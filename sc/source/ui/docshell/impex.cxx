@@ -2230,8 +2230,8 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, CharSet ) RETURN_ERROR
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress&, const CharSet, sal_uInt32 ) RETURN_ERROR
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const CharSet, sal_uInt32 ) RETURN_ERROR
-    virtual FltError ScExportHTML( SvStream&, const String&, ScDocument*, const ScRange&, const CharSet, bool,
-                  const String&, String& ) RETURN_ERROR
+    virtual FltError ScExportHTML( SvStream&, const OUString&, ScDocument*, const ScRange&, const CharSet, bool,
+                                   const OUString&, OUString& ) RETURN_ERROR
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const CharSet ) RETURN_ERROR
 
     virtual ScOrcusFilters* GetOrcusFilters() { return NULL; }

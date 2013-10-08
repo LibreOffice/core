@@ -182,7 +182,6 @@ sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
         objectReleaseTime, batch);
 
     // create a dummy graphic object to get access to the common GraphicManager
-    GraphicObject       aDummyObject;
     GraphicManager*     rGrfMgr = GraphicManager::GetGlobalManager();
 
     rGrfMgr->SetMaxCacheSize(totalCacheSize);

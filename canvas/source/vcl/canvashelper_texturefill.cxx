@@ -69,7 +69,7 @@ namespace vclcanvas
     namespace
     {
         bool textureFill( OutputDevice&         rOutDev,
-                          GraphicObject&        rGraphic,
+                          rtl::Reference<GraphicObject>& rGraphicObject,
                           const ::Point&        rPosPixel,
                           const ::Size&         rNextTileX,
                           const ::Size&         rNextTileY,
@@ -91,7 +91,7 @@ namespace vclcanvas
                 {
                     // update return value. This method should return true, if
                     // at least one of the looped Draws succeeded.
-                    bRet |= ( sal_True == rGraphic.Draw( &rOutDev,
+                    bRet |= ( sal_True == rGraphicObject->Draw( &rOutDev,
                                            aCurrPos,
                                            rTileSize,
                                            &rAttr ) );
@@ -842,7 +842,7 @@ namespace vclcanvas
                     aTotalTransform.decompose( aScale, aOutputPos, nRotate, nShearX );
 
                     GraphicAttr             aGrfAttr;
-                    GraphicObjectSharedPtr  pGrfObj;
+                    rtl::Reference<GraphicObject>  rGrfObj;
 
                     if( ::basegfx::fTools::equalZero( nShearX ) )
                     {
@@ -856,7 +856,7 @@ namespace vclcanvas
                             ( aScale.getY() < 0.0 ? BMP_MIRROR_VERT : 0 ) );
                         aGrfAttr.SetRotation( static_cast< sal_uInt16 >(::basegfx::fround( nRotate*10.0 )) );
 
-                        pGrfObj.reset( new GraphicObject( aBmpEx ) );
+                        rGrfObj = GraphicObject::Create( aBmpEx );
                     }
                     else
                     {
@@ -867,7 +867,7 @@ namespace vclcanvas
                                                          uno::Sequence< double >(),
                                                          tools::MODULATE_NONE);
 
-                        pGrfObj.reset( new GraphicObject( aBmpEx ) );
+                        rGrfObj = GraphicObject::Create( aBmpEx );
 
                         // clear scale values, generated bitmap already
                         // contains scaling
@@ -989,7 +989,7 @@ namespace vclcanvas
 
                         rOutDev.IntersectClipRegion( aPolygonDeviceRect );
                         textureFill( rOutDev,
-                                     *pGrfObj,
+                                     rGrfObj,
                                      aPt,
                                      aIntegerNextTileX,
                                      aIntegerNextTileY,
@@ -1003,7 +1003,7 @@ namespace vclcanvas
                             OutputDevice& r2ndOutDev( mp2ndOutDev->getOutDev() );
                             r2ndOutDev.IntersectClipRegion( aPolygonDeviceRect );
                             textureFill( r2ndOutDev,
-                                         *pGrfObj,
+                                         rGrfObj,
                                          aPt,
                                          aIntegerNextTileX,
                                          aIntegerNextTileY,
@@ -1038,7 +1038,7 @@ namespace vclcanvas
 
                             aVDev.SetClipRegion( aPolyClipRegion );
                             textureFill( aVDev,
-                                         *pGrfObj,
+                                         rGrfObj,
                                          aOutPos,
                                          aIntegerNextTileX,
                                          aIntegerNextTileY,
@@ -1075,7 +1075,7 @@ namespace vclcanvas
                             rOutDev.SetClipRegion( aPolyClipRegion );
 
                             textureFill( rOutDev,
-                                         *pGrfObj,
+                                         rGrfObj,
                                          aPt,
                                          aIntegerNextTileX,
                                          aIntegerNextTileY,
@@ -1092,7 +1092,7 @@ namespace vclcanvas
 
                                 r2ndOutDev.SetClipRegion( aPolyClipRegion );
                                 textureFill( r2ndOutDev,
-                                             *pGrfObj,
+                                             rGrfObj,
                                              aPt,
                                              aIntegerNextTileX,
                                              aIntegerNextTileY,

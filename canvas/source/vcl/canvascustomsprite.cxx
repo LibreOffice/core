@@ -161,7 +161,7 @@ namespace vclcanvas
         mbSurfaceDirty = false;
     }
 
-    bool CanvasCustomSprite::repaint( const GraphicObjectSharedPtr& rGrf,
+    bool CanvasCustomSprite::repaint( const rtl::Reference<GraphicObject>& rGrf,
                                       const rendering::ViewState&   viewState,
                                       const rendering::RenderState& renderState,
                                       const ::Point&                rPt,

@@ -264,7 +264,7 @@ namespace vclcanvas
         ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
 
         /// Repaint a cached bitmap
-        bool repaint( const GraphicObjectSharedPtr&                   rGrf,
+        bool repaint( const rtl::Reference<GraphicObject>&            rGrf,
                       const ::com::sun::star::rendering::ViewState&   viewState,
                       const ::com::sun::star::rendering::RenderState& renderState,
                       const ::Point&                                  rPt,

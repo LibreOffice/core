@@ -293,7 +293,7 @@ void GalleryBrowser1::ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec)
 
 // -----------------------------------------------------------------------------
 
-void GalleryBrowser1::ImplGalleryThemeProperties( const String & rThemeName, bool bCreateNew )
+void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, bool bCreateNew )
 {
     DBG_ASSERT(!mpThemePropsDlgItemSet, "mpThemePropsDlgItemSet already set!");
     mpThemePropsDlgItemSet = new SfxItemSet( SFX_APP()->GetPool() );
@@ -326,19 +326,17 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
 
     if( nRet == RET_OK )
     {
-        String aName( mpExchangeData->pTheme->GetName() );
+        OUString aName( mpExchangeData->pTheme->GetName() );
 
-        if( mpExchangeData->aEditedTitle.Len() && aName != mpExchangeData->aEditedTitle )
+        if( !mpExchangeData->aEditedTitle.isEmpty() && aName != mpExchangeData->aEditedTitle )
         {
-            const String    aOldName( aName );
-            String          aTitle( mpExchangeData->aEditedTitle );
+            const OUString    aOldName( aName );
+            OUString          aTitle( mpExchangeData->aEditedTitle );
             sal_uInt16          nCount = 0;
 
             while( mpGallery->HasTheme( aTitle ) && ( nCount++ < 16000 ) )
             {
-                aTitle = mpExchangeData->aEditedTitle;
-                aTitle += ' ';
-                aTitle += OUString::number( nCount );
+                aTitle = mpExchangeData->aEditedTitle + " " + OUString::number( nCount );
             }
 
             mpGallery->RenameTheme( aOldName, aTitle );
@@ -351,7 +349,7 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties( VclAbstractDialog2* pDialog
         }
     }
 
-    String aThemeName( mpExchangeData->pTheme->GetName() );
+    OUString aThemeName( mpExchangeData->pTheme->GetName() );
     mpGallery->ReleaseTheme( mpExchangeData->pTheme, *this );
 
     if ( bCreateNew && ( nRet != RET_OK ) )
@@ -423,7 +421,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
         case( MN_RENAME ):
         {
             GalleryTheme*   pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
-            const String    aOldName( pTheme->GetName() );
+            const OUString    aOldName( pTheme->GetName() );
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -432,18 +430,16 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 
             if( aDlg->Execute() == RET_OK )
             {
-                const String aNewName( aDlg->GetTitle() );
+                const OUString aNewName( aDlg->GetTitle() );
 
-                if( aNewName.Len() && ( aNewName != aOldName ) )
+                if( !aNewName.isEmpty() && ( aNewName != aOldName ) )
                 {
-                    String  aName( aNewName );
+                    OUString  aName( aNewName );
                     sal_uInt16  nCount = 0;
 
                     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
                     {
-                        aName = aNewName;
-                        aName += ' ';
-                        aName += OUString::number( nCount );
+                        aName = aNewName + " "  + OUString::number( nCount );
                     }
 
                     mpGallery->RenameTheme( aOldName, aName );
@@ -690,15 +686,13 @@ IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl)
 
 IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl)
 {
-    String  aNewTheme( GAL_RESSTR(RID_SVXSTR_GALLERY_NEWTHEME) );
-    String  aName( aNewTheme );
+    OUString  aNewTheme( GAL_RESSTR(RID_SVXSTR_GALLERY_NEWTHEME) );
+    OUString  aName( aNewTheme );
     sal_uIntPtr nCount = 0;
 
     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
     {
-        aName = aNewTheme;
-        aName += ' ';
-        aName += OUString::number( nCount );
+        aName = aNewTheme + " " + OUString::number( nCount );
     }
 
     if( !mpGallery->HasTheme( aName ) && mpGallery->CreateTheme( aName ) )

@@ -529,7 +529,6 @@ sal_Bool SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
 }
 
 #define CLEARCACHE( pNd ) {\
-    (pNd)->ReleaseGraphicFromCache();\
     SwFlyFrm* pFly = FindFlyFrm();\
     if( pFly && pFly->GetFmt()->GetSurround().IsContour() )\
     {\
@@ -570,7 +569,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             if( pVSh )
             {
                 GraphicAttr aAttr;
-                if( pNd->GetGrfObj().IsCached( pVSh->GetOut(), Point(),
+                if( pNd->GetGrfObj()->IsCached( pVSh->GetOut(), Point(),
                             Prt().SSize(), &pNd->GetGraphicAttr( aAttr, this ) ))
                 {
                     ViewShell *pSh = pVSh;
@@ -828,7 +827,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         }
 
         bool bForceSwap = false, bContinue = true;
-        const GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
+        const rtl::Reference<GraphicObject> rGrfObj = pGrfNd->GetGrfObj();
 
         GraphicAttr aGrfAttr;
         pGrfNd->GetGraphicAttr( aGrfAttr, this );
@@ -842,8 +841,8 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             }
             // #i85717#, #i90395# - check, if asynchronous retrieval
             // if input stream for the graphic is possible
-            else if ( ( rGrfObj.GetType() == GRAPHIC_DEFAULT ||
-                        rGrfObj.GetType() == GRAPHIC_NONE ) &&
+            else if ( ( rGrfObj->GetType() == GRAPHIC_DEFAULT ||
+                        rGrfObj->GetType() == GRAPHIC_NONE ) &&
                       pGrfNd->IsLinkedFile() &&
                       pGrfNd->IsAsyncRetrieveInputStreamPossible() )
             {
@@ -862,7 +861,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, false );
                 bContinue = false;
             }
-            else if( rGrfObj.IsCached( pOut, aAlignedGrfArea.Pos(),
+            else if( rGrfObj->IsCached( pOut, aAlignedGrfArea.Pos(),
                                     aAlignedGrfArea.SSize(), &aGrfAttr ))
             {
                 pGrfNd->DrawGraphicWithPDFHandling(*pOut,
@@ -874,11 +873,11 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         if( bContinue )
         {
-            const sal_Bool bSwapped = rGrfObj.IsSwappedOut();
+            const sal_Bool bSwapped = rGrfObj->IsSwappedOut();
             const bool bSwappedIn = 0 != pGrfNd->SwapIn( bPrn );
-            if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
+            if( bSwappedIn && rGrfObj->GetGraphic().IsSupportedGraphic())
             {
-                const bool bAnimate = rGrfObj.IsAnimated() &&
+                const bool bAnimate = rGrfObj->IsAnimated() &&
                                          !pShell->IsPreView() &&
                                          !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
                 // #i9684# Stop animation during printing/pdf export
@@ -906,7 +905,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 }
                 else
                 {
-                    const SvgDataPtr& rSvgDataPtr = rGrfObj.GetGraphic().getSvgData();
+                    const SvgDataPtr& rSvgDataPtr = rGrfObj->GetGraphic().getSvgData();
                     bool bDone(false);
 
                     if(rSvgDataPtr.get())
@@ -933,7 +932,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                         if(bNeedTransformedGraphic)
                         {
                             // #i122039# need to apply graphic transformation if GraphicAttr are used qwhich need this
-                            const Graphic aTransformedGraphic(rGrfObj.GetTransformedGraphic(&aSuppressGraphicAttr));
+                            const Graphic aTransformedGraphic(rGrfObj->GetTransformedGraphic(&aSuppressGraphicAttr));
                             const basegfx::B2DRange aRange(rSvgDataPtr->getRange());
                             const basegfx::B2DHomMatrix aTransform(
                                 basegfx::tools::createScaleTranslateB2DHomMatrix(
@@ -975,9 +974,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 sal_uInt16 nResId = 0;
                 if( bSwappedIn )
                 {
-                    if( GRAPHIC_NONE == rGrfObj.GetType() )
+                    if( GRAPHIC_NONE == rGrfObj->GetType() )
                         nResId = STR_COMCORE_READERROR;
-                    else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
+                    else if ( !rGrfObj->GetGraphic().IsSupportedGraphic() )
                         nResId = STR_COMCORE_CANT_SHOW;
                 }
                 ((SwNoTxtFrm*)this)->nWeight = -1;

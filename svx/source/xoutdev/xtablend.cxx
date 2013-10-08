@@ -33,7 +33,7 @@
 
 using namespace com::sun::star;
 
-XLineEndList::XLineEndList( const String& rPath )
+XLineEndList::XLineEndList( const OUString& rPath )
     : XPropertyList( XLINE_END_LIST, rPath )
 {
 }

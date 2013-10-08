@@ -26,6 +26,7 @@
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
+#include <rtl/ref.hxx>
 #include <svtools/embedhlp.hxx>
 
 #include <bparr.hxx>
@@ -231,7 +232,7 @@ public:
                             sal_Bool bDelayed = sal_False );    ///< in ndgrf.cxx
 
     SwGrfNode *MakeGrfNode( const SwNodeIndex & rWhere,
-                            const GraphicObject& rGrfObj,
+                            const rtl::Reference<GraphicObject>& rGrfObj,
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); ///< in ndgrf.cxx
 

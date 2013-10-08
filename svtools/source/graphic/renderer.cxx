@@ -320,8 +320,8 @@ void SAL_CALL GraphicRendererVCL::render( const uno::Reference< graphic::XGraphi
 
         if( pGraphic )
         {
-            GraphicObject aGraphicObject( *pGraphic );
-            aGraphicObject.Draw( mpOutDev, maDestRect.TopLeft(), maDestRect.GetSize() );
+            rtl::Reference<GraphicObject> rGraphicObject = GraphicObject::Create( *pGraphic );
+            rGraphicObject->Draw( mpOutDev, maDestRect.TopLeft(), maDestRect.GetSize() );
         }
     }
 }

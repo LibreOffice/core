@@ -194,7 +194,7 @@ public:
             aStr.Append( sal_Unicode(' ') );
             aStr.Append( String( "External Edit" ) );
             m_pView->BegUndo( aStr );
-            pNewObj->SetGraphicObject( aGraphic );
+            pNewObj->SetGraphicObject( GraphicObject::Create(aGraphic) );
             m_pView->ReplaceObjectAtView( m_pObj, *pPageView, pNewObj );
             m_pView->EndUndo();
         }
@@ -970,9 +970,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                 if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
                 {
-                    GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+                    rtl::Reference<GraphicObject> rGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
                     {
-                        GraphicHelper::ExportGraphic( aGraphicObject.GetGraphic(), String("") );
+                        GraphicHelper::ExportGraphic( rGraphicObject->GetGraphic(), String("") );
                     }
                 }
             }
@@ -989,9 +989,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                 if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
                 {
-                    GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+                    rtl::Reference<GraphicObject> rGraphicObject =  ( (SdrGrafObj*) pObj )->GetGraphicObject() ;
                     SdExternalToolEdit* aExternalToolEdit = new SdExternalToolEdit( mpDrawView, pObj );
-                    aExternalToolEdit->Edit( &aGraphicObject );
+                    aExternalToolEdit->Edit( rGraphicObject );
                 }
             }
             Cancel();

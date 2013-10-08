@@ -127,12 +127,12 @@ namespace drawinglayer
         SdrGrafPrimitive2D::SdrGrafPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-            const GraphicObject& rGraphicObject,
+            const rtl::Reference<GraphicObject>& rGraphicObject,
             const GraphicAttr& rGraphicAttr)
         :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
-            maGraphicObject(rGraphicObject),
+            m_rGraphicObject(rGraphicObject),
             maGraphicAttr(rGraphicAttr)
         {
             // reset some values from GraphicAttr which are part of transformation already
@@ -157,7 +157,7 @@ namespace drawinglayer
         bool SdrGrafPrimitive2D::isTransparent() const
         {
             return ((0L != getGraphicAttr().GetTransparency())
-                || (getGraphicObject().IsTransparent()));
+                || (getGraphicObject()->IsTransparent()));
         }
 
         // provide unique ID

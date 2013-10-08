@@ -2191,13 +2191,13 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             {
                 if ( nColorCount || rObj.GetBrightness() != 1.0 )
                 {
-                    Bitmap aBitmap(((const XFillBitmapItem&)rObj.GetMergedItem(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
+                    Bitmap aBitmap(((const XFillBitmapItem&)rObj.GetMergedItem(XATTR_FILLBITMAP)).GetGraphicObject()->GetGraphic().GetBitmapEx().GetBitmap());
 
                     aBitmap.Adjust(
                         static_cast< short > ( GetLuminanceChange(
                             std::min(nColorIndex, nColorCount-1))));
 
-                    rObj.SetMergedItem(XFillBitmapItem(String(), Graphic(aBitmap)));
+                    rObj.SetMergedItem(XFillBitmapItem(OUString(), GraphicObject::Create(aBitmap)));
                 }
 
                 break;

@@ -28,13 +28,14 @@ class GraphicObject;
 class GraphicCache;
 
 #include <vector>
+#include <rtl/ref.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/svtdllapi.h>
 
 #define GRAPHIC_MANAGER_CACHE_SIZE 15000000UL
 #define GRAPHCI_MANAGER_MAX_OBJECT_CACHE_SIZE 3000000UL
 
-typedef ::std::vector< GraphicObject* > GraphicObjectList;
+typedef ::std::vector< const GraphicObject* > GraphicObjectList;
 
 class SVT_DLLPUBLIC GraphicManager
 {
@@ -52,30 +53,34 @@ class SVT_DLLPUBLIC GraphicManager
                          sal_uInt32 nAdjustmentFlags );
 
     bool  Draw( OutputDevice* pOutDev, const Point& rPoint,
-                const Size& rSize, GraphicObject& rGraphicObject,
+                const Size& rSize, GraphicObject* pGraphicObject,
                 const GraphicAttr& rGraphicAttr, const sal_uInt32 nFlags,
                 bool& rCached);
 
     bool  DrawObj( OutputDevice* pOut, const Point& rPt,
-                   const Size& rSz, GraphicObject& rObj,
+                   const Size& rSz, GraphicObject* pObj,
                    const GraphicAttr& rAttr, const sal_uInt32 nFlags,
                    bool& rCached);
-    bool  FillSwappedGraphicObject( const GraphicObject& rGraphicObject, Graphic& rSubstituteGraphicObject );
-    OString GetUniqueID( const GraphicObject& rGraphicObject ) const;
-    void  GraphicObjectWasSwappedIn( const GraphicObject& rGraphicObjet );
-    void  GraphicObjectWasSwappedOut( const GraphicObject& rGRaphicObject );
+    bool  FillSwappedGraphicObject( const rtl::Reference<GraphicObject>& rGraphicObject, Graphic& rSubstituteGraphicObject );
+    OString GetUniqueID( const rtl::Reference<GraphicObject>& rGraphicObject ) const;
+    OString GetUniqueID( const GraphicObject* pGraphicObject ) const;
+    void  GraphicObjectWasSwappedIn( const rtl::Reference<GraphicObject>& rGraphicObjet );
+    void  GraphicObjectWasSwappedOut( const rtl::Reference<GraphicObject>& rGRaphicObject );
     inline bool HasObjects() const { return !maObjectList.empty(); }
     bool  IsInCache( OutputDevice* pOut, const Point& rPt,
-                     const Size& rSz, const GraphicObject& rObj,
+                     const Size& rSz, const rtl::Reference<GraphicObject>& rObj,
                      const GraphicAttr& rAttr ) const;
-    void  RegisterObject( const GraphicObject& rGraphicObject, Graphic& rSubstituteGraphicObject,
-                       const OString* pID = NULL, const GraphicObject* pCopyObj = NULL );
+    bool  IsInCache( OutputDevice* pOut, const Point& rPt,
+                     const Size& rSz, const GraphicObject* pObj,
+                     const GraphicAttr& rAttr ) const;
+    void  RegisterObject( const GraphicObject* rGraphicObject, Graphic& rSubstituteGraphicObject,
+                          const OString* pID = NULL, const GraphicObject* pCopyObj = NULL );
     void  ReleaseFromCache( const GraphicObject& rObj );
     void  SetCacheTimeout( int nTimeoutSeconds );
     void  SetMaxCacheSize( size_t nNewCacheSize );
     void  SetMaxObjCacheSize( size_t nNewMaxObjSize,
                               bool bDestroyGreaterCached = false);
-    void  UnregisterObject( const GraphicObject& rGraphicObject );
+    void  UnregisterObject( const GraphicObject* pGraphicObject );
 
     static void  Draw( OutputDevice* pOutDev, const Point& rPoint,
                        const Size& rSize, GDIMetaFile& rMtf,

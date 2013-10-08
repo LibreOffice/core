@@ -752,7 +752,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( pHatchingList->GetName().Len() )
+    if( !pHatchingList->GetName().isEmpty() )
     {
         aFile.Append( pHatchingList->GetName() );
 

@@ -33,7 +33,7 @@
 
 using namespace com::sun::star;
 
-XDashList::XDashList(const String& rPath)
+XDashList::XDashList(const OUString& rPath)
     : XPropertyList(XDASH_LIST, rPath)
     , maBitmapSolidLine()
     , maStringSolidLine()
@@ -68,16 +68,14 @@ uno::Reference< container::XNameContainer > XDashList::createInstance()
 
 bool XDashList::Create()
 {
-    XubString aStr(SVX_RESSTR(RID_SVXSTR_LINESTYLE));
-    xub_StrLen nLen;
-
-    aStr.AppendAscii(" 1");
-    nLen = aStr.Len() - 1;
-    Insert(new XDashEntry(XDash(XDASH_RECT,1, 50,1, 50, 50),aStr));
-    aStr.SetChar(nLen, sal_Unicode('2'));
-    Insert(new XDashEntry(XDash(XDASH_RECT,1,500,1,500,500),aStr));
-    aStr.SetChar(nLen, sal_Unicode('3'));
-    Insert(new XDashEntry(XDash(XDASH_RECT,2, 50,3,250,120),aStr));
+    OUString aStr(SVX_RESSTR(RID_SVXSTR_LINESTYLE));
+    OUString aTmp;
+    aTmp = aStr + " 1";
+    Insert(new XDashEntry(XDash(XDASH_RECT,1, 50,1, 50, 50),aTmp));
+    aTmp = aStr + " 2";
+    Insert(new XDashEntry(XDash(XDASH_RECT,1,500,1,500,500),aTmp));
+    aTmp = aStr + " 3";
+    Insert(new XDashEntry(XDash(XDASH_RECT,2, 50,3,250,120),aTmp));
 
     return true;
 }
@@ -202,9 +200,9 @@ Bitmap XDashList::GetBitmapForUISolidLine() const
     return maBitmapSolidLine;
 }
 
-String XDashList::GetStringForUiSolidLine() const
+OUString XDashList::GetStringForUiSolidLine() const
 {
-    if(!maStringSolidLine.Len())
+    if(maStringSolidLine.isEmpty())
     {
         const_cast< XDashList* >(this)->maStringSolidLine = ResId(RID_SVXSTR_SOLID, DIALOG_MGR()).toString();
     }
@@ -212,9 +210,9 @@ String XDashList::GetStringForUiSolidLine() const
     return maStringSolidLine;
 }
 
-String XDashList::GetStringForUiNoLine() const
+OUString XDashList::GetStringForUiNoLine() const
 {
-    if(!maStringNoLine.Len())
+    if(maStringNoLine.isEmpty())
     {
         // formally was RID_SVXSTR_INVISIBLE, but tomake equal
         // everywhere, use RID_SVXSTR_NONE

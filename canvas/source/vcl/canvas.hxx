@@ -101,7 +101,7 @@ namespace vclcanvas
         virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // RepaintTarget
-        virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,
+        virtual bool repaint( const rtl::Reference<GraphicObject>&          rGrf,
                               const com::sun::star::rendering::ViewState&   viewState,
                               const com::sun::star::rendering::RenderState& renderState,
                               const ::Point&                                rPt,

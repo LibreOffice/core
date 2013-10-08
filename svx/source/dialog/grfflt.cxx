@@ -33,9 +33,9 @@
 // - SvxGraphicFilter -
 // --------------------
 
-sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& rFilterObject )
+sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, rtl::Reference<GraphicObject>* pFilterObject )
 {
-    const Graphic&  rGraphic = rFilterObject.GetGraphic();
+    const Graphic&  rGraphic = (*pFilterObject)->GetGraphic();
     sal_uIntPtr         nRet = SVX_GRAPHICFILTER_UNSUPPORTED_GRAPHICTYPE;
 
     if( rGraphic.GetType() == GRAPHIC_BITMAP )
@@ -273,7 +273,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
 
         if( aGraphic.GetType() != GRAPHIC_NONE )
         {
-            rFilterObject.SetGraphic( aGraphic );
+            *pFilterObject = GraphicObject::Create(*pFilterObject, aGraphic );
             nRet = SVX_GRAPHICFILTER_ERRCODE_NONE;
         }
     }

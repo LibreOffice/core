@@ -763,7 +763,7 @@ namespace vclcanvas
                 aMatrix.decompose( aScale, aOutputPos, nRotate, nShearX );
 
                 GraphicAttr             aGrfAttr;
-                GraphicObjectSharedPtr  pGrfObj;
+                rtl::Reference<GraphicObject>  rGrfObj;
 
                 ::Size aBmpSize( aBmpEx.GetSizePixel() );
 
@@ -803,7 +803,7 @@ namespace vclcanvas
                     const double nAngleInTenthOfDegrees (3600.0 - nRotate * 3600.0 / (2*M_PI));
                     aGrfAttr.SetRotation( static_cast< sal_uInt16 >(::basegfx::fround(nAngleInTenthOfDegrees)) );
 
-                    pGrfObj.reset( new GraphicObject( aBmpEx ) );
+                    rGrfObj = GraphicObject::Create( aBmpEx );
                 }
                 else
                 {
@@ -828,7 +828,7 @@ namespace vclcanvas
                                                      renderState.DeviceColor,
                                                      tools::MODULATE_NONE );
 
-                    pGrfObj.reset( new GraphicObject( aBmpEx ) );
+                    rGrfObj = GraphicObject::Create( aBmpEx );
 
                     // clear scale values, generated bitmap already
                     // contains scaling
@@ -843,22 +843,23 @@ namespace vclcanvas
                 const ::Size  aSz( ::basegfx::fround( aScale.getX() * aBmpSize.Width() ),
                                    ::basegfx::fround( aScale.getY() * aBmpSize.Height() ) );
 
-                pGrfObj->Draw( &mpOutDev->getOutDev(),
+                rGrfObj->Draw( &mpOutDev->getOutDev(),
                                aPt,
                                aSz,
                                &aGrfAttr );
 
                 if( mp2ndOutDev )
-                    pGrfObj->Draw( &mp2ndOutDev->getOutDev(),
+                {
+                    rGrfObj->Draw( &mp2ndOutDev->getOutDev(),
                                    aPt,
                                    aSz,
                                    &aGrfAttr );
-
+                }
                 // created GraphicObject, which possibly cached
                 // display bitmap - return cache object, to retain
                 // that information.
                 return uno::Reference< rendering::XCachedPrimitive >(
-                    new CachedBitmap( pGrfObj,
+                    new CachedBitmap( rGrfObj,
                                       aPt,
                                       aSz,
                                       aGrfAttr,
@@ -1410,14 +1411,14 @@ namespace vclcanvas
         return true;
     }
 
-    bool CanvasHelper::repaint( const GraphicObjectSharedPtr&   rGrf,
+bool CanvasHelper::repaint( const rtl::Reference<GraphicObject>& rGrf,
                                 const rendering::ViewState&     viewState,
                                 const rendering::RenderState&   renderState,
                                 const ::Point&                  rPt,
                                 const ::Size&                   rSz,
                                 const GraphicAttr&              rAttr ) const
     {
-        ENSURE_OR_RETURN_FALSE( rGrf,
+        ENSURE_OR_RETURN_FALSE( rGrf.is(),
                           "Invalid Graphic" );
 
         if( !mpOutDev )

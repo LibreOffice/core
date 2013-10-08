@@ -20,7 +20,8 @@
  #ifndef IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
  #define IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
 
- #include <sal/types.h>
+#include <sal/types.h>
+#include <rtl/ref.hxx>
 
  class SwPaM;
  struct SwPosition;
@@ -115,12 +116,12 @@
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const String& rGrfName, const String& rFltName, const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
-    virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
+     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const rtl::Reference<GraphicObject>& rGrfObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*) = 0;
 
     /** Transpose graphic (with undo)
      */
-    virtual void ReRead(SwPaM&, const String& rGrfName, const String& rFltName, const Graphic* pGraphic, const GraphicObject* pGrfObj) = 0;
+     virtual void ReRead(SwPaM&, const String& rGrfName, const String& rFltName, const Graphic* pGraphic, const rtl::Reference<GraphicObject>* pGrfObj) = 0;
 
     /** Insert a DrawObject. The object must be already registered
         in DrawModel.

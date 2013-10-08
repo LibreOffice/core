@@ -57,7 +57,7 @@ private:
 
     typedef ::std::pair< OUString, OUString >                                             URLPair;
     typedef ::std::vector< URLPair >                                                                    URLPairVector;
-    typedef ::std::vector< GraphicObject >                                                              GraphicObjectVector;
+    typedef ::std::vector< rtl::Reference<GraphicObject> >                                                              GraphicObjectVector;
     typedef ::std::set< OUString >                                                               URLSet;
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > >    GraphicOutputStreamVector;
 

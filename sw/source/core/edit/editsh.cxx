@@ -265,21 +265,28 @@ sal_Bool SwEditShell::IsGrfSwapOut( sal_Bool bOnlyLinked ) const
     SwGrfNode *pGrfNode = _GetGrfNode();
     return pGrfNode &&
         (bOnlyLinked ? ( pGrfNode->IsLinkedFile() &&
-                        ( GRAPHIC_DEFAULT == pGrfNode->GetGrfObj().GetType()||
-                          pGrfNode->GetGrfObj().IsSwappedOut()))
-                     : pGrfNode->GetGrfObj().IsSwappedOut());
+                        ( GRAPHIC_DEFAULT == pGrfNode->GetGrfObj()->GetType()||
+                          pGrfNode->GetGrfObj()->IsSwappedOut()))
+                     : pGrfNode->GetGrfObj()->IsSwappedOut());
 }
 
-const GraphicObject* SwEditShell::GetGraphicObj() const
+const rtl::Reference<GraphicObject> SwEditShell::GetGraphicObj() const
 {
     SwGrfNode* pGrfNode = _GetGrfNode();
-    return pGrfNode ? &(pGrfNode->GetGrfObj()) : 0L;
+    if(pGrfNode)
+    {
+        return pGrfNode->GetGrfObj();
+    }
+    else
+    {
+        return rtl::Reference<GraphicObject>();
+    }
 }
 
 sal_uInt16 SwEditShell::GetGraphicType() const
 {
     SwGrfNode *pGrfNode = _GetGrfNode();
-    return static_cast<sal_uInt16>(pGrfNode ? pGrfNode->GetGrfObj().GetType() : GRAPHIC_NONE);
+    return static_cast<sal_uInt16>(pGrfNode ? pGrfNode->GetGrfObj()->GetType() : GRAPHIC_NONE);
 }
 
 // returns the size of a graphic in <rSz> if CurCrsr->GetPoint() points to a SwGrfNode and
@@ -301,7 +308,7 @@ sal_Bool SwEditShell::GetGrfSize(Size& rSz) const
 
 /// Read again if graphic is not OK and replace old one
 void SwEditShell::ReRead( const String& rGrfName, const String& rFltName,
-                    const Graphic* pGraphic, const GraphicObject* pGrfObj )
+                          const Graphic* pGraphic, const rtl::Reference<GraphicObject>* pGrfObj )
 {
     StartAllAction();
     mpDoc->ReRead( *GetCrsr(), rGrfName, rFltName, pGraphic, pGrfObj );

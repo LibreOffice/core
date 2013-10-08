@@ -20,14 +20,14 @@
 class SVX_DLLPUBLIC ExternalToolEdit
 {
 public:
-    GraphicObject* m_pGraphicObject;
+    rtl::Reference<GraphicObject> m_rGraphicObject;
     OUString m_aFileName;
 
     ExternalToolEdit();
     virtual ~ExternalToolEdit();
 
     virtual void Update( Graphic& aGraphic ) = 0;
-    void Edit( GraphicObject *pGraphic );
+    void Edit( rtl::Reference<GraphicObject>& rGraphic );
 
     DECL_LINK( StartListeningEvent, void *pEvent );
 

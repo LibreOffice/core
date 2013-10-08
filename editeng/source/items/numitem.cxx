@@ -97,16 +97,16 @@ SvxNumberType::~SvxNumberType()
         xFormatter = 0;
 }
 
-String SvxNumberType::GetNumStr( sal_uLong nNo ) const
+OUString SvxNumberType::GetNumStr( sal_uLong nNo ) const
 {
     const LanguageTag& rLang = Application::GetSettings().GetLanguageTag();
     return GetNumStr( nNo, rLang.getLocale() );
 }
 
-String  SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
+OUString  SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
 {
     lcl_getFormatter(xFormatter);
-    String aTmpStr;
+    OUString aTmpStr;
     if(!xFormatter.is())
         return aTmpStr;
 
@@ -114,32 +114,32 @@ String  SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
     {
         switch(nNumType)
         {
-            case NumberingType::CHAR_SPECIAL:
-            case NumberingType::BITMAP:
+        case NumberingType::CHAR_SPECIAL:
+        case NumberingType::BITMAP:
             break;
-            default:
-                {
-                    // '0' allowed for ARABIC numberings
-                    if(NumberingType::ARABIC == nNumType && 0 == nNo )
-                        aTmpStr = '0';
-                    else
-                    {
-                        Sequence< PropertyValue > aProperties(2);
-                        PropertyValue* pValues = aProperties.getArray();
-                        pValues[0].Name = OUString("NumberingType");
-                        pValues[0].Value <<= nNumType;
-                        pValues[1].Name = OUString("Value");
-                        pValues[1].Value <<= (sal_Int32)nNo;
+        default:
+            // '0' allowed for ARABIC numberings
+            if(NumberingType::ARABIC == nNumType && 0 == nNo )
+            {
+                aTmpStr = "0";
+            }
+            else
+            {
+                Sequence< PropertyValue > aProperties(2);
+                PropertyValue* pValues = aProperties.getArray();
+                pValues[0].Name = OUString("NumberingType");
+                pValues[0].Value <<= nNumType;
+                pValues[1].Name = OUString("Value");
+                pValues[1].Value <<= (sal_Int32)nNo;
 
-                        try
-                        {
-                            aTmpStr = xFormatter->makeNumberingString( aProperties, rLocale );
-                        }
-                        catch(const Exception&)
-                        {
-                        }
-                    }
+                try
+                {
+                    aTmpStr = xFormatter->makeNumberingString( aProperties, rLocale );
                 }
+                catch(const Exception&)
+                {
+                }
+            }
         }
     }
     return aTmpStr;
@@ -196,9 +196,9 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
 
     rStream >> nCharTextDistance;
 
-    sPrefix = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
-    sSuffix = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
-    sCharStyleName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
+    m_sPrefix = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
+    m_sSuffix = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
+    m_sCharStyleName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
 
     sal_uInt16 hasGraphicBrush = 0;
     rStream >> hasGraphicBrush;
@@ -242,7 +242,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     if(pConverter && pBulletFont)
     {
         cBullet = ConvertFontToSubsFontChar(pConverter, cBullet);
-        String sFontName = GetFontToSubsFontName(pConverter);
+        OUString sFontName = GetFontToSubsFontName(pConverter);
         pBulletFont->SetName(sFontName);
     }
 
@@ -260,9 +260,9 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
 
     rStream << nCharTextDistance;
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
-    rStream.WriteUniOrByteString(sPrefix, eEnc);
-    rStream.WriteUniOrByteString(sSuffix, eEnc);
-    rStream.WriteUniOrByteString(sCharStyleName, eEnc);
+    rStream.WriteUniOrByteString(m_sPrefix, eEnc);
+    rStream.WriteUniOrByteString(m_sSuffix, eEnc);
+    rStream.WriteUniOrByteString(m_sCharStyleName, eEnc);
     if(pGraphicBrush)
     {
         rStream << (sal_uInt16)1;
@@ -272,7 +272,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
         // are present, so Brush save is forced
         if(pGraphicBrush->GetGraphicLink() && pGraphicBrush->GetGraphic())
         {
-            String aEmpty;
+            OUString aEmpty;
             pGraphicBrush->SetGraphicLink(aEmpty);
         }
 
@@ -331,13 +331,13 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
         mnFirstLineIndent = rFormat.mnFirstLineIndent;
         mnIndentAt = rFormat.mnIndentAt;
         eVertOrient         = rFormat.eVertOrient ;
-        sPrefix             = rFormat.sPrefix     ;
-        sSuffix             = rFormat.sSuffix     ;
-        aGraphicSize        = rFormat.aGraphicSize  ;
-        nBulletColor        = rFormat.nBulletColor   ;
+        m_sPrefix           = rFormat.m_sPrefix ;
+        m_sSuffix           = rFormat.m_sSuffix ;
+        aGraphicSize        = rFormat.aGraphicSize ;
+        nBulletColor        = rFormat.nBulletColor ;
         nBulletRelSize      = rFormat.nBulletRelSize;
         SetShowSymbol(rFormat.IsShowSymbol());
-        sCharStyleName      = rFormat.sCharStyleName;
+        m_sCharStyleName    = rFormat.m_sCharStyleName;
     DELETEZ(pGraphicBrush);
     if(rFormat.pGraphicBrush)
     {
@@ -367,13 +367,13 @@ sal_Bool  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
         mnFirstLineIndent != rFormat.mnFirstLineIndent ||
         mnIndentAt != rFormat.mnIndentAt ||
         eVertOrient         != rFormat.eVertOrient ||
-        sPrefix             != rFormat.sPrefix     ||
-        sSuffix             != rFormat.sSuffix     ||
-        aGraphicSize        != rFormat.aGraphicSize  ||
-        nBulletColor        != rFormat.nBulletColor   ||
+        m_sPrefix           != rFormat.m_sPrefix ||
+        m_sSuffix           != rFormat.m_sSuffix ||
+        aGraphicSize        != rFormat.aGraphicSize ||
+        nBulletColor        != rFormat.nBulletColor ||
         nBulletRelSize      != rFormat.nBulletRelSize ||
         IsShowSymbol()      != rFormat.IsShowSymbol() ||
-        sCharStyleName      != rFormat.sCharStyleName
+        m_sCharStyleName    != rFormat.m_sCharStyleName
         )
         return sal_False;
     if (
@@ -420,16 +420,16 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
         aGraphicSize.Width() = aGraphicSize.Height() = 0;
 }
 
-void SvxNumberFormat::SetGraphic( const String& rName )
+void SvxNumberFormat::SetGraphic( const OUString& rName )
 {
-    const String* pName;
+    const OUString* pName;
     if( pGraphicBrush &&
             0 != (pName = pGraphicBrush->GetGraphicLink())
                 && *pName == rName )
         return ;
 
     delete pGraphicBrush;
-    String sTmp;
+    OUString sTmp;
     pGraphicBrush = new SvxBrushItem( rName, sTmp, GPOS_AREA, 0 );
     pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
     if( eVertOrient == text::VertOrientation::NONE )
@@ -552,7 +552,7 @@ Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
     return aRetSize;
 }
 
-String SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
+OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
 {
     nNo %= 4000;            // more can not be displayed
 //      i, ii, iii, iv, v, vi, vii, vii, viii, ix
@@ -561,7 +561,7 @@ String SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
                         ? "MDCLXVI--"   // +2 Dummy entries!
                         : "mdclxvi--";  // +2 Dummy entries!
 
-    String sRet;
+    OUStringBuffer sRet;
     sal_uInt16 nMask = 1000;
     while( nMask )
     {
@@ -572,35 +572,39 @@ String SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
         if( 5 < nZahl )
         {
             if( nZahl < 9 )
-                sRet += sal_Unicode(*(cRomanArr-1));
+                sRet.append(sal_Unicode(*(cRomanArr-1)));
             ++nDiff;
             nZahl -= 5;
         }
         switch( nZahl )
         {
-        case 3:     { sRet += sal_Unicode(*cRomanArr); }
-        case 2:     { sRet += sal_Unicode(*cRomanArr); }
-        case 1:     { sRet += sal_Unicode(*cRomanArr); }
-                    break;
-
-        case 4:     {
-                        sRet += sal_Unicode(*cRomanArr);
-                        sRet += sal_Unicode(*(cRomanArr-nDiff));
-                    }
-                    break;
-        case 5:     { sRet += sal_Unicode(*(cRomanArr-nDiff)); }
-                    break;
+        case 3:
+            sRet.append(sal_Unicode(*cRomanArr));
+            // Fall-trough
+        case 2:
+            sRet.append(sal_Unicode(*cRomanArr));
+            // Fall-trough
+        case 1:
+            sRet.append(sal_Unicode(*cRomanArr));
+            break;
+        case 4:
+            sRet.append(sal_Unicode(*cRomanArr));
+            sRet.append(sal_Unicode(*(cRomanArr-nDiff)));
+            break;
+        case 5:
+            sRet.append(sal_Unicode(*(cRomanArr-nDiff)));
+            break;
         }
 
         nMask /= 10;            // for the next decade
         cRomanArr += 2;
     }
-    return sRet;
+    return sRet.toString();
 }
 
-const String&   SvxNumberFormat::GetCharFmtName()const
+OUString   SvxNumberFormat::GetCharFmtName()const
 {
-    return sCharStyleName;
+    return m_sCharStyleName;
 }
 
 sal_Int32 SvxNumRule::nRefCount = 0;
@@ -853,9 +857,9 @@ void SvxNumRule::SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt)
     }
 }
 
-String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclStrings ) const
+OUString  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclStrings ) const
 {
-    String aStr;
+    OUStringBuffer aStr;
     if( SVX_NO_NUM > rNum.GetLevel() && !( SVX_NO_NUMLEVEL & rNum.GetLevel() ) )
     {
         const SvxNumberFormat& rMyNFmt = GetLevel( rNum.GetLevel() );
@@ -870,9 +874,13 @@ String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclStrings
                 if( 1 < n )
                 {
                     if( i+1 >= n )
+                    {
                         i -= n - 1;
+                    }
                     else
+                    {
                         i = 0;
+                    }
                 }
             }
 
@@ -888,24 +896,28 @@ String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclStrings
                 if( rNum.GetLevelVal()[ i ] )
                 {
                     if(SVX_NUM_BITMAP != rNFmt.GetNumberingType())
-                        aStr += rNFmt.GetNumStr( rNum.GetLevelVal()[ i ], aLocale );
+                        aStr.append(rNFmt.GetNumStr( rNum.GetLevelVal()[ i ], aLocale ));
                     else
                         bDot = sal_False;
                 }
                 else
-                    aStr += sal_Unicode('0');       // all 0-levels are a 0
+                {
+                    aStr.append(sal_Unicode('0'));       // all 0-levels are a 0
+                }
                 if( i != rNum.GetLevel() && bDot)
-                    aStr += sal_Unicode('.');
+                {
+                    aStr.append(sal_Unicode('.'));
+                }
             }
         }
 
         if( bInclStrings )
         {
-            aStr.Insert( rMyNFmt.GetPrefix(), 0 );
-            aStr += rMyNFmt.GetSuffix();
+            aStr.insert( 0, rMyNFmt.GetPrefix());
+            aStr.append(rMyNFmt.GetSuffix());
         }
     }
-    return aStr;
+    return aStr.toString();
 }
 
 // changes linked to embedded bitmaps
@@ -916,17 +928,17 @@ sal_Bool SvxNumRule::UnLinkGraphics()
     {
         SvxNumberFormat aFmt(GetLevel(i));
         const SvxBrushItem* pBrush = aFmt.GetBrush();
-        const String* pLinkStr;
+        const OUString* pLinkStr;
         const Graphic* pGraphic;
         if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
         {
             if(pBrush &&
                 0 != (pLinkStr = pBrush->GetGraphicLink()) &&
-                    pLinkStr->Len() &&
+                    !pLinkStr->isEmpty() &&
                     0 !=(pGraphic = pBrush->GetGraphic()))
             {
                 SvxBrushItem aTempItem(*pBrush);
-                aTempItem.SetGraphicLink( String());
+                aTempItem.SetGraphicLink( OUString());
                 aTempItem.SetGraphic(*pGraphic);
                 sal_Int16    eOrient = aFmt.GetVertOrient();
                 aFmt.SetGraphicBrush( &aTempItem, &aFmt.GetGraphicSize(), &eOrient );

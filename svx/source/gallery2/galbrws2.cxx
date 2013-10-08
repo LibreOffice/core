@@ -62,9 +62,6 @@
 #define TBX_ID_ICON 1
 #define TBX_ID_LIST 2
 
-namespace css = ::com::sun::star;
-using rtl::OUString;
-
 GalleryBrowserMode GalleryBrowser2::meInitMode = GALLERYBROWSERMODE_ICON;
 
 struct DispatchInfo
@@ -750,7 +747,7 @@ sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
     return bRet;
 }
 
-void GalleryBrowser2::SelectTheme( const String& rThemeName )
+void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
 {
     delete mpIconView, mpIconView = NULL;
     delete mpListView, mpListView = NULL;
@@ -972,7 +969,7 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
 
 void GalleryBrowser2::ImplUpdateInfoBar()
 {
-    String aInfoText;
+    OUString aInfoText;
 
     if( mpCurTheme )
     {
@@ -1211,7 +1208,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
 
                 if( pObj )
                 {
-                    const String    aOldTitle( GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_TITLE ) );
+                    const OUString    aOldTitle( GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_TITLE ) );
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
@@ -1220,13 +1217,14 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
                         DBG_ASSERT(aDlg, "Dialogdiet fail!");
                         if( aDlg->Execute() == RET_OK )
                         {
-                            String aNewTitle( aDlg->GetTitle() );
+                            OUString aNewTitle( aDlg->GetTitle() );
 
-                            if( ( !aNewTitle.Len() && pObj->GetTitle().Len() ) || ( aNewTitle != aOldTitle ) )
+                            if( ( aNewTitle.isEmpty() && !pObj->GetTitle().isEmpty() ) || ( aNewTitle != aOldTitle ) )
                             {
-                                if( !aNewTitle.Len() )
-                                    aNewTitle = String( RTL_CONSTASCII_USTRINGPARAM( "__<empty>__" ) );
-
+                                if( aNewTitle.isEmpty() )
+                                {
+                                    aNewTitle = OUString( "__<empty>__" );
+                                }
                                 pObj->SetTitle( aNewTitle );
                                 mpCurTheme->InsertObject( *pObj );
                             }
@@ -1274,29 +1272,29 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
     }
 }
 
-String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags )
+OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags )
 {
-    String          aRet;
+    OUString          aRet;
 
     INetURLObject aURL(rObj.GetURL());
 
     if( nItemTextFlags & GALLERY_ITEM_THEMENAME )
     {
         aRet += rTheme.GetName();
-        aRet += String( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
+        aRet += " - ";
     }
 
     if( nItemTextFlags & GALLERY_ITEM_TITLE )
     {
-        String aTitle( rObj.GetTitle() );
+        OUString aTitle( rObj.GetTitle() );
 
-        if( !aTitle.Len() )
-            aTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_UNAMBIGUOUS );
-
-        if( !aTitle.Len() )
+        if( aTitle.isEmpty() )
         {
-            aTitle = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
-            aTitle = aTitle.GetToken( comphelper::string::getTokenCount(aTitle, '/') - 1, '/' );
+            aTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_UNAMBIGUOUS );
+        }
+        if( aTitle.isEmpty() )
+        {
+            aTitle = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ).getToken( comphelper::string::getTokenCount(aTitle, '/') - 1, '/' );
         }
 
         aRet += aTitle;
@@ -1304,15 +1302,18 @@ String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject
 
     if( nItemTextFlags & GALLERY_ITEM_PATH )
     {
-        const String aPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+        const OUString aPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-        if( aPath.Len() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
-            aRet += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
+        if( !aPath.isEmpty() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
+        {
+            aRet += " (" ;
+        }
+        aRet += aURL.getFSysPath( INetURLObject::FSYS_DETECT );
 
-        aRet += String(aURL.getFSysPath( INetURLObject::FSYS_DETECT ));
-
-        if( aPath.Len() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
-            aRet += ')';
+        if( !aPath.isEmpty() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
+        {
+            aRet += ")";
+        }
     }
 
     return aRet;
@@ -1328,9 +1329,9 @@ INetURLObject GalleryBrowser2::GetURL() const
     return aURL;
 }
 
-String GalleryBrowser2::GetFilterName() const
+OUString GalleryBrowser2::GetFilterName() const
 {
-    String aFilterName;
+    OUString aFilterName;
 
     if( mpCurTheme && mnCurActionPos != 0xffffffff )
     {

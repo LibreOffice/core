@@ -789,7 +789,7 @@ namespace drawinglayer
                     {
                         // emulate data handling from UnoControlPDFExportContact, original see
                         // svtools/source/graphic/grfmgr.cxx
-                        const Graphic& rGraphic = rGraphicPrimitive.getGraphicObject().GetGraphic();
+                        const Graphic& rGraphic = rGraphicPrimitive.getGraphicObject()->GetGraphic();
 
                         if(rGraphic.IsLink())
                         {
@@ -836,8 +836,8 @@ namespace drawinglayer
                             {
                                 const MapMode aMapMode100thmm(MAP_100TH_MM);
                                 const Size aBitmapSize(Application::GetDefaultDevice()->LogicToLogic(
-                                    rGraphicPrimitive.getGraphicObject().GetPrefSize(),
-                                    rGraphicPrimitive.getGraphicObject().GetPrefMapMode(), aMapMode100thmm));
+                                    rGraphicPrimitive.getGraphicObject()->GetPrefSize(),
+                                    rGraphicPrimitive.getGraphicObject()->GetPrefMapMode(), aMapMode100thmm));
                                 const double fDivX(aBitmapSize.Width() - rAttr.GetLeftCrop() - rAttr.GetRightCrop());
                                 const double fDivY(aBitmapSize.Height() - rAttr.GetTopCrop() - rAttr.GetBottomCrop());
 
@@ -862,7 +862,7 @@ namespace drawinglayer
                                 sal_Int32(ceil(aCropRange.getMaxX())), sal_Int32(ceil(aCropRange.getMaxY())));
                         }
 
-                        mpPDFExtOutDevData->EndGroup(rGraphicPrimitive.getGraphicObject().GetGraphic(),
+                        mpPDFExtOutDevData->EndGroup(rGraphicPrimitive.getGraphicObject()->GetGraphic(),
                             rAttr.GetTransparency(),
                             aCurrentRect,
                             aCropRect);

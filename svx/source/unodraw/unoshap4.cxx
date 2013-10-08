@@ -147,8 +147,8 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
         OUString aURL;
         if( rValue >>= aURL )
         {
-            GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
-            static_cast<SdrOle2Obj*>(mpObj.get())->SetGraphic( &aGrafObj.GetGraphic() );
+            rtl::Reference<GraphicObject> rGrafObj = GraphicObject::CreateGraphicObjectFromURL( aURL );
+            static_cast<SdrOle2Obj*>(mpObj.get())->SetGraphic( &rGrafObj->GetGraphic() );
             return true;
         }
         break;
@@ -161,8 +161,8 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
             SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
             if( pOle )
             {
-                GraphicObject aGrafObj( xGraphic );
-                const Graphic aGraphic( aGrafObj.GetGraphic() );
+                rtl::Reference<GraphicObject> rGrafObj = GraphicObject::Create( xGraphic );
+                const Graphic aGraphic( rGrafObj->GetGraphic() );
                 pOle->SetGraphicToObj( aGraphic, OUString() );
             }
             return true;
@@ -334,14 +334,13 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
             // if there isn't already a preview graphic set, check if we need to generate
             // one if model says so
             if( pGraphic == NULL && !pOle->IsEmptyPresObj() && mpModel->IsSaveOLEPreview() )
-                pGraphic = pOle->GetGraphic();
+                pGraphic = pOle->GetGraphic(); /* FIXME: that sound wrong pGraphic is already = to pOle->GetGraphic() */
 
             if( pGraphic )
             {
-                GraphicObject aObj( *pGraphic );
+                rtl::Reference<GraphicObject> rObj = GraphicObject::Create( *pGraphic );
                 aURL = OUString( UNO_NAME_GRAPHOBJ_URLPREFIX);
-                aURL += OStringToOUString(aObj.GetUniqueID(),
-                    RTL_TEXTENCODING_ASCII_US);
+                aURL += OStringToOUString(rObj->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
             }
         }
         rValue <<= aURL;

@@ -21,6 +21,7 @@
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <rtl/ref.hxx>
 #include <tools/string.hxx>
 #include <vcl/font.hxx>
 #include <editeng/swafopt.hxx>
@@ -604,7 +605,7 @@ public:
      (and mark is not set or points to the same graphic). */
 
     const Graphic* GetGraphic( sal_Bool bWait = sal_True ) const;
-    const GraphicObject* GetGraphicObj() const;
+    const rtl::Reference<GraphicObject> GetGraphicObj() const;
 
     sal_Bool IsGrfSwapOut( sal_Bool bOnlyLinked = sal_False ) const;
     sal_uInt16 GetGraphicType() const;
@@ -627,8 +628,8 @@ public:
 
     /// Re-read if graphic is not ok. Current graphic is replaced by the new one.
     void ReRead( const String& rGrfName, const String& rFltName,
-                  const Graphic* pGraphic = 0,
-                  const GraphicObject* pGrafObj = 0 );
+                 const Graphic* pGraphic = 0,
+                 const rtl::Reference<GraphicObject>* prGrafObj = 0 );
 
     /// Unique identification of object (for ImageMapDlg).
     void    *GetIMapInventor() const;

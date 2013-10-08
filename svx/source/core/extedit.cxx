@@ -77,11 +77,11 @@ void ExternalToolEdit::threadWorker(void* pThreadData)
     xSystemShellExecute->execute( pData->m_aFileName, OUString(), SystemShellExecuteFlags::URIS_ONLY );
 }
 
-void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
+void ExternalToolEdit::Edit( rtl::Reference<GraphicObject>& rGraphicObject )
 {
     //Get the graphic from the GraphicObject
-    m_pGraphicObject = pGraphicObject;
-    const Graphic aGraphic = pGraphicObject->GetGraphic();
+    m_rGraphicObject = rGraphicObject;
+    const Graphic aGraphic = rGraphicObject->GetGraphic();
 
     //get the Preferred File Extension for this graphic
     OUString fExtension;
@@ -102,15 +102,15 @@ void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilter(rGraphicFilter.GetExportFormatNumber(fExtension));
 
-    String aFilter(rGraphicFilter.GetExportFormatShortName(nFilter));
-    String sPath(aTempFileName);
+    OUString aFilter(rGraphicFilter.GetExportFormatShortName(nFilter));
+    OUString sPath(aTempFileName);
 
     // Write the Graphic to the file now
     XOutBitmap::WriteGraphic(aGraphic, sPath, aFilter, XOUTBMP_USE_NATIVE_IF_POSSIBLE | XOUTBMP_DONT_EXPAND_FILENAME);
 
     // There is a possiblity that sPath extnesion might have been changed if the
     // provided extension is not writable
-    m_aFileName = OUString(sPath);
+    m_aFileName = sPath;
 
     //Create a thread
 

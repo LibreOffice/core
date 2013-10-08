@@ -102,7 +102,7 @@ IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 // ------------------------
 
 sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
-                             String& rFilterName, sal_Bool bShowProgress )
+                                 OUString& rFilterName, sal_Bool bShowProgress )
 {
     sal_uInt16      nRet = SGA_IMPORT_NONE;
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
@@ -217,27 +217,26 @@ sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageM
 // - GetReducedString -
 // --------------------
 
-String GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen )
+OUString GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen )
 {
-    String aReduced( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
+    OUString aReduced( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-    aReduced = aReduced.GetToken( comphelper::string::getTokenCount(aReduced, '/') - 1, '/' );
+    aReduced = aReduced.getToken( comphelper::string::getTokenCount(aReduced, '/') - 1, '/' );
 
     if( INET_PROT_PRIV_SOFFICE != rURL.GetProtocol() )
     {
         sal_Unicode     aDelimiter;
-           const String    aPath( rURL.getFSysPath( INetURLObject::FSYS_DETECT, &aDelimiter ) );
-        const String    aName( aReduced );
+        const OUString    aPath( rURL.getFSysPath( INetURLObject::FSYS_DETECT, &aDelimiter ) );
+        const OUString    aName( aReduced );
 
-        if( aPath.Len() > nMaxLen )
+        if( aPath.getLength() > (sal_Int32)nMaxLen )
         {
-            aReduced = aPath.Copy( 0, (sal_uInt16)( nMaxLen - aName.Len() - 4 ) );
-            aReduced += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
-            aReduced += aDelimiter;
-            aReduced += aName;
+            aReduced = aPath.copy( 0, ( nMaxLen - aName.getLength() - 4 ) ) + OUString("...") + OUString(aDelimiter) + aName;
         }
         else
+        {
             aReduced = aPath;
+        }
     }
 
     return aReduced;
@@ -245,14 +244,14 @@ String GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen )
 
 // -----------------------------------------------------------------------------
 
-String GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
+OUString GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
 {
-    String aRet;
+    OUString aRet;
 
     if( rSvDrawObjURL.GetProtocol() == INET_PROT_PRIV_SOFFICE &&
         comphelper::string::getTokenCount(rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ), '/') == 3 )
     {
-        aRet = String(rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE )).GetToken( 2, '/' );
+        aRet = rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ).getToken( 2, '/' );
     }
 
     return aRet;
@@ -405,19 +404,19 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
         if( mxProgressBar.is() )
         {
-            String aProgressText;
+            OUString aProgressText;
 
             if( mpFilter )
             {
-                aProgressText = GAL_RESSTR(RID_SVXSTR_GALLERY_FILTER);
+                aProgressText = OUString(GAL_RESSTR(RID_SVXSTR_GALLERY_FILTER));
 //              mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
 //                                                                                          // so I am removing this. The gallery progress should
 //                                                                                          // be changed to use the XStatusIndicator instead of XProgressMonitor
             }
             else
-                aProgressText = String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) );
+                aProgressText = "Gallery";
 
-            xMonitor->addText( String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) ), aProgressText, sal_False ) ;
+            xMonitor->addText( OUString( "Gallery" ), aProgressText, sal_False ) ;
             mxProgressBar->setRange( 0, GALLERY_PROGRESS_RANGE );
         }
     }
@@ -447,7 +446,7 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObj
     mpTheme( pTheme ),
     meObjectKind( mpTheme->GetObjectKind( nObjectPos ) ),
     mnObjectPos( nObjectPos ),
-    mpGraphicObject( NULL ),
+    m_rGraphicObject( NULL ),
     mpImageMap( NULL ),
     mpURL( NULL )
 {
@@ -473,17 +472,19 @@ void GalleryTransferable::InitData( bool bLazy )
         {
             if( !bLazy )
             {
-                if( !mpGraphicObject )
+                if( !m_rGraphicObject.is() )
                 {
                     Graphic aGraphic;
 
                     if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
-                        mpGraphicObject = new GraphicObject( aGraphic );
+                    {
+                        m_rGraphicObject = GraphicObject::Create( aGraphic );
+                    }
                 }
 
                 if( !mxModelStream.Is() )
                 {
-                    mxModelStream = new SotStorageStream( String() );
+                    mxModelStream = new SotStorageStream( OUString() );
                     mxModelStream->SetBufferSize( 16348 );
 
                     if( !mpTheme->GetModelStream( mnObjectPos, mxModelStream ) )
@@ -508,12 +509,14 @@ void GalleryTransferable::InitData( bool bLazy )
                     delete mpURL, mpURL = NULL;
             }
 
-            if( ( SGA_OBJ_SOUND != meObjectKind ) && !mpGraphicObject )
+            if( ( SGA_OBJ_SOUND != meObjectKind ) && !m_rGraphicObject.is() )
             {
                 Graphic aGraphic;
 
                 if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
-                    mpGraphicObject = new GraphicObject( aGraphic );
+                {
+                    m_rGraphicObject = GraphicObject::Create( aGraphic );
+                }
             }
         }
         break;
@@ -540,11 +543,11 @@ void GalleryTransferable::AddSupportedFormats()
         if( mpURL )
             AddFormat( FORMAT_FILE );
 
-        if( mpGraphicObject )
+        if( m_rGraphicObject.is() )
         {
             AddFormat( SOT_FORMATSTR_ID_SVXB );
 
-            if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
+            if( m_rGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
             {
                 AddFormat( FORMAT_GDIMETAFILE );
                 AddFormat( FORMAT_BITMAP );
@@ -580,17 +583,17 @@ sal_Bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
     {
         bRet = SetString( mpURL->GetMainURL( INetURLObject::NO_DECODE ), rFlavor );
     }
-    else if( ( SOT_FORMATSTR_ID_SVXB == nFormat ) && mpGraphicObject )
+    else if( ( SOT_FORMATSTR_ID_SVXB == nFormat ) && m_rGraphicObject.is() )
     {
-        bRet = SetGraphic( mpGraphicObject->GetGraphic(), rFlavor );
+        bRet = SetGraphic( m_rGraphicObject->GetGraphic(), rFlavor );
     }
-    else if( ( FORMAT_GDIMETAFILE == nFormat ) && mpGraphicObject )
+    else if( ( FORMAT_GDIMETAFILE == nFormat ) && m_rGraphicObject.is() )
     {
-        bRet = SetGDIMetaFile( mpGraphicObject->GetGraphic().GetGDIMetaFile(), rFlavor );
+        bRet = SetGDIMetaFile( m_rGraphicObject->GetGraphic().GetGDIMetaFile(), rFlavor );
     }
-    else if( ( FORMAT_BITMAP == nFormat ) && mpGraphicObject )
+    else if( ( FORMAT_BITMAP == nFormat ) && m_rGraphicObject.is() )
     {
-        bRet = SetBitmapEx( mpGraphicObject->GetGraphic().GetBitmapEx(), rFlavor );
+        bRet = SetBitmapEx( m_rGraphicObject->GetGraphic().GetBitmapEx(), rFlavor );
     }
 
     return bRet;
@@ -631,7 +634,7 @@ void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 void GalleryTransferable::ObjectReleased()
 {
     mxModelStream.Clear();
-    delete mpGraphicObject, mpGraphicObject = NULL;
+    m_rGraphicObject = rtl::Reference<GraphicObject>();
     delete mpImageMap, mpImageMap = NULL;
     delete mpURL, mpURL = NULL;
 }

@@ -75,8 +75,8 @@ public:
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt* );
 
-    virtual void            SetCharFmtName(const String& rSet);
-    virtual const String&   GetCharFmtName()const;
+    virtual void           SetCharFmtName(const OUString& rSet);
+    virtual OUString GetCharFmtName()const;
 
     //For i120928,access the cp info of graphic within bullet
     void            SetGrfBulletCP(sal_Unicode cP){cGrfBulletCP = cP;}

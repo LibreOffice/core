@@ -39,13 +39,13 @@ bool SVX_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBa
 class SVX_DLLPUBLIC XFillBitmapItem : public NameOrIndex
 {
 private:
-    GraphicObject   maGraphicObject;
+    rtl::Reference<GraphicObject>   m_rGraphicObject;
 
 public:
             TYPEINFO();
             XFillBitmapItem() : NameOrIndex(XATTR_FILLBITMAP, -1 ) {}
-            XFillBitmapItem(const String& rName, const GraphicObject& rGraphicObject);
-            XFillBitmapItem(SfxItemPool* pPool, const GraphicObject& rGraphicObject);
+            XFillBitmapItem(const String& rName, const rtl::Reference<GraphicObject>& rGraphicObject);
+            XFillBitmapItem(SfxItemPool* pPool, const rtl::Reference<GraphicObject>& rGraphicObject);
             XFillBitmapItem( const XFillBitmapItem& rItem );
             XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer = 0 );
 
@@ -63,8 +63,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const;
 
-    const GraphicObject& GetGraphicObject() const;
-    void SetGraphicObject(const GraphicObject& rGraphicObject);
+    const rtl::Reference<GraphicObject> GetGraphicObject() const;
+    void SetGraphicObject(const rtl::Reference<GraphicObject>& rGraphicObject);
 
     static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillBitmapItem* checkForUniqueItem( SdrModel* pModel ) const;

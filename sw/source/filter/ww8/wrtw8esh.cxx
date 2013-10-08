@@ -1344,8 +1344,8 @@ sal_Int32 SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
     OpenContainer( ESCHER_SpContainer );
     AddShape(ESCHER_ShpInst_PictureFrame, 0xa00,0x401);
     EscherPropertyContainer aPropOpt;
-    GraphicObject aGraphicObject( rGrf );
-    OString aUniqueId = aGraphicObject.GetUniqueID();
+    rtl::Reference<GraphicObject> rGraphicObject = GraphicObject::Create( rGrf );
+    OString aUniqueId = rGraphicObject->GetUniqueID();
     if ( !aUniqueId.isEmpty() )
     {
         const MapMode aMap100mm( MAP_100TH_MM );
@@ -1431,8 +1431,8 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
         pGrfNd->SwapIn(true);
 
         Graphic         aGraphic(pGrfNd->GetGrf());
-        GraphicObject   aGraphicObject( aGraphic );
-        OString aUniqueId = aGraphicObject.GetUniqueID();
+        rtl::Reference<GraphicObject> rGraphicObject = GraphicObject::Create( aGraphic );
+        OString aUniqueId = rGraphicObject->GetUniqueID();
 
         if (!aUniqueId.isEmpty())
         {
@@ -1639,12 +1639,13 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
 {
     bool bSetOpacity = false;
     sal_uInt32 nOpaque = 0;
-    if (const GraphicObject *pGraphicObject = rBrush.GetGraphicObject())
+    const rtl::Reference<GraphicObject> rGraphicObject = rBrush.GetGraphicObject();
+    if (rGraphicObject.is())
     {
-        OString aUniqueId = pGraphicObject->GetUniqueID();
+        OString aUniqueId = rGraphicObject->GetUniqueID();
         if (!aUniqueId.isEmpty())
         {
-            const Graphic &rGraphic = pGraphicObject->GetGraphic();
+            const Graphic &rGraphic = rGraphicObject->GetGraphic();
             Size aSize(rGraphic.GetPrefSize());
             const MapMode aMap100mm(MAP_100TH_MM);
             if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
@@ -1667,7 +1668,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
                 rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
         }
 
-        if (0 != (nOpaque = pGraphicObject->GetAttr().GetTransparency()))
+        if (0 != (nOpaque = rGraphicObject->GetAttr().GetTransparency()))
             bSetOpacity = true;
 
         rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
@@ -2813,8 +2814,8 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
     //nShapeFlags == 0xA00 + flips and ole active
     AddShape(ESCHER_ShpInst_PictureFrame, nShapeFlags, nShapeId);
 
-    GraphicObject aGraphicObject(rGraphic);
-    OString aId = aGraphicObject.GetUniqueID();
+    rtl::Reference<GraphicObject> rGraphicObject = GraphicObject::Create(rGraphic);
+    OString aId = rGraphicObject->GetUniqueID();
     if (!aId.isEmpty())
     {
         Rectangle aRect = rObj.GetLogicRect();

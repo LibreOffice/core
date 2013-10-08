@@ -59,7 +59,7 @@ public:
             aStr.Append( sal_Unicode(' ') );
             aStr.Append( String( "External Edit" ) );
             m_pView->BegUndo( aStr );
-            pNewObj->SetGraphicObject( aGraphic );
+            pNewObj->SetGraphicObject( GraphicObject::Create(aGraphic) );
             m_pView->ReplaceObjectAtView( m_pObj, *pPageView, pNewObj );
             m_pView->EndUndo();
         }
@@ -135,10 +135,10 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
 
         if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
         {
-            GraphicObject aFilterObj( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+            rtl::Reference<GraphicObject> rFilterObj = ( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
 
             if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
-                SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
+                SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, &rFilterObj ) )
             {
                 SdrPageView* pPageView = pView->GetSdrPageView();
 
@@ -150,7 +150,7 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( ScResId( SCSTR_UNDO_GRAFFILTER ) ) );
                     pView->BegUndo( aStr );
-                    pFilteredObj->SetGraphicObject( aFilterObj );
+                    pFilteredObj->SetGraphicObject( rFilterObj );
                     pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );
                     pView->EndUndo();
                 }
@@ -189,9 +189,9 @@ void ScGraphicShell::ExecuteExternalEdit( SfxRequest& )
 
         if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
         {
-            GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+            rtl::Reference<GraphicObject> rGraphicObject = ( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
             ScExternalToolEdit* aExternalToolEdit = new ScExternalToolEdit( pView, pObj );
-            aExternalToolEdit->Edit( &aGraphicObject );
+            aExternalToolEdit->Edit( rGraphicObject );
         }
     }
 

@@ -20,6 +20,7 @@
 #ifndef _SVX_GALMISC_HXX_
 #define _SVX_GALMISC_HXX_
 
+#include <rtl/ref.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/imap.hxx>
@@ -28,7 +29,7 @@
 #include <svx/svdobj.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XProgressMonitor.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
@@ -37,7 +38,7 @@ class GalleryTheme;
 struct ExchangeData
 {
     GalleryTheme*   pTheme;
-    String          aEditedTitle;
+    OUString        aEditedTitle;
     Date            aThemeChangeDate;
     Time            aThemeChangeTime;
 
@@ -78,25 +79,24 @@ enum SgaObjKind
 #define GALLERY_DLG_COLOR       Application::GetSettings().GetStyleSettings().GetDialogColor()
 
 class ResMgr;
-class String;
 class SvStream;
 class Graphic;
 class FmFormModel;
 class ImageMap;
 class Gallery;
 
-SVX_DLLPUBLIC ResMgr*           GetGalleryResMgr();
-sal_uInt16          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, String& rFilterName, sal_Bool bShowProgress = sal_False );
+SVX_DLLPUBLIC ResMgr* GetGalleryResMgr();
+sal_uInt16          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName, sal_Bool bShowProgress = sal_False );
 sal_Bool            GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
 sal_Bool            CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
-SVX_DLLPUBLIC String            GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen );
-String          GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
+SVX_DLLPUBLIC OUString GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen );
+OUString            GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
 
 sal_Bool            FileExists( const INetURLObject& rURL );
 sal_Bool            CreateDir(  const INetURLObject& rURL );
 sal_Bool            CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
 sal_Bool            KillFile( const INetURLObject& rURL );
-BitmapEx        GalleryResGetBitmapEx( sal_uInt32 nId );
+BitmapEx            GalleryResGetBitmapEx( sal_uInt32 nId );
 
 class SgaIMapInfo : public SdrObjUserData, public SfxListener
 {
@@ -125,7 +125,7 @@ class SgaUserDataFactory
 {
 public:
         SgaUserDataFactory() { SdrObjFactory::InsertMakeUserDataHdl( USERDATA_HDL() ); }
-        ~SgaUserDataFactory() { SdrObjFactory::RemoveMakeUserDataHdl( USERDATA_HDL() ); }
+       ~SgaUserDataFactory() { SdrObjFactory::RemoveMakeUserDataHdl( USERDATA_HDL() ); }
 
         DECL_LINK( MakeUserData, SdrObjFactory* );
 };
@@ -134,15 +134,14 @@ class GraphicFilter;
 
 class SVX_DLLPUBLIC GalleryProgress
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar > mxProgressBar;
-    GraphicFilter*                                                          mpFilter;
+    ::css::uno::Reference< ::css::awt::XProgressBar > mxProgressBar;
+    GraphicFilter* mpFilter;
 
     public:
+           GalleryProgress( GraphicFilter* pFilter = NULL );
+          ~GalleryProgress();
 
-                                    GalleryProgress( GraphicFilter* pFilter = NULL );
-                                    ~GalleryProgress();
-
-    void                            Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal );
+    void   Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal );
 };
 
 class Gallery;
@@ -160,14 +159,13 @@ private:
     SgaObjKind                      meObjectKind;
     sal_uInt32                      mnObjectPos;
     SotStorageStreamRef             mxModelStream;
-    GraphicObject*                  mpGraphicObject;
+    rtl::Reference<GraphicObject>   m_rGraphicObject;
     ImageMap*                       mpImageMap;
     INetURLObject*                  mpURL;
 
 protected:
-
                                     GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObjectPos, bool bLazy );
-                                    ~GalleryTransferable();
+                                   ~GalleryTransferable();
 
     void                            InitData( bool bLazy );
 
@@ -205,17 +203,17 @@ private:
 
 public:
 
-                    GalleryHint( sal_uIntPtr nType, const String& rThemeName, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
+                    GalleryHint( sal_uIntPtr nType, const OUString& rThemeName, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
                         mnType( nType ), maThemeName( rThemeName ), mnData1( nData1 ), mnData2( nData2 ) {}
 
-                    GalleryHint( sal_uIntPtr nType, const String& rThemeName, const String& rStringData, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
+                    GalleryHint( sal_uIntPtr nType, const OUString& rThemeName, const OUString& rStringData, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
                         mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nData1 ), mnData2( nData2 ) {}
 
-    sal_uIntPtr          GetType() const { return mnType; }
+    sal_uIntPtr     GetType() const { return mnType; }
     const OUString& GetThemeName() const { return maThemeName; }
     const OUString& GetStringData() const { return maStringData; }
-    sal_uIntPtr          GetData1() const { return mnData1; }
-    sal_uIntPtr          GetData2() const { return mnData2; }
+    sal_uIntPtr     GetData1() const { return mnData1; }
+    sal_uIntPtr     GetData2() const { return mnData2; }
 };
 
     #endif

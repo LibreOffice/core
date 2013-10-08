@@ -121,15 +121,14 @@ SvXMLImportContext *SwXMLBrushItemImportContext::CreateChildContext(
     {
         if( !xBase64Stream.is() && !pItem->GetGraphicLink() )
         {
-            const GraphicObject *pGrObj = pItem->GetGraphicObject();
-            if( !pGrObj || GRAPHIC_NONE == pGrObj->GetType() )
+            const rtl::Reference<GraphicObject> rGrObj = pItem->GetGraphicObject();
+            if( !rGrObj.is() || GRAPHIC_NONE == rGrObj->GetType() )
             {
-                xBase64Stream =
-                    GetImport().GetStreamForGraphicObjectURLFromBase64();
+                xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
                 if( xBase64Stream.is() )
                     pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
-                                                        rLocalName, xAttrList,
-                                                        xBase64Stream );
+                                                           rLocalName, xAttrList,
+                                                           xBase64Stream );
             }
         }
     }

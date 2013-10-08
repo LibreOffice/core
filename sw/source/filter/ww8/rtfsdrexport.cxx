@@ -444,7 +444,7 @@ void RtfSdrExport::impl_writeGraphic()
     xPropertySet->getPropertyValue("GraphicURL") >>= sGraphicURL;
     OString aURLBS(OUStringToOString(sGraphicURL, RTL_TEXTENCODING_UTF8));
     const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
-    Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
+    Graphic aGraphic = GraphicObject::Create(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)))->GetTransformedGraphic();
 
     // Export it to a stream.
     SvMemoryStream aStream;

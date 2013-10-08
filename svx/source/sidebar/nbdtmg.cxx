@@ -675,13 +675,16 @@ sal_Bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIn
     const SvxBrushItem* pBrsh = aFmt.GetBrush();
     const Graphic* pGrf = 0;
     if ( pBrsh )
+    {
         pGrf = pBrsh->GetGraphic();
+    }
     else
+    {
         return sal_False;
-
+    }
     if ( pGrf )
     {
-        const String* pGrfName = pBrsh->GetGraphicLink();
+        const OUString* pGrfName = pBrsh->GetGraphicLink();
         //String* pGrfName = (String*)(pBrsh->GetGraphicLink());
         GrfBulDataRelation* pEntry = aGrfDataLst[nIndex];
         if ( pGrfName )
@@ -689,12 +692,13 @@ sal_Bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIn
         //pEntry->sDescription = sEmpty;
         pEntry->nGallaryIndex = (sal_uInt16)0xFFFF;
         pEntry->bIsCustomized = sal_True;
-        String aStrFromRES = String(SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION));
-        String aReplace = OUString("%LIST_NUM");
-        String sNUM = OUString::number( nIndex + 1 );
-        aStrFromRES.SearchAndReplace(aReplace,sNUM);
+        OUString aStrFromRES = OUString(SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION));
+        OUString aReplace = OUString("%LIST_NUM");
+        OUString sNUM = OUString::number( nIndex + 1 );
+        aStrFromRES = aStrFromRES.replaceAll(aReplace, sNUM);
         pEntry->sDescription = aStrFromRES;
-    }else
+    }
+    else
     {
         return sal_False;
     }
@@ -1080,13 +1084,15 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
         else
             return sal_False;
 
-        String sEmpty;
+        OUString sEmpty;
         if ( pGrf )
         {
-            const String* pGrfName = pBrsh->GetGraphicLink();
+            const OUString* pGrfName = pBrsh->GetGraphicLink();
             GrfBulDataRelation* pEntry = (GrfBulDataRelation*) (pActualBullets[nIndex]->pBullets);
             if ( pGrfName )
+            {
                 pEntry->sGrfName = *pGrfName;
+            }
             GraphyicBulletsTypeMgr* mGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();
             if ( mGrfTMgr )
             {
@@ -1099,9 +1105,9 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
                 {
                     pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
                     sEmpty = String(SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION));
-                    String aReplace = OUString("%LIST_NUM");
-                    String sNUM = OUString::number( nIndex + 1 );
-                    sEmpty.SearchAndReplace(aReplace,sNUM);
+                    OUString aReplace = OUString("%LIST_NUM");
+                    OUString sNUM = OUString::number( nIndex + 1 );
+                    sEmpty = sEmpty.replaceAll(aReplace, sNUM);
                     //pEntry->pGrfObj = pGrf;
                     pEntry->pGrfObj = new Graphic(*pGrf);
                     pEntry->aSize = aFmt.GetGraphicSize();
@@ -1158,7 +1164,7 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
             else
                 return sal_False;
 
-            const String* pGrfName = 0;
+            const OUString* pGrfName = 0;
             if ( pGrf )
             {
                 pGrfName = pBrsh->GetGraphicLink();

@@ -35,7 +35,7 @@ typedef ::cppu::WeakImplHelper1< graphic::XGraphicObject > GObjectAccess_BASE;
 class GObjectImpl : public GObjectAccess_BASE
 {
      ::osl::Mutex m_aMutex;
-     std::auto_ptr< GraphicObject > mpGObject;
+    rtl::Reference< GraphicObject > mrGraphicObject;
 public:
      GObjectImpl( uno::Sequence< uno::Any > const & args, uno::Reference< uno::XComponentContext > const & xComponentContext ) throw (uno::RuntimeException);
 
@@ -53,35 +53,37 @@ GObjectImpl::GObjectImpl( uno::Sequence< uno::Any > const & args, uno::Reference
         if ( !( args[ 0 ] >>= sId ) || sId.isEmpty() )
             throw lang::IllegalArgumentException();
         OString bsId(OUStringToOString(sId, RTL_TEXTENCODING_UTF8));
-        mpGObject.reset( new GraphicObject( bsId ) );
+        mrGraphicObject = GraphicObject::Create( bsId );
     }
     else
-       mpGObject.reset( new GraphicObject() );
+    {
+        mrGraphicObject = GraphicObject::Create();
+    }
 }
 
 uno::Reference< graphic::XGraphic > SAL_CALL GObjectImpl::getGraphic() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if ( !mpGObject.get() )
+    if ( !mrGraphicObject.is() )
         throw uno::RuntimeException();
-    return mpGObject->GetGraphic().GetXGraphic();
+    return mrGraphicObject->GetGraphic().GetXGraphic();
 }
 
 void SAL_CALL GObjectImpl::setGraphic( const uno::Reference< graphic::XGraphic >& _graphic ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if ( !mpGObject.get() )
+    if ( !mrGraphicObject.is() )
         throw uno::RuntimeException();
     Graphic aGraphic( _graphic );
-    mpGObject->SetGraphic( aGraphic );
+    mrGraphicObject = GraphicObject::Create( aGraphic );
 }
 
 OUString SAL_CALL GObjectImpl::getUniqueID() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OUString sId;
-    if ( mpGObject.get() )
-        sId = OStringToOUString(mpGObject->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
+    if ( mrGraphicObject.is() )
+        sId = OStringToOUString(mrGraphicObject->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
     return sId;
 }
 

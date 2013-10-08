@@ -466,17 +466,16 @@ public:
 class EDITENG_DLLPUBLIC DrawBulletInfo
 {
 public:
-    const GraphicObject maBulletGraphicObject;
+    const rtl::Reference<GraphicObject> maBulletGraphicObject;
     Point               maBulletPosition;
     Size                maBulletSize;
 
-    DrawBulletInfo(
-        const GraphicObject& rBulletGraphicObject,
-        const Point& rBulletPosition,
-        const Size& rBulletSize)
-    :   maBulletGraphicObject(rBulletGraphicObject),
-        maBulletPosition(rBulletPosition),
-        maBulletSize(rBulletSize)
+    DrawBulletInfo( const rtl::Reference<GraphicObject>& rBulletGraphicObject,
+                    const Point& rBulletPosition,
+                    const Size& rBulletSize)
+        : maBulletGraphicObject(rBulletGraphicObject)
+        , maBulletPosition(rBulletPosition)
+        , maBulletSize(rBulletSize)
     {}
 };
 

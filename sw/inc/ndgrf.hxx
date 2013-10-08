@@ -37,8 +37,8 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 {
     friend class SwNodes;
 
-    GraphicObject maGrfObj;
-    GraphicObject *mpReplacementGraphic;
+    rtl::Reference<GraphicObject> m_rGrfObj;
+    rtl::Reference<GraphicObject> m_rReplacementGraphic;
     ::sfx2::SvBaseLinkRef refLink;       ///< If graphics only as link then pointer is set.
     Size nGrfSize;
     String aNewStrmName;                 /**< SW3/XML: new stream name (either SW3 stream
@@ -70,13 +70,13 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
                SwGrfFmtColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
     SwGrfNode( const SwNodeIndex& rWhere,
-               const GraphicObject& rGrfObj,
+               const rtl::Reference<GraphicObject>& rGrfObj,
                SwGrfFmtColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
 
     void InsertLink( const String& rGrfName, const String& rFltName );
     sal_Bool ImportGraphic( SvStream& rStrm );
-    sal_Bool HasStreamName() const { return maGrfObj.HasUserData(); }
+    sal_Bool HasStreamName() const { return m_rGrfObj->HasUserData(); }
     /** adjust return type and rename method to
        indicate that its an private one. */
 
@@ -85,7 +85,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     void _GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
 
     void DelStreamName();
-    DECL_LINK( SwapGraphic, GraphicObject* );
+    DECL_LINK( SwapGraphic, rtl::Reference<GraphicObject>* );
 
     /** helper method to determine stream for the embedded graphic.
 
@@ -128,19 +128,18 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
 public:
     virtual ~SwGrfNode();
-    const Graphic&          GetGrf() const      { return maGrfObj.GetGraphic(); }
-    const GraphicObject&    GetGrfObj() const   { return maGrfObj; }
-    const GraphicObject* GetReplacementGrfObj() const;
+    const Graphic&          GetGrf() const      { return m_rGrfObj->GetGraphic(); }
+    const rtl::Reference<GraphicObject>    GetGrfObj() const   { return m_rGrfObj; }
+    const rtl::Reference<GraphicObject> GetReplacementGrfObj() const;
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
 
     /// isolated only way to set GraphicObject to allow more actions when doing so
     void SetGraphic(const Graphic& rGraphic, const String& rLink);
 
     /// wrappers for non-const calls at GraphicObject
-    void ReleaseGraphicFromCache() { maGrfObj.ReleaseFromCache(); }
-    void DrawGraphicWithPDFHandling(OutputDevice& rOutDev, const Point& rPt, const Size& rSz, const GraphicAttr* pGrfAttr = NULL, const sal_uLong nFlags = GRFMGR_DRAW_STANDARD) { maGrfObj.DrawWithPDFHandling(rOutDev, rPt, rSz, pGrfAttr, nFlags); }
-    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0, const GraphicAttr* pAttr = NULL, sal_uLong nFlags = GRFMGR_DRAW_STANDARD, OutputDevice* pFirstFrameOutDev = NULL) { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pAttr, nFlags, pFirstFrameOutDev); }
-    void StopGraphicAnimation(OutputDevice* pOut = NULL, long nExtraData = 0) { maGrfObj.StopAnimation(pOut, nExtraData); }
+    void DrawGraphicWithPDFHandling(OutputDevice& rOutDev, const Point& rPt, const Size& rSz, const GraphicAttr* pGrfAttr = NULL, const sal_uLong nFlags = GRFMGR_DRAW_STANDARD) { m_rGrfObj->DrawWithPDFHandling(rOutDev, rPt, rSz, pGrfAttr, nFlags); }
+    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0, const GraphicAttr* pAttr = NULL, sal_uLong nFlags = GRFMGR_DRAW_STANDARD, OutputDevice* pFirstFrameOutDev = NULL) { m_rGrfObj->StartAnimation(pOut, rPt, rSz, nExtraData, pAttr, nFlags, pFirstFrameOutDev); }
+    void StopGraphicAnimation(OutputDevice* pOut = NULL, long nExtraData = 0) { m_rGrfObj->StopAnimation(pOut, nExtraData); }
 
     /// allow reaction on change of content of GraphicObject, so always call
     /// when GraphicObject content changes
@@ -152,7 +151,7 @@ public:
 
     sal_Bool IsTransparent() const;
 
-    inline sal_Bool IsAnimated() const              { return maGrfObj.IsAnimated(); }
+    inline sal_Bool IsAnimated() const              { return m_rGrfObj->IsAnimated(); }
 
     inline sal_Bool IsChgTwipSize() const           { return bChgTwipSize; }
     inline sal_Bool IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
@@ -174,15 +173,15 @@ public:
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */
     sal_Bool ReRead( const String& rGrfName, const String& rFltName,
-                 const Graphic* pGraphic = 0,
-                 const GraphicObject* pGrfObj = 0,
-                 sal_Bool bModify = sal_True );
+                     const Graphic* pGraphic = 0,
+                     const rtl::Reference<GraphicObject>* pGrfObj = 0,
+                     sal_Bool bModify = sal_True );
     /// Loading of graphic immediately before displaying.
     short SwapIn( sal_Bool bWaitForData = sal_False );
     /// Remove graphic in order to free memory.
     short SwapOut();
     /// Access to storage stream-name.
-    void SetStreamName( const String& r ) { maGrfObj.SetUserData( r ); }
+    void SetStreamName( const String& r ) { m_rGrfObj->SetUserData( r ); }
     void SetNewStreamName( const String& r ) { aNewStrmName = r; }
     /// Is this node selected by any shell?
     sal_Bool IsSelected() const;

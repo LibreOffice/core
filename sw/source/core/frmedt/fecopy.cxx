@@ -1480,7 +1480,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
 
                     if(GRAPHIC_NONE != rGraphic.GetType() && GRAPHIC_DEFAULT != rGraphic.GetType())
                     {
-                        aSet.Put(XFillBitmapItem(String(), rGraphic));
+                        aSet.Put(XFillBitmapItem(OUString(), GraphicObject::Create(rGraphic)));
                         aSet.Put(XFillStyleItem(XFILL_BITMAP));
                     }
                 }
@@ -1563,7 +1563,7 @@ sal_Bool SwFEShell::Paste( const Graphic &rGrf )
         SfxItemSet aSet(GetAttrPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
 
         aSet.Put(XFillStyleItem(XFILL_BITMAP));
-        aSet.Put(XFillBitmapItem(aEmptyStr, rGrf));
+        aSet.Put(XFillBitmapItem(OUString(), GraphicObject::Create(rGrf)));
         pView->SetAttributes(aSet, false);
     }
     return bRet;

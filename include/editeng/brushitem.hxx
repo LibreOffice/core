@@ -19,6 +19,7 @@
 #ifndef _SVX_BRSHITEM_HXX
 #define _SVX_BRSHITEM_HXX
 
+#include <rtl/ref.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/wall.hxx>
 #include <tools/link.hxx>
@@ -51,10 +52,10 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     Color               aColor;
     sal_Int32           nShadingValue;
     SvxBrushItem_Impl*  pImpl;
-    String*             pStrLink;
-    String*             pStrFilter;
+    OUString*           pStrLink;
+    OUString*           pStrFilter;
     SvxGraphicPosition  eGraphicPos;
-    sal_Bool                bLoadAgain;
+    sal_Bool            bLoadAgain;
 
     void        ApplyGraphicTransparency_Impl();
     DECL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void *);
@@ -70,9 +71,9 @@ public:
 
     SvxBrushItem( const Graphic& rGraphic,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
-    SvxBrushItem( const GraphicObject& rGraphicObj,
+    SvxBrushItem( const rtl::Reference<GraphicObject>& rGraphicObj,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
-    SvxBrushItem( const String& rLink, const String& rFilter,
+    SvxBrushItem( const OUString& rLink, const OUString& rFilter,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const SvxBrushItem& );
     SvxBrushItem( const CntWallpaperItem&, sal_uInt16 nWhich );
@@ -86,18 +87,18 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const;
 
-    virtual int              operator==( const SfxPoolItem& ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual int         operator==( const SfxPoolItem& ) const;
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 nVersion ) const;
-    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const;
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem* Create( SvStream&, sal_uInt16 nVersion ) const;
+    virtual SvStream&   Store( SvStream& , sal_uInt16 nItemVersion ) const;
+    virtual sal_uInt16  GetVersion( sal_uInt16 nFileVersion ) const;
 
-    const Color&    GetColor() const                { return aColor; }
-    Color&          GetColor()                      { return aColor; }
-    void            SetColor( const Color& rCol)    { aColor = rCol; }
+    const Color&        GetColor() const                { return aColor; }
+    Color&              GetColor()                      { return aColor; }
+    void                SetColor( const Color& rCol)    { aColor = rCol; }
 
     void                SetDoneLink( const Link& rLink );
 
@@ -105,24 +106,24 @@ public:
 
     void                PurgeMedium() const;
 
-    sal_uInt32              GetShadingValue() const     { return nShadingValue; }
-    const Graphic*          GetGraphic() const;
-    const GraphicObject*    GetGraphicObject() const;
-    const String*           GetGraphicLink() const      { return pStrLink; }
-    const String*           GetGraphicFilter() const    { return pStrFilter; }
+    sal_uInt32          GetShadingValue() const     { return nShadingValue; }
+    const Graphic*      GetGraphic() const;
+    const rtl::Reference<GraphicObject>  GetGraphicObject() const;
+    const OUString*     GetGraphicLink() const      { return pStrLink; }
+    const OUString*     GetGraphicFilter() const    { return pStrFilter; }
 
     void                SetShadingValue( const sal_uInt32 nNew );
     void                SetGraphicPos( SvxGraphicPosition eNew );
     void                SetGraphic( const Graphic& rNew );
-    void                SetGraphicObject( const GraphicObject& rNewObj );
-    void                SetGraphicLink( const String& rNew );
-    void                SetGraphicFilter( const String& rNew );
+    void                SetGraphicObject( const rtl::Reference<GraphicObject>& rNewObj );
+    void                SetGraphicLink( const OUString& rNew );
+    void                SetGraphicFilter( const OUString& rNew );
 
     SvxBrushItem&       operator=( const SvxBrushItem& rItem);
 
-    static SvxGraphicPosition   WallpaperStyle2GraphicPos( WallpaperStyle eStyle );
-    static WallpaperStyle       GraphicPos2WallpaperStyle( SvxGraphicPosition ePos );
-    static sal_Int8             TransparencyToPercent(sal_Int32 nTrans);
+    static SvxGraphicPosition WallpaperStyle2GraphicPos( WallpaperStyle eStyle );
+    static WallpaperStyle GraphicPos2WallpaperStyle( SvxGraphicPosition ePos );
+    static sal_Int8     TransparencyToPercent(sal_Int32 nTrans);
 };
 
 #endif // #ifndef _SVX_BRSHITEM_HXX

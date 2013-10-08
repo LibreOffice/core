@@ -30,14 +30,14 @@ class SVX_DLLPUBLIC XOBitmap
 {
 private:
     XBitmapType     eType;
-    GraphicObject   aGraphicObject;
+    rtl::Reference<GraphicObject>   m_rGraphicObject;
     sal_uInt16*     pPixelArray;
     Size            aArraySize;
     Color           aPixelColor;
     Color           aBckgrColor;
     sal_Bool        bGraphicDirty;
 
-    const GraphicObject& GetGraphicObject() const;
+    const rtl::Reference<GraphicObject> GetGraphicObject() const;
 
 public:
     XOBitmap( const Bitmap& rBitmap );

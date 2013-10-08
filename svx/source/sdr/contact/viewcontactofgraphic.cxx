@@ -87,7 +87,7 @@ namespace sdr
             const GraphicAttr& rLocalGrafInfo) const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            GraphicObject aEmptyGraphicObject;
+            rtl::Reference<GraphicObject> aEmptyGraphicObject = GraphicObject::Create();
             GraphicAttr aEmptyGraphicAttr;
 
             // SdrGrafPrimitive2D without content in original size which carries all eventual attributes and texts
@@ -132,7 +132,7 @@ namespace sdr
                 aSmallerMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
                     * aSmallerMatrix;
 
-                const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+                const rtl::Reference<GraphicObject> rGraphicObject = GetGrafObject().GetGraphicObject(false);
                 const drawinglayer::primitive2d::Primitive2DReference xReferenceB(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
                     aSmallerMatrix,
                     drawinglayer::attribute::SdrLineFillShadowTextAttribute(),
@@ -150,7 +150,7 @@ namespace sdr
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            GraphicObject aEmptyGraphicObject;
+            rtl::Reference<GraphicObject> aEmptyGraphicObject = GraphicObject::Create();
             GraphicAttr aEmptyGraphicAttr;
 
             // SdrGrafPrimitive2D without content in original size which carries all eventual attributes and texts
@@ -367,7 +367,7 @@ namespace sdr
                 aObjectRange.getMinX(), aObjectRange.getMinY()));
 
             // get the current, unchenged graphic obect from SdrGrafObj
-            const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+            const rtl::Reference<GraphicObject> rGraphicObject = GetGrafObject().GetGraphicObject(false);
 
             if(visualisationUsesPresObj())
             {
@@ -418,14 +418,14 @@ namespace sdr
                 return false;
 
             // draft when swapped out
-            const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
+            const rtl::Reference<GraphicObject> rGraphicObject = GetGrafObject().GetGraphicObject(false);
             static bool bAllowReplacements(true);
 
-            if(rGraphicObject.IsSwappedOut() && bAllowReplacements)
+            if(rGraphicObject->IsSwappedOut() && bAllowReplacements)
                 return true;
 
             // draft when no graphic
-            if(GRAPHIC_NONE == rGraphicObject.GetType() || GRAPHIC_DEFAULT == rGraphicObject.GetType())
+            if(GRAPHIC_NONE == rGraphicObject->GetType() || GRAPHIC_DEFAULT == rGraphicObject->GetType())
                return true;
 
             return false;

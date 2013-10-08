@@ -44,7 +44,7 @@ namespace editeng { class SvxBorderLine; }
 struct ScHTMLStyle
 {   // Defaults aus StyleSheet
     Color               aBackgroundColor;
-    String              aFontFamilyName;
+    OUString            aFontFamilyName;
     sal_uInt32              nFontHeight;        // Item-Value
     sal_uInt16              nFontSizeNumber;    // HTML value 1-7
     sal_uInt8                nDefaultScriptType; // Font values are valid for the default script type
@@ -96,12 +96,12 @@ class ScHTMLExport : public ScExportBase
 
     boost::ptr_vector< ScHTMLGraphEntry > aGraphList;
     ScHTMLStyle         aHTMLStyle;
-    String              aBaseURL;
-    String              aStreamPath;
-    String              aCId;           // Content-Id fuer Mail-Export
+    OUString            aBaseURL;
+    OUString            aStreamPath;
+    OUString            aCId;           // Content-Id fuer Mail-Export
     OutputDevice*       pAppWin;        // fuer Pixelei
-    boost::scoped_ptr< std::map<String, String> >  pFileNameMap;        // fuer CopyLocalFileToINet
-    String              aNonConvertibleChars;   // collect nonconvertible characters
+    boost::scoped_ptr< std::map<OUString, OUString> >  pFileNameMap;        // fuer CopyLocalFileToINet
+    OUString            aNonConvertibleChars;   // collect nonconvertible characters
     rtl_TextEncoding    eDestEnc;
     SCTAB               nUsedTables;
     short               nIndent;
@@ -122,7 +122,7 @@ class ScHTMLExport : public ScExportBase
     void                WriteTables();
     void                WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void                WriteGraphEntry( ScHTMLGraphEntry* );
-    void                WriteImage( String& rLinkName,
+    void                WriteImage( OUString& rLinkName,
                                     const Graphic&, const OString& rImgOptions,
                                     sal_uLong nXOutFlags = 0 );
                             // nXOutFlags fuer XOutBitmap::WriteGraphic
@@ -131,10 +131,10 @@ class ScHTMLExport : public ScExportBase
     bool WriteFieldText( const EditTextObject* pData );
 
                         // kopiere ggfs. eine lokale Datei ins Internet
-    sal_Bool                CopyLocalFileToINet( String& rFileNm,
-                            const String& rTargetNm, sal_Bool bFileToFile = false );
-    sal_Bool                HasCId() { return aCId.Len() > 0; }
-    void                MakeCIdURL( String& rURL );
+    sal_Bool                CopyLocalFileToINet( OUString& rFileNm,
+                                                 const OUString& rTargetNm, sal_Bool bFileToFile = false );
+    sal_Bool                HasCId() { return !aCId.isEmpty(); }
+    void                MakeCIdURL( OUString& rURL );
 
     void                PrepareGraphics( ScDrawLayer*, SCTAB nTab,
                                         SCCOL nStartCol, SCROW nStartRow,
@@ -154,11 +154,11 @@ class ScHTMLExport : public ScExportBase
     const sal_Char*         GetIndentStr() { return sIndent; }
 
 public:
-                        ScHTMLExport( SvStream&, const String&, ScDocument*, const ScRange&,
-                                        sal_Bool bAll, const String& aStreamPath );
+                        ScHTMLExport( SvStream&, const OUString&, ScDocument*, const ScRange&,
+                                        sal_Bool bAll, const OUString& aStreamPath );
     virtual             ~ScHTMLExport();
     sal_uLong               Write();
-    const String&       GetNonConvertibleChars() const
+    const OUString&       GetNonConvertibleChars() const
                             { return aNonConvertibleChars; }
 };
 

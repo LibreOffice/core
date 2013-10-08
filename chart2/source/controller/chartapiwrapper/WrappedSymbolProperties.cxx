@@ -334,9 +334,9 @@ OUString WrappedSymbolBitmapURLProperty::getValueFromSeries( const Reference< be
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue("Symbol") >>= aSymbol )
         && aSymbol.Graphic.is())
     {
-        GraphicObject aGrObj( Graphic( aSymbol.Graphic ));
+        rtl::Reference<GraphicObject> rGrObj = GraphicObject::Create( Graphic( aSymbol.Graphic ));
         aRet = UNO_NAME_GRAPHOBJ_URLPREFIX +
-               OStringToOUString(aGrObj.GetUniqueID(),
+               OStringToOUString(rGrObj->GetUniqueID(),
                                  RTL_TEXTENCODING_ASCII_US);
     }
     return aRet;
@@ -355,9 +355,9 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
         bool bMatchesPrefix = aNewGraphicURL.match( UNO_NAME_GRAPHOBJ_URLPREFIX );
         if( bMatchesPrefix )
         {
-            GraphicObject aGrObj = GraphicObject(
+            rtl::Reference<GraphicObject> rGrObj = GraphicObject::Create(
                 OUStringToOString(aNewGraphicURL.copy( RTL_CONSTASCII_LENGTH(UNO_NAME_GRAPHOBJ_URLPREFIX) ), RTL_TEXTENCODING_ASCII_US));
-            aSymbol.Graphic.set( aGrObj.GetGraphic().GetXGraphic());
+            aSymbol.Graphic.set( rGrObj->GetGraphic().GetXGraphic());
             xSeriesPropertySet->setPropertyValue( "Symbol", uno::makeAny( aSymbol ) );
         }
         else

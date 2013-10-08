@@ -101,7 +101,7 @@ namespace vclcanvas
         return maCanvasHelper.getBitmap();
     }
 
-    bool CanvasBitmap::repaint( const GraphicObjectSharedPtr& rGrf,
+    bool CanvasBitmap::repaint( const rtl::Reference<GraphicObject>& rGrf,
                                 const rendering::ViewState&   viewState,
                                 const rendering::RenderState& renderState,
                                 const ::Point&                rPt,

@@ -33,18 +33,19 @@
 #include <vcl/virdev.hxx>
 #include <svtools/GraphicObject.hxx>
 #include <svtools/GraphicManager.hxx>
-
+#include <comphelper/servicedecl.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::XInterface;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::Sequence;
-using com::sun::star::container::XNameContainer;
-using com::sun::star::beans::XPropertySet;
+using css::beans::XPropertySet;
+using css::container::XNameContainer;
+using css::uno::Reference;
+using css::uno::RuntimeException;
+using css::uno::Sequence;
+using css::uno::UNO_QUERY;
+using css::uno::XInterface;
 
 struct GrfSimpleCacheObj
 {
@@ -86,38 +87,59 @@ struct ImplTileInfo
 };
 
 
-GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject( void) :
     mpLink      ( NULL ),
     mpUserData  ( NULL )
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr );
+    ImplSetGraphicManager( );
 }
 
-GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject( const Graphic& rGraphic ) :
     maGraphic   ( rGraphic ),
     mpLink      ( NULL ),
     mpUserData  ( NULL )
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr );
+    ImplSetGraphicManager(  );
 }
 
-GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicManager* pMgr ) :
-    SvDataCopyStream(),
+GraphicObject::GraphicObject( const GraphicObject& rGraphicObj) :
     maGraphic   ( rGraphicObj.GetGraphic() ),
     maAttr      ( rGraphicObj.maAttr ),
-    mpLink      ( rGraphicObj.mpLink ? ( new String( *rGraphicObj.mpLink ) ) : NULL ),
-    mpUserData  ( rGraphicObj.mpUserData ? ( new String( *rGraphicObj.mpUserData ) ) : NULL )
+    mpLink      ( rGraphicObj.mpLink ? ( new OUString( *rGraphicObj.mpLink ) ) : NULL ),
+    mpUserData  ( rGraphicObj.mpUserData ? ( new OUString( *rGraphicObj.mpUserData ) ) : NULL )
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr, NULL, &rGraphicObj );
+    ImplSetGraphicManager( NULL, &rGraphicObj );
 }
 
-GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject( const GraphicObject* pGraphicObj) :
+    maGraphic   ( pGraphicObj->GetGraphic() ),
+    maAttr      ( pGraphicObj->maAttr ),
+    mpLink      ( pGraphicObj->mpLink ? ( new OUString( *(pGraphicObj->mpLink) ) ) : NULL ),
+    mpUserData  ( pGraphicObj->mpUserData ? ( new OUString( *(pGraphicObj->mpUserData) ) ) : NULL )
+{
+    ImplConstruct();
+    ImplAssignGraphicData();
+    ImplSetGraphicManager( NULL, pGraphicObj );
+}
+
+GraphicObject::GraphicObject( const GraphicObject* pGraphicObj, const Graphic& rGraphic) :
+    maGraphic   ( rGraphic ),
+    maAttr      ( pGraphicObj->maAttr ),
+    mpLink      ( pGraphicObj->mpLink ? ( new OUString( *(pGraphicObj->mpLink) ) ) : NULL ),
+    mpUserData  ( pGraphicObj->mpUserData ? ( new OUString( *(pGraphicObj->mpUserData) ) ) : NULL )
+{
+    ImplConstruct();
+    ImplAssignGraphicData();
+    ImplSetGraphicManager( NULL, pGraphicObj );
+}
+
+GraphicObject::GraphicObject( const OString& rUniqueID ) :
     mpLink      ( NULL ),
     mpUserData  ( NULL )
 {
@@ -126,15 +148,61 @@ GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pM
     // assign default properties
     ImplAssignGraphicData();
 
-    ImplSetGraphicManager( pMgr, &rUniqueID );
+    ImplSetGraphicManager(&rUniqueID );
 
     // update properties
     ImplAssignGraphicData();
 }
 
+GraphicObject::GraphicObject( css::uno::Sequence< css::uno::Any > const & args,
+                              css::uno::Reference< css::uno::XComponentContext > const & )
+    throw( RuntimeException ) :
+    mpLink      ( NULL ),
+    mpUserData  ( NULL )
+{
+    ImplConstruct();
+    ImplAssignGraphicData();
+
+    if ( args.getLength() == 1 )
+    {
+        OUString sId;
+        if ( !( args[ 0 ] >>= sId ) || sId.isEmpty() )
+            throw css::lang::IllegalArgumentException();
+
+        OString bsId ( OUStringToOString ( sId, RTL_TEXTENCODING_UTF8 ) );
+        ImplSetGraphicManager( &bsId );
+    }
+    else
+        ImplSetGraphicManager();
+}
+
+css::uno::Reference< css::graphic::XGraphic > SAL_CALL GraphicObject::getGraphic()
+    throw( RuntimeException )
+{
+    SolarMutexGuard aSolarGuard;
+    return GetGraphic().GetXGraphic();
+}
+
+void SAL_CALL GraphicObject::setGraphic( const css::uno::Reference< css::graphic::XGraphic >& /*xGraphic*/ )
+    throw( RuntimeException )
+{
+    SolarMutexGuard aSolarGuard;
+    assert(false);
+//    Graphic aGraphic( xGraphic );
+//    SetGraphic( aGraphic );
+}
+
+OUString SAL_CALL GraphicObject::getUniqueID()
+    throw( RuntimeException )
+{
+    SolarMutexGuard aSolarGuard;
+
+    return OStringToOUString(GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
+}
+
 GraphicObject::~GraphicObject()
 {
-    GraphicManager::GetGlobalManager()->UnregisterObject(*this);
+    GraphicManager::GetGlobalManager()->UnregisterObject(this);
     delete mpSwapOutTimer;
     delete mpSwapStreamHdl;
     delete mpLink;
@@ -148,9 +216,9 @@ void GraphicObject::ImplConstruct()
     mpSwapOutTimer = NULL;
     mpSimpleCache = NULL;
     mnAnimationLoopCount = 0;
-    mbAutoSwapped = sal_False;
-    mbIsInSwapIn = sal_False;
-    mbIsInSwapOut = sal_False;
+    mbAutoSwapped = false;
+    mbIsInSwapIn = false;
+    mbIsInSwapOut = false;
 }
 
 void GraphicObject::ImplAssignGraphicData()
@@ -166,25 +234,26 @@ void GraphicObject::ImplAssignGraphicData()
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
 }
 
-void GraphicObject::ImplSetGraphicManager( const GraphicManager* /* pMgr */, const OString* pID, const GraphicObject* pCopyObj )
+
+void GraphicObject::ImplSetGraphicManager(const OString* pID, const GraphicObject* pCopyObject )
 {
-    GraphicManager::GetGlobalManager()->RegisterObject(*this, maGraphic, pID, pCopyObj);
+    GraphicManager::GetGlobalManager()->RegisterObject(this, maGraphic, pID, pCopyObject);
 }
 
 void GraphicObject::ImplAutoSwapIn()
 {
     if( IsSwappedOut() )
     {
-        if( GraphicManager::GetGlobalManager()->FillSwappedGraphicObject( *this, maGraphic ) )
+        if( GraphicManager::GetGlobalManager()->FillSwappedGraphicObject( this, maGraphic ) )
         {
-            mbAutoSwapped = sal_False;
+            mbAutoSwapped = false;
         }
         else
         {
-            mbIsInSwapIn = sal_True;
+            mbIsInSwapIn = true;
 
             if( maGraphic.SwapIn() )
-                mbAutoSwapped = sal_False;
+                mbAutoSwapped = false;
             else
             {
                 SvStream* pStream = GetSwapStream();
@@ -227,20 +296,20 @@ void GraphicObject::ImplAutoSwapIn()
                 }
             }
 
-            mbIsInSwapIn = sal_False;
+            mbIsInSwapIn = false;
 
             if( !mbAutoSwapped)
             {
-                GraphicManager::GetGlobalManager()->GraphicObjectWasSwappedIn( *this );
+                GraphicManager::GetGlobalManager()->GraphicObjectWasSwappedIn( this );
             }
         }
     }
 }
 
-sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
-                                       PolyPolygon& rClipPolyPoly, sal_Bool& bRectClipRegion ) const
+bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
+                                       PolyPolygon& rClipPolyPoly, bool& bRectClipRegion ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( GetType() != GRAPHIC_NONE )
     {
@@ -254,11 +323,12 @@ sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size&
         if( nRot10 )
         {
             aClipPoly.Rotate( rPt, nRot10 );
-            bRectClipRegion = sal_False;
+            bRectClipRegion = false;
         }
         else
-            bRectClipRegion = sal_True;
-
+        {
+            bRectClipRegion = true;
+        }
         rClipPolyPoly = aClipPoly;
 
         if( maGraphic.GetPrefMapMode() == MAP_PIXEL )
@@ -299,13 +369,14 @@ sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size&
                 rPt = aOriginPoly[ 0 ];
             }
 
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
     return bRet;
 }
 
+/*
 GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
 {
     if( &rGraphicObj != this )
@@ -322,34 +393,20 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         mpLink = rGraphicObj.mpLink ? new String( *rGraphicObj.mpLink ) : NULL;
         mpUserData = rGraphicObj.mpUserData ? new String( *rGraphicObj.mpUserData ) : NULL;
         ImplAssignGraphicData();
-        mbAutoSwapped = sal_False;
+        mbAutoSwapped = false;
 
         GraphicManager::GetGlobalManager()->RegisterObject( *this, maGraphic, NULL, &rGraphicObj );
     }
 
     return *this;
 }
+*/
 
-sal_Bool GraphicObject::operator==( const GraphicObject& rGraphicObj ) const
+bool GraphicObject::operator==( const GraphicObject& rGraphicObj ) const
 {
     return( ( rGraphicObj.maGraphic == maGraphic ) &&
             ( rGraphicObj.maAttr == maAttr ) &&
             ( rGraphicObj.GetLink() == GetLink() ) );
-}
-
-void GraphicObject::Load( SvStream& rIStm )
-{
-    rIStm >> *this;
-}
-
-void GraphicObject::Save( SvStream& rOStm )
-{
-    rOStm << *this;
-}
-
-void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
-{
-    *this = (const GraphicObject& ) rCopyStream;
 }
 
 OString GraphicObject::GetUniqueID() const
@@ -359,7 +416,7 @@ OString GraphicObject::GetUniqueID() const
 
     OString aRet;
 
-    aRet = GraphicManager::GetGlobalManager()->GetUniqueID( *this );
+    aRet = GraphicManager::GetGlobalManager()->GetUniqueID( this );
 
     return aRet;
 }
@@ -383,17 +440,17 @@ void GraphicObject::SetLink()
         delete mpLink, mpLink = NULL;
 }
 
-void GraphicObject::SetLink( const String& rLink )
+void GraphicObject::SetLink( const OUString& rLink )
 {
-    delete mpLink, mpLink = new String( rLink );
+    delete mpLink, mpLink = new OUString( rLink );
 }
 
-String GraphicObject::GetLink() const
+OUString GraphicObject::GetLink() const
 {
     if( mpLink )
         return *mpLink;
     else
-        return String();
+        return OUString();
 }
 
 void GraphicObject::SetUserData()
@@ -402,17 +459,17 @@ void GraphicObject::SetUserData()
         delete mpUserData, mpUserData = NULL;
 }
 
-void GraphicObject::SetUserData( const String& rUserData )
+void GraphicObject::SetUserData( const OUString& rUserData )
 {
-    delete mpUserData, mpUserData = new String( rUserData );
+    delete mpUserData, mpUserData = new OUString( rUserData );
 }
 
-String GraphicObject::GetUserData() const
+OUString GraphicObject::GetUserData() const
 {
     if( mpUserData )
         return *mpUserData;
     else
-        return String();
+        return OUString();
 }
 
 void GraphicObject::SetSwapStreamHdl()
@@ -457,26 +514,27 @@ void GraphicObject::GraphicManagerDestroyed()
 {
 }
 
-sal_Bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPoint, const Size& rSize,
                               const GraphicAttr* pAttr, sal_uLong nFlags ) const
 {
-    sal_Bool bRet;
+    bool bRet;
 
     if( nFlags & GRFMGR_DRAW_CACHED )
     {
-        Point aPt( rPt );
-        Size aSz( rSz );
+        Point aPoint( rPoint );
+        Size aSize( rSize );
         if ( pAttr->IsCropped() )
         {
             PolyPolygon aClipPolyPoly;
-            sal_Bool        bRectClip;
-            ImplGetCropParams( pOut, aPt, aSz, pAttr, aClipPolyPoly, bRectClip );
+            bool        bRectClip;
+            ImplGetCropParams( pOut, aPoint, aSize, pAttr, aClipPolyPoly, bRectClip );
         }
-        bRet = GraphicManager::GetGlobalManager()->IsInCache( pOut, aPt, aSz, *this, ( pAttr ? *pAttr : GetAttr() ) );
+        bRet = GraphicManager::GetGlobalManager()->IsInCache( pOut, aPoint, aSize, this, ( pAttr ? *pAttr : GetAttr() ) );
     }
     else
-        bRet = sal_False;
-
+    {
+        bRet = false;
+    }
     return bRet;
 }
 
@@ -522,8 +580,8 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     if( bCropped )
     {
         PolyPolygon aClipPolyPoly;
-        sal_Bool        bRectClip;
-        const sal_Bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
+        bool        bRectClip;
+        const bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
 
         pOut->Push( PUSH_CLIPREGION );
 
@@ -543,7 +601,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         }
     }
 
-    bRet = GraphicManager::GetGlobalManager()->DrawObj( pOut, aPt, aSz, *this, aAttr, nFlags, bCached );
+    bRet = GraphicManager::GetGlobalManager()->DrawObj( pOut, aPt, aSz, this, aAttr, nFlags, bCached );
 
     if( bCropped )
         pOut->Pop();
@@ -564,7 +622,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 }
 
 // #i105243#
-sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
+bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
                                          const Point& rPt, const Size& rSz,
                                          const GraphicAttr* pGrfAttr,
                                          const sal_uLong nFlags )
@@ -572,7 +630,7 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
     const GraphicAttr aGrfAttr( pGrfAttr ? *pGrfAttr : GetAttr() );
 
     // Notify PDF writer about linked graphic (if any)
-    sal_Bool bWritingPdfLinkedGraphic( sal_False );
+    bool bWritingPdfLinkedGraphic( false );
     Point aPt( rPt );
     Size aSz( rSz );
     Rectangle aCropRect;
@@ -594,8 +652,8 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
             if( aGrfAttr.IsCropped() )
             {
                 PolyPolygon aClipPolyPoly;
-                sal_Bool bRectClip;
-                const sal_Bool bCrop = ImplGetCropParams( &rOutDev,
+                bool bRectClip;
+                const bool bCrop = ImplGetCropParams( &rOutDev,
                                                       aPt, aSz,
                                                       &aGrfAttr,
                                                       aClipPolyPoly,
@@ -610,7 +668,7 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
         }
     }
 
-    sal_Bool bRet = Draw( &rOutDev, rPt, rSz, &aGrfAttr, nFlags );
+    bool bRet = Draw( &rOutDev, rPt, rSz, &aGrfAttr, nFlags );
 
     // Notify PDF writer about linked graphic (if any)
     if( bWritingPdfLinkedGraphic )
@@ -624,11 +682,11 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
     return bRet;
 }
 
-sal_Bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
+bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
                                const Size& rOffset, const GraphicAttr* pAttr, sal_uLong nFlags, int nTileCacheSize1D )
 {
     if( pOut == NULL || rSize.Width() == 0 || rSize.Height() == 0 )
-        return sal_False;
+        return false;
 
     const MapMode   aOutMapMode( pOut->GetMapMode() );
     const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
@@ -646,11 +704,11 @@ sal_Bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
     return ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, pAttr, nFlags, nTileCacheSize1D );
 }
 
-sal_Bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                     long nExtraData, const GraphicAttr* pAttr, sal_uLong /*nFlags*/,
                                     OutputDevice* pFirstFrameOutDev )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     GetGraphic();
 
@@ -662,13 +720,13 @@ sal_Bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, co
         {
             Point   aPt( rPt );
             Size    aSz( rSz );
-            sal_Bool    bCropped = aAttr.IsCropped();
+            bool    bCropped = aAttr.IsCropped();
 
             if( bCropped )
             {
                 PolyPolygon aClipPolyPoly;
-                sal_Bool        bRectClip;
-                const sal_Bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
+                bool        bRectClip;
+                const bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
 
                 pOut->Push( PUSH_CLIPREGION );
 
@@ -695,7 +753,7 @@ sal_Bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, co
             if( bCropped )
                 pOut->Pop();
 
-            bRet = sal_True;
+            bRet = true;
         }
         else
             bRet = Draw( pOut, rPt, rSz, &aAttr, GRFMGR_DRAW_STANDARD );
@@ -716,31 +774,6 @@ const Graphic& GraphicObject::GetGraphic() const
         ( (GraphicObject*) this )->ImplAutoSwapIn();
 
     return maGraphic;
-}
-
-void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj )
-{
-    GraphicManager::GetGlobalManager()->UnregisterObject( *this );
-
-    if( mpSwapOutTimer )
-        mpSwapOutTimer->Stop();
-
-    maGraphic = rGraphic;
-    mbAutoSwapped = sal_False;
-    ImplAssignGraphicData();
-    delete mpLink, mpLink = NULL;
-    delete mpSimpleCache, mpSimpleCache = NULL;
-
-    GraphicManager::GetGlobalManager()->RegisterObject( *this, maGraphic, 0, pCopyObj);
-
-    if( mpSwapOutTimer )
-        mpSwapOutTimer->Start();
-}
-
-void GraphicObject::SetGraphic( const Graphic& rGraphic, const String& rLink )
-{
-    SetGraphic( rGraphic );
-    mpLink = new String( rLink );
 }
 
 Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const
@@ -894,7 +927,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                     // cropping affects this frame, apply it then
                     // do _not_ apply enlargement, this is done below
                     ImplTransformBitmap( aAnimBmp.aBmpEx, rAttr, Size(), Size(),
-                                         aCropRectRel, rDestSize, sal_False );
+                                         aCropRectRel, rDestSize, false );
 
                     aAnim.Replace( aAnimBmp, nFrame );
                 }
@@ -939,7 +972,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         else
         {
             ImplTransformBitmap( aBitmapEx, rAttr, aCropLeftTop, aCropRightBottom,
-                                 aCropRect, rDestSize, sal_True );
+                                 aCropRect, rDestSize, true );
 
             aTransGraphic = aBitmapEx;
         }
@@ -1004,47 +1037,49 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const /
     return aGraphic;
 }
 
-sal_Bool GraphicObject::SwapOut()
+bool GraphicObject::SwapOut()
 {
-    sal_Bool bRet = ( !mbAutoSwapped ? maGraphic.SwapOut() : sal_False );
+    bool bRet = ( !mbAutoSwapped ? maGraphic.SwapOut() : false );
 
     if( bRet )
     {
-        GraphicManager::GetGlobalManager()->GraphicObjectWasSwappedOut( *this );
+        GraphicManager::GetGlobalManager()->GraphicObjectWasSwappedOut( this );
     }
     return bRet;
 }
 
-sal_Bool GraphicObject::SwapOut( SvStream* pOStm )
+bool GraphicObject::SwapOut( SvStream* pOStm )
 {
-    sal_Bool bRet = ( !mbAutoSwapped ? maGraphic.SwapOut( pOStm ) : sal_False );
+    bool bRet = ( !mbAutoSwapped ? maGraphic.SwapOut( pOStm ) : false );
 
     if( bRet )
     {
-        GraphicManager::GetGlobalManager()->GraphicObjectWasSwappedOut( *this );
+        GraphicManager::GetGlobalManager()->GraphicObjectWasSwappedOut( this );
     }
 
     return bRet;
 }
 
-sal_Bool GraphicObject::SwapIn()
+bool GraphicObject::SwapIn()
 {
-    sal_Bool bRet;
+    bool bRet;
 
     if( mbAutoSwapped )
     {
         ImplAutoSwapIn();
-        bRet = sal_True;
+        bRet = true;
     }
-    else if( GraphicManager::GetGlobalManager()->FillSwappedGraphicObject( *this, maGraphic ) )
-        bRet = sal_True;
+    else if( GraphicManager::GetGlobalManager()->FillSwappedGraphicObject( this, maGraphic ) )
+    {
+        bRet = true;
+    }
     else
     {
         bRet = maGraphic.SwapIn();
 
         if( bRet)
         {
-            GraphicManager::GetGlobalManager()->GraphicObjectWasSwappedIn( *this );
+            GraphicManager::GetGlobalManager()->GraphicObjectWasSwappedIn( this );
         }
     }
 
@@ -1058,9 +1093,9 @@ void GraphicObject::SetSwapState()
 {
     if( !IsSwappedOut() )
     {
-        mbAutoSwapped = sal_True;
+        mbAutoSwapped = true;
 
-        GraphicManager::GetGlobalManager()->GraphicObjectWasSwappedOut( *this );
+        GraphicManager::GetGlobalManager()->GraphicObjectWasSwappedOut( this );
     }
 }
 
@@ -1068,7 +1103,7 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
 {
     if( !IsSwappedOut() )
     {
-        mbIsInSwapOut = sal_True;
+        mbIsInSwapOut = true;
 
         SvStream* pStream = GetSwapStream();
 
@@ -1088,7 +1123,7 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
             }
         }
 
-        mbIsInSwapOut = sal_False;
+        mbIsInSwapOut = false;
     }
 
     if( mpSwapOutTimer )
@@ -1097,12 +1132,13 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
     return 0L;
 }
 
+#if 0
 SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     Graphic         aGraphic;
     GraphicAttr     aAttr;
-    sal_Bool            bLink;
+    sal_Bool        bLink;
 
     rIStm >> aGraphic >> aAttr >> bLink;
 
@@ -1125,7 +1161,7 @@ SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
 SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 {
     VersionCompat   aCompat( rOStm, STREAM_WRITE, 1 );
-    const sal_Bool      bLink =  rGraphicObj.HasLink();
+    const sal_Bool  bLink =  rGraphicObj.HasLink() ? sal_True : sal_False;
 
     rOStm << rGraphicObj.GetGraphic() << rGraphicObj.GetAttr() << bLink;
 
@@ -1134,34 +1170,37 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 
     return rOStm;
 }
+#endif
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 
-GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
+rtl::Reference<GraphicObject> GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
 {
-    const String aURL( rURL ), aPrefix( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) );
-    if( aURL.Search( aPrefix ) == 0 )
+    const OUString aURL( rURL );
+    const OUString aPrefix(UNO_NAME_GRAPHOBJ_URLPREFIX);
+    if( aURL.indexOf( aPrefix ) == 0 )
     {
         // graphic manager url
         OString aUniqueID(OUStringToOString(rURL.copy(sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX) - 1), RTL_TEXTENCODING_UTF8));
-        return GraphicObject( aUniqueID );
+        return GraphicObject::Create( aUniqueID );
     }
     else
     {
         Graphic     aGraphic;
-        if ( aURL.Len() )
+        if ( !aURL.isEmpty() )
         {
             SvStream*   pStream = utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
             if( pStream )
+            {
                 GraphicConverter::Import( *pStream, aGraphic );
+            }
         }
 
-        return GraphicObject( aGraphic );
+        return GraphicObject::Create( aGraphic );
     }
 }
 
-void
-GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,  std::vector< OUString >& rvEmbedImgUrls )
+void GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,  std::vector< OUString >& rvEmbedImgUrls )
 {
     static OUString sImageURL( "ImageURL" );
     Reference< XPropertySet > xProps( xIf, UNO_QUERY );
@@ -1253,8 +1292,8 @@ bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
 
     // #105229# Switch off mapping (converting to logic and back to
     // pixel might cause roundoff errors)
-    sal_Bool bOldMap( rVDev.IsMapModeEnabled() );
-    rVDev.EnableMapMode( sal_False );
+    bool bOldMap( rVDev.IsMapModeEnabled() );
+    rVDev.EnableMapMode( false );
 
     bool bRet( ImplRenderTileRecursive( rVDev, nExponent, nMSBFactor, nNumTilesX, nNumTilesY,
                                         nNumTilesX, nNumTilesY, rTileSizePixel, pAttr, nFlags, aTileInfo ) );
@@ -1278,7 +1317,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
                                              sal_uLong nFlags, ImplTileInfo& rTileInfo )
 {
     // gets loaded with our tile bitmap
-    GraphicObject aTmpGraphic;
+    rtl::Reference<GraphicObject> aTmpGraphic = GraphicObject::Create(*this);
 
     // stores a flag that renders the zero'th tile position
     // (i.e. (0,0)+rCurrPos) only if we're at the bottom of the
@@ -1302,8 +1341,6 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
     // check for recursion's end condition: LSB place reached?
     if( nMSBFactor == 1 )
     {
-        aTmpGraphic = *this;
-
         // set initial tile size -> orig size
         aTileInfo.aTileSizePixel = rTileSizePixel;
         aTileInfo.nTilesEmptyX = nNumOrigTilesX;
@@ -1317,7 +1354,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
         // extract generated tile -> see comment on the first loop below
         BitmapEx aTileBitmap( rVDev.GetBitmap( aTileInfo.aTileTopLeft, aTileInfo.aTileSizePixel ) );
 
-        aTmpGraphic = GraphicObject( aTileBitmap );
+        aTmpGraphic = GraphicObject::Create( aTileBitmap );
 
         // fill stripes left over from upstream levels:
         //
@@ -1344,7 +1381,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             aCurrPos.Y() = aTileInfo.aTileTopLeft.Y();
             for( nX=0; nX < aTileInfo.nTilesEmptyX; nX += nMSBFactor )
             {
-                if( !aTmpGraphic.Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
+                if( !aTmpGraphic->Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
                     return false;
 
                 aCurrPos.X() += aTileInfo.aTileSizePixel.Width();
@@ -1365,7 +1402,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             aCurrPos.Y() = aTileInfo.aNextTileTopLeft.Y();
             for( nY=0; nY < aTileInfo.nTilesEmptyY; nY += nMSBFactor )
             {
-                if( !aTmpGraphic.Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
+                if( !aTmpGraphic->Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
                     return false;
 
                 aCurrPos.Y() += aTileInfo.aTileSizePixel.Height();
@@ -1425,7 +1462,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
         {
             if( bNoFirstTileDraw )
                 bNoFirstTileDraw = false; // don't draw first tile position
-            else if( !aTmpGraphic.Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
+            else if( !aTmpGraphic->Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
                 return false;
 
             aCurrPos.X() += aTileInfo.aTileSizePixel.Width();
@@ -1483,31 +1520,38 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
             // draw alpha content, if any
             if( IsTransparent() )
             {
-                GraphicObject aAlphaGraphic;
+                rtl::Reference<GraphicObject> aAlphaGraphic;
 
                 if( GetGraphic().IsAlpha() )
-                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetAlpha().GetBitmap() );
+                {
+                    aAlphaGraphic = GraphicObject::Create( GetGraphic().GetBitmapEx().GetAlpha().GetBitmap() );
+                }
                 else
-                    aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
-
-                if( aAlphaGraphic.ImplRenderTempTile( aVDev, SubdivisionExponent, nNumTilesInCacheX,
+                {
+                    aAlphaGraphic = GraphicObject::Create( GetGraphic().GetBitmapEx().GetMask() );
+                }
+                if( aAlphaGraphic->ImplRenderTempTile( aVDev, SubdivisionExponent, nNumTilesInCacheX,
                                                       nNumTilesInCacheY, rSizePixel, pAttr, nFlags ) )
                 {
                     // Combine bitmap and alpha/mask
                     if( GetGraphic().IsAlpha() )
+                    {
                         aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
                                                 AlphaMask( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) ) );
+                    }
                     else
+                    {
                         aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
                                                 aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ).CreateMask( Color(COL_WHITE) ) );
+                    }
                 }
             }
 
             // paint generated tile
-            GraphicObject aTmpGraphic( aTileBitmap );
-            bRet = aTmpGraphic.ImplDrawTiled( pOut, rArea,
-                                              aTileBitmap.GetSizePixel(),
-                                              rOffset, pAttr, nFlags, nTileCacheSize1D );
+            rtl::Reference<GraphicObject> aTmpGraphic = GraphicObject::Create(aTileBitmap);
+            bRet = aTmpGraphic->ImplDrawTiled( pOut, rArea,
+                                               aTileBitmap.GetSizePixel(),
+                                               rOffset, pAttr, nFlags, nTileCacheSize1D );
         }
     }
     else
@@ -1572,7 +1616,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
     bool bOldMap( rOut.IsMapModeEnabled() );
 
     if( bDrawInPixel )
-        rOut.EnableMapMode( sal_False );
+        rOut.EnableMapMode( false );
 
     for( nY=0; nY < nNumTilesY; ++nY )
     {
@@ -1609,7 +1653,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
                                          const Size&        rCropRightBottom,
                                          const Rectangle&   rCropRect,
                                          const Size&        rDstSize,
-                                         sal_Bool               bEnlarge ) const
+                                         bool               bEnlarge ) const
 {
     // #107947# Extracted from svdograf.cxx
 
@@ -1681,4 +1725,13 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
     }
 }
 
+#if 0
+namespace unographic {
+    namespace sdecl = comphelper::service_decl;
+    sdecl::class_<GraphicObject, sdecl::with_args<true> > serviceBI;
+    extern sdecl::ServiceDecl const serviceDecl( serviceBI,
+                                                 "com.sun.star.graphic.GraphicObject",
+                                                 "com.sun.star.graphic.GraphicObject" );
+}
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

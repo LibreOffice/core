@@ -169,11 +169,11 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         {
             // When the graphic is selected to be opened via some external tool
             // for advanced editing
-            GraphicObject *pGraphicObject = (GraphicObject *) rSh.GetGraphicObj();
-            if(0 != pGraphicObject)
+            rtl::Reference<GraphicObject> rGraphicObject = rSh.GetGraphicObj();
+            if(rGraphicObject.is())
             {
                 SwExternalToolEdit* externalToolEdit = new SwExternalToolEdit( &rSh );
-                externalToolEdit->Edit ( pGraphicObject );
+                externalToolEdit->Edit ( rGraphicObject );
             }
         }
         break;
@@ -263,10 +263,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             else
             {
                 // #119353# - robust
-                const GraphicObject* pGrfObj = rSh.GetGraphicObj();
-                if ( pGrfObj )
+                const rtl::Reference<GraphicObject> rGrfObj = rSh.GetGraphicObj();
+                if ( rGrfObj.is() )
                 {
-                    aSet.Put( SvxBrushItem( *pGrfObj, GPOS_LT,
+                    aSet.Put( SvxBrushItem( rGrfObj, GPOS_LT,
                                             SID_ATTR_GRAF_GRAPHIC ) );
                 }
             }
@@ -548,14 +548,15 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
             if( GRAPHIC_BITMAP == nGrfType )
             {
                 // #119353# - robust
-                const GraphicObject* pFilterObj( GetShell().GetGraphicObj() );
-                if ( pFilterObj )
+                rtl::Reference<GraphicObject> rFilterObj = GetShell().GetGraphicObj();
+                if ( rFilterObj.is() )
                 {
-                    GraphicObject aFilterObj( *pFilterObj );
                     if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
-                        SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ))
+                        SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, &rFilterObj ))
+                    {
                         GetShell().ReRead( aEmptyStr, aEmptyStr,
-                                           &aFilterObj.GetGraphic() );
+                                           &rFilterObj->GetGraphic() );
+                    }
                 }
             }
             break;
@@ -667,15 +668,19 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             if( !bParentCntProt )
             {
                 // #119353# - robust
-                const GraphicObject* pGrafObj = rSh.GetGraphicObj();
-                if ( pGrafObj )
+                const rtl::Reference<GraphicObject> rGrafObj = rSh.GetGraphicObj();
+                if ( rGrafObj.is() )
                 {
-                    if( pGrafObj->IsAnimated() ||
-                        GRAPHIC_GDIMETAFILE == pGrafObj->GetType() )
+                    if( rGrafObj->IsAnimated() ||
+                        GRAPHIC_GDIMETAFILE == rGrafObj->GetType() )
+                    {
                         bDisable = true;
+                    }
                     else
+                    {
                         rSet.Put( SfxUInt16Item( nWhich, ((SwTransparencyGrf&)
                             aCoreSet.Get(RES_GRFATR_TRANSPARENCY)).GetValue() ));
+                    }
                 }
             }
             break;

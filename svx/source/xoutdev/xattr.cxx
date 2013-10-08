@@ -242,8 +242,8 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
                     {
                     case XATTR_FILLBITMAP:
                     {
-                        const GraphicObject& rGraphicObjectA(((XFillBitmapItem*)pCheckItem)->GetGraphicObject());
-                        const GraphicObject& rGraphicObjectB(((XBitmapEntry*)pEntry)->GetGraphicObject());
+                        const rtl::Reference<GraphicObject> rGraphicObjectA = ((XFillBitmapItem*)pCheckItem)->GetGraphicObject();
+                        const rtl::Reference<GraphicObject> rGraphicObjectB = ((XBitmapEntry*)pEntry)->GetGraphicObject();
 
                         bFound = (rGraphicObjectA == rGraphicObjectB);
                         break;

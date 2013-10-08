@@ -303,7 +303,7 @@ public:
     SwHTMLTxtFtns *pFootEndNotes;
 
     String aCSS1Selector;           // der Selektor eines Styles
-    String aNonConvertableCharacters;
+    OUString aNonConvertableCharacters;
     String aBulletGrfs[MAXLEVEL];   // die Grafiken fuer Listen
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  *pxFormComps; // die aktuelle Form

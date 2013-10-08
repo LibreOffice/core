@@ -1234,7 +1234,7 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
             }
 
             rSet.Put(XFillBmpTileItem(false));
-            rSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmap)));
+            rSet.Put(XFillBitmapItem(OUString(), GraphicObject::Create(Graphic(aBitmap))));
         }
     }
 }
@@ -1356,19 +1356,19 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                             aGraf = Graphic( aXOBitmap.GetBitmap()  );
                         }
 
-                        rSet.Put(XFillBitmapItem(OUString(), aGraf));
+                        rSet.Put(XFillBitmapItem(OUString(), GraphicObject::Create(aGraf)));
                     }
                     else if ( eMSO_FillType == mso_fillTexture )
                     {
                         rSet.Put(XFillBmpTileItem(true));
-                        rSet.Put(XFillBitmapItem(OUString(), aGraf));
+                        rSet.Put(XFillBitmapItem(OUString(), GraphicObject::Create(aGraf)));
                         rSet.Put(XFillBmpSizeXItem(GetPropertyValue(DFF_Prop_fillWidth, 0) / 360));
                         rSet.Put(XFillBmpSizeYItem(GetPropertyValue(DFF_Prop_fillHeight, 0) / 360));
                         rSet.Put(XFillBmpSizeLogItem(true));
                     }
                     else
                     {
-                        rSet.Put(XFillBitmapItem(OUString(), aGraf));
+                        rSet.Put(XFillBitmapItem(OUString(), GraphicObject::Create(aGraf)));
                         rSet.Put(XFillBmpTileItem(false));
                     }
                 }
@@ -6132,8 +6132,8 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
             {
                 /* if this entry is available, then it should be possible
                 to get the Graphic via GraphicObject */
-                GraphicObject aGraphicObject( iter->second );
-                rData = aGraphicObject.GetGraphic();
+                rtl::Reference<GraphicObject> rGraphicObject = GraphicObject::Create( iter->second );
+                rData = rGraphicObject->GetGraphic();
                 if ( rData.GetType() != GRAPHIC_NONE )
                     bOk = sal_True;
                 else
@@ -6190,8 +6190,8 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
             if ( bOk )
             {
                 // create new BlipCacheEntry for this graphic
-                GraphicObject aGraphicObject( rData );
-                aEscherBlipCache.insert(std::make_pair(nIdx_,aGraphicObject.GetUniqueID()));
+                rtl::Reference<GraphicObject> rGraphicObject = GraphicObject::Create( rData );
+                aEscherBlipCache.insert(std::make_pair(nIdx_, rGraphicObject->GetUniqueID()));
             }
         }
     }

@@ -2493,7 +2493,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
     const drawinglayer::primitive2d::Primitive2DReference aGraphic(
         new drawinglayer::primitive2d::GraphicPrimitive2D(
             aCroppedTransform,
-            maGraphic));
+            GraphicObject::Create(maGraphic)));
 
     // prepare outline polygon for whole graphic
     const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;

@@ -259,13 +259,13 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
     INetURLObject   aInfoFileURL( GetParent()->GetUserURL() );
     INetURLObject   aNewURL;
     sal_uInt32      nNextNumber = 1999;
-    sal_Char const* pExt = NULL;
+    OUString sExt;
     sal_Bool            bExists;
 
-    aDir.Append( String( RTL_CONSTASCII_USTRINGPARAM( "dragdrop" ) ) );
+    aDir.Append( OUString("dragdrop" ) );
     CreateDir( aDir );
 
-    aInfoFileURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "sdddndx1" ) ) );
+    aInfoFileURL.Append( OUString( "sdddndx1" ) );
 
     // read next possible number
     if( FileExists( aInfoFileURL ) )
@@ -284,19 +284,19 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
     {
         switch( nFormat )
         {
-            case( CVT_BMP ): pExt = ".bmp"; break;
-            case( CVT_GIF ): pExt = ".gif"; break;
-            case( CVT_JPG ): pExt = ".jpg"; break;
-            case( CVT_MET ): pExt = ".met"; break;
-            case( CVT_PCT ): pExt = ".pct"; break;
-            case( CVT_PNG ): pExt = ".png"; break;
-            case( CVT_SVM ): pExt = ".svm"; break;
-            case( CVT_TIF ): pExt = ".tif"; break;
-            case( CVT_WMF ): pExt = ".wmf"; break;
-            case( CVT_EMF ): pExt = ".emf"; break;
+            case( CVT_BMP ): sExt = ".bmp"; break;
+            case( CVT_GIF ): sExt = ".gif"; break;
+            case( CVT_JPG ): sExt = ".jpg"; break;
+            case( CVT_MET ): sExt = ".met"; break;
+            case( CVT_PCT ): sExt = ".pct"; break;
+            case( CVT_PNG ): sExt = ".png"; break;
+            case( CVT_SVM ): sExt = ".svm"; break;
+            case( CVT_TIF ): sExt = ".tif"; break;
+            case( CVT_WMF ): sExt = ".wmf"; break;
+            case( CVT_EMF ): sExt = ".emf"; break;
 
             default:
-                pExt = ".grf";
+                sExt = ".grf";
             break;
         }
     }
@@ -306,25 +306,23 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
         // get URL
         if( SGA_OBJ_SVDRAW == eObjKind )
         {
-            String aFileName( RTL_CONSTASCII_USTRINGPARAM( "gallery/svdraw/dd" ) );
+            OUString aFileName( "gallery/svdraw/dd" );
             aNewURL = INetURLObject( aFileName += OUString::number( ++nNextNumber % 99999999 ), INET_PROT_PRIV_SOFFICE );
 
             bExists = sal_False;
 
             for ( size_t i = 0, n = aObjectList.size(); i < n; ++i )
+            {
                 if ( aObjectList[ i ]->aURL == aNewURL )
                 {
                     bExists = sal_True;
                     break;
                 }
+            }
         }
         else
         {
-            String aFileName( RTL_CONSTASCII_USTRINGPARAM( "dd" ) );
-
-            aFileName += OUString::number( ++nNextNumber % 999999 );
-            aFileName += String( pExt, RTL_TEXTENCODING_ASCII_US );
-
+            OUString aFileName("dd" + OUString::number( ++nNextNumber % 999999 ) + sExt);
             aNewURL = aDir;
             aNewURL.Append( aFileName );
 
@@ -409,7 +407,7 @@ bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
             GalleryObject aNewEntry;
 
             // update title of new object if necessary
-            if( !rObj.GetTitle().Len() )
+            if( rObj.GetTitle().isEmpty() )
             {
                 SgaObject* pOldObj = ImplReadSgaObject( pFoundEntry );
 
@@ -419,9 +417,10 @@ bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
                     delete pOldObj;
                 }
             }
-            else if( rObj.GetTitle() == String( RTL_CONSTASCII_USTRINGPARAM( "__<empty>__" ) ) )
-                ( (SgaObject&) rObj ).SetTitle( String() );
-
+            else if( rObj.GetTitle() == "__<empty>__" )
+            {
+                ( (SgaObject&) rObj ).SetTitle( OUString() );
+            }
             ImplWriteSgaObject( rObj, nInsertPos, &aNewEntry );
             pFoundEntry->nOffset = aNewEntry.nOffset;
         }
@@ -444,7 +443,7 @@ SgaObject* GalleryTheme::AcquireObject( size_t nPos )
 
 // ------------------------------------------------------------------------
 
-void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBitmapEx, Size& rSize, String& rTitle, String& rPath) const
+void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath) const
 {
     const GalleryObject* pGalleryObject = nPos < aObjectList.size() ? aObjectList[ nPos ] : NULL;
 
@@ -463,7 +462,7 @@ void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBit
 
 // ------------------------------------------------------------------------
 
-void GalleryTheme::SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const String& rTitle, const String& rPath)
+void GalleryTheme::SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath)
 {
     GalleryObject* pGalleryObject = nPos < aObjectList.size() ? aObjectList[ nPos ] : NULL;
 
@@ -555,7 +554,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
     if( !IsReadOnly() )
     {
         Graphic         aGraphic;
-        String          aFormat;
+        OUString        aFormat;
         GalleryObject*  pEntry;
         const size_t    nCount = aObjectList.size();
 
@@ -617,7 +616,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
             {
                 if ( aSvDrawStorageRef.Is() )
                 {
-                    const String        aStmName( GetSvDrawStreamNameFromURL( pEntry->aURL ) );
+                    const OUString      aStmName( GetSvDrawStreamNameFromURL( pEntry->aURL ) );
                     SvStorageStreamRef  pIStm = aSvDrawStorageRef->OpenSotStream( aStmName, STREAM_READ );
 
                     if( pIStm && !pIStm->GetError() )
@@ -739,7 +738,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
 
         if( pIStm )
         {
-            String          aThemeName;
+            OUString        aThemeName;
             sal_uInt16      nVersion;
             sal_Bool        bThemeNameFromResource = sal_False;
 
@@ -835,7 +834,7 @@ sal_Bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool
             case( SGA_OBJ_ANIM ):
             case( SGA_OBJ_INET ):
             {
-                String aFilterDummy;
+                OUString aFilterDummy;
                 bRet = ( GalleryGraphicImport( aURL, rGraphic, aFilterDummy, bProgress ) != SGA_IMPORT_NONE );
             }
             break;
@@ -986,7 +985,7 @@ sal_Bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel, sal_Bool )
 
         if( xStor.Is() )
         {
-            const String        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
+            const OUString      aStmName( GetSvDrawStreamNameFromURL( aURL ) );
             SvStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, STREAM_READ ) );
 
             if( xIStm.Is() && !xIStm->GetError() )
@@ -1011,7 +1010,7 @@ sal_Bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInse
 
     if( xStor.Is() )
     {
-        const String        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
+        const OUString      aStmName( GetSvDrawStreamNameFromURL( aURL ) );
         SvStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, STREAM_WRITE | STREAM_TRUNC ) );
 
         if( xOStm.Is() && !xOStm->GetError() )
@@ -1062,7 +1061,7 @@ sal_Bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rx
 
         if( xStor.Is() )
         {
-            const String        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
+            const OUString      aStmName( GetSvDrawStreamNameFromURL( aURL ) );
             SvStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, STREAM_READ ) );
 
             if( xIStm.Is() && !xIStm->GetError() )
@@ -1111,7 +1110,7 @@ sal_Bool GalleryTheme::InsertModelStream( const SotStorageStreamRef& rxModelStre
 
     if( xStor.Is() )
     {
-        const String        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
+        const OUString      aStmName( GetSvDrawStreamNameFromURL( aURL ) );
         SvStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, STREAM_WRITE | STREAM_TRUNC ) );
 
         if( xOStm.Is() && !xOStm->GetError() )
@@ -1158,7 +1157,7 @@ sal_Bool GalleryTheme::GetURL( sal_uIntPtr nPos, INetURLObject& rURL, sal_Bool )
 sal_Bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos )
 {
     Graphic         aGraphic;
-    String          aFormat;
+    OUString        aFormat;
     SgaObject*      pNewObj = NULL;
     const sal_uInt16    nImportRet = GalleryGraphicImport( rURL, aGraphic, aFormat );
     sal_Bool            bRet = sal_False;
@@ -1373,7 +1372,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
         const GalleryObject* pObj = ImplGetGalleryObject( i );
-        String               aPath;
+        OUString             aPath;
 
         if( SGA_OBJ_SVDRAW == pObj->eObjKind )
         {
@@ -1383,35 +1382,40 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
         else
         {
             aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-            bRel = ( ( aPath.Erase( sal::static_int_cast< xub_StrLen >( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) ) ) == String(aRelURL1.GetMainURL( INetURLObject::NO_DECODE ) ));
+            bRel = aPath.copy( 0, aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) == aRelURL1.GetMainURL( INetURLObject::NO_DECODE );
 
             if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > ( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() + 1 ) ) )
             {
-                aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                aPath = aPath.Erase( 0, sal::static_int_cast< xub_StrLen >( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) );
+                aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).copy(aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() );
             }
             else
             {
                 aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                bRel = ( ( aPath.Erase( sal::static_int_cast< xub_StrLen >( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) ) ) == String(aRelURL2.GetMainURL( INetURLObject::NO_DECODE ) ));
+                bRel = aPath.copy(0, aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength()) == aRelURL2.GetMainURL( INetURLObject::NO_DECODE );
 
-                if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > ( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() + 1 ) ) )
+                if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > ( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() + 1 )))
                 {
-                    aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                    aPath = aPath.Erase( 0, sal::static_int_cast< xub_StrLen >( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() ) );
+                    aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).copy(aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() );
                 }
                 else
+                {
                     aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
+                }
             }
         }
 
-        if ( m_aDestDir.Len() > 0 )
+        if ( !m_aDestDir.isEmpty())
         {
-            if ( aPath.SearchAndReplace(m_aDestDir, String()) != STRING_NOTFOUND )
+            if ( aPath.indexOf(m_aDestDir) < 0 )
+            {
+                aPath = aPath.replaceAll(m_aDestDir, OUString());
                 bRel = m_bDestDirRelative;
+            }
             else
+            {
                 SAL_WARN( "svx", "failed to replace destdir of '"
                           << m_aDestDir << "' in '" << aPath << "'");
+            }
         }
 
         rOStm << bRel;

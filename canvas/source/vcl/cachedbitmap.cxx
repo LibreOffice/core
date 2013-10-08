@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    CachedBitmap::CachedBitmap( const GraphicObjectSharedPtr&               rGraphicObject,
+    CachedBitmap::CachedBitmap( const rtl::Reference<GraphicObject>&        rGraphicObject,
                                 const ::Point&                              rPoint,
                                 const ::Size&                               rSize,
                                 const GraphicAttr&                          rAttr,
@@ -43,7 +43,7 @@ namespace vclcanvas
                                 const rendering::RenderState&               rUsedRenderState,
                                 const uno::Reference< rendering::XCanvas >& rTarget ) :
         CachedPrimitiveBase( rUsedViewState, rTarget, true ),
-        mpGraphicObject( rGraphicObject ),
+        m_rGraphicObject( rGraphicObject ),
         maRenderState(rUsedRenderState),
         maPoint( rPoint ),
         maSize( rSize ),
@@ -55,7 +55,7 @@ namespace vclcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        mpGraphicObject.reset();
+        m_rGraphicObject = rtl::Reference<GraphicObject>();
 
         CachedPrimitiveBase::disposing();
     }
@@ -78,7 +78,7 @@ namespace vclcanvas
         ENSURE_OR_THROW( pTarget,
                           "CachedBitmap::redraw(): cannot cast target to RepaintTarget" );
 
-        if( !pTarget->repaint( mpGraphicObject,
+        if( !pTarget->repaint( m_rGraphicObject,
                                rNewState,
                                maRenderState,
                                maPoint,

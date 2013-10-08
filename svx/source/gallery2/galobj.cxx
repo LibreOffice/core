@@ -22,11 +22,12 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/rcid.h>
 #include <tools/vcompat.hxx>
 #include <tools/helpers.hxx>
+#include <tools/string.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/itempool.hxx>
 #include <svx/fmmodel.hxx>
@@ -175,7 +176,7 @@ sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
 
 // ------------------------------------------------------------------------
 
-void SgaObject::WriteData( SvStream& rOut, const String& rDestDir ) const
+void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     static const sal_uInt32 nInventor = COMPAT_FORMAT( 'S', 'G', 'A', '3' );
 
@@ -198,8 +199,8 @@ void SgaObject::WriteData( SvStream& rOut, const String& rDestDir ) const
     else
         rOut << aThumbMtf;
 
-    String aURLWithoutDestDir = String(aURL.GetMainURL( INetURLObject::NO_DECODE ));
-    aURLWithoutDestDir.SearchAndReplace(rDestDir, String());
+    OUString aURLWithoutDestDir(aURL.GetMainURL( INetURLObject::NO_DECODE ));
+    aURLWithoutDestDir = aURLWithoutDestDir.replaceAll(rDestDir, OUString());
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aURLWithoutDestDir, RTL_TEXTENCODING_UTF8);
 }
 
@@ -227,18 +228,18 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
 
 // ------------------------------------------------------------------------
 
-const String SgaObject::GetTitle() const
+const OUString SgaObject::GetTitle() const
 {
-    String aReturnValue( aTitle );
+    OUString aReturnValue( aTitle );
     if ( !getenv( "GALLERY_SHOW_PRIVATE_TITLE" ) )
     {
         if ( comphelper::string::getTokenCount(aReturnValue, ':') == 3 )
         {
-            String      aPrivateInd  ( aReturnValue.GetToken( 0, ':' ) );
-            String      aResourceName( aReturnValue.GetToken( 1, ':' ) );
-            sal_Int32   nResId       ( aReturnValue.GetToken( 2, ':' ).ToInt32() );
-            if ( aPrivateInd.EqualsAscii( "private" ) &&
-                aResourceName.Len() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
+            OUString      aPrivateInd  ( aReturnValue.getToken( 0, ':' ) );
+            OUString      aResourceName( aReturnValue.getToken( 1, ':' ) );
+            sal_Int32   nResId       ( aReturnValue.getToken( 2, ':' ).toInt32() );
+            if ( aPrivateInd == "private" &&
+                 !aResourceName.isEmpty() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
             {
                 OString aMgrName(OUStringToOString(aResourceName, RTL_TEXTENCODING_UTF8));
                 ResMgr* pResMgr = ResMgr::CreateResMgr( aMgrName.getStr(),
@@ -261,7 +262,7 @@ const String SgaObject::GetTitle() const
 
 // ------------------------------------------------------------------------
 
-void SgaObject::SetTitle( const String& rTitle )
+void SgaObject::SetTitle( const OUString& rTitle )
 {
     aTitle = rTitle;
 }
@@ -270,7 +271,7 @@ void SgaObject::SetTitle( const String& rTitle )
 
 SvStream& operator<<( SvStream& rOut, const SgaObject& rObj )
 {
-    rObj.WriteData( rOut, String() );
+    rObj.WriteData( rOut, OUString() );
     return rOut;
 }
 
@@ -299,7 +300,7 @@ SgaObjectBmp::SgaObjectBmp()
 SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
 {
     Graphic aGraphic;
-    String  aFilter;
+    OUString  aFilter;
 
     if ( SGA_IMPORT_NONE != GalleryGraphicImport( rURL, aGraphic, aFilter ) )
         Init( aGraphic, rURL );
@@ -307,7 +308,7 @@ SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
 
 // ------------------------------------------------------------------------
 
-SgaObjectBmp::SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL, const String& )
+SgaObjectBmp::SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& )
 {
     if( FileExists( rURL ) )
         Init( rGraphic, rURL );
@@ -323,7 +324,7 @@ void SgaObjectBmp::Init( const Graphic& rGraphic, const INetURLObject& rURL )
 
 // ------------------------------------------------------------------------
 
-void SgaObjectBmp::WriteData( SvStream& rOut, const String& rDestDir ) const
+void SgaObjectBmp::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     // Version setzen
     SgaObject::WriteData( rOut, rDestDir );
@@ -410,7 +411,7 @@ BitmapEx SgaObjectSound::GetThumbBmp() const
 
 // ------------------------------------------------------------------------
 
-void SgaObjectSound::WriteData( SvStream& rOut, const String& rDestDir ) const
+void SgaObjectSound::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
     rOut << (sal_uInt16) eSoundType;
@@ -446,7 +447,7 @@ SgaObjectAnim::SgaObjectAnim()
 
 SgaObjectAnim::SgaObjectAnim( const Graphic& rGraphic,
                               const INetURLObject& rURL,
-                              const String& )
+                              const OUString& )
 {
     aURL = rURL;
     bIsValid = CreateThumb( rGraphic );
@@ -462,7 +463,7 @@ SgaObjectINet::SgaObjectINet()
 
 // ------------------------------------------------------------------------
 
-SgaObjectINet::SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL, const String& rFormatName ) :
+SgaObjectINet::SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& rFormatName ) :
             SgaObjectAnim   ( rGraphic, rURL, rFormatName )
 {
 }
@@ -491,7 +492,7 @@ SvxGalleryDrawModel::SvxGalleryDrawModel()
 {
     DBG_CTOR(SvxGalleryDrawModel,NULL);
 
-    const String sFactoryURL(RTL_CONSTASCII_USTRINGPARAM("sdraw"));
+    const OUString sFactoryURL("sdraw");
 
     mxDoc = SfxObjectShell::CreateObjectByFactoryName( sFactoryURL );
 
@@ -599,7 +600,7 @@ sal_Bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
 
 // ------------------------------------------------------------------------
 
-void SgaObjectSvDraw::WriteData( SvStream& rOut, const String& rDestDir ) const
+void SgaObjectSvDraw::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aTitle, RTL_TEXTENCODING_UTF8);

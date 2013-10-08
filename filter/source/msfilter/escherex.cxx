@@ -1279,18 +1279,18 @@ sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
             const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pSdrOLE2)->GetGraphic();
             if ( pGraphic )
             {
-                GraphicObject aGraphicObject( *pGraphic );
-                bRetValue = CreateGraphicProperties( rXShape,aGraphicObject );
+                rtl::Reference<GraphicObject> rGraphicObject = GraphicObject::Create( *pGraphic );
+                bRetValue = CreateGraphicProperties( rXShape, rGraphicObject );
             }
         }
     }
     return bRetValue;
 }
 
-sal_Bool EscherPropertyContainer::CreateGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape, const GraphicObject& rGraphicObj )
+sal_Bool EscherPropertyContainer::CreateGraphicProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape, const rtl::Reference<GraphicObject>& rGraphicObj )
 {
     sal_Bool    bRetValue = sal_False;
-    OString aUniqueId( rGraphicObj.GetUniqueID() );
+    OString aUniqueId( rGraphicObj->GetUniqueID() );
     if ( !aUniqueId.isEmpty() )
     {
         AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
@@ -1328,8 +1328,8 @@ sal_Bool EscherPropertyContainer::CreateMediaGraphicProperties(
         SdrObject* pSdrMedia( GetSdrObjectFromXShape( rXShape ) );  // SJ: leaving unoapi, because currently there is
         if ( pSdrMedia && pSdrMedia->ISA( SdrMediaObj ) )               // no access to the native graphic object
         {
-            GraphicObject aGraphicObject( ((SdrMediaObj*)pSdrMedia)->getSnapshot() );
-            bRetValue = CreateGraphicProperties( rXShape, aGraphicObject );
+            rtl::Reference<GraphicObject> rGraphicObject = GraphicObject::Create( ((SdrMediaObj*)pSdrMedia)->getSnapshot() );
+            bRetValue = CreateGraphicProperties( rXShape, rGraphicObject );
         }
     }
     return bRetValue;
@@ -1385,7 +1385,7 @@ sal_Bool EscherPropertyContainer::CreateEmbeddedBitmapProperties(
 
 namespace {
 
-GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground, const Rectangle& rRect )
+rtl::Reference<GraphicObject> lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground, const Rectangle& rRect )
 {
     // #i121183# For hatch, do no longer create a bitmap with the fixed size of 28x28 pixels. Also
     // do not create a bitmap in page size, that would explode file sizes (and have no good quality).
@@ -1408,7 +1408,7 @@ GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, cons
     aMtf.SetPrefMapMode(MapMode(MAP_100TH_MM));
     aMtf.SetPrefSize(rRect.GetSize());
 
-    return GraphicObject(Graphic(aMtf));
+    return GraphicObject::Create(Graphic(aMtf));
 }
 
 } // namespace
@@ -1417,8 +1417,8 @@ GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, cons
 sal_Bool EscherPropertyContainer::CreateEmbeddedHatchProperties( const ::com::sun::star::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground )
 {
     const Rectangle aRect(pShapeBoundRect ? *pShapeBoundRect : Rectangle(Point(0,0), Size(28000, 21000)));
-    GraphicObject aGraphicObject = lclDrawHatch( rHatch, rBackColor, bFillBackground, aRect );
-    OString aUniqueId = aGraphicObject.GetUniqueID();
+    rtl::Reference<GraphicObject> rGraphicObject = lclDrawHatch( rHatch, rBackColor, bFillBackground, aRect );
+    OString aUniqueId = rGraphicObject->GetUniqueID();
     sal_Bool bRetValue = ImplCreateEmbeddedBmp( aUniqueId );
     if ( bRetValue )
         AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
@@ -1437,7 +1437,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
     sal_Bool        bMirrored = sal_False;
     sal_Bool        bRotate   = sal_True;
     GraphicAttr*    pGraphicAttr = NULL;
-    GraphicObject   aGraphicObject;
+    rtl::Reference<GraphicObject> rGraphicObject;
     OUString        aGraphicUrl;
     OString         aUniqueId;
     bool            bIsGraphicMtf(false);
@@ -1470,9 +1470,9 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                 sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, CVT_WMF );
                 if ( nErrCode == ERRCODE_NONE )
                 {
-                    aGraphicObject = aGraphic;
-                    aUniqueId = aGraphicObject.GetUniqueID();
-                    bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;
+                    rGraphicObject = GraphicObject::Create(aGraphic);
+                    aUniqueId = rGraphicObject->GetUniqueID();
+                    bIsGraphicMtf = rGraphicObject->GetType() == GRAPHIC_GDIMETAFILE;
                 }
             }
         }
@@ -1486,9 +1486,9 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                 {
                     BitmapEx    aBitmapEx( VCLUnoHelper::GetBitmap( xBmp ) );
                     Graphic     aGraphic( aBitmapEx );
-                    aGraphicObject = aGraphic;
-                    aUniqueId = aGraphicObject.GetUniqueID();
-                    bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;
+                    rGraphicObject = GraphicObject::Create(aGraphic);
+                    aUniqueId = rGraphicObject->GetUniqueID();
+                    bIsGraphicMtf = rGraphicObject->GetType() == GRAPHIC_GDIMETAFILE;
                 }
             }
         }
@@ -1518,10 +1518,10 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                 }
 
                 const Rectangle aRect(Point(0, 0), pShapeBoundRect ? pShapeBoundRect->GetSize() : Size(28000, 21000));
-                aGraphicObject = lclDrawHatch( aHatch, aBackColor, bFillBackground, aRect );
-                aUniqueId = aGraphicObject.GetUniqueID();
+                rGraphicObject = lclDrawHatch( aHatch, aBackColor, bFillBackground, aRect );
+                aUniqueId = rGraphicObject->GetUniqueID();
                 eBitmapMode = ::com::sun::star::drawing::BitmapMode_REPEAT;
-                bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;
+                bIsGraphicMtf = rGraphicObject->GetType() == GRAPHIC_GDIMETAFILE;
             }
         }
 
@@ -1611,8 +1611,8 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                         if ( nErrCode == ERRCODE_NONE )
                         {
                             // no.
-                            aGraphicObject = aGraphic;
-                            aUniqueId = aGraphicObject.GetUniqueID();
+                            rGraphicObject = GraphicObject::Create(aGraphic);
+                            aUniqueId = rGraphicObject->GetUniqueID();
                         }
                         // else: simply keep the graphic link
                         delete pIn;
@@ -3822,8 +3822,8 @@ sal_Bool   EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const ::co
         SdrModel* pMod = pShape->GetModel();
         Graphic aGraphic(SdrExchangeView::GetObjGraphic( pMod, pShape));
 
-        GraphicObject   aGraphicObject = aGraphic;
-        OString  aUniqueId = aGraphicObject.GetUniqueID();
+        rtl::Reference<GraphicObject> rGraphicObject = GraphicObject::Create(aGraphic);
+        OString  aUniqueId = rGraphicObject->GetUniqueID();
         if ( aUniqueId.getLength() )
         {
             if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
@@ -3979,13 +3979,13 @@ sal_Bool EscherPropertyValueHelper::GetPropertyValue(
     return eRetValue;
 }
 
-EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject& rObject, const OString& rId,
-                                        const GraphicAttr* pGraphicAttr ) :
+EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const rtl::Reference<GraphicObject>& rObject, const OString& rId,
+                                  const GraphicAttr* pGraphicAttr ) :
     mnPictureOffset ( nPictureOffset ),
     mnRefCount      ( 1 ),
     mnSizeExtra     ( 0 ),
-    maPrefSize      ( rObject.GetPrefSize() ),
-    maPrefMapMode   ( rObject.GetPrefMapMode() ),
+    maPrefSize      ( rObject->GetPrefSize() ),
+    maPrefMapMode   ( rObject->GetPrefMapMode() ),
     mbIsEmpty       ( sal_True )
 {
     mbIsNativeGraphicPossible = ( pGraphicAttr == NULL );
@@ -3994,7 +3994,7 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
 
     sal_uInt32      nLen = static_cast<sal_uInt32>(rId.getLength());
     const sal_Char* pData = rId.getStr();
-    GraphicType     eType( rObject.GetType() );
+    GraphicType     eType( rObject->GetType() );
     if ( nLen && pData && ( eType != GRAPHIC_NONE ) )
     {
         mnIdentifier[ 0 ] = rtl_crc32( 0,pData, nLen );
@@ -4221,9 +4221,9 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                                             const Rectangle& /* rBoundRect */, const com::sun::star::awt::Rectangle* pVisArea, const GraphicAttr* pGraphicAttr )
 {
     sal_uInt32          nBlibId = 0;
-    GraphicObject       aGraphicObject( rId );
+    rtl::Reference<GraphicObject> rGraphicObject = GraphicObject::Create( rId );
 
-    EscherBlibEntry* p_EscherBlibEntry = new EscherBlibEntry( rPicOutStrm.Tell(), aGraphicObject, rId, pGraphicAttr );
+    EscherBlibEntry* p_EscherBlibEntry = new EscherBlibEntry( rPicOutStrm.Tell(), rGraphicObject, rId, pGraphicAttr );
     if ( !p_EscherBlibEntry->IsEmpty() )
     {
         for ( sal_uInt32 i = 0; i < mnBlibEntrys; i++ )
@@ -4238,7 +4238,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
 
         sal_Bool            bUseNativeGraphic( sal_False );
 
-        Graphic             aGraphic( aGraphicObject.GetTransformedGraphic( pGraphicAttr ) );
+        Graphic             aGraphic( rGraphicObject->GetTransformedGraphic( pGraphicAttr ) );
         GfxLink             aGraphicLink;
         SvMemoryStream      aStream;
 

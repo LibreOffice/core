@@ -307,17 +307,17 @@ void SwNumFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         CheckRegistration( pOld, pNew );
 }
 
-void SwNumFmt::SetCharFmtName(const String& rSet)
+void SwNumFmt::SetCharFmtName(const OUString& rSet)
 {
     SvxNumberFormat::SetCharFmtName(rSet);
 }
 
-const String&   SwNumFmt::GetCharFmtName() const
+OUString SwNumFmt::GetCharFmtName() const
 {
     if((SwCharFmt*)GetRegisteredIn())
         return ((SwCharFmt*)GetRegisteredIn())->GetName();
     else
-        return aEmptyStr;
+        return OUString();
 }
 
 void    SwNumFmt::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize,

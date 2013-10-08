@@ -44,7 +44,7 @@ class SVX_DLLPUBLIC GalleryPreview : public Window, public DropTargetHelper, pub
 {
 private:
 
-    GraphicObject       aGraphicObj;
+    rtl::Reference<GraphicObject> m_rGraphicObj;
     Rectangle           aPreviewRect;
     GalleryTheme*       mpTheme;
 
@@ -74,7 +74,7 @@ public:
                         GalleryPreview( Window* pParent, const ResId& rResId  );
                         ~GalleryPreview();
 
-    void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
+    void                SetGraphic( const Graphic& rGraphic ) { m_rGraphicObj = GraphicObject::Create( rGraphic ); }
     bool                SetGraphic( const INetURLObject& );
     void                PreviewMedia( const INetURLObject& rURL );
 };

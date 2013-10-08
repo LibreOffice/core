@@ -142,15 +142,19 @@ void GalleryPreview::Paint( const Rectangle& rRect )
 {
     Window::Paint( rRect );
 
-    if( ImplGetGraphicCenterRect( aGraphicObj.GetGraphic(), aPreviewRect ) )
+    if( ImplGetGraphicCenterRect( m_rGraphicObj->GetGraphic(), aPreviewRect ) )
     {
         const Point aPos( aPreviewRect.TopLeft() );
         const Size  aSize( aPreviewRect.GetSize() );
 
-        if( aGraphicObj.IsAnimated() )
-            aGraphicObj.StartAnimation( this, aPos, aSize );
+        if( m_rGraphicObj->IsAnimated() )
+        {
+            m_rGraphicObj->StartAnimation( this, aPos, aSize );
+        }
         else
-            aGraphicObj.Draw( this, aPos, aSize );
+        {
+            m_rGraphicObj->Draw( this, aPos, aSize );
+        }
     }
 }
 
@@ -329,14 +333,14 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
         const Size aSize(rRect.GetWidth(), rRect.GetHeight());
         BitmapEx aBitmapEx;
         Size aPreparedSize;
-        String aItemTextTitle;
-        String aItemTextPath;
+        OUString aItemTextTitle;
+        OUString aItemTextPath;
 
         mpTheme->GetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aPreparedSize, aItemTextTitle, aItemTextPath);
 
         bool bNeedToCreate(aBitmapEx.IsEmpty());
 
-        if(!bNeedToCreate && !aItemTextTitle.Len())
+        if(!bNeedToCreate && aItemTextTitle.isEmpty())
         {
             bNeedToCreate = true;
         }
@@ -629,19 +633,19 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
         const Size aSize(rRect.GetHeight(), rRect.GetHeight());
         BitmapEx aBitmapEx;
         Size aPreparedSize;
-        String aItemTextTitle;
-        String aItemTextPath;
+        OUString aItemTextTitle;
+        OUString aItemTextPath;
 
         mpTheme->GetPreviewBitmapExAndStrings(mnCurRow, aBitmapEx, aPreparedSize, aItemTextTitle, aItemTextPath);
 
         bool bNeedToCreate(aBitmapEx.IsEmpty());
 
-        if(!bNeedToCreate && GALLERY_BRWBOX_TITLE == nColumnId && !aItemTextTitle.Len())
+        if(!bNeedToCreate && GALLERY_BRWBOX_TITLE == nColumnId && aItemTextTitle.isEmpty())
         {
             bNeedToCreate = true;
         }
 
-        if(!bNeedToCreate && GALLERY_BRWBOX_PATH == nColumnId && !aItemTextPath.Len())
+        if(!bNeedToCreate && GALLERY_BRWBOX_PATH == nColumnId && aItemTextPath.isEmpty())
         {
             bNeedToCreate = true;
         }

@@ -225,12 +225,11 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
 
     {
         const SvxBrushItem* pBrush = rFmt.GetBrush();
-        if(pBrush && pBrush->GetGraphicObject())
+        if(pBrush && pBrush->GetGraphicObject().is())
         {
-            const GraphicObject* pGrafObj = pBrush->GetGraphicObject();
+            const rtl::Reference<GraphicObject> rGrafObj = pBrush->GetGraphicObject();
             OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
-            aURL += OStringToOUString(pGrafObj->GetUniqueID(),
-                RTL_TEXTENCODING_ASCII_US);
+            aURL += OStringToOUString(rGrafObj->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
 
             aVal <<= aURL;
             const beans::PropertyValue aGraphicProp( OUString("GraphicURL"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
@@ -375,8 +374,8 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
             OUString aURL;
             if( aVal >>= aURL )
             {
-                GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
-                SvxBrushItem aBrushItem( aGrafObj, GPOS_AREA, SID_ATTR_BRUSH );
+                rtl::Reference<GraphicObject> rGrafObj = GraphicObject::CreateGraphicObjectFromURL( aURL );
+                SvxBrushItem aBrushItem( rGrafObj, GPOS_AREA, SID_ATTR_BRUSH );
                 aFmt.SetGraphicBrush( &aBrushItem );
                 continue;
             }
@@ -463,7 +462,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
     {
         if( NULL == aFmt.GetBrush() )
         {
-            GraphicObject aGrafObj;
+            rtl::Reference<GraphicObject> aGrafObj(NULL);
             SvxBrushItem aBrushItem( aGrafObj, GPOS_AREA, SID_ATTR_BRUSH );
             aFmt.SetGraphicBrush( &aBrushItem );
         }

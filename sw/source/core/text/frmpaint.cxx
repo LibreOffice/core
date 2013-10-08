@@ -187,7 +187,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
 {
   // Line number is stronger than the divider
     const OUString aTmp( HasNumber() ? rLineInf.GetNumType().GetNumStr( nLineNr )
-                                : rLineInf.GetDivider() );
+                         : OUString(rLineInf.GetDivider()) );
 
     // Get script type of line numbering:
     pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmp, 0 ) );

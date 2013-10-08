@@ -147,14 +147,14 @@ private:
 
 public:
 
-    static String       GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags );
+    static OUString     GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags );
 
 public:
 
                         GalleryBrowser2( Window* pParent, const ResId& rResId, Gallery* pGallery );
                         ~GalleryBrowser2();
 
-    void                SelectTheme( const String& rThemeName );
+    void                SelectTheme( const OUString& rThemeName );
 
     GalleryBrowserMode  GetMode() const { return meMode; }
     void                SetMode( GalleryBrowserMode eMode );
@@ -164,7 +164,7 @@ public:
     void                Travel( GalleryBrowserTravel eTravel );
 
     INetURLObject       GetURL() const;
-    String              GetFilterName() const;
+    OUString            GetFilterName() const;
     Graphic             GetGraphic() const;
 
     sal_Int8            AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt );

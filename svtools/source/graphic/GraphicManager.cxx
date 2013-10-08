@@ -75,14 +75,21 @@ void GraphicManager::ReleaseFromCache( const GraphicObject& /*rGraphicObject*/ )
 }
 
 bool GraphicManager::IsInCache( OutputDevice* pOutDev, const Point& rPoint,
-                                const Size& rSize, const GraphicObject& rGraphicObject,
+                                const Size& rSize, const rtl::Reference<GraphicObject>& rGraphicObject,
                                 const GraphicAttr& rAttr ) const
 {
     return mpCache->IsInDisplayCache( pOutDev, rPoint, rSize, rGraphicObject, rAttr );
 }
 
+bool GraphicManager::IsInCache( OutputDevice* pOutDev, const Point& rPoint,
+                                const Size& rSize, const GraphicObject* pGraphicObject,
+                                const GraphicAttr& rAttr ) const
+{
+    return mpCache->IsInDisplayCache( pOutDev, rPoint, rSize, pGraphicObject, rAttr );
+}
+
 bool GraphicManager::DrawObj( OutputDevice* pOutDev, const Point& rPoint, const Size& rSize,
-                              GraphicObject& rGraphicObject, const GraphicAttr& rAttr,
+                              GraphicObject* pGraphicObject, const GraphicAttr& rAttr,
                               const sal_uInt32 nFlags, bool& rCached )
 {
     Point   aPoint( rPoint );
@@ -91,19 +98,19 @@ bool GraphicManager::DrawObj( OutputDevice* pOutDev, const Point& rPoint, const 
 
     rCached = false;
 
-    if( ( rGraphicObject.GetType() == GRAPHIC_BITMAP ) ||
-        ( rGraphicObject.GetType() == GRAPHIC_GDIMETAFILE ) )
+    if( ( pGraphicObject->GetType() == GRAPHIC_BITMAP ) ||
+        ( pGraphicObject->GetType() == GRAPHIC_GDIMETAFILE ) )
     {
         // create output and fill cache
 
-        if( rGraphicObject.IsAnimated() ||
+        if( pGraphicObject->IsAnimated() ||
             ( pOutDev->GetOutDevType() == OUTDEV_PRINTER ) ||
             ( !( nFlags & GRFMGR_DRAW_NO_SUBSTITUTE ) &&
               ( ( nFlags & GRFMGR_DRAW_SUBSTITUTE ) || !( nFlags & GRFMGR_DRAW_CACHED ) ||
                 ( pOutDev->GetConnectMetaFile() && !pOutDev->IsOutputEnabled() ) ) ) )
         {
             // simple output of transformed graphic
-            const Graphic aGraphic( rGraphicObject.GetTransformedGraphic( &rAttr ) );
+            const Graphic aGraphic( pGraphicObject->GetTransformedGraphic( &rAttr ) );
 
             if( aGraphic.IsSupportedGraphic() )
             {
@@ -128,9 +135,9 @@ bool GraphicManager::DrawObj( OutputDevice* pOutDev, const Point& rPoint, const 
         if( !bRet )
         {
             // cached/direct drawing
-            if( !mpCache->DrawDisplayCacheObj( pOutDev, aPoint, aSize, rGraphicObject, rAttr ) )
+            if( !mpCache->DrawDisplayCacheObj( pOutDev, aPoint, aSize, pGraphicObject, rAttr ) )
             {
-                bRet = Draw( pOutDev, aPoint, aSize, rGraphicObject, rAttr, nFlags, rCached );
+                bRet = Draw( pOutDev, aPoint, aSize, pGraphicObject, rAttr, nFlags, rCached );
             }
             else
             {
@@ -142,19 +149,19 @@ bool GraphicManager::DrawObj( OutputDevice* pOutDev, const Point& rPoint, const 
     return bRet;
 }
 
-void GraphicManager::RegisterObject( const GraphicObject& rGraphicObject, Graphic& rSubstituteGraphicObject,
+void GraphicManager::RegisterObject( const GraphicObject* pGraphicObject, Graphic& rSubstituteGraphicObject,
                                      const OString* pID, const GraphicObject* pCopyGraphicObject )
 {
-    maObjectList.push_back( (GraphicObject*)&rGraphicObject );
-    mpCache->AddGraphicObject( rGraphicObject, rSubstituteGraphicObject, pID, pCopyGraphicObject );
+    maObjectList.push_back( pGraphicObject );
+    mpCache->AddGraphicObject( pGraphicObject, rSubstituteGraphicObject, pID, pCopyGraphicObject );
 }
 
-void GraphicManager::UnregisterObject( const GraphicObject& rGraphicObject )
+void GraphicManager::UnregisterObject( const GraphicObject* pGraphicObject )
 {
-    mpCache->ReleaseGraphicObject( rGraphicObject );
+    mpCache->ReleaseGraphicObject( pGraphicObject );
     for( GraphicObjectList::iterator it = maObjectList.begin(); it != maObjectList.end(); ++it )
     {
-        if ( *it == &rGraphicObject )
+        if ( (*it) == pGraphicObject )
         {
             maObjectList.erase( it );
             break;
@@ -162,23 +169,28 @@ void GraphicManager::UnregisterObject( const GraphicObject& rGraphicObject )
     }
 }
 
-void GraphicManager::GraphicObjectWasSwappedOut( const GraphicObject& rGraphicObject )
+void GraphicManager::GraphicObjectWasSwappedOut( const rtl::Reference<GraphicObject>& rGraphicObject )
 {
     mpCache->GraphicObjectWasSwappedOut( rGraphicObject );
 }
 
-OString GraphicManager::GetUniqueID( const GraphicObject& rGraphicObject ) const
+OString GraphicManager::GetUniqueID( const rtl::Reference<GraphicObject>& rGraphicObject ) const
 {
-    return mpCache->GetUniqueID( rGraphicObject );
+    return mpCache->GetUniqueID( rGraphicObject.get() );
 }
 
-bool GraphicManager::FillSwappedGraphicObject( const GraphicObject& rGraphicObject,
+OString GraphicManager::GetUniqueID( const GraphicObject* pGraphicObject ) const
+{
+    return mpCache->GetUniqueID( pGraphicObject );
+}
+
+bool GraphicManager::FillSwappedGraphicObject( const rtl::Reference<GraphicObject>& rGraphicObject,
                                                Graphic& rSubstituteGraphicObject )
 {
     return( mpCache->FillSwappedGraphicObject( rGraphicObject, rSubstituteGraphicObject ) );
 }
 
-void GraphicManager::GraphicObjectWasSwappedIn( const GraphicObject& rGraphicObject )
+void GraphicManager::GraphicObjectWasSwappedIn( const rtl::Reference<GraphicObject>& rGraphicObject )
 {
     mpCache->GraphicObjectWasSwappedIn( rGraphicObject );
 }
@@ -745,11 +757,11 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 }
 
 bool GraphicManager::Draw( OutputDevice* pOutDev, const Point& rPoint,
-                           const Size& rSize, GraphicObject& rGraphicObject,
+                           const Size& rSize, GraphicObject* pGraphicObject,
                            const GraphicAttr& rAttr,
                            const sal_uInt32 nFlags, bool& rCached )
 {
-    const Graphic&  rGraphic = rGraphicObject.GetGraphic();
+    const Graphic&  rGraphic = pGraphicObject->GetGraphic();
     bool bRet = false;
 
     if( rGraphic.IsSupportedGraphic() && !rGraphic.IsSwapOut() )
@@ -761,13 +773,13 @@ bool GraphicManager::Draw( OutputDevice* pOutDev, const Point& rPoint,
             // #i46805# No point in caching a bitmap that is rendered
             // via RectFill on the OutDev
             if( !(pOutDev->GetDrawMode() & ( DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP )) &&
-                mpCache->IsDisplayCacheable( pOutDev, rPoint, rSize, rGraphicObject, rAttr ) )
+                mpCache->IsDisplayCacheable( pOutDev, rPoint, rSize, pGraphicObject, rAttr ) )
             {
                 BitmapEx aDstBmpEx;
 
                 if( ImplCreateOutput( pOutDev, rPoint, rSize, aSrcBmpEx, rAttr, nFlags, &aDstBmpEx ) )
                 {
-                    rCached = mpCache->CreateDisplayCacheObj( pOutDev, rPoint, rSize, rGraphicObject, rAttr, aDstBmpEx );
+                    rCached = mpCache->CreateDisplayCacheObj( pOutDev, rPoint, rSize, pGraphicObject, rAttr, aDstBmpEx );
                     bRet = true;
                 }
             }
@@ -781,7 +793,7 @@ bool GraphicManager::Draw( OutputDevice* pOutDev, const Point& rPoint,
         {
             const GDIMetaFile& rSrcMtf = rGraphic.GetGDIMetaFile();
 
-            if( mpCache->IsDisplayCacheable( pOutDev, rPoint, rSize, rGraphicObject, rAttr ) )
+            if( mpCache->IsDisplayCacheable( pOutDev, rPoint, rSize, pGraphicObject, rAttr ) )
             {
                 GDIMetaFile aDstMtf;
                 BitmapEx    aContainedBmpEx;
@@ -796,13 +808,13 @@ bool GraphicManager::Draw( OutputDevice* pOutDev, const Point& rPoint,
 
                         if( ImplCreateOutput( pOutDev, rPoint, rSize, aContainedBmpEx, rAttr, nFlags, &aDstBmpEx ) )
                         {
-                            rCached = mpCache->CreateDisplayCacheObj( pOutDev, rPoint, rSize, rGraphicObject, rAttr, aDstBmpEx );
+                            rCached = mpCache->CreateDisplayCacheObj( pOutDev, rPoint, rSize, pGraphicObject, rAttr, aDstBmpEx );
                             bRet = true;
                         }
                     }
                     else
                     {
-                        rCached = mpCache->CreateDisplayCacheObj( pOutDev, rPoint, rSize, rGraphicObject, rAttr, aDstMtf );
+                        rCached = mpCache->CreateDisplayCacheObj( pOutDev, rPoint, rSize, pGraphicObject, rAttr, aDstMtf );
                         bRet = true;
                     }
                 }
@@ -810,7 +822,7 @@ bool GraphicManager::Draw( OutputDevice* pOutDev, const Point& rPoint,
 
             if( !bRet )
             {
-                const Graphic aGraphic( rGraphicObject.GetTransformedGraphic( &rAttr ) );
+                const Graphic aGraphic( pGraphicObject->GetTransformedGraphic( &rAttr ) );
 
                 if( aGraphic.IsSupportedGraphic() )
                 {

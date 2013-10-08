@@ -1043,7 +1043,7 @@ SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     return pSwFlyFrmFmt;
 }
 
-SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg, const GraphicObject& rGrfObj,
+SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg, const rtl::Reference<GraphicObject>& rGrfObj,
                             const SfxItemSet* pFlyAttrSet,
                             const SfxItemSet* pGrfAttrSet,
                             SwFrmFmt* pFrmFmt )
@@ -1934,7 +1934,7 @@ void SwDoc::ResetModified()
 
 void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
                     const String& rFltName, const Graphic* pGraphic,
-                    const GraphicObject* pGrafObj )
+                    const rtl::Reference<GraphicObject>* prGrafObj )
 {
     SwGrfNode *pGrfNd;
     if( ( !rPam.HasMark()
@@ -1951,7 +1951,7 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
                                                 GetMirrorGrf().GetValue() )
             pGrfNd->SetAttr( SwMirrorGrf() );
 
-        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, pGrafObj, sal_True );
+        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, prGrafObj, sal_True );
         SetModified();
     }
 }

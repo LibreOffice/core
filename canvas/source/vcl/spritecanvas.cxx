@@ -154,7 +154,7 @@ namespace vclcanvas
         return OUString( SPRITECANVAS_SERVICE_NAME );
     }
 
-    bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,
+    bool SpriteCanvas::repaint( const rtl::Reference<GraphicObject>& rGrf,
                                 const rendering::ViewState&     viewState,
                                 const rendering::RenderState&   renderState,
                                 const ::Point&                  rPt,

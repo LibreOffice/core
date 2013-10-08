@@ -705,7 +705,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
         if (aURLBS.compareTo(aURLBegin, RTL_CONSTASCII_LENGTH(aURLBegin)) == 0)
         {
-            Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
+            Graphic aGraphic = GraphicObject::Create(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)))->GetTransformedGraphic();
             Size aSize(aGraphic.GetPrefSize());
             MapMode aMap(MAP_100TH_MM);
             if (aGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL)

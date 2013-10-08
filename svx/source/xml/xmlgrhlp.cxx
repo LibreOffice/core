@@ -96,17 +96,17 @@ public:
 
 SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
 {
-    GraphicObject   aGrfObject( OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) );
+    rtl::Reference<GraphicObject> rGrfObject = GraphicObject::Create( OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) );
 
     maTmp.EnableKillingFile();
 
-    if( aGrfObject.GetType() != GRAPHIC_NONE )
+    if( rGrfObject->GetType() != GRAPHIC_NONE )
     {
         SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( maTmp.GetURL(), STREAM_WRITE | STREAM_TRUNC );
 
         if( pStm )
         {
-            Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+            Graphic         aGraphic( (Graphic&) rGrfObject->GetGraphic() );
             const GfxLink   aGfxLink( aGraphic.GetLink() );
             sal_Bool        bRet = sal_False;
 
@@ -120,14 +120,14 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
                 if( aGraphic.GetType() == GRAPHIC_BITMAP )
                 {
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
-                    String          aFormat;
+                    OUString aFormat;
 
                     if( aGraphic.IsAnimated() )
-                        aFormat = String(  "gif"  );
+                        aFormat = "gif";
                     else
-                        aFormat = String(  "png"  );
+                        aFormat = "png";
 
-                    bRet = ( rFilter.ExportGraphic( aGraphic, String(), *pStm, rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
+                    bRet = ( rFilter.ExportGraphic( aGraphic, OUString(), *pStm, rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
                 }
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                 {
@@ -210,7 +210,7 @@ private:
     ::utl::TempFile*                mpTmp;
     SvStream*                       mpOStm;
     Reference< XOutputStream >      mxStmWrapper;
-    GraphicObject                   maGrfObj;
+    rtl::Reference<GraphicObject>   m_rGrfObj;
     sal_Bool                        mbClosed;
 
                                     // not available
@@ -223,7 +223,7 @@ public:
     virtual                         ~SvXMLGraphicOutputStream();
 
     bool                            Exists() const { return mxStmWrapper.is(); }
-    const GraphicObject&            GetGraphicObject();
+    const rtl::Reference<GraphicObject> GetGraphicObject();
 };
 
 SvXMLGraphicOutputStream::SvXMLGraphicOutputStream() :
@@ -274,9 +274,9 @@ void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
     mbClosed = sal_True;
 }
 
-const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
+const rtl::Reference<GraphicObject> SvXMLGraphicOutputStream::GetGraphicObject()
 {
-    if( mbClosed && ( maGrfObj.GetType() == GRAPHIC_NONE ) && mpOStm )
+    if( mbClosed && ( m_rGrfObj->GetType() == GRAPHIC_NONE ) && mpOStm )
     {
         Graphic aGraphic;
 
@@ -334,15 +334,15 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
             }
         }
 
-        maGrfObj = aGraphic;
-        if( maGrfObj.GetType() != GRAPHIC_NONE )
+        m_rGrfObj = GraphicObject::Create(aGraphic);
+        if( m_rGrfObj->GetType() != GRAPHIC_NONE )
         {
             delete mpOStm, mpOStm = NULL;
             delete mpTmp, mpTmp = NULL;
         }
     }
 
-    return maGrfObj;
+    return m_rGrfObj;
 }
 
 SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
@@ -507,15 +507,15 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageNa
                                                const OUString& rGraphicId,
                                                bool bUseGfxLink )
 {
-    GraphicObject   aGrfObject( OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) );
+    rtl::Reference<GraphicObject>   rGrfObject = GraphicObject::Create( OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) );
     sal_Bool        bRet = sal_False;
 
-    if( aGrfObject.GetType() != GRAPHIC_NONE )
+    if( rGrfObject->GetType() != GRAPHIC_NONE )
     {
         SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, sal_False ) );
         if( aStream.xStream.is() )
         {
-            Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+            Graphic         aGraphic( (Graphic&) rGrfObject->GetGraphic() );
             const GfxLink   aGfxLink( aGraphic.GetLink() );
             const OUString  aMimeType( ImplGetGraphicMimeType( rPictureStreamName ) );
             uno::Any        aAny;
@@ -609,93 +609,101 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
 
         if( GRAPHICHELPER_MODE_READ == meCreateMode )
         {
-            const GraphicObject aObj( ImplReadGraphic( aPictureStorageName, aPictureStreamName ) );
+            const rtl::Reference<GraphicObject> rObj = GraphicObject::Create(ImplReadGraphic( aPictureStorageName, aPictureStreamName ));
 
-            if( aObj.GetType() != GRAPHIC_NONE )
+            if( rObj->GetType() != GRAPHIC_NONE )
             {
-                maGrfObjs.push_back( aObj );
+                maGrfObjs.push_back( rObj );
                 OUString aBaseURL(  XML_GRAPHICOBJECT_URL_BASE  );
 
                 rURLPair.second = aBaseURL;
-                rURLPair.second += OStringToOUString(aObj.GetUniqueID(),
+                rURLPair.second += OStringToOUString(rObj->GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US);
             }
             else
-                rURLPair.second = String();
+            {
+                rURLPair.second = OUString();
+            }
         }
         else
         {
-            const String        aGraphicObjectId( aPictureStreamName );
+            const OUString aGraphicObjectId( aPictureStreamName );
             const OString aAsciiObjectID(OUStringToOString(aGraphicObjectId, RTL_TEXTENCODING_ASCII_US));
-            const GraphicObject aGrfObject( aAsciiObjectID );
-            if( aGrfObject.GetType() != GRAPHIC_NONE )
+            const rtl::Reference<GraphicObject> rGrfObject = GraphicObject::Create( aAsciiObjectID );
+            if( rGrfObject->GetType() != GRAPHIC_NONE )
             {
-                String          aStreamName( aGraphicObjectId );
-                Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
-                const GfxLink   aGfxLink( aGraphic.GetLink() );
-                String          aExtension;
-                bool            bUseGfxLink( true );
+                OUString aStreamName( aGraphicObjectId );
+                Graphic aGraphic( (Graphic&) rGrfObject->GetGraphic() );
+                const GfxLink aGfxLink( aGraphic.GetLink() );
+                OUString aExtension;
+                bool bUseGfxLink( true );
 
                 if( aGfxLink.GetDataSize() )
                 {
                     switch( aGfxLink.GetType() )
                     {
-                        case( GFX_LINK_TYPE_EPS_BUFFER ): aExtension = String(  ".eps"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_GIF ): aExtension = String(  ".gif"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_JPG ): aExtension = String(  ".jpg"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_PNG ): aExtension = String(  ".png"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_TIF ): aExtension = String(  ".tif"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_WMF ): aExtension = String(  ".wmf"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_MET ): aExtension = String(  ".met"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_PCT ): aExtension = String(  ".pct"  ); break;
-                        case( GFX_LINK_TYPE_NATIVE_SVG ):
-                            // backward-compat kludge: since no released OOo
-                            // version to date can handle svg properly, wrap it up
-                            // into an svm. slight catch22 here, since strict ODF
-                            // conformance _recommends_ svg - then again, most old
-                            // ODF consumers are believed to be OOo
-                            if( SvtSaveOptions().GetODFDefaultVersion() <= SvtSaveOptions::ODFVER_012 )
-                            {
-                                bUseGfxLink = false;
-                                aExtension = String(  ".svm"  );
-                            }
-                            else
-                                aExtension = String(  ".svg"  );
-                            break;
+                    case GFX_LINK_TYPE_EPS_BUFFER: aExtension = ".eps"; break;
+                    case GFX_LINK_TYPE_NATIVE_GIF: aExtension = ".gif"; break;
+                    case GFX_LINK_TYPE_NATIVE_JPG: aExtension = ".jpg"; break;
+                    case GFX_LINK_TYPE_NATIVE_PNG: aExtension = ".png"; break;
+                    case GFX_LINK_TYPE_NATIVE_TIF: aExtension = ".tif"; break;
+                    case GFX_LINK_TYPE_NATIVE_WMF: aExtension = ".wmf"; break;
+                    case GFX_LINK_TYPE_NATIVE_MET: aExtension = ".met"; break;
+                    case GFX_LINK_TYPE_NATIVE_PCT: aExtension = ".pct"; break;
+                    case GFX_LINK_TYPE_NATIVE_SVG:
+                        // backward-compat kludge: since no released OOo
+                        // version to date can handle svg properly, wrap it up
+                        // into an svm. slight catch22 here, since strict ODF
+                        // conformance _recommends_ svg - then again, most old
+                        // ODF consumers are believed to be OOo
+                        if( SvtSaveOptions().GetODFDefaultVersion() <= SvtSaveOptions::ODFVER_012 )
+                        {
+                            bUseGfxLink = false;
+                            aExtension = ".svm";
+                        }
+                        else
+                            aExtension = ".svg";
+                        break;
 
-                        default:
-                            aExtension = String(  ".grf"  );
+                    default:
+                        aExtension = ".grf";
                         break;
                     }
                 }
                 else
                 {
-                    if( aGrfObject.GetType() == GRAPHIC_BITMAP )
+                    if( rGrfObject->GetType() == GRAPHIC_BITMAP )
                     {
-                        if( aGrfObject.IsAnimated() )
-                            aExtension = String(  ".gif"  );
+                        if( rGrfObject->IsAnimated() )
+                        {
+                            aExtension = ".gif";
+                        }
                         else
-                            aExtension = String(  ".png"  );
+                        {
+                            aExtension = ".png";
+                        }
                     }
-                    else if( aGrfObject.GetType() == GRAPHIC_GDIMETAFILE )
+                    else if( rGrfObject->GetType() == GRAPHIC_GDIMETAFILE )
                     {
                         // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
                         GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
                         if ( ImplCheckForEPS( rMtf ) )
-                            aExtension = String(  ".eps"  );
+                        {
+                            aExtension = ".eps";
+                        }
                         else
-                            aExtension = String(  ".svm"  );
+                        {
+                            aExtension = ".svm";
+                        }
                     }
                 }
 
                 OUString aURLEntry;
-                const String sPictures(  "Pictures/"  );
+                const OUString sPictures(  "Pictures/"  );
 
                 if ( !rRequestedFileName.isEmpty() )
                 {
-                    aURLEntry = sPictures;
-                    aURLEntry += rRequestedFileName;
-                    aURLEntry += aExtension;
+                    aURLEntry = sPictures + rRequestedFileName + aExtension;
 
                     URLPairVector::const_iterator aIter( maGrfURLs.begin() ), aEnd( maGrfURLs.end() );
                     for ( ; aIter != aEnd; ++aIter )
@@ -704,24 +712,25 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                             break;
                     }
                     if ( aIter == aEnd )
+                    {
                         aStreamName = rRequestedFileName;
+                    }
                 }
 
                 aStreamName += aExtension;
 
-                if( mbDirect && aStreamName.Len() )
+                if( mbDirect && !aStreamName.isEmpty() )
+                {
                     ImplWriteGraphic( aPictureStorageName, aStreamName, aGraphicObjectId, bUseGfxLink );
-
-                rURLPair.second = sPictures;
-                rURLPair.second += aStreamName;
+                }
+                rURLPair.second = sPictures + aStreamName;
             }
 #if OSL_DEBUG_LEVEL > 0
             else
             {
-                OStringBuffer sMessage(
-                    RTL_CONSTASCII_STRINGPARAM("graphic object with ID '"));
+                OStringBuffer sMessage("graphic object with ID '");
                 sMessage.append(aAsciiObjectID).
-                    append(RTL_CONSTASCII_STRINGPARAM("' has an unknown type"));
+                    append("' has an unknown type");
                 OSL_ENSURE( false, sMessage.getStr() );
             }
 #endif
@@ -868,9 +877,8 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOut
 
             if( pOStm )
             {
-                const GraphicObject& rGrfObj = pOStm->GetGraphicObject();
-                const OUString aId(OStringToOUString(
-                    rGrfObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US));
+                const rtl::Reference<GraphicObject> rGrfObj = pOStm->GetGraphicObject();
+                const OUString aId(OStringToOUString(rGrfObj->GetUniqueID(), RTL_TEXTENCODING_ASCII_US));
 
                 if( !aId.isEmpty() )
                 {

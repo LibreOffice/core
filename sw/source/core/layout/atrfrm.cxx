@@ -2945,11 +2945,9 @@ sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
     }
     else
     {
-        const GraphicObject *pTmpGrf =
-                static_cast<const GraphicObject*>(GetBackground().GetGraphicObject());
-        if ( (pTmpGrf) &&
-             (pTmpGrf->GetAttr().GetTransparency() != 0)
-           )
+        const rtl::Reference<GraphicObject> rTmpGrf = GetBackground().GetGraphicObject();
+        if ( (rTmpGrf.is()) &&
+             (rTmpGrf->GetAttr().GetTransparency() != 0) )
         {
             bReturn = sal_True;
         }
@@ -2975,7 +2973,7 @@ sal_Bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
     sal_Bool bReturn = sal_False;
 
     if ( (GetBackground().GetColor() == COL_TRANSPARENT) &&
-         !(GetBackground().GetGraphicObject()) )
+         !(GetBackground().GetGraphicObject().is()) )
     {
         bReturn = sal_True;
     }

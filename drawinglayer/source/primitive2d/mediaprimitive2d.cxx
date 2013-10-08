@@ -49,7 +49,7 @@ namespace drawinglayer
 
             if(GRAPHIC_BITMAP == maSnapshot.GetType() || GRAPHIC_GDIMETAFILE == maSnapshot.GetType())
             {
-                const GraphicObject aGraphicObject(maSnapshot);
+                const rtl::Reference<GraphicObject> aGraphicObject = GraphicObject::Create(maSnapshot);
                 const GraphicAttr aGraphicAttr;
                 xRetval.realloc(2);
                 xRetval[0] = xRefBackground;

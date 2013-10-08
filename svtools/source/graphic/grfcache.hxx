@@ -20,6 +20,7 @@
 #ifndef _GRFCACHE_HXX
 #define _GRFCACHE_HXX
 
+#include <rtl/ref.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/timer.hxx>
 #include <list>
@@ -39,105 +40,93 @@ private:
     typedef std::list< GraphicCacheEntry* > GraphicCacheEntryList;
     typedef std::list< GraphicDisplayCacheEntry* > GraphicDisplayCacheEntryList;
 
-    Timer                   maReleaseTimer;
-    GraphicCacheEntryList   maGraphicCache;
+    Timer                maReleaseTimer;
+    GraphicCacheEntryList maGraphicCache;
     GraphicDisplayCacheEntryList maDisplayCache;
-    sal_uLong               mnReleaseTimeoutSeconds;
-    sal_uLong               mnMaxDisplaySize;
-    sal_uLong               mnMaxObjDisplaySize;
-    sal_uLong               mnUsedDisplaySize;
+    int                  mnReleaseTimeoutSeconds;
+    size_t               mnMaxDisplaySize;
+    size_t               mnMaxObjDisplaySize;
+    size_t               mnUsedDisplaySize;
 
-    sal_Bool                ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree );
-    GraphicCacheEntry*      ImplGetCacheEntry( const GraphicObject& rObj );
+    bool                 ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree );
+    GraphicCacheEntry*   ImplGetCacheEntry( const rtl::Reference<GraphicObject>& rObj );
+    GraphicCacheEntry*   ImplGetCacheEntry( const GraphicObject* pObj );
 
 
-                            DECL_LINK( ReleaseTimeoutHdl, Timer* pTimer );
+                         DECL_LINK( ReleaseTimeoutHdl, Timer* pTimer );
+
+public:
+                         GraphicCache( size_t nDisplayCacheSize = 10000000UL,
+                                       size_t nMaxObjDisplayCacheSize = 2400000UL );
+                        ~GraphicCache();
+
+public:
+    void                 AddGraphicObject( const GraphicObject* pObj,
+                                           Graphic& rSubstitute,
+                                           const OString* pID,
+                                           const GraphicObject* pCopyObj );
+
+    void                 ReleaseGraphicObject( const GraphicObject* pObj );
+
+    void                 GraphicObjectWasSwappedOut( const rtl::Reference<GraphicObject>& rObj );
+    bool                 FillSwappedGraphicObject( const rtl::Reference<GraphicObject>& rObj, Graphic& rSubstitute );
+    void                 GraphicObjectWasSwappedIn( const rtl::Reference<GraphicObject>& rObj );
+
+    OString              GetUniqueID( const rtl::Reference<GraphicObject>& rObj ) const;
+    OString              GetUniqueID( const GraphicObject* pObj ) const;
 
 public:
 
-                            GraphicCache(
-                                sal_uLong nDisplayCacheSize = 10000000UL,
-                                sal_uLong nMaxObjDisplayCacheSize = 2400000UL
-                            );
+    void                 SetMaxDisplayCacheSize( sal_uLong nNewCacheSize );
+    size_t               GetMaxDisplayCacheSize() const { return mnMaxDisplaySize; };
 
-                            ~GraphicCache();
+    void                 SetMaxObjDisplayCacheSize( size_t nNewMaxObjSize,
+                                                    bool bDestroyGreaterCached = false );
 
-public:
+    size_t               GetMaxObjDisplayCacheSize() const { return mnMaxObjDisplaySize; }
 
-    void                    AddGraphicObject(
-                                const GraphicObject& rObj,
-                                Graphic& rSubstitute,
-                                const OString* pID,
-                                const GraphicObject* pCopyObj
-                            );
+    size_t               GetUsedDisplayCacheSize() const { return mnUsedDisplaySize; }
+    size_t               GetFreeDisplayCacheSize() const { return( mnMaxDisplaySize - mnUsedDisplaySize ); }
 
-    void                    ReleaseGraphicObject( const GraphicObject& rObj );
+    void                 SetCacheTimeout( int nTimeoutSeconds );
+    int                  GetCacheTimeout() const { return mnReleaseTimeoutSeconds; }
 
-    void                    GraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    sal_Bool                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
-    void                    GraphicObjectWasSwappedIn( const GraphicObject& rObj );
+    bool                IsDisplayCacheable( OutputDevice* pOut,
+                                            const Point& rPoint,
+                                            const Size& rSize,
+                                            const rtl::Reference<GraphicObject>& rObj,
+                                            const GraphicAttr& rAttr ) const;
 
-    OString            GetUniqueID( const GraphicObject& rObj ) const;
+    bool                IsInDisplayCache( OutputDevice* pOut,
+                                          const Point& rPoint,
+                                          const Size& rSize,
+                                          const rtl::Reference<GraphicObject>& rObj,
+                                          const GraphicAttr& rAttr ) const;
+    bool                IsInDisplayCache( OutputDevice* pOut,
+                                          const Point& rPoint,
+                                          const Size& rSize,
+                                          const GraphicObject* pObj,
+                                          const GraphicAttr& rAttr ) const;
 
-public:
+    bool                CreateDisplayCacheObj( OutputDevice* pOut,
+                                               const Point& rPoint,
+                                               const Size& rSize,
+                                               const rtl::Reference<GraphicObject>& rObj,
+                                               const GraphicAttr& rAttr,
+                                               const BitmapEx& rBmpEx );
 
-    void                    SetMaxDisplayCacheSize( sal_uLong nNewCacheSize );
-    sal_uLong               GetMaxDisplayCacheSize() const { return mnMaxDisplaySize; };
+    bool                CreateDisplayCacheObj( OutputDevice* pOut,
+                                               const Point& rPoint,
+                                               const Size& rSize,
+                                               const rtl::Reference<GraphicObject>& rObj,
+                                               const GraphicAttr& rAttr,
+                                               const GDIMetaFile& rMtf );
 
-    void                    SetMaxObjDisplayCacheSize(
-                                sal_uLong nNewMaxObjSize,
-                                sal_Bool bDestroyGreaterCached = sal_False
-                            );
-
-    sal_uLong               GetMaxObjDisplayCacheSize() const { return mnMaxObjDisplaySize; }
-
-    sal_uLong               GetUsedDisplayCacheSize() const { return mnUsedDisplaySize; }
-    sal_uLong               GetFreeDisplayCacheSize() const { return( mnMaxDisplaySize - mnUsedDisplaySize ); }
-
-    void                    SetCacheTimeout( sal_uLong nTimeoutSeconds );
-    sal_uLong               GetCacheTimeout() const { return mnReleaseTimeoutSeconds; }
-
-    sal_Bool                IsDisplayCacheable(
-                                OutputDevice* pOut,
-                                const Point& rPt,
-                                const Size& rSz,
-                                const GraphicObject& rObj,
-                                const GraphicAttr& rAttr
-                            ) const;
-
-    sal_Bool                IsInDisplayCache(
-                                OutputDevice* pOut,
-                                const Point& rPt,
-                                const Size& rSz,
-                                const GraphicObject& rObj,
-                                const GraphicAttr& rAttr
-                            ) const;
-
-    sal_Bool                CreateDisplayCacheObj(
-                                OutputDevice* pOut,
-                                const Point& rPt,
-                                const Size& rSz,
-                                const GraphicObject& rObj,
-                                const GraphicAttr& rAttr,
-                                const BitmapEx& rBmpEx
-                            );
-
-    sal_Bool                CreateDisplayCacheObj(
-                                OutputDevice* pOut,
-                                const Point& rPt,
-                                const Size& rSz,
-                                const GraphicObject& rObj,
-                                const GraphicAttr& rAttr,
-                                const GDIMetaFile& rMtf
-                            );
-
-    sal_Bool                DrawDisplayCacheObj(
-                                OutputDevice* pOut,
-                                const Point& rPt,
-                                const Size& rSz,
-                                const GraphicObject& rObj,
-                                const GraphicAttr& rAttr
-                            );
+    bool                DrawDisplayCacheObj( OutputDevice* pOut,
+                                             const Point& rPoint,
+                                             const Size& rSize,
+                                             const GraphicObject* pObj,
+                                             const GraphicAttr& rAttr );
 };
 
 #endif // _GRFCACHE_HXX

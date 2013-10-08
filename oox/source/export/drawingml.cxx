@@ -419,7 +419,7 @@ OUString DrawingML::WriteImage( const OUString& rURL )
     if ( index != -1 )
     {
         DBG(printf ("begin: %ld %s\n", long( sizeof( aURLBegin ) ), USS( rURL ) + RTL_CONSTASCII_LENGTH( aURLBegin ) ));
-        Graphic aGraphic = GraphicObject( aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)) ).GetTransformedGraphic ();
+        Graphic aGraphic = GraphicObject::Create( aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)) )->GetTransformedGraphic ();
 
         return WriteImage( aGraphic );
     } else {
@@ -617,7 +617,7 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, OUString sUR
 
 void DrawingML::WriteSrcRect( Reference< XPropertySet > rXPropSet, const OUString& rURL )
 {
-    Size aOriginalSize( GraphicObject::CreateGraphicObjectFromURL( rURL ).GetPrefSize() );
+    Size aOriginalSize( GraphicObject::CreateGraphicObjectFromURL( rURL )->GetPrefSize() );
 
     if ( GetProperty( rXPropSet, "GraphicCrop" ) )
     {

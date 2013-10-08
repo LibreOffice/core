@@ -72,8 +72,8 @@ public:
     SvxNumberType(const SvxNumberType& rType);
     ~SvxNumberType();
 
-    String          GetNumStr( sal_uLong nNo ) const;
-    String          GetNumStr( sal_uLong nNo, const com::sun::star::lang::Locale& rLocale ) const;
+    OUString        GetNumStr( sal_uLong nNo ) const;
+    OUString        GetNumStr( sal_uLong nNo, const com::sun::star::lang::Locale& rLocale ) const;
 
     void            SetNumberingType(sal_Int16 nSet) {nNumType = nSet;}
     sal_Int16       GetNumberingType() const {return nNumType;}
@@ -105,8 +105,8 @@ public:
     };
 
 private:
-    OUString       sPrefix;
-    OUString       sSuffix;
+    OUString       m_sPrefix;
+    OUString       m_sSuffix;
 
     SvxAdjust           eNumAdjust;
 
@@ -149,7 +149,7 @@ private:
     Size                aGraphicSize;       // Always! in 1/100 mm
     Font*               pBulletFont;        // Pointer to the bullet font
 
-    String              sCharStyleName;     // Character Style
+    OUString            m_sCharStyleName;     // Character Style
 
     DECL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void * );
     virtual void NotifyGraphicArrived();
@@ -170,13 +170,13 @@ public:
 
     void            SetNumAdjust(SvxAdjust eSet) {eNumAdjust = eSet;}
     SvxAdjust       GetNumAdjust() const {return eNumAdjust;}
-    void            SetPrefix(const OUString& rSet) { sPrefix = rSet;}
-    const OUString&   GetPrefix() const { return sPrefix;}
-    void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
-    const OUString&   GetSuffix() const { return sSuffix;}
+    void            SetPrefix(const OUString& rSet) { m_sPrefix = rSet;}
+    const OUString& GetPrefix() const { return m_sPrefix;}
+    void            SetSuffix(const OUString& rSet) { m_sSuffix = rSet;}
+    const OUString& GetSuffix() const { return m_sSuffix;}
 
-    void                    SetCharFmtName(const String& rSet){ sCharStyleName = rSet; }
-    virtual const String&   GetCharFmtName()const;
+    void            SetCharFmtName(const OUString& rSet){ m_sCharStyleName = rSet; }
+    virtual OUString GetCharFmtName()const;
 
     void            SetBulletFont(const Font* pFont);
     const Font*     GetBulletFont() const {return pBulletFont;}
@@ -194,7 +194,7 @@ public:
 
     virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0);
     const SvxBrushItem*         GetBrush() const {return pGraphicBrush;}
-    void            SetGraphic( const String& rName );
+    void            SetGraphic( const OUString& rName );
     virtual void        SetVertOrient(sal_Int16 eSet);
     virtual sal_Int16   GetVertOrient() const;
     void            SetGraphicSize(const Size& rSet) {aGraphicSize = rSet;}
@@ -222,7 +222,7 @@ public:
     long GetIndentAt() const;
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
-    static String   CreateRomanString( sal_uLong nNo, sal_Bool bUpper );
+    static OUString CreateRomanString( sal_uLong nNo, sal_Bool bUpper );
 };
 
 enum SvxNumRuleType
@@ -280,7 +280,7 @@ public:
     sal_uInt32                  GetFeatureFlags() const {return nFeatureFlags;}
     void                    SetFeatureFlag( sal_uInt32 nFlag, sal_Bool bSet = sal_True ) { if(bSet) nFeatureFlags |= nFlag; else nFeatureFlags &= ~nFlag; }
 
-    String                  MakeNumString( const SvxNodeNum&, sal_Bool bInclStrings = sal_True ) const;
+    OUString                MakeNumString( const SvxNodeNum&, sal_Bool bInclStrings = sal_True ) const;
 
     SvxNumRuleType          GetNumRuleType() const { return eNumberingType; }
     void                    SetNumRuleType( const SvxNumRuleType& rType ) { eNumberingType = rType; }

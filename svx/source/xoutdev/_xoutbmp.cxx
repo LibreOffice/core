@@ -114,15 +114,15 @@ Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const sal_uIntPtr nM
     return aRetGraphic;
 }
 
-sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
-                                 const String& rFilterName, const sal_uIntPtr nFlags,
-                                 const Size* pMtfSize_100TH_MM )
+sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
+                                     const OUString& rFilterName, const sal_uIntPtr nFlags,
+                                     const Size* pMtfSize_100TH_MM )
 {
     if( rGraphic.GetType() != GRAPHIC_NONE )
     {
         INetURLObject   aURL( rFileName );
         Graphic         aGraphic;
-        String          aExt;
+        OUString          aExt;
         GraphicFilter&  rFilter = GraphicFilter::GetGraphicFilter();
         sal_uInt16          nErr = GRFILTER_FILTERERROR, nFilter = GRFILTER_FORMAT_NOTFOUND;
         sal_Bool            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
@@ -132,13 +132,13 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
         // calculate correct file name
         if( !( nFlags & XOUTBMP_DONT_EXPAND_FILENAME ) )
         {
-            String aName( aURL.getBase() );
-            aName += '_';
-            aName += String(aURL.getExtension());
-            aName += '_';
-            String aStr( OUString::number( rGraphic.GetChecksum(), 16 ) );
-            if ( aStr.GetChar(0) == '-' )
-                aStr.SetChar(0,'m');
+            OUString aName( aURL.getBase() + "_" + aURL.getExtension() + "_" );
+
+            OUString aStr( OUString::number( rGraphic.GetChecksum(), 16 ) );
+            if ( aStr[0] == '-' )
+            {
+                aStr = "m" + aStr.copy(1);
+            }
             aName += aStr;
             aURL.setBase( aName );
         }
@@ -148,7 +148,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 
         if(aSvgDataPtr.get()
             && aSvgDataPtr->getSvgDataArrayLength()
-            && rFilterName.EqualsIgnoreCaseAscii("svg"))
+            && rFilterName.equalsIgnoreAsciiCase("svg"))
         {
             if(!(nFlags & XOUTBMP_DONT_ADD_EXTENSION))
             {
@@ -191,7 +191,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                     break;
                 }
 
-                if( aExt.Len() )
+                if( !aExt.isEmpty() )
                 {
                     if( 0 == (nFlags & XOUTBMP_DONT_ADD_EXTENSION))
                         aURL.setExtension( aExt );

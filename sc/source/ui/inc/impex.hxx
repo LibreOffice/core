@@ -52,7 +52,7 @@ class ScImportExport
     ScDocument* pUndoDoc;
     ScRange     aRange;
     String      aStreamPath;
-    String      aNonConvertibleChars;
+    OUString    aNonConvertibleChars;
     sal_uLong   nSizeLimit;
     sal_Unicode cSep;                   // Separator
     sal_Unicode cStr;                   // String Delimiter
@@ -147,7 +147,7 @@ public:
     bool IsOverflowCell() const { return bOverflowCell; }
     bool IsOverflow() const { return bOverflowRow || bOverflowCol || bOverflowCell; }
 
-    const String& GetNonConvertibleChars() const { return aNonConvertibleChars; }
+    const OUString& GetNonConvertibleChars() const { return aNonConvertibleChars; }
 
     bool IsApi() const { return mbApi; }
     void SetApi( bool bApi ) { mbApi = bApi; }

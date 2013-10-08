@@ -1054,7 +1054,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
             }
             else
             {
-                if ( pFmt->GetBrush()->GetGraphicObject() )
+                if ( pFmt->GetBrush()->GetGraphicObject().is() )
                 {
                     Point aBulletPos;
                     if ( !bVertical )
@@ -1080,7 +1080,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                             // created aDrawBulletHdl, Set/GetDrawBulletHdl.
                             // created DrawBulletInfo and added handling to sdrtextdecomposition.cxx
                             DrawBulletInfo aDrawBulletInfo(
-                                *pFmt->GetBrush()->GetGraphicObject(),
+                                pFmt->GetBrush()->GetGraphicObject(),
                                 aBulletPos,
                                 pPara->aBulSize);
 
@@ -1090,7 +1090,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                     else
                     {
                         // Remove CAST when KA made the Draw-Method const
-                        ((GraphicObject*)pFmt->GetBrush()->GetGraphicObject())->Draw( pOutDev, aBulletPos, pPara->aBulSize );
+                        pFmt->GetBrush()->GetGraphicObject()->Draw( pOutDev, aBulletPos, pPara->aBulSize );
                     }
                 }
             }
@@ -1735,7 +1735,7 @@ EBulletInfo Outliner::GetBulletInfo( sal_Int32 nPara )
             if( pFmt->GetBulletFont() )
                 aInfo.aFont = *pFmt->GetBulletFont();
         }
-        else if ( pFmt->GetBrush()->GetGraphicObject() )
+        else if ( pFmt->GetBrush()->GetGraphicObject().is() )
         {
             aInfo.aGraphic = pFmt->GetBrush()->GetGraphicObject()->GetGraphic();
         }

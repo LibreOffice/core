@@ -20,6 +20,7 @@
 #define _XTABLE_HXX
 
 #include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xhatch.hxx>
@@ -28,7 +29,6 @@
 #include <svx/xlnasit.hxx>
 
 #include <tools/color.hxx>
-#include <tools/string.hxx>
 #include <tools/contnr.hxx>
 
 #include <cppuhelper/weak.hxx>
@@ -61,7 +61,7 @@ private:
     Color   aColor;
 
 public:
-    XColorEntry(const Color& rColor, const String& rName);
+    XColorEntry(const Color& rColor, const OUString& rName);
     XColorEntry(const XColorEntry& rOther);
 
     const Color& GetColor() const
@@ -80,7 +80,7 @@ private:
     basegfx::B2DPolyPolygon aB2DPolyPolygon;
 
 public:
-    XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName);
+    XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const OUString& rName);
     XLineEndEntry(const XLineEndEntry& rOther);
 
     const basegfx::B2DPolyPolygon& GetLineEnd() const
@@ -99,7 +99,7 @@ private:
     XDash   aDash;
 
 public:
-    XDashEntry(const XDash& rDash, const String& rName);
+    XDashEntry(const XDash& rDash, const OUString& rName);
     XDashEntry(const XDashEntry& rOther);
 
     const XDash& GetDash() const
@@ -118,7 +118,7 @@ private:
     XHatch  aHatch;
 
 public:
-    XHatchEntry(const XHatch& rHatch, const String& rName);
+    XHatchEntry(const XHatch& rHatch, const OUString& rName);
     XHatchEntry(const XHatchEntry& rOther);
 
     const XHatch& GetHatch() const
@@ -137,7 +137,7 @@ private:
     XGradient  aGradient;
 
 public:
-    XGradientEntry(const XGradient& rGradient, const String& rName);
+    XGradientEntry(const XGradient& rGradient, const OUString& rName);
     XGradientEntry(const XGradientEntry& rOther);
 
     const XGradient& GetGradient() const
@@ -153,15 +153,15 @@ public:
 class SVX_DLLPUBLIC XBitmapEntry : public XPropertyEntry
 {
 private:
-    GraphicObject   maGraphicObject;
+    rtl::Reference<GraphicObject>   m_rGraphicObject;
 
 public:
-    XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName);
+    XBitmapEntry(const rtl::Reference<GraphicObject>& rGraphicObject, const OUString& rName);
     XBitmapEntry(const XBitmapEntry& rOther);
 
-    const GraphicObject& GetGraphicObject() const
+    const rtl::Reference<GraphicObject> GetGraphicObject() const
     {
-        return maGraphicObject;
+        return m_rGraphicObject;
     }
 };
 
@@ -199,15 +199,15 @@ protected:
     typedef ::std::vector< Bitmap* > BitmapList_impl;
 
     XPropertyListType   meType;
-    String              maName; // not persistent
-    String              maPath;
+    OUString            maName; // not persistent
+    OUString            maPath;
 
     XPropertyEntryList_impl maList;
 
     bool                mbListDirty;
     bool                mbEmbedInDocument;
 
-    XPropertyList(XPropertyListType t, const String& rPath);
+    XPropertyList(XPropertyListType t, const OUString& rPath);
 
     virtual Bitmap CreateBitmapForUI(long nIndex) = 0;
 
@@ -222,14 +222,14 @@ public:
     XPropertyEntry* Remove(long nIndex);
 
     XPropertyEntry* Get(long nIndex) const;
-    long GetIndex(const String& rName) const;
+    long GetIndex(const OUString& rName) const;
     Bitmap GetUiBitmap(long nIndex) const;
 
-    const String& GetName() const { return maName; }
-    void SetName(const String& rString);
+    const OUString& GetName() const { return maName; }
+    void SetName(const OUString& rString);
 
-    const String& GetPath() const { return maPath; }
-    void SetPath(const String& rString) { maPath = rString; }
+    const OUString& GetPath() const { return maPath; }
+    void SetPath(const OUString& rString) { maPath = rString; }
 
     bool IsDirty() const { return mbListDirty; }
     void SetDirty(bool bDirty = true) { mbListDirty = bDirty; }
@@ -244,22 +244,20 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
         createInstance() = 0;
     bool Load();
-    bool LoadFrom(const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::embed::XStorage > &xStorage,
-                   const OUString &rURL);
+    bool LoadFrom(const ::css::uno::Reference<::css::embed::XStorage > &xStorage,
+                  const OUString &rURL);
     bool Save();
-    bool SaveTo  (const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::embed::XStorage > &xStorage,
-                   const OUString &rURL,
-                                  OUString *pOptName);
+    bool SaveTo  (const ::css::uno::Reference<::css::embed::XStorage > &xStorage,
+                  const OUString &rURL,
+                  OUString *pOptName);
     virtual bool Create() = 0;
 
     // Factory method for sub-classes
     static XPropertyListRef CreatePropertyList(XPropertyListType t,
-                                                const String& rPath);
+                                                const OUString& rPath);
     // as above but initializes name as expected
     static XPropertyListRef CreatePropertyListFromURL(XPropertyListType t,
-                                                       const OUString & rUrl);
+                                                      const OUString & rUrl);
 
     // helper accessors
     inline XDashListRef  AsDashList();
@@ -280,7 +278,7 @@ protected:
     virtual Bitmap  CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XColorList(const String& rPath)
+    explicit XColorList(const OUString& rPath)
         : XPropertyList(XCOLOR_LIST, rPath) {}
 
     using XPropertyList::Replace;
@@ -306,7 +304,7 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XLineEndList(const String& rPath);
+    explicit XLineEndList(const OUString& rPath);
     virtual ~XLineEndList();
 
     using XPropertyList::Remove;
@@ -325,15 +323,15 @@ class SVX_DLLPUBLIC XDashList : public XPropertyList
 {
 private:
     Bitmap              maBitmapSolidLine;
-    String              maStringSolidLine;
-    String              maStringNoLine;
+    OUString            maStringSolidLine;
+    OUString            maStringNoLine;
 
 protected:
     Bitmap ImpCreateBitmapForXDash(const XDash* pDash);
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XDashList(const String& rPath);
+    explicit XDashList(const OUString& rPath);
     virtual ~XDashList();
 
     using XPropertyList::Replace;
@@ -352,8 +350,8 @@ public:
 
     // Special calls to get the translated strings for the UI entry for no
     // line style (XLINE_NONE) and solid line style (XLINE_SOLID) for dialogs
-    String GetStringForUiSolidLine() const;
-    String GetStringForUiNoLine() const;
+    OUString GetStringForUiSolidLine() const;
+    OUString GetStringForUiNoLine() const;
 };
 
 // -------------------
@@ -366,7 +364,7 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XHatchList(const String& rPath);
+    explicit XHatchList(const OUString& rPath);
     virtual ~XHatchList();
 
     using XPropertyList::Replace;
@@ -388,7 +386,7 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XGradientList(const String& rPath);
+    explicit XGradientList(const OUString& rPath);
     virtual ~XGradientList();
 
     using XPropertyList::Replace;
@@ -411,7 +409,7 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XBitmapList(const String& rPath)
+    explicit XBitmapList(const OUString& rPath)
         : XPropertyList(XBITMAP_LIST, rPath) {}
 
     using XPropertyList::Replace;

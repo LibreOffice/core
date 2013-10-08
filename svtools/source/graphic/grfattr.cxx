@@ -38,7 +38,7 @@ GraphicAttr::GraphicAttr() :
     mnRPercent      ( 0 ),
     mnGPercent      ( 0 ),
     mnBPercent      ( 0 ),
-    mbInvert        ( sal_False ),
+    mbInvert        ( false ),
     mcTransparency  ( 0 ),
     meDrawMode      ( GRAPHICDRAWMODE_STANDARD )
 {
@@ -52,7 +52,7 @@ GraphicAttr::~GraphicAttr()
 
 // ------------------------------------------------------------------------
 
-sal_Bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
+bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
 {
     return( ( mfGamma == rAttr.mfGamma ) &&
             ( mnMirrFlags == rAttr.mnMirrFlags ) &&
@@ -78,12 +78,13 @@ SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr )
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt32      nTmp32;
     sal_uInt16          nTmp16;
+    sal_Bool bInvert;
 
     rIStm >> nTmp32 >> nTmp32 >> rAttr.mfGamma >> rAttr.mnMirrFlags >> rAttr.mnRotate10;
     rIStm >> rAttr.mnContPercent >> rAttr.mnLumPercent >> rAttr.mnRPercent >> rAttr.mnGPercent >> rAttr.mnBPercent;
-    rIStm >> rAttr.mbInvert >> rAttr.mcTransparency >> nTmp16;
+    rIStm >> bInvert >> rAttr.mcTransparency >> nTmp16;
     rAttr.meDrawMode = (GraphicDrawMode) nTmp16;
-
+    rAttr.mbInvert = bInvert ? true : false;
     if( aCompat.GetVersion() >= 2 )
     {
         //#fdo39428 SvStream no longer supports operator>>(long&)
@@ -107,7 +108,7 @@ SvStream& operator<<( SvStream& rOStm, const GraphicAttr& rAttr )
 
     rOStm << nTmp32 << nTmp32 << rAttr.mfGamma << rAttr.mnMirrFlags << rAttr.mnRotate10;
     rOStm << rAttr.mnContPercent << rAttr.mnLumPercent << rAttr.mnRPercent << rAttr.mnGPercent << rAttr.mnBPercent;
-    rOStm << rAttr.mbInvert << rAttr.mcTransparency << (sal_uInt16) rAttr.meDrawMode;
+    rOStm << (sal_Bool)rAttr.mbInvert << rAttr.mcTransparency << (sal_uInt16) rAttr.meDrawMode;
     //#fdo39428 SvStream no longer supports operator<<(long)
     rOStm << sal::static_int_cast<sal_Int32>(rAttr.mnLeftCrop)
           << sal::static_int_cast<sal_Int32>(rAttr.mnTopCrop)

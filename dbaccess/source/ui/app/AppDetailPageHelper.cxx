@@ -1351,15 +1351,19 @@ void OPreviewWindow::Paint( const Rectangle& rRect )
 {
     Window::Paint( rRect );
 
-    if( ImplGetGraphicCenterRect( m_aGraphicObj.GetGraphic(), m_aPreviewRect ) )
+    if( ImplGetGraphicCenterRect( m_rGraphicObj->GetGraphic(), m_aPreviewRect ) )
     {
         const Point aPos( m_aPreviewRect.TopLeft() );
         const Size  aSize( m_aPreviewRect.GetSize() );
 
-        if( m_aGraphicObj.IsAnimated() )
-            m_aGraphicObj.StartAnimation( this, aPos, aSize );
+        if( m_rGraphicObj->IsAnimated() )
+        {
+            m_rGraphicObj->StartAnimation( this, aPos, aSize );
+        }
         else
-            m_aGraphicObj.Draw( this, aPos, aSize );
+        {
+            m_rGraphicObj->Draw( this, aPos, aSize );
+        }
     }
 }
 // -----------------------------------------------------------------------------

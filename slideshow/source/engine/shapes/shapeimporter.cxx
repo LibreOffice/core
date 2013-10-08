@@ -63,9 +63,8 @@ namespace internal {
 
 namespace {
 
-bool importShapeGraphic(
-    GraphicObject & o_rGraphic,
-    uno::Reference<beans::XPropertySet> const& xPropSet )
+bool importShapeGraphic(rtl::Reference<GraphicObject> & o_rGraphic,
+                        uno::Reference<beans::XPropertySet> const& xPropSet )
 {
     OUString aURL;
     if( !getPropertyValue( aURL, xPropSet, "GraphicURL") ||
@@ -103,11 +102,11 @@ bool importShapeGraphic(
         // fetch already loaded graphic from graphic manager.
         OString const aOldString(OUStringToOString(aUniqueId,
             RTL_TEXTENCODING_UTF8));
-        o_rGraphic = GraphicObject( aOldString );
+        o_rGraphic = GraphicObject::Create( aOldString );
 
 
-        if( GRAPHIC_DEFAULT == o_rGraphic.GetType()
-            || GRAPHIC_NONE == o_rGraphic.GetType() )
+        if( GRAPHIC_DEFAULT == o_rGraphic->GetType()
+            || GRAPHIC_NONE == o_rGraphic->GetType() )
         {
             // even the GrfMgr does not seem to know this graphic
             return false;
@@ -138,7 +137,7 @@ bool importShapeGraphic(
             return false;
         }
 
-        o_rGraphic = GraphicObject( aTmpGraphic );
+        o_rGraphic = GraphicObject::Create( aTmpGraphic );
     }
     return true;
 }
@@ -329,18 +328,18 @@ ShapeSharedPtr ShapeImporter::createShape(
     }
     else if( shapeType == "com.sun.star.drawing.GraphicObjectShape" || shapeType == "com.sun.star.presentation.GraphicObjectShape" )
     {
-        GraphicObject aGraphicObject;
+        rtl::Reference<GraphicObject> rGraphicObject;
 
         // to get hold of GIF animations, inspect Graphic
         // objects more thoroughly (the plain-jane shape
         // metafile of course would only contain the first
         // animation frame)
-        if( !importShapeGraphic( aGraphicObject, xPropSet ) )
+        if( !importShapeGraphic( rGraphicObject, xPropSet ) )
             return ShapeSharedPtr(); // error loading graphic -
                                      // no placeholders in
                                      // slideshow
 
-        if( !aGraphicObject.IsAnimated() )
+        if( !rGraphicObject->IsAnimated() )
         {
             // no animation - simply utilize plain draw shape import
 
@@ -403,9 +402,9 @@ ShapeSharedPtr ShapeImporter::createShape(
         // ---------------------------------------------
 
         Graphic aGraphic(
-            aGraphicObject.GetTransformedGraphic(
-                aGraphicObject.GetPrefSize(),
-                aGraphicObject.GetPrefMapMode(),
+            rGraphicObject->GetTransformedGraphic(
+                rGraphicObject->GetPrefSize(),
+                rGraphicObject->GetPrefMapMode(),
                 aGraphAttrs ) );
 
         return DrawShape::create( xCurrShape,

@@ -50,22 +50,22 @@ private:
 public:
 
 
-                GraphicID( const GraphicObject& rObj );
-                ~GraphicID() {}
+                GraphicID( const GraphicObject* rObj );
+               ~GraphicID() {}
 
-    sal_Bool        operator==( const GraphicID& rID ) const
+    bool        operator==( const GraphicID& rID ) const
                 {
                     return( rID.mnID1 == mnID1 && rID.mnID2 == mnID2 &&
                             rID.mnID3 == mnID3 && rID.mnID4 == mnID4 );
                 }
 
-    OString GetIDString() const;
-    sal_Bool        IsEmpty() const { return( 0 == mnID4 ); }
+    OString     GetIDString() const;
+    bool        IsEmpty() const { return( 0 == mnID4 ); }
 };
 
-GraphicID::GraphicID( const GraphicObject& rObj )
+GraphicID::GraphicID( const GraphicObject* rObj )
 {
-    const Graphic& rGraphic = rObj.GetGraphic();
+    const Graphic& rGraphic = rObj->GetGraphic();
 
     mnID1 = ( (sal_uLong) rGraphic.GetType() ) << 28;
 
@@ -158,29 +158,30 @@ private:
     // SvgData support
     SvgDataPtr          maSvgData;
 
-    bool                ImplInit( const GraphicObject& rObj );
-    bool                ImplMatches( const GraphicObject& rObj ) const { return( GraphicID( rObj ) == maID ); }
+    bool                ImplInit( const GraphicObject* pObj );
+    bool                ImplMatches( const rtl::Reference<GraphicObject>& rObj ) const { return( GraphicID( rObj.get() ) == maID ); }
     void                ImplFillSubstitute( Graphic& rSubstitute );
 
 public:
 
-                        GraphicCacheEntry( const GraphicObject& rObj );
-                        ~GraphicCacheEntry();
+                        GraphicCacheEntry( const GraphicObject* rObj );
+                       ~GraphicCacheEntry();
 
     const GraphicID&    GetID() const { return maID; }
 
-    void                AddGraphicObjectReference( const GraphicObject& rObj, Graphic& rSubstitute );
-    bool                ReleaseGraphicObjectReference( const GraphicObject& rObj );
+    void                AddGraphicObjectReference( const GraphicObject* rObj, Graphic& rSubstitute );
+    bool                ReleaseGraphicObjectReference( const GraphicObject* pObj );
     size_t              GetGraphicObjectReferenceCount() { return maGraphicObjectList.size(); }
-    bool                HasGraphicObjectReference( const GraphicObject& rObj );
+    bool                HasGraphicObjectReference( const rtl::Reference<GraphicObject>& rObj );
+    bool                HasGraphicObjectReference( const GraphicObject* pObj );
 
     void                TryToSwapIn();
-    void                GraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    bool                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
-    void                GraphicObjectWasSwappedIn( const GraphicObject& rObj );
+    void                GraphicObjectWasSwappedOut( const rtl::Reference<GraphicObject>& rObj );
+    bool                FillSwappedGraphicObject( const rtl::Reference<GraphicObject>& rObj, Graphic& rSubstitute );
+    void                GraphicObjectWasSwappedIn( const rtl::Reference<GraphicObject>& rObj );
 };
 
-GraphicCacheEntry::GraphicCacheEntry( const GraphicObject& rObj ) :
+GraphicCacheEntry::GraphicCacheEntry( const GraphicObject* rObj ) :
     maID            ( rObj ),
     mpBmpEx         ( NULL ),
     mpMtf           ( NULL ),
@@ -188,7 +189,7 @@ GraphicCacheEntry::GraphicCacheEntry( const GraphicObject& rObj ) :
     mbSwappedAll    ( true )
 {
     mbSwappedAll = !ImplInit( rObj );
-    maGraphicObjectList.push_back( (GraphicObject*)&rObj );
+    maGraphicObjectList.push_back( rObj );
 }
 
 GraphicCacheEntry::~GraphicCacheEntry()
@@ -203,13 +204,13 @@ GraphicCacheEntry::~GraphicCacheEntry()
     delete mpAnimation;
 }
 
-bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
+bool GraphicCacheEntry::ImplInit( const GraphicObject* pObj )
 {
     bool bRet = false;
 
-    if( !rObj.IsSwappedOut() )
+    if( !pObj->IsSwappedOut() )
     {
-        const Graphic& rGraphic = rObj.GetGraphic();
+        const Graphic& rGraphic = pObj->GetGraphic();
 
         if( mpBmpEx )
             delete mpBmpEx, mpBmpEx = NULL;
@@ -222,31 +223,27 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
 
         switch( rGraphic.GetType() )
         {
-            case( GRAPHIC_BITMAP ):
+        case( GRAPHIC_BITMAP ):
+            if(rGraphic.getSvgData().get())
             {
-                if(rGraphic.getSvgData().get())
-                {
-                    maSvgData = rGraphic.getSvgData();
-                }
-                else if( rGraphic.IsAnimated() )
-                {
-                    mpAnimation = new Animation( rGraphic.GetAnimation() );
-                }
-                else
-                {
-                    mpBmpEx = new BitmapEx( rGraphic.GetBitmapEx() );
-                }
+                maSvgData = rGraphic.getSvgData();
+            }
+            else if( rGraphic.IsAnimated() )
+            {
+                mpAnimation = new Animation( rGraphic.GetAnimation() );
+            }
+            else
+            {
+                mpBmpEx = new BitmapEx( rGraphic.GetBitmapEx() );
             }
             break;
 
-            case( GRAPHIC_GDIMETAFILE ):
-            {
-                mpMtf = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
-            }
+        case( GRAPHIC_GDIMETAFILE ):
+            mpMtf = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
             break;
 
-            default:
-                DBG_ASSERT( GetID().IsEmpty(), "GraphicCacheEntry::ImplInit: Could not initialize graphic! (=>KA)" );
+        default:
+            DBG_ASSERT( GetID().IsEmpty(), "GraphicCacheEntry::ImplInit: Could not initialize graphic! (=>KA)" );
             break;
         }
 
@@ -315,23 +312,23 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     }
 }
 
-void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Graphic& rSubstitute )
+void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject* pObj, Graphic& rSubstitute )
 {
     if( mbSwappedAll )
-        mbSwappedAll = !ImplInit( rObj );
-
+    {
+        mbSwappedAll = !ImplInit( pObj );
+    }
     ImplFillSubstitute( rSubstitute );
-    maGraphicObjectList.push_back( (GraphicObject*) &rObj );
+    maGraphicObjectList.push_back( pObj);
 }
 
-bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject& rObj )
+bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject* pObj )
 {
-    for(
-        GraphicObjectList::iterator it = maGraphicObjectList.begin();
+    for( GraphicObjectList::iterator it = maGraphicObjectList.begin();
         it != maGraphicObjectList.end();
-        ++it
-    ) {
-        if( &rObj == *it )
+        ++it )
+    {
+        if( pObj == *it )
         {
             maGraphicObjectList.erase( it );
             return true;
@@ -341,24 +338,43 @@ bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject& rObj
     return false;
 }
 
-bool GraphicCacheEntry::HasGraphicObjectReference( const GraphicObject& rObj )
+bool GraphicCacheEntry::HasGraphicObjectReference( const rtl::Reference<GraphicObject>& rObj )
 {
     bool bRet = false;
 
     for( size_t i = 0, n = maGraphicObjectList.size(); ( i < n ) && !bRet; ++i )
-        if( &rObj == maGraphicObjectList[ i ] )
+    {
+        if( rObj.get() == maGraphicObjectList[ i ] )
+        {
             bRet = true;
+        }
+    }
+    return bRet;
+}
 
+bool GraphicCacheEntry::HasGraphicObjectReference( const GraphicObject* pObj )
+{
+    bool bRet = false;
+
+    for( size_t i = 0, n = maGraphicObjectList.size(); ( i < n ) && !bRet; ++i )
+    {
+        if( pObj == maGraphicObjectList[ i ] )
+        {
+            bRet = true;
+        }
+    }
     return bRet;
 }
 
 void GraphicCacheEntry::TryToSwapIn()
 {
     if( mbSwappedAll && !maGraphicObjectList.empty() )
-        maGraphicObjectList.front()->FireSwapInRequest();
+    {
+        (const_cast<GraphicObject*>(maGraphicObjectList.front()))->FireSwapInRequest();
+    }
 }
 
-void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*/ )
+void GraphicCacheEntry::GraphicObjectWasSwappedOut( const rtl::Reference<GraphicObject>& /*rObj*/ )
 {
     mbSwappedAll = true;
 
@@ -377,11 +393,11 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*
     }
 }
 
-bool GraphicCacheEntry::FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
+bool GraphicCacheEntry::FillSwappedGraphicObject( const rtl::Reference<GraphicObject>& rObj, Graphic& rSubstitute )
 {
     bool bRet = false;
 
-    if( !mbSwappedAll && rObj.IsSwappedOut() )
+    if( !mbSwappedAll && rObj->IsSwappedOut() )
     {
         ImplFillSubstitute( rSubstitute );
         bRet = true;
@@ -390,10 +406,10 @@ bool GraphicCacheEntry::FillSwappedGraphicObject( const GraphicObject& rObj, Gra
     return bRet;
 }
 
-void GraphicCacheEntry::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
+void GraphicCacheEntry::GraphicObjectWasSwappedIn( const rtl::Reference<GraphicObject>& rObj )
 {
     if( mbSwappedAll )
-        mbSwappedAll = !ImplInit( rObj );
+        mbSwappedAll = !ImplInit( rObj.get() );
 }
 
 class GraphicDisplayCacheEntry
@@ -406,86 +422,82 @@ private:
     BitmapEx*                   mpBmpEx;
     GraphicAttr                 maAttr;
     Size                        maOutSizePix;
-    sal_uLong                       mnCacheSize;
-    sal_uLong                       mnOutDevDrawMode;
-    sal_uInt16                      mnOutDevBitCount;
+    size_t                      mnCacheSize;
+    sal_uLong                   mnOutDevDrawMode;
+    sal_uInt16                  mnOutDevBitCount;
 
     static bool IsCacheableAsBitmap( const GDIMetaFile& rMtf, OutputDevice* pOut, const Size& rSz );
 
 public:
 
-    static sal_uLong                GetNeededSize( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                               const GraphicObject& rObj, const GraphicAttr& rAttr );
+    static size_t GetNeededSize( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+                                 const rtl::Reference<GraphicObject>& rObj, const GraphicAttr& rAttr );
 
 public:
 
-                                GraphicDisplayCacheEntry( const GraphicCacheEntry* pRefCacheEntry,
-                                                          OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                                          const GraphicObject& rObj, const GraphicAttr& rAttr,
-                                                          const BitmapEx& rBmpEx ) :
-                                    mpRefCacheEntry( pRefCacheEntry ),
-                                    mpMtf( NULL ), mpBmpEx( new BitmapEx( rBmpEx ) ),
-                                    maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
-                                    mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ),
-                                    mnOutDevDrawMode( pOut->GetDrawMode() ),
-                                    mnOutDevBitCount( pOut->GetBitCount() )
-                                    {
-                                    }
+                  GraphicDisplayCacheEntry( const GraphicCacheEntry* pRefCacheEntry,
+                                            OutputDevice* pOut, const Point& rPt, const Size& rSz,
+                                            const rtl::Reference<GraphicObject>& rObj, const GraphicAttr& rAttr,
+                                            const BitmapEx& rBmpEx ) :
+                      mpRefCacheEntry( pRefCacheEntry ),
+                      mpMtf( NULL ), mpBmpEx( new BitmapEx( rBmpEx ) ),
+                      maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
+                      mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ),
+                      mnOutDevDrawMode( pOut->GetDrawMode() ),
+                      mnOutDevBitCount( pOut->GetBitCount() ) { }
 
-                                GraphicDisplayCacheEntry( const GraphicCacheEntry* pRefCacheEntry,
-                                                          OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                                          const GraphicObject& rObj, const GraphicAttr& rAttr,
-                                                          const GDIMetaFile& rMtf ) :
-                                    mpRefCacheEntry( pRefCacheEntry ),
-                                    mpMtf( new GDIMetaFile( rMtf ) ), mpBmpEx( NULL ),
-                                    maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
-                                    mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ),
-                                    mnOutDevDrawMode( pOut->GetDrawMode() ),
-                                    mnOutDevBitCount( pOut->GetBitCount() )
-                                    {
-                                    }
+                  GraphicDisplayCacheEntry( const GraphicCacheEntry* pRefCacheEntry,
+                                            OutputDevice* pOut, const Point& rPt, const Size& rSz,
+                                            const rtl::Reference<GraphicObject>& rObj, const GraphicAttr& rAttr,
+                                            const GDIMetaFile& rMtf ) :
+                      mpRefCacheEntry( pRefCacheEntry ),
+                      mpMtf( new GDIMetaFile( rMtf ) ), mpBmpEx( NULL ),
+                      maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
+                      mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ),
+                      mnOutDevDrawMode( pOut->GetDrawMode() ),
+                      mnOutDevBitCount( pOut->GetBitCount() ) { }
 
 
-                                ~GraphicDisplayCacheEntry();
+                 ~GraphicDisplayCacheEntry();
 
-    const GraphicAttr&          GetAttr() const { return maAttr; }
-    const Size&                 GetOutputSizePixel() const { return maOutSizePix; }
-    sal_uLong                   GetCacheSize() const { return mnCacheSize; }
-    const GraphicCacheEntry*    GetReferencedCacheEntry() const { return mpRefCacheEntry; }
-    sal_uLong                   GetOutDevDrawMode() const { return mnOutDevDrawMode; }
-    sal_uInt16              GetOutDevBitCount() const { return mnOutDevBitCount; }
+    const GraphicAttr& GetAttr() const { return maAttr; }
+    const Size& GetOutputSizePixel() const { return maOutSizePix; }
+    size_t GetCacheSize() const { return mnCacheSize; }
+    const GraphicCacheEntry* GetReferencedCacheEntry() const { return mpRefCacheEntry; }
+    sal_uLong GetOutDevDrawMode() const { return mnOutDevDrawMode; }
+    sal_uInt16 GetOutDevBitCount() const { return mnOutDevBitCount; }
 
-    void                        SetReleaseTime( const ::salhelper::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
-    const ::salhelper::TTimeValue&    GetReleaseTime() const { return maReleaseTime; }
+    void SetReleaseTime( const ::salhelper::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
+    const ::salhelper::TTimeValue& GetReleaseTime() const { return maReleaseTime; }
 
-    sal_Bool                        Matches( OutputDevice* pOut, const Point& /*rPtPixel*/, const Size& rSzPixel,
-                                         const GraphicCacheEntry* pCacheEntry, const GraphicAttr& rAttr ) const
-                                {
-                                    // #i46805# Additional match
-                                    // criteria: outdev draw mode and
-                                    // bit count. One cannot reuse
-                                    // this cache object, if it's
-                                    // e.g. generated for
-                                    // DRAWMODE_GRAYBITMAP.
-                                    return( ( pCacheEntry == mpRefCacheEntry ) &&
-                                            ( maAttr == rAttr ) &&
-                                            ( ( maOutSizePix == rSzPixel ) || ( !maOutSizePix.Width() && !maOutSizePix.Height() ) ) &&
-                                            ( pOut->GetBitCount() == mnOutDevBitCount ) &&
-                                            ( pOut->GetDrawMode() == mnOutDevDrawMode ) );
-                                }
+    bool Matches( OutputDevice* pOut, const Point& /*rPtPixel*/, const Size& rSzPixel,
+                  const GraphicCacheEntry* pCacheEntry, const GraphicAttr& rAttr ) const
+        {
+            // #i46805# Additional match
+            // criteria: outdev draw mode and
+            // bit count. One cannot reuse
+            // this cache object, if it's
+            // e.g. generated for
+            // DRAWMODE_GRAYBITMAP.
+            return( ( pCacheEntry == mpRefCacheEntry ) &&
+                    ( maAttr == rAttr ) &&
+                    ( ( maOutSizePix == rSzPixel ) || ( !maOutSizePix.Width() && !maOutSizePix.Height() ) ) &&
+                    ( pOut->GetBitCount() == mnOutDevBitCount ) &&
+                    ( pOut->GetDrawMode() == mnOutDevDrawMode ) );
+        }
 
-    void                        Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz ) const;
+    void Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz ) const;
 };
 
 // This whole function is based on checkMetadataBitmap() from grfmgr2.cxx, see that one for details.
 // If you do changes here, change the original function too.
 static void checkMetadataBitmap( const BitmapEx& rBmpEx,
-                                 Point    /*rSrcPoint*/,
-                                 Size     rSrcSize,
-                                 const Point&    rDestPoint,
-                                 const Size&     rDestSize,
-                                 const Size&     rRefSize,
-                                 bool&           o_rbNonBitmapActionEncountered )
+                                 Point /*rSrcPoint*/,
+                                 Size rSrcSize,
+                                 const Point& rDestPoint,
+                                 const Size& rDestSize,
+                                 const Size& rRefSize,
+                                 bool& o_rbNonBitmapActionEncountered )
 {
     if( rSrcSize == Size())
         rSrcSize = rBmpEx.GetSizePixel();
@@ -513,7 +525,7 @@ static void checkMetadataBitmap( const BitmapEx& rBmpEx,
 // ImplCreateOutput() would use the optimization of using the single bitmap.
 // If you do changes here, change the original function too.
 bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
-    OutputDevice* pOut, const Size& rSz )
+                                                    OutputDevice* pOut, const Size& rSz )
 {
     const Size aNewSize( rMtf.GetPrefSize() );
     GDIMetaFile rOutMtf = rMtf;
@@ -534,45 +546,45 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
         {
             switch( pAct->GetType() )
             {
-                case META_FONT_ACTION:
-                    // FALLTHROUGH intended
-                case META_NULL_ACTION:
-                    // FALLTHROUGH intended
+            case META_FONT_ACTION:
+                // FALLTHROUGH intended
+            case META_NULL_ACTION:
+                // FALLTHROUGH intended
 
-                    // OutDev state changes (which don't affect bitmap
-                    // output)
-                case META_LINECOLOR_ACTION:
-                    // FALLTHROUGH intended
-                case META_FILLCOLOR_ACTION:
-                    // FALLTHROUGH intended
-                case META_TEXTCOLOR_ACTION:
-                    // FALLTHROUGH intended
-                case META_TEXTFILLCOLOR_ACTION:
-                    // FALLTHROUGH intended
-                case META_TEXTALIGN_ACTION:
-                    // FALLTHROUGH intended
-                case META_TEXTLINECOLOR_ACTION:
-                    // FALLTHROUGH intended
-                case META_TEXTLINE_ACTION:
-                    // FALLTHROUGH intended
-                case META_PUSH_ACTION:
-                    // FALLTHROUGH intended
-                case META_POP_ACTION:
-                    // FALLTHROUGH intended
-                case META_LAYOUTMODE_ACTION:
-                    // FALLTHROUGH intended
-                case META_TEXTLANGUAGE_ACTION:
-                    // FALLTHROUGH intended
-                case META_COMMENT_ACTION:
-                    break;
+                // OutDev state changes (which don't affect bitmap
+                // output)
+            case META_LINECOLOR_ACTION:
+                // FALLTHROUGH intended
+            case META_FILLCOLOR_ACTION:
+                // FALLTHROUGH intended
+            case META_TEXTCOLOR_ACTION:
+                // FALLTHROUGH intended
+            case META_TEXTFILLCOLOR_ACTION:
+                // FALLTHROUGH intended
+            case META_TEXTALIGN_ACTION:
+                // FALLTHROUGH intended
+            case META_TEXTLINECOLOR_ACTION:
+                // FALLTHROUGH intended
+            case META_TEXTLINE_ACTION:
+                // FALLTHROUGH intended
+            case META_PUSH_ACTION:
+                // FALLTHROUGH intended
+            case META_POP_ACTION:
+                // FALLTHROUGH intended
+            case META_LAYOUTMODE_ACTION:
+                // FALLTHROUGH intended
+            case META_TEXTLANGUAGE_ACTION:
+                // FALLTHROUGH intended
+            case META_COMMENT_ACTION:
+                break;
 
-                    // bitmap output methods
-                case META_BMP_ACTION:
-                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
-                    {
-                        MetaBmpAction* pAction = (MetaBmpAction*)pAct;
+                // bitmap output methods
+            case META_BMP_ACTION:
+                if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                {
+                    MetaBmpAction* pAction = (MetaBmpAction*)pAct;
 
-                        checkMetadataBitmap(
+                    checkMetadataBitmap(
                             BitmapEx( pAction->GetBitmap()),
                             Point(), Size(),
                             pOut->LogicToPixel( pAction->GetPoint(),
@@ -580,16 +592,16 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                             pAction->GetBitmap().GetSizePixel(),
                             rSizePix,
                             bNonBitmapActionEncountered );
-                    }
-                    ++nNumBitmaps;
-                    break;
+                }
+                ++nNumBitmaps;
+                break;
 
-                case META_BMPSCALE_ACTION:
-                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
-                    {
-                        MetaBmpScaleAction* pAction = (MetaBmpScaleAction*)pAct;
+            case META_BMPSCALE_ACTION:
+                if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                {
+                    MetaBmpScaleAction* pAction = (MetaBmpScaleAction*)pAct;
 
-                        checkMetadataBitmap(
+                    checkMetadataBitmap(
                             BitmapEx( pAction->GetBitmap()),
                             Point(), Size(),
                             pOut->LogicToPixel( pAction->GetPoint(),
@@ -598,181 +610,186 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
                                                 rPrefMapMode ),
                             rSizePix,
                             bNonBitmapActionEncountered );
-                    }
-                    ++nNumBitmaps;
+                }
+                ++nNumBitmaps;
+                break;
+
+            case META_BMPSCALEPART_ACTION:
+                if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                {
+                    MetaBmpScalePartAction* pAction = (MetaBmpScalePartAction*)pAct;
+
+                    checkMetadataBitmap( BitmapEx( pAction->GetBitmap() ),
+                                         pAction->GetSrcPoint(),
+                                         pAction->GetSrcSize(),
+                                         pOut->LogicToPixel( pAction->GetDestPoint(),
+                                                             rPrefMapMode ),
+                                         pOut->LogicToPixel( pAction->GetDestSize(),
+                                                             rPrefMapMode ),
+                                         rSizePix,
+                                         bNonBitmapActionEncountered );
+                }
+                ++nNumBitmaps;
+                break;
+
+            case META_BMPEX_ACTION:
+                if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                {
+                    MetaBmpExAction* pAction = (MetaBmpExAction*)pAct;
+
+                    checkMetadataBitmap( pAction->GetBitmapEx(),
+                                         Point(), Size(),
+                                         pOut->LogicToPixel( pAction->GetPoint(),
+                                                             rPrefMapMode ),
+                                         pAction->GetBitmapEx().GetSizePixel(),
+                                         rSizePix,
+                                         bNonBitmapActionEncountered );
+                }
+                ++nNumBitmaps;
+                break;
+
+            case META_BMPEXSCALE_ACTION:
+                if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                {
+                    MetaBmpExScaleAction* pAction = (MetaBmpExScaleAction*)pAct;
+
+                    checkMetadataBitmap( pAction->GetBitmapEx(),
+                                         Point(), Size(),
+                                         pOut->LogicToPixel( pAction->GetPoint(),
+                                                             rPrefMapMode ),
+                                         pOut->LogicToPixel( pAction->GetSize(),
+                                                             rPrefMapMode ),
+                                         rSizePix,
+                                         bNonBitmapActionEncountered );
+                }
+                ++nNumBitmaps;
+                break;
+
+            case META_BMPEXSCALEPART_ACTION:
+                if( !nNumBitmaps && !bNonBitmapActionEncountered )
+                {
+                    MetaBmpExScalePartAction* pAction = (MetaBmpExScalePartAction*)pAct;
+
+                    checkMetadataBitmap( pAction->GetBitmapEx(),
+                                         pAction->GetSrcPoint(),
+                                         pAction->GetSrcSize(),
+                                         pOut->LogicToPixel( pAction->GetDestPoint(),
+                                                             rPrefMapMode ),
+                                         pOut->LogicToPixel( pAction->GetDestSize(),
+                                                             rPrefMapMode ),
+                                         rSizePix,
+                                         bNonBitmapActionEncountered );
+                }
+                ++nNumBitmaps;
+                break;
+
+                // these actions actually output something (that's
+                // different from a bitmap)
+            case META_RASTEROP_ACTION:
+                if( ((MetaRasterOpAction*)pAct)->GetRasterOp() == ROP_OVERPAINT )
                     break;
+                // FALLTHROUGH intended
+            case META_PIXEL_ACTION:
+                // FALLTHROUGH intended
+            case META_POINT_ACTION:
+                // FALLTHROUGH intended
+            case META_LINE_ACTION:
+                // FALLTHROUGH intended
+            case META_RECT_ACTION:
+                // FALLTHROUGH intended
+            case META_ROUNDRECT_ACTION:
+                // FALLTHROUGH intended
+            case META_ELLIPSE_ACTION:
+                // FALLTHROUGH intended
+            case META_ARC_ACTION:
+                // FALLTHROUGH intended
+            case META_PIE_ACTION:
+                // FALLTHROUGH intended
+            case META_CHORD_ACTION:
+                // FALLTHROUGH intended
+            case META_POLYLINE_ACTION:
+                // FALLTHROUGH intended
+            case META_POLYGON_ACTION:
+                // FALLTHROUGH intended
+            case META_POLYPOLYGON_ACTION:
+                // FALLTHROUGH intended
 
-                case META_BMPSCALEPART_ACTION:
-                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
-                    {
-                        MetaBmpScalePartAction* pAction = (MetaBmpScalePartAction*)pAct;
+            case META_TEXT_ACTION:
+                // FALLTHROUGH intended
+            case META_TEXTARRAY_ACTION:
+                // FALLTHROUGH intended
+            case META_STRETCHTEXT_ACTION:
+                // FALLTHROUGH intended
+            case META_TEXTRECT_ACTION:
+                // FALLTHROUGH intended
 
-                        checkMetadataBitmap(        BitmapEx( pAction->GetBitmap() ),
-                                                    pAction->GetSrcPoint(),
-                                                    pAction->GetSrcSize(),
-                                                    pOut->LogicToPixel( pAction->GetDestPoint(),
-                                                                        rPrefMapMode ),
-                                                    pOut->LogicToPixel( pAction->GetDestSize(),
-                                                                        rPrefMapMode ),
-                                                    rSizePix,
-                                                    bNonBitmapActionEncountered );
-                    }
-                    ++nNumBitmaps;
-                    break;
+            case META_MASK_ACTION:
+                // FALLTHROUGH intended
+            case META_MASKSCALE_ACTION:
+                // FALLTHROUGH intended
+            case META_MASKSCALEPART_ACTION:
+                // FALLTHROUGH intended
 
-                case META_BMPEX_ACTION:
-                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
-                    {
-                        MetaBmpExAction* pAction = (MetaBmpExAction*)pAct;
+            case META_GRADIENT_ACTION:
+                // FALLTHROUGH intended
+            case META_HATCH_ACTION:
+                // FALLTHROUGH intended
+            case META_WALLPAPER_ACTION:
+                // FALLTHROUGH intended
 
-                        checkMetadataBitmap(
-                            pAction->GetBitmapEx(),
-                            Point(), Size(),
-                            pOut->LogicToPixel( pAction->GetPoint(),
-                                                rPrefMapMode ),
-                            pAction->GetBitmapEx().GetSizePixel(),
-                            rSizePix,
-                            bNonBitmapActionEncountered );
-                    }
-                    ++nNumBitmaps;
-                    break;
+            case META_TRANSPARENT_ACTION:
+                // FALLTHROUGH intended
+            case META_EPS_ACTION:
+                // FALLTHROUGH intended
+            case META_FLOATTRANSPARENT_ACTION:
+                // FALLTHROUGH intended
+            case META_GRADIENTEX_ACTION:
+                // FALLTHROUGH intended
 
-                case META_BMPEXSCALE_ACTION:
-                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
-                    {
-                        MetaBmpExScaleAction* pAction = (MetaBmpExScaleAction*)pAct;
+                // OutDev state changes that _do_ affect bitmap
+                // output
+            case META_CLIPREGION_ACTION:
+                // FALLTHROUGH intended
+            case META_ISECTRECTCLIPREGION_ACTION:
+                // FALLTHROUGH intended
+            case META_ISECTREGIONCLIPREGION_ACTION:
+                // FALLTHROUGH intended
+            case META_MOVECLIPREGION_ACTION:
+                // FALLTHROUGH intended
 
-                        checkMetadataBitmap(
-                            pAction->GetBitmapEx(),
-                            Point(), Size(),
-                            pOut->LogicToPixel( pAction->GetPoint(),
-                                                rPrefMapMode ),
-                            pOut->LogicToPixel( pAction->GetSize(),
-                                                rPrefMapMode ),
-                            rSizePix,
-                            bNonBitmapActionEncountered );
-                    }
-                    ++nNumBitmaps;
-                    break;
-
-                case META_BMPEXSCALEPART_ACTION:
-                    if( !nNumBitmaps && !bNonBitmapActionEncountered )
-                    {
-                        MetaBmpExScalePartAction* pAction = (MetaBmpExScalePartAction*)pAct;
-
-                        checkMetadataBitmap( pAction->GetBitmapEx(),
-                                                    pAction->GetSrcPoint(),
-                                                    pAction->GetSrcSize(),
-                                                    pOut->LogicToPixel( pAction->GetDestPoint(),
-                                                                        rPrefMapMode ),
-                                                    pOut->LogicToPixel( pAction->GetDestSize(),
-                                                                        rPrefMapMode ),
-                                                    rSizePix,
-                                                    bNonBitmapActionEncountered );
-                    }
-                    ++nNumBitmaps;
-                    break;
-
-                    // these actions actually output something (that's
-                    // different from a bitmap)
-                case META_RASTEROP_ACTION:
-                    if( ((MetaRasterOpAction*)pAct)->GetRasterOp() == ROP_OVERPAINT )
-                        break;
-                    // FALLTHROUGH intended
-                case META_PIXEL_ACTION:
-                    // FALLTHROUGH intended
-                case META_POINT_ACTION:
-                    // FALLTHROUGH intended
-                case META_LINE_ACTION:
-                    // FALLTHROUGH intended
-                case META_RECT_ACTION:
-                    // FALLTHROUGH intended
-                case META_ROUNDRECT_ACTION:
-                    // FALLTHROUGH intended
-                case META_ELLIPSE_ACTION:
-                    // FALLTHROUGH intended
-                case META_ARC_ACTION:
-                    // FALLTHROUGH intended
-                case META_PIE_ACTION:
-                    // FALLTHROUGH intended
-                case META_CHORD_ACTION:
-                    // FALLTHROUGH intended
-                case META_POLYLINE_ACTION:
-                    // FALLTHROUGH intended
-                case META_POLYGON_ACTION:
-                    // FALLTHROUGH intended
-                case META_POLYPOLYGON_ACTION:
-                    // FALLTHROUGH intended
-
-                case META_TEXT_ACTION:
-                    // FALLTHROUGH intended
-                case META_TEXTARRAY_ACTION:
-                    // FALLTHROUGH intended
-                case META_STRETCHTEXT_ACTION:
-                    // FALLTHROUGH intended
-                case META_TEXTRECT_ACTION:
-                    // FALLTHROUGH intended
-
-                case META_MASK_ACTION:
-                    // FALLTHROUGH intended
-                case META_MASKSCALE_ACTION:
-                    // FALLTHROUGH intended
-                case META_MASKSCALEPART_ACTION:
-                    // FALLTHROUGH intended
-
-                case META_GRADIENT_ACTION:
-                    // FALLTHROUGH intended
-                case META_HATCH_ACTION:
-                    // FALLTHROUGH intended
-                case META_WALLPAPER_ACTION:
-                    // FALLTHROUGH intended
-
-                case META_TRANSPARENT_ACTION:
-                    // FALLTHROUGH intended
-                case META_EPS_ACTION:
-                    // FALLTHROUGH intended
-                case META_FLOATTRANSPARENT_ACTION:
-                    // FALLTHROUGH intended
-                case META_GRADIENTEX_ACTION:
-                    // FALLTHROUGH intended
-
-                    // OutDev state changes that _do_ affect bitmap
-                    // output
-                case META_CLIPREGION_ACTION:
-                    // FALLTHROUGH intended
-                case META_ISECTRECTCLIPREGION_ACTION:
-                    // FALLTHROUGH intended
-                case META_ISECTREGIONCLIPREGION_ACTION:
-                    // FALLTHROUGH intended
-                case META_MOVECLIPREGION_ACTION:
-                    // FALLTHROUGH intended
-
-                case META_MAPMODE_ACTION:
-                    // FALLTHROUGH intended
-                case META_REFPOINT_ACTION:
-                    // FALLTHROUGH intended
-                default:
-                    bNonBitmapActionEncountered = true;
-                    break;
+            case META_MAPMODE_ACTION:
+                // FALLTHROUGH intended
+            case META_REFPOINT_ACTION:
+                // FALLTHROUGH intended
+            default:
+                bNonBitmapActionEncountered = true;
+                break;
             }
         }
     }
     return nNumBitmaps == 1 && !bNonBitmapActionEncountered;
 }
 
-sal_uLong GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Point& /*rPt*/, const Size& rSz,
-                                               const GraphicObject& rObj, const GraphicAttr& rAttr )
+size_t GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Point& /*rPt*/, const Size& rSz,
+                                                const rtl::Reference<GraphicObject>& rObj,
+                                                const GraphicAttr& rAttr )
 {
-    const Graphic&      rGraphic = rObj.GetGraphic();
+    const Graphic&      rGraphic = rObj->GetGraphic();
     const GraphicType   eType = rGraphic.GetType();
 
     bool canCacheAsBitmap = false;
     if( GRAPHIC_BITMAP == eType )
+    {
         canCacheAsBitmap = true;
+    }
     else if( GRAPHIC_GDIMETAFILE == eType )
+    {
         canCacheAsBitmap = IsCacheableAsBitmap( rGraphic.GetGDIMetaFile(), pOut, rSz );
+    }
     else
+    {
         return 0;
+    }
     if( canCacheAsBitmap )
     {
         const Size aOutSizePix( pOut->LogicToPixel( rSz ) );
@@ -786,8 +803,10 @@ sal_uLong GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Poi
         else if( nBitCount )
         {
             sal_uLong nNeededSize = aOutSizePix.Width() * aOutSizePix.Height() * nBitCount / 8;
-            if( rObj.IsTransparent() || ( rAttr.GetRotation() % 3600 ) )
+            if( rObj->IsTransparent() || ( rAttr.GetRotation() % 3600 ) )
+            {
                 nNeededSize += nNeededSize / nBitCount;
+            }
             return nNeededSize;
         }
         else
@@ -797,7 +816,9 @@ sal_uLong GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Poi
         }
     }
     else
+    {
         return rGraphic.GetSizeBytes();
+    }
 }
 
 GraphicDisplayCacheEntry::~GraphicDisplayCacheEntry()
@@ -826,11 +847,13 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
             pOut->DrawBitmapEx( aRotBoundRect.TopLeft(), aRotBoundRect.GetSize(), *mpBmpEx );
         }
         else
+        {
             pOut->DrawBitmapEx( rPt, rSz, *mpBmpEx );
+        }
     }
 }
 
-GraphicCache::GraphicCache( sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDisplayCacheSize ) :
+GraphicCache::GraphicCache( size_t nDisplayCacheSize, size_t nMaxObjDisplayCacheSize ) :
     mnReleaseTimeoutSeconds ( 0UL ),
     mnMaxDisplaySize        ( nDisplayCacheSize ),
     mnMaxObjDisplaySize     ( nMaxObjDisplayCacheSize ),
@@ -847,37 +870,26 @@ GraphicCache::~GraphicCache()
     DBG_ASSERT( maDisplayCache.empty(), "GraphicCache::~GraphicCache(): there are some GraphicObjects in display cache" );
 }
 
-void GraphicCache::AddGraphicObject(
-    const GraphicObject& rObj,
-    Graphic& rSubstitute,
-    const OString* pID,
-    const GraphicObject* pCopyObj
-)
+void GraphicCache::AddGraphicObject( const GraphicObject* pObj,
+                                     Graphic& rSubstitute,
+                                     const OString* pID,
+                                     const GraphicObject* pCopyObj)
 {
-    sal_Bool bInserted = sal_False;
+    bool bInserted = false;
 
-    if(  !rObj.IsSwappedOut()
-      && (  pID
-         || (    pCopyObj
-            && ( pCopyObj->GetType() != GRAPHIC_NONE )
-            )
-         || ( rObj.GetType() != GRAPHIC_NONE )
-         )
-      )
+    if( !pObj->IsSwappedOut() &&
+        ( pID || ( pCopyObj && ( pCopyObj->GetType() != GRAPHIC_NONE ) ) ||
+          ( pObj->GetType() != GRAPHIC_NONE ) ) )
     {
-        if( pCopyObj
-          && !maGraphicCache.empty()
-        )
+        if( pCopyObj && !maGraphicCache.empty())
         {
             GraphicCacheEntryList::iterator it = maGraphicCache.begin();
-            while(  !bInserted
-                 && ( it != maGraphicCache.end() )
-                 )
+            while( !bInserted && ( it != maGraphicCache.end() ) )
             {
-                if( (*it)->HasGraphicObjectReference( *pCopyObj ) )
+                if( (*it)->HasGraphicObjectReference( pCopyObj ) )
                 {
-                    (*it)->AddGraphicObjectReference( rObj, rSubstitute );
-                    bInserted = sal_True;
+                    (*it)->AddGraphicObjectReference( pObj, rSubstitute );
+                    bInserted = true;
                 }
                 else
                 {
@@ -893,12 +905,10 @@ void GraphicCache::AddGraphicObject(
 
             if( !pID )
             {
-                apID.reset( new GraphicID( rObj ) );
+                apID.reset( new GraphicID( pObj ) );
             }
 
-            while(  !bInserted
-                 && ( it != maGraphicCache.end() )
-                 )
+            while(!bInserted && ( it != maGraphicCache.end() ) )
             {
                 const GraphicID& rEntryID = (*it)->GetID();
 
@@ -913,22 +923,21 @@ void GraphicCache::AddGraphicObject(
                         // CacheEntry object; after this, quickly jump out of the outer iteration
                         for( GraphicCacheEntryList::iterator jt = maGraphicCache.begin();
                              !bInserted && jt != maGraphicCache.end();
-                             ++jt
-                        )
+                             ++jt)
                         {
                             const GraphicID& rID = (*jt)->GetID();
 
                             if( rID.GetIDString() == *pID )
                             {
-                                (*jt)->AddGraphicObjectReference( rObj, rSubstitute );
-                                bInserted = sal_True;
+                                (*jt)->AddGraphicObjectReference( pObj, rSubstitute );
+                                bInserted = true;
                             }
                         }
 
                         if( !bInserted )
                         {
-                            maGraphicCache.push_back( new GraphicCacheEntry( rObj ) );
-                            bInserted = sal_True;
+                            maGraphicCache.push_back( new GraphicCacheEntry( pObj ) );
+                            bInserted = true;
                         }
                     }
                 }
@@ -936,29 +945,33 @@ void GraphicCache::AddGraphicObject(
                 {
                     if( rEntryID == *apID )
                     {
-                        (*it)->AddGraphicObjectReference( rObj, rSubstitute );
-                        bInserted = sal_True;
+                        (*it)->AddGraphicObjectReference( pObj, rSubstitute );
+                        bInserted = true;
                     }
                 }
 
                 if( !bInserted )
+                {
                     ++it;
+                }
             }
         }
     }
 
     if( !bInserted )
-        maGraphicCache.push_back( new GraphicCacheEntry( rObj ) );
+    {
+        maGraphicCache.push_back( new GraphicCacheEntry( pObj ) );
+    }
 }
 
-void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
+void GraphicCache::ReleaseGraphicObject( const GraphicObject* pObj )
 {
     // Release cached object
     bool    bRemoved = false;
     GraphicCacheEntryList::iterator it = maGraphicCache.begin();
     while (!bRemoved && it != maGraphicCache.end())
     {
-        bRemoved = (*it)->ReleaseGraphicObjectReference( rObj );
+        bRemoved = (*it)->ReleaseGraphicObjectReference( pObj );
 
         if( bRemoved )
         {
@@ -977,7 +990,9 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
                         delete pDisplayEntry;
                     }
                     else
+                    {
                         ++it2;
+                    }
                 }
 
                 // delete graphic cache entry
@@ -986,33 +1001,40 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
             }
         }
         else
+        {
             ++it;
+        }
     }
 
     DBG_ASSERT( bRemoved, "GraphicCache::ReleaseGraphicObject(...): GraphicObject not found in cache" );
 }
 
-void GraphicCache::GraphicObjectWasSwappedOut( const GraphicObject& rObj )
+void GraphicCache::GraphicObjectWasSwappedOut( const rtl::Reference<GraphicObject>& rObj )
 {
     // notify cache that rObj is swapped out (and can thus be pruned
     // from the cache)
     GraphicCacheEntry* pEntry = ImplGetCacheEntry( rObj );
 
     if( pEntry )
+    {
         pEntry->GraphicObjectWasSwappedOut( rObj );
+    }
 }
 
-sal_Bool GraphicCache::FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
+bool GraphicCache::FillSwappedGraphicObject( const rtl::Reference<GraphicObject>& rObj,
+                                             Graphic& rSubstitute )
 {
     GraphicCacheEntry* pEntry = ImplGetCacheEntry( rObj );
 
     if( !pEntry )
-        return sal_False;
+    {
+        return false;
+    }
 
     return pEntry->FillSwappedGraphicObject( rObj, rSubstitute );
 }
 
-void GraphicCache::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
+void GraphicCache::GraphicObjectWasSwappedIn( const rtl::Reference<GraphicObject>& rObj )
 {
     GraphicCacheEntry* pEntry = ImplGetCacheEntry( rObj );
 
@@ -1020,25 +1042,29 @@ void GraphicCache::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
     {
         if( pEntry->GetID().IsEmpty() )
         {
-            ReleaseGraphicObject( rObj );
-            AddGraphicObject( rObj, (Graphic&) rObj.GetGraphic(), NULL, NULL );
+            ReleaseGraphicObject( rObj.get() );
+            AddGraphicObject( rObj.get(), (Graphic&) rObj->GetGraphic(), NULL, NULL );
         }
         else
+        {
             pEntry->GraphicObjectWasSwappedIn( rObj );
+        }
     }
 }
 
-void GraphicCache::SetMaxDisplayCacheSize( sal_uLong nNewCacheSize )
+void GraphicCache::SetMaxDisplayCacheSize( size_t nNewCacheSize )
 {
     mnMaxDisplaySize = nNewCacheSize;
 
     if( GetMaxDisplayCacheSize() < GetUsedDisplayCacheSize() )
+    {
         ImplFreeDisplayCacheSpace( GetUsedDisplayCacheSize() - GetMaxDisplayCacheSize() );
+    }
 }
 
-void GraphicCache::SetMaxObjDisplayCacheSize( sal_uLong nNewMaxObjSize, sal_Bool bDestroyGreaterCached )
+void GraphicCache::SetMaxObjDisplayCacheSize( size_t nNewMaxObjSize, bool bDestroyGreaterCached )
 {
-    const sal_Bool bDestroy = ( bDestroyGreaterCached && ( nNewMaxObjSize < mnMaxObjDisplaySize ) );
+    const bool bDestroy = ( bDestroyGreaterCached && ( nNewMaxObjSize < mnMaxObjDisplaySize ) );
 
     mnMaxObjDisplaySize = std::min( nNewMaxObjSize, mnMaxDisplaySize );
 
@@ -1055,12 +1081,14 @@ void GraphicCache::SetMaxObjDisplayCacheSize( sal_uLong nNewMaxObjSize, sal_Bool
                 delete pCacheObj;
             }
             else
+            {
                 ++it;
+            }
         }
     }
 }
 
-void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
+void GraphicCache::SetCacheTimeout( int nTimeoutSeconds )
 {
     if( mnReleaseTimeoutSeconds != nTimeoutSeconds )
     {
@@ -1080,35 +1108,60 @@ void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
     }
 }
 
-sal_Bool GraphicCache::IsDisplayCacheable( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                       const GraphicObject& rObj, const GraphicAttr& rAttr ) const
+bool GraphicCache::IsDisplayCacheable( OutputDevice* pOut, const Point& rPoint, const Size& rSize,
+                                       const rtl::Reference<GraphicObject>& rObj,
+                                       const GraphicAttr& rAttr ) const
 {
-    return( GraphicDisplayCacheEntry::GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) <=
-            GetMaxObjDisplayCacheSize() );
+    return( GraphicDisplayCacheEntry::GetNeededSize( pOut, rPoint, rSize, rObj, rAttr ) <= GetMaxObjDisplayCacheSize() );
 }
 
-sal_Bool GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                     const GraphicObject& rObj, const GraphicAttr& rAttr ) const
+bool GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPoint, const Size& rSize,
+                                     const rtl::Reference<GraphicObject>& rObj,
+                                     const GraphicAttr& rAttr ) const
 {
-    const Point                 aPtPixel( pOut->LogicToPixel( rPt ) );
-    const Size                  aSzPixel( pOut->LogicToPixel( rSz ) );
+    const Point                 aPointPixel( pOut->LogicToPixel( rPoint ) );
+    const Size                  aSizePixel( pOut->LogicToPixel( rSize ) );
     const GraphicCacheEntry*    pCacheEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
-    sal_Bool                        bFound = sal_False;
+    bool                        bFound = false;
 
     if( pCacheEntry )
     {
         for( GraphicDisplayCacheEntryList::const_iterator it = maDisplayCache.begin();
              !bFound && ( it != maDisplayCache.end() ); ++it )
         {
-            if( (*it)->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
-                bFound = sal_True;
+            if( (*it)->Matches( pOut, aPointPixel, aSizePixel, pCacheEntry, rAttr ) )
+            {
+                bFound = true;
+            }
         }
     }
-
     return bFound;
 }
 
-OString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
+bool GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPoint, const Size& rSize,
+                                     const GraphicObject* pObj,
+                                     const GraphicAttr& rAttr ) const
+{
+    const Point                 aPointPixel( pOut->LogicToPixel( rPoint ) );
+    const Size                  aSizePixel( pOut->LogicToPixel( rSize ) );
+    const GraphicCacheEntry*    pCacheEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( pObj );
+    bool                        bFound = false;
+
+    if( pCacheEntry )
+    {
+        for( GraphicDisplayCacheEntryList::const_iterator it = maDisplayCache.begin();
+             !bFound && ( it != maDisplayCache.end() ); ++it )
+        {
+            if( (*it)->Matches( pOut, aPointPixel, aSizePixel, pCacheEntry, rAttr ) )
+            {
+                bFound = true;
+            }
+        }
+    }
+    return bFound;
+}
+
+OString GraphicCache::GetUniqueID( const rtl::Reference<GraphicObject>& rObj ) const
 {
     OString aRet;
     GraphicCacheEntry*  pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
@@ -1121,25 +1174,46 @@ OString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
     pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
 
     if( pEntry )
+    {
         aRet = pEntry->GetID().GetIDString();
-
+    }
     return aRet;
 }
 
-sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                          const GraphicObject& rObj, const GraphicAttr& rAttr,
+OString GraphicCache::GetUniqueID( const GraphicObject* pObj ) const
+{
+    OString aRet;
+    GraphicCacheEntry*  pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( pObj );
+
+    // ensure that the entry is correctly initialized (it has to be read at least once)
+    if( pEntry && pEntry->GetID().IsEmpty() )
+        pEntry->TryToSwapIn();
+
+    // do another call to ImplGetCacheEntry in case of modified entry list
+    pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( pObj );
+
+    if( pEntry )
+    {
+        aRet = pEntry->GetID().GetIDString();
+    }
+    return aRet;
+}
+
+bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPoint, const Size& rSize,
+                                          const rtl::Reference<GraphicObject>& rObj, const GraphicAttr& rAttr,
                                           const BitmapEx& rBmpEx )
 {
-    const sal_uLong nNeededSize = GraphicDisplayCacheEntry::GetNeededSize( pOut, rPt, rSz, rObj, rAttr );
-    sal_Bool        bRet = sal_False;
+    const size_t nNeededSize = GraphicDisplayCacheEntry::GetNeededSize( pOut, rPoint, rSize, rObj, rAttr );
+    bool bRet = false;
 
     if( nNeededSize <= GetMaxObjDisplayCacheSize() )
     {
         if( nNeededSize > GetFreeDisplayCacheSize() )
+        {
             ImplFreeDisplayCacheSpace( nNeededSize - GetFreeDisplayCacheSize() );
-
+        }
         GraphicDisplayCacheEntry* pNewEntry = new GraphicDisplayCacheEntry( ImplGetCacheEntry( rObj ),
-                                                                            pOut, rPt, rSz, rObj, rAttr, rBmpEx );
+                                                                            pOut, rPoint, rSize, rObj, rAttr, rBmpEx );
 
         if( GetCacheTimeout() )
         {
@@ -1152,26 +1226,27 @@ sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& r
 
         maDisplayCache.push_back( pNewEntry );
         mnUsedDisplaySize += pNewEntry->GetCacheSize();
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                          const GraphicObject& rObj, const GraphicAttr& rAttr,
+bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPoint, const Size& rSize,
+                                          const rtl::Reference<GraphicObject>& rObj, const GraphicAttr& rAttr,
                                           const GDIMetaFile& rMtf )
 {
-    const sal_uLong nNeededSize = GraphicDisplayCacheEntry::GetNeededSize( pOut, rPt, rSz, rObj, rAttr );
-    sal_Bool        bRet = sal_False;
+    const size_t nNeededSize = GraphicDisplayCacheEntry::GetNeededSize( pOut, rPoint, rSize, rObj, rAttr );
+    bool bRet = false;
 
     if( nNeededSize <= GetMaxObjDisplayCacheSize() )
     {
         if( nNeededSize > GetFreeDisplayCacheSize() )
+        {
             ImplFreeDisplayCacheSpace( nNeededSize - GetFreeDisplayCacheSize() );
-
+        }
         GraphicDisplayCacheEntry* pNewEntry = new GraphicDisplayCacheEntry( ImplGetCacheEntry( rObj ),
-                                                                            pOut, rPt, rSz, rObj, rAttr, rMtf );
+                                                                            pOut, rPoint, rSize, rObj, rAttr, rMtf );
 
         if( GetCacheTimeout() )
         {
@@ -1184,26 +1259,26 @@ sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& r
 
         maDisplayCache.push_back( pNewEntry );
         mnUsedDisplaySize += pNewEntry->GetCacheSize();
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-sal_Bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                        const GraphicObject& rObj, const GraphicAttr& rAttr )
+bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPoint, const Size& rSize,
+                                        const GraphicObject* pObj, const GraphicAttr& rAttr )
 {
-    const Point                 aPtPixel( pOut->LogicToPixel( rPt ) );
-    const Size                  aSzPixel( pOut->LogicToPixel( rSz ) );
-    const GraphicCacheEntry*    pCacheEntry = ImplGetCacheEntry( rObj );
+    const Point                 aPointPixel( pOut->LogicToPixel( rPoint ) );
+    const Size                  aSizePixel( pOut->LogicToPixel( rSize ) );
+    const GraphicCacheEntry*    pCacheEntry = ImplGetCacheEntry( pObj );
     GraphicDisplayCacheEntry*   pDisplayCacheEntry = NULL;
     GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
-    sal_Bool                    bRet = sal_False;
+    bool                        bRet = false;
 
     while( !bRet && it != maDisplayCache.end() )
     {
         pDisplayCacheEntry = *it;
-        if( pDisplayCacheEntry->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
+        if( pDisplayCacheEntry->Matches( pOut, aPointPixel, aSizePixel, pCacheEntry, rAttr ) )
         {
             ::salhelper::TTimeValue aReleaseTime;
 
@@ -1218,29 +1293,33 @@ sal_Bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt
             }
 
             pDisplayCacheEntry->SetReleaseTime( aReleaseTime );
-            bRet = sal_True;
+            bRet = true;
         }
         else
+        {
             ++it;
+        }
     }
 
     if( bRet )
-        pDisplayCacheEntry->Draw( pOut, rPt, rSz );
-
+    {
+        pDisplayCacheEntry->Draw( pOut, rPoint, rSize );
+    }
     return bRet;
 }
 
-sal_Bool GraphicCache::ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree )
+bool GraphicCache::ImplFreeDisplayCacheSpace( size_t nSizeToFree )
 {
-    sal_uLong nFreedSize = 0UL;
+    size_t nFreedSize = 0UL;
 
     if( nSizeToFree )
     {
         GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
 
         if( nSizeToFree > mnUsedDisplaySize )
+        {
             nSizeToFree = mnUsedDisplaySize;
-
+        }
         while( it != maDisplayCache.end() )
         {
             GraphicDisplayCacheEntry* pCacheObj = *it;
@@ -1251,23 +1330,42 @@ sal_Bool GraphicCache::ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree )
             delete pCacheObj;
 
             if( nFreedSize >= nSizeToFree )
+            {
                 break;
+            }
         }
     }
 
     return( nFreedSize >= nSizeToFree );
 }
 
-GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject& rObj )
+GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const rtl::Reference<GraphicObject>& rObj )
 {
     GraphicCacheEntry* pRet = NULL;
 
-    for(
-        GraphicCacheEntryList::iterator it = maGraphicCache.begin();
+    for( GraphicCacheEntryList::iterator it = maGraphicCache.begin();
         !pRet && it != maGraphicCache.end();
-        ++it
-    ) {
-        if( (*it)->HasGraphicObjectReference( rObj ) ) {
+         ++it)
+    {
+        if( (*it)->HasGraphicObjectReference( rObj ) )
+        {
+            pRet = *it;
+        }
+    }
+
+    return pRet;
+}
+
+GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject* pObj )
+{
+    GraphicCacheEntry* pRet = NULL;
+
+    for( GraphicCacheEntryList::iterator it = maGraphicCache.begin();
+        !pRet && it != maGraphicCache.end();
+         ++it)
+    {
+        if( (*it)->HasGraphicObjectReference( pObj ) )
+        {
             pRet = *it;
         }
     }
@@ -1279,7 +1377,7 @@ IMPL_LINK( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer )
 {
     pTimer->Stop();
 
-    ::salhelper::TTimeValue           aCurTime;
+    ::salhelper::TTimeValue aCurTime;
     GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
 
     osl_getSystemTime( &aCurTime );
@@ -1296,9 +1394,10 @@ IMPL_LINK( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer )
             delete pDisplayEntry;
         }
         else
+        {
             ++it;
+        }
     }
-
     pTimer->Start();
 
     return 0;

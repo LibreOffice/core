@@ -1146,10 +1146,10 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, Out
                         //  (pixel rounding is handled correctly, and a very small bitmap
                         //  is duplicated into a bigger one for better performance)
 
-                        GraphicObject aObject( *pGraphic );
+                        rtl::Reference<GraphicObject> rObject = GraphicObject::Create( *pGraphic );
 
                         if( pOut->GetPDFWriter() &&
-                            (aObject.GetType() == GRAPHIC_BITMAP || aObject.GetType() == GRAPHIC_DEFAULT) )
+                            (rObject->GetType() == GRAPHIC_BITMAP || rObject->GetType() == GRAPHIC_DEFAULT) )
                         {
                             // For PDF export, every draw
                             // operation for bitmaps takes a noticeable
@@ -1178,13 +1178,13 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, Out
                             const Size      aSize( rOrg.GetSize() );
                             const double    Abitmap( k1/k2 * aSize.Width()*aSize.Height() );
 
-                            aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0),
+                            rObject->DrawTiled( pOut, rOrg, aGrfSize, Size(0,0),
                                                NULL, GRFMGR_DRAW_STANDARD,
                                                ::std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
                         }
                         else
                         {
-                            aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0) );
+                            rObject->DrawTiled( pOut, rOrg, aGrfSize, Size(0,0) );
                         }
 
                         bDraw = false;

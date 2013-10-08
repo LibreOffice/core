@@ -674,8 +674,8 @@ class SdrOle2ObjImpl
 {
 public:
     // TODO/LATER: do we really need this pointer?
-    GraphicObject*  pGraphicObject;
-    String          aPersistName;       // name of object in persist
+    rtl::Reference<GraphicObject>  m_rGraphicObject;
+    OUString        aPersistName;       // name of object in persist
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
 
     // New local var to avoid repeated loading if load of OLE2 fails
@@ -683,10 +683,10 @@ public:
     bool            mbConnected;
 
     SdrEmbedObjectLink* mpObjectLink;
-    String maLinkURL;
+    OUString maLinkURL;
 
     SdrOle2ObjImpl()
-    : pGraphicObject( NULL )
+    : m_rGraphicObject( NULL )
     , pLightClient ( NULL )
     // init to start situation, loading did not fail
     , mbLoadingOLEObjectFailed( false )
@@ -780,7 +780,7 @@ void SdrOle2Obj::Init()
     mpImpl = new SdrOle2ObjImpl;
     pModifyListener = NULL;
     pGraphic=NULL;
-    mpImpl->pGraphicObject=NULL;
+    mpImpl->m_rGraphicObject = rtl::Reference<GraphicObject>();
     mpImpl->pLightClient = 0;
 
     xObjRef.Lock( sal_True );
@@ -797,8 +797,6 @@ SdrOle2Obj::~SdrOle2Obj()
         Disconnect();
 
     delete pGraphic;
-
-    delete mpImpl->pGraphicObject;
 
     if(pModifyListener)
     {
@@ -843,14 +841,16 @@ void SdrOle2Obj::SetGraphic_Impl(const Graphic* pGrf)
     {
         delete pGraphic;
         pGraphic = NULL;
-        delete mpImpl->pGraphicObject;
-        mpImpl->pGraphicObject = NULL;
     }
 
-    if (pGrf!=NULL)
+    if (pGrf != NULL)
     {
         pGraphic = new Graphic(*pGrf);
-        mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
+        mpImpl->m_rGraphicObject = GraphicObject::Create( *pGraphic );
+    }
+    else
+    {
+        mpImpl->m_rGraphicObject = rtl::Reference<GraphicObject>();
     }
 
     SetChanged();
@@ -1042,7 +1042,7 @@ void SdrOle2Obj::Reconnect_Impl()
 
 void SdrOle2Obj::Connect_Impl()
 {
-    if( pModel && mpImpl->aPersistName.Len() )
+    if( pModel && !mpImpl->aPersistName.isEmpty() )
     {
         try
         {
@@ -1176,7 +1176,7 @@ void SdrOle2Obj::Disconnect()
 
 void SdrOle2Obj::RemoveListeners_Impl()
 {
-    if( xObjRef.is() && mpImpl->aPersistName.Len() )
+    if( xObjRef.is() && !mpImpl->aPersistName.isEmpty() )
     {
         try
         {
@@ -1207,7 +1207,7 @@ void SdrOle2Obj::Disconnect_Impl()
 {
     try
     {
-        if ( pModel && mpImpl->aPersistName.Len() )
+        if ( pModel && !mpImpl->aPersistName.isEmpty() )
         {
             if( pModel->IsInDestruction() )
             {
@@ -1337,7 +1337,7 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHC
 
         // bitmap fill
         pClone->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
-        pClone->SetMergedItem(XFillBitmapItem(String(), GetEmptyOLEReplacementGraphic()));
+        pClone->SetMergedItem(XFillBitmapItem(OUString(), GraphicObject::Create(GetEmptyOLEReplacementGraphic())));
         pClone->SetMergedItem(XFillBmpTileItem(false));
         pClone->SetMergedItem(XFillBmpStretchItem(false));
 
@@ -1548,7 +1548,7 @@ void SdrOle2Obj::SetPersistName( const String& rPersistName )
 
 void SdrOle2Obj::AbandonObject()
 {
-    mpImpl->aPersistName.Erase();
+    mpImpl->aPersistName = "";
     mpImpl->mbLoadingOLEObjectFailed = false;
     SetObjRef(0);
 }
@@ -1649,11 +1649,10 @@ SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
             if( pGraphic )
             {
                 delete pGraphic;
-                delete mpImpl->pGraphicObject;
             }
 
             pGraphic = new Graphic( *rOle2Obj.pGraphic );
-            mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
+            mpImpl->m_rGraphicObject = GraphicObject::Create( *pGraphic );
         }
 
         if( pModel && rObj.GetModel() && !IsEmptyPresObj() )
@@ -1998,7 +1997,7 @@ sal_Bool SdrOle2Obj::Unload()
 
 void SdrOle2Obj::GetObjRef_Impl()
 {
-    if ( !xObjRef.is() && mpImpl->aPersistName.Len() && pModel && pModel->GetPersist() )
+    if ( !xObjRef.is() && !mpImpl->aPersistName.isEmpty() && pModel && pModel->GetPersist() )
     {
         // Only try loading if it did not went wrong up to now
         if(!mpImpl->mbLoadingOLEObjectFailed)

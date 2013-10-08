@@ -49,7 +49,7 @@ namespace dbaui
 
     class OPreviewWindow : public Window
     {
-        GraphicObject       m_aGraphicObj;
+        rtl::Reference<GraphicObject> m_rGraphicObj;
         Rectangle           m_aPreviewRect;
 
         /** gets the graphic cnter rect
@@ -71,7 +71,7 @@ namespace dbaui
         // window overloads
         virtual void Paint(const Rectangle& rRect);
 
-        void setGraphic(const Graphic& _rGraphic ) { m_aGraphicObj.SetGraphic(_rGraphic); }
+        void setGraphic(const Graphic& _rGraphic ) { m_rGraphicObj = GraphicObject::Create(m_rGraphicObj, _rGraphic); }
     };
     //==================================================================
     // A helper class for the controls in the detail page.
@@ -90,12 +90,9 @@ namespace dbaui
         Window*             m_pTablePreview;
         ::std::auto_ptr<PopupMenu> m_aMenu;
         PreviewMode         m_ePreviewMode;
-        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
-                            m_xFrame;
-        ::com::sun::star::uno::Reference < ::com::sun::star::io::XPersist >
-                            m_xDocInfo;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
-                            m_xWindow;
+        ::css::uno::Reference < ::com::sun::star::frame::XFrame2 > m_xFrame;
+        ::css::uno::Reference < ::com::sun::star::io::XPersist > m_xDocInfo;
+        ::css::uno::Reference< ::com::sun::star::awt::XWindow > m_xWindow;
 
         /// returns the index of the visible control
         int getVisibleControlIndex() const;

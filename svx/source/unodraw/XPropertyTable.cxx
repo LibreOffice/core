@@ -669,8 +669,8 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XP
 uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
     OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
-    const GraphicObject& rGraphicObject(((XBitmapEntry*)pEntry)->GetGraphicObject());
-    aURL += OStringToOUString(rGraphicObject.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
+    const rtl::Reference<GraphicObject> rGraphicObject = ((XBitmapEntry*)pEntry)->GetGraphicObject();
+    aURL += OStringToOUString(rGraphicObject->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
 
     uno::Any aAny;
     aAny <<= aURL;
@@ -683,10 +683,9 @@ XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::
     if(!(rAny >>= aURL))
         return NULL;
 
-    const GraphicObject aGrafObj(GraphicObject::CreateGraphicObjectFromURL(aURL));
-    const String aName(rName);
+    const rtl::Reference<GraphicObject> rGrafObj = GraphicObject::CreateGraphicObjectFromURL(aURL);
 
-    return new XBitmapEntry(aGrafObj, aName);
+    return new XBitmapEntry(rGrafObj, rName);
 }
 
 // XElementAccess

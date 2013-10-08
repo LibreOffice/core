@@ -137,7 +137,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     {
         SwGrfNode* pSwGrfNode = dynamic_cast< SwGrfNode* >(pCntntNode);
         OSL_ENSURE(pSwGrfNode, "Error, pSwGrfNode expected when node answers IsGrfNode() with true (!)");
-        const GraphicObject& rGrfObj = pSwGrfNode->GetGrfObj();
+        const rtl::Reference<GraphicObject> rGrfObj = pSwGrfNode->GetGrfObj();
 
         bDontNotify = pSwGrfNode->IsFrameInPaint();
 
@@ -148,7 +148,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         Graphic aGrf;
         if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&
             ( GRAPHIC_DEFAULT != aGrf.GetType() ||
-              GRAPHIC_DEFAULT != rGrfObj.GetType() ) )
+              GRAPHIC_DEFAULT != rGrfObj->GetType() ) )
         {
             aGrfSz = ::GetGraphicSizeTwip( aGrf, 0 );
             if( pSwGrfNode->IsChgTwipSizeFromPixel() )
@@ -175,7 +175,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                 bGraphicPieceArrived = sal_False;
             }
 
-            pSwGrfNode->SetGraphic(aGrf, rGrfObj.GetLink());
+            pSwGrfNode->SetGraphic(aGrf, rGrfObj->GetLink());
             bUpdate = true;
 
             // In order for the Node to have the right transparency status
@@ -246,7 +246,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
                     if( pBLink != this &&
                         ( !bSwapIn ||
-                            GRAPHIC_DEFAULT == pGrfNd->GetGrfObj().GetType()))
+                            GRAPHIC_DEFAULT == pGrfNd->GetGrfObj()->GetType()))
                     {
                         pBLink->bIgnoreDataChanged = sal_False;
                         pBLink->DataChanged( rMimeType, rValue );

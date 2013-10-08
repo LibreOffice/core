@@ -342,8 +342,8 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // bitmap and transparency like shadow
         if(bBitmapFillUsed)
         {
-            GraphicObject aGraphicObject(((XFillBitmapItem&)(rOriginalSet.Get(XATTR_FILLBITMAP))).GetGraphicObject());
-            const BitmapEx aBitmapEx(aGraphicObject.GetGraphic().GetBitmapEx());
+            rtl::Reference<GraphicObject> rGraphicObject = (((XFillBitmapItem&)(rOriginalSet.Get(XATTR_FILLBITMAP))).GetGraphicObject());
+            const BitmapEx aBitmapEx(rGraphicObject->GetGraphic().GetBitmapEx());
             Bitmap aBitmap(aBitmapEx.GetBitmap());
 
             if(!aBitmap.IsEmpty())
@@ -379,21 +379,21 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
                     {
                         if(aBitmapEx.IsAlpha())
                         {
-                            aGraphicObject.SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetAlpha())));
+                            rGraphicObject = GraphicObject::Create(rGraphicObject, Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetAlpha())));
                         }
                         else
                         {
-                            aGraphicObject.SetGraphic(Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetMask())));
+                            rGraphicObject = GraphicObject::Create(rGraphicObject, Graphic(BitmapEx(aDestBitmap, aBitmapEx.GetMask())));
                         }
                     }
                     else
                     {
-                        aGraphicObject.SetGraphic(Graphic(aDestBitmap));
+                        rGraphicObject = GraphicObject::Create(rGraphicObject, Graphic(aDestBitmap));
                     }
                 }
             }
 
-            aTempSet.Put(XFillBitmapItem(aTempSet.GetPool(), aGraphicObject));
+            aTempSet.Put(XFillBitmapItem(aTempSet.GetPool(), rGraphicObject));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }
 

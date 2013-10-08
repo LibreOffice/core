@@ -41,7 +41,7 @@ using namespace com::sun::star::beans;
 CompressGraphicsDialog::CompressGraphicsDialog( Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings ) :
     ModalDialog       ( pParent, "CompressGraphicDialog", "svx/ui/compressgraphicdialog.ui" ),
     m_pGraphicObj     ( pGraphicObj ),
-    m_aGraphic        ( pGraphicObj->GetGraphicObject().GetGraphic() ),
+    m_aGraphic        ( pGraphicObj->GetGraphicObject()->GetGraphic() ),
     m_aViewSize100mm  ( pGraphicObj->GetLogicRect().GetSize() ),
     m_rBindings       ( rBindings ),
     m_dResolution     ( 96.0 )

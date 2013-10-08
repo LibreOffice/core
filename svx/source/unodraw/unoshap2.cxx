@@ -1513,7 +1513,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 aURL = aURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
                 String aTmpStr(aURL);
                 OString aUniqueID(OUStringToOString(aTmpStr, RTL_TEXTENCODING_UTF8));
-                GraphicObject aGrafObj(aUniqueID);
+                rtl::Reference<GraphicObject> rGrafObj = GraphicObject::Create(aUniqueID);
 
                 // #101808# since loading a graphic can cause a reschedule of the office
                 //          it is possible that our shape is removed while where in this
@@ -1521,7 +1521,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 if( mpObj.is() )
                 {
                     static_cast<SdrGrafObj*>(mpObj.get())->ReleaseGraphicLink();
-                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphicObject( aGrafObj );
+                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphicObject( rGrafObj );
                 }
             }
             else if( !aURL.startsWith( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) )
@@ -1649,9 +1649,9 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         else
         {
             sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
-            const GraphicObject& rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject(true);
+            const rtl::Reference<GraphicObject> rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject(true);
             OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
-            aURL += OStringToOUString(rGrafObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
+            aURL += OStringToOUString(rGrafObj->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
             rValue <<= aURL;
             if ( bSwapped )
                 static_cast< SdrGrafObj* >( mpObj.get() )->ForceSwapOut();
@@ -1661,12 +1661,12 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
     case OWN_ATTR_REPLACEMENTGRAFURL:
     {
-        const GraphicObject* pGrafObj = static_cast< SdrGrafObj* >(mpObj.get())->GetReplacementGraphicObject();
+        const rtl::Reference<GraphicObject> rGrafObj = static_cast< SdrGrafObj* >(mpObj.get())->GetReplacementGraphicObject();
 
-        if(pGrafObj)
+        if(rGrafObj.is())
         {
             OUString aURL(UNO_NAME_GRAPHOBJ_URLPREFIX);
-            aURL += OStringToOUString(pGrafObj->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
+            aURL += OStringToOUString(rGrafObj->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
             rValue <<= aURL;
         }
 
