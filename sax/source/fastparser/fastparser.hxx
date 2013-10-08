@@ -22,12 +22,14 @@
 
 #include <vector>
 #include <stack>
-#include <boost/unordered_map.hpp>
+#include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/unordered_map.hpp>
 #include <rtl/ref.hxx>
+#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 
@@ -43,13 +45,22 @@ namespace sax_fastparser {
 
 class FastLocatorImpl;
 struct NamespaceDefine;
-struct SaxContextImpl;
 
-typedef ::boost::shared_ptr< SaxContextImpl > SaxContextImplPtr;
 typedef ::boost::shared_ptr< NamespaceDefine > NamespaceDefineRef;
 
 typedef ::boost::unordered_map< OUString, sal_Int32,
         OUStringHash, ::std::equal_to< OUString > > NamespaceMap;
+
+// --------------------------------------------------------------------
+
+struct SaxContext
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > mxContext;
+    sal_Int32                   mnElementToken;
+    boost::optional< OUString > maNamespace;
+    boost::optional< OUString > maElementName;
+    SaxContext( sal_Int32 nElementToken, const OUString& aNamespace, const OUString& aElementName );
+};
 
 // --------------------------------------------------------------------
 
@@ -79,13 +90,21 @@ struct Entity : public ParserData
     // therefore the exception must be saved somewhere.
     ::com::sun::star::uno::Any              maSavedException;
 
-    ::std::stack< SaxContextImplPtr >       maContextStack;
+    ::std::stack< OUString >                maNamespaceStack;
+    /* Context for main thread consuming events.
+     * startElement() stores the data, which characters() and endElement() uses
+     */
+    ::std::stack< SaxContext>               maContextStack;
     // Determines which elements of maNamespaceDefines are valid in current context
     ::std::stack< sal_uInt32 >              maNamespaceCount;
     ::std::vector< NamespaceDefineRef >     maNamespaceDefines;
 
     explicit Entity( const ParserData& rData );
     ~Entity();
+    void startElement( sal_Int32 nElementToken, const OUString& aNamespace,
+            const OUString& aElementName, FastAttributeList *pAttributes );
+    void characters( const OUString& sChars );
+    void endElement();
 };
 
 // --------------------------------------------------------------------
