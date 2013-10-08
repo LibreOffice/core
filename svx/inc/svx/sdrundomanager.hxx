@@ -51,6 +51,9 @@ public:
     virtual sal_Bool Undo();
     virtual sal_Bool Redo();
 
+    // ##
+    virtual void Clear();
+
     // Call for the view which starts the interactive text edit. Use link to
     // activate (start text edit) and empty link to reset (end text edit). On
     // reset all text edit actions will be removed from this undo manager to
