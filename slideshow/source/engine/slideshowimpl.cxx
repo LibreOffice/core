@@ -1712,14 +1712,6 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             return false;
 
         // TODO(F3): Forward to slides!
-//         if( bOldValue != mbImageAnimationsAllowed )
-//         {
-//             if( mbImageAnimationsAllowed )
-//                 maEventMultiplexer.notifyIntrinsicAnimationsEnabled();
-//             else
-//                 maEventMultiplexer.notifyIntrinsicAnimationsDisabled();
-//         }
-
         return true;
     }
 
@@ -1800,10 +1792,10 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
     {
         bool visible;
         if (!(rProperty.Value >>= visible))
-        {
             return false;
-        }
+
         mpPointerSymbol->setVisible(visible);
+        return true;
     }
 
     if ( rProperty.Name == "PointerPosition")
@@ -1812,12 +1804,11 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         if (! (rProperty.Value >>= pos))
             return false;
 
-        // std::cerr<<"Received pos at :(" << pos.X << ","<<pos.Y << ")" << std::endl;
         mpPointerSymbol->viewsChanged(pos);
+        return true;
     }
 
-    if (rProperty.Name.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("NoSlideTransitions") ))
+    if (rProperty.Name == "NoSlideTransitions" )
     {
         return (rProperty.Value >>= mbNoSlideTransitions);
     }
