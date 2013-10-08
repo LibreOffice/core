@@ -136,8 +136,6 @@ public class ScAccessiblePageHeader extends TestCase {
             throw new StatusException(Status.failed("Couldn't change mode"));
         }
 
-        AccessibilityTools at = new AccessibilityTools();
-
         XInterface oObj = null;
         for (int i = 0;; ++i) {
             try {
