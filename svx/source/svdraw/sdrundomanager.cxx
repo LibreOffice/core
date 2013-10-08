@@ -80,6 +80,25 @@ bool SdrUndoManager::Redo()
     return bRetval;
 }
 
+void SdrUndoManager::Clear()
+{
+    if(isTextEditActive())
+    {
+        while(GetUndoActionCount() && mpLastUndoActionBeforeTextEdit != GetUndoAction(0))
+        {
+            RemoveLastUndoAction();
+        }
+
+        // urgently needed: RemoveLastUndoAction does NOT correct the Redo stack by itself (!)
+        ClearRedo();
+    }
+    else
+    {
+        // call parent
+        EditUndoManager::Clear();
+    }
+}
+
 void SdrUndoManager::SetEndTextEditHdl(const Link& rLink)
 {
     maEndTextEditHdl = rLink;

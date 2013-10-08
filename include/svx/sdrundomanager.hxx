@@ -48,6 +48,9 @@ public:
     virtual bool Undo();
     virtual bool Redo();
 
+    // #i123350#
+    virtual void Clear();
+
     // Call for the view which starts the interactive text edit. Use link to
     // activate (start text edit) and empty link to reset (end text edit). On
     // reset all text edit actions will be removed from this undo manager to
