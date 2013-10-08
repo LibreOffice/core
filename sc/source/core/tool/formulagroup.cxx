@@ -141,7 +141,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     // the group.
 
     ScAddress aTmpPos = rTopPos;
-    std::vector<double> aResults;
+    std::vector<formula::FormulaTokenRef> aResults;
     aResults.reserve(xGroup->mnLength);
     CachedTokensType aCachedTokens;
 
@@ -256,7 +256,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
         generateRPNCode(rDoc, aTmpPos, aCode2);
         ScInterpreter aInterpreter(pDest, &rDoc, aTmpPos, aCode2);
         aInterpreter.Interpret();
-        aResults.push_back(aInterpreter.GetResultToken()->GetDouble());
+        aResults.push_back(aInterpreter.GetResultToken());
     } // for loop end (xGroup->mnLength)
 
     if (!aResults.empty())

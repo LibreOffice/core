@@ -2466,6 +2466,32 @@ void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLe
     }
 }
 
+void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaTokenRef* pResults, size_t nLen )
+{
+    sc::CellStoreType::position_type aPos = maCells.position(nRow);
+    sc::CellStoreType::iterator it = aPos.first;
+    if (it->type != sc::element_type_formula)
+        // This is not a formula block.
+        return;
+
+    size_t nBlockLen = it->size - aPos.second;
+    if (nBlockLen < nLen)
+        // Result array is longer than the length of formula cells. Not good.
+        return;
+
+    sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
+    std::advance(itCell, aPos.second);
+
+    const formula::FormulaTokenRef* pResEnd = pResults + nLen;
+    for (; pResults != pResEnd; ++pResults, ++itCell)
+    {
+        ScFormulaCell& rCell = **itCell;
+        rCell.SetResultToken(pResults->get());
+        rCell.ResetDirty();
+        rCell.SetChanged(true);
+    }
+}
+
 void ScColumn::SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat )
 {
     short eOldType = pDocument->GetFormatTable()->GetType(

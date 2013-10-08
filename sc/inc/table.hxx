@@ -871,6 +871,7 @@ public:
     void InterpretDirtyCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults, size_t nLen );
+    void SetFormulaResults( SCCOL nCol, SCROW nRow, const formula::FormulaTokenRef* pResults, size_t nLen );
 
     /**
      * Have formula cells with NeedsListening() == true start listening to the

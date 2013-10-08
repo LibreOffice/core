@@ -477,6 +477,7 @@ public:
     void FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2 ) const;
     formula::VectorRefArray FetchVectorRefArray( sc::FormulaGroupContext& rCxt, SCROW nRow1, SCROW nRow2 );
     void SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen );
+    void SetFormulaResults( SCROW nRow, const formula::FormulaTokenRef* pResults, size_t nLen );
 
     void SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat );
 

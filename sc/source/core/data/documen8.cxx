@@ -454,8 +454,15 @@ void ScDocument::SetFormulaResults( const ScAddress& rTopPos, const double* pRes
     pTab->SetFormulaResults(rTopPos.Col(), rTopPos.Row(), pResults, nLen);
 }
 
+void ScDocument::SetFormulaResults(
+    const ScAddress& rTopPos, const formula::FormulaTokenRef* pResults, size_t nLen )
+{
+    ScTable* pTab = FetchTable(rTopPos.Tab());
+    if (!pTab)
+        return;
 
-//------------------------------------------------------------------------
+    pTab->SetFormulaResults(rTopPos.Col(), rTopPos.Row(), pResults, nLen);
+}
 
 void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
                                       bool bNumFormatChanged )

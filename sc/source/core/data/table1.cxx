@@ -2231,6 +2231,15 @@ void ScTable::SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults,
     aCol[nCol].SetFormulaResults(nRow, pResults, nLen);
 }
 
+void ScTable::SetFormulaResults(
+    SCCOL nCol, SCROW nRow, const formula::FormulaTokenRef* pResults, size_t nLen )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].SetFormulaResults(nRow, pResults, nLen);
+}
+
 #if DEBUG_COLUMN_STORAGE
 void ScTable::DumpFormulaGroups( SCCOL nCol ) const
 {

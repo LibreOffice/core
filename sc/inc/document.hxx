@@ -1748,6 +1748,8 @@ public:
      */
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
 
+    void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const formula::FormulaTokenRef* pResults, size_t nLen );
+
 private:
     ScDocument(const ScDocument& r); // disabled with no definition
 
