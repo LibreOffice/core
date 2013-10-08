@@ -618,11 +618,7 @@ void ScInputWindow::SetTextString( const OUString& rString )
     if (rString.getLength() <= 32767)
         aTextWindow.SetTextString(rString);
     else
-    {
-        OUString aNew = rString;
-        aNew = aNew.copy(0, 32767);
-        aTextWindow.SetTextString(aNew);
-    }
+        aTextWindow.SetTextString(rString.copy(0, 32767));
 }
 
 void ScInputWindow::SetOkCancelMode()
