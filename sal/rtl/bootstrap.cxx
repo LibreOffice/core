@@ -199,8 +199,17 @@ static sal_Bool getFromCommandLineArgs(
             }
             rtl_uString_release( pArg );
         }
-        pNameValueList = &nameValueList;
+        // If osl_setCommandArgs() has not been called yet (for
+        // instance, if this gets called from a static initialiser),
+        // don't initialise pNameValueList, as that would cause the
+        // code to ignore any -env:FOO=BAR on the command line once
+        // osl is told about it.
+        if( nArgCount > 0 )
+            pNameValueList = &nameValueList;
     }
+
+    if( ! pNameValueList )
+        return sal_False;
 
     sal_Bool found = sal_False;
 
