@@ -4858,7 +4858,8 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
     const SfxItemSet* pItems = GetExport().GetCurItemSet();
-    const SvxFrameDirectionItem* rFrameDir = static_cast< const SvxFrameDirectionItem* >( pItems->GetItem( RES_FRAMEDIR ) );
+    const SvxFrameDirectionItem* rFrameDir = pItems?
+        static_cast< const SvxFrameDirectionItem* >( pItems->GetItem( RES_FRAMEDIR ) ): NULL;
 
     short nDir = FRMDIR_ENVIRONMENT;
     if( rFrameDir != NULL )
