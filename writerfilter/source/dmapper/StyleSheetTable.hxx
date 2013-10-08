@@ -63,6 +63,8 @@ public:
     OUString sStyleName1;
     PropertyMapPtr  pProperties;
     OUString sConvertedStyleName;
+    std::vector<beans::PropertyValue> aLatentStyles; ///< Attributes of latentStyles
+    std::vector<beans::PropertyValue> aLsdExceptions; ///< List of lsdException attribute lists
 
     StyleSheetEntry();
     virtual ~StyleSheetEntry();

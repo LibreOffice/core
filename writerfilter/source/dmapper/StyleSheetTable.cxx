@@ -23,6 +23,7 @@
 #include <ConversionHelper.hxx>
 #include <TblStylePrHandler.hxx>
 #include <BorderHandler.hxx>
+#include <LatentStyleHandler.hxx>
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <vector>
@@ -280,6 +281,9 @@ struct StyleSheetTable_Impl
     StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument, bool bIsNewDoc);
 
     OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
+
+    /// Appends the given key-value pair to the list of latent style properties of the current entry.
+    void AppendLatentStyleProperty(OUString aName, Value& rValue);
 };
 
 
@@ -341,6 +345,14 @@ OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rP
         ++aListVectorIter;
     }
     return sRet;
+}
+
+void StyleSheetTable_Impl::AppendLatentStyleProperty(OUString aName, Value& rValue)
+{
+    beans::PropertyValue aValue;
+    aValue.Name = aName;
+    aValue.Value <<= rValue.getString();
+    m_pCurrentEntry->aLatentStyles.push_back(aValue);
 }
 
 
@@ -459,6 +471,24 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         break;
         case NS_ooxml::LN_CT_TblWidth_type:
             dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TblWidth_type( nIntValue );
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_defQFormat:
+            m_pImpl->AppendLatentStyleProperty("defQFormat", val);
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_defUnhideWhenUsed:
+            m_pImpl->AppendLatentStyleProperty("defUnhideWhenUsed", val);
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_defSemiHidden:
+            m_pImpl->AppendLatentStyleProperty("defSemiHidden", val);
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_count:
+            m_pImpl->AppendLatentStyleProperty("count", val);
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_defUIPriority:
+            m_pImpl->AppendLatentStyleProperty("defUIPriority", val);
+        break;
+        case NS_ooxml::LN_CT_LatentStyles_defLockedState:
+            m_pImpl->AppendLatentStyleProperty("defLockedState", val);
         break;
         default:
         {
@@ -587,6 +617,20 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_TblPrBase_tblCellMar:
             //no cell margins in styles
         break;
+        case NS_ooxml::LN_CT_LatentStyles_lsdException:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if (pProperties.get())
+            {
+                LatentStyleHandlerPtr pLatentStyleHandler(new LatentStyleHandler());
+                pProperties->resolve(*pLatentStyleHandler);
+                beans::PropertyValue aValue;
+                aValue.Name = "lsdException";
+                aValue.Value = uno::makeAny(pLatentStyleHandler->getAttributes());
+                m_pImpl->m_pCurrentEntry->aLsdExceptions.push_back(aValue);
+            }
+        }
+        break;
         case NS_ooxml::LN_CT_Style_pPr:
             // no break
         case NS_ooxml::LN_CT_Style_rPr:
@@ -638,6 +682,43 @@ void StyleSheetTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>
     else
     {
         //TODO: this entry contains the default settings - they have to be added to the settings
+    }
+
+    if (!m_pImpl->m_pCurrentEntry->aLatentStyles.empty())
+    {
+        // We have latent styles for this entry, then process them.
+        std::vector<beans::PropertyValue>& rLatentStyles = m_pImpl->m_pCurrentEntry->aLatentStyles;
+
+        if (!m_pImpl->m_pCurrentEntry->aLsdExceptions.empty())
+        {
+            std::vector<beans::PropertyValue>& rLsdExceptions = m_pImpl->m_pCurrentEntry->aLsdExceptions;
+            uno::Sequence<beans::PropertyValue> aLsdExceptions(rLsdExceptions.size());
+            beans::PropertyValue* pLsdExceptions = aLsdExceptions.getArray();
+            for (std::vector<beans::PropertyValue>::iterator i = rLsdExceptions.begin(); i != rLsdExceptions.end(); ++i)
+                *pLsdExceptions++ = *i;
+
+            beans::PropertyValue aValue;
+            aValue.Name = "lsdExceptions";
+            aValue.Value = uno::makeAny(aLsdExceptions);
+            rLatentStyles.push_back(aValue);
+        }
+
+        uno::Sequence<beans::PropertyValue> aLatentStyles(rLatentStyles.size());
+        beans::PropertyValue* pLatentStyles = aLatentStyles.getArray();
+        for (std::vector<beans::PropertyValue>::iterator i = rLatentStyles.begin(); i != rLatentStyles.end(); ++i)
+            *pLatentStyles++ = *i;
+
+        // We can put all latent style info directly to the document interop
+        // grab bag, as we can be sure that only a single style entry has
+        // latent style info.
+        uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->m_xTextDocument, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> aGrabBag;
+        xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+        sal_Int32 nLength = aGrabBag.getLength();
+        aGrabBag.realloc(nLength + 1);
+        aGrabBag[nLength].Name = "latentStyles";
+        aGrabBag[nLength].Value = uno::makeAny(aLatentStyles);
+        xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
     }
 
     StyleSheetEntryPtr pEmptyEntry;
