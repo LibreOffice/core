@@ -59,7 +59,7 @@ struct SwTextPortion
 
 typedef std::deque<SwTextPortion> SwTextPortions;
 
-static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
+static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
 {
     const sal_Unicode cOpenBracket = '<';
     const sal_Unicode cCloseBracket= '>';
@@ -72,7 +72,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     const sal_Unicode cCR          = 0x0d;
 
 
-    const sal_uInt16 nStrLen = rSource.Len();
+    const sal_uInt16 nStrLen = rSource.getLength();
     sal_uInt16 nInsert = 0;         // number of inserted portions
     sal_uInt16 nActPos = 0;         // position, where '<' was found
     sal_uInt16 nOffset = 0;         // Offset of nActPos to '<'
@@ -82,7 +82,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     while(nActPos < nStrLen)
     {
         svtools::ColorConfigEntry eFoundType = svtools::HTMLUNKNOWN;
-        if(rSource.GetChar(nActPos) == cOpenBracket && nActPos < nStrLen - 2 )
+        if(rSource[nActPos] == cOpenBracket && nActPos < nStrLen - 2 )
         {
             // insert 'empty' portion
             if(nPortEnd < nActPos - 1 )
@@ -97,13 +97,13 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                 aPortionList.push_back( aText );
                 nInsert++;
             }
-            sal_Unicode cFollowFirst = rSource.GetChar((xub_StrLen)(nActPos + 1));
-            sal_Unicode cFollowNext = rSource.GetChar((xub_StrLen)(nActPos + 2));
+            sal_Unicode cFollowFirst = rSource[(xub_StrLen)(nActPos + 1)];
+            sal_Unicode cFollowNext = rSource[(xub_StrLen)(nActPos + 2)];
             if(cExclamation == cFollowFirst)
             {
                 // "<!" SGML or comment
                 if(cMinus == cFollowNext &&
-                    nActPos < nStrLen - 3 && cMinus == rSource.GetChar((xub_StrLen)(nActPos + 3)))
+                    nActPos < nStrLen - 3 && cMinus == rSource[(xub_StrLen)(nActPos + 3)])
                 {
                     eFoundType = svtools::HTMLCOMMENT;
                 }
@@ -125,7 +125,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                 sal_uInt16 nSrchPos = nActPos;
                 while(++nSrchPos < nStrLen - 1)
                 {
-                    sal_Unicode cNext = rSource.GetChar(nSrchPos);
+                    sal_Unicode cNext = rSource[nSrchPos];
                     if( cNext == cSpace ||
                         cNext == cTab   ||
                         cNext == cLF    ||
@@ -139,7 +139,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                 if(nSrchPos > nActPos + 1)
                 {
                     // some string was found
-                    OUString sToken = rSource.Copy(nActPos + 1, nSrchPos - nActPos - 1 );
+                    OUString sToken = rSource.copy(nActPos + 1, nSrchPos - nActPos - 1 );
                     sToken = sToken.toAsciiUpperCase();
                     int nToken = ::GetHTMLToken(sToken);
                     if(nToken)
@@ -165,7 +165,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
             {
                 bool bFound = false;
                 for(sal_uInt16 i = nPortEnd; i < nStrLen; i++)
-                    if(cCloseBracket == rSource.GetChar(i))
+                    if(cCloseBracket == rSource[i])
                     {
                         bFound = true;
                         nPortEnd = i;
@@ -665,7 +665,7 @@ void SwSrcEditWindow::DoDelayedSyntaxHighlight( sal_uInt16 nPara )
     }
 }
 
-void SwSrcEditWindow::ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff )
+void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineOff )
 {
     SwTextPortions aPortionList;
     lcl_Highlight(rSource, aPortionList);
@@ -705,8 +705,8 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff
                 r.nStart = nLastEnd;
             }
             nLastEnd = r.nEnd+1;
-            if ( ( i == (nCount-1) ) && ( r.nEnd < rSource.Len() ) )
-                r.nEnd = rSource.Len();
+            if ( ( i == (nCount-1) ) && ( r.nEnd < rSource.getLength() ) )
+                r.nEnd = rSource.getLength();
         }
     }
 

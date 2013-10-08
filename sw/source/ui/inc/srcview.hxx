@@ -64,7 +64,7 @@ public:
 
     SwDocShell*         GetDocShell();
     SwSrcEditWindow&    GetEditWin() {return aEditWin;}
-    void                SaveContent(const String& rTmpFile);
+    void                SaveContent(const OUString& rTmpFile);
     void                SaveContentTo(SfxMedium& rMed);
 
     sal_Bool                IsModified() {return aEditWin.IsModified();}

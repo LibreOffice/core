@@ -275,7 +275,7 @@ SwDocShell*     SwSrcView::GetDocShell()
     return PTR_CAST(SwDocShell, pObjShell);
 }
 
-void SwSrcView::SaveContent(const String& rTmpFile)
+void SwSrcView::SaveContent(const OUString& rTmpFile)
 {
     SfxMedium aMedium( rTmpFile,    STREAM_WRITE);
     SvStream* pOutStream = aMedium.GetOutStream();
