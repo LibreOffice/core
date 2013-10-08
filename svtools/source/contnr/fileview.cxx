@@ -2557,7 +2557,9 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
     _aYesButton   ( this, SvtResId( BTN_YES ) ),
     _aAllButton   ( this, SvtResId( BTN_ALL ) ),
     _aNoButton    ( this, SvtResId( BTN_NO ) ),
-    _aCancelButton( this, SvtResId( BTN_CANCEL ) )
+    _aCancelButton( this, SvtResId( BTN_CANCEL ) ),
+
+    _eResult( QUERYDELETE_YES )
 
 {
     FreeResource();
