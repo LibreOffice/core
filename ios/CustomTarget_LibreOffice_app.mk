@@ -59,14 +59,6 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,LibreOffice)
 	cp $(INSTDIR)/program/services/services.rdb $(appdir)
 	cp $(INSTDIR)/ure/share/misc/services.rdb $(appdir)/ure
 #
-# Copy "registry" files
-#
-# FIXME This can be removed ? registry is copied below
-	mkdir -p $(appdir)/registry/modules $(appdir)/registry/res
-	cp $(OUTDIR)/xml/*.xcd $(appdir)/registry
-	mv $(appdir)/registry/fcfg_langpack_en-US.xcd $(appdir)/registry/res
-	cp -R $(OUTDIR)/xml/registry/* $(appdir)/registry
-#
 # Copy .res files
 #
 # program/resource is hardcoded in tools/source/rc/resmgr.cxx. Sure,
@@ -103,7 +95,7 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,LibreOffice)
 	( \
 		echo '[Bootstrap]' && \
 		echo 'BRAND_BASE_DIR=file://$$APP_DATA_DIR' && \
-		echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/registry module:$${BRAND_BASE_DIR}/registry/modules res:$${BRAND_BASE_DIR}/registry' && \
+		echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry res:$${BRAND_BASE_DIR}/share/registry' && \
 	: ) > $(appdir)/fundamentalrc
 #
 	( \
