@@ -88,7 +88,7 @@ class SwIndexMarkPane
     PushButton*     m_pPrevBT;
     PushButton*     m_pNextBT;
 
-    String          aOrgStr;
+    OUString        aOrgStr;
     sal_Bool            bDel;
     sal_Bool            bNewMark;
     sal_Bool            bSelected;
@@ -126,7 +126,7 @@ class SwIndexMarkPane
     //it needs to be called ones if this dialog is opened to create a new entry (in InitControls),
     //or otherwise it has to be called for each changed TOXMark (in UpdateDialog)
     void            UpdateLanguageDependenciesForPhoneticReading();
-    String          GetDefaultPhoneticReading( const String& rText );
+    OUString        GetDefaultPhoneticReading( const OUString& rText );
 
     void            UpdateKeyBoxes();
 
@@ -147,7 +147,7 @@ public:
     ~SwIndexMarkPane();
 
     void    ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark = 0);
-    sal_Bool    IsTOXType(const String& rName)
+    sal_Bool    IsTOXType(const OUString& rName)
                 {return LISTBOX_ENTRY_NOTFOUND != m_pTypeDCB->GetEntryPos(rName);}
 };
 
@@ -202,10 +202,10 @@ class SwAuthorMarkPane
 
     SwWrtShell*     pSh;
 
-    String          m_sColumnTitles[AUTH_FIELD_END];
-    String          m_sFields[AUTH_FIELD_END];
+    OUString        m_sColumnTitles[AUTH_FIELD_END];
+    OUString        m_sFields[AUTH_FIELD_END];
 
-    String          m_sCreatedEntry[AUTH_FIELD_END];
+    OUString        m_sCreatedEntry[AUTH_FIELD_END];
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xBibAccess;
 

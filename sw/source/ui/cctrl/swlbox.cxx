@@ -31,7 +31,7 @@ SwBoxEntry::SwBoxEntry() :
 {
 }
 
-SwBoxEntry::SwBoxEntry(const String& aNam, sal_uInt16 nIdx) :
+SwBoxEntry::SwBoxEntry(const OUString& aNam, sal_uInt16 nIdx) :
     bModified(sal_False),
     bNew(sal_False),
     aName(aNam),

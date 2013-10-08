@@ -279,7 +279,7 @@ void SwIndexMarkPane::InitControls()
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
             m_pSearchCaseWordOnlyCB->Show();
-            m_pApplyToAllCB->Enable(0 != aOrgStr.Len() &&
+            m_pApplyToAllCB->Enable(!aOrgStr.isEmpty() &&
                 0 == (nFrmType & ( FRMTYPE_HEADER | FRMTYPE_FOOTER | FRMTYPE_FLY_ANY )));
             SearchTypeHdl(m_pApplyToAllCB);
         }
@@ -342,7 +342,7 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
 
 }
 
-String  SwIndexMarkPane::GetDefaultPhoneticReading( const String& rText )
+OUString SwIndexMarkPane::GetDefaultPhoneticReading( const OUString& rText )
 {
     if( !bIsPhoneticReadingEnabled )
         return aEmptyStr;
@@ -371,7 +371,7 @@ void    SwIndexMarkPane::Activate()
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
             m_pSearchCaseWordOnlyCB->Show();
-            m_pApplyToAllCB->Enable(0 != aOrgStr.Len() &&
+            m_pApplyToAllCB->Enable(!aOrgStr.isEmpty() &&
                 0 == (nFrmType & ( FRMTYPE_HEADER | FRMTYPE_FOOTER | FRMTYPE_FLY_ANY )));
             SearchTypeHdl(m_pApplyToAllCB);
         }
@@ -1046,7 +1046,7 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
 
 public:
     SwCreateAuthEntryDlg_Impl(Window* pParent,
-                            const String pFields[],
+                            const OUString pFields[],
                             SwWrtShell& rSh,
                             sal_Bool bNewEntry,
                             bool bCreate);
@@ -1234,8 +1234,8 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
     if(pSh)
     {
         bool bDifferent = false;
-        OSL_ENSURE(m_sFields[AUTH_FIELD_IDENTIFIER].Len() , "No Id is set!");
-        OSL_ENSURE(m_sFields[AUTH_FIELD_AUTHORITY_TYPE].Len() , "No authority type is set!");
+        OSL_ENSURE(!m_sFields[AUTH_FIELD_IDENTIFIER].isEmpty() , "No Id is set!");
+        OSL_ENSURE(!m_sFields[AUTH_FIELD_AUTHORITY_TYPE].isEmpty() , "No authority type is set!");
         //check if the entry already exists with different content
         const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
                                         pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
@@ -1288,7 +1288,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
     bool bCreate = pButton == m_pCreateEntryPB;
     String sOldId = m_sCreatedEntry[0];
     for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
-        m_sCreatedEntry[i] = bCreate ? aEmptyStr : m_sFields[i];
+        m_sCreatedEntry[i] = bCreate ? OUString() : m_sFields[i];
     SwCreateAuthEntryDlg_Impl aDlg(pButton,
                 bCreate ? m_sCreatedEntry : m_sFields,
                 *pSh, bNewEntry, bCreate);
@@ -1382,7 +1382,7 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
             for(size_t n = 0; n < aIds.size(); ++n)
                 m_pEntryLB->InsertEntry(aIds[n]);
         }
-        if(m_sCreatedEntry[AUTH_FIELD_IDENTIFIER].Len())
+        if(!m_sCreatedEntry[AUTH_FIELD_IDENTIFIER].isEmpty())
             m_pEntryLB->InsertEntry(m_sCreatedEntry[AUTH_FIELD_IDENTIFIER]);
     }
     m_pEntryLB->SelectEntryPos(0);
@@ -1435,7 +1435,7 @@ void SwAuthorMarkPane::InitControls()
     {
         ChangeSourceHdl(m_pFromComponentRB->IsChecked() ? m_pFromComponentRB : m_pFromDocContentRB);
         m_pCreateEntryPB->Enable(!m_pFromComponentRB->IsChecked());
-        if(!m_pFromComponentRB->IsChecked() && m_sCreatedEntry[0].Len())
+        if(!m_pFromComponentRB->IsChecked() && !m_sCreatedEntry[0].isEmpty())
             for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = m_sCreatedEntry[i];
     }
@@ -1462,7 +1462,7 @@ void SwAuthorMarkPane::Activate()
 }
 
 SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
-        const String pFields[],
+        const OUString pFields[],
         SwWrtShell& rSh,
         sal_Bool bNewEntry,
         bool bCreate)
@@ -1499,9 +1499,9 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pTypeListBox = new ListBox(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
             for(sal_uInt16 j = 0; j < AUTH_TYPE_END; j++)
                 pTypeListBox->InsertEntry(SW_RESSTR(STR_AUTH_TYPE_START + j));
-            if(pFields[aCurInfo.nToxField].Len())
+            if(!pFields[aCurInfo.nToxField].isEmpty())
             {
-                sal_uInt16 nIndexPos = static_cast< sal_uInt16 >(pFields[aCurInfo.nToxField].ToInt32());
+                sal_uInt16 nIndexPos = static_cast< sal_uInt16 >(pFields[aCurInfo.nToxField].toInt32());
                 pTypeListBox->SelectEntryPos(nIndexPos);
             }
             pTypeListBox->set_grid_left_attach(1);
@@ -1550,7 +1550,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
             {
                 pEdits[nIndex]->SetModifyHdl(LINK(this, SwCreateAuthEntryDlg_Impl, ShortNameHdl));
-                m_bNameAllowed = pFields[nIndex].Len() > 0;
+                m_bNameAllowed = !pFields[nIndex].isEmpty();
                 if(!bCreate)
                 {
                     pFixedTexts[nIndex]->Enable(sal_False);

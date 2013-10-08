@@ -39,15 +39,15 @@ class SW_DLLPUBLIC SwBoxEntry
     sal_Bool    bModified : 1;
     sal_Bool    bNew : 1;
 
-    String  aName;
+    OUString    aName;
     sal_uInt16  nId;
 
 public:
-    SwBoxEntry(const String& aName, sal_uInt16 nId=0);
+    SwBoxEntry(const OUString& aName, sal_uInt16 nId=0);
     SwBoxEntry(const SwBoxEntry& rOrg);
     SwBoxEntry();
 
-    const String& GetName() const { return aName;}
+    const OUString& GetName() const { return aName;}
 };
 
 /*--------------------------------------------------------------------

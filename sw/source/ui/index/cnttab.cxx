@@ -545,7 +545,7 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
     return 0;
 }
 
-sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
+sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
 {
     SwTxtFmtColl* pColl = rSh.GetParaStyle(rName);
     if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle())
@@ -661,19 +661,19 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
     PushButton*     m_pLeftPB;
     PushButton*     m_pRightPB;
 
-    String*         pStyleArr;
+    OUString*       pStyleArr;
 
     DECL_LINK(OkHdl, void *);
     DECL_LINK(LeftRightHdl, PushButton*);
     DECL_LINK(HeaderDragHdl, void *);
 
 public:
-    SwAddStylesDlg_Impl(Window* pParent, SwWrtShell& rWrtSh, String rStringArr[]);
+    SwAddStylesDlg_Impl(Window* pParent, SwWrtShell& rWrtSh, OUString rStringArr[]);
     ~SwAddStylesDlg_Impl();
 };
 
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
-            SwWrtShell& rWrtSh, String rStringArr[])
+            SwWrtShell& rWrtSh, OUString rStringArr[])
     : SfxModalDialog(pParent, "AssignStylesDialog",
         "modules/swriter/ui/assignstylesdialog.ui")
     , pStyleArr(rStringArr)
@@ -749,7 +749,7 @@ SwAddStylesDlg_Impl::~SwAddStylesDlg_Impl()
 IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
-        pStyleArr[i].Erase();
+        pStyleArr[i] = "";
 
     SvTreeListEntry* pEntry = m_pHeaderTree->First();
     while(pEntry)
@@ -758,8 +758,8 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
         if(nLevel != USHRT_MAX)
         {
             String sName(m_pHeaderTree->GetEntryText(pEntry));
-            if(pStyleArr[nLevel].Len())
-                pStyleArr[nLevel] += TOX_STYLE_DELIMITER;
+            if(!pStyleArr[nLevel].isEmpty())
+                pStyleArr[nLevel] += OUString(TOX_STYLE_DELIMITER);
             pStyleArr[nLevel] += sName;
         }
         pEntry = m_pHeaderTree->Next(pEntry);
@@ -1237,7 +1237,7 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
                                         INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 );
-    m_pFromFileCB->Check( 0 != sAutoMarkURL.Len() );
+    m_pFromFileCB->Check( !sAutoMarkURL.isEmpty() );
 
     m_pCaptionSequenceLB->Clear();
     sal_uInt16 i, nCount = rSh.GetFldTypeCount(RES_SETEXPFLD);
@@ -1455,7 +1455,7 @@ IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 
 IMPL_LINK(SwTOXSelectTabPage, MenuEnableHdl, Menu*, pMenu)
 {
-    pMenu->EnableItem("edit", sAutoMarkURL.Len() > 0);
+    pMenu->EnableItem("edit", !sAutoMarkURL.isEmpty());
     return 0;
 }
 
@@ -1476,7 +1476,7 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
         {
             sAutoMarkURL = lcl_CreateAutoMarkFileDlg(
                                     sAutoMarkURL, sAutoMarkType, false);
-            if( !sAutoMarkURL.Len() )
+            if( sAutoMarkURL.isEmpty() )
                 return 0;
         }
 
@@ -2549,7 +2549,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
                                 RES_POOLCHR_IDX_MAIN_ENTRY, aEmptyStr ));
 }
 
-String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
+OUString SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
 {
     OUString sRet;
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -2736,7 +2736,7 @@ void SwTokenWindow::SetActiveControl(Control* pSet)
     }
 }
 
-Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rToken)
+Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& rToken)
 {
     Control* pRet = 0;
     Size aControlSize(m_pCtrlParentWin->GetSizePixel());
@@ -2798,7 +2798,7 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
     return pRet;
 }
 
-void SwTokenWindow::InsertAtSelection(const String& rText, const SwFormToken& rToken)
+void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& rToken)
 {
     OSL_ENSURE(pActiveCtrl, "no active control!");
 
@@ -3212,9 +3212,9 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     return 0;
 }
 
-String  SwTokenWindow::GetPattern() const
+OUString SwTokenWindow::GetPattern() const
 {
-    String sRet;
+    OUString sRet;
 
     for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {

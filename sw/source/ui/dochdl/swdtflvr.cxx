@@ -1016,7 +1016,7 @@ int SwTransferable::CalculateAndCopy()
 }
 
 int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
-                                    const String& rStr )
+                                    const OUString& rStr )
 {
     if(!pWrtShell)
         return 0;

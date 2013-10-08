@@ -122,7 +122,7 @@ public:
     void                CreateOrUpdateExample(
                             TOXTypes nTOXIndex, sal_uInt16 nPage = 0, sal_uInt16 nCurLevel = USHRT_MAX);
 
-    static sal_Bool IsNoNum(SwWrtShell& rSh, const String& rName);
+    static sal_Bool IsNoNum(SwWrtShell& rSh, const OUString& rName);
 };
 
 class IndexEntryResource;
@@ -192,11 +192,11 @@ class SwTOXSelectTabPage : public SfxTabPage
 
     IndexEntryResource* pIndexRes;
 
-    String          aStyleArr[MAXLEVEL];
-    String          sAutoMarkURL;
-    String          sAutoMarkType;
-    String          sAddStyleUser;
-    String          sAddStyleContent;
+    OUString        aStyleArr[MAXLEVEL];
+    OUString        sAutoMarkURL;
+    OUString        sAutoMarkType;
+    OUString        sAddStyleUser;
+    OUString        sAddStyleContent;
 
     const IndexEntrySupplierWrapper* pIndexEntryWrapper;
 
@@ -271,7 +271,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
 
     void    SetActiveControl(Control* pSet);
 
-    Control*    InsertItem(const String& rText, const SwFormToken& aToken);
+    Control*    InsertItem(const OUString& rText, const SwFormToken& aToken);
     void        AdjustPositions();
     void        AdjustScrolling();
     void        MoveControls(long nOffset);
@@ -289,7 +289,7 @@ public:
 
     void        SetInvalid() {bValid = sal_False;}
 
-    String      GetPattern() const;
+    OUString    GetPattern() const;
 
     void        SetButtonSelectedHdl(const Link& rLink)
                 { aButtonSelectedHdl = rLink;}
@@ -299,7 +299,7 @@ public:
     Control*    GetActiveControl()
                     { return pActiveCtrl;}
 
-    void        InsertAtSelection(const String& rText, const SwFormToken& aToken);
+    void        InsertAtSelection(const OUString& rText, const SwFormToken& aToken);
     void        RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall = sal_False);
 
     sal_Bool        Contains(FormTokenType) const;
@@ -437,7 +437,7 @@ public:
                                 const SfxItemSet& rAttrSet);
     void                SetWrtShell(SwWrtShell& rSh);
 
-    String              GetLevelHelp(sal_uInt16 nLevel) const;
+    OUString            GetLevelHelp(sal_uInt16 nLevel) const;
 
     void                PreTokenButtonRemoved(const SwFormToken& rToken);
 };

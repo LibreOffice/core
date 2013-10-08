@@ -141,7 +141,7 @@ namespace
 
 // Content, contains names and reference at the content type.
 
-SwContent::SwContent(const SwContentType* pCnt, const String& rName, long nYPos) :
+SwContent::SwContent(const SwContentType* pCnt, const OUString& rName, long nYPos) :
     SwTypeNumber(CTYPE_CNT),
     pParent(pCnt),
     sContentName(rName),
@@ -1776,7 +1776,7 @@ bool SwContentTree::HasContentChanged()
                             pEntry->SetUserData((void*)pCnt);
                             String sEntryText = GetEntryText(pEntry);
                             if( sEntryText != pCnt->GetName() &&
-                                !(sEntryText == sSpace && !pCnt->GetName().Len()))
+                                !(sEntryText == sSpace && pCnt->GetName().isEmpty()))
                                 bRepaint = true;
                         }
                     }
@@ -1845,7 +1845,7 @@ bool SwContentTree::HasContentChanged()
                             pEntry->SetUserData((void*)pCnt);
                             String sEntryText = GetEntryText(pEntry);
                             if( sEntryText != pCnt->GetName() &&
-                                !(sEntryText == sSpace && !pCnt->GetName().Len()))
+                                !(sEntryText == sSpace && pCnt->GetName().isEmpty()))
                                 bRepaint = true;
                         }
                     }
@@ -1876,7 +1876,7 @@ bool SwContentTree::HasContentChanged()
                             pChild->SetUserData((void*)pCnt);
                             String sEntryText = GetEntryText(pChild);
                             if( sEntryText != pCnt->GetName() &&
-                                !(sEntryText == sSpace && !pCnt->GetName().Len()))
+                                !(sEntryText == sSpace && pCnt->GetName().isEmpty()))
                                 bRemoveChildren = sal_True;
                             pChild = Next(pChild);
                         }

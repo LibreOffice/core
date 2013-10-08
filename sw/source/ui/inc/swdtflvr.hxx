@@ -163,7 +163,7 @@ public:
     int  Copy( sal_Bool bIsCut = sal_False );
     int  PrepareForCopy( sal_Bool bIsCut = sal_False );
     int  CalculateAndCopy();                // special for Calculator
-    int  CopyGlossary( SwTextBlocks& rGlossary, const String& rStr );
+    int  CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr );
 
     // remove the DDE-Link format promise
     void RemoveDDELinkFormat( const Window& rWin );

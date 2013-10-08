@@ -70,15 +70,15 @@ class SwTypeNumber
 class SwContent : public SwTypeNumber
 {
     const SwContentType*    pParent;
-    String                  sContentName;
+    OUString                sContentName;
     long                    nYPosition;
     sal_Bool                    bInvisible;
 public:
-        SwContent(const SwContentType* pCnt, const String& rName, long nYPos );
+        SwContent(const SwContentType* pCnt, const OUString& rName, long nYPos );
 
     virtual sal_Bool            IsProtect() const;
     const SwContentType*    GetParent() const {return pParent;}
-    const String&           GetName()   const {return sContentName;}
+    const OUString&         GetName()   const {return sContentName;}
     int                     operator==(const SwContent& /*rCont*/) const
                                 {
                                     // they're never equal, otherwise they'd fall out of the array
