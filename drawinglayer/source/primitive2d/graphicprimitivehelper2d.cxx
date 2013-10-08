@@ -304,9 +304,10 @@ namespace drawinglayer
                         basegfx::B2DPolygon aMaskPolygon(basegfx::tools::createUnitPolygon());
                         aMaskPolygon.transform(rTransform);
 
-                        aRetval[0] = new MaskPrimitive2D(
+                        Primitive2DReference mask = new MaskPrimitive2D(
                             basegfx::B2DPolyPolygon(aMaskPolygon),
                             aRetval);
+                        aRetval[0] = mask;
                     }
                     break;
                 }
