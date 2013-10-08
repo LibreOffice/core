@@ -271,7 +271,7 @@ class FuncCount : public sc::ColumnSpanSet::ColumnAction
     sal_uInt32 mnNumFmt;
 
 public:
-    FuncCount() : mnCount(0), mnNumFmt(0) {}
+    FuncCount() : mpCol(0), mnCount(0), mnNumFmt(0) {}
 
     virtual void startColumn(ScColumn* pCol)
     {
@@ -302,7 +302,7 @@ class FuncSum : public sc::ColumnSpanSet::ColumnAction
     sal_uInt32 mnNumFmt;
 
 public:
-    FuncSum() : mfSum(0.0), mnNumFmt(0) {}
+    FuncSum() : mpCol(0), mfSum(0.0), mnNumFmt(0) {}
 
     virtual void startColumn(ScColumn* pCol)
     {
