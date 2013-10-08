@@ -1142,7 +1142,7 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
     return 0;
 }
 
-String SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
+OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
 {
     OUString sFileName;
     sal_uLong nFmt;
@@ -1201,7 +1201,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if( !aDesc.Detect() )   // accept no graphics
         {
             if( STRING_NOTFOUND == sFileName.Search('#')
-                && (!sContentFileName.Len() || sContentFileName != sFileName ))
+                && (sContentFileName.isEmpty() || sContentFileName != sFileName ))
             {
                 nRet = rEvt.mnAction;
                 sFileName = comphelper::string::stripEnd(sFileName, 0);

@@ -65,9 +65,9 @@ class SwNavigationPI : public Window,
     SwGlobalTree        aGlobalTree;
     ListBox             aDocListBox;
     Timer               aPageChgTimer;
-    String              sContentFileName;
-    String              aContextArr[3];
-    String              aStatusArr[4];
+    OUString            sContentFileName;
+    OUString            aContextArr[3];
+    OUString            aStatusArr[4];
     Point               aBoxBottomLeft; // Pos when Box is at bottom
 
     SfxObjectShellLock  *pxObjectShell;
@@ -155,7 +155,7 @@ public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                             const SfxPoolItem* pState );
 
-    static String   CreateDropFileName( TransferableDataHelper& rData );
+    static OUString CreateDropFileName( TransferableDataHelper& rData );
     static OUString CleanEntry(const OUString& rEntry);
 
     sal_uInt16          GetRegionDropMode() const {return nRegionMode;}

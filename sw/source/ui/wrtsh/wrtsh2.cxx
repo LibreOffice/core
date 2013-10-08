@@ -444,10 +444,10 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
     else
     {
         SwSectionData aSection( FILE_LINK_SECTION, GetUniqueSectionName() );
-        String aLinkFile( rBkmk.GetURL().GetToken(0, '#') );
+        String aLinkFile( rBkmk.GetURL().getToken(0, '#') );
         aLinkFile += sfx2::cTokenSeparator;
         aLinkFile += sfx2::cTokenSeparator;
-        aLinkFile += rBkmk.GetURL().GetToken(1, '#');
+        aLinkFile += rBkmk.GetURL().getToken(1, '#');
         aSection.SetLinkFileName( aLinkFile );
         aSection.SetProtectFlag( true );
         const SwSection* pIns = InsertSection( aSection );

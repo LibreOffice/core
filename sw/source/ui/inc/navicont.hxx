@@ -32,19 +32,19 @@ class TransferableDataHelper;
 
 class NaviContentBookmark
 {
-    String          aUrl;       // URL including jump mark
-    String          aDescr;     // description
+    OUString        aUrl;       // URL including jump mark
+    OUString        aDescr;     // description
     long            nDocSh;     // address of DocShell
     sal_uInt16          nDefDrag;   // description contains defaultDragType
 
 public:
     NaviContentBookmark();
-    NaviContentBookmark( const String &rUrl, const String& rDesc,
+    NaviContentBookmark( const OUString &rUrl, const OUString& rDesc,
                             sal_uInt16 nDragType, const SwDocShell* );
 
-    const String&   GetURL() const              { return aUrl; }
-    const String&   GetDescription() const      { return aDescr; }
-    sal_uInt16          GetDefaultDragType() const  { return nDefDrag; }
+    const OUString& GetURL() const              { return aUrl; }
+    const OUString& GetDescription() const      { return aDescr; }
+    sal_uInt16      GetDefaultDragType() const  { return nDefDrag; }
     void            Copy( TransferDataContainer& rData ) const;
     sal_Bool            Paste( TransferableDataHelper& rData );
 };

@@ -3028,8 +3028,8 @@ NaviContentBookmark::NaviContentBookmark()
 {
 }
 
-NaviContentBookmark::NaviContentBookmark( const String &rUrl,
-                    const String& rDesc,
+NaviContentBookmark::NaviContentBookmark( const OUString &rUrl,
+                    const OUString& rDesc,
                     sal_uInt16 nDragType,
                     const SwDocShell* pDocSh ) :
     aUrl( rUrl ),
