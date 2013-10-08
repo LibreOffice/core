@@ -183,6 +183,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 		canvas/source/directx/directx9canvas \
 		canvas/source/directx/gdipluscanvas \
 	) \
+	$(if $(ENABLE_OPENGL_CANVAS), \
+        canvas/source/opengl/oglcanvas \
+	) \
 	$(if $(ENABLE_GCONF), \
 		shell/source/backends/gconfbe/gconfbe1 \
 	) \

@@ -956,7 +956,7 @@ namespace oglcanvas
 
     uno::Any SpriteDeviceHelper::getDeviceHandle() const
     {
-        return uno::Any();
+        return uno::makeAny( reinterpret_cast< sal_Int64 >(mpChildWindow.get()) );
     }
 
     uno::Any SpriteDeviceHelper::getSurfaceHandle() const
