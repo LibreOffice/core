@@ -2183,7 +2183,7 @@ bool appendStrings(
                 getBlockIterators<sc::string_block>(it, nLenRemain, itData, itDataEnd);
 
                 for (; itData != itDataEnd; ++itData)
-                    rArray.push_back(itData->getData());
+                    rArray.push_back(itData->getDataIgnoreCase());
             }
             break;
             case sc::element_type_edittext:
@@ -2194,7 +2194,7 @@ bool appendStrings(
                 for (; itData != itDataEnd; ++itData)
                 {
                     OUString aStr = ScEditUtil::GetString(**itData, pDoc);
-                    rArray.push_back(rPool.intern(aStr).getData());
+                    rArray.push_back(rPool.intern(aStr).getDataIgnoreCase());
                 }
             }
             break;
@@ -2219,7 +2219,7 @@ bool appendStrings(
                         return false;
                     }
 
-                    rArray.push_back(rPool.intern(aStr).getData());
+                    rArray.push_back(rPool.intern(aStr).getDataIgnoreCase());
                 }
             }
             break;
@@ -2250,7 +2250,7 @@ bool appendStrings(
     return false;
 }
 
-void copyFirstBlock( sc::FormulaGroupContext& rCxt, size_t nLen, const sc::CellStoreType::position_type& rPos )
+void copyFirstStringBlock( sc::FormulaGroupContext& rCxt, size_t nLen, const sc::CellStoreType::position_type& rPos )
 {
     rCxt.maStrArrays.push_back(new sc::FormulaGroupContext::StrArrayType);
     sc::FormulaGroupContext::StrArrayType& rArray = rCxt.maStrArrays.back();
@@ -2259,7 +2259,7 @@ void copyFirstBlock( sc::FormulaGroupContext& rCxt, size_t nLen, const sc::CellS
     svl::SharedString* p = &sc::string_block::at(*rPos.first->data, rPos.second);
     svl::SharedString* pEnd = p + nLen;
     for (; p != pEnd; ++p)
-        rArray.push_back(p->getData());
+        rArray.push_back(p->getDataIgnoreCase());
 }
 
 }
@@ -2370,12 +2370,12 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( sc::FormulaGroupContext& 
             if (nLenRequested <= nLen)
             {
                 // Requested length fits a single block.
-                copyFirstBlock(rCxt, nLenRequested, aPos);
+                copyFirstStringBlock(rCxt, nLenRequested, aPos);
                 sc::FormulaGroupContext::StrArrayType& rArray = rCxt.maStrArrays.back();
                 return formula::VectorRefArray(&rArray[0]);
             }
 
-            copyFirstBlock(rCxt, nLen, aPos);
+            copyFirstStringBlock(rCxt, nLen, aPos);
             sc::FormulaGroupContext::StrArrayType& rArray = rCxt.maStrArrays.back();
 
             // Fill the remaining array with values from the following blocks.
