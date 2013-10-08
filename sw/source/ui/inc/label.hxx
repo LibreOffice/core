@@ -41,7 +41,7 @@ class SwLabDlg : public SfxTabDialog
     std::vector<OUString> aMakes;
 
     SwLabRecs* pRecs;
-    String     aLstGroup;
+    OUString   aLstGroup;
     OUString   m_sBusinessCardDlg;
     bool       m_bLabel;
     sal_uInt16 m_nFormatId;
@@ -50,7 +50,7 @@ class SwLabDlg : public SfxTabDialog
     sal_uInt16 m_nCardsId;
     sal_uInt16 m_nBusinessId;
     sal_uInt16 m_nPrivateId;
-    void          _ReplaceGroup( const String &rMake );
+    void          _ReplaceGroup( const OUString &rMake );
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 public:
@@ -59,7 +59,7 @@ public:
                  SwNewDBMgr* pNewDBMgr, sal_Bool bLabel);
     ~SwLabDlg();
 
-    SwLabRec*   GetRecord(const String &rRecName, sal_Bool bCont);
+    SwLabRec*   GetRecord(const OUString &rRecName, sal_Bool bCont);
     void        GetLabItem(SwLabItem &rItem);
 
           SwLabRecs &Recs()           { return *pRecs;   }
@@ -72,8 +72,8 @@ public:
     const std::vector<OUString> &Makes() const { return aMakes; }
 
     Printer *GetPrt();
-    inline void ReplaceGroup( const String &rMake );
-    void UpdateGroup( const String &rMake ) {_ReplaceGroup( rMake );}
+    inline void ReplaceGroup( const OUString &rMake );
+    void UpdateGroup( const OUString &rMake ) {_ReplaceGroup( rMake );}
     static void UpdateFieldInformation(::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& xModel,
                                                                                 const SwLabItem& rItem);
     const OUString& GetBusinessCardStr() const {return m_sBusinessCardDlg;}
@@ -82,7 +82,7 @@ public:
 
 };
 
-inline void SwLabDlg::ReplaceGroup( const String &rMake )
+inline void SwLabDlg::ReplaceGroup( const OUString &rMake )
 {
     if ( rMake != aLstGroup )
         _ReplaceGroup( rMake );

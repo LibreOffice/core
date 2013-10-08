@@ -68,7 +68,7 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
     rItem.nRows   = nRows;
 }
 
-void SwLabDlg::_ReplaceGroup( const String &rMake )
+void SwLabDlg::_ReplaceGroup( const OUString &rMake )
 {
     // Remove old entries
     pRecs->erase(pRecs->begin() + 1, pRecs->end());
@@ -198,7 +198,7 @@ void SwLabDlg::GetLabItem(SwLabItem &rItem)
     }
 }
 
-SwLabRec* SwLabDlg::GetRecord(const String &rRecName, sal_Bool bCont)
+SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, sal_Bool bCont)
 {
     SwLabRec* pRec = NULL;
     bool bFound = false;

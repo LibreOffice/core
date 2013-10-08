@@ -32,9 +32,9 @@ namespace SwLangHelper
     extern sal_uInt16 GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet );
     extern bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView &rView, SwWrtShell &rSh );
 
-    extern void SetLanguage( SwWrtShell &rWrtSh, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
+    extern void SetLanguage( SwWrtShell &rWrtSh, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
 //  extern void SetLanguage( SwWrtShell &rWrtSh, EditEngine* pEditEngine, ESelection aSelection, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
-    extern void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
+    extern void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
     extern void SetLanguage_None( SwWrtShell &rWrtSh, bool bIsForSelection, SfxItemSet &rCoreSet );
 //  extern void SetLanguage_None( SwWrtShell &rWrtSh, EditEngine* pEditEngine, ESelection aSelection, bool bIsForSelection, SfxItemSet &rCoreSet  );
     extern void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, bool bIsForSelection, SfxItemSet &rCoreSet  );
@@ -47,8 +47,8 @@ namespace SwLangHelper
     // EditView
     extern void SelectPara( EditView &rEditView, const ESelection &rCurSel );
 
-    extern String GetTextForLanguageGuessing( EditEngine* rEditEngine, ESelection aDocSelection );
-    extern String GetTextForLanguageGuessing( SwWrtShell &rSh );
+    extern OUString GetTextForLanguageGuessing( EditEngine* rEditEngine, ESelection aDocSelection );
+    extern OUString GetTextForLanguageGuessing( SwWrtShell &rSh );
 
     extern LanguageType GetLanguage( SfxItemSet aSet, sal_uInt16 nLangWhichId );
     extern LanguageType GetLanguage( SwWrtShell &rSh, sal_uInt16 nLangWhichId );

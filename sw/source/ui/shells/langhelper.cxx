@@ -230,12 +230,12 @@ namespace SwLangHelper
     }
 
 
-    void SetLanguage( SwWrtShell &rWrtSh, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
+    void SetLanguage( SwWrtShell &rWrtSh, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
         SetLanguage( rWrtSh, 0 , ESelection(), rLangText, bIsForSelection, rCoreSet );
     }
 
-    void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
+    void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
         const LanguageType nLang = SvtLanguageTable().GetType( rLangText );
         if (nLang != LANGUAGE_DONTKNOW)
@@ -546,44 +546,44 @@ namespace SwLangHelper
         return nCurrentLang;
     }
 
-    String GetTextForLanguageGuessing( SwWrtShell &rSh )
+    OUString GetTextForLanguageGuessing( SwWrtShell &rSh )
     {
         // string for guessing language
-        String aText;
+        OUString aText;
         SwPaM *pCrsr = rSh.GetCrsr();
         SwTxtNode *pNode = pCrsr->GetNode()->GetTxtNode();
         if (pNode)
         {
             aText = pNode->GetTxt();
-            if (aText.Len() > 0)
+            if (!aText.isEmpty())
             {
                 xub_StrLen nStt = 0;
                 xub_StrLen nEnd = pCrsr->GetPoint()->nContent.GetIndex();
                 // at most 100 chars to the left...
                 nStt = nEnd > 100 ? nEnd - 100 : 0;
                 // ... and 100 to the right of the cursor position
-                nEnd = aText.Len() - nEnd > 100 ? nEnd + 100 : aText.Len();
-                aText = aText.Copy( nStt, nEnd - nStt );
+                nEnd = aText.getLength() - nEnd > 100 ? nEnd + 100 : aText.getLength();
+                aText = aText.copy( nStt, nEnd - nStt );
             }
         }
         return aText;
     }
 
-    String GetTextForLanguageGuessing( EditEngine* rEditEngine, ESelection aDocSelection )
+    OUString GetTextForLanguageGuessing( EditEngine* rEditEngine, ESelection aDocSelection )
     {
         // string for guessing language
-        String aText;
+        OUString aText;
 
         aText = rEditEngine->GetText(aDocSelection);
-        if (aText.Len() > 0)
+        if (!aText.isEmpty())
         {
             xub_StrLen nStt = 0;
             xub_StrLen nEnd = aDocSelection.nEndPos;
             // at most 100 chars to the left...
             nStt = nEnd > 100 ? nEnd - 100 : 0;
             // ... and 100 to the right of the cursor position
-            nEnd = aText.Len() - nEnd > 100 ? nEnd + 100 : aText.Len();
-            aText = aText.Copy( nStt, nEnd - nStt );
+            nEnd = aText.getLength() - nEnd > 100 ? nEnd + 100 : aText.getLength();
+            aText = aText.copy( nStt, nEnd - nStt );
         }
 
         return aText;
