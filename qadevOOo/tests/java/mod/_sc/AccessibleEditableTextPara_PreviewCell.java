@@ -38,6 +38,7 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
+import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
@@ -86,7 +87,6 @@ public class AccessibleEditableTextPara_PreviewCell extends TestCase {
      */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        XAccessibleContext oObj = null;
         XCell xCell = null;
 
         try {
@@ -136,19 +136,38 @@ public class AccessibleEditableTextPara_PreviewCell extends TestCase {
             throw new StatusException(Status.failed("Couldn't change mode"));
         }
 
-        shortWait();
-
-
-        XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), xModel);
-        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-        //AccessibilityTools.printAccessibleTree(log,xRoot);
-        AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL,true);
-
-        xRoot = AccessibilityTools.SearchedAccessible;
-
-        //AccessibilityTools.printAccessibleTree(log,xRoot);
-
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,AccessibleRole.PARAGRAPH);
+        XAccessibleContext oObj = null;
+        for (int i = 0;; ++i) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                XAccessible xRoot = AccessibilityTools.getAccessibleObject(
+                    AccessibilityTools.getCurrentWindow(
+                        (XMultiServiceFactory) Param.getMSF(), xModel));
+                if (xRoot != null) {
+                    AccessibilityTools.getAccessibleObjectForRole(
+                        xRoot, AccessibleRole.TABLE_CELL, true);
+                    xRoot = AccessibilityTools.SearchedAccessible;
+                    if (xRoot != null) {
+                        oObj = AccessibilityTools.getAccessibleObjectForRole(
+                            xRoot, AccessibleRole.PARAGRAPH);
+                        if (oObj != null) {
+                            break;
+                        }
+                    }
+                }
+            } catch (DisposedException e) {
+                log.println("Ignoring DisposedException");
+            }
+            if (i == 20) { // give up after 10 sec
+                throw new RuntimeException(
+                    "Couldn't get AccessibleRoot.HEADER object");
+            }
+            log.println("No TABLE_CELL/PARAGRAPH found yet, retrying");
+        }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
         log.println("AccessibleName " + oObj.getAccessibleName());
@@ -168,13 +187,5 @@ public class AccessibleEditableTextPara_PreviewCell extends TestCase {
             });
 
         return tEnv;
-    }
-
-    protected void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
     }
 }
