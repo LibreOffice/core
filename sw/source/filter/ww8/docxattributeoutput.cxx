@@ -4117,10 +4117,10 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
         m_pSerializer->singleElementNS( XML_w, XML_vertAlign,
            FSNS( XML_w, XML_val ), sIss.getStr(), FSEND );
 
-    if ( sIss.isEmpty() || sIss.match( OString( "baseline" ) ) )
+    const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(m_rExport.GetItem(RES_CHRATR_FONTSIZE));
+    if (&rItem != NULL && (sIss.isEmpty() || sIss.match(OString("baseline"))))
     {
-        long nHeight = ((SvxFontHeightItem&)m_rExport.GetItem(
-                                    RES_CHRATR_FONTSIZE )).GetHeight();
+        long nHeight = rItem.GetHeight();
         OString sPos = OString::number( ( nHeight * nEsc + 500 ) / 1000 );
         m_pSerializer->singleElementNS( XML_w, XML_position,
                 FSNS( XML_w, XML_val ), sPos.getStr( ), FSEND );
