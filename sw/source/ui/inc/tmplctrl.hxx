@@ -37,7 +37,7 @@ public:
     ~SwTemplateControl();
 
 private:
-    String  sTemplate;
+    OUString  sTemplate;
 };
 
 #endif

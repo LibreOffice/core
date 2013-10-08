@@ -34,25 +34,25 @@ class SwForm;
 class SW_DLLPUBLIC SwTOXDescription
 {
     TOXTypes            eTOXType;
-    String              aStyleNames[MAXLEVEL];
-    String              sSequenceName;
-    String              sMainEntryCharStyle;
-    String              sAutoMarkURL;
-    String*             pTitle;
-    String*             pTOUName;
+    OUString            aStyleNames[MAXLEVEL];
+    OUString            sSequenceName;
+    OUString            sMainEntryCharStyle;
+    OUString            sAutoMarkURL;
+    OUString*           pTitle;
+    OUString*           pTOUName;
     SwForm*             pForm;
-    sal_uInt16              nContent;
-    sal_uInt16              nIndexOptions;
-    sal_uInt16              nOLEOptions;
+    sal_uInt16          nContent;
+    sal_uInt16          nIndexOptions;
+    sal_uInt16          nOLEOptions;
     LanguageType        eLanguage;
-    String              sSortAlgorithm;
+    OUString            sSortAlgorithm;
 
-    String              sAuthBrackets;
+    OUString            sAuthBrackets;
     SwCaptionDisplay    eCaptionDisplay;
     SwTOXSortKey        eSortKey1;
     SwTOXSortKey        eSortKey2;
     SwTOXSortKey        eSortKey3;
-    sal_uInt8               nLevel;
+    sal_uInt8           nLevel;
     sal_Bool                bFromObjectNames : 1;
     sal_Bool                bFromChapter : 1;
     sal_Bool                bReadonly: 1;
@@ -98,19 +98,19 @@ public:
     void            SetTOXType(TOXTypes eSet) { eTOXType = eSet;}
     TOXTypes        GetTOXType() const { return eTOXType;}
 
-    const String&   GetStyleNames(sal_uInt16 nLvl) const
+    const OUString& GetStyleNames(sal_uInt16 nLvl) const
                                 {return aStyleNames[nLvl];}
-    void            SetStyleNames(const String& rSet, sal_uInt16 nLvl)
+    void            SetStyleNames(const OUString& rSet, sal_uInt16 nLvl)
                                 {aStyleNames[nLvl] = rSet; }
 
-    const String&   GetAutoMarkURL() const { return sAutoMarkURL;}
-    void            SetAutoMarkURL(const String& rSet) {sAutoMarkURL = rSet;}
+    const OUString& GetAutoMarkURL() const { return sAutoMarkURL;}
+    void            SetAutoMarkURL(const OUString& rSet) {sAutoMarkURL = rSet;}
 
-    void            SetTitle(const String& pSet) {delete pTitle; pTitle = new String(pSet);}
-    const String*   GetTitle() const {return pTitle; }
+    void            SetTitle(const OUString& pSet) {delete pTitle; pTitle = new OUString(pSet);}
+    const OUString* GetTitle() const {return pTitle; }
 
-    void            SetTOUName(const String& pSet) {delete pTOUName; pTOUName = new String(pSet);}
-    const String*   GetTOUName() const {return pTOUName; }
+    void            SetTOUName(const OUString& pSet) {delete pTOUName; pTOUName = new OUString(pSet);}
+    const OUString* GetTOUName() const {return pTOUName; }
 
     void            SetForm(const SwForm& rSet) {delete pForm; pForm = new SwForm(rSet);}
     const SwForm*   GetForm() const {return pForm;}
@@ -121,8 +121,8 @@ public:
     void            SetIndexOptions(sal_uInt16 nSet) { nIndexOptions = nSet;}
     sal_uInt16          GetIndexOptions() const { return nIndexOptions;}
 
-    const String&   GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
-    void            SetMainEntryCharStyle(const String& rSet)  {sMainEntryCharStyle = rSet;}
+    const OUString& GetMainEntryCharStyle() const {return sMainEntryCharStyle;}
+    void            SetMainEntryCharStyle(const OUString& rSet)  {sMainEntryCharStyle = rSet;}
 
     void            SetLevel(sal_uInt8 nSet) {nLevel = nSet;}
     sal_uInt8           GetLevel()const  {return nLevel; }
@@ -130,8 +130,8 @@ public:
     void            SetCreateFromObjectNames(sal_Bool bSet) { bFromObjectNames = bSet;}
     sal_Bool            IsCreateFromObjectNames() const {return bFromObjectNames;}
 
-    const String&   GetSequenceName() const {return sSequenceName;}
-    void            SetSequenceName(const String& rSet) {sSequenceName = rSet;}
+    const OUString& GetSequenceName() const {return sSequenceName;}
+    void            SetSequenceName(const OUString& rSet) {sSequenceName = rSet;}
 
     SwCaptionDisplay    GetCaptionDisplay() const { return eCaptionDisplay;}
     void                SetCaptionDisplay(SwCaptionDisplay eSet) {eCaptionDisplay = eSet;}
@@ -148,8 +148,8 @@ public:
     sal_Bool            IsLevelFromChapter() const {return bLevelFromChapter;}
     void            SetLevelFromChapter(sal_Bool bSet) {bLevelFromChapter = bSet;}
 
-    String          GetAuthBrackets() const {return sAuthBrackets;}
-    void            SetAuthBrackets(const String& rSet) {sAuthBrackets = rSet;}
+    OUString        GetAuthBrackets() const {return sAuthBrackets;}
+    void            SetAuthBrackets(const OUString& rSet) {sAuthBrackets = rSet;}
 
     sal_Bool            IsAuthSequence() const {return bIsAuthSequence;}
     void            SetAuthSequence(sal_Bool bSet){bIsAuthSequence = bSet;}
@@ -168,8 +168,8 @@ public:
     LanguageType    GetLanguage() const {return eLanguage;}
     void            SetLanguage(LanguageType nLang)  {eLanguage = nLang;}
 
-    const String&   GetSortAlgorithm()const {return sSortAlgorithm;}
-    void            SetSortAlgorithm(const String& rSet) {sSortAlgorithm = rSet;}
+    const OUString& GetSortAlgorithm()const {return sSortAlgorithm;}
+    void            SetSortAlgorithm(const OUString& rSet) {sSortAlgorithm = rSet;}
 
     void            ApplyTo(SwTOXBase& rTOXBase);
 
@@ -181,14 +181,14 @@ class SwTOXMarkDescription
     int         nLevel;
     sal_Bool        bMainEntry;
 
-    String*     pPrimKey;
-    String*     pSecKey;
-    String*     pAltStr;
-    String*     pTOUName;
+    OUString*   pPrimKey;
+    OUString*   pSecKey;
+    OUString*   pAltStr;
+    OUString*   pTOUName;
 
-    String*     pPhoneticReadingOfAltStr;
-    String*     pPhoneticReadingOfPrimKey;
-    String*     pPhoneticReadingOfSecKey;
+    OUString*   pPhoneticReadingOfAltStr;
+    OUString*   pPhoneticReadingOfPrimKey;
+    OUString*   pPhoneticReadingOfSecKey;
 
     // forbidden and not implemented.
     SwTOXMarkDescription();
@@ -229,34 +229,34 @@ public:
     void            SetMainEntry(sal_Bool bSet) {bMainEntry = bSet;}
     sal_Bool            IsMainEntry() const {return bMainEntry;}
 
-    void            SetPrimKey(const String& rSet)
-                                {delete pPrimKey; pPrimKey = new String(rSet);}
-    const String*   GetPrimKey() const {return pPrimKey;}
+    void            SetPrimKey(const OUString& rSet)
+                                {delete pPrimKey; pPrimKey = new OUString(rSet);}
+    const OUString* GetPrimKey() const {return pPrimKey;}
 
-    void            SetSecKey(const String& rSet)
-                                {delete pSecKey;  pSecKey  = new String(rSet);}
-    const String*   GetSecKey() const { return pSecKey; }
+    void            SetSecKey(const OUString& rSet)
+                                {delete pSecKey;  pSecKey  = new OUString(rSet);}
+    const OUString* GetSecKey() const { return pSecKey; }
 
-    void            SetAltStr(const String& rSet)
-                                {delete pAltStr;  pAltStr  = new String(rSet);}
-    const String*   GetAltStr() const { return pAltStr; }
+    void            SetAltStr(const OUString& rSet)
+                                {delete pAltStr;  pAltStr  = new OUString(rSet);}
+    const OUString* GetAltStr() const { return pAltStr; }
 
-    void            SetTOUName(const String& rSet)
-                                {delete pTOUName; pTOUName = new String(rSet);}
-    const String*   GetTOUName() const {return pTOUName;}
+    void            SetTOUName(const OUString& rSet)
+                                {delete pTOUName; pTOUName = new OUString(rSet);}
+    const OUString* GetTOUName() const {return pTOUName;}
 
 
-    void            SetPhoneticReadingOfAltStr(const String& rSet)
-                                {delete pPhoneticReadingOfAltStr;  pPhoneticReadingOfAltStr  = new String(rSet);}
-    const String*   GetPhoneticReadingOfAltStr() const {    return pPhoneticReadingOfAltStr; }
+    void            SetPhoneticReadingOfAltStr(const OUString& rSet)
+                                {delete pPhoneticReadingOfAltStr;  pPhoneticReadingOfAltStr  = new OUString(rSet);}
+    const OUString* GetPhoneticReadingOfAltStr() const {    return pPhoneticReadingOfAltStr; }
 
-    void            SetPhoneticReadingOfPrimKey(const String& rSet)
-                                {delete pPhoneticReadingOfPrimKey;  pPhoneticReadingOfPrimKey  = new String(rSet);}
-    const String*   GetPhoneticReadingOfPrimKey() const {   return pPhoneticReadingOfPrimKey; }
+    void            SetPhoneticReadingOfPrimKey(const OUString& rSet)
+                                {delete pPhoneticReadingOfPrimKey;  pPhoneticReadingOfPrimKey  = new OUString(rSet);}
+    const OUString* GetPhoneticReadingOfPrimKey() const {   return pPhoneticReadingOfPrimKey; }
 
-    void            SetPhoneticReadingOfSecKey(const String& rSet)
-                                {delete pPhoneticReadingOfSecKey;  pPhoneticReadingOfSecKey  = new String(rSet);}
-    const String*   GetPhoneticReadingOfSecKey() const {    return pPhoneticReadingOfSecKey; }
+    void            SetPhoneticReadingOfSecKey(const OUString& rSet)
+                                {delete pPhoneticReadingOfSecKey;  pPhoneticReadingOfSecKey  = new OUString(rSet);}
+    const OUString* GetPhoneticReadingOfSecKey() const {    return pPhoneticReadingOfSecKey; }
 };
 
 class SW_DLLPUBLIC SwTOXMgr
@@ -265,7 +265,7 @@ class SW_DLLPUBLIC SwTOXMgr
     SwTOXMark*          pCurTOXMark;
     SwTOXMarks          aCurMarks;
 
-    SW_DLLPRIVATE sal_uInt16                GetUserTypeID(const String& rStr);
+    SW_DLLPRIVATE sal_uInt16                GetUserTypeID(const OUString& rStr);
 
 public:
     // single argument ctors shall be explicit.

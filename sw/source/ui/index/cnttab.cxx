@@ -1027,7 +1027,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     sal_uInt16 i;
 
     for( i = 0; i < MAXLEVEL; i++)
-        if(rDesc.GetStyleNames(i).Len())
+        if(!rDesc.GetStyleNames(i).isEmpty())
         {
             bHasStyleNames = sal_True;
             break;

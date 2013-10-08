@@ -96,13 +96,13 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
         {
             pMark = new SwTOXMark(pSh->GetTOXType(TOX_INDEX, 0));
 
-            if( rDesc.GetPrimKey() && rDesc.GetPrimKey()->Len() )
+            if( rDesc.GetPrimKey() && !rDesc.GetPrimKey()->isEmpty() )
             {
                 pMark->SetPrimaryKey( *rDesc.GetPrimKey() );
                 if(rDesc.GetPhoneticReadingOfPrimKey())
                     pMark->SetPrimaryKeyReading( *rDesc.GetPhoneticReadingOfPrimKey() );
 
-                if( rDesc.GetSecKey() && rDesc.GetSecKey()->Len() )
+                if( rDesc.GetSecKey() && !rDesc.GetSecKey()->isEmpty() )
                 {
                     pMark->SetSecondaryKey( *rDesc.GetSecKey() );
                     if(rDesc.GetPhoneticReadingOfSecKey())
@@ -147,7 +147,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     pSh->StartAllAction();
     if(pCurTOXMark->GetTOXType()->GetType() == TOX_INDEX)
     {
-        if(rDesc.GetPrimKey() && rDesc.GetPrimKey()->Len() )
+        if(rDesc.GetPrimKey() && !rDesc.GetPrimKey()->isEmpty() )
         {
             pCurTOXMark->SetPrimaryKey( *rDesc.GetPrimKey() );
             if(rDesc.GetPhoneticReadingOfPrimKey())
@@ -155,7 +155,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
             else
                 pCurTOXMark->SetPrimaryKeyReading( aEmptyStr );
 
-            if( rDesc.GetSecKey() && rDesc.GetSecKey()->Len() )
+            if( rDesc.GetSecKey() && !rDesc.GetSecKey()->isEmpty() )
             {
                 pCurTOXMark->SetSecondaryKey( *rDesc.GetSecKey() );
                 if(rDesc.GetPhoneticReadingOfSecKey())
@@ -219,7 +219,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
  --------------------------------------------------------------------*/
 
 
-sal_uInt16 SwTOXMgr::GetUserTypeID(const String& rStr)
+sal_uInt16 SwTOXMgr::GetUserTypeID(const OUString& rStr)
 {
     sal_uInt16 nSize = pSh->GetTOXTypeCount(TOX_USER);
     for(sal_uInt16 i=0; i < nSize; ++i)
@@ -365,8 +365,8 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                     pFType = static_cast<SwAuthorityFieldType*>(
                                 pSh->InsertFldType(type));
                 }
-                pFType->SetPreSuffix(rDesc.GetAuthBrackets().GetChar(0),
-                    rDesc.GetAuthBrackets().GetChar(1));
+                pFType->SetPreSuffix(rDesc.GetAuthBrackets()[0],
+                    rDesc.GetAuthBrackets()[1]);
                 pFType->SetSequence(rDesc.IsAuthSequence());
                 SwTOXSortKey rArr[3];
                 rArr[0] = rDesc.GetSortKey1();
@@ -487,7 +487,7 @@ void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         rTOXBase.SetStyleNames(GetStyleNames(i), i);
-    rTOXBase.SetTitle(GetTitle() ? *GetTitle() : aEmptyStr);
+    rTOXBase.SetTitle(GetTitle() ? *GetTitle() : OUString());
     rTOXBase.SetCreate(GetContentOptions());
 
     if(GetTOXType() == TOX_INDEX)

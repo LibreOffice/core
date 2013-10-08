@@ -55,13 +55,13 @@ class SwAutoFormatDlg : public SfxModalDialog
     PushButton*     m_pBtnAdd;
     PushButton*     m_pBtnRemove;
     PushButton*     m_pBtnRename;
-    String          aStrTitle;
-    String          aStrLabel;
-    String          aStrClose;
-    String          aStrDelTitle;
-    String          aStrDelMsg;
-    String          aStrRenameTitle;
-    String          aStrInvalidFmt;
+    OUString        aStrTitle;
+    OUString        aStrLabel;
+    OUString        aStrClose;
+    OUString        aStrDelTitle;
+    OUString        aStrDelMsg;
+    OUString        aStrRenameTitle;
+    OUString        aStrInvalidFmt;
     AutoFmtPreview* m_pWndPreview;
 
     //------------------------
