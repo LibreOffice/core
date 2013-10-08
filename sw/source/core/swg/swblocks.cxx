@@ -94,7 +94,8 @@ SwImpBlocks::SwImpBlocks( const OUString& rFile, sal_Bool )
     aDateModified( Date::EMPTY ),
     aTimeModified( Time::EMPTY ),
     pDoc( 0 ), nCur( (sal_uInt16)-1 ),
-    bReadOnly( sal_True ), bInPutMuchBlocks( sal_False )
+    bReadOnly( sal_True ), bInPutMuchBlocks( sal_False ),
+    bInfoChanged(false)
 {
     FStatHelper::GetModifiedDateTimeOfFile( rFile,
                                             &aDateModified, &aTimeModified );
