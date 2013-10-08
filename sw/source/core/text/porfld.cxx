@@ -1090,7 +1090,10 @@ void SwTxtFrm::StopAnimation( OutputDevice* pOut )
  *************************************************************************/
 
 SwCombinedPortion::SwCombinedPortion( const OUString &rTxt )
-     : SwFldPortion( rTxt )
+    : SwFldPortion( rTxt )
+    , nUpPos(0)
+    , nLowPos(0)
+    , nProportion(55)
 {
     SetLen(1);
     SetWhichPor( POR_COMBINED );
