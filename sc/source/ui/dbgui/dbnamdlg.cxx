@@ -416,7 +416,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
     OUString  aNewName = comphelper::string::strip(m_pEdName->GetText(), ' ');
     OUString  aNewArea = m_pEdAssign->GetText();
 
-    if ( !aNewName.isEmpty() > 0 && !aNewArea.isEmpty() )
+    if ( !aNewName.isEmpty() && !aNewArea.isEmpty() )
     {
         if ( ScRangeData::IsNameValid( aNewName, pDoc ) && !aNewName.equalsAscii(STR_DB_LOCAL_NONAME) )
         {
