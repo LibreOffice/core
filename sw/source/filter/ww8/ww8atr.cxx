@@ -2998,24 +2998,29 @@ void WW8AttributeOutput::ParaHyphenZone( const SvxHyphenZoneItem& rHyphenZone )
 
 void WW8AttributeOutput::ParaScriptSpace( const SfxBoolItem& rScriptSpace )
 {
-    sal_uInt16 nId = 0;
-    if ( m_rWW8Export.bWrtWW8 )
-        switch ( rScriptSpace.Which() )
-        {
-            case RES_PARATR_SCRIPTSPACE:            nId = NS_sprm::LN_PFAutoSpaceDE;   break;
-            case RES_PARATR_HANGINGPUNCTUATION:     nId = NS_sprm::LN_PFOverflowPunct;   break;
-            case RES_PARATR_FORBIDDEN_RULES:        nId = NS_sprm::LN_PFKinsoku;   break;
-        }
+    if ( !m_rWW8Export.bWrtWW8 )
+        return;
 
-    if ( nId )
-    {
-        if( m_rWW8Export.bWrtWW8 )
-            m_rWW8Export.InsUInt16( nId );
-        else
-            m_rWW8Export.pO->push_back( (sal_uInt8)nId );
+    m_rWW8Export.InsUInt16( NS_sprm::LN_PFAutoSpaceDE );
+    m_rWW8Export.pO->push_back( rScriptSpace.GetValue() ? 1 : 0 );
+}
 
-        m_rWW8Export.pO->push_back( rScriptSpace.GetValue() ? 1 : 0 );
-    }
+void WW8AttributeOutput::ParaHangingPunctuation( const SfxBoolItem& rItem )
+{
+    if ( !m_rWW8Export.bWrtWW8 )
+        return;
+
+    m_rWW8Export.InsUInt16( NS_sprm::LN_PFOverflowPunct );
+    m_rWW8Export.pO->push_back( rItem.GetValue() ? 1 : 0 );
+}
+
+void WW8AttributeOutput::ParaForbiddenRules( const SfxBoolItem& rItem )
+{
+    if ( !m_rWW8Export.bWrtWW8 )
+        return;
+
+    m_rWW8Export.InsUInt16( NS_sprm::LN_PFKinsoku );
+    m_rWW8Export.pO->push_back( rItem.GetValue() ? 1 : 0 );
 }
 
 void WW8AttributeOutput::ParaSnapToGrid( const SvxParaGridItem& rGrid )

@@ -5196,27 +5196,23 @@ void DocxAttributeOutput::ParaNumRule_Impl( const SwTxtNode* /*pTxtNd*/, sal_Int
 
 void DocxAttributeOutput::ParaScriptSpace( const SfxBoolItem& rScriptSpace )
 {
-    sal_uInt16 nXmlElement = 0;
+    m_pSerializer->singleElementNS( XML_w, XML_autoSpaceDE,
+           FSNS( XML_w, XML_val ), rScriptSpace.GetValue( ) ? "true": "false",
+           FSEND );
+}
 
-    switch ( rScriptSpace.Which( ) )
-    {
-        case RES_PARATR_SCRIPTSPACE:
-            nXmlElement = XML_autoSpaceDE;
-            break;
-        case RES_PARATR_HANGINGPUNCTUATION:
-            nXmlElement = XML_overflowPunct;
-            break;
-        case RES_PARATR_FORBIDDEN_RULES:
-            nXmlElement = XML_kinsoku;
-            break;
-    }
+void DocxAttributeOutput::ParaHangingPunctuation( const SfxBoolItem& rItem )
+{
+    m_pSerializer->singleElementNS( XML_w, XML_overflowPunct,
+           FSNS( XML_w, XML_val ), rItem.GetValue( ) ? "true": "false",
+           FSEND );
+}
 
-    if ( nXmlElement )
-    {
-        m_pSerializer->singleElementNS( XML_w, nXmlElement,
-               FSNS( XML_w, XML_val ), rScriptSpace.GetValue( ) ? "true": "false",
-               FSEND );
-    }
+void DocxAttributeOutput::ParaForbiddenRules( const SfxBoolItem& rItem )
+{
+    m_pSerializer->singleElementNS( XML_w, XML_kinsoku,
+           FSNS( XML_w, XML_val ), rItem.GetValue( ) ? "true": "false",
+           FSEND );
 }
 
 void DocxAttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )

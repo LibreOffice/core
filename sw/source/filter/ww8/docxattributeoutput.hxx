@@ -537,6 +537,12 @@ protected:
     /// Sfx item RES_PARATR_SCRIPTSPACE
     virtual void ParaScriptSpace( const SfxBoolItem& );
 
+    /// Sfx item RES_PARATR_HANGINGPUNCTUATION
+    virtual void ParaHangingPunctuation( const SfxBoolItem& );
+
+    /// Sfx item RES_PARATR_FORBIDDEN_RULES
+    virtual void ParaForbiddenRules( const SfxBoolItem& );
+
     /// Sfx item RES_PARATR_VERTALIGN
     virtual void ParaVerticalAlign( const SvxParaVertAlignItem& rAlign );
 

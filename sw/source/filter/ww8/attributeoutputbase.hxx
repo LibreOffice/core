@@ -502,10 +502,10 @@ protected:
     virtual void ParaScriptSpace( const SfxBoolItem& ) = 0;
 
     /// Sfx item RES_PARATR_HANGINGPUNCTUATION
-    void ParaHangingPunctuation( const SfxBoolItem& rHt ) { ParaScriptSpace( rHt ); };
+    virtual void ParaHangingPunctuation( const SfxBoolItem& ) = 0;
 
     /// Sfx item RES_PARATR_FORBIDDEN_RULES
-    void ParaForbiddenRules( const SfxBoolItem& rHt ) { ParaScriptSpace( rHt ); };
+    virtual void ParaForbiddenRules( const SfxBoolItem& ) = 0;
 
     /// Sfx item RES_PARATR_VERTALIGN
     virtual void ParaVerticalAlign( const SvxParaVertAlignItem& ) = 0;

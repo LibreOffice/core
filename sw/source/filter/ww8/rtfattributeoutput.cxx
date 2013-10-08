@@ -2659,15 +2659,18 @@ void RtfAttributeOutput::ParaScriptSpace( const SfxBoolItem& rScriptSpace )
 
     if (!rScriptSpace.GetValue( ))
         return;
-    switch ( rScriptSpace.Which( ) )
-    {
-        case RES_PARATR_SCRIPTSPACE:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ASPALPHA);
-            break;
 
-        default:
-            break;
-    }
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ASPALPHA);
+}
+
+void RtfAttributeOutput::ParaHangingPunctuation( const SfxBoolItem& )
+{
+    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
+}
+
+void RtfAttributeOutput::ParaForbiddenRules( const SfxBoolItem& )
+{
+    SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }
 
 void RtfAttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
