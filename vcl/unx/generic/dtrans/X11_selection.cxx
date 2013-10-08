@@ -3836,7 +3836,7 @@ void SelectionManager::shutdown() throw()
                 Application::Reschedule();
             }
             // trigger poll()'s wait end by writing a dummy value
-            int dummy=0;
+            char dummy=0;
             dummy = write(m_EndThreadPipe[1], &dummy, 1);
         }
         osl_joinWithThread( m_aThread );
