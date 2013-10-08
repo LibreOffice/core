@@ -22,9 +22,6 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-// the solaris compiler defines 'sun' as '1'. To avoid that (and to allow
-// pre-declarations of com/sun/star namespace), include sal/config.h here
-// where sun is redefined as 'sun' (so i guess the problem is known).
 #include <sal/config.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
