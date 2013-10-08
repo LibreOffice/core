@@ -6449,43 +6449,6 @@ void ScInterpreter::ScHLookup()
     CalculateLookup(true);
 }
 
-namespace {
-
-#if 1
-bool isFilterByEqualString( const ScQueryParam& )
-{
-    return false;
-}
-#else
-bool isFilterByEqualString( const ScQueryParam& rParam )
-{
-    if (rParam.bRegExp)
-        // filter by regular expression.
-        return false;
-
-    if (!rParam.GetEntryCount())
-        // No entries.
-        return false;
-
-    const ScQueryEntry& rEntry = rParam.GetEntry(0);
-    if (rEntry.eOp != SC_EQUAL)
-        return false;
-
-    const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
-    if (rItems.size() != 1)
-        // Multi-item query is not supported.
-        return false;
-
-    if (rItems[0].meType != ScQueryEntry::ByString)
-        // Not by string equality.
-        return false;
-
-    return true;
-}
-#endif
-
-}
-
 void ScInterpreter::CalculateLookup(bool bHLookup)
 {
     sal_uInt8 nParamCount = GetByte();
@@ -6722,18 +6685,9 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         }
         else
         {
-            if (isFilterByEqualString(aParam))
-            {
-                nRow = nRow1;
-                bFound = true;
-            }
-            else
-            {
-                ScAddress aResultPos( nCol1, nRow1, nTab1);
-                bFound = LookupQueryWithCache( aResultPos, aParam);
-                nRow = aResultPos.Row();
-            }
-
+            ScAddress aResultPos( nCol1, nRow1, nTab1);
+            bFound = LookupQueryWithCache( aResultPos, aParam);
+            nRow = aResultPos.Row();
             nCol = nSpIndex;
         }
 
