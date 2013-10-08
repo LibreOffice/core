@@ -2527,6 +2527,15 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
                     pHt->GetAutoFmt().GetStyleHandle());
             if ((pSet->Count() == 1) && pSet->GetItem(RES_CHRATR_RSID, false))
             {
+                // fdo#70201: eliminate no-extent RSID-only AUTOFMT
+                // could be produced by ReplaceText or (maybe?) RstAttr
+                if (*pHt->GetStart() == *pHt->GetEnd())
+                {
+                    SwpHintsArray::DeleteAtPos(i); // kill it without History!
+                    SwTxtAttr::Destroy(pHt, rNode.GetDoc()->GetAttrPool());
+                    --i;
+                    continue;
+                }
                 // fdo#52028: this one has _only_ RSID => ignore it completely
                 if (!pHt->IsFormatIgnoreStart() || !pHt->IsFormatIgnoreEnd())
                 {
