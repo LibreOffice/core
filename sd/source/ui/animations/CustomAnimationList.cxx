@@ -456,10 +456,12 @@ void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* )
 // ====================================================================
 
 CustomAnimationList::CustomAnimationList( ::Window* pParent )
-:   SvTreeListBox( pParent, WB_TABSTOP | WB_BORDER   ),
-    mpController(0)
+    : SvTreeListBox( pParent, WB_TABSTOP | WB_BORDER )
+    , mbIgnorePaint(false)
+    , mpController(0)
+    , mnLastGroupId(0)
+    , mpLastParentEntry(0)
 {
-
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCustomAnimationList( ::Window *pParent )
