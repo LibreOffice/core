@@ -68,7 +68,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &) {};
     virtual void GenSlidingWindowDeclRef(std::stringstream &ss)
     {
-        GenDeclRef(ss);
+        ss << mSymName << "[i]";
     }
     const std::string &GetSymName(void) const { return mSymName; }
 protected:
