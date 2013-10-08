@@ -21,7 +21,6 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
-#include <stdexcept>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
