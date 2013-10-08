@@ -3086,8 +3086,8 @@ static const mso_CustomShape msoActionButtonMovie =
 static const SvxMSDffVertPair mso_sptSmileyFaceVert[] = // adj value 15510 - 17520
 {
     { 10800, 10800 }, { 10800, 10800 }, { 0, 360 },
-    { 7305, 7515 }, { 1165, 1165 }, { 0, 360 },
-    { 14295, 7515 }, { 1165, 1165 }, { 0, 360 },
+    { 7305, 7515 }, { 1000, 1865 }, { 0, 360 },
+    { 14295, 7515 }, { 1000, 1865 }, { 0, 360 },
     { 4870, 1 MSO_I }, { 8680, 2 MSO_I }, { 12920, 2 MSO_I }, { 16730, 1 MSO_I }
 };
 static const sal_uInt16 mso_sptSmileyFaceSegm[] =
@@ -3099,19 +3099,19 @@ static const sal_uInt16 mso_sptSmileyFaceSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptSmileyFaceCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 15510 } },
-    { 0x8000, { 17520, 0, 0x400 } },
-    { 0x4000, { 15510, 0x400, 0 } }
+    { 0x2000, { DFF_Prop_adjustValue, 0, 14510 } },
+    { 0x8000, { 18520, 0, 0x400 } },
+    { 0x4000, { 14510, 0x400, 0 } }
 };
 
 static const sal_Int32 mso_sptSmileyFaceDefault[] =
 {
-    1, 17520
+    1, 18520
 };
 static const SvxMSDffHandle mso_sptSmileyHandle[] =
 {
     {   MSDFF_HANDLE_FLAGS_RANGE,
-        10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 15510, 17520 }
+        10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 14510, 18520 }
 };
 static const mso_CustomShape msoSmileyFace =
 {
