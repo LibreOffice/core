@@ -16,86 +16,6 @@
         <property name="column_spacing">6</property>
         <property name="column_homogeneous">True</property>
         <child>
-          <object class="GtkToolbar" id="horizontalalignment">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="has_tooltip">True</property>
-            <property name="tooltip_markup" translatable="yes">Horizontal Alignment</property>
-            <property name="tooltip_text" translatable="yes">Horizontal Alignment</property>
-            <property name="halign">start</property>
-            <property name="show_arrow">False</property>
-            <child>
-              <object class="GtkToolButton" id="leftpara">
-                <property name="width_request">25</property>
-                <property name="height_request">25</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Align Left</property>
-                <property name="tooltip_text" translatable="yes">Align Left</property>
-                <property name="valign">start</property>
-                <property name="action_name">.uno:LeftPara</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="centerpara">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Align Center</property>
-                <property name="tooltip_text" translatable="yes">Align Center</property>
-                <property name="action_name">.uno:CenterPara</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="rightpara">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Align Right</property>
-                <property name="tooltip_text" translatable="yes">Align Right</property>
-                <property name="action_name">.uno:RightPara</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="substjustify">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Align Justified</property>
-                <property name="tooltip_text" translatable="yes">Align Justified</property>
-                <property name="action_name">.uno:JustifyPara</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkToolbar" id="verticalalignment">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -684,6 +604,136 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkToolbar" id="horizontalalignment">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Horizontal Alignment</property>
+                <property name="tooltip_text" translatable="yes">Horizontal Alignment</property>
+                <property name="halign">start</property>
+                <property name="show_arrow">False</property>
+                <child>
+                  <object class="GtkToolButton" id="leftpara">
+                    <property name="width_request">25</property>
+                    <property name="height_request">25</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Align Left</property>
+                    <property name="tooltip_text" translatable="yes">Align Left</property>
+                    <property name="valign">start</property>
+                    <property name="action_name">.uno:LeftPara</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="centerpara">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Align Center</property>
+                    <property name="tooltip_text" translatable="yes">Align Center</property>
+                    <property name="action_name">.uno:CenterPara</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="rightpara">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Align Right</property>
+                    <property name="tooltip_text" translatable="yes">Align Right</property>
+                    <property name="action_name">.uno:RightPara</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="substjustify">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Align Justified</property>
+                    <property name="tooltip_text" translatable="yes">Align Justified</property>
+                    <property name="action_name">.uno:JustifyPara</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="sfxlo-SidebarToolBox" id="writedirection">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="show_arrow">False</property>
+                <child>
+                  <object class="GtkToolButton" id="lefttoright">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="is_important">True</property>
+                    <property name="action_name">.uno:ParaLeftToRight</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="righttoleft">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="is_important">True</property>
+                    <property name="action_name">.uno:ParaRightToLeft</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
             <property name="width">1</property>
             <property name="height">1</property>
           </packing>
