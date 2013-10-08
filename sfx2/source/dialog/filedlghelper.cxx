@@ -2250,6 +2250,7 @@ FileDialogHelper::FileDialogHelper(
     const OUString& rFact,
     SfxFilterFlags nMust,
     SfxFilterFlags nDont )
+    : m_nError(0)
 {
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
     mxImp = mpImp;
@@ -2268,6 +2269,7 @@ FileDialogHelper::FileDialogHelper(
     SfxFilterFlags nDont,
     const OUString& rStandardDir,
     const ::com::sun::star::uno::Sequence< OUString >& rBlackList)
+    : m_nError(0)
 {
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, NULL, rStandardDir, rBlackList );
     mxImp = mpImp;
@@ -2281,6 +2283,7 @@ FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
     sal_Int64 nFlags,
     Window* _pPreferredParent )
+    : m_nError(0)
 {
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent );
     mxImp = mpImp;
@@ -2294,6 +2297,7 @@ FileDialogHelper::FileDialogHelper(
     const OUString& rStandardDir,
     const ::com::sun::star::uno::Sequence< OUString >& rBlackList,
     Window* _pPreferredParent )
+    : m_nError(0)
 {
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent,rStandardDir, rBlackList );
     mxImp = mpImp;
