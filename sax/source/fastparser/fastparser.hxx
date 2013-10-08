@@ -20,11 +20,13 @@
 #ifndef _SAX_FASTPARSER_HXX_
 #define _SAX_FASTPARSER_HXX_
 
+#include <queue>
 #include <vector>
 #include <stack>
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
+#include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
@@ -43,6 +45,7 @@
 
 namespace sax_fastparser {
 
+struct Event;
 class FastLocatorImpl;
 struct NamespaceDefine;
 
@@ -57,6 +60,24 @@ struct NameWithToken
     sal_Int32 mnToken;
     NameWithToken(const OUString& sName, const sal_Int32& nToken):
         msName(sName), mnToken(nToken) {}
+};
+
+typedef std::vector<Event> EventList;
+
+enum CallbackType { START_ELEMENT, END_ELEMENT, CHARACTERS, DONE, EXCEPTION };
+
+struct Event {
+    boost::optional< OUString > msChars;
+    boost::optional< sal_Int32 > mnElementToken;
+    boost::optional< OUString > maNamespace;
+    boost::optional< OUString > maElementName;
+    boost::optional< rtl::Reference< FastAttributeList > > mpAttributes;
+    CallbackType maType;
+    Event(const CallbackType& t);
+    Event(const CallbackType& t, const OUString& sChars);
+    Event(const CallbackType& t, sal_Int32 nElementToken, const OUString& aNamespace,
+            const OUString& aElementName, FastAttributeList *pAttributes);
+    ~Event();
 };
 
 // --------------------------------------------------------------------
@@ -86,13 +107,24 @@ struct ParserData
 
 // --------------------------------------------------------------------
 
-// Entity binds all information needed for a single file
+// Entity binds all information needed for a single file | single call of parseStream
 struct Entity : public ParserData
 {
+    // Amount of work producer sends to consumer in one iteration:
+    static const size_t mnEventListSize = 1000;
+    // unique for each Entity instance:
+
+    EventList *mpProducedEvents;
+    std::queue< EventList * > maPendingEvents;
+    std::queue< EventList * > maUsedEvents;
+    osl::Mutex maEventProtector;
+    osl::Condition maEventsPushed;
+
+    // copied in copy constructor:
+
     ::com::sun::star::xml::sax::InputSource maStructSource;
     XML_Parser                              mpParser;
     ::sax_expatwrap::XMLFile2UTFConverter   maConverter;
-    ::rtl::Reference< FastAttributeList >   mxAttributes;
 
     // Exceptions cannot be thrown through the C-XmlParser (possible resource leaks),
     // therefore the exception must be saved somewhere.
@@ -108,9 +140,9 @@ struct Entity : public ParserData
     ::std::vector< NamespaceDefineRef >     maNamespaceDefines;
 
     explicit Entity( const ParserData& rData );
+    Entity( const Entity& rEntity );
     ~Entity();
-    void startElement( sal_Int32 nElementToken, const OUString& aNamespace,
-            const OUString& aElementName, FastAttributeList *pAttributes );
+    void startElement( Event *pEvent );
     void characters( const OUString& sChars );
     void endElement();
 };
@@ -155,9 +187,12 @@ public:
     inline void pushEntity( const Entity& rEntity ) { maEntities.push( rEntity ); }
     inline void popEntity()                         { maEntities.pop(); }
     Entity& getEntity()                             { return maEntities.top(); }
+    void parse();
+    void produce( const Event& );
 
 private:
-    void parse();
+    bool consume(EventList *);
+    void deleteUsedEvents();
 
     sal_Int32 GetToken( const sal_Char* pToken, sal_Int32 nTokenLen = 0 );
     sal_Int32 GetTokenWithPrefix( const sal_Char*pPrefix, int nPrefixLen, const sal_Char* pName, int nNameLen ) throw (::com::sun::star::xml::sax::SAXException);
@@ -173,8 +208,7 @@ private:
     void splitName( const XML_Char *pwName, const XML_Char *&rpPrefix, sal_Int32 &rPrefixLen, const XML_Char *&rpName, sal_Int32 &rNameLen );
 
 private:
-    ::osl::Mutex maMutex;
-
+    osl::Mutex maMutex; ///< Protecting whole parseStream() execution
     ::rtl::Reference< FastLocatorImpl >     mxDocumentLocator;
     NamespaceMap                            maNamespaceMap;
 

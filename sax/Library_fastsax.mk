@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_libraries,fastsax,\
     cppu \
     cppuhelper \
     sal \
+	salhelper \
 	sax \
 	$(gb_UWINAPI) \
 ))
