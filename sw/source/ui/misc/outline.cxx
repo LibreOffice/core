@@ -305,7 +305,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
     return 0;
 }
 
-sal_uInt16  SwOutlineTabDialog::GetLevel(const String &rFmtName) const
+sal_uInt16  SwOutlineTabDialog::GetLevel(const OUString &rFmtName) const
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {

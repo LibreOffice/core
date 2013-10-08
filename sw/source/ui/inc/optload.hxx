@@ -89,13 +89,13 @@ public:
 class SwCaptionPreview : public Window
 {
 private:
-    String maText;
-    Point maDrawPos;
+    OUString maText;
+    Point    maDrawPos;
 public:
     SwCaptionPreview( Window* pParent );
     SwCaptionPreview( Window* pParent, const ResId& rResId );
     void Init();
-    void SetPreviewText( const String& rText );
+    void SetPreviewText( const OUString& rText );
     virtual void Paint( const Rectangle& rRect );
 };
 

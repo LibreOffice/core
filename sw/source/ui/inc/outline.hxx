@@ -74,7 +74,7 @@ class SwOutlineTabDialog : public SfxTabDialog
         ~SwOutlineTabDialog();
 
     SwNumRule*          GetNumRule() {return pNumRule;}
-    sal_uInt16              GetLevel(const String &rFmtName) const;
+    sal_uInt16              GetLevel(const OUString &rFmtName) const;
     OUString*           GetCollNames() {return aCollNames;}
 
     static sal_uInt16       GetActNumLevel() {return nNumLevel;}
@@ -95,8 +95,8 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     NumericField*   m_pStartEdit;
     NumberingPreview* m_pPreviewWIN;
 
-    String              aNoFmtName;
-    String              aSaveCollNames[MAXLEVEL];
+    OUString            aNoFmtName;
+    OUString            aSaveCollNames[MAXLEVEL];
     SwWrtShell*         pSh;
     SwNumRule*          pNumRule;
     OUString*           pCollNames;

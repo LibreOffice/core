@@ -287,7 +287,7 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
 SwSpellPopup::SwSpellPopup(
         SwWrtShell* pWrtSh,
         const uno::Reference< linguistic2::XSpellAlternatives >  &xAlt,
-        const String &rParaText
+        const OUString &rParaText
 )   : PopupMenu( SW_RES(MN_SPELL_POPUP) )
     , pSh( pWrtSh )
     , xSpellAlt(xAlt)
@@ -481,7 +481,7 @@ SwSpellPopup::SwSpellPopup(
     const linguistic2::ProofreadingResult &rResult,
     sal_Int32 nErrorInResult,
     const uno::Sequence< OUString > &rSuggestions,
-    const String &rParaText ) :
+    const OUString &rParaText ) :
 PopupMenu( SW_RES(MN_SPELL_POPUP) ),
 pSh( pWrtSh ),
 xGrammarResult( rResult ),

@@ -56,10 +56,10 @@ class SwSpellPopup : public PopupMenu
     std::map< sal_Int16, OUString > aLangTable_Paragraph;
 //    std::map< sal_Int16, OUString > aLangTable_Document;
 
-    String  aDicNameSingle;
-    bool    bGrammarResults;    // show grammar results? Or show spellcheck results?
+    OUString  aDicNameSingle;
+    bool      bGrammarResults;    // show grammar results? Or show spellcheck results?
 
-    Image   aInfo16;
+    Image     aInfo16;
 
     void fillLangPopupMenu( PopupMenu *pPopupMenu, sal_uInt16 nLangStart,
             ::com::sun::star::uno::Sequence< OUString > aSeq, SwWrtShell* pWrtSh,
@@ -71,13 +71,13 @@ public:
     SwSpellPopup( SwWrtShell *pWrtSh,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellAlternatives >  &xAlt,
-            const String & rParaText );
+            const OUString & rParaText );
 
     SwSpellPopup( SwWrtShell *pWrtSh,
             const ::com::sun::star::linguistic2::ProofreadingResult &rResult,
             sal_Int32 nErrorInResult,
             const ::com::sun::star::uno::Sequence< OUString > &rSuggestions,
-            const String & rParaText );
+            const OUString & rParaText );
 
     sal_uInt16  Execute( const Rectangle& rPopupPos, Window* pWin );
     void Execute( sal_uInt16 nId );

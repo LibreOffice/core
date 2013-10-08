@@ -348,7 +348,7 @@ void SwCaptionPreview::Init()
     SetFont(aFont);
 }
 
-void SwCaptionPreview::SetPreviewText( const String& rText )
+void SwCaptionPreview::SetPreviewText( const OUString& rText )
 {
     if( rText != maText )
     {

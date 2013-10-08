@@ -109,7 +109,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     CheckBox*       m_pPaperFromSetupCB;
     ListBox*        m_pFaxLB;
 
-    String          sNone;
+    OUString        sNone;
 
     sal_Bool        bAttrModified;
     sal_Bool        bPreview;
@@ -129,7 +129,7 @@ public:
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     void                SetFax( const std::vector<String>& );
-    void                SelectFax( const String& );
+    void                SelectFax( const OUString& );
     void                SetPreview(sal_Bool bPrev);
     virtual void        PageCreated (SfxAllItemSet aSet);
 
@@ -152,11 +152,11 @@ class SwStdFontTabPage : public SfxTabPage
     CheckBox*        pDocOnlyCB  ;
     PushButton*      pStandardPB;
 
-    String          sShellStd;
-    String          sShellTitle;
-    String          sShellList;
-    String          sShellLabel;
-    String          sShellIndex;
+    OUString        sShellStd;
+    OUString        sShellTitle;
+    OUString        sShellList;
+    OUString        sShellLabel;
+    OUString        sShellIndex;
 
     SfxPrinter*         pPrt;
     FontList*           pFontList;
@@ -181,9 +181,9 @@ class SwStdFontTabPage : public SfxTabPage
 
     sal_uInt8 nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
 
-    String sScriptWestern;
-    String sScriptAsian;
-    String sScriptComplex;
+    OUString sScriptWestern;
+    OUString sScriptAsian;
+    OUString sScriptComplex;
 
     DECL_LINK(StandardHdl, void *);
     DECL_LINK( ModifyHdl, ComboBox * );
