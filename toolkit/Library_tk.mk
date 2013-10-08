@@ -124,14 +124,6 @@ $(eval $(call gb_Library_add_cxxflags,tk,\
     $(gb_OBJCXXFLAGS)))
 endif
 
-ifeq (,$(ENABLE_HEADLESS))
-ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
-$(eval $(call gb_Library_add_libs,tk,\
-    -lX11 \
-))
-endif
-endif
-
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_use_libraries,tk,\
     libotouch \
