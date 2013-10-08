@@ -33,7 +33,6 @@ struct FormulaGroupContext : boost::noncopyable
     typedef boost::ptr_vector<NumArrayType> NumArrayStoreType;
     typedef boost::ptr_vector<StrArrayType> StrArrayStoreType;
 
-    svl::SharedStringPool maStrPool;
     NumArrayStoreType maNumArrays;
     StrArrayStoreType maStrArrays;
 };

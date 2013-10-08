@@ -2167,11 +2167,11 @@ bool appendDouble(
 }
 
 bool appendStrings(
-    sc::FormulaGroupContext& rCxt, ScDocument* pDoc,
-    sc::FormulaGroupContext::StrArrayType& rArray, size_t nLen,
-    sc::CellStoreType::iterator it, const sc::CellStoreType::iterator& itEnd )
+    ScDocument* pDoc, sc::FormulaGroupContext::StrArrayType& rArray,
+    size_t nLen, sc::CellStoreType::iterator it, const sc::CellStoreType::iterator& itEnd)
 {
     size_t nLenRemain = nLen;
+    svl::SharedStringPool& rPool = pDoc->GetCellStringPool();
 
     for (; it != itEnd; ++it)
     {
@@ -2194,7 +2194,7 @@ bool appendStrings(
                 for (; itData != itDataEnd; ++itData)
                 {
                     OUString aStr = ScEditUtil::GetString(**itData, pDoc);
-                    rArray.push_back(rCxt.maStrPool.intern(aStr).getData());
+                    rArray.push_back(rPool.intern(aStr).getData());
                 }
             }
             break;
@@ -2219,7 +2219,7 @@ bool appendStrings(
                         return false;
                     }
 
-                    rArray.push_back(rCxt.maStrPool.intern(aStr).getData());
+                    rArray.push_back(rPool.intern(aStr).getData());
                 }
             }
             break;
@@ -2380,7 +2380,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( sc::FormulaGroupContext& 
 
             // Fill the remaining array with values from the following blocks.
             ++aPos.first;
-            if (!appendStrings(rCxt, pDocument, rArray, nLenRequested - nLen, aPos.first, maCells.end()))
+            if (!appendStrings(pDocument, rArray, nLenRequested - nLen, aPos.first, maCells.end()))
                 return formula::VectorRefArray();
 
             return formula::VectorRefArray(&rArray[0]);
