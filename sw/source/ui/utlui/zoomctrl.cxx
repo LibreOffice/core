@@ -58,7 +58,7 @@ void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
 void SwZoomControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    if(!sPreviewZoom.Len())
+    if(sPreviewZoom.isEmpty())
         SvxZoomStatusBarControl::Paint(rUsrEvt);
     else
         GetStatusBar().SetItemText( GetId(), sPreviewZoom );
@@ -66,7 +66,7 @@ void SwZoomControl::Paint( const UserDrawEvent& rUsrEvt )
 
 void SwZoomControl::Command( const CommandEvent& rCEvt )
 {
-    if(!sPreviewZoom.Len())
+    if(sPreviewZoom.isEmpty())
         SvxZoomStatusBarControl::Command(rCEvt);
 }
 

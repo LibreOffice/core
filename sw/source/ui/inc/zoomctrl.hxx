@@ -24,7 +24,7 @@
 class SwZoomControl : public SvxZoomStatusBarControl
 {
 private:
-    String  sPreviewZoom;
+    OUString  sPreviewZoom;
 public:
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
