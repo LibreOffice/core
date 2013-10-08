@@ -269,6 +269,17 @@ uno::Reference< drawing::XShape >
     return new DummyXShape();
 }
 
+
+uno::Reference< drawing::XShape >
+        DummyShapeFactory::createText( const uno::Reference< drawing::XShapes >& ,
+                const awt::Size& , const awt::Point& ,
+                uno::Sequence< uno::Reference< chart2::XFormattedString > > ,
+                const uno::Reference< beans::XPropertySet > ,
+                double , const OUString& )
+{
+    return new DummyXShape();
+}
+
 } //namespace dummy
 
 } //namespace chart

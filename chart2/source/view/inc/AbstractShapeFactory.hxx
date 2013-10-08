@@ -13,18 +13,21 @@
 #include "PropertyMapper.hxx"
 #include "VLineProperties.hxx"
 #include "BaseGFXHelper.hxx"
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include <rtl/ustring.hxx>
 
 namespace chart {
 
@@ -188,6 +191,15 @@ public:
                     , const tAnySequence& rPropValues
                     , const ::com::sun::star::uno::Any& rATransformation
                      ) = 0;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createText( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget2D,
+                const com::sun::star::awt::Size& rSize,
+                const com::sun::star::awt::Point& rPosition,
+                com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::chart2::XFormattedString > > xFormattedString,
+                const com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertySet > xTextProperties,
+                double nRotation, const OUString& aName ) = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createInvisibleRectangle(

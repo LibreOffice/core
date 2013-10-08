@@ -21,13 +21,10 @@
 #include "CommonConverters.hxx"
 #include "macros.hxx"
 #include "PropertyMapper.hxx"
-#include "ShapeFactory.hxx"
-#include "RelativeSizeHelper.hxx"
+#include "AbstractShapeFactory.hxx"
 #include <com/sun/star/chart2/XFormattedString.hpp>
 #include <rtl/math.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -78,7 +75,7 @@ awt::Size VTitle::getUnrotatedSize() const //size before rotation
 
 awt::Size VTitle::getFinalSize() const //size after rotation
 {
-    return ShapeFactory::getSizeAfterRotation(
+    return AbstractShapeFactory::getSizeAfterRotation(
          m_xShape, m_fRotationAngleDegree );
 }
 
@@ -111,168 +108,32 @@ void VTitle::createShapes(
       const awt::Point& rPos
     , const awt::Size& rReferenceSize )
 {
+    if(!m_xTitle.is())
+        return;
+
+    uno::Sequence< uno::Reference< XFormattedString > > aStringList = m_xTitle->getText();
+    if(aStringList.getLength()<=0)
+        return;
+
+    m_nXPos = rPos.X;
+    m_nYPos = rPos.Y;
+
+    uno::Reference< beans::XPropertySet > xTitleProperties( m_xTitle, uno::UNO_QUERY );
+
     try
     {
-        if(!m_xTitle.is())
-            return;
-
-        uno::Sequence< uno::Reference< XFormattedString > > aStringList = m_xTitle->getText();
-        if(aStringList.getLength()<=0)
-            return;
-
-        //create shape and add to page
-        uno::Reference< drawing::XShape > xShape(
-                m_xShapeFactory->createInstance(
-                "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY );
-        m_xTarget->add(xShape);
-        m_xShape = xShape;
-
-        //set text and text properties
-        uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-        uno::Reference< text::XTextCursor > xTextCursor( xText->createTextCursor() );
-        uno::Reference< text::XTextRange > xTextRange( xTextCursor, uno::UNO_QUERY );
-        uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-        uno::Reference< beans::XPropertySet > xTitleProperties( m_xTitle, uno::UNO_QUERY );
-        if( !xText.is() || !xTextRange.is() || !xTextCursor.is() || !xShapeProp.is() || !xTitleProperties.is() )
-            return;
-
-        tPropertyNameValueMap aValueMap;
-        //fill line-, fill- and paragraph-properties into the ValueMap
-        {
-            tMakePropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForParagraphProperties();
-            aNameMap( PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
-
-            PropertyMapper::getValueMap( aValueMap, aNameMap, xTitleProperties );
-        }
-
-        //fill some more shape properties into the ValueMap
-        {
-            drawing::TextHorizontalAdjust eHorizontalAdjust = drawing::TextHorizontalAdjust_CENTER;
-            drawing::TextVerticalAdjust eVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
-
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::makeAny(eHorizontalAdjust) ) ); // drawing::TextHorizontalAdjust
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::makeAny(eVerticalAdjust) ) ); //drawing::TextVerticalAdjust
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(sal_True) ) ); // sal_Bool
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny(sal_True) ) ); // sal_Bool
-
-            //set name/classified ObjectID (CID)
-            if( !m_aCID.isEmpty() )
-                aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( m_aCID ) ) ); //CID OUString
-        }
-
-        //set global title properties
-        {
-            tNameSequence aPropNames;
-            tAnySequence aPropValues;
-            PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
-            PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShapeProp );
-        }
-
-        sal_Bool bStackCharacters(sal_False);
-        try
-        {
-            xTitleProperties->getPropertyValue( "StackCharacters" ) >>= bStackCharacters;
-        }
-        catch( const uno::Exception& e )
-        {
-            ASSERT_EXCEPTION( e );
-        }
-
-        if(bStackCharacters)
-        {
-            //if the characters should be stacked we use only the first character properties for code simplicity
-            if( aStringList.getLength()>0 )
-            {
-                OUString aLabel;
-                for( sal_Int32 nN=0; nN<aStringList.getLength();nN++ )
-                    aLabel += aStringList[nN]->getString();
-                aLabel = ShapeFactory::getStackedString( aLabel, bStackCharacters );
-
-                xTextCursor->gotoEnd(false);
-                xText->insertString( xTextRange, aLabel, false );
-                xTextCursor->gotoEnd(true);
-                uno::Reference< beans::XPropertySet > xTargetProps( xShape, uno::UNO_QUERY );
-                uno::Reference< beans::XPropertySet > xSourceProps( aStringList[0], uno::UNO_QUERY );
-
-                PropertyMapper::setMappedProperties( xTargetProps, xSourceProps
-                    , PropertyMapper::getPropertyNameMapForCharacterProperties() );
-
-                // adapt font size according to page size
-                awt::Size aOldRefSize;
-                if( xTitleProperties->getPropertyValue( "ReferencePageSize") >>= aOldRefSize )
-                {
-                    RelativeSizeHelper::adaptFontSizes( xTargetProps, aOldRefSize, rReferenceSize );
-                }
-            }
-        }
-        else
-        {
-            uno::Sequence< uno::Reference< text::XTextCursor > > aCursorList( aStringList.getLength() );
-            sal_Int32 nN = 0;
-            for( nN=0; nN<aStringList.getLength();nN++ )
-            {
-                xTextCursor->gotoEnd(false);
-                xText->insertString( xTextRange, aStringList[nN]->getString(), false );
-                xTextCursor->gotoEnd(true);
-                aCursorList[nN] = xText->createTextCursorByRange( uno::Reference< text::XTextRange >(xTextCursor,uno::UNO_QUERY) );
-            }
-            awt::Size aOldRefSize;
-            bool bHasRefPageSize =
-                ( xTitleProperties->getPropertyValue( "ReferencePageSize") >>= aOldRefSize );
-
-            if( aStringList.getLength()>0 )
-            {
-                uno::Reference< beans::XPropertySet > xTargetProps( xShape, uno::UNO_QUERY );
-                uno::Reference< beans::XPropertySet > xSourceProps( aStringList[0], uno::UNO_QUERY );
-                PropertyMapper::setMappedProperties( xTargetProps, xSourceProps, PropertyMapper::getPropertyNameMapForCharacterProperties() );
-
-                // adapt font size according to page size
-                if( bHasRefPageSize )
-                {
-                    RelativeSizeHelper::adaptFontSizes( xTargetProps, aOldRefSize, rReferenceSize );
-                }
-            }
-        }
-
-        // #i109336# Improve auto positioning in chart
-        float fFontHeight = 0.0;
-        if ( xShapeProp.is() && ( xShapeProp->getPropertyValue( "CharHeight" ) >>= fFontHeight ) )
-        {
-            fFontHeight *= ( 2540.0f / 72.0f );  // pt -> 1/100 mm
-            float fXFraction = 0.18f;
-            sal_Int32 nXDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * fXFraction ) );
-            float fYFraction = 0.30f;
-            sal_Int32 nYDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * fYFraction ) );
-            xShapeProp->setPropertyValue( "TextLeftDistance", uno::makeAny( nXDistance ) );
-            xShapeProp->setPropertyValue( "TextRightDistance", uno::makeAny( nXDistance ) );
-            xShapeProp->setPropertyValue( "TextUpperDistance", uno::makeAny( nYDistance ) );
-            xShapeProp->setPropertyValue( "TextLowerDistance", uno::makeAny( nYDistance ) );
-        }
-
-        try
-        {
-            double fAngleDegree = 0;
-            xTitleProperties->getPropertyValue( "TextRotation" ) >>= fAngleDegree;
-            m_fRotationAngleDegree += fAngleDegree;
-        }
-        catch( const uno::Exception& e )
-        {
-            ASSERT_EXCEPTION( e );
-        }
-        m_nXPos = rPos.X;
-        m_nYPos = rPos.Y;
-
-        //set position matrix
-        //the matrix needs to be set at the end behind autogrow and such position influencing properties
-        ::basegfx::B2DHomMatrix aM;
-        aM.rotate( -m_fRotationAngleDegree*F_PI/180.0 );//#i78696#->#i80521#
-        aM.translate( m_nXPos, m_nYPos );
-        xShapeProp->setPropertyValue( "Transformation", uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
+        double fAngleDegree = 0;
+        xTitleProperties->getPropertyValue( "TextRotation" ) >>= fAngleDegree;
+        m_fRotationAngleDegree += fAngleDegree;
     }
     catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
+
+    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+    m_xShape =pShapeFactory->createText( m_xTarget, rReferenceSize, rPos, aStringList,
+            xTitleProperties, m_fRotationAngleDegree, m_aCID );
 }
 
 } //namespace chart
