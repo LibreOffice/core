@@ -404,7 +404,8 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             {
                 // use selected text as name for urls
                 OUString sReturn = pOutView->GetSelected();
-                sReturn = sReturn.copy(0, 255);
+                sal_Int32 nLen = std::min<sal_Int32>(sReturn.getLength(), 255);
+                sReturn = sReturn.copy(0, nLen);
                 aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
             }
         }
