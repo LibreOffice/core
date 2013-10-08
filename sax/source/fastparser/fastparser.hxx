@@ -80,6 +80,8 @@ struct Entity : public ParserData
     ::com::sun::star::uno::Any              maSavedException;
 
     ::std::stack< SaxContextImplPtr >       maContextStack;
+    // Determines which elements of maNamespaceDefines are valid in current context
+    ::std::stack< sal_uInt32 >              maNamespaceCount;
     ::std::vector< NamespaceDefineRef >     maNamespaceDefines;
 
     explicit Entity( const ParserData& rData );

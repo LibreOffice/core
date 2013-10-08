@@ -46,13 +46,12 @@ namespace sax_fastparser {
 struct SaxContextImpl
 {
     Reference< XFastContextHandler >    mxContext;
-    sal_uInt32      mnNamespaceCount;
     sal_Int32       mnElementToken;
     OUString        maNamespace;
     OUString        maElementName;
 
-    SaxContextImpl() { mnNamespaceCount = 0; mnElementToken = 0; }
-    SaxContextImpl( const SaxContextImplPtr& p ) { mnNamespaceCount = p->mnNamespaceCount; mnElementToken = p->mnElementToken; maNamespace = p->maNamespace; }
+    SaxContextImpl() { mnElementToken = 0; }
+    SaxContextImpl( const SaxContextImplPtr& p ) { mnElementToken = p->mnElementToken; maNamespace = p->maNamespace; }
 };
 
 // --------------------------------------------------------------------
@@ -220,11 +219,13 @@ void FastSaxParser::pushContext()
     if( rEntity.maContextStack.empty() )
     {
         rEntity.maContextStack.push( SaxContextImplPtr( new SaxContextImpl ) );
+        rEntity.maNamespaceCount.push(0);
         DefineNamespace( OString("xml"), "http://www.w3.org/XML/1998/namespace");
     }
     else
     {
         rEntity.maContextStack.push( SaxContextImplPtr( new SaxContextImpl( rEntity.maContextStack.top() ) ) );
+        rEntity.maNamespaceCount.push( rEntity.maNamespaceCount.top() );
     }
 }
 
@@ -236,6 +237,8 @@ void FastSaxParser::popContext()
     assert(!rEntity.maContextStack.empty()); // pop without push?
     if( !rEntity.maContextStack.empty() )
         rEntity.maContextStack.pop();
+    if( !rEntity.maNamespaceCount.empty() )
+        rEntity.maNamespaceCount.pop();
 }
 
 // --------------------------------------------------------------------
@@ -243,10 +246,10 @@ void FastSaxParser::popContext()
 void FastSaxParser::DefineNamespace( const OString& rPrefix, const sal_Char* pNamespaceURL )
 {
     Entity& rEntity = getEntity();
-    assert(!rEntity.maContextStack.empty()); // need a context!
-    if( !rEntity.maContextStack.empty() )
+    assert(!rEntity.maNamespaceCount.empty()); // need a context!
+    if( !rEntity.maNamespaceCount.empty() )
     {
-        sal_uInt32 nOffset = rEntity.maContextStack.top()->mnNamespaceCount++;
+        sal_uInt32 nOffset = rEntity.maNamespaceCount.top()++;
 
         if( rEntity.maNamespaceDefines.size() <= nOffset )
             rEntity.maNamespaceDefines.resize( rEntity.maNamespaceDefines.size() + 64 );
@@ -299,7 +302,7 @@ sal_Int32 FastSaxParser::GetTokenWithPrefix( const OString& rPrefix, const OStri
     sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
 
     Entity& rEntity = getEntity();
-    sal_uInt32 nNamespace = rEntity.maContextStack.top()->mnNamespaceCount;
+    sal_uInt32 nNamespace = rEntity.maNamespaceCount.top();
     while( nNamespace-- )
     {
         if( rEntity.maNamespaceDefines[nNamespace]->maPrefix == rPrefix )
@@ -327,7 +330,7 @@ sal_Int32 FastSaxParser::GetTokenWithPrefix( const sal_Char*pPrefix, int nPrefix
     sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
 
     Entity& rEntity = getEntity();
-    sal_uInt32 nNamespace = rEntity.maContextStack.top()->mnNamespaceCount;
+    sal_uInt32 nNamespace = rEntity.maNamespaceCount.top();
     while( nNamespace-- )
     {
         const OString& rPrefix( rEntity.maNamespaceDefines[nNamespace]->maPrefix );
@@ -368,9 +371,9 @@ sal_Int32 FastSaxParser::GetNamespaceToken( const OUString& rNamespaceURL )
 OUString FastSaxParser::GetNamespaceURL( const OString& rPrefix ) throw (SAXException)
 {
     Entity& rEntity = getEntity();
-    if( !rEntity.maContextStack.empty() )
+    if( !rEntity.maNamespaceCount.empty() )
     {
-        sal_uInt32 nNamespace = rEntity.maContextStack.top()->mnNamespaceCount;
+        sal_uInt32 nNamespace = rEntity.maNamespaceCount.top();
         while( nNamespace-- )
             if( rEntity.maNamespaceDefines[nNamespace]->maPrefix == rPrefix )
                 return rEntity.maNamespaceDefines[nNamespace]->maNamespaceURL;
@@ -382,9 +385,9 @@ OUString FastSaxParser::GetNamespaceURL( const OString& rPrefix ) throw (SAXExce
 OUString FastSaxParser::GetNamespaceURL( const sal_Char*pPrefix, int nPrefixLen ) throw(SAXException)
 {
     Entity& rEntity = getEntity();
-    if( pPrefix && !rEntity.maContextStack.empty() )
+    if( pPrefix && !rEntity.maNamespaceCount.empty() )
     {
-        sal_uInt32 nNamespace = rEntity.maContextStack.top()->mnNamespaceCount;
+        sal_uInt32 nNamespace = rEntity.maNamespaceCount.top();
         while( nNamespace-- )
         {
             const OString& rPrefix( rEntity.maNamespaceDefines[nNamespace]->maPrefix );
