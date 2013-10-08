@@ -146,41 +146,65 @@ size_t DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno, int)
     // fixed ranges, then each range is calculated by another
     // kernel and will have only one reduction per
     // range per vector
-    int opc = ref->GetOpCode();
+    OpCode opc = ref->GetOpCode();
     int total_nr = 0;
-    if (ref->GetByte() > 1)
-        return 0; // FIXME Not supporting more than one range for now
-    FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
-    assert(pChild);
-    const formula::DoubleVectorRefToken* pChildDVR =
-        dynamic_cast<const formula::DoubleVectorRefToken *>(pChild);
-    assert(pChildDVR);
-    // Pass that ..
-    double *pHostBuffer = const_cast<double*>(
-            pChildDVR->GetArrays()[0].mpNumericArray);
-    size_t nHostBuffer = pChildDVR->GetArrayLength();
-    // TODO either call an OpenCL reduce kerenl or use Bolt (preferred)
-    // This is a CPU quick hack just to show it works. But can be REALLY slow!!
-    double cur_top = pHostBuffer[0];
-    for (unsigned int i = 1; i < nHostBuffer; i++) {
-        switch(opc)
-        {
-            case ocMin:
-                cur_top = fmin(cur_top, pHostBuffer[i]);
-                break;
-            case ocMax:
-                cur_top = fmax(cur_top, pHostBuffer[i]);
-                break;
-            case ocAverage:
-                cur_top = cur_top + pHostBuffer[i];
-                break;
-            default:
-                assert(0);
+    double cur_top = 0.0;
+    for (int j = 0; j < ref->GetByte(); j++)
+    {
+        FormulaToken *pChild = mFormulaTree->Children[j]->CurrentFormula;
+        assert(pChild);
+        const formula::DoubleVectorRefToken* pChildDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pChild);
+        assert(pChildDVR);
+        // Pass that ..
+        double *pHostBuffer = const_cast<double*>(
+                pChildDVR->GetArrays()[0].mpNumericArray);
+        size_t nHostBuffer = pChildDVR->GetArrayLength();
+        // TODO either call an OpenCL reduce kerenl or use Bolt (preferred)
+        // This is a CPU quick hack just to show it works. But can be REALLY slow!!
+
+        unsigned int i = 0;
+        if (j == 0) {
+            if (pHostBuffer[0] == pHostBuffer[0] || nHostBuffer == 1)
+            {
+                cur_top = pHostBuffer[i++];
+            } else {
+                i++;
+                cur_top = pHostBuffer[i++];
+            }
+        }
+        if (cur_top == cur_top)
+            total_nr++;
+
+        for (; i < nHostBuffer; i++) {
+            double val = pHostBuffer[i];
+            if (val != val) //skip nan
+                continue;
+            else
+                total_nr++;
+            switch(opc)
+            {
+                case ocMin:
+                    cur_top = fmin(cur_top, val);
+                    break;
+                case ocMax:
+                    cur_top = fmax(cur_top, val);
+                    break;
+                case ocSum:
+                case ocAverage:
+                    cur_top = cur_top + val;
+                    break;
+                case ocCount:
+                    break;
+                default:
+                    assert(0);
+            }
         }
     }
-    total_nr += nHostBuffer;
     if (opc == ocAverage)
         cur_top /= total_nr;
+    else if (opc == ocCount)
+        cur_top = total_nr;
     // Obtain cl context
     KernelEnv kEnv;
     OclCalc::setKernelEnv(&kEnv);
@@ -601,9 +625,12 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
                 mKernelSrc << (p->GetOpCode() == ocAdd?"+":"-");
                 TraverseAST(cur->Children[0]);
                 return;
+            case ocSum:
+                std::cerr << "ocSum!\n";
             case ocMin:
             case ocMax:
             case ocAverage:
+            case ocCount:
                 {
 
                     assert(cur->Children.size() == p->GetByte());
