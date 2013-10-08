@@ -600,12 +600,12 @@ ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos )
     return maTabs[rPos.Tab()]->GetRefCellValue(rPos.Col(), rPos.Row());
 }
 
-svl::SharedStringPool& ScDocument::GetCellStringPool()
+svl::SharedStringPool& ScDocument::GetSharedStringPool()
 {
     return *mpCellStringPool;
 }
 
-const svl::SharedStringPool& ScDocument::GetCellStringPool() const
+const svl::SharedStringPool& ScDocument::GetSharedStringPool() const
 {
     return *mpCellStringPool;
 }

@@ -250,7 +250,7 @@ void XclImpChangeTrack::ReadCell(
             if( pStrm->IsValid() )
             {
                 rCell.meType = CELLTYPE_STRING;
-                rCell.mpString = new svl::SharedString(GetDoc().GetCellStringPool().intern(sString));
+                rCell.mpString = new svl::SharedString(GetDoc().GetSharedStringPool().intern(sString));
             }
         }
         break;

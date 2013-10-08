@@ -1018,7 +1018,7 @@ protected:
 public:
     void commitStrings()
     {
-        svl::SharedStringPool& rPool = mpDoc->GetCellStringPool();
+        svl::SharedStringPool& rPool = mpDoc->GetSharedStringPool();
         sc::CellStoreType::iterator it = mrCells.begin();
         std::vector<StrEntry>::iterator itStr = maStrEntries.begin(), itStrEnd = maStrEntries.end();
         for (; itStr != itStrEnd; ++itStr)
@@ -1957,7 +1957,7 @@ class FillMatrixHandler
 
 public:
     FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, SCCOL nCol, SCTAB nTab, ScDocument* pDoc) :
-        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mnCol(nCol), mnTab(nTab), mpDoc(pDoc), mrPool(pDoc->GetCellStringPool()) {}
+        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mnCol(nCol), mnTab(nTab), mpDoc(pDoc), mrPool(pDoc->GetSharedStringPool()) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
@@ -2171,7 +2171,7 @@ bool appendStrings(
     size_t nLen, sc::CellStoreType::iterator it, const sc::CellStoreType::iterator& itEnd)
 {
     size_t nLenRemain = nLen;
-    svl::SharedStringPool& rPool = pDoc->GetCellStringPool();
+    svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
 
     for (; it != itEnd; ++it)
     {

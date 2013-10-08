@@ -6763,7 +6763,7 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
             const OUString& sStr = GetString();
             rItem.meType = ScQueryEntry::ByString;
             rItem.maString = sStr;
-            rItem.mnStrId = pDok->GetCellStringPool().getIdentifierIgnoreCase(rItem.maString);
+            rItem.mnStrId = pDok->GetSharedStringPool().getIdentifierIgnoreCase(rItem.maString);
         }
         break;
         case svDoubleRef :
@@ -6788,7 +6788,7 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
                 GetCellString(aStr, aCell);
                 rItem.meType = ScQueryEntry::ByString;
                 rItem.maString = aStr;
-                rItem.mnStrId = pDok->GetCellStringPool().getIdentifierIgnoreCase(rItem.maString);
+                rItem.mnStrId = pDok->GetSharedStringPool().getIdentifierIgnoreCase(rItem.maString);
             }
         }
         break;
@@ -6797,7 +6797,7 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
             OUString aStr;
             const ScMatValType nType = GetDoubleOrStringFromMatrix(rItem.mfVal, aStr);
             rItem.maString = aStr;
-            rItem.mnStrId = pDok->GetCellStringPool().getIdentifierIgnoreCase(rItem.maString);
+            rItem.mnStrId = pDok->GetSharedStringPool().getIdentifierIgnoreCase(rItem.maString);
             rItem.meType = ScMatrix::IsNonValueType(nType) ?
                 ScQueryEntry::ByString : ScQueryEntry::ByValue;
         }

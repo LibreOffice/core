@@ -462,7 +462,7 @@ bool ScValidationData::IsDataValid(
         }
         else
         {
-            svl::SharedString aSS = mpDoc->GetCellStringPool().intern(rTest);
+            svl::SharedString aSS = mpDoc->GetSharedStringPool().intern(rTest);
             ScRefCellValue aTmpCell(&aSS);
             bRet = IsDataValid(aTmpCell, rPos);
         }

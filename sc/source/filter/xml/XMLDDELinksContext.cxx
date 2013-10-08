@@ -166,7 +166,7 @@ void ScXMLDDELinkContext::EndElement()
         ScDDELinkCells::iterator aItr(aDDELinkTable.begin());
         ScDDELinkCells::iterator aEndItr(aDDELinkTable.end());
 
-        svl::SharedStringPool& rPool = pDoc->GetCellStringPool();
+        svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
         while (aItr != aEndItr)
         {
             if (nIndex % nColumns == 0)

@@ -1477,7 +1477,7 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
                 for (; itData != itDataEnd; ++itData)
                 {
                     const EditTextObject& rObj = **itData;
-                    svl::SharedString aSS = pDocument->GetCellStringPool().intern(ScEditUtil::GetString(rObj, pDocument));
+                    svl::SharedString aSS = pDocument->GetSharedStringPool().intern(ScEditUtil::GetString(rObj, pDocument));
                     aConverted.push_back(aSS);
                 }
                 aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nCurRow, aConverted.begin(), aConverted.end());
@@ -1507,7 +1507,7 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
                         aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nRow, rFC.GetValue());
                     else
                     {
-                        svl::SharedString aSS = pDocument->GetCellStringPool().intern(rFC.GetString());
+                        svl::SharedString aSS = pDocument->GetSharedStringPool().intern(rFC.GetString());
                         if (aSS.getData())
                             aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nRow, aSS);
                     }
@@ -1800,7 +1800,7 @@ class CopyByCloneHandler
             }
             else
             {
-                svl::SharedString aSS = mrDestCol.GetDoc().GetCellStringPool().intern(aStr);
+                svl::SharedString aSS = mrDestCol.GetDoc().GetSharedStringPool().intern(aStr);
                 if (aSS.getData())
                 {
                     maDestPos.miCellPos =

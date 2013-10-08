@@ -853,8 +853,8 @@ public:
      */
     double* GetValueCell( const ScAddress& rPos );
 
-    SC_DLLPUBLIC svl::SharedStringPool& GetCellStringPool();
-    const svl::SharedStringPool& GetCellStringPool() const;
+    SC_DLLPUBLIC svl::SharedStringPool& GetSharedStringPool();
+    const svl::SharedStringPool& GetSharedStringPool() const;
     sal_uIntPtr GetCellStringID( const ScAddress& rPos ) const;
     sal_uIntPtr GetCellStringIDIgnoreCase( const ScAddress& rPos ) const;
 

@@ -1294,7 +1294,7 @@ void ScXMLChangeCellContext::EndElement()
                 if (!sText.isEmpty() && bString)
                 {
                     mrOldCell.meType = CELLTYPE_STRING;
-                    mrOldCell.mpString = new svl::SharedString(pDoc->GetCellStringPool().intern(sText));
+                    mrOldCell.mpString = new svl::SharedString(pDoc->GetSharedStringPool().intern(sText));
                 }
                 else
                 {

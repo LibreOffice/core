@@ -670,7 +670,7 @@ ScUndoThesaurus::ScUndoThesaurus( ScDocShell* pNewDocShell,
     else
     {
         aOldCell.meType = CELLTYPE_STRING;
-        aOldCell.mpString = new svl::SharedString(pDocShell->GetDocument()->GetCellStringPool().intern(aUndoStr));
+        aOldCell.mpString = new svl::SharedString(pDocShell->GetDocument()->GetSharedStringPool().intern(aUndoStr));
     }
     SetChangeTrack(aOldCell);
 }

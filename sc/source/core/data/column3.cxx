@@ -1454,7 +1454,7 @@ bool ScColumn::ParseString(
     else
         cFirstChar = 0; // Text
 
-    svl::SharedStringPool& rPool = pDocument->GetCellStringPool();
+    svl::SharedStringPool& rPool = pDocument->GetSharedStringPool();
 
     if ( cFirstChar == '=' )
     {
@@ -1606,7 +1606,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const OUString& rString,
 
 void ScColumn::SetEditText( SCROW nRow, EditTextObject* pEditText )
 {
-    pEditText->NormalizeString(pDocument->GetCellStringPool());
+    pEditText->NormalizeString(pDocument->GetSharedStringPool());
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     maCells.set(it, nRow, pEditText);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
@@ -1617,7 +1617,7 @@ void ScColumn::SetEditText( SCROW nRow, EditTextObject* pEditText )
 
 void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, EditTextObject* pEditText )
 {
-    pEditText->NormalizeString(pDocument->GetCellStringPool());
+    pEditText->NormalizeString(pDocument->GetSharedStringPool());
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pEditText);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
@@ -1751,7 +1751,7 @@ sal_uIntPtr ScColumn::GetCellStringID( SCROW nRow ) const
         {
             std::vector<sal_uIntPtr> aIDs;
             const EditTextObject* pObj = sc::edittext_block::at(*aPos.first->data, aPos.second);
-            pObj->GetStringIDs(pDocument->GetCellStringPool(), aIDs);
+            pObj->GetStringIDs(pDocument->GetSharedStringPool(), aIDs);
             if (aIDs.size() != 1)
                 // We don't handle multiline content for now.
                 return 0;
@@ -1780,7 +1780,7 @@ sal_uIntPtr ScColumn::GetCellStringIDIgnoreCase( SCROW nRow ) const
         {
             std::vector<sal_uIntPtr> aIDs;
             const EditTextObject* pObj = sc::edittext_block::at(*aPos.first->data, aPos.second);
-            pObj->GetStringIDsIgnoreCase(pDocument->GetCellStringPool(), aIDs);
+            pObj->GetStringIDsIgnoreCase(pDocument->GetSharedStringPool(), aIDs);
             if (aIDs.size() != 1)
                 // We don't handle multiline content for now.
                 return 0;
@@ -2111,7 +2111,7 @@ class FormulaToValueHandler
 
 public:
 
-    FormulaToValueHandler(ScDocument& rDoc) : mrStrPool(rDoc.GetCellStringPool()) {}
+    FormulaToValueHandler(ScDocument& rDoc) : mrStrPool(rDoc.GetSharedStringPool()) {}
 
     void operator() (size_t nRow, const ScFormulaCell* p)
     {
@@ -2195,7 +2195,7 @@ void ScColumn::SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast )
     if (!ValidRow(nRow))
         return;
 
-    svl::SharedString aSS = pDocument->GetCellStringPool().intern(rStr);
+    svl::SharedString aSS = pDocument->GetSharedStringPool().intern(rStr);
     if (!aSS.getData())
         return;
 
@@ -2219,7 +2219,7 @@ void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBr
 void ScColumn::SetRawString(
     sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const OUString& rStr, bool bBroadcast )
 {
-    svl::SharedString aSS = pDocument->GetCellStringPool().intern(rStr);
+    svl::SharedString aSS = pDocument->GetSharedStringPool().intern(rStr);
     if (!aSS.getData())
         return;
 

@@ -150,7 +150,7 @@ void ScDocumentImport::setStringCell(const ScAddress& rPos, const OUString& rStr
     if (!pBlockPos)
         return;
 
-    svl::SharedString aSS = mpImpl->mrDoc.GetCellStringPool().intern(rStr);
+    svl::SharedString aSS = mpImpl->mrDoc.GetSharedStringPool().intern(rStr);
     if (!aSS.getData())
         return;
 
@@ -170,7 +170,7 @@ void ScDocumentImport::setEditCell(const ScAddress& rPos, EditTextObject* pEditT
     if (!pBlockPos)
         return;
 
-    pEditText->NormalizeString(mpImpl->mrDoc.GetCellStringPool());
+    pEditText->NormalizeString(mpImpl->mrDoc.GetSharedStringPool());
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), pEditText);
 }

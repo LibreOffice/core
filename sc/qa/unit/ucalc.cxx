@@ -502,7 +502,7 @@ void Test::testCellStringPool()
     CPPUNIT_ASSERT_MESSAGE("They must be equal when cases are ignored.", nId1 == nId2);
 
     // Check the string counts after purging. Purging shouldn't remove any strings in this case.
-    svl::SharedStringPool& rPool = m_pDoc->GetCellStringPool();
+    svl::SharedStringPool& rPool = m_pDoc->GetSharedStringPool();
     rPool.purge();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rPool.getCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPool.getCountIgnoreCase());
@@ -1475,7 +1475,7 @@ struct PartiallyFilledEmptyMatrix
 
 void Test::testMatrix()
 {
-    svl::SharedStringPool& rPool = m_pDoc->GetCellStringPool();
+    svl::SharedStringPool& rPool = m_pDoc->GetSharedStringPool();
     ScMatrixRef pMat, pMat2;
 
     // First, test the zero matrix type.
