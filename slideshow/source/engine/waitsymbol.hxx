@@ -39,6 +39,7 @@ namespace internal {
 class EventMultiplexer;
 typedef boost::shared_ptr<class WaitSymbol> WaitSymbolSharedPtr;
 
+/// On-screen 'hour glass' for when slideshow is unresponsive
 class WaitSymbol : public ViewEventHandler,
                    private ::boost::noncopyable
 {

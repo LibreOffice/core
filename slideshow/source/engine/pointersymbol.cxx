@@ -28,8 +28,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/geometry/IntegerSize2D.hpp>
-#include "com/sun/star/uno/Reference.hxx"
+#include <com/sun/star/presentation/XSlideShowView.hpp>
 
 #include "pointersymbol.hxx"
 #include "eventmultiplexer.hxx"
@@ -47,9 +46,9 @@ const sal_Int32 LEFT_BORDER_SPACE  = 10;
 const sal_Int32 LOWER_BORDER_SPACE = 10;
 
 PointerSymbolSharedPtr PointerSymbol::create( const uno::Reference<rendering::XBitmap>& xBitmap,
-                                        ScreenUpdater&                            rScreenUpdater,
-                                        EventMultiplexer&                         rEventMultiplexer,
-                                        const UnoViewContainer&                   rViewContainer )
+                                              ScreenUpdater&                            rScreenUpdater,
+                                              EventMultiplexer&                         rEventMultiplexer,
+                                              const UnoViewContainer&                   rViewContainer )
 {
     PointerSymbolSharedPtr pRet(
         new PointerSymbol( xBitmap,
@@ -62,11 +61,12 @@ PointerSymbolSharedPtr PointerSymbol::create( const uno::Reference<rendering::XB
 }
 
 PointerSymbol::PointerSymbol( uno::Reference<rendering::XBitmap> const &   xBitmap,
-                        ScreenUpdater&                               rScreenUpdater,
-                        const UnoViewContainer&                      rViewContainer ) :
+                              ScreenUpdater&                               rScreenUpdater,
+                              const UnoViewContainer&                      rViewContainer ) :
     mxBitmap(xBitmap),
     maViews(),
     mrScreenUpdater( rScreenUpdater ),
+    maPos(),
     mbVisible(false)
 {
     std::for_each( rViewContainer.begin(),
@@ -102,35 +102,14 @@ void PointerSymbol::setVisible( const bool bVisible )
     }
 }
 
-basegfx::B2DPoint PointerSymbol::calcSpritePos( UnoViewSharedPtr const & rView ) const
+basegfx::B2DPoint PointerSymbol::calcSpritePos(UnoViewSharedPtr const & rView) const
 {
-    const uno::Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
-                                                      uno::UNO_QUERY_THROW );
-    const geometry::IntegerSize2D realSize( xBitmap->getSize() );
-
-    return basegfx::B2DPoint(
-        // pos.X pos.Y are given in 0..1, beginning from the upper left corner of the currentSlide.
-        std::min<sal_Int32>( 0, LEFT_BORDER_SPACE ),
-        std::max<sal_Int32>( 0, realSize.Height * 1 - mxBitmap->getSize().Height
-                                                - LOWER_BORDER_SPACE ) );
-}
-
-basegfx::B2DPoint PointerSymbol::calcSpritePos(
-    UnoViewSharedPtr const & rView, const ::com::sun::star::geometry::RealPoint2D pos) const
-{
-    const uno::Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
-                                                      uno::UNO_QUERY_THROW );
-    const geometry::IntegerSize2D realSize( xBitmap->getSize() );
-
+    const awt::Rectangle aViewArea( rView->getUnoView()->getCanvasArea() );
     const geometry::IntegerSize2D realTranslationOffset ( rView->getTranslationOffset() );
 
-
-    basegfx::B2DPoint newPos(
-        realTranslationOffset.Width + (realSize.Width - 2 * realTranslationOffset.Width) * pos.X,
-        realTranslationOffset.Height + (realSize.Height - 2 * realTranslationOffset.Height) * pos.Y);
-
-
-    return newPos;
+    return basegfx::B2DPoint(
+        realTranslationOffset.Width + ((aViewArea.Width - aViewArea.X) - 2 * realTranslationOffset.Width) * maPos.X,
+        realTranslationOffset.Height + ((aViewArea.Height - aViewArea.Y) - 2 * realTranslationOffset.Height) * maPos.Y);
 }
 
 void PointerSymbol::viewAdded( const UnoViewSharedPtr& rView )
@@ -215,20 +194,26 @@ void PointerSymbol::viewsChanged()
     }
 }
 
-void PointerSymbol::viewsChanged(const ::com::sun::star::geometry::RealPoint2D pos)
+void PointerSymbol::viewsChanged(const geometry::RealPoint2D pos)
 {
-    // reposition sprites on all views
-    ViewsVecT::const_iterator       aIter( maViews.begin() );
-    ViewsVecT::const_iterator const aEnd ( maViews.end() );
-    while( aIter != aEnd )
+    if( pos.X != maPos.X || pos.Y != maPos.Y )
     {
-        if( aIter->second ) {
-            aIter->second->movePixel(
-                calcSpritePos( aIter->first, pos ));
-            mrScreenUpdater.notifyUpdate();
-            mrScreenUpdater.commitUpdates();
+        maPos = pos;
+
+        // reposition sprites on all views
+        ViewsVecT::const_iterator       aIter( maViews.begin() );
+        ViewsVecT::const_iterator const aEnd ( maViews.end() );
+        while( aIter != aEnd )
+        {
+            if( aIter->second )
+            {
+                aIter->second->movePixel(
+                calcSpritePos( aIter->first ));
+                mrScreenUpdater.notifyUpdate();
+                mrScreenUpdater.commitUpdates();
+            }
+            ++aIter;
         }
-        ++aIter;
     }
 }
 

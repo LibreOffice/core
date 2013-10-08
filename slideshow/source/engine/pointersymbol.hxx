@@ -34,15 +34,16 @@ namespace internal {
 class EventMultiplexer;
 typedef boost::shared_ptr<class PointerSymbol> PointerSymbolSharedPtr;
 
+/// On-screen 'laser pointer' from the Impress remote control
 class PointerSymbol : public ViewEventHandler,
-                   private ::boost::noncopyable
+                      private ::boost::noncopyable
 {
 public:
     static PointerSymbolSharedPtr create( const ::com::sun::star::uno::Reference<
-                                             ::com::sun::star::rendering::XBitmap>& xBitmap,
-                                       ScreenUpdater&                               rScreenUpdater,
-                                       EventMultiplexer&                            rEventMultiplexer,
-                                       const UnoViewContainer&                      rViewContainer );
+                                                ::com::sun::star::rendering::XBitmap>& xBitmap,
+                                          ScreenUpdater&                               rScreenUpdater,
+                                          EventMultiplexer&                            rEventMultiplexer,
+                                          const UnoViewContainer&                      rViewContainer );
 
     /** Shows the pointer symbol.
      */
@@ -58,9 +59,9 @@ public:
 
 private:
     PointerSymbol( const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::rendering::XBitmap>& xBitmap,
-                ScreenUpdater&                               rScreenUpdater,
-                const UnoViewContainer&                      rViewContainer );
+                         ::com::sun::star::rendering::XBitmap>& xBitmap,
+                   ScreenUpdater&                               rScreenUpdater,
+                   const UnoViewContainer&                      rViewContainer );
 
     // ViewEventHandler
     virtual void viewAdded( const UnoViewSharedPtr& rView );
@@ -68,8 +69,6 @@ private:
     virtual void viewChanged( const UnoViewSharedPtr& rView );
     virtual void viewsChanged();
 
-
-    ::basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView, const ::com::sun::star::geometry::RealPoint2D pos ) const;
     ::basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView ) const;
 
     template <typename func_type>
@@ -91,6 +90,7 @@ private:
 
     ViewsVecT                                  maViews;
     ScreenUpdater&                             mrScreenUpdater;
+    ::com::sun::star::geometry::RealPoint2D    maPos;
     bool                                       mbVisible;
 };
 
