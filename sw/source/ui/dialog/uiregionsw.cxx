@@ -539,7 +539,7 @@ SwEditRegionDlg::~SwEditRegionDlg( )
     delete m_pDocInserter;
 }
 
-void    SwEditRegionDlg::SelectSection(const String& rSectionName)
+void    SwEditRegionDlg::SelectSection(const OUString& rSectionName)
 {
     SvTreeListEntry* pEntry = m_pTree->First();
     while(pEntry)
@@ -1604,7 +1604,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
         m_pProtectCB->Check( 0 != pSectionData->IsProtectFlag() );
         m_sFileName = pSectionData->GetLinkFileName();
         m_sFilePasswd = pSectionData->GetLinkFilePassword();
-        m_pFileCB->Check( 0 != m_sFileName.Len() );
+        m_pFileCB->Check( !m_sFileName.isEmpty() );
         m_pFileNameED->SetText( m_sFileName );
         UseFileHdl(m_pFileCB);
     }

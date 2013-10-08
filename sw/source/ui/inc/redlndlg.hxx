@@ -45,8 +45,8 @@ struct SwRedlineDataParent
 {
     const SwRedlineData*        pData;      // RedlineDataPtr
     const SwRedlineDataChild*   pNext;      // link to stacked data
-    SvTreeListEntry*                pTLBParent; // corresponding TreeListBox entry
-    String                      sComment;   // redline comment
+    SvTreeListEntry*            pTLBParent; // corresponding TreeListBox entry
+    OUString                    sComment;   // redline comment
 
     inline sal_Bool operator==( const SwRedlineDataParent& rObj ) const
                         { return (pData && pData->GetSeqNo() == rObj.pData->GetSeqNo()); }
@@ -76,13 +76,13 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     PopupMenu               aPopup;
     Timer                   aDeselectTimer;
     Timer                   aSelectTimer;
-    String                  sInserted;
-    String                  sDeleted;
-    String                  sFormated;
-    String                  sTableChgd;
-    String                  sFmtCollSet;
-    String                  sFilterAction;
-    String                  sAutoFormat;
+    OUString                sInserted;
+    OUString                sDeleted;
+    OUString                sFormated;
+    OUString                sTableChgd;
+    OUString                sFmtCollSet;
+    OUString                sFilterAction;
+    OUString                sAutoFormat;
     SvxTPView*              pTPView;
     SvxRedlinTable*         pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
     Link                    aOldSelectHdl;
@@ -110,9 +110,9 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SW_DLLPRIVATE void          RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd);
     SW_DLLPRIVATE void          InitAuthors();
 
-    SW_DLLPRIVATE String            GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack = 0);
-    SW_DLLPRIVATE const String& GetActionText(const SwRedline& rRedln, sal_uInt16 nStack = 0);
-    SW_DLLPRIVATE sal_uInt16            GetRedlinePos( const SvTreeListEntry& rEntry) const;
+    SW_DLLPRIVATE OUString      GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack = 0);
+    SW_DLLPRIVATE OUString      GetActionText(const SwRedline& rRedln, sal_uInt16 nStack = 0);
+    SW_DLLPRIVATE sal_uInt16    GetRedlinePos( const SvTreeListEntry& rEntry) const;
 
 public:
     SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt = sal_False);
@@ -126,7 +126,7 @@ public:
     void            Init(sal_uInt16 nStart = 0);
     void            CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept );
 
-    void            Initialize(const String &rExtraData);
+    void            Initialize(const OUString &rExtraData);
     void            FillInfo(OUString &rExtraData) const;
 
     virtual void    Activate();

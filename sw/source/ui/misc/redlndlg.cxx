@@ -312,26 +312,26 @@ void SwRedlineAcceptDlg::InitAuthors()
                                 !bOnlyFormatedRedlines );
 }
 
-String SwRedlineAcceptDlg::GetRedlineText( const SwRedline& rRedln,
+OUString SwRedlineAcceptDlg::GetRedlineText( const SwRedline& rRedln,
                                         DateTime &rDateTime, sal_uInt16 nStack)
 {
-    String sEntry(GetActionText(rRedln, nStack));
-    sEntry += '\t';
+    OUString sEntry(GetActionText(rRedln, nStack));
+    sEntry += "\t";
     sEntry += rRedln.GetAuthorString(nStack);
-    sEntry += '\t';
+    sEntry += "\t";
 
     const DateTime &rDT = rRedln.GetTimeStamp(nStack);
     rDateTime = rDT;
 
     sEntry += GetAppLangDateTimeString( rDT );
-    sEntry += '\t';
+    sEntry += "\t";
 
     sEntry += rRedln.GetComment(nStack);
 
     return sEntry;
 }
 
-const String &SwRedlineAcceptDlg::GetActionText(const SwRedline& rRedln, sal_uInt16 nStack)
+OUString SwRedlineAcceptDlg::GetActionText(const SwRedline& rRedln, sal_uInt16 nStack)
 {
     switch( rRedln.GetType(nStack) )
     {
@@ -343,7 +343,7 @@ const String &SwRedlineAcceptDlg::GetActionText(const SwRedline& rRedln, sal_uIn
         default:;//prevent warning
     }
 
-    return aEmptyStr;
+    return OUString();
 }
 
 /*--------------------------------------------------------------------
@@ -534,8 +534,8 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRe
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
     bool bAutoFmt = (rRedln.GetRealType() & nAutoFmt) != 0;
 
-    const String *pAction = &GetActionText(rRedln);
-    sal_Bool bValidParent = !sFilterAction.Len() || sFilterAction == *pAction;
+    OUString sAction = GetActionText(rRedln);
+    sal_Bool bValidParent = sFilterAction.isEmpty() || sFilterAction == sAction;
     bValidParent = bValidParent && pTable->IsValidEntry(rRedln.GetAuthorString(), rRedln.GetTimeStamp(), rRedln.GetComment());
     if (nAutoFmt)
     {
@@ -573,8 +573,8 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRe
         else
             pParent->pNext = pRedlineChild;
 
-        pAction = &GetActionText(rRedln, nStack);
-        sal_Bool bValidChild = !sFilterAction.Len() || sFilterAction == *pAction;
+        sAction = GetActionText(rRedln, nStack);
+        sal_Bool bValidChild = sFilterAction.isEmpty() || sFilterAction == sAction;
         bValidChild = bValidChild && pTable->IsValidEntry(rRedln.GetAuthorString(nStack), rRedln.GetTimeStamp(nStack), rRedln.GetComment());
         if (nAutoFmt)
             bValidChild = bValidChild && bAutoFmt;
@@ -1156,24 +1156,24 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
     return 0;
 }
 
-void SwRedlineAcceptDlg::Initialize(const String& rExtraData)
+void SwRedlineAcceptDlg::Initialize(const OUString& rExtraData)
 {
-    if (rExtraData.Len())
+    if (!rExtraData.isEmpty())
     {
-        sal_uInt16 nPos = rExtraData.Search(OUString("AcceptChgDat:"));
+        sal_Int32 nPos = rExtraData.indexOf("AcceptChgDat:");
 
         // try to read the alignment string "ALIGN:(...)"; if none existing,
         // it's an old version
-        if (nPos != STRING_NOTFOUND)
+        if (nPos != -1)
         {
-            sal_uInt16 n1 = rExtraData.Search('(', nPos);
-            if (n1 != STRING_NOTFOUND)
+            sal_Int32 n1 = rExtraData.indexOf('(', nPos);
+            if (n1 != -1)
             {
-                sal_uInt16 n2 = rExtraData.Search(')', n1);
-                if (n2 != STRING_NOTFOUND)
+                sal_Int32 n2 = rExtraData.indexOf(')', n1);
+                if (n2 != -1)
                 {
                     // cut out the alignment string
-                    String aStr = rExtraData.Copy(nPos, n2 - nPos + 1);
+                    String aStr = rExtraData.copy(nPos, n2 - nPos + 1);
                     aStr.Erase(0, n1 - nPos + 1);
 
                     if (aStr.Len())

@@ -135,7 +135,7 @@ public:
     SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh );
     virtual ~SwEditRegionDlg();
 
-    void    SelectSection(const String& rSectionName);
+    void    SelectSection(const OUString& rSectionName);
 
 };
 
@@ -166,9 +166,9 @@ class SwInsertSectionTabPage : public SfxTabPage
     // #114856# edit in readonly sections
     CheckBox*       m_pEditInReadonlyCB;
 
-    String          m_sFileName;
-    String          m_sFilterName;
-    String          m_sFilePasswd;
+    OUString        m_sFileName;
+    OUString        m_sFilterName;
+    OUString        m_sFilePasswd;
 
     ::com::sun::star::uno::Sequence <sal_Int8 > m_aNewPasswd;
     SwWrtShell*             m_pWrtSh;
