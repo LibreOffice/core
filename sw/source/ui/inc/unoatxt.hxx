@@ -101,8 +101,8 @@ class SwXAutoTextGroup : public cppu::WeakImplHelper6
 {
     const SfxItemPropertySet* pPropSet;
     SwGlossaries*           pGlossaries;
-    OUString           sName;
-    String                  m_sGroupName;   // prefix m_ to disambiguate from some local vars in the implementation
+    OUString                sName;
+    OUString                m_sGroupName;   // prefix m_ to disambiguate from some local vars in the implementation
 
 protected:
     virtual ~SwXAutoTextGroup();    // ref-counted objects are not to be deleted from outside -> protected dtor
@@ -169,8 +169,8 @@ class SwXAutoTextEntry
         >
 {
     SwGlossaries*   pGlossaries;
-    String          sGroupName;
-    String          sEntryName;
+    OUString        sGroupName;
+    OUString        sEntryName;
     SwDocShellRef   xDocSh;
     SwXBodyText*    pBodyText;
     com::sun::star::uno::Reference < com::sun::star::lang::XServiceInfo> xBodyText;
@@ -203,7 +203,7 @@ protected:
     virtual ~SwXAutoTextEntry();    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
-    SwXAutoTextEntry(SwGlossaries* , const String& rGroupName, const String& rEntryName);
+    SwXAutoTextEntry(SwGlossaries* , const OUString& rGroupName, const OUString& rEntryName);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -238,8 +238,8 @@ public:
 
     void    Invalidate() {pGlossaries = 0;}
     const SwGlossaries* GetGlossaries() { return pGlossaries; }
-    const String&   GetGroupName() {return sGroupName;}
-    const String&   GetEntryName() {return sEntryName;}
+    const OUString&   GetGroupName() {return sGroupName;}
+    const OUString&   GetEntryName() {return sEntryName;}
 };
 
 

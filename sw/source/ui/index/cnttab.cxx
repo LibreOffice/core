@@ -522,7 +522,7 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
             else
             {
                 Link aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
-                String sTemp(sTemplate);
+                OUString sTemp(sTemplate);
                 pExampleFrame = new SwOneExampleFrame(
                         *m_pExampleContainerWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemp);
 

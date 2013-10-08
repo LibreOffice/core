@@ -749,8 +749,8 @@ sal_Int64 SAL_CALL SwXAutoTextEntry::getSomething( const uno::Sequence< sal_Int8
     return 0;
 }
 
-SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const String& rGroupName,
-                                            const String& rEntryName) :
+SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const OUString& rGroupName,
+                                            const OUString& rEntryName) :
     pGlossaries(pGlss),
     sGroupName(rGroupName),
     sEntryName(rEntryName),

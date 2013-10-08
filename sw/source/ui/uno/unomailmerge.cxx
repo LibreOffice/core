@@ -402,7 +402,7 @@ SwXMailMerge::SwXMailMerge() :
 
 SwXMailMerge::~SwXMailMerge()
 {
-    if (aTmpFileName.Len())
+    if (!aTmpFileName.isEmpty())
         DeleteTmpFile_Impl( xModel, xDocSh, aTmpFileName );
     else    // there was no temporary file in use
     {
@@ -788,7 +788,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     if ( xCurModel.get() != xModel.get() )
     {   // in case it was a temporary model -> close it, and delete the file
         DeleteTmpFile_Impl( xCurModel, xCurDocSh, aTmpFileName );
-        aTmpFileName.Erase();
+        aTmpFileName = "";
     }
     // (in case it wasn't a temporary model, it will be closed in the dtor, at the latest)
 

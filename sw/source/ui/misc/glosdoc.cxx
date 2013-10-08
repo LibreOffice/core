@@ -670,8 +670,8 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
         }
 
         if  (   pEntry
-            &&  ( COMPARE_EQUAL == pEntry->GetGroupName().CompareTo( rGroupName ) )
-            &&  ( COMPARE_EQUAL == pEntry->GetEntryName().CompareTo( rEntryName ) )
+            &&  pEntry->GetGroupName() == rGroupName
+            &&  pEntry->GetEntryName() == rEntryName
             )
         {
             xReturn = pEntry;

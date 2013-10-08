@@ -96,7 +96,7 @@ class SwXMailMerge :
 
     SfxObjectShellRef xDocSh;   // the document
 
-    String          aTmpFileName;
+    OUString        aTmpFileName;
 
     // properties of mail merge service
     com::sun::star::uno::Sequence< com::sun::star::uno::Any >           aSelection;

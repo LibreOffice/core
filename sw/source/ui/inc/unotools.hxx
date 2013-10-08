@@ -78,7 +78,7 @@ class SW_DLLPUBLIC SwOneExampleFrame
     Link            aInitializedLink;
 
     MenuResource    aMenuRes;
-    String          sArgumentURL;
+    OUString        sArgumentURL;
 
     SwView*         pModuleView;
 
@@ -99,7 +99,7 @@ public:
     SwOneExampleFrame(Window& rWin,
                     sal_uInt32 nStyleFlags = EX_SHOW_ONLINE_LAYOUT,
                     const Link* pInitalizedLink = 0,
-                    String* pURL = 0);
+                    OUString* pURL = 0);
     ~SwOneExampleFrame();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > &       GetControl()    {return _xControl; }

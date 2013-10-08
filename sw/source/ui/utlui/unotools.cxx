@@ -63,7 +63,7 @@ bool SwOneExampleFrame::bShowServiceNotAvailableMessage = true;
 SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
                                         sal_uInt32 nFlags,
                                         const Link* pInitializedLink,
-                                        String* pURL ) :
+                                        OUString* pURL ) :
     aTopWindow(&rWin, this),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
     pModuleView(SW_MOD()->GetView()),
@@ -71,7 +71,7 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
     bIsInitialized(sal_False),
     bServiceAvailable(sal_False)
 {
-    if (pURL && pURL->Len())
+    if (pURL && !pURL->isEmpty())
         sArgumentURL = *pURL;
 
     aTopWindow.SetPosSizePixel(Point(0, 0), rWin.GetSizePixel());
@@ -130,7 +130,7 @@ void SwOneExampleFrame::CreateControl()
         uno::Any aURL;
         // create new doc
         OUString sTempURL(cFactory);
-        if(sArgumentURL.Len())
+        if(!sArgumentURL.isEmpty())
             sTempURL = sArgumentURL;
         aURL <<= sTempURL;
 
