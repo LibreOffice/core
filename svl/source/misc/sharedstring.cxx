@@ -78,6 +78,11 @@ bool SharedString::operator== ( const SharedString& r ) const
     return !r.mpData;
 }
 
+bool SharedString::operator!= ( const SharedString& r ) const
+{
+    return !operator== (r);
+}
+
 OUString SharedString::getString() const
 {
     return mpData ? OUString(mpData) : OUString();
@@ -101,6 +106,11 @@ rtl_uString* SharedString::getDataIgnoreCase()
 const rtl_uString* SharedString::getDataIgnoreCase() const
 {
     return mpDataIgnoreCase;
+}
+
+bool SharedString::isValid() const
+{
+    return mpData != NULL;
 }
 
 }

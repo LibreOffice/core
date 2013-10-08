@@ -144,8 +144,7 @@ public:
                         ~ContentInfo();
 
     void NormalizeString( svl::SharedStringPool& rPool );
-    sal_uIntPtr GetStringID( const svl::SharedStringPool& rPool ) const;
-    sal_uIntPtr GetStringIDIgnoreCase( const svl::SharedStringPool& rPool ) const;
+    const svl::SharedString& GetSharedString() const;
     OUString GetText() const;
     void SetText( const OUString& rStr );
 
@@ -210,8 +209,7 @@ public:
     void SetUserType( sal_uInt16 n );
 
     void NormalizeString( svl::SharedStringPool& rPool );
-    bool GetStringIDs( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
-    bool GetStringIDsIgnoreCase( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
+    std::vector<svl::SharedString> GetSharedStrings() const;
 
     bool                    IsVertical() const;
     void                    SetVertical( bool b );

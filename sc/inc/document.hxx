@@ -855,8 +855,8 @@ public:
 
     SC_DLLPUBLIC svl::SharedStringPool& GetSharedStringPool();
     const svl::SharedStringPool& GetSharedStringPool() const;
-    sal_uIntPtr GetCellStringID( const ScAddress& rPos ) const;
-    sal_uIntPtr GetCellStringIDIgnoreCase( const ScAddress& rPos ) const;
+
+    svl::SharedString GetSharedString( const ScAddress& rPos ) const;
 
     SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );

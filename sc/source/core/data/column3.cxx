@@ -1736,62 +1736,28 @@ bool ScColumn::SetGroupFormulaCell( SCROW nRow, ScFormulaCell* pCell )
     return true;
 }
 
-sal_uIntPtr ScColumn::GetCellStringID( SCROW nRow ) const
+svl::SharedString ScColumn::GetSharedString( SCROW nRow ) const
 {
     sc::CellStoreType::const_position_type aPos = maCells.position(nRow);
     switch (aPos.first->type)
     {
         case sc::element_type_string:
-        {
-            const svl::SharedString& rStr = sc::string_block::at(*aPos.first->data, aPos.second);
-            return reinterpret_cast<sal_uIntPtr>(rStr.getData());
-        }
-        break;
+            return sc::string_block::at(*aPos.first->data, aPos.second);
         case sc::element_type_edittext:
         {
-            std::vector<sal_uIntPtr> aIDs;
             const EditTextObject* pObj = sc::edittext_block::at(*aPos.first->data, aPos.second);
-            pObj->GetStringIDs(pDocument->GetSharedStringPool(), aIDs);
-            if (aIDs.size() != 1)
+            std::vector<svl::SharedString> aSSs = pObj->GetSharedStrings();
+            if (aSSs.size() != 1)
                 // We don't handle multiline content for now.
-                return 0;
+                return svl::SharedString();
 
-            return aIDs[0];
+            return aSSs[0];
         }
         break;
         default:
             ;
     }
-    return 0;
-}
-
-sal_uIntPtr ScColumn::GetCellStringIDIgnoreCase( SCROW nRow ) const
-{
-    sc::CellStoreType::const_position_type aPos = maCells.position(nRow);
-    switch (aPos.first->type)
-    {
-        case sc::element_type_string:
-        {
-            const svl::SharedString& rStr = sc::string_block::at(*aPos.first->data, aPos.second);
-            return reinterpret_cast<sal_uIntPtr>(rStr.getDataIgnoreCase());
-        }
-        break;
-        case sc::element_type_edittext:
-        {
-            std::vector<sal_uIntPtr> aIDs;
-            const EditTextObject* pObj = sc::edittext_block::at(*aPos.first->data, aPos.second);
-            pObj->GetStringIDsIgnoreCase(pDocument->GetSharedStringPool(), aIDs);
-            if (aIDs.size() != 1)
-                // We don't handle multiline content for now.
-                return 0;
-
-            return aIDs[0];
-        }
-        break;
-        default:
-            ;
-    }
-    return 0;
+    return svl::SharedString();
 }
 
 namespace {

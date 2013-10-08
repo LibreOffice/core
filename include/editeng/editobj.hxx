@@ -51,6 +51,7 @@ struct Section;
 
 namespace svl {
 
+class SharedString;
 class SharedStringPool;
 
 }
@@ -85,8 +86,7 @@ public:
      */
     void NormalizeString( svl::SharedStringPool& rPool );
 
-    bool GetStringIDs( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
-    bool GetStringIDsIgnoreCase( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const;
+    std::vector<svl::SharedString> GetSharedStrings() const;
 
     const SfxItemPool* GetPool() const;
     sal_uInt16 GetUserType() const;    // For OutlinerMode, it can however not save in compatible format

@@ -461,7 +461,7 @@ void Test::testCollator()
     CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", nRes != 0);
 }
 
-void Test::testCellStringPool()
+void Test::testSharedStringPool()
 {
     m_pDoc->InsertTab(0, "foo");
 
@@ -472,34 +472,34 @@ void Test::testCellStringPool()
     m_pDoc->SetString(ScAddress(0,3,0), "andy");  // A4
     m_pDoc->SetString(ScAddress(0,4,0), "BRUCE"); // A5
 
-    sal_uIntPtr nId1 = m_pDoc->GetCellStringID(ScAddress(0,0,0));
-    sal_uIntPtr nId2 = m_pDoc->GetCellStringID(ScAddress(0,1,0));
-    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId1);
-    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId2);
-    CPPUNIT_ASSERT_EQUAL(nId1, nId2);
+    {
+        // These two shared string objects must go out of scope before the purge test.
+        svl::SharedString aSS1 = m_pDoc->GetSharedString(ScAddress(0,0,0));
+        svl::SharedString aSS2 = m_pDoc->GetSharedString(ScAddress(0,1,0));
+        CPPUNIT_ASSERT_MESSAGE("Failed to get a valid shared string.", aSS1.isValid());
+        CPPUNIT_ASSERT_MESSAGE("Failed to get a valid shared string.", aSS2.isValid());
+        CPPUNIT_ASSERT_EQUAL(aSS1.getData(), aSS2.getData());
 
-    nId2 = m_pDoc->GetCellStringID(ScAddress(0,2,0));
-    CPPUNIT_ASSERT_MESSAGE("They must differ", nId1 != nId2);
+        aSS2 = m_pDoc->GetSharedString(ScAddress(0,2,0));
+        CPPUNIT_ASSERT_MESSAGE("They must differ", aSS1.getData() != aSS2.getData());
 
-    nId2 = m_pDoc->GetCellStringID(ScAddress(0,3,0));
-    CPPUNIT_ASSERT_MESSAGE("They must differ", nId1 != nId2);
+        aSS2 = m_pDoc->GetSharedString(ScAddress(0,3,0));
+        CPPUNIT_ASSERT_MESSAGE("They must differ", aSS1.getData() != aSS2.getData());
 
-    nId2 = m_pDoc->GetCellStringID(ScAddress(0,4,0));
-    CPPUNIT_ASSERT_MESSAGE("They must differ", nId1 != nId2);
+        aSS2 = m_pDoc->GetSharedString(ScAddress(0,4,0));
+        CPPUNIT_ASSERT_MESSAGE("They must differ", aSS1.getData() != aSS2.getData());
 
-    // A3 and A5 should differ but should be equal case-insensitively.
-    nId1 = m_pDoc->GetCellStringID(ScAddress(0,2,0));
-    nId2 = m_pDoc->GetCellStringID(ScAddress(0,4,0));
-    CPPUNIT_ASSERT_MESSAGE("They must differ", nId1 != nId2);
+        // A3 and A5 should differ but should be equal case-insensitively.
+        aSS1 = m_pDoc->GetSharedString(ScAddress(0,2,0));
+        aSS2 = m_pDoc->GetSharedString(ScAddress(0,4,0));
+        CPPUNIT_ASSERT_MESSAGE("They must differ", aSS1.getData() != aSS2.getData());
+        CPPUNIT_ASSERT_MESSAGE("They must be equal when cases are ignored.", aSS1.getDataIgnoreCase() == aSS2.getDataIgnoreCase());
 
-    nId1 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(0,2,0));
-    nId2 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(0,4,0));
-    CPPUNIT_ASSERT_MESSAGE("They must be equal when cases are ignored.", nId1 == nId2);
-
-    // A2 and A4 should be equal when ignoring cases.
-    nId1 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(0,1,0));
-    nId2 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(0,3,0));
-    CPPUNIT_ASSERT_MESSAGE("They must be equal when cases are ignored.", nId1 == nId2);
+        // A2 and A4 should be equal when ignoring cases.
+        aSS1 = m_pDoc->GetSharedString(ScAddress(0,1,0));
+        aSS2 = m_pDoc->GetSharedString(ScAddress(0,3,0));
+        CPPUNIT_ASSERT_MESSAGE("They must be equal when cases are ignored.", aSS1.getDataIgnoreCase() == aSS2.getDataIgnoreCase());
+    }
 
     // Check the string counts after purging. Purging shouldn't remove any strings in this case.
     svl::SharedStringPool& rPool = m_pDoc->GetSharedStringPool();
@@ -568,24 +568,24 @@ void Test::testCellStringPool()
     m_pDoc->SetEditText(ScAddress(1,0,0), rEE.CreateTextObject()); // B1
 
     // These two should be equal.
-    nId1 = m_pDoc->GetCellStringID(ScAddress(0,0,0));
-    nId2 = m_pDoc->GetCellStringID(ScAddress(1,0,0));
-    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId1);
-    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId2);
-    CPPUNIT_ASSERT_EQUAL(nId1, nId2);
+    svl::SharedString aSS1 = m_pDoc->GetSharedString(ScAddress(0,0,0));
+    svl::SharedString aSS2 = m_pDoc->GetSharedString(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", aSS1.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", aSS2.isValid());
+    CPPUNIT_ASSERT_EQUAL(aSS1.getData(), aSS2.getData());
 
     rEE.SetText("ANDY and BRUCE");
     m_pDoc->SetEditText(ScAddress(2,0,0), rEE.CreateTextObject()); // C1
-    nId2 = m_pDoc->GetCellStringID(ScAddress(2,0,0));
-    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId2);
-    CPPUNIT_ASSERT_MESSAGE("These two should be different when cases are considered.", nId1 != nId2);
+    aSS2 = m_pDoc->GetSharedString(ScAddress(2,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", aSS2.isValid());
+    CPPUNIT_ASSERT_MESSAGE("These two should be different when cases are considered.", aSS1.getData() != aSS2.getData());
 
     // But they should be considered equal when cases are ignored.
-    nId1 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(0,0,0));
-    nId2 = m_pDoc->GetCellStringIDIgnoreCase(ScAddress(2,0,0));
-    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId1);
-    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", nId2);
-    CPPUNIT_ASSERT_EQUAL(nId1, nId2);
+    aSS1 = m_pDoc->GetSharedString(ScAddress(0,0,0));
+    aSS2 = m_pDoc->GetSharedString(ScAddress(2,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", aSS1.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Failed to get a valid string ID.", aSS2.isValid());
+    CPPUNIT_ASSERT_EQUAL(aSS1.getDataIgnoreCase(), aSS2.getDataIgnoreCase());
 
     m_pDoc->DeleteTab(0);
 }

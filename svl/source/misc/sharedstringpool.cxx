@@ -52,28 +52,6 @@ SharedString SharedStringPool::intern( const OUString& rStr )
     return SharedString(pOrig, aRes.first->pData);
 }
 
-sal_uIntPtr SharedStringPool::getIdentifier( const OUString& rStr ) const
-{
-    StrHashType::const_iterator it = maStrPool.find(rStr);
-    return (it == maStrPool.end()) ? 0 : reinterpret_cast<sal_uIntPtr>(it->pData);
-}
-
-sal_uIntPtr SharedStringPool::getIdentifierIgnoreCase( const OUString& rStr ) const
-{
-    StrHashType::const_iterator itOrig = maStrPool.find(rStr);
-    if (itOrig == maStrPool.end())
-        // Not in the pool.
-        return 0;
-
-    StrStoreType::const_iterator itUpper = maStrStore.find(itOrig->pData);
-    if (itUpper == maStrStore.end())
-        // Passed string is not in the pool.
-        return 0;
-
-    const rtl_uString* pUpper = itUpper->second.pData;
-    return reinterpret_cast<sal_uIntPtr>(pUpper);
-}
-
 namespace {
 
 inline sal_Int32 getRefCount( const rtl_uString* p )

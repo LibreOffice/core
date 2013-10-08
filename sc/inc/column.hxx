@@ -280,8 +280,7 @@ public:
     ScFormulaCell* SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell );
     bool SetGroupFormulaCell( SCROW nRow, ScFormulaCell* pCell );
 
-    sal_uIntPtr GetCellStringID( SCROW nRow ) const;
-    sal_uIntPtr GetCellStringIDIgnoreCase( SCROW nRow ) const;
+    svl::SharedString GetSharedString( SCROW nRow ) const;
 
     void SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast = true );
     void SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBroadcast = true );

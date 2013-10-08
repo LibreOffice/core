@@ -154,16 +154,9 @@ void ContentInfo::NormalizeString( svl::SharedStringPool& rPool )
     maText = rPool.intern(OUString(maText.getData()));
 }
 
-sal_uIntPtr ContentInfo::GetStringID( const svl::SharedStringPool& rPool ) const
+const svl::SharedString& ContentInfo::GetSharedString() const
 {
-    rtl_uString* p = const_cast<rtl_uString*>(maText.getData());
-    return rPool.getIdentifier(OUString(p));
-}
-
-sal_uIntPtr ContentInfo::GetStringIDIgnoreCase( const svl::SharedStringPool& rPool ) const
-{
-    rtl_uString* p = const_cast<rtl_uString*>(maText.getData());
-    return rPool.getIdentifierIgnoreCase(OUString(p));
+    return maText;
 }
 
 OUString ContentInfo::GetText() const
@@ -350,14 +343,9 @@ void EditTextObject::NormalizeString( svl::SharedStringPool& rPool )
     mpImpl->NormalizeString(rPool);
 }
 
-bool EditTextObject::GetStringIDs( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
+std::vector<svl::SharedString> EditTextObject::GetSharedStrings() const
 {
-    return mpImpl->GetStringIDs(rPool, rIDs);
-}
-
-bool EditTextObject::GetStringIDsIgnoreCase( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
-{
-    return mpImpl->GetStringIDsIgnoreCase(rPool, rIDs);
+    return mpImpl->GetSharedStrings();
 }
 
 const SfxItemPool* EditTextObject::GetPool() const
@@ -656,42 +644,17 @@ void EditTextObjectImpl::NormalizeString( svl::SharedStringPool& rPool )
     }
 }
 
-bool EditTextObjectImpl::GetStringIDs( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
+std::vector<svl::SharedString> EditTextObjectImpl::GetSharedStrings() const
 {
-    std::vector<sal_uIntPtr> aIDs;
-    aIDs.reserve(aContents.size());
+    std::vector<svl::SharedString> aSSs;
+    aSSs.reserve(aContents.size());
     ContentInfosType::const_iterator it = aContents.begin(), itEnd = aContents.end();
     for (; it != itEnd; ++it)
     {
         const ContentInfo& rInfo = *it;
-        sal_uIntPtr nID = rInfo.GetStringID(rPool);
-        if (!nID)
-            return false;
-
-        aIDs.push_back(nID);
+        aSSs.push_back(rInfo.GetSharedString());
     }
-
-    rIDs.swap(aIDs);
-    return true;
-}
-
-bool EditTextObjectImpl::GetStringIDsIgnoreCase( const svl::SharedStringPool& rPool, std::vector<sal_uIntPtr>& rIDs ) const
-{
-    std::vector<sal_uIntPtr> aIDs;
-    aIDs.reserve(aContents.size());
-    ContentInfosType::const_iterator it = aContents.begin(), itEnd = aContents.end();
-    for (; it != itEnd; ++it)
-    {
-        const ContentInfo& rInfo = *it;
-        sal_uIntPtr nID = rInfo.GetStringIDIgnoreCase(rPool);
-        if (!nID)
-            return false;
-
-        aIDs.push_back(nID);
-    }
-
-    rIDs.swap(aIDs);
-    return true;
+    return aSSs;
 }
 
 bool EditTextObjectImpl::IsVertical() const

@@ -51,28 +51,6 @@ public:
     SharedString intern( const OUString& rStr );
 
     /**
-     * Get a unique ID of string object that's expected to be in the shared
-     * string pool. If the string is not in the pool, NULL is returned.  The
-     * ID obtained by this method can be used for case sensitive comparison.
-     *
-     * @param rStr string object to get the ID of.
-     *
-     * @return unique ID of the string object.
-     */
-    sal_uIntPtr getIdentifier( const OUString& rStr ) const;
-
-    /**
-     * Get a unique ID of string object for case insensitive comparison. The
-     * string object is expected to be in the pool.
-     *
-     * @param rStr string object to get the ID of.
-     *
-     * @return unique ID of the string object usable for case insensitive
-     *         comparison.
-     */
-    sal_uIntPtr getIdentifierIgnoreCase( const OUString& rStr ) const;
-
-    /**
      * Go through all string objects in the pool, and clear those that are no
      * longer used outside of the pool.
      */

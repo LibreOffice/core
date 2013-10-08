@@ -29,6 +29,7 @@ public:
     SharedString& operator= ( const SharedString& r );
 
     bool operator== ( const SharedString& r ) const;
+    bool operator!= ( const SharedString& r ) const;
 
     OUString getString() const;
 
@@ -37,6 +38,8 @@ public:
 
     rtl_uString* getDataIgnoreCase();
     const rtl_uString* getDataIgnoreCase() const;
+
+    bool isValid() const;
 };
 
 }

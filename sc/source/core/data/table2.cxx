@@ -1505,20 +1505,12 @@ bool ScTable::SetGroupFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell 
     return aCol[nCol].SetGroupFormulaCell(nRow, pCell);
 }
 
-sal_uIntPtr ScTable::GetCellStringID( SCCOL nCol, SCROW nRow ) const
+svl::SharedString ScTable::GetSharedString( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))
-        return 0;
+        return svl::SharedString();
 
-    return aCol[nCol].GetCellStringID(nRow);
-}
-
-sal_uIntPtr ScTable::GetCellStringIDIgnoreCase( SCCOL nCol, SCROW nRow ) const
-{
-    if (!ValidColRow(nCol, nRow))
-        return 0;
-
-    return aCol[nCol].GetCellStringIDIgnoreCase(nRow);
+    return aCol[nCol].GetSharedString(nRow);
 }
 
 void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
