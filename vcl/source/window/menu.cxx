@@ -135,22 +135,45 @@ struct MenuItemData
 
     SalMenuItem*    pSalMenuItem;           // access to native menu
 
-                    MenuItemData() :
-                        pSubMenu(NULL), pAutoSubMenu(NULL), nItemImageAngle(0), pSalMenuItem ( NULL )
-                    {}
-                    MenuItemData( const OUString& rStr, const Image& rImage ) :
-                        pSubMenu(NULL),
-                        pAutoSubMenu(NULL),
-                        aText( rStr ),
-                        aImage( rImage ),
-                        nItemImageAngle(0),
-                        pSalMenuItem ( NULL )
-                    {}
-                    ~MenuItemData();
-        bool HasCheck() const
-        {
-            return bChecked || ( nBits & ( MIB_RADIOCHECK | MIB_CHECKABLE | MIB_AUTOCHECK ) );
-        }
+    MenuItemData()
+        : nId(0)
+        , eType(MENUITEM_DONTKNOW)
+        , nBits(0)
+        , pSubMenu(NULL)
+        , pAutoSubMenu(NULL)
+        , nUserValue(0)
+        , bChecked(false)
+        , bEnabled(false)
+        , bVisible(false)
+        , bIsTemporary(false)
+        , bMirrorMode(false)
+        , nItemImageAngle(0)
+        , pSalMenuItem(NULL)
+    {
+    }
+    MenuItemData( const OUString& rStr, const Image& rImage )
+        : nId(0)
+        , eType(MENUITEM_DONTKNOW)
+        , nBits(0)
+        , pSubMenu(NULL)
+        , pAutoSubMenu(NULL)
+        , aText(rStr)
+        , nUserValue(0)
+        , aImage(rImage)
+        , bChecked(false)
+        , bEnabled(false)
+        , bVisible(false)
+        , bIsTemporary(false)
+        , bMirrorMode(false)
+        , nItemImageAngle(0)
+        , pSalMenuItem(NULL)
+    {
+    }
+    ~MenuItemData();
+    bool HasCheck() const
+    {
+        return bChecked || ( nBits & ( MIB_RADIOCHECK | MIB_CHECKABLE | MIB_AUTOCHECK ) );
+    }
 };
 
 MenuItemData::~MenuItemData()
