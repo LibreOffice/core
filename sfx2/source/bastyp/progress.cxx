@@ -103,7 +103,17 @@ void SfxProgress_Impl::Enable_Impl( sal_Bool bEnable )
 // -----------------------------------------------------------------------
 
 SfxProgress_Impl::SfxProgress_Impl( const OUString &/*rTitle*/ )
-    : pActiveProgress(0), pWorkWin(0), pView(0)
+    : nMax(0)
+    , nCreate(0)
+    , nNextReschedule(0)
+    , bLocked(false)
+    , bAllDocs(false)
+    , bWaitMode(false)
+    , bAllowRescheduling(false)
+    , bRunning(false)
+    , pActiveProgress(0)
+    , pWorkWin(0)
+    , pView(0)
 {
 }
 
