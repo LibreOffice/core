@@ -2719,9 +2719,56 @@ void SdPage::setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettin
     }
 
     SetChanged();
+
     if(TRG_HasMasterPage())
     {
         TRG_GetMasterPageDescriptorViewContact().ActionChanged();
+
+        // #i119056# For HeaderFooterSettings SdrObjects are used, but the properties
+        // used are not part of their model data, but kept in SD. This data is applied
+        // using a 'backdoor' on primitive creation. Thus, the normal mechanism to detect
+        // object changes does not work here. It is neccessary to trigger updates here
+        // directly. BroadcastObjectChange used for PagePreview invalidations,
+        // flushViewObjectContacts used to invalidate and flush all visualizations in
+        // edit views.
+        SdPage* pMasterPage = dynamic_cast< SdPage* >(&TRG_GetMasterPage());
+
+        if(pMasterPage)
+        {
+            SdrObject* pCandidate = 0;
+
+            pCandidate = pMasterPage->GetPresObj( PRESOBJ_HEADER );
+
+            if(pCandidate)
+            {
+                pCandidate->BroadcastObjectChange();
+                pCandidate->GetViewContact().flushViewObjectContacts();
+            }
+
+            pCandidate = pMasterPage->GetPresObj( PRESOBJ_DATETIME );
+
+            if(pCandidate)
+            {
+                pCandidate->BroadcastObjectChange();
+                pCandidate->GetViewContact().flushViewObjectContacts();
+            }
+
+            pCandidate = pMasterPage->GetPresObj( PRESOBJ_FOOTER );
+
+            if(pCandidate)
+            {
+                pCandidate->BroadcastObjectChange();
+                pCandidate->GetViewContact().flushViewObjectContacts();
+            }
+
+            pCandidate = pMasterPage->GetPresObj( PRESOBJ_SLIDENUMBER );
+
+            if(pCandidate)
+            {
+                pCandidate->BroadcastObjectChange();
+                pCandidate->GetViewContact().flushViewObjectContacts();
+            }
+        }
     }
 }
 
