@@ -126,7 +126,7 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
         ScRefAddress    aEndPos;
 
         aStartPosStr = aTempAreaStr.copy( 0,           nColonPos  );
-        aEndPosStr   = aTempAreaStr.copy( nColonPos+1, STRING_LEN );
+        aEndPosStr   = aTempAreaStr.copy( nColonPos+1 );
 
         if ( ConvertSingleRef( pDoc, aStartPosStr, 0, aStartPos, rDetails ) )
         {
