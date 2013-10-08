@@ -58,7 +58,7 @@ using namespace ::com::sun::star;
                         An old rule at that position will be overwritten.
 ------------------------------------------------------------------------*/
 
-SwBaseNumRules::SwBaseNumRules( const String& rFileName )
+SwBaseNumRules::SwBaseNumRules( const OUString& rFileName )
     :
     sFileName( rFileName ),
     nVersion(0),
@@ -175,7 +175,7 @@ void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt1
 }
 
 SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
-                                        const String &rName )
+                                        const OUString &rName )
     : maName(rName)
 {
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
@@ -532,7 +532,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
                             SwNumFmt& rNew ) const
 {
     SwCharFmt* pFmt = 0;
-    if( sCharFmtName.Len() )
+    if( !sCharFmtName.isEmpty() )
     {
         // at first, look for the name
         sal_uInt16 nArrLen = rSh.GetCharFmtCount();

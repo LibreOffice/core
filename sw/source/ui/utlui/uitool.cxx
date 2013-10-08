@@ -662,7 +662,7 @@ void    SetDfltMetric( FieldUnit eMetric, sal_Bool bWeb )
     SW_MOD()->ApplyUserMetric(eMetric, bWeb);
 }
 
-sal_uInt16 InsertStringSorted(const String& rEntry, ListBox& rToFill, sal_uInt16 nOffset )
+sal_uInt16 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_uInt16 nOffset )
 {
     sal_uInt16 i = nOffset;
     CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
@@ -759,12 +759,11 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
     return nWidth;
 }
 
-String GetAppLangDateTimeString( const DateTime& rDT )
+OUString GetAppLangDateTimeString( const DateTime& rDT )
 {
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rAppLclData = aSysLocale.GetLocaleData();
-    String sRet( rAppLclData.getDate( rDT ));
-    ( sRet += ' ' ) += rAppLclData.getTime( rDT, sal_False, sal_False );
+    OUString sRet = rAppLclData.getDate( rDT ) + " " + rAppLclData.getTime( rDT, sal_False, sal_False );
     return sRet;
 }
 

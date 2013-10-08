@@ -92,13 +92,13 @@ void SetApplyCharUnit(sal_Bool bApplyChar, sal_Bool bWeb);
 SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);
 
 //inserts a string sorted into a ListBox,
-SW_DLLPUBLIC sal_uInt16 InsertStringSorted(const String& rEntry, ListBox& rToFill, sal_uInt16 nOffset);
+SW_DLLPUBLIC sal_uInt16 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_uInt16 nOffset);
 
 // Get table width and alignement
 SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
         SwWrtShell* pSh );
 
-String GetAppLangDateTimeString( const DateTime& );
+OUString GetAppLangDateTimeString( const DateTime& );
 
 // search for a command string withing the menu structure and execute it
 // at the dispatcher if there is one, if executed return true

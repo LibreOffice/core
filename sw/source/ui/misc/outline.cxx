@@ -69,7 +69,7 @@ class SwNumNamesDlg : public ModalDialog
 
 public:
     SwNumNamesDlg(Window *pParent);
-    void SetUserNames(const String *pList[]);
+    void SetUserNames(const OUString *pList[]);
     String GetName() const { return m_pFormEdit->GetText(); }
     sal_uInt16 GetCurEntryPos() const { return m_pFormBox->GetSelectEntryPos(); }
 };
@@ -87,7 +87,7 @@ IMPL_LINK_INLINE_END( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
  *
  * @param pList list of user defined names; unknown positions for the user are 0.
  */
-void SwNumNamesDlg::SetUserNames(const String *pList[])
+void SwNumNamesDlg::SetUserNames(const OUString *pList[])
 {
     sal_uInt16 nSelect = 0;
     for(sal_uInt16 i = 0; i < SwBaseNumRules::nMaxRules; ++i)
@@ -265,7 +265,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
     else if (sIdent == "saveas")
     {
         SwNumNamesDlg *pDlg = new SwNumNamesDlg(this);
-        const String *aStrArr[SwChapterNumRules::nMaxRules];
+        const OUString *aStrArr[SwChapterNumRules::nMaxRules];
         for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
         {
             const SwNumRulesWithName *pRules = pChapterNumRules->GetRules(i);

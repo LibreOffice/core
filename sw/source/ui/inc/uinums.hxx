@@ -33,13 +33,13 @@ typedef boost::ptr_vector<SfxPoolItem> _SwNumFmtsAttrs;
 
 class SW_DLLPUBLIC SwNumRulesWithName
 {
-    String maName;
+    OUString maName;
     // the NumRule's formats _have_ to be independent of a document
     // (They should always be there!)
     class SW_DLLPRIVATE _SwNumFmtGlobal
     {
         SwNumFmt aFmt;
-        String sCharFmtName;
+        OUString sCharFmtName;
         sal_uInt16 nCharPoolId;
         _SwNumFmtsAttrs aItems;
 
@@ -58,17 +58,17 @@ class SW_DLLPUBLIC SwNumRulesWithName
     _SwNumFmtGlobal* aFmts[ MAXLEVEL ];
 
 protected:
-    void SetName(const String& rSet) {maName = rSet;}
+    void SetName(const OUString& rSet) {maName = rSet;}
 
 public:
-    SwNumRulesWithName(const SwNumRule &, const String &);
+    SwNumRulesWithName(const SwNumRule &, const OUString &);
     SwNumRulesWithName( const SwNumRulesWithName & );
     SwNumRulesWithName(SvStream &, sal_uInt16 nVersion);
     ~SwNumRulesWithName();
 
     const SwNumRulesWithName &operator=(const SwNumRulesWithName &);
 
-    const String& GetName() const               { return maName; }
+    const OUString& GetName() const               { return maName; }
     void MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const;
 
     void Store( SvStream& );
@@ -79,10 +79,10 @@ class SwBaseNumRules
 public:
     enum { nMaxRules = MAX_NUM_RULES };         // currently 9 defined forms
 protected:
-    SwNumRulesWithName  *pNumRules[ MAX_NUM_RULES ];
-    String              sFileName;
-    sal_uInt16              nVersion;
-     sal_Bool               bModified;
+    SwNumRulesWithName   *pNumRules[ MAX_NUM_RULES ];
+    OUString              sFileName;
+    sal_uInt16            nVersion;
+    sal_Bool              bModified;
 
     virtual int         Load(SvStream&);
     virtual sal_Bool        Store(SvStream&);
@@ -90,7 +90,7 @@ protected:
     void                Init();
 
 public:
-    SwBaseNumRules(const String& rFileName);
+    SwBaseNumRules(const OUString& rFileName);
     virtual ~SwBaseNumRules();
 
     inline const SwNumRulesWithName*    GetRules(sal_uInt16 nIdx) const;
