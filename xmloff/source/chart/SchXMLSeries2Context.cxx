@@ -277,6 +277,7 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         m_bStockHasVolume( bStockHasVolume ),
         m_rGlobalSeriesImportInfo(rGlobalSeriesImportInfo),
         mpAttachedAxis( NULL ),
+        mnAttachedAxis( 0 ),
         maGlobalChartTypeName( aGlobalChartTypeName ),
         maSeriesChartTypeName( aGlobalChartTypeName ),
         m_bHasDomainContext(false),
