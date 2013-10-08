@@ -1162,7 +1162,9 @@ namespace oglcanvas
             ::basegfx::B2IVector       maSize;
             const SpriteDeviceHelper&  mrDeviceHelper;
             unx::GLXPbuffer            mpPBuffer;
+#if 0
             unx::Display*              mpDisplay;
+#endif
             unsigned int               mnTexture;
 
             virtual bool startBufferRendering()
@@ -1184,12 +1186,18 @@ namespace oglcanvas
         public:
             BufferContextImpl(const SpriteDeviceHelper&   rDeviceHelper,
                               unx::GLXPbuffer             pBuffer,
-                              unx::Display*               pDisplay,
+                              unx::Display*
+#if 0
+                                                          pDisplay
+#endif
+                              ,
                               const ::basegfx::B2IVector& rSize) :
                 maSize(rSize),
                 mrDeviceHelper(rDeviceHelper),
                 mpPBuffer(pBuffer),
+#if 0
                 mpDisplay(pDisplay),
+#endif
                 mnTexture(0)
             {
                 glGenTextures( 1, &mnTexture );
