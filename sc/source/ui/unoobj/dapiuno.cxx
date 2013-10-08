@@ -1232,7 +1232,6 @@ void SAL_CALL ScDataPilotTableObj::setTag( const OUString& aNewTag )
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
     if (pDPObj)
     {
-        OUString aString(aNewTag);
         pDPObj->SetTag( aNewTag );      //! Undo - DBDocFunc ???
 
         //  DataPilotUpdate would do too much (output table is not changed)
