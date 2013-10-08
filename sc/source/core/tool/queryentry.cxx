@@ -32,7 +32,7 @@
 
 bool ScQueryEntry::Item::operator== (const Item& r) const
 {
-    return meType == r.meType && mfVal == r.mfVal && maString.equals(r.maString) && mnStrId == r.mnStrId;
+    return meType == r.meType && mfVal == r.mfVal && maString.equals(r.maString);
 }
 
 ScQueryEntry::ScQueryEntry() :
