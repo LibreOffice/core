@@ -443,12 +443,12 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
 }
 
 
-void SwInputWindow::SetFormula( const String& rFormula, sal_Bool bDelFlag )
+void SwInputWindow::SetFormula( const OUString& rFormula, sal_Bool bDelFlag )
 {
     String sEdit = OUString('=');
-    if( rFormula.Len() )
+    if( !rFormula.isEmpty() )
     {
-        if( '=' == rFormula.GetChar( 0 ) )
+        if( '=' == rFormula[0] )
             sEdit = rFormula;
         else
             sEdit += rFormula;
@@ -504,10 +504,10 @@ void InputEdit::KeyInput(const KeyEvent& rEvent)
         Edit::KeyInput(rEvent);
 }
 
-void InputEdit::UpdateRange(const String& rBoxes,
-                                    const String& rName )
+void InputEdit::UpdateRange(const OUString& rBoxes,
+                                    const OUString& rName )
 {
-    if( !rBoxes.Len() )
+    if( rBoxes.isEmpty() )
     {
         GrabFocus();
         return;
@@ -515,7 +515,7 @@ void InputEdit::UpdateRange(const String& rBoxes,
     const sal_Unicode   cOpen = '<', cClose = '>',
                 cOpenBracket = '(';
     String aPrefix = rName;
-    if(rName.Len())
+    if(!rName.isEmpty())
         aPrefix += '.';
     String aBoxes = aPrefix;
     aBoxes += rBoxes;

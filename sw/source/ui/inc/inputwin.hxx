@@ -37,8 +37,8 @@ public:
                     InputEdit(Window* pParent, WinBits nStyle) :
                         Edit(pParent , nStyle){}
 
-    void            UpdateRange(const String& aSel,
-                                const String& aTblName );
+    void            UpdateRange(const OUString& aSel,
+                                const OUString& aTblName );
 
 protected:
     virtual void    KeyInput( const KeyEvent&  );
@@ -57,7 +57,7 @@ friend class InputEdit;
     SwWrtShell*     pWrtShell;
     SwView*         pView;
     SfxBindings*    pBindings;
-    String          aAktTableName, sOldFml;
+    OUString        aAktTableName, sOldFml;
 
     sal_Bool        bFirst : 1;  // initialisations at first call
     sal_Bool        bActive : 1; // for hide/show when switching documents
@@ -96,7 +96,7 @@ public:
 
     DECL_LINK( SelTblCellsNotify, SwWrtShell * );
 
-    void            SetFormula( const String& rFormula, sal_Bool bDelSel = sal_True );
+    void            SetFormula( const OUString& rFormula, sal_Bool bDelSel = sal_True );
     const SwView*   GetView() const{return pView;}
 };
 
@@ -110,7 +110,7 @@ public:
                         SfxChildWinInfo*  );
     ~SwInputChild();
     SFX_DECL_CHILDWINDOW_WITHID( SwInputChild );
-    void            SetFormula( const String& rFormula, sal_Bool bDelSel = sal_True )
+    void            SetFormula( const OUString& rFormula, sal_Bool bDelSel = sal_True )
                         { ((SwInputWindow*)pWindow)->SetFormula(
                                     rFormula, bDelSel ); }
     const SwView*   GetView() const{return ((SwInputWindow*)pWindow)->GetView();}
