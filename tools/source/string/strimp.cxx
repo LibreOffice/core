@@ -428,23 +428,4 @@ xub_StrLen STRING::Search( const STRING& rStr, xub_StrLen nIndex ) const
     return STRING_NOTFOUND;
 }
 
-void STRING::SearchAndReplaceAll( STRCODE c, STRCODE cRep )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    sal_Int32       nLen    = mpData->mnLen;
-    const STRCODE*  pStr    = mpData->maStr;
-    sal_Int32       nIndex  = 0;
-    while ( nIndex < nLen )
-    {
-        if ( *pStr == c )
-        {
-            ImplCopyData();
-            mpData->maStr[nIndex] = cRep;
-        }
-        ++pStr,
-        ++nIndex;
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

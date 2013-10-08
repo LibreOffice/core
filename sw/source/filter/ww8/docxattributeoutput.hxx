@@ -631,7 +631,7 @@ private:
     void WriteCommentRanges();
 
     void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = sal_False );
-    void DoWriteCmd( String& rCmd );
+    void DoWriteCmd( const OUString& rCmd );
     void CmdField_Impl( FieldInfos& rInfos );
     void EndField_Impl( FieldInfos& rInfos );
 

@@ -245,8 +245,6 @@ public:
                                           xub_StrLen nIndex = 0 );
     xub_StrLen          SearchAndReplace( const UniString& rStr, const UniString& rRepStr,
                                           xub_StrLen nIndex = 0 );
-    void                SearchAndReplaceAll( sal_Unicode c, sal_Unicode cRep );
-    void                SearchAndReplaceAll( const UniString& rStr, const UniString& rRepStr );
 
     void                SetToken( xub_StrLen nToken, sal_Unicode cTok, const UniString& rStr,
                                   xub_StrLen nIndex = 0 );

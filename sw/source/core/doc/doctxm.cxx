@@ -1539,28 +1539,28 @@ static String lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix, 
 
 /// Generate String with newlines changed to spaces, consecutive spaces changed
 /// to a single space, and trailing space removed.
-String lcl_RemoveLineBreaks( String sRet )
+OUString lcl_RemoveLineBreaks(const OUString &rRet)
 {
-    if (!sRet.Len())
-        return sRet;
-    xub_StrLen nOffset = 0;
-    sRet.SearchAndReplaceAll('\n', ' ');
-    for (xub_StrLen i = 1; i < sRet.Len(); i++)
+    if (rRet.isEmpty())
+        return rRet;
+    sal_Int32 nOffset = 0;
+    OUStringBuffer sRet(rRet.replace('\n', ' '));
+    for (sal_Int32 i = 1; i < sRet.getLength(); ++i)
     {
-        if ( sRet.GetChar(i - 1) == ' ' && sRet.GetChar(i) == ' ' )
+        if ( sRet[i - 1] == ' ' && sRet[i] == ' ' )
         {
             nOffset += 1;
         }
         else
         {
-            sRet.SetChar(i - nOffset, sRet.GetChar(i));
+            sRet[i - nOffset] = sRet[i];
         }
     }
-    if (sRet.GetChar(sRet.Len() - 1) == ' ')
+    if (sRet[sRet.getLength() - 1] == ' ')
     {
         nOffset += 1;
     }
-    return sRet.Copy(0, sRet.Len() - nOffset);
+    return sRet.copy(0, sRet.getLength() - nOffset).toString();
 }
 
 // Add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc> in order to control,

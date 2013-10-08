@@ -2087,9 +2087,8 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
                     rWrt.WriteOutliner(*rAtn.mpRichText, nTTyp);
                 else
                 {
-                    String sTxt(rAtn.msSimpleText);
-                    sTxt.SearchAndReplaceAll(0x0A, 0x0B);
-                    rWrt.WriteStringAsPara( sTxt );
+                    OUString sTxt(rAtn.msSimpleText);
+                    rWrt.WriteStringAsPara(sTxt.replace(0x0A, 0x0B));
                 }
             }
             break;

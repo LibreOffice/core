@@ -1397,16 +1397,16 @@ because word doesn't have the feature
 String SwWW8AttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
     xub_StrLen nLen) const
 {
-    String aSnippet(rStr, nAktPos, nLen);
     if (!nLen)
-        return aSnippet;
+        return OUString();
 
+    OUString aSnippet(rStr.Copy(nAktPos, nLen));
     // 0x0a     ( Hard Line Break ) -> 0x0b
     // 0xad     ( soft hyphen )     -> 0x1f
     // 0x2011   ( hard hyphen )     -> 0x1e
-    aSnippet.SearchAndReplaceAll(0x0A, 0x0B);
-    aSnippet.SearchAndReplaceAll(CHAR_HARDHYPHEN, 0x1e);
-    aSnippet.SearchAndReplaceAll(CHAR_SOFTHYPHEN, 0x1f);
+    aSnippet = aSnippet.replace(0x0A, 0x0B);
+    aSnippet = aSnippet.replace(CHAR_HARDHYPHEN, 0x1e);
+    aSnippet = aSnippet.replace(CHAR_SOFTHYPHEN, 0x1f);
 
     m_rExport.m_aCurrentCharPropStarts.push( nAktPos );
     const SfxPoolItem &rItem = GetItem(RES_CHRATR_CASEMAP);
@@ -1444,7 +1444,7 @@ String SwWW8AttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
             rStr, nAktPos, g_pBreakIt->GetLocale(nLanguage),
             i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
         {
-            aSnippet.SetChar(0, rStr.GetChar(nAktPos));
+            aSnippet = OUString(rStr.GetChar(nAktPos)) + aSnippet.copy(1);
         }
     }
     m_rExport.m_aCurrentCharPropStarts.pop();

@@ -284,9 +284,9 @@ SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
     {
         SwFieldType* pFldType = (*mpFldTypes)[i];
 
-        String aFldName( pFldType->GetName() );
+        OUString aFldName( pFldType->GetName() );
         if (bDbFieldMatching && nResId == RES_DBFLD)    // #i51815#
-            aFldName.SearchAndReplaceAll(DB_DELIM, '.');
+            aFldName = aFldName.replace(DB_DELIM, '.');
 
         if( nResId == pFldType->Which() &&
             rSCmp.isEqual( rName, aFldName ))

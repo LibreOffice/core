@@ -1734,12 +1734,10 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
 
 static String lcl_GetExpandedField(const SwField &rFld)
 {
-    String sRet(rFld.ExpandField(true));
+    OUString sRet(rFld.ExpandField(true));
 
     //replace LF 0x0A with VT 0x0B
-    sRet.SearchAndReplaceAll(0x0A, 0x0B);
-
-    return sRet;
+    return sRet.replace(0x0A, 0x0B);
 }
 
 WW8_WrPlcFld* WW8Export::CurrentFieldPlc() const
@@ -2405,10 +2403,10 @@ OUString FieldString(ww::eField eIndex)
 
 void WW8AttributeOutput::HiddenField( const SwField& rFld )
 {
-    String sExpand(rFld.GetPar2());
+    OUString sExpand(rFld.GetPar2());
 
     //replace LF 0x0A with VT 0x0B
-    sExpand.SearchAndReplaceAll(0x0A, 0x0B);
+    sExpand = sExpand.replace(0x0A, 0x0B);
     m_rWW8Export.pChpPlc->AppendFkpEntry(m_rWW8Export.Strm().Tell());
     if (m_rWW8Export.IsUnicode())
     {

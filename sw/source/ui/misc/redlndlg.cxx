@@ -438,9 +438,8 @@ void SwRedlineAcceptDlg::Activate()
             if (pParent->pTLBParent)
             {
                 // update only comment
-                String sComment(rRedln.GetComment());
-                sComment.SearchAndReplaceAll((sal_Unicode)'\n',(sal_Unicode)' ');
-                pTable->SetEntryText(sComment, pParent->pTLBParent, 3);
+                OUString sComment(rRedln.GetComment());
+                pTable->SetEntryText(sComment.replace('\n', ' '), pParent->pTLBParent, 3);
             }
             pParent->sComment = rRedln.GetComment();
         }
@@ -725,9 +724,8 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         pRedlineParent = new SwRedlineDataParent;
         pRedlineParent->pData    = pRedlineData;
         pRedlineParent->pNext    = 0;
-        String sComment(rRedln.GetComment());
-        sComment.SearchAndReplaceAll((sal_Unicode)'\n',(sal_Unicode)' ');
-        pRedlineParent->sComment = sComment;
+        OUString sComment(rRedln.GetComment());
+        pRedlineParent->sComment = sComment.replace('\n', ' ');
         aRedlineParents.insert(aRedlineParents.begin() + i, pRedlineParent);
 
         pData = new RedlinData;
@@ -1113,12 +1111,11 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                         if ( pDlg->Execute() == RET_OK )
                         {
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                            String sMsg(((const SvxPostItTextItem&)pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
+                            OUString sMsg(((const SvxPostItTextItem&)pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
 
                             // insert / change comment
                             pSh->SetRedlineComment(sMsg);
-                            sMsg.SearchAndReplaceAll((sal_Unicode)'\n',(sal_Unicode)' ');
-                            pTable->SetEntryText(sMsg, pEntry, 3);
+                            pTable->SetEntryText(sMsg.replace('\n', ' '), pEntry, 3);
                         }
 
                         delete pDlg;

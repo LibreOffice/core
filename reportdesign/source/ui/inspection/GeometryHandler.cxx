@@ -2114,9 +2114,9 @@ void GeometryHandler::impl_createFunction(const OUString& _sFunctionName,const O
 
     const String sPlaceHolder1(RTL_CONSTASCII_USTRINGPARAM("%Column"));
     const String sPlaceHolder2(RTL_CONSTASCII_USTRINGPARAM("%FunctionName"));
-    String sFormula(_aFunction.m_sFormula);
-    sFormula.SearchAndReplaceAll(sPlaceHolder1,_sDataField);
-    sFormula.SearchAndReplaceAll(sPlaceHolder2,_sFunctionName);
+    OUString sFormula(_aFunction.m_sFormula);
+    sFormula = sFormula.replaceAll(sPlaceHolder1,_sDataField);
+    sFormula = sFormula.replaceAll(sPlaceHolder2,_sFunctionName);
 
     m_xFunction->setFormula(sFormula);
     m_xFunction->setPreEvaluated(_aFunction.m_bPreEvaluated);
@@ -2124,9 +2124,9 @@ void GeometryHandler::impl_createFunction(const OUString& _sFunctionName,const O
     if ( _aFunction.m_sInitialFormula.IsPresent )
     {
         beans::Optional< OUString> aInitialFormula = _aFunction.m_sInitialFormula;
-        String sInitialFormula = aInitialFormula.Value;
-        sInitialFormula.SearchAndReplaceAll(sPlaceHolder1,_sDataField);
-        sInitialFormula.SearchAndReplaceAll(sPlaceHolder2,_sFunctionName);
+        OUString sInitialFormula = aInitialFormula.Value;
+        sInitialFormula = sInitialFormula.replaceAll(sPlaceHolder1,_sDataField);
+        sInitialFormula = sInitialFormula.replaceAll(sPlaceHolder2,_sFunctionName);
         aInitialFormula.Value = sInitialFormula;
         m_xFunction->setInitialFormula( aInitialFormula );
     }

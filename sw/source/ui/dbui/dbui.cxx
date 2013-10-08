@@ -66,9 +66,9 @@ CreateMonitor::CreateMonitor( Window *pParent )
 
 void CreateMonitor::UpdateCountingText()
 {
-    String sText(m_sCountingPattern);
-    sText.SearchAndReplaceAll( m_sVariable_Total, OUString::number( m_nTotalCount ) );
-    sText.SearchAndReplaceAll( m_sVariable_Position, OUString::number( m_nCurrentPosition ) );
+    OUString sText(m_sCountingPattern);
+    sText = sText.replaceAll( m_sVariable_Total, OUString::number( m_nTotalCount ) );
+    sText = sText.replaceAll( m_sVariable_Position, OUString::number( m_nCurrentPosition ) );
     m_aCounting.SetText(sText);
 }
 

@@ -1059,9 +1059,8 @@ void SwHTMLWriter::OutBookmarks()
 
     while( nPos < aOutlineMarkPoss.size() && aOutlineMarkPoss[nPos] == nNode )
     {
-        String sMark( aOutlineMarks[nPos] );
-        sMark.SearchAndReplaceAll( '?', '_' );  // '?' causes problems in IE/Netscape 5
-        OutAnchor( sMark );
+        OUString sMark( aOutlineMarks[nPos] );
+        OutAnchor( sMark.replace('?', '_') ); // '?' causes problems in IE/Netscape 5
         aOutlineMarkPoss.erase( aOutlineMarkPoss.begin()+nPos );
         aOutlineMarks.erase( aOutlineMarks.begin() + nPos );
     }
@@ -1072,13 +1071,11 @@ void SwHTMLWriter::OutImplicitMark( const String& rMark,
 {
     if( rMark.Len() && !aImplicitMarks.empty() )
     {
-        String sMark( rMark );
-        sMark.Append( cMarkSeparator );
-        sMark.AppendAscii( pMarkType );
+        OUString sMark( rMark );
+        sMark + OUString(cMarkSeparator) + OUString::createFromAscii(pMarkType);
         if( 0 != aImplicitMarks.erase( sMark ) )
         {
-            sMark.SearchAndReplaceAll( '?', '_' );  // '?' causes problems in IE/Netscape 5
-            OutAnchor( sMark );
+            OutAnchor(sMark.replace('?', '_')); // '?' causes problems in IE/Netscape 5
         }
     }
 }

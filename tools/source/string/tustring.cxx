@@ -235,21 +235,6 @@ xub_StrLen STRING::Match( const STRING& rStr ) const
     return STRING_MATCH;
 }
 
-void STRING::SearchAndReplaceAll( const STRING& rStr, const STRING& rRepStr )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rRepStr, STRING, DBGCHECKSTRING );
-
-    xub_StrLen nSPos = Search( rStr, 0 );
-    while ( nSPos != STRING_NOTFOUND )
-    {
-        Replace( nSPos, rStr.Len(), rRepStr );
-        nSPos = nSPos + rRepStr.Len();
-        nSPos = Search( rStr, nSPos );
-    }
-}
-
 void STRING::SetToken( xub_StrLen nToken, STRCODE cTok, const STRING& rStr,
                        xub_StrLen nIndex )
 {

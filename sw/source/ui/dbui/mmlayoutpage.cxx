@@ -319,8 +319,8 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         sDBName += DB_DELIM;
         sDBName += String(rData.sCommand);
         sDBName += DB_DELIM;
-        String sDatabaseConditionPrefix(sDBName);
-        sDatabaseConditionPrefix.SearchAndReplaceAll(DB_DELIM, '.');
+        OUString sDatabaseConditionPrefix(sDBName);
+        sDatabaseConditionPrefix = sDatabaseConditionPrefix.replace(DB_DELIM, '.');
         sDBName += OUString::number(rData.nCommandType);
         sDBName += DB_DELIM;
 

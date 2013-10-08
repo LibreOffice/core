@@ -695,15 +695,17 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
                     aRect.Right()   = aRect.Left();
                     aRect.Bottom()  = aRect.Top();
 
-                    String sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
+                    OUString sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
                     SwContentAtPos aCnt( SwContentAtPos::SW_OUTLINE );
                     m_pWrtShell->GetContentAtPos( aPos, aCnt );
                     if( aCnt.sStr.Len() )
                     {
                         sPageStr += OUString("  - ");
-                        sPageStr.Insert( aCnt.sStr, 0, 80 );
-                        sPageStr.SearchAndReplaceAll( '\t', ' ' );
-                        sPageStr.SearchAndReplaceAll( 0x0a, ' ' );
+                        sal_Int32 nChunkLen = std::min<sal_Int32>(aCnt.sStr.Len(), 80);
+                        OUString sChunk = aCnt.sStr.Copy(0, nChunkLen);
+                        sPageStr = sChunk + sPageStr;
+                        sPageStr = sPageStr.replace('\t', ' ');
+                        sPageStr = sPageStr.replace(0x0a, ' ');
                     }
                     nPgNum = nPhNum;
                 }

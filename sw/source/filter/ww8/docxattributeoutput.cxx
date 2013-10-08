@@ -890,9 +890,9 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
     }
 }
 
-void DocxAttributeOutput::DoWriteCmd( String& rCmd )
+void DocxAttributeOutput::DoWriteCmd( const OUString& rCmd )
 {
-    OUString sCmd = OUString(rCmd).trim();
+    OUString sCmd = rCmd.trim();
     if (sCmd.startsWith("SEQ"))
     {
         OUString sSeqName = msfilter::util::findQuotedText(sCmd, "SEQ ", '\\').trim();
@@ -900,7 +900,7 @@ void DocxAttributeOutput::DoWriteCmd( String& rCmd )
     }
     // Write the Field command
     m_pSerializer->startElementNS( XML_w, XML_instrText, FSEND );
-    m_pSerializer->writeEscaped( OUString( rCmd ) );
+    m_pSerializer->writeEscaped( rCmd );
     m_pSerializer->endElementNS( XML_w, XML_instrText );
 
 }
@@ -912,15 +912,15 @@ void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
 
     for ( xub_StrLen i = 0; i < nNbToken; i++ )
     {
-        String sToken = rInfos.sCmd.GetToken( i, '\t' );
+        OUString sToken = rInfos.sCmd.GetToken( i, '\t' );
         if ( rInfos.eType ==  ww::eCREATEDATE
           || rInfos.eType ==  ww::eSAVEDATE
           || rInfos.eType ==  ww::ePRINTDATE
           || rInfos.eType ==  ww::eDATE
           || rInfos.eType ==  ww::eTIME )
         {
-           sToken.SearchAndReplaceAll( String( "NNNN" ), String( "dddd"  ) );
-           sToken.SearchAndReplaceAll( String( "NN" ), String( "ddd"  ) );
+           sToken = sToken.replaceAll("NNNN", "dddd");
+           sToken = sToken.replaceAll("NN", "ddd");
         }
         // Write the Field command
         DoWriteCmd( sToken );
@@ -963,10 +963,9 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
         // Write the Field latest value
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
 
-        String sExpand( rInfos.pField->ExpandField( true ) );
+        OUString sExpand( rInfos.pField->ExpandField( true ) );
         // newlines embedded in fields are 0x0B in MSO and 0x0A for us
-        sExpand.SearchAndReplaceAll( 0x0A, 0x0B );
-        RunText( sExpand );
+        RunText(sExpand.replace(0x0A, 0x0B));
 
         m_pSerializer->endElementNS( XML_w, XML_r );
     }

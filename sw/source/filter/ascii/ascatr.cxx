@@ -165,9 +165,9 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         }
     }
 
-    String aStr( rNd.GetTxt() );
+    OUString aStr( rNd.GetTxt() );
     if( rWrt.bASCII_ParaAsBlanc )
-        aStr.SearchAndReplaceAll( 0x0A, ' ' );
+        aStr = aStr.replace(0x0A, ' ');
 
     const bool bExportSoftHyphens = RTL_TEXTENCODING_UCS2 == rWrt.GetAsciiOptions().GetCharSet() ||
                                     RTL_TEXTENCODING_UTF8 == rWrt.GetAsciiOptions().GetCharSet();
@@ -180,7 +180,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
         if( !aAttrIter.OutAttr( nStrPos ))
         {
-            String aOutStr( aStr.Copy( nStrPos, nNextAttr - nStrPos ) );
+            String aOutStr( aStr.copy( nStrPos, nNextAttr - nStrPos ) );
             if ( !bExportSoftHyphens )
                 aOutStr = comphelper::string::remove(aOutStr, CHAR_SOFTHYPHEN);
 
