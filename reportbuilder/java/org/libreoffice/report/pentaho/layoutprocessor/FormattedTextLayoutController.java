@@ -84,6 +84,8 @@ public class FormattedTextLayoutController
         {
             final FormattedTextElement element = (FormattedTextElement) getNode();
             final FormulaExpression formulaExpression = element.getValueExpression();
+            if (formulaExpression.getFormulaExpression() == null)
+                return false;
             final Formula formula = formulaExpression.getCompiledFormula();
             final LValue lValue = formula.getRootReference();
             return FormatValueUtility.isReferenceChanged(this, lValue);
