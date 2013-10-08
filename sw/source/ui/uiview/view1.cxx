@@ -75,10 +75,10 @@ void SwView::Activate(sal_Bool bMDIActivate)
     {
         m_pWrtShell->ShGetFcs(sal_False);     // Selections visible
 
-        if( m_sSwViewData.Len() )
+        if( !m_sSwViewData.isEmpty() )
         {
             ReadUserData(m_sSwViewData, false);
-            m_sSwViewData.Erase();
+            m_sSwViewData = "";
         }
 
         AttrChangedNotify(m_pWrtShell);

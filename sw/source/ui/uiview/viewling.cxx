@@ -492,7 +492,7 @@ bool SwView::IsValidSelectionForThesaurus() const
     return !bMultiSel && (!bSelection || m_pWrtShell->IsSelOnePara() );
 }
 
-String SwView::GetThesaurusLookUpText( bool bSelection ) const
+OUString SwView::GetThesaurusLookUpText( bool bSelection ) const
 {
     return bSelection ? m_pWrtShell->GetSelTxt() : m_pWrtShell->GetCurWord();
 }

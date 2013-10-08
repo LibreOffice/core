@@ -790,7 +790,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             m_sNewCrsrPos = ((SwPagePreView*)pExistingSh)->GetNewCrsrPos();
             m_nNewPage = ((SwPagePreView*)pExistingSh)->GetNewPage();
             m_bOldShellWasPagePreView = sal_True;
-            m_bIsPreviewDoubleClick = m_sNewCrsrPos.Len() > 0 || m_nNewPage != USHRT_MAX;
+            m_bIsPreviewDoubleClick = !m_sNewCrsrPos.isEmpty() || m_nNewPage != USHRT_MAX;
         }
         else if( pExistingSh->IsA( TYPE( SwSrcView ) ) )
             bOldShellWasSrcView = sal_True;
@@ -1212,10 +1212,10 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
             }
 
             //apply information from print preview - if available
-            if( m_sNewCrsrPos.Len() )
+            if( !m_sNewCrsrPos.isEmpty() )
             {
-                long nXTmp = m_sNewCrsrPos.GetToken( 0, ';' ).ToInt32(),
-                      nYTmp = m_sNewCrsrPos.GetToken( 1, ';' ).ToInt32();
+                long nXTmp = m_sNewCrsrPos.getToken( 0, ';' ).toInt32(),
+                     nYTmp = m_sNewCrsrPos.getToken( 1, ';' ).toInt32();
                 Point aCrsrPos2( nXTmp, nYTmp );
                 bSelectObj = m_pWrtShell->IsObjSelectable( aCrsrPos2 );
 
@@ -1226,7 +1226,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
                     m_pWrtShell->EnterSelFrmMode( &aCrsrPos2 );
                 }
                 m_pWrtShell->MakeSelVisible();
-                m_sNewCrsrPos.Erase();
+                m_sNewCrsrPos = "";
             }
             else if(USHRT_MAX != m_nNewPage)
             {

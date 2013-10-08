@@ -176,8 +176,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SvxHtmlOptions      m_aHTMLOpt;
     Timer               m_aTimer;         // for delayed ChgLnks during an action
-    String              m_aPageStr;       // status view, current page
-    String              m_sSwViewData,
+    OUString            m_aPageStr;       // status view, current page
+    OUString            m_sSwViewData,
     //and the new cursor position if the user double click in the PagePreView
                         m_sNewCrsrPos;
     // to support keyboard the number of the page to go to can be set too
@@ -229,13 +229,13 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     static const int m_nMASTERENUMCOMMANDS = 6;
 
-    String          m_aCurrShapeEnumCommand[ m_nMASTERENUMCOMMANDS ];
+    OUString            m_aCurrShapeEnumCommand[ m_nMASTERENUMCOMMANDS ];
 
     sal_uInt16          m_nPageCnt;
 
     // current draw mode
     sal_uInt16          m_nDrawSfxId;
-    String          m_sDrawCustom; //some drawing types are marked with strings!
+    OUString            m_sDrawCustom; //some drawing types are marked with strings!
     sal_uInt16          m_nFormSfxId;
     sal_uInt16          m_nLastPasteDestination;
 
@@ -424,7 +424,7 @@ public:
     // (this code has special handling for "in word" character)
     void                    InsertThesaurusSynonym( const OUString &rSynonmText, const OUString &rLookUpText, bool bValidSelection );
     bool                    IsValidSelectionForThesaurus() const;
-    String                  GetThesaurusLookUpText( bool bSelection ) const;
+    OUString                GetThesaurusLookUpText( bool bSelection ) const;
 
     // immediately switch shell -> for GetSelectionObject
     void        StopShellTimer();
@@ -560,7 +560,7 @@ public:
     inline void     FlipDrawSelMode()   { m_bDrawSelMode = !m_bDrawSelMode; }
     void            NoRotate();     // turn off rotate mode
     sal_Bool            EnterDrawTextMode(const Point& aDocPos);
-    void            LeaveDrawCreate()   { m_nDrawSfxId = m_nFormSfxId = USHRT_MAX; m_sDrawCustom.Erase();}
+    void            LeaveDrawCreate()   { m_nDrawSfxId = m_nFormSfxId = USHRT_MAX; m_sDrawCustom = "";}
     sal_Bool            IsDrawMode()        { return (m_nDrawSfxId != USHRT_MAX || m_nFormSfxId != USHRT_MAX); }
     bool            IsFormMode() const;
     bool            IsBezierEditMode();
@@ -584,9 +584,9 @@ public:
     void            InsertCaption(const InsCaptionOpt *pOpt);
 
     // Async call by Core
-    void        UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const String& rPgStr);
+    void        UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr);
 
-    String      GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const String& rPgStr);
+    OUString    GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr);
 
     // hand over Shell
                  SfxShell       *GetCurShell()  { return m_pShell; }
@@ -608,10 +608,10 @@ public:
     sal_Bool IsCrsrAtTop() const                    { return m_bTopCrsr; }
     sal_Bool IsCrsrAtCenter() const                 { return m_bCenterCrsr; }
 
-    bool JumpToSwMark( const String& rMark );
+    bool JumpToSwMark( const OUString& rMark );
 
-    long InsertDoc( sal_uInt16 nSlotId, const String& rFileName,
-                    const String& rFilterName, sal_Int16 nVersion = 0 );
+    long InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName,
+                    const OUString& rFilterName, sal_Int16 nVersion = 0 );
 
     void ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem );
     long InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVersion );
@@ -647,7 +647,7 @@ public:
     void StateFormatPaintbrush(SfxItemSet &);
 
     //public fuer D&D
-    int     InsertGraphic( const String &rPath, const String &rFilter,
+    int     InsertGraphic( const OUString &rPath, const OUString &rFilter,
                             sal_Bool bLink = sal_True, GraphicFilter *pFlt = 0,
                             Graphic* pPreviewGrf = 0,
                             sal_Bool bRule = sal_False );

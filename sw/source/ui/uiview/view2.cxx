@@ -179,27 +179,27 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhi
 }
 
 /* Create string for showing of page in statusbar */
-String SwView::GetPageStr( sal_uInt16 nPg, sal_uInt16 nLogPg,
-                            const String& rDisplay )
+OUString SwView::GetPageStr( sal_uInt16 nPg, sal_uInt16 nLogPg,
+                            const OUString& rDisplay )
 {
-    String aStr( m_aPageStr );
-    if( rDisplay.Len() )
+    OUString aStr( m_aPageStr );
+    if( !rDisplay.isEmpty() )
         aStr += rDisplay;
     else
         aStr += OUString::number(nLogPg);
 
     if( nLogPg && nLogPg != nPg )
     {
-        aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM("   "));
+        aStr += "   ";
         aStr += OUString::number(nPg);
     }
-    aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" / "));
+    aStr += " / ";
     aStr += OUString::number( GetWrtShell().GetPageCnt() );
 
     return aStr;
 }
 
-int SwView::InsertGraphic( const String &rPath, const String &rFilter,
+int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
                                 sal_Bool bLink, GraphicFilter *pFilter,
                                 Graphic* pPreviewGrf, sal_Bool bRule )
 {
@@ -1206,7 +1206,7 @@ void SwView::Execute(SfxRequest &rReq)
 }
 
 /// invalidate page numbering field
-void SwView::UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const String& rPgStr)
+void SwView::UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr)
 {
     String sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
     const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
@@ -1839,10 +1839,10 @@ void SwView::EditLinkDlg()
     }
 }
 
-bool SwView::JumpToSwMark( const String& rMark )
+bool SwView::JumpToSwMark( const OUString& rMark )
 {
     bool bRet = false;
-    if( rMark.Len() )
+    if( !rMark.isEmpty() )
     {
         // place bookmark at top-center
         sal_Bool bSaveCC = IsCrsrAtCenter();
@@ -2022,12 +2022,12 @@ void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
     }
 }
 
-long SwView::InsertDoc( sal_uInt16 nSlotId, const String& rFileName, const String& rFilterName, sal_Int16 nVersion )
+long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUString& rFilterName, sal_Int16 nVersion )
 {
     SfxMedium* pMed = 0;
     SwDocShell* pDocSh = GetDocShell();
 
-    if( rFileName.Len() )
+    if( !rFileName.isEmpty() )
     {
         SfxObjectFactory& rFact = pDocSh->GetFactory();
         const SfxFilter* pFilter = rFact.GetFilterContainer()->GetFilter4FilterName( rFilterName );
