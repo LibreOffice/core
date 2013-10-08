@@ -26,18 +26,12 @@
   <xsl:text>
 #include &lt;doctok/resources.hxx&gt;
 
-#ifndef WW8_OUTPUT_WITH_DEPTH
-#include &lt;doctok/WW8OutputWithDepth.hxx&gt;
-#endif
-
 #ifndef INCLUDED_SPRMIDS_HXX
 #include &lt;doctok/sprmids.hxx&gt;
 #endif
 
 namespace writerfilter {
 namespace doctok {
-
-extern WW8OutputWithDepth output;
 
 using namespace ::std;
 </xsl:text>

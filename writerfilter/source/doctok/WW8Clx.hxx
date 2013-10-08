@@ -22,8 +22,6 @@
 
 #include <doctok/resources.hxx>
 
-#include "WW8OutputWithDepth.hxx"
-
 namespace writerfilter {
 namespace doctok
 {

@@ -39,16 +39,7 @@ WW8PICF::get_DffRecord()
 writerfilter::Reference<Properties>::Pointer_t
 WW8PICF::get_ffdata()
 {
-    writerfilter::Reference<Properties>::Pointer_t
-        pRet(new WW8FFDATA(this, get_cbHeader(), getCount() - get_cbHeader()));
-
-    WW8StructBase::Pointer_t pStruct
-        (new WW8StructBase(this, get_cbHeader(),
-                           getCount() - get_cbHeader()));
-
-    pStruct->dump(output);
-
-    return pRet;
+    return writerfilter::Reference<Properties>::Pointer_t();
 }
 
 writerfilter::Reference<Properties>::Pointer_t

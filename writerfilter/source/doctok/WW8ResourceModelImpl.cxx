@@ -19,7 +19,6 @@
 
 #include "WW8ResourceModelImpl.hxx"
 #include <doctok/resources.hxx>
-#include "WW8OutputWithDepth.hxx"
 #include <resourcemodel/TableManager.hxx>
 #include <rtl/string.hxx>
 #include <resourcemodel/QNameToString.hxx>
@@ -52,63 +51,37 @@ public:
     virtual void endCell(const string & end);
 };
 
-void WW8TableDataHandler::startTable(unsigned int nRows, unsigned int nDepth,
+void WW8TableDataHandler::startTable(unsigned int /*nRows*/, unsigned int /*nDepth*/,
                                      TablePropsPointer_t /*pProps*/)
 {
-    char sBuffer[256];
-
-    string tmpStr = "<tabledata.table rows=\"";
-    snprintf(sBuffer, sizeof(sBuffer), "%u", nRows);
-    tmpStr += sBuffer;
-    tmpStr += "\" depth=\"";
-    snprintf(sBuffer, sizeof(sBuffer), "%u", nDepth);
-    tmpStr += sBuffer;
-    tmpStr += "\">";
-
-    output.addItem(tmpStr);
 }
 
 void WW8TableDataHandler::endTable(unsigned int /*nestedTableLevel*/)
 {
-    output.addItem("</tabledata.table>");
 }
 
 void WW8TableDataHandler::startRow
-(unsigned int nCols, TablePropsPointer_t /*pProps*/)
+(unsigned int /*nCols*/, TablePropsPointer_t /*pProps*/)
 {
-    char sBuffer[256];
-
-    snprintf(sBuffer, sizeof(sBuffer), "%u", nCols);
-    string tmpStr = "<tabledata.row cells=\"";
-    tmpStr += sBuffer;
-    tmpStr += "\">";
-    output.addItem(tmpStr);
 }
 
 void WW8TableDataHandler::endRow()
 {
-    output.addItem("</tabledata.row>");
 }
 
-void WW8TableDataHandler::startCell(const string & start,
+void WW8TableDataHandler::startCell(const string & /*start*/,
                                     TablePropsPointer_t /*pProps*/)
 {
-    output.addItem("<tabledata.cell>");
-    output.addItem(start);
-    output.addItem(", ");
 }
 
-void WW8TableDataHandler::endCell(const string & end)
+void WW8TableDataHandler::endCell(const string & /*end*/)
 {
-    output.addItem(end);
-    output.addItem("</tabledata.cell>");
 }
 
 //-------- WW8TableReference -----------------------------------
 
 void WW8TableReference::resolve(Table & /*rHandler*/)
 {
-    output.addItem("<table/>");
 }
 
 string WW8TableReference::getType() const

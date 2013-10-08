@@ -23,7 +23,6 @@
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <doctok/WW8Document.hxx>
 #include "WW8StructBase.hxx"
-#include "WW8OutputWithDepth.hxx"
 
 #include <map>
 
