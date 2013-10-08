@@ -52,9 +52,9 @@ class SwEndNoteOptionPage : public SfxTabPage
     Edit* m_pContEdit;
     Edit* m_pContFromEdit;
 
-    String aNumDoc;
-    String aNumPage;
-    String aNumChapter;
+    OUString aNumDoc;
+    OUString aNumPage;
+    OUString aNumChapter;
     SwWrtShell *pSh;
     bool    bPosDoc;
     bool    bEndNote;
