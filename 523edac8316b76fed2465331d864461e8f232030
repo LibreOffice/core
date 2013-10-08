@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///8I\u003d",
+        "filename": "vcl/generic/fontmanager/fontmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-10-08T15:07:31Z",
+      "side": 1,
+      "message": "what\u0027s the point of that open check?\n\nshouldn\u0027t CountTTCFonts return 0 for that case already?",
+      "revId": "523edac8316b76fed2465331d864461e8f232030",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
