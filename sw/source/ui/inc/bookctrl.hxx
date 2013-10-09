@@ -39,7 +39,7 @@ public:
     ~SwBookmarkControl();
 
 private:
-    String  sPageNumber;
+    OUString  sPageNumber;
 };
 
 

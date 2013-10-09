@@ -31,7 +31,7 @@
 #include "IMark.hxx"
 #include "globals.hrc"
 
-const String BookmarkCombo::aForbiddenChars = OUString("/\\@:*?\";,.#");
+const OUString BookmarkCombo::aForbiddenChars("/\\@:*?\";,.#");
 
 IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 {
@@ -43,12 +43,12 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
         String sTmp = pBox->GetText();
         sal_uInt16 nLen = sTmp.Len();
         String sMsg;
-        for(sal_uInt16 i = 0; i < BookmarkCombo::aForbiddenChars.Len(); i++)
+        for(sal_uInt16 i = 0; i < BookmarkCombo::aForbiddenChars.getLength(); i++)
         {
             sal_uInt16 nTmpLen = sTmp.Len();
-            sTmp = comphelper::string::remove(sTmp, BookmarkCombo::aForbiddenChars.GetChar(i));
+            sTmp = comphelper::string::remove(sTmp, BookmarkCombo::aForbiddenChars[i]);
             if(sTmp.Len() != nTmpLen)
-                sMsg += BookmarkCombo::aForbiddenChars.GetChar(i);
+                sMsg += BookmarkCombo::aForbiddenChars[i];
         }
         if(sTmp.Len() != nLen)
         {
@@ -232,7 +232,7 @@ long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
          rNEvt.GetKeyEvent()->GetCharCode() )
     {
         OUString sKey( rNEvt.GetKeyEvent()->GetCharCode() );
-        if(STRING_NOTFOUND != aForbiddenChars.Search(sKey))
+        if(-1 != aForbiddenChars.indexOf(sKey))
             nHandled = 1;
     }
     if(!nHandled)

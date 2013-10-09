@@ -61,7 +61,7 @@ protected:
 
     DECL_STATIC_LINK(   SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl* );
 
-    void                InsertURLButton( const String& rURL, const String& rTarget, const String& rTxt );
+    void                InsertURLButton( const OUString& rURL, const OUString& rTarget, const OUString& rTxt );
     void                InsertTable( SfxRequest& _rRequest );
 
 public:

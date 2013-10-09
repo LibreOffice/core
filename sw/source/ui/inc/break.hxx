@@ -42,9 +42,9 @@ class SwBreakDlg: public SvxStandardDialog
     CheckBox*       m_pPageNumBox;
     NumericField*   m_pPageNumEdit;
 
-    String          aTemplate;
-    sal_uInt16          nKind;
-    sal_uInt16          nPgNum;
+    OUString        aTemplate;
+    sal_uInt16      nKind;
+    sal_uInt16      nPgNum;
 
     sal_Bool            bHtmlMode;
 
@@ -62,7 +62,7 @@ public:
     SwBreakDlg( Window *pParent, SwWrtShell &rSh );
     ~SwBreakDlg();
 
-    String  GetTemplateName() { return aTemplate; }
+    OUString    GetTemplateName() { return aTemplate; }
     sal_uInt16  GetKind() { return nKind; }
     sal_uInt16  GetPageNumber() { return nPgNum; }
 };

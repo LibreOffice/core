@@ -42,7 +42,7 @@ public:
     sal_uInt16          GetSelectEntryCount() const;
     sal_uInt16          GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
 
-    static const String aForbiddenChars;
+    static const OUString aForbiddenChars;
 };
 
 class SwInsertBookmarkDlg: public SvxStandardDialog
@@ -51,7 +51,7 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
     OKButton*       m_pOkBtn;
     PushButton*     m_pDeleteBtn;
 
-    String          sRemoveWarning;
+    OUString        sRemoveWarning;
     SwWrtShell      &rSh;
     SfxRequest&     rReq;
 

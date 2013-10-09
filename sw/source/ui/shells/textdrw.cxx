@@ -41,7 +41,7 @@
 
 using namespace ::com::sun::star;
 
-void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, const String& rTxt)
+void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget, const OUString& rTxt)
 {
     SwWrtShell& rSh = GetShell();
 
@@ -93,9 +93,9 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
             aTmp <<= OUString(URIHelper::SmartRel2Abs(aAbs, rURL));
             xPropSet->setPropertyValue( "TargetURL", aTmp );
 
-            if( rTarget.Len() )
+            if( !rTarget.isEmpty() )
             {
-                aTmp <<= OUString(rTarget);
+                aTmp <<= rTarget;
                 xPropSet->setPropertyValue( "TargetFrame", aTmp );
             }
 
