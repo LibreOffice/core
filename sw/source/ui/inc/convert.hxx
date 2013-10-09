@@ -51,7 +51,7 @@ class SwConvertTableDlg: public SfxModalDialog
     CheckBox*       mpBorderCB;
     PushButton*     mpAutoFmtBtn;
 
-    String          sConvertTextTable;
+    OUString        sConvertTextTable;
     SwTableAutoFmt* pTAutoFmt;
     SwWrtShell*     pShell;
 

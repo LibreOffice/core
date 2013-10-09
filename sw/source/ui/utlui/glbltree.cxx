@@ -206,7 +206,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
 
-        String sFileName;
+        OUString sFileName;
         const SwGlblDocContent* pCnt = pDropEntry ?
                     (const SwGlblDocContent*)pDropEntry->GetUserData() :
                             0;
@@ -243,8 +243,8 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
             }
             delete pTempContents;
         }
-        else if( 0 != (sFileName =
-                        SwNavigationPI::CreateDropFileName( aData )).Len())
+        else if( !(sFileName =
+                        SwNavigationPI::CreateDropFileName( aData )).isEmpty())
         {
             INetURLObject aTemp(sFileName);
             GraphicDescriptor aDesc(aTemp);
@@ -704,7 +704,7 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
     }
 }
 
-void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const String* pFileName )
+void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const OUString* pFileName )
 {
     Sequence< OUString > aFileNames;
     if ( !pFileName )
@@ -716,7 +716,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const String* pF
                 OUString("swriter"), true );
         pDocInserter->StartExecuteModal( LINK( this, SwGlobalTree, DialogClosedHdl ) );
     }
-    else if ( pFileName->Len() )
+    else if ( !pFileName->isEmpty() )
     {
         aFileNames.realloc(1);
         INetURLObject aFileName;
@@ -929,10 +929,10 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                                 SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON );
                 SfxObjectShell& rObj = *pFrame->GetObjectShell();
                 const SfxMedium* pMedium = rObj.GetMedium();
-                String sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI));
+                OUString sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI));
                 // Insert the area with the Doc-Name
                 // Bring the own Doc in the foreground
-                if(aFrmListener.IsValid() && sNewFile.Len())
+                if(aFrmListener.IsValid() && !sNewFile.isEmpty())
                 {
                     pGlobFrm->ToTop();
                     // Due to the update the entries are invalid

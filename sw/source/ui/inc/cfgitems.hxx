@@ -136,7 +136,7 @@ public:
     virtual int          operator==( const SfxPoolItem& ) const;
 
     const OUString &GetFax() const              { return sFaxName; }
-    void          SetFax( const String& rFax) { sFaxName = rFax; }
+    void          SetFax( const OUString& rFax) { sFaxName = rFax; }
 
 
     sal_Bool   IsPrintProspect() const      { return bPrintProspect; }

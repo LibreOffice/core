@@ -85,8 +85,8 @@ class SwCaptionDialog : public SvxStandardDialog
     SwFldMgr     *pMgr;      // pointer to save the include
     SelectionType eType;
 
-    String       sCharacterStyle;
-    String       sObjectName;
+    OUString     sCharacterStyle;
+    OUString     sObjectName;
     bool         bCopyAttributes;
     bool        bOrderNumberingFirst; //#i61007# order of captions
 
@@ -104,7 +104,7 @@ class SwCaptionDialog : public SvxStandardDialog
     void    CheckButtonWidth();
     void    ApplyCaptionOrder(); //#i61007# order of captions
 
-    static String our_aSepTextSave; // Save caption separator text
+    static OUString our_aSepTextSave; // Save caption separator text
 public:
      SwCaptionDialog( Window *pParent, SwView &rV );
     ~SwCaptionDialog();

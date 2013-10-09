@@ -80,7 +80,7 @@ public:
     String  GetCharacterStyle() const;
 };
 
-String SwCaptionDialog::our_aSepTextSave = OUString(": "); // Caption separator text
+OUString SwCaptionDialog::our_aSepTextSave(": "); // Caption separator text
 
 SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     SvxStandardDialog( pParent, "InsertCaptionDialog", "modules/swriter/ui/insertcaption.ui" ),

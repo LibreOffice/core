@@ -662,11 +662,11 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
             aCategoryBox.InsertSwEntry(SwBoxEntry(m_sDrawing));
         }
 
-        if(pOpt->GetCategory().Len())
+        if(!pOpt->GetCategory().isEmpty())
             aCategoryBox.SetText(pOpt->GetCategory());
         else
             aCategoryBox.SetText(m_sNone);
-        if (pOpt->GetCategory().Len() &&
+        if (!pOpt->GetCategory().isEmpty() &&
             aCategoryBox.GetEntryPos(OUString(pOpt->GetCategory())) == COMBOBOX_ENTRY_NOTFOUND)
             aCategoryBox.InsertEntry(pOpt->GetCategory());
         if (aCategoryBox.GetText().isEmpty())
@@ -716,7 +716,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
         aLbLevel.SelectEntryPos( nLevelPos );
         aEdDelim.SetText(pOpt->GetSeparator());
         aNumberingSeparatorED.SetText( pOpt->GetNumSeparator() );
-        if(pOpt->GetCharacterStyle().Len())
+        if(!pOpt->GetCharacterStyle().isEmpty())
             aCharStyleLB.SelectEntry( pOpt->GetCharacterStyle() );
         else
             aCharStyleLB.SelectEntryPos( 0 );

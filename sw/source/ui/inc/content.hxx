@@ -58,7 +58,7 @@ class SwOutlineContent : public SwContent
     bool    bIsMoveable;
     public:
         SwOutlineContent(   const SwContentType* pCnt,
-                            const String& rName,
+                            const OUString& rName,
                             sal_uInt16 nArrPos,
                             sal_uInt8 nLevel,
                             bool bMove,
@@ -79,7 +79,7 @@ class SwRegionContent : public SwContent
 
     public:
         SwRegionContent(    const SwContentType* pCnt,
-                            const String& rName,
+                            const OUString& rName,
                             sal_uInt8 nLevel,
                             long nYPos) :
             SwContent(pCnt, rName, nYPos),
@@ -90,20 +90,20 @@ class SwRegionContent : public SwContent
 
 class SwURLFieldContent : public SwContent
 {
-    String sURL;
+    OUString sURL;
     const SwTxtINetFmt* pINetAttr;
 
 public:
     SwURLFieldContent(  const SwContentType* pCnt,
-                            const String& rName,
-                            const String& rURL,
+                            const OUString& rName,
+                            const OUString& rURL,
                             const SwTxtINetFmt* pAttr,
                             long nYPos )
         : SwContent( pCnt, rName, nYPos ), sURL( rURL ), pINetAttr( pAttr )
     {}
 
     virtual sal_Bool    IsProtect() const;
-    const String&   GetURL()                { return sURL; }
+    const OUString&     GetURL()            { return sURL; }
     const SwTxtINetFmt* GetINetAttr()       { return pINetAttr; }
 };
 
@@ -115,13 +115,13 @@ class SwPostItContent : public SwContent
     bool                mbPostIt;
 public:
     SwPostItContent( const SwContentType* pCnt,
-                            const String& rName,
+                            const OUString& rName,
                             const SwFmtFld* pField,
                             long nYPos )
         : SwContent( pCnt, rName, nYPos ), pFld( pField ),mbPostIt(true)
     {}
     SwPostItContent( const SwContentType* pCnt,
-                            const String& rName,
+                            const OUString& rName,
                             SwRedline* pRed,
                             long nYPos )
         : SwContent( pCnt, rName, nYPos ), pRedline( pRed ),mbPostIt(false)
@@ -137,14 +137,14 @@ public:
 
 class SwGraphicContent : public SwContent
 {
-    String      sLink;
+    OUString      sLink;
 public:
-    SwGraphicContent(const SwContentType* pCnt, const String& rName, const String& rLink, long nYPos)
+    SwGraphicContent(const SwContentType* pCnt, const OUString& rName, const OUString& rLink, long nYPos)
         : SwContent( pCnt, rName, nYPos ), sLink( rLink )
         {}
     virtual ~SwGraphicContent();
 
-    const String&   GetLink() const {return sLink;}
+    const OUString&   GetLink() const {return sLink;}
 };
 
 //----------------------------------------------------------------------------
@@ -152,7 +152,7 @@ class SwTOXBaseContent : public SwContent
 {
     const SwTOXBase* pBase;
 public:
-    SwTOXBaseContent(const SwContentType* pCnt, const String& rName, long nYPos, const SwTOXBase& rBase)
+    SwTOXBaseContent(const SwContentType* pCnt, const OUString& rName, long nYPos, const SwTOXBase& rBase)
         : SwContent( pCnt, rName, nYPos ), pBase(&rBase)
         {}
     virtual ~SwTOXBaseContent();
@@ -171,12 +171,12 @@ class SwContentType : public SwTypeNumber
 {
     SwWrtShell*         pWrtShell;
     SwContentArr*       pMember;            // array for content
-    String              sContentTypeName;   // name of content type
-    String              sSingleContentTypeName; // name of content type, singular
-    String              sTypeToken;         // attachment for URL
-    sal_uInt16              nMemberCount;       // content count
-    sal_uInt16              nContentType;       // content type's Id
-    sal_uInt8               nOutlineLevel;
+    OUString            sContentTypeName;   // name of content type
+    OUString            sSingleContentTypeName; // name of content type, singular
+    OUString            sTypeToken;         // attachment for URL
+    sal_uInt16          nMemberCount;       // content count
+    sal_uInt16          nContentType;       // content type's Id
+    sal_uInt8           nOutlineLevel;
     bool                bDataValid :    1;  //
     bool                bEdit:          1;  // can this type be edited?
     bool                bDelete:        1;  // can this type be deleted?
@@ -192,9 +192,9 @@ public:
                                 {return nMemberCount;};
         sal_uInt16              GetType() const {return nContentType;}
         const SwContent*    GetMember(sal_uInt16 nIndex);
-        const String&       GetName() {return sContentTypeName;}
-        const String&       GetSingleName() const {return sSingleContentTypeName;}
-        const String&       GetTypeToken() const{return sTypeToken;}
+        const OUString&     GetName() {return sContentTypeName;}
+        const OUString&     GetSingleName() const {return sSingleContentTypeName;}
+        const OUString&     GetTypeToken() const{return sTypeToken;}
 
         void                SetOutlineLevel(sal_uInt8 nNew)
                             {

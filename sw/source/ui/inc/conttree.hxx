@@ -49,21 +49,21 @@ class SfxObjectShell;
 class SwContentTree : public SvTreeListBox
 {
     ImageList           aEntryImages;
-    String              sSpace;
+    OUString            sSpace;
     AutoTimer           aUpdTimer;
 
     SwContentType*      aActiveContentArr[CONTENT_TYPE_MAX];
     SwContentType*      aHiddenContentArr[CONTENT_TYPE_MAX];
-    String              aContextStrings[CONTEXT_COUNT + 1];
-    String              sRemoveIdx;
-    String              sUpdateIdx;
-    String              sUnprotTbl;
-    String              sRename;
-    String              sReadonlyIdx;
-    String              sInvisible;
-    String              sPostItShow;
-    String              sPostItHide;
-    String              sPostItDelete;
+    OUString            aContextStrings[CONTEXT_COUNT + 1];
+    OUString            sRemoveIdx;
+    OUString            sUpdateIdx;
+    OUString            sUnprotTbl;
+    OUString            sRename;
+    OUString            sReadonlyIdx;
+    OUString            sInvisible;
+    OUString            sPostItShow;
+    OUString            sPostItHide;
+    OUString            sPostItDelete;
 
     SwWrtShell*         pHiddenShell;   // dropped Doc
     SwWrtShell*         pActiveShell;   // the active or a const. open view
@@ -207,7 +207,7 @@ class SwLBoxString : public SvLBoxString
 public:
 
     SwLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr)
+        const OUString& rStr ) : SvLBoxString(pEntry,nFlags,rStr)
     {
     }
 
@@ -223,7 +223,7 @@ class SwGlobalTree : public SvTreeListBox
 {
 private:
     AutoTimer           aUpdateTimer;
-    String              aContextStrings[GLOBAL_CONTEXT_COUNT];
+    OUString            aContextStrings[GLOBAL_CONTEXT_COUNT];
 
     ImageList           aEntryImages;
 
@@ -313,7 +313,7 @@ public:
 
     void                TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox);
     void                InsertRegion( const SwGlblDocContent* pCont,
-                                        const String* pFileName = 0 );
+                                        const OUString* pFileName = 0 );
     void                EditContent(const SwGlblDocContent* pCont );
 
     void                ShowTree();

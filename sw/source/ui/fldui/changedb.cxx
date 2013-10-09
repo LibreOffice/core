@@ -134,11 +134,11 @@ void SwChangeDBDlg::FillDBPopup()
 
 }
 
-SvTreeListEntry* SwChangeDBDlg::Insert(const String& rDBName)
+SvTreeListEntry* SwChangeDBDlg::Insert(const OUString& rDBName)
 {
-    String sDBName(rDBName.GetToken(0, DB_DELIM));
-    String sTableName(rDBName.GetToken(1, DB_DELIM));
-    sal_IntPtr nCommandType = rDBName.GetToken(2, DB_DELIM).ToInt32();
+    String sDBName(rDBName.getToken(0, DB_DELIM));
+    String sTableName(rDBName.getToken(1, DB_DELIM));
+    sal_IntPtr nCommandType = rDBName.getToken(2, DB_DELIM).toInt32();
     SvTreeListEntry* pParent;
     SvTreeListEntry* pChild;
 

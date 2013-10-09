@@ -30,14 +30,14 @@ private:
     sal_Bool            bUseCaption;
     SwCapObjType    eObjType;
     SvGlobalName    aOleId;
-    String          sCategory;
-    sal_uInt16          nNumType;
-    OUString sNumberSeparator;
-    String          sCaption;
-    sal_uInt16          nPos;
-    sal_uInt16          nLevel;
-    String          sSeparator;
-    String          sCharacterStyle;
+    OUString        sCategory;
+    sal_uInt16      nNumType;
+    OUString        sNumberSeparator;
+    OUString        sCaption;
+    sal_uInt16      nPos;
+    sal_uInt16      nLevel;
+    OUString        sSeparator;
+    OUString        sCharacterStyle;
 
     bool         bIgnoreSeqOpts;    // is not being saved
     sal_Bool         bCopyAttributes;   //          -""-
@@ -56,8 +56,8 @@ public:
     inline const SvGlobalName&  GetOleId() const                { return aOleId; }
     inline void             SetOleId(const SvGlobalName &rId)   { aOleId = rId; }
 
-    inline const String&    GetCategory() const             { return sCategory; }
-    inline void             SetCategory(const String& rCat) { sCategory = rCat; }
+    inline const OUString&  GetCategory() const             { return sCategory; }
+    inline void             SetCategory(const OUString& rCat) { sCategory = rCat; }
 
     inline sal_uInt16           GetNumType() const              { return nNumType; }
     inline void             SetNumType(const sal_uInt16 nNT)    { nNumType = nNT; }
@@ -65,8 +65,8 @@ public:
     const OUString&  GetNumSeparator() const { return sNumberSeparator; }
     void                    SetNumSeparator(const OUString& rSet) {sNumberSeparator = rSet;}
 
-    inline const String&    GetCaption() const              { return sCaption; }
-    inline void             SetCaption(const String& rCap)  { sCaption = rCap; }
+    inline const OUString&  GetCaption() const              { return sCaption; }
+    inline void             SetCaption(const OUString& rCap)  { sCaption = rCap; }
 
     inline sal_uInt16           GetPos() const                  { return nPos; }
     inline void             SetPos(const sal_uInt16 nP)         { nPos = nP; }
@@ -74,11 +74,11 @@ public:
     inline sal_uInt16           GetLevel() const                { return nLevel; }
     inline void             SetLevel(const sal_uInt16 nLvl)     { nLevel = nLvl; }
 
-    inline const String&    GetSeparator() const                { return sSeparator; }
-    inline void             SetSeparator(const String& rSep)    { sSeparator = rSep; }
+    inline const OUString&  GetSeparator() const                { return sSeparator; }
+    inline void             SetSeparator(const OUString& rSep)    { sSeparator = rSep; }
 
-    const String&           GetCharacterStyle() const { return sCharacterStyle; }
-    void                    SetCharacterStyle(const String& rStyle)
+    const OUString&         GetCharacterStyle() const { return sCharacterStyle; }
+    void                    SetCharacterStyle(const OUString& rStyle)
                                     { sCharacterStyle = rStyle; }
 
     inline bool&            IgnoreSeqOpts()                 { return bIgnoreSeqOpts; }
