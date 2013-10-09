@@ -3056,7 +3056,7 @@ sal_Bool Svx3DWin::LBSelectColor( ColorLB* pLb, const Color& rColor )
         OUString aStr(SVX_RESSTR(RID_SVXFLOAT3D_FIX_R));
 
         aStr += OUString::number((sal_Int32)rColor.GetRed());
-        aStr += " '";
+        aStr += " ";
         aStr += SVX_RESSTR(RID_SVXFLOAT3D_FIX_G);
         aStr += OUString::number((sal_Int32)rColor.GetGreen());
         aStr += " ";
