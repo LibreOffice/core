@@ -162,6 +162,15 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         apply_table_style( pObj, GetDoc(), sTableStyle );
         SdrPageView* pPV = mpView->GetSdrPageView();
 
+        // #i123359# if an object is to be replaced/manipulated it may be that it is in text edit mode,
+        // so to be on the safe side call SdrEndTextEdit here
+        SdrTextObj* pCheckForTextEdit = dynamic_cast< SdrTextObj* >(pPickObj);
+
+        if(pCheckForTextEdit && pCheckForTextEdit->IsInEditMode())
+        {
+            mpView->SdrEndTextEdit();
+        }
+
         // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
         if( pPickObj )
         {
