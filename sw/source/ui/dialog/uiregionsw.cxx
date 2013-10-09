@@ -82,11 +82,10 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
                     (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                     && TOX_HEADER_SECTION != eTmpType )
             {
-                    String* pString =
-                        new String(pFmt->GetSection()->GetSectionName());
+                    OUString sString(pFmt->GetSection()->GetSectionName());
                     if(pAvailNames)
-                        pAvailNames->InsertEntry(*pString);
-                    rSubRegions.InsertEntry(*pString);
+                        pAvailNames->InsertEntry(sString);
+                    rSubRegions.InsertEntry(sString);
                     lcl_FillList( rSh, rSubRegions, pAvailNames, pFmt );
             }
         }
@@ -103,11 +102,10 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
                     (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                     && TOX_HEADER_SECTION != eTmpType )
                 {
-                    String* pString =
-                        new String(pFmt->GetSection()->GetSectionName());
+                    OUString sString(pFmt->GetSection()->GetSectionName());
                     if(pAvailNames)
-                        pAvailNames->InsertEntry(*pString);
-                    rSubRegions.InsertEntry(*pString);
+                        pAvailNames->InsertEntry(sString);
+                    rSubRegions.InsertEntry(sString);
                     lcl_FillList( rSh, rSubRegions, pAvailNames, pFmt );
                 }
         }
