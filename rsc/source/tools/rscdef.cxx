@@ -69,6 +69,7 @@ RscId::RscId( RscDefine * pDef )
 
     aExpType.aExp.pDef = pDef;
     aExpType.cType = RSCEXP_DEF;
+    aExpType.cUnused = 0;
     Create( aExpType );
 }
 
