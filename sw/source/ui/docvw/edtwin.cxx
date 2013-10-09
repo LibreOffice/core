@@ -2516,12 +2516,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 // replace the word or abbreviation with the auto text
                 rSh.StartUndo( UNDO_START );
 
-                String sFnd( aTmpQHD.m_aHelpStrings[ aTmpQHD.nCurArrPos ] );
+                OUString sFnd( aTmpQHD.m_aHelpStrings[ aTmpQHD.nCurArrPos ] );
                 if( aTmpQHD.m_bIsAutoText )
                 {
                     SwGlossaryList* pList = ::GetGlossaryList();
-                    String sShrtNm;
-                    String sGroup;
+                    OUString sShrtNm;
+                    OUString sGroup;
                     if(pList->GetShortName( sFnd, sShrtNm, sGroup))
                     {
                         rSh.SttSelect();
@@ -2534,7 +2534,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 }
                 else
                 {
-                    rSh.Insert( sFnd.Erase( 0, aTmpQHD.nLen ));
+                    sFnd = sFnd.copy( aTmpQHD.nLen );
+                    rSh.Insert( sFnd );
                     m_pQuickHlpData->m_bAppendSpace = !pACorr ||
                             pACorr->GetSwFlags().bAutoCmpltAppendBlanc;
                 }

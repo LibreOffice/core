@@ -103,8 +103,8 @@ SwGlossaryList::~SwGlossaryList()
 // will be filled. Otherwise also rGroupName will be set and
 // on demand asked for the right group.
 
-sal_Bool SwGlossaryList::GetShortName(const String& rLongName,
-                                String& rShortName, String& rGroupName )
+sal_Bool SwGlossaryList::GetShortName(const OUString& rLongName,
+                                OUString& rShortName, OUString& rGroupName )
 {
     if(!bFilled)
         Update();
@@ -116,7 +116,7 @@ sal_Bool SwGlossaryList::GetShortName(const String& rLongName,
     for(sal_uInt16 i = 0; i < nCount; i++ )
     {
         AutoTextGroup* pGroup = aGroupArr[i];
-        if(rGroupName.Len() && rGroupName != pGroup->sName)
+        if(!rGroupName.isEmpty() && rGroupName != pGroup->sName)
             continue;
 
         for(sal_uInt16 j = 0; j < pGroup->nCount; j++)

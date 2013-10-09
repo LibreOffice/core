@@ -170,7 +170,7 @@ void SwGlossaryGroupDlg::Apply()
         if( sNewGroup != aActGroup )
         {
             pGlosHdl->NewGroup(sNewGroup, sNewTitle);
-            if(!sCreatedGroup.Len())
+            if(sCreatedGroup.isEmpty())
                 sCreatedGroup = sNewGroup;
         }
     }
@@ -437,7 +437,7 @@ void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
             GlosBibUserData* pData = (GlosBibUserData*)pEntry->GetUserData();
             sMsg = pData->sPath;
             sMsg += INET_PATH_TOKEN;
-            sMsg += pData->sGroupName.GetToken(0, GLOS_DELIM);
+            sMsg += pData->sGroupName.getToken(0, GLOS_DELIM);
             sMsg += SwGlossaries::GetExtension();
 
             Help::ShowQuickHelp( this, aItemRect, sMsg,

@@ -52,9 +52,9 @@ public:
 
 struct GlosBibUserData
 {
-    String sPath;
-    String sGroupName;
-    String sGroupTitle;
+    OUString sPath;
+    OUString sGroupName;
+    OUString sGroupTitle;
 };
 
 class SwGlossaryGroupTLB : public SvTabListBox
@@ -90,7 +90,7 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
 
     SwGlossaryHdl   *pGlosHdl;
 
-    String          sCreatedGroup;
+    OUString        sCreatedGroup;
 
     sal_Bool            IsDeleteAllowed(const OUString &rGroup);
 
@@ -108,7 +108,7 @@ public:
                         SwGlossaryHdl *pGlosHdl);
     ~SwGlossaryGroupDlg();
 
-    const String&       GetCreatedGroupName() const {return sCreatedGroup;}
+    const OUString&     GetCreatedGroupName() const {return sCreatedGroup;}
 };
 
 #endif

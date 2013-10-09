@@ -22,9 +22,9 @@
 
 class SwGlosDocShell : public SwDocShell
 {
-    String          aLongName;
-    String          aShortName;
-    String          aGroupName;
+    OUString          aLongName;
+    OUString          aShortName;
+    OUString          aGroupName;
 
     using SotObject::GetInterface;
 
@@ -41,21 +41,21 @@ public:
 
     void            Execute( SfxRequest& );
     void            GetState( SfxItemSet& );
-    void            SetLongName( const String& rLongName )
+    void            SetLongName( const OUString& rLongName )
                         { aLongName = rLongName; }
-    void            SetShortName( const String& rShortName )
+    void            SetShortName( const OUString& rShortName )
                         { aShortName = rShortName; }
-    void            SetGroupName( const String& rGroupName )
+    void            SetGroupName( const OUString& rGroupName )
                         { aGroupName = rGroupName; }
-    const String&   GetShortName(){return aShortName;}
+    const OUString& GetShortName(){return aShortName;}
 };
 
 
 class SwWebGlosDocShell : public SwWebDocShell
 {
-    String          aLongName;
-    String          aShortName;
-    String          aGroupName;
+    OUString          aLongName;
+    OUString          aShortName;
+    OUString          aGroupName;
 
     using SotObject::GetInterface;
 
@@ -72,13 +72,13 @@ public:
 
     void            Execute( SfxRequest& );
     void            GetState( SfxItemSet& );
-    void            SetLongName( const String& rLongName )
+    void            SetLongName( const OUString& rLongName )
                         { aLongName = rLongName; }
-    void            SetShortName( const String& rShortName )
+    void            SetShortName( const OUString& rShortName )
                         { aShortName = rShortName; }
-    void            SetGroupName( const String& rGroupName )
+    void            SetGroupName( const OUString& rGroupName )
                         { aGroupName = rGroupName; }
-    const String&   GetShortName(){return aShortName;}
+    const OUString& GetShortName(){return aShortName;}
 };
 
 #endif
