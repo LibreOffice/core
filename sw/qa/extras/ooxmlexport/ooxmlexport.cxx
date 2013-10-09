@@ -1403,9 +1403,14 @@ void Test::testStyleInheritance()
     // w:ind was copied from the parent (Normal) style without a good reason.
     assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:pPr/w:ind", 0);
 
+    // We output exactly 2 properties in rPrDefault, nothing else was
+    // introduced as an additional default
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/*", 2);
     // Check that we output real content of rPrDefault
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "ascii", "Times New Roman");
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:lang", "bidi", "ar-SA");
+    // pPrDefault is empty
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/*", 0);
 
     // Check latent styles
     uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, "InteropGrabBag");
