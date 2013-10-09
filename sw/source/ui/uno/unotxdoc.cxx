@@ -2666,6 +2666,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if(!IsValid())
         throw RuntimeException();
 
+    CleanUpRenderingData();
+
     const bool bIsPDFExport = !lcl_SeqHasProperty( rxOptions, "IsPrinter" );
     bool bIsSwSrcView = false;
     SfxViewShell *pView = GetRenderView( bIsSwSrcView, rxOptions, bIsPDFExport );
@@ -2675,20 +2677,6 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if ( pDoc == 0 || pView == 0 )
     {
         return 0;
-    }
-
-    // clean up <RenderData> and <PrintUIOptions>
-    {
-        if ( m_pRenderData )
-        {
-            delete m_pRenderData;
-            m_pRenderData = 0;
-        }
-        if ( m_pPrintUIOptions )
-        {
-            delete m_pPrintUIOptions;
-            m_pPrintUIOptions = 0;
-        }
     }
 
     if ( !bIsSwSrcView )
@@ -3067,8 +3055,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
     SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, sal_False );
 
     // look for the view shell with the same controller in use,
-    // otherwise look for a suitable view, preferably a SwView,
-    // if that one is not found use a SwPagePreView if found.
+    // otherwise look for a suitable view
     while (pFrame)
     {
         pView = pFrame->GetViewShell();
@@ -3081,7 +3068,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
             if (pView && pView->GetController() == xController)
                 break;
         }
-        else if (pSwView || pSwSrcView)
+        else if ( pSwView || pSwSrcView || pSwPagePreView )
             break;
         pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell,  sal_False );
     }
