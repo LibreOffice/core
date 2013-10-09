@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <uitool.hxx>
+#include <comphelper/string.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <vcl/msgbox.hxx>
@@ -159,7 +160,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         if(aFile.Len() || aSub.Len())
         {
             OUString sLinkFileName = OUString(sfx2::cTokenSeparator);
-            sLinkFileName += sfx2::cTokenSeparator;
+            sLinkFileName += OUString(sfx2::cTokenSeparator);
             sLinkFileName = comphelper::string::setToken(sLinkFileName, 0, sfx2::cTokenSeparator, aFile);
 
             if(SFX_ITEM_SET ==
