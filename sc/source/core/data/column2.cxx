@@ -596,6 +596,8 @@ public:
         ScRefCellValue aCell(const_cast<ScFormulaCell*>(p));
         checkLength(aCell);
     }
+
+    const OUString& getMaxLenStr() const { return maMaxLenStr; }
 };
 
 }
@@ -652,6 +654,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
             sc::SingleColumnSpanSet::SpansType::const_iterator it = aMarkedSpans.begin(), itEnd = aMarkedSpans.end();
             for (; it != itEnd; ++it)
                 itPos = sc::ParseAllNonEmpty(itPos, maCells, it->mnRow1, it->mnRow2, aFunc);
+
+            aLongStr = aFunc.getMaxLenStr();
         }
 
         if (!aLongStr.isEmpty())
