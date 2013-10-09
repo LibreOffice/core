@@ -42,9 +42,6 @@ using namespace com::sun::star;
 namespace slideshow {
 namespace internal {
 
-const sal_Int32 LEFT_BORDER_SPACE  = 10;
-const sal_Int32 LOWER_BORDER_SPACE = 10;
-
 PointerSymbolSharedPtr PointerSymbol::create( const uno::Reference<rendering::XBitmap>& xBitmap,
                                               ScreenUpdater&                            rScreenUpdater,
                                               EventMultiplexer&                         rEventMultiplexer,
