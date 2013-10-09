@@ -214,6 +214,9 @@ public:
     /// Write Doc Defaults
     void DocDefaults( );
 
+    /// Write latent styles.
+    void LatentStyles();
+
     /** Similar to OutputItem(), but write something only if it is not the default.
 
         This is to output the docDefaults, and we should write something out

@@ -102,6 +102,7 @@
 #include <txtftn.hxx>
 #include <txtinet.hxx>
 #include <fmtautofmt.hxx>
+#include <docsh.hxx>
 
 #include <osl/file.hxx>
 #include <rtl/tencinfo.h>
@@ -2357,6 +2358,99 @@ void DocxAttributeOutput::StartStyles()
             FSEND );
 
     DocDefaults();
+    LatentStyles();
+}
+
+namespace {
+struct StringTokenMap
+{
+    const char* pToken;
+    sal_Int32 nToken;
+};
+
+StringTokenMap aDefaultTokens[] {
+    {"defQFormat", XML_defQFormat},
+    {"defUnhideWhenUsed", XML_defUnhideWhenUsed},
+    {"defSemiHidden", XML_defSemiHidden},
+    {"count", XML_count},
+    {"defUIPriority", XML_defUIPriority},
+    {"defLockedState", XML_defLockedState},
+    {0, 0}
+};
+
+StringTokenMap aExceptionTokens[] {
+    {"name", XML_name},
+    {"locked", XML_locked},
+    {"uiPriority", XML_uiPriority},
+    {"semiHidden", XML_semiHidden},
+    {"unhideWhenUsed", XML_unhideWhenUsed},
+    {"qFormat", XML_qFormat},
+    {0, 0}
+};
+
+sal_Int32 lcl_getToken(StringTokenMap* pMap, OUString aName)
+{
+    OString sName = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
+    while (pMap->pToken)
+    {
+        if (sName == pMap->pToken)
+            return pMap->nToken;
+        ++pMap;
+    }
+    return 0;
+}
+}
+
+void DocxAttributeOutput::LatentStyles()
+{
+    // Do we have latent styles available?
+    uno::Reference<beans::XPropertySet> xPropertySet(m_rExport.pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aInteropGrabBag;
+    xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
+    uno::Sequence<beans::PropertyValue> aLatentStyles;
+    for (sal_Int32 i = 0; i < aInteropGrabBag.getLength(); ++i)
+    {
+        if (aInteropGrabBag[i].Name == "latentStyles")
+        {
+            aInteropGrabBag[i].Value >>= aLatentStyles;
+            break;
+        }
+    }
+    if (!aLatentStyles.getLength())
+        return;
+
+    // Extract default attributes first.
+    sax_fastparser::FastAttributeList* pAttributeList = m_pSerializer->createAttrList();
+    uno::Sequence<beans::PropertyValue> aLsdExceptions;
+    for (sal_Int32 i = 0; i < aLatentStyles.getLength(); ++i)
+    {
+        if (sal_Int32 nToken = lcl_getToken(aDefaultTokens, aLatentStyles[i].Name))
+            pAttributeList->add(FSNS(XML_w, nToken), OUStringToOString(aLatentStyles[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+        else if (aLatentStyles[i].Name == "lsdExceptions")
+            aLatentStyles[i].Value >>= aLsdExceptions;
+    }
+
+    XFastAttributeListRef xAttributeList(pAttributeList);
+    m_pSerializer->startElementNS(XML_w, XML_latentStyles, xAttributeList);
+    pAttributeList = 0;
+
+    // Then handle the exceptions.
+    for (sal_Int32 i = 0; i < aLsdExceptions.getLength(); ++i)
+    {
+        pAttributeList = m_pSerializer->createAttrList();
+
+        uno::Sequence<beans::PropertyValue> aAttributes;
+        aLsdExceptions[i].Value >>= aAttributes;
+        for (sal_Int32 j = 0; j < aAttributes.getLength(); ++j)
+            if (sal_Int32 nToken = lcl_getToken(aExceptionTokens, aAttributes[j].Name))
+                pAttributeList->add(FSNS(XML_w, nToken), OUStringToOString(aAttributes[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+
+        xAttributeList = pAttributeList;
+        m_pSerializer->singleElementNS(XML_w, XML_lsdException, xAttributeList);
+        pAttributeList = 0;
+    }
+
+    m_pSerializer->endElementNS(XML_w, XML_latentStyles);
 }
 
 void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
