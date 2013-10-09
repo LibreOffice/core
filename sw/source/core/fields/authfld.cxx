@@ -668,7 +668,7 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
 
     OUStringBuffer sBuf;
     comphelper::string::padToLength(sBuf, AUTH_FIELD_ISBN, TOX_STYLE_DELIMITER);
-    String sToSet(sBuf.makeStringAndClear());
+    OUString sToSet(sBuf.makeStringAndClear());
     const PropertyValue* pParam = aParam.getConstArray();
     for(sal_Int32 i = 0; i < aParam.getLength(); i++)
     {
@@ -684,7 +684,7 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
             }
             else
                 pParam[i].Value >>= sContent;
-            sToSet.SetToken(nFound, TOX_STYLE_DELIMITER, sContent);
+            sToSet = comphelper::string::setToken(sToSet, nFound, TOX_STYLE_DELIMITER, sContent);
         }
     }
 

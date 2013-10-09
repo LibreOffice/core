@@ -142,7 +142,7 @@ static const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rIte
     String sDBName;
     if( (!rItem.bSynchron || !(nCol|nRow)) && (sDBName = InsertLabEnvText( rSh, rFldMgr, rItem.aWriting )).Len() && !bLast )
     {
-        sDBName.SetToken( 3, DB_DELIM, OUString("True"));
+        sDBName = comphelper::string::setToken(sDBName, 3, DB_DELIM, "True");
         SwInsertFld_Data aData(TYP_DBNEXTSETFLD, 0, sDBName, aEmptyStr, 0, &rSh );
         rFldMgr.InsertFld( aData );
     }

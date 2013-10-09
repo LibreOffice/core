@@ -896,17 +896,17 @@ IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
     if(bEnable)
     {
         //add the correct extension
-        String sAttach(m_aAttachmentED.GetText());
+        OUString sAttach(m_aAttachmentED.GetText());
         //do nothing if the user has removed the name - the warning will come early enough
-        if(sAttach.Len())
+        if (!sAttach.isEmpty())
         {
-            xub_StrLen nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
+            sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
             if( 2 > nTokenCount)
             {
                 sAttach += '.';
                 ++nTokenCount;
             }
-            sAttach.SetToken( nTokenCount - 1, '.', lcl_GetExtensionForDocType( nDocType ));
+            sAttach = comphelper::string::setToken(sAttach, nTokenCount - 1, '.', lcl_GetExtensionForDocType( nDocType ));
             m_aAttachmentED.SetText(sAttach);
         }
     }
@@ -1054,14 +1054,14 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         aQuery.SetIsEmptyTextAllowed(false);
         if(RET_OK == aQuery.Execute())
         {
-            String sAttach(aQuery.GetValue());
-            xub_StrLen nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
-            if( 2 > nTokenCount)
+            OUString sAttach(aQuery.GetValue());
+            sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
+            if (2 > nTokenCount)
             {
                 sAttach += '.';
                 ++nTokenCount;
             }
-            sAttach.SetToken( nTokenCount - 1, '.', lcl_GetExtensionForDocType(
+            sAttach = comphelper::string::setToken(sAttach, nTokenCount - 1, '.', lcl_GetExtensionForDocType(
                      (sal_uLong)m_aSendAsLB.GetEntryData(m_aSendAsLB.GetSelectEntryPos())));
             m_aAttachmentED.SetText(sAttach);
         }
@@ -1194,12 +1194,12 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         {
             sBody = m_sBody;
             aDesc.sAttachmentURL = aName.GetValue();
-            String sAttachment(m_aAttachmentED.GetText());
-            xub_StrLen nTokenCount = comphelper::string::getTokenCount(sAttachment, '.');
-            if( 2 > nTokenCount)
+            OUString sAttachment(m_aAttachmentED.GetText());
+            sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttachment, '.');
+            if (2 > nTokenCount)
             {
                 sAttachment += '.';
-                sAttachment.SetToken( nTokenCount, '.', sExtension);
+                sAttachment = comphelper::string::setToken(sAttachment, nTokenCount, '.', sExtension);
             }
             else if(sAttachment.GetToken( nTokenCount - 1, '.') != sExtension)
                 sAttachment += sExtension;

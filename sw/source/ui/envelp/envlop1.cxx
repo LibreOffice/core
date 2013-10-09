@@ -246,7 +246,9 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
         sActDBName += DB_DELIM;
     }
     else
-        sActDBName.SetToken(1, DB_DELIM, m_pTableLB->GetSelectEntry());
+    {
+        sActDBName = comphelper::string::setToken(sActDBName, 1, DB_DELIM, m_pTableLB->GetSelectEntry());
+    }
     pSh->GetNewDBMgr()->GetColumnNames(m_pDBFieldLB, m_pDatabaseLB->GetSelectEntry(),
                                        m_pTableLB->GetSelectEntry());
     return 0;

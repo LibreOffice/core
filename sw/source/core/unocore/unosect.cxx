@@ -614,9 +614,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             case WID_SECT_DDE_FILE:
             case WID_SECT_DDE_ELEMENT:
             {
-                OUString uTmp;
-                pValues[nProperty] >>= uTmp;
-                String sTmp(uTmp);
+                OUString sTmp;
+                pValues[nProperty] >>= sTmp;
                 if (m_bIsDescriptor)
                 {
                     if (!m_pProps->m_bDDE)
@@ -627,9 +626,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                         m_pProps->m_sLinkFileName = buf.makeStringAndClear();
                         m_pProps->m_bDDE = true;
                     }
-                    String sLinkFileName(m_pProps->m_sLinkFileName);
-                    sLinkFileName.SetToken(pEntry->nWID - WID_SECT_DDE_TYPE,
-                            sfx2::cTokenSeparator, sTmp);
+                    OUString sLinkFileName(m_pProps->m_sLinkFileName);
+                    sLinkFileName = comphelper::string::setToken(sLinkFileName,
+                        pEntry->nWID - WID_SECT_DDE_TYPE, sfx2::cTokenSeparator, sTmp);
                     m_pProps->m_sLinkFileName = sLinkFileName;
                 }
                 else
@@ -641,7 +640,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                         sLinkFileName += sfx2::cTokenSeparator;
                         pSectionData->SetType(DDE_LINK_SECTION);
                     }
-                    sLinkFileName.SetToken(pEntry->nWID - WID_SECT_DDE_TYPE,
+                    sLinkFileName = comphelper::string::setToken(sLinkFileName,
+                        pEntry->nWID - WID_SECT_DDE_TYPE,
                             sfx2::cTokenSeparator, sTmp);
                     pSectionData->SetLinkFileName(sLinkFileName);
                 }
@@ -725,12 +725,12 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     {
                         pSectionData->SetType(FILE_LINK_SECTION);
                     }
-                    String sSectLink(pSectionData->GetLinkFileName());
+                    OUString sSectLink(pSectionData->GetLinkFileName());
                     while (3 < comphelper::string::getTokenCount(sSectLink, sfx2::cTokenSeparator))
                     {
                         sSectLink += sfx2::cTokenSeparator;
                     }
-                    sSectLink.SetToken(2, sfx2::cTokenSeparator, sLink);
+                    sSectLink = comphelper::string::setToken(sSectLink, 2, sfx2::cTokenSeparator, sLink);
                     pSectionData->SetLinkFileName(sSectLink);
                     if (sSectLink.Len() < 3)
                     {

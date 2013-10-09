@@ -63,21 +63,6 @@ static sal_Int32 ImplStringCompareAscii( const sal_Unicode* pStr1, const sal_Cha
     return nRet;
 }
 
-static sal_Int32 ImplStringCompareWithoutZeroAscii( const sal_Unicode* pStr1, const sal_Char* pStr2,
-                                                    xub_StrLen nCount )
-{
-    sal_Int32 nRet = 0;
-    while ( nCount &&
-            ((nRet = ((sal_Int32)*pStr1)-((sal_Int32)((unsigned char)*pStr2))) == 0) )
-    {
-        ++pStr1,
-        ++pStr2,
-        --nCount;
-    }
-
-    return nRet;
-}
-
 UniString& UniString::AppendAscii( const sal_Char* pAsciiStr )
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
@@ -166,49 +151,6 @@ StringCompare UniString::CompareToAscii( const sal_Char* pAsciiStr,
         return COMPARE_LESS;
     else
         return COMPARE_GREATER;
-}
-
-xub_StrLen UniString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex ) const
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "UniString::SearchAscii() - pAsciiStr include characters > 127" );
-
-    sal_Int32 nLen = mpData->mnLen;
-    xub_StrLen nStrLen  = ImplStringLen( pAsciiStr );
-
-    // If length of pAsciiStr is 0 or index exceeds length, it was not found
-    if ( !nStrLen || (nIndex >= nLen) )
-        return STRING_NOTFOUND;
-
-    const sal_Unicode* pStr = mpData->maStr;
-    pStr += nIndex;
-
-    if ( nStrLen == 1 )
-    {
-        sal_Unicode cSearch = (unsigned char)*pAsciiStr;
-        while ( nIndex < nLen )
-        {
-            if ( *pStr == cSearch )
-                return nIndex;
-            ++pStr,
-            ++nIndex;
-        }
-    }
-    else
-    {
-        // Only search within string
-        while ( nLen - nIndex >= nStrLen )
-        {
-            // Check if string matches
-            if ( ImplStringCompareWithoutZeroAscii( pStr, pAsciiStr, nStrLen ) == 0 )
-                return nIndex;
-            ++pStr,
-            ++nIndex;
-        }
-    }
-
-    return STRING_NOTFOUND;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

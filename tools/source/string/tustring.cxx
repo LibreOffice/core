@@ -235,44 +235,6 @@ xub_StrLen STRING::Match( const STRING& rStr ) const
     return STRING_MATCH;
 }
 
-void STRING::SetToken( xub_StrLen nToken, STRCODE cTok, const STRING& rStr,
-                       xub_StrLen nIndex )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
-    const STRCODE*  pStr            = mpData->maStr;
-    xub_StrLen      nLen            = (xub_StrLen)mpData->mnLen;
-    xub_StrLen      nTok            = 0;
-    xub_StrLen      nFirstChar      = nIndex;
-    xub_StrLen      i               = nFirstChar;
-
-    // Determine token position and length
-    pStr += i;
-    while ( i < nLen )
-    {
-        // Increase token count if match
-        if ( *pStr == cTok )
-        {
-            ++nTok;
-
-            if ( nTok == nToken )
-                nFirstChar = i+1;
-            else
-            {
-                if ( nTok > nToken )
-                    break;
-            }
-        }
-
-        ++pStr,
-        ++i;
-    }
-
-    if ( nTok >= nToken )
-        Replace( nFirstChar, i-nFirstChar, rStr );
-}
-
 STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, sal_Int32& rIndex ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

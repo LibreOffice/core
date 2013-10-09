@@ -158,14 +158,16 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 
         if(aFile.Len() || aSub.Len())
         {
-            String sLinkFileName = OUString(sfx2::cTokenSeparator);
+            OUString sLinkFileName = OUString(sfx2::cTokenSeparator);
             sLinkFileName += sfx2::cTokenSeparator;
-            sLinkFileName.SetToken(0, sfx2::cTokenSeparator,aFile);
+            sLinkFileName = comphelper::string::setToken(sLinkFileName, 0, sfx2::cTokenSeparator, aFile);
 
             if(SFX_ITEM_SET ==
                     pSet->GetItemState(FN_PARAM_2, sal_True, &pItem))
-                sLinkFileName.SetToken(1, sfx2::cTokenSeparator,
+            {
+                sLinkFileName = comphelper::string::setToken(sLinkFileName, 1, sfx2::cTokenSeparator,
                     ((const SfxStringItem *)pItem)->GetValue());
+            }
 
             sLinkFileName += aSub;
             aSection.SetType( FILE_LINK_SECTION );

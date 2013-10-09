@@ -105,8 +105,6 @@ private:
     TOOLS_DLLPRIVATE inline void ImplCopyData();
     TOOLS_DLLPRIVATE inline sal_Unicode * ImplCopyStringData(sal_Unicode *);
 
-    TOOLS_DLLPRIVATE xub_StrLen SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex ) const;
-
                         UniString( const int* pDummy );    // not implemented: to prevent UniString( NULL )
                         UniString(int); // not implemented; to detect misuses of
                                         // UniString(sal_Unicode)
@@ -243,8 +241,6 @@ public:
     xub_StrLen          SearchAndReplace( const UniString& rStr, const UniString& rRepStr,
                                           xub_StrLen nIndex = 0 );
 
-    void                SetToken( xub_StrLen nToken, sal_Unicode cTok, const UniString& rStr,
-                                  xub_StrLen nIndex = 0 );
     UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok, sal_Int32& rIndex ) const;
     UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok = ';' ) const;
 
