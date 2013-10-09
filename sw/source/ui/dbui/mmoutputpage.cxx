@@ -903,7 +903,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
             if( 2 > nTokenCount)
             {
-                sAttach += '.';
+                sAttach += OUString('.');
                 ++nTokenCount;
             }
             sAttach = comphelper::string::setToken(sAttach, nTokenCount - 1, '.', lcl_GetExtensionForDocType( nDocType ));
@@ -1058,7 +1058,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
             if (2 > nTokenCount)
             {
-                sAttach += '.';
+                sAttach += OUString('.');
                 ++nTokenCount;
             }
             sAttach = comphelper::string::setToken(sAttach, nTokenCount - 1, '.', lcl_GetExtensionForDocType(
@@ -1198,10 +1198,10 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttachment, '.');
             if (2 > nTokenCount)
             {
-                sAttachment += '.';
+                sAttachment += OUString('.');
                 sAttachment = comphelper::string::setToken(sAttachment, nTokenCount, '.', sExtension);
             }
-            else if(sAttachment.GetToken( nTokenCount - 1, '.') != sExtension)
+            else if (sAttachment.getToken( nTokenCount - 1, '.') != sExtension)
                 sAttachment += sExtension;
             aDesc.sAttachmentName = sAttachment;
             aDesc.sMimeType = sMimeType;

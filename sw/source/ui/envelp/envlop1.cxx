@@ -35,6 +35,7 @@
 #include "view.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <unomid.h>
 
