@@ -176,11 +176,7 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount (void)
     sal_uInt32 result = 0;
 
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    if (g_command_args.m_nCount == 0) {
-        OSL_TRACE(
-            OSL_LOG_PREFIX
-            "osl_getCommandArgCount w/o prior call to osl_setCommandArgs");
-    }
+    assert (g_command_args.m_nCount != 0);
     if (g_command_args.m_nCount > 0)
         result = g_command_args.m_nCount - 1;
     pthread_mutex_unlock (&(g_command_args.m_mutex));
@@ -214,7 +210,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
     OSL_ASSERT(argc > 0);
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    OSL_ENSURE (g_command_args.m_nCount == 0, "osl_setCommandArgs(): CommandArgs already set.");
+    assert (g_command_args.m_nCount == 0);
     if (g_command_args.m_nCount == 0)
     {
         rtl_uString** ppArgs = (rtl_uString**)rtl_allocateZeroMemory (argc * sizeof(rtl_uString*));
