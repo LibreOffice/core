@@ -52,6 +52,7 @@
 #include <editeng/cmapitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
@@ -2582,40 +2583,40 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             break;
 
         case RES_PARATR_LINESPACING:
-            //FIXME ParaLineSpacing( static_cast< const SvxLineSpacingItem& >( rHt ) );
+            bMustWrite = static_cast< const SvxLineSpacingItem& >(rHt).GetInterLineSpaceRule() != SVX_INTER_LINE_SPACE_OFF;
             break;
         case RES_PARATR_ADJUST:
-            //FIXME ParaAdjust( static_cast< const SvxAdjustItem& >( rHt ) );
+            bMustWrite = static_cast< const SvxAdjustItem& >(rHt).GetAdjust() != SVX_ADJUST_LEFT;
             break;
         case RES_PARATR_SPLIT:
-            //FIXME ParaSplit( static_cast< const SvxFmtSplitItem& >( rHt ) );
+            bMustWrite = !static_cast< const SvxFmtSplitItem& >(rHt).GetValue();
             break;
         case RES_PARATR_WIDOWS:
-            //FIXME ParaWidows( static_cast< const SvxWidowsItem& >( rHt ) );
+            bMustWrite = static_cast< const SvxWidowsItem& >(rHt).GetValue();
             break;
         case RES_PARATR_TABSTOP:
-            //FIXME ParaTabStop( static_cast< const SvxTabStopItem& >( rHt ) );
+            bMustWrite = static_cast< const SvxTabStopItem& >(rHt).Count() != 0;
             break;
         case RES_PARATR_HYPHENZONE:
-            //FIXME ParaHyphenZone( static_cast< const SvxHyphenZoneItem& >( rHt ) );
+            bMustWrite = static_cast< const SvxHyphenZoneItem& >(rHt).IsHyphen();
             break;
         case RES_PARATR_NUMRULE:
-            //FIXME ParaNumRule( static_cast< const SwNumRuleItem& >( rHt ) );
+            bMustWrite = !static_cast< const SwNumRuleItem& >(rHt).GetValue().isEmpty();
             break;
         case RES_PARATR_SCRIPTSPACE:
-            //FIXME ParaScriptSpace( static_cast< const SfxBoolItem& >( rHt ) );
+            bMustWrite = !static_cast< const SfxBoolItem& >(rHt).GetValue();
             break;
         case RES_PARATR_HANGINGPUNCTUATION:
-            //FIXME ParaHangingPunctuation( static_cast< const SfxBoolItem& >( rHt ) );
+            bMustWrite = !static_cast< const SfxBoolItem& >(rHt).GetValue();
             break;
         case RES_PARATR_FORBIDDEN_RULES:
-            //FIXME ParaForbiddenRules( static_cast< const SfxBoolItem& >( rHt ) );
+            bMustWrite = !static_cast< const SfxBoolItem& >(rHt).GetValue();
             break;
         case RES_PARATR_VERTALIGN:
-            //FIXME ParaVerticalAlign( static_cast< const SvxParaVertAlignItem& >( rHt ) );
+            bMustWrite = static_cast< const SvxParaVertAlignItem& >(rHt).GetValue() != SvxParaVertAlignItem::AUTOMATIC;
             break;
         case RES_PARATR_SNAPTOGRID:
-            //FIXME ParaSnapToGrid( static_cast< const SvxParaGridItem& >( rHt ) );
+            bMustWrite = !static_cast< const SvxParaGridItem& >(rHt).GetValue();
             break;
 
         default:
@@ -2647,14 +2648,12 @@ void DocxAttributeOutput::DocDefaults( )
     // Output the default paragraph properties
     m_pSerializer->startElementNS(XML_w, XML_pPrDefault, FSEND);
 
-    /* TODO Paragraph properties still need work.
     StartStyleProperties(true, 0);
 
     for (int i = int(RES_PARATR_BEGIN); i < int(RES_PARATR_END); ++i)
         OutputDefaultItem(m_rExport.pDoc->GetDefault(i));
 
     EndStyleProperties(true);
-    */
 
     m_pSerializer->endElementNS(XML_w, XML_pPrDefault);
 
