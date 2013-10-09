@@ -170,6 +170,17 @@ void ScOpenclTest::testSharedFormulaXLS()
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
     }
+    // AMLOEXT-11
+    for (SCROW i = 28; i < 35; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+    }
+    // AMLOEXT-11; workaround for a Calc beta bug
+    CPPUNIT_ASSERT_EQUAL(25.0, pDoc->GetValue(ScAddress(2, 35, 0)));
+    CPPUNIT_ASSERT_EQUAL(24.0, pDoc->GetValue(ScAddress(2, 36, 0)));
+
 
     xDocSh->DoClose();
     xDocShRes->DoClose();
