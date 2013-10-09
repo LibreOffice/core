@@ -7,8 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,setup_native/ulf,$(SRCDIR)/setup_native/source))
+$(eval $(call gb_Package_Package,setup_native/ulf,$(call gb_CustomTarget_get_workdir,setup_native/mac)))
 
-$(eval $(call gb_Package_add_file,setup_native/ulf,bin/macinstall.ulf,mac/macinstall.ulf))
+$(eval $(call gb_Package_add_file,setup_native/ulf,bin/macinstall.ulf,macinstall.ulf))
 
 # vim: set noet sw=4 ts=4:
