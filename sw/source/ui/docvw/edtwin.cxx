@@ -698,7 +698,7 @@ void SwEditWin::StopInsFrm()
 
 
 
-sal_Bool SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const SwPaM& rCrsr ) const
+sal_Bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCrsr ) const
 {
     const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
     if ( !rCTLOptions.IsCTLFontEnabled() ||
@@ -721,7 +721,7 @@ sal_Bool SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const 
             nCTLScriptPos = xBI->nextScript( rText, 0, i18n::ScriptType::COMPLEX );
     }
 
-    return (0 <= nCTLScriptPos && nCTLScriptPos <= rText.Len());
+    return (0 <= nCTLScriptPos && nCTLScriptPos <= rText.getLength());
 }
 
 //return INVALID_HINT if language should not be explictly overridden, the correct
@@ -838,7 +838,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
  */
 void SwEditWin::FlushInBuffer()
 {
-    if ( m_aInBuffer.Len() )
+    if ( !m_aInBuffer.isEmpty() )
     {
         SwWrtShell& rSh = m_rView.GetWrtShell();
 
@@ -877,9 +877,9 @@ void SwEditWin::FlushInBuffer()
                 OUString aNewText( aOldText );
                 if (rCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
                 {
-                    for (xub_StrLen k = 0;  k < m_aInBuffer.Len();  ++k)
+                    for (xub_StrLen k = 0;  k < m_aInBuffer.getLength();  ++k)
                     {
-                        const sal_Unicode cChar = m_aInBuffer.GetChar(k);
+                        const sal_Unicode cChar = m_aInBuffer[k];
                         const sal_Int32 nPrevPos =xISC->correctInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode );
 
                         // valid sequence or sequence could be corrected:
@@ -903,13 +903,13 @@ void SwEditWin::FlushInBuffer()
                         nExpandSelection = static_cast< xub_StrLen >(nOldLen - nChgPos);
                     }
                     else
-                        m_aInBuffer.Erase();
+                        m_aInBuffer = "";
                 }
                 else
                 {
-                    for (xub_StrLen k = 0;  k < m_aInBuffer.Len();  ++k)
+                    for (xub_StrLen k = 0;  k < m_aInBuffer.getLength();  ++k)
                     {
-                        const sal_Unicode cChar = m_aInBuffer.GetChar(k);
+                        const sal_Unicode cChar = m_aInBuffer[k];
                         if (xISC->checkInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode ))
                         {
                             // character can be inserted:
@@ -925,7 +925,7 @@ void SwEditWin::FlushInBuffer()
 
             rSh.Pop( sal_False );  // pop old cursor from stack
 
-            if (!m_aInBuffer.Len())
+            if (m_aInBuffer.isEmpty())
                 return;
 
             // if text prior to the original selection needs to be changed
@@ -965,7 +965,7 @@ void SwEditWin::FlushInBuffer()
 
         rSh.Insert( m_aInBuffer );
         m_eBufferLanguage = LANGUAGE_DONTKNOW;
-        m_aInBuffer.Erase();
+        m_aInBuffer = "";
         bFlushCharBuffer = false;
     }
 }
@@ -1357,7 +1357,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     //if the language changes the buffer must be flushed
     LanguageType eNewLanguage = GetInputLanguage();
-    if(!bIsDocReadOnly && m_eBufferLanguage != eNewLanguage && m_aInBuffer.Len())
+    if(!bIsDocReadOnly && m_eBufferLanguage != eNewLanguage && !m_aInBuffer.isEmpty())
     {
         FlushInBuffer();
     }
@@ -1877,7 +1877,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_GlossaryExpand;
 
                         //RETURN and empty paragraph in numbering -> end numbering
-                        else if( !m_aInBuffer.Len() &&
+                        else if( m_aInBuffer.isEmpty() &&
                                  rSh.GetCurNumRule() &&
                                  !rSh.GetCurNumRule()->IsOutlineRule() &&
                                  !rSh.HasSelection() &&
@@ -2234,7 +2234,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     rSh.NumOrNoNum(sal_False);
                 }
 
-                if( m_aInBuffer.Len() && ( !bNormalChar || bIsDocReadOnly ))
+                if( !m_aInBuffer.isEmpty() && ( !bNormalChar || bIsDocReadOnly ))
                     FlushInBuffer();
 
                 if( m_rView.KeyInput( aKeyEvent ) )
@@ -2351,11 +2351,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 sal_Bool bIsNormalChar = GetAppCharClass().isLetterNumeric(
                                                             OUString( aCh ), 0 );
                 if( bAppendSpace && bIsNormalChar &&
-                    (m_aInBuffer.Len() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
+                    (!m_aInBuffer.isEmpty() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
                 {
                     // insert a blank ahead of the character. this ends up
                     // between the expanded text and the new "non-word-separator".
-                    m_aInBuffer += ' ';
+                    m_aInBuffer += " ";
                 }
 
                 sal_Bool bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
@@ -2388,7 +2388,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 {
                     OUStringBuffer aBuf(m_aInBuffer);
                     comphelper::string::padToLength(aBuf,
-                        m_aInBuffer.Len() + aKeyEvent.GetRepeat() + 1, aCh);
+                        !m_aInBuffer.isEmpty() + aKeyEvent.GetRepeat() + 1, aCh);
                     m_aInBuffer = aBuf.makeStringAndClear();
                     bFlushCharBuffer = Application::AnyInput( VCL_INPUT_KEYBOARD );
                     bFlushBuffer = !bFlushCharBuffer;
@@ -2630,7 +2630,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
     }
 
     // in case the buffered characters are inserted
-    if( bFlushBuffer && m_aInBuffer.Len() )
+    if( bFlushBuffer && !m_aInBuffer.isEmpty() )
     {
         // bFlushCharBuffer was not resetted here
         // why not?
@@ -5829,7 +5829,7 @@ void QuickHelpData::SortAndFilter()
 }
 
 void SwEditWin::ShowAutoTextCorrectQuickHelp(
-        const String& rWord, SvxAutoCorrCfg* pACfg, SvxAutoCorrect* pACorr,
+        const OUString& rWord, SvxAutoCorrCfg* pACfg, SvxAutoCorrect* pACorr,
         bool bFromIME )
 {
     SwWrtShell& rSh = m_rView.GetWrtShell();
@@ -5856,7 +5856,7 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
     if( !m_pQuickHlpData->m_aHelpStrings.empty() )
     {
         m_pQuickHlpData->SortAndFilter();
-        m_pQuickHlpData->Start( rSh, rWord.Len() );
+        m_pQuickHlpData->Start( rSh, rWord.getLength() );
     }
 }
 

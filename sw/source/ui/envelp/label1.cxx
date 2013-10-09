@@ -36,7 +36,7 @@
 #include <label.hrc>
 
 //impl in envimg.cxx
-extern SW_DLLPUBLIC String MakeSender();
+extern SW_DLLPUBLIC OUString MakeSender();
 
 
 void SwLabRec::SetFromItem( const SwLabItem& rItem )

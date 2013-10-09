@@ -90,7 +90,7 @@ class SwEnvPage : public SfxTabPage
     SwEnvPreview* m_pPreview;
 
     SwWrtShell*   pSh;
-    String        sActDBName;
+    OUString      sActDBName;
 
      SwEnvPage(Window* pParent, const SfxItemSet& rSet);
     ~SwEnvPage();

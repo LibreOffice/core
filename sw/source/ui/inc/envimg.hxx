@@ -24,7 +24,7 @@
 #include "swdllapi.h"
 
 // MakeSender -----------------------------------------------------------------
-SW_DLLPUBLIC String MakeSender();
+SW_DLLPUBLIC OUString MakeSender();
 
 // enum -----------------------------------------------------------------------
 enum SwEnvAlign

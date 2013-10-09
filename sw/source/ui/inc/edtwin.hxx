@@ -67,7 +67,7 @@ friend void     SizeNotify(ViewShell* pVwSh, const Size &);
 friend void     PageNumNotify(  ViewShell* pVwSh,
                                 sal_uInt16 nPhyNum,
                                 sal_uInt16 nVirtNum,
-                                const String& rPg );
+                                const OUString& rPg );
 
     static  QuickHelpData* m_pQuickHlpData;
 
@@ -89,7 +89,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     // timer for ANY-KeyInut question without a following KeyInputEvent
     Timer           m_aKeyInputFlushTimer;
 
-    String          m_aInBuffer;
+    OUString        m_aInBuffer;
     LanguageType    m_eBufferLanguage;
     Point           m_aStartPos;
     Point           m_aMovePos;
@@ -210,7 +210,7 @@ protected:
     virtual OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
 
-    void    ShowAutoTextCorrectQuickHelp( const String& rWord, SvxAutoCorrCfg* pACfg,
+    void    ShowAutoTextCorrectQuickHelp( const OUString& rWord, SvxAutoCorrCfg* pACfg,
                                 SvxAutoCorrect* pACorr, bool bFromIME = false );
 
     /// Returns true if in header/footer area, or in the header/footer control.
@@ -245,7 +245,7 @@ public:
     sal_Bool            IsChainMode() const             { return m_bChainMode; }
 
     void            FlushInBuffer();
-    sal_Bool            IsInputSequenceCheckingRequired( const String &rText, const SwPaM& rCrsr ) const;
+    sal_Bool            IsInputSequenceCheckingRequired( const OUString &rText, const SwPaM& rCrsr ) const;
 
     void             SetApplyTemplate(const SwApplyTemplate &);
     SwApplyTemplate* GetApplyTemplate() const { return m_pApplyTempl; }

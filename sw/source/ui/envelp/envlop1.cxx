@@ -47,7 +47,7 @@ using namespace ::rtl;
 
 
 //impl in envimg.cxx
-extern SW_DLLPUBLIC String MakeSender();
+extern SW_DLLPUBLIC OUString MakeSender();
 
 SwEnvPreview::SwEnvPreview(Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
@@ -227,8 +227,8 @@ SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet)
 
     SwDBData aData = pSh->GetDBData();
     sActDBName = aData.sDataSource;
-    sActDBName += DB_DELIM;
-    sActDBName += (String)aData.sCommand;
+    sActDBName += OUString(DB_DELIM);
+    sActDBName += aData.sCommand;
     InitDatabaseBox();
 }
 
@@ -244,7 +244,7 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
     {
         sActDBName = pListBox->GetSelectEntry();
         pSh->GetNewDBMgr()->GetTableNames(m_pTableLB, sActDBName);
-        sActDBName += DB_DELIM;
+        sActDBName += OUString(DB_DELIM);
     }
     else
     {
@@ -294,8 +294,8 @@ void SwEnvPage::InitDatabaseBox()
         for (long i = 0; i < aDataNames.getLength(); i++)
             m_pDatabaseLB->InsertEntry(pDataNames[i]);
 
-        String sDBName = sActDBName.GetToken( 0, DB_DELIM );
-        String sTableName = sActDBName.GetToken( 1, DB_DELIM );
+        String sDBName = sActDBName.getToken( 0, DB_DELIM );
+        String sTableName = sActDBName.getToken( 1, DB_DELIM );
         m_pDatabaseLB->SelectEntry(sDBName);
         if (pSh->GetNewDBMgr()->GetTableNames(m_pTableLB, sDBName))
         {

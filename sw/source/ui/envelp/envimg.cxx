@@ -48,11 +48,11 @@ using namespace ::com::sun::star::uno;
 
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
 
-SW_DLLPUBLIC String MakeSender()
+SW_DLLPUBLIC OUString MakeSender()
 {
     SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
 
-    String sRet;
+    OUString sRet;
     String sSenderToken(SW_RES(STR_SENDER_TOKENS));
     xub_StrLen nTokenCount = comphelper::string::getTokenCount(sSenderToken, ';');
     sal_Int32 nSttPos = 0;
@@ -62,14 +62,14 @@ SW_DLLPUBLIC String MakeSender()
         OUString sToken = sSenderToken.GetToken( 0, ';', nSttPos );
         if (sToken == "COMPANY")
         {
-            xub_StrLen nOldLen = sRet.Len();
+            xub_StrLen nOldLen = sRet.getLength();
             sRet += (String)rUserOpt.GetCompany();
-            bLastLength = sRet.Len() != nOldLen;
+            bLastLength = sRet.getLength() != nOldLen;
         }
         else if (sToken == "CR")
         {
             if(bLastLength)
-                sRet +=NEXTLINE;
+                sRet += OUString(NEXTLINE);
             bLastLength = true;
         }
         else if (sToken == "FIRSTNAME")
