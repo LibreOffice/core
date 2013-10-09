@@ -84,17 +84,17 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     PushButton      m_aSendDocumentsPB;
 
     //some FixedLine labels
-    String          m_sSaveStartST;
-    String          m_sSaveMergedST;
-    String          m_sPrintST;
-    String          m_sSendMailST;
+    OUString        m_sSaveStartST;
+    OUString        m_sSaveMergedST;
+    OUString        m_sPrintST;
+    OUString        m_sSendMailST;
 
     //misc strings
-    String          m_sDefaultAttachmentST;
-    String          m_sNoSubjectST;
-    String          m_sConfigureMail;
+    OUString        m_sDefaultAttachmentST;
+    OUString        m_sNoSubjectST;
+    OUString        m_sConfigureMail;
 
-    String          m_sBody;
+    OUString        m_sBody;
 
     long            m_nFromToRBPos;
     long            m_nFromToFTPos;
@@ -107,8 +107,8 @@ class SwMailMergeOutputPage : public svt::OWizardPage
 
     //some dialog data
     Printer*        m_pTempPrinter;
-    String          m_sCC;
-    String          m_sBCC;
+    OUString        m_sCC;
+    OUString        m_sBCC;
 
 
     DECL_LINK(OutputTypeHdl_Impl, RadioButton*);
@@ -168,17 +168,17 @@ class SW_DLLPUBLIC SwSendMailDialog : public ModelessDialog //SfxModalDialog
     PushButton              m_aStopPB;
     PushButton              m_aClosePB;
 
-    String                  m_sMore;
-    String                  m_sLess;
-    String                  m_sContinue;
-    String                  m_sStop;
-    String                  m_sSend;
-    String                  m_sTransferStatus;
+    OUString                m_sMore;
+    OUString                m_sLess;
+    OUString                m_sContinue;
+    OUString                m_sStop;
+    OUString                m_sSend;
+    OUString                m_sTransferStatus;
     OUString                m_sErrorStatus;
-    String                  m_sSendingTo;
-    String                  m_sCompleted;
-    String                  m_sFailed;
-    String                  m_sTerminateQuery;
+    OUString                m_sSendingTo;
+    OUString                m_sCompleted;
+    OUString                m_sFailed;
+    OUString                m_sTerminateQuery;
 
     bool                    m_bCancel;
     bool                    m_bDesctructionEnabled;

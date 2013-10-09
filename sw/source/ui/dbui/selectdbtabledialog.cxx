@@ -173,14 +173,14 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
     return 0;
 }
 
-String      SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)
+OUString    SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)
 {
     SvTreeListEntry* pEntry = m_aTableLB.FirstSelected();
     bIsTable = pEntry->GetUserData() ? false : true;
     return pEntry ? m_aTableLB.GetEntryText(pEntry, 0) : OUString();
 }
 
-void   SwSelectDBTableDialog::SetSelectedTable(const String& rTable, bool bIsTable)
+void   SwSelectDBTableDialog::SetSelectedTable(const OUString& rTable, bool bIsTable)
 {
     SvTreeListEntry*    pEntry = m_aTableLB.First();
     while(pEntry)

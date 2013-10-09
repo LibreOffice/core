@@ -44,10 +44,10 @@ class SwSelectDBTableDialog : public SfxModalDialog
     CancelButton    m_aCancel;
     HelpButton      m_aHelp;
 
-    String          m_sName;
-    String          m_sType;
-    String          m_sTable;
-    String          m_sQuery;
+    OUString        m_sName;
+    OUString        m_sType;
+    OUString        m_sTable;
+    OUString        m_sQuery;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> m_xConnection;
 
@@ -59,8 +59,8 @@ public:
             );
     ~SwSelectDBTableDialog();
 
-    String      GetSelectedTable(bool& bIsTable);
-    void        SetSelectedTable(const String& rTable, bool bIsTable);
+    OUString    GetSelectedTable(bool& bIsTable);
+    void        SetSelectedTable(const OUString& rTable, bool bIsTable);
 };
 #endif
 

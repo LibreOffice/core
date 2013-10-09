@@ -171,23 +171,23 @@ public:
     void            SetSelectionChangedHdl( const Link& rLink ) {m_aSelectionLink = rLink;}
 
     void            SetText( const OUString& rStr );
-    String          GetAddress();
+    OUString        GetAddress();
 
-    void            InsertNewEntry( const String& rStr );
-    void            InsertNewEntryAtPosition( const String& rStr, sal_uLong nPara, sal_uInt16 nIndex );
+    void            InsertNewEntry( const OUString& rStr );
+    void            InsertNewEntryAtPosition( const OUString& rStr, sal_uLong nPara, sal_uInt16 nIndex );
     void            RemoveCurrentEntry();
 
     void            MoveCurrentItem(sal_uInt16 nMove);
     sal_uInt16      IsCurrentItemMoveable();
     bool            HasCurrentItem();
-    String          GetCurrentItem();
+    OUString        GetCurrentItem();
     void            SelectCurrentItem();
 };
 
 // Dialog is used to create custom address blocks as well as custom greeting lines
 class SwRestrictedComboBox : public ComboBox
 {
-    String sForbiddenChars;
+    OUString sForbiddenChars;
 
 protected:
     virtual void KeyInput( const KeyEvent& );
@@ -198,7 +198,7 @@ public:
     {
     }
 
-    void SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
+    void SetForbiddenChars(const OUString& rSet){sForbiddenChars = rSet;}
 
 };
 class SwCustomizeAddressBlockDialog : public SfxModalDialog
@@ -237,9 +237,9 @@ private:
     ::std::vector<String>   m_aSalutations;
     ::std::vector<String>   m_aPunctuations;
 
-    String                  m_sCurrentSalutation;
-    String                  m_sCurrentPunctuation;
-    String                  m_sCurrentText;
+    OUString                m_sCurrentSalutation;
+    OUString                m_sCurrentPunctuation;
+    OUString                m_sCurrentText;
 
     SwMailMergeConfigItem&  m_rConfigItem;
     DialogType              m_eType;
@@ -278,8 +278,8 @@ class SwAssignFieldsDialog : public SfxModalDialog
     CancelButton            m_aCancel;
     HelpButton              m_aHelp;
 
-    String                  m_sNone;
-    OUString         m_rPreviewString;
+    OUString                m_sNone;
+    OUString                m_rPreviewString;
 
     SwMailMergeConfigItem&  m_rConfigItem;
 

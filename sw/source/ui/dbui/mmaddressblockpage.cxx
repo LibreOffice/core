@@ -504,7 +504,7 @@ void SwRestrictedComboBox::KeyInput(const KeyEvent& rEvt)
     if(rEvt.GetCharCode())
     {
         OUString sKey(rEvt.GetCharCode());
-        if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
+        if( -1 != sForbiddenChars.indexOf(sKey))
             bCallParent = false;
     }
     if(bCallParent)
@@ -515,9 +515,9 @@ void SwRestrictedComboBox::Modify()
 {
     Selection aSel = GetSelection();
     OUString sTemp = GetText();
-    for(sal_uInt16 i = 0; i < sForbiddenChars.Len(); i++)
+    for(sal_uInt16 i = 0; i < sForbiddenChars.getLength(); i++)
     {
-        sTemp = comphelper::string::remove(sTemp, sForbiddenChars.GetChar(i));
+        sTemp = comphelper::string::remove(sTemp, sForbiddenChars[i]);
     }
     sal_Int32 nDiff = GetText().getLength() - sTemp.getLength();
     if(nDiff)
@@ -1398,7 +1398,7 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
 
 
 // Insert the new entry in front of the entry at the beginning of the selection
-void AddressMultiLineEdit::InsertNewEntry( const String& rStr )
+void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
 {
     // insert new entry after current selected one.
     ExtTextView* pTextView = GetTextView();
@@ -1419,7 +1419,7 @@ void AddressMultiLineEdit::InsertNewEntry( const String& rStr )
     Modify();
 }
 
-void AddressMultiLineEdit::InsertNewEntryAtPosition( const String& rStr, sal_uLong nPara, sal_uInt16 nIndex )
+void AddressMultiLineEdit::InsertNewEntryAtPosition( const OUString& rStr, sal_uLong nPara, sal_uInt16 nIndex )
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
     TextPaM aInsertPos( nPara, nIndex );
@@ -1559,9 +1559,9 @@ bool AddressMultiLineEdit::HasCurrentItem()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()));
 }
 
-String AddressMultiLineEdit::GetCurrentItem()
+OUString AddressMultiLineEdit::GetCurrentItem()
 {
-    String sRet;
+    OUString sRet;
     ExtTextEngine* pTextEngine = GetTextEngine();
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
@@ -1594,21 +1594,21 @@ void AddressMultiLineEdit::SelectCurrentItem()
     }
 }
 
-String AddressMultiLineEdit::GetAddress()
+OUString AddressMultiLineEdit::GetAddress()
 {
-    String sRet;
+    OUString sRet;
     ExtTextEngine* pTextEngine = GetTextEngine();
     sal_uLong  nParaCount = pTextEngine->GetParagraphCount();
     for(sal_uLong nPara = nParaCount; nPara; --nPara)
     {
         String sPara = comphelper::string::stripEnd(pTextEngine->GetText(nPara - 1), ' ');
         //don't add empty trailing paragraphs
-        if(sRet.Len() || sPara.Len())
+        if(!sRet.isEmpty() || sPara.Len())
         {
-            sRet.Insert(sPara, 0);
+            sRet = sPara + sRet;
             //insert the para break
             if(nPara > 1)
-                sRet.Insert( '\n', 0);
+                sRet = "\n" + sRet;
         }
     }
     return sRet;

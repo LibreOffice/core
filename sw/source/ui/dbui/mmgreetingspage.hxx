@@ -153,8 +153,8 @@ public:
     SwMailBodyDialog(Window* pParent, SwMailMergeWizard* pWizard);
     ~SwMailBodyDialog();
 
-    void            SetBody(const String& rBody ) {m_aBodyMLE.SetText(rBody);}
-    String          GetBody() const {return m_aBodyMLE.GetText();}
+    void            SetBody(const OUString& rBody ) {m_aBodyMLE.SetText(rBody);}
+    OUString        GetBody() const {return m_aBodyMLE.GetText();}
 };
 #endif
 
