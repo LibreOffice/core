@@ -274,8 +274,8 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
 
     bool            GetEditUrl( const Point& rPos,
                                 OUString* pName=0, OUString* pUrl=0, OUString* pTarget=0 );
-    bool            GetEditUrlOrError( bool bSpellErr, const Point& rPos,
-                                       OUString* pName=0, OUString* pUrl=0, OUString* pTarget=0 );
+    bool GetEditUrlOrError(
+        const Point& rPos, OUString* pName = NULL, OUString* pUrl = NULL, OUString* pTarget = NULL );
 
     bool            HitRangeFinder( const Point& rMouse, RfCorner& rCorner, sal_uInt16* pIndex = NULL,
                                     SCsCOL* pAddX = NULL, SCsROW* pAddY = NULL );

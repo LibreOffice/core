@@ -2946,11 +2946,12 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         Point aPosPixel = rCEvt.GetMousePosPixel();
         Point aMenuPos = aPosPixel;
 
+        SCsCOL nCellX = -1;
+        SCsROW nCellY = -1;
+        pViewData->GetPosFromPixel(aPosPixel.X(), aPosPixel.Y(), eWhich, nCellX, nCellY);
+
         if ( bMouse )
         {
-            SCsCOL nCellX = -1;
-            SCsROW nCellY = -1;
-            pViewData->GetPosFromPixel(aPosPixel.X(), aPosPixel.Y(), eWhich, nCellX, nCellY);
             ScDocument* pDoc = pViewData->GetDocument();
             SCTAB nTab = pViewData->GetTabNo();
             const ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
@@ -2978,10 +2979,12 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
         sal_Bool bDone = false;
         sal_Bool bEdit = pViewData->HasEditView(eWhich);
+        bool bSpellError = mpSpellCheckCxt->isMisspelled(nCellX, nCellY);
+
         if ( !bEdit )
         {
                 // Edit-Zelle mit Spelling-Errors ?
-            if ( bMouse && GetEditUrlOrError( sal_True, aPosPixel ) )
+            if (bMouse && (GetEditUrlOrError(aPosPixel) || bSpellError))
             {
                 //  GetEditUrlOrError hat den Cursor schon bewegt
 
@@ -3015,7 +3018,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             //  IsCursorAtWrongSpelledWord could be used for !bMouse
             //  if there was a corresponding ExecuteSpellPopup call
 
-            if( pEditView->IsWrongSpelledWordAtPos( aMenuPos ) )
+            if (bSpellError)
             {
                 //  Wenn man unter OS/2 neben das Popupmenue klickt, kommt MouseButtonDown
                 //  vor dem Ende des Menue-Execute, darum muss SetModified vorher kommen
@@ -5112,11 +5115,11 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, sal_Bool bUp )
 bool ScGridWindow::GetEditUrl( const Point& rPos,
                                OUString* pName, OUString* pUrl, OUString* pTarget )
 {
-    return GetEditUrlOrError( false, rPos, pName, pUrl, pTarget );
+    return GetEditUrlOrError(rPos, pName, pUrl, pTarget);
 }
 
-bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
-                                OUString* pName, OUString* pUrl, OUString* pTarget )
+bool ScGridWindow::GetEditUrlOrError(
+    const Point& rPos, OUString* pName, OUString* pUrl, OUString* pTarget )
 {
     //! nPosX/Y mit uebergeben?
     SCsCOL nPosX;
@@ -5177,8 +5180,6 @@ bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
     }
     aDefault.Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
     aEngine.SetDefaults( aDefault );
-    if (bSpellErr)
-        aEngine.SetControlWord( aEngine.GetControlWord() | EE_CNTRL_ONLINESPELLING );
 
     MapMode aEditMode = pViewData->GetLogicMode(eWhich);            // ohne Drawing-Skalierung
     Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );
@@ -5254,33 +5255,23 @@ bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
         MapMode aOld = GetMapMode();
         SetMapMode(aEditMode);                  // kein return mehr
 
-        if (bSpellErr)                          // Spelling-Fehler suchen
+        const SvxFieldItem* pFieldItem = aTempView.GetFieldUnderMousePointer();
+        if (pFieldItem)
         {
-            bRet = aTempView.IsWrongSpelledWordAtPos( rPos );
-            if ( bRet )
-                pViewData->GetView()->SetCursor( nPosX, nPosY );        // Cursor setzen
-        }
-        else                                    // URL suchen
-        {
-            const SvxFieldItem* pFieldItem = aTempView.GetFieldUnderMousePointer();
-
-            if (pFieldItem)
+            const SvxFieldData* pField = pFieldItem->GetField();
+            if ( pField && pField->ISA(SvxURLField) )
             {
-                const SvxFieldData* pField = pFieldItem->GetField();
-                if ( pField && pField->ISA(SvxURLField) )
+                if ( pName || pUrl || pTarget )
                 {
-                    if ( pName || pUrl || pTarget )
-                    {
-                        const SvxURLField* pURLField = (const SvxURLField*)pField;
-                        if (pName)
-                            *pName = pURLField->GetRepresentation();
-                        if (pUrl)
-                            *pUrl = pURLField->GetURL();
-                        if (pTarget)
-                            *pTarget = pURLField->GetTargetFrame();
-                    }
-                    bRet = sal_True;
+                    const SvxURLField* pURLField = (const SvxURLField*)pField;
+                    if (pName)
+                        *pName = pURLField->GetRepresentation();
+                    if (pUrl)
+                        *pUrl = pURLField->GetURL();
+                    if (pTarget)
+                        *pTarget = pURLField->GetTargetFrame();
                 }
+                bRet = sal_True;
             }
         }
 
