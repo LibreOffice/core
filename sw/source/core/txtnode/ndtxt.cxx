@@ -3892,10 +3892,18 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule && IsCountedInList())
     {
+        int nLevel = GetActualListLevel();
+
+        if (nLevel < 0)
+            nLevel = 0;
+
+        if (nLevel >= MAXLEVEL)
+            nLevel = MAXLEVEL - 1;
+
         // #i87154#
         // Correction of #newlistlevelattrs#:
         // The numbering type has to be checked for bullet lists.
-        const SwNumFmt& rFmt = pRule->Get( static_cast<sal_uInt16>(GetActualListLevel() ));
+        const SwNumFmt& rFmt = pRule->Get( static_cast<sal_uInt16>(nLevel ));
         return SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() ||
                !pRule->MakeNumString( *(GetNum()) ).isEmpty();
     }
