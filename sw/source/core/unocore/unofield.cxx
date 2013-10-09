@@ -94,8 +94,6 @@
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
 
-#define COM_TEXT_FLDMASTER      "com.sun.star.text.FieldMaster."
-
 // case-corrected version of the first part for the service names (see #i67811)
 #define COM_TEXT_FLDMASTER_CC   "com.sun.star.text.fieldmaster."
 
@@ -2596,7 +2594,7 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
   -----------------------------------------------------------------------*/
 static sal_uInt16 lcl_GetIdByName( OUString& rName, OUString& rTypeName )
 {
-    if (rName.startsWith(COM_TEXT_FLDMASTER) || rName.startsWith(COM_TEXT_FLDMASTER_CC))
+    if (rName.startsWithIgnoreAsciiCase(COM_TEXT_FLDMASTER_CC))
         rName = rName.copy(30);
 
     sal_uInt16 nResId = USHRT_MAX;
