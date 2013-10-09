@@ -49,7 +49,6 @@ class ViewShellBase;
 namespace sd { namespace sidebar {
 
 class PreviewValueSet;
-class SidebarShellManager;
 
 
 /** Base class of a menu that lets the user select from a list of

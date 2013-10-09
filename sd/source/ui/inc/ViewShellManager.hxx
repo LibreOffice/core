@@ -129,13 +129,6 @@ public:
     */
     void DeactivateSubShell (const ViewShell& rParentShell, ShellId nId);
 
-    /** Move the specified sub shells to the top position among the sub
-        shells of the parent view shell.  The rest of the SFX shell stack
-        does not change (but the all shells above the sub shells have to be
-        taken once off the stack and are then moved back on again.)
-    */
-    void MoveSubShellToTop (const ViewShell& rParentShell, ShellId nId);
-
     /** Send all sub shells of the specified view shell an Invalidate()
         call.  This does not modify the shell stack.
     */

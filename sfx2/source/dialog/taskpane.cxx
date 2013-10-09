@@ -731,14 +731,6 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ModuleTaskPane::ModuleTaskPane( Window& i_rParentWindow, const Reference< XFrame >& i_rDocumentFrame,
-            const IToolPanelCompare& i_rCompare )
-        :Window( &i_rParentWindow, WB_DIALOGCONTROL )
-        ,m_pImpl( new ModuleTaskPane_Impl( *this, i_rDocumentFrame, &i_rCompare ) )
-    {
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     ModuleTaskPane::~ModuleTaskPane()
     {
     }
@@ -779,12 +771,6 @@ namespace sfx2
     ::boost::optional< size_t > ModuleTaskPane::GetPanelPos( const OUString& i_rResourceURL )
     {
         return m_pImpl->GetPanelPos( i_rResourceURL );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    OUString ModuleTaskPane::GetPanelResourceURL( const size_t i_nPanelPos ) const
-    {
-        return m_pImpl->GetPanelResourceURL( i_nPanelPos );
     }
 
     //------------------------------------------------------------------------------------------------------------------

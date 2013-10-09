@@ -21,7 +21,6 @@
 
 #include "MasterPageContainer.hxx"
 #include "DocumentHelper.hxx"
-#include "SidebarShellManager.hxx"
 #include "pres.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"

@@ -19,7 +19,6 @@
 
 #include "LayoutMenu.hxx"
 
-#include "SidebarShellManager.hxx"
 #include "app.hrc"
 #include "drawdoc.hxx"
 #include "framework/FrameworkHelper.hxx"

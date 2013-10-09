@@ -23,7 +23,6 @@
 #include "RecentlyUsedMasterPages.hxx"
 #include "MasterPageContainerProviders.hxx"
 #include "MasterPageObserver.hxx"
-#include "SidebarShellManager.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 #include "app.hrc"

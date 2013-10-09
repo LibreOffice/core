@@ -194,9 +194,7 @@ public:
     void        Append(const SvxColumnDescription& rDesc);
     void        SetLeft(long aLeft);
     void        SetRight(long aRight);
-    void        SetActColumn(sal_uInt16 nCol);
     sal_uInt16  GetActColumn() const;
-    sal_uInt16  GetColumnDescription() const;
     sal_Bool    IsFirstAct() const;
     sal_Bool    IsLastAct() const;
     long        GetLeft();
@@ -204,7 +202,6 @@ public:
     sal_Bool    IsTable() const;
     sal_Bool    CalcOrtho() const;
     void        SetOrtho(sal_Bool bVal);
-    sal_Bool    IsOrtho () const;
     sal_Bool    IsConsistent() const;
 };
 

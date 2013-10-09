@@ -923,20 +923,6 @@ Reference<XResourceId> FrameworkHelper::CreateResourceId (
 
 Reference<XResourceId> FrameworkHelper::CreateResourceId (
     const OUString& rsResourceURL,
-    const OUString& rsFirstAnchorURL,
-    const OUString& rsSecondAnchorURL)
-{
-    ::std::vector<OUString> aAnchorURLs (2);
-    aAnchorURLs[0] = rsFirstAnchorURL;
-    aAnchorURLs[1] = rsSecondAnchorURL;
-    return new ::sd::framework::ResourceId(rsResourceURL, aAnchorURLs);
-}
-
-
-
-
-Reference<XResourceId> FrameworkHelper::CreateResourceId (
-    const OUString& rsResourceURL,
     const Reference<XResourceId>& rxAnchorId)
 {
     if (rxAnchorId.is())

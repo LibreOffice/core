@@ -47,18 +47,6 @@ void Sidebar::ShowPanel (
     }
 }
 
-
-
-
-void Sidebar::ShowDeck (
-    const ::rtl::OUString& rsDeckId,
-    const Reference<frame::XFrame>& rxFrame)
-{
-    SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
-    if (pController != NULL)
-        pController->RequestSwitchToDeck(rsDeckId);
-}
-
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

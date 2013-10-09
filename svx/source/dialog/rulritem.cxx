@@ -648,17 +648,7 @@ void SvxColumnItem::SetRight(long right)
     nRight = right;
 }
 
-void SvxColumnItem::SetActColumn(sal_uInt16 nCol)
-{
-    nActColumn = nCol;
-}
-
 sal_uInt16 SvxColumnItem::GetActColumn() const
-{
-    return nActColumn;
-}
-
-sal_uInt16 SvxColumnItem::GetColumnDescription() const
 {
     return nActColumn;
 }
@@ -745,11 +735,6 @@ long SvxColumnDescription::GetWidth() const
 void SvxColumnItem::SetOrtho(sal_Bool bVal)
 {
     bOrtho = bVal;
-}
-
-sal_Bool SvxColumnItem::IsOrtho () const
-{
-    return sal_False;
 }
 
 sal_Bool SvxColumnItem::IsConsistent() const

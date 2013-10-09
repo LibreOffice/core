@@ -117,22 +117,6 @@ namespace sfx2
             Window& i_rParentWindow,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame
         );
-        /** creates a new instance
-            @param i_rParentWindow
-                the parent window
-            @param i_rDocumentFrame
-                the frame to which the task pane belongs. Will be passed to any custom tool panels created
-                via an XUIElementFactory. Also, it is used to determine the module which the task pane is
-                responsible for, thus controlling which tool panels are actually available.
-            @param i_rCompare
-                a comparator for tool panel URLs, which allows controlling the order in which the panels are
-                added to the tool panel deck.
-        */
-        ModuleTaskPane(
-            Window& i_rParentWindow,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame,
-            const IToolPanelCompare& i_rCompare
-        );
         ~ModuleTaskPane();
 
         /** determines whether a given module has any registered tool panels
@@ -153,11 +137,6 @@ namespace sfx2
         */
         ::boost::optional< size_t >
                     GetPanelPos( const OUString& i_rResourceURL );
-
-        /** returns the resource URL of the panel at the specified position
-        */
-        OUString
-                    GetPanelResourceURL( const size_t i_nPanelPos ) const;
 
         /// sets the "classical" layout of the tool panel deck, using drawers
         void    SetDrawersLayout();

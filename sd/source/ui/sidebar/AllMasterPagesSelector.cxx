@@ -20,7 +20,6 @@
 #include "AllMasterPagesSelector.hxx"
 #include "PreviewValueSet.hxx"
 #include "ViewShellBase.hxx"
-#include "SidebarShellManager.hxx"
 #include "MasterPageContainer.hxx"
 #include "MasterPageDescriptor.hxx"
 #include "app.hrc"

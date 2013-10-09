@@ -304,16 +304,6 @@ public:
                 const OUString& rsResourceURL,
                 const OUString& rsAnchorURL);
 
-    /** Create a new XResourceId object for the given resource URL and the
-        two given anchor URLs.
-    */
-    static cssu::Reference<
-        cssdf::XResourceId>
-            CreateResourceId (
-                const OUString& rsResourceURL,
-                const OUString& rsFirstAnchorURL,
-                const OUString& rsSecondAnchorURL);
-
     /** Create a new XResourceId object for the given resource URL.
     */
     static cssu::Reference<

@@ -58,7 +58,6 @@ namespace sd { namespace sidebar {
 
 class ControlFactory;
 class SidebarViewShell;
-class SidebarShellManager;
 
 
 class LayoutMenu

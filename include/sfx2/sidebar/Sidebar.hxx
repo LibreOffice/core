@@ -43,14 +43,6 @@ public:
     static void ShowPanel (
         const ::rtl::OUString& rsPanelId,
         const cssu::Reference<css::frame::XFrame>& rxFrame);
-
-    /** Switch to the specified deck.
-        Note that most of the work is done asynchronously and that
-        this function probably returns before the requested deck is visible.
-    */
-    static void ShowDeck (
-        const ::rtl::OUString& rsDeckId,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
 };
 
 } } // end of namespace sfx2::sidebar

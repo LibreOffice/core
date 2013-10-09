@@ -123,7 +123,6 @@ public:
     void SetFormShell (const ViewShell* pViewShell, FmFormShell* pFormShell, bool bAbove);
     void ActivateSubShell (const SfxShell& rParentShell, ShellId nId);
     void DeactivateSubShell (const SfxShell& rParentShell, ShellId nId);
-    void MoveSubShellToTop (const SfxShell& rParentShell, ShellId nId);
     void MoveToTop (const SfxShell& rParentShell);
     SfxShell* GetShell (ShellId nId) const;
     SfxShell* GetTopShell (void) const;
@@ -297,17 +296,6 @@ void ViewShellManager::DeactivateViewShell (const ViewShell* pShell)
 {
     if (mbValid && pShell!=NULL)
         mpImpl->DeactivateViewShell(*pShell);
-}
-
-
-
-
-void ViewShellManager::MoveSubShellToTop (
-    const ViewShell& rParentShell,
-    ShellId nId)
-{
-    if (mbValid)
-        mpImpl->MoveSubShellToTop(rParentShell, nId);
 }
 
 
@@ -706,34 +694,6 @@ void ViewShellManager::Implementation::DeactivateSubShell (
     DestroySubShell(rParentShell, aDescriptor);
 }
 
-
-
-
-void ViewShellManager::Implementation::MoveSubShellToTop (
-    const SfxShell& rParentShell,
-    ShellId nId)
-{
-    SubShellList::iterator iList (maActiveSubShells.find(&rParentShell));
-    if (iList != maActiveSubShells.end())
-    {
-        // Look up the sub shell.
-        SubShellSubList& rList (iList->second);
-        SubShellSubList::iterator iShell (
-            ::std::find_if(rList.begin(),rList.end(), IsId(nId)));
-        if (iShell!=rList.end() && iShell!=rList.begin())
-        {
-            SubShellSubList::value_type aEntry (*iShell);
-            rList.erase(iShell);
-            rList.push_front(aEntry);
-        }
-    }
-    else
-    {
-        // Ignore this call when there are no sub shells for the given
-        // parent shell.  We could remember the sub shell to move to the top
-        // but we do not.  Do call this method at a later time instead.
-    }
-}
 
 
 
