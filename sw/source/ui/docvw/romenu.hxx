@@ -35,7 +35,7 @@ class SwReadOnlyPopup : public PopupMenu
     const SvxBrushItem *pItem;
     const Point &rDocPos;
                 Graphic aGraphic;
-    String      sURL,
+    OUString    sURL,
                 sTargetFrameName,
                 sDescription;
     OUString    sGrfName;
@@ -45,7 +45,7 @@ class SwReadOnlyPopup : public PopupMenu
     INetImage*  pTargetURL;
 
     void Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rDis );
-    String SaveGraphic( sal_uInt16 nId );
+    OUString SaveGraphic( sal_uInt16 nId );
 
     using PopupMenu::Execute;
 
@@ -57,7 +57,7 @@ public:
     void Execute( Window* pWin, sal_uInt16 nId );
 };
 
-void GetPreferedExtension( String &rExt, const Graphic &rGrf );
+void GetPreferedExtension( OUString &rExt, const Graphic &rGrf );
 
 #endif
 

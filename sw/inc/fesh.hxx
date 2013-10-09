@@ -430,9 +430,9 @@ public:
                     sal_Bool bSelFrame = sal_True );
 
     /// Position is a graphic with URL?
-    const SwFrmFmt* IsURLGrfAtPos( const Point& rPt, String* pURL = 0,
-                                    String *pTargetFrameName = 0,
-                                    String *pURLDescription = 0 ) const;
+    const SwFrmFmt* IsURLGrfAtPos( const Point& rPt, OUString* pURL = 0,
+                                    OUString *pTargetFrameName = 0,
+                                    OUString *pURLDescription = 0 ) const;
 
     /** For Chain always connect Fly specified by format with that hit by point.
      rRect contains rect of Fly (for its highlight). */

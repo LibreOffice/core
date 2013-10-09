@@ -91,7 +91,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     bGrfToGalleryAsLnk = SW_MOD()->GetModuleConfig()->IsGrfToGalleryAsLnk();
     SwWrtShell &rSh = rView.GetWrtShell();
     rSh.IsURLGrfAtPos( rDocPos, &sURL, &sTargetFrameName, &sDescription );
-    if ( !sURL.Len() )
+    if ( sURL.isEmpty() )
     {
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
         if( rSh.GetContentAtPos( rDocPos, aCntntAtPos, sal_False))
@@ -216,7 +216,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     }
     delete pState;
 
-    if ( !sURL.Len() )
+    if ( sURL.isEmpty() )
     {
         EnableItem( MN_READONLY_OPENURL, sal_False );
         EnableItem( MN_READONLY_OPENURLNEW, sal_False );
@@ -344,7 +344,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
     }
 }
 
-String SwReadOnlyPopup::SaveGraphic( sal_uInt16 nId )
+OUString SwReadOnlyPopup::SaveGraphic( sal_uInt16 nId )
 {
     // fish out the graphic's name
     if ( MN_READONLY_SAVEBACKGROUND == nId )
@@ -360,7 +360,7 @@ String SwReadOnlyPopup::SaveGraphic( sal_uInt16 nId )
                 sGrfName = pItem->GetGraphicLink();
         }
         else
-            return aEmptyStr;
+            return OUString();
     }
     return GraphicHelper::ExportGraphic( aGraphic, sGrfName );
 }

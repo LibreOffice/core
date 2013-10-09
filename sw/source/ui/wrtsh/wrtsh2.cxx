@@ -336,10 +336,10 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
 bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
 {
     bool bRet = false;
-    String sURL;
-    String sTargetFrameName;
+    OUString sURL;
+    OUString sTargetFrameName;
     const SwFrmFmt* pFnd = IsURLGrfAtPos( rDocPt, &sURL, &sTargetFrameName );
-    if( pFnd && sURL.Len() )
+    if( pFnd && !sURL.isEmpty() )
     {
         bRet = true;
         // At first run the possibly set ObjectSelect Macro

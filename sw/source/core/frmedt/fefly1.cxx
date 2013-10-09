@@ -1544,9 +1544,9 @@ String SwFEShell::GetUniqueGrfName() const
     return GetDoc()->GetUniqueGrfName();
 }
 
-const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
-                                        String *pTargetFrameName,
-                                        String *pDescription ) const
+const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
+                                        OUString *pTargetFrameName,
+                                        OUString *pDescription ) const
 {
     if( !Imp()->HasDrawView() )
         return 0;
@@ -1601,8 +1601,8 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
                         // without MapMode-Offset, without Offset, o ... !!!!!
                         aPt = GetOut()->LogicToPixel(
                                 aPt, MapMode( MAP_TWIP ) );
-                        ((( *pURL += '?' ) += OUString::number( aPt.getX() ))
-                                  += ',' ) += OUString::number(aPt.getY() );
+                        ((( *pURL += "?" ) += OUString::number( aPt.getX() ))
+                                  += "," ) += OUString::number(aPt.getY() );
                     }
                 }
                 pRet = pFly->GetFmt();
