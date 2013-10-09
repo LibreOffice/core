@@ -2707,8 +2707,16 @@ OUString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
     if ( pRule &&
          IsCountedInList() )
     {
+        int nLevel = GetActualListLevel();
+
+        if (nLevel < 0)
+            nLevel = 0;
+
+        if (nLevel >= MAXLEVEL)
+            nLevel = MAXLEVEL - 1;
+
         SvxNumberType const& rNumberType(
-                pRule->Get( static_cast<sal_uInt16>(GetActualListLevel()) ) );
+                pRule->Get( static_cast<sal_uInt16>(nLevel) ) );
         if (rNumberType.IsTxtFmt() ||
         //
             (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
@@ -2797,7 +2805,7 @@ sal_Bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(nLevel));
             if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                rFLOffset = pRule->Get( static_cast<sal_uInt16>(GetActualListLevel() )).GetFirstLineOffset();
+                rFLOffset = rFmt.GetFirstLineOffset();
 
                 if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
