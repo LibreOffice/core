@@ -1406,6 +1406,35 @@ void Test::testStyleInheritance()
     // Check that we output real content of rPrDefault
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "ascii", "Times New Roman");
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:lang", "bidi", "ar-SA");
+
+    // Check latent styles
+    uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, "InteropGrabBag");
+    uno::Sequence<beans::PropertyValue> aLatentStyles;
+    for (sal_Int32 i = 0; i < aGrabBag.getLength(); ++i)
+        if (aGrabBag[i].Name == "latentStyles")
+            aGrabBag[i].Value >>= aLatentStyles;
+    CPPUNIT_ASSERT(aLatentStyles.getLength()); // document should have latent styles
+
+    // Check latent style default attributes
+    OUString aCount;
+    uno::Sequence<beans::PropertyValue> aLatentStyleExceptions;
+    for (sal_Int32 i = 0; i < aLatentStyles.getLength(); ++i)
+    {
+        if (aLatentStyles[i].Name == "count")
+            aCount = aLatentStyles[i].Value.get<OUString>();
+        else if (aLatentStyles[i].Name == "lsdExceptions")
+            aLatentStyles[i].Value >>= aLatentStyleExceptions;
+    }
+    CPPUNIT_ASSERT_EQUAL(OUString("371"), aCount); // This check the "count" attribute.
+
+    // Check exceptions to the latent style defaults.
+    uno::Sequence<beans::PropertyValue> aLatentStyleException;
+    aLatentStyleExceptions[0].Value >>= aLatentStyleException;
+    OUString aName;
+    for (sal_Int32 i = 0; i < aLatentStyleException.getLength(); ++i)
+        if (aLatentStyleException[i].Name == "name")
+            aName = aLatentStyleException[i].Value.get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("Normal"), aName); // This checks the "name" attribute of the first exception.
 }
 
 void Test::testSmartart()
