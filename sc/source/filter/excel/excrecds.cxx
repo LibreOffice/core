@@ -721,10 +721,9 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     bool bConflict = false;
     OUString  sText;
     const ScQueryEntry::Item& rItem = rItems[0];
-    OUString aQueryStr = rItem.maString.getString();
-    if (!aQueryStr.isEmpty())
+    if (!rItem.maString.isEmpty())
     {
-        sText = aQueryStr;
+        sText = rItem.maString.getString();
         switch( rEntry.eOp )
         {
             case SC_CONTAINS:

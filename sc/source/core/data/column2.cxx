@@ -578,11 +578,10 @@ public:
 
     void operator() (size_t /*nRow*/, const svl::SharedString& rSS)
     {
-        OUString aStr = rSS.getString();
-        if (aStr.getLength() > mnMaxLen)
+        if (rSS.getLength() > mnMaxLen)
         {
-            mnMaxLen = aStr.getLength();
-            maMaxLenStr = aStr;
+            mnMaxLen = rSS.getLength();
+            maMaxLenStr = rSS.getString();
         }
     }
 

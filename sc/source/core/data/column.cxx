@@ -1866,7 +1866,7 @@ public:
                 for (; it != itEnd; ++it, ++nRow)
                 {
                     const svl::SharedString& rStr = *it;
-                    if (rStr.getString().isEmpty())
+                    if (rStr.isEmpty())
                     {
                         // String cell with empty value is used to special-case cell value removal.
                         maDestPos.miCellPos = mrDestCol.GetCellStore().set_empty(

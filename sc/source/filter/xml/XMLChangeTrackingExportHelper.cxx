@@ -294,12 +294,11 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScCellValue& rCell)
 
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-    OUString aStr = rCell.mpString->getString();
-    if (!aStr.isEmpty())
+    if (!rCell.mpString->isEmpty())
     {
         SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
         bool bPrevCharWasSpace(true);
-        rExport.GetTextParagraphExport()->exportText(aStr, bPrevCharWasSpace);
+        rExport.GetTextParagraphExport()->exportText(rCell.mpString->getString(), bPrevCharWasSpace);
     }
 }
 
