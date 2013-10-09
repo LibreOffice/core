@@ -70,10 +70,10 @@ class SwFldVarPage : public SwFldPage
     sal_uInt16          m_nApplyId;
     sal_uInt16          m_nDeleteId;
 
-    String              sOldValueFT;
-    String              sOldNameFT;
+    OUString            sOldValueFT;
+    OUString            sOldNameFT;
 
-    sal_uLong               nOldFormat;
+    sal_uLong           nOldFormat;
     sal_Bool                bInit;
 
     DECL_LINK(TypeHdl, void *);

@@ -587,9 +587,9 @@ sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
     return sal_False;
 }
 
-String SwFldFuncPage::TurnMacroString(const String &rMacro)
+OUString SwFldFuncPage::TurnMacroString(const OUString &rMacro)
 {
-    if (rMacro.Len())
+    if (!rMacro.isEmpty())
     {
         // reverse content of aName
         String sTmp, sBuf;
@@ -598,9 +598,9 @@ String SwFldFuncPage::TurnMacroString(const String &rMacro)
         for (sal_uInt16 i = 0; i < 4 && nPos != -1; i++)
         {
             if (i == 3)
-                sTmp = rMacro.Copy(nPos);
+                sTmp = rMacro.copy(nPos);
             else
-                sTmp = rMacro.GetToken(0, '.', nPos);
+                sTmp = rMacro.getToken(0, '.', nPos);
 
             if( sBuf.Len() )
                 sTmp += '.';

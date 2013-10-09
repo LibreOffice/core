@@ -30,12 +30,12 @@ const int coLBCount = 3;
 
 class SwFldPage : public SfxTabPage
 {
-    String              m_aLstStrArr[ coLBCount ];
+    OUString            m_aLstStrArr[ coLBCount ];
     SwFldMgr            m_aMgr;
     SwField             *m_pCurFld;
     SwWrtShell*         m_pWrtShell;
-    sal_uInt16              m_nTypeSel;
-    sal_uInt16              m_nSelectionSel;
+    sal_uInt16          m_nTypeSel;
+    sal_uInt16          m_nSelectionSel;
     bool                m_bFldEdit;
     sal_Bool                m_bInsert;
     sal_Bool                m_bFldDlgHtmlMode;
@@ -68,8 +68,8 @@ protected:
     // insert field
     sal_Bool                InsertFld(  sal_uInt16 nTypeId,
                                     sal_uInt16 nSubType,
-                                    const String& rPar1,
-                                    const String& rPar2,
+                                    const OUString& rPar1,
+                                    const OUString& rPar2,
                                     sal_uLong nFormatId,
                                     sal_Unicode cDelim = ' ',
                                     sal_Bool bIsAutomaticLanguage = sal_True);

@@ -77,7 +77,7 @@ class SwFldFuncPage : public SwFldPage
     DECL_LINK( MacroHdl, Button * );
 
     void                UpdateSubType();
-    String              TurnMacroString(const String &rMacro);
+    OUString            TurnMacroString(const OUString &rMacro);
 
 protected:
     virtual sal_uInt16      GetGroup();

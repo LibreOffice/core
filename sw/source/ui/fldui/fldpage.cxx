@@ -127,8 +127,8 @@ void SwFldPage::EditNewField( sal_Bool bOnlyActivate )
      Description: insert field
  --------------------------------------------------------------------*/
 
-sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const String& rPar1,
-                            const String& rPar2, sal_uLong nFormatId,
+sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUString& rPar1,
+                            const OUString& rPar2, sal_uLong nFormatId,
                             sal_Unicode cSeparator, sal_Bool bIsAutomaticLanguage)
 {
     sal_Bool bRet = sal_False;
@@ -157,13 +157,13 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
             if(bRecordDB)
             {
                 aReq.AppendItem(SfxStringItem
-                        (FN_INSERT_DBFIELD,rPar1.GetToken(0, DB_DELIM)));
+                        (FN_INSERT_DBFIELD,rPar1.getToken(0, DB_DELIM)));
                 aReq.AppendItem(SfxStringItem
-                        (FN_PARAM_1,rPar1.GetToken(1, DB_DELIM)));
+                        (FN_PARAM_1,rPar1.getToken(1, DB_DELIM)));
                 aReq.AppendItem(SfxInt32Item
-                        (FN_PARAM_3,rPar1.GetToken(1, DB_DELIM).ToInt32()));
+                        (FN_PARAM_3,rPar1.getToken(1, DB_DELIM).toInt32()));
                 aReq.AppendItem(SfxStringItem
-                        (FN_PARAM_2,rPar1.GetToken(3, DB_DELIM)));
+                        (FN_PARAM_2,rPar1.getToken(3, DB_DELIM)));
             }
             else
             {
@@ -201,10 +201,10 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
                 sal_Int32 nPos = 0;
                 SwDBData aData;
 
-                aData.sDataSource = rPar1.GetToken(0, DB_DELIM, nPos);
-                aData.sCommand = rPar1.GetToken(0, DB_DELIM, nPos);
-                aData.nCommandType = rPar1.GetToken(0, DB_DELIM, nPos).ToInt32();
-                sPar1 = rPar1.Copy(nPos);
+                aData.sDataSource = rPar1.getToken(0, DB_DELIM, nPos);
+                aData.sCommand = rPar1.getToken(0, DB_DELIM, nPos);
+                aData.nCommandType = rPar1.getToken(0, DB_DELIM, nPos).toInt32();
+                sPar1 = rPar1.copy(nPos);
 
                 ((SwDBNameInfField*)pTmpFld)->SetDBData(aData);
             }
@@ -213,10 +213,10 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
         case TYP_DBFLD:
             {
                 SwDBData aData;
-                aData.sDataSource = rPar1.GetToken(0, DB_DELIM);
-                aData.sCommand = rPar1.GetToken(1, DB_DELIM);
-                aData.nCommandType = rPar1.GetToken(2, DB_DELIM).ToInt32();
-                String sColumn = rPar1.GetToken(3, DB_DELIM);
+                aData.sDataSource = rPar1.getToken(0, DB_DELIM);
+                aData.sCommand = rPar1.getToken(1, DB_DELIM);
+                aData.nCommandType = rPar1.getToken(2, DB_DELIM).toInt32();
+                String sColumn = rPar1.getToken(3, DB_DELIM);
 
                 SwDBFieldType* pOldTyp = (SwDBFieldType*)pTmpFld->GetTyp();
                 SwDBFieldType* pTyp = (SwDBFieldType*)pSh->InsertFldType(
@@ -303,7 +303,7 @@ void SwFldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
         if( (*ppLB) && (*ppLB)->GetEntryCount() )
             m_aLstStrArr[ i ] = (*ppLB)->GetSelectEntry();
         else
-            m_aLstStrArr[ i ].Erase();
+            m_aLstStrArr[ i ] = "";
 }
 
 void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
@@ -312,7 +312,7 @@ void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
     ListBox* aLBArr [ coLBCount ] = { pLst1, pLst2, pLst3 };
     ListBox** ppLB = aLBArr;
     for( int i = 0; i < coLBCount; ++i, ++ppLB )
-        if( (*ppLB) && (*ppLB)->GetEntryCount() && m_aLstStrArr[ i ].Len() &&
+        if( (*ppLB) && (*ppLB)->GetEntryCount() && !m_aLstStrArr[ i ].isEmpty() &&
             LISTBOX_ENTRY_NOTFOUND !=
                         ( nPos = (*ppLB)->GetEntryPos(m_aLstStrArr[ i ] ) ) )
             (*ppLB)->SelectEntryPos( nPos );
