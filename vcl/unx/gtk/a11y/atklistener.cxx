@@ -78,7 +78,10 @@ extern "C" {
         // This is an equivalent to a state change to DEFUNC(T).
         atk_object_notify_state_change( atk_obj, ATK_STATE_DEFUNCT, TRUE );
         if( atk_get_focus_object() == atk_obj )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
             atk_focus_tracker_notify( NULL );
+#pragma GCC diagnostic pop
         g_object_unref( G_OBJECT( atk_obj ) );
         return FALSE;
     }
