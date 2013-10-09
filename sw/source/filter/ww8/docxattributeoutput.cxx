@@ -5149,10 +5149,12 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     {
         case SVX_ADJUST_LEFT:
             if ( bEcma )
+            {
                 if ( bRtl )
                     pAdjustString = "right";
                 else
                     pAdjustString = "left";
+            }
             else if ( bRtl )
                 pAdjustString = "end";
             else
@@ -5160,10 +5162,12 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
             break;
         case SVX_ADJUST_RIGHT:
             if ( bEcma )
+            {
                 if ( bRtl )
                     pAdjustString = "left";
                 else
                     pAdjustString = "right";
+            }
             else if ( bRtl )
                 pAdjustString = "start";
             else
