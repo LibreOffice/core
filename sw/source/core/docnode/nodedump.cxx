@@ -296,13 +296,14 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<sal_Int32> oValue;
         switch (pItem->Which())
         {
-            case RES_CHRATR_POSTURE: pWhich = "posture"; break;
-            case RES_CHRATR_WEIGHT: pWhich = "weight"; break;
-            case RES_CHRATR_CJK_POSTURE: pWhich = "cjk posture"; break;
-            case RES_CHRATR_CJK_WEIGHT: pWhich = "cjk weight"; break;
-            case RES_CHRATR_CTL_POSTURE: pWhich = "ctl posture"; break;
-            case RES_CHRATR_CTL_WEIGHT: pWhich = "ctl weight"; break;
-            case RES_PARATR_OUTLINELEVEL: pWhich = "outline level"; oValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue(); break;
+            case RES_CHRATR_POSTURE: pWhich = "character posture"; break;
+            case RES_CHRATR_WEIGHT: pWhich = "character weight"; break;
+            case RES_CHRATR_CJK_POSTURE: pWhich = "character cjk posture"; break;
+            case RES_CHRATR_CJK_WEIGHT: pWhich = "character cjk weight"; break;
+            case RES_CHRATR_CTL_POSTURE: pWhich = "character ctl posture"; break;
+            case RES_CHRATR_CTL_WEIGHT: pWhich = "character ctl weight"; break;
+            case RES_CHRATR_RSID: pWhich = "character rsid"; break;
+            case RES_PARATR_OUTLINELEVEL: pWhich = "paragraph outline level"; oValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue(); break;
         }
         if (pWhich)
             writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
@@ -331,6 +332,15 @@ void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w)
         }
         writer.endElement();
     }
+}
+
+void SwNumRule::dumpAsXml(xmlTextWriterPtr w)
+{
+     WriterHelper writer(w);
+     writer.startElement("swnumrule");
+     OString aName = OUStringToOString(GetName(), RTL_TEXTENCODING_UTF8);
+     writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
+     writer.endElement();
 }
 
 void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
@@ -382,6 +392,8 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
         }
         writer.endElement();
     }
+    if (GetNumRule())
+        GetNumRule()->dumpAsXml(w);
 
     writer.endElement();
 }

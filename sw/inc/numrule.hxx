@@ -29,6 +29,7 @@
 #include <hints.hxx>
 #include <boost/unordered_map.hpp>
 #include <SwNumberTreeTypes.hxx>
+#include <ndarr.hxx>
 #include <vector>
 
 class SwTxtFmtColl;
@@ -269,6 +270,7 @@ public:
     void SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent );
 
     void Validate();
+    void dumpAsXml(xmlTextWriterPtr w);
 };
 
 /// namespace for static functions and methods for numbering and bullets
