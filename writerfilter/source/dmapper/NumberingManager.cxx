@@ -229,7 +229,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
     _PropertyMap::const_iterator aEndIter = end();
     for( ; aMapIter != aEndIter; ++aMapIter )
     {
-        switch( aMapIter->first.eId )
+        switch( aMapIter->first )
         {
             case PROP_ADJUST:
             case PROP_INDENT_AT:
@@ -243,8 +243,8 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
             {
                 rProperties.push_back(
                         beans::PropertyValue(
-                            aPropNameSupplier.GetName( aMapIter->first.eId ), 0,
-                            aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
+                            aPropNameSupplier.GetName( aMapIter->first ), 0,
+                            aMapIter->second.getValue(), beans::PropertyState_DIRECT_VALUE ));
             }
         }
     }
@@ -335,7 +335,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     _PropertyMap::const_iterator aEndIter = end();
     for( ; aMapIter != aEndIter; ++aMapIter )
     {
-        switch( aMapIter->first.eId )
+        switch( aMapIter->first )
         {
             case PROP_ADJUST:
             case PROP_INDENT_AT:
@@ -343,13 +343,13 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
             case PROP_FIRST_LINE_OFFSET:
             case PROP_LEFT_MARGIN:
                 aNumberingProperties.push_back(
-                    beans::PropertyValue( aPropNameSupplier.GetName( aMapIter->first.eId ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
+                    beans::PropertyValue( aPropNameSupplier.GetName( aMapIter->first ), 0, aMapIter->second.getValue(), beans::PropertyState_DIRECT_VALUE ));
             break;
             case PROP_CHAR_FONT_NAME:
                 if( !isOutlineNumbering())
                 {
                     aNumberingProperties.push_back(
-                        beans::PropertyValue( aPropNameSupplier.GetName( PROP_BULLET_FONT_NAME ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
+                        beans::PropertyValue( aPropNameSupplier.GetName( PROP_BULLET_FONT_NAME ), 0, aMapIter->second.getValue(), beans::PropertyState_DIRECT_VALUE ));
                 }
             break;
             default:

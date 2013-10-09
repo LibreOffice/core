@@ -64,23 +64,27 @@ enum BorderPosition
     BORDER_BOTTOM
 };
 
-
-struct PropertyDefinition
+class PropValue
 {
-    PropertyIds eId;
+    uno::Any m_aValue;
     bool m_bGrabBag;
 
-    PropertyDefinition( PropertyIds _eId, bool bGrabBag = false ) :
-        eId( _eId ), m_bGrabBag(bGrabBag){}
+public:
+    PropValue(const uno::Any& rValue, bool bGrabBag = false) :
+        m_aValue(rValue), m_bGrabBag(bGrabBag) {}
 
-    bool    operator== (const PropertyDefinition& rDef) const
-            {   return rDef.eId == eId; }
-    bool    operator< (const PropertyDefinition& rDef) const
-            {   return eId < rDef.eId; }
+    PropValue() : m_aValue(), m_bGrabBag() {}
+
+    const PropValue& operator=(const PropValue& rProp) { m_aValue = rProp.m_aValue; m_bGrabBag = rProp.m_bGrabBag; return *this; }
+
+    const uno::Any& getValue() const { return m_aValue; }
+    bool hasGrabBag() const { return m_bGrabBag; }
 };
-typedef std::map < PropertyDefinition, ::com::sun::star::uno::Any > _PropertyMap;
+typedef std::map< PropertyIds, PropValue > _PropertyMap;
+
 class PropertyMap : public _PropertyMap
 {
+    /// Cache the property values for the GetPropertyValues() call(s).
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aValues;
     //marks context as footnote context - ::text( ) events contain either the footnote character or can be ignored
     //depending on sprmCSymbol
@@ -105,6 +109,7 @@ public:
     /** Add property, usually overwrites already available attributes. It shouldn't overwrite in case of default attributes
      */
     void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true, bool bGrabBag = false );
+    void Insert( PropertyIds eId, const PropValue& rValue, bool bOverwrite = true );
     void InsertProps(const boost::shared_ptr<PropertyMap> pMap);
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const;

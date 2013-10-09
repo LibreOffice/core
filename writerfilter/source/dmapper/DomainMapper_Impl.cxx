@@ -583,10 +583,10 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
         if(pEntry->pProperties)
         {
             PropertyMap::const_iterator aPropertyIter =
-                    pEntry->pProperties->find(PropertyDefinition(eId));
+                    pEntry->pProperties->find(eId);
             if( aPropertyIter != pEntry->pProperties->end())
             {
-                return aPropertyIter->second;
+                return aPropertyIter->second.getValue();
             }
         }
         //search until the property is set or no parent is available
@@ -729,11 +729,11 @@ void lcl_AddRangeAndStyle(
     pToBeSavedProperties->SetStartingRange(xParaCursor->getStart());
     if(pPropertyMap)
     {
-        PropertyMap::iterator aParaStyleIter = pPropertyMap->find(PropertyDefinition( PROP_PARA_STYLE_NAME ) );
+        PropertyMap::iterator aParaStyleIter = pPropertyMap->find(PROP_PARA_STYLE_NAME);
         if( aParaStyleIter != pPropertyMap->end())
         {
             OUString sName;
-            aParaStyleIter->second >>= sName;
+            aParaStyleIter->second.getValue() >>= sName;
             pToBeSavedProperties->SetParaStyleName(sName);
         }
     }
@@ -1805,9 +1805,9 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 // Fix spacing for as-character objects. If the paragraph has CT_Spacing_after set,
                 // it needs to be set on the object too, as that's what object placement code uses.
                 PropertyMapPtr paragraphContext = GetTopContextOfType( CONTEXT_PARAGRAPH );
-                PropertyMap::const_iterator pos = paragraphContext->find( PropertyDefinition( PROP_PARA_BOTTOM_MARGIN ));
+                PropertyMap::const_iterator pos = paragraphContext->find(PROP_PARA_BOTTOM_MARGIN);
                 if( pos != paragraphContext->end())
-                    xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ), (*pos).second );
+                    xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ), (*pos).second.getValue() );
             }
         }
     }
@@ -2062,17 +2062,16 @@ bool lcl_FindInCommand(
 void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
 {
     PropertyMapPtr pTopContext = GetTopContext();
-    PropertyDefinition aCharLocale( PROP_CHAR_LOCALE );
-    PropertyMap::iterator aLocaleIter = pTopContext->find( aCharLocale );
+    PropertyMap::iterator aLocaleIter = pTopContext->find(PROP_CHAR_LOCALE);
     if( aLocaleIter != pTopContext->end())
-        aLocaleIter->second >>= rLocale;
+        aLocaleIter->second.getValue() >>= rLocale;
     else
     {
         PropertyMapPtr pParaContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
-        aLocaleIter = pParaContext->find(aCharLocale);
+        aLocaleIter = pParaContext->find(PROP_CHAR_LOCALE);
         if( aLocaleIter != pParaContext->end())
         {
-            aLocaleIter->second >>= rLocale;
+            aLocaleIter->second.getValue() >>= rLocale;
         }
     }
 }
@@ -4088,14 +4087,14 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(OUString aProp)
 {
     sal_Int32 nRet = 0;
 
-    PropertyMap::iterator it = m_pTopContext->find(PropertyDefinition( PROP_NUMBERING_RULES ) );
+    PropertyMap::iterator it = m_pTopContext->find(PROP_NUMBERING_RULES);
     uno::Reference<container::XIndexAccess> xNumberingRules;
     if (it != m_pTopContext->end())
-        xNumberingRules.set(it->second, uno::UNO_QUERY);
-    it = m_pTopContext->find(PropertyDefinition( PROP_NUMBERING_LEVEL ) );
+        xNumberingRules.set(it->second.getValue(), uno::UNO_QUERY);
+    it = m_pTopContext->find(PROP_NUMBERING_LEVEL);
     sal_Int32 nNumberingLevel = -1;
     if (it != m_pTopContext->end())
-        it->second >>= nNumberingLevel;
+        it->second.getValue() >>= nNumberingLevel;
     if (xNumberingRules.is() && nNumberingLevel != -1)
     {
         uno::Sequence<beans::PropertyValue> aProps;

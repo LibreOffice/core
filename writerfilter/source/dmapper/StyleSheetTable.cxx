@@ -119,10 +119,10 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pPr
         if ( nType == pTypesToFix[i] )
         {
             PropertyIds nChecked = pPropsToCheck[i];
-            PropertyMap::iterator pCheckedIt = pProps->find( PropertyDefinition( nChecked )  );
+            PropertyMap::iterator pCheckedIt = pProps->find(nChecked);
 
             PropertyIds nInsideProp = ( i < 2 ) ? META_PROP_HORIZONTAL_BORDER : META_PROP_VERTICAL_BORDER;
-            PropertyMap::iterator pInsideIt = pProps->find( PropertyDefinition( nInsideProp )  );
+            PropertyMap::iterator pInsideIt = pProps->find(nInsideProp);
 
             bool bHasChecked = pCheckedIt != pProps->end( );
             bool bHasInside = pInsideIt != pProps->end( );
@@ -194,18 +194,17 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
     for ( unsigned i = 0 ; i != sizeof(pPropsToCheck) / sizeof(PropertyIds); i++ )
     {
         PropertyIds nId = pPropsToCheck[i];
-        PropertyDefinition aProp( nId );
-        PropertyMap::iterator pIt = pToAdd->find( aProp );
+        PropertyMap::iterator pIt = pToAdd->find(nId);
 
         if ( pIt != pToAdd->end( ) )
         {
-            PropertyMap::iterator pDestIt = pToFill->find( aProp );
+            PropertyMap::iterator pDestIt = pToFill->find(nId);
 
             if ( pRemoveInside[i] )
             {
                 // Remove the insideH and insideV depending on the cell pos
                 PropertyIds nInsideProp = ( i < 2 ) ? META_PROP_HORIZONTAL_BORDER : META_PROP_VERTICAL_BORDER;
-                pDestIt = pToFill->find( PropertyDefinition( nInsideProp ) );
+                pDestIt = pToFill->find(nInsideProp);
                 if ( pDestIt != pToFill->end( ) )
                     pToFill->erase( pDestIt );
             }
@@ -1300,7 +1299,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             {
                 try
                 {
-                    m_pImpl->m_xTextDefaults->setPropertyValue(rPropNameSupplier.GetName( aMapIter->first.eId ), aMapIter->second);
+                    m_pImpl->m_xTextDefaults->setPropertyValue(rPropNameSupplier.GetName( aMapIter->first ), aMapIter->second.getValue());
                 }
                 catch( const uno::Exception& )
                 {
@@ -1315,7 +1314,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             {
                 try
                 {
-                    m_pImpl->m_xTextDefaults->setPropertyValue(rPropNameSupplier.GetName( aMapIter->first.eId ), aMapIter->second);
+                    m_pImpl->m_xTextDefaults->setPropertyValue(rPropNameSupplier.GetName( aMapIter->first ), aMapIter->second.getValue());
                 }
                 catch( const uno::Exception& )
                 {
