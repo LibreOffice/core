@@ -10322,7 +10322,7 @@ dnl =================================================
 AC_MSG_CHECKING([whether to build with the OpenCL support.])
 ENABLE_OPENCL=
 
-if test "x$enable_opencl" != "xno"; then
+if test $_os != iOS -a $_os != Android -a "x$enable_opencl" != "xno"; then
     AC_MSG_RESULT([yes])
     enable_opencl=yes
     ENABLE_OPENCL=TRUE
