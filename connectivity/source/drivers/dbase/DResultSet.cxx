@@ -21,6 +21,7 @@
 #include "dbase/DResultSet.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "dbase/DIndex.hxx"
 #include "dbase/DIndexIter.hxx"
 #include "dbase/DCode.hxx"
@@ -58,16 +59,10 @@ Sequence< OUString > SAL_CALL ODbaseResultSet::getSupportedServiceNames(  ) thro
     aSupported[1] = OUString("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODbaseResultSet::supportsService( const OUString& _rServiceName ) throw( RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL ODbaseResultSet::queryInterface( const Type & rType ) throw(RuntimeException)

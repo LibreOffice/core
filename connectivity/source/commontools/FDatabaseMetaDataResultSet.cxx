@@ -36,6 +36,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "connectivity/dbexception.hxx"
 #include "resource/common_res.hrc"
 #include "TConnection.hxx"
@@ -855,16 +856,9 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
         return getImplementationName_Static();
     }
 
-    //------------------------------------------------------------------
     sal_Bool SAL_CALL ODatabaseMetaDataResultSet::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
-        Sequence< OUString > aSupported(getSupportedServiceNames());
-        const OUString* pSupported = aSupported.getConstArray();
-        const OUString* pEnd = pSupported + aSupported.getLength();
-        for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-            ;
-
-        return pSupported != pEnd;
+        return cppu::supportsService(this, _rServiceName);
     }
     //------------------------------------------------------------------
     Sequence< OUString > SAL_CALL ODatabaseMetaDataResultSet::getSupportedServiceNames(  ) throw(RuntimeException)

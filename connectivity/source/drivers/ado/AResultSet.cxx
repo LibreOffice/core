@@ -28,6 +28,7 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/seqstream.hxx>
@@ -64,16 +65,10 @@ OUString SAL_CALL OResultSet::getImplementationName(  ) throw (::com::sun::star:
     aSupported[1] = OUString("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  OResultSet_BASE(m_aMutex)
