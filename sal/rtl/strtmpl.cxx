@@ -1266,7 +1266,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromSubString )( IMPL_RTL_STRINGDATA** ppT
     }
     if ( count < 0 || beginIndex < 0 || beginIndex + count > pFrom->length )
     {
-        OSL_FAIL( "Out of bounds substring access" );
+        assert(false); // fail fast at least in debug builds
         IMPL_RTL_STRINGNAME( newFromLiteral )( ppThis, "!!br0ken!!", 10, 0 );
         return;
     }
