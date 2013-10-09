@@ -40,6 +40,7 @@ public:
     const rtl_uString* getDataIgnoreCase() const;
 
     bool isValid() const;
+    bool isEmpty() const;
 };
 
 }

@@ -976,7 +976,7 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
         if (!rItems.empty())
         {
             const ScQueryEntry::Item& rItem = rItems[0];
-            if (rItem.meType != ScQueryEntry::ByString && !rItem.maString.getString().isEmpty() &&
+            if (rItem.meType != ScQueryEntry::ByString && !rItem.maString.isEmpty() &&
                 (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL))
             {
                 // As in ScTable::ValidQuery() match a numeric string for a

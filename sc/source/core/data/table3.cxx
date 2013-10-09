@@ -1487,7 +1487,7 @@ public:
             // Simple string matching i.e. no regexp match.
             if (isTextMatchOp(rEntry))
             {
-                if (rItem.meType != ScQueryEntry::ByString && rItem.maString.getString().isEmpty())
+                if (rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
                 {
                     // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
                     // the query value is assigned directly, and the string is empty. In that case,

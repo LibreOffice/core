@@ -113,6 +113,11 @@ bool SharedString::isValid() const
     return mpData != NULL;
 }
 
+bool SharedString::isEmpty() const
+{
+    return mpData == NULL || mpData->length == 0;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

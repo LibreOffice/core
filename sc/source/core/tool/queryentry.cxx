@@ -107,7 +107,7 @@ bool ScQueryEntry::IsQueryByEmpty() const
     const Item& rItem = maQueryItems[0];
     return eOp == SC_EQUAL &&
         rItem.meType == ByEmpty &&
-        rItem.maString.getString().isEmpty() &&
+        rItem.maString.isEmpty() &&
         rItem.mfVal == SC_EMPTYFIELDS;
 }
 
@@ -129,7 +129,7 @@ bool ScQueryEntry::IsQueryByNonEmpty() const
     const Item& rItem = maQueryItems[0];
     return eOp == SC_EQUAL &&
         rItem.meType == ByEmpty &&
-        rItem.maString.getString().isEmpty() &&
+        rItem.maString.isEmpty() &&
         rItem.mfVal == SC_NONEMPTYFIELDS;
 }
 
