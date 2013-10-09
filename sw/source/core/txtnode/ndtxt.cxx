@@ -2873,7 +2873,15 @@ void SwTxtNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpac
         const SwNumRule* pRule = GetNumRule();
         if ( pRule && GetActualListLevel() >= 0 )
         {
-            const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(GetActualListLevel()));
+            int nLevel = GetActualListLevel();
+
+            if (nLevel < 0)
+                nLevel = 0;
+
+            if (nLevel >= MAXLEVEL)
+                nLevel = MAXLEVEL - 1;
+
+            const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(nLevel));
             if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
