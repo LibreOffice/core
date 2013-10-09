@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <algorithm>
+
 #include <unofield.hxx>
 #include <unofieldcoll.hxx>
 #include <swtypes.hxx>
@@ -2640,7 +2644,7 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     if( USHRT_MAX == nResId )
         throw container::NoSuchElementException();
 
-    sName = sName.copy(sTypeName.getLength()+1);
+    sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));
     SwFieldType* pType = GetDoc()->GetFldType(nResId, sName, sal_True);
     if(!pType)
         throw container::NoSuchElementException();
@@ -2727,7 +2731,7 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::Runti
     sal_Bool bRet = sal_False;
     if( USHRT_MAX != nResId )
     {
-        sName = sName.copy(sTypeName.getLength()+1);
+        sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));
         bRet = USHRT_MAX != nResId && 0 != GetDoc()->GetFldType(nResId, sName, sal_True);
     }
     return bRet;
