@@ -341,28 +341,12 @@ void ScOrcusSheet::set_formula_result(os::row_t row, os::col_t col, const char* 
 }
 
 void ScOrcusSheet::set_shared_formula(
-    os::row_t /*row*/, os::col_t /*col*/, os::formula_grammar_t /*grammar*/, size_t /*sindex*/,
-    const char* /*p_formula*/, size_t /*n_formula*/)
-{
-    // TODO: We need to revise this interface in orcus.
-}
-
-void ScOrcusSheet::set_shared_formula(
     os::row_t row, os::col_t col, os::formula_grammar_t grammar, size_t sindex,
-    const char* p_formula, size_t n_formula, const char* p_range, size_t n_range)
+    const char* p_formula, size_t n_formula)
 {
     ScAddress aPos(col, row, mnTab);
     OUString aFormula(p_formula, n_formula, RTL_TEXTENCODING_UTF8);
-    OUString aRangeStr(p_range, n_range, RTL_TEXTENCODING_UTF8);
     formula::FormulaGrammar::Grammar eGram = getCalcGrammarFromOrcus(grammar);
-    formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::extractRefConvention(eGram);
-
-    // Convert the shared formula range.
-    ScRange aRange;
-    sal_uInt16 nRes = aRange.Parse(aRangeStr, &mrDoc.getDoc(), eConv);
-    if (!(nRes & SCA_VALID))
-        // Conversion failed.
-        return;
 
     // Compile the formula expression into tokens.
     ScCompiler aComp(&mrDoc.getDoc(), aPos);
@@ -372,24 +356,9 @@ void ScOrcusSheet::set_shared_formula(
         // Tokenization failed.
         return;
 
-    for (sal_Int32 nCol = aRange.aStart.Col(); nCol <= aRange.aEnd.Col(); ++nCol)
-    {
-        // Create one group per column, since Calc doesn't support shared
-        // formulas across multiple columns.
-        ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
-        xNewGroup->mnStart = aRange.aStart.Row();
-        xNewGroup->mnLength = 1;
-        xNewGroup->setCode(*pArray);
-        maFormulaGroups.set(sindex, nCol, xNewGroup);
-    }
+    maFormulaGroups.set(sindex, pArray);
 
-    ScFormulaCellGroupRef xGroup = maFormulaGroups.get(sindex, aPos.Col());
-    if (!xGroup)
-        return;
-
-    // Generate code for the top cell only.
-    xGroup->compileCode(mrDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_DEFAULT);
-    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, xGroup);
+    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, pArray);
     mrDoc.setFormulaCell(aPos, pCell);
     cellInserted();
 
@@ -398,16 +367,22 @@ void ScOrcusSheet::set_shared_formula(
     pCell->StartListeningTo(&mrDoc.getDoc());
 }
 
+void ScOrcusSheet::set_shared_formula(
+    os::row_t row, os::col_t col, os::formula_grammar_t grammar, size_t sindex,
+    const char* p_formula, size_t n_formula, const char* /*p_range*/, size_t /*n_range*/)
+{
+    set_shared_formula(row, col, grammar, sindex, p_formula, n_formula);
+}
+
 void ScOrcusSheet::set_shared_formula(os::row_t row, os::col_t col, size_t sindex)
 {
     ScAddress aPos(col, row, mnTab);
 
-    ScFormulaCellGroupRef xGroup = maFormulaGroups.get(sindex, aPos.Col());
-    if (!xGroup)
+    const ScTokenArray* pArray = maFormulaGroups.get(sindex);
+    if (!pArray)
         return;
 
-    xGroup->mnLength = aPos.Row() - xGroup->mnStart + 1;
-    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, xGroup);
+    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc.getDoc(), aPos, pArray);
     mrDoc.setFormulaCell(aPos, pCell);
     cellInserted();
 

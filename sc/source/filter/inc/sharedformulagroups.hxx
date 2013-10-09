@@ -10,43 +10,20 @@
 #ifndef SC_FILTER_SHAREDFORMULAGROUPS_HXX
 #define SC_FILTER_SHAREDFORMULAGROUPS_HXX
 
-#include "address.hxx"
-#include "formulacell.hxx"
 #include "tokenarray.hxx"
 
 #include <boost/ptr_container/ptr_map.hpp>
-#include <boost/unordered_map.hpp>
 
 namespace sc {
 
 class SharedFormulaGroups
 {
-    struct Key
-    {
-        size_t mnId;
-        SCCOL mnCol;
-
-        Key(size_t nId, SCCOL nCol);
-
-        bool operator== ( const Key& rOther ) const;
-        bool operator!= ( const Key& rOther ) const;
-    };
-
-    struct KeyHash
-    {
-        size_t operator() ( const Key& rKey ) const;
-    };
-
     typedef boost::ptr_map<size_t, ScTokenArray> StoreType;
-    typedef boost::unordered_map<Key, ScFormulaCellGroupRef, KeyHash> ColStoreType;
-    ColStoreType maColStore;
     StoreType maStore;
 public:
 
     void set( size_t nSharedId, ScTokenArray* pArray );
-    void set( size_t nSharedId, SCCOL nCol, const ScFormulaCellGroupRef& xGroup );
     const ScTokenArray* get( size_t nSharedId ) const;
-    ScFormulaCellGroupRef get( size_t nSharedId, SCCOL nCol ) const;
 };
 
 }

@@ -11,48 +11,15 @@
 
 namespace sc {
 
-SharedFormulaGroups::Key::Key(size_t nId, SCCOL nCol) : mnId(nId), mnCol(nCol) {}
-
-bool SharedFormulaGroups::Key::operator== ( const Key& rOther ) const
-{
-    return mnId == rOther.mnId && mnCol == rOther.mnCol;
-}
-
-bool SharedFormulaGroups::Key::operator!= ( const Key& rOther ) const
-{
-    return !operator==(rOther);
-}
-
-size_t SharedFormulaGroups::KeyHash::operator ()( const Key& rKey ) const
-{
-    double nVal = rKey.mnId;
-    nVal *= 256.0;
-    nVal += rKey.mnCol;
-    return static_cast<size_t>(nVal);
-}
-
 void SharedFormulaGroups::set( size_t nSharedId, ScTokenArray* pArray )
 {
     maStore.insert(nSharedId, pArray);
-}
-
-void SharedFormulaGroups::set( size_t nSharedId, SCCOL nCol, const ScFormulaCellGroupRef& xGroup )
-{
-    Key aKey(nSharedId, nCol);
-    maColStore.insert(ColStoreType::value_type(aKey, xGroup));
 }
 
 const ScTokenArray* SharedFormulaGroups::get( size_t nSharedId ) const
 {
     StoreType::const_iterator it = maStore.find(nSharedId);
     return it == maStore.end() ? NULL : it->second;
-}
-
-ScFormulaCellGroupRef SharedFormulaGroups::get( size_t nSharedId, SCCOL nCol ) const
-{
-    Key aKey(nSharedId, nCol);
-    ColStoreType::const_iterator it = maColStore.find(aKey);
-    return it == maColStore.end() ? ScFormulaCellGroupRef() : it->second;
 }
 
 }

@@ -25,6 +25,8 @@
 #include "scdllapi.h"
 #include "types.hxx"
 #include "calcmacros.hxx"
+#include "address.hxx"
+#include "global.hxx"
 #include <formula/tokenarray.hxx>
 
 namespace sc {
