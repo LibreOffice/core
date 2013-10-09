@@ -1196,7 +1196,8 @@ namespace {
 
 class QueryEvaluator
 {
-    const ScDocument& mrDoc;
+    ScDocument& mrDoc;
+    svl::SharedStringPool& mrStrPool;
     const ScTable& mrTab;
     const ScQueryParam& mrParam;
     const bool* mpTestEqualCondition;
@@ -1259,9 +1260,10 @@ class QueryEvaluator
     }
 
 public:
-    QueryEvaluator(const ScDocument& rDoc, const ScTable& rTab, const ScQueryParam& rParam,
+    QueryEvaluator(ScDocument& rDoc, const ScTable& rTab, const ScQueryParam& rParam,
                    const bool* pTestEqualCondition) :
         mrDoc(rDoc),
+        mrStrPool(rDoc.GetSharedStringPool()),
         mrTab(rTab),
         mrParam(rParam),
         mpTestEqualCondition(pTestEqualCondition),
@@ -1405,7 +1407,7 @@ public:
         bool bOk = false;
         bool bTestEqual = false;
         bool bMatchWholeCell = mbMatchWholeCell;
-        OUString  aCellStr;
+        svl::SharedString aCellStr;
         if (isPartialTextMatchOp(rEntry))
             // may have to do partial textural comparison.
             bMatchWholeCell = false;
@@ -1415,16 +1417,24 @@ public:
             if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode())
             {
                 // Error cell is evaluated as string (for now).
-                aCellStr = ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode());
+                aCellStr = mrStrPool.intern(ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode()));
             }
+            else if (rCell.meType == CELLTYPE_STRING)
+                aCellStr = *rCell.mpString;
             else
             {
                 sal_uLong nFormat = mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
-                ScCellFormat::GetInputString(rCell, nFormat, aCellStr, *mrDoc.GetFormatTable(), &mrDoc);
+                OUString aStr;
+                ScCellFormat::GetInputString(rCell, nFormat, aStr, *mrDoc.GetFormatTable(), &mrDoc);
+                aCellStr = mrStrPool.intern(aStr);
             }
         }
         else
-            mrTab.GetInputString( static_cast<SCCOL>(rEntry.nField), nRow, aCellStr );
+        {
+            OUString aStr;
+            mrTab.GetInputString(static_cast<SCCOL>(rEntry.nField), nRow, aStr);
+            aCellStr = mrStrPool.intern(aStr);
+        }
 
         bool bRealRegExp = isRealRegExp(rEntry);
         bool bTestRegExp = isTestRegExp(rEntry);
@@ -1441,12 +1451,12 @@ public:
                 nEnd = 0;
                 nStart = aCellStr.getLength();
                 bMatch = rEntry.GetSearchTextPtr( mrParam.bCaseSens )
-                    ->SearchBackward( aCellStr, &nStart, &nEnd );
+                    ->SearchBackward(aCellStr.getString(), &nStart, &nEnd);
             }
             else
             {
                 bMatch = rEntry.GetSearchTextPtr( mrParam.bCaseSens )
-                    ->SearchForward( aCellStr, &nStart, &nEnd );
+                    ->SearchForward(aCellStr.getString(), &nStart, &nEnd);
             }
             if ( bMatch && bMatchWholeCell
                     && (nStart != 0 || nEnd != aCellStr.getLength()) )
@@ -1498,8 +1508,12 @@ public:
                 }
                 else if ( bMatchWholeCell )
                 {
-                    // TODO: Use shared string for faster equality check.
-                    bOk = mpTransliteration->isEqual(aCellStr, rItem.maString.getString());
+                    // Fast string equality check by comparing string identifiers.
+                    if (mrParam.bCaseSens)
+                        bOk = aCellStr.getData() == rItem.maString.getData();
+                    else
+                        bOk = aCellStr.getDataIgnoreCase() == rItem.maString.getDataIgnoreCase();
+
                     if ( rEntry.eOp == SC_NOT_EQUAL )
                         bOk = !bOk;
                 }
@@ -1507,7 +1521,7 @@ public:
                 {
                     OUString aQueryStr = rItem.maString.getString();
                     OUString aCell( mpTransliteration->transliterate(
-                        aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(),
+                        aCellStr.getString(), ScGlobal::eLnge, 0, aCellStr.getLength(),
                         NULL ) );
                     OUString aQuer( mpTransliteration->transliterate(
                         aQueryStr, ScGlobal::eLnge, 0, aQueryStr.getLength(),
@@ -1547,7 +1561,7 @@ public:
             else
             {   // use collator here because data was probably sorted
                 sal_Int32 nCompare = mpCollator->compareString(
-                    aCellStr, rItem.maString.getString());
+                    aCellStr.getString(), rItem.maString.getString());
                 switch (rEntry.eOp)
                 {
                     case SC_LESS :
