@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <cppuhelper/supportsservice.hxx>
 #include "MMozillaBootstrap.hxx"
 
 using namespace com::sun::star::uno;
@@ -45,10 +45,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozillaBootstrap_CreateInstance
     return  pMozillaBootstrap;
 }
 
-// --------------------------------------------------------------------------------
-
-
-// --------------------------------------------------------------------------------
 MozillaBootstrap::MozillaBootstrap(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : OMozillaBootstrap_BASE(m_aMutex), m_xMSFactory( _rxFactory )
@@ -104,16 +100,9 @@ OUString SAL_CALL MozillaBootstrap::getImplementationName(  ) throw(RuntimeExcep
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------
 sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 //------------------------------------------------------------------

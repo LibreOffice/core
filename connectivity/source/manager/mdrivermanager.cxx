@@ -32,6 +32,7 @@
 #include <comphelper/stl_types.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <osl/diagnose.h>
 
@@ -521,16 +522,9 @@ OUString SAL_CALL OSDBCDriverManager::getImplementationName(  ) throw(RuntimeExc
     return getImplementationName_static();
 }
 
-//--------------------------------------------------------------------------
 sal_Bool SAL_CALL OSDBCDriverManager::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 //--------------------------------------------------------------------------

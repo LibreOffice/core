@@ -20,6 +20,7 @@
 #include "connectivity/sdbcx/VColumn.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "TConnection.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 // -------------------------------------------------------------------------
@@ -49,16 +50,10 @@ OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::un
 
     return aSupported;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OColumn::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 // -------------------------------------------------------------------------
 OColumn::OColumn(sal_Bool _bCase)

@@ -18,6 +18,7 @@
  */
 
 #include "connectivity/sdbcx/VIndexColumn.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "TConnection.hxx"
 
 using namespace connectivity;
@@ -42,16 +43,10 @@ OUString SAL_CALL OIndexColumn::getImplementationName(  ) throw (::com::sun::sta
 
     return aSupported;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OIndexColumn::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 // -----------------------------------------------------------------------------
 OIndexColumn::OIndexColumn(sal_Bool _bCase) : OColumn(_bCase),  m_IsAscending(sal_True)

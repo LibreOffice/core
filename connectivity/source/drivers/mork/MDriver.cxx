@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cppuhelper/supportsservice.hxx>
 #include "MDriver.hxx"
 #include "MConnection.hxx"
 #include "MNSProfileDiscover.hxx"
@@ -60,13 +61,7 @@ OUString SAL_CALL MorkDriver::getImplementationName()
 sal_Bool SAL_CALL MorkDriver::supportsService(const OUString& serviceName)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(serviceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames()

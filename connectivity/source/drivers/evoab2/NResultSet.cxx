@@ -38,6 +38,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -74,16 +75,10 @@ OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeExce
     aSupported[0] = OUString("com.sun.star.sdbc.ResultSet");
     return aSupported;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::supportsService( const OUString& _rServiceName ) throw( RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 struct ComparisonData

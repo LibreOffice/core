@@ -26,6 +26,7 @@
 #include "resource/sharedresources.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/process.h>
 
 using namespace com::sun::star;
@@ -116,13 +117,7 @@ OUString SAL_CALL FirebirdDriver::getImplementationName() throw(RuntimeException
 sal_Bool SAL_CALL FirebirdDriver::supportsService(const OUString& _rServiceName)
     throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > SAL_CALL FirebirdDriver::getSupportedServiceNames()

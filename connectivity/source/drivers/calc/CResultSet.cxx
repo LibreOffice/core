@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
 
 using namespace ::comphelper;
@@ -54,16 +55,10 @@ Sequence< OUString > SAL_CALL OCalcResultSet::getSupportedServiceNames(  ) throw
     aSupported[1] = OUString("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OCalcResultSet::supportsService( const OUString& _rServiceName ) throw( RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OCalcResultSet::queryInterface( const Type & rType ) throw(RuntimeException)

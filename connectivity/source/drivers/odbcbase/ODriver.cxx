@@ -22,6 +22,7 @@
 #include "odbc/OFunctions.hxx"
 #include "odbc/OTools.hxx"
 #include "connectivity/dbexception.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 
@@ -77,16 +78,9 @@ OUString SAL_CALL ODBCDriver::getImplementationName(  ) throw(RuntimeException)
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------
 sal_Bool SAL_CALL ODBCDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 //------------------------------------------------------------------

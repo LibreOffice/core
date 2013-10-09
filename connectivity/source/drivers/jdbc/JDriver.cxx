@@ -31,6 +31,7 @@
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -76,16 +77,9 @@ OUString SAL_CALL java_sql_Driver::getImplementationName(  ) throw(RuntimeExcept
     return getImplementationName_Static();
 }
 
-// --------------------------------------------------------------------------------
 sal_Bool SAL_CALL java_sql_Driver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 // --------------------------------------------------------------------------------

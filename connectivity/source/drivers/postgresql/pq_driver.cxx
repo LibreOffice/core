@@ -41,6 +41,7 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "pq_driver.hxx"
 
@@ -150,11 +151,7 @@ OUString SAL_CALL Driver::getImplementationName()
 sal_Bool Driver::supportsService(const OUString& ServiceName)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< OUString > serviceNames = DriverGetSupportedServiceNames();
-    for( int i = 0 ; i < serviceNames.getLength() ; i ++ )
-        if( serviceNames[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > Driver::getSupportedServiceNames(void)
