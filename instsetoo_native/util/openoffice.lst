@@ -50,7 +50,7 @@ LibreOffice
         {
             PRODUCTNAME LibreOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -17
+            PRODUCTEXTENSION -18
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4.0
@@ -100,7 +100,7 @@ LibreOffice_Dev
         {
             PRODUCTNAME LOdev
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -17
+            PRODUCTEXTENSION -18
             UNIXBASISROOTNAME lodev4.0
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
@@ -161,7 +161,7 @@ URE
             PRODUCTVERSION 4.0
             PACKAGEVERSION 4.0
             PACKAGEREVISION 1
-            PRODUCTEXTENSION -17
+            PRODUCTEXTENSION -18
             BRANDPACKAGEVERSION 4.0
             LICENSENAME LGPL
             NOVERSIONINDIRNAME 1
@@ -192,7 +192,7 @@ LibreOffice_SDK
         {
             PRODUCTNAME LibreOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -17
+            PRODUCTEXTENSION -18
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 4.0
@@ -231,7 +231,7 @@ LibreOffice_Dev_SDK
         {
             PRODUCTNAME LOdev
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -17
+            PRODUCTEXTENSION -18
             UNIXBASISROOTNAME lodev4.0
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
@@ -276,7 +276,7 @@ LibreOffice_Test
         {
             PRODUCTNAME LibreOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -17
+            PRODUCTEXTENSION -18
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
             BRANDPACKAGEVERSION 4.0
@@ -315,7 +315,7 @@ LibreOffice_Dev_Test
         {
             PRODUCTNAME LOdev
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -17
+            PRODUCTEXTENSION -18
             UNIXBASISROOTNAME lodev4.0
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
@@ -359,7 +359,7 @@ OxygenOffice
         {
             PRODUCTNAME OxygenOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -17
+            PRODUCTEXTENSION -18
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4.0
