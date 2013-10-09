@@ -62,9 +62,9 @@ private: //member
     FixedText       m_aCounting;
     CancelButton    m_aCancelButton;
 
-    String          m_sCountingPattern;
-    String          m_sVariable_Total;
-    String          m_sVariable_Position;
+    OUString        m_sCountingPattern;
+    OUString        m_sVariable_Total;
+    OUString        m_sVariable_Position;
     sal_Int32       m_nTotalCount;
     sal_Int32       m_nCurrentPosition;
 };

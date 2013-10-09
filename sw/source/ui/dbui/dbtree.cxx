@@ -225,15 +225,15 @@ void SwDBTreeList::InitTreeList()
         String sDBName(pDBNames[i]);
         InsertEntry(sDBName, aImg, aImg, NULL, sal_True);
     }
-    String sDBName(sDefDBName.GetToken(0, DB_DELIM));
-    String sTableName(sDefDBName.GetToken(1, DB_DELIM));
-    String sColumnName(sDefDBName.GetToken(2, DB_DELIM));
+    String sDBName(sDefDBName.getToken(0, DB_DELIM));
+    String sTableName(sDefDBName.getToken(1, DB_DELIM));
+    String sColumnName(sDefDBName.getToken(2, DB_DELIM));
     Select(sDBName, sTableName, sColumnName);
 
     bInitialized = true;
 }
 
-void    SwDBTreeList::AddDataSource(const String& rSource)
+void    SwDBTreeList::AddDataSource(const OUString& rSource)
 {
     Image aImg = aImageList.GetImage(IMG_DB);
     SvTreeListEntry* pEntry = InsertEntry(rSource, aImg, aImg, NULL, sal_True);
@@ -434,7 +434,7 @@ OUString SwDBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sa
 /*------------------------------------------------------------------------
  Description:   Format: database.table
 ------------------------------------------------------------------------*/
-void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const String& rColumnName)
+void SwDBTreeList::Select(const OUString& rDBName, const OUString& rTableName, const OUString& rColumnName)
 {
     SvTreeListEntry* pParent;
     SvTreeListEntry* pChild;
@@ -453,7 +453,7 @@ void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const
                 {
                     pParent = pChild;
 
-                    if (bShowColumns && rColumnName.Len())
+                    if (bShowColumns && !rColumnName.isEmpty())
                     {
                         nChild = 0;
 

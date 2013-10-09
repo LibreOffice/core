@@ -65,7 +65,7 @@ struct SwInsDBColumn
     sal_Bool bHasFmt : 1;
     sal_Bool bIsDBFmt : 1;
 
-    SwInsDBColumn( const String& rStr, sal_uInt16 nColumn )
+    SwInsDBColumn( const OUString& rStr, sal_uInt16 nColumn )
         : sColumn( rStr ),
         nDBNumFmt( 0 ),
         nUsrNumFmt( 0 ),
@@ -126,7 +126,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     const SwDBData  aDBData;
 
     Link            aOldNumFmtLnk;
-    String          sNoTmpl;
+    OUString        sNoTmpl;
 
     SwView*         pView;
     SwTableAutoFmt* pTAutoFmt;
@@ -144,7 +144,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     DECL_LINK( DblClickHdl, ListBox* );
     DECL_LINK( HeaderHdl, Button* );
 
-    bool SplitTextToColArr( const String& rTxt, _DB_Columns& rColArr, sal_Bool bInsField );
+    bool SplitTextToColArr( const OUString& rTxt, _DB_Columns& rColArr, sal_Bool bInsField );
         using SfxModalDialog::Notify;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     virtual void            Commit();

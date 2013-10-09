@@ -35,7 +35,7 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
     Image           aTableBMP;
     Image           aQueryBMP;
 
-    String          sDefDBName;
+    OUString        sDefDBName;
     bool            bInitialized;
     sal_Bool            bShowColumns;
 
@@ -58,13 +58,13 @@ public:
 
     OUString GetDBName( OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable = 0);
 
-    void    Select( const String& rDBName, const String& rTableName,
-                    const String& rColumnName );
+    void    Select( const OUString& rDBName, const OUString& rTableName,
+                    const OUString& rColumnName );
 
     void    ShowColumns(sal_Bool bShowCol);
     void    SetWrtShell(SwWrtShell& rSh);
 
-    void    AddDataSource(const String& rSource);
+    void    AddDataSource(const OUString& rSource);
 };
 
 #endif
