@@ -21,10 +21,11 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "connectivity/sdbcx/VColumn.hxx"
 #include "connectivity/sdbcx/VCollection.hxx"
 #include "TConnection.hxx"
-// -------------------------------------------------------------------------
+
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
@@ -52,16 +53,10 @@ OUString SAL_CALL OKey::getImplementationName(  ) throw (::com::sun::star::uno::
 
     return aSupported;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OKey::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 // -------------------------------------------------------------------------
 OKey::OKey(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)

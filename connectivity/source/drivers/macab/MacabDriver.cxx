@@ -28,6 +28,7 @@
 #include <tools/diagnose_ex.h>
 #include "resource/macab_res.hrc"
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -227,16 +228,10 @@ OUString SAL_CALL MacabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
-//------------------------------------------------------------------
+
 sal_Bool SAL_CALL MacabDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-
-    while (pSupported != pEnd && !pSupported->equals(_rServiceName))
-        ++pSupported;
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 //------------------------------------------------------------------
 Sequence< OUString > SAL_CALL MacabDriver::getSupportedServiceNames(  ) throw(RuntimeException)

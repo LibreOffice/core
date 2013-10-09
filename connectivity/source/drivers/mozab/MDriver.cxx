@@ -21,6 +21,7 @@
 #include "MDriver.hxx"
 #include "MConnection.hxx"
 #include "connectivity/dbexception.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "resource/mozab_res.hrc"
 #include "resource/common_res.hrc"
 
@@ -102,16 +103,9 @@ OUString SAL_CALL MozabDriver::getImplementationName(  ) throw(RuntimeException)
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------
 sal_Bool SAL_CALL MozabDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 //------------------------------------------------------------------

@@ -35,6 +35,7 @@
  ************************************************************************/
 
 #include <rtl/ustrbuf.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 #include "pq_tools.hxx"
@@ -148,10 +149,7 @@ OUString ReflectionBase::getImplementationName()
 sal_Bool ReflectionBase::supportsService(const OUString& ServiceName)
         throw(::com::sun::star::uno::RuntimeException)
 {
-    for( int i = 0 ; i < m_supportedServices.getLength() ; i ++ )
-        if( m_supportedServices[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > ReflectionBase::getSupportedServiceNames(void)

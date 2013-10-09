@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include "resource/kab_res.hrc"
@@ -359,16 +360,10 @@ OUString SAL_CALL KabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
-//------------------------------------------------------------------
+
 sal_Bool SAL_CALL KabDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-
-    while (pSupported != pEnd && !pSupported->equals(_rServiceName))
-        ++pSupported;
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 //------------------------------------------------------------------
 Sequence< OUString > SAL_CALL KabDriver::getSupportedServiceNames(  ) throw(RuntimeException)

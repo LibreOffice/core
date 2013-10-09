@@ -29,6 +29,7 @@
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "diagnose_ex.h"
 
@@ -143,16 +144,9 @@ OUString SAL_CALL OPoolCollection::getImplementationName(  ) throw(RuntimeExcept
     return getImplementationName_Static();
 }
 
-//--------------------------------------------------------------------------
 sal_Bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 //--------------------------------------------------------------------------

@@ -23,6 +23,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
 #include <propertyids.hxx>
 #include <rtl/string.hxx>
@@ -815,13 +816,7 @@ Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames()
 sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)
     throw( RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

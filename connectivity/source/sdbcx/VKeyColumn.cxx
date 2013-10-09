@@ -18,6 +18,7 @@
  */
 
 #include "connectivity/sdbcx/VKeyColumn.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "TConnection.hxx"
 
 using namespace connectivity;
@@ -43,16 +44,10 @@ OUString SAL_CALL OKeyColumn::getImplementationName(  ) throw (::com::sun::star:
 
     return aSupported;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OKeyColumn::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 // -------------------------------------------------------------------------
 OKeyColumn::OKeyColumn(sal_Bool _bCase) : OColumn(_bCase)

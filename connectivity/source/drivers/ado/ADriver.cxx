@@ -30,9 +30,9 @@
 #include "ado/adoimp.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "connectivity/dbexception.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "resource/ado_res.hrc"
 #include <objbase.h>
-
 
 #include "resource/sharedresources.hxx"
 
@@ -106,16 +106,9 @@ OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
     return getImplementationName_Static();
 }
 
-// --------------------------------------------------------------------------------
 sal_Bool SAL_CALL ODriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pSupported = aSupported.getConstArray();
-    const OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 // --------------------------------------------------------------------------------
