@@ -489,7 +489,8 @@ void SwHTMLParser::InsertEmbed()
 #if HAVE_FEATURE_JAVA
 void SwHTMLParser::NewObject()
 {
-    String aClassID, aName, aStandBy, aId, aStyle, aClass;
+    OUString aClassID;
+    String aName, aStandBy, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
     sal_Int16 eVertOri = text::VertOrientation::TOP;
@@ -581,10 +582,10 @@ void SwHTMLParser::NewObject()
     // Java applets are supported.
     sal_Bool bIsApplet = sal_False;
 
-    if( !bDeclare && aClassID.Len() == 42 &&
-        aClassID.EqualsAscii( "clsid:", 0, 6 ) )
+    if( !bDeclare && aClassID.getLength() == 42 &&
+        aClassID.startsWith("clsid:") )
     {
-        aClassID.Erase( 0, 6 );
+        aClassID = aClassID.copy(6);
         SvGlobalName aCID;
         if( aCID.MakeId( aClassID ) )
         {

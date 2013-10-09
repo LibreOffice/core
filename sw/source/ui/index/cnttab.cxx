@@ -1088,8 +1088,8 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     }
     else if(TOX_AUTHORITIES == aCurType.eType)
     {
-        String sBrackets(rDesc.GetAuthBrackets());
-        if(!sBrackets.Len() || sBrackets.EqualsAscii("  "))
+        OUString sBrackets(rDesc.GetAuthBrackets());
+        if(sBrackets.isEmpty() || sBrackets == "  ")
             m_pBracketLB->SelectEntryPos(0);
         else
             m_pBracketLB->SelectEntry(sBrackets);

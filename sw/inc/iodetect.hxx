@@ -46,20 +46,19 @@
 
 struct SwIoDetect
 {
-    const sal_Char* pName;
-    sal_uInt16 nLen;
+    const OUString sName;
 
-    inline SwIoDetect( const sal_Char *pN, sal_uInt16 nL )
-        : pName( pN ), nLen( nL )
-    {}
-
-    inline int IsFilter( const String& rNm ) const
+    SwIoDetect(const OUString &rN)
+        : sName(rN)
     {
-        return pName && rNm.EqualsAscii( pName, 0, nLen );
     }
 
-    const sal_Char* IsReader( const sal_Char* pHeader, sal_uLong nLen_,
-            const String &rFileName, const String& rUserData ) const;
+    bool IsFilter( const OUString& rNm ) const
+    {
+        return rNm.startsWith(sName);
+    }
+
+    OUString IsReader(const sal_Char* pHeader, sal_uLong nLen_) const;
 };
 
 enum ReaderWriterEnum {

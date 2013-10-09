@@ -2051,18 +2051,18 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
 //helper function
 //For MS MacroButton field, the symbol in plain text is always "(" (0x28),
 //which should be mapped according to the macro type
-bool ConvertMacroSymbol( const String& rName, OUString& rReference )
+bool ConvertMacroSymbol( const OUString& rName, OUString& rReference )
 {
     bool bConverted = false;
     if( rReference == "(" )
     {
         bConverted = true;
         sal_Unicode cSymbol = sal_Unicode(); // silence false warning
-        if( rName.EqualsAscii( "CheckIt" ) )
+        if (rName == "CheckIt")
             cSymbol = 0xF06F;
-        else if( rName.EqualsAscii( "UncheckIt" ) )
+        else if (rName == "UncheckIt")
             cSymbol = 0xF0FE;
-        else if( rName.EqualsAscii( "ShowExample" ) )
+        else if (rName == "ShowExample")
             cSymbol = 0xF02A;
         //else if... : todo
         else

@@ -29,21 +29,20 @@ bool IsDocShellRegistered();
 
 SwIoDetect aFilterDetect[] =
 {
-    SwIoDetect( FILTER_RTF,      STRING_LEN ),
-    SwIoDetect( FILTER_BAS,      STRING_LEN ),
-    SwIoDetect( sWW6,            STRING_LEN ),
-    SwIoDetect( FILTER_WW8,      STRING_LEN ),
-    SwIoDetect( sRtfWH,          STRING_LEN ),
-    SwIoDetect( sHTML,           4 ),
-    SwIoDetect( sWW1,            STRING_LEN ),
-    SwIoDetect( sWW5,            STRING_LEN ),
-    SwIoDetect( FILTER_XML,      4 ),
-    SwIoDetect( FILTER_TEXT_DLG, 8 ),
-    SwIoDetect( FILTER_TEXT,     4 )
+    SwIoDetect( FILTER_RTF ),
+    SwIoDetect( FILTER_BAS ),
+    SwIoDetect( sWW6 ),
+    SwIoDetect( FILTER_WW8 ),
+    SwIoDetect( sRtfWH ),
+    SwIoDetect( sHTML ),
+    SwIoDetect( sWW1 ),
+    SwIoDetect( sWW5 ),
+    SwIoDetect( FILTER_XML ),
+    SwIoDetect( FILTER_TEXT_DLG ),
+    SwIoDetect( FILTER_TEXT )
 };
 
-const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_,
-    const String & /*rFileName*/, const String& /*rUserData*/) const
+OUString SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_) const
 {
     // Filter erkennung
     struct W1_FIB
@@ -63,12 +62,11 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_,
     };
 
     int bRet = sal_False;
-    OString aName( pName );
-    if ( sHTML == aName )
+    if ( sHTML == sName )
         bRet = HTMLParser::IsHTMLFormat( pHeader, sal_True, RTL_TEXTENCODING_DONTKNOW );
-    else if ( FILTER_RTF == aName )
+    else if ( FILTER_RTF == sName )
         bRet = 0 == strncmp( "{\\rtf", pHeader, 5 );
-    else if ( sWW5 == aName )
+    else if ( sWW5 == sName )
     {
         W1_FIB *pW1Header = (W1_FIB*)pHeader;
         if (pW1Header->wIdentGet() == 0xA5DC && pW1Header->nFibGet() == 0x65)
@@ -76,17 +74,17 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_,
         else if (pW1Header->wIdentGet() == 0xA5DB && pW1Header->nFibGet() == 0x2D)
             bRet = true; /*WW2*/
     }
-    else if ( sWW1 == aName )
+    else if ( sWW1 == sName )
     {
         bRet = (( ((W1_FIB*)pHeader)->wIdentGet() == 0xA59C
                     && ((W1_FIB*)pHeader)->nFibGet() == 0x21)
                 && ((W1_FIB*)pHeader)->fComplexGet() == 0);
     }
-    else if ( FILTER_TEXT == aName )
+    else if ( FILTER_TEXT == sName )
         bRet = SwIoSystem::IsDetectableText(pHeader, nLen_);
-    else if ( FILTER_TEXT_DLG == aName)
+    else if ( FILTER_TEXT_DLG == sName)
         bRet = SwIoSystem::IsDetectableText( pHeader, nLen_, 0, 0, 0, true);
-    return bRet ? pName : 0;
+    return bRet ? sName : OUString();
 }
 
 const String SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
@@ -244,8 +242,8 @@ sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const String& rFmtName)
                     {
                         if (aFilterDetect[i].IsFilter(rFmtName))
                         {
-                            bRet = 0 != aFilterDetect[i].IsReader( aBuffer, nBytesRead,
-                                    rMedium.GetPhysicalName(), rUserData );
+                            OUString sFilter(aFilterDetect[i].IsReader(aBuffer, nBytesRead));
+                            bRet = !sFilter.isEmpty();
                             break;
                         }
                     }
@@ -382,14 +380,12 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     /* nie erkannt und es wird auch der ASCII-Filter returnt.             */
     /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     {
-        const SfxFilter* pFilterTmp = 0;
-        const sal_Char* pNm;
         for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
         {
-            String sEmptyUserData;
-            pNm = aFilterDetect[n].IsReader(aBuffer, nBytesRead, rFileName, sEmptyUserData);
-            pFilterTmp = pNm ? SwIoSystem::GetFilterOfFormat(OUString::createFromAscii(pNm), pFCntnr) : 0;
-            if (pNm && pFilterTmp)
+            OUString sNm(aFilterDetect[n].IsReader(aBuffer, nBytesRead));
+            const SfxFilter* pFilterTmp =
+                sNm.isEmpty() ? 0 : SwIoSystem::GetFilterOfFormat(sNm, pFCntnr);
+            if (pFilterTmp)
             {
                 return pFilterTmp;
             }

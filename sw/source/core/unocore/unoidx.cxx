@@ -160,11 +160,11 @@ static void
 lcl_ConvertTOUNameToUserName(OUString& rTmp)
 {
     ShellResource* pShellRes = ViewShell::GetShellRes();
-    if(rTmp.equalsAscii(cUserDefined))
+    if (rTmp.equalsAscii(cUserDefined))
     {
         rTmp = pShellRes->aTOXUserName;
     }
-    else if(!pShellRes->aTOXUserName.EqualsAscii(cUserDefined) &&
+    else if (!pShellRes->aTOXUserName.equalsAscii(cUserDefined) &&
         USER_AND_SUFFIXLEN == rTmp.getLength())
     {
         //make sure that in non-English versions the " (user)" suffix is removed

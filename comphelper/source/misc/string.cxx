@@ -417,6 +417,38 @@ sal_Int32 indexOfAny(OUString const& rIn,
     return -1;
 }
 
+OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
+    const OUString& rNewToken)
+{
+    const sal_Unicode* pStr = rIn.getStr();
+    sal_Int32 nLen = rIn.getLength();
+    sal_Int32 nTok = 0;
+    sal_Int32 nFirstChar = 0;
+    sal_Int32 i = 0;
+
+    // Determine token position and length
+    while ( i < nLen )
+    {
+        // Increase token count if match
+        if (*pStr == cTok)
+        {
+            ++nTok;
+
+            if (nTok == nToken)
+                nFirstChar = i+1;
+            else if (nTok > nToken)
+                break;
+        }
+
+        ++pStr,
+        ++i;
+    }
+
+    if (nTok >= nToken)
+        return rIn.replaceAt(nFirstChar, i-nFirstChar, rNewToken);
+    return rIn;
+}
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

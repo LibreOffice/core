@@ -291,7 +291,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_LANGUAGE_STATUS:
         {
             // get the language
-            String aNewLangTxt;
+            OUString aNewLangTxt;
             SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_LANGUAGE_STATUS , sal_False );
             if (pItem2)
                 aNewLangTxt = pItem2->GetValue();
@@ -301,7 +301,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             //!! SwTextShell got destroyed meanwhile.)
             SfxViewFrame *pViewFrame = GetView().GetViewFrame();
 
-            if (aNewLangTxt.EqualsAscii( "*" ))
+            if (aNewLangTxt == "*")
             {
                 // open the dialog "Tools/Options/Language Settings - Language"
                 // to set the documents default language
@@ -326,7 +326,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.Push();
 
                 // setting the new language...
-                if (aNewLangTxt.Len() > 0)
+                if (!aNewLangTxt.isEmpty())
                 {
                     const OUString aSelectionLangPrefix("Current_");
                     const OUString aParagraphLangPrefix("Paragraph_");
@@ -340,26 +340,26 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
                             0 );
 
-                    xub_StrLen nPos = 0;
+                    sal_Int32 nPos = 0;
                     bool bForSelection = true;
                     bool bForParagraph = false;
-                    if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aSelectionLangPrefix, 0 )))
+                    if (-1 != (nPos = aNewLangTxt.indexOf( aSelectionLangPrefix, 0 )))
                     {
                         // ... for the current selection
-                        aNewLangTxt = aNewLangTxt.Erase( nPos, aSelectionLangPrefix.getLength() );
+                        aNewLangTxt = aNewLangTxt.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
                         bForSelection = true;
                     }
-                    else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aParagraphLangPrefix , 0 )))
+                    else if (-1 != (nPos = aNewLangTxt.indexOf(aParagraphLangPrefix, 0)))
                     {
                         // ... for the current paragraph language
-                        aNewLangTxt = aNewLangTxt.Erase( nPos, aParagraphLangPrefix.getLength() );
+                        aNewLangTxt = aNewLangTxt.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
                         bForSelection = true;
                         bForParagraph = true;
                     }
-                    else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aDocumentLangPrefix , 0 )))
+                    else if (-1 != (nPos = aNewLangTxt.indexOf(aDocumentLangPrefix, 0)))
                     {
                         // ... as default document language
-                        aNewLangTxt = aNewLangTxt.Erase( nPos, aDocumentLangPrefix.getLength() );
+                        aNewLangTxt = aNewLangTxt.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");
                         bForSelection = false;
                     }
 

@@ -285,6 +285,17 @@ COMPHELPER_DLLPUBLIC inline OUStringBuffer& padToLength(
     return detail::padToLength(rBuffer, nLength, cFill);
 }
 
+/** Replace a token in a string
+    @param rIn       OUString in which the token is to be replaced
+    @param nToken    which nToken to replace
+    @param cTok      token delimiter
+    @param rNewToken replacement token
+
+    @return original string with token nToken replaced by rNewToken
+ */
+COMPHELPER_DLLPUBLIC OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
+    const OUString& rNewToken);
+
 /** Find any of a list of code units in the string.
     @param rIn      OUString to search
     @param pChars   0-terminated array of sal_Unicode code units to search for

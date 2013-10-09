@@ -3452,9 +3452,9 @@ MSWordSections& WW8Export::Sections() const
     return *pSepx;
 }
 
-SwWW8Writer::SwWW8Writer(const String& rFltName, const String& rBaseURL)
+SwWW8Writer::SwWW8Writer(const OUString& rFltName, const OUString& rBaseURL)
     : StgWriter(),
-      m_bWrtWW8( rFltName.EqualsAscii( FILTER_WW8 ) ),
+      m_bWrtWW8( rFltName == FILTER_WW8 ),
       m_pExport( NULL ),
       mpMedium( 0 )
 {

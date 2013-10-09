@@ -57,7 +57,7 @@ struct SW_DLLPUBLIC ShellResource : public Resource
 
     //Names of TOXs.
     String          aTOXIndexName;
-    String          aTOXUserName;
+    OUString        aTOXUserName;
     String          aTOXContentName;
     String          aTOXIllustrationsName;
     String          aTOXObjectsName;

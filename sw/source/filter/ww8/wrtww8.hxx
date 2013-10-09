@@ -858,7 +858,7 @@ friend void WW8_WrtRedlineAuthor::Write(Writer &rWrt);
     SfxMedium *mpMedium;
 
 public:
-    SwWW8Writer( const String& rFltName, const String& rBaseURL );
+    SwWW8Writer(const OUString& rFltName, const OUString& rBaseURL);
     virtual ~SwWW8Writer();
 
     virtual sal_uLong WriteStorage();

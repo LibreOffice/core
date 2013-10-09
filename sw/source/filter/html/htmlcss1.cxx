@@ -1692,7 +1692,7 @@ _HTMLAttr **SwHTMLParser::GetAttrTabEntry( sal_uInt16 nWhich )
 
 void SwHTMLParser::NewStyle()
 {
-    String sType;
+    OUString sType;
 
     const HTMLOptions& rOptions2 = GetOptions();
     for (size_t i = rOptions2.size(); i; )
@@ -1702,8 +1702,8 @@ void SwHTMLParser::NewStyle()
             sType = rOption.GetString();
     }
 
-    bIgnoreRawData = sType.Len() &&
-                     !sType.GetToken(0,';').EqualsAscii(sCSS_mimetype);
+    bIgnoreRawData = !sType.getLength() &&
+                     !sType.getToken(0,';').equalsAscii(sCSS_mimetype);
 }
 
 void SwHTMLParser::EndStyle()
@@ -1778,8 +1778,7 @@ void SwHTMLParser::InsertLink()
     }
     else
     {
-        OUString sRel;
-        String sHRef, sType;
+        OUString sRel, sHRef, sType;
 
         const HTMLOptions& rOptions2 = GetOptions();
         for (size_t i = rOptions2.size(); i; )
@@ -1799,9 +1798,9 @@ void SwHTMLParser::InsertLink()
             }
         }
 
-        if( sHRef.Len() && sRel.equalsIgnoreAsciiCase( "STYLESHEET" ) &&
-            ( !sType.Len() ||
-              sType.GetToken(0,';').EqualsAscii(sCSS_mimetype) ) )
+        if( !sHRef.isEmpty() && sRel.equalsIgnoreAsciiCase( "STYLESHEET" ) &&
+            ( sType.isEmpty() ||
+              sType.getToken(0,';').equalsAscii(sCSS_mimetype) ) )
         {
             if( GetMedium() )
             {

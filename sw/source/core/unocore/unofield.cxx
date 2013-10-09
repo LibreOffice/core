@@ -2590,44 +2590,40 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
     Falls wir grosszuegig werden wollen, dann koennte man com.sun.star.text
     auch optional weglassen
   -----------------------------------------------------------------------*/
-static sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
+static sal_uInt16 lcl_GetIdByName( OUString& rName, OUString& rTypeName )
 {
-    if( rName.EqualsAscii( COM_TEXT_FLDMASTER, 0, RTL_CONSTASCII_LENGTH(COM_TEXT_FLDMASTER ))
-        ||  rName.EqualsAscii( COM_TEXT_FLDMASTER_CC, 0, RTL_CONSTASCII_LENGTH(COM_TEXT_FLDMASTER_CC )))
-        rName.Erase(0, 30);
+    if (rName.startsWith(COM_TEXT_FLDMASTER) || rName.startsWith(COM_TEXT_FLDMASTER_CC))
+        rName = rName.copy(30);
 
     sal_uInt16 nResId = USHRT_MAX;
     sal_Int32 nFound = 0;
-    rTypeName = rName.GetToken( 0, '.', nFound );
-    if(rTypeName.EqualsAscii("User"))
+    rTypeName = rName.getToken( 0, '.', nFound );
+    if (rTypeName == "User")
         nResId = RES_USERFLD;
-    else if(rTypeName.EqualsAscii("DDE"))
+    else if (rTypeName == "DDE")
         nResId = RES_DDEFLD;
-    else if(rTypeName.EqualsAscii("SetExpression"))
+    else if (rTypeName == "SetExpression")
     {
         nResId = RES_SETEXPFLD;
 
-        String sFldTypName( rName.GetToken( 1, '.' ));
+        String sFldTypName( rName.getToken( 1, '.' ));
         String sUIName( SwStyleNameMapper::GetSpecialExtraUIName( sFldTypName ) );
 
         if( sUIName != sFldTypName )
-            rName.SetToken( 1, '.', sUIName );
+            rName = comphelper::string::setToken(rName, 1, '.', sUIName);
     }
-    else if(rTypeName.EqualsAscii("DataBase"))
+    else if (rTypeName == "DataBase")
     {
-        rName.Erase( 0, RTL_CONSTASCII_LENGTH( "DataBase." ));
+        rName = rName.copy(RTL_CONSTASCII_LENGTH("DataBase."));
         sal_uInt16 nDotCount = comphelper::string::getTokenCount(rName, '.');
         if( 2 <= nDotCount )
         {
             // #i51815#
-            //rName.SearchAndReplace('.', DB_DELIM);
-            //rName.SetChar( rName.SearchBackward( '.' ), DB_DELIM );
-
             rName = OUString("DataBase.") + rName;
             nResId = RES_DBFLD;
         }
     }
-    else if( rTypeName.EqualsAscii("Bibliography"))
+    else if (rTypeName == "Bibliography")
         nResId = RES_AUTHORITY;
     return nResId;
 }
@@ -2639,12 +2635,12 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     if(!GetDoc())
         throw uno::RuntimeException();
 
-    String sName(rName), sTypeName;
+    OUString sName(rName), sTypeName;
     sal_uInt16 nResId = lcl_GetIdByName( sName, sTypeName );
     if( USHRT_MAX == nResId )
         throw container::NoSuchElementException();
 
-    sName.Erase(0, sTypeName.Len()+1);
+    sName = sName.copy(sTypeName.getLength()+1);
     SwFieldType* pType = GetDoc()->GetFldType(nResId, sName, sal_True);
     if(!pType)
         throw container::NoSuchElementException();
@@ -2726,12 +2722,12 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::Runti
     if(!GetDoc())
         throw uno::RuntimeException();
 
-    String sName(rName), sTypeName;
+    OUString sName(rName), sTypeName;
     sal_uInt16 nResId = lcl_GetIdByName( sName, sTypeName );
     sal_Bool bRet = sal_False;
     if( USHRT_MAX != nResId )
     {
-        sName.Erase(0, sTypeName.Len()+1);
+        sName = sName.copy(sTypeName.getLength()+1);
         bRet = USHRT_MAX != nResId && 0 != GetDoc()->GetFldType(nResId, sName, sal_True);
     }
     return bRet;

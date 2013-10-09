@@ -59,34 +59,34 @@ SW_DLLPUBLIC String MakeSender()
     bool bLastLength = true;
     for( xub_StrLen i = 0; i < nTokenCount; i++ )
     {
-        String sToken = sSenderToken.GetToken( 0, ';', nSttPos );
-        if(sToken.EqualsAscii("COMPANY"))
+        OUString sToken = sSenderToken.GetToken( 0, ';', nSttPos );
+        if (sToken == "COMPANY")
         {
             xub_StrLen nOldLen = sRet.Len();
             sRet += (String)rUserOpt.GetCompany();
             bLastLength = sRet.Len() != nOldLen;
         }
-        else if(sToken.EqualsAscii("CR"))
+        else if (sToken == "CR")
         {
             if(bLastLength)
                 sRet +=NEXTLINE;
             bLastLength = true;
         }
-        else if(sToken.EqualsAscii("FIRSTNAME"))
+        else if (sToken == "FIRSTNAME")
             sRet += (String)rUserOpt.GetFirstName();
-        else if(sToken.EqualsAscii("LASTNAME"))
+        else if (sToken == "LASTNAME")
             sRet += (String)rUserOpt.GetLastName();
-        else if(sToken.EqualsAscii("ADDRESS"))
+        else if (sToken == "ADDRESS")
             sRet += (String)rUserOpt.GetStreet();
-        else if(sToken.EqualsAscii("COUNTRY"))
+        else if (sToken == "COUNTRY")
             sRet += (String)rUserOpt.GetCountry();
-        else if(sToken.EqualsAscii("POSTALCODE"))
+        else if (sToken == "POSTALCODE")
             sRet += (String)rUserOpt.GetZip();
-        else if(sToken.EqualsAscii("CITY"))
+        else if (sToken == "CITY")
             sRet += (String)rUserOpt.GetCity();
-        else if(sToken.EqualsAscii("STATEPROV"))
+        else if (sToken == "STATEPROV")
             sRet += (String)rUserOpt.GetState();
-        else if(sToken.Len()) //spaces
+        else if (!sToken.isEmpty()) //spaces
             sRet += sToken;
     }
     return sRet;

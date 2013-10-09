@@ -47,19 +47,6 @@ static void ImplCopyAsciiStr( sal_Unicode* pDest, const sal_Char* pSrc,
     }
 }
 
-static sal_Int32 ImplStringCompareAscii( const sal_Unicode* pStr1, const sal_Char* pStr2 )
-{
-    sal_Int32 nRet;
-    while ( ((nRet = ((sal_Int32)*pStr1)-((sal_Int32)((unsigned char)*pStr2))) == 0) &&
-            *pStr2 )
-    {
-        ++pStr1,
-        ++pStr2;
-    }
-
-    return nRet;
-}
-
 static sal_Int32 ImplStringCompareAscii( const sal_Unicode* pStr1, const sal_Char* pStr2,
                                          xub_StrLen nCount )
 {
@@ -179,29 +166,6 @@ StringCompare UniString::CompareToAscii( const sal_Char* pAsciiStr,
         return COMPARE_LESS;
     else
         return COMPARE_GREATER;
-}
-
-sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
-                "UniString::EqualsAscii() - pAsciiStr include characters > 127" );
-
-    return (ImplStringCompareAscii( mpData->maStr, pAsciiStr ) == 0);
-}
-
-sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr,
-                             xub_StrLen nIndex, xub_StrLen nLen ) const
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, nLen ),
-                "UniString::EqualsAscii() - pAsciiStr include characters > 127" );
-
-    // Are there enough codes for comparing?
-    if ( nIndex > mpData->mnLen )
-        return (*pAsciiStr == 0);
-
-    return (ImplStringCompareAscii( mpData->maStr+nIndex, pAsciiStr, nLen ) == 0);
 }
 
 xub_StrLen UniString::SearchAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex ) const

@@ -230,11 +230,8 @@ public:
     StringCompare       CompareToAscii( const sal_Char* pAsciiStr,
                                         xub_StrLen nLen = STRING_LEN ) const;
     sal_Bool            Equals( const UniString& rStr ) const;
-    sal_Bool            EqualsAscii( const sal_Char* pAsciiStr ) const;
     sal_Bool            Equals( const UniString& rStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
-    sal_Bool            EqualsAscii( const sal_Char* pAsciiStr,
-                                     xub_StrLen nIndex, xub_StrLen nLen ) const;
 
     xub_StrLen          Match( const UniString& rStr ) const;
 

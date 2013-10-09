@@ -31,11 +31,11 @@ namespace
     class SameName: public std::unary_function<const sal_Char*, bool>
     {
     private:
-        const String &mrName;
+        const OUString &mrName;
     public:
-        explicit SameName(const String &rName) : mrName(rName) {}
+        explicit SameName(const OUString &rName) : mrName(rName) {}
         bool operator() (const sal_Char *pEntry) const
-            { return mrName.EqualsAscii(pEntry); }
+            { return mrName.equalsAscii(pEntry); }
     };
 
     const sal_Char **GetStiNames() throw()

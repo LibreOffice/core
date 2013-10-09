@@ -253,19 +253,12 @@ IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl)
  --------------------------------------------------------------------*/
 void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 {
-    String sTmp(rDBData.sDataSource);
-    String sName;
-    sTmp += '.';
-    sTmp += (String)rDBData.sCommand;
+    OUString sTmp(rDBData.sDataSource);
+    sTmp += ".";
+    sTmp += rDBData.sCommand;
 
-    for (sal_uInt16 i = 0; i < sTmp.Len(); i++)
-    {
-        sName += sTmp.GetChar(i);
-        if (sTmp.GetChar(i) == '~')
-            sName += '~';
-    }
-
-    if (sName.EqualsAscii(".")) //empty
+    OUString sName(sTmp.replaceAll("~", "~~"));
+    if (sName == ".") //empty
         sName = SW_RESSTR(SW_STR_NONE);
 
     m_pDocDBNameFT->SetText(sName);

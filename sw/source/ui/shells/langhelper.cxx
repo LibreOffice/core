@@ -111,7 +111,7 @@ namespace SwLangHelper
         EditEngine * pEditEngine = rEditView.GetEditEngine();
 
         // get the language
-        String aNewLangTxt;
+        OUString aNewLangTxt;
 
         SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_LANGUAGE_STATUS , sal_False );
         if (pItem)
@@ -122,7 +122,7 @@ namespace SwLangHelper
         //!! SwTextShell got destroyed meanwhile.)
         SfxViewFrame *pViewFrame = rView.GetViewFrame();
 
-        if (aNewLangTxt.EqualsAscii( "*" ))
+        if (aNewLangTxt == "*" )
         {
             // open the dialog "Tools/Options/Language Settings - Language"
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -136,7 +136,7 @@ namespace SwLangHelper
         else
         {
             // setting the new language...
-            if (aNewLangTxt.Len() > 0)
+            if (!aNewLangTxt.isEmpty())
             {
                 const OUString aSelectionLangPrefix("Current_");
                 const OUString aParagraphLangPrefix("Paragraph_");
@@ -144,26 +144,26 @@ namespace SwLangHelper
                 const String aStrNone( OUString("LANGUAGE_NONE") );
                 const String aStrResetLangs( OUString("RESET_LANGUAGES") );
 
-                xub_StrLen nPos = 0;
+                sal_Int32 nPos = 0;
                 bool bForSelection = true;
                 bool bForParagraph = false;
-                if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aSelectionLangPrefix, 0 )))
+                if (-1 != (nPos = aNewLangTxt.indexOf( aSelectionLangPrefix, 0 )))
                 {
                     // ... for the current selection
-                    aNewLangTxt = aNewLangTxt.Erase( nPos, aSelectionLangPrefix.getLength() );
+                    aNewLangTxt = aNewLangTxt.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
                     bForSelection = true;
                 }
-                else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aParagraphLangPrefix , 0 )))
+                else if (-1 != (nPos = aNewLangTxt.indexOf( aParagraphLangPrefix , 0 )))
                 {
                     // ... for the current paragraph language
-                    aNewLangTxt = aNewLangTxt.Erase( nPos, aParagraphLangPrefix.getLength() );
+                    aNewLangTxt = aNewLangTxt.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
                     bForSelection = true;
                     bForParagraph = true;
                 }
-                else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aDocumentLangPrefix , 0 )))
+                else if (-1 != (nPos = aNewLangTxt.indexOf( aDocumentLangPrefix , 0 )))
                 {
                     // ... as default document language
-                    aNewLangTxt = aNewLangTxt.Erase( nPos, aDocumentLangPrefix.getLength() );
+                    aNewLangTxt = aNewLangTxt.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");
                     bForSelection = false;
                 }
 
