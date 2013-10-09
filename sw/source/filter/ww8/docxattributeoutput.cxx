@@ -5512,8 +5512,6 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
                 OString::number( rULSpace.GetLower() ) );
         if (rULSpace.GetContext())
             m_pSerializer->singleElementNS( XML_w, XML_contextualSpacing, FSEND );
-        else
-            m_pSerializer->singleElementNS( XML_w, XML_contextualSpacing, FSNS( XML_w, XML_val ), "false", FSEND );
     }
 }
 
