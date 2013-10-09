@@ -232,6 +232,8 @@ namespace basegfx
                             const B2DPoint aFirst( aCurrPoly.getB2DPoint(0) );
                             nLastX = aFirst.getX();
                             nLastY = aFirst.getY();
+                            // add point
+                            aCurrPoly.append(B2DPoint(nLastX, nLastY));
                         }
                         break;
                     }
