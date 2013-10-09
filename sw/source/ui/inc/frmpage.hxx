@@ -213,8 +213,8 @@ class SwGrfExtPage: public SfxTabPage
     Edit*           m_pConnectED;
     PushButton*     m_pBrowseBT;
 
-    String          aFilterName;
-    String          aGrfName, aNewGrfName;
+    OUString        aFilterName;
+    OUString        aGrfName, aNewGrfName;
 
     ::sfx2::FileDialogHelper*     pGrfDlg;
 

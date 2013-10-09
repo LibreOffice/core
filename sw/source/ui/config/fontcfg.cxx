@@ -225,7 +225,7 @@ bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
     return bSame;
 }
 
-String  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang)
+OUString  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang)
 {
     sal_uInt16 nFontId;
     switch( nFontType )

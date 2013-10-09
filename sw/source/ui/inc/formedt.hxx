@@ -79,7 +79,6 @@ public:
     SwIdxFormDlg( Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
     ~SwIdxFormDlg();
 
-    static sal_Bool     IsNoNum(SwWrtShell& rSh, const String& rName);
     const SwForm&   GetTOXForm();
 };
 

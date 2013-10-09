@@ -82,9 +82,9 @@ private:
     SfxItemSet* m_pTableItemSet;
 
     /** name of the character format (if it exist) */
-    String m_aCharStyle;
+    OUString m_aCharStyle;
     /** name of the paragraph format (if it exist) */
-    String m_aParaStyle;
+    OUString m_aParaStyle;
     //no frame style because it contains position information
 
     /** specify if the Paste function have to clear the current object */

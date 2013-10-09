@@ -244,8 +244,8 @@ bool SwFormatClipboard::HasContent() const
     return m_pItemSet_TxtAttr!=0
         || m_pItemSet_ParAttr!=0
         || m_pTableItemSet != 0
-        || m_aCharStyle.Len()
-        || m_aParaStyle.Len()
+        || !m_aCharStyle.isEmpty()
+        || !m_aParaStyle.isEmpty()
         ;
 }
 bool SwFormatClipboard::HasContentForThisType( int nSelectionType ) const
@@ -479,7 +479,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
         if( pPool )
         {
             // if there is a named text format recorded and the user wants to apply it
-            if(m_aCharStyle.Len() && !bNoCharacterFormats )
+            if(!m_aCharStyle.isEmpty() && !bNoCharacterFormats )
             {
                 // look for the named text format in the pool
                 SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aCharStyle, SFX_STYLE_FAMILY_CHAR));
@@ -498,7 +498,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             }
 
             // if there is a named paragraph format recorded and the user wants to apply it
-            if(m_aParaStyle.Len() && !bNoParagraphFormats )
+            if(!m_aParaStyle.isEmpty() && !bNoParagraphFormats )
             {
                 // look for the named pragraph format in the pool
                 SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aParaStyle, SFX_STYLE_FAMILY_PARA));
@@ -599,10 +599,10 @@ void SwFormatClipboard::Erase()
     delete m_pTableItemSet;
     m_pTableItemSet = 0;
 
-    if( m_aCharStyle.Len() )
-        m_aCharStyle.Erase();
-    if( m_aParaStyle.Len() )
-        m_aParaStyle.Erase();
+    if( !m_aCharStyle.isEmpty() )
+        m_aCharStyle = "";
+    if( !m_aParaStyle.isEmpty() )
+        m_aParaStyle = "";
 
     m_bPersistentCopy = false;
 }
