@@ -88,6 +88,7 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
     ReferencePathInfo aResult;
     if ( !nCount )
     {
+        aResult.pPopupMenu = NULL;
         aResult.eResult = RP_MENUITEM_NOT_FOUND;
         return aResult;
     }
