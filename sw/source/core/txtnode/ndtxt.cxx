@@ -2676,7 +2676,15 @@ sal_Bool SwTxtNode::HasBullet() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
     {
-        SwNumFmt aFmt(pRule->Get( static_cast<sal_uInt16>(GetActualListLevel())));
+        int nLevel = GetActualListLevel();
+
+        if (nLevel < 0)
+            nLevel = 0;
+
+        if (nLevel >= MAXLEVEL)
+            nLevel = MAXLEVEL - 1;
+
+        SwNumFmt aFmt(pRule->Get( static_cast<sal_uInt16>(nLevel) ));
 
         bResult = aFmt.IsItemize();
     }
