@@ -19,7 +19,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 	UIConfig_scalc \
 ))
 
-ifeq ($(ENABLE_OPENCL),TRUE)
+ifneq (,$(ENABLE_OPENCL))
 $(eval $(call gb_Module_add_targets,sc,\
 	Library_scopencl \
 ))

@@ -10330,7 +10330,6 @@ if test $_os != iOS -a $_os != Android -a "x$enable_opencl" != "xno"; then
 else
     AC_MSG_RESULT([no])
     enable_opencl=no
-    ENABLE_OPENCL=FALSE
 fi
 
 AC_SUBST(ENABLE_OPENCL)
