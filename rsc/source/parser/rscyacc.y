@@ -386,9 +386,10 @@ resource_definition
       }
       else if( $4.IsDefinition() )
       {
-          RscExpType              aExpType;
+          RscExpType aExpType;
           RscExpression * pExpr;
 
+          aExpType.cUnused = 0;
           aExpType.cType = RSCEXP_NOTHING;
           aExpType.SetLong( 0 );
           aExpType.cType = RSCEXP_LONG;
