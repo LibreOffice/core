@@ -353,6 +353,9 @@ sal_Bool LwpTocSuperLayout::GetUsePageNumber(sal_uInt16 index)
  */
 sal_uInt16 LwpTocSuperLayout::GetSeparatorType(sal_uInt16 index)
 {
+    if (index >= MAX_LEVELS)
+        return NONE;
+
     sal_uInt16 Flag = (sal_uInt16)m_nFlags[index];
 
     if (Flag & TS_LEADERDOTS)
