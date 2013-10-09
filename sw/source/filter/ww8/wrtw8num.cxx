@@ -196,7 +196,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
-        const String &rNumberingString,
+        const OUString &rNumberingString,
         const SvxBrushItem* pBrush //For i120928,to transfer graphic of bullet
     )
 {
@@ -298,7 +298,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         m_rWW8Export.pTableStrm->Write( aCharAtrs.data(), aCharAtrs.size() );
 
     // write the num string
-    SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, rNumberingString.Len() );
+    SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, rNumberingString.getLength() );
     SwWW8Writer::WriteString16( *m_rWW8Export.pTableStrm, rNumberingString, false );
 }
 
@@ -363,8 +363,8 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             }
 
             // Build the NumString for this Level
-            String sNumStr;
-            String sFontName;
+            OUString sNumStr;
+            OUString sFontName;
             bool bWriteBullet = false;
             const Font* pBulletFont=0;
             rtl_TextEncoding eChrSet=0;
@@ -372,7 +372,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() ||
                 SVX_NUM_BITMAP == rFmt.GetNumberingType() )
             {
-                sNumStr = rFmt.GetBulletChar();
+                sNumStr = OUString(rFmt.GetBulletChar());
                 bWriteBullet = true;
 
                 pBulletFont = rFmt.GetBulletFont();
@@ -412,12 +412,12 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     for( sal_uInt8 i = 0; i <= nLvl; ++i )
                     {
                         String sSrch( OUString::number( i ));
-                        xub_StrLen nFnd = sNumStr.Search( sSrch );
-                        if( STRING_NOTFOUND != nFnd )
+                        sal_Int32 nFnd = sNumStr.indexOf( sSrch );
+                        if( -1 != nFnd )
                         {
                             *pLvlPos = (sal_uInt8)(nFnd + rFmt.GetPrefix().getLength() + 1 );
                             ++pLvlPos;
-                            sNumStr.SetChar( nFnd, (char)i );
+                            sNumStr = sNumStr.replaceAt( nFnd, 1, OUString((char)i) );
                         }
                     }
                     // #i86652#
@@ -433,7 +433,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                 }
 
                 if( !rFmt.GetPrefix().isEmpty() )
-                    sNumStr.Insert( rFmt.GetPrefix(), 0 );
+                    sNumStr = rFmt.GetPrefix() + sNumStr;
                 sNumStr += rFmt.GetSuffix();
             }
 
@@ -455,7 +455,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     aSet.ClearItem( RES_CHRATR_CJK_FONT );
                     aSet.ClearItem( RES_CHRATR_FONT );
 
-                    if ( !sFontName.Len() )
+                    if ( sFontName.isEmpty() )
                         sFontName = pBulletFont->GetName();
 
                     pPseudoFont = new wwFont( sFontName, pBulletFont->GetPitch(),
@@ -637,9 +637,9 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
         const Font& rFont = rFmt.GetBulletFont()
                             ? *rFmt.GetBulletFont()
                             : numfunc::GetDefBulletFont();
-        String sNumStr = OUString(rFmt.GetBulletChar());
+        OUString sNumStr = OUString(rFmt.GetBulletChar());
         rtl_TextEncoding eChrSet = rFont.GetCharSet();
-        String sFontName = rFont.GetName();
+        OUString sFontName = rFont.GetName();
 
         sal_uInt16 nFontId;
         if ( IsStarSymbol(sFontName) )
@@ -653,7 +653,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
             wwFont aPseudoFont(sFontName, rFont.GetPitch(), rFont.GetFamily(),
                 eChrSet, bWrtWW8);
             nFontId = maFontHelper.GetId(aPseudoFont);
-            *rpCh = static_cast<sal_uInt8>(sNumStr.GetChar(0));
+            *rpCh = static_cast<sal_uInt8>(sNumStr[0]);
         }
         else
         {
@@ -666,7 +666,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
             true unicode to an 8bit charset
             */
             nFontId = maFontHelper.GetId(rFont);
-            sal_Unicode cChar = sNumStr.GetChar(0);
+            sal_Unicode cChar = sNumStr[0];
             if ( (eChrSet == RTL_TEXTENCODING_SYMBOL) && (cChar >= 0xF000) && (
                 cChar <= 0xF0FF) )
             {
@@ -693,17 +693,17 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
     }
 }
 
-void MSWordExportBase::SubstituteBullet( String& rNumStr,
-    rtl_TextEncoding& rChrSet, String& rFontName ) const
+void MSWordExportBase::SubstituteBullet( OUString& rNumStr,
+    rtl_TextEncoding& rChrSet, OUString& rFontName ) const
 {
     if (!bSubstituteBullets)
         return;
     OUString sFontName = rFontName;
 
     // If Bullet char is "", don't change
-    if (rNumStr.GetChar(0) != sal_Unicode(0x0))
+    if (rNumStr[0] != sal_Unicode(0x0))
     {
-        rNumStr.SetChar(0, msfilter::util::bestFitOpenSymbolToMSFont(rNumStr.GetChar(0), rChrSet, sFontName, !SupportsUnicode()));
+        rNumStr = rNumStr.replaceAt(0, 1, OUString( msfilter::util::bestFitOpenSymbolToMSFont(rNumStr[0], rChrSet, sFontName, !SupportsUnicode()) ));
     }
 
     rFontName = sFontName;

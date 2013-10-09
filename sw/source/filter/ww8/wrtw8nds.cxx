@@ -840,7 +840,7 @@ bool WW8AttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTarg
     return bBookMarkOnly;
 }
 
-bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
+bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget )
 {
     // hyperlinks only in WW8
     if ( !m_rWW8Export.bWrtWW8 )
@@ -882,7 +882,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
     // Compare the URL written by AnalyzeURL with the original one to see if
     // the output URL is absolute or relative.
     String sRelativeURL;
-    if ( rUrl.Len() )
+    if ( !rUrl.isEmpty() )
         sRelativeURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), rUrl );
     bool bAbsolute = sRelativeURL.Equals( rUrl );
 
@@ -1008,7 +1008,7 @@ bool WW8AttributeOutput::EndURL()
     return true;
 }
 
-String BookmarkToWord(const String &rBookmark)
+OUString BookmarkToWord(const OUString &rBookmark)
 {
     String sRet(INetURLObject::encode(rBookmark,
         INetURLObject::PART_REL_SEGMENT_EXTRA, '%',
@@ -1016,7 +1016,7 @@ String BookmarkToWord(const String &rBookmark)
     return TruncateBookmark(sRet);
 }
 
-String BookmarkToWriter(const String &rBookmark)
+OUString BookmarkToWriter(const OUString &rBookmark)
 {
     return INetURLObject::decode(rBookmark, '%',
         INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_ASCII_US);
@@ -1029,7 +1029,7 @@ void SwWW8AttrIter::OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool)
                                             &rAttr.GetRefName(), 0 ));
 }
 
-void WW8AttributeOutput::FieldVanish( const String& rTxt, ww::eField /*eType*/ )
+void WW8AttributeOutput::FieldVanish( const OUString& rTxt, ww::eField /*eType*/ )
 {
     ww::bytes aItems;
     m_rWW8Export.GetCurrentItems( aItems );
@@ -1053,7 +1053,7 @@ void WW8AttributeOutput::FieldVanish( const String& rTxt, ww::eField /*eType*/ )
     m_rWW8Export.WriteChar( '\x13' );
     m_rWW8Export.pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), aItems.size(),
                                     aItems.data() );
-    m_rWW8Export.OutSwString( rTxt, 0, rTxt.Len(), m_rWW8Export.IsUnicode(),
+    m_rWW8Export.OutSwString( rTxt, 0, rTxt.getLength(), m_rWW8Export.IsUnicode(),
                         RTL_TEXTENCODING_MS_1252 );
     m_rWW8Export.pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), nStt_sprmCFSpec,
                                     aItems.data() );
@@ -1394,13 +1394,13 @@ Convert characters that need to be converted, the basic replacements and the
 ridicously complicated title case attribute mapping to hardcoded upper case
 because word doesn't have the feature
 */
-String SwWW8AttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
+OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, xub_StrLen nAktPos,
     xub_StrLen nLen) const
 {
     if (!nLen)
         return OUString();
 
-    OUString aSnippet(rStr.Copy(nAktPos, nLen));
+    OUString aSnippet(rStr.copy(nAktPos, nLen));
     // 0x0a     ( Hard Line Break ) -> 0x0b
     // 0xad     ( soft hyphen )     -> 0x1f
     // 0x2011   ( hard hyphen )     -> 0x1e
@@ -1444,7 +1444,7 @@ String SwWW8AttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
             rStr, nAktPos, g_pBreakIt->GetLocale(nLanguage),
             i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
         {
-            aSnippet = OUString(rStr.GetChar(nAktPos)) + aSnippet.copy(1);
+            aSnippet = OUString(rStr[nAktPos]) + aSnippet.copy(1);
         }
     }
     m_rExport.m_aCurrentCharPropStarts.pop();

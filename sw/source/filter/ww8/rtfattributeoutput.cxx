@@ -439,7 +439,7 @@ OStringBuffer& RtfAttributeOutput::Styles()
     return m_aStyles;
 }
 
-void RtfAttributeOutput::RawText( const String& rText, bool /*bForceUnicode*/, rtl_TextEncoding eCharSet )
+void RtfAttributeOutput::RawText( const OUString& rText, bool /*bForceUnicode*/, rtl_TextEncoding eCharSet )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     m_aRunText->append(msfilter::rtfutil::OutString(rText, eCharSet));
@@ -455,7 +455,7 @@ void RtfAttributeOutput::EndRuby()
     SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }
 
-bool RtfAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
+bool RtfAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarget )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
@@ -474,7 +474,7 @@ bool RtfAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
         m_aStyles.append("\" ");
     }
 
-    if( rTarget.Len() )
+    if( !rTarget.isEmpty() )
     {
         m_aStyles.append("\\\\t \"");
         m_aStyles.append(msfilter::rtfutil::OutString( rTarget, m_rExport.eCurrentEncoding));
@@ -498,7 +498,7 @@ bool RtfAttributeOutput::EndURL()
     return true;
 }
 
-void RtfAttributeOutput::FieldVanish( const String& /*rTxt*/, ww::eField /*eType*/ )
+void RtfAttributeOutput::FieldVanish( const OUString& /*rTxt*/, ww::eField /*eType*/ )
 {
     SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }
@@ -1061,11 +1061,11 @@ void RtfAttributeOutput::DefaultStyle( sal_uInt16 /*nStyle*/ )
     /* noop, the default style is always 0 in RTF */
 }
 
-void RtfAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
+void RtfAttributeOutput::StartStyle( const OUString& rName, bool bPapFmt,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId,
         bool /* bAutoUpdate */ )
 {
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rName = '" << OUString(rName) << "'");
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rName = '" << rName << "'");
 
     m_aStylesheet.append('{');
     if (bPapFmt)
@@ -1322,7 +1322,7 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
         sal_Int16 /*nListTabPos*/,
-        const String &rNumberingString,
+        const OUString &rNumberingString,
         const SvxBrushItem* pBrush)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
@@ -1383,14 +1383,14 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
             SVX_NUM_BITMAP == nNumberingType )
     {
         m_rExport.Strm() << "\\'01";
-        sal_Unicode cChar = rNumberingString.GetChar(0);
+        sal_Unicode cChar = rNumberingString[0];
         m_rExport.Strm() << "\\u";
         m_rExport.OutULong(cChar);
         m_rExport.Strm() << " ?";
     }
     else
     {
-        m_rExport.Strm() << "\\'" << msfilter::rtfutil::OutHex( rNumberingString.Len(), 2 ).getStr();
+        m_rExport.Strm() << "\\'" << msfilter::rtfutil::OutHex( rNumberingString.getLength(), 2 ).getStr();
         m_rExport.Strm() << msfilter::rtfutil::OutString( rNumberingString, m_rExport.eDefaultEncoding, /*bUnicode =*/ false ).getStr();
     }
 
@@ -1424,12 +1424,12 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         m_rExport.Strm() << '}';
 }
 
-void RtfAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField /*eType*/, const String& rFldCmd, sal_uInt8 /*nMode*/ )
+void RtfAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField /*eType*/, const OUString& rFldCmd, sal_uInt8 /*nMode*/ )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     // If there are no field instructions, don't export it as a field.
-    bool bHasInstructions = rFldCmd.Len() > 0;
+    bool bHasInstructions = !rFldCmd.isEmpty();
     if (bHasInstructions)
     {
         m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
@@ -3154,7 +3154,7 @@ void RtfAttributeOutput::WriteExpand( const SwField* pFld )
     }
 }
 
-void RtfAttributeOutput::RefField( const SwField& /*rFld*/, const String& /*rRef*/ )
+void RtfAttributeOutput::RefField( const SwField& /*rFld*/, const OUString& /*rRef*/ )
 {
     SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }
@@ -3164,7 +3164,7 @@ void RtfAttributeOutput::HiddenField( const SwField& /*rFld*/ )
     SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }
 
-void RtfAttributeOutput::SetField( const SwField& /*rFld*/, ww::eField /*eType*/, const String& /*rCmd*/ )
+void RtfAttributeOutput::SetField( const SwField& /*rFld*/, ww::eField /*eType*/, const OUString& /*rCmd*/ )
 {
     SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }
@@ -3259,11 +3259,11 @@ MSWordExportBase& RtfAttributeOutput::GetExport()
 // These are used by wwFont::WriteRtf()
 
 /// Start the font.
-void RtfAttributeOutput::StartFont( const String& rFamilyName ) const
+void RtfAttributeOutput::StartFont( const OUString& rFamilyName ) const
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    m_rExport.Strm() << OUStringToOString( OUString( rFamilyName ), m_rExport.eCurrentEncoding ).getStr();
+    m_rExport.Strm() << OUStringToOString( rFamilyName, m_rExport.eCurrentEncoding ).getStr();
 }
 
 /// End the font.
@@ -3275,12 +3275,12 @@ void RtfAttributeOutput::EndFont() const
 }
 
 /// Alternate name for the font.
-void RtfAttributeOutput::FontAlternateName( const String& rName ) const
+void RtfAttributeOutput::FontAlternateName( const OUString& rName ) const
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     m_rExport.Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_FALT << ' ';
-    m_rExport.Strm() << OUStringToOString( OUString( rName ), m_rExport.eCurrentEncoding ).getStr() << '}';
+    m_rExport.Strm() << OUStringToOString( rName, m_rExport.eCurrentEncoding ).getStr() << '}';
 }
 
 /// Font charset.

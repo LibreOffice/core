@@ -187,7 +187,7 @@ public:
     virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet ) = 0;
 
     /// Output text (without markup).
-    virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet ) = 0;
+    virtual void RawText( const OUString& rText, bool bForceUnicode, rtl_TextEncoding eCharSet ) = 0;
 
     /// Output ruby start.
     virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby ) = 0;
@@ -196,12 +196,12 @@ public:
     virtual void EndRuby() = 0;
 
     /// Output URL start.
-    virtual bool StartURL( const String& rUrl, const String& rTarget ) = 0;
+    virtual bool StartURL( const OUString& rUrl, const OUString& rTarget ) = 0;
 
     /// Output URL end.
     virtual bool EndURL() = 0;
 
-    virtual void FieldVanish( const String& rTxt, ww::eField eType ) = 0;
+    virtual void FieldVanish( const OUString& rTxt, ww::eField eType ) = 0;
 
     void StartTOX( const SwSection& rSect );
 
@@ -260,7 +260,7 @@ public:
     virtual void DefaultStyle( sal_uInt16 nStyle ) = 0;
 
     /// Start of a style in the styles table.
-    virtual void StartStyle( const String& rName, bool bPapFmt,
+    virtual void StartStyle( const OUString& rName, bool bPapFmt,
             sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId,
             bool bAutoUpdate ) = 0;
 
@@ -337,7 +337,7 @@ public:
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
-        const String &rNumberingString,
+        const OUString &rNumberingString,
         const SvxBrushItem* pBrush = 0) = 0; // #i120928 export graphic of bullet
 
 protected:
@@ -584,9 +584,9 @@ protected:
     /// Write the expanded field
     virtual void WriteExpand( const SwField* pFld ) = 0;
 
-    virtual void RefField( const SwField& rFld, const String& rRef ) = 0;
+    virtual void RefField( const SwField& rFld, const OUString& rRef ) = 0;
     virtual void HiddenField( const SwField& rFld ) = 0;
-    virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd ) = 0;
+    virtual void SetField( const SwField& rFld, ww::eField eType, const OUString& rCmd ) = 0;
     virtual void PostitField( const SwField* pFld ) = 0;
     virtual bool DropdownField( const SwField* pFld ) = 0;
     virtual bool PlaceholderField( const SwField* pFld ) = 0;

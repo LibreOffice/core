@@ -94,7 +94,7 @@ void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 }
 
 bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
-    SvStorageRef xOleStg, SvStorageRef xObjStg, String &rStorageName,
+    SvStorageRef xOleStg, SvStorageRef xObjStg, OUString &rStorageName,
     SwOLENode *pOLENd)
 {
     bool bGraphicNeeded = false;
@@ -248,7 +248,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
             bool bIsNotDuplicate = aRes.second; //.second is false when element already existed
             nPictureId = aRes.first->second;
             Set_UInt32(pDataAdr, nPictureId);
-            String sStorageName = OUString('_');
+            OUString sStorageName('_');
             sStorageName += OUString::number( nPictureId );
             SvStorageRef xOleStg = xObjStg->OpenSotStorage( sStorageName,
                                 STREAM_READWRITE| STREAM_SHARE_DENYALL );

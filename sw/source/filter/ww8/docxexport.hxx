@@ -127,7 +127,7 @@ public:
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
-            const String& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL );
+            const OUString& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL );
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );

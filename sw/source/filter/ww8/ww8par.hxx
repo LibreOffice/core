@@ -224,7 +224,7 @@ struct WW8FlyPara
 
 class SwWW8StyInf
 {
-    String      sWWStyleName;
+    OUString        sWWStyleName;
     sal_uInt16      nWWStyleId;
 public:
     rtl_TextEncoding eLTRFontSrcCharSet;    // rtl_TextEncoding fuer den Font
@@ -291,13 +291,13 @@ public:
         delete pWWFly;
     }
 
-    void SetOrgWWIdent( const String& rName, const sal_uInt16 nId )
+    void SetOrgWWIdent( const OUString& rName, const sal_uInt16 nId )
     {
         sWWStyleName = rName;
         nWWStyleId = nId;
     }
     sal_uInt16 GetWWStyleId() const { return nWWStyleId; }
-    const String& GetOrgWWName() const
+    const OUString& GetOrgWWName() const
     {
         return sWWStyleName;
     }
@@ -858,14 +858,14 @@ class wwSectionNamer
 {
 private:
     const SwDoc &mrDoc;
-    String msFileLinkSeed;
+    OUString msFileLinkSeed;
     int mnFileSectionNo;
     //No copying
     wwSectionNamer(const wwSectionNamer&);
     wwSectionNamer& operator=(const wwSectionNamer&);
 public:
-    String UniqueName();
-    wwSectionNamer(const SwDoc &rDoc, const String &rSeed)
+    OUString UniqueName();
+    wwSectionNamer(const SwDoc &rDoc, const OUString &rSeed)
         : mrDoc(rDoc), msFileLinkSeed(rSeed), mnFileSectionNo(0)
         { }
 };
@@ -1130,7 +1130,7 @@ private:
     WW8ListManager* pLstManager;
     WW8ScannerBase* pSBase;
     WW8PLCFMan* pPlcxMan;
-    std::map<short, String> aLinkStringMap;
+    std::map<short, OUString> aLinkStringMap;
 
     std::set<const SwNode*> maTxtNodesHavingFirstLineOfstSet; // #i103711#
     std::set<const SwNode*> maTxtNodesHavingLeftIndentSet; // #i105414#
@@ -1173,7 +1173,7 @@ private:
     boost::shared_ptr<WW8PLCFspecial> mpAtnEnds;
 
     sw::util::AuthorInfos m_aAuthorInfos;
-    String sBaseURL;
+    OUString sBaseURL;
 
                                 // Ini-Flags:
     sal_uLong nIniFlags;            // Flags aus der writer.ini
@@ -1315,7 +1315,7 @@ private:
     }
     void DeleteAnchorStk()  { DeleteStk( pAnchorStck ); pAnchorStck = 0; }
     void emulateMSWordAddTextToParagraph(const OUString& rAddString);
-    void simpleAddTextToParagraph(const String& rAddString);
+    void simpleAddTextToParagraph(const OUString& rAddString);
     bool HandlePageBreakChar();
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs);
@@ -1338,7 +1338,7 @@ private:
     void Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartCp,
                            long nLen, ManTypes nType );
 
-    void ImportTox( int nFldId, String aStr );
+    void ImportTox( int nFldId, OUString aStr );
 
     void EndSprm( sal_uInt16 nId );
     // #i103711#
@@ -1413,11 +1413,11 @@ private:
         SdrObject &rSubObj);
 
     SwFlyFrmFmt* MakeGrafNotInCntnt(const WW8PicDesc& rPD,
-        const Graphic* pGraph, const String& rFileName,
+        const Graphic* pGraph, const OUString& rFileName,
         const SfxItemSet& rGrfSet);
 
     SwFrmFmt* MakeGrafInCntnt(const WW8_PIC& rPic, const WW8PicDesc& rPD,
-        const Graphic* pGraph, const String& rFileName,
+        const Graphic* pGraph, const OUString& rFileName,
         const SfxItemSet& rGrfSet);
 
     SwFrmFmt *AddAutoAnchor(SwFrmFmt *pFmt);
@@ -1535,12 +1535,12 @@ private:
     void GrafikDtor();
 
 // anderes
-    String GetFieldResult( WW8FieldDesc* pF );
-    void MakeTagString( String& rStr, const String& rOrg );
+    OUString GetFieldResult( WW8FieldDesc* pF );
+    void MakeTagString( OUString& rStr, const OUString& rOrg );
     void UpdateFields();
     OUString ConvertFFileName(const OUString& rRaw);
     long Read_F_Tag( WW8FieldDesc* pF );
-    void InsertTagField( const sal_uInt16 nId, const String& rTagText );
+    void InsertTagField( const sal_uInt16 nId, const OUString& rTagText );
     long ImportExtSprm(WW8PLCFManResult* pRes);
     void EndExtSprm(sal_uInt16 nSprmId);
     void ReadDocInfo();
@@ -1734,7 +1734,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, short nLen);
     long MapBookmarkVariables(const WW8FieldDesc* pF, OUString &rOrigName,
         const OUString &rData);
-    String GetMappedBookmark(const String &rOrigName);
+    OUString GetMappedBookmark(const OUString &rOrigName);
 
     // Felder
     eF_ResT Read_F_Input(WW8FieldDesc*, OUString& rStr);
@@ -1763,7 +1763,7 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr);
     eF_ResT Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr );
     eF_ResT Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr);
-    com::sun::star::awt::Size MiserableDropDownFormHack(const String &rString,
+    com::sun::star::awt::Size MiserableDropDownFormHack(const OUString &rString,
         com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>&
         rPropSet);
 
@@ -1804,9 +1804,9 @@ public:     // eigentlich private, geht aber leider nur public
     static ColorData GetCol(sal_uInt8 nIco);
 
     SwWW8ImplReader( sal_uInt8 nVersionPara, SvStorage* pStorage, SvStream* pSt,
-        SwDoc& rD, const String& rBaseURL, bool bNewDoc );
+        SwDoc& rD, const OUString& rBaseURL, bool bNewDoc );
 
-    const String& GetBaseURL() const { return sBaseURL; }
+    const OUString& GetBaseURL() const { return sBaseURL; }
     // Laden eines kompletten DocFiles
     sal_uLong LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
     CharSet GetCurrentCharSet();
@@ -1815,7 +1815,7 @@ public:     // eigentlich private, geht aber leider nur public
     void PostProcessAttrs();
 };
 
-bool CanUseRemoteLink(const String &rGrfName);
+bool CanUseRemoteLink(const OUString &rGrfName);
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt);
 void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFmt &rFmt);
 // #i103711#
@@ -1825,7 +1825,7 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
                          const bool bFirstLineOfStSet,
                          const bool bLeftIndentSet );
 long GetListFirstLineIndent(const SwNumFmt &rFmt);
-String BookmarkToWriter(const String &rBookmark);
+OUString BookmarkToWriter(const OUString &rBookmark);
 bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
     sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize);

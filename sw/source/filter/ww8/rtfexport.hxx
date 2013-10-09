@@ -27,7 +27,7 @@ class RtfExportFilter;
 class RtfSdrExport;
 typedef std::map<sal_uInt16,Color> RtfColorTbl;
 typedef std::map<sal_uInt16,OString> RtfStyleTbl;
-typedef std::map<String,sal_uInt16> RtfRedlineTbl;
+typedef std::map<OUString,sal_uInt16> RtfRedlineTbl;
 class SwNode;
 class SwTxtNode;
 class SwGrfNode;
@@ -91,7 +91,7 @@ public:
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
-            const String& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL );
+            const OUString& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL );
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
@@ -158,7 +158,7 @@ public:
     SvStream& Strm();
     SvStream& OutULong( sal_uLong nVal );
     SvStream& OutLong( long nVal );
-    void OutUnicode(const sal_Char *pToken, const String &rContent, bool bUpr = false);
+    void OutUnicode(const sal_Char *pToken, const OUString &rContent, bool bUpr = false);
     void OutDateTime(const sal_Char* pStr, const css::util::DateTime& rDT );
     void OutPageDescription( const SwPageDesc& rPgDsc, bool bWriteReset, bool bCheckForFirstPage );
 
@@ -166,8 +166,8 @@ public:
     void InsColor( const Color& rCol );
     void InsColorLine( const SvxBoxItem& rBox );
     void OutColorTable();
-    sal_uInt16 GetRedline( const String& rAuthor );
-    const String* GetRedline( sal_uInt16 nId );
+    sal_uInt16 GetRedline( const OUString& rAuthor );
+    const OUString* GetRedline( sal_uInt16 nId );
 
     void InsStyle( sal_uInt16 nId, const OString& rStyle );
     OString* GetStyle( sal_uInt16 nId );

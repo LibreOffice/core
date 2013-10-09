@@ -914,7 +914,7 @@ void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
 
     for ( xub_StrLen i = 0; i < nNbToken; i++ )
     {
-        OUString sToken = rInfos.sCmd.GetToken( i, '\t' );
+        OUString sToken = rInfos.sCmd.getToken( i, '\t' );
         if ( rInfos.eType ==  ww::eCREATEDATE
           || rInfos.eType ==  ww::eSAVEDATE
           || rInfos.eType ==  ww::ePRINTDATE
@@ -999,7 +999,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
         bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == RES_SETEXPFLD;
         bool bShowRef = ( !bIsSetField || ( nSubType & nsSwExtendedSubType::SUB_INVISIBLE ) ) ? false : true;
 
-        if ( ( m_sFieldBkm.Len( ) > 0 ) && bShowRef )
+        if ( ( !m_sFieldBkm.isEmpty() ) && bShowRef )
         {
             // Write the field beginning
             m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
@@ -1009,9 +1009,9 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
             m_pSerializer->endElementNS( XML_w, XML_r );
 
             rInfos.sCmd = FieldString( ww::eREF );
-            rInfos.sCmd.AppendAscii( "\"" );
+            rInfos.sCmd += "\"";
             rInfos.sCmd += m_sFieldBkm;
-            rInfos.sCmd.AppendAscii( "\" " );
+            rInfos.sCmd += "\" ";
 
             // Clean the field bookmark data to avoid infinite loop
             m_sFieldBkm = String( );
@@ -1268,7 +1268,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
     impl_WriteRunText( m_pSerializer, nTextToken, pBegin, pEnd, false );
 }
 
-void DocxAttributeOutput::RawText( const String& /*rText*/, bool /*bForceUnicode*/, rtl_TextEncoding /*eCharSet*/ )
+void DocxAttributeOutput::RawText( const OUString& /*rText*/, bool /*bForceUnicode*/, rtl_TextEncoding /*eCharSet*/ )
 {
     OSL_TRACE("TODO DocxAttributeOutput::RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )" );
 }
@@ -1366,7 +1366,7 @@ bool DocxAttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTar
     return bBookMarkOnly;
 }
 
-bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
+bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarget )
 {
     OUString sMark;
     OUString sUrl;
@@ -1435,7 +1435,7 @@ bool DocxAttributeOutput::EndURL()
     return true;
 }
 
-void DocxAttributeOutput::FieldVanish( const String& rTxt, ww::eField eType )
+void DocxAttributeOutput::FieldVanish( const OUString& rTxt, ww::eField eType )
 {
     WriteField_Impl( NULL, eType, rTxt, WRITEFIELD_ALL );
 }
@@ -3596,7 +3596,7 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
     return m_rDrawingML;
 }
 
-void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
+void DocxAttributeOutput::StartStyle( const OUString& rName, bool bPapFmt,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId, bool bAutoUpdate )
 {
     m_pSerializer->startElementNS( XML_w, XML_style,
@@ -3941,10 +3941,10 @@ void DocxAttributeOutput::SectionType( sal_uInt8 nBreakCode )
                 FSEND );
 }
 
-void DocxAttributeOutput::StartFont( const String& rFamilyName ) const
+void DocxAttributeOutput::StartFont( const OUString& rFamilyName ) const
 {
     m_pSerializer->startElementNS( XML_w, XML_font,
-            FSNS( XML_w, XML_name ), OUStringToOString( OUString( rFamilyName ), RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSNS( XML_w, XML_name ), OUStringToOString( rFamilyName, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 }
 
@@ -3953,10 +3953,10 @@ void DocxAttributeOutput::EndFont() const
     m_pSerializer->endElementNS( XML_w, XML_font );
 }
 
-void DocxAttributeOutput::FontAlternateName( const String& rName ) const
+void DocxAttributeOutput::FontAlternateName( const OUString& rName ) const
 {
     m_pSerializer->singleElementNS( XML_w, XML_altName,
-            FSNS( XML_w, XML_val ), OUStringToOString( OUString( rName ), RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSNS( XML_w, XML_val ), OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 }
 
@@ -4181,7 +4181,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
-        const String &rNumberingString,
+        const OUString &rNumberingString,
         const SvxBrushItem* pBrush)
 {
     m_pSerializer->startElementNS( XML_w, XML_lvl,
@@ -4744,7 +4744,7 @@ void DocxAttributeOutput::TextCharFormat( const SwFmtCharFmt& rCharFmt )
     m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
 
-void DocxAttributeOutput::RefField( const SwField&  rFld, const String& rRef )
+void DocxAttributeOutput::RefField( const SwField&  rFld, const OUString& rRef )
 {
     sal_uInt16 nType = rFld.GetTyp( )->Which( );
     if ( nType == RES_GETEXPFLD )
@@ -4853,7 +4853,7 @@ void DocxAttributeOutput::WritePendingPlaceholder()
     m_pSerializer->endElementNS( XML_w, XML_sdt );
 }
 
-void DocxAttributeOutput::SetField( const SwField& rFld, ww::eField eType, const String& rCmd )
+void DocxAttributeOutput::SetField( const SwField& rFld, ww::eField eType, const OUString& rCmd )
 {
     // field bookmarks are handled in the EndRun method
     GetExport().OutputField(&rFld, eType, rCmd );
@@ -4866,7 +4866,7 @@ void DocxAttributeOutput::WriteExpand( const SwField* pFld )
     m_rExport.OutputField( pFld, ww::eUNKNOWN, sCmd );
 }
 
-void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, sal_uInt8 nMode )
+void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType, const OUString& rFldCmd, sal_uInt8 nMode )
 {
     struct FieldInfos infos;
     if (pFld)

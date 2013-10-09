@@ -83,7 +83,7 @@ public:
     OStringBuffer& Styles();
 
     /// Output text (without markup).
-    virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
+    virtual void RawText( const OUString& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
 
     /// Output ruby start.
     virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby );
@@ -92,12 +92,12 @@ public:
     virtual void EndRuby();
 
     /// Output URL start.
-    virtual bool StartURL( const String& rUrl, const String& rTarget );
+    virtual bool StartURL( const OUString& rUrl, const OUString& rTarget );
 
     /// Output URL end.
     virtual bool EndURL();
 
-    virtual void FieldVanish( const String& rTxt, ww::eField eType );
+    virtual void FieldVanish( const OUString& rTxt, ww::eField eType );
 
     /// Output redlining.
     ///
@@ -134,7 +134,7 @@ public:
     virtual void DefaultStyle( sal_uInt16 nStyle );
 
     /// Start of a style in the styles table.
-    virtual void StartStyle( const String& rName, bool bPapFmt,
+    virtual void StartStyle( const OUString& rName, bool bPapFmt,
             sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId,
             bool bAutoUpdate );
 
@@ -208,10 +208,10 @@ public:
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
-        const String &rNumberingString,
+        const OUString &rNumberingString,
         const SvxBrushItem* pBrush = 0);//For i120928,to export graphic of bullet
 
-    void WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, sal_uInt8 nMode );
+    void WriteField_Impl( const SwField* pFld, ww::eField eType, const OUString& rFldCmd, sal_uInt8 nMode );
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void WriteHeaderFooter_Impl( const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr, bool bTitlepg );
 
@@ -426,9 +426,9 @@ protected:
     /// Write the expanded field
     virtual void WriteExpand( const SwField* pFld );
 
-    virtual void RefField( const SwField& rFld, const String& rRef );
+    virtual void RefField( const SwField& rFld, const OUString& rRef );
     virtual void HiddenField( const SwField& rFld );
-    virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd );
+    virtual void SetField( const SwField& rFld, ww::eField eType, const OUString& rCmd );
     virtual void PostitField( const SwField* pFld );
     virtual bool DropdownField( const SwField* pFld );
     virtual bool PlaceholderField( const SwField* pFld );
@@ -465,7 +465,7 @@ private:
     /*
      * Current style name and its ID.
      */
-    String m_rStyleName;
+    OUString m_rStyleName;
     sal_uInt16 m_nStyleId;
     /*
      * Current list ID.
@@ -598,13 +598,13 @@ public:
 
     // These are used by wwFont::WriteRtf()
     /// Start the font.
-    void StartFont( const String& rFamilyName ) const;
+    void StartFont( const OUString& rFamilyName ) const;
 
     /// End the font.
     void EndFont() const;
 
     /// Alternate name for the font.
-    void FontAlternateName( const String& rName ) const;
+    void FontAlternateName( const OUString& rName ) const;
 
     /// Font charset.
     void FontCharset( sal_uInt8 nCharSet ) const;

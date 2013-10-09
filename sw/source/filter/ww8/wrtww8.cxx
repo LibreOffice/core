@@ -1543,7 +1543,7 @@ int MSWordExportBase::GetGrfIndex(const SvxBrushItem& rBrush)
     return nIndex;
 }
 
-void MSWordExportBase::AppendWordBookmark( const String& rName )
+void MSWordExportBase::AppendWordBookmark( const OUString& rName )
 {
     AppendBookmark( BookmarkToWord( rName ) );
 }
@@ -1704,10 +1704,10 @@ void SwWW8Writer::WriteString8(SvStream& rStrm, const OUString& rStr,
         rStrm.Write(&aBytes[0], aBytes.size());
 }
 
-void WW8Export::WriteStringAsPara( const String& rTxt, sal_uInt16 nStyleId )
+void WW8Export::WriteStringAsPara( const OUString& rTxt, sal_uInt16 nStyleId )
 {
-    if( rTxt.Len() )
-        OutSwString( rTxt, 0, rTxt.Len(), IsUnicode(), RTL_TEXTENCODING_MS_1252 );
+    if( !rTxt.isEmpty() )
+        OutSwString( rTxt, 0, rTxt.getLength(), IsUnicode(), RTL_TEXTENCODING_MS_1252 );
     WriteCR();              // CR thereafter
 
     ww::bytes aArr;
@@ -1757,7 +1757,7 @@ void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_u
     nTxtTyp = nOldTyp;
 }
 
-void WW8Export::OutSwString(const String& rStr, xub_StrLen nStt,
+void WW8Export::OutSwString(const OUString& rStr, xub_StrLen nStt,
     xub_StrLen nLen, bool bUnicode, rtl_TextEncoding eChrSet)
 
 {
@@ -1768,9 +1768,9 @@ void WW8Export::OutSwString(const String& rStr, xub_StrLen nStt,
         if ( bUnicode != pPiece->IsUnicode() )
             pPiece->AppendPc ( Strm().Tell(), bUnicode );
 
-        if( nStt || nLen != rStr.Len() )
+        if( nStt || nLen != rStr.getLength() )
         {
-            String sOut( rStr.Copy( nStt, nLen ) );
+            String sOut( rStr.copy( nStt, nLen ) );
 
             SAL_INFO( "sw.ww8.level2", sOut );
 
@@ -2849,12 +2849,12 @@ void WW8Export::StoreDoc1()
     WriteFkpPlcUsw();                   // FKP, PLC, .....
 }
 
-void MSWordExportBase::AddLinkTarget(const String& rURL)
+void MSWordExportBase::AddLinkTarget(const OUString& rURL)
 {
-    if( !rURL.Len() || rURL.GetChar(0) != INET_MARK_TOKEN )
+    if( rURL.isEmpty() || rURL[0] != INET_MARK_TOKEN )
         return;
 
-    OUString aURL( BookmarkToWriter( rURL.Copy( 1 ) ) );
+    OUString aURL( BookmarkToWriter( rURL.copy( 1 ) ) );
     sal_Int32 nPos = aURL.lastIndexOf( cMarkSeparator );
 
     if( nPos < 2 )

@@ -50,7 +50,7 @@ struct FieldInfos
     ww::eField  eType;
     bool        bOpen;
     bool        bClose;
-    String     sCmd;
+    OUString    sCmd;
     FieldInfos() : pField(NULL), pFieldmark(NULL), eType(ww::eUNKNOWN), bOpen(false), bClose(false){}
 };
 
@@ -149,7 +149,7 @@ public:
     virtual void RunText( const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
     /// Output text (without markup).
-    virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
+    virtual void RawText( const OUString& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
 
     /// Output ruby start.
     virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby );
@@ -158,12 +158,12 @@ public:
     virtual void EndRuby();
 
     /// Output URL start.
-    virtual bool StartURL( const String& rUrl, const String& rTarget );
+    virtual bool StartURL( const OUString& rUrl, const OUString& rTarget );
 
     /// Output URL end.
     virtual bool EndURL();
 
-    virtual void FieldVanish( const String& rTxt, ww::eField eType );
+    virtual void FieldVanish( const OUString& rTxt, ww::eField eType );
 
     /// Output redlining.
     ///
@@ -225,7 +225,7 @@ public:
     void OutputDefaultItem(const SfxPoolItem& rHt);
 
     /// Start of a style in the styles table.
-    virtual void StartStyle( const String& rName, bool bPapFmt,
+    virtual void StartStyle( const OUString& rName, bool bPapFmt,
             sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId,
             bool bAutoUpdate );
 
@@ -279,13 +279,13 @@ public:
     virtual void SectionType( sal_uInt8 nBreakCode );
 
     /// Start the font.
-    void StartFont( const String& rFamilyName ) const;
+    void StartFont( const OUString& rFamilyName ) const;
 
     /// End the font.
     void EndFont() const;
 
     /// Alternate name for the font.
-    void FontAlternateName( const String& rName ) const;
+    void FontAlternateName( const OUString& rName ) const;
 
     /// Font charset.
     void FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEncoding ) const;
@@ -320,10 +320,10 @@ public:
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
-        const String &rNumberingString,
+        const OUString &rNumberingString,
         const SvxBrushItem* pBrush = 0 );
 
-    void WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, sal_uInt8 nMode );
+    void WriteField_Impl( const SwField* pFld, ww::eField eType, const OUString& rFldCmd, sal_uInt8 nMode );
     void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
 
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
@@ -612,9 +612,9 @@ protected:
     /// Write the expanded field
     virtual void WriteExpand( const SwField* pFld );
 
-    virtual void RefField( const SwField& rFld, const String& rRef );
+    virtual void RefField( const SwField& rFld, const OUString& rRef );
     virtual void HiddenField( const SwField& rFld );
-    virtual void SetField( const SwField& rFld, ww::eField eType, const String& rCmd );
+    virtual void SetField( const SwField& rFld, ww::eField eType, const OUString& rCmd );
     virtual void PostitField( const SwField* pFld );
     virtual bool DropdownField( const SwField* pFld );
     virtual bool PlaceholderField( const SwField* pFld );
@@ -677,7 +677,7 @@ private:
 
     /// Field data to remember in the text run
     std::vector< FieldInfos > m_Fields;
-    String m_sFieldBkm;
+    OUString m_sFieldBkm;
     sal_Int32 m_nNextMarkId;
 
     /// Bookmarks to output

@@ -4080,7 +4080,7 @@ long WW8PLCFx_Book::GetHandle() const
     }
 }
 
-String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
+OUString WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
 {
     bool bFound = false;
     sal_uInt16 i = 0;

@@ -349,7 +349,7 @@ void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
 // MakeGrafNotInCntnt setzt eine nicht-Zeichengebundene Grafik
 // ( bGrafApo == true)
 SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
-    const Graphic* pGraph, const String& rFileName, const SfxItemSet& rGrfSet)
+    const Graphic* pGraph, const OUString& rFileName, const SfxItemSet& rGrfSet)
 {
 
     sal_uInt32 nWidth = rPD.nWidth;
@@ -384,14 +384,14 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
 
 // MakeGrafInCntnt fuegt zeichengebundene Grafiken ein
 SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
-    const WW8PicDesc& rPD, const Graphic* pGraph, const String& rFileName,
+    const WW8PicDesc& rPD, const Graphic* pGraph, const OUString& rFileName,
     const SfxItemSet& rGrfSet)
 {
     WW8FlySet aFlySet(*this, pPaM, rPic, rPD.nWidth, rPD.nHeight);
 
     SwFrmFmt* pFlyFmt = 0;
 
-    if (!rFileName.Len() && nObjLocFc)      // dann sollte ists ein OLE-Object
+    if (rFileName.isEmpty() && nObjLocFc)      // dann sollte ists ein OLE-Object
         pFlyFmt = ImportOle(pGraph, &aFlySet, &rGrfSet);
 
     if( !pFlyFmt )                          // dann eben als Graphic

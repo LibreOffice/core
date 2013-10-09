@@ -2978,9 +2978,9 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
     }
 }
 
-void SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
+void SwWW8ImplReader::simpleAddTextToParagraph(const OUString& rAddString)
 {
-    if (!rAddString.Len())
+    if (rAddString.isEmpty())
         return;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2998,7 +2998,7 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
     if (!pNd)
         return;
 
-    if ((pNd->GetTxt().getLength() + rAddString.Len()) < STRING_MAXLEN-1)
+    if ((pNd->GetTxt().getLength() + rAddString.getLength()) < STRING_MAXLEN-1)
     {
         rDoc.InsertString(*pPaM, rAddString);
     }
@@ -3010,8 +3010,8 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
             String sTempStr (rAddString,0,
                 STRING_MAXLEN - pNd->GetTxt().getLength() -1);
             rDoc.InsertString(*pPaM, sTempStr);
-            sTempStr = rAddString.Copy(sTempStr.Len(),
-                rAddString.Len() - sTempStr.Len());
+            sTempStr = rAddString.copy(sTempStr.Len(),
+                rAddString.getLength() - sTempStr.Len());
             AppendTxtNode(*pPaM->GetPoint());
             rDoc.InsertString(*pPaM, sTempStr);
         }
@@ -3714,7 +3714,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
  * class SwWW8ImplReader
  */
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
-    SvStream* pSt, SwDoc& rD, const String& rBaseURL, bool bNewDoc) :
+    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc) :
     mpDocShell(rD.GetDocShell()),
     pStg(pStorage),
     pStrm(pSt),

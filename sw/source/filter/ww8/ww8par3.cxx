@@ -2283,7 +2283,7 @@ WW8FormulaListBox::WW8FormulaListBox(SwWW8ImplReader &rR)
 
 //Miserable hack to get a hardcoded guesstimate of the size of a list dropdown
 //box's first entry to set as the lists default size
-awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
+awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
     uno::Reference<beans::XPropertySet>& rPropSet)
 {
     awt::Size aRet;

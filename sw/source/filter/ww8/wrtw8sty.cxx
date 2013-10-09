@@ -372,7 +372,7 @@ void WW8AttributeOutput::EndStyle()
     m_rWW8Export.pO->clear();
 }
 
-void WW8AttributeOutput::StartStyle( const String& rName, bool bPapFmt, sal_uInt16 nWwBase,
+void WW8AttributeOutput::StartStyle( const OUString& rName, bool bPapFmt, sal_uInt16 nWwBase,
     sal_uInt16 nWwNext, sal_uInt16 nWwId, sal_uInt16 /*nId*/, bool bAutoUpdate )
 {
     sal_uInt8 aWW8_STD[ sizeof( WW8_STD ) ];
@@ -405,7 +405,7 @@ void WW8AttributeOutput::StartStyle( const String& rName, bool bPapFmt, sal_uInt
 
 
     sal_uInt16 nLen = static_cast< sal_uInt16 >( ( pData - aWW8_STD ) + 1 +
-                ((m_rWW8Export.bWrtWW8 ? 2 : 1 ) * (rName.Len() + 1)) );  // temporary
+                ((m_rWW8Export.bWrtWW8 ? 2 : 1 ) * (rName.getLength() + 1)) );  // temporary
 
     nPOPosStdLen1 = m_rWW8Export.pO->size();        // Adr1 zum nachtragen der Laenge
 
@@ -417,12 +417,12 @@ void WW8AttributeOutput::StartStyle( const String& rName, bool bPapFmt, sal_uInt
     // write names
     if( m_rWW8Export.bWrtWW8 )
     {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, rName.Len() ); // length
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, rName.getLength() ); // length
         SwWW8Writer::InsAsString16( *m_rWW8Export.pO, rName );
     }
     else
     {
-        m_rWW8Export.pO->push_back( (sal_uInt8)rName.Len() );       // length
+        m_rWW8Export.pO->push_back( (sal_uInt8)rName.getLength() );       // length
         SwWW8Writer::InsAsString8( *m_rWW8Export.pO, rName, RTL_TEXTENCODING_MS_1252 );
     }
     m_rWW8Export.pO->push_back( (sal_uInt8)0 );             // Trotz P-String 0 am Ende!
@@ -687,14 +687,14 @@ void MSWordStyles::OutputStylesTable()
 //---------------------------------------------------------------------------
 //          Fonts
 //---------------------------------------------------------------------------
-wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
+wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
     rtl_TextEncoding eChrSet, bool bWrtWW8) : mbAlt(false), mbWrtWW8(bWrtWW8), mePitch(ePitch), meFamily(eFamily), meChrSet(eChrSet)
 {
     FontMapExport aResult(rFamilyName);
     msFamilyNm = aResult.msPrimary;
     msAltNm = aResult.msSecondary;
-    if (msAltNm.Len() && msAltNm != msFamilyNm &&
-        (msFamilyNm.Len() + msAltNm.Len() + 2 <= 65) )
+    if (!msAltNm.isEmpty() && msAltNm != msFamilyNm &&
+        (msFamilyNm.getLength() + msAltNm.getLength() + 2 <= 65) )
     {
         //max size of szFfn in 65 chars
         mbAlt = true;
@@ -704,15 +704,15 @@ wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
 
     if (bWrtWW8)
     {
-        maWW8_FFN[0] = (sal_uInt8)( 6 - 1 + 0x22 + ( 2 * ( 1 + msFamilyNm.Len() ) ));
+        maWW8_FFN[0] = (sal_uInt8)( 6 - 1 + 0x22 + ( 2 * ( 1 + msFamilyNm.getLength() ) ));
         if (mbAlt)
-            maWW8_FFN[0] = static_cast< sal_uInt8 >(maWW8_FFN[0] + 2 * ( 1 + msAltNm.Len()));
+            maWW8_FFN[0] = static_cast< sal_uInt8 >(maWW8_FFN[0] + 2 * ( 1 + msAltNm.getLength()));
     }
     else
     {
-        maWW8_FFN[0] = (sal_uInt8)( 6 - 1 + 1 + msFamilyNm.Len() );
+        maWW8_FFN[0] = (sal_uInt8)( 6 - 1 + 1 + msFamilyNm.getLength() );
         if (mbAlt)
-            maWW8_FFN[0] = static_cast< sal_uInt8 >(maWW8_FFN[0] + 1 + msAltNm.Len());
+            maWW8_FFN[0] = static_cast< sal_uInt8 >(maWW8_FFN[0] + 1 + msAltNm.getLength());
     }
 
     sal_uInt8 aB = 0;
@@ -763,7 +763,7 @@ wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_getBestWindowsCharsetFromTextEncoding(eChrSet);
 
     if (mbAlt)
-        maWW8_FFN[5] = static_cast< sal_uInt8 >(msFamilyNm.Len() + 1);
+        maWW8_FFN[5] = static_cast< sal_uInt8 >(msFamilyNm.getLength() + 1);
 }
 
 bool wwFont::Write(SvStream *pTableStrm) const
@@ -825,10 +825,9 @@ bool operator<(const wwFont &r1, const wwFont &r2)
     int nRet = memcmp(r1.maWW8_FFN, r2.maWW8_FFN, sizeof(r1.maWW8_FFN));
     if (nRet == 0)
     {
-        StringCompare eRet = r1.msFamilyNm.CompareTo(r2.msFamilyNm);
-        if (eRet == COMPARE_EQUAL)
-            eRet = r1.msAltNm.CompareTo(r2.msAltNm);
-        nRet = eRet;
+        nRet = r1.msFamilyNm.compareTo(r2.msFamilyNm);
+        if (nRet == 0)
+            nRet = r1.msAltNm.compareTo(r2.msAltNm);
     }
     return nRet < 0;
 }
@@ -2202,7 +2201,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
 void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     WW8_FC& rTxtStart, sal_Int32& rTxtCount, WW8_FC& rRefStart, sal_Int32& rRefCount ) const
 {
-    typedef ::std::vector<String>::iterator myiter;
+    typedef ::std::vector<OUString>::iterator myiter;
 
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
     sal_uInt16 nLen = aCps.size();
@@ -2211,7 +2210,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
     OSL_ENSURE( aCps.size() + 2 == pTxtPos->Count(), "WritePlc: DeSync" );
 
-    ::std::vector<String> aStrArr;
+    ::std::vector<OUString> aStrArr;
     WW8Fib& rFib = *rWrt.pFib;              // n+1-te CP-Pos nach Handbuch
     sal_uInt16 i;
     bool bWriteCP = true;
@@ -2236,8 +2235,8 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 {
                     for ( i = 0; i < aStrArr.size(); ++i )
                     {
-                        const String& rStr = aStrArr[i];
-                        SwWW8Writer::WriteShort(*rWrt.pTableStrm, rStr.Len());
+                        const OUString& rStr = aStrArr[i];
+                        SwWW8Writer::WriteShort(*rWrt.pTableStrm, rStr.getLength());
                         SwWW8Writer::WriteString16(*rWrt.pTableStrm, rStr,
                                 false);
                     }
@@ -2246,8 +2245,8 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 {
                     for ( i = 0; i < aStrArr.size(); ++i )
                     {
-                        const String& rStr = aStrArr[i];
-                        *rWrt.pTableStrm << (sal_uInt8)rStr.Len();
+                        const OUString& rStr = aStrArr[i];
+                        *rWrt.pTableStrm << (sal_uInt8)rStr.getLength();
                         SwWW8Writer::WriteString8(*rWrt.pTableStrm, rStr, false,
                                 RTL_TEXTENCODING_MS_1252);
                     }

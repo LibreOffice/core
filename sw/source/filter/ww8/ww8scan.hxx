@@ -121,12 +121,12 @@ public:
 
 //Read a Pascal-style, i.e. single byte string length followed
 //by string contents
-inline String read_uInt8_PascalString(SvStream& rStrm, rtl_TextEncoding eEnc)
+inline OUString read_uInt8_PascalString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
     return read_lenPrefixed_uInt8s_ToOUString<sal_uInt8>(rStrm, eEnc);
 }
 
-inline String read_uInt16_PascalString(SvStream& rStrm)
+inline OUString read_uInt16_PascalString(SvStream& rStrm)
 {
     return read_lenPrefixed_uInt16s_ToOUString<sal_uInt16>(rStrm);
 }
@@ -748,7 +748,7 @@ public:
     long GetHandle() const;
     void SetStatus( sal_uInt16 nIndex, eBookStatus eStat );
     bool MapName(OUString& rName);
-    String GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex);
+    OUString GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex);
     eBookStatus GetStatus() const;
     OUString GetUniqueBookmarkName(const OUString &rSuggestedName);
 };

@@ -937,7 +937,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 // MakeTagString() gibt als Returnwert die Position des ersten
 // CR / Zeilenende / Seitenumbruch in pText und wandelt auch nur bis dort
 // Wenn keins dieser Sonderzeichen enthalten ist, wird 0 zurueckgeliefert.
-void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
+void SwWW8ImplReader::MakeTagString( OUString& rStr, const OUString& rOrg )
 {
     OUString sHex("\\x");
     bool bAllowCr = SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_IN_TEXT )
@@ -946,37 +946,37 @@ void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
     rStr = rOrg;
 
     for( xub_StrLen nI = 0;
-            nI < rStr.Len() && rStr.Len() < (MAX_FIELDLEN - 4); ++nI )
+            nI < rStr.getLength() && rStr.getLength() < (MAX_FIELDLEN - 4); ++nI )
     {
         bool bSetAsHex = false;
-        switch( cChar = rStr.GetChar( nI ) )
+        switch( cChar = rStr[ nI ] )
         {
             case 132:                       // Typographische Anfuehrungszeichen
             case 148:                       // gegen normale tauschen
             case 147:
-                rStr.SetChar( nI, '"' );
+                rStr = rStr.replaceAt( nI, 1, "\"" );
                 break;
             case 19:
-                rStr.SetChar( nI, '{' );
+                rStr = rStr.replaceAt( nI, 1, "{" );
                 break;  // 19..21 zu {|}
             case 20:
-                rStr.SetChar( nI, '|' );
+                rStr = rStr.replaceAt( nI, 1, "|" );
                 break;
             case 21:
-                rStr.SetChar( nI, '}' );
+                rStr = rStr.replaceAt( nI, 1, "}" );
                 break;
             case '\\':                      // \{|} per \ Taggen
             case '{':
             case '|':
             case '}':
-                rStr.Insert( nI, '\\' );
+                rStr = rStr.replaceAt( nI, 0, "\\" );
                 ++nI;
                 break;
             case 0x0b:
             case 0x0c:
             case 0x0d:
                 if( bAllowCr )
-                    rStr.SetChar( nI, '\n' );
+                    rStr = rStr.replaceAt( nI, 1, "\n" );
                 else
                     bSetAsHex = true;
                 break;
@@ -996,16 +996,16 @@ void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
             if( cChar < 0x10 )
                 sTmp += '0';
             sTmp += OUString::number( cChar, 16 );
-            rStr.Replace( nI, 1 , sTmp );
+            rStr = rStr.replaceAt( nI, 1 , sTmp );
             nI += sTmp.Len() - 1;
         }
     }
 
-    if( rStr.Len() > (MAX_FIELDLEN - 4))
-        rStr.Erase( MAX_FIELDLEN - 4 );
+    if( rStr.getLength() > (MAX_FIELDLEN - 4))
+        rStr = rStr.copy( 0, MAX_FIELDLEN - 4 );
 }
 
-void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const String& rTagText )
+void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const OUString& rTagText )
 {
     String aName(OUString("WwFieldTag"));
     if( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_DO_ID ) ) // Nummer?
@@ -1044,7 +1044,7 @@ long SwWW8ImplReader::Read_F_Tag( WW8FieldDesc* pF )
                                 pPlcxMan->GetCpOfs() + nStart, nL, eStructCharSet);
 
 
-    String aTagText;
+    OUString aTagText;
     MakeTagString( aTagText, sFTxt );
     InsertTagField( pF->nId, aTagText );
 
@@ -1093,7 +1093,7 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, OUString& rStr )
 }
 
 // GetFieldResult alloziert einen String und liest das Feld-Resultat ein
-String SwWW8ImplReader::GetFieldResult( WW8FieldDesc* pF )
+OUString SwWW8ImplReader::GetFieldResult( WW8FieldDesc* pF )
 {
     long nOldPos = pStrm->Tell();
 
@@ -1219,7 +1219,7 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
     return pRet;
 }
 
-String SwWW8ImplReader::GetMappedBookmark(const String &rOrigName)
+OUString SwWW8ImplReader::GetMappedBookmark(const OUString &rOrigName)
 {
     OUString sName(BookmarkToWriter(rOrigName));
     OSL_ENSURE(pPlcxMan,"no pPlcxMan");
@@ -2178,7 +2178,7 @@ WW8PostProcessAttrsInfo::WW8PostProcessAttrsInfo(WW8_CP nCpStart, WW8_CP nCpEnd,
 {
 }
 
-bool CanUseRemoteLink(const String &rGrfName)
+bool CanUseRemoteLink(const OUString &rGrfName)
 {
     bool bUseRemote = false;
     try
@@ -2260,7 +2260,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr )
     return FLD_READ_FSPA;
 }
 
-String wwSectionNamer::UniqueName()
+OUString wwSectionNamer::UniqueName()
 {
     const OUString aName(msFileLinkSeed + OUString::number(++mnFileSectionNo));
     return mrDoc.GetUniqueSectionName(&aName);
@@ -3454,7 +3454,7 @@ void sw::ms::ImportXE(SwDoc &rDoc, SwPaM &rPaM, const String &rStr)
     lcl_ImportTox(rDoc, rPaM, rStr, true);
 }
 
-void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
+void SwWW8ImplReader::ImportTox( int nFldId, OUString aStr )
 {
     bool bIdx = (nFldId != 9);
     lcl_ImportTox(rDoc, *pPaM, aStr, bIdx);

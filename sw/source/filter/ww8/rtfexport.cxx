@@ -274,7 +274,7 @@ void RtfExport::WriteRevTab()
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_REVTBL << ' ';
     for(sal_uInt16 i = 0; i < m_aRedlineTbl.size(); ++i)
     {
-        const String* pAuthor = GetRedline(i);
+        const OUString* pAuthor = GetRedline(i);
         Strm() << '{';
         if (pAuthor)
             Strm() << msfilter::rtfutil::OutString(*pAuthor, eDefaultEncoding).getStr();
@@ -309,7 +309,7 @@ void RtfExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
         WriteHeaderFooter( rFirstPageFmt, false, OOO_STRING_SVTOOLS_RTF_FOOTERF, true );
 }
 
-void RtfExport::OutputField( const SwField* pFld, ww::eField eFldType, const String& rFldCmd, sal_uInt8 nMode )
+void RtfExport::OutputField( const SwField* pFld, ww::eField eFldType, const OUString& rFldCmd, sal_uInt8 nMode )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
@@ -832,9 +832,9 @@ SvStream& RtfExport::OutLong( long nVal )
     return m_pWriter->OutLong( Strm(), nVal );
 }
 
-void RtfExport::OutUnicode(const sal_Char *pToken, const String &rContent, bool bUpr)
+void RtfExport::OutUnicode(const sal_Char *pToken, const OUString &rContent, bool bUpr)
 {
-    if (rContent.Len())
+    if (!rContent.isEmpty())
     {
         if (!bUpr)
         {
@@ -1048,22 +1048,22 @@ OString* RtfExport::GetStyle( sal_uInt16 nId )
     return NULL;
 }
 
-sal_uInt16 RtfExport::GetRedline( const String& rAuthor )
+sal_uInt16 RtfExport::GetRedline( const OUString& rAuthor )
 {
-    std::map<String,sal_uInt16>::iterator i = m_aRedlineTbl.find(rAuthor);
+    std::map<OUString,sal_uInt16>::iterator i = m_aRedlineTbl.find(rAuthor);
     if (i != m_aRedlineTbl.end())
         return i->second;
     else
     {
         int nId = m_aRedlineTbl.size();
-        m_aRedlineTbl.insert(std::pair<String,sal_uInt16>(rAuthor,nId));
+        m_aRedlineTbl.insert(std::pair<OUString,sal_uInt16>(rAuthor,nId));
         return nId;
     }
 }
 
-const String* RtfExport::GetRedline( sal_uInt16 nId )
+const OUString* RtfExport::GetRedline( sal_uInt16 nId )
 {
-    for(std::map<String,sal_uInt16>::iterator aIter = m_aRedlineTbl.begin(); aIter != m_aRedlineTbl.end(); ++aIter)
+    for(std::map<OUString,sal_uInt16>::iterator aIter = m_aRedlineTbl.begin(); aIter != m_aRedlineTbl.end(); ++aIter)
         if ((*aIter).second == nId)
             return &(*aIter).first;
     return NULL;

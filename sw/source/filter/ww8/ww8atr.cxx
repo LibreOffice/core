@@ -870,7 +870,7 @@ bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const OUString* pName, s
     return false;
 }
 
-String MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo )
+OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo )
 {
     String sRet;
     switch ( nTyp )
@@ -994,9 +994,9 @@ void WW8AttributeOutput::RunText( const OUString& rText, rtl_TextEncoding eCharS
     RawText( rText, m_rWW8Export.bWrtWW8, eCharSet );
 }
 
-void WW8AttributeOutput::RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )
+void WW8AttributeOutput::RawText( const OUString& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )
 {
-    m_rWW8Export.OutSwString( rText, 0, rText.Len(), bForceUnicode, eCharSet );
+    m_rWW8Export.OutSwString( rText, 0, rText.getLength(), bForceUnicode, eCharSet );
 }
 
 void WW8AttributeOutput::OutputFKP()
@@ -1773,7 +1773,7 @@ WW8_WrPlcFld* WW8Export::CurrentFieldPlc() const
 }
 
 void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
-    const String& rFldCmd, sal_uInt8 nMode )
+    const OUString& rFldCmd, sal_uInt8 nMode )
 {
     bool bUnicode = IsUnicode();
     WW8_WrPlcFld* pFldP = CurrentFieldPlc();
@@ -1913,7 +1913,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
     }
 }
 
-void WW8Export::StartCommentOutput(const String& rName)
+void WW8Export::StartCommentOutput(const OUString& rName)
 {
     String sStr(FieldString(ww::eQUOTE));
     sStr.AppendAscii("[");
@@ -1922,7 +1922,7 @@ void WW8Export::StartCommentOutput(const String& rName)
     OutputField(0, ww::eQUOTE, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
 }
 
-void WW8Export::EndCommentOutput(const String& rName)
+void WW8Export::EndCommentOutput(const OUString& rName)
 {
     String sStr(OUString(" ["));
     sStr += rName;
@@ -2429,7 +2429,7 @@ void WW8AttributeOutput::HiddenField( const SwField& rFld )
     }
 }
 
-void WW8AttributeOutput::SetField( const SwField& rFld, ww::eField eType, const String& rCmd )
+void WW8AttributeOutput::SetField( const SwField& rFld, ww::eField eType, const OUString& rCmd )
 {
     const SwSetExpField* pSet=(const SwSetExpField*)(&rFld);
     const String &rVar = pSet->GetPar2();
@@ -2491,7 +2491,7 @@ bool WW8AttributeOutput::PlaceholderField( const SwField* )
     return true; // expand to text?
 }
 
-void WW8AttributeOutput::RefField( const SwField &rFld, const String &rRef)
+void WW8AttributeOutput::RefField( const SwField &rFld, const OUString &rRef)
 {
     String sStr( FieldString( ww::eREF ) );
     sStr.AppendAscii( "\"" );

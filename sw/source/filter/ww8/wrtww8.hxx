@@ -281,15 +281,15 @@ class wwFont
 //and we could have harmony
 private:
     sal_uInt8 maWW8_FFN[6];
-    String msFamilyNm;
-    String msAltNm;
+    OUString msFamilyNm;
+    OUString msAltNm;
     bool mbAlt;
     bool mbWrtWW8;
     FontPitch mePitch;
     FontFamily meFamily;
     rtl_TextEncoding meChrSet;
 public:
-    wwFont( const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
+    wwFont( const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_TextEncoding eChrSet, bool bWrtWW8 );
     bool Write( SvStream *pTableStram ) const;
     void WriteDocx( DocxAttributeOutput* rAttrOutput ) const;
@@ -447,7 +447,7 @@ public:
     wwFontHelper maFontHelper;
     std::vector<sal_uLong> maChapterFieldLocs;
     typedef std::vector<sal_uLong>::const_iterator mycCFIter;
-    String aMainStg;
+    OUString aMainStg;
     std::vector<const SwTOXType*> aTOXArr;
     const SfxItemSet* pISet;    // fuer Doppel-Attribute
     WW8_WrPct*  pPiece;         // Pointer auf Piece-Table
@@ -596,10 +596,10 @@ public:
     bool HasRefToObject( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
 
     /// Find the bookmark name.
-    String GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
+    OUString GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
 
     /// Add a bookmark converted to a Word name.
-    void AppendWordBookmark( const String& rName );
+    void AppendWordBookmark( const OUString& rName );
 
     /// Use OutputItem() on an item set according to the parameters.
     void OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt, sal_uInt16 nScript, bool bExportParentItemSet );
@@ -702,8 +702,8 @@ public:
     void AbstractNumberingDefinitions();
 
     // Convert the bullet according to the font.
-    void SubstituteBullet( String& rNumStr, rtl_TextEncoding& rChrSet,
-        String& rFontName ) const;
+    void SubstituteBullet( OUString& rNumStr, rtl_TextEncoding& rChrSet,
+        OUString& rFontName ) const;
 
     /// No-op for the newer WW versions.
     virtual void OutputOlst( const SwNumRule& /*rRule*/ ) {}
@@ -724,7 +724,7 @@ public:
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
-            const String& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL ) = 0;
+            const OUString& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL ) = 0;
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
@@ -769,7 +769,7 @@ protected:
     /// Setup the chapter fields (maChapterFieldLocs).
     void GatherChapterFields();
 
-    void AddLinkTarget( const String& rURL );
+    void AddLinkTarget( const OUString& rURL );
     void CollectOutlineBookmarks( const SwDoc &rDoc );
 
     bool SetAktPageDescFromNode(const SwNode &rNd);
@@ -1003,13 +1003,13 @@ public:
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
-            const String& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL );
+            const OUString& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL );
 
-    void StartCommentOutput( const String& rName );
-    void EndCommentOutput(   const String& rName );
+    void StartCommentOutput( const OUString& rName );
+    void EndCommentOutput(   const OUString& rName );
     void OutGrf(const sw::Frame &rFrame);
     bool TestOleNeedsGraphic(const SwAttrSet& rSet, SvStorageRef xOleStg,
-        SvStorageRef xObjStg, String &rStorageName, SwOLENode *pOLENd);
+        SvStorageRef xObjStg, OUString &rStorageName, SwOLENode *pOLENd);
 
     virtual void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos, xub_StrLen nLen );
     virtual void AppendBookmark( const OUString& rName, bool bSkip = false );
@@ -1027,7 +1027,7 @@ public:
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t() );
     void WriteChar( sal_Unicode c );
 
-    void OutSwString(const String&, xub_StrLen nStt, xub_StrLen nLen,
+    void OutSwString(const OUString&, xub_StrLen nStt, xub_StrLen nLen,
         bool bUnicode, rtl_TextEncoding eChrSet);
 
     WW8_CP Fc2Cp( sal_uLong nFc ) const          { return pPiece->Fc2Cp( nFc ); }
@@ -1083,11 +1083,11 @@ public:
 
     void InsUInt16( sal_uInt16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
     void InsUInt32( sal_uInt32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
-    void InsAsString16( const String& rStr )
+    void InsAsString16( const OUString& rStr )
                         { SwWW8Writer::InsAsString16( *pO, rStr ); }
-    void InsAsString8( const String& rStr, rtl_TextEncoding eCodeSet )
+    void InsAsString8( const OUString& rStr, rtl_TextEncoding eCodeSet )
                         { SwWW8Writer::InsAsString8( *pO, rStr, eCodeSet ); }
-    void WriteStringAsPara( const String& rTxt, sal_uInt16 nStyleId = 0 );
+    void WriteStringAsPara( const OUString& rTxt, sal_uInt16 nStyleId = 0 );
 
     /// Setup the exporter.
     WW8Export( SwWW8Writer *pWriter,
@@ -1187,8 +1187,8 @@ public:
 struct WW8_Annotation
 {
     const OutlinerParaObject* mpRichText;
-    String msSimpleText;
-    String msOwner;
+    OUString msSimpleText;
+    OUString msOwner;
     DateTime maDateTime;
     WW8_Annotation(const SwPostItField* pPostIt);
     WW8_Annotation(const SwRedlineData* pRedline);
@@ -1466,7 +1466,7 @@ private:
     sw::FrameIter maFlyIter;
 
     xub_StrLen SearchNext( xub_StrLen nStartPos );
-    void FieldVanish( const String& rTxt );
+    void FieldVanish( const OUString& rTxt );
 
     void OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool bStart);
 
@@ -1497,7 +1497,7 @@ public:
     bool IsCharRTL() const { return mbCharIsRTL; }
     bool IsParaRTL() const { return mbParaIsRTL; }
     rtl_TextEncoding GetCharSet() const { return meChrSet; }
-    String GetSnippet(const String &rStr, xub_StrLen nAktPos,
+    OUString GetSnippet(const OUString &rStr, xub_StrLen nAktPos,
         xub_StrLen nLen) const;
     const SwFmtDrop& GetSwFmtDrop() const { return mrSwFmtDrop; }
 };
@@ -1557,7 +1557,7 @@ public:
 sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt);
 // A bit of a bag on the side for now
 OUString FieldString(ww::eField eIndex);
-String BookmarkToWord(const String &rBookmark);
+OUString BookmarkToWord(const OUString &rBookmark);
 
 class WW8SHDLong
 {
