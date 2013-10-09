@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <algorithm>
+
 #include "emfwr.hxx"
 #include <rtl/strbuf.hxx>
 #include <tools/helpers.hxx>
@@ -1353,7 +1357,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case META_TEXT_ACTION:
             {
                 const MetaTextAction*   pA = (const MetaTextAction*) pAction;
-                const OUString          aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                const OUString          aText = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
                 ImplCheckTextAttr();
                 ImplWriteTextRecord( pA->GetPoint(), aText, NULL, 0 );
@@ -1373,7 +1377,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case META_TEXTARRAY_ACTION:
             {
                 const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pAction;
-                const OUString              aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                const OUString              aText = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
                 ImplCheckTextAttr();
                 ImplWriteTextRecord( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
@@ -1383,7 +1387,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case META_STRETCHTEXT_ACTION:
             {
                 const MetaStretchTextAction*    pA = (const MetaStretchTextAction*) pAction;
-                const OUString                  aText = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                const OUString                  aText = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
                 ImplCheckTextAttr();
                 ImplWriteTextRecord( pA->GetPoint(), aText, NULL, pA->GetWidth() );

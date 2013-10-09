@@ -246,7 +246,7 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                     if( pLinkStr )
                         *pLinkStr = sRange;
                     if( pFilter )
-                        *pFilter = sLNm.copy( nPos );
+                        *pFilter = nPos == -1 ? OUString() : sLNm.copy(nPos);
 
                     if( pType )
                     {

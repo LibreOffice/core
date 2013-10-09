@@ -441,7 +441,7 @@ void SmParser::NextToken()
         }
         else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
         {
-            if (nRealStart + 2 <= nBufLen && m_aBufferString.copy(nRealStart, 2) == "%%")
+            if (nRealStart + 2 <= nBufLen && m_aBufferString.match("%%", nRealStart))
             {
                 //SkipComment
                 m_nBufferIndex = nRealStart + 2;
@@ -543,7 +543,7 @@ void SmParser::NextToken()
             {
                 case '<':
                     {
-                        if (m_aBufferString.copy(nRealStart, 2) == "<<")
+                        if (m_aBufferString.match("<<", nRealStart))
                         {
                             m_aCurToken.eType    = TLL;
                             m_aCurToken.cMathChar = MS_LL;
@@ -553,7 +553,7 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.copy(nRealStart, 2) == "<=")
+                        else if (m_aBufferString.match("<=", nRealStart))
                         {
                             m_aCurToken.eType    = TLE;
                             m_aCurToken.cMathChar = MS_LE;
@@ -563,7 +563,7 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.copy(nRealStart, 2) == "<>")
+                        else if (m_aBufferString.match("<>", nRealStart))
                         {
                             m_aCurToken.eType    = TNEQ;
                             m_aCurToken.cMathChar = MS_NEQ;
@@ -573,7 +573,7 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.copy(nRealStart, 3) == "<?>")
+                        else if (m_aBufferString.match("<?>", nRealStart))
                         {
                             m_aCurToken.eType    = TPLACE;
                             m_aCurToken.cMathChar = MS_PLACE;
@@ -595,7 +595,7 @@ void SmParser::NextToken()
                     break;
                 case '>':
                     {
-                        if (m_aBufferString.copy(nRealStart, 2) == ">=")
+                        if (m_aBufferString.match(">=", nRealStart))
                         {
                             m_aCurToken.eType    = TGE;
                             m_aCurToken.cMathChar = MS_GE;
@@ -605,7 +605,7 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.copy(nRealStart, 2) == ">>")
+                        else if (m_aBufferString.match(">>", nRealStart))
                         {
                             m_aCurToken.eType    = TGG;
                             m_aCurToken.cMathChar = MS_GG;
@@ -770,7 +770,7 @@ void SmParser::NextToken()
                     break;
                 case '#':
                     {
-                        if (m_aBufferString.copy(nRealStart, 2) == "##")
+                        if (m_aBufferString.match("##", nRealStart))
                         {
                             m_aCurToken.eType    = TDPOUND;
                             m_aCurToken.cMathChar = '\0';
@@ -828,7 +828,7 @@ void SmParser::NextToken()
                     break;
                 case '+':
                     {
-                        if (m_aBufferString.copy(nRealStart, 2) == "+-")
+                        if (m_aBufferString.match("+-", nRealStart))
                         {
                             m_aCurToken.eType    = TPLUSMINUS;
                             m_aCurToken.cMathChar = MS_PLUSMINUS;
@@ -850,7 +850,7 @@ void SmParser::NextToken()
                     break;
                 case '-':
                     {
-                        if (m_aBufferString.copy(nRealStart, 2) == "-+")
+                        if (m_aBufferString.match("-+", nRealStart))
                         {
                             m_aCurToken.eType    = TMINUSPLUS;
                             m_aCurToken.cMathChar = MS_MINUSPLUS;

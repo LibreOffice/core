@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <algorithm>
+
 #include "wmfwr.hxx"
 #include <unotools/fontcvt.hxx>
 #include "emfwr.hxx"
@@ -1182,7 +1186,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_TEXT_ACTION:
                 {
                     const MetaTextAction * pA = (const MetaTextAction*) pMA;
-                    OUString aTemp = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                    OUString aTemp = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
                     if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, NULL ) )
@@ -1194,7 +1198,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pMA;
 
-                    OUString aTemp = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                    OUString aTemp = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
                     if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pA->GetDXArray() ) )
@@ -1205,7 +1209,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_STRETCHTEXT_ACTION:
                 {
                     const MetaStretchTextAction* pA = (const MetaStretchTextAction *) pMA;
-                    OUString aTemp = pA->GetText().copy( pA->GetIndex(), pA->GetLen() );
+                    OUString aTemp = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
                     sal_uInt16 nLen,i;
                     sal_Int32 nNormSize;
