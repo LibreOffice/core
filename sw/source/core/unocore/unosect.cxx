@@ -728,11 +728,11 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     OUString sSectLink(pSectionData->GetLinkFileName());
                     while (3 < comphelper::string::getTokenCount(sSectLink, sfx2::cTokenSeparator))
                     {
-                        sSectLink += sfx2::cTokenSeparator;
+                        sSectLink += OUString(sfx2::cTokenSeparator);
                     }
                     sSectLink = comphelper::string::setToken(sSectLink, 2, sfx2::cTokenSeparator, sLink);
                     pSectionData->SetLinkFileName(sSectLink);
-                    if (sSectLink.Len() < 3)
+                    if (sSectLink.getLength() < 3)
                     {
                         pSectionData->SetType(CONTENT_SECTION);
                     }

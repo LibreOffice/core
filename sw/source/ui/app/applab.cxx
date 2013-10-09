@@ -22,6 +22,7 @@
 
 #include <hintids.hxx>
 
+#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
