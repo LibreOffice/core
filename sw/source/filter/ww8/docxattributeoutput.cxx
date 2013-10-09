@@ -2368,7 +2368,7 @@ struct StringTokenMap
     sal_Int32 nToken;
 };
 
-StringTokenMap aDefaultTokens[] {
+StringTokenMap const aDefaultTokens[] = {
     {"defQFormat", XML_defQFormat},
     {"defUnhideWhenUsed", XML_defUnhideWhenUsed},
     {"defSemiHidden", XML_defSemiHidden},
@@ -2378,7 +2378,7 @@ StringTokenMap aDefaultTokens[] {
     {0, 0}
 };
 
-StringTokenMap aExceptionTokens[] {
+StringTokenMap const aExceptionTokens[] = {
     {"name", XML_name},
     {"locked", XML_locked},
     {"uiPriority", XML_uiPriority},
@@ -2388,7 +2388,7 @@ StringTokenMap aExceptionTokens[] {
     {0, 0}
 };
 
-sal_Int32 lcl_getToken(StringTokenMap* pMap, OUString aName)
+sal_Int32 lcl_getToken(StringTokenMap const * pMap, OUString aName)
 {
     OString sName = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
     while (pMap->pToken)
