@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
 #include "formulagroup.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
@@ -17,7 +19,6 @@
 
 #include "formula/vectortoken.hxx"
 #include "rtl/bootstrap.hxx"
-#include "config_features.h"
 
 #include <vector>
 #include <boost/unordered_map.hpp>
@@ -422,6 +423,7 @@ void FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
         msInstance = new sc::FormulaGroupInterpreterSoftware();
         return;
     }
+#if HAVE_FEATURE_OPENCL
 #ifndef DISABLE_DYNLOADING
     osl::Module* pModule = getOpenCLModule();
     if (!pModule)
@@ -439,12 +441,14 @@ void FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     if(!bSuccess)
         return;
 #endif
+#else
+    (void) bAutoSelect;
+#endif
 
     delete msInstance;
     msInstance = NULL;
 
 #if HAVE_FEATURE_OPENCL
-
     if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
     {
 #ifdef DISABLE_DYNLOADING
@@ -469,6 +473,7 @@ void FormulaGroupInterpreter::compileOpenCLKernels()
         // OpenCL is not enabled.
         return;
 
+#if HAVE_FEATURE_OPENCL
 #ifndef DISABLE_DYNLOADING
     osl::Module* pModule = getOpenCLModule();
     if (!pModule)
@@ -481,6 +486,7 @@ void FormulaGroupInterpreter::compileOpenCLKernels()
     reinterpret_cast<__compileOpenCLKernels>(fn)(&rConfig.maOpenCLDevice);
 #else
     ::compileOpenCLKernels(&rConfig.maOpenCLDevice);
+#endif
 #endif
 }
 
