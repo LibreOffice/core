@@ -19,15 +19,8 @@
 
 
 // bootstrap stuff
-#include <sal/main.h>
-#include <rtl/bootstrap.hxx>
-#include <rtl/ref.hxx>
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <test/bootstrapfixture.hxx>
+
 #include <com/sun/star/util/Endianness.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
@@ -37,44 +30,21 @@
 #include <com/sun/star/rendering/XBitmapPalette.hpp>
 
 #include <cppuhelper/compbase3.hxx>
-
 #include <tools/diagnose_ex.h>
-#include <tools/extendapplicationenvironment.hxx>
+#include <rtl/ref.hxx>
 
 #include "vcl/svapp.hxx"
 #include "vcl/canvastools.hxx"
-#include "vcl/canvasbitmap.hxx"
 #include "vcl/dialog.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/bmpacc.hxx"
 #include "vcl/virdev.hxx"
 #include "vcl/bitmapex.hxx"
 
+#include "canvasbitmap.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::vcl::unotools;
-
-
-void Main();
-
-
-SAL_IMPLEMENT_MAIN()
-{
-    tools::extendApplicationEnvironment();
-
-    uno::Reference< lang::XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory(
-        OUString( "applicat.rdb"  ),
-        sal_True );
-
-    comphelper::setProcessServiceFactory( xMS );
-
-    InitVCL();
-    ::Main();
-    DeInitVCL();
-
-    return 0;
-}
 
 
 namespace com { namespace sun { namespace star { namespace rendering
@@ -95,44 +65,17 @@ bool operator==( const ARGBColor& rLHS, const RGBColor& rRHS )
 namespace
 {
 
-class TestApp : public Application
+class CanvasBitmapTest : public test::BootstrapFixture
 {
 public:
-    virtual void   Main();
-    virtual sal_uInt16 Exception( sal_uInt16 nError );
+    CanvasBitmapTest() : BootstrapFixture(true, false) {}
+
+    void runTest();
+
+    CPPUNIT_TEST_SUITE(CanvasBitmapTest);
+    CPPUNIT_TEST(runTest);
+    CPPUNIT_TEST_SUITE_END();
 };
-
-class TestWindow : public Dialog
-{
-    public:
-        TestWindow() : Dialog( (Window *) NULL )
-        {
-            SetText( OUString("CanvasBitmap test harness") );
-            SetSizePixel( Size( 1024, 1024 ) );
-            EnablePaint( true );
-            Show();
-        }
-
-        virtual ~TestWindow() {}
-        virtual void Paint( const Rectangle& rRect );
-};
-
-
-static bool g_failure=false;
-
-void test( bool bResult, const char* msg )
-{
-    if( bResult )
-    {
-        OSL_TRACE("Testing: %s - PASSED", msg);
-    }
-    else
-    {
-        g_failure = true;
-        OSL_TRACE("Testing: %s - FAILED", msg);
-    }
-}
-
 
 bool rangeCheck( const rendering::RGBColor& rColor )
 {
@@ -140,7 +83,6 @@ bool rangeCheck( const rendering::RGBColor& rColor )
         rColor.Green < 0.0 || rColor.Green > 1.0 ||
         rColor.Blue < 0.0 || rColor.Blue > 1.0;
 }
-
 
 void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                         const char*                            msg,
@@ -158,52 +100,52 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
         nDepth = pAcc->GetBitCount();
     }
 
-    test( aContainedBmp.GetSizePixel() == Size(200,200),
-          "Original bitmap size" );
+    CPPUNIT_ASSERT_MESSAGE( "Original bitmap size not (200,200)",
+                            aContainedBmp.GetSizePixel() == Size(200,200));
 
-    test( xBmp->getSize().Width == 200 && xBmp->getSize().Height == 200,
-          "Original bitmap size via API" );
+    CPPUNIT_ASSERT_MESSAGE( "Original bitmap size via API not (200,200)",
+                            xBmp->getSize().Width == 200 && xBmp->getSize().Height == 200);
 
-    test( xBmp->hasAlpha() == aContainedBmpEx.IsTransparent(),
-          "Correct alpha state" );
+    CPPUNIT_ASSERT_MESSAGE( "alpha state mismatch",
+                            xBmp->hasAlpha() == aContainedBmpEx.IsTransparent());
 
-    test( xBmp->getScaledBitmap( geometry::RealSize2D(500,500), sal_False ).is(),
-          "getScaledBitmap()" );
+    CPPUNIT_ASSERT_MESSAGE( "getScaledBitmap() failed",
+                            xBmp->getScaledBitmap( geometry::RealSize2D(500,500), sal_False ).is());
 
     rendering::IntegerBitmapLayout aLayout;
     uno::Sequence<sal_Int8> aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,1,1));
 
     const sal_Int32 nExpectedBitsPerPixel(
         aContainedBmpEx.IsTransparent() ? std::max(8,nDepth)+8 : nDepth);
-    test( aLayout.ScanLines == 1,
-          "# scanlines" );
-    test( aLayout.ScanLineBytes == (nExpectedBitsPerPixel+7)/8,
-          "# scanline bytes" );
-    test( aLayout.ScanLineStride == (nExpectedBitsPerPixel+7)/8 ||
-          aLayout.ScanLineStride == -(nExpectedBitsPerPixel+7)/8,
-          "# scanline stride" );
-    test( aLayout.PlaneStride == 0,
-          "# plane stride" );
+    CPPUNIT_ASSERT_MESSAGE( "# scanlines not 1",
+                            aLayout.ScanLines == 1);
+    CPPUNIT_ASSERT_MESSAGE( "# scanline bytes mismatch",
+                            aLayout.ScanLineBytes == (nExpectedBitsPerPixel+7)/8);
+    CPPUNIT_ASSERT_MESSAGE( "# scanline stride mismatch",
+                            aLayout.ScanLineStride == (nExpectedBitsPerPixel+7)/8 ||
+                            aLayout.ScanLineStride == -(nExpectedBitsPerPixel+7)/8);
+    CPPUNIT_ASSERT_MESSAGE( "# plane stride not 0",
+                            aLayout.PlaneStride == 0);
 
-    test( aLayout.ColorSpace.is(),
-          "Color space there" );
+    CPPUNIT_ASSERT_MESSAGE( "Color space not there",
+                            aLayout.ColorSpace.is());
 
-    test( aLayout.Palette.is() == (nDepth <= 8),
-          "Palette existance conforms to bitmap" );
+    CPPUNIT_ASSERT_MESSAGE( "Palette existance does not conform to bitmap",
+                            aLayout.Palette.is() == (nDepth <= 8));
 
     uno::Sequence<sal_Int8> aPixelData2 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(0,0) );
 
-    test( aPixelData2.getLength() == aPixelData.getLength(),
-          "getData and getPixel return same amount of data" );
+    CPPUNIT_ASSERT_MESSAGE( "getData and getPixel did not return same amount of data",
+                            aPixelData2.getLength() == aPixelData.getLength());
 
     aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,200,1));
-    test( aLayout.ScanLines == 1,
-          "# scanlines" );
-    test( aLayout.ScanLineBytes == (200*nExpectedBitsPerPixel+7)/8,
-          "# scanline bytes" );
-    test( aLayout.ScanLineStride == (200*nExpectedBitsPerPixel+7)/8 ||
-          aLayout.ScanLineStride == -(200*nExpectedBitsPerPixel+7)/8,
-          "# scanline stride" );
+    CPPUNIT_ASSERT_MESSAGE( "# scanlines not 1 for getPixel",
+                            aLayout.ScanLines == 1);
+    CPPUNIT_ASSERT_MESSAGE( "# scanline bytes mismatch for getPixel",
+                            aLayout.ScanLineBytes == (200*nExpectedBitsPerPixel+7)/8);
+    CPPUNIT_ASSERT_MESSAGE( "# scanline stride mismatch for getPixel",
+                            aLayout.ScanLineStride == (200*nExpectedBitsPerPixel+7)/8 ||
+                            aLayout.ScanLineStride == -(200*nExpectedBitsPerPixel+7)/8);
 
     uno::Sequence< rendering::RGBColor >  aRGBColors  = xBmp->convertIntegerToRGB( aPixelData );
     uno::Sequence< rendering::ARGBColor > aARGBColors = xBmp->convertIntegerToARGB( aPixelData );
@@ -213,51 +155,53 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     const rendering::ARGBColor* pARGBStart( aARGBColors.getConstArray() );
     std::pair<const rendering::RGBColor*,
         const rendering::ARGBColor*> aRes = std::mismatch( pRGBStart, pRGBEnd, pARGBStart );
-    test( aRes.first == pRGBEnd,
-          "argb and rgb colors are equal" );
+    CPPUNIT_ASSERT_MESSAGE( "argb and rgb colors are not equal",
+                            aRes.first == pRGBEnd);
 
-    test( std::find_if(pRGBStart,pRGBEnd,&rangeCheck) == pRGBEnd,
-          "rgb colors are within [0,1] range" );
+    CPPUNIT_ASSERT_MESSAGE( "rgb colors are not within [0,1] range",
+                            std::find_if(pRGBStart,pRGBEnd,&rangeCheck) == pRGBEnd);
 
-    test( pRGBStart[0].Red == 1.0 && pRGBStart[0].Green == 1.0 && pRGBStart[0].Blue == 1.0,
-          "First pixel is white" );
-    test( pARGBStart[1].Alpha == 1.0,
-          "Second pixel is opaque" );
+    CPPUNIT_ASSERT_MESSAGE( "First pixel is not white",
+                            pRGBStart[0].Red == 1.0 && pRGBStart[0].Green == 1.0 && pRGBStart[0].Blue == 1.0);
+    CPPUNIT_ASSERT_MESSAGE( "Second pixel is not opaque",
+                            pARGBStart[1].Alpha == 1.0);
     if( aContainedBmpEx.IsTransparent() )
     {
-        test( pARGBStart[0].Alpha == 0.0,
-              "First pixel is fully transparent" );
+        CPPUNIT_ASSERT_MESSAGE( "First pixel is not fully transparent",
+                                pARGBStart[0].Alpha == 0.0);
     }
 
-    test( pRGBStart[1].Red == 0.0 && pRGBStart[1].Green == 0.0 && pRGBStart[1].Blue == 0.0,
-          "Second pixel is black" );
+    CPPUNIT_ASSERT_MESSAGE( "Second pixel is not black",
+                            pRGBStart[1].Red == 0.0 && pRGBStart[1].Green == 0.0 && pRGBStart[1].Blue == 0.0);
 
     if( nOriginalDepth > 8 )
     {
         const Color aCol(COL_GREEN);
-        test( pRGBStart[5].Red == vcl::unotools::toDoubleColor(aCol.GetRed()) &&
-              pRGBStart[5].Green == vcl::unotools::toDoubleColor(aCol.GetGreen()) &&
-              pRGBStart[5].Blue == vcl::unotools::toDoubleColor(aCol.GetBlue()),
-              "Sixth pixel is green" );
+        CPPUNIT_ASSERT_MESSAGE( "Sixth pixel is not green",
+                                pRGBStart[5].Red == vcl::unotools::toDoubleColor(aCol.GetRed()) &&
+                                pRGBStart[5].Green == vcl::unotools::toDoubleColor(aCol.GetGreen()) &&
+                                pRGBStart[5].Blue == vcl::unotools::toDoubleColor(aCol.GetBlue()));
     }
     else if( nDepth <= 8 )
     {
         uno::Reference<rendering::XBitmapPalette> xPal = xBmp->getPalette();
-        test( xPal.is(),
-              "8bit or less: needs palette" );
-        test( xPal->getNumberOfEntries() == 1L << nOriginalDepth,
-              "Palette has correct entry count" );
+        CPPUNIT_ASSERT_MESSAGE( "8bit or less: missing palette",
+                                xPal.is());
+        CPPUNIT_ASSERT_MESSAGE( "Palette incorrect entry count",
+                                xPal->getNumberOfEntries() == 1L << nOriginalDepth);
         uno::Sequence<double> aIndex;
-        test( xPal->setIndex(aIndex,sal_True,0) == sal_False,
-              "Palette is read-only" );
-        test( xPal->getIndex(aIndex,0),
-              "Palette entry 0 is opaque" );
-        test( xPal->getColorSpace().is(),
-              "Palette has a valid color space" );
+        CPPUNIT_ASSERT_MESSAGE( "Palette is not read-only",
+                                xPal->setIndex(aIndex,sal_True,0) == sal_False);
+        CPPUNIT_ASSERT_MESSAGE( "Palette entry 0 is not opaque",
+                                xPal->getIndex(aIndex,0));
+        CPPUNIT_ASSERT_MESSAGE( "Palette has no valid color space",
+                                xPal->getColorSpace().is());
     }
 
-    test( pRGBStart[150].Red == 1.0 && pRGBStart[150].Green == 1.0 && pRGBStart[150].Blue == 1.0,
-          "150th pixel is white" );
+    CPPUNIT_ASSERT_MESSAGE( "150th pixel is not white",
+                            pRGBStart[150].Red == 1.0 &&
+                            pRGBStart[150].Green == 1.0 &&
+                            pRGBStart[150].Blue == 1.0);
 
     if( nOriginalDepth > 8 )
     {
@@ -278,14 +222,14 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
 
         aPixel3 = xBmp->convertIntegerFromARGB( aARGBColor );
         aPixel4 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(5,0) );
-        test( aPixel3 == aPixel4,
-              "Green pixel from bitmap matches with manually converted green pixel" );
+        CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually converted green pixel",
+                                aPixel3 == aPixel4);
 
         if( !aContainedBmpEx.IsTransparent() )
         {
             aPixel3 = xBmp->convertIntegerFromRGB( aRGBColor );
-            test( aPixel3 == aPixel4,
-                  "Green pixel from bitmap matches with manually RGB-converted green pixel" );
+            CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually RGB-converted green pixel",
+                                    aPixel3 == aPixel4);
         }
     }
 }
@@ -312,10 +256,10 @@ private:
                                                           const geometry::IntegerRectangle2D& rect ) throw (lang::IndexOutOfBoundsException,
                                                                                                             rendering::VolatileContentDestroyedException, uno::RuntimeException)
     {
-        test( rect.X1 >= 0, "X1 within bounds" );
-        test( rect.Y1 >= 0, "Y1 within bounds" );
-        test( rect.X2 <= maSize.Width,  "X2 within bounds" );
-        test( rect.Y2 <= maSize.Height, "Y2 within bounds" );
+        CPPUNIT_ASSERT_MESSAGE( "X1 out of bounds", rect.X1 >= 0 );
+        CPPUNIT_ASSERT_MESSAGE( "Y1 out of bounds", rect.Y1 >= 0 );
+        CPPUNIT_ASSERT_MESSAGE( "X2 out of bounds", rect.X2 <= maSize.Width );
+        CPPUNIT_ASSERT_MESSAGE( "Y2 out of bounds", rect.Y2 <= maSize.Height );
 
         bitmapLayout = getMemoryLayout();
 
@@ -358,7 +302,7 @@ private:
                                                            const geometry::IntegerPoint2D&  ) throw (lang::IndexOutOfBoundsException,
                                                                                                      rendering::VolatileContentDestroyedException, uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("getPixel: method not implemented", false);
         return uno::Sequence< sal_Int8 >();
     }
 
@@ -388,8 +332,8 @@ private:
     // XBitmapPalette
     virtual sal_Int32 SAL_CALL getNumberOfEntries() throw (uno::RuntimeException)
     {
-        test( getPalette().is(),
-              "Got palette interface call without handing out palette?!" );
+        CPPUNIT_ASSERT_MESSAGE( "Got palette getNumberOfEntries interface call without handing out palette",
+                                getPalette().is() );
 
         return 255;
     }
@@ -398,14 +342,14 @@ private:
                                           ::sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException,
                                                                       uno::RuntimeException)
     {
-        test( getPalette().is(),
-              "Got palette interface call without handing out palette?!" );
-        test( nIndex >= 0 && nIndex < 256,
-              "Index out of range" );
+        CPPUNIT_ASSERT_MESSAGE( "Got palette getIndex interface call without handing out palette",
+                                getPalette().is() );
+        CPPUNIT_ASSERT_MESSAGE( "getIndex: index out of range",
+                                nIndex >= 0 && nIndex < 256 );
         entry = colorToStdColorSpaceSequence(
-            Color(UINT8(nIndex),
-                  UINT8(nIndex),
-                  UINT8(nIndex)) );
+            Color(sal_uInt8(nIndex),
+                  sal_uInt8(nIndex),
+                  sal_uInt8(nIndex)) );
 
         return sal_True; // no palette transparency here.
     }
@@ -416,10 +360,10 @@ private:
                                                                       lang::IllegalArgumentException,
                                                                       uno::RuntimeException)
     {
-        test( getPalette().is(),
-              "Got palette interface call without handing out palette?!" );
-        test( nIndex >= 0 && nIndex < 256,
-              "Index out of range" );
+        CPPUNIT_ASSERT_MESSAGE( "Got palette setIndex interface call without handing out palette",
+                                getPalette().is());
+        CPPUNIT_ASSERT_MESSAGE( "setIndex: index out of range",
+                                nIndex >= 0 && nIndex < 256);
         return sal_False;
     }
 
@@ -457,56 +401,56 @@ private:
 
     virtual uno::Sequence< beans::PropertyValue > SAL_CALL getProperties(  ) throw (uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("getProperties: method not implemented", false );
         return uno::Sequence< ::beans::PropertyValue >();
     }
 
     virtual uno::Sequence< double > SAL_CALL convertColorSpace( const uno::Sequence< double >&,
                                                                 const uno::Reference< rendering::XColorSpace >& ) throw (uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("convertColorSpace: method not implemented", false);
         return uno::Sequence< double >();
     }
 
     virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const uno::Sequence< double >& ) throw (lang::IllegalArgumentException,
                                                                                                                 uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("convertToRGB: method not implemented", false);
         return uno::Sequence< rendering::RGBColor >();
     }
 
     virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const uno::Sequence< double >& ) throw (lang::IllegalArgumentException,
                                                                                                                   uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("convertToARGB: method not implemented", false);
         return uno::Sequence< rendering::ARGBColor >();
     }
 
     virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& ) throw (lang::IllegalArgumentException,
                                                                                                                    uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("convertToPARGB: method not implemented", false);
         return uno::Sequence< rendering::ARGBColor >();
     }
 
     virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& ) throw (lang::IllegalArgumentException,
                                                                                                                   uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("convertFromRGB: method not implemented", false);
         return uno::Sequence< double >();
     }
 
     virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& ) throw (lang::IllegalArgumentException,
                                                                                                                     uno::RuntimeException)
     {
-        test(false, "This method is not expected to be called!");
+        CPPUNIT_ASSERT_MESSAGE("convertFromARGB: this method is not expected to be called!", false);
         return uno::Sequence< double >();
     }
 
     virtual uno::Sequence< double > SAL_CALL convertFromPARGB( const uno::Sequence< rendering::ARGBColor >& ) throw (lang::IllegalArgumentException,
                                                                                                                     uno::RuntimeException)
     {
-        test(false, "This method is not expected to be called!");
+        CPPUNIT_ASSERT_MESSAGE("convertFromPARGB: this method is not expected to be called!", false);
         return uno::Sequence< double >();
     }
 
@@ -529,7 +473,7 @@ private:
                                                                            const uno::Reference< rendering::XColorSpace >& ) throw (lang::IllegalArgumentException,
                                                                                                                                     uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("convertFromIntegerColorSpace: method not implemented", false);
         return uno::Sequence< double >();
     }
 
@@ -537,7 +481,7 @@ private:
                                                                              const uno::Reference< rendering::XIntegerBitmapColorSpace >& ) throw (lang::IllegalArgumentException,
                                                                                                                                                    uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("convertToIntegerColorSpace: method not implemented", false);
         return uno::Sequence< sal_Int8 >();
     }
 
@@ -563,8 +507,8 @@ private:
     {
         const sal_Size  nLen( deviceColor.getLength() );
         const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
-        test(nLen%nBytesPerPixel==0,
-             "number of channels no multiple of pixel element count");
+        CPPUNIT_ASSERT_MESSAGE("number of channels no multiple of pixel element count",
+                               nLen%nBytesPerPixel==0);
 
         uno::Sequence< rendering::ARGBColor > aRes( nLen / nBytesPerPixel );
         rendering::ARGBColor* pOut( aRes.getArray() );
@@ -600,8 +544,8 @@ private:
     {
         const sal_Size  nLen( deviceColor.getLength() );
         const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
-        test(nLen%nBytesPerPixel==0,
-             "number of channels no multiple of pixel element count");
+        CPPUNIT_ASSERT_MESSAGE("number of channels no multiple of pixel element count",
+                               nLen%nBytesPerPixel==0);
 
         uno::Sequence< rendering::ARGBColor > aRes( nLen / nBytesPerPixel );
         rendering::ARGBColor* pOut( aRes.getArray() );
@@ -636,21 +580,21 @@ private:
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const uno::Sequence< rendering::RGBColor >& ) throw (lang::IllegalArgumentException,
                                                                                                                              uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("convertIntegerFromRGB: method not implemented", false);
         return uno::Sequence< sal_Int8 >();
     }
 
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const uno::Sequence< rendering::ARGBColor >& ) throw (lang::IllegalArgumentException,
                                                                                                                                uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("convertIntegerFromARGB: method not implemented", false);
         return uno::Sequence< sal_Int8 >();
     }
 
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const uno::Sequence< rendering::ARGBColor >& ) throw (lang::IllegalArgumentException,
                                                                                                                                 uno::RuntimeException)
     {
-        test(false, "Method not implemented");
+        CPPUNIT_ASSERT_MESSAGE("convertIntegerFromPARGB: method not implemented", false);
         return uno::Sequence< sal_Int8 >();
     }
 
@@ -699,174 +643,152 @@ public:
 
 
 
-void TestWindow::Paint( const Rectangle& )
+void CanvasBitmapTest::runTest()
 {
     static const sal_Int8 lcl_depths[]={1,4,8,16,24};
 
-    try
+    // Testing VclCanvasBitmap wrapper
+    // ===============================
+
+    for( unsigned int i=0; i<SAL_N_ELEMENTS(lcl_depths); ++i )
     {
-        // Testing VclCanvasBitmap wrapper
-        // ===============================
-
-        for( unsigned int i=0; i<SAL_N_ELEMENTS(lcl_depths); ++i )
+        const sal_Int8 nDepth( lcl_depths[i] );
+        Bitmap aBitmap(Size(200,200),nDepth);
+        aBitmap.Erase(COL_WHITE);
         {
-            const sal_Int8 nDepth( lcl_depths[i] );
-            Bitmap aBitmap(Size(200,200),nDepth);
-            aBitmap.Erase(COL_WHITE);
+            Bitmap::ScopedWriteAccess pAcc(aBitmap);
+            if( pAcc.get() )
             {
-                Bitmap::ScopedWriteAccess pAcc(aBitmap);
-                if( pAcc.get() )
+                BitmapColor aBlack(0);
+                BitmapColor aWhite(0);
+                if( pAcc->HasPalette() )
                 {
-                    BitmapColor aBlack(0);
-                    BitmapColor aWhite(0);
-                    if( pAcc->HasPalette() )
-                    {
-                        aBlack.SetIndex( sal::static_int_cast<BYTE>(pAcc->GetBestPaletteIndex(BitmapColor(0,0,0))) );
-                        aWhite.SetIndex( sal::static_int_cast<BYTE>(pAcc->GetBestPaletteIndex(BitmapColor(255,255,255))) );
-                    }
-                    else
-                    {
-                        aBlack = Color(COL_BLACK);
-                        aWhite = Color(COL_WHITE);
-                    }
-                    pAcc->SetFillColor(COL_GREEN);
-                    pAcc->FillRect(Rectangle(0,0,100,100));
-                    pAcc->SetPixel(0,0,aWhite);
-                    pAcc->SetPixel(0,1,aBlack);
-                    pAcc->SetPixel(0,2,aWhite);
+                    aBlack.SetIndex( sal::static_int_cast<sal_Int8>(pAcc->GetBestPaletteIndex(BitmapColor(0,0,0))) );
+                    aWhite.SetIndex( sal::static_int_cast<sal_Int8>(pAcc->GetBestPaletteIndex(BitmapColor(255,255,255))) );
                 }
-            }
-
-            rtl::Reference<VclCanvasBitmap> xBmp( new VclCanvasBitmap(aBitmap) );
-
-            checkCanvasBitmap( xBmp, "single bitmap", nDepth );
-
-            Bitmap aMask(Size(200,200),1);
-            aMask.Erase(COL_WHITE);
-            {
-                Bitmap::ScopedWriteAccess pAcc(aMask);
-                if( pAcc.get() )
+                else
                 {
-                    pAcc->SetFillColor(COL_BLACK);
-                    pAcc->FillRect(Rectangle(0,0,100,100));
-                    pAcc->SetPixel(0,0,BitmapColor(1));
-                    pAcc->SetPixel(0,1,BitmapColor(0));
-                    pAcc->SetPixel(0,2,BitmapColor(1));
+                    aBlack = Color(COL_BLACK);
+                    aWhite = Color(COL_WHITE);
                 }
+                pAcc->SetFillColor(COL_GREEN);
+                pAcc->FillRect(Rectangle(0,0,100,100));
+                pAcc->SetPixel(0,0,aWhite);
+                pAcc->SetPixel(0,1,aBlack);
+                pAcc->SetPixel(0,2,aWhite);
             }
-
-            xBmp.set( new VclCanvasBitmap(BitmapEx(aBitmap,aMask)) );
-
-            checkCanvasBitmap( xBmp, "masked bitmap", nDepth );
-
-            AlphaMask aAlpha(Size(200,200));
-            aAlpha.Erase(255);
-            {
-                BitmapWriteAccess* pAcc = aAlpha.AcquireWriteAccess();
-                if( pAcc )
-                {
-                    pAcc->SetFillColor(COL_BLACK);
-                    pAcc->FillRect(Rectangle(0,0,100,100));
-                    pAcc->SetPixel(0,0,BitmapColor(255));
-                    pAcc->SetPixel(0,1,BitmapColor(0));
-                    pAcc->SetPixel(0,2,BitmapColor(255));
-                    aAlpha.ReleaseAccess(pAcc);
-                }
-            }
-
-            xBmp.set( new VclCanvasBitmap(BitmapEx(aBitmap,aAlpha)) );
-
-            checkCanvasBitmap( xBmp, "alpha bitmap", nDepth );
         }
 
-        // Testing XBitmap import
-        // ======================
-        uno::Reference< rendering::XIntegerReadOnlyBitmap > xTestBmp(
-            new TestBitmap( geometry::IntegerSize2D(10,10), true ));
+        rtl::Reference<VclCanvasBitmap> xBmp( new VclCanvasBitmap(aBitmap) );
 
-        BitmapEx aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
-        test( aBmp.IsTransparent() == false,
-              "Palette bitmap is not transparent" );
-        test( aBmp.GetSizePixel() == Size(10,10),
-              "Bitmap has size (10,10)" );
-        test( aBmp.GetBitCount() == 8,
-              "Bitmap has bitcount of 8" );
+        checkCanvasBitmap( xBmp, "single bitmap", nDepth );
+
+        Bitmap aMask(Size(200,200),1);
+        aMask.Erase(COL_WHITE);
         {
-            BitmapReadAccess* pBmpAcc   = aBmp.GetBitmap().AcquireReadAccess();
-
-            test( pBmpAcc,
-                  "Bitmap has valid BitmapReadAccess" );
-
-            test(pBmpAcc->GetPixel(0,0) == BitmapColor(0),
-                 "(0,0) correct content");
-            test(pBmpAcc->GetPixel(2,2) == BitmapColor(2),
-                 "(2,2) correct content");
-            test(pBmpAcc->GetPixel(2,9) == BitmapColor(9),
-                 "(9,2) correct content");
-
-            aBmp.GetBitmap().ReleaseAccess(pBmpAcc);
+            Bitmap::ScopedWriteAccess pAcc(aMask);
+            if( pAcc.get() )
+            {
+                pAcc->SetFillColor(COL_BLACK);
+                pAcc->FillRect(Rectangle(0,0,100,100));
+                pAcc->SetPixel(0,0,BitmapColor(1));
+                pAcc->SetPixel(0,1,BitmapColor(0));
+                pAcc->SetPixel(0,2,BitmapColor(1));
+            }
         }
 
-        xTestBmp.set( new TestBitmap( geometry::IntegerSize2D(10,10), false ));
+        xBmp.set( new VclCanvasBitmap(BitmapEx(aBitmap,aMask)) );
 
-        aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
-        test( aBmp.IsTransparent() == TRUE,
-              "Palette bitmap is transparent" );
-        test( aBmp.IsAlpha() == TRUE,
-              "Palette bitmap has alpha" );
-        test( aBmp.GetSizePixel() == Size(10,10),
-              "Bitmap has size (10,10)" );
-        test( aBmp.GetBitCount() == 24,
-              "Bitmap has bitcount of 24" );
+        checkCanvasBitmap( xBmp, "masked bitmap", nDepth );
+
+        AlphaMask aAlpha(Size(200,200));
+        aAlpha.Erase(255);
         {
-            BitmapReadAccess* pBmpAcc   = aBmp.GetBitmap().AcquireReadAccess();
-            BitmapReadAccess* pAlphaAcc = aBmp.GetAlpha().AcquireReadAccess();
-
-            test( pBmpAcc,
-                  "Bitmap has valid BitmapReadAccess" );
-            test( pAlphaAcc,
-                  "Bitmap has valid alpha BitmapReadAccess" );
-
-            test(pBmpAcc->GetPixel(0,0) == BitmapColor(0,1,0),
-                 "(0,0) correct content");
-            test(pAlphaAcc->GetPixel(0,0) == BitmapColor(255),
-                 "(0,0) correct alpha content");
-            test(pBmpAcc->GetPixel(2,2) == BitmapColor(0,3,2),
-                 "(2,2) correct content");
-            test(pAlphaAcc->GetPixel(2,2) == BitmapColor(253),
-                 "(2,2) correct alpha content");
-            test(pBmpAcc->GetPixel(2,9) == BitmapColor(0,3,9),
-                 "(9,2) correct content");
-            test(pAlphaAcc->GetPixel(2,9) == BitmapColor(253),
-                 "(9,2) correct alpha content");
-
-            aBmp.GetAlpha().ReleaseAccess(pAlphaAcc);
-            aBmp.GetBitmap().ReleaseAccess(pBmpAcc);
+            BitmapWriteAccess* pAcc = aAlpha.AcquireWriteAccess();
+            if( pAcc )
+            {
+                pAcc->SetFillColor(COL_BLACK);
+                pAcc->FillRect(Rectangle(0,0,100,100));
+                pAcc->SetPixel(0,0,BitmapColor(255));
+                pAcc->SetPixel(0,1,BitmapColor(0));
+                pAcc->SetPixel(0,2,BitmapColor(255));
+                aAlpha.ReleaseAccess(pAcc);
+            }
         }
-    }
-    catch( uno::Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-        exit(2);
-    }
-    catch( std::exception& )
-    {
-        OSL_TRACE( "Caught std exception!" );
+
+        xBmp.set( new VclCanvasBitmap(BitmapEx(aBitmap,aAlpha)) );
+
+        checkCanvasBitmap( xBmp, "alpha bitmap", nDepth );
     }
 
-    if( g_failure )
-        exit(2);
+    // Testing XBitmap import
+    // ======================
+    uno::Reference< rendering::XIntegerReadOnlyBitmap > xTestBmp(
+        new TestBitmap( geometry::IntegerSize2D(10,10), true ));
+
+    BitmapEx aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
+    CPPUNIT_ASSERT_MESSAGE( "Palette bitmap is transparent",
+                            aBmp.IsTransparent() == false);
+    CPPUNIT_ASSERT_MESSAGE( "Bitmap does not have size (10,10)",
+                            aBmp.GetSizePixel() == Size(10,10));
+    CPPUNIT_ASSERT_MESSAGE( "Bitmap does not have bitcount of 8",
+                            aBmp.GetBitCount() == 8);
+    {
+        BitmapReadAccess* pBmpAcc   = aBmp.GetBitmap().AcquireReadAccess();
+
+        CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid BitmapReadAccess",
+                                pBmpAcc );
+
+        CPPUNIT_ASSERT_MESSAGE("(0,0) incorrect content",
+                               pBmpAcc->GetPixel(0,0) == BitmapColor(0));
+        CPPUNIT_ASSERT_MESSAGE("(2,2) incorrect content",
+                               pBmpAcc->GetPixel(2,2) == BitmapColor(2));
+        CPPUNIT_ASSERT_MESSAGE("(9,2) incorrect content",
+                               pBmpAcc->GetPixel(2,9) == BitmapColor(9));
+
+        aBmp.GetBitmap().ReleaseAccess(pBmpAcc);
+    }
+
+    xTestBmp.set( new TestBitmap( geometry::IntegerSize2D(10,10), false ));
+
+    aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
+    CPPUNIT_ASSERT_MESSAGE( "Palette bitmap is not transparent",
+                            aBmp.IsTransparent() == true);
+    CPPUNIT_ASSERT_MESSAGE( "Palette bitmap has no alpha",
+                            aBmp.IsAlpha() == true);
+    CPPUNIT_ASSERT_MESSAGE( "Bitmap does not have size (10,10)",
+                            aBmp.GetSizePixel() == Size(10,10));
+    CPPUNIT_ASSERT_MESSAGE( "Bitmap has bitcount of 24",
+                            aBmp.GetBitCount() == 24);
+    {
+        BitmapReadAccess* pBmpAcc   = aBmp.GetBitmap().AcquireReadAccess();
+        BitmapReadAccess* pAlphaAcc = aBmp.GetAlpha().AcquireReadAccess();
+
+        CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid BitmapReadAccess",
+                                pBmpAcc);
+        CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid alpha BitmapReadAccess",
+                                pAlphaAcc);
+
+        CPPUNIT_ASSERT_MESSAGE("(0,0) incorrect content",
+                               pBmpAcc->GetPixel(0,0) == BitmapColor(0,1,0));
+        CPPUNIT_ASSERT_MESSAGE("(0,0) incorrect alpha content",
+                               pAlphaAcc->GetPixel(0,0) == BitmapColor(255));
+        CPPUNIT_ASSERT_MESSAGE("(2,2) incorrect content",
+                               pBmpAcc->GetPixel(2,2) == BitmapColor(0,3,2));
+        CPPUNIT_ASSERT_MESSAGE("(2,2) incorrect alpha content",
+                               pAlphaAcc->GetPixel(2,2) == BitmapColor(253));
+        CPPUNIT_ASSERT_MESSAGE("(9,2) incorrect content",
+                               pBmpAcc->GetPixel(2,9) == BitmapColor(0,3,9));
+        CPPUNIT_ASSERT_MESSAGE("(9,2) correct alpha content",
+                               pAlphaAcc->GetPixel(2,9) == BitmapColor(253));
+
+        aBmp.GetAlpha().ReleaseAccess(pAlphaAcc);
+        aBmp.GetBitmap().ReleaseAccess(pBmpAcc);
+    }
 }
 
 } // namespace
 
-void Main()
-{
-    TestWindow aWindow;
-    aWindow.Execute();
-    aWindow.SetText( OUString( "VCL - canvasbitmaptest"  ) );
-
-    Application::Execute();
-}
+CPPUNIT_TEST_SUITE_REGISTRATION(CanvasBitmapTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

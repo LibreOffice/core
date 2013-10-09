@@ -9,7 +9,13 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,vcl_complextext))
 
+$(eval $(call gb_CppunitTest_set_include,vcl_complextext,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/vcl/inc \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_complextext, \
+	vcl/qa/cppunit/canvasbitmaptest \
 	vcl/qa/cppunit/complextext \
 ))
 

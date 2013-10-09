@@ -17,15 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <unotest/filters-test.hxx>
+#include <test/bootstrapfixture.hxx>
+
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/servicefactory.hxx>
+
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
+
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -34,9 +37,6 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
-#include <osl/process.h>
-
-#include <stdio.h>
 
 using namespace ::rtl;
 using namespace ::com::sun::star::io;
@@ -45,16 +45,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
-
-// -----------------------------------------------------------------------
-
-class MyApp : public Application
-{
-public:
-    void        Main();
-};
-
-MyApp aMyApp;
 
 // -----------------------------------------------------------------------
 
@@ -142,72 +132,39 @@ public:
 
 // -----------------------------------------------------------------------
 
-void MyApp::Main()
+class VclDnDTest : public test::BootstrapFixture
 {
-    OUString aRegistry;
+public:
+    VclDnDTest() : BootstrapFixture(true, false) {}
 
-    for( sal_Int32 n = 0, nmax = osl_getCommandArgCount(); n < nmax; n++ )
-    {
-        OUString aArg;
+    /// Play with drag and drop
+    void testDnD();
 
-        osl_getCommandArg( n, &aArg.pData );
+    CPPUNIT_TEST_SUITE(VclDnDTest);
+    CPPUNIT_TEST(testDnD);
+    CPPUNIT_TEST_SUITE_END();
+};
 
-        if( aArg.startsWith( "-r" ) )
-        {
-            if ( n + 1 < nmax )
-                osl_getCommandArg( ++n, &aRegistry.pData );
-        }
-    }
+// -----------------------------------------------------------------------
 
-    Reference< XMultiServiceFactory > xServiceManager;
-
-    if( aRegistry.getLength() )
-    {
-        xServiceManager = ::cppu::createRegistryServiceFactory( aRegistry, sal_True );
-
-        if( xServiceManager.is() )
-        {
-            ::comphelper::setProcessServiceFactory( xServiceManager );
-        }
-
-        if( ! xServiceManager.is() )
-            printf( "No servicemanager available.\n" );
-        else
-            printf( "Ok\n" );
-
-    }
-    else
-        fprintf( stderr, "Usage: %s -r full-path-to-applicat.rdb\n", "dnddemo" );
-
-
+void VclDnDTest::testDnD()
+{
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
     aMainWin.SetText( OUString( "Drag And Drop - Workbench"  ) );
     aMainWin.Show();
 
     // test the clipboard code
     Reference< XClipboard > xClipboard = aMainWin.GetClipboard();
-    if( xClipboard.is() )
-    {
-        printf( "System clipboard available.\n" );
-        xClipboard->getContents();
-    }
-    else
-        fprintf( stderr, "System clipboard not available.\n" );
+    CPPUNIT_ASSERT_MESSAGE("System clipboard not available",
+                           xClipboard.is());
 
     MyInfoBox aInfoBox( &aMainWin );
     aInfoBox.Execute();
 
     MyListBox aListBox( &aMainWin );
-    aListBox.SetPosSizePixel( 10, 10, 100, 100 );
+    aListBox.setPosSizePixel( 10, 10, 100, 100 );
     aListBox.InsertEntry( OUString("TestItem"));
     aListBox.Show();
-
-    Execute();
-
-    Reference< XComponent > xComponent( xServiceManager, UNO_QUERY );
-    if( xComponent.is() )
-        xComponent->dispose();
-
 }
 
 // -----------------------------------------------------------------------
@@ -282,19 +239,14 @@ void MyWin::Resize()
 
 void SAL_CALL MyDragAndDropListener::dragGestureRecognized( const DragGestureEvent& dge ) throw(RuntimeException)
 {
-    printf( "XDragGestureListener::dragGestureRecognized called ( Window: %p, %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 " ).\n", m_pWindow, dge.DragOriginX, dge.DragOriginY );
-
     Reference< XDragSource > xDragSource( dge.DragSource, UNO_QUERY );
     xDragSource->startDrag( dge, -1, 0, 0, new StringTransferable( OUString("TestString") ), this );
-    printf( "XDragSource::startDrag returned.\n" );
 }
 
 // -----------------------------------------------------------------------
 
 void SAL_CALL MyDragAndDropListener::drop( const DropTargetDropEvent& dtde ) throw(RuntimeException)
 {
-    printf( "XDropTargetListener::drop called ( Window: %p, %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 " ).\n", m_pWindow, dtde.LocationX, dtde.LocationY );
-
     dtde.Context->dropComplete( sal_True );
 }
 
@@ -302,7 +254,6 @@ void SAL_CALL MyDragAndDropListener::drop( const DropTargetDropEvent& dtde ) thr
 
 void SAL_CALL MyDragAndDropListener::dragEnter( const DropTargetDragEnterEvent& dtdee ) throw(RuntimeException)
 {
-    printf( "XDropTargetListener::dragEnter called ( Window: %p, %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 " ).\n", m_pWindow, dtdee.LocationX, dtdee.LocationY );
     dtdee.Context->acceptDrag( dtdee.DropAction );
 }
 
@@ -310,14 +261,12 @@ void SAL_CALL MyDragAndDropListener::dragEnter( const DropTargetDragEnterEvent& 
 
 void SAL_CALL MyDragAndDropListener::dragExit( const DropTargetEvent& ) throw(RuntimeException)
 {
-    printf( "XDropTargetListener::dragExit called ( Window: %p ).\n", m_pWindow );
 }
 
 // -----------------------------------------------------------------------
 
 void SAL_CALL MyDragAndDropListener::dragOver( const DropTargetDragEvent& dtde ) throw(RuntimeException)
 {
-    printf( "XDropTargetListener::dragOver called ( Window: %p, %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 " ).\n", m_pWindow, dtde.LocationX, dtde.LocationY );
     dtde.Context->acceptDrag( dtde.DropAction );
 }
 
@@ -325,50 +274,43 @@ void SAL_CALL MyDragAndDropListener::dragOver( const DropTargetDragEvent& dtde )
 
 void SAL_CALL MyDragAndDropListener::dropActionChanged( const DropTargetDragEvent& dtde ) throw(RuntimeException)
 {
-    printf( "XDropTargetListener::dropActionChanged called ( Window: %p, %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 " ).\n", m_pWindow, dtde.LocationX, dtde.LocationY );
     dtde.Context->acceptDrag( dtde.DropAction );
 }
 
 // -----------------------------------------------------------------------
 
-void SAL_CALL MyDragAndDropListener::dragDropEnd( const DragSourceDropEvent& dsde ) throw(RuntimeException)
+void SAL_CALL MyDragAndDropListener::dragDropEnd( const DragSourceDropEvent& ) throw(RuntimeException)
 {
-    printf( "XDragSourceListener::dropDropEnd called ( Window: %p, %s ).\n", m_pWindow, dsde.DropSuccess ? "success" : "failed" );
 }
 
 // -----------------------------------------------------------------------
 
 void SAL_CALL MyDragAndDropListener::dragEnter( const DragSourceDragEvent& ) throw(RuntimeException)
 {
-    printf( "XDragSourceListener::dragEnter called ( Window: %p ).\n", m_pWindow );
 }
 
 // -----------------------------------------------------------------------
 
 void SAL_CALL MyDragAndDropListener::dragExit( const DragSourceEvent& ) throw(RuntimeException)
 {
-    printf( "XDragSourceListener::dragExit called ( Window: %p ).\n", m_pWindow );
 }
 
 // -----------------------------------------------------------------------
 
 void SAL_CALL MyDragAndDropListener::dragOver( const DragSourceDragEvent& ) throw(RuntimeException)
 {
-    printf( "XDragSourceListener::dragOver called ( Window: %p ).\n", m_pWindow );
 }
 
 // -----------------------------------------------------------------------
 
 void SAL_CALL MyDragAndDropListener::dropActionChanged( const DragSourceDragEvent& ) throw(RuntimeException)
 {
-    printf( "XDragSourceListener::dropActionChanged called ( Window: %p ).\n", m_pWindow );
 }
 
 // -----------------------------------------------------------------------
 
 void SAL_CALL MyDragAndDropListener::disposing( const EventObject& ) throw(RuntimeException)
 {
-    printf( "XEventListener::disposing called ( Window: %p ).\n", m_pWindow );
 }
 
 // -----------------------------------------------------------------------
@@ -432,5 +374,6 @@ sal_Bool SAL_CALL StringTransferable::isDataFlavorSupported( const DataFlavor& )
     return sal_True;
 }
 
+CPPUNIT_TEST_SUITE_REGISTRATION(VclDnDTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

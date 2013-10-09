@@ -575,6 +575,21 @@ namespace vcl
         }
 
 
+        uno::Sequence< double > colorToStdColorSpaceSequence( const Color& rColor )
+        {
+            uno::Sequence< double > aRet(4);
+            double* pRet = aRet.getArray();
+
+            pRet[0] = toDoubleColor(rColor.GetRed());
+            pRet[1] = toDoubleColor(rColor.GetGreen());
+            pRet[2] = toDoubleColor(rColor.GetBlue());
+
+            // VCL's notion of alpha is different from the rest of the world's
+            pRet[3] = 1.0 - toDoubleColor(rColor.GetTransparency());
+
+            return aRet;
+        }
+
         Color stdColorSpaceSequenceToColor( const uno::Sequence< double >& rColor        )
         {
             ENSURE_ARG_OR_THROW( rColor.getLength() == 4,

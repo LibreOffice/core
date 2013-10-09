@@ -90,6 +90,14 @@ namespace vcl
         // Color conversions (vcl/tools Color <-> canvas standard color space)
         // ===================================================================
 
+        /** Create a device-specific color sequence from VCL/Tools color
+
+            Note that this method assumes a color space equivalent to
+            the one returned from createStandardColorSpace()
+         */
+        ::com::sun::star::uno::Sequence< double >
+            VCL_DLLPUBLIC colorToStdColorSpaceSequence( const Color& rColor );
+
         /** Convert color to device color sequence
 
             @param rColor
