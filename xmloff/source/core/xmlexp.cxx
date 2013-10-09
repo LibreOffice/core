@@ -68,6 +68,7 @@
 #include "xmloff/XMLFilterServiceNames.h"
 #include "xmloff/XMLEmbeddedObjectExportFilter.hxx"
 #include "XMLBasicExportFilter.hxx"
+#include "cppuhelper/exc_hlp.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -842,9 +843,10 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
     {
         // We must catch exceptions, because according to the
         // API definition export must not throw one!
-        Sequence<OUString> aSeq(0);
+        css::uno::Any ex(cppu::getCaughtException());
         SetError( XMLERROR_FLAG_ERROR | XMLERROR_FLAG_SEVERE | XMLERROR_API,
-                  aSeq, e.Message, NULL );
+                  Sequence<OUString>(),
+                  ex.getValueTypeName() + ": \"" + e.Message + "\"", NULL );
     }
 
     // return true only if no error occurred
