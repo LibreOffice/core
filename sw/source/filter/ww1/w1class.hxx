@@ -167,9 +167,9 @@ public:
     sal_Unicode Out( OUString&, sal_uLong=0xffffffff);
     sal_Unicode Out( sal_Unicode& );
     friend std::ostream& operator <<(std::ostream&, Ww1PlainText&);
-    String& Fill( String&, sal_uLong=0, sal_uLong=0xffffffff );
+    OUString& Fill( OUString&, sal_uLong=0, sal_uLong=0xffffffff );
     sal_Unicode operator []( sal_uLong );
-    String GetText( sal_uLong ulOffset, sal_uLong nLen ) const;
+    OUString GetText( sal_uLong ulOffset, sal_uLong nLen ) const;
 
     enum Consts { MinChar = 32 };
     static bool IsChar( sal_Unicode c )     { return c >= MinChar; }
@@ -241,7 +241,7 @@ public:
 //
 class Ww1Style
 {
-    String aName;
+    OUString aName;
     W1_CHP aChpx;
     Ww1SprmPapx* pPapx;
     Ww1StyleSheet* pParent;
@@ -254,8 +254,8 @@ public:
     bool IsUsed() const                 { return bUsed; }
     void SetDefaults(sal_uInt8);
     void SetParent(Ww1StyleSheet* newParent)    { pParent = newParent; }
-    void SetName(const String& rName)   { bUsed = sal_True; aName = rName; }
-    const String& GetName() const       { return aName; }
+    void SetName(const OUString& rName)   { bUsed = sal_True; aName = rName; }
+    const OUString& GetName() const       { return aName; }
     Ww1Style& GetBase();
     sal_uInt16 GetnBase() const             { return stcBase; }
     sal_uInt16 GetnNext() const             { return stcNext; }
@@ -928,7 +928,7 @@ public:
     Ww1StringList( SvStream& rSt, sal_uLong nFc, sal_uInt16 nCb );
     ~Ww1StringList()
         {   if( pIdxA ) { delete pIdxA[0]; delete pIdxA; } }
-    const String GetStr( sal_uInt16 nNum ) const;
+    const OUString GetStr( sal_uInt16 nNum ) const;
     sal_uInt16 Count() const    { return nMax; }
     sal_Bool GetError() const   { return (nMax != 0) && !pIdxA; }
 };
@@ -1055,7 +1055,7 @@ class Ww1Assoc
     sal_Char* pStrTbl[ MaxFields ];
     sal_Bool bOK;
 
-    String GetStr(sal_uInt16);
+    OUString GetStr(sal_uInt16);
 
 public:
     Ww1Assoc(Ww1Fib&);
@@ -1296,7 +1296,7 @@ public:
     sal_Bool GetError() const   { return !bOK; }
     long GetHandle() const;
     sal_Bool GetIsEnd() const   { return ( nIsEnd ) ? sal_True : sal_False; }
-    const String GetName() const;
+    const OUString GetName() const;
     long Len() const;
     friend std::ostream& operator <<(std::ostream&, Ww1Bookmarks&);
     void Start(Ww1Shell&, Ww1Manager&);

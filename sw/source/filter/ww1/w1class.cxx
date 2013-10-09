@@ -68,7 +68,7 @@ sal_Unicode Ww1PlainText::operator [] ( sal_uLong ulOffset )
     return cRet;
 }
 
-String Ww1PlainText::GetText( sal_uLong ulOffset, sal_uLong nLen ) const
+OUString Ww1PlainText::GetText( sal_uLong ulOffset, sal_uLong nLen ) const
 {
     OSL_ENSURE(ulOffset+nLen<Count(), "Ww1PlainText");
 
@@ -852,11 +852,12 @@ Ww1StringList::Ww1StringList( SvStream& rSt, sal_uLong nFc, sal_uInt16 nCb )
             }
     }
 }
-const String Ww1StringList::GetStr( sal_uInt16 nNum ) const
+
+const OUString Ww1StringList::GetStr( sal_uInt16 nNum ) const
 {
-    String sRet;
+    OUString sRet;
     if( nNum <= nMax )
-        sRet = String( pIdxA[ nNum+1 ], RTL_TEXTENCODING_MS_1252 );
+        sRet = OUString( pIdxA[ nNum+1 ], strlen(pIdxA[ nNum+1 ]), RTL_TEXTENCODING_MS_1252 );
     return sRet;
 }
 
@@ -925,7 +926,7 @@ long Ww1Bookmarks::Len() const
     return pPos[1]->Where(nEndIdx) - pPos[0]->Where(nPlcIdx[0]);
 }
 
-const String Ww1Bookmarks::GetName() const
+const OUString Ww1Bookmarks::GetName() const
 {
     if( nIsEnd )
         return OUString("???");
@@ -1031,7 +1032,7 @@ Ww1Assoc::Ww1Assoc(Ww1Fib& _rFib)
     }
 }
 
-String Ww1Assoc::GetStr(sal_uInt16 code)
+OUString Ww1Assoc::GetStr(sal_uInt16 code)
 {
     OStringBuffer sRet;
     OSL_ENSURE(code<MaxFields, "out of range");

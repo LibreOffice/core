@@ -117,7 +117,7 @@ sal_uLong WW1Reader::Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, co
 // in einen Stream werden alle Informationen, die aus der Datei
 // gelesen werden, in die shell ge'piped'.
 //
-Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const String& rBaseURL, sal_Bool bNew, sal_uLong nFieldFlags)
+Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const OUString& rBaseURL, sal_Bool bNew, sal_uLong nFieldFlags)
     : SwFltShell(&rD, rPam, rBaseURL, bNew, nFieldFlags)
 {
 }
