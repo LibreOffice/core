@@ -27,6 +27,7 @@
 
 #include <osl/module.hxx>
 #include <osl/thread.h>
+#include <osl/process.h>
 #include <osl/file.hxx>
 
 #include <typelib/typedescription.hxx>
@@ -260,6 +261,13 @@ static PyObject* getComponentContext(
         }
         else
         {
+            // cppu::defaultBootstrap_InitialComponentContext expects
+            // command line arguments to be present
+            static char * argv [1];
+            argv[0] = strdup(
+                "this is just a fake and cheap imitation of a command line");
+            osl_setCommandArgs(1, argv);
+
             OUString iniFile;
             if( path.isEmpty() )
             {
