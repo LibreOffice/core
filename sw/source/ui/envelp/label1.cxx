@@ -454,8 +454,8 @@ void SwLabPage::InitDatabaseBox()
         const OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
             m_pDatabaseLB->InsertEntry(pDataNames[i]);
-        String sDBName = sActDBName.GetToken( 0, DB_DELIM );
-        String sTableName = sActDBName.GetToken( 1, DB_DELIM );
+        String sDBName = sActDBName.getToken( 0, DB_DELIM );
+        String sTableName = sActDBName.getToken( 1, DB_DELIM );
         m_pDatabaseLB->SelectEntry(sDBName);
         if( sDBName.Len() && GetNewDBMgr()->GetTableNames(m_pTableLB, sDBName))
         {

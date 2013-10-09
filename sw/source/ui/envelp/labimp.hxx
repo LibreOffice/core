@@ -86,8 +86,8 @@ public:
     void SetFromItem( const SwLabItem& rItem );
     void FillItem( SwLabItem& rItem ) const;
 
-    String          aMake;
-    String          aType;
+    OUString        aMake;
+    OUString        aType;
     long            lHDist;
     long            lVDist;
     long            lWidth;

@@ -25,7 +25,7 @@
 class SwLabPage : public SfxTabPage
 {
     SwNewDBMgr*   pNewDBMgr;
-    String        sActDBName;
+    OUString      sActDBName;
     SwLabItem     aItem;
 
     VclContainer* m_pAddressFrame;
@@ -87,7 +87,7 @@ class SwVisitingCardPage : public SfxTabPage
     ListBox*        m_pAutoTextGroupLB;
     Window*         m_pExampleWIN;
 
-    String          sTempURL;
+    OUString        sTempURL;
 
     SwLabItem       aLabItem;
 

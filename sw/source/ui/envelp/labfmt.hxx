@@ -30,16 +30,16 @@ class SwLabPreview : public Window
 {
     Color aGrayColor;
 
-    String aHDistStr;
-    String aVDistStr;
-    String aWidthStr;
-    String aHeightStr;
-    String aLeftStr;
-    String aUpperStr;
-    String aColsStr;
-    String aRowsStr;
-    String aPWidthStr;
-    String aPHeightStr;
+    OUString aHDistStr;
+    OUString aVDistStr;
+    OUString aWidthStr;
+    OUString aHeightStr;
+    OUString aLeftStr;
+    OUString aUpperStr;
+    OUString aColsStr;
+    OUString aRowsStr;
+    OUString aPWidthStr;
+    OUString aPHeightStr;
 
     long lHDistWidth;
     long lVDistWidth;
