@@ -980,7 +980,11 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     {
                         sal_Int32 nError = pStream ? pStream->GetError() : ERRCODE_IO_GENERAL;
                         delete pStream;
-                        throw task::ErrorCodeIOException( OUString(), uno::Reference< uno::XInterface >(), nError );
+                        throw task::ErrorCodeIOException(
+                            ("utl::UcbStreamHelper::CreateStream failed for \""
+                             + aCodeStreamName + "\": 0x"
+                             + OUString::number(nError, 16)),
+                            uno::Reference< uno::XInterface >(), nError);
                     }
 
                     /*sal_Bool bRet = */pMod->LoadBinaryData( *pStream );
@@ -1094,9 +1098,12 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                             {
                                 sal_Int32 nError = pStream ? pStream->GetError() : ERRCODE_IO_GENERAL;
                                 delete pStream;
-                                throw task::ErrorCodeIOException( OUString(),
-                                                                    uno::Reference< uno::XInterface >(),
-                                                                    nError );
+                                throw task::ErrorCodeIOException(
+                                    ("utl::UcbStreamHelper::CreateStream failed"
+                                     " for code.bin: 0x"
+                                     + OUString::number(nError, 16)),
+                                    uno::Reference< uno::XInterface >(),
+                                    nError);
                             }
 
                             /*sal_Bool bRet = */pMod->LoadBinaryData( *pStream );

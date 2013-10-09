@@ -28,7 +28,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <com/sun/star/uno/Type.h>

@@ -22,6 +22,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XPrintJobListener.hpp>
@@ -1660,7 +1661,9 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             // write the contents of the logger to the file
             SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCFAILED, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOCFAILED), m_pData->m_pObjectShell ) );
 
-            throw task::ErrorCodeIOException( OUString(), Reference< XInterface >(), nErrCode );
+            throw task::ErrorCodeIOException(
+                "SfxBaseModel::storeSelf: 0x" + OUString::number(nErrCode, 16),
+                Reference< XInterface >(), nErrCode);
         }
     }
 
@@ -1807,7 +1810,9 @@ void SAL_CALL SfxBaseModel::initNew()
         m_pData->m_pObjectShell->ResetError();
 
         if ( !bRes )
-            throw task::ErrorCodeIOException( OUString(), Reference< XInterface >(), nErrCode );
+            throw task::ErrorCodeIOException(
+                "SfxBaseModel::initNew: 0x" + OUString::number(nErrCode, 16),
+                Reference< XInterface >(), nErrCode);
     }
 }
 
@@ -2733,9 +2738,10 @@ void SfxBaseModel::handleLoadError( sal_uInt32 nError, SfxMedium* pMedium )
 
     if ( !bWarning )    // #i30711# don't abort loading if it's only a warning
     {
-        throw task::ErrorCodeIOException( OUString(),
-                                            Reference< XInterface >(),
-                                            nError ? nError : ERRCODE_IO_CANTREAD );
+        nError = nError ? nError : ERRCODE_IO_CANTREAD;
+        throw task::ErrorCodeIOException(
+            "SfxBaseModel::handleLoadError: 0x" + OUString::number(nError, 16),
+            Reference< XInterface >(), nError);
     }
 }
 
@@ -3158,7 +3164,10 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED, GlobalEventConfig::GetEventName( bSaveTo ? STR_EVENT_SAVETODOCFAILED : STR_EVENT_SAVEASDOCFAILED),
                                                     m_pData->m_pObjectShell ) );
 
-            throw task::ErrorCodeIOException( OUString(), Reference< XInterface >(), nErrCode );
+            throw task::ErrorCodeIOException(
+                ("SfxBaseModel::impl_store <" + sURL + "> failed: 0x"
+                 + OUString::number(nErrCode, 16)),
+                Reference< XInterface >(), nErrCode);
         }
     }
 }
@@ -3781,9 +3790,10 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
     if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
     {
         sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
-        throw task::ErrorCodeIOException( OUString(),
-                                            Reference< XInterface >(),
-                                            nError ? nError : ERRCODE_IO_CANTREAD );
+        nError = nError ? nError : ERRCODE_IO_CANTREAD;
+        throw task::ErrorCodeIOException(
+            "SfxBaseModel::loadFromStorage: 0x" + OUString::number(nError, 16),
+            Reference< XInterface >(), nError);
     }
     loadCmisProperties( );
 }
@@ -3844,9 +3854,10 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     // the warnings are currently not transported
     if ( !bSuccess )
     {
-        throw task::ErrorCodeIOException( OUString(),
-                                            Reference< XInterface >(),
-                                            nError ? nError : ERRCODE_IO_GENERAL );
+        nError = nError ? nError : ERRCODE_IO_GENERAL;
+        throw task::ErrorCodeIOException(
+            "SfxBaseModel::storeToStorage: 0x" + OUString::number(nError, 16),
+            Reference< XInterface >(), nError);
     }
 }
 
@@ -3868,9 +3879,11 @@ void SAL_CALL SfxBaseModel::switchToStorage( const Reference< embed::XStorage >&
         if ( !m_pData->m_pObjectShell->SwitchPersistance( xStorage ) )
         {
             sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
-            throw task::ErrorCodeIOException( OUString(),
-                                                Reference< XInterface >(),
-                                                nError ? nError : ERRCODE_IO_GENERAL );
+            nError = nError ? nError : ERRCODE_IO_GENERAL;
+            throw task::ErrorCodeIOException(
+                ("SfxBaseModel::switchToStorage: 0x"
+                 + OUString::number(nError, 16)),
+                Reference< XInterface >(), nError);
         }
         else
         {

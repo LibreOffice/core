@@ -34,7 +34,6 @@
 
 #if OSL_DEBUG_LEVEL > 0
     #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
-    #include <com/sun/star/task/ErrorCodeIOException.hpp>
     #include <cppuhelper/exc_hlp.hxx>
     #include <osl/diagnose.h>
     #include <osl/thread.h>

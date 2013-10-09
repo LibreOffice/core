@@ -2118,8 +2118,10 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
             nError = ERRCODE_IO_GENERAL;
         }
 
-        throw css::task::ErrorCodeIOException( OUString(),
-                css::uno::Reference< css::uno::XInterface >(), nError);
+        throw css::task::ErrorCodeIOException(
+            ("SfxDocumentMetaData::storeToMedium <" + URL + "> Commit failed: "
+             "0x" + OUString::number(nError, 16)),
+            css::uno::Reference< css::uno::XInterface >(), nError);
 
     }
 }

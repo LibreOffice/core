@@ -30,6 +30,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
@@ -692,9 +693,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 else
                 {
                     // the user has decided not to store the document
-                    throw task::ErrorCodeIOException( OUString(),
-                                                      uno::Reference< uno::XInterface >(),
-                                                      ERRCODE_IO_ABORT );
+                    throw task::ErrorCodeIOException(
+                        "SfxObjectShell::ExecFile_Impl: ERRCODE_IO_ABORT",
+                        uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT);
                 }
 
                 // merge aDispatchArgs to the request

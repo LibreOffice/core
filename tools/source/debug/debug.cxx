@@ -34,6 +34,7 @@
 #include <windows.h>
 #endif
 
+#include "com/sun/star/task/ErrorCodeIOException.hpp"
 #include <tools/debug.hxx>
 #include <rtl/string.h>
 #include <sal/log.hxx>

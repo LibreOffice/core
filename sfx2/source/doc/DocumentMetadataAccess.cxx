@@ -1382,8 +1382,10 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             if ( nError == ERRCODE_NONE ) {
                 nError = ERRCODE_IO_GENERAL;
             }
-            task::ErrorCodeIOException ex( OUString(),
-                    uno::Reference< uno::XInterface >(), nError);
+            task::ErrorCodeIOException ex(
+                ("DocumentMetadataAccess::storeMetadataToMedium Commit failed: "
+                 "0x" + OUString::number(nError, 16)),
+                uno::Reference< uno::XInterface >(), nError);
             throw lang::WrappedTargetException(OUString(), *this,
                     uno::makeAny(ex));
         }
