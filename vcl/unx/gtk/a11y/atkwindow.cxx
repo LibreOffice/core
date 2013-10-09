@@ -122,7 +122,9 @@ static gint
 ooo_window_wrapper_clear_focus(gpointer)
 {
     SolarMutexGuard aGuard;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     atk_focus_tracker_notify( NULL );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     return FALSE;
 }
 

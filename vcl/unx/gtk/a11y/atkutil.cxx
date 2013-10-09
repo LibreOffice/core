@@ -86,7 +86,9 @@ atk_wrapper_focus_idle_handler (gpointer data)
 #ifdef ENABLE_TRACING
             fprintf(stderr, "notifying focus event for %p\n", atk_obj);
 #endif
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             atk_focus_tracker_notify(atk_obj);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             // #i93269#
             // emit text_caret_moved event for <XAccessibleText> object,
             // if cursor is inside the <XAccessibleText> object.
