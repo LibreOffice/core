@@ -1282,43 +1282,40 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
         int nMinLen = std::min( nDstLen , nSrcLen );
         int nAvgLen = ( nDstLen + nSrcLen )/2;
 
-        int *pLcsDst = new int[ nMinLen + 1 ];
-        int *pLcsSrc = new int[ nMinLen + 1 ];
+        std::vector<int> aLcsDst( nMinLen + 1 );
+        std::vector<int> aLcsSrc( nMinLen + 1 );
 
         if( CmpOptions.eCmpMode == SVX_CMP_BY_WORD )
         {
-            int *pTmpLcsDst = new int[ nMinLen + 1 ];
-            int *pTmpLcsSrc = new int[ nMinLen + 1 ];
+            std::vector<int> aTmpLcsDst( nMinLen + 1 );
+            std::vector<int> aTmpLcsSrc( nMinLen + 1 );
 
             WordArrayComparator aCmp( &rDstNd, &rSrcNd );
 
             LgstCommonSubseq aSeq( aCmp );
 
-            nLcsLen = aSeq.Find( pTmpLcsDst, pTmpLcsSrc );
+            nLcsLen = aSeq.Find( &aTmpLcsDst[0], &aTmpLcsSrc[0] );
 
             if( CmpOptions.nIgnoreLen )
             {
-                nLcsLen = aSeq.IgnoreIsolatedPieces( pTmpLcsDst, pTmpLcsSrc,
+                nLcsLen = aSeq.IgnoreIsolatedPieces( &aTmpLcsDst[0], &aTmpLcsSrc[0],
                                                 aCmp.GetLen1(), aCmp.GetLen2(),
                                                 nLcsLen, CmpOptions.nIgnoreLen );
             }
 
-            nLcsLen = aCmp.GetCharSequence( pTmpLcsDst, pTmpLcsSrc,
-                                            pLcsDst, pLcsSrc, nLcsLen );
-
-            delete[] pTmpLcsDst;
-            delete[] pTmpLcsSrc;
+            nLcsLen = aCmp.GetCharSequence( &aTmpLcsDst[0], &aTmpLcsSrc[0],
+                                            &aLcsDst[0], &aLcsSrc[0], nLcsLen );
         }
         else
         {
             CharArrayComparator aCmp( &rDstNd, &rSrcNd );
             LgstCommonSubseq aSeq( aCmp );
 
-            nLcsLen = aSeq.Find( pLcsDst, pLcsSrc );
+            nLcsLen = aSeq.Find( &aLcsDst[0], &aLcsSrc[0] );
 
             if( CmpOptions.nIgnoreLen )
             {
-                nLcsLen = aSeq.IgnoreIsolatedPieces( pLcsDst, pLcsSrc, nDstLen,
+                nLcsLen = aSeq.IgnoreIsolatedPieces( &aLcsDst[0], &aLcsSrc[0], nDstLen,
                                                     nSrcLen, nLcsLen,
                                                     CmpOptions.nIgnoreLen );
             }
@@ -1329,8 +1326,8 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
         int nCnt = 1;
         for( int i = 0; i < nLcsLen; i++ )
         {
-            if( i != nLcsLen - 1 && pLcsDst[i] + 1 == pLcsDst[i + 1]
-                                && pLcsSrc[i] + 1 == pLcsSrc[i + 1] )
+            if( i != nLcsLen - 1 && aLcsDst[i] + 1 == aLcsDst[i + 1]
+                                && aLcsSrc[i] + 1 == aLcsSrc[i + 1] )
             {
                 nCnt++;
             }
@@ -1351,10 +1348,10 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
         int nSkip = 0;
         for( int i = 0; i <= nLcsLen; i++ )
         {
-            int nDstFrom = i ? (pLcsDst[i - 1] + 1) : 0;
-            int nDstTo = ( i == nLcsLen ) ? nDstLen : pLcsDst[i];
-            int nSrcFrom = i ? (pLcsSrc[i - 1] + 1) : 0;
-            int nSrcTo = ( i == nLcsLen ) ? nSrcLen : pLcsSrc[i];
+            int nDstFrom = i ? (aLcsDst[i - 1] + 1) : 0;
+            int nDstTo = ( i == nLcsLen ) ? nDstLen : aLcsDst[i];
+            int nSrcFrom = i ? (aLcsSrc[i - 1] + 1) : 0;
+            int nSrcTo = ( i == nLcsLen ) ? nSrcLen : aLcsSrc[i];
 
             SwPaM aPam( rDstNd, nDstTo + nSkip );
 
@@ -1394,9 +1391,6 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                 }
             }
         }
-
-        delete[] pLcsDst;
-        delete[] pLcsSrc;
 
         bRet = true;
     }
