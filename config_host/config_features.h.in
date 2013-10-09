@@ -68,8 +68,7 @@
 #define HAVE_FEATURE_MULTIUSER_ENVIRONMENT 0
 
 /*
- * Whether we have the OpenCL headers and should compile in any
- * support for that abstraction.
+ * Whether OpenCL is usable on the platform and we should compile in use of OpenCL.
  */
 
 #define HAVE_FEATURE_OPENCL 0
