@@ -2582,8 +2582,7 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
 
     if( pRule && pTxtNd->IsInList() )
     {
-        OSL_ENSURE( pTxtNd->GetActualListLevel() >= 0 && pTxtNd->GetActualListLevel() < MAXLEVEL,
-                "<SwRTFWriter::OutListNum(..)> - text node does not have valid list level. Serious defect -> please inform OD" );
+        SAL_WARN_IF(pTxtNd->GetActualListLevel() < 0 || pTxtNd->GetActualListLevel() >= MAXLEVEL, "sw.rtf", "text node does not have valid list level");
 
         const bool bExportNumRule = USHRT_MAX != nNumId;
         const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
