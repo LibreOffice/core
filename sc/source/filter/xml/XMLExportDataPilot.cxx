@@ -112,15 +112,15 @@ void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, boo
     if (bIsCaseSensitive)
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
     const ScQueryEntry::Item& rItem = aQueryEntry.GetQueryItem();
-    const OUString& rQueryStr = rItem.maString;
+    OUString aQueryStr = rItem.maString.getString();
     if (rItem.meType == ScQueryEntry::ByString)
     {
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rQueryStr);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aQueryStr);
     }
     else
     {
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rQueryStr);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aQueryStr);
     }
 
     if (aQueryEntry.IsQueryByEmpty())

@@ -28,6 +28,12 @@
 struct ScDBQueryParamInternal;
 struct ScQueryEntry;
 
+namespace svl {
+
+class SharedStringPool;
+
+}
+
 struct ScQueryParamBase
 {
     bool            bHasHeader;
@@ -48,7 +54,7 @@ struct ScQueryParamBase
     ScQueryEntry* FindEntryByField(SCCOLROW nField, bool bNew);
     SC_DLLPUBLIC void RemoveEntryByField(SCCOLROW nField);
     void Resize(size_t nNew);
-    void FillInExcelSyntax(const OUString& aCellStr, SCSIZE nIndex);
+    void FillInExcelSyntax(svl::SharedStringPool& rPool, const OUString& aCellStr, SCSIZE nIndex);
 
 protected:
     typedef boost::ptr_vector<ScQueryEntry> EntriesType;

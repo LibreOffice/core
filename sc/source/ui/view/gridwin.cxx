@@ -38,6 +38,7 @@
 #include <svl/stritem.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svl/urlbmk.hxx>
+#include "svl/sharedstringpool.hxx"
 #include <vcl/cursor.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/hatch.hxx>
@@ -646,12 +647,14 @@ public:
 class AddItemToEntry : public std::unary_function<OUString, void>
 {
     ScQueryEntry::QueryItemsType& mrItems;
+    svl::SharedStringPool& mrPool;
 public:
-    AddItemToEntry(ScQueryEntry::QueryItemsType& rItems) : mrItems(rItems) {}
+    AddItemToEntry(ScQueryEntry::QueryItemsType& rItems, svl::SharedStringPool& rPool) :
+        mrItems(rItems), mrPool(rPool) {}
     void operator() (const OUString& rSelected)
     {
         ScQueryEntry::Item aNew;
-        aNew.maString = rSelected;
+        aNew.maString = mrPool.intern(rSelected);
         aNew.meType = ScQueryEntry::ByString;
         aNew.mfVal = 0.0;
         mrItems.push_back(aNew);
@@ -667,7 +670,7 @@ public:
 
     void operator() (const ScQueryEntry::Item& rItem)
     {
-        mrSet.insert(rItem.maString);
+        mrSet.insert(rItem.maString.getString());
     }
 };
 
@@ -780,12 +783,13 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     if (!pDBData)
         return;
 
+    ScDocument* pDoc = pViewData->GetDocument();
+    svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
     switch (eMode)
     {
         case SortAscending:
         case SortDescending:
         {
-            ScDocument* pDoc = pViewData->GetDocument();
             SCTAB nTab = pViewData->GetTabNo();
             SCCOL nCol = rPos.Col();
             ScSortParam aSortParam;
@@ -866,13 +870,13 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 
                 ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
                 rItems.clear();
-                std::for_each(aSelected.begin(), aSelected.end(), AddItemToEntry(rItems));
+                std::for_each(aSelected.begin(), aSelected.end(), AddItemToEntry(rItems, rPool));
             }
             break;
             case Top10:
                 pEntry->eOp = SC_TOPVAL;
                 pEntry->GetQueryItem().meType = ScQueryEntry::ByString;
-                pEntry->GetQueryItem().maString = OUString("10");
+                pEntry->GetQueryItem().maString = rPool.intern("10");
             break;
             case Empty:
                 pEntry->SetQueryByEmpty();
@@ -1230,15 +1234,15 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
                             bValid = false;
                     if (rEntry.nField == nCol)
                     {
-                        const OUString& rQueryStr = rEntry.GetQueryItem().maString;
+                        OUString aQueryStr = rEntry.GetQueryItem().maString.getString();
                         if (rEntry.eOp == SC_EQUAL)
                         {
-                            if (!rQueryStr.isEmpty())
+                            if (!aQueryStr.isEmpty())
                             {
-                                nSelPos = pFilterBox->GetEntryPos(rQueryStr);
+                                nSelPos = pFilterBox->GetEntryPos(aQueryStr);
                             }
                         }
-                        else if ( rEntry.eOp == SC_TOPVAL && rQueryStr == "10" )
+                        else if ( rEntry.eOp == SC_TOPVAL && aQueryStr == "10" )
                             nSelPos = SC_AUTOFILTER_TOP10;
                         else
                             nSelPos = SC_AUTOFILTER_CUSTOM;
@@ -1381,6 +1385,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
 {
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
+    svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
 
     ScDBData* pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab );
     if (pDBData)
@@ -1454,7 +1459,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                     if ( nSel == SC_AUTOFILTER_TOP10 )
                     {
                         rNewEntry.eOp = SC_TOPVAL;
-                        rItem.maString = OUString("10");
+                        rItem.maString = rPool.intern("10");
                     }
                     else if (nSel == SC_AUTOFILTER_EMPTY)
                     {
@@ -1467,7 +1472,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                     else
                     {
                         rNewEntry.eOp = SC_EQUAL;
-                        rItem.maString = aValue;
+                        rItem.maString = rPool.intern(aValue);
                     }
                     if (nQueryPos > 0)
                         rNewEntry.eConnect   = SC_AND;

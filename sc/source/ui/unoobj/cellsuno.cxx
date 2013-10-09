@@ -32,6 +32,7 @@
 #include <editeng/langitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svl/srchitem.hxx>
+#include "svl/sharedstringpool.hxx"
 #include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unotext.hxx>
@@ -5699,6 +5700,7 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
             static_cast<SCCOLROW>(aRange.aStart.Col()) :
             static_cast<SCCOLROW>(aRange.aStart.Row());
         SCSIZE nCount = aParam.GetEntryCount();
+        svl::SharedStringPool& rPool = pDocSh->GetDocument()->GetSharedStringPool();
         for (SCSIZE i=0; i<nCount; i++)
         {
             ScQueryEntry& rEntry = aParam.GetEntry(i);
@@ -5711,8 +5713,9 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
                 ScQueryEntry::Item& rItem = rItems.front();
                 if (rItem.meType != ScQueryEntry::ByString)
                 {
-                    pDocSh->GetDocument()->GetFormatTable()->
-                        GetInputLineString(rItem.mfVal, 0, rItem.maString);
+                    OUString aStr;
+                    pDocSh->GetDocument()->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, aStr);
+                    rItem.maString = rPool.intern(aStr);
                 }
             }
         }

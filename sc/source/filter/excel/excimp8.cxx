@@ -55,6 +55,7 @@
 #include <sot/exchange.hxx>
 
 #include <svl/stritem.hxx>
+#include "svl/sharedstringpool.hxx"
 
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
@@ -454,7 +455,7 @@ void ImportExcel8::AutoFilter( void )
 
     XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetCurrScTab() );
     if( pData )
-        pData->ReadAutoFilter( aIn );
+        pData->ReadAutoFilter(aIn, GetDoc().GetSharedStringPool());
 }
 
 
@@ -472,15 +473,19 @@ XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRan
     aParam.nCol2 = rRange.aEnd.Col();
     aParam.nRow2 = rRange.aEnd.Row();
 
-    aParam.bInplace = sal_True;
+    aParam.bInplace = true;
 
 }
 
-void XclImpAutoFilterData::CreateFromDouble( OUString& rStr, double fVal )
+namespace {
+
+OUString CreateFromDouble( double fVal )
 {
-    rStr += ::rtl::math::doubleToUString(fVal,
+    return rtl::math::doubleToUString(fVal,
                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                 ScGlobal::pLocaleData->getNumDecimalSep()[0], true);
+}
+
 }
 
 void XclImpAutoFilterData::SetCellAttribs()
@@ -515,12 +520,11 @@ void XclImpAutoFilterData::InsertQueryParam()
     }
 }
 
-static void ExcelQueryToOooQuery( ScQueryEntry& rEntry )
+static void ExcelQueryToOooQuery( OUString& aStr, ScQueryEntry& rEntry )
 {
     if (rEntry.eOp != SC_EQUAL && rEntry.eOp != SC_NOT_EQUAL)
         return;
 
-    OUString aStr = rEntry.GetQueryItem().maString;
     xub_StrLen nLen = aStr.getLength();
     sal_Unicode nStart = aStr[0];
     sal_Unicode nEnd   = aStr[ nLen-1 ];
@@ -543,10 +547,10 @@ static void ExcelQueryToOooQuery( ScQueryEntry& rEntry )
     {
         aStr = aStr.copy( 1 );
     }
-    rEntry.GetQueryItem().maString = aStr;
 }
 
-void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
+void XclImpAutoFilterData::ReadAutoFilter(
+    XclImpStream& rStrm, svl::SharedStringPool& rPool )
 {
     sal_uInt16 nCol, nFlags;
     rStrm >> nCol >> nFlags;
@@ -570,7 +574,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         aEntry.eConnect = SC_AND;
 
         rItem.meType = ScQueryEntry::ByString;
-        rItem.maString = OUString::number(nCntOfTop10);
+        rItem.maString = rPool.intern(OUString::number(nCntOfTop10));
 
         rStrm.Ignore(20);
         return;
@@ -620,23 +624,23 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
             case EXC_AFTYPE_RK:
                 rStrm >> nRK;
                 rStrm.Ignore( 4 );
-                CreateFromDouble(
-                    rItem.maString, XclTools::GetDoubleFromRK(nRK));
+                rItem.maString = rPool.intern(
+                    CreateFromDouble(XclTools::GetDoubleFromRK(nRK)));
             break;
             case EXC_AFTYPE_DOUBLE:
                 rStrm >> fVal;
-                CreateFromDouble(rItem.maString, fVal);
+                rItem.maString = rPool.intern(CreateFromDouble(fVal));
             break;
             case EXC_AFTYPE_STRING:
                 rStrm.Ignore( 4 );
                 rStrm >> nStrLen[ nE ];
                 rStrm.Ignore( 3 );
-                rItem.maString = OUString();
+                rItem.maString = svl::SharedString();
             break;
             case EXC_AFTYPE_BOOLERR:
                 rStrm >> nBoolErr >> nVal;
                 rStrm.Ignore( 6 );
-                rItem.maString = OUString::number(nVal);
+                rItem.maString = rPool.intern(OUString::number(nVal));
                 bIgnore = (nBoolErr != 0);
             break;
             case EXC_AFTYPE_EMPTY:
@@ -665,8 +669,9 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         {
             if (nStrLen[nE] && aEntries[nE].bDoQuery)
             {
-                aEntries[nE].GetQueryItem().maString = rStrm.ReadUniString(nStrLen[nE]);
-                ExcelQueryToOooQuery(aEntries[nE]);
+                OUString aStr = rStrm.ReadUniString(nStrLen[nE]);
+                ExcelQueryToOooQuery(aStr, aEntries[nE]);
+                aEntries[nE].GetQueryItem().maString = rPool.intern(aStr);
                 aParam.AppendEntry() = aEntries[nE];
             }
         }
@@ -693,9 +698,9 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
             ScQueryEntry::QueryItemsType aItems;
             aItems.reserve(2);
             ScQueryEntry::Item aItem1, aItem2;
-            aItem1.maString = rStrm.ReadUniString(nStrLen[0]);
+            aItem1.maString = rPool.intern(rStrm.ReadUniString(nStrLen[0]));
             aItem1.meType = ScQueryEntry::ByString;
-            aItem2.maString = rStrm.ReadUniString(nStrLen[1]);
+            aItem2.maString = rPool.intern(rStrm.ReadUniString(nStrLen[1]));
             aItem2.meType = ScQueryEntry::ByString;
             aItems.push_back(aItem1);
             aItems.push_back(aItem2);
@@ -704,8 +709,9 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         else if (nStrLen[0] && aEntries[0].bDoQuery)
         {
             // Due to conflict, we can import only the first condition.
-            aEntries[0].GetQueryItem().maString = rStrm.ReadUniString(nStrLen[0]);
-            ExcelQueryToOooQuery(aEntries[0]);
+            OUString aStr = rStrm.ReadUniString(nStrLen[0]);
+            ExcelQueryToOooQuery(aStr, aEntries[0]);
+            aEntries[0].GetQueryItem().maString = rPool.intern(aStr);
             aParam.AppendEntry() = aEntries[0];
         }
     }

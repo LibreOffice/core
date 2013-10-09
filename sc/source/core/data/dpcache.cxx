@@ -550,7 +550,8 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                 {
                     if (bMatchWholeCell)
                     {
-                        OUString aStr = rEntry.GetQueryItem().maString;
+                        // TODO: Use shared string for fast equality check.
+                        OUString aStr = rEntry.GetQueryItem().maString.getString();
                         bOk = pTransliteration->isEqual(aCellStr, aStr);
                         bool bHasStar = false;
                         sal_Int32 nIndex;
@@ -574,12 +575,12 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                     }
                     else
                     {
-                        const OUString& rQueryStr = rEntry.GetQueryItem().maString;
+                        OUString aQueryStr = rEntry.GetQueryItem().maString.getString();
                         ::com::sun::star::uno::Sequence< sal_Int32 > xOff;
                         OUString aCell = pTransliteration->transliterate(
                             aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(), &xOff);
                         OUString aQuer = pTransliteration->transliterate(
-                            rQueryStr, ScGlobal::eLnge, 0, rQueryStr.getLength(), &xOff);
+                            aQueryStr, ScGlobal::eLnge, 0, aQueryStr.getLength(), &xOff);
                         bOk = (aCell.indexOf( aQuer ) != -1);
                     }
                     if (rEntry.eOp == SC_NOT_EQUAL)
@@ -588,7 +589,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                 else
                 {   // use collator here because data was probably sorted
                     sal_Int32 nCompare = pCollator->compareString(
-                        aCellStr, rEntry.GetQueryItem().maString);
+                        aCellStr, rEntry.GetQueryItem().maString.getString());
                     switch (rEntry.eOp)
                     {
                         case SC_LESS :

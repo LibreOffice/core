@@ -21,6 +21,8 @@
 #include "queryentry.hxx"
 #include "scmatrix.hxx"
 
+#include "svl/sharedstringpool.hxx"
+
 namespace {
 
 const size_t MAXQUERY = 8;
@@ -166,7 +168,8 @@ void ScQueryParamBase::Resize(size_t nNew)
     }
 }
 
-void ScQueryParamBase::FillInExcelSyntax(const OUString& rStr, SCSIZE nIndex)
+void ScQueryParamBase::FillInExcelSyntax(
+    svl::SharedStringPool& rPool, const OUString& rStr, SCSIZE nIndex)
 {
     const OUString aCellStr = rStr;
     if (!aCellStr.isEmpty())
@@ -183,17 +186,17 @@ void ScQueryParamBase::FillInExcelSyntax(const OUString& rStr, SCSIZE nIndex)
         {
             if (aCellStr[1] == '>')
             {
-                rItem.maString = aCellStr.copy(2);
+                rItem.maString = rPool.intern(aCellStr.copy(2));
                 rEntry.eOp   = SC_NOT_EQUAL;
             }
             else if (aCellStr[1] == '=')
             {
-                rItem.maString = aCellStr.copy(2);
+                rItem.maString = rPool.intern(aCellStr.copy(2));
                 rEntry.eOp   = SC_LESS_EQUAL;
             }
             else
             {
-                rItem.maString = aCellStr.copy(1);
+                rItem.maString = rPool.intern(aCellStr.copy(1));
                 rEntry.eOp   = SC_LESS;
             }
         }
@@ -201,21 +204,21 @@ void ScQueryParamBase::FillInExcelSyntax(const OUString& rStr, SCSIZE nIndex)
         {
             if (aCellStr[1] == '=')
             {
-                rItem.maString = aCellStr.copy(2);
+                rItem.maString = rPool.intern(aCellStr.copy(2));
                 rEntry.eOp   = SC_GREATER_EQUAL;
             }
             else
             {
-                rItem.maString = aCellStr.copy(1);
+                rItem.maString = rPool.intern(aCellStr.copy(1));
                 rEntry.eOp   = SC_GREATER;
             }
         }
         else
         {
             if (aCellStr[0] == '=')
-                rItem.maString = aCellStr.copy(1);
+                rItem.maString = rPool.intern(aCellStr.copy(1));
             else
-                rItem.maString = aCellStr;
+                rItem.maString = rPool.intern(aCellStr);
             rEntry.eOp = SC_EQUAL;
         }
     }

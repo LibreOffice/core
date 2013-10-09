@@ -22,6 +22,7 @@
 
 #include "address.hxx"
 #include "global.hxx"
+#include "svl/sharedstring.hxx"
 
 #include <vector>
 
@@ -41,7 +42,7 @@ struct SC_DLLPUBLIC ScQueryEntry
     {
         QueryType     meType;
         double        mfVal;
-        OUString maString;
+        svl::SharedString maString;
 
         Item() : meType(ByValue), mfVal(0.0) {}
 

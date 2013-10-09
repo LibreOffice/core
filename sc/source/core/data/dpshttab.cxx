@@ -59,7 +59,7 @@ ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, con
             {
                 sal_uInt32 nIndex = 0;
                 bool bNumber = pD->GetFormatTable()->IsNumberFormat(
-                    rItem.maString, nIndex, rItem.mfVal);
+                    rItem.maString.getString(), nIndex, rItem.mfVal);
                 rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
             }
         }

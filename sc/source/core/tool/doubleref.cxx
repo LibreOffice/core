@@ -26,6 +26,8 @@
 #include "globstr.hrc"
 #include "scmatrix.hxx"
 
+#include "svl/sharedstringpool.hxx"
+
 #include <memory>
 #include <vector>
 
@@ -39,7 +41,8 @@ void lcl_uppercase(OUString& rStr)
     rStr = ScGlobal::pCharClass->uppercase(rStr.trim());
 }
 
-bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
+bool lcl_createStarQuery(
+    svl::SharedStringPool& rPool, ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
 {
     // A valid StarQuery must be at least 4 columns wide. To be precise it
     // should be exactly 4 columns ...
@@ -128,7 +131,8 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         if (bValid)
         {
             // Finally, the right-hand-side value in the 4th column.
-            rEntry.GetQueryItem().maString = pQueryRef->getString(3, nRow);
+            rEntry.GetQueryItem().maString =
+                rPool.intern(pQueryRef->getString(3, nRow));
             rEntry.bDoQuery = true;
         }
         nIndex++;
@@ -139,7 +143,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
 }
 
 bool lcl_createExcelQuery(
-    ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
+    svl::SharedStringPool& rPool, ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
 {
     bool bValid = true;
     SCCOL nCols = pQueryRef->getColSize();
@@ -186,7 +190,7 @@ bool lcl_createExcelQuery(
                     if (nIndex < nNewEntries)
                     {
                         pParam->GetEntry(nIndex).nField = aFields[nCol];
-                        pParam->FillInExcelSyntax(OUString(aCellStr), nIndex);
+                        pParam->FillInExcelSyntax(rPool, aCellStr, nIndex);
                         nIndex++;
                         if (nIndex < nNewEntries)
                             pParam->GetEntry(nIndex).eConnect = SC_AND;
@@ -205,17 +209,17 @@ bool lcl_createExcelQuery(
 }
 
 bool lcl_fillQueryEntries(
-    ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
+    svl::SharedStringPool& rPool, ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
 {
     SCSIZE nCount = pParam->GetEntryCount();
     for (SCSIZE i = 0; i < nCount; ++i)
         pParam->GetEntry(i).Clear();
 
     // Standard QueryTabelle
-    bool bValid = lcl_createStarQuery(pParam, pDBRef, pQueryRef);
+    bool bValid = lcl_createStarQuery(rPool, pParam, pDBRef, pQueryRef);
     // Excel QueryTabelle
     if (!bValid)
-        bValid = lcl_createExcelQuery(pParam, pDBRef, pQueryRef);
+        bValid = lcl_createExcelQuery(rPool, pParam, pDBRef, pQueryRef);
 
     nCount = pParam->GetEntryCount();
     if (bValid)
@@ -249,7 +253,7 @@ bool ScDBRangeBase::fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBa
     if (!pDBRef)
         return false;
 
-    return lcl_fillQueryEntries(pParam, pDBRef, this);
+    return lcl_fillQueryEntries(getDoc()->GetSharedStringPool(), pParam, pDBRef, this);
 }
 
 void ScDBRangeBase::fillQueryOptions(ScQueryParamBase* pParam)

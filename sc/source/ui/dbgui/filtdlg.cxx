@@ -37,6 +37,7 @@
 
 #include "filtdlg.hxx"
 #include <vcl/msgbox.hxx>
+#include "svl/sharedstringpool.hxx"
 
 #include <limits>
 
@@ -272,7 +273,8 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
             }
             else
             {
-                if (rItem.maString.isEmpty())
+                OUString aQueryStr = rItem.maString.getString();
+                if (aQueryStr.isEmpty())
                 {
                     if (rItem.meType == ScQueryEntry::ByValue)
                         pDoc->GetFormatTable()->GetInputLineString( rItem.mfVal, 0, aValStr);
@@ -285,7 +287,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                     else
                     {
                         SAL_WARN( "sc", "ScFilterDlg::Init: empty query string, really?");
-                        aValStr = rItem.maString;
+                        aValStr = aQueryStr;
                     }
                 }
                 else
@@ -293,7 +295,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                     // XXX NOTE: if not ByString we just assume this has been
                     // set to a proper string corresponding to the numeric
                     // value earlier!
-                    aValStr = rItem.maString;
+                    aValStr = aQueryStr;
                 }
             }
         }
@@ -1128,12 +1130,12 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
             }
             else
             {
-                rItem.maString = aStrVal;
+                rItem.maString = pDoc->GetSharedStringPool().intern(aStrVal);
                 rItem.mfVal = 0.0;
 
                 sal_uInt32 nIndex = 0;
                 bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(
-                    rItem.maString, nIndex, rItem.mfVal);
+                    rItem.maString.getString(), nIndex, rItem.mfVal);
                 rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
             }
 
@@ -1193,7 +1195,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
                nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
 
             const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            const OUString& rQueryStr = rItem.maString;
+            OUString aQueryStr = rItem.maString.getString();
             if (rEntry.IsQueryByEmpty())
             {
                 aValStr = aStrEmpty;
@@ -1206,7 +1208,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             }
             else
             {
-                aValStr = rQueryStr;
+                aValStr = aQueryStr;
                 maCondLbArr[i]->Enable();
             }
             maFieldLbArr[i]->Enable();

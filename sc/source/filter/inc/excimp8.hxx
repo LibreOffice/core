@@ -89,7 +89,6 @@ private:
     bool                        bCriteria:1;
     bool                        bAutoOrAdvanced:1;
 
-    void                        CreateFromDouble( OUString& rStr, double fVal );
     void                        SetCellAttribs();
     void                        InsertQueryParam();
 
@@ -107,7 +106,7 @@ public:
     inline SCCOL                EndCol() const      { return aParam.nCol2; }
     inline SCROW                EndRow() const      { return aParam.nRow2; }
 
-    void                        ReadAutoFilter( XclImpStream& rStrm );
+    void ReadAutoFilter( XclImpStream& rStrm, svl::SharedStringPool& rPool );
 
     inline void                 Activate()          { bActive = true; }
     void                        SetAdvancedRange( const ScRange* pRange );

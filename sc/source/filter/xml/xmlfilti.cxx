@@ -24,7 +24,9 @@
 #include "XMLConverter.hxx"
 #include "rangeutl.hxx"
 #include "queryentry.hxx"
+#include "document.hxx"
 
+#include "svl/sharedstringpool.hxx"
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -452,7 +454,8 @@ void ScXMLConditionContext::EndElement()
         }
         else
         {
-            rItem.maString = sConditionValue;
+            svl::SharedStringPool& rPool = GetScImport().GetDocument()->GetSharedStringPool();
+            rItem.maString = rPool.intern(sConditionValue);
             rItem.meType = ScQueryEntry::ByString;
         }
     }
@@ -490,8 +493,9 @@ ScXMLSetItemContext::ScXMLSetItemContext(
         {
             case XML_TOK_FILTER_SET_ITEM_ATTR_VALUE:
             {
+                svl::SharedStringPool& rPool = GetScImport().GetDocument()->GetSharedStringPool();
                 ScQueryEntry::Item aItem;
-                aItem.maString = sValue;
+                aItem.maString = rPool.intern(sValue);
                 aItem.meType = ScQueryEntry::ByString;
                 aItem.mfVal = 0.0;
                 rParent.AddSetItem(aItem);
@@ -864,15 +868,17 @@ void ScXMLDPConditionContext::EndElement()
         pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
         aFilterField.nField = nField;
         ScQueryEntry::Item& rItem = aFilterField.GetQueryItem();
+        svl::SharedStringPool& rPool = GetScImport().GetDocument()->GetSharedStringPool();
+
         if (IsXMLToken(sDataType, XML_NUMBER))
         {
             rItem.mfVal = sConditionValue.toDouble();
-            rItem.maString = sConditionValue;
+            rItem.maString = rPool.intern(sConditionValue);
             rItem.meType = ScQueryEntry::ByValue;
         }
         else
         {
-            rItem.maString = sConditionValue;
+            rItem.maString = rPool.intern(sConditionValue);
             rItem.meType = ScQueryEntry::ByString;
             rItem.mfVal = 0.0;
         }

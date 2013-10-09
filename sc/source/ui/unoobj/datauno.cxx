@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "datauno.hxx"
+
 #include <svl/smplhint.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstringpool.hxx"
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -31,7 +34,6 @@
 #include <com/sun/star/sheet/FilterOperator2.hpp>
 #include <com/sun/star/sheet/TableFilterField2.hpp>
 
-#include "datauno.hxx"
 #include "dapiuno.hxx"
 #include "cellsuno.hxx"
 #include "miscuno.hxx"
@@ -1061,7 +1063,7 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
                                                              sheet::FilterConnection_OR;
         aField.Field         = rEntry.nField;
         aField.IsNumeric     = rItem.meType != ScQueryEntry::ByString;
-        aField.StringValue   = rItem.maString;
+        aField.StringValue   = rItem.maString.getString();
         aField.NumericValue  = rItem.mfVal;
 
         switch (rEntry.eOp)             // ScQueryOp
@@ -1176,6 +1178,7 @@ void fillQueryParam(
     rParam.Resize(nCount);
 
     const sheet::TableFilterField2* pAry = aFilterFields.getConstArray();
+    svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
     for (size_t i = 0; i < nCount; ++i)
     {
         ScQueryEntry& rEntry = rParam.GetEntry(i);
@@ -1188,10 +1191,14 @@ void fillQueryParam(
             ScQueryEntry::Item& rItem = rItems.front();
             rItem.meType    = pAry[i].IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
             rItem.mfVal     = pAry[i].NumericValue;
-            rItem.maString  = pAry[i].StringValue;
+            rItem.maString = rPool.intern(pAry[i].StringValue);
 
-            if (rItem.meType == ScQueryEntry::ByValue && pDoc)
-                pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, rItem.maString);
+            if (rItem.meType == ScQueryEntry::ByValue)
+            {
+                OUString aStr;
+                pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, aStr);
+                rItem.maString = rPool.intern(aStr);
+            }
         }
     }
 
@@ -1207,6 +1214,7 @@ void fillQueryParam(
     size_t nCount = static_cast<size_t>(aFilterFields.getLength());
     rParam.Resize(nCount);
 
+    svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
     const sheet::TableFilterField3* pAry = aFilterFields.getConstArray();
     for (size_t i = 0; i < nCount; ++i)
     {
@@ -1223,10 +1231,14 @@ void fillQueryParam(
                 ScQueryEntry::Item aItem;
                 aItem.meType   = rVals[j].IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
                 aItem.mfVal    = rVals[j].NumericValue;
-                aItem.maString = rVals[j].StringValue;
+                aItem.maString = rPool.intern(rVals[j].StringValue);
 
-                if (aItem.meType == ScQueryEntry::ByValue && pDoc)
-                    pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, 0, aItem.maString);
+                if (aItem.meType == ScQueryEntry::ByValue)
+                {
+                    OUString aStr;
+                    pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, 0, aStr);
+                    aItem.maString = rPool.intern(aStr);
+                }
 
                 rItems.push_back(aItem);
             }
@@ -1282,7 +1294,7 @@ throw(uno::RuntimeException)
         {
             const ScQueryEntry::Item& rItem = rEntry.GetQueryItems().front();
             aField.IsNumeric     = rItem.meType != ScQueryEntry::ByString;
-            aField.StringValue   = rItem.maString;
+            aField.StringValue   = rItem.maString.getString();
             aField.NumericValue  = rItem.mfVal;
         }
 
@@ -1340,7 +1352,7 @@ uno::Sequence<sheet::TableFilterField3> SAL_CALL ScFilterDescriptorBase::getFilt
             for (size_t j = 0; itr != itrEnd; ++itr, ++j)
             {
                 aField.Values[j].IsNumeric = itr->meType != ScQueryEntry::ByString;
-                aField.Values[j].StringValue = itr->maString;
+                aField.Values[j].StringValue = itr->maString.getString();
                 aField.Values[j].NumericValue = itr->mfVal;
 
             }
@@ -1362,6 +1374,8 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
     SCSIZE nCount = static_cast<SCSIZE>(aFilterFields.getLength());
     aParam.Resize( nCount );
 
+    ScDocument* pDoc = pDocSh->GetDocument();
+    svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
     const sheet::TableFilterField* pAry = aFilterFields.getConstArray();
     SCSIZE i;
     for (i=0; i<nCount; i++)
@@ -1375,10 +1389,14 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
         rEntry.nField   = pAry[i].Field;
         rItem.meType    = pAry[i].IsNumeric ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
         rItem.mfVal     = pAry[i].NumericValue;
-        rItem.maString  = pAry[i].StringValue;
+        rItem.maString = rPool.intern(pAry[i].StringValue);
 
-        if (rItem.meType != ScQueryEntry::ByString && pDocSh)
-            pDocSh->GetDocument()->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, rItem.maString);
+        if (rItem.meType != ScQueryEntry::ByString)
+        {
+            OUString aStr;
+            pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, aStr);
+            rItem.maString = rPool.intern(aStr);
+        }
 
         switch (pAry[i].Operator)           // FilterOperator
         {

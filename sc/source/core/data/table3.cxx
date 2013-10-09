@@ -57,6 +57,8 @@
 #include "mtvcellfunc.hxx"
 #include "columnspanset.hxx"
 
+#include "svl/sharedstringpool.hxx"
+
 #include <vector>
 #include <boost/unordered_set.hpp>
 
@@ -1485,7 +1487,7 @@ public:
             // Simple string matching i.e. no regexp match.
             if (isTextMatchOp(rEntry))
             {
-                if (rItem.meType != ScQueryEntry::ByString && rItem.maString.isEmpty())
+                if (rItem.meType != ScQueryEntry::ByString && rItem.maString.getString().isEmpty())
                 {
                     // #i18374# When used from functions (match, countif, sumif, vlookup, hlookup, lookup),
                     // the query value is assigned directly, and the string is empty. In that case,
@@ -1496,18 +1498,19 @@ public:
                 }
                 else if ( bMatchWholeCell )
                 {
-                    bOk = mpTransliteration->isEqual(aCellStr, rItem.maString);
+                    // TODO: Use shared string for faster equality check.
+                    bOk = mpTransliteration->isEqual(aCellStr, rItem.maString.getString());
                     if ( rEntry.eOp == SC_NOT_EQUAL )
                         bOk = !bOk;
                 }
                 else
                 {
-                    const OUString& rQueryStr = rItem.maString;
+                    OUString aQueryStr = rItem.maString.getString();
                     OUString aCell( mpTransliteration->transliterate(
                         aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(),
                         NULL ) );
                     OUString aQuer( mpTransliteration->transliterate(
-                        rQueryStr, ScGlobal::eLnge, 0, rQueryStr.getLength(),
+                        aQueryStr, ScGlobal::eLnge, 0, aQueryStr.getLength(),
                         NULL ) );
                     xub_StrLen nIndex = (rEntry.eOp == SC_ENDS_WITH
                         || rEntry.eOp == SC_DOES_NOT_END_WITH) ? (aCell.getLength()-aQuer.getLength()) : 0;
@@ -1544,7 +1547,7 @@ public:
             else
             {   // use collator here because data was probably sorted
                 sal_Int32 nCompare = mpCollator->compareString(
-                    aCellStr, rItem.maString);
+                    aCellStr, rItem.maString.getString());
                 switch (rEntry.eOp)
                 {
                     case SC_LESS :
@@ -1809,7 +1812,7 @@ public:
 
         sal_uInt32 nIndex = 0;
         bool bNumber = mrDoc.GetFormatTable()->
-            IsNumberFormat(rItem.maString, nIndex, rItem.mfVal);
+            IsNumberFormat(rItem.maString.getString(), nIndex, rItem.mfVal);
 
         // Advanced Filter creates only ByString queries that need to be
         // converted to ByValue if appropriate. rItem.mfVal now holds the value
@@ -2039,6 +2042,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 
         SCSIZE nIndex = 0;
         SCROW nRow = nRow1 + 1;
+        svl::SharedStringPool& rPool = pDocument->GetSharedStringPool();
         while (nRow <= nRow2)
         {
             nCol = nCol1;
@@ -2050,7 +2054,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
                     if (nIndex < nNewEntries)
                     {
                         rQueryParam.GetEntry(nIndex).nField = pFields[nCol - nCol1];
-                        rQueryParam.FillInExcelSyntax(aCellStr, nIndex);
+                        rQueryParam.FillInExcelSyntax(rPool, aCellStr, nIndex);
                         nIndex++;
                         if (nIndex < nNewEntries)
                             rQueryParam.GetEntry(nIndex).eConnect = SC_AND;
@@ -2094,6 +2098,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
 
     SCSIZE nNewEntries = static_cast<SCSIZE>(nRow2-nRow1+1);
     rQueryParam.Resize( nNewEntries );
+    svl::SharedStringPool& rPool = pDocument->GetSharedStringPool();
 
     do
     {
@@ -2167,7 +2172,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         {
             OUString aStr;
             GetString(nCol1 + 3, nRow, aStr);
-            rEntry.GetQueryItem().maString = aStr;
+            rEntry.GetQueryItem().maString = rPool.intern(aStr);
             rEntry.bDoQuery = true;
         }
         nIndex++;

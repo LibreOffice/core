@@ -721,10 +721,10 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     bool bConflict = false;
     OUString  sText;
     const ScQueryEntry::Item& rItem = rItems[0];
-    const OUString& rQueryStr = rItem.maString;
-    if (!rQueryStr.isEmpty())
+    OUString aQueryStr = rItem.maString.getString();
+    if (!aQueryStr.isEmpty())
     {
-        sText = rQueryStr;
+        sText = aQueryStr;
         switch( rEntry.eOp )
         {
             case SC_CONTAINS:
@@ -830,7 +830,7 @@ bool XclExpAutofilter::AddMultiValueEntry( const ScQueryEntry& rEntry )
     const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
     ScQueryEntry::QueryItemsType::const_iterator itr = rItems.begin(), itrEnd = rItems.end();
     for (; itr != itrEnd; ++itr)
-        maMultiValues.push_back(itr->maString);
+        maMultiValues.push_back(itr->maString.getString());
 
     return false;
 }

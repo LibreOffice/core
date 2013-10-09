@@ -43,7 +43,7 @@ ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry ) :
 
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     if (rItem.meType == ScQueryEntry::ByString)
-        setString(rItem.maString);
+        setString(rItem.maString.getString());
     else
         setDouble(rItem.mfVal);
 }

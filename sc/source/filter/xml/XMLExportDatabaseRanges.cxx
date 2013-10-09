@@ -424,7 +424,7 @@ private:
         WriteSetItem(ScXMLExport& r) : mrExport(r) {}
         void operator() (const ScQueryEntry::Item& rItem) const
         {
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString);
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             SvXMLElementExport aElem(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_SET_ITEM, true, true);
         }
     };
@@ -447,7 +447,7 @@ private:
             // Single item condition.
             const ScQueryEntry::Item& rItem = rItems.front();
             if (rItem.meType == ScQueryEntry::ByString)
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             else
             {
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
@@ -466,7 +466,7 @@ private:
 
             // Store the 1st value for backward compatibility.
             const ScQueryEntry::Item& rItem = rItems.front();
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString);
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, OUString("="));
             SvXMLElementExport aElemC(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
 

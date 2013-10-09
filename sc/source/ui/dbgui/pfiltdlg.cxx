@@ -42,6 +42,7 @@
 #include "pfiltdlg.hxx"
 #undef _PFILTDLG_CXX
 #include <svl/zforlist.hxx>
+#include "svl/sharedstringpool.hxx"
 
 //==================================================================
 
@@ -199,7 +200,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         {
             const ScQueryEntry& rEntry = theQueryData.GetEntry(i);
             const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            OUString aValStr = rItem.maString;
+            OUString aValStr = rItem.maString.getString();
             if (rEntry.IsQueryByEmpty())
                 aValStr = aStrEmpty;
             else if (rEntry.IsQueryByNonEmpty())
@@ -382,6 +383,8 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
     sal_uInt16          nConnect1 = aLbConnect1.GetSelectEntryPos();
     sal_uInt16          nConnect2 = aLbConnect2.GetSelectEntryPos();
 
+    svl::SharedStringPool& rPool = pViewData->GetDocument()->GetSharedStringPool();
+
     for ( SCSIZE i=0; i<3; i++ )
     {
         sal_uInt16      nField  = aFieldLbArr[i]->GetSelectEntryPos();
@@ -414,7 +417,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
             }
             else
             {
-                rItem.maString = aStrVal;
+                rItem.maString = rPool.intern(aStrVal);
                 rItem.mfVal = 0.0;
                 rItem.meType = ScQueryEntry::ByString;
             }

@@ -32,7 +32,7 @@
 
 bool ScQueryEntry::Item::operator== (const Item& r) const
 {
-    return meType == r.meType && mfVal == r.mfVal && maString.equals(r.maString);
+    return meType == r.meType && mfVal == r.mfVal && maString == r.maString;
 }
 
 ScQueryEntry::ScQueryEntry() :
@@ -95,7 +95,7 @@ void ScQueryEntry::SetQueryByEmpty()
     maQueryItems.resize(1);
     Item& rItem = maQueryItems[0];
     rItem.meType = ByEmpty;
-    rItem.maString = OUString();
+    rItem.maString = svl::SharedString();
     rItem.mfVal = SC_EMPTYFIELDS;
 }
 
@@ -107,7 +107,7 @@ bool ScQueryEntry::IsQueryByEmpty() const
     const Item& rItem = maQueryItems[0];
     return eOp == SC_EQUAL &&
         rItem.meType == ByEmpty &&
-        rItem.maString.isEmpty() &&
+        rItem.maString.getString().isEmpty() &&
         rItem.mfVal == SC_EMPTYFIELDS;
 }
 
@@ -117,7 +117,7 @@ void ScQueryEntry::SetQueryByNonEmpty()
     maQueryItems.resize(1);
     Item& rItem = maQueryItems[0];
     rItem.meType = ByEmpty;
-    rItem.maString = OUString();
+    rItem.maString = svl::SharedString();
     rItem.mfVal = SC_NONEMPTYFIELDS;
 }
 
@@ -129,7 +129,7 @@ bool ScQueryEntry::IsQueryByNonEmpty() const
     const Item& rItem = maQueryItems[0];
     return eOp == SC_EQUAL &&
         rItem.meType == ByEmpty &&
-        rItem.maString.isEmpty() &&
+        rItem.maString.getString().isEmpty() &&
         rItem.mfVal == SC_NONEMPTYFIELDS;
 }
 
@@ -178,9 +178,9 @@ utl::TextSearch* ScQueryEntry::GetSearchTextPtr( bool bCaseSens ) const
 {
     if ( !pSearchParam )
     {
-        const OUString& rStr = maQueryItems[0].maString;
+        OUString aStr = maQueryItems[0].maString.getString();
         pSearchParam = new utl::SearchParam(
-            rStr, utl::SearchParam::SRCH_REGEXP, bCaseSens, false, false);
+            aStr, utl::SearchParam::SRCH_REGEXP, bCaseSens, false, false);
         pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
     }
     return pSearchText;

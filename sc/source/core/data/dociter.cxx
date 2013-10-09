@@ -364,7 +364,7 @@ ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDat
         ScQueryEntry::Item& rItem = rItems.front();
         sal_uInt32 nIndex = 0;
         bool bNumber = mpDoc->GetFormatTable()->IsNumberFormat(
-            rItem.maString, nIndex, rItem.mfVal);
+            rItem.maString.getString(), nIndex, rItem.mfVal);
         rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
     }
     nNumFormat = 0; // Initialized in GetNumberFormat
@@ -683,7 +683,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
                 // Equality check first.
                 OUString aMatStr = rMat.GetString(nField, nRow);
                 upperCase(aMatStr);
-                OUString aQueryStr = rEntry.GetQueryItem().maString;
+                OUString aQueryStr = rEntry.GetQueryItem().maString.getString();
                 upperCase(aQueryStr);
                 bool bDone = false;
                 switch (rEntry.eOp)
@@ -1062,7 +1062,7 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
             ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
             sal_uInt32 nIndex = 0;
             bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(
-                rItem.maString, nIndex, rItem.mfVal);
+                rItem.maString.getString(), nIndex, rItem.mfVal);
             rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
         }
     }
@@ -1408,7 +1408,7 @@ bool ScQueryCellIterator::BinarySearch()
         sal_uLong nFormat = pCol->GetNumberFormat(toLogicalPos(aLoPos));
         aCell = sc::toRefCell(aLoPos.first, aLoPos.second);
         ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
-        sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
+        sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
         if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
                 (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
                 (rEntry.eOp == SC_EQUAL && nTmp != 0))
@@ -1559,7 +1559,7 @@ bool ScQueryCellIterator::BinarySearch()
             aCell = sc::toRefCell(aPos.first, aPos.second);
             ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
 
-            nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString);
+            nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
             if (nRes < 0 && bLessEqual)
             {
                 sal_Int32 nTmp = pCollator->compareString( aLastInRangeString,
