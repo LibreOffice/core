@@ -46,7 +46,7 @@ public:
  * --------------------------------------------------*/
 class SW_DLLPUBLIC NoSpaceEdit : public Edit
 {
-    String sForbiddenChars;
+    OUString sForbiddenChars;
 protected:
     virtual void KeyInput( const KeyEvent& );
     virtual void        Modify();
@@ -54,8 +54,8 @@ protected:
 public:
     NoSpaceEdit( Window* pParent );
     virtual ~NoSpaceEdit();
-    void            SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
-    const String&   GetForbiddenChars(){return sForbiddenChars;}
+    void            SetForbiddenChars(const OUString& rSet){sForbiddenChars = rSet;}
+    const OUString& GetForbiddenChars(){return sForbiddenChars;}
 };
 
 /* --------------------------------------------------

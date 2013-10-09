@@ -66,7 +66,7 @@ void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
     if(rEvt.GetCharCode())
     {
         OUString sKey(rEvt.GetCharCode());
-        if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
+        if( -1 != sForbiddenChars.indexOf(sKey))
             bCallParent = false;
     }
     if(bCallParent)
@@ -77,9 +77,9 @@ void NoSpaceEdit::Modify()
 {
     Selection aSel = GetSelection();
     OUString sTemp = GetText();
-    for(sal_uInt16 i = 0; i < sForbiddenChars.Len(); i++)
+    for(sal_uInt16 i = 0; i < sForbiddenChars.getLength(); i++)
     {
-        sTemp = comphelper::string::remove(sTemp, sForbiddenChars.GetChar(i));
+        sTemp = comphelper::string::remove(sTemp, sForbiddenChars[i]);
     }
     sal_Int32 nDiff = GetText().getLength() - sTemp.getLength();
     if(nDiff)

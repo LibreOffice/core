@@ -96,12 +96,12 @@ IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
     // prevent from pasting illegal characters
     sal_uInt16 nLen = sTmp.Len();
     String sMsg;
-    for(sal_uInt16 i = 0; i < pEdit->GetForbiddenChars().Len(); i++)
+    for(sal_uInt16 i = 0; i < pEdit->GetForbiddenChars().getLength(); i++)
     {
         sal_uInt16 nTmpLen = sTmp.Len();
-        sTmp = comphelper::string::remove(sTmp, pEdit->GetForbiddenChars().GetChar(i));
+        sTmp = comphelper::string::remove(sTmp, pEdit->GetForbiddenChars()[i]);
         if(sTmp.Len() != nTmpLen)
-            sMsg += pEdit->GetForbiddenChars().GetChar(i);
+            sMsg += pEdit->GetForbiddenChars()[i];
     }
     if(sTmp.Len() != nLen)
     {
