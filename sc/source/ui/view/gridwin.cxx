@@ -2984,7 +2984,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         if ( !bEdit )
         {
                 // Edit-Zelle mit Spelling-Errors ?
-            if (bMouse && (GetEditUrlOrError(aPosPixel) || bSpellError))
+            if (bMouse && (GetEditUrl(aPosPixel) || bSpellError))
             {
                 //  GetEditUrlOrError hat den Cursor schon bewegt
 
@@ -5114,12 +5114,6 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, sal_Bool bUp )
 
 bool ScGridWindow::GetEditUrl( const Point& rPos,
                                OUString* pName, OUString* pUrl, OUString* pTarget )
-{
-    return GetEditUrlOrError(rPos, pName, pUrl, pTarget);
-}
-
-bool ScGridWindow::GetEditUrlOrError(
-    const Point& rPos, OUString* pName, OUString* pUrl, OUString* pTarget )
 {
     //! nPosX/Y mit uebergeben?
     SCsCOL nPosX;
