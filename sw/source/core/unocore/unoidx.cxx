@@ -2603,7 +2603,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
 {
     SolarMutexGuard aGuard;
 
-    if(nIndex < 0 || nIndex > MAXLEVEL)
+    if(nIndex < 0 || nIndex >= MAXLEVEL)
     {
         throw lang::IndexOutOfBoundsException();
     }
@@ -2646,7 +2646,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 {
     SolarMutexGuard aGuard;
 
-    if(nIndex < 0 || nIndex > MAXLEVEL)
+    if(nIndex < 0 || nIndex >= MAXLEVEL)
     {
         throw lang::IndexOutOfBoundsException();
     }
