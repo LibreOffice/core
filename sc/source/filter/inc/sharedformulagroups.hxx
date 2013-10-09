@@ -12,7 +12,9 @@
 
 #include "address.hxx"
 #include "formulacell.hxx"
+#include "tokenarray.hxx"
 
+#include <boost/ptr_container/ptr_map.hpp>
 #include <boost/unordered_map.hpp>
 
 namespace sc {
@@ -35,11 +37,15 @@ class SharedFormulaGroups
         size_t operator() ( const Key& rKey ) const;
     };
 
-    typedef boost::unordered_map<Key, ScFormulaCellGroupRef, KeyHash> StoreType;
+    typedef boost::ptr_map<size_t, ScTokenArray> StoreType;
+    typedef boost::unordered_map<Key, ScFormulaCellGroupRef, KeyHash> ColStoreType;
+    ColStoreType maColStore;
     StoreType maStore;
 public:
 
+    void set( size_t nSharedId, ScTokenArray* pArray );
     void set( size_t nSharedId, SCCOL nCol, const ScFormulaCellGroupRef& xGroup );
+    const ScTokenArray* get( size_t nSharedId ) const;
     ScFormulaCellGroupRef get( size_t nSharedId, SCCOL nCol ) const;
 };
 

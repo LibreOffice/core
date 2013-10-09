@@ -94,7 +94,7 @@ void FormulaBuffer::applyCellFormula( ScDocument& rDoc, const ApiTokenSequence& 
     ScFormulaCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
     pNewCell->StartListeningTo( &rDoc );
     rDoc.EnsureTable(aCellPos.Tab());
-    rDoc.SetFormulaCell(aCellPos, pNewCell);
+    rDoc.SetGroupFormulaCell(aCellPos, pNewCell);
 }
 
 void FormulaBuffer::applyCellFormulas( const std::vector< TokenAddressItem >& rVector )
@@ -149,7 +149,6 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
         for (; it != itEnd; ++it)
         {
             const table::CellAddress& rAddr = it->maAddress;
-            const table::CellRangeAddress& rRange = it->maRange;
             sal_Int32 nId = it->mnSharedId;
             const OUString& rTokenStr = it->maTokenStr;
 
@@ -159,18 +158,7 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
             aComp.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_OOX);
             ScTokenArray* pArray = aComp.CompileString(rTokenStr);
             if (pArray)
-            {
-                for (sal_Int32 nCol = rRange.StartColumn; nCol <= rRange.EndColumn; ++nCol)
-                {
-                    // Create one group per column, since Calc doesn't support
-                    // shared formulas across multiple columns.
-                    ScFormulaCellGroupRef xNewGroup(new ScFormulaCellGroup);
-                    xNewGroup->mnStart = rRange.StartRow;
-                    xNewGroup->mnLength = 1; // Length gets updated as we go.
-                    xNewGroup->setCode(*pArray);
-                    aGroups.set(nId, nCol, xNewGroup);
-                }
-            }
+                aGroups.set(nId, pArray);
         }
     }
 
@@ -180,18 +168,13 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
         for (; it != itEnd; ++it)
         {
             const table::CellAddress& rAddr = it->maAddress;
-
-            ScFormulaCellGroupRef xGroup = aGroups.get(it->mnSharedId, rAddr.Column);
-            if (!xGroup)
+            const ScTokenArray* pArray = aGroups.get(it->mnSharedId);
+            if (!pArray)
                 continue;
 
             ScAddress aPos;
             ScUnoConversion::FillScAddress(aPos, rAddr);
-            if (xGroup->mnStart == aPos.Row())
-                // Generate code for the top cell only.
-                xGroup->compileCode(rDoc, aPos, formula::FormulaGrammar::GRAM_DEFAULT);
-            ScFormulaCell* pCell = new ScFormulaCell(&rDoc, aPos, xGroup);
-
+            ScFormulaCell* pCell = new ScFormulaCell(&rDoc, aPos, pArray);
             bool bInserted = rDoc.SetGroupFormulaCell(aPos, pCell);
             if (!bInserted)
             {
@@ -200,9 +183,6 @@ void FormulaBuffer::applySharedFormulas( sal_Int32 nTab )
                 continue;
             }
 
-            // Update the length of shared formula span as we go. The length
-            // that Excel gives is not always correct.
-            xGroup->mnLength = aPos.Row() - xGroup->mnStart + 1;
             pCell->StartListeningTo(&rDoc);
 
             if (it->maCellValue.isEmpty())

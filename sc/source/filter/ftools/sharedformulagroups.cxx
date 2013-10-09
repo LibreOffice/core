@@ -31,17 +31,28 @@ size_t SharedFormulaGroups::KeyHash::operator ()( const Key& rKey ) const
     return static_cast<size_t>(nVal);
 }
 
+void SharedFormulaGroups::set( size_t nSharedId, ScTokenArray* pArray )
+{
+    maStore.insert(nSharedId, pArray);
+}
+
 void SharedFormulaGroups::set( size_t nSharedId, SCCOL nCol, const ScFormulaCellGroupRef& xGroup )
 {
     Key aKey(nSharedId, nCol);
-    maStore.insert(StoreType::value_type(aKey, xGroup));
+    maColStore.insert(ColStoreType::value_type(aKey, xGroup));
+}
+
+const ScTokenArray* SharedFormulaGroups::get( size_t nSharedId ) const
+{
+    StoreType::const_iterator it = maStore.find(nSharedId);
+    return it == maStore.end() ? NULL : it->second;
 }
 
 ScFormulaCellGroupRef SharedFormulaGroups::get( size_t nSharedId, SCCOL nCol ) const
 {
     Key aKey(nSharedId, nCol);
-    StoreType::const_iterator it = maStore.find(aKey);
-    return it == maStore.end() ? ScFormulaCellGroupRef() : it->second;
+    ColStoreType::const_iterator it = maColStore.find(aKey);
+    return it == maColStore.end() ? ScFormulaCellGroupRef() : it->second;
 }
 
 }

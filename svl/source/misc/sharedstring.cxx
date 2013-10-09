@@ -118,6 +118,11 @@ bool SharedString::isEmpty() const
     return mpData == NULL || mpData->length == 0;
 }
 
+sal_Int32 SharedString::getLength() const
+{
+    return mpData ? mpData->length : 0;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

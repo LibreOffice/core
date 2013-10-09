@@ -1527,6 +1527,7 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
         if (rNode.type != sc::element_type_formula)
             return;
 
+        cout << "  -- formula block" << endl;
         sc::formula_block::const_iterator it = sc::formula_block::begin(*rNode.data);
         sc::formula_block::const_iterator itEnd = sc::formula_block::end(*rNode.data);
 
@@ -1534,10 +1535,16 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
         {
             const ScFormulaCell& rCell = **it;
             if (!rCell.IsShared())
+            {
+                cout << "  + row " << rCell.aPos.Row() << " not shared" << endl;
                 continue;
+            }
 
             if (rCell.GetSharedTopRow() != rCell.aPos.Row())
+            {
+                cout << "  + row " << rCell.aPos.Row() << " shared with top row " << rCell.GetSharedTopRow() << " with length " << rCell.GetSharedLength() << endl;
                 continue;
+            }
 
             SCROW nLen = rCell.GetSharedLength();
             cout << "  * group: start=" << rCell.aPos.Row() << ", length=" << nLen << endl;

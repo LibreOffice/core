@@ -2702,7 +2702,6 @@ public:
             if (eCompState == ScFormulaCell::NotEqual)
             {
                 // different formula tokens.
-                pCur->SetCellGroup(mxNone);
                 if (xCurGrp)
                 {
                     // Move to the cell after the last cell of the current group.

@@ -41,6 +41,8 @@ public:
 
     bool isValid() const;
     bool isEmpty() const;
+
+    sal_Int32 getLength() const;
 };
 
 }

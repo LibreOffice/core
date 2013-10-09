@@ -2014,7 +2014,7 @@ public:
     bool HasBroadcaster( SCTAB nTab, SCCOL nCol ) const;
 
 #if DEBUG_COLUMN_STORAGE
-    void DumpFormulaGroups( SCTAB nTab, SCCOL nCol ) const;
+    SC_DLLPUBLIC void DumpFormulaGroups( SCTAB nTab, SCCOL nCol ) const;
 #endif
 
 private: // CLOOK-Impl-methods
