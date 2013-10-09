@@ -380,6 +380,8 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
         }
     }
 
+    SolarMutexGuard g;
+
     if( xIStm.is() )
     {
         GraphicDescriptor* pDescriptor = new GraphicDescriptor;
@@ -482,6 +484,8 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             aValue >>= nExtMapMode;
         }
     }
+
+    SolarMutexGuard g;
 
     if( xIStm.is() )
     {
@@ -769,6 +773,8 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
 void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XGraphic >& rxGraphic, const uno::Sequence< beans::PropertyValue >& rMediaProperties )
     throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    SolarMutexGuard g;
+
     SvStream*   pOStm = NULL;
     OUString    aPath;
     sal_Int32   i;
