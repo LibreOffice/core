@@ -130,10 +130,8 @@ void handleCommand(
     const OString& rInPath, const OString& rOutPath,
     const OString& rExecutable)
 {
-    OStringBuffer buf(OString(getenv("SOLARVER")));
-    buf.append('/');
-    buf.append(OString(getenv("INPATH_FOR_BUILD")));
-    buf.append("/bin/");
+    OStringBuffer buf(OString(getenv("WORKDIR_FOR_BUILD")));
+    buf.append("/LinkTarget/Executable/");
     buf.append(rExecutable);
     buf.append(" -i ");
     buf.append(rInPath);
