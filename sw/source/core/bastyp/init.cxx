@@ -831,7 +831,7 @@ CharClass& GetAppCharClass()
 
 void SwCalendarWrapper::LoadDefaultCalendar( sal_uInt16 eLang )
 {
-    sUniqueId.Erase();
+    sUniqueId = "";
     if( eLang != nLang )
         loadDefaultCalendar( LanguageTag::convertToLocale( nLang = eLang ));
 }
