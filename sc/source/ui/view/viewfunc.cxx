@@ -650,9 +650,9 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
             if ( !bSimple && aEngine.GetParagraphCount() == 1 )
             {
-                OUString aParStr = aEngine.GetText( 0 );
+                OUString aParStr(aEngine.GetText( 0 ));
                 if ( aParStr[0] == '=' )
-                    bSimple = sal_True;
+                    bSimple = true;
             }
 
             if (bCommon)                // attribute for tab
