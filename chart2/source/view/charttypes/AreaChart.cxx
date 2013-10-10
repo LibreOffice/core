@@ -29,7 +29,6 @@
 #include "LabelPositionHelper.hxx"
 #include "Clipping.hxx"
 #include "Stripe.hxx"
-#include "PolarLabelPositionHelper.hxx"
 #include "DateHelper.hxx"
 
 #include <com/sun/star/chart2/Symbol.hpp>

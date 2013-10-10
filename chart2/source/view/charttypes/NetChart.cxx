@@ -24,7 +24,6 @@
 #include "macros.hxx"
 #include "ViewDefines.hxx"
 #include "ObjectIdentifier.hxx"
-#include "Splines.hxx"
 #include "ChartTypeHelper.hxx"
 #include "LabelPositionHelper.hxx"
 #include "Clipping.hxx"
@@ -58,7 +57,6 @@ NetChart::NetChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_pMainPosHelper(pPlottingPositionHelper)
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
-        , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel,nDimensionCount) )
         , m_xSeriesTarget(0)
         , m_xTextTarget(0)
 {
@@ -657,7 +655,7 @@ void NetChart::createShapes()
                     if( !bIsVisible )
                         continue;
 
-                    Symbol* pSymbolProperties = m_bSymbol ? (*aSeriesIter)->getSymbolProperties( nIndex ) : 0;
+                    Symbol* pSymbolProperties = (*aSeriesIter)->getSymbolProperties( nIndex );
                     bool bCreateSymbol = pSymbolProperties && (pSymbolProperties->Style != SymbolStyle_NONE);
 
                     if( !bCreateSymbol && !pSeries->getDataPointLabelIfLabel(nIndex) )

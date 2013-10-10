@@ -69,7 +69,6 @@ private: //member
 
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;
-    bool                                m_bSymbol;
 
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes > m_xSeriesTarget;
