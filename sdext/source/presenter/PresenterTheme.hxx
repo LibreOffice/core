@@ -47,7 +47,7 @@ namespace sdext { namespace presenter {
     Example: you want to access the top left bitmap of a pane border
         (simplified code):
 
-    String sStyleName = getPropertyValue("private:resource/pane/Presenter/Pane1");
+    OUString sStyleName = getPropertyValue("private:resource/pane/Presenter/Pane1");
     XBitmap xBitmap = getPropertyValue(sStyleName + "_TopLeftBitmap");
 
     For the offset of the bitmap you can call
