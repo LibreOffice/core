@@ -397,13 +397,32 @@ String impl_getFilter( const String& _rURL )
             ::rtl::OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, sal_True );
             if ( !sType.isEmpty() )
             {
-                css::uno::Reference< css::container::XNameAccess > xTypeCont( xTypeDetection,
-                                                                              css::uno::UNO_QUERY );
-                if ( xTypeCont.is() )
+                // Honor a selected/detected filter.
+                for (sal_Int32 i=0; i < aDescrList.getLength(); ++i)
                 {
-                    ::comphelper::SequenceAsHashMap lTypeProps( xTypeCont->getByName( sType ) );
-                    sFilter = lTypeProps.getUnpackedValueOrDefault(
-                        ::rtl::OUString("PreferredFilter"), ::rtl::OUString() );
+                    if (aDescrList[i].Name == "FilterName")
+                    {
+                        OUString aFilterName;
+                        if (aDescrList[i].Value >>= aFilterName)
+                        {
+                            sFilter = aFilterName;
+                            break;
+                        }
+                    }
+                }
+                if (!sFilter.Len())
+                {
+                    css::uno::Reference< css::container::XNameAccess > xTypeCont( xTypeDetection,
+                            css::uno::UNO_QUERY );
+                    if ( xTypeCont.is() )
+                    {
+                        /* XXX: for fdo#69948 scenario the sequence returned by
+                         * getByName() contains an empty PreferredFilter
+                         * property value (since? expected?) */
+                        ::comphelper::SequenceAsHashMap lTypeProps( xTypeCont->getByName( sType ) );
+                        sFilter = lTypeProps.getUnpackedValueOrDefault(
+                                ::rtl::OUString("PreferredFilter"), ::rtl::OUString() );
+                    }
                 }
             }
         }
