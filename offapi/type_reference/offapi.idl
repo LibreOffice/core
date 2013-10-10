@@ -8945,7 +8945,7 @@ module com {
      [attribute] boolean IsIgnoreControlCharacters;
      [attribute] boolean IsSpellUpperCase;
      [attribute] boolean IsSpellWithDigits;
-     /** @deprecated */ [attribute] boolean IsSpellCapitalization;
+     [attribute] boolean IsSpellCapitalization;
      [attribute] short HyphMinLeading;
      [attribute] short HyphMinTrailing;
      [attribute] short HyphMinWordLength;
