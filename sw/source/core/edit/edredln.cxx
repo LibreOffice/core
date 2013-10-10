@@ -92,7 +92,7 @@ sal_Bool SwEditShell::RejectRedline( sal_uInt16 nPos )
 }
 
 // Set the comment at the Redline
-sal_Bool SwEditShell::SetRedlineComment( const String& rS )
+sal_Bool SwEditShell::SetRedlineComment( const OUString& rS )
 {
     sal_Bool bRet = sal_False;
     FOREACHPAM_START(GetCrsr())

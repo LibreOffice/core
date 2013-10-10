@@ -287,7 +287,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
  * @param bRegExpRplc if <true> replace tabs (\\t) and replace with found string (not \&).
  *                    E.g. [Fnd: "zzz", Repl: "xx\t\\t..&..\&"] --> "xx\t<Tab>..zzz..&"
  */
-sal_Bool SwEditShell::Replace( const String& rNewStr, sal_Bool bRegExpRplc )
+sal_Bool SwEditShell::Replace( const OUString& rNewStr, sal_Bool bRegExpRplc )
 {
     SET_CURR_SHELL( this );
 

@@ -649,16 +649,16 @@ private:
 
     /// Database fields:
     void UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc );
-    void AddUsedDBToList( std::vector<String>& rDBNameList,
-                          const std::vector<String>& rUsedDBNames );
-    void AddUsedDBToList( std::vector<String>& rDBNameList, const String& rDBName );
-    bool IsNameInArray( const std::vector<String>& rOldNames, const String& rName );
-    void GetAllDBNames( std::vector<String>& rAllDBNames );
-    OUString ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
+    void AddUsedDBToList( std::vector<OUString>& rDBNameList,
+                          const std::vector<OUString>& rUsedDBNames );
+    void AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString& rDBName );
+    bool IsNameInArray( const std::vector<OUString>& rOldNames, const OUString& rName );
+    void GetAllDBNames( std::vector<OUString>& rAllDBNames );
+    OUString ReplaceUsedDBs( const std::vector<OUString>& rUsedDBNames,
                              const OUString& rNewName, const OUString& rFormula );
-    std::vector<String>& FindUsedDBs( const std::vector<String>& rAllDBNames,
-                                const String& rFormula,
-                                std::vector<String>& rUsedDBNames );
+    std::vector<OUString>& FindUsedDBs( const std::vector<OUString>& rAllDBNames,
+                                const OUString& rFormula,
+                                std::vector<OUString>& rUsedDBNames );
 
     void InitDrawModel();
     void ReleaseDrawModel();
@@ -1137,13 +1137,13 @@ public:
     */
     void SetNewDBMgr( SwNewDBMgr* pNewMgr )     { mpNewDBMgr = pNewMgr; }
     SwNewDBMgr* GetNewDBMgr() const             { return mpNewDBMgr; }
-    void ChangeDBFields( const std::vector<String>& rOldNames,
-                        const String& rNewName );
+    void ChangeDBFields( const std::vector<OUString>& rOldNames,
+                        const OUString& rNewName );
     void SetInitDBFields(sal_Bool b);
 
     /// Find out which databases are used by fields.
-    void GetAllUsedDB( std::vector<String>& rDBNameList,
-                       const std::vector<String>* pAllDBNames = 0 );
+    void GetAllUsedDB( std::vector<OUString>& rDBNameList,
+                       const std::vector<OUString>* pAllDBNames = 0 );
 
     void ChgDBData( const SwDBData& rNewData );
     SwDBData GetDBData();
@@ -1435,7 +1435,7 @@ public:
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
 
     /// Key for management of index.
-    sal_uInt16 GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) const;
+    sal_uInt16 GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const;
 
     /// Sort table text.
     bool SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions&);

@@ -1579,7 +1579,7 @@ OUString SwView::GetSelectionText( bool bCompleteWrds )
 
 OUString SwView::GetSelectionTextParam( bool bCompleteWrds, bool bEraseTrail )
 {
-    String sReturn;
+    OUString sReturn;
     if( bCompleteWrds && !GetWrtShell().HasSelection() )
         GetWrtShell().SelWrd();
 

@@ -1692,8 +1692,8 @@ void SwMailMergeConfigItem::SetSourceView(SwView* pView)
 
     if(pView)
     {
-        std::vector<String> aDBNameList;
-        std::vector<String> aAllDBNames;
+        std::vector<OUString> aDBNameList;
+        std::vector<OUString> aAllDBNames;
         pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
         if(!aDBNameList.empty())
         {

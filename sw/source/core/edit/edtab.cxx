@@ -404,9 +404,9 @@ sal_Bool SwEditShell::IsTableBoxTextFormat() const
     return !GetDoc()->GetNumberFormatter()->IsNumberFormat( rTxt, nFmt, fVal );
 }
 
-String SwEditShell::GetTableBoxText() const
+OUString SwEditShell::GetTableBoxText() const
 {
-    String sRet;
+    OUString sRet;
     if( !IsTableMode() )
     {
         SwTableBox *pBox = 0;

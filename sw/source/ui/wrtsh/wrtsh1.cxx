@@ -468,10 +468,10 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     {
         if( bStarMath )
         {
-            String aMathData;
+            OUString aMathData;
             GetSelectedText( aMathData, GETSELTXT_PARABRK_TO_ONLYCR );
 
-            if( aMathData.Len() && svt::EmbeddedObjectRef::TryRunningState( xRef.GetObject() ) )
+            if( !aMathData.isEmpty() && svt::EmbeddedObjectRef::TryRunningState( xRef.GetObject() ) )
             {
                 uno::Reference < beans::XPropertySet > xSet( xRef->getComponent(), uno::UNO_QUERY );
                 if ( xSet.is() )

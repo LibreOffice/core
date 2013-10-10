@@ -1662,11 +1662,11 @@ static String lcl_DBDataToString(const SwDBData& rData)
     return sRet;
 }
 
-void SwDoc::GetAllUsedDB( std::vector<String>& rDBNameList,
-                          const std::vector<String>* pAllDBNames )
+void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
+                          const std::vector<OUString>* pAllDBNames )
 {
-    std::vector<String> aUsedDBNames;
-    std::vector<String> aAllDBNames;
+    std::vector<OUString> aUsedDBNames;
+    std::vector<OUString> aAllDBNames;
 
     if( !pAllDBNames )
     {
@@ -1738,7 +1738,7 @@ void SwDoc::GetAllUsedDB( std::vector<String>& rDBNameList,
     }
 }
 
-void SwDoc::GetAllDBNames( std::vector<String>& rAllDBNames )
+void SwDoc::GetAllDBNames( std::vector<OUString>& rAllDBNames )
 {
     SwNewDBMgr* pMgr = GetNewDBMgr();
 
@@ -1754,9 +1754,9 @@ void SwDoc::GetAllDBNames( std::vector<String>& rAllDBNames )
     }
 }
 
-std::vector<String>& SwDoc::FindUsedDBs( const std::vector<String>& rAllDBNames,
-                                    const String& rFormula,
-                                   std::vector<String>& rUsedDBNames )
+std::vector<OUString>& SwDoc::FindUsedDBs( const std::vector<OUString>& rAllDBNames,
+                                   const OUString& rFormula,
+                                   std::vector<OUString>& rUsedDBNames )
 {
     const CharClass& rCC = GetAppCharClass();
     String  sFormula(rFormula);
@@ -1787,44 +1787,44 @@ std::vector<String>& SwDoc::FindUsedDBs( const std::vector<String>& rAllDBNames,
     return rUsedDBNames;
 }
 
-void SwDoc::AddUsedDBToList( std::vector<String>& rDBNameList,
-                             const std::vector<String>& rUsedDBNames )
+void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList,
+                             const std::vector<OUString>& rUsedDBNames )
 {
     for (sal_uInt16 i = 0; i < rUsedDBNames.size(); ++i)
         AddUsedDBToList( rDBNameList, rUsedDBNames[i] );
 }
 
-void SwDoc::AddUsedDBToList( std::vector<String>& rDBNameList, const String& rDBName)
+void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString& rDBName)
 {
-    if( !rDBName.Len() )
+    if( rDBName.isEmpty() )
         return;
 
 #ifdef UNX
     for( sal_uInt16 i = 0; i < rDBNameList.size(); ++i )
-        if( rDBName == rDBNameList[i].GetToken(0) )
+        if( rDBName == rDBNameList[i].getToken(0, ';') )
             return;
 #else
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
     for( sal_uInt16 i = 0; i < rDBNameList.size(); ++i )
-        if( rSCmp.isEqual( rDBName, rDBNameList[i].GetToken(0) ) )
+        if( rSCmp.isEqual( rDBName, rDBNameList[i].getToken(0, ';') ) )
             return;
 #endif
 
     SwDBData aData;
-    aData.sDataSource = rDBName.GetToken(0, DB_DELIM);
-    aData.sCommand = rDBName.GetToken(1, DB_DELIM);
+    aData.sDataSource = rDBName.getToken(0, DB_DELIM);
+    aData.sCommand = rDBName.getToken(1, DB_DELIM);
     aData.nCommandType = -1;
     GetNewDBMgr()->CreateDSData(aData);
     rDBNameList.push_back(rDBName);
 }
 
-void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
-                            const String& rNewName )
+void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
+                            const OUString& rNewName )
 {
     SwDBData aNewDBData;
-    aNewDBData.sDataSource = rNewName.GetToken(0, DB_DELIM);
-    aNewDBData.sCommand = rNewName.GetToken(1, DB_DELIM);
-    aNewDBData.nCommandType = (short)rNewName.GetToken(2, DB_DELIM).ToInt32();
+    aNewDBData.sDataSource = rNewName.getToken(0, DB_DELIM);
+    aNewDBData.sCommand = rNewName.getToken(1, DB_DELIM);
+    aNewDBData.nCommandType = (short)rNewName.getToken(2, DB_DELIM).toInt32();
 
     SwSectionFmts& rArr = GetSections();
     for (sal_uInt16 n = rArr.size(); n; )
@@ -1922,7 +1922,7 @@ inline OUString lcl_CutOffDBCommandType(const OUString& rName)
 
 }
 
-OUString SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
+OUString SwDoc::ReplaceUsedDBs( const std::vector<OUString>& rUsedDBNames,
                                 const OUString& rNewName, const OUString& rFormula )
 {
     const CharClass& rCC = GetAppCharClass();
@@ -1959,7 +1959,7 @@ OUString SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
     return sFormula;
 }
 
-bool SwDoc::IsNameInArray( const std::vector<String>& rArr, const String& rName )
+bool SwDoc::IsNameInArray( const std::vector<OUString>& rArr, const OUString& rName )
 {
 #ifdef UNX
     for( sal_uInt16 i = 0; i < rArr.size(); ++i )

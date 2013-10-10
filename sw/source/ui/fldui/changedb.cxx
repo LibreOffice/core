@@ -99,7 +99,7 @@ void SwChangeDBDlg::FillDBPopup()
     String sTableName(rDBData.sCommand);
     m_pAvailDBTLB->Select(sDBName, sTableName, aEmptyStr);
 
-    std::vector<String> aAllDBNames;
+    std::vector<OUString> aAllDBNames;
 
     Sequence< OUString > aDBNames = xDBContext->getElementNames();
     const OUString* pDBNames = aDBNames.getConstArray();
@@ -109,7 +109,7 @@ void SwChangeDBDlg::FillDBPopup()
         aAllDBNames.push_back(pDBNames[i]);
     }
 
-    std::vector<String> aDBNameList;
+    std::vector<OUString> aDBNameList;
     pSh->GetAllUsedDB( aDBNameList, &aAllDBNames );
 
     size_t nCount = aDBNameList.size();
@@ -188,7 +188,7 @@ void SwChangeDBDlg::Apply()
 
 void SwChangeDBDlg::UpdateFlds()
 {
-    std::vector<String> aDBNames;
+    std::vector<OUString> aDBNames;
     aDBNames.reserve(m_pUsedDBTLB->GetSelectionCount());
     SvTreeListEntry* pEntry = m_pUsedDBTLB->FirstSelected();
 

@@ -85,7 +85,7 @@ struct LinkStruct
 
 typedef std::vector<LinkStruct*> LinkStructArr;
 
-sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) const
+sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const
 {
     rArr.clear();
 

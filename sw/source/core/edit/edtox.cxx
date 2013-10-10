@@ -216,7 +216,7 @@ const SwTOXType* SwEditShell::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
 
 // manage keys for the alphabetical index
 
-sal_uInt16 SwEditShell::GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) const
+sal_uInt16 SwEditShell::GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const
 {
     return GetDoc()->GetTOIKeys( eTyp, rArr );
 }

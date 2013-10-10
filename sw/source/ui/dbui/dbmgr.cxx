@@ -406,13 +406,13 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
     if (IsInitDBFields())
     {
         // with database fields without DB-Name, use DB-Name from Doc
-        std::vector<String> aDBNames;
-        aDBNames.push_back(String());
+        std::vector<OUString> aDBNames;
+        aDBNames.push_back(OUString());
         SwDBData aInsertData = rMergeDesc.rSh.GetDBData();
-        String sDBName = aInsertData.sDataSource;
-        sDBName += DB_DELIM;
-        sDBName += (String)aInsertData.sCommand;
-        sDBName += DB_DELIM;
+        OUString sDBName = aInsertData.sDataSource;
+        sDBName += OUString(DB_DELIM);
+        sDBName += aInsertData.sCommand;
+        sDBName += OUString(DB_DELIM);
         sDBName += OUString::number(aInsertData.nCommandType);
         rMergeDesc.rSh.ChangeDBFields( aDBNames, sDBName);
         SetInitDBFields(sal_False);

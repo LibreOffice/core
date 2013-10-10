@@ -494,7 +494,7 @@ bool SwView::IsValidSelectionForThesaurus() const
 
 OUString SwView::GetThesaurusLookUpText( bool bSelection ) const
 {
-    return bSelection ? m_pWrtShell->GetSelTxt() : m_pWrtShell->GetCurWord();
+    return bSelection ? OUString(m_pWrtShell->GetSelTxt()) : m_pWrtShell->GetCurWord();
 }
 
 void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString &rLookUpText, bool bSelection )

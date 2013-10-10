@@ -70,7 +70,7 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     EndAllAction();
 }
 
-SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
+SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const OUString& rFmtCollName,
         SwTxtFmtColl* pParent)
 {
     SwTxtFmtColl *pColl;

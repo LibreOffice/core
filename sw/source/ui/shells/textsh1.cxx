@@ -1375,7 +1375,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             const sal_Int16 nWordType = ::i18n::WordType::DICTIONARY_WORD;
             bool bWord = rSh.IsInWord( nWordType ) || rSh.IsStartWord( nWordType ) || rSh.IsEndWord( nWordType );
             if (bValid && bWord)
-               aText = rSh.HasSelection()? rSh.GetSelTxt() : rSh.GetCurWord();
+               aText = rSh.HasSelection()? OUString(rSh.GetSelTxt()) : rSh.GetCurWord();
 
             LanguageType nLang = rSh.GetCurLang();
             LanguageTag aLanguageTag( nLang);

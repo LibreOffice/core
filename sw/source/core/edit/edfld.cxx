@@ -113,7 +113,7 @@ SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, sal_Boo
 }
 
 /// get first type with given ResId and name
-SwFieldType* SwEditShell::GetFldType(sal_uInt16 nResId, const String& rName) const
+SwFieldType* SwEditShell::GetFldType(sal_uInt16 nResId, const OUString& rName) const
 {
     return GetDoc()->GetFldType( nResId, rName, false );
 }
@@ -141,7 +141,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
 }
 
 /// delete field type based on its name
-void SwEditShell::RemoveFldType(sal_uInt16 nResId, const String& rStr)
+void SwEditShell::RemoveFldType(sal_uInt16 nResId, const OUString& rStr)
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->size();
@@ -373,14 +373,14 @@ void SwEditShell::ChgDBData(const SwDBData& rNewData)
     GetDoc()->ChgDBData(rNewData);
 }
 
-void SwEditShell::GetAllUsedDB( std::vector<String>& rDBNameList,
-                                std::vector<String>* pAllDBNames )
+void SwEditShell::GetAllUsedDB( std::vector<OUString>& rDBNameList,
+                                std::vector<OUString>* pAllDBNames )
 {
     GetDoc()->GetAllUsedDB( rDBNameList, pAllDBNames );
 }
 
-void SwEditShell::ChangeDBFields( const std::vector<String>& rOldNames,
-                                    const String& rNewName )
+void SwEditShell::ChangeDBFields( const std::vector<OUString>& rOldNames,
+                                  const OUString& rNewName )
 {
     GetDoc()->ChangeDBFields( rOldNames, rNewName );
 }

@@ -113,12 +113,12 @@ SwFrmFmt& SwEditShell::GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const
     return GetDoc()->GetTblFrmFmt(nFmt, bUsed );
 }
 
-String SwEditShell::GetUniqueTblName() const
+OUString SwEditShell::GetUniqueTblName() const
 {
     return GetDoc()->GetUniqueTblName();
 }
 
-SwCharFmt* SwEditShell::MakeCharFmt( const String& rName,
+SwCharFmt* SwEditShell::MakeCharFmt( const OUString& rName,
                                     SwCharFmt* pDerivedFrom )
 {
     if( !pDerivedFrom )
@@ -148,17 +148,17 @@ bool SwEditShell::IsUsed( const SwModify& rModify ) const
     return mpDoc->IsUsed( rModify );
 }
 
-const SwFlyFrmFmt* SwEditShell::FindFlyByName( const String& rName, sal_uInt8 nNdTyp ) const
+const SwFlyFrmFmt* SwEditShell::FindFlyByName( const OUString& rName, sal_uInt8 nNdTyp ) const
 {
     return mpDoc->FindFlyByName(rName, nNdTyp);
 }
 
-SwCharFmt* SwEditShell::FindCharFmtByName( const String& rName ) const
+SwCharFmt* SwEditShell::FindCharFmtByName( const OUString& rName ) const
 {
     return mpDoc->FindCharFmtByName( rName );
 }
 
-SwTxtFmtColl* SwEditShell::FindTxtFmtCollByName( const String& rName ) const
+SwTxtFmtColl* SwEditShell::FindTxtFmtCollByName( const OUString& rName ) const
 {
     return mpDoc->FindTxtFmtCollByName( rName );
 }

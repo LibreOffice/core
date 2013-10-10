@@ -5946,7 +5946,7 @@ void SwEditWin::SetUseInputLanguage( sal_Bool bNew )
 
 OUString SwEditWin::GetSurroundingText() const
 {
-    String sReturn;
+    OUString sReturn;
     SwWrtShell& rSh = m_rView.GetWrtShell();
     if( rSh.HasSelection() && !rSh.IsMultiSelection() && rSh.IsSelOnePara() )
         rSh.GetSelectedText( sReturn, GETSELTXT_PARABRK_TO_ONLYCR  );
@@ -5975,9 +5975,9 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     SwWrtShell& rSh = m_rView.GetWrtShell();
     if( rSh.HasSelection() )
     {
-        String sReturn;
+        OUString sReturn;
         rSh.GetSelectedText( sReturn, GETSELTXT_PARABRK_TO_ONLYCR  );
-        return Selection( 0, sReturn.Len() );
+        return Selection( 0, sReturn.getLength() );
     }
     else
     {

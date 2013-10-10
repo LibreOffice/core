@@ -200,16 +200,16 @@ void SwIndexMarkPane::InitControls()
         m_pTypeDCB->InsertEntry( pSh->GetTOXType(TOX_USER, i)->GetTypeName() );
 
     // read keywords primary
-    std::vector<String> aArr;
+    std::vector<OUString> aArr;
     nCount = pSh->GetTOIKeys( TOI_PRIMARY, aArr );
     std::sort(aArr.begin(), aArr.end());
-    for (std::vector<String>::iterator it = aArr.begin(); it != aArr.end(); ++it)
+    for (std::vector<OUString>::iterator it = aArr.begin(); it != aArr.end(); ++it)
         m_pKey1DCB->InsertEntry( *it );
 
     // read keywords secondary
     nCount = pSh->GetTOIKeys( TOI_SECONDARY, aArr );
     std::sort(aArr.begin(), aArr.end());
-    for (std::vector<String>::iterator it = aArr.begin(); it != aArr.end(); ++it)
+    for (std::vector<OUString>::iterator it = aArr.begin(); it != aArr.end(); ++it)
         m_pKey2DCB->InsertEntry( *it );
 
     UpdateLanguageDependenciesForPhoneticReading();

@@ -320,8 +320,8 @@ sal_Bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShor
     if(!ConvertToNew(*pTmp))
         return sal_False;
 
-    String sOnlyTxt;
-    String* pOnlyTxt = 0;
+    OUString sOnlyTxt;
+    OUString* pOnlyTxt = 0;
     if( bNoAttr )
     {
         if( !pWrtShell->GetSelectedText( sOnlyTxt, GETSELTXT_PARABRK_TO_ONLYCR ))

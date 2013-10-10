@@ -2303,8 +2303,8 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
         SwDBData aData;
         SwWrtShell &rSh = GetWrtShell();
 
-        std::vector<String> aDBNameList;
-        std::vector<String> aAllDBNames;
+        std::vector<OUString> aDBNameList;
+        std::vector<OUString> aAllDBNames;
         rSh.GetAllUsedDB( aDBNameList, &aAllDBNames );
         if(!aDBNameList.empty())
         {

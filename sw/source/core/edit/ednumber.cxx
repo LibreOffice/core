@@ -710,7 +710,7 @@ const SwNumRule* SwEditShell::GetCurNumRule() const
 
 void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
                                  const bool bCreateNewList,
-                                 const String sContinuedListId,
+                                 const OUString sContinuedListId,
                                  const bool bResetIndentAttrs )
 {
     StartAllAction();
@@ -755,7 +755,7 @@ void SwEditShell::ChgNumRuleFmts( const SwNumRule& rRule )
     EndAllAction();
 }
 
-bool SwEditShell::ReplaceNumRule( const String& rOldRule, const String& rNewRule )
+bool SwEditShell::ReplaceNumRule( const OUString& rOldRule, const OUString& rNewRule )
 {
     StartAllAction();
     bool bRet = GetDoc()->ReplaceNumRule( *GetCrsr()->GetPoint(), rOldRule, rNewRule );

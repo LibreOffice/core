@@ -733,7 +733,7 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
         else
             nVal = 0;
 
-        if (bFormat || !rSh.GetDropTxt(1).Len())
+        if (bFormat || rSh.GetDropTxt(1).isEmpty())
             sPreview = GetDefaultString(nVal);
         else
         {

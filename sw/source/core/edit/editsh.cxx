@@ -78,7 +78,7 @@ void SwEditShell::Insert( sal_Unicode c, sal_Bool bOnlyCurrCrsr )
     EndAllAction();
 }
 
-void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
+void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
 {
     StartAllAction();
     {
@@ -98,7 +98,7 @@ void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
 
             if (bSuccess)
             {
-                GetDoc()->UpdateRsid( *_pStartCrsr, rStr.Len() );
+                GetDoc()->UpdateRsid( *_pStartCrsr, rStr.getLength() );
 
                 // Set paragraph rsid if beginning of paragraph
                 SwTxtNode *const pTxtNode =
@@ -160,7 +160,7 @@ void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
     EndAllAction();
 }
 
-void SwEditShell::Overwrite(const String &rStr)
+void SwEditShell::Overwrite(const OUString &rStr)
 {
     StartAllAction();
     FOREACHPAM_START(GetCrsr())
@@ -300,7 +300,7 @@ sal_Bool SwEditShell::GetGrfSize(Size& rSz) const
 }
 
 /// Read again if graphic is not OK and replace old one
-void SwEditShell::ReRead( const String& rGrfName, const String& rFltName,
+void SwEditShell::ReRead( const OUString& rGrfName, const OUString& rFltName,
                     const Graphic* pGraphic, const GraphicObject* pGrfObj )
 {
     StartAllAction();
@@ -378,7 +378,7 @@ svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
     return rOObj.GetObject();
 }
 
-sal_Bool SwEditShell::HasOLEObj( const String &rName ) const
+sal_Bool SwEditShell::HasOLEObj( const OUString &rName ) const
 {
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -396,26 +396,26 @@ sal_Bool SwEditShell::HasOLEObj( const String &rName ) const
     return sal_False;
 }
 
-void SwEditShell::SetChartName( const String &rName )
+void SwEditShell::SetChartName( const OUString &rName )
 {
     SwOLENode *pONd = GetCrsr()->GetNode()->GetOLENode();
     OSL_ENSURE( pONd, "ChartNode not found" );
     pONd->SetChartTblName( rName );
 }
 
-void SwEditShell::UpdateCharts( const String &rName )
+void SwEditShell::UpdateCharts( const OUString &rName )
 {
     GetDoc()->UpdateCharts( rName );
 }
 
 /// change table name
-void SwEditShell::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
+void SwEditShell::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
 {
     GetDoc()->SetTableName( rTblFmt, rNewName );
 }
 
 /// request current word
-String SwEditShell::GetCurWord()
+OUString SwEditShell::GetCurWord()
 {
     const SwPaM& rPaM = *GetCrsr();
     const SwTxtNode* pNd = rPaM.GetNode()->GetTxtNode();
@@ -443,7 +443,7 @@ const SwDocStat& SwEditShell::GetUpdatedDocStat()
 // OPT: eddocinl.cxx
 
 /// get the reference of a given name in the Doc
-const SwFmtRefMark* SwEditShell::GetRefMark( const String& rName ) const
+const SwFmtRefMark* SwEditShell::GetRefMark( const OUString& rName ) const
 {
     return GetDoc()->GetRefMark( rName );
 }
@@ -454,7 +454,7 @@ sal_uInt16 SwEditShell::GetRefMarks( std::vector<OUString>* pStrings ) const
     return GetDoc()->GetRefMarks( pStrings );
 }
 
-String SwEditShell::GetDropTxt( const sal_uInt16 nChars ) const
+OUString SwEditShell::GetDropTxt( const sal_uInt16 nChars ) const
 {
     /*
      * pb: made changes for #i74939#
@@ -500,7 +500,7 @@ String SwEditShell::GetDropTxt( const sal_uInt16 nChars ) const
     return aTxt;
 }
 
-void SwEditShell::ReplaceDropTxt( const String &rStr, SwPaM* pPaM )
+void SwEditShell::ReplaceDropTxt( const OUString &rStr, SwPaM* pPaM )
 {
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
     if( pCrsr->GetPoint()->nNode == pCrsr->GetMark()->nNode &&
@@ -509,7 +509,7 @@ void SwEditShell::ReplaceDropTxt( const String &rStr, SwPaM* pPaM )
         StartAllAction();
 
         const SwNodeIndex& rNd = pCrsr->GetPoint()->nNode;
-        SwPaM aPam( rNd, rStr.Len(), rNd, 0 );
+        SwPaM aPam( rNd, rStr.getLength(), rNd, 0 );
         if( !GetDoc()->Overwrite( aPam, rStr ) )
         {
             OSL_FAIL( "Doc->Overwrite(Str) failed." );
@@ -519,7 +519,7 @@ void SwEditShell::ReplaceDropTxt( const String &rStr, SwPaM* pPaM )
     }
 }
 
-String SwEditShell::Calculate()
+OUString SwEditShell::Calculate()
 {
     String  aFormel;                    // the final formula
     SwPaM   *pPaMLast = (SwPaM*)GetCrsr()->GetNext(),
@@ -970,7 +970,7 @@ SwExtTextInput* SwEditShell::CreateExtTextInput(LanguageType eInputLanguage)
     return pRet;
 }
 
-String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, sal_Bool bInsText )
+OUString SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, sal_Bool bInsText )
 {
     if( !pDel )
     {
@@ -985,7 +985,7 @@ String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, sal_Bool bInsText 
             pDel = GetDoc()->GetExtTextInput();
         }
     }
-    String sRet;
+    OUString sRet;
     if( pDel )
     {
         OUString sTmp;

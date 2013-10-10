@@ -34,7 +34,7 @@
 #include <acorrect.hxx>
 #include <swerror.h>        // SwTextBlocks
 
-void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const String& rStr )
+void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const OUString& rStr )
 {
     StartAllAction();
     GetDoc()->InsertGlossary( rGlossary, rStr, *GetCrsr(), this );
@@ -42,8 +42,8 @@ void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const String& rStr )
 }
 
 /// convert current selection into text block and add to the text block document, incl. templates
-sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, const String& rShortName,
-                                    sal_Bool bSaveRelFile, const String* pOnlyTxt )
+sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName, const OUString& rShortName,
+                                    sal_Bool bSaveRelFile, const OUString* pOnlyTxt )
 {
     SwDoc* pGDoc = rBlks.GetDoc();
 
@@ -77,8 +77,8 @@ sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, 
 }
 
 sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
-                                    const String& rName,
-                                    const String& rShortName,
+                                    const OUString& rName,
+                                    const OUString& rShortName,
                                     sal_Bool bSaveRelFile,
                                     sal_Bool bOnlyTxt )
 {
@@ -119,8 +119,8 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
         if( pCntntNd )
             pCrsr->GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
 
-        String sBuf;
-        if( GetSelectedText( sBuf, GETSELTXT_PARABRK_TO_ONLYCR ) && sBuf.Len() )
+        OUString sBuf;
+        if( GetSelectedText( sBuf, GETSELTXT_PARABRK_TO_ONLYCR ) && !sBuf.isEmpty() )
             nRet = rBlock.PutText( rShortName, rName, sBuf );
     }
     else
@@ -260,7 +260,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
  *
  * @return sal_False if the selected area is too big for being copied into the string buffer
  */
-sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
+sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
 {
     GetCrsr();  // creates all cursors if needed
     if( IsSelOnePara() )
@@ -268,18 +268,15 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
         rBuf = GetSelTxt();
         if( GETSELTXT_PARABRK_TO_BLANK == nHndlParaBrk )
         {
-            xub_StrLen nPos = 0;
-            while( STRING_NOTFOUND !=
-                ( nPos = rBuf.SearchAndReplace( 0x0a, ' ', nPos )) )
-                ;
+            rBuf = rBuf.replaceAll(OUString(0x0a), " ");
         }
         else if( IsSelFullPara() &&
             GETSELTXT_PARABRK_TO_ONLYCR != nHndlParaBrk )
         {
 #ifdef _WIN32
-                rBuf += OUString("\015\012");
+                rBuf += "\015\012";
 #else
-                rBuf += '\012';
+                rBuf += "\012";
 #endif
         }
     }

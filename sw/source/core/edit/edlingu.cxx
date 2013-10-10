@@ -1551,9 +1551,9 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
         bool bIsField, bool bIsHidden)
 {
     svx::SpellPortion aPortion;
-    String sText;
+    OUString sText;
     GetSh()->GetSelectedText( sText );
-    if(sText.Len())
+    if(!sText.isEmpty())
     {
         // in case of redlined deletions the selection of an error is not the same as the _real_ word
         if(xAlt.is())
@@ -1597,9 +1597,9 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
                                 const SpellContentPositions& rDeletedRedlines)
 {
     SwEditShell *pMySh = GetSh();
-    String sText;
+    OUString sText;
     pMySh->GetSelectedText( sText );
-    if(sText.Len())
+    if(!sText.isEmpty())
     {
         if(xAlt.is() || pGrammarResult != 0)
         {
