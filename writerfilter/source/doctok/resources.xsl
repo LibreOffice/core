@@ -63,7 +63,6 @@ using namespace ::std;&#xa;</xsl:text>
       <xsl:apply-templates select="//UML:Class" mode="class"/>
       <xsl:text>
 OUString getDffOptName(sal_uInt32 nPid);
-bool isBooleanDffOpt(sal_uInt32 nId);
 }}
 #endif // INCLUDED_RESOURCES_HXX&#xa;</xsl:text></out>
 </xsl:template>

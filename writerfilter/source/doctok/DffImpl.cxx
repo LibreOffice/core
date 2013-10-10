@@ -338,23 +338,8 @@ DffBSE::get_blip()
 }
 
 // WW8FOPTE
-void WW8FOPTE::resolveNoAuto(Properties & rHandler)
+void WW8FOPTE::resolveNoAuto(Properties &)
 {
-    sal_uInt16 nId = get_pid() + 1;
-    sal_uInt32 nOp = get_op();
-    sal_uInt32 nMask = 2;
-
-    while (isBooleanDffOpt(nId))
-    {
-        WW8Value::Pointer_t pVal = createValue(getDffOptName(nId));
-        rHandler.attribute(NS_rtf::LN_shpname, *pVal);
-
-        pVal = createValue((nOp & nMask) != 0);
-        rHandler.attribute(NS_rtf::LN_shpvalue, *pVal);
-
-        --nId;
-        nMask = nMask << 1;
-    }
 }
 
 // DffFSP
