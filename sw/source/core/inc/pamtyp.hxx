@@ -22,7 +22,6 @@
 
 #include <unotools/textsearch.hxx>
 #include <node.hxx>
-#include <tools/string.hxx>
 
 class SwpHints;
 struct SwPosition;

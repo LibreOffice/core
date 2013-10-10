@@ -20,7 +20,7 @@
 #define SW_TXTFRM_HXX
 
 #include <tools/mempool.hxx>
-#include <tools/string.hxx>
+//#include <tools/string.hxx>
 #include "cntfrm.hxx"
 #include "ndtxt.hxx"
 
