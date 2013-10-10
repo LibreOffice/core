@@ -82,6 +82,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/charttypes/BubbleChart \
     chart2/source/view/charttypes/CandleStickChart \
     chart2/source/view/charttypes/CategoryPositionHelper \
+    chart2/source/view/charttypes/NetChart \
     chart2/source/view/charttypes/PieChart \
     chart2/source/view/charttypes/Splines \
     chart2/source/view/charttypes/VSeriesPlotter \
