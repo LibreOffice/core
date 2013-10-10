@@ -60,9 +60,9 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
 {
     try
     {
-                uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
-                if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( rModName ) )
-                {
+        uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
+        if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( rModName ) )
+        {
             script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
             uno::Any aObject( aModuleInfo.ModuleObject );
             uno::Reference< lang::XServiceInfo > xServiceInfo( aObject, uno::UNO_QUERY );
