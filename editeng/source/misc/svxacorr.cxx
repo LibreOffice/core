@@ -1387,6 +1387,8 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
         }
 
         if( ( IsAutoCorrFlag( nRet = ChgOrdinalNumber ) &&
+                (nInsPos >= 2 ) &&       // fdo#69762 avoid autocorrect for 2e-3
+                ( '-' != cChar || 'E' != toupper(rTxt[nInsPos-1]) || '0' > rTxt[nInsPos-2] || '9' < rTxt[nInsPos-2] ) &&
                 FnChgOrdinalNumber( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
             ( IsAutoCorrFlag( nRet = SetINetAttr ) &&
                 ( ' ' == cChar || '\t' == cChar || 0x0a == cChar || !cChar ) &&
