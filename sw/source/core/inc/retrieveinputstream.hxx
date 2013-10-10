@@ -36,7 +36,7 @@ class SwAsyncRetrieveInputStreamThread : public ObservableThread
 
         static ::rtl::Reference< ObservableThread > createThread(
                     const SwRetrievedInputStreamDataManager::tDataKey nDataKey,
-                    const String& rLinkedURL );
+                    const OUString& rLinkedURL );
 
         virtual ~SwAsyncRetrieveInputStreamThread();
 
@@ -47,10 +47,10 @@ class SwAsyncRetrieveInputStreamThread : public ObservableThread
     private:
 
         SwAsyncRetrieveInputStreamThread( const SwRetrievedInputStreamDataManager::tDataKey nDataKey,
-                                          const String& rLinkedURL );
+                                          const OUString& rLinkedURL );
 
         const SwRetrievedInputStreamDataManager::tDataKey mnDataKey;
-        const String mrLinkedURL;
+        const OUString mrLinkedURL;
 };
 #endif
 

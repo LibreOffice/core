@@ -85,7 +85,7 @@ public:
     virtual ~SwHistoryHint() {}
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) = 0;
     HISTORY_HINT Which() const                     { return m_eWhichId; }
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 };
 
 class SwHistorySetFmt : public SwHistoryHint
@@ -99,7 +99,7 @@ public:
     SwHistorySetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNode );
     virtual ~SwHistorySetFmt();
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 
 };
 
@@ -150,13 +150,13 @@ public:
     virtual ~SwHistorySetTxtFld();
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 
 };
 
 class SwHistorySetRefMark : public SwHistoryHint
 {
-    const String m_RefName;
+    const OUString m_RefName;
     const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
     const xub_StrLen m_nEnd;
@@ -170,7 +170,7 @@ public:
 class SwHistorySetTOXMark : public SwHistoryHint
 {
     SwTOXMark m_TOXMark;
-    const String m_TOXName;
+    const OUString m_TOXName;
     const TOXTypes m_eTOXTypes;
     const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
@@ -206,7 +206,7 @@ class SwHistorySetFootnote : public SwHistoryHint
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const ::std::auto_ptr<SwUndoSaveSection> m_pUndo;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    const String m_FootnoteNumber;
+    const OUString m_FootnoteNumber;
     sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
     const bool m_bEndNote;
@@ -217,7 +217,7 @@ public:
     virtual ~SwHistorySetFootnote();
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 
 };
 
@@ -329,10 +329,10 @@ public:
 class SwHistoryChangeCharFmt : public SwHistoryHint
 {
     const SfxItemSet m_OldSet;
-    const String m_Fmt;
+    const OUString m_Fmt;
 
 public:
-    SwHistoryChangeCharFmt( const SfxItemSet& rSet, const String & sFmt);
+    SwHistoryChangeCharFmt( const SfxItemSet& rSet, const OUString & sFmt);
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
 };

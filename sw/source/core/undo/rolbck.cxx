@@ -55,9 +55,9 @@
 #include <undo.hrc>
 #include <bookmrk.hxx>
 
-String SwHistoryHint::GetDescription() const
+OUString SwHistoryHint::GetDescription() const
 {
-    return String();
+    return OUString();
 }
 
 SwHistorySetFmt::SwHistorySetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNd )
@@ -100,9 +100,9 @@ SwHistorySetFmt::SwHistorySetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNd )
     }
 }
 
-String SwHistorySetFmt::GetDescription() const
+OUString SwHistorySetFmt::GetDescription() const
 {
-    String aResult;
+    OUString aResult;
 
     sal_uInt16 nWhich = m_pAttr->Which();
     switch (nWhich)
@@ -274,7 +274,7 @@ SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, sal_uLong nNodePos )
     m_nPos = *pTxtFld->GetStart();
 }
 
-String SwHistorySetTxtFld::GetDescription() const
+OUString SwHistorySetTxtFld::GetDescription() const
 {
     return m_pFld->GetFld()->GetDescription();
 }
@@ -448,7 +448,7 @@ SwHistorySetFootnote::SwHistorySetFootnote( const SwTxtFtn &rTxtFtn )
             "SwHistorySetFootnote: Footnote without Section" );
 }
 
-String SwHistorySetFootnote::GetDescription() const
+OUString SwHistorySetFootnote::GetDescription() const
 {
     return SW_RES(STR_FOOTNOTE);
 }
@@ -470,7 +470,7 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
         SwFmtFtn aTemp( m_bEndNote );
         SwFmtFtn& rNew = const_cast<SwFmtFtn&>(
                 static_cast<const SwFmtFtn&>(pDoc->GetAttrPool().Put(aTemp)) );
-        if ( m_FootnoteNumber.Len() )
+        if ( !m_FootnoteNumber.isEmpty() )
         {
             rNew.SetNumStr( m_FootnoteNumber );
         }
@@ -947,7 +947,7 @@ void SwHistoryChangeFlyChain::SetInDoc( SwDoc* pDoc, bool )
 
 // -> #i27615#
 SwHistoryChangeCharFmt::SwHistoryChangeCharFmt(const SfxItemSet & rSet,
-                                     const String & sFmt)
+                                     const OUString & sFmt)
     : SwHistoryHint(HSTRY_CHGCHARFMT)
     , m_OldSet(rSet), m_Fmt(sFmt)
 {
