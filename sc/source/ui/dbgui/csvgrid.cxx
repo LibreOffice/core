@@ -1152,15 +1152,16 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
     // #i67432# cut string to avoid edit engine performance problems with very large strings
     sal_Int32 nFirstVisPos = ::std::max( GetColumnPos( nColIndex ), GetFirstVisPos() );
     sal_Int32 nLastVisPos = ::std::min( GetColumnPos( nColIndex + 1 ), GetLastVisPos() );
-    xub_StrLen nStrPos = static_cast< xub_StrLen >( nFirstVisPos - GetColumnPos( nColIndex ) );
-    xub_StrLen nStrLen = static_cast< xub_StrLen >( nLastVisPos - nFirstVisPos + 1 );
+    sal_Int32 nStrPos = nFirstVisPos - GetColumnPos( nColIndex );
+    sal_Int32 nStrLen = nLastVisPos - nFirstVisPos + 1;
     sal_Int32 nStrX = GetX( nFirstVisPos );
     for( size_t nLine = 0; nLine < nLineCount; ++nLine )
     {
         StringVec& rStrVec = maTexts[ nLine ];
         if( (nColIndex < rStrVec.size()) && (rStrVec[ nColIndex ].getLength() > nStrPos) )
         {
-            OUString aText = rStrVec[ nColIndex ].copy( nStrPos, nStrLen );
+            const OUString& rStr = rStrVec[ nColIndex ];
+            OUString aText = rStr.copy( nStrPos, ::std::min( nStrLen, rStr.getLength()) - nStrPos );
             ImplDrawCellText( Point( nStrX, GetY( GetFirstVisLine() + nLine ) ), aText );
         }
     }
