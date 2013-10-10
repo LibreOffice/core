@@ -52,7 +52,7 @@ else
 # specific name like build/lib.linux-x86_64-3.3
 
 python3_cflags = $(ZLIB_CFLAGS)
-ifeq ($(ENABLE_VALGRIND),TRUE)
+ifneq (,$(ENABLE_VALGRIND))
     python3_cflags += $(VALGRIND_CFLAGS)
 endif
 
@@ -60,7 +60,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		$(if $(filter TRUE,$(ENABLE_VALGRIND)),--with-valgrind) \
+		$(if $(ENABLE_VALGRIND),--with-valgrind) \
 		--prefix=/python-inst \
 		$(if $(filter MACOSX,$(OS)),,--with-system-expat) \
 		$(if $(filter AIX,$(OS)), \

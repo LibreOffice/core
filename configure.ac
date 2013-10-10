@@ -5524,17 +5524,18 @@ AC_DEFINE_UNQUOTED(SAL_TYPES_ALIGNMENT8,$SAL_TYPES_ALIGNMENT8)
 dnl ===================================================================
 dnl Check if valgrind headers are available
 dnl ===================================================================
-if test "$cross_compiling" = yes; then
-    ENABLE_VALGRIND=FALSE
-else
+ENABLE_VALGRIND=
+if test "$cross_compiling" != yes; then
     prev_cppflags=$CPPFLAGS
+    # Is VALGRIND_CFLAGS something one is supposed to have in the environment,
+    # or where does it come from?
     CPPFLAGS="$CPPFLAGS $VALGRIND_CFLAGS"
     AC_CHECK_HEADER([valgrind/valgrind.h],
-        [ENABLE_VALGRIND=TRUE],[ENABLE_VALGRIND=FALSE])
+        [ENABLE_VALGRIND=TRUE])
     CPPFLAGS=$prev_cppflags
 fi
 AC_SUBST([ENABLE_VALGRIND])
-if test "$ENABLE_VALGRIND" = FALSE; then
+if test -z "$ENABLE_VALGRIND"; then
     VALGRIND_CFLAGS=
 fi
 AC_SUBST([VALGRIND_CFLAGS])
