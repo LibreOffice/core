@@ -1625,8 +1625,8 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
     sal_uInt16 nSelPos = pBox->GetSelectEntryPos();
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
     {
+        boost::scoped_ptr<SvxBrushItem> xItemHolder;
         SvxBrushItem* pActItem = NULL;
-        bool bDelete = false;
         sal_uInt16 nWhich = 0;
         switch(pTableBck_Impl->nActPos)
         {
@@ -1649,8 +1649,8 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
         pTableBck_Impl->nActPos = nSelPos;
         if(!pActItem)
         {
-            pActItem = new SvxBrushItem(nWhich);
-            bDelete = true;
+            xItemHolder.reset(new SvxBrushItem(nWhich));
+            pActItem = xItemHolder.get();
         }
         if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
         {
@@ -1693,25 +1693,19 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
             nWhich = pTableBck_Impl->nTableWhich;
             break;
         default:
-            if (bDelete)
-            {
-                // The item will be new'ed again below, but that will be the
-                // default item then, not an existing modified one.
-                delete pActItem;
-                bDelete = false;
-            }
+            // The item will be new'ed again below, but that will be the
+            // default item then, not an existing modified one.
+            xItemHolder.reset();
             pActItem = NULL;
             break;
         }
         OUString aUserData = GetUserData();
-        if(!pActItem)
+        if (!pActItem)
         {
-            pActItem = new SvxBrushItem(nWhich);
-            bDelete = true;
+            xItemHolder.reset(new SvxBrushItem(nWhich));
+            pActItem = xItemHolder.get();
         }
         FillControls_Impl(*pActItem, aUserData);
-        if (bDelete)
-            delete pActItem;
     }
     return 0;
 }
