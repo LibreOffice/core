@@ -88,20 +88,20 @@ class SwIoSystem
 public:
     /// find for an internal format name the corresponding filter entry
     SWD_DLLPUBLIC static const SfxFilter*
-        GetFilterOfFormat( const String& rFormat,
+        GetFilterOfFormat( const OUString& rFormat,
             const SfxFilterContainer* pCnt = 0 );
 
     /** Detect for the given file which filter should be used. The filter name
      is returned. If no filter could be found, the name of the ASCII filter
      is returned! */
     SWD_DLLPUBLIC static const SfxFilter*
-        GetFileFilter( const String& rFileName,
-            const String& rPrefFltName,
+        GetFileFilter( const OUString& rFileName,
+            const OUString& rPrefFltName,
             SfxMedium* pMedium = 0 );
 
     /** Detect whether the given file is in the given format.
      For now, only our own filters are supported! */
-    static sal_Bool IsFileFilter(SfxMedium& rMedium, const String& rFmtName);
+    static sal_Bool IsFileFilter(SfxMedium& rMedium, const OUString& rFmtName);
 
     static sal_Bool IsValidStgFilter( SotStorage& , const SfxFilter& );
     static sal_Bool IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
@@ -112,7 +112,7 @@ public:
 
     static const SfxFilter* GetTextFilter( const sal_Char* pBuf, sal_uLong nLen );
 
-    SWD_DLLPUBLIC static const String
+    SWD_DLLPUBLIC static const OUString
         GetSubStorageName( const SfxFilter& rFltr );
 };
 

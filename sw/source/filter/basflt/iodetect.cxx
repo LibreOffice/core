@@ -87,7 +87,7 @@ OUString SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_) const
     return bRet ? sName : OUString();
 }
 
-const String SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
+const OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
 {
     /* bei den StorageFiltern noch den SubStorageNamen setzen */
     const OUString& rUserData = rFltr.GetUserData();
@@ -100,7 +100,7 @@ const String SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
     return OUString();
 }
 
-const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
+const SfxFilter* SwIoSystem::GetFilterOfFormat(const OUString& rFmtNm,
     const SfxFilterContainer* pCnt)
 {
     SfxFilterContainer aCntSw( OUString(sSWRITER) );
@@ -194,7 +194,7 @@ void TerminateBuffer(sal_Char *pBuffer, sal_uLong nBytesRead, sal_uLong nBufferL
 
 /* Feststellen ob das File in dem entsprechenden Format vorliegt. */
 /* Z.z werden nur unsere eigene Filter unterstuetzt               */
-sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const String& rFmtName)
+sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const OUString& rFmtName)
 {
     sal_Bool bRet = sal_False;
 
@@ -269,8 +269,8 @@ sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const String& rFmtName)
 /* returnt !! Der Returnwert ist der interne Filtername!                  */
 /* rPrefFltName ist der interne Name des Filters, den der Benutzer im     */
 /* Open-Dialog eingestellt hat.                                           */
-const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
-    const String& rPrefFltName, SfxMedium* pMedium)
+const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
+    const OUString& rPrefFltName, SfxMedium* pMedium)
 {
     SfxFilterContainer aCntSw( OUString(sSWRITER) );
     SfxFilterContainer aCntSwWeb( OUString(sSWRITERWEB) );
@@ -394,7 +394,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
 
     /* Ok, bis jetzt kein Filter gefunden, also befrage mal die */
     /* "WORD 4 WORD" Filter                                     */
-    if( rFileName.Len() )
+    if( !rFileName.isEmpty() )
     {
         if( pMedium )
             pMedium->CloseInStream();
