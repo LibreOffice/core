@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///ys\u003d",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-10T17:42:04Z",
+      "side": 1,
+      "message": "This can\u0027t be done here in the block of ODFF function names as these functions are not defined in ODFF. We need to use the namespace conventions defined in ODFF, here for example\n\n COM.MICROSOFT.COVARIANCE.P\n COM.MICROSOFT.COVARIANCE.S",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///yQ\u003d",
+        "filename": "include/formula/compiler.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-10T17:42:04Z",
+      "side": 1,
+      "message": "I\u0027d rather prefer if for new functions we used the entire non-abbreviated name, thus SC_OPCODE_COVARIANCE_P and SC_OPCODE_COVARIANCE_S to make it more obvious to the reader.",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///yM\u003d",
+        "filename": "include/formula/opcode.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-10T17:42:04Z",
+      "side": 1,
+      "message": "Also here, make the names more obvious, ocCovarianceP and ocCovarianceS",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///yg\u003d",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-10T17:42:04Z",
+      "side": 1,
+      "message": "I\u0027d rather prefer to not have a default argument value for the new parameter but make it explicit instead, which makes it more obvious in callers.",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///yc\u003d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3892,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-10T17:42:04Z",
+      "side": 1,
+      "message": "What should happen if both, _bPearson and _bSample, are true?",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///yY\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-10T17:42:04Z",
+      "side": 1,
+      "message": "Are these functions really defined in OOXML? I think they aren\u0027t.\nIf Excel stores them with a _xlfn. prefix they are not. They\u0027d then need to go in a block similar to saFuncTable_2013[] but maybe better create a new block saFuncTable_2010[] before that as the functions were introduced in Excel 2010.",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///yU\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-10T17:42:04Z",
+      "side": 1,
+      "message": "Same as in xlformula.cxx, these functions instead should go into a new block saFuncTable2010[] similar to saFuncTable2013[]",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
