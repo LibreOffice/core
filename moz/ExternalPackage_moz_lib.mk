@@ -10,8 +10,6 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,moz_lib,moz_lib))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,moz_lib,lib,\
-	embed_base_s.lib \
-	mozreg_s.lib \
 	nslber32v50.lib \
 	nsldap32v50.lib \
 	xpcom.lib \

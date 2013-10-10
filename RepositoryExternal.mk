@@ -2234,11 +2234,6 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 	xpcom_core \
 )
 
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	embed_base_s \
-	mozreg_s \
-)
-
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DMOZILLA_CLIENT \
 	-DMOZ_REFLOW_PERF \
@@ -2274,8 +2269,8 @@ $(call gb_LinkTarget_add_defs,$(1),\
 endif
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(OUTDIR)/lib/embed_base_s.lib \
-	$(OUTDIR)/lib/mozreg_s.lib \
+	$(call gb_UnpackedTarball_get_dir,moz_lib)/embed_base_s.lib \
+	$(call gb_UnpackedTarball_get_dir,moz_lib)/mozreg_s.lib \
 )
 
 endif # !GCC
