@@ -141,7 +141,7 @@ friend class sc::EditTextIterator;
 
     bool ParseString(
         ScCellValue& rCell,
-        SCROW nRow, SCTAB nTab, const String& rString, formula::FormulaGrammar::AddressConvention eConv,
+        SCROW nRow, SCTAB nTab, const OUString& rString, formula::FormulaGrammar::AddressConvention eConv,
         ScSetStringParam* pParam );
 
 public:
@@ -260,7 +260,7 @@ public:
     bool HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst);
 
     bool SetString(
-        SCROW nRow, SCTAB nTab, const String& rString, formula::FormulaGrammar::AddressConvention eConv,
+        SCROW nRow, SCTAB nTab, const OUString& rString, formula::FormulaGrammar::AddressConvention eConv,
         ScSetStringParam* pParam = NULL );
 
     void SetEditText( SCROW nRow, EditTextObject* pEditText );
