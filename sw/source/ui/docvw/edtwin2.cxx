@@ -89,7 +89,7 @@ static OUString lcl_GetRedlineHelp( const SwRedline& rRedl, sal_Bool bBalloon )
         sBuf.append(rRedl.GetAuthorString());
         sBuf.append(" - ");
         sBuf.append(GetAppLangDateTimeString(rRedl.GetTimeStamp()));
-        if( bBalloon && rRedl.GetComment().Len() )
+        if( bBalloon && !rRedl.GetComment().isEmpty() )
             sBuf.append('\n').append(rRedl.GetComment());
     }
     return sBuf.makeStringAndClear();

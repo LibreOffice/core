@@ -433,7 +433,7 @@ void SwRedlineAcceptDlg::Activate()
         const SwRedline& rRedln = pSh->GetRedline(i);
         pParent = &aRedlineParents[i];
 
-        if(!rRedln.GetComment().Equals(pParent->sComment))
+        if(rRedln.GetComment() != pParent->sComment)
         {
             if (pParent->pTLBParent)
             {

@@ -51,11 +51,11 @@ public:
 
 class SwRedlineExtraData_FmtColl : public SwRedlineExtraData
 {
-    String sFmtNm;
+    OUString sFmtNm;
     SfxItemSet* pSet;
     sal_uInt16 nPoolId;
 public:
-    SwRedlineExtraData_FmtColl( const String& rColl, sal_uInt16 nPoolFmtId,
+    SwRedlineExtraData_FmtColl( const OUString& rColl, sal_uInt16 nPoolFmtId,
                                 const SfxItemSet* pSet = 0 );
     virtual ~SwRedlineExtraData_FmtColl();
     virtual SwRedlineExtraData* CreateNew() const;
@@ -86,7 +86,7 @@ class SW_DLLPUBLIC SwRedlineData
     SwRedlineData* pNext;       // Points to other data.
     SwRedlineExtraData* pExtraData;
 
-    String sComment;
+    OUString sComment;
     DateTime aStamp;
     RedlineType_t eType;
     sal_uInt16 nAuthor, nSeqNo;
@@ -97,7 +97,7 @@ public:
 
     // For sw3io: pNext/pExtraData are taken over.
     SwRedlineData( RedlineType_t eT, sal_uInt16 nAut, const DateTime& rDT,
-                   const String& rCmnt, SwRedlineData* pNxt,
+                   const OUString& rCmnt, SwRedlineData* pNxt,
                     SwRedlineExtraData* pExtraData = 0 );
 
     ~SwRedlineData();
@@ -120,11 +120,11 @@ public:
   { return ((RedlineType_t)(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
     RedlineType_t GetRealType() const { return eType; }
     sal_uInt16 GetAuthor() const                { return nAuthor; }
-    const String& GetComment() const        { return sComment; }
+    const OUString& GetComment() const        { return sComment; }
     const DateTime& GetTimeStamp() const    { return aStamp; }
     inline const SwRedlineData* Next() const{ return pNext; }
 
-    void SetComment( const String& rS )     { sComment = rS; }
+    void SetComment( const OUString& rS )     { sComment = rS; }
     void SetTimeStamp( const DateTime& rDT ) { aStamp = rDT; }
 
     void SetAutoFmtFlag()
@@ -154,7 +154,7 @@ public:
     sal_uInt16 GetSeqNo() const                     { return nSeqNo; }
     void SetSeqNo( sal_uInt16 nNo )                 { nSeqNo = nNo; }
 
-    String GetDescr() const;
+    OUString GetDescr() const;
 };
 
 
@@ -219,10 +219,10 @@ public:
     const DateTime& GetTimeStamp( sal_uInt16 nPos = 0) const;
     RedlineType_t GetRealType( sal_uInt16 nPos = 0 ) const;
     RedlineType_t GetType( sal_uInt16 nPos = 0) const
-  { return ( (RedlineType_t)(GetRealType( nPos ) & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
-    const String& GetComment( sal_uInt16 nPos = 0 ) const;
+        { return ( (RedlineType_t)(GetRealType( nPos ) & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
+    const OUString& GetComment( sal_uInt16 nPos = 0 ) const;
 
-    void SetComment( const String& rS ) { pRedlineData->SetComment( rS ); }
+    void SetComment( const OUString& rS ) { pRedlineData->SetComment( rS ); }
 
     /** ExtraData gets copied, the pointer is therefor not taken over by
      *  the RedLineObject.*/
@@ -270,7 +270,7 @@ public:
 
        @return textual description of the selected redline data element
      */
-    String GetDescr(sal_uInt16 nPos = 0);
+    OUString GetDescr(sal_uInt16 nPos = 0);
 
     int operator==( const SwRedline& ) const;
     int operator<( const SwRedline& ) const;

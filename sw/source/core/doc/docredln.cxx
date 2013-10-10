@@ -2841,7 +2841,7 @@ int SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
     return sal_False;
 }
 
-SwRedlineExtraData_FmtColl::SwRedlineExtraData_FmtColl( const String& rColl,
+SwRedlineExtraData_FmtColl::SwRedlineExtraData_FmtColl( const OUString& rColl,
                                                 sal_uInt16 nPoolFmtId,
                                                 const SfxItemSet* pItemSet )
     : sFmtNm(rColl), pSet(0), nPoolId(nPoolFmtId)
@@ -2997,7 +2997,7 @@ SwRedlineData::SwRedlineData( const SwRedlineData& rCpy, sal_Bool bCpyNext )
 
 // For sw3io: We now own pNext!
 SwRedlineData::SwRedlineData(RedlineType_t eT, sal_uInt16 nAut, const DateTime& rDT,
-    const String& rCmnt, SwRedlineData *pNxt, SwRedlineExtraData* pData)
+    const OUString& rCmnt, SwRedlineData *pNxt, SwRedlineExtraData* pData)
     : pNext(pNxt), pExtraData(pData), sComment(rCmnt), aStamp(rDT),
     eType(eT), nAuthor(nAut), nSeqNo(0)
 {
@@ -3021,9 +3021,9 @@ void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
         pExtraData = 0;
 }
 
-String SwRedlineData::GetDescr() const
+OUString SwRedlineData::GetDescr() const
 {
-    String aResult;
+    OUString aResult;
 
     aResult += String(SW_RES(STR_REDLINE_INSERT + GetType()));
 
@@ -3726,7 +3726,7 @@ RedlineType_t SwRedline::GetRealType( sal_uInt16 nPos ) const
     return GetRedlineData(nPos).eType;
 }
 
-const String& SwRedline::GetComment( sal_uInt16 nPos ) const
+const OUString& SwRedline::GetComment( sal_uInt16 nPos ) const
 {
     return GetRedlineData(nPos).sComment;
 }
@@ -3765,9 +3765,9 @@ const SwRedlineData & SwRedline::GetRedlineData(sal_uInt16 nPos) const
     return *pCur;
 }
 
-String SwRedline::GetDescr(sal_uInt16 nPos)
+OUString SwRedline::GetDescr(sal_uInt16 nPos)
 {
-    String aResult;
+    OUString aResult;
 
     // get description of redline data (e.g.: "insert $1")
     aResult = GetRedlineData(nPos).GetDescr();
