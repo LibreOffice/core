@@ -1462,11 +1462,6 @@ namespace cppcanvas
 
                                 ::basegfx::B2DPolyPolygon polyPolygon (polygon);
 
-                                // n#812793: EMF+ Seems to specify transparent background with Alpha=0xFF !
-                                // Workaround for the problem.
-                                if( isColor && brushIndexOrColor == 0xFFFFFFFF && rectangles == 1 )
-                                    brushIndexOrColor = 0xFFFFFF;
-
                                 EMFPPlusFillPolygon (polyPolygon, rFactoryParms, rState, rCanvas, isColor, brushIndexOrColor);
                             }
                             break;
