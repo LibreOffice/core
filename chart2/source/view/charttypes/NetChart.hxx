@@ -73,8 +73,6 @@ private: //member
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes > m_xSeriesTarget;
     ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::XShapes > m_xErrorBarTarget;
-    ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes > m_xTextTarget;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes > m_xRegressionCurveEquationTarget;
