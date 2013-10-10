@@ -6010,6 +6010,44 @@ AC_SUBST(HAVE_GCC_AVX)
 AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
 
 dnl ===================================================================
+dnl Identify the C++ library
+dnl ===================================================================
+
+AC_MSG_CHECKING([What the C++ library is])
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <utility>
+#ifndef __GLIBCXX__
+foo bar
+#endif
+]])],
+    [CPP_LIBRARY=GLIBCXX
+     cpp_library_name="GNU libstdc++"
+    ],
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <utility>
+#ifndef _LIBCPP_VERSION
+foo bar
+#endif
+]])],
+    [CPP_LIBRARY=LIBCPP
+     cpp_library_name="LLVM libc++"
+    ],
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <utility>
+#ifndef _MSC_VER
+foo bar
+#endif
+]])],
+    [CPP_LIBRARY=MSVCRT
+     cpp_library_name="Microsoft"
+    ],
+    AC_MSG_ERROR([Could not figure out what C++ library this is]))))
+AC_MSG_RESULT([$cpp_library_name])
+AC_LANG_POP([C++])
+AC_SUBST(CPP_LIBRARY)
+
+dnl ===================================================================
 dnl C++11
 dnl ===================================================================
 
@@ -6043,7 +6081,7 @@ elif test "$GCC" = "yes"; then
     fi
 fi
 
-if test "$HAVE_CXX11" = TRUE; then
+if test $CPP_LIBRARY = GLIBCXX -a "$HAVE_CXX11" = TRUE; then
     AC_MSG_CHECKING([whether using C++11 causes libstdc++ 4.7.0/4.7.1 ABI breakage])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
@@ -6144,40 +6182,6 @@ if test "$HAVE_CXX11" = TRUE; then
     AC_LANG_POP([C++])
     CXXFLAGS=$save_CXXFLAGS
 fi
-
-AC_MSG_CHECKING([What the C++ library is])
-AC_LANG_PUSH([C++])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#include <utility>
-#ifndef __GLIBCXX__
-foo bar
-#endif
-]])],
-    [CPP_LIBRARY=GLIBCXX
-     cpp_library_name="GNU libstdc++"
-    ],
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#include <utility>
-#ifndef _LIBCPP_VERSION
-foo bar
-#endif
-]])],
-    [CPP_LIBRARY=LIBCPP
-     cpp_library_name="LLVM libc++"
-    ],
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#include <utility>
-#ifndef _MSC_VER
-foo bar
-#endif
-]])],
-    [CPP_LIBRARY=MSVCRT
-     cpp_library_name="Microsoft"
-    ],
-    AC_MSG_ERROR([Could not figure out what C++ library this is]))))
-AC_MSG_RESULT([$cpp_library_name])
-AC_LANG_POP([C++])
-AC_SUBST(CPP_LIBRARY)
 
 if test "$HAVE_CXX11" = "TRUE"; then
     AC_DEFINE(HAVE_CXX11)
