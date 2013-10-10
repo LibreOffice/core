@@ -51,12 +51,12 @@ published interface XDebugging: com::sun::star::uno::XInterface
 
         @returns the value of the expression as string.
 
-        @param CallStackPos Position in the call stack for which the expression
+        @param nCallStackPos Position in the call stack for which the expression
                     should be evaluated. 0 is the top/actual position in the call
                     in the call stack, 1 the next and so on.
      */
     string eval( [in] string aSourceCode,
-             [in] short CallStackPos );
+             [in] short nCallStackPos );
 
     /** Returns the engine's stack trace of the current execute position. Line break is the delimiter.
      */

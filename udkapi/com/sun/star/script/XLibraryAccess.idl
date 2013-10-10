@@ -61,12 +61,12 @@ published interface XLibraryAccess: com::sun::star::uno::XInterface
 
     /** Get the hole compiled code of a module.
 
-        @param ModuleName the full qualified name of a module.
+        @param aModuleName the full qualified name of a module.
                             (e.g., "UtilLibrary.ModuleDate")
         @return         an empty sequence, if this module is not found or the
                             code is not compiled.
      */
-    sequence<byte> getModuleCode( [in] string ModuleName );
+    sequence<byte> getModuleCode( [in] string aModuleName );
 
     /** get the source code of a function.
      */

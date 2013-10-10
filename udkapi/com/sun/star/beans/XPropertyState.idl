@@ -69,14 +69,14 @@ published interface XPropertyState: com::sun::star::uno::XInterface
         <p>The order of the states is correlating to the order of the
         given property names. </p>
 
-        @param PropertyNames
+        @param aPropertyName
             contains the sequence of property names.
 
         @throws UnknownPropertyException
             if one property does not exist.
      */
     sequence<com::sun::star::beans::PropertyState> getPropertyStates(
-            [in] sequence<string> PropertyNames )
+            [in] sequence<string> aPropertyName )
         raises( com::sun::star::beans::UnknownPropertyException );
 
 
