@@ -951,11 +951,13 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 /*****************************************************************************/
 static void osl_thread_textencoding_init_Impl (void)
 {
+    rtl_TextEncoding defaultEncoding;
+
     /* create thread specific data key */
     pthread_key_create (&(g_thread.m_textencoding.m_key), NULL);
 
     /* determine default text encoding */
-    rtl_TextEncoding defaultEncoding = osl_getTextEncodingFromLocale(NULL);
+    defaultEncoding = osl_getTextEncodingFromLocale(NULL);
     OSL_ASSERT(defaultEncoding != RTL_TEXTENCODING_DONTKNOW);
 
     /*
