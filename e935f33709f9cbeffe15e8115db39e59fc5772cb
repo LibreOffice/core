@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///xc\u003d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-10-10T21:40:25Z",
+      "side": 1,
+      "message": "do not mix xub_Strlen with OUString\nwhen converting, use sal_Int32 instead of xub_Strlen",
+      "revId": "e935f33709f9cbeffe15e8115db39e59fc5772cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///xY\u003d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-10-10T21:40:25Z",
+      "side": 1,
+      "message": "would it be simple to keep the last one rather than the first one\nif(nIndex \u003e 1)\n{\n  iow aString \u003d aString copy(nIndex - 1)\n}\nor something like that... should be cheaper thant repalceAt and less devious :-)",
+      "revId": "e935f33709f9cbeffe15e8115db39e59fc5772cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///xU\u003d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-10-10T21:40:25Z",
+      "side": 1,
+      "message": "fyi: aCorrectedFormula \u003d \"\u003d\" + aComp.GetCorrectedFormula() should work too... iirc.",
+      "revId": "e935f33709f9cbeffe15e8115db39e59fc5772cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
