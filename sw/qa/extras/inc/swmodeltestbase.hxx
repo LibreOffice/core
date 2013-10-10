@@ -161,18 +161,18 @@ protected:
     }
 
     template< typename T >
-    T getProperty( uno::Any obj, const OUString& name ) const
+    T getProperty( const uno::Any& obj, const OUString& name ) const
     {
-        uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY_THROW );
         T data = T();
         properties->getPropertyValue( name ) >>= data;
         return data;
     }
 
     template< typename T >
-    T getProperty( uno::Reference< uno::XInterface > obj, const OUString& name ) const
+    T getProperty( const uno::Reference< uno::XInterface >& obj, const OUString& name ) const
     {
-        uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY_THROW );
         T data = T();
         properties->getPropertyValue( name ) >>= data;
         return data;
