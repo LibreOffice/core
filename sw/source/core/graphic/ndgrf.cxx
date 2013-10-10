@@ -57,7 +57,7 @@ using namespace com::sun::star;
 
 SwGrfNode::SwGrfNode(
         const SwNodeIndex & rWhere,
-        const String& rGrfName, const String& rFltName,
+        const OUString& rGrfName, const OUString& rFltName,
         const Graphic* pGraphic,
         SwGrfFmtColl *pGrfColl,
         SwAttrSet* pAutoAttr ) :
@@ -101,7 +101,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
  * @note Does not read/open the image itself!
  */
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
-                      const String& rGrfName, const String& rFltName,
+                      const OUString& rGrfName, const OUString& rFltName,
                       SwGrfFmtColl *pGrfColl,
                       SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
@@ -134,7 +134,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 }
 
 sal_Bool SwGrfNode::ReRead(
-    const String& rGrfName, const OUString& rFltName,
+    const OUString& rGrfName, const OUString& rFltName,
     const Graphic* pGraphic, const GraphicObject* pGrfObj,
     sal_Bool bNewGrf )
 {
@@ -142,7 +142,7 @@ sal_Bool SwGrfNode::ReRead(
     delete mpReplacementGraphic;
     mpReplacementGraphic = 0;
 
-    OSL_ENSURE( pGraphic || pGrfObj || rGrfName.Len(),
+    OSL_ENSURE( pGraphic || pGrfObj || !rGrfName.isEmpty(),
             "GraphicNode without a name, Graphic or GraphicObject" );
 
     // with name
@@ -150,7 +150,7 @@ sal_Bool SwGrfNode::ReRead(
     {
         OSL_ENSURE( !bInSwapIn, "ReRead: I am still in SwapIn" );
 
-        if( rGrfName.Len() )
+        if( !rGrfName.isEmpty() )
         {
             // Note: If there is DDE in the FltName, than it is a DDE-linked graphic
             OUString sCmd( rGrfName );
@@ -220,7 +220,7 @@ sal_Bool SwGrfNode::ReRead(
             bSetTwipSize = sal_False;
         }
     }
-    else if( pGraphic && !rGrfName.Len() )
+    else if( pGraphic && rGrfName.isEmpty() )
     {
         // Old stream must be deleted before the new one is set.
         if( HasStreamName() )
@@ -230,7 +230,7 @@ sal_Bool SwGrfNode::ReRead(
         onGraphicChanged();
         bReadGrf = sal_True;
     }
-    else if( pGrfObj && !rGrfName.Len() )
+    else if( pGrfObj && rGrfName.isEmpty() )
     {
         // Old stream must be deleted before the new one is set.
         if( HasStreamName() )
@@ -384,7 +384,7 @@ void SwGrfNode::onGraphicChanged()
     }
 }
 
-void SwGrfNode::SetGraphic(const Graphic& rGraphic, const String& rLink)
+void SwGrfNode::SetGraphic(const Graphic& rGraphic, const OUString& rLink)
 {
     maGrfObj.SetGraphic(rGraphic, rLink);
     onGraphicChanged();
@@ -843,13 +843,13 @@ void SwGrfNode::DelStreamName()
     A substorage with the specified name will be opened readonly. If the provided
     name is empty the root storage will be returned.
 */
-uno::Reference< embed::XStorage > SwGrfNode::_GetDocSubstorageOrRoot( const String& aStgName ) const
+uno::Reference< embed::XStorage > SwGrfNode::_GetDocSubstorageOrRoot( const OUString& aStgName ) const
 {
     uno::Reference < embed::XStorage > refStor =
         const_cast<SwGrfNode*>(this)->GetDoc()->GetDocStorage();
     OSL_ENSURE( refStor.is(), "Kein Storage am Doc" );
 
-    if ( aStgName.Len() )
+    if ( !aStgName.isEmpty() )
     {
         if( refStor.is() )
             return refStor->openStorageElement( aStgName, embed::ElementModes::READ );

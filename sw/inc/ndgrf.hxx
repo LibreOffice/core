@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     GraphicObject *mpReplacementGraphic;
     ::sfx2::SvBaseLinkRef refLink;       ///< If graphics only as link then pointer is set.
     Size nGrfSize;
-    String aLowResGrf;                   ///< HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
+    OUString aLowResGrf;                   ///< HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
     sal_Bool bTransparentFlagValid  :1;
     sal_Bool bInSwapIn              :1;
 
@@ -58,13 +58,13 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     sal_Bool mbIsStreamReadOnly;
 
     SwGrfNode( const SwNodeIndex& rWhere,
-               const String& rGrfName, const String& rFltName,
+               const OUString& rGrfName, const OUString& rFltName,
                const Graphic* pGraphic,
                SwGrfFmtColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
     ///< Ctor for reading (SW/G) without graphics.
     SwGrfNode( const SwNodeIndex& rWhere,
-               const String& rGrfName, const String& rFltName,
+               const OUString& rGrfName, const OUString& rFltName,
                SwGrfFmtColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
     SwGrfNode( const SwNodeIndex& rWhere,
@@ -118,7 +118,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
         reference to substorage or the root storage
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > _GetDocSubstorageOrRoot(
-                                                const String& aStgName ) const;
+                                                const OUString& aStgName ) const;
 
 public:
     virtual ~SwGrfNode();
@@ -128,7 +128,7 @@ public:
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
 
     /// isolated only way to set GraphicObject to allow more actions when doing so
-    void SetGraphic(const Graphic& rGraphic, const String& rLink);
+    void SetGraphic(const Graphic& rGraphic, const OUString& rLink);
 
     /// wrappers for non-const calls at GraphicObject
     void ReleaseGraphicFromCache() { maGrfObj.ReleaseFromCache(); }
@@ -165,7 +165,7 @@ public:
 
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */
-    sal_Bool ReRead( const String& rGrfName, const OUString& rFltName,
+    sal_Bool ReRead( const OUString& rGrfName, const OUString& rFltName,
                  const Graphic* pGraphic = 0,
                  const GraphicObject* pGrfObj = 0,
                  sal_Bool bModify = sal_True );
@@ -174,7 +174,7 @@ public:
     /// Remove graphic in order to free memory.
     short SwapOut();
     /// Access to storage stream-name.
-    void SetStreamName( const String& r ) { maGrfObj.SetUserData( r ); }
+    void SetStreamName( const OUString& r ) { maGrfObj.SetUserData( r ); }
     /// Is this node selected by any shell?
     sal_Bool IsSelected() const;
 
