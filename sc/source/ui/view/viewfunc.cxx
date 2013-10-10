@@ -660,6 +660,17 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 //! remove common attributes from EditEngine?
             }
         }
+        else
+        {       //fdo#69762 detect if the unformated string is a number
+                aString = ScEditUtil::GetSpaceDelimitedString(aEngine);
+                sal_uInt32 nTmpFormat=0;
+                double fTmpValue=0.0;
+                if(pDoc->GetFormatTable()->IsNumberFormat(aString,nTmpFormat,fTmpValue))
+                {       //then treat it as a number
+                        EnterData(nCol,nRow,nTab,aString,&rData);
+                        return;
+                }
+        }
 
         // #i97726# always get text for "repeat" of undo action
         aString = ScEditUtil::GetSpaceDelimitedString(aEngine);
