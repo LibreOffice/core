@@ -143,8 +143,8 @@ DBG_NAME(OConnectionHelper)
 
     void OConnectionHelper::implUpdateURLDependentStates() const
     {
-        OSL_PRECOND( m_pAdminDialog, "OConnectionHelper::implUpdateURLDependentStates: no admin dialog!" );
-        if ( !m_pAdminDialog )
+        OSL_PRECOND( m_pAdminDialog && m_pCollection, "OConnectionHelper::implUpdateURLDependentStates: no admin dialog!" );
+        if ( !m_pAdminDialog || !m_pCollection )
             return;
 
         if ( m_pCollection->isFileSystemBased(m_eType) )
