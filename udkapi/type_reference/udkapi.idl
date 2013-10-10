@@ -600,7 +600,7 @@ module com {
     };
     published interface XIdentifierAccess {
      interface ::com::sun::star::container::XElementAccess;
-     any getByIdentifier([in] long Identifierr) raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
+     any getByIdentifier([in] long Identifier) raises (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException);
      sequence< long > getIdentifiers();
     };
     published interface XIdentifierReplace {
