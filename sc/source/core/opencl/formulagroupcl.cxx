@@ -22,7 +22,9 @@
 #include <map>
 #include <iostream>
 #include <sstream>
-//#include <openssl/md5.h>
+#ifdef MD5_KERNEL
+#include <openssl/md5.h>
+#endif
 #include <memory>
 using namespace formula;
 
@@ -494,7 +496,7 @@ public:
     /// Produce kernel hash
     std::string GetMD5(void)
     {
-    /*
+#ifdef MD5_KERNEL
         if(mKernelSignature.empty()) {
             std::stringstream md5s;
             // Compute MD5SUM of kernel body to obtain the name
@@ -506,8 +508,10 @@ public:
             }
             mKernelSignature = md5s.str();
         }
-        return mKernelSignature;*/
+        return mKernelSignature;
+#else
         return "";
+#endif
     }
     /// Create program, build, and create kerenl
     /// TODO cache results based on kernel body hash
