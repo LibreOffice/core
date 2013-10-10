@@ -137,7 +137,7 @@ public:
     SwNumRuleItem()
         : SfxStringItem( RES_PARATR_NUMRULE, aEmptyStr ) {}
 
-    SwNumRuleItem( const String& rRuleName )
+    SwNumRuleItem( const OUString& rRuleName )
         : SfxStringItem( RES_PARATR_NUMRULE, rRuleName ) {}
 
     SwNumRuleItem( const SwNumRuleItem& rCpy )
