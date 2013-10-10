@@ -2945,8 +2945,9 @@ if test $_os = iOS; then
     # Just add -fvisibility=hidden to CC and CXX directly so that the 3rd-party libs also
     # get compiled with it, to avoid ld warnings when linking all that together into one
     # executable.
+    # Also, use libc++.
     CC="`xcrun -find clang` -arch $arch -fvisibility=hidden -isysroot $sysroot $lto $versionmin"
-    CXX="`xcrun -find clang++` -arch $arch -fvisibility=hidden -isysroot $sysroot $lto $versionmin"
+    CXX="`xcrun -find clang++` -arch $arch -fvisibility=hidden -stdlib=libc++ -isysroot $sysroot $lto $versionmin"
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
     NM=`xcrun -find nm`
