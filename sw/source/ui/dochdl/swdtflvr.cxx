@@ -1002,7 +1002,7 @@ int SwTransferable::CalculateAndCopy()
         return 0;
     SwWait aWait( *pWrtShell->GetView().GetDocShell(), sal_True );
 
-    String aStr( pWrtShell->Calculate() );
+    OUString aStr( pWrtShell->Calculate() );
 
     pClpDocFac = new SwDocFac;
     SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);

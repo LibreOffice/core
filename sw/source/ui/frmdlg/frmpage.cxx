@@ -434,10 +434,10 @@ static size_t lcl_GetFrmMapCount( const FrmMap* pMap)
 }
 
 static void lcl_InsertVectors(ListBox& rBox,
-    const ::std::vector< String >& rPrev, const ::std::vector< String >& rThis,
-    const ::std::vector< String >& rNext, const ::std::vector< String >& rRemain)
+    const ::std::vector< OUString >& rPrev, const ::std::vector< OUString >& rThis,
+    const ::std::vector< OUString >& rNext, const ::std::vector< OUString >& rRemain)
 {
-    ::std::vector< String >::const_iterator aIt;
+    ::std::vector< OUString >::const_iterator aIt;
     sal_uInt16 nEntry = 0;
     for(aIt = rPrev.begin(); aIt != rPrev.end(); ++aIt)
         nEntry = rBox.InsertEntry(*aIt);
@@ -2930,10 +2930,10 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
                 sNextChain = pFlyFmt->GetName();
             }
             //determine chainable frames
-            ::std::vector< String > aPrevPageFrames;
-            ::std::vector< String > aThisPageFrames;
-            ::std::vector< String > aNextPageFrames;
-            ::std::vector< String > aRemainFrames;
+            ::std::vector< OUString > aPrevPageFrames;
+            ::std::vector< OUString > aThisPageFrames;
+            ::std::vector< OUString > aNextPageFrames;
+            ::std::vector< OUString > aRemainFrames;
             pWrtSh->GetConnectableFrmFmts(*pFmt, sNextChain, sal_False,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
             lcl_InsertVectors(*pPrevLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
@@ -3109,10 +3109,10 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
         for(sal_uInt16 nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
             rChangeLB.RemoveEntry(nEntry - 1);
         //determine chainable frames
-        ::std::vector< String > aPrevPageFrames;
-        ::std::vector< String > aThisPageFrames;
-        ::std::vector< String > aNextPageFrames;
-        ::std::vector< String > aRemainFrames;
+        ::std::vector< OUString > aPrevPageFrames;
+        ::std::vector< OUString > aThisPageFrames;
+        ::std::vector< OUString > aNextPageFrames;
+        ::std::vector< OUString > aRemainFrames;
         pWrtSh->GetConnectableFrmFmts(*pFmt, bNextBox ? sCurrentNextChain : sCurrentPrevChain, !bNextBox,
                         aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
         lcl_InsertVectors(rChangeLB,

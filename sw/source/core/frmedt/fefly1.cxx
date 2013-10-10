@@ -765,7 +765,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
 #*  Methode     :  Insert
 #***********************************************************************/
 
-void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
+void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                         const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet,
@@ -1504,7 +1504,7 @@ SwFrmFmt* SwFEShell::WizzardGetFly()
     return 0;
 }
 
-void SwFEShell::SetFlyName( const String& rName )
+void SwFEShell::SetFlyName( const OUString& rName )
 {
     SwLayoutFrm *pFly = FindFlyFrm();
     if( pFly )
@@ -1539,7 +1539,7 @@ const uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
 }
 
 
-String SwFEShell::GetUniqueGrfName() const
+OUString SwFEShell::GetUniqueGrfName() const
 {
     return GetDoc()->GetUniqueGrfName();
 }
@@ -1833,7 +1833,7 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection( SdrObject** ppObj ) const
 }
 
 
-sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltName,
+sal_Bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltName,
                                 const Graphic* pGrf )
 {
     SET_CURR_SHELL( this );
@@ -1908,12 +1908,12 @@ static sal_uInt16 SwFmtGetPageNum(const SwFlyFrmFmt * pFmt)
 #include <fmtcnct.hxx>
 
 void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
-                                      const String & rReference,
+                                      const OUString & rReference,
                                       sal_Bool bSuccessors,
-                                      ::std::vector< String > & aPrevPageVec,
-                                      ::std::vector< String > & aThisPageVec,
-                                      ::std::vector< String > & aNextPageVec,
-                                      ::std::vector< String > & aRestVec)
+                                      ::std::vector< OUString > & aPrevPageVec,
+                                      ::std::vector< OUString > & aThisPageVec,
+                                      ::std::vector< OUString > & aNextPageVec,
+                                      ::std::vector< OUString > & aRestVec)
 {
     StartAction();
 

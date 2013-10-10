@@ -183,7 +183,7 @@ sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
 }
 
 
-sal_Bool SwFEShell::GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, String &rDisplay) const
+sal_Bool SwFEShell::GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay) const
 {
     const SwFrm *pPage;
 
@@ -442,10 +442,10 @@ sal_uInt16 SwFEShell::GetPageOffset() const
 |*
 *************************************************************************/
 
-void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
-                             const String& rNumberSeparator,
+void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rTxt, const OUString& rSeparator,
+                             const OUString& rNumberSeparator,
                              const sal_Bool bBefore, const sal_uInt16 nId,
-                             const String& rCharacterStyle,
+                             const OUString& rCharacterStyle,
                              const sal_Bool bCpyBrd )
 {
     // get node index of cursor position, SwDoc can do everything else itself

@@ -83,13 +83,13 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
 }
 
 
-String SwFEShell::GetUniqueOLEName() const
+OUString SwFEShell::GetUniqueOLEName() const
 {
     return GetDoc()->GetUniqueOLEName();
 }
 
 
-String SwFEShell::GetUniqueFrameName() const
+OUString SwFEShell::GetUniqueFrameName() const
 {
     return GetDoc()->GetUniqueFrameName();
 }

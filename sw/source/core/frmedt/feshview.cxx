@@ -2373,7 +2373,7 @@ void SwFEShell::MirrorSelection( bool bHorizontal )
 
 // jump to named frame (Graphic/OLE)
 
-sal_Bool SwFEShell::GotoFly( const String& rName, FlyCntType eType, sal_Bool bSelFrm )
+sal_Bool SwFEShell::GotoFly( const OUString& rName, FlyCntType eType, sal_Bool bSelFrm )
 {
     sal_Bool bRet = sal_False;
     static sal_uInt8 const aChkArr[ 4 ] = {

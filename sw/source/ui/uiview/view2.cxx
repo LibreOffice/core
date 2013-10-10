@@ -1243,7 +1243,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             case FN_STAT_PAGE: {
                 // number of pages, log. page number
                 sal_uInt16 nPage, nLogPage;
-                String sDisplay;
+                OUString sDisplay;
                 rShell.GetPageNumber( -1, rShell.IsCrsrVisible(), nPage, nLogPage, sDisplay );
                 rSet.Put( SfxStringItem( FN_STAT_PAGE,
                             GetPageStr( nPage, nLogPage, sDisplay) ));

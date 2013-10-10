@@ -94,7 +94,7 @@ namespace
 
     sal_uInt16 lcl_GetCurrentPage(SwWrtShell *pSh)
     {
-        String sDummy;
+        OUString sDummy;
         sal_uInt16 nPhyNum=1, nVirtNum=1;
         pSh->GetPageNumber(0, true, nPhyNum, nVirtNum, sDummy);
         return nPhyNum;

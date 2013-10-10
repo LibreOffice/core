@@ -219,7 +219,7 @@ public:
     virtual ~SwFEShell();
 
     /// Copy and Paste methods for internal clipboard.
-    sal_Bool Copy( SwDoc* pClpDoc, const String* pNewClpTxt = 0 );
+    sal_Bool Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt = 0 );
     sal_Bool Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames = sal_False);
 
     /// Paste some pages into another doc - used in mailmerge.
@@ -414,19 +414,19 @@ public:
     void SetCheckForOLEInCaption( sal_Bool bFlag )  { bCheckForOLEInCaption = bFlag; }
 
     /// Set name at selected FlyFrame.
-    void SetFlyName( const String& rName );
+    void SetFlyName( const OUString& rName );
     OUString GetFlyName() const;
 
     /// get reference to OLE object (if there is one) for selected FlyFrame
     const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef() const;
 
     /// Created unique name for frame.
-    String GetUniqueGrfName() const;
-    String GetUniqueOLEName() const;
-    String GetUniqueFrameName() const;
+    OUString GetUniqueGrfName() const;
+    OUString GetUniqueOLEName() const;
+    OUString GetUniqueFrameName() const;
 
     /// Jump to named Fly (graphic/OLE).
-    sal_Bool GotoFly( const String& rName, FlyCntType eType = FLYCNTTYPE_ALL,
+    sal_Bool GotoFly( const OUString& rName, FlyCntType eType = FLYCNTTYPE_ALL,
                     sal_Bool bSelFrame = sal_True );
 
     /// Position is a graphic with URL?
@@ -515,8 +515,8 @@ public:
     sal_Bool IsAlignPossible() const;
     void SetCalcFieldValueHdl(Outliner* pOutliner);
 
-    void Insert(const String& rGrfName,
-                const String& rFltName,
+    void Insert(const OUString& rGrfName,
+                const OUString& rFltName,
                 const Graphic* pGraphic = 0,
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
@@ -526,7 +526,7 @@ public:
     void InsertDrawObj( SdrObject& rDrawObj,
                         const Point& rInsertPosition );
 
-    sal_Bool ReplaceSdrObj( const String& rGrfName, const String& rFltName,
+    sal_Bool ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltName,
                         const Graphic* pGrf = 0 );
 
     // --> #i972#
@@ -554,7 +554,7 @@ public:
     sal_uInt16 GetCurPageDesc( const sal_Bool bCalcFrm = sal_True ) const;
     sal_uInt16 GetMousePageDesc( const Point &rPt ) const;
     sal_uInt16 GetPageDescCnt() const;
-    SwPageDesc* FindPageDescByName( const String& rName,
+    SwPageDesc* FindPageDescByName( const OUString& rName,
                                     sal_Bool bGetFromPool = sal_False,
                                     sal_uInt16* pPos = 0 );
 
@@ -572,7 +572,7 @@ public:
 
     /// Page number of the page containing Point, O if no page.
     sal_uInt16 GetPageNumber( const Point &rPoint ) const;
-    sal_Bool GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, String &rDisplay ) const;
+    sal_Bool GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
 
     SwFlyFrmFmt* InsertObject( const svt::EmbeddedObjectRef&,
                 const SfxItemSet* pFlyAttrSet = 0,
@@ -694,10 +694,10 @@ public:
     void SetPageOffset( sal_uInt16 nOffset );   ///< Changes last page offset.
     sal_uInt16 GetPageOffset() const;           ///< @return last page offset.
 
-    void InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
-                      const String& rNumberSeparator,
+    void InsertLabel( const SwLabelType eType, const OUString &rTxt, const OUString& rSeparator,
+                      const OUString& rNumberSeparator,
                       const sal_Bool bBefore, const sal_uInt16 nId,
-                      const String& rCharacterStyle,
+                      const OUString& rCharacterStyle,
                       const sal_Bool bCpyBrd = sal_True );
 
     /// The ruler needs some information too.
@@ -718,11 +718,11 @@ public:
     long GetSectionWidth( SwFmt& rFmt ) const;
 
     void GetConnectableFrmFmts
-    (SwFrmFmt & rFmt, const String & rReference, sal_Bool bSuccessors,
-     ::std::vector< String > & aPrevPageVec,
-     ::std::vector< String > & aThisPageVec,
-     ::std::vector< String > & aNextPageVec,
-     ::std::vector< String > & aRestVec);
+    (SwFrmFmt & rFmt, const OUString & rReference, sal_Bool bSuccessors,
+     ::std::vector< OUString > & aPrevPageVec,
+     ::std::vector< OUString > & aThisPageVec,
+     ::std::vector< OUString > & aNextPageVec,
+     ::std::vector< OUString > & aRestVec);
 
     /** SwFEShell::GetShapeBackgrd
 

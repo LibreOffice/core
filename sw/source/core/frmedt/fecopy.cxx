@@ -82,7 +82,7 @@ using namespace ::com::sun::star;
 |*
 |*************************************************************************/
 
-sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
+sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
 {
     OSL_ENSURE( pClpDoc, "kein Clipboard-Dokument"  );
 

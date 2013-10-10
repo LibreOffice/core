@@ -680,7 +680,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
             sal_uInt16 nPhNum = 1;
             sal_uInt16 nVirtNum = 1;
 
-            String sDisplay;
+            OUString sDisplay;
             if(m_pWrtShell->GetPageNumber( aPos.Y(), sal_False, nPhNum, nVirtNum, sDisplay ))
             {
                 // The end scrollhandler invalidate the FN_STAT_PAGE,

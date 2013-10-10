@@ -145,7 +145,7 @@ const SwPageDesc& SwFEShell::GetPageDesc( sal_uInt16 i ) const
     return GetDoc()->GetPageDesc( i );
 }
 
-SwPageDesc* SwFEShell::FindPageDescByName( const String& rName,
+SwPageDesc* SwFEShell::FindPageDescByName( const OUString& rName,
                                             sal_Bool bGetFromPool,
                                             sal_uInt16* pPos )
 {
