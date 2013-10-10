@@ -104,7 +104,7 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
     return bRet;
 }
 
-sal_Bool SwServerObject::SetData( const String & ,
+sal_Bool SwServerObject::SetData( const OUString & ,
                     const uno::Any& )
 {
     // set new data into the "server" -> at first nothing to do

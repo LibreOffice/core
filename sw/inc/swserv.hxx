@@ -64,7 +64,7 @@ public:
                             const OUString & rMimeType,
                             sal_Bool bSynchron = sal_False );
 
-    sal_Bool SetData( const String & rMimeType,
+    sal_Bool SetData( const OUString & rMimeType,
                     const ::com::sun::star::uno::Any& rData );
 
     virtual void SendDataChanged( const SwPosition& rPos );
