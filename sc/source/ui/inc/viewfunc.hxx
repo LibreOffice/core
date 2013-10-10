@@ -157,59 +157,59 @@ public:
     void            CreateNames( sal_uInt16 nFlags );
     sal_uInt16          GetCreateNameFlags();
     void            InsertNameList();
-    sal_Bool            InsertName( const OUString& rName, const OUString& rSymbol,
+    bool            InsertName( const OUString& rName, const OUString& rSymbol,
                                 const OUString& rType );
 
     void            ApplyAttributes( const SfxItemSet* pDialogSet, const SfxItemSet* pOldSet,
-                                        sal_Bool bRecord = sal_True );
+                                        bool bRecord = true );
     void            ApplyAttr( const SfxPoolItem& rAttrItem );
     void            ApplySelectionPattern( const ScPatternAttr& rAttr,
-                                            sal_Bool bRecord = sal_True,
-                                            sal_Bool bCursorOnly = false );
+                                            bool bRecord = true,
+                                            bool bCursorOnly = false );
     void            ApplyPatternLines( const ScPatternAttr& rAttr,
                                         const SvxBoxItem* pNewOuter,
-                                        const SvxBoxInfoItem* pNewInner, sal_Bool bRecord = sal_True );
+                                        const SvxBoxInfoItem* pNewInner, bool bRecord = true );
 
     void            ApplyUserItemSet( const SfxItemSet& rItemSet );
 
     const SfxStyleSheet*    GetStyleSheetFromMarked();
     void                    SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet,
-                                                        sal_Bool bRecord = sal_True );
+                                                        bool bRecord = true );
     void                    RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
     void                    UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
 
     void            SetNumberFormat( short nFormatType, sal_uLong nAdd = 0 );
     void            SetNumFmtByStr( const OUString& rCode );
-    void            ChangeNumFmtDecimals( sal_Bool bIncrement );
+    void            ChangeNumFmtDecimals( bool bIncrement );
 
     void            SetValidation( const ScValidationData& rNew );
 
-    void            ChangeIndent( sal_Bool bIncrement );
+    void            ChangeIndent( bool bIncrement );
 
     void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
     void            Protect( SCTAB nTab, const OUString& rPassword );
-    sal_Bool            Unprotect( SCTAB nTab, const OUString& rPassword );
+    bool            Unprotect( SCTAB nTab, const OUString& rPassword );
 
-    void            DeleteCells( DelCellCmd eCmd, sal_Bool bRecord = sal_True );
-    sal_Bool            InsertCells( InsCellCmd eCmd, sal_Bool bRecord = sal_True, sal_Bool bPartOfPaste = false );
-    void            DeleteMulti( sal_Bool bRows, sal_Bool bRecord = sal_True );
+    void            DeleteCells( DelCellCmd eCmd, bool bRecord = true );
+    bool            InsertCells( InsCellCmd eCmd, bool bRecord = true, bool bPartOfPaste = false );
+    void            DeleteMulti( bool bRows, bool bRecord = true );
 
-    void            DeleteContents( sal_uInt16 nFlags, sal_Bool bRecord = sal_True );
+    void            DeleteContents( sal_uInt16 nFlags, bool bRecord = true );
 
-    void            SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
+    void            SetWidthOrHeight( bool bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
                                         ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                        sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True,
+                                        bool bRecord = true, bool bPaint = true,
                                         ScMarkData* pMarkData = NULL );
-    void            SetMarkedWidthOrHeight( sal_Bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips,
-                                        sal_Bool bRecord = sal_True, sal_Bool bPaint = sal_True );
+    void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips,
+                                        bool bRecord = true, bool bPaint = true );
     void            ShowMarkedColumns( sal_Bool bShow, sal_Bool bRecord = sal_True );
     void            ShowMarkedRows( sal_Bool bShow, sal_Bool bRecord = sal_True );
 
     sal_Bool            AdjustBlockHeight( sal_Bool bPaint = sal_True, ScMarkData* pMarkData = NULL );
     sal_Bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, sal_Bool bPaint = sal_True );
 
-    void            ModifyCellSize( ScDirection eDir, sal_Bool bOptimal );
+    void            ModifyCellSize( ScDirection eDir, bool bOptimal );
 
     SC_DLLPUBLIC void           InsertPageBreak( sal_Bool bColumn, sal_Bool bRecord = sal_True,
                                         const ScAddress* pPos = NULL,
@@ -324,7 +324,7 @@ public:
     void            EditNote();
 
     void            ForgetFormatArea()      { bFormatValid = false; }
-    sal_Bool            SelectionEditable( bool* pOnlyNotBecauseOfMatrix = NULL );
+    bool            SelectionEditable( bool* pOnlyNotBecauseOfMatrix = NULL );
 
         SC_DLLPUBLIC void                   DataFormPutData( SCROW nCurrentRow ,
                                                              SCROW nStartRow , SCCOL nStartCol ,
@@ -355,12 +355,12 @@ private:
 
     void            PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMarkData& rMark);
 
-    sal_uInt16          GetOptimalColWidth( SCCOL nCol, SCTAB nTab, sal_Bool bFormula );
+    sal_uInt16          GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula );
 
     void            StartFormatArea();
-    sal_Bool            TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bAttrChanged );
+    bool            TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrChanged );
     void            DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                        sal_Bool bAttrChanged, sal_Bool bAddUndo );
+                                        bool bAttrChanged, bool bAddUndo );
 
     void            MarkAndJumpToRanges(const ScRangeList& rRanges);
 };
