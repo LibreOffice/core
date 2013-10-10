@@ -205,7 +205,6 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
 
     if( nOriginalDepth > 8 )
     {
-        const uno::Sequence<sal_Int8> aComponentTags( xBmp->getComponentTags() );
         uno::Sequence<rendering::ARGBColor> aARGBColor(1);
         uno::Sequence<rendering::RGBColor>  aRGBColor(1);
         uno::Sequence<sal_Int8> aPixel3, aPixel4;
