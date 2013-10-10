@@ -473,11 +473,11 @@ SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
 }
 
 SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
-                                    const String& rSubExp )
+                                    const OUString& rSubExp )
     : SwClient( pColl ), nCondition( nMasterCond )
 {
     if( USRFLD_EXPRESSION & nCondition )
-        aSubCondition.pFldExpression = new String( rSubExp );
+        aSubCondition.pFldExpression = new OUString( rSubExp );
     else
         aSubCondition.nSubCondition = 0;
 }
@@ -486,7 +486,7 @@ SwCollCondition::SwCollCondition( const SwCollCondition& rCopy )
     : SwClient( (SwModify*)rCopy.GetRegisteredIn() ), nCondition( rCopy.nCondition )
 {
     if( USRFLD_EXPRESSION & rCopy.nCondition )
-        aSubCondition.pFldExpression = new String( *rCopy.GetFldExpression() );
+        aSubCondition.pFldExpression = new OUString( *rCopy.GetFldExpression() );
     else
         aSubCondition.nSubCondition = rCopy.aSubCondition.nSubCondition;
 }
@@ -510,7 +510,7 @@ int SwCollCondition::operator==( const SwCollCondition& rCmp ) const
         if( USRFLD_EXPRESSION & nCondition )
         {
             // The SubCondition contains the expression for the UserField
-            const String* pTmp = aSubCondition.pFldExpression;
+            const OUString* pTmp = aSubCondition.pFldExpression;
             if( !pTmp )
                 pTmp = rCmp.aSubCondition.pFldExpression;
             if( pTmp )

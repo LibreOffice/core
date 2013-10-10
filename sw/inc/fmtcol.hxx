@@ -190,7 +190,7 @@ class SW_DLLPUBLIC SwCollCondition : public SwClient
     union
     {
         sal_uLong nSubCondition;
-        String* pFldExpression;
+        OUString* pFldExpression;
     } aSubCondition;
 
 public:
@@ -199,7 +199,7 @@ public:
     SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
                     sal_uLong nSubCond = 0 );
     SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
-                    const String& rSubExp );
+                    const OUString& rSubExp );
     virtual ~SwCollCondition();
 
     /// @@@ public copy ctor, but no copy assignment?
@@ -215,7 +215,7 @@ public:
 
     sal_uLong GetCondition() const      { return nCondition; }
     sal_uLong GetSubCondition() const   { return aSubCondition.nSubCondition; }
-    const String* GetFldExpression() const
+    const OUString* GetFldExpression() const
                                     { return aSubCondition.pFldExpression; }
 
     void SetCondition( sal_uLong nCond, sal_uLong nSubCond );
@@ -235,7 +235,7 @@ protected:
                             SwTxtFmtColl* pDerFrom = 0 )
         : SwTxtFmtColl( rPool, pFmtCollName, pDerFrom, RES_CONDTXTFMTCOLL )
     {}
-    SwConditionTxtFmtColl( SwAttrPool& rPool, const String &rFmtCollName,
+    SwConditionTxtFmtColl( SwAttrPool& rPool, const OUString &rFmtCollName,
                             SwTxtFmtColl* pDerFrom = 0 )
         : SwTxtFmtColl( rPool, rFmtCollName, pDerFrom, RES_CONDTXTFMTCOLL )
     {}
