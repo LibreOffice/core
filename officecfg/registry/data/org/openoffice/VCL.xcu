@@ -1830,7 +1830,7 @@
 
       <node oor:name="calibri" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hiraginomarugothicpronw3;hiraginomarugothicprow3</value>
+          <value>carlito;hiraginomarugothicpronw3;hiraginomarugothicprow3</value>
         </prop>
         <prop oor:name="FontType"><value>Normal,SansSerif</value></prop>
       </node>
@@ -1840,7 +1840,7 @@
 
       <node oor:name="cambria" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>applelisung</value>
+          <value>caladea;applelisung</value>
         </prop>
         <prop oor:name="FontType"><value>Normal,Serif</value></prop>
       </node>
