@@ -354,11 +354,15 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
         }
         else if ( nFormat == SOT_FORMAT_GDIMETAFILE )
         {
-            InitDocShell();
+            // #i123405# Do not limit visual size calculation for metafile creation.
+            // It seems unlikely that removing the limitation causes problems since
+            // metafile creation means that no real pixel device in the needed size is
+            // created.
+            InitDocShell(false);
+
             SfxObjectShell* pEmbObj = aDocShellRef;
 
             // like SvEmbeddedTransfer::GetData:
-
             GDIMetaFile     aMtf;
             VirtualDevice   aVDev;
             MapMode         aMapMode( pEmbObj->GetMapUnit() );
@@ -380,7 +384,8 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
         else if ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
         {
             //TODO/LATER: differentiate between formats?!
-            InitDocShell();         // set aDocShellRef
+            // #i123405# Do limit visual size calculation to PageSize
+            InitDocShell(true);         // set aDocShellRef
 
             SfxObjectShell* pEmbObj = aDocShellRef;
             bOK = SetObject( pEmbObj, SCTRANS_TYPE_EMBOBJ, rFlavor );
@@ -582,8 +587,10 @@ ScMarkData ScTransferObj::GetSourceMarkData()
 //
 //  initialize aDocShellRef with a live document from the ClipDoc
 //
+// #i123405# added parameter to allow size calculation without limitation
+// to PageSize, e.g. used for Metafile creation for clipboard.
 
-void ScTransferObj::InitDocShell()
+void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 {
     if ( !aDocShellRef.Is() )
     {
@@ -700,14 +707,14 @@ void ScTransferObj::InitDocShell()
         for (nCol=nStartX; nCol<=nEndX; nCol++)
         {
             long nAdd = pDestDoc->GetColWidth( nCol, 0 );
-            if ( nSizeX+nAdd > aPaperSize.Width() && nSizeX )   // above limit?
+            if ( bLimitToPageSize && nSizeX+nAdd > aPaperSize.Width() && nSizeX )   // above limit?
                 break;
             nSizeX += nAdd;
         }
         for (SCROW nRow=nStartY; nRow<=nEndY; nRow++)
         {
             long nAdd = pDestDoc->GetRowHeight( nRow, 0 );
-            if ( nSizeY+nAdd > aPaperSize.Height() && nSizeY )  // above limit?
+            if ( bLimitToPageSize && nSizeY+nAdd > aPaperSize.Height() && nSizeY )  // above limit?
                 break;
             nSizeY += nAdd;
         }

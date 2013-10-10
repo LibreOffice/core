@@ -56,7 +56,9 @@ private:
     bool                            bHasFiltered;       // if has filtered rows
     bool                            bUseInApi;          // to recognize clipboard content copied from API
 
-    void        InitDocShell();
+    // #i123405# added parameter to allow size calculation without limitation
+    // to PageSize, e.g. used for Metafile creation for clipboard.
+    void        InitDocShell(bool bLimitToPageSize);
     static void StripRefs( ScDocument* pDoc, SCCOL nStartX, SCROW nStartY,
                             SCCOL nEndX, SCROW nEndY,
                             ScDocument* pDestDoc=0,
