@@ -1069,7 +1069,7 @@ SwErgoSumPortion *SwTxtFormatter::NewErgoSumPortion( SwTxtFormatInfo &rInf ) con
     SwParaPortion *pPara = pQuoFrm->GetPara();
     if( pPara )
         pPara->SetErgoSumNum( aPage );
-    if( !rFtnInfo.aErgoSum.Len() )
+    if( rFtnInfo.aErgoSum.isEmpty() )
         return 0;
     SwErgoSumPortion *pErgo = new SwErgoSumPortion( rFtnInfo.aErgoSum,
                                 lcl_GetPageNumber( pQuoPage ) );
@@ -1112,7 +1112,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 
     SwTxtFormatInfo &rInf = GetInfo();
     const SwFtnInfo &rFtnInfo = pFrm->GetNode()->GetDoc()->GetFtnInfo();
-    if( !rFtnInfo.aQuoVadis.Len() )
+    if( rFtnInfo.aQuoVadis.isEmpty() )
         return nOffset;
 
     // Ein Wort zu QuoVadis/ErgoSum:

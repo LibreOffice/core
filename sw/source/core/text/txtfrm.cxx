@@ -1451,13 +1451,13 @@ static bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHint e
     const SwFtnInfo &rFtnInfo = pFrm->GetNode()->GetDoc()->GetFtnInfo();
     if( ePrep == PREP_ERGOSUM )
     {
-        if( !rFtnInfo.aErgoSum.Len() )
+        if( rFtnInfo.aErgoSum.isEmpty() )
             return false;;
         rPos = pFrm->GetOfst();
     }
     else
     {
-        if( !rFtnInfo.aQuoVadis.Len() )
+        if( rFtnInfo.aQuoVadis.isEmpty() )
             return false;
         if( pFrm->HasFollow() )
             rPos = pFrm->GetFollow()->GetOfst();

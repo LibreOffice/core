@@ -90,8 +90,8 @@ class SW_DLLPUBLIC SwFtnInfo: public SwEndNoteInfo
     using SwEndNoteInfo::operator ==;
 
 public:
-    String    aQuoVadis;
-    String    aErgoSum;
+    OUString  aQuoVadis;
+    OUString  aErgoSum;
     SwFtnPos  ePos;
     SwFtnNum  eNum;
 

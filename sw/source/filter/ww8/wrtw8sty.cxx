@@ -1174,8 +1174,8 @@ void WW8_WrPlcSepx::WriteFtnEndTxt( WW8Export& rWrt, sal_uLong nCpStt )
 {
     sal_uInt8 nInfoFlags = 0;
     const SwFtnInfo& rInfo = rWrt.pDoc->GetFtnInfo();
-    if( rInfo.aErgoSum.Len() )  nInfoFlags |= 0x02;
-    if( rInfo.aQuoVadis.Len() ) nInfoFlags |= 0x04;
+    if( !rInfo.aErgoSum.isEmpty() )  nInfoFlags |= 0x02;
+    if( !rInfo.aQuoVadis.isEmpty() ) nInfoFlags |= 0x04;
 
     sal_uInt8 nEmptyStt = rWrt.bWrtWW8 ? 0 : 6;
     if( nInfoFlags )

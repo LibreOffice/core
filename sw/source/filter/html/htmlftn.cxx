@@ -564,12 +564,12 @@ void SwHTMLWriter::OutFootEndNoteInfo()
             aParts[5] = "C";
             nParts = 6;
         }
-        if( rInfo.aQuoVadis.Len() > 0 )
+        if( !rInfo.aQuoVadis.isEmpty() )
         {
             aParts[6] = rInfo.aQuoVadis;
             nParts = 7;
         }
-        if( rInfo.aErgoSum.Len() > 0 )
+        if( !rInfo.aErgoSum.isEmpty() )
         {
             aParts[7] = rInfo.aErgoSum;
             nParts = 8;
