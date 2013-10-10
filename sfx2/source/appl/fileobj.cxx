@@ -399,13 +399,28 @@ OUString impl_getFilter( const OUString& _rURL )
             OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, sal_True );
             if ( !sType.isEmpty() )
             {
-                css::uno::Reference< css::container::XNameAccess > xTypeCont( xTypeDetection,
-                                                                              css::uno::UNO_QUERY );
-                if ( xTypeCont.is() )
+                // Honor a selected/detected filter.
+                for (sal_Int32 i=0; i < aDescrList.getLength(); ++i)
                 {
-                    ::comphelper::SequenceAsHashMap lTypeProps( xTypeCont->getByName( sType ) );
-                    sFilter = lTypeProps.getUnpackedValueOrDefault(
-                        OUString("PreferredFilter"), OUString() );
+                    if (aDescrList[i].Name == "FilterName")
+                    {
+                        if (aDescrList[i].Value >>= sFilter)
+                            break;
+                    }
+                }
+                if (sFilter.isEmpty())
+                {
+                    css::uno::Reference< css::container::XNameAccess > xTypeCont( xTypeDetection,
+                            css::uno::UNO_QUERY );
+                    if ( xTypeCont.is() )
+                    {
+                        /* XXX: for fdo#69948 scenario the sequence returned by
+                         * getByName() contains an empty PreferredFilter
+                         * property value (since? expected?) */
+                        ::comphelper::SequenceAsHashMap lTypeProps( xTypeCont->getByName( sType ) );
+                        sFilter = lTypeProps.getUnpackedValueOrDefault(
+                                OUString("PreferredFilter"), OUString() );
+                    }
                 }
             }
         }
