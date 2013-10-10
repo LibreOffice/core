@@ -2903,30 +2903,17 @@ if test $_os = iOS; then
 
     AC_MSG_CHECKING([what iOS SDK to use])
 
-    xcode_developer=`xcode-select -print-path`
-
     if test "$enable_ios_simulator" = yes; then
         platform=iPhoneSimulator
-        versionmin=-mmacosx-version-min=10.7
-        if test "$BITNESS_OVERRIDE" = 64; then
-            arch=x86_64
-        else
-            arch=i386
-        fi
     else
         platform=iPhoneOS
-        if test "$BITNESS_OVERRIDE" = 64; then
-            arch=arm64
-            versionmin=-miphoneos-version-min=7.0
-        else
-            arch=armv7
-            versionmin=-miphoneos-version-min=5.0
-        fi
     fi
 
-    pref_sdk_ver=6.1
-    for I in 6.1 6.0 7.0; do
-        t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$I.sdk
+    xcode_developer=`xcode-select -print-path`
+
+    pref_sdk_ver=7.0
+    for sdkver in 7.0 6.1 6.0; do
+        t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$sdkver.sdk
         if test -d $t; then
             sysroot=$t
             break
@@ -2939,6 +2926,34 @@ if test $_os = iOS; then
 
     AC_MSG_RESULT($sysroot)
 
+    if test "$enable_ios_simulator" = yes; then
+        if test "$BITNESS_OVERRIDE" = 64; then
+            arch=x86_64
+            versionmin=-mios-simulator-version-min=7.0
+        else
+            arch=i386
+            case $sdkver in
+            7.*)
+                versionmin=-mios-simulator-version-min=5.0
+                ;;
+            *)
+                versionmin=-mmacosx-version-min=10.7
+                ;;
+            esac
+        fi
+    else
+        platform=iPhoneOS
+        if test "$BITNESS_OVERRIDE" = 64; then
+            arch=arm64
+            versionmin=-miphoneos-version-min=7.0
+        else
+            arch=armv7
+            versionmin=-miphoneos-version-min=5.0
+        fi
+    fi
+
+    # LTO is not really recommended for iOS builds,
+    # the link time will be astronomical
     if test "$ENABLE_LTO" = TRUE; then
         lto=-flto
     fi
