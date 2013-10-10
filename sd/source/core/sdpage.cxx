@@ -868,7 +868,7 @@ const char* const PresObjKindVector[] = {
     "PRESOBJ_MEDIA", "PRESOBJ_MAX"
 };
 
-void getPresObjProp( SdPage rPage, const char* sObjKind, const char* sPageKind, double presObjPropValue[] )
+void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPageKind, double presObjPropValue[] )
 {
     bool bNoObjectFound = true;  //used to break from outer loop
 
