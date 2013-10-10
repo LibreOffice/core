@@ -171,9 +171,9 @@ public:
                                     { return LeftRight( sal_False, nCnt, nMode, bAllowVisual, bSkipHidden, sal_False ); }
     sal_Bool GoNextCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( sal_True, nCnt ); }
     sal_Bool GoPrevCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( sal_False, nCnt ); }
-    virtual bool GotoTable( const String& rName );
-    sal_Bool GotoTblBox( const String& rName );
-    bool GotoRegion( const String& rName );
+    virtual bool GotoTable( const OUString& rName );
+    sal_Bool GotoTblBox( const OUString& rName );
+    bool GotoRegion( const OUString& rName );
     sal_Bool GotoFtnAnchor();
     sal_Bool GotoFtnTxt();
     sal_Bool GotoNextFtnAnchor();
@@ -274,7 +274,7 @@ public:
 
     virtual sal_Bool LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         sal_Bool bAllowVisual, sal_Bool bSkipHidden, sal_Bool bInsertCrsr );
-    virtual bool GotoTable( const String& rName );
+    virtual bool GotoTable( const OUString& rName );
 
     void InsertBox( const SwTableBox& rTblBox );
     void DeleteBox(size_t nPos);

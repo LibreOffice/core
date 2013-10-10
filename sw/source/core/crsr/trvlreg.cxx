@@ -230,7 +230,7 @@ sal_Bool SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPos
     return bRet;
 }
 
-bool SwCursor::GotoRegion( const String& rName )
+bool SwCursor::GotoRegion( const OUString& rName )
 {
     bool bRet = false;
     const SwSectionFmts& rFmts = GetDoc()->GetSections();

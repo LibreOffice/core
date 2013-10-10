@@ -1905,12 +1905,12 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
     return !IsInProtectTable( sal_True );
 }
 
-bool SwTableCursor::GotoTable( const String& )
+bool SwTableCursor::GotoTable( const OUString& )
 {
     return false; // invalid action
 }
 
-bool SwCursor::GotoTable( const String& rName )
+bool SwCursor::GotoTable( const OUString& rName )
 {
     bool bRet = false;
     if ( !HasMark() )
@@ -1929,7 +1929,7 @@ bool SwCursor::GotoTable( const String& rName )
     return bRet;
 }
 
-sal_Bool SwCursor::GotoTblBox( const String& rName )
+sal_Bool SwCursor::GotoTblBox( const OUString& rName )
 {
     sal_Bool bRet = sal_False;
     const SwTableNode* pTblNd = GetPoint()->nNode.GetNode().FindTableNode();
