@@ -705,38 +705,66 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
             case ocAverage:
             case ocCount:
                 {
-
                     assert(cur->Children.size() == p->GetByte());
-                    FormulaToken *pChild = cur->Children[0]->CurrentFormula;
-                    assert(pChild);
-                    const formula::DoubleVectorRefToken* pChildDVR =
-                        dynamic_cast<const formula::DoubleVectorRefToken *>(pChild);
-                    assert(pChildDVR);
-                    if (pChildDVR->IsStartFixed() && pChildDVR->IsEndFixed())
+                    mKernelSrc<<"(";
+                    for (unsigned i = 0; i < cur->Children.size(); i ++)
                     {
-                        // Reduce to a scalar variable
-                        mSyms.DeclRefArg<DynamicKernelReducedArgument>(cur)
-                            ->GenDeclRef(mKernelSrc);
-                    } else {
-                        // Reduce to an array on CPU
-                        // for code like avg($A1:$A2, $B$3:$B$4) Generate code like
-                        //  double custom_sliding_dotproduct(int nWindow,
-                        //                                   __global *sliding) {
-                        //    double tmp = 0.0;
-                        //    for (int i = 0; i < nWindow; i++) {
-                        //        tmp += sliding[i+get_global_id(0)];
-                        //    }
-                        //    return tmp;
-                        //  }
-                        //  __kernel DynamicKernel (..., __global double *windows,
-                        //                          double fixed, ...
-                        //  {
-                        //      (custom_sliding_sum(N, sliding)+fixed) /
-                        //            get_global_size(0)) ...
+                        FormulaToken *pChild = cur->Children[i]->CurrentFormula;
+                        assert(pChild);
+                        // For double vectors (i.e. ranges as arguments) generate
+                        // function invocation
+                        if (const formula::DoubleVectorRefToken* pChildDVR =
+                            dynamic_cast<const formula::DoubleVectorRefToken *>(pChild))
+                        {
+                            if (pChildDVR->IsStartFixed() && pChildDVR->IsEndFixed())
+                            {
+                                // Reduce to a scalar variable
+                                mSyms.DeclRefArg<DynamicKernelReducedArgument>(cur)
+                                    ->GenDeclRef(mKernelSrc);
+                            } else {
+                                // Reduce to an array on CPU
+                                // for code like avg($A1:$A2, $B$3:$B$4) Generate code like
+                                //  double custom_sliding_dotproduct(int nWindow,
+                                //                                   __global *sliding) {
+                                //    double tmp = 0.0;
+                                //    for (int i = 0; i < nWindow; i++) {
+                                //        tmp += sliding[i+get_global_id(0)];
+                                //    }
+                                //    return tmp;
+                                //  }
+                                //  __kernel DynamicKernel (..., __global double *windows,
+                                //                          double fixed, ...
+                                //  {
+                                //      (custom_sliding_sum(N, sliding)+fixed) /
+                                //            get_global_size(0)) ...
 
-                        mSyms.DeclRefArg<DynamicKernelSoPArguments<false> >(cur)
-                            ->GenDeclRef(mKernelSrc);
+                                mSyms.DeclRefArg<DynamicKernelSoPArguments<false> >(cur)
+                                    ->GenDeclRef(mKernelSrc);
+                            }
+                            break; //FIXME
+                        } else {
+                            // For single vectors (i.e. scalar or other functions as arguments)
+                            // generate function invocation
+                            switch (p->GetOpCode())
+                            {
+                                case ocMin:
+                                    if (i == 0)
+                                        mKernelSrc << "fmin(";
+                                    else
+                                        mKernelSrc << ",";
+                                    break;
+                                default:
+                                    assert(0 && "Unsupported");
+                            }
+                            mKernelSrc<<"(";
+                            TraverseAST(cur->Children[i]);
+                            mKernelSrc<<")";
+                            if (i == cur->Children.size()-1)
+                                mKernelSrc<<")";
+                        }
                     }
+                    mKernelSrc<<")";
+
                 }
                 return;
             case ocSumProduct:
