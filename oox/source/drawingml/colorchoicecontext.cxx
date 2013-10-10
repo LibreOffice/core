@@ -87,8 +87,6 @@ Reference< XFastContextHandler > ColorValueContext::createFastChildContext(
     switch( nElement )
     {
         case A_TOKEN( alpha ):
-            mrColor.addTransformation( nElement, rAttribs.getInteger( XML_val, 0 )*PER_PERCENT );
-            break;
         case A_TOKEN( alphaMod ):
         case A_TOKEN( alphaOff ):
         case A_TOKEN( blue ):
