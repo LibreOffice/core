@@ -226,12 +226,12 @@ class SwUndoChangeFootNote : public SwUndo, private SwUndRng
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const ::std::auto_ptr<SwHistory> m_pHistory;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    const String m_Text;
+    const OUString m_Text;
     const sal_uInt16 m_nNumber;
     const bool m_bEndNote;
 
 public:
-    SwUndoChangeFootNote( const SwPaM& rRange, const String& rTxt,
+    SwUndoChangeFootNote( const SwPaM& rRange, const OUString& rTxt,
                           sal_uInt16 nNum, bool bIsEndNote );
     virtual ~SwUndoChangeFootNote();
 

@@ -49,7 +49,7 @@ class SwTableSortBoxes;
 
 class SwUndoInsTbl : public SwUndo
 {
-    String sTblNm;
+    OUString sTblNm;
     SwInsertTableOptions aInsTblOpts;
     SwDDEFieldType* pDDEFldType;
     std::vector<sal_uInt16> *pColWidth;
@@ -63,7 +63,7 @@ public:
     SwUndoInsTbl( const SwPosition&, sal_uInt16 nCols, sal_uInt16 nRows,
                     sal_uInt16 eAdjust, const SwInsertTableOptions& rInsTblOpts,
                     const SwTableAutoFmt* pTAFmt, const std::vector<sal_uInt16> *pColArr,
-                  const String & rName);
+                  const OUString & rName);
 
     virtual ~SwUndoInsTbl();
 
@@ -76,7 +76,7 @@ public:
 
 class SwUndoTxtToTbl : public SwUndo, public SwUndRng
 {
-    String sTblNm;
+    OUString sTblNm;
     SwInsertTableOptions aInsTblOpts;
     std::vector<sal_uLong>* pDelBoxes;
     SwTableAutoFmt* pAutoFmt;
@@ -102,7 +102,7 @@ public:
 
 class SwUndoTblToTxt : public SwUndo
 {
-    String sTblNm;
+    OUString sTblNm;
     SwDDEFieldType* pDDEFldType;
     _SaveTable* pTblSave;
     SwTblToTxtSaves* pBoxSaves;
@@ -248,7 +248,7 @@ class SwUndoTblNumFmt : public SwUndo
 {
     SfxItemSet *pBoxSet;
     SwHistory* pHistory;
-    String aStr, aNewFml;
+    OUString aStr, aNewFml;
 
     sal_uLong nFmtIdx, nNewFmtIdx;
     double fNum, fNewNum;
@@ -342,7 +342,7 @@ public:
 
 class SwUndoMergeTbl : public SwUndo
 {
-    String aName;
+    OUString aName;
     sal_uLong nTblNode;
     _SaveTable* pSavTbl, *pSavHdl;
     SwHistory* pHistory;

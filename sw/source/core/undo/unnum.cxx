@@ -45,7 +45,7 @@ SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
-                            const String& rReplaceRule )
+                            const OUString& rReplaceRule )
     : SwUndo( UNDO_INSNUM ),
     aNumRule( rRule ), pHistory( 0 ),
     nSttSet( ULONG_MAX ), pOldNumRule( 0 ),
@@ -117,7 +117,7 @@ void SwUndoInsNum::RedoImpl(::sw::UndoRedoContext & rContext)
     else if( pHistory )
     {
         SwPaM & rPam( AddUndoRedoPaM(rContext) );
-        if( sReplaceRule.Len() )
+        if( !sReplaceRule.isEmpty() )
         {
             rDoc.ReplaceNumRule(*rPam.GetPoint(),
                                 sReplaceRule, aNumRule.GetName() );
@@ -141,7 +141,7 @@ void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
     SwDoc & rDoc(rContext.GetDoc());
     if( nSttNode )
     {
-        if( !sReplaceRule.Len() )
+        if( sReplaceRule.isEmpty() )
         {
             // #i42921# - adapt to changed signature
             rDoc.SetNumRule(rContext.GetRepeatPaM(), aNumRule, false);

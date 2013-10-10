@@ -108,7 +108,7 @@ private:
 
 class SwUndoFmtColl : public SwUndo, private SwUndRng
 {
-    String aFmtName;
+    OUString aFmtName;
     SwHistory* pHistory;
     SwFmtColl* pFmtColl;
     // for correct <ReDo(..)> and <Repeat(..)>
@@ -213,8 +213,8 @@ const int nUndoStringLength = 20;
 
    @return the shortened string
  */
-String
-ShortenString(const String & rStr, xub_StrLen nLength, const String & rFillStr);
+OUString
+ShortenString(const OUString & rStr, xub_StrLen nLength, const OUString & rFillStr);
 /**
    Denotes special characters in a string.
 
@@ -233,7 +233,7 @@ ShortenString(const String & rStr, xub_StrLen nLength, const String & rFillStr);
 
    @return the denoted string
 */
-String DenoteSpecialCharacters(const String & rStr);
+OUString DenoteSpecialCharacters(const OUString & rStr);
 
 #endif // SW_UNDOCORE_HXX
 

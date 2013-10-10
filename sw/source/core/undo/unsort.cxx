@@ -245,7 +245,7 @@ void SwUndoSort::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-void SwUndoSort::Insert( const String& rOrgPos, const String& rNewPos)
+void SwUndoSort::Insert( const OUString& rOrgPos, const OUString& rNewPos)
 {
     SwSortUndoElement* pEle = new SwSortUndoElement(rOrgPos, rNewPos);
     aSortList.push_back( pEle );

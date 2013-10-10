@@ -37,14 +37,14 @@ struct SwSortUndoElement
             sal_uLong nSource, nTarget;
         } TXT;
         struct {
-            String *pSource, *pTarget;
+            OUString *pSource, *pTarget;
         } TBL;
     } SORT_TXT_TBL;
 
-    SwSortUndoElement( const String& aS, const String& aT )
+    SwSortUndoElement( const OUString& aS, const OUString& aT )
     {
-        SORT_TXT_TBL.TBL.pSource = new String( aS );
-        SORT_TXT_TBL.TBL.pTarget = new String( aT );
+        SORT_TXT_TBL.TBL.pSource = new OUString( aS );
+        SORT_TXT_TBL.TBL.pTarget = new OUString( aT );
     }
     SwSortUndoElement( sal_uLong nS, sal_uLong nT )
     {
@@ -77,7 +77,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    void Insert( const String& rOrgPos, const String& rNewPos );
+    void Insert( const OUString& rOrgPos, const OUString& rNewPos );
     void Insert( sal_uLong nOrgPos, sal_uLong nNewPos );
 };
 

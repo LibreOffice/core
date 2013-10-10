@@ -33,7 +33,7 @@ class SwUndoInsNum : public SwUndo, private SwUndRng
     SwHistory* pHistory;
     sal_uLong nSttSet;
     SwNumRule* pOldNumRule;
-    String sReplaceRule;
+    OUString sReplaceRule;
     sal_uInt16 nLRSavePos;
 
 public:
@@ -41,7 +41,7 @@ public:
     SwUndoInsNum( const SwNumRule& rOldRule, const SwNumRule& rNewRule,
                   SwUndoId nUndoId = UNDO_INSFMTATTR );
     SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
-                            const String& rReplaceRule );
+                            const OUString& rReplaceRule );
 
     virtual ~SwUndoInsNum();
 

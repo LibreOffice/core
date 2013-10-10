@@ -62,9 +62,9 @@ using namespace ::com::sun::star;
 
 // INSERT
 
-String * SwUndoInsert::GetTxtFromDoc() const
+OUString * SwUndoInsert::GetTxtFromDoc() const
 {
-    String * pResult = NULL;
+    OUString * pResult = NULL;
 
     SwNodeIndex aNd( pDoc->GetNodes(), nNode);
     SwCntntNode* pCNd = aNd.GetNode().GetCntntNode();
@@ -85,7 +85,7 @@ String * SwUndoInsert::GetTxtFromDoc() const
             nStart = 0;
         }
 
-        pResult = new String(sTxt.copy(nStart, nLength));
+        pResult = new OUString(sTxt.copy(nStart, nLength));
     }
 
     return pResult;
@@ -145,7 +145,7 @@ sal_Bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
         nCntnt++;
 
         if (pUndoTxt)
-            pUndoTxt->Insert(cIns);
+            (*pUndoTxt) += OUString(cIns);
 
         return sal_True;
     }
@@ -262,7 +262,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                         aPaM.GetMark()->nContent.GetIndex());
                 }
                 RemoveIdxFromRange( aPaM, sal_False );
-                pTxt = new String( pTxtNode->GetTxt().copy(nCntnt-nLen, nLen) );
+                pTxt = new OUString( pTxtNode->GetTxt().copy(nCntnt-nLen, nLen) );
                 pTxtNode->EraseText( aPaM.GetPoint()->nContent, nLen );
 
                 // Undo deletes fieldmarks in two step: first the end then the start position.
@@ -364,7 +364,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
                 OUString const ins(
                     pTxtNode->InsertText( *pTxt, pPam->GetMark()->nContent,
                     m_nInsertFlags) );
-                assert(ins.getLength() == pTxt->Len()); // must succeed
+                assert(ins.getLength() == pTxt->getLength()); // must succeed
                 DELETEZ( pTxt );
                 if (m_bWithRsid) // re-insert RSID
                 {
@@ -478,7 +478,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 SwRewriter SwUndoInsert::GetRewriter() const
 {
     SwRewriter aResult;
-    String * pStr = NULL;
+    OUString * pStr = NULL;
     bool bDone = false;
 
     if (pTxt)
@@ -897,12 +897,12 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
 
 
 SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
-                                      const String &rTxt,
-                                      const String& rSeparator,
-                                      const String& rNumberSeparator,
+                                      const OUString &rTxt,
+                                      const OUString& rSeparator,
+                                      const OUString& rNumberSeparator,
                                       const sal_Bool bBef,
                                       const sal_uInt16 nInitId,
-                                      const String& rCharacterStyle,
+                                      const OUString& rCharacterStyle,
                                       const sal_Bool bCpyBorder )
     : SwUndo( UNDO_INSERTLABEL ),
       sText( rTxt ),

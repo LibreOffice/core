@@ -1093,17 +1093,17 @@ sal_Bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
 }
 
 // #111827#
-String ShortenString(const String & rStr, xub_StrLen nLength, const String & rFillStr)
+OUString ShortenString(const OUString & rStr, xub_StrLen nLength, const OUString & rFillStr)
 {
-    assert(nLength - rFillStr.Len() >= 2);
+    assert(nLength - rFillStr.getLength() >= 2);
 
-    String aResult;
+    OUString aResult;
 
-    if (rStr.Len() <= nLength)
+    if (rStr.getLength() <= nLength)
         aResult = rStr;
     else
     {
-        long nTmpLength = nLength - rFillStr.Len();
+        long nTmpLength = nLength - rFillStr.getLength();
         if ( nTmpLength < 2 )
             nTmpLength = 2;
 
@@ -1112,9 +1112,9 @@ String ShortenString(const String & rStr, xub_StrLen nLength, const String & rFi
         const xub_StrLen nFrontLen = nLength - nLength / 2;
         const xub_StrLen nBackLen = nLength - nFrontLen;
 
-        aResult += rStr.Copy(0, nFrontLen);
+        aResult += rStr.copy(0, nFrontLen);
         aResult += rFillStr;
-        aResult += rStr.Copy(rStr.Len() - nBackLen, nBackLen);
+        aResult += rStr.copy(rStr.getLength() - nBackLen, nBackLen);
     }
 
     return aResult;

@@ -33,7 +33,7 @@ namespace utl {
 
 class SwUndoOverwrite: public SwUndo, private SwUndoSaveCntnt
 {
-    String aDelStr, aInsStr;
+    OUString aDelStr, aInsStr;
     SwRedlineSaveDatas* pRedlSaveData;
     sal_uLong nSttNode;
     xub_StrLen nSttCntnt;

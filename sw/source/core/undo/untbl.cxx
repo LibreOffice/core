@@ -224,7 +224,7 @@ SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt16 n
                             sal_uInt16 nAdj, const SwInsertTableOptions& rInsTblOpts,
                             const SwTableAutoFmt* pTAFmt,
                             const std::vector<sal_uInt16> *pColArr,
-                            const String & rName)
+                            const OUString & rName)
     : SwUndo( UNDO_INSTABLE ),
     aInsTblOpts( rInsTblOpts ), pDDEFldType( 0 ), pColWidth( 0 ), pRedlData( 0 ), pAutoFmt( 0 ),
     nSttNode( rPos.nNode.GetIndex() ), nRows( nRw ), nCols( nCl ), nAdjust( nAdj )
@@ -2220,7 +2220,7 @@ void SwUndoTblNumFmt::UndoImpl(::sw::UndoRedoContext & rContext)
     if( pTxtNd->HasSwAttrSet() )
         pTxtNd->ResetAllAttr();
 
-    if( pTxtNd->GetpSwpHints() && aStr.Len() )
+    if( pTxtNd->GetpSwpHints() && !aStr.isEmpty() )
         pTxtNd->ClearSwpHintsArr( true );
 
     // ChgTextToNum(..) only acts when the strings are different. We need to do
@@ -2230,7 +2230,7 @@ void SwUndoTblNumFmt::UndoImpl(::sw::UndoRedoContext & rContext)
         rDoc.DeleteRedline( *( pBox->GetSttNd() ), false, USHRT_MAX );
 
         SwIndex aIdx( pTxtNd, 0 );
-        if( aStr.Len() )
+        if( !aStr.isEmpty() )
         {
             pTxtNd->EraseText( aIdx );
             pTxtNd->InsertText( aStr, aIdx,

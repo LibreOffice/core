@@ -63,7 +63,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     xub_StrLen nTxtNdLen = pTxtNd->GetTxt().getLength();
     if( nSttCntnt < nTxtNdLen )     // no pure insert?
     {
-        aDelStr.Insert( pTxtNd->GetTxt()[nSttCntnt] );
+        aDelStr += OUString( pTxtNd->GetTxt()[nSttCntnt] );
         if( !pHistory )
             pHistory = new SwHistory;
         SwRegHistory aRHst( *pTxtNd, pHistory );
@@ -78,7 +78,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
 
     pTxtNd->InsertText( OUString(cIns), rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND );
-    aInsStr.Insert( cIns );
+    aInsStr += OUString( cIns );
 
     if( !bInsChar )
     {
@@ -101,15 +101,15 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
 // What is with only inserted characters?
 
     // Only deletion of single chars can be combined.
-    if( rPos.nNode != nSttNode || !aInsStr.Len()  ||
-        ( !bGroup && aInsStr.Len() != 1 ))
+    if( rPos.nNode != nSttNode || aInsStr.isEmpty()  ||
+        ( !bGroup && aInsStr.getLength() != 1 ))
         return sal_False;
 
     // Is the node a TextNode at all?
     SwTxtNode * pDelTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( !pDelTxtNd ||
         (pDelTxtNd->GetTxt().getLength() != rPos.nContent.GetIndex() &&
-            rPos.nContent.GetIndex() != ( nSttCntnt + aInsStr.Len() )))
+            rPos.nContent.GetIndex() != ( nSttCntnt + aInsStr.getLength() )))
         return sal_False;
 
     CharClass& rCC = GetAppCharClass();
@@ -117,7 +117,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     // ask the char that should be inserted
     if (( CH_TXTATR_BREAKWORD == cIns || CH_TXTATR_INWORD == cIns ) ||
         rCC.isLetterNumeric( OUString( cIns ), 0 ) !=
-        rCC.isLetterNumeric( aInsStr, aInsStr.Len()-1 ) )
+        rCC.isLetterNumeric( aInsStr, aInsStr.getLength()-1 ) )
         return sal_False;
 
     {
@@ -144,7 +144,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     {
         if (rPos.nContent.GetIndex() < pDelTxtNd->GetTxt().getLength())
         {
-            aDelStr.Insert(pDelTxtNd->GetTxt()[rPos.nContent.GetIndex()]);
+            aDelStr += OUString( pDelTxtNd->GetTxt()[rPos.nContent.GetIndex()] );
             rPos.nContent++;
         }
         else
@@ -158,7 +158,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
             IDocumentContentOperations::INS_EMPTYEXPAND) );
     assert(ins.getLength() == 1); // check in SwDoc::Overwrite => cannot fail
     (void) ins;
-    aInsStr.Insert( cIns );
+    aInsStr += OUString( cIns );
 
     if( !bInsChar )
     {
@@ -186,29 +186,29 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     SwAutoCorrExceptWord* pACEWord = pDoc->GetAutoCorrExceptWord();
     if( pACEWord )
     {
-        if( 1 == aInsStr.Len() && 1 == aDelStr.Len() )
-            pACEWord->CheckChar( *pAktPam->GetPoint(), aDelStr.GetChar( 0 ) );
+        if( 1 == aInsStr.getLength() && 1 == aDelStr.getLength() )
+            pACEWord->CheckChar( *pAktPam->GetPoint(), aDelStr[0] );
         pDoc->SetAutoCorrExceptWord( 0 );
     }
 
     // If there was not only a overwrite but also an insert, delete the surplus
-    if( aInsStr.Len() > aDelStr.Len() )
+    if( aInsStr.getLength() > aDelStr.getLength() )
     {
-        rIdx += aDelStr.Len();
-        pTxtNd->EraseText( rIdx, aInsStr.Len() - aDelStr.Len() );
+        rIdx += aDelStr.getLength();
+        pTxtNd->EraseText( rIdx, aInsStr.getLength() - aDelStr.getLength() );
         rIdx = nSttCntnt;
     }
 
-    if( aDelStr.Len() )
+    if( !aDelStr.isEmpty() )
     {
         bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
         pTxtNd->SetIgnoreDontExpand( true );
 
         ++rIdx;
-        for( xub_StrLen n = 0; n < aDelStr.Len(); n++  )
+        for( xub_StrLen n = 0; n < aDelStr.getLength(); n++  )
         {
             // do it individually, to keep the attributes!
-            OUString aTmpStr(aDelStr.GetChar(n));
+            OUString aTmpStr(aDelStr[n]);
             OUString const ins( pTxtNd->InsertText(aTmpStr, rIdx) );
             assert(ins.getLength() == 1); // cannot fail
         (void) ins;
@@ -240,17 +240,17 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoOverwrite::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwPaM *const pAktPam = & rContext.GetRepeatPaM();
-    if( !aInsStr.Len() || pAktPam->HasMark() )
+    if( aInsStr.isEmpty() || pAktPam->HasMark() )
         return;
 
     SwDoc & rDoc = rContext.GetDoc();
 
     {
         ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-        rDoc.Overwrite(*pAktPam, OUString(aInsStr.GetChar(0)));
+        rDoc.Overwrite(*pAktPam, OUString(aInsStr[0]));
     }
-    for( xub_StrLen n = 1; n < aInsStr.Len(); ++n )
-        rDoc.Overwrite( *pAktPam, OUString(aInsStr.GetChar(n)) );
+    for( xub_StrLen n = 1; n < aInsStr.getLength(); ++n )
+        rDoc.Overwrite( *pAktPam, OUString(aInsStr[n]) );
 }
 
 void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -268,28 +268,28 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         rIdx.Assign( pTxtNd, nSttCntnt );
         pAktPam->SetMark();
-        pAktPam->GetMark()->nContent += aInsStr.Len();
+        pAktPam->GetMark()->nContent += aInsStr.getLength();
         pDoc->DeleteRedline( *pAktPam, false, USHRT_MAX );
         pAktPam->DeleteMark();
     }
-    rIdx.Assign( pTxtNd, aDelStr.Len() ? nSttCntnt+1 : nSttCntnt );
+    rIdx.Assign( pTxtNd, !aDelStr.isEmpty() ? nSttCntnt+1 : nSttCntnt );
 
     bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
     pTxtNd->SetIgnoreDontExpand( true );
 
-    for( xub_StrLen n = 0; n < aInsStr.Len(); n++  )
+    for( xub_StrLen n = 0; n < aInsStr.getLength(); n++  )
     {
         // do it individually, to keep the attributes!
         OUString const ins(
-                pTxtNd->InsertText( OUString(aInsStr.GetChar(n)), rIdx,
+                pTxtNd->InsertText( OUString(aInsStr[n]), rIdx,
                 IDocumentContentOperations::INS_EMPTYEXPAND) );
         assert(ins.getLength() == 1); // cannot fail
         (void) ins;
-        if( n < aDelStr.Len() )
+        if( n < aDelStr.getLength() )
         {
             rIdx -= 2;
             pTxtNd->EraseText( rIdx, 1 );
-            rIdx += n+1 < aDelStr.Len() ? 2 : 1;
+            rIdx += n+1 < aDelStr.getLength() ? 2 : 1;
         }
     }
     pTxtNd->SetIgnoreDontExpand( bOldExpFlg );

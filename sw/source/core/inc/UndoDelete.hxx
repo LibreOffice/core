@@ -37,13 +37,13 @@ class SwUndoDelete
     , private SwUndoSaveCntnt
 {
     SwNodeIndex* pMvStt;            // Position of Nodes in UndoNodes-Array
-    String *pSttStr, *pEndStr;
+    OUString *pSttStr, *pEndStr;
     SwRedlineData* pRedlData;
     SwRedlineSaveDatas* pRedlSaveData;
     ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
     ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
-    String sTableName;
+    OUString sTableName;
 
     sal_uLong nNode;
     sal_uLong nNdDiff;           // difference of Nodes before/after Delete
@@ -92,7 +92,7 @@ public:
     void SetPgBrkFlags( sal_Bool bPageBreak, sal_Bool bPageDesc )
         { bResetPgDesc = bPageDesc; bResetPgBrk = bPageBreak; }
 
-    void SetTableName(const String & rName);
+    void SetTableName(const OUString & rName);
 
     // SwUndoTblCpyTbl needs this information:
     sal_Bool IsDelFullPara() const { return bDelFullPara; }

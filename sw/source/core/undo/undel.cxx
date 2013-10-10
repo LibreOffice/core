@@ -361,13 +361,13 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
-        pSttStr = new String( pSttTxtNd->GetTxt().copy(nSttCntnt, nLen));
+        pSttStr = new OUString( pSttTxtNd->GetTxt().copy(nSttCntnt, nLen));
         pSttTxtNd->EraseText( pStt->nContent, nLen );
         if( pSttTxtNd->GetpSwpHints() )
             pSttTxtNd->GetpSwpHints()->DeRegister();
 
         // METADATA: store
-        bool emptied( pSttStr->Len() && !pSttTxtNd->Len() );
+        bool emptied( !pSttStr->isEmpty() && !pSttTxtNd->Len() );
         if (!bOneNode || emptied) // merging may overwrite xmlids...
         {
             m_pMetadataUndoStart = (emptied)
@@ -396,14 +396,14 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
-        pEndStr = new String( pEndTxtNd->GetTxt().copy( 0,
+        pEndStr = new OUString( pEndTxtNd->GetTxt().copy( 0,
                                     pEnd->nContent.GetIndex() ));
         pEndTxtNd->EraseText( aEndIdx, pEnd->nContent.GetIndex() );
         if( pEndTxtNd->GetpSwpHints() )
             pEndTxtNd->GetpSwpHints()->DeRegister();
 
         // METADATA: store
-        bool emptied( pEndStr->Len() && !pEndTxtNd->Len() );
+        bool emptied = !pEndStr->isEmpty() && !pEndTxtNd->Len();
 
         m_pMetadataUndoEnd = (emptied)
             ? pEndTxtNd->CreateUndoForDelete()
@@ -420,7 +420,7 @@ sal_Bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd
 sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
 {
     // Is Undo greater than one Node (that is Start and EndString)?
-    if( pSttStr ? !pSttStr->Len() || pEndStr : sal_True )
+    if( pSttStr ? pSttStr->isEmpty() || pEndStr : sal_True )
         return sal_False;
 
     // only the deletion of single char's can be condensed
@@ -456,7 +456,7 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     SwTxtNode * pDelTxtNd = pStt->nNode.GetNode().GetTxtNode();
     if( !pDelTxtNd ) return sal_False;
 
-    xub_StrLen nUChrPos = bBackSp ? 0 : pSttStr->Len()-1;
+    xub_StrLen nUChrPos = bBackSp ? 0 : pSttStr->getLength()-1;
     sal_Unicode cDelChar = pDelTxtNd->GetTxt()[ pStt->nContent.GetIndex() ];
     CharClass& rCC = GetAppCharClass();
     if( ( CH_TXTATR_BREAKWORD == cDelChar || CH_TXTATR_INWORD == cDelChar ) ||
@@ -487,7 +487,7 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         nEndCntnt++;    // Delete: attach char at the end
         nUChrPos++;
     }
-    pSttStr->Insert( cDelChar, nUChrPos );
+    (*pSttStr) = pSttStr->replaceAt( nUChrPos, 0, OUString(cDelChar) );
     pDelTxtNd->EraseText( pStt->nContent, 1 );
 
     bGroup = sal_True;
@@ -595,21 +595,21 @@ static String lcl_DenotedPortion(String rStr, xub_StrLen nStart,
     return aResult;
 }
 
-String DenoteSpecialCharacters(const String & rStr)
+OUString DenoteSpecialCharacters(const OUString & rStr)
 {
-    String aResult;
+    OUString aResult;
 
-    if (rStr.Len() > 0)
+    if (!rStr.isEmpty())
     {
         bool bStart = false;
         xub_StrLen nStart = 0;
         sal_Unicode cLast = 0;
 
-        for (xub_StrLen i = 0; i < rStr.Len(); i++)
+        for (xub_StrLen i = 0; i < rStr.getLength(); i++)
         {
-            if (lcl_IsSpecialCharacter(rStr.GetChar(i)))
+            if (lcl_IsSpecialCharacter(rStr[i]))
             {
-                if (cLast != rStr.GetChar(i))
+                if (cLast != rStr[i])
                     bStart = true;
 
             }
@@ -627,10 +627,10 @@ String DenoteSpecialCharacters(const String & rStr)
                 bStart = false;
             }
 
-            cLast = rStr.GetChar(i);
+            cLast = rStr[i];
         }
 
-        aResult += lcl_DenotedPortion(rStr, nStart, rStr.Len());
+        aResult += lcl_DenotedPortion(rStr, nStart, rStr.getLength());
     }
     else
         aResult = SwRewriter::GetPlaceHolder(UndoArg2);
@@ -644,7 +644,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
 
     if (nNode != 0)
     {
-        if (sTableName.Len() > 0)
+        if (!sTableName.isEmpty())
         {
 
             SwRewriter aRewriter;
@@ -662,14 +662,14 @@ SwRewriter SwUndoDelete::GetRewriter() const
     {
         String aStr;
 
-        if (pSttStr != NULL && pEndStr != NULL && pSttStr->Len() == 0 &&
-            pEndStr->Len() == 0)
+        if (pSttStr != NULL && pEndStr != NULL && pSttStr->isEmpty() &&
+            pEndStr->isEmpty())
         {
             aStr = SW_RESSTR(STR_PARAGRAPH_UNDO);
         }
         else
         {
-            String * pStr = NULL;
+            OUString * pStr = NULL;
             if (pSttStr != NULL)
                 pStr = pSttStr;
             else if (pEndStr != NULL)
@@ -788,7 +788,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 OUString const ins( pTxtNd->InsertText(*pEndStr, aPos.nContent,
                         IDocumentContentOperations::INS_NOHINTEXPAND) );
-                assert(ins.getLength() == pEndStr->Len()); // must succeed
+                assert(ins.getLength() == pEndStr->getLength()); // must succeed
                 (void) ins;
                 // METADATA: restore
                 pTxtNd->RestoreMetadata(m_pMetadataUndoEnd);
@@ -883,7 +883,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 aPos.nContent.Assign( pTxtNd, nSttCntnt );
                 OUString const ins( pTxtNd->InsertText(*pSttStr, aPos.nContent,
                         IDocumentContentOperations::INS_NOHINTEXPAND) );
-                assert(ins.getLength() == pSttStr->Len()); // must succeed
+                assert(ins.getLength() == pSttStr->getLength()); // must succeed
                 (void) ins;
                 // METADATA: restore
                 pTxtNd->RestoreMetadata(m_pMetadataUndoStart);
@@ -1074,7 +1074,7 @@ void SwUndoDelete::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 
-void SwUndoDelete::SetTableName(const String & rName)
+void SwUndoDelete::SetTableName(const OUString & rName)
 {
     sTableName = rName;
 }

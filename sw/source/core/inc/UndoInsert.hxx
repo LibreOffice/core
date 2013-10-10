@@ -35,7 +35,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 {
     /// start of Content in UndoNodes for Redo
     ::boost::scoped_ptr<SwNodeIndex> m_pUndoNodeIndex;
-    String *pTxt, *pUndoTxt;
+    OUString *pTxt, *pUndoTxt;
     SwRedlineData* pRedlData;
     sal_uLong nNode;
     xub_StrLen nCntnt, nLen;
@@ -52,7 +52,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     SwDoc * pDoc;
 
     void Init(const SwNodeIndex & rNode);
-    String * GetTxtFromDoc() const;
+    OUString * GetTxtFromDoc() const;
 
 public:
     SwUndoInsert( const SwNodeIndex& rNode, xub_StrLen nCntnt, xub_StrLen nLen,
@@ -162,11 +162,11 @@ class SwUndoInsertLabel : public SwUndo
         } NODE;
     };
 
-    String sText;
+    OUString sText;
     // #i39983# the separator is drawn with a character style
-    String sSeparator;
-    String sNumberSeparator;
-    String sCharacterStyle;
+    OUString sSeparator;
+    OUString sNumberSeparator;
+    OUString sCharacterStyle;
     // #i26791# - re-store of drawing object position no longer needed
     sal_uInt16 nFldId;
     SwLabelType eType;
@@ -176,12 +176,12 @@ class SwUndoInsertLabel : public SwUndo
     sal_Bool bCpyBrd        :1;
 
 public:
-    SwUndoInsertLabel( const SwLabelType eTyp, const String &rText,
+    SwUndoInsertLabel( const SwLabelType eTyp, const OUString &rText,
     // #i39983# the separator is drawn with a character style
-                        const String& rSeparator,
-                        const String& rNumberSeparator, //#i61007# order of captions
+                        const OUString& rSeparator,
+                        const OUString& rNumberSeparator, //#i61007# order of captions
                         const sal_Bool bBefore, const sal_uInt16 nId,
-                        const String& rCharacterStyle,
+                        const OUString& rCharacterStyle,
                         const sal_Bool bCpyBrd );
     virtual ~SwUndoInsertLabel();
 

@@ -1052,7 +1052,7 @@ void SwUndoMoveLeftMargin::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 SwUndoChangeFootNote::SwUndoChangeFootNote(
-            const SwPaM& rRange, const String& rTxt,
+            const SwPaM& rRange, const OUString& rTxt,
             sal_uInt16 nNum, bool bIsEndNote )
     : SwUndo( UNDO_CHGFTN ), SwUndRng( rRange )
     , m_pHistory( new SwHistory() )
