@@ -2353,7 +2353,7 @@ const OUString& ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
         ;   // nothing
     else if ( !pJumpMatrix )
     {
-        aTempStr = pMat->GetString( *pFormatter, 0, 0);
+        aTempStr = pMat->GetString( *pFormatter, 0, 0).getString();
         return aTempStr;
     }
     else
@@ -2363,7 +2363,7 @@ const OUString& ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
         pJumpMatrix->GetPos( nC, nR);
         if ( nC < nCols && nR < nRows )
         {
-            aTempStr = pMat->GetString( *pFormatter, nC, nR);
+            aTempStr = pMat->GetString( *pFormatter, nC, nR).getString();
             return aTempStr;
         }
         else
@@ -3277,7 +3277,7 @@ void ScInterpreter::ScMacro()
                             SbxVariable* p = refArray->Get32( nIdx );
                             if (pMat->IsString(nMatCol, nMatRow))
                             {
-                                p->PutString( pMat->GetString(nMatCol, nMatRow) );
+                                p->PutString( pMat->GetString(nMatCol, nMatRow).getString() );
                             }
                             else
                             {

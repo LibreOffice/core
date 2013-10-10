@@ -191,9 +191,9 @@ public:
     sal_uInt16 GetError( SCSIZE nC, SCSIZE nR) const;
     double GetDouble(SCSIZE nC, SCSIZE nR) const;
     double GetDouble( SCSIZE nIndex) const;
-    OUString GetString(SCSIZE nC, SCSIZE nR) const;
-    OUString GetString( SCSIZE nIndex) const;
-    OUString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
+    svl::SharedString GetString(SCSIZE nC, SCSIZE nR) const;
+    svl::SharedString GetString( SCSIZE nIndex) const;
+    svl::SharedString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
     ScMatrixValue Get(SCSIZE nC, SCSIZE nR) const;
     bool IsString( SCSIZE nIndex ) const;
     bool IsString( SCSIZE nC, SCSIZE nR ) const;
@@ -222,7 +222,7 @@ public:
     ScMatrix::IterateResult Product(bool bTextAsZero) const;
     size_t Count(bool bCountStrings) const;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const;
-    size_t MatchStringInColumns(const OUString& rStr, size_t nCol1, size_t nCol2) const;
+    size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const;
 
     double GetMaxValue( bool bTextAsZero ) const;
     double GetMinValue( bool bTextAsZero ) const;
@@ -471,7 +471,7 @@ double ScMatrixImpl::GetDouble( SCSIZE nIndex) const
     return GetDouble(nC, nR);
 }
 
-OUString ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
+svl::SharedString ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
 {
     if (ValidColRowOrReplicated( nC, nR ))
     {
@@ -480,9 +480,9 @@ OUString ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
         switch (maMat.get_type(aPos))
         {
             case mdds::mtm::element_string:
-                return maMat.get_string(aPos).getString();
+                return maMat.get_string(aPos);
             case mdds::mtm::element_empty:
-                return EMPTY_OUSTRING;
+                return svl::SharedString(EMPTY_OUSTRING);
             case mdds::mtm::element_numeric:
             case mdds::mtm::element_boolean:
                 OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
@@ -496,17 +496,17 @@ OUString ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
     {
         OSL_FAIL("ScMatrixImpl::GetString: dimension error");
     }
-    return EMPTY_OUSTRING;
+    return svl::SharedString(EMPTY_OUSTRING);
 }
 
-OUString ScMatrixImpl::GetString( SCSIZE nIndex) const
+svl::SharedString ScMatrixImpl::GetString( SCSIZE nIndex) const
 {
     SCSIZE nC, nR;
     CalcPosition(nIndex, nC, nR);
     return GetString(nC, nR);
 }
 
-OUString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
+svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
 {
     if (!ValidColRowOrReplicated( nC, nR ))
     {
@@ -1024,7 +1024,7 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
 }
 
 template<>
-size_t WalkAndMatchElements<OUString>::compare(const MatrixImplType::element_block_node_type& node) const
+size_t WalkAndMatchElements<svl::SharedString>::compare(const MatrixImplType::element_block_node_type& node) const
 {
     size_t nCount = 0;
     switch (node.type)
@@ -1035,7 +1035,7 @@ size_t WalkAndMatchElements<OUString>::compare(const MatrixImplType::element_blo
             MatrixImplType::string_block_type::const_iterator itEnd = MatrixImplType::string_block_type::end(*node.data);
             for (; it != itEnd; ++it, ++nCount)
             {
-                if (ScGlobal::GetpTransliteration()->isEqual(it->getString(), maMatchValue))
+                if (it->getDataIgnoreCase() == maMatchValue.getDataIgnoreCase())
                 {
                     return mnIndex + nCount;
                 }
@@ -1292,9 +1292,9 @@ size_t ScMatrixImpl::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nC
     return aFunc.getMatching();
 }
 
-size_t ScMatrixImpl::MatchStringInColumns(const OUString& rStr, size_t nCol1, size_t nCol2) const
+size_t ScMatrixImpl::MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const
 {
-    WalkAndMatchElements<OUString> aFunc(rStr, maMat.size(), nCol1, nCol2);
+    WalkAndMatchElements<svl::SharedString> aFunc(rStr, maMat.size(), nCol1, nCol2);
     maMat.walk(aFunc);
     return aFunc.getMatching();
 }
@@ -1548,17 +1548,17 @@ double ScMatrix::GetDouble( SCSIZE nIndex) const
     return pImpl->GetDouble(nIndex);
 }
 
-OUString ScMatrix::GetString(SCSIZE nC, SCSIZE nR) const
+svl::SharedString ScMatrix::GetString(SCSIZE nC, SCSIZE nR) const
 {
     return pImpl->GetString(nC, nR);
 }
 
-OUString ScMatrix::GetString( SCSIZE nIndex) const
+svl::SharedString ScMatrix::GetString( SCSIZE nIndex) const
 {
     return pImpl->GetString(nIndex);
 }
 
-OUString ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
+svl::SharedString ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const
 {
     return pImpl->GetString(rFormatter, nC, nR);
 }
@@ -1697,7 +1697,7 @@ size_t ScMatrix::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2)
     return pImpl->MatchDoubleInColumns(fValue, nCol1, nCol2);
 }
 
-size_t ScMatrix::MatchStringInColumns(const OUString& rStr, size_t nCol1, size_t nCol2) const {
+size_t ScMatrix::MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const {
     return pImpl->MatchStringInColumns(rStr, nCol1, nCol2);
 }
 

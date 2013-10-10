@@ -429,7 +429,7 @@ OUString ScDBExternalRange::getString(SCCOL nCol, SCROW nRow) const
     if (nCol >= mnCols || nRow >= mnRows)
         return OUString();
 
-    return mpMatrix->GetString(nCol, nRow);
+    return mpMatrix->GetString(nCol, nRow).getString();
 }
 
 SCCOL ScDBExternalRange::getFirstFieldColumn() const
@@ -451,7 +451,7 @@ SCCOL ScDBExternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     lcl_uppercase(aUpper);
     for (SCCOL i = 0; i < mnCols; ++i)
     {
-        OUString aUpperVal = mpMatrix->GetString(i, 0);
+        OUString aUpperVal = mpMatrix->GetString(i, 0).getString();
         lcl_uppercase(aUpperVal);
         if (aUpper.equals(aUpperVal))
             return i;

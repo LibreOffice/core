@@ -553,7 +553,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::getCurrent(Value& rValue)
 
         if (isValidQuery(mnCurRow, rMat))
         {
-            rValue.maString = rMat.GetString(mpParam->mnField, mnCurRow);
+            rValue.maString = rMat.GetString(mpParam->mnField, mnCurRow).getString();
             rValue.mfValue = rMat.GetDouble(mpParam->mnField, mnCurRow);
             rValue.mbIsNumber = !bIsStrVal;
             rValue.mnError = 0;
@@ -681,19 +681,19 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
             do
             {
                 // Equality check first.
-                OUString aMatStr = rMat.GetString(nField, nRow);
-                upperCase(aMatStr);
-                OUString aQueryStr = rEntry.GetQueryItem().maString.getString();
-                upperCase(aQueryStr);
+                svl::SharedString aMatStr = rMat.GetString(nField, nRow);
+                svl::SharedString aQueryStr = rEntry.GetQueryItem().maString;
                 bool bDone = false;
+                rtl_uString* p1 = mpParam->bCaseSens ? aMatStr.getData() : aMatStr.getDataIgnoreCase();
+                rtl_uString* p2 = mpParam->bCaseSens ? aQueryStr.getData() : aQueryStr.getDataIgnoreCase();
                 switch (rEntry.eOp)
                 {
                     case SC_EQUAL:
-                        bValid = aMatStr.equals(aQueryStr);
+                        bValid = (p1 == p2);
                         bDone = true;
                     break;
                     case SC_NOT_EQUAL:
-                        bValid = !aMatStr.equals(aQueryStr);
+                        bValid = (p1 != p2);
                         bDone = true;
                     break;
                     default:
@@ -704,7 +704,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
                     break;
 
                 // Unequality check using collator.
-                sal_Int32 nCompare = rCollator.compareString(aMatStr, aQueryStr);
+                sal_Int32 nCompare = rCollator.compareString(aMatStr.getString(), aQueryStr.getString());
                 switch (rEntry.eOp)
                 {
                     case SC_LESS :

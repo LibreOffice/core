@@ -1778,7 +1778,7 @@ void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
     {
         // determine if the matrix result is a string or value.
         if (!xMat->IsValue(0, 1))
-            rURL = xMat->GetString(0, 1);
+            rURL = xMat->GetString(0, 1).getString();
         else
             pFormatter->GetOutputString(
                 xMat->GetDouble(0, 1), nURLFormat, rURL, &pColor);

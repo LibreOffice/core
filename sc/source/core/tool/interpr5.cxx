@@ -1084,8 +1084,8 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
                     xResMat->PutError( nErr, i, j);
                 else
                 {
-                    OUString aTmp = pMat1->GetString(*pFormatter, i, j);
-                    aTmp += pMat2->GetString( *pFormatter, i, j);
+                    OUString aTmp = pMat1->GetString(*pFormatter, i, j).getString();
+                    aTmp += pMat2->GetString(*pFormatter, i, j).getString();
                     xResMat->PutString(mrStrPool.intern(aTmp), i, j);
                 }
             }
@@ -1316,7 +1316,7 @@ void ScInterpreter::ScAmpersand()
                         else
                         {
                             OUString aTmp = sStr;
-                            aTmp += pMat->GetString( *pFormatter, i, j);
+                            aTmp += pMat->GetString(*pFormatter, i, j).getString();
                             pResMat->PutString(mrStrPool.intern(aTmp), i, j);
                         }
                     }
@@ -1331,7 +1331,7 @@ void ScInterpreter::ScAmpersand()
                             pResMat->PutError( nErr, i, j);
                         else
                         {
-                            OUString aTmp = pMat->GetString(*pFormatter, i, j);
+                            OUString aTmp = pMat->GetString(*pFormatter, i, j).getString();
                             aTmp += sStr;
                             pResMat->PutString(mrStrPool.intern(aTmp), i, j);
                         }

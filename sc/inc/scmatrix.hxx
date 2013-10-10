@@ -276,15 +276,15 @@ public:
     double GetDouble( SCSIZE nIndex) const;
 
     /// @return empty string if empty or empty path, else string content.
-    OUString GetString( SCSIZE nC, SCSIZE nR) const;
+    svl::SharedString GetString( SCSIZE nC, SCSIZE nR) const;
     /// @return empty string if empty or empty path, else string content.
-    OUString GetString( SCSIZE nIndex) const;
+    svl::SharedString GetString( SCSIZE nIndex) const;
 
     /** @returns the matrix element's string if one is present, otherwise the
         numerical value formatted as string, or in case of an error the error
         string is returned; an empty string for empty, a "FALSE" string for
         empty path. */
-    OUString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
+    svl::SharedString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
 
     /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
     /// an empty string!
@@ -337,7 +337,7 @@ public:
     IterateResult Product(bool bTextAsZero) const;
     size_t Count(bool bCountStrings) const;
     size_t MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const;
-    size_t MatchStringInColumns(const OUString& rStr, size_t nCol1, size_t nCol2) const;
+    size_t MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const;
 
     double GetMaxValue( bool bTextAsZero ) const;
     double GetMinValue( bool bTextAsZero ) const;

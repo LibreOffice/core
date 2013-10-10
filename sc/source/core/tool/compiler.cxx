@@ -4168,7 +4168,7 @@ void ScCompiler::CreateStringFromMatrix( OUStringBuffer& rBuffer,
             else if( pMatrix->IsEmpty( nC, nR ) )
                 ;
             else if( pMatrix->IsString( nC, nR ) )
-                AppendString( rBuffer, pMatrix->GetString( nC, nR ) );
+                AppendString( rBuffer, pMatrix->GetString(nC, nR).getString() );
         }
     }
     rBuffer.append( mxSymbols->getSymbol(ocArrayClose) );

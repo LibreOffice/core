@@ -40,6 +40,7 @@
 #include "scmatrix.hxx"
 
 #include "formula/opcode.hxx"
+#include "svl/sharedstring.hxx"
 
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
@@ -2726,7 +2727,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
                     ++nDataCount;
 
                     rItem.mbIsValue = false;
-                    rItem.maString = pMat->GetString(nC, nR);
+                    rItem.maString = pMat->GetString(nC, nR).getString();
                 }
             }
         }

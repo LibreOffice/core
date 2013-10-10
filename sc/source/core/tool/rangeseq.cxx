@@ -216,7 +216,7 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMa
             if ( pMatrix->IsString( nCol, nRow ) )
             {
                 if ( !pMatrix->IsEmpty( nCol, nRow ) )
-                    aStr = pMatrix->GetString( nCol, nRow );
+                    aStr = pMatrix->GetString(nCol, nRow).getString();
             }
             else if ( pFormatter )
             {
@@ -303,8 +303,8 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMat
             {
                 OUString aStr;
                 if ( !pMatrix->IsEmpty( nCol, nRow ) )
-                    aStr = pMatrix->GetString( nCol, nRow );
-                pColAry[nCol] <<= OUString( aStr );
+                    aStr = pMatrix->GetString(nCol, nRow).getString();
+                pColAry[nCol] <<= aStr;
             }
             else
             {
