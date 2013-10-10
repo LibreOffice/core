@@ -167,9 +167,7 @@ namespace desktop
 #else
         // rest gets a dialog box
         CmdlineHelpDialog aDlg;
-        String head = aHelpMessage_version;
-        head.Append(aHelpMessage_head);
-        aDlg.m_pftHead->SetText(head);
+        aDlg.m_pftHead->SetText(aHelpMessage_version + aHelpMessage_head);
         aDlg.m_pftLeft->SetText(aHelpMessage_left);
         aDlg.m_pftRight->SetText(aHelpMessage_right);
         aDlg.m_pftBottom->SetText(aHelpMessage_bottom);

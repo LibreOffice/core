@@ -281,7 +281,7 @@ static OString lcl_toOStringSkipLeadingWhites( const OUString& aStr )
     return aORetStr;
 }
 
-String lcl_dumpMethodParameters( SbMethod* pMethod )
+OUString lcl_dumpMethodParameters( SbMethod* pMethod )
 {
     OUString aStr;
     if( pMethod == NULL )
