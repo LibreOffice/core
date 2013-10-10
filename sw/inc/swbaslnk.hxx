@@ -39,7 +39,7 @@ class SwBaseLink : public ::sfx2::SvBaseLink
 protected:
     SwBaseLink(): m_pReReadThread(0) {}
 
-    SwBaseLink( const String& rNm, sal_uInt16 nObjectType, ::sfx2::SvLinkSource* pObj,
+    SwBaseLink( const OUString& rNm, sal_uInt16 nObjectType, ::sfx2::SvLinkSource* pObj,
                  SwCntntNode* pNode = 0 )
         : ::sfx2::SvBaseLink( rNm, nObjectType, pObj ), pCntntNode( pNode ),
         bSwapIn( sal_False ), bNoDataFlag( sal_False ), bIgnoreDataChanged( sal_False ),
