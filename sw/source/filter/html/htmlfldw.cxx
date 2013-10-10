@@ -289,18 +289,6 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             HTMLOutFuncs::Out_String( rWrt.Strm(), aValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut.append('\"');
         }
-        if( bNumFmt )
-        {
-            OSL_ENSURE( nFmt, "Zahlenformat ist 0" );
-            sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(
-                bNumValue, dNumValue, nFmt,
-                *rHTMLWrt.pDoc->GetNumberFormatter(), rHTMLWrt.eDestEnc,
-                &rHTMLWrt.aNonConvertableCharacters));
-        }
-        if( bFixed )
-        {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
-        }
         sOut.append('>');
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
     }

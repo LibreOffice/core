@@ -101,13 +101,6 @@ struct HTMLOutFuncs
                                  const HTMLOutEvent*, sal_Bool bOutStarBasic,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         OUString *pNonConvertableChars = 0 );
-
-    // <TD SDVAL="..." SDNUM="...">
-    SVT_DLLPUBLIC static OString CreateTableDataOptionsValNum(
-                sal_Bool bValue, double fVal, sal_uLong nFormat,
-                SvNumberFormatter& rFormatter,
-                rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                OUString *pNonConvertableChars = 0);
 };
 
 #endif

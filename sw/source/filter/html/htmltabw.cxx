@@ -451,12 +451,6 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             nNumFmt = pBox->GetFrmFmt()->GetTblBoxNumFmt().GetValue();
     }
 
-    if( bNumFmt || bValue )
-    {
-        sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValue, nValue,
-            nNumFmt, *rWrt.pDoc->GetNumberFormatter(), rWrt.eDestEnc,
-            &rWrt.aNonConvertableCharacters));
-    }
     sOut.append('>');
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
     rWrt.bLFPossible = sal_True;

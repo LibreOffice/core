@@ -34,7 +34,6 @@ namespace dbaui
         sal_Int16           m_nWidth;
         sal_Int16           m_nColumnWidth; ///< maximum column width
         sal_Bool            m_bMetaOptions; ///< true when we scanned the meta information
-        sal_Bool            m_bSDNum;
 
     protected:
         virtual void        NextToken( int nToken ); // base class

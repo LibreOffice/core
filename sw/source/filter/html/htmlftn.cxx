@@ -304,10 +304,7 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
         .append(OOO_STRING_SVTOOLS_HTML_O_href).append("=\"#");
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol).append('\"');
-    if( !rFmtFtn.GetNumStr().isEmpty() )
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
-    sOut.append('>');
+    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol).append("\">");
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, sal_True );
 

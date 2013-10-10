@@ -93,7 +93,6 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_aDestColumns(sal_True)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rxContext)
-    ,m_pFormatter(NULL)
     ,m_rInputStream( _rInputStream )
     ,m_pTypeInfo()
     ,m_pColumnList(pList)
@@ -150,7 +149,6 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rxContext)
-    ,m_pFormatter(NULL)
     ,m_rInputStream( _rInputStream )
     ,m_pTypeInfo()
     ,m_pColumnList(NULL)
@@ -286,7 +284,6 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
 ODatabaseExport::~ODatabaseExport()
 {
     DBG_DTOR(ODatabaseExport,NULL);
-    m_pFormatter = NULL;
     ODatabaseExport::TColumns::iterator aIter = m_aDestColumns.begin();
     ODatabaseExport::TColumns::iterator aEnd  = m_aDestColumns.end();
 
@@ -321,23 +318,9 @@ void ODatabaseExport::insertValueIntoColumn()
                         if (m_vColumnTypes[nNewPos] != DataType::VARCHAR && m_vColumnTypes[nNewPos] != DataType::CHAR && m_vColumnTypes[nNewPos] != DataType::LONGVARCHAR )
                         {
                             SAL_INFO("dbaccess", "ODatabaseExport::insertValueIntoColumn != DataType::VARCHAR" );
-                            ensureFormatter();
                             sal_Int32 nNumberFormat = 0;
                             double fOutNumber = 0.0;
                             bool bNumberFormatError = false;
-                            if ( m_pFormatter && !m_sNumToken.isEmpty() )
-                            {
-                                LanguageType eNumLang = LANGUAGE_NONE;
-                                sal_uInt32 nNumberFormat2( nNumberFormat );
-                                fOutNumber = SfxHTMLParser::GetTableDataOptionsValNum(nNumberFormat2,eNumLang,m_sTextToken,m_sNumToken,*m_pFormatter);
-                                if ( eNumLang != LANGUAGE_NONE )
-                                {
-                                    nNumberFormat2 = m_pFormatter->GetFormatForLanguageIfBuiltIn( nNumberFormat2, eNumLang );
-                                    m_pFormatter->IsNumberFormat( m_sTextToken, nNumberFormat2, fOutNumber );
-                                }
-                                nNumberFormat = static_cast<sal_Int32>(nNumberFormat2);
-                            }
-                            else
                             {
                                 Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
                                 Reference<XNumberFormatTypes> xNumType(xSupplier->getNumberFormats(),UNO_QUERY);
@@ -423,22 +406,6 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
         Reference< XNumberFormatsSupplier > xSupplier = m_xFormatter->getNumberFormatsSupplier();
         Reference< XNumberFormats >         xFormats = xSupplier->getNumberFormats();
 
-        ensureFormatter();
-        if ( m_pFormatter && !m_sNumToken.isEmpty() )
-        {
-            LanguageType eNumLang;
-            sal_uInt32 nFormatKey(0);
-            fOutNumber = SfxHTMLParser::GetTableDataOptionsValNum(nFormatKey,eNumLang,m_sTextToken,m_sNumToken,*m_pFormatter);
-            if ( eNumLang != LANGUAGE_NONE )
-            {
-                nFormatKey = m_pFormatter->GetFormatForLanguageIfBuiltIn( nFormatKey, eNumLang );
-                if ( !m_pFormatter->IsNumberFormat( m_sTextToken, nFormatKey, fOutNumber ) )
-                    return NumberFormat::TEXT;
-            }
-            Reference<XPropertySet> xProp = xFormats->getByKey(nFormatKey);
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nNumberFormat;
-        }
-        else
         {
             Reference<XNumberFormatTypes> xNumType(xFormats,UNO_QUERY);
             sal_Int32 nFormatKey = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::ALL,m_aLocale),aCheckToken);
@@ -805,22 +772,6 @@ void ODatabaseExport::eraseTokens()
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::eraseTokens" );
     m_sTextToken = "";
-    m_sNumToken = "";
-    m_sValToken = "";
-}
-
-void ODatabaseExport::ensureFormatter()
-{
-    SAL_INFO("dbaccess.ui", "ODatabaseExport::ensureFormatter" );
-    if ( !m_pFormatter )
-    {
-        Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
-        Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-        SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
-        m_pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
-        Reference<XPropertySet> xNumberFormatSettings = xSupplier->getNumberFormatSettings();
-        xNumberFormatSettings->getPropertyValue("NullDate") >>= m_aNullDate;
-    }
 }
 
 Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const Reference<XDatabaseMetaData>& _xMetaData

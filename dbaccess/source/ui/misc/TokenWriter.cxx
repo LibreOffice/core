@@ -838,8 +838,6 @@ void OHTMLImportExport::WriteTables()
 
     if(m_xObject.is())
     {
-        sal_Int32* pFormat = new sal_Int32[aNames.getLength()];
-
         const char **pHorJustify = new const char*[aNames.getLength()];
         sal_Int32 *pColWidth = new sal_Int32[aNames.getLength()];
 
@@ -853,14 +851,12 @@ void OHTMLImportExport::WriteTables()
         for( sal_Int32 i=0;pIter != pEnd; ++pIter,++i )
         {
             sal_Int32 nAlign = 0;
-            pFormat[i] = 0;
             pColWidth[i] = 100;
             if ( !bUseResultMetaData )
             {
                 Reference<XPropertySet> xColumn;
                 xColumns->getByName(*pIter) >>= xColumn;
                 xColumn->getPropertyValue(PROPERTY_ALIGN) >>= nAlign;
-                pFormat[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_FORMATKEY));
                 pColWidth[i] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_WIDTH));
             }
 
@@ -874,7 +870,7 @@ void OHTMLImportExport::WriteTables()
             if(i == aNames.getLength()-1)
                 IncIndent(-1);
 
-            WriteCell(pFormat[i],pColWidth[i],nHeight,pHorJustify[i],*pIter,OOO_STRING_SVTOOLS_HTML_tableheader);
+            WriteCell(pColWidth[i],nHeight,pHorJustify[i],*pIter,OOO_STRING_SVTOOLS_HTML_tableheader);
         }
 
         IncIndent(-1);
@@ -917,14 +913,13 @@ void OHTMLImportExport::WriteTables()
                     {
                         DBG_UNHANDLED_EXCEPTION();
                     }
-                    WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,OOO_STRING_SVTOOLS_HTML_tabledata);
+                    WriteCell(pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,OOO_STRING_SVTOOLS_HTML_tabledata);
                 }
             }
             ++j;
             TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
         }
 
-        delete [] pFormat;
         delete [] pHorJustify;
         delete [] pColWidth;
     }
@@ -942,7 +937,7 @@ void OHTMLImportExport::WriteTables()
     IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_table );
 }
 
-void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal_Int32 nHeightPixel, const char* pChar,
+void OHTMLImportExport::WriteCell( sal_Int32 nWidthPixel, sal_Int32 nHeightPixel, const char* pChar,
                                    const OUString& rValue, const char* pHtmlTag)
 {
     SAL_INFO("dbaccess.ui", "OHTMLImportExport::WriteCell" );
@@ -968,24 +963,6 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
     aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_align;
     aStrTD = aStrTD + "=";
     aStrTD = aStrTD + pChar;
-
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
-    SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
-    SvNumberFormatter* pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
-    if(pFormatter)
-    {
-        double fVal = 0.0;
-
-        try
-        {
-            fVal = m_xFormatter->convertStringToNumber(nFormat,rValue);
-            HTMLOutFuncs::CreateTableDataOptionsValNum(sal_False, fVal,nFormat, *pFormatter);
-        }
-        catch(const Exception&)
-        {
-            HTMLOutFuncs::CreateTableDataOptionsValNum(sal_False, fVal,nFormat, *pFormatter);
-        }
-    }
 
     TAG_ON( aStrTD.getStr() );
 

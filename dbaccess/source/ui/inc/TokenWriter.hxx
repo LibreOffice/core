@@ -169,7 +169,7 @@ namespace dbaui
         void WriteHeader();
         void WriteBody();
         void WriteTables();
-        void WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,const OUString& rValue,const char* pHtmlTag);
+        void WriteCell( sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,const OUString& rValue,const char* pHtmlTag);
         void IncIndent( sal_Int16 nVal );
         const char*         GetIndentStr() { return sIndent; }
         void FontOn();

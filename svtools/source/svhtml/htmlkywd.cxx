@@ -613,8 +613,6 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_style},     HTML_O_STYLE},
     {{OOO_STRING_SVTOOLS_HTML_O_title},     HTML_O_TITLE},
     {{OOO_STRING_SVTOOLS_HTML_O_value},     HTML_O_VALUE},
-    {{OOO_STRING_SVTOOLS_HTML_O_SDval},     HTML_O_SDVAL}, // StarDiv NumberValue
-    {{OOO_STRING_SVTOOLS_HTML_O_SDnum},     HTML_O_SDNUM}, // StarDiv NumberFormat
     {{OOO_STRING_SVTOOLS_HTML_O_sdlibrary}, HTML_O_SDLIBRARY},
     {{OOO_STRING_SVTOOLS_HTML_O_sdmodule},  HTML_O_SDMODULE},
 

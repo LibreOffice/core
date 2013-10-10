@@ -78,7 +78,6 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
     ,m_bMetaOptions(sal_False)
-    ,m_bSDNum(sal_False)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     DBG_CTOR(OHTMLReader,NULL);
@@ -100,7 +99,6 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
     ,m_bMetaOptions(sal_False)
-    ,m_bSDNum(sal_False)
 {
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     DBG_CTOR(OHTMLReader,NULL);
@@ -191,7 +189,7 @@ void OHTMLReader::NextToken( int nToken )
                 break;
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
-                if ( m_bInTbl ) //&& !m_bSDNum ) // important, as otherwise we also get the names of the fonts
+                if ( m_bInTbl ) // important, as otherwise we also get the names of the fonts
                     m_sTextToken += aToken;
                 break;
             case HTML_PARABREAK_OFF:
@@ -219,7 +217,7 @@ void OHTMLReader::NextToken( int nToken )
                     m_sCurrent = "";
                     m_nColumnPos++;
                     eraseTokens();
-                    m_bSDNum = m_bInTbl = sal_False;
+                    m_bInTbl = sal_False;
                 }
                 break;
             case HTML_TABLEROW_OFF:
@@ -265,7 +263,7 @@ void OHTMLReader::NextToken( int nToken )
                 break;
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
-                if ( m_bInTbl ) // && !m_bSDNum ) // important, as otherwise we also get the names of the fonts
+                if ( m_bInTbl ) // important, as otherwise we also get the names of the fonts
                     m_sTextToken += aToken;
                 break;
             case HTML_PARABREAK_OFF:
@@ -279,7 +277,7 @@ void OHTMLReader::NextToken( int nToken )
                     m_sTextToken = m_sCurrent;
                 adjustFormat();
                 m_nColumnPos++;
-                m_bSDNum = m_bInTbl = sal_False;
+                m_bInTbl = sal_False;
                 m_sCurrent = "";
                 break;
             case HTML_TABLEROW_OFF:
@@ -307,7 +305,6 @@ void OHTMLReader::fetchOptions()
             case HTML_O_SDVAL:
             {
                 m_sValToken = rOption.GetString();
-                m_bSDNum = sal_True;
             }
             break;
             case HTML_O_SDNUM:

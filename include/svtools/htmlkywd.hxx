@@ -460,8 +460,6 @@
 #define OOO_STRING_SVTOOLS_HTML_O_style "style"
 #define OOO_STRING_SVTOOLS_HTML_O_title "title"
 #define OOO_STRING_SVTOOLS_HTML_O_value "value"
-#define OOO_STRING_SVTOOLS_HTML_O_SDval "sdval"
-#define OOO_STRING_SVTOOLS_HTML_O_SDnum "sdnum"
 #define OOO_STRING_SVTOOLS_HTML_O_sdlibrary "sdlibrary"
 #define OOO_STRING_SVTOOLS_HTML_O_sdmodule "sdmodule"
 #define OOO_STRING_SVTOOLS_HTML_O_sdevent "sdevent-"
