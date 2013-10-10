@@ -501,12 +501,11 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
 
 void ScDocumentLoader::RemoveAppPrefix( OUString& rFilterName )
 {
-    OUStringBuffer aAppPrefix;
-    aAppPrefix.appendAscii(STRING_SCAPP);
-    aAppPrefix.appendAscii(": ");
-    sal_Int32 nPreLen = aAppPrefix.getLength();
-    if (rFilterName.copy(0, nPreLen).equals(aAppPrefix.makeStringAndClear()))
-        rFilterName = rFilterName.copy(nPreLen);
+    OUStringBuffer aBuf;
+    aBuf.appendAscii( STRING_SCAPP).appendAscii( ": ");
+    OUString aAppPrefix( aBuf.makeStringAndClear());
+    if (rFilterName.startsWith( aAppPrefix))
+        rFilterName = rFilterName.copy( aAppPrefix.getLength());
 }
 
 ScDocumentLoader::ScDocumentLoader( const OUString& rFileName,
