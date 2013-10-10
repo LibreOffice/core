@@ -773,6 +773,11 @@ AC_ARG_ENABLE(lpsolve,
         [Disable compilation of the lp solve solver ])
 )
 
+AC_ARG_ENABLE(pdfimport,
+    AS_HELP_STRING([--disable-pdfimport],
+        [Disable building the PDF import feature.])
+)
+
 ###############################################################################
 
 dnl ---------- *** ----------
@@ -4514,11 +4519,11 @@ if test "$cross_compiling" = "yes"; then
     # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
         --disable-graphite \
+        --disable-pdfimport \
         --disable-postgresql-sdbc \
         --with-parallelism="$with_parallelism" \
         --without-doxygen \
         --without-java \
-        ENABLE_PDFIMPORT=FALSE \
         $sub_conf_opts \
         --srcdir=$srcdir \
         2>&1 | sed -e 's/^/    /'
@@ -10347,15 +10352,16 @@ fi
 AC_SUBST(ENABLE_MINIMIZER)
 
 # pdf import?
-AC_MSG_CHECKING([whether to build the PDF import])
-if test "$_os" != Android -a "$_os" != iOS -a "$ENABLE_PDFIMPORT" != FALSE; then
+AC_MSG_CHECKING([whether to build the PDF import feature])
+ENABLE_PDFIMPORT=
+if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_pdfimport" = yes \); then
     AC_MSG_RESULT([yes])
     ENABLE_PDFIMPORT=TRUE
 
     dnl ===================================================================
     dnl Check for system poppler
     dnl ===================================================================
-    AC_MSG_CHECKING([which pdf backend to use])
+    AC_MSG_CHECKING([which PDF import backend to use])
     if test "$with_system_poppler" = "yes"; then
         AC_MSG_RESULT([external])
         SYSTEM_POPPLER=YES
@@ -10379,7 +10385,6 @@ if test "$_os" != Android -a "$_os" != iOS -a "$ENABLE_PDFIMPORT" != FALSE; then
     fi
 else
     AC_MSG_RESULT([no])
-    ENABLE_PDFIMPORT=FALSE
 fi
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
@@ -12492,7 +12497,7 @@ if test "$enable_mpl_subset" = "yes"; then
     if test "x$enable_ext_mariadb_connector" = "xyes"; then
         AC_MSG_ERROR([need to --disable-ext-mariadb-connector - mariadb/mysql support.])
     fi
-    if test "x$ENABLE_PDFIMPORT" != "xFALSE"; then
+    if test -n "$ENABLE_PDFIMPORT"; then
         if test "x$SYSTEM_POPPLER" != "xNO"; then
             AC_MSG_ERROR([need to disable PDF import via poppler or use system library])
         fi

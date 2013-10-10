@@ -26,7 +26,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(ENABLE_PDFIMPORT)" == "FALSE"
+.IF "$(ENABLE_PDFIMPORT)" != "TRUE"
 @all:
     @echo "PDF Import extension disabled."
 .ENDIF
