@@ -52,6 +52,9 @@ BubbleChart::BubbleChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_fMaxLogicBubbleSize( 0.0 )
         , m_fBubbleSizeFactorToScreen( 1.0 )
 {
+    // We only support 2 dimensional bubble charts
+    assert(nDimensionCount == 2);
+
     if( !m_pMainPosHelper )
         m_pMainPosHelper = new PlottingPositionHelper();
     PlotterBase::m_pPosHelper = m_pMainPosHelper;
@@ -253,9 +256,6 @@ void BubbleChart::createShapes()
                         pPosHelper = m_pMainPosHelper;
                     PlotterBase::m_pPosHelper = pPosHelper;
 
-                    if(m_nDimension==3)
-                        fLogicZ = nZ+0.5;
-
                     //collect data point information (logic coordinates, style ):
                     double fLogicX = pSeries->getXValue(nIndex);
                     double fLogicY = pSeries->getYValue(nIndex);
@@ -311,18 +311,15 @@ void BubbleChart::createShapes()
 
                         //create data point
                         drawing::Direction3D aSymbolSize = transformToScreenBubbleSize( fBubbleSize );
-                        if(m_nDimension!=3)
-                        {
-                            uno::Reference<drawing::XShape> xShape;
-                            xShape = m_pShapeFactory->createCircle2D( xPointGroupShape_Shapes
-                                                                      , aScenePosition, aSymbolSize );
+                        uno::Reference<drawing::XShape> xShape;
+                        xShape = m_pShapeFactory->createCircle2D( xPointGroupShape_Shapes
+                                , aScenePosition, aSymbolSize );
 
-                            this->setMappedProperties( xShape
-                                                       , pSeries->getPropertiesOfPoint( nIndex )
-                                                       , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+                        this->setMappedProperties( xShape
+                                , pSeries->getPropertiesOfPoint( nIndex )
+                                , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
 
-                            m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
-                        }
+                        m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
 
                         //create data point label
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
