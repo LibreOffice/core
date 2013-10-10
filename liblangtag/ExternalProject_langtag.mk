@@ -33,6 +33,8 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 		$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath,\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
 		$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-R$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
 		$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
-		&& $(if $(filter WNTMSC,$(OS)$(COM)),REAL_CC="$(shell cygpath -w $(lastword $(CC)))") $(MAKE) \
+		&& $(if $(filter WNTMSC,$(OS)$(COM)),REAL_CC="$(shell cygpath -w $(lastword $(CC)))") \
+		   $(if $(VERBOSE)$(verbose),V=1) \
+		   $(MAKE) \
 	)
 # vim: set noet sw=4 ts=4:

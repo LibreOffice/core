@@ -33,7 +33,9 @@ $(call gb_ExternalProject_get_state_target,libodfgen,build) :
 			--disable-weffc \
 			CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS))" \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE)) \
+		&& (cd $(EXTERNAL_WORKDIR)/src && \
+			$(if $(VERBOSE)$(verbose),V=1) \
+			$(MAKE)) \
 	)
 
 # vim: set noet sw=4 ts=4:

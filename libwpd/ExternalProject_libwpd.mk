@@ -27,7 +27,8 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 			--disable-debug \
 			$(if $(filter MACOSX,$(OS)),--disable-werror) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& $(MAKE) \
+		&& $(if $(VERBOSE)$(verbose),V=1) \
+		   $(MAKE) \
 	)
 
 # vim: set noet sw=4 ts=4:
