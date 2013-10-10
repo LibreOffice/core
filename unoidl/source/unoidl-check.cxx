@@ -537,12 +537,13 @@ void checkMap(
                             }
                             if (k->name != l->name) {
                                 std::cerr
-                                    << "Warning: interface type " << name
+                                    << "interface type " << name
                                     << " direct method " << i->name
                                     << " parameter #"
                                     << k - i->parameters.begin() + 1
                                     << " changed name from " << k->name
                                     << " to " << l->name << std::endl;
+                                std::exit(EXIT_FAILURE);
                             }
                         }
                     }
