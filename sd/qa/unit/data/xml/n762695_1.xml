@@ -83,7 +83,7 @@
    </PropertyValue>
    <PropertyValue name="Type" value="ooxml-non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
-    <ViewBox x="0" y="0" width="0" height="0"/>
+    <ViewBox x="0" y="0" width="6477000" height="2743200"/>
    </PropertyValue>
   </CustomShapeGeometry>
  </XShape>
@@ -170,7 +170,7 @@
    </PropertyValue>
    <PropertyValue name="Type" value="ooxml-non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
-    <ViewBox x="0" y="0" width="0" height="0"/>
+    <ViewBox x="0" y="0" width="6365875" height="3430587"/>
    </PropertyValue>
   </CustomShapeGeometry>
  </XShape>

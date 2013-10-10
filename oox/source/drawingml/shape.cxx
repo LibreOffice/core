@@ -621,7 +621,7 @@ Reference< XShape > Shape::createAndInsert(
             }
 
             SAL_INFO("oox.cscode", "==cscode== shape name: '" << msName << "'");
-            mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
+            mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape, maSize );
         }
         else if( getTextBody() )
             getTextBody()->getTextProperties().pushVertSimulation();
