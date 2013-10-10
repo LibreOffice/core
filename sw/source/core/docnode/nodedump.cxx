@@ -115,6 +115,7 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     mpFldTypes->dumpAsXml( writer );
     mpTxtFmtCollTbl->dumpAsXml( writer );
     mpCharFmtTbl->dumpAsXml( writer );
+    mpNumRuleTbl->dumpAsXml( writer );
     writer.endElement();
 }
 
@@ -341,6 +342,18 @@ void SwNumRule::dumpAsXml(xmlTextWriterPtr w)
      OString aName = OUStringToOString(GetName(), RTL_TEXTENCODING_UTF8);
      writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
      writer.endElement();
+}
+
+void SwNumRuleTbl::dumpAsXml(xmlTextWriterPtr w)
+{
+    if (!empty())
+    {
+        WriterHelper writer(w);
+        writer.startElement("swnumruletbl");
+        for (size_t i = 0; i < size(); ++i)
+            operator[](i)->dumpAsXml(w);
+        writer.endElement();
+    }
 }
 
 void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )

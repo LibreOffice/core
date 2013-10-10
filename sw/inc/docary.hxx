@@ -135,6 +135,7 @@ public:
     /// the destructor will free all objects still in the vector
     ~SwNumRuleTbl();
     sal_uInt16 GetPos(const SwNumRule* pRule) const;
+    void dumpAsXml(xmlTextWriterPtr w);
 };
 
 struct CompareSwRedlineTbl
