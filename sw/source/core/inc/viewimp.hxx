@@ -83,7 +83,7 @@ class SwViewImp
     SwAccessibleMap *pAccMap;       // Accessible Wrappers
 
     mutable const SdrObject * pSdrObjCached;
-    mutable String sSdrObjCachedComment;
+    mutable OUString sSdrObjCachedComment;
 
     sal_Bool bFirstPageInvalid  :1; //Pointer auf erste Seite ungueltig?
 
