@@ -273,18 +273,18 @@ SwGlossaryList* GetGlossaryList()
 
 struct ImpAutoFmtNameListLoader : public Resource
 {
-    ImpAutoFmtNameListLoader( std::vector<String>& rLst );
+    ImpAutoFmtNameListLoader( std::vector<OUString>& rLst );
 };
 
 void ShellResource::_GetAutoFmtNameLst() const
 {
     assert(!pAutoFmtNameLst);
-    pAutoFmtNameLst = new std::vector<String>;
+    pAutoFmtNameLst = new std::vector<OUString>;
     pAutoFmtNameLst->reserve(STR_AUTOFMTREDL_END);
     ImpAutoFmtNameListLoader aTmp(*pAutoFmtNameLst);
 }
 
-ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( std::vector<String>& rLst )
+ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( std::vector<OUString>& rLst )
     : Resource( ResId(RID_SHELLRES_AUTOFMTSTRS, *pSwResMgr) )
 {
     for( sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n )

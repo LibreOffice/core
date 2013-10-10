@@ -26,50 +26,50 @@
 
 struct SW_DLLPUBLIC ShellResource : public Resource
 {
-    String          aPostItAuthor;
-    String          aPostItPage;
-    String          aPostItLine;
+    OUString        aPostItAuthor;
+    OUString        aPostItPage;
+    OUString        aPostItLine;
 
     // Calc error-strings.
-    String          aCalc_Syntax;
-    String          aCalc_ZeroDiv;
-    String          aCalc_Brack;
-    String          aCalc_Pow;
-    String          aCalc_VarNFnd;
-    String          aCalc_Overflow;
-    String          aCalc_WrongTime;
-    String          aCalc_Default;
-    String          aCalc_Error;
+    OUString        aCalc_Syntax;
+    OUString        aCalc_ZeroDiv;
+    OUString        aCalc_Brack;
+    OUString        aCalc_Pow;
+    OUString        aCalc_VarNFnd;
+    OUString        aCalc_Overflow;
+    OUString        aCalc_WrongTime;
+    OUString        aCalc_Default;
+    OUString        aCalc_Error;
 
     // For GetRefField - up/down.
-    String          aGetRefFld_Up;
-    String          aGetRefFld_Down;
+    OUString        aGetRefFld_Up;
+    OUString        aGetRefFld_Down;
     // For GetRefField - referenced item not found.
-    String          aGetRefFld_RefItemNotFound;
+    OUString        aGetRefFld_RefItemNotFound;
     // For dynamic menu - string "all".
-    String          aStrAllPageHeadFoot;
+    OUString        aStrAllPageHeadFoot;
     // For some list boxes - string "none"
-    String          aStrNone;
+    OUString        aStrNone;
     // For fixed fields.
-    String          aFixedStr;
+    OUString        aFixedStr;
     // Custom fields of type css::util::Duration.
-    String          sDurationFormat;
+    OUString        sDurationFormat;
 
     //Names of TOXs.
-    String          aTOXIndexName;
+    OUString        aTOXIndexName;
     OUString        aTOXUserName;
-    String          aTOXContentName;
-    String          aTOXIllustrationsName;
-    String          aTOXObjectsName;
-    String          aTOXTablesName;
-    String          aTOXAuthoritiesName;
+    OUString        aTOXContentName;
+    OUString        aTOXIllustrationsName;
+    OUString        aTOXObjectsName;
+    OUString        aTOXTablesName;
+    OUString        aTOXAuthoritiesName;
 
     OUString        aHyperlinkClick;
 
-    std::vector<String> aDocInfoLst;
+    std::vector<OUString> aDocInfoLst;
 
     // The autoFormat-Redline comments.
-    inline const std::vector<String>& GetAutoFmtNameLst() const;
+    inline const std::vector<OUString>& GetAutoFmtNameLst() const;
 
     enum PageNameMode
     {
@@ -87,13 +87,13 @@ struct SW_DLLPUBLIC ShellResource : public Resource
 
 private:
     void _GetAutoFmtNameLst() const;
-    mutable std::vector<String> *pAutoFmtNameLst;
-    String          sPageDescFirstName;
-    String          sPageDescFollowName;
-    String          sPageDescName;
+    mutable std::vector<OUString> *pAutoFmtNameLst;
+    OUString        sPageDescFirstName;
+    OUString        sPageDescFollowName;
+    OUString        sPageDescName;
 };
 
-inline const std::vector<String>& ShellResource::GetAutoFmtNameLst() const
+inline const std::vector<OUString>& ShellResource::GetAutoFmtNameLst() const
 {
     if( !pAutoFmtNameLst )
         _GetAutoFmtNameLst();
