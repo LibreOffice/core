@@ -263,10 +263,7 @@ static PyObject* getComponentContext(
         {
             // cppu::defaultBootstrap_InitialComponentContext expects
             // command line arguments to be present
-            static char * argv [1];
-            argv[0] = strdup(
-                "this is just a fake and cheap imitation of a command line");
-            osl_setCommandArgs(1, argv);
+            osl_setCommandArgs(0, 0); // fake it
 
             OUString iniFile;
             if( path.isEmpty() )

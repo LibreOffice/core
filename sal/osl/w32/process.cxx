@@ -261,14 +261,14 @@ static struct CommandArgs_Impl g_command_args =
 #endif
 static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
 {
+    int nArgs(0);
+    LPWSTR *wargv = CommandLineToArgvW( GetCommandLineW(), &nArgs );
+    assert(argc == nArgs || argc == 0 /* special case - faked */);
     rtl_uString ** ppArgs =
-        (rtl_uString**)rtl_allocateZeroMemory (argc * sizeof(rtl_uString*));
+        (rtl_uString**)rtl_allocateZeroMemory(nArgs * sizeof(rtl_uString*));
     if (ppArgs != 0)
     {
         int i;
-        int nArgs;
-        LPWSTR *wargv = CommandLineToArgvW( GetCommandLineW(), &nArgs );
-        OSL_ASSERT( nArgs == argc );
         for (i = 0; i < nArgs; i++)
         {
             /* Convert to unicode */

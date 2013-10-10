@@ -208,13 +208,26 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
  **************************************/
 void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
-    OSL_ASSERT(argc > 0);
+    // special case for argc == 0: set up fake command line
+    int nArgs(argc ? argc : 1);
     pthread_mutex_lock (&(g_command_args.m_mutex));
     assert (g_command_args.m_nCount == 0);
     if (g_command_args.m_nCount == 0)
     {
-        rtl_uString** ppArgs = (rtl_uString**)rtl_allocateZeroMemory (argc * sizeof(rtl_uString*));
-        if (ppArgs != 0)
+        rtl_uString** ppArgs =
+            (rtl_uString**)rtl_allocateZeroMemory(nArgs * sizeof(rtl_uString*));
+        if (ppArgs != 0 && argc == 0)
+        {
+            // special case: set up fake command line
+            char const*const arg =
+                "this is just a fake and cheap imitation of a command line";
+            rtl_string2UString(&ppArgs[0],
+                arg, rtl_str_getLength(arg), RTL_TEXTENCODING_ASCII_US,
+                OSTRING_TO_OUSTRING_CVTFLAGS);
+            g_command_args.m_nCount = nArgs;
+            g_command_args.m_ppArgs = ppArgs;
+        }
+        else if (ppArgs != 0)
         {
             rtl_TextEncoding encoding = osl_getThreadTextEncoding();
             for (int i = 0; i < argc; i++)
