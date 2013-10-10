@@ -71,6 +71,29 @@ Reference< XGraphic > lclCheckAndApplyDuotoneTransform( const BlipFillProperties
     return xGraphic;
 }
 
+Reference< XGraphic > lclCheckAndApplyChangeColorTransform( const BlipFillProperties &aBlipProps, Reference< XGraphic > xGraphic,
+                                                            const GraphicHelper& rGraphicHelper, const sal_Int32 nPhClr )
+{
+    if( aBlipProps.maColorChangeFrom.isUsed() && aBlipProps.maColorChangeTo.isUsed() )
+    {
+        sal_Int32 nFromColor = aBlipProps.maColorChangeFrom.getColor( rGraphicHelper, nPhClr );
+        sal_Int32 nToColor = aBlipProps.maColorChangeTo.getColor( rGraphicHelper, nPhClr );
+        if ( (nFromColor != nToColor) || aBlipProps.maColorChangeTo.hasTransparency() ) try
+        {
+            sal_Int16 nToTransparence = aBlipProps.maColorChangeTo.getTransparency();
+            sal_Int8 nToAlpha = static_cast< sal_Int8 >( (100 - nToTransparence) * 2.55 );
+            Reference< XGraphicTransformer > xTransformer( aBlipProps.mxGraphic, UNO_QUERY_THROW );
+            xGraphic = xTransformer->colorChange( xGraphic, nFromColor, 9, nToColor, nToAlpha );
+        }
+        catch( Exception& )
+        {
+        }
+    }
+    return xGraphic;
+}
+
+
+
 BitmapMode lclGetBitmapMode( sal_Int32 nToken )
 {
     OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
@@ -480,21 +503,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
     {
         // created transformed graphic
         Reference< XGraphic > xGraphic = lclCheckAndApplyDuotoneTransform( maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, nPhClr );
-        if( maBlipProps.maColorChangeFrom.isUsed() && maBlipProps.maColorChangeTo.isUsed() )
-        {
-            sal_Int32 nFromColor = maBlipProps.maColorChangeFrom.getColor( rGraphicHelper, nPhClr );
-            sal_Int32 nToColor = maBlipProps.maColorChangeTo.getColor( rGraphicHelper, nPhClr );
-            if ( (nFromColor != nToColor) || maBlipProps.maColorChangeTo.hasTransparency() ) try
-            {
-                sal_Int16 nToTransparence = maBlipProps.maColorChangeTo.getTransparency();
-                sal_Int8 nToAlpha = static_cast< sal_Int8 >( (100 - nToTransparence) / 39.062 );   // ?!? correct ?!?
-                Reference< XGraphicTransformer > xTransformer( maBlipProps.mxGraphic, UNO_QUERY_THROW );
-                xGraphic = xTransformer->colorChange( maBlipProps.mxGraphic, nFromColor, 9, nToColor, nToAlpha );
-            }
-            catch( Exception& )
-            {
-            }
-        }
+        xGraphic = lclCheckAndApplyChangeColorTransform( maBlipProps, xGraphic, rGraphicHelper, nPhClr );
 
         rPropMap[ PROP_Graphic ] <<= xGraphic;
 

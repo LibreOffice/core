@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/color.hxx"
@@ -83,6 +84,8 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
     switch( nElement )
     {
         case A_TOKEN( alpha ):
+            mrColor.addTransformation( nElement, rAttribs.getInteger( XML_val, 0 )*PER_PERCENT );
+            break;
         case A_TOKEN( alphaMod ):
         case A_TOKEN( alphaOff ):
         case A_TOKEN( blue ):
