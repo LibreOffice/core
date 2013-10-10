@@ -28,11 +28,11 @@ SwSortKey::SwSortKey() :
 {
 }
 
-SwSortKey::SwSortKey(sal_uInt16 nId, const String& rSrtType, SwSortOrder eOrder) :
+SwSortKey::SwSortKey(sal_uInt16 nId, const OUString& rSrtType, SwSortOrder eOrder) :
     sSortType( rSrtType ),
     eSortOrder( eOrder ),
     nColumnId( nId ),
-    bIsNumeric( 0 == rSrtType.Len() )
+    bIsNumeric( rSrtType.isEmpty() )
 {
 }
 

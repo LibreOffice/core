@@ -30,12 +30,12 @@ enum SwSortDirection    { SRT_COLUMNS, SRT_ROWS         };
 struct SW_DLLPUBLIC SwSortKey
 {
     SwSortKey();
-    SwSortKey( sal_uInt16 nId, const String& rSrtType, SwSortOrder eOrder );
+    SwSortKey( sal_uInt16 nId, const OUString& rSrtType, SwSortOrder eOrder );
     SwSortKey( const SwSortKey& rOld );
 
-    String          sSortType;
+    OUString        sSortType;
     SwSortOrder     eSortOrder;
-    sal_uInt16          nColumnId;
+    sal_uInt16      nColumnId;
     bool            bIsNumeric;
 };
 
