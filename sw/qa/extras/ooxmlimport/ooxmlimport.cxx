@@ -141,7 +141,7 @@ public:
     void testFdo43093();
 
     CPPUNIT_TEST_SUITE(Test);
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(WNT)
     CPPUNIT_TEST(run);
 #endif
     CPPUNIT_TEST_SUITE_END();
