@@ -163,7 +163,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     }
 
     // und es ggf. durch die Optionen veraendern
-    String aId, aStyle, aClass, aLang, aDir;
+    OUString aId, aStyle, aClass, aLang, aDir;
     OUString aBulletSrc;
     sal_Int16 eVertOri = text::VertOrientation::NONE;
     sal_uInt16 nWidth=USHRT_MAX, nHeight=USHRT_MAX;
@@ -464,7 +464,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
 void SwHTMLParser::NewNumBulListItem( int nToken )
 {
     sal_uInt8 nLevel = GetNumInfo().GetLevel();
-    String aId, aStyle, aClass, aLang, aDir;
+    OUString aId, aStyle, aClass, aLang, aDir;
     sal_uInt16 nStart = HTML_LISTHEADER_ON != nToken
                         ? GetNumInfo().GetNodeStartValue( nLevel )
                         : USHRT_MAX;
@@ -789,7 +789,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
     {
         rWrt.OutNewLine(); // <OL>/<UL> in eine neue Zeile
 
-        rWrt.aBulletGrfs[i].Erase();
+        rWrt.aBulletGrfs[i] = "";
         OStringBuffer sOut;
         sOut.append('<');
         const SwNumFmt& rNumFmt = rInfo.GetNumRule()->Get( i );

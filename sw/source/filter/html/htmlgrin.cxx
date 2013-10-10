@@ -796,7 +796,7 @@ void SwHTMLParser::InsertBodyOptions()
     pDoc->SetTxtFmtColl( *pPam,
                          pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_TEXT ) );
 
-    String aBackGround, aId, aStyle, aLang, aDir;
+    OUString aBackGround, aId, aStyle, aLang, aDir;
     Color aBGColor, aTextColor, aLinkColor, aVLinkColor;
     sal_Bool bBGColor=sal_False, bTextColor=sal_False;
     sal_Bool bLinkColor=sal_False, bVLinkColor=sal_False;
@@ -923,7 +923,7 @@ void SwHTMLParser::InsertBodyOptions()
         pCSS1Parser->SetBodyBGColorSet();
     }
 
-    if( aBackGround.Len() && !pCSS1Parser->IsBodyBackgroundSet() )
+    if( !aBackGround.isEmpty() && !pCSS1Parser->IsBodyBackgroundSet() )
     {
         // Hintergrundgrafik aus "BACKGROUND"
         aBrushItem.SetGraphicLink( INetURLObject::GetAbsURL( sBaseURL, aBackGround ) );
@@ -932,11 +932,11 @@ void SwHTMLParser::InsertBodyOptions()
         pCSS1Parser->SetBodyBackgroundSet();
     }
 
-    if( aStyle.Len() || aDir.Len() )
+    if( !aStyle.isEmpty() || !aDir.isEmpty() )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
-        String aDummy;
+        OUString aDummy;
         ParseStyleOptions( aStyle, aDummy, aDummy, aItemSet, aPropInfo, 0, &aDir );
 
         // Ein par Attribute muessen an der Seitenvorlage gesetzt werden,
@@ -986,7 +986,7 @@ void SwHTMLParser::InsertBodyOptions()
         pCharFmt->SetFmtAttr( SvxColorItem(aVLinkColor, RES_CHRATR_COLOR) );
         pCSS1Parser->SetBodyVLinkSet();
     }
-    if( aLang.Len() )
+    if( !aLang.isEmpty() )
     {
         LanguageType eLang = LanguageTag::convertToLanguageTypeWithFallback( aLang );
         if( LANGUAGE_DONTKNOW != eLang )
@@ -1013,7 +1013,7 @@ void SwHTMLParser::InsertBodyOptions()
         }
     }
 
-    if( aId.Len() )
+    if( !aId.isEmpty() )
         InsertBookmark( aId );
 }
 
@@ -1032,7 +1032,7 @@ void SwHTMLParser::NewAnchor()
 
     SvxMacroTableDtor aMacroTbl;
     String sHRef, aName, sTarget;
-    String aId, aStyle, aClass, aLang, aDir;
+    OUString aId, aStyle, aClass, aLang, aDir;
     sal_Bool bHasHRef = sal_False, bFixed = sal_False;
 
     ScriptType eDfltScriptType;
@@ -1238,7 +1238,7 @@ void SwHTMLParser::EndAnchor()
 
 /*  */
 
-void SwHTMLParser::InsertBookmark( const String& rName )
+void SwHTMLParser::InsertBookmark( const OUString& rName )
 {
     _HTMLAttr* pTmp = new _HTMLAttr( *pPam->GetPoint(),
             SfxStringItem( RES_FLTR_BOOKMARK, rName ));

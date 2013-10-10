@@ -196,7 +196,7 @@ class _HTMLAttrContext
 {
     _HTMLAttrs aAttrs;      // die in dem Kontext gestarteten Attribute
 
-    String aClass;          // die Klasse des Kontexts
+    OUString    aClass;          // die Klasse des Kontexts
 
     _HTMLAttrContext_SaveDoc *pSaveDocContext;
     SfxItemSet *pFrmItemSet;
@@ -227,7 +227,7 @@ class _HTMLAttrContext
 public:
     void ClearSaveDocContext();
 
-    _HTMLAttrContext( sal_uInt16 nTokn, sal_uInt16 nPoolId, const String& rClass,
+    _HTMLAttrContext( sal_uInt16 nTokn, sal_uInt16 nPoolId, const OUString& rClass,
                       sal_Bool bDfltColl=sal_False ) :
         aClass( rClass ),
         pSaveDocContext( 0 ),
@@ -280,7 +280,7 @@ public:
     sal_uInt16 GetTxtFmtColl() const { return bDfltTxtFmtColl ? 0 : nTxtFmtColl; }
     sal_uInt16 GetDfltTxtFmtColl() const { return bDfltTxtFmtColl ? nTxtFmtColl : 0; }
 
-    const String& GetClass() const { return aClass; }
+    const OUString& GetClass() const { return aClass; }
 
     inline void SetMargins( sal_uInt16 nLeft, sal_uInt16 nRight, short nIndent );
 
@@ -593,7 +593,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     // Fly-Frames einfuegen/verlassen
     void InsertFlyFrame( const SfxItemSet& rItemSet, _HTMLAttrContext *pCntxt,
-                         const String& rId, sal_uInt16 nFlags );
+                         const OUString& rId, sal_uInt16 nFlags );
 
     void SaveDocContext( _HTMLAttrContext *pCntxt, sal_uInt16 nFlags,
                        const SwPosition *pNewPos );
@@ -732,11 +732,11 @@ private:
     void EndAnchor();
 
     // eine ::com::sun::star::text::Bookmark einfuegen
-    void InsertBookmark( const String& rName );
+    void InsertBookmark( const OUString& rName );
 
 
     void InsertCommentText( const sal_Char *pTag = 0 );
-    void InsertComment( const String& rName, const sal_Char *pTag = 0 );
+    void InsertComment( const OUString& rName, const sal_Char *pTag = 0 );
 
     // sind im aktuellen Absatz ::com::sun::star::text::Bookmarks vorhanden?
     sal_Bool HasCurrentParaBookmarks( sal_Bool bIgnoreStack=sal_False ) const;
@@ -755,7 +755,7 @@ private:
                               ScriptType eScrType, const OUString& rScrType );
 
     // ein Event an ein VC-Control anhaengen (htmlform.cxx)
-    void InsertBasicCtrlEvent( sal_uInt16 nEvent, const String& rName );
+    void InsertBasicCtrlEvent( sal_uInt16 nEvent, const OUString& rName );
 
     // Inserting styles
 
@@ -763,13 +763,13 @@ private:
     void NewStyle();
     void EndStyle();
 
-    inline sal_Bool HasStyleOptions( const String &rStyle, const String &rId,
-                                 const String &rClass, const String *pLang=0,
-                                    const String *pDir=0 );
-    sal_Bool ParseStyleOptions( const String &rStyle, const String &rId,
-                            const String &rClass, SfxItemSet &rItemSet,
+    inline sal_Bool HasStyleOptions( const OUString &rStyle, const OUString &rId,
+                                 const OUString &rClass, const OUString *pLang=0,
+                                    const OUString *pDir=0 );
+    sal_Bool ParseStyleOptions( const OUString &rStyle, const OUString &rId,
+                            const OUString &rClass, SfxItemSet &rItemSet,
                             SvxCSS1PropertyInfo &rPropInfo,
-                             const String *pLang=0, const String *pDir=0 );
+                             const OUString *pLang=0, const OUString *pDir=0 );
 
 
     // Inserting Controls and ::com::sun::star::form::Forms (htmlform.cxx)
@@ -852,7 +852,7 @@ private:
 
     void ParseMoreMetaOptions();
 
-    sal_Bool FileDownload( const String& rURL, OUString& rStr );
+    sal_Bool FileDownload( const OUString& rURL, OUString& rStr );
     void InsertLink();
 
     void InsertIDOption();
@@ -880,10 +880,10 @@ public:         // used in tables
 
     // Create brush item (with new) or 0
     SvxBrushItem* CreateBrushItem( const Color *pColor,
-                                   const String &rImageURL,
-                                   const String &rStyle,
-                                   const String &rId,
-                                   const String &rClass );
+                                   const OUString &rImageURL,
+                                   const OUString &rStyle,
+                                   const OUString &rId,
+                                   const OUString &rClass );
 
 protected:
     // Executed for each token recognized by CallParser
@@ -980,14 +980,14 @@ inline void _HTMLAttrContext::GetULSpace( sal_uInt16& rUpper,
     }
 }
 
-inline sal_Bool SwHTMLParser::HasStyleOptions( const String &rStyle,
-                                            const String &rId,
-                                            const String &rClass,
-                                            const String *pLang,
-                                               const String *pDir )
+inline sal_Bool SwHTMLParser::HasStyleOptions( const OUString &rStyle,
+                                            const OUString &rId,
+                                            const OUString &rClass,
+                                            const OUString *pLang,
+                                               const OUString *pDir )
 {
-    return rStyle.Len() || rId.Len() || rClass.Len() ||
-           (pLang && pLang->Len()) || (pDir && pDir->Len());
+    return !rStyle.isEmpty() || !rId.isEmpty() || !rClass.isEmpty() ||
+           (pLang && !pLang->isEmpty()) || (pDir && !pDir->isEmpty());
 }
 
 inline const _HTMLAttrContext *SwHTMLParser::GetTopContext() const

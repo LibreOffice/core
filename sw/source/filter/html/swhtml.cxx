@@ -1901,7 +1901,7 @@ void SwHTMLParser::NextToken( int nToken )
                 const HTMLOption& rOption = rHTMLOptions[--i];
                 if( HTML_O_DIR == rOption.GetToken() )
                 {
-                    const String& rDir = rOption.GetString();
+                    const OUString& rDir = rOption.GetString();
                     SfxItemSet aItemSet( pDoc->GetAttrPool(),
                                          pCSS1Parser->GetWhichMap() );
                     SvxCSS1PropertyInfo aPropInfo;
@@ -3424,7 +3424,7 @@ void SwHTMLParser::InsertAttrs( _HTMLAttrs& rAttrs )
 
 void SwHTMLParser::NewStdAttr( int nToken )
 {
-    String aId, aStyle, aLang, aDir;
+    OUString aId, aStyle, aLang, aDir;
     OUString aClass;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -3478,7 +3478,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
                                _HTMLAttr **ppAttr2, const SfxPoolItem *pItem2,
                                _HTMLAttr **ppAttr3, const SfxPoolItem *pItem3 )
 {
-    String aId, aStyle, aClass, aLang, aDir;
+    OUString aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -3558,7 +3558,7 @@ void SwHTMLParser::EndTag( int nToken )
 
 void SwHTMLParser::NewBasefontAttr()
 {
-    String aId, aStyle, aClass, aLang, aDir;
+    OUString aId, aStyle, aClass, aLang, aDir;
     sal_uInt16 nSize = 3;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -3656,7 +3656,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
             ? (aFontStack[aFontStack.size()-1] & FONTSIZE_MASK)
             : nBaseSize );
 
-    String aFace, aId, aStyle, aClass, aLang, aDir;
+    OUString aFace, aId, aStyle, aClass, aLang, aDir;
     Color aColor;
     sal_uLong nFontHeight = 0;  // tatsaechlich einzustellende Font-Hoehe
     sal_uInt16 nSize = 0;       // Fontgroesse in Netscape-Notation (1-7)
@@ -3756,7 +3756,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     FontPitch ePitch = PITCH_DONTKNOW;      // falls nicht gefunden
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
 
-    if( aFace.Len() && !pCSS1Parser->IsIgnoreFontFamily() )
+    if( !aFace.isEmpty() && !pCSS1Parser->IsIgnoreFontFamily() )
     {
         const FontList *pFList = 0;
         SwDocShell *pDocSh = pDoc->GetDocShell();
@@ -3772,7 +3772,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
         sal_Int32 nStrPos = 0;
         while( nStrPos!= -1 )
         {
-            String aFName = aFace.GetToken( 0, ',', nStrPos );
+            String aFName = aFace.getToken( 0, ',', nStrPos );
             aFName = comphelper::string::strip(aFName, ' ');
             if( aFName.Len() )
             {
@@ -3882,7 +3882,7 @@ void SwHTMLParser::NewPara()
         AddParSpace();
 
     eParaAdjust = SVX_ADJUST_END;
-    String aId, aStyle, aClass, aLang, aDir;
+    OUString aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -3913,7 +3913,7 @@ void SwHTMLParser::NewPara()
 
     // einen neuen Kontext anlegen
     _HTMLAttrContext *pCntxt =
-        aClass.Len() ? new _HTMLAttrContext( HTML_PARABREAK_ON,
+        !aClass.isEmpty() ? new _HTMLAttrContext( HTML_PARABREAK_ON,
                                              RES_POOLCOLL_TEXT, aClass )
                      : new _HTMLAttrContext( HTML_PARABREAK_ON );
 
@@ -3926,7 +3926,7 @@ void SwHTMLParser::NewPara()
 
         if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            OSL_ENSURE( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
+            OSL_ENSURE( aClass.isEmpty() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
@@ -3940,7 +3940,7 @@ void SwHTMLParser::NewPara()
     PushContext( pCntxt );
 
     // die aktuelle Vorlage oder deren Attribute setzen
-    SetTxtCollAttrs( aClass.Len() ? pCntxt : 0 );
+    SetTxtCollAttrs( !aClass.isEmpty() ? pCntxt : 0 );
 
     // Laufbalkenanzeige
     ShowStatline();
@@ -4002,7 +4002,7 @@ void SwHTMLParser::NewHeading( int nToken )
 {
     eParaAdjust = SVX_ADJUST_END;
 
-    String aId, aStyle, aClass, aLang, aDir;
+    OUString aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -4061,7 +4061,7 @@ void SwHTMLParser::NewHeading( int nToken )
 
         if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            OSL_ENSURE( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
+            OSL_ENSURE( aClass.isEmpty() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
@@ -4127,7 +4127,7 @@ void SwHTMLParser::EndHeading()
 
 void SwHTMLParser::NewTxtFmtColl( int nToken, sal_uInt16 nColl )
 {
-    String aId, aStyle, aClass, aLang, aDir;
+    OUString aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -4195,7 +4195,7 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, sal_uInt16 nColl )
 
         if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            OSL_ENSURE( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
+            OSL_ENSURE( aClass.isEmpty() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
@@ -4255,7 +4255,7 @@ void SwHTMLParser::EndTxtFmtColl( int nToken )
 
 void SwHTMLParser::NewDefList()
 {
-    String aId, aStyle, aClass, aLang, aDir;
+    OUString aId, aStyle, aClass, aLang, aDir;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -4554,7 +4554,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
     SwTxtFmtColl *pCollToSet = 0;   // die zu setzende Vorlage
     SfxItemSet *pItemSet = 0;       // der Set fuer harte Attrs
     sal_uInt16 nTopColl = pContext ? pContext->GetTxtFmtColl() : 0;
-    const OUString& rTopClass = pContext ? pContext->GetClass() : aEmptyStr;
+    const OUString& rTopClass = pContext ? pContext->GetClass() : aEmptyOUStr;
     sal_uInt16 nDfltColl = RES_POOLCOLL_TEXT;
 
     sal_Bool bInPRE=sal_False;                          // etwas Kontext Info
@@ -4775,7 +4775,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
 
 void SwHTMLParser::NewCharFmt( int nToken )
 {
-    String aId, aStyle, aLang, aDir;
+    OUString aId, aStyle, aLang, aDir;
     OUString aClass;
 
     const HTMLOptions& rHTMLOptions = GetOptions();

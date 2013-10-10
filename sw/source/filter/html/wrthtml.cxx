@@ -83,7 +83,7 @@
 static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
-SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
+SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     : bCfgOutStyles( sal_False )
     , bCfgPreferStyles( sal_False )
     , bCfgFormFeed( sal_False )
@@ -428,7 +428,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     ClearNextNumInfo();
 
     for( i=0; i<MAXLEVEL; i++ )
-        aBulletGrfs[i].Erase();
+        aBulletGrfs[i] = "";
 
     aNonConvertableCharacters = "";
 
@@ -1010,7 +1010,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     return pPageDesc;
 }
 
-void SwHTMLWriter::OutAnchor( const String& rName )
+void SwHTMLWriter::OutAnchor( const OUString& rName )
 {
     OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
@@ -1060,10 +1060,10 @@ void SwHTMLWriter::OutBookmarks()
     }
 }
 
-void SwHTMLWriter::OutImplicitMark( const String& rMark,
+void SwHTMLWriter::OutImplicitMark( const OUString& rMark,
                                     const sal_Char *pMarkType )
 {
-    if( rMark.Len() && !aImplicitMarks.empty() )
+    if( !rMark.isEmpty() && !aImplicitMarks.empty() )
     {
         OUString sMark( rMark );
         sMark + OUString(cMarkSeparator) + OUString::createFromAscii(pMarkType);
@@ -1074,7 +1074,7 @@ void SwHTMLWriter::OutImplicitMark( const String& rMark,
     }
 }
 
-void SwHTMLWriter::OutHyperlinkHRefValue( const String& rURL )
+void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )
 {
     OUString sURL( rURL );
     sal_Int32 nPos = sURL.lastIndexOf( cMarkSeparator );

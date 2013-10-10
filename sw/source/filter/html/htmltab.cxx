@@ -381,7 +381,7 @@ class HTMLTable
     OUString aId;
     OUString aStyle;
     OUString aClass;
-    String aDir;
+    OUString aDir;
 
     SdrObjects *pResizeDrawObjs;// SDR objects
     std::vector<sal_uInt16> *pDrawObjPrcWidths;   // column of draw object and its rel. width
@@ -645,7 +645,7 @@ public:
     const OUString& GetId() const { return aId; }
     const OUString& GetClass() const { return aClass; }
     const OUString& GetStyle() const { return aStyle; }
-    const String& GetDirection() const { return aDir; }
+    const OUString& GetDirection() const { return aDir; }
 
     void IncBoxCount() { nBoxes++; }
     sal_Bool IsOverflowing() const { return nBoxes > 64000; }
@@ -2982,20 +2982,20 @@ xub_StrLen SwHTMLParser::StripTrailingLF()
 }
 
 SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
-                                             const String& rImageURL,
-                                             const String& rStyle,
-                                             const String& rId,
-                                             const String& rClass )
+                                             const OUString& rImageURL,
+                                             const OUString& rStyle,
+                                             const OUString& rId,
+                                             const OUString& rClass )
 {
     SvxBrushItem *pBrushItem = 0;
 
-    if( rStyle.Len() || rId.Len() || rClass.Len() )
+    if( !rStyle.isEmpty() || !rId.isEmpty() || !rClass.isEmpty() )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_BACKGROUND,
                                                   RES_BACKGROUND );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( rClass.Len() )
+        if( !rClass.isEmpty() )
         {
             OUString aClass( rClass );
             SwCSS1Parser::GetScriptFromClass( aClass );
@@ -3004,7 +3004,7 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
                 aItemSet.Put( pClass->GetItemSet() );
         }
 
-        if( rId.Len() )
+        if( !rId.isEmpty() )
         {
             const SvxCSS1MapEntry *pId = pCSS1Parser->GetId( rId );
             if( pId )
@@ -3020,14 +3020,14 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
         }
     }
 
-    if( !pBrushItem && (pColor || rImageURL.Len()) )
+    if( !pBrushItem && (pColor || !rImageURL.isEmpty()) )
     {
         pBrushItem = new SvxBrushItem(RES_BACKGROUND);
 
         if( pColor )
             pBrushItem->SetColor(*pColor);
 
-        if( rImageURL.Len() )
+        if( !rImageURL.isEmpty() )
         {
             pBrushItem->SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject(sBaseURL), rImageURL, Link(), false) );
             pBrushItem->SetGraphicPos( GPOS_TILED );
@@ -3119,7 +3119,7 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
 
 class _CellSaveStruct : public _SectionSaveStruct
 {
-    String aStyle, aId, aClass, aLang, aDir;
+    OUString aStyle, aId, aClass, aLang, aDir;
     String aBGImage;
     Color aBGColor;
     boost::shared_ptr<SvxBoxItem> m_pBoxItem;
@@ -3269,7 +3269,7 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
             }
         }
 
-        if( aId.Len() )
+        if( !aId.isEmpty() )
             rParser.InsertBookmark( aId );
     }
 

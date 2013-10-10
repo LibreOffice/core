@@ -527,7 +527,7 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
 
 
 OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
-                                     const String& rAlternateTxt,
+                                     const OUString& rAlternateTxt,
                                      sal_uInt32 nFrmOpts,
                                      const OString &rEndTags )
 {
@@ -559,7 +559,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
 
 
     // ALT
-    if( (nFrmOpts & HTML_FRMOPT_ALT) && rAlternateTxt.Len() )
+    if( (nFrmOpts & HTML_FRMOPT_ALT) && !rAlternateTxt.isEmpty() )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_alt).
             append("=\"");
@@ -1646,28 +1646,28 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 }
 
 
-void SwHTMLWriter::AddLinkTarget( const String& rURL )
+void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
 {
-    if( !rURL.Len() || rURL.GetChar(0) != '#' )
+    if( rURL.isEmpty() || rURL[0] != '#' )
         return;
 
     // There might be a '|' as delimiter (if the link has been inserted
     // freshly) or a '%7c' or a '%7C' if the document has been saved and
     // loaded already.
-    xub_StrLen nPos = rURL.Len();
+    xub_StrLen nPos = rURL.getLength();
     sal_Bool bFound = sal_False, bEncoded = sal_False;
     while( !bFound && nPos > 0 )
     {
-        sal_Unicode c = rURL.GetChar( --nPos );
+        sal_Unicode c = rURL[ --nPos ];
         switch( c )
         {
         case cMarkSeparator:
             bFound = sal_True;
             break;
         case '%':
-            bFound = (rURL.Len() - nPos) >=3 &&
-                     rURL.GetChar( nPos+1 ) == '7' &&
-                     ((c =rURL.GetChar( nPos+2 )) == 'C' || c == 'c');
+            bFound = (rURL.getLength() - nPos) >=3 &&
+                     rURL[ nPos+1 ] == '7' &&
+                     ((c =rURL[ nPos+2 ]) == 'C' || c == 'c');
             if( bFound )
                 bEncoded = sal_True;
         }
@@ -1675,7 +1675,7 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
     if( !bFound || nPos < 2 ) // mindetsens "#a|..."
         return;
 
-    String aURL( rURL.Copy( 1 ) );
+    String aURL( rURL.copy( 1 ) );
 
     // nPos-1+1/3 (-1 wg. Erase)
     OUString sCmp(comphelper::string::remove(aURL.Copy(bEncoded ? nPos+2 : nPos),
@@ -1720,7 +1720,7 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
                 aURL.Erase( nPos, 2 );
                 aURL.SetChar( nPos-1, cMarkSeparator );
             }
-            aOutlineMarks.insert( aOutlineMarks.begin()+nIns, new String( aURL ) );
+            aOutlineMarks.insert( aOutlineMarks.begin()+nIns, aURL );
         }
     }
     else if( sCmp == "text" )

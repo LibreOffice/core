@@ -732,7 +732,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         if( bNumbered )
         {
-            if( rHWrt.aBulletGrfs[nBulletGrfLvl].Len()  )
+            if( !rHWrt.aBulletGrfs[nBulletGrfLvl].isEmpty()  )
                 bNumbered = sal_False;
             else
                 nBulletGrfLvl = 255;

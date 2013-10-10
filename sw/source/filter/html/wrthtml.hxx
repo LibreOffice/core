@@ -276,19 +276,19 @@ class SwHTMLWriter : public Writer
     const SwPageDesc *MakeHeader( sal_uInt16& rHeaderAtrs );
     void GetControls();
 
-    void AddLinkTarget( const String& rURL );
+    void AddLinkTarget( const OUString& rURL );
     void CollectLinkTargets();
 
 protected:
     sal_uLong WriteStream();
 
 public:
-    std::vector<String> aImgMapNames;     // geschriebene Image Maps
-    std::set<String> aImplicitMarks;// implizite Stprungmarken
-    std::set<String> aNumRuleNames;// Names of exported num rules
-    std::set<String> aScriptParaStyles;// script dependent para styles
+    std::vector<OUString> aImgMapNames;     // geschriebene Image Maps
+    std::set<OUString> aImplicitMarks;// implizite Stprungmarken
+    std::set<OUString> aNumRuleNames;// Names of exported num rules
+    std::set<OUString> aScriptParaStyles;// script dependent para styles
     std::set<OUString> aScriptTextStyles;// script dependent text styles
-    boost::ptr_vector<String> aOutlineMarks;
+    std::vector<OUString> aOutlineMarks;
     std::vector<sal_uInt32> aOutlineMarkPoss;
     HTMLControls aHTMLControls;     // die zu schreibenden ::com::sun::star::form::Forms
     SwHTMLFmtInfos aChrFmtInfos;
@@ -296,9 +296,9 @@ public:
     INetFmts aINetFmts;             // die "offenen" INet-Attribute
     SwHTMLTxtFtns *pFootEndNotes;
 
-    String aCSS1Selector;           // der Selektor eines Styles
+    OUString aCSS1Selector;           // der Selektor eines Styles
     OUString aNonConvertableCharacters;
-    String aBulletGrfs[MAXLEVEL];   // die Grafiken fuer Listen
+    OUString aBulletGrfs[MAXLEVEL];   // die Grafiken fuer Listen
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  *pxFormComps; // die aktuelle Form
 
@@ -394,16 +394,16 @@ public:
     sal_Bool bCfgNetscape4 : 1;         // Netscape4 Hacks
     // 23
 
-    SwHTMLWriter( const String& rBaseURL );
+    SwHTMLWriter( const OUString& rBaseURL );
     virtual ~SwHTMLWriter();
 
     void Out_SwDoc( SwPaM* );       // schreibe den makierten Bereich
 
     // gebe alle an in aktuellen Ansatz stehenden ::com::sun::star::text::Bookmarks aus
-    void OutAnchor( const String& rName );
+    void OutAnchor( const OUString& rName );
     void OutBookmarks();
-    void OutImplicitMark( const String& rMark, const sal_Char *pMarkType );
-    void OutHyperlinkHRefValue( const String& rURL );
+    void OutImplicitMark( const OUString& rMark, const sal_Char *pMarkType );
+    void OutHyperlinkHRefValue( const OUString& rURL );
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
     sal_Bool OutFlyFrm( sal_uLong nNdIdx, xub_StrLen nCntntIdx,
@@ -425,8 +425,8 @@ public:
 
     void OutFootEndNoteInfo();
     void OutFootEndNotes();
-    String GetFootEndNoteSym( const SwFmtFtn& rFmtFtn );
-    void OutFootEndNoteSym( const SwFmtFtn& rFmtFtn, const String& rNum,
+    OUString GetFootEndNoteSym( const SwFmtFtn& rFmtFtn );
+    void OutFootEndNoteSym( const SwFmtFtn& rFmtFtn, const OUString& rNum,
                              sal_uInt16 nScript );
 
     void OutBasic();
@@ -461,7 +461,7 @@ public:
     // ALT/ALIGN/WIDTH/HEIGHT/HSPACE/VSPACE-Optionen des aktuellen
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
     // rEndTags anhaengen
-    OString OutFrmFmtOptions( const SwFrmFmt& rFrmFmt, const String& rAltTxt,
+    OString OutFrmFmtOptions( const SwFrmFmt& rFrmFmt, const OUString& rAltTxt,
         sal_uInt32 nFrmOpts, const OString& rEndTags = OString() );
     void OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt );
     void OutCSS1_TableCellBorderHack(const SwFrmFmt& rFrmFmt);

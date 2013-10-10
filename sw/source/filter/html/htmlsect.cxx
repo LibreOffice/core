@@ -65,7 +65,7 @@ using namespace ::com::sun::star;
 void SwHTMLParser::NewDivision( int nToken )
 {
     OUString aId, aHRef;
-    String aStyle, aLang, aDir;
+    OUString aStyle, aLang, aDir;
     OUString aClass;
     SvxAdjust eAdjust = HTML_CENTER_ON==nToken ? SVX_ADJUST_CENTER
                                                : SVX_ADJUST_END;
@@ -543,7 +543,7 @@ sal_Bool SwHTMLParser::EndSections( sal_Bool bLFStripped )
 void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 {
     OUString aId;
-    String aStyle, aClass, aLang, aDir;
+    OUString aStyle, aClass, aLang, aDir;
     long nWidth = 100;
     sal_uInt16 nCols = columnsFromCss, nGutter = 10;
     sal_Bool bPrcWidth = sal_True;
@@ -769,7 +769,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
 void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
                                    _HTMLAttrContext *pCntxt,
-                                   const String& rName,
+                                   const OUString& rName,
                                    sal_uInt16 nFlags )
 {
     RndStdIds eAnchorId =
@@ -779,7 +779,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
     SwFlyFrmFmt* pFlyFmt = pDoc->MakeFlySection( eAnchorId, pPam->GetPoint(),
                                                     &rItemSet );
     // Ggf. den Namen setzen
-    if( rName.Len() )
+    if( !rName.isEmpty() )
         pFlyFmt->SetName( rName );
 
     RegisterFlyFrm( pFlyFmt );

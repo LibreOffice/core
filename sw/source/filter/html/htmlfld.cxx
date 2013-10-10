@@ -600,7 +600,7 @@ void SwHTMLParser::InsertCommentText( const sal_Char *pTag )
     }
 }
 
-void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
+void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag )
 {
     OUString aComment( rComment );
     if( pTag )

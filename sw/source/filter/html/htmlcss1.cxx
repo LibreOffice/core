@@ -1717,7 +1717,7 @@ void SwHTMLParser::EndStyle()
     }
 }
 
-sal_Bool SwHTMLParser::FileDownload( const String& rURL,
+sal_Bool SwHTMLParser::FileDownload( const OUString& rURL,
                                  OUString& rStr )
 {
     // View wegschmeissen (wegen Reschedule)
@@ -1890,17 +1890,17 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
     return sal_True;
 }
 
-sal_Bool SwHTMLParser::ParseStyleOptions( const String &rStyle,
-                                      const String &rId,
-                                      const String &rClass,
-                                      SfxItemSet &rItemSet,
-                                      SvxCSS1PropertyInfo &rPropInfo,
-                                         const String *pLang,
-                                         const String *pDir )
+sal_Bool SwHTMLParser::ParseStyleOptions( const OUString &rStyle,
+                                          const OUString &rId,
+                                          const OUString &rClass,
+                                          SfxItemSet &rItemSet,
+                                          SvxCSS1PropertyInfo &rPropInfo,
+                                          const OUString *pLang,
+                                          const OUString *pDir )
 {
     sal_Bool bRet = sal_False;
 
-    if( rClass.Len() )
+    if( !rClass.isEmpty() )
     {
         OUString aClass( rClass );
         SwCSS1Parser::GetScriptFromClass( aClass );
@@ -1914,18 +1914,18 @@ sal_Bool SwHTMLParser::ParseStyleOptions( const String &rStyle,
         }
     }
 
-    if( rId.Len() )
+    if( !rId.isEmpty() )
     {
         const SvxCSS1MapEntry *pId = pCSS1Parser->GetId( rId );
         if( pId )
             pCSS1Parser->MergeStyles( pId->GetItemSet(),
                                       pId->GetPropertyInfo(),
-                                      rItemSet, rPropInfo, rClass.Len()!=0 );
+                                      rItemSet, rPropInfo, !rClass.isEmpty() );
         rPropInfo.aId = rId;
         bRet = sal_True;
     }
 
-    if( rStyle.Len() )
+    if( !rStyle.isEmpty() )
     {
         pCSS1Parser->ParseStyleOption( rStyle, rItemSet, rPropInfo );
         bRet = sal_True;
@@ -1934,7 +1934,7 @@ sal_Bool SwHTMLParser::ParseStyleOptions( const String &rStyle,
     if( bRet )
         rPropInfo.SetBoxItem( rItemSet, MIN_BORDER_DIST );
 
-    if( pLang && pLang->Len() )
+    if( pLang && !pLang->isEmpty() )
     {
         LanguageType eLang = LanguageTag::convertToLanguageTypeWithFallback( *pLang );
         if( LANGUAGE_DONTKNOW != eLang )
@@ -1949,7 +1949,7 @@ sal_Bool SwHTMLParser::ParseStyleOptions( const String &rStyle,
             bRet = sal_True;
         }
     }
-    if( pDir && pDir->Len() )
+    if( pDir && !pDir->isEmpty() )
     {
         OUString aValue( *pDir );
         SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;

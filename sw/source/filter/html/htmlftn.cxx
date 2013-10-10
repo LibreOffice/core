@@ -404,7 +404,7 @@ void SwHTMLWriter::OutFootEndNotes()
     nFootNote = nEndNote = 0;
 }
 
-String SwHTMLWriter::GetFootEndNoteSym( const SwFmtFtn& rFmtFtn )
+OUString SwHTMLWriter::GetFootEndNoteSym( const SwFmtFtn& rFmtFtn )
 {
     const SwEndNoteInfo * pInfo = 0;
     if( rFmtFtn.GetNumStr().isEmpty() )
@@ -422,7 +422,7 @@ String SwHTMLWriter::GetFootEndNoteSym( const SwFmtFtn& rFmtFtn )
 }
 
 void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
-                                         const String& rNum,
+                                         const OUString& rNum,
                                          sal_uInt16 nScript )
 {
     const SwEndNoteInfo *pInfo;
