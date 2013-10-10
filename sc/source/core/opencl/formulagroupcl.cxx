@@ -22,7 +22,7 @@
 #include <map>
 #include <iostream>
 #include <sstream>
-#include <openssl/md5.h>
+//#include <openssl/md5.h>
 #include <memory>
 using namespace formula;
 
@@ -193,10 +193,10 @@ size_t DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno, int)
             switch(opc)
             {
                 case ocMin:
-                    cur_top = fmin(cur_top, val);
+                    cur_top = cur_top<val?cur_top:val;// fmin(cur_top, val);
                     break;
                 case ocMax:
-                    cur_top = fmax(cur_top, val);
+                    cur_top = cur_top>val?cur_top:val;//fmax(cur_top, val);
                     break;
                 case ocSum:
                 case ocAverage:
@@ -494,6 +494,7 @@ public:
     /// Produce kernel hash
     std::string GetMD5(void)
     {
+    /*
         if(mKernelSignature.empty()) {
             std::stringstream md5s;
             // Compute MD5SUM of kernel body to obtain the name
@@ -505,7 +506,8 @@ public:
             }
             mKernelSignature = md5s.str();
         }
-        return mKernelSignature;
+        return mKernelSignature;*/
+        return "";
     }
     /// Create program, build, and create kerenl
     /// TODO cache results based on kernel body hash
