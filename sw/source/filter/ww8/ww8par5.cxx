@@ -3448,7 +3448,7 @@ static void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bId
     }
 }
 
-void sw::ms::ImportXE(SwDoc &rDoc, SwPaM &rPaM, const String &rStr)
+void sw::ms::ImportXE(SwDoc &rDoc, SwPaM &rPaM, const OUString &rStr)
 {
     lcl_ImportTox(rDoc, rPaM, rStr, true);
 }

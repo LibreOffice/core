@@ -927,7 +927,7 @@ SfxPoolItem* SwFltRedline::Clone( SfxItemPool* ) const
 }
 
 //------ hier stehen die Methoden von SwFltBookmark -----------
-SwFltBookmark::SwFltBookmark( const String& rNa, const String& rVa,
+SwFltBookmark::SwFltBookmark( const OUString& rNa, const OUString& rVa,
                                 long nHand, sal_Bool bOnlyR )
     : SfxPoolItem(RES_FLTR_BOOKMARK), nHandle(nHand), aName(rNa), aVal(rVa),
     bOnlyRef(bOnlyR), bRef(sal_False), bPgRef(sal_False)
@@ -1018,7 +1018,7 @@ SfxPoolItem* SwFltSection::Clone(SfxItemPool*) const
 //
 
 //////////////////////////////////////////////////////////// SwFltShell
-SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const String& rBaseURL, sal_Bool bNew, sal_uLong nFieldFl) :
+SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const OUString& rBaseURL, sal_Bool bNew, sal_uLong nFieldFl) :
     pCurrentPageDesc(0),
     pSavedPos(0),
     eSubMode(None),
@@ -1120,7 +1120,7 @@ SwFltShell::~SwFltShell()
     delete pOutDoc;
 }
 
-SwFltShell& SwFltShell::operator << ( const String& rStr )
+SwFltShell& SwFltShell::operator << ( const OUString& rStr )
 {
     OSL_ENSURE(eSubMode != Style, "char insert while in style-mode");
     GetDoc().InsertString( *pPaM, rStr );
@@ -1199,7 +1199,7 @@ void SwFltShell::NextPage()
         SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
 }
 
-SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
+SwFltShell& SwFltShell::AddGraphic( const OUString& rPicName )
 {
     // embedded:
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
@@ -2152,7 +2152,7 @@ SwFltFormatCollection::SwFltFormatCollection(
 }
 
 SwFltFormatCollection::SwFltFormatCollection(
-    SwDoc& _rDoc, const String& rName ) :
+    SwDoc& _rDoc, const OUString& rName ) :
     SwFltOutBase(_rDoc),
     pFlyAttrs( 0 ),
     bHasFly( false )

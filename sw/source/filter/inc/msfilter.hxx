@@ -88,7 +88,7 @@ namespace sw
             @author
                 <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        void ImportXE(SwDoc &rDoc, SwPaM &rPaM, const String &rXE);
+        void ImportXE(SwDoc &rDoc, SwPaM &rPaM, const OUString &rXE);
 
         /** Convert from DTTM to Writer's DateTime
 
@@ -281,9 +281,9 @@ namespace sw
         class FontMapExport
         {
         public:
-            String msPrimary;
-            String msSecondary;
-            FontMapExport(const String &rFontDescription);
+            OUString msPrimary;
+            OUString msSecondary;
+            FontMapExport(const OUString &rFontDescription);
         };
 
         class InsertedTableClient : public SwClient
@@ -399,7 +399,7 @@ namespace sw
         protected:
             std::vector<OUString> maAuthors;          // Array of Sw - Bookmarknames
 
-            sal_uInt16 GetPos( const String& rNm );
+            sal_uInt16 GetPos( const OUString& rNm );
         public:
             WrtRedlineAuthor() {}
             virtual ~WrtRedlineAuthor() {}

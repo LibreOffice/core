@@ -469,12 +469,12 @@ namespace sw
             return mpImpl->GetStyle(rName, eSti);
         }
 
-        FontMapExport::FontMapExport(const String &rFamilyName)
+        FontMapExport::FontMapExport(const OUString &rFamilyName)
         {
             sal_Int32 nIndex = 0;
             msPrimary = GetNextFontToken(rFamilyName, nIndex);
             msSecondary = myImplHelpers::FindBestMSSubstituteFont(msPrimary);
-            if (!msSecondary.Len() && nIndex != -1)
+            if (msSecondary.isEmpty() && nIndex != -1)
                 msSecondary = GetNextFontToken(rFamilyName, nIndex);
         }
 

@@ -272,20 +272,20 @@ class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
 {
     friend class SwFltShell;    // darf aName und aVal uebersetzen
     long nHandle;
-    String aName;
-    String aVal;
+    OUString aName;
+    OUString aVal;
     sal_Bool bOnlyRef;          // "FRAGE"-Feld, Ref/Seitenrf oder nichts
     sal_Bool bRef;
     sal_Bool bPgRef;
 public:
-    SwFltBookmark( const String& rNa, const String& rVa,
+    SwFltBookmark( const OUString& rNa, const OUString& rVa,
                     long nHand, sal_Bool bOnlyR );
     SwFltBookmark( const SwFltBookmark& );
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int operator==(const SfxPoolItem&) const;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const;
-    const String& GetName() const       { return aName; }
-    const String& GetValSys() const     { return aVal; }
+    const OUString& GetName() const       { return aName; }
+    const OUString& GetValSys() const     { return aVal; }
     sal_Bool IsOnlyRef() const              { return bOnlyRef; }
     sal_Bool IsRef() const                  { return bRef; }
     void SetRef(sal_Bool b = sal_True)          { bRef = b; }
@@ -456,7 +456,7 @@ class SwFltFormatCollection : public SwFltOutBase
     bool bHasFly;
 public:
     SwFltFormatCollection(SwDoc&, RES_POOL_COLLFMT_TYPE nType);
-    SwFltFormatCollection(SwDoc&, const String& rName );
+    SwFltFormatCollection(SwDoc&, const OUString& rName );
     ~SwFltFormatCollection() { if( pFlyAttrs ) delete pFlyAttrs; }
 
     void Reset()
@@ -527,7 +527,7 @@ class SwFltShell
     SwFltEndStack aEndStack;
     SwPaM* pPaM;
 //
-    String sBaseURL;
+    OUString sBaseURL;
     sal_uInt16 nPageDescOffset; // fuers update der pagedescs
     CharSet eSrcCharSet; // charset der quelle
     friend class SwFltControlStack;
@@ -536,7 +536,7 @@ class SwFltShell
     sal_Bool bProtect;
 
 public:
-    SwFltShell(SwDoc* , SwPaM& , const String& rBaseURL, sal_Bool bNew, sal_uLong = 0);
+    SwFltShell(SwDoc* , SwPaM& , const OUString& rBaseURL, sal_Bool bNew, sal_uLong = 0);
     ~SwFltShell();
 
     SwDoc& GetDoc()                 { return *aStack.pDoc; }
@@ -555,7 +555,7 @@ public:
     void NextPage();
     void NextSection()      { pCurrentPageDesc = MakePageDesc(); }
 
-    SwFltShell& AddGraphic( const String& rPicName );
+    SwFltShell& AddGraphic( const OUString& rPicName );
     SwFltShell& AddError( const sal_Char* pErr );
     SwFltShell& EndItem( sal_uInt16 nId );
     SwFltShell& SetStyle( sal_uInt16 nStyle );
@@ -563,7 +563,7 @@ public:
     SwFltShell& operator << ( Graphic& );
     SwFltShell& operator << ( SwFltBookmark& aBook );
     void SetBookEnd(long nHandle);
-    SwFltShell& operator << ( const String& );  // Vorsicht: CHARSET_ANSI
+    SwFltShell& operator << ( const OUString& );  // Vorsicht: CHARSET_ANSI
     SwFltShell& operator << ( const sal_Unicode );
     SwFltShell& operator << ( const SwField& );
     SwFltShell& operator << ( const SfxPoolItem& rItem )
@@ -633,7 +633,7 @@ public:
         nAktStyle = nUserCode;
         eSubMode = Style;
     }
-    void BeginStyle( sal_uInt16 nUserCode, const String& rName )
+    void BeginStyle( sal_uInt16 nUserCode, const OUString& rName )
     {
         OSL_ENSURE(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
         OSL_ENSURE(pColls[nUserCode] == NULL, "user codes dublicate");
@@ -679,7 +679,7 @@ public:
     bool GetCaseKapitaelchen();
     bool GetCaseVersalien();
 
-    const String& GetBaseURL() const { return sBaseURL; }
+    const OUString& GetBaseURL() const { return sBaseURL; }
 };
 
 SW_DLLPUBLIC void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset);
