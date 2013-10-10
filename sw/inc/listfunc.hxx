@@ -24,7 +24,7 @@ class SwDoc;
 
 namespace listfunc
 {
-    const String CreateUniqueListId( const SwDoc& rDoc );
+    const OUString CreateUniqueListId( const SwDoc& rDoc );
 }
 
 #endif // LISTFUNC_HXX_INCLUDED

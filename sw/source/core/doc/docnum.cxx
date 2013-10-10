@@ -2599,7 +2599,7 @@ namespace listfunc
 
         return aTmpStr;
     }
-    const String CreateUniqueListId( const SwDoc& rDoc )
+    const OUString CreateUniqueListId( const SwDoc& rDoc )
     {
         static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
 
