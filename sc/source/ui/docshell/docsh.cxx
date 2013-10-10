@@ -105,6 +105,7 @@
 #include "sheetdata.hxx"
 #include "tabprotection.hxx"
 #include "docparam.hxx"
+#include "tokenarray.hxx"
 
 #include "docshimp.hxx"
 #include "sizedev.hxx"
@@ -1176,6 +1177,17 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     bOverflowRow = aImpEx.IsOverflowRow();
                     bOverflowCol = aImpEx.IsOverflowCol();
                     bOverflowCell = aImpEx.IsOverflowCell();
+
+                    ScRange aNewRange;
+                    aNewRange.aEnd.IncCol( aImpEx.GetRange().aEnd.Col() );
+                    aNewRange.aEnd.IncRow( aImpEx.GetRange().aEnd.Row() );
+                    ScComplexRefData aRefData;
+                    aRefData.InitRange( aNewRange );
+                    ScTokenArray aTokArray;
+                    aTokArray.AddDoubleReference( aRefData );
+                    OUString aName("text/csv");
+                    ScRangeData* pRangeData = new ScRangeData( &aDocument, aName, aTokArray );
+                    aDocument.GetRangeName()->insert( pRangeData );
                 }
                 else
                 {
