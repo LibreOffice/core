@@ -164,7 +164,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl(
                     // find corresponding hyphen pos in string
                     nPos = aTxt.indexOf( sal_Unicode( HYPH_POS_CHAR ), nStart );
 
-                    if (nStart == -1)
+                    if (nPos == -1)
                         break;
                     else
                     {
