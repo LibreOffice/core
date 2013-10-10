@@ -2584,20 +2584,17 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
     {
         SAL_WARN_IF(pTxtNd->GetActualListLevel() < 0 || pTxtNd->GetActualListLevel() >= MAXLEVEL, "sw.rtf", "text node does not have valid list level");
 
-        const bool bExportNumRule = USHRT_MAX != nNumId;
         const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
         if( !pFmt )
             pFmt = &pRule->Get( nLvl );
 
         const SfxItemSet& rNdSet = pTxtNd->GetSwAttrSet();
 
-        if ( bExportNumRule ) {
-            m_aStyles.append('{');
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LISTTEXT);
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PARD);
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
-            m_aStyles.append(' ');
-        }
+        m_aStyles.append('{');
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LISTTEXT);
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PARD);
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
+        m_aStyles.append(' ');
 
         SvxLRSpaceItem aLR( (SvxLRSpaceItem&)rNdSet.Get( RES_LR_SPACE ) );
         aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetIndentAt() );
@@ -2621,32 +2618,27 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
                 m_aStyles.append(msfilter::rtfutil::OutString(sTxt, m_rExport.eDefaultEncoding));
             }
 
-            if( bExportNumRule )
+            if( OUTLINE_RULE != pRule->GetRuleType() )
             {
-                if( OUTLINE_RULE != pRule->GetRuleType() )
+                if (sTxt.Len())
+                    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB);
+                m_aStyles.append('}');
+                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ILVL);
+                if( nLvl > 8 )            // RTF knows only 9 levels
                 {
-                    if (sTxt.Len())
-                        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB);
+                    m_aStyles.append((sal_Int32)8);
+                    m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SOUTLVL);
+                    m_aStyles.append((sal_Int32)nLvl);
                     m_aStyles.append('}');
-                    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ILVL);
-                    if( nLvl > 8 )            // RTF knows only 9 levels
-                    {
-                        m_aStyles.append((sal_Int32)8);
-                        m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SOUTLVL);
-                        m_aStyles.append((sal_Int32)nLvl);
-                        m_aStyles.append('}');
-                    }
-                    else
-                        m_aStyles.append((sal_Int32)nLvl);
                 }
                 else
-                    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB "}");
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LS);
-                m_aStyles.append((sal_Int32)m_rExport.GetId(*pRule)+1);
-                m_aStyles.append(' ');
+                    m_aStyles.append((sal_Int32)nLvl);
             }
-            else if( sTxt.Len() )
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB);
+            else
+                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB "}");
+            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LS);
+            m_aStyles.append((sal_Int32)m_rExport.GetId(*pRule)+1);
+            m_aStyles.append(' ');
         }
         FormatLRSpace(aLR);
     }
