@@ -43,6 +43,7 @@ endif
 
 $(eval $(call gb_Module_add_check_targets,sw,\
     CppunitTest_sw_uwriter \
+    CppunitTest_sw_uiwriter \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
