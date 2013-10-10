@@ -678,18 +678,22 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
             // FIXME: merge all binary operators..
             case ocMul:
             case ocDiv:
+                mKernelSrc<<"(";
                 TraverseAST(cur->Children[1]);
                 mKernelSrc << (p->GetOpCode() == ocMul?"*":"/");
                 TraverseAST(cur->Children[0]);
+                mKernelSrc<<")";
                 return;
             case ocAdd:
             case ocSub:
                 // A-B would be converted as:
                 // Children[1] = A
                 // Children[0] = B
+                mKernelSrc<<"(";
                 TraverseAST(cur->Children[1]);
                 mKernelSrc << (p->GetOpCode() == ocAdd?"+":"-");
                 TraverseAST(cur->Children[0]);
+                mKernelSrc<<")";
                 return;
             case ocSum:
             case ocMin:
