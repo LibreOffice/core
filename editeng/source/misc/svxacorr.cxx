@@ -1387,6 +1387,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
         }
 
         if( ( IsAutoCorrFlag( nRet = ChgOrdinalNumber ) &&
+                ( '-' != cChar || rCC.getLanguageTag().getLanguage() != "fr" ) &&   // fdo#69762 avoid autocorrect in fr for 2e-3
                 FnChgOrdinalNumber( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
             ( IsAutoCorrFlag( nRet = SetINetAttr ) &&
                 ( ' ' == cChar || '\t' == cChar || 0x0a == cChar || !cChar ) &&
