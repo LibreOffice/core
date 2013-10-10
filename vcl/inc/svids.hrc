@@ -20,8 +20,6 @@
 #ifndef _SV_SVIDS_HRC
 #define _SV_SVIDS_HRC
 
-#include "svl/solar.hrc"
-
 #define SV_RESID_STDOFFSET                  0
 #define SV_RESID_MONOOFFSET                 1
 
