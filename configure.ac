@@ -2942,8 +2942,11 @@ if test $_os = iOS; then
     if test "$ENABLE_LTO" = TRUE; then
         lto=-flto
     fi
-    CC="`xcrun -find clang` -arch $arch -isysroot $sysroot $lto $versionmin"
-    CXX="`xcrun -find clang++` -arch $arch -isysroot $sysroot $lto $versionmin"
+    # Just add -fvisibility=hidden to CC and CXX directly so that the 3rd-party libs also
+    # get compiled with it, to avoid ld warnings when linking all that together into one
+    # executable.
+    CC="`xcrun -find clang` -arch $arch -fvisibility=hidden -isysroot $sysroot $lto $versionmin"
+    CXX="`xcrun -find clang++` -arch $arch -fvisibility=hidden -isysroot $sysroot $lto $versionmin"
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
     NM=`xcrun -find nm`
