@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///xs\u003d",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-10-10T21:32:00Z",
+      "side": 1,
+      "message": "not related to the patch... but that is dead code\ncFirstChar cannot be \u0027\u003d\u0027 if getLenght() \u003d 1\ndue to the if else just above",
+      "revId": "e819acd93035d62bcb7dc9e8940a55c15b68f144",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
