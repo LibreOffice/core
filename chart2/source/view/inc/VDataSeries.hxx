@@ -190,9 +190,6 @@ public: //member
 private: //member
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDataSeries >       m_xDataSeries;
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence > >   m_aDataSequences;
 
     //all points given by the model data (here are not only the visible points meant)
     sal_Int32       m_nPointCount;

@@ -189,13 +189,15 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     uno::Reference<data::XDataSource> xDataSource =
             uno::Reference<data::XDataSource>( xDataSeries, uno::UNO_QUERY );
 
-    m_aDataSequences = xDataSource->getDataSequences();
+    uno::Sequence< uno::Reference<
+        chart2::data::XLabeledDataSequence > > aDataSequences =
+            xDataSource->getDataSequences();
 
-    for(sal_Int32 nN = m_aDataSequences.getLength();nN--;)
+    for(sal_Int32 nN = aDataSequences.getLength();nN--;)
     {
-        if(!m_aDataSequences[nN].is())
+        if(!aDataSequences[nN].is())
             continue;
-        uno::Reference<data::XDataSequence>  xDataSequence( m_aDataSequences[nN]->getValues());
+        uno::Reference<data::XDataSequence>  xDataSequence( aDataSequences[nN]->getValues());
         uno::Reference<beans::XPropertySet> xProp(xDataSequence, uno::UNO_QUERY );
         if( xProp.is())
         {
