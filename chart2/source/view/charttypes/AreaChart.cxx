@@ -53,20 +53,12 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
                      , sal_Int32 nDimensionCount
                      , bool bCategoryXAxis
                      , bool bNoArea
-                     , PlottingPositionHelper* pPlottingPositionHelper
-                     , bool bConnectLastToFirstPoint
-                     , bool bExpandIfValuesCloseToBorder
-                     , sal_Int32 nKeepAspectRatio
                      )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount, bCategoryXAxis )
-        , m_pMainPosHelper(pPlottingPositionHelper)
+        , m_pMainPosHelper(new PlottingPositionHelper())
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
         , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel,nDimensionCount) )
-        , m_bIsPolarCooSys( bConnectLastToFirstPoint )
-        , m_bConnectLastToFirstPoint( bConnectLastToFirstPoint )
-        , m_bExpandIfValuesCloseToBorder( bExpandIfValuesCloseToBorder )
-        , m_nKeepAspectRatio(nKeepAspectRatio)
         , m_eCurveStyle(CurveStyle_LINES)
         , m_nCurveResolution(20)
         , m_nSplineOrder(3)
@@ -75,9 +67,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_xTextTarget(0)
         , m_xRegressionCurveEquationTarget(0)
 {
-    if( !m_pMainPosHelper )
-        m_pMainPosHelper = new PlottingPositionHelper();
-
     m_pMainPosHelper->AllowShiftXAxisPos(true);
     m_pMainPosHelper->AllowShiftZAxisPos(true);
 
@@ -109,15 +98,12 @@ AreaChart::~AreaChart()
 double AreaChart::getMaximumX()
 {
     double fMax = VSeriesPlotter::getMaximumX();
-    if( m_bCategoryXAxis && m_bIsPolarCooSys )//the angle axis in net charts needs a different autoscaling
-        fMax += 1.0;
     return fMax;
 }
 
 bool AreaChart::isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex )
 {
-    return m_bExpandIfValuesCloseToBorder &&
-        VSeriesPlotter::isExpandIfValuesCloseToBorder( nDimensionIndex );
+    return VSeriesPlotter::isExpandIfValuesCloseToBorder( nDimensionIndex );
 }
 
 bool AreaChart::isSeparateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex*/ )
@@ -148,8 +134,6 @@ uno::Any AreaChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPo
 
 drawing::Direction3D AreaChart::getPreferredDiagramAspectRatio() const
 {
-    if( m_nKeepAspectRatio == 1 )
-        return drawing::Direction3D(1,1,1);
     drawing::Direction3D aRet(1,-1,1);
     if( m_nDimension == 2 )
         aRet = drawing::Direction3D(-1,-1,-1);
@@ -167,10 +151,6 @@ drawing::Direction3D AreaChart::getPreferredDiagramAspectRatio() const
 
 bool AreaChart::keepAspectRatio() const
 {
-    if( m_nKeepAspectRatio == 0 )
-        return false;
-    if( m_nKeepAspectRatio == 1 )
-        return true;
     if( m_nDimension == 2 )
     {
         if( !m_bSymbol )
@@ -181,7 +161,7 @@ bool AreaChart::keepAspectRatio() const
 
 void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
-    if( m_bArea && !m_bIsPolarCooSys && pSeries )
+    if( m_bArea && pSeries )
     {
         sal_Int32 nMissingValueTreatment = pSeries->getMissingValueTreatment();
         if( nMissingValueTreatment == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP  )
@@ -441,28 +421,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     else
     { // default to creating a straight line
         SAL_WARN_IF(CurveStyle_LINES != m_eCurveStyle, "chart2.areachart", "Unknown curve style");
-        bool bIsClipped = false;
-        if( m_bConnectLastToFirstPoint && !AbstractShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
-        {
-            // do NOT connect last and first point, if one is NAN, and NAN handling is NAN_AS_GAP
-            double fFirstY = pSeries->getYValue( 0 );
-            double fLastY = pSeries->getYValue( VSeriesPlotter::getPointCount() - 1 );
-            if( (pSeries->getMissingValueTreatment() != ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
-                || (::rtl::math::isFinite( fFirstY ) && ::rtl::math::isFinite( fLastY )) )
-            {
-                // connect last point in last polygon with first point in first polygon
-                ::basegfx::B2DRectangle aScaledLogicClipDoubleRect( pPosHelper->getScaledLogicClipDoubleRect() );
-                drawing::PolyPolygonShape3D aTmpPoly(*pSeriesPoly);
-                drawing::Position3D aLast(aScaledLogicClipDoubleRect.getMaxX(),aTmpPoly.SequenceY[0][0],aTmpPoly.SequenceZ[0][0]);
-                // add connector line to last polygon
-                AddPointToPoly( aTmpPoly, aLast, pSeriesPoly->SequenceX.getLength() - 1 );
-                Clipping::clipPolygonAtRectangle( aTmpPoly, aScaledLogicClipDoubleRect, aPoly );
-                bIsClipped = true;
-            }
-        }
-
-        if( !bIsClipped )
-            Clipping::clipPolygonAtRectangle( *pSeriesPoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
+        Clipping::clipPolygonAtRectangle( *pSeriesPoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
 
     if(!AbstractShapeFactory::hasPolygonAnyLines(aPoly))
@@ -524,12 +483,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
 
     drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
     //add second part to the polygon (grounding points or previous series points)
-    if( m_bConnectLastToFirstPoint && !AbstractShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
-    {
-        if( pPreviousSeriesPoly )
-            addPolygon( aPoly, *pPreviousSeriesPoly );
-    }
-    else if(!pPreviousSeriesPoly)
+    if(!pPreviousSeriesPoly)
     {
         double fMinX = pSeries->m_fLogicMinX;
         double fMaxX = pSeries->m_fLogicMaxX;
@@ -822,22 +776,6 @@ void AreaChart::createShapes()
                         fLogicX = DateHelper::RasterizeDateValue( fLogicX, m_aNullDate, m_nTimeResolution );
                     double fLogicY = (*aSeriesIter)->getYValue(nIndex);
 
-                    if( m_bIsPolarCooSys && m_bArea &&
-                        ( ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY) ) )
-                    {
-                        if( (*aSeriesIter)->getMissingValueTreatment() == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP )
-                        {
-                            if( rSeriesList.size() == 1 || nSeriesIndex == 0 )
-                            {
-                                fLogicY = pPosHelper->getLogicMinY();
-                                if( !pPosHelper->isMathematicalOrientationY() )
-                                    fLogicY = pPosHelper->getLogicMaxY();
-                            }
-                            else
-                                fLogicY = 0.0;
-                        }
-                    }
-
                     if( m_nDimension==3 && m_bArea && rSeriesList.size()!=1 )
                         fLogicY = fabs( fLogicY );
 
@@ -911,18 +849,6 @@ void AreaChart::createShapes()
                     if( isValidPosition(aScaledLogicPosition) )
                     {
                         AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aScaledLogicPosition, (*aSeriesIter)->m_nPolygonIndex );
-
-                        //prepare clipping for filled net charts
-                        if( !bIsVisible && m_bIsPolarCooSys && m_bArea )
-                        {
-                            drawing::Position3D aClippedPos(aScaledLogicPosition);
-                            pPosHelper->clipScaledLogicValues( 0, &aClippedPos.PositionY, 0 );
-                            if( pPosHelper->isLogicVisible( aClippedPos.PositionX, aClippedPos.PositionY, aClippedPos.PositionZ ) )
-                            {
-                                AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aClippedPos, (*aSeriesIter)->m_nPolygonIndex );
-                                AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aScaledLogicPosition, (*aSeriesIter)->m_nPolygonIndex );
-                            }
-                        }
                     }
 
                     //create a single datapoint if point is visible
@@ -1052,17 +978,6 @@ void AreaChart::createShapes()
 
                             awt::Point aScreenPosition2D;//get the screen position for the labels
                             sal_Int32 nOffset = 100; //todo maybe calculate this font height dependent
-                            if( m_bIsPolarCooSys && nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE )
-                            {
-                                PolarPlottingPositionHelper* pPolarPosHelper = dynamic_cast<PolarPlottingPositionHelper*>(pPosHelper);
-                                if( pPolarPosHelper )
-                                {
-                                    PolarLabelPositionHelper aPolarLabelPositionHelper(pPolarPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory);
-                                    aScreenPosition2D = awt::Point( aPolarLabelPositionHelper.getLabelScreenPositionAndAlignmentForLogicValues(
-                                        eAlignment, fLogicX, fLogicY, fLogicZ, nOffset ));
-                                }
-                            }
-                            else
                             {
                                 if(LABEL_ALIGN_CENTER==eAlignment || m_nDimension == 3 )
                                     nOffset = 0;

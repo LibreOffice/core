@@ -34,10 +34,6 @@ public:
              ::com::sun::star::chart2::XChartType >& xChartTypeModel
              , sal_Int32 nDimensionCount
              , bool bCategoryXAxis, bool bNoArea=false
-             , PlottingPositionHelper* pPlottingPositionHelper=NULL //takes owner ship
-             , bool bConnectLastToFirstPoint=false
-             , bool bExpandIfValuesCloseToBorder=true
-             , sal_Int32 nKeepAspectRatio=-1 //0->no 1->yes other value->automatic
              );
     virtual ~AreaChart();
 
@@ -78,11 +74,6 @@ private: //member
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;
     bool                                m_bSymbol;
-    bool                                m_bIsPolarCooSys;//used e.g. for net chart (the data labels need to be placed different)
-    bool                                m_bConnectLastToFirstPoint;//used e.g. for net chart
-    bool                                m_bExpandIfValuesCloseToBorder; // e.g. false for net charts
-
-    sal_Int32                           m_nKeepAspectRatio; //0->no 1->yes other value->automatic
 
     //Properties for splines:
     ::com::sun::star::chart2::CurveStyle    m_eCurveStyle;
