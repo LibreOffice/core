@@ -27,7 +27,7 @@
 #include "scmatrix.hxx"
 
 #include "formula/errorcodes.hxx"
-#include "svl/sharedstring.hxx"
+#include "svl/sharedstringpool.hxx"
 
 #include "imp_op.hxx"
 #include "root.hxx"
@@ -1815,6 +1815,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
         OSL_FAIL( "ExcelToSc::ReadExtensionArray - missing matrix" );
     }
 
+    svl::SharedStringPool& rPool = GetDoc().GetSharedStringPool();
     for( nR = 0 ; nR < nRows; nR++ )
     {
         for( nC = 0 ; nC < nCols; nC++ )
@@ -1851,7 +1852,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
                     }
                     if( NULL != pMatrix )
                     {
-                        pMatrix->PutString(svl::SharedString(aString), nC, nR);
+                        pMatrix->PutString(rPool.intern(aString), nC, nR);
                     }
                     break;
 

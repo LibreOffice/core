@@ -29,7 +29,7 @@
 #include "tokenarray.hxx"
 #include "externalrefmgr.hxx"
 #include "scmatrix.hxx"
-#include "svl/sharedstring.hxx"
+#include "svl/sharedstringpool.hxx"
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -123,6 +123,8 @@ public:
     sal_uInt16          GetTabCount() const;
 
     void                LoadCachedValues();
+
+    svl::SharedStringPool& GetSharedStringPool();
 
 private:
     typedef boost::ptr_vector< XclImpSupbookTab >  XclImpSupbookTabList;
@@ -274,7 +276,7 @@ sal_uInt16 XclImpTabInfo::GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMa
 
 // External names =============================================================
 
-XclImpExtName::MOper::MOper(XclImpStream& rStrm) :
+XclImpExtName::MOper::MOper(svl::SharedStringPool& rPool, XclImpStream& rStrm) :
     mxCached(new ScMatrix(0,0))
 {
     SCSIZE nLastCol = rStrm.ReaduInt8();
@@ -297,7 +299,7 @@ XclImpExtName::MOper::MOper(XclImpStream& rStrm) :
                 case 0x02:
                 {
                     OUString aStr = rStrm.ReadUniString();
-                    mxCached->PutString(svl::SharedString(aStr), nCol, nRow);
+                    mxCached->PutString(rPool.intern(aStr), nCol, nRow);
                 }
                 break;
                 case 0x04:
@@ -327,7 +329,7 @@ const ScMatrix& XclImpExtName::MOper::GetCache() const
     return *mxCached;
 }
 
-XclImpExtName::XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm, XclSupbookType eSubType, ExcelToSc* pFormulaConv ) :
+XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclSupbookType eSubType, ExcelToSc* pFormulaConv ) :
     mpMOper(NULL)
 {
     sal_uInt16 nFlags;
@@ -385,7 +387,7 @@ XclImpExtName::XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm
             }
         break;
         case xlExtOLE:
-            mpMOper = new MOper(rStrm);
+            mpMOper = new MOper(rSupbook.GetSharedStringPool(), rStrm);
         break;
         default:
             ;
@@ -401,7 +403,7 @@ void XclImpExtName::CreateDdeData( ScDocument& rDoc, const OUString& rApplic, co
 {
     ScMatrixRef xResults;
     if( mxDdeMatrix.get() )
-        xResults = mxDdeMatrix->CreateScMatrix();
+        xResults = mxDdeMatrix->CreateScMatrix(rDoc.GetSharedStringPool());
     rDoc.CreateDdeLink( rApplic, rTopic, maName, SC_DDE_DEFAULT, xResults );
 }
 
@@ -732,6 +734,11 @@ void XclImpSupbook::LoadCachedValues()
         itTab->LoadCachedValues(pCacheTable);
         pCacheTable->setWholeTableCached();
     }
+}
+
+svl::SharedStringPool& XclImpSupbook::GetSharedStringPool()
+{
+    return GetDoc().GetSharedStringPool();
 }
 
 // Import link manager ========================================================

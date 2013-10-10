@@ -1876,10 +1876,12 @@ class ToMatrixHandler
     ScMatrix& mrMat;
     SCCOL mnMatCol;
     SCROW mnTopRow;
-    const ScDocument* mpDoc;
+    ScDocument* mpDoc;
+    svl::SharedStringPool& mrStrPool;
 public:
-    ToMatrixHandler(ScMatrix& rMat, SCCOL nMatCol, SCROW nTopRow, const ScDocument* pDoc) :
-        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mpDoc(pDoc) {}
+    ToMatrixHandler(ScMatrix& rMat, SCCOL nMatCol, SCROW nTopRow, ScDocument* pDoc) :
+        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow),
+        mpDoc(pDoc), mrStrPool(pDoc->GetSharedStringPool()) {}
 
     void operator() (size_t nRow, double fVal)
     {
@@ -1893,17 +1895,17 @@ public:
         if (rCell.IsValue())
             mrMat.PutDouble(rCell.GetValue(), mnMatCol, nRow - mnTopRow);
         else
-            mrMat.PutString(rCell.GetString(), mnMatCol, nRow - mnTopRow);
+            mrMat.PutString(mrStrPool.intern(rCell.GetString()), mnMatCol, nRow - mnTopRow);
     }
 
     void operator() (size_t nRow, const svl::SharedString& rSS)
     {
-        mrMat.PutString(rSS.getString(), mnMatCol, nRow - mnTopRow);
+        mrMat.PutString(rSS, mnMatCol, nRow - mnTopRow);
     }
 
     void operator() (size_t nRow, const EditTextObject* pStr)
     {
-        mrMat.PutString(ScEditUtil::GetString(*pStr, mpDoc), mnMatCol, nRow - mnTopRow);
+        mrMat.PutString(mrStrPool.intern(ScEditUtil::GetString(*pStr, mpDoc)), mnMatCol, nRow - mnTopRow);
     }
 };
 

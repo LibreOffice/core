@@ -25,6 +25,7 @@
 #include <sfx2/objsh.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstringpool.hxx"
 #include <sal/macros.h>
 
 #include "attrib.hxx"
@@ -2515,13 +2516,13 @@ void ScInterpreter::ScHyperLink()
             if (ScMatrix::IsValueType( nResultType))
                 pResMat->PutDouble( fVal, 0);
             else if (ScMatrix::IsRealStringType( nResultType))
-                pResMat->PutString( aStr, 0);
+                pResMat->PutString(mrStrPool.intern(aStr), 0);
             else    // EmptyType, EmptyPathType, mimic xcl
                 pResMat->PutDouble( 0.0, 0 );
         }
         else
-            pResMat->PutString(svl::SharedString(aUrl), 0);
-        pResMat->PutString(svl::SharedString(aUrl), 1);
+            pResMat->PutString(mrStrPool.intern(aUrl), 0);
+        pResMat->PutString(mrStrPool.intern(aUrl), 1);
         bMatrixFormula = true;
         PushMatrix(pResMat);
     }

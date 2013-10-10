@@ -57,6 +57,12 @@ struct RangeMatrix;
 
 }
 
+namespace svl {
+
+class SharedStringPool;
+
+}
+
 #define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
 
 class ScTokenStack
@@ -145,6 +151,7 @@ private:
     ScAddress   aPos;
     ScTokenArray& rArr;
     ScDocument* pDok;
+    svl::SharedStringPool& mrStrPool;
     formula::FormulaTokenRef  xResult;
     ScJumpMatrix*   pJumpMatrix;        // currently active array condition, if any
     ScTokenMatrixMap* pTokenMatrixMap;  // map ScToken* to formula::FormulaTokenRef if in array condition

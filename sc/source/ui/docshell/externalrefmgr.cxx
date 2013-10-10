@@ -45,7 +45,7 @@
 #include "svl/stritem.hxx"
 #include "svl/urihelper.hxx"
 #include "svl/zformat.hxx"
-#include "svl/sharedstring.hxx"
+#include "svl/sharedstringpool.hxx"
 #include "sfx2/linkmgr.hxx"
 #include "tools/urlobj.hxx"
 #include "unotools/ucbhelper.hxx"
@@ -488,12 +488,10 @@ ScExternalRefCache::CellFormat::CellFormat() :
 
 // ----------------------------------------------------------------------------
 
-ScExternalRefCache::ScExternalRefCache()
-{
-}
-ScExternalRefCache::~ScExternalRefCache()
-{
-}
+ScExternalRefCache::ScExternalRefCache(svl::SharedStringPool& rPool) :
+    mrStrPool(rPool) {}
+
+ScExternalRefCache::~ScExternalRefCache() {}
 
 const OUString* ScExternalRefCache::getRealTableName(sal_uInt16 nFileId, const OUString& rTabName) const
 {
@@ -645,7 +643,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                         xMat->PutDouble(pToken->GetDouble(), nC, nR);
                     break;
                     case svString:
-                        xMat->PutString(svl::SharedString(pToken->GetString()), nC, nR);
+                        xMat->PutString(mrStrPool.intern(pToken->GetString()), nC, nR);
                     break;
                     default:
                         ;
@@ -1374,7 +1372,8 @@ inline void ColumnBatch<T>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
 }
 
 static ScTokenArray* convertToTokenArray(
-    ScDocument* pSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
+    ScDocument* pSrcDoc, svl::SharedStringPool& rStrPool, ScRange& rRange,
+    vector<ScExternalRefCache::SingleRangeData>& rCacheData )
 {
     ScAddress& s = rRange.aStart;
     ScAddress& e = rRange.aEnd;
@@ -1455,7 +1454,7 @@ static ScTokenArray* convertToTokenArray(
                         else
                         {
                             OUString aStr = pFCell->GetString();
-                            xMat->PutString(aStr, nC, nR);
+                            xMat->PutString(rStrPool.intern(aStr), nC, nR);
                         }
                     }
                     break;
@@ -1505,6 +1504,7 @@ static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
 
 ScExternalRefManager::ScExternalRefManager(ScDocument* pDoc) :
     mpDoc(pDoc),
+    maRefCache(pDoc->GetSharedStringPool()),
     mbInReferenceMarking(false),
     mbUserInteractionEnabled(true)
 {
@@ -2024,7 +2024,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     aRange.aStart.SetTab(nTab1);
     aRange.aEnd.SetTab(nTab1 + nTabSpan);
 
-    pArray.reset(convertToTokenArray(pSrcDoc, aRange, aCacheData));
+    pArray.reset(convertToTokenArray(pSrcDoc, mpDoc->GetSharedStringPool(), aRange, aCacheData));
     rRange = aRange;
     rCacheData.swap(aCacheData);
     return pArray;

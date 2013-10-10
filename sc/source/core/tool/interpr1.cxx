@@ -248,7 +248,8 @@ void ScInterpreter::ScIfJump()
 /** Store a matrix value in another matrix in the context of that other matrix
     is the result matrix of a jump matrix. All arguments must be valid and are
     not checked. */
-static void lcl_storeJumpMatResult( const ScMatrix* pMat, ScMatrix* pResMat, SCSIZE nC, SCSIZE nR )
+static void lcl_storeJumpMatResult(
+    svl::SharedStringPool& rPool, const ScMatrix* pMat, ScMatrix* pResMat, SCSIZE nC, SCSIZE nR )
 {
     if ( pMat->IsValue( nC, nR ) )
     {
@@ -262,7 +263,7 @@ static void lcl_storeJumpMatResult( const ScMatrix* pMat, ScMatrix* pResMat, SCS
     else
     {
         const OUString& rStr = pMat->GetString(nC, nR);
-        pResMat->PutString(svl::SharedString(rStr), nC, nR);
+        pResMat->PutString(rPool.intern(rStr), nC, nR);
     }
 }
 
@@ -379,7 +380,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                     {
                         for ( ; nR < nRows && (nC != nErrorCol || nR != nErrorRow); ++nR)
                         {
-                            lcl_storeJumpMatResult( pMatPtr, pResMatPtr, nC, nR);
+                            lcl_storeJumpMatResult(mrStrPool, pMatPtr, pResMatPtr, nC, nR);
                         }
                         if (nC != nErrorCol || nR != nErrorRow)
                             ++nC;
@@ -396,7 +397,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
                             }
                             else
                             {   // FALSE, EMPTY path, store result instead
-                                lcl_storeJumpMatResult( pMatPtr, pResMatPtr, nC, nR);
+                                lcl_storeJumpMatResult(mrStrPool, pMatPtr, pResMatPtr, nC, nR);
                             }
                         }
                     }
@@ -600,7 +601,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         nGlobalError = 0;
                     }
                     else
-                        pResMat->PutString( rStr, nC, nR );
+                        pResMat->PutString(mrStrPool.intern(rStr), nC, nR);
                 }
                 break;
                 case svSingleRef:
@@ -641,7 +642,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                 nGlobalError = 0;
                             }
                             else
-                                pResMat->PutString( aStr, nC, nR);
+                                pResMat->PutString(mrStrPool.intern(aStr), nC, nR);
                         }
                     }
                 }
@@ -709,7 +710,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                     nGlobalError = 0;
                                 }
                                 else
-                                    pResMat->PutString( aStr, nC, nR );
+                                    pResMat->PutString(mrStrPool.intern(aStr), nC, nR);
                             }
                           }
                         SCSIZE nParmCols = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
@@ -745,7 +746,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         }
                         else
                         {
-                            lcl_storeJumpMatResult( pMat.get(), pResMat.get(), nC, nR);
+                            lcl_storeJumpMatResult(mrStrPool, pMat.get(), pResMat.get(), nC, nR);
                         }
                         lcl_AdjustJumpMatrix( pJumpMatrix, pResMat, nCols, nRows );
                     }
@@ -1181,7 +1182,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScCompareOptions* pOptions )
                         aRes.mpMat->PutDouble(CompareFunc(aComp, pOptions), j, k);
                     }
                     else
-                        aRes.mpMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), j, k);
+                        aRes.mpMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), j, k);
                 }
             }
         }
@@ -1721,7 +1722,7 @@ void ScInterpreter::ScNeg()
                                 pResMat->PutDouble( -pMat->GetDouble(i,j), i, j );
                             else
                                 pResMat->PutString(
-                                    ScGlobal::GetRscString( STR_NO_VALUE ), i, j );
+                                    mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i, j);
                         }
                     }
                     PushMatrix( pResMat );
@@ -1777,7 +1778,7 @@ void ScInterpreter::ScNot()
                                 pResMat->PutDouble( (pMat->GetDouble(i,j) == 0.0), i, j );
                             else
                                 pResMat->PutString(
-                                    ScGlobal::GetRscString( STR_NO_VALUE ), i, j );
+                                    mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i, j);
                         }
                     }
                     PushMatrix( pResMat );
@@ -4899,7 +4900,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                     if (pToken->GetType() == svDouble)
                         pSumExtraMatrix->PutDouble(pToken->GetDouble(), 0, 0);
                     else
-                        pSumExtraMatrix->PutString(pToken->GetString(), 0, 0);
+                        pSumExtraMatrix->PutString(mrStrPool.intern(pToken->GetString()), 0, 0);
                 }
                 break;
             case svExternalDoubleRef:
@@ -6151,7 +6152,7 @@ void ScInterpreter::ScLookup()
                 if (pDataMat->IsValue(0, i))
                     pTempMat->PutDouble(pDataMat->GetDouble(0, i), 0, i);
                 else
-                    pTempMat->PutString(pDataMat->GetString(0, i), 0, i);
+                    pTempMat->PutString(mrStrPool.intern(pDataMat->GetString(0, i)), 0, i);
             pDataMat2 = pTempMat;
         }
         else
@@ -6161,7 +6162,7 @@ void ScInterpreter::ScLookup()
                 if (pDataMat->IsValue(i, 0))
                     pTempMat->PutDouble(pDataMat->GetDouble(i, 0), i, 0);
                 else
-                    pTempMat->PutString(pDataMat->GetString(i, 0), i, 0);
+                    pTempMat->PutString(mrStrPool.intern(pDataMat->GetString(i, 0)), i, 0);
             pDataMat2 = pTempMat;
         }
 
@@ -7630,8 +7631,8 @@ void ScInterpreter::ScIndex()
                                         pResMat->PutDouble(pMat->GetDouble(i,
                                                     nRowMinus1), i, 0);
                                     else
-                                        pResMat->PutString(pMat->GetString(i,
-                                                    nRowMinus1), i, 0);
+                                        pResMat->PutString(
+                                            mrStrPool.intern(pMat->GetString(i, nRowMinus1)), i, 0);
                                 PushMatrix(pResMat);
                             }
                             else
@@ -7648,8 +7649,7 @@ void ScInterpreter::ScIndex()
                                         pResMat->PutDouble(pMat->GetDouble(nColMinus1,
                                                     i), i);
                                     else
-                                        pResMat->PutString(pMat->GetString(nColMinus1,
-                                                    i), i);
+                                        pResMat->PutString(mrStrPool.intern(pMat->GetString(nColMinus1, i)), i);
                                 PushMatrix(pResMat);
                             }
                             else

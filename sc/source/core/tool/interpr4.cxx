@@ -31,6 +31,7 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbuno.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstringpool.hxx"
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
@@ -3377,7 +3378,7 @@ void ScInterpreter::ScMacro()
                             }
                             else
                             {
-                                pMat->PutString( pV->GetOUString(), i, j );
+                                pMat->PutString(mrStrPool.intern(pV->GetOUString()), i, j);
                             }
                         }
                     }
@@ -3688,6 +3689,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     aPos( rPos ),
     rArr( r ),
     pDok( pDoc ),
+    mrStrPool(pDoc->GetSharedStringPool()),
     pTokenMatrixMap( NULL ),
     pMyFormulaCell( pCell ),
     pFormatter( pDoc->GetFormatTable() ),

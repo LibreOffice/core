@@ -49,6 +49,12 @@ class ScFormulaCell;
 
 class ScExternalRefCache;
 
+namespace svl {
+
+class SharedStringPool;
+
+}
+
 class ScExternalRefLink : public ::sfx2::SvBaseLink
 {
 public:
@@ -195,7 +201,7 @@ public:
     typedef ::boost::unordered_map< OUString, size_t, OUStringHash>
         TableNameIndexMap;
 
-    ScExternalRefCache();
+    ScExternalRefCache(svl::SharedStringPool& rPool);
     ~ScExternalRefCache();
 
     const OUString* getRealTableName(sal_uInt16 nFileId, const OUString& rTabName) const;
@@ -334,6 +340,7 @@ private:
     DocItem* getDocItem(sal_uInt16 nFileId) const;
 
 private:
+    svl::SharedStringPool& mrStrPool;;
     mutable DocDataType maDocs;
 };
 
@@ -756,10 +763,10 @@ private:
 
 
 private:
+    ScDocument* mpDoc;
+
     /** cache of referenced ranges and names from source documents. */
     ScExternalRefCache maRefCache;
-
-    ScDocument* mpDoc;
 
     /**
      * Source document cache.  This stores the original source document shell

@@ -661,7 +661,7 @@ bool ScValidationData::GetSelectionFromFormula(
         else
         {
             OUString aStr = aValidationSrc.GetString();
-            xMatRef->PutString( aStr, 0);
+            xMatRef->PutString(pDocument->GetSharedStringPool().intern(aStr), 0);
         }
 
         pValues = xMatRef.get();

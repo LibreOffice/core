@@ -25,6 +25,12 @@
 #include "xiroot.hxx"
 #include "types.hxx"
 
+namespace svl {
+
+class SharedStringPool;
+
+}
+
 /* ============================================================================
 Classes for import of different kinds of internal/external references.
 - 3D cell and cell range links
@@ -112,7 +118,7 @@ class XclImpExtName
     class MOper
     {
     public:
-        MOper(XclImpStream& rStrm);
+        MOper(svl::SharedStringPool& rPool, XclImpStream& rStrm);
         const ScMatrix& GetCache() const;
     private:
         ScMatrixRef mxCached;
@@ -120,9 +126,9 @@ class XclImpExtName
 
 public:
     /** Reads the external name from the stream. */
-    explicit            XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm,
-                                        XclSupbookType eSubType, ExcelToSc* pFormulaConv );
-                        ~XclImpExtName();
+    explicit XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm,
+                            XclSupbookType eSubType, ExcelToSc* pFormulaConv );
+    ~XclImpExtName();
 
     /** Create and apply the cached list of this DDE Link to the document. */
     void                CreateDdeData( ScDocument& rDoc,

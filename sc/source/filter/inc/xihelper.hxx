@@ -31,6 +31,12 @@
 
 class ScRangeList;
 
+namespace svl {
+
+class SharedStringPool;
+
+}
+
 // Excel->Calc cell address/range conversion ==================================
 
 /** Provides functions to convert Excel cell addresses to Calc cell addresses. */
@@ -326,7 +332,7 @@ public:
                         ~XclImpCachedMatrix();
 
     /** Creates a new ScMatrix object and fills it with the contained values. */
-    ScMatrixRef         CreateScMatrix() const;
+    ScMatrixRef CreateScMatrix( svl::SharedStringPool& rPool ) const;
 
 private:
     typedef boost::ptr_vector< XclImpCachedValue > XclImpValueList;

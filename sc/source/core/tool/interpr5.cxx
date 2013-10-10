@@ -401,7 +401,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
                 {
                     OUString aStr;
                     GetCellString(aStr, aCell);
-                    pMat->PutString(aStr, 0);
+                    pMat->PutString(mrStrPool.intern(aStr), 0);
                 }
             }
         }
@@ -450,7 +450,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
                     nGlobalError = 0;
                 }
                 else
-                    pMat->PutString(svl::SharedString(aStr), 0);
+                    pMat->PutString(mrStrPool.intern(aStr), 0);
             }
         }
         break;
@@ -472,7 +472,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             else if (pToken->GetType() == svString)
             {
                 pMat = new ScMatrix(1, 1, 0.0);
-                pMat->PutString(pToken->GetString(), 0, 0);
+                pMat->PutString(mrStrPool.intern(pToken->GetString()), 0, 0);
             }
             else
             {
@@ -1029,7 +1029,8 @@ static inline SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
 
 template<class _Function>
 static ScMatrixRef lcl_MatrixCalculation(
-   const ScMatrix& rMat1, const ScMatrix& rMat2, ScInterpreter* pInterpreter)
+    svl::SharedStringPool& rPool,
+    const ScMatrix& rMat1, const ScMatrix& rMat2, ScInterpreter* pInterpreter)
 {
     static _Function Op;
 
@@ -1053,7 +1054,7 @@ static ScMatrixRef lcl_MatrixCalculation(
                     xResMat->PutDouble( d, i, j);
                 }
                 else
-                    xResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i, j);
+                    xResMat->PutString(rPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i, j);
             }
         }
     }
@@ -1085,7 +1086,7 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
                 {
                     OUString aTmp = pMat1->GetString(*pFormatter, i, j);
                     aTmp += pMat2->GetString( *pFormatter, i, j);
-                    xResMat->PutString(svl::SharedString(aTmp), i, j);
+                    xResMat->PutString(mrStrPool.intern(aTmp), i, j);
                 }
             }
         }
@@ -1181,11 +1182,11 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         ScMatrixRef pResMat;
         if ( _bSub )
         {
-            pResMat = lcl_MatrixCalculation<MatrixSub>(*pMat1, *pMat2, this);
+            pResMat = lcl_MatrixCalculation<MatrixSub>(mrStrPool, *pMat1, *pMat2, this);
         }
         else
         {
-            pResMat = lcl_MatrixCalculation<MatrixAdd>(*pMat1, *pMat2, this);
+            pResMat = lcl_MatrixCalculation<MatrixAdd>(mrStrPool, *pMat1, *pMat2, this);
         }
 
         if (!pResMat)
@@ -1222,7 +1223,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
                     if (pMat->IsValue(i))
                         pResMat->PutDouble( _bSub ? ::rtl::math::approxSub( fVal, pMat->GetDouble(i)) : ::rtl::math::approxAdd( pMat->GetDouble(i), fVal), i);
                     else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
                 } // for ( SCSIZE i = 0; i < nCount; i++ )
             } // if (bFlag || !_bSub )
             else
@@ -1231,7 +1232,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
                 {   if (pMat->IsValue(i))
                         pResMat->PutDouble( ::rtl::math::approxSub( pMat->GetDouble(i), fVal), i);
                     else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
                 } // for ( SCSIZE i = 0; i < nCount; i++ )
             }
             PushMatrix(pResMat);
@@ -1316,7 +1317,7 @@ void ScInterpreter::ScAmpersand()
                         {
                             OUString aTmp = sStr;
                             aTmp += pMat->GetString( *pFormatter, i, j);
-                            pResMat->PutString(svl::SharedString(aTmp), i, j);
+                            pResMat->PutString(mrStrPool.intern(aTmp), i, j);
                         }
                     }
             }
@@ -1332,7 +1333,7 @@ void ScInterpreter::ScAmpersand()
                         {
                             OUString aTmp = pMat->GetString(*pFormatter, i, j);
                             aTmp += sStr;
-                            pResMat->PutString(svl::SharedString(aTmp), i, j);
+                            pResMat->PutString(mrStrPool.intern(aTmp), i, j);
                         }
                     }
             }
@@ -1389,7 +1390,7 @@ void ScInterpreter::ScMul()
     }
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixMul>(*pMat1, *pMat2, this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixMul>(mrStrPool, *pMat1, *pMat2, this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1416,7 +1417,7 @@ void ScInterpreter::ScMul()
                 if (pMat->IsValue(i))
                     pResMat->PutDouble(pMat->GetDouble(i)*fVal, i);
                 else
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                    pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
             PushMatrix(pResMat);
         }
         else
@@ -1462,7 +1463,7 @@ void ScInterpreter::ScDiv()
     }
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixDiv>(*pMat1, *pMat2, this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixDiv>(mrStrPool, *pMat1, *pMat2, this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1495,14 +1496,14 @@ void ScInterpreter::ScDiv()
                     if (pMat->IsValue(i))
                         pResMat->PutDouble( div( fVal, pMat->GetDouble(i)), i);
                     else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
             }
             else
             {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
                         pResMat->PutDouble( div( pMat->GetDouble(i), fVal), i);
                     else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
             }
             PushMatrix(pResMat);
         }
@@ -1541,7 +1542,7 @@ void ScInterpreter::ScPow()
         fVal1 = GetDouble();
     if (pMat1 && pMat2)
     {
-        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixPow>(*pMat1, *pMat2, this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixPow>(mrStrPool, *pMat1, *pMat2, this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1574,14 +1575,14 @@ void ScInterpreter::ScPow()
                     if (pMat->IsValue(i))
                         pResMat->PutDouble(pow(fVal,pMat->GetDouble(i)), i);
                     else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
             }
             else
             {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
                         pResMat->PutDouble(pow(pMat->GetDouble(i),fVal), i);
                     else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
+                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
             }
             PushMatrix(pResMat);
         }
@@ -1726,7 +1727,7 @@ void ScInterpreter::ScSumXMY2()
         PushNoValue();
         return;
     } // if (nC1 != nC2 || nR1 != nR2)
-    ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixSub>(*pMat1, *pMat2, this);
+    ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixSub>(mrStrPool, *pMat1, *pMat2, this);
     if (!pResMat)
     {
         PushNoValue();
@@ -2370,9 +2371,9 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
     {
         for (SCSIZE i=2; i<K+1; i++)
         {
-            pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 2 );
-            pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 3 );
-            pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), i, 4 );
+            pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), i, 2);
+            pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), i, 3);
+            pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), i, 4);
         }
     }
 
@@ -2439,13 +2440,13 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
             {   // exact fit; test SSreg too, because SSresid might be
                 // unequal zero due to round of errors
                 pResMat->PutDouble(0.0, 1, 4); // SSresid
-                pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), 0, 3); // F
+                pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), 0, 3); // F
                 pResMat->PutDouble(0.0, 1, 2); // RMSE
                 pResMat->PutDouble(0.0, 0, 1); // SigmaSlope
                 if (bConstant)
                     pResMat->PutDouble(0.0, 1, 1); //SigmaIntercept
                 else
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), 1, 1);
+                    pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), 1, 1);
                 pResMat->PutDouble(1.0, 0, 2); // R^2
             }
             else
@@ -2469,7 +2470,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                 }
                 else
                 {
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), 1, 1);
+                    pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), 1, 1);
                 }
 
                 double fR2 = fSSreg / (fSSreg + fSSresid);
@@ -2567,7 +2568,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                 {   // exact fit; incl. observed values Y are identical
                     pResMat->PutDouble(0.0, 1, 4); // SSresid
                     // F = (SSreg/K) / (SSresid/df) = #DIV/0!
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), 0, 3); // F
+                    pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), 0, 3); // F
                     // RMSE = sqrt(SSresid / df) = sqrt(0 / df) = 0
                     pResMat->PutDouble(0.0, 1, 2); // RMSE
                     // SigmaSlope[i] = RMSE * sqrt(matrix[i,i]) = 0 * sqrt(...) = 0
@@ -2578,7 +2579,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                     if (bConstant)
                         pResMat->PutDouble(0.0, K, 1); //SigmaIntercept
                     else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), K, 1);
+                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), K, 1);
 
                     //  R^2 = SSreg / (SSreg + SSresid) = 1.0
                     pResMat->PutDouble(1.0, 0, 2); // R^2
@@ -2629,7 +2630,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                     }
                     else
                     {
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), K, 1);
+                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), K, 1);
                     }
 
                     double fR2 = fSSreg / (fSSreg + fSSresid);
@@ -2725,7 +2726,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                 {   // exact fit; incl. case observed values Y are identical
                     pResMat->PutDouble(0.0, 1, 4); // SSresid
                     // F = (SSreg/K) / (SSresid/df) = #DIV/0!
-                    pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), 0, 3); // F
+                    pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), 0, 3); // F
                     // RMSE = sqrt(SSresid / df) = sqrt(0 / df) = 0
                     pResMat->PutDouble(0.0, 1, 2); // RMSE
                     // SigmaSlope[i] = RMSE * sqrt(matrix[i,i]) = 0 * sqrt(...) = 0
@@ -2736,7 +2737,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                     if (bConstant)
                         pResMat->PutDouble(0.0, K, 1); //SigmaIntercept
                     else
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), K, 1);
+                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), K, 1);
 
                     //  R^2 = SSreg / (SSreg + SSresid) = 1.0
                     pResMat->PutDouble(1.0, 0, 2); // R^2
@@ -2787,7 +2788,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                     }
                     else
                     {
-                        pResMat->PutString(ScGlobal::GetRscString(STR_NV_STR), K, 1);
+                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NV_STR)), K, 1);
                     }
 
                     double fR2 = fSSreg / (fSSreg + fSSresid);
