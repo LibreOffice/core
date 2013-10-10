@@ -50,10 +50,10 @@ void SwUndoFmtCreate::UndoImpl(::sw::UndoRedoContext &)
 {
     if (pNew)
     {
-        if (sNewName.Len() == 0 && pNew)
+        if (sNewName.isEmpty() && pNew)
             sNewName = pNew->GetName();
 
-        if (sNewName.Len() > 0)
+        if (!sNewName.isEmpty())
             pNew = Find(sNewName);
 
         if (pNew)
@@ -88,7 +88,7 @@ void SwUndoFmtCreate::RedoImpl(::sw::UndoRedoContext &)
 
 SwRewriter SwUndoFmtCreate::GetRewriter() const
 {
-    if (sNewName.Len() == 0 && pNew)
+    if (sNewName.isEmpty() && pNew)
         sNewName = pNew->GetName();
 
     SwRewriter aRewriter;
@@ -149,8 +149,8 @@ SwRewriter SwUndoFmtDelete::GetRewriter() const
 }
 
 SwUndoRenameFmt::SwUndoRenameFmt(SwUndoId nUndoId,
-                                 const String & _sOldName,
-                                 const String & _sNewName,
+                                 const OUString & _sOldName,
+                                 const OUString & _sNewName,
                                  SwDoc * _pDoc)
     : SwUndo(nUndoId), sOldName(_sOldName),
       sNewName(_sNewName), pDoc(_pDoc)
@@ -235,8 +235,8 @@ SwFmt * SwUndoTxtFmtCollDelete::Find(const OUString & rName) const
     return pDoc->FindTxtFmtCollByName(rName);
 }
 
-SwUndoRenameFmtColl::SwUndoRenameFmtColl(const String & sInitOldName,
-                                         const String & sInitNewName,
+SwUndoRenameFmtColl::SwUndoRenameFmtColl(const OUString & sInitOldName,
+                                         const OUString & sInitNewName,
                                          SwDoc * _pDoc)
     : SwUndoRenameFmt(UNDO_TXTFMTCOL_RENAME, sInitOldName, sInitNewName, _pDoc)
 {
@@ -289,8 +289,8 @@ SwFmt * SwUndoCharFmtDelete::Find(const OUString & rName) const
     return pDoc->FindCharFmtByName(rName);
 }
 
-SwUndoRenameCharFmt::SwUndoRenameCharFmt(const String & sInitOldName,
-                                         const String & sInitNewName,
+SwUndoRenameCharFmt::SwUndoRenameCharFmt(const OUString & sInitOldName,
+                                         const OUString & sInitNewName,
                                          SwDoc * pDocument)
     : SwUndoRenameFmt(UNDO_CHARFMT_RENAME, sInitOldName, sInitNewName, pDocument)
 {
@@ -344,8 +344,8 @@ SwFmt * SwUndoFrmFmtDelete::Find(const OUString & rName) const
     return pDoc->FindFrmFmtByName(rName);
 }
 
-SwUndoRenameFrmFmt::SwUndoRenameFrmFmt(const String & sInitOldName,
-                                       const String & sInitNewName,
+SwUndoRenameFrmFmt::SwUndoRenameFrmFmt(const OUString & sInitOldName,
+                                       const OUString & sInitNewName,
                                        SwDoc * pDocument)
     : SwUndoRenameFmt(UNDO_FRMFMT_RENAME, sInitOldName, sInitNewName, pDocument)
 {
@@ -419,8 +419,8 @@ SwRewriter SwUndoNumruleDelete::GetRewriter() const
     return aResult;
 }
 
-SwUndoNumruleRename::SwUndoNumruleRename(const String & _aOldName,
-                                         const String & _aNewName,
+SwUndoNumruleRename::SwUndoNumruleRename(const OUString & _aOldName,
+                                         const OUString & _aNewName,
                                          SwDoc * _pDoc)
     : SwUndo(UNDO_NUMRULE_RENAME), aOldName(_aOldName), aNewName(_aNewName),
       pDoc(_pDoc)

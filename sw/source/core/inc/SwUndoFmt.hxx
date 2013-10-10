@@ -33,9 +33,9 @@ class SwUndoFmtCreate : public SwUndo
 {
 protected:
     SwFmt * pNew;
-    String sDerivedFrom;
+    OUString sDerivedFrom;
     SwDoc * pDoc;
-    mutable String sNewName;
+    mutable OUString sNewName;
     SfxItemSet * pNewSet;
     sal_uInt16 nId;     // FmtId related
     sal_Bool bAuto;
@@ -58,9 +58,9 @@ public:
 class SwUndoFmtDelete : public SwUndo
 {
 protected:
-    String sDerivedFrom;
+    OUString sDerivedFrom;
     SwDoc * pDoc;
-    String sOldName;
+    OUString sOldName;
     SfxItemSet aOldSet;
     sal_uInt16 nId;     // FmtId related
     sal_Bool bAuto;
@@ -82,12 +82,12 @@ public:
 class SwUndoRenameFmt : public SwUndo
 {
 protected:
-    String sOldName, sNewName;
+    OUString sOldName, sNewName;
     SwDoc * pDoc;
 
 public:
-    SwUndoRenameFmt(SwUndoId nUndoId, const String & sOldName,
-                    const String & sNewName,
+    SwUndoRenameFmt(SwUndoId nUndoId, const OUString & sOldName,
+                    const OUString & sNewName,
                     SwDoc * pDoc);
     ~SwUndoRenameFmt();
 
@@ -123,8 +123,8 @@ public:
 class SwUndoRenameFmtColl : public SwUndoRenameFmt
 {
 public:
-    SwUndoRenameFmtColl(const String & sOldName,
-                        const String & sNewName,
+    SwUndoRenameFmtColl(const OUString & sOldName,
+                        const OUString & sNewName,
                         SwDoc * pDoc);
 
     virtual SwFmt * Find(const OUString & rName) const;
@@ -154,8 +154,8 @@ public:
 class SwUndoRenameCharFmt : public SwUndoRenameFmt
 {
 public:
-    SwUndoRenameCharFmt(const String & sOldName,
-                        const String & sNewName,
+    SwUndoRenameCharFmt(const OUString & sOldName,
+                        const OUString & sNewName,
                         SwDoc * pDoc);
 
     virtual SwFmt * Find(const OUString & rName) const;
@@ -187,8 +187,8 @@ public:
 class SwUndoRenameFrmFmt : public SwUndoRenameFmt
 {
 public:
-    SwUndoRenameFrmFmt(const String & sOldName,
-                       const String & sNewName,
+    SwUndoRenameFrmFmt(const OUString & sOldName,
+                       const OUString & sNewName,
                        SwDoc * pDoc);
 
     virtual SwFmt * Find(const OUString & rName) const;
@@ -226,11 +226,11 @@ public:
 
 class SwUndoNumruleRename : public SwUndo
 {
-    String aOldName, aNewName;
+    OUString aOldName, aNewName;
     SwDoc * pDoc;
 
  public:
-    SwUndoNumruleRename(const String & aOldName, const String & aNewName,
+    SwUndoNumruleRename(const OUString & aOldName, const OUString & aNewName,
                         SwDoc * pDoc);
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
