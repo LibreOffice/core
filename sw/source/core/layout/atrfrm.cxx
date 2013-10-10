@@ -2599,7 +2599,8 @@ void SwFrmFmt::SetPositionLayoutDir( const sal_Int16 )
 {
     // empty body, because default implementation does nothing
 }
-String SwFrmFmt::GetDescription() const
+
+OUString SwFrmFmt::GetDescription() const
 {
     return SW_RES(STR_FRAME);
 }
@@ -3100,9 +3101,9 @@ void SwDrawFrmFmt::SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir )
     }
 }
 
-String SwDrawFrmFmt::GetDescription() const
+OUString SwDrawFrmFmt::GetDescription() const
 {
-    String aResult;
+    OUString aResult;
     const SdrObject * pSdrObj = FindSdrObject();
 
     if (pSdrObj)

@@ -52,7 +52,7 @@ protected:
                 pDrvdFrm, nFmtWhich )
     {}
 
-    SwFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
+    SwFrmFmt( SwAttrPool& rPool, const OUString &rFmtNm,
                 SwFrmFmt *pDrvdFrm, sal_uInt16 nFmtWhich = RES_FRMFMT,
                 const sal_uInt16* pWhichRange = 0 )
           : SwFmt( rPool, rFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange),
@@ -121,7 +121,7 @@ public:
     virtual sal_Int16 GetPositionLayoutDir() const;
     virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
 
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 
     SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::uno::XInterface> const& GetXObject() const
@@ -154,7 +154,7 @@ protected:
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FLYFRMFMT )
     {}
-    SwFlyFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
+    SwFlyFrmFmt( SwAttrPool& rPool, const OUString &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FLYFRMFMT )
     {}
@@ -220,7 +220,7 @@ class SW_DLLPUBLIC SwDrawFrmFmt: public SwFrmFmt
     friend class SwDoc;
 
     mutable const SdrObject * pSdrObjCached;
-    mutable String sSdrObjCachedComment;
+    mutable OUString sSdrObjCachedComment;
 
     /// Both not existent.
     SwDrawFrmFmt( const SwDrawFrmFmt &rCpy );
@@ -245,7 +245,7 @@ protected:
           mbPosAttrSet( false )
 
     {}
-    SwDrawFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
+    SwDrawFrmFmt( SwAttrPool& rPool, const OUString &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_DRAWFRMFMT ),
           pSdrObjCached(NULL),
@@ -284,7 +284,7 @@ public:
         mbPosAttrSet = false;
     }
 
-    virtual String GetDescription() const;
+    virtual OUString GetDescription() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrmFmt);
 };
