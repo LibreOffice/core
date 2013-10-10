@@ -427,7 +427,7 @@ const SwFrm* SwAccessibleFrame::GetParent( const SwAccessibleChild& rFrmOrObj,
     return rFrmOrObj.GetParent( bInPagePreview );
 }
 
-String SwAccessibleFrame::GetFormattedPageNumber() const
+OUString SwAccessibleFrame::GetFormattedPageNumber() const
 {
     sal_uInt16 nPageNum = GetFrm()->GetVirtPageNum();
     sal_uInt32 nFmt = GetFrm()->FindPageFrm()->GetPageDesc()
@@ -435,7 +435,7 @@ String SwAccessibleFrame::GetFormattedPageNumber() const
     if( SVX_NUM_NUMBER_NONE == nFmt )
         nFmt = SVX_NUM_ARABIC;
 
-    String sRet( FormatNumber( nPageNum, nFmt ) );
+    OUString sRet( FormatNumber( nPageNum, nFmt ) );
     return sRet;
 }
 

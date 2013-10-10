@@ -23,7 +23,7 @@
 #include <swrect.hxx>
 
 #include <sal/types.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include <list>
 #include <accfrmobj.hxx>
@@ -140,7 +140,7 @@ protected:
         return maVisArea;
     }
 
-    String GetFormattedPageNumber() const;
+    OUString GetFormattedPageNumber() const;
 };
 
 inline sal_Bool SwAccessibleFrame::IsShowing( const SwRect& rFrm ) const
