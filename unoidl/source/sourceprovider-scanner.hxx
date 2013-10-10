@@ -233,7 +233,9 @@ struct SourceProviderEntity {
     explicit SourceProviderEntity(Kind theKind): kind(theKind)
     { assert(theKind >= KIND_INTERFACE_DECL); }
 
-    SourceProviderEntity() {} // needed for std::map::operator []
+    SourceProviderEntity(): // needed for std::map::operator []
+        kind() // avoid false warnings about uninitialized members
+    {}
 
     Kind kind;
     rtl::Reference<unoidl::Entity> entity;
@@ -243,7 +245,10 @@ struct SourceProviderEntity {
 struct SourceProviderScannerData {
     SourceProviderScannerData(
         rtl::Reference<unoidl::Manager> const & theManager):
-        manager(theManager), errorLine(0)
+        manager(theManager),
+        sourcePosition(), sourceEnd(),
+            // avoid false warnings about uninitialized members
+        errorLine(0)
     { assert(manager.is()); }
 
     void setSource(void const * address, sal_uInt64 size) {
