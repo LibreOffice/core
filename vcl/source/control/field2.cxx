@@ -19,6 +19,8 @@
 
 #include "sal/config.h"
 
+#include <algorithm>
+
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/rc.h>
@@ -1013,7 +1015,7 @@ static sal_uInt16 ImplCutNumberFromString( OUString& rStr )
         ++i2;
     }
     sal_Int32 nValue = rStr.copy(i1, i2-i1).toInt32();
-    rStr = rStr.copy(i2+1);
+    rStr = rStr.copy(std::min(i2+1, rStr.getLength()));
     return nValue;
 }
 
