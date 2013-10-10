@@ -43,9 +43,9 @@ public:
 
     void                Dispose();
     void                SetText( OutlinerParaObject& rText );
-    void                SetString( const String& rText );
+    void                SetString( const OUString& rText );
     OutlinerParaObject* CreateText();
-    String              GetText();
+    OUString            GetText();
 };
 
 class SwTextAPIObject : public SvxUnoText
@@ -56,9 +56,9 @@ public:
     virtual             ~SwTextAPIObject() throw();
     void                DisposeEditSource() { pSource->Dispose(); }
     OutlinerParaObject* CreateText() { return pSource->CreateText(); }
-    void                SetString( const String& rText ) { pSource->SetString( rText ); }
+    void                SetString( const OUString& rText ) { pSource->SetString( rText ); }
     void                SetText( OutlinerParaObject& rText ) { pSource->SetText( rText ); }
-    String              GetText() { return pSource->GetText(); }
+    OUString            GetText() { return pSource->GetText(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

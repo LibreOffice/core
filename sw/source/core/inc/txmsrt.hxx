@@ -77,14 +77,14 @@ class SwTOXInternational
     IndexEntrySupplierWrapper* pIndexWrapper;
     CharClass* pCharClass;
     LanguageType eLang;
-    String sSortAlgorithm;
+    OUString sSortAlgorithm;
     sal_uInt16 nOptions;
 
     void Init();
 
 public:
     SwTOXInternational( LanguageType nLang, sal_uInt16 nOptions,
-                        const String& rSortAlgorithm );
+                        const OUString& rSortAlgorithm );
     SwTOXInternational( const SwTOXInternational& );
     ~SwTOXInternational();
 
@@ -109,13 +109,13 @@ public:
         return -1 == Compare( rTaR1, rLocale1, rTaR2, rLocale2 );
     }
 
-    String GetIndexKey( const TextAndReading& rTaR,
+    OUString GetIndexKey( const TextAndReading& rTaR,
                         const ::com::sun::star::lang::Locale& rLcl ) const;
 
-    String GetFollowingText( sal_Bool bMorePages ) const;
+    OUString GetFollowingText( sal_Bool bMorePages ) const;
 
-    String ToUpper( const String& rStr, xub_StrLen nPos ) const;
-    inline sal_Bool IsNumeric( const String& rStr ) const;
+    OUString ToUpper( const OUString& rStr, xub_StrLen nPos ) const;
+    inline sal_Bool IsNumeric( const OUString& rStr ) const;
 };
 
 /*--------------------------------------------------------------------
@@ -149,7 +149,7 @@ struct SwTOXSortTabBase
     virtual bool    operator==( const SwTOXSortTabBase& );
     virtual bool    operator<( const SwTOXSortTabBase& );
 
-    virtual String  GetURL() const;
+    virtual OUString  GetURL() const;
 
     inline TextAndReading GetTxt() const;
     inline const ::com::sun::star::lang::Locale& GetLocale() const;
@@ -246,7 +246,7 @@ struct SwTOXPara : public SwTOXSortTabBase
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
     virtual sal_uInt16  GetLevel() const;
 
-    virtual String  GetURL() const;
+    virtual OUString  GetURL() const;
 private:
     virtual TextAndReading GetText_Impl() const;
 
@@ -266,7 +266,7 @@ struct SwTOXTable : public SwTOXSortTabBase
 
     virtual sal_uInt16  GetLevel() const;
 
-    virtual String  GetURL() const;
+    virtual OUString  GetURL() const;
 private:
     virtual TextAndReading GetText_Impl() const;
 

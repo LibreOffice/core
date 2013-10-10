@@ -55,7 +55,7 @@ using namespace ::com::sun::star::uno;
 sal_uInt16 SwTOXSortTabBase::nOpt = 0;
 
 SwTOXInternational::SwTOXInternational( LanguageType nLang, sal_uInt16 nOpt,
-                                        const String& rSortAlgorithm ) :
+                                        const OUString& rSortAlgorithm ) :
     eLang( nLang ),
     sSortAlgorithm(rSortAlgorithm),
     nOptions( nOpt )
@@ -78,7 +78,7 @@ void SwTOXInternational::Init()
     const lang::Locale aLcl( LanguageTag::convertToLocale( eLang ) );
     pIndexWrapper->SetLocale( aLcl );
 
-    if(!sSortAlgorithm.Len())
+    if(sSortAlgorithm.isEmpty())
     {
         Sequence < OUString > aSeq( pIndexWrapper->GetAlgorithmList( aLcl ));
         if(aSeq.getLength())
@@ -100,11 +100,12 @@ SwTOXInternational::~SwTOXInternational()
     delete pIndexWrapper;
 }
 
-String SwTOXInternational::ToUpper( const String& rStr, xub_StrLen nPos ) const
+OUString SwTOXInternational::ToUpper( const OUString& rStr, xub_StrLen nPos ) const
 {
     return pCharClass->uppercase( rStr, nPos, 1 );
 }
-inline sal_Bool SwTOXInternational::IsNumeric( const String& rStr ) const
+
+inline sal_Bool SwTOXInternational::IsNumeric( const OUString& rStr ) const
 {
     return pCharClass->isNumeric( rStr );
 }
@@ -118,13 +119,13 @@ sal_Int32 SwTOXInternational::Compare( const TextAndReading& rTaR1,
                                              rTaR2.sText, rTaR2.sReading, rLocale2 );
 }
 
-String SwTOXInternational::GetIndexKey( const TextAndReading& rTaR,
+OUString SwTOXInternational::GetIndexKey( const TextAndReading& rTaR,
                                         const lang::Locale& rLocale ) const
 {
     return pIndexWrapper->GetIndexKey( rTaR.sText, rTaR.sReading, rLocale );
 }
 
-String SwTOXInternational::GetFollowingText( sal_Bool bMorePages ) const
+OUString SwTOXInternational::GetFollowingText( sal_Bool bMorePages ) const
 {
     return pIndexWrapper->GetFollowingText( bMorePages );
 }
@@ -186,8 +187,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
     }
 }
 
-
-String SwTOXSortTabBase::GetURL() const
+OUString SwTOXSortTabBase::GetURL() const
 {
     return aEmptyStr;
 }
@@ -603,7 +603,7 @@ sal_uInt16 SwTOXPara::GetLevel() const
 }
 
 
-String SwTOXPara::GetURL() const
+OUString SwTOXPara::GetURL() const
 {
     OUString aTxt;
     const SwCntntNode* pNd = aTOXSources[0].pNd;
@@ -691,7 +691,7 @@ sal_uInt16 SwTOXTable::GetLevel() const
 }
 
 
-String SwTOXTable::GetURL() const
+OUString SwTOXTable::GetURL() const
 {
     const SwNode* pNd = aTOXSources[0].pNd;
     if (!pNd)

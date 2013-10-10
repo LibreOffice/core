@@ -150,7 +150,7 @@ void SwTextAPIEditSource::SetText( OutlinerParaObject& rText )
     }
 }
 
-void SwTextAPIEditSource::SetString( const String& rText )
+void SwTextAPIEditSource::SetString( const OUString& rText )
 {
     if ( pImpl->mpPool )
     {
@@ -175,12 +175,12 @@ OutlinerParaObject* SwTextAPIEditSource::CreateText()
         return 0;
 }
 
-String SwTextAPIEditSource::GetText()
+OUString SwTextAPIEditSource::GetText()
 {
     if ( pImpl->mpPool && pImpl->mpOutliner )
         return pImpl->mpOutliner->GetEditEngine().GetText();
     else
-        return String();
+        return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
