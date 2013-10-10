@@ -31,14 +31,14 @@ class SwListImpl;
 class SwList
 {
     public:
-        SwList( const String sListId,
+        SwList( const OUString sListId,
                 SwNumRule& rDefaultListStyle,
                 const SwNodes& rNodes );
         ~SwList();
 
-        const String GetListId() const;
+        const OUString GetListId() const;
 
-        const String GetDefaultListStyleName() const;
+        const OUString GetDefaultListStyleName() const;
 
         void InsertListItem( SwNodeNum& rNodeNum,
                              const int nLevel );

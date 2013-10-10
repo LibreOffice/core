@@ -220,7 +220,7 @@ void SwListImpl::NotifyItemsOnListLevel( const int nLevel )
 }
 
 // SwList ---------------------------------------------------------------------
-SwList::SwList( const String sListId,
+SwList::SwList( const OUString sListId,
                 SwNumRule& rDefaultListStyle,
                 const SwNodes& rNodes )
     : mpListImpl( new SwListImpl( sListId, rDefaultListStyle, rNodes ) )
@@ -232,12 +232,12 @@ SwList::~SwList()
     delete mpListImpl;
 }
 
-const String SwList::GetListId() const
+const OUString SwList::GetListId() const
 {
     return mpListImpl->GetListId();
 }
 
-const String SwList::GetDefaultListStyleName() const
+const OUString SwList::GetDefaultListStyleName() const
 {
     return mpListImpl->GetDefaultListStyleName();
 }
