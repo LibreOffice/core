@@ -2006,7 +2006,16 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             if( pLine )
             {
                 GetInfo().SetMulti( sal_True );
-                CalcNewBlock( pLine, NULL, rMulti.Width() );
+
+                // If the fourth element bSkipKashida of function CalcNewBlock is true, multiportion will be showed in justification.
+                // Kashida (Persian) is a type of justification used in some cursive scripts, particularly Arabic.
+                // In contrast to white-space justification, which increases the length of a line of text by expanding spaces between words or individual letters,
+                // kashida justification is accomplished by elongating characters at certain chosen points.
+                // Kashida justification can be combined with white-space justification to various extents.
+                // The default value of bSkipKashida (the 4th parameter passed to 'CalcNewBlock') is false.
+                // Only when Adjust is SVX_ADJUST_BLOCK ( alignment is justify ), multiportion will be showed in justification in new code.
+                CalcNewBlock( pLine, NULL, rMulti.Width(), GetAdjust() != SVX_ADJUST_BLOCK );
+
                 GetInfo().SetMulti( sal_False );
             }
             rInf.SetIdx( nStartIdx );
