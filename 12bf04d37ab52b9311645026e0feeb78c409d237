@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///zQ\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-10T16:59:03Z",
+      "side": 1,
+      "message": "Argh.. please don\u0027t introduce more of these senseless \"delimiter lines\" ;-)",
+      "revId": "12bf04d37ab52b9311645026e0feeb78c409d237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///zM\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-10T16:59:03Z",
+      "side": 1,
+      "message": "It is actually not necessary here to have a temporary Locale instance, just do\n\n if ( SC_MOD()-\u003eGetFormulaOptions().GetUseEnglishFuncName() )\n     xAddIn-\u003esetLocale( lang::Locale( \"en\", \"US\", \"\"));\n else\n     xAddIn-\u003esetLocale( Application::GetSettings().GetUILanguageTag().getLocale());",
+      "revId": "12bf04d37ab52b9311645026e0feeb78c409d237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///zA\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-10T16:59:03Z",
+      "side": 1,
+      "message": "Also remove the () from aServiceName, else it yields\n\n error: no match for call to ‘(rtl::OUString) ()’",
+      "revId": "12bf04d37ab52b9311645026e0feeb78c409d237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///zI\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-10T16:59:03Z",
+      "side": 1,
+      "message": "Same here, see above for temporary Locale instance.",
+      "revId": "12bf04d37ab52b9311645026e0feeb78c409d237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
