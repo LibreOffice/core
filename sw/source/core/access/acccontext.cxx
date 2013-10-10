@@ -1393,7 +1393,7 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
                                            const OUString *pArg1,
                                            const OUString *pArg2 )
 {
-    String sStr;
+    OUString sStr;
     {
         SolarMutexGuard aGuard;
 
@@ -1402,16 +1402,14 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
 
     if( pArg1 )
     {
-        sStr.SearchAndReplace( OUString("$(ARG1)"),
-                               String( *pArg1 ) );
+        sStr = sStr.replaceFirst( OUString("$(ARG1)"), *pArg1 );
     }
     if( pArg2 )
     {
-        sStr.SearchAndReplace( OUString("$(ARG2)"),
-                               String( *pArg2 ) );
+        sStr = sStr.replaceFirst( OUString("$(ARG2)"), *pArg2 );
     }
 
-    return OUString( sStr );
+    return sStr;
 }
 
 void SwAccessibleContext::RemoveFrmFromAccessibleMap()
