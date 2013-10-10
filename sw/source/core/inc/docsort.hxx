@@ -66,7 +66,7 @@ struct SwSortElement
     static const FlatFndBox*    pBox;
     static CollatorWrapper*     pSortCollator;
     static ::com::sun::star::lang::Locale* pLocale;
-    static String*              pLastAlgorithm;
+    static OUString*            pLastAlgorithm;
     static LocaleDataWrapper*   pLclData;
 
     static void Init( SwDoc*, const SwSortOptions& rOpt, FlatFndBox* = 0 );
@@ -74,13 +74,13 @@ struct SwSortElement
 
     virtual ~SwSortElement();
 
-    virtual String GetKey(sal_uInt16 nKey ) const = 0;
+    virtual OUString GetKey(sal_uInt16 nKey ) const = 0;
     virtual double GetValue(sal_uInt16 nKey ) const;
 
     bool operator==(const SwSortElement& ) const;
     bool operator<(const SwSortElement& ) const;
 
-    double StrToDouble(const String& rStr) const;
+    double StrToDouble(const OUString& rStr) const;
 private:
     int keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const;
 };
@@ -94,7 +94,7 @@ struct SwSortTxtElement : public SwSortElement
     SwSortTxtElement( const SwNodeIndex& rPos );
     virtual ~SwSortTxtElement();
 
-    virtual String GetKey( sal_uInt16 nKey ) const;
+    virtual OUString GetKey( sal_uInt16 nKey ) const;
 };
 
 // sort table
@@ -105,7 +105,7 @@ struct SwSortBoxElement : public SwSortElement
     SwSortBoxElement( sal_uInt16 nRC );
     virtual ~SwSortBoxElement();
 
-    virtual String GetKey( sal_uInt16 nKey ) const;
+    virtual OUString GetKey( sal_uInt16 nKey ) const;
     virtual double GetValue( sal_uInt16 nKey ) const;
 };
 

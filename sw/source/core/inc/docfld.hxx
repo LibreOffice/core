@@ -119,15 +119,15 @@ public:
 // struct for saving strings from the SetExp's string fields
 struct _HashStr : public SwHash
 {
-    String aSetStr;
-    _HashStr( const String& rName, const String& rText, _HashStr* = 0 );
+    OUString aSetStr;
+    _HashStr( const OUString& rName, const OUString& rText, _HashStr* = 0 );
 };
 
 struct SwCalcFldType : public SwHash
 {
     const SwFieldType* pFldType;
 
-    SwCalcFldType( const String& rStr, const SwFieldType* pFldTyp )
+    SwCalcFldType( const OUString& rStr, const SwFieldType* pFldTyp )
         : SwHash( rStr ), pFldType( pFldTyp )
     {}
 };

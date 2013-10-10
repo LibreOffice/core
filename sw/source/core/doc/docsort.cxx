@@ -55,8 +55,8 @@ SwSortOptions*      SwSortElement::pOptions = 0;
 SwDoc*              SwSortElement::pDoc = 0;
 const FlatFndBox*   SwSortElement::pBox = 0;
 CollatorWrapper*    SwSortElement::pSortCollator = 0;
-lang::Locale*             SwSortElement::pLocale = 0;
-String*             SwSortElement::pLastAlgorithm = 0;
+lang::Locale*       SwSortElement::pLocale = 0;
+OUString*           SwSortElement::pLastAlgorithm = 0;
 LocaleDataWrapper*  SwSortElement::pLclData = 0;
 
 // List of all sorted elements
@@ -102,7 +102,7 @@ SwSortElement::~SwSortElement()
 {
 }
 
-double SwSortElement::StrToDouble( const String& rStr ) const
+double SwSortElement::StrToDouble( const OUString& rStr ) const
 {
     if( !pLclData )
         pLclData = new LocaleDataWrapper( LanguageTag( *pLocale ));
@@ -145,7 +145,7 @@ int SwSortElement::keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const
             if( pLastAlgorithm )
                 *pLastAlgorithm = pSrtKey->sSortType;
             else
-                pLastAlgorithm = new String( pSrtKey->sSortType );
+                pLastAlgorithm = new OUString( pSrtKey->sSortType );
             pSortCollator->loadCollatorAlgorithm( *pLastAlgorithm,
                     *pLocale,
                     pOptions->bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
@@ -193,7 +193,7 @@ SwSortTxtElement::~SwSortTxtElement()
 {
 }
 
-String SwSortTxtElement::GetKey(sal_uInt16 nId) const
+OUString SwSortTxtElement::GetKey(sal_uInt16 nId) const
 {
     SwTxtNode* pTxtNd = aPos.GetNode().GetTxtNode();
     if( !pTxtNd )
@@ -231,7 +231,7 @@ SwSortBoxElement::~SwSortBoxElement()
 }
 
 /// Get Key for a cell
-String SwSortBoxElement::GetKey(sal_uInt16 nKey) const
+OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
 {
     const _FndBox* pFndBox;
     sal_uInt16 nCol = pOptions->aKeys[nKey]->nColumnId-1;
@@ -242,7 +242,7 @@ String SwSortBoxElement::GetKey(sal_uInt16 nKey) const
         pFndBox = pBox->GetBox(nRow, nCol);         // Sort columns
 
     // Extract the Text
-    String aRetStr;
+    OUString aRetStr;
     if( pFndBox )
     {   // Get StartNode and skip it
         const SwTableBox* pMyBox = pFndBox->GetBox();

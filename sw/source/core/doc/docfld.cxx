@@ -975,7 +975,7 @@ xub_StrLen _SetGetExpFld::GetCntPosFromCntnt() const
     return nRet;
 }
 
-_HashStr::_HashStr( const String& rName, const String& rText,
+_HashStr::_HashStr( const OUString& rName, const OUString& rText,
                     _HashStr* pNxt )
     : SwHash( rName ), aSetStr( rText )
 {

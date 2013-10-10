@@ -2227,7 +2227,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
 }
 
 /// Find Key Range and insert if possible
-Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReading,
+Range SwTOXBaseSection::GetKeyRange(const OUString& rStr, const OUString& rStrReading,
                                     const SwTOXSortTabBase& rNew,
                                     sal_uInt16 nLevel, const Range& rRange )
 {

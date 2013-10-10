@@ -68,7 +68,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
                          const SwTOXInternational& rIntl );
 
     // get section for entering keywords
-    Range GetKeyRange( const String& rStr, const String& rStrReading,
+    Range GetKeyRange( const OUString& rStr, const OUString& rStrReading,
                        const SwTOXSortTabBase& rNew, sal_uInt16 nLevel,
                        const Range& rRange );
 
