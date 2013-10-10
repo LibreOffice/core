@@ -287,59 +287,39 @@ enum HTML_OPTION_IDS
 HTML_OPTION_BOOL_START          = HTML_OPTION_START,
 
 // Attribute ohne Wert
-    HTML_O_BOX                  = HTML_OPTION_BOOL_START,
-    HTML_O_CHECKED,
+    HTML_O_CHECKED              = HTML_OPTION_BOOL_START,
     HTML_O_COMPACT,
-    HTML_O_CONTINUE,
-    HTML_O_CONTROLS, // IExplorer 2.0
     HTML_O_DECLARE, // IExplorer 3.0b5
     HTML_O_DISABLED,
-    HTML_O_FOLDED, // Netscape internal
     HTML_O_ISMAP,
     HTML_O_MAYSCRIPT, // Netcape 3.0
     HTML_O_MULTIPLE,
-    HTML_O_NOFLOW,
     HTML_O_NOHREF, // Netscape
     HTML_O_NORESIZE, // Netscape 2.0
     HTML_O_NOSHADE, // Netscape
     HTML_O_NOWRAP,
-    HTML_O_PLAIN,
     HTML_O_SDFIXED,
     HTML_O_SELECTED,
-    HTML_O_SHAPES, // IExplorer 3.0b5
 HTML_OPTION_BOOL_END,
 
 // Attribute mit einem String als Wert
 HTML_OPTION_STRING_START        = HTML_OPTION_BOOL_END,
-    HTML_O_ABOVE                = HTML_OPTION_STRING_START,
-    HTML_O_ACCEPT,
+    HTML_O_ACCEPT               = HTML_OPTION_STRING_START,
     HTML_O_ACCESSKEY,
-    HTML_O_ADD_DATE, // Netscape internal
     HTML_O_ALT,
-    HTML_O_AXES,
     HTML_O_AXIS,
-    HTML_O_BELOW,
     HTML_O_CHAR, // HTML3 Table Model Draft
     HTML_O_CLASS,
-    HTML_O_CLIP,
     HTML_O_CODE, // HotJava
     HTML_O_CODETYPE,
-    HTML_O_COLSPEC,
     HTML_O_CONTENT,
     HTML_O_COORDS, // Netscape 2.0
-    HTML_O_DP,
     HTML_O_ENCTYPE,
-    HTML_O_ERROR,
     HTML_O_FACE, // IExplorer 2.0
     HTML_O_FRAMEBORDER, // IExplorer 3.0
     HTML_O_HTTPEQUIV,
     HTML_O_LANGUAGE, // JavaScript
-    HTML_O_LAST_MODIFIED, // Netscape internal
-    HTML_O_LAST_VISIT, // Netscape internal
-    HTML_O_MD,
-    HTML_O_N,
     HTML_O_NAME,
-    HTML_O_NOTATION,
     HTML_O_PROMPT,
     HTML_O_SHAPE,
     HTML_O_STANDBY,
@@ -354,11 +334,9 @@ HTML_OPTION_STRING_END,
 
 // Attribute mit einem SGML-Identifier als Wert
 HTML_OPTION_SGMLID_START        = HTML_OPTION_STRING_END,
-    HTML_O_FROM                 = HTML_OPTION_SGMLID_START,
-    HTML_O_ID,
+    HTML_O_ID                   = HTML_OPTION_SGMLID_START,
     HTML_O_TARGET, // Netscape 2.0
     HTML_O_TO,
-    HTML_O_UNTIL,
 HTML_OPTION_SGMLID_END,
 
 // Attribute mit einem URI als Wert
@@ -369,24 +347,14 @@ HTML_OPTION_URI_START           = HTML_OPTION_SGMLID_END,
     HTML_O_CLASSID,
     HTML_O_CODEBASE, // HotJava
     HTML_O_DATA,
-    HTML_O_DYNSRC, // IExplorer 3.0
-    HTML_O_DYNSYNC, // IExplorer 2.0
-    HTML_O_IMAGEMAP,
     HTML_O_HREF,
-    HTML_O_LOWSRC, // Netscape 3.0
     HTML_O_SCRIPT,
     HTML_O_SRC,
     HTML_O_USEMAP, // Netscape 2.0
 HTML_OPTION_URI_END,
 
-// Attribute mit Entity-Namen als Wert
-HTML_OPTION_ENTITY_START        = HTML_OPTION_URI_END,
-    HTML_O_DINGBAT              = HTML_OPTION_ENTITY_START,
-    HTML_O_SYM,
-HTML_OPTION_ENTITY_END,
-
 // Attribute mit einer Farbe als Wert (alle Netscape)
-HTML_OPTION_COLOR_START         = HTML_OPTION_ENTITY_END,
+HTML_OPTION_COLOR_START         = HTML_OPTION_URI_END,
     HTML_O_ALINK                = HTML_OPTION_COLOR_START,
     HTML_O_BGCOLOR,
     HTML_O_BORDERCOLOR, // IExplorer 2.0
@@ -407,41 +375,26 @@ HTML_OPTION_NUMBER_START        = HTML_OPTION_COLOR_END,
     HTML_O_COLSPAN,
     HTML_O_FRAMESPACING, // IExplorer 3.0
     HTML_O_GUTTER, // Netscape 3.0b5
-    HTML_O_INDENT,
     HTML_O_HEIGHT,
     HTML_O_HSPACE,          // Netscape
     HTML_O_LEFT,
-    HTML_O_LEFTMARGIN, // IExplorer 2.0
     HTML_O_LOOP, // IExplorer 2.0
     HTML_O_MARGINWIDTH, // Netscape 2.0
     HTML_O_MARGINHEIGHT, // Netscape 2.0
-    HTML_O_MAX,
     HTML_O_MAXLENGTH,
-    HTML_O_MIN,
-    HTML_O_PAGEX,
-    HTML_O_PAGEY,
-    HTML_O_POINTSIZE,
     HTML_O_ROWSPAN,
     HTML_O_SCROLLAMOUNT, // IExplorer 2.0
     HTML_O_SCROLLDELAY, // IExplorer 2.0
-    HTML_O_SEQNUM,
-    HTML_O_SKIP,
     HTML_O_SPAN, // HTML3 Table Model Draft
     HTML_O_TABINDEX,
-    HTML_O_TOP,
-    HTML_O_TOPMARGIN, // IExplorer 2.0
     HTML_O_VSPACE,          // Netscape
-    HTML_O_WEIGHT,
     HTML_O_WIDTH,
-    HTML_O_X,
-    HTML_O_Y,
     HTML_O_ZINDEX,
 HTML_OPTION_NUMBER_END,
 
 // Attribute mit Enum-Werten
 HTML_OPTION_ENUM_START          = HTML_OPTION_NUMBER_END,
     HTML_O_BEHAVIOR             = HTML_OPTION_ENUM_START, // IExplorer 2.0
-    HTML_O_BGPROPERTIES, // IExplorer 2.0
     HTML_O_CLEAR,
     HTML_O_DIR,
     HTML_O_DIRECTION, // IExplorer 2.0
@@ -449,7 +402,6 @@ HTML_OPTION_ENUM_START          = HTML_OPTION_NUMBER_END,
     HTML_O_FRAME, // HTML3 Table Model Draft
     HTML_O_LANG,
     HTML_O_METHOD,
-    HTML_O_PALETTE,
     HTML_O_REL,
     HTML_O_REV,
     HTML_O_RULES, // HTML3 Table Model Draft
@@ -459,7 +411,6 @@ HTML_OPTION_ENUM_START          = HTML_OPTION_NUMBER_END,
     HTML_O_TYPE,
     HTML_O_VALIGN,
     HTML_O_VALUETYPE,
-    HTML_O_VISIBILITY,
     HTML_O_WRAP,
 HTML_OPTION_ENUM_END,
 
@@ -501,7 +452,6 @@ HTML_OPTION_CONTEXT_START       = HTML_OPTION_SCRIPT_END,
     HTML_O_ROWS, // Netscape 2.0 vs HTML 2.0
     HTML_O_SIZE,
     HTML_O_START,
-    HTML_O_UNITS,
 HTML_OPTION_CONTEXT_END,
 
 // eine unbekannte Option

@@ -556,57 +556,37 @@ static bool bSortOptionKeyWords = false;
 static HTML_TokenEntry aHTMLOptionTab[] = {
 
 // Attributes without value
-    {{OOO_STRING_SVTOOLS_HTML_O_box},       HTML_O_BOX},
     {{OOO_STRING_SVTOOLS_HTML_O_checked},   HTML_O_CHECKED},
     {{OOO_STRING_SVTOOLS_HTML_O_compact},   HTML_O_COMPACT},
-    {{OOO_STRING_SVTOOLS_HTML_O_continue},  HTML_O_CONTINUE},
-    {{OOO_STRING_SVTOOLS_HTML_O_controls},  HTML_O_CONTROLS}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_declare},   HTML_O_DECLARE},
     {{OOO_STRING_SVTOOLS_HTML_O_disabled},  HTML_O_DISABLED},
-    {{OOO_STRING_SVTOOLS_HTML_O_folded},        HTML_O_FOLDED}, // Netscape internal
     {{OOO_STRING_SVTOOLS_HTML_O_ismap},     HTML_O_ISMAP},
     {{OOO_STRING_SVTOOLS_HTML_O_mayscript}, HTML_O_MAYSCRIPT},
     {{OOO_STRING_SVTOOLS_HTML_O_multiple},  HTML_O_MULTIPLE},
-    {{OOO_STRING_SVTOOLS_HTML_O_noflow},        HTML_O_NOFLOW},
     {{OOO_STRING_SVTOOLS_HTML_O_nohref},        HTML_O_NOHREF}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_noresize},  HTML_O_NORESIZE}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_noshade},   HTML_O_NOSHADE}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_nowrap},        HTML_O_NOWRAP},
-    {{OOO_STRING_SVTOOLS_HTML_O_plain},     HTML_O_PLAIN},
     {{OOO_STRING_SVTOOLS_HTML_O_sdfixed},   HTML_O_SDFIXED},
     {{OOO_STRING_SVTOOLS_HTML_O_selected},      HTML_O_SELECTED},
-    {{OOO_STRING_SVTOOLS_HTML_O_shapes},    HTML_O_SHAPES},
 
 // Attributes with a string value
-    {{OOO_STRING_SVTOOLS_HTML_O_above},     HTML_O_ABOVE},
     {{OOO_STRING_SVTOOLS_HTML_O_accept},        HTML_O_ACCEPT},
     {{OOO_STRING_SVTOOLS_HTML_O_accesskey}, HTML_O_ACCESSKEY},
-    {{OOO_STRING_SVTOOLS_HTML_O_add_date},  HTML_O_ADD_DATE}, // Netscape internal
     {{OOO_STRING_SVTOOLS_HTML_O_alt},       HTML_O_ALT},
-    {{OOO_STRING_SVTOOLS_HTML_O_axes},      HTML_O_AXES},
     {{OOO_STRING_SVTOOLS_HTML_O_axis},      HTML_O_AXIS},
-    {{OOO_STRING_SVTOOLS_HTML_O_below},     HTML_O_BELOW},
     {{OOO_STRING_SVTOOLS_HTML_O_char},      HTML_O_CHAR}, // HTML 3 Table Model Draft
     {{OOO_STRING_SVTOOLS_HTML_O_class},     HTML_O_CLASS},
-    {{OOO_STRING_SVTOOLS_HTML_O_clip},      HTML_O_CLIP},
     {{OOO_STRING_SVTOOLS_HTML_O_code},      HTML_O_CODE}, // HotJava
     {{OOO_STRING_SVTOOLS_HTML_O_codetype},  HTML_O_CODETYPE},
-    {{OOO_STRING_SVTOOLS_HTML_O_colspec},   HTML_O_COLSPEC},
     {{OOO_STRING_SVTOOLS_HTML_O_content},   HTML_O_CONTENT},
     {{OOO_STRING_SVTOOLS_HTML_O_coords},        HTML_O_COORDS}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_dp},            HTML_O_DP},
     {{OOO_STRING_SVTOOLS_HTML_O_enctype},   HTML_O_ENCTYPE},
-    {{OOO_STRING_SVTOOLS_HTML_O_error},     HTML_O_ERROR},
     {{OOO_STRING_SVTOOLS_HTML_O_face},      HTML_O_FACE}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_frameborder}, HTML_O_FRAMEBORDER}, // IExplorer 3.0
     {{OOO_STRING_SVTOOLS_HTML_O_httpequiv}, HTML_O_HTTPEQUIV},
     {{OOO_STRING_SVTOOLS_HTML_O_language},  HTML_O_LANGUAGE}, // JavaScript
-    {{OOO_STRING_SVTOOLS_HTML_O_last_modified}, HTML_O_LAST_MODIFIED}, // Netscape internal
-    {{OOO_STRING_SVTOOLS_HTML_O_last_visit},    HTML_O_LAST_VISIT}, // Netscape internal
-    {{OOO_STRING_SVTOOLS_HTML_O_md},            HTML_O_MD},
-    {{OOO_STRING_SVTOOLS_HTML_O_n},         HTML_O_N},
     {{OOO_STRING_SVTOOLS_HTML_O_name},      HTML_O_NAME},
-    {{OOO_STRING_SVTOOLS_HTML_O_notation},  HTML_O_NOTATION},
     {{OOO_STRING_SVTOOLS_HTML_O_prompt},        HTML_O_PROMPT},
     {{OOO_STRING_SVTOOLS_HTML_O_shape},     HTML_O_SHAPE},
     {{OOO_STRING_SVTOOLS_HTML_O_standby},   HTML_O_STANDBY},
@@ -619,11 +599,9 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_sdmodule},  HTML_O_SDMODULE},
 
 // Attributes with a SGML identifier value
-    {{OOO_STRING_SVTOOLS_HTML_O_from},      HTML_O_FROM},
     {{OOO_STRING_SVTOOLS_HTML_O_id},            HTML_O_ID},
     {{OOO_STRING_SVTOOLS_HTML_O_target},        HTML_O_TARGET}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_to},            HTML_O_TO},
-    {{OOO_STRING_SVTOOLS_HTML_O_until},     HTML_O_UNTIL},
 
 // Attributes with an URI value
     {{OOO_STRING_SVTOOLS_HTML_O_action},        HTML_O_ACTION},
@@ -632,18 +610,10 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_classid},   HTML_O_CLASSID},
     {{OOO_STRING_SVTOOLS_HTML_O_codebase},  HTML_O_CODEBASE}, // HotJava
     {{OOO_STRING_SVTOOLS_HTML_O_data},      HTML_O_DATA},
-    {{OOO_STRING_SVTOOLS_HTML_O_dynsrc},        HTML_O_DYNSRC}, // IExplorer 3.0b1
-    {{OOO_STRING_SVTOOLS_HTML_O_dynsync},   HTML_O_DYNSYNC}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_imagemap},  HTML_O_IMAGEMAP},
     {{OOO_STRING_SVTOOLS_HTML_O_href},      HTML_O_HREF},
-    {{OOO_STRING_SVTOOLS_HTML_O_lowsrc},        HTML_O_LOWSRC}, // Netscape 3.0
     {{OOO_STRING_SVTOOLS_HTML_O_script},        HTML_O_SCRIPT},
     {{OOO_STRING_SVTOOLS_HTML_O_src},       HTML_O_SRC},
     {{OOO_STRING_SVTOOLS_HTML_O_usemap},        HTML_O_USEMAP}, // Netscape 2.0
-
-// Attributes with entity name value
-    {{OOO_STRING_SVTOOLS_HTML_O_dingbat},   HTML_O_DINGBAT},
-    {{OOO_STRING_SVTOOLS_HTML_O_sym},       HTML_O_SYM},
 
 // Attributes with a color value (all Netscape versions)
     {{OOO_STRING_SVTOOLS_HTML_O_alink},     HTML_O_ALINK},
@@ -664,38 +634,23 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_colspan},   HTML_O_COLSPAN},
     {{OOO_STRING_SVTOOLS_HTML_O_framespacing}, HTML_O_FRAMESPACING}, // IExplorer 3.0
     {{OOO_STRING_SVTOOLS_HTML_O_gutter},        HTML_O_GUTTER}, // Netscape 3.0b5
-    {{OOO_STRING_SVTOOLS_HTML_O_indent},        HTML_O_INDENT},
     {{OOO_STRING_SVTOOLS_HTML_O_height},        HTML_O_HEIGHT},
     {{OOO_STRING_SVTOOLS_HTML_O_hspace},        HTML_O_HSPACE}, // Netscape
     {{OOO_STRING_SVTOOLS_HTML_O_left},      HTML_O_LEFT},
-    {{OOO_STRING_SVTOOLS_HTML_O_leftmargin},    HTML_O_LEFTMARGIN}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_loop},      HTML_O_LOOP}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_marginheight},HTML_O_MARGINHEIGHT}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_marginwidth},HTML_O_MARGINWIDTH}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_max},       HTML_O_MAX},
     {{OOO_STRING_SVTOOLS_HTML_O_maxlength}, HTML_O_MAXLENGTH},
-    {{OOO_STRING_SVTOOLS_HTML_O_min},       HTML_O_MIN},
-    {{OOO_STRING_SVTOOLS_HTML_O_pagex},     HTML_O_PAGEX},
-    {{OOO_STRING_SVTOOLS_HTML_O_pagey},     HTML_O_PAGEY},
-    {{OOO_STRING_SVTOOLS_HTML_O_pointsize}, HTML_O_POINTSIZE},
     {{OOO_STRING_SVTOOLS_HTML_O_rowspan},   HTML_O_ROWSPAN},
     {{OOO_STRING_SVTOOLS_HTML_O_scrollamount}, HTML_O_SCROLLAMOUNT}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_scrolldelay}, HTML_O_SCROLLDELAY}, // IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_seqnum},        HTML_O_SEQNUM},
-    {{OOO_STRING_SVTOOLS_HTML_O_skip},      HTML_O_SKIP},
     {{OOO_STRING_SVTOOLS_HTML_O_span},      HTML_O_SPAN}, // HTML 3 Table Model Draft
     {{OOO_STRING_SVTOOLS_HTML_O_tabindex},  HTML_O_TABINDEX},
-    {{OOO_STRING_SVTOOLS_HTML_O_top},       HTML_O_TOP},
-    {{OOO_STRING_SVTOOLS_HTML_O_topmargin}, HTML_O_TOPMARGIN}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_vspace},        HTML_O_VSPACE}, // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_O_weight},        HTML_O_WEIGHT},
     {{OOO_STRING_SVTOOLS_HTML_O_width},     HTML_O_WIDTH},
-    {{OOO_STRING_SVTOOLS_HTML_O_x},         HTML_O_X},
-    {{OOO_STRING_SVTOOLS_HTML_O_y},         HTML_O_Y},
     {{OOO_STRING_SVTOOLS_HTML_O_zindex},        HTML_O_ZINDEX},
 
 // Attributes with enum values
-    {{OOO_STRING_SVTOOLS_HTML_O_bgproperties}, HTML_O_BGPROPERTIES}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_behavior},  HTML_O_BEHAVIOR}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_clear},     HTML_O_CLEAR},
     {{OOO_STRING_SVTOOLS_HTML_O_dir},       HTML_O_DIR}, // HTML 3 Table Model Draft
@@ -704,7 +659,6 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_frame},     HTML_O_FRAME}, // HTML 3 Table Model Draft
     {{OOO_STRING_SVTOOLS_HTML_O_lang},      HTML_O_LANG},
     {{OOO_STRING_SVTOOLS_HTML_O_method},        HTML_O_METHOD},
-    {{OOO_STRING_SVTOOLS_HTML_O_palette},   HTML_O_PALETTE},
     {{OOO_STRING_SVTOOLS_HTML_O_rel},       HTML_O_REL},
     {{OOO_STRING_SVTOOLS_HTML_O_rev},       HTML_O_REV},
     {{OOO_STRING_SVTOOLS_HTML_O_rules},     HTML_O_RULES}, // HTML 3 Table Model Draft
@@ -715,7 +669,6 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_valign},        HTML_O_VALIGN},
     {{OOO_STRING_SVTOOLS_HTML_O_valuetype}, HTML_O_VALUETYPE},
     {{OOO_STRING_SVTOOLS_HTML_O_wrap},      HTML_O_WRAP},
-    {{OOO_STRING_SVTOOLS_HTML_O_visibility},    HTML_O_VISIBILITY},
 
 // Attributes with script code value
     {{OOO_STRING_SVTOOLS_HTML_O_onblur},        HTML_O_ONBLUR}, // JavaScript
@@ -752,7 +705,6 @@ static HTML_TokenEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_rows},      HTML_O_ROWS}, // Netscape 2.0 vs HTML 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_size},      HTML_O_SIZE},
     {{OOO_STRING_SVTOOLS_HTML_O_start},     HTML_O_START}, // Netscape 2.0 vs IExplorer 2.0
-    {{OOO_STRING_SVTOOLS_HTML_O_units},     HTML_O_UNITS}
 };
 
 int GetHTMLOption( const OUString& rName )
