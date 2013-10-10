@@ -679,6 +679,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount, bExcludingPositioning );
             if( !pPlotter )
                 continue;
+
             m_aSeriesPlotterList.push_back( pPlotter );
             pPlotter->setNumberFormatsSupplier( xNumberFormatsSupplier );
             pPlotter->setColorScheme( xColorScheme );
@@ -693,6 +694,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             OSL_ASSERT( xDataSeriesContainer.is());
             if( !xDataSeriesContainer.is() )
                 continue;
+
             sal_Int32 zSlot=-1;
             sal_Int32 xSlot=-1;
             sal_Int32 ySlot=-1;

@@ -117,8 +117,6 @@ drawing::Direction3D BarChart::getPreferredDiagramAspectRatio() const
 
 bool BarChart::keepAspectRatio() const
 {
-    if( m_nDimension == 3 )
-        return true;
     return true;
 }
 

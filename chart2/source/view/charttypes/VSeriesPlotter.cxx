@@ -110,7 +110,7 @@ VDataSeriesGroup::~VDataSeriesGroup()
 void VDataSeriesGroup::deleteSeries()
 {
     //delete all data series help objects:
-    ::std::vector< VDataSeries* >::const_iterator       aIter = m_aSeriesVector.begin();
+    ::std::vector< VDataSeries* >::const_iterator aIter = m_aSeriesVector.begin();
     const ::std::vector< VDataSeries* >::const_iterator aEnd  = m_aSeriesVector.end();
     for( ; aIter != aEnd; ++aIter )
     {
@@ -168,8 +168,8 @@ VSeriesPlotter::~VSeriesPlotter()
     while( aPosIt != m_aSecondaryPosHelperMap.end() )
     {
         PlottingPositionHelper* pPosHelper = aPosIt->second;
-        if( pPosHelper )
-            delete pPosHelper;
+        delete pPosHelper;
+
         ++aPosIt;
     }
     m_aSecondaryPosHelperMap.clear();
@@ -2418,7 +2418,6 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
 {
     OUString aChartType = xChartTypeModel->getChartType();
 
-    //@todo: in future the plotter should be instanciated via service factory
     VSeriesPlotter* pRet=NULL;
     if( aChartType.equalsIgnoreAsciiCase( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ) )
         pRet = new BarChart(xChartTypeModel,nDimensionCount);
