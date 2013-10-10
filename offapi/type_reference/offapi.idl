@@ -4669,9 +4669,9 @@ module com {
    module document {
     interface XDocumentEventBroadcaster {
      interface ::com::sun::star::uno::XInterface;
-     void addDocumentEventListener([in] ::com::sun::star::document::XDocumentEventListener _Listener);
-     void removeDocumentEventListener([in] ::com::sun::star::document::XDocumentEventListener _Listener);
-     void notifyDocumentEvent([in] string _EventName, [in] ::com::sun::star::frame::XController2 _ViewController, [in] any _Supplement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException);
+     void addDocumentEventListener([in] ::com::sun::star::document::XDocumentEventListener Listener);
+     void removeDocumentEventListener([in] ::com::sun::star::document::XDocumentEventListener Listener);
+     void notifyDocumentEvent([in] string EventName, [in] ::com::sun::star::frame::XController2 ViewController, [in] any Supplement) raises (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException);
     };
     published interface XDocumentPropertiesSupplier {
      interface ::com::sun::star::uno::XInterface;
@@ -6642,8 +6642,8 @@ module com {
     interface XGridControl {
      interface ::com::sun::star::form::XGrid;
      interface ::com::sun::star::form::XGridFieldDataSupplier;
-     void addGridControlListener([in] ::com::sun::star::form::XGridControlListener _listener);
-     void removeGridControlListener([in] ::com::sun::star::form::XGridControlListener _listener);
+     void addGridControlListener([in] ::com::sun::star::form::XGridControlListener listener);
+     void removeGridControlListener([in] ::com::sun::star::form::XGridControlListener listener);
     };
     /** @deprecated */ published interface XGridPeer {
      interface ::com::sun::star::uno::XInterface;
@@ -9916,14 +9916,14 @@ module com {
     published interface XScannerManager {
      interface ::com::sun::star::uno::XInterface;
      sequence< ::com::sun::star::scanner::ScannerContext > getAvailableScanners();
-     boolean configureScanner([inout] ::com::sun::star::scanner::ScannerContext scanner_context) raises (::com::sun::star::scanner::ScannerException);
-     void startScan([in] ::com::sun::star::scanner::ScannerContext scanner_context, [in] ::com::sun::star::lang::XEventListener listener) raises (::com::sun::star::scanner::ScannerException);
-     ::com::sun::star::scanner::ScanError getError([in] ::com::sun::star::scanner::ScannerContext scanner_context) raises (::com::sun::star::scanner::ScannerException);
-     ::com::sun::star::awt::XBitmap getBitmap([in] ::com::sun::star::scanner::ScannerContext scanner_context) raises (::com::sun::star::scanner::ScannerException);
+     boolean configureScanner([inout] ::com::sun::star::scanner::ScannerContext scannerContext) raises (::com::sun::star::scanner::ScannerException);
+     void startScan([in] ::com::sun::star::scanner::ScannerContext scannerContext, [in] ::com::sun::star::lang::XEventListener listener) raises (::com::sun::star::scanner::ScannerException);
+     ::com::sun::star::scanner::ScanError getError([in] ::com::sun::star::scanner::ScannerContext scannerContext) raises (::com::sun::star::scanner::ScannerException);
+     ::com::sun::star::awt::XBitmap getBitmap([in] ::com::sun::star::scanner::ScannerContext scannerContext) raises (::com::sun::star::scanner::ScannerException);
     };
     published interface XScannerManager2 {
      interface ::com::sun::star::scanner::XScannerManager;
-     boolean configureScannerAndScan([inout] ::com::sun::star::scanner::ScannerContext scanner_context, [in] ::com::sun::star::lang::XEventListener listener) raises (::com::sun::star::scanner::ScannerException);
+     boolean configureScannerAndScan([inout] ::com::sun::star::scanner::ScannerContext scannerContext, [in] ::com::sun::star::lang::XEventListener listener) raises (::com::sun::star::scanner::ScannerException);
     };
     published service ScannerManager: ::com::sun::star::scanner::XScannerManager2;
    };
@@ -17346,19 +17346,19 @@ module com {
     };
     published interface XModeChangeApproveListener {
      interface ::com::sun::star::lang::XEventListener;
-     void approveModeChange([in] ::com::sun::star::util::ModeChangeEvent _rSource) raises (::com::sun::star::util::VetoException);
+     void approveModeChange([in] ::com::sun::star::util::ModeChangeEvent rSource) raises (::com::sun::star::util::VetoException);
     };
     published interface XModeChangeListener;
     published interface XModeChangeBroadcaster {
      interface ::com::sun::star::uno::XInterface;
-     void addModeChangeListener([in] ::com::sun::star::util::XModeChangeListener _rxListener);
-     void removeModeChangeListener([in] ::com::sun::star::util::XModeChangeListener _rxListener);
-     void addModeChangeApproveListener([in] ::com::sun::star::util::XModeChangeApproveListener _rxListener) raises (::com::sun::star::lang::NoSupportException);
-     void removeModeChangeApproveListener([in] ::com::sun::star::util::XModeChangeApproveListener _rxListener) raises (::com::sun::star::lang::NoSupportException);
+     void addModeChangeListener([in] ::com::sun::star::util::XModeChangeListener rxListener);
+     void removeModeChangeListener([in] ::com::sun::star::util::XModeChangeListener rxListener);
+     void addModeChangeApproveListener([in] ::com::sun::star::util::XModeChangeApproveListener rxListener) raises (::com::sun::star::lang::NoSupportException);
+     void removeModeChangeApproveListener([in] ::com::sun::star::util::XModeChangeApproveListener rxListener) raises (::com::sun::star::lang::NoSupportException);
     };
     published interface XModeChangeListener {
      interface ::com::sun::star::lang::XEventListener;
-     void modeChanged([in] ::com::sun::star::util::ModeChangeEvent _rSource);
+     void modeChanged([in] ::com::sun::star::util::ModeChangeEvent rSource);
     };
     published interface XModifyListener {
      interface ::com::sun::star::lang::XEventListener;
