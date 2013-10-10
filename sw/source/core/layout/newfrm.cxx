@@ -373,7 +373,7 @@ void _FrmFinit()
         if( (*SwFrm::GetCachePtr())[ --n ] )
         {
             SwCacheObj* pObj = (*SwFrm::GetCachePtr())[ n ];
-            OSL_ENSURE( !pObj, "Who didn't derregister?");
+            OSL_ENSURE( !pObj, "Who didn't deregister?");
         }
 #endif
     delete SwRootFrm::pVout;
