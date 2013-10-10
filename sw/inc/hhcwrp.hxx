@@ -65,11 +65,11 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
 
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
                                     const sal_Int32 nUnitEnd );
-    void        ChangeText( const String &rNewText,
+    void        ChangeText( const OUString &rNewText,
                             const OUString& rOrigText,
                             const ::com::sun::star::uno::Sequence< sal_Int32 > *pOffsets,
                             SwPaM *pCrsr );
-    void        ChangeText_impl( const String &rNewText, bool bKeepAttributes );
+    void        ChangeText_impl( const OUString &rNewText, bool bKeepAttributes );
 
     inline bool IsDrawObj()             { return m_bIsDrawObj; }
     inline void SetDrawObj( bool bNew ) { m_bIsDrawObj = bNew; }

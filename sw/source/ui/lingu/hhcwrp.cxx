@@ -222,7 +222,7 @@ void SwHHCWrapper::HandleNewUnit(
 }
 
 
-void SwHHCWrapper::ChangeText( const String &rNewText,
+void SwHHCWrapper::ChangeText( const OUString &rNewText,
         const OUString& rOrigText,
         const uno::Sequence< sal_Int32 > *pOffsets,
         SwPaM *pCrsr )
@@ -230,8 +230,8 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
     //!! please see also TextConvWrapper::ChangeText with is a modified
     //!! copy of this code
 
-    OSL_ENSURE( rNewText.Len() != 0, "unexpected empty string" );
-    if (rNewText.Len() == 0)
+    OSL_ENSURE( !rNewText.isEmpty(), "unexpected empty string" );
+    if (rNewText.isEmpty())
         return;
 
     if (pOffsets && pCrsr)  // try to keep as much attributation as possible ?
@@ -244,7 +244,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
 
         const sal_Int32  nIndices = pOffsets->getLength();
         const sal_Int32 *pIndices = pOffsets->getConstArray();
-        xub_StrLen nConvTextLen = rNewText.Len();
+        xub_StrLen nConvTextLen = rNewText.getLength();
         xub_StrLen nPos = 0;
         xub_StrLen nChgPos = STRING_NOTFOUND;
         xub_StrLen nChgLen = 0;
@@ -272,7 +272,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
                 nIndex = static_cast< xub_StrLen >( rOrigText.getLength() );
             }
 
-            if (rOrigText.getStr()[nIndex] == rNewText.GetChar(nPos) ||
+            if (rOrigText.getStr()[nIndex] == rNewText[nPos] ||
                 nPos == nConvTextLen /* end of string also terminates non-matching char sequence */)
             {
                 // substring that needs to be replaced found?
@@ -283,7 +283,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
 #if OSL_DEBUG_LEVEL > 1
                     String aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
 #endif
-                    String aInNew( rNewText.Copy( nConvChgPos, nConvChgLen ) );
+                    String aInNew( rNewText.copy( nConvChgPos, nConvChgLen ) );
 
                     // set selection to sub string to be replaced in original text
                     xub_StrLen nChgInNodeStartIndex = static_cast< xub_StrLen >( nStartIndex + nCorrectionOffset + nChgPos );
@@ -332,7 +332,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
 }
 
 
-void SwHHCWrapper::ChangeText_impl( const String &rNewText, bool bKeepAttributes )
+void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttributes )
 {
     if (bKeepAttributes)
     {
@@ -355,7 +355,7 @@ void SwHHCWrapper::ChangeText_impl( const String &rNewText, bool bKeepAttributes
         if (!m_rWrtShell.GetCrsr()->HasMark())
             m_rWrtShell.GetCrsr()->SetMark();
         SwPosition *pMark = m_rWrtShell.GetCrsr()->GetMark();
-        pMark->nContent = pMark->nContent.GetIndex() - rNewText.Len();
+        pMark->nContent = pMark->nContent.GetIndex() - rNewText.getLength();
 #if OSL_DEBUG_LEVEL > 1
         String aSelTxt2( m_rWrtShell.GetSelTxt() );
 #endif
