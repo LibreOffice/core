@@ -576,16 +576,9 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void)
     _encoding = LOWORD(dwEncoding);
     gotACP = HIWORD(dwEncoding);
 
-
     if ( !gotACP )
     {
-        char    *pszEncoding;
-
-        if ( NULL != (pszEncoding = getenv( "SOLAR_USER_RTL_TEXTENCODING" )) )
-            _encoding = (rtl_TextEncoding)atoi(pszEncoding);
-        else
-            _encoding = rtl_getTextEncodingFromWindowsCodePage( GetACP() );
-
+        _encoding = rtl_getTextEncodingFromWindowsCodePage( GetACP() );
         TlsSetValue( g_dwTLSTextEncodingIndex, (LPVOID)(DWORD_PTR)MAKELONG( _encoding, TRUE ) );
     }
 

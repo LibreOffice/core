@@ -951,19 +951,11 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 /*****************************************************************************/
 static void osl_thread_textencoding_init_Impl (void)
 {
-    rtl_TextEncoding defaultEncoding;
-    const char *     pszEncoding;
-
     /* create thread specific data key */
     pthread_key_create (&(g_thread.m_textencoding.m_key), NULL);
 
     /* determine default text encoding */
-    pszEncoding = getenv ("SOLAR_USER_RTL_TEXTENCODING");
-    if (pszEncoding)
-        defaultEncoding = atoi(pszEncoding);
-    else
-        defaultEncoding = osl_getTextEncodingFromLocale(NULL);
-
+    rtl_TextEncoding defaultEncoding = osl_getTextEncodingFromLocale(NULL);
     OSL_ASSERT(defaultEncoding != RTL_TEXTENCODING_DONTKNOW);
 
     /*
