@@ -107,8 +107,8 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     // Only used for nFamily == SFX_STYLE_FAMILY_PAGE. Identifies optional Slot by which the edit is triggered.
     // Used to activate certain dialog pane
     SW_DLLPRIVATE sal_uInt16 Edit(
-        const String &rName,
-        const String& rParent,
+        const OUString &rName,
+        const OUString& rParent,
         const sal_uInt16 nFamily,
         sal_uInt16 nMask,
         const sal_Bool bNew,
@@ -116,14 +116,14 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
         SwWrtShell* pActShell = 0,
         const sal_Bool bBasic = sal_False );
 
-    SW_DLLPRIVATE sal_uInt16                    Delete(const String &rName, sal_uInt16 nFamily);
-    SW_DLLPRIVATE sal_uInt16                    Hide(const String &rName, sal_uInt16 nFamily, bool bHidden);
-    SW_DLLPRIVATE sal_uInt16                    ApplyStyles(const String &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0,
-                                        sal_uInt16 nMode = 0 );
-    SW_DLLPRIVATE sal_uInt16                    DoWaterCan( const String &rName, sal_uInt16 nFamily);
-    SW_DLLPRIVATE sal_uInt16                    UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0);
-    SW_DLLPRIVATE sal_uInt16                    MakeByExample(const String &rName,
-                                            sal_uInt16 nFamily, sal_uInt16 nMask, SwWrtShell* pShell = 0);
+    SW_DLLPRIVATE sal_uInt16            Delete(const OUString &rName, sal_uInt16 nFamily);
+    SW_DLLPRIVATE sal_uInt16            Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden);
+    SW_DLLPRIVATE sal_uInt16            ApplyStyles(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0,
+                                                    sal_uInt16 nMode = 0 );
+    SW_DLLPRIVATE sal_uInt16            DoWaterCan( const OUString &rName, sal_uInt16 nFamily);
+    SW_DLLPRIVATE sal_uInt16            UpdateStyle(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0);
+    SW_DLLPRIVATE sal_uInt16            MakeByExample(const OUString &rName,
+                                        sal_uInt16 nFamily, sal_uInt16 nMask, SwWrtShell* pShell = 0);
 
     SW_DLLPRIVATE void                  InitDraw();
     SW_DLLPRIVATE void                  SubInitNew();   ///< for InitNew and HtmlSourceMode.
@@ -131,7 +131,7 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     SW_DLLPRIVATE void                  RemoveOLEObjects();
     SW_DLLPRIVATE void                  CalcLayoutForOLEObjects();
 
-    SW_DLLPRIVATE void                    Init_Impl();
+    SW_DLLPRIVATE void                  Init_Impl();
     SW_DLLPRIVATE DECL_STATIC_LINK( SwDocShell, IsLoadFinished, void* );
 
 
@@ -241,7 +241,7 @@ public:
     // @param nSlot
     // Identifies slot by which the dialog is triggered. Used to activate certain dialog pane
     void FormatPage(
-        const String& rPage,
+        const OUString& rPage,
         const OString& rPageId,
         SwWrtShell& rActShell );
 
@@ -256,7 +256,7 @@ public:
     virtual void CancelTransfers();
 
     /// Re-read Doc from Html-source.
-    void    ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView );
+    void    ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcView );
 
     sal_Int16   GetUpdateDocMode() const {return nUpdateDocMode;}
 
@@ -268,7 +268,7 @@ public:
 
     void ToggleBrowserMode(sal_Bool bOn, SwView* pView);
 
-    sal_uLong LoadStylesFromFile( const String& rURL, SwgReaderOption& rOpt,
+    sal_uLong LoadStylesFromFile( const OUString& rURL, SwgReaderOption& rOpt,
                                 sal_Bool bUnoCall );
     void InvalidateModel();
     void ReactivateModel();
@@ -301,10 +301,6 @@ public:
     virtual bool    SetProtectionPassword( const OUString &rPassword );
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
 };
-
-class Graphic;
- /// implemented in source/ui/docvw/romenu.cxx
-String ExportGraphic( const Graphic &rGraphic, const String &rGrfName );
 
 /** Find the right DocShell and create a new one:
     The return value specifies what should happen to the Shell

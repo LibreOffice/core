@@ -593,8 +593,8 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
 }
 
 sal_uInt16 SwDocShell::Edit(
-    const String &rName,
-    const String &rParent,
+    const OUString &rName,
+    const OUString &rParent,
     const sal_uInt16 nFamily,
     sal_uInt16 nMask,
     const sal_Bool bNew,
@@ -623,7 +623,7 @@ sal_uInt16 SwDocShell::Edit(
         {
             case SFX_STYLE_FAMILY_PARA:
             {
-                if(rParent.Len())
+                if(!rParent.isEmpty())
                 {
                     SwTxtFmtColl* pColl = pWrtShell->FindTxtFmtCollByName( rParent );
                     if(!pColl)
@@ -657,7 +657,7 @@ sal_uInt16 SwDocShell::Edit(
             break;
             case SFX_STYLE_FAMILY_CHAR:
             {
-                if(rParent.Len())
+                if(!rParent.isEmpty())
                 {
                     SwCharFmt* pCFmt = pWrtShell->FindCharFmtByName( rParent );
                     if(!pCFmt)
@@ -681,7 +681,7 @@ sal_uInt16 SwDocShell::Edit(
             break;
             case SFX_STYLE_FAMILY_FRAME :
             {
-                if(rParent.Len())
+                if(!rParent.isEmpty())
                 {
                     SwFrmFmt* pFFmt = pWrtShell->GetDoc()->FindFrmFmtByName( rParent );
                     if(!pFFmt)
@@ -807,7 +807,7 @@ sal_uInt16 SwDocShell::Edit(
 }
 
 // Delete
-sal_uInt16 SwDocShell::Delete(const String &rName, sal_uInt16 nFamily)
+sal_uInt16 SwDocShell::Delete(const OUString &rName, sal_uInt16 nFamily)
 {
     SfxStyleSheetBase *pStyle = mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
@@ -824,7 +824,7 @@ sal_uInt16 SwDocShell::Delete(const String &rName, sal_uInt16 nFamily)
     return sal_False;
 }
 
-sal_uInt16 SwDocShell::Hide(const String &rName, sal_uInt16 nFamily, bool bHidden)
+sal_uInt16 SwDocShell::Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden)
 {
     SfxStyleSheetBase *pStyle = mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
 
@@ -843,7 +843,7 @@ sal_uInt16 SwDocShell::Hide(const String &rName, sal_uInt16 nFamily, bool bHidde
 }
 
 // apply template
-sal_uInt16 SwDocShell::ApplyStyles(const String &rName, sal_uInt16 nFamily,
+sal_uInt16 SwDocShell::ApplyStyles(const OUString &rName, sal_uInt16 nFamily,
                                SwWrtShell* pShell, sal_uInt16 nMode )
 {
     SwDocStyleSheet* pStyle =
@@ -906,7 +906,7 @@ sal_uInt16 SwDocShell::ApplyStyles(const String &rName, sal_uInt16 nFamily,
 }
 
 // start watering-can
-sal_uInt16 SwDocShell::DoWaterCan(const String &rName, sal_uInt16 nFamily)
+sal_uInt16 SwDocShell::DoWaterCan(const OUString &rName, sal_uInt16 nFamily)
 {
     assert( GetWrtShell() );
 
@@ -914,7 +914,7 @@ sal_uInt16 SwDocShell::DoWaterCan(const String &rName, sal_uInt16 nFamily)
     SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
     bool bWaterCan = !(pApply && pApply->eType != 0);
 
-    if( !rName.Len() )
+    if( rName.isEmpty() )
         bWaterCan = false;
 
     SwApplyTemplate aTemplate;
@@ -960,7 +960,7 @@ sal_uInt16 SwDocShell::DoWaterCan(const String &rName, sal_uInt16 nFamily)
 }
 
 // update template
-sal_uInt16 SwDocShell::UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWrtShell* pShell)
+sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell)
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
     assert( pCurrWrtShell );
@@ -1045,7 +1045,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWr
 }
 
 // NewByExample
-sal_uInt16 SwDocShell::MakeByExample( const String &rName, sal_uInt16 nFamily,
+sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
                                     sal_uInt16 nMask, SwWrtShell* pShell )
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
@@ -1245,7 +1245,7 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrent
 }
 
 void SwDocShell::FormatPage(
-    const String& rPage,
+    const OUString& rPage,
     const OString& rPageId,
     SwWrtShell& rActShell )
 {

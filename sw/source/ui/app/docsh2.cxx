@@ -1276,7 +1276,7 @@ class SwReloadFromHtmlReader : public SwReader
         }
 };
 
-void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView )
+void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcView )
 {
     sal_Bool bModified = IsModified();
 
@@ -1382,7 +1382,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
         pDoc->ResetModified();
 }
 
-sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
+sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
                     SwgReaderOption& rOpt, sal_Bool bUnoCall )
 {
     sal_uLong nErr = 0;
