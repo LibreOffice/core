@@ -47,7 +47,9 @@ void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
     if( !::get_flag( nFlags, EXC_STR_SEPARATEFORMATS ) )
         maFormats.clear();
 
-    OSL_ENSURE( (nFlags & ~nAllowedFlags) == 0, "XclImpString::Read - unknown flag" );
+    SAL_WARN_IF(
+        (nFlags & ~nAllowedFlags) != 0, "sc.filter",
+        "XclImpString::Read - unknown flag");
     bool b16BitLen = !::get_flag( nFlags, EXC_STR_8BITLENGTH );
 
     switch( rStrm.GetRoot().GetBiff() )

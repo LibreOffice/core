@@ -663,7 +663,9 @@ void PivotCacheField::importPCDField( BiffInputStream& rStrm )
     // read group items, if any
     if( nGroupItems > 0 )
     {
-        OSL_ENSURE( getFlag( nFlags, BIFF_PCDFIELD_HASITEMS ), "PivotCacheField::importPCDField - missing items flag" );
+        SAL_WARN_IF(
+            !getFlag(nFlags, BIFF_PCDFIELD_HASITEMS), "sc.filter",
+            "PivotCacheField::importPCDField - missing items flag");
         maGroupItems.importItemList( rStrm, nGroupItems );
 
         sal_uInt16 nNextRecId = rStrm.getNextRecId();
@@ -681,7 +683,9 @@ void PivotCacheField::importPCDField( BiffInputStream& rStrm )
     // read the shared items, if any
     if( nSharedItems > 0 )
     {
-        OSL_ENSURE( getFlag( nFlags, BIFF_PCDFIELD_HASITEMS ), "PivotCacheField::importPCDField - missing items flag" );
+        SAL_WARN_IF(
+            !getFlag(nFlags, BIFF_PCDFIELD_HASITEMS), "sc.filter",
+            "PivotCacheField::importPCDField - missing items flag");
         maSharedItems.importItemList( rStrm, nSharedItems );
     }
 }

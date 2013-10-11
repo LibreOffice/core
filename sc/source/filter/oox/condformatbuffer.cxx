@@ -482,7 +482,9 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
     switch( nType )
     {
         case BIFF12_CFRULE_TYPE_CELLIS:
-            OSL_ENSURE( nSubType == BIFF12_CFRULE_SUB_CELLIS, "CondFormatRule::importCfRule - rule type/subtype mismatch" );
+            SAL_WARN_IF(
+                nSubType != BIFF12_CFRULE_SUB_CELLIS, "sc.filter",
+                "CondFormatRule::importCfRule - rule type/subtype mismatch");
             maModel.mnType = XML_cellIs;
             maModel.setBiffOperator( nOperator );
             OSL_ENSURE( maModel.mnOperator != XML_TOKEN_INVALID, "CondFormatRule::importCfRule - unknown operator" );
@@ -520,52 +522,77 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
                     maModel.mnType = XML_notContainsErrors;
                 break;
                 case BIFF12_CFRULE_SUB_TODAY:
-                    OSL_ENSURE( nOperator == BIFF12_CFRULE_TIMEOP_TODAY, "CondFormatRule::importCfRule - unexpected time operator value" );
+                    SAL_WARN_IF(
+                        nOperator != BIFF12_CFRULE_TIMEOP_TODAY, "sc.filter",
+                        "CondFormatRule::importCfRule - unexpected time operator value");
                     maModel.mnType = XML_timePeriod;
                     maModel.mnTimePeriod = XML_today;
                 break;
                 case BIFF12_CFRULE_SUB_TOMORROW:
-                    OSL_ENSURE( nOperator == BIFF12_CFRULE_TIMEOP_TOMORROW, "CondFormatRule::importCfRule - unexpected time operator value" );
+                    SAL_WARN_IF(
+                        nOperator != BIFF12_CFRULE_TIMEOP_TOMORROW, "sc.filter",
+                        "CondFormatRule::importCfRule - unexpected time operator value");
                     maModel.mnType = XML_timePeriod;
                     maModel.mnTimePeriod = XML_tomorrow;
                 break;
                 case BIFF12_CFRULE_SUB_YESTERDAY:
-                    OSL_ENSURE( nOperator == BIFF12_CFRULE_TIMEOP_YESTERDAY, "CondFormatRule::importCfRule - unexpected time operator value" );
+                    SAL_WARN_IF(
+                        nOperator != BIFF12_CFRULE_TIMEOP_YESTERDAY,
+                        "sc.filter",
+                        "CondFormatRule::importCfRule - unexpected time operator value");
                     maModel.mnType = XML_timePeriod;
                     maModel.mnTimePeriod = XML_yesterday;
                 break;
                 case BIFF12_CFRULE_SUB_LAST7DAYS:
-                    OSL_ENSURE( nOperator == BIFF12_CFRULE_TIMEOP_LAST7DAYS, "CondFormatRule::importCfRule - unexpected time operator value" );
+                    SAL_WARN_IF(
+                        nOperator != BIFF12_CFRULE_TIMEOP_LAST7DAYS,
+                        "sc.filter",
+                        "CondFormatRule::importCfRule - unexpected time operator value");
                     maModel.mnType = XML_timePeriod;
                     maModel.mnTimePeriod = XML_last7Days;
                 break;
                 case BIFF12_CFRULE_SUB_LASTMONTH:
-                    OSL_ENSURE( nOperator == BIFF12_CFRULE_TIMEOP_LASTMONTH, "CondFormatRule::importCfRule - unexpected time operator value" );
+                    SAL_WARN_IF(
+                        nOperator != BIFF12_CFRULE_TIMEOP_LASTMONTH,
+                        "sc.filter",
+                        "CondFormatRule::importCfRule - unexpected time operator value");
                     maModel.mnType = XML_timePeriod;
                     maModel.mnTimePeriod = XML_lastMonth;
                 break;
                 case BIFF12_CFRULE_SUB_NEXTMONTH:
-                    OSL_ENSURE( nOperator == BIFF12_CFRULE_TIMEOP_NEXTMONTH, "CondFormatRule::importCfRule - unexpected time operator value" );
+                    SAL_WARN_IF(
+                        nOperator != BIFF12_CFRULE_TIMEOP_NEXTMONTH,
+                        "sc.filter",
+                        "CondFormatRule::importCfRule - unexpected time operator value");
                     maModel.mnType = XML_timePeriod;
                     maModel.mnTimePeriod = XML_nextMonth;
                 break;
                 case BIFF12_CFRULE_SUB_THISWEEK:
-                    OSL_ENSURE( nOperator == BIFF12_CFRULE_TIMEOP_THISWEEK, "CondFormatRule::importCfRule - unexpected time operator value" );
+                    SAL_WARN_IF(
+                        nOperator != BIFF12_CFRULE_TIMEOP_THISWEEK, "sc.filter",
+                        "CondFormatRule::importCfRule - unexpected time operator value");
                     maModel.mnType = XML_timePeriod;
                     maModel.mnTimePeriod = XML_thisWeek;
                 break;
                 case BIFF12_CFRULE_SUB_NEXTWEEK:
-                    OSL_ENSURE( nOperator == BIFF12_CFRULE_TIMEOP_NEXTWEEK, "CondFormatRule::importCfRule - unexpected time operator value" );
+                    SAL_WARN_IF(
+                        nOperator != BIFF12_CFRULE_TIMEOP_NEXTWEEK, "sc.filter",
+                        "CondFormatRule::importCfRule - unexpected time operator value");
                     maModel.mnType = XML_timePeriod;
                     maModel.mnTimePeriod = XML_nextWeek;
                 break;
                 case BIFF12_CFRULE_SUB_LASTWEEK:
-                    OSL_ENSURE( nOperator == BIFF12_CFRULE_TIMEOP_LASTWEEK, "CondFormatRule::importCfRule - unexpected time operator value" );
+                    SAL_WARN_IF(
+                        nOperator != BIFF12_CFRULE_TIMEOP_LASTWEEK, "sc.filter",
+                        "CondFormatRule::importCfRule - unexpected time operator value");
                     maModel.mnType = XML_timePeriod;
                     maModel.mnTimePeriod = XML_lastWeek;
                 break;
                 case BIFF12_CFRULE_SUB_THISMONTH:
-                    OSL_ENSURE( nOperator == BIFF12_CFRULE_TIMEOP_THISMONTH, "CondFormatRule::importCfRule - unexpected time operator value" );
+                    SAL_WARN_IF(
+                        nOperator != BIFF12_CFRULE_TIMEOP_THISMONTH,
+                        "sc.filter",
+                        "CondFormatRule::importCfRule - unexpected time operator value");
                     maModel.mnType = XML_timePeriod;
                     maModel.mnTimePeriod = XML_thisMonth;
                 break;
@@ -604,22 +631,30 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
             }
         break;
         case BIFF12_CFRULE_TYPE_COLORSCALE:
-            OSL_ENSURE( nSubType == BIFF12_CFRULE_SUB_COLORSCALE, "CondFormatRule::importCfRule - rule type/subtype mismatch" );
+            SAL_WARN_IF(
+                nSubType != BIFF12_CFRULE_SUB_COLORSCALE, "sc.filter",
+                "CondFormatRule::importCfRule - rule type/subtype mismatch");
             OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
             maModel.mnType = XML_colorScale;
         break;
         case BIFF12_CFRULE_TYPE_DATABAR:
-            OSL_ENSURE( nSubType == BIFF12_CFRULE_SUB_DATABAR, "CondFormatRule::importCfRule - rule type/subtype mismatch" );
+            SAL_WARN_IF(
+                nSubType != BIFF12_CFRULE_SUB_DATABAR, "sc.filter",
+                "CondFormatRule::importCfRule - rule type/subtype mismatch");
             OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
             maModel.mnType = XML_dataBar;
         break;
         case BIFF12_CFRULE_TYPE_TOPTEN:
-            OSL_ENSURE( nSubType == BIFF12_CFRULE_SUB_TOPTEN, "CondFormatRule::importCfRule - rule type/subtype mismatch" );
+            SAL_WARN_IF(
+                nSubType != BIFF12_CFRULE_SUB_TOPTEN, "sc.filter",
+                "CondFormatRule::importCfRule - rule type/subtype mismatch");
             maModel.mnType = XML_top10;
             maModel.mnRank = nOperator;   // operator field used for rank value
         break;
         case BIFF12_CFRULE_TYPE_ICONSET:
-            OSL_ENSURE( nSubType == BIFF12_CFRULE_SUB_ICONSET, "CondFormatRule::importCfRule - rule type/subtype mismatch" );
+            SAL_WARN_IF(
+                nSubType != BIFF12_CFRULE_SUB_ICONSET, "sc.filter",
+                "CondFormatRule::importCfRule - rule type/subtype mismatch");
             OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
             maModel.mnType = XML_iconSet;
         break;

@@ -838,8 +838,10 @@ void PivotTableFilter::importTop10Filter( SequenceInputStream& rStrm )
     sal_uInt8 nFlags;
     rStrm >> nFlags >> maModel.mfValue;
 
-    OSL_ENSURE( getFlag( nFlags, BIFF12_TOP10FILTER_PERCENT ) == (maModel.mnType == XML_percent),
-        "PivotTableFilter::importTop10 - unexpected value of percent attribute" );
+    SAL_WARN_IF(
+        getFlag(nFlags, BIFF12_TOP10FILTER_PERCENT) != (maModel.mnType == XML_percent),
+        "sc.filter",
+        "PivotTableFilter::importTop10 - unexpected value of percent attribute");
     maModel.mbTopFilter = getFlag( nFlags, BIFF12_TOP10FILTER_TOP );
 }
 
@@ -1048,8 +1050,10 @@ void PivotTable::importPTDefinition( SequenceInputStream& rStrm )
     if( getFlag( nFlags3, BIFF12_PTDEF_HASROWHEADERCAPTION ) )
         rStrm >> maDefModel.maRowHeaderCaption;
 
-    OSL_ENSURE( (nDataAxis == BIFF12_PTDEF_ROWAXIS) || (nDataAxis == BIFF12_PTDEF_COLAXIS),
-        "PivotTable::importPTDefinition - unexpected axis position for data field" );
+    SAL_WARN_IF(
+        (nDataAxis != BIFF12_PTDEF_ROWAXIS) && (nDataAxis != BIFF12_PTDEF_COLAXIS),
+        "sc.filter",
+        "PivotTable::importPTDefinition - unexpected axis position for data field");
 
     maDefModel.mnIndent              = extractValue< sal_uInt8 >( nFlags1, 24, 7 );
     maDefModel.mbDataOnRows          = nDataAxis == BIFF12_PTDEF_ROWAXIS;
