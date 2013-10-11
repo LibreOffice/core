@@ -2486,8 +2486,7 @@ void ScViewFunc::MoveTable(
 
         //  execute without SFX_CALLMODE_RECORD, because already contained in move command
 
-        OUString aUrl("private:factory/");
-        aUrl += STRING_SCAPP;               // "scalc"
+        OUString aUrl("private:factory/" STRING_SCAPP);
         SfxStringItem aItem( SID_FILE_NAME, aUrl );
         SfxStringItem aTarget( SID_TARGETNAME, OUString("_blank") );
 
