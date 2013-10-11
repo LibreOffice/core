@@ -1046,16 +1046,18 @@ struct ValDataTestParams
 {
     ScValidationMode eValMode;
     ScConditionMode eCondOp;
-    String aStrVal1, aStrVal2;
+    OUString aStrVal1;
+    OUString aStrVal2;
     ScDocument* pDocument;
     ScAddress aPosition;
-    String aErrorTitle, aErrorMessage;
+    OUString aErrorTitle;
+    OUString aErrorMessage;
     ScValidErrorStyle eErrorStyle;
     sal_uLong nExpectedIndex;
 
     ValDataTestParams( ScValidationMode eMode, ScConditionMode eOp,
-                       String aExpr1, String aExpr2, ScDocument* pDoc,
-                       ScAddress aPos, String aETitle, String aEMsg,
+                       OUString aExpr1, OUString aExpr2, ScDocument* pDoc,
+                       ScAddress aPos, OUString aETitle, OUString aEMsg,
                        ScValidErrorStyle eEStyle, sal_uLong nIndex ):
                             eValMode(eMode), eCondOp(eOp), aStrVal1(aExpr1),
                             aStrVal2(aExpr2), pDocument(pDoc), aPosition(aPos),
@@ -1077,7 +1079,7 @@ void checkValiditationEntries( const ValDataTestParams& rVDTParams )
     aValData.SetListType( 1 );
     aValData.ResetInput();
     aValData.SetError( rVDTParams.aErrorTitle, rVDTParams.aErrorMessage, rVDTParams.eErrorStyle );
-    aValData.SetSrcString( EMPTY_STRING );
+    aValData.SetSrcString( EMPTY_OUSTRING );
 
     //get actual data validation entry from document
     const ScValidationData* pValDataTest = pDoc->GetValidationEntry( rVDTParams.nExpectedIndex );
@@ -1086,9 +1088,18 @@ void checkValiditationEntries( const ValDataTestParams& rVDTParams )
     sal_Int32 nRow( static_cast<sal_Int32>(rVDTParams.aPosition.Row()) );
     sal_Int32 nTab( static_cast<sal_Int32>(rVDTParams.aPosition.Tab()) );
     OStringBuffer sMsg("Data Validation Entry with base-cell-address: (");
-    sMsg.append(nCol).append(",").append(nRow).append(",").append(nTab).append(") was not imported correctly.");
+    sMsg.append(nCol).append(",").append(nRow).append(",").append(nTab).append(") ");
+    OString aMsgPrefix = sMsg.makeStringAndClear();
+
+    OString aMsg = aMsgPrefix + "did not get imported at all.";
+    CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), pValDataTest);
+
     //check if expected and actual data validation entries are equal
-    CPPUNIT_ASSERT_MESSAGE( sMsg.getStr(), pValDataTest && aValData.EqualEntries(*pValDataTest) );
+    if (!aValData.EqualEntries(*pValDataTest))
+    {
+        aMsg = aMsgPrefix + "got imported incorrectly.";
+        CPPUNIT_FAIL(aMsg.getStr());
+    }
 }
 
 void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, const ScDocument* pDoc )
@@ -1140,16 +1151,16 @@ void ScFiltersTest::testDataValidityODS()
 
     //sheet1's expected Data Validation Entry values
     ValDataTestParams aVDTParams1(
-        SC_VALID_DECIMAL, SC_COND_GREATER, String("3.14"), EMPTY_STRING, pDoc,
-        aValBaseAddr1, String("Too small"),
-        String("The number you are trying to enter is not greater than 3.14! Are you sure you want to enter it anyway?"),
+        SC_VALID_DECIMAL, SC_COND_GREATER, "3.14", EMPTY_OUSTRING, pDoc,
+        aValBaseAddr1, "Too small",
+        "The number you are trying to enter is not greater than 3.14! Are you sure you want to enter it anyway?",
         SC_VALERR_WARNING, 1
     );
     //sheet2's expected Data Validation Entry values
     ValDataTestParams aVDTParams2(
-        SC_VALID_WHOLE, SC_COND_BETWEEN, String("1"), String("10"), pDoc,
-        aValBaseAddr2, String("Error sheet 2"),
-        String("Must be a whole number between 1 and 10."),
+        SC_VALID_WHOLE, SC_COND_BETWEEN, "1", "10", pDoc,
+        aValBaseAddr2, "Error sheet 2",
+        "Must be a whole number between 1 and 10.",
         SC_VALERR_STOP, 2
     );
     //check each sheet's Data Validation Entries
