@@ -565,15 +565,23 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
         xParser->launch();
         bool done = false;
         do {
-            rEntity.maEventsPushed.wait();
-            rEntity.maEventsPushed.reset();
-            MutexGuard aGuard(rEntity.maEventProtector);
+            rEntity.maConsumeResume.wait();
+            rEntity.maConsumeResume.reset();
+
+            osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
             while (!rEntity.maPendingEvents.empty())
             {
+                if (rEntity.maPendingEvents.size() <= rEntity.mnEventLowWater)
+                    rEntity.maProduceResume.set(); // start producer again
+
                 EventList *pEventList = rEntity.maPendingEvents.front();
                 rEntity.maPendingEvents.pop();
+                aGuard.clear(); // unlock
+
                 if (!consume(pEventList))
                     done = true;
+
+                aGuard.reset(); // lock
             }
         } while (!done);
         xParser->join();
@@ -748,12 +756,18 @@ OUString lclGetErrorMessage( XML_Error xmlE, const OUString& sSystemId, sal_Int3
 void FastSaxParser::deleteUsedEvents()
 {
     Entity& rEntity = getEntity();
+    osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
+
     while (!rEntity.maUsedEvents.empty())
     {
         EventList *pEventList = rEntity.maUsedEvents.front();
         rEntity.maUsedEvents.pop();
 
+        aGuard.clear(); // unlock
+
         delete pEventList;
+
+        aGuard.reset(); // lock
     }
 }
 
@@ -770,11 +784,24 @@ void FastSaxParser::produce(const Event& aEvent)
         aEvent->maType == CallbackType::EXCEPTION ||
         rEntity.mpProducedEvents->size() == rEntity.mnEventListSize)
     {
-        MutexGuard aGuard(rEntity.maEventProtector);
+        osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
+
+        while (rEntity.maPendingEvents.size() >= rEntity.mnEventHighWater)
+        { // pause parsing for a bit
+            aGuard.clear(); // unlock
+            rEntity.maProduceResume.wait();
+            rEntity.maProduceResume.reset();
+            aGuard.reset(); // lock
+        }
+
         rEntity.maPendingEvents.push(rEntity.mpProducedEvents);
         rEntity.mpProducedEvents = 0;
+
+        aGuard.clear(); // unlock
+
+        rEntity.maConsumeResume.set();
+
         deleteUsedEvents();
-        rEntity.maEventsPushed.set();
     }
 }
 

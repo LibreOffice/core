@@ -118,7 +118,11 @@ struct Entity : public ParserData
     std::queue< EventList * > maPendingEvents;
     std::queue< EventList * > maUsedEvents;
     osl::Mutex maEventProtector;
-    osl::Condition maEventsPushed;
+
+    static const size_t mnEventLowWater = 4;
+    static const size_t mnEventHighWater = 8;
+    osl::Condition maConsumeResume;
+    osl::Condition maProduceResume;
 
     // copied in copy constructor:
 
