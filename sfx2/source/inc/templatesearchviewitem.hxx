@@ -16,6 +16,7 @@ struct TemplateSearchViewItem : public TemplateViewItem
 {
     TemplateSearchViewItem (ThumbnailView &rView, sal_uInt16 nId)
         : TemplateViewItem(rView, nId)
+        , mnAssocId(0)
     {}
 
     virtual ~TemplateSearchViewItem ()
