@@ -266,7 +266,9 @@ namespace
         Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
         OSL_ENSURE( xControlModel.is(), "lcl_removeFormObject: suspicious: no control model!" );
         if ( !xControlModel.is() )
+        {
             return;
+        }
 
     #if OSL_DEBUG_LEVEL > 0
         Any aOldAssignment =
