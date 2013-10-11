@@ -137,11 +137,11 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
         case SID_THES:
         {
-            String aReplaceText;
+            OUString aReplaceText;
             SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
-            if (aReplaceText.Len() > 0)
+            if (!aReplaceText.isEmpty())
                 ReplaceTextWithSynonym( pOLV->GetEditView(), aReplaceText );
             break;
         }
@@ -1012,8 +1012,8 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
                     }
                     else
                     {
-                        String sSel(pOLV->GetSelected());
-                        sSel.Erase(255);
+                        OUString sSel(pOLV->GetSelected());
+                        sSel = sSel.copy(0, std::min(255, sSel.getLength()));
                         aHLinkItem.SetName(comphelper::string::stripEnd(sSel, ' '));
                     }
 

@@ -70,7 +70,7 @@ using namespace nsSwDocInfoSubType;
 
 extern bool bNoInterrupt;       // in mainwn.cxx
 
-static String& lcl_AppendRedlineStr( String& rStr, sal_uInt16 nRedlId )
+static OUString& lcl_AppendRedlineStr( OUString& rStr, sal_uInt16 nRedlId )
 {
     sal_uInt16 nResId = 0;
     switch( nRedlId )
@@ -148,11 +148,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             if(pFld && pFld->GetTyp()->Which() == RES_MACROFLD)
             {
 
-                const String& rMacro = ((SwMacroField*)pFld)->GetMacro();
-                sal_uInt16 nPos = rMacro.Search('.', 0);
-                if(nPos != STRING_NOTFOUND)
+                const OUString& rMacro = ((SwMacroField*)pFld)->GetMacro();
+                sal_Int32 nPos = rMacro.indexOf('.');
+                if(nPos != -1)
                 {
-                    SvxMacro aMacro( rMacro.Copy(nPos + 1), rMacro.Copy(0,nPos), STARBASIC );
+                    SvxMacro aMacro( rMacro.copy(nPos + 1), rMacro.copy(0,nPos), STARBASIC );
                     rSh.ExecMacro(aMacro);
                 }
             }
@@ -192,14 +192,14 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     sal_uLong  nFormat = 0;
                     sal_uInt16 nType = 0;
-                    String aPar1 = ((SfxStringItem *)pItem)->GetValue();
-                    String aPar2;
+                    OUString aPar1 = ((SfxStringItem *)pItem)->GetValue();
+                    OUString aPar2;
                     sal_Int32 nCommand = 0;
 
                     if( SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
                                                                 sal_False, &pItem ))
                         nType = ((SfxUInt16Item *)pItem)->GetValue();
-                    aPar1 += DB_DELIM;
+                    aPar1 += OUString(DB_DELIM);
                     if( SFX_ITEM_SET == pArgs->GetItemState(
                                         FN_PARAM_1, sal_False, &pItem ))
                     {
@@ -208,9 +208,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( SFX_ITEM_SET == pArgs->GetItemState(
                                         FN_PARAM_3, sal_False, &pItem ))
                         nCommand = ((SfxInt32Item*)pItem)->GetValue();
-                    aPar1 += DB_DELIM;
+                    aPar1 += OUString(DB_DELIM);
                     aPar1 += OUString::number(nCommand);
-                    aPar1 += DB_DELIM;
+                    aPar1 += OUString(DB_DELIM);
                     if( SFX_ITEM_SET == pArgs->GetItemState(
                                         FN_PARAM_2, sal_False, &pItem ))
                     {
@@ -239,8 +239,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     sal_uLong  nFormat = 0;
                     sal_uInt16 nType = 0;
                     sal_uInt16 nSubType = 0;
-                    String aPar1 = ((SfxStringItem *)pItem)->GetValue();
-                    String aPar2;
+                    OUString aPar1 = ((SfxStringItem *)pItem)->GetValue();
+                    OUString aPar2;
                     sal_Unicode cSeparator = ' ';
 
                     if( SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
@@ -258,9 +258,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( SFX_ITEM_SET == pArgs->GetItemState(
                                         FN_PARAM_3, sal_False, &pItem ))
                     {
-                        String sTmp = ((SfxStringItem *)pItem)->GetValue();
-                        if(sTmp.Len())
-                            cSeparator = sTmp.GetChar(0);
+                        OUString sTmp = ((SfxStringItem *)pItem)->GetValue();
+                        if(!sTmp.isEmpty())
+                            cSeparator = sTmp[0];
                     }
                     SwInsertFld_Data aData(nType, nSubType, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
                     bRes = aFldMgr.InsertFld( aData );
@@ -337,10 +337,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if (bNew || GetView().GetPostItMgr()->IsAnswer())
                 {
                     SvtUserOptions aUserOpt;
-                    String sAuthor;
-                    if( !(sAuthor = aUserOpt.GetFullName()).Len())
-                        if( !(sAuthor = aUserOpt.GetID()).Len() )
-                            sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
+                    OUString sAuthor;
+                    if( (sAuthor = aUserOpt.GetFullName()).isEmpty())
+                        if( (sAuthor = aUserOpt.GetID()).isEmpty() )
+                            sAuthor = SW_RES( STR_REDLINE_UNKNOWN_AUTHOR );
 
                     // Save the current selection, it will be required later for fieldmark insertion.
                     SwPaM& rCurrPam = rSh.GetCurrentShellCursor();
@@ -457,7 +457,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     pDlg->HideAuthor();
 
-                    String sTitle(SW_RES(STR_REDLINE_COMMENT));
+                    OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
                     ::lcl_AppendRedlineStr( sTitle, pRedline->GetType() );
 
                     pDlg->SetText(sTitle);
@@ -475,7 +475,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if ( pDlg->Execute() == RET_OK )
                     {
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                        String sMsg(((const SvxPostItTextItem&)pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
+                        OUString sMsg(((const SvxPostItTextItem&)pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
 
                         // Insert or change a comment
                         rSh.SetRedlineComment(sMsg);
@@ -706,9 +706,9 @@ void SwTextShell::StateField( SfxItemSet &rSet )
 
 void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
 {
-    const String& rName   = rHlnkItem.GetName();
-    const String& rURL    = rHlnkItem.GetURL();
-    const String& rTarget = rHlnkItem.GetTargetFrame();
+    const OUString& rName   = rHlnkItem.GetName();
+    const OUString& rURL    = rHlnkItem.GetURL();
+    const OUString& rTarget = rHlnkItem.GetTargetFrame();
     sal_uInt16 nType =  (sal_uInt16)rHlnkItem.GetInsertMode();
     nType &= ~HLINK_HTMLMODE;
     const SvxMacroTableDtor* pMacroTbl = rHlnkItem.GetMacroTbl();
@@ -808,7 +808,7 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
                     GetAppLangDateTimeString(
                                 pRedline->GetRedlineData().GetTimeStamp() ));
 
-        String sTitle(SW_RES(STR_REDLINE_COMMENT));
+        OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
         ::lcl_AppendRedlineStr( sTitle, pRedline->GetType() );
 
         pDlg->SetText(sTitle);
@@ -855,7 +855,7 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
                 GetAppLangDateTimeString(
                                 pRedline->GetRedlineData().GetTimeStamp() ));
 
-        String sTitle(SW_RES(STR_REDLINE_COMMENT));
+        OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
         ::lcl_AppendRedlineStr( sTitle, pRedline->GetType() );
 
         pDlg->SetText(sTitle);

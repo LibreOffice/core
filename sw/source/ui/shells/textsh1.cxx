@@ -211,15 +211,15 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         // The old item is for unknown reasons back in the set again.
         if( !bSelectionPut && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, sal_False, &pSelectionItem) )
         {
-            String sInsert = ((const SfxStringItem*)pSelectionItem)->GetValue();
-            bInsert = sInsert.Len() != 0;
+            OUString sInsert = ((const SfxStringItem*)pSelectionItem)->GetValue();
+            bInsert = !sInsert.isEmpty();
             if(bInsert)
             {
-                nInsert = sInsert.Len();
+                nInsert = sInsert.getLength();
                 rWrtSh.StartAction();
                 rWrtSh.Insert( sInsert );
                 rWrtSh.SetMark();
-                rWrtSh.ExtendSelection(sal_False, sInsert.Len());
+                rWrtSh.ExtendSelection(sal_False, sInsert.getLength());
                 SfxRequest aReq( rWrtSh.GetView().GetViewFrame(), FN_INSERT_STRING );
                 aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sInsert ) );
                 aReq.Done();
@@ -259,8 +259,8 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
 static short lcl_AskRedlineMode(Window *pWin)
 {
     MessBox aQBox( pWin, 0,
-                    String( SW_RES( STR_REDLINE_TITLE ) ),
-                    String( SW_RES( STR_REDLINE_MSG ) ) );
+                    OUString( SW_RES( STR_REDLINE_TITLE ) ),
+                    OUString( SW_RES( STR_REDLINE_MSG ) ) );
     aQBox.SetImage( QueryBox::GetStandardImage() );
     sal_uInt16 nBtnFlags = BUTTONDIALOG_DEFBUTTON |
                         BUTTONDIALOG_OKBUTTON |
@@ -328,8 +328,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     const OUString aSelectionLangPrefix("Current_");
                     const OUString aParagraphLangPrefix("Paragraph_");
                     const OUString aDocumentLangPrefix("Default_");
-                    const String aStrNone( OUString("LANGUAGE_NONE") );
-                    const String aStrResetLangs( OUString("RESET_LANGUAGES") );
+                    const OUString aStrNone("LANGUAGE_NONE");
+                    const OUString aStrResetLangs("RESET_LANGUAGES");
 
                     SfxItemSet aCoreSet( GetPool(),
                             RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
@@ -404,15 +404,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_THES:
         {
             // replace word/selection with text from selected sub menu entry
-            String aReplaceText;
+            OUString aReplaceText;
             SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , sal_False );
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
-            if (aReplaceText.Len() > 0)
+            if (!aReplaceText.isEmpty())
             {
                 SwView &rView2 = rWrtSh.GetView();
                 const bool bSelection = rWrtSh.HasSelection();
-                const String aLookUpText = rView2.GetThesaurusLookUpText( bSelection );
+                const OUString aLookUpText = rView2.GetThesaurusLookUpText( bSelection );
                 rView2.InsertThesaurusSynonym( aReplaceText, aLookUpText, bSelection );
             }
         }
@@ -426,7 +426,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_FOOTNOTE:
         case FN_INSERT_ENDNOTE:
         {
-            String aStr;
+            OUString aStr;
             SFX_REQUEST_ARG( rReq, pFont, SfxStringItem, FN_PARAM_1 , sal_False );
             SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, nSlot , sal_False );
             if ( pNameItem )
@@ -745,7 +745,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     pVFrame->GetBindings().InvalidateAll( sal_True );
                 }
 
-                String sFormula(((const SfxStringItem*)pItem)->GetValue());
+                OUString sFormula(((const SfxStringItem*)pItem)->GetValue());
                 SwFldMgr aFldMgr;
                 rWrtSh.StartAllAction();
                 sal_Bool bDelSel;
@@ -761,7 +761,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                 if( !bDelSel && aFldMgr.GetCurFld() && TYP_FORMELFLD == aFldMgr.GetCurTypeId() )
                     aFldMgr.UpdateCurFld( aFldMgr.GetCurFld()->GetFormat(), aEmptyStr, sFormula );
-                else if( sFormula.Len() )
+                else if( !sFormula.isEmpty() )
                 {
                     if( rWrtSh.IsCrsrInTbl() )
                     {
@@ -994,7 +994,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                 if( SFX_ITEM_SET == pSet->GetItemState( RES_PARATR_DROP, sal_False, &pItem ))
                 {
-                    String sCharStyleName;
+                    OUString sCharStyleName;
                     if(((const SwFmtDrop*)pItem)->GetCharFmt())
                         sCharStyleName = ((const SwFmtDrop*)pItem)->GetCharFmt()->GetName();
                     pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName));
@@ -1212,7 +1212,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     case FN_INSERT_PAGEFOOTER:
     if(pArgs && pArgs->Count())
     {
-        String sStyleName;
+        OUString sStyleName;
         if(pItem)
             sStyleName = ((const SfxStringItem*)pItem)->GetValue();
         sal_Bool bOn = sal_True;
@@ -1333,19 +1333,19 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case SID_LANGUAGE_STATUS:
             {
                 // the value of used script types
-                String aScriptTypesInUse( OUString::number( rSh.GetScriptType() ) );
+                OUString aScriptTypesInUse( OUString::number( rSh.GetScriptType() ) );
 
                 SvtLanguageTable aLangTable;
 
                 // get keyboard language
-                String aKeyboardLang;
+                OUString aKeyboardLang;
                 SwEditWin& rEditWin = GetView().GetEditWin();
                 LanguageType nLang = rEditWin.GetInputLanguage();
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                     aKeyboardLang = aLangTable.GetString( nLang );
 
                 // get the language that is in use
-                String aCurrentLang = OUString("*");
+                OUString aCurrentLang = OUString("*");
                 nLang = SwLangHelper::GetCurrentLanguage( rSh );
                 if (nLang != LANGUAGE_DONTKNOW)
                     aCurrentLang = aLangTable.GetString( nLang );
@@ -1367,7 +1367,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case SID_THES:
         {
             // is there a valid selection to get text from?
-            String aText;
+            OUString aText;
             bool bValid = !rSh.HasSelection() ||
                     (rSh.IsSelOnePara() && !rSh.IsMultiSelection());
             // prevent context menu from showing when cursor is not in or at the end of a word
@@ -1380,18 +1380,16 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             LanguageType nLang = rSh.GetCurLang();
             LanguageTag aLanguageTag( nLang);
             lang::Locale aLocale( aLanguageTag.getLocale());
-            String aLangText( aLanguageTag.getBcp47() );
+            OUString aLangText( aLanguageTag.getBcp47() );
 
             // set word and locale to look up as status value
-            OUString aStatusVal( aText );
-            aStatusVal += "#";
-            aStatusVal += aLangText;
+            OUString aStatusVal = aText + "#" + aLangText;
 
             rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
             // disable "Thesaurus" context menu entry if there is nothing to look up
             uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
-            if (aText.Len() == 0 ||
+            if (aText.isEmpty() ||
                 !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
                 rSet.DisableItem( SID_THES );
         }

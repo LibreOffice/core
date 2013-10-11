@@ -702,7 +702,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             {
                 SwWait aWait( *rView.GetDocShell(), sal_True );
 
-                String aGrfName, aFltName;
+                OUString aGrfName, aFltName;
                 const Graphic aGrf( pGalleryItem->GetGraphic() );
 
                 if ( nSelType & nsSelectionType::SEL_GRF )
@@ -768,13 +768,13 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             {
                 aInsTblOpts.mnInsMode = 0;
                 // Delimiter
-                String sDelim = static_cast< const SfxStringItem* >(pItem)->GetValue();
-                if(sDelim.Len())
-                    cDelim = sDelim.GetChar(0);
+                OUString sDelim = static_cast< const SfxStringItem* >(pItem)->GetValue();
+                if(!sDelim.isEmpty())
+                    cDelim = sDelim[0];
                 // AutoFormat
                 if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_2, sal_True, &pItem))
                 {
-                    String sAutoFmt = static_cast< const SfxStringItem* >(pItem)->GetValue();
+                    OUString sAutoFmt = static_cast< const SfxStringItem* >(pItem)->GetValue();
 
                     pAutoFmtTbl = new SwTableAutoFmtTbl;
                     pAutoFmtTbl->Load();

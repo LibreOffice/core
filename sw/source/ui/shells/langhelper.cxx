@@ -67,12 +67,12 @@ namespace SwLangHelper
 
         // the value of used script types
         const sal_uInt16 nScriptType =pOLV->GetSelectedScriptType();
-        String aScriptTypesInUse( OUString::number( nScriptType ) );//pEditEngine->GetScriptType(aSelection)
+        OUString aScriptTypesInUse( OUString::number( nScriptType ) );//pEditEngine->GetScriptType(aSelection)
 
         SvtLanguageTable aLangTable;
 
         // get keyboard language
-        String aKeyboardLang;
+        OUString aKeyboardLang;
         LanguageType nLang = LANGUAGE_DONTKNOW;
 
         Window* pWin = rEditView.GetWindow();
@@ -82,7 +82,7 @@ namespace SwLangHelper
             aKeyboardLang = aLangTable.GetString( nLang );
 
         // get the language that is in use
-        String aCurrentLang = OUString("*");
+        OUString aCurrentLang("*");
         SfxItemSet aSet(pOLV->GetAttribs());
         nLang = SwLangHelper::GetCurrentLanguage( aSet,nScriptType );
         if (nLang != LANGUAGE_DONTKNOW)
@@ -141,8 +141,8 @@ namespace SwLangHelper
                 const OUString aSelectionLangPrefix("Current_");
                 const OUString aParagraphLangPrefix("Paragraph_");
                 const OUString aDocumentLangPrefix("Default_");
-                const String aStrNone( OUString("LANGUAGE_NONE") );
-                const String aStrResetLangs( OUString("RESET_LANGUAGES") );
+                const OUString aStrNone("LANGUAGE_NONE");
+                const OUString aStrResetLangs("RESET_LANGUAGES");
 
                 sal_Int32 nPos = 0;
                 bool bForSelection = true;

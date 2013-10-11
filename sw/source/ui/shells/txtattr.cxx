@@ -423,12 +423,12 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
         case FN_DROP_CHAR_STYLE_NAME:
             if( pItem )
             {
-                String sCharStyleName = ((const SfxStringItem*)pItem)->GetValue();
+                OUString sCharStyleName = ((const SfxStringItem*)pItem)->GetValue();
                 SfxItemSet aSet(GetPool(), RES_PARATR_DROP, RES_PARATR_DROP, 0L);
                 rSh.GetCurAttr(aSet);
                 SwFmtDrop aDropItem((const SwFmtDrop&)aSet.Get(RES_PARATR_DROP));
                 SwCharFmt* pFmt = 0;
-                if(sCharStyleName.Len())
+                if(!sCharStyleName.isEmpty())
                     pFmt = rSh.FindCharFmtByName( sCharStyleName );
                 aDropItem.SetCharFmt( pFmt );
                 aSet.Put(aDropItem);

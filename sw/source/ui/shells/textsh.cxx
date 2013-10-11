@@ -217,7 +217,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         if ( ERRCODE_NONE == aDlg.Execute() )
         {
             // Determine URL
-            String aStrURL( aDlg.GetPath() );
+            OUString aStrURL( aDlg.GetPath() );
             aStrURL = URIHelper::SmartRel2Abs(
                 INetURLObject(), aStrURL, URIHelper::GetMaybeFileHdl() );
 
@@ -265,7 +265,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         svt::EmbeddedObjectRef xObj;
         if( nSlot == SID_INSERT_PLUGIN && ( pClassLocationItem || pCommandsItem ) )
         {
-            String sClassLocation;
+            OUString sClassLocation;
             if(pClassLocationItem)
                 sClassLocation = pClassLocationItem->GetValue();
 
@@ -287,7 +287,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 {
                     try
                     {
-                        if ( sClassLocation.Len() )
+                        if ( !sClassLocation.isEmpty() )
                             xSet->setPropertyValue("PluginURL",
                                 uno::makeAny(
                                     OUString(
@@ -757,7 +757,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                         rSh.StartAction();
                         rSh.CreateCrsr();
                         rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT,sal_True);
-                        String sLinkName = rSh.GetSelTxt();
+                        OUString sLinkName = rSh.GetSelTxt();
                         aHLinkItem.SetName(sLinkName);
                         aHLinkItem.SetInsertMode(HLINK_FIELD);
                         rSh.DestroyCrsr();
@@ -765,8 +765,8 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     }
                     else
                     {
-                        String sReturn = rSh.GetSelTxt();
-                        sReturn.Erase(255);
+                        OUString sReturn = rSh.GetSelTxt();
+                        sReturn = sReturn.copy(0, std::min(255, sReturn.getLength()));
                         aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
                     }
 
@@ -929,7 +929,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     if( pArgs )
         pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
 
-    String aChars, aFontName;
+    OUString aChars, aFontName;
     if ( pItem )
     {
         aChars = ((const SfxStringItem*)pItem)->GetValue();
@@ -959,20 +959,20 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             aFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
                         RES_CHRATR_FONT,
                         GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) ));
-        if (!aFontName.Len())
+        if (aFontName.isEmpty())
             aFontName = aFont.GetFamilyName();
     }
 
     Font aNewFont(aFontName, Size(1,1)); // Size only because CTOR.
-    if( !aChars.Len() )
+    if( aChars.isEmpty() )
     {
         // Set selected font as default.
         SfxAllItemSet aAllSet( rSh.GetAttrPool() );
         aAllSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
 
         SwViewOption aOpt(*GetShell().GetViewOptions());
-        String sSymbolFont = aOpt.GetSymbolFont();
-        if( !aFontName.Len() && sSymbolFont.Len() )
+        OUString sSymbolFont = aOpt.GetSymbolFont();
+        if( aFontName.isEmpty() && !sSymbolFont.isEmpty() )
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, sSymbolFont ) );
         else
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, aFont.GetFamilyName() ) );
@@ -1003,7 +1003,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         delete pDlg;
     }
 
-    if( aChars.Len() )
+    if( !aChars.isEmpty() )
     {
         rSh.StartAllAction();
 
@@ -1063,7 +1063,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             }
 
             rSh.SetMark();
-            rSh.ExtendSelection( sal_False, aChars.Len() );
+            rSh.ExtendSelection( sal_False, aChars.getLength() );
             rSh.SetAttr( aSet, nsSetAttrMode::SETATTR_DONTEXPAND | nsSetAttrMode::SETATTR_NOFORMATATTR );
             if( !rSh.IsCrsrPtAtEnd() )
                 rSh.SwapPam();
@@ -1084,7 +1084,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         rSh.EndAllAction();
         rSh.EndUndo();
 
-        if ( aChars.Len() )
+        if ( !aChars.isEmpty() )
         {
             rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), aChars ) );
             rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aNewFont.GetName() ) );

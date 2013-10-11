@@ -197,13 +197,13 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 OUString sColumnName;
                 if(pColumnNameItem)
                     ((SfxUsrAnyItem*)pColumnNameItem)->GetValue() >>= sColumnName;
-                String sDBName = sSourceArg;
-                sDBName += DB_DELIM;
-                sDBName += (String)sCommandArg;
-                sDBName += DB_DELIM;
+                OUString sDBName = sSourceArg;
+                sDBName += OUString(DB_DELIM);
+                sDBName += sCommandArg;
+                sDBName += OUString(DB_DELIM);
                 sDBName += OUString::number(nCommandTypeArg);
-                sDBName += DB_DELIM;
-                sDBName += (String)sColumnName;
+                sDBName += OUString(DB_DELIM);
+                sDBName += sColumnName;
 
                 SwFldMgr aFldMgr(GetShellPtr());
                 SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0);

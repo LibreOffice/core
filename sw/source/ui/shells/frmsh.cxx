@@ -191,8 +191,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_HYPERLINK_SETLINK, sal_False, &pItem))
             {
                 const SvxHyperlinkItem& rHLinkItem = *(const SvxHyperlinkItem *)pItem;
-                const String& rURL = rHLinkItem.GetURL();
-                const String& rTarget = rHLinkItem.GetTargetFrame();
+                const OUString& rURL = rHLinkItem.GetURL();
+                const OUString& rTarget = rHLinkItem.GetTargetFrame();
 
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                 rSh.GetFlyFrmAttr( aSet );

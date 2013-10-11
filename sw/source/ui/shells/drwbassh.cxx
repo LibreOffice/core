@@ -615,7 +615,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     OSL_ENSURE(rMarkList.GetMarkCount() == 1, "wrong draw selection");
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-    const String sCurrentName = pObj->GetName();
+    const OUString sCurrentName = pObj->GetName();
     OUString sNewName;
     pNameDialog->GetName(sNewName);
     long nRet = 0;

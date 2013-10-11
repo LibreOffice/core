@@ -634,7 +634,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                     ((SwTblBoxNumFormat&)aBoxSet.Get(
                                     RES_BOXATR_FORMAT )).GetValue() ));
 
-                String sCurText( rSh.GetTableBoxText() );
+                OUString sCurText( rSh.GetTableBoxText() );
                 aCoreSet.Put( SvxNumberInfoItem( pFormatter,
                                     ((SwTblBoxValue&)aBoxSet.Get(
                                         RES_BOXATR_VALUE)).GetValue(),

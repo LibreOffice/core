@@ -1049,8 +1049,8 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
                     }
                     else
                     {
-                        String sSel(pOLV->GetSelected());
-                        sSel.Erase(255);
+                        OUString sSel(pOLV->GetSelected());
+                        sSel = sSel.copy(0, std::min(255, sSel.getLength()));
                         aHLinkItem.SetName(comphelper::string::stripEnd(sSel, ' '));
                     }
 
@@ -1145,10 +1145,10 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
                 else
                 {
                     SvtUserOptions aUserOpt;
-                    String sAuthor;
-                    if( !(sAuthor = aUserOpt.GetFullName()).Len())
-                            if( !(sAuthor = aUserOpt.GetID()).Len() )
-                        sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
+                    OUString sAuthor;
+                    if( (sAuthor = aUserOpt.GetFullName()).isEmpty() &&
+                        (sAuthor = aUserOpt.GetID()).isEmpty() )
+                        sAuthor = SW_RES( STR_REDLINE_UNKNOWN_AUTHOR );
                     if (sAuthor == pPostItMgr->GetActiveSidebarWin()->GetAuthor())
                         rSet.DisableItem(nWhich);
                 }
@@ -1198,11 +1198,11 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
         }
         case SID_THES:
         {
-            String aReplaceText;
+            OUString aReplaceText;
             SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
-            if (aReplaceText.Len() > 0)
+            if (!aReplaceText.isEmpty())
                 ReplaceTextWithSynonym( pOLV->GetEditView(), aReplaceText );
             break;
         }
@@ -1635,8 +1635,8 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     if( pArgs )
         pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
 
-    String sSym;
-    String sFontName;
+    OUString sSym;
+    OUString sFontName;
     if ( pItem )
     {
         sSym = ((const SfxStringItem*)pItem)->GetValue();
@@ -1660,12 +1660,12 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
             aSetDlgFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
                         SID_ATTR_CHAR_FONT,
                         GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) ));
-        if (!sFontName.Len())
+        if (sFontName.isEmpty())
             sFontName = aSetDlgFont.GetFamilyName();
     }
 
     Font aFont(sFontName, Size(1,1));
-    if( !sSym.Len() )
+    if( sSym.isEmpty() )
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
 
@@ -1673,8 +1673,8 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         aAllSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
 
         SwViewOption aOpt(*rView.GetWrtShell().GetViewOptions());
-        String sSymbolFont = aOpt.GetSymbolFont();
-        if( sSymbolFont.Len() )
+        OUString sSymbolFont = aOpt.GetSymbolFont();
+        if( !sSymbolFont.isEmpty() )
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, sSymbolFont ) );
         else
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, aSetDlgFont.GetFamilyName() ) );
@@ -1707,7 +1707,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         delete( pDlg );
     }
 
-    if( sSym.Len() )
+    if( !sSym.isEmpty() )
     {
         // do not flicker
         pOLV->HideCursor();

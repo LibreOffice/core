@@ -694,8 +694,8 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     if( pArgs )
         pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
 
-    String sSym;
-    String sFontName;
+    OUString sSym;
+    OUString sFontName;
     if ( pItem )
     {
         sSym = ((const SfxStringItem*)pItem)->GetValue();
@@ -719,19 +719,19 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
             aSetDlgFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
                         SID_ATTR_CHAR_FONT,
                         GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) ));
-        if (!sFontName.Len())
+        if (sFontName.isEmpty())
             sFontName = aSetDlgFont.GetFamilyName();
     }
 
     Font aFont(sFontName, Size(1,1));
-    if(!sSym.Len())
+    if(sSym.isEmpty())
     {
         SfxAllItemSet aAllSet( GetPool() );
         aAllSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
 
         SwViewOption aOpt(*rView.GetWrtShell().GetViewOptions());
-        String sSymbolFont = aOpt.GetSymbolFont();
-        if( sSymbolFont.Len() )
+        OUString sSymbolFont = aOpt.GetSymbolFont();
+        if( !sSymbolFont.isEmpty() )
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, sSymbolFont ) );
         else
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, aSetDlgFont.GetFamilyName() ) );
@@ -764,7 +764,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         delete( pDlg );
     }
 
-    if( sSym.Len() )
+    if( !sSym.isEmpty() )
     {
         // do not flicker
         pOLV->HideCursor();
