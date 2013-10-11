@@ -258,9 +258,9 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                  pCNd && pCNd->IsTxtNode() &&
                  GetItemState( RES_PARATR_LIST_ID, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                const String& sListId =
+                const OUString& sListId =
                         dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
-                if ( sListId.Len() > 0 &&
+                if ( !sListId.isEmpty() &&
                      !pDstDoc->getListByName( sListId ) )
                 {
                     const SwList* pList = pSrcDoc->getListByName( sListId );

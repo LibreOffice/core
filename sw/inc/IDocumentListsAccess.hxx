@@ -29,17 +29,17 @@ class SwList;
 class IDocumentListsAccess
 {
     public:
-        virtual SwList* createList( String sListId,
-                                    const String sDefaultListStyleName ) = 0;
-        virtual void deleteList( const String sListId ) = 0;
-        virtual SwList* getListByName( const String sListId ) const = 0;
+        virtual SwList* createList( const OUString& rListId,
+                                    const OUString& rDefaultListStyleName ) = 0;
+        virtual void deleteList( const OUString& rListId ) = 0;
+        virtual SwList* getListByName( const OUString& rListId ) const = 0;
 
-        virtual SwList* createListForListStyle( const String sListStyleName ) = 0;
-        virtual SwList* getListForListStyle( const String sListStyleName ) const = 0;
-        virtual void deleteListForListStyle( const String sListStyleName ) = 0;
+        virtual SwList* createListForListStyle( const OUString& rListStyleName ) = 0;
+        virtual SwList* getListForListStyle( const OUString& rListStyleName ) const = 0;
+        virtual void deleteListForListStyle( const OUString& rListStyleName ) = 0;
         // #i91400#
-        virtual void trackChangeOfListStyleName( const String sListStyleName,
-                                                 const String sNewListStyleName ) = 0;
+        virtual void trackChangeOfListStyleName( const OUString& rListStyleName,
+                                                 const OUString& rNewListStyleName ) = 0;
     protected:
         virtual ~IDocumentListsAccess() {};
 };

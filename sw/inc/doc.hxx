@@ -996,15 +996,15 @@ public:
 
     /** IDocumentListsAccess
     */
-    virtual SwList* createList( String sListId,
-                                const String sDefaultListStyleName );
-    virtual void deleteList( const String sListId );
-    virtual SwList* getListByName( const String sListId ) const;
-    virtual SwList* createListForListStyle( const String sListStyleName );
-    virtual SwList* getListForListStyle( const String sListStyleName ) const;
-    virtual void deleteListForListStyle( const String sListStyleName );
-    virtual void trackChangeOfListStyleName( const String sListStyleName,
-                                             const String sNewListStyleName );
+    virtual SwList* createList( const OUString& rListId,
+                                const OUString& rDefaultListStyleName );
+    virtual void deleteList( const OUString& rListId );
+    virtual SwList* getListByName( const OUString& rListId ) const;
+    virtual SwList* createListForListStyle( const OUString& rListStyleName );
+    virtual SwList* getListForListStyle( const OUString& rListStyleName ) const;
+    virtual void deleteListForListStyle( const OUString& rListStyleName );
+    virtual void trackChangeOfListStyleName( const OUString& rListStyleName,
+                                             const OUString& rNewListStyleName );
 
     /** IDocumentExternalData */
     virtual void setExternalData(::sw::tExternalDataType eType,

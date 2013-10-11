@@ -2452,10 +2452,11 @@ void SwDoc::getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOu
 }
 
 // implementation of interface IDocumentListsAccess
-SwList* SwDoc::createList( String sListId,
-                           const String sDefaultListStyleName )
+SwList* SwDoc::createList( const OUString& rListId,
+                           const OUString& sDefaultListStyleName )
 {
-    if ( sListId.Len() == 0 )
+    OUString sListId = rListId;
+    if ( sListId.isEmpty() )
     {
         sListId = listfunc::CreateUniqueListId( *this );
     }
@@ -2479,7 +2480,7 @@ SwList* SwDoc::createList( String sListId,
     return pNewList;
 }
 
-void SwDoc::deleteList( const String sListId )
+void SwDoc::deleteList( const OUString& sListId )
 {
     SwList* pList = getListByName( sListId );
     if ( pList )
@@ -2489,7 +2490,7 @@ void SwDoc::deleteList( const String sListId )
     }
 }
 
-SwList* SwDoc::getListByName( const String sListId ) const
+SwList* SwDoc::getListByName( const OUString& sListId ) const
 {
     SwList* pList = 0;
 
@@ -2503,9 +2504,9 @@ SwList* SwDoc::getListByName( const String sListId ) const
     return pList;
 }
 
-SwList* SwDoc::createListForListStyle( const String sListStyleName )
+SwList* SwDoc::createListForListStyle( const OUString& sListStyleName )
 {
-    if ( sListStyleName.Len() == 0 )
+    if ( sListStyleName.isEmpty() )
     {
         OSL_FAIL( "<SwDoc::createListForListStyle(..)> - no list style name provided. Serious defect -> please inform OD." );
         return 0;
@@ -2536,7 +2537,7 @@ SwList* SwDoc::createListForListStyle( const String sListStyleName )
     return pNewList;
 }
 
-SwList* SwDoc::getListForListStyle( const String sListStyleName ) const
+SwList* SwDoc::getListForListStyle( const OUString& sListStyleName ) const
 {
     SwList* pList = 0;
 
@@ -2550,7 +2551,7 @@ SwList* SwDoc::getListForListStyle( const String sListStyleName ) const
     return pList;
 }
 
-void SwDoc::deleteListForListStyle( const String sListStyleName )
+void SwDoc::deleteListForListStyle( const OUString& sListStyleName )
 {
     String sListId;
     {
@@ -2569,8 +2570,8 @@ void SwDoc::deleteListForListStyle( const String sListStyleName )
     }
 }
 
-void SwDoc::trackChangeOfListStyleName( const String sListStyleName,
-                                        const String sNewListStyleName )
+void SwDoc::trackChangeOfListStyleName( const OUString& sListStyleName,
+                                        const OUString& sNewListStyleName )
 {
     SwList* pList = getListForListStyle( sListStyleName );
     OSL_ENSURE( pList,
