@@ -229,12 +229,15 @@ static double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
 }
 
 SwCalc::SwCalc( SwDoc& rD )
-    : aErrExpr( aEmptyStr, SwSbxValue(), 0 ),
-    rDoc( rD ),
-    pLclData( m_aSysLocale.GetLocaleDataPtr() ),
-    pCharClass( &GetAppCharClass() ),
-    nListPor( 0 ),
-    eError( CALC_NOERR )
+    : aErrExpr( aEmptyStr, SwSbxValue(), 0 )
+    , nCommandPos(0)
+    , rDoc( rD )
+    , pLclData( m_aSysLocale.GetLocaleDataPtr() )
+    , pCharClass( &GetAppCharClass() )
+    , nListPor( 0 )
+    , eCurrOper( CALC_NAME )
+    , eCurrListOper( CALC_NAME )
+    , eError( CALC_NOERR )
 {
     aErrExpr.aStr = "~C_ERR~";
     memset( VarTable, 0, sizeof(VarTable) );
