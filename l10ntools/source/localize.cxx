@@ -79,9 +79,7 @@ bool passesNegativeList(const OUString& rUrl) {
             "org.openoffice.hu.hunspell.dictionaries/page1.xhp") },
         { RTL_CONSTASCII_STRINGPARAM(
             "/officecfg/registry/data/org/openoffice/Office/"
-            "Accelerators.xcu") },
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/officecfg/registry/data/org/openoffice/Office/SFX.xcu") }
+            "Accelerators.xcu") }
     };
     return !matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }
@@ -98,31 +96,15 @@ bool passesPositiveList(const OUString& rUrl) {
             "/chart2/source/controller/dialogs/"
             "res_SecondaryAxisCheckBoxes_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM(
-            "/chart2/source/controller/dialogs/res_Statistic_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM(
             "/chart2/source/controller/dialogs/res_Titlesx_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/chart2/source/controller/dialogs/res_Trendline_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/chart2/source/controller/menu/MenuItems_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM(
             "/dbaccess/source/ui/dlg/AutoControls_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM(
             "/dbaccess/source/ui/inc/toolbox_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM("/description.xml") },
         { RTL_CONSTASCII_STRINGPARAM("/android/sdremote/res/values/strings.xml") },
-        { RTL_CONSTASCII_STRINGPARAM("/offmgr/inc/offmenu_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/offmgr/source/offapp/intro/intro_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM("/svx/inc/globlmn_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM("/svx/source/intro/intro_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/svx/source/unodialogs/textconversiondlgs/"
-            "chinese_direction_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/misc.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/swacc_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/swmn_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/toolbox_tmpl.hrc") }
+        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/misc.hrc") }
     };
     return matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }
