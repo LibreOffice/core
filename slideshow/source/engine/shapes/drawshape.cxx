@@ -177,6 +177,9 @@ namespace slideshow
                                                                              // it does _not_ for MSVC without
                                                                              // the extra mem_fn. WTF.
                                      _1,
+                                     ::boost::cref( mxShape ),
+                                     ::boost::cref( mxPage ),
+                                     ::boost::cref( mxPrimitives ),
                                      ::boost::cref( mpCurrMtf ),
                                      ::boost::cref(
                                          getViewRenderArgs() ),
@@ -390,6 +393,9 @@ namespace slideshow
             mnAttributeVisibilityState(0),
             maViewShapes(),
             mxComponentContext( rContext.mxComponentContext ),
+            mxPrimitives(
+                rContext.mxPrimitiveFactory->createPrimitivesFromXShape(xShape,
+                                                                        uno::Sequence<beans::PropertyValue>()) ),
             maHyperlinkIndices(),
             maHyperlinkRegions(),
             maSubsetting(),
@@ -451,6 +457,9 @@ namespace slideshow
             mnAttributeVisibilityState(0),
             maViewShapes(),
             mxComponentContext( rContext.mxComponentContext ),
+            mxPrimitives(
+                rContext.mxPrimitiveFactory->createPrimitivesFromXShape(xShape,
+                                                                        uno::Sequence<beans::PropertyValue>()) ),
             maHyperlinkIndices(),
             maHyperlinkRegions(),
             maSubsetting(),
@@ -503,6 +512,7 @@ namespace slideshow
             mnAttributeVisibilityState(0),
             maViewShapes(),
             mxComponentContext( rSrc.mxComponentContext ),
+            mxPrimitives( rSrc.mxPrimitives ),
             maHyperlinkIndices(),
             maHyperlinkRegions(),
             maSubsetting( rTreeNode, mpCurrMtf ),
@@ -661,7 +671,10 @@ namespace slideshow
             // render the Shape on the newly added ViewLayer
             if( bRedrawLayer )
             {
-                pNewShape->update( mpCurrMtf,
+                pNewShape->update( mxShape,
+                                   mxPage,
+                                   mxPrimitives,
+                                   mpCurrMtf,
                                    getViewRenderArgs(),
                                    ViewShape::FORCE,
                                    isVisible() );

@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
     cppcanvas \
     cppu \
     cppuhelper \
+    drawinglayer \
     sal \
     svt \
     tl \

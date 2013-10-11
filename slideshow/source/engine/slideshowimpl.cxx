@@ -1749,7 +1749,8 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
                     maUserEventQueue,
                     *this,
                     maViewContainer,
-                    mxComponentContext) );
+                    mxComponentContext,
+                    0) );
         }
         else if (mpRehearseTimingsActivity)
         {

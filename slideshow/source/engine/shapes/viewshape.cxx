@@ -43,6 +43,7 @@
 #include <canvas/canvastools.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
+#include <drawinglayer/processor2d/canvasprocessor2d.hxx>
 
 #include "viewshape.hxx"
 #include "tools.hxx"
@@ -180,6 +181,9 @@ namespace slideshow
         }
 
         bool ViewShape::draw( const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,
+                              const uno::Reference<drawing::XShape>&    xShape,
+                              const uno::Reference<drawing::XDrawPage>& xPage,
+                              const uno::Sequence<uno::Reference<graphic::XPrimitive2D> >& xPrimitives,
                               const GDIMetaFileSharedPtr&           rMtf,
                               const ShapeAttributeLayerSharedPtr&   rAttr,
                               const ::basegfx::B2DHomMatrix&        rTransform,
@@ -219,34 +223,29 @@ namespace slideshow
                 DBG_UNHANDLED_EXCEPTION();
             }
 #endif
+
+            drawinglayer::geometry::ViewInformation2D aViewInfo(
+                basegfx::B2DHomMatrix(), rTransform,
+                basegfx::B2DRange(-10000,-10000,10000,10000), // HACK
+                xPage, 0.0,
+                uno::Sequence<beans::PropertyValue>());
+
+            drawinglayer::processor2d::CanvasProcessor2D aProcessor(
+                aViewInfo,
+                rDestinationCanvas->getUNOCanvas());
+
+            aProcessor.process(xPrimitives);
+
+#if 0
+            pRenderer->setTransformation( rTransform );
             if( pClip )
                 pRenderer->setClip( *pClip );
             else
                 pRenderer->setClip();
 
-            if( rSubsets.empty() )
-            {
-                return pRenderer->draw();
-            }
-            else
-            {
-                // render subsets of whole metafile
-                // --------------------------------
-
-                bool bRet(true);
-                VectorOfDocTreeNodes::const_iterator        aIter( rSubsets.begin() );
-                const VectorOfDocTreeNodes::const_iterator  aEnd ( rSubsets.end() );
-                while( aIter != aEnd )
-                {
-                    if( !pRenderer->drawSubset( aIter->getStartIndex(),
-                                                aIter->getEndIndex() ) )
-                        bRet = false;
-
-                    ++aIter;
-                }
-
-                return bRet;
-            }
+            return pRenderer->draw();
+#endif
+            return true;
         }
 
         namespace
@@ -291,6 +290,9 @@ namespace slideshow
         }
 
         bool ViewShape::renderSprite( const ViewLayerSharedPtr&             rViewLayer,
+                                      const uno::Reference<drawing::XShape>&    xShape,
+                                      const uno::Reference<drawing::XDrawPage>& xPage,
+                                      const uno::Sequence<uno::Reference<graphic::XPrimitive2D> >& xPrimitives,
                                       const GDIMetaFileSharedPtr&           rMtf,
                                       const ::basegfx::B2DRectangle&        rOrigBounds,
                                       const ::basegfx::B2DRectangle&        rBounds,
@@ -502,6 +504,9 @@ namespace slideshow
             ::cppcanvas::CanvasSharedPtr pContentCanvas( mpSprite->getContentCanvas() );
 
             return draw( pContentCanvas,
+                         xShape,
+                         xPage,
+                         xPrimitives,
                          rMtf,
                          pAttr,
                          aShapeTransformation,
@@ -510,6 +515,9 @@ namespace slideshow
         }
 
         bool ViewShape::render( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
+                                const uno::Reference<drawing::XShape>&    xShape,
+                                const uno::Reference<drawing::XDrawPage>& xPage,
+                                const uno::Sequence<uno::Reference<graphic::XPrimitive2D> >& xPrimitives,
                                 const GDIMetaFileSharedPtr&         rMtf,
                                 const ::basegfx::B2DRectangle&      rBounds,
                                 const ::basegfx::B2DRectangle&      rUpdateBounds,
@@ -669,6 +677,9 @@ namespace slideshow
 
                         // render into this bitmap
                         if( !draw( pBitmapCanvas,
+                                   xShape,
+                                   xPage,
+                                   xPrimitives,
                                    rMtf,
                                    pAttr,
                                    aTransform,
@@ -713,6 +724,9 @@ namespace slideshow
                                         pAttr ) );
 
             return draw( rDestinationCanvas,
+                         xShape,
+                         xPage,
+                         xPrimitives,
                          rMtf,
                          pAttr,
                          aTransform,
@@ -845,16 +859,22 @@ namespace slideshow
             mbForceUpdate   = true;
         }
 
-        bool ViewShape::update( const GDIMetaFileSharedPtr& rMtf,
-                                const RenderArgs&           rArgs,
-                                int                         nUpdateFlags,
-                                bool                        bIsVisible ) const
+        bool ViewShape::update( const uno::Reference<drawing::XShape>&    xShape,
+                                const uno::Reference<drawing::XDrawPage>& xPage,
+                                const uno::Sequence<uno::Reference<graphic::XPrimitive2D> >& xPrimitives,
+                                const GDIMetaFileSharedPtr&               rMtf,
+                                const RenderArgs&                         rArgs,
+                                int                                       nUpdateFlags,
+                                bool                                      bIsVisible ) const
         {
             ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
 
             // Shall we render to a sprite, or to a plain canvas?
             if( isBackgroundDetached() )
                 return renderSprite( mpViewLayer,
+                                     xShape,
+                                     xPage,
+                                     xPrimitives,
                                      rMtf,
                                      rArgs.maOrigBounds,
                                      rArgs.maBounds,
@@ -866,6 +886,9 @@ namespace slideshow
                                      bIsVisible );
             else
                 return render( mpViewLayer->getCanvas(),
+                               xShape,
+                               xPage,
+                               xPrimitives,
                                rMtf,
                                rArgs.maBounds,
                                rArgs.maUpdateBounds,

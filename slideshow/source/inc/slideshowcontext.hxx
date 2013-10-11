@@ -23,9 +23,11 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <boost/shared_ptr.hpp>
 
-namespace com{ namespace sun{ namespace star{ namespace uno
-{
-    class XComponentContext;
+namespace com{ namespace sun{ namespace star{
+namespace uno {
+    class XComponentContext; }
+namespace graphic {
+    class XPrimitiveFactory2D;
 }}}}
 
 
@@ -90,7 +92,9 @@ namespace slideshow
                               CursorManager&                                    rCursorManager,
                               const UnoViewContainer&                           rViewContainer,
                               const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::uno::XComponentContext>&    rComponentContext );
+                                  ::com::sun::star::uno::XComponentContext>&    rComponentContext,
+                              const ::com::sun::star::uno::Reference<
+                                  ::com::sun::star::graphic::XPrimitiveFactory2D>& rPrimitiveFactory );
             void dispose();
 
             boost::shared_ptr<SubsettableShapeManager>&     mpSubsettableShapeManager;
@@ -103,6 +107,8 @@ namespace slideshow
             const UnoViewContainer&                         mrViewContainer;
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext>   mxComponentContext;
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::graphic::XPrimitiveFactory2D> mxPrimitiveFactory;
         };
     }
 }

@@ -22,6 +22,7 @@
 
 #include <osl/diagnose.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 
 #include "attributableshape.hxx"
 #include "doctreenodesupplier.hxx"
@@ -334,6 +335,10 @@ namespace slideshow
 
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext>                           mxComponentContext;
+
+            ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Reference<
+                    ::com::sun::star::graphic::XPrimitive2D > >                     mxPrimitives;
 
             /// hyperlink support
             typedef ::std::pair<sal_Int32 /* mtf start */,

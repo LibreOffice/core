@@ -37,6 +37,9 @@
 
 #include <vector>
 
+namespace com{ namespace sun{ namespace star{ namespace graphic {
+    class XPrimitive2D;
+}}}}
 
 namespace slideshow
 {
@@ -189,7 +192,14 @@ namespace slideshow
 
                 @return whether the rendering finished successfully.
             */
-            bool update( const GDIMetaFileSharedPtr&    rMtf,
+            bool update( const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::drawing::XShape >& xShape,
+                         const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::drawing::XDrawPage >& xPage,
+                         const ::com::sun::star::uno::Sequence<
+                         ::com::sun::star::uno::Reference<
+                         ::com::sun::star::graphic::XPrimitive2D > >& xPrimitives,
+                         const GDIMetaFileSharedPtr&    rMtf,
                          const RenderArgs&              rArgs,
                          int                            nUpdateFlags,
                          bool                           bIsVisible ) const;
@@ -247,6 +257,13 @@ namespace slideshow
                 associated canvas (which happens to be mpLastCanvas).
              */
             bool draw( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
+                       const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::drawing::XShape >& xShape,
+                       const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::drawing::XDrawPage >& xPage,
+                       const ::com::sun::star::uno::Sequence<
+                       ::com::sun::star::uno::Reference<
+                       ::com::sun::star::graphic::XPrimitive2D > >& xPrimitives,
                        const GDIMetaFileSharedPtr&          rMtf,
                        const ShapeAttributeLayerSharedPtr&  rAttr,
                        const ::basegfx::B2DHomMatrix&       rTransform,
@@ -256,6 +273,13 @@ namespace slideshow
             /** Render shape to an active sprite
              */
             bool renderSprite( const ViewLayerSharedPtr&            rViewLayer,
+                               const ::com::sun::star::uno::Reference<
+                               ::com::sun::star::drawing::XShape >& xShape,
+                               const ::com::sun::star::uno::Reference<
+                               ::com::sun::star::drawing::XDrawPage >& xPage,
+                               const ::com::sun::star::uno::Sequence<
+                               ::com::sun::star::uno::Reference<
+                               ::com::sun::star::graphic::XPrimitive2D > >& xPrimitives,
                                const GDIMetaFileSharedPtr&          rMtf,
                                const ::basegfx::B2DRectangle&       rOrigBounds,
                                const ::basegfx::B2DRectangle&       rBounds,
@@ -269,6 +293,13 @@ namespace slideshow
             /** Render shape to given canvas
              */
             bool render( const ::cppcanvas::CanvasSharedPtr&    rDestinationCanvas,
+                         const ::com::sun::star::uno::Reference<
+                         ::com::sun::star::drawing::XShape >& xShape,
+                         const ::com::sun::star::uno::Reference<
+                         ::com::sun::star::drawing::XDrawPage >& xPage,
+                         const ::com::sun::star::uno::Sequence<
+                         ::com::sun::star::uno::Reference<
+                         ::com::sun::star::graphic::XPrimitive2D > >& xPrimitives,
                          const GDIMetaFileSharedPtr&            rMtf,
                          const ::basegfx::B2DRectangle&         rBounds,
                          const ::basegfx::B2DRectangle&         rUpdateBounds,

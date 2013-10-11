@@ -19,6 +19,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 
 #include "slideshowcontext.hxx"
 #include "subsettableshapemanager.hxx"
@@ -46,7 +47,9 @@ SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettab
                                     CursorManager&                    rCursorManager,
                                     const UnoViewContainer&           rViewContainer,
                                     const uno::Reference<
-                                          uno::XComponentContext>&    rComponentContext ) :
+                                          uno::XComponentContext>&    rComponentContext,
+                                    const uno::Reference<
+                                          graphic::XPrimitiveFactory2D>& rPrimitiveFactory ) :
         mpSubsettableShapeManager( rSubsettableShapeManager ),
         mrEventQueue( rEventQueue ),
         mrEventMultiplexer( rEventMultiplexer ),
@@ -55,7 +58,8 @@ SlideShowContext::SlideShowContext( SubsettableShapeManagerSharedPtr& rSubsettab
         mrUserEventQueue( rUserEventQueue ),
         mrCursorManager( rCursorManager ),
         mrViewContainer( rViewContainer ),
-        mxComponentContext( rComponentContext )
+        mxComponentContext( rComponentContext ),
+        mxPrimitiveFactory( rPrimitiveFactory )
     {}
 
 void SlideShowContext::dispose()

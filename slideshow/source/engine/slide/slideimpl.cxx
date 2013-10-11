@@ -36,6 +36,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
@@ -376,7 +377,13 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                rUserEventQueue,
                *this,
                rViewContainer,
-               xComponentContext ),
+               xComponentContext,
+               uno::Reference<com::sun::star::graphic::XPrimitiveFactory2D>(
+                   xComponentContext->getServiceManager()->createInstanceWithContext(
+                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                            "com.sun.star.graphic.PrimitiveFactory2D") ),
+                       xComponentContext ),
+                   uno::UNO_QUERY_THROW ) ),
     mrCursorManager( rCursorManager ),
     maAnimations( maContext,
                   basegfx::B2DSize( getSlideSizeImpl() ) ),
