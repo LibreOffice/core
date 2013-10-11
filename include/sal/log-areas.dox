@@ -133,6 +133,7 @@ certain functionality.
 
 @li @c filter.config
 @li @c filter.ms - escher import/export
+@li @c filter.odfflatxml
 @li @c filter.xslt - xslt import/export
 @li @c oox.cscode - see oox/source/drawingml/customshapes/README
 @li @c oox.drawingml - DrawingML

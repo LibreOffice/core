@@ -135,9 +135,9 @@ OdfFlatXml::importer(
         }
     catch (const Exception &exc)
         {
-            OString msg = OUStringToOString(exc.Message,
-                                            RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(msg.getStr());
+            SAL_WARN(
+                "filter.odfflatxml",
+                "caught exception \"" << exc.Message << "\"");
             return sal_False;
         }
     return sal_True;
