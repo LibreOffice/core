@@ -407,8 +407,14 @@ namespace oglcanvas
         mpDeviceHelper = &rDeviceHelper;
     }
 
-    void CanvasHelper::clear()
+    void CanvasHelper::erase()
     {
+        mpRecordedActions->clear();
+    }
+
+    void CanvasHelper::fill(const uno::Sequence< double >&)
+    {
+        // TODO(F3): implement color erase
         mpRecordedActions->clear();
     }
 

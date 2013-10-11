@@ -112,13 +112,20 @@ interface XTextLayout;
  */
 interface XCanvas : ::com::sun::star::uno::XInterface
 {
-    /** Clear the whole canvas area.<p>
+    /** Erase the whole canvas area.<p>
 
         This method clears the whole canvas area to the device default
-        color (e.g. white for a printer, transparent for an
+        content (e.g. white for a printer, transparent for an
         XCustomSprite).
      */
-    void                clear();
+    void                erase();
+
+    /** Clears the whole canvas area to given color.<p>
+
+        This method fills the whole canvas area with the given device
+        color.
+     */
+    void                clear( [in] sequence<ColorComponent> aColor );
 
      /** Draw a point in device resolution on the device.
 

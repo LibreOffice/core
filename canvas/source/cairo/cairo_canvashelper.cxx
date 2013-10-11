@@ -218,9 +218,9 @@ namespace cairocanvas
         cairo_set_operator( mpCairo.get(), compositingMode );
     }
 
-    void CanvasHelper::clear()
+    void CanvasHelper::erase( double r, double g, double b, double alpha )
     {
-        SAL_INFO( "canvas.cairo", "clear whole area: " << maSize.getX() << " x " << maSize.getY() );
+        SAL_INFO( "canvas.cairo", "erase whole area: " << maSize.getX() << " x " << maSize.getY() );
 
         if( mpCairo )
         {
@@ -231,9 +231,9 @@ namespace cairocanvas
             // internally converts to premultiplied alpha. but anyway,
             // this keeps it consistent with the other canvas impls
             if( mbHaveAlpha )
-                cairo_set_source_rgba( mpCairo.get(), 1.0, 1.0, 1.0, 0.0 );
+                cairo_set_source_rgba( mpCairo.get(), r, g, b, alpha );
             else
-                cairo_set_source_rgb( mpCairo.get(), 1.0, 1.0, 1.0 );
+                cairo_set_source_rgb( mpCairo.get(), r, g, b );
             cairo_set_operator( mpCairo.get(), CAIRO_OPERATOR_SOURCE );
 
             cairo_rectangle( mpCairo.get(), 0, 0, maSize.getX(), maSize.getY() );
@@ -241,6 +241,16 @@ namespace cairocanvas
 
             cairo_restore( mpCairo.get() );
         }
+    }
+
+    void CanvasHelper::erase()
+    {
+        erase(1.0, 1.0, 1.0, 0.0);
+    }
+
+    void CanvasHelper::fill(const uno::Sequence< double >& rColor)
+    {
+        erase(rColor[0], rColor[1], rColor[2], rColor[3] );
     }
 
     void CanvasHelper::drawPoint( const rendering::XCanvas*     ,

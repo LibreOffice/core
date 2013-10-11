@@ -151,7 +151,10 @@ public:
 
     // XCanvas
 
-    virtual void SAL_CALL clear (void)
+    virtual void SAL_CALL erase (void)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL fill (const css::uno::Sequence<double>& rColor)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL drawPoint (

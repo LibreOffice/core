@@ -90,7 +90,7 @@ namespace cairocanvas
         maCanvasHelper.setSurface( mpBufferSurface, bHasAlpha );
 
         // clear bitmap to 100% transparent
-        maCanvasHelper.clear();
+        maCanvasHelper.erase();
     }
 
     void CanvasBitmap::disposeThis()

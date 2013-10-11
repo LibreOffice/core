@@ -105,14 +105,25 @@ namespace canvas
         }
 
         // XCanvas: selectively override base's methods here, for opacity tracking
-        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL erase() throw (::com::sun::star::uno::RuntimeException)
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.clearingContent( this );
 
             // and forward to base class, which handles the actual rendering
-            return BaseType::clear();
+            BaseType::erase();
+        }
+
+        // XCanvas: selectively override base's methods here, for opacity tracking
+        virtual void SAL_CALL fill( const ::com::sun::star::uno::Sequence< double >& aColor ) throw (::com::sun::star::uno::RuntimeException)
+        {
+            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+
+            maSpriteHelper.clearingContent( this );
+
+            // and forward to base class, which handles the actual rendering
+            BaseType::fill( aColor );
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL

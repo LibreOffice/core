@@ -158,7 +158,7 @@ namespace vclcanvas
         mp2ndOutDev->getOutDev().SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
     }
 
-    void CanvasHelper::clear()
+    void CanvasHelper::fill( Color aColor )
     {
         // are we disposed?
         if( mpOutDev )
@@ -167,9 +167,8 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
             rOutDev.EnableMapMode( sal_False );
-            rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
-            rOutDev.SetLineColor( COL_WHITE );
-            rOutDev.SetFillColor( COL_WHITE );
+            rOutDev.SetLineColor( aColor );
+            rOutDev.SetFillColor( aColor );
             rOutDev.SetClipRegion();
             rOutDev.DrawRect( Rectangle( Point(),
                                          rOutDev.GetOutputSizePixel()) );
@@ -180,7 +179,6 @@ namespace vclcanvas
 
                 rOutDev2.SetDrawMode( DRAWMODE_DEFAULT );
                 rOutDev2.EnableMapMode( sal_False );
-                rOutDev2.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
                 rOutDev2.SetLineColor( COL_WHITE );
                 rOutDev2.SetFillColor( COL_WHITE );
                 rOutDev2.SetClipRegion();
@@ -190,6 +188,24 @@ namespace vclcanvas
                                       DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
             }
         }
+    }
+
+    void CanvasHelper::erase()
+    {
+        fill( Color(COL_WHITE) );
+    }
+
+    void CanvasHelper::fill(const uno::Sequence< double >& rColor)
+    {
+        Color aColor( COL_WHITE );
+        if( rColor.getLength() > 2 )
+            aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(rColor);
+
+        // make color opaque. Otherwise, OutputDevice won't draw
+        // anything
+        aColor.SetTransparency(0);
+
+        fill( aColor );
     }
 
     void CanvasHelper::drawPoint( const rendering::XCanvas*     ,

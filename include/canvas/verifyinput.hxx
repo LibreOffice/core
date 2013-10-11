@@ -208,6 +208,28 @@ namespace canvas
                               ::com::sun::star::uno::XInterface >&              xIf,
                           ::sal_Int16                                           nArgPos );
 
+        /** Basic check for color sequence validity.
+
+            @param aColor
+            Device color value
+
+            @param xIf
+            The interface that should be reported as the one
+            generating the exception.
+
+            @param nArgPos
+            Argument position on the call site (i.e. the position of
+            the argument, checked here, on the UNO interface
+            method. Counting starts at 0).
+
+            @throws an lang::IllegalArgumentException, if anything is wrong
+         */
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::uno::Sequence< double >& aColor,
+                          const char*                                   pStr,
+                          const ::com::sun::star::uno::Reference<
+                                   ::com::sun::star::uno::XInterface >& xIf,
+                          ::sal_Int16                                   nArgPos );
+
         /** Basic check for view state validity.
 
             @param viewState

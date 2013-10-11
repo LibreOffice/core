@@ -122,14 +122,28 @@ namespace canvas
         }
 
         // XCanvas
-        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL erase() throw (::com::sun::star::uno::RuntimeException)
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
             maCanvasHelper.modifying();
 
-            maCanvasHelper.clear();
+            maCanvasHelper.erase();
+        }
+
+        virtual void SAL_CALL fill( const ::com::sun::star::uno::Sequence< double >& aColor ) throw (::com::sun::star::uno::RuntimeException)
+        {
+            tools::verifyArgs(aColor,
+                              BOOST_CURRENT_FUNCTION,
+                              static_cast< UnambiguousBaseType* >(this));
+
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+            maCanvasHelper.modifying();
+
+            maCanvasHelper.fill( aColor );
         }
 
         virtual void SAL_CALL drawPoint( const ::com::sun::star::geometry::RealPoint2D&     aPoint,

@@ -276,6 +276,28 @@ namespace canvas
 #endif
         }
 
+        void verifyInput( const uno::Sequence< double >&          aColor,
+                          const char*                             pStr,
+                          const uno::Reference<uno::XInterface >& xIf,
+                          ::sal_Int16                             nArgPos )
+        {
+            if( aColor.getLength() < 3 )
+            {
+#if OSL_DEBUG_LEVEL > 0
+                throw lang::IllegalArgumentException(
+                    OUString::createFromAscii(pStr) +
+                    ": verifyInput(): device color has too few components (" +
+                    OUString::number(3) +
+                    " expected, " +
+                    OUString::number(aColor.getLength()) +
+                    " provided)",
+                    xIf, nArgPos );
+#else
+                throw lang::IllegalArgumentException();
+#endif
+            }
+        }
+
         void verifyInput( const rendering::ViewState&               viewState,
                           const char*                               pStr,
                           const uno::Reference< uno::XInterface >&  xIf,

@@ -81,12 +81,17 @@ namespace cairocanvas
         void setSize( const ::basegfx::B2ISize& rSize );
         void setSurface( const ::cairo::SurfaceSharedPtr& pSurface, bool bHasAlpha );
 
+        /// erase whole viewport with given color
+        void erase( double r, double g, double b, double alpha );
+
+
         // CanvasHelper functionality
         // ==========================
 
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
-        void clear();
+        void erase();
+        void fill(const ::com::sun::star::uno::Sequence< double >& rColor);
         void drawPoint( const ::com::sun::star::rendering::XCanvas*     pCanvas,
                         const ::com::sun::star::geometry::RealPoint2D&  aPoint,
                         const ::com::sun::star::rendering::ViewState&   viewState,

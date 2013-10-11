@@ -313,23 +313,8 @@ void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeExcept
     ::osl::MutexGuard aGuard( m_aMutex );
     SolarMutexGuard aSolarGuard;
 
-    // fill the bounds rectangle in black
-    // ----------------------------------
-
-    const Size aWindowSize( mrOutputWindow.GetSizePixel() );
-
-    ::basegfx::B2DPolygon aPoly( ::basegfx::tools::createPolygonFromRect(
-                                     ::basegfx::B2DRectangle(0.0,0.0,
-                                                             aWindowSize.Width(),
-                                                             aWindowSize.Height() ) ) );
-    ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-        ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( mpCanvas, aPoly ) );
-
-    if( pPolyPoly.get() )
-    {
-        pPolyPoly->setRGBAFillColor( 0x000000FFU );
-        pPolyPoly->draw();
-    }
+    // fill the whole slideshow window in black
+    mxSpriteCanvas->fill( vcl::unotools::colorToStdColorSpaceSequence( Color(0x000000FFU) ));
 }
 
 geometry::IntegerSize2D SAL_CALL SlideShowView::getTranslationOffset( ) throw (RuntimeException)

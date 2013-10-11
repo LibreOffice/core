@@ -141,7 +141,7 @@ namespace dxcanvas
         maOutputOffset = rOutputOffset;
     }
 
-    void CanvasHelper::clear()
+    void CanvasHelper::erase()
     {
         if( needOutput() )
         {
@@ -151,10 +151,28 @@ namespace dxcanvas
             ENSURE_OR_THROW(
                 Gdiplus::Ok == pGraphics->SetCompositingMode(
                     Gdiplus::CompositingModeSourceCopy ), // force set, don't blend
-                "CanvasHelper::clear(): GDI+ SetCompositingMode call failed" );
+                "CanvasHelper::erase(): GDI+ SetCompositingMode call failed" );
             ENSURE_OR_THROW(
                 Gdiplus::Ok == pGraphics->Clear( aClearColor ),
-                "CanvasHelper::clear(): GDI+ Clear call failed" );
+                "CanvasHelper::erase(): GDI+ Clear call failed" );
+        }
+    }
+
+    void CanvasHelper::fill(const uno::Sequence< double >& rColor)
+    {
+        if( needOutput() )
+        {
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            Gdiplus::Color aClearColor = Gdiplus::Color(
+                tools::sequenceToArgb(rColor));
+
+            ENSURE_OR_THROW(
+                Gdiplus::Ok == pGraphics->SetCompositingMode(
+                    Gdiplus::CompositingModeSourceCopy ), // force set, don't blend
+                "CanvasHelper::fill(): GDI+ SetCompositingMode call failed" );
+            ENSURE_OR_THROW(
+                Gdiplus::Ok == pGraphics->Clear( aClearColor ),
+                "CanvasHelper::fill(): GDI+ Clear call failed" );
         }
     }
 

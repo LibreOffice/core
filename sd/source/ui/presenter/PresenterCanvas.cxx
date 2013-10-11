@@ -273,6 +273,13 @@ void SAL_CALL PresenterCanvas::clear (void)
 }
 
 
+void SAL_CALL PresenterCanvas::fill (const css::uno::Sequence<double>&)
+    throw (css::uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    // ToDo: Clear the area covered by the child window.  A simple forward
+    // would clear the whole shared canvas.
+}
 
 
 void SAL_CALL PresenterCanvas::drawPoint (

@@ -68,7 +68,7 @@ namespace dxcanvas
                              bShowSpriteBounds );
 
         // clear sprite to 100% transparent
-        maCanvasHelper.clear();
+        maCanvasHelper.erase();
     }
 
     void CanvasCustomSprite::disposeThis()

@@ -114,7 +114,7 @@ namespace vclcanvas
                              bShowSpriteBounds );
 
         // clear sprite to 100% transparent
-        maCanvasHelper.clear();
+        maCanvasHelper.erase();
     }
 
 #define IMPLEMENTATION_NAME "VCLCanvas.CanvasCustomSprite"

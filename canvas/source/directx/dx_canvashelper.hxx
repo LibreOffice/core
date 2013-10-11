@@ -88,7 +88,8 @@ namespace dxcanvas
 
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
-        void clear();
+        void erase();
+        void fill(const ::com::sun::star::uno::Sequence< double >& rColor);
         void drawPoint( const ::com::sun::star::rendering::XCanvas*     pCanvas,
                         const ::com::sun::star::geometry::RealPoint2D&  aPoint,
                         const ::com::sun::star::rendering::ViewState&   viewState,
