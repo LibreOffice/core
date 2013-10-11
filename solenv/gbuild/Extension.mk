@@ -114,7 +114,7 @@ $(call gb_Extension_get_target,%) : \
 # add deliverable
 # add dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
 #
-# gb_Extension_Extension extension srcdir
+# gb_Extension_Extension extension srcdir nodeliver
 define gb_Extension_Extension
 $(call gb_Extension_get_target,$(1)) : DESCRIPTION :=
 $(call gb_Extension_get_target,$(1)) : FILES := META-INF description.xml
@@ -127,11 +127,7 @@ $(call gb_Extension_get_workdir,$(1))/description.xml :| \
 	$(call gb_Extension__get_preparation_target,$(1))
 $(call gb_Extension__get_final_target,$(1)) : $(call gb_Extension_get_target,$(1))
 
-$(call gb_GeneratedPackage_GeneratedPackage,Extension/$(1),$(dir $(call gb_Extension_get_rootdir,$(1))))
-$(call gb_GeneratedPackage_add_dir,Extension/$(1),$(INSTROOT)/share/extensions/$(1),$(notdir $(call gb_Extension_get_rootdir,$(1))))
-
-$(call gb_GeneratedPackage_get_target,Extension/$(1)) : $(call gb_Extension_get_target,$(1))
-$(call gb_Extension__get_final_target,$(1)) : $(call gb_GeneratedPackage_get_target,Extension/$(1))
+$(if $(filter nodeliver,$(3)),,$(call gb_Extension__Extension_deliver,$(1),Extension/$(1)))
 
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_Extension_get_target,$(1)) : \
@@ -146,6 +142,18 @@ $(foreach lang,$(gb_Extension_ALL_LANGS), \
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Extension__get_final_target,$(1)),$(call gb_Extension_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Extension,$(call gb_Extension__get_final_target,$(1)))
+
+endef
+
+# Ensure delivery of the extension to instdir.
+#
+# gb_Extension__Extension_deliver extension package-name
+define gb_Extension__Extension_deliver
+$(call gb_GeneratedPackage_GeneratedPackage,$(2),$(dir $(call gb_Extension_get_rootdir,$(1))))
+$(call gb_GeneratedPackage_add_dir,$(2),$(INSTROOT)/share/extensions/$(1),$(notdir $(call gb_Extension_get_rootdir,$(1))))
+
+$(call gb_GeneratedPackage_get_target,$(2)) : $(call gb_Extension_get_target,$(1))
+$(call gb_Extension__get_final_target,$(1)) : $(call gb_GeneratedPackage_get_target,$(2))
 
 endef
 

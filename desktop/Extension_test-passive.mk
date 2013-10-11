@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Extension_Extension,test-passive,desktop/test/deployment/passive))
+$(eval $(call gb_Extension_Extension,test-passive,desktop/test/deployment/passive,nodeliver))
 
 $(eval $(call gb_Extension_add_file,test-passive,generic.components,$(call gb_Rdb_get_target,passive_generic)))
 

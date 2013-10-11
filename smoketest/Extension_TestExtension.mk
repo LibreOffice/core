@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Extension_Extension,TestExtension,smoketest/com/sun/star/comp/smoketest))
+$(eval $(call gb_Extension_Extension,TestExtension,smoketest/com/sun/star/comp/smoketest,nodeliver))
 
 $(eval $(call gb_Extension_add_file,TestExtension,TestExtension.jar,$(call gb_Jar_get_outdir_target,TestExtension)))
 
