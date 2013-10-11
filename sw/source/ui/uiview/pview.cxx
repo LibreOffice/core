@@ -488,10 +488,8 @@ void SwPagePreViewWin::MouseButtonDown( const MouseEvent& rMEvt )
         {
             // close page preview, set new cursor position and switch to
             // normal view.
-            String sNewCrsrPos( OUString::number( aDocPos.X() ));
-            ((( sNewCrsrPos += ';' )
-                            += OUString::number( aDocPos.Y() )) )
-                            += ';';
+            OUString sNewCrsrPos = OUString::number( aDocPos.X() ) + ";" +
+                                   OUString::number( aDocPos.Y() ) + ";";
             mrView.SetNewCrsrPos( sNewCrsrPos );
 
             SfxViewFrame *pTmpFrm = mrView.GetViewFrame();
@@ -1425,7 +1423,7 @@ IMPL_LINK( SwPagePreView, ScrollHdl, SwScrollbar *, pScrollbar )
         GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow())
     {
         // Scroll how many pages??
-        String sStateStr(sPageStr);
+        OUString sStateStr(sPageStr);
         sal_uInt16 nThmbPos = (sal_uInt16)pScrollbar->GetThumbPos();
         if( 1 == aViewWin.GetCol() || !nThmbPos )
             ++nThmbPos;

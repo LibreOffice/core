@@ -245,7 +245,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         sal_Bool bBack = m_pSrchItem->GetBackward();
                         if (bBack)
                             m_pWrtShell->Push();
-                        String aReplace( m_pSrchItem->GetReplaceString() );
+                        OUString aReplace( m_pSrchItem->GetReplaceString() );
                         SearchOptions aTmp( m_pSrchItem->GetSearchOptions() );
                         String *pBackRef = ReplaceBackReferences( aTmp, m_pWrtShell->GetCrsr() );
                         if( pBackRef )
@@ -326,10 +326,8 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
 
                     if( !bApi && ULONG_MAX != nFound)
                     {
-                        String aText( SW_RES( STR_NB_REPLACED ) );
-                        const xub_StrLen nPos = aText.Search( OUString("XX") );
-                        aText.Erase( nPos, 2 );
-                        aText.Insert( OUString::number( nFound ), nPos );
+                        OUString aText( SW_RES( STR_NB_REPLACED ) );
+                        aText = aText.replaceFirst("XX", OUString::number( nFound ));
                         Window* pParentWindow = GetParentWindow( m_pSrchDlg );
                         InfoBox( pParentWindow, aText ).Execute();
                     }
@@ -814,9 +812,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 
                 if( m_bJustOpened && m_pWrtShell->IsSelection() )
                 {
-                    String aTxt;
+                    OUString aTxt;
                     if( 1 == m_pWrtShell->GetCrsrCnt() &&
-                        ( aTxt = m_pWrtShell->SwCrsrShell::GetSelTxt() ).Len() )
+                        !( aTxt = m_pWrtShell->SwCrsrShell::GetSelTxt() ).isEmpty() )
                     {
                         m_pSrchItem->SetSearchString( aTxt );
                         m_pSrchItem->SetSelection( sal_False );

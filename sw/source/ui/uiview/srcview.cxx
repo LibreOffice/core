@@ -125,7 +125,7 @@ SFX_IMPL_INTERFACE( SwSrcView, SfxViewShell, SW_RES(0) )
 
 TYPEINIT1(SwSrcView, SfxViewShell)
 
-static void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt16 nCurPage, const String& rTitle )
+static void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt16 nCurPage, const OUString& rTitle )
 {
     short nLeftMargin   = LMARGPRN;
     Size aSz = rOutDev.GetOutputSize();
@@ -161,11 +161,11 @@ static void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt1
     {
         aFont.SetWeight( WEIGHT_NORMAL );
         rOutDev.SetFont( aFont );
-        String aPageStr( OUString(" [") );
-        aPageStr += String( SW_RES( STR_PAGE ) );
-        aPageStr += ' ';
+        OUString aPageStr( " [" );
+        aPageStr += SW_RES( STR_PAGE );
+        aPageStr += " ";
         aPageStr += OUString::number( nCurPage );
-        aPageStr += ']';
+        aPageStr += "]";
         aPos.X() += rOutDev.GetTextWidth( rTitle );
         rOutDev.DrawText( aPos, aPageStr );
     }
@@ -307,7 +307,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             if ( pFilter )
             {
                 // filter found -> use its uiname and wildcard
-                const String& rUIName = pFilter->GetUIName();
+                const OUString& rUIName = pFilter->GetUIName();
                 const WildCard& rCard = pFilter->GetWildcard();
                 xFltMgr->appendFilter( rUIName, rCard.getGlob() );
                 xFltMgr->setCurrentFilter( rUIName ) ;
@@ -428,10 +428,10 @@ void SwSrcView::GetState(SfxItemSet& rSet)
         switch(nWhich)
         {
             case SID_SAVEASDOC:
-                rSet.Put(SfxStringItem(nWhich, String(SW_RES(STR_SAVEAS_SRC))));
+                rSet.Put(SfxStringItem(nWhich, OUString(SW_RES(STR_SAVEAS_SRC))));
             break;
             case SID_SAVEACOPY:
-                rSet.Put(SfxStringItem(nWhich, String(SW_RES(STR_SAVEACOPY_SRC))));
+                rSet.Put(SfxStringItem(nWhich, OUString(SW_RES(STR_SAVEACOPY_SRC))));
             break;
             case SID_SAVEDOC:
             {
@@ -445,11 +445,11 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             break;
             case SID_TABLE_CELL:
             {
-                String aPos( SW_RES(STR_SRCVIEW_ROW) );
+                OUString aPos( SW_RES(STR_SRCVIEW_ROW) );
                 TextSelection aSel = pTextView->GetSelection();
                 aPos += OUString::number( aSel.GetEnd().GetPara()+1 );
-                aPos += OUString(" : ");
-                aPos += String(SW_RES(STR_SRCVIEW_COL));
+                aPos += " : ";
+                aPos += SW_RES(STR_SRCVIEW_COL);
                 aPos += OUString::number( aSel.GetEnd().GetIndex()+1 );
                 SfxStringItem aItem( nWhich, aPos );
                 rSet.Put( aItem );
@@ -466,7 +466,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             break;
             case SID_SEARCH_ITEM:
             {
-                String sSelected;
+                OUString sSelected;
                 if ( !pTextView->HasSelection() )
                 {
                     const TextSelection& rSel = pTextView->GetSelection();
@@ -497,7 +497,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     nCount = rMgr.GetUndoActionCount();
                     if(nCount)
                     {
-                        String aStr(SvtResId( STR_UNDO));
+                        OUString aStr(SvtResId( STR_UNDO));
                         aStr += rMgr.GetUndoActionComment(--nCount);
                         rSet.Put(SfxStringItem(nWhich, aStr));
                     }
@@ -509,7 +509,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     nCount = rMgr.GetRedoActionCount();
                     if(nCount)
                     {
-                        String aStr(SvtResId( STR_REDO));
+                        OUString aStr(SvtResId( STR_REDO));
                         aStr += rMgr.GetRedoActionComment(--nCount);
                         rSet.Put(SfxStringItem(nWhich,aStr));
                     }
@@ -710,7 +710,7 @@ sal_Int32 SwSrcView::PrintSource(
     aFont.SetColor( COL_BLACK );
     pOutDev->SetFont( aFont );
 
-    String aTitle( GetViewFrame()->GetWindow().GetText() );
+    OUString aTitle( GetViewFrame()->GetWindow().GetText() );
 
     sal_uInt16 nLineHeight = (sal_uInt16) pOutDev->GetTextHeight(); // slightly more
     sal_uInt16 nParaSpace = 10;

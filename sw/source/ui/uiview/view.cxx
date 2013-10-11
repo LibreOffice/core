@@ -1123,12 +1123,12 @@ static bool lcl_IsOwnDocument( SwView& rView )
         rView.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps
         = xDPS->getDocumentProperties();
-    String Created = xDocProps->getAuthor();
-    String Changed = xDocProps->getModifiedBy();
-    String FullName = SW_MOD()->GetUserOptions().GetFullName();
-    return (FullName.Len() &&
-            (Changed.Len() && Changed == FullName )) ||
-            (!Changed.Len() && Created.Len() && Created == FullName );
+    OUString Created = xDocProps->getAuthor();
+    OUString Changed = xDocProps->getModifiedBy();
+    OUString FullName = SW_MOD()->GetUserOptions().GetFullName();
+    return (!FullName.isEmpty() &&
+            (!Changed.isEmpty() && Changed == FullName )) ||
+            (Changed.isEmpty() && !Created.isEmpty() && Created == FullName );
 }
 
 void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )

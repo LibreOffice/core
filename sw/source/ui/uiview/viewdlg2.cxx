@@ -99,11 +99,11 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     if (!pOpt)
         return;
 
-    const String &rName = pOpt->GetCategory();
+    const OUString &rName = pOpt->GetCategory();
 
     // Is there a pool template with the same name?
     SwWrtShell &rSh = GetWrtShell();
-    if(rName.Len())
+    if(!rName.isEmpty())
     {
         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
         if( USHRT_MAX != nPoolId )
@@ -130,7 +130,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     SwFldMgr aMgr(&rSh);
     SwSetExpFieldType* pFldType =
             (SwSetExpFieldType*)aMgr.GetFldType(RES_SETEXPFLD, rName);
-    if (!pFldType && rName.Len() )
+    if (!pFldType && !rName.isEmpty() )
     {
         // Create new field types
         SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), rName, nsSwGetSetExpType::GSE_SEQ);
@@ -150,12 +150,12 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     sal_uInt16       nID    = USHRT_MAX;
     SwFieldType* pType  = 0;
     const sal_uInt16 nCount = aMgr.GetFldTypeCount();
-    if( rName.Len() )
+    if( !rName.isEmpty() )
     {
         for (sal_uInt16 i = 0; i < nCount; ++i)
         {
             pType = aMgr.GetFldType(USHRT_MAX, i);
-            String aTmpName( pType->GetName() );
+            OUString aTmpName( pType->GetName() );
             if (aTmpName == rName && pType->Which() == RES_SETEXPFLD)
             {
                 nID = i;

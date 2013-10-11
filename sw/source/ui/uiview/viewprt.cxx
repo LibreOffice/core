@@ -163,8 +163,8 @@ void SwView::ExecutePrint(SfxRequest& rReq)
         case FN_FAX:
         {
             SwPrintOptions* pPrintOptions = SW_MOD()->GetPrtOptions(bWeb);
-            String sFaxName(pPrintOptions->GetFaxName());
-            if (sFaxName.Len())
+            OUString sFaxName(pPrintOptions->GetFaxName());
+            if (!sFaxName.isEmpty())
             {
                 SfxStringItem aPrinterName(SID_PRINTER_NAME, sFaxName);
                 SfxBoolItem aSilent( SID_SILENT, sal_True );
@@ -175,9 +175,9 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             else
             {
                 InfoBox aInfoBox(&GetEditWin(), SW_RES(MSG_ERR_NO_FAX));
-                String sMsg = aInfoBox.GetMessText();
+                OUString sMsg = aInfoBox.GetMessText();
                 sal_uInt16 nResNo = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
-                sMsg.SearchAndReplace(OUString("%1"), String(SW_RES(nResNo)));
+                sMsg = sMsg.replaceFirst("%1", OUString(SW_RES(nResNo)));
                 aInfoBox.SetMessText(sMsg);
                 aInfoBox.Execute();
                 SfxUInt16Item aDefPage(SID_SW_EDITOPTIONS, TP_OPTPRINT_PAGE);

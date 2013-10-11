@@ -247,7 +247,7 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
                     pDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) :
                     OUString());
 
-            String sURL = URIHelper::SmartRel2Abs( aTemp, rPath, URIHelper::GetMaybeFileHdl() );
+            OUString sURL = URIHelper::SmartRel2Abs( aTemp, rPath, URIHelper::GetMaybeFileHdl() );
 
             rShell.Insert( sURL, rFilter, aGraphic, &aFrameManager, bRule );
         }
@@ -310,7 +310,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     Sequence<OUString> aListBoxEntries(aFormats.size());
     OUString* pEntries = aListBoxEntries.getArray();
     sal_Int16 nSelect = 0;
-    String sGraphicFormat = SW_RESSTR(STR_POOLFRM_GRAPHIC);
+    OUString sGraphicFormat = SW_RESSTR(STR_POOLFRM_GRAPHIC);
     for( i = 0; i < aFormats.size(); i++ )
     {
         pEntries[i] = aFormats[i];
@@ -338,7 +338,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     if( pName || ERRCODE_NONE == pFileDlg->Execute() )
     {
 
-        String aFileName, aFilterName;
+        OUString aFileName, aFilterName;
         if ( pName )
         {
             aFileName = pName->GetValue();
@@ -559,7 +559,7 @@ void SwView::Execute(SfxRequest &rReq)
                     aPasswdDlg.SetMinLen( 1 );
                     //#i69751# the result of Execute() can be ignored
                     aPasswdDlg.Execute();
-                    String sNewPasswd( aPasswdDlg.GetPassword() );
+                    OUString sNewPasswd( aPasswdDlg.GetPassword() );
                     Sequence <sal_Int8> aNewPasswd = pIDRA->GetRedlinePassword();
                     SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                     if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
@@ -599,7 +599,7 @@ void SwView::Execute(SfxRequest &rReq)
             if (aPasswdDlg.Execute())
             {
                 sal_uInt16 nOn = nsRedlineMode_t::REDLINE_ON;
-                String sNewPasswd( aPasswdDlg.GetPassword() );
+                OUString sNewPasswd( aPasswdDlg.GetPassword() );
                 Sequence <sal_Int8> aNewPasswd =
                         pIDRA->GetRedlinePassword();
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
@@ -706,7 +706,7 @@ void SwView::Execute(SfxRequest &rReq)
         case SID_DOCUMENT_COMPARE:
         case SID_DOCUMENT_MERGE:
             {
-                String sFileName, sFilterName;
+                OUString sFileName, sFilterName;
                 sal_Int16 nVersion = 0;
                 bool bHasFileName = false;
                 m_pViewImpl->SetParam( 0 );
@@ -715,7 +715,7 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     if( SFX_ITEM_SET == pArgs->GetItemState( SID_FILE_NAME, sal_False, &pItem ))
                         sFileName = ((const SfxStringItem*)pItem)->GetValue();
-                    bHasFileName = ( sFileName.Len() > 0 );
+                    bHasFileName = !sFileName.isEmpty();
 
                     if( SFX_ITEM_SET == pArgs->GetItemState( SID_FILTER_NAME, sal_False, &pItem ))
                         sFilterName = ((const SfxStringItem*)pItem)->GetValue();
@@ -1208,7 +1208,7 @@ void SwView::Execute(SfxRequest &rReq)
 /// invalidate page numbering field
 void SwView::UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr)
 {
-    String sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
+    OUString sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
     const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
     SfxBindings &rBnd = GetViewFrame()->GetBindings();
     rBnd.SetState( aTmp );
@@ -1468,10 +1468,10 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                             if(SFX_ITEM_AVAILABLE <=
                                aSet.GetItemState(RES_PARATR_NUMRULE, sal_True))
                             {
-                                const String& rNumStyle =
+                                const OUString& rNumStyle =
                                     ((const SfxStringItem &)
                                      aSet.Get(RES_PARATR_NUMRULE)).GetValue();
-                                if(rNumStyle.Len())
+                                if(!rNumStyle.isEmpty())
                                 {
                                     if(!sStr.isEmpty())
                                         sStr += sStatusDelim;
@@ -1856,24 +1856,23 @@ bool SwView::JumpToSwMark( const OUString& rMark )
 
         const SwFmtINetFmt* pINet;
         OUString sCmp;
-        String  sMark( INetURLObject::decode( rMark, INET_HEX_ESCAPE,
+        OUString  sMark( INetURLObject::decode( rMark, INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_WITH_CHARSET,
                                         RTL_TEXTENCODING_UTF8 ));
 
-        xub_StrLen nLastPos, nPos = sMark.Search( cMarkSeparator );
-        if( STRING_NOTFOUND != nPos )
-            while( STRING_NOTFOUND != ( nLastPos =
-                sMark.Search( cMarkSeparator, nPos + 1 )) )
+        sal_Int32 nLastPos, nPos = sMark.indexOf( cMarkSeparator );
+        if( -1 != nPos )
+            while( -1 != ( nLastPos = sMark.indexOf( cMarkSeparator, nPos + 1 )) )
                 nPos = nLastPos;
 
         IDocumentMarkAccess::const_iterator_t ppMark;
         IDocumentMarkAccess* const pMarkAccess = m_pWrtShell->getIDocumentMarkAccess();
-        if( STRING_NOTFOUND != nPos )
-            sCmp = comphelper::string::remove(sMark.Copy(nPos + 1), ' ');
+        if( -1 != nPos )
+            sCmp = comphelper::string::remove(sMark.copy(nPos + 1), ' ');
 
         if( !sCmp.isEmpty() )
         {
-            rtl::OUString sName( sMark.Copy( 0, nPos ) );
+            rtl::OUString sName( sMark.copy( 0, nPos ) );
             sCmp = sCmp.toAsciiLowerCase();
             FlyCntType eFlyType = FLYCNTTYPE_ALL;
 
@@ -2001,17 +2000,17 @@ void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
 
     if ( !pItem )
     {
-        String sEmpty;
+        OUString sEmpty;
         InsertDoc( nSlot, sEmpty, sEmpty );
     }
     else
     {
-        String sFile, sFilter;
+        OUString sFile, sFilter;
         sFile = ( (const SfxStringItem *)pItem )->GetValue();
         if ( SFX_ITEM_SET == rRequest.GetArgs()->GetItemState( FN_PARAM_1, sal_True, &pItem ) )
             sFilter = ( (const SfxStringItem *)pItem )->GetValue();
 
-        bool bHasFileName = ( sFile.Len() > 0 );
+        bool bHasFileName = !sFile.isEmpty();
         long nFound = InsertDoc( nSlot, sFile, sFilter );
 
         if ( bHasFileName )
@@ -2165,7 +2164,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
         SfxObjectShellRef xDocSh;
         SfxObjectShellLock xLockRef;
 
-        String sFltNm;
+        OUString sFltNm;
         const int nRet = SwFindDocShell( xDocSh, xLockRef, pMedium->GetName(), OUString(),
                                     sFltNm, nVersion, pDocSh );
         if( nRet )
@@ -2308,10 +2307,10 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
         rSh.GetAllUsedDB( aDBNameList, &aAllDBNames );
         if(!aDBNameList.empty())
         {
-            String sDBName(aDBNameList[0]);
-            aData.sDataSource = sDBName.GetToken(0, DB_DELIM);
-            aData.sCommand = sDBName.GetToken(1, DB_DELIM);
-            aData.nCommandType = sDBName.GetToken(2, DB_DELIM ).ToInt32();
+            OUString sDBName(aDBNameList[0]);
+            aData.sDataSource = sDBName.getToken(0, DB_DELIM);
+            aData.sCommand = sDBName.getToken(1, DB_DELIM);
+            aData.nCommandType = sDBName.getToken(2, DB_DELIM ).toInt32();
         }
         rSh.EnterStdMode(); // force change in text shell; necessary for mixing DB fields
         AttrChangedNotify( &rSh );

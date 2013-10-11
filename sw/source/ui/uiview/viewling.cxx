@@ -342,7 +342,7 @@ void SwView::SpellError(LanguageType eLang)
         }
         while( m_pWrtShell->ActionPend() );
     }
-    String aErr(SvtLanguageTable::GetLanguageString( eLang ) );
+    OUString aErr(SvtLanguageTable::GetLanguageString( eLang ) );
 
     SwEditWin &rEditWin = GetEditWin();
 #if OSL_DEBUG_LEVEL > 1
@@ -418,8 +418,8 @@ void SwView::HyphenateDocument()
     // do not hyphenate if interactive hyphenation is active elsewhere
     if (GetWrtShell().HasHyphIter())
     {
-        MessBox( 0, WB_OK, String( SW_RES( STR_HYPH_TITLE ) ),
-                String( SW_RES( STR_MULT_INTERACT_HYPH_WARN ) ) ).Execute();
+        MessBox( 0, WB_OK, OUString( SW_RES( STR_HYPH_TITLE ) ),
+                OUString( SW_RES( STR_MULT_INTERACT_HYPH_WARN ) ) ).Execute();
         return;
     }
 
@@ -566,7 +566,7 @@ void SwView::StartThesaurus()
 
     // get initial LookUp text
     const sal_Bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection();
-    String aTmp = GetThesaurusLookUpText( bSelection );
+    OUString aTmp = GetThesaurusLookUpText( bSelection );
 
     Reference< XThesaurus >  xThes( ::GetThesaurus() );
     AbstractThesaurusDialog *pDlg = NULL;
@@ -671,7 +671,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 (bUseGrammarContext && bCorrectionRes && aGrammarCheckRes.aErrors.getLength() > 0))
             {
                 // get paragraph text
-                String aParaText;
+                OUString aParaText;
                 SwPosition aPoint( *m_pWrtShell->GetCrsr()->GetPoint() );
                 const SwTxtNode *pNode = dynamic_cast< const SwTxtNode * >(
                                             &aPoint.nNode.GetNode() );
