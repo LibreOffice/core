@@ -44,9 +44,9 @@ certain functionality.
 @li @c canvas
 @li @c canvas.cairo
 @li @c canvas.directx
-@li @c canvas.vcl
 @li @c canvas.null
 @li @c canvas.ogl
+@li @c canvas.vcl
 
 @section chart2
 
@@ -55,15 +55,15 @@ certain functionality.
 
 @section connectivity
 
-@li @c connectivity.evoab2
-@li @c connectivity.cpool
 @li @c connectivity.commontools
+@li @c connectivity.cpool
 @li @c connectivity.drivers
+@li @c connectivity.evoab2
 @li @c connectivity.firebird
+@li @c connectivity.flat
 @li @c connectivity.hsqldb
 @li @c connectivity.jdbc
 @li @c connectivity.mork
-@li @c connectivity.flat
 @li @c connectivity.parse
 @li @c connectivity.postgresql
 
@@ -84,8 +84,8 @@ certain functionality.
 
 @li @c sc
 @li @c sc.core
-@li @c sc.ui - Calc UI
 @li @c sc.filter - Calc filter
+@li @c sc.ui - Calc UI
 
 @section desktop
 
@@ -101,11 +101,11 @@ certain functionality.
 @li @c sd
 @li @c sd.filter
 @li @c sd.fwk
+@li @c sd.slideshow
 @li @c sd.sls - slidesorter
 @li @c sd.tools
 @li @c sd.ui
 @li @c sd.view
-@li @c sd.slideshow
 @li @c sdremote
 @li @c sdremote.bluetooth
 @li @c sdremote.wifi
@@ -197,8 +197,8 @@ certain functionality.
 @section Math
 
 @li @c starmath
-@li @c starmath.rtf
 @li @c starmath.ooxml - OOXML import/export
+@li @c starmath.rtf
 @li @c starmath.wordbase
 
 @section package
@@ -216,8 +216,8 @@ certain functionality.
 @section sfx2
 
 @li @c sfx2
-@li @c sfx2.doc
 @li @c sfx2.appl
+@li @c sfx2.doc
 
 @section sfx
 
@@ -235,8 +235,8 @@ certain functionality.
 @section slideshow
 
 @li @c slideshow
-@li @c slideshow.opengl
 @li @c slideshow.eventqueue
+@li @c slideshow.opengl
 
 @section svl
 
@@ -260,12 +260,12 @@ certain functionality.
 @li @c svx.dialog
 @li @c svx.fmcomp
 @li @c svx.form
+@li @c svx.sdr
 @li @c svx.stbcrtls - StatusBarControl
+@li @c svx.svdraw
 @li @c svx.table
 @li @c svx.tbxcrtls - ToolboxControl
-@li @c svx.sdr
 @li @c svx.uno
-@li @c svx.svdraw
 
 @section toolkit
 
@@ -274,8 +274,8 @@ certain functionality.
 @section tools
 
 @li @c tools
-@li @c tools.debug
 @li @c tools.datetime
+@li @c tools.debug
 @li @c tools.generic
 @li @c tools.memtools
 @li @c tools.rc - resource manager
@@ -340,10 +340,10 @@ certain functionality.
 @li @c vcl.plugadapt - the Unix/X11 backend plugin mechanism
 @li @c vcl.scrollbar - Scroll Bars
 @li @c vcl.sm - Session Manager
-@li @c vcl.window
 @li @c vcl.unity
 @li @c vcl.unx.print
 @li @c vcl.virdev
+@li @c vcl.window
 
 @section Writer
 
@@ -372,10 +372,10 @@ certain functionality.
 @section xmloff
 
 @li @c xmloff
+@li @c xmloff.chart
 @li @c xmloff.core
 @li @c xmloff.draw
 @li @c xmloff.forms
-@li @c xmloff.chart
 @li @c xmloff.style
 @li @c xmloff.text
 @li @c xmloff.transform
@@ -388,9 +388,9 @@ certain functionality.
 
 @section xmlscript
 
-@li @c xmlscript.xmlhelper
 @li @c xmlscript.xmldlg
 @li @c xmlscript.xmlflat
+@li @c xmlscript.xmlhelper
 @li @c xmlscript.xmllib
 @li @c xmlscript.xmlmod
 
@@ -415,11 +415,12 @@ certain functionality.
 @li @c configmgr
 @li @c cppcanvas
 @li @c cppcanvas.emf
-@li @c cppuhelper
 @li @c cppu
+@li @c cppuhelper
 @li @c helpcompiler
 @li @c linguistic
 @li @c oox
+@li @c reportdesign
 @li @c rsc
 @li @c sax
 @li @c shell
@@ -431,7 +432,6 @@ certain functionality.
 @li @c vbahelper
 @li @c xmlhelp
 @li @c xmlreader
-@li @c reportdesign
 
 */
 /* vim:set ft=cpp shiftwidth=4 softtabstop=4 expandtab: */
