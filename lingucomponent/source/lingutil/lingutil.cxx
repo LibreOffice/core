@@ -147,12 +147,28 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
                     nStartIndex - aSystemPrefix.getLength());
                 if (sChunk.isEmpty())
                     continue;
+
                 // We prefer (now) to use language tags.
                 // Avoid feeding in the older LANG_REGION scheme to the BCP47
                 // ctor as that triggers use of liblangtag and initializes its
                 // database which we do not want during startup. Convert
                 // instead.
                 sChunk = sChunk.replace( '_', '-');
+
+                // There's a known exception to the rule, the dreaded
+                // hu_HU_u8.dic of the myspell-hu package, see
+                // http://packages.debian.org/search?arch=any&searchon=contents&keywords=hu_HU_u8.dic
+                // This was ignored because unknown in the old implementation,
+                // truncate to the known locale and either insert because hu_HU
+                // wasn't encountered yet, or skip because it was. It doesn't
+                // really matter because the proper new-style hu_HU dictionary
+                // will take precedence anyway if installed with a Hungarian
+                // languagepack. Again, this is only to not pull in all
+                // liblangtag and stuff during startup, the result would be
+                // !isValidBcp47() and the dictionary ignored.
+                if (sChunk == "hu-HU-u8")
+                    sChunk = "hu-HU";
+
                 LanguageTag aLangTag(sChunk, true);
                 if (!aLangTag.isValidBcp47())
                     continue;
