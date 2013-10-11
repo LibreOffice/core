@@ -102,6 +102,9 @@ struct CentralDirectoryEnd
 #define LOC_FILE_HEADER_SIG 0x04034b50
 #define CDIR_END_SIG 0x06054b50
 
+// This little lot performs in a truly appalling way without
+// buffering eg. on an IStream.
+
 static unsigned char readByte(StreamInterface *stream)
 {
     if (!stream || stream->stell() == -1)
@@ -250,31 +253,57 @@ static bool areHeadersConsistent(const LocalFileHeader &header, const CentralDir
     return true;
 }
 
+#define BLOCK_SIZE 0x800
+
+static bool findSignatureAtOffset(StreamInterface *stream, unsigned long nOffset)
+{
+    // read in reasonably sized chunk, and read more, to get overlapping sigs
+    unsigned char aBuffer[ BLOCK_SIZE + 4 ];
+
+    stream->sseek(nOffset, SEEK_SET);
+
+    unsigned long nBytesRead = stream->sread(aBuffer, sizeof(aBuffer));
+    if (nBytesRead < 0)
+        return false;
+
+    for (long n = nBytesRead - 4; n >= 0; n--)
+    {
+        if (aBuffer[n  ] == 0x50 && aBuffer[n+1] == 0x4b &&
+            aBuffer[n+2] == 0x05 && aBuffer[n+3] == 0x06)
+        { // a palpable hit ...
+            stream->sseek(nOffset + n, SEEK_SET);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 static bool findCentralDirectoryEnd(StreamInterface *stream)
 {
     if (!stream)
         return false;
-    stream->sseek(0, SEEK_SET);
-    if (stream->sseek(-1024, SEEK_END)) stream->sseek(0, SEEK_SET);
+
+    stream->sseek(0,SEEK_END);
+
+    long nLength = stream->stell();
+    if (nLength == -1)
+        return false;
+
     try
     {
-        while (stream->stell() != -1)
+        for (long nOffset = nLength - BLOCK_SIZE;
+             nOffset > 0; nOffset -= BLOCK_SIZE)
         {
-            unsigned signature = readInt(stream);
-            if (signature == CDIR_END_SIG)
-            {
-                stream->sseek(-4, SEEK_CUR);
+            if (findSignatureAtOffset(stream, nOffset))
                 return true;
-            }
-            else
-                stream->sseek(-3, SEEK_CUR);
         }
+        return findSignatureAtOffset(stream, 0);
     }
     catch (...)
     {
         return false;
     }
-    return false;
 }
 
 static bool isZipStream(StreamInterface *stream)
