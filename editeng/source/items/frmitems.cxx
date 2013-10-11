@@ -561,14 +561,17 @@ int SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
+    const SvxLRSpaceItem& rOther = (const SvxLRSpaceItem&)rAttr;
+
     return (
-        nLeftMargin == ((SvxLRSpaceItem&)rAttr).GetLeft()  &&
-        nRightMargin == ((SvxLRSpaceItem&)rAttr).GetRight() &&
-        nFirstLineOfst == ((SvxLRSpaceItem&)rAttr).GetTxtFirstLineOfst() &&
-        nPropLeftMargin == ((SvxLRSpaceItem&)rAttr).GetPropLeft()  &&
-        nPropRightMargin == ((SvxLRSpaceItem&)rAttr).GetPropRight() &&
-        nPropFirstLineOfst == ((SvxLRSpaceItem&)rAttr).GetPropTxtFirstLineOfst() &&
-        bAutoFirst == ((SvxLRSpaceItem&)rAttr).IsAutoFirst() );
+        nFirstLineOfst == rOther.GetTxtFirstLineOfst() &&
+        nTxtLeft == rOther.GetTxtLeft() &&
+        nLeftMargin == rOther.GetLeft()  &&
+        nRightMargin == rOther.GetRight() &&
+        nPropFirstLineOfst == rOther.GetPropTxtFirstLineOfst() &&
+        nPropLeftMargin == rOther.GetPropLeft()  &&
+        nPropRightMargin == rOther.GetPropRight() &&
+        bAutoFirst == rOther.IsAutoFirst() );
 }
 
 // -----------------------------------------------------------------------
