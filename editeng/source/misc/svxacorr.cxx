@@ -281,7 +281,7 @@ SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
     : sShareAutoCorrFile( rShareAutocorrFile ),
     sUserAutoCorrFile( rUserAutocorrFile ),
     pLangTable( new boost::ptr_map<LanguageTag, SvxAutoCorrectLanguageLists> ),
-    pCharClass( 0 ), bRunNext( false ),
+    pCharClass( 0 ), bRunNext( false ), eCharClassLang( LANGUAGE_DONTKNOW ),
     cStartDQuote( 0 ), cEndDQuote( 0 ), cStartSQuote( 0 ), cEndSQuote( 0 )
 {
     nFlags = SvxAutoCorrect::GetDefaultFlags();
