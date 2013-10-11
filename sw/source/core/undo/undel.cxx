@@ -789,6 +789,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 OUString const ins( pTxtNd->InsertText(*pEndStr, aPos.nContent,
                         IDocumentContentOperations::INS_NOHINTEXPAND) );
                 assert(ins.getLength() == pEndStr->Len()); // must succeed
+                (void) ins;
                 // METADATA: restore
                 pTxtNd->RestoreMetadata(m_pMetadataUndoEnd);
             }
@@ -883,6 +884,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 OUString const ins( pTxtNd->InsertText(*pSttStr, aPos.nContent,
                         IDocumentContentOperations::INS_NOHINTEXPAND) );
                 assert(ins.getLength() == pSttStr->Len()); // must succeed
+                (void) ins;
                 // METADATA: restore
                 pTxtNd->RestoreMetadata(m_pMetadataUndoStart);
             }

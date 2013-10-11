@@ -157,6 +157,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     OUString const ins( pDelTxtNd->InsertText(OUString(cIns), rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND) );
     assert(ins.getLength() == 1); // check in SwDoc::Overwrite => cannot fail
+    (void) ins;
     aInsStr.Insert( cIns );
 
     if( !bInsChar )
@@ -210,6 +211,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
             OUString aTmpStr(aDelStr.GetChar(n));
             OUString const ins( pTxtNd->InsertText(aTmpStr, rIdx) );
             assert(ins.getLength() == 1); // cannot fail
+        (void) ins;
             rIdx -= 2;
             pTxtNd->EraseText( rIdx, 1 );
             rIdx += 2;
@@ -282,6 +284,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
                 pTxtNd->InsertText( OUString(aInsStr.GetChar(n)), rIdx,
                 IDocumentContentOperations::INS_EMPTYEXPAND) );
         assert(ins.getLength() == 1); // cannot fail
+        (void) ins;
         if( n < aDelStr.Len() )
         {
             rIdx -= 2;

@@ -730,6 +730,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         OUString const ins( pNd->InsertText( m_sOld, aIdx ) );
         assert(ins.getLength() == m_sOld.getLength()); // must succeed
+        (void) ins;
     }
 
     if( pHistory )
