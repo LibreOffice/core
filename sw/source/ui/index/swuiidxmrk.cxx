@@ -182,7 +182,7 @@ void SwIndexMarkPane::InitControls()
     // contents index
     const SwTOXType* pType = pTOXMgr->GetTOXType(TOX_CONTENT, 0);
     OSL_ENSURE(pType, "Kein Verzeichnistyp !!");
-    String sTmpTypeSelection;
+    OUString sTmpTypeSelection;
     if(m_pTypeDCB->GetSelectEntryCount())
         sTmpTypeSelection = m_pTypeDCB->GetSelectEntry();
     m_pTypeDCB->Clear();
@@ -285,7 +285,7 @@ void SwIndexMarkPane::InitControls()
         }
 
         // index type is default
-        if( sTmpTypeSelection.Len() &&
+        if( !sTmpTypeSelection.isEmpty() &&
             LISTBOX_ENTRY_NOTFOUND != m_pTypeDCB->GetEntryPos( sTmpTypeSelection ) )
             m_pTypeDCB->SelectEntry(sTmpTypeSelection);
         else
@@ -470,8 +470,8 @@ void SwIndexMarkPane::InsertMark()
         case POS_INDEX:     // keyword index mark
         {
             UpdateKeyBoxes();
-            String  aPrim(m_pKey1DCB->GetText());
-            String  aSec(m_pKey2DCB->GetText());
+            OUString  aPrim(m_pKey1DCB->GetText());
+            OUString  aSec(m_pKey2DCB->GetText());
             aDesc.SetPrimKey(aPrim);
             aDesc.SetSecKey(aSec);
             aDesc.SetMainEntry(m_pMainEntryCB->IsChecked());
@@ -482,7 +482,7 @@ void SwIndexMarkPane::InsertMark()
         break;
         default:            // Userdefined index mark
         {
-            String aName(m_pTypeDCB->GetSelectEntry());
+            OUString aName(m_pTypeDCB->GetSelectEntry());
             aDesc.SetTOUName(aName);
         }
     }
@@ -513,10 +513,10 @@ void SwIndexMarkPane::InsertMark()
  --------------------------------------------------------------------*/
 void SwIndexMarkPane::UpdateMark()
 {
-    String  aAltText(m_pEntryED->GetText());
-    String* pAltText = OUString(aOrgStr) != m_pEntryED->GetText() ? &aAltText : 0;
+    OUString  aAltText(m_pEntryED->GetText());
+    OUString* pAltText = aOrgStr != m_pEntryED->GetText() ? &aAltText : 0;
     //empty alternative texts are not allowed
-    if(pAltText && !pAltText->Len())
+    if(pAltText && pAltText->isEmpty())
         return;
 
     UpdateKeyBoxes();
@@ -533,11 +533,11 @@ void SwIndexMarkPane::UpdateMark()
     if(pAltText)
         aDesc.SetAltStr(*pAltText);
 
-    String  aPrim(m_pKey1DCB->GetText());
-    if(aPrim.Len())
+    OUString  aPrim(m_pKey1DCB->GetText());
+    if(!aPrim.isEmpty())
         aDesc.SetPrimKey(aPrim);
-    String  aSec(m_pKey2DCB->GetText());
-    if(aSec.Len())
+    OUString  aSec(m_pKey2DCB->GetText());
+    if(!aSec.isEmpty())
         aDesc.SetSecKey(aSec);
 
     if(eType == TOX_INDEX)
@@ -555,10 +555,10 @@ void SwIndexMarkPane::UpdateMark()
  --------------------------------------------------------------------*/
 void SwIndexMarkPane::UpdateKeyBoxes()
 {
-    String aKey(m_pKey1DCB->GetText());
+    OUString aKey(m_pKey1DCB->GetText());
     sal_uInt16 nPos = m_pKey1DCB->GetEntryPos(aKey);
 
-    if(nPos == LISTBOX_ENTRY_NOTFOUND && aKey.Len() > 0)
+    if(nPos == LISTBOX_ENTRY_NOTFOUND && !aKey.isEmpty())
     {   // create new key
         m_pKey1DCB->InsertEntry(aKey);
     }
@@ -566,7 +566,7 @@ void SwIndexMarkPane::UpdateKeyBoxes()
     aKey = m_pKey2DCB->GetText();
     nPos = m_pKey2DCB->GetEntryPos(aKey);
 
-    if(nPos == LISTBOX_ENTRY_NOTFOUND && aKey.Len() > 0)
+    if(nPos == LISTBOX_ENTRY_NOTFOUND && !aKey.isEmpty())
     {   // create new key
         m_pKey2DCB->InsertEntry(aKey);
     }
@@ -595,7 +595,7 @@ class SwNewUserIdxDlg : public ModalDialog
             }
 
     virtual void    Apply();
-    String  GetName(){return m_pNameED->GetText();}
+    OUString  GetName(){return m_pNameED->GetText();}
 };
 void SwNewUserIdxDlg::Apply()
 {
@@ -612,7 +612,7 @@ IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl)
     SwNewUserIdxDlg* pDlg = new SwNewUserIdxDlg(this);
     if(RET_OK == pDlg->Execute())
     {
-        String sNewName(pDlg->GetName());
+        OUString sNewName(pDlg->GetName());
         m_pTypeDCB->InsertEntry(sNewName);
         m_pTypeDCB->SelectEntry(sNewName);
     }
@@ -1052,7 +1052,7 @@ public:
                             bool bCreate);
     ~SwCreateAuthEntryDlg_Impl();
 
-    String          GetEntryText(ToxAuthorityField eField) const;
+    OUString        GetEntryText(ToxAuthorityField eField) const;
 
     void            SetCheckNameHdl(const Link& rLink) {aShortNameCheckLink = rLink;}
 
@@ -1165,9 +1165,9 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl)
     return 0;
 }
 
-static String lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32 nLen, const String& rColumnTitle)
+static OUString lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32 nLen, const OUString& rColumnTitle)
 {
-    String sRet;
+    OUString sRet;
     OUString uColumnTitle = rColumnTitle;
     for(sal_uInt16 i = 0; i < nLen; i++)
     {
@@ -1175,7 +1175,7 @@ static String lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32
         if(pFields[i].Name == uColumnTitle &&
             (pFields[i].Value >>= uTmp))
         {
-            sRet = String(uTmp);
+            sRet = uTmp;
             break;
         }
     }
@@ -1184,10 +1184,10 @@ static String lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32
 
 IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
 {
-    String sEntry(pBox->GetSelectEntry());
+    OUString sEntry(pBox->GetSelectEntry());
     if(bIsFromComponent)
     {
-        if(xBibAccess.is() && sEntry.Len())
+        if(xBibAccess.is() && !sEntry.isEmpty())
         {
             OUString uEntry(sEntry);
             if(xBibAccess->hasByName(uEntry))
@@ -1208,7 +1208,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
     }
     else
     {
-        if(sEntry.Len())
+        if(!sEntry.isEmpty())
         {
             const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
                                         pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
@@ -1255,11 +1255,11 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
         }
 
         SwFldMgr aMgr(pSh);
-        String sFields;
+        OUString sFields;
         for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
         {
             sFields += m_sFields[i];
-            sFields += TOX_STYLE_DELIMITER;
+            sFields += OUString(TOX_STYLE_DELIMITER);
         }
         if(bNewEntry)
         {
@@ -1286,7 +1286,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
 IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
 {
     bool bCreate = pButton == m_pCreateEntryPB;
-    String sOldId = m_sCreatedEntry[0];
+    OUString sOldId = m_sCreatedEntry[0];
     for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
         m_sCreatedEntry[i] = bCreate ? OUString() : m_sFields[i];
     SwCreateAuthEntryDlg_Impl aDlg(pButton,
@@ -1298,7 +1298,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
     }
     if(RET_OK == aDlg.Execute())
     {
-        if(bCreate && sOldId.Len())
+        if(bCreate && !sOldId.isEmpty())
         {
             m_pEntryLB->RemoveEntry(sOldId);
         }
@@ -1351,7 +1351,7 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
                     const beans::PropertyValue* pArr = aSeq.getConstArray();
                     for(sal_uInt16 i = 0; i < aSeq.getLength(); i++)
                     {
-                        String sTitle = pArr[i].Name;
+                        OUString sTitle = pArr[i].Name;
                         sal_Int16 nField = 0;
                         pArr[i].Value >>= nField;
                         if(nField >= 0 && nField < AUTH_FIELD_END)
@@ -1397,7 +1397,7 @@ IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit*, pEdit)
     m_pActionBT->Enable(nResult > 0);
     if(nResult)
     {
-        String sEntry(pEdit->GetText());
+        OUString sEntry(pEdit->GetText());
         m_sFields[AUTH_FIELD_IDENTIFIER] = sEntry;
         m_sCreatedEntry[AUTH_FIELD_IDENTIFIER] = sEntry;
     }
@@ -1406,9 +1406,9 @@ IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit*, pEdit)
 
 IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit)
 {
-    String sEntry = pEdit->GetText();
+    OUString sEntry = pEdit->GetText();
     sal_Bool bAllowed = sal_False;
-    if(sEntry.Len())
+    if(!sEntry.isEmpty())
     {
         if(m_pEntryLB->GetEntryPos(sEntry) != LISTBOX_ENTRY_NOTFOUND)
             return 0;
@@ -1579,9 +1579,9 @@ SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
     delete pIdentifierBox;
 }
 
-String  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
+OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
 {
-    String sRet;
+    OUString sRet;
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
     {
         OSL_ENSURE(pTypeListBox, "No ListBox");

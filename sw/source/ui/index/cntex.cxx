@@ -70,7 +70,7 @@ using namespace com::sun::star::ui::dialogs;
 
 static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
-                         const char* pPropName, const String& rValue)
+                         const char* pPropName, const OUString& rValue)
 {
     OUString uPropName(OUString::createFromAscii(pPropName));
     if(xInfo->hasPropertyByName(uPropName))
@@ -83,7 +83,7 @@ static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
 
 static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
-                           sal_uInt16 nId, const String& rValue)
+                           sal_uInt16 nId, const OUString& rValue)
 {
     lcl_SetProp( xInfo, xProps, SW_PROP_NAME_STR(nId), rValue);
 }
@@ -137,7 +137,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl)
         OUString sSectionName("IndexSection_");
         for(int i = 0; i < 7; ++i )
         {
-            String sTmp( sSectionName ); sTmp += OUString::number(i);
+            OUString sTmp( sSectionName ); sTmp += OUString::number(i);
             uno::Any aSection = xSections->getByName( sTmp );
             aSection >>= pxIndexSectionsArr[i]->xContainerSection;
          }
@@ -239,14 +239,14 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
                 for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
                 {
-                    String sLevel;
+                    OUString sLevel;
                     if(bOn)
                         sLevel = rDesc.GetStyleNames(i);
                     sal_uInt16 nStyles = comphelper::string::getTokenCount(sLevel, TOX_STYLE_DELIMITER);
                     uno::Sequence<OUString> aStyles(nStyles);
                     OUString* pArr = aStyles.getArray();
                     for(sal_uInt16 nStyle = 0; nStyle < nStyles; nStyle++)
-                        pArr[nStyle] = sLevel.GetToken(nStyle, TOX_STYLE_DELIMITER);
+                        pArr[nStyle] = sLevel.getToken(nStyle, TOX_STYLE_DELIMITER);
                     uno::Any aAny(&aStyles, ::getCppuType((uno::Sequence<OUString>*)0));
                     xAcc->replaceByIndex(i, aAny);
                 }
@@ -271,7 +271,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_DASH,                    0 != (nIdxOptions&nsSwTOIOptions::TOI_DASH             ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_UPPER_CASE,              0 != (nIdxOptions&nsSwTOIOptions::TOI_INITIAL_CAPS     ));
 
-            String aTmpName( SwStyleNameMapper::GetSpecialExtraProgName( rDesc.GetSequenceName() ) );
+            OUString aTmpName( SwStyleNameMapper::GetSpecialExtraProgName( rDesc.GetSequenceName() ) );
             lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_CATEGORY, aTmpName );
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_LABELS,  !rDesc.IsCreateFromObjectNames());
 
@@ -427,7 +427,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             }
             for(sal_uInt16 i = 1; i < nEndLevel; i++)
             {
-                String sPropName(OUString("ParaStyleLevel"));
+                OUString sPropName("ParaStyleLevel");
                 sPropName += OUString::number( i );
                 lcl_SetProp(xInfo,
                     xIdxProps,
