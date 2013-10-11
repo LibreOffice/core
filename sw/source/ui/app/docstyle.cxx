@@ -1982,7 +1982,7 @@ sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
 
     if( UCHAR_MAX != nFileId )
     {
-        const String *pTemplate = rDoc.GetDocPattern( nFileId );
+        const OUString *pTemplate = rDoc.GetDocPattern( nFileId );
         if( pTemplate )
         {
             rFile = *pTemplate;

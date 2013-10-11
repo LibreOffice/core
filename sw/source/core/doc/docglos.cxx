@@ -93,7 +93,7 @@ static void lcl_copyDocumentProperties(
 }
 
 /// inserts an AutoText block
-bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
+bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                             SwPaM& rPaM, SwCrsrShell* pShell )
 {
     bool bRet = false;

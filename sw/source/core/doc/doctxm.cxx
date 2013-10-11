@@ -665,7 +665,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     return aName + OUString::number( ++nNum );
 }
 
-bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
+bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName)
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ),
                     "no TOXBaseSection!" );

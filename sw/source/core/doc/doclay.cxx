@@ -1443,10 +1443,10 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
 SwFlyFrmFmt *
 SwDoc::InsertLabel(
-        SwLabelType const eType, String const& rTxt, String const& rSeparator,
-        String const& rNumberingSeparator,
+        SwLabelType const eType, OUString const& rTxt, OUString const& rSeparator,
+        OUString const& rNumberingSeparator,
         sal_Bool const bBefore, sal_uInt16 const nId, sal_uLong const nNdIdx,
-        String const& rCharacterStyle,
+        OUString const& rCharacterStyle,
         sal_Bool const bCpyBrd )
 {
     SwUndoInsertLabel * pUndo(0);
@@ -1714,11 +1714,11 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 }
 
 SwFlyFrmFmt* SwDoc::InsertDrawLabel(
-        String const& rTxt,
-        String const& rSeparator,
-        String const& rNumberSeparator,
+        OUString const& rTxt,
+        OUString const& rSeparator,
+        OUString const& rNumberSeparator,
         sal_uInt16 const nId,
-        String const& rCharacterStyle,
+        OUString const& rCharacterStyle,
         SdrObject& rSdrObj )
 {
     SwDrawContact *const pContact =
@@ -1941,17 +1941,17 @@ static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
     return aName += OUString::number( ++nNum );
 }
 
-String SwDoc::GetUniqueGrfName() const
+OUString SwDoc::GetUniqueGrfName() const
 {
     return lcl_GetUniqueFlyName( this, STR_GRAPHIC_DEFNAME );
 }
 
-String SwDoc::GetUniqueOLEName() const
+OUString SwDoc::GetUniqueOLEName() const
 {
     return lcl_GetUniqueFlyName( this, STR_OBJECT_DEFNAME );
 }
 
-String SwDoc::GetUniqueFrameName() const
+OUString SwDoc::GetUniqueFrameName() const
 {
     return lcl_GetUniqueFlyName( this, STR_FRAME_DEFNAME );
 }

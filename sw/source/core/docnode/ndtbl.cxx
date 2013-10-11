@@ -3848,7 +3848,7 @@ sal_Bool SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet 
     return sal_True;
 }
 
-String SwDoc::GetUniqueTblName() const
+OUString SwDoc::GetUniqueTblName() const
 {
     ResId aId( STR_TABLE_DEFNAME, *pSwResMgr );
     const OUString aName( aId );
@@ -3889,7 +3889,7 @@ String SwDoc::GetUniqueTblName() const
     return aName + OUString::number( ++nNum );
 }
 
-SwTableFmt* SwDoc::FindTblFmtByName( const String& rName, sal_Bool bAll ) const
+SwTableFmt* SwDoc::FindTblFmtByName( const OUString& rName, sal_Bool bAll ) const
 {
     const SwFmt* pRet = 0;
     if( bAll )
@@ -4401,7 +4401,7 @@ sal_Bool SwDoc::_UnProtectTblCells( SwTable& rTbl )
     return bChgd;
 }
 
-sal_Bool SwDoc::UnProtectCells( const String& rName )
+sal_Bool SwDoc::UnProtectCells( const OUString& rName )
 {
     sal_Bool bChgd = sal_False;
     SwTableFmt* pFmt = FindTblFmtByName( rName );

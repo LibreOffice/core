@@ -2288,9 +2288,9 @@ bool SwDoc::IsUsed( const SwNumRule& rRule ) const
 
 // Look for the style name's position. If it doesn't exist,
 // insert a anew
-sal_uInt16 SwDoc::SetDocPattern( const String& rPatternName )
+sal_uInt16 SwDoc::SetDocPattern( const OUString& rPatternName )
 {
-    OSL_ENSURE( rPatternName.Len(), "no Document style name" );
+    OSL_ENSURE( !rPatternName.isEmpty(), "no Document style name" );
 
     size_t nNewPos = maPatternNms.size();
     for(size_t n = 0; n < maPatternNms.size(); ++n)
@@ -2305,7 +2305,7 @@ sal_uInt16 SwDoc::SetDocPattern( const String& rPatternName )
     if( nNewPos < maPatternNms.size() )
         maPatternNms.erase(maPatternNms.begin() + nNewPos);   // Free space again
 
-    maPatternNms.insert(maPatternNms.begin() + nNewPos, new String(rPatternName));
+    maPatternNms.insert(maPatternNms.begin() + nNewPos, new OUString(rPatternName));
     SetModified();
     return nNewPos;
 }

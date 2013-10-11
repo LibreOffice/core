@@ -284,7 +284,7 @@ class SW_DLLPUBLIC SwDoc :
     SwDBData    maDBData;                ///< database descriptor
     ::com::sun::star::uno::Sequence <sal_Int8 > maRedlinePasswd;
     OUString    msTOIAutoMarkURL;        ///< ::com::sun::star::util::URL of table of index AutoMark file
-    boost::ptr_vector< boost::nullable<String> > maPatternNms;          // Array for names of document-templates
+    boost::ptr_vector< boost::nullable<OUString> > maPatternNms;          // Array for names of document-templates
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         mxXForms;                        ///< container with XForms models
     mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > m_xGCIterator;
@@ -625,7 +625,7 @@ private:
                             const bool bCopyFlyAtFly = false ) const;
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, bool bNewFrms );
 
-    typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, bool, bool );
+    typedef SwFmt* (SwDoc:: *FNCopyFmt)( const OUString&, SwFmt*, bool, bool );
     SwFmt* CopyFmt( const SwFmt& rFmt, const SwFmtsBase& rFmtArr,
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt );
     void CopyFmtArr( const SwFmtsBase& rSourceArr, SwFmtsBase& rDestArr,
@@ -669,7 +669,7 @@ private:
 
     /** Create sub-documents according to the given collection.
      If no collection is given, take chapter style of the 1st level. */
-    bool SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline,
+    bool SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         const SwTxtFmtColl* pSplitColl, int nOutlineLevel = 0 );
 
     /// Update charts of given table.
@@ -684,9 +684,9 @@ private:
     void DoUpdateAllCharts();
     DECL_LINK( DoUpdateModifiedOLE, Timer * );
 
-     SwFmt *_MakeCharFmt(const String &, SwFmt *, bool, bool );
-     SwFmt *_MakeFrmFmt(const String &, SwFmt *, bool, bool );
-     SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, bool, bool );
+     SwFmt *_MakeCharFmt(const OUString &, SwFmt *, bool, bool );
+     SwFmt *_MakeFrmFmt(const OUString &, SwFmt *, bool, bool );
+     SwFmt *_MakeTxtFmtColl(const OUString &, SwFmt *, bool, bool );
 
      void InitTOXTypes();
      void   Paste( const SwDoc& );
@@ -694,7 +694,7 @@ private:
      bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);
      bool DeleteRangeImpl(SwPaM&, const bool unused = false);
      bool DeleteRangeImplImpl(SwPaM &);
-     bool ReplaceRangeImpl(SwPaM&, String const&, const bool);
+     bool ReplaceRangeImpl(SwPaM&, OUString const&, const bool);
 
 public:
 
@@ -1047,8 +1047,8 @@ public:
                         bool bAsCharAlso = false ) const;
 
     /// Because swrtf.cxx and define private public here now.
-    SwFlyFrmFmt  *MakeFlyFrmFmt (const String &rFmtName, SwFrmFmt *pDerivedFrom);
-    SwDrawFrmFmt *MakeDrawFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom);
+    SwFlyFrmFmt  *MakeFlyFrmFmt (const OUString &rFmtName, SwFrmFmt *pDerivedFrom);
+    SwDrawFrmFmt *MakeDrawFrmFmt(const OUString &rFmtName, SwFrmFmt *pDerivedFrom);
 
     // From now on this interface has to be used for Flys.
     // pAnchorPos must be set, if they are not attached to pages AND
@@ -1084,9 +1084,9 @@ public:
     bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,
                         SfxItemSet* pSet = 0, bool bKeepOrient = false );
     void SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
-                         const String& sNewTitle );
+                         const OUString& sNewTitle );
     void SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
-                               const String& sNewDescription );
+                               const OUString& sNewDescription );
 
     /** Footnotes
     */
@@ -1152,9 +1152,9 @@ public:
 
     /** Some helper functions
     */
-    String GetUniqueGrfName() const;
-    String GetUniqueOLEName() const;
-    String GetUniqueFrameName() const;
+    OUString GetUniqueGrfName() const;
+    OUString GetUniqueOLEName() const;
+    OUString GetUniqueFrameName() const;
 
     std::set<SwRootFrm*> GetAllLayouts();//swmod 080225
 
@@ -1222,29 +1222,29 @@ public:
     /// Remove all language dependencies from all existing formats
     void RemoveAllFmtLanguageDependencies();
 
-    SwFrmFmt  *MakeFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom,
+    SwFrmFmt  *MakeFrmFmt(const OUString &rFmtName, SwFrmFmt *pDerivedFrom,
                           bool bBroadcast = false, bool bAuto = true);
     void       DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast = false );
-    SwFrmFmt* FindFrmFmtByName( const String& rName ) const
+    SwFrmFmt* FindFrmFmtByName( const OUString& rName ) const
         {   return (SwFrmFmt*)FindFmtByName( (SwFmtsBase&)*mpFrmFmtTbl, rName ); }
 
-    SwCharFmt *MakeCharFmt(const String &rFmtName, SwCharFmt *pDerivedFrom,
+    SwCharFmt *MakeCharFmt(const OUString &rFmtName, SwCharFmt *pDerivedFrom,
                            bool bBroadcast = false,
                            bool bAuto = true );
     void       DelCharFmt(sal_uInt16 nFmt, bool bBroadcast = false);
     void       DelCharFmt(SwCharFmt* pFmt, bool bBroadcast = false);
-    SwCharFmt* FindCharFmtByName( const String& rName ) const
+    SwCharFmt* FindCharFmtByName( const OUString& rName ) const
         {   return (SwCharFmt*)FindFmtByName( (SwFmtsBase&)*mpCharFmtTbl, rName ); }
 
     /* Formatcollections (styles) */
     // TXT
     const SwTxtFmtColl* GetDfltTxtFmtColl() const { return mpDfltTxtFmtColl; }
     const SwTxtFmtColls *GetTxtFmtColls() const { return mpTxtFmtCollTbl; }
-    SwTxtFmtColl *MakeTxtFmtColl( const String &rFmtName,
+    SwTxtFmtColl *MakeTxtFmtColl( const OUString &rFmtName,
                                   SwTxtFmtColl *pDerivedFrom,
                                   bool bBroadcast = false,
                                   bool bAuto = true );
-    SwConditionTxtFmtColl* MakeCondTxtFmtColl( const String &rFmtName,
+    SwConditionTxtFmtColl* MakeCondTxtFmtColl( const OUString &rFmtName,
                                                SwTxtFmtColl *pDerivedFrom,
                                                bool bBroadcast = false);
     void DelTxtFmtColl(sal_uInt16 nFmt, bool bBroadcast = false);
@@ -1259,16 +1259,16 @@ public:
     bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
                             bool bReset = true,
                             bool bResetListAttrs = false );
-    SwTxtFmtColl* FindTxtFmtCollByName( const String& rName ) const
+    SwTxtFmtColl* FindTxtFmtCollByName( const OUString& rName ) const
         {   return (SwTxtFmtColl*)FindFmtByName( (SwFmtsBase&)*mpTxtFmtCollTbl, rName ); }
 
     void ChkCondColls();
 
     const SwGrfFmtColl* GetDfltGrfFmtColl() const   { return mpDfltGrfFmtColl; }
     const SwGrfFmtColls *GetGrfFmtColls() const     { return mpGrfFmtCollTbl; }
-    SwGrfFmtColl *MakeGrfFmtColl(const String &rFmtName,
+    SwGrfFmtColl *MakeGrfFmtColl(const OUString &rFmtName,
                                     SwGrfFmtColl *pDerivedFrom);
-    SwGrfFmtColl* FindGrfFmtCollByName( const String& rName ) const
+    SwGrfFmtColl* FindGrfFmtCollByName( const OUString& rName ) const
         {   return (SwGrfFmtColl*)FindFmtByName( (SwFmtsBase&)*mpGrfFmtCollTbl, rName ); }
 
     /// Table formating
@@ -1276,9 +1276,9 @@ public:
           SwFrmFmts* GetTblFrmFmts()        { return mpTblFrmFmtTbl; }
     sal_uInt16 GetTblFrmFmtCount( bool bUsed ) const;
     SwFrmFmt& GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const;
-    SwTableFmt* MakeTblFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom);
+    SwTableFmt* MakeTblFrmFmt(const OUString &rFmtName, SwFrmFmt *pDerivedFrom);
     void        DelTblFrmFmt( SwTableFmt* pFmt );
-    SwTableFmt* FindTblFmtByName( const String& rName, sal_Bool bAll = sal_False ) const;
+    SwTableFmt* FindTblFmtByName( const OUString& rName, sal_Bool bAll = sal_False ) const;
 
     /** Access to frames.
     Iterate over Flys - forr Basic-Collections. */
@@ -1305,10 +1305,10 @@ public:
     bool IsUsed( const SwNumRule& ) const;
 
     /// Set name of newly loaded document template.
-    sal_uInt16 SetDocPattern( const String& rPatternName );
+    sal_uInt16 SetDocPattern( const OUString& rPatternName );
 
     /// @return name of document template. Can be 0!
-    const String* GetDocPattern( sal_uInt16 nPos ) const
+    const OUString* GetDocPattern( sal_uInt16 nPos ) const
     {
         if(nPos >= maPatternNms.size())
             return NULL;
@@ -1324,7 +1324,7 @@ public:
     void SetGlossaryDoc( SwDoc* pDoc ) { mpGlossaryDoc = pDoc; }
 
     /// travel over PaM Ring
-    bool InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
+    bool InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                         SwPaM& rPaM, SwCrsrShell* pShell = 0);
 
     /** get the set of printable pages for the XRenderable API by
@@ -1340,7 +1340,7 @@ public:
     sal_uInt16 GetPageDescCnt() const { return maPageDescs.size(); }
     const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return *maPageDescs[i]; }
     SwPageDesc& GetPageDesc( sal_uInt16 i ) { return *maPageDescs[i]; }
-    SwPageDesc* FindPageDescByName( const String& rName,
+    SwPageDesc* FindPageDescByName( const OUString& rName,
                                     sal_uInt16* pPos = 0 ) const;
 
     /** Copy the complete PageDesc - beyond document and "deep"!
@@ -1360,17 +1360,17 @@ public:
 
     //For Reader.
 
-    SwPageDesc * GetPageDesc( const String & rName );
-    void ChgPageDesc( const String & rName, const SwPageDesc& );
+    SwPageDesc * GetPageDesc( const OUString & rName );
+    void ChgPageDesc( const OUString & rName, const SwPageDesc& );
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
-    bool FindPageDesc( const String & rName, sal_uInt16 * pFound );
-    void DelPageDesc( const String & rName, bool bBroadcast = false);
+    bool FindPageDesc( const OUString & rName, sal_uInt16 * pFound );
+    void DelPageDesc( const OUString & rName, bool bBroadcast = false);
     void DelPageDesc( sal_uInt16 i, bool bBroadcast = false );
     void PreDelPageDesc(SwPageDesc * pDel);
-    sal_uInt16 MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
+    sal_uInt16 MakePageDesc( const OUString &rName, const SwPageDesc* pCpy = 0,
                              bool bRegardLanguage = true,
                              bool bBroadcast = false);
-    void BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
+    void BroadcastStyleOperation(OUString rName, SfxStyleFamily eFamily,
                                  sal_uInt16 nOp);
 
     /** The html import sometimes overwrites the
@@ -1400,7 +1400,7 @@ public:
     OUString GetUniqueTOXBaseName( const SwTOXType& rType,
                                    const OUString sChkStr ) const;
 
-    bool SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName);
+    bool SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName);
     void SetTOXBaseProtection(const SwTOXBase& rTOXBase, sal_Bool bProtect);
 
     /// After reading file update all tables/indices.
@@ -1475,7 +1475,7 @@ public:
     /// Ountline - move up / move down.
     bool MoveOutlinePara( const SwPaM& rPam, short nOffset = 1);
 
-    bool GotoOutline( SwPosition& rPos, const String& rName ) const;
+    bool GotoOutline( SwPosition& rPos, const OUString& rName ) const;
 
     /** Accept changes of outline styles for OUtlineRule.
      re-use unused 3rd parameter
@@ -1489,7 +1489,7 @@ public:
     void SetNumRule( const SwPaM&,
                      const SwNumRule&,
                      const bool bCreateNewList,
-                     const String sContinuedListId = String(),
+                     const OUString sContinuedListId = OUString(),
                      bool bSetItem = true,
                      const bool bResetIndentAttrs = false );
     void SetCounted( const SwPaM&, bool bCounted);
@@ -1516,19 +1516,19 @@ public:
         bool bBroadcast = false,
         const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-    sal_uInt16 FindNumRule( const String& rName ) const;
-    SwNumRule* FindNumRulePtr( const String& rName ) const;
+    sal_uInt16 FindNumRule( const OUString& rName ) const;
+    SwNumRule* FindNumRulePtr( const OUString& rName ) const;
 
     /// Deletion only possible if ::com::sun::star::chaos::Rule is not used!
-    bool RenameNumRule(const String & aOldName, const String & aNewName,
+    bool RenameNumRule(const OUString & aOldName, const OUString & aNewName,
                            bool bBroadcast = false);
-    bool DelNumRule( const String& rName, bool bBroadCast = false );
+    bool DelNumRule( const OUString& rName, bool bBroadCast = false );
     OUString GetUniqueNumRuleName( const OUString* pChkStr = 0, bool bAutoNum = true ) const;
 
     void UpdateNumRule();   /// Update all invalids.
     void ChgNumRuleFmts( const SwNumRule& rRule );
-    bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
-                        const String& rNewRule );
+    bool ReplaceNumRule( const SwPosition& rPos, const OUString& rOldRule,
+                        const OUString& rNewRule );
 
     /// Goto next/previous on same level.
     bool GotoNextNum( SwPosition&, bool bOverUpper = true,
@@ -1640,7 +1640,7 @@ public:
 
     /// @return enum TableMergeErr.
     sal_uInt16 MergeTbl( SwPaM& rPam );
-    String GetUniqueTblName() const;
+    OUString GetUniqueTblName() const;
     sal_Bool IsInsTblFormatNum() const;
     sal_Bool IsInsTblChangeNumFormat() const;
     sal_Bool IsInsTblAlignNum() const;
@@ -1684,7 +1684,7 @@ public:
                         const SwTable* pCpyTbl = 0, sal_Bool bCpyName = sal_False,
                         sal_Bool bCorrPos = sal_False );
 
-    sal_Bool UnProtectCells( const String& rTblName );
+    sal_Bool UnProtectCells( const OUString& rTblName );
     sal_Bool UnProtectCells( const SwSelBoxes& rBoxes );
     sal_Bool UnProtectTbls( const SwPaM& rPam );
     sal_Bool HasTblAnyProtection( const SwPosition* pPos,
@@ -1701,16 +1701,16 @@ public:
                         sal_uInt16 nMode = 0 );
 
     /// Make charts of given table update.
-    void UpdateCharts( const String &rName ) const;
+    void UpdateCharts( const OUString &rName ) const;
 
     /// Update all charts, for that exists any table.
     void UpdateAllCharts()          { DoUpdateAllCharts(); }
 
     /// Table is renamed and refreshes charts.
-    void SetTableName( SwFrmFmt& rTblFmt, const String &rNewName );
+    void SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName );
 
     /// @return the reference in document that is set for name.
-    const SwFmtRefMark* GetRefMark( const String& rName ) const;
+    const SwFmtRefMark* GetRefMark( const OUString& rName ) const;
 
     /// @return RefMark via index - for UNO.
     const SwFmtRefMark* GetRefMark( sal_uInt16 nIndex ) const;
@@ -1720,14 +1720,14 @@ public:
     sal_uInt16 GetRefMarks( std::vector<OUString>* = 0 ) const;
 
     /// Insert label. If a FlyFormat is created, return it.
-    SwFlyFrmFmt* InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
-                    const String& rNumberingSeparator,
+    SwFlyFrmFmt* InsertLabel( const SwLabelType eType, const OUString &rTxt, const OUString& rSeparator,
+                    const OUString& rNumberingSeparator,
                     const sal_Bool bBefore, const sal_uInt16 nId, const sal_uLong nIdx,
-                    const String& rCharacterStyle,
+                    const OUString& rCharacterStyle,
                     const sal_Bool bCpyBrd = sal_True );
     SwFlyFrmFmt* InsertDrawLabel(
-        const String &rTxt, const String& rSeparator, const String& rNumberSeparator,
-        const sal_uInt16 nId, const String& rCharacterStyle, SdrObject& rObj );
+        const OUString &rTxt, const OUString& rSeparator, const OUString& rNumberSeparator,
+        const sal_uInt16 nId, const OUString& rCharacterStyle, SdrObject& rObj );
 
     /// Query attribute pool.
     const SwAttrPool& GetAttrPool() const   { return *mpAttrPool; }
@@ -1781,7 +1781,7 @@ public:
     bool IsInLoadAsynchron() const             { return mbInLoadAsynchron; }
     void SetInLoadAsynchron( bool bFlag )       { mbInLoadAsynchron = bFlag; }
 
-    bool SelectServerObj( const String& rStr, SwPaM*& rpPam,
+    bool SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const;
 
     /// For Drag&Move: (e.g. allow "moving" of RefMarks)
@@ -1801,7 +1801,7 @@ public:
     // Query if ::com::sun::star::util::URL was visited.
     // Query via Doc, if only a ::com::sun::star::text::Bookmark has been given.
     // In this case the document name has to be set in front.
-    bool IsVisitedURL( const String& rURL ) const;
+    bool IsVisitedURL( const OUString& rURL ) const;
 
     /// Save current values for automatic registration of exceptions in Autocorrection.
     void SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew );
@@ -1837,12 +1837,12 @@ public:
 
     /// Create sub-documents according to given collection.
     /// If no collection is given, use chapter styles for 1st level.
-    sal_Bool GenerateGlobalDoc( const String& rPath,
+    sal_Bool GenerateGlobalDoc( const OUString& rPath,
                                 const SwTxtFmtColl* pSplitColl = 0 );
-    sal_Bool GenerateGlobalDoc( const String& rPath, int nOutlineLevel = 0 );
-    sal_Bool GenerateHTMLDoc( const String& rPath,
+    sal_Bool GenerateGlobalDoc( const OUString& rPath, int nOutlineLevel = 0 );
+    sal_Bool GenerateHTMLDoc( const OUString& rPath,
                                 const SwTxtFmtColl* pSplitColl = 0 );
-    sal_Bool GenerateHTMLDoc( const String& rPath, int nOutlineLevel = 0 );
+    sal_Bool GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel = 0 );
 
     ///  Compare two documents.
     long CompareDoc( const SwDoc& rDoc );
@@ -1972,7 +1972,7 @@ public:
         @param bValue     - true  mark the level
                           - false unmark the level
     */
-    void MarkListLevel( const String& sListId,
+    void MarkListLevel( const OUString& sListId,
                         const int nListLevel,
                         const bool bValue );
 
@@ -1992,7 +1992,7 @@ public:
     /// Change a format undoable.
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
 
-    void RenameFmt(SwFmt & rFmt, const String & sNewName,
+    void RenameFmt(SwFmt & rFmt, const OUString & sNewName,
                    bool bBroadcast = false);
 
     /// Change a TOX undoable.
@@ -2015,7 +2015,7 @@ public:
 
        @return the textual description of rPaM
      */
-    String GetPaMDescr(const SwPaM & rPaM) const;
+    OUString GetPaMDescr(const SwPaM & rPaM) const;
 
     bool IsFirstOfNumRule(SwPosition & rPos);
 

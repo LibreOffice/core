@@ -2235,7 +2235,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const OUString& rStr,
 
 // It's possible to call Replace with a PaM that spans 2 paragraphs:
 // search with regex for "$", then replace _all_
-bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
+bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const OUString& rStr,
         const bool bRegExReplace )
 {
     if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark() )

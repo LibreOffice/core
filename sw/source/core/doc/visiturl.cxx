@@ -95,16 +95,16 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 // Check if the URL has been visited before. Via the Doc, if only one Bookmark is set
 // We need to put the Doc's name before it!
-bool SwDoc::IsVisitedURL( const String& rURL ) const
+bool SwDoc::IsVisitedURL( const OUString& rURL ) const
 {
     bool bRet = false;
-    if( rURL.Len() )
+    if( !rURL.isEmpty() )
     {
         INetURLHistory *pHist = INetURLHistory::GetOrCreate();
-        if( '#' == rURL.GetChar( 0 ) && mpDocShell && mpDocShell->GetMedium() )
+        if( '#' == rURL[0] && mpDocShell && mpDocShell->GetMedium() )
         {
             INetURLObject aIObj( mpDocShell->GetMedium()->GetURLObject() );
-            aIObj.SetMark( rURL.Copy( 1 ) );
+            aIObj.SetMark( rURL.copy( 1 ) );
             bRet = pHist->QueryUrl( aIObj );
         }
         else

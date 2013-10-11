@@ -1784,7 +1784,7 @@ void SwDoc::DocInfoChgd( )
 }
 
 /// @return the reference in the doc for the name
-const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
+const SwFmtRefMark* SwDoc::GetRefMark( const OUString& rName ) const
 {
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
@@ -1796,7 +1796,7 @@ const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
         const SwFmtRefMark* pFmtRef = (SwFmtRefMark*)pItem;
         const SwTxtRefMark* pTxtRef = pFmtRef->GetTxtRefMark();
         if( pTxtRef && &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() &&
-            rName.Equals( pFmtRef->GetRefName() ) )
+            rName == pFmtRef->GetRefName() )
             return pFmtRef;
     }
     return 0;
@@ -2589,9 +2589,9 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
     }
 }
 
-String SwDoc::GetPaMDescr(const SwPaM & rPam) const
+OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
 {
-    String aResult;
+    OUString aResult;
     bool bOK = false;
 
     if (rPam.GetNode(sal_True) == rPam.GetNode(sal_False))

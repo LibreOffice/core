@@ -137,7 +137,7 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
     }
 }
 
-void SwDoc::UpdateCharts( const String &rName ) const
+void SwDoc::UpdateCharts( const OUString &rName ) const
 {
     SwTable* pTmpTbl = SwTable::FindTable( FindTblFmtByName( rName ) );
     if( pTmpTbl )
@@ -150,11 +150,11 @@ void SwDoc::UpdateCharts( const String &rName ) const
     }
 }
 
-void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
+void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
 {
     const String aOldName( rTblFmt.GetName() );
 
-    bool bNameFound = 0 == rNewName.Len();
+    bool bNameFound = rNewName.isEmpty();
     if( !bNameFound )
     {
         SwFrmFmt* pFmt;

@@ -1438,7 +1438,7 @@ void SwDoc::DelTblFrmFmt( SwTableFmt *pFmt )
 }
 
 /// Create the formats
-SwFlyFrmFmt *SwDoc::MakeFlyFrmFmt( const String &rFmtName,
+SwFlyFrmFmt *SwDoc::MakeFlyFrmFmt( const OUString &rFmtName,
                                     SwFrmFmt *pDerivedFrom )
 {
     SwFlyFrmFmt *pFmt = new SwFlyFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
@@ -1447,7 +1447,7 @@ SwFlyFrmFmt *SwDoc::MakeFlyFrmFmt( const String &rFmtName,
     return pFmt;
 }
 
-SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const String &rFmtName,
+SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const OUString &rFmtName,
                                      SwFrmFmt *pDerivedFrom )
 {
     SwDrawFrmFmt *pFmt = new SwDrawFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom);
@@ -1488,7 +1488,7 @@ SwFrmFmt& SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const
     return *((*mpTblFrmFmtTbl)[nRemoved + nFmt]);
 }
 
-SwTableFmt* SwDoc::MakeTblFrmFmt( const String &rFmtName,
+SwTableFmt* SwDoc::MakeTblFrmFmt( const OUString &rFmtName,
                                     SwFrmFmt *pDerivedFrom )
 {
     SwTableFmt* pFmt = new SwTableFmt( GetAttrPool(), rFmtName, pDerivedFrom );
@@ -1498,7 +1498,7 @@ SwTableFmt* SwDoc::MakeTblFrmFmt( const String &rFmtName,
     return pFmt;
 }
 
-SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
+SwFrmFmt *SwDoc::MakeFrmFmt(const OUString &rFmtName,
                             SwFrmFmt *pDerivedFrom,
                             bool bBroadcast, bool bAuto)
 {
@@ -1524,7 +1524,7 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
     return pFmt;
 }
 
-SwFmt *SwDoc::_MakeFrmFmt(const String &rFmtName,
+SwFmt *SwDoc::_MakeFrmFmt(const OUString &rFmtName,
                             SwFmt *pDerivedFrom,
                             bool bBroadcast, bool bAuto)
 {
@@ -1534,7 +1534,7 @@ SwFmt *SwDoc::_MakeFrmFmt(const String &rFmtName,
 }
 
 // #i40550# - add parameter <bAuto> - not relevant
-SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
+SwCharFmt *SwDoc::MakeCharFmt( const OUString &rFmtName,
                                SwCharFmt *pDerivedFrom,
                                bool bBroadcast,
                                bool )
@@ -1560,7 +1560,7 @@ SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
     return pFmt;
 }
 
-SwFmt *SwDoc::_MakeCharFmt(const String &rFmtName,
+SwFmt *SwDoc::_MakeCharFmt(const OUString &rFmtName,
                             SwFmt *pDerivedFrom,
                             bool bBroadcast, bool bAuto)
 {
@@ -1570,7 +1570,7 @@ SwFmt *SwDoc::_MakeCharFmt(const String &rFmtName,
 }
 
 /// Create the FormatCollections
-SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
+SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const OUString &rFmtName,
                                      SwTxtFmtColl *pDerivedFrom,
                                      bool bBroadcast,
                                      bool )
@@ -1595,7 +1595,7 @@ SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
     return pFmtColl;
 }
 
-SwFmt *SwDoc::_MakeTxtFmtColl(const String &rFmtName,
+SwFmt *SwDoc::_MakeTxtFmtColl(const OUString &rFmtName,
                             SwFmt *pDerivedFrom,
                             bool bBroadcast, bool bAuto)
 {
@@ -1605,7 +1605,7 @@ SwFmt *SwDoc::_MakeTxtFmtColl(const String &rFmtName,
 }
 
 //FEATURE::CONDCOLL
-SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const String &rFmtName,
+SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const OUString &rFmtName,
                                                   SwTxtFmtColl *pDerivedFrom,
                                                   bool bBroadcast)
 {
@@ -1624,7 +1624,7 @@ SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const String &rFmtName,
 //FEATURE::CONDCOLL
 
 // GRF
-SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const String &rFmtName,
+SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const OUString &rFmtName,
                                      SwGrfFmtColl *pDerivedFrom )
 {
     SwGrfFmtColl *pFmtColl = new SwGrfFmtColl( GetAttrPool(), rFmtName,
@@ -2528,7 +2528,7 @@ void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
     rFmt.SetFmtAttr(rSet);
 }
 
-void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName,
+void SwDoc::RenameFmt(SwFmt & rFmt, const OUString & sNewName,
                       bool bBroadcast)
 {
     SfxStyleFamily eFamily = SFX_STYLE_FAMILY_ALL;

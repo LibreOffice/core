@@ -489,7 +489,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
     }
 }
 
-void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
+void SwDoc::BroadcastStyleOperation(OUString rName, SfxStyleFamily eFamily,
                                     sal_uInt16 nOp)
 {
     if (mpDocShell)
@@ -533,7 +533,7 @@ void SwDoc::DelPageDesc( sal_uInt16 i, bool bBroadcast )
     SetModified();
 }
 
-sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
+sal_uInt16 SwDoc::MakePageDesc( const OUString &rName, const SwPageDesc *pCpy,
                             bool bRegardLanguage, bool bBroadcast)
 {
     SwPageDesc *pNew;
@@ -577,7 +577,7 @@ sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
     return (maPageDescs.size()-1);
 }
 
-SwPageDesc* SwDoc::FindPageDescByName( const String& rName, sal_uInt16* pPos ) const
+SwPageDesc* SwDoc::FindPageDescByName( const OUString& rName, sal_uInt16* pPos ) const
 {
     SwPageDesc* pRet = 0;
     if( pPos ) *pPos = USHRT_MAX;
@@ -785,7 +785,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
     return 0;
 }
 
-bool SwDoc::FindPageDesc( const String & rName, sal_uInt16 * pFound)
+bool SwDoc::FindPageDesc( const OUString & rName, sal_uInt16 * pFound)
 {
     bool bResult = false;
     sal_uInt16 nI;
@@ -802,7 +802,7 @@ bool SwDoc::FindPageDesc( const String & rName, sal_uInt16 * pFound)
     return bResult;
 }
 
-SwPageDesc * SwDoc::GetPageDesc( const String & rName )
+SwPageDesc * SwDoc::GetPageDesc( const OUString & rName )
 {
     SwPageDesc * aResult = NULL;
 
@@ -814,7 +814,7 @@ SwPageDesc * SwDoc::GetPageDesc( const String & rName )
     return aResult;
 }
 
-void SwDoc::DelPageDesc( const String & rName, bool bBroadcast )
+void SwDoc::DelPageDesc( const OUString & rName, bool bBroadcast )
 {
     sal_uInt16 nI;
 
@@ -822,7 +822,7 @@ void SwDoc::DelPageDesc( const String & rName, bool bBroadcast )
         DelPageDesc(nI, bBroadcast);
 }
 
-void SwDoc::ChgPageDesc( const String & rName, const SwPageDesc & rDesc)
+void SwDoc::ChgPageDesc( const OUString & rName, const SwPageDesc & rDesc)
 {
     sal_uInt16 nI;
 

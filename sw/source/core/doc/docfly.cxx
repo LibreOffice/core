@@ -448,7 +448,7 @@ bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
 
 // #i73249#
 void SwDoc::SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
-                            const String& sNewTitle )
+                            const OUString& sNewTitle )
 {
     if ( rFlyFrmFmt.GetObjTitle() == sNewTitle )
     {
@@ -471,7 +471,7 @@ void SwDoc::SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
 }
 
 void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
-                                  const String& sNewDescription )
+                                  const OUString& sNewDescription )
 {
     if ( rFlyFrmFmt.GetObjDescription() == sNewDescription )
     {

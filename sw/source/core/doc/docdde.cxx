@@ -277,7 +277,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
     return pObj;
 }
 
-bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
+bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const
 {
     // Do we actually have the Item?

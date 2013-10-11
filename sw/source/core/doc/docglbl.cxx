@@ -56,23 +56,23 @@ enum SwSplitDocType
     SPLITDOC_TO_HTML
 };
 
-sal_Bool SwDoc::GenerateGlobalDoc( const String& rPath,
+sal_Bool SwDoc::GenerateGlobalDoc( const OUString& rPath,
                                    const SwTxtFmtColl* pSplitColl )
 {
     return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, false, pSplitColl, 0 );
 }
 
-sal_Bool SwDoc::GenerateGlobalDoc( const String& rPath, int nOutlineLevel )
+sal_Bool SwDoc::GenerateGlobalDoc( const OUString& rPath, int nOutlineLevel )
 {
     return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, true, 0, nOutlineLevel );
 }
 
-sal_Bool SwDoc::GenerateHTMLDoc( const String& rPath, int nOutlineLevel )
+sal_Bool SwDoc::GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel )
 {
     return SplitDoc( SPLITDOC_TO_HTML, rPath, true, 0, nOutlineLevel );
 }
 
-sal_Bool SwDoc::GenerateHTMLDoc( const String& rPath,
+sal_Bool SwDoc::GenerateHTMLDoc( const OUString& rPath,
                                  const SwTxtFmtColl* pSplitColl )
 {
     return SplitDoc( SPLITDOC_TO_HTML, rPath, false, pSplitColl, 0 );
@@ -147,7 +147,7 @@ SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSplit
     return 0;
 }
 
-bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, const SwTxtFmtColl* pSplitColl, int nOutlineLevel )
+bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline, const SwTxtFmtColl* pSplitColl, int nOutlineLevel )
 {
     // Iterate over all the template's Nodes, creating an own
     // document for every single one and replace linked sections (GlobalDoc) for links (HTML).

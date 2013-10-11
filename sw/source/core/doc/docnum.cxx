@@ -690,9 +690,9 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
 // found, we got the right entry. Or else we use the one found by
 // searching for the Number.
 // If we don't have a Number, we search via the Text only.
-bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
+bool SwDoc::GotoOutline( SwPosition& rPos, const OUString& rName ) const
 {
-    if( rName.Len() )
+    if( !rName.isEmpty() )
     {
         const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
 
@@ -823,7 +823,7 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 void SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
                         const bool bCreateNewList,
-                        const String sContinuedListId,
+                        const OUString sContinuedListId,
                         bool bSetItem,
                         const bool bResetIndentAttrs )
 {
@@ -883,7 +883,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
             InsertPoolItem( rPam,
                 SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
         }
-        else if ( sContinuedListId.Len() > 0 )
+        else if ( !sContinuedListId.isEmpty() )
         {
             // apply given list id
             InsertPoolItem( rPam,
@@ -1002,7 +1002,7 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt )
 }
 
 // We can only delete if the Rule is unused!
-bool SwDoc::DelNumRule( const String& rName, bool bBroadcast )
+bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
 {
     sal_uInt16 nPos = FindNumRule( rName );
 
@@ -1081,7 +1081,7 @@ void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule )
     }
 }
 
-bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName,
+bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,
                               bool bBroadcast)
 {
     bool bResult = false;
@@ -1138,7 +1138,7 @@ void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
 }
 
 bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
-                            const String& rOldRule, const String& rNewRule )
+                            const OUString& rOldRule, const OUString& rNewRule )
 {
     bool bRet = false;
     SwNumRule *pOldRule = FindNumRulePtr( rOldRule ),
@@ -2115,7 +2115,7 @@ SwNumRule* SwDoc::GetCurrNumRule( const SwPosition& rPos ) const
     return pRet;
 }
 
-sal_uInt16 SwDoc::FindNumRule( const String& rName ) const
+sal_uInt16 SwDoc::FindNumRule( const OUString& rName ) const
 {
     for( sal_uInt16 n = mpNumRuleTbl->size(); n; )
         if( (*mpNumRuleTbl)[ --n ]->GetName() == rName )
@@ -2124,7 +2124,7 @@ sal_uInt16 SwDoc::FindNumRule( const String& rName ) const
     return USHRT_MAX;
 }
 
-SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
+SwNumRule* SwDoc::FindNumRulePtr( const OUString& rName ) const
 {
     SwNumRule * pResult = 0;
 
@@ -2297,7 +2297,7 @@ void SwDoc::UpdateNumRule()
             rNmTbl[ n ]->Validate();
 }
 
-void SwDoc::MarkListLevel( const String& sListId,
+void SwDoc::MarkListLevel( const OUString& sListId,
                            const int nListLevel,
                            const bool bValue )
 {
