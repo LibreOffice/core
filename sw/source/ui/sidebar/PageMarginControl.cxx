@@ -25,11 +25,11 @@
 
 #include <svx/sidebar/ValueSetWithTextControl.hxx>
 
-#define SWPAGE_LEFT_GVALUE      String("Sw_Page_Left", 12, RTL_TEXTENCODING_ASCII_US)
-#define SWPAGE_RIGHT_GVALUE     String("Sw_Page_Right", 13, RTL_TEXTENCODING_ASCII_US)
-#define SWPAGE_TOP_GVALUE       String("Sw_Page_Top", 11, RTL_TEXTENCODING_ASCII_US)
-#define SWPAGE_DOWN_GVALUE      String("Sw_Page_Down", 12, RTL_TEXTENCODING_ASCII_US)
-#define SWPAGE_MIRROR_GVALUE    String("Sw_Page_Mirrored", 16, RTL_TEXTENCODING_ASCII_US)
+#define SWPAGE_LEFT_GVALUE      "Sw_Page_Left"
+#define SWPAGE_RIGHT_GVALUE     "Sw_Page_Right"
+#define SWPAGE_TOP_GVALUE       "Sw_Page_Top"
+#define SWPAGE_DOWN_GVALUE      "Sw_Page_Down"
+#define SWPAGE_MIRROR_GVALUE    "Sw_Page_Mirrored"
 
 
 namespace sw { namespace sidebar {
@@ -425,8 +425,8 @@ bool PageMarginControl::GetUserCustomValues()
         ::rtl::OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
-        String aWinData( aTmp );
-        mnUserCustomPageLeftMargin = aWinData.ToInt32();
+        OUString aWinData( aTmp );
+        mnUserCustomPageLeftMargin = aWinData.toInt32();
         bUserCustomValuesAvailable = true;
     }
 
@@ -437,8 +437,8 @@ bool PageMarginControl::GetUserCustomValues()
         ::rtl::OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
-        String aWinData( aTmp );
-        mnUserCustomPageRightMargin = aWinData.ToInt32();
+        OUString aWinData( aTmp );
+        mnUserCustomPageRightMargin = aWinData.toInt32();
         bUserCustomValuesAvailable = true;
     }
 
@@ -449,8 +449,8 @@ bool PageMarginControl::GetUserCustomValues()
         ::rtl::OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
-        String aWinData( aTmp );
-        mnUserCustomPageTopMargin = aWinData.ToInt32();
+        OUString aWinData( aTmp );
+        mnUserCustomPageTopMargin = aWinData.toInt32();
         bUserCustomValuesAvailable = true;
     }
 
@@ -461,8 +461,8 @@ bool PageMarginControl::GetUserCustomValues()
         ::rtl::OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
-        String aWinData( aTmp );
-        mnUserCustomPageBottomMargin = aWinData.ToInt32();
+        OUString aWinData( aTmp );
+        mnUserCustomPageBottomMargin = aWinData.toInt32();
         bUserCustomValuesAvailable = true;
     }
 
@@ -473,8 +473,8 @@ bool PageMarginControl::GetUserCustomValues()
         ::rtl::OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
-        String aWinData( aTmp );
-        mbUserCustomMirrored = aWinData.ToInt32() == 0 ? false : true;
+        OUString aWinData( aTmp );
+        mbUserCustomMirrored = aWinData.toInt32() == 0 ? false : true;
         bUserCustomValuesAvailable = true;
     }
 
