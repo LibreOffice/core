@@ -737,59 +737,6 @@ namespace svgio
             }
         }
 
-        double get_markerRotation(
-            const SvgMarkerNode& rMarker,
-            const basegfx::B2DPolygon& rPolygon,
-            const sal_uInt32 nIndex)
-        {
-            double fAngle(0.0);
-            const sal_uInt32 nPointCount(rPolygon.count());
-
-            if(nPointCount)
-            {
-                if(rMarker.getOrientAuto())
-                {
-                    const bool bPrev(rPolygon.isClosed() || nIndex > 0);
-                    basegfx::B2DCubicBezier aSegment;
-                    basegfx::B2DVector aPrev;
-                    basegfx::B2DVector aNext;
-
-                    if(bPrev)
-                    {
-                        rPolygon.getBezierSegment((nIndex - 1) % nPointCount, aSegment);
-                        aPrev = aSegment.getTangent(1.0);
-                    }
-
-                    const bool bNext(rPolygon.isClosed() || nIndex + 1 < nPointCount);
-
-                    if(bNext)
-                    {
-                        rPolygon.getBezierSegment(nIndex % nPointCount, aSegment);
-                        aNext = aSegment.getTangent(0.0);
-                    }
-
-                    if(bPrev && bNext)
-                    {
-                        fAngle = atan2(aPrev.getY() + aNext.getY(), aPrev.getX() + aNext.getX());
-                    }
-                    else if(bPrev)
-                    {
-                        fAngle = atan2(aPrev.getY(), aPrev.getX());
-                    }
-                    else if(bNext)
-                    {
-                        fAngle = atan2(aNext.getY(), aNext.getX());
-                    }
-                }
-                else
-                {
-                    fAngle = rMarker.getAngle();
-                }
-            }
-
-            return fAngle;
-        }
-
         bool SvgStyleAttributes::prepare_singleMarker(
             drawinglayer::primitive2d::Primitive2DSequence& rMarkerPrimitives,
             basegfx::B2DHomMatrix& rMarkerTransform,
@@ -880,49 +827,6 @@ namespace svgio
             return false;
         }
 
-        void SvgStyleAttributes::add_singleMarker(
-            drawinglayer::primitive2d::Primitive2DSequence& rTarget,
-            const drawinglayer::primitive2d::Primitive2DSequence& rMarkerPrimitives,
-            const basegfx::B2DHomMatrix& rMarkerTransform,
-            const basegfx::B2DRange& rClipRange,
-            const SvgMarkerNode& rMarker,
-            const basegfx::B2DPolygon& rCandidate,
-            const sal_uInt32 nIndex) const
-        {
-            const sal_uInt32 nPointCount(rCandidate.count());
-
-            if(nPointCount)
-            {
-                // get and apply rotation
-                basegfx::B2DHomMatrix aCombinedTransform(rMarkerTransform);
-                aCombinedTransform.rotate(get_markerRotation(rMarker, rCandidate, nIndex));
-
-                // get and apply target position
-                const basegfx::B2DPoint aPoint(rCandidate.getB2DPoint(nIndex % nPointCount));
-                aCombinedTransform.translate(aPoint.getX(), aPoint.getY());
-
-                // prepare marker
-                drawinglayer::primitive2d::Primitive2DReference xMarker(
-                    new drawinglayer::primitive2d::TransformPrimitive2D(
-                        aCombinedTransform,
-                        rMarkerPrimitives));
-
-                if(!rClipRange.isEmpty())
-                {
-                    // marker needs to be clipped, it's bigger as the mapping
-                    basegfx::B2DPolyPolygon aClipPolygon(basegfx::tools::createPolygonFromRect(rClipRange));
-
-                    aClipPolygon.transform(aCombinedTransform);
-                    xMarker = new drawinglayer::primitive2d::MaskPrimitive2D(
-                        aClipPolygon,
-                        drawinglayer::primitive2d::Primitive2DSequence(&xMarker, 1));
-                }
-
-                // add marker
-                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xMarker);
-            }
-        }
-
         void SvgStyleAttributes::add_markers(
             const basegfx::B2DPolyPolygon& rPath,
             drawinglayer::primitive2d::Primitive2DSequence& rTarget) const
@@ -934,51 +838,158 @@ namespace svgio
 
             if(pStart || pMid || pEnd)
             {
-                const sal_uInt32 nCount(rPath.count());
+                const sal_uInt32 nSubPathCount(rPath.count());
 
-                for (sal_uInt32 a(0); a < nCount; a++)
+                if(nSubPathCount)
                 {
-                    const basegfx::B2DPolygon aCandidate(rPath.getB2DPolygon(a));
-                    const sal_uInt32 nPointCount(aCandidate.count());
+                    // remember prepared marker; pStart, pMid and pEnd may all be equal when
+                    // only 'marker' was used instead of 'marker-start', 'marker-mid' or 'marker-end',
+                    // see 'case SVGTokenMarker' in this file; thus in this case only one common
+                    // marker in primitive form will be prepared
+                    const SvgMarkerNode* pPrepared = 0;
 
-                    if(nPointCount)
+                    // values for the prepared marker, results of prepare_singleMarker
+                    drawinglayer::primitive2d::Primitive2DSequence aPreparedMarkerPrimitives;
+                    basegfx::B2DHomMatrix aPreparedMarkerTransform;
+                    basegfx::B2DRange aPreparedMarkerClipRange;
+
+                    for (sal_uInt32 a(0); a < nSubPathCount; a++)
                     {
-                        const sal_uInt32 nMarkerCount(aCandidate.isClosed() ? nPointCount + 1 : nPointCount);
-                        drawinglayer::primitive2d::Primitive2DSequence aMarkerPrimitives;
-                        basegfx::B2DHomMatrix aMarkerTransform;
-                        basegfx::B2DRange aClipRange;
-                        const SvgMarkerNode* pPrepared = 0;
+                        // iterate over sub-paths
+                        const basegfx::B2DPolygon aSubPolygonPath(rPath.getB2DPolygon(a));
+                        const sal_uInt32 nSubPolygonPointCount(aSubPolygonPath.count());
+                        const bool bSubPolygonPathIsClosed(aSubPolygonPath.isClosed());
 
-                        if(pStart && a==0)
+                        if(nSubPolygonPointCount)
                         {
-                            if(prepare_singleMarker(aMarkerPrimitives, aMarkerTransform, aClipRange, *pStart))
-                            {
-                                pPrepared = pStart;
-                                add_singleMarker(rTarget, aMarkerPrimitives, aMarkerTransform, aClipRange, *pPrepared, aCandidate, 0);
-                            }
-                        }
+                            // for each sub-path, create one marker per point (when closed, two markers
+                            // need to pe created for the 1st point)
+                            const sal_uInt32 nTargetMarkerCount(bSubPolygonPathIsClosed ? nSubPolygonPointCount + 1 : nSubPolygonPointCount);
 
-                        if(pMid)
-                        {
-                            if(pMid == pPrepared || prepare_singleMarker(aMarkerPrimitives, aMarkerTransform, aClipRange, *pMid))
+                            for (sal_uInt32 b(0); b < nTargetMarkerCount; b++)
                             {
-                                pPrepared = pMid;
-                                const sal_uInt32 nFirstIndex(a==0 ? 1 : 0);
-                                const sal_uInt32 nLastIndex(a==nCount-1 ? nMarkerCount-1 : nMarkerCount);
+                                const bool bIsFirstMarker(!a && !b);
+                                const bool bIsLastMarker(nSubPathCount - 1 == a && nTargetMarkerCount - 1 == b);
+                                const SvgMarkerNode* pNeeded = 0;
 
-                                for(sal_uInt32 b(nFirstIndex); b < nLastIndex; b++)
+                                if(bIsFirstMarker)
                                 {
-                                    add_singleMarker(rTarget, aMarkerPrimitives, aMarkerTransform, aClipRange, *pPrepared, aCandidate, b);
+                                    // 1st point in 1st sub-polygon, use pStart
+                                    pNeeded = pStart;
                                 }
-                            }
-                        }
+                                else if(bIsLastMarker)
+                                {
+                                    // last point in last sub-polygon, use pEnd
+                                    pNeeded = pEnd;
+                                }
+                                else
+                                {
+                                    // anything in-between, use pMid
+                                    pNeeded = pMid;
+                                }
 
-                        if(pEnd && a==nCount-1)
-                        {
-                            if(pEnd == pPrepared || prepare_singleMarker(aMarkerPrimitives, aMarkerTransform, aClipRange, *pEnd))
-                            {
-                                pPrepared = pEnd;
-                                add_singleMarker(rTarget, aMarkerPrimitives, aMarkerTransform, aClipRange, *pPrepared, aCandidate, nMarkerCount - 1);
+                                if(!pNeeded)
+                                {
+                                    // no marker needs to be created for this point
+                                    continue;
+                                }
+
+                                if(pPrepared != pNeeded)
+                                {
+                                    // if needed marker is not yet prepared, do it now
+                                    if(prepare_singleMarker(aPreparedMarkerPrimitives, aPreparedMarkerTransform, aPreparedMarkerClipRange, *pNeeded))
+                                    {
+                                        pPrepared = pNeeded;
+                                    }
+                                    else
+                                    {
+                                        // error: could not prepare given marker
+                                        OSL_ENSURE(false, "OOps, could not prepare given marker as primitives (!)");
+                                        pPrepared = 0;
+                                        continue;
+                                    }
+                                }
+
+                                // prepare complete transform
+                                basegfx::B2DHomMatrix aCombinedTransform(aPreparedMarkerTransform);
+
+                                // get rotation
+                                if(pPrepared->getOrientAuto())
+                                {
+                                    const sal_uInt32 nPointIndex(b % nSubPolygonPointCount);
+
+                                    // get entering and leaving tangents; this will search backward/froward
+                                    // in the polygon to find tangents unequal to zero, skipping empty edges
+                                    // see basegfx descriptions)
+                                    // Hint: Mozilla, Inkscape and others use only leaving tangent for start marker
+                                    // and entering tangent for end marker. To achieve this (if wanted) it is possibe
+                                    // to make the fetch of aEntering/aLeaving dependent on bIsFirstMarker/bIsLastMarker.
+                                    // This is not done here, see comment 14 in task #1232379#
+                                    // or http://www.w3.org/TR/SVG/painting.html#OrientAttribute
+                                    basegfx::B2DVector aEntering(
+                                        basegfx::tools::getTangentEnteringPoint(
+                                            aSubPolygonPath,
+                                            nPointIndex));
+                                    basegfx::B2DVector aLeaving(
+                                        basegfx::tools::getTangentLeavingPoint(
+                                            aSubPolygonPath,
+                                            nPointIndex));
+                                    const bool bEntering(!aEntering.equalZero());
+                                    const bool bLeaving(!aLeaving.equalZero());
+
+                                    if(bEntering || bLeaving)
+                                    {
+                                        basegfx::B2DVector aSum(0.0, 0.0);
+
+                                        if(bEntering)
+                                        {
+                                            aSum += aEntering.normalize();
+                                        }
+
+                                        if(bLeaving)
+                                        {
+                                            aSum += aLeaving.normalize();
+                                        }
+
+                                        if(!aSum.equalZero())
+                                        {
+                                            const double fAngle(atan2(aSum.getY(), aSum.getX()));
+
+                                            // apply rotation
+                                            aCombinedTransform.rotate(fAngle);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // apply rotation
+                                    aCombinedTransform.rotate(pPrepared->getAngle());
+                                }
+
+                                // get and apply target position
+                                const basegfx::B2DPoint aPoint(aSubPolygonPath.getB2DPoint(b % nSubPolygonPointCount));
+
+                                aCombinedTransform.translate(aPoint.getX(), aPoint.getY());
+
+                                // prepare marker
+                                drawinglayer::primitive2d::Primitive2DReference xMarker(
+                                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                                        aCombinedTransform,
+                                        aPreparedMarkerPrimitives));
+
+                                if(!aPreparedMarkerClipRange.isEmpty())
+                                {
+                                    // marker needs to be clipped, it's bigger as the mapping
+                                    basegfx::B2DPolyPolygon aClipPolygon(basegfx::tools::createPolygonFromRect(aPreparedMarkerClipRange));
+
+                                    aClipPolygon.transform(aCombinedTransform);
+                                    xMarker = new drawinglayer::primitive2d::MaskPrimitive2D(
+                                        aClipPolygon,
+                                        drawinglayer::primitive2d::Primitive2DSequence(&xMarker, 1));
+                                }
+
+                                // add marker
+                                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xMarker);
                             }
                         }
                     }
