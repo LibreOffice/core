@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -1238,6 +1240,7 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
 //--------------------------------------------------------------------
 void SfxDispatcher::SetMenu_Impl()
 {
+#if HAVE_FEATURE_DESKTOP_GUI_ELEMENTS
     if ( pImp->pFrame )
     {
         SfxViewFrame* pTop = pImp->pFrame->GetTopViewFrame();
@@ -1262,6 +1265,7 @@ void SfxDispatcher::SetMenu_Impl()
             }
         }
     }
+#endif
 }
 
 //--------------------------------------------------------------------
