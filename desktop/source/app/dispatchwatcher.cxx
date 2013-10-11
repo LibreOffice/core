@@ -327,10 +327,13 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                     else
                         xDispatcher->dispatch( aURL, aArgs2 );
                 }
-                catch (const ::com::sun::star::uno::Exception&)
+                catch (const ::com::sun::star::uno::Exception& e)
                 {
-                    OUString aMsg = "Desktop::OpenDefault() IllegalArgumentException while calling XNotifyingDispatch: ";
-                    OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                    SAL_WARN(
+                        "desktop.app",
+                        "Desktop::OpenDefault() ignoring Exception while"
+                            " calling XNotifyingDispatch: \"" << e.Message
+                            << "\"");
                 }
             }
         }
@@ -385,15 +388,17 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             }
             catch (const ::com::sun::star::lang::IllegalArgumentException& iae)
             {
-                OUString aMsg = "Dispatchwatcher IllegalArgumentException while calling loadComponentFromURL: "
-                    + iae.Message;
-                OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                SAL_WARN(
+                    "desktop.app",
+                    "Dispatchwatcher IllegalArgumentException while calling"
+                        " loadComponentFromURL: \"" << iae.Message << "\"");
             }
             catch (const com::sun::star::io::IOException& ioe)
             {
-                OUString aMsg = "Dispatchwatcher IOException while calling loadComponentFromURL: "
-                    + ioe.Message;
-                OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                SAL_WARN(
+                    "desktop.app",
+                    "Dispatchwatcher IOException while calling"
+                        " loadComponentFromURL: \"" << ioe.Message << "\"");
             }
             if ( aDispatchRequest.aRequestType == REQUEST_OPEN ||
                  aDispatchRequest.aRequestType == REQUEST_VIEW ||

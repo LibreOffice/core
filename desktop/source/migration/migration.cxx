@@ -883,8 +883,8 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
     }
     catch (const com::sun::star::uno::Exception& e)
     {
-        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(aMsg.getStr());
+        SAL_WARN(
+            "desktop.migration", "ignoring Exception \"" << e.Message << "\"");
     }
     return xNameAccess;
 }
