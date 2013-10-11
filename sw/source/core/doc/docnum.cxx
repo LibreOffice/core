@@ -2424,7 +2424,7 @@ int SwDoc::getOutlineLevel( const sal_Int32 nIdx ) const
                                 GetTxtNode()->GetAttrOutlineLevel()-1;
 }
 
-String SwDoc::getOutlineText( const sal_Int32 nIdx,
+OUString SwDoc::getOutlineText( const sal_Int32 nIdx,
                               const bool bWithNumber,
                               const bool bWithSpacesForLevel ) const
 {

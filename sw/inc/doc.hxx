@@ -988,7 +988,7 @@ public:
     */
     virtual sal_Int32 getOutlineNodesCount() const;
     virtual int getOutlineLevel( const sal_Int32 nIdx ) const;
-    virtual String getOutlineText( const sal_Int32 nIdx,
+    virtual OUString getOutlineText( const sal_Int32 nIdx,
                                    const bool bWithNumber,
                                    const bool bWithSpacesForLevel ) const;
     virtual SwTxtNode* getOutlineNode( const sal_Int32 nIdx ) const;
