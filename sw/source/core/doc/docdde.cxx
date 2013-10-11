@@ -128,7 +128,7 @@ static bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
     return true;
 }
 
-bool SwDoc::GetData( const OUString& rItem, const String& rMimeType,
+bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
                      uno::Any & rValue ) const
 {
     // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
@@ -171,7 +171,7 @@ bool SwDoc::GetData( const OUString& rItem, const String& rMimeType,
     return sal_False;
 }
 
-bool SwDoc::SetData( const OUString& rItem, const String& rMimeType,
+bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
                      const uno::Any & rValue )
 {
     // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
