@@ -188,7 +188,7 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     return new SwPrintUIOptions( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
 
-static SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
+static SwTxtFmtColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc* pDoc)
 {
     SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName( rCollName );
     if( !pColl )
@@ -1038,10 +1038,10 @@ static sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, sal_Bool& bException)
     return nRet;
 }
 
-static String lcl_CreateOutlineString( sal_uInt16 nIndex,
+static OUString lcl_CreateOutlineString( sal_uInt16 nIndex,
             const SwOutlineNodes& rOutlineNodes, const SwNumRule* pOutlRule)
 {
-    String sEntry;
+    OUString sEntry;
     const SwTxtNode * pTxtNd = rOutlineNodes[ nIndex ]->GetTxtNode();
     SwNumberTree::tNumberVector aNumVector = pTxtNd->GetNumberVector();
     if( pOutlRule && pTxtNd->GetNumRule())
@@ -1053,7 +1053,7 @@ static String lcl_CreateOutlineString( sal_uInt16 nIndex,
             nVal ++;
             nVal -= pOutlRule->Get(nLevel).GetStart();
             sEntry += OUString::number( nVal );
-            sEntry += '.';
+            sEntry += ".";
         }
     sEntry += rOutlineNodes[ nIndex ]->
                     GetTxtNode()->GetExpandTxt( 0, STRING_LEN, sal_False );
@@ -1075,47 +1075,47 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
         int nCount = aSettings.getLength();
         for(int i = 0; i < nCount; i++)
         {
-            String sName = pProperties[i].Name;
+            OUString sName = pProperties[i].Name;
             const Any& rVal = pProperties[i].Value;
             sal_Bool bException;
             sal_uInt32 nVal = lcl_Any_To_ULONG(rVal, bException);
-            if( COMPARE_EQUAL == sName.CompareToAscii("PageRows" ) )
+            if( sName.equalsAscii("PageRows" ) )
             {
                 if(!nVal || nVal > 0xff)
                     throw RuntimeException();
                 aData.SetRow((sal_uInt8)nVal);
             }
-            else if(COMPARE_EQUAL == sName.CompareToAscii("PageColumns"))
+            else if(sName.equalsAscii("PageColumns"))
             {
                 if(!nVal  || nVal > 0xff)
                     throw RuntimeException();
                 aData.SetCol((sal_uInt8)nVal);
             }
-            else if(COMPARE_EQUAL == sName.CompareToAscii("LeftMargin"))
+            else if(sName.equalsAscii("LeftMargin"))
             {
                 aData.SetLeftSpace(MM100_TO_TWIP_UNSIGNED(nVal));
             }
-            else if(COMPARE_EQUAL == sName.CompareToAscii("RightMargin"))
+            else if(sName.equalsAscii("RightMargin"))
             {
                 aData.SetRightSpace(MM100_TO_TWIP_UNSIGNED(nVal));
             }
-            else if(COMPARE_EQUAL == sName.CompareToAscii("TopMargin"))
+            else if(sName.equalsAscii("TopMargin"))
             {
                 aData.SetTopSpace(MM100_TO_TWIP_UNSIGNED(nVal));
             }
-            else if(COMPARE_EQUAL == sName.CompareToAscii("BottomMargin"))
+            else if(sName.equalsAscii("BottomMargin"))
             {
                 aData.SetBottomSpace(MM100_TO_TWIP_UNSIGNED(nVal));
             }
-            else if(COMPARE_EQUAL == sName.CompareToAscii("HoriMargin"))
+            else if(sName.equalsAscii("HoriMargin"))
             {
                 aData.SetHorzSpace(MM100_TO_TWIP_UNSIGNED(nVal));
             }
-            else if(COMPARE_EQUAL == sName.CompareToAscii("VertMargin"))
+            else if(sName.equalsAscii("VertMargin"))
             {
                 aData.SetVertSpace(MM100_TO_TWIP_UNSIGNED(nVal));
             }
-            else if(COMPARE_EQUAL == sName.CompareToAscii("IsLandscape"))
+            else if(sName.equalsAscii("IsLandscape"))
             {
                 bException =  (::getBooleanCppuType() != rVal.getValueType());
                 aData.SetLandscape(*(sal_Bool*)rVal.getValue());
@@ -3348,13 +3348,13 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
 SwXLinkTargetSupplier::SwXLinkTargetSupplier(SwXTextDocument& rxDoc) :
     pxDoc(&rxDoc)
 {
-    sTables     = String(SW_RES(STR_CONTENT_TYPE_TABLE));
-    sFrames     = String(SW_RES(STR_CONTENT_TYPE_FRAME));
-    sGraphics   = String(SW_RES(STR_CONTENT_TYPE_GRAPHIC));
-    sOLEs       = String(SW_RES(STR_CONTENT_TYPE_OLE));
-    sSections   = String(SW_RES(STR_CONTENT_TYPE_REGION));
-    sOutlines   = String(SW_RES(STR_CONTENT_TYPE_OUTLINE));
-    sBookmarks  = String(SW_RES(STR_CONTENT_TYPE_BOOKMARK));
+    sTables     = SW_RES(STR_CONTENT_TYPE_TABLE);
+    sFrames     = SW_RES(STR_CONTENT_TYPE_FRAME);
+    sGraphics   = SW_RES(STR_CONTENT_TYPE_GRAPHIC);
+    sOLEs       = SW_RES(STR_CONTENT_TYPE_OLE);
+    sSections   = SW_RES(STR_CONTENT_TYPE_REGION);
+    sOutlines   = SW_RES(STR_CONTENT_TYPE_OUTLINE);
+    sBookmarks  = SW_RES(STR_CONTENT_TYPE_BOOKMARK);
 }
 
 SwXLinkTargetSupplier::~SwXLinkTargetSupplier()
@@ -3367,8 +3367,8 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     Any aRet;
     if(!pxDoc)
         throw RuntimeException();
-    String sToCompare(rName);
-    String sSuffix = OUString('|');
+    OUString sToCompare(rName);
+    OUString sSuffix("|");
     if(sToCompare == sTables)
     {
         sSuffix += "table";
@@ -3420,7 +3420,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sBookmarks)
     {
-        sSuffix.Erase();
+        sSuffix = "";
         Reference< XNameAccess >  xBkms = new SwXLinkNameAccessWrapper(
                                         pxDoc->getBookmarks(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xBkms, UNO_QUERY);
@@ -3449,7 +3449,7 @@ Sequence< OUString > SwXLinkTargetSupplier::getElementNames(void)
 sal_Bool SwXLinkTargetSupplier::hasByName(const OUString& rName)
                                     throw( RuntimeException )
 {
-    String sToCompare(rName);
+    OUString sToCompare(rName);
     if( sToCompare == sTables  ||
         sToCompare == sFrames  ||
         sToCompare == sGraphics||
@@ -3523,17 +3523,17 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
     Any aRet;
     bool bFound = false;
     //cut link extension and call the real NameAccess
-    String sParam = rName;
-    String sSuffix(sLinkSuffix);
-    if(sParam.Len() > sSuffix.Len() )
+    OUString sParam = rName;
+    OUString sSuffix(sLinkSuffix);
+    if(sParam.getLength() > sSuffix.getLength() )
     {
-        String sCmp = sParam.Copy(sParam.Len() - sSuffix.Len(),
-                                                    sSuffix.Len());
+        OUString sCmp = sParam.copy(sParam.getLength() - sSuffix.getLength(),
+                                                    sSuffix.getLength());
         if(sCmp == sSuffix)
         {
             if(pxDoc)
             {
-                sParam = sParam.Copy(0, sParam.Len() - sSuffix.Len());
+                sParam = sParam.copy(0, sParam.getLength() - sSuffix.getLength());
                 if(!pxDoc->GetDocShell())
                     throw RuntimeException();
                 SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
@@ -3554,7 +3554,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
             }
             else
             {
-                aRet = xRealAccess->getByName(sParam.Copy(0, sParam.Len() - sSuffix.Len()));
+                aRet = xRealAccess->getByName(sParam.copy(0, sParam.getLength() - sSuffix.getLength()));
                 Reference< XInterface > xInt;
                 if(!(aRet >>= xInt))
                     throw RuntimeException();
@@ -3583,12 +3583,12 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
         sal_uInt16 nOutlineCount = rOutlineNodes.size();
         aRet.realloc(nOutlineCount);
         OUString* pResArr = aRet.getArray();
-        String sSuffix = OUString('|');
+        OUString sSuffix("|");
         sSuffix += OUString::createFromAscii("outline");
         const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
         for (sal_uInt16 i = 0; i < nOutlineCount; ++i)
         {
-            String sEntry = lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule);
+            OUString sEntry = lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule);
             sEntry += sSuffix;
             pResArr[i] = sEntry;
         }
@@ -3611,14 +3611,14 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
     throw( RuntimeException )
 {
     sal_Bool bRet = sal_False;
-    String sParam(rName);
-    if(sParam.Len() > sLinkSuffix.getLength() )
+    OUString sParam(rName);
+    if(sParam.getLength() > sLinkSuffix.getLength() )
     {
-        String sCmp = sParam.Copy(sParam.Len() - sLinkSuffix.getLength(),
+        OUString sCmp = sParam.copy(sParam.getLength() - sLinkSuffix.getLength(),
                                                     sLinkSuffix.getLength());
         if(sCmp == sLinkSuffix)
         {
-            sParam = sParam.Copy(0, sParam.Len() - sLinkSuffix.getLength());
+            sParam = sParam.copy(0, sParam.getLength() - sLinkSuffix.getLength());
             if(pxDoc)
             {
                 if(!pxDoc->GetDocShell())

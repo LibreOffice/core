@@ -132,7 +132,7 @@ static CloseResult CloseModelAndDocSh(
 static bool LoadFromURL_impl(
         Reference< frame::XModel > &rxModel,
         SfxObjectShellRef &rxDocSh,
-        const String &rURL,
+        const OUString &rURL,
         bool bClose )
     throw (RuntimeException)
 {
@@ -191,12 +191,12 @@ namespace
         ::osl::Mutex                    m_aMutex;
         Reference< util::XCloseable >   m_xDocument;
         Timer                           m_aDeleteTimer;
-        String                          m_sTemporaryFile;
+        OUString                        m_sTemporaryFile;
         sal_Int32                       m_nPendingDeleteAttempts;
 
     public:
         DelayedFileDeletion( const Reference< XModel >& _rxModel,
-                             const String& _rTemporaryFile );
+                             const OUString& _rTemporaryFile );
 
     protected:
         ~DelayedFileDeletion( );
@@ -217,7 +217,7 @@ namespace
         DelayedFileDeletion& operator=( const DelayedFileDeletion& );       // never implemented
     };
 
-    DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, const String& _rTemporaryFile )
+    DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, const OUString& _rTemporaryFile )
         :
         m_xDocument( _rxModel, UNO_QUERY )
         ,m_sTemporaryFile( _rTemporaryFile )
@@ -337,10 +337,10 @@ namespace
 static bool DeleteTmpFile_Impl(
         Reference< frame::XModel > &rxModel,
         SfxObjectShellRef &rxDocSh,
-        const String &rTmpFileURL )
+        const OUString &rTmpFileURL )
 {
     bool bRes = false;
-    if (rTmpFileURL.Len())
+    if (!rTmpFileURL.isEmpty())
     {
         bool bDelete = true;
         if ( eVetoed == CloseModelAndDocSh( rxModel, rxDocSh ) )
@@ -703,18 +703,18 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         }
 
         aURLObj.SetSmartURL( aCurOutputURL );
-        String aPath = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+        OUString aPath = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
 
-        String aDelim = OUString(INET_PATH_TOKEN);
-        if (aPath.Len() >= aDelim.Len() &&
-            aPath.Copy( aPath.Len()-aDelim.Len() ).CompareTo( aDelim ) != COMPARE_EQUAL)
+        OUString aDelim = OUString(INET_PATH_TOKEN);
+        if (aPath.getLength() >= aDelim.getLength() &&
+            aPath.copy( aPath.getLength() - aDelim.getLength() ) == aDelim)
             aPath += aDelim;
         if (bCurFileNameFromColumn)
             pMgr->SetEMailColumn( aCurFileNamePrefix );
         else
         {
-            aPath += String( aCurFileNamePrefix );
-            pMgr->SetEMailColumn( String() );
+            aPath += aCurFileNamePrefix;
+            pMgr->SetEMailColumn( OUString() );
         }
         pMgr->SetSubject( aPath );
         if(MailMergeType::FILE == nCurOutputType)

@@ -143,8 +143,8 @@ uno::Sequence< OUString > SwXAutoTextContainer::getElementNames(void) throw( uno
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
         // The names will be passed without a path extension.
-        String sGroupName(pGlossaries->GetGroupName(i));
-        pArr[i] = sGroupName.GetToken(0, GLOS_DELIM);
+        OUString sGroupName(pGlossaries->GetGroupName(i));
+        pArr[i] = sGroupName.getToken(0, GLOS_DELIM);
     }
     return aGroupNames;
 }
@@ -153,8 +153,8 @@ sal_Bool SwXAutoTextContainer::hasByName(const OUString& Name)
     throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    String sGroupName( pGlossaries->GetCompleteGroupName( Name ) );
-    if(sGroupName.Len())
+    OUString sGroupName( pGlossaries->GetCompleteGroupName( Name ) );
+    if(!sGroupName.isEmpty())
         return sal_True;
     return sal_False;
 }
@@ -206,8 +206,8 @@ void SwXAutoTextContainer::removeByName(const OUString& aGroupName)
 {
     SolarMutexGuard aGuard;
     // At first find the name with path extension
-    String sGroupName = pGlossaries->GetCompleteGroupName( aGroupName );
-    if(!sGroupName.Len())
+    OUString sGroupName = pGlossaries->GetCompleteGroupName( aGroupName );
+    if(sGroupName.isEmpty())
         throw container::NoSuchElementException();
     pGlossaries->DelGroupDoc(sGroupName);
 }
@@ -372,8 +372,8 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
         throw uno::RuntimeException();
 
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
-    String sShortName(aName);
-    String sLongName(aTitle);
+    OUString sShortName(aName);
+    OUString sLongName(aTitle);
     if(pGlosGroup && !pGlosGroup->GetError())
     {
         uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
@@ -387,8 +387,8 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
                                     OTextCursorHelper::getUnoTunnelId()));
         }
 
-        String sOnlyTxt;
-        String* pOnlyTxt = 0;
+        OUString sOnlyTxt;
+        OUString* pOnlyTxt = 0;
         bool bNoAttr = !pxCursor && !pxRange;
         if(bNoAttr)
         {

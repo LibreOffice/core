@@ -49,7 +49,7 @@ sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** pp
     if( *ppFilter )
     {
         // verify the given filter
-        String aPrefFlt = (*ppFilter)->GetUserData();
+        OUString aPrefFlt = (*ppFilter)->GetUserData();
 
         // detection for TextFilter needs an additional checking
         sal_Bool bDetected = SwIoSystem::IsFileFilter(rMedium, aPrefFlt);
@@ -57,7 +57,7 @@ sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** pp
     }
 
     // mba: without preselection there is no PrefFlt
-    String aPrefFlt;
+    OUString aPrefFlt;
     const SfxFilter* pTmp = SwIoSystem::GetFileFilter( rMedium.GetPhysicalName(), aPrefFlt, &rMedium );
     if( !pTmp )
         return ERRCODE_ABORT;

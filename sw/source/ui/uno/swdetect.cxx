@@ -80,10 +80,10 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     Reference< XInputStream > xStream;
     Reference< XContent > xContent;
     Reference< XInteractionHandler > xInteraction;
-    String aURL;
+    OUString aURL;
     OUString sTemp;
-    String aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
-    String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
+    OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
+    OUString aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
     OUString aDocumentTitle; // interesting only if set in this method
 
@@ -115,7 +115,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( !aURL.Len() && lDescriptor[nProperty].Name == "FileName" )
+        else if( aURL.isEmpty() && lDescriptor[nProperty].Name == "FileName" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
@@ -164,14 +164,13 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    String aPrefix = OUString("private:factory/");
-    if( aURL.Match( aPrefix ) == aPrefix.Len() )
+    OUString aPrefix = "private:factory/";
+    if( aURL.startsWith( aPrefix ) )
     {
         if( SvtModuleOptions().IsWriter() )
         {
-            String aPattern( aPrefix );
-            aPattern += OUString("swriter");
-            if ( aURL.Match( aPattern ) >= aPattern.Len() )
+            OUString aPattern = aPrefix + "swriter";
+            if ( aURL.startsWith( aPattern ) )
                 return aTypeName;
         }
     }
@@ -224,8 +223,8 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
                     try
                     {
-                        const SfxFilter* pPreFilter = aPreselectedFilterName.Len() ?
-                                SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
+                        const SfxFilter* pPreFilter = !aPreselectedFilterName.isEmpty() ?
+                                SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : !aTypeName.isEmpty() ?
                                 SfxFilterMatcher(OUString("swriter")).GetFilter4EA( aTypeName ) : 0;
                         if (!pPreFilter)
                             pPreFilter = SfxFilterMatcher(OUString("sweb")).GetFilter4EA( aTypeName );
@@ -249,7 +248,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                         // repairing is done only if this type is requested from outside
                         // we don't do any type detection on broken packages (f.e. because it might be impossible), so any requested
                         // type will be accepted if the user allows to repair the file
-                        if ( ( aWrap.TargetException >>= aZipException ) && ( aTypeName.Len() || aPreselectedFilterName.Len() ) )
+                        if ( ( aWrap.TargetException >>= aZipException ) && ( !aTypeName.isEmpty() || !aPreselectedFilterName.isEmpty() ) )
                         {
                             if ( xInteraction.is() )
                             {
@@ -287,8 +286,8 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
                             if ( !bRepairAllowed )
                             {
-                                aTypeName.Erase();
-                                aPreselectedFilterName.Erase();
+                                aTypeName = "";
+                                aPreselectedFilterName = "";
                             }
                         }
                     }
@@ -298,8 +297,8 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                     }
                     catch (const Exception&)
                     {
-                        aTypeName.Erase();
-                        aPreselectedFilterName.Erase();
+                        aTypeName = "";
+                        aPreselectedFilterName = "";
                     }
                 }
             }
@@ -308,7 +307,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                 aMedium.GetInStream();
                 if ( aMedium.GetErrorCode() == ERRCODE_NONE )
                 {
-                    if ( aPreselectedFilterName.Len() )
+                    if ( !aPreselectedFilterName.isEmpty() )
                         pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
                     else
                         pFilter = SfxFilterMatcher().GetFilter4EA( aTypeName );
@@ -341,7 +340,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                 if ( pFilter )
                     aTypeName = pFilter->GetTypeName();
                 else
-                    aTypeName.Erase();
+                    aTypeName = "";
             }
         }
     }

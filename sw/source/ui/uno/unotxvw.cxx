@@ -556,7 +556,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
     {
         const SwRubyListEntry* pEntry = &aList[n];
 
-        const String& rEntryText = pEntry->GetText();
+        const OUString& rEntryText = pEntry->GetText();
         const SwFmtRuby& rAttr = pEntry->GetRubyAttr();
 
         pRet[n].realloc(5);
