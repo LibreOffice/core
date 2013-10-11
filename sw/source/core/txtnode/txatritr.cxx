@@ -20,7 +20,6 @@
 #include <txatritr.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <tools/string.hxx>
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
 #include <breakit.hxx>

@@ -22,7 +22,6 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 
 TYPEINIT0(SwIndexReg);
 

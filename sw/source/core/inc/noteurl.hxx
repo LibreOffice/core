@@ -20,8 +20,6 @@
 #ifndef _NOTEURL_HXX
 #define _NOTEURL_HXX
 
-
-#include <tools/string.hxx>
 #include "swrect.hxx"
 #include <boost/ptr_container/ptr_vector.hpp>
 
