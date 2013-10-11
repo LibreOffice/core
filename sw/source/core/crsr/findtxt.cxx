@@ -416,9 +416,14 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
 
     if ( bRegSearch )
     {
-        const OUString a00AD("\\x00AD");
-        if ( -1 != rSearchOpt.searchString.indexOf( a00AD ) )
+        if (   -1 != rSearchOpt.searchString.indexOf("\\xAD")
+            || -1 != rSearchOpt.searchString.indexOf("\\x{00AD}")
+            || -1 != rSearchOpt.searchString.indexOf("\\u00AD")
+            || -1 != rSearchOpt.searchString.indexOf("\\U000000AD")
+            || -1 != rSearchOpt.searchString.indexOf("\\N{SOFT HYPHEN}"))
+        {
              bRemoveSoftHyphens = false;
+        }
     }
     else
     {
