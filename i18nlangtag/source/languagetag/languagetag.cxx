@@ -564,7 +564,8 @@ LanguageTag::LanguageTag( const LanguageTag & rLanguageTag )
         mbSystemLocale( rLanguageTag.mbSystemLocale),
         mbInitializedBcp47( rLanguageTag.mbInitializedBcp47),
         mbInitializedLocale( rLanguageTag.mbInitializedLocale),
-        mbInitializedLangID( rLanguageTag.mbInitializedLangID)
+        mbInitializedLangID( rLanguageTag.mbInitializedLangID),
+        mbIsFallback(rLanguageTag.mbIsFallback)
 {
 }
 
