@@ -53,11 +53,6 @@ using ::std::set;
 
 namespace {
 
-void upperCase(OUString& rStr)
-{
-    rStr = ScGlobal::pCharClass->uppercase(rStr.trim());
-}
-
 template<typename _Iter>
 void incBlock(std::pair<_Iter, size_t>& rPos)
 {
