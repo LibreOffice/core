@@ -601,13 +601,16 @@ SwMergeAddressItem   SwAddressIterator::Next()
             }
             else if(-1 == nOpen && -1 == nReturn)
             {
-                nOpen = sAddress.getLength();
                 aRet.sText = sAddress;
                 sAddress = "";
             }
             else
             {
-                xub_StrLen nTarget = ::std::min(nOpen, nReturn);
+                if (nOpen == -1)
+                    nOpen = sAddress.getLength();
+                if (nReturn == -1)
+                    nReturn = sAddress.getLength();
+                sal_Int32 nTarget = ::std::min(nOpen, nReturn);
                 aRet.sText = sAddress.copy(0, nTarget);
                 sAddress = sAddress.copy(nTarget);
             }
