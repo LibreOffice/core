@@ -702,11 +702,11 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
                     OUString sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
                     SwContentAtPos aCnt( SwContentAtPos::SW_OUTLINE );
                     m_pWrtShell->GetContentAtPos( aPos, aCnt );
-                    if( aCnt.sStr.Len() )
+                    if( !aCnt.sStr.isEmpty() )
                     {
                         sPageStr += OUString("  - ");
-                        sal_Int32 nChunkLen = std::min<sal_Int32>(aCnt.sStr.Len(), 80);
-                        OUString sChunk = aCnt.sStr.Copy(0, nChunkLen);
+                        sal_Int32 nChunkLen = std::min<sal_Int32>(aCnt.sStr.getLength(), 80);
+                        OUString sChunk = aCnt.sStr.copy(0, nChunkLen);
                         sPageStr = sChunk + sPageStr;
                         sPageStr = sPageStr.replace('\t', ' ');
                         sPageStr = sPageStr.replace(0x0a, ' ');

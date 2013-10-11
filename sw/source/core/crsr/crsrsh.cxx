@@ -385,16 +385,16 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
     return bRet;
 }
 
-void SwCrsrShell::MarkListLevel( const String& sListId,
+void SwCrsrShell::MarkListLevel( const OUString& sListId,
                                  const int nListLevel )
 {
     if ( sListId != m_sMarkedListId ||
          nListLevel != m_nMarkedListLevel)
     {
-        if ( m_sMarkedListId.Len() > 0 )
+        if ( !m_sMarkedListId.isEmpty() )
             mpDoc->MarkListLevel( m_sMarkedListId, m_nMarkedListLevel, false );
 
-        if ( sListId.Len() > 0 )
+        if ( !sListId.isEmpty() )
         {
             mpDoc->MarkListLevel( sListId, nListLevel, true );
         }
@@ -2154,9 +2154,9 @@ void SwCrsrShell::CallChgLnk()
 }
 
 /// get selected text of a node at current cursor
-String SwCrsrShell::GetSelTxt() const
+OUString SwCrsrShell::GetSelTxt() const
 {
-    String aTxt;
+    OUString aTxt;
     if( m_pCurCrsr->GetPoint()->nNode.GetIndex() ==
         m_pCurCrsr->GetMark()->nNode.GetIndex() )
     {
@@ -2172,9 +2172,9 @@ String SwCrsrShell::GetSelTxt() const
 }
 
 /// get text only from current cursor position (until end of node)
-String SwCrsrShell::GetText() const
+OUString SwCrsrShell::GetText() const
 {
-    String aTxt;
+    OUString aTxt;
     if( m_pCurCrsr->GetPoint()->nNode.GetIndex() ==
         m_pCurCrsr->GetMark()->nNode.GetIndex() )
     {
@@ -3177,12 +3177,12 @@ void SwCrsrShell::ClearUpCrsrs()
         TblCrsrToCursor();
 }
 
-String SwCrsrShell::GetCrsrDescr() const
+OUString SwCrsrShell::GetCrsrDescr() const
 {
-    String aResult;
+    OUString aResult;
 
     if (IsMultiSelection())
-        aResult += String(SW_RES(STR_MULTISEL));
+        aResult += SW_RES(STR_MULTISEL);
     else
         aResult = GetDoc()->GetPaMDescr(*GetCrsr());
 

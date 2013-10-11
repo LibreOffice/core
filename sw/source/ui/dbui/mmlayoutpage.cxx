@@ -462,7 +462,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
         //we may end up inside of a paragraph if the left margin is not at DEFAULT_LEFT_DISTANCE
         rShell.MovePara(GetfnParaCurr(), GetfnParaStart());
     }
-    bool bSplitNode = rShell.GetText().Len() > 0;
+    bool bSplitNode = !rShell.GetText().isEmpty();
     sal_Int32 nMoves = rConfigItem.GetGreetingMoves();
     if( !bExample && 0 != nMoves )
     {

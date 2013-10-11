@@ -704,9 +704,9 @@ bool SwCrsrShell::IsTblComplexForChart()
     return bRet;
 }
 
-String SwCrsrShell::GetBoxNms() const
+OUString SwCrsrShell::GetBoxNms() const
 {
-    String sNm;
+    OUString sNm;
     const SwPosition* pPos;
     SwFrm* pFrm;
 
@@ -727,7 +727,7 @@ String SwCrsrShell::GetBoxNms() const
             return sNm;
 
         sNm = ((SwCellFrm*)pFrm)->GetTabBox()->GetName();
-        sNm += ':';
+        sNm += ":";
         pPos = m_pTblCrsr->End();
     }
     else
@@ -753,7 +753,7 @@ String SwCrsrShell::GetBoxNms() const
     return sNm;
 }
 
-bool SwCrsrShell::GotoTable( const String& rName )
+bool SwCrsrShell::GotoTable( const OUString& rName )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves
     bool bRet = !m_pTblCrsr && m_pCurCrsr->GotoTable( rName );

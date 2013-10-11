@@ -255,7 +255,7 @@ bool SwCursor::GotoRegion( const OUString& rName )
     return bRet;
 }
 
-bool SwCrsrShell::GotoRegion( const String& rName )
+bool SwCrsrShell::GotoRegion( const OUString& rName )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves;call Link if needed
     bool bRet = !m_pTblCrsr && m_pCurCrsr->GotoRegion( rName );

@@ -118,7 +118,7 @@ struct SwContentAtPos
 
     int nDist;
 
-    String sStr;
+    OUString sStr;
     const SwTxtAttr* pFndTxtAttr;
 
     SwContentAtPos( int eGetAtPos = 0xffff )
@@ -206,7 +206,7 @@ private:
     sal_uInt16 m_nBasicActionCnt;     ///< Actions which are parenthesized by Basic
     CrsrMoveState m_eMvState;     ///< Status for Crsr-Travelling - GetCrsrOfst
 
-    String m_sMarkedListId;
+    OUString m_sMarkedListId;
     int m_nMarkedListLevel;
 
     sal_Bool m_bHasFocus : 1;         ///< Shell is "active" in a window
@@ -248,7 +248,7 @@ private:
 
         An empty sListId denotes that no level of a list is marked.
      */
-    SW_DLLPRIVATE void MarkListLevel( const String& sListId,
+    SW_DLLPRIVATE void MarkListLevel( const OUString& sListId,
                                       const int nLevel );
 
     // private method(s) accessed from public inline method(s) must be exported.
@@ -579,10 +579,10 @@ public:
 
     // get the selected text at the current cursor. it will be filled with
     // fields etc.
-    String GetSelTxt() const;
+    OUString GetSelTxt() const;
     // return only the text starting from the current cursor position (to the
     // end of the node)
-    String GetText() const;
+    OUString GetText() const;
 
     // Check of SPoint or Mark of current cursor are placed within a table.
     inline const SwTableNode* IsCrsrInTbl( sal_Bool bIsPtInTbl = sal_True ) const;
@@ -595,13 +595,13 @@ public:
 
     bool IsTblComplexForChart();
     // get current table selection as text
-    String GetBoxNms() const;
+    OUString GetBoxNms() const;
 
     // set Crsr to the next/previous cell
     sal_Bool GoNextCell( sal_Bool bAppendLine = sal_True );
     sal_Bool GoPrevCell();
     // go to this box (if available and inside of table)
-    bool GotoTable( const String& rName );
+    bool GotoTable( const OUString& rName );
 
     // select a table row, column or box (based on the current cursor)
     sal_Bool SelTblRow() { return _SelTblRowOrCol( true  ); }
@@ -613,7 +613,7 @@ public:
     bool GotoNextNum();
     bool GotoPrevNum();
 
-    bool GotoOutline( const String& rName );
+    bool GotoOutline( const OUString& rName );
     // to the next/previous or the given OutlineNode
     void GotoOutline( sal_uInt16 nIdx );
     // find the "outline position" in the nodes array of the current chapter
@@ -686,7 +686,7 @@ public:
     // on graphics
     bool SelectNxtPrvHyperlink( bool bNext = true );
 
-    sal_Bool GotoRefMark( const String& rRefMark, sal_uInt16 nSubType = 0,
+    sal_Bool GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType = 0,
                             sal_uInt16 nSeqNo = 0 );
 
     // get the nth character from the start or end of the  current selection
@@ -751,7 +751,7 @@ public:
 
     sal_Bool BasicActionPend() const    { return m_nBasicActionCnt != mnStartAction; }
 
-    bool GotoRegion( const String& rName );
+    bool GotoRegion( const OUString& rName );
 
     // show the current selection
     virtual void MakeSelVisible();
@@ -833,7 +833,7 @@ public:
 
        @return the textual description of the current selection
      */
-    String GetCrsrDescr() const;
+    OUString GetCrsrDescr() const;
 
     SwRect GetRectOfCurrentChar();
 };

@@ -798,7 +798,7 @@ void SwCrsrShell::GotoOutline( sal_uInt16 nIdx )
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
 }
 
-bool SwCrsrShell::GotoOutline( const String& rName )
+bool SwCrsrShell::GotoOutline( const OUString& rName )
 {
     SwCursor* pCrsr = getShellCrsr( true );
 
@@ -956,7 +956,7 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
 }
 
 /// jump to reference marker
-sal_Bool SwCrsrShell::GotoRefMark( const String& rRefMark, sal_uInt16 nSubType,
+sal_Bool SwCrsrShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
                                     sal_uInt16 nSeqNo )
 {
     SET_CURR_SHELL( this );
@@ -1487,8 +1487,8 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     }
                     if (!sAttrs.isEmpty())
                     {
-                        if( rCntntAtPos.sStr.Len() )
-                            rCntntAtPos.sStr += '\n';
+                        if( !rCntntAtPos.sStr.isEmpty() )
+                            rCntntAtPos.sStr += "\n";
                         rCntntAtPos.sStr += "Attr: " + sAttrs;
                     }
                 }
