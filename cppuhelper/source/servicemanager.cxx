@@ -656,7 +656,7 @@ void cppuhelper::ServiceManager::loadImplementation(
             uri, rtl::OUString(), info->name, this,
             css::uno::Reference< css::registry::XRegistryKey >(), prefix);
     } else {
-        SAL_INFO_IF(
+        SAL_WARN_IF(
             !info->prefix.isEmpty(), "cppuhelper",
             "Loader " << info->loader << " and non-empty prefix "
                 << info->prefix);
