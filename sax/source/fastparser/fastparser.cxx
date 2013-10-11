@@ -201,6 +201,7 @@ Entity::~Entity()
 FastSaxParser::FastSaxParser()
 {
     mxDocumentLocator.set( new FastLocatorImpl( this ) );
+    maUtf8Buffer.realloc( mnUtf8BufferSize );
 }
 
 // --------------------------------------------------------------------
@@ -259,19 +260,36 @@ void FastSaxParser::DefineNamespace( const OString& rPrefix, const sal_Char* pNa
 
 sal_Int32 FastSaxParser::GetToken( const OString& rToken )
 {
-    Sequence< sal_Int8 > aSeq( (sal_Int8*)rToken.getStr(), rToken.getLength() );
-
-    return getEntity().mxTokenHandler->getTokenFromUTF8( aSeq );
+    return GetToken( rToken.getStr(), rToken.getLength() );
 }
 
 sal_Int32 FastSaxParser::GetToken( const sal_Char* pToken, sal_Int32 nLen /* = 0 */ )
 {
+    sal_Int32 nRet;
+
     if( !nLen )
         nLen = strlen( pToken );
 
-    Sequence< sal_Int8 > aSeq( (sal_Int8*)pToken, nLen );
+    if ( nLen < mnUtf8BufferSize )
+    {
+        // Get intimiate with the underlying sequence cf. sal/types.h
+        sal_Sequence *pSeq = maUtf8Buffer.get();
 
-    return getEntity().mxTokenHandler->getTokenFromUTF8( aSeq );
+        sal_Int32 nPreRefCount = pSeq->nRefCount;
+
+        pSeq->nElements = nLen;
+        memcpy( pSeq->elements, pToken, nLen );
+        nRet = getEntity().mxTokenHandler->getTokenFromUTF8( maUtf8Buffer );
+
+        (void)nPreRefCount; // for non-debug mode.
+        assert( pSeq->nRefCount == nPreRefCount ); // callee must not take ref.
+    }
+    else
+    {
+        Sequence< sal_Int8 > aSeq( (sal_Int8*)pToken, nLen ); // heap allocate & free
+        nRet = getEntity().mxTokenHandler->getTokenFromUTF8( aSeq );
+    }
+    return nRet;
 }
 
 // --------------------------------------------------------------------
