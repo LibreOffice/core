@@ -19,7 +19,6 @@
 #ifndef _SVXCSS1_HXX
 #define _SVXCSS1_HXX
 
-#include <tools/string.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/svxenum.hxx>
 #include <rtl/textenc.h>

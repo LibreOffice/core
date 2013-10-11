@@ -21,7 +21,6 @@
 #define _WW8STRUC_HXX
 
 #include <osl/endian.h>
-#include <tools/string.hxx>
 #include "rtl/ustring.hxx"
 #include <sal/config.h>
 

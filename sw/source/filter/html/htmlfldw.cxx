@@ -19,7 +19,6 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/string.hxx>
-#include <tools/string.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
