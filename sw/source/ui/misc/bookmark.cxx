@@ -40,20 +40,20 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
     // there may be illegal characters in the box
     if(!bSelEntries)
     {
-        String sTmp = pBox->GetText();
-        sal_uInt16 nLen = sTmp.Len();
-        String sMsg;
+        OUString sTmp = pBox->GetText();
+        sal_uInt16 nLen = sTmp.getLength();
+        OUString sMsg;
         for(sal_uInt16 i = 0; i < BookmarkCombo::aForbiddenChars.getLength(); i++)
         {
-            sal_uInt16 nTmpLen = sTmp.Len();
+            sal_uInt16 nTmpLen = sTmp.getLength();
             sTmp = comphelper::string::remove(sTmp, BookmarkCombo::aForbiddenChars[i]);
-            if(sTmp.Len() != nTmpLen)
-                sMsg += BookmarkCombo::aForbiddenChars[i];
+            if(sTmp.getLength() != nTmpLen)
+                sMsg += OUString(BookmarkCombo::aForbiddenChars[i]);
         }
-        if(sTmp.Len() != nLen)
+        if(sTmp.getLength() != nLen)
         {
             pBox->SetText(sTmp);
-            String sWarning(sRemoveWarning);
+            OUString sWarning(sRemoveWarning);
             sWarning += sMsg;
             InfoBox(this, sWarning).Execute();
         }
@@ -94,7 +94,7 @@ void SwInsertBookmarkDlg::Apply()
     //name
     for (sal_uInt16 nCount = m_pBookmarkBox->GetRemovedCount(); nCount > 0; nCount--)
     {
-        String sRemoved = m_pBookmarkBox->GetRemovedEntry( nCount -1 ).GetName();
+        OUString sRemoved = m_pBookmarkBox->GetRemovedEntry( nCount -1 ).GetName();
         IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
         pMarkAccess->deleteMark( pMarkAccess->findMark(sRemoved) );
         SfxRequest aReq( rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK );
@@ -108,7 +108,7 @@ void SwInsertBookmarkDlg::Apply()
     if (!m_pBookmarkBox->GetText().isEmpty() &&
         (m_pBookmarkBox->GetSwEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND))
     {
-        String sEntry(comphelper::string::remove(m_pBookmarkBox->GetText(),
+        OUString sEntry(comphelper::string::remove(m_pBookmarkBox->GetText(),
             m_pBookmarkBox->GetMultiSelectionSeparator()));
 
         rSh.SetBookmark( KeyCode(), sEntry, aEmptyStr );
@@ -150,7 +150,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRe
         }
     }
 
-    sRemoveWarning = String(SW_RES(STR_REMOVE_WARNING));
+    sRemoveWarning = OUString(SW_RES(STR_REMOVE_WARNING));
 }
 
 SwInsertBookmarkDlg::~SwInsertBookmarkDlg()

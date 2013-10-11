@@ -113,7 +113,7 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     {
         XColorEntry* pEntry = pColorLst->GetColor( i );
         Color aColor = pEntry->GetColor();
-        String sName = pEntry->GetName();
+        OUString sName = pEntry->GetName();
         m_pColorLB->InsertEntry( aColor, sName );
     }
     m_pColorLB->SetUpdateMode( sal_True );

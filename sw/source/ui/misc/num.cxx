@@ -151,7 +151,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     // insert levels
     for(sal_uInt16 i = 1; i <= MAXLEVEL; i++)
         m_pLevelLB->InsertEntry(OUString::number(i));
-    String sEntry(OUString("1 - "));
+    OUString sEntry("1 - ");
     sEntry += OUString::number(MAXLEVEL);
     m_pLevelLB->InsertEntry(sEntry);
     m_pLevelLB->SelectEntry(sEntry);
@@ -783,7 +783,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
     }
     else
     {
-        m_pListtabMF->SetText( String() );
+        m_pListtabMF->SetText( OUString() );
     }
 
     SetModified();

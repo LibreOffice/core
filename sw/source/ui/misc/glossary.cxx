@@ -101,7 +101,7 @@ static OUString lcl_GetValidShortCut( const OUString& rName )
 
 struct GroupUserData
 {
-    String      sGroupName;
+    OUString    sGroupName;
     sal_uInt16  nPathIdx;
     bool        bReadonly;
 
@@ -127,16 +127,16 @@ protected:
 
 public:
     SwNewGlosNameDlg( Window* pParent,
-                      const String& rOldName,
-                      const String& rOldShort );
+                      const OUString& rOldName,
+                      const OUString& rOldShort );
 
-    String GetNewName()  const { return m_pNewName->GetText(); }
-    String GetNewShort() const { return m_pNewShort->GetText(); }
+    OUString GetNewName()  const { return m_pNewName->GetText(); }
+    OUString GetNewShort() const { return m_pNewShort->GetText(); }
 };
 
 SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
-                            const String& rOldName,
-                            const String& rOldShort )
+                            const OUString& rOldName,
+                            const OUString& rOldShort )
     : ModalDialog(pParent, "RenameAutoTextDialog",
         "modules/swriter/ui/renameautotextdialog.ui")
 {

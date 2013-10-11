@@ -85,7 +85,7 @@ void SwCommentRuler::DrawCommentControl()
 
     maVirDev.DrawRect( Rectangle( Point(), aControlRect.GetSize() ) );
 
-    String aLabel( SW_RESSTR ( STR_COMMENTS_LABEL ) );
+    OUString aLabel( SW_RESSTR ( STR_COMMENTS_LABEL ) );
     // Get label and arrow coordinates
     Point aLabelPos;
     Point aArrowPos;
@@ -198,7 +198,7 @@ void SwCommentRuler::MouseMove(const MouseEvent& rMEvt)
         {
             // Mouse out of comment control
             // FIXME Should remember previous tooltip text?
-            SetQuickHelpText( String() );
+            SetQuickHelpText( OUString() );
         }
     }
 }

@@ -71,7 +71,7 @@ static void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
     void* pDel;
     for( sal_uInt16 n = 0, nEnd = rLstBox.GetEntryCount(); n < nEnd; ++n )
         if( 0 != ( pDel = rLstBox.GetEntryData( n )) )
-            delete (String*)pDel;
+            delete (OUString*)pDel;
     rLstBox.Clear();
 }
 
@@ -262,9 +262,9 @@ sal_Unicode SwSortDlg::GetDelimChar() const
     sal_Unicode cRet = '\t';
     if( !m_pDelimTabRB->IsChecked() )
     {
-        String aTmp( m_pDelimEdt->GetText() );
-        if( aTmp.Len() )
-            cRet = aTmp.GetChar( 0 );
+        OUString aTmp( m_pDelimEdt->GetText() );
+        if( !aTmp.isEmpty() )
+            cRet = aTmp[0];
     }
     return cRet;
 }
@@ -299,12 +299,12 @@ void SwSortDlg::Apply()
     SwSortOptions aOptions;
     if( bCheck1 )
     {
-        String sEntry( m_pTypDLB1->GetSelectEntry() );
+        OUString sEntry( m_pTypDLB1->GetSelectEntry() );
         if( sEntry == aNumericTxt )
-            sEntry.Erase();
+            sEntry = "";
         else if( 0 != (pUserData = m_pTypDLB1->GetEntryData(
                                             m_pTypDLB1->GetSelectEntryPos())) )
-            sEntry = *(String*)pUserData;
+            sEntry = *(OUString*)pUserData;
 
         SwSortKey *pKey = new SwSortKey( nCol1, sEntry,
                                     bAsc1 ? SRT_ASCENDING : SRT_DESCENDING );
@@ -313,12 +313,12 @@ void SwSortDlg::Apply()
 
     if( bCheck2 )
     {
-        String sEntry( m_pTypDLB2->GetSelectEntry() );
+        OUString sEntry( m_pTypDLB2->GetSelectEntry() );
         if( sEntry == aNumericTxt )
-            sEntry.Erase();
+            sEntry = "";
         else if( 0 != (pUserData = m_pTypDLB2->GetEntryData(
                                             m_pTypDLB2->GetSelectEntryPos())) )
-            sEntry = *(String*)pUserData;
+            sEntry = *(OUString*)pUserData;
 
         SwSortKey *pKey = new SwSortKey( nCol2, sEntry,
                                     bAsc2 ? SRT_ASCENDING : SRT_DESCENDING );
@@ -327,12 +327,12 @@ void SwSortDlg::Apply()
 
     if( bCheck3 )
     {
-        String sEntry( m_pTypDLB3->GetSelectEntry() );
+        OUString sEntry( m_pTypDLB3->GetSelectEntry() );
         if( sEntry == aNumericTxt )
-            sEntry.Erase();
+            sEntry = "";
         else if( 0 != (pUserData = m_pTypDLB3->GetEntryData(
                                             m_pTypDLB3->GetSelectEntryPos())) )
-            sEntry = *(String*)pUserData;
+            sEntry = *(OUString*)pUserData;
 
         SwSortKey *pKey = new SwSortKey( nCol3, sEntry,
                                     bAsc3 ? SRT_ASCENDING : SRT_DESCENDING );
@@ -429,7 +429,7 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
     const sal_uInt16 nLstBoxCnt = 3;
     ListBox* aLstArr[ nLstBoxCnt ] = { m_pTypDLB1, m_pTypDLB2, m_pTypDLB3 };
     sal_uInt16* aTypeArr[ nLstBoxCnt ] = { &nType1, &nType2, &nType3 };
-    String aOldStrArr[ nLstBoxCnt ];
+    OUString aOldStrArr[ nLstBoxCnt ];
     sal_uInt16 n;
 
     void* pUserData;
@@ -437,12 +437,12 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
     {
         ListBox* pL = aLstArr[ n ];
         if( 0 != (pUserData = pL->GetEntryData( pL->GetSelectEntryPos())) )
-            aOldStrArr[ n ] = *(String*)pUserData;
+            aOldStrArr[ n ] = *(OUString*)pUserData;
         ::lcl_ClearLstBoxAndDelUserData( *pL );
     }
 
     sal_uInt16 nInsPos;
-    String sAlg, sUINm;
+    OUString sAlg, sUINm;
     for( long nCnt = 0, nEnd = aSeq.getLength(); nCnt <= nEnd; ++nCnt )
     {
         if( nCnt < nEnd )
@@ -454,7 +454,7 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
         {
             ListBox* pL = aLstArr[ n ];
             nInsPos = pL->InsertEntry( sUINm );
-            pL->SetEntryData( nInsPos, new String( sAlg ));
+            pL->SetEntryData( nInsPos, new OUString( sAlg ));
             if( pLBox && sAlg == aOldStrArr[ n ] )
                 pL->SelectEntryPos( nInsPos );
         }

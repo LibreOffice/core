@@ -251,8 +251,8 @@ void SwRedlineAcceptDlg::InitAuthors()
 
     SvxTPFilter *pFilterPage = aTabPagesCTRL.GetFilterPage();
 
-    std::vector<String> aStrings;
-    String sOldAuthor(pFilterPage->GetSelectedAuthor());
+    std::vector<OUString> aStrings;
+    OUString sOldAuthor(pFilterPage->GetSelectedAuthor());
     pFilterPage->ClearAuthors();
 
     sal_uInt16 nCount = pSh->GetRedlineCount();
@@ -529,7 +529,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
 
 void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRedline& rRedln, const sal_uInt16 nAutoFmt)
 {
-    String sChild;
+    OUString sChild;
     SwRedlineDataChild *pLastRedlineChild = 0;
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
     bool bAutoFmt = (rRedln.GetRealType() & nAutoFmt) != 0;
@@ -691,7 +691,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     sal_uInt16 nAutoFmt = HasRedlineAutoFmt() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
 
-    String sParent;
+    OUString sParent;
     sal_uInt16 nCount = pSh->GetRedlineCount();
     nEnd = std::min((sal_uInt16)nEnd, (sal_uInt16)(nCount - 1)); // also treats nEnd=USHRT_MAX (until the end)
 
@@ -788,7 +788,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
     // #111827#
     if (aRedlines.size() > 1)
     {
-        String aTmpStr;
+        OUString aTmpStr;
         {
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1,
@@ -1101,7 +1101,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                             break;
                         default:;//prevent warning
                         }
-                        String sTitle(SW_RES(STR_REDLINE_COMMENT));
+                        OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
                         if( nResId )
                             sTitle += SW_RESSTR( nResId );
                         pDlg->SetText(sTitle);
@@ -1173,18 +1173,18 @@ void SwRedlineAcceptDlg::Initialize(const OUString& rExtraData)
                 if (n2 != -1)
                 {
                     // cut out the alignment string
-                    String aStr = rExtraData.copy(nPos, n2 - nPos + 1);
-                    aStr.Erase(0, n1 - nPos + 1);
+                    OUString aStr = rExtraData.copy(nPos, n2 - nPos + 1);
+                    aStr = aStr.copy(n1 - nPos + 1);
 
-                    if (aStr.Len())
+                    if (!aStr.isEmpty())
                     {
-                        sal_uInt16 nCount = static_cast< sal_uInt16 >(aStr.ToInt32());
+                        sal_uInt16 nCount = static_cast< sal_uInt16 >(aStr.toInt32());
 
                         for (sal_uInt16 i = 0; i < nCount; i++)
                         {
-                            sal_uInt16 n3 = aStr.Search(';');
-                            aStr.Erase(0, n3 + 1);
-                            pTable->SetTab(i, aStr.ToInt32(), MAP_PIXEL);
+                            sal_Int32 n3 = aStr.indexOf(';');
+                            aStr = aStr.copy(n3 + 1);
+                            pTable->SetTab(i, aStr.toInt32(), MAP_PIXEL);
                         }
                     }
                 }

@@ -54,18 +54,18 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     get(m_pRestartEachPageCB, "restarteverynewpage");
     get(m_pNumberingOnCB, "shownumbering");
 
-    String sIntervalName = m_pDivIntervalFT->GetAccessibleName();
-    sIntervalName += OUString("(");
+    OUString sIntervalName = m_pDivIntervalFT->GetAccessibleName();
+    sIntervalName += "(";
     sIntervalName += m_pDivRowsFT->GetAccessibleName();
-    sIntervalName += OUString(")");
+    sIntervalName += ")";
     m_pDivIntervalNF->SetAccessibleName(sIntervalName);
 
     Window *pNumIntervalFT = get<Window>("interval");
     Window *pNumRowsFT = get<Window>("intervallines");
     sIntervalName = pNumIntervalFT->GetAccessibleName();
-    sIntervalName += OUString("(");
+    sIntervalName += "(";
     sIntervalName += pNumRowsFT->GetAccessibleName();
-    sIntervalName += OUString(")");
+    sIntervalName += ")";
     m_pNumIntervalNF->SetAccessibleName(sIntervalName);
 
     // char styles
@@ -74,14 +74,14 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     const SwLineNumberInfo &rInf = pSh->GetLineNumberInfo();
     IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
 
-    String sStyleName(rInf.GetCharFmt( *pIDSPA )->GetName());
+    OUString sStyleName(rInf.GetCharFmt( *pIDSPA )->GetName());
     const sal_uInt16 nPos = m_pCharStyleLB->GetEntryPos(sStyleName);
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
         m_pCharStyleLB->SelectEntryPos(nPos);
     else
     {
-        if (sStyleName.Len())
+        if (!sStyleName.isEmpty())
         {
             m_pCharStyleLB->InsertEntry(sStyleName);
             m_pCharStyleLB->SelectEntry(sStyleName);
@@ -136,7 +136,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
     // char styles
-    String sCharFmtName(m_pCharStyleLB->GetSelectEntry());
+    OUString sCharFmtName(m_pCharStyleLB->GetSelectEntry());
     SwCharFmt *pCharFmt = pSh->FindCharFmtByName(sCharFmtName);
 
     if (!pCharFmt)

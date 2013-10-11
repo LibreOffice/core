@@ -95,15 +95,15 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     for( sal_uInt16 i = 0; i < nCount; ++i)
     {
         OUString sTitle;
-        String sGroup = pHdl->GetGroupName(i, &sTitle);
-        if(!sGroup.Len())
+        OUString sGroup = pHdl->GetGroupName(i, &sTitle);
+        if(sGroup.isEmpty())
             continue;
         GlosBibUserData* pData = new GlosBibUserData;
         pData->sGroupName = sGroup;
         pData->sGroupTitle = sTitle;
-        String sTemp(sTitle);
-        sTemp += '\t';
-        pData->sPath = m_pPathLB->GetEntry((sal_uInt16)sGroup.GetToken(1, GLOS_DELIM).ToInt32());
+        OUString sTemp(sTitle);
+        sTemp += "\t";
+        pData->sPath = m_pPathLB->GetEntry((sal_uInt16)sGroup.getToken(1, GLOS_DELIM).toInt32());
         sTemp += pData->sPath;
         SvTreeListEntry* pEntry = m_pGroupTLB->InsertEntry(sTemp);
         pEntry->SetUserData(pData);
@@ -121,12 +121,12 @@ void SwGlossaryGroupDlg::Apply()
     if(m_pNewPB->IsEnabled())
         NewHdl(m_pNewPB);
 
-    String aActGroup = SwGlossaryDlg::GetCurrGroup();
+    OUString aActGroup = SwGlossaryDlg::GetCurrGroup();
 
     for (OUVector_t::const_iterator it(m_RemovedArr.begin());
             it != m_RemovedArr.end(); ++it)
     {
-        const String sDelGroup = it->getToken(0, '\t');
+        const OUString sDelGroup = it->getToken(0, '\t');
         if( sDelGroup == aActGroup )
         {
             //when the current group is deleted, the current group has to be relocated
@@ -137,12 +137,12 @@ void SwGlossaryGroupDlg::Apply()
                 pGlosHdl->SetCurGroup(pUserData->sGroupName);
             }
         }
-        String sMsg(SW_RES(STR_QUERY_DELETE_GROUP1));
-        String sTitle( it->getToken(1, '\t') );
-        if(sTitle.Len())
+        OUString sMsg(SW_RES(STR_QUERY_DELETE_GROUP1));
+        OUString sTitle( it->getToken(1, '\t') );
+        if(!sTitle.isEmpty())
             sMsg += sTitle;
         else
-            sDelGroup.GetToken(1, GLOS_DELIM);
+            sDelGroup.getToken(1, GLOS_DELIM);
         sMsg += SW_RESSTR(STR_QUERY_DELETE_GROUP2);
         QueryBox aQuery(this->GetParent(), WB_YES_NO|WB_DEF_NO, sMsg );
         if(RET_YES == aQuery.Execute())
@@ -183,19 +183,19 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
     if(pFirstEntry)
     {
         GlosBibUserData* pUserData = (GlosBibUserData*)pFirstEntry->GetUserData();
-        String sEntry(pUserData->sGroupName);
-        String sName(m_pNameED->GetText());
+        OUString sEntry(pUserData->sGroupName);
+        OUString sName(m_pNameED->GetText());
         bool bExists = false;
         sal_uLong nPos = m_pGroupTLB->GetEntryPos(sName, 0);
         if( 0xffffffff > nPos)
         {
             SvTreeListEntry* pEntry = m_pGroupTLB->GetEntry(nPos);
             GlosBibUserData* pFoundData = (GlosBibUserData*)pEntry->GetUserData();
-            String sGroup = pFoundData->sGroupName;
+            OUString sGroup = pFoundData->sGroupName;
             bExists = sGroup == sEntry;
         }
 
-        m_pRenamePB->Enable(!bExists && sName.Len());
+        m_pRenamePB->Enable(!bExists && !sName.isEmpty());
         m_pDelPB->Enable(IsDeleteAllowed(sEntry));
     }
     return 0;
@@ -208,8 +208,8 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl)
         + OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     m_InsertedArr.push_back(sGroup);
-    String sTemp(m_pNameED->GetText());
-    sTemp += '\t';
+    OUString sTemp(m_pNameED->GetText());
+    sTemp += "\t";
     sTemp += m_pPathLB->GetSelectEntry();
     SvTreeListEntry* pEntry = m_pGroupTLB->InsertEntry(sTemp);
     GlosBibUserData* pData = new GlosBibUserData;
@@ -263,8 +263,8 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     }
     if(bDelete)
     {
-        String sGroupEntry(pUserData->sGroupName);
-        sGroupEntry += '\t';
+        OUString sGroupEntry(pUserData->sGroupName);
+        sGroupEntry += "\t";
         sGroupEntry += pUserData->sGroupTitle;
         m_RemovedArr.push_back(sGroupEntry);
     }
@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
 {
     SvTreeListEntry* pEntry = m_pGroupTLB->FirstSelected();
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
-    String sEntry(pUserData->sGroupName);
+    OUString sEntry(pUserData->sGroupName);
 
     const OUString sNewTitle(m_pNameED->GetText());
     OUString sNewName = sNewTitle
@@ -304,16 +304,16 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
     }
     if(!bDone)
     {
-        sEntry += RENAME_TOKEN_DELIM;
+        sEntry += OUString(RENAME_TOKEN_DELIM);
         sEntry += sNewName;
-        sEntry += RENAME_TOKEN_DELIM;
+        sEntry += OUString(RENAME_TOKEN_DELIM);
         sEntry += sNewTitle;
         m_RenamedArr.push_back(sEntry);
     }
     delete (GlosBibUserData*)pEntry->GetUserData();
     m_pGroupTLB->GetModel()->Remove(pEntry);
-    String sTemp(m_pNameED->GetText());
-    sTemp += '\t';
+    OUString sTemp(m_pNameED->GetText());
+    sTemp += "\t";
     sTemp += m_pPathLB->GetSelectEntry();
     pEntry = m_pGroupTLB->InsertEntry(sTemp);
     GlosBibUserData* pData = new GlosBibUserData;
@@ -329,16 +329,16 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
 
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
 {
-    String sEntry(m_pNameED->GetText());
+    OUString sEntry(m_pNameED->GetText());
     sal_Bool bEnableNew = sal_True;
     sal_Bool bEnableDel = sal_False;
     sal_uLong nCaseReadonly =
             (sal_uLong)m_pPathLB->GetEntryData(m_pPathLB->GetSelectEntryPos());
     bool bDirReadonly = 0 != (nCaseReadonly&PATH_READONLY);
 
-    if(!sEntry.Len() || bDirReadonly)
+    if(sEntry.isEmpty() || bDirReadonly)
         bEnableNew = sal_False;
-    else if(sEntry.Len())
+    else if(!sEntry.isEmpty())
     {
         sal_uLong nPos = m_pGroupTLB->GetEntryPos(sEntry, 0);
         //if it's not case sensitive you have to search for yourself
@@ -347,7 +347,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
             const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
             for(sal_uInt16 i = 0; i < m_pGroupTLB->GetEntryCount(); i++)
             {
-                String sTemp = m_pGroupTLB->GetEntryText( i, 0 );
+                OUString sTemp = m_pGroupTLB->GetEntryText( i, 0 );
                 nCaseReadonly = (sal_uLong)m_pPathLB->GetEntryData(
                     m_pPathLB->GetEntryPos(m_pGroupTLB->GetEntryText(i,1)));
                 bool bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
@@ -433,10 +433,10 @@ void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
                 aSize.Width() = GetSizePixel().Width() - aPos.X();
             aPos = OutputToScreenPixel(aPos);
             Rectangle aItemRect( aPos, aSize );
-            String sMsg;
+            OUString sMsg;
             GlosBibUserData* pData = (GlosBibUserData*)pEntry->GetUserData();
             sMsg = pData->sPath;
-            sMsg += INET_PATH_TOKEN;
+            sMsg += OUString(INET_PATH_TOKEN);
             sMsg += pData->sGroupName.getToken(0, GLOS_DELIM);
             sMsg += SwGlossaries::GetExtension();
 

@@ -234,7 +234,7 @@ SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet &rSet
 ------------------------------------------------------------------------*/
 void SwEndNoteOptionPage::SelectNumbering(int eNum)
 {
-    String sSelect;
+    OUString sSelect;
     switch(eNum)
     {
         case FTNNUM_DOC:
@@ -332,7 +332,7 @@ IMPL_LINK_NOARG_INLINE_START(SwEndNoteOptionPage, PosChapterHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwEndNoteOptionPage, PosChapterHdl)
 
-static SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const String& rCharFmtName )
+static SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFmtName )
 {
     SwCharFmt* pFmt = 0;
     sal_uInt16 nChCount = pSh->GetCharFmtCount();
@@ -375,7 +375,7 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
     sal_uInt16 nPos = m_pParaTemplBox->GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
-        const String aFmtName( m_pParaTemplBox->GetSelectEntry() );
+        const OUString aFmtName( m_pParaTemplBox->GetSelectEntry() );
         SwTxtFmtColl *pColl = pSh->GetParaStyle(aFmtName, SwWrtShell::GETSTYLE_CREATEANY);
         OSL_ENSURE(pColl, "paragraph style not found");
         pInf->SetFtnTxtColl(*pColl);

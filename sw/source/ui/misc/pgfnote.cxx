@@ -236,7 +236,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     sal_uInt16 nSelPos = m_pLineColorBox->GetEntryPos( pFtnInfo->GetLineColor() );
     if( nSelPos == LISTBOX_ENTRY_NOTFOUND )
         nSelPos = m_pLineColorBox->InsertEntry( pFtnInfo->GetLineColor(),
-                String( SW_RES( RID_SVXSTR_COLOR_USER ) ) );
+                OUString( SW_RES( RID_SVXSTR_COLOR_USER ) ) );
 
     m_pLineColorBox->SetSelectHdl( LINK( this, SwFootNotePage, LineColorSelected_Impl ) );
     m_pLineColorBox->SelectEntryPos( nSelPos );

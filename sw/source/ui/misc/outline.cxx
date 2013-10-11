@@ -70,7 +70,7 @@ class SwNumNamesDlg : public ModalDialog
 public:
     SwNumNamesDlg(Window *pParent);
     void SetUserNames(const OUString *pList[]);
-    String GetName() const { return m_pFormEdit->GetText(); }
+    OUString GetName() const { return m_pFormEdit->GetText(); }
     sal_uInt16 GetCurEntryPos() const { return m_pFormBox->GetSelectEntryPos(); }
 };
 
@@ -277,7 +277,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
         pDlg->SetUserNames(aStrArr);
         if(RET_OK == pDlg->Execute())
         {
-            const String aName(pDlg->GetName());
+            const OUString aName(pDlg->GetName());
             pChapterNumRules->ApplyNumRules( SwNumRulesWithName(
                     *pNumRule, aName ), pDlg->GetCurEntryPos() );
             pMenu->SetItemText(pMenu->GetItemId(pDlg->GetCurEntryPos()), aName);
@@ -513,8 +513,8 @@ void    SwOutlineSettingsTabPage::Update()
     else
     {
         sal_uInt16 nTmpLevel = lcl_BitToLevel(nActLevel);
-        String aColl(pCollNames[nTmpLevel]);
-        if(aColl.Len())
+        OUString aColl(pCollNames[nTmpLevel]);
+        if(!aColl.isEmpty())
             m_pCollBox->SelectEntry(aColl);
         else
             m_pCollBox->SelectEntry(aNoFmtName);
@@ -591,10 +591,10 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
 {
     sal_uInt8 i;
 
-    const String aCollName(pBox->GetSelectEntry());
+    const OUString aCollName(pBox->GetSelectEntry());
     //0xFFFF not allowed here (disable)
     sal_uInt16 nTmpLevel = lcl_BitToLevel(nActLevel);
-    String sOldName( pCollNames[nTmpLevel] );
+    OUString sOldName( pCollNames[nTmpLevel] );
 
     for( i = 0; i < MAXLEVEL; ++i)
         pCollNames[i] = aSaveCollNames[i];
@@ -611,7 +611,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
     }
 
     // search the oldname and put it into the current entries
-    if( sOldName.Len() )
+    if( !sOldName.isEmpty() )
         for( i = 0; i < MAXLEVEL; ++i)
             if( aSaveCollNames[ i ] == sOldName && i != nTmpLevel &&
                 pCollNames[ i ].isEmpty() )
@@ -693,7 +693,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
 
 IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFmtHdl)
 {
-    String sEntry = m_pCharFmtLB->GetSelectEntry();
+    OUString sEntry = m_pCharFmtLB->GetSelectEntry();
     sal_uInt16 nMask = 1;
     bool bFormatNone = sEntry == ViewShell::GetShellRes()->aStrNone;
     SwCharFmt* pFmt = 0;
@@ -999,7 +999,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     if(pActNum->IsContinusNum())
                         aNumVector[nLevel] = nPreNum;
                     // #128041#
-                    String aText(pActNum->MakeNumString( aNumVector ));
+                    OUString aText(pActNum->MakeNumString( aNumVector ));
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
                     nBulletWidth = (sal_uInt16)pVDev->GetTextWidth(aText);
                     nPreNum++;
@@ -1103,7 +1103,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     if(pActNum->IsContinusNum())
                         aNumVector[nLevel] = nPreNum;
                     // #128041#
-                    String aText(pActNum->MakeNumString( aNumVector ));
+                    OUString aText(pActNum->MakeNumString( aNumVector ));
                     pVDev->DrawText( Point(nXStart, nYStart), aText );
                     nTextOffset = (sal_uInt16)pVDev->GetTextWidth(aText);
                     nTextOffset = nTextOffset + nXStep;
