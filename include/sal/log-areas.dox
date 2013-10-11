@@ -110,6 +110,11 @@ certain functionality.
 @li @c sdremote.bluetooth
 @li @c sdremote.wifi
 
+@section drawinlayer
+
+@li @c drawinglayer
+@li @c drawinglayer.canvas
+
 @section editeng
 
 @li @c editeng

@@ -76,7 +76,7 @@ namespace drawinglayer
         //////////////////////////////////////////////////////////////////////////////
         // single primitive renderers
 
-        void CanvasProcessor2D::impRenderTextSimpleOrDecoratedPortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate)
+        void CanvasProcessor2D::impRenderTextSimplePortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate)
         {
             if(rTextCandidate.getTextLength())
             {
@@ -95,7 +95,7 @@ namespace drawinglayer
                     : rendering::PanoseProportion::ANYTHING;
                 aFontRequest.FontDescription.FontDescription.Letterform = rFontAttr.getItalic() ? 9 : 0;
 
-                // init CellSize to 1.0, else a default font height will be used
+                // init CellSize to 1.0, actual height comes TextTransform
                 aFontRequest.CellSize = 1.0;
                 aFontRequest.Locale = rTextCandidate.getLocale();
 
@@ -103,8 +103,11 @@ namespace drawinglayer
                 css::geometry::Matrix2D aFontMatrix;
                 canvas::tools::setIdentityMatrix2D(aFontMatrix);
 
-                uno::Reference<rendering::XCanvasFont> xFont(mxCanvas->createFont(
-                                                                 aFontRequest, uno::Sequence< beans::PropertyValue >(), aFontMatrix));
+                uno::Reference<rendering::XCanvasFont> xFont(
+                    mxCanvas->createFont(
+                        aFontRequest,
+                        uno::Sequence< beans::PropertyValue >(),
+                        aFontMatrix));
 
                 if(xFont.is())
                 {
@@ -124,7 +127,8 @@ namespace drawinglayer
                         const ::std::vector< double >& rDXArray = rTextCandidate.getDXArray();
                         const sal_uInt32 nDXCount(rDXArray.size());
 
-                        if(nDXCount)
+                        // TODO(F3): this needs proper scaling
+                        if(false) //nDXCount)
                         {
                             // DXArray does not need to be adapted to getTextPosition/getTextLength,
                             // it is already provided correctly
@@ -133,13 +137,17 @@ namespace drawinglayer
                         }
 
                         // set text color
-                        const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
+                        const basegfx::BColor aRGBColor(
+                            maBColorModifierStack.getModifiedColor(
+                                rTextCandidate.getFontColor()));
                         maVolatileRenderState.DeviceColor =
                             aRGBColor.colorToDoubleSequence(mxCanvas->getDevice());
 
                         // set text transformation
-                        canvas::tools::setRenderStateTransform(maVolatileRenderState,
-                                                               getViewInformation2D().getObjectTransformation() * rTextCandidate.getTextTransform());
+                        canvas::tools::setRenderStateTransform(
+                            maVolatileRenderState,
+                            getViewInformation2D().getObjectTransformation()
+                            * rTextCandidate.getTextTransform());
 
                         // paint
                         mxCanvas->drawTextLayout(xLayout, maViewState, maVolatileRenderState);
@@ -495,14 +503,24 @@ namespace drawinglayer
                 //
                 // See also http://www.w3.org/TR/SVG/masking.html#Masking
 
-                // how big is the resulting image?
-                const basegfx::B2DRange aRange(primitive2d::getB2DRangeFromPrimitive2DSequence(
-                                                   rTransCandidate.getChildren(),
-                                                   getViewInformation2D()));
+                // how big is the resulting image, in device pixel?
+                basegfx::B2DRange aRange(primitive2d::getB2DRangeFromPrimitive2DSequence(
+                                             rTransCandidate.getChildren(),
+                                             getViewInformation2D()));
+                aRange.transform(getViewInformation2D().getViewTransformation()
+                                 * getViewInformation2D().getObjectTransformation());
+
+                // just in case clip against viewport, pointless to
+                // render outside visible area
+                aRange.intersect( getViewInformation2D().getDiscreteViewport() );
+
                 const basegfx::B2IRange aIntRange(
                     canvas::tools::spritePixelAreaFromB2DRange(aRange));
                 const css::geometry::IntegerSize2D aMaskSize(
                     aIntRange.getWidth(), aIntRange.getHeight());
+
+                SAL_INFO("drawinglayer.canvas", "TransparencePrimitive2D rendering into ("
+                         << aMaskSize.Width << "," << aMaskSize.Height << ") bitmap");
 
                 // TODO(E1): in theory, could also get a float bitmap here...
                 uno::Reference< rendering::XIntegerBitmap > xContent(
@@ -546,17 +564,19 @@ namespace drawinglayer
                     0,0,
                     aMaskSize.Width,
                     aMaskSize.Height);
+                uno::Sequence< sal_Int8 > aRawMask =
+                    xMask->getData(aMaskLayout,
+                                   aMaskArea);
                 uno::Sequence< rendering::ARGBColor > aARGBMask =
-                    aMaskLayout.ColorSpace->convertIntegerToARGB(
-                        xMask->getData(
-                            aMaskLayout,
-                            aMaskArea));
+                    aMaskLayout.ColorSpace->convertIntegerToARGB(aRawMask);
+
                 rendering::IntegerBitmapLayout aContentLayout;
+                uno::Sequence< sal_Int8 > aRawContent =
+                    xContent->getData(
+                        aContentLayout,
+                        aMaskArea);
                 uno::Sequence< rendering::ARGBColor > aARGBContent =
-                    aContentLayout.ColorSpace->convertIntegerToARGB(
-                        xContent->getData(
-                            aContentLayout,
-                            aMaskArea));
+                    aContentLayout.ColorSpace->convertIntegerToARGB(aRawContent);
 
                 rendering::ARGBColor* pARGBContent( aARGBContent.getArray() );
                 const rendering::ARGBColor* const pARGBContentEnd(
@@ -604,7 +624,7 @@ namespace drawinglayer
 
             // create new local ViewInformation2D with new transformation
             const geometry::ViewInformation2D aViewInformation2D(
-                getViewInformation2D().getObjectTransformation()  * rTransformCandidate.getTransformation(),
+                getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation(),
                 getViewInformation2D().getViewTransformation(),
                 getViewInformation2D().getViewport(),
                 getViewInformation2D().getVisualizedPage(),
@@ -793,7 +813,7 @@ namespace drawinglayer
                 aStops[i] = rEntries[i].getOffset();
                 aColors[i] = rEntries[i].getColor().colorToDoubleSequence(
                     mxCanvas->getDevice());
-                aColors[i][4] = rEntries[i].getOpacity();
+                aColors[i][3] = rEntries[i].getOpacity();
             }
 
             // fill service params
@@ -879,7 +899,7 @@ namespace drawinglayer
                 aStops[i] = rEntries[i].getOffset();
                 aColors[i] = rEntries[i].getColor().colorToDoubleSequence(
                     mxCanvas->getDevice());
-                aColors[i][4] = rEntries[i].getOpacity();
+                aColors[i][3] = rEntries[i].getOpacity();
             }
 
             // fill service params
@@ -945,18 +965,19 @@ namespace drawinglayer
                 // relevant for edit mode currently, or stuff like
                 // e.g. hatches is currently not implemented in
                 // canvas):
-                //   case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D          (fallback good)
-                //   case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D            (fallback excellent)
-                //   case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D         (fallback good)
-                //   case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D (fallback good)
-                //   case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D             (fallback needs vcl)
-                //   case PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D           (NYI in canvas)
-                //   case PRIMITIVE2D_ID_INVERTPRIMITIVE2D              (edit mode only)
-                //   case PRIMITIVE2D_ID_SVGLINEARATOMPRIMITIVE2D       (should not happen, and if: fallback good)
-                //   case PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D       (should not happen, and if: fallback good)
+                //   case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D           (fallback good)
+                //   case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D             (fallback excellent)
+                //   case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D          (fallback good)
+                //   case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D  (fallback good)
+                //   case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D              (fallback needs vcl)
+                //   case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D (fallback needs vcl)
+                //   case PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D            (NYI in canvas)
+                //   case PRIMITIVE2D_ID_INVERTPRIMITIVE2D               (edit mode only)
+                //   case PRIMITIVE2D_ID_SVGLINEARATOMPRIMITIVE2D        (should not happen, and if: fallback good)
+                //   case PRIMITIVE2D_ID_SVGRADIALATOMPRIMITIVE2D        (should not happen, and if: fallback good)
                 //
                 // TODO(F1):
-                //   case PRIMITIVE2D_ID_EPSPRIMITIVE2D                 (needs ghostscript/Xpost help)
+                //   case PRIMITIVE2D_ID_EPSPRIMITIVE2D                  (needs ghostscript/Xpost help)
 
 
                 case PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D :
@@ -968,19 +989,7 @@ namespace drawinglayer
                     // directdraw of text simple portion; added test possibility to check text decompose
                     if(getOptionsDrawinglayer().IsRenderSimpleTextDirect())
                     {
-                        impRenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
-                    }
-                    else
-                    {
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    }
-                    break;
-
-                case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
-                    // directdraw of text simple portion; added test possibility to check text decompose
-                    if(getOptionsDrawinglayer().IsRenderDecoratedTextDirect())
-                    {
-                        impRenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
+                        impRenderTextSimplePortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
                     }
                     else
                     {
