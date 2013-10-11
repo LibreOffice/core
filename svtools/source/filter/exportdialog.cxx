@@ -951,7 +951,7 @@ void ExportDialog::updateControls()
         if (nInd != -1)
             aEst = aEst.replaceAt( nInd, 2, ImpValueOfInKB( nRawFileSize ) );
 
-        if ( nRealFileSize )
+        if ( nRealFileSize && nInd != -1 )
         {
             nInd = aEst.indexOf( "%", nInd );
             if (nInd != -1)
