@@ -226,22 +226,6 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     SwIndex& rCntntIdx = pPam->GetPoint()->nContent;
 
-    // If a beginning/end, from out of node; stop if empty node
-    if( bSrchForward
-        ? ( rCntntIdx.GetIndex() == pPam->GetCntntNode()->Len() &&
-            rCntntIdx.GetIndex() )
-        : !rCntntIdx.GetIndex() && pPam->GetCntntNode()->Len() )
-    {
-        if( !(*fnMove->fnNds)( &rNdIdx, sal_False ))
-        {
-            delete pPam;
-            return sal_False;
-        }
-        SwCntntNode *pNd = rNdIdx.GetNode().GetCntntNode();
-        xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
-        rCntntIdx.Assign( pNd, nTmpPos );
-    }
-
     // If bFound is true then the string was found and is between nStart and nEnd
     sal_Bool bFound = sal_False;
     // start position in text or initial position
