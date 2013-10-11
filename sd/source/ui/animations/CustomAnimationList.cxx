@@ -455,12 +455,17 @@ void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* )
 // ====================================================================
 
 CustomAnimationList::CustomAnimationList( ::Window* pParent )
-    : SvTreeListBox( pParent, WB_TABSTOP | WB_BORDER )
+    : SvTreeListBox( pParent, WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT )
     , mbIgnorePaint(false)
     , mpController(0)
     , mnLastGroupId(0)
     , mpLastParentEntry(0)
 {
+
+    EnableContextMenuHandling();
+    SetSelectionMode( MULTIPLE_SELECTION );
+    SetIndent(16);
+    SetNodeDefaultImages();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCustomAnimationList( ::Window *pParent )
