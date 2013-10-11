@@ -281,9 +281,9 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
                     nChgLen = nIndex - nChgPos;
                     nConvChgLen = nPos - nConvChgPos;
 #if OSL_DEBUG_LEVEL > 1
-                    String aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
+                    OUString aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
 #endif
-                    String aInNew( rNewText.copy( nConvChgPos, nConvChgLen ) );
+                    OUString aInNew( rNewText.copy( nConvChgPos, nConvChgLen ) );
 
                     // set selection to sub string to be replaced in original text
                     xub_StrLen nChgInNodeStartIndex = static_cast< xub_StrLen >( nStartIndex + nCorrectionOffset + nChgPos );
@@ -291,7 +291,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
                     m_rWrtShell.GetCrsr()->GetMark()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex );
                     m_rWrtShell.GetCrsr()->GetPoint()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex + nChgLen );
 #if OSL_DEBUG_LEVEL > 1
-                    String aSelTxt1( m_rWrtShell.GetSelTxt() );
+                    OUString aSelTxt1( m_rWrtShell.GetSelTxt() );
 #endif
 
                     // replace selected sub string with the corresponding
@@ -346,7 +346,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         m_rWrtShell.GetCurAttr( aItemSet );
 
 #if OSL_DEBUG_LEVEL > 1
-        String aSelTxt1( m_rWrtShell.GetSelTxt() );
+        OUString aSelTxt1( m_rWrtShell.GetSelTxt() );
 #endif
         m_rWrtShell.Delete();
         m_rWrtShell.Insert( rNewText );
@@ -357,7 +357,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         SwPosition *pMark = m_rWrtShell.GetCrsr()->GetMark();
         pMark->nContent = pMark->nContent.GetIndex() - rNewText.getLength();
 #if OSL_DEBUG_LEVEL > 1
-        String aSelTxt2( m_rWrtShell.GetSelTxt() );
+        OUString aSelTxt2( m_rWrtShell.GetSelTxt() );
 #endif
 
         // since 'SetAttr' below functions like merging with the attributes
@@ -402,7 +402,7 @@ void SwHHCWrapper::ReplaceUnit(
     OSL_ENSURE( aOrigTxt == rOrigText, "!! text mismatch !!" );
     SwFmtRuby *pRuby = 0;
     bool bRubyBelow = false;
-    String  aNewOrigText;
+    OUString  aNewOrigText;
     switch (eAction)
     {
         case eExchange :
@@ -449,7 +449,7 @@ void SwHHCWrapper::ReplaceUnit(
     if (pRuby)
     {
         m_rWrtShell.StartUndo( UNDO_SETRUBYATTR );
-        if (aNewOrigText.Len())
+        if (!aNewOrigText.isEmpty())
         {
             // according to FT we currently should not bother about keeping
             // attributes in Hangul/Hanja conversion
@@ -464,7 +464,7 @@ void SwHHCWrapper::ReplaceUnit(
             // of the flag.
             m_rWrtShell.EndSelect();
 
-            m_rWrtShell.Left( 0, sal_True, aNewOrigText.Len(), sal_True, sal_True );
+            m_rWrtShell.Left( 0, sal_True, aNewOrigText.getLength(), sal_True, sal_True );
         }
 
         pRuby->SetPosition( static_cast<sal_uInt16>(bRubyBelow) );

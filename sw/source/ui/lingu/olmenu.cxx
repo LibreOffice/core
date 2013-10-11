@@ -220,12 +220,12 @@ void SwSpellPopup::fillLangPopupMenu(
         }
     }
 
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_NONE_OFFSET,  String(SW_RES( STR_LANGSTATUS_NONE )), MIB_RADIOCHECK );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_NONE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_NONE )), MIB_RADIOCHECK );
     if ( aLanguageTable.GetString( LANGUAGE_NONE ) == aCurLang )
         pPopupMenu->CheckItem( nLangItemIdStart + MN_NONE_OFFSET, sal_True );
 
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, String(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )), 0 );
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  String(SW_RES( STR_LANGSTATUS_MORE )), 0 );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, OUString(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )), 0 );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_MORE )), 0 );
 }
 
 
@@ -235,7 +235,7 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
     OUString aTmp;
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
     Graphic aGraphic;
-    const String aFilterName( IMP_PNG );
+    const OUString aFilterName( IMP_PNG );
     if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
     {
         aRes = Image( aGraphic.GetBitmapEx() );
@@ -346,7 +346,7 @@ SwSpellPopup::SwSpellPopup(
         }
     }
 
-    OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
+    OUString aIgnoreSelection( OUString( SW_RES( STR_IGNORE_SELECTION ) ) );
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
     sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );
@@ -431,18 +431,18 @@ SwSpellPopup::SwSpellPopup(
 
     //ADD NEW LANGUAGE MENU ITEM
     ///////////////////////////////////////////////////////////////////////////
-    String aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
+    OUString aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
     SvtLanguageTable aLanguageTable;
 
     // get keyboard language
-    String aKeyboardLang;
+    OUString aKeyboardLang;
     SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
     LanguageType nLang = rEditWin.GetInputLanguage();
     if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
         aKeyboardLang = aLanguageTable.GetString( nLang );
 
     // get the language that is in use
-    String aCurrentLang = OUString("*");
+    OUString aCurrentLang("*");
     nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
         aCurrentLang = aLanguageTable.GetString( nLang );
@@ -555,7 +555,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
         InsertSeparator(OString(), nPos++);
     }
 
-    OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
+    OUString aIgnoreSelection( SW_RES( STR_IGNORE_SELECTION ) );
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
     sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );
@@ -586,18 +586,18 @@ aInfo16( SW_RES(IMG_INFO_16) )
 
     //ADD NEW LANGUAGE MENU ITEM
     ///////////////////////////////////////////////////////////////////////////
-    String aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
+    OUString aScriptTypesInUse( OUString::number( pWrtSh->GetScriptType() ) );
     SvtLanguageTable aLanguageTable;
 
     // get keyboard language
-    String aKeyboardLang;
+    OUString aKeyboardLang;
     SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
     LanguageType nLang = rEditWin.GetInputLanguage();
     if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
         aKeyboardLang = aLanguageTable.GetString( nLang );
 
     // get the language that is in use
-    String aCurrentLang = OUString("*");
+    OUString aCurrentLang("*");
     nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
         aCurrentLang = aLanguageTable.GetString( nLang );
@@ -687,27 +687,27 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             sal_Bool bOldIns = pSh->IsInsMode();
             pSh->SetInsMode( sal_True );
 
-            String aTmp( aSuggestions[ nAltIdx ] );
-            String aOrig( bGrammarResults ? OUString() : xSpellAlt->getWord() );
+            OUString aTmp( aSuggestions[ nAltIdx ] );
+            OUString aOrig( bGrammarResults ? OUString() : xSpellAlt->getWord() );
 
             // if orginal word has a trailing . (likely the end of a sentence)
             // and the replacement text hasn't, then add it to the replacement
-            if (aTmp.Len() && aOrig.Len() &&
-                '.' == aOrig.GetChar( aOrig.Len() - 1) && /* !IsAlphaNumeric ??*/
-                '.' != aTmp.GetChar( aTmp.Len() - 1))
+            if (!aTmp.isEmpty() && !aOrig.isEmpty() &&
+                '.' == aOrig[ aOrig.getLength() - 1] && /* !IsAlphaNumeric ??*/
+                '.' != aTmp[ aTmp.getLength() - 1])
             {
-                aTmp += '.';
+                aTmp += ".";
             }
 
             // #111827#
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UndoArg1, pSh->GetCrsrDescr());
-            aRewriter.AddRule(UndoArg2, String(SW_RES(STR_YIELDS)));
+            aRewriter.AddRule(UndoArg2, OUString(SW_RES(STR_YIELDS)));
 
-            String aTmpStr( SW_RES(STR_START_QUOTE) );
+            OUString aTmpStr( SW_RES(STR_START_QUOTE) );
             aTmpStr += aTmp;
-            aTmpStr += String(SW_RES(STR_END_QUOTE));
+            aTmpStr += OUString(SW_RES(STR_END_QUOTE));
             aRewriter.AddRule(UndoArg3, aTmpStr);
 
             pSh->StartUndo(UNDO_UI_REPLACE, &aRewriter);
@@ -780,7 +780,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     else if ((MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END) || nId == MN_ADD_TO_DIC_SINGLE)
     {
             OUString aWord( xSpellAlt->getWord() );
-            String aDicName;
+            OUString aDicName;
 
             if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
             {
@@ -847,7 +847,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                     RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
                     RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
                     0 );
-        String aNewLangTxt;
+        OUString aNewLangTxt;
 
         if (MN_SET_LANGUAGE_SELECTION_START <= nId && nId <= MN_SET_LANGUAGE_SELECTION_END)
         {
