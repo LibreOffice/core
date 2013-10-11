@@ -1030,9 +1030,6 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
 
 void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
 {
-    const OUString sFullPath ("FullPath");
-    const OUString sMediaType ("MediaType");
-
     ZipEntry* pEntry = new ZipEntry;
     ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
     uno::Reference< io::XOutputStream > xConTypeOutStream( *pBuffer, UNO_QUERY );
@@ -1055,7 +1052,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     {
         OUString aPath;
         OUString aType;
-        OSL_ENSURE( ( *aIter )[PKG_MNFST_MEDIATYPE].Name.equals( sMediaType ) && ( *aIter )[PKG_MNFST_FULLPATH].Name.equals( sFullPath ),
+        OSL_ENSURE( ( *aIter )[PKG_MNFST_MEDIATYPE].Name == "MediaType" && ( *aIter )[PKG_MNFST_FULLPATH].Name == "FullPath",
                     "The mediatype sequence format is wrong!\n" );
         ( *aIter )[PKG_MNFST_MEDIATYPE].Value >>= aType;
         if ( !aType.isEmpty() )
