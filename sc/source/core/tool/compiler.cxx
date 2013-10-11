@@ -17,11 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "compiler.hxx"
+
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/zforlist.hxx>
+#include "svl/sharedstringpool.hxx"
 #include <sal/macros.h>
 #include <tools/rcid.h>
 #include <tools/solar.h>
@@ -41,7 +44,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "compiler.hxx"
 #include "rangenam.hxx"
 #include "dbdata.hxx"
 #include "document.hxx"
@@ -2566,7 +2568,9 @@ bool ScCompiler::IsString()
     {
         cSymbol[nLen] = '\0';
         ScRawToken aToken;
-        aToken.SetString( cSymbol+1 );
+        const sal_Unicode* pStr = cSymbol+1;
+        svl::SharedString aSS = pDoc->GetSharedStringPool().intern(OUString(pStr));
+        aToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
         pRawToken = aToken.Clone();
         return true;
     }
@@ -3464,7 +3468,8 @@ bool ScCompiler::NextNewToken( bool bInArray )
              * information if not ODFF (in that case it was already handled).
              * */
             ScRawToken aToken;
-            aToken.SetString( aStr.getStr() );
+            svl::SharedString aSS = pDoc->GetSharedStringPool().intern(aStr);
+            aToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
             aToken.NewOpCode( ocBad );
             pRawToken = aToken.Clone();
         }
@@ -3607,7 +3612,8 @@ bool ScCompiler::NextNewToken( bool bInArray )
     // the interpreter.
     aUpper = ScGlobal::pCharClass->lowercase( aUpper );
     ScRawToken aToken;
-    aToken.SetString( aUpper.getStr() );
+    svl::SharedString aSS = pDoc->GetSharedStringPool().intern(aUpper);
+    aToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
     aToken.NewOpCode( ocBad );
     pRawToken = aToken.Clone();
     if ( bAutoCorrect )

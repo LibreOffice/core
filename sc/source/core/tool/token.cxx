@@ -174,21 +174,14 @@ void ScRawToken::SetOpCode( OpCode e )
     nRefCnt = 0;
 }
 
-void ScRawToken::SetString( const sal_Unicode* pStr )
+void ScRawToken::SetString( rtl_uString* pData, rtl_uString* pDataIgoreCase )
 {
     eOp   = ocPush;
     eType = svString;
-    if ( pStr )
-    {
-        xub_StrLen nLen = GetStrLen( pStr ) + 1;
-        if( nLen > MAXSTRLEN )
-            nLen = MAXSTRLEN;
-        memcpy( cStr, pStr, GetStrLenBytes( nLen ) );
-        cStr[ nLen-1 ] = 0;
-    }
-    else
-        cStr[0] = 0;
     nRefCnt = 0;
+
+    sharedstring.mpData = pData;
+    sharedstring.mpDataIgnoreCase = pDataIgoreCase;
 }
 
 void ScRawToken::SetSingleReference( const ScSingleRefData& rRef )
@@ -340,7 +333,7 @@ ScRawToken* ScRawToken::Clone() const
             case svByte:        n += sizeof(ScRawToken::sbyte); break;
             case svDouble:      n += sizeof(double); break;
             case svError:       n += sizeof(nError); break;
-            case svString:      n = sal::static_int_cast<sal_uInt16>( n + GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ) ); break;
+            case svString:      n += sizeof(sharedstring); break;
             case svSingleRef:
             case svDoubleRef:   n += sizeof(aRef); break;
             case svMatrix:      n += sizeof(ScMatrix*); break;
@@ -381,10 +374,13 @@ FormulaToken* ScRawToken::CreateToken() const
             IF_NOT_OPCODE_ERROR( ocPush, FormulaDoubleToken);
             return new FormulaDoubleToken( nValue );
         case svString :
+        {
+            svl::SharedString aSS(sharedstring.mpData, sharedstring.mpDataIgnoreCase);
             if (eOp == ocPush)
-                return new FormulaStringToken( OUString( cStr ) );
+                return new FormulaStringToken(aSS);
             else
-                return new FormulaStringOpToken( eOp, OUString( cStr ) );
+                return new FormulaStringOpToken(eOp, aSS);
+        }
         case svSingleRef :
             if (eOp == ocPush)
                 return new ScSingleRefToken( aRef.Ref1 );

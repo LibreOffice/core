@@ -138,6 +138,10 @@ public:
             bool        bGlobal;
             sal_uInt16  nIndex;
         } name;
+        struct {
+            rtl_uString* mpData;
+            rtl_uString* mpDataIgnoreCase;
+        } sharedstring;
         ScMatrix*    pMat;
         sal_uInt16   nError;
         sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to 255 characters + 0)
@@ -161,7 +165,7 @@ public:
     // Use these methods only on tokens that are not part of a token array,
     // since the reference count is cleared!
     void SetOpCode( OpCode eCode );
-    void SetString( const sal_Unicode* pStr );
+    void SetString( rtl_uString* pData, rtl_uString* pDataIgoreCase );
     void SetSingleReference( const ScSingleRefData& rRef );
     void SetDoubleReference( const ScComplexRefData& rRef );
     void SetDouble( double fVal );
