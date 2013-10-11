@@ -1985,7 +1985,7 @@ RTLFUNC(CDateFromUnoTime)
 
 void SbxDateFromUNODateTime( SbxValue *pVal, const ::com::sun::star::util::DateTime& aUnoDT)
 {
-    double dDate;
+    double dDate(0.0);
     if( implDateTimeSerial( aUnoDT.Year, aUnoDT.Month, aUnoDT.Day,
                             aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds,
                             dDate ) )
