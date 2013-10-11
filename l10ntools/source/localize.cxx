@@ -119,6 +119,7 @@ bool passesPositiveList(const OUString& rUrl) {
         { RTL_CONSTASCII_STRINGPARAM(
             "/svx/source/unodialogs/textconversiondlgs/"
             "chinese_direction_tmpl.hrc") },
+        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/misc.hrc") },
         { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/swacc_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/swmn_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/toolbox_tmpl.hrc") }
