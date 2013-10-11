@@ -73,6 +73,9 @@ SharedString& SharedString::operator= ( const SharedString& r )
 bool SharedString::operator== ( const SharedString& r ) const
 {
     // Only compare case sensitive strings.
+    if (mpData == r.mpData)
+        return true;
+
     if (mpData)
     {
         if (!r.mpData)
