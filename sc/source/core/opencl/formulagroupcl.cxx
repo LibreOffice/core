@@ -72,9 +72,11 @@ public:
         }
     }
     virtual void GenSlidingWindowFunction(std::stringstream &) {};
-    virtual void GenSlidingWindowDeclRef(std::stringstream &ss)
+    virtual std::string GenSlidingWindowDeclRef(void)
     {
+        std::stringstream ss;
         ss << mSymName << "[i]";
+        return ss.str();
     }
     const std::string &GetSymName(void) const { return mSymName; }
     FormulaToken *GetFormulaToken(void) const
@@ -251,19 +253,70 @@ public:
     {
         assert(0 && "This class should not be directly used");
     }
-    virtual void GenSlidingWindowDeclRef(std::stringstream &ss)
+    virtual std::string GenSlidingWindowDeclRef(void)
     {
+        std::stringstream ss;
         if (!bIsStartFixed && !bIsEndFixed)
             ss << mSymName << "[i + gid0]";
         else
             ss << mSymName << "[i]";
+        return ss.str();
     }
 private:
     bool bIsStartFixed, bIsEndFixed;
 };
 
+/// operator traits
+class OpSum {
+public:
+    static std::string GetBottom(void) { return "0"; }
+    static const bool isReduction = true;
+    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    {
+        return lhs + "+" + rhs;
+    }
+    static std::string BinFuncName(void) { return "fsum"; }
+};
+
+class OpMin {
+public:
+    static std::string GetBottom(void) { return "MAXFLOAT"; }
+    static const bool isReduction = true;
+    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    {
+        return "fmin("+lhs + "," + rhs +")";
+    }
+    static std::string BinFuncName(void) { return "fmin"; }
+};
+
+class OpSumProduct {
+public:
+    static std::string GetBottom(void) { return "0"; }
+    static const bool isReduction = false;
+    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    {
+        return lhs + "*" + rhs;
+    }
+    static std::string BinFuncName(void) { return "fsum"; }
+};
+
+class Op {
+public:
+    static std::string BinFuncName(OpCode op)
+    {
+        switch (op)
+        {
+            case ocSum:
+                return OpSum::BinFuncName();
+            case ocMin:
+                return OpMin::BinFuncName();
+            default:
+                assert(0 && "Unsupported op");
+        };
+    }
+};
 /// Helper functions that have multiple buffers
-template<bool isSumOfProd>
+template<class Op>
 class DynamicKernelSoPArguments: public DynamicKernelArgument
 {
 public:
@@ -334,7 +387,7 @@ public:
         {
             if (i)
                 ss << "*";
-            mvSubArguments[i]->GenSlidingWindowDeclRef(ss);
+            ss << mvSubArguments[i]->GenSlidingWindowDeclRef();
         }
         ss << ";\n\t";
         ss << "return tmp;\n";
@@ -352,7 +405,7 @@ public:
             mvSubArguments[i]->GenDecl(ss);
         }
         ss << ") {\n\t";
-        ss << "double tmp = 0.0;\n\t";
+        ss << "double tmp = " << Op::GetBottom() <<";\n\t";
         ss << "int gid0 = get_global_id(0);\n\t";
         for (unsigned i = 0; i < mvSubArguments.size(); i++)
         {
@@ -371,15 +424,16 @@ public:
             } else {
                 assert(0 && "Unreachable code executed");
             }
-            ss << "tmp += ";
-            mvSubArguments[i]->GenSlidingWindowDeclRef(ss);
+            ss << "tmp = ";
+            // Generate the operation in binary form
+            ss << Op::Gen("tmp", mvSubArguments[i]->GenSlidingWindowDeclRef());
             ss << ";\n\t";
         }
         ss << "return tmp;\n";
         ss << "}";
     }
     virtual void GenSlidingWindowFunction(std::stringstream &ss) {
-        if (isSumOfProd)
+        if (!Op::isReduction)
             GenSlidingWindowFunctionForSumOfProd(ss);
         else
             GenSlidingWindowFunctionForReduction(ss);
@@ -388,7 +442,6 @@ public:
     /// Generate use/references to the argument
     virtual void GenDeclRef(std::stringstream &ss) const
     {
-        OpCode opc = mFormulaTree->CurrentFormula->GetOpCode();
         FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
         assert(pChild);
         const formula::DoubleVectorRefToken* pChildDVR =
@@ -481,6 +534,8 @@ public:
         } else if (OpenclDevice::gpuEnv.mnAmdFp64Flag) {
             decl << "#pragma OPENCL EXTENSION cl_amd_fp64: enable\n";
         }
+        // preambles
+        decl << "double fsum(double a, double b) { return a+b; }\n";
         mSyms.DumpSlidingWindowFunctions(decl);
         decl << "__kernel void DynamicKernel" << GetMD5();
         decl << "(\n__global double *result";
@@ -677,7 +732,8 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
         return;
     } else {
         // Operator
-        switch (p->GetOpCode())
+        OpCode opc = p->GetOpCode();
+        switch (opc)
         {
             // FIXME: merge all binary operators..
             case ocMul:
@@ -704,67 +760,68 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
             case ocMax:
             case ocAverage:
             case ocCount:
+                assert(cur->Children.size() == p->GetByte());
+                for (unsigned i = 0; i < cur->Children.size(); i ++)
                 {
-                    assert(cur->Children.size() == p->GetByte());
-                    mKernelSrc<<"(";
-                    for (unsigned i = 0; i < cur->Children.size(); i ++)
+                    FormulaToken *pChild = cur->Children[i]->CurrentFormula;
+                    assert(pChild);
+                    // For double vectors (i.e. ranges as arguments) generate
+                    // function invocation
+                    if (const formula::DoubleVectorRefToken* pChildDVR =
+                            dynamic_cast<const formula::DoubleVectorRefToken *>(
+                                pChild))
                     {
-                        FormulaToken *pChild = cur->Children[i]->CurrentFormula;
-                        assert(pChild);
-                        // For double vectors (i.e. ranges as arguments) generate
-                        // function invocation
-                        if (const formula::DoubleVectorRefToken* pChildDVR =
-                            dynamic_cast<const formula::DoubleVectorRefToken *>(pChild))
+                        if (pChildDVR->IsStartFixed() && pChildDVR->IsEndFixed())
                         {
-                            if (pChildDVR->IsStartFixed() && pChildDVR->IsEndFixed())
-                            {
-                                // Reduce to a scalar variable
-                                mSyms.DeclRefArg<DynamicKernelReducedArgument>(cur)
-                                    ->GenDeclRef(mKernelSrc);
-                            } else {
-                                // Reduce to an array on CPU
-                                // for code like avg($A1:$A2, $B$3:$B$4) Generate code like
-                                //  double custom_sliding_dotproduct(int nWindow,
-                                //                                   __global *sliding) {
-                                //    double tmp = 0.0;
-                                //    for (int i = 0; i < nWindow; i++) {
-                                //        tmp += sliding[i+get_global_id(0)];
-                                //    }
-                                //    return tmp;
-                                //  }
-                                //  __kernel DynamicKernel (..., __global double *windows,
-                                //                          double fixed, ...
-                                //  {
-                                //      (custom_sliding_sum(N, sliding)+fixed) /
-                                //            get_global_size(0)) ...
-
-                                mSyms.DeclRefArg<DynamicKernelSoPArguments<false> >(cur)
-                                    ->GenDeclRef(mKernelSrc);
-                            }
-                            break; //FIXME
+                            // Reduce to a scalar variable
+                            mSyms.DeclRefArg<DynamicKernelReducedArgument>(cur)
+                                ->GenDeclRef(mKernelSrc);
                         } else {
-                            // For single vectors (i.e. scalar or other functions as arguments)
-                            // generate function invocation
-                            switch (p->GetOpCode())
-                            {
-                                case ocMin:
-                                    if (i == 0)
-                                        mKernelSrc << "fmin(";
-                                    else
-                                        mKernelSrc << ",";
-                                    break;
-                                default:
-                                    assert(0 && "Unsupported");
-                            }
-                            mKernelSrc<<"(";
-                            TraverseAST(cur->Children[i]);
-                            mKernelSrc<<")";
-                            if (i == cur->Children.size()-1)
-                                mKernelSrc<<")";
+                            // Reduce to an array on CPU
+                            // for code like avg($A1:$A2, $B$3:$B$4),
+                            // generate code like
+                            //  double custom_sliding_dotproduct(int nWindow,
+                            //                                  __global *sliding) {
+                            //    double tmp = 0.0;
+                            //    for (int i = 0; i < nWindow; i++) {
+                            //        tmp += sliding[i+get_global_id(0)];
+                            //    }
+                            //    return tmp;
+                            //  }
+                            //  __kernel DynamicKernel (..,__global double *windows,
+                            //                          double fixed, ...
+                            //  {
+                            //      (custom_sliding_sum(N, sliding)+fixed) /
+                            //            get_global_size(0)) ...
+                            if (opc == ocSum||opc == ocAverage)
+                                mSyms.DeclRefArg<
+                                    DynamicKernelSoPArguments<OpSum> >(cur)
+                                    ->GenDeclRef(mKernelSrc);
+                            else if (opc == ocMin)
+                                mSyms.DeclRefArg<
+                                    DynamicKernelSoPArguments<OpMin> >(cur)
+                                    ->GenDeclRef(mKernelSrc);
+                            else
+                                assert(0 && "Unsupported");
                         }
+                        break; //FIXME
+                    } else {
+                        // For single vectors,
+                        // (i.e. scalar or other functions as arguments)
+                        // generate binary function invocations,
+                        // e.g. fmin(x, fmin(y, fmin(z, w)))
+                        if (i > 0)
+                            mKernelSrc << ", ";
+                        if (i < cur->Children.size() - 1)
+                        {
+                            mKernelSrc << Op::BinFuncName(opc);
+                            mKernelSrc << "(";
+                        }
+                        TraverseAST(cur->Children[i]);
+                        if (i == cur->Children.size()-1)
+                            for (unsigned j = 0; j < cur->Children.size()-1; j++)
+                                mKernelSrc<<")";
                     }
-                    mKernelSrc<<")";
-
                 }
                 return;
             case ocSumProduct:
@@ -783,7 +840,7 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
                 //  {
                 //      (custom_sliding_sum(N, sliding)+fixed) /
                 //            get_global_size(0)) ...
-                mSyms.DeclRefArg<DynamicKernelSoPArguments<true> >(cur)
+                mSyms.DeclRefArg<DynamicKernelSoPArguments<OpSumProduct> >(cur)
                     ->GenDeclRef(mKernelSrc);
                 return;
             default:
