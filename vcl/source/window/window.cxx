@@ -8504,7 +8504,7 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
             {
                 uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-#if defined(UNX) && !defined(MACOSX)
+#if defined(UNX) && !defined(MACOSX) && !defined(IOS) && !defined(ANDROID)
                 // A hack, making the primary selection available as an instance
                 // of the SystemClipboard service on X11:
                 css::uno::Sequence<css::uno::Any> args(1);
