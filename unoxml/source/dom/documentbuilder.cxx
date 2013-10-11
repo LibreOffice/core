@@ -278,19 +278,19 @@ namespace DOM
     // default warning handler does not trigger assertion
     static void warning_func(void * ctx, const char * /*msg*/, ...)
     {
-        OUStringBuffer buf("libxml2 warning\n");
-        buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
-        OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE(msg.getStr());
+        SAL_INFO(
+            "unoxml",
+            "libxml2 warning: "
+                << make_error_message(static_cast<xmlParserCtxtPtr>(ctx)));
     }
 
     // default error handler triggers assertion
     static void error_func(void * ctx, const char * /*msg*/, ...)
     {
-        OUStringBuffer buf("libxml2 error\n");
-        buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
-        OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(msg.getStr());
+        SAL_WARN(
+            "unoxml",
+            "libxml2 error: "
+                << make_error_message(static_cast<xmlParserCtxtPtr>(ctx)));
     }
 
     } // extern "C"

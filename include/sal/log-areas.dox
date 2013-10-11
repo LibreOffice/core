@@ -428,6 +428,7 @@ certain functionality.
 @li @c svg
 @li @c ucbhelper
 @li @c unoidl
+@li @c unoxml
 @li @c uui
 @li @c vbahelper
 @li @c xmlhelp

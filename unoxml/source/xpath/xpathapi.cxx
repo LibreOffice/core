@@ -260,20 +260,24 @@ namespace XPath
     static OUString make_error_message(xmlErrorPtr pError)
     {
         OUStringBuffer buf;
-        if (pError->message) {
-            buf.appendAscii(pError->message);
-        }
-        int line = pError->line;
-        if (line) {
-            buf.appendAscii("Line: ");
-            buf.append(static_cast<sal_Int32>(line));
-            buf.appendAscii("\n");
-        }
-        int column = pError->int2;
-        if (column) {
-            buf.appendAscii("Column: ");
-            buf.append(static_cast<sal_Int32>(column));
-            buf.appendAscii("\n");
+        if (pError) {
+            if (pError->message) {
+                buf.appendAscii(pError->message);
+            }
+            int line = pError->line;
+            if (line) {
+                buf.appendAscii("Line: ");
+                buf.append(static_cast<sal_Int32>(line));
+                buf.appendAscii("\n");
+            }
+            int column = pError->int2;
+            if (column) {
+                buf.appendAscii("Column: ");
+                buf.append(static_cast<sal_Int32>(column));
+                buf.appendAscii("\n");
+            }
+        } else {
+            buf.appendAscii("no error argument!");
         }
         OUString msg = buf.makeStringAndClear();
         return msg;
@@ -281,9 +285,8 @@ namespace XPath
 
     extern "C" {
 
-        static void generic_error_func(void *userData, const char *format, ...)
+        static void generic_error_func(void *, const char *format, ...)
         {
-            (void) userData;
             char str[1000];
             va_list args;
 
@@ -294,27 +297,12 @@ namespace XPath
             vsnprintf(str, sizeof(str), format, args);
             va_end(args);
 
-            OUStringBuffer buf(
-                "libxml2 error:\n");
-            buf.appendAscii(str);
-            OString msg = OUStringToOString(buf.makeStringAndClear(),
-                RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(msg.getStr());
+            SAL_WARN("unoxml", "libxml2 error: " << str);
         }
 
-        static void structured_error_func(void * userData, xmlErrorPtr error)
+        static void structured_error_func(void *, xmlErrorPtr error)
         {
-            (void) userData;
-            OUStringBuffer buf(
-                "libxml2 error:\n");
-            if (error) {
-                buf.append(make_error_message(error));
-            } else {
-                buf.append("no error argument!");
-            }
-            OString msg = OUStringToOString(buf.makeStringAndClear(),
-                RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(msg.getStr());
+            SAL_WARN("unoxml", "libxml2 error: " << make_error_message(error));
         }
 
     } // extern "C"
