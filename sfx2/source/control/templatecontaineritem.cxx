@@ -30,6 +30,7 @@ using namespace drawinglayer::primitive2d;
 
 TemplateContainerItem::TemplateContainerItem (ThumbnailView &rView, sal_uInt16 nId)
     : ThumbnailViewItem(rView, nId)
+    , mnRegionId(0)
 {
 }
 
