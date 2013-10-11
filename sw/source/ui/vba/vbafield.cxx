@@ -73,11 +73,11 @@ SwVbaField::getServiceNames()
 class SwVbaReadFieldParams
 {
 private:
-    String aData;
+    OUString aData;
     xub_StrLen nLen, nFnd, nNext, nSavPtr;
-    String aFieldName;
+    OUString aFieldName;
 public:
-    SwVbaReadFieldParams( const String& rData );
+    SwVbaReadFieldParams( const OUString& rData );
     ~SwVbaReadFieldParams();
 
     long SkipToNextToken();
@@ -85,22 +85,22 @@ public:
 
     xub_StrLen FindNextStringPiece( xub_StrLen _nStart = STRING_NOTFOUND );
 
-    String GetResult() const;
-    String GetFieldName()const { return aFieldName; }
+    OUString GetResult() const;
+    OUString GetFieldName()const { return aFieldName; }
 };
 
-SwVbaReadFieldParams::SwVbaReadFieldParams( const String& _rData )
-    : aData( _rData ), nLen( _rData.Len() ), nNext( 0 )
+SwVbaReadFieldParams::SwVbaReadFieldParams( const OUString& _rData )
+    : aData( _rData ), nLen( _rData.getLength() ), nNext( 0 )
 {
     // First search for an opening parenthesis or a space or a quotation mark
     // or a backslash, so that the field command
     // (thus INCLUDEPICTURE or ...) is ignored.
-    while( (nLen > nNext) && (aData.GetChar( nNext ) == ' ') )
+    while( (nLen > nNext) && (aData[ nNext ] == ' ') )
         ++nNext;
 
     sal_Unicode c;
     while(     nLen > nNext
-            && (c = aData.GetChar( nNext )) != ' '
+            && (c = aData[ nNext ]) != ' '
             && c != '"'
             && c != '\\'
             && c != 132
@@ -109,7 +109,7 @@ SwVbaReadFieldParams::SwVbaReadFieldParams( const String& _rData )
 
     nFnd      = nNext;
     nSavPtr   = nNext;
-    aFieldName = aData.Copy( 0, nFnd );
+    aFieldName = aData.copy( 0, nFnd );
 }
 
 SwVbaReadFieldParams::~SwVbaReadFieldParams()
@@ -117,11 +117,11 @@ SwVbaReadFieldParams::~SwVbaReadFieldParams()
 }
 
 
-String SwVbaReadFieldParams::GetResult() const
+OUString SwVbaReadFieldParams::GetResult() const
 {
     return    (STRING_NOTFOUND == nFnd)
-            ? aEmptyStr
-            : aData.Copy( nFnd, (nSavPtr - nFnd) );
+            ? OUString()
+            : aData.copy( nFnd, (nSavPtr - nFnd) );
 }
 
 // ret: -2: NOT a '\' parameter but normal Text
@@ -135,9 +135,9 @@ long SwVbaReadFieldParams::SkipToNextToken()
     {
         nSavPtr = nNext;
 
-        if ('\\' == aData.GetChar(nFnd) && '\\' != aData.GetChar(nFnd + 1))
+        if ('\\' == aData[nFnd] && '\\' != aData[nFnd + 1])
         {
-            nRet = aData.GetChar(++nFnd);
+            nRet = aData[++nFnd];
             nNext = ++nFnd;             // and set behind
         }
         else
@@ -146,8 +146,8 @@ long SwVbaReadFieldParams::SkipToNextToken()
             if (
                  (STRING_NOTFOUND != nSavPtr ) &&
                  (
-                   ('"' == aData.GetChar(nSavPtr - 1)) ||
-                   (0x201d == aData.GetChar(nSavPtr - 1))
+                   ('"' == aData[nSavPtr - 1]) ||
+                   (0x201d == aData[nSavPtr - 1])
                  )
                )
             {
@@ -173,32 +173,32 @@ xub_StrLen SwVbaReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
 
     nNext = STRING_NOTFOUND;        // Default for not found
 
-    while( (nLen > n) && (aData.GetChar( n ) == ' ') )
+    while( (nLen > n) && (aData[ n ] == ' ') )
         ++n;
 
     if( nLen == n )
         return STRING_NOTFOUND;     // String End reached!
 
-    if(     (aData.GetChar( n ) == '"')     // quotation marks are in front of parenthesis?
-        ||  (aData.GetChar( n ) == 0x201c)
-        ||  (aData.GetChar( n ) == 132) )
+    if(     (aData[ n ] == '"')     // quotation marks are in front of parenthesis?
+        ||  (aData[ n ] == 0x201c)
+        ||  (aData[ n ] == 132) )
     {
         n++;                        // ignore quotation marks
         n2 = n;                     // From here search for the end
         while(     (nLen > n2)
-                && (aData.GetChar( n2 ) != '"')
-                && (aData.GetChar( n2 ) != 0x201d)
-                && (aData.GetChar( n2 ) != 147) )
+                && (aData[ n2 ] != '"')
+                && (aData[ n2 ] != 0x201d)
+                && (aData[ n2 ] != 147) )
             n2++;                   // Search for the end of the parenthesis
     }
     else                        // no quotation marks
     {
         n2 = n;                     // from here search for the end
-        while( (nLen > n2) && (aData.GetChar( n2 ) != ' ') ) // Search for the end of the parenthesis
+        while( (nLen > n2) && (aData[ n2 ] != ' ') ) // Search for the end of the parenthesis
         {
-            if( aData.GetChar( n2 ) == '\\' )
+            if( aData[ n2 ] == '\\' )
             {
-                if( aData.GetChar( n2+1 ) == '\\' )
+                if( aData[ n2+1 ] == '\\' )
                     n2 += 2;        // double-backslash -> OK
                 else
                 {
@@ -213,7 +213,7 @@ xub_StrLen SwVbaReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
     }
     if( nLen > n2 )
     {
-        if(aData.GetChar( n2 ) != ' ') n2++;
+        if(aData[ n2 ] != ' ') n2++;
         nNext = n2;
     }
     return n;

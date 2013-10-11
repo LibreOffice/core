@@ -29,17 +29,17 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static String lcl_CheckGroupName( const String& rGroupName )
+static OUString lcl_CheckGroupName( const OUString& rGroupName )
 {
-    String sRet;
+    OUString sRet;
     //group name should contain only A-Z and a-z and spaces
-    for( xub_StrLen i = 0; i < rGroupName.Len(); i++ )
+    for( xub_StrLen i = 0; i < rGroupName.getLength(); i++ )
     {
-        sal_Unicode cChar = rGroupName.GetChar(i);
+        sal_Unicode cChar = rGroupName[i];
         if (comphelper::string::isalnumAscii(cChar) ||
             cChar == '_' || cChar == 0x20)
         {
-            sRet += cChar;
+            sRet += OUString(cChar);
         }
     }
     return comphelper::string::strip(sRet, ' ');
@@ -96,7 +96,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
     {
         sGroup = sName.copy( 0, sName.lastIndexOf( sal_Unicode('.') ) );
     }
-    String sNewGroup = lcl_CheckGroupName( sGroup );
+    OUString sNewGroup = lcl_CheckGroupName( sGroup );
 
     uno::Reference< container::XIndexAccess > xGroup;
     if( xAutoTextContainer->hasByName( sNewGroup ) )

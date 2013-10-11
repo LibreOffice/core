@@ -988,11 +988,11 @@ void SwVbaSelection::GetSelectedCellRange( OUString& sTLName, OUString& sBRName 
     uno::Reference< text::XTextTableCursor > xTextTableCursor( mxModel->getCurrentSelection(), uno::UNO_QUERY );
     if( xTextTableCursor.is() )
     {
-        String sRange( xTextTableCursor->getRangeName() );
+        OUString sRange( xTextTableCursor->getRangeName() );
         if( comphelper::string::getTokenCount(sRange, ':') > 0 )
         {
-            sTLName = sRange.GetToken(0, ':');
-            sBRName = sRange.GetToken(1, ':');
+            sTLName = sRange.getToken(0, ':');
+            sBRName = sRange.getToken(1, ':');
         }
     }
     if( sTLName.isEmpty() )

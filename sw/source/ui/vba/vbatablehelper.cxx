@@ -75,7 +75,7 @@ sal_Int32 SwVbaTableHelper::getTabColumnsMaxCount( ) throw (uno::RuntimeExceptio
 sal_Int32 SwVbaTableHelper::getTabRowIndex( const OUString& CellName ) throw (uno::RuntimeException)
 {
     sal_Int32 nRet = 0;
-    String sCellName(CellName);
+    OUString sCellName(CellName);
     SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
     if( !pBox )
         throw uno::RuntimeException();
@@ -90,7 +90,7 @@ sal_Int32 SwVbaTableHelper::getTabRowIndex( const OUString& CellName ) throw (un
 sal_Int32 SwVbaTableHelper::getTabColIndex( const OUString& CellName ) throw (uno::RuntimeException)
 {
     sal_Int32 nRet = 0;
-    String sCellName(CellName);
+    OUString sCellName(CellName);
     const SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
     if( !pBox )
         throw uno::RuntimeException();
@@ -104,13 +104,13 @@ OUString SwVbaTableHelper::getColumnStr( sal_Int32 nCol )
     const sal_Int32 coDiff = 52; // 'A'-'Z' 'a' - 'z'
     sal_Int32 nCalc = 0;
 
-    String sRet;
+    OUString sRet;
     do{
         nCalc = nCol % coDiff;
         if( nCalc >= 26 )
-            sRet.Insert( sal_Unicode('a' - 26 + nCalc ), 0 );
+            sRet = OUString( sal_Unicode('a' - 26 + nCalc ) ) + sRet;
         else
-            sRet.Insert( sal_Unicode('A' + nCalc ), 0 );
+            sRet = OUString( sal_Unicode('A' + nCalc ) ) + sRet;
 
         if( 0 == ( nCol = nCol - nCalc ) )
             break;
