@@ -2371,7 +2371,7 @@ void SwDoc::removeListItem( const SwNodeNum& rNodeNum )
     }
 }
 
-String SwDoc::getListItemText( const SwNodeNum& rNodeNum,
+OUString SwDoc::getListItemText( const SwNodeNum& rNodeNum,
                                const bool bWithNumber,
                                const bool bWithSpacesForLevel ) const
 {

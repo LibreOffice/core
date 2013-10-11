@@ -978,7 +978,7 @@ public:
     */
     virtual void addListItem( const SwNodeNum& rNodeNum );
     virtual void removeListItem( const SwNodeNum& rNodeNum );
-    virtual String getListItemText( const SwNodeNum& rNodeNum,
+    virtual OUString getListItemText( const SwNodeNum& rNodeNum,
                                     const bool bWithNumber = true,
                                     const bool bWithSpacesForLevel = false ) const;
     virtual void getListItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const;

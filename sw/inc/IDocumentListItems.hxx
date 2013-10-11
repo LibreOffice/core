@@ -34,7 +34,7 @@ public:
     virtual void addListItem( const SwNodeNum& rNodeNum ) = 0;
     virtual void removeListItem( const SwNodeNum& rNodeNum ) = 0;
 
-    virtual String getListItemText( const SwNodeNum& rNodeNum,
+    virtual OUString getListItemText( const SwNodeNum& rNodeNum,
                                     const bool bWithNumber = true,
                                     const bool bWithSpacesForLevel = false ) const = 0;
 
