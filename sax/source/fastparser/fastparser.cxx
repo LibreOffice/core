@@ -310,11 +310,6 @@ void FastSaxParser::DefineNamespace( const OString& rPrefix, const sal_Char* pNa
 
 // --------------------------------------------------------------------
 
-sal_Int32 FastSaxParser::GetToken( const OString& rToken )
-{
-    return GetToken( rToken.getStr(), rToken.getLength() );
-}
-
 sal_Int32 FastSaxParser::GetToken( const sal_Char* pToken, sal_Int32 nLen /* = 0 */ )
 {
     sal_Int32 nRet;
@@ -345,34 +340,6 @@ sal_Int32 FastSaxParser::GetToken( const sal_Char* pToken, sal_Int32 nLen /* = 0
 }
 
 // --------------------------------------------------------------------
-
-sal_Int32 FastSaxParser::GetTokenWithPrefix( const OString& rPrefix, const OString& rName ) throw (SAXException)
-{
-    sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
-
-    Entity& rEntity = getEntity();
-    sal_uInt32 nNamespace = rEntity.maNamespaceCount.top();
-    while( nNamespace-- )
-    {
-        if( rEntity.maNamespaceDefines[nNamespace]->maPrefix == rPrefix )
-        {
-            nNamespaceToken = rEntity.maNamespaceDefines[nNamespace]->mnToken;
-            break;
-        }
-
-        if( !nNamespace )
-            throw SAXException(); // prefix that has no defined namespace url
-    }
-
-    if( nNamespaceToken != FastToken::DONTKNOW )
-    {
-        sal_Int32 nNameToken = GetToken( rName.getStr(), rName.getLength() );
-        if( nNameToken != FastToken::DONTKNOW )
-            return nNamespaceToken | nNameToken;
-    }
-
-    return FastToken::DONTKNOW;
-}
 
 sal_Int32 FastSaxParser::GetTokenWithPrefix( const sal_Char*pPrefix, int nPrefixLen, const sal_Char* pName, int nNameLen ) throw (SAXException)
 {
@@ -763,17 +730,6 @@ void FastSaxParser::parse()
 //
 //-----------------------------------------
 
-namespace {
-
-struct AttributeData
-{
-    OString             maPrefix;
-    OString             maName;
-    OString             maValue;
-};
-
-} // namespace
-
 void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char** awAttributes )
 {
     Entity& rEntity = getEntity();
@@ -790,7 +746,6 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
     rEntity.mxAttributes->clear();
 
     // create attribute map and process namespace instructions
-    int i = 0;
     sal_Int32 nNameLen, nPrefixLen;
     const XML_Char *pName;
     const XML_Char *pPrefix;
@@ -804,10 +759,9 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
             First, process all namespace attributes and cache other attributes in a
             vector. Second, process the attributes after namespaces have been
             initialized. */
-        ::std::vector< AttributeData > aAttribs;
 
         // #158414# first: get namespaces
-        for( ; awAttributes[i]; i += 2 )
+        for (int i = 0; awAttributes[i]; i += 2)
         {
             assert(awAttributes[i+1]);
 
@@ -818,13 +772,6 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
                 {
                     DefineNamespace( OString( pName, nNameLen ), awAttributes[i+1] );
                 }
-                else
-                {
-                    aAttribs.resize( aAttribs.size() + 1 );
-                    aAttribs.back().maPrefix = OString( pPrefix, nPrefixLen );
-                    aAttribs.back().maName = OString( pName, nNameLen );
-                    aAttribs.back().maValue = OString( awAttributes[i+1] );
-                }
             }
             else
             {
@@ -833,33 +780,35 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
                     // namespace of the element found
                     aNamespace = OUString( awAttributes[i+1], strlen( awAttributes[i+1] ), RTL_TEXTENCODING_UTF8 );
                 }
-                else
-                {
-                    aAttribs.resize( aAttribs.size() + 1 );
-                    aAttribs.back().maName = OString( pName, nNameLen );
-                    aAttribs.back().maValue = OString( awAttributes[i+1] );
-                }
             }
         }
 
         // #158414# second: fill attribute list with other attributes
-        for( ::std::vector< AttributeData >::const_iterator aIt = aAttribs.begin(), aEnd = aAttribs.end(); aIt != aEnd; ++aIt )
+        for (int i = 0; awAttributes[i]; i += 2)
         {
-            if( !aIt->maPrefix.isEmpty() )
+            splitName( awAttributes[i], pPrefix, nPrefixLen, pName, nNameLen );
+            if( nPrefixLen )
             {
-                sal_Int32 nAttributeToken = GetTokenWithPrefix( aIt->maPrefix, aIt->maName );
-                if( nAttributeToken != FastToken::DONTKNOW )
-                    rEntity.mxAttributes->add( nAttributeToken, aIt->maValue );
-                else
-                    rEntity.mxAttributes->addUnknown( GetNamespaceURL( aIt->maPrefix ), aIt->maName, aIt->maValue );
+                if( (nPrefixLen != 5) || (strncmp( pPrefix, "xmlns", 5 ) != 0) )
+                {
+                    sal_Int32 nAttributeToken = GetTokenWithPrefix( pPrefix, nPrefixLen, pName, nNameLen );
+                    if( nAttributeToken != FastToken::DONTKNOW )
+                        rEntity.mxAttributes->add( nAttributeToken, OString(awAttributes[i+1]) );
+                    else
+                        rEntity.mxAttributes->addUnknown( GetNamespaceURL( pPrefix, nPrefixLen ),
+                                OString(pName, nNameLen), OString(awAttributes[i+1]) );
+                }
             }
             else
             {
-                sal_Int32 nAttributeToken = GetToken( aIt->maName );
-                if( nAttributeToken != FastToken::DONTKNOW )
-                    rEntity.mxAttributes->add( nAttributeToken, aIt->maValue );
-                else
-                    rEntity.mxAttributes->addUnknown( aIt->maName, aIt->maValue );
+                if( (nNameLen != 5) || (strcmp( pName, "xmlns" ) != 0) )
+                {
+                    sal_Int32 nAttributeToken = GetToken( pName, nNameLen );
+                    if( nAttributeToken != FastToken::DONTKNOW )
+                        rEntity.mxAttributes->add( nAttributeToken, OString(awAttributes[i+1]) );
+                    else
+                        rEntity.mxAttributes->addUnknown( OString(pName, nNameLen), OString(awAttributes[i+1]) );
+                }
             }
         }
 

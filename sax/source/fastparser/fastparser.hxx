@@ -151,9 +151,7 @@ public:
 private:
     void parse();
 
-    sal_Int32 GetToken( const OString& rToken );
     sal_Int32 GetToken( const sal_Char* pToken, sal_Int32 nTokenLen = 0 );
-    sal_Int32 GetTokenWithPrefix( const OString& rPrefix, const OString& rName ) throw (::com::sun::star::xml::sax::SAXException);
     sal_Int32 GetTokenWithPrefix( const sal_Char*pPrefix, int nPrefixLen, const sal_Char* pName, int nNameLen ) throw (::com::sun::star::xml::sax::SAXException);
     OUString GetNamespaceURL( const OString& rPrefix ) throw (::com::sun::star::xml::sax::SAXException);
     OUString GetNamespaceURL( const sal_Char*pPrefix, int nPrefixLen ) throw (::com::sun::star::xml::sax::SAXException);
