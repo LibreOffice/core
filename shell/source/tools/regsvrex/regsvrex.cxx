@@ -42,8 +42,6 @@ bool IsUnregisterParameter(const char* Param)
 int main(int argc, char* argv[])
 {
     HMODULE hmod;
-    lpfnDllRegisterServer   lpfn_register;
-    lpfnDllUnregisterServer lpfn_unregister;
 
     if (2 == argc)
     {
@@ -51,7 +49,7 @@ int main(int argc, char* argv[])
 
         if (hmod)
         {
-            lpfn_register = (lpfnDllRegisterServer)GetProcAddress(
+            lpfnDllRegisterServer lpfn_register = (lpfnDllRegisterServer)GetProcAddress(
                 hmod, "DllRegisterServer");
 
             if (lpfn_register)
@@ -66,7 +64,7 @@ int main(int argc, char* argv[])
 
         if (hmod)
         {
-            lpfn_unregister = (lpfnDllUnregisterServer)GetProcAddress(
+            lpfnDllUnregisterServer lpfn_unregister = (lpfnDllUnregisterServer)GetProcAddress(
                 hmod, "DllUnregisterServer");
 
             if (lpfn_unregister)
