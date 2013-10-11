@@ -51,6 +51,14 @@ typedef ::boost::shared_ptr< NamespaceDefine > NamespaceDefineRef;
 typedef ::boost::unordered_map< OUString, sal_Int32,
         OUStringHash, ::std::equal_to< OUString > > NamespaceMap;
 
+struct NameWithToken
+{
+    OUString msName;
+    sal_Int32 mnToken;
+    NameWithToken(const OUString& sName, const sal_Int32& nToken):
+        msName(sName), mnToken(nToken) {}
+};
+
 // --------------------------------------------------------------------
 
 struct SaxContext
@@ -90,7 +98,7 @@ struct Entity : public ParserData
     // therefore the exception must be saved somewhere.
     ::com::sun::star::uno::Any              maSavedException;
 
-    ::std::stack< OUString >                maNamespaceStack;
+    ::std::stack< NameWithToken >           maNamespaceStack;
     /* Context for main thread consuming events.
      * startElement() stores the data, which characters() and endElement() uses
      */
@@ -138,7 +146,7 @@ public:
     void callbackStartElement( const XML_Char* name, const XML_Char** atts );
     void callbackEndElement( const XML_Char* name );
     void callbackCharacters( const XML_Char* s, int nLen );
-    int callbackExternalEntityRef( XML_Parser parser, const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId);
+    int  callbackExternalEntityRef( XML_Parser parser, const XML_Char *openEntityNames, const XML_Char *base, const XML_Char *systemId, const XML_Char *publicId);
     void callbackEntityDecl(const XML_Char *entityName, int is_parameter_entity,
             const XML_Char *value, int value_length, const XML_Char *base,
             const XML_Char *systemId, const XML_Char *publicId,
@@ -156,7 +164,7 @@ private:
     OUString GetNamespaceURL( const OString& rPrefix ) throw (::com::sun::star::xml::sax::SAXException);
     OUString GetNamespaceURL( const sal_Char*pPrefix, int nPrefixLen ) throw (::com::sun::star::xml::sax::SAXException);
     sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
-    sal_Int32 GetTokenWithNamespaceURL( const OUString& rNamespaceURL, const sal_Char* pName, int nNameLen );
+    sal_Int32 GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const sal_Char* pName, int nNameLen );
     void DefineNamespace( const OString& rPrefix, const sal_Char* pNamespaceURL );
 
     void pushContext();

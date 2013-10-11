@@ -420,10 +420,8 @@ OUString FastSaxParser::GetNamespaceURL( const sal_Char*pPrefix, int nPrefixLen 
 
 // --------------------------------------------------------------------
 
-sal_Int32 FastSaxParser::GetTokenWithNamespaceURL( const OUString& rNamespaceURL, const sal_Char* pName, int nNameLen )
+sal_Int32 FastSaxParser::GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const sal_Char* pName, int nNameLen )
 {
-    sal_Int32 nNamespaceToken = GetNamespaceToken( rNamespaceURL );
-
     if( nNamespaceToken != FastToken::DONTKNOW )
     {
         sal_Int32 nNameToken = GetToken( pName, nNameLen );
@@ -749,9 +747,13 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
     sal_Int32 nNameLen, nPrefixLen;
     const XML_Char *pName;
     const XML_Char *pPrefix;
-    OUString aNamespace;
+    OUString sNamespace;
+    sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
     if (!rEntity.maNamespaceStack.empty())
-        aNamespace = rEntity.maNamespaceStack.top();
+    {
+        sNamespace = rEntity.maNamespaceStack.top().msName;
+        nNamespaceToken = rEntity.maNamespaceStack.top().mnToken;
+    }
 
     try
     {
@@ -777,8 +779,9 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
             {
                 if( (nNameLen == 5) && (strcmp( pName, "xmlns" ) == 0) )
                 {
-                    // namespace of the element found
-                    aNamespace = OUString( awAttributes[i+1], strlen( awAttributes[i+1] ), RTL_TEXTENCODING_UTF8 );
+                    // default namespace is the attribute value
+                    sNamespace = OUString( awAttributes[i+1], strlen( awAttributes[i+1] ), RTL_TEXTENCODING_UTF8 );
+                    nNamespaceToken = GetNamespaceToken( sNamespace );
                 }
             }
         }
@@ -816,17 +819,20 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
         splitName( pwName, pPrefix, nPrefixLen, pName, nNameLen );
         if( nPrefixLen > 0 )
             nElementToken = GetTokenWithPrefix( pPrefix, nPrefixLen, pName, nNameLen );
-        else if( !aNamespace.isEmpty() )
-            nElementToken = GetTokenWithNamespaceURL( aNamespace, pName, nNameLen );
+        else if( !sNamespace.isEmpty() )
+            nElementToken = GetTokenWithContextNamespace( nNamespaceToken, pName, nNameLen );
         else
             nElementToken = GetToken( pName );
 
         if( nElementToken == FastToken::DONTKNOW )
             if( nPrefixLen > 0 )
-                aNamespace = GetNamespaceURL( pPrefix, nPrefixLen );
+            {
+                sNamespace = GetNamespaceURL( pPrefix, nPrefixLen );
+                nNamespaceToken = GetNamespaceToken( sNamespace );
+            }
 
-        rEntity.maNamespaceStack.push(aNamespace);
-        rEntity.startElement( nElementToken, aNamespace,
+        rEntity.maNamespaceStack.push( NameWithToken(sNamespace, nNamespaceToken) );
+        rEntity.startElement( nElementToken, sNamespace,
                 OUString(pName, nNameLen, RTL_TEXTENCODING_UTF8), rEntity.mxAttributes.get() );
     }
     catch (const Exception& e)
