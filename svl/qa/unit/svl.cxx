@@ -39,6 +39,7 @@
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
+using namespace svl;
 
 namespace {
 
@@ -51,15 +52,17 @@ public:
     virtual void tearDown();
 
     void testNumberFormat();
-    void testStringPool();
-    void testStringPoolPurge();
+    void testSharedString();
+    void testSharedStringPool();
+    void testSharedStringPoolPurge();
     void testFdo60915();
     void testI116701();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNumberFormat);
-    CPPUNIT_TEST(testStringPool);
-    CPPUNIT_TEST(testStringPoolPurge);
+    CPPUNIT_TEST(testSharedString);
+    CPPUNIT_TEST(testSharedStringPool);
+    CPPUNIT_TEST(testSharedStringPoolPurge);
     CPPUNIT_TEST(testFdo60915);
     CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST_SUITE_END();
@@ -278,7 +281,16 @@ void Test::testNumberFormat()
     }
 }
 
-void Test::testStringPool()
+void Test::testSharedString()
+{
+    // Use shared string as normal, non-shared string, which is allowed.
+    SharedString aSS1("Test"), aSS2("Test");
+    CPPUNIT_ASSERT_MESSAGE("Equality check should return true.", aSS1 == aSS2);
+    SharedString aSS3("test");
+    CPPUNIT_ASSERT_MESSAGE("Equality check is case sensitive.", aSS1 != aSS3);
+}
+
+void Test::testSharedStringPool()
 {
     SvtSysLocale aSysLocale;
     svl::SharedStringPool aPool(aSysLocale.GetCharClassPtr());
@@ -311,7 +323,7 @@ void Test::testStringPool()
     CPPUNIT_ASSERT_MESSAGE("These two ID's should be equal.", p1.getDataIgnoreCase() == p2.getDataIgnoreCase());
 }
 
-void Test::testStringPoolPurge()
+void Test::testSharedStringPoolPurge()
 {
     SvtSysLocale aSysLocale;
     svl::SharedStringPool aPool(aSysLocale.GetCharClassPtr());
