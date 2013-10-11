@@ -328,8 +328,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.StartAction();
                 // prevent view from jumping because of (temporary) selection changes
                 rWrtSh.LockView( sal_True );
-                // save selection for later restoration
-                rWrtSh.Push();
 
                 // setting the new language...
                 if (aNewLangTxt.Len() > 0)
@@ -369,6 +367,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         bForSelection = false;
                     }
 
+                    if (bForParagraph || !bForSelection)
+                    {
+                        rWrtSh.Push(); // save selection for later restoration
+                        rWrtSh.ClearMark(); // fdo#67796: invalidate table crsr
+                    }
+
                     if (bForParagraph)
                         SwLangHelper::SelectCurrentPara( rWrtSh );
 
@@ -383,10 +387,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         SwLangHelper::ResetLanguages( rWrtSh, bForSelection );
                     else
                         SwLangHelper::SetLanguage( rWrtSh, aNewLangTxt, bForSelection, aCoreSet );
-                }
 
-                // restore selection...
-                rWrtSh.Pop( sal_False );
+                    if (bForParagraph || !bForSelection)
+                    {
+                        rWrtSh.Pop(false); // restore selection...
+                    }
+                }
 
                 rWrtSh.LockView( sal_False );
                 rWrtSh.EndAction();
