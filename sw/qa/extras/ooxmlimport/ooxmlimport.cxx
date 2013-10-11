@@ -139,6 +139,7 @@ public:
     void testChartProp();
     void testBnc779620();
     void testFdo43093();
+    void testMultiColumnSeparator();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(WNT)
@@ -242,6 +243,7 @@ void Test::run()
         {"chart-prop.docx", &Test::testChartProp},
         {"bnc779620.docx", &Test::testBnc779620},
         {"fdo43093.docx", &Test::testFdo43093},
+        {"multi-column-separator-with-line.docx", &Test::testMultiColumnSeparator},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1570,6 +1572,9 @@ void Test::testDefaultSectBreakCols()
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xPageStyle, "TextColumns");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
+    // Check for the Column Separator value.It should be FALSE as the document does not contain separator line.
+    bool bValue = getProperty< bool >(xTextColumns, "SeparatorLineIsOn");
+    CPPUNIT_ASSERT(!bValue) ;
 }
 
 void Test::testFdo69636()
@@ -1634,6 +1639,17 @@ void Test::testFdo43093()
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLLDir);
 }
 
+
+void Test::testMultiColumnSeparator()
+{
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1, "First data."), "TextSection");
+    CPPUNIT_ASSERT(xTextSection.is());
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
+    // Check for the Column Separator value.It should be TRUE as the document contains separator line.
+    bool  bValue = getProperty< bool >(xTextColumns, "SeparatorLineIsOn");
+    CPPUNIT_ASSERT(bValue);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 

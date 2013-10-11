@@ -3105,6 +3105,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 {
                     pSectionContext->SetColumnCount( (sal_Int16)pSectHdl->GetNum() - 1 );
                     pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
+                    pSectionContext->SetSeparatorLine( pSectHdl->IsSeparator() );
                 }
             }
         }

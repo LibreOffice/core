@@ -5886,7 +5886,8 @@ void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol& 
 
     pColsAttrList->add( FSNS( XML_w, XML_equalWidth ), pEquals );
 
-    bool bHasSep = COLADJ_NONE == rCol.GetLineAdj( );
+    bool bHasSep = (COLADJ_NONE != rCol.GetLineAdj());
+
     pColsAttrList->add( FSNS( XML_w, XML_sep ), bHasSep ? "true" : "false" );
 
     // Write the element
