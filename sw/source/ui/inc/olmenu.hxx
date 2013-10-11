@@ -67,6 +67,9 @@ class SwSpellPopup : public PopupMenu
 
     using PopupMenu::Execute;
 
+    /// Checks if any of the redline menu items should be hidden.
+    void checkRedline();
+
 public:
     SwSpellPopup( SwWrtShell *pWrtSh,
             const ::com::sun::star::uno::Reference<
