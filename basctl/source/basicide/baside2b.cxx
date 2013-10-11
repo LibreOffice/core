@@ -476,7 +476,7 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
 bool EditorWindow::ImpCanModify()
 {
     bool bCanModify = true;
-    if ( StarBASIC::IsRunning() )
+    if ( StarBASIC::IsRunning() && rModulWindow.GetBasicStatus().bIsRunning )
     {
         // If in Trace-mode, abort the trace or refuse input
         // Remove markers in the modules in Notify at Basic::Stoped
