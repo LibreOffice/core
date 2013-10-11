@@ -2419,8 +2419,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     while ( pEntry )
     {
         WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
-        OUString aVName( pItem->maName );
-        DBG_ASSERT( !aVName.isEmpty(), "Var? - Must not be empty!" );
+        DBG_ASSERT( !pItem->maName.isEmpty(), "Var? - Must not be empty!" );
         OUString aWatchStr;
         OUString aTypeStr;
         if ( pCurMethod )
