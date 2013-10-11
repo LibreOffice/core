@@ -1607,8 +1607,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 
 
     OUString aFactory = getCurrentFactory_Impl( _xFrame );
-    OUString sTemp = GetModuleIdentifier( _xFrame );
-    DBG_ASSERT( sTemp == aFactory, "S H I T!!!" );
+    DBG_ASSERT( GetModuleIdentifier( _xFrame ) == aFactory, "S H I T!!!" );
 
     // Writer and Writer/Web options
     SvtModuleOptions aModuleOpt;

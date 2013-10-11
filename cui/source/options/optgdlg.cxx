@@ -1079,8 +1079,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     {
         // we'll just leave the box in it's default setting and won't
         // even give it event handler...
-        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(aMsg.getStr());
+        SAL_WARN("cui.options", "ignoring Exception \"" << e.Message << "\"");
     }
 
     m_pWesternLanguageLB->SetLanguageList( LANG_LIST_WESTERN | LANG_LIST_ONLY_KNOWN, sal_True,  sal_False, sal_True );
@@ -1239,8 +1238,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     {
         // we'll just leave the box in it's default setting and won't
         // even give it event handler...
-        OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(aMsg.getStr());
+        SAL_WARN("cui.options", "ignoring Exception \"" << e.Message << "\"");
     }
 
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
