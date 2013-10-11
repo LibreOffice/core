@@ -39,11 +39,19 @@ interface XPrimitive2D : ::com::sun::star::uno::XInterface
         2D View-specific parameter set. The defined but not mandatory
         parameters include:
 
-        ::com::sun::star::geometry::AffineMatrix2D Transformation
+        ::com::sun::star::geometry::AffineMatrix2D ObjectTransformation
 
-        A transformation matrix which maps between world coordinates (which
-        is equal to object's local coordinates) to view coordinates. If not
-        defined, an empty transformation is implied.
+        A transformation matrix which maps between object coordinates
+        (which is equal to object's local coordinates) to world
+        coordinates. If not defined, the identity transformation is
+        implied.
+
+        ::com::sun::star::geometry::AffineMatrix2D ViewTransformation
+
+        A transformation matrix which maps between world coordinates
+        to view coordinates, i.e. usually the actual pixel on
+        screen. If not defined, the identity transformation is
+        implied.
 
         ::com::sun::star::geometry::RealRectangle2D Viewport
 
@@ -58,6 +66,11 @@ interface XPrimitive2D : ::com::sun::star::uno::XInterface
         lead to varied results for animated objects. This value is defined in the
         range [0.0 .. n[, negative values are not allowed. If not given, a value of
         0.0 is implied.
+
+        ::com::sun::star::drawing::XDrawPage VisualizedPage
+
+        The page object this is displayed on. Used to e.g. resolve
+        page number placeholders and the like.
      */
     sequence< XPrimitive2D > getDecomposition( [in] sequence< ::com::sun::star::beans::PropertyValue > aViewParameters );
 

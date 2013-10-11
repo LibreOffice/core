@@ -53,6 +53,42 @@ interface XPrimitiveFactory2D : ::com::sun::star::uno::XInterface
         Sequence of factory parameters, whose semantics depend on the
         shape to be generated.
 
+        2D View-specific parameter set. The defined but not mandatory
+        parameters include:
+
+        ::com::sun::star::geometry::AffineMatrix2D ObjectTransformation
+
+        A transformation matrix which maps between object coordinates
+        (which is equal to object's local coordinates) to world
+        coordinates. If not defined, the identity transformation is
+        implied.
+
+        ::com::sun::star::geometry::AffineMatrix2D ViewTransformation
+
+        A transformation matrix which maps between world coordinates
+        to view coordinates, i.e. usually the actual pixel on
+        screen. If not defined, the identity transformation is
+        implied.
+
+        ::com::sun::star::geometry::RealRectangle2D Viewport
+
+        Defines the visible part of the view in world coordinates. May be used
+        to optimize decompositions, e.g. for 3d scenes only the visible part
+        needs to be created. If not given, an empty Viewport is implied which
+        means all is visible.
+
+        double Time
+
+        Defines the point in time for which the geometry is defined. This may
+        lead to varied results for animated objects. This value is defined in the
+        range [0.0 .. n[, negative values are not allowed. If not given, a value of
+        0.0 is implied.
+
+        ::com::sun::star::drawing::XDrawPage VisualizedPage
+
+        The page object this is displayed on. Used to e.g. resolve
+        page number placeholders and the like.
+
         @return a sequence of primitives, that consists of the
         geometrical representation from the given XShape.
      */
@@ -70,6 +106,42 @@ interface XPrimitiveFactory2D : ::com::sun::star::uno::XInterface
         @param aParms
         Sequence of factory parameters, whose semantics depend on the
         page to be generated.
+
+        2D View-specific parameter set. The defined but not mandatory
+        parameters include:
+
+        ::com::sun::star::geometry::AffineMatrix2D ObjectTransformation
+
+        A transformation matrix which maps between object coordinates
+        (which is equal to object's local coordinates) to world
+        coordinates. If not defined, the identity transformation is
+        implied.
+
+        ::com::sun::star::geometry::AffineMatrix2D ViewTransformation
+
+        A transformation matrix which maps between world coordinates
+        to view coordinates, i.e. usually the actual pixel on
+        screen. If not defined, the identity transformation is
+        implied.
+
+        ::com::sun::star::geometry::RealRectangle2D Viewport
+
+        Defines the visible part of the view in world coordinates. May be used
+        to optimize decompositions, e.g. for 3d scenes only the visible part
+        needs to be created. If not given, an empty Viewport is implied which
+        means all is visible.
+
+        double Time
+
+        Defines the point in time for which the geometry is defined. This may
+        lead to varied results for animated objects. This value is defined in the
+        range [0.0 .. n[, negative values are not allowed. If not given, a value of
+        0.0 is implied.
+
+        ::com::sun::star::drawing::XDrawPage VisualizedPage
+
+        The page object this is displayed on. Used to e.g. resolve
+        page number placeholders and the like.
 
         @return a sequence of primitives, that consists of the
         geometrical representation for the given XDrawPage.
