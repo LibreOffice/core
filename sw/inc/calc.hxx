@@ -168,7 +168,7 @@ _CalcOp* FindOperator( const OUString& rSearch );
 class SwCalc
 {
     SwHash*     VarTable[ TBLSZ ];
-    String      aVarName, sCurrSym;
+    OUString    aVarName, sCurrSym;
     OUString    sCommand;
     std::vector<const SwUserFieldType*> aRekurStk;
     SwSbxValue  nLastLeft;
@@ -194,8 +194,8 @@ class SwCalc
 
     sal_Bool        ParseTime( sal_uInt16*, sal_uInt16*, sal_uInt16* );
 
-    String  GetColumnName( const String& rName );
-    String  GetDBName( const String& rName );
+    OUString  GetColumnName( const OUString& rName );
+    OUString  GetDBName( const OUString& rName );
 
     // dont call this methods
     SwCalc( const SwCalc& );
@@ -205,14 +205,14 @@ public:
         SwCalc( SwDoc& rD );
         ~SwCalc();
 
-    SwSbxValue  Calculate( const String &rStr );
-    String      GetStrResult( const SwSbxValue& rValue, sal_Bool bRound = sal_True );
-    String      GetStrResult( double, sal_Bool bRound = sal_True );
+    SwSbxValue  Calculate( const OUString &rStr );
+    OUString    GetStrResult( const SwSbxValue& rValue, sal_Bool bRound = sal_True );
+    OUString    GetStrResult( double, sal_Bool bRound = sal_True );
 
-    SwCalcExp*  VarInsert( const String& r );
-    SwCalcExp*  VarLook( const String &rStr, sal_uInt16 ins = 0 );
-    void        VarChange( const String& rStr, const SwSbxValue& rValue );
-    void        VarChange( const String& rStr, double );
+    SwCalcExp*  VarInsert( const OUString& r );
+    SwCalcExp*  VarLook( const OUString &rStr, sal_uInt16 ins = 0 );
+    void        VarChange( const OUString& rStr, const SwSbxValue& rValue );
+    void        VarChange( const OUString& rStr, double );
     SwHash**    GetVarTable()                       { return VarTable; }
 
     bool        Push(const SwUserFieldType* pUserFieldType);

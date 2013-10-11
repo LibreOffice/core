@@ -372,12 +372,12 @@ SwCalc::~SwCalc()
         delete pCharClass;
 }
 
-SwSbxValue SwCalc::Calculate( const String& rStr )
+SwSbxValue SwCalc::Calculate( const OUString& rStr )
 {
     eError = CALC_NOERR;
     SwSbxValue nResult;
 
-    if( !rStr.Len() )
+    if( rStr.isEmpty() )
         return nResult;
 
     nListPor = 0;
@@ -405,7 +405,7 @@ SwSbxValue SwCalc::Calculate( const String& rStr )
                 Now this parameter is ignored.
   @return ???
 */
-String SwCalc::GetStrResult( const SwSbxValue& rVal, sal_Bool bRound )
+OUString SwCalc::GetStrResult( const SwSbxValue& rVal, sal_Bool bRound )
 {
     if( !rVal.IsDouble() )
     {
@@ -414,7 +414,7 @@ String SwCalc::GetStrResult( const SwSbxValue& rVal, sal_Bool bRound )
     return GetStrResult( rVal.GetDouble(), bRound );
 }
 
-String SwCalc::GetStrResult( double nValue, sal_Bool )
+OUString SwCalc::GetStrResult( double nValue, sal_Bool )
 {
     if( nValue >= DBL_MAX )
         switch( eError )
@@ -430,7 +430,7 @@ String SwCalc::GetStrResult( double nValue, sal_Bool )
         }
 
     sal_uInt16  nDec = 15;
-    String aRetStr( ::rtl::math::doubleToUString(
+    OUString aRetStr( ::rtl::math::doubleToUString(
                         nValue,
                         rtl_math_StringFormat_Automatic,
                         nDec,
@@ -439,13 +439,13 @@ String SwCalc::GetStrResult( double nValue, sal_Bool )
     return aRetStr;
 }
 
-SwCalcExp* SwCalc::VarInsert( const String &rStr )
+SwCalcExp* SwCalc::VarInsert( const OUString &rStr )
 {
     OUString aStr = pCharClass->lowercase( rStr );
     return VarLook( aStr, 1 );
 }
 
-SwCalcExp* SwCalc::VarLook( const String& rStr, sal_uInt16 ins )
+SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
 {
     aErrExpr.nValue.SetVoidValue(false);
 
@@ -598,13 +598,13 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, sal_uInt16 ins )
     return pNewExp;
 }
 
-void SwCalc::VarChange( const String& rStr, double nValue )
+void SwCalc::VarChange( const OUString& rStr, double nValue )
 {
     SwSbxValue aVal( nValue );
     VarChange( rStr, aVal );
 }
 
-void SwCalc::VarChange( const String& rStr, const SwSbxValue& rValue )
+void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
 {
     OUString aStr = pCharClass->lowercase( rStr );
 
@@ -774,9 +774,9 @@ SwCalcOper SwCalc::GetToken()
                 case '[':
                     if( aRes.EndPos < sCommand.getLength() )
                     {
-                        aVarName.Erase();
+                        aVarName = "";
                         sal_Int32 nFndPos = aRes.EndPos,
-                                             nSttPos = nFndPos;
+                                  nSttPos = nFndPos;
 
                         do {
                             if( -1 != ( nFndPos =
@@ -1458,28 +1458,28 @@ SwSbxValue  SwCalc::Expr()
     }
 }
 
-String SwCalc::GetColumnName(const String& rName)
+OUString SwCalc::GetColumnName(const OUString& rName)
 {
-    xub_StrLen nPos = rName.Search(DB_DELIM);
-    if( STRING_NOTFOUND != nPos )
+    sal_Int32 nPos = rName.indexOf(DB_DELIM);
+    if( -1 != nPos )
     {
-        nPos = rName.Search(DB_DELIM, nPos + 1);
+        nPos = rName.indexOf(DB_DELIM, nPos + 1);
 
-        if( STRING_NOTFOUND != nPos )
-            return rName.Copy(nPos + 1);
+        if( -1 != nPos )
+            return rName.copy(nPos + 1);
     }
     return rName;
 }
 
-String SwCalc::GetDBName(const String& rName)
+OUString SwCalc::GetDBName(const OUString& rName)
 {
-    xub_StrLen nPos = rName.Search(DB_DELIM);
-    if( STRING_NOTFOUND != nPos )
+    sal_Int32 nPos = rName.indexOf(DB_DELIM);
+    if( -1 != nPos )
     {
-        nPos = rName.Search(DB_DELIM, nPos + 1);
+        nPos = rName.indexOf(DB_DELIM, nPos + 1);
 
-        if( STRING_NOTFOUND != nPos )
-            return rName.Copy( 0, nPos );
+        if( -1 != nPos )
+            return rName.copy( 0, nPos );
     }
     SwDBData aData = rDoc.GetDBData();
     String sRet = aData.sDataSource;
