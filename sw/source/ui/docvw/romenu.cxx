@@ -198,13 +198,14 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     Check( MN_READONLY_OPENURL,         SID_OPENDOC,        rDis );
     Check( MN_READONLY_OPENURLNEW,      SID_OPENDOC,        rDis );
 
-    SfxPoolItem* pState;
+    SfxPoolItem* pState = NULL;
 
     SfxItemState eState = pVFrame->GetBindings().QueryState( SID_COPY, pState );
     Check( MN_READONLY_COPY,            SID_COPY,           rDis );
     if(eState < SFX_ITEM_AVAILABLE)
         EnableItem( MN_READONLY_COPY, sal_False );
     delete pState;
+    pState = NULL;
 
     eState = pVFrame->GetBindings().QueryState( SID_EDITDOC, pState );
     if (
