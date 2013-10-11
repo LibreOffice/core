@@ -28,7 +28,6 @@ $(eval $(call gb_Library_use_libraries,drawinglayer,\
     basegfx \
     canvastools \
     comphelper \
-    cppcanvas \
     cppu \
     cppuhelper \
     i18nlangtag \

@@ -19,7 +19,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	canvas/source/vcl/vclcanvas \
 	comphelper/util/comphelp \
 	configmgr/source/configmgr \
-	cppcanvas/source/uno/mtfrenderer \
 	cui/util/cui \
 	desktop/source/deployment/deployment \
 	drawinglayer/drawinglayer \
