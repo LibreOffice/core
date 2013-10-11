@@ -1216,8 +1216,10 @@ void LanguageTag::syncFromImpl()
 
 void LanguageTag::syncVarsFromImpl() const
 {
-    getImpl();
-    syncVarsFromRawImpl();
+    if (!mpImpl)
+        getImpl();      // with side effect syncVarsFromRawImpl()
+    else
+        syncVarsFromRawImpl();
 }
 
 
