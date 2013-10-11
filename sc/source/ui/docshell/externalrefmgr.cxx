@@ -488,8 +488,7 @@ ScExternalRefCache::CellFormat::CellFormat() :
 
 // ----------------------------------------------------------------------------
 
-ScExternalRefCache::ScExternalRefCache(svl::SharedStringPool& rPool) :
-    mrStrPool(rPool) {}
+ScExternalRefCache::ScExternalRefCache() {}
 
 ScExternalRefCache::~ScExternalRefCache() {}
 
@@ -1503,7 +1502,6 @@ static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
 
 ScExternalRefManager::ScExternalRefManager(ScDocument* pDoc) :
     mpDoc(pDoc),
-    maRefCache(pDoc->GetSharedStringPool()),
     mbInReferenceMarking(false),
     mbUserInteractionEnabled(true)
 {

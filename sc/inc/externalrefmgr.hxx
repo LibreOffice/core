@@ -201,7 +201,7 @@ public:
     typedef ::boost::unordered_map< OUString, size_t, OUStringHash>
         TableNameIndexMap;
 
-    ScExternalRefCache(svl::SharedStringPool& rPool);
+    ScExternalRefCache();
     ~ScExternalRefCache();
 
     const OUString* getRealTableName(sal_uInt16 nFileId, const OUString& rTabName) const;
@@ -340,7 +340,6 @@ private:
     DocItem* getDocItem(sal_uInt16 nFileId) const;
 
 private:
-    svl::SharedStringPool& mrStrPool;;
     mutable DocDataType maDocs;
 };
 
