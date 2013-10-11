@@ -28,7 +28,6 @@
 
 #include <vector>
 
-#include <tools/string.hxx>
 #include <tools/color.hxx>
 #include <viewopt.hxx>
 

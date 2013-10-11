@@ -21,7 +21,6 @@
 #define _DRAWFONT_HXX
 
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <tools/debug.hxx>
 
 class SwTxtFrm;
