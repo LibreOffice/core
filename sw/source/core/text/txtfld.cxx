@@ -395,7 +395,15 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     // hat ein "gueltige" Nummer ?
     if( pTxtNd->IsNumbered() && pTxtNd->IsCountedInList())
     {
-        const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(pTxtNd->GetActualListLevel()) );
+        int nLevel = pTxtNd->GetActualListLevel();
+
+        if (nLevel < 0)
+            nLevel = 0;
+
+        if (nLevel >= MAXLEVEL)
+            nLevel = MAXLEVEL - 1;
+
+        const SwNumFmt &rNumFmt = pNumRule->Get( nLevel );
         const sal_Bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
         const sal_Bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
         const bool bLabelAlignmentPosAndSpaceModeActive(
