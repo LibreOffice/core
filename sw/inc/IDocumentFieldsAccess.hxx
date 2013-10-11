@@ -50,7 +50,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
     virtual SwFieldType *GetSysFldType( const sal_uInt16 eWhich ) const = 0;
 
-    virtual SwFieldType* GetFldType(sal_uInt16 nResId, const String& rName, bool bDbFieldMatching) const = 0;
+    virtual SwFieldType* GetFldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const = 0;
 
     virtual void RemoveFldType(sal_uInt16 nFld) = 0;
 

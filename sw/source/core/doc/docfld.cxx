@@ -252,7 +252,7 @@ const SwFldTypes* SwDoc::GetFldTypes() const
 }
 
 /// Find first type with ResId and name
-SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
+SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const OUString& rName,
          bool bDbFieldMatching // used in some UNO calls for RES_DBFLD
                                    // to use different string matching code
                                    // #i51815#

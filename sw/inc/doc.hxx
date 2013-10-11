@@ -809,7 +809,7 @@ public:
     virtual const SwFldTypes *GetFldTypes() const;
     virtual SwFieldType *InsertFldType(const SwFieldType &);
     virtual SwFieldType *GetSysFldType( const sal_uInt16 eWhich ) const;
-    virtual SwFieldType* GetFldType(sal_uInt16 nResId, const String& rName, bool bDbFieldMatching) const;
+    virtual SwFieldType* GetFldType(sal_uInt16 nResId, const OUString& rName, bool bDbFieldMatching) const;
     virtual void RemoveFldType(sal_uInt16 nFld);
     virtual void UpdateFlds( SfxPoolItem* pNewHt, bool bCloseDB);
     virtual void InsDeletedFldType(SwFieldType &);
