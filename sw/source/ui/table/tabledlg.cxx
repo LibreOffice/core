@@ -607,8 +607,8 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     // dialog bei OK den focus verliert
     m_pNameED->GrabFocus();
     // Test the table name for spaces
-    String sTblName = m_pNameED->GetText();
-    if(sTblName.Search(' ') != STRING_NOTFOUND)
+    OUString sTblName = m_pNameED->GetText();
+    if(sTblName.indexOf(' ') != -1)
     {
         InfoBox(this, SW_RES(MSG_WRONG_TABLENAME)).Execute();
         m_pNameED->GrabFocus();
@@ -863,8 +863,8 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     }
     for( sal_uInt16 i = 0; (i < nNoOfVisibleCols ) && ( i < MET_FIELDS); i++ )
     {
-        String sEntry = OUString('~');
-        String sIndex = OUString::number( aValueTbl[i] + 1 );
+        OUString sEntry('~');
+        OUString sIndex = OUString::number( aValueTbl[i] + 1 );
         sEntry += sIndex;
         m_pTextArr[i]->SetText( sEntry );
 
@@ -1381,7 +1381,7 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
            m_pPageCollLB->GetSelectEntryPos() != m_pPageCollLB->GetSavedValue() )
            || (m_pPageNoNF->IsEnabled() && m_pPageNoNF->IsValueModified()) )
     {
-        String sPage;
+        OUString sPage;
 
         if ( bState )
         {
@@ -1480,7 +1480,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
             m_pPageCollLB->InsertEntry(rPageDesc.GetName());
         }
 
-        String aFmtName;
+        OUString aFmtName;
         for(i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
             if( LISTBOX_ENTRY_NOTFOUND == m_pPageCollLB->GetEntryPos(
                     aFmtName = SwStyleNameMapper::GetUIName( i, aFmtName ) ))
@@ -1513,12 +1513,12 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
         {
             if(SFX_ITEM_SET == rSet.GetItemState( RES_PAGEDESC, sal_False, &pItem ))
             {
-                String sPageDesc;
+                OUString sPageDesc;
                 const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
                 m_pPageNoNF->SetValue(((const SwFmtPageDesc*)pItem)->GetNumOffset());
                 if(pDesc)
                     sPageDesc = pDesc->GetName();
-                if ( sPageDesc.Len() &&
+                if ( !sPageDesc.isEmpty() &&
                         m_pPageCollLB->GetEntryPos( sPageDesc ) != LISTBOX_ENTRY_NOTFOUND )
                 {
                     m_pPageCollLB->SelectEntry( sPageDesc );

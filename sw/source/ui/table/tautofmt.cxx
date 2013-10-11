@@ -67,13 +67,13 @@ private:
     long                    nDataColWidth1;
     long                    nDataColWidth2;
     long                    nRowHeight;
-    const String            aStrJan;
-    const String            aStrFeb;
-    const String            aStrMar;
-    const String            aStrNorth;
-    const String            aStrMid;
-    const String            aStrSouth;
-    const String            aStrSum;
+    const OUString          aStrJan;
+    const OUString          aStrFeb;
+    const OUString          aStrMar;
+    const OUString          aStrNorth;
+    const OUString          aStrMid;
+    const OUString          aStrSouth;
+    const OUString          aStrSum;
     SvNumberFormatter*      pNumFmt;
 
     uno::Reference< i18n::XBreakIterator >       m_xBreak;
@@ -92,15 +92,15 @@ private:
     void                DrawBackground();
 
     void    MakeFonts       ( sal_uInt8 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont );
-    String  MakeNumberString( String cellString, sal_Bool bAddDec );
+    OUString  MakeNumberString( OUString cellString, sal_Bool bAddDec );
 };
 
 class SwStringInputDlg : public ModalDialog
 {
 public:
             SwStringInputDlg(     Window* pParent,
-                            const String& rTitle,
-                            const String& rEditTitle,
+                            const OUString& rTitle,
+                            const OUString& rEditTitle,
                             const OUString& rDefault );
             ~SwStringInputDlg();
 
@@ -111,8 +111,8 @@ private:
 };
 
 
-SwStringInputDlg::SwStringInputDlg(Window* pParent, const String& rTitle,
-    const String& rEditTitle, const OUString& rDefault)
+SwStringInputDlg::SwStringInputDlg(Window* pParent, const OUString& rTitle,
+    const OUString& rEditTitle, const OUString& rDefault)
     : ModalDialog(pParent, "StringInputDialog", "modules/swriter/ui/stringinput.ui")
 {
     get<FixedText>("name")->SetText(rEditTitle);
@@ -346,9 +346,9 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
 
 IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
 {
-    OUString aMessage = aStrDelMsg ;
+    OUString aMessage = aStrDelMsg;
     aMessage += "\n\n";
-    aMessage += m_pLbFormat->GetSelectEntry() ;
+    aMessage += m_pLbFormat->GetSelectEntry();
     aMessage += "\n";
 
     MessBox* pBox = new MessBox( this, WinBits( WB_OK_CANCEL ),
