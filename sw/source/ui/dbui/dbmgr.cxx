@@ -597,7 +597,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
 /*--------------------------------------------------------------------
     Description: fill Listbox with tablelist
  --------------------------------------------------------------------*/
-sal_Bool SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
+sal_Bool SwNewDBMgr::GetTableNames(ListBox* pListBox, const OUString& rDBName)
 {
     sal_Bool bRet = sal_False;
     String sOldTableName(pListBox->GetSelectEntry());
@@ -649,7 +649,7 @@ sal_Bool SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
     Description: fill Listbox with column names of a database
  --------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::GetColumnNames(ListBox* pListBox,
-            const String& rDBName, const String& rTableName, sal_Bool bAppend)
+            const OUString& rDBName, const OUString& rTableName, sal_Bool bAppend)
 {
     if (!bAppend)
         pListBox->Clear();
@@ -683,7 +683,7 @@ sal_Bool SwNewDBMgr::GetColumnNames(ListBox* pListBox,
 
 sal_Bool SwNewDBMgr::GetColumnNames(ListBox* pListBox,
         uno::Reference< XConnection> xConnection,
-        const String& rTableName, sal_Bool bAppend)
+        const OUString& rTableName, sal_Bool bAppend)
 {
     if (!bAppend)
         pListBox->Clear();
@@ -853,7 +853,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
     uno::Reference< XPropertySet > xColumnProp;
     {
-        bool bColumnName = sEMailAddrFld.Len() > 0;
+        bool bColumnName = !sEMailAddrFld.isEmpty();
 
         if (bColumnName)
         {
@@ -877,21 +877,21 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                                     sSourceDocumentURL, ::aEmptyStr );
             const SfxFilter* pStoreToFilter = pSfxFlt;
             SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
-            const String* pStoreToFilterOptions = 0;
+            const OUString* pStoreToFilterOptions = 0;
             // if a save_to filter is set then use it - otherwise use the default
             if( bEMail && !rMergeDescriptor.bSendAsAttachment )
             {
                 OUString sExtension = rMergeDescriptor.bSendAsHTML ? OUString("html") : OUString("txt");
                 pStoreToFilter = pFilterContainer->GetFilter4Extension(sExtension, SFX_FILTER_EXPORT);
             }
-            else if( rMergeDescriptor.sSaveToFilter.Len())
+            else if( !rMergeDescriptor.sSaveToFilter.isEmpty())
             {
                 const SfxFilter* pFilter =
                         pFilterContainer->GetFilter4FilterName( rMergeDescriptor.sSaveToFilter );
                 if(pFilter)
                 {
                     pStoreToFilter = pFilter;
-                    if(rMergeDescriptor.sSaveToFilterOptions.Len())
+                    if(!rMergeDescriptor.sSaveToFilterOptions.isEmpty())
                         pStoreToFilterOptions = &rMergeDescriptor.sSaveToFilterOptions;
                 }
             }
@@ -1355,9 +1355,9 @@ IMPL_LINK_INLINE_END( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
     Description: determine the column's Numberformat and transfer
                     to the forwarded Formatter, if applicable.
   --------------------------------------------------------------------*/
-sal_uLong SwNewDBMgr::GetColumnFmt( const String& rDBName,
-                                const String& rTableName,
-                                const String& rColNm,
+sal_uLong SwNewDBMgr::GetColumnFmt( const OUString& rDBName,
+                                const OUString& rTableName,
+                                const OUString& rColNm,
                                 SvNumberFormatter* pNFmtr,
                                 long nLanguage )
 {
@@ -1517,9 +1517,9 @@ sal_uLong SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
     return nRet;
 }
 
-sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
-                          const String& rTableName,
-                          const String& rColNm )
+sal_Int32 SwNewDBMgr::GetColumnType( const OUString& rDBName,
+                          const OUString& rTableName,
+                          const OUString& rColNm )
 {
     sal_Int32 nRet = DataType::SQLNULL;
     SwDBData aData;
@@ -1562,7 +1562,7 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
     return nRet;
 }
 
-uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rDataSource,
+uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const OUString& rDataSource,
                                                     uno::Reference<XDataSource>& rxSource)
 {
     Reference< sdbc::XConnection> xConnection;
@@ -1585,7 +1585,7 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
 }
 
 uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Reference<sdbc::XConnection> xConnection,
-                                    const String& rTableOrQuery,
+                                    const OUString& rTableOrQuery,
                                     sal_uInt8   eTableOrQuery)
 {
     Reference< sdbcx::XColumnsSupplier> xRet;
@@ -1632,7 +1632,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Refe
     return xRet;
 }
 
-String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
+OUString SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
                         const SwDBFormatData& rDBFormatData,
                         double* pNumber)
 {
@@ -1713,15 +1713,15 @@ void    SwNewDBMgr::EndMerge()
 }
 
 // checks if a desired data source table or query is open
-sal_Bool    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource,
-            const String& rTableOrQuery, sal_Bool bMergeOnly)
+sal_Bool    SwNewDBMgr::IsDataSourceOpen(const OUString& rDataSource,
+                                         const OUString& rTableOrQuery, sal_Bool bMergeOnly)
 {
     if(pImpl->pMergeData)
     {
         return !bMergeLock &&
                 ((rDataSource == (String)pImpl->pMergeData->sDataSource &&
                     rTableOrQuery == (String)pImpl->pMergeData->sCommand)
-                    ||(!rDataSource.Len() && !rTableOrQuery.Len()))
+                    ||(rDataSource.isEmpty() && rTableOrQuery.isEmpty()))
                     &&
                     pImpl->pMergeData->xResultSet.is();
     }
@@ -1738,8 +1738,8 @@ sal_Bool    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource,
 }
 
 // read column data at a specified position
-sal_Bool SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableName,
-                            const String& rColumnName, sal_uInt32 nAbsRecordId,
+sal_Bool SwNewDBMgr::GetColumnCnt(const OUString& rSourceName, const OUString& rTableName,
+                            const OUString& rColumnName, sal_uInt32 nAbsRecordId,
                             long nLanguage,
                             OUString& rResult, double* pNumber)
 {
@@ -1805,7 +1805,7 @@ sal_Bool SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTabl
 
 
 // reads the column data at the current position
-sal_Bool    SwNewDBMgr::GetMergeColumnCnt(const String& rColumnName, sal_uInt16 nLanguage,
+sal_Bool    SwNewDBMgr::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
                                 OUString &rResult, double *pNumber, sal_uInt32 * /*pFormat*/)
 {
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is() || pImpl->pMergeData->bAfterSelection )
@@ -1825,7 +1825,7 @@ sal_Bool SwNewDBMgr::ToNextMergeRecord()
 }
 
 sal_Bool SwNewDBMgr::ToNextRecord(
-    const String& rDataSource, const String& rCommand, sal_Int32 /*nCommandType*/)
+    const OUString& rDataSource, const OUString& rCommand, sal_Int32 /*nCommandType*/)
 {
     SwDSParam* pFound = 0;
     if(pImpl->pMergeData &&
@@ -1929,7 +1929,7 @@ sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
     return bRet;
 }
 
-sal_Bool SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableOrQuery,
+sal_Bool SwNewDBMgr::OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,
             sal_Int32 nCommandType, bool bCreate)
 {
     SwDBData aData;
@@ -2011,7 +2011,7 @@ uno::Reference< XConnection> SwNewDBMgr::RegisterConnection(OUString& rDataSourc
 }
 
 sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
-    const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType)
+    const OUString& rDataSource, const OUString& rTableOrQuery, sal_Int32 nCommandType)
 {
     sal_uInt32 nRet = 0xffffffff;
     //check for merge data source first
@@ -2172,7 +2172,7 @@ Sequence<OUString> SwNewDBMgr::GetExistingDatabaseNames()
     return xDBContext->getElementNames();
 }
 
-String SwNewDBMgr::LoadAndRegisterDataSource()
+OUString SwNewDBMgr::LoadAndRegisterDataSource()
 {
     sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
