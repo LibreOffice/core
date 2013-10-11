@@ -21,6 +21,7 @@
 #define _MISC_HRC
 
 #include "rcid.hrc"
+#include "cmdid.h"
 
 #define DLG_INSERT_BOOKMARK         (RC_MISC_BEGIN + 17)
 #define DLG_NUM_NAMES               (RC_MISC_BEGIN + 18)
@@ -54,6 +55,32 @@
 #if MISC_ACT_END > RC_MISC_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
+
+#define MN_EDIT_REDLINE                                          \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_REDLINE_ACCEPT_DIRECT;                            \
+            HelpId = CMD_FN_REDLINE_ACCEPT_DIRECT ;                                \
+            Text [ en-US ] = "Accept Change" ;                       \
+        };\
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_REDLINE_REJECT_DIRECT ;                            \
+            HelpId = CMD_FN_REDLINE_REJECT_DIRECT ;                                \
+            Text [ en-US ] = "Reject Change" ;                       \
+        };                              \
+        MenuItem                                                     \
+        {                                                            \
+            Identifier = FN_REDLINE_NEXT_CHANGE;                     \
+            HelpId = CMD_FN_REDLINE_NEXT_CHANGE ;                    \
+            Text [ en-US ] = "Next Change" ;                         \
+        };\
+        MenuItem                                                     \
+        {                                                            \
+            Identifier = FN_REDLINE_PREV_CHANGE;                     \
+            HelpId = CMD_FN_REDLINE_PREV_CHANGE ;                    \
+            Text [ en-US ] = "Previous Change" ;                     \
+        };
 
 #endif  // _MISC_HRC
 

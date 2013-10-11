@@ -20,6 +20,7 @@
 
 #include "olmenu.hrc"
 #include "helpid.h"
+#include "misc.hrc"
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 #define SEPARATOR   MenuItem { Separator = TRUE; };
@@ -81,6 +82,8 @@ Menu MN_SPELL_POPUP
             };
             Text [ en-US ] = "Set Language for Paragraph" ;
         };
+        SEPARATOR
+        MN_EDIT_REDLINE
     };
 };
 String STR_WORD
