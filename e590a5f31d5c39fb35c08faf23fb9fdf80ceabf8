@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///r4\u003d",
+        "filename": "sw/CppunitTest_sw_uiwriter.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-10-11T20:33:53Z",
+      "side": 1,
+      "message": "there is an inconsistent mess of tabs and spaces here - likely just like in the file you copied it from :)\n\nperhaps run a search-and-replace over it to test it works in your text editor too :)",
+      "revId": "e590a5f31d5c39fb35c08faf23fb9fdf80ceabf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///r0\u003d",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-10-11T20:33:53Z",
+      "side": 1,
+      "message": "c++ reference var should have \"r\" prefix not \"a\"",
+      "revId": "e590a5f31d5c39fb35c08faf23fb9fdf80ceabf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
