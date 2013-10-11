@@ -4489,19 +4489,23 @@ if test "$cross_compiling" = "yes"; then
     echo
     rm -rf CONF-FOR-BUILD config_build.mk
     mkdir CONF-FOR-BUILD
+    # Here must be listed all files needed when running the configure script. In particular, also
+    # those expanded by the AC_CONFIG_FILES() call near the end of this configure.ac. For clarity,
+    # keep them in the same order as there.
     (cd $SRC_ROOT && tar cf - \
         config.guess \
-        config_host.mk.in \
-        Makefile.in \
-        lo.xcent.in \
-        config_host/*.in \
         bin/get_config_variables \
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
-        instsetoo_native/util/openoffice.lst.in) \
+        config_host.mk.in \
+        Makefile.in \
+        lo.xcent.in \
+        instsetoo_native/util/openoffice.lst.in \
+        config_host/*.in \
+        sysui/desktop/macosx/Info.plist.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
     cp configure CONF-FOR-BUILD
-    test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host
+    test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host 2>/dev/null
     (
     unset COM GUIBASE OS CPU CPUNAME
     unset CC CXX SYSBASE CFLAGS
