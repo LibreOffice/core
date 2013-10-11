@@ -35,6 +35,9 @@ gb_Extension_HELPLINKERCOMMAND := $(call gb_Executable_get_command,HelpLinker)
 gb_Extension_TRANS_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
 gb_Extension_ALL_LANGS := en-US $(gb_Extension_TRANS_LANGS)
 
+# target ensuring delivery of the extension to instdir
+gb_Extension__get_final_target = $(WORKDIR)/Extension/$(1).final
+
 # Substitute platform or copy if no platform has been set
 define gb_Extension__subst_platform
 $(if $(PLATFORM),\
@@ -57,6 +60,10 @@ $(call gb_Extension_get_clean_target,%) :
 		rm -f $(call gb_Extension__get_preparation_target,$*) \
 			  $(call gb_Extension_get_target,$*) \
 	)
+
+$(call gb_Extension__get_final_target,%) :
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && touch $@)
 
 # preparation target to delay adding files produced by e.g. UnpackedTarball
 $(call gb_Extension__get_preparation_target,%) :
@@ -118,6 +125,13 @@ $(call gb_Extension_get_workdir,$(1))/description.xml : \
 	$(SRCDIR)/$(2)/description.xml
 $(call gb_Extension_get_workdir,$(1))/description.xml :| \
 	$(call gb_Extension__get_preparation_target,$(1))
+$(call gb_Extension__get_final_target,$(1)) : $(call gb_Extension_get_target,$(1))
+
+$(call gb_GeneratedPackage_GeneratedPackage,Extension/$(1),$(dir $(call gb_Extension_get_rootdir,$(1))))
+$(call gb_GeneratedPackage_add_dir,Extension/$(1),$(INSTROOT)/share/extensions/$(1),$(notdir $(call gb_Extension_get_rootdir,$(1))))
+
+$(call gb_GeneratedPackage_get_target,Extension/$(1)) : $(call gb_Extension_get_target,$(1))
+$(call gb_Extension__get_final_target,$(1)) : $(call gb_GeneratedPackage_get_target,Extension/$(1))
 
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_Extension_get_target,$(1)) : \
@@ -130,8 +144,8 @@ endif
 $(foreach lang,$(gb_Extension_ALL_LANGS), \
     $(call gb_Extension__compile_help_onelang,$(1),$(lang)))
 
-$$(eval $$(call gb_Module_register_target,$(call gb_Extension_get_target,$(1)),$(call gb_Extension_get_clean_target,$(1))))
-$(call gb_Helper_make_userfriendly_targets,$(1),Extension)
+$$(eval $$(call gb_Module_register_target,$(call gb_Extension__get_final_target,$(1)),$(call gb_Extension_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Extension,$(call gb_Extension__get_final_target,$(1)))
 
 endef
 
