@@ -82,45 +82,6 @@ using namespace vcl_sal;
 #define SALCOLOR_WHITE      MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF )
 #define SALCOLOR_BLACK      MAKE_SALCOLOR( 0x00, 0x00, 0x00 )
 
-static const char* const EventNames[] =
-{
-    NULL,
-    NULL,
-    "KeyPress",
-    "KeyRelease",
-    "ButtonPress",
-    "ButtonRelease",
-    "MotionNotify",
-    "EnterNotify",
-    "LeaveNotify",
-    "FocusIn",
-    "FocusOut",
-    "KeymapNotify",
-    "Expose",
-    "GraphicsExpose",
-    "NoExpose",
-    "VisibilityNotify",
-    "CreateNotify",
-    "DestroyNotify",
-    "UnmapNotify",
-    "MapNotify",
-    "MapRequest",
-    "ReparentNotify",
-    "ConfigureNotify",
-    "ConfigureRequest",
-    "GravityNotify",
-    "ResizeRequest",
-    "CirculateNotify",
-    "CirculateRequest",
-    "PropertyNotify",
-    "SelectionClear",
-    "SelectionRequest",
-    "SelectionNotify",
-    "ColormapNotify",
-    "ClientMessage",
-    "MappingNotify"
-};
-
 inline const char *Null( const char *p ) { return p ? p : ""; }
 inline const char *GetEnv( const char *p ) { return Null( getenv( p ) ); }
 inline const char *KeyStr( KeySym n ) { return Null( XKeysymToString( n ) ); }
@@ -2013,6 +1974,45 @@ long SalX11Display::Dispatch( XEvent *pEvent )
 #ifdef DBG_UTIL
 void SalDisplay::DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) const
 {
+    static const char* const EventNames[] =
+    {
+        NULL,
+        NULL,
+        "KeyPress",
+        "KeyRelease",
+        "ButtonPress",
+        "ButtonRelease",
+        "MotionNotify",
+        "EnterNotify",
+        "LeaveNotify",
+        "FocusIn",
+        "FocusOut",
+        "KeymapNotify",
+        "Expose",
+        "GraphicsExpose",
+        "NoExpose",
+        "VisibilityNotify",
+        "CreateNotify",
+        "DestroyNotify",
+        "UnmapNotify",
+        "MapNotify",
+        "MapRequest",
+        "ReparentNotify",
+        "ConfigureNotify",
+        "ConfigureRequest",
+        "GravityNotify",
+        "ResizeRequest",
+        "CirculateNotify",
+        "CirculateRequest",
+        "PropertyNotify",
+        "SelectionClear",
+        "SelectionRequest",
+        "SelectionNotify",
+        "ColormapNotify",
+        "ClientMessage",
+        "MappingNotify"
+    };
+
     if( pEvent->type <= MappingNotify )
     {
         fprintf( stderr, "[%s] %s s=%d w=%ld\n",
