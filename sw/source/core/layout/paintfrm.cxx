@@ -7134,10 +7134,27 @@ const Color& SwPageFrm::GetDrawBackgrdColor() const
     const XFillGradientItem* pFillGradientItem;
     const Color* pDummyColor;
     SwRect aDummyRect;
+
     if ( GetBackgroundBrush( pBrushItem, pFillStyleItem, pFillGradientItem, pDummyColor, aDummyRect, true) )
-        return pBrushItem->GetColor();
-    else
-        return aGlobalRetoucheColor;
+    {
+        const Graphic* pGraphic = pBrushItem->GetGraphic();
+
+        if(pGraphic)
+        {
+            // #i29105# when a graphic is set, it may be possible to calculate a single
+            // color which looks good in all places of the graphic. Since it is
+            // planned to have text edit on the overlay one day and the fallback
+            // to aGlobalRetoucheColor returns something useful, just use that
+            // for now.
+        }
+        else
+        {
+            // not a graphic, use (hopefully) initialized color
+            return pBrushItem->GetColor();
+        }
+    }
+
+    return aGlobalRetoucheColor;
 }
 
 /*************************************************************************
