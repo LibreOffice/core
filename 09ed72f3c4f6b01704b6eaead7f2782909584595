@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAY3///wQ\u003d",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-11T07:02:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAY3///ys\u003d",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAY3///yQ\u003d",
         "filename": "include/formula/compiler.hrc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2013-10-10T17:42:04Z",
       "side": 1,
       "message": "I\u0027d rather prefer if for new functions we used the entire non-abbreviated name, thus SC_OPCODE_COVARIANCE_P and SC_OPCODE_COVARIANCE_S to make it more obvious to the reader.",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///wM\u003d",
+        "filename": "include/formula/compiler.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-11T07:02:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAY3///yQ\u003d",
       "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAY3///wI\u003d",
+        "filename": "include/formula/opcode.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-11T07:02:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAY3///yM\u003d",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAY3///yg\u003d",
         "filename": "sc/source/core/inc/interpre.hxx",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2013-10-10T17:42:04Z",
       "side": 1,
       "message": "I\u0027d rather prefer to not have a default argument value for the new parameter but make it explicit instead, which makes it more obvious in callers.",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///wE\u003d",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-11T07:02:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAY3///yg\u003d",
       "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAY3///wA\u003d",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3892,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-11T07:02:37Z",
+      "side": 1,
+      "message": "IMHO nothing yet, as i don\u0027t know if there exists a Pearson Population/Sample distinction in the world of Statistics.\nShould someone (including myself) add support for this distinction, the occurrance of both _bPearson and _bSample being true must be handled.\nCurrently, the value of _bSample is of no consequence (don;t care) when _bPearson is true.",
+      "parentUuid": "AAAAY3///yc\u003d",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAY3///yY\u003d",
         "filename": "sc/source/filter/excel/xlformula.cxx",
         "patchSetId": 2
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAY3///v8\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-11T07:02:37Z",
+      "side": 1,
+      "message": "I will try to find out if these function were introduced with Excel 2010 or are in OOXML, and move these functions to saFunctable_2010[] (with _xlfn. prefix) if need be.",
+      "parentUuid": "AAAAY3///yY\u003d",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAY3///yU\u003d",
         "filename": "sc/source/filter/oox/formulabase.cxx",
         "patchSetId": 2
@@ -115,6 +223,24 @@
       "writtenOn": "2013-10-10T17:42:04Z",
       "side": 1,
       "message": "Same as in xlformula.cxx, these functions instead should go into a new block saFuncTable2010[] similar to saFuncTable2013[]",
+      "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///v4\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-11T07:02:37Z",
+      "side": 1,
+      "message": "Will do so, depending on my changes to xlformula.cxx.",
+      "parentUuid": "AAAAY3///yU\u003d",
       "revId": "09ed72f3c4f6b01704b6eaead7f2782909584595",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
