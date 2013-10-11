@@ -3660,6 +3660,88 @@ namespace basegfx
             return true;
         }
 
+        B2DVector getTangentEnteringPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex)
+        {
+            B2DVector aRetval(0.0, 0.0);
+            const sal_uInt32 nCount(rCandidate.count());
+
+            if(nIndex >= nCount)
+            {
+                // out of range
+                return aRetval;
+            }
+
+            // start immediately at prev point compared to nIndex
+            const bool bClosed(rCandidate.isClosed());
+            sal_uInt32 nPrev(bClosed ? (nIndex + nCount - 1) % nCount : nIndex ? nIndex - 1 : nIndex);
+
+            if(nPrev == nIndex)
+            {
+                // no previous, done
+                return aRetval;
+            }
+
+            B2DCubicBezier aSegment;
+
+            // go backward in the polygon; if closed, maximal back to start index (nIndex); if not closed,
+            // until zero. Use nIndex as stop criteria
+            while(nPrev != nIndex)
+            {
+                // get BezierSegment and tangent at the *end* of segment
+                rCandidate.getBezierSegment(nPrev, aSegment);
+                aRetval = aSegment.getTangent(1.0);
+
+                if(!aRetval.equalZero())
+                {
+                    // if we have a tangent, return it
+                    return aRetval;
+                }
+
+                // prepare index before checked one
+                nPrev = bClosed ? (nPrev + nCount - 1) % nCount : nPrev ? nPrev - 1 : nIndex;
+            }
+
+            return aRetval;
+        }
+
+        B2DVector getTangentLeavingPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex)
+        {
+            B2DVector aRetval(0.0, 0.0);
+            const sal_uInt32 nCount(rCandidate.count());
+
+            if(nIndex >= nCount)
+            {
+                // out of range
+                return aRetval;
+            }
+
+            // start at nIndex
+            const bool bClosed(rCandidate.isClosed());
+            sal_uInt32 nCurrent(nIndex);
+            B2DCubicBezier aSegment;
+
+            // go forward; if closed, do this until once around and back at start index (nIndex); if not
+            // closed, until last point (nCount - 1). Use nIndex as stop criteria
+            do
+            {
+                // get BezierSegment and tangent at the *beginning* of segment
+                rCandidate.getBezierSegment(nCurrent, aSegment);
+                aRetval = aSegment.getTangent(0.0);
+
+                if(!aRetval.equalZero())
+                {
+                    // if we have a tangent, return it
+                    return aRetval;
+                }
+
+                // prepare next index
+                nCurrent = bClosed ? (nCurrent + 1) % nCount : nCurrent + 1 < nCount ? nCurrent + 1 : nIndex;
+            }
+            while(nCurrent != nIndex);
+
+            return aRetval;
+        }
+
     } // end of namespace tools
 } // end of namespace basegfx
 
