@@ -30,7 +30,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <svx/ShapeTypeHandler.hxx>
 #include "CustomAnimationList.hxx"
-#include "CustomAnimationPane.hrc"
 #include "CustomAnimation.hrc"
 #include "CustomAnimationPreset.hxx"
 #include <vcl/svapp.hxx>

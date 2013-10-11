@@ -42,7 +42,6 @@
 #include "CustomAnimationPane.hxx"
 #include "CustomAnimationDialog.hxx"
 #include "CustomAnimationCreateDialog.hxx"
-#include "CustomAnimationPane.hrc"
 #include "CustomAnimation.hrc"
 #include "CustomAnimationList.hxx"
 #include <vcl/lstbox.hxx>
