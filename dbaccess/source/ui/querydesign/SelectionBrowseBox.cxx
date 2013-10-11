@@ -1826,8 +1826,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
         }
         m_bVisibleRow[BROW_CRIT1_ROW + nLevel] = sal_True;
     }
-
-    else if (aIter == getFields().end())
+    else if (aIter == rFields.end())
     {
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, sal_False, sal_False );
         if ( pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy() ) // the GroupBy was inherited from rInfo
