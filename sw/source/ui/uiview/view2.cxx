@@ -2218,52 +2218,6 @@ namespace
     }
 }
 
-class SwMergeSourceWarningBox_Impl : public ModalDialog
-{
-        FixedInfo       aMessageFI;
-        OKButton        aOK;
-        CancelButton    aCancel;
-
-        FixedImage      aWarnImage;
-    public:
-        SwMergeSourceWarningBox_Impl( Window* pParent ) :
-            ModalDialog( pParent, SW_RES( DLG_MERGE_SOURCE_UNAVAILABLE   ) ),
-                    aMessageFI( this, SW_RES( ST_MERGE_SOURCE_UNAVAILABLE ) ),
-                    aOK(        this, SW_RES( PB_MERGE_OK                 ) ),
-                    aCancel(    this, SW_RES( PB_MERGE_CANCEL             ) ),
-                    aWarnImage( this, SW_RES( IMG_MERGE                   ) )
-                    {
-                        FreeResource();
-                        SetText( Application::GetDisplayName() );
-                        const Image& rImg = WarningBox::GetStandardImage();
-                        aWarnImage.SetImage( rImg );
-                        Size aImageSize( rImg.GetSizePixel() );
-                        aImageSize.Width()  += 4;
-                        aImageSize.Height() += 4;
-                        aWarnImage.SetSizePixel( aImageSize );
-
-                        aImageSize.Width() += aWarnImage.GetPosPixel().X();
-                        Size aSz(GetSizePixel());
-                        aSz.Width() += aImageSize.Width();
-                        SetSizePixel(aSz);
-
-                        Point aPos(aMessageFI.GetPosPixel());
-                        aPos.X() += aImageSize.Width();
-                        aMessageFI.SetPosPixel( aPos );
-
-                        aPos = aOK.GetPosPixel();
-                        aPos.X() += aImageSize.Width();
-                        aOK.SetPosPixel( aPos );
-                        aPos = aCancel.GetPosPixel();
-                        aPos.X() += aImageSize.Width();
-                        aCancel.SetPosPixel( aPos );
-
-                    }
-
-        String          GetMessText() const { return aMessageFI.GetText(); }
-        void            SetMessText( const String& rText ) { aMessageFI.SetText( rText ); }
-};
-
 void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
 {
     if(bUseCurrentDocument)
@@ -2326,10 +2280,12 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
             OUString sSource;
             if(!GetWrtShell().IsFieldDataSourceAvailable(sSource))
             {
-                SwMergeSourceWarningBox_Impl aWarning( &GetViewFrame()->GetWindow());
-                OUString sTmp(aWarning.GetMessText());
-                aWarning.SetMessText(sTmp.replaceFirst("%1", sSource));
-                if(RET_OK == aWarning.Execute())
+                MessageDialog aWarning(&GetViewFrame()->GetWindow(),
+                    "WarnDataSourceDialog",
+                    "modules/swriter/ui/warndatasourcedialog.ui");
+                OUString sTmp(aWarning.get_primary_text());
+                aWarning.set_primary_text(sTmp.replaceFirst("%1", "SOURCE"));
+                if (RET_OK == aWarning.Execute())
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     if ( pFact )

@@ -45,14 +45,6 @@
 #define STR_CJK_FONT                    (RC_APP_BEGIN + 78)
 #define MSG_PRINT_AS_MERGE              (RC_APP_BEGIN + 80)
 
-#define DLG_MERGE_SOURCE_UNAVAILABLE    (RC_APP_BEGIN + 83)
-
-#define ST_MERGE_SOURCE_UNAVAILABLE     1
-#define PB_MERGE_OK                     2
-#define PB_MERGE_CANCEL                 3
-#define IMG_MERGE                       4
-
-
 #define STR_ENV_TITLE                   (RC_APP_BEGIN + 91)
 #define STR_LAB_TITLE                   (RC_APP_BEGIN + 92)
 

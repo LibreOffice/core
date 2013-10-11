@@ -489,39 +489,6 @@ QueryBox MSG_PRINT_AS_MERGE
     Message [ en-US ] = "Your document contains address database fields. Do you want to print a form letter?";
 };
 
-ModalDialog DLG_MERGE_SOURCE_UNAVAILABLE
-{
-    HelpId = HID_MERGE_SOURCE_UNAVAILABLE;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 202 , 72 ) ;
-    Moveable = TRUE ;
-
-    FixedImage IMG_MERGE
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 103 , 32 ) ;
-    };
-    FixedText ST_MERGE_SOURCE_UNAVAILABLE
-    {
-        Pos = MAP_APPFONT ( 12 , 6 ) ;
-        Size = MAP_APPFONT ( 178 , 40 ) ;
-        WordBreak = TRUE;
-        Text [ en-US ] = "The data source '%1' was not found. Thus the connection to the data source could not be established.\n\nPlease check the connection settings.";
-    };
-    OKButton PB_MERGE_OK
-    {
-        Pos = MAP_APPFONT ( 12 , 52 ) ;
-        Size = MAP_APPFONT ( 125 , 14 ) ;
-        Text [ en-US ] = "Check Connection Settings...";
-    };
-    CancelButton PB_MERGE_CANCEL
-    {
-        Pos = MAP_APPFONT ( 140 , 52 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-};
-
 String RID_MODULE_TOOLBOX
 {
     Text [ en-US ] = "Function Bar (viewing mode)" ;
