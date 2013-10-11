@@ -2979,7 +2979,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
         sal_Bool bDone = false;
         sal_Bool bEdit = pViewData->HasEditView(eWhich);
-        bool bSpellError = mpSpellCheckCxt->isMisspelled(nCellX, nCellY);
+        bool bSpellError = (mpSpellCheckCxt && mpSpellCheckCxt->isMisspelled(nCellX, nCellY));
 
         if ( !bEdit )
         {
