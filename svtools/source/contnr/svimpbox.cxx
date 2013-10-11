@@ -1602,8 +1602,12 @@ void SvImpLBox::SetNodeBmpYOffset( const Image& rBmp )
 void SvImpLBox::SetNodeBmpTabDistance()
 {
     nNodeBmpTabDistance = -pView->GetIndent();
-    Size aSize = GetExpandedNodeBmp().GetSizePixel();
-    nNodeBmpTabDistance -= aSize.Width() / 2;
+    if( pView->nContextBmpWidthMax )
+    {
+        // only if the first dynamic tab is centered (we currently assume that)
+        Size aSize = GetExpandedNodeBmp().GetSizePixel();
+        nNodeBmpTabDistance -= aSize.Width() / 2;
+    }
 }
 
 //

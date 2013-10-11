@@ -1855,7 +1855,7 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
                     LINK(this, SfxCommonTemplateDialog_Impl,  ApplyHdl));
             ((StyleTreeListBox_Impl*)pTreeBox)->
                 SetDropHdl(LINK(this, SfxCommonTemplateDialog_Impl,  DropHdl));
-            pTreeBox->SetIndent(10);
+            pTreeBox->SetOptimalImageIndent();
             FillTreeBox();
             SelectStyle(aSelectEntry);
             pTreeBox->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST).toString());

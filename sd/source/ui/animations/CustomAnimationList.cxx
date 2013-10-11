@@ -464,7 +464,7 @@ CustomAnimationList::CustomAnimationList( ::Window* pParent )
 
     EnableContextMenuHandling();
     SetSelectionMode( MULTIPLE_SELECTION );
-    SetIndent(16);
+    SetOptimalImageIndent();
     SetNodeDefaultImages();
 }
 
