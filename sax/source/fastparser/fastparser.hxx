@@ -139,7 +139,6 @@ private:
     sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
     sal_Int32 GetTokenWithNamespaceURL( const OUString& rNamespaceURL, const sal_Char* pName, int nNameLen );
     void DefineNamespace( const OString& rPrefix, const sal_Char* pNamespaceURL );
-    sal_Int32 CreateCustomToken( const sal_Char* pToken, int len = 0 );
 
     void pushContext();
     void popContext();
