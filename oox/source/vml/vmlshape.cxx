@@ -942,7 +942,9 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
     // try to find registered OLE object info
     if( const OleObjectInfo* pOleObjectInfo = mrDrawing.getOleObjectInfo( maTypeModel.maShapeId ) )
     {
-        OSL_ENSURE( nShapeType == VML_SHAPETYPE_PICTUREFRAME, "ComplexShape::implConvertAndInsert - unexpected shape type" );
+        SAL_WARN_IF(
+            nShapeType != VML_SHAPETYPE_PICTUREFRAME, "oox",
+            "ComplexShape::implConvertAndInsert - unexpected shape type");
 
         // if OLE object is embedded into a DrawingML shape (PPTX), do not create it here
         if( pOleObjectInfo->mbDmlShape )

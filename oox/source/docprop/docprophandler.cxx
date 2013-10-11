@@ -333,8 +333,7 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
 void SAL_CALL OOXMLDocPropHandler::startUnknownElement( const OUString& aNamespace, const OUString& aName, const uno::Reference< xml::sax::XFastAttributeList >& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
-    OUString aUnknown = "Unknown element" + aNamespace + ":" + aName;
-    OSL_FAIL( OUStringToOString( aUnknown, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_WARN("oox", "Unknown element " << aNamespace << ":" << aName);
 
     if ( m_nInBlock == SAL_MAX_INT32 )
         throw uno::RuntimeException();
