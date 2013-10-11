@@ -1196,7 +1196,7 @@ void XclExpFmlaCompImpl::ProcessDouble( const XclExpScToken& rTokData )
 void XclExpFmlaCompImpl::ProcessString( const XclExpScToken& rTokData )
 {
     AppendOperandTokenId( EXC_TOKID_STR, rTokData.mnSpaces );
-    Append( rTokData.mpScToken->GetString() );
+    Append( rTokData.mpScToken->GetString().getString() );
 }
 
 void XclExpFmlaCompImpl::ProcessMissing( const XclExpScToken& rTokData )
@@ -1230,7 +1230,7 @@ inline bool lclGetTokenString( OUString& rString, const XclExpScToken& rTokData 
 {
     bool bIsStr = (rTokData.GetType() == svString) && (rTokData.GetOpCode() == ocPush);
     if( bIsStr )
-        rString = rTokData.mpScToken->GetString();
+        rString = rTokData.mpScToken->GetString().getString();
     return bIsStr;
 }
 
@@ -2017,13 +2017,13 @@ void XclExpFmlaCompImpl::ProcessExternalCellRef( const XclExpScToken& rTokData )
 
         // store external cell contents in CRN records
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
-        const OUString& rTabName = rTokData.mpScToken->GetString();
+        OUString aTabName = rTokData.mpScToken->GetString().getString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
-            mxData->mpLinkMgr->StoreCell(nFileId, rTabName, aRefData.toAbs(*mxData->mpScBasePos));
+            mxData->mpLinkMgr->StoreCell(nFileId, aTabName, aRefData.toAbs(*mxData->mpScBasePos));
 
         // 1-based EXTERNSHEET index and 0-based Excel sheet indexes
         sal_uInt16 nExtSheet, nFirstSBTab, nLastSBTab;
-        mxData->mpLinkMgr->FindExtSheet( nFileId, rTabName, 1, nExtSheet, nFirstSBTab, nLastSBTab, GetNewRefLogEntry() );
+        mxData->mpLinkMgr->FindExtSheet( nFileId, aTabName, 1, nExtSheet, nFirstSBTab, nLastSBTab, GetNewRefLogEntry() );
         // write the token
         sal_uInt8 nBaseId = lclIsRefDel2D( aRefData ) ? EXC_TOKID_REFERR3D : EXC_TOKID_REF3D;
         AppendOperandTokenId( GetTokenId( nBaseId, EXC_TOKCLASS_REF ), rTokData.mnSpaces );
@@ -2053,14 +2053,15 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
 
         // store external cell contents in CRN records
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
-        const OUString& rTabName = rTokData.mpScToken->GetString();
+        OUString aTabName = rTokData.mpScToken->GetString().getString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
-            mxData->mpLinkMgr->StoreCellRange(nFileId, rTabName, aRefData.toAbs(*mxData->mpScBasePos));
+            mxData->mpLinkMgr->StoreCellRange(nFileId, aTabName, aRefData.toAbs(*mxData->mpScBasePos));
 
         // 1-based EXTERNSHEET index and 0-based Excel sheet indexes
         sal_uInt16 nExtSheet, nFirstSBTab, nLastSBTab;
         sal_uInt16 nTabSpan = static_cast<sal_uInt16>(aRefData.Ref2.Tab() - aRefData.Ref1.Tab() + 1);
-        mxData->mpLinkMgr->FindExtSheet( nFileId, rTabName, nTabSpan, nExtSheet, nFirstSBTab, nLastSBTab, GetNewRefLogEntry() );
+        mxData->mpLinkMgr->FindExtSheet(
+            nFileId, aTabName, nTabSpan, nExtSheet, nFirstSBTab, nLastSBTab, GetNewRefLogEntry());
         // write the token
         sal_uInt8 nBaseId = lclIsRefDel2D( aRefData ) ? EXC_TOKID_AREAERR3D : EXC_TOKID_AREA3D;
         AppendOperandTokenId( GetTokenId( nBaseId, EXC_TOKCLASS_REF ), rTokData.mnSpaces );
@@ -2117,8 +2118,8 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
     {
         ScExternalRefManager& rExtRefMgr = *GetDoc().GetExternalRefManager();
         sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
-        const OUString& rName = rTokData.mpScToken->GetString();
-        ScExternalRefCache::TokenArrayRef xArray = rExtRefMgr.getRangeNameTokens( nFileId, rName );
+        OUString aName = rTokData.mpScToken->GetString().getString();
+        ScExternalRefCache::TokenArrayRef xArray = rExtRefMgr.getRangeNameTokens( nFileId, aName );
         if( xArray.get() )
         {
             // store external cell contents in CRN records
@@ -2134,14 +2135,14 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
                             {
                                 ScSingleRefData aRefData = static_cast< ScToken* >( pScToken )->GetSingleRef();
                                 mxData->mpLinkMgr->StoreCell(
-                                    nFileId, pScToken->GetString(), aRefData.toAbs(*mxData->mpScBasePos));
+                                    nFileId, pScToken->GetString().getString(), aRefData.toAbs(*mxData->mpScBasePos));
                             }
                             break;
                             case svExternalDoubleRef:
                             {
                                 ScComplexRefData aRefData = static_cast< ScToken* >( pScToken )->GetDoubleRef();
                                 mxData->mpLinkMgr->StoreCellRange(
-                                    nFileId, pScToken->GetString(), aRefData.toAbs(*mxData->mpScBasePos));
+                                    nFileId, pScToken->GetString().getString(), aRefData.toAbs(*mxData->mpScBasePos));
                             }
                             default:
                                 ;   // nothing, avoid compiler warning
@@ -2153,7 +2154,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
             // insert the new external name and create the tNameX token
             sal_uInt16 nExtSheet = 0, nExtName = 0;
             const OUString* pFile = rExtRefMgr.getExternalFileName( nFileId );
-            if( pFile && mxData->mpLinkMgr->InsertExtName( nExtSheet, nExtName, *pFile, rName, xArray ) )
+            if( pFile && mxData->mpLinkMgr->InsertExtName( nExtSheet, nExtName, *pFile, aName, xArray ) )
             {
                 AppendNameXToken( nExtSheet, nExtName, rTokData.mnSpaces );
                 return;

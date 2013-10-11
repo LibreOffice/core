@@ -1776,9 +1776,9 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
 
             case svString:
                 if( eOp == ocBad || eOp == ocStringXML )
-                    rBuffer.append( t->GetString());
+                    rBuffer.append( t->GetString().getString());
                 else
-                    AppendString( rBuffer, t->GetString() );
+                    AppendString( rBuffer, t->GetString().getString() );
                 break;
             case svSingleRef:
                 CreateStringFromSingleRef( rBuffer, t);

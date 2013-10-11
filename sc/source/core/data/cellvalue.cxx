@@ -564,7 +564,7 @@ OUString ScRefCellValue::getString( const ScDocument* pDoc )
                 return ScEditUtil::GetString(*mpEditText, pDoc);
         break;
         case CELLTYPE_FORMULA:
-            return mpFormula->GetString();
+            return mpFormula->GetString().getString();
         default:
             ;
     }

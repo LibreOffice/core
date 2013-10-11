@@ -667,7 +667,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
             else
             {
                 // string result
-                OUString aStrVal = pFormula->GetString();
+                OUString aStrVal = pFormula->GetString().getString();
                 aRet <<= aStrVal;
             }
         }

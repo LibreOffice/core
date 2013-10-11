@@ -160,7 +160,6 @@ private:
 
     const formula::FormulaToken*
                 pCur;                   // current token
-    OUString    aTempStr;               // for GetString()
     ScTokenStack* pStackObj;            // contains the stacks
     formula::FormulaToken**   pStack;   // the current stack
     sal_uInt16  nGlobalError;           // global (local to this formula expression) error
@@ -200,7 +199,7 @@ double ConvertStringToValue( const OUString& );
 double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
 double GetCellValueOrZero( const ScAddress&, ScRefCellValue& rCell );
 double GetValueCellValue( const ScAddress&, double fOrig );
-void GetCellString( OUString& rStr, ScRefCellValue& rCell );
+void GetCellString( svl::SharedString& rStr, ScRefCellValue& rCell );
 sal_uInt16 GetCellErrCode( const ScRefCellValue& rCell );
 
 bool CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
@@ -267,7 +266,7 @@ formula::FormulaTokenRef PopToken();
 void Pop();
 void PopError();
 double PopDouble();
-const OUString& PopString();
+svl::SharedString PopString();
 void ValidateRef( const ScSingleRefData & rRef );
 void ValidateRef( const ScComplexRefData & rRef );
 void ValidateRef( const ScRefList & rRefList );
@@ -317,7 +316,8 @@ void QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetInde
 void PushDouble(double nVal);
 void PushInt( int nVal );
 void PushStringBuffer( const sal_Unicode* pString );
-void PushString( const OUString& rString );
+void PushString( const OUString& rStr );
+void PushString( const svl::SharedString& rString );
 void PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab);
 void PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                    SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
@@ -343,10 +343,10 @@ double GetDouble();
 double GetDoubleWithDefault(double nDefault);
 bool IsMissing();
 bool GetBool() { return GetDouble() != 0.0; }
-const OUString& GetString();
-const OUString& GetStringFromMatrix(const ScMatrixRef& pMat);
+svl::SharedString GetString();
+svl::SharedString GetStringFromMatrix(const ScMatrixRef& pMat);
 // pop matrix and obtain one element, upper left or according to jump matrix
-ScMatValType GetDoubleOrStringFromMatrix( double& rDouble, OUString& rString );
+ScMatValType GetDoubleOrStringFromMatrix( double& rDouble, svl::SharedString& rString );
 ScMatrixRef CreateMatrixFromDoubleRef( const formula::FormulaToken* pToken,
         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         SCCOL nCol2, SCROW nRow2, SCTAB nTab2 );
@@ -833,7 +833,7 @@ public:
 
     sal_uInt16                  GetError() const            { return nGlobalError; }
     formula::StackVar           GetResultType() const       { return xResult->GetType(); }
-    const OUString&               GetStringResult() const     { return xResult->GetString(); }
+    svl::SharedString GetStringResult() const;
     double                      GetNumResult() const        { return xResult->GetDouble(); }
     formula::FormulaTokenRef    GetResultToken() const      { return xResult; }
     short                       GetRetFormatType() const    { return nRetFmtType; }

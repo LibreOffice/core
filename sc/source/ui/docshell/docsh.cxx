@@ -1948,7 +1948,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                             aString = ScCellFormat::GetString(aDocument, aPos, nFormat, &pDummy, rFormatter);
                         }
                         else
-                            aString = pCell->mpFormula->GetString();
+                            aString = pCell->mpFormula->GetString().getString();
                         bString = true;
                     }
                 }

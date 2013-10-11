@@ -855,7 +855,7 @@ FormulaToken* ScMatrixRangeToken::Clone() const
 
 // ============================================================================
 
-ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& r ) :
+ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScSingleRefData& r ) :
     ScToken( svExternalSingleRef, ocPush),
     mnFileId(nFileId),
     maTabName(rTabName),
@@ -880,7 +880,7 @@ sal_uInt16 ScExternalSingleRefToken::GetIndex() const
     return mnFileId;
 }
 
-const OUString& ScExternalSingleRefToken::GetString() const
+svl::SharedString ScExternalSingleRefToken::GetString() const
 {
     return maTabName;
 }
@@ -911,7 +911,7 @@ bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 
 // ============================================================================
 
-ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& r ) :
+ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScComplexRefData& r ) :
     ScToken( svExternalDoubleRef, ocPush),
     mnFileId(nFileId),
     maTabName(rTabName),
@@ -936,7 +936,7 @@ sal_uInt16 ScExternalDoubleRefToken::GetIndex() const
     return mnFileId;
 }
 
-const OUString& ScExternalDoubleRefToken::GetString() const
+svl::SharedString ScExternalDoubleRefToken::GetString() const
 {
     return maTabName;
 }
@@ -987,7 +987,7 @@ bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
 
 // ============================================================================
 
-ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const OUString& rName ) :
+ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const svl::SharedString& rName ) :
     ScToken( svExternalName, ocPush),
     mnFileId(nFileId),
     maName(rName)
@@ -1008,7 +1008,7 @@ sal_uInt16 ScExternalNameToken::GetIndex() const
     return mnFileId;
 }
 
-const OUString& ScExternalNameToken::GetString() const
+svl::SharedString ScExternalNameToken::GetString() const
 {
     return maName;
 }
@@ -1021,8 +1021,7 @@ bool ScExternalNameToken::operator==( const FormulaToken& r ) const
     if (mnFileId != r.GetIndex())
         return false;
 
-    const OUString& rName = r.GetString();
-    return maName == rName;
+    return maName.getData() == r.GetString().getData();
 }
 
 // ============================================================================
@@ -1038,11 +1037,12 @@ ScJumpMatrixToken::~ScJumpMatrixToken()
 }
 
 double          ScEmptyCellToken::GetDouble() const     { return 0.0; }
-const OUString &  ScEmptyCellToken::GetString() const
+
+svl::SharedString ScEmptyCellToken::GetString() const
 {
-    static  OUString              aDummyString;
-    return aDummyString;
+    return svl::SharedString::getEmptyString();
 }
+
 bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
@@ -1057,7 +1057,12 @@ ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken&
     ScToken(r), xMatrix(r.xMatrix), xUpperLeft(r.xUpperLeft) {}
 
 double          ScMatrixCellResultToken::GetDouble() const  { return xUpperLeft->GetDouble(); }
-const OUString &  ScMatrixCellResultToken::GetString() const  { return xUpperLeft->GetString(); }
+
+svl::SharedString ScMatrixCellResultToken::GetString() const
+{
+    return xUpperLeft->GetString();
+}
+
 const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix.get(); }
 // Non-const GetMatrix() is private and unused but must be implemented to
 // satisfy vtable linkage.
@@ -1164,7 +1169,12 @@ void ScMatrixFormulaCellToken::ResetResult()
 
 
 double ScHybridCellToken::GetDouble() const { return mfDouble; }
-const OUString& ScHybridCellToken::GetString() const { return maString; }
+
+svl::SharedString ScHybridCellToken::GetString() const
+{
+    return maString;
+}
+
 bool ScHybridCellToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
@@ -1469,8 +1479,8 @@ void ScTokenArray::GenHash()
                 case svString:
                 {
                     // Constant string.
-                    const OUString& rStr = p->GetString();
-                    nHash += aHasher(rStr);
+                    OUString aStr = p->GetString().getString();
+                    nHash += aHasher(aStr);
                 }
                 break;
                 case svSingleRef:

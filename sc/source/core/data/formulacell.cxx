@@ -1700,7 +1700,7 @@ void ScFormulaCell::SetResultToken( const formula::FormulaToken* pToken )
     aResult.SetToken(pToken);
 }
 
-OUString ScFormulaCell::GetResultString() const
+svl::SharedString ScFormulaCell::GetResultString() const
 {
     return aResult.GetString();
 }
@@ -1770,7 +1770,7 @@ void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
     }
     else
     {
-        aCellString = GetString();
+        aCellString = GetString().getString();
         pFormatter->GetOutputString( aCellString, nCellFormat, rCellText, &pColor );
     }
     ScConstMatrixRef xMat( aResult.GetMatrix());
@@ -1864,13 +1864,14 @@ double ScFormulaCell::GetValue()
     return 0.0;
 }
 
-OUString ScFormulaCell::GetString()
+svl::SharedString ScFormulaCell::GetString()
 {
     MaybeInterpret();
     if ((!pCode->GetCodeError() || pCode->GetCodeError() == errDoubleRef) &&
             !aResult.GetResultError())
         return aResult.GetString();
-    return OUString();
+
+    return svl::SharedString::getEmptyString();
 }
 
 const ScMatrix* ScFormulaCell::GetMatrix()
@@ -2082,7 +2083,7 @@ bool ScFormulaCell::GetErrorOrValue( sal_uInt16& rErr, double& rVal )
     return aResult.GetErrorOrDouble(rErr, rVal);
 }
 
-bool ScFormulaCell::GetErrorOrString( sal_uInt16& rErr, OUString& rStr )
+bool ScFormulaCell::GetErrorOrString( sal_uInt16& rErr, svl::SharedString& rStr )
 {
     MaybeInterpret();
 

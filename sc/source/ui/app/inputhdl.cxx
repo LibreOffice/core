@@ -1346,7 +1346,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
     }
     else
     {
-        OUString aStr = pCalc->GetString();
+        OUString aStr = pCalc->GetString().getString();
         sal_uLong nFormat = aFormatter.GetStandardFormat(
                 pCalc->GetFormatType(), ScGlobal::eLnge);
         {

@@ -314,7 +314,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
         case svExternalDoubleRef:
         {
             double fVal;
-            OUString aStr;
+            svl::SharedString aStr;
             // Handles also existing jump matrix case and sets error on
             // elements.
             GetDoubleOrStringFromMatrix( fVal, aStr);
@@ -592,7 +592,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                 break;
                 case svString:
                 {
-                    const OUString& rStr = GetString();
+                    svl::SharedString aStr = GetString();
                     if ( nGlobalError )
                     {
                         pResMat->PutDouble( CreateDoubleError( nGlobalError),
@@ -600,7 +600,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         nGlobalError = 0;
                     }
                     else
-                        pResMat->PutString(mrStrPool.intern(rStr), nC, nR);
+                        pResMat->PutString(aStr, nC, nR);
                 }
                 break;
                 case svSingleRef:
@@ -632,7 +632,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         }
                         else
                         {
-                            OUString aStr;
+                            svl::SharedString aStr;
                             GetCellString(aStr, aCell);
                             if ( nGlobalError )
                             {
@@ -641,7 +641,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                 nGlobalError = 0;
                             }
                             else
-                                pResMat->PutString(mrStrPool.intern(aStr), nC, nR);
+                                pResMat->PutString(aStr, nC, nR);
                         }
                     }
                 }
@@ -699,8 +699,8 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                 pResMat->PutDouble( fCellVal, nC, nR );
                               }
                               else
-                            {
-                                OUString aStr;
+                              {
+                                svl::SharedString aStr;
                                 GetCellString(aStr, aCell);
                                 if ( nGlobalError )
                                 {
@@ -709,7 +709,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                     nGlobalError = 0;
                                 }
                                 else
-                                    pResMat->PutString(mrStrPool.intern(aStr), nC, nR);
+                                    pResMat->PutString(aStr, nC, nR);
                             }
                           }
                         SCSIZE nParmCols = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
@@ -1011,7 +1011,7 @@ double ScInterpreter::Compare()
                 aComp.bVal[ i ] = true;
                 break;
             case svString:
-                *aComp.pVal[ i ] = GetString();
+                *aComp.pVal[ i ] = GetString().getString();
                 aComp.bVal[ i ] = false;
                 break;
             case svDoubleRef :
@@ -1026,9 +1026,9 @@ double ScInterpreter::Compare()
                     aComp.bEmpty[i] = true;
                 else if (aCell.hasString())
                 {
-                    OUString aStr;
+                    svl::SharedString aStr;
                     GetCellString(aStr, aCell);
-                    *aComp.pVal[i] = aStr;
+                    *aComp.pVal[i] = aStr.getString();
                     aComp.bVal[i] = false;
                 }
                 else
@@ -1102,7 +1102,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScCompareOptions* pOptions )
                 aComp.bVal[ i ] = true;
                 break;
             case svString:
-                *aComp.pVal[ i ] = GetString();
+                *aComp.pVal[ i ] = GetString().getString();
                 aComp.bVal[ i ] = false;
                 break;
             case svSingleRef:
@@ -1114,9 +1114,9 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScCompareOptions* pOptions )
                     aComp.bEmpty[i] = true;
                 else if (aCell.hasString())
                 {
-                    OUString aStr;
+                    svl::SharedString aStr;
                     GetCellString(aStr, aCell);
-                    *aComp.pVal[i] = aStr;
+                    *aComp.pVal[i] = aStr.getString();
                     aComp.bVal[i] = false;
                 }
                 else
@@ -2401,7 +2401,7 @@ void ScInterpreter::ScCell()
             }
             bError = !PopDoubleRefOrSingleRef( aCellPos );
         }
-        OUString aInfoType( GetString() );
+        OUString aInfoType = GetString().getString();
         if( bError || nGlobalError )
             PushIllegalParameter();
         else
@@ -2477,7 +2477,7 @@ void ScInterpreter::ScCell()
             {   // contents of the cell, no formatting
                 if (aCell.hasString())
                 {
-                    OUString aStr;
+                    svl::SharedString aStr;
                     GetCellString(aStr, aCell);
                     PushString( aStr );
                 }
@@ -2574,7 +2574,7 @@ void ScInterpreter::ScCellExternal()
         return;
     }
 
-    OUString aInfoType = GetString();
+    OUString aInfoType = GetString().getString();
     if (nGlobalError)
     {
         PushIllegalParameter();
@@ -3135,7 +3135,7 @@ void ScInterpreter::ScN()
 void ScInterpreter::ScTrim()
 {
     // Doesn't only trim but also removes duplicated blanks within!
-    OUString aVal = comphelper::string::strip(GetString(), ' ');
+    OUString aVal = comphelper::string::strip(GetString().getString(), ' ');
     OUStringBuffer aStr;
     const sal_Unicode* p = aVal.getStr();
     const sal_Unicode* const pEnd = p + aVal.getLength();
@@ -3151,7 +3151,7 @@ void ScInterpreter::ScTrim()
 
 void ScInterpreter::ScUpper()
 {
-    OUString aString = ScGlobal::pCharClass->uppercase(GetString());
+    OUString aString = ScGlobal::pCharClass->uppercase(GetString().getString());
     PushString(aString);
 }
 
@@ -3159,7 +3159,7 @@ void ScInterpreter::ScUpper()
 void ScInterpreter::ScPropper()
 {
 //2do: what to do with I18N-CJK ?!?
-    OUStringBuffer aStr(GetString());
+    OUStringBuffer aStr(GetString().getString());
     const sal_Int32 nLen = aStr.getLength();
     if ( nLen > 0 )
     {
@@ -3183,15 +3183,14 @@ void ScInterpreter::ScPropper()
 
 void ScInterpreter::ScLower()
 {
-    OUString aString = ScGlobal::pCharClass->lowercase(GetString());
+    OUString aString = ScGlobal::pCharClass->lowercase(GetString().getString());
     PushString(aString);
 }
 
 
 void ScInterpreter::ScLen()
 {
-    const OUString& aStr = GetString();
-    PushDouble( aStr.getLength() );
+    PushDouble(GetString().getLength());
 }
 
 
@@ -3230,8 +3229,9 @@ void ScInterpreter::ScT()
             else
             {
                 // like GetString()
-                GetCellString(aTempStr, aCell);
-                PushString( aTempStr );
+                svl::SharedString aStr;
+                GetCellString(aStr, aCell);
+                PushString(aStr);
             }
         }
         break;
@@ -3240,10 +3240,10 @@ void ScInterpreter::ScT()
         case svExternalDoubleRef:
         {
             double fVal;
-            OUString aStr;
+            svl::SharedString aStr;
             ScMatValType nMatValType = GetDoubleOrStringFromMatrix( fVal, aStr);
             if (ScMatrix::IsValueType( nMatValType))
-                PushString( EMPTY_STRING);
+                PushString(svl::SharedString::getEmptyString());
             else
                 PushString( aStr);
         }
@@ -3291,7 +3291,11 @@ void ScInterpreter::ScValue()
             ScRefCellValue aCell;
             aCell.assign(*pDok, aAdr);
             if (aCell.hasString())
-                GetCellString(aInputString, aCell);
+            {
+                svl::SharedString aSS;
+                GetCellString(aSS, aCell);
+                aInputString = aSS.getString();
+            }
             else if (aCell.hasNumeric())
             {
                 PushDouble( GetCellValue(aAdr, aCell) );
@@ -3306,8 +3310,10 @@ void ScInterpreter::ScValue()
         break;
         case svMatrix:
             {
+                svl::SharedString aSS;
                 ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
-                        aInputString);
+                        aSS);
+                aInputString = aSS.getString();
                 switch (nType)
                 {
                     case SC_MATVAL_EMPTY:
@@ -3327,7 +3333,7 @@ void ScInterpreter::ScValue()
             }
             break;
         default:
-            aInputString = GetString();
+            aInputString = GetString().getString();
             break;
     }
 
@@ -3352,11 +3358,11 @@ void ScInterpreter::ScNumberValue()
     sal_Unicode cDecimalSeparator = 0;
 
     if ( nParamCount == 3 )
-        aGroupSeparator = GetString();
+        aGroupSeparator = GetString().getString();
 
     if ( nParamCount >= 2 )
     {
-        aDecimalSeparator = GetString();
+        aDecimalSeparator = GetString().getString();
         if ( aDecimalSeparator.getLength() == 1  )
             cDecimalSeparator = aDecimalSeparator[ 0 ];
         else
@@ -3377,7 +3383,7 @@ void ScInterpreter::ScNumberValue()
         case svDouble:
         return; // leave on stack
         default:
-        aInputString = GetString();
+        aInputString = GetString().getString();
     }
     if ( nGlobalError )
     {
@@ -3444,7 +3450,7 @@ static inline bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
 
 void ScInterpreter::ScClean()
 {
-    OUString aStr( GetString() );
+    OUString aStr = GetString().getString();
     for ( xub_StrLen i = 0; i < aStr.getLength(); i++ )
     {
         if ( !lcl_ScInterpreter_IsPrintable( aStr[i] ) )
@@ -3457,7 +3463,7 @@ void ScInterpreter::ScClean()
 void ScInterpreter::ScCode()
 {
 //2do: make it full range unicode?
-    OUString aStr = GetString();
+    OUString aStr = GetString().getString();
     //"classic" ByteString conversion flags
     const sal_uInt32 convertFlags =
         RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
@@ -3538,7 +3544,7 @@ static OUString lcl_convertIntoFullWidth( const OUString & rStr )
 void ScInterpreter::ScJis()
 {
     if (MustHaveParamCount( GetByte(), 1))
-        PushString( lcl_convertIntoFullWidth( GetString()));
+        PushString( lcl_convertIntoFullWidth( GetString().getString()));
 }
 
 
@@ -3551,20 +3557,20 @@ void ScInterpreter::ScJis()
 void ScInterpreter::ScAsc()
 {
     if (MustHaveParamCount( GetByte(), 1))
-        PushString( lcl_convertIntoHalfWidth( GetString()));
+        PushString( lcl_convertIntoHalfWidth( GetString().getString()));
 }
 
 void ScInterpreter::ScUnicode()
 {
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
-        const OUString& rStr = GetString();
-        if (rStr.isEmpty())
+        OUString aStr = GetString().getString();
+        if (aStr.isEmpty())
             PushIllegalParameter();
         else
         {
             sal_Int32 i = 0;
-            PushDouble( rStr.iterateCodePoints(&i) );
+            PushDouble(aStr.iterateCodePoints(&i));
         }
     }
 }
@@ -4299,8 +4305,8 @@ void ScInterpreter::ScTable()
             {
                 case svString :
                 {
-                    OUString aStr( PopString() );
-                    if ( pDok->GetTable( aStr, nVal ) )
+                    svl::SharedString aStr = PopString();
+                    if ( pDok->GetTable(aStr.getString(), nVal))
                         ++nVal;
                     else
                         SetError( errIllegalArgument );
@@ -4541,9 +4547,7 @@ void ScInterpreter::ScMatch()
 
         if (nGlobalError == 0)
         {
-            svl::SharedStringPool& rPool = pDok->GetSharedStringPool();
             double fVal;
-            OUString sStr;
             ScQueryParam rParam;
             rParam.nCol1       = nCol1;
             rParam.nRow1       = nRow1;
@@ -4568,9 +4572,8 @@ void ScInterpreter::ScMatch()
                 break;
                 case svString:
                 {
-                    sStr = GetString();
                     rItem.meType = ScQueryEntry::ByString;
-                    rItem.maString = rPool.intern(sStr);
+                    rItem.maString = GetString();
                 }
                 break;
                 case svDoubleRef :
@@ -4592,9 +4595,8 @@ void ScInterpreter::ScMatch()
                     }
                     else
                     {
-                        GetCellString(sStr, aCell);
+                        GetCellString(rItem.maString, aCell);
                         rItem.meType = ScQueryEntry::ByString;
-                        rItem.maString = rPool.intern(sStr);
                     }
                 }
                 break;
@@ -4615,7 +4617,7 @@ void ScInterpreter::ScMatch()
                     else
                     {
                         rItem.meType = ScQueryEntry::ByString;
-                        rItem.maString = rPool.intern(pToken->GetString());
+                        rItem.maString = pToken->GetString();
                     }
                 }
                 break;
@@ -4626,10 +4628,10 @@ void ScInterpreter::ScMatch()
                 break;
                 case svMatrix :
                 {
-                    OUString aStr;
+                    svl::SharedString aStr;
                     ScMatValType nType = GetDoubleOrStringFromMatrix(
                             rItem.mfVal, aStr);
-                    rItem.maString = rPool.intern(aStr);
+                    rItem.maString = aStr;
                     rItem.meType = ScMatrix::IsNonValueType(nType) ?
                         ScQueryEntry::ByString : ScQueryEntry::ByValue;
                 }
@@ -4899,7 +4901,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                     if (pToken->GetType() == svDouble)
                         pSumExtraMatrix->PutDouble(pToken->GetDouble(), 0, 0);
                     else
-                        pSumExtraMatrix->PutString(mrStrPool.intern(pToken->GetString()), 0, 0);
+                        pSumExtraMatrix->PutString(pToken->GetString(), 0, 0);
                 }
                 break;
             case svExternalDoubleRef:
@@ -4911,7 +4913,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
         }
     }
 
-    OUString aString;
+    svl::SharedString aString;
     double fVal = 0.0;
     bool bIsString = true;
     switch ( GetStackType() )
@@ -5112,7 +5114,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
             else
             {
-                rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString, 0);
+                rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0);
                 sal_uInt32 nIndex = 0;
                 bool bNumber = pFormatter->IsNumberFormat(
                         rItem.maString.getString(), nIndex, rItem.mfVal);
@@ -5274,7 +5276,7 @@ void ScInterpreter::ScCountIf()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        OUString aString;
+        svl::SharedString aString;
         double fVal = 0.0;
         bool bIsString = true;
         switch ( GetStackType() )
@@ -5319,8 +5321,7 @@ void ScInterpreter::ScCountIf()
             case svExternalSingleRef:
             case svExternalDoubleRef:
             {
-                ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
-                        aString);
+                ScMatValType nType = GetDoubleOrStringFromMatrix(fVal, aString);
                 bIsString = ScMatrix::IsNonValueType( nType);
             }
             break;
@@ -5412,7 +5413,7 @@ void ScInterpreter::ScCountIf()
                 }
                 else
                 {
-                    rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString, 0);
+                    rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0);
                     sal_uInt32 nIndex = 0;
                     bool bNumber = pFormatter->IsNumberFormat(
                             rItem.maString.getString(), nIndex, rItem.mfVal);
@@ -5497,7 +5498,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
         while (nParamCount > 1 && !nGlobalError)
         {
             // take criteria
-            OUString aString;
+            svl::SharedString aString;
             fVal = 0.0;
             bool bIsString = true;
             switch ( GetStackType() )
@@ -5664,7 +5665,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                 }
                 else
                 {
-                    rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString, 0);
+                    rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0);
                     sal_uInt32 nIndex = 0;
                     bool bNumber = pFormatter->IsNumberFormat(
                             rItem.maString.getString(), nIndex, rItem.mfVal);
@@ -5902,7 +5903,7 @@ void ScInterpreter::ScLookup()
 
     // The third parameter, result array, for double, string and single reference.
     double fResVal = 0.0;
-    OUString aResStr;
+    svl::SharedString aResStr;
     ScAddress aResAdr;
     StackVar eResArrayType = svUnknown;
 
@@ -5962,7 +5963,7 @@ void ScInterpreter::ScLookup()
 
     // For double, string and single reference.
     double fDataVal = 0.0;
-    OUString aDataStr;
+    svl::SharedString aDataStr;
     ScAddress aDataAdr;
     bool bValueData = false;
 
@@ -6074,7 +6075,7 @@ void ScInterpreter::ScLookup()
             if (rItem.meType != ScQueryEntry::ByString)
                 bFound = false;
             else
-                bFound = (ScGlobal::GetCollator()->compareString(aDataStr, rItem.maString.getString()) <= 0);
+                bFound = (ScGlobal::GetCollator()->compareString(aDataStr.getString(), rItem.maString.getString()) <= 0);
         }
 
         if (!bFound)
@@ -6088,7 +6089,7 @@ void ScInterpreter::ScLookup()
             if (pResMat->IsValue( 0, 0 ))
                 PushDouble(pResMat->GetDouble( 0, 0 ));
             else
-                PushString(pResMat->GetString(0, 0).getString());
+                PushString(pResMat->GetString(0, 0));
         }
         else if (nParamCount == 3)
         {
@@ -6293,14 +6294,14 @@ void ScInterpreter::ScLookup()
                 if (pDataMat->IsValue(nC-1, nDelta))
                     PushDouble(pDataMat->GetDouble(nC-1, nDelta));
                 else
-                    PushString(pDataMat->GetString(nC-1, nDelta).getString());
+                    PushString(pDataMat->GetString(nC-1, nDelta));
             }
             else
             {
                 if (pDataMat->IsValue(nDelta, nR-1))
                     PushDouble(pDataMat->GetDouble(nDelta, nR-1));
                 else
-                    PushString(pDataMat->GetString(nDelta, nR-1).getString());
+                    PushString(pDataMat->GetString(nDelta, nR-1));
             }
         }
 
@@ -6705,7 +6706,6 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
 bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
 {
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-    svl::SharedStringPool& rPool = pDok->GetSharedStringPool();
     switch ( GetStackType() )
     {
         case svDouble:
@@ -6716,9 +6716,8 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
         break;
         case svString:
         {
-            const OUString& sStr = GetString();
             rItem.meType = ScQueryEntry::ByString;
-            rItem.maString = rPool.intern(sStr);
+            rItem.maString = GetString();
         }
         break;
         case svDoubleRef :
@@ -6739,18 +6738,16 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
             }
             else
             {
-                OUString aStr;
-                GetCellString(aStr, aCell);
+                GetCellString(rItem.maString, aCell);
                 rItem.meType = ScQueryEntry::ByString;
-                rItem.maString = rPool.intern(aStr);
             }
         }
         break;
         case svMatrix :
         {
-            OUString aStr;
+            svl::SharedString aStr;
             const ScMatValType nType = GetDoubleOrStringFromMatrix(rItem.mfVal, aStr);
-            rItem.maString = rPool.intern(aStr);
+            rItem.maString = aStr;
             rItem.meType = ScMatrix::IsNonValueType(nType) ?
                 ScQueryEntry::ByString : ScQueryEntry::ByValue;
         }
@@ -6836,7 +6833,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
 
         bool    bByVal = true;
         double  nVal = 0.0;
-        OUString  aStr;
+        svl::SharedString  aStr;
         ScRange aMissingRange;
         bool bRangeFake = false;
         switch (GetStackType())
@@ -6919,7 +6916,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
         else
         {
             sal_uInt16 nErr = 0;
-            nField = pDBRef->findFieldColumn(aStr, &nErr);
+            nField = pDBRef->findFieldColumn(aStr.getString(), &nErr);
             SetError(nErr);
         }
 
@@ -7248,7 +7245,7 @@ void ScInterpreter::ScIndirect()
         }
         const ScAddress::Details aDetails( eConv, aPos );
         SCTAB nTab = aPos.Tab();
-        OUString sRefStr( GetString() );
+        OUString sRefStr = GetString().getString();
         ScRefAddress aRefAd, aRefAd2;
         ScAddress::ExternalInfo aExtInfo;
         if (ConvertDoubleRef(pDok, sRefStr, nTab, aRefAd, aRefAd2, aDetails, &aExtInfo))
@@ -7320,7 +7317,7 @@ void ScInterpreter::ScAddressFunc()
         return;
 
     if( nParamCount >= 5 )
-        sTabStr = GetString();
+        sTabStr = GetString().getString();
 
     FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;      // default
     if( nParamCount >= 4 && 0.0 == ::rtl::math::approxFloor( GetDoubleWithDefault( 1.0)))
@@ -7870,10 +7867,10 @@ void ScInterpreter::ScReplace()
 {
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
-        OUString aNewStr( GetString() );
+        OUString aNewStr = GetString().getString();
         double fCount = ::rtl::math::approxFloor( GetDouble());
         double fPos   = ::rtl::math::approxFloor( GetDouble());
-        OUString aOldStr( GetString() );
+        OUString aOldStr = GetString().getString();
         if (fPos < 1.0 || fPos > static_cast<double>(STRING_MAXLEN)
                 || fCount < 0.0 || fCount > static_cast<double>(STRING_MAXLEN))
             PushIllegalArgument();
@@ -7963,12 +7960,12 @@ void ScInterpreter::ScFind()
             fAnz = GetDouble();
         else
             fAnz = 1.0;
-        OUString sStr = GetString();
+        OUString sStr = GetString().getString();
         if( fAnz < 1.0 || fAnz > (double) sStr.getLength() )
             PushNoValue();
         else
         {
-            sal_Int32 nPos = sStr.indexOf( GetString(), (xub_StrLen) fAnz - 1 );
+            sal_Int32 nPos = sStr.indexOf(GetString().getString(), static_cast<sal_Int32>(fAnz - 1));
             if (nPos == -1)
                 PushNoValue();
             else
@@ -7983,9 +7980,9 @@ void ScInterpreter::ScExact()
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        OUString s1( GetString() );
-        OUString s2( GetString() );
-        PushInt( s1 == s2 );
+        svl::SharedString s1 = GetString();
+        svl::SharedString s2 = GetString();
+        PushInt( s1.getData() == s2.getData() );
     }
 }
 
@@ -8009,7 +8006,7 @@ void ScInterpreter::ScLeft()
         }
         else
             n = 1;
-        OUString aStr( GetString() );
+        OUString aStr = GetString().getString();
         aStr = aStr.copy( 0, n );
         PushString( aStr );
     }
@@ -8067,7 +8064,7 @@ sal_Int32 getLengthB(const OUString &str)
 }
 void ScInterpreter::ScLenB()
 {
-    PushDouble( getLengthB(GetString()) );
+    PushDouble( getLengthB(GetString().getString()) );
 }
 OUString lcl_RightB(const OUString &rStr, sal_Int32 n)
 {
@@ -8116,7 +8113,7 @@ void ScInterpreter::ScRightB()
         }
         else
             n = 1;
-        OUString aStr(lcl_RightB(GetString(), n));
+        OUString aStr(lcl_RightB(GetString().getString(), n));
         PushString( aStr );
     }
 }
@@ -8167,7 +8164,7 @@ void ScInterpreter::ScLeftB()
         }
         else
             n = 1;
-        OUString aStr(lcl_LeftB(GetString(), n));
+        OUString aStr(lcl_LeftB(GetString().getString(), n));
         PushString( aStr );
     }
 }
@@ -8177,7 +8174,7 @@ void ScInterpreter::ScMidB()
     {
         double fAnz    = ::rtl::math::approxFloor(GetDouble());
         double fAnfang = ::rtl::math::approxFloor(GetDouble());
-        OUString aStr( GetString() );
+        OUString aStr = GetString().getString();
         if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(STRING_MAXLEN) || fAnz > double(STRING_MAXLEN))
             PushIllegalArgument();
         else
@@ -8210,7 +8207,7 @@ void ScInterpreter::ScRight()
         }
         else
             n = 1;
-        OUString aStr( GetString() );
+        OUString aStr = GetString().getString();
         if( n < aStr.getLength() )
             aStr = aStr.copy( aStr.getLength() - n );
         PushString( aStr );
@@ -8235,8 +8232,8 @@ void ScInterpreter::ScSearch()
         }
         else
             fAnz = 1.0;
-        OUString sStr = GetString();
-        OUString SearchStr = GetString();
+        OUString sStr = GetString().getString();
+        OUString SearchStr = GetString().getString();
         sal_Int32 nPos = fAnz - 1;
         sal_Int32 nEndPos = sStr.getLength();
         if( nPos >= nEndPos )
@@ -8264,11 +8261,11 @@ void ScInterpreter::ScMid()
     {
         double fAnz    = ::rtl::math::approxFloor(GetDouble());
         double fAnfang = ::rtl::math::approxFloor(GetDouble());
-        OUString aStr = GetString();
+        OUString aStr = GetString().getString();
         if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(STRING_MAXLEN) || fAnz > double(STRING_MAXLEN))
             PushIllegalArgument();
         else
-            PushString(aStr.copy( (xub_StrLen) fAnfang - 1, (xub_StrLen) fAnz ));
+            PushString(aStr.copy(static_cast<sal_Int32>(fAnfang-1), static_cast<sal_Int32>(fAnz)));
     }
 }
 
@@ -8277,8 +8274,8 @@ void ScInterpreter::ScText()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        const OUString& sFormatString = GetString();
-        OUString aStr;
+        OUString sFormatString = GetString().getString();
+        svl::SharedString aStr;
         bool bString = false;
         double fVal = 0.0;
         switch (GetStackType())
@@ -8328,7 +8325,7 @@ void ScInterpreter::ScText()
                 eCellLang = ScGlobal::eLnge;
             if (bString)
             {
-                if (!pFormatter->GetPreviewString( sFormatString, aStr,
+                if (!pFormatter->GetPreviewString( sFormatString, aStr.getString(),
                             aResult, &pColor, eCellLang))
                     PushIllegalArgument();
                 else
@@ -8366,9 +8363,9 @@ void ScInterpreter::ScSubstitute()
         }
         else
             nAnz = 0;
-        OUString sNewStr = GetString();
-        OUString sOldStr = GetString();
-        OUString sStr    = GetString();
+        OUString sNewStr = GetString().getString();
+        OUString sOldStr = GetString().getString();
+        OUString sStr    = GetString().getString();
         sal_Int32 nPos = 0;
         xub_StrLen nCount = 0;
         xub_StrLen nNewLen = sNewStr.getLength();
@@ -8406,7 +8403,7 @@ void ScInterpreter::ScRept()
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double fAnz = ::rtl::math::approxFloor(GetDouble());
-        OUString aStr( GetString() );
+        OUString aStr = GetString().getString();
         if ( fAnz < 0.0 )
             PushIllegalArgument();
         else if ( fAnz * aStr.getLength() > STRING_MAXLEN )
@@ -8434,8 +8431,8 @@ void ScInterpreter::ScConcat()
     OUString aRes;
     while( nParamCount-- > 0)
     {
-        const OUString& rStr = GetString();
-        aRes = rStr + aRes;
+        OUString aStr = GetString().getString();
+        aRes = aStr + aRes;
     }
     PushString( aRes );
 }

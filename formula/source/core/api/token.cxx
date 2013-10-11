@@ -174,11 +174,10 @@ double & FormulaToken::GetDoubleAsReference()
     return fVal;
 }
 
-const OUString& FormulaToken::GetString() const
+svl::SharedString FormulaToken::GetString() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetString: virtual dummy called" );
-    static  OUString              aDummyString;
-    return aDummyString;
+    return svl::SharedString(); // invalid string
 }
 
 sal_uInt16 FormulaToken::GetIndex() const
@@ -1323,18 +1322,45 @@ bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && fDouble == r.GetDouble();
 }
 
+FormulaStringToken::FormulaStringToken( const svl::SharedString& r ) :
+    FormulaToken( svString ), maString( r ) {}
+FormulaStringToken::FormulaStringToken( const FormulaStringToken& r ) :
+    FormulaToken( r ), maString( r.maString ) {}
 
-const OUString& FormulaStringToken::GetString() const          { return aString; }
-bool FormulaStringToken::operator==( const FormulaToken& r ) const
+FormulaToken* FormulaStringToken::Clone() const
 {
-    return FormulaToken::operator==( r ) && aString == r.GetString();
+    return new FormulaStringToken(*this);
 }
 
+svl::SharedString FormulaStringToken::GetString() const
+{
+    return maString;
+}
 
-const OUString& FormulaStringOpToken::GetString() const             { return aString; }
+bool FormulaStringToken::operator==( const FormulaToken& r ) const
+{
+    return FormulaToken::operator==( r ) && maString == r.GetString();
+}
+
+FormulaStringOpToken::FormulaStringOpToken( OpCode e, const svl::SharedString& r ) :
+    FormulaByteToken( e, 0, svString, false ), maString( r ) {}
+
+FormulaStringOpToken::FormulaStringOpToken( const FormulaStringOpToken& r ) :
+    FormulaByteToken( r ), maString( r.maString ) {}
+
+FormulaToken* FormulaStringOpToken::Clone() const
+{
+    return new FormulaStringOpToken(*this);
+}
+
+svl::SharedString FormulaStringOpToken::GetString() const
+{
+    return maString;
+}
+
 bool FormulaStringOpToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaByteToken::operator==( r ) && aString == r.GetString();
+    return FormulaByteToken::operator==( r ) && maString == r.GetString();
 }
 
 sal_uInt16  FormulaIndexToken::GetIndex() const             { return nIndex; }
@@ -1364,11 +1390,12 @@ bool FormulaErrorToken::operator==( const FormulaToken& r ) const
         nError == static_cast< const FormulaErrorToken & >(r).GetError();
 }
 double          FormulaMissingToken::GetDouble() const       { return 0.0; }
-const OUString&   FormulaMissingToken::GetString() const
+
+svl::SharedString FormulaMissingToken::GetString() const
 {
-    static  OUString              aDummyString;
-    return aDummyString;
+    return svl::SharedString::getEmptyString();
 }
+
 bool FormulaMissingToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r );

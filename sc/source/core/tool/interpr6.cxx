@@ -398,7 +398,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             {
                 if( eFunc == ifCOUNT )
                 {
-                    OUString aStr( PopString() );
+                    OUString aStr = PopString().getString();
                     sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
                     if ( bTextAsZero || pFormatter->IsNumberFormat(aStr, nFIndex, fVal))
                         nCount++;
@@ -884,7 +884,7 @@ void ScInterpreter::ScCount()
         {
             case svString:
             {
-                OUString aStr( PopString() );
+                OUString aStr = PopString().getString();
                 sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
                 if (pFormatter->IsNumberFormat(aStr, nFIndex, fVal))
                     nCount++;

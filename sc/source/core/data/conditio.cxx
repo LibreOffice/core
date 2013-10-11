@@ -280,7 +280,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                 else if ( pToken->GetType() == svString )
                 {
                     bIsStr1 = true;
-                    aStrVal1 = pToken->GetString();
+                    aStrVal1 = pToken->GetString().getString();
                     DELETEZ(pFormula1);             // nicht als Formel merken
                 }
             }
@@ -304,7 +304,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                 else if ( pToken->GetType() == svString )
                 {
                     bIsStr2 = true;
-                    aStrVal2 = pToken->GetString();
+                    aStrVal2 = pToken->GetString().getString();
                     DELETEZ(pFormula2);             // nicht als Formel merken
                 }
             }
@@ -360,7 +360,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
                         else if ( pToken->GetType() == svString )
                         {
                             bIsStr1 = true;
-                            aStrVal1 = pToken->GetString();
+                            aStrVal1 = pToken->GetString().getString();
                             DELETEZ(pFormula1);             // nicht als Formel merken
                         }
                     }
@@ -397,7 +397,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
                         else if ( pToken->GetType() == svString )
                         {
                             bIsStr2 = true;
-                            aStrVal2 = pToken->GetString();
+                            aStrVal2 = pToken->GetString().getString();
                             DELETEZ(pFormula2);             // nicht als Formel merken
                         }
                     }
@@ -649,7 +649,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             else
             {
                 bIsStr1 = true;
-                aStrVal1 = pEff1->GetString();
+                aStrVal1 = pEff1->GetString().getString();
                 nVal1 = 0.0;
             }
         }
@@ -678,7 +678,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             else
             {
                 bIsStr2 = true;
-                aStrVal2 = pEff2->GetString();
+                aStrVal2 = pEff2->GetString().getString();
                 nVal2 = 0.0;
             }
         }
@@ -717,7 +717,7 @@ static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rAr
             if (bVal)
                 rArg = rCell.mpFormula->GetValue();
             else
-                rArgStr = rCell.mpFormula->GetString();
+                rArgStr = rCell.mpFormula->GetString().getString();
         }
         break;
         case CELLTYPE_STRING:

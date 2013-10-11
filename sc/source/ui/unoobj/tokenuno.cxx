@@ -402,7 +402,7 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                     rAPI.Data <<= rToken.GetDouble();
                     break;
                 case formula::svString:
-                    rAPI.Data <<= OUString( rToken.GetString() );
+                    rAPI.Data <<= rToken.GetString().getString();
                     break;
                 case svExternal:
                     // Function name is stored as string.
@@ -441,7 +441,8 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                         sheet::SingleReference aSingleRef;
                         lcl_ExternalRefToApi( aSingleRef, static_cast<const ScToken&>(rToken).GetSingleRef() );
                         size_t nCacheId;
-                        rDoc.GetExternalRefManager()->getCacheTable( rToken.GetIndex(), rToken.GetString(), false, &nCacheId );
+                        rDoc.GetExternalRefManager()->getCacheTable(
+                            rToken.GetIndex(), rToken.GetString().getString(), false, &nCacheId);
                         aSingleRef.Sheet = static_cast< sal_Int32 >( nCacheId );
                         sheet::ExternalReference aExtRef;
                         aExtRef.Index = rToken.GetIndex();
@@ -456,7 +457,8 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                         lcl_ExternalRefToApi( aComplRef.Reference1, static_cast<const ScToken&>(rToken).GetSingleRef() );
                         lcl_ExternalRefToApi( aComplRef.Reference2, static_cast<const ScToken&>(rToken).GetSingleRef2() );
                         size_t nCacheId;
-                        rDoc.GetExternalRefManager()->getCacheTable( rToken.GetIndex(), rToken.GetString(), false, &nCacheId );
+                        rDoc.GetExternalRefManager()->getCacheTable(
+                            rToken.GetIndex(), rToken.GetString().getString(), false, &nCacheId);
                         aComplRef.Reference1.Sheet = static_cast< sal_Int32 >( nCacheId );
                         // NOTE: This assumes that cached sheets are in consecutive order!
                         aComplRef.Reference2.Sheet =
@@ -473,7 +475,7 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                     {
                         sheet::ExternalReference aExtRef;
                         aExtRef.Index = rToken.GetIndex();
-                        aExtRef.Reference <<= OUString( rToken.GetString() );
+                        aExtRef.Reference <<= rToken.GetString().getString();
                         rAPI.Data <<= aExtRef;
                         eOpCode = ocPush;
                     }

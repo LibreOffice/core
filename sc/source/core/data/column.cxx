@@ -1507,8 +1507,8 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
                         aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nRow, rFC.GetValue());
                     else
                     {
-                        svl::SharedString aSS = pDocument->GetSharedStringPool().intern(rFC.GetString());
-                        if (aSS.getData())
+                        svl::SharedString aSS = rFC.GetString();
+                        if (aSS.isValid())
                             aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nRow, aSS);
                     }
                 }
@@ -1785,7 +1785,7 @@ class CopyByCloneHandler
 
         if (bCloneString)
         {
-            OUString aStr = rSrcCell.GetString();
+            svl::SharedString aStr = rSrcCell.GetString();
             if (aStr.isEmpty())
                 // Don't create empty string cells.
                 return;
@@ -1794,18 +1794,14 @@ class CopyByCloneHandler
             {
                 // Clone as an edit text object.
                 EditEngine& rEngine = mrDestCol.GetDoc().GetEditEngine();
-                rEngine.SetText(aStr);
+                rEngine.SetText(aStr.getString());
                 maDestPos.miCellPos =
                     mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, rEngine.CreateTextObject());
             }
             else
             {
-                svl::SharedString aSS = mrDestCol.GetDoc().GetSharedStringPool().intern(aStr);
-                if (aSS.getData())
-                {
-                    maDestPos.miCellPos =
-                        mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, aSS);
-                }
+                maDestPos.miCellPos =
+                    mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, aStr);
             }
 
             setDefaultAttrToDest(nRow);

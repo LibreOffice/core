@@ -970,8 +970,8 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
                 if (bColRel) nCol |= 0x4000;
                 if (bRowRel) nCol |= 0x8000;
 
-                const OUString& rTabName = p->GetString();
-                sal_uInt16 nSBTab = mrSupbook.GetTabIndex(rTabName);
+                OUString aTabName = p->GetString().getString();
+                sal_uInt16 nSBTab = mrSupbook.GetTabIndex(aTabName);
 
                 // size is always 9
                 rStrm << static_cast<sal_uInt16>(9);
@@ -1005,8 +1005,8 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
                 if (bCol2Rel) nCol2 |= 0x4000;
                 if (bRow2Rel) nCol2 |= 0x8000;
 
-                const OUString& rTabName = p->GetString();
-                sal_uInt16 nSBTab = mrSupbook.GetTabIndex(rTabName);
+                OUString aTabName = p->GetString().getString();
+                sal_uInt16 nSBTab = mrSupbook.GetTabIndex(aTabName);
 
                 // size is always 13 (0x0D)
                 rStrm << static_cast<sal_uInt16>(13);
@@ -1282,7 +1282,7 @@ void XclExpXct::Save( XclExpStream& rStrm )
                     case svString:
                         // do not save empty strings (empty cells) to cache
                         if( !xToken->GetString().isEmpty() )
-                            bValid = aCrnRecs.InsertValue( nScCol, nScRow, Any( OUString( xToken->GetString() ) ) );
+                            bValid = aCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetString().getString() ) );
                     break;
                     default:
                     break;

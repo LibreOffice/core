@@ -163,7 +163,7 @@ void ScInterpreter::ScGetHour()
 
 void ScInterpreter::ScGetDateValue()
 {
-    const OUString& aInputString = GetString();
+    OUString aInputString = GetString().getString();
     sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
     double fVal;
     if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
@@ -389,7 +389,7 @@ void ScInterpreter::ScGetDateDif()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        const OUString& aInterval = GetString();
+        OUString aInterval = GetString().getString();
         double nDate2    = GetDouble();
         double nDate1    = GetDouble();
 
@@ -532,7 +532,7 @@ void ScInterpreter::ScGetDateDif()
 
 void ScInterpreter::ScGetTimeValue()
 {
-    OUString aInputString = GetString();
+    OUString aInputString = GetString().getString();
     sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
     double fVal;
     if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
@@ -1941,11 +1941,11 @@ void ScInterpreter::ScStyle()
     {
         OUString aStyle2;                             // Vorlage nach Timer
         if (nParamCount >= 3)
-            aStyle2 = GetString();
+            aStyle2 = GetString().getString();
         long nTimeOut = 0;                          // Timeout
         if (nParamCount >= 2)
             nTimeOut = (long)(GetDouble()*1000.0);
-        OUString aStyle1 = GetString();               // Vorlage fuer sofort
+        OUString aStyle1 = GetString().getString();               // Vorlage fuer sofort
 
         if (nTimeOut < 0)
             nTimeOut = 0;
@@ -2005,9 +2005,9 @@ void ScInterpreter::ScDde()
         sal_uInt8 nMode = SC_DDE_DEFAULT;
         if (nParamCount == 4)
             nMode = (sal_uInt8) ::rtl::math::approxFloor(GetDouble());
-        OUString aItem  = GetString();
-        OUString aTopic = GetString();
-        OUString aAppl  = GetString();
+        OUString aItem  = GetString().getString();
+        OUString aTopic = GetString().getString();
+        OUString aAppl  = GetString().getString();
 
         if (nMode > SC_DDE_TEXT)
             nMode = SC_DDE_DEFAULT;
@@ -2226,7 +2226,7 @@ void ScInterpreter::ScDecimal()
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double fBase = ::rtl::math::approxFloor( GetDouble() );
-        OUString aStr( GetString() );
+        OUString aStr = GetString().getString();
         if ( !nGlobalError && 2 <= fBase && fBase <= 36 )
         {
             double fVal = 0.0;
@@ -2281,8 +2281,8 @@ void ScInterpreter::ScConvert()
 {   // Value, FromUnit, ToUnit
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        OUString aToUnit( GetString() );
-        OUString aFromUnit( GetString() );
+        OUString aToUnit = GetString().getString();
+        OUString aFromUnit = GetString().getString();
         double fVal = GetDouble();
         if ( nGlobalError )
             PushError( nGlobalError);
@@ -2388,7 +2388,7 @@ static bool lcl_GetArabicValue( sal_Unicode cChar, sal_uInt16& rnValue, bool& rb
 
 void ScInterpreter::ScArabic()
 {
-    OUString aRoman( GetString() );
+    OUString aRoman = GetString().getString();
     if( nGlobalError )
         PushError( nGlobalError);
     else
@@ -2449,7 +2449,7 @@ void ScInterpreter::ScHyperLink()
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
         double fVal = 0.0;
-        OUString aStr;
+        svl::SharedString aStr;
         ScMatValType nResultType = SC_MATVAL_STRING;
 
         if ( nParamCount == 2 )
@@ -2504,7 +2504,7 @@ void ScInterpreter::ScHyperLink()
                     SetError( errIllegalArgument);
             }
         }
-        OUString aUrl = GetString();
+        svl::SharedString aUrl = GetString();
         ScMatrixRef pResMat = GetNewMat( 1, 2);
         if (nGlobalError)
         {
@@ -2516,13 +2516,13 @@ void ScInterpreter::ScHyperLink()
             if (ScMatrix::IsValueType( nResultType))
                 pResMat->PutDouble( fVal, 0);
             else if (ScMatrix::IsRealStringType( nResultType))
-                pResMat->PutString(mrStrPool.intern(aStr), 0);
+                pResMat->PutString(aStr, 0);
             else    // EmptyType, EmptyPathType, mimic xcl
                 pResMat->PutDouble( 0.0, 0 );
         }
         else
-            pResMat->PutString(mrStrPool.intern(aUrl), 0);
-        pResMat->PutString(mrStrPool.intern(aUrl), 1);
+            pResMat->PutString(aUrl, 0);
+        pResMat->PutString(aUrl, 1);
         bMatrixFormula = true;
         PushMatrix(pResMat);
     }
@@ -2585,8 +2585,8 @@ void ScInterpreter::ScEuroConvert()
         bool bFullPrecision = false;
         if ( nParamCount >= 4 )
             bFullPrecision = GetBool();
-        OUString aToUnit( GetString() );
-        OUString aFromUnit( GetString() );
+        OUString aToUnit = GetString().getString();
+        OUString aFromUnit = GetString().getString();
         double fVal = GetDouble();
         if ( nGlobalError )
             PushError( nGlobalError);
@@ -2829,7 +2829,7 @@ void ScInterpreter::ScGetPivotData()
     }
 
     std::vector<sheet::DataPilotFieldFilter> aFilters;
-    OUString aDataFieldName;
+    svl::SharedString aDataFieldName;
     ScRange aBlock;
 
     if (bOldSyntax)
@@ -2864,8 +2864,8 @@ void ScInterpreter::ScGetPivotData()
         while (i-- > 0)
         {
             //! should allow numeric constraint values
-            aFilters[i].MatchValue = GetString();
-            aFilters[i].FieldName = GetString();
+            aFilters[i].MatchValue = GetString().getString();
+            aFilters[i].FieldName = GetString().getString();
         }
 
         switch (GetStackType())
@@ -2898,7 +2898,7 @@ void ScInterpreter::ScGetPivotData()
         return;
     }
 
-    double fVal = pDPObj->GetPivotData(aDataFieldName, aFilters);
+    double fVal = pDPObj->GetPivotData(aDataFieldName.getString(), aFilters);
     if (rtl::math::isNan(fVal))
     {
         PushError(errNoRef);

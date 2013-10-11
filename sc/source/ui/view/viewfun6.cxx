@@ -181,11 +181,11 @@ void ScViewFunc::DetectiveMarkPred()
         ScRange aRange;
         if (pPath && ScRefTokenHelper::getRangeFromToken(aRange, p, aCurPos, true))
         {
-            const OUString& rTabName = p->GetString();
+            OUString aTabName = p->GetString().getString();
             OUStringBuffer aBuf;
             aBuf.append(*pPath);
             aBuf.append(sal_Unicode('#'));
-            aBuf.append(rTabName);
+            aBuf.append(aTabName);
             aBuf.append(sal_Unicode('.'));
 
             OUString aRangeStr(aRange.Format(SCA_VALID));

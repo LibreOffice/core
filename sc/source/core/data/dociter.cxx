@@ -440,7 +440,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                         incPos();
                     else
                     {
-                        rValue.maString = aCell.mpFormula->GetString();
+                        rValue.maString = aCell.mpFormula->GetString().getString();
                         rValue.mfValue = 0.0;
                         rValue.mnError = aCell.mpFormula->GetErrCode();
                         rValue.mbIsNumber = false;

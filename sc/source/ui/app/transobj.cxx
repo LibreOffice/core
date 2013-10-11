@@ -823,7 +823,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
             }
             else
             {
-                OUString aStr = pFCell->GetString();
+                OUString aStr = pFCell->GetString().getString();
                 if ( pFCell->IsMultilineResult() )
                 {
                     ScFieldEditEngine& rEngine = pDestDoc->GetEditEngine();

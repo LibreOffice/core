@@ -11,6 +11,15 @@
 
 namespace svl {
 
+SharedString SharedString::getEmptyString()
+{
+    // unicode string array for empty string is globally shared in OUString.
+    // Let's take advantage of that.
+    rtl_uString* pData = NULL;
+    rtl_uString_new(&pData);
+    return SharedString(pData, pData);
+}
+
 SharedString::SharedString() : mpData(NULL), mpDataIgnoreCase(NULL) {}
 
 SharedString::SharedString( rtl_uString* pData, rtl_uString* pDataIgnoreCase ) :

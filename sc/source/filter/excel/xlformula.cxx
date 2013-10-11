@@ -706,7 +706,7 @@ void XclTokenArrayIterator::SkipSpaces()
 bool XclTokenArrayHelper::GetTokenString( OUString& rString, const FormulaToken& rScToken )
 {
     bool bIsStr = (rScToken.GetType() == svString) && (rScToken.GetOpCode() == ocPush);
-    if( bIsStr ) rString = rScToken.GetString();
+    if( bIsStr ) rString = rScToken.GetString().getString();
     return bIsStr;
 }
 

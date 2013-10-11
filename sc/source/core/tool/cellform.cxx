@@ -112,13 +112,13 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
                         if ( !bNullVals && fValue == 0.0 )
                             rString = OUString();
                         else if ( pFCell->IsHybridValueCell() )
-                            rString = pFCell->GetString();
+                            rString = pFCell->GetString().getString();
                         else
                             rFormatter.GetOutputString( fValue, nFormat, rString, ppColor, bUseStarFormat );
                     }
                     else
                     {
-                        OUString aCellString = pFCell->GetString();
+                        OUString aCellString = pFCell->GetString().getString();
                         rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor, bUseStarFormat );
                     }
                 }
@@ -205,12 +205,12 @@ OUString ScCellFormat::GetString(
                     {
                         double fValue = pFCell->GetValue();
                         if (!bNullVals && fValue == 0.0) aString = OUString();
-                        else if (pFCell->IsHybridValueCell()) aString = pFCell->GetString();
+                        else if (pFCell->IsHybridValueCell()) aString = pFCell->GetString().getString();
                         else rFormatter.GetOutputString(fValue, nFormat, aString, ppColor, bUseStarFormat);
                     }
                     else
                     {
-                        OUString aCellString = pFCell->GetString();
+                        OUString aCellString = pFCell->GetString().getString();
                         rFormatter.GetOutputString(aCellString, nFormat, aString, ppColor, bUseStarFormat);
                     }
                 }
@@ -250,7 +250,7 @@ void ScCellFormat::GetInputString(
             else if (pFC->IsValue())
                 rFormatter.GetInputLineString(pFC->GetValue(), nFormat, aString);
             else
-                aString = pFC->GetString();
+                aString = pFC->GetString().getString();
 
             sal_uInt16 nErrCode = pFC->GetErrCode();
             if (nErrCode != 0)

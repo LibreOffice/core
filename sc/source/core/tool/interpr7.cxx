@@ -28,8 +28,8 @@ void ScInterpreter::ScFilterXML()
     sal_uInt8 nParamCount = GetByte();
     if (MustHaveParamCount( nParamCount, 2 ) )
     {
-        OUString aXPathExpression = GetString();
-        OUString aString = GetString();
+        OUString aXPathExpression = GetString().getString();
+        OUString aString = GetString().getString();
         if(aString.isEmpty() || aXPathExpression.isEmpty())
         {
             PushError( errNoValue );
@@ -152,7 +152,7 @@ void ScInterpreter::ScWebservice()
     sal_uInt8 nParamCount = GetByte();
     if (MustHaveParamCount( nParamCount, 1 ) )
     {
-        OUString aURI = GetString();
+        OUString aURI = GetString().getString();
 
         if(aURI.isEmpty())
         {

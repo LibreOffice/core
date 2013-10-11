@@ -294,8 +294,8 @@ bool ScFormulaResult::IsMultiline() const
 {
     if (meMultiline == MULTILINE_UNKNOWN)
     {
-        const OUString& rStr = GetString();
-        if (!rStr.isEmpty() && rStr.indexOf( '\n' ) != -1)
+        svl::SharedString aStr = GetString();
+        if (!aStr.isEmpty() && aStr.getString().indexOf('\n') != -1)
             const_cast<ScFormulaResult*>(this)->meMultiline = MULTILINE_TRUE;
         else
             const_cast<ScFormulaResult*>(this)->meMultiline = MULTILINE_FALSE;
@@ -336,7 +336,7 @@ bool ScFormulaResult::GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const
     return true;
 }
 
-bool ScFormulaResult::GetErrorOrString( sal_uInt16& rErr, OUString& rStr ) const
+bool ScFormulaResult::GetErrorOrString( sal_uInt16& rErr, svl::SharedString& rStr ) const
 {
     if (mnError)
     {
@@ -440,7 +440,7 @@ double ScFormulaResult::GetDouble() const
     return mfValue;
 }
 
-const OUString & ScFormulaResult::GetString() const
+svl::SharedString ScFormulaResult::GetString() const
 {
     if (mbToken && mpToken)
     {
@@ -462,7 +462,7 @@ const OUString & ScFormulaResult::GetString() const
                 ;   // nothing
         }
     }
-    return EMPTY_OUSTRING;
+    return svl::SharedString::getEmptyString();
 }
 
 ScConstMatrixRef ScFormulaResult::GetMatrix() const
@@ -492,7 +492,7 @@ void ScFormulaResult::SetHybridDouble( double f )
             SetDouble(f);
         else
         {
-            OUString aString( GetString());
+            svl::SharedString aString = GetString();
             OUString aFormula( GetHybridFormula());
             mpToken->DecRef();
             mpToken = new ScHybridCellToken( f, aString, aFormula);
@@ -524,7 +524,7 @@ void ScFormulaResult::SetHybridFormula( const OUString & rFormula )
 {
     // Obtain values before changing anything.
     double f = GetDouble();
-    OUString aStr( GetString());
+    svl::SharedString aStr = GetString();
     ResetToDefaults();
     if (mbToken && mpToken)
         mpToken->DecRef();

@@ -66,7 +66,7 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const OUString& 
                     aStr = aIter.getString();
                 break;
                 case CELLTYPE_FORMULA:
-                    aStr = aIter.getFormulaCell()->GetString();
+                    aStr = aIter.getFormulaCell()->GetString().getString();
                 break;
                 case CELLTYPE_EDIT:
                 {

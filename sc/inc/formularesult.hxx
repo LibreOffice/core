@@ -135,7 +135,7 @@ public:
     bool IsMultiline() const;
 
     bool GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const;
-    bool GetErrorOrString( sal_uInt16& rErr, OUString& rStr ) const;
+    bool GetErrorOrString( sal_uInt16& rErr, svl::SharedString& rStr ) const;
 
     /** Get error code if set or GetCellResultType() is formula::svError or svUnknown,
         else 0. */
@@ -159,7 +159,7 @@ public:
 
     /** Return string if type formula::svString or formula::svHybridCell or formula::svMatrixCell and
         upper left formula::svString, else empty string. */
-    const OUString& GetString() const;
+    svl::SharedString GetString() const;
 
     /** Return matrix if type formula::svMatrixCell and ScMatrix present, else NULL. */
     ScConstMatrixRef GetMatrix() const;

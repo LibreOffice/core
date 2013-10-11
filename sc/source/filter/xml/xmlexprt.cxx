@@ -3383,7 +3383,7 @@ void ScXMLExport::WriteMultiLineFormulaResult(const ScFormulaCell* pCell)
 {
     OUString aElemName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TEXT, GetXMLToken(XML_P));
 
-    OUString aResStr = pCell->GetResultString();
+    OUString aResStr = pCell->GetResultString().getString();
     const sal_Unicode* p = aResStr.getStr();
     const sal_Unicode* pEnd = p + static_cast<size_t>(aResStr.getLength());
     const sal_Unicode* pPara = p; // paragraph head.
@@ -4684,7 +4684,7 @@ void ScXMLExport::WriteExternalRefCaches()
                             case svString:
                             {
                                 AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
-                                aStrVal = pToken->GetString();
+                                aStrVal = pToken->GetString().getString();
                             }
                             break;
                             default:

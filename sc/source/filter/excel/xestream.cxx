@@ -696,7 +696,7 @@ void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsT
         case NUMBERFORMAT_TEXT:
         {
             rsType = "str";
-            rsValue = rCell.GetString();
+            rsValue = rCell.GetString().getString();
         }
         break;
 
@@ -710,7 +710,7 @@ void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsT
         default:
         {
             rsType = "inlineStr";
-            rsValue = rCell.GetString();
+            rsValue = rCell.GetString().getString();
         }
         break;
     }

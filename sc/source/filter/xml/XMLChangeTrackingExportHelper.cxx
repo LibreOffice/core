@@ -374,7 +374,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScCellValue& rCell, co
     else
     {
         rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
-        OUString sCellValue = pFormulaCell->GetString();
+        OUString sCellValue = pFormulaCell->GetString().getString();
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
         if (!sCellValue.isEmpty())
         {

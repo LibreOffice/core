@@ -40,7 +40,7 @@ public:
     bool IsValue();
     sal_uInt16 GetErrCode();
     double GetValue();
-    OUString GetString();
+    svl::SharedString GetString();
     short GetFormatType() const { return mnFormatType; }
     sal_uLong GetFormatIndex() const { return mnFormatIndex; }
 

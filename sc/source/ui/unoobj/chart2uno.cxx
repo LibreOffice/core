@@ -733,7 +733,9 @@ void Chart2Positioner::createPositionMap()
 
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
-        OUString aTabName = bExternal ? pToken->GetString() : OUString();
+        svl::SharedString aTabName = svl::SharedString::getEmptyString();
+        if (bExternal)
+            aTabName = pToken->GetString();
 
         ScComplexRefData aData;
         if( !ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr) )
@@ -961,7 +963,9 @@ private:
             return false;
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
-        OUString aTabName = bExternal ? pToken->GetString() : OUString();
+        svl::SharedString aTabName = svl::SharedString::getEmptyString();
+        if (bExternal)
+            aTabName = pToken->GetString();
 
         // In saving to XML, we don't prepend address with '$'.
         setRelative(aData.Ref1);
@@ -1124,7 +1128,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
     SCTAB nTab    = 0;
 
     sal_uInt16 nFileId = 0;
-    OUString aExtTabName;
+    svl::SharedString aExtTabName;
     bool bExternal = false;
 
     vector<ScTokenRef>::const_iterator itr = rRefTokens.begin(), itrEnd = rRefTokens.end();
@@ -2660,8 +2664,8 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
         return 0;
 
     sal_uInt16 nFileId = pToken->GetIndex();
-    const OUString& rTabName = pToken->GetString();
-    ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, rTabName, aRange, NULL);
+    OUString aTabName = pToken->GetString().getString();
+    ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, aTabName, aRange, NULL);
     if (!pArray)
         // no external data exists for this range.
         return 0;
@@ -2671,7 +2675,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
     pRefMgr->addLinkListener(nFileId, pExtRefListener);
     pExtRefListener->addFileId(nFileId);
 
-    ScExternalRefCache::TableTypeRef pTable = pRefMgr->getCacheTable(nFileId, rTabName, false, NULL);
+    ScExternalRefCache::TableTypeRef pTable = pRefMgr->getCacheTable(nFileId, aTabName, false, NULL);
     sal_Int32 nDataCount = 0;
     for (FormulaToken* p = pArray->First(); p; p = pArray->Next())
     {
@@ -3075,7 +3079,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData(  ) thro
         if( m_pTokens->front()->GetType() == svString )
         {
             aSeq = uno::Sequence<OUString>(1);
-            aSeq[0] = m_pTokens->front()->GetString();
+            aSeq[0] = m_pTokens->front()->GetString().getString();
         }
     }
 

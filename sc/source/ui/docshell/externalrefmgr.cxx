@@ -184,7 +184,7 @@ public:
             // string cell otherwise.
             ScSetStringParam aParam;
             aParam.setTextInput();
-            mpDoc->SetString(aPos, pCell->GetString(), &aParam);
+            mpDoc->SetString(aPos, pCell->GetString().getString(), &aParam);
         }
     }
 private:
@@ -643,7 +643,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                         xMat->PutDouble(pToken->GetDouble(), nC, nR);
                     break;
                     case svString:
-                        xMat->PutString(mrStrPool.intern(pToken->GetString()), nC, nR);
+                        xMat->PutString(pToken->GetString(), nC, nR);
                     break;
                     default:
                         ;
@@ -1298,7 +1298,7 @@ static FormulaToken* convertToToken( ScRefCellValue& rCell )
             }
             else
             {
-                OUString aStr = pFCell->GetString();
+                svl::SharedString aStr = pFCell->GetString();
                 return new formula::FormulaStringToken(aStr);
             }
         }
@@ -1372,8 +1372,7 @@ inline void ColumnBatch<T>::putValues(ScMatrixRef& xMat, const SCCOL nCol) const
 }
 
 static ScTokenArray* convertToTokenArray(
-    ScDocument* pSrcDoc, svl::SharedStringPool& rStrPool, ScRange& rRange,
-    vector<ScExternalRefCache::SingleRangeData>& rCacheData )
+    ScDocument* pSrcDoc, ScRange& rRange, vector<ScExternalRefCache::SingleRangeData>& rCacheData )
 {
     ScAddress& s = rRange.aStart;
     ScAddress& e = rRange.aEnd;
@@ -1453,8 +1452,8 @@ static ScTokenArray* convertToTokenArray(
                         }
                         else
                         {
-                            OUString aStr = pFCell->GetString();
-                            xMat->PutString(rStrPool.intern(aStr), nC, nR);
+                            svl::SharedString aStr = pFCell->GetString();
+                            xMat->PutString(aStr, nC, nR);
                         }
                     }
                     break;
@@ -2024,7 +2023,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     aRange.aStart.SetTab(nTab1);
     aRange.aEnd.SetTab(nTab1 + nTabSpan);
 
-    pArray.reset(convertToTokenArray(pSrcDoc, mpDoc->GetSharedStringPool(), aRange, aCacheData));
+    pArray.reset(convertToTokenArray(pSrcDoc, aRange, aCacheData));
     rRange = aRange;
     rCacheData.swap(aCacheData);
     return pArray;

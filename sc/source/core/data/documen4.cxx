@@ -443,14 +443,14 @@ bool setCacheTableReferenced(ScToken& rToken, ScExternalRefManager& rRefMgr, con
     {
         case svExternalSingleRef:
             return rRefMgr.setCacheTableReferenced(
-                rToken.GetIndex(), rToken.GetString(), 1);
+                rToken.GetIndex(), rToken.GetString().getString(), 1);
         case svExternalDoubleRef:
         {
             const ScComplexRefData& rRef = rToken.GetDoubleRef();
             ScRange aAbs = rRef.toAbs(rPos);
             size_t nSheets = aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1;
             return rRefMgr.setCacheTableReferenced(
-                    rToken.GetIndex(), rToken.GetString(), nSheets);
+                    rToken.GetIndex(), rToken.GetString().getString(), nSheets);
         }
         case svExternalName:
             /* TODO: external names aren't supported yet, but would

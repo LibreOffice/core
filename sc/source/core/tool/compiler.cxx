@@ -3624,9 +3624,9 @@ void ScCompiler::CreateStringFromXMLTokenArray( OUString& rFormula, OUString& rF
     {
         FormulaToken** ppTokens = pArr->GetArray();
         // string tokens expected, GetString() will assert if token type is wrong
-        rFormula = ppTokens[ 0 ]->GetString();
+        rFormula = ppTokens[0]->GetString().getString();
         if( bExternal )
-            rFormulaNmsp = ppTokens[ 1 ]->GetString();
+            rFormulaNmsp = ppTokens[1]->GetString().getString();
     }
 }
 
@@ -3985,9 +3985,9 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
                 return true;
             }
 
-            const OUString& rName = _aToken.GetString();
+            OUString aName = _aToken.GetString().getString();
             ScExternalRefCache::TokenArrayRef xNew = pRefMgr->getRangeNameTokens(
-                _aToken.GetIndex(), rName, &aPos);
+                _aToken.GetIndex(), aName, &aPos);
 
             if (!xNew)
             {
@@ -4111,16 +4111,16 @@ void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken*
         {
             const OUString *pStr = pRefMgr->getExternalFileName(t->GetIndex());
             OUString aFileName = pStr ? *pStr : ScGlobal::GetRscString(STR_NO_NAME_REF);
-            rBuffer.append(pConv->makeExternalNameStr( aFileName, t->GetString()));
+            rBuffer.append(pConv->makeExternalNameStr( aFileName, t->GetString().getString()));
         }
         break;
         case svExternalSingleRef:
             pConv->makeExternalRefStr(
-                   rBuffer, *this, t->GetIndex(), t->GetString(), static_cast<ScToken*>(t)->GetSingleRef(), pRefMgr);
+                   rBuffer, *this, t->GetIndex(), t->GetString().getString(), static_cast<ScToken*>(t)->GetSingleRef(), pRefMgr);
         break;
         case svExternalDoubleRef:
             pConv->makeExternalRefStr(
-                        rBuffer, *this, t->GetIndex(), t->GetString(), static_cast<ScToken*>(t)->GetDoubleRef(), pRefMgr);
+                        rBuffer, *this, t->GetIndex(), t->GetString().getString(), static_cast<ScToken*>(t)->GetDoubleRef(), pRefMgr);
            break;
         default:
             // warning, not error, otherwise we may end up with a never

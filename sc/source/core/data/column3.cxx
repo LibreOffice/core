@@ -847,7 +847,7 @@ public:
                         }
                         else if (bString)
                         {
-                            OUString aStr = rSrcCell.GetString();
+                            svl::SharedString aStr = rSrcCell.GetString();
                             if (aStr.isEmpty())
                                 // do not clone empty string
                                 continue;
@@ -858,7 +858,7 @@ public:
                             {
                                 // Clone as an edit text object.
                                 ScFieldEditEngine& rEngine = mrDestCol.GetDoc().GetEditEngine();
-                                rEngine.SetText(aStr);
+                                rEngine.SetText(aStr.getString());
                                 mrDestCol.SetEditText(maDestBlockPos, nSrcRow + mnRowOffset, rEngine.CreateTextObject());
                             }
                             else
@@ -2073,11 +2073,8 @@ class FormulaToValueHandler
 
     typedef std::vector<Entry> EntriesType;
     EntriesType maEntries;
-    svl::SharedStringPool& mrStrPool;
 
 public:
-
-    FormulaToValueHandler(ScDocument& rDoc) : mrStrPool(rDoc.GetSharedStringPool()) {}
 
     void operator() (size_t nRow, const ScFormulaCell* p)
     {
@@ -2085,7 +2082,7 @@ public:
         if (p2->IsValue())
             maEntries.push_back(Entry(nRow, p2->GetValue()));
         else
-            maEntries.push_back(Entry(nRow, mrStrPool.intern(p2->GetString())));
+            maEntries.push_back(Entry(nRow, p2->GetString()));
     }
 
     void commitCells(ScColumn& rColumn)
@@ -2115,7 +2112,7 @@ public:
 
 void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
 {
-    FormulaToValueHandler aFunc(*pDocument);
+    FormulaToValueHandler aFunc;
     sc::CellStoreType::const_iterator itPos = maCells.begin();
 
     ScAttrIterator aAttrIter( pAttrArray, nStartRow, nEndRow );

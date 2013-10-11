@@ -3265,7 +3265,7 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rSt
                 pFormatter->GetInputLineString(fVal, nIndex, aStr);
             }
             else
-                aStr = pFCell->GetString();
+                aStr = pFCell->GetString().getString();
         }
         break;
         case CELLTYPE_VALUE:

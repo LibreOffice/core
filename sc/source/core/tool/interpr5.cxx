@@ -399,9 +399,9 @@ ScMatrixRef ScInterpreter::GetMatrix()
                     pMat->PutDouble(GetCellValue(aAdr, aCell), 0);
                 else
                 {
-                    OUString aStr;
+                    svl::SharedString aStr;
                     GetCellString(aStr, aCell);
-                    pMat->PutString(mrStrPool.intern(aStr), 0);
+                    pMat->PutString(aStr, 0);
                 }
             }
         }
@@ -439,7 +439,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
         break;
         case svString :
         {
-            OUString aStr = GetString();
+            svl::SharedString aStr = GetString();
             pMat = GetNewMat( 1, 1);
             if ( pMat )
             {
@@ -450,7 +450,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
                     nGlobalError = 0;
                 }
                 else
-                    pMat->PutString(mrStrPool.intern(aStr), 0);
+                    pMat->PutString(aStr, 0);
             }
         }
         break;
@@ -472,7 +472,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             else if (pToken->GetType() == svString)
             {
                 pMat = new ScMatrix(1, 1, 0.0);
-                pMat->PutString(mrStrPool.intern(pToken->GetString()), 0, 0);
+                pMat->PutString(pToken->GetString(), 0, 0);
             }
             else
             {
@@ -556,7 +556,7 @@ void ScInterpreter::ScMatValue()
                         PushDouble(GetCellValue(aAdr, aCell));
                     else
                     {
-                        OUString aStr;
+                        svl::SharedString aStr;
                         GetCellString(aStr, aCell);
                         PushString(aStr);
                     }
@@ -1265,11 +1265,11 @@ void ScInterpreter::ScAmpersand()
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix();
     else
-        sStr2 = GetString();
+        sStr2 = GetString().getString();
     if ( GetStackType() == svMatrix )
         pMat1 = GetMatrix();
     else
-        sStr1 = GetString();
+        sStr1 = GetString().getString();
     if (pMat1 && pMat2)
     {
         ScMatrixRef pResMat = MatConcat(pMat1, pMat2);
@@ -3173,7 +3173,7 @@ void ScInterpreter::ScMatRef()
             PushDouble(aCell.mpFormula->GetValue());
         else
         {
-            OUString aVal = aCell.mpFormula->GetString();
+            svl::SharedString aVal = aCell.mpFormula->GetString();
             PushString( aVal );
         }
         pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr);
@@ -3186,7 +3186,7 @@ void ScInterpreter::ScInfo()
 {
     if( MustHaveParamCount( GetByte(), 1 ) )
     {
-        OUString aStr = GetString();
+        OUString aStr = GetString().getString();
         ScCellKeywordTranslator::transKeyword(aStr, ScGlobal::GetLocale(), ocInfo);
         if( aStr.equalsAscii( "SYSTEM" ) )
             PushString( OUString( SC_INFO_OSVERSION ) );

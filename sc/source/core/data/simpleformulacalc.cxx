@@ -75,7 +75,7 @@ double ScSimpleFormulaCalculator::GetValue()
     return 0.0;
 }
 
-OUString ScSimpleFormulaCalculator::GetString()
+svl::SharedString ScSimpleFormulaCalculator::GetString()
 {
     Calculate();
 
@@ -83,7 +83,7 @@ OUString ScSimpleFormulaCalculator::GetString()
             !maResult.GetResultError())
         return maResult.GetString();
 
-    return OUString();
+    return svl::SharedString::getEmptyString();
 }
 
 bool ScSimpleFormulaCalculator::HasColRowName()

@@ -1895,7 +1895,7 @@ public:
         if (rCell.IsValue())
             mrMat.PutDouble(rCell.GetValue(), mnMatCol, nRow - mnTopRow);
         else
-            mrMat.PutString(mrStrPool.intern(rCell.GetString()), mnMatCol, nRow - mnTopRow);
+            mrMat.PutString(rCell.GetString(), mnMatCol, nRow - mnTopRow);
     }
 
     void operator() (size_t nRow, const svl::SharedString& rSS)
@@ -2050,7 +2050,7 @@ public:
                         continue;
                     }
 
-                    svl::SharedString aStr = mrPool.intern(rCell.GetString());
+                    svl::SharedString aStr = rCell.GetString();
                     if (!aBucket.maStrVals.empty() && nThisRow == nPrevRow + 1)
                     {
                         // Secondary strings.
@@ -2216,7 +2216,7 @@ bool appendStrings(
                 getBlockIterators<sc::formula_block>(it, nLenRemain, itData, itDataEnd);
 
                 sal_uInt16 nErr;
-                OUString aStr;
+                svl::SharedString aStr;
                 for (; itData != itDataEnd; ++itData)
                 {
                     ScFormulaCell& rFC = **itData;
@@ -2231,7 +2231,7 @@ bool appendStrings(
                         return false;
                     }
 
-                    rArray.push_back(rPool.intern(aStr).getDataIgnoreCase());
+                    rArray.push_back(aStr.getDataIgnoreCase());
                 }
             }
             break;

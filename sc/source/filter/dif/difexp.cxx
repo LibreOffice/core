@@ -207,7 +207,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                     }
                     else
                     {
-                        aString = aCell.mpFormula->GetString();
+                        aString = aCell.mpFormula->GetString().getString();
                         bWriteStringData = true;
                     }
 

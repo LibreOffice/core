@@ -461,8 +461,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
                 }
                 else
                 {
-                    OUString aStr = pFCell->GetString();
-                    fValue = ConvertStringToValue( aStr );
+                    fValue = ConvertStringToValue(pFCell->GetString().getString());
                 }
             }
             else
@@ -498,7 +497,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
     return fValue;
 }
 
-void ScInterpreter::GetCellString( OUString& rStr, ScRefCellValue& rCell )
+void ScInterpreter::GetCellString( svl::SharedString& rStr, ScRefCellValue& rCell )
 {
     sal_uInt16 nErr = 0;
 
@@ -506,7 +505,7 @@ void ScInterpreter::GetCellString( OUString& rStr, ScRefCellValue& rCell )
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            rStr = rCell.getString(pDok);
+            rStr = mrStrPool.intern(rCell.getString(pDok));
         break;
         case CELLTYPE_FORMULA:
         {
@@ -518,7 +517,9 @@ void ScInterpreter::GetCellString( OUString& rStr, ScRefCellValue& rCell )
                 sal_uLong nIndex = pFormatter->GetStandardFormat(
                                     NUMBERFORMAT_NUMBER,
                                     ScGlobal::eLnge);
-                pFormatter->GetInputLineString(fVal, nIndex, rStr);
+                OUString aStr;
+                pFormatter->GetInputLineString(fVal, nIndex, aStr);
+                rStr = mrStrPool.intern(aStr);
             }
             else
                 rStr = pFCell->GetString();
@@ -530,11 +531,13 @@ void ScInterpreter::GetCellString( OUString& rStr, ScRefCellValue& rCell )
             sal_uLong nIndex = pFormatter->GetStandardFormat(
                                     NUMBERFORMAT_NUMBER,
                                     ScGlobal::eLnge);
-            pFormatter->GetInputLineString(fVal, nIndex, rStr);
+            OUString aStr;
+            pFormatter->GetInputLineString(fVal, nIndex, aStr);
+            rStr = mrStrPool.intern(aStr);
         }
         break;
         default:
-            rStr = ScGlobal::GetEmptyString();
+            rStr = svl::SharedString::getEmptyString();
         break;
     }
 
@@ -676,7 +679,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             if (!aCell.mpFormula->IsValue())
                             {
                                 nErr = aCell.mpFormula->GetErrCode();
-                                aStr = aCell.mpFormula->GetString();
+                                aStr = aCell.mpFormula->GetString().getString();
                             }
                             else
                                 bOk = false;
@@ -785,7 +788,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             if (aCell.mpFormula->IsValue())
                                 nVal = aCell.mpFormula->GetValue();
                             else
-                                aStr = aCell.mpFormula->GetString();
+                                aStr = aCell.mpFormula->GetString().getString();
                             break;
                         default :
                             bOk = false;
@@ -978,7 +981,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
     }
     else if (aCell.hasString())
     {
-        OUString aRes;
+        svl::SharedString aRes;
         GetCellString( aRes, aCell);
         PushString( aRes);
         if (pRetTypeExpr)
@@ -1068,7 +1071,7 @@ double ScInterpreter::PopDouble()
 }
 
 
-const OUString& ScInterpreter::PopString()
+svl::SharedString ScInterpreter::PopString()
 {
     nCurFmtType = NUMBERFORMAT_TEXT;
     nCurFmtIndex = 0;
@@ -1082,18 +1085,18 @@ const OUString& ScInterpreter::PopString()
                 nGlobalError = p->GetError();
                 break;
             case svString:
-                aTempStr = p->GetString();
-                return aTempStr;
+                return p->GetString();
             case svEmptyCell:
             case svMissing:
-                return EMPTY_OUSTRING;
+                return svl::SharedString::getEmptyString();
             default:
                 SetError( errIllegalArgument);
         }
     }
     else
         SetError( errUnknownStackVariable);
-    return EMPTY_OUSTRING;
+
+    return svl::SharedString::getEmptyString();
 }
 
 
@@ -1401,7 +1404,7 @@ void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName
     }
 
     rFileId = p->GetIndex();
-    rTabName = p->GetString();
+    rTabName = p->GetString().getString();
     rRef = static_cast<ScToken*>(p)->GetSingleRef();
 }
 
@@ -1477,7 +1480,7 @@ void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName
     }
 
     rFileId = p->GetIndex();
-    rTabName = p->GetString();
+    rTabName = p->GetString().getString();
     rRef = static_cast<ScToken*>(p)->GetDoubleRef();
 }
 
@@ -1689,10 +1692,10 @@ bool ScInterpreter::ConvertMatrixParameters()
                     if (eType == ScParameterClassification::Array)
                     {
                         sal_uInt16 nFileId = p->GetIndex();
-                        const OUString& rTabName = p->GetString();
+                        OUString aTabName = p->GetString().getString();
                         const ScComplexRefData& rRef = static_cast<ScToken*>(p)->GetDoubleRef();
                         ScExternalRefCache::TokenArrayRef pArray;
-                        GetExternalDoubleRef(nFileId, rTabName, rRef, pArray);
+                        GetExternalDoubleRef(nFileId, aTabName, rRef, pArray);
                         if (nGlobalError)
                             break;
 
@@ -1896,13 +1899,20 @@ void ScInterpreter::PushInt(int nVal)
 void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 {
     if ( pString )
-        PushString( OUString(pString) );
+    {
+        svl::SharedString aSS = pDok->GetSharedStringPool().intern(OUString(pString));
+        PushString(aSS);
+    }
     else
-        PushString( EMPTY_STRING );
+        PushString(svl::SharedString::getEmptyString());
 }
 
+void ScInterpreter::PushString( const OUString& rStr )
+{
+    PushString(pDok->GetSharedStringPool().intern(rStr));
+}
 
-void ScInterpreter::PushString( const OUString& rString )
+void ScInterpreter::PushString( const svl::SharedString& rString )
 {
     if (!IfErrorPushError())
         PushTempTokenWithoutError( new FormulaStringToken( rString ) );
@@ -2187,7 +2197,7 @@ double ScInterpreter::GetDouble()
             nVal = PopDouble();
         break;
         case svString:
-            nVal = ConvertStringToValue( PopString());
+            nVal = ConvertStringToValue( PopString().getString());
         break;
         case svSingleRef:
         {
@@ -2267,25 +2277,26 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
 }
 
 
-const OUString& ScInterpreter::GetString()
+svl::SharedString ScInterpreter::GetString()
 {
     switch (GetRawStackType())
     {
         case svError:
             PopError();
-            return EMPTY_OUSTRING;
+            return svl::SharedString::getEmptyString();
         case svMissing:
         case svEmptyCell:
             Pop();
-            return EMPTY_OUSTRING;
+            return svl::SharedString::getEmptyString();
         case svDouble:
         {
             double fVal = PopDouble();
             sal_uLong nIndex = pFormatter->GetStandardFormat(
                                     NUMBERFORMAT_NUMBER,
                                     ScGlobal::eLnge);
-            pFormatter->GetInputLineString(fVal, nIndex, aTempStr);
-            return aTempStr;
+            OUString aStr;
+            pFormatter->GetInputLineString(fVal, nIndex, aStr);
+            return mrStrPool.intern(aStr);
         }
         case svString:
             return PopString();
@@ -2297,11 +2308,12 @@ const OUString& ScInterpreter::GetString()
             {
                 ScRefCellValue aCell;
                 aCell.assign(*pDok, aAdr);
-                GetCellString(aTempStr, aCell);
-                return aTempStr;
+                svl::SharedString aSS;
+                GetCellString(aSS, aCell);
+                return aSS;
             }
             else
-                return EMPTY_OUSTRING;
+                return svl::SharedString::getEmptyString();
         }
         case svDoubleRef:
         {   // generate position dependent SingleRef
@@ -2312,21 +2324,21 @@ const OUString& ScInterpreter::GetString()
             {
                 ScRefCellValue aCell;
                 aCell.assign(*pDok, aAdr);
-                GetCellString(aTempStr, aCell);
-                return aTempStr;
+                svl::SharedString aSS;
+                GetCellString(aSS, aCell);
+                return aSS;
             }
             else
-                return EMPTY_OUSTRING;
+                return svl::SharedString::getEmptyString();
         }
         case svExternalSingleRef:
         {
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
             if (nGlobalError)
-                return EMPTY_OUSTRING;
+                return svl::SharedString::getEmptyString();
 
-            aTempStr = pToken->GetString();
-            return aTempStr;
+            return pToken->GetString();
         }
         case svExternalDoubleRef:
         {
@@ -2344,17 +2356,16 @@ const OUString& ScInterpreter::GetString()
             PopError();
             SetError( errIllegalArgument);
     }
-    return EMPTY_OUSTRING;
+    return svl::SharedString::getEmptyString();
 }
 
-const OUString& ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
+svl::SharedString ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
 {
     if ( !pMat )
         ;   // nothing
     else if ( !pJumpMatrix )
     {
-        aTempStr = pMat->GetString( *pFormatter, 0, 0).getString();
-        return aTempStr;
+        return pMat->GetString( *pFormatter, 0, 0);
     }
     else
     {
@@ -2363,21 +2374,20 @@ const OUString& ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
         pJumpMatrix->GetPos( nC, nR);
         if ( nC < nCols && nR < nRows )
         {
-            aTempStr = pMat->GetString( *pFormatter, nC, nR).getString();
-            return aTempStr;
+            return pMat->GetString( *pFormatter, nC, nR);
         }
         else
             SetError( errNoValue);
     }
-    return EMPTY_OUSTRING;
+    return svl::SharedString::getEmptyString();
 }
 
 ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix(
-    double& rDouble, OUString& rString )
+    double& rDouble, svl::SharedString& rString )
 {
 
     rDouble = 0.0;
-    rString = EMPTY_OUSTRING;
+    rString = svl::SharedString::getEmptyString();
     ScMatValType nMatValType = SC_MATVAL_EMPTY;
 
     ScMatrixRef pMat;
@@ -2517,7 +2527,7 @@ void ScInterpreter::ScExternal()
                         break;
                     case PTR_STRING :
                         {
-                            OString aStr(OUStringToOString(GetString(),
+                            OString aStr(OUStringToOString(GetString().getString(),
                                 osl_getThreadTextEncoding()));
                             if ( aStr.getLength() >= ADDIN_MAXSTRLEN )
                                 SetError( errStringOverflow );
@@ -2727,7 +2737,7 @@ void ScInterpreter::ScExternal()
                     break;
 
                 case SC_ADDINARG_STRING:
-                    aParam <<= GetString();
+                    aParam <<= GetString().getString();
                     break;
 
                 case SC_ADDINARG_INTEGER_ARRAY:
@@ -2807,7 +2817,7 @@ void ScInterpreter::ScExternal()
                         case svString:
                         case svSingleRef:
                             {
-                                const OUString& aString = GetString();
+                                OUString aString = GetString().getString();
                                 uno::Sequence<OUString> aInner( &aString, 1 );
                                 uno::Sequence< uno::Sequence<OUString> > aOuter( &aInner, 1 );
                                 aParam <<= aOuter;
@@ -2842,7 +2852,7 @@ void ScInterpreter::ScExternal()
                                 if ( nStackType == svDouble )
                                     aElem <<= (double) GetDouble();
                                 else if ( nStackType == svString )
-                                    aElem <<= GetString();
+                                    aElem <<= GetString().getString();
                                 else
                                 {
                                     ScAddress aAdr;
@@ -2852,9 +2862,9 @@ void ScInterpreter::ScExternal()
                                         aCell.assign(*pDok, aAdr);
                                         if (aCell.hasString())
                                         {
-                                            OUString aStr;
+                                            svl::SharedString aStr;
                                             GetCellString(aStr, aCell);
-                                            aElem <<= aStr;
+                                            aElem <<= aStr.getString();
                                         }
                                         else
                                             aElem <<= GetCellValue(aAdr, aCell);
@@ -2892,7 +2902,7 @@ void ScInterpreter::ScExternal()
                             aParam <<= (double) GetDouble();
                             break;
                         case svString:
-                            aParam <<= GetString();
+                            aParam <<= GetString().getString();
                             break;
                         case svSingleRef:
                             {
@@ -2903,9 +2913,9 @@ void ScInterpreter::ScExternal()
                                     aCell.assign(*pDok, aAdr);
                                     if (aCell.hasString())
                                     {
-                                        OUString aStr;
+                                        svl::SharedString aStr;
                                         GetCellString(aStr, aCell);
-                                        aParam <<= aStr;
+                                        aParam <<= aStr.getString();
                                     }
                                     else
                                         aParam <<= GetCellValue(aAdr, aCell);
@@ -3179,14 +3189,14 @@ void ScInterpreter::ScMacro()
                 pPar->PutDouble( GetDouble() );
             break;
             case svString:
-                pPar->PutString( GetString() );
+                pPar->PutString( GetString().getString() );
             break;
             case svExternalSingleRef:
             {
                 ScExternalRefCache::TokenRef pToken;
                 PopExternalSingleRef(pToken);
                 if ( pToken->GetType() == svString )
-                    pPar->PutString( pToken->GetString() );
+                    pPar->PutString( pToken->GetString().getString() );
                 else if ( pToken->GetType() == svDouble )
                     pPar->PutDouble( pToken->GetDouble() );
                 else
@@ -3436,7 +3446,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
                         pVar->PutDouble(aCell.mpFormula->GetValue());
                     }
                     else
-                        pVar->PutString(aCell.mpFormula->GetString());
+                        pVar->PutString(aCell.mpFormula->GetString().getString());
                 }
                 else
                     SetError( nErr ), bOk = false;
@@ -3523,7 +3533,7 @@ void ScInterpreter::ScTableOp()
     }
     else
     {
-        OUString aCellString;
+        svl::SharedString aCellString;
         GetCellString(aCellString, aCell);
         PushString( aCellString );
     }
@@ -4435,6 +4445,11 @@ StackVar ScInterpreter::Interpret()
         // interpreters.
         static_cast<ScToken*>(xResult.get())->GetMatrix()->SetImmutable( true);
     return eType;
+}
+
+svl::SharedString ScInterpreter::GetStringResult() const
+{
+    return xResult->GetString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

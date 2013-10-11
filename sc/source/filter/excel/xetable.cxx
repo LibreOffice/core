@@ -806,7 +806,7 @@ XclExpFormulaCell::XclExpFormulaCell(
         bool bForceLineBreak = false;
         if( nFormatType == NUMBERFORMAT_TEXT )
         {
-            OUString aResult = mrScFmlaCell.GetString();
+            OUString aResult = mrScFmlaCell.GetString().getString();
             bForceLineBreak = mrScFmlaCell.IsMultilineResult();
             nScript = XclExpStringHelper::GetLeadingScriptType( rRoot, aResult );
         }
@@ -955,7 +955,7 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
 
             case NUMBERFORMAT_TEXT:
                 {
-                    OUString aResult = mrScFmlaCell.GetString();
+                    OUString aResult = mrScFmlaCell.GetString().getString();
                     if( !aResult.isEmpty() || (rStrm.GetRoot().GetBiff() <= EXC_BIFF5) )
                     {
                         rStrm << EXC_FORMULA_RES_STRING;

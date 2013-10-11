@@ -351,7 +351,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
         }
         else
         {
-            OUString aStr = pFCell->GetString();
+            OUString aStr = pFCell->GetString().getString();
             OUString sTempOut(rStrResult);
             sal_uLong nFormat = aFormatter.GetStandardFormat(
                             pFCell->GetFormatType(), ScGlobal::eLnge);

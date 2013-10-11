@@ -320,7 +320,7 @@ private:
         // Get the information of the new token.
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
-        OUString aTabName = bExternal ? pToken->GetString() : OUString();
+        OUString aTabName = bExternal ? pToken->GetString().getString() : OUString();
 
         bool bJoined = false;
         vector<ScTokenRef>::iterator itr = rTokens.begin(), itrEnd = rTokens.end();
@@ -343,7 +343,7 @@ private:
                     // Different external files.
                     continue;
 
-                if (aTabName != pOldToken->GetString())
+                if (aTabName != pOldToken->GetString().getString())
                     // Different table names.
                     continue;
             }

@@ -199,7 +199,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
         if ( bIsValue )
             nValue  = pCell->GetValue();
         else
-            aValStr = pCell->GetString();
+            aValStr = pCell->GetString().getString();
     }
     if ( bIsValue )
         aParams[0] = ::com::sun::star::uno::makeAny( nValue );
@@ -318,7 +318,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
             if ( bIsValue )
                 nValue  = pCell->GetValue();
             else
-                aValStr = pCell->GetString();
+                aValStr = pCell->GetString().getString();
         }
         if ( bIsValue )
             refPar->Get(1)->PutDouble( nValue );
@@ -501,7 +501,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             if ( bIsVal )
                 nVal  = pFCell->GetValue();
             else
-                aString = pFCell->GetString();
+                aString = pFCell->GetString().getString();
         }
         break;
         default:                        // Notizen, Broadcaster
@@ -560,27 +560,28 @@ public:
                                     mrTokArr( rTokArr ), mbSkipEmpty( bSkipEmpty ), mbOk( true ) {}
 
     /** Returns the string of the first string token or NULL on error or empty token array. */
-    const OUString*               First();
+    rtl_uString* First();
     /** Returns the string of the next string token or NULL on error or end of token array. */
-    const OUString*               Next();
+    rtl_uString* Next();
 
     /** Returns false, if a wrong token has been found. Does NOT return false on end of token array. */
     inline bool                 Ok() const { return mbOk; }
 
 private:
+    svl::SharedString maCurString; /// Current string.
     ScTokenArray&               mrTokArr;       /// The token array for iteration.
     bool                        mbSkipEmpty;    /// Ignore empty strings.
     bool                        mbOk;           /// true = correct token or end of token array.
 };
 
-const OUString* ScStringTokenIterator::First()
+rtl_uString* ScStringTokenIterator::First()
 {
     mrTokArr.Reset();
     mbOk = true;
     return Next();
 }
 
-const OUString* ScStringTokenIterator::Next()
+rtl_uString* ScStringTokenIterator::Next()
 {
     if( !mbOk )
         return NULL;
@@ -591,9 +592,13 @@ const OUString* ScStringTokenIterator::Next()
         pToken = mrTokArr.NextNoSpaces();
 
     mbOk = !pToken || (pToken->GetType() == formula::svString);
-    const OUString* pString = (mbOk && pToken) ? &pToken->GetString() : NULL;
+
+    maCurString = svl::SharedString(); // start with invalid string.
+    if (mbOk && pToken)
+        maCurString = pToken->GetString();
+
     // string found but empty -> get next token; otherwise return it
-    return (mbSkipEmpty && pString && pString->isEmpty()) ? Next() : pString;
+    return (mbSkipEmpty && maCurString.isValid() && maCurString.isEmpty()) ? Next() : maCurString.getData();
 }
 
 // ----------------------------------------------------------------------------
@@ -660,8 +665,8 @@ bool ScValidationData::GetSelectionFromFormula(
             xMatRef->PutDouble( aValidationSrc.GetValue(), 0);
         else
         {
-            OUString aStr = aValidationSrc.GetString();
-            xMatRef->PutString(pDocument->GetSharedStringPool().intern(aStr), 0);
+            svl::SharedString aStr = aValidationSrc.GetString();
+            xMatRef->PutString(aStr, 0);
         }
 
         pValues = xMatRef.get();
@@ -805,13 +810,14 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
 
         sal_uInt32 nFormat = lclGetCellFormat( *GetDocument(), rPos );
         ScStringTokenIterator aIt( *pTokArr );
-        for( const OUString* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next() )
+        for (rtl_uString* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next())
         {
             double fValue;
-            bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue );
+            OUString aStr(pString);
+            bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat(aStr, nFormat, fValue);
             rStrColl.push_back(
                 ScTypedStrData(
-                    *pString, fValue, bIsValue ? ScTypedStrData::Value : ScTypedStrData::Standard));
+                    aStr, fValue, bIsValue ? ScTypedStrData::Value : ScTypedStrData::Standard));
         }
         bOk = aIt.Ok();
 
@@ -861,7 +867,7 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
 
     sal_uInt32 nFormat = lclGetCellFormat( *GetDocument(), rPos );
     ScStringTokenIterator aIt( *pTokArr );
-    for( const OUString* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next() )
+    for (rtl_uString* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next())
     {
         /*  Do not break the loop, if a valid string has been found.
             This is to find invalid tokens following in the formula. */
@@ -870,10 +876,11 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
             // create a formula containing a single string or number
             ScTokenArray aCondTokArr;
             double fValue;
-            if( GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue ) )
+            OUString aStr(pString);
+            if (GetDocument()->GetFormatTable()->IsNumberFormat(aStr, nFormat, fValue))
                 aCondTokArr.AddDouble( fValue );
             else
-                aCondTokArr.AddString( *pString );
+                aCondTokArr.AddString(aStr);
 
             bIsValid = IsEqualToTokenArray(rCell, rPos, aCondTokArr);
         }

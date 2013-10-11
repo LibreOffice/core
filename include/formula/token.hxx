@@ -28,6 +28,7 @@
 #include "formula/IFunctionDescription.hxx"
 #include "formula/formuladllapi.h"
 #include "formula/types.hxx"
+#include "svl/sharedstring.hxx"
 
 namespace formula
 {
@@ -136,7 +137,7 @@ public:
     virtual void                SetForceArray( bool b );
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
-    virtual const OUString&       GetString() const;
+    virtual svl::SharedString GetString() const;
     virtual sal_uInt16          GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
     virtual bool                IsGlobal() const;
@@ -256,17 +257,14 @@ public:
 
 class FORMULA_DLLPUBLIC FormulaStringToken : public FormulaToken
 {
-private:
-            OUString              aString;
+    svl::SharedString maString;
 public:
-                                FormulaStringToken( const OUString& r ) :
-                                    FormulaToken( svString ), aString( r ) {}
-                                FormulaStringToken( const FormulaStringToken& r ) :
-                                    FormulaToken( r ), aString( r.aString ) {}
+    FormulaStringToken( const svl::SharedString& r );
+    FormulaStringToken( const FormulaStringToken& r );
 
-    virtual FormulaToken*       Clone() const { return new FormulaStringToken(*this); }
-    virtual const OUString&       GetString() const;
-    virtual bool                operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken* Clone() const;
+    virtual svl::SharedString GetString() const;
+    virtual bool operator==( const FormulaToken& rToken ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken )
 };
@@ -276,17 +274,14 @@ public:
     ocPush, and an optional sal_uInt8 for ocBad tokens. */
 class FORMULA_DLLPUBLIC FormulaStringOpToken : public FormulaByteToken
 {
-private:
-            OUString              aString;
+    svl::SharedString maString;
 public:
-                                FormulaStringOpToken( OpCode e, const OUString& r ) :
-                                    FormulaByteToken( e, 0, svString, false ), aString( r ) {}
-                                FormulaStringOpToken( const FormulaStringOpToken& r ) :
-                                    FormulaByteToken( r ), aString( r.aString ) {}
+    FormulaStringOpToken( OpCode e, const svl::SharedString& r );
+    FormulaStringOpToken( const FormulaStringOpToken& r );
 
-    virtual FormulaToken*       Clone() const { return new FormulaStringOpToken(*this); }
-    virtual const OUString&       GetString() const;
-    virtual bool                operator==( const FormulaToken& rToken ) const;
+    virtual FormulaToken* Clone() const;
+    virtual svl::SharedString GetString() const;
+    virtual bool operator==( const FormulaToken& rToken ) const;
 };
 
 class FORMULA_DLLPUBLIC FormulaIndexToken : public FormulaToken
@@ -343,7 +338,7 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaMissingToken(*this); }
     virtual double              GetDouble() const;
-    virtual const OUString&       GetString() const;
+    virtual svl::SharedString GetString() const;
     virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 

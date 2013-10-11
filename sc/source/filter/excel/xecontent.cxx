@@ -920,7 +920,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         // the token array for that
         boost::scoped_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateTokenArry(0));
         if(pTokenArray->GetLen())
-            aText = XclXmlUtils::ToOString(pTokenArray->First()->GetString());
+            aText = XclXmlUtils::ToOString(pTokenArray->First()->GetString().getString());
     }
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
