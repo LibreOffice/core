@@ -161,31 +161,13 @@ void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::co
 //*************************************************************************
 Reference<XInterface> SAL_CALL DllComponentLoader::activate(
     const OUString & rImplName, const OUString &, const OUString & rLibName,
-    const Reference< XRegistryKey > & xKey )
+    const Reference< XRegistryKey > & )
 
     throw(CannotActivateFactoryException, RuntimeException)
 {
-    OUString aPrefix;
-    if( xKey.is() )
-    {
-        Reference<XRegistryKey > xActivatorKey = xKey->openKey(
-                OUString("/UNO/ACTIVATOR") );
-        if (xActivatorKey.is() && xActivatorKey->getValueType() == RegistryValueType_ASCII )
-        {
-            Reference<XRegistryKey > xPrefixKey = xKey->openKey(
-                OUString("/UNO/PREFIX") );
-            if( xPrefixKey.is() && xPrefixKey->getValueType() == RegistryValueType_ASCII )
-            {
-                aPrefix = xPrefixKey->getAsciiValue();
-                if( !aPrefix.isEmpty() )
-                    aPrefix = aPrefix + "_";
-            }
-        }
-    }
-
     return loadSharedLibComponentFactory(
         cppu::bootstrap_expandUri(rLibName), OUString(), rImplName, m_xSMgr,
-        css::uno::Reference<css::registry::XRegistryKey>(), aPrefix );
+        css::uno::Reference<css::registry::XRegistryKey>(), OUString() );
 }
 
 
