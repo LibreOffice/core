@@ -61,11 +61,11 @@ class SwSequenceOptionDialog : public SvxStandardDialog
     ListBox*        m_pLbCaptionOrder;
 
     SwView&         rView;
-    String          aFldTypeName;
+    OUString        aFldTypeName;
 
 public:
     SwSequenceOptionDialog( Window *pParent, SwView &rV,
-                            const String& rSeqFldType );
+                            const OUString& rSeqFldType );
     virtual ~SwSequenceOptionDialog();
     virtual void Apply();
 
@@ -76,8 +76,8 @@ public:
     bool IsOrderNumberingFirst() const {return m_pLbCaptionOrder->GetSelectEntryPos() == 1;}
     void SetOrderNumberingFirst(bool bSet) { m_pLbCaptionOrder->SelectEntryPos( bSet ? 1 : 0 ); }
 
-    void    SetCharacterStyle(const String& rStyle);
-    String  GetCharacterStyle() const;
+    void      SetCharacterStyle(const OUString& rStyle);
+    OUString  GetCharacterStyle() const;
 };
 
 OUString SwCaptionDialog::our_aSepTextSave(": "); // Caption separator text
@@ -334,8 +334,8 @@ IMPL_LINK_NOARG(SwCaptionDialog, CaptionHdl)
 
 void SwCaptionDialog::DrawSample()
 {
-    String aStr;
-    String sCaption = m_pTextEdit->GetText();
+    OUString aStr;
+    OUString sCaption = m_pTextEdit->GetText();
 
     // number
     OUString sFldTypeName = m_pCategoryBox->GetText();
@@ -351,8 +351,8 @@ void SwCaptionDialog::DrawSample()
             if( !bOrderNumberingFirst )
             {
                 aStr += sFldTypeName;
-                if ( aStr.Len() > 0 )
-                    aStr += ' ';
+                if ( !aStr.isEmpty() )
+                    aStr += " ";
             }
 
             SwWrtShell &rSh = rView.GetWrtShell();
@@ -365,21 +365,21 @@ void SwCaptionDialog::DrawSample()
                 for( sal_Int8 i = 0; i <= nLvl; ++i )
                     aNumVector.push_back(1);
 
-                String sNumber( rSh.GetOutlineNumRule()->
+                OUString sNumber( rSh.GetOutlineNumRule()->
                                 MakeNumString(aNumVector, sal_False ));
-                if( sNumber.Len() )
+                if( !sNumber.isEmpty() )
                     (aStr += sNumber) += pFldType->GetDelimiter();
             }
 
             switch( nNumFmt )
             {
-            case SVX_NUM_CHARS_UPPER_LETTER:    aStr += 'A'; break;
-            case SVX_NUM_CHARS_UPPER_LETTER_N:  aStr += 'A'; break;
-            case SVX_NUM_CHARS_LOWER_LETTER:    aStr += 'a'; break;
-            case SVX_NUM_CHARS_LOWER_LETTER_N:  aStr += 'a'; break;
-            case SVX_NUM_ROMAN_UPPER:           aStr += 'I'; break;
-            case SVX_NUM_ROMAN_LOWER:           aStr += 'i'; break;
-            default:                    aStr += '1'; break;
+            case SVX_NUM_CHARS_UPPER_LETTER:    aStr += "A"; break;
+            case SVX_NUM_CHARS_UPPER_LETTER_N:  aStr += "A"; break;
+            case SVX_NUM_CHARS_LOWER_LETTER:    aStr += "a"; break;
+            case SVX_NUM_CHARS_LOWER_LETTER_N:  aStr += "a"; break;
+            case SVX_NUM_ROMAN_UPPER:           aStr += "I"; break;
+            case SVX_NUM_ROMAN_LOWER:           aStr += "i"; break;
+            default:                    aStr += "1"; break;
             }
             //#i61007# order of captions
             if( bOrderNumberingFirst )
@@ -389,7 +389,7 @@ void SwCaptionDialog::DrawSample()
             }
 
         }
-        if( sCaption.Len() > 0 )
+        if( !sCaption.isEmpty() )
         {
             aStr += m_pSepEdit->GetText();
         }
@@ -405,7 +405,7 @@ SwCaptionDialog::~SwCaptionDialog()
 }
 
 SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
-                                            const String& rSeqFldType )
+                                            const OUString& rSeqFldType )
     : SvxStandardDialog( pParent, "CaptionOptionsDialog", "modules/swriter/ui/captionoptions.ui" ),
     rView( rV ),
     aFldTypeName( rSeqFldType )
@@ -462,7 +462,7 @@ void SwSequenceOptionDialog::Apply()
         pFldType->SetDelimiter( OUString(cDelim) );
         pFldType->SetOutlineLvl( nLvl );
     }
-    else if( aFldTypeName.Len() && nLvl < MAXLEVEL )
+    else if( !aFldTypeName.isEmpty() && nLvl < MAXLEVEL )
     {
         // then we have to insert that
         SwSetExpFieldType aFldType( rSh.GetDoc(), aFldTypeName, nsSwGetSetExpType::GSE_SEQ );
@@ -477,15 +477,15 @@ void SwSequenceOptionDialog::Apply()
         rSh.UpdateExpFlds();
 }
 
-String  SwSequenceOptionDialog::GetCharacterStyle() const
+OUString  SwSequenceOptionDialog::GetCharacterStyle() const
 {
-    String sRet;
+    OUString sRet;
     if(m_pLbCharStyle->GetSelectEntryPos())
         sRet = m_pLbCharStyle->GetSelectEntry();
     return sRet;
 }
 
-void    SwSequenceOptionDialog::SetCharacterStyle(const String& rStyle)
+void    SwSequenceOptionDialog::SetCharacterStyle(const OUString& rStyle)
 {
     m_pLbCharStyle->SelectEntryPos(0);
     m_pLbCharStyle->SelectEntry(rStyle);

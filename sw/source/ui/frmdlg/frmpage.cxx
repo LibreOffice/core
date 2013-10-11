@@ -892,7 +892,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 //        if ( !bVerticalChanged && pSh->IsFrmVertical(sal_True, bIsInRightToLeft) )
         if ( pSh->IsFrmVertical( sal_True, bIsInRightToLeft, bIsVerticalL2R ) )
         {
-            String sHLabel = m_pHorizontalFT->GetText();
+            OUString sHLabel = m_pHorizontalFT->GetText();
             m_pHorizontalFT->SetText(m_pVerticalFT->GetText());
             m_pVerticalFT->SetText(sHLabel);
             bIsVerticalFrame = true;
@@ -1347,7 +1347,7 @@ sal_uInt16 SwFrmPage::FillPosLB(const FrmMap* _pMap,
                             const sal_uInt16 _nRel,
                             ListBox& _rLB )
 {
-    String sSelEntry, sOldEntry;
+    OUString sSelEntry, sOldEntry;
     sOldEntry = _rLB.GetSelectEntry();
 
     _rLB.Clear();
@@ -1370,7 +1370,7 @@ sal_uInt16 SwFrmPage::FillPosLB(const FrmMap* _pMap,
                                                      bIsVerticalFrame,
                                                      bIsVerticalL2R,
                                                      bIsInRightToLeft);
-            String sEntry(aFramePosString.GetString(eStrId));
+            OUString sEntry(aFramePosString.GetString(eStrId));
             if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
             {
                 // don't insert entries when frames are character bound
@@ -1405,7 +1405,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                             ListBox& _rLB,
                             FixedText& _rFT )
 {
-    String sSelEntry;
+    OUString sSelEntry;
     sal_uLong  nLBRelations = 0;
     size_t nMapCount = ::lcl_GetFrmMapCount(_pMap);
 
@@ -1415,7 +1415,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
     {
         if (_pMap == aVAsCharHtmlMap || _pMap == aVAsCharMap)
         {
-            String sOldEntry(_rLB.GetSelectEntry());
+            OUString sOldEntry(_rLB.GetSelectEntry());
             sal_uInt16 nRelCount = sizeof(aAsCharRelationMap) / sizeof(RelationMap);
             SvxSwFramePosString::StringId eStrId = _pMap[_nLBSelPos].eStrId;
 
@@ -1436,7 +1436,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                                                                 bIsVerticalFrame,
                                                                 bIsVerticalL2R,
                                                                 bIsInRightToLeft);
-                            String sEntry = aFramePosString.GetString(sStrId1);
+                            OUString sEntry = aFramePosString.GetString(sStrId1);
                             sal_uInt16 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
                             if (_pMap[nMapPos].nAlign == _nAlign)
@@ -1446,7 +1446,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                     }
                 }
             }
-            if (sSelEntry.Len())
+            if (!sSelEntry.isEmpty())
                 _rLB.SelectEntry(sSelEntry);
             else
             {
@@ -1501,16 +1501,16 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                                                                 bIsVerticalFrame,
                                                                 bIsVerticalL2R,
                                                                 bIsInRightToLeft);
-                            String sEntry = aFramePosString.GetString(eStrId1);
+                            OUString sEntry = aFramePosString.GetString(eStrId1);
                             sal_uInt16 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
-                            if (!sSelEntry.Len() && aRelationMap[nRelPos].nRelation == _nRel)
+                            if (sSelEntry.isEmpty() && aRelationMap[nRelPos].nRelation == _nRel)
                                 sSelEntry = sEntry;
                         }
                     }
                 }
             }
-            if (sSelEntry.Len())
+            if (!sSelEntry.isEmpty())
                 _rLB.SelectEntry(sSelEntry);
             else
             {
@@ -1621,13 +1621,13 @@ sal_uInt16 SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
             size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
-            String sSelEntry(rAlignLB.GetSelectEntry());
+            OUString sSelEntry(rAlignLB.GetSelectEntry());
 
             for (size_t i = 0; i < nMapCount; i++)
             {
                 SvxSwFramePosString::StringId eResId = pMap[i].eStrId;
 
-                String sEntry = aFramePosString.GetString(eResId);
+                OUString sEntry = aFramePosString.GetString(eResId);
                 sEntry = MnemonicGenerator::EraseAllMnemonicChars( sEntry );
 
                 if (sEntry == sSelEntry)
@@ -2749,7 +2749,7 @@ sal_Bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
         pFmtURL = new SwFmtURL();
 
     {
-        String sText = pURLED->GetText();
+        OUString sText = pURLED->GetText();
 
         if( pFmtURL->GetURL() != sText ||
             OUString(pFmtURL->GetName()) != pNameED->GetText() ||
@@ -2789,8 +2789,8 @@ IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
 
     try
     {
-        String sTemp(pURLED->GetText());
-        if(sTemp.Len())
+        OUString sTemp(pURLED->GetText());
+        if(!sTemp.isEmpty())
             xFP->setDisplayDirectory(sTemp);
     }
     catch( const uno::Exception& rEx )
@@ -2874,14 +2874,14 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     {
         // insert graphic - properties
         // bNew is not set, so recognise by selection
-        String aTmpName1;
+        OUString aTmpName1;
         if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_NAME, sal_False, &pItem))
         {
             aTmpName1 = ((const SfxStringItem*)pItem)->GetValue();
         }
 
         OSL_ENSURE(pWrtSh, "keine Shell?");
-        if( bNew || !aTmpName1.Len() )
+        if( bNew || aTmpName1.isEmpty() )
         {
             if (sDlgType == "PictureDialog")
                 aTmpName1 = pWrtSh->GetUniqueGrfName();
@@ -2919,7 +2919,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         {
             const SwFmtChain &rChain = pFmt->GetChain();
             const SwFlyFrmFmt* pFlyFmt;
-            String sNextChain, sPrevChain;
+            OUString sNextChain, sPrevChain;
             if ((pFlyFmt = rChain.GetPrev()) != 0)
             {
                 sPrevChain = pFlyFmt->GetName();
@@ -2937,7 +2937,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
             pWrtSh->GetConnectableFrmFmts(*pFmt, sNextChain, sal_False,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
             lcl_InsertVectors(*pPrevLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
-            if(sPrevChain.Len())
+            if(!sPrevChain.isEmpty())
             {
                 if(LISTBOX_ENTRY_NOTFOUND == pPrevLB->GetEntryPos(sPrevChain))
                     pPrevLB->InsertEntry(sPrevChain, 1);
@@ -2953,7 +2953,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
             pWrtSh->GetConnectableFrmFmts(*pFmt, sPrevChain, sal_True,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
             lcl_InsertVectors(*pNextLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
-            if(sNextChain.Len())
+            if(!sNextChain.isEmpty())
             {
                 if(LISTBOX_ENTRY_NOTFOUND == pNextLB->GetEntryPos(sNextChain))
                     pNextLB->InsertEntry(sNextChain, 1);
@@ -3049,14 +3049,14 @@ sal_Bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
         const SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
         if (pFmt)
         {
-            String sCurrentPrevChain, sCurrentNextChain;
+            OUString sCurrentPrevChain, sCurrentNextChain;
             if(pPrevLB->GetSelectEntryPos())
                 sCurrentPrevChain = pPrevLB->GetSelectEntry();
             if(pNextLB->GetSelectEntryPos())
                 sCurrentNextChain = pNextLB->GetSelectEntry();
             const SwFmtChain &rChain = pFmt->GetChain();
             const SwFlyFrmFmt* pFlyFmt;
-            String sNextChain, sPrevChain;
+            OUString sNextChain, sPrevChain;
             if ((pFlyFmt = rChain.GetPrev()) != 0)
                 sPrevChain = pFlyFmt->GetName();
 
@@ -3096,7 +3096,7 @@ void SwFrmAddPage::SetFormatUsed(sal_Bool bFmt)
 
 IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
 {
-    String sCurrentPrevChain, sCurrentNextChain;
+    OUString sCurrentPrevChain, sCurrentNextChain;
     if(pPrevLB->GetSelectEntryPos())
         sCurrentPrevChain = pPrevLB->GetSelectEntry();
     if(pNextLB->GetSelectEntryPos())
@@ -3117,7 +3117,7 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
                         aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
         lcl_InsertVectors(rChangeLB,
                 aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
-        String sToSelect = bNextBox ? sCurrentPrevChain : sCurrentNextChain;
+        OUString sToSelect = bNextBox ? sCurrentPrevChain : sCurrentNextChain;
         if(rChangeLB.GetEntryPos(sToSelect) != LISTBOX_ENTRY_NOTFOUND)
             rChangeLB.SelectEntry(sToSelect);
         else

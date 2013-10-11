@@ -192,7 +192,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh)
     sal_uInt16 nPagePos = m_pApplyToLB->GetEntryPos( (void*) LISTBOX_PAGE );
     if (pPageSet && pPageDesc)
     {
-        String sPageStr = m_pApplyToLB->GetEntry(nPagePos);
+        OUString sPageStr = m_pApplyToLB->GetEntry(nPagePos);
         m_pApplyToLB->RemoveEntry(nPagePos);
         sPageStr += pPageDesc->GetName();
         m_pApplyToLB->InsertEntry( sPageStr, nPagePos );
@@ -910,19 +910,19 @@ void SwColumnPage::SetLabels( sal_uInt16 nVis )
 {
     OUString sLbl( '~' );
 
-    String sLbl2( OUString::number( nVis + 1 ));
-    String tmp1(sLbl2);
-    sLbl2.Insert(sLbl, sLbl2.Len() - 1);
+    OUString sLbl2( OUString::number( nVis + 1 ));
+    OUString tmp1(sLbl2);
+    sLbl2 = sLbl2.replaceAt(sLbl2.getLength() - 1, 0, sLbl);
     m_pLbl1->SetText(sLbl2);
 
     sLbl2 = OUString::number( nVis + 2 );
-    String tmp2(sLbl2);
-    sLbl2.Insert(sLbl, sLbl2.Len() - 1);
+    OUString tmp2(sLbl2);
+    sLbl2 = sLbl2.replaceAt(sLbl2.getLength() - 1, 0, sLbl);
     m_pLbl2->SetText(sLbl2);
 
     sLbl2 = OUString::number( nVis + 3 );
-    String tmp3(sLbl2);
-    sLbl2.Insert(sLbl, sLbl2.Len() - 1);
+    OUString tmp3(sLbl2);
+    sLbl2 = sLbl2.replaceAt(sLbl2.getLength() - 1, 0, sLbl);
     m_pLbl3->SetText(sLbl2);
     OUString sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
     aEd1.SetAccessibleName(sColumnWidth.replaceFirst("%1", tmp1));
