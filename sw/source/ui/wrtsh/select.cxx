@@ -851,7 +851,7 @@ int SwWrtShell::IntelligentCut(int nSelection, sal_Bool bCut)
     if( IsAddMode() || !(nSelection & nsSelectionType::SEL_TXT) )
         return sal_False;
 
-    String sTxt;
+    OUString sTxt;
     CharClass& rCC = GetAppCharClass();
 
         // If the first character is no word character,
@@ -859,8 +859,8 @@ int SwWrtShell::IntelligentCut(int nSelection, sal_Bool bCut)
     sal_Unicode cPrev = GetChar(sal_False);
     sal_Unicode cNext = GetChar(sal_True, -1);
     if( !cPrev || !cNext ||
-        !rCC.isLetterNumeric( ( sTxt = cPrev), 0 ) ||
-        !rCC.isLetterNumeric( ( sTxt = cNext), 0 ) )
+        !rCC.isLetterNumeric( ( sTxt = OUString(cPrev) ), 0 ) ||
+        !rCC.isLetterNumeric( ( sTxt = OUString(cNext) ), 0 ) )
         return NO_WORD;
 
     cPrev = GetChar(sal_False, -1);
@@ -871,8 +871,8 @@ int SwWrtShell::IntelligentCut(int nSelection, sal_Bool bCut)
     if(!cWord && cPrev && cNext &&
         CH_TXTATR_BREAKWORD != cPrev && CH_TXTATR_INWORD != cPrev &&
         CH_TXTATR_BREAKWORD != cNext && CH_TXTATR_INWORD != cNext &&
-        !rCC.isLetterNumeric( ( sTxt = cPrev), 0 ) &&
-        !rCC.isLetterNumeric( ( sTxt = cNext), 0 ) )
+        !rCC.isLetterNumeric( ( sTxt = OUString(cPrev) ), 0 ) &&
+        !rCC.isLetterNumeric( ( sTxt = OUString(cNext) ), 0 ) )
        cWord = WORD_NO_SPACE;
 
     if(cWord == WORD_NO_SPACE && ' ' == cPrev )

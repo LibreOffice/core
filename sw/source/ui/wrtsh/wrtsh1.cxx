@@ -208,12 +208,12 @@ void SwWrtShell::Insert( const OUString &rStr )
         SwRewriter aRewriter;
 
         aRewriter.AddRule(UndoArg1, GetCrsrDescr());
-        aRewriter.AddRule(UndoArg2, String(SW_RES(STR_YIELDS)));
+        aRewriter.AddRule(UndoArg2, OUString(SW_RES(STR_YIELDS)));
         {
-            String aTmpStr;
-            aTmpStr += String(SW_RES(STR_START_QUOTE));
+            OUString aTmpStr;
+            aTmpStr += SW_RES(STR_START_QUOTE);
             aTmpStr += rStr;
-            aTmpStr += String(SW_RES(STR_END_QUOTE));
+            aTmpStr += SW_RES(STR_END_QUOTE);
 
             aRewriter.AddRule(UndoArg3, rStr);
         }
@@ -1269,7 +1269,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
         }
         // reset indent attribute on applying list style
         // start new list
-        SetCurNumRule( aNumRule, true, String(), true );
+        SetCurNumRule( aNumRule, true, OUString(), true );
     }
 
     EndUndo(UNDO_NUMORNONUM);
@@ -1717,7 +1717,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
     {
         int bChgd = sal_False;
         SwPageDesc aDesc( GetPageDesc( nFrom ));
-        String sTmp(aDesc.GetName());
+        OUString sTmp(aDesc.GetName());
         if( rStyleName.isEmpty() || rStyleName == sTmp )
         {
             if( bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&

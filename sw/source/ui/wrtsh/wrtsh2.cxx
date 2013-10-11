@@ -384,7 +384,7 @@ void LoadURL( ViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
         sTargetFrame = xDocProps->getDefaultTarget();
     }
 
-    String sReferer;
+    OUString sReferer;
     if( pDShell && pDShell->GetMedium() )
         sReferer = pDShell->GetMedium()->GetName();
     SfxViewFrame* pViewFrm = rSh.GetView().GetViewFrame();
@@ -444,9 +444,9 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
     else
     {
         SwSectionData aSection( FILE_LINK_SECTION, GetUniqueSectionName() );
-        String aLinkFile( rBkmk.GetURL().getToken(0, '#') );
-        aLinkFile += sfx2::cTokenSeparator;
-        aLinkFile += sfx2::cTokenSeparator;
+        OUString aLinkFile( rBkmk.GetURL().getToken(0, '#') );
+        aLinkFile += OUString(sfx2::cTokenSeparator);
+        aLinkFile += OUString(sfx2::cTokenSeparator);
         aLinkFile += rBkmk.GetURL().getToken(1, '#');
         aSection.SetLinkFileName( aLinkFile );
         aSection.SetProtectFlag( true );
