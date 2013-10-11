@@ -21,6 +21,12 @@
 		BE02DE57175F2E2A00ED4032 /* guess.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = guess.cxx; path = ../../../../sw/source/core/text/guess.cxx; sourceTree = "<group>"; };
 		BE08805B16FDB784000CED5C /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
 		BE08805C16FDB784000CED5C /* View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.m; sourceTree = "<group>"; };
+		BE2CB9601808247600953CB4 /* winproc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = winproc.cxx; path = ../../../../vcl/source/window/winproc.cxx; sourceTree = "<group>"; };
+		BE2CB9611808297500953CB4 /* select.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = select.cxx; path = ../../../../sw/source/ui/wrtsh/select.cxx; sourceTree = "<group>"; };
+		BE2CB962180829DD00953CB4 /* txtcrsr.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = txtcrsr.cxx; path = ../../../../sw/source/ui/shells/txtcrsr.cxx; sourceTree = "<group>"; };
+		BE2CB96318082A7800953CB4 /* edtwin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = edtwin.cxx; path = ../../../../sw/source/ui/docvw/edtwin.cxx; sourceTree = "<group>"; };
+		BE2CB96418082A7800953CB4 /* edtwin2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = edtwin2.cxx; path = ../../../../sw/source/ui/docvw/edtwin2.cxx; sourceTree = "<group>"; };
+		BE2CB96518082A7800953CB4 /* edtwin3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = edtwin3.cxx; path = ../../../../sw/source/ui/docvw/edtwin3.cxx; sourceTree = "<group>"; };
 		BE2F0A0A17077A040060FE0D /* typedescriptionprovider.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = typedescriptionprovider.cxx; path = ../../../../cppuhelper/source/typedescriptionprovider.cxx; sourceTree = "<group>"; };
 		BE2F0A121707809B0060FE0D /* unoidlprovider.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = unoidlprovider.cxx; path = ../../../../unoidl/source/unoidlprovider.cxx; sourceTree = "<group>"; };
 		BE4EEE9916FF724200D475B2 /* bitmapdevice.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bitmapdevice.cxx; path = ../../../../basebmp/source/bitmapdevice.cxx; sourceTree = "<group>"; };
@@ -130,6 +136,7 @@
 				BEBF3E3B17002D0200C454AC /* svmain.cxx */,
 				BE4EEE9A16FF80B100D475B2 /* virdev.cxx */,
 				BEBF3E3D17002D6900C454AC /* window.cxx */,
+				BE2CB9601808247600953CB4 /* winproc.cxx */,
 				BEA86899170B3FCB0043E44B /* coretext */,
 				BE2F0A0C17077A2F0060FE0D /* headless */,
 			);
@@ -205,8 +212,6 @@
 				BE2F0A1017077B560060FE0D /* basebmp */,
 				BE2F0A0B17077A0F0060FE0D /* cppuhelper */,
 				BE2F0A0E17077AC40060FE0D /* framework */,
-				BE56CD651704A08E00CA5B15 /* lo.h */,
-				BE56CD661704A08E00CA5B15 /* lo.mm */,
 				BE2F0A0F17077B060060FE0D /* sfx2 */,
 				BECB749717182B5F001BEB85 /* sw */,
 				BE2F0A11170780620060FE0D /* unoidl */,
@@ -271,7 +276,12 @@
 			isa = PBXGroup;
 			children = (
 				BECB749617181C92001BEB85 /* crsrsh.cxx */,
+				BE2CB96318082A7800953CB4 /* edtwin.cxx */,
+				BE2CB96418082A7800953CB4 /* edtwin2.cxx */,
+				BE2CB96518082A7800953CB4 /* edtwin3.cxx */,
 				BE02DE57175F2E2A00ED4032 /* guess.cxx */,
+				BE2CB9611808297500953CB4 /* select.cxx */,
+				BE2CB962180829DD00953CB4 /* txtcrsr.cxx */,
 				BECB749917185F48001BEB85 /* view.cxx */,
 				BECB749A17185F48001BEB85 /* view0.cxx */,
 				BECB749B17185F48001BEB85 /* view1.cxx */,
@@ -289,6 +299,8 @@
 				BE08805C16FDB784000CED5C /* View.m */,
 				BE7B7AFF170438D0002341F4 /* ViewController.h */,
 				BE7B7B00170438D0002341F4 /* ViewController.m */,
+				BE56CD651704A08E00CA5B15 /* lo.h */,
+				BE56CD661704A08E00CA5B15 /* lo.mm */,
 			);
 			name = LibreOffice;
 			sourceTree = "<group>";
