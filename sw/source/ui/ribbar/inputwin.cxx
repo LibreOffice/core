@@ -195,12 +195,12 @@ void SwInputWindow::ShowWin()
                                                 SelTblCellsNotify) );
         if( bIsTable )
         {
-            const String& rPos = pWrtShell->GetBoxNms();
-            sal_uInt16 nPos = 0;
+            const OUString& rPos = pWrtShell->GetBoxNms();
+            sal_Int32 nPos = 0;
             short nSrch = -1;
-            while( (nPos = rPos.Search( ':',nPos + 1 ) ) != STRING_NOTFOUND )
+            while( (nPos = rPos.indexOf( ':',nPos + 1 ) ) != -1 )
                 nSrch = (short) nPos;
-            aPos.SetText( rPos.Copy( ++nSrch ) );
+            aPos.SetText( rPos.copy( ++nSrch ) );
             aAktTableName = pWrtShell->GetTableFmt()->GetName();
         }
         else
@@ -211,7 +211,7 @@ void SwInputWindow::ShowWin()
         pMgr = new SwFldMgr;
 
         // Formular should always begin with "=" , so set here
-        String sEdit = OUString('=');
+        OUString sEdit('=');
         if( pMgr->GetCurFld() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
         {
             sEdit += pMgr->GetCurFldPar2();
@@ -266,7 +266,7 @@ void SwInputWindow::ShowWin()
         aEdit.SetModifyHdl( LINK( this, SwInputWindow, ModifyHdl ));
 
         aEdit.SetText( sEdit );
-        aEdit.SetSelection( Selection( sEdit.Len(), sEdit.Len() ) );
+        aEdit.SetSelection( Selection( sEdit.getLength(), sEdit.getLength() ) );
         sOldFml = sEdit;
 
         aEdit.Invalidate();
@@ -314,8 +314,8 @@ static const char * const aStrArr[] = {
     sal_uInt16 nId = pMenu->GetCurItemId();
     if ( nId <= MN_CALC_ROUND )
     {
-        String aTmp( OUString::createFromAscii(aStrArr[nId - 1]) );
-        aTmp += ' ';
+        OUString aTmp( OUString::createFromAscii(aStrArr[nId - 1]) );
+        aTmp += " ";
         aEdit.ReplaceSelected( aTmp );
     }
     return 0;
@@ -366,9 +366,9 @@ void  SwInputWindow::ApplyFormula()
     pWrtShell->Pop( sal_False );
 
     // Formular should always begin with "=", so remove it here again
-    String sEdit(comphelper::string::strip(aEdit.GetText(), ' '));
-    if( sEdit.Len() && '=' == sEdit.GetChar( 0 ) )
-        sEdit.Erase( 0, 1 );
+    OUString sEdit(comphelper::string::strip(aEdit.GetText(), ' '));
+    if( !sEdit.isEmpty() && '=' == sEdit[0] )
+        sEdit = sEdit.copy( 1 );
     SfxStringItem aParam(FN_EDIT_FORMULA, sEdit);
 
     pWrtShell->EndSelTblCells();
@@ -406,17 +406,17 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
     if(bIsTable)
     {
         SwFrmFmt* pTblFmt = pCaller->GetTableFmt();
-        String sBoxNms( pCaller->GetBoxNms() );
-        String sTblNm;
+        OUString sBoxNms( pCaller->GetBoxNms() );
+        OUString sTblNm;
         if( pTblFmt && aAktTableName != pTblFmt->GetName() )
             sTblNm = pTblFmt->GetName();
 
         aEdit.UpdateRange( sBoxNms, sTblNm );
 
-        String sNew;
-        sNew += CH_LRE;
+        OUString sNew;
+        sNew += OUString(CH_LRE);
         sNew += aEdit.GetText();
-        sNew += CH_PDF;
+        sNew += OUString(CH_PDF);
 
         if( sNew != sOldFml )
         {
@@ -445,7 +445,7 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
 
 void SwInputWindow::SetFormula( const OUString& rFormula, sal_Bool bDelFlag )
 {
-    String sEdit = OUString('=');
+    OUString sEdit('=');
     if( !rFormula.isEmpty() )
     {
         if( '=' == rFormula[0] )
@@ -454,7 +454,7 @@ void SwInputWindow::SetFormula( const OUString& rFormula, sal_Bool bDelFlag )
             sEdit += rFormula;
     }
     aEdit.SetText( sEdit );
-    aEdit.SetSelection( Selection( sEdit.Len(), sEdit.Len() ) );
+    aEdit.SetSelection( Selection( sEdit.getLength(), sEdit.getLength() ) );
     aEdit.Invalidate();
     bDelSel = bDelFlag;
 }
@@ -465,10 +465,10 @@ IMPL_LINK_NOARG(SwInputWindow, ModifyHdl)
     {
         pWrtShell->StartAllAction();
         DelBoxCntnt();
-        String sNew;
-        sNew += CH_LRE;
+        OUString sNew;
+        sNew += OUString(CH_LRE);
         sNew += aEdit.GetText();
-        sNew += CH_PDF;
+        sNew += OUString(CH_PDF);
         pWrtShell->SwEditShell::Insert2( sNew );
         pWrtShell->EndAllAction();
         sOldFml = sNew;
@@ -514,10 +514,10 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
     }
     const sal_Unicode   cOpen = '<', cClose = '>',
                 cOpenBracket = '(';
-    String aPrefix = rName;
+    OUString aPrefix = rName;
     if(!rName.isEmpty())
-        aPrefix += '.';
-    String aBoxes = aPrefix;
+        aPrefix += ".";
+    OUString aBoxes = aPrefix;
     aBoxes += rBoxes;
     Selection aSelection(GetSelection());
     sal_uInt16 nSel = (sal_uInt16) aSelection.Len();
@@ -528,16 +528,16 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
         Cut();
     else
         aSelection.Max() = aSelection.Min();
-    String aActText(GetText());
-    const sal_uInt16 nLen = aActText.Len();
+    OUString aActText(GetText());
+    const sal_uInt16 nLen = aActText.getLength();
     if( !nLen )
     {
-        String aStr = OUStringBuffer().
+        OUString aStr = OUStringBuffer().
             append(cOpen).append(aBoxes).append(cClose).
             makeStringAndClear();
         SetText(aStr);
-        sal_uInt16 nPos = aStr.Search( cClose );
-        OSL_ENSURE(nPos < aStr.Len(), "delimiter not found");
+        sal_Int32 nPos = aStr.indexOf( cClose );
+        OSL_ENSURE(nPos != -1, "delimiter not found");
         ++nPos;
         SetSelection( Selection( nPos, nPos ));
     }
@@ -549,7 +549,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
         if( nStartPos-- )
         {
             do {
-                if( cOpen  == (cCh = aActText.GetChar( nStartPos ) ) ||
+                if( cOpen  == (cCh = aActText[ nStartPos ] ) ||
                     cOpenBracket == cCh )
                 {
                     bFound = cCh == cOpen;
@@ -563,7 +563,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
             nEndPos = nStartPos;
             while( nEndPos < nLen )
             {
-                if( cClose == (cCh = aActText.GetChar( nEndPos )))
+                if( cClose == (cCh = aActText[ nEndPos ]))
                 {
                     bFound = true;
                     break;
@@ -578,9 +578,8 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
         if( bFound )
         {
             nPos = ++nStartPos + 1; // We want behind
-            aActText.Erase( nStartPos, nEndPos - nStartPos );
-            aActText.Insert( aBoxes, nStartPos );
-            nPos = nPos + aBoxes.Len();
+            aActText = aActText.replaceAt( nStartPos, nEndPos - nStartPos, aBoxes );
+            nPos = nPos + aBoxes.getLength();
         }
         else
         {
@@ -588,7 +587,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
                 append(cOpen).append(aBoxes).append(cClose).
                 makeStringAndClear();
             nPos = (sal_uInt16)aSelection.Min();
-            aActText.Insert( aTmp, nPos );
+            aActText = aActText.replaceAt( nPos, 0, aTmp );
             nPos = nPos + aTmp.getLength();
         }
         if( GetText() != OUString(aActText) )
