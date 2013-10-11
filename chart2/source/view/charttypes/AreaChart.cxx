@@ -685,37 +685,37 @@ void AreaChart::createShapes()
 
     bool bDateCategory = (m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis());
 
-    //iterate through all x values per indices
-    for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
+    ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
+    const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
+
+    std::vector<std::map< sal_Int32, double >> aLogicYSumMapByX(nEndIndex);//one for each different nAttachedAxisIndex
+    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
-        ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
-        const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
+        ::std::vector< VDataSeriesGroup >::iterator aXSlotIter = aZSlotIter->begin();
+        const ::std::vector< VDataSeriesGroup >::iterator aXSlotEnd = aZSlotIter->end();
 
-        std::map< sal_Int32, double > aLogicYSumMap;//one for each different nAttachedAxisIndex
-        for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
+        //iterate through all x slots in this category to get 100percent sum
+        for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
-            ::std::vector< VDataSeriesGroup >::iterator aXSlotIter = aZSlotIter->begin();
-            const ::std::vector< VDataSeriesGroup >::iterator aXSlotEnd = aZSlotIter->end();
+            std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
+            std::vector<VDataSeries*>::iterator aSeriesIter = rSeriesList.begin();
+            std::vector<VDataSeries*>::iterator aSeriesEnd  = rSeriesList.end();
 
-            //iterate through all x slots in this category to get 100percent sum
-            for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
+            for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
             {
-                std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
-                std::vector<VDataSeries*>::iterator aSeriesIter = rSeriesList.begin();
-                std::vector<VDataSeries*>::iterator aSeriesEnd  = rSeriesList.end();
+                VDataSeries* pSeries( *aSeriesIter );
+                if(!pSeries)
+                    continue;
 
-                for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
+                if (bDateCategory)
+                    pSeries->doSortByXValues();
+
+                for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
                 {
-                    VDataSeries* pSeries( *aSeriesIter );
-                    if(!pSeries)
-                        continue;
-
-                    if (bDateCategory)
-                        pSeries->doSortByXValues();
-
+                    std::map< sal_Int32, double >& rLogicYSumMap = aLogicYSumMapByX[nIndex];
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
-                    if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
-                        aLogicYSumMap[nAttachedAxisIndex]=0.0;
+                    if( rLogicYSumMap.find(nAttachedAxisIndex)==rLogicYSumMap.end() )
+                        rLogicYSumMap[nAttachedAxisIndex]=0.0;
 
                     PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
                     if(!pPosHelper)
@@ -724,50 +724,54 @@ void AreaChart::createShapes()
 
                     double fAdd = pSeries->getYValue( nIndex );
                     if( !::rtl::math::isNan(fAdd) && !::rtl::math::isInf(fAdd) )
-                        aLogicYSumMap[nAttachedAxisIndex] += fabs( fAdd );
+                        rLogicYSumMap[nAttachedAxisIndex] += fabs( fAdd );
                 }
             }
         }
+    }
 
-        aZSlotIter = m_aZSlots.begin();
-        for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
+    aZSlotIter = m_aZSlots.begin();
+    for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
+    {
+        ::std::vector< VDataSeriesGroup >::const_iterator aXSlotIter = aZSlotIter->begin();
+        ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+
+        //for the area chart there should be at most one x slot (no side by side stacking available)
+        //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???
+        for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, ++nX )
         {
-            ::std::vector< VDataSeriesGroup >::const_iterator aXSlotIter = aZSlotIter->begin();
-            ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+            const std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
+            std::vector<VDataSeries*>::const_iterator aSeriesIter = rSeriesList.begin();
+            const std::vector<VDataSeries*>::const_iterator aSeriesEnd  = rSeriesList.end();
 
-            //for the area chart there should be at most one x slot (no side by side stacking available)
-            //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???
-            for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, ++nX )
+            std::vector<std::map< sal_Int32, double > > aLogicYForNextSeriesMapByX(nEndIndex); //one for each different nAttachedAxisIndex
+            //iterate through all series
+            for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; ++aSeriesIter, ++nSeriesIndex )
             {
-                const std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
-                std::vector<VDataSeries*>::const_iterator aSeriesIter = rSeriesList.begin();
-                const std::vector<VDataSeries*>::const_iterator aSeriesEnd  = rSeriesList.end();
+                VDataSeries* pSeries( *aSeriesIter );
+                if(!pSeries)
+                    continue;
 
-                std::map< sal_Int32, double > aLogicYForNextSeriesMap;//one for each different nAttachedAxisIndex
-                //iterate through all series
-                for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; ++aSeriesIter, ++nSeriesIndex )
+                uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(*aSeriesIter, m_xSeriesTarget);
+
+                sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
+                PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
+                if(!pPosHelper)
+                    pPosHelper = m_pMainPosHelper;
+                PlotterBase::m_pPosHelper = pPosHelper;
+
+                if(m_nDimension==3)
+                    fLogicZ = nZ+0.5;
+                (*aSeriesIter)->m_fLogicZPos = fLogicZ;
+
+                for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
                 {
-                    VDataSeries* pSeries( *aSeriesIter );
-                    if(!pSeries)
-                        continue;
 
                     /*  #i70133# ignore points outside of series length in standard area
                         charts. Stacked area charts will use missing points as zeros. In
                         standard charts, pSeriesList contains only one series. */
                     if( m_bArea && (rSeriesList.size() == 1) && (nIndex >= (*aSeriesIter)->getTotalPointCount()) )
                         continue;
-
-                    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(*aSeriesIter, m_xSeriesTarget);
-
-                    sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
-                    PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
-                    if(!pPosHelper)
-                        pPosHelper = m_pMainPosHelper;
-                    PlotterBase::m_pPosHelper = pPosHelper;
-
-                    if(m_nDimension==3)
-                        fLogicZ = nZ+0.5;
-                    (*aSeriesIter)->m_fLogicZPos = fLogicZ;
 
                     //collect data point information (logic coordinates, style ):
                     double fLogicX = (*aSeriesIter)->getXValue(nIndex);
@@ -778,14 +782,15 @@ void AreaChart::createShapes()
                     if( m_nDimension==3 && m_bArea && rSeriesList.size()!=1 )
                         fLogicY = fabs( fLogicY );
 
-                    if( pPosHelper->isPercentY() && !::rtl::math::approxEqual( aLogicYSumMap[nAttachedAxisIndex], 0.0 ) )
+                    std::map< sal_Int32, double >& rLogicYSumMap = aLogicYSumMapByX[nIndex];
+                    if( pPosHelper->isPercentY() && !::rtl::math::approxEqual( rLogicYSumMap[nAttachedAxisIndex], 0.0 ) )
                     {
-                        fLogicY = fabs( fLogicY )/aLogicYSumMap[nAttachedAxisIndex];
+                        fLogicY = fabs( fLogicY )/rLogicYSumMap[nAttachedAxisIndex];
                     }
 
                     if(    ::rtl::math::isNan(fLogicX) || ::rtl::math::isInf(fLogicX)
-                        || ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY)
-                        || ::rtl::math::isNan(fLogicZ) || ::rtl::math::isInf(fLogicZ) )
+                            || ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY)
+                            || ::rtl::math::isNan(fLogicZ) || ::rtl::math::isInf(fLogicZ) )
                     {
                         if( (*aSeriesIter)->getMissingValueTreatment() == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP )
                         {
@@ -800,13 +805,14 @@ void AreaChart::createShapes()
                         continue;
                     }
 
-                    if( aLogicYForNextSeriesMap.find(nAttachedAxisIndex) == aLogicYForNextSeriesMap.end() )
-                        aLogicYForNextSeriesMap[nAttachedAxisIndex] = 0.0;
+                    std::map< sal_Int32, double >& rLogicYForNextSeriesMap = aLogicYForNextSeriesMapByX[nIndex];
+                    if( rLogicYForNextSeriesMap.find(nAttachedAxisIndex) == rLogicYForNextSeriesMap.end() )
+                        rLogicYForNextSeriesMap[nAttachedAxisIndex] = 0.0;
 
                     double fLogicValueForLabeDisplay = fLogicY;
 
-                    fLogicY += aLogicYForNextSeriesMap[nAttachedAxisIndex];
-                    aLogicYForNextSeriesMap[nAttachedAxisIndex] = fLogicY;
+                    fLogicY += rLogicYForNextSeriesMap[nAttachedAxisIndex];
+                    rLogicYForNextSeriesMap[nAttachedAxisIndex] = fLogicY;
 
                     bool bIsVisible = pPosHelper->isLogicVisible( fLogicX, fLogicY, fLogicZ );
 
@@ -833,8 +839,8 @@ void AreaChart::createShapes()
                     pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
                     if( !pSeries->isAttributedDataPoint(nIndex)
                             &&
-                        pPosHelper->isSameForGivenResolution( aFormerPoint.m_fX, aFormerPoint.m_fY, aFormerPoint.m_fZ
-                                                            , aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ ) )
+                            pPosHelper->isSameForGivenResolution( aFormerPoint.m_fX, aFormerPoint.m_fY, aFormerPoint.m_fZ
+                                , aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ ) )
                     {
                         ++nSkippedPoints;
                         m_bPointsWereSkipped = true;
@@ -887,11 +893,11 @@ void AreaChart::createShapes()
 
                     //create a group shape for this point and add to the series shape:
                     OUString aPointCID = ObjectIdentifier::createPointCID(
-                        (*aSeriesIter)->getPointCID_Stub(), nIndex );
+                            (*aSeriesIter)->getPointCID_Stub(), nIndex );
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(
-                        createGroupShape(xSeriesGroupShape_Shapes,aPointCID) );
+                            createGroupShape(xSeriesGroupShape_Shapes,aPointCID) );
                     uno::Reference<drawing::XShape> xPointGroupShape_Shape =
-                            uno::Reference<drawing::XShape>( xPointGroupShape_Shapes, uno::UNO_QUERY );
+                        uno::Reference<drawing::XShape>( xPointGroupShape_Shapes, uno::UNO_QUERY );
 
                     {
                         nCreatedPoints++;
@@ -941,38 +947,38 @@ void AreaChart::createShapes()
                         {
                             LabelAlignment eAlignment = LABEL_ALIGN_TOP;
                             drawing::Position3D aScenePosition3D( aScenePosition.PositionX
-                                        , aScenePosition.PositionY
-                                        , aScenePosition.PositionZ+this->getTransformedDepth() );
+                                    , aScenePosition.PositionY
+                                    , aScenePosition.PositionZ+this->getTransformedDepth() );
 
                             sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
 
                             switch(nLabelPlacement)
                             {
-                            case ::com::sun::star::chart::DataLabelPlacement::TOP:
-                                aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
-                                eAlignment = LABEL_ALIGN_TOP;
-                                break;
-                            case ::com::sun::star::chart::DataLabelPlacement::BOTTOM:
-                                aScenePosition3D.PositionY += (aSymbolSize.DirectionY/2+1);
-                                eAlignment = LABEL_ALIGN_BOTTOM;
-                                break;
-                            case ::com::sun::star::chart::DataLabelPlacement::LEFT:
-                                aScenePosition3D.PositionX -= (aSymbolSize.DirectionX/2+1);
-                                eAlignment = LABEL_ALIGN_LEFT;
-                                break;
-                            case ::com::sun::star::chart::DataLabelPlacement::RIGHT:
-                                aScenePosition3D.PositionX += (aSymbolSize.DirectionX/2+1);
-                                eAlignment = LABEL_ALIGN_RIGHT;
-                                break;
-                            case ::com::sun::star::chart::DataLabelPlacement::CENTER:
-                                eAlignment = LABEL_ALIGN_CENTER;
-                                //todo implement this different for area charts
-                                break;
-                            default:
-                                OSL_FAIL("this label alignment is not implemented yet");
-                                aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
-                                eAlignment = LABEL_ALIGN_TOP;
-                                break;
+                                case ::com::sun::star::chart::DataLabelPlacement::TOP:
+                                    aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
+                                    eAlignment = LABEL_ALIGN_TOP;
+                                    break;
+                                case ::com::sun::star::chart::DataLabelPlacement::BOTTOM:
+                                    aScenePosition3D.PositionY += (aSymbolSize.DirectionY/2+1);
+                                    eAlignment = LABEL_ALIGN_BOTTOM;
+                                    break;
+                                case ::com::sun::star::chart::DataLabelPlacement::LEFT:
+                                    aScenePosition3D.PositionX -= (aSymbolSize.DirectionX/2+1);
+                                    eAlignment = LABEL_ALIGN_LEFT;
+                                    break;
+                                case ::com::sun::star::chart::DataLabelPlacement::RIGHT:
+                                    aScenePosition3D.PositionX += (aSymbolSize.DirectionX/2+1);
+                                    eAlignment = LABEL_ALIGN_RIGHT;
+                                    break;
+                                case ::com::sun::star::chart::DataLabelPlacement::CENTER:
+                                    eAlignment = LABEL_ALIGN_CENTER;
+                                    //todo implement this different for area charts
+                                    break;
+                                default:
+                                    OSL_FAIL("this label alignment is not implemented yet");
+                                    aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
+                                    eAlignment = LABEL_ALIGN_TOP;
+                                    break;
                             }
 
                             awt::Point aScreenPosition2D;//get the screen position for the labels
@@ -981,23 +987,23 @@ void AreaChart::createShapes()
                                 if(LABEL_ALIGN_CENTER==eAlignment || m_nDimension == 3 )
                                     nOffset = 0;
                                 aScreenPosition2D = awt::Point( LabelPositionHelper(pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
-                                    .transformSceneToScreenPosition( aScenePosition3D ) );
+                                        .transformSceneToScreenPosition( aScenePosition3D ) );
                             }
 
                             this->createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
-                                            , fLogicValueForLabeDisplay
-                                            , aLogicYSumMap[nAttachedAxisIndex], aScreenPosition2D, eAlignment, nOffset );
+                                    , fLogicValueForLabeDisplay
+                                    , rLogicYSumMap[nAttachedAxisIndex], aScreenPosition2D, eAlignment, nOffset );
                         }
                     }
 
                     //remove PointGroupShape if empty
                     if(!xPointGroupShape_Shapes->getCount())
                         xSeriesGroupShape_Shapes->remove(xPointGroupShape_Shape);
+                }
 
-                }//next series in x slot (next y slot)
-            }//next x slot
-        }//next z slot
-    }//next category
+            }//next series in x slot (next y slot)
+        }//next x slot
+    }//next z slot
 
     impl_createSeriesShapes();
 
