@@ -233,7 +233,7 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
 #endif
 }
 
-bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
+bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
 {
     SwDocShell* pDocShell = rDoc.GetDocShell();
     SfxMedium* pMedium = pDocShell ? pDocShell->GetMedium() : 0;

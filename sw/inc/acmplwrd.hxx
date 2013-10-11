@@ -51,7 +51,7 @@ public:
     SwAutoCompleteWord( sal_uInt16 nWords = 500, sal_uInt16 nMWrdLen = 10 );
     ~SwAutoCompleteWord();
 
-    bool InsertWord( const String& rWord, SwDoc& rDoc );
+    bool InsertWord( const OUString& rWord, SwDoc& rDoc );
 
     const OUString& operator[](size_t n) const
         { return m_WordList[n]->GetAutoCompleteString(); }
