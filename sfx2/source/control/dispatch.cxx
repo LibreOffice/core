@@ -19,50 +19,50 @@
 
 #include <config_features.h>
 
+#include <algorithm>
+#include <deque>
+#include <vector>
+
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <svl/itempool.hxx>
-#include <svl/itemiter.hxx>
-#include <svl/whiter.hxx>
-#include <svl/intitem.hxx>
-#include <svl/eitem.hxx>
-#include <svl/undo.hxx>
-#include <vcl/wrkwin.hxx>
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>  // due to bsearch
-#include <algorithm>
 
-#include <svtools/helpopt.hxx>
-
-// due to nAutoPageID
-#include "appdata.hxx"
-#include "sfx2/sfxhelp.hxx"
-#include <sfx2/dispatch.hxx>
-#include <sfx2/msg.hxx>
-#include <sfx2/objface.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/request.hxx>
+#include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/hintpost.hxx>
-#include "slotserv.hxx"
 #include <sfx2/ipclient.hxx>
-#include "sfxtypes.hxx"
+#include <sfx2/mnumgr.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/sfxhelp.hxx>
+#include <sfx2/sfxuno.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/childwin.hxx>
-#include <sfx2/docfac.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/module.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/mnumgr.hxx>
-#include "workwin.hxx"
-#include <rtl/strbuf.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/itempool.hxx>
+#include <svl/undo.hxx>
+#include <svl/whiter.hxx>
+#include <svtools/helpopt.hxx>
+#include <vcl/wrkwin.hxx>
 
-#include <deque>
-#include <vector>
+#include <appdata.hxx>
+#include <sfxtypes.hxx>
+#include <slotserv.hxx>
+#include <workwin.hxx>
 
 DBG_NAME(SfxDispatcherFlush)
 DBG_NAME(SfxDispatcherFillState)
