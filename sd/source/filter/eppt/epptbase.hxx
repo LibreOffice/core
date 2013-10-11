@@ -156,6 +156,8 @@ struct FontCollectionEntry
 
         FontCollectionEntry( const OUString& rName ) :
                             Scaling ( 1.0 ),
+                            Family  ( 0 ),
+                            Pitch   ( 0 ),
                             Original( rName )
                             {
                                 ImplInit( rName );
