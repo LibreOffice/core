@@ -1161,7 +1161,7 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
         if( (nColIndex < rStrVec.size()) && (rStrVec[ nColIndex ].getLength() > nStrPos) )
         {
             const OUString& rStr = rStrVec[ nColIndex ];
-            OUString aText = rStr.copy( nStrPos, ::std::min( nStrLen, rStr.getLength()) - nStrPos );
+            OUString aText = rStr.copy( nStrPos, ::std::min( nStrLen, rStr.getLength() - nStrPos) );
             ImplDrawCellText( Point( nStrX, GetY( GetFirstVisLine() + nLine ) ), aText );
         }
     }
