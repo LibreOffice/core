@@ -97,16 +97,16 @@ uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getChartShape
 {
     if (!mxChartShapeContext.is())
     {
-        ContextHandler2Helper *rFragmentHandler
-                    (new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
-        ShapePtr pMasterShape;
-
         switch (nElement & 0xffff)
         {
             case XML_chart:
+            {
+                ContextHandler2Helper *rFragmentHandler
+                            (new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
                 mpShape.reset(new Shape("com.sun.star.drawing.OLE2Shape" ));
                 mxChartShapeContext.set(new ChartGraphicDataContext(*rFragmentHandler, mpShape, true));
                 break;
+            }
             default:
                 break;
         }
