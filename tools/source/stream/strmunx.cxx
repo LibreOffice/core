@@ -494,9 +494,9 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
     eStreamMode &= ~STREAM_TRUNC; // don't truncat on reopen
 
     aFilename = rFilename;
-    OString aLocalFilename(OUStringToOString(aFilename, osl_getThreadTextEncoding()));
 
 #ifdef DBG_UTIL
+    OString aLocalFilename(OUStringToOString(aFilename, osl_getThreadTextEncoding()));
     OStringBuffer aTraceStr("SvFileStream::Open(): ");
     aTraceStr.append(aLocalFilename);
     OSL_TRACE( "%s", aTraceStr.getStr() );
