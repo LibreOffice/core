@@ -270,7 +270,9 @@ namespace xmloff
         // get the forms collection of the page
         Reference< XIndexAccess > xCollectionIndex;
         if (!impl_isFormPageContainingForms(_rxDrawPage, xCollectionIndex))
+        {
             return;
+        }
 
 #if OSL_DEBUG_LEVEL > 0
         sal_Bool bPageIsKnown =
@@ -406,7 +408,9 @@ namespace xmloff
         // get the forms collection of the page
         Reference< XIndexAccess > xCollectionIndex;
         if (!impl_isFormPageContainingForms(_rxDrawPage, xCollectionIndex))
+        {
             return;
+        }
 
         // move the iterator which specify the currently handled page
 #if OSL_DEBUG_LEVEL > 0
