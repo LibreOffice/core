@@ -50,7 +50,6 @@ extern bool bDbgOutStdErr;
 extern bool bDbgOutPrintAttrSet;
 
 SW_DLLPUBLIC const char * dbg_out(const void * pVoid);
-SW_DLLPUBLIC const char * dbg_out(const String & aStr);
 SW_DLLPUBLIC const char * dbg_out(const OUString & aStr);
 SW_DLLPUBLIC const char * dbg_out(const SwRect & rRect);
 SW_DLLPUBLIC const char * dbg_out(const SwFrmFmt & rFrmFmt);
@@ -73,25 +72,25 @@ SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTbl & rTbl);
 SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange);
 
 template<typename tKey, typename tMember, typename fHashFunction>
-String lcl_dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rMap)
+OUString lcl_dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rMap)
 {
-    String aResult("[", RTL_TEXTENCODING_ASCII_US);
+    OUString aResult("[", RTL_TEXTENCODING_ASCII_US);
 
     typename boost::unordered_map<tKey, tMember, fHashFunction>::const_iterator aIt;
 
     for (aIt = rMap.begin(); aIt != rMap.end(); aIt++)
     {
         if (aIt != rMap.begin())
-            aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+            aResult += ", ";
 
         aResult += aIt->first;
 
         char sBuffer[256];
         sprintf(sBuffer, "(%p)", aIt->second);
-        aResult += String(sBuffer, RTL_TEXTENCODING_ASCII_US);
+        aResult += OUString(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US);
     }
 
-    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
+    aResult += "]";
 
     return aResult;
 }
