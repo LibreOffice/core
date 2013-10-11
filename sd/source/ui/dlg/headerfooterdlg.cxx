@@ -734,7 +734,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
 ///////////////////////////////////////////////////////////////////////
 
 PresLayoutPreview::PresLayoutPreview( ::Window* pParent )
-:Control( pParent )
+    : Control(pParent)
+    , mpMaster(NULL)
 {
 }
 
