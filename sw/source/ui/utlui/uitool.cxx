@@ -376,7 +376,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         else if(SFX_ITEM_SET == rSet.GetItemState(
                                 SID_SWREGISTER_COLLECTION, sal_False, &pItem))
         {
-            const String& rColl = ((const SfxStringItem*)pItem)->GetValue();
+            const OUString& rColl = ((const SfxStringItem*)pItem)->GetValue();
             SwDoc& rDoc = *rMaster.GetDoc();
             SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( rColl );
             if( !pColl )
@@ -584,8 +584,8 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
     }
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_PARA_MODEL, sal_False, &pItem ))
     {
-        const String& rDescName = ((SvxPageModelItem*)pItem)->GetValue();
-        if( rDescName.Len() )   // No name -> disable PageDesc!
+        const OUString& rDescName = ((SvxPageModelItem*)pItem)->GetValue();
+        if( !rDescName.isEmpty() )   // No name -> disable PageDesc!
         {
             // Delete only, if PageDesc will be enabled!
             rSet.ClearItem( RES_BREAK );
@@ -618,7 +618,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
 void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 {
     const SfxPoolItem* pItem = 0;
-    String aName;
+    OUString aName;
     sal_uInt16 nPageNum = 0;
     bool bPut = true;
     switch( rCoreSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
@@ -704,7 +704,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
         const SwCharFmt* pFmt = (*pFmts)[i];
         if(pFmt->IsDefault())
             continue;
-        const String& rName = pFmt->GetName();
+        const OUString& rName = pFmt->GetName();
         if(rToFill.GetEntryPos(rName) == LISTBOX_ENTRY_NOTFOUND)
         {
             sal_uInt16 nPos;
@@ -783,18 +783,18 @@ bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, sal_uInt16 
 {
     bool bRet = false;
     sal_uInt16 nItemCount = rMenu.GetItemCount();
-    String sCommand;
+    OUString sCommand;
     for( sal_uInt16 nItem = 0; nItem < nItemCount; ++nItem)
     {
         PopupMenu* pPopup = rMenu.GetPopupMenu( rMenu.GetItemId( nItem ) );
         if(pPopup)
         {
             sCommand = pPopup->GetItemCommand(nId);
-            if(sCommand.Len())
+            if(!sCommand.isEmpty())
                 break;
         }
     }
-    if(sCommand.Len())
+    if(!sCommand.isEmpty())
     {
         uno::Reference< frame::XFrame >  xFrame = rViewFrame.GetFrame().GetFrameInterface();
         uno::Reference < frame::XDispatchProvider > xProv( xFrame, uno::UNO_QUERY );

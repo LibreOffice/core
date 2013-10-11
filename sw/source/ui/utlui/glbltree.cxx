@@ -467,9 +467,9 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
             if (pItem && SV_ITEM_ID_LBOXSTRING == pItem->GetType())
             {
                 const SwSection* pSect = pCont->GetSection();
-                String sEntry = pSect->GetLinkFileName().getToken(0, sfx2::cTokenSeparator);
+                OUString sEntry = pSect->GetLinkFileName().getToken(0, sfx2::cTokenSeparator);
                 if(!pSect->IsConnectFlag())
-                    sEntry.Insert(aContextStrings[ST_BROKEN_LINK - ST_GLOBAL_CONTEXT_FIRST], 0 );
+                    sEntry = aContextStrings[ST_BROKEN_LINK - ST_GLOBAL_CONTEXT_FIRST] + sEntry;
                 Point aEntryPos = GetEntryPosition( pEntry );
 
                 aEntryPos.X() = GetTabPos( pEntry, pTab );
@@ -641,7 +641,7 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
     {
         SetUpdateMode( sal_False );
         SvTreeListEntry* pOldSelEntry = FirstSelected();
-        String sEntryName;  // Name of the entry
+        OUString sEntryName;  // Name of the entry
         sal_uInt16 nSelPos = USHRT_MAX;
         if(pOldSelEntry)
         {
@@ -656,7 +656,7 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
             SwGlblDocContent* pCont = (*pSwGlblDocContents)[i];
-            String sEntry;
+            OUString sEntry;
             Image aImage;
             switch( pCont->GetType()  )
             {
@@ -1117,7 +1117,7 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
                     SwGlblDocContent* pRight = (*pSwGlblDocContents)[i];
                     GlobalDocContentType eType = pLeft->GetType();
                     SvTreeListEntry* pEntry = GetEntry(i);
-                    String sTemp = GetEntryText(pEntry);
+                    OUString sTemp = GetEntryText(pEntry);
                     if (
                          eType != pRight->GetType() ||
                          (
@@ -1263,7 +1263,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             _pContent = (SwGlblDocContent*)pLast->GetUserData();
             bMove = true;
         }
-        String sFilePassword;
+        OUString sFilePassword;
         sal_uInt16 nEntryCount = (sal_uInt16)GetEntryCount();
         const OUString* pFileNames = _rFiles.getConstArray();
         SwWrtShell& rSh = GetParentWindow()->GetCreateView()->GetWrtShell();
@@ -1294,14 +1294,14 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
                 pAnchorContent = aTempContents[nAnchorContent + nFile];
             else
                 pAnchorContent = aTempContents.back();
-            String sFileName(pFileNames[nFile]);
+            OUString sFileName(pFileNames[nFile]);
             INetURLObject aFileUrl;
             aFileUrl.SetSmartURL( sFileName );
-            String sSectionName(String(aFileUrl.GetLastName(
+            OUString sSectionName(String(aFileUrl.GetLastName(
                 INetURLObject::DECODE_UNAMBIGUOUS)).GetToken(0,
                 sfx2::cTokenSeparator));
             sal_uInt16 nSectCount = rSh.GetSectionFmtCount();
-            String sTempSectionName(sSectionName);
+            OUString sTempSectionName(sSectionName);
             sal_uInt16 nAddNumber = 0;
             sal_uInt16 nCount = 0;
             // if applicable: add index if the range name is already in use.
@@ -1313,9 +1313,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
                 {
                     nCount = 0;
                     nAddNumber++;
-                    sTempSectionName = sSectionName;
-                    sTempSectionName += ':';
-                    sTempSectionName += OUString::number( nAddNumber );
+                    sTempSectionName = sSectionName + ":" + OUString::number( nAddNumber );
                 }
                 else
                     nCount++;
@@ -1360,10 +1358,10 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
             for ( size_t i = 0, n = pMedList->size(); i < n; ++i )
             {
                 SfxMedium* pMed = pMedList->at( i );
-                String sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-                sFileName += sfx2::cTokenSeparator;
+                OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+                sFileName += OUString(sfx2::cTokenSeparator);
                 sFileName += pMed->GetFilter()->GetFilterName();
-                sFileName += sfx2::cTokenSeparator;
+                sFileName += OUString(sfx2::cTokenSeparator);
                 pFileNames[nPos++] = sFileName;
             }
             delete pMedList;

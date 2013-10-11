@@ -92,7 +92,7 @@ void SwOneExampleFrame::CreateErrorMessage(Window* pParent)
 {
     if(SwOneExampleFrame::bShowServiceNotAvailableMessage)
     {
-        String sInfo(SW_RES(STR_SERVICE_UNAVAILABLE));
+        OUString sInfo(SW_RES(STR_SERVICE_UNAVAILABLE));
         sInfo += OUString(cFrameControl);
         InfoBox(pParent, sInfo).Execute();
         SwOneExampleFrame::bShowServiceNotAvailableMessage = false;
@@ -292,35 +292,35 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 
                 do
                 {
-                  if (pSh->GetCurWord() == String("HEADING1"))
+                  if (pSh->GetCurWord() == "HEADING1")
                   {
                     pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_HEADING1));
                   }
-                  else if (pSh->GetCurWord() == String("ENTRY1"))
+                  else if (pSh->GetCurWord() == "ENTRY1")
                   {
                     pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_ENTRY1));
                   }
-                  else if (pSh->GetCurWord() == String("HEADING11"))
+                  else if (pSh->GetCurWord() == "HEADING11")
                   {
                     pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_HEADING11));
                   }
-                  else if (pSh->GetCurWord() == String("ENTRY11"))
+                  else if (pSh->GetCurWord() == "ENTRY11")
                   {
                     pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_ENTRY11));
                   }
-                  else if (pSh->GetCurWord() == String("HEADING12"))
+                  else if (pSh->GetCurWord() == "HEADING12")
                   {
                     pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_HEADING12));
                   }
-                  else if (pSh->GetCurWord() == String("ENTRY12"))
+                  else if (pSh->GetCurWord() == "ENTRY12")
                   {
                     pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_ENTRY12));
                   }
-                  else if (pSh->GetCurWord() == String("TABLE1"))
+                  else if (pSh->GetCurWord() == "TABLE1")
                   {
                     pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_TABLE1));
                   }
-                  else if (pSh->GetCurWord() == String("IMAGE1"))
+                  else if (pSh->GetCurWord() == "IMAGE1")
                   {
                     pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_IMAGE1));
                   }
@@ -472,9 +472,9 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         for (sal_uInt16 i = 0;
                 i < (sizeof(nZoomValues)/sizeof(nZoomValues[0])); ++i)
         {
-            String sTemp;
+            OUString sTemp;
             sTemp = OUString::number(nZoomValues[i]);
-            sTemp += OUString(" %");
+            sTemp += " %";
             aSubPop1.InsertItem( ITEM_ZOOM + i + 1, sTemp);
             if(nZoom == nZoomValues[i])
                 aSubPop1.CheckItem(ITEM_ZOOM + i + 1);

@@ -289,7 +289,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                 && TOX_HEADER_SECTION != eTmpType )
                 {
-                    const String& rSectionName =
+                    const OUString& rSectionName =
                         pFmt->GetSection()->GetSectionName();
                     sal_uInt8 nLevel = 0;
                     SwSectionFmt* pParentFmt = pFmt->GetParent();
@@ -592,7 +592,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
             {
                 if(lcl_IsUiVisibleBookmark(*ppBookmark))
                 {
-                    const String& rBkmName = ppBookmark->get()->GetName();
+                    const OUString& rBkmName = ppBookmark->get()->GetName();
                     //nYPos from 0 -> text::Bookmarks will be sorted alphabetically
                     SwContent* pCnt = new SwContent(this, rBkmName, 0);
                     pMember->insert(pCnt);
@@ -612,7 +612,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                 (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                 && TOX_HEADER_SECTION != eTmpType )
                 {
-                    String sSectionName = pFmt->GetSection()->GetSectionName();
+                    OUString sSectionName = pFmt->GetSection()->GetSectionName();
 
                     sal_uInt8 nLevel = 0;
                     SwSectionFmt* pParentFmt = pFmt->GetParent();
@@ -681,7 +681,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
             for ( sal_uInt16 nTox = 0; nTox < nCount; nTox++ )
             {
                 const SwTOXBase* pBase = pWrtShell->GetTOX( nTox );
-                String sTOXNm( pBase->GetTOXName() );
+                OUString sTOXNm( pBase->GetTOXName() );
 
                 SwContent* pCnt = new SwTOXBaseContent(
                         this, sTOXNm, nTox, *pBase);
@@ -973,12 +973,12 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     SwView *pView = SwModule::GetFirstView();
     while (pView)
     {
-        String sInsert = pView->GetDocShell()->GetTitle();
+        OUString sInsert = pView->GetDocShell()->GetTitle();
         if(pView == pActiveView)
         {
-            sInsert += '(';
+            sInsert += "(";
             sInsert += aContextStrings[ ST_ACTIVE - ST_CONTEXT_FIRST];
-            sInsert += ')';
+            sInsert += ")";
         }
         pSubPop3->InsertItem(nId, sInsert);
         if(bIsConstant && pActiveShell == &pView->GetWrtShell())
@@ -989,10 +989,10 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     pSubPop3->InsertItem(nId++, aContextStrings[ST_ACTIVE_VIEW - ST_CONTEXT_FIRST]);
     if(pHiddenShell)
     {
-        String sHiddenEntry = pHiddenShell->GetView().GetDocShell()->GetTitle();
-        sHiddenEntry += OUString(" ( ");
+        OUString sHiddenEntry = pHiddenShell->GetView().GetDocShell()->GetTitle();
+        sHiddenEntry += " ( ";
         sHiddenEntry += aContextStrings[ ST_HIDDEN - ST_CONTEXT_FIRST];
-        sHiddenEntry += OUString(" )");
+        sHiddenEntry += " )";
         pSubPop3->InsertItem(nId, sHiddenEntry);
     }
 
@@ -1154,8 +1154,8 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                      if(pCnt)
                      {
                          sal_uInt16 nLevel = ((SwOutlineContent*)pCnt)->GetOutlineLevel();
-                         String sEntry = pCnt->GetName();
-                         if(!sEntry.Len())
+                         OUString sEntry = pCnt->GetName();
+                         if(sEntry.isEmpty())
                              sEntry = sSpace;
                          if(!pChild || (nLevel == 0))
                              pChild = InsertEntry(sEntry, pParent,
@@ -1191,8 +1191,8 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                      const SwContent* pCnt = pCntType->GetMember(i);
                      if(pCnt)
                      {
-                         String sEntry = pCnt->GetName();
-                         if(!sEntry.Len())
+                         OUString sEntry = pCnt->GetName();
+                         if(sEntry.isEmpty())
                              sEntry = sSpace;
                          InsertEntry(sEntry, pParent,
                              sal_False, LIST_APPEND, (void*)pCnt);
@@ -1337,7 +1337,7 @@ void SwContentTree::Display( bool bActive )
     // First read the selected entry to select it later again if necessary
     // -> the user data here are no longer valid!
     SvTreeListEntry* pOldSelEntry = FirstSelected();
-    String sEntryName;  // Name of the entry
+    OUString sEntryName;  // Name of the entry
     sal_uInt16 nEntryRelPos = 0; // relative position to their parent
     sal_uInt32 nOldEntryCount = GetEntryCount();
     sal_Int32 nOldScrollPos = 0;
@@ -1390,7 +1390,7 @@ void SwContentTree::Display( bool bActive )
                 if(!*ppContentT)
                     (*ppContentT) = new SwContentType(pShell, nCntType, nOutlineLevel );
 
-                String sEntry = (*ppContentT)->GetName();
+                OUString sEntry = (*ppContentT)->GetName();
                 SvTreeListEntry* pEntry;
                 const Image& rImage = aEntryImages.GetImage(SID_SW_START + nCntType);
                 sal_Bool bChOnDemand = 0 != (*ppContentT)->GetMemberCount();
@@ -1455,8 +1455,8 @@ void SwContentTree::Display( bool bActive )
                     const SwContent* pCnt = (*ppRootContentT)->GetMember(i);
                     if(pCnt)
                     {
-                        String sEntry = pCnt->GetName();
-                        if(!sEntry.Len())
+                        OUString sEntry = pCnt->GetName();
+                        if(sEntry.isEmpty())
                             sEntry = sSpace;
                         InsertEntry( sEntry, pParent,
                             sal_False, LIST_APPEND, (void*)pCnt);
@@ -1539,13 +1539,13 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
     SvTreeListEntry* pEntry = GetCurEntry();
     if(!pEntry || lcl_IsContentType(pEntry) || !pWrtShell)
         return false;
-    String sEntry;
+    OUString sEntry;
     SwContent* pCnt = ((SwContent*)pEntry->GetUserData());
 
     sal_uInt16 nActType = pCnt->GetParent()->GetType();
-    String sUrl;
+    OUString sUrl;
     bool bOutline = false;
-    String sOutlineText;
+    OUString sOutlineText;
     switch( nActType )
     {
         case CONTENT_TYPE_OUTLINE:
@@ -1572,7 +1572,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                         nVal ++;
                         nVal = nVal - pOutlRule->Get(nLevel).GetStart();
                         sEntry += OUString::number( nVal );
-                        sEntry += '.';
+                        sEntry += ".";
                     }
                 }
                 sEntry += pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos, false);
@@ -1601,10 +1601,10 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
     }
 
     bool bRet = false;
-    if(sEntry.Len())
+    if(!sEntry.isEmpty())
     {
         const SwDocShell* pDocShell = pWrtShell->GetView().GetDocShell();
-        if(!sUrl.Len())
+        if(sUrl.isEmpty())
         {
             if(pDocShell->HasName())
             {
@@ -1634,12 +1634,12 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 rDragMode = DND_ACTION_MOVE;
             }
 
-            const String& rToken = pCnt->GetParent()->GetTypeToken();
-            sUrl += '#';
+            const OUString& rToken = pCnt->GetParent()->GetTypeToken();
+            sUrl += "#";
             sUrl += sEntry;
-            if(rToken.Len())
+            if(!rToken.isEmpty())
             {
-                sUrl += cMarkSeparator;
+                sUrl += OUString(cMarkSeparator);
                 sUrl += rToken;
             }
         }
@@ -1774,7 +1774,7 @@ bool SwContentTree::HasContentChanged()
                             pEntry = Next(pEntry);
                             const SwContent* pCnt = pArrType->GetMember(j);
                             pEntry->SetUserData((void*)pCnt);
-                            String sEntryText = GetEntryText(pEntry);
+                            OUString sEntryText = GetEntryText(pEntry);
                             if( sEntryText != pCnt->GetName() &&
                                 !(sEntryText == sSpace && pCnt->GetName().isEmpty()))
                                 bRepaint = true;
@@ -1843,7 +1843,7 @@ bool SwContentTree::HasContentChanged()
                             bNext = false;
                             const SwContent* pCnt = pArrType->GetMember(j);
                             pEntry->SetUserData((void*)pCnt);
-                            String sEntryText = GetEntryText(pEntry);
+                            OUString sEntryText = GetEntryText(pEntry);
                             if( sEntryText != pCnt->GetName() &&
                                 !(sEntryText == sSpace && pCnt->GetName().isEmpty()))
                                 bRepaint = true;
@@ -1874,7 +1874,7 @@ bool SwContentTree::HasContentChanged()
                         {
                             const SwContent* pCnt = pArrType->GetMember(j);
                             pChild->SetUserData((void*)pCnt);
-                            String sEntryText = GetEntryText(pChild);
+                            OUString sEntryText = GetEntryText(pChild);
                             if( sEntryText != pCnt->GetName() &&
                                 !(sEntryText == sSpace && pCnt->GetName().isEmpty()))
                                 bRemoveChildren = sal_True;
@@ -2423,7 +2423,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                 nType = ((SwContent*)pUserData)->GetParent()->GetType();
                 bContent = true;
             }
-            String sEntry;
+            OUString sEntry;
             bool bRet = false;
             if(bContent)
             {
@@ -2464,8 +2464,8 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                 }
                 if(((SwContent*)pUserData)->IsInvisible())
                 {
-                    if(sEntry.Len())
-                        sEntry += OUString(", ");
+                    if(!sEntry.isEmpty())
+                        sEntry += ", ";
                     sEntry += sInvisible;
                     bRet = true;
                 }
@@ -2474,7 +2474,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
             {
                 sal_uInt16 nMemberCount = ((SwContentType*)pUserData)->GetMemberCount();
                 sEntry = OUString::number(nMemberCount);
-                sEntry += ' ';
+                sEntry += " ";
                 sEntry += nMemberCount == 1
                             ? ((SwContentType*)pUserData)->GetSingleName()
                             : ((SwContentType*)pUserData)->GetName();
@@ -2709,7 +2709,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
             else if(nMode == EDIT_MODE_DELETE)
             {
                 pActiveShell->StartAction();
-                String sTable = SW_RES(STR_TABLE_NAME);
+                OUString sTable = SW_RES(STR_TABLE_NAME);
                 SwRewriter aRewriterTableName;
                 aRewriterTableName.AddRule(UndoArg1, SW_RES(STR_START_QUOTE));
                 aRewriterTableName.AddRule(UndoArg2, pCnt->GetName());
@@ -2897,14 +2897,14 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
         if(xSecond.is())
             pDlg->SetAlternativeAccess( xSecond, xThird);
 
-        String sForbiddenChars;
+        OUString sForbiddenChars;
         if(CONTENT_TYPE_BOOKMARK == nType)
         {
-            sForbiddenChars = OUString("/\\@:*?\";,.#");
+            sForbiddenChars = "/\\@:*?\";,.#";
         }
         else if(CONTENT_TYPE_TABLE == nType)
         {
-            sForbiddenChars = OUString(" .<>");
+            sForbiddenChars = " .<>";
         }
         pDlg->SetForbiddenChars(sForbiddenChars);
         pDlg->Execute();
@@ -3069,7 +3069,7 @@ class SwContentLBoxString : public SvLBoxString
 {
 public:
     SwContentLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
-        const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr) {}
+        const OUString& rStr ) : SvLBoxString(pEntry,nFlags,rStr) {}
 
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,

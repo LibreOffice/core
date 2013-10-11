@@ -64,22 +64,22 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
             {
                 ODataAccessDescriptor aColDesc = OColumnTransferable::extractColumnDescriptor(
                                                                     aData);
-                String sDBName;
+                OUString sDBName;
                 if (bBrackets)
-                    sDBName += '[';
+                    sDBName += "[";
                 OUString sTmp;
                 sTmp = aColDesc.getDataSource();
-                sDBName += String(sTmp);
-                sDBName += '.';
+                sDBName += sTmp;
+                sDBName += ".";
 
                 aColDesc[daCommand] >>= sTmp;
-                sDBName += String(sTmp);
-                sDBName += '.';
+                sDBName += sTmp;
+                sDBName += ".";
 
                 aColDesc[daColumnName] >>= sTmp;
-                sDBName += String(sTmp);
+                sDBName += sTmp;
                 if (bBrackets)
-                    sDBName += ']';
+                    sDBName += "]";
 
                 SetText( sDBName );
                 nRet = DND_ACTION_COPY;

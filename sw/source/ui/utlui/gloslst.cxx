@@ -45,9 +45,9 @@
 
 struct TripleString
 {
-    String sGroup;
-    String sBlock;
-    String sShort;
+    OUString sGroup;
+    OUString sBlock;
+    OUString sShort;
 };
 
 class SwGlossDecideDlg : public ModalDialog
@@ -151,7 +151,7 @@ sal_Bool SwGlossaryList::GetShortName(const OUString& rLongName,
 
         ListBox& rLB = aDlg.GetListBox();
         for(std::vector<TripleString>::const_iterator i = aTripleStrings.begin(); i != aTripleStrings.end(); ++i)
-            rLB.InsertEntry(i->sGroup.GetToken(0, GLOS_DELIM));
+            rLB.InsertEntry(i->sGroup.getToken(0, GLOS_DELIM));
 
         rLB.SelectEntryPos(0);
         if(RET_OK == aDlg.Execute() &&

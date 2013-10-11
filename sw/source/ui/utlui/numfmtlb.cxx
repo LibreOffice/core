@@ -343,7 +343,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
          )
        )
     {
-        sValue += String(SW_RES(RID_STR_SYSTEM));
+        sValue += SW_RES(RID_STR_SYSTEM);
     }
 
     nPos = InsertEntry(sValue, nPos);   // Insert as first numeric entry
@@ -362,7 +362,7 @@ sal_uLong NumFormatListBox::GetFormat() const
 IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
 {
     sal_uInt16 nPos = pBox->GetSelectEntryPos();
-    String sDefine(SW_RES( STR_DEFINE_NUMBERFORMAT ));
+    OUString sDefine(SW_RES( STR_DEFINE_NUMBERFORMAT ));
     SwView *pView = GetView();
 
     if( pView && nPos == pBox->GetEntryCount() - 1 &&

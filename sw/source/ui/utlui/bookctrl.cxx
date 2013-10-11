@@ -73,7 +73,7 @@ void SwBookmarkControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState != SFX_ITEM_AVAILABLE || pState->ISA( SfxVoidItem ) )
-        GetStatusBar().SetItemText( GetId(), String() );
+        GetStatusBar().SetItemText( GetId(), OUString() );
     else if ( pState->ISA( SfxStringItem ) )
     {
         sPageNumber = ((SfxStringItem*)pState)->GetValue();

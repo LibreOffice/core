@@ -1069,8 +1069,8 @@ void SwNavigationPI::UpdateListBox()
         // #i53333# don't show help pages here
         if ( !pDoc->IsHelpDocument() )
         {
-            String sEntry = pDoc->GetTitle();
-            sEntry += OUString(" (");
+            OUString sEntry = pDoc->GetTitle();
+            sEntry += " (";
             if (pView == pActView)
             {
                 nAct = nCount;
@@ -1078,7 +1078,7 @@ void SwNavigationPI::UpdateListBox()
             }
             else
                 sEntry += aStatusArr[ST_INACTIVE - ST_STATUS_FIRST];
-            sEntry += ')';
+            sEntry += ")";
             aDocListBox.InsertEntry(sEntry);
 
 
@@ -1094,11 +1094,11 @@ void SwNavigationPI::UpdateListBox()
 
     if(aContentTree.GetHiddenWrtShell())
     {
-        String sEntry = aContentTree.GetHiddenWrtShell()->GetView().
+        OUString sEntry = aContentTree.GetHiddenWrtShell()->GetView().
                                         GetDocShell()->GetTitle();
-        sEntry += OUString(" (");
+        sEntry += " (";
         sEntry += aStatusArr[ST_HIDDEN - ST_STATUS_FIRST];
-        sEntry += ')';
+        sEntry += ")";
         aDocListBox.InsertEntry(sEntry);
         bDisable = false;
     }
@@ -1192,15 +1192,15 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
     sal_Int8 nRet = DND_ACTION_NONE;
-    String sFileName;
+    OUString sFileName;
     if( !aContentTree.IsInDrag() &&
-        0 != (sFileName = SwNavigationPI::CreateDropFileName( aData )).Len() )
+        !(sFileName = SwNavigationPI::CreateDropFileName( aData )).isEmpty() )
     {
         INetURLObject aTemp( sFileName );
         GraphicDescriptor aDesc( aTemp );
         if( !aDesc.Detect() )   // accept no graphics
         {
-            if( STRING_NOTFOUND == sFileName.Search('#')
+            if( -1 == sFileName.indexOf('#')
                 && (sContentFileName.isEmpty() || sContentFileName != sFileName ))
             {
                 nRet = rEvt.mnAction;

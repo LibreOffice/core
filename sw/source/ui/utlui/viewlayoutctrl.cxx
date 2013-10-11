@@ -67,7 +67,7 @@ SwViewLayoutControl::~SwViewLayoutControl()
 void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState || pState->ISA( SfxVoidItem ) )
-        GetStatusBar().SetItemText( GetId(), String() );
+        GetStatusBar().SetItemText( GetId(), OUString() );
     else
     {
         OSL_ENSURE( pState->ISA( SvxViewLayoutItem ), "invalid item type" );

@@ -64,10 +64,10 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
     get(m_pNewNameED, "entry");
     get(m_pOk, "ok");
 
-    String sTmp(GetText());
+    OUString sTmp(GetText());
     m_pNewNameED->SetText(xNamed->getName());
     m_pNewNameED->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    sTmp += String(xNamed->getName());
+    sTmp += xNamed->getName();
     SetText(sTmp);
 
     m_pOk->SetClickHdl(LINK(this, SwRenameXNamedDlg, OkHdl));
@@ -91,30 +91,31 @@ IMPL_LINK_NOARG(SwRenameXNamedDlg, OkHdl)
 
 IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
 {
-    String sTmp(pEdit->GetText());
+    OUString sTmp(pEdit->GetText());
 
     // prevent from pasting illegal characters
-    sal_uInt16 nLen = sTmp.Len();
-    String sMsg;
+    sal_uInt16 nLen = sTmp.getLength();
+    OUString sMsg;
     for(sal_uInt16 i = 0; i < pEdit->GetForbiddenChars().getLength(); i++)
     {
-        sal_uInt16 nTmpLen = sTmp.Len();
+        sal_uInt16 nTmpLen = sTmp.getLength();
         sTmp = comphelper::string::remove(sTmp, pEdit->GetForbiddenChars()[i]);
-        if(sTmp.Len() != nTmpLen)
-            sMsg += pEdit->GetForbiddenChars()[i];
+        if(sTmp.getLength() != nTmpLen)
+            sMsg += OUString(pEdit->GetForbiddenChars()[i]);
     }
-    if(sTmp.Len() != nLen)
+    if(sTmp.getLength() != nLen)
     {
         pEdit->SetText(sTmp);
-        String sWarning(m_sRemoveWarning);
+        OUString sWarning(m_sRemoveWarning);
         sWarning += sMsg;
         InfoBox(this, sWarning).Execute();
     }
 
-    m_pOk->Enable(sTmp.Len() && !xNameAccess->hasByName(sTmp)
-    && (!xSecondAccess.is() || !xSecondAccess->hasByName(sTmp))
-    && (!xThirdAccess.is() || !xThirdAccess->hasByName(sTmp))
-    );
+    m_pOk->Enable(!sTmp.isEmpty()
+                  && !xNameAccess->hasByName(sTmp)
+                  && (!xSecondAccess.is() || !xSecondAccess->hasByName(sTmp))
+                  && (!xThirdAccess.is() || !xThirdAccess->hasByName(sTmp))
+                 );
     return 0;
 }
 
