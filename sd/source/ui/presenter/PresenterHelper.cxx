@@ -24,7 +24,6 @@
 #include "PresenterHelper.hxx"
 #include "CanvasUpdateRequester.hxx"
 #include "PresenterCanvas.hxx"
-#include <cppcanvas/vclfactory.hxx>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
@@ -32,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/canvastools.hxx>
 
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
@@ -450,18 +450,10 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
 
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
-    const cppcanvas::CanvasSharedPtr pCanvas (
-        cppcanvas::VCLFactory::getInstance().createCanvas(
-            Reference<css::rendering::XBitmapCanvas>(rxCanvas,UNO_QUERY)));
-
-    if (pCanvas.get()!=NULL)
-    {
-        BitmapEx aBitmapEx = SdResId(nid);
-        return cppcanvas::VCLFactory::getInstance().createBitmap(
-            pCanvas, aBitmapEx)->getUNOBitmap();
-    }
-
-    return NULL;
+    BitmapEx aBitmapEx = SdResId(nid);
+    return ::vcl::unotools::xBitmapFromBitmapEx(
+        rxCanvas->getDevice(),
+        aBitmapEx);
 }
 
 

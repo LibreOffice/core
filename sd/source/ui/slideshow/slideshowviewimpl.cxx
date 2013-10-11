@@ -27,9 +27,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-
-#include <cppcanvas/vclfactory.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
+#include <vcl/canvastools.hxx>
 
 
 using ::com::sun::star::uno::UNO_QUERY;
@@ -200,7 +198,7 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
                               SlideshowImpl*  pSlideShow,
                               bool            bFullScreen )
 :   SlideShowView_Base( m_aMutex ),
-    mpCanvas( ::cppcanvas::VCLFactory::getInstance().createSpriteCanvas( rOutputWindow ) ),
+    mxSpriteCanvas( rOutputWindow.GetSpriteCanvas() ),
     mxWindow( VCLUnoHelper::GetInterface( &rOutputWindow ), uno::UNO_QUERY_THROW ),
     mxWindowPeer( mxWindow, uno::UNO_QUERY_THROW ),
     mxPointer(),
@@ -240,7 +238,7 @@ void SAL_CALL SlideShowView::dispose() throw (RuntimeException)
             mxWindow->removeMouseMotionListener( this );
     }
 
-    mpCanvas.reset();
+    mxSpriteCanvas.clear();
     mxWindow.clear();
 
     // clear all listener containers
@@ -304,7 +302,7 @@ Reference< rendering::XSpriteCanvas > SAL_CALL SlideShowView::getCanvas(  ) thro
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return mpCanvas.get() ? mpCanvas->getUNOSpriteCanvas() : Reference< rendering::XSpriteCanvas >();
+    return mxSpriteCanvas;
 }
 
 void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeException)

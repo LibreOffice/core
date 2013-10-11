@@ -39,7 +39,6 @@ $(eval $(call gb_Library_use_sdk_api,sdui))
 $(eval $(call gb_Library_use_libraries,sdui,\
     basegfx \
     comphelper \
-    cppcanvas \
     cppu \
     cppuhelper \
     editeng \

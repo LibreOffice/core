@@ -23,9 +23,9 @@
 #include "cache/SlsCacheContext.hxx"
 #include "tools/IdleDetection.hxx"
 #include "sdpage.hxx"
-#include <cppcanvas/vclfactory.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <vcl/canvastools.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -189,10 +189,6 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
     ThrowIfDisposed();
     OSL_ASSERT(mpCacheContext.get()!=NULL);
 
-    cppcanvas::BitmapCanvasSharedPtr pCanvas (
-        cppcanvas::VCLFactory::getInstance().createCanvas(
-            Reference<rendering::XBitmapCanvas>(rxCanvas, UNO_QUERY)));
-
     const SdrPage* pPage = mpCacheContext->GetPage(nSlideIndex);
     if (pPage == NULL)
         throw RuntimeException();
@@ -201,9 +197,9 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
     if (aPreview.IsEmpty())
         return NULL;
     else
-        return cppcanvas::VCLFactory::getInstance().createBitmap(
-            pCanvas,
-            aPreview)->getUNOBitmap();
+        return ::vcl::unotools::xBitmapFromBitmapEx(
+            rxCanvas->getDevice(),
+            aPreview);
 }
 
 

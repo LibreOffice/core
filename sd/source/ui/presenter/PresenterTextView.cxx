@@ -21,7 +21,6 @@
 #include "PresenterTextView.hxx"
 
 #include <i18nlangtag/mslangid.hxx>
-#include <cppcanvas/vclfactory.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <unotools/linguprops.hxx>
@@ -36,6 +35,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/canvastools.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
@@ -96,7 +96,7 @@ public:
     Implementation (void);
     ~Implementation (void);
 
-    void SetCanvas (const cppcanvas::CanvasSharedPtr& rCanvas);
+    void SetCanvas (const Reference<rendering::XCanvas>& rCanvas);
     void SetSize (const Size aSize);
     void SetBackgroundColor (const Color aColor);
     void SetTextColor (const Color aColor);
@@ -110,7 +110,7 @@ public:
 
 private:
     Reference<rendering::XBitmap> mxBitmap;
-    cppcanvas::CanvasSharedPtr mpCanvas;
+    Reference<rendering::XCanvas> mxCanvas;
     VirtualDevice* mpOutputDevice;
     EditEngine* mpEditEngine;
     SfxItemPool* mpEditEngineItemPool;
@@ -170,8 +170,7 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
             Reference<rendering::XBitmapCanvas> xCanvas (rArguments[0], UNO_QUERY_THROW);
             if (xCanvas.is())
             {
-                mpImplementation->SetCanvas(
-                    cppcanvas::VCLFactory::getInstance().createCanvas(xCanvas));
+                mpImplementation->SetCanvas( xCanvas );
             }
         }
         catch (RuntimeException&)
@@ -299,7 +298,7 @@ PresenterTextView::Implementation::Implementation (void)
       msTopRelativePropertyName("RelativeTop"),
       msTotalHeightPropertyName("TotalHeight"),
       mxBitmap(),
-      mpCanvas(),
+      mxCanvas(),
       mpOutputDevice(new VirtualDevice(*Application::GetDefaultDevice(), 0, 0)),
       mpEditEngine(NULL),
       mpEditEngineItemPool(EditEngine::CreatePool()),
@@ -413,9 +412,9 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
 
 
 
-void PresenterTextView::Implementation::SetCanvas (const cppcanvas::CanvasSharedPtr& rpCanvas)
+void PresenterTextView::Implementation::SetCanvas (const Reference<rendering::XCanvas>& rCanvas)
 {
-    mpCanvas = rpCanvas;
+    mxCanvas = rCanvas;
     mxBitmap = NULL;
 }
 
@@ -580,10 +579,9 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap (void
         mpEditEngine->Draw(mpOutputDevice, aWindowBox, Point(0,mnTop));
 
         const BitmapEx aBitmap (mpOutputDevice->GetBitmapEx(Point(0,0), maSize));
-        mxBitmap = cppcanvas::VCLFactory::getInstance().createBitmap(
-            mpCanvas,
-            aBitmap
-            )->getUNOBitmap();
+        mxBitmap = ::vcl::unotools::xBitmapFromBitmapEx(
+            mxCanvas->getDevice(),
+            aBitmap);
     }
     return mxBitmap;
 }

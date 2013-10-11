@@ -72,7 +72,6 @@ $(eval $(call gb_Library_use_libraries,sd,\
 	basegfx \
 	canvastools \
 	comphelper \
-	cppcanvas \
 	cppu \
 	cppuhelper \
 	drawinglayer \

@@ -24,7 +24,7 @@
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <cppcanvas/vclfactory.hxx>
+#include <vcl/canvastools.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -131,14 +131,9 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     ThrowIfDisposed();
     SolarMutexGuard aGuard;
 
-    cppcanvas::BitmapCanvasSharedPtr pCanvas (cppcanvas::VCLFactory::getInstance().createCanvas(
-        Reference<rendering::XBitmapCanvas>(rxCanvas, UNO_QUERY)));
-    if (pCanvas.get() != NULL)
-        return cppcanvas::VCLFactory::getInstance().createBitmap(
-            pCanvas,
-            CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor))->getUNOBitmap();
-    else
-        return NULL;
+    return ::vcl::unotools::xBitmapFromBitmapEx(
+        rxCanvas->getDevice(),
+        CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor));
 }
 
 

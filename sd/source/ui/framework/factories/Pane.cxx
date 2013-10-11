@@ -24,8 +24,10 @@
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
-#include <cppcanvas/vclfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -226,17 +228,7 @@ sal_Int64 SAL_CALL Pane::getSomething (const Sequence<sal_Int8>& rId)
 Reference<rendering::XCanvas> Pane::CreateCanvas (void)
     throw (RuntimeException)
 {
-    Reference<rendering::XCanvas> xCanvas;
-
-    if (mpWindow != NULL)
-    {
-        ::cppcanvas::SpriteCanvasSharedPtr pCanvas (
-            ::cppcanvas::VCLFactory::getInstance().createSpriteCanvas(*mpWindow));
-        if (pCanvas.get() != NULL)
-            xCanvas = Reference<rendering::XCanvas>(pCanvas->getUNOSpriteCanvas(), UNO_QUERY);
-    }
-
-    return xCanvas;
+    return mpWindow->GetSpriteCanvas();
 }
 
 

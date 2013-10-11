@@ -264,7 +264,7 @@ void SAL_CALL PresenterCanvas::initialize (
 
 //----- XCanvas ---------------------------------------------------------------
 
-void SAL_CALL PresenterCanvas::clear (void)
+void SAL_CALL PresenterCanvas::erase (void)
     throw (css::uno::RuntimeException)
 {
     ThrowIfDisposed();
