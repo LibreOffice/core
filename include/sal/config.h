@@ -29,7 +29,6 @@
 #ifdef WIN32
 #define SAL_W32
 #define SAL_DLLEXTENSION ".dll"
-#define SAL_PRGEXTENSION ".exe"
 #define SAL_PATHSEPARATOR ';'
 #define SAL_PATHDELIMITER '\\'
 #define SAL_CONFIGFILE( name ) name ".ini"
@@ -57,7 +56,6 @@
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".so"
 #define SAL_DLLPREFIX "lib"
-#define SAL_PRGEXTENSION ".bin"
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
 #define SAL_CONFIGFILE( name ) name "rc"
@@ -67,7 +65,6 @@
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".dylib"
 #define SAL_DLLPREFIX "lib"
-#define SAL_PRGEXTENSION ".bin"
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
 #define SAL_CONFIGFILE( name ) name "rc"
@@ -80,10 +77,6 @@
  */
 #define SAL_DLLEXTENSION ".dylib"
 #define SAL_DLLPREFIX "lib"
-/* This is fairly pointless too, an iOS app consists of a single
- * executable (plus data files).
- */
-#define SAL_PRGEXTENSION ".bin"
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
 #define SAL_CONFIGFILE( name ) name "rc"
