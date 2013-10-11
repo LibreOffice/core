@@ -58,6 +58,7 @@ private:
     typedef ::std::vector< TokenName > TokenNameVector;
 
     TokenNameVector     maTokenNames;
+    sal_Int32           mnAlphaTokens[26];
 };
 
 // ============================================================================

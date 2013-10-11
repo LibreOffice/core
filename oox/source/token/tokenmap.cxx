@@ -79,6 +79,13 @@ TokenMap::TokenMap() :
             append( nToken ).append( ", '" ).append( aUtf8Name ).append( '\'' ).getStr() );
     }
 #endif
+
+    for (unsigned char c = 'a'; c <= 'z'; c++)
+    {
+        struct xmltoken* pToken = Perfect_Hash::in_word_set(
+                reinterpret_cast< const char* >( &c ), 1 );
+        mnAlphaTokens[ c - 'a' ] = pToken ? pToken->nToken : XML_TOKEN_INVALID;
+    }
 }
 
 TokenMap::~TokenMap()
@@ -108,6 +115,13 @@ Sequence< sal_Int8 > TokenMap::getUtf8TokenName( sal_Int32 nToken ) const
 
 sal_Int32 TokenMap::getTokenFromUtf8( const Sequence< sal_Int8 >& rUtf8Name ) const
 {
+    // 50% of OOXML tokens are primarily 1 lower-case character, a-z
+    if( rUtf8Name.getLength() == 1)
+    {
+        sal_Char c = rUtf8Name[0];
+        if (c >= 'a' && c <= 'z')
+            return mnAlphaTokens[ c - 'a' ];
+    }
     struct xmltoken* pToken = Perfect_Hash::in_word_set(
         reinterpret_cast< const char* >( rUtf8Name.getConstArray() ), rUtf8Name.getLength() );
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
