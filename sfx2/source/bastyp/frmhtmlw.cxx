@@ -54,10 +54,10 @@ static sal_Char const sHTML_SC_yes[] =  "YES";
 static sal_Char const sHTML_SC_no[] =       "NO";
 static sal_Char const sHTML_MIME_text_html[] =  "text/html; charset=";
 
-#if defined(UNX)
-const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\012";
-#else
+#ifdef _WIN32
 const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\015\012";
+#else
+const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\012";
 #endif
 
 void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
