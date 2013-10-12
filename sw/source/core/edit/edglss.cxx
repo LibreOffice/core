@@ -276,10 +276,10 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
         else if( IsSelFullPara() &&
             GETSELTXT_PARABRK_TO_ONLYCR != nHndlParaBrk )
         {
-#if defined(UNX)
-                rBuf += '\012';
-#else
+#ifdef _WIN32
                 rBuf += OUString("\015\012");
+#else
+                rBuf += '\012';
 #endif
         }
     }
