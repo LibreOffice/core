@@ -29,12 +29,6 @@
 #define FILTER_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
-#if defined UNX && ! defined MACOS
-#define FILTER_PLUGIN_PUBLIC FILTER_DLLPUBLIC
-#else
-#define FILTER_PLUGIN_PUBLIC SAL_DLLPRIVATE
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
