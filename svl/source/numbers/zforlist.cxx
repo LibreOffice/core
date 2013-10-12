@@ -4434,25 +4434,17 @@ sal_Char NfCurrencyEntry::GetEuroSymbol( rtl_TextEncoding eTextEncoding )
 {
     switch ( eTextEncoding )
     {
-    case RTL_TEXTENCODING_MS_1252 :         // WNT Ansi
-    case RTL_TEXTENCODING_ISO_8859_1 :      // UNX for use with TrueType fonts
+    case RTL_TEXTENCODING_MS_1252 :
+    case RTL_TEXTENCODING_ISO_8859_1 :
         return '\x80';
-    case RTL_TEXTENCODING_ISO_8859_15 :     // UNX real
+    case RTL_TEXTENCODING_ISO_8859_15 :
         return '\xA4';
-    case RTL_TEXTENCODING_IBM_850 :         // OS2
+    case RTL_TEXTENCODING_IBM_850 :
         return '\xD5';
-    case RTL_TEXTENCODING_APPLE_ROMAN :     // MAC
+    case RTL_TEXTENCODING_APPLE_ROMAN :
         return '\xDB';
-    default:                                // default system
-#if defined(WNT)
-        return '\x80';
-#elif defined(UNX)
-//      return '\xA4';      // #56121# 0xA4 would be correct for iso-8859-15
-        return '\x80';      // but Windows code for the converted TrueType fonts
-#else
-#error EuroSymbol is what?
-        return '\x80';
-#endif
+    default:
+        return '\x80';      // Windows code for the converted TrueType fonts (whatever that means)
     }
 }
 
