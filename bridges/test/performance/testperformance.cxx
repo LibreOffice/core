@@ -46,7 +46,7 @@ static inline sal_uInt32 getSystemTicks()
 {
 #ifdef SAL_W32
     return (sal_uInt32)GetTickCount();
-#else // only UNX supported for now
+#else
     static sal_uInt32   nImplTicksPerSecond = 0;
     static double       dImplTicksPerSecond;
     static double       dImplTicksULONGMAX;
