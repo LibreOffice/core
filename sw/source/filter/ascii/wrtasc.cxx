@@ -55,7 +55,7 @@ SwASCWriter::SwASCWriter( const OUString& rFltNm )
                 break;
 
     case 'A':
-#if !defined(WNT)
+#ifndef _WIN32
                 aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                 aNewOpts.SetParaFlags( LINEEND_CRLF );
 #endif
@@ -67,7 +67,7 @@ SwASCWriter::SwASCWriter( const OUString& rFltNm )
                 break;
 
     case 'X':
-#if !defined(UNX)
+#ifdef _WIN32
                 aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                 aNewOpts.SetParaFlags( LINEEND_LF );
 #endif
