@@ -17,15 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <stdlib.h>
+
 #include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <svx/dialogs.hrc>
-
-#if defined (UNX) || defined (ICC) || defined(WNT)
-#include <stdlib.h>
-#endif
 
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
