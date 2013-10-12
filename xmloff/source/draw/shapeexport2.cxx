@@ -408,7 +408,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
                 XMLEffect eKind;
                 XMLEffectDirection eDirection;
                 sal_Int16 nStartScale;
-                sal_Bool bIn;
+                bool bIn;
 
                 SdXMLImplSetEffect( eEffect, eKind, eDirection, nStartScale, bIn );
 

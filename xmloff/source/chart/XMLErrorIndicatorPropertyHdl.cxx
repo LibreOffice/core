@@ -75,7 +75,7 @@ bool XMLErrorIndicatorPropertyHdl::importXML( const OUString& rStrImpValue,
 
     rValue <<= eType;
 
-    return sal_True;
+    return true;
 }
 
 bool XMLErrorIndicatorPropertyHdl::exportXML( OUString& rStrExpValue,

@@ -172,7 +172,7 @@ private:
     SchXMLTable& mrTable;
     OUString maCellContent;
     OUString maRangeId;
-    sal_Bool mbReadText;
+    bool mbReadText;
 
 public:
     SchXMLTableCellContext( SchXMLImportHelper& rImpHelper,

@@ -105,7 +105,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         if( rPropSetHelper.hasProperty( nTextSectionId ))
         {
             xNextSection.set(rPropSetHelper.getValue( nTextSectionId , xPropSet,
-                sal_True ), uno::UNO_QUERY);
+                true ), uno::UNO_QUERY);
         }
         // else: no current section
     }

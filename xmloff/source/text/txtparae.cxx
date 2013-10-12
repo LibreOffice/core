@@ -620,7 +620,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     if( rPropSetHelper.hasProperty( NUMBERING_RULES_AUTO ) )
     {
         Reference < XIndexReplace > xNumRule(rPropSetHelper.getValue( NUMBERING_RULES_AUTO,
-            rPropSet, sal_True ), uno::UNO_QUERY);
+            rPropSet, true ), uno::UNO_QUERY);
         if( xNumRule.is() && xNumRule->getCount() )
         {
             Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
@@ -666,12 +666,12 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             if( rPropSetHelper.hasProperty( PARA_STYLE_NAME_AUTO ) )
             {
                 rPropSetHelper.getValue( PARA_STYLE_NAME_AUTO, rPropSet,
-                                                sal_True ) >>= sParent;
+                                                true ) >>= sParent;
             }
             if( rPropSetHelper.hasProperty( PARA_CONDITIONAL_STYLE_NAME_AUTO ) )
             {
                 rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME_AUTO,
-                                                 rPropSet, sal_True ) >>= sCondParent;
+                                                 rPropSet, true ) >>= sCondParent;
             }
 
             break;

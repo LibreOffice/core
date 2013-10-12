@@ -228,8 +228,8 @@ static void lcl_exportString(
     const OUString& sProperty,
     sal_uInt16 nPrefix,
     enum XMLTokenEnum eElement,
-    sal_Bool bEncodeName,
-    sal_Bool bOmitIfEmpty)
+    bool bEncodeName,
+    bool bOmitIfEmpty)
 {
     DBG_ASSERT( eElement != XML_TOKEN_INVALID, "need element token");
 
@@ -255,33 +255,33 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     lcl_exportString( GetExport(), rFootnoteConfig,
                       sParaStyleName,
                       XML_NAMESPACE_TEXT, XML_DEFAULT_STYLE_NAME,
-                      sal_True, sal_True);
+                      true, true);
 
     // citation style
     lcl_exportString( GetExport(), rFootnoteConfig,
                       sCharStyleName,
                       XML_NAMESPACE_TEXT, XML_CITATION_STYLE_NAME,
-                      sal_True, sal_True);
+                      true, true);
 
     // citation body style
     lcl_exportString( GetExport(), rFootnoteConfig,
                       sAnchorCharStyleName,
                       XML_NAMESPACE_TEXT, XML_CITATION_BODY_STYLE_NAME,
-                      sal_True, sal_True);
+                      true, true);
 
     // page style
     lcl_exportString( GetExport(), rFootnoteConfig,
                       sPageStyleName,
                       XML_NAMESPACE_TEXT, XML_MASTER_PAGE_NAME,
-                      sal_True, sal_True );
+                      true, true );
 
     // prefix
     lcl_exportString( GetExport(), rFootnoteConfig, sPrefix,
-                      XML_NAMESPACE_STYLE, XML_NUM_PREFIX, sal_False, sal_True);
+                      XML_NAMESPACE_STYLE, XML_NUM_PREFIX, false, true);
 
     // suffix
     lcl_exportString( GetExport(), rFootnoteConfig, sSuffix,
-                      XML_NAMESPACE_STYLE, XML_NUM_SUFFIX, sal_False, sal_True);
+                      XML_NAMESPACE_STYLE, XML_NUM_SUFFIX, false, true);
 
 
 

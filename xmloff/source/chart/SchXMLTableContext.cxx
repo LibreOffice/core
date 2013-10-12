@@ -652,7 +652,7 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
         }
     }
 
-    mbReadText = sal_True;
+    mbReadText = true;
     SchXMLCell aCell;
     aCell.eType = eValueType;
 
@@ -664,7 +664,7 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
 
         aCell.fValue = fData;
         // dont read text from following <text:p> or <text:list> element
-        mbReadText = sal_False;
+        mbReadText = false;
     }
 
     mrTable.aData[ mrTable.nRowIndex ].push_back( aCell );
@@ -687,7 +687,7 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
         rCell.aComplexString = Sequence< OUString >();
         rCell.eType = SCH_CELL_TYPE_COMPLEX_STRING;
         pContext = new SchXMLTextListContext( GetImport(), rLocalName, rCell.aComplexString );
-        mbReadText = sal_False;//don't apply text from <text:p>
+        mbReadText = false;//don't apply text from <text:p>
     }
     // <text:p> element - read text (and range from text:id old version)
     else if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_P ) )

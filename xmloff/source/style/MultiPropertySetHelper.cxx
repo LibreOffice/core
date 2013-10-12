@@ -107,7 +107,7 @@ void MultiPropertySetHelper::hasProperties(
     }
 }
 
-sal_Bool MultiPropertySetHelper::checkedProperties()
+bool MultiPropertySetHelper::checkedProperties()
 {
     return (NULL != pSequenceIndex);
 }
@@ -147,7 +147,7 @@ void MultiPropertySetHelper::getValues(
 
 const Any& MultiPropertySetHelper::getValue( sal_Int16 nIndex,
                      const Reference< XPropertySet> & rPropSet,
-                     sal_Bool bTryMulti )
+                     bool bTryMulti )
 {
     if( !pValues )
     {

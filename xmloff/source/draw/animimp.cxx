@@ -111,7 +111,7 @@ SvXMLEnumMapEntry aXML_AnimationSpeed_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirection, sal_Int16 nStartScale, sal_Bool /*bIn*/ )
+AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirection, sal_Int16 nStartScale, bool /*bIn*/ )
 {
     switch( eKind )
     {

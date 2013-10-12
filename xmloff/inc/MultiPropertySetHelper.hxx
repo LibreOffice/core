@@ -96,7 +96,7 @@ public:
      * Return whether hasProperties was called
      * (i.e. if we are ready to call getValues)
      */
-    sal_Bool checkedProperties();
+    bool checkedProperties();
 
     /**
      * Get values from the XMultiPropertySet.
@@ -147,7 +147,7 @@ public:
     const ::com::sun::star::uno::Any& getValue( sal_Int16 nIndex,
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::beans::XPropertySet> &,
-                        sal_Bool bTryMulti = sal_False );
+                        bool bTryMulti = false );
 
     /**
      * Get a value from the XMultiPropertySet on demand.

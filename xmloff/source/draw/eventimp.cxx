@@ -440,7 +440,7 @@ void SdXMLEventContext::EndElement()
                 case ClickAction_VANISH:
                     pProperties->Name = OUString( "Effect" );
                     pProperties->Handle = -1;
-                    pProperties->Value <<= ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, sal_True );
+                    pProperties->Value <<= ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, true );
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     pProperties++;
 

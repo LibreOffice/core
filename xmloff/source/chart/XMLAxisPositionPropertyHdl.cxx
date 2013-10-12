@@ -83,7 +83,7 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
 bool XMLAxisPositionPropertyHdl::exportXML( OUString& rStrExpValue,
                                               const uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    bool bResult = sal_False;
+    bool bResult = false;
 
     OUStringBuffer sValueBuffer;
     if( m_bCrossingValue )
