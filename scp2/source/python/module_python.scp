@@ -23,8 +23,8 @@
 Module gid_Module_Pyuno
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
-    Name = "PyUNO"
-    Description = "Python-UNO bridge"
+    Name = "PyUNO";
+    Description = "Python-UNO bridge";
     Dirs = (gid_Dir_PythonFramework,
             gid_Dir_PythonFramework_Versions,
             gid_Dir_PythonFramework_Versions_ver,
