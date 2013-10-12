@@ -19,9 +19,6 @@
 
 #include <tools/stream.hxx>
 #include <basic/sbxvar.hxx>
-#if defined UNX && !defined LINUX
-#include <wchar.h>
-#endif
 #include <rtl/math.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
