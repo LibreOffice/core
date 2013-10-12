@@ -101,13 +101,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_QUERY;
 
-// #TODO is this defined somewhere else?
-#if ( defined UNX ) //unix
-#define FILE_PATH_SEPARATOR "/"
-#else // windows
-#define FILE_PATH_SEPARATOR "\\"
-#endif
-
 // ============================================================================
 
 /** Global application settings shared by all open workbooks. */
@@ -942,8 +935,7 @@ ScVbaApplication::getTemplatesPath() throw (uno::RuntimeException)
 OUString SAL_CALL
 ScVbaApplication::getPathSeparator() throw (uno::RuntimeException)
 {
-    static OUString sPathSep( FILE_PATH_SEPARATOR );
-    return sPathSep;
+    return OUString( (sal_Unicode) SAL_PATHDELIMITER );
 }
 
 // ----------------------------------------------------------------------------
