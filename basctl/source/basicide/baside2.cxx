@@ -72,6 +72,11 @@ namespace Print
 
 short const ValidWindow = 0x1234;
 
+// What (who) are OW and MTF? Compare to baside3.cxx where an
+// identically named variable, used in the same way, has the value
+// "*.*" on Windows, "*" otherwise. Is that what should be done here,
+// too?
+
 #if defined(OW) || defined(MTF)
 char const FilterMask_All[] = "*";
 #else
