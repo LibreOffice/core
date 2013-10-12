@@ -103,14 +103,8 @@ inline OUString tempFileHelper(OUString const & fname)
     return aTmpFile;
 }
 
-#if defined( UNX ) || defined (__MINGW32__)
 int main ( int argc, char ** argv)
 {
-#else
-int cdecl main ( int argc, char ** argv)
-{
-#endif
-
     OUString aTmpListFile;
     OUString aTmpSlotMapFile;
     OUString aTmpSfxItemFile;
