@@ -23,9 +23,7 @@
 
 #include "unotools/syslocale.hxx"
 
-#if defined ( UNX )
 #include <stdlib.h>
-#endif
 
 #include <vcl/svapp.hxx>
 #include <math.h>
