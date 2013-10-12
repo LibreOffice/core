@@ -308,9 +308,13 @@ private:
 
     /** Generates on-the-fly LangID and registers the maBcp47,mnLangID pair.
 
+        @param  nRegisterID
+                If not 0 and not LANGUAGE_DONTKNOW, use that ID instead of
+                generating an on-the-fly ID.
+
         @return NULL if no ID could be obtained or registration failed.
      */
-    LanguageTag::ImplPtr registerOnTheFly();
+    LanguageTag::ImplPtr registerOnTheFly( LanguageType nRegisterID );
 
     /** Obtain Language, Script, Country and Variants via simpleExtract() and
         assign them to the cached variables if successful.
@@ -592,7 +596,7 @@ LanguageTag::~LanguageTag()
 }
 
 
-LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly()
+LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID )
 {
     LanguageTag::ImplPtr pImpl;
 
@@ -640,7 +644,8 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly()
 
     if (!bOtherImpl || !pImpl->mbInitializedLangID)
     {
-        LanguageType nLang = getNextOnTheFlyLanguage();
+        LanguageType nLang = ((nRegisterID == 0 || nRegisterID == LANGUAGE_DONTKNOW) ?
+                getNextOnTheFlyLanguage() : nRegisterID);
         if (!nLang)
         {
             // out of IDs, nothing to register
@@ -878,7 +883,11 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
                     pImpl->convertBcp47ToLocale();
                 if (!pImpl->mbInitializedLangID)
                     pImpl->convertLocaleToLang( true);
-                bool bInsert = LanguageTag::isOnTheFlyID( pImpl->mnLangID);
+                // Unconditionally insert (round-trip is possible) for
+                // on-the-fly IDs and (generated or not) primary language IDs.
+                bool bInsert = (pImpl->mnLangID != LANGUAGE_DONTKNOW &&
+                        (LanguageTag::isOnTheFlyID( pImpl->mnLangID) ||
+                         (pImpl->mnLangID == MsLangId::getPrimaryLanguage( pImpl->mnLangID))));
                 OUString aBcp47;
                 if (!bInsert)
                 {
@@ -1298,7 +1307,26 @@ void LanguageTagImpl::convertLocaleToLang( bool bAllowOnTheFlyID )
         if (mnLangID == LANGUAGE_DONTKNOW && bAllowOnTheFlyID)
         {
             if (isValidBcp47())
-                registerOnTheFly();
+            {
+                // For language-only (including script) look if we know some
+                // locale of that language and if so use the primary language
+                // ID of that instead of generating an on-the-fly-ID.
+                if (getCountry().isEmpty() && isIsoODF())
+                {
+                    lang::Locale aLoc( MsLangId::Conversion::lookupFallbackLocale( maLocale));
+                    // 'en-US' is last resort, do not use except when looking
+                    // for 'en'.
+                    if (aLoc.Language != "en" || getLanguage() == "en")
+                    {
+                        mnLangID = MsLangId::Conversion::convertLocaleToLanguage( aLoc);
+                        // LANGUAGE_DONTKNOW is all bits of primary language,
+                        // so this is ok even if the conversion failed, which
+                        // it should not anyway..
+                        mnLangID = MsLangId::getPrimaryLanguage( mnLangID);
+                    }
+                }
+                registerOnTheFly( mnLangID);
+            }
             else
             {
                 SAL_WARN( "i18nlangtag", "LanguageTagImpl::convertLocaleToLang: with bAllowOnTheFlyID invalid '"

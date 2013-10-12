@@ -324,6 +324,24 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( de_DE.getLanguageType() == LANGUAGE_GERMAN );
     }
 
+    // Unmapped but known language-only.
+    {
+        OUString s_de( "de" );
+        LanguageTag de( s_de, true );
+        lang::Locale aLocale = de.getLocale();
+        CPPUNIT_ASSERT( de.getBcp47() == s_de );
+        CPPUNIT_ASSERT( aLocale.Language == "de" );
+        CPPUNIT_ASSERT( aLocale.Country == "" );
+        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        LanguageType de_LangID = de.getLanguageType();
+        CPPUNIT_ASSERT( de_LangID != LANGUAGE_GERMAN );
+        CPPUNIT_ASSERT( MsLangId::getPrimaryLanguage( de_LangID) == MsLangId::getPrimaryLanguage( LANGUAGE_GERMAN) );
+        CPPUNIT_ASSERT( de.makeFallback().getBcp47() == "de-DE");
+        // Check registered mapping.
+        LanguageTag de_l( de_LangID);
+        CPPUNIT_ASSERT( de_l.getBcp47() == s_de );
+    }
+
     // 'de-1901' derived from 'de-DE-1901' grandfathered to check that it is
     // accepted as (DIGIT 3ALNUM) variant
     {
