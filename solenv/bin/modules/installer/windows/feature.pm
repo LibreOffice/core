@@ -179,6 +179,7 @@ sub get_feature_attributes
     if ( $onefeature->{'ParentID'} ) { $parentgid = $onefeature->{'ParentID'}; }
 
     if (( $parentgid eq "" ) || ( $parentgid eq $installer::globals::rootmodulegid )) { $attributes = "8"; }
+    elsif ( get_feature_display($onefeature) eq "0" ) { $attributes = "26"; } # fdo#33798
     else { $attributes = "10"; }
 
     return $attributes
