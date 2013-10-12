@@ -79,16 +79,12 @@ using namespace com::sun::star::uno;
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <errno.h>
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 #if defined (WNT)
 #include <direct.h>   // _getdcwd get current work directory, _chdrive
-#endif
-
-#ifdef UNX
-#include <errno.h>
-#include <unistd.h>
 #endif
 
 #include <basic/sbobjmod.hxx>
@@ -399,11 +395,6 @@ RTLFUNC(ChrW)
     implChr( rPar, bChrW );
 }
 
-
-#ifdef UNX
-#define _PATH_INCR 250
-#endif
-
 RTLFUNC(CurDir)
 {
     (void)pBasic;
@@ -449,9 +440,11 @@ RTLFUNC(CurDir)
     }
     delete [] pBuffer;
 
-#elif defined( UNX )
+#else
 
-    int nSize = _PATH_INCR;
+    const int PATH_INCR = 250;
+
+    int nSize = PATH_INCR;
     char* pMem;
     while( true )
       {
@@ -474,7 +467,7 @@ RTLFUNC(CurDir)
             return;
           }
         delete [] pMem;
-        nSize += _PATH_INCR;
+        nSize += PATH_INCR;
       };
 
 #endif

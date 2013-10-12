@@ -856,10 +856,10 @@ void SbiParser::AddConstants( void )
     addStringConst( aPublics, "vbCrLf", "\x0D\x0A" );
     addStringConst( aPublics, "vbFormFeed", "\x0C" );
     addStringConst( aPublics, "vbLf", "\x0A" );
-#if defined(UNX)
-    addStringConst( aPublics, "vbNewLine", "\x0A" );
-#else
+#ifndef WNT
     addStringConst( aPublics, "vbNewLine", "\x0D\x0A" );
+#else
+    addStringConst( aPublics, "vbNewLine", "\x0A" );
 #endif
     addStringConst( aPublics, "vbNullString", "" );
     addStringConst( aPublics, "vbTab", "\x09" );
