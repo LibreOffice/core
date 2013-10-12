@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Database" script:language="StarBasic">Option Compatible
+Option ClassModule
+
+Option Explicit
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS ROOT FIELDS 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Private	_Type					As String				&apos;	Must be DATABASE
+Private	_Standalone				As Boolean
+Private	Title					As String
+Private	Document				As Object				&apos;	com.sun.star.comp.dba.ODatabaseDocument	or	SwXTextDocument
+Private	Connection				As Object				&apos;	com.sun.star.sdbc.drivers.OConnectionWrapper
+Private	URL						As String
+Private	MetaData				As Object				&apos;	interface XDatabaseMetaData
+Private	Form					As Object				&apos;	com.sun.star.form.XForm
+Private	FormName				As String				&apos;	name of standalone form
+Private FindRecord				As Object
+Private StatusBar				As Object
+Private Dialogs					As Object				&apos;	Collection
+Private RecordsetMax			As Integer
+Private	RecordsetsColl			As Object				&apos;	Collection of actice recordsets
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CONSTRUCTORS / DESTRUCTORS						        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Sub Class_Initialize()
+	_Type = OBJDATABASE
+	_Standalone = False
+	Title = &quot;&quot;
+	Set Document = Nothing
+	Set Connection = Nothing
+	URL = &quot;&quot;
+	Set MetaData = Nothing
+	Set Form = Nothing
+	FormName = &quot;&quot;
+	Set FindRecord = Nothing
+	Set StatusBar = Nothing
+	Set Dialogs = New Collection
+	RecordsetMax = 0
+	Set RecordsetsColl = New Collection
+End Sub		&apos;	Constructor
+
+REM -----------------------------------------------------------------------------------------------------------------------
+&apos;Private Sub Class_Terminate()
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS GET/LET/SET PROPERTIES					        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Property Get ObjectType() As String
+	ObjectType = _PropertyGet(&quot;ObjectType&quot;)
+End Property		&apos;	ObjectType (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS METHODS	 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Sub CloseAllRecordsets()
+&apos;	Clean all recordsets for housekeeping
+
+Dim sRecordsets() As String, i As Integer, oRecordset As Object
+	On Local Error Goto Exit_Sub
+
+	If IsNull(RecordsetsColl) Then Exit Sub
+	If RecordsetsColl.Count &lt; 1 Then Exit Sub
+	For i = 1 To RecordsetsColl.Count
+		Set oRecordset = RecordsetsColl.Item(i)
+		oRecordset.mClose(False)		&apos;	Do not remove entry in collection
+	Next i
+	Set RecordsetsColl = New Collection
+	RecordsetMax = 0
+
+Exit_Sub:
+	Exit Sub
+End Sub				&apos;	CloseAllRecordsets	V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function CreateQueryDef(ByVal Optional pvQueryName As Variant _
+								, ByVal Optional pvSql As Variant _
+								, ByVal Optional pvOption As Variant _
+								) As Object
+&apos;Return a (new) QueryDef object based on SQL statement
+Const cstThisSub = &quot;Database.CreateQueryDef&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+Const cstNull = -1
+Dim oQuery As Object, oQueries As Object
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+
+	Set CreateQueryDef = Nothing
+	If _Standalone() Then Goto Error_Standalone
+	If IsMissing(pvQueryName) Then Call _TraceArguments()
+	If IsMissing(pvSql) Then Call _TraceArguments()
+	If IsMissing(pvOption) Then pvOption = cstNull
+
+	If Not Utils._CheckArgument(pvQueryName, 1, vbString) Then Goto Exit_Function
+	If pvQueryName = &quot;&quot; Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvSql, 2, vbString) Then Goto Exit_Function
+	If pvSql = &quot;&quot; Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvOption, 3, Utils._AddNumeric(), Array(cstNull, dbSQLPassThrough)) Then Goto Exit_Function
+	
+	Set oQuery = CreateUnoService(&quot;com.sun.star.sdb.QueryDefinition&quot;)
+	oQuery.rename(pvQueryName)
+	oQuery.Command = Utils._ReplaceSquareBrackets(pvSql)
+	oQuery.EscapeProcessing = Not ( pvOption = dbSQLPassThrough )
+	
+	Set oQueries = Document.DataSource.getQueryDefinitions()
+	With oQueries
+		If .hasByName(pvQueryName) Then
+			TraceError(TRACEWARNING, ERRQUERYDEFDELETED, Utils._CalledSub(), 0, False, pvQueryName)
+			.removeByName(pvQueryName)
+		End If
+		.insertByName(pvQueryName, oQuery)
+	End With
+	Set CreateQueryDef = QueryDefs(pvQueryName)
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Standalone:
+	TraceError(TRACEFATAL, ERRSTANDALONE, Utils._CalledSub(), 0)
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function	&apos;	CreateQueryDef	V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function getProperty(Optional ByVal pvProperty As Variant) As Variant
+&apos;	Return property value of psProperty property name
+
+	Utils._SetCalledSub(&quot;Database.getProperty&quot;)
+	If IsMissing(pvProperty) Then Call _TraceArguments()
+	getProperty = _PropertyGet(pvProperty)
+	Utils._ResetCalledSub(&quot;Database.getProperty&quot;)
+	
+End Function		&apos;	getProperty
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function hasProperty(ByVal Optional pvProperty As Variant) As Boolean
+&apos;	Return True if object has a valid property called pvProperty (case-insensitive comparison !)
+
+	If IsMissing(pvProperty) Then hasProperty = PropertiesGet._hasProperty(_Type, _PropertiesList()) Else hasProperty = PropertiesGet._hasProperty(_Type, _PropertiesList(), pvProperty)
+	Exit Function
+	
+End Function	&apos;	hasProperty
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function OpenRecordset(ByVal Optional pvSource As Variant _
+								, ByVal Optional pvType As Variant _
+								, ByVal Optional pvOptions As Variant _
+								, ByVal Optional pvLockEdit As Variant _
+								) As Object
+&apos;Return a Recordset object based on Source (= SQL, table or query name)
+
+Const cstThisSub = &quot;Database.OpenRecordset&quot;
+	Utils._SetCalledSub(cstThisSub)
+Const cstNull = -1
+
+Dim lCommandType As Long, sCommand As String, oObject As Object
+Dim sSource As String, i As Integer, iCount As Integer
+Dim sObjects() As String, bFound As Boolean, oTables As Object, oQueries As Object
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Set oObject = Nothing
+	If IsMissing(pvSource) Then Call _TraceArguments()
+	If pvSource = &quot;&quot; Then Call _TraceArguments()
+	If IsMissing(pvType) Then
+		pvType = cstNull
+	Else
+		If Not Utils._CheckArgument(pvType, 1, Utils._AddNumeric(), dbOpenForwardOnly) Then Goto Exit_Function
+	End If
+	If IsMissing(pvOptions) Then
+		pvOptions = cstNull
+	Else
+		If Not Utils._CheckArgument(pvOptions, 2, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
+	End If
+	If IsMissing(pvLockEdit) Then
+		pvLockEdit = cstNull
+	Else
+		If Not Utils._CheckArgument(pvLockEdit, 3, Utils._AddNumeric(), dbReadOnly) Then Goto Exit_Function
+	End If
+
+	sSource = Split(UCase(Trim(pvSource)), &quot; &quot;)(0)
+	Select Case True
+		Case sSource = &quot;SELECT&quot;
+			lCommandType = com.sun.star.sdb.CommandType.COMMAND
+			sCommand = Trim(Utils._ReplaceSquareBrackets(pvSource))
+		Case Else
+			sSource = UCase(Trim(pvSource))
+			REM Explore tables
+			Set oTables = Connection.getTables
+			sObjects = oTables.ElementNames()
+			bFound = False
+			For i = 0 To UBound(sObjects)
+				If sSource = UCase(sObjects(i)) Then
+					sCommand = sObjects(i)
+					bFound = True
+					Exit For
+				End If
+			Next i
+			If bFound Then
+				lCommandType = com.sun.star.sdb.CommandType.TABLE
+			Else
+				REM Explore queries
+				Set oQueries = Connection.getQueries
+				sObjects = oQueries.ElementNames()
+				For i = 0 To UBound(sObjects)
+					If sSource = UCase(sObjects(i)) Then
+						sCommand = sObjects(i)
+						bFound = True
+						Exit For
+					End If
+				Next i
+				If Not bFound Then Goto Trace_NotFound
+				lCommandType = com.sun.star.sdb.CommandType.QUERY
+			End If
+	End Select
+	
+	Set oObject = New Recordset
+	With oObject
+		._CommandType = lCommandType
+		._Command = sCommand
+		._ParentName = Title
+		._ParentType = _Type
+		._ForwardOnly = ( pvType = dbOpenForwardOnly )
+		._PassThrough = ( pvOptions = dbSQLPassThrough )
+		._ReadOnly = ( pvLockEdit = dbReadOnly )
+		Call ._Initialize()
+		RecordsetMax = RecordsetMax + 1
+		._Name = Format(RecordsetMax, &quot;0000000&quot;)
+		RecordsetsColl.Add(oObject, UCase(._Name))
+	End With
+
+	If Not ( oObject._BOF And oObject._EOF ) Then oObject.MoveFirst()		&apos;	Do nothing if resultset empty
+
+Exit_Function:
+	Set OpenRecordset = oObject
+	Set oObject = Nothing
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Trace_NotFound:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Table/Query&quot;, pvSource))
+	Goto Exit_Function
+End Function	&apos;	OpenRecordset	V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Properties(ByVal Optional pvIndex As Variant) As Variant
+&apos;	Return
+&apos;		a Collection object if pvIndex absent
+&apos;		a Property object otherwise
+
+	Utils._SetCalledSub(&quot;Database.Properties&quot;)
+Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
+	vPropertiesList = _PropertiesList()
+	sObject = Utils._PCase(_Type)
+	If IsMissing(pvIndex) Then
+		vProperty = PropertiesGet._Properties(sObject, &quot;&quot;, vPropertiesList)
+	Else
+		vProperty = PropertiesGet._Properties(sObject, &quot;&quot;, vPropertiesList, pvIndex)
+		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
+	End If
+	
+Exit_Function:
+	Set Properties = vProperty
+	Utils._ResetCalledSub(&quot;Database.Properties&quot;)
+	Exit Function
+End Function	&apos;	Properties
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function QueryDefs(ByVal Optional pvIndex As variant) As Object
+&apos;	Collect all Queries in the database
+&apos;	Check when standalone &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(&quot;Database.QueryDefs&quot;)
+
+	Set QueryDefs = Nothing
+	If Not IsMissing(pvIndex) Then
+		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
+	End If
+			
+Dim sObjects() As String, sObjectName As String, oObject As Object
+Dim i As Integer, bFound As Boolean, oQueries As Object
+
+	Set oQueries = Connection.getQueries
+	sObjects = oQueries.ElementNames()
+	Select Case True
+		Case IsMissing(pvIndex)
+			Set oObject = New Collect
+			oObject._CollType = COLLQUERYDEFS
+			oObject._ParentType = OBJDATABASE
+			oObject._ParentName = &quot;&quot;
+			oObject._Count = UBound(sObjects) + 1
+			Goto Exit_Function
+		Case VarType(pvIndex) = vbString
+			bFound = False
+		&apos;	Check existence of object and find its exact (case-sensitive) name
+			For i = 0 To UBound(sObjects)
+				If UCase(pvIndex) = UCase(sObjects(i)) Then
+					sObjectName = sObjects(i)
+					bFound = True
+					Exit For
+				End If
+			Next i
+			If Not bFound Then Goto Trace_NotFound
+		Case Else		&apos;	pvIndex is numeric
+			If pvIndex &lt; 0 Or pvIndex &gt; UBound(sObjects) Then Goto Trace_IndexError
+			sObjectName = sObjects(pvIndex)
+	End Select
+
+	Set oObject = New DataDef
+	oObject._Type = OBJQUERYDEF
+	oObject._Name = sObjectName
+	Set oObject.Query = oQueries.getByName(sObjectName)
+
+Exit_Function:
+	Set QueryDefs = oObject
+	Set oObject = Nothing
+	Utils._ResetCalledSub(&quot;Database.QueryDefs&quot;)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, &quot;Database.QueryDefs&quot;, Erl)
+	GoTo Exit_Function
+Trace_NotFound:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Query&quot;, pvIndex))
+	Goto Exit_Function
+Trace_IndexError:
+	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0)
+	Goto Exit_Function
+End Function		&apos;	QueryDefs	V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Recordsets(ByVal Optional pvIndex As variant) As Object
+&apos;	Collect all active recordsets
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(&quot;Database.Recordsets&quot;)
+
+	Set Recordsets = Nothing
+	If Not IsMissing(pvIndex) Then
+		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
+	End If
+			
+Dim sObjects() As String, sObjectName As String, oObject As Object
+Dim i As Integer, bFound As Boolean, oTables As Object
+
+	Select Case True
+		Case IsMissing(pvIndex)
+			Set oObject = New Collect
+			oObject._CollType = COLLRECORDSETS
+			oObject._ParentType = OBJDATABASE
+			oObject._ParentName = &quot;&quot;
+			oObject._Count = RecordsetsColl.Count
+		Case VarType(pvIndex) = vbString
+			bFound = _hasRecordset(pvIndex)
+			If Not bFound Then Goto Trace_NotFound
+			Set oObject = RecordsetsColl.Item(pvIndex)
+		Case Else		&apos;	pvIndex is numeric
+			If pvIndex &lt; 0 Or pvIndex &gt;= RecordsetsColl.Count Then Goto Trace_IndexError
+			Set oObject = RecordsetsColl.Item(pvIndex + 1)		&apos;	Collection members are numbered 1 ... Count
+	End Select
+
+Exit_Function:
+	Set Recordsets = oObject
+	Set oObject = Nothing
+	Utils._ResetCalledSub(&quot;Database.Recordsets&quot;)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, &quot;Database.Recordsets&quot;, Erl)
+	GoTo Exit_Function
+Trace_NotFound:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Recordset&quot;, pvIndex))
+	Goto Exit_Function
+Trace_IndexError:
+	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0)
+	Goto Exit_Function
+End Function		&apos;	Recordsets	V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function TableDefs(ByVal Optional pvIndex As variant) As Object
+&apos;	Collect all tables in the database
+&apos;	Check when standalone &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(&quot;Database.TableDefs&quot;)
+
+	Set TableDefs = Nothing
+	If Not IsMissing(pvIndex) Then
+		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
+	End If
+			
+Dim sObjects() As String, sObjectName As String, oObject As Object
+Dim i As Integer, bFound As Boolean, oTables As Object
+
+	Set oTables = Connection.getTables
+	sObjects = oTables.ElementNames()
+	Select Case True
+		Case IsMissing(pvIndex)
+			Set oObject = New Collect
+			oObject._CollType = COLLTABLEDEFS
+			oObject._ParentType = OBJDATABASE
+			oObject._ParentName = &quot;&quot;
+			oObject._Count = UBound(sObjects) + 1
+			Goto Exit_Function
+		Case VarType(pvIndex) = vbString
+			bFound = False
+		&apos;	Check existence of object and find its exact (case-sensitive) name
+			For i = 0 To UBound(sObjects)
+				If UCase(pvIndex) = UCase(sObjects(i)) Then
+					sObjectName = sObjects(i)
+					bFound = True
+					Exit For
+				End If
+			Next i
+			If Not bFound Then Goto Trace_NotFound
+		Case Else		&apos;	pvIndex is numeric
+			If pvIndex &lt; 0 Or pvIndex &gt; UBound(sObjects) Then Goto Trace_IndexError
+			sObjectName = sObjects(pvIndex)
+	End Select
+
+	Set oObject = New DataDef
+	oObject._Type = OBJTABLEDEF
+	oObject._Name = sObjectName
+	Set oObject.Table = oTables.getByName(sObjectName)
+
+Exit_Function:
+	Set TableDefs = oObject
+	Set oObject = Nothing
+	Utils._ResetCalledSub(&quot;Database.TableDefs&quot;)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, &quot;Database.TableDefs&quot;, Erl)
+	GoTo Exit_Function
+Trace_NotFound:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Table&quot;, pvIndex))
+	Goto Exit_Function
+Trace_IndexError:
+	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0)
+	Goto Exit_Function
+End Function		&apos;	TableDefs	V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- PRIVATE FUNCTIONS 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _hasDialog(ByVal psName As String) As Boolean
+&apos;	Return True if psName if in the collection of started dialogs
+
+Dim oDialog As Object
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Set oDialog = Dialogs.Item(UCase(psName))
+	_hasDialog = True
+
+Exit_Function:
+	Exit Function
+Error_Function:		&apos;	Item by key aborted
+	_hasDialog = False
+	GoTo Exit_Function
+End Function	&apos;	_hasDialog	V0.9.1
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _hasRecordset(ByVal psName As String) As Boolean
+&apos;	Return True if psName if in the collection of Recordsets
+
+Dim oRecordset As Object
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Set oRecordset = RecordsetsColl.Item(psName)
+	_hasRecordset = True
+
+Exit_Function:
+	Exit Function
+Error_Function:		&apos;	Item by key aborted
+	_hasRecordset = False
+	GoTo Exit_Function
+End Function	&apos;	_hasRecordset	V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _PropertiesList() As Variant
+
+	_PropertiesList = Array(&quot;ObjectType&quot;)
+
+End Function	&apos;	_PropertiesList
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _PropertyGet(ByVal psProperty As String) As Variant
+&apos;	Return property value of the psProperty property name
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(&quot;Database.get&quot; &amp; psProperty)
+Dim vEMPTY As Variant
+	_PropertyGet = vEMPTY
+	
+	Select Case UCase(psProperty)
+		Case UCase(&quot;ObjectType&quot;)
+			_PropertyGet = _Type
+		Case Else
+			Goto Trace_Error
+	End Select
+	
+Exit_Function:
+	Utils._ResetCalledSub(&quot;Database.get&quot; &amp; psProperty)
+	Exit Function
+Trace_Error:
+	TraceError(TRACEFATAL, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
+	_PropertyGet = vEMPTY
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, &quot;Database._PropertyGet&quot;, Erl)
+	_PropertyGet = vEMPTY
+	GoTo Exit_Function
+End Function		&apos;	_PropertyGet
+</script:module>

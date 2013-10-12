@@ -27,6 +27,13 @@
 
 #include "macros.inc"
 
+File gid_File_Basic_Access2Base
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "wizards_basicsrvaccess2base.filelist";
+End
+
 File gid_File_Basic_Depot
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;

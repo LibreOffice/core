@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="DataDef" script:language="StarBasic">Option Compatible
+Option ClassModule
+
+Option Explicit
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS ROOT FIELDS 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Private	_Type					As String				&apos;	Must be TABLEDEF or QUERYDEF
+Private _Name					As String
+Private Table					As Object				&apos;	com.sun.star.sdb.dbaccess.ODBTable
+Private Query					As Object				&apos;	com.sun.star.sdb.dbaccess.OQuery
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CONSTRUCTORS / DESTRUCTORS						        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Sub Class_Initialize()
+	_Type = &quot;&quot;
+	_Name = &quot;&quot;
+	Set Table = Nothing
+	Set Query = Nothing
+End Sub		&apos;	Constructor
+
+REM -----------------------------------------------------------------------------------------------------------------------
+&apos;Private Sub Class_Terminate()
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS GET/LET/SET PROPERTIES					        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Property Get Name() As String
+	Name = _PropertyGet(&quot;Name&quot;)
+End Property		&apos;	Name (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get ObjectType() As String
+	ObjectType = _PropertyGet(&quot;ObjectType&quot;)
+End Property		&apos;	ObjectType (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get SQL() As Variant
+	SQL = _PropertyGet(&quot;SQL&quot;)
+End Property		&apos;	SQL (get)
+
+Property Let SQL(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;SQL&quot;, pvValue)
+End Property		&apos;	SQL (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get pType() As Integer
+	pType = _PropertyGet(&quot;Type&quot;)
+End Property		&apos;	Type (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS METHODS	 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Execute(ByVal Optional pvOptions As Variant) As Boolean
+&apos;Execute a stored query. The query must be an ACTION query.
+
+Dim cstThisSub As String
+	cstThisSub = Utils._PCase(_Type) &amp; &quot;.Execute&quot;
+	Utils._SetCalledSub(cstThisSub)
+	On Local Error Goto Error_Function
+Const cstNull = -1
+	Execute = False
+	If _Type &lt;&gt; OBJQUERYDEF Then Goto Trace_Method
+	If IsMissing(pvOptions) Then
+		pvOptions = cstNull
+	Else
+		If Not Utils._CheckArgument(pvOptions, 1, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
+	End If
+	
+	&apos;Check action query
+Dim oDatabase As Object, oStatement As Object, vResult As Variant
+Dim iType As Integer, sSql As String
+	iType = pType
+	If ( (iType And DBQAction) = 0 ) And ( (iType And DBQDDL) = 0 ) Then Goto Trace_Action
+
+	&apos;Execute action query
+	Set oDatabase = Application._CurrentDb()
+	Set oStatement = oDatabase.Connection.createStatement()
+	sSql = Query.Command
+	If pvOptions = dbSQLPassThrough	Then oStatement.EscapeProcessing = False _
+									Else oStatement.EscapeProcessing = True
+	On Local Error Goto SQL_Error
+	vResult = oStatement.executeUpdate(Utils._ReplaceSquareBrackets(sSql))
+	On Local Error Goto Error_Function
+	
+	Execute = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Trace_Method:
+	TraceError(TRACEFATAL, ERRMETHOD, cstThisSub, 0, , cstThisSub)
+	Goto Exit_Function
+Trace_Action:
+	TraceError(TRACEFATAL, ERRNOTACTIONQUERY, cstThisSub, 0, , _Name)
+	Goto Exit_Function
+SQL_Error:
+	TraceError(TRACEFATAL, ERRSQLSTATEMENT, Utils._CalledSub(), 0, , sSql)
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function		&apos;	Execute
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Fields(ByVal Optional pvIndex As variant) As Object
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Dim cstThisSub As String
+	cstThisSub = Utils._PCase(_Type) &amp; &quot;.Fields&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+	Set Fields = Nothing
+	If Not IsMissing(pvIndex) Then
+		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
+	End If
+			
+Dim sObjects() As String, sObjectName As String, oObject As Object
+Dim i As Integer, bFound As Boolean, oFields As Object
+
+	If _Type = OBJTABLEDEF Then Set oFields = Table.getColumns() Else Set oFields = Query.getColumns()
+	sObjects = oFields.ElementNames()
+	Select Case True
+		Case IsMissing(pvIndex)
+			Set oObject = New Collect
+			oObject._CollType = COLLFIELDS
+			oObject._ParentType = _Type
+			oObject._ParentName = _Name
+			oObject._Count = UBound(sObjects) + 1
+			Goto Exit_Function
+		Case VarType(pvIndex) = vbString
+			bFound = False
+		&apos;	Check existence of object and find its exact (case-sensitive) name
+			For i = 0 To UBound(sObjects)
+				If UCase(pvIndex) = UCase(sObjects(i)) Then
+					sObjectName = sObjects(i)
+					bFound = True
+					Exit For
+				End If
+			Next i
+			If Not bFound Then Goto Trace_NotFound
+		Case Else		&apos;	pvIndex is numeric
+			If pvIndex &lt; 0 Or pvIndex &gt; UBound(sObjects) Then Goto Trace_IndexError
+			sObjectName = sObjects(pvIndex)
+	End Select
+
+	Set oObject = New Field
+	oObject._Name = sObjectName
+	Set oObject.Column = oFields.getByName(sObjectName)
+	oObject._ParentName = _Name
+	oObject._ParentType = _Type
+
+Exit_Function:
+	Set Fields = oObject
+	Set oObject = Nothing
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Trace_NotFound:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Field&quot;, pvIndex))
+	Goto Exit_Function
+Trace_IndexError:
+	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0)
+	Goto Exit_Function
+End Function		&apos;	Fields
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function getProperty(Optional ByVal pvProperty As Variant) As Variant
+&apos;	Return property value of psProperty property name
+
+Dim cstThisSub As String
+	cstThisSub = Utils._PCase(_Type) &amp; &quot;.getProperty&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(pvProperty) Then Call _TraceArguments()
+	getProperty = _PropertyGet(pvProperty)
+	Utils._ResetCalledSub(cstThisSub)
+	
+End Function		&apos;	getProperty
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function hasProperty(ByVal Optional pvProperty As Variant) As Boolean
+&apos;	Return True if object has a valid property called pvProperty (case-insensitive comparison !)
+
+Dim cstThisSub As String
+	cstThisSub = Utils._PCase(_Type) &amp; &quot;.hasProperty&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(pvProperty) Then hasProperty = PropertiesGet._hasProperty(_Type, _PropertiesList()) Else hasProperty = PropertiesGet._hasProperty(_Type, _PropertiesList(), pvProperty)
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+	
+End Function	&apos;	hasProperty
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function OpenRecordset(ByVal Optional pvType As Variant, ByVal Optional pvOptions As Variant, ByVal Optional pvLockEdit As Variant) As Object
+&apos;Return a Recordset object based on current tabledef object
+
+Dim cstThisSub As String
+	cstThisSub = Utils._PCase(_Type) &amp; &quot;.OpenRecordset&quot;
+	Utils._SetCalledSub(cstThisSub)
+Const cstNull = -1
+Dim lCommandType As Long, sCommand As String, oObject As Object
+Dim odbDatabase As Object
+	Set oObject = Nothing
+	If IsMissing(pvType) Then
+		pvType = cstNull
+	Else
+		If Not Utils._CheckArgument(pvType, 1, Utils._AddNumeric(), dbOpenForwardOnly) Then Goto Exit_Function
+	End If
+	If IsMissing(pvOptions) Then
+		pvOptions = cstNull
+	Else
+		If Not Utils._CheckArgument(pvOptions, 2, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
+	End If
+	If IsMissing(pvLockEdit) Then
+		pvLockEdit = cstNull
+	Else
+		If Not Utils._CheckArgument(pvLockEdit, 3, Utils._AddNumeric(), dbReadOnly) Then Goto Exit_Function
+	End If
+
+	Select Case _Type
+		Case OBJTABLEDEF
+			lCommandType = com.sun.star.sdb.CommandType.TABLE
+			sCommand = _Name
+		Case OBJQUERYDEF
+			lCommandType = com.sun.star.sdb.CommandType.QUERY
+			sCommand = _Name
+	End Select
+	
+	Set oObject = New Recordset
+	With oObject
+		._CommandType = lCommandType
+		._Command = sCommand
+		._ParentName = _Name
+		._ParentType = _Type
+		._ForwardOnly = ( pvType = dbOpenForwardOnly )
+		._PassThrough = ( pvOptions = dbSQLPassThrough )
+		._ReadOnly = ( pvLockEdit = dbReadOnly )
+		Call ._Initialize()
+	End With
+	Set odbDatabase = Application._CurrentDb()
+	With odbDatabase
+		.RecordsetMax = .RecordsetMax + 1
+		oObject._Name = Format(.RecordsetMax, &quot;0000000&quot;)
+		.RecordsetsColl.Add(oObject, UCase(oObject._Name))
+	End With
+	
+	If Not ( oObject._BOF And oObject._EOF ) Then oObject.MoveFirst()		&apos;	Do nothing if resultset empty
+
+Exit_Function:
+	Set OpenRecordset = oObject
+	Set oObject = Nothing
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	Set oObject = Nothing
+	GoTo Exit_Function
+End Function	&apos;	OpenRecordset
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Properties(ByVal Optional pvIndex As Variant) As Variant
+&apos;	Return
+&apos;		a Collection object if pvIndex absent
+&apos;		a Property object otherwise
+
+Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
+Dim cstThisSub As String
+	cstThisSub = Utils._PCase(_Type) &amp; &quot;.Properties&quot;
+	Utils._SetCalledSub(cstThisSub)
+	vPropertiesList = _PropertiesList()
+	sObject = Utils._PCase(_Type)
+	If IsMissing(pvIndex) Then
+		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList)
+	Else
+		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList, pvIndex)
+		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
+	End If
+	
+Exit_Function:
+	Set Properties = vProperty
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+End Function	&apos;	Properties
+
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- PRIVATE FUNCTIONS 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _PropertiesList() As Variant
+
+	Select Case _Type
+		Case OBJTABLEDEF
+			_PropertiesList = Array(&quot;Name&quot;, &quot;ObjectType&quot;)
+		Case OBJQUERYDEF
+			_PropertiesList = Array(&quot;Name&quot;, &quot;ObjectType&quot;, &quot;SQL&quot;, &quot;Type&quot;)
+		Case Else
+	End Select
+
+End Function	&apos;	_PropertiesList
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _PropertyGet(ByVal psProperty As String) As Variant
+&apos;	Return property value of the psProperty property name
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Dim cstThisSub As String
+	cstThisSub = Utils._PCase(_Type)
+	Utils._SetCalledSub(cstThisSub &amp; &quot;.get&quot; &amp; psProperty)
+Dim vEMPTY As Variant, sSql As String, sVerb As String, iType As Integer
+	_PropertyGet = vEMPTY
+	
+	Select Case UCase(psProperty)
+		Case UCase(&quot;Name&quot;)
+			_PropertyGet = _Name
+		Case UCase(&quot;ObjectType&quot;)
+			_PropertyGet = _Type
+		Case UCase(&quot;SQL&quot;)
+			_PropertyGet = Query.Command
+		Case UCase(&quot;Type&quot;)
+			iType = 0
+			sSql = Trim(UCase(Query.Command))
+			sVerb = Split(sSql, &quot; &quot;)(0)
+			If sVerb = &quot;SELECT&quot; Then iType = iType + dbQSelect
+			If sVerb = &quot;SELECT&quot; And InStr(sSql, &quot; INTO &quot;) &gt; 0 Then iType = iType + dbQMakeTable
+			If sVerb = &quot;SELECT&quot; And InStr(sSql, &quot; UNION &quot;) &gt; 0 Then iType = iType + dbQSetOperation
+			If Not Query.EscapeProcessing Then iType = iType + dbQSQLPassThrough
+			If sVerb = &quot;INSERT&quot; Then iType = iType + dbQAppend
+			If sVerb = &quot;DELETE&quot; Then iType = iType + dbQDelete
+			If sVerb = &quot;UPDATE&quot; Then iType = iType + dbQUpdate
+			If sVerb = &quot;CREATE&quot; _
+				Or sVerb = &quot;ALTER&quot; _
+				Or sVerb = &quot;DROP&quot; _
+				Or sVerb = &quot;RENAME&quot; _
+				Or sVerb = &quot;TRUNCATE&quot; _
+					Then iType = iType + dbQDDL
+			&apos; dbQAction implied by dbQMakeTable, dbQAppend, dbQDelete and dbQUpdate
+			&apos; To check Type use: If (iType And dbQxxx) &lt;&gt; 0 Then ...
+			_PropertyGet = iType
+		Case Else
+			Goto Trace_Error
+	End Select
+	
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub &amp; &quot;.get&quot; &amp; psProperty)
+	Exit Function
+Trace_Error:
+	TraceError(TRACEFATAL, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
+	_PropertyGet = vEMPTY
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub &amp; &quot;._PropertyGet&quot;, Erl)
+	_PropertyGet = vEMPTY
+	GoTo Exit_Function
+End Function		&apos;	_PropertyGet
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _PropertySet(ByVal psProperty As String, ByVal pvValue As Variant) As Boolean
+&apos;	Return True if property setting OK
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Dim cstThisSub As String
+	cstThisSub = Utils._PCase(_Type)
+	Utils._SetCalledSub(cstThisSub &amp; &quot;.set&quot; &amp; psProperty)
+
+&apos;Execute
+Dim iArgNr As Integer
+
+	_PropertySet = True
+	Select Case UCase(_A2B_.CalledSub)
+		Case UCase(&quot;setProperty&quot;)						:	iArgNr = 3
+		Case UCase(cstThisSub &amp; &quot;.setProperty&quot;)			:	iArgNr = 2
+		Case UCase(cstThisSub &amp; &quot;.set&quot; &amp; psProperty)	:	iArgNr = 1
+	End Select
+	
+	If Not hasProperty(psProperty) Then Goto Trace_Error
+
+	Select Case UCase(psProperty)
+		Case UCase(&quot;SQL&quot;)
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			Query.Command = pvValue
+		Case Else
+			Goto Trace_Error
+	End Select
+	
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub &amp; &quot;.set&quot; &amp; psProperty)
+	Exit Function
+Trace_Error:
+	TraceError(TRACEFATAL, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
+	_PropertySet = False
+	Goto Exit_Function
+Trace_Error_Value:
+	TraceError(TRACEFATAL, ERRPROPERTYVALUE, Utils._CalledSub(), 0, 1, Array(pvValue, psProperty))
+	_PropertySet = False
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub &amp; &quot;._PropertySet&quot;, Erl)
+	_PropertySet = False
+	GoTo Exit_Function
+End Function			&apos;	_PropertySet
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS PROPERTY SETs								        														---
+REM --- Workaround to bug https://www.libreoffice.org/bugzilla/show_bug.cgi?id=60752 (LibreOffice 4.0)					---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Property Set SQL(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;SQL&quot;, pvValue)
+End Property		&apos;	SQL (set)
+
+
+</script:module>
