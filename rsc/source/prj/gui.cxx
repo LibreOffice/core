@@ -23,16 +23,6 @@
 #include <rscrsc.hxx>
 #include <rscdb.hxx>
 
-static RscCompiler * pRscCompiler = NULL;
-#if defined( UNX ) || defined ( __GNUC__ ) || defined(__MINGW32__)
-    void ExitProgram( void ){
-#else
-    void cdecl ExitProgram( void ){
-#endif
-    if( pRscCompiler )
-        delete pRscCompiler;
-}
-
 static RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
 {
     for ( int i = 0; i < argc; ++i )
@@ -49,9 +39,6 @@ static RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
 
 int rsc2_main( int argc, char **argv )
 {
-#ifndef UNX
-    atexit( ExitProgram );
-#endif
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "debugging %s\n", argv[0] );
 #endif
@@ -71,9 +58,7 @@ int rsc2_main( int argc, char **argv )
     else{
         RscCompiler* pCompiler = new RscCompiler( pCmdLine, pTypCont );
 
-        pRscCompiler = pCompiler;
         aError = pCompiler->Start();
-        pRscCompiler = NULL;
 
         delete pCompiler;
     }
