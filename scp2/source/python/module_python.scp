@@ -71,8 +71,8 @@ Module gid_Module_Pyuno
 End
 
 Module gid_Module_Script_Provider_For_Python
-    Name = "Script Provider For Python"
-    Description = "Script Provider For Python"
+    Name = "Script Provider For Python";
+    Description = "Script Provider For Python";
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
     Files = ( gid_File_scriptproviderforpython );

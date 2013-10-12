@@ -26,8 +26,8 @@
 #include "macros.inc"
 
 Module gid_Module_Pdfimport
-    Name = "PDF Import"
-    Description = "PDF Import"
+    Name = "PDF Import";
+    Description = "PDF Import";
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
     Styles = (HIDDEN_ROOT);
