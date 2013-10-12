@@ -64,10 +64,10 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::resource;
 using namespace ::com::sun::star::ui::dialogs;
 
-#if defined(UNX)
-char const FilterMask_All[] = "*";
-#else
+#ifdef WNT
 char const FilterMask_All[] = "*.*";
+#else
+char const FilterMask_All[] = "*";
 #endif
 
 DBG_NAME( DialogWindow )
