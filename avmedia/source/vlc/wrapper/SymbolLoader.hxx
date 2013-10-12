@@ -34,7 +34,7 @@ struct ApiMap
 
 namespace
 {
-#if defined( UNX )
+#if defined( LINUX )
     const char LibName[] = "libvlc.so.5";
 #elif defined( MACOSX )
     const char LibName[] = "/Applications/VLC.app/Contents/MacOS/lib/libvlc.dylib";
@@ -92,7 +92,7 @@ namespace
     template<size_t N>
     bool InitApiMap( const ApiMap ( &pMap )[N]  )
     {
-#if defined( UNX ) || defined( MACOSX )
+#if defined( LINUX ) || defined( MACOSX )
         const OUString& fullPath = OUString::createFromAscii(LibName);
 #elif defined( WNT )
         const OUString& fullPath = GetVLCPath() + OUString::createFromAscii(LibName);
