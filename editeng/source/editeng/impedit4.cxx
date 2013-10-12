@@ -152,12 +152,6 @@ EditPaM ImpEditEngine::ReadXML( SvStream& rInput, EditSelection aSel )
 
 EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
 {
-#if (OSL_DEBUG_LEVEL > 2) && !defined( UNX )
-    SvFileStream aRTFOut( OUString( "d:\\rtf_in.rtf" ), STREAM_WRITE );
-    aRTFOut << rInput;
-    aRTFOut.Close();
-    rInput.Seek( 0 );
-#endif
     if ( aSel.HasRange() )
         aSel = ImpDeleteSelection( aSel );
 
@@ -687,16 +681,6 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     std::vector<SvxFontItem*>::iterator it;
     for (it = aFontTable.begin(); it != aFontTable.end(); ++it)
         delete *it;
-
-#if (OSL_DEBUG_LEVEL > 2) && !defined( UNX )
-    {
-        SvFileStream aStream( OUString( "d:\\rtf_out.rtf" ), STREAM_WRITE|STREAM_TRUNC );
-        sal_uLong nP = rOutput.Tell();
-        rOutput.Seek( 0 );
-        aStream << rOutput;
-        rOutput.Seek( nP );
-    }
-#endif
 
     return rOutput.GetError();
 }
