@@ -21,16 +21,8 @@
 #ifndef SC_DECL_H
 #define SC_DECL_H
 
-#include <tools/solar.h>
-
 enum WKTYP { eWK_UNKNOWN = -2, eWK_1 = 0, eWK_2, eWK3, eWK4, eWK_Error, eWK123 };
-typedef void ( BEARBFKT )( void );
-typedef sal_Char STRING16[ 16 ];
-typedef sal_Char STRING14[ 14 ];
-typedef sal_Char STRING8[ 8 ];
-typedef sal_Char STRING6[ 6 ];
-typedef sal_uInt16 USHORT4[ 4 ];
-//typedef unsigned short USHORT4[ 4 ];
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

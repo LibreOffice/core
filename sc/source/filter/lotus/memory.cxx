@@ -29,7 +29,6 @@
 
 #include "attrib.hxx"
 
-#include "decl.h"
 #include "tool.h"
 
 extern ScDocument*      pDoc;
