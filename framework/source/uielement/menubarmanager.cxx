@@ -279,6 +279,8 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
         {
             a <<= (long) aSystemMenuData.hMenu;
         }
+#else
+        (void) SystemType;
 #endif
     }
 
