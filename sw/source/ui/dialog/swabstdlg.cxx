@@ -21,7 +21,6 @@
 #include "swabstdlg.hxx"
 
 #include <osl/module.hxx>
-#include <tools/string.hxx>
 #include <vcl/unohelp.hxx>
 
 typedef SwAbstractDialogFactory* (SAL_CALL *SwFuncPtrCreateDialogFactory)();
@@ -42,7 +41,7 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
     SwFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
     static const OUString sLibName(::vcl::unohelper::CreateLibraryName("swui", sal_True));
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( sLibName ),
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName,
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( SwAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory"));

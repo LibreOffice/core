@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 // local
 #include <w1struct.hxx>
