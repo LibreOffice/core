@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///rU\u003d",
+        "filename": "external/Module_external.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-10-12T01:35:30Z",
+      "side": 1,
+      "message": "the gb_Helper_optional call actually seems superfluous here ultimately, as Module_libpng.mk checks the conditional itself (and is an empty module otherwise).",
+      "revId": "10bfeb2a345ad8f3286d95a9bea8416f318a0feb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
