@@ -48,7 +48,7 @@ typedef sal_uInt16 StreamMode;
 // file i/o
 #define STREAM_NOCREATE                 0x0004  ///< 1 == Dont create file
 #define STREAM_TRUNC                    0x0008  ///< Truncate _existing_ file to zero length
-#define STREAM_COPY_ON_SYMLINK          0x0010  ///< copy-on-write for symlinks (UNX)
+#define STREAM_COPY_ON_SYMLINK          0x0010  ///< copy-on-write for symlinks (Unix)
 
 #define STREAM_READWRITEBITS            (STREAM_READ | STREAM_WRITE | \
                                          STREAM_NOCREATE | STREAM_TRUNC)
