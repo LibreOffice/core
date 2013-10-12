@@ -40,11 +40,6 @@ using namespace cppu;
 #define CDECL
 #endif
 
-int CDECL SbCompare_PropertyValues_Impl( const void *arg1, const void *arg2 )
-{
-   return ((PropertyValue*)arg1)->Name.compareTo( ((PropertyValue*)arg2)->Name );
-}
-
 struct SbCompare_UString_PropertyValue_Impl
 {
    bool operator() (const OUString& lhs, PropertyValue const & rhs)
@@ -62,11 +57,6 @@ struct SbCompare_UString_PropertyValue_Impl
    }
 #endif
 };
-
-int CDECL SbCompare_Properties_Impl( const void *arg1, const void *arg2 )
-{
-   return ((Property*)arg1)->Name.compareTo( ((Property*)arg2)->Name );
-}
 
 extern "C" int CDECL SbCompare_UString_Property_Impl( const void *arg1, const void *arg2 )
 {
