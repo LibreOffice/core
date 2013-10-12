@@ -27,9 +27,6 @@
 #include <cmath>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifdef UNX
-#include <vcl/sysdata.hxx>
-#endif
 
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
