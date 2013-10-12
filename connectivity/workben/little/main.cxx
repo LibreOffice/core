@@ -42,12 +42,7 @@ using namespace cppu;
 
 
 
-#if (defined UNX)
 void main( int argc, char * argv[] )
-#else
-void _cdecl main( int argc, char * argv[] )
-#endif
-
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  m_xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver>      m_xDriver;

@@ -387,12 +387,8 @@ void usage()
     PRINTLN("-e test outlook express");
     PRINTLN("0 < threadcount <= 100, default 100");
 }
-#if (defined UNX)
-int main( int argc, char * argv[] )
-#else
-int _cdecl main( int argc, char * argv[] )
-#endif
 
+int main( int argc, char * argv[] )
 {
     OSL_TRACE("Init UNO");
     Reference< XMultiServiceFactory > xMgr =InitializeFac();
