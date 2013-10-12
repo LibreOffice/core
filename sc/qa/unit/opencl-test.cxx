@@ -207,11 +207,14 @@ void ScOpenclTest::testSharedFormulaXLS()
         CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
     }
 
-    // AMLOEXT-15
+    // AMLOEXT-15 and AMLOEXT-16
     for (SCROW i = 5; i < 10; ++i)
     {
         double fLibre = pDoc->GetValue(ScAddress(6, i, 1));
         double fExcel = pDocRes->GetValue(ScAddress(6, i, 1));
+        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        fLibre = pDoc->GetValue(ScAddress(7, i, 1));
+        fExcel = pDocRes->GetValue(ScAddress(7, i, 1));
         CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
     }
     xDocSh->DoClose();
