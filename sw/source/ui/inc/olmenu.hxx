@@ -34,7 +34,7 @@
 
 class SwWrtShell;
 
-class SwSpellPopup : public PopupMenu
+class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
 {
     SwWrtShell* pSh;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<

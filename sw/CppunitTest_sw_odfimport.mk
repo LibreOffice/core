@@ -58,6 +58,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfimport,\
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \
+	lingucomponent/source/languageguessing/guesslang \
     linguistic/source/lng \
     package/util/package2 \
     package/source/xstor/xstor \

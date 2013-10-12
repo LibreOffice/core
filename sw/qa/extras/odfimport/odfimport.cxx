@@ -17,6 +17,8 @@
 #include <swdtflvr.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
+#include <olmenu.hxx>
+#include <cmdid.h>
 
 typedef std::map<OUString, com::sun::star::uno::Sequence< com::sun::star::table::BorderLine> > AllBordersMap;
 typedef std::pair<OUString, com::sun::star::uno::Sequence< com::sun::star::table::BorderLine> > StringSequencePair;
@@ -38,6 +40,7 @@ public:
     void testFdo37606Copy();
     void testFdo69862();
     void testFdo69979();
+    void testSpellmenuRedline();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -66,6 +69,7 @@ void Test::run()
         {"fdo37606.odt", &Test::testFdo37606Copy},
         {"fdo69862.odt", &Test::testFdo69862},
         {"fdo69979.odt", &Test::testFdo69979},
+        {"spellmenu-redline.odt", &Test::testSpellmenuRedline},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -459,6 +463,20 @@ void Test::testFdo69979()
 
     SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
     CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetTxt());
+}
+
+void Test::testSpellmenuRedline()
+{
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
+    OUString aParaText;
+    uno::Reference<linguistic2::XSpellAlternatives> xAlt;
+    SwSpellPopup aPopup(pWrtShell, xAlt, aParaText);
+    // Make sure that if we show the spellcheck popup menu (for the current
+    // document, which contains redlines), then the last two entries will be
+    // always 'go to next/previous change'.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_NEXT_CHANGE), aPopup.GetItemId(aPopup.GetItemCount() - 2));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_PREV_CHANGE), aPopup.GetItemId(aPopup.GetItemCount() - 1));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
