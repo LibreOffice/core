@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Utils" script:language="StarBasic">Option Explicit
+
+Global _A2B_			As Variant
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- PRIVATE FUNCTIONS 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Public Function _AddNumeric(ByVal Optional pvTypes As Variant) As Variant
+&apos;Return on top of argument the list of all numeric types
+&apos;Facilitates the entry of the list of allowed types in _CheckArgument calls
+
+Dim i As Integer, vNewList() As Variant, vNumeric() As Variant, iSize As Integer
+	If IsMissing(pvTypes) Then
+		vNewList = Array()
+	ElseIf IsArray(pvTypes) Then
+		vNewList = pvTypes
+	Else
+		vNewList = Array(pvTypes)
+	End If
+	
+	vNumeric = Array(vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBigint, vbDecimal)
+	
+	iSize = UBound(vNewlist)
+	ReDim Preserve vNewList(iSize + UBound(vNumeric) + 1)
+	For i = 0 To UBound(vNumeric)
+		vNewList(iSize + i + 1) = vNumeric(i)
+	Next i
+	
+	_AddNumeric = vNewList		
+
+End Function		&apos;	_AddNumeric	V0.8.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Public Function _BitShift(piValue As Integer, piConstant As Integer) As Boolean
+
+	_BitShift = False
+	If piValue = 0 Then Exit Function
+	Select Case piConstant
+		Case 1
+			Select Case piValue
+				Case 1, 3, 5, 7, 9, 11, 13, 15:				_BitShift = True
+				Case Else
+			End Select
+		Case 2
+			Select Case piValue
+				Case 2, 3, 6, 7, 10, 11, 14, 15:			_BitShift = True
+				Case Else
+			End Select
+		Case 4
+			Select Case piValue
+				Case 4, 5, 6, 7, 12, 13, 14, 15:			_BitShift = True
+				Case Else
+			End Select
+		Case 8
+			Select Case piValue
+				Case 8, 9, 10, 11, 12, 13, 14, 15:			_BitShift = True
+				Case Else
+			End Select
+	End Select
+
+End Function		&apos;	BitShift
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _CalledSub() As String
+	_CalledSub = Iif(_A2B_.CalledSub = &quot;&quot;, &quot;&quot;, _GetLabel(&quot;CALLTO&quot;) &amp; &quot; &apos;&quot; &amp; _A2B_.CalledSub &amp; &quot;&apos;&quot;)
+End Function	&apos;	CalledSub	V0.8.9
+
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _CheckArgument(pvItem As Variant _
+			, ByVal piArgNr As Integer _
+			, Byval pvType As Variant _
+			, ByVal Optional pvValid As Variant _
+			, ByVal Optional pvError As Boolean _
+			) As Variant
+&apos;	Called by public functions to check the validity of their arguments
+&apos;		pvItem 				Argument to be checked
+&apos;		piArgNr				Argument sequence number
+&apos;		pvType				Single value or array of allowed variable types
+&apos;							If of string type must contain one or more valid pseudo-object types
+&apos;		pvValid				Single value or array of allowed values - comparison for strings is case-insensitive
+&apos;		pvError				If True (default), error handling in this routine. False in _setProperty methods in class modules.
+
+	_CheckArgument = False
+	
+Dim iVarType As Integer
+	If IsArray(pvType) Then iVarType = VarType(pvType(LBound(pvType))) Else iVarType = VarType(pvType)
+	If iVarType = vbString Then					&apos;	pvType is a pseudo-type string
+		_CheckArgument = Utils._IsPseudo(pvItem, pvType)
+	Else
+		If IsMissing(pvValid) Then _CheckArgument = Utils._IsScalar(pvItem, pvType) Else _CheckArgument = Utils._IsScalar(pvItem, pvType, pvValid)
+	End If
+	
+	If VarType(pvItem) = vbCurrency Or VarType(pvItem) = vbDecimal Or VarType(pvItem) = vbBigint Then pvItem = CDbl(pvItem)
+
+Exit_Function:
+	If Not _CheckArgument Then
+		If IsMissing(pvError) Then pvError = True
+		If pvError Then
+			TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, Array(piArgNr, pvItem))
+		End If
+	End If
+	Exit Function
+End Function	&apos;	CheckArgument	V0.9.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _CStr(pvArg As Variant, ByVal Optional pbShort As Boolean) As String
+&apos;	Convert pvArg into a readable string (truncated if too long and pbShort = True or missing)
+
+Dim sArg As String, sObject As String, oArg As Object, sLength As String
+Const cstLength = 50
+	If IsArray(pvArg) Then
+		sArg = &quot;[ARRAY]&quot;
+	Else
+		Select Case VarType(pvArg)
+			Case vbEmpty			:		sArg = &quot;[EMPTY]&quot;
+			Case vbNull				:		sArg = &quot;[NULL]&quot;
+			Case vbObject
+				If IsNull(pvArg) Then
+					sArg = &quot;[NULL]&quot;
+				Else
+					sObject = Utils._ImplementationName(pvArg)
+					If Utils._IsPseudo(pvArg, Array(OBJDATABASE, OBJCOLLECTION, OBJPROPERTY, OBJFORM, OBJSUBFORM, OBJCONTROL, OBJOPTIONGROUP _
+								, OBJEVENT, OBJFIELD, OBJTABLEDEF, OBJQUERYDEF, OBJRECORDSET _
+								)) Then
+						Set oArg = pvArg		&apos;	To avoid &quot;Object variable not set&quot; error message
+						sArg = &quot;[&quot; &amp; oArg._Type &amp; &quot;] &quot; &amp; oArg._Name
+					ElseIf sObject &lt;&gt; &quot;&quot; Then
+						sArg = &quot;[&quot; &amp; sObject &amp; &quot;]&quot;
+					Else
+						sArg = &quot;[OBJECT]&quot;
+					End If
+				End If
+			Case vbVariant			:		sArg = &quot;[VARIANT]&quot;
+			Case vbString			:		sArg = pvArg
+			Case vbBoolean			:		sArg = Iif(pvArg, &quot;TRUE&quot;, &quot;FALSE&quot;)
+			Case Else				:		sArg = CStr(pvArg)
+		End Select
+	End If
+	If IsMissing(pbShort) Then pbShort = True
+	If pbShort And Len(sArg) &gt; cstLength Then 
+		sLength = &quot;(&quot; &amp; Len(sArg) &amp; &quot;)&quot;
+		sArg = Left(sArg, cstLength - 5 - Len(slength)) &amp; &quot; ... &quot; &amp; sLength
+	End If
+	_CStr = sArg
+	
+End Function	&apos;	CStr			V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _DecimalPoint() As String
+&apos;Return locale decimal point
+	_DecimalPoint = Mid(Format(0, &quot;0.0&quot;), 2, 1)
+End Function
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _ExtensionLocation() As String
+&apos;	Return the URL pointing to the location where OO installed the Access2Base extension
+&apos;	Adapted from http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Extensions/Location_of_Installed_Extensions
+
+Dim oPip As Object, sLocation As String
+	Set oPip = GetDefaultContext.getByName(&quot;/singletons/com.sun.star.deployment.PackageInformationProvider&quot;)
+	_ExtensionLocation = oPip.getPackageLocation(&quot;Access2Base&quot;)
+	
+End Function	&apos;	ExtensionLocation
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _getResultSetColumnValue(poResultSet As Object, Byval piColIndex As Integer) As Variant
+REM Modified from Roberto Benitez&apos;s BaseTools
+REM get the data for the column specified by ColIndex
+REM get type name from metadata
+	
+Dim vValue As Variant, sType As String, vDateTime As Variant
+
+	sType = poResultSet.MetaData.getColumnTypeName(piColIndex)
+	Select Case sType
+		Case &quot;ARRAY&quot;:							vValue = poResultSet.getArray(piColIndex)
+		Case &quot;BLOB&quot;:							vValue = poResultSet.getBlob(piColIndex)
+		Case &quot;BIT&quot;, &quot;BOOLEAN&quot;:					vValue = poResultSet.getBoolean(piColIndex)
+		Case &quot;BYTE&quot;:							vValue = poResultSet.getByte(piColIndex)
+		Case &quot;BYTES&quot;:							vValue = poResultSet.getBytes(piColIndex)
+		Case &quot;CLOB&quot;:							vValue = poResultSet.getClob(piColIndex)
+		Case &quot;DATE&quot;:							vDateTime = poResultSet.getDate(piColIndex)
+												vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day))
+		Case &quot;DOUBLE&quot;, &quot;REAL&quot;:					vValue = poResultSet.getDouble(piColIndex)
+		Case &quot;FLOAT&quot;:							vValue = poResultSet.getFloat(piColIndex)
+		Case &quot;INTEGER&quot;, &quot;SMALLINT&quot;:				vValue = poResultSet.getInt(piColIndex)
+		Case &quot;LONG&quot;, &quot;BIGINT&quot;: 					vValue = poResultSet.getLong(piColIndex)
+		Case &quot;DECIMAL&quot;, &quot;NUMERIC&quot;:				vValue = poResultSet.getDouble(piColIndex)
+		Case &quot;NULL&quot;:							vValue = poResultSet.getNull(piColIndex)
+		Case &quot;OBJECT&quot;:							vValue = poResultSet.getObject(piColIndex)
+		Case &quot;REF&quot;:								vValue = poResultSet.getRef(piColIndex)
+		Case &quot;SHORT&quot;, &quot;TINYINT&quot;:				vValue = poResultSet.getShort(piColIndex)
+		Case &quot;CHAR&quot;, &quot;VARCHAR&quot;, &quot;LONGVARCHAR&quot;:	vValue = poResultSet.getString(piColIndex)
+		Case &quot;TIME&quot;:							vDateTime = poResultSet.getTime(piColIndex)
+												vValue = TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
+		Case &quot;TIMESTAMP&quot;:						vDateTime = poResultSet.getTimeStamp(piColIndex)
+												vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day)) _
+															+ TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
+		Case Else
+			vValue = poResultSet.getString(piColIndex)			&apos;GIVE STRING A TRY
+			If IsNumeric(vValue) Then vValue = Val(vValue)		&apos;Required when type = &quot;&quot;, sometimes numeric fields are returned as strings (query/MSAccess)
+	End Select
+	
+	_getResultSetColumnValue = vValue
+	
+End Function	&apos;	getResultSetColumnValue		V 0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _FinalProperty(psShortcut As String) As String
+&apos; Return the final property of a shortcut
+
+Const cstEXCLAMATION = &quot;!&quot;
+Const cstDOT = &quot;.&quot;
+
+Dim iCurrentIndex As Integer, vCurrentObject As Variant, sCurrentProperty As String
+Dim sComponents() As String, sSubComponents() As String
+	_FinalProperty = &quot;&quot;
+	sComponents = Split(Trim(psShortcut), cstEXCLAMATION)
+	If UBound(sComponents) = 0 Then Exit Function
+	sSubComponents = Split(sComponents(UBound(sComponents)), cstDOT)
+	Select Case UBound(sSubComponents)
+		Case 1
+			_FinalProperty = sSubComponents(1)
+		Case Else
+			Exit Function
+	End Select
+	
+End Function	&apos;	FinalProperty
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _GetProductName(ByVal Optional psFlag As String) as String
+&apos;Return OO product (&quot;PRODUCT&quot;) and version numbers (&quot;VERSION&quot;)
+&apos;Derived from Tools library
+
+Dim oProdNameAccess as Object
+Dim sVersion as String
+Dim sProdName as String
+	If IsMissing(psFlag) Then psFlag = &quot;ALL&quot;
+	oProdNameAccess = _GetRegistryKeyContent(&quot;org.openoffice.Setup/Product&quot;)
+	sProdName = oProdNameAccess.getByName(&quot;ooName&quot;)
+	sVersion = oProdNameAccess.getByName(&quot;ooSetupVersionAboutBox&quot;)
+	Select Case psFlag
+		Case &quot;ALL&quot;			:	_GetProductName = sProdName &amp; &quot; &quot; &amp; sVersion
+		Case &quot;PRODUCT&quot;		:	_GetProductName = sProdName
+		Case &quot;VERSION&quot;		:	_GetProductName = sVersion
+	End Select
+End Function	&apos;	GetProductName		V1.0.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _GetRegistryKeyContent(sKeyName as string, Optional bforUpdate as Boolean) As Variant
+&apos;Implement ConfigurationProvider service
+&apos;Derived from Tools library
+
+Dim oConfigProvider as Object
+Dim aNodePath(0) as new com.sun.star.beans.PropertyValue
+	oConfigProvider = createUnoService(&quot;com.sun.star.configuration.ConfigurationProvider&quot;)
+	aNodePath(0).Name = &quot;nodepath&quot;
+	aNodePath(0).Value = sKeyName
+	If IsMissing(bForUpdate) Then bForUpdate = False
+	If bForUpdate Then
+		_GetRegistryKeyContent() = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationUpdateAccess&quot;, aNodePath())
+	Else
+		_GetRegistryKeyContent() = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, aNodePath())
+	End If
+End Function	&apos;	GetRegistryKeyContent	V0.8.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _getUNOTypeName(pvObject As Variant) As String
+&apos; Return the symbolic name of the pvObject (UNO-object) type
+&apos; Code-snippet from XRAY
+
+Dim oService As Object, vClass as Variant
+	_getUNOTypeName = &quot;&quot;
+	On Local Error Resume Next
+	oService = CreateUnoService(&quot;com.sun.star.reflection.CoreReflection&quot;)
+	vClass = oService.getType(pvObject)
+	If vClass.TypeClass = com.sun.star.uno.TypeClass.STRUCT  Then
+		_getUNOTypeName = vClass.Name
+	End If
+	oService.Dispose()
+
+End Function	&apos;	getUNOTypeName
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _hasUNOMethod(pvObject As Variant, psMethod As String) As Boolean
+&apos; Return true if pvObject has the (UNO) method psMethod
+&apos; Code-snippet found in Bernard Marcelly&apos;s XRAY
+
+Dim vInspect as Variant
+	_hasUNOMethod = False
+	On Local Error Resume Next
+	If IsNull(_A2B_.Introspection) Then _A2B_.Introspection = CreateUnoService(&quot;com.sun.star.beans.Introspection&quot;)
+	vInspect = _A2B_.Introspection.Inspect(pvObject)
+	_hasUNOMethod = vInspect.hasMethod(psMethod, com.sun.star.beans.MethodConcept.ALL)
+
+End Function	&apos;	hasUNOMethod	V0.8.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _hasUNOProperty(pvObject As Variant, psProperty As String) As Boolean
+&apos; Return true if pvObject has the (UNO) property psProperty
+&apos; Code-snippet found in Bernard Marcelly&apos;s XRAY
+
+Dim vInspect as Variant
+	_hasUNOProperty = False
+	On Local Error Resume Next
+	If IsNull(_A2B_.Introspection) Then _A2B_.Introspection = CreateUnoService(&quot;com.sun.star.beans.Introspection&quot;)
+	vInspect = _A2B_.Introspection.Inspect(pvObject)
+	_hasUNOProperty = vInspect.hasProperty(psProperty, com.sun.star.beans.PropertyConcept.ALL)
+
+End Function	&apos;	hasUNOProperty	V0.8.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _ImplementationName(pvObject As Variant) As String
+&apos;	Use getImplementationName method or _getUNOTypeName function
+
+Dim sObjectType As String
+	On Local Error Resume Next
+	sObjectType = pvObject.getImplementationName()
+	If sObjectType = &quot;&quot; Then sObjectType =  _getUNOTypeName(pvObject)
+	
+	_ImplementationName = sObjectType
+	
+End Function		&apos;	ImplementationName
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _InList(ByVal pvItem As Variant, pvList As Variant, ByVal Optional pvReturnValue As Variant, Optional ByVal pbBinarySearch As Boolean) As Variant
+&apos;	Return True if pvItem is present in the pvList array (case insensitive comparison)
+&apos;	Return the value in pvList if pvReturnValue = True
+
+Dim i As Integer, bFound As Boolean, iListVarType As Integer, iItemVarType As Integer
+Dim iTop As Integer, iBottom As Integer, iFound As Integer
+	iItemVarType = VarType(pvItem)
+	If iItemVarType = vbNull Or IsNull(pvList) Then
+		_InList = False
+	ElseIf Not IsArray(pvList) Then
+		_InList = ( pvItem = pvList )
+	ElseIf UBound(pvList) &lt; LBound(pvList) Then		&apos;	Array not initialized
+		_InList = False
+	Else
+		bFound = False
+		_InList = False
+		iListVarType = VarType(pvList(LBound(pvList)))
+		If iListVarType = iItemVarType _
+			Or ( (iListVarType = vbInteger Or iListVarType = vbLong Or iListVarType = vbSingle Or iListVarType = vbDouble _
+					Or iListVarType = vbCurrency Or iListVarType = vbBigint Or iListVarType = vbDecimal) _
+				And (iItemVarType = vbInteger Or iItemVarType = vbLong Or iItemVarType = vbSingle Or iItemVarType = vbDouble _
+					Or iItemVarType = vbCurrency Or iItemVarType = vbBigint Or iItemVarType = vbDecimal) _
+				) Then
+			If IsMissing(pbBinarySearch) Then pbBinarySearch = False
+			If Not pbBinarySearch Then			&apos;	Linear search
+				For i = LBound(pvList) To UBound(pvList)
+					If iItemVarType = vbString Then bFound = ( pvList(i) &lt;&gt; &quot;&quot; And UCase(pvItem) = UCase(pvList(i)) ) Else bFound = ( pvItem = pvList(i) )
+					If bFound Then
+						iFound = i
+						Exit For
+					End If
+				Next i
+			Else								&apos;	Binary search =&gt; array must be sorted
+				iTop = UBound(pvList)
+				iBottom = lBound(pvList)
+				Do
+					iFound = (iTop + iBottom) / 2
+					If ( iItemVarType = vbString And UCase(pvItem) &gt; UCase(pvList(iFound)) ) Or ( iItemVarType &lt;&gt; vbString And pvItem &gt; pvList(iFound) ) Then
+						iBottom = iFound + 1
+					Else
+						iTop = iFound - 1
+					End If
+					If iItemVarType = vbString Then bFound = ( pvList(i) &lt;&gt; &quot;&quot; And UCase(pvItem) = UCase(pvList(iFound)) ) Else bFound = ( pvItem = pvList(iFound) )
+				Loop Until ( bFound ) Or ( iBottom &gt; iTop )
+			End If
+			If bFound Then
+				If IsMissing(pvReturnValue) Then _InList = True Else _InList = pvList(iFound)
+			End If
+		End If
+	End If
+	
+	Exit Function				
+		
+End Function	&apos;	InList V0.9.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _InspectPropertyType(poObject As Object, psProperty As String) As String
+&apos;Return type of property EVEN WHEN EMPTY ! (Used in date and time controls)
+
+Dim oInspect1 As Object, oInspect2 As Object, oInspect3 As Object
+&apos;	On Local Error Resume Next
+	_InspectPropertyType = &quot;&quot;
+	Set oInspect1 = CreateUnoService(&quot;com.sun.star.script.Invocation&quot;)
+	Set oInspect2 = oInspect1.createInstanceWithArguments(Array(poObject)).IntroSpection
+	If Not IsNull(oInspect2) Then
+		Set oInspect3 = oInspect2.getProperty(psProperty, com.sun.star.beans.PropertyConcept.ALL)
+		If Not IsNull(oInspect3) Then _InspectPropertyType = oInspect3.Type.Name
+	End If
+	Set oInspect1 = Nothing	:	Set oInspect2 = Nothing	:	Set oInspect3 = Nothing
+
+End Function	&apos;	InspectPropertyType	V1.0.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _IsPseudo(pvObject As Variant, ByVal pvType As Variant) As Boolean
+&apos;	Test pvObject:	does it exist ?
+&apos;					is the _Type item = one of the proposed pvTypes ?
+&apos;					does the pseudo-object refer to an existing object (e.g. does the form really exist in the db) ?
+
+Dim bIsPseudo As Boolean, bPseudoExists As Boolean, vObject As Variant
+
+	If _ErrorHandler() Then On Local Error Goto Exit_False
+	
+	_IsPseudo = False
+	bIsPseudo = False
+	vObject = pvObject					&apos;	To avoid &quot;Object variable not set&quot; error message
+	Select Case True
+		Case IsEmpty(vObject)
+		Case IsNull(vObject)
+		Case VarType(vObject) &lt;&gt; vbObject
+		Case Else
+			With vObject
+				Select Case True
+					Case IsEmpty(._Type)
+					Case IsNull(._Type)
+					Case ._Type = &quot;&quot;
+					Case Else
+						bIsPseudo = _InList(._Type, pvType)
+						If Not bIsPseudo Then		&apos;	If primary type did not succeed, give the subtype a chance
+							If ._Type = OBJCONTROL Then bIsPseudo = _InList(._SubType, pvType)
+						End If
+				End Select
+			End With
+	End Select
+	
+	If Not bIsPseudo Then Goto Exit_Function
+	
+Dim oDatabase As Variant, oForms As Variant
+	
+	bPseudoExists = False
+	With vObject
+		Select Case ._Type
+			Case OBJFORM
+				If ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of form name
+					Set oDatabase = _CurrentDb
+					If oDatabase._Standalone Then
+						bPseudoExists = True
+					Else
+						Set oForms = oDatabase.Document.getFormDocuments()
+						bPseudoExists = ( oForms.HasByName(._Name) )
+					End If
+				End If
+			Case OBJDATABASE
+				If ._Standalone Then bPseudoExists = True Else bPseudoExists = .Document.CurrentController.IsConnected
+			Case OBJDIALOG
+				If ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of dialog name
+					Set oDatabase = _CurrentDb
+					bPseudoExists = ( oDatabase._hasDialog(._Name) )
+				End If			
+			Case OBJCOLLECTION
+				bPseudoExists = True
+			Case OBJCONTROL
+				If Not IsNull(.ControlModel) And ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of control
+					Set oForms = .ControlModel.Parent
+					bPseudoExists = ( oForms.hasByName(._Name) )
+				End If
+			Case OBJSUBFORM
+				If Not IsNull(.DatabaseForm) And ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of subform
+					If .DatabaseForm.ImplementationName = &quot;com.sun.star.comp.forms.ODatabaseForm&quot; Then
+						Set oForms = .DatabaseForm.Parent
+						bPseudoExists = ( oForms.hasByName(._Name) )
+					End If
+				End If
+			Case OBJOPTIONGROUP
+				bPseudoExists = ( .Count &gt; 0 )
+			Case OBJEVENT
+				bPseudoExists = ( Not IsNull(._EventSource) )
+			Case OBJPROPERTY
+				bPseudoExists = ( ._Name &lt;&gt; &quot;&quot; )
+			Case OBJTABLEDEF
+				bPseudoExists = ( ._Name &lt;&gt; &quot;&quot; And Not IsNull(.Table) )
+			Case OBJQUERYDEF
+				bPseudoExists = ( ._Name &lt;&gt; &quot;&quot; And Not IsNull(.Query) )
+			Case OBJRECORDSET
+				bPseudoExists = ( Not IsNull(.RowSet) )
+			Case OBJFIELD
+				bPseudoExists = ( ._Name &lt;&gt; &quot;&quot; And Not IsNull(.Column) )
+			Case Else
+		End Select
+	End With
+	
+	_IsPseudo = ( bIsPseudo And bPseudoExists )
+
+Exit_Function:
+	Exit Function
+Exit_False:
+	_IsPseudo = False
+	Goto Exit_Function
+End Function	&apos;	IsPseudo		V0.9.1
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _IsScalar(ByVal pvArg As Variant, Byval pvType As Variant, ByVal Optional pvValid As Variant) As Boolean
+&apos;	Check type of pvArg and value in allowed pvValid list
+
+	_IsScalar = False
+
+	If IsArray(pvType) Then
+		If Not _InList(VarType(pvArg), pvType) Then Exit Function
+	ElseIf VarType(pvArg) &lt;&gt; pvType Then
+		If pvType = vbBoolean And VarType(pvArg) = vbLong Then
+			If pvArg &lt; -1 And pvArg &gt; 0 Then Exit Function	&apos;	Special boolean processing because the Not function returns a Long
+		Else
+			Exit Function
+		End If
+	End If
+	If Not IsMissing(pvValid) Then
+		If Not _InList(pvArg, pvValid) Then Exit Function
+	End If
+	
+	_IsScalar = True
+	
+Exit_Function:
+	Exit Function
+End Function	&apos;	IsScalar	V0.7.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _PCase(ByVal psString As String) As String
+&apos;	Return the proper case representation of argument
+
+Dim vSubStrings() As Variant, i As Integer, iLen As Integer
+	vSubStrings = Split(psString, &quot; &quot;)
+	For i = 0 To UBound(vSubStrings)
+		iLen = Len(vSubStrings(i))
+		If iLen &gt; 1 Then
+			vSubStrings(i) = UCase(Left(vSubStrings(i), 1)) &amp; LCase(Right(vSubStrings(i), iLen - 1))
+		ElseIf iLen = 1 Then
+			vSubStrings(i) = UCase(vSubStrings(i))
+		End If
+	Next i
+	_PCase = Join(vSubStrings, &quot; &quot;)
+	
+End Function	&apos;	PCase		V0.9.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _ReplaceSquareBrackets(ByVal psSql As String) As String
+&apos; Returns psSql after substitution of [] by quote character
+&apos; [] square brackets in quoted strings not affected
+
+Dim sQuote As String		&apos;RDBMS specific quote character
+Dim vSubStrings() As Variant, i As Integer
+	
+	sQuote = CurrentDb.MetaData.IdentifierQuoteString
+	If sQuote = &quot; &quot; Then		&apos;	What&apos;s the string used to quote SQL identifiers? This returns a space &quot; &quot; if identifier quoting is not supported.
+		_QuoteString = psSql
+		Exit Function
+	End If
+	vSubStrings() = Split(psSql, sQuote)
+	For i = 0 To UBound(vSubStrings)
+		If (i Mod 2) = 0 Then		&apos;	Only even substrings are parsed for square brackets
+			vSubStrings(i) = Join(Split(vSubStrings(i), &quot;[&quot;), sQuote)
+			vSubStrings(i) = Join(Split(vSubStrings(i), &quot;]&quot;), sQuote)
+		End If
+	Next i
+	
+	_ReplaceSquareBrackets = Join(vSubStrings, sQuote)
+	
+End Function	&apos;	ReplaceSquareBrackets		V0.7.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Sub _ResetCalledSub(ByVal psSub As String) As String
+&apos;	Called in bottom of each public function. _A2B_.CalledSub variable is used for error handling
+&apos;	Used to trace routine in/outs and to clarify error messages
+		If _A2B_.CalledSub = psSub Then _A2B_.CalledSub = &quot;&quot;
+		If _A2B_.MinimalTraceLevel = 1 Then TraceLog(TRACEDEBUG, _GetLabel(&quot;Exiting&quot;) &amp; &quot; &quot; &amp; psSub &amp; &quot; ...&quot;, False)
+End Sub			&apos;	ResetCalledSub
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Sub _SetCalledSub(ByVal psSub As String) As String
+&apos;	Called in top of each public function.
+&apos;	Used to trace routine in/outs and to clarify error messages
+		If _A2B_.CalledSub = &quot;&quot; Then _A2B_.CalledSub = psSub
+		If _A2B_.MinimalTraceLevel = 1 Then TraceLog(TRACEDEBUG, _GetLabel(&quot;Entering&quot;) &amp; &quot; &quot; &amp; psSub &amp; &quot; ...&quot;, False)
+End Sub			&apos;	SetCalledSub
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _Surround(ByVal psName As String) As String
+&apos; Return [Name] if Name contains spaces
+Const cstSquareOpen = &quot;[&quot;
+Const cstSquareClose = &quot;]&quot;
+	If InStr(psName, &quot; &quot;) &gt; 0 Then
+		_Surround = cstSquareOpen &amp; psName &amp; cstSquareClose
+	Else
+		_Surround = psName
+	End If
+End Function	&apos;	Surround
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _Trim(ByVal psString As String) As String
+&apos;	Remove leading and trailing spaces, remove surrounding square brackets
+Const cstSquareOpen = &quot;[&quot;
+Const cstSquareClose = &quot;]&quot;
+Dim sTrim As String
+	
+	sTrim = Trim(psString)
+	_Trim = sTrim
+	If Len(sTrim) &lt;= 2 Then Exit Function
+	
+	If Left(sTrim, 1) = cstSquareOpen Then
+		If Right(sTrim, 1) = cstSquareClose Then
+			_Trim = Mid(sTrim, 2, Len(sTrim) - 2)
+		End If
+	End If
+End Function	&apos;	Trim	V0.9.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _TrimArray(pvArray As Variant) As Variant
+&apos;	Remove empty strings from strings array
+
+Dim sTrim As String, vTrim() As Variant, i As Integer, j As Integer, iCount As Integer
+	vTrim = Null
+	If Not IsArray(pvArray) Then
+		If Len(Trim(pvArray)) &gt; 0 Then vTrim = Array(pvArray) Else vTrim = Array()
+	ElseIf UBound(pvArray) &lt; LBound(pvArray) Then				&apos;	Array empty
+		vTrim = Array()
+	Else
+		iCount = 0
+		For i = LBound(pvArray) To UBound(pvArray)
+			If Len(Trim(pvArray(i))) = 0 Then iCount = iCount + 1
+		Next i
+		If iCount = 0 Then
+			vTrim() = pvArray()
+		ElseIf iCount = UBound(pvArray) - LBound(pvArray) + 1 Then	&apos;	Array empty or all blanks
+			vTrim() = Array()
+		Else
+			ReDim vTrim(LBound(pvArray) To UBound(pvArray) - iCount)
+			j = 0
+			For i = LBound(pvArray) To UBound(pvArray)
+				If Len(Trim(pvArray(i))) &gt; 0 Then
+					vTrim(j) = pvArray(i)
+					j = j + 1
+				End If
+			Next i
+		End If
+	End If
+	
+	_TrimArray() = vTrim()
+
+End Function	&apos;	TrimArray	V0.9.0
+</script:module>

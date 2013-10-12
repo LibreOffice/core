@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Collect" script:language="StarBasic">Option Compatible
+Option ClassModule
+
+Option Explicit
+
+REM MODULE NAME &lt;&gt; COLLECTION (seems a reserved name ?)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS ROOT FIELDS 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Private _Type		As String		&apos;	Must be COLLECTION
+Private _CollType	As String
+Private _ParentType	As String
+Private _ParentName	As String		&apos;	Name or shortcut
+Private _Count		As Long
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CONSTRUCTORS / DESTRUCTORS						        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Sub Class_Initialize()
+	_Type = OBJCOLLECTION
+	_CollType = &quot;&quot;
+	_ParentType = &quot;&quot;
+	_ParentName = &quot;&quot;
+	_Count = 0
+End Sub		&apos;	Constructor
+
+REM -----------------------------------------------------------------------------------------------------------------------
+&apos;Private Sub Class_Terminate()
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS GET/LET/SET PROPERTIES					        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Property Get Count() As Long
+	Count = _PropertyGet(&quot;Count&quot;)
+End Property		&apos;	Count (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get Item(ByVal Optional pvItem As Variant) As Variant
+&apos;Return property value.
+&apos;pvItem either numeric index or property name
+
+Const cstThisSub = &quot;Collection.getItem&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(pvItem) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvItem, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
+
+Dim vNames() As Variant, oProperty As Object
+
+	Set Item = Nothing
+	Select Case _CollType
+		Case COLLALLDIALOGS
+			Set Item = Application.AllDialogs(pvItem)
+		Case COLLALLFORMS
+			Set Item = Application.AllForms(pvItem)
+		Case COLLCONTROLS
+			Select Case _ParentType
+				Case OBJCONTROL, OBJSUBFORM
+					Set Item = getObject(_ParentName).Controls(pvItem)
+				Case OBJDIALOG
+					Set Item = Application.AllDialogs(_ParentName).Controls(pvItem)
+				Case OBJFORM
+					Set Item = Application.Forms(_ParentName).Controls(pvItem)
+				Case OBJOPTIONGROUP
+					&apos; NOT SUPPORTED
+			End Select
+		Case COLLFORMS
+			Set Item = Application.Forms(pvItem)
+		Case COLLFIELDS
+			Select Case _ParentType
+				Case OBJQUERYDEF
+					Set Item = Application.CurrentDb().QueryDefs(_ParentName).Fields(pvItem)
+				Case OBJRECORDSET
+					Set Item = Application.CurrentDb().Recordsets(_ParentName).Fields(pvItem)
+				Case OBJTABLEDEF
+					Set Item = Application.CurrentDb().TableDefs(_ParentName).Fields(pvItem)
+			End Select
+		Case COLLPROPERTIES
+			Select Case _ParentType
+				Case OBJCONTROL, OBJSUBFORM
+					Set Item = getObject(_ParentName).Properties(pvItem)
+				Case OBJDATABASE
+					Set Item = Application.CurrentDb().Properties(pvItem)
+				Case OBJDIALOG
+					Set Item = Application.AllDialogs(_ParentName).Properties(pvItem)
+				Case OBJFIELD
+					vNames() = Split(_ParentName, &quot;/&quot;)
+					Select Case vNames(0)
+						Case OBJQUERYDEF
+							Set Item = Application.CurrentDb().QueryDefs(vNames(1)).Fields(vNames(2)).Properties(pvItem)
+						Case OBJRECORDSET
+							Set Item = Application.CurrentDb().Recordsets(vNames(1)).Fields(vNames(2)).Properties(pvItem)
+						Case OBJTABLEDEF
+							Set Item = Application.CurrentDb().TableDefs(vNames(1)).Fields(vNames(2)).Properties(pvItem)
+					End Select
+				Case OBJFORM
+					Set Item = Application.Forms(_ParentName).Properties(pvItem)
+				Case OBJQUERYDEF
+					Set Item = Application.CurrentDb().QueryDefs(_ParentName).Properties(pvItem)
+				Case OBJRECORDSET
+					Set Item = Application.CurrentDb().Recordsets(_ParentName).Properties(pvItem)
+				Case OBJTABLEDEF
+					Set Item = Application.CurrentDb().TableDefs(_ParentName).Properties(pvItem)
+				Case OBJCOLLECTION, OBJEVENT, OBJOPTIONGROUP
+					&apos; NOT SUPPORTED
+			End Select
+		Case COLLQUERYDEFS
+			Set Item = Application.CurrentDb().QueryDefs(pvItem)
+		Case COLLRECORDSETS
+			Set Item = Application.CurrentDb().Recordsets(pvItem)
+		Case COLLTABLEDEFS
+			Set Item = Application.CurrentDb().TableDefs(pvItem)
+		Case Else
+	End Select
+
+Exit_Function:
+	Exit Property
+Error_Function:
+	TraceError(TRACEABORT, Err, Utils._CalledSub(), Erl)
+	Set Item = Nothing
+	GoTo Exit_Function
+End Property		&apos;	V0.9.5
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get ObjectType() As String
+	ObjectType = _PropertyGet(&quot;ObjectType&quot;)
+End Property		&apos;	ObjectType (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Properties(ByVal Optional pvIndex As Variant) As Variant
+&apos;	Return
+&apos;		a Collection object if pvIndex absent
+&apos;		a Property object otherwise
+
+Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
+	vPropertiesList = _PropertiesList()
+	sObject = Utils._PCase(_Type)
+	If IsMissing(pvIndex) Then
+		vProperty = PropertiesGet._Properties(sObject, _ParentName, vPropertiesList)
+	Else
+		vProperty = PropertiesGet._Properties(sObject, _ParentName, vPropertiesList, pvIndex)
+		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
+	End If
+	
+Exit_Function:
+	Set Properties = vProperty
+	Exit Function
+End Function	&apos;	Properties
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS METHODS	 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Public Function getProperty(Optional ByVal pvProperty As Variant) As Variant
+&apos;	Return property value of psProperty property name
+
+	Utils._SetCalledSub(&quot;Collection.getProperty&quot;)
+	If IsMissing(pvProperty) Then Call _TraceArguments()
+	getProperty = _PropertyGet(pvProperty)
+	Utils._ResetCalledSub(&quot;Collection.getProperty&quot;)
+	
+End Function		&apos;	getProperty
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function hasProperty(ByVal Optional pvProperty As Variant) As Boolean
+&apos;	Return True if object has a valid property called pvProperty (case-insensitive comparison !)
+
+	If IsMissing(pvProperty) Then hasProperty = PropertiesGet._hasProperty(_Type, _PropertiesList()) Else hasProperty = PropertiesGet._hasProperty(_Type, _PropertiesList(), pvProperty)
+	Exit Function
+	
+End Function	&apos;	hasProperty
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- PRIVATE FUNCTIONS 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _PropertiesList() As Variant
+	 _PropertiesList = Array(&quot;Count&quot;, &quot;ObjectType&quot;)
+End Function	&apos;	_PropertiesList
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _PropertyGet(ByVal psProperty As String) As Variant
+&apos;	Return property value of the psProperty property name
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(&quot;Collection.get&quot; &amp; psProperty)
+	_PropertyGet = Nothing
+	
+	Select Case UCase(psProperty)
+		Case UCase(&quot;Count&quot;)
+			_PropertyGet = _Count
+		Case UCase(&quot;ObjectType&quot;)
+			_PropertyGet = _Type
+		Case Else
+			Goto Trace_Error
+	End Select
+	
+Exit_Function:
+	Utils._ResetCalledSub(&quot;Collection.get&quot; &amp; psProperty)
+	Exit Function
+Trace_Error:
+	TraceError(TRACEFATAL, ERRPROPERTY, Utils._CalledSub(), 0, 1, psProperty)
+	_PropertyGet = Nothing
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, &quot;Collection._PropertyGet&quot;, Erl)
+	_PropertyGet = Nothing
+	GoTo Exit_Function
+End Function		&apos;	_PropertyGet
+
+
+</script:module>

@@ -1,0 +1,1053 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Recordset" script:language="StarBasic">Option Compatible
+Option ClassModule
+
+Option Explicit
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS ROOT FIELDS 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Private	_Type					As String				&apos;	Must be RECORDSET
+Private _Name					As String				&apos;	Unique, generated
+Private _ParentName				As String
+Private _ParentType				As String
+Private _ForwardOnly			As Boolean
+Private _PassThrough			As Boolean
+Private _ReadOnly				As Boolean
+Private _CommandType			As Long
+Private _Command				As String
+Private _DataSet				As Boolean				&apos;	True if execute() successful
+Private _BOF					As Boolean
+Private _EOF					As Boolean
+Private _Filter					As String
+Private _EditMode				As Integer				&apos;	dbEditxxx constants
+Private _BookmarkBeforeNew		As Variant
+Private _BookmarkLastModified	As Variant
+Private _IsClone				As Boolean
+Private RowSet					As Object				&apos;	com.sun.star.comp.dba.ORowSet
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CONSTRUCTORS / DESTRUCTORS						        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Sub Class_Initialize()
+	_Type = OBJRECORDSET
+	_Name = &quot;&quot;
+	_ParentName = &quot;&quot;
+	_ParentType = &quot;&quot;
+	_ForwardOnly = False
+	_PassThrough = False
+	_ReadOnly = False
+	_CommandType = 0
+	_Command = &quot;&quot;
+	_DataSet = False
+	_BOF = True
+	_EOF = True
+	_Filter = &quot;&quot;
+	_EditMode = dbEditNone
+	_BookmarkBeforeNew = Null
+	_BookmarkLastModified = Null
+	_IsClone = False
+	Set RowSet = Nothing
+End Sub		&apos;	Constructor
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Sub Class_Terminate()
+	mClose()
+	Set Statement = Nothing
+	Set RowSet = Nothing
+End Sub
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS GET/LET/SET PROPERTIES					        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get AbsolutePosition() As Variant
+	AbsolutePosition = _PropertyGet(&quot;AbsolutePosition&quot;)
+End Property		&apos;	AbsolutePosition (get)
+
+Property Let AbsolutePosition(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;AbsolutePosition&quot;, pvValue)
+End Property	&apos;	AbsolutePosition (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get BOF() As Boolean
+	BOF = _PropertyGet(&quot;BOF&quot;)
+End Property		&apos;	BOF (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get Bookmark() As Variant
+	Bookmark = _PropertyGet(&quot;Bookmark&quot;)
+End Property		&apos;	Bookmark (get)
+
+Property Let Bookmark(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;Bookmark&quot;, pvValue)
+End Property	&apos;	Bookmark (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get Bookmarkable() As Boolean
+	Bookmarkable = _PropertyGet(&quot;Bookmarkable&quot;)
+End Property		&apos;	Bookmarkable (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get EOF() As Boolean
+	EOF = _PropertyGet(&quot;EOF&quot;)
+End Property		&apos;	EOF (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get EditMode() As Boolean
+	EditMode = _PropertyGet(&quot;EditMode&quot;)
+End Property		&apos;	EditMode (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get Filter() As Variant
+	Filter = _PropertyGet(&quot;Filter&quot;)
+End Property		&apos;	Filter (get)
+
+Property Let Filter(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;Filter&quot;, pvValue)
+End Property	&apos;	Filter (set)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get LastModified() As Variant
+&apos;	DO NOT PUBLISH
+	LastModified = _PropertyGet(&quot;LastModified&quot;)
+End Property		&apos;	LastModified (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get Name() As String
+	Name = _PropertyGet(&quot;Name&quot;)
+End Property		&apos;	Name (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get ObjectType() As String
+	ObjectType = _PropertyGet(&quot;ObjectType&quot;)
+End Property		&apos;	ObjectType (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Property Get RecordCount() As Long
+	RecordCount = _PropertyGet(&quot;RecordCount&quot;)
+End Property		&apos;	RecordCount (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS METHODS	 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function AddNew() As Boolean
+&apos;	Initiates the creation of a new record
+
+Const cstThisSub = &quot;Recordset.AddNew&quot;
+Dim i As Integer, iFieldsCount As Integer, oField As Object
+Dim sdefault As String, oColumn As Object
+Dim iValue As Integer, lValue As Long, sgValue As Single, dbValue As Double, dValue As Date
+Dim vTemp As Variant
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(cstThisSub)
+	AddNew = False
+	
+	With RowSet
+		&apos;Is inserting a new row allowed ?
+		If _ForwardOnly Or _ReadOnly Then Goto Error_NoUpdate
+		If Not .CanUpdateInsertedRows Then Goto Error_NoUpdate
+		If Not .IsBookmarkable Then Goto Error_NoUpdate
+		If _EditMode &lt;&gt; dbEditNone Then CancelUpdate()
+		If _BOF And _EOF Then		&apos;	Records before first or after last do not have a bookmark
+			_BookmarkBeforeNew = &quot;_BOF_&quot;
+		ElseIf .isBeforeFirst() Then
+			_BookmarkBeforeNew = &quot;_BOF_&quot;
+		ElseIf .isAfterLast() Then
+			_BookmarkBeforeNew = &quot;_EOF_&quot;
+		Else
+			_BookmarkBeforeNew = .getBookmark()
+		End If
+
+		.moveToInsertRow()
+		
+		&apos;Set all fields to their default value
+		iFieldsCount = Fields().Count
+		On Local Error Resume Next			&apos;	Do not stop if default setting fails
+		For i = 0 To iFieldsCount - 1
+			Set oField = Fields(i)
+			Set oColumn = oField.Column
+			If Utils._hasUNOProperty(oColumn, &quot;DefaultValue&quot;) Then			&apos;	Default value in database set via SQL statement
+				sDefault = oColumn.DefaultValue
+			ElseIf Utils._hasUNOProperty(oColumn, &quot;ControlDefault&quot;) Then	&apos;	Default value set in Base via table edition
+					If IsEmpty(oColumn.ControlDefault) Then sdefault = &quot;&quot; Else sDefault = oColumn.ControlDefault
+			Else
+					sdefault = &quot;&quot;
+			End If
+			If sDefault = &quot;&quot; Then
+				If oColumn.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE Then oColumn.updateNull()
+			Else				&apos;	No default value
+				With com.sun.star.sdbc.DataType
+					Select Case oColumn.Type
+						Case .BIT, .BOOLEAN
+							If sDefault = &quot;1&quot; Then oColumn.updateBoolean(True) Else oColumn.updateBoolean(False)
+						Case .TINYINT
+							iValue = CInt(sDefault)
+							If iValue &gt;= -128 And iValue &lt;= +127 Then oColumn.updateShort(iValue)
+						Case .SMALLINT
+							lValue = CLng(sDefault)
+							If lValue &gt;= -32768 And lValue &lt;= 32767 Then oColumn.updateInt(lValue)
+						Case .INTEGER
+							lValue = CLng(sDefault)
+							If lValue &gt;= -2147483648 And lValue &lt;= 2147483647 Then oColumn.updateInt(lValue)
+						Case .BIGINT
+							lValue = CLng(sDefault)
+							Column.updateLong(lValue)		&apos;	No proper type conversion for HYPER data type
+						Case .FLOAT
+							sgValue = CSng(sDefault)
+							If Abs(sgValue) &lt; 3.402823E38 And Abs(sgValue) &gt; 1.401298E-45 Then oColumn.updateFloat(sgValue)
+						Case .REAL, .DOUBLE
+							dbValue = CDbl(sDefault)
+							&apos;If Abs(dbValue) &lt; 1.79769313486232E308 And Abs(dbValue) &gt; 4.94065645841247E-307 Then oColumn.updateDouble(dbValue)
+							oColumn.updateDouble(dbValue)
+						Case .NUMERIC, .DECIMAL
+							dbValue = CDbl(sDefault)
+							If Utils._hasUNOProperty(Column, &quot;Scale&quot;) Then
+								If Column.Scale &gt; 0 Then
+									&apos;If Abs(dbValue) &lt; 1.79769313486232E308 And Abs(dbValue) &gt; 4.94065645841247E-307 Then oColumn.updateDouble(dbValue)
+									oColumn.updateDouble(dbValue)
+								Else
+									oColumn.updateString(sdefault)
+								End If
+							Else
+								oColumn.updateString(sdefault)
+							End If
+						Case .CHAR, .VARCHAR, .LONGVARCHAR
+							oColumn.updateString(sdefault)						&apos;	vbString
+						Case .DATE
+							dValue = DateValue(sDefault)
+							vTemp = New com.sun.star.util.Date
+							With vTemp
+								.Day = Day(dValue)
+								.Month = Month(dValue)
+								.Year = Year(dValue)
+							End With
+							oColumn.updateDate(vTemp)
+						Case .TIME
+							dValue = TimeValue(sDefault)
+							vTemp = New com.sun.star.util.Time
+							With vTemp
+								.Hours = Hour(dValue)
+								.Minutes = Minute(dValue)
+								.Seconds = Second(dValue)
+								&apos;.HundredthSeconds = 0
+							End With
+							oColumn.updateTime(vTemp)
+						Case .TIMESTAMP
+							dValue = DateValue(sDefault)
+							vTemp = New com.sun.star.util.DateTime
+							With vTemp
+								.Day = Day(dValue)
+								.Month = Month(dValue)
+								.Year = Year(dValue)
+								.Hours = Hour(dValue)
+								.Minutes = Minute(dValue)
+								.Seconds = Second(dValue)
+								&apos;.HundredthSeconds = 0
+							End With
+							oColumn.updateTimestamp(vTemp)
+&apos;						Case .BINARY, .VARBINARY, .LONGVARBINARY
+	&apos;					Case .BLOB
+&apos;						Case .CLOB
+						Case Else
+					End Select
+				End With
+			End If
+		Next i
+	End With
+	On Local Error Goto Error_Function
+
+	_EditMode = dbEditAdd
+	AddNew = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function	
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Error_NoUpdate:
+	TraceError(TRACEFATAL, ERRNOTUPDATABLE, Utils._CalledSub(), 0)
+	Goto Exit_Function
+End Function		&apos;	AddNew
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function CancelUpdate() As Boolean
+&apos;	Cancel any edit action
+
+Const cstThisSub = &quot;Recordset.CancelUpdate&quot;
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(cstThisSub)
+	CancelUpdate = False
+	
+	With RowSet
+		Select Case _EditMode
+			Case dbEditNone
+			Case dbEditAdd
+				If Not IsNull(_BookmarkBeforeNew) Then
+					Select Case _BookmarkBeforeNew
+						Case &quot;_BOF_&quot;		:		.beforeFirst()
+						Case &quot;_EOF_&quot;		:		.afterLast()
+						Case Else			:		.moveToBookmark(_BookmarkBeforeNew)
+					End Select
+				End If
+			Case dbEditInProgress
+				.cancelRowUpdates()
+		End Select
+	End With
+	
+	_EditMode = dbEditNone
+	_BookmarkBeforeNew = Null
+	_BookmarkLastModified = Null
+	CancelUpdate = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function	
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function		&apos;	CancelUpdate
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Clone() As Object
+&apos;	Duplicate an existing recordset
+
+Const cstThisSub = &quot;Recordset.Clone&quot;
+
+Const cstNull = -1
+Dim iType As Integer, iOptions As Integer, iLockEdit As Integer
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(cstThisSub)
+	Set Clone = Nothing
+	
+	If _IsClone Then Goto Error_Clone
+	If _ForwardOnly Then iType = dbOpenForwardOnly Else iType = cstNull
+	If _PassThrough Then iOptions = dbSQLPassThrough Else iOptions = cstNull
+	iLockEdit = dbReadOnly			&apos;	Always read-only
+	
+	Set Clone = OpenRecordset(iType, iOptions, iLockEdit, True)
+	
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function	
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Error_Clone:
+	TraceError(TRACEFATAL, ERRRECORDSETCLONE, Utils._CalledSub(), 0)
+	Goto Exit_Function
+End Function		&apos;	Clone
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function mClose(ByVal Optional pbRemove As Boolean) As Variant
+&apos;	Dispose UNO objects
+&apos;	If pbRemove = True, remove recordset from Recordsets collection
+
+Const cstThisSub = &quot;Recordset.Close&quot;
+
+	If _ErrorHandler() Then On Local Error Goto Exit_Function		&apos;	Do not stop execution
+	Utils._SetCalledSub(cstThisSub)
+	If Not IsNull(RowSet) Then
+		RowSet.close()
+		RowSet.dispose()
+	End If
+	_ForwardOnly = False
+	_PassThrough = False
+	_ReadOnly = False
+	_CommandType = 0
+	_Command = &quot;&quot;
+	_DataSet = False
+	_BOF = True
+	_EOF = True
+	_Filter = &quot;&quot;
+	_EditMode = dbEditNone
+	_BookmarkBeforeNew = Null
+	_BookmarkLastModified = Null
+	_IsClone = False
+	Set RowSet = Nothing
+	If IsMissing(pbRemove) Then pbRemove = True
+	If pbRemove Then Application.CurrentDb().RecordsetsColl.Remove(_Name)
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function	
+End Function		&apos;	Close
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Delete() As Boolean
+&apos;	Deletes the current record
+
+Const cstThisSub = &quot;Recordset.Delete&quot;
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(cstThisSub)
+	Delete = False
+	
+	&apos;Is deleting a row allowed ?
+	If _ForwardOnly Or _ReadOnly Then Goto Error_NoUpdate
+	If _EditMode &lt;&gt; dbEditNone Then
+		CancelUpdate()
+		Goto Error_Sequence
+	End If
+	If RowSet.rowDeleted() Then Goto Error_RowDeleted
+
+	RowSet.deleteRow()
+	Delete = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function	
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Error_NoUpdate:
+	TraceError(TRACEFATAL, ERRNOTUPDATABLE, Utils._CalledSub(), 0)
+	Goto Exit_Function
+Error_RowDeleted:
+	TraceError(TRACEFATAL, ERRROWDELETED, Utils._CalledSub(), 0)
+	Goto Exit_Function
+Error_Sequence:
+	TraceError(TRACEFATAL, ERRUPDATESEQUENCE, Utils._CalledSub(), 0, 1)
+	Goto Exit_Function
+End Function		&apos;	Delete
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Edit() As Boolean
+&apos;	Updates the current record
+
+Const cstThisSub = &quot;Recordset.Edit&quot;
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(cstThisSub)
+	Edit = False
+	
+	&apos;Is updating a row allowed ?
+	If _ForwardOnly Or _ReadOnly Then Goto Error_NoUpdate
+	If _EditMode &lt;&gt; dbEditNone Then CancelUpdate()
+	If RowSet.rowDeleted() Then Goto Error_RowDeleted
+
+	_EditMode = dbEditInProgress
+	Edit = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function	
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Error_NoUpdate:
+	TraceError(TRACEFATAL, ERRNOTUPDATABLE, Utils._CalledSub(), 0)
+	Goto Exit_Function
+Error_RowDeleted:
+	TraceError(TRACEFATAL, ERRROWDELETED, Utils._CalledSub(), 0)
+	Goto Exit_Function
+End Function		&apos;	Edit
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Fields(ByVal Optional pvIndex As variant) As Object
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;Recordset.Fields&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+	Set Fields = Nothing
+	If Not IsMissing(pvIndex) Then
+		If Not Utils._CheckArgument(pvIndex, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
+	End If
+			
+Dim sObjects() As String, sObjectName As String, oObject As Object
+Dim i As Integer, bFound As Boolean, oFields As Object
+
+	Set oFields = RowSet.getColumns()
+	sObjects = oFields.ElementNames()
+	Select Case True
+		Case IsMissing(pvIndex)
+			Set oObject = New Collect
+			oObject._CollType = COLLFIELDS
+			oObject._ParentType = OBJRECORDSET
+			oObject._ParentName = _Name
+			oObject._Count = UBound(sObjects) + 1
+			Goto Exit_Function
+		Case VarType(pvIndex) = vbString
+			bFound = False
+		&apos;	Check existence of object and find its exact (case-sensitive) name
+			For i = 0 To UBound(sObjects)
+				If UCase(pvIndex) = UCase(sObjects(i)) Then
+					sObjectName = sObjects(i)
+					bFound = True
+					Exit For
+				End If
+			Next i
+			If Not bFound Then Goto Trace_NotFound
+		Case Else		&apos;	pvIndex is numeric
+			If pvIndex &lt; 0 Or pvIndex &gt; UBound(sObjects) Then Goto Trace_IndexError
+			sObjectName = sObjects(pvIndex)
+	End Select
+
+	Set oObject = New Field
+	oObject._Name = sObjectName
+	Set oObject.Column = oFields.getByName(sObjectName)
+	oObject._ParentName = _Name
+	oObject._ParentType = _Type
+
+Exit_Function:
+	Set Fields = oObject
+	Set oObject = Nothing
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Trace_NotFound:
+	TraceError(TRACEFATAL, ERROBJECTNOTFOUND, Utils._CalledSub(), 0, , Array(&quot;Field&quot;, pvIndex))
+	Goto Exit_Function
+Trace_IndexError:
+	TraceError(TRACEFATAL, ERRCOLLECTION, Utils._CalledSub(), 0)
+	Goto Exit_Function
+End Function		&apos;	Fields
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function getProperty(Optional ByVal pvProperty As Variant) As Variant
+&apos;	Return property value of psProperty property name
+
+Const cstThisSub = &quot;Recordset.getProperty&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(pvProperty) Then Call _TraceArguments()
+	getProperty = _PropertyGet(pvProperty)
+	Utils._ResetCalledSub(cstThisSub)
+	
+End Function		&apos;	getProperty
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function hasProperty(ByVal Optional pvProperty As Variant) As Boolean
+&apos;	Return True if object has a valid property called pvProperty (case-insensitive comparison !)
+
+Const cstThisSub = &quot;Recordset.hasProperty&quot;
+	Utils._SetCalledSub(cstThisSub)
+	If IsMissing(pvProperty) Then hasProperty = PropertiesGet._hasProperty(_Type, _PropertiesList()) Else hasProperty = PropertiesGet._hasProperty(_Type, _PropertiesList(), pvProperty)
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+	
+End Function	&apos;	hasProperty
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Move(ByVal Optional pvRelative As Variant, ByVal Optional pvBookmark As variant) As Boolean
+&apos;	Move record pointer Relative rows vs. bookmark or current record
+
+	If IsMissing(pvRelative) Then Call _TraceArguments()
+	If Not Utils._CheckArgument(pvRelative, 1, Utils._AddNumeric()) Then Goto Exit_Function
+	
+	If IsMissing(pvBookmark) Then Move = _Move(pvRelative) Else Move = _Move(pvRelative, pvBookmark)
+
+Exit_Function:
+	Exit Function
+End Function		&apos;	Move
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function MoveFirst() As Boolean
+	MoveFirst = _Move(&quot;First&quot;)
+End Function		&apos;	MoveFirst
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function MoveLast() As Boolean
+	MoveLast = _Move(&quot;Last&quot;)
+End Function		&apos;	MoveLast
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function MoveNext() As Boolean
+	MoveNext = _Move(&quot;Next&quot;)
+End Function		&apos;	MoveNext
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function MovePrevious() As Boolean
+	MovePrevious = _Move(&quot;Previous&quot;)
+End Function		&apos;	MovePrevious
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function OpenRecordset(ByVal Optional pvType As Variant _
+								, ByVal Optional pvOptions As Variant _
+								, ByVal Optional pvLockEdit As Variant _
+								, ByVal Optional pbClone As Boolean) As Object
+&apos;Return a Recordset object based on currentrecordset object with filter addition
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Dim cstThisSub As String
+	cstThisSub = Utils._PCase(_Type) &amp; &quot;.OpenRecordset&quot;
+	Utils._SetCalledSub(cstThisSub)
+	Set OpenRecordset = Nothing
+Const cstNull = -1
+
+Dim oObject As Object, odbDatabase As Object
+	Set oObject = Nothing
+	If IsMissing(pvType) Then
+		pvType = cstNull
+	Else
+		If Not Utils._CheckArgument(pvType, 1, Utils._AddNumeric(), Array(cstNull, dbOpenForwardOnly)) Then Goto Exit_Function
+	End If
+	If IsMissing(pvOptions) Then
+		pvOptions = cstNull
+	Else
+		If Not Utils._CheckArgument(pvOptions, 2, Utils._AddNumeric(), Array(cstNull, dbSQLPassThrough)) Then Goto Exit_Function
+	End If
+	If IsMissing(pvLockEdit) Then
+		pvLockEdit = cstNull
+	Else
+		If Not Utils._CheckArgument(pvLockEdit, 3, Utils._AddNumeric(), Array(cstNull, dbReadOnly)) Then Goto Exit_Function
+	End If
+	If IsMissing(pbClone) Then pbClone = False		&apos;	pbClone is a not published argument
+
+	Set oObject = New Recordset
+	With oObject
+		._CommandType = _CommandType
+		._Command = _Command
+		._ParentName = _Name
+		._ParentType = _Type
+		._ForwardOnly = ( pvType = dbOpenForwardOnly )
+		._PassThrough = ( pvOptions = dbSQLPassThrough )
+		._ReadOnly = ( pvLockEdit = dbReadOnly )
+		Select Case True
+			Case pbClone		:	Call ._Initialize(, RowSet)
+			Case _Filter &lt;&gt; &quot;&quot; 	:	Call ._Initialize(_Filter)
+			Case Else			:	Call ._Initialize()
+		End Select
+	End With
+	Set odbDatabase = Application._CurrentDb()
+	With odbDatabase
+		.RecordsetMax = .RecordsetMax + 1
+		oObject._Name = Format(.RecordsetMax, &quot;0000000&quot;)
+		.RecordsetsColl.Add(oObject, UCase(oObject._Name))
+	End With
+	
+	If Not ( oObject._BOF And oObject._EOF ) Then oObject.MoveFirst()		&apos;	Do nothing if resultset empty
+
+Exit_Function:
+	Set OpenRecordset = oObject
+	Set oObject = Nothing
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Error_Function:
+	TraceError(TRACEABORT, Err, Utils._CalledSub(), Erl)
+	GoTo Exit_Function
+End Function	&apos;	OpenRecordset
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Properties(ByVal Optional pvIndex As Variant) As Variant
+&apos;	Return
+&apos;		a Collection object if pvIndex absent
+&apos;		a Property object otherwise
+
+Const cstThisSub = &quot;Recordset.Properties&quot;
+	Utils._SetCalledSub(cstThisSub)
+Dim vProperty As Variant, vPropertiesList() As Variant, sObject As String
+	vPropertiesList = _PropertiesList()
+	sObject = Utils._PCase(_Type)
+	If IsMissing(pvIndex) Then
+		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList)
+	Else
+		vProperty = PropertiesGet._Properties(sObject, _Name, vPropertiesList, pvIndex)
+		vProperty._Value = _PropertyGet(vPropertiesList(pvIndex))
+	End If
+	
+Exit_Function:
+	Set Properties = vProperty
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+End Function	&apos;	Properties
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function Update() As Boolean
+&apos;	Finalize the updates of the current record
+
+Const cstThisSub = &quot;Recordset.Update&quot;
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	Utils._SetCalledSub(cstThisSub)
+	Update = False
+	
+	&apos;Is updating a row allowed ?
+	If _ForwardOnly Or _ReadOnly Then Goto Error_NoUpdate
+	With RowSet
+		If .rowDeleted() Then Goto Error_RowDeleted
+		Select Case _EditMode
+			Case dbEditNone
+				Goto Trace_Error_Update
+			Case dbEditAdd
+				If .IsNew And .IsModified Then .insertRow()
+				_BookmarkLastModified = .getBookmark()
+				If Not IsNull(_BookmarkBeforeNew) Then
+					Select Case _BookmarkBeforeNew
+						Case &quot;_BOF_&quot;		:		.beforeFirst()
+						Case &quot;_EOF_&quot;		:		.afterLast()
+						Case Else			:		.moveToBookmark(_BookmarkBeforeNew)
+					End Select
+				End If
+			Case dbEditInProgress
+				If .IsModified Then
+					.updateRow()
+					_BookmarkLastModified = .getBookmark()
+				End If
+		End Select
+	End With
+	_EditMode = dbEditNone
+	Update = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function	
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+Error_NoUpdate:
+	TraceError(TRACEFATAL, ERRNOTUPDATABLE, Utils._CalledSub(), 0)
+	Goto Exit_Function
+Trace_Error_Update:
+	TraceError(TRACEFATAL, ERRUPDATESEQUENCE, Utils._CalledSub(), 0, 1)
+	Goto Exit_Function
+Error_RowDeleted:
+	TraceError(TRACEFATAL, ERRROWDELETED, Utils._CalledSub(), 0)
+	Goto Exit_Function
+End Function		&apos;	Update
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- PRIVATE FUNCTIONS 								        														---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Sub _Initialize(ByVal Optional pvFilter As Variant, Optional poRowSet As Object)
+&apos;	Initialize new recordset
+
+	If _Command = &quot;&quot; Then Exit Sub
+	
+	If _ErrorHandler() Then On Local Error Goto Error_Sub
+	If IsMissing(pvFilter) Then pvFilter = &quot;&quot;
+	If Not IsMissing(poRowSet) Then		&apos;	Clone
+		Set RowSet = poRowSet.createResultSet()
+		_IsClone = True
+		RowSet.last()		&apos;	Solves bookmark desynchro when parent bookmark is used ?!?
+	Else
+		Set RowSet = CreateUnoService(&quot;com.sun.star.sdb.RowSet&quot;)
+		_IsClone = False
+		With RowSet
+			If IsNull(.ActiveConnection) Then Set .ActiveConnection = Application._CurrentDb().Connection				&apos;	Error forced if connection broken
+			.CommandType = _CommandType
+			.Command = _Command
+			If _ForwardOnly	Then .ResultSetType = com.sun.star.sdbc.ResultSetType.FORWARD_ONLY _
+							Else .ResultSetType = com.sun.star.sdbc.ResultSetType.SCROLL_SENSITIVE
+			If _PassThrough	Then .EscapeProcessing = False _
+							Else .EscapeProcessing = True
+			If _ReadOnly	Then
+				.ResultSetConcurrency = com.sun.star.sdbc.ResultSetConcurrency.READ_ONLY
+				.TransactionIsolation = com.sun.star.sdbc.TransactionIsolation.READ_UNCOMMITTED		&apos;	Dirty read
+			Else
+				.ResultSetConcurrency = com.sun.star.sdbc.ResultSetConcurrency.UPDATABLE
+				.TransactionIsolation = com.sun.star.sdbc.TransactionIsolation.READ_COMMITTED
+			End If
+		End With
+
+		If Not IsMissing(pvFilter) Then			&apos;	Filter must be set before execute()
+			If pvFilter &lt;&gt; &quot;&quot; Then
+				RowSet.Filter = pvFilter
+				RowSet.ApplyFilter = True
+			End If
+		End If
+		On Local Error Goto SQL_Error
+		RowSet.execute()
+		On Local Error Goto Error_Sub
+	End If
+	_DataSet = True
+&apos;If the Recordset contains no records, the BOF and EOF properties are True, and there is no current record.
+	_BOF = ( RowSet.IsRowCountFinal And RowSet.RowCount = 0 )
+	_EOF = _BOF
+
+Exit_Sub:
+	Exit Sub
+SQL_Error:
+	TraceError(TRACEFATAL, ERRSQLSTATEMENT, Utils._CalledSub(), 0, , _Command)
+	Goto Exit_Sub
+Error_Sub:
+	TraceError(TRACEABORT, Err, &quot;Recordset._Initialize&quot;, Erl)
+	GoTo Exit_Sub
+End Sub			&apos;	_Initialize
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _Move(pvTarget As Variant, ByVal Optional pvBookmark As Variant, ByVal Optional pbAbsolute As Boolean) As Boolean
+&apos;Move to the first, last, next, or previous record in a specified Recordset object and make that record the current record.
+
+Dim cstThisSub As String
+	cstThisSub = &quot;Recordset.Move&quot; &amp; Iif(VarType(pvTarget) = vbString, pvTarget, &quot;&quot;)
+	Utils._SetCalledSub(cstThisSub)
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+
+	If IsNull(RowSet) Then Goto Trace_Closed
+	If Not _DataSet Then Goto Trace_NoData
+	If _BOF And _EOF Then Goto Trace_NoData
+	_Move = False
+	CancelUpdate()		&apos;	Any Move cancels all updates, even Move(0) !
+	
+Dim l As Long, lRow As Long
+	With RowSet	
+		Select Case VarType(pvTarget)
+			Case vbString
+				Select Case UCase(pvTarget)
+					Case &quot;FIRST&quot;
+						If _ForwardOnly Then
+							If Not ( .isBeforeFirst() Or .isFirst() ) Then
+								Goto Trace_Forward
+							Else
+								.next()
+							End If
+						Else
+							.first()
+						End If
+					Case &quot;LAST&quot;
+						If _ForwardOnly Then
+							If .isAfterLast() Then Goto Trace_Forward
+							Do While Not ( .isRowCountFinal And .Row = .RowCount )	&apos;	isLast() = True after reading of first records chunk
+								.next()
+							Loop
+						Else
+							.last()
+						End If
+					Case &quot;NEXT&quot;
+						If _EOF Then Goto Trace_OutOfRange
+						.next()
+					Case &quot;PREVIOUS&quot;
+						If _ForwardOnly Then Goto Trace_Forward
+						If _BOF Then Goto Trace_OutOfRange
+						.previous()
+				End Select
+			Case Else			&apos;	Relative or absolute move
+				If IsMissing(pbAbsolute) Then pbAbsolute = False		&apos;	Relative move is default
+				If _ForwardOnly And pvTarget &lt; 0 then Goto Trace_Forward
+				If IsMissing(pvBookmark) Then
+					If pvTarget = 0 Then Goto Exit_Function		&apos;	Do nothing
+					If _ForwardOnly Then
+						If pbAbsolute Then lRow = .getRow() Else lRow = 0
+						For l = 1 To pvTarget - lRow
+							If .isAfterLast() Then Exit For
+							.next()
+						Next l
+					Else
+						If pbAbsolute Then .absolute(pvTarget) Else .relative(pvTarget)
+					End If
+				Else		&apos;	Move is always relative when bookmark argument present
+					If _ForwardOnly Then Goto Trace_Forward
+					If pvTarget = 0 Then
+						.moveToBookmark(pvBookmark)
+					Else
+						.moveRelativeToBookmark(pvBookmark, pvTarget)
+					End If
+				End If
+		End Select
+
+		Select Case True
+			Case .isBeforeFirst()
+				_BOF = True
+				_Move = False
+			Case .isAfterlast()
+				_EOF = True
+				_Move = False
+			Case Else
+				If .rowDeleted() Then Goto Error_RowDeleted
+				If .rowUpdated() Then .refreshRow()
+				_Move = True
+		End Select
+	End With
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function
+Exit_Close:							&apos;	Force close of recordset when error raised
+	mClose()
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Close
+Trace_Forward:
+	TraceError(TRACEFATAL, ERRRECORDSETFORWARD, Utils._CalledSub(), 0)
+	Goto Exit_Close
+Trace_NoData:
+	TraceError(TRACEFATAL, ERRRECORDSETNODATA, Utils._CalledSub(), 0)
+	Goto Exit_Close
+Trace_OutOfRange:
+	TraceError(TRACEFATAL, ERRRECORDSETRANGE, Utils._CalledSub(), 0)
+	Goto Exit_Close
+Error_RowDeleted:
+	TraceError(TRACEFATAL, ERRROWDELETED, Utils._CalledSub(), 0)
+	Goto Exit_Function
+Trace_Closed:
+	TraceError(TRACEFATAL, ERRRECORDSETCLOSED, Utils._CalledSub(), 0)
+	Goto Exit_Close
+End Function		&apos;	Move
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _PropertiesList() As Variant
+
+	_PropertiesList = Array(&quot;AbsolutePosition&quot;, &quot;BOF&quot;, &quot;Bookmarkable&quot;, &quot;Bookmark&quot;, &quot;EditMode&quot; _
+			, &quot;EOF&quot;, &quot;Filter&quot;, &quot;LastModified&quot;, &quot;Name&quot;, &quot;ObjectType&quot; , &quot;RecordCount&quot; _
+
+End Function	&apos;	_PropertiesList
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _PropertyGet(ByVal psProperty As String) As Variant
+&apos;	Return property value of the psProperty property name
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Dim cstThisSub As String
+	cstThisSub = &quot;Recordset.get&quot;
+	Utils._SetCalledSub(cstThisSub &amp; psProperty)
+
+Dim vEMPTY As Variant
+	_PropertyGet = vEMPTY
+	
+	Select Case UCase(psProperty)
+		Case UCase(&quot;AbsolutePosition&quot;)
+			If IsNull(RowSet) Then Goto Trace_Closed
+			With RowSet
+				Select Case True
+					Case _BOF And _EOF						:	_PropertyGet = -1
+					Case .isBeforeFirst() Or .isAfterLast()	:	_PropertyGet = -1
+					Case Else								:	_PropertyGet = .getRow()	&apos;	Not getRow() - 1 as MSAccess requires
+				End Select
+			End With
+		Case UCase(&quot;BOF&quot;)
+			If IsNull(RowSet) Then Goto Trace_Closed
+			Select Case True
+				Case _BOF And _EOF					:	_PropertyGet = True
+				Case RowSet.isBeforeFirst()			:	_PropertyGet = True
+				Case Else							:	_PropertyGet = False
+			End Select
+		Case UCase(&quot;Bookmarkable&quot;)
+			If IsNull(RowSet) Then Goto Trace_Closed
+			If _ForwardOnly Then _PropertyGet = False Else _PropertyGet = RowSet.IsBookmarkable
+		Case UCase(&quot;Bookmark&quot;)
+			If IsNull(RowSet) Then Goto Trace_Closed
+			If RowSet.IsBookmarkable And Not _ForwardOnly Then
+				If _BOF Or _EOF Then _PropertyGet = Null Else _PropertyGet = RowSet.getBookmark()
+			Else
+				_PropertyGet = Null
+				If _ForwardOnly Then Goto Trace_Forward
+			End If
+		Case UCase(&quot;EditMode&quot;)
+			If IsNull(RowSet) Then Goto Trace_Closed
+			_PropertyGet = _EditMode
+		Case UCase(&quot;EOF&quot;)
+			If IsNull(RowSet) Then Goto Trace_Closed
+			Select Case True
+				Case _BOF And _EOF					:	_PropertyGet = True
+				Case RowSet.isAfterLast()			:	_PropertyGet = True
+				Case Else							:	_PropertyGet = False
+			End Select
+		Case UCase(&quot;Filter&quot;)
+			If IsNull(RowSet) Then Goto Trace_Closed
+			_PropertyGet = RowSet.Filter
+		Case UCase(&quot;LastModified&quot;)
+			If IsNull(RowSet) Then Goto Trace_Closed
+			If RowSet.IsBookmarkable And Not _ForwardOnly Then
+				_PropertyGet = _BookmarkLastModified
+			Else
+				_PropertyGet = Null
+				If _ForwardOnly Then Goto Trace_Forward
+			End If
+		Case UCase(&quot;Name&quot;)
+			_PropertyGet = _Name
+		Case UCase(&quot;ObjectType&quot;)
+			_PropertyGet = _Type
+		Case UCase(&quot;RecordCount&quot;)
+			If IsNull(RowSet) Then Goto Trace_Closed
+			_PropertyGet = RowSet.RowCount
+		Case Else
+			Goto Trace_Error
+	End Select
+	
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub &amp; psProperty)
+	Exit Function
+Trace_Error:
+	TraceError(TRACEFATAL, ERRPROPERTY, Utils._CalledSub(), 0, , psProperty)
+	_PropertyGet = vEMPTY
+	Goto Exit_Function
+Trace_Forward:
+	TraceError(TRACEFATAL, ERRRECORDSETFORWARD, Utils._CalledSub(), 0)
+	Goto Exit_Function
+Trace_Closed:
+	TraceError(TRACEFATAL, ERRRECORDSETCLOSED, Utils._CalledSub(), 0)
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub &amp; &quot;._PropertyGet&quot;, Erl)
+	_PropertyGet = vEMPTY
+	GoTo Exit_Function
+End Function		&apos;	_PropertyGet
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _PropertySet(ByVal psProperty As String, ByVal pvValue As Variant) As Boolean
+
+Dim cstThisSub As String
+	cstThisSub = &quot;Recordset.set&quot;
+	Utils._SetCalledSub(cstThisSub &amp; psProperty)
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+	_PropertySet = True
+
+&apos;Execute
+Dim iArgNr As Integer
+Dim oObject As Object
+
+	If Len(_A2B_.CalledSub) &gt; 10 And Left(_A2B_.CalledSub, 10) = &quot;Recordset.&quot; Then iArgNr = 1 Else iArgNr = 2
+	Select Case UCase(psProperty)
+		Case UCase(&quot;AbsolutePosition&quot;)
+			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
+			If pvValue &lt; 1 Then Goto Trace_Error_Value
+			_Move(pvValue, , True)
+		Case UCase(&quot;Bookmark&quot;)
+			If IsNull(RowSet) Then Goto Trace_Closed
+			_Move(0, pvValue)
+		Case UCase(&quot;Filter&quot;)
+			If IsNull(RowSet) Then Goto Trace_Closed
+			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+			_Filter = Utils._ReplaceSquareBrackets(pvValue)
+		Case Else
+			Goto Trace_Error
+	End Select
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub &amp; psProperty)
+	Exit Function
+Trace_Error:
+	TraceError(TRACEFATAL, ERRPROPERTY, Utils._CalledSub(), 0, 1, psProperty)
+	_PropertySet = False
+	Goto Exit_Function
+Trace_Error_Value:
+	TraceError(TRACEFATAL, ERRPROPERTYVALUE, Utils._CalledSub(), 0, 1, Array(pvValue, psProperty))
+	_PropertySet = False
+	Goto Exit_Function
+Trace_Closed:
+	TraceError(TRACEFATAL, ERRRECORDSETCLOSED, Utils._CalledSub(), 0)
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, Utils._CalledSub(), Erl)
+	_PropertySet = False
+	GoTo Exit_Function
+End Function		&apos;	_PropertySet
+
+REM -----------------------------------------------------------------------------------------------------------------------
+REM --- CLASS PROPERTY SETs								        														---
+REM --- Workaround to bug https://www.libreoffice.org/bugzilla/show_bug.cgi?id=60752 (LibreOffice 4.0)					---
+REM -----------------------------------------------------------------------------------------------------------------------
+
+Property Set Bookmark(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;Bookmark&quot;, pvValue)
+End Property	&apos;	Bookmark (set)
+
+Property Set Filter(ByVal pvValue As Variant)
+	Call _PropertySet(&quot;Filter&quot;, pvValue)
+End Property	&apos;	Filter (set)
+
+
+</script:module>

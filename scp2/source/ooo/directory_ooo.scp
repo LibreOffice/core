@@ -255,6 +255,11 @@ Directory gid_Dir_Basic
     DosName = "basic";
 End
 
+Directory gid_Dir_Basic_Access2Base
+    ParentID = gid_Dir_Basic;
+    DosName = "Access2Base";
+End
+
 Directory gid_Dir_Basic_Euro
     ParentID = gid_Dir_Basic;
     DosName = "Euro";

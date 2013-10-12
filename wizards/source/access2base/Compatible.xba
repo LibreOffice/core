@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Compatible" script:language="StarBasic">Option Compatible
+Option Explicit
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Sub DebugPrint(ParamArray pvArgs() As Variant)
+
+&apos;Print arguments unconditionnally in console
+&apos;Arguments are separated by a TAB (simulated by spaces)
+&apos;Some pvArgs might be missing: a TAB is still generated
+
+Dim vVarTypes() As Variant, i As Integer
+Const cstTab = 5
+	On Local Error Goto Exit_Sub	&apos;	Never interrupt processing
+	Utils._SetCalledSub(&quot;DebugPrint&quot;)
+	vVarTypes = Utils._AddNumeric(Array(vbEmpty, vbNull, vbDate, vbString, vbBoolean, vbObject, vbVariant))
+	
+	If UBound(pvArgs) &gt;= 0 Then
+		For i = 0 To UBound(pvArgs)
+&apos;			If IsError(pvArgs(i)) Then		&apos;	IsError gives &quot;Object variable not set&quot; in LO 4,0 ?!?
+&apos;				pvArgs(i) = &quot;[ERROR]&quot;
+&apos;			Else
+				If Not Utils._CheckArgument(pvArgs(i), i + 1, vVarTypes(), , False) Then pvArgs(i) = &quot;[TYPE?]&quot;
+&apos;			End If
+		Next i
+	End If
+
+Dim sOutput As String, sArg As String
+	sOutput = &quot;&quot;	
+	For i = 0 To UBound(pvArgs)
+		sArg = Utils._CStr(pvArgs(i))
+		&apos; Add argument to output
+		If i = 0 Then
+			sOutput = sArg
+		Else
+			sOutput = sOutput &amp; Space(cstTab - (Len(sOutput) Mod cstTab)) &amp; sArg
+		End If
+	Next i
+	
+	TraceLog(TRACEANY, sOutput, False)
+	
+Exit_Sub:
+	Utils._ResetCalledSub(&quot;DebugPrint&quot;)
+	Exit Sub
+End Sub			&apos;	DebugPrint		V0.9.5
+</script:module>

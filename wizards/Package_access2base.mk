@@ -17,42 +17,39 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Module_Module,wizards))
+$(eval $(call gb_Package_Package,wizards_basicsrvaccess2base,$(SRCDIR)/wizards/source/access2base))
 
-$(eval $(call gb_Module_add_targets,wizards,\
-	AllLangResTarget_dbw \
-	AllLangResTarget_eur \
-	AllLangResTarget_imp \
-	AllLangResTarget_tpl \
-	AllLangResTarget_wzi \
-	Package_access2base \
-	Package_depot \
-	Package_euro \
-	Package_form \
-	Package_gimmicks \
-	Package_import \
-	Package_share \
-	Package_standard \
-	Package_template \
-	Package_tools \
-	Package_tutorials \
-	Package_usr \
-	Pyuno_fax \
-	Pyuno_letter \
-	Pyuno_agenda \
-	Pyuno_web \
-	Pyuno_commonwizards \
-))
+$(eval $(call gb_Package_set_outdir,wizards_basicsrvaccess2base,$(INSTROOT)))
 
-ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Module_add_targets,wizards,\
-	Jar_commonwizards \
-	Jar_form \
-	Jar_query \
-	Jar_report \
-	Jar_reportbuilder \
-	Jar_table \
+$(eval $(call gb_Package_add_files,wizards_basicsrvaccess2base,$(LIBO_SHARE_FOLDER)/basic/Access2Base,\
+	_License.xba \
+	acConstants.xba \
+	Application.xba \
+	Collect.xba \
+	Compatible.xba \
+	Control.xba \
+	Database.xba \
+	DataDef.xba \
+	Dialog.xba \
+	dialog.xlb \
+	dlgFormat.xdl \
+	dlgTrace.xdl \
+	DoCmd.xba \
+	Event.xba \
+	Field.xba \
+	Form.xba \
+	L10N.xba \
+	Methods.xba \
+	OptionGroup.xba \
+	PropertiesGet.xba \
+	PropertiesSet.xba \
+	Property.xba \
+	Recordset.xba \
+	script.xlb \
+	SubForm.xba \
+	Test.xba \
+	Trace.xba \
+	Utils.xba \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:
