@@ -43,6 +43,13 @@
 
 #define HAVE_FEATURE_DESKTOP_GUI_ELEMENTS 0
 
+/* X11
+ *
+ * Whether we are building code to run in an X11 environment.
+ */
+
+#define HAVE_FEATURE_X11 0
+
 /* EXTENSIONS - Whether we have any extension mechanism at all
  *
  * Primarily intended for non-desktop platforms where supporting

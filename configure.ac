@@ -9138,6 +9138,7 @@ dnl ***************************************
 WANT_X11="no"
 if test $_os != Darwin -a $_os != WINNT -a $_os != Android -a $_os != iOS -a "$enable_headless" != "yes"; then
     WANT_X11="yes"
+    AC_DEFINE(HAVE_FEATURE_X11)
 fi
 AC_MSG_RESULT([$WANT_X11])
 
