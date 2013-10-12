@@ -33,13 +33,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace cppu;
 
-#ifdef WNT
-#define CDECL _cdecl
-#endif
-#if defined(UNX)
-#define CDECL
-#endif
-
 struct SbCompare_UString_PropertyValue_Impl
 {
    bool operator() (const OUString& lhs, PropertyValue const & rhs)
@@ -58,7 +51,7 @@ struct SbCompare_UString_PropertyValue_Impl
 #endif
 };
 
-extern "C" int CDECL SbCompare_UString_Property_Impl( const void *arg1, const void *arg2 )
+extern "C" int SAL_CALL SbCompare_UString_Property_Impl( const void *arg1, const void *arg2 )
 {
     const OUString *pArg1 = (OUString*) arg1;
     const Property *pArg2 = (Property*) arg2;
