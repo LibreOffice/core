@@ -144,11 +144,7 @@ public:
     /// Destructor.
     virtual ~RtfExport();
 
-#if defined(UNX)
-    static const sal_Char sNewLine; // \012 or \015
-#else
-    static const sal_Char* const sNewLine; // \015\012
-#endif
+    static const sal_Char* const sNewLine;
 
     rtl_TextEncoding eDefaultEncoding;
     rtl_TextEncoding eCurrentEncoding;

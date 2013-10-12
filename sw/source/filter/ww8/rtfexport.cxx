@@ -69,10 +69,10 @@ using namespace ::com::sun::star;
 
 using sw::mark::IMark;
 
-#if defined(UNX)
-const sal_Char RtfExport::sNewLine = '\012';
-#else
+#ifdef _WIN32
 const sal_Char* const RtfExport::sNewLine = "\015\012";
+#else
+const sal_Char* const RtfExport::sNewLine = "\012";
 #endif
 
 // the default text encoding for the export, if it doesn't fit unicode will
