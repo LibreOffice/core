@@ -83,6 +83,23 @@ public:
     {
         return mFormulaTree->CurrentFormula;
     }
+    size_t GetWindowSize(void) const
+    {
+        FormulaToken *pCur = mFormulaTree->CurrentFormula;
+        assert(pCur);
+        if (auto *pCurDVR =
+                dynamic_cast<const formula::DoubleVectorRefToken *>(pCur))
+        {
+            return pCurDVR->GetRefRowSize();
+        } else if (auto *pCurSVR =
+                dynamic_cast<const formula::SingleVectorRefToken *>(pCur))
+        {
+            // Prepare intermediate results (on CPU for now)
+            return 1;
+        } else {
+            assert(0 && "Unreachable");
+        }
+    }
 protected:
     const std::string mSymName;
     FormulaTreeNode *mFormulaTree;
@@ -295,6 +312,16 @@ public:
     static std::string BinFuncName(void) { return "fmin"; }
 };
 
+class OpMax {
+public:
+    static std::string GetBottom(void) { return "-MAXFLOAT"; }
+    static const bool isReduction = true;
+    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    {
+        return "fmax("+lhs + "," + rhs +")";
+    }
+    static std::string BinFuncName(void) { return "fmax"; }
+};
 class OpSumProduct {
 public:
     static std::string GetBottom(void) { return "0"; }
@@ -312,10 +339,13 @@ public:
     {
         switch (op)
         {
+            case ocAverage:
             case ocSum:
                 return OpSum::BinFuncName();
             case ocMin:
                 return OpMin::BinFuncName();
+            case ocMax:
+                return OpMax::BinFuncName();
             default:
                 assert(0 && "Unsupported op");
         };
@@ -455,28 +485,21 @@ public:
     {
         FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
         assert(pChild);
-        size_t nWindowSize = 0;
-        if (auto *pChildDVR =
-                dynamic_cast<const formula::DoubleVectorRefToken *>(pChild))
-        {
-            // Prepare intermediate results (on CPU for now)
-            nWindowSize = pChildDVR->GetRefRowSize();
-        } else if (auto *pChildSVR =
-                dynamic_cast<const formula::SingleVectorRefToken *>(pChild))
-        {
-            // Prepare intermediate results (on CPU for now)
-            nWindowSize = pChildSVR->GetArrayLength();
-        }
+        size_t nWindowSize = mvSubArguments[0]->GetWindowSize();
         ss << mSymName << "_SlidingDotProduct("<<nWindowSize<<", ";
+        size_t nItems = 0;
         for (unsigned i = 0; i < mvSubArguments.size(); i++)
         {
             if (i)
                 ss << ",";
             ss << mvSubArguments[i]->GetSymName();
+            nItems += mvSubArguments[i]->GetWindowSize();
         }
         ss << ")";
         if (mFormulaTree->CurrentFormula->GetOpCode() == ocAverage)
-            ss << "/(double)"<<nWindowSize;
+        {
+            ss << "/(double)"<<nItems;
+        }
     }
     virtual void GenDecl(std::stringstream &ss)
     {
@@ -844,12 +867,16 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
                             mSyms.DeclRefArg<
                                 DynamicKernelSoPArguments<OpMin> >(cur)
                                 ->GenDeclRef(mKernelSrc);
+                        else if (opc == ocMax)
+                            mSyms.DeclRefArg<
+                                DynamicKernelSoPArguments<OpMax> >(cur)
+                                ->GenDeclRef(mKernelSrc);
                         else
                             assert(0 && "Unsupported");
                         return;
                     } else {
                         // There are nested functions etc that requires
-                        // recursively handling
+                        // recursive handling
 
                         // For single vectors,
                         // (i.e. scalar or other functions as arguments)
@@ -867,6 +894,8 @@ void DynamicKernel::TraverseAST(FormulaTreeNode *cur)
                         TraverseAST(cur->Children[cur->Children.size()-1]);
                         for (unsigned i = 0; i < cur->Children.size()-1; i ++)
                             mKernelSrc << ")";
+                        if (opc == ocAverage)
+                            mKernelSrc << "/"<<cur->Children.size();
                     }
                 }
                 return;
