@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Test" script:language="StarBasic">Option Explicit
+&apos;Option Compatible
+
+Sub Main
+	Application._RootInit()
+	_A2B_.CalledSub = &quot;&quot;
+	Application.SysCmd(acSysCmdRemoveMeter)
+Dim a as variant, b as variant, c as variant, d as variant, i as integer, s as string,f as variant, h as variant, j as long, k as integer, l as integer, sFile As String
+Dim lTime1 as Date, lTime2 as Long
+	lTime1=getsystemticks()
+&apos;	TraceConsole()
+
+	lTime2=getsystemticks
+	debugprint lTime2 - lTime1
+	exit sub
+End Sub
+</script:module>

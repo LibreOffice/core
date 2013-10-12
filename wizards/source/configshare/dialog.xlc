@@ -9,4 +9,5 @@
  <library:library library:name="Euro" xlink:href="$(INST)/$(SHARE_SUBDIR_NAME)/basic/Euro/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="Depot" xlink:href="$(INST)/$(SHARE_SUBDIR_NAME)/basic/Depot/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="ScriptBindingLibrary" xlink:href="$(INST)/$(SHARE_SUBDIR_NAME)/basic/ScriptBindingLibrary/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
-</library:libraries>
+ <library:library library:name="Access2Base" xlink:href="$(INST)/$(SHARE_SUBDIR_NAME)/basic/Access2Base/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
+ </library:libraries>
