@@ -21,6 +21,8 @@
 #ifndef SYSTEM_FIREBIRD
 
 Module gid_Module_Firebird
+    Name = "Firebird"
+    Description = "Firebird"
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
     Files = (

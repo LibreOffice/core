@@ -23,6 +23,8 @@
 Module gid_Module_Pyuno
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
+    Name = "PyUNO"
+    Description = "Python-UNO bridge"
     Dirs = (gid_Dir_PythonFramework,
             gid_Dir_PythonFramework_Versions,
             gid_Dir_PythonFramework_Versions_ver,
@@ -69,6 +71,8 @@ Module gid_Module_Pyuno
 End
 
 Module gid_Module_Script_Provider_For_Python
+    Name = "Script Provider For Python"
+    Description = "Script Provider For Python"
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
     Files = ( gid_File_scriptproviderforpython );
