@@ -728,7 +728,7 @@ else
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,exttextcat)/src/.libs/libexttextcat-2.0.a\
 )
-$(call gb_LinkTarget_use_external_project,$(1),mythes)
+$(call gb_LinkTarget_use_external_project,$(1),exttextcat)
 endif
 
 
