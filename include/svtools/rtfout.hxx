@@ -33,11 +33,7 @@ class SvStream;
 class SVT_DLLPUBLIC RTFOutFuncs
 {
 public:
-#if defined(UNX)
-    static const sal_Char sNewLine;     // nur \012 oder \015
-#else
-    static const sal_Char sNewLine[];   // \015\012
-#endif
+    static const sal_Char sNewLine[];
 
     static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
                     int *pUCMode,

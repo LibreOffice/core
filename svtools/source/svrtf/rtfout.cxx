@@ -25,10 +25,10 @@
 #include <svtools/rtfout.hxx>
 
 
-#if defined(UNX)
-const sal_Char RTFOutFuncs::sNewLine = '\012';
-#else
+#ifdef _WIN32
 const sal_Char RTFOutFuncs::sNewLine[] = "\015\012";
+#else
+const sal_Char RTFOutFuncs::sNewLine[] = "\012";
 #endif
 
 

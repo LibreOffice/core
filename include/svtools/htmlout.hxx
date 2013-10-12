@@ -51,11 +51,7 @@ struct SVT_DLLPUBLIC HTMLOutContext
 
 struct HTMLOutFuncs
 {
-#if defined(UNX)
-    static const sal_Char sNewLine;     // nur \012 oder \015
-#else
-    static const sal_Char sNewLine[];   // \015\012
-#endif
+    static const sal_Char sNewLine[];
 
     SVT_DLLPUBLIC static OString ConvertStringToHTML( const OUString& sSrc,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,

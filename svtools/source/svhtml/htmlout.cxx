@@ -31,10 +31,10 @@
 #include <svtools/imappoly.hxx>
 #include "svl/urihelper.hxx"
 
-#if defined(UNX)
-const sal_Char HTMLOutFuncs::sNewLine = '\012';
-#else
+#ifdef _WIN32
 const sal_Char HTMLOutFuncs::sNewLine[] = "\015\012";
+#else
+const sal_Char HTMLOutFuncs::sNewLine[] = "\012";
 #endif
 
 #define TXTCONV_BUFFER_SIZE 20
