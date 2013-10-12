@@ -29,12 +29,6 @@
 #define L10N_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
-#if defined UNX && ! defined MACOS
-#define L10N_PLUGIN_PUBLIC L10N_DLLPUBLIC
-#else
-#define L10N_PLUGIN_PUBLIC SAL_DLLPRIVATE
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
