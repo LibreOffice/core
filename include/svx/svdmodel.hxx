@@ -45,13 +45,7 @@ class OutputDevice;
 #include <rtl/ref.hxx>
 #include <deque>
 
-#if defined(UNX) || defined(WNT)
-#define DEGREE_CHAR ((sal_Unicode)176)   /* 0xB0 = Ansi */
-#endif
-
-#ifndef DEGREE_CHAR
-#error unbekannte Plattrorm
-#endif
+#define DEGREE_CHAR ((sal_Unicode)0x00B0)   /* U+00B0 DEGREE SIGN */
 
 class SdrOutliner;
 class SdrLayerAdmin;
