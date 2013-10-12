@@ -274,18 +274,10 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
         aSystemMenuData.nSize = sizeof( SystemMenuData );
 
         m_pVCLMenu->GetSystemMenuData( &aSystemMenuData );
-#ifdef MACOSX
-        if( SystemType == SystemDependent::SYSTEM_MAC )
-        {
-        }
-#elif (defined WNT)
+#ifdef _WIN32
         if( SystemType == SystemDependent::SYSTEM_WIN32 )
         {
             a <<= (long) aSystemMenuData.hMenu;
-        }
-#elif (defined UNX)
-        if( SystemType == SystemDependent::SYSTEM_XWINDOW )
-        {
         }
 #endif
     }
