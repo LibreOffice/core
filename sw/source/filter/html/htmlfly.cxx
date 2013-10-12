@@ -928,21 +928,13 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
         OString aIndMap, aIndArea;
         const sal_Char *pLF = 0, *pIndArea = 0, *pIndMap = 0;
-#if defined(UNX)
-        sal_Char aLF[2] = "\x00";
-#endif
 
         if( rHTMLWrt.bLFPossible )
         {
             rHTMLWrt.OutNewLine( sal_True );
             aIndMap = rHTMLWrt.GetIndentString();
             aIndArea = rHTMLWrt.GetIndentString(1);
-#if defined(UNX)
-            aLF[0]  = SwHTMLWriter::sNewLine;
-            pLF = aLF;
-#else
             pLF = SwHTMLWriter::sNewLine;
-#endif
             pIndArea = aIndArea.getStr();
             pIndMap = aIndMap.getStr();
         }

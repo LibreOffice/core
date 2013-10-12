@@ -283,11 +283,7 @@ protected:
     sal_uLong WriteStream();
 
 public:
-#if defined(UNX)
-    static const sal_Char sNewLine;     // nur \012 oder \015
-#else
-    static const sal_Char sNewLine[];   // \015\012
-#endif
+    static const sal_Char sNewLine[];
 
     std::vector<String> aImgMapNames;     // geschriebene Image Maps
     std::set<String> aImplicitMarks;// implizite Stprungmarken

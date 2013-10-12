@@ -80,10 +80,10 @@
 
 #define MAX_INDENT_LEVEL 20
 
-#if defined(UNX)
-const sal_Char SwHTMLWriter::sNewLine = '\012';
-#else
+#ifdef _WIN32
 const sal_Char SwHTMLWriter::sNewLine[] = "\015\012";
+#else
+const sal_Char SwHTMLWriter::sNewLine[] = "\012";
 #endif
 
 static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
