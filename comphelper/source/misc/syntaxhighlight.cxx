@@ -224,7 +224,7 @@ static const char* strListSqlKeyWords[] = {
 };
 
 
-extern "C" int CDECL compare_strings( const void *arg1, const void *arg2 )
+static int compare_strings( const void *arg1, const void *arg2 )
 {
     return strcmp( (char *)arg1, *(char **)arg2 );
 }

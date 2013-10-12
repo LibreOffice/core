@@ -24,22 +24,9 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-
-#if defined CDECL
-#undef CDECL
-#endif
-
-// for the bsearch
-#ifdef WNT
-#define CDECL _cdecl
-#endif
-#if defined(UNX)
-#define CDECL
-#endif
 #ifdef UNX
 #include <sys/resource.h>
 #endif
-
 
 // Token-Typen TT_...
 enum TokenTypes
