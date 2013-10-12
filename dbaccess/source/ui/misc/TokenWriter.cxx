@@ -72,10 +72,10 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 using ::com::sun::star::frame::XModel;
 
-#if defined(UNX)
-const char ODatabaseImportExport::sNewLine = '\012';
-#else
+#ifdef _WIN32
 const char ODatabaseImportExport::sNewLine[] = "\015\012";
+#else
+const char ODatabaseImportExport::sNewLine = '\012';
 #endif
 
 const static char sMyBegComment[]   = "<!-- ";
