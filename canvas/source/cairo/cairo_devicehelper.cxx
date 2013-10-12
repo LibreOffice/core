@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
@@ -91,7 +92,7 @@ namespace cairocanvas
 
         OutputDevice* pOutDev=getOutputDevice();
 
-#if defined (UNX) && !defined (MACOSX)
+#if HAVE_FEATURE_X11
         // X11 only
         if( mpSurface )
             mpSurface->Resize( rSize.getX() + pOutDev->GetOutOffXPixel(),
