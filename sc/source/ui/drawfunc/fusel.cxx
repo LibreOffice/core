@@ -85,8 +85,6 @@ FuSelection::~FuSelection()
 
 sal_uInt8 FuSelection::Command(const CommandEvent& rCEvt)
 {
-    //  special code for non-VCL OS2/UNX removed
-
     return FuDraw::Command( rCEvt );
 }
 

@@ -63,8 +63,6 @@ FuConstruct::~FuConstruct()
 
 sal_uInt8 FuConstruct::Command(const CommandEvent& rCEvt)
 {
-    //  special code for non-VCL OS2/UNX removed
-
     return FuDraw::Command( rCEvt );
 }
 
