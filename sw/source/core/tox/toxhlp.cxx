@@ -20,7 +20,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/IndexEntrySupplier.hpp>
-#include <tools/string.hxx>
 #include <toxwrap.hxx>
 #include <sal/log.hxx>
 
