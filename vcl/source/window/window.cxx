@@ -8418,7 +8418,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
                     aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
                     aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
                     aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
-#elif defined UNX
+#elif HAVE_FEATURE_X11
                     aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.X11DragSource");
                     aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.X11DropTarget");
 
@@ -8504,7 +8504,7 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
             {
                 uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-#if defined(UNX) && !defined(MACOSX) && !defined(IOS) && !defined(ANDROID)
+#if HAVE_FEATURE_X11
                 // A hack, making the primary selection available as an instance
                 // of the SystemClipboard service on X11:
                 css::uno::Sequence<css::uno::Any> args(1);
