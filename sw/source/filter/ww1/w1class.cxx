@@ -154,11 +154,11 @@ sal_uInt16 Ww1Style::ReadName( sal_uInt8*&p, sal_uInt16& rnCountBytes, sal_uInt1
             pStr = "?";
         else
             pStr = names[nSize-222];
-        SetName(String(pStr, RTL_TEXTENCODING_MS_1252));
+        SetName(OUString(pStr, strlen(pStr), RTL_TEXTENCODING_MS_1252));
     }
     else if( 255 > nCountBytes ) // unused
     {
-        SetName( String( (sal_Char*)p, nCountBytes, RTL_TEXTENCODING_MS_1252 ));
+        SetName( OUString( (sal_Char*)p, nCountBytes, RTL_TEXTENCODING_MS_1252 ));
         p += nCountBytes;
         OSL_ENSURE(rnCountBytes>=nCountBytes, "Ww1Style");
         rnCountBytes = rnCountBytes - nCountBytes;
