@@ -20,7 +20,6 @@
 #ifndef _WW8PAR_HXX
 #define _WW8PAR_HXX
 
-#include <tools/string.hxx>
 #include "rtl/ustring.hxx"
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/util.hxx>
