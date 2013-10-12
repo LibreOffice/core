@@ -31,11 +31,7 @@ class ScFieldEditEngine;
 class ScExportBase
 {
 public:
-#if defined UNX
-    static const sal_Char sNewLine;
-#else
     static const sal_Char sNewLine[];
-#endif
 
 protected:
 

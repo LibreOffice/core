@@ -24,10 +24,10 @@
 
 //------------------------------------------------------------------
 
-#if defined(UNX)
-const sal_Char ScExportBase::sNewLine = '\012';
-#else
+#ifdef _WIN32
 const sal_Char ScExportBase::sNewLine[] = "\015\012";
+#else
+const sal_Char ScExportBase::sNewLine[] = "\012";
 #endif
 
 
