@@ -75,7 +75,9 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfimport,\
     unoxml/source/service/unoxml \
     uui/util/uui \
     $(if $(filter-out MACOSX WNT,$(OS)), \
-		vcl/vcl.unx \
+		$(if $(filter-out TRUE,$(ENABLE_HEADLESS)), \
+			vcl/vcl.unx \
+		) \
     ) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
     xmloff/util/xo \
