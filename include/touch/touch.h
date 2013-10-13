@@ -39,6 +39,7 @@ void touch_ui_damaged(int minX, int minY, int width, int height);
 
 void touch_ui_show_keyboard();
 void touch_ui_hide_keyboard();
+bool touch_ui_keyboard_visible();
 
 // 2) Those implmented in the lower layers to be called by the upper
 // layer, in cases where we don't want to include a bunch of the

@@ -542,13 +542,19 @@ Java_org_libreoffice_android_AppSupport_scroll(JNIEnv * /* env */,
 }
 
 extern "C" void
-lo_show_keyboard()
+touch_ui_show_keyboard()
 {
 }
 
 extern "C" void
-lo_hide_keyboard()
+touch_ui_hide_keyboard()
 {
+}
+
+extern "C" bool
+touch_ui_keyboard_visible()
+{
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

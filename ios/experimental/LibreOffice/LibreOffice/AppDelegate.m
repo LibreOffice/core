@@ -16,6 +16,7 @@
 #import "lo.h"
 
 static View *theView;
+static BOOL keyboardShows;
 
 @implementation AppDelegate
 
@@ -78,6 +79,8 @@ static View *theView;
     NSThread* thread = [[NSThread alloc] initWithTarget:self
                                                selector:@selector(threadMainMethod:)
                                                  object:nil];
+    keyboardShows = NO;
+
     [thread start];
 
     return YES;
@@ -158,6 +161,8 @@ static View *theView;
     NSLog(@"keyboardWillShow: frame:%dx%d@(%d,%d)",
           (int) frameEnd.size.width, (int) frameEnd.size.height,
           (int) frameEnd.origin.x, (int) frameEnd.origin.y);
+
+    keyboardShows = YES;
 }
 
 - (void)keyboardDidHide:(NSNotification *)note
@@ -165,6 +170,8 @@ static View *theView;
     (void) note;
 
     NSLog(@"keyboardDidHide");
+
+    keyboardShows = NO;
 
     touch_lo_keyboard_did_hide();
 }
@@ -186,6 +193,15 @@ void touch_ui_damaged(int minX, int minY, int width, int height)
 
 void touch_ui_show_keyboard()
 {
+#if 0
+    // Horrible hack
+    static bool beenHere = false;
+    if (!beenHere) {
+        beenHere = true;
+        touch_lo_keyboard_did_hide();
+        return;
+    }
+#endif
     dispatch_async(dispatch_get_main_queue(), ^{
             [theView->textView becomeFirstResponder];
         });
@@ -196,6 +212,11 @@ void touch_ui_hide_keyboard()
     dispatch_async(dispatch_get_main_queue(), ^{
             [theView->textView resignFirstResponder];
         });
+}
+
+bool touch_ui_keyboard_visible()
+{
+    return keyboardShows;
 }
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

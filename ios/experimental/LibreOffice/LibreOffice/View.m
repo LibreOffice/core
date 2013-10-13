@@ -54,8 +54,6 @@
         // NSLog(@"tapGesture: at: (%d,%d)", (int)location.x, (int)location.y);
 
         touch_lo_tap(location.x, location.y);
-
-        [self->textView becomeFirstResponder];
     } else {
         // NSLog(@"tapGesture: %@", gestureRecognizer);
     }

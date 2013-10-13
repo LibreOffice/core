@@ -61,6 +61,10 @@
 #include <globals.hrc>
 #include <comcore.hrc>
 
+#if defined(ANDROID) || defined(IOS)
+#include <touch/touch.h>
+#endif
+
 using namespace com::sun::star;
 using namespace util;
 
@@ -2030,6 +2034,9 @@ void SwCrsrShell::ShowCrsr()
     if( !m_bBasicHideCrsr )
     {
         m_bSVCrsrVis = sal_True;
+#if defined(ANDROID) || defined(IOS)
+        touch_ui_show_keyboard();
+#endif
         UpdateCrsr();
     }
 }
@@ -2042,6 +2049,9 @@ void SwCrsrShell::HideCrsr()
         // possibly reverse selected areas!!
         SET_CURR_SHELL( this );
         m_pVisCrsr->Hide();
+#if defined(ANDROID) || defined(IOS)
+        touch_ui_hide_keyboard();
+#endif
     }
 }
 
@@ -2510,7 +2520,12 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     m_bAllProtect = m_bVisPortChgd = m_bChgCallFlag = m_bInCMvVisportChgd =
     m_bGCAttr = m_bIgnoreReadonly = m_bSelTblCells = m_bBasicHideCrsr =
     m_bOverwriteCrsr = sal_False;
-    m_bCallChgLnk = m_bHasFocus = m_bSVCrsrVis = m_bAutoUpdateCells = sal_True;
+    m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = sal_True;
+#if defined(ANDROID) || defined(IOS)
+    m_bSVCrsrVis = touch_ui_keyboard_visible();
+#else
+    m_bSVCrsrVis = sal_True;
+#endif
     m_bSetCrsrInReadOnly = sal_True;
     m_pVisCrsr = new SwVisCrsr( this );
     m_bMacroExecAllowed = rShell.IsMacroExecAllowed();
@@ -2542,7 +2557,12 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     m_bAllProtect = m_bVisPortChgd = m_bChgCallFlag = m_bInCMvVisportChgd =
     m_bGCAttr = m_bIgnoreReadonly = m_bSelTblCells = m_bBasicHideCrsr =
     m_bOverwriteCrsr = sal_False;
-    m_bCallChgLnk = m_bHasFocus = m_bSVCrsrVis = m_bAutoUpdateCells = sal_True;
+    m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = sal_True;
+#if defined(ANDROID) || defined(IOS)
+    m_bSVCrsrVis = touch_ui_keyboard_visible();
+#else
+    m_bSVCrsrVis = sal_True;
+#endif
     m_bSetCrsrInReadOnly = sal_True;
 
     m_pVisCrsr = new SwVisCrsr( this );
