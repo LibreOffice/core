@@ -33,8 +33,6 @@ class SvStream;
 class SVT_DLLPUBLIC RTFOutFuncs
 {
 public:
-    static const sal_Char sNewLine[];
-
     static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
                     int *pUCMode,
                     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,

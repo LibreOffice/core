@@ -30,9 +30,6 @@ class ScFieldEditEngine;
 
 class ScExportBase
 {
-public:
-    static const sal_Char sNewLine[];
-
 protected:
 
     SvStream&           rStrm;

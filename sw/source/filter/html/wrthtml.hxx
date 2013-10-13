@@ -283,8 +283,6 @@ protected:
     sal_uLong WriteStream();
 
 public:
-    static const sal_Char sNewLine[];
-
     std::vector<String> aImgMapNames;     // geschriebene Image Maps
     std::set<String> aImplicitMarks;// implizite Stprungmarken
     std::set<String> aNumRuleNames;// Names of exported num rules

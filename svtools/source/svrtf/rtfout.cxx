@@ -24,14 +24,6 @@
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>
 
-
-#ifdef _WIN32
-const sal_Char RTFOutFuncs::sNewLine[] = "\015\012";
-#else
-const sal_Char RTFOutFuncs::sNewLine[] = "\012";
-#endif
-
-
 SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
     int *pUCMode, rtl_TextEncoding eDestEnc, sal_Bool bWriteHelpFile)
 {

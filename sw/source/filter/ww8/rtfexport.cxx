@@ -69,12 +69,6 @@ using namespace ::com::sun::star;
 
 using sw::mark::IMark;
 
-#ifdef _WIN32
-const sal_Char* const RtfExport::sNewLine = "\015\012";
-#else
-const sal_Char* const RtfExport::sNewLine = "\012";
-#endif
-
 // the default text encoding for the export, if it doesn't fit unicode will
 // be used
 #define DEF_ENCODING            RTL_TEXTENCODING_ASCII_US
@@ -280,7 +274,7 @@ void RtfExport::WriteRevTab()
             Strm() << msfilter::rtfutil::OutString(*pAuthor, eDefaultEncoding).getStr();
         Strm() << ";}";
     }
-    Strm() << '}' << sNewLine;
+    Strm() << '}' << SAL_NEWLINE_STRING;
 }
 
 void RtfExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
@@ -376,7 +370,7 @@ sal_uLong RtfExport::ReplaceCr( sal_uInt8 )
 
 void RtfExport::WriteFonts()
 {
-    Strm() << sNewLine << '{' << OOO_STRING_SVTOOLS_RTF_FONTTBL;
+    Strm() << SAL_NEWLINE_STRING << '{' << OOO_STRING_SVTOOLS_RTF_FONTTBL;
     maFontHelper.WriteFontTable( *m_pAttrOutput );
     Strm() << '}';
 }
@@ -464,14 +458,14 @@ void RtfExport::WritePageDescTable()
     if( !nSize )
         return;
 
-    Strm() << sNewLine;        // a separator
+    Strm() << SAL_NEWLINE_STRING;
     bOutPageDescs = sal_True;
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_PGDSCTBL;
     for( sal_uInt16 n = 0; n < nSize; ++n )
     {
         const SwPageDesc& rPageDesc = pDoc->GetPageDesc( n );
 
-        Strm() << sNewLine << '{' << OOO_STRING_SVTOOLS_RTF_PGDSC;
+        Strm() << SAL_NEWLINE_STRING << '{' << OOO_STRING_SVTOOLS_RTF_PGDSC;
         OutULong( n ) << OOO_STRING_SVTOOLS_RTF_PGDSCUSE;
         OutULong( rPageDesc.ReadUseOn() );
 
@@ -486,7 +480,7 @@ void RtfExport::WritePageDescTable()
         OutULong( i ) << ' ';
         Strm() << msfilter::rtfutil::OutString( rPageDesc.GetName(), eDefaultEncoding).getStr() << ";}";
     }
-    Strm() << '}' << sNewLine;
+    Strm() << '}' << SAL_NEWLINE_STRING;
     bOutPageDescs = sal_False;
 
     // reset table infos, otherwise the depth of the cells will be incorrect,
@@ -520,7 +514,7 @@ void RtfExport::ExportDocument_Impl()
 
     WriteInfo();
     // Default TabSize
-    Strm() << m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr() << sNewLine;
+    Strm() << m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr() << SAL_NEWLINE_STRING;
     // Zoom
     ViewShell *pViewShell(pDoc->GetCurrentViewShell());
     if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SVX_ZOOM_PERCENT)
@@ -697,7 +691,7 @@ void RtfExport::ExportDocument_Impl()
         Strm() << pOut;
     }
 
-    Strm() << sNewLine;
+    Strm() << SAL_NEWLINE_STRING;
 
     // Init sections
     m_pSections = new MSWordSections( *this );

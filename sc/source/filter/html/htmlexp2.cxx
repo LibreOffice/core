@@ -233,7 +233,7 @@ void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
                     rLinkName ), eDestEnc ) << '\"';
         if ( !rImgOptions.isEmpty() )
             rStrm << rImgOptions.getStr();
-        rStrm << '>' << sNewLine << GetIndentStr();
+        rStrm << '>' << SAL_NEWLINE_STRING << GetIndentStr();
     }
 }
 

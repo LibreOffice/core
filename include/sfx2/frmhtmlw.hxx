@@ -41,7 +41,6 @@ namespace com { namespace sun { namespace star {
 
 class SFX2_DLLPUBLIC SfxFrameHTMLWriter
 {
-    SAL_DLLPRIVATE static const sal_Char sNewLine[];
     SAL_DLLPRIVATE static void OutMeta( SvStream& rStrm,
                                 const sal_Char *pIndent, const OUString& rName,
                                 const OUString& rContent, sal_Bool bHTTPEquiv,

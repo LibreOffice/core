@@ -144,8 +144,6 @@ public:
     /// Destructor.
     virtual ~RtfExport();
 
-    static const sal_Char* const sNewLine;
-
     rtl_TextEncoding eDefaultEncoding;
     rtl_TextEncoding eCurrentEncoding;
     /// This is used by OutputFlyFrame_Impl() to control the written syntax

@@ -86,7 +86,7 @@ long HundMMToTwips( long nIn )
 sal_uLong SdrTableRtfExporter::Write()
 {
     mrStrm << '{' << OOO_STRING_SVTOOLS_RTF_RTF;
-    mrStrm << OOO_STRING_SVTOOLS_RTF_ANSI << RTFOutFuncs::sNewLine;
+    mrStrm << OOO_STRING_SVTOOLS_RTF_ANSI << SAL_NEWLINE_STRING;
 
     Reference< XTableColumns > xColumns( mxTable->getColumns() );
     const sal_Int32 nColCount = xColumns->getCount();
@@ -125,7 +125,7 @@ sal_uLong SdrTableRtfExporter::Write()
         OSL_FAIL("SdrTableRtfExporter::Write(), exception caught!");
     }
 
-    mrStrm << '}' << RTFOutFuncs::sNewLine;
+    mrStrm << '}' << SAL_NEWLINE_STRING;
     return mrStrm.GetError();
 }
 
@@ -147,9 +147,9 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
 
         mrStrm << OOO_STRING_SVTOOLS_RTF_CELLX << OString::number(aColumnStart[nCol]).getStr();
         if ( (nCol & 0x0F) == 0x0F )
-            mrStrm << RTFOutFuncs::sNewLine;        // Zeilen nicht zu lang werden lassen
+            mrStrm << SAL_NEWLINE_STRING;        // Zeilen nicht zu lang werden lassen
     }
-    mrStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << RTFOutFuncs::sNewLine;
+    mrStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << SAL_NEWLINE_STRING;
 
     sal_uLong nStrmPos = mrStrm.Tell();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
@@ -157,11 +157,11 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
         WriteCell( nCol, nRow );
         if ( mrStrm.Tell() - nStrmPos > 255 )
         {
-            mrStrm << RTFOutFuncs::sNewLine;
+            mrStrm << SAL_NEWLINE_STRING;
             nStrmPos = mrStrm.Tell();
         }
     }
-    mrStrm << OOO_STRING_SVTOOLS_RTF_ROW << RTFOutFuncs::sNewLine;
+    mrStrm << OOO_STRING_SVTOOLS_RTF_ROW << SAL_NEWLINE_STRING;
 }
 
 

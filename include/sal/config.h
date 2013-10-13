@@ -31,6 +31,7 @@
 #define SAL_DLLEXTENSION ".dll"
 #define SAL_PATHSEPARATOR ';'
 #define SAL_PATHDELIMITER '\\'
+#define SAL_NEWLINE_STRING "\r\n"
 #define SAL_CONFIGFILE( name ) name ".ini"
 
 #ifdef _MSC_VER
@@ -58,6 +59,7 @@
 #define SAL_DLLPREFIX "lib"
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
+#define SAL_NEWLINE_STRING "\n"
 #define SAL_CONFIGFILE( name ) name "rc"
 #endif
 
@@ -67,6 +69,7 @@
 #define SAL_DLLPREFIX "lib"
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
+#define SAL_NEWLINE_STRING "\n"
 #define SAL_CONFIGFILE( name ) name "rc"
 #endif
 
@@ -79,6 +82,7 @@
 #define SAL_DLLPREFIX "lib"
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
+#define SAL_NEWLINE_STRING "\n"
 #define SAL_CONFIGFILE( name ) name "rc"
 #endif
 

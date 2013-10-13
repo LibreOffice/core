@@ -927,14 +927,13 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         rHTMLWrt.aImgMapNames.push_back(aIMapName);
 
         OString aIndMap, aIndArea;
-        const sal_Char *pLF = 0, *pIndArea = 0, *pIndMap = 0;
+        const sal_Char *pIndArea = 0, *pIndMap = 0;
 
         if( rHTMLWrt.bLFPossible )
         {
             rHTMLWrt.OutNewLine( sal_True );
             aIndMap = rHTMLWrt.GetIndentString();
             aIndArea = rHTMLWrt.GetIndentString(1);
-            pLF = SwHTMLWriter::sNewLine;
             pIndArea = aIndArea.getStr();
             pIndMap = aIndMap.getStr();
         }
@@ -946,7 +945,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             HTMLOutFuncs::Out_ImageMap( rWrt.Strm(), rWrt.GetBaseURL(), aScaledIMap, aIMapName,
                                         aIMapEventTable,
                                         rHTMLWrt.bCfgStarBasic,
-                                        pLF, pIndArea, pIndMap,
+                                        SAL_NEWLINE_STRING, pIndArea, pIndMap,
                                         rHTMLWrt.eDestEnc,
                                         &rHTMLWrt.aNonConvertableCharacters );
         }
@@ -955,7 +954,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             HTMLOutFuncs::Out_ImageMap( rWrt.Strm(), rWrt.GetBaseURL(), *pIMap, aIMapName,
                                         aIMapEventTable,
                                         rHTMLWrt.bCfgStarBasic,
-                                        pLF, pIndArea, pIndMap,
+                                        SAL_NEWLINE_STRING, pIndArea, pIndMap,
                                          rHTMLWrt.eDestEnc,
                                         &rHTMLWrt.aNonConvertableCharacters );
         }

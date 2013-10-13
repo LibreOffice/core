@@ -80,12 +80,6 @@ namespace dbaui
         sal_Int32       m_nCommandType;
         bool            m_bNeedToReInitialize;
 
-#if defined UNX
-        static const char sNewLine;
-#else
-        static const char sNewLine[];
-#endif
-
         ODatabaseExport*    m_pReader;
         sal_Int32*          m_pRowMarker; // if set, then copy only these rows
         rtl_TextEncoding    m_eDestEnc;

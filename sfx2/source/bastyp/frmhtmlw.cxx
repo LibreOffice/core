@@ -54,12 +54,6 @@ static sal_Char const sHTML_SC_yes[] =  "YES";
 static sal_Char const sHTML_SC_no[] =       "NO";
 static sal_Char const sHTML_MIME_text_html[] =  "text/html; charset=";
 
-#ifdef _WIN32
-const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\015\012";
-#else
-const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\012";
-#endif
-
 void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                                   const sal_Char *pIndent,
                                   const OUString& rName,
@@ -67,7 +61,7 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                                      rtl_TextEncoding eDestEnc,
                                   OUString *pNonConvertableChars  )
 {
-    rStrm << sNewLine;
+    rStrm << SAL_NEWLINE_STRING;
     if( pIndent )
         rStrm << pIndent;
 
@@ -102,7 +96,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
     }
 
     // Titel (auch wenn er leer ist)
-    rStrm << sNewLine;
+    rStrm << SAL_NEWLINE_STRING;
     if( pIndent )
         rStrm << pIndent;
     HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_title );
@@ -120,7 +114,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         const OUString& rTarget = i_xDocProps->getDefaultTarget();
         if( !rTarget.isEmpty() )
         {
-            rStrm << sNewLine;
+            rStrm << SAL_NEWLINE_STRING;
             if( pIndent )
                 rStrm << pIndent;
 

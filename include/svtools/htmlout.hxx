@@ -51,8 +51,6 @@ struct SVT_DLLPUBLIC HTMLOutContext
 
 struct HTMLOutFuncs
 {
-    static const sal_Char sNewLine[];
-
     SVT_DLLPUBLIC static OString ConvertStringToHTML( const OUString& sSrc,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         OUString *pNonConvertableChars = 0 );

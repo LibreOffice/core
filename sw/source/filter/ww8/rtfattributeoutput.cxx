@@ -308,7 +308,7 @@ void RtfAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
         m_bTblAfterCell = false;
     else
     {
-        aParagraph->append(m_rExport.sNewLine);
+        aParagraph->append(SAL_NEWLINE_STRING);
         aParagraph->append(OOO_STRING_SVTOOLS_RTF_PAR);
         aParagraph->append(' ');
     }
@@ -328,7 +328,7 @@ void RtfAttributeOutput::EmptyParagraph()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    m_rExport.Strm() << m_rExport.sNewLine << OOO_STRING_SVTOOLS_RTF_PAR << ' ';
+    m_rExport.Strm() << SAL_NEWLINE_STRING << OOO_STRING_SVTOOLS_RTF_PAR << ' ';
 }
 
 void RtfAttributeOutput::SectionBreaks(const SwTxtNode& rNode)
@@ -403,7 +403,7 @@ void RtfAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool bSing
 void RtfAttributeOutput::EndRun()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-    m_aRun->append(m_rExport.sNewLine);
+    m_aRun->append(SAL_NEWLINE_STRING);
     m_aRun.appendAndClear(m_aRunText);
     if (!m_bSingleEmptyRun && m_bInRun)
         m_aRun->append('}');
@@ -1038,10 +1038,10 @@ void RtfAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer
 void RtfAttributeOutput::StartStyles()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-    m_rExport.Strm() << m_rExport.sNewLine << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL;
+    m_rExport.Strm() << SAL_NEWLINE_STRING << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL;
     m_rExport.OutColorTable();
     OSL_ENSURE(m_aStylesheet.getLength() == 0, "m_aStylesheet is not empty");
-    m_aStylesheet.append(m_rExport.sNewLine);
+    m_aStylesheet.append(SAL_NEWLINE_STRING);
     m_aStylesheet.append('{');
     m_aStylesheet.append(OOO_STRING_SVTOOLS_RTF_STYLESHEET);
 }
@@ -1097,7 +1097,7 @@ void RtfAttributeOutput::EndStyle()
     m_aStylesheet.append(' ');
     m_aStylesheet.append(msfilter::rtfutil::OutString(m_rStyleName, m_rExport.eCurrentEncoding));
     m_aStylesheet.append(";}");
-    m_aStylesheet.append(m_rExport.sNewLine);
+    m_aStylesheet.append(SAL_NEWLINE_STRING);
 }
 
 void RtfAttributeOutput::StartStyleProperties( bool /*bParProp*/, sal_uInt16 /*nStyle*/ )
@@ -1308,7 +1308,7 @@ void RtfAttributeOutput::EndAbstractNumbering()
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_LISTID;
-    m_rExport.OutULong( m_nListId ) << '}' << m_rExport.sNewLine;
+    m_rExport.OutULong( m_nListId ) << '}' << SAL_NEWLINE_STRING;
 }
 
 void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
@@ -1327,7 +1327,7 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    m_rExport.Strm() << m_rExport.sNewLine;
+    m_rExport.Strm() << SAL_NEWLINE_STRING;
     if( nLevel > 8 ) // RTF knows only 9 levels
         m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_SOUTLVL;
 
@@ -1600,7 +1600,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             m_rExport.Strm() << '}'; // shpinst
             m_rExport.Strm() << '}'; // shp
 
-            m_rExport.Strm() << RtfExport::sNewLine;
+            m_rExport.Strm() << SAL_NEWLINE_STRING;
             }
             break;
         case sw::Frame::eGraphic:
@@ -3394,9 +3394,9 @@ OString RtfAttributeOutput::WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, S
         if (++nBreak == nLimit)
         {
             if (pStream)
-                (*pStream) << RtfExport::sNewLine;
+                (*pStream) << SAL_NEWLINE_STRING;
             else
-                aRet.append(RtfExport::sNewLine);
+                aRet.append(SAL_NEWLINE_STRING);
             nBreak = 0;
         }
     }
@@ -3481,7 +3481,7 @@ static OString ExportPICT( const SwFlyFrmFmt* pFlyFrmFmt, const Size &rOrig, con
             aRet.append((sal_Int32)8);
             StripMetafileHeader(pGraphicAry, nSize);
         }
-        aRet.append(RtfExport::sNewLine);
+        aRet.append(SAL_NEWLINE_STRING);
         if (pStream)
             (*pStream) << aRet.makeStringAndClear().getStr();
         if (pStream)
@@ -3674,7 +3674,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
         m_rExport.Strm() << '}';
     }
 
-    m_rExport.Strm() << m_rExport.sNewLine;
+    m_rExport.Strm() << SAL_NEWLINE_STRING;
 }
 
 void RtfAttributeOutput::BulletDefinition(int /*nId*/, const Graphic& rGraphic, Size aSize)
@@ -3687,7 +3687,7 @@ void RtfAttributeOutput::BulletDefinition(int /*nId*/, const Graphic& rGraphic, 
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_PICHGOAL;
     m_rExport.OutULong(aSize.Height());
 
-    m_rExport.Strm() << RtfExport::sNewLine;
+    m_rExport.Strm() << SAL_NEWLINE_STRING;
     const sal_uInt8* pGraphicAry = 0;
     SvMemoryStream aStream;
     if (GraphicConverter::Export(aStream, rGraphic, CVT_PNG) != ERRCODE_NONE)

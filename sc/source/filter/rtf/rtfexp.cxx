@@ -69,7 +69,7 @@ ScRTFExport::~ScRTFExport()
 sal_uLong ScRTFExport::Write()
 {
     rStrm << '{' << OOO_STRING_SVTOOLS_RTF_RTF;
-    rStrm << OOO_STRING_SVTOOLS_RTF_ANSI << sNewLine;
+    rStrm << OOO_STRING_SVTOOLS_RTF_ANSI << SAL_NEWLINE_STRING;
 
     // Daten
     for ( SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); nTab++ )
@@ -79,14 +79,14 @@ sal_uLong ScRTFExport::Write()
         WriteTab( nTab );
     }
 
-    rStrm << '}' << sNewLine;
+    rStrm << '}' << SAL_NEWLINE_STRING;
     return rStrm.GetError();
 }
 
 
 void ScRTFExport::WriteTab( SCTAB nTab )
 {
-    rStrm << '{' << sNewLine;
+    rStrm << '{' << SAL_NEWLINE_STRING;
     if ( pDoc->HasTable( nTab ) )
     {
         memset( &pCellX[0], 0, (MAXCOL+2) * sizeof(sal_uLong) );
@@ -103,7 +103,7 @@ void ScRTFExport::WriteTab( SCTAB nTab )
             WriteRow( nTab, nRow );
         }
     }
-    rStrm << '}' << sNewLine;
+    rStrm << '}' << SAL_NEWLINE_STRING;
 }
 
 
@@ -143,9 +143,9 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
 
         rStrm << OOO_STRING_SVTOOLS_RTF_CELLX << OString::number(pCellX[nCol+1]).getStr();
         if ( (nCol & 0x0F) == 0x0F )
-            rStrm << sNewLine;      // Zeilen nicht zu lang werden lassen
+            rStrm << SAL_NEWLINE_STRING;      // Zeilen nicht zu lang werden lassen
     }
-    rStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << sNewLine;
+    rStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << SAL_NEWLINE_STRING;
 
     sal_uLong nStrmPos = rStrm.Tell();
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
@@ -153,11 +153,11 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
         WriteCell( nTab, nRow, nCol );
         if ( rStrm.Tell() - nStrmPos > 255 )
         {   // Zeilen nicht zu lang werden lassen
-            rStrm << sNewLine;
+            rStrm << SAL_NEWLINE_STRING;
             nStrmPos = rStrm.Tell();
         }
     }
-    rStrm << OOO_STRING_SVTOOLS_RTF_ROW << sNewLine;
+    rStrm << OOO_STRING_SVTOOLS_RTF_ROW << SAL_NEWLINE_STRING;
 }
 
 

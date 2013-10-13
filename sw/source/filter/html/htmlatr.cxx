@@ -645,7 +645,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         // nur einen Zeilen-Umbruch (ohne Einrueckung) am Absatz-Anfang
         // ausgeben
         rInfo.aToken = OString();   // kein End-Tag ausgeben
-        rWrt.Strm() << SwHTMLWriter::sNewLine;
+        rWrt.Strm() << SAL_NEWLINE_STRING;
 
         return;
     }

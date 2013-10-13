@@ -1304,7 +1304,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             while ( nPos != -1 )
             {
                 if( nPos )
-                    rWrt.Strm() << SwHTMLWriter::sNewLine;
+                    rWrt.Strm() << SAL_NEWLINE_STRING;
                 OUString aLine = sVal.getToken( 0, 0x0A, nPos );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aLine,
                                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );

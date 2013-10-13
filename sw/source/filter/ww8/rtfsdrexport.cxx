@@ -367,7 +367,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
             case ESCHER_Prop_fillBlip:
                 {
                     OStringBuffer aBuf;
-                    aBuf.append('{').append(OOO_STRING_SVTOOLS_RTF_PICT).append(OOO_STRING_SVTOOLS_RTF_PNGBLIP).append(RtfExport::sNewLine);
+                    aBuf.append('{').append(OOO_STRING_SVTOOLS_RTF_PICT).append(OOO_STRING_SVTOOLS_RTF_PNGBLIP).append(SAL_NEWLINE_STRING);
                     int nHeaderSize = 25; // The first bytes are WW8-specific, we're only interested in the PNG
                     aBuf.append(RtfAttributeOutput::WriteHex(it->pBuf + nHeaderSize, it->nPropSize - nHeaderSize));
                     aBuf.append('}');
@@ -456,7 +456,7 @@ void RtfSdrExport::impl_writeGraphic()
     RtfStringBuffer aBuf;
     aBuf->append('{').append(OOO_STRING_SVTOOLS_RTF_PICT).append(OOO_STRING_SVTOOLS_RTF_PNGBLIP);
     aBuf->append(OOO_STRING_SVTOOLS_RTF_PICW).append(sal_Int32(aMapped.Width()));
-    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICH).append(sal_Int32(aMapped.Height())).append(RtfExport::sNewLine);
+    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICH).append(sal_Int32(aMapped.Height())).append(SAL_NEWLINE_STRING);
     aBuf->append(RtfAttributeOutput::WriteHex(pGraphicAry, nSize));
     aBuf->append('}');
     m_aShapeProps.insert(std::pair<OString,OString>("pib", aBuf.makeStringAndClear()));
@@ -554,7 +554,7 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
                 nNextAttr = nEnd;
 
             aAttrIter.OutAttr( nAktPos );
-            m_rAttrOutput.RunText().append('{').append(m_rAttrOutput.Styles().makeStringAndClear()).append(m_rExport.sNewLine);
+            m_rAttrOutput.RunText().append('{').append(m_rAttrOutput.Styles().makeStringAndClear()).append(SAL_NEWLINE_STRING);
             bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
             if( !bTxtAtr )
             {

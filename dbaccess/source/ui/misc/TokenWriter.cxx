@@ -72,12 +72,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 using ::com::sun::star::frame::XModel;
 
-#ifdef _WIN32
-const char ODatabaseImportExport::sNewLine[] = "\015\012";
-#else
-const char ODatabaseImportExport::sNewLine = '\012';
-#endif
-
 const static char sMyBegComment[]   = "<!-- ";
 const static char sMyEndComment[]   = " -->";
 const static char sFontFamily[]     = "font-family: ";
@@ -388,7 +382,7 @@ sal_Bool ORTFImportExport::Write()
     SAL_INFO("dbaccess.ui", "ORTFImportExport::Write" );
     ODatabaseImportExport::Write();
     (*m_pStream) << '{'     << OOO_STRING_SVTOOLS_RTF_RTF;
-    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ANSI << ODatabaseImportExport::sNewLine;
+    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ANSI << SAL_NEWLINE_STRING;
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
 
     sal_Bool bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
@@ -419,7 +413,7 @@ sal_Bool ORTFImportExport::Write()
         (*m_pStream) << ';';
     }
     (*m_pStream) << '}' ;
-    (*m_pStream) << ODatabaseImportExport::sNewLine;
+    (*m_pStream) << SAL_NEWLINE_STRING;
     // write the rtf color table
     (*m_pStream) << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL << OOO_STRING_SVTOOLS_RTF_RED;
     m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetRed()));
@@ -429,7 +423,7 @@ sal_Bool ORTFImportExport::Write()
     m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetBlue()));
 
     (*m_pStream) << ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}"
-                 << ODatabaseImportExport::sNewLine;
+                 << SAL_NEWLINE_STRING;
 
     static char const aTRRH[] = "\\trrh-270\\pard\\intbl";
     static char const aFS[] = "\\fs20\\f0\\cf0\\cb2";
@@ -437,7 +431,7 @@ sal_Bool ORTFImportExport::Write()
 
     (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
     m_pStream->WriteNumber(static_cast<sal_Int32>(40));
-    (*m_pStream) << ODatabaseImportExport::sNewLine;
+    (*m_pStream) << SAL_NEWLINE_STRING;
 
     if(m_xObject.is())
     {
@@ -458,11 +452,11 @@ sal_Bool ORTFImportExport::Write()
         {
             (*m_pStream) << aCell1;
             m_pStream->WriteNumber(i*CELL_X);
-            (*m_pStream) << ODatabaseImportExport::sNewLine;
+            (*m_pStream) << SAL_NEWLINE_STRING;
         }
 
         // column description
-        (*m_pStream) << '{' << ODatabaseImportExport::sNewLine;
+        (*m_pStream) << '{' << SAL_NEWLINE_STRING;
         (*m_pStream) << aTRRH;
 
         OString* pHorzChar = new OString[nCount];
@@ -493,7 +487,7 @@ sal_Bool ORTFImportExport::Write()
 
             pHorzChar[i-1] = pChar; // to avoid to always rummage in the ITEMSET later on
 
-            (*m_pStream) << ODatabaseImportExport::sNewLine;
+            (*m_pStream) << SAL_NEWLINE_STRING;
             (*m_pStream) << '{';
             (*m_pStream) << OOO_STRING_SVTOOLS_RTF_QC;   // column header always centered
 
@@ -508,13 +502,13 @@ sal_Bool ORTFImportExport::Write()
 
             (*m_pStream) << OOO_STRING_SVTOOLS_RTF_CELL;
             (*m_pStream) << '}';
-            (*m_pStream) << ODatabaseImportExport::sNewLine;
+            (*m_pStream) << SAL_NEWLINE_STRING;
             (*m_pStream) << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
         }
 
         (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ROW;
-        (*m_pStream) << ODatabaseImportExport::sNewLine << '}';
-        (*m_pStream) << ODatabaseImportExport::sNewLine;
+        (*m_pStream) << SAL_NEWLINE_STRING << '}';
+        (*m_pStream) << SAL_NEWLINE_STRING;
 
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
         sal_Int32 k=1;
@@ -553,7 +547,7 @@ sal_Bool ORTFImportExport::Write()
         delete [] pHorzChar;
     }
 
-    (*m_pStream) << '}' << ODatabaseImportExport::sNewLine;
+    (*m_pStream) << '}' << SAL_NEWLINE_STRING;
     (*m_pStream) << (sal_uInt8) 0;
     return ((*m_pStream).GetError() == SVSTREAM_OK);
 }
@@ -565,7 +559,7 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
         ++kk;
         (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
         m_pStream->WriteNumber(static_cast<sal_Int32>(40));
-        (*m_pStream) << ODatabaseImportExport::sNewLine;
+        (*m_pStream) << SAL_NEWLINE_STRING;
 
         static char const aCell2[] = "\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx";
         static char const aTRRH[] = "\\trrh-270\\pard\\intbl";
@@ -574,7 +568,7 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
         {
             (*m_pStream) << aCell2;
             m_pStream->WriteNumber(i*CELL_X);
-            (*m_pStream) << ODatabaseImportExport::sNewLine;
+            (*m_pStream) << SAL_NEWLINE_STRING;
         }
 
         const sal_Bool bBold            = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
@@ -587,7 +581,7 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
         (*m_pStream) << aTRRH;
         for ( sal_Int32 i=1; i <= _nColumnCount; ++i )
         {
-            (*m_pStream) << ODatabaseImportExport::sNewLine;
+            (*m_pStream) << SAL_NEWLINE_STRING;
             (*m_pStream) << '{';
             (*m_pStream) << pHorzChar[i-1].getStr();
 
@@ -613,10 +607,10 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
 
             (*m_pStream) << OOO_STRING_SVTOOLS_RTF_CELL;
             (*m_pStream) << '}';
-            (*m_pStream) << ODatabaseImportExport::sNewLine;
+            (*m_pStream) << SAL_NEWLINE_STRING;
             (*m_pStream) << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
         }
-        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ROW << ODatabaseImportExport::sNewLine;
+        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ROW << SAL_NEWLINE_STRING;
         (*m_pStream) << '}';
     }
     ++k;
@@ -655,9 +649,9 @@ const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\
 // Macros for HTML-Export
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag, sal_False )
-#define OUT_LF()            (*m_pStream) << ODatabaseImportExport::sNewLine << GetIndentStr()
-#define TAG_ON_LF( tag )    (TAG_ON( tag ) << ODatabaseImportExport::sNewLine << GetIndentStr())
-#define TAG_OFF_LF( tag )   (TAG_OFF( tag ) << ODatabaseImportExport::sNewLine << GetIndentStr())
+#define OUT_LF()            (*m_pStream) << SAL_NEWLINE_STRING << GetIndentStr()
+#define TAG_ON_LF( tag )    (TAG_ON( tag ) << SAL_NEWLINE_STRING << GetIndentStr())
+#define TAG_OFF_LF( tag )   (TAG_OFF( tag ) << SAL_NEWLINE_STRING << GetIndentStr())
 
 OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                      const Reference< XComponentContext >& _rM,
@@ -683,7 +677,7 @@ sal_Bool OHTMLImportExport::Write()
     ODatabaseImportExport::Write();
     if(m_xObject.is())
     {
-        (*m_pStream) << '<' << OOO_STRING_SVTOOLS_HTML_doctype << ' ' << OOO_STRING_SVTOOLS_HTML_doctype40 << '>' << ODatabaseImportExport::sNewLine << ODatabaseImportExport::sNewLine;
+        (*m_pStream) << '<' << OOO_STRING_SVTOOLS_HTML_doctype << ' ' << OOO_STRING_SVTOOLS_HTML_doctype40 << '>' << SAL_NEWLINE_STRING << SAL_NEWLINE_STRING;
         TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_html );
         WriteHeader();
         OUT_LF();

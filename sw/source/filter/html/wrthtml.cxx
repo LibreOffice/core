@@ -80,12 +80,6 @@
 
 #define MAX_INDENT_LEVEL 20
 
-#ifdef _WIN32
-const sal_Char SwHTMLWriter::sNewLine[] = "\015\012";
-#else
-const sal_Char SwHTMLWriter::sNewLine[] = "\012";
-#endif
-
 static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
@@ -1248,7 +1242,7 @@ void SwHTMLWriter::OutNewLine( sal_Bool bCheck )
 {
     if( !bCheck || (Strm().Tell()-nLastLFPos) > nIndentLvl )
     {
-        Strm() << sNewLine;
+        Strm() << SAL_NEWLINE_STRING;
         nLastLFPos = Strm().Tell();
     }
 

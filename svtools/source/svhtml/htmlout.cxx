@@ -31,12 +31,6 @@
 #include <svtools/imappoly.hxx>
 #include "svl/urihelper.hxx"
 
-#ifdef _WIN32
-const sal_Char HTMLOutFuncs::sNewLine[] = "\015\012";
-#else
-const sal_Char HTMLOutFuncs::sNewLine[] = "\012";
-#endif
-
 #define TXTCONV_BUFFER_SIZE 20
 
 HTMLOutContext::HTMLOutContext( rtl_TextEncoding eDestEnc )
@@ -841,12 +835,12 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     if( !rSource.isEmpty() || pSBLibrary || pSBModule )
     {
-        rStrm << sNewLine;
+        rStrm << SAL_NEWLINE_STRING;
 
         if( JAVASCRIPT != eScriptType )
         {
             rStrm << "<!--"
-                  << sNewLine;
+                  << SAL_NEWLINE_STRING;
         }
 
         if( STARBASIC == eScriptType )
@@ -857,7 +851,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                     .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_SB_library))
                     .append(' ')
                     .append(OUStringToOString(*pSBLibrary, eDestEnc));
-                rStrm << sOut.makeStringAndClear().getStr() << sNewLine;
+                rStrm << sOut.makeStringAndClear().getStr() << SAL_NEWLINE_STRING;
             }
 
             if( pSBModule )
@@ -866,7 +860,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                     .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_SB_module))
                     .append(' ')
                     .append(OUStringToOString(*pSBModule, eDestEnc));
-                rStrm << sOut.makeStringAndClear().getStr() << sNewLine;
+                rStrm << sOut.makeStringAndClear().getStr() << SAL_NEWLINE_STRING;
             }
         }
 
@@ -875,9 +869,9 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
             // Wir schreiben das Modul mm ANSI-Zeichensatz, aber mit
             // System-Zeilenumbruechen raus.
             const OString sSource(OUStringToOString(rSource, eDestEnc));
-            rStrm << sSource.getStr() << sNewLine;
+            rStrm << sSource.getStr() << SAL_NEWLINE_STRING;
         }
-        rStrm << sNewLine;
+        rStrm << SAL_NEWLINE_STRING;
 
         if( JAVASCRIPT != eScriptType )
         {
@@ -885,7 +879,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
             // falsch sein. Da der Kommentar aber beim Einlesen wider
             // entfernt wird, schickt uns das nicht weiter ...
             rStrm << (STARBASIC == eScriptType ? "' -->" : "// -->")
-                  << sNewLine;
+                  << SAL_NEWLINE_STRING;
         }
     }
 
