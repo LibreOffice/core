@@ -34,10 +34,6 @@ int lo_apk_closedir(lo_apk_dir *dirp);
 
 int lo_apk_lstat(const char *path, struct stat *statp);
 
-int lo_dlcall_argc_argv(void *function,
-                        int argc,
-                        const char **argv);
-
 JavaVM *lo_get_javavm(void);
 
 const char *lo_get_app_data_dir(void);

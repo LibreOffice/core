@@ -631,18 +631,6 @@ lo_apk_lstat(const char *path,
     return -1;
 }
 
-__attribute__ ((visibility("default")))
-int
-lo_dlcall_argc_argv(void *function,
-                    int argc,
-                    const char **argv)
-{
-    int (*fp)(int, const char **) = function;
-    int result = fp(argc, argv);
-
-    return result;
-}
-
 #define UNPACK_TREE "/assets/unpack"
 #define UNPACK_TREE_GZ "/assets/gz.unpack"
 
