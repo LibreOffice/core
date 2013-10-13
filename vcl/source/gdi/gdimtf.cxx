@@ -47,10 +47,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 
-#if defined(UNX) && !defined(ANDROID) && !defined(IOS) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
-#include <unx/salbmp.h>
-#endif
-
 using namespace com::sun::star;
 
 #define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0L,255L))
