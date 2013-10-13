@@ -138,9 +138,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/draw/sdxmlexp \
     xmloff/source/draw/sdxmlimp \
     xmloff/source/draw/shapeexport \
-    xmloff/source/draw/shapeexport2 \
-    xmloff/source/draw/shapeexport3 \
-    xmloff/source/draw/shapeexport4 \
     xmloff/source/draw/shapeimport \
     xmloff/source/draw/xexptran \
     xmloff/source/draw/ximp3dobject \

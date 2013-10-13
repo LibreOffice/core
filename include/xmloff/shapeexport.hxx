@@ -162,7 +162,6 @@ private:
     UniReference< XMLPropertyHandlerFactory >   mxSdPropHdlFactory;
     UniReference< SvXMLExportPropertyMapper >   mxPropertySetMapper;
     UniReference< XMLAnimationsExporter >       mxAnimationsExporter;
-    sal_Int32                                   mnNextUniqueShapeId;
     ShapesInfos                                 maShapesInfos;
     ShapesInfos::iterator                       maCurrentShapesIter;
     sal_Bool                                    mbExportLayer;
