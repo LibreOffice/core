@@ -14,8 +14,8 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    NSLog(@"drawRect: %dx%d@(%d,%d)", (int) rect.size.width, (int) rect.size.height, (int) rect.origin.x, (int) rect.origin.y);
-    NSLog(@"statusBarOrientation: %ld", (long)[[UIApplication sharedApplication] statusBarOrientation]);
+    // NSLog(@"drawRect: %dx%d@(%d,%d)", (int) rect.size.width, (int) rect.size.height, (int) rect.origin.x, (int) rect.origin.y);
+    // NSLog(@"statusBarOrientation: %ld", (long)[[UIApplication sharedApplication] statusBarOrientation]);
 
     // NSDate *startDate = [NSDate date];
 
@@ -51,13 +51,13 @@
     if ([gestureRecognizer state] == UIGestureRecognizerStateEnded) {
         CGPoint location = [gestureRecognizer locationInView: self];
 
-        NSLog(@"tapGesture: at: (%d,%d)", (int)location.x, (int)location.y);
+        // NSLog(@"tapGesture: at: (%d,%d)", (int)location.x, (int)location.y);
 
         touch_lo_tap(location.x, location.y);
 
         [self->textView becomeFirstResponder];
     } else {
-        NSLog(@"tapGesture: %@", gestureRecognizer);
+        // NSLog(@"tapGesture: %@", gestureRecognizer);
     }
 }
 
@@ -71,7 +71,7 @@
         int deltaX = translation.x - previousX;
         int deltaY = translation.y - previousY;
 
-        NSLog(@"panGesture: pan (delta): (%d,%d)", deltaX, deltaY);
+        // NSLog(@"panGesture: pan (delta): (%d,%d)", deltaX, deltaY);
 
         touch_lo_pan(deltaX, deltaY);
     }
@@ -85,7 +85,7 @@
     CGPoint location = [gestureRecognizer locationInView: self];
     CGFloat scale = gestureRecognizer.scale;
 
-    NSLog(@"pinchGesture: pinch: (%f) cords (%d,%d)", (float)scale, (int)location.x, (int)location.y );
+    // NSLog(@"pinchGesture: pinch: (%f) cords (%d,%d)", (float)scale, (int)location.x, (int)location.y );
 
     touch_lo_zoom((int)location.x, (int)location.y, (float)scale);
 
@@ -101,7 +101,7 @@
 
     UIGestureRecognizerState state = gestureRecognizer.state;
 
-    NSLog(@"longPressGesture: state %d cords (%d,%d)",state ,(int)point.x,(int)point.y);
+    // NSLog(@"longPressGesture: state %d cords (%d,%d)",state ,(int)point.x,(int)point.y);
 
     if (state == UIGestureRecognizerStateEnded) {
         touch_lo_tap(point.x, point.y);
