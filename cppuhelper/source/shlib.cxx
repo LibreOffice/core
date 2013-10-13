@@ -34,7 +34,7 @@
 #endif
 
 #ifdef IOS
-#include <osl/detail/ios-bootstrap.h>
+#include <osl/detail/component-mapping.h>
 #endif
 
 using namespace ::osl;

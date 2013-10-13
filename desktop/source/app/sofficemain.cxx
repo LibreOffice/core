@@ -39,6 +39,10 @@
 #  define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
 #endif
 
+#ifdef IOS
+#include <touch/touch.h>
+#endif
+
 int SVMain();
 
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
@@ -97,7 +101,7 @@ Java_org_libreoffice_android_AppSupport_runMain(JNIEnv* /* env */,
 #else
 extern "C"
 void
-lo_runMain()
+touch_lo_runMain()
 #endif
 {
     int nRet;

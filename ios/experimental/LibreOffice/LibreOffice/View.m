@@ -8,7 +8,7 @@
 
 #import "View.h"
 
-#include <osl/detail/ios-bootstrap.h>
+#include <touch/touch.h>
 
 @implementation View
 
@@ -40,10 +40,10 @@
         CGContextScaleCTM(context, 1, -1);
         break;
     }
-    lo_render_windows(context, rect);
+    touch_lo_render_windows(context, rect.origin.y, rect.origin.y, rect.size.width, rect.size.height);
     CGContextRestoreGState(context);
 
-    // NSLog(@"drawRect: lo_render_windows took %f s", [[NSDate date] timeIntervalSinceDate: startDate]);
+    // NSLog(@"drawRect: touch_lo_render_windows took %f s", [[NSDate date] timeIntervalSinceDate: startDate]);
 }
 
 - (void)tapGesture:(UITapGestureRecognizer *)gestureRecognizer
@@ -53,7 +53,7 @@
 
         NSLog(@"tapGesture: at: (%d,%d)", (int)location.x, (int)location.y);
 
-        lo_tap(location.x, location.y);
+        touch_lo_tap(location.x, location.y);
 
         [self->textView becomeFirstResponder];
     } else {
@@ -73,7 +73,7 @@
 
         NSLog(@"panGesture: pan (delta): (%d,%d)", deltaX, deltaY);
 
-        lo_pan(deltaX, deltaY);
+        touch_lo_pan(deltaX, deltaY);
     }
 
     previousX = translation.x;
@@ -87,11 +87,11 @@
 
     NSLog(@"pinchGesture: pinch: (%f) cords (%d,%d)", (float)scale, (int)location.x, (int)location.y );
 
-    lo_zoom((int)location.x, (int)location.y, (float)scale);
+    touch_lo_zoom((int)location.x, (int)location.y, (float)scale);
 
     // to reset the gesture scaling
     if (gestureRecognizer.state==UIGestureRecognizerStateEnded) {
-        lo_zoom(1, 1, 0.0f);
+        touch_lo_zoom(1, 1, 0.0f);
     }
 }
 
@@ -104,8 +104,8 @@
     NSLog(@"longPressGesture: state %d cords (%d,%d)",state ,(int)point.x,(int)point.y);
 
     if (state == UIGestureRecognizerStateEnded) {
-        lo_tap(point.x, point.y);
-        lo_tap(point.x, point.y);
+        touch_lo_tap(point.x, point.y);
+        touch_lo_tap(point.x, point.y);
     }
 }
 

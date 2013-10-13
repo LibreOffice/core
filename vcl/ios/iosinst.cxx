@@ -21,13 +21,13 @@
 #include <UIKit/UIKit.h>
 #include <postmac.h>
 
-#include <osl/detail/ios-bootstrap.h>
+#include <basebmp/scanlineformats.hxx>
+#include <vcl/msgbox.hxx>
+#include <touch/touch.h>
+
 #include "ios/iosinst.hxx"
 #include "headless/svpdummies.hxx"
 #include "generic/gendata.hxx"
-
-#include <basebmp/scanlineformats.hxx>
-#include <vcl/msgbox.hxx>
 
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
@@ -43,7 +43,7 @@ public:
 void IosSalInstance::damaged( IosSalFrame */* frame */,
                               const basegfx::B2IBox& rDamageRect )
 {
-    lo_damaged( CGRectMake( rDamageRect.getMinX(), rDamageRect.getMinY(), rDamageRect.getWidth(), rDamageRect.getHeight() ));
+    touch_ui_damaged( rDamageRect.getMinX(), rDamageRect.getMinY(), rDamageRect.getWidth(), rDamageRect.getHeight() );
 }
 
 void IosSalInstance::GetWorkArea( Rectangle& rRect )
@@ -301,12 +301,12 @@ IMPL_LINK( IosSalInstance, DisplayConfigurationChanged, void*, )
         (*it)->Show( sal_True, sal_False );
     }
 
-    lo_damaged( CGRectMake( 0, 0, viewWidth, viewHeight ) );
+    touch_ui_damaged( 0, 0, viewWidth, viewHeight );
     return 0;
 }
 
 extern "C"
-void lo_set_view_size(int width, int height)
+void touch_lo_set_view_size(int width, int height)
 {
     int oldWidth = viewWidth;
 
@@ -382,8 +382,9 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
 }
 
 extern "C"
-void lo_render_windows( CGContextRef context, CGRect rect )
+void touch_lo_render_windows(void *context, int minX, int minY, int width, int height)
 {
+    CGContextRef cgContext = (CGContextRef) context;
     int rc;
     IosSalInstance *pInstance = IosSalInstance::getInstance();
 
@@ -396,7 +397,8 @@ void lo_render_windows( CGContextRef context, CGRect rect )
         return;
     }
 
-    IosSalInstance::RenderWindowsArg arg = { false, context, rect };
+    CGRect rect = CGRectMake(minX, minY, width, height);
+    IosSalInstance::RenderWindowsArg arg = { false, cgContext, rect };
     Application::PostUserEvent( LINK( pInstance, IosSalInstance, RenderWindows), &arg );
 
     while (!arg.done) {
@@ -409,7 +411,7 @@ void lo_render_windows( CGContextRef context, CGRect rect )
 }
 
 extern "C"
-void lo_tap(int x, int y)
+void touch_lo_tap(int x, int y)
 {
     SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
@@ -426,7 +428,7 @@ void lo_tap(int x, int y)
 }
 
 extern "C"
-void lo_mouse_drag(int x, int y, LOMouseButtonState state)
+void touch_lo_mouse_drag(int x, int y, LOMouseButtonState state)
 {
     SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
 
@@ -454,7 +456,7 @@ void lo_mouse_drag(int x, int y, LOMouseButtonState state)
 }
 
 extern "C"
-void lo_pan(int deltaX, int deltaY)
+void touch_lo_pan(int deltaX, int deltaY)
 {
     SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
@@ -465,7 +467,7 @@ void lo_pan(int deltaX, int deltaY)
 }
 
 extern "C"
-void lo_zoom(int x, int y, float scale)
+void touch_lo_zoom(int x, int y, float scale)
 {
     SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
@@ -476,7 +478,7 @@ void lo_zoom(int x, int y, float scale)
 }
 
 extern "C"
-void lo_keyboard_input(int c)
+void touch_lo_keyboard_input(int c)
 {
     SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
@@ -487,7 +489,7 @@ void lo_keyboard_input(int c)
 }
 
 extern "C"
-void lo_keyboard_did_hide()
+void touch_lo_keyboard_did_hide()
 {
     // Tell LO it has lost "focus", which will cause it to stop
     // displaying any text insertion cursor etc

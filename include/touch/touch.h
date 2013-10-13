@@ -18,24 +18,48 @@
 
 #if !HAVE_FEATURE_DESKTOP
 
-// Functions to be implemented by the app-specifc upper or less
-// app-specific but platform-specific medium layer on touch-based
-// platforms. The same API is used on each such platform. There are
-// called from low level LibreOffice code. Note that these are just
-// declared here in this header in the "touch" module, the
-// per-platform implementations are elsewhere.
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void lo_show_keyboard();
-void lo_hide_keyboard();
+// These functions are the interface between the upper GUI layers of a
+// LibreOffice-based app on a touch platform app and the lower "core"
+// layers, used in cases where the core parts need to call
+// functionality in the upper parts or vice versa.
+//
+// Thus there are two classes of functions here:
+//
+// 1) Those to be implemented in the upper layer and called by the
+// lower layer. Prefixed by touch_ui_. The same API is used on each
+// such platform. There are called from low level LibreOffice
+// code. Note that these are just declared here in a header for a
+// "touch" module, the per-platform implementations are elsewhere.
 
-// Functions to be implemented in the medium platform-specific layer
-// to be called from the app-specific UI layer.
+void touch_ui_damaged(int minX, int minY, int width, int height);
 
-void lo_keyboard_did_hide();
+void touch_ui_show_keyboard();
+void touch_ui_hide_keyboard();
+
+// 2) Those implmented in the lower layers to be called by the upper
+// layer, in cases where we don't want to include a bunch of the
+// "normal" LibreOffice C++ headers in an otherwise purely Objective-C
+// CocoaTouch-based source file. Of course it depends on the case
+// where that is wanted, and this all is work in progress. Prefixed by
+// touch_lo_.
+
+void touch_lo_keyboard_did_hide();
+
+void touch_lo_runMain();
+void touch_lo_set_view_size(int width, int height);
+void touch_lo_render_windows(void *context, int minX, int minY, int width, int height);
+void touch_lo_tap(int x, int y);
+void touch_lo_pan(int deltaX, int deltaY);
+void touch_lo_zoom(int x, int y, float scale);
+void touch_lo_keyboard_input(int c);
+
+typedef enum { DOWN, MOVE, UP} LOMouseButtonState;
+
+void touch_lo_mouse_drag(int x, int y, LOMouseButtonState state);
 
 #ifdef __cplusplus
 }

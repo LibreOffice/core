@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#include <osl/detail/ios-bootstrap.h>
 #include <touch/touch.h>
 
 #import "AppDelegate.h"
@@ -69,9 +68,9 @@ static View *theView;
     NSLog(@"statusBarOrientation: %ld", (long) [[UIApplication sharedApplication] statusBarOrientation]);
 
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
-        lo_set_view_size(applicationFrame.size.height, applicationFrame.size.width);
+        touch_lo_set_view_size(applicationFrame.size.height, applicationFrame.size.width);
     else
-        lo_set_view_size(applicationFrame.size.width, applicationFrame.size.height);
+        touch_lo_set_view_size(applicationFrame.size.width, applicationFrame.size.height);
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
@@ -90,7 +89,7 @@ static View *theView;
 
     @autoreleasepool {
         lo_initialize();
-        lo_runMain();
+        touch_lo_runMain();
     }
 }
 
@@ -100,7 +99,7 @@ static View *theView;
     assert(textView == theView->textView);
 
     for (NSUInteger i = 0; i < [text length]; i++)
-        lo_keyboard_input([text characterAtIndex: i]);
+        touch_lo_keyboard_input([text characterAtIndex: i]);
 
     return NO;
 }
@@ -142,9 +141,9 @@ static View *theView;
     NSLog(@"statusBarOrientation: %ld", (long) [[UIApplication sharedApplication] statusBarOrientation]);
 
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
-        lo_set_view_size(applicationFrame.size.height, applicationFrame.size.width);
+        touch_lo_set_view_size(applicationFrame.size.height, applicationFrame.size.width);
     else
-        lo_set_view_size(applicationFrame.size.width, applicationFrame.size.height);
+        touch_lo_set_view_size(applicationFrame.size.width, applicationFrame.size.height);
 }
 
 - (void)keyboardWillShow:(NSNotification *)note
@@ -167,7 +166,7 @@ static View *theView;
 
     NSLog(@"keyboardDidHide");
 
-    lo_keyboard_did_hide();
+    touch_lo_keyboard_did_hide();
 }
 
 @end
@@ -176,23 +175,23 @@ static View *theView;
 // CocoaTouch activity to happen on the GUI thread. Use
 // dispatch_async() consistently.
 
-void lo_damaged(CGRect rect)
+void touch_ui_damaged(int minX, int minY, int width, int height)
 {
-    (void) rect;
+    CGRect rect = CGRectMake(minX, minY, width, height);
     dispatch_async(dispatch_get_main_queue(), ^{
             [theView setNeedsDisplayInRect:rect];
         });
-    // NSLog(@"lo_damaged: %dx%d@(%d,%d)", (int)rect.size.width, (int)rect.size.height, (int)rect.origin.x, (int)rect.origin.y);
+    // NSLog(@"lo_damaged: %dx%d@(%d,%d)", width, height, minX, minY);
 }
 
-void lo_show_keyboard()
+void touch_ui_show_keyboard()
 {
     dispatch_async(dispatch_get_main_queue(), ^{
             [theView->textView becomeFirstResponder];
         });
 }
 
-void lo_hide_keyboard()
+void touch_ui_hide_keyboard()
 {
     dispatch_async(dispatch_get_main_queue(), ^{
             [theView->textView resignFirstResponder];

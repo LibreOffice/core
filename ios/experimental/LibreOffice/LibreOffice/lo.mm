@@ -12,8 +12,9 @@
 #import <UIKit/UIKit.h>
 #include <postmac.h>
 
-#include <osl/detail/ios-bootstrap.h>
+#include <osl/detail/component-mapping.h>
 #include <osl/process.h>
+#include <touch/touch.h>
 
 extern "C" {
     extern void * analysis_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
