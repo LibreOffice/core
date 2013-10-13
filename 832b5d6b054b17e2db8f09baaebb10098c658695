@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///pw\u003d",
+        "filename": "wizards/source/access2base/_License.xba",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-10-13T09:07:05Z",
+      "side": 1,
+      "message": "That\u0027s a tiny bit ambiguous:\n\n - not explicit that users can choose between MPL _or_ GPL\n   as they wish (as opposed to obeying the two simultaneously.)\n\n - what LGPL version is this? Version 2.1? 3?\n\n - it says \"this file\", but is supposed to apply to the whole directory,\n   right?\n\nAssuming you want to keep the LGPL/MPL dual license (as opposed to switching to \"pure\" MPL) and keeping your disclaimer, how about something like that:\n\nThe files in this directory are part of Access2Base, a part of the LibreOffice project.\n\nAccess2Base is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\nAccess2Base is free software; you can redistribute it and/or modify\nit under the terms of either (at your option):\n\n1) The Mozilla Public License, v. 2.0. If a copy of the MPL was not\n    distributed with this file, you can obtain one at http://mozilla.org/MPL/2.0/ .\n\n2) The GNU Lesser General Public License as published by\n    the Free Software Foundation, either version 3 of the License, or\n    (at your option) any later version. If a copy of the LGPL was not\n    distributed with this file, see http://www.gnu.org/licenses/ .",
+      "revId": "832b5d6b054b17e2db8f09baaebb10098c658695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
