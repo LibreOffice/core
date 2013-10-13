@@ -1283,10 +1283,10 @@ void SvxXMLListStyleContext::SetDefaultStyle(
         // TODO: Bullet-Font
         awt::FontDescriptor aFDesc;
         aFDesc.Name = OUString(
-#if defined UNX
-                        "starbats"
-#else
+#ifdef _WIN32
                         "StarBats"
+#else
+                        "starbats"
 #endif
                                         );
         aFDesc.Family = FAMILY_DONTKNOW ;
