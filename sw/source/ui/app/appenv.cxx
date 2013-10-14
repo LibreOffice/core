@@ -73,41 +73,41 @@
 #define ENV_INSERT      RET_USER
 
 // Function used for labels and envelopes in applab.cxx and appenv.cxx
-String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText )
+OUString InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const OUString& rText )
 {
-    String sRet;
-    String aText(comphelper::string::remove(rText, '\r'));
+    OUString sRet;
+    OUString aText(comphelper::string::remove(rText, '\r'));
 
     sal_Int32 nTokenPos = 0;
     while( -1 != nTokenPos )
     {
-        String aLine = aText.GetToken( 0, '\n', nTokenPos );
-        while ( aLine.Len() )
+        OUString aLine = aText.getToken( 0, '\n', nTokenPos );
+        while ( !aLine.isEmpty() )
         {
-            String sTmpText;
+            OUString sTmpText;
             bool bField = false;
 
-            sal_uInt16 nPos = aLine.Search( '<' );
-            if ( nPos )
+            sal_Int32 nPos = aLine.indexOf( '<' );
+            if ( nPos != -1)
             {
-                sTmpText = aLine.Copy( 0, nPos );
-                aLine.Erase( 0, nPos );
+                sTmpText = aLine.copy( 0, nPos );
+                aLine = aLine.copy( nPos );
             }
             else
             {
-                nPos = aLine.Search( '>' );
-                if ( nPos == STRING_NOTFOUND )
+                nPos = aLine.indexOf( '>' );
+                if ( nPos == -1 )
                 {
                     sTmpText = aLine;
-                    aLine.Erase();
+                    aLine = "";
                 }
                 else
                 {
-                    sTmpText = aLine.Copy( 0, nPos + 1);
-                    aLine.Erase( 0, nPos + 1);
+                    sTmpText = aLine.copy( 0, nPos + 1);
+                    aLine = aLine.copy( nPos + 1);
 
                     // Database fields must contain at least 3 points!
-                    String sDBName( sTmpText.Copy( 1, sTmpText.Len() - 2));
+                    OUString sDBName( sTmpText.copy( 1, sTmpText.getLength() - 2));
                     sal_uInt16 nCnt = comphelper::string::getTokenCount(sDBName, '.');
                     if (nCnt >= 3)
                     {
@@ -160,7 +160,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     pNewView->AttrChangedNotify( &pNewView->GetWrtShell() ); // so that SelectShell is being called
     pSh = pNewView->GetWrtShellPtr();
 
-    String aTmp( SW_RES(STR_ENV_TITLE) );
+    OUString aTmp( SW_RES(STR_ENV_TITLE) );
     aTmp += OUString::number( ++nTitleNo );
     xDocSh->SetTitle( aTmp );
 

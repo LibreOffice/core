@@ -134,7 +134,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         SwStdFontConfig* pStdFont = SW_MOD()->GetStdFontConfig();
         SfxPrinter* pPrt = pDoc->getPrinter( false );
 
-        String sEntry;
+        OUString sEntry;
         sal_uInt16 aFontWhich[] =
         {   RES_CHRATR_FONT,
             RES_CHRATR_CJK_FONT,
@@ -574,8 +574,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 
     do {        // middle check loop
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
-        String aStreamName;
-        aStreamName = OUString("styles.xml");
+        OUString aStreamName = "styles.xml";
         uno::Reference < container::XNameAccess > xAccess( rMedium.GetStorage(), uno::UNO_QUERY );
         if ( xAccess->hasByName( aStreamName ) && rMedium.GetStorage()->isStreamElement( aStreamName ) )
         {

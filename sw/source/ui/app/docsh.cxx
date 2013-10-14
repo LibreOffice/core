@@ -144,7 +144,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         }
         return 0;
     }
-    String aFileName( rMedium.GetName() );
+    OUString aFileName( rMedium.GetName() );
     SwRead pRead = SwReaderWriter::GetReader( pFlt->GetUserData() );
     if( !pRead )
         return 0;
@@ -162,7 +162,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         return 0;
 
     // Check password
-    String aPasswd;
+    OUString aPasswd;
     if ((*ppRdr)->NeedsPasswd( *pRead ))
     {
         if(!bAPICall)
@@ -655,7 +655,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         ( pWrtShell || !::lcl_GetSourceView( this ) ))
     {
         SwAsciiOptions aOpt;
-        String sItemOpt;
+        OUString sItemOpt;
         const SfxItemSet* pSet;
         const SfxPoolItem* pItem;
         if( 0 != ( pSet = rMedium.GetItemSet() ) )
@@ -664,7 +664,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                                                     sal_True, &pItem ) )
                 sItemOpt = ((const SfxStringItem*)pItem)->GetValue();
         }
-        if(sItemOpt.Len())
+        if(!sItemOpt.isEmpty())
             aOpt.ReadUserData( sItemOpt );
 
         xWriter->SetAsciiOptions( aOpt );

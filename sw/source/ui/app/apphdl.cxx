@@ -181,10 +181,10 @@ void SwModule::StateOther(SfxItemSet &rSet)
     }
 }
 
-static SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
+static SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
 {
     SwView* pNewView = 0;
-    if(rURL.Len())
+    if(!rURL.isEmpty())
     {
         SfxStringItem aURL(SID_FILE_NAME, rURL);
         SfxStringItem aTargetFrameName( SID_TARGETNAME, OUString("_blank") );
@@ -347,11 +347,11 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                 m_pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
                 if(!aDBNameList.empty())
                 {
-                    String sDBName(aDBNameList[0]);
+                    OUString sDBName(aDBNameList[0]);
                     SwDBData aDBData;
-                    aDBData.sDataSource = sDBName.GetToken(0, DB_DELIM);
-                    aDBData.sCommand = sDBName.GetToken(1, DB_DELIM);
-                    aDBData.nCommandType = sDBName.GetToken(2, DB_DELIM ).ToInt32();
+                    aDBData.sDataSource = sDBName.getToken(0, DB_DELIM);
+                    aDBData.sCommand = sDBName.getToken(1, DB_DELIM);
+                    aDBData.nCommandType = sDBName.getToken(2, DB_DELIM ).toInt32();
                     //set the currently used database for the wizard
                     m_pMMConfig->SetCurrentDBData( aDBData );
                 }

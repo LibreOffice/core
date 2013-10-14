@@ -321,7 +321,7 @@ static sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
     return USHRT_MAX;
 }
 
-bool FindPhyStyle( SwDoc& rDoc, const String& rName, SfxStyleFamily eFam )
+bool FindPhyStyle( SwDoc& rDoc, const OUString& rName, SfxStyleFamily eFam )
 {
     switch( eFam )
     {
@@ -2659,7 +2659,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     };
 
                 sal_uInt16* pPoolIds = aPoolIds;
-                String s;
+                OUString s;
                 while( *pPoolIds )
                 {
                     if( !bIsSearchUsed || rDoc.IsPoolTxtCollUsed( *pPoolIds ) )

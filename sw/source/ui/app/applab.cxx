@@ -76,7 +76,7 @@
 using namespace ::com::sun::star;
 
 // is in appenv.cxx
-extern String InsertLabEnvText( SwWrtShell& , SwFldMgr& , const String& );
+extern OUString InsertLabEnvText( SwWrtShell& , SwFldMgr& , const OUString& );
 
 const char MASTER_LABEL[] = "MasterLabel";
 
@@ -140,8 +140,8 @@ static const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rIte
     rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
     // If applicable "next dataset"
-    String sDBName;
-    if( (!rItem.bSynchron || !(nCol|nRow)) && (sDBName = InsertLabEnvText( rSh, rFldMgr, rItem.aWriting )).Len() && !bLast )
+    OUString sDBName;
+    if( (!rItem.bSynchron || !(nCol|nRow)) && !(sDBName = InsertLabEnvText( rSh, rFldMgr, rItem.aWriting )).isEmpty() && !bLast )
     {
         sDBName = comphelper::string::setToken(sDBName, 3, DB_DELIM, "True");
         SwInsertFld_Data aData(TYP_DBNEXTSETFLD, 0, sDBName, aEmptyStr, 0, &rSh );
@@ -198,10 +198,10 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
         pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );// So that SelectShell is being called.
 
         // Set document title
-        String aTmp;
+        OUString aTmp;
         if(bLabel)
         {
-            aTmp = String(SW_RES( STR_LAB_TITLE));
+            aTmp = SW_RES( STR_LAB_TITLE);
             aTmp += OUString::number(++nLabelTitleNo );
         }
         else

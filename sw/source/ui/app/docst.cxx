@@ -107,7 +107,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
     while (nWhich)
     {
         // determine current template to every family
-        String aName;
+        OUString aName;
         switch (nWhich)
         {
             case SID_STYLE_APPLY:
@@ -267,7 +267,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
         {
             const sal_uInt16 nFamily = ((const SfxUInt16Item*)pItem)->GetValue();
 
-            String sName;
+            OUString sName;
             sal_uInt16 nMask = 0;
             if( SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_NEW,
                 sal_False, &pItem ))
@@ -275,7 +275,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             if( SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_MASK,
                 sal_False, &pItem ))
                 nMask = ((const SfxUInt16Item*)pItem)->GetValue();
-            String sParent;
+            OUString sParent;
             if( SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_REFERENCE,
                 sal_False, &pItem ))
                 sParent = ((const SfxStringItem*)pItem)->GetValue();
@@ -327,7 +327,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
-            String aParam;
+            OUString aParam;
             sal_uInt16 nFamily = SFX_STYLE_FAMILY_PARA;
             sal_uInt16 nMask = 0;
 
@@ -378,20 +378,20 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 
                 if( SFX_ITEM_SET == pArgs->GetItemState(SID_STYLE_FAMILYNAME, sal_False, &pItem ))
                 {
-                    String aFamily = ((const SfxStringItem*)pItem)->GetValue();
-                    if(aFamily.CompareToAscii("CharacterStyles") == COMPARE_EQUAL)
+                    OUString aFamily = ((const SfxStringItem*)pItem)->GetValue();
+                    if(aFamily.equalsAscii("CharacterStyles"))
                         nFamily = SFX_STYLE_FAMILY_CHAR;
                     else
-                    if(aFamily.CompareToAscii("ParagraphStyles") == COMPARE_EQUAL)
+                    if(aFamily.equalsAscii("ParagraphStyles"))
                         nFamily = SFX_STYLE_FAMILY_PARA;
                     else
-                    if(aFamily.CompareToAscii("PageStyles") == COMPARE_EQUAL)
+                    if(aFamily.equalsAscii("PageStyles"))
                         nFamily = SFX_STYLE_FAMILY_PAGE;
                     else
-                    if(aFamily.CompareToAscii("FrameStyles") == COMPARE_EQUAL)
+                    if(aFamily.equalsAscii("FrameStyles"))
                         nFamily = SFX_STYLE_FAMILY_FRAME;
                     else
-                    if(aFamily.CompareToAscii("NumberingStyles") == COMPARE_EQUAL)
+                    if(aFamily.equalsAscii("NumberingStyles"))
                         nFamily = SFX_STYLE_FAMILY_PSEUDO;
                 }
 
@@ -437,7 +437,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     rReq.AppendItem(SfxStringItem(nSlot, aParam));
                 }
             }
-            if (aParam.Len() || nSlot == SID_STYLE_WATERCAN )
+            if (!aParam.isEmpty() || nSlot == SID_STYLE_WATERCAN )
             {
                 switch(nSlot)
                 {
@@ -893,7 +893,7 @@ sal_uInt16 SwDocShell::ApplyStyles(const OUString &rName, sal_uInt16 nFamily,
             // reset indent attribute on applying list style
             // continue list of list style
             const SwNumRule* pNumRule = pStyle->GetNumRule();
-            const String sListIdForStyle =pNumRule->GetDefaultListId();
+            const OUString sListIdForStyle =pNumRule->GetDefaultListId();
             pSh->SetCurNumRule( *pNumRule, false, sListIdForStyle, true );
             break;
         }
@@ -1171,7 +1171,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
             pCurrWrtShell->StartAllAction();
 
             SwNumRule aRule( *pCurrWrtShell->GetCurNumRule() );
-            String sOrigRule( aRule.GetName() );
+            OUString sOrigRule( aRule.GetName() );
             // #i91400#
             aRule.SetName( pStyle->GetNumRule()->GetName(),
                            *(pCurrWrtShell->GetDoc()) );

@@ -118,7 +118,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::sfx2;
-extern bool FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
+
+extern bool FindPhyStyle( SwDoc& , const OUString& , SfxStyleFamily );
 
 // create DocInfo (virtual)
 SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
@@ -450,7 +451,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             break;
         case SID_TEMPLATE_LOAD:
             {
-                String aFileName;
+                OUString aFileName;
                 static sal_Bool bText = sal_True;
                 static sal_Bool bFrame = sal_False;
                 static sal_Bool bPage =  sal_False;
@@ -480,7 +481,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                 }
 
-                if ( !aFileName.Len() )
+                if ( aFileName.isEmpty() )
                 {
                     SvtPathOptions aPathOpt;
                     SfxNewFileDialog* pNewFileDlg =
@@ -507,7 +508,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 ( pFlt->GetUserData() == "CXML" ||
                                   pFlt->GetUserData() == "CXMLV" ) )
                             {
-                                const String sWild = pFlt->GetWildcard().getGlob();
+                                const OUString sWild = pFlt->GetWildcard().getGlob();
                                 xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
                             }
                             pFlt = aIter.Next();
@@ -520,7 +521,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         // make sure the default file format is also available
                         if(bWeb)
                         {
-                            const String sWild = pOwnFlt->GetWildcard().getGlob();
+                            const OUString sWild = pOwnFlt->GetWildcard().getGlob();
                             xFltMgr->appendFilter( pOwnFlt->GetUIName(), sWild );
                         }
 
@@ -551,7 +552,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     delete pNewFileDlg;
                 }
 
-                if( aFileName.Len() )
+                if( !aFileName.isEmpty() )
                 {
                     SwgReaderOption aOpt;
                     aOpt.SetTxtFmts(    bText = (0 != (nFlags&SFX_LOAD_TEXT_STYLES) ));
@@ -610,7 +611,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         {
                             break;
                         }
-                        String sPath = aDlgHelper.GetPath();
+                        OUString sPath = aDlgHelper.GetPath();
                         SfxStringItem aName(SID_FILE_NAME, sPath);
                         SfxStringItem aFilter(SID_FILTER_NAME, pHtmlFlt->GetName());
                         const SfxBoolItem* pBool = (const SfxBoolItem*)
@@ -697,7 +698,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     WriterRef xWrt;
                     // mba: looks as if relative URLs don't make sense here
-                    ::GetRTFWriter( aEmptyStr, String(), xWrt );
+                    ::GetRTFWriter( aEmptyStr, OUString(), xWrt );
                     SvMemoryStream *pStrm = new SvMemoryStream();
                     pStrm->SetBufferSize( 16348 );
                     SwWriter aWrt( *pStrm, *pSmryDoc );
@@ -739,7 +740,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     SwView      *pCurrView = (SwView*) pFrame->GetViewShell();
 
                     // Set document's title
-                    String aTmp( SW_RES(STR_ABSTRACT_TITLE) );
+                    OUString aTmp( SW_RES(STR_ABSTRACT_TITLE) );
                     aTmp += GetTitle();
                     xDocSh->SetTitle( aTmp );
                     pCurrView->GetWrtShell().SetNewDoc();
@@ -851,7 +852,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 bool bCreateByOutlineLevel = false;
                 sal_Int32  nTemplateOutlineLevel = 0;
 
-                String aFileName, aTemplateName;
+                OUString aFileName, aTemplateName;
                 if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich, sal_False, &pItem ) )
                 {
                     aFileName = ((const SfxStringItem*)pItem)->GetValue();
@@ -860,7 +861,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         aTemplateName = pTemplItem->GetValue();
                 }
                 bool bError = false;
-                if ( !aFileName.Len() )
+                if ( aFileName.isEmpty() )
                 {
                     FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE, 0 );
 
@@ -925,7 +926,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if( pFlt )
                     {
                         uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-                        const String sWild = pFlt->GetWildcard().getGlob();
+                        const OUString sWild = pFlt->GetWildcard().getGlob();
                         xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
                         try
                         {
@@ -988,7 +989,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
                                 ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
                             xCtrlAcc->setLabel( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                                                    String(SW_RES( STR_FDLG_TEMPLATE_NAME )));
+                                                    OUString(SW_RES( STR_FDLG_TEMPLATE_NAME )));
                         }
                         catch (const Exception&)
                         {
@@ -1019,17 +1020,17 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 bCreateByOutlineLevel = true;
                             }
 
-                            if ( aFileName.Len() )
+                            if ( !aFileName.isEmpty() )
                             {
                                 rReq.AppendItem( SfxStringItem( nWhich, aFileName ) );
-                                if( aTemplateName.Len() )
+                                if( !aTemplateName.isEmpty() )
                                     rReq.AppendItem( SfxStringItem( SID_TEMPLATE_NAME, aTemplateName ) );
                             }
                         }
                     }
                 }
 
-                if( aFileName.Len() )
+                if( !aFileName.isEmpty() )
                 {
                     if( PrepareClose( sal_False ) )
                     {
@@ -1044,7 +1045,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         else
                         {
                             const SwTxtFmtColl* pSplitColl = 0;
-                            if ( aTemplateName.Len() )
+                            if ( !aTemplateName.isEmpty() )
                                 pSplitColl = pDoc->FindTxtFmtCollByName(aTemplateName);
                             bDone = bCreateHtml
                                 ? pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
@@ -1268,7 +1269,7 @@ class SwReloadFromHtmlReader : public SwReader
 {
     public:
         SwReloadFromHtmlReader( SfxMedium& _rTmpMedium,
-                                const String& _rFilename,
+                                const OUString& _rFilename,
                                 SwDoc* _pDoc )
             : SwReader( _rTmpMedium, _rFilename, _pDoc )
         {
@@ -1306,7 +1307,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
                 {
                     // Notify the IDE
                     SfxUsrAnyItem aShellItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( GetModel() ) );
-                    String aLibName( pBasic->GetName() );
+                    OUString aLibName( pBasic->GetName() );
                     SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
                     pSrcView->GetViewFrame()->GetDispatcher()->Execute(
                                             SID_BASICIDE_LIBREMOVED,
@@ -1340,7 +1341,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     pDoc->set(IDocumentSettingAccess::BROWSE_MODE, bWasBrowseMode);
     pSrcView->SetPool(&GetPool());
 
-    const String& rMedname = GetMedium()->GetName();
+    const OUString& rMedname = GetMedium()->GetName();
 
     // The HTML template still has to be set
     SetHTMLTemplate( *GetDoc() );   //Styles from HTML.vor
@@ -1391,7 +1392,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
     INetURLObject aURLObj( rURL );
 
     // Set filter:
-    String sFactory(OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
+    OUString sFactory(OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
     SfxFilterMatcher aMatcher( sFactory );
 
     // search for filter in WebDocShell, too
@@ -1400,7 +1401,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
     aMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
     if(!pFlt)
     {
-        String sWebFactory(OUString::createFromAscii(SwWebDocShell::Factory().GetShortName()));
+        OUString sWebFactory(OUString::createFromAscii(SwWebDocShell::Factory().GetShortName()));
         SfxFilterMatcher aWebMatcher( sWebFactory );
         aWebMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
     }
