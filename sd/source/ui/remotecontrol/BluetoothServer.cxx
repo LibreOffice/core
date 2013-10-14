@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <new>
 
 #include <sal/log.hxx>
 
@@ -586,6 +587,13 @@ BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
     mpCommunicators( pCommunicators )
 {
 #ifdef LINUX_BLUETOOTH
+    // D-Bus requires the following in order to be thread-safe (and we
+    // potentially access D-Bus from different threads in different places of
+    // the code base):
+    if (!dbus_threads_init_default()) {
+        throw std::bad_alloc();
+    }
+
     mpImpl.reset(new BluetoothServer::Impl());
 #endif
 }

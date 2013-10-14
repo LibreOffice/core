@@ -8,6 +8,7 @@
  */
 #include <time.h>
 #include <iostream>
+#include <new>
 #include <stdlib.h>
 #include <assert.h>
 
@@ -19,6 +20,8 @@
 #include <avahi-common/error.h>
 #include <avahi-common/timeval.h>
 #include <avahi-common/thread-watch.h>
+
+#include <dbus/dbus.h>
 
 #include <sal/log.hxx>
 
@@ -149,6 +152,13 @@ static void client_callback(AvahiClient *c, AvahiClientState state, AVAHI_GCC_UN
 }
 
 void AvahiNetworkService::setup() {
+    // Avahi internally uses D-Bus, which requires the following in order to be
+    // thread-safe (and we potentially access D-Bus from different threads in
+    // different places of the code base):
+    if (!dbus_threads_init_default()) {
+        throw std::bad_alloc();
+    }
+
    int error = 0;
    avahiService = this;
    if (!(threaded_poll = avahi_threaded_poll_new())) {
