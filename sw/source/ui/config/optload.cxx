@@ -468,8 +468,6 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     m_pLbLevel->SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
     m_pEdDelim->SetText( sDelim );
 
-    m_pCheckLB->SetHelpId(HID_OPTCAPTION_CLB);
-
     Link aLk = LINK( this, SwCaptionOptPage, ModifyHdl );
     m_pCategoryBox->SetModifyHdl( aLk );
     m_pNumberingSeparatorED->SetModifyHdl( aLk );

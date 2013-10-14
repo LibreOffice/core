@@ -277,7 +277,6 @@
 #define HID_LINGU_IGNORE_SELECTION                              "SW_HID_LINGU_IGNORE_SELECTION"    // grammar check context menu
 
 // More Help-IDs
-#define HID_OPTCAPTION_CLB                                      "SW_HID_OPTCAPTION_CLB"
 #define HID_EDIT_FORMULA                                        "SW_HID_EDIT_FORMULA"
 #define HID_INSERT_FILE                                         "SW_HID_INSERT_FILE"
 #define HID_FORMAT_PAGE                                         "SW_HID_FORMAT_PAGE"
