@@ -757,23 +757,25 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
 
         if( aMapGraph == MAP_PIXEL )
         {
-            aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel( Size( rAttr.GetLeftCrop(),
-                                                                                rAttr.GetTopCrop() ),
-                                                                          aMap100 );
-            aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel( Size( rAttr.GetRightCrop(),
-                                                                                    rAttr.GetBottomCrop() ),
-                                                                              aMap100 );
+            // crops are in 1/100th mm -> to aMapGraph -> to MAP_PIXEL
+            aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel(
+                Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
+                aMap100);
+            aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel(
+                Size(rAttr.GetRightCrop(), rAttr.GetBottomCrop()),
+                aMap100);
         }
         else
         {
-            aCropLeftTop = OutputDevice::LogicToLogic( Size( rAttr.GetLeftCrop(),
-                                                             rAttr.GetTopCrop() ),
-                                                       aMap100,
-                                                       aMapGraph );
-            aCropRightBottom = OutputDevice::LogicToLogic( Size( rAttr.GetRightCrop(),
-                                                                 rAttr.GetBottomCrop() ),
-                                                           aMap100,
-                                                           aMapGraph );
+            // crops are in GraphicObject units -> to aMapGraph
+            aCropLeftTop = OutputDevice::LogicToLogic(
+                Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
+                aMap100,
+                aMapGraph);
+            aCropRightBottom = OutputDevice::LogicToLogic(
+                Size(rAttr.GetRightCrop(), rAttr.GetBottomCrop()),
+                aMap100,
+                aMapGraph);
         }
 
         // #104115# If the metafile is cropped, give it a special
@@ -823,15 +825,29 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         BitmapEx aBitmapEx( aTransGraphic.GetBitmapEx() );
         Rectangle aCropRect;
 
-        // convert crops to pixel (crops are always in GraphicObject units)
+        // convert crops to pixel
         if(rAttr.IsCropped())
         {
-            aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel(
-                Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
-                aMapGraph);
-            aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel(
-                Size(rAttr.GetRightCrop(), rAttr.GetBottomCrop()),
-                aMapGraph);
+            if( aMapGraph == MAP_PIXEL )
+            {
+                // crops are in 1/100th mm -> to MAP_PIXEL
+                aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel(
+                    Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
+                    aMap100);
+                aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel(
+                    Size(rAttr.GetRightCrop(), rAttr.GetBottomCrop()),
+                    aMap100);
+            }
+            else
+            {
+                // crops are in GraphicObject units -> to MAP_PIXEL
+                aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel(
+                    Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
+                    aMapGraph);
+                aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel(
+                    Size(rAttr.GetRightCrop(), rAttr.GetBottomCrop()),
+                    aMapGraph);
+            }
 
             // convert from prefmapmode to pixel
             Size aSrcSizePixel(
@@ -851,8 +867,9 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
 
                 // another possibility is to adapt the values created so far with a factor; this
                 // will keep the original Bitmap untouched and thus quality will not change
-                const double fFactorX(aBitmapEx.GetSizePixel().Width() / aSrcSizePixel.Width());
-                const double fFactorY(aBitmapEx.GetSizePixel().Height() / aSrcSizePixel.Height());
+                // caution: convert to double first, else pretty big errors may occurr
+                const double fFactorX((double)aBitmapEx.GetSizePixel().Width() / aSrcSizePixel.Width());
+                const double fFactorY((double)aBitmapEx.GetSizePixel().Height() / aSrcSizePixel.Height());
 
                 aCropLeftTop.Width() = basegfx::fround(aCropLeftTop.Width() * fFactorX);
                 aCropLeftTop.Height() = basegfx::fround(aCropLeftTop.Height() * fFactorY);
