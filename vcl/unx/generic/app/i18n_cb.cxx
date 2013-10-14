@@ -321,7 +321,7 @@ void
 PreeditDrawCallback(XIC ic, XPointer client_data,
             XIMPreeditDrawCallbackStruct *call_data)
 {
-      preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
+    preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
 
     // if there's nothing to change then change nothing
     if ( ( (call_data->text == NULL) && (call_data->chg_length == 0) )
@@ -341,11 +341,11 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       // chg_first and chg_length are guaranteed to be nonnegative
 
       // handle text deletion
-      if (call_data->text == NULL)
+    if (call_data->text == NULL)
     {
         Preedit_DeleteText(&(pPreeditData->aText),
                call_data->chg_first, call_data->chg_length );
-      }
+    }
     else
     {
         // handle text insertion
@@ -355,42 +355,41 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
               Preedit_InsertText(&(pPreeditData->aText), call_data->text,
                      call_data->chg_first);
         }
-        else
-          // handle text replacement by deletion and insertion of text,
-          // not smart, just good enough
-          if (   (call_data->chg_length != 0)
+        else if (   (call_data->chg_length != 0)
               && (call_data->text->string.wide_char != NULL))
         {
+            // handle text replacement by deletion and insertion of text,
+            // not smart, just good enough
+
             Preedit_DeleteText(&(pPreeditData->aText),
                        call_data->chg_first, call_data->chg_length);
             Preedit_InsertText(&(pPreeditData->aText), call_data->text,
                        call_data->chg_first);
           }
-        else
-        // not really a text update, only attributes are concerned
-        if (   (call_data->chg_length != 0)
+        else if (   (call_data->chg_length != 0)
             && (call_data->text->string.wide_char == NULL))
         {
+            // not really a text update, only attributes are concerned
               Preedit_UpdateAttributes(&(pPreeditData->aText),
                    call_data->text->feedback,
                    call_data->chg_first, call_data->chg_length);
         }
-      }
+    }
 
-      //
-      // build the SalExtTextInputEvent and send it up
-      //
-      pPreeditData->aInputEv.mnTime = 0;
-      pPreeditData->aInputEv.mpTextAttr = Preedit_FeedbackToSAL(
-            pPreeditData->aText.pCharStyle, pPreeditData->aText.nLength, pPreeditData->aInputFlags);
-      pPreeditData->aInputEv.mnCursorPos = call_data->caret;
-      pPreeditData->aInputEv.maText = OUString(pPreeditData->aText.pUnicodeBuffer,
+    //
+    // build the SalExtTextInputEvent and send it up
+    //
+    pPreeditData->aInputEv.mnTime = 0;
+    pPreeditData->aInputEv.mpTextAttr = Preedit_FeedbackToSAL(
+        pPreeditData->aText.pCharStyle, pPreeditData->aText.nLength, pPreeditData->aInputFlags);
+    pPreeditData->aInputEv.mnCursorPos = call_data->caret;
+    pPreeditData->aInputEv.maText = OUString(pPreeditData->aText.pUnicodeBuffer,
                                 pPreeditData->aText.nLength);
     pPreeditData->aInputEv.mnCursorFlags    = 0; // default: make cursor visible
-      pPreeditData->aInputEv.mnDeltaStart = 0; // call_data->chg_first;
-      pPreeditData->aInputEv.mbOnlyCursor = False;
+    pPreeditData->aInputEv.mnDeltaStart = 0; // call_data->chg_first;
+    pPreeditData->aInputEv.mbOnlyCursor = False;
 
-      if ( pPreeditData->eState == ePreeditStatusActive && pPreeditData->pFrame )
+    if ( pPreeditData->eState == ePreeditStatusActive && pPreeditData->pFrame )
         pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&pPreeditData->aInputEv);
     if (pPreeditData->aText.nLength == 0 && pPreeditData->pFrame )
         pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
@@ -404,23 +403,23 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
 void
 GetPreeditSpotLocation(XIC ic, XPointer client_data)
 {
-      //
-      // Send SalEventExtTextInputPos event to get spotlocation
-      //
-      SalExtTextInputPosEvent mPosEvent;
-      preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
+    //
+    // Send SalEventExtTextInputPos event to get spotlocation
+    //
+    SalExtTextInputPosEvent mPosEvent;
+    preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
 
     if( pPreeditData->pFrame )
         pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, (void*)&mPosEvent);
 
-      XPoint point;
-      point.x = mPosEvent.mnX + mPosEvent.mnWidth;
-      point.y = mPosEvent.mnY + mPosEvent.mnHeight;
+    XPoint point;
+    point.x = mPosEvent.mnX + mPosEvent.mnWidth;
+    point.y = mPosEvent.mnY + mPosEvent.mnHeight;
 
-      XVaNestedList preedit_attr;
-      preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &point, NULL);
-      XSetICValues(ic, XNPreeditAttributes, preedit_attr, NULL);
-      XFree(preedit_attr);
+    XVaNestedList preedit_attr;
+    preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &point, NULL);
+    XSetICValues(ic, XNPreeditAttributes, preedit_attr, NULL);
+    XFree(preedit_attr);
 
     return;
 }
