@@ -55,11 +55,11 @@ static void  lcl_printProperties( PropertyMapPtr pProps )
         PropertyNameSupplier& rPropSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         for( ; aMapIter != aEndIter; ++aMapIter )
         {
-            SAL_INFO("writerfilter", rPropSupplier.GetName(aMapIter->first.eId));
+            SAL_INFO("writerfilter", rPropSupplier.GetName(aMapIter->first));
 
             table::BorderLine2 aLine;
             sal_Int32 nColor;
-            if ( aMapIter->second >>= aLine )
+            if ( aMapIter->second.getValue() >>= aLine )
             {
                 dmapper_logger->startElement("borderline");
                 dmapper_logger->attribute("color", aLine.Color);
@@ -67,7 +67,7 @@ static void  lcl_printProperties( PropertyMapPtr pProps )
                 dmapper_logger->attribute("outer", aLine.OuterLineWidth);
                 dmapper_logger->endElement();
             }
-            else if ( aMapIter->second >>= nColor )
+            else if ( aMapIter->second.getValue() >>= nColor )
             {
                 dmapper_logger->startElement("color");
                 dmapper_logger->attribute("number", nColor);
