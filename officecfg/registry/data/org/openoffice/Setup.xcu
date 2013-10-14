@@ -816,6 +816,7 @@
                     <!-- arguably, dropping PDFImport extensions should be
                          conditional on having in-core PDF import actually built
                          and installed -->
+                <it>com.sun.star.PresentationMinimizer-*</it>
                 <it>com.sun.star.script.provider.ScriptProviderForBeanShell</it>
                 <it>com.sun.star.script.provider.ScriptProviderForJavaScript</it>
                 <it>com.sun.star.script.provider.ScriptProviderForPython</it>
