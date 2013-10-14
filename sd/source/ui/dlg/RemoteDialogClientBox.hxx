@@ -32,7 +32,6 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "RemoteServer.hxx"
 #include "sdresid.hxx"
 
 namespace sd {
@@ -48,6 +47,7 @@ namespace sd {
 //                          struct ClientBoxEntry
 //------------------------------------------------------------------------------
 struct ClientBoxEntry;
+struct ClientInfo;
 
 typedef ::boost::shared_ptr< ClientBoxEntry > TClientBoxEntry;
 
@@ -112,7 +112,6 @@ class ClientBox:
 
     com::sun::star::uno::Reference< ClientRemovedListener > m_xRemoveListener;
 
-    RemoteServer      *m_pServer;
     //This mutex is used for synchronizing access to m_vEntries.
     //Currently it is used to synchronize adding, removing entries and
     //functions like getItemName, getItemDescription, etc. to prevent
@@ -141,8 +140,7 @@ class ClientBox:
 
 
 public:
-                    ClientBox( Dialog* pParent, RemoteServer *pServer,
-                               const SdResId& aId );
+                    ClientBox( Dialog* pParent, const SdResId& aId );
                    ~ClientBox();
 
     void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -174,8 +172,6 @@ public:
     void            checkEntries();
 
     OUString getPin();
-
-    RemoteServer*    getServer() const { return m_pServer; }
 };
 
 }

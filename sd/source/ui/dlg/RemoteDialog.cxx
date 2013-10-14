@@ -22,7 +22,7 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
     ModalDialog( pWindow, SdResId( DLG_PAIR_REMOTE ) ),
     mButtonConnect(     this, SdResId( BTN_CONNECT ) ),
     mButtonCancel(      this, SdResId( BTN_CANCEL ) ),
-    mClientBox(         this, NULL, SdResId( LB_SERVERS ) )
+    mClientBox(         this, SdResId( LB_SERVERS ) )
 {
     FreeResource();
 

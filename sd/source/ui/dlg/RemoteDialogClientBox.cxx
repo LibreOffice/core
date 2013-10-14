@@ -21,6 +21,7 @@
 
 #include "RemoteDialogClientBox.hxx"
 #include "RemoteDialog.hrc"
+#include "RemoteServer.hxx"
 
 #include "comphelper/processfactory.hxx"
 #include "com/sun/star/i18n/CollatorOptions.hpp"
@@ -62,8 +63,7 @@ ClientRemovedListener::~ClientRemovedListener()
 //------------------------------------------------------------------------------
 // ClientBox
 //------------------------------------------------------------------------------
-ClientBox::ClientBox( Dialog* pParent, RemoteServer *pServer,
-                      const SdResId& aId ) :
+ClientBox::ClientBox( Dialog* pParent, const SdResId& aId ) :
     Control( pParent, aId ),
     m_bHasScrollBar( false ),
     m_bHasActive( false ),
@@ -77,8 +77,7 @@ ClientBox::ClientBox( Dialog* pParent, RemoteServer *pServer,
     m_nExtraHeight( 2 ),
     m_aPinBox( this, SdResId( INPUT_PIN ) ),
     m_aPinDescription( this, SdResId( TEXT_PIN ) ),
-    m_pScrollBar( new ScrollBar( this, WB_VERT ) ),
-    m_pServer( pServer )
+    m_pScrollBar( new ScrollBar( this, WB_VERT ) )
 {
     m_pScrollBar->SetScrollHdl( LINK( this, ClientBox, ScrollHdl ) );
     m_pScrollBar->EnableDrag();
