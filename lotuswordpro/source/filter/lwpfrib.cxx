@@ -255,8 +255,11 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
             pStyle->SetStyleName(A2OUSTR(""));
             pFont = pFoundry->GetFontManger()->CreateOverrideFont(pCharStyle->GetFinalFontID(),m_pModifiers->FontID);
             pStyle->SetFont(pFont);
-            m_StyleName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
-            }
+            IXFStyle *pNewStyle = pXFStyleManager->AddStyle(pStyle);
+            m_StyleName = pNewStyle->GetStyleName();
+            if (pNewStyle != pStyle)
+                pStyle = NULL;
+        }
         else
             m_StyleName =  pNamedStyle->GetStyleName();
     }
@@ -267,7 +270,10 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
             pStyle = new XFTextStyle();
             pFont = pFoundry->GetFontManger()->CreateFont(m_pModifiers->FontID);
             pStyle->SetFont(pFont);
-            m_StyleName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+            IXFStyle *pNewStyle = pXFStyleManager->AddStyle(pStyle);
+            m_StyleName = pNewStyle->GetStyleName();
+            if (pNewStyle != pStyle)
+                pStyle = NULL;
         }
     }
 
