@@ -1312,7 +1312,8 @@ OUString SAL_CALL ORowSet::getString( sal_Int32 columnIndex ) throw(SQLException
 sal_Bool SAL_CALL ORowSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    return getInsertValue(columnIndex);
+    // the extra cast is to recognise the "true" or "false" strings
+    return static_cast<bool>(getInsertValue(columnIndex));
 }
 
 sal_Int8 SAL_CALL ORowSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
