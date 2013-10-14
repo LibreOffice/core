@@ -805,6 +805,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
         // Exponent
         if (p != p0 && p != pEnd && (*p == CharT('E') || *p == CharT('e')))
         {
+            CharT const * const pExponent = p;
             ++p;
             bool bExpSign;
             if (p != pEnd && *p == CharT('-'))
@@ -818,6 +819,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                 if (p != pEnd && *p == CharT('+'))
                     ++p;
             }
+            CharT const * const pFirstExpDigit = p;
             if ( fVal == 0.0 )
             {   // no matter what follows, zero stays zero, but carry on the
                 // offset
@@ -862,6 +864,10 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                     }
                     else
                         fVal = rtl::math::pow10Exp( fVal, nExp );  // normal
+                }
+                else if (p == pFirstExpDigit)
+                {   // no digits in exponent, reset end of scan
+                    p = pExponent;
                 }
             }
         }
