@@ -249,15 +249,15 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     bModified |= m_pTargetFrmLB->GetSavedValue() != m_pTargetFrmLB->GetText();
 
     // set valid settings first
-    String sEntry = m_pVisitedLB->GetSelectEntry();
+    OUString sEntry = m_pVisitedLB->GetSelectEntry();
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
     aINetFmt.SetVisitedFmtId(nId);
-    aINetFmt.SetVisitedFmt(nId == RES_POOLCHR_INET_VISIT ? aEmptyStr : sEntry);
+    aINetFmt.SetVisitedFmt(nId == RES_POOLCHR_INET_VISIT ? aEmptyOUStr : sEntry);
 
     sEntry = m_pNotVisitedLB->GetSelectEntry();
     nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
     aINetFmt.SetINetFmtId( nId );
-    aINetFmt.SetINetFmt(nId == RES_POOLCHR_INET_NORMAL ? aEmptyStr : sEntry);
+    aINetFmt.SetINetFmt(nId == RES_POOLCHR_INET_NORMAL ? aEmptyOUStr : sEntry);
 
     if( pINetItem && !pINetItem->GetMacroTable().empty() )
         aINetFmt.SetMacroTbl( &pINetItem->GetMacroTable() );

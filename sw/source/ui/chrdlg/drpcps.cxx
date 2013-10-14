@@ -64,8 +64,8 @@ static sal_uInt16 aPageRg[] = {
 class SwDropCapsPict : public Control
 {
     SwDropCapsPage* mpPage;
-    String          maText;
-    String          maScriptText;
+    OUString        maText;
+    OUString        maScriptText;
     Color           maBackColor;
     Color           maTextLineColor;
     sal_uInt8       mnLines;
@@ -126,7 +126,7 @@ public:
     void SetText( const OUString& rT );
     void SetLines( sal_uInt8 nL );
     void SetDistance( sal_uInt16 nD );
-    void SetValues( const String& rText, sal_uInt8 nLines, sal_uInt16 nDistance );
+    void SetValues( const OUString& rText, sal_uInt8 nLines, sal_uInt16 nDistance );
 
     void        DrawPrev( const Point& rPt );
 };
@@ -165,7 +165,7 @@ void SwDropCapsPict::SetDistance( sal_uInt16 nD )
     UpdatePaintSettings();
 }
 
-void SwDropCapsPict::SetValues( const String& rText, sal_uInt8 nLines, sal_uInt16 nDistance )
+void SwDropCapsPict::SetValues( const OUString& rText, sal_uInt8 nLines, sal_uInt16 nDistance )
 {
     maText = rText;
     mnLines = nLines;
@@ -187,7 +187,7 @@ void SwDropCapsPict::InitPrinter( void )
 
 String GetDefaultString(sal_uInt16 nChars)
 {
-    String aStr;
+    OUString aStr;
     for (sal_uInt16 i = 0; i < nChars; i++)
         aStr += OUString((char) (i + 65));
     return aStr;
@@ -219,7 +219,7 @@ void SwDropCapsPict::GetFirstScriptSegment(xub_StrLen &start, xub_StrLen &end, s
     start = 0;
     if( maScriptChanges.empty() )
     {
-        end = maText.Len();
+        end = maText.getLength();
         scriptType = css::i18n::ScriptType::LATIN;
     }
     else
@@ -237,7 +237,7 @@ void SwDropCapsPict::GetFirstScriptSegment(xub_StrLen &start, xub_StrLen &end, s
 /// @returns True if there was a next segment, false if not.
 bool SwDropCapsPict::GetNextScriptSegment(size_t &nIdx, xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType)
 {
-    if (maScriptChanges.empty() || nIdx >= maScriptChanges.size() - 1 || end >= maText.Len())
+    if (maScriptChanges.empty() || nIdx >= maScriptChanges.size() - 1 || end >= maText.getLength())
         return false;
     start = maScriptChanges[nIdx++].changePos;
     end = maScriptChanges[ nIdx ].changePos;
@@ -429,7 +429,7 @@ void SwDropCapsPict::CheckScript( void )
     if( css::i18n::ScriptType::WEAK == nScript )
     {
         nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
-        if( nChg < maText.Len() )
+        if( nChg < maText.getLength() )
             nScript = xBreak->getScriptType( maText, nChg );
         else
             nScript = css::i18n::ScriptType::LATIN;
@@ -440,7 +440,7 @@ void SwDropCapsPict::CheckScript( void )
         nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
         maScriptChanges.push_back( _ScriptInfo(0, nScript, nChg) );
 
-        if( nChg < maText.Len() )
+        if( nChg < maText.getLength() )
             nScript = xBreak->getScriptType( maText, nChg );
         else
             break;
@@ -720,7 +720,7 @@ Page: SpinFields' Modify-Handler
 
 IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
 {
-    String sPreview;
+    OUString sPreview;
 
     // set text if applicable
     if (pEdit == m_pDropCapsField)
@@ -741,11 +741,11 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
             sPreview = rSh.GetDropTxt(nVal);
         }
 
-        String sEdit(m_pTextEdit->GetText());
+        OUString sEdit(m_pTextEdit->GetText());
 
-        if (sEdit.Len() && sPreview.CompareTo(sEdit, sEdit.Len()) != COMPARE_EQUAL)
+        if (!sEdit.isEmpty() && !sPreview.startsWith(sEdit))
         {
-            sPreview = sEdit.Copy(0, sPreview.Len());
+            sPreview = sEdit.copy(0, sPreview.getLength());
             bSetText = false;
         }
 
@@ -827,10 +827,10 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
         // Bug 24974: in designer/template catalog this doesn't make sense!!
         if( !bFormat && m_pDropCapsBox->IsChecked() )
         {
-            String sText(m_pTextEdit->GetText());
+            OUString sText(m_pTextEdit->GetText());
 
             if (!m_pWholeWordCB->IsChecked())
-                sText.Erase( static_cast< xub_StrLen >(m_pDropCapsField->GetValue()));
+                sText = sText.copy( 0, m_pDropCapsField->GetValue());
 
             SfxStringItem aStr(FN_PARAM_1, sText);
             rSet.Put( aStr );

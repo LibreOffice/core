@@ -288,17 +288,17 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     }
     else
     {
-        String sTbEntry;
+        OUString sTbEntry;
         SvTreeListEntry* pE = m_pTbLinks->FirstSelected();
         if(pE)
             sTbEntry = m_pTbLinks->GetEntryText(pE);
-        sTbEntry = sTbEntry.GetToken(1, '\t');
-        String sStyle = m_pStyleLB->GetSelectEntry();
+        sTbEntry = sTbEntry.getToken(1, '\t');
+        OUString sStyle = m_pStyleLB->GetSelectEntry();
 
         m_pAssignPB->Enable( sStyle != sTbEntry && m_pConditionCB->IsChecked() );
 
         if(pBox != m_pStyleLB)
-            m_pRemovePB->Enable( m_pConditionCB->IsChecked() && sTbEntry.Len() );
+            m_pRemovePB->Enable( m_pConditionCB->IsChecked() && !sTbEntry.isEmpty() );
     }
     return 0;
 }
