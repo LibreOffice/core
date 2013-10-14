@@ -174,7 +174,6 @@ class </xsl:text>
     </xsl:if>
     <xsl:text>
     {
-      init();
     }
     </xsl:text>
     <xsl:value-of select="$classname"/>
@@ -192,7 +191,6 @@ class </xsl:text>
     </xsl:if>
     <xsl:text>
     {
-      init();
     }&#xa;    </xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:text>( const </xsl:text>
@@ -209,7 +207,6 @@ class </xsl:text>
     </xsl:if>
     <xsl:text>
     {
-        init();
     }&#xa;
     </xsl:text>
     <xsl:value-of select="$classname"/>
@@ -227,7 +224,6 @@ class </xsl:text>
     </xsl:if>
     <xsl:text>
     {
-      init();
     }
 
     virtual ~</xsl:text>
@@ -240,7 +236,6 @@ class </xsl:text>
       <xsl:text>    void initPayload();</xsl:text>
     </xsl:if>
     <xsl:text>
-    void init();
 
     /**
         Return type of resource.

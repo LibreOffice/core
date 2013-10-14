@@ -120,24 +120,6 @@ using namespace ::std;
     {
     }
     </xsl:text>
-    <xsl:if test="$needsinit='true'">
-      <xsl:text>
-    void </xsl:text>
-      <xsl:value-of select="$classname"/>
-      <xsl:text>::init()
-    {
-      </xsl:text>    
-      <xsl:if test='.//UML:Stereotype[@xmi.idref ="withmembers"]'>
-        <xsl:for-each select='.//UML:Attribute[@name!="reserved"]'>
-          <xsl:apply-templates select='.' mode='initmembers'/>
-        </xsl:for-each>
-      </xsl:if>
-      <xsl:if test='.//UML:Stereotype[@xmi.idref ="initimpl"]'>
-        <xsl:text>    initImpl();&#xa;</xsl:text>
-      </xsl:if>
-      <xsl:text>
-    }&#xa;</xsl:text>
-    </xsl:if>
 
     <xsl:choose>
       <xsl:when test='$parentresource="Properties"'>
