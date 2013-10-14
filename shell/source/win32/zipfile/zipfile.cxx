@@ -118,18 +118,42 @@ static unsigned char readByte(StreamInterface *stream)
 
 static unsigned short readShort(StreamInterface *stream)
 {
-    unsigned short p0 = (unsigned short)readByte(stream);
-    unsigned short p1 = (unsigned short)readByte(stream);
-    return (unsigned short)(p0|(p1<<8));
+    if (!stream || stream->stell() == -1)
+        throw IOException(-1);
+    unsigned short tmpBuf;
+    unsigned long numBytesRead = stream->sread(
+        reinterpret_cast<unsigned char *>( &tmpBuf ), 2);
+    if (numBytesRead != 2)
+        throw IOException(-1);
+    return tmpBuf;
 }
 
 static unsigned readInt(StreamInterface *stream)
 {
-    unsigned p0 = (unsigned)readByte(stream);
-    unsigned p1 = (unsigned)readByte(stream);
-    unsigned p2 = (unsigned)readByte(stream);
-    unsigned p3 = (unsigned)readByte(stream);
-    return (unsigned)(p0|(p1<<8)|(p2<<16)|(p3<<24));
+    if (!stream || stream->stell() == -1)
+        throw IOException(-1);
+    unsigned tmpBuf;
+    unsigned long numBytesRead = stream->sread(
+        reinterpret_cast<unsigned char *>( &tmpBuf ), 4);
+    if (numBytesRead != 4)
+        throw IOException(-1);
+    return tmpBuf;
+}
+
+static std::string readString(StreamInterface *stream, unsigned long size)
+{
+    if (!stream || stream->stell() == -1)
+        throw IOException(-1);
+    unsigned char *tmp = new unsigned char[size];
+    if (!tmp)
+        throw IOException(-1);
+    unsigned long numBytesRead = stream->sread(tmp, size);
+    if (numBytesRead != size)
+        throw IOException(-1);
+
+    std::string aStr((char *)tmp, size);
+    delete [] tmp;
+    return aStr;
 }
 
 static bool readCentralDirectoryEnd(StreamInterface *stream, CentralDirectoryEnd &end)
@@ -147,9 +171,7 @@ static bool readCentralDirectoryEnd(StreamInterface *stream, CentralDirectoryEnd
         end.cdir_size = readInt(stream);
         end.cdir_offset = readInt(stream);
         end.comment_size = readShort(stream);
-        end.comment.clear();
-        for (unsigned short i = 0; i < end.comment_size; i++)
-            end.comment.append(1,(char)readByte(stream));
+        end.comment.assign(readString(stream, end.comment_size));
     }
     catch (...)
     {
@@ -183,15 +205,9 @@ static bool readCentralDirectoryEntry(StreamInterface *stream, CentralDirectoryE
         entry.external_attr = readInt(stream);
         entry.offset = readInt(stream);
         unsigned short i = 0;
-        entry.filename.clear();
-        for (i=0; i < entry.filename_size; i++)
-            entry.filename.append(1,(char)readByte(stream));
-        entry.extra_field.clear();
-        for (i=0; i < entry.extra_field_size; i++)
-            entry.extra_field.append(1,(char)readByte(stream));
-        entry.file_comment.clear();
-        for (i=0; i < entry.file_comment_size; i++)
-            entry.file_comment.append(1,(char)readByte(stream));
+        entry.filename.assign(readString(stream, entry.filename_size));
+        entry.extra_field.assign(readString(stream, entry.extra_field_size));
+        entry.file_comment.assign(readString(stream, entry.file_comment_size));
     }
     catch (...)
     {
@@ -219,12 +235,8 @@ static bool readLocalFileHeader(StreamInterface *stream, LocalFileHeader &header
         header.filename_size = readShort(stream);
         header.extra_field_size = readShort(stream);
         unsigned short i = 0;
-        header.filename.clear();
-        for (i=0; i < header.filename_size; i++)
-            header.filename.append(1,(char)readByte(stream));
-        header.extra_field.clear();
-        for (i=0; i < header.extra_field_size; i++)
-            header.extra_field.append(1,(char)readByte(stream));
+        header.filename.assign(readString(stream, header.filename_size));
+        header.extra_field.assign(readString(stream, header.extra_field_size));
     }
     catch (...)
     {
