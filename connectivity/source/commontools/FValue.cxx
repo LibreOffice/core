@@ -1024,7 +1024,12 @@ OUString ORowSetValue::getString( ) const
                 aRet = OUString::number(static_cast<bool>(*this));
                 break;
             case DataType::BOOLEAN:
-                aRet = OUString::boolean(static_cast<bool>(*this));
+                // This would be the natural choice,
+                // but historically it was converted to "0" or "1".
+                // For backwards compatibility, continue doing that.
+                // aRet = OUString::boolean(static_cast<bool>(*this));
+                BOOST_STATIC_ASSERT((boost::is_same< sal_Bool, sal_uInt8 >::value));
+                aRet = OUString::number(static_cast<sal_Bool>(*this));
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
