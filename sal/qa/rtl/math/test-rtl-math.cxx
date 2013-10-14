@@ -72,9 +72,21 @@ public:
         CPPUNIT_ASSERT_EQUAL(0.0, res);
     }
 
+    void test_stringToDouble_exponent_without_digit() {
+        rtl_math_ConversionStatus status;
+        sal_Int32 end;
+        double res = rtl::math::stringToDouble(
+            rtl::OUString("1e"),
+            sal_Unicode('.'), sal_Unicode(','), &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(RTL_CONSTASCII_LENGTH("1")), end);
+        CPPUNIT_ASSERT_EQUAL(1.0, res);
+    }
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(test_stringToDouble_good);
     CPPUNIT_TEST(test_stringToDouble_bad);
+    CPPUNIT_TEST(test_stringToDouble_exponent_without_digit);
     CPPUNIT_TEST_SUITE_END();
 };
 
