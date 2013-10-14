@@ -51,20 +51,20 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
     switch( eType )
     {
     case MACASSGN_AUTOTEXT:
-        aItem.AddEvent( String( SW_RES(STR_EVENT_START_INS_GLOSSARY) ), String(),
+        aItem.AddEvent( OUString( SW_RES(STR_EVENT_START_INS_GLOSSARY) ), OUString(),
                             SW_EVENT_START_INS_GLOSSARY );
-        aItem.AddEvent( String( SW_RES(STR_EVENT_END_INS_GLOSSARY) ), String(),
+        aItem.AddEvent( OUString( SW_RES(STR_EVENT_END_INS_GLOSSARY) ), OUString(),
                             SW_EVENT_END_INS_GLOSSARY);
         // in order for the new handler to become active!
         break;
     case MACASSGN_ALLFRM:
     case MACASSGN_GRAPHIC:          // graphics
         {
-            aItem.AddEvent( String( SW_RES(STR_EVENT_IMAGE_ERROR) ), String(),
+            aItem.AddEvent( OUString( SW_RES(STR_EVENT_IMAGE_ERROR) ), OUString(),
                                 SVX_EVENT_IMAGE_ERROR);
-            aItem.AddEvent( String( SW_RES(STR_EVENT_IMAGE_ABORT) ), String(),
+            aItem.AddEvent( OUString( SW_RES(STR_EVENT_IMAGE_ABORT) ), OUString(),
                                 SVX_EVENT_IMAGE_ABORT);
-            aItem.AddEvent( String( SW_RES(STR_EVENT_IMAGE_LOAD) ), String(),
+            aItem.AddEvent( OUString( SW_RES(STR_EVENT_IMAGE_LOAD) ), OUString(),
                                 SVX_EVENT_IMAGE_LOAD);
         }
         // no break;
@@ -73,13 +73,13 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
             if( !bHtmlMode &&
                 (MACASSGN_FRMURL == eType || MACASSGN_ALLFRM == eType))
             {
-                aItem.AddEvent( String( SW_RES( STR_EVENT_FRM_KEYINPUT_A ) ), String(),
+                aItem.AddEvent( OUString( SW_RES( STR_EVENT_FRM_KEYINPUT_A ) ), OUString(),
                                 SW_EVENT_FRM_KEYINPUT_ALPHA );
-                aItem.AddEvent( String( SW_RES( STR_EVENT_FRM_KEYINPUT_NOA ) ), String(),
+                aItem.AddEvent( OUString( SW_RES( STR_EVENT_FRM_KEYINPUT_NOA ) ), OUString(),
                                 SW_EVENT_FRM_KEYINPUT_NOALPHA );
-                aItem.AddEvent( String( SW_RES( STR_EVENT_FRM_RESIZE ) ), String(),
+                aItem.AddEvent( OUString( SW_RES( STR_EVENT_FRM_RESIZE ) ), OUString(),
                                 SW_EVENT_FRM_RESIZE );
-                aItem.AddEvent( String( SW_RES( STR_EVENT_FRM_MOVE ) ), String(),
+                aItem.AddEvent( OUString( SW_RES( STR_EVENT_FRM_MOVE ) ), OUString(),
                                 SW_EVENT_FRM_MOVE );
             }
         }
@@ -87,17 +87,17 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
     case MACASSGN_OLE:              // OLE
         {
             if( !bHtmlMode )
-                aItem.AddEvent( String( SW_RES(STR_EVENT_OBJECT_SELECT) ), String(),
+                aItem.AddEvent( OUString( SW_RES(STR_EVENT_OBJECT_SELECT) ), OUString(),
                                 SW_EVENT_OBJECT_SELECT );
         }
         // no break;
     case MACASSGN_INETFMT:          // INetFmt-Attributes
         {
-            aItem.AddEvent( String( SW_RES(STR_EVENT_MOUSEOVER_OBJECT) ), String(),
+            aItem.AddEvent( OUString( SW_RES(STR_EVENT_MOUSEOVER_OBJECT) ), OUString(),
                                 SFX_EVENT_MOUSEOVER_OBJECT );
-            aItem.AddEvent( String( SW_RES(STR_EVENT_MOUSECLICK_OBJECT) ), String(),
+            aItem.AddEvent( OUString( SW_RES(STR_EVENT_MOUSECLICK_OBJECT) ), OUString(),
                                 SFX_EVENT_MOUSECLICK_OBJECT);
-            aItem.AddEvent( String( SW_RES(STR_EVENT_MOUSEOUT_OBJECT) ), String(),
+            aItem.AddEvent( OUString( SW_RES(STR_EVENT_MOUSEOUT_OBJECT) ), OUString(),
                                 SFX_EVENT_MOUSEOUT_OBJECT);
         }
         break;

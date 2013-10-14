@@ -419,7 +419,7 @@ The code below would only be part of the solution.
             if(bCloseMessage)
             {
                 LockFocusNotification( true );
-                String sInfo(SW_RES(STR_SPELLING_COMPLETED));
+                OUString sInfo(SW_RES(STR_SPELLING_COMPLETED));
                 //#i84610#
                 Window* pTemp = GetWindow();    // temporary needed for g++ 3.3.5
                 InfoBox(pTemp, sInfo ).Execute();

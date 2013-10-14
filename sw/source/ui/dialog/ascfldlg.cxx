@@ -181,7 +181,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             }
 
             // get the set of disctinct available family names
-            std::set< String > aFontNames;
+            std::set< OUString > aFontNames;
             int nFontNames = pPrt->GetDevFontCount();
             for( int i = 0; i < nFontNames; i++ )
             {
@@ -190,7 +190,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             }
 
             // insert to listbox
-            for( std::set< String >::const_iterator it = aFontNames.begin();
+            for( std::set< OUString >::const_iterator it = aFontNames.begin();
                  it != aFontNames.end(); ++it )
             {
                 m_pFontLB->InsertEntry( *it );
@@ -245,7 +245,7 @@ SwAsciiFilterDlg::~SwAsciiFilterDlg()
 void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
 {
     sal_uLong nCCode = m_pCharSetLB->GetSelectTextEncoding();
-    String sFont;
+    OUString sFont;
     sal_uLong nLng = 0;
     if( m_pFontLB->IsVisible() )
     {

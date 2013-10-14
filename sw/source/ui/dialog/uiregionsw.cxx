@@ -167,11 +167,11 @@ public:
     SvxLRSpaceItem&         GetLRSpace()        { return m_LRSpaceItem; }
 
     sal_uInt16              GetArrPos() const { return m_nArrPos; }
-    String              GetFile() const;
-    String              GetSubRegion() const;
-    void                SetFile(String const& rFile);
-    void                SetFilter(String const& rFilter);
-    void                SetSubRegion(String const& rSubRegion);
+    OUString            GetFile() const;
+    OUString            GetSubRegion() const;
+    void                SetFile(OUString const& rFile);
+    void                SetFilter(OUString const& rFilter);
+    void                SetSubRegion(OUString const& rSubRegion);
 
     bool                IsContent() { return m_bContent; }
     void                SetContent(bool const bValue) { m_bContent = bValue; }
@@ -207,27 +207,27 @@ SectRepr::SectRepr( sal_uInt16 nPos, SwSection& rSect )
     }
 }
 
-void SectRepr::SetFile( const String& rFile )
+void SectRepr::SetFile( const OUString& rFile )
 {
-    String sNewFile( INetURLObject::decode( rFile, INET_HEX_ESCAPE,
+    OUString sNewFile( INetURLObject::decode( rFile, INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
-    String sOldFileName( m_SectionData.GetLinkFileName() );
-    String sSub( sOldFileName.GetToken( 2, sfx2::cTokenSeparator ) );
+    OUString sOldFileName( m_SectionData.GetLinkFileName() );
+    OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
 
-    if( rFile.Len() || sSub.Len() )
+    if( !rFile.isEmpty() || !sSub.isEmpty() )
     {
-        sNewFile += sfx2::cTokenSeparator;
-        if( rFile.Len() ) // Filter only with FileName
-            sNewFile += sOldFileName.GetToken( 1, sfx2::cTokenSeparator );
+        sNewFile += OUString(sfx2::cTokenSeparator);
+        if( !rFile.isEmpty() ) // Filter only with FileName
+            sNewFile += sOldFileName.getToken( 1, sfx2::cTokenSeparator );
 
-        sNewFile += sfx2::cTokenSeparator;
+        sNewFile += OUString(sfx2::cTokenSeparator);
         sNewFile += sSub;
     }
 
     m_SectionData.SetLinkFileName( sNewFile );
 
-    if( rFile.Len() || sSub.Len() )
+    if( !rFile.isEmpty() || !sSub.isEmpty() )
     {
         m_SectionData.SetType( FILE_LINK_SECTION );
     }
@@ -238,41 +238,41 @@ void SectRepr::SetFile( const String& rFile )
 }
 
 
-void SectRepr::SetFilter( const String& rFilter )
+void SectRepr::SetFilter( const OUString& rFilter )
 {
-    String sNewFile;
-    String sOldFileName( m_SectionData.GetLinkFileName() );
-    String sFile( sOldFileName.GetToken( 0, sfx2::cTokenSeparator ) );
-    String sSub( sOldFileName.GetToken( 2, sfx2::cTokenSeparator ) );
+    OUString sNewFile;
+    OUString sOldFileName( m_SectionData.GetLinkFileName() );
+    OUString sFile( sOldFileName.getToken( 0, sfx2::cTokenSeparator ) );
+    OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
 
-    if( sFile.Len() )
-        (((( sNewFile = sFile ) += sfx2::cTokenSeparator ) += rFilter )
-                                += sfx2::cTokenSeparator ) += sSub;
-    else if( sSub.Len() )
-        (( sNewFile = sfx2::cTokenSeparator ) += sfx2::cTokenSeparator ) += sSub;
+    if( !sFile.isEmpty() )
+        sNewFile = sFile + OUString(sfx2::cTokenSeparator) +
+                   rFilter + OUString(sfx2::cTokenSeparator) + sSub;
+    else if( !sSub.isEmpty() )
+        sNewFile = OUString(sfx2::cTokenSeparator) + OUString(sfx2::cTokenSeparator) + sSub;
 
     m_SectionData.SetLinkFileName( sNewFile );
 
-    if( sNewFile.Len() )
+    if( !sNewFile.isEmpty() )
     {
         m_SectionData.SetType( FILE_LINK_SECTION );
     }
 }
 
-void SectRepr::SetSubRegion(const String& rSubRegion)
+void SectRepr::SetSubRegion(const OUString& rSubRegion)
 {
-    String sNewFile;
-    String sOldFileName( m_SectionData.GetLinkFileName() );
-    String sFilter( sOldFileName.GetToken( 1, sfx2::cTokenSeparator ) );
-    sOldFileName = sOldFileName.GetToken( 0, sfx2::cTokenSeparator );
+    OUString sNewFile;
+    OUString sOldFileName( m_SectionData.GetLinkFileName() );
+    OUString sFilter( sOldFileName.getToken( 1, sfx2::cTokenSeparator ) );
+    sOldFileName = sOldFileName.getToken( 0, sfx2::cTokenSeparator );
 
-    if( rSubRegion.Len() || sOldFileName.Len() )
-        (((( sNewFile = sOldFileName ) += sfx2::cTokenSeparator ) += sFilter )
-                                       += sfx2::cTokenSeparator ) += rSubRegion;
+    if( !rSubRegion.isEmpty() || !sOldFileName.isEmpty() )
+        sNewFile = sOldFileName + OUString(sfx2::cTokenSeparator) +
+                   sFilter + OUString(sfx2::cTokenSeparator) + rSubRegion;
 
     m_SectionData.SetLinkFileName( sNewFile );
 
-    if( rSubRegion.Len() || sOldFileName.Len() )
+    if( !rSubRegion.isEmpty() || !sOldFileName.isEmpty() )
     {
         m_SectionData.SetType( FILE_LINK_SECTION );
     }
@@ -283,32 +283,32 @@ void SectRepr::SetSubRegion(const String& rSubRegion)
 }
 
 
-String SectRepr::GetFile() const
+OUString SectRepr::GetFile() const
 {
-    String sLinkFile( m_SectionData.GetLinkFileName() );
-    if( sLinkFile.Len() )
+    OUString sLinkFile( m_SectionData.GetLinkFileName() );
+    if( !sLinkFile.isEmpty() )
     {
         if (DDE_LINK_SECTION == m_SectionData.GetType())
         {
-            sal_uInt16 n = sLinkFile.SearchAndReplace( sfx2::cTokenSeparator, ' ' );
-            sLinkFile.SearchAndReplace( sfx2::cTokenSeparator, ' ',  n );
+            sal_Int32 n = 0;
+            sLinkFile = sLinkFile.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &n );
+            sLinkFile = sLinkFile.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &n );
         }
         else
-            sLinkFile = INetURLObject::decode( sLinkFile.GetToken( 0,
-                                               sfx2::cTokenSeparator ),
+            sLinkFile = INetURLObject::decode( sLinkFile.getToken( 0, sfx2::cTokenSeparator ),
                                         INET_HEX_ESCAPE,
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
+                                        INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 );
     }
     return sLinkFile;
 }
 
 
-String SectRepr::GetSubRegion() const
+OUString SectRepr::GetSubRegion() const
 {
-    String sLinkFile( m_SectionData.GetLinkFileName() );
-    if( sLinkFile.Len() )
-        sLinkFile = sLinkFile.GetToken( 2, sfx2::cTokenSeparator );
+    OUString sLinkFile( m_SectionData.GetLinkFileName() );
+    if( !sLinkFile.isEmpty() )
+        sLinkFile = sLinkFile.getToken( 2, sfx2::cTokenSeparator );
     return sLinkFile;
 }
 

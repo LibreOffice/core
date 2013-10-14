@@ -93,7 +93,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     else
     {
         const SfxPoolItem *pItem = 0;
-        String aTmpStr;
+        OUString aTmpStr;
         if ( SFX_ITEM_SET ==
                 pSet->GetItemState(FN_PARAM_REGION_NAME, sal_True, &pItem) )
         {
@@ -147,7 +147,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
                 pSet->GetItemState(FN_PARAM_REGION_CONDITION, sal_True, &pItem))
             aSection.SetCondition(((const SfxStringItem *)pItem)->GetValue());
 
-        String aFile, aSub;
+        OUString aFile, aSub;
         if(SFX_ITEM_SET ==
                 pSet->GetItemState(FN_PARAM_1, sal_True, &pItem))
             aFile = ((const SfxStringItem *)pItem)->GetValue();
@@ -157,7 +157,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             aSub = ((const SfxStringItem *)pItem)->GetValue();
 
 
-        if(aFile.Len() || aSub.Len())
+        if(!aFile.isEmpty() || !aSub.isEmpty())
         {
             OUString sLinkFileName = OUString(sfx2::cTokenSeparator);
             sLinkFileName += OUString(sfx2::cTokenSeparator);
