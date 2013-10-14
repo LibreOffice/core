@@ -262,7 +262,6 @@ enum PPPOptimizerTokenEnum
     STR_CREATING_OLE_REPLACEMENTS,
     STR_FILESIZESEPARATOR,
 
-    TK_Last,
     TK_NotFound
 };
 

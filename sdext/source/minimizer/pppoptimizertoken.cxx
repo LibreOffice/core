@@ -278,7 +278,6 @@ static const TokenTable pTokenTableArray[] =
     { "STR_CREATING_OLE_REPLACEMENTS",STR_CREATING_OLE_REPLACEMENTS },
     { "STR_FileSizeSeparator",      STR_FILESIZESEPARATOR },
 
-    { "Last",               TK_Last },
     { "NotFound",           TK_NotFound }
 };
 
@@ -312,10 +311,7 @@ PPPOptimizerTokenEnum TKGet( const OUString& rToken )
 
 OUString TKGet( const PPPOptimizerTokenEnum eToken )
 {
-    sal_uInt32 i = eToken >= TK_Last
-        ? (sal_uInt32)TK_NotFound
-        : (sal_uInt32)eToken;
-    return OUString::createFromAscii( pTokenTableArray[ i ].pS );
+    return OUString::createFromAscii( pTokenTableArray[ eToken ].pS );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
