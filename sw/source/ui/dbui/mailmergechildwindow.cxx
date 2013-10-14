@@ -246,10 +246,10 @@ class SwSendWarningBox_Impl : public MessageDialog
 {
     VclMultiLineEdit  *m_pDetailED;
 public:
-    SwSendWarningBox_Impl(Window* pParent, const String& rDetails);
+    SwSendWarningBox_Impl(Window* pParent, const OUString& rDetails);
 };
 
-SwSendWarningBox_Impl::SwSendWarningBox_Impl(Window* pParent, const String& rDetails)
+SwSendWarningBox_Impl::SwSendWarningBox_Impl(Window* pParent, const OUString& rDetails)
     : MessageDialog(pParent, "WarnEmailDialog", "modules/swriter/ui/warnemaildialog.ui")
 {
     get(m_pDetailED, "errors");
@@ -303,8 +303,8 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_nErrorCount(0)
 {
     m_nStatusHeight =  m_aSeparatorFL.GetPosPixel().Y() - m_aStatusLB.GetPosPixel().Y();
-    String sTask(SW_RES(ST_TASK));
-    String sStatus(SW_RES(ST_STATUS));
+    OUString sTask(SW_RES(ST_TASK));
+    OUString sStatus(SW_RES(ST_STATUS));
     m_aStatusLB.SetHelpId(HID_MM_SENDMAILS_STATUSLB);
 
     FreeResource();
@@ -534,8 +534,8 @@ void  SwSendMailDialog::IterateMails()
             Image aInsertImg = m_aImageList.GetImage( FN_FORMULA_CANCEL );
 
             OUString sMessage = m_sSendingTo;
-            String sTmp(pCurrentMailDescriptor->sEMail);
-            sTmp += '\t';
+            OUString sTmp(pCurrentMailDescriptor->sEMail);
+            sTmp += "\t";
             sTmp += m_sFailed;
             m_aStatusLB.InsertEntry( sMessage.replaceFirst("%1", sTmp), aInsertImg, aInsertImg);
             ++m_nSendCount;
@@ -572,25 +572,25 @@ void  SwSendMailDialog::IterateMails()
         //CC and BCC are tokenized by ';'
         if(!pCurrentMailDescriptor->sCC.isEmpty())
         {
-            String sTokens( pCurrentMailDescriptor->sCC );
+            OUString sTokens( pCurrentMailDescriptor->sCC );
             sal_uInt16 nTokens = comphelper::string::getTokenCount(sTokens, ';');
             sal_Int32 nPos = 0;
             for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
             {
-                String sTmp = sTokens.GetToken( 0, ';', nPos);
-                if( sTmp.Len() )
+                OUString sTmp = sTokens.getToken( 0, ';', nPos);
+                if( !sTmp.isEmpty() )
                     pMessage->addCcRecipient( sTmp );
             }
         }
         if(!pCurrentMailDescriptor->sBCC.isEmpty())
         {
-            String sTokens( pCurrentMailDescriptor->sBCC );
+            OUString sTokens( pCurrentMailDescriptor->sBCC );
             sal_uInt16 nTokens = comphelper::string::getTokenCount(sTokens, ';');
             sal_Int32 nPos = 0;
             for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
             {
-                String sTmp = sTokens.GetToken( 0, ';', nPos);
-                if( sTmp.Len() )
+                OUString sTmp = sTokens.getToken( 0, ';', nPos);
+                if( !sTmp.isEmpty() )
                     pMessage->addBccRecipient( sTmp );
             }
         }

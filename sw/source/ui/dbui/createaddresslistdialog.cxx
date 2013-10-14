@@ -349,7 +349,7 @@ long SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
 }
 
 SwCreateAddressListDialog::SwCreateAddressListDialog(
-        Window* pParent, const String& rURL, SwMailMergeConfigItem& rConfig) :
+        Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CREATEADDRESSLIST)),
 #ifdef _MSC_VER
 #pragma warning (disable : 4355)
@@ -395,7 +395,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     m_aNextPB.SetClickHdl(aLk);
     m_aEndPB.SetClickHdl(aLk);
 
-    if(m_sURL.Len())
+    if(!m_sURL.isEmpty())
     {
         //file exists, has to be loaded here
         SfxMedium aMedium( m_sURL, STREAM_READ );
@@ -406,8 +406,8 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
 
             OUString sQuote('"');
-            String sTempMiddle(sQuote);
-            sTempMiddle += sal_Unicode(9);
+            OUString sTempMiddle(sQuote);
+            sTempMiddle += OUString(sal_Unicode(9));
 
             OUString sLine;
             bool bRead = pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
@@ -419,13 +419,13 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 sal_Int32 nIndex = 0;
                 for( sal_Int32 nToken = 0; nToken < nHeaders; ++nToken)
                 {
-                    String sHeader = sLine.getToken( 0, '\t', nIndex );
-                    OSL_ENSURE(sHeader.Len() > 2 &&
-                            sHeader.GetChar(0) == '\"' && sHeader.GetChar(sHeader.Len() - 1) == '\"',
+                    OUString sHeader = sLine.getToken( 0, '\t', nIndex );
+                    OSL_ENSURE(sHeader.getLength() > 2 &&
+                            sHeader[0] == '\"' && sHeader[sHeader.getLength() - 1] == '\"',
                             "Wrong format of header");
-                    if(sHeader.Len() > 2)
+                    if(sHeader.getLength() > 2)
                     {
-                        m_pCSVData->aDBColumnHeaders.push_back( sHeader.Copy(1, sHeader.Len() -2));
+                        m_pCSVData->aDBColumnHeaders.push_back( sHeader.copy(1, sHeader.getLength() -2));
                     }
                 }
             }
@@ -437,12 +437,12 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 sal_Int32 nIndex = 0;
                 for( sal_Int32 nToken = 0; nToken < nDataCount; ++nToken)
                 {
-                    String sData = sLine.getToken( 0, '\t', nIndex );
-                    OSL_ENSURE(sData.Len() >= 2 &&
-                                sData.GetChar(0) == '\"' && sData.GetChar(sData.Len() - 1) == '\"',
+                    OUString sData = sLine.getToken( 0, '\t', nIndex );
+                    OSL_ENSURE(sData.getLength() >= 2 &&
+                                sData[0] == '\"' && sData[sData.getLength() - 1] == '\"',
                             "Wrong format of line");
-                    if(sData.Len() >= 2)
-                        aNewData.push_back(sData.Copy(1, sData.Len() - 2));
+                    if(sData.getLength() >= 2)
+                        aNewData.push_back(sData.copy(1, sData.getLength() - 2));
                     else
                         aNewData.push_back(sData);
                 }
@@ -458,7 +458,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
         for(sal_uInt16 nHeader = 0; nHeader < nCount; ++nHeader)
             m_pCSVData->aDBColumnHeaders.push_back( rAddressHeader.GetString(nHeader));
         ::std::vector<OUString> aNewData;
-        String sTemp;
+        OUString sTemp;
         aNewData.insert(aNewData.begin(), nCount, sTemp);
         m_pCSVData->aDBData.push_back(aNewData);
     }
@@ -480,7 +480,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, NewHdl_Impl)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
     ::std::vector<OUString> aNewData;
-    String sTemp;
+    OUString sTemp;
     aNewData.insert(aNewData.begin(), m_pCSVData->aDBColumnHeaders.size(), sTemp);
     m_pCSVData->aDBData.insert(m_pCSVData->aDBData.begin() + ++nCurrent, aNewData);
     m_aSetNoNF.SetMax(m_pCSVData->aDBData.size());
@@ -504,7 +504,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, DeleteHdl_Impl)
     else
     {
         // if only one set is available then clear the data
-        String sTemp;
+        OUString sTemp;
         m_pCSVData->aDBData[0].assign(m_pCSVData->aDBData[0].size(), sTemp);
         m_aDeletePB.Enable(sal_False);
     }
@@ -561,12 +561,12 @@ IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
 {
-    if(!m_sURL.Len())
+    if(m_sURL.isEmpty())
     {
         sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
         uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
-        String sPath( SvtPathOptions().SubstituteVariable(
+        OUString sPath( SvtPathOptions().SubstituteVariable(
                     OUString("$(userurl)/database") ));
         aDlgHelper.SetDisplayDirectory( sPath );
         uno::Reference< XFilterManager > xFltMgr(xFP, uno::UNO_QUERY);
@@ -582,7 +582,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
             m_sURL = aResult.GetMainURL(INetURLObject::NO_DECODE);
         }
     }
-    if(m_sURL.Len())
+    if(!m_sURL.isEmpty())
     {
         SfxMedium aMedium( m_sURL, STREAM_READWRITE|STREAM_TRUNC );
         SvStream* pStream = aMedium.GetOutStream();
@@ -590,8 +590,8 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
         pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
 
         OUString sQuote('"');
-        String sTempMiddle(sQuote);
-        sTempMiddle += sal_Unicode(9);
+        OUString sTempMiddle(sQuote);
+        sTempMiddle += OUString(sal_Unicode(9));
         OUString sMiddle(sTempMiddle);
         sMiddle += sQuote;
 
@@ -674,7 +674,7 @@ void SwCreateAddressListDialog::UpdateButtons()
     m_aDeletePB.Enable(nSize > 0);
 }
 
-void SwCreateAddressListDialog::Find(const String& rSearch, sal_Int32 nColumn)
+void SwCreateAddressListDialog::Find(const OUString& rSearch, sal_Int32 nColumn)
 {
     OUString sSearch = OUString(rSearch).toAsciiLowerCase();
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();

@@ -74,13 +74,13 @@ OUString CallSaveAsDialog(OUString& rFilter)
 */
 bool CheckMailAddress( const OUString& rMailAddress )
 {
-    String sAddress(rMailAddress);
+    OUString sAddress(rMailAddress);
     if (!(comphelper::string::getTokenCount(sAddress, '@') == 2))
         return false;
-    sAddress = sAddress.GetToken(1, '@');
+    sAddress = sAddress.getToken(1, '@');
     if (comphelper::string::getTokenCount(sAddress, '.') < 2)
         return false;
-    if(sAddress.GetToken( 0, '.').Len() < 2 || sAddress.GetToken( 1, '.').Len() < 2)
+    if(sAddress.getToken( 0, '.').getLength() < 2 || sAddress.getToken( 1, '.').getLength() < 2)
         return false;
     return true;
 }
@@ -112,7 +112,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     rConfigItem.IsInServerPOP() ?
                         mail::MailServiceType_POP3 : mail::MailServiceType_IMAP);
             //authenticate at the POP or IMAP server first
-            String sPasswd = rConfigItem.GetInServerPassword();
+            OUString sPasswd = rConfigItem.GetInServerPassword();
             if(!rInMailServerPassword.isEmpty())
                 sPasswd = rInMailServerPassword;
             uno::Reference<mail::XAuthenticator> xAuthenticator =
@@ -136,7 +136,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                 !rConfigItem.IsSMTPAfterPOP() &&
                 !rConfigItem.GetMailUserName().isEmpty())
         {
-            String sPasswd = rConfigItem.GetMailPassword();
+            OUString sPasswd = rConfigItem.GetMailPassword();
             if(!rOutMailServerPassword.isEmpty())
                 sPasswd = rOutMailServerPassword;
             xAuthenticator =
@@ -455,14 +455,14 @@ void SwAddressPreview::DrawText_Impl(
         DrawRect(Rectangle(rTopLeft, rSize));
     }
     sal_Int32 nHeight = GetTextHeight();
-    String sAddress(rAddress);
+    OUString sAddress(rAddress);
     sal_uInt16 nTokens = comphelper::string::getTokenCount(sAddress, '\n');
     Point aStart = rTopLeft;
     //put it away from the border
     aStart.Move( 2, 2);
     for(sal_uInt16 nToken = 0; nToken < nTokens; nToken++)
     {
-        DrawText( aStart, sAddress.GetToken(nToken, '\n') );
+        DrawText( aStart, sAddress.getToken(nToken, '\n') );
         aStart.Y() += nHeight;
     }
 }
@@ -483,15 +483,13 @@ OUString SwAddressPreview::FillData(
                                                 rConfigItem.GetCurrentDBData() );
     const OUString* pAssignment = aAssignment.getConstArray();
     const ResStringArray& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
-    String sAddress(rAddress);
-    String sNotAssigned(SW_RES(STR_NOTASSIGNED));
-    sNotAssigned.Insert('<', 0);
-    sNotAssigned += '>';
+    OUString sAddress(rAddress);
+    OUString sNotAssigned = "<" + OUString(SW_RES(STR_NOTASSIGNED)) + ">";
 
     sal_Bool bIncludeCountry = rConfigItem.IsIncludeCountry();
     const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
     bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
-    String sCountryColumn;
+    OUString sCountryColumn;
     if( bSpecialReplacementForCountry )
     {
         sCountryColumn = rDefHeaders.GetString(MM_PART_COUNTRY);
@@ -502,7 +500,7 @@ OUString SwAddressPreview::FillData(
     }
 
     SwAddressIterator aIter(sAddress);
-    sAddress.Erase();
+    sAddress = "";
     while(aIter.HasMore())
     {
         SwMergeAddressItem aItem = aIter.Next();
@@ -511,7 +509,7 @@ OUString SwAddressPreview::FillData(
             //get the default column name
 
             //find the appropriate assignment
-            String sConvertedColumn = aItem.sText;
+            OUString sConvertedColumn = aItem.sText;
             for(sal_uInt16 nColumn = 0;
                     nColumn < rDefHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                 ++nColumn)
@@ -523,7 +521,7 @@ OUString SwAddressPreview::FillData(
                     break;
                 }
             }
-            if(sConvertedColumn.Len() &&
+            if(!sConvertedColumn.isEmpty() &&
                     xColAccess.is() &&
                     xColAccess->hasByName(sConvertedColumn))
             {

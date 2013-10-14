@@ -297,10 +297,10 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         sal_Int32 nAssign;
         for(nAssign = 0; nAssign < aAssignProperties.getLength(); nAssign += 4)
         {
-            String sAssignPath = OUString::createFromAscii(cAddressDataAssignments);
-            sAssignPath += '/';
-            sAssignPath += String(pAssignments[nAssign / 4]);
-            sAssignPath += '/';
+            OUString sAssignPath = OUString::createFromAscii(cAddressDataAssignments);
+            sAssignPath += "/";
+            sAssignPath += pAssignments[nAssign / 4];
+            sAssignPath += "/";
             pAssignProperties[nAssign] = sAssignPath;
             pAssignProperties[nAssign] += OUString::createFromAscii(cDataSourceName);
             pAssignProperties[nAssign + 1] = sAssignPath;
@@ -393,11 +393,8 @@ static void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeader
     OUString sBlock(rBlock.replaceAll("\n", OUString("\\n")));
     for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
     {
-        String sHeader = rHeaders.GetString( i );
-        sHeader.Insert('<', 0);
-        sHeader += '>';
-        String sReplace("<>");
-        sReplace.Insert('0' + i, 1);
+        OUString sHeader = "<" + rHeaders.GetString( i ) + ">";
+        OUString sReplace = "<" + OUString('0' + i) + ">";
         sBlock = sBlock.replaceAll(sHeader, sReplace);
     }
     rBlock = sBlock;
@@ -1308,7 +1305,7 @@ bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
         SwMergeAddressItem aItem = aIter.Next();
         if(aItem.bIsColumn)
         {
-            String sConvertedColumn = aItem.sText;
+            OUString sConvertedColumn = aItem.sText;
             for(sal_uInt16 nColumn = 0;
                     nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                 ++nColumn)
@@ -1367,7 +1364,7 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
         SwMergeAddressItem aItem = aIter.Next();
         if(aItem.bIsColumn)
         {
-            String sConvertedColumn = aItem.sText;
+            OUString sConvertedColumn = aItem.sText;
             for(sal_uInt16 nColumn = 0;
                     nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                 ++nColumn)

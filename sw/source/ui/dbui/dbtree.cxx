@@ -222,12 +222,12 @@ void SwDBTreeList::InitTreeList()
     Image aImg = aImageList.GetImage(IMG_DB);
     for(long i = 0; i < nCount; i++)
     {
-        String sDBName(pDBNames[i]);
+        OUString sDBName(pDBNames[i]);
         InsertEntry(sDBName, aImg, aImg, NULL, sal_True);
     }
-    String sDBName(sDefDBName.getToken(0, DB_DELIM));
-    String sTableName(sDefDBName.getToken(1, DB_DELIM));
-    String sColumnName(sDefDBName.getToken(2, DB_DELIM));
+    OUString sDBName(sDefDBName.getToken(0, DB_DELIM));
+    OUString sTableName(sDefDBName.getToken(1, DB_DELIM));
+    OUString sColumnName(sDefDBName.getToken(2, DB_DELIM));
     Select(sDBName, sTableName, sColumnName);
 
     bInitialized = true;
@@ -282,8 +282,8 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
             try
             {
 
-                String sSourceName = GetEntryText(GetParent(pParent));
-                String sTableName = GetEntryText(pParent);
+                OUString sSourceName = GetEntryText(GetParent(pParent));
+                OUString sTableName = GetEntryText(pParent);
 
                 if(!pImpl->GetContext()->hasByName(sSourceName))
                     return;
@@ -337,7 +337,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                     long nCount = aColNames.getLength();
                     for (long i = 0; i < nCount; i++)
                     {
-                        String sName = pColNames[i];
+                        OUString sName = pColNames[i];
                         InsertEntry(sName, pParent);
                     }
                 }
@@ -350,7 +350,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
         {
             try
             {
-                String sSourceName = GetEntryText(pParent);
+                OUString sSourceName = GetEntryText(pParent);
                 if(!pImpl->GetContext()->hasByName(sSourceName))
                     return;
                 Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
@@ -361,7 +361,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                     {
                         Reference<XNameAccess> xTbls = xTSupplier->getTables();
                         Sequence< OUString> aTblNames = xTbls->getElementNames();
-                        String sTableName;
+                        OUString sTableName;
                         long nCount = aTblNames.getLength();
                         const OUString* pTblNames = aTblNames.getConstArray();
                         Image aImg = aImageList.GetImage(IMG_DBTABLE);
@@ -379,7 +379,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                     {
                         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
                         Sequence< OUString> aQueryNames = xQueries->getElementNames();
-                        String sQueryName;
+                        OUString sQueryName;
                         long nCount = aQueryNames.getLength();
                         const OUString* pQueryNames = aQueryNames.getConstArray();
                         Image aImg = aImageList.GetImage(IMG_DBQUERY);

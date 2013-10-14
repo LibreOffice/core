@@ -338,8 +338,8 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
 
 IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
 {
-    String sNewSource = SwNewDBMgr::LoadAndRegisterDataSource();
-    if(sNewSource.Len())
+    OUString sNewSource = SwNewDBMgr::LoadAndRegisterDataSource();
+    if(!sNewSource.isEmpty())
     {
         SvTreeListEntry* pNewSource = m_pListLB->InsertEntry(sNewSource);
         pNewSource->SetUserData(new AddressUserData_Impl());
@@ -350,7 +350,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
 
 IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 {
-    String sInputURL;
+    OUString sInputURL;
     SwCreateAddressListDialog* pDlg =
             new SwCreateAddressListDialog(
                     pButton,
@@ -406,7 +406,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
             uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
             OUString const sExt(".odb");
-            String sTmpName;
+            OUString sTmpName;
             {
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
                 utl::TempFile aTempFile(sFind , &sExt, &sHomePath);
@@ -419,9 +419,9 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             uno::Reference<XNamingService> xNaming(m_xDBContext, UNO_QUERY);
             xNaming->registerObject( sFind, xNewInstance );
             //now insert the new source into the ListBox
-            String sEntry(sFind);
-            sEntry += '\t';
-            sEntry += String(aFilters[0]);
+            OUString sEntry(sFind);
+            sEntry += "\t";
+            sEntry += aFilters[0];
             m_pCreatedDataSource = m_pListLB->InsertEntry(sEntry);
             AddressUserData_Impl* pUserData = new AddressUserData_Impl();
             pUserData->sURL = sURL;
@@ -488,8 +488,8 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
     AddressUserData_Impl* pUserData = 0;
     if(pSelect)
     {
-        String sTable = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
-        if(!sTable.Len())
+        OUString sTable = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
+        if(sTable.isEmpty())
         {
             pThis->m_pListLB->SetEntryText(pThis->m_sConnecting, pSelect, ITEMID_TABLE - 1);
             // allow painting of the new entry
@@ -513,7 +513,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
              * here.
              */
             pThis->m_pListLB->EndSelection();
-            pThis->DetectTablesAndQueries(pSelect, !sTable.Len());
+            pThis->DetectTablesAndQueries(pSelect, sTable.isEmpty());
         }
         else
         {
@@ -579,8 +579,8 @@ void SwAddressListDialog::DetectTablesAndQueries(
             {
                 //now call the table select dialog - if more than one table exists
                 SwSelectDBTableDialog* pDlg = new SwSelectDBTableDialog(this, pUserData->xConnection);
-                String sTable = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
-                if(sTable.Len())
+                OUString sTable = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
+                if(!sTable.isEmpty())
                     pDlg->SetSelectedTable(sTable, pUserData->nCommandType == CommandType::TABLE);
                 if(RET_OK == pDlg->Execute())
                 {
@@ -621,9 +621,9 @@ void SwAddressListDialog::DetectTablesAndQueries(
             else
                 m_pListLB->SetEntryText(String(), pSelect, ITEMID_TABLE - 1);
         }
-        String sCommand = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
-        m_pOK->Enable(pSelect && sCommand.Len());
-        m_pFilterPB->Enable( pUserData->xConnection.is() && sCommand.Len() );
+        OUString sCommand = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
+        m_pOK->Enable(pSelect && !sCommand.isEmpty());
+        m_pFilterPB->Enable( pUserData->xConnection.is() && !sCommand.isEmpty() );
         m_pTablePB->Enable( pUserData->nTableAndQueryCount > 1 );
     }
     catch (const Exception&)
@@ -642,10 +642,10 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
         //only call the table select dialog if tables have not been searched for or there
         //are more than 1
-        String sTable = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
+        OUString sTable = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
         if( pUserData->nTableAndQueryCount > 1 || pUserData->nTableAndQueryCount == -1)
         {
-            DetectTablesAndQueries(pSelect, (pButton != 0) || (!sTable.Len()));
+            DetectTablesAndQueries(pSelect, (pButton != 0) || sTable.isEmpty());
         }
     }
 

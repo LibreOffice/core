@@ -107,8 +107,8 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
         const OUString* pTbls = aTbls.getConstArray();
         for(long i = 0; i < aTbls.getLength(); i++)
         {
-            String sEntry = pTbls[i];
-            sEntry += '\t';
+            OUString sEntry = pTbls[i];
+            sEntry += "\t";
             sEntry += m_sTable;
             SvTreeListEntry* pEntry = m_aTableLB.InsertEntry(sEntry);
             pEntry->SetUserData((void*)0);
@@ -122,8 +122,8 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
         const OUString* pQueries = aQueries.getConstArray();
         for(long i = 0; i < aQueries.getLength(); i++)
         {
-            String sEntry = pQueries[i];
-            sEntry += '\t';
+            OUString sEntry = pQueries[i];
+            sEntry += "\t";
             sEntry += m_sQuery;
             SvTreeListEntry* pEntry = m_aTableLB.InsertEntry(sEntry);
             pEntry->SetUserData((void*)1);

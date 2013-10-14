@@ -132,8 +132,8 @@ void    SwGreetingsHandler::UpdatePreview()
 
 IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
 {
-    String sPreview = m_aFemaleLB.GetSelectEntry();
-    sPreview += '\n';
+    OUString sPreview = m_aFemaleLB.GetSelectEntry();
+    sPreview += "\n";
     sPreview += m_aMaleLB.GetSelectEntry();
     SwAssignFieldsDialog* pDlg =
             new SwAssignFieldsDialog(pButton, m_pWizard->GetConfigItem(), sPreview, false);
@@ -201,7 +201,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
         }
     }
 
-    String sPreview = bFemale ? OUString(m_aFemaleLB.GetSelectEntry()) :
+    OUString sPreview = bFemale ? OUString(m_aFemaleLB.GetSelectEntry()) :
         bNoValue ? m_aNeutralCB.GetText() : OUString(m_aMaleLB.GetSelectEntry());
 
     sPreview = SwAddressPreview::FillData(sPreview, m_pWizard->GetConfigItem());

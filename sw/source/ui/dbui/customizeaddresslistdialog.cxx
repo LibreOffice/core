@@ -82,12 +82,12 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
         pDlg = new SwAddEntryDialog(pButton, m_pNewData->aDBColumnHeaders);
     if(bRename)
     {
-        String aTemp = m_pFieldsLB->GetEntry(nPos);
+        OUString aTemp = m_pFieldsLB->GetEntry(nPos);
         pDlg->SetFieldName(aTemp);
     }
     if(RET_OK == pDlg->Execute())
     {
-        String sNew = pDlg->GetFieldName();
+        OUString sNew = pDlg->GetFieldName();
         if(bRename)
         {
             m_pNewData->aDBColumnHeaders[nPos] = sNew;
@@ -100,7 +100,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
             //add the new column
             m_pNewData->aDBColumnHeaders.insert(m_pNewData->aDBColumnHeaders.begin() + nPos, sNew);
             //add a new entry into all data arrays
-            String sTemp;
+            OUString sTemp;
             std::vector< std::vector< OUString > >::iterator aDataIter;
             for( aDataIter = m_pNewData->aDBData.begin(); aDataIter != m_pNewData->aDBData.end(); ++aDataIter)
                 aDataIter->insert(aDataIter->begin() + nPos, sTemp);
@@ -136,7 +136,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
 {
     sal_uInt16 nPos;
     sal_uInt16 nOldPos = nPos = m_pFieldsLB->GetSelectEntryPos();
-    String aTemp = m_pFieldsLB->GetEntry(nPos);
+    OUString aTemp = m_pFieldsLB->GetEntry(nPos);
     m_pFieldsLB->RemoveEntry( nPos );
     if(pButton == m_pUpPB)
         --nPos;

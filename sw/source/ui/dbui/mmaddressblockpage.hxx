@@ -234,8 +234,8 @@ private:
 
     OKButton*               m_pOK;
 
-    ::std::vector<String>   m_aSalutations;
-    ::std::vector<String>   m_aPunctuations;
+    ::std::vector<OUString>   m_aSalutations;
+    ::std::vector<OUString>   m_aPunctuations;
 
     OUString                m_sCurrentSalutation;
     OUString                m_sCurrentPunctuation;

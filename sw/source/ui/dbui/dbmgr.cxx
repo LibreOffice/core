@@ -275,7 +275,7 @@ static sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
 }
 
 static sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
-    const String& rColumnName, long nLanguage, OUString& rResult, double* pNumber)
+    const OUString& rColumnName, long nLanguage, OUString& rResult, double* pNumber)
 {
     uno::Reference< XColumnsSupplier > xColsSupp( pParam->xResultSet, UNO_QUERY );
     uno::Reference<XNameAccess> xCols;
@@ -494,14 +494,14 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
     }
 }
 
-static String  lcl_FindColumn(const String& sFormatStr,sal_uInt16  &nUsedPos, sal_uInt8 &nSeparator)
+static OUString  lcl_FindColumn(const OUString& sFormatStr,sal_uInt16  &nUsedPos, sal_uInt8 &nSeparator)
 {
-    String sReturn;
-    sal_uInt16 nLen = sFormatStr.Len();
+    OUString sReturn;
+    sal_uInt16 nLen = sFormatStr.getLength();
     nSeparator = 0xff;
     while(nUsedPos < nLen && nSeparator == 0xff)
     {
-        sal_Unicode cAkt = sFormatStr.GetChar(nUsedPos);
+        sal_Unicode cAkt = sFormatStr[nUsedPos];
         switch(cAkt)
         {
             case ',':
@@ -517,7 +517,7 @@ static String  lcl_FindColumn(const String& sFormatStr,sal_uInt16  &nUsedPos, sa
                 nSeparator = DB_SEP_NEWLINE;
             break;
             default:
-                sReturn += cAkt;
+                sReturn += OUString(cAkt);
         }
         nUsedPos++;
 
@@ -531,16 +531,16 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
     {
         uno::Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
         uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
-        String sFormatStr;
-        sal_uInt16 nFmtLen = sFormatStr.Len();
+        OUString sFormatStr;
+        sal_uInt16 nFmtLen = sFormatStr.getLength();
         if( nFmtLen )
         {
             const char cSpace = ' ';
             const char cTab = '\t';
             sal_uInt16 nUsedPos = 0;
             sal_uInt8   nSeparator;
-            String sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
-            while( sColumn.Len() )
+            OUString sColumn = lcl_FindColumn(sFormatStr, nUsedPos, nSeparator);
+            while( !sColumn.isEmpty() )
             {
                 if(!xCols->hasByName(sColumn))
                     return;
@@ -550,11 +550,11 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 if(xColumnProp.is())
                 {
                     SwDBFormatData aDBFormat;
-                    String sInsert = GetDBField( xColumnProp,   aDBFormat);
+                    OUString sInsert = GetDBField( xColumnProp,   aDBFormat);
                     if( DB_SEP_SPACE == nSeparator )
-                            sInsert += cSpace;
+                            sInsert += OUString(cSpace);
                     else if( DB_SEP_TAB == nSeparator)
-                            sInsert += cTab;
+                            sInsert += OUString(cTab);
                     pSh->Insert(sInsert);
                     if( DB_SEP_RETURN == nSeparator)
                         pSh->SplitNode();
@@ -574,7 +574,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
         }
         else
         {
-            String sStr;
+            OUString sStr;
             Sequence<OUString> aColNames = xCols->getElementNames();
             const OUString* pColNames = aColNames.getConstArray();
             long nLength = aColNames.getLength();
@@ -586,7 +586,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 SwDBFormatData aDBFormat;
                 sStr += GetDBField( xColumnProp, aDBFormat);
                 if (i < nLength - 1)
-                    sStr += '\t';
+                    sStr += "\t";
             }
             pSh->SwEditShell::Insert2(sStr);
             pSh->SwFEShell::SplitNode();    // line feed
@@ -600,7 +600,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
 sal_Bool SwNewDBMgr::GetTableNames(ListBox* pListBox, const OUString& rDBName)
 {
     sal_Bool bRet = sal_False;
-    String sOldTableName(pListBox->GetSelectEntry());
+    OUString sOldTableName(pListBox->GetSelectEntry());
     pListBox->Clear();
     SwDSParam* pParam = FindDSConnection(rDBName, sal_False);
     uno::Reference< XConnection> xConnection;
@@ -638,7 +638,7 @@ sal_Bool SwNewDBMgr::GetTableNames(ListBox* pListBox, const OUString& rDBName)
                 pListBox->SetEntryData(nEntry, (void*)1);
             }
         }
-        if (sOldTableName.Len())
+        if (!sOldTableName.isEmpty())
             pListBox->SelectEntry(sOldTableName);
         bRet = sal_True;
     }
@@ -741,11 +741,11 @@ SwNewDBMgr::~SwNewDBMgr()
 /*--------------------------------------------------------------------
     Description:    save bulk letters as single documents
  --------------------------------------------------------------------*/
-static String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageDesc, sal_uLong nDocNo )
+static OUString lcl_FindUniqueName(SwWrtShell* pTargetShell, const OUString& rStartingPageDesc, sal_uLong nDocNo )
 {
     do
     {
-        String sTest = rStartingPageDesc;
+        OUString sTest = rStartingPageDesc;
         sTest += OUString::number( nDocNo );
         if( !pTargetShell->FindPageDescByName( sTest ) )
             return sTest;
@@ -790,11 +790,11 @@ static void lcl_CopyFollowPageDesc(
 {
     //now copy the follow page desc, too
     const SwPageDesc* pFollowPageDesc = rSourcePageDesc.GetFollow();
-    String sFollowPageDesc = pFollowPageDesc->GetName();
+    OUString sFollowPageDesc = pFollowPageDesc->GetName();
     if( sFollowPageDesc != rSourcePageDesc.GetName() )
     {
         SwDoc* pTargetDoc = rTargetShell.GetDoc();
-        String sNewFollowPageDesc = lcl_FindUniqueName(&rTargetShell, sFollowPageDesc, nDocNo );
+        OUString sNewFollowPageDesc = lcl_FindUniqueName(&rTargetShell, sFollowPageDesc, nDocNo );
         sal_uInt16 nNewDesc = pTargetDoc->MakePageDesc( sNewFollowPageDesc );
         SwPageDesc& rTargetFollowPageDesc = pTargetDoc->GetPageDesc( nNewDesc );
 
@@ -815,7 +815,7 @@ static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
         if( aSectionData.GetType() == FILE_LINK_SECTION )
         {
             aSectionData.SetType( CONTENT_SECTION );
-            aSectionData.SetLinkFileName( String() );
+            aSectionData.SetLinkFileName( OUString() );
             rWorkShell.UpdateSection( nSection, aSectionData );
         }
     }
@@ -872,7 +872,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         if( !pSourrceDocSh->IsModified() )
         {
             SfxMedium* pOrig = pSourceShell->GetView().GetDocShell()->GetMedium();
-            String sSourceDocumentURL(pOrig->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ));
+            OUString sSourceDocumentURL(pOrig->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ));
             const SfxFilter* pSfxFlt = SwIoSystem::GetFileFilter(
                                                     sSourceDocumentURL, ::aEmptyStr );
             const SfxFilter* pStoreToFilter = pSfxFlt;
@@ -907,7 +907,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             SwView* pTargetView = 0;
             std::auto_ptr< utl::TempFile > aTempFile;
             OUString sModifiedStartingPageDesc;
-            String sStartingPageDesc;
+            OUString sStartingPageDesc;
             sal_uInt16 nStartingPageNo = 0;
             bool bPageStylesWithHeaderFooter = false;
             if(bAsSingleFile || rMergeDescriptor.bCreateSingleFile)
@@ -969,22 +969,22 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
             long nStartRow, nEndRow;
             // collect temporary files
-            ::std::vector< String> aFilesToRemove;
+            ::std::vector< OUString> aFilesToRemove;
             do
             {
                 nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
                 {
                     OUString sPath(sSubject);
 
-                    String sAddress;
+                    OUString sAddress;
                     if( !bEMail && bColumnName )
                     {
                         SwDBFormatData aDBFormat;
                         aDBFormat.xFormatter = pImpl->pMergeData->xFormatter;
                         aDBFormat.aNullDate = pImpl->pMergeData->aNullDate;
                         sAddress = GetDBField( xColumnProp, aDBFormat);
-                        if (!sAddress.Len())
-                            sAddress = '_';
+                        if (sAddress.isEmpty())
+                            sAddress = "_";
                         sPath += sAddress;
                     }
 
@@ -992,9 +992,9 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     if( 1 == nDocNo || (!rMergeDescriptor.bCreateSingleFile && !bAsSingleFile) )
                     {
                         INetURLObject aEntry(sPath);
-                        String sLeading;
+                        OUString sLeading;
                         //#i97667# if the name is from a database field then it will be used _as is_
-                        if( sAddress.Len() )
+                        if( !sAddress.isEmpty() )
                             sLeading = sAddress;
                         else
                             sLeading = aEntry.GetBase();
@@ -1017,8 +1017,8 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     {
                         INetURLObject aTempFileURL(aTempFile->GetURL());
                         aPrtMonDlg.m_pPrinter->SetText( aTempFileURL.GetBase() );
-                        String sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
-                        sStat += ' ';
+                        OUString sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
+                        sStat += " ";
                         sStat += OUString::number( nDocNo );
                         aPrtMonDlg.m_pPrintInfo->SetText(sStat);
 
@@ -1086,7 +1086,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
                                     SwDoc* pTargetDoc = pTargetShell->GetDoc();
                                     SwPageDesc* pSourcePageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
-                                    String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
+                                    OUString sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
                                     pTargetDoc->MakePageDesc( sNewPageDescName );
                                     SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
                                     if(pSourcePageDesc && pTargetPageDesc)
@@ -1124,7 +1124,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                             }
                             else
                             {
-                                String sFileURL =  aTempFileURL.GetMainURL( INetURLObject::NO_DECODE );
+                                OUString sFileURL =  aTempFileURL.GetMainURL( INetURLObject::NO_DECODE );
                                 SfxMedium* pDstMed = new SfxMedium(
                                     sFileURL,
                                     STREAM_STD_READWRITE );
@@ -1155,7 +1155,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     SwDBFormatData aDBFormat;
                                     aDBFormat.xFormatter = pImpl->pMergeData->xFormatter;
                                     aDBFormat.aNullDate = pImpl->pMergeData->aNullDate;
-                                    String sMailAddress = GetDBField( xColumnProp, aDBFormat);
+                                    OUString sMailAddress = GetDBField( xColumnProp, aDBFormat);
                                     if(!SwMailMergeHelper::CheckMailAddress( sMailAddress ))
                                     {
                                         OSL_FAIL("invalid e-Mail address in database column");
@@ -1314,7 +1314,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             }
 
             //remove the temporary files
-            ::std::vector<String>::iterator aFileIter;
+            ::std::vector<OUString>::iterator aFileIter;
             for(aFileIter = aFilesToRemove.begin();
                         aFileIter != aFilesToRemove.end(); ++aFileIter)
                 SWUnoHelper::UCB_DeleteFile( *aFileIter );
@@ -1637,7 +1637,7 @@ OUString SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
                         double* pNumber)
 {
     uno::Reference< XColumn > xColumn(xColumnProps, UNO_QUERY);
-    String sRet;
+    OUString sRet;
     OSL_ENSURE(xColumn.is(), "SwNewDBMgr::::ImportDBField: illegal arguments");
     if(!xColumn.is())
         return sRet;
@@ -1719,8 +1719,8 @@ sal_Bool    SwNewDBMgr::IsDataSourceOpen(const OUString& rDataSource,
     if(pImpl->pMergeData)
     {
         return !bMergeLock &&
-                ((rDataSource == (String)pImpl->pMergeData->sDataSource &&
-                    rTableOrQuery == (String)pImpl->pMergeData->sCommand)
+                ((rDataSource == pImpl->pMergeData->sDataSource &&
+                    rTableOrQuery == pImpl->pMergeData->sCommand)
                     ||(rDataSource.isEmpty() && rTableOrQuery.isEmpty()))
                     &&
                     pImpl->pMergeData->xResultSet.is();
@@ -1747,8 +1747,8 @@ sal_Bool SwNewDBMgr::GetColumnCnt(const OUString& rSourceName, const OUString& r
     SwDSParam* pFound = 0;
     //check if it's the merge data source
     if(pImpl->pMergeData &&
-        rSourceName == (String)pImpl->pMergeData->sDataSource &&
-        rTableName == (String)pImpl->pMergeData->sCommand)
+        rSourceName == pImpl->pMergeData->sDataSource &&
+        rTableName == pImpl->pMergeData->sCommand)
     {
         pFound = pImpl->pMergeData;
     }
@@ -1829,8 +1829,8 @@ sal_Bool SwNewDBMgr::ToNextRecord(
 {
     SwDSParam* pFound = 0;
     if(pImpl->pMergeData &&
-        rDataSource == (String)pImpl->pMergeData->sDataSource &&
-        rCommand == (String)pImpl->pMergeData->sCommand)
+        rDataSource == pImpl->pMergeData->sDataSource &&
+        rCommand == pImpl->pMergeData->sCommand)
         pFound = pImpl->pMergeData;
     else
     {
@@ -2015,8 +2015,8 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
 {
     sal_uInt32 nRet = 0xffffffff;
     //check for merge data source first
-    if(pImpl->pMergeData && rDataSource == (String)pImpl->pMergeData->sDataSource &&
-                    rTableOrQuery == (String)pImpl->pMergeData->sCommand &&
+    if(pImpl->pMergeData && rDataSource == pImpl->pMergeData->sDataSource &&
+                    rTableOrQuery == pImpl->pMergeData->sCommand &&
                     (nCommandType == -1 || nCommandType == pImpl->pMergeData->nCommandType) &&
                     pImpl->pMergeData->xResultSet.is())
         nRet = GetSelectedRecordId();
@@ -2182,17 +2182,17 @@ OUString SwNewDBMgr::LoadAndRegisterDataSource()
 
     Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
-    String sFilterAll(SW_RES(STR_FILTER_ALL));
-    String sFilterAllData(SW_RES(STR_FILTER_ALL_DATA));
-    String sFilterSXB(SW_RES(STR_FILTER_SXB));
-    String sFilterSXC(SW_RES(STR_FILTER_SXC));
-    String sFilterDBF(SW_RES(STR_FILTER_DBF));
-    String sFilterXLS(SW_RES(STR_FILTER_XLS));
-    String sFilterTXT(SW_RES(STR_FILTER_TXT));
-    String sFilterCSV(SW_RES(STR_FILTER_CSV));
+    OUString sFilterAll(SW_RES(STR_FILTER_ALL));
+    OUString sFilterAllData(SW_RES(STR_FILTER_ALL_DATA));
+    OUString sFilterSXB(SW_RES(STR_FILTER_SXB));
+    OUString sFilterSXC(SW_RES(STR_FILTER_SXC));
+    OUString sFilterDBF(SW_RES(STR_FILTER_DBF));
+    OUString sFilterXLS(SW_RES(STR_FILTER_XLS));
+    OUString sFilterTXT(SW_RES(STR_FILTER_TXT));
+    OUString sFilterCSV(SW_RES(STR_FILTER_CSV));
 #ifdef WNT
-    String sFilterMDB(SW_RES(STR_FILTER_MDB));
-    String sFilterACCDB(SW_RES(STR_FILTER_ACCDB));
+    OUString sFilterMDB(SW_RES(STR_FILTER_MDB));
+    OUString sFilterACCDB(SW_RES(STR_FILTER_ACCDB));
 #endif
     xFltMgr->appendFilter( sFilterAll, "*" );
     xFltMgr->appendFilter( sFilterAllData, "*.ods;*.sxc;*.dbf;*.xls;*.txt;*.csv");
@@ -2209,11 +2209,11 @@ OUString SwNewDBMgr::LoadAndRegisterDataSource()
 #endif
 
     xFltMgr->setCurrentFilter( sFilterAll ) ;
-    String sFind;
+    OUString sFind;
     bool bTextConnection = false;
     if( ERRCODE_NONE == aDlgHelper.Execute() )
     {
-        String sURL = xFP->getFiles().getConstArray()[0];
+        OUString sURL = xFP->getFiles().getConstArray()[0];
         //data sources have to be registered depending on their extensions
         INetURLObject aURL( sURL );
         OUString sExt( aURL.GetExtension() );
@@ -2283,12 +2283,12 @@ OUString SwNewDBMgr::LoadAndRegisterDataSource()
             Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
             Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
 
-            String sNewName = INetURLObject::decode( aURL.getName(),
+            OUString sNewName = INetURLObject::decode( aURL.getName(),
                                                      INET_HEX_ESCAPE,
                                                      INetURLObject::DECODE_UNAMBIGUOUS,
                                                      RTL_TEXTENCODING_UTF8 );
-            xub_StrLen nExtLen = static_cast< xub_StrLen >(aURL.GetExtension().getLength());
-            sNewName.Erase( sNewName.Len() - nExtLen - 1, nExtLen + 1 );
+            sal_Int32 nExtLen = aURL.GetExtension().getLength();
+            sNewName = sNewName.replaceAt( sNewName.getLength() - nExtLen - 1, nExtLen + 1, "" );
 
             //find a unique name if sNewName already exists
             sFind = sNewName;
@@ -2338,7 +2338,7 @@ OUString SwNewDBMgr::LoadAndRegisterDataSource()
                 Reference<XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
                 Reference<XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
                 OUString sOutputExt = OUString(".odb");
-                String sTmpName;
+                OUString sTmpName;
                 {
                     utl::TempFile aTempFile(sNewName , &sOutputExt, &sHomePath);
                     aTempFile.EnableKillingFile(sal_True);
@@ -2718,7 +2718,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     rSourceShell.SttEndDoc(sal_True);
     sal_uInt16 nStartingPageNo = rSourceShell.GetVirtPageNum();
     OUString sModifiedStartingPageDesc;
-    String sStartingPageDesc = sModifiedStartingPageDesc = rSourceShell.GetPageDesc(
+    OUString sStartingPageDesc = sModifiedStartingPageDesc = rSourceShell.GetPageDesc(
                                 rSourceShell.GetCurPageDesc()).GetName();
 
     try
@@ -2834,7 +2834,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
 
                 SwDoc* pTargetDoc = pTargetShell->GetDoc();
-                String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
+                OUString sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
                 pTargetShell->GetDoc()->MakePageDesc( sNewPageDescName );
                 SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
                 const SwPageDesc* pWorkPageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );

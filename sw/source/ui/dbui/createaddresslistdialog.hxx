@@ -61,8 +61,8 @@ class SwCreateAddressListDialog : public SfxModalDialog
     CancelButton            m_aCancel;
     HelpButton              m_aHelp;
 
-    String                  m_sAddressListFilterName;
-    String                  m_sURL;
+    OUString                m_sAddressListFilterName;
+    OUString                m_sURL;
 
     SwCSVData*              m_pCSVData;
     SwFindEntryDialog*      m_pFindDlg;
@@ -79,11 +79,11 @@ class SwCreateAddressListDialog : public SfxModalDialog
 
 public:
     SwCreateAddressListDialog(
-            Window* pParent, const String& rURL, SwMailMergeConfigItem& rConfig);
+            Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig);
     ~SwCreateAddressListDialog();
 
-    const String&           GetURL() const {    return m_sURL;    }
-    void                    Find( const String& rSearch, sal_Int32 nColumn);
+    const OUString&         GetURL() const {    return m_sURL;    }
+    void                    Find( const OUString& rSearch, sal_Int32 nColumn);
 };
 
 class SwFindEntryDialog : public ModelessDialog

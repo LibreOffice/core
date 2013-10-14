@@ -265,7 +265,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl)
     sal_uInt16 nSel = m_aSettingsWIN.GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks =
                 m_pWizard->GetConfigItem().GetAddressBlocks();
-    String sPreview = SwAddressPreview::FillData(aBlocks[nSel], m_pWizard->GetConfigItem());
+    OUString sPreview = SwAddressPreview::FillData(aBlocks[nSel], m_pWizard->GetConfigItem());
     m_aPreviewWIN.SetAddress(sPreview);
     m_pWizard->GetConfigItem().SetCurrentAddressBlockIndex( nSel );
     GetWizard()->UpdateRoadmap();
@@ -312,7 +312,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
             sal_uInt16 nSel = m_aSettingsWIN.GetSelectedAddress();
             const uno::Sequence< OUString> aBlocks =
                         m_pWizard->GetConfigItem().GetAddressBlocks();
-            String sPreview = SwAddressPreview::FillData(aBlocks[nSel], rConfig);
+            OUString sPreview = SwAddressPreview::FillData(aBlocks[nSel], rConfig);
             m_aPreviewWIN.SetAddress(sPreview);
         }
     }
@@ -565,11 +565,11 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     {
         m_pFieldFT->Show();
         m_pFieldCB->Show();
-        SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(String(SW_RES(ST_SALUTATION )));
+        SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(OUString(SW_RES(ST_SALUTATION )));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_SALUTATION );
-        pEntry = m_pAddressElementsLB->InsertEntry(String(SW_RES(ST_PUNCTUATION)));
+        pEntry = m_pAddressElementsLB->InsertEntry(OUString(SW_RES(ST_PUNCTUATION)));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_PUNCTUATION );
-        pEntry = m_pAddressElementsLB->InsertEntry(String(SW_RES(ST_TEXT       )));
+        pEntry = m_pAddressElementsLB->InsertEntry(OUString(SW_RES(ST_TEXT       )));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_TEXT       );
         ResStringArray aSalutArr(SW_RES(
                     eType == GREETING_MALE ? RA_SALUTATION_MALE : RA_SALUTATION_FEMALE));
@@ -580,16 +580,16 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         for(i = 0; i < aPunctArr.Count(); ++i)
             m_aPunctuations.push_back(aPunctArr.GetString(i));
         m_pDragED->SetText(OUString("            "));
-        SetText( String( SW_RES( eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE)));
-        m_pAddressElementsFT->SetText(String(SW_RES(ST_SALUTATIONELEMENTS)));
-        m_pInsertFieldIB->SetQuickHelpText(String(SW_RES(ST_INSERTSALUTATIONFIELD)));
-        m_pRemoveFieldIB->SetQuickHelpText(String(SW_RES(ST_REMOVESALUTATIONFIELD)));
-        m_pDragFT->SetText(String(SW_RES(ST_DRAGSALUTATION)));
+        SetText( OUString( SW_RES( eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE)));
+        m_pAddressElementsFT->SetText(OUString(SW_RES(ST_SALUTATIONELEMENTS)));
+        m_pInsertFieldIB->SetQuickHelpText(OUString(SW_RES(ST_INSERTSALUTATIONFIELD)));
+        m_pRemoveFieldIB->SetQuickHelpText(OUString(SW_RES(ST_REMOVESALUTATIONFIELD)));
+        m_pDragFT->SetText(OUString(SW_RES(ST_DRAGSALUTATION)));
     }
     else
     {
         if(eType == ADDRESSBLOCK_EDIT)
-            SetText(String(SW_RES(ST_TITLE_EDIT)));
+            SetText(OUString(SW_RES(ST_TITLE_EDIT)));
         m_pDragED->SetText(OUString("\n\n\n\n\n"));
     }
 
@@ -637,7 +637,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, DDListBox*, pBox
 
 IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl)
 {
-    String sAddress = SwAddressPreview::FillData(
+    OUString sAddress = SwAddressPreview::FillData(
             GetAddress(),
             m_rConfigItem);
     m_pPreviewWIN->SetAddress(sAddress);
@@ -652,9 +652,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, ImageButton*, pBut
         SvTreeListEntry* pEntry = m_pAddressElementsLB->GetCurEntry();
         if(pEntry)
         {
-            String sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
-            sEntry.Insert('<', 0);
-            sEntry += '>';
+            OUString sEntry = "<" + m_pAddressElementsLB->GetEntryText(pEntry) + ">";
             m_pDragED->InsertNewEntry(sEntry);
         }
     }
@@ -680,13 +678,13 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, ImageButton*, pBut
 sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
 {
     sal_Int32 nRet = USER_DATA_NONE;
-    String sSelected = m_pDragED->GetCurrentItem();
-    if(sSelected.Len())
+    OUString sSelected = m_pDragED->GetCurrentItem();
+    if(!sSelected.isEmpty())
         for(sal_uLong i = 0; i < m_pAddressElementsLB->GetEntryCount();  ++i)
         {
             SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
-            String sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
-            if( sSelected.Equals( sEntry, 1, sSelected.Len() - 2 ) )
+            OUString sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
+            if( sSelected == sEntry.copy( 1, sSelected.getLength() - 2 ) )
             {
                 nRet = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
                 break;
@@ -698,7 +696,7 @@ sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
 bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
 {
     //get the entry from the ListBox
-    String sEntry;
+    OUString sEntry;
     for(sal_uLong i = 0; i < m_pAddressElementsLB->GetEntryCount();  ++i)
     {
         SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
@@ -709,11 +707,10 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
         }
     }
     //put it into '<>'
-    sEntry += '>';
-    sEntry.Insert( '<', 0);
+    sEntry = "<" + sEntry + ">";
     //search for this entry in the content
-    String sText = m_pDragED->GetText();
-    bool bRet = sText.Search(sEntry) != STRING_NOTFOUND;
+    OUString sText = m_pDragED->GetText();
+    bool bRet = sText.indexOf(sEntry) != -1;
     return bRet;
 }
 
@@ -734,8 +731,8 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiL
     if(m_pFieldCB->IsVisible() && (USER_DATA_NONE != nSelected) && (nSelected < 0))
     {
         //search in ListBox if it's one of the first entries
-        String sSelect;
-        ::std::vector<String>* pVector = 0;
+        OUString sSelect;
+        ::std::vector<OUString>* pVector = 0;
         switch(nSelected) {
             case USER_DATA_SALUTATION:
                 sSelect =  m_sCurrentSalutation;
@@ -751,7 +748,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiL
         }
         m_pFieldCB->Clear();
         if(pVector) {
-            ::std::vector<String>::iterator  aIterator;
+            ::std::vector<OUString>::iterator  aIterator;
             for( aIterator = pVector->begin(); aIterator != pVector->end(); ++aIterator)
                 m_pFieldCB->InsertEntry(*aIterator);
         }
@@ -774,7 +771,7 @@ IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl)
 {
     //changing the field content changes the related members, too
     sal_Int32 nSelected = GetSelectedItem_Impl();
-    String sContent = m_pFieldCB->GetText();
+    OUString sContent = m_pFieldCB->GetText();
     switch(nSelected) {
         case USER_DATA_SALUTATION:
             m_sCurrentSalutation = sContent;
@@ -814,22 +811,20 @@ void SwCustomizeAddressBlockDialog::SetAddress(const OUString& rAddress)
 
 OUString SwCustomizeAddressBlockDialog::GetAddress()
 {
-    String sAddress(m_pDragED->GetAddress());
+    OUString sAddress(m_pDragED->GetAddress());
     //remove placeholders by the actual content
     if(m_pFieldFT->IsVisible())
     {
         for(sal_uLong i = 0; i < m_pAddressElementsLB->GetEntryCount();  ++i)
         {
             SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
-            String sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
-            sEntry += '>';
-            sEntry.Insert('<', 0);
+            OUString sEntry = "<" + m_pAddressElementsLB->GetEntryText(pEntry) + ">";
             sal_Int32 nUserData = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
             switch(nUserData)
             {
-                case USER_DATA_SALUTATION : sAddress.SearchAndReplace(sEntry, m_sCurrentSalutation); break;
-                case USER_DATA_PUNCTUATION: sAddress.SearchAndReplace(sEntry, m_sCurrentPunctuation); break;
-                case USER_DATA_TEXT       : sAddress.SearchAndReplace(sEntry, m_sCurrentText); break;
+                case USER_DATA_SALUTATION : sAddress = sAddress.replaceFirst(sEntry, m_sCurrentSalutation); break;
+                case USER_DATA_PUNCTUATION: sAddress = sAddress.replaceFirst(sEntry, m_sCurrentPunctuation); break;
+                case USER_DATA_TEXT       : sAddress = sAddress.replaceFirst(sEntry, m_sCurrentText); break;
             }
         }
     }
@@ -1279,15 +1274,9 @@ void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
         //special entries can only be once in the address / greeting
         if(nUserData >= 0 || !m_pParentDialog->HasItem_Impl(nUserData))
         {
-            String sEntry;
-            sEntry = GetEntryText(pEntry);
-            sEntry.Insert('<', 0);
-            sEntry += '>';
-            if(sEntry.Len())
-            {
-                pContainer->CopyString( sEntry );
-                pContainer->StartDrag( this, DND_ACTION_COPY, GetDragFinishedHdl() );
-            }
+            OUString sEntry = "<" + GetEntryText(pEntry) + ">";
+            pContainer->CopyString( sEntry );
+            pContainer->StartDrag( this, DND_ACTION_COPY, GetDragFinishedHdl() );
         }
     }
 }
@@ -1365,18 +1354,18 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
     for(sal_uLong nPara = 0; nPara < nParaCount; ++nPara)
     {
         xub_StrLen nIndex = 0;
-        String sPara = pTextEngine->GetText( nPara );
-        if(sPara.Len() && sPara.GetChar(sPara.Len() - 1) != ' ')
+        OUString sPara = pTextEngine->GetText( nPara );
+        if(!sPara.isEmpty() && sPara[sPara.getLength() - 1] != ' ')
         {
-            TextPaM aPaM(nPara, sPara.Len());
+            TextPaM aPaM(nPara, sPara.getLength());
             pTextEngine->ReplaceText(TextSelection( aPaM ), OUString(' '));
         }
         while(true)
         {
-            sal_uInt16 nStart = sPara.Search( '<', nIndex );
-            sal_uInt16 nEnd = sPara.Search( '>', nStart );
+            sal_Int32 nStart = sPara.indexOf( '<', nIndex );
+            sal_Int32 nEnd = sPara.indexOf( '>', nStart );
             nIndex = nEnd;
-            if(nStart != STRING_NOTFOUND && nEnd != STRING_NOTFOUND)
+            if(nStart != -1 && nEnd != -1)
                 pTextEngine->SetAttrib( aProtectAttr, nPara, nStart, nEnd + 1, sal_False );
             else
                 break;
@@ -1447,7 +1436,7 @@ void AddressMultiLineEdit::RemoveCurrentEntry()
     {
         sal_uLong nPara = rSelection.GetStart().GetPara();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
-        pTextEngine->ReplaceText(aEntrySel, String());
+        pTextEngine->ReplaceText(aEntrySel, OUString());
         //restore the attributes
         SetText( GetAddress() );
         Modify();
@@ -1468,9 +1457,9 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
         sal_uLong nPara = rSelection.GetStart().GetPara();
         sal_uInt16 nIndex = pBeginAttrib->GetStart();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
-        String sCurrentItem = pTextEngine->GetText(aEntrySel);
+        OUString sCurrentItem = pTextEngine->GetText(aEntrySel);
         pTextEngine->RemoveAttrib( nPara, *pBeginAttrib );
-        pTextEngine->ReplaceText(aEntrySel, String());
+        pTextEngine->ReplaceText(aEntrySel, OUString());
         switch(nMove)
         {
             case MOVE_ITEM_LEFT :
@@ -1601,9 +1590,9 @@ OUString AddressMultiLineEdit::GetAddress()
     sal_uLong  nParaCount = pTextEngine->GetParagraphCount();
     for(sal_uLong nPara = nParaCount; nPara; --nPara)
     {
-        String sPara = comphelper::string::stripEnd(pTextEngine->GetText(nPara - 1), ' ');
+        OUString sPara = comphelper::string::stripEnd(pTextEngine->GetText(nPara - 1), ' ');
         //don't add empty trailing paragraphs
-        if(!sRet.isEmpty() || sPara.Len())
+        if(!sRet.isEmpty() || !sPara.isEmpty())
         {
             sRet = sPara + sRet;
             //insert the para break

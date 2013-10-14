@@ -74,16 +74,16 @@ using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-static String lcl_GetExtensionForDocType(sal_uLong nDocType)
+static OUString lcl_GetExtensionForDocType(sal_uLong nDocType)
 {
     OUString sExtension;
     switch( nDocType )
     {
-        case MM_DOCTYPE_OOO : sExtension = OUString( "odt" ); break;
-        case MM_DOCTYPE_PDF : sExtension = OUString( "pdf" ); break;
-        case MM_DOCTYPE_WORD: sExtension = OUString( "doc" ); break;
-        case MM_DOCTYPE_HTML: sExtension = OUString( "html" ); break;
-        case MM_DOCTYPE_TEXT: sExtension = OUString( "txt" ); break;
+        case MM_DOCTYPE_OOO : sExtension = "odt"; break;
+        case MM_DOCTYPE_PDF : sExtension = "pdf"; break;
+        case MM_DOCTYPE_WORD: sExtension = "doc"; break;
+        case MM_DOCTYPE_HTML: sExtension = "html"; break;
+        case MM_DOCTYPE_TEXT: sExtension = "txt"; break;
     }
     return sExtension;
 }
@@ -469,8 +469,8 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             m_aSendAllRB.Check();
         if(m_aAttachmentED.GetText().isEmpty())
         {
-            String sAttach( m_sDefaultAttachmentST );
-            sAttach += '.';
+            OUString sAttach( m_sDefaultAttachmentST );
+            sAttach += ".";
             sAttach += lcl_GetExtensionForDocType(
                         (sal_uLong)m_aSendAsLB.GetEntryData(m_aSendAsLB.GetSelectEntryPos()));
             m_aAttachmentED.SetText( sAttach );
@@ -495,7 +495,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             m_aMailToLB.SelectEntryPos(0);
             // then select the right one - may not be available
             const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
-            String sEMailColumn = rHeaders.GetString( MM_PART_E_MAIL );
+            OUString sEMailColumn = rHeaders.GetString( MM_PART_E_MAIL );
             Sequence< OUString> aAssignment =
                             rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
             if(aAssignment.getLength() > MM_PART_E_MAIL && !aAssignment[MM_PART_E_MAIL].isEmpty())
@@ -650,7 +650,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         OUString sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
         if (sPath.isEmpty())
             return 0;
-        String sTargetTempURL = URIHelper::SmartRel2Abs(
+        OUString sTargetTempURL = URIHelper::SmartRel2Abs(
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
         const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
@@ -701,9 +701,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                 sExtension = comphelper::string::getToken(pSfxFlt->GetWildcard().getGlob(), 1, '.');
                 sPath += "." + sExtension;
             }
-            String sStat(SW_RES(STR_STATSTR_LETTER));
-            sStat += ' ';
-            sStat += OUString::number( nDoc );
+            OUString sStat = OUString(SW_RES(STR_STATSTR_LETTER)) + " " + OUString::number( nDoc );
             aSaveMonitor.m_pPrintInfo->SetText(sStat);
 
             //now extract a document from the target document
@@ -726,10 +724,9 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                     (sal_uInt16)rInfo.nStartPageInTarget, (sal_uInt16)rInfo.nEndPageInTarget );
             pTargetView->GetWrtShell().EndAction();
             //then save it
-            String sOutPath = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
-            String sCounter = OUString('_');
-            sCounter += OUString::number(nDoc);
-            sOutPath.Insert(sCounter, sOutPath.Len() - sExtension.getLength() - 1);
+            OUString sOutPath = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
+            OUString sCounter = "_" + OUString::number(nDoc);
+            sOutPath = sOutPath.replaceAt( sOutPath.getLength() - sExtension.getLength() - 1, 0, sCounter);
 
             while(true)
             {
@@ -974,7 +971,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
     const SfxFilter *pSfxFlt = 0;
     sal_uLong nDocType = (sal_uLong)m_aSendAsLB.GetEntryData(m_aSendAsLB.GetSelectEntryPos());
-    String sExtension = lcl_GetExtensionForDocType(nDocType);
+    OUString sExtension = lcl_GetExtensionForDocType(nDocType);
     switch( nDocType )
     {
         case MM_DOCTYPE_OOO:
@@ -1070,11 +1067,11 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             return 0;
     }
     SfxStringItem aFilterName( SID_FILTER_NAME, pSfxFlt->GetFilterName() );
-    String sEMailColumn = m_aMailToLB.GetSelectEntry();
-    OSL_ENSURE( sEMailColumn.Len(), "No email column selected");
+    OUString sEMailColumn = m_aMailToLB.GetSelectEntry();
+    OSL_ENSURE( !sEMailColumn.isEmpty(), "No email column selected");
     Reference< sdbcx::XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), UNO_QUERY);
     Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
-    if(!sEMailColumn.Len() || !xColAccess.is() || !xColAccess->hasByName(sEMailColumn))
+    if(sEMailColumn.isEmpty() || !xColAccess.is() || !xColAccess->hasByName(sEMailColumn))
         return 0;
 
     OUString sFilterOptions;
@@ -1088,7 +1085,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         aOpt.SetParaFlags( LINEEND_CR );
         aOpt.WriteUserData( sFilterOptions );
     }
-    String sTargetTempURL = URIHelper::SmartRel2Abs(
+    OUString sTargetTempURL = URIHelper::SmartRel2Abs(
         INetURLObject(), utl::TempFile::CreateTempName(),
         URIHelper::GetMaybeFileHdl());
     const SfxFilter *pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
@@ -1161,7 +1158,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         sal_Int32 nTarget = rConfigItem.MoveResultSet(rInfo.nDBRow);
         OSL_ENSURE( nTarget == rInfo.nDBRow, "row of current document could not be selected");
         (void)nTarget;
-        OSL_ENSURE( sEMailColumn.Len(), "No email column selected");
+        OSL_ENSURE( !sEMailColumn.isEmpty(), "No email column selected");
         OUString sEMail = lcl_GetColumnValueOf(sEMailColumn, xColAccess);
         SwMailDescriptor aDesc;
         aDesc.sEMail = sEMail;
@@ -1211,7 +1208,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             {
                 OUString sNameColumn = rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
                 OUString sName = lcl_GetColumnValueOf(sNameColumn, xColAccess);
-                String sGreeting;
+                OUString sGreeting;
                 if(!sName.isEmpty() && rConfigItem.IsIndividualGreeting(sal_True))
                 {
                     OUString sGenderColumn = rConfigItem.GetAssignedColumn(MM_PART_GENDER);
@@ -1233,10 +1230,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                         [rConfigItem.GetCurrentGreeting(SwMailMergeConfigItem::NEUTRAL)];
 
                 }
-                sGreeting += '\n';
-                OUString sTemp( sGreeting );
-                sTemp += sBody;
-                sBody = sTemp;
+                sGreeting += "\n";
+                sBody = sGreeting + sBody;
             }
         }
         aDesc.sBodyContent = sBody;
