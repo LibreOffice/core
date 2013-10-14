@@ -46,6 +46,8 @@ public:
     void test_float();
     void test_double();
 
+    void test_getString();
+
     CPPUNIT_TEST_SUITE(FValueTest);
 
     CPPUNIT_TEST(test_Bool);
@@ -65,6 +67,7 @@ public:
     CPPUNIT_TEST(test_float);
     CPPUNIT_TEST(test_double);
 
+    CPPUNIT_TEST(test_getString);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -281,6 +284,27 @@ void FValueTest::test_double()
     trg_double = t.getDouble();
 
     CPPUNIT_ASSERT_MESSAGE("double conversion from Any didn't work", src_double == trg_double);
+}
+
+void FValueTest::test_getString()
+{
+    bool src_bool_1 = true;
+    ORowSetValue v_1(src_bool_1);
+    OUString trg_bool_1 = v_1.getString();
+
+    std::cerr << "src_bool_1" << src_bool_1 << std::endl;
+    std::cerr << "trg_bool_1: " << trg_bool_1 << std::endl;
+
+    CPPUNIT_ASSERT_MESSAGE("bool to string conversion to ORowSetValue didn't work", trg_bool_1 == "1");
+
+    bool src_bool_0 = false;
+    ORowSetValue v_0(src_bool_0);
+    OUString trg_bool_0 = v_0.getString();
+
+    std::cerr << "src_bool_0" << src_bool_0 << std::endl;
+    std::cerr << "trg_bool_0: " << trg_bool_0 << std::endl;
+
+    CPPUNIT_ASSERT_MESSAGE("bool to string conversion to ORowSetValue didn't work", trg_bool_0 == "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FValueTest);
