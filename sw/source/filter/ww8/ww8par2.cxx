@@ -103,7 +103,7 @@ WW8TabBandDesc::~WW8TabBandDesc()
 
 class WW8TabDesc
 {
-    std::vector<String> aNumRuleNames;
+    std::vector<OUString> aNumRuleNames;
     sw::util::RedlineStack *mpOldRedlineStack;
 
     SwWW8ImplReader* pIo;
@@ -193,8 +193,8 @@ public:
     const WW8_TCell* GetAktWWCell() const { return pAktWWCell; }
     short GetAktCol() const { return nAktCol; }
     // find name of numrule valid for current WW-COL
-    const String& GetNumRuleName() const;
-    void SetNumRuleName( const String& rName );
+    const OUString& GetNumRuleName() const;
+    void SetNumRuleName( const OUString& rName );
 
     sw::util::RedlineStack* getOldRedlineStack(){ return mpOldRedlineStack; }
 };
@@ -291,12 +291,12 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
     xub_StrLen nPos = pPaM->GetPoint()->nContent.GetIndex();
 
-    String sChar;
+    OUString sChar;
     SwTxtAttr* pFN = 0;
     //There should have been a footnote char, we will replace this.
     if (pTxt && nPos)
     {
-        sChar.Append(pTxt->GetTxt()[--nPos]);
+        sChar += OUString(pTxt->GetTxt()[--nPos]);
         pPaM->SetMark();
         pPaM->GetMark()->nContent--;
         rDoc.DeleteRange( *pPaM );
@@ -326,7 +326,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         bFtEdOk = true;
         bFtnEdn = bOld;
 
-        OSL_ENSURE(sChar.Len()==1 && ((rDesc.mbAutoNum == (sChar.GetChar(0) == 2))),
+        OSL_ENSURE(sChar.getLength()==1 && ((rDesc.mbAutoNum == (sChar[0] == 2))),
          "footnote autonumbering must be 0x02, and everthing else must not be");
 
         // If no automatic numbering use the following char from the main text
@@ -342,9 +342,9 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         SwNodeIndex& rNIdx = pPaM->GetPoint()->nNode;
         rNIdx = pSttIdx->GetIndex() + 1;
         SwTxtNode* pTNd = rNIdx.GetNode().GetTxtNode();
-        if (pTNd && !pTNd->GetTxt().isEmpty() && sChar.Len())
+        if (pTNd && !pTNd->GetTxt().isEmpty() && !sChar.isEmpty())
         {
-            if (pTNd->GetTxt()[0] == sChar.GetChar(0))
+            if (pTNd->GetTxt()[0] == sChar[0])
             {
                 pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
                 pPaM->SetMark();
@@ -589,8 +589,7 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
 
     if( SVBT8ToByte( rAV.nfc ) == 5 || SVBT8ToByte( rAV.nfc ) == 7 )
     {
-        String sP( rNum.GetSuffix() );
-        sP.Insert( '.', 0 );
+        OUString sP = "." + rNum.GetSuffix();
         rNum.SetSuffix( sP );   // ordinal number
     }
 }
@@ -604,10 +603,10 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     const WW8_FFN* pF = pFonts->GetFont(SVBT16ToShort(rAV.ftc)); // FontInfo
     bool bListSymbol = pF && ( pF->chs == 2 );      // Symbol/WingDings/...
 
-    String sTxt;
+    OUString sTxt;
     if (bVer67)
     {
-        sTxt = String( (sal_Char*)pTxt,  SVBT8ToByte( rAV.cbTextBefore )
+        sTxt = OUString( (sal_Char*)pTxt,  SVBT8ToByte( rAV.cbTextBefore )
                                  + SVBT8ToByte( rAV.cbTextAfter  ), eCharSet );
     }
     else
@@ -615,7 +614,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
         for(xub_StrLen i = SVBT8ToByte(rAV.cbTextBefore);
             i < SVBT8ToByte(rAV.cbTextAfter); ++i, pTxt += 2)
         {
-            sTxt.Append(SVBT16ToShort(*(SVBT16*)pTxt));
+            sTxt += OUString(SVBT16ToShort(*(SVBT16*)pTxt));
         }
     }
 
@@ -661,7 +660,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
 
                 // take only the very first character
                 if( rAV.cbTextBefore || rAV.cbTextAfter)
-                    rNum.SetBulletChar( sTxt.GetChar( 0 ) );
+                    rNum.SetBulletChar( sTxt[ 0 ] );
                 else
                     rNum.SetBulletChar( 0x2190 );
             }
@@ -671,14 +670,14 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     {
         if( rAV.cbTextBefore )
         {
-            String sP( sTxt.Copy( 0, SVBT8ToByte( rAV.cbTextBefore ) ) );
+            OUString sP( sTxt.copy( 0, SVBT8ToByte( rAV.cbTextBefore ) ) );
             rNum.SetPrefix( sP );
         }
         if( SVBT8ToByte( rAV.cbTextAfter ) )
         {
-            String sP( rNum.GetSuffix() );
-            sP.Insert( sTxt.Copy( SVBT8ToByte( rAV.cbTextBefore ),
-                                  SVBT8ToByte( rAV.cbTextAfter  ) ) );
+            OUString sP( rNum.GetSuffix() );
+            sP += sTxt.copy( SVBT8ToByte( rAV.cbTextBefore ),
+                             SVBT8ToByte( rAV.cbTextAfter  ) );
             rNum.SetSuffix( sP );
         }
 // The characters before and after multipe digits do not apply because
@@ -899,36 +898,36 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
 
     // check for COL numbering:
     const sal_uInt8* pS12 = 0;// sprmAnld
-    String sNumRule;
+    OUString sNumRule;
 
     if (pTableDesc)
     {
         sNumRule = pTableDesc->GetNumRuleName();
-        if (sNumRule.Len())
+        if (!sNumRule.isEmpty())
         {
             pNumRule = rDoc.FindNumRulePtr(sNumRule);
             if (!pNumRule)
-                sNumRule.Erase();
+                sNumRule = "";
             else
             {
                 // this is ROW numbering ?
                 pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
                 if (pS12 && 0 != SVBT8ToByte(((WW8_ANLD*)pS12)->fNumberAcross))
-                    sNumRule.Erase();
+                    sNumRule = "";
             }
         }
     }
 
     SwWW8StyInf * pStyInf = GetStyle(nAktColl);
-    if (!sNumRule.Len() && pStyInf != NULL &&  pStyInf->bHasStyNumRule)
+    if (sNumRule.isEmpty() && pStyInf != NULL &&  pStyInf->bHasStyNumRule)
     {
         sNumRule = pStyInf->pFmt->GetNumRule().GetValue();
         pNumRule = rDoc.FindNumRulePtr(sNumRule);
         if (!pNumRule)
-            sNumRule.Erase();
+            sNumRule = "";
     }
 
-    if (!sNumRule.Len())
+    if (sNumRule.isEmpty())
     {
         if (!pNumRule)
         {
@@ -3304,16 +3303,16 @@ sal_uInt16 WW8TabDesc::GetLogicalWWCol() const // returns number of col as INDIC
 }
 
 // find name of numrule valid for current WW-COL
-const String& WW8TabDesc::GetNumRuleName() const
+const OUString& WW8TabDesc::GetNumRuleName() const
 {
     sal_uInt16 nCol = GetLogicalWWCol();
     if (nCol < aNumRuleNames.size())
         return aNumRuleNames[nCol];
     else
-        return aEmptyStr;
+        return aEmptyOUStr;
 }
 
-void WW8TabDesc::SetNumRuleName( const String& rName )
+void WW8TabDesc::SetNumRuleName( const OUString& rName )
 {
     sal_uInt16 nCol = GetLogicalWWCol();
     for (sal_uInt16 nSize = static_cast< sal_uInt16 >(aNumRuleNames.size()); nSize <= nCol; ++nSize)
@@ -4225,12 +4224,12 @@ void WW8RStyle::ImportOldFormatStyles()
         SwWW8StyInf &rSI = pIo->vColl[stc];
         if (nCount != 0xFF)    // undefined style
         {
-            String sName;
+            OUString sName;
             if (nCount == 0)   // inbuilt style
             {
                 ww::sti eSti = ww::GetCanonicalStiFromStc(stc);
                 if (const sal_Char *pStr = GetEnglishNameFromSti(eSti))
-                    sName = String(pStr, RTL_TEXTENCODING_ASCII_US);
+                    sName = OUString(pStr, strlen(pStr), RTL_TEXTENCODING_ASCII_US);
                 else
                     sName = OUString("Unknown");
             }
@@ -4248,7 +4247,7 @@ void WW8RStyle::ImportOldFormatStyles()
             ww::sti eSti = ww::GetCanonicalStiFromStc(stc);
             if (const sal_Char *pStr = GetEnglishNameFromSti(eSti))
             {
-                String sName = String(pStr, RTL_TEXTENCODING_ASCII_US);
+                OUString sName = OUString(pStr, strlen(pStr), RTL_TEXTENCODING_ASCII_US);
                 rSI.SetOrgWWIdent(sName, stc);
             }
         }

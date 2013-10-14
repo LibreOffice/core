@@ -134,8 +134,8 @@ inline OUString read_uInt16_PascalString(SvStream& rStrm)
 //Belt and Braces strings, i.e. Pascal-style strings followed by
 //null termination, Spolsky calls them "fucked strings" FWIW
 //http://www.joelonsoftware.com/articles/fog0000000319.html
-String read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc);
-String read_uInt16_BeltAndBracesString(SvStream& rStrm);
+OUString read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc);
+OUString read_uInt16_BeltAndBracesString(SvStream& rStrm);
 
 //--Line abovewhich the code has meaningful comments
 

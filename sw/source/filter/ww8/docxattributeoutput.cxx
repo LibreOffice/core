@@ -1014,7 +1014,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
             rInfos.sCmd += "\" ";
 
             // Clean the field bookmark data to avoid infinite loop
-            m_sFieldBkm = String( );
+            m_sFieldBkm = OUString( );
 
             // Write the end of the field
             EndField_Impl( rInfos );
@@ -1449,7 +1449,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
         return;
 
     OString aId( OString::number( pRedline->GetSeqNo() ) );
-    const String &rAuthor( SW_MOD()->GetRedlineAuthor( pRedline->GetAuthor() ) );
+    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedline->GetAuthor() ) );
     OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
     OString aDate( msfilter::util::DateTimeToOString( pRedline->GetTimeStamp() ) );
 
@@ -1509,7 +1509,7 @@ void DocxAttributeOutput::StartRedline()
 
     OString aId( OString::number( m_nRedlineId++ ) );
 
-    const String &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
+    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
     OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
 
     OString aDate( msfilter::util::DateTimeToOString( pRedlineData->GetTimeStamp() ) );
@@ -3549,9 +3549,9 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         if( n )
             aAttrIter.NextPara( n );
 
-        String aStr( rEditObj.GetText( n ));
+        OUString aStr( rEditObj.GetText( n ));
         xub_StrLen nAktPos = 0;
-        xub_StrLen nEnd = aStr.Len();
+        xub_StrLen nEnd = aStr.getLength();
 
         m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
 
@@ -3575,7 +3575,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
             bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
             if( !bTxtAtr )
             {
-                String aOut( aStr.Copy( nAktPos, nNextAttr - nAktPos ) );
+                OUString aOut( aStr.copy( nAktPos, nNextAttr - nAktPos ) );
                 RunText(aOut);
             }
 
@@ -4815,7 +4815,7 @@ bool DocxAttributeOutput::DropdownField( const SwField* pFld )
     bool bExpand = false;
 
     ww::eField eType = ww::eFORMDROPDOWN;
-    String sCmd = FieldString( eType  );
+    OUString sCmd = FieldString( eType  );
     GetExport( ).OutputField( pFld, eType, sCmd );
 
     return bExpand;
@@ -4860,7 +4860,7 @@ void DocxAttributeOutput::SetField( const SwField& rFld, ww::eField eType, const
 void DocxAttributeOutput::WriteExpand( const SwField* pFld )
 {
     // Will be written in the next End Run
-    String sCmd;
+    OUString sCmd;
     m_rExport.OutputField( pFld, ww::eUNKNOWN, sCmd );
 }
 

@@ -955,9 +955,9 @@ void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bSi
 {
     if (pRedlineData)
     {
-        const String &rComment = pRedlineData->GetComment();
+        const OUString &rComment = pRedlineData->GetComment();
         //Only possible to export to main text
-        if (rComment.Len() && (m_rWW8Export.nTxtTyp == TXT_MAINTEXT))
+        if (!rComment.isEmpty() && (m_rWW8Export.nTxtTyp == TXT_MAINTEXT))
         {
             if (m_rWW8Export.pAtn->IsNewRedlineComment(pRedlineData))
             {
@@ -1647,7 +1647,7 @@ void WW8AttributeOutput::TextINetFormat( const SwFmtINetFmt& rINet )
 // add optional parameter <bIncludeEmptyPicLocation>
 // It is needed to write an empty picture location for page number field separators
 static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
-                               String* pLinkStr = 0L,
+                               OUString* pLinkStr = 0L,
                                bool bIncludeEmptyPicLocation = false )
 {
     ww::bytes aItems;
@@ -1691,7 +1691,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
         };
         rStrm.Write( aFixHeader, nFixHdrLen );
         // write reference string including length+1
-        sal_uInt32 nStrLen( pLinkStr->Len() + 1 );
+        sal_uInt32 nStrLen( pLinkStr->getLength() + 1 );
         SwWW8Writer::WriteLong( rStrm, nStrLen );
         SwWW8Writer::WriteString16( rStrm, *(pLinkStr), false );
         // write additional two NULL Bytes
@@ -1732,7 +1732,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
     rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell(), aItems.size(), aItems.data());
 }
 
-static String lcl_GetExpandedField(const SwField &rFld)
+static OUString lcl_GetExpandedField(const SwField &rFld)
 {
     OUString sRet(rFld.ExpandField(true));
 
@@ -1814,7 +1814,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
         if ( bHandleBookmark )
         {
             // retrieve reference destination - the name of the bookmark
-            String aLinkStr;
+            OUString aLinkStr;
             const sal_uInt16 nSubType = pFld->GetSubType();
             const SwGetRefField& rRFld = *(static_cast<const SwGetRefField*>(pFld));
             if ( nSubType == REF_SETREFATTR ||
@@ -1845,12 +1845,12 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
     }
     if (WRITEFIELD_END & nMode)
     {
-        String sOut;
+        OUString sOut;
         if( pFld )
             sOut = lcl_GetExpandedField(*pFld);
         else
             sOut = rFldCmd;
-        if( sOut.Len() )
+        if( !sOut.isEmpty() )
         {
             if( bUnicode )
                 SwWW8Writer::WriteString16(Strm(), sOut, false);
@@ -1944,10 +1944,10 @@ sal_uInt16 MSWordExportBase::GetId( const SwTOXType& rTOXType )
 //                 2 - TabStop before PageNum,
 //                 3 - Text before PageNum - rTxt hold the text
 //                 4 - no Text and no TabStop before PageNum
-static int lcl_CheckForm( const SwForm& rForm, sal_uInt8 nLvl, String& rText )
+static int lcl_CheckForm( const SwForm& rForm, sal_uInt8 nLvl, OUString& rText )
 {
     int nRet = 4;
-    rText.Erase();
+    rText = "";
 
     // #i21237#
     SwFormTokens aPattern = rForm.GetPattern(nLvl);
@@ -2048,18 +2048,18 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 sStr += "\\h \"A\" ";
 
             {
-                String aFillTxt;
+                OUString aFillTxt;
                 for (sal_uInt8 n = 1; n <= 3; ++n)
                 {
-                    String aTxt;
+                    OUString aTxt;
                     int nRet = ::lcl_CheckForm(pTOX->GetTOXForm(), n, aTxt);
 
                     if( 3 == nRet )
                         aFillTxt = aTxt;
                     else if ((4 == nRet) || (2 == nRet))
-                        aFillTxt = '\t';
+                        aFillTxt = "\t";
                     else
-                        aFillTxt.Erase();
+                        aFillTxt = "";
                 }
                 sStr += "\\e \"";
                 sStr += aFillTxt;
@@ -2078,7 +2078,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 sStr += pTOX->GetSequenceName();
                 sStr += sEntryEnd;
 
-                String aTxt;
+                OUString aTxt;
                 int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(), 1, aTxt );
                 if (1 == nRet)
                     sStr += "\\n ";
@@ -2095,7 +2095,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             {
                 sStr = FieldString(eCode);
 
-                String sTOption;
+                OUString sTOption;
                 sal_uInt16 n, nTOXLvl = pTOX->GetLevel();
                 if( !nTOXLvl )
                     ++nTOXLvl;
@@ -2195,9 +2195,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                 sal_uInt8 nTestLvl =  ::sal::static_int_cast<sal_uInt8>(pColl->GetAssignedOutlineStyleLevel());
                                 if (nTestLvl < nTOXLvl && nTestLvl >= nMaxMSAutoEvaluate)
                                 {
-                                    if( sTOption.Len() )
-                                        sTOption += ',';
-                                    (( sTOption += pColl->GetName() ) += ',' ) += OUString::number( nTestLvl + 1 );
+                                    if( !sTOption.isEmpty() )
+                                        sTOption += ",";
+                                    sTOption += pColl->GetName()  + "," + OUString::number( nTestLvl + 1 );
                                 }
                             }
                         }
@@ -2207,21 +2207,21 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         // #i99641# - Consider additional styles regardless of TOX-outlinelevel
                         for( n = 0; n < MAXLEVEL; ++n )
                         {
-                            const String& rStyles = pTOX->GetStyleNames( n );
-                            if( rStyles.Len() )
+                            const OUString& rStyles = pTOX->GetStyleNames( n );
+                            if( !rStyles.isEmpty() )
                             {
                                 sal_Int32 nPos = 0;
-                                String sLvl = OUString(',');
+                                OUString sLvl = OUString(',');
                                 sLvl += OUString::number( n + 1 );
                                 do {
-                                    String sStyle( rStyles.GetToken( 0, TOX_STYLE_DELIMITER, nPos ));
-                                    if( sStyle.Len() )
+                                    OUString sStyle( rStyles.getToken( 0, TOX_STYLE_DELIMITER, nPos ));
+                                    if( !sStyle.isEmpty() )
                                     {
                                         SwTxtFmtColl* pColl = GetExport().pDoc->FindTxtFmtCollByName(sStyle);
                                         if (!pColl || !pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
                                         {
-                                            if( sTOption.Len() )
-                                                sTOption += ',';
+                                            if( !sTOption.isEmpty() )
+                                                sTOption += ",";
                                             ( sTOption += sStyle ) += sLvl;
                                         }
                                     }
@@ -2229,12 +2229,12 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             }
                         }
 
-                    String aFillTxt;
+                    OUString aFillTxt;
                     sal_uInt8 nNoPgStt = MAXLEVEL, nNoPgEnd = MAXLEVEL;
                     bool bFirstFillTxt = true, bOnlyText = true;
                     for( n = 0; n < nTOXLvl; ++n )
                     {
-                        String aTxt;
+                        OUString aTxt;
                         int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(),
                                                     static_cast< sal_uInt8 >(n+1), aTxt );
                         if( 1 == nRet )
@@ -2255,7 +2255,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                 if( bFirstFillTxt )
                                     aFillTxt = aTxt;
                                 else if( aFillTxt != aTxt )
-                                    aFillTxt.Erase();
+                                    aFillTxt = "";
                                 bFirstFillTxt = false;
                             }
                         }
@@ -2277,7 +2277,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         sStr += sEntryEnd;
                     }
 
-                    if( sTOption.Len() )
+                    if( !sTOption.isEmpty() )
                     {
                         sStr += "\\t \"";
                         sStr += sTOption;
@@ -2429,7 +2429,7 @@ void WW8AttributeOutput::HiddenField( const SwField& rFld )
 void WW8AttributeOutput::SetField( const SwField& rFld, ww::eField eType, const OUString& rCmd )
 {
     const SwSetExpField* pSet=(const SwSetExpField*)(&rFld);
-    const String &rVar = pSet->GetPar2();
+    const OUString &rVar = pSet->GetPar2();
 
     sal_uLong nFrom = m_rWW8Export.Fc2Cp(m_rWW8Export.Strm().Tell());
 
@@ -2446,7 +2446,7 @@ void WW8AttributeOutput::SetField( const SwField& rFld, ww::eField eType, const 
     */
     m_rWW8Export.MoveFieldMarks(nFrom,m_rWW8Export.Fc2Cp(m_rWW8Export.Strm().Tell()));
 
-    if (rVar.Len())
+    if (!rVar.isEmpty())
     {
         if (m_rWW8Export.IsUnicode())
             SwWW8Writer::WriteString16(m_rWW8Export.Strm(), rVar, false);
@@ -2494,8 +2494,8 @@ void WW8AttributeOutput::RefField( const SwField &rFld, const OUString &rRef)
     sStr += "\"" + rRef + "\" ";
     m_rWW8Export.OutputField( &rFld, ww::eREF, sStr, WRITEFIELD_START |
         WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
-    String sVar = lcl_GetExpandedField( rFld );
-    if ( sVar.Len() )
+    OUString sVar = lcl_GetExpandedField( rFld );
+    if ( !sVar.isEmpty() )
     {
         if ( m_rWW8Export.IsUnicode() )
             SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sVar, false );
@@ -2510,7 +2510,7 @@ void WW8AttributeOutput::RefField( const SwField &rFld, const OUString &rRef)
 
 void WW8AttributeOutput::WriteExpand( const SwField* pFld )
 {
-    String sExpand( lcl_GetExpandedField( *pFld ) );
+    OUString sExpand( lcl_GetExpandedField( *pFld ) );
     if ( m_rWW8Export.IsUnicode() )
         SwWW8Writer::WriteString16( m_rWW8Export.Strm(), sExpand, false );
     else
@@ -2668,11 +2668,11 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
 
                         if (pDocInfoField != NULL)
                         {
-                            String sFieldname = pDocInfoField->GetFieldName();
-                            xub_StrLen nIndex = sFieldname.Search(':');
+                            OUString sFieldname = pDocInfoField->GetFieldName();
+                            sal_Int32 nIndex = sFieldname.indexOf(':');
 
-                            if (nIndex != sFieldname.Len())
-                                sFieldname = sFieldname.Copy(nIndex + 1);
+                            if (nIndex != sFieldname.getLength())
+                                sFieldname = sFieldname.copy(nIndex + 1);
 
                             sStr = sQuotes + sFieldname + sQuotes;
                         }
@@ -2928,8 +2928,8 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         break;
     case RES_HIDDENTXTFLD:
         {
-            String sExpand(pFld->GetPar2());
-            if (sExpand.Len())
+            OUString sExpand(pFld->GetPar2());
+            if (!sExpand.isEmpty())
             {
                 HiddenField( *pFld );
             }
@@ -3196,7 +3196,7 @@ void AttributeOutputBase::TextFootnote( const SwFmtFtn& rFtn )
 
     // if any reference to this footnote/endnote then insert an internal
     // Bookmark.
-    String sBkmkNm;
+    OUString sBkmkNm;
     if ( GetExport().HasRefToObject( nTyp, 0, rFtn.GetTxtFtn()->GetSeqRefNo() ))
     {
         sBkmkNm = GetExport().GetBookmarkName( nTyp, 0,
@@ -3206,7 +3206,7 @@ void AttributeOutputBase::TextFootnote( const SwFmtFtn& rFtn )
 
     TextFootnote_Impl( rFtn );
 
-    if ( sBkmkNm.Len() )
+    if ( !sBkmkNm.isEmpty() )
         GetExport().AppendBookmark( sBkmkNm ); // FIXME: Why is it added twice?  Shouldn't this one go to WW8AttributeOuput::TextFootnote_Impl()?
 }
 

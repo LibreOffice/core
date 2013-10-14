@@ -763,7 +763,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
                                                      sal_False, &pPoolItem );
             if( SFX_ITEM_DEFAULT == eState )
-                aSet.Put( XFillColorItem( String(),
+                aSet.Put( XFillColorItem( OUString(),
                           Color( mnDefaultColor ) ) );
             pObj->SetMergedItemSet(aSet);
         }
@@ -1019,7 +1019,7 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     const SfxPoolItem *pItem = GetStackAttr(rPos, RES_FLTR_NUMRULE);
     if (pItem && rTxtNode.GetNumRule())
     {
-        String sName(((SfxStringItem*)pItem)->GetValue());
+        OUString sName(((SfxStringItem*)pItem)->GetValue());
         if (rTxtNode.IsCountedInList())
         {
             const SwNumRule *pRule = pDoc->FindNumRulePtr(sName);
@@ -1804,7 +1804,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         if (pA)
             sAuthor = *pA;
         else
-            sAuthor = String(pDescri->xstUsrInitl + 1, pDescri->xstUsrInitl[0],
+            sAuthor = OUString(pDescri->xstUsrInitl + 1, pDescri->xstUsrInitl[0],
                 RTL_TEXTENCODING_MS_1252);
     }
     else
@@ -2716,9 +2716,9 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
                     sal_Char aTest[2];
                     aTest[0] = static_cast< sal_Char >((nUCode & 0xFF00) >> 8);
                     aTest[1] = static_cast< sal_Char >(nUCode & 0x00FF);
-                    String aTemp(aTest, 2, eSrcCJKCharSet);
-                    OSL_ENSURE(aTemp.Len() == 1, "so much for that theory");
-                    *pWork = aTemp.GetChar(0);
+                    OUString aTemp(aTest, 2, eSrcCJKCharSet);
+                    OSL_ENSURE(aTemp.getLength() == 1, "so much for that theory");
+                    *pWork = aTemp[0];
                 }
                 else
                 {
@@ -3007,11 +3007,11 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const OUString& rAddString)
 
         if (pNd->GetTxt().getLength() < STRING_MAXLEN -1)
         {
-            String sTempStr (rAddString,0,
+            OUString sTempStr = rAddString.copy( 0,
                 STRING_MAXLEN - pNd->GetTxt().getLength() -1);
             rDoc.InsertString(*pPaM, sTempStr);
-            sTempStr = rAddString.copy(sTempStr.Len(),
-                rAddString.getLength() - sTempStr.Len());
+            sTempStr = rAddString.copy(sTempStr.getLength(),
+                rAddString.getLength() - sTempStr.getLength());
             AppendTxtNode(*pPaM->GetPoint());
             rDoc.InsertString(*pPaM, sTempStr);
         }
@@ -4288,10 +4288,10 @@ void SwWW8ImplReader::ReadDocInfo()
 #if OSL_DEBUG_LEVEL > 1
                 aSttb.Print( stderr );
 #endif
-                String sPath = aSttb.getStringAtIndex( 0x1 );
+                OUString sPath = aSttb.getStringAtIndex( 0x1 );
                 OUString aURL;
                 // attempt to convert to url (won't work for obvious reasons on linux)
-                if ( sPath.Len() )
+                if ( !sPath.isEmpty() )
                     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPath, aURL );
                 if (aURL.isEmpty())
                     xDocProps->setTemplateURL( aURL );
@@ -4380,7 +4380,7 @@ bool WW8Customizations::Import( SwDocShell* pShell )
 bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const uno::Reference< container::XNameContainer >& xPrjNameCache )
 {
     SvtPathOptions aPathOpt;
-    String aAddinPath = aPathOpt.GetAddinPath();
+    OUString aAddinPath = aPathOpt.GetAddinPath();
     uno::Sequence< OUString > sGlobalTemplates;
 
     // first get the autoload addins in the directory STARTUP
@@ -4998,9 +4998,9 @@ namespace
     }
 
     // moan, copy and paste :-(
-    String QueryPasswordForMedium(SfxMedium& rMedium)
+    OUString QueryPasswordForMedium(SfxMedium& rMedium)
     {
-        String aPassw;
+        OUString aPassw;
 
         using namespace com::sun::star;
 
@@ -5044,7 +5044,7 @@ namespace
 
         if ( !aEncryptionData.getLength() )
         {
-            String sUniPassword = QueryPasswordForMedium( rMedium );
+            OUString sUniPassword = QueryPasswordForMedium( rMedium );
 
             OString sPassword(OUStringToOString(sUniPassword,
                 WW8Fib::GetFIBCharset(pWwFib->chseTables)));
@@ -5080,7 +5080,7 @@ namespace
                 sal_uInt16 pStd97Pass[16];
                 memset( pStd97Pass, 0, sizeof( pStd97Pass ) );
                 for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
-                    pStd97Pass[nChar] = sUniPassword.GetChar(nChar);
+                    pStd97Pass[nChar] = sUniPassword[nChar];
 
                 aCodec97.InitKey( pStd97Pass, pDocId );
 
@@ -5103,15 +5103,15 @@ namespace
 
         if ( !aEncryptionData.getLength() )
         {
-            String sUniPassword = QueryPasswordForMedium( rMedium );
+            OUString sUniPassword = QueryPasswordForMedium( rMedium );
 
-            xub_StrLen nLen = sUniPassword.Len();
+            xub_StrLen nLen = sUniPassword.getLength();
             if ( nLen <= 15 )
             {
                 sal_Unicode pPassword[16];
                 memset( pPassword, 0, sizeof( pPassword ) );
                 for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
-                    pPassword[nChar] = sUniPassword.GetChar(nChar);
+                    pPassword[nChar] = sUniPassword[nChar];
 
                 rCodec.InitKey( pPassword, pDocId );
                 aEncryptionData = rCodec.GetEncryptionData();

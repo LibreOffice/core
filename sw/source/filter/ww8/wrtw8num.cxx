@@ -411,7 +411,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     // now search the nums in the string
                     for( sal_uInt8 i = 0; i <= nLvl; ++i )
                     {
-                        String sSrch( OUString::number( i ));
+                        OUString sSrch( OUString::number( i ));
                         sal_Int32 nFnd = sNumStr.indexOf( sSrch );
                         if( -1 != nFnd )
                         {
@@ -539,12 +539,12 @@ void WW8Export::OutListNamesTab()
     for( ; nNms < nCount; ++nNms )
     {
         const SwNumRule& rRule = *(*pUsedNumTbl)[ nNms ];
-        String sNm;
+        OUString sNm;
         if( !rRule.IsAutoRule() )
             sNm = rRule.GetName();
 
-        SwWW8Writer::WriteShort( *pTableStrm, sNm.Len() );
-        if (sNm.Len())
+        SwWW8Writer::WriteShort( *pTableStrm, sNm.getLength() );
+        if (!sNm.isEmpty())
             SwWW8Writer::WriteString16(*pTableStrm, sNm, false);
     }
 
@@ -709,7 +709,7 @@ void MSWordExportBase::SubstituteBullet( OUString& rNumStr,
     rFontName = sFontName;
 }
 
-static void SwWw8_InsertAnlText( const String& rStr, sal_uInt8*& rpCh,
+static void SwWw8_InsertAnlText( const OUString& rStr, sal_uInt8*& rpCh,
                                  sal_uInt16& rCharLen, SVBT8& r8Len )
 {
     sal_uInt8 nb = 0;

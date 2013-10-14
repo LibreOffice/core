@@ -136,28 +136,28 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
     return FLD_OK;
     } else {
     WW8PLCFx_Book* pB = pPlcxMan->GetBook();
-    String aBookmarkName;
+    OUString aBookmarkName;
     if (pB!=NULL) {
         WW8_CP currentCP=pF->nSCode;
         WW8_CP currentLen=pF->nLen;
 
         sal_uInt16 bkmFindIdx;
-        String aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
+        OUString aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
 
-        if (aBookmarkFind.Len()>0) {
+        if (!aBookmarkFind.isEmpty()) {
             pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark bookmark as consumed, such that tl'll not get inserted as a "normal" bookmark again
-            if (aBookmarkFind.Len()>0) {
+            if (!aBookmarkFind.isEmpty()) {
                 aBookmarkName=aBookmarkFind;
             }
         }
     }
 
-    if (pB!=NULL && aBookmarkName.Len()==0) {
+    if (pB!=NULL && aBookmarkName.isEmpty()) {
         aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
     }
 
 
-    if (aBookmarkName.Len()>0) {
+    if (!aBookmarkName.isEmpty()) {
         maFieldStack.back().SetBookmarkName(aBookmarkName);
         maFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
         maFieldStack.back().getParameters()["Description"] = uno::makeAny(OUString(aFormula.sToolTip));
@@ -185,28 +185,28 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
         return FLD_OK;
     }
 
-    String aBookmarkName;
+    OUString aBookmarkName;
     WW8PLCFx_Book* pB = pPlcxMan->GetBook();
     if (pB!=NULL) {
         WW8_CP currentCP=pF->nSCode;
         WW8_CP currentLen=pF->nLen;
 
         sal_uInt16 bkmFindIdx;
-        String aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
+        OUString aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
 
-        if (aBookmarkFind.Len()>0) {
+        if (!aBookmarkFind.isEmpty()) {
             pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark as consumed by field
-            if (aBookmarkFind.Len()>0) {
+            if (!aBookmarkFind.isEmpty()) {
                 aBookmarkName=aBookmarkFind;
             }
         }
     }
 
-    if (pB!=NULL && aBookmarkName.Len()==0) {
+    if (pB!=NULL && aBookmarkName.isEmpty()) {
         aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
     }
 
-    if (aBookmarkName.Len()>0)
+    if (!aBookmarkName.isEmpty())
     {
         IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
         IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
@@ -257,7 +257,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
     else
     {
         // TODO: review me
-        String aBookmarkName;
+        OUString aBookmarkName;
         WW8PLCFx_Book* pB = pPlcxMan->GetBook();
         if (pB!=NULL)
         {
@@ -265,20 +265,20 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
             WW8_CP currentLen=pF->nLen;
 
             sal_uInt16 bkmFindIdx;
-            String aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
+            OUString aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
 
-            if (aBookmarkFind.Len()>0)
+            if (!aBookmarkFind.isEmpty())
             {
                 pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark as consumed by field
-                if (aBookmarkFind.Len()>0)
+                if (!aBookmarkFind.isEmpty())
                     aBookmarkName=aBookmarkFind;
             }
         }
 
-        if (pB!=NULL && aBookmarkName.Len()==0)
+        if (pB!=NULL && aBookmarkName.isEmpty())
             aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
 
-        if (aBookmarkName.Len()>0)
+        if (!aBookmarkName.isEmpty())
         {
             IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>(
@@ -485,16 +485,16 @@ WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
     return *aResult;
 }
 
-static void lcl_CopyGreaterEight(String &rDest, String &rSrc,
+static void lcl_CopyGreaterEight(OUString &rDest, OUString &rSrc,
     xub_StrLen nStart, xub_StrLen nLen = STRING_LEN)
 {
-    if (nLen > rSrc.Len() || nLen == STRING_LEN)
-        nLen = rSrc.Len();
+    if (nLen > rSrc.getLength() || nLen == STRING_LEN)
+        nLen = rSrc.getLength();
     for (xub_StrLen nI = nStart; nI < nLen; ++nI)
     {
-        sal_Unicode nChar = rSrc.GetChar(nI);
+        sal_Unicode nChar = rSrc[nI];
         if (nChar > WW8ListManager::nMaxLevel)
-            rDest.Append(nChar);
+            rDest += OUString(nChar);
     }
 }
 
@@ -511,8 +511,8 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
     sal_Unicode     cGrfBulletCP(USHRT_MAX);
 
-    String          sPrefix;
-    String          sPostfix;
+    OUString        sPrefix;
+    OUString        sPostfix;
     WW8LVL          aLVL;
     //
     // 1. LVLF einlesen
@@ -709,7 +709,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     //
     // 4. den Nummerierungsstring einlesen: ergibt Prefix und Postfix
     //
-    String sNumString(read_uInt16_PascalString(rSt));
+    OUString sNumString(read_uInt16_PascalString(rSt));
 
     //
     // 5. gelesene Werte in Writer Syntax umwandeln
@@ -777,7 +777,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     for(nLevelB = 0; nLevelB <= nLevel; ++nLevelB)
     {
         sal_uInt8 nPos = aOfsNumsXCH[nLevelB];
-        if (nPos && nPos < sNumString.Len()  && sNumString.GetChar(nPos-1) < nMaxLevel)
+        if (nPos && nPos < sNumString.getLength()  && sNumString[nPos-1] < nMaxLevel)
         {
             if (rNotReallyThere[nLevelB])
                 aOfsNumsXCH[nLevelB] = 0;
@@ -815,7 +815,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
     if (SVX_NUM_CHAR_SPECIAL == eType)
     {
-        cBullet = sNumString.Len() ? sNumString.GetChar(0) : 0x2190;
+        cBullet = !sNumString.isEmpty() ? sNumString[0] : 0x2190;
 
         if (!cBullet)  // unsave control code?
             cBullet = 0x2190;
@@ -847,7 +847,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
                 nOneBasedNextNoIndex > 0 ? nOneBasedNextNoIndex -1 : STRING_LEN;
             if (nNextNoIndex != STRING_LEN)
                 ++nNextNoIndex;
-            if (sNumString.Len() > nNextNoIndex)
+            if (sNumString.getLength() > nNextNoIndex)
                 lcl_CopyGreaterEight(sPostfix, sNumString, nNextNoIndex);
         }
 
@@ -902,7 +902,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     else
     {
         // reminder: Garnix ist default Prefix
-        if( sPrefix.Len() )
+        if( !sPrefix.isEmpty() )
             rNumFmt.SetPrefix( sPrefix );
         // reminder: Point is default Postfix
         rNumFmt.SetSuffix( sPostfix );
@@ -2261,7 +2261,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         maListEntries.reserve(nNoStrings);
         for (sal_uInt32 nI = 0; nI < nNoStrings; ++nI)
         {
-            String sEntry =  read_uInt16_PascalString(*pDataStream);
+            OUString sEntry =  read_uInt16_PascalString(*pDataStream);
             maListEntries.push_back(sEntry);
         }
     }
@@ -2321,7 +2321,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
         {
         case RES_CHRATR_COLOR:
             {
-                String pNm;
+                OUString pNm;
                 if (xPropSetInfo->hasPropertyByName(pNm = "TextColor"))
                 {
                     aTmp <<= (sal_Int32)((SvxColorItem*)pItem)->GetValue().GetColor();
@@ -2333,7 +2333,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
         case RES_CHRATR_FONT:
             {
                 const SvxFontItem *pFontItem = (SvxFontItem *)pItem;
-                String pNm;
+                OUString pNm;
                 if (xPropSetInfo->hasPropertyByName(pNm = "FontStyleName"))
                 {
                     aTmp <<= OUString( pFontItem->GetStyleName());

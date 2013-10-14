@@ -184,9 +184,9 @@ private:
     struct BookmarkInfo {
         sal_uLong  startPos; //!< Starting character position.
         sal_uLong  endPos;   //!< Ending character position.
-        bool   isField;  //!< True if the bookmark is in a field result.
-        String name;     //!< Name of this bookmark.
-        inline BookmarkInfo(sal_uLong start, sal_uLong end, bool isFld, const String& bkName) : startPos(start), endPos(end), isField(isFld), name(bkName) {};
+        bool       isField;  //!< True if the bookmark is in a field result.
+        OUString    name;    //!< Name of this bookmark.
+        inline BookmarkInfo(sal_uLong start, sal_uLong end, bool isFld, const OUString& bkName) : startPos(start), endPos(end), isField(isFld), name(bkName) {};
         //! Operator < is defined purely for sorting.
         inline bool operator<(const BookmarkInfo &other) const { return startPos < other.startPos; }
     };
@@ -194,7 +194,7 @@ private:
     typedef std::vector<BookmarkInfo>::iterator BkmIter;
 
     //! Return the position in aBookmarks where the string rNm can be found.
-    BkmIter GetPos( const String& rNm );
+    BkmIter GetPos( const OUString& rNm );
 
     //No copying
     WW8_WrtBookmarks(const WW8_WrtBookmarks&);
@@ -204,7 +204,7 @@ public:
     ~WW8_WrtBookmarks();
 
     //! Add a new bookmark to the list OR add an end position to an existing bookmark.
-    void Append( WW8_CP nStartCp, const String& rNm, const ::sw::mark::IMark* pBkmk=NULL );
+    void Append( WW8_CP nStartCp, const OUString& rNm, const ::sw::mark::IMark* pBkmk=NULL );
     //! Write out bookmarks to file.
     void Write( WW8Export& rWrt );
     //! Move existing field marks from one position to another.
@@ -1247,7 +1247,7 @@ WW8_WrtBookmarks::~WW8_WrtBookmarks()
 {
 }
 
-void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm,  const ::sw::mark::IMark* )
+void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm,  const ::sw::mark::IMark* )
 {
     BkmIter bkIter = GetPos( rNm );
     if( bkIter == aBookmarks.end() )
@@ -1328,7 +1328,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt )
     }
 }
 
-WW8_WrtBookmarks::BkmIter WW8_WrtBookmarks::GetPos( const String& rNm )
+WW8_WrtBookmarks::BkmIter WW8_WrtBookmarks::GetPos( const OUString& rNm )
 {
     for (BkmIter bIt = aBookmarks.begin(); bIt < aBookmarks.end(); ++bIt) {
         if (rNm == bIt->name)
@@ -1586,8 +1586,8 @@ void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
             SwWW8Writer::WriteLong( rStrm, nCount );
             for( n = 0; n < nCount; ++n )
             {
-                const String& rNm = rStrings[n];
-                SwWW8Writer::WriteShort( rStrm, rNm.Len() );
+                const OUString& rNm = rStrings[n];
+                SwWW8Writer::WriteShort( rStrm, rNm.getLength() );
                 SwWW8Writer::WriteString16(rStrm, rNm, false);
                 if( nExtraLen )
                     SwWW8Writer::FillCount(rStrm, nExtraLen);
@@ -1599,8 +1599,8 @@ void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
             for( n = 0; n < nCount; ++n )
             {
                 const OUString &rString = rStrings[n];
-                const String aNm(rString.copy(0, std::min<sal_Int32>(rString.getLength(), 255)));
-                rStrm << (sal_uInt8)aNm.Len();
+                const OUString aNm(rString.copy(0, std::min<sal_Int32>(rString.getLength(), 255)));
+                rStrm << (sal_uInt8)aNm.getLength();
                 SwWW8Writer::WriteString8(rStrm, aNm, false,
                     RTL_TEXTENCODING_MS_1252);
                 if (nExtraLen)
@@ -1770,7 +1770,7 @@ void WW8Export::OutSwString(const OUString& rStr, xub_StrLen nStt,
 
         if( nStt || nLen != rStr.getLength() )
         {
-            String sOut( rStr.copy( nStt, nLen ) );
+            OUString sOut( rStr.copy( nStt, nLen ) );
 
             SAL_INFO( "sw.ww8.level2", sOut );
 
@@ -2869,7 +2869,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     if( sCmp == "outline" )
     {
         SwPosition aPos( *pCurPam->GetPoint() );
-        String aOutline( BookmarkToWriter(aURL.copy( 0, nPos )) );
+        OUString aOutline( BookmarkToWriter(aURL.copy( 0, nPos )) );
         // If we can find the outline this bookmark refers to
         // save the name of the bookmark and the
         // node index number of where it points to
@@ -3465,13 +3465,13 @@ SwWW8Writer::~SwWW8Writer()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_uLong SAL_CALL SaveOrDelMSVBAStorage_ww8( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const String& rStorageName )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_uLong SAL_CALL SaveOrDelMSVBAStorage_ww8( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const OUString& rStorageName )
 {
     SvxImportMSVBasic aTmp( rDoc, rStor );
     return aTmp.SaveOrDelMSVBAStorage( bSaveInto, rStorageName );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportDOC( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportDOC( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwWW8Writer( rFltName, rBaseURL );
 }
@@ -3734,11 +3734,11 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         *pDataStrm << sal_uInt16(0);
 
 
-    SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffformat ), true );
-    SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffhelptext ), true );
-    SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffstattext ), true );
-    SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffentrymcr ), true );
-    SwWW8Writer::WriteString_xstz( *pDataStrm, String( ffexitmcr ), true );
+    SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffformat ), true );
+    SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffhelptext ), true );
+    SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffstattext ), true );
+    SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffentrymcr ), true );
+    SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffexitmcr ), true );
     if (type==2) {
         *pDataStrm<<(sal_uInt16)0xFFFF;
         const int items=aListItems.size();

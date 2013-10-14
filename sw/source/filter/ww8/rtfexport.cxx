@@ -1165,17 +1165,17 @@ class SwRTFWriter : public Writer
         bool m_bOutOutlineOnly;
 
     public:
-        SwRTFWriter( const String& rFilterName, const String& rBaseURL );
+        SwRTFWriter( const OUString& rFilterName, const OUString& rBaseURL );
         virtual ~SwRTFWriter();
                virtual sal_uLong WriteStream();
 };
 
-SwRTFWriter::SwRTFWriter( const String& rFltName, const String & rBaseURL )
+SwRTFWriter::SwRTFWriter( const OUString& rFltName, const OUString & rBaseURL )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     SetBaseURL( rBaseURL );
     // export outline nodes, only (send outline to clipboard/presentation)
-    m_bOutOutlineOnly = 'O' == rFltName.GetChar( 0 );
+    m_bOutOutlineOnly = 'O' == rFltName[0];
 }
 
 SwRTFWriter::~SwRTFWriter()
@@ -1190,7 +1190,7 @@ sal_uLong SwRTFWriter::WriteStream()
     return 0;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
     xRet = new SwRTFWriter( rFltName, rBaseURL );

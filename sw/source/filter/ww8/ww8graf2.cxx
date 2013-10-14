@@ -246,7 +246,7 @@ bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
         GRFILTER_FORMAT_DONTKNOW);
 }
 
-bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
+bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, Graphic*& rpGraphic,
     const WW8_PIC& rPic, SvStream* pSt, sal_uLong nFilePos, bool* pbInDoc)
 {                                                  // Grafik in File schreiben
     *pbInDoc = true;                               // default
@@ -260,12 +260,12 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
             pSt->Seek(nPosFc);
             // Name als P-String einlesen
             rFileName = read_uInt8_PascalString(*pSt, eStructCharSet);
-            if (rFileName.Len())
+            if (!rFileName.isEmpty())
                 rFileName = URIHelper::SmartRel2Abs(
                     INetURLObject(sBaseURL), rFileName,
                     URIHelper::GetMaybeFileHdl());
             *pbInDoc = false;       // Datei anschliessend nicht loeschen
-            return rFileName.Len() != 0;        // Einlesen OK
+            return !rFileName.isEmpty();        // Einlesen OK
     }
 
     GDIMetaFile aWMF;
@@ -415,7 +415,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
     if( pSt->IsEof() || rPic.fError || rPic.MFP.mm == 99 )
         return 0;
 
-    String aFileName;
+    OUString aFileName;
     bool bInDoc;
     Graphic* pGraph = 0;
     bool bOk = ReadGrafFile(aFileName, pGraph, rPic, pSt, nFilePos, &bInDoc);

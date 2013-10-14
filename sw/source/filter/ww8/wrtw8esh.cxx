@@ -373,7 +373,7 @@ void WW8Export::DoFormText(const SwInputField * pFld)
 
     OutputField(0, ww::eFORMTEXT, aEmptyStr, WRITEFIELD_CMD_END);
 
-    String const fieldStr( pFld->ExpandField(true) );
+    OUString const fieldStr( pFld->ExpandField(true) );
     SwWW8Writer::WriteString16(Strm(), fieldStr, false);
 
     static sal_uInt8 aArr2[] = {
@@ -943,7 +943,7 @@ void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
         const SvxURLField *pURL = (const SvxURLField *)pFld;
         m_rExport.AttrOutput().StartURL( pURL->GetURL(), pURL->GetTargetFrame() );
 
-        const String &rStr = pURL->GetRepresentation();
+        const OUString &rStr = pURL->GetRepresentation();
         m_rExport.AttrOutput().RawText( rStr, true, GetNodeCharSet() ); // FIXME kendy: is the 'true' actually correct here?  It was here before, but... ;-)
 
         m_rExport.AttrOutput().EndURL();
@@ -1144,9 +1144,9 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
 
         OSL_ENSURE( pO->empty(), " pO ist am Zeilenanfang nicht leer" );
 
-        String aStr( rEditObj.GetText( n ));
+        OUString aStr( rEditObj.GetText( n ));
         xub_StrLen nAktPos = 0;
-        xub_StrLen nEnd = aStr.Len();
+        xub_StrLen nEnd = aStr.getLength();
         do {
             xub_StrLen nNextAttr = aAttrIter.WhereNext();
             rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
@@ -2994,8 +2994,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     sal_uInt8 *pData = aSpecOLE+2;
     Set_UInt32(pData,nObjId );
 
-    OUString sFld(FieldString(ww::eCONTROL));
-    sFld += "Forms." + sUName + ".1 \\s ";
+    OUString sFld = FieldString(ww::eCONTROL) + "Forms." + sUName + ".1 \\s ";
 
     rWW8Wrt.OutputField(0, ww::eCONTROL, sFld,
         WRITEFIELD_START|WRITEFIELD_CMD_START|WRITEFIELD_CMD_END);

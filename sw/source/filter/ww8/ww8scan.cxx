@@ -1888,16 +1888,16 @@ Err:
     return false;
 }
 
-String read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
+OUString read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
     OUString aRet = read_lenPrefixed_uInt8s_ToOUString<sal_uInt8>(rStrm, eEnc);
     rStrm.SeekRel(sizeof(sal_uInt8)); // skip null-byte at end
     return aRet;
 }
 
-String read_uInt16_BeltAndBracesString(SvStream& rStrm)
+OUString read_uInt16_BeltAndBracesString(SvStream& rStrm)
 {
-    String aRet = read_uInt16_PascalString(rStrm);
+    OUString aRet = read_uInt16_PascalString(rStrm);
     rStrm.SeekRel(sizeof(sal_Unicode)); // skip null-byte at end
     return aRet;
 }
@@ -6270,7 +6270,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
 
-                p->sFontname = String ( (((const sal_Char*)pVer2) + 1 + 2), eEnc);
+                p->sFontname = OUString ( (((const sal_Char*)pVer2) + 1 + 2), strlen((((const sal_Char*)pVer2) + 1 + 2)), eEnc);
                 pVer2 = (WW8_FFN_BASE*)( ((sal_uInt8*)pVer2) + pVer2->cbFfnM1 + 1 );
             }
         }

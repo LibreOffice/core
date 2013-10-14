@@ -539,9 +539,9 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
 
         rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
 
-        String aStr( rEditObj.GetText( n ));
+        OUString aStr( rEditObj.GetText( n ));
         xub_StrLen nAktPos = 0;
-        xub_StrLen nEnd = aStr.Len();
+        xub_StrLen nEnd = aStr.getLength();
 
         aAttrIter.OutParaAttr(false);
         m_rAttrOutput.RunText().append(m_rAttrOutput.Styles().makeStringAndClear());
@@ -558,7 +558,7 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
             bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
             if( !bTxtAtr )
             {
-                String aOut( aStr.Copy( nAktPos, nNextAttr - nAktPos ) );
+                OUString aOut( aStr.copy( nAktPos, nNextAttr - nAktPos ) );
                 m_rAttrOutput.RunText().append( msfilter::rtfutil::OutString( aOut, eChrSet ) );
             }
 

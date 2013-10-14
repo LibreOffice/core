@@ -466,8 +466,8 @@ bool RtfAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarget
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FLDINST);
     m_aStyles.append(" HYPERLINK ");
 
-    String sURL( rUrl );
-    if( sURL.Len() )
+    OUString sURL( rUrl );
+    if( !sURL.isEmpty() )
     {
         m_aStyles.append("\"");
         m_aStyles.append(msfilter::rtfutil::OutString( sURL, m_rExport.eCurrentEncoding));
@@ -2606,13 +2606,13 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
             m_aStyles.append(*pString);
 
         {
-            String sTxt;
+            OUString sTxt;
             if( SVX_NUM_CHAR_SPECIAL == pFmt->GetNumberingType() || SVX_NUM_BITMAP == pFmt->GetNumberingType() )
-                sTxt = pFmt->GetBulletChar();
+                sTxt = OUString(pFmt->GetBulletChar());
             else
                 sTxt = pTxtNd->GetNumString();
 
-            if (sTxt.Len())
+            if (!sTxt.isEmpty())
             {
                 m_aStyles.append(' ');
                 m_aStyles.append(msfilter::rtfutil::OutString(sTxt, m_rExport.eDefaultEncoding));
@@ -2620,7 +2620,7 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
 
             if( OUTLINE_RULE != pRule->GetRuleType() )
             {
-                if (sTxt.Len())
+                if (!sTxt.isEmpty())
                     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB);
                 m_aStyles.append('}');
                 m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ILVL);
@@ -3129,7 +3129,7 @@ void RtfAttributeOutput::ParaOutlineLevel(const SfxUInt16Item& /*rItem*/)
 void RtfAttributeOutput::WriteExpand( const SwField* pFld )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-    String sCmd;        // for optional Parameters
+    OUString sCmd;        // for optional Parameters
     switch (pFld->GetTyp()->Which())
     {
         //#i119803# Export user field and DB field for RTF filter
@@ -3430,12 +3430,12 @@ static OString ExportPICT( const SwFlyFrmFmt* pFlyFrmFmt, const Size &rOrig, con
 
         if( pFlyFrmFmt )
         {
-            String sDescription = pFlyFrmFmt->GetObjDescription();
+            OUString sDescription = pFlyFrmFmt->GetObjDescription();
             //write picture properties - wzDescription at first
             //looks like: "{\*\picprop{\sp{\sn PropertyName}{\sv PropertyValue}}}"
             aRet.append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_PICPROP );//"{\*\picprop
             lcl_AppendSP( aRet, "wzDescription", sDescription, rExport );
-            String sName = pFlyFrmFmt->GetObjTitle();
+            OUString sName = pFlyFrmFmt->GetObjTitle();
             lcl_AppendSP( aRet, "wzName", sName, rExport );
             aRet.append( "}" ); //"}"
         }

@@ -673,8 +673,8 @@ extern "C" {
     Reader *ImportRTF();
     void ExportRTF( const String&, const String& rBaseURL, WriterRef& );
     Reader *ImportDOC();
-    void ExportDOC( const String&, const String& rBaseURL, WriterRef& );
-    sal_uLong SaveOrDelMSVBAStorage_ww8( SfxObjectShell&, SotStorage&, sal_Bool, const String& );
+    void ExportDOC( const OUString&, const OUString& rBaseURL, WriterRef& );
+    sal_uLong SaveOrDelMSVBAStorage_ww8( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
     sal_uLong GetSaveWarningOfMSVBAStorage_ww8( SfxObjectShell& );
 }
 

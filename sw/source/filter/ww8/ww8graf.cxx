@@ -561,11 +561,11 @@ static void lcl_StripFields(OUString &rString, long &rNewStartCp)
 class Chunk
 {
 private:
-    String msURL;
+    OUString msURL;
     long mnStartPos; //0x13
     long mnEndPos;   //0x15
 public:
-    explicit Chunk(long nStart, const String &rURL)
+    explicit Chunk(long nStart, const OUString &rURL)
         : msURL(rURL), mnStartPos(nStart), mnEndPos(0)  {}
     Chunk(const Chunk &rChunk)
         : msURL(rChunk.msURL), mnStartPos(rChunk.mnStartPos),
@@ -580,7 +580,7 @@ public:
     void SetEndPos(long nEnd) { mnEndPos = nEnd; }
     long GetStartPos() const {return mnStartPos;}
     long GetEndPos() const {return mnEndPos;}
-    const String &GetURL() const {return msURL;}
+    const OUString &GetURL() const {return msURL;}
     void Adjust(sal_Int32 nAdjust)
     {
         mnStartPos-=nAdjust;
@@ -677,7 +677,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
                     size_t nCount = pCtrlStck->size();
                     if (maFieldStack.empty() && Read_Field(&aRes))
                     {
-                        String sURL;
+                        OUString sURL;
                         for (size_t nI = pCtrlStck->size(); nI > nCount; --nI)
                         {
                             const SfxPoolItem *pItem = ((*pCtrlStck)[nI-1]).pAttr;
@@ -768,7 +768,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
         lcl_StripFields(aString, nDummy);
 
         sal_Int32 nChanged;
-        if (aIter->GetURL().Len())
+        if (!aIter->GetURL().isEmpty())
         {
             SvxURLField aURL(aIter->GetURL(), aString,
                 SVXURLFORMAT_APPDEFAULT);
@@ -2583,7 +2583,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if ( bMoveToBackgrd )
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
 
-    String aObjName = pObject->GetName();
+    OUString aObjName = pObject->GetName();
 
     SwFrmFmt* pRetFrmFmt = 0;
     if (bReplaceable)
@@ -2666,7 +2666,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         MapWrapIntoFlyFmt(pRecord, pRetFrmFmt);
 
     // Set frame name with object name
-    if( pRetFrmFmt /*#i52825# */ && aObjName.Len() )
+    if( pRetFrmFmt /*#i52825# */ && !aObjName.isEmpty() )
         pRetFrmFmt->SetName( aObjName );
     return AddAutoAnchor(pRetFrmFmt);
 }
@@ -2935,7 +2935,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         MatchEscherMirrorIntoFlySet(*pRecord, aGrSet);
     }
 
-    String aObjectName(rpObject->GetName());
+    OUString aObjectName(rpObject->GetName());
     if (OBJ_OLE2 == SdrObjKind(rpObject->GetObjIdentifier()))
         pRetFrmFmt = InsertOle(*((SdrOle2Obj*)rpObject), rFlySet, aGrSet);
     else
@@ -2945,7 +2945,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         if (pGrf->IsLinkedGraphic() && !pGrf->GetFileName().isEmpty())
         {
             GraphicType eType = pGrf->GetGraphicType();
-            String aGrfName(
+            OUString aGrfName(
                 URIHelper::SmartRel2Abs(
                     INetURLObject(sBaseURL), pGrf->GetFileName(),
                     URIHelper::GetMaybeFileHdl()));

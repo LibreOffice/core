@@ -1405,7 +1405,7 @@ private:
     bool ProcessSpecial(bool &rbReSync, WW8_CP nStartCp);
     sal_uInt16 TabRowSprm(int nLevel) const;
 
-    bool ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
+    bool ReadGrafFile(OUString& rFileName, Graphic*& rpGraphic,
        const WW8_PIC& rPic, SvStream* pSt, sal_uLong nFilePos, bool* pDelIt);
 
     void ReplaceObj(const SdrObject &rReplaceTextObj,

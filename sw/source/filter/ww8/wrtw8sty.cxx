@@ -2366,11 +2366,11 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 OSL_ENSURE(aIter != aStrArr.end() && *aIter == rAtn.msOwner,
                         "Impossible");
                 sal_uInt16 nFndPos = static_cast< sal_uInt16 >(aIter - aStrArr.begin());
-                String sAuthor(*aIter);
-                sal_uInt8 nNameLen = (sal_uInt8)sAuthor.Len();
+                OUString sAuthor(*aIter);
+                sal_uInt8 nNameLen = (sal_uInt8)sAuthor.getLength();
                 if ( nNameLen > 9 )
                 {
-                    sAuthor.Erase( 9 );
+                    sAuthor = sAuthor.copy( 0, 9 );
                     nNameLen = 9;
                 }
 

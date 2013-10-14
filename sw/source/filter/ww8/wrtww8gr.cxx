@@ -281,9 +281,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 
                 // write as embedded field - the other things will be done
                 // in the escher export
-                String sServer(FieldString(ww::eEMBED));
-                sServer += xOleStg->GetUserName();
-                sServer += ' ';
+                OUString sServer = FieldString(ww::eEMBED) + xOleStg->GetUserName() + " ";
 
                 OutputField(0, ww::eEMBED, sServer, WRITEFIELD_START |
                     WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
@@ -509,7 +507,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     // linked, as-character anchored graphics have to be exported as fields.
     else if ( pGrfNd && pGrfNd->IsLinkedFile() )
     {
-        OutputField( 0, ww::eINCLUDEPICTURE, String(), WRITEFIELD_CLOSE );
+        OutputField( 0, ww::eINCLUDEPICTURE, OUString(), WRITEFIELD_CLOSE );
     }
     //Added for i120568,the hyperlink info within a graphic whose anchor type is
     //"As character" will be exported to ensure the fidelity

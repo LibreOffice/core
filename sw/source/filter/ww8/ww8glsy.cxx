@@ -84,7 +84,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 {
     // this code will be called after reading all text into the
     // empty sections
-    const String aOldURL( rBlocks.GetBaseURL() );
+    const OUString aOldURL( rBlocks.GetBaseURL() );
     bool bRet=false;
     if( bSaveRelFile )
     {
@@ -149,16 +149,16 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                 rBlocks.ClearDoc();
                 const OUString &rLNm = rStrings[nGlosEntry];
 
-                String sShortcut = rLNm;
+                OUString sShortcut = rLNm;
 
                 // Need to check make sure the shortcut is not already being used
                 sal_Int32 nStart = 0;
                 sal_uInt16 nCurPos = rBlocks.GetIndex( sShortcut );
-                xub_StrLen nLen = sShortcut.Len();
+                xub_StrLen nLen = sShortcut.getLength();
                 while( (sal_uInt16)-1 != nCurPos )
                 {
-                    sShortcut.Erase( nLen ) +=
-                        OUString::number(++nStart);    // add an Number to it
+                    sShortcut = sShortcut.copy( 0, nLen );
+                    sShortcut += OUString::number(++nStart);    // add an Number to it
                     nCurPos = rBlocks.GetIndex( sShortcut );
                 }
 

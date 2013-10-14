@@ -868,9 +868,9 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
 
         AttrOutput().StartParagraph( ww8::WW8TableNodeInfo::Pointer_t());
         rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
-        String aStr( rEditObj.GetText( n ));
+        OUString aStr( rEditObj.GetText( n ));
         xub_StrLen nAktPos = 0;
-        xub_StrLen nEnd = aStr.Len();
+        xub_StrLen nEnd = aStr.getLength();
         do {
             AttrOutput().StartRun( NULL );
             xub_StrLen nNextAttr = aAttrIter.WhereNext();
@@ -882,11 +882,11 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
             bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
             if( !bTxtAtr )
             {
-                if( nAktPos == 0 && nNextAttr - nAktPos == aStr.Len())
+                if( nAktPos == 0 && nNextAttr - nAktPos == aStr.getLength())
                     AttrOutput().RunText( aStr, eChrSet );
                 else
                 {
-                    String tmp( aStr.Copy( nAktPos, nNextAttr - nAktPos ));
+                    OUString tmp( aStr.copy( nAktPos, nNextAttr - nAktPos ));
                     AttrOutput().RunText( tmp, eChrSet );
                 }
             }

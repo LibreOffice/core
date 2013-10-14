@@ -222,14 +222,14 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
     nAktSwPos = SearchNext(1);
 }
 
-xub_StrLen lcl_getMinPos( xub_StrLen pos1, xub_StrLen pos2 )
+sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
 {
-    xub_StrLen min = STRING_NOTFOUND;
-    if ( pos1 == STRING_NOTFOUND && pos2 != STRING_NOTFOUND )
+    xub_StrLen min = -1;
+    if ( pos1 == -1 && pos2 != -1 )
         min = pos2;
-    else if ( pos2 == STRING_NOTFOUND && pos1 != STRING_NOTFOUND )
+    else if ( pos2 == -1 && pos1 != -1 )
         min = pos1;
-    else if ( pos1 != STRING_NOTFOUND && pos2 != STRING_NOTFOUND )
+    else if ( pos1 != -1 && pos2 != -1 )
     {
         if ( pos1 < pos2 )
             min = pos1;
@@ -246,16 +246,16 @@ xub_StrLen SwWW8AttrIter::SearchNext( xub_StrLen nStartPos )
     xub_StrLen nMinPos = STRING_MAXLEN;
     xub_StrLen i=0;
 
-    const String aTxt = rNd.GetTxt();
-    xub_StrLen fieldEndPos = aTxt.Search(CH_TXT_ATR_FIELDEND, nStartPos);
-    xub_StrLen fieldStartPos = aTxt.Search(CH_TXT_ATR_FIELDSTART, nStartPos);
-    xub_StrLen formElementPos = aTxt.Search(CH_TXT_ATR_FORMELEMENT, nStartPos);
+    const OUString aTxt = rNd.GetTxt();
+    sal_Int32 fieldEndPos = aTxt.indexOf(CH_TXT_ATR_FIELDEND, nStartPos);
+    sal_Int32 fieldStartPos = aTxt.indexOf(CH_TXT_ATR_FIELDSTART, nStartPos);
+    sal_Int32 formElementPos = aTxt.indexOf(CH_TXT_ATR_FORMELEMENT, nStartPos);
 
-    xub_StrLen pos = lcl_getMinPos( fieldEndPos, fieldStartPos );
+    sal_Int32 pos = lcl_getMinPos( fieldEndPos, fieldStartPos );
     pos = lcl_getMinPos( pos, formElementPos );
 
-    if (pos!=STRING_NOTFOUND)
-        nMinPos=pos;
+    if (pos != -1)
+        nMinPos = pos;
 
     // first the redline, then the attributes
     if( pCurRedline )
@@ -686,7 +686,7 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
 
     const SwTxtRuby* pRubyTxt = rRuby.GetTxtRuby();
     const SwCharFmt* pFmt = pRubyTxt ? pRubyTxt->GetCharFmt() : 0;
-    String sFamilyName;
+    OUString sFamilyName;
     long nHeight;
     if ( pFmt )
     {
@@ -760,11 +760,11 @@ void WW8AttributeOutput::EndRuby()
 }
 
 /*#i15387# Better ideas welcome*/
-String &TruncateBookmark( String &rRet )
+OUString &TruncateBookmark( OUString &rRet )
 {
-    if ( rRet.Len() > 40 )
-        rRet.Erase( 40 );
-    OSL_ENSURE( rRet.Len() <= 40, "Word cannot have bookmarks longer than 40 chars" );
+    if ( rRet.getLength() > 40 )
+        rRet = rRet.copy( 0, 40 );
+    OSL_ENSURE( rRet.getLength() <= 40, "Word cannot have bookmarks longer than 40 chars" );
     return rRet;
 }
 
@@ -880,10 +880,10 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
 
     // Compare the URL written by AnalyzeURL with the original one to see if
     // the output URL is absolute or relative.
-    String sRelativeURL;
+    OUString sRelativeURL;
     if ( !rUrl.isEmpty() )
         sRelativeURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), rUrl );
-    bool bAbsolute = sRelativeURL.Equals( rUrl );
+    bool bAbsolute = sRelativeURL == rUrl;
 
     static sal_uInt8 aURLData1[] = {
         0,0,0,0,        // len of struct
@@ -1009,7 +1009,7 @@ bool WW8AttributeOutput::EndURL()
 
 OUString BookmarkToWord(const OUString &rBookmark)
 {
-    String sRet(INetURLObject::encode(rBookmark,
+    OUString sRet(INetURLObject::encode(rBookmark,
         INetURLObject::PART_REL_SEGMENT_EXTRA, '%',
         INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_ASCII_US));
     return TruncateBookmark(sRet);
@@ -1789,8 +1789,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     if ( aAttrIter.RequiresImplicitBookmark() )
     {
-        String sBkmkName = String(  "_toc"  );
-        sBkmkName += OUString::number( rNode.GetIndex() );
+        OUString sBkmkName =  "_toc" + OUString::number( rNode.GetIndex() );
         AppendWordBookmark( sBkmkName );
     }
 
@@ -1870,7 +1869,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 else if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
                     WriteHyperlinkData( *pFieldmark );
                 if (!bCommentRange)
-                    OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CMD_END );
+                    OutputField( NULL, lcl_getFieldId( pFieldmark ), OUString(), WRITEFIELD_CMD_END );
 
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
                 {
@@ -1908,7 +1907,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if (pFieldmark && pFieldmark->GetFieldname() == ODF_COMMENTRANGE)
                     AttrOutput().WritePostitFieldEnd();
                 else
-                    OutputField( NULL, eFieldId, String(), WRITEFIELD_CLOSE );
+                    OutputField( NULL, eFieldId, OUString(), WRITEFIELD_CLOSE );
 
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
                     AppendBookmark( pFieldmark->GetName(), false );
@@ -1929,18 +1928,18 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                         WRITEFIELD_START | WRITEFIELD_CMD_START );
                 if ( isDropdownOrCheckbox )
                     WriteFormData( *pFieldmark );
-                OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CLOSE );
+                OutputField( NULL, lcl_getFieldId( pFieldmark ), OUString(), WRITEFIELD_CLOSE );
                 if ( isDropdownOrCheckbox )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
             nLen -= static_cast< sal_Int32 >( ofs );
 
-            String aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + static_cast< sal_Int32 >( ofs ), nLen ) );
+            OUString aSnippet( aAttrIter.GetSnippet( aStr, nAktPos + static_cast< sal_Int32 >( ofs ), nLen ) );
             if ( ( nTxtTyp == TXT_EDN || nTxtTyp == TXT_FTN ) && nAktPos == 0 && nLen > 0 )
             {
                 // Insert tab for aesthetic puposes #i24762#
-                if ( aSnippet.GetChar( 0 ) != 0x09 )
-                    aSnippet.Insert( 0x09, 0 );
+                if ( aSnippet[0] != 0x09 )
+                    aSnippet = OUString( 0x09 ) + aSnippet;
             }
             AttrOutput().RunText( aSnippet, eChrSet );
         }
