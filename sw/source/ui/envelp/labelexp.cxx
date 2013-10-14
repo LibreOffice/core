@@ -111,7 +111,7 @@ void SwVisitingCardPage::InitFrameControl()
 IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
 {
     SvTreeListEntry* pSel = m_pAutoTextLB->FirstSelected();
-    String sEntry;
+    OUString sEntry;
     if( pSel )
         sEntry = *(String*)pSel->GetUserData();
     uno::Reference< text::XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
@@ -125,7 +125,7 @@ IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
         uno::Reference< text::XAutoTextGroup >  xGroup;
         aGroup >>= xGroup;
 
-        if( sEntry.Len() && xGroup->hasByName( uEntry ) )
+        if( !sEntry.isEmpty() && xGroup->hasByName( uEntry ) )
         {
             uno::Any aEntry(xGroup->getByName(uEntry));
             uno::Reference< text::XAutoTextEntry >  xEntry;

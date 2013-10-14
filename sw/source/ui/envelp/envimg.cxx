@@ -53,13 +53,13 @@ SW_DLLPUBLIC OUString MakeSender()
     SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
 
     OUString sRet;
-    String sSenderToken(SW_RES(STR_SENDER_TOKENS));
+    OUString sSenderToken(SW_RES(STR_SENDER_TOKENS));
     xub_StrLen nTokenCount = comphelper::string::getTokenCount(sSenderToken, ';');
     sal_Int32 nSttPos = 0;
     bool bLastLength = true;
     for( xub_StrLen i = 0; i < nTokenCount; i++ )
     {
-        OUString sToken = sSenderToken.GetToken( 0, ';', nSttPos );
+        OUString sToken = sSenderToken.getToken( 0, ';', nSttPos );
         if (sToken == "COMPANY")
         {
             xub_StrLen nOldLen = sRet.getLength();

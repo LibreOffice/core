@@ -135,7 +135,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     // Read user label from writer.cfg
     SwLabItem aItem((const SwLabItem&)rSet.Get( FN_LABEL ));
     SwLabRec* pRec = new SwLabRec;
-    const String aTmp( SW_RES( STR_CUSTOM ) );
+    const OUString aTmp( SW_RES( STR_CUSTOM ) );
     pRec->aMake   = pRec->aType = aTmp;
     pRec->SetFromItem( aItem );
 
@@ -202,7 +202,7 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, sal_Bool bCont)
 {
     SwLabRec* pRec = NULL;
     bool bFound = false;
-    String sCustom(SW_RES(STR_CUSTOM));
+    OUString sCustom(SW_RES(STR_CUSTOM));
 
     const sal_uInt16 nCount = Recs().size();
     for (sal_uInt16 i = 0; i < nCount; i++)
@@ -302,7 +302,7 @@ void SwLabPage::SetToBusinessCard()
 
 IMPL_LINK_NOARG(SwLabPage, AddrHdl)
 {
-    String aWriting;
+    OUString aWriting;
 
     if ( m_pAddrBox->IsChecked() )
         aWriting = convertLineEnd(MakeSender(), GetSystemLineEnd());
@@ -353,7 +353,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
     m_pHiddenSortTypeBox->Clear();
     GetParentSwLabDlg()->TypeIds().clear();
 
-    const String aMake = m_pMakeBox->GetSelectEntry();
+    const OUString aMake = m_pMakeBox->GetSelectEntry();
     GetParentSwLabDlg()->ReplaceGroup( aMake );
     aItem.aLstMake = aMake;
 
@@ -361,11 +361,11 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
     const sal_uInt16 nCount   = GetParentSwLabDlg()->Recs().size();
           sal_uInt16 nLstType = 0;
 
-    const String sCustom(SW_RES(STR_CUSTOM));
+    const OUString sCustom(SW_RES(STR_CUSTOM));
     //insert the entries into the sorted list box
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        const String aType ( GetParentSwLabDlg()->Recs()[i]->aType );
+        const OUString aType ( GetParentSwLabDlg()->Recs()[i]->aType );
         bool bInsert = false;
         if ( GetParentSwLabDlg()->Recs()[i]->aType == sCustom )
         {
@@ -383,7 +383,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
         if(bInsert)
         {
             GetParentSwLabDlg()->TypeIds().push_back(i);
-            if ( !nLstType && aType == String(aItem.aLstType) )
+            if ( !nLstType && aType == OUString(aItem.aLstType) )
                 nLstType = GetParentSwLabDlg()->TypeIds().size();
         }
     }
@@ -420,27 +420,21 @@ void SwLabPage::DisplayFormat()
     aItem.aLstType = pRec->aType;
     SETFLDVAL(aField, pRec->lWidth);
     aField.Reformat();
-    const String aWString = aField.GetText();
+    const OUString aWString = aField.GetText();
 
     SETFLDVAL(aField, pRec->lHeight);
     aField.Reformat();
 
-    OUString aText = pRec->aType;
-    aText += ": ";
-    aText += aWString;
-    aText += " x ";
-    aText += aField.GetText();
-    aText += " (";
-    aText += OUString::number( pRec->nCols );
-    aText += " x ";
-    aText += OUString::number( pRec->nRows );
-    aText += ")";
+    OUString aText = pRec->aType + ": " + aWString +
+           " x " + aField.GetText() +
+           " (" + OUString::number( pRec->nCols ) +
+           " x " + OUString::number( pRec->nRows ) + ")";
     m_pFormatInfo->SetText(aText);
 }
 
 SwLabRec* SwLabPage::GetSelectedEntryPos()
 {
-    String sSelEntry(m_pTypeBox->GetSelectEntry());
+    OUString sSelEntry(m_pTypeBox->GetSelectEntry());
 
     return GetParentSwLabDlg()->GetRecord(sSelEntry, m_pContButton->IsChecked());
 }
@@ -454,10 +448,10 @@ void SwLabPage::InitDatabaseBox()
         const OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
             m_pDatabaseLB->InsertEntry(pDataNames[i]);
-        String sDBName = sActDBName.getToken( 0, DB_DELIM );
-        String sTableName = sActDBName.getToken( 1, DB_DELIM );
+        OUString sDBName = sActDBName.getToken( 0, DB_DELIM );
+        OUString sTableName = sActDBName.getToken( 1, DB_DELIM );
         m_pDatabaseLB->SelectEntry(sDBName);
-        if( sDBName.Len() && GetNewDBMgr()->GetTableNames(m_pTableLB, sDBName))
+        if( !sDBName.isEmpty() && GetNewDBMgr()->GetTableNames(m_pTableLB, sDBName))
         {
             m_pTableLB->SelectEntry(sTableName);
             GetNewDBMgr()->GetColumnNames(m_pDBFieldLB, sActDBName, sTableName);
@@ -512,28 +506,28 @@ sal_Bool SwLabPage::FillItemSet(SfxItemSet& rSet)
 void SwLabPage::Reset(const SfxItemSet& rSet)
 {
     aItem = (const SwLabItem&) rSet.Get(FN_LABEL);
-    String sDBName  = aItem.sDBName;
+    OUString sDBName  = aItem.sDBName;
 
-    String aWriting(convertLineEnd(aItem.aWriting, GetSystemLineEnd()));
+    OUString aWriting(convertLineEnd(aItem.aWriting, GetSystemLineEnd()));
 
     m_pAddrBox->Check( aItem.bAddr );
     m_pWritingEdit->SetText    ( aWriting );
 
     for(std::vector<OUString>::const_iterator i = GetParentSwLabDlg()->Makes().begin(); i != GetParentSwLabDlg()->Makes().end(); ++i)
     {
-        if(m_pMakeBox->GetEntryPos(String(*i)) == LISTBOX_ENTRY_NOTFOUND)
+        if(m_pMakeBox->GetEntryPos(OUString(*i)) == LISTBOX_ENTRY_NOTFOUND)
             m_pMakeBox->InsertEntry(*i);
     }
 
     m_pMakeBox->SelectEntry( aItem.aMake );
     //save the current type
-    String sType(aItem.aType);
+    OUString sType(aItem.aType);
     m_pMakeBox->GetSelectHdl().Call(m_pMakeBox);
     aItem.aType = sType;
     //#102806# a newly added make may not be in the type ListBox already
-    if (m_pTypeBox->GetEntryPos(String(aItem.aType)) == LISTBOX_ENTRY_NOTFOUND && !aItem.aMake.isEmpty())
+    if (m_pTypeBox->GetEntryPos(aItem.aType) == LISTBOX_ENTRY_NOTFOUND && !aItem.aMake.isEmpty())
         GetParentSwLabDlg()->UpdateGroup( aItem.aMake );
-    if (m_pTypeBox->GetEntryPos(String(aItem.aType)) != LISTBOX_ENTRY_NOTFOUND)
+    if (m_pTypeBox->GetEntryPos(aItem.aType) != LISTBOX_ENTRY_NOTFOUND)
     {
         m_pTypeBox->SelectEntry(aItem.aType);
         m_pTypeBox->GetSelectHdl().Call(m_pTypeBox);
@@ -555,7 +549,7 @@ void SwVisitingCardPage::ClearUserData()
     SvTreeListEntry* pEntry = m_pAutoTextLB->First();
     while(pEntry)
     {
-        delete (String*)pEntry->GetUserData();
+        delete (OUString*)pEntry->GetUserData();
         pEntry = m_pAutoTextLB->Next(pEntry);
     }
 }
@@ -566,7 +560,7 @@ void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
     for( sal_uInt32 i = 0; i < nCnt; ++i )
     {
         SvTreeListEntry* pEntry = m_pAutoTextLB->InsertEntry( pNames[ i ] );
-        pEntry->SetUserData( new String( pValues[ i ] ));
+        pEntry->SetUserData( new OUString( pValues[ i ] ));
     }
 }
 
@@ -632,17 +626,17 @@ sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
 
     SvTreeListEntry* pSelEntry = m_pAutoTextLB->FirstSelected();
     if(pSelEntry)
-        aLabItem.sGlossaryBlockName = *(String*)pSelEntry->GetUserData();
+        aLabItem.sGlossaryBlockName = *(OUString*)pSelEntry->GetUserData();
     rSet.Put(aLabItem);
     return sal_True;
 }
 
-static void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
+static void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const OUString& rBlockName)
 {
     SvTreeListEntry* pEntry = rAutoTextLB.First();
     while(pEntry)
     {
-        if(*(String*)pEntry->GetUserData() == rBlockName)
+        if(*(OUString*)pEntry->GetUserData() == rBlockName)
         {
             rAutoTextLB.Select(pEntry);
             rAutoTextLB.MakeVisible(pEntry);
@@ -652,12 +646,12 @@ static void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName
     }
 }
 
-static bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
+static bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const OUString& rBlockName)
 {
     SvTreeListEntry* pEntry = rAutoTextLB.First();
     while(pEntry)
     {
-        if(*(String*)pEntry->GetUserData() == rBlockName)
+        if(*(OUString*)pEntry->GetUserData() == rBlockName)
         {
             rAutoTextLB.Select(pEntry);
             return true;
@@ -702,7 +696,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
         {
             SvTreeListEntry* pSelEntry = m_pAutoTextLB->FirstSelected();
             if( pSelEntry &&
-                *(String*)pSelEntry->GetUserData() != String(aLabItem.sGlossaryBlockName))
+                *(OUString*)pSelEntry->GetUserData() != aLabItem.sGlossaryBlockName)
             {
                 lcl_SelectBlock(*m_pAutoTextLB, aLabItem.sGlossaryBlockName);
                 AutoTextSelectHdl(m_pAutoTextLB);

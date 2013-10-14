@@ -365,8 +365,8 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     aAddressFldLB.SelectEntry(OUString("EMAIL"));
 
-    String sPath(pModOpt->GetMailingPath());
-    if(!sPath.Len())
+    OUString sPath(pModOpt->GetMailingPath());
+    if(sPath.isEmpty())
     {
         SvtPathOptions aPathOpt;
         sPath = aPathOpt.GetWorkPath();
@@ -759,8 +759,8 @@ bool SwMailMergeDlg::ExecQryShell()
 
 IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl)
 {
-    String sPath( aPathED.GetText() );
-    if( !sPath.Len() )
+    OUString sPath( aPathED.GetText() );
+    if( sPath.isEmpty() )
     {
         SvtPathOptions aPathOpt;
         sPath = aPathOpt.GetWorkPath();

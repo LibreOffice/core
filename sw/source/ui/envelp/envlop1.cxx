@@ -294,8 +294,8 @@ void SwEnvPage::InitDatabaseBox()
         for (long i = 0; i < aDataNames.getLength(); i++)
             m_pDatabaseLB->InsertEntry(pDataNames[i]);
 
-        String sDBName = sActDBName.getToken( 0, DB_DELIM );
-        String sTableName = sActDBName.getToken( 1, DB_DELIM );
+        OUString sDBName = sActDBName.getToken( 0, DB_DELIM );
+        OUString sTableName = sActDBName.getToken( 1, DB_DELIM );
         m_pDatabaseLB->SelectEntry(sDBName);
         if (pSh->GetNewDBMgr()->GetTableNames(m_pTableLB, sDBName))
         {

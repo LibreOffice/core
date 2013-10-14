@@ -608,8 +608,8 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec)
 IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
 {
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
-    String sMake(m_pMakeCB->GetText());
-    String sType(m_pTypeED->GetText());
+    OUString sMake(m_pMakeCB->GetText());
+    OUString sType(m_pTypeED->GetText());
     if(rCfg.HasLabel(sMake, sType))
     {
         if ( rCfg.IsPredefinedLabel(sMake, sType) )

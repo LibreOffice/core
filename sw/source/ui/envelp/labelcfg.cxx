@@ -182,15 +182,15 @@ static SwLabRec* lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeas
     pNewRec->aType = rType;
     //all values are contained as colon-separated 1/100 mm values
     //except for the continuous flag ('C'/'S') and nCols, nRows (sal_Int32)
-    String sMeasure(rMeasure);
+    OUString sMeasure(rMeasure);
     sal_uInt16 nTokenCount = comphelper::string::getTokenCount(sMeasure, ';');
     for(sal_uInt16 i = 0; i < nTokenCount; i++)
     {
-        String sToken(sMeasure.GetToken(i, ';' ));
-        int nVal = sToken.ToInt32();
+        OUString sToken(sMeasure.getToken(i, ';' ));
+        int nVal = sToken.toInt32();
         switch(i)
         {
-            case  0 : pNewRec->bCont = sToken.GetChar(0) == 'C'; break;
+            case  0 : pNewRec->bCont = sToken[0] == 'C'; break;
             case  1 : pNewRec->lHDist    = MM100_TO_TWIP(nVal);  break;
             case  2 : pNewRec->lVDist    = MM100_TO_TWIP(nVal);  break;
             case  3 : pNewRec->lWidth    = MM100_TO_TWIP(nVal);  break;
