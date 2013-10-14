@@ -47,7 +47,7 @@ void SwFldRefTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         SvTreeListEntry* pEntry = GetEntry( aPos );
         if( pEntry )
         {
-            String sEntry( GetEntryText( pEntry ) );
+            OUString sEntry( GetEntryText( pEntry ) );
             SvLBoxTab* pTab;
             SvLBoxItem* pItem = GetItem( pEntry, aPos.X(), &pTab );
             if( pItem )

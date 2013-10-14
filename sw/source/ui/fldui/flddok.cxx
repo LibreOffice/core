@@ -257,7 +257,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
                         case TYP_AUTHORFLD:
                         {
-                            String sFmt(GetFldMgr().GetFormatStr(nTypeId, i));
+                            OUString sFmt(GetFldMgr().GetFormatStr(nTypeId, i));
                             nPos = m_pSelectionLB->InsertEntry(sFmt);
                             m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(i));
                             m_pSelectionLB->SelectEntry(GetFldMgr().GetFormatStr(nTypeId, GetCurField()->GetFormat()));
@@ -550,7 +550,7 @@ sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
         nTypeId = (sal_uInt16)(sal_uLong)m_pSelectionLB->GetEntryData(nPos);
     }
 
-    String aVal(m_pValueED->GetText());
+    OUString aVal(m_pValueED->GetText());
     sal_uLong nFormat = 0;
     sal_uInt16 nSubType = 0;
 
@@ -643,8 +643,8 @@ sal_uInt16 SwFldDokPage::GetGroup()
 
 void    SwFldDokPage::FillUserData()
 {
-    String sData(OUString(USER_DATA_VERSION));
-    sData += ';';
+    OUString sData(USER_DATA_VERSION);
+    sData += ";";
     sal_uInt16 nTypeSel = m_pTypeLB->GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;

@@ -95,8 +95,8 @@ void SwChangeDBDlg::FillDBPopup()
     Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
 
     const SwDBData& rDBData = pSh->GetDBData();
-    String sDBName(rDBData.sDataSource);
-    String sTableName(rDBData.sCommand);
+    OUString sDBName(rDBData.sDataSource);
+    OUString sTableName(rDBData.sCommand);
     m_pAvailDBTLB->Select(sDBName, sTableName, aEmptyStr);
 
     std::vector<OUString> aAllDBNames;
@@ -120,7 +120,7 @@ void SwChangeDBDlg::FillDBPopup()
     for(size_t k = 0; k < nCount; k++)
     {
         sDBName = aDBNameList[k];
-        sDBName = sDBName.GetToken(0);
+        sDBName = sDBName.getToken(0, ';');
         pLast = Insert(sDBName);
         if (!pFirst)
             pFirst = pLast;
@@ -136,8 +136,8 @@ void SwChangeDBDlg::FillDBPopup()
 
 SvTreeListEntry* SwChangeDBDlg::Insert(const OUString& rDBName)
 {
-    String sDBName(rDBName.getToken(0, DB_DELIM));
-    String sTableName(rDBName.getToken(1, DB_DELIM));
+    OUString sDBName(rDBName.getToken(0, DB_DELIM));
+    OUString sTableName(rDBName.getToken(1, DB_DELIM));
     sal_IntPtr nCommandType = rDBName.getToken(2, DB_DELIM).toInt32();
     SvTreeListEntry* pParent;
     SvTreeListEntry* pChild;

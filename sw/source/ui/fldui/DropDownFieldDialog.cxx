@@ -56,7 +56,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(Window *pParent, SwWrtShell &rS,
     {
         //
         pDropField = (SwDropDownField*)pField;
-        String sTitle = GetText();
+        OUString sTitle = GetText();
         sTitle += pDropField->GetPar2();
         SetText(sTitle);
         uno::Sequence< OUString > aItems = pDropField->GetItemSequence();

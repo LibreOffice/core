@@ -125,7 +125,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
 
         if (nTypeId == TYP_MACROFLD)
         {
-            String sName(GetCurField()->GetPar1());
+            OUString sName(GetCurField()->GetPar1());
             GetFldMgr().SetMacroPath(sName);
         }
     }
@@ -400,7 +400,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
     if(pControl == m_pListAddPB ||
             (pControl == m_pListItemED && m_pListAddPB->IsEnabled()))
     {
-        String sEntry(m_pListItemED->GetText());
+        OUString sEntry(m_pListItemED->GetText());
         m_pListItemsLB->InsertEntry(sEntry);
         m_pListItemsLB->SelectEntry(sEntry);
     }
@@ -416,7 +416,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
         {
             if(nSelPos)
             {
-                String sEntry = m_pListItemsLB->GetSelectEntry();
+                OUString sEntry = m_pListItemsLB->GetSelectEntry();
                 m_pListItemsLB->RemoveEntry(nSelPos);
                 nSelPos--;
                 m_pListItemsLB->InsertEntry(sEntry, nSelPos);
@@ -427,7 +427,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
         {
             if(nSelPos < m_pListItemsLB->GetEntryCount() - 1)
             {
-                String sEntry = m_pListItemsLB->GetSelectEntry();
+                OUString sEntry = m_pListItemsLB->GetSelectEntry();
                 m_pListItemsLB->RemoveEntry(nSelPos);
                 nSelPos++;
                 m_pListItemsLB->InsertEntry(sEntry, nSelPos);
@@ -508,8 +508,8 @@ IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
     Window* pDefModalDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( pBtn );
 
-    String sMacro(TurnMacroString(m_pNameED->GetText()));
-    while (sMacro.SearchAndReplace('.', ';') != STRING_NOTFOUND) ;
+    OUString sMacro(TurnMacroString(m_pNameED->GetText()));
+    sMacro = sMacro.replaceAll(".", ";");
 
     if (GetFldMgr().ChooseMacro(sMacro))
         UpdateSubType();
@@ -532,8 +532,8 @@ sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
     else
         nFormat = (sal_uLong)m_pFormatLB->GetEntryData((sal_uInt16)nFormat);
 
-    String aVal(m_pValueED->GetText());
-    String aName(m_pNameED->GetText());
+    OUString aVal(m_pValueED->GetText());
+    OUString aName(m_pNameED->GetText());
 
     switch(nTypeId)
     {
@@ -551,9 +551,7 @@ sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
             break;
 
         case TYP_CONDTXTFLD:
-            aVal = m_pCond1ED->GetText();
-            aVal += '|';
-            aVal += m_pCond2ED->GetText();
+            aVal = m_pCond1ED->GetText() + "|" + m_pCond2ED->GetText();
             break;
         case TYP_DROPDOWN :
         {
@@ -561,7 +559,7 @@ sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
             for(sal_uInt16 i = 0; i < m_pListItemsLB->GetEntryCount(); i++)
             {
                 if(i)
-                    aVal += DB_DELIM;
+                    aVal += OUString(DB_DELIM);
                 aVal += m_pListItemsLB->GetEntry(i);
             }
         }
@@ -592,7 +590,8 @@ OUString SwFldFuncPage::TurnMacroString(const OUString &rMacro)
     if (!rMacro.isEmpty())
     {
         // reverse content of aName
-        String sTmp, sBuf;
+        OUString sTmp;
+        OUStringBuffer sBuf;
         sal_Int32 nPos = 0;
 
         for (sal_uInt16 i = 0; i < 4 && nPos != -1; i++)
@@ -602,11 +601,11 @@ OUString SwFldFuncPage::TurnMacroString(const OUString &rMacro)
             else
                 sTmp = rMacro.getToken(0, '.', nPos);
 
-            if( sBuf.Len() )
-                sTmp += '.';
-            sBuf.Insert( sTmp, 0 );
+            if( !sBuf.isEmpty() )
+                sTmp += ".";
+            sBuf.insert(0, sTmp);
         }
-        return sBuf;
+        return sBuf.makeStringAndClear();
     }
 
     return rMacro;
@@ -625,8 +624,8 @@ sal_uInt16 SwFldFuncPage::GetGroup()
 
 void    SwFldFuncPage::FillUserData()
 {
-    String sData(OUString(USER_DATA_VERSION));
-    sData += ';';
+    OUString sData(USER_DATA_VERSION);
+    sData += ";";
     sal_uInt16 nTypeSel = m_pTypeLB->GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
@@ -638,8 +637,8 @@ void    SwFldFuncPage::FillUserData()
 
 IMPL_LINK_NOARG(SwFldFuncPage, ModifyHdl)
 {
-    String aName(m_pNameED->GetText());
-    const sal_uInt16 nLen = aName.Len();
+    OUString aName(m_pNameED->GetText());
+    const sal_uInt16 nLen = aName.getLength();
 
     sal_Bool bEnable = sal_True;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());

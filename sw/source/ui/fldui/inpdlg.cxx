@@ -60,7 +60,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     }
 
     // evaluation here
-    String aStr;
+    OUString aStr;
     if( RES_INPUTFLD == pField->GetTyp()->Which() )
     {   // it is an input field
         //
@@ -86,7 +86,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     {
         // it is a SetExpression
         pSetFld = (SwSetExpField*)pField;
-        String sFormula(pSetFld->GetFormula());
+        OUString sFormula(pSetFld->GetFormula());
         //values are formatted - formulas are not
         CharClass aCC( LanguageTag( pSetFld->GetLanguage() ));
         if( aCC.isNumeric( sFormula ))
@@ -105,7 +105,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     m_pOKBT->Enable( bEnable );
     m_pEditED->SetReadOnly( !bEnable );
 
-    if( aStr.Len() )
+    if( !aStr.isEmpty() )
         m_pEditED->SetText(convertLineEnd(aStr, GetSystemLineEnd()));
 }
 

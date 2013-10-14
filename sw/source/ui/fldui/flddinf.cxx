@@ -146,7 +146,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
 
                     if( rProperties.getLength() )
                     {
-                        pInfo = m_pTypeTLB->InsertEntry( String(SW_RES( STR_CUSTOM )) );
+                        pInfo = m_pTypeTLB->InsertEntry( OUString(SW_RES( STR_CUSTOM )) );
                         pInfo->SetUserData(reinterpret_cast<void*>(USHRT_MAX));
 
                         for (sal_Int32 n=0; n < rProperties.getLength(); n++)
@@ -464,8 +464,8 @@ sal_uInt16 SwFldDokInfPage::GetGroup()
 
 void    SwFldDokInfPage::FillUserData()
 {
-    String sData(OUString(USER_DATA_VERSION));
-    sData += ';';
+    OUString sData(USER_DATA_VERSION);
+    sData += ";";
     SvTreeListEntry* pEntry = m_pTypeTLB->FirstSelected();
     sal_uInt16 nTypeSel = pEntry ? sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(pEntry->GetUserData())) : USHRT_MAX;
     sData += OUString::number( nTypeSel );

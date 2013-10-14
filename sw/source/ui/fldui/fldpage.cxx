@@ -183,8 +183,8 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
     {
         SwField *const pTmpFld = m_pCurFld->CopyField();
 
-        String sPar1(rPar1);
-        String sPar2(rPar2);
+        OUString sPar1(rPar1);
+        OUString sPar2(rPar2);
         switch( nTypeId )
         {
         case TYP_DATEFLD:
@@ -216,7 +216,7 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUS
                 aData.sDataSource = rPar1.getToken(0, DB_DELIM);
                 aData.sCommand = rPar1.getToken(1, DB_DELIM);
                 aData.nCommandType = rPar1.getToken(2, DB_DELIM).toInt32();
-                String sColumn = rPar1.getToken(3, DB_DELIM);
+                OUString sColumn = rPar1.getToken(3, DB_DELIM);
 
                 SwDBFieldType* pOldTyp = (SwDBFieldType*)pTmpFld->GetTyp();
                 SwDBFieldType* pTyp = (SwDBFieldType*)pSh->InsertFldType(

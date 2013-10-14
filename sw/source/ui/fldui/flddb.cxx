@@ -286,7 +286,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
         if (IsFldEdit())
         {
             SwDBData aData;
-            String sColumnName;
+            OUString sColumnName;
             if (nTypeId == TYP_DBFLD)
             {
                 aData = ((SwDBField*)GetCurField())->GetDBData();
@@ -462,8 +462,8 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
 
 IMPL_LINK_NOARG(SwFldDBPage, AddDBHdl)
 {
-    String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
-    if(sNewDB.Len())
+    OUString sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
+    if(!sNewDB.isEmpty())
     {
         m_pDatabaseTLB->AddDataSource(sNewDB);
     }
@@ -481,8 +481,8 @@ IMPL_LINK_NOARG(SwFldDBPage, ModifyHdl)
 
 void    SwFldDBPage::FillUserData()
 {
-    String sData(OUString(USER_DATA_VERSION));
-    sData += ';';
+    OUString sData(OUString(USER_DATA_VERSION));
+    sData += ";";
     sal_uInt16 nTypeSel = m_pTypeLB->GetSelectEntryPos();
 
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )

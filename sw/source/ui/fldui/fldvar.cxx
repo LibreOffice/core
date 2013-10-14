@@ -304,7 +304,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             {
                 if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
-                    String sName(m_pSelectionLB->GetSelectEntry());
+                    OUString sName(m_pSelectionLB->GetSelectEntry());
                     m_pNameED->SetText(sName);
 
                     if (!IsFldDlgHtmlMode())
@@ -354,7 +354,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
                 if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
-                    String sName(m_pSelectionLB->GetSelectEntry());
+                    OUString sName(m_pSelectionLB->GetSelectEntry());
                     if (!IsFldEdit())
                         m_pNameED->SetText(sName);
 
@@ -390,7 +390,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             {
                 bValue = bNumFmt = sal_True;
 
-                String sName;
+                OUString sName;
 
                 sName = m_pSelectionLB->GetSelectEntry();
                 m_pNameED->SetText( sName );
@@ -440,9 +440,10 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
                         //JP 28.08.95: DDE-Topics/-Items can have blanks in their names!
                         //              That's not considered here yet
-                        String sCmd( pType->GetCmd() );
-                        sal_uInt16 nTmpPos = sCmd.SearchAndReplace( sfx2::cTokenSeparator, ' ' );
-                        sCmd.SearchAndReplace( sfx2::cTokenSeparator, ' ', nTmpPos );
+                        OUString sCmd( pType->GetCmd() );
+                        sal_Int32 nTmpPos = 0;
+                        sCmd = sCmd.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &nTmpPos );
+                        sCmd = sCmd.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &nTmpPos );
 
                         m_pValueED->SetText( sCmd );
                         m_pFormatLB->SelectEntryPos(pType->GetType());
@@ -461,8 +462,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     pFldTyp = GetCurField()->GetTyp();
                 else
                 {
-                    String sFldTypeName( m_pSelectionLB->GetEntry( nSelPos ));
-                    if( sFldTypeName.Len() )
+                    OUString sFldTypeName( m_pSelectionLB->GetEntry( nSelPos ));
+                    if( !sFldTypeName.isEmpty() )
                         pFldTyp = GetFldMgr().GetFldType( RES_SETEXPFLD,
                                                           sFldTypeName );
                     else
@@ -483,7 +484,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         m_pChapterLevelLB->SelectEntryPos( 0 );
                     else
                         m_pChapterLevelLB->SelectEntryPos( nLevel + 1 );
-                    String sDelim = ((SwSetExpFieldType*)pFldTyp)->GetDelimiter();
+                    OUString sDelim = ((SwSetExpFieldType*)pFldTyp)->GetDelimiter();
                     m_pSeparatorED->SetText( sDelim );
                     ChapterHdl();
                 }
@@ -565,7 +566,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
  --------------------------------------------------------------------*/
 void SwFldVarPage::UpdateSubType()
 {
-    String sOldSel;
+    OUString sOldSel;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     SetSelectionSel(m_pSelectionLB->GetSelectEntryPos());
@@ -667,7 +668,7 @@ void SwFldVarPage::UpdateSubType()
 
 sal_uInt16 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 {
-    String sOldSel, sOldNumSel;
+    OUString sOldSel, sOldNumSel;
     sal_uLong nOldNumFormat = 0;
 
     sal_uInt16 nFormatSel = m_pFormatLB->GetSelectEntryPos();
@@ -799,8 +800,8 @@ sal_uInt16 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
  --------------------------------------------------------------------*/
 IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
 {
-    String sValue(m_pValueED->GetText());
-    sal_Bool bHasValue = sValue.Len() != 0;
+    OUString sValue(m_pValueED->GetText());
+    sal_Bool bHasValue = !sValue.isEmpty();
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
     bool bInsert = false, bApply = false, bDelete = false;
 
@@ -962,7 +963,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
     }
     else if (nCurId == m_nApplyId)
     {
-        String sName(m_pNameED->GetText()), sValue(m_pValueED->GetText());
+        OUString sName(m_pNameED->GetText()), sValue(m_pValueED->GetText());
         SwFieldType* pType = 0;
         sal_uInt16 nId = 0;
         sal_uInt16 nNumFormatPos = m_pNumFormatLB->GetSelectEntryPos();
@@ -1010,8 +1011,9 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     {
                         // DDE-Topics/-Items can have blanks in their names!
                         //  That's not being considered here yet.
-                        sal_uInt16 nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeparator );
-                        sValue.SearchAndReplace( ' ', sfx2::cTokenSeparator, nTmpPos );
+                        sal_Int32 nTmpPos = 0;
+                        sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
+                        sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
                         ((SwDDEFieldType*)pType)->SetCmd(sValue);
                         ((SwDDEFieldType*)pType)->SetType((sal_uInt16)nFormat);
                     }
@@ -1048,8 +1050,9 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                 {
                     // DDE-Topics/-Items can have blanks in their names!
                     //  That's not being considered here yet.
-                    sal_uInt16 nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeparator );
-                    sValue.SearchAndReplace( ' ', sfx2::cTokenSeparator, nTmpPos );
+                    sal_Int32 nTmpPos = 0;
+                    sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
+                    sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
 
                     SwDDEFieldType aType(sName, sValue, (sal_uInt16)nFormat);
                     m_pSelectionLB->InsertEntry(sName);
@@ -1091,8 +1094,8 @@ sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
-    String aVal(m_pValueED->GetText());
-    String aName(m_pNameED->GetText());
+    OUString aVal(m_pValueED->GetText());
+    OUString aName(m_pNameED->GetText());
 
     sal_uInt16 nSubType = m_pSelectionLB->GetSelectEntryPos();
     if(nSubType == LISTBOX_ENTRY_NOTFOUND)
@@ -1276,8 +1279,8 @@ long SelectionListBox::PreNotify( NotifyEvent& rNEvt )
 
 void SwFldVarPage::FillUserData()
 {
-    String sData(OUString(USER_DATA_VERSION));
-    sData += ';';
+    OUString sData(USER_DATA_VERSION);
+    sData += ";";
     sal_uInt16 nTypeSel = m_pTypeLB->GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
