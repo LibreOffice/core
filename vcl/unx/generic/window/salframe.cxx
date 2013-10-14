@@ -2666,7 +2666,7 @@ void X11SalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )
 
 long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
 {
-    SalMouseEvent       aMouseEvt;
+    SalMouseEvent       aMouseEvt = {0, 0, 0, 0, 0};
     sal_uInt16              nEvent = 0;
     bool                bClosePopups = false;
 
