@@ -119,6 +119,7 @@
 #include <com/sun/star/xml/dom/XAttr.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -134,6 +135,7 @@ using namespace nsFieldFlags;
 using namespace sw::util;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
+
 
 class FFDataWriterHelper
 {
@@ -1171,7 +1173,7 @@ void DocxAttributeOutput::WritePostponedGraphic()
     for( std::list< PostponedGraphic >::const_iterator it = m_postponedGraphic->begin();
          it != m_postponedGraphic->end();
          ++it )
-        FlyFrameGraphic( it->grfNode, it->size );
+        FlyFrameGraphic( it->grfNode, it->size, 0, 0, it->pSdrObj );
     delete m_postponedGraphic;
     m_postponedGraphic = NULL;
 }
@@ -2687,9 +2689,37 @@ OString lcl_ConvertTransparency(const Color& rColor)
         return OString("");
 }
 
-void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode )
+/* Writes <a:srcRect> tag back to document.xml if a file conatins a cropped image.
+   NOTE : It works only for images of type JPEG,EMF/WMF and BMP.
+          It does not work for images of type PNG and GIF.
+*/
+void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode ) - some stuff still missing" );
+    uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+
+    OUString sUrl;
+    xPropSet->getPropertyValue("GraphicURL") >>= sUrl;
+    Size aOriginalSize( GraphicObject::CreateGraphicObjectFromURL( sUrl ).GetPrefSize() );
+
+    ::com::sun::star::text::GraphicCrop aGraphicCropStruct;
+    xPropSet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
+
+    if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
+    {
+            m_pSerializer->singleElementNS( XML_a, XML_srcRect,
+                          XML_l, I32S(((aGraphicCropStruct.Left) * 100000)/aOriginalSize.Width()),
+                          XML_t, I32S(((aGraphicCropStruct.Top) * 100000)/aOriginalSize.Height()),
+                          XML_r, I32S(((aGraphicCropStruct.Right) * 100000)/aOriginalSize.Width()),
+                          XML_b, I32S(((aGraphicCropStruct.Bottom) * 100000)/aOriginalSize.Height()),
+                          FSEND );
+
+    }
+}
+
+void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode, const SdrObject* pSdrObj )
+{
+    OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt, SwOLENode* pOLENode, const SdrObject* pSdrObj  ) - some stuff still missing" );
     // detect mis-use of the API
     assert(pGrfNode || (pOLEFrmFmt && pOLENode));
     const SwFrmFmt* pFrmFmt = pGrfNode ? pGrfNode->GetFlyFmt() : pOLEFrmFmt;
@@ -2994,8 +3024,11 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->singleElementNS( XML_a, XML_blip,
             FSNS( XML_r, nImageType ), aRelId.getStr(),
             FSEND );
-    m_pSerializer->singleElementNS( XML_a, XML_srcRect,
-            FSEND );
+
+    if (pSdrObj){
+        WriteSrcRect(pSdrObj);
+    }
+
     m_pSerializer->startElementNS( XML_a, XML_stretch,
             FSEND );
     m_pSerializer->singleElementNS( XML_a, XML_fillRect,
@@ -3283,15 +3316,16 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
     {
         case sw::Frame::eGraphic:
             {
+                const SdrObject* pSdrObj = rFrame.GetFrmFmt().FindRealSdrObject();
                 const SwNode *pNode = rFrame.GetContent();
                 const SwGrfNode *pGrfNode = pNode ? pNode->GetGrfNode() : 0;
                 if ( pGrfNode )
                 {
                     if( m_postponedGraphic == NULL )
-                        FlyFrameGraphic( pGrfNode, rFrame.GetLayoutSize() );
+                        FlyFrameGraphic( pGrfNode, rFrame.GetLayoutSize(), 0, 0, pSdrObj);
                     else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                     {    // so write it out later
-                        m_postponedGraphic->push_back( PostponedGraphic( pGrfNode, rFrame.GetLayoutSize()));
+                        m_postponedGraphic->push_back( PostponedGraphic( pGrfNode, rFrame.GetLayoutSize(), pSdrObj));
                     }
                 }
             }

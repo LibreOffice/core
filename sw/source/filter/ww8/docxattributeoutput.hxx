@@ -361,7 +361,8 @@ private:
     /// replacement graphics, set the first as 0, and pass the remaining three.
     ///
     /// @see WriteOLE2Obj()
-    void FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt = 0, SwOLENode* pOLENode = 0);
+    void FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrmFmt* pOLEFrmFmt = 0, SwOLENode* pOLENode = 0, const SdrObject* pSdrObj = 0);
+    void WriteSrcRect( const SdrObject* pSdrObj );
     void WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrmFmt* pFlyFrmFmt);
     bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize );
     bool WriteOLEMath( const SdrObject* pSdrObj, const SwOLENode& rNode, const Size& rSize );
@@ -727,9 +728,10 @@ private:
 
     struct PostponedGraphic
     {
-        PostponedGraphic( const SwGrfNode* n, Size s ) : grfNode( n ), size( s ) {};
+        PostponedGraphic( const SwGrfNode* n, Size s,  const SdrObject* sObj ) : grfNode( n ), size( s ),  pSdrObj(sObj) {};
         const SwGrfNode* grfNode;
         Size size;
+        const SdrObject* pSdrObj;
     };
     std::list< PostponedGraphic >* m_postponedGraphic;
     struct PostponedDiagram
