@@ -62,14 +62,14 @@ OUString InsertFixedText( InformationDialog& rInformationDialog, const OUString&
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
-        TKGet( TK_Height ),
-        TKGet( TK_Label ),
-        TKGet( TK_MultiLine ),
-        TKGet( TK_PositionX ),
-        TKGet( TK_PositionY ),
-        TKGet( TK_Step ),
-        TKGet( TK_TabIndex ),
-        TKGet( TK_Width ) };
+        "Height",
+        "Label",
+        "MultiLine",
+        "PositionX",
+        "PositionY",
+        "Step",
+        "TabIndex",
+        "Width" };
 
     Any pValues[] = {
         Any( nHeight ),
@@ -101,13 +101,13 @@ OUString InsertImage(
     sal_Bool bScale )
 {
     OUString pNames[] = {
-        TKGet( TK_Border ),
-        TKGet( TK_Height ),
-        TKGet( TK_ImageURL ),
-        TKGet( TK_PositionX ),
-        TKGet( TK_PositionY ),
-        TKGet( TK_ScaleImage ),
-        TKGet( TK_Width ) };
+        "Border",
+        "Height",
+        "ImageURL",
+        "PositionX",
+        "PositionY",
+        "ScaleImage",
+        "Width" };
 
     Any pValues[] = {
         Any( sal_Int16( 0 ) ),
@@ -131,14 +131,14 @@ OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& 
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
-        TKGet( TK_Enabled ),
-        TKGet( TK_Height ),
-        TKGet( TK_Label ),
-        TKGet( TK_PositionX ),
-        TKGet( TK_PositionY ),
-        TKGet( TK_Step ),
-        TKGet( TK_TabIndex ),
-        TKGet( TK_Width ) };
+        "Enabled",
+        "Height",
+        "Label",
+        "PositionX",
+        "PositionY",
+        "Step",
+        "TabIndex",
+        "Width" };
 
     Any pValues[] = {
         Any( sal_True ),
@@ -165,15 +165,15 @@ OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rC
     sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, PPPOptimizerTokenEnum nResID )
 {
     OUString pNames[] = {
-        TKGet( TK_Enabled ),
-        TKGet( TK_Height ),
-        TKGet( TK_Label ),
-        TKGet( TK_PositionX ),
-        TKGet( TK_PositionY ),
-        TKGet( TK_PushButtonType ),
-        TKGet( TK_Step ),
-        TKGet( TK_TabIndex ),
-        TKGet( TK_Width ) };
+        "Enabled",
+        "Height",
+        "Label",
+        "PositionX",
+        "PositionY",
+        "PushButtonType",
+        "Step",
+        "TabIndex",
+        "Width" };
 
     Any pValues[] = {
         Any( sal_True ),
@@ -217,13 +217,13 @@ void InformationDialog::InitDialog()
 
    // setting the dialog properties
     OUString pNames[] = {
-        TKGet( TK_Closeable ),
-        TKGet( TK_Height ),
-        TKGet( TK_Moveable ),
-        TKGet( TK_PositionX ),
-        TKGet( TK_PositionY ),
-        TKGet( TK_Title ),
-        TKGet( TK_Width ) };
+        "Closeable",
+        "Height",
+        "Moveable",
+        "PositionX",
+        "PositionY",
+        "Title",
+        "Width" };
 
     Any pValues[] = {
         Any( sal_True ),
@@ -304,11 +304,11 @@ void InformationDialog::InitDialog()
                  5, 5, 25, 25, sal_False );
     InsertFixedText( *this, OUString("fixedtext"), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
     if ( !maSaveAsURL.isEmpty() )
-        InsertCheckBox(  *this, TKGet( TK_OpenNewDocument ), xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
+        InsertCheckBox(  *this, "OpenNewDocument", xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
     InsertButton( *this, OUString("button"), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
 
     sal_Bool bOpenNewDocument = mrbOpenNewDocument;
-    setControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ), Any( (sal_Int16)bOpenNewDocument ) );
+    setControlProperty( "OpenNewDocument", "State", Any( (sal_Int16)bOpenNewDocument ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -348,7 +348,7 @@ sal_Bool InformationDialog::execute()
     if ( !maSaveAsURL.isEmpty() )
     {
         sal_Int16 nInt16 = 0;
-        Any aAny( getControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ) ) );
+        Any aAny( getControlProperty( "OpenNewDocument", "State" ) );
         if ( aAny >>= nInt16 )
         {
             sal_Bool bOpenNewDocument = static_cast< sal_Bool >( nInt16 );

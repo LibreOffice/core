@@ -54,13 +54,13 @@ void OptimizerDialog::InitDialog()
 {
    // setting the dialog properties
     OUString pNames[] = {
-        TKGet( TK_Closeable ),
-        TKGet( TK_Height ),
-        TKGet( TK_Moveable ),
-        TKGet( TK_PositionX ),
-        TKGet( TK_PositionY ),
-        TKGet( TK_Title ),
-        TKGet( TK_Width ) };
+        "Closeable",
+        "Height",
+        "Moveable",
+        "PositionX",
+        "PositionY",
+        "Title",
+        "Width" };
 
     Any pValues[] = {
         Any( sal_True ),
@@ -86,12 +86,12 @@ void OptimizerDialog::InitRoadmap()
     try
     {
         OUString pNames[] = {
-            TKGet( TK_Height ),
-            TKGet( TK_PositionX ),
-            TKGet( TK_PositionY ),
-            TKGet( TK_Step ),
-            TKGet( TK_TabIndex ),
-            TKGet( TK_Width ) };
+            "Height",
+            "PositionX",
+            "PositionY",
+            "Step",
+            "TabIndex",
+            "Width" };
 
         Any pValues[] = {
             Any( sal_Int32( DIALOG_HEIGHT - 26 ) ),
@@ -107,11 +107,11 @@ void OptimizerDialog::InitRoadmap()
         Sequence< Any >             aValues( pValues, nCount );
 
         mxRoadmapControlModel = insertControlModel( OUString( "com.sun.star.awt.UnoControlRoadmapModel"  ),
-                                                              TKGet( TK_rdmNavi ), aNames, aValues  );
+                                                              "rdmNavi", aNames, aValues  );
 
         Reference< XPropertySet > xPropertySet( mxRoadmapControlModel, UNO_QUERY_THROW );
-        xPropertySet->setPropertyValue( TKGet( TK_Name ), Any( TKGet( TK_rdmNavi ) ) );
-        mxRoadmapControl = mxDialog->getControl( TKGet( TK_rdmNavi ) );
+        xPropertySet->setPropertyValue( "Name", Any( OUString("rdmNavi") ) );
+        mxRoadmapControl = mxDialog->getControl( "rdmNavi" );
         InsertRoadmapItem( 0, sal_True, getString( STR_INTRODUCTION ), ITEM_ID_INTRODUCTION );
         InsertRoadmapItem( 1, sal_True, getString( STR_SLIDES ), ITEM_ID_SLIDES );
         InsertRoadmapItem( 2, sal_True, getString( STR_IMAGE_OPTIMIZATION ), ITEM_ID_GRAPHIC_OPTIMIZATION );
@@ -122,11 +122,11 @@ void OptimizerDialog::InitRoadmap()
         OUString sBitmap( "/minimizepresi_80.png" );
         OUString sURL( sBitmapPath += sBitmap );
 
-        xPropertySet->setPropertyValue( TKGet( TK_ImageURL ), Any( sURL ) );
-        xPropertySet->setPropertyValue( TKGet( TK_Activated ), Any( (sal_Bool)sal_True ) );
-        xPropertySet->setPropertyValue( TKGet( TK_Complete ), Any( (sal_Bool)sal_True ) );
-        xPropertySet->setPropertyValue( TKGet( TK_CurrentItemID ), Any( (sal_Int16)ITEM_ID_INTRODUCTION ) );
-        xPropertySet->setPropertyValue( TKGet( TK_Text ), Any( getString( STR_STEPS ) ) );
+        xPropertySet->setPropertyValue( "ImageURL", Any( sURL ) );
+        xPropertySet->setPropertyValue( "Activated", Any( (sal_Bool)sal_True ) );
+        xPropertySet->setPropertyValue( "Complete", Any( (sal_Bool)sal_True ) );
+        xPropertySet->setPropertyValue( "CurrentItemID", Any( (sal_Int16)ITEM_ID_INTRODUCTION ) );
+        xPropertySet->setPropertyValue( "Text", Any( getString( STR_STEPS ) ) );
     }
     catch( Exception& )
     {
@@ -143,9 +143,9 @@ void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool 
         Reference< XIndexContainer > aIndexContainerRoadmap( mxRoadmapControlModel, UNO_QUERY_THROW );
         Reference< XInterface > xRoadmapItem( xSFRoadmap->createInstance(), UNO_QUERY_THROW );
         Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY_THROW );
-        xPropertySet->setPropertyValue( TKGet( TK_Label ), Any( rLabel ) );
-        xPropertySet->setPropertyValue( TKGet( TK_Enabled ), Any( bEnabled ) );
-        xPropertySet->setPropertyValue( TKGet( TK_ID ), Any( nItemID ) );
+        xPropertySet->setPropertyValue( "Label", Any( rLabel ) );
+        xPropertySet->setPropertyValue( "Enabled", Any( bEnabled ) );
+        xPropertySet->setPropertyValue( "ID", Any( nItemID ) );
         aIndexContainerRoadmap->insertByIndex( nIndex, Any( xRoadmapItem ) );
     }
     catch( Exception& )
@@ -165,13 +165,13 @@ void OptimizerDialog::UpdateConfiguration()
     Sequence< OUString > aStringItemList;
 
     // page0
-    aAny = getControlProperty( TKGet( TK_ListBox0Pg0 ), TKGet( TK_SelectedItems ) );
+    aAny = getControlProperty( "ListBox0Pg0", "SelectedItems" );
     if ( aAny >>= aSelectedItems )
     {
         if ( aSelectedItems.getLength() )
         {
             sal_Int16 nSelectedItem = aSelectedItems[ 0 ];
-            aAny = getControlProperty( TKGet( TK_ListBox0Pg0 ), TKGet( TK_StringItemList ) );
+            aAny = getControlProperty( "ListBox0Pg0", "StringItemList" );
             if ( aAny >>= aStringItemList )
             {
                 if ( aStringItemList.getLength() > nSelectedItem )
@@ -180,18 +180,18 @@ void OptimizerDialog::UpdateConfiguration()
         }
     }
 
-    aAny = getControlProperty( TKGet( TK_CheckBox3Pg3 ), TKGet( TK_State ) );
+    aAny = getControlProperty( "CheckBox3Pg3", "State" );
     if ( aAny >>= nInt16 )
     {
         if ( nInt16 )
         {
-            aAny = getControlProperty( TKGet( TK_ListBox0Pg3 ), TKGet( TK_SelectedItems ) );
+            aAny = getControlProperty( "ListBox0Pg3", "SelectedItems" );
             if ( aAny >>= aSelectedItems )
             {
                 if ( aSelectedItems.getLength() )
                 {
                     sal_Int16 nSelectedItem = aSelectedItems[ 0 ];
-                    aAny = getControlProperty( TKGet( TK_ListBox0Pg3 ), TKGet( TK_StringItemList ) );
+                    aAny = getControlProperty( "ListBox0Pg3", "StringItemList" );
                     if ( aAny >>= aStringItemList )
                     {
                         if ( aStringItemList.getLength() > nSelectedItem )
@@ -268,16 +268,16 @@ void OptimizerDialog::SwitchPage( sal_Int16 nNewStep )
     {
         sal_Int16 nOldStep = mnCurrentStep;
         if ( nNewStep == 0 )
-            disableControl( TKGet( TK_btnNavBack ) );
+            disableControl( "btnNavBack" );
         else if ( nOldStep == 0 )
-            enableControl( TKGet( TK_btnNavBack ) );
+            enableControl( "btnNavBack" );
 
         if ( nNewStep == MAX_STEP )
-            disableControl( TKGet( TK_btnNavNext ) );
+            disableControl( "btnNavNext" );
         else if ( nOldStep == MAX_STEP )
-            enableControl( TKGet( TK_btnNavNext ) );
+            enableControl( "btnNavNext" );
 
-        setControlProperty( TKGet( TK_rdmNavi ), TKGet( TK_CurrentItemID ), Any( nNewStep ) );
+        setControlProperty( "rdmNavi", "CurrentItemID", Any( nNewStep ) );
 
         DeactivatePage( nOldStep );
         UpdateControlStates( nNewStep );
@@ -315,8 +315,8 @@ OUString OptimizerDialog::GetSelectedString( const PPPOptimizerTokenEnum eToken 
     Sequence< sal_Int16 > sSelectedItems;
     Sequence< OUString >  sItemList;
 
-    if ( ( getControlProperty( TKGet( eToken ), TKGet( TK_SelectedItems ) ) >>= sSelectedItems ) &&
-            ( getControlProperty( TKGet( eToken ), TKGet( TK_StringItemList ) ) >>= sItemList ) )
+    if ( ( getControlProperty( TKGet( eToken ), "SelectedItems" ) >>= sSelectedItems ) &&
+            ( getControlProperty( TKGet( eToken ), "StringItemList" ) >>= sItemList ) )
     {
         if ( sSelectedItems.getLength() == 1 )
         {
@@ -341,8 +341,8 @@ void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::su
             OUString sStatus;
             if ( *pVal >>= sStatus )
             {
-                setControlProperty( TKGet( TK_FixedText1Pg4 ), TKGet( TK_Enabled ), Any( sal_True ) );
-                setControlProperty( TKGet( TK_FixedText1Pg4 ), TKGet( TK_Label ), Any( getString( TKGet( sStatus ) ) ) );
+                setControlProperty( "FixedText1Pg4", "Enabled", Any( sal_True ) );
+                setControlProperty( "FixedText1Pg4", "Label", Any( getString( TKGet( sStatus ) ) ) );
             }
         }
         pVal = maStats.GetStatusValue( TK_Progress );
@@ -350,7 +350,7 @@ void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::su
         {
             sal_Int32 nProgress = 0;
             if ( *pVal >>= nProgress )
-                setControlProperty( TKGet( TK_Progress ), TKGet( TK_ProgressValue ), Any( nProgress ) );
+                setControlProperty( "Progress", "ProgressValue", Any( nProgress ) );
         }
         pVal = maStats.GetStatusValue( TK_OpenNewDocument );
         if ( pVal )
@@ -374,7 +374,7 @@ void ItemListener::itemStateChanged( const ItemEvent& Event )
         if ( aSource >>= xControl )
         {
             Reference< XPropertySet > xPropertySet( xControl->getModel(), UNO_QUERY_THROW );
-            xPropertySet->getPropertyValue( TKGet( TK_Name ) ) >>= aControlName;
+            xPropertySet->getPropertyValue( "Name" ) >>= aControlName;
             PPPOptimizerTokenEnum eControl( TKGet( aControlName ) );
             switch( eControl )
             {
@@ -385,52 +385,52 @@ void ItemListener::itemStateChanged( const ItemEvent& Event )
                 break;
                 case TK_CheckBox1Pg1 :
                 {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nState )
                         mrOptimizerDialog.SetConfigProperty( TK_RemoveCropArea, Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox2Pg1 :
                 {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nState )
                         mrOptimizerDialog.SetConfigProperty( TK_EmbedLinkedGraphics, Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox0Pg2 :
                 {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nState )
                     {
                         mrOptimizerDialog.SetConfigProperty( TK_OLEOptimization, Any( nState != 0 ) );
-                        mrOptimizerDialog.setControlProperty( TKGet( TK_RadioButton0Pg2 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
-                        mrOptimizerDialog.setControlProperty( TKGet( TK_RadioButton1Pg2 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
+                        mrOptimizerDialog.setControlProperty( "RadioButton0Pg2", "Enabled", Any( nState != 0 ) );
+                        mrOptimizerDialog.setControlProperty( "RadioButton1Pg2", "Enabled", Any( nState != 0 ) );
                     }
                 }
                 break;
                 case TK_RadioButton0Pg1 :
                 {
                     sal_Int16 nInt16 = 0;
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nInt16 )
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nInt16 )
                     {
                         nInt16 ^= 1;
                         mrOptimizerDialog.SetConfigProperty( TK_JPEGCompression, Any( nInt16 != 0 ) );
-                        mrOptimizerDialog.setControlProperty( TKGet( TK_FixedText1Pg1 ), TKGet( TK_Enabled ), Any( nInt16 != 0 ) );
-                        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_Enabled ), Any( nInt16 != 0 ) );
+                        mrOptimizerDialog.setControlProperty( "FixedText1Pg1", "Enabled", Any( nInt16 != 0 ) );
+                        mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "Enabled", Any( nInt16 != 0 ) );
                     }
                 }
                 break;
                 case TK_RadioButton1Pg1 :
                 {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nState )
                     {
                         mrOptimizerDialog.SetConfigProperty( TK_JPEGCompression, Any( nState != 0 ) );
-                        mrOptimizerDialog.setControlProperty( TKGet( TK_FixedText1Pg1 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
-                        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
+                        mrOptimizerDialog.setControlProperty( "FixedText1Pg1", "Enabled", Any( nState != 0 ) );
+                        mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "Enabled", Any( nState != 0 ) );
                     }
                 }
                 break;
                 case TK_RadioButton0Pg2 :
                 {
                     sal_Int16 nInt16;
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nInt16 )
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nInt16 )
                     {
                         nInt16 ^= 1;
                         mrOptimizerDialog.SetConfigProperty( TK_OLEOptimizationType, Any( nInt16 ) );
@@ -439,44 +439,44 @@ void ItemListener::itemStateChanged( const ItemEvent& Event )
                 break;
                 case TK_RadioButton1Pg2 :
                 {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nState )
                         mrOptimizerDialog.SetConfigProperty( TK_OLEOptimizationType, Any( nState ) );
                 }
                 break;
                 case TK_CheckBox0Pg3 :
                 {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nState )
                         mrOptimizerDialog.SetConfigProperty( TK_DeleteUnusedMasterPages, Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox1Pg3 :
                 {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nState )
                         mrOptimizerDialog.SetConfigProperty( TK_DeleteNotesPages, Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox2Pg3 :
                 {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nState )
                         mrOptimizerDialog.SetConfigProperty( TK_DeleteHiddenSlides, Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox3Pg3 :
                 {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        mrOptimizerDialog.setControlProperty( TKGet( TK_ListBox0Pg3 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nState )
+                        mrOptimizerDialog.setControlProperty( "ListBox0Pg3", "Enabled", Any( nState != 0 ) );
                 }
                 break;
                 case TK_CheckBox1Pg4 :
                 {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        mrOptimizerDialog.setControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nState )
+                        mrOptimizerDialog.setControlProperty( "ComboBox0Pg4", "Enabled", Any( nState != 0 ) );
                 }
                 break;
                 case TK_RadioButton0Pg4 :
                 case TK_RadioButton1Pg4 :
                 {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
+                    if ( xPropertySet->getPropertyValue( "State" ) >>= nState )
                         mrOptimizerDialog.SetConfigProperty( TK_SaveAs, Any( eControl == TK_RadioButton1Pg4 ? nState != 0 : nState == 0 ) );
                 }
                 break;
@@ -510,16 +510,16 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
 
             mrOptimizerDialog.SwitchPage( ITEM_ID_SUMMARY );
             mrOptimizerDialog.DisablePage( ITEM_ID_SUMMARY );
-            mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavBack ), TKGet( TK_Enabled ), Any( sal_False ) );
-            mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavNext ), TKGet( TK_Enabled ), Any( sal_False ) );
-            mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavFinish ), TKGet( TK_Enabled ), Any( sal_False ) );
-            mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavCancel ), TKGet( TK_Enabled ), Any( sal_False ) );
-            mrOptimizerDialog.setControlProperty( TKGet( TK_FixedText0Pg4 ), TKGet( TK_Enabled ), Any( sal_True ) );
+            mrOptimizerDialog.setControlProperty( "btnNavBack", "Enabled", Any( sal_False ) );
+            mrOptimizerDialog.setControlProperty( "btnNavNext", "Enabled", Any( sal_False ) );
+            mrOptimizerDialog.setControlProperty( "btnNavFinish", "Enabled", Any( sal_False ) );
+            mrOptimizerDialog.setControlProperty( "btnNavCancel", "Enabled", Any( sal_False ) );
+            mrOptimizerDialog.setControlProperty( "FixedText0Pg4", "Enabled", Any( sal_True ) );
 
             // check if we have to open the FileDialog
             sal_Bool    bSuccessfullyExecuted = sal_True;
             sal_Int16   nInt16 = 0;
-            mrOptimizerDialog.getControlProperty( TKGet( TK_RadioButton1Pg4 ), TKGet( TK_State ) ) >>= nInt16;
+            mrOptimizerDialog.getControlProperty( "RadioButton1Pg4", "State" ) >>= nInt16;
             if ( nInt16 )
             {
                 OUString aSaveAsURL;
@@ -574,8 +574,8 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             {   // now check if we have to store a session template
                 nInt16 = 0;
                 OUString aSettingsName;
-                mrOptimizerDialog.getControlProperty( TKGet( TK_CheckBox1Pg4 ), TKGet( TK_State ) ) >>= nInt16;
-                mrOptimizerDialog.getControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Text ) ) >>= aSettingsName;
+                mrOptimizerDialog.getControlProperty( "CheckBox1Pg4", "State" ) >>= nInt16;
+                mrOptimizerDialog.getControlProperty( "ComboBox0Pg4", "Text" ) >>= aSettingsName;
                 if ( nInt16 && !aSettingsName.isEmpty() )
                 {
                     std::vector< OptimizerSettings >::iterator aIter( mrOptimizerDialog.GetOptimizerSettingsByName( aSettingsName ) );
@@ -600,11 +600,11 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 aURL.Path = OUString( "optimize"  );
 
                 Sequence< PropertyValue > lArguments( 3 );
-                lArguments[ 0 ].Name = TKGet( TK_Settings );
+                lArguments[ 0 ].Name = "Settings";
                 lArguments[ 0 ].Value <<= mrOptimizerDialog.GetConfigurationSequence();
-                lArguments[ 1 ].Name = TKGet( TK_StatusDispatcher );
+                lArguments[ 1 ].Name = "StatusDispatcher";
                 lArguments[ 1 ].Value <<= mrOptimizerDialog.GetStatusDispatcher();
-                lArguments[ 2 ].Name = TKGet( TK_InformationDialog );
+                lArguments[ 2 ].Name = "InformationDialog";
                 lArguments[ 2 ].Value <<= mrOptimizerDialog.GetFrame();
 
                 xDispatch->dispatch( aURL, lArguments );
@@ -613,10 +613,10 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             }
             else
             {
-                mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavBack ), TKGet( TK_Enabled ), Any( sal_True ) );
-                mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavNext ), TKGet( TK_Enabled ), Any( sal_False ) );
-                mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavFinish ), TKGet( TK_Enabled ), Any( sal_True ) );
-                mrOptimizerDialog.setControlProperty( TKGet( TK_btnNavCancel ), TKGet( TK_Enabled ), Any( sal_True ) );
+                mrOptimizerDialog.setControlProperty( "btnNavBack", "Enabled", Any( sal_True ) );
+                mrOptimizerDialog.setControlProperty( "btnNavNext", "Enabled", Any( sal_False ) );
+                mrOptimizerDialog.setControlProperty( "btnNavFinish", "Enabled", Any( sal_True ) );
+                mrOptimizerDialog.setControlProperty( "btnNavCancel", "Enabled", Any( sal_True ) );
                 mrOptimizerDialog.EnablePage( ITEM_ID_SUMMARY );
             }
         }
@@ -670,7 +670,7 @@ void TextListenerFormattedField0Pg1::textChanged( const TextEvent& /* rEvent */ 
     throw ( com::sun::star::uno::RuntimeException )
 {
     double fDouble = 0;
-    Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
+    Any aAny = mrOptimizerDialog.getControlProperty( "FormattedField0Pg1", "EffectiveValue" );
     if ( aAny >>= fDouble )
         mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
 }
@@ -685,7 +685,7 @@ void TextListenerComboBox0Pg1::textChanged( const TextEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
     OUString aString;
-    Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_ComboBox0Pg1 ), TKGet( TK_Text ) );
+    Any aAny = mrOptimizerDialog.getControlProperty( "ComboBox0Pg1", "Text" );
     if ( aAny >>= aString )
     {
         sal_Int32 nI0, nI1, nI2, nI3, nI4;
@@ -714,13 +714,13 @@ void SpinListenerFormattedField0Pg1::up( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
     double fDouble;
-    Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
+    Any aAny = mrOptimizerDialog.getControlProperty( "FormattedField0Pg1", "EffectiveValue" );
     if ( aAny >>= fDouble )
     {
         fDouble += 9;
         if ( fDouble > 100 )
             fDouble = 100;
-        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );
+        mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( fDouble ) );
         mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
     }
 }
@@ -728,26 +728,26 @@ void SpinListenerFormattedField0Pg1::down( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
     double fDouble;
-    Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
+    Any aAny = mrOptimizerDialog.getControlProperty( "FormattedField0Pg1", "EffectiveValue" );
     if ( aAny >>= fDouble )
     {
         fDouble -= 9;
         if ( fDouble < 0 )
             fDouble = 0;
-        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );
+        mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( fDouble ) );
         mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
     }
 }
 void SpinListenerFormattedField0Pg1::first( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 0 ) ) );
+    mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( static_cast< double >( 0 ) ) );
     mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)0 ) );
 }
 void SpinListenerFormattedField0Pg1::last( const SpinEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 100 ) ) );
+    mrOptimizerDialog.setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( static_cast< double >( 100 ) ) );
     mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)100 ) );
 }
 void SpinListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )

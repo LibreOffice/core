@@ -93,16 +93,16 @@ void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference
 {
     Reference< XGraphic > xGraphic;
     Reference< XPropertySet > xShapePropertySet( rxShape, UNO_QUERY_THROW );
-    if ( xShapePropertySet->getPropertyValue( TKGet( TK_Graphic ) ) >>= xGraphic )
+    if ( xShapePropertySet->getPropertyValue( "Graphic" ) >>= xGraphic )
     {
         text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
 
         GraphicCollector::GraphicUser aUser;
         aUser.mxShape = rxShape;
         aUser.mbFillBitmap = sal_False;
-        xShapePropertySet->getPropertyValue( TKGet( TK_GraphicURL ) ) >>= aUser.maGraphicURL;
-        xShapePropertySet->getPropertyValue( TKGet( TK_GraphicStreamURL ) ) >>= aUser.maGraphicStreamURL;
-        xShapePropertySet->getPropertyValue( TKGet( TK_GraphicCrop ) ) >>= aGraphicCropLogic;
+        xShapePropertySet->getPropertyValue( "GraphicURL" ) >>= aUser.maGraphicURL;
+        xShapePropertySet->getPropertyValue( "GraphicStreamURL" ) >>= aUser.maGraphicStreamURL;
+        xShapePropertySet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropLogic;
         awt::Size aLogicalSize( rxShape->getSize() );
 
         // calculating the logical size, as if there were no cropping
@@ -133,12 +133,12 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
     try
     {
         FillStyle eFillStyle;
-        if ( rxPropertySet->getPropertyValue( TKGet( TK_FillStyle ) ) >>= eFillStyle )
+        if ( rxPropertySet->getPropertyValue( "FillStyle" ) >>= eFillStyle )
         {
             if ( eFillStyle == FillStyle_BITMAP )
             {
                 Reference< XBitmap > xFillBitmap;
-                if ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmap ) ) >>= xFillBitmap )
+                if ( rxPropertySet->getPropertyValue( "FillBitmap" ) >>= xFillBitmap )
                 {
                     Reference< XGraphic > xGraphic( xFillBitmap, UNO_QUERY_THROW );
                     if ( xGraphic.is() )
@@ -147,18 +147,18 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
                         Reference< XPropertySetInfo > axPropSetInfo( rxPropertySet->getPropertySetInfo() );
                         if ( axPropSetInfo.is() )
                         {
-                            if ( axPropSetInfo->hasPropertyByName( TKGet( TK_FillBitmapMode ) ) )
+                            if ( axPropSetInfo->hasPropertyByName( "FillBitmapMode" ) )
                             {
                                 BitmapMode eBitmapMode;
-                                if ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapMode ) ) >>= eBitmapMode )
+                                if ( rxPropertySet->getPropertyValue( "FillBitmapMode" ) >>= eBitmapMode )
                                 {
                                     if ( ( eBitmapMode == BitmapMode_REPEAT ) || ( eBitmapMode == BitmapMode_NO_REPEAT ) )
                                     {
                                         sal_Bool bLogicalSize = sal_False;
                                         awt::Size aSize( 0, 0 );
-                                        if ( ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapLogicalSize ) ) >>= bLogicalSize )
-                                          && ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapSizeX ) ) >>= aSize.Width )
-                                          && ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapSizeY ) ) >>= aSize.Height ) )
+                                        if ( ( rxPropertySet->getPropertyValue( "FillBitmapLogicalSize" ) >>= bLogicalSize )
+                                          && ( rxPropertySet->getPropertyValue( "FillBitmapSizeX" ) >>= aSize.Width )
+                                          && ( rxPropertySet->getPropertyValue( "FillBitmapSizeY" ) >>= aSize.Height ) )
                                         {
                                             if ( bLogicalSize )
                                             {
@@ -183,7 +183,7 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
                         }
                         GraphicCollector::GraphicUser aUser;
                         aUser.mxPropertySet = rxPropertySet;
-                        rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapURL ) ) >>= aUser.maGraphicURL;
+                        rxPropertySet->getPropertyValue( "FillBitmapURL" ) >>= aUser.maGraphicURL;
                         aUser.mbFillBitmap = sal_True;
                         aUser.maLogicalSize = aLogicalSize;
                         aUser.mxPagePropertySet = rxPagePropertySet;
@@ -204,11 +204,11 @@ void ImpCollectBackgroundGraphic( const Reference< XComponentContext >& rxMSF, c
     {
         awt::Size aLogicalSize( 28000, 21000 );
         Reference< XPropertySet > xPropertySet( rxDrawPage, UNO_QUERY_THROW );
-        xPropertySet->getPropertyValue( TKGet( TK_Width ) ) >>= aLogicalSize.Width;
-        xPropertySet->getPropertyValue( TKGet( TK_Height ) ) >>= aLogicalSize.Height;
+        xPropertySet->getPropertyValue( "Width" ) >>= aLogicalSize.Width;
+        xPropertySet->getPropertyValue( "Height" ) >>= aLogicalSize.Height;
 
         Reference< XPropertySet > xBackgroundPropSet;
-        if ( xPropertySet->getPropertyValue( TKGet( TK_Background ) ) >>= xBackgroundPropSet )
+        if ( xPropertySet->getPropertyValue( "Background" ) >>= xBackgroundPropSet )
             ImpAddFillBitmapEntity( rxMSF, xBackgroundPropSet, aLogicalSize, rGraphicEntities, rGraphicSettings, xPropertySet );
     }
     catch( Exception& )
@@ -252,12 +252,12 @@ awt::Size GraphicCollector::GetOriginalSize( const Reference< XComponentContext 
 {
     awt::Size aSize100thMM( 0, 0 );
     Reference< XPropertySet > xGraphicPropertySet( rxGraphic, UNO_QUERY_THROW );
-    if ( xGraphicPropertySet->getPropertyValue( TKGet( TK_Size100thMM ) ) >>= aSize100thMM )
+    if ( xGraphicPropertySet->getPropertyValue( "Size100thMM" ) >>= aSize100thMM )
     {
         if ( !aSize100thMM.Width && !aSize100thMM.Height )
         {   // MAPMODE_PIXEL USED :-(
             awt::Size aSourceSizePixel( 0, 0 );
-            if ( xGraphicPropertySet->getPropertyValue( TKGet( TK_SizePixel ) ) >>= aSourceSizePixel )
+            if ( xGraphicPropertySet->getPropertyValue( "SizePixel" ) >>= aSourceSizePixel )
             {
                 const DeviceInfo& rDeviceInfo( GraphicCollector::GetDeviceInfo( rxMSF ) );
                 if ( rDeviceInfo.PixelPerMeterX && rDeviceInfo.PixelPerMeterY )
@@ -364,7 +364,7 @@ void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const 
             Reference< XPropertySet > xEmptyPagePropSet;
             Reference< XPropertySet > xShapePropertySet( xShape, UNO_QUERY_THROW );
             FillStyle eFillStyle;
-            if ( xShapePropertySet->getPropertyValue( TKGet( TK_FillStyle ) ) >>= eFillStyle )
+            if ( xShapePropertySet->getPropertyValue( "FillStyle" ) >>= eFillStyle )
             {
                 if ( eFillStyle == FillStyle_BITMAP )
                 {
@@ -385,14 +385,14 @@ void ImpCountBackgroundGraphic(
     {
         awt::Size aLogicalSize( 28000, 21000 );
         Reference< XPropertySet > xPropertySet( rxDrawPage, UNO_QUERY_THROW );
-        xPropertySet->getPropertyValue( TKGet( TK_Width ) ) >>= aLogicalSize.Width;
-        xPropertySet->getPropertyValue( TKGet( TK_Height ) ) >>= aLogicalSize.Height;
+        xPropertySet->getPropertyValue( "Width" ) >>= aLogicalSize.Width;
+        xPropertySet->getPropertyValue( "Height" ) >>= aLogicalSize.Height;
 
         Reference< XPropertySet > xBackgroundPropSet;
-        if ( xPropertySet->getPropertyValue( TKGet( TK_Background ) ) >>= xBackgroundPropSet )
+        if ( xPropertySet->getPropertyValue( "Background" ) >>= xBackgroundPropSet )
         {
             FillStyle eFillStyle;
-            if ( xBackgroundPropSet->getPropertyValue( TKGet( TK_FillStyle ) ) >>= eFillStyle )
+            if ( xBackgroundPropSet->getPropertyValue( "FillStyle" ) >>= eFillStyle )
             {
                 if ( eFillStyle == FillStyle_BITMAP )
                 {

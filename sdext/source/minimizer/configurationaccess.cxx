@@ -83,21 +83,21 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
     if ( rSettings.is() )
     {
         OUString pNames[] = {
-            TKGet( TK_Name ),
-            TKGet( TK_JPEGCompression ),
-            TKGet( TK_JPEGQuality ),
-            TKGet( TK_RemoveCropArea ),
-            TKGet( TK_ImageResolution ),
-            TKGet( TK_EmbedLinkedGraphics ),
-            TKGet( TK_OLEOptimization ),
-            TKGet( TK_OLEOptimizationType ),
-            TKGet( TK_DeleteUnusedMasterPages ),
-            TKGet( TK_DeleteHiddenSlides ),
-            TKGet( TK_DeleteNotesPages ),
-            TKGet( TK_SaveAs ),
-//          TKGet( TK_SaveAsURL ),
-//          TKGet( TK_FilterName ),
-            TKGet( TK_OpenNewDocument ) };
+            "Name",
+            "JPEGCompression",
+            "JPEGQuality",
+            "RemoveCropArea",
+            "ImageResolution",
+            "EmbedLinkedGraphics",
+            "OLEOptimization",
+            "OLEOptimizationType",
+            "DeleteUnusedMasterPages",
+            "DeleteHiddenSlides",
+            "DeleteNotesPages",
+            "SaveAs",
+//          "SaveAsURL",
+//          "FilterName",
+            "OpenNewDocument" };
 
         Any pValues[] = {
             Any( maName ),
@@ -153,7 +153,7 @@ ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContex
     LoadStrings();
     maSettings.push_back( pDefaultSettings ?
         *pDefaultSettings : OptimizerSettings() );
-    maSettings.back().maName = TKGet( TK_LastUsedSettings );
+    maSettings.back().maName = "LastUsedSettings";
     LoadConfiguration();
     maInitialSettings = maSettings;
 };
@@ -199,7 +199,7 @@ void ConfigurationAccess::LoadStrings()
             Reference< XInterface > xRoot( OpenConfiguration( true ) );
             if ( !xRoot.is() )
                 break;
-            Reference< container::XNameAccess > xSet( GetConfigurationNode( xRoot, TKGet( TK_Strings ) ), UNO_QUERY );
+            Reference< container::XNameAccess > xSet( GetConfigurationNode( xRoot, "Strings" ), UNO_QUERY );
             if ( xSet.is() )
             {
                 const Sequence< OUString > aElements( xSet->getElementNames() );
@@ -233,13 +233,13 @@ void ConfigurationAccess::LoadConfiguration()
             Reference< XInterface > xRoot( OpenConfiguration( true ) );
             if ( !xRoot.is() )
                 break;
-            Reference< container::XNameAccess > xSet( GetConfigurationNode( xRoot, TKGet( TK_LastUsedSettings ) ), UNO_QUERY );
+            Reference< container::XNameAccess > xSet( GetConfigurationNode( xRoot, "LastUsedSettings" ), UNO_QUERY );
             if ( xSet.is() )
             {
                 OptimizerSettings& rCurrent( maSettings.front() );
                 rCurrent.LoadSettingsFromConfiguration( xSet );
             }
-            xSet = Reference< container::XNameAccess >( GetConfigurationNode( xRoot, TKGet( TK_Settings_Templates ) ), UNO_QUERY );
+            xSet = Reference< container::XNameAccess >( GetConfigurationNode( xRoot, "Settings/Templates" ), UNO_QUERY );
             if ( xSet.is() )
             {
                 const Sequence< OUString > aElements( xSet->getElementNames() );
@@ -247,7 +247,7 @@ void ConfigurationAccess::LoadConfiguration()
                 {
                     try
                     {
-                        OUString aPath( TKGet( TK_Settings_Templates_ ).concat( aElements[ i ] ) );
+                        OUString aPath( "Settings/Templates/" + aElements[ i ] );
                         Reference< container::XNameAccess > xTemplates( GetConfigurationNode( xRoot, aPath ), UNO_QUERY );
                         if ( xTemplates.is() )
                         {
@@ -279,12 +279,12 @@ void ConfigurationAccess::SaveConfiguration()
             Reference<util::XChangesBatch> xRoot( OpenConfiguration( false ), UNO_QUERY_THROW );
 
             // storing the last used settings
-            Reference< container::XNameReplace > xSet( GetConfigurationNode( xRoot, TKGet( TK_LastUsedSettings ) ), UNO_QUERY_THROW );
+            Reference< container::XNameReplace > xSet( GetConfigurationNode( xRoot, "LastUsedSettings" ), UNO_QUERY_THROW );
             OptimizerSettings& rCurrent( maSettings.front() );
             rCurrent.SaveSettingsToConfiguration( xSet );
 
             // updating template elements
-            xSet = Reference< container::XNameReplace >( GetConfigurationNode( xRoot, TKGet( TK_Settings_Templates ) ), UNO_QUERY_THROW );
+            xSet = Reference< container::XNameReplace >( GetConfigurationNode( xRoot, "Settings/Templates" ), UNO_QUERY_THROW );
             Reference< container::XNameContainer > xNameContainer( xSet, UNO_QUERY_THROW );
 
             const Sequence< OUString > aElements( xSet->getElementNames() );
@@ -294,12 +294,12 @@ void ConfigurationAccess::SaveConfiguration()
             for( k = 1; k < maSettings.size(); k++ )
             {
                 OptimizerSettings& rSettings( maSettings[ k ] );
-                OUString aElementName( TKGet( TK_Template ).concat( OUString::number( k ) ) );
+                OUString aElementName( "Template" + OUString::number( k ) );
                 Reference< lang::XSingleServiceFactory > xChildFactory ( xSet, UNO_QUERY_THROW );
                 Reference< container::XNameReplace > xChild( xChildFactory->createInstance(), UNO_QUERY_THROW );
                 xNameContainer->insertByName( aElementName, Any( xChild ) );
 
-                OUString aPath( TKGet( TK_Settings_Templates_ ).concat( aElementName ) );
+                OUString aPath( "Settings/Templates/" + aElementName );
                 Reference< container::XNameReplace > xTemplates( GetConfigurationNode( xRoot, aPath ), UNO_QUERY );
                 rSettings.SaveSettingsToConfiguration( xTemplates );
             }
@@ -468,35 +468,35 @@ Sequence< PropertyValue > ConfigurationAccess::GetConfigurationSequence()
 {
     Sequence< PropertyValue > aRet( 15 );
     OptimizerSettings& rSettings( maSettings.front() );
-    aRet[ 0 ].Name = TKGet( TK_JPEGCompression );
+    aRet[ 0 ].Name = "JPEGCompression";
     aRet[ 0 ].Value= Any( rSettings.mbJPEGCompression );
-    aRet[ 1 ].Name = TKGet( TK_JPEGQuality );
+    aRet[ 1 ].Name = "JPEGQuality";
     aRet[ 1 ].Value= Any( rSettings.mnJPEGQuality );
-    aRet[ 2 ].Name = TKGet( TK_RemoveCropArea );
+    aRet[ 2 ].Name = "RemoveCropArea";
     aRet[ 2 ].Value= Any( rSettings.mbRemoveCropArea );
-    aRet[ 3 ].Name = TKGet( TK_ImageResolution );
+    aRet[ 3 ].Name = "ImageResolution";
     aRet[ 3 ].Value= Any( rSettings.mnImageResolution );
-    aRet[ 4 ].Name = TKGet( TK_EmbedLinkedGraphics );
+    aRet[ 4 ].Name = "EmbedLinkedGraphics";
     aRet[ 4 ].Value= Any( rSettings.mbEmbedLinkedGraphics );
-    aRet[ 5 ].Name = TKGet( TK_OLEOptimization );
+    aRet[ 5 ].Name = "OLEOptimization";
     aRet[ 5 ].Value= Any( rSettings.mbOLEOptimization );
-    aRet[ 6 ].Name = TKGet( TK_OLEOptimizationType );
+    aRet[ 6 ].Name = "OLEOptimizationType";
     aRet[ 6 ].Value= Any( rSettings.mnOLEOptimizationType );
-    aRet[ 7 ].Name = TKGet( TK_DeleteUnusedMasterPages );
+    aRet[ 7 ].Name = "DeleteUnusedMasterPages";
     aRet[ 7 ].Value= Any( rSettings.mbDeleteUnusedMasterPages );
-    aRet[ 8 ].Name = TKGet( TK_DeleteHiddenSlides );
+    aRet[ 8 ].Name = "DeleteHiddenSlides";
     aRet[ 8 ].Value= Any( rSettings.mbDeleteHiddenSlides );
-    aRet[ 9 ].Name = TKGet( TK_DeleteNotesPages );
+    aRet[ 9 ].Name = "DeleteNotesPages";
     aRet[ 9 ].Value= Any( rSettings.mbDeleteNotesPages );
-    aRet[ 10].Name = TKGet( TK_CustomShowName );
+    aRet[ 10].Name = "CustomShowName";
     aRet[ 10].Value= Any( rSettings.maCustomShowName );
-    aRet[ 11].Name = TKGet( TK_SaveAsURL );
+    aRet[ 11].Name = "SaveAsURL";
     aRet[ 11].Value= Any( rSettings.maSaveAsURL );
-    aRet[ 12].Name = TKGet( TK_FilterName );
+    aRet[ 12].Name = "FilterName";
     aRet[ 12].Value= Any( rSettings.maFilterName );
-    aRet[ 13].Name = TKGet( TK_OpenNewDocument );
+    aRet[ 13].Name = "OpenNewDocument";
     aRet[ 13].Value= Any( rSettings.mbOpenNewDocument );
-    aRet[ 14].Name = TKGet( TK_EstimatedFileSize );
+    aRet[ 14].Name = "EstimatedFileSize";
     aRet[ 14].Value= Any( rSettings.mnEstimatedFileSize );
     return aRet;
 }

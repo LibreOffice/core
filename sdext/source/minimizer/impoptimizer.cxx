@@ -185,13 +185,13 @@ void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOptimizati
                     if ( nOLEOptimizationType == 1 )
                     {
                         sal_Bool bIsInternal = sal_True;
-                        xPropSet->getPropertyValue( TKGet( TK_IsInternal ) ) >>= bIsInternal;
+                        xPropSet->getPropertyValue( "IsInternal" ) >>= bIsInternal;
                         bConvertOLE = !bIsInternal;
                     }
                     if ( bConvertOLE )
                     {
                         Reference< XGraphic > xGraphic;
-                        if ( xPropSet->getPropertyValue( TKGet( TK_Graphic ) ) >>= xGraphic )
+                        if ( xPropSet->getPropertyValue( "Graphic" ) >>= xGraphic )
                         {
                             const OUString sGraphicShape( "com.sun.star.drawing.GraphicObjectShape"  );
                             Reference< XMultiServiceFactory > xFact( rxModel, UNO_QUERY_THROW );
@@ -200,9 +200,9 @@ void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOptimizati
                             xShape2->setPosition( xShape->getPosition() );
                             xShape2->setSize( xShape->getSize() );
                             Reference< XPropertySet > xPropSet2( xShape2, UNO_QUERY_THROW );
-                            xPropSet2->setPropertyValue( TKGet( TK_Graphic ), Any( xGraphic ) );
+                            xPropSet2->setPropertyValue( "Graphic", Any( xGraphic ) );
                             xShapes->remove( xShape );
-                            xPropSet2->setPropertyValue( TKGet( TK_ZOrder ), Any( j ) );
+                            xPropSet2->setPropertyValue( "ZOrder", Any( j ) );
                         }
                     }
                 }
@@ -222,29 +222,29 @@ void ImpCompressGraphic( Reference< XGraphicProvider >& rxGraphicProvider, const
         if ( rxGraphicProvider.is() && rxOutputStream.is() )
         {
             Sequence< PropertyValue > aFilterData( 8 );
-            aFilterData[ 0 ].Name = TKGet( TK_ImageResolution );
+            aFilterData[ 0 ].Name = "ImageResolution";
             aFilterData[ 0 ].Value <<= nImageResolution;
-            aFilterData[ 1 ].Name = TKGet( TK_ColorMode );      // todo: jpeg color mode (0->true color, 1->greyscale)
+            aFilterData[ 1 ].Name = "ColorMode";      // todo: jpeg color mode (0->true color, 1->greyscale)
             aFilterData[ 1 ].Value <<= (sal_Int32)0;
-            aFilterData[ 2 ].Name = TKGet( TK_Quality );        // quality that is used if we export to jpeg
+            aFilterData[ 2 ].Name = "Quality";        // quality that is used if we export to jpeg
             aFilterData[ 2 ].Value <<= nJPEGQuality;
-            aFilterData[ 3 ].Name = TKGet( TK_Compression );    // compression that is used if we export to png
+            aFilterData[ 3 ].Name = "Compression";    // compression that is used if we export to png
             aFilterData[ 3 ].Value <<= (sal_Int32)6;
-            aFilterData[ 4 ].Name = TKGet( TK_Interlaced );     // interlaced is turned off if we export to png
+            aFilterData[ 4 ].Name = "Interlaced";     // interlaced is turned off if we export to png
             aFilterData[ 4 ].Value <<= (sal_Int32)0;
-            aFilterData[ 5 ].Name = TKGet( TK_LogicalSize );
+            aFilterData[ 5 ].Name = "LogicalSize";
             aFilterData[ 5 ].Value <<= rLogicalSize;
-            aFilterData[ 6 ].Name = TKGet( TK_RemoveCropArea );
+            aFilterData[ 6 ].Name = "RemoveCropArea";
             aFilterData[ 6 ].Value <<= bRemoveCropping;
-            aFilterData[ 7 ].Name = TKGet( TK_GraphicCropLogic );
+            aFilterData[ 7 ].Name = "GraphicCropLogic";
             aFilterData[ 7 ].Value <<= rGraphicCropLogic;
 
             Sequence< PropertyValue > aArgs( 3 );
-            aArgs[ 0 ].Name = TKGet( TK_MimeType );             // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
+            aArgs[ 0 ].Name = "MimeType";             // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
             aArgs[ 0 ].Value <<= rDestMimeType;
-            aArgs[ 1 ].Name = TKGet( TK_OutputStream );
+            aArgs[ 1 ].Name = "OutputStream";
             aArgs[ 1 ].Value <<= rxOutputStream;
-            aArgs[ 2 ].Name = TKGet( TK_FilterData );
+            aArgs[ 2 ].Name = "FilterData";
             aArgs[ 2 ].Value <<= aFilterData;
 
             rxGraphicProvider->storeGraphic( rxGraphic, aArgs );
@@ -264,7 +264,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
     {
         OUString aSourceMimeType;
         Reference< XPropertySet > xGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
-        if ( xGraphicPropertySet->getPropertyValue( TKGet( TK_MimeType ) ) >>= aSourceMimeType )
+        if ( xGraphicPropertySet->getPropertyValue( "MimeType" ) >>= aSourceMimeType )
         {
             sal_Int8 nGraphicType( xGraphic->getType() );
             if ( nGraphicType == com::sun::star::graphic::GraphicType::PIXEL )
@@ -276,10 +276,10 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                 awt::Size aSourceSizePixel( 0, 0 );
                 text::GraphicCrop aGraphicCropPixel( 0, 0, 0, 0 );
 
-                if ( ( xGraphicPropertySet->getPropertyValue( TKGet( TK_SizePixel ) ) >>= aSourceSizePixel ) &&
-                    ( xGraphicPropertySet->getPropertyValue( TKGet( TK_Transparent ) ) >>= bTransparent ) &&
-                    ( xGraphicPropertySet->getPropertyValue( TKGet( TK_Alpha ) ) >>= bAlpha ) &&
-                    ( xGraphicPropertySet->getPropertyValue( TKGet( TK_Animated ) ) >>= bAnimated ) )
+                if ( ( xGraphicPropertySet->getPropertyValue( "SizePixel" ) >>= aSourceSizePixel ) &&
+                    ( xGraphicPropertySet->getPropertyValue( "Transparent" ) >>= bTransparent ) &&
+                    ( xGraphicPropertySet->getPropertyValue( "Alpha" ) >>= bAlpha ) &&
+                    ( xGraphicPropertySet->getPropertyValue( "Animated" ) >>= bAnimated ) )
                 {
                     awt::Size aDestSizePixel( aSourceSizePixel );
                     if ( !bAnimated )
@@ -348,7 +348,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
                                 xSeekable->seek( 0 );
                                 Sequence< PropertyValue > aArgs( 1 );
-                                aArgs[ 0 ].Name = TKGet( TK_InputStream );
+                                aArgs[ 0 ].Name = "InputStream";
                                 aArgs[ 0 ].Value <<= xInputStream;
                                 xNewGraphic = xGraphicProvider->queryGraphic( aArgs );
                             }
@@ -367,7 +367,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
                 xSeekable->seek( 0 );
                 Sequence< PropertyValue > aArgs( 1 );
-                aArgs[ 0 ].Name = TKGet( TK_InputStream );
+                aArgs[ 0 ].Name = "InputStream";
                 aArgs[ 0 ].Value <<= xInputStream;
                 xNewGraphic = xGraphicProvider->queryGraphic( aArgs );
             }
@@ -403,13 +403,13 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                 if ( aGraphicIter->maUser[ 0 ].mbFillBitmap && aGraphicIter->maUser[ 0 ].mxPropertySet.is() )
                 {
                     Reference< XBitmap > xFillBitmap;
-                    if ( aGraphicIter->maUser[ 0 ].mxPropertySet->getPropertyValue( TKGet( TK_FillBitmap ) ) >>= xFillBitmap )
+                    if ( aGraphicIter->maUser[ 0 ].mxPropertySet->getPropertyValue( "FillBitmap" ) >>= xFillBitmap )
                         xGraphic = Reference< XGraphic >( xFillBitmap, UNO_QUERY_THROW );
                 }
                 else if ( aGraphicIter->maUser[ 0 ].mxShape.is() )
                 {
                     Reference< XPropertySet > xShapePropertySet( aGraphicIter->maUser[ 0 ].mxShape, UNO_QUERY_THROW );
-                    xShapePropertySet->getPropertyValue( TKGet( TK_Graphic ) ) >>= xGraphic;
+                    xShapePropertySet->getPropertyValue( "Graphic" ) >>= xGraphic;
                 }
                 if ( xGraphic.is() )
                 {
@@ -426,8 +426,8 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                             {
                                 OUString sEmptyGraphicURL;
                                 Reference< XPropertySet > xShapePropertySet( aGraphicUserIter->mxShape, UNO_QUERY_THROW );
-                                xShapePropertySet->setPropertyValue( TKGet( TK_GraphicURL ), Any( sEmptyGraphicURL ) );
-                                xShapePropertySet->setPropertyValue( TKGet( TK_Graphic ), Any( xNewGraphic ) );
+                                xShapePropertySet->setPropertyValue( "GraphicURL", Any( sEmptyGraphicURL ) );
+                                xShapePropertySet->setPropertyValue( "Graphic", Any( xNewGraphic ) );
 
                                 if ( aGraphicUserIter->maGraphicCropLogic.Left || aGraphicUserIter->maGraphicCropLogic.Top
                                 || aGraphicUserIter->maGraphicCropLogic.Right || aGraphicUserIter->maGraphicCropLogic.Bottom )
@@ -441,7 +441,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                                         aGraphicCropLogic.Right = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Right * ((double)aNewSize.Width / (double)aSize100thMM.Width));
                                         aGraphicCropLogic.Bottom = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Bottom * ((double)aNewSize.Height / (double)aSize100thMM.Height));
                                     }
-                                    xShapePropertySet->setPropertyValue( TKGet( TK_GraphicCrop ), Any( aGraphicCropLogic ) );
+                                    xShapePropertySet->setPropertyValue( "GraphicCrop", Any( aGraphicCropLogic ) );
                                 }
                             }
                             else if ( aGraphicUserIter->mxPropertySet.is() )
@@ -453,20 +453,20 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                                     sal_Bool bLogicalSize;
 
                                     Reference< XPropertySet >& rxPropertySet( aGraphicUserIter->mxPropertySet );
-                                    rxPropertySet->setPropertyValue( TKGet( TK_FillBitmap ), Any( xFillBitmap ) );
-                                    if ( ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapLogicalSize ) ) >>= bLogicalSize )
-                                        && ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapSizeX ) ) >>= aSize.Width )
-                                        && ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapSizeY ) ) >>= aSize.Height ) )
+                                    rxPropertySet->setPropertyValue( "FillBitmap", Any( xFillBitmap ) );
+                                    if ( ( rxPropertySet->getPropertyValue( "FillBitmapLogicalSize" ) >>= bLogicalSize )
+                                        && ( rxPropertySet->getPropertyValue( "FillBitmapSizeX" ) >>= aSize.Width )
+                                        && ( rxPropertySet->getPropertyValue( "FillBitmapSizeY" ) >>= aSize.Height ) )
                                     {
                                         if ( !aSize.Width || !aSize.Height )
                                         {
-                                            rxPropertySet->setPropertyValue( TKGet( TK_FillBitmapLogicalSize ), Any( sal_True ) );
-                                            rxPropertySet->setPropertyValue( TKGet( TK_FillBitmapSizeX ), Any( aGraphicUserIter->maLogicalSize.Width ) );
-                                            rxPropertySet->setPropertyValue( TKGet( TK_FillBitmapSizeY ), Any( aGraphicUserIter->maLogicalSize.Height ) );
+                                            rxPropertySet->setPropertyValue( "FillBitmapLogicalSize", Any( sal_True ) );
+                                            rxPropertySet->setPropertyValue( "FillBitmapSizeX", Any( aGraphicUserIter->maLogicalSize.Width ) );
+                                            rxPropertySet->setPropertyValue( "FillBitmapSizeY", Any( aGraphicUserIter->maLogicalSize.Height ) );
                                         }
                                     }
                                     if ( aGraphicUserIter->mxPagePropertySet.is() )
-                                        aGraphicUserIter->mxPagePropertySet->setPropertyValue( TKGet( TK_Background ), Any( rxPropertySet ) );
+                                        aGraphicUserIter->mxPagePropertySet->setPropertyValue( "Background", Any( rxPropertySet ) );
                                 }
                             }
                             ++aGraphicUserIter;
@@ -533,7 +533,7 @@ sal_Bool ImpOptimizer::Optimize()
     if ( mbDeleteUnusedMasterPages )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 40 ) ) );
-        SetStatusValue( TK_Status, Any( TKGet( STR_DELETING_SLIDES ) ) );
+        SetStatusValue( TK_Status, Any( OUString("STR_DELETING_SLIDES") ) );
         DispatchStatus();
         ImpDeleteUnusedMasterPages( mxModel );
     }
@@ -541,14 +541,14 @@ sal_Bool ImpOptimizer::Optimize()
     if ( mbDeleteHiddenSlides )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 40 ) ) );
-        SetStatusValue( TK_Status, Any( TKGet( STR_DELETING_SLIDES ) ) );
+        SetStatusValue( TK_Status, Any( OUString("STR_DELETING_SLIDES") ) );
         DispatchStatus();
         ImpDeleteHiddenSlides( mxModel );
     }
 
     if ( mbDeleteNotesPages )
     {
-        SetStatusValue( TK_Status, Any( TKGet( STR_DELETING_SLIDES ) ) );
+        SetStatusValue( TK_Status, Any( OUString("STR_DELETING_SLIDES") ) );
         DispatchStatus();
         ImpDeleteNotesPages( mxModel );
     }
@@ -556,7 +556,7 @@ sal_Bool ImpOptimizer::Optimize()
     if ( mbOLEOptimization )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 45 ) ) );
-        SetStatusValue( TK_Status, Any( TKGet( STR_CREATING_OLE_REPLACEMENTS ) ) );
+        SetStatusValue( TK_Status, Any( OUString("STR_CREATING_OLE_REPLACEMENTS") ) );
         DispatchStatus();
         ImpConvertOLE( mxModel, mnOLEOptimizationType );
     }
@@ -564,7 +564,7 @@ sal_Bool ImpOptimizer::Optimize()
     if ( mbJPEGCompression || mbRemoveCropArea || mnImageResolution )
     {
         SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 50 ) ) );
-        SetStatusValue( TK_Status, Any( TKGet( STR_OPTIMIZING_GRAPHICS ) ) );
+        SetStatusValue( TK_Status, Any( OUString("STR_OPTIMIZING_GRAPHICS") ) );
         DispatchStatus();
 
         std::vector< GraphicCollector::GraphicEntity > aGraphicList;
@@ -656,7 +656,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         {
 
             SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 10 ) ) );
-            SetStatusValue( TK_Status, Any( TKGet( STR_DUPLICATING_PRESENTATION ) ) );
+            SetStatusValue( TK_Status, Any( OUString("STR_DUPLICATING_PRESENTATION") ) );
             DispatchStatus();
 
             Reference< XStorable >xStorable( mxModel, UNO_QUERY );
@@ -670,7 +670,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                 {
                     int nLength = aArguments.getLength();
                     aArguments.realloc( nLength + 1 );
-                    aArguments[ nLength ].Name = TKGet( TK_FilterName );
+                    aArguments[ nLength ].Name = "FilterName";
                     aArguments[ nLength ].Value <<= maFilterName;
                 }
                 xStorable->storeToURL( maSaveAsURL, aArguments );
@@ -678,18 +678,18 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                     nSourceSize = PPPOptimizer::GetFileSize( maSaveAsURL );
 
                 SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 30 ) ) );
-                SetStatusValue( TK_Status, Any( TKGet( STR_DUPLICATING_PRESENTATION ) ) );
+                SetStatusValue( TK_Status, Any( OUString("STR_DUPLICATING_PRESENTATION") ) );
                 DispatchStatus();
 
                 Reference< XDesktop2 > xDesktop = Desktop::create( mxContext );
-                xSelf = xDesktop->findFrame( TKGet( TK__blank ), FrameSearchFlag::CREATE );
+                xSelf = xDesktop->findFrame( "_blank", FrameSearchFlag::CREATE );
                 Reference< XComponentLoader > xComponentLoader( xSelf, UNO_QUERY );
 
                 Sequence< PropertyValue > aLoadProps( 1 );
-                aLoadProps[ 0 ].Name = TKGet( TK_Hidden );
+                aLoadProps[ 0 ].Name = "Hidden";
                 aLoadProps[ 0 ].Value <<= (sal_Bool)( sal_True );
                 mxModel = Reference< XModel >( xComponentLoader->loadComponentFromURL(
-                    maSaveAsURL, TKGet( TK__self ), 0, aLoadProps ), UNO_QUERY );
+                    maSaveAsURL, "_self", 0, aLoadProps ), UNO_QUERY );
             }
         }
 
