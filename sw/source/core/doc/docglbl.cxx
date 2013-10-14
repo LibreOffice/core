@@ -287,9 +287,9 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
                     xDocProps->setTemplateURL(rPath);
                     // Set the new doc's title to the text of the "split para".
                     // If the current doc has a title, insert it at the begin.
-                    String sTitle( xDocProps->getTitle() );
-                    if( sTitle.Len() )
-                        sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ));
+                    OUString sTitle( xDocProps->getTitle() );
+                    if (!sTitle.isEmpty())
+                        sTitle += ": ";
                     sTitle += ((SwTxtNode*)pStartNd)->GetExpandTxt();
                     xDocProps->setTitle( sTitle );
 

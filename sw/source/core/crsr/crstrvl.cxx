@@ -1453,20 +1453,20 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 
                 rCntntAtPos.sStr = "Pos: (";
                 rCntntAtPos.sStr += OUString::number( aPos.nNode.GetIndex());
-                rCntntAtPos.sStr += ':';
+                rCntntAtPos.sStr += ":";
                 rCntntAtPos.sStr += OUString::number( aPos.nContent.GetIndex());
-                rCntntAtPos.sStr += ')';
-                rCntntAtPos.sStr.AppendAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "\nAbs.Vorl.: " )); // translation *might be* "paragraph template"
+                rCntntAtPos.sStr += ")";
+                rCntntAtPos.sStr += "\nAbs.Vorl.: "; // translation *might be* "paragraph template"
                 rCntntAtPos.sStr += pTxtNd->GetFmtColl()->GetName();
                 if( pTxtNd->GetCondFmtColl() )
-                    rCntntAtPos.sStr.AppendAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "\nBed.Vorl.: " )) // translation *might be* "conditional template"
-                        += pTxtNd->GetCondFmtColl()->GetName();
+                {
+                     // translation *might be* "conditional template"
+                    rCntntAtPos.sStr += "\nBed.Vorl.: " + pTxtNd->GetCondFmtColl()->GetName();
+                }
 
                 if( aSet.Count() )
                 {
-                    String sAttrs;
+                    OUString sAttrs;
                     SfxItemIter aIter( aSet );
                     const SfxPoolItem* pItem = aIter.FirstItem();
                     while( true )
@@ -1477,22 +1477,19 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             GetDoc()->GetAttrPool().GetPresentation( *pItem,
                                             SFX_ITEM_PRESENTATION_COMPLETE,
                                             SFX_MAPUNIT_CM, aStr );
-                            if( sAttrs.Len() )
-                                sAttrs.AppendAscii(
-                                        RTL_CONSTASCII_STRINGPARAM( ", " ));
+                            if (!sAttrs.isEmpty())
+                                sAttrs += ", ";
                             sAttrs += aStr;
                         }
                         if( aIter.IsAtEnd() )
                             break;
                         pItem = aIter.NextItem();
                     }
-                    if( sAttrs.Len() )
+                    if (!sAttrs.isEmpty())
                     {
                         if( rCntntAtPos.sStr.Len() )
                             rCntntAtPos.sStr += '\n';
-                        rCntntAtPos.sStr.AppendAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "Attr: " ) )
-                                += sAttrs;
+                        rCntntAtPos.sStr += "Attr: " + sAttrs;
                     }
                 }
                 bRet = sal_True;

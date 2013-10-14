@@ -640,8 +640,8 @@ const SfxPoolItem& SwWW8AttrIter::GetItem(sal_uInt16 nWhich) const
 
 void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/, const SwFmtRuby& rRuby )
 {
-    String aStr( FieldString( ww::eEQ ) );
-    aStr.AppendAscii( "\\* jc" );
+    OUString aStr( FieldString( ww::eEQ ) );
+    aStr += "\\* jc";
     sal_Int32 nJC = 0;
     sal_Char cDirective = 0;
     switch ( rRuby.GetAdjustment() )
@@ -715,17 +715,16 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
     }
     nHeight = (nHeight + 5)/10;
 
-    aStr.AppendAscii( " \\* \"Font:" );
-    aStr.Append( sFamilyName );
-    aStr.AppendAscii( "\" \\* hps" );
+    aStr += " \\* \"Font:";
+    aStr += sFamilyName;
+    aStr += "\" \\* hps";
     aStr += OUString::number( nHeight );
-    aStr.AppendAscii( " \\o" );
+    aStr += " \\o";
     if ( cDirective )
     {
-        aStr.AppendAscii( "\\a" );
-        aStr.Append( cDirective );
+        aStr += "\\a" + OUString(cDirective);
     }
-    aStr.AppendAscii( "(\\s\\up " );
+    aStr += "(\\s\\up ";
 
 
     if ( g_pBreakIt->GetBreakIter().is() )
@@ -740,15 +739,15 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
                                              GetWhichOfScript( RES_CHRATR_FONTSIZE, nRubyScript ) );
     nHeight = (rHeightItem.GetHeight() + 10)/20-1;
     aStr += OUString::number(nHeight);
-    aStr += '(';
+    aStr += "(";
     aStr += rRuby.GetText();
-    aStr.AppendAscii( ")" );
+    aStr += ")";
 
     // The parameter separator depends on the FIB.lid
     if ( m_rWW8Export.pFib->getNumDecimalSep() == '.' )
-        aStr.AppendAscii( "," );
+        aStr += ",";
     else
-        aStr.AppendAscii( ";" );
+        aStr += ";";
 
     m_rWW8Export.OutputField( 0, ww::eEQ, aStr,
             WRITEFIELD_START | WRITEFIELD_CMD_START );

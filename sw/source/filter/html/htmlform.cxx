@@ -1671,9 +1671,8 @@ void SwHTMLParser::InsertInput()
     if( !rServiceFactory.is() )
         return;
 
-    String sServiceName(
-        OUString("com.sun.star.form.component.") );
-    sServiceName.AppendAscii( pType );
+    OUString sServiceName("com.sun.star.form.component.");
+    sServiceName += OUString::createFromAscii(pType);
     uno::Reference< XInterface > xInt =
         rServiceFactory->createInstance( sServiceName );
     if( !xInt.is() )

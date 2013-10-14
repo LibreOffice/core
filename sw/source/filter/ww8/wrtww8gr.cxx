@@ -406,8 +406,8 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
                               ? rFrame.GetContent()->GetGrfNode() : 0;
     if ( pGrfNd && pGrfNd->IsLinkedFile() )
     {
-        String sStr( FieldString(ww::eINCLUDEPICTURE) );
-        sStr.AppendAscii(" \"");
+        OUString sStr( FieldString(ww::eINCLUDEPICTURE) );
+        sStr += " \"";
         {
             if ( pGrfNd )
             {
@@ -416,7 +416,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
                 sStr += aFileURL;
             }
         }
-        sStr.AppendAscii("\" \\d");
+        sStr += "\" \\d";
 
         OutputField( 0, ww::eINCLUDEPICTURE, sStr,
                    WRITEFIELD_START | WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );

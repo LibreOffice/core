@@ -111,11 +111,10 @@ void SidebarTxtControl::RequestHelp(const HelpEvent &rEvt)
     if ( nResId &&
          mrDocView.GetWrtShell().GetContentAtPos( mrSidebarWin.GetAnchorPos(), aCntntAtPos ) )
     {
-        String sTxt;
-        sTxt = SW_RESSTR( nResId );
-        sTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM(": " ));
+        OUString sTxt(SW_RESSTR(nResId));
+        sTxt += ": ";
         sTxt += aCntntAtPos.aFnd.pRedl->GetAuthorString();
-        sTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " - " ));
+        sTxt += " - ";
         sTxt += GetAppLangDateTimeString( aCntntAtPos.aFnd.pRedl->GetTimeStamp() );
         Help::ShowQuickHelp( this,PixelToLogic(Rectangle(rEvt.GetMousePosPixel(),Size(50,10))),sTxt);
     }

@@ -365,9 +365,9 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
             SwTxtNode* pHeadNd = GetNodes().MakeTxtNode( aIdx,
                             GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
-            String sNm( pNewSection->GetTOXName() );
+            OUString sNm( pNewSection->GetTOXName() );
             // ??Resource
-            sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
+            sNm += "_Head";
 
             SwSectionData headerData( TOX_HEADER_SECTION, sNm );
 
@@ -882,9 +882,9 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                                 GetTxtFmtColl( FORM_TITLE ) );
         pHeadNd->InsertText( GetTitle(), SwIndex( pHeadNd ) );
 
-        String sNm( GetTOXName() );
+        OUString sNm( GetTOXName() );
         // ??Resource
-        sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
+        sNm += "_Head";
 
         SwSectionData headerData( TOX_HEADER_SECTION, sNm );
 
@@ -1581,7 +1581,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
     for(sal_uInt16 nIndex = nArrayIdx; nIndex < nArrayIdx + nCount; nIndex++)
     {
         if(nIndex > nArrayIdx)
-            rTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " )); // comma separation
+            rTxt += ", "; // comma separation
         // Initialize String with the Pattern from the form
         const SwTOXSortTabBase& rBase = *aSortArr[nIndex];
         sal_uInt16 nLvl = rBase.GetLevel();
@@ -1715,7 +1715,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                         String aInsStr = OUString(cNumRepl);
                         for (size_t i = 1; i < nSize; ++i)
                         {
-                            aInsStr.AppendAscii( sPageDeli );
+                            aInsStr += sPageDeli;
                             aInsStr += cNumRepl;
                         }
                         aInsStr += cEndPageNum;
@@ -2051,7 +2051,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                     if(nCount >= 2 )
                         aNumStr += '-';
                     else if(nCount == 1 )
-                        aNumStr.AppendAscii( sPageDeli );
+                        aNumStr += sPageDeli;
                     //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
                     if(nCount)
                         aNumStr += aType.GetNumStr( nBeg + nCount );
@@ -2059,7 +2059,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
 
                 // Create new String
                 nBeg     = rNums[i];
-                aNumStr.AppendAscii( sPageDeli );
+                aNumStr += sPageDeli;
                 //the change of the character style must apply after sPageDeli is appended
                 if (xCharStyleIdx && bMainEntryChanges)
                 {
@@ -2074,7 +2074,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         {   // Insert all Numbers
             aNumStr += aType.GetNumStr( sal_uInt16(rNums[i]) );
             if(i != (rNums.size()-1))
-                aNumStr.AppendAscii( sPageDeli );
+                aNumStr += sPageDeli;
         }
     }
     // Flush when ending and the following old values
@@ -2090,7 +2090,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
             if(nCount >= 2)
                 aNumStr +='-';
             else if(nCount == 1)
-                aNumStr.AppendAscii( sPageDeli );
+                aNumStr += sPageDeli;
             //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
             if(nCount)
                 aNumStr += SvxNumberType( rDescs[i-1]->GetNumType() ).GetNumStr( nBeg+nCount );

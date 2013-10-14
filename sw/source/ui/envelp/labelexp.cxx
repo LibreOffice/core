@@ -226,8 +226,8 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
         OUString uCntName( OUString::createFromAscii( SW_PROP_NAME_STR(UNO_NAME_CONTENT )));
         for( const _SwLabItemMap* p = aArr; p->pName; ++p )
         {
-            String sCurFldName( sFldName );
-            sCurFldName.AppendAscii( p->pName );
+            OUString sCurFldName( sFldName );
+            sCurFldName += OUString::createFromAscii(p->pName);
             OUString uFldName( sCurFldName );
             if( xFldMasters->hasByName( uFldName ))
             {

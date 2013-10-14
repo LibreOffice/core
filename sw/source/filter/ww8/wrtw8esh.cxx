@@ -2983,8 +2983,6 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     if (!WriteOCXStream( mxModel, xOleStg,xControlModel,aSize,sUName))
         return false;
 
-    String sName = sUName;
-
     sal_uInt8 aSpecOLE[] =
     {
         0x03, 0x6a, 0xFF, 0xFF, 0xFF, 0xFF, // sprmCPicLocation
@@ -2996,10 +2994,8 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     sal_uInt8 *pData = aSpecOLE+2;
     Set_UInt32(pData,nObjId );
 
-    String sFld(FieldString(ww::eCONTROL));
-    sFld.AppendAscii("Forms.");
-    sFld += sName;
-    sFld.AppendAscii(".1 \\s ");
+    OUString sFld(FieldString(ww::eCONTROL));
+    sFld += "Forms." + sUName + ".1 \\s ";
 
     rWW8Wrt.OutputField(0, ww::eCONTROL, sFld,
         WRITEFIELD_START|WRITEFIELD_CMD_START|WRITEFIELD_CMD_END);

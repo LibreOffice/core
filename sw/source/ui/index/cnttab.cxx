@@ -3986,8 +3986,8 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
     m_pEntriesBB->Show();
     m_pOKPB->SetClickHdl(LINK(this, SwAutoMarkDlg_Impl, OkHdl));
 
-    String sTitle = GetText();
-    sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM(": "));
+    OUString sTitle = GetText();
+    sTitle += ": ";
     sTitle += sAutoMarkURL;
     SetText(sTitle);
     bool bError = false;

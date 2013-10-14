@@ -1237,8 +1237,7 @@ OUString SwWW8ImplReader::GetMappedBookmark(const OUString &rOrigName)
 // "ASK"
 eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
 {
-    OUString sOrigName;
-    String aQ;
+    OUString sOrigName, aQ;
     String aDef;
     WW8ReadFieldParams aReadParam( rStr );
     for (;;)
@@ -1251,7 +1250,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
         case -2:
             if (sOrigName.isEmpty())
                 sOrigName = aReadParam.GetResult();
-            else if( !aQ.Len() )
+            else if (aQ.isEmpty())
                 aQ = aReadParam.GetResult();
             break;
         case 'd':
@@ -1271,9 +1270,9 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
     //available for aResult and aDef otherwise
     if (aDef.Len())
     {
-        if (aQ.Len())
-            aQ.AppendAscii(" - ");
-        aQ.Append(aDef);
+        if (!aQ.isEmpty())
+            aQ += " - ";
+        aQ += aDef;
     }
 
     const long nNo = MapBookmarkVariables(pF, sOrigName, aResult);

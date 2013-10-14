@@ -346,10 +346,10 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
 
 IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
 {
-    String aMessage = aStrDelMsg ;
-    aMessage.AppendAscii("\n\n");
+    OUString aMessage = aStrDelMsg ;
+    aMessage += "\n\n";
     aMessage += m_pLbFormat->GetSelectEntry() ;
-    aMessage += '\n';
+    aMessage += "\n";
 
     MessBox* pBox = new MessBox( this, WinBits( WB_OK_CANCEL ),
                                     aStrDelTitle, aMessage);

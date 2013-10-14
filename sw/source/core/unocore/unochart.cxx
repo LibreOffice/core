@@ -1764,7 +1764,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
     if (bDisposed)
         throw lang::DisposedException();
 
-    String aRes;
+    OUString aRes;
     String aRangeRepresentation( rRangeRepresentation );
 
     // multiple ranges are delimeted by a ';' like in
@@ -1816,9 +1816,9 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
             aCellRange.aLowerRight.nRow      = nRow;
             aCellRange.aLowerRight.bIsEmpty  = false;
         }
-        String aTmp( XMLRangeHelper::getXMLStringFromCellRange( aCellRange ) );
-        if (aRes.Len()) // in case of multiple ranges add delimeter
-            aRes.AppendAscii( " " );
+        OUString aTmp( XMLRangeHelper::getXMLStringFromCellRange( aCellRange ) );
+        if (!aRes.isEmpty()) // in case of multiple ranges add delimeter
+            aRes += " ";
         aRes += aTmp;
     }
 
@@ -1832,7 +1832,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
     if (bDisposed)
         throw lang::DisposedException();
 
-    String aRes;
+    OUString aRes;
     String aXMLRange( rXMLRange );
 
     // multiple ranges are delimeted by a ' ' like in
@@ -1865,9 +1865,9 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
                                      aCellRange.aLowerRight.nRow );
         }
 
-        if (aRes.Len()) // in case of multiple ranges add delimeter
-            aRes.AppendAscii( ";" );
-        aRes += String(aTmp);
+        if (!aRes.isEmpty()) // in case of multiple ranges add delimeter
+            aRes += ";";
+        aRes += aTmp;
     }
 
     return aRes;
@@ -2688,8 +2688,8 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
     pStartBox = pTable->GetTblBox( pStartNd->GetIndex() );
     const String aStartBox( pStartBox->GetName() );
     //
-    String aCellRange( aStartBox );     // note that cell range here takes the newly added rows/cols already into account
-    aCellRange.AppendAscii( ":" );
+    OUString aCellRange( aStartBox );     // note that cell range here takes the newly added rows/cols already into account
+    aCellRange += ":";
     aCellRange += aEndBox;
     SwRangeDescriptor aDesc;
     FillRangeDescriptor( aDesc, aCellRange );

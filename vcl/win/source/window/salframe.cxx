@@ -4675,14 +4675,14 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
         HFONT hfntOld = (HFONT) SelectObject(hdc, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
 
         // menu text and accelerator
-        String aStr(pSalMenuItem->mText);
+        OUString aStr(pSalMenuItem->mText);
         if( pSalMenuItem->mAccelText.getLength() )
         {
-            aStr.AppendAscii(" ");
-            aStr.Append( pSalMenuItem->mAccelText );
+            aStr += " ";
+            aStr += pSalMenuItem->mAccelText;
         }
-        GetTextExtentPoint32W( hdc, (LPWSTR) aStr.GetBuffer(),
-                                aStr.Len(), &strSize );
+        GetTextExtentPoint32W( hdc, (LPWSTR) aStr.getStr(),
+                                aStr.getLength(), &strSize );
 
         // image
         Size bmpSize( 16, 16 );

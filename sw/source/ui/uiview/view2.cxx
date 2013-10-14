@@ -1416,12 +1416,12 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             }
             else
             {
-                String sStr;
+                OUString sStr;
                 if( rShell.IsCrsrInTbl() )
                 {
                     // table name + cell coordinate
                     sStr = rShell.GetTableFmt()->GetName();
-                    sStr += ':';
+                    sStr += ":";
                     sStr += rShell.GetBoxNms();
                 }
                 else
@@ -1473,14 +1473,14 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                      aSet.Get(RES_PARATR_NUMRULE)).GetValue();
                                 if(rNumStyle.Len())
                                 {
-                                    if( sStr.Len() )
-                                        sStr.AppendAscii(sStatusDelim);
+                                    if(!sStr.isEmpty())
+                                        sStr += sStatusDelim;
                                     sStr += rNumStyle;
                                 }
                             }
                         }
-                        if( sStr.Len() )
-                            sStr.AppendAscii(sStatusDelim);
+                        if (!sStr.isEmpty())
+                            sStr += sStatusDelim;
                         sStr += SW_RESSTR(STR_NUM_LEVEL);
                         sStr += OUString::number( nNumLevel + 1 );
 
@@ -1489,12 +1489,12 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 const int nOutlineLevel = rShell.GetCurrentParaOutlineLevel();
                 if( nOutlineLevel != 0 )
                 {
-                    if( sStr.Len() )
-                        sStr.AppendAscii(sStatusComma);
+                    if (!sStr.isEmpty())
+                        sStr += sStatusComma;
                     if( bOutlineNum )
                     {
                         sStr += SW_RESSTR(STR_OUTLINE_NUMBERING);
-                        sStr.AppendAscii(sStatusDelim);
+                        sStr += sStatusDelim;
                         sStr += SW_RESSTR(STR_NUM_LEVEL);
                     }
                     else
@@ -1504,11 +1504,11 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 
                 if( rShell.HasReadonlySel() )
                 {
-                    if( sStr.Len() )
-                        sStr = OUString(sStatusDelim) + sStr;
-                    sStr.Insert( SW_RESSTR(SW_STR_READONLY), 0 );
+                    if (!sStr.isEmpty())
+                        sStr = sStatusDelim + sStr;
+                    sStr = SW_RESSTR(SW_STR_READONLY) + sStr;
                 }
-                if( sStr.Len() )
+                if (!sStr.isEmpty())
                     rSet.Put( SfxStringItem( SID_TABLE_CELL, sStr ));
             }
             break;

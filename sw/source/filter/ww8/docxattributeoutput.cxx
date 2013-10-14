@@ -4749,10 +4749,8 @@ void DocxAttributeOutput::RefField( const SwField&  rFld, const OUString& rRef )
     sal_uInt16 nType = rFld.GetTyp( )->Which( );
     if ( nType == RES_GETEXPFLD )
     {
-        String sCmd = FieldString( ww::eREF );
-        sCmd.AppendAscii( "\"" );
-        sCmd += rRef;
-        sCmd.AppendAscii( "\" " );
+        OUString sCmd = FieldString( ww::eREF );
+        sCmd += "\"" + rRef + "\" ";
 
         m_rExport.OutputField( &rFld, ww::eREF, sCmd );
     }

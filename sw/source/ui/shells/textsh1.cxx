@@ -1383,8 +1383,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             String aLangText( aLanguageTag.getBcp47() );
 
             // set word and locale to look up as status value
-            String aStatusVal( aText );
-            aStatusVal.AppendAscii( "#" );
+            OUString aStatusVal( aText );
+            aStatusVal += "#";
             aStatusVal += aLangText;
 
             rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );

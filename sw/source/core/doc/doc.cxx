@@ -1241,22 +1241,22 @@ static void lcl_FormatPostIt(
         pIDCO->SplitNode( *aPam.GetPoint(), false );
     }
 
-    String aStr( ViewShell::GetShellRes()->aPostItPage );
-    aStr.AppendAscii(sTmp);
+    OUString aStr( ViewShell::GetShellRes()->aPostItPage );
+    aStr += sTmp;
 
     aStr += OUString::number( nPageNo );
-    aStr += ' ';
+    aStr += " ";
     if( nLineNo )
     {
         aStr += ViewShell::GetShellRes()->aPostItLine;
-        aStr.AppendAscii(sTmp);
+        aStr += sTmp;
         aStr += OUString::number( nLineNo );
-        aStr += ' ';
+        aStr += " ";
     }
     aStr += ViewShell::GetShellRes()->aPostItAuthor;
-    aStr.AppendAscii(sTmp);
+    aStr += sTmp;
     aStr += pField->GetPar1();
-    aStr += ' ';
+    aStr += " ";
     SvtSysLocale aSysLocale;
     aStr += /*(LocaleDataWrapper&)*/aSysLocale.GetLocaleData().getDate( pField->GetDate() );
     pIDCO->InsertString( aPam, aStr );

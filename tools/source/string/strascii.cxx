@@ -32,21 +32,6 @@ static sal_Bool ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, sal_Int32 nLen 
 }
 #endif
 
-static void ImplCopyAsciiStr( sal_Unicode* pDest, const sal_Char* pSrc,
-                              sal_Int32 nLen )
-{
-    DBG_ASSERT( ImplDbgCheckAsciiStr( pSrc, nLen ),
-                "UniString::CopyAsciiStr() - pAsciiStr include characters > 127" );
-
-    while ( nLen )
-    {
-        *pDest = (unsigned char)*pSrc;
-        ++pDest,
-        ++pSrc,
-        --nLen;
-    }
-}
-
 static sal_Int32 ImplStringCompareAscii( const sal_Unicode* pStr1, const sal_Char* pStr2,
                                          xub_StrLen nCount )
 {
@@ -61,77 +46,6 @@ static sal_Int32 ImplStringCompareAscii( const sal_Unicode* pStr1, const sal_Cha
     }
 
     return nRet;
-}
-
-UniString& UniString::AppendAscii( const sal_Char* pAsciiStr )
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( pAsciiStr, "UniString::AppendAscii() - pAsciiStr is NULL" );
-
-    // determine string length
-    sal_Int32 nCopyLen = ImplStringLen( pAsciiStr );
-
-    // detect overflow
-    nCopyLen = ImplGetCopyLen( mpData->mnLen, nCopyLen );
-
-    // If appended string is not empty
-    if ( nCopyLen )
-    {
-        // Allocate new string
-        UniStringData* pNewData = ImplAllocData( mpData->mnLen+nCopyLen );
-
-        // copy string data
-        memcpy( pNewData->maStr, mpData->maStr, mpData->mnLen*sizeof( sal_Unicode ) );
-        ImplCopyAsciiStr( pNewData->maStr+mpData->mnLen, pAsciiStr, nCopyLen );
-
-        // release old string
-        STRING_RELEASE((STRING_TYPE *)mpData);
-        mpData = pNewData;
-    }
-
-    return *this;
-}
-
-UniString& UniString::AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-    DBG_ASSERT( pAsciiStr, "UniString::AppendAscii() - pAsciiStr is NULL" );
-
-    if ( nLen == STRING_LEN )
-        nLen = ImplStringLen( pAsciiStr );
-
-#ifdef DBG_UTIL
-    if ( DbgIsAssert() )
-    {
-        for ( xub_StrLen i = 0; i < nLen; ++i )
-        {
-            if ( !pAsciiStr[i] )
-            {
-                OSL_FAIL( "UniString::AppendAscii() : nLen is wrong" );
-            }
-        }
-    }
-#endif
-
-    // detect overflow
-    sal_Int32 nCopyLen = ImplGetCopyLen( mpData->mnLen, nLen );
-
-    // If appended string is not empty
-    if ( nCopyLen )
-    {
-        // Allocate new string
-        UniStringData* pNewData = ImplAllocData( mpData->mnLen+nCopyLen );
-
-        // copy string data
-        memcpy( pNewData->maStr, mpData->maStr, mpData->mnLen*sizeof( sal_Unicode ) );
-        ImplCopyAsciiStr( pNewData->maStr+mpData->mnLen, pAsciiStr, nCopyLen );
-
-        // release old string
-        STRING_RELEASE((STRING_TYPE *)mpData);
-        mpData = pNewData;
-    }
-
-    return *this;
 }
 
 StringCompare UniString::CompareToAscii( const sal_Char* pAsciiStr,

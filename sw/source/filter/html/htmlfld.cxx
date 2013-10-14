@@ -602,12 +602,12 @@ void SwHTMLParser::InsertCommentText( const sal_Char *pTag )
 
 void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
 {
-    String aComment( rComment );
+    OUString aComment( rComment );
     if( pTag )
     {
-        aComment.AppendAscii( "</" );
-        aComment.AppendAscii( pTag );
-        aComment.Append( '>' );
+        aComment += "</";
+        aComment += OUString::createFromAscii(pTag);
+        aComment += ">";
     }
 
     // MIB 24.06.97: Wenn ein PostIt nach einen Space eingefuegt

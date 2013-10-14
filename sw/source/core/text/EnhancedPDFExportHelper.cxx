@@ -1627,8 +1627,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             pNumFormatter->GetOutputString( aDateDiff.GetDate(), nFormat, sDate, &pColor );
 
                             // The title should consist of the author and the date:
-                            String sTitle( pField->GetPar1() );
-                            sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+                            OUString sTitle( pField->GetPar1() );
+                            sTitle += ", ";
                             sTitle += sDate;
                             aNote.Title = sTitle;
                             // Guess what the contents contains...

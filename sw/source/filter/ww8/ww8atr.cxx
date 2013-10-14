@@ -872,13 +872,13 @@ bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const OUString* pName, s
 
 OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo )
 {
-    String sRet;
+    OUString sRet;
     switch ( nTyp )
     {
         case REF_SETREFATTR:
             if ( pName )
             {
-                sRet.AppendAscii( "Ref_" );
+                sRet += "Ref_";
                 sRet += *pName;
             }
             break;
@@ -891,11 +891,11 @@ OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pNa
         case REF_OUTLINE:
             break;      // ???
         case REF_FOOTNOTE:
-            sRet.AppendAscii( "_RefF" );
+            sRet += "_RefF";
             sRet += OUString::number( nSeqNo );
             break;
         case REF_ENDNOTE:
-            sRet.AppendAscii( "_RefE" );
+            sRet += "_RefE";
             sRet += OUString::number( nSeqNo );
             break;
     }
@@ -1915,18 +1915,15 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
 
 void WW8Export::StartCommentOutput(const OUString& rName)
 {
-    String sStr(FieldString(ww::eQUOTE));
-    sStr.AppendAscii("[");
-    sStr += rName;
-    sStr.AppendAscii("] ");
+    OUString sStr(FieldString(ww::eQUOTE));
+    sStr += "[" + rName + "] ";
     OutputField(0, ww::eQUOTE, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
 }
 
 void WW8Export::EndCommentOutput(const OUString& rName)
 {
-    String sStr(OUString(" ["));
-    sStr += rName;
-    sStr.AppendAscii("] ");
+    OUString sStr(" [");
+    sStr += rName + "] ";
     OutputField(0, ww::eQUOTE, sStr, WRITEFIELD_CMD_END | WRITEFIELD_END |
         WRITEFIELD_CLOSE);
 }
@@ -2037,7 +2034,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
         static const sal_Char sEntryEnd[] = "\" ";
 
         ww::eField eCode = ww::eTOC;
-        String sStr;
+        OUString sStr;
         switch (pTOX->GetType())
         {
         case TOX_INDEX:
@@ -2045,10 +2042,10 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             sStr = FieldString(eCode);
 
             if (pTOX->GetTOXForm().IsCommaSeparated())
-                sStr.AppendAscii("\\r ");
+                sStr += "\\r ";
 
             if (nsSwTOIOptions::TOI_ALPHA_DELIMITTER & pTOX->GetOptions())
-                sStr.AppendAscii("\\h \"A\" ");
+                sStr += "\\h \"A\" ";
 
             {
                 String aFillTxt;
@@ -2064,9 +2061,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     else
                         aFillTxt.Erase();
                 }
-                sStr.AppendAscii("\\e \"");
+                sStr += "\\e \"";
                 sStr += aFillTxt;
-                sStr.AppendAscii(sEntryEnd);
+                sStr += sEntryEnd;
             }
             break;
 
@@ -2077,19 +2074,19 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             {
                 sStr = FieldString(eCode);
 
-                sStr.AppendAscii("\\c \"");
+                sStr += "\\c \"";
                 sStr += pTOX->GetSequenceName();
-                sStr.AppendAscii(sEntryEnd);
+                sStr += sEntryEnd;
 
                 String aTxt;
                 int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(), 1, aTxt );
                 if (1 == nRet)
-                    sStr.AppendAscii("\\n ");
+                    sStr += "\\n ";
                 else if( 3 == nRet || 4 == nRet )
                 {
-                    sStr.AppendAscii("\\p \"");
+                    sStr += "\\p \"";
                     sStr += aTxt;
-                    sStr.AppendAscii(sEntryEnd);
+                    sStr += sEntryEnd;
                 }
             }
             break;
@@ -2105,13 +2102,13 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 
                 if( nsSwTOXElement::TOX_MARK & pTOX->GetCreateType() )
                 {
-                    sStr.AppendAscii( "\\f " );
+                    sStr += "\\f ";
 
                     if( TOX_USER == pTOX->GetType() )
                     {
-                         sStr += '\"';
-                         sStr += (sal_Char)( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) );
-                         sStr.AppendAscii( sEntryEnd );
+                         sStr += "\"";
+                         sStr += OUString((sal_Char)( 'A' + GetExport( ).GetId( *pTOX->GetTOXType() ) ));
+                         sStr += sEntryEnd;
                     }
 
                     if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
@@ -2124,9 +2121,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             if (nTmpLvl > WW8ListManager::nMaxLevel)
                                 nTmpLvl = WW8ListManager::nMaxLevel;
 
-                            sStr.AppendAscii( "\\o \"1-" );
+                            sStr += "\\o \"1-";
                             sStr += OUString::number( nTmpLvl );
-                            sStr.AppendAscii(sEntryEnd);
+                            sStr += sEntryEnd;
                         }
                     }
 
@@ -2179,9 +2176,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                             if (nMaxMSAutoEvaluate > WW8ListManager::nMaxLevel)
                               nMaxMSAutoEvaluate = WW8ListManager::nMaxLevel;
 
-                            sStr.AppendAscii( "\\o \"1-" );
+                            sStr += "\\o \"1-";
                             sStr += OUString::number( nMaxMSAutoEvaluate );
-                            sStr.AppendAscii(sEntryEnd);
+                            sStr += sEntryEnd;
                         }
 
                         //collect up any other styles in the writer TOC which will
@@ -2267,34 +2264,34 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                     {
                         if (WW8ListManager::nMaxLevel < nNoPgEnd)
                             nNoPgEnd = WW8ListManager::nMaxLevel;
-                        sStr.AppendAscii( "\\n " );
+                        sStr += "\\n ";
                         sStr += OUString::number( nNoPgStt );
-                        sStr += '-';
+                        sStr += "-";
                         sStr += OUString::number( nNoPgEnd  );
-                        sStr += ' ';
+                        sStr += " ";
                     }
                     if( bOnlyText )
                     {
-                        sStr.AppendAscii( "\\p \"" );
+                        sStr += "\\p \"";
                         sStr += aFillTxt;
-                        sStr.AppendAscii(sEntryEnd);
+                        sStr += sEntryEnd;
                     }
 
                     if( sTOption.Len() )
                     {
-                        sStr.AppendAscii( "\\t \"" );
+                        sStr += "\\t \"";
                         sStr += sTOption;
-                        sStr.AppendAscii(sEntryEnd);
+                        sStr += sEntryEnd;
                     }
 
                     if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
-                        sStr.AppendAscii("\\h");
+                        sStr += "\\h";
                 }
             break;
             }
         }
 
-        if( sStr.Len() )
+        if (!sStr.isEmpty())
         {
             GetExport( ).bInWriteTOX = true;
             GetExport( ).OutputField( 0, eCode, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START |
@@ -2493,10 +2490,8 @@ bool WW8AttributeOutput::PlaceholderField( const SwField* )
 
 void WW8AttributeOutput::RefField( const SwField &rFld, const OUString &rRef)
 {
-    String sStr( FieldString( ww::eREF ) );
-    sStr.AppendAscii( "\"" );
-    sStr += rRef;
-    sStr.AppendAscii( "\" " );
+    OUString sStr( FieldString( ww::eREF ) );
+    sStr += "\"" + rRef + "\" ";
     m_rWW8Export.OutputField( &rFld, ww::eREF, sStr, WRITEFIELD_START |
         WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
     String sVar = lcl_GetExpandedField( rFld );

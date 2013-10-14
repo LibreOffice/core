@@ -425,16 +425,16 @@ void SwLabPage::DisplayFormat()
     SETFLDVAL(aField, pRec->lHeight);
     aField.Reformat();
 
-    String aText = pRec->aType;
-    aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": "));
+    OUString aText = pRec->aType;
+    aText += ": ";
     aText += aWString;
-    aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" x "));
+    aText += " x ";
     aText += aField.GetText();
-    aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" ("));
+    aText += " (";
     aText += OUString::number( pRec->nCols );
-    aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM(" x "));
+    aText += " x ";
     aText += OUString::number( pRec->nRows );
-    aText += ')';
+    aText += ")";
     m_pFormatInfo->SetText(aText);
 }
 

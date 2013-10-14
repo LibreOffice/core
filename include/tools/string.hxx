@@ -196,8 +196,6 @@ public:
     UniString&          Append( sal_Unicode c );
     inline UniString & Append(char c) // ...but allow "Append('a')"
         { return Append(static_cast< sal_Unicode >(c)); }
-    UniString&          AppendAscii( const sal_Char* pAsciiStr );
-    UniString&          AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen );
     UniString&          operator +=( const UniString& rStr )
                             { return Append( rStr ); }
     UniString&          operator +=( const OUString& rStr )
