@@ -16,6 +16,24 @@
       "revId": "523edac8316b76fed2465331d864461e8f232030",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///mg\u003d",
+        "filename": "vcl/generic/fontmanager/fontmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2013-10-14T10:42:40Z",
+      "side": 1,
+      "message": "*shrug*, looks an ultra trivial nit either way. Feel free to modify it how so ever you feel.",
+      "parentUuid": "AAAAY3///8I\u003d",
+      "revId": "523edac8316b76fed2465331d864461e8f232030",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
