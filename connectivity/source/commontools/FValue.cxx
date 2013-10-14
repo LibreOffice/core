@@ -27,6 +27,8 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
+#include <boost/type_traits.hpp>
+#include <boost/static_assert.hpp>
 
 using namespace ::dbtools;
 using namespace ::com::sun::star::sdbc;
@@ -1007,7 +1009,12 @@ OUString ORowSetValue::getString( ) const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                aRet = OUString::boolean(static_cast<bool>(*this));
+                // This would be the natural choice,
+                // but historically it was converted to "0" or "1".
+                // For backwards compatibility, continue doing that.
+                // aRet = OUString::boolean(static_cast<bool>(*this));
+                BOOST_STATIC_ASSERT((boost::is_same< sal_Bool, sal_uInt8 >::value));
+                aRet = OUString::number(static_cast<sal_Bool>(*this));
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
