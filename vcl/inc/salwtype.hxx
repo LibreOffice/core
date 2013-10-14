@@ -191,6 +191,15 @@ struct SalExtTextInputPosEvent
     long            mnHeight;       // Cursor-Height in Pixel
     long            mnExtWidth;     // Width of the PreEdit area
     bool            mbVertical;     // true if in vertical mode
+    SalExtTextInputPosEvent()
+        : mnX(0)
+        , mnY(0)
+        , mnWidth(0)
+        , mnHeight(0)
+        , mnExtWidth(0)
+        , mbVertical(false)
+    {
+    }
 };
 
 // INPUTCONTEXTCHANGE
