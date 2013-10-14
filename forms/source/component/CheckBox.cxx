@@ -203,6 +203,13 @@ void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& 
         resetNoBroadcast();
 }
 
+bool OCheckBoxModel::DbUseBool()
+{
+    if ( ! (getReferenceValue().isEmpty() && getNoCheckReferenceValue().isEmpty()) )
+        return false;
+    return true;
+}
+
 //------------------------------------------------------------------------------
 Any OCheckBoxModel::translateDbColumnToControlValue()
 {
@@ -210,7 +217,21 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
 
     //////////////////////////////////////////////////////////////////
     // Set value in ControlModel
-    sal_Bool bValue = m_xColumn->getBoolean();
+    bool bValue;
+    if(DbUseBool())
+    {
+        bValue = m_xColumn->getBoolean();
+    }
+    else
+    {
+        const OUString sVal(m_xColumn->getString());
+        if (sVal == getReferenceValue())
+            bValue = true;
+        else if (sVal == getNoCheckReferenceValue())
+            bValue = false;
+        else
+            aValue <<= static_cast<sal_Int16>(getDefaultChecked());
+    }
     if ( m_xColumn->wasNull() )
     {
         sal_Bool bTriState = sal_True;
@@ -218,8 +239,10 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
             m_xAggregateSet->getPropertyValue( PROPERTY_TRISTATE ) >>= bTriState;
         aValue <<= (sal_Int16)( bTriState ? STATE_DONTKNOW : getDefaultChecked() );
     }
-    else
+    else if ( !aValue.hasValue() )
+    {
         aValue <<= (sal_Int16)( bValue ? STATE_CHECK : STATE_NOCHECK );
+    }
 
     return aValue;
 }
@@ -241,10 +264,16 @@ sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                     m_xColumnUpdate->updateNull();
                     break;
                 case STATE_CHECK:
-                    m_xColumnUpdate->updateBoolean( sal_True );
+                    if (DbUseBool())
+                        m_xColumnUpdate->updateBoolean( sal_True );
+                    else
+                        m_xColumnUpdate->updateString( getReferenceValue() );
                     break;
                 case STATE_NOCHECK:
-                    m_xColumnUpdate->updateBoolean( sal_False );
+                    if (DbUseBool())
+                        m_xColumnUpdate->updateBoolean( sal_False );
+                    else
+                        m_xColumnUpdate->updateString( getNoCheckReferenceValue() );
                     break;
                 default:
                     OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: invalid value !");

@@ -1905,7 +1905,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                _xParams->setBoolean(parameterIndex,_rValue);
+                _xParams->setBoolean(parameterIndex,static_cast<bool>(_rValue));
                 break;
             case DataType::TINYINT:
                 if ( _rValue.isSigned() )
