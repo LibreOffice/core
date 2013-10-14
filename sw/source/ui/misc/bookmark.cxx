@@ -157,8 +157,8 @@ SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
 {
 }
 
-BookmarkCombo::BookmarkCombo(Window* pWin)
-    : SwComboBox(pWin)
+BookmarkCombo::BookmarkCombo(Window* pWin, WinBits nStyle)
+    : SwComboBox(pWin, nStyle)
 {
 }
 
@@ -242,7 +242,7 @@ long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBookmarkCombo(Window* pParent, VclBuilder::stringmap &)
 {
-    return new BookmarkCombo(pParent);
+    return new BookmarkCombo(pParent, 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

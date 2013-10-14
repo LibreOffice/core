@@ -122,7 +122,7 @@
 // Sw-pages
 #define TP_OPTPRINT_PAGE            (RC_GLOBALS_BEGIN +  26)
 
-#define TP_OPTCAPTION_PAGE          (RC_GLOBALS_BEGIN +  77)
+
 #define DLG_SVXTEST_NUM_BULLET      (RC_GLOBALS_BEGIN +  79)
 //maximum: RC_GLOBALS_BEGIN +  120
 

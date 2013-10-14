@@ -66,7 +66,7 @@ class SW_DLLPUBLIC SwComboBox : public ComboBox
 
 public:
 
-    SwComboBox(Window* pParent);
+    SwComboBox(Window* pParent, WinBits nStyle);
     SwComboBox(Window* pParent, const ResId& rId);
     ~SwComboBox();
 

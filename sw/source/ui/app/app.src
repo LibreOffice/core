@@ -713,4 +713,29 @@ String STR_ROTATE_TO_STANDARD_ORIENTATION
     Text [ en-US ] = "This image is rotated. Would you like to rotate it into standard orientation?";
 };
 
+String STR_CAPTION_TABLE
+{
+    Text [ en-US ] = "%PRODUCTNAME Writer Table";
+};
+
+String STR_CAPTION_FRAME
+{
+    Text [ en-US ] = "%PRODUCTNAME Writer Frame";
+};
+
+String STR_CAPTION_GRAPHIC
+{
+    Text [ en-US ] = "%PRODUCTNAME Writer Picture";
+};
+
+String STR_CAPTION_OLE
+{
+    Text [ en-US ] = "Other OLE Objects";
+};
+
+String STR_CATEGORY_NONE
+{
+    Text [ en-US ] = "<None>" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

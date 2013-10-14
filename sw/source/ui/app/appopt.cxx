@@ -543,7 +543,6 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
             }
             break;
         }
-        case TP_OPTCAPTION_PAGE:
         case RID_SW_TP_OPTCAPTION_PAGE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

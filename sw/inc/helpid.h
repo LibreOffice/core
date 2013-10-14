@@ -136,7 +136,6 @@
 // TabPage Help-IDs
 
 #define HID_REDLINE_CTRL                                        "SW_HID_REDLINE_CTRL"
-#define HID_OPTCAPTION_PAGE                                     "SW_HID_OPTCAPTION_PAGE"
 #define HID_ADD_STYLES_TLB                                      "SW_HID_ADD_STYLES_TLB"
 
 #define HID_COMPATIBILITY_OPTIONS_BOX                           "SW_HID_COMPATIBILITY_OPTIONS_BOX"

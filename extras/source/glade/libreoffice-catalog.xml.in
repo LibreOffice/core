@@ -445,6 +445,10 @@
                         generic-name="SelectionListBox" parent="VclComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
 
+    <glade-widget-class title="CaptionComboBox" name="swuilo-CaptionComboBox"
+                        generic-name="CaptionComboBox" parent="VclComboBoxText"
+                        icon-name="widget-gtk-comboboxtext"/>
+
     <glade-widget-class title="PropertyControl" name="sdlo-PropertyControl"
                         generic-name="PropertyControl" parent="VclComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>

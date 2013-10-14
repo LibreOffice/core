@@ -23,6 +23,7 @@
 
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <svx/strarray.hxx>
@@ -81,8 +82,8 @@ protected:
     virtual void KeyInput( const KeyEvent& );
 
 public:
-    CaptionComboBox( Window* pParent, const ResId& rResId)
-        : SwComboBox(pParent, rResId)
+    CaptionComboBox(Window* pParent, WinBits nStyle)
+        : SwComboBox(pParent, nStyle)
     {}
 };
 
@@ -92,47 +93,38 @@ private:
     OUString maText;
     Point    maDrawPos;
 public:
-    SwCaptionPreview( Window* pParent );
-    SwCaptionPreview( Window* pParent, const ResId& rResId );
+    SwCaptionPreview( Window* pParent, WinBits nStyle );
     void Init();
     void SetPreviewText( const OUString& rText );
     virtual void Paint( const Rectangle& rRect );
+    virtual Size GetOptimalSize() const;
 };
 
 class SwCaptionOptPage : public SfxTabPage
 {
 private:
-    FixedText       aCheckFT;
-    SvxCheckListBox aCheckLB;
+    SvxCheckListBox*  m_pCheckLB;
+    ListBox*          m_pLbCaptionOrder;
+    SwCaptionPreview* m_pPreview;
 
-    FixedText       aFtCaptionOrder;
-    ListBox         aLbCaptionOrder;
-
-    SwCaptionPreview    aPreview;
-
-    FixedLine       aSettingsGroupFL;
-    FixedText       aCategoryText;
-    CaptionComboBox aCategoryBox;
-    FixedText       aFormatText;
-    ListBox         aFormatBox;
+    VclContainer*     m_pSettingsGroup;
+    CaptionComboBox*  m_pCategoryBox;
+    FixedText*        m_pFormatText;
+    ListBox*          m_pFormatBox;
     //#i61007# order of captions
-    FixedText       aNumberingSeparatorFT;
-    Edit            aNumberingSeparatorED;
-    FixedText       aTextText;
-    Edit            aTextEdit;
-    FixedText       aPosText;
-    ListBox         aPosBox;
+    FixedText*        m_pNumberingSeparatorFT;
+    Edit*             m_pNumberingSeparatorED;
+    FixedText*        m_pTextText;
+    Edit*             m_pTextEdit;
+    ListBox*          m_pPosBox;
 
-    FixedLine       aNumCaptFL;
-    FixedText       aFtLevel;
-    ListBox         aLbLevel;
-    FixedText       aFtDelim;
-    Edit            aEdDelim;
+    VclContainer*     m_pNumCapt;
+    ListBox*          m_pLbLevel;
+    Edit*             m_pEdDelim;
 
-    FixedLine       aCategoryFL;
-    FixedText       aCharStyleFT;
-    ListBox         aCharStyleLB;
-    CheckBox        aApplyBorderCB;
+    VclContainer*     m_pCategory;
+    ListBox*          m_pCharStyleLB;
+    CheckBox*         m_pApplyBorderCB;
 
     OUString        m_sSWTable;
     OUString        m_sSWFrame;
