@@ -953,10 +953,12 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         sal_Bool bCheckedOut = sal_False;
                         for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
                         {
-                            if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
+                            if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" )
                             {
                                 bFoundCheckedout = true;
-                                aCmisProperties[i].Value >>= bCheckedOut;
+                                uno::Sequence< sal_Bool > aValues;
+                                aCmisProperties[i].Value >>= aValues;
+                                bCheckedOut = aValues.getLength() > 0 && aValues[0];
                             }
                         }
                         bShow = !bCheckedOut;
@@ -984,10 +986,12 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         sal_Bool bCheckedOut = sal_False;
                         for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
                         {
-                            if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
+                            if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" )
                             {
                                 bFoundCheckedout = true;
-                                aCmisProperties[i].Value >>= bCheckedOut;
+                                uno::Sequence< sal_Bool > aValues;
+                                aCmisProperties[i].Value >>= aValues;
+                                bCheckedOut = aValues.getLength() > 0 && aValues[0];
                             }
                         }
                         bShow = bCheckedOut;
