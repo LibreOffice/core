@@ -309,14 +309,14 @@ void OptimizerDialog::UpdateControlStates( sal_Int16 nPage )
 
 // -----------------------------------------------------------------------------
 
-OUString OptimizerDialog::GetSelectedString( const PPPOptimizerTokenEnum eToken )
+OUString OptimizerDialog::GetSelectedString( OUString const & token )
 {
     OUString aSelectedItem;
     Sequence< sal_Int16 > sSelectedItems;
     Sequence< OUString >  sItemList;
 
-    if ( ( getControlProperty( TKGet( eToken ), "SelectedItems" ) >>= sSelectedItems ) &&
-            ( getControlProperty( TKGet( eToken ), "StringItemList" ) >>= sItemList ) )
+    if ( ( getControlProperty( token, "SelectedItems" ) >>= sSelectedItems ) &&
+            ( getControlProperty( token, "StringItemList" ) >>= sItemList ) )
     {
         if ( sSelectedItems.getLength() == 1 )
         {
@@ -624,7 +624,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
         case TK_btnNavCancel :  mrOptimizerDialog.endExecute( sal_False ); break;
         case TK_Button0Pg0 :    // delete configuration
         {
-            OUString aSelectedItem( mrOptimizerDialog.GetSelectedString( TK_ListBox0Pg0 ) );
+            OUString aSelectedItem( mrOptimizerDialog.GetSelectedString( "ListBox0Pg0" ) );
             if ( !aSelectedItem.isEmpty() )
             {
                 std::vector< OptimizerSettings >::iterator aIter( mrOptimizerDialog.GetOptimizerSettingsByName( aSelectedItem ) );

@@ -22,7 +22,6 @@
 #include "optimizerdialog.hrc"
 #include <vector>
 #include "unodialog.hxx"
-#include "pppoptimizertoken.hxx"
 #include "optimizationstats.hxx"
 #include "configurationaccess.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -122,7 +121,7 @@ public :
     void SwitchPage( sal_Int16 nNewStep );
     void UpdateControlStates( sal_Int16 nStep = -1 );
 
-    OUString GetSelectedString( PPPOptimizerTokenEnum eListBox );
+    OUString GetSelectedString( OUString const & token );
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame>& GetFrame() { return mxFrame; };
     const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxContext; };
