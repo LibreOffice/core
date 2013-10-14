@@ -128,7 +128,7 @@ public:
 
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
-    void                SetFax( const std::vector<String>& );
+    void                SetFax( const std::vector<OUString>& );
     void                SelectFax( const OUString& );
     void                SetPreview(sal_Bool bPrev);
     virtual void        PageCreated (SfxAllItemSet aSet);

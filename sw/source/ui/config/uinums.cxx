@@ -72,8 +72,8 @@ SwBaseNumRules::~SwBaseNumRules()
     if( bModified )
     {
         SvtPathOptions aPathOpt;
-        String sNm( aPathOpt.GetUserConfigPath() );
-        sNm += INET_PATH_TOKEN;
+        OUString sNm( aPathOpt.GetUserConfigPath() );
+        sNm += OUString(INET_PATH_TOKEN);
         sNm += sFileName;
         INetURLObject aTempObj(sNm);
         sNm = aTempObj.GetFull();
@@ -323,7 +323,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         short nShort;
         sal_Char cChar;
         sal_Bool bFlag;
-        String sStr;
+        OUString sStr;
 
         rStream >> nUS;             aFmt.SetNumberingType((sal_Int16)nUS );
         if( VERSION_53A > nVersion )
@@ -370,12 +370,12 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         short   nWidth;
         short   nHeight;
         sal_uInt16  nPitch;
-        String aName;
+        OUString aName;
 
         aName = rStream.ReadUniOrByteString(eEncoding);
         rStream >> nFamily >> nCharSet >> nWidth >> nHeight >> nPitch;
 
-        if( aName.Len() )
+        if( !aName.isEmpty() )
         {
             Font aFont( static_cast<FontFamily>(nFamily), Size( nWidth, nHeight ) );
             aFont.SetName( aName );
@@ -454,7 +454,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
 {
     CharSet eEncoding = osl_getThreadTextEncoding();
     {
-        String aName;
+        OUString aName;
         sal_uInt16 nFamily = FAMILY_DONTKNOW, nCharSet = 0, nPitch = 0;
         short  nWidth = 0, nHeight = 0;
 

@@ -119,7 +119,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
     for ( sal_uInt16 i = 0; i < aMetricArr.Count(); ++i )
     {
-        String sMetric = aMetricArr.GetStringByPos( i );
+        OUString sMetric = aMetricArr.GetStringByPos( i );
         FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
 
         switch ( eFUnit )
@@ -399,8 +399,8 @@ sal_Bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
         if (m_pEndPageRB->IsChecked()) aAddPrinterAttr.nPrintPostIts =
                                                         POSTITS_ENDPAGE;
 
-        String sFax = m_pFaxLB->GetSelectEntry();
-        aAddPrinterAttr.sFaxName = sNone == sFax ? aEmptyStr : sFax;
+        OUString sFax = m_pFaxLB->GetSelectEntry();
+        aAddPrinterAttr.sFaxName = sNone == sFax ? aEmptyOUStr : sFax;
         rCoreSet.Put(aAddPrinterAttr);
     }
     return bAttrModified;
@@ -465,7 +465,7 @@ IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, AutoClickHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwAddPrinterTabPage, AutoClickHdl)
 
-void  SwAddPrinterTabPage::SetFax( const std::vector<String>& rFaxLst )
+void  SwAddPrinterTabPage::SetFax( const std::vector<OUString>& rFaxLst )
 {
     m_pFaxLB->InsertEntry(sNone);
     for(size_t i = 0; i < rFaxLst.size(); ++i)
@@ -493,7 +493,7 @@ void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
     }
     if (pListItem && pListItem->GetValue())
     {
-        std::vector<String> aFaxList;
+        std::vector<OUString> aFaxList;
         const std::vector<OUString>& rPrinters = Printer::GetPrinterQueues();
         for (unsigned int i = 0; i < rPrinters.size(); ++i)
             aFaxList.insert(aFaxList.begin(), rPrinters[i]);
@@ -592,7 +592,7 @@ SfxTabPage* SwStdFontTabPage::Create( Window* pParent,
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
-                    SfxPrinter* pPrt, const String& rStyle,
+                    SfxPrinter* pPrt, const OUString& rStyle,
                     sal_uInt16 nFontWhich)
 {
     Font aFont( rStyle, Size( 0, 10 ) );
@@ -617,11 +617,11 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
     sal_Bool bNotDocOnly = !pDocOnlyCB->IsChecked();
     SW_MOD()->GetModuleConfig()->SetDefaultFontInCurrDocOnly(!bNotDocOnly);
 
-    String sStandard    = pStandardBox->GetText();
-    String sTitle       = pTitleBox->GetText();
-    String sList        = pListBox->GetText();
-    String sLabel       = pLabelBox->GetText();
-    String sIdx         = pIdxBox->GetText();
+    OUString sStandard    = pStandardBox->GetText();
+    OUString sTitle       = pTitleBox->GetText();
+    OUString sList        = pListBox->GetText();
+    OUString sLabel       = pLabelBox->GetText();
+    OUString sIdx         = pIdxBox->GetText();
 
     bool bStandardHeightChanged = pStandardHeightLB->GetSavedValue() != pStandardHeightLB->GetText();
     bool bTitleHeightChanged = pTitleHeightLB->GetSavedValue() != pTitleHeightLB->GetText();
@@ -785,7 +785,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
     if( !pStandardBox->GetEntryCount() )
     {
         // get the set of disctinct available family names
-        std::set< String > aFontNames;
+        std::set< OUString > aFontNames;
         int nFontNames = pPrt->GetDevFontCount();
         for( int i = 0; i < nFontNames; i++ )
         {
@@ -794,7 +794,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         }
 
         // insert to listboxes
-        for( std::set< String >::const_iterator it = aFontNames.begin();
+        for( std::set< OUString >::const_iterator it = aFontNames.begin();
              it != aFontNames.end(); ++it )
         {
             pStandardBox->InsertEntry( *it );
@@ -813,11 +813,11 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
     {
         pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
     }
-    String sStdBackup;
-    String sOutBackup;
-    String sListBackup;
-    String sCapBackup;
-    String sIdxBackup;
+    OUString sStdBackup;
+    OUString sOutBackup;
+    OUString sListBackup;
+    OUString sCapBackup;
+    OUString sIdxBackup;
     sal_Int32 nStandardHeight = -1;
     sal_Int32 nTitleHeight = -1;
     sal_Int32 nListHeight = -1;
@@ -975,7 +975,7 @@ IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
 {
     if(pBox == pStandardBox)
     {
-        String sEntry = pBox->GetText();
+        OUString sEntry = pBox->GetText();
         if(bSetListDefault && bListDefault)
             pListBox->SetText(sEntry);
         if(bSetLabelDefault && bLabelDefault)
@@ -1028,7 +1028,7 @@ IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, FontSizeBox*, pBox )
 IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, ComboBox*, pBox )
 {
     FontSizeBox* pHeightLB = 0;
-    String sEntry = pBox->GetText();
+    OUString sEntry = pBox->GetText();
     if(pBox == pStandardBox)
     {
         pHeightLB = pStandardHeightLB;
@@ -1902,7 +1902,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     {
         XColorEntry* pEntry = pColorLst->GetColor( i );
         Color aColor = pEntry->GetColor();
-        String sName = pEntry->GetName();
+        OUString sName = pEntry->GetName();
 
         pInsertColorLB->InsertEntry( aColor, sName );
         pDeletedColorLB->InsertEntry( aColor, sName );

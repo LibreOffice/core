@@ -84,7 +84,7 @@ SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
     for ( sal_uInt16 i = 0; i < aMetricArr.Count(); ++i )
     {
-        String sMetric = aMetricArr.GetStringByPos( i );
+        OUString sMetric = aMetricArr.GetStringByPos( i );
         FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
 
         switch ( eFUnit )
@@ -554,13 +554,13 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     for ( sal_uLong i = 0; i < aObjS.Count(); ++i )
     {
         const SvGlobalName &rOleId = aObjS[i].GetClassName();
-        String sClass;
+        OUString sClass;
         if (rOleId == SvGlobalName(SO3_OUT_CLASSID))
             sClass = aObjS[i].GetHumanName();
         else
             sClass = m_sOLE;
         // don't show product version
-        sClass.SearchAndReplace( sComplete, sWithoutVersion );
+        sClass = sClass.replaceFirst( sComplete, sWithoutVersion );
         m_pCheckLB->InsertEntry( sClass );
         SetOptions( nPos++, OLE_CAP, &rOleId );
     }
@@ -724,7 +724,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
         InsCaptionOpt* pOpt = (InsCaptionOpt*)pEntry->GetUserData();
 
         pOpt->UseCaption() = m_pCheckLB->IsChecked((sal_uInt16)m_pCheckLB->GetModel()->GetAbsPos(pEntry));
-        String aName( m_pCategoryBox->GetText() );
+        OUString aName( m_pCategoryBox->GetText() );
         if (aName == m_sNone)
             pOpt->SetCategory(aEmptyStr);
         else
@@ -747,12 +747,12 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
 
 IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
 {
-    String sFldTypeName = m_pCategoryBox->GetText();
+    OUString sFldTypeName = m_pCategoryBox->GetText();
 
     SfxNoLayoutSingleTabDialog *pDlg = dynamic_cast<SfxNoLayoutSingleTabDialog*>(GetParentDialog());
     PushButton *pBtn = pDlg ? pDlg->GetOKButton() : NULL;
     if (pBtn)
-        pBtn->Enable(sFldTypeName.Len() != 0);
+        pBtn->Enable(!sFldTypeName.isEmpty());
     bool bEnable = m_pCategoryBox->IsEnabled() && sFldTypeName != m_sNone;
 
     m_pFormatText->Enable(bEnable);
@@ -790,7 +790,7 @@ IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
 
 void SwCaptionOptPage::DrawSample()
 {
-    String aStr;
+    OUString aStr;
 
     if( m_pCategoryBox->GetText() != m_sNone)
     {
@@ -806,11 +806,11 @@ void SwCaptionOptPage::DrawSample()
             {
                 // category
                 aStr += m_pCategoryBox->GetText();
-                aStr += ' ';
+                aStr += " ";
             }
 
             SwWrtShell *pSh = ::GetActiveWrtShell();
-            String sFldTypeName( m_pCategoryBox->GetText() );
+            OUString sFldTypeName( m_pCategoryBox->GetText() );
             if (pSh)
             {
                 SwSetExpFieldType* pFldType = (SwSetExpFieldType*)pMgr->GetFldType(
@@ -822,23 +822,23 @@ void SwCaptionOptPage::DrawSample()
                     for( sal_uInt8 i = 0; i <= nLvl; ++i )
                         aNumVector.push_back(1);
 
-                    String sNumber( pSh->GetOutlineNumRule()->MakeNumString(
+                    OUString sNumber( pSh->GetOutlineNumRule()->MakeNumString(
                                                             aNumVector, sal_False ));
-                    if( sNumber.Len() )
+                    if( !sNumber.isEmpty() )
                         (aStr += sNumber) += pFldType->GetDelimiter();
                 }
             }
 
             switch( nNumFmt )
             {
-                case SVX_NUM_CHARS_UPPER_LETTER:    aStr += 'A'; break;
-                case SVX_NUM_CHARS_UPPER_LETTER_N:  aStr += 'A'; break;
-                case SVX_NUM_CHARS_LOWER_LETTER:    aStr += 'a'; break;
-                case SVX_NUM_CHARS_LOWER_LETTER_N:  aStr += 'a'; break;
-                case SVX_NUM_ROMAN_UPPER:           aStr += 'I'; break;
-                case SVX_NUM_ROMAN_LOWER:           aStr += 'i'; break;
+                case SVX_NUM_CHARS_UPPER_LETTER:    aStr += "A"; break;
+                case SVX_NUM_CHARS_UPPER_LETTER_N:  aStr += "A"; break;
+                case SVX_NUM_CHARS_LOWER_LETTER:    aStr += "a"; break;
+                case SVX_NUM_CHARS_LOWER_LETTER_N:  aStr += "a"; break;
+                case SVX_NUM_ROMAN_UPPER:           aStr += "I"; break;
+                case SVX_NUM_ROMAN_LOWER:           aStr += "i"; break;
                 //case ARABIC:
-                default:                    aStr += '1'; break;
+                default:                    aStr += "1"; break;
             }
         }
         //#i61007# order of captions

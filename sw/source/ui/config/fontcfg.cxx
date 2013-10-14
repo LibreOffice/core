@@ -178,9 +178,9 @@ bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
                 eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),
                 eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
 
-    String sDefFont(GetDefaultFor(FONT_STANDARD, eWestern));
-    String sDefFontCJK(GetDefaultFor(FONT_STANDARD_CJK, eCJK));
-    String sDefFontCTL(GetDefaultFor(FONT_STANDARD_CTL, eCTL));
+    OUString sDefFont(GetDefaultFor(FONT_STANDARD, eWestern));
+    OUString sDefFontCJK(GetDefaultFor(FONT_STANDARD_CJK, eCJK));
+    OUString sDefFontCTL(GetDefaultFor(FONT_STANDARD_CTL, eCTL));
     LanguageType eLang = lcl_LanguageOfType(nFontType, eWestern, eCJK, eCTL);
     switch( nFontType )
     {
