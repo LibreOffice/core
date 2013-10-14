@@ -132,10 +132,10 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                 Sequence< OUString > aExtensions;
                 for ( int i = 0; i < aTypeProperties.getLength(); i++ )
                 {
-                    switch( TKGet( aTypeProperties[ i ].Name ) )
+                    if( aTypeProperties[ i ].Name == "Extensions" )
                     {
-                        case TK_Extensions : aTypeProperties[ i ].Value >>= aExtensions; break;
-                        default: break;
+                        aTypeProperties[ i ].Value >>= aExtensions;
+                        break;
                     }
                 }
                 if ( aExtensions.getLength() )
