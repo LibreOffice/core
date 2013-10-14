@@ -22,11 +22,11 @@
 #include "tools/toolsdllapi.h"
 #include <vector>
 
-#define PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef, AddNextRef, ReleaseRef, Init, pRefbase ) \
+#define PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef, AddNextRef, ReleaseRef, pRefbase ) \
 inline ClassName##Ref::ClassName##Ref( const ClassName##Ref & rObj )        \
-    { pObj = rObj.pObj; if( pObj ) { Init pRefbase->AddNextRef; } }         \
+    { pObj = rObj.pObj; if( pObj ) { pRefbase->AddNextRef; } }              \
 inline ClassName##Ref::ClassName##Ref( ClassName * pObjP )                  \
-{ pObj = pObjP; if( pObj ) { Init pRefbase->AddRef; } }                     \
+{ pObj = pObjP; if( pObj ) { pRefbase->AddRef; } }                          \
 inline void ClassName##Ref::Clear()                                         \
 {                                                                           \
     if( pObj )                                                              \
@@ -44,7 +44,7 @@ inline ClassName##Ref & ClassName##Ref::                                    \
     if( rObj.pObj ) rObj.pRefbase->AddNextRef;                              \
     ClassName* const pRefObj = pRefbase;                                    \
     pObj = rObj.pObj;                                                       \
-    Init if( pRefObj ) { pRefObj->ReleaseRef; }                             \
+    if( pRefObj ) { pRefObj->ReleaseRef; }                                  \
     return *this;                                                           \
 }                                                                           \
 inline ClassName##Ref & ClassName##Ref::operator = ( ClassName * pObjP )    \
@@ -86,12 +86,12 @@ class ClassName##Lock                           \
 
 #define SV_IMPL_REF( ClassName )                                \
 PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef(), AddNextRef(),\
-                          ReleaseReference(), EMPTYARG, pObj )
+                          ReleaseReference(), pObj )
 
 #define SV_IMPL_LOCK( ClassName )                                   \
 PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( sal_True ),       \
                           OwnerLock( sal_True ), OwnerLock( sal_False ),    \
-                          EMPTYARG, pObj )
+                          pObj )
 
 #define SV_DECL_IMPL_REF(ClassName)             \
     SV_DECL_REF(ClassName)                      \
@@ -174,7 +174,6 @@ public:
                         if( nRefCount < SV_NO_DELETE_REFCOUNT )
                             nRefCount += SV_NO_DELETE_REFCOUNT;
                     }
-    sal_uIntPtr     AddMulRef( sal_uIntPtr n ) { return nRefCount += n; }
     sal_uIntPtr     AddNextRef() { return ++nRefCount; }
     sal_uIntPtr     AddRef()
                     {
@@ -196,10 +195,6 @@ public:
                     }
     sal_uIntPtr     GetRefCount() const { return nRefCount; }
 };
-
-#ifndef EMPTYARG
-#define EMPTYARG
-#endif
 
 SV_DECL_IMPL_REF(SvRefBase)
 
