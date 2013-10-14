@@ -301,7 +301,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
     return bInsert;
 }
 
-void sw_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
+void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm );
 static void lcl_xmltble_appendBoxPrefix( OUStringBuffer& rBuffer,
                                   const OUString& rNamePrefix,
                                   sal_uInt32 nCol, sal_uInt32 nRow, sal_Bool bTop )
@@ -310,7 +310,7 @@ static void lcl_xmltble_appendBoxPrefix( OUStringBuffer& rBuffer,
     rBuffer.append( (sal_Unicode)'.' );
     if( bTop )
     {
-        String sTmp;
+        OUString sTmp;
         sw_GetTblBoxColStr( (sal_uInt16)nCol, sTmp );
         rBuffer.append( sTmp );
     }
@@ -621,7 +621,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 sBuffer.append( (sal_Unicode)'.' );
                 if( bTop )
                 {
-                    String sTmp;
+                    OUString sTmp;
                     sw_GetTblBoxColStr( nColumn, sTmp );
                     sBuffer.append( sTmp );
                 }
@@ -1127,13 +1127,13 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
                           pDDEFldType->GetName() );
 
             // DDE command
-            const String sCmd = pDDEFldType->GetCmd();
+            const OUString sCmd = pDDEFldType->GetCmd();
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
-                          sCmd.GetToken(0, sfx2::cTokenSeparator) );
+                          sCmd.getToken(0, sfx2::cTokenSeparator) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_ITEM,
-                          sCmd.GetToken(1, sfx2::cTokenSeparator) );
+                          sCmd.getToken(1, sfx2::cTokenSeparator) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_TOPIC,
-                          sCmd.GetToken(2, sfx2::cTokenSeparator) );
+                          sCmd.getToken(2, sfx2::cTokenSeparator) );
 
             // auto update
             if (pDDEFldType->GetType() == sfx2::LINKUPDATE_ALWAYS)

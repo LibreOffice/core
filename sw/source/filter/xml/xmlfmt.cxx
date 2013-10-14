@@ -913,7 +913,7 @@ uno::Reference < container::XNameContainer > SwXMLStylesContext_Impl::GetStylesC
 
 OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 {
-    String sServiceName;
+    OUString sServiceName;
     if( XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily )
         sServiceName = OUString("com.sun.star.style.FrameStyle");
     else

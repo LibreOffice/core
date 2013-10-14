@@ -122,7 +122,7 @@ int XMLReader::GetReaderType()
 sal_Int32 ReadThroughComponent(
     uno::Reference<io::XInputStream> xInputStream,
     uno::Reference<XComponent> xModelComponent,
-    const String& rStreamName,
+    const OUString& rStreamName,
     uno::Reference<uno::XComponentContext> & rxContext,
     const sal_Char* pFilterName,
     const Sequence<Any>& rFilterArguments,
@@ -202,11 +202,11 @@ sal_Int32 ReadThroughComponent(
         OSL_FAIL(aError.getStr());
 #endif
 
-        String sErr( OUString::number( r.LineNumber ));
-        sErr += ',';
+        OUString sErr( OUString::number( r.LineNumber ));
+        sErr += ",";
         sErr += OUString::number( r.ColumnNumber );
 
-        if( rStreamName.Len() )
+        if( !rStreamName.isEmpty() )
         {
             return *new TwoStringErrorInfo(
                             (bMustBeSuccessfull ? ERR_FORMAT_FILE_ROWCOL
@@ -381,9 +381,9 @@ static void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 {
     // array containing the names of the default outline styles ('Heading 1',
     // 'Heading 2', ..., 'Heading 10')
-    String aDefOutlStyleNames[ MAXLEVEL ];
+    OUString aDefOutlStyleNames[ MAXLEVEL ];
     {
-        String sStyleName;
+        OUString sStyleName;
         for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
             sStyleName =

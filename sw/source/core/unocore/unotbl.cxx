@@ -100,7 +100,7 @@ using namespace ::com::sun::star;
 using ::editeng::SvxBorderLine;
 
 // from swtable.cxx
-extern void sw_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
+extern void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm );
 
 #define UNO_TABLE_COLUMN_SUM    10000
 
@@ -493,7 +493,7 @@ String sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
     }
 #endif
 
-    String sCellName;
+    OUString sCellName;
     if (nColumn < 0 || nRow < 0)
         return sCellName;
     sw_GetTblBoxColStr( static_cast< sal_uInt16 >(nColumn), sCellName );

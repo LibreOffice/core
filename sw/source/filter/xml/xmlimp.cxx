@@ -1176,7 +1176,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         if( !bIsUserSetting )
         {
             // test over the hash value if the entry is in the table.
-            String aStr(pValues->Name);
+            OUString aStr(pValues->Name);
 
             bSet = aSet.find(aStr) == aSet.end();
         }

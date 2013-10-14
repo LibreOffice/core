@@ -306,7 +306,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     else
     {
         // check whether an object with this name already exists in the document
-        String aName;
+        OUString aName;
         SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
         for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
         {
@@ -336,7 +336,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             }
         }
 
-        if ( !aName.Len() )
+        if ( aName.isEmpty() )
             aName = aObjName;
 
         // the correct aspect will be set later
@@ -638,7 +638,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
 
     SwApplet_Impl aAppletImpl ( aItemSet );
 
-    String sCodeBase;
+    OUString sCodeBase;
     if( !rHRef.isEmpty() )
         sCodeBase = GetXMLImport().GetAbsoluteReference( rHRef );
 

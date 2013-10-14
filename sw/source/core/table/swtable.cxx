@@ -1876,7 +1876,7 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
 |*      resulting from the position in the lines/boxes/tables.
 |*
 |*************************************************************************/
-void sw_GetTblBoxColStr( sal_uInt16 nCol, String& rNm )
+void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm )
 {
     const sal_uInt16 coDiff = 52;   // 'A'-'Z' 'a' - 'z'
     sal_uInt16 nCalc;
@@ -1884,9 +1884,9 @@ void sw_GetTblBoxColStr( sal_uInt16 nCol, String& rNm )
     do {
         nCalc = nCol % coDiff;
         if( nCalc >= 26 )
-            rNm.Insert( sal_Unicode('a' - 26 + nCalc ), 0 );
+            rNm = OUString( sal_Unicode('a' - 26 + nCalc ) ) + rNm;
         else
-            rNm.Insert( sal_Unicode('A' + nCalc ), 0 );
+            rNm = OUString( sal_Unicode('A' + nCalc ) ) + rNm;
 
         if( 0 == (nCol = nCol - nCalc) )
             break;
@@ -1905,7 +1905,7 @@ OUString SwTableBox::GetName() const
 
     const SwTable& rTbl = pSttNd->FindTableNode()->GetTable();
     sal_uInt16 nPos;
-    String sNm, sTmp;
+    OUString sNm, sTmp;
     const SwTableBox* pBox = this;
     do {
         const SwTableBoxes* pBoxes = &pBox->GetUpper()->GetTabBoxes();
@@ -1915,14 +1915,14 @@ OUString SwTableBox::GetName() const
                 ? &pLine->GetUpper()->GetTabLines() : &rTbl.GetTabLines();
 
         sTmp = OUString::number( nPos = pLines->GetPos( pLine ) + 1 );
-        if( sNm.Len() )
-            sNm.Insert( aDotStr, 0 ).Insert( sTmp, 0 );
+        if( !sNm.isEmpty() )
+            sNm = sTmp + aDotStr + sNm;
         else
             sNm = sTmp;
 
         sTmp = OUString::number(( nPos = pBoxes->GetPos( pBox )) + 1 );
         if( 0 != ( pBox = pLine->GetUpper()) )
-            sNm.Insert( aDotStr, 0 ).Insert( sTmp, 0 );
+            sNm = sTmp + aDotStr + sNm;
         else
             sw_GetTblBoxColStr( nPos, sNm );
 

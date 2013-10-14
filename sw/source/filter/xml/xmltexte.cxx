@@ -205,8 +205,7 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
     if( !pGrfNd->IsGrfLink() )
     {
-        String aNewURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.Package:") );
-        aNewURL += String(rURL);
+        OUString aNewURL = "vnd.sun.star.Package:" + rURL;
 
         // #i15411# save-as will swap all graphics in; we need to swap
         // them out again, to prevent excessive memory use
@@ -214,18 +213,18 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     }
 }
 
-static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
+static void lcl_addURL ( SvXMLExport &rExport, const OUString &rURL,
                          bool bToRel = true )
 {
-    String sRelURL;
+    OUString sRelURL;
 
-    if( bToRel && (rURL.Len() > 0) )
+    if( bToRel && !rURL.isEmpty() )
         sRelURL = URIHelper::simpleNormalizedMakeRelative(rExport.GetOrigFileName(),
               rURL);
     else
         sRelURL = rURL;
 
-    if (sRelURL.Len())
+    if (!sRelURL.isEmpty())
     {
         rExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, sRelURL );
         rExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );

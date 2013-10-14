@@ -1171,17 +1171,17 @@ void SwXMLDDETableContext_Impl::StartElement(
 }
 
 // generate a new name for DDE field type (called by lcl_GetDDEFieldType below)
-static String lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
+static OUString lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
 {
-    String sPrefixStr(sPrefix);
+    OUString sPrefixStr(sPrefix);
 
-    if (sPrefixStr.Len() == 0)
+    if (sPrefixStr.isEmpty())
     {
-        sPrefixStr = OUString('_');
+        sPrefixStr = "_";
     }
 
     // increase count until we find a name that is not yet taken
-    String sName;
+    OUString sName;
     sal_Int32 nCount = 0;
     do
     {
@@ -1204,22 +1204,22 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
                                     SwTableNode* pTableNode)
 {
     // make command string
-    String sCommand(pContext->GetDDEApplication());
-    sCommand += sfx2::cTokenSeparator;
-    sCommand += String(pContext->GetDDEItem());
-    sCommand += sfx2::cTokenSeparator;
-    sCommand += String(pContext->GetDDETopic());
+    OUString sCommand(pContext->GetDDEApplication());
+    sCommand += OUString(sfx2::cTokenSeparator);
+    sCommand += pContext->GetDDEItem();
+    sCommand += OUString(sfx2::cTokenSeparator);
+    sCommand += pContext->GetDDETopic();
 
     sal_uInt16 nType = static_cast< sal_uInt16 >(pContext->GetIsAutomaticUpdate() ? sfx2::LINKUPDATE_ALWAYS
                                                         : sfx2::LINKUPDATE_ONCALL);
 
-    String sName(pContext->GetConnectionName());
+    OUString sName(pContext->GetConnectionName());
 
     // field type to be returned
     SwDDEFieldType* pType = NULL;
 
     // valid name?
-    if (sName.Len() == 0)
+    if (sName.isEmpty())
     {
         sName = lcl_GenerateFldTypeName(pContext->GetDDEApplication(),
                                         pTableNode);
@@ -2138,9 +2138,9 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                         if( pTxtNode != NULL )
                         {
                             // check text: does it look like some form of 0.0?
-                            const String& rText = pTxtNode->GetTxt();
-                            if( ( rText.Len() > 10 ) ||
-                                ( rText.Search( '0' ) == STRING_NOTFOUND ) )
+                            const OUString& rText = pTxtNode->GetTxt();
+                            if( ( rText.getLength() > 10 ) ||
+                                ( rText.indexOf( '0' ) == -1 ) )
                             {
                                 bSuppressNumericContent = true;
                             }
