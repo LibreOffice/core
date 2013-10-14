@@ -2929,7 +2929,7 @@ if test $_os = iOS; then
             arch=i386
             case $sdkver in
             7.*)
-                versionmin=-mios-simulator-version-min=5.0
+                versionmin=-mios-simulator-version-min=6.1
                 ;;
             *)
                 versionmin=-mmacosx-version-min=10.7
@@ -2943,7 +2943,7 @@ if test $_os = iOS; then
             versionmin=-miphoneos-version-min=7.0
         else
             arch=armv7
-            versionmin=-miphoneos-version-min=5.0
+            versionmin=-miphoneos-version-min=6.1
         fi
     fi
 
