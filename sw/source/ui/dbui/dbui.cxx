@@ -46,22 +46,18 @@ PrintMonitor::PrintMonitor(Window *pParent, PrintMonitorType eType )
 
 // Progress Indicator for Creation of personalized Mail Merge documents:
 CreateMonitor::CreateMonitor( Window *pParent )
-:   ModelessDialog( pParent, SW_RES(DLG_MM_CREATIONMONITOR) ),
-    m_aStatus           (this, SW_RES( FT_STATUS )),
-    m_aProgress         (this, SW_RES( FT_PROGRESS )),
-    m_aCreateDocuments  (this, SW_RES( FT_CREATEDOCUMENTS )),
-    m_aCounting         (this, SW_RES( FT_COUNTING )),
-    m_aCancelButton     (this, SW_RES( PB_CANCELPRNMON  )),
-    m_sCountingPattern(),
-    m_sVariable_Total( OUString("%Y") ),
-    m_sVariable_Position( OUString("%X") ),
-    m_nTotalCount(0),
-    m_nCurrentPosition(0)
+    : ModelessDialog(pParent, "MMCreatingDialog",
+        "modules/swriter/ui/mmcreatingdialog.ui")
+    , m_sCountingPattern()
+    , m_sVariable_Total("%Y")
+    , m_sVariable_Position("%X")
+    , m_nTotalCount(0)
+    , m_nCurrentPosition(0)
 {
-    FreeResource();
-
-    m_sCountingPattern = m_aCounting.GetText();
-    m_aCounting.SetText(OUString("..."));
+    get(m_pCancelButton, "cancel");
+    get(m_pCounting, "progress");
+    m_sCountingPattern = m_pCounting->GetText();
+    m_pCounting->SetText("...");
 }
 
 void CreateMonitor::UpdateCountingText()
@@ -69,7 +65,7 @@ void CreateMonitor::UpdateCountingText()
     OUString sText(m_sCountingPattern);
     sText = sText.replaceAll( m_sVariable_Total, OUString::number( m_nTotalCount ) );
     sText = sText.replaceAll( m_sVariable_Position, OUString::number( m_nCurrentPosition ) );
-    m_aCounting.SetText(sText);
+    m_pCounting->SetText(sText);
 }
 
 void CreateMonitor::SetTotalCount( sal_Int32 nTotal )
@@ -86,7 +82,7 @@ void CreateMonitor::SetCurrentPosition( sal_Int32 nCurrent )
 
 void CreateMonitor::SetCancelHdl( const Link& rLink )
 {
-    m_aCancelButton.SetClickHdl( rLink );
+    m_pCancelButton->SetClickHdl( rLink );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

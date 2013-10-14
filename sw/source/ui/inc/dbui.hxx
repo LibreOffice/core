@@ -52,15 +52,12 @@ public:
 
     void SetCancelHdl( const Link& rLink );
 
-private: //methods
+private:
     void UpdateCountingText();
 
-private: //member
-    FixedText       m_aStatus;
-    FixedText       m_aProgress;
-    FixedText       m_aCreateDocuments;
-    FixedText       m_aCounting;
-    CancelButton    m_aCancelButton;
+private:
+    FixedText*      m_pCounting;
+    CancelButton*   m_pCancelButton;
 
     OUString        m_sCountingPattern;
     OUString        m_sVariable_Total;

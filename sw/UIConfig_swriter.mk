@@ -160,6 +160,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/querydefaultcompatdialog \
 	sw/uiconfig/swriter/ui/querysavelabeldialog \
 	sw/uiconfig/swriter/ui/queryshowchangesdialog \
+	sw/uiconfig/swriter/ui/mmcreatingdialog \
 	sw/uiconfig/swriter/ui/mmoutputtypepage \
 	sw/uiconfig/swriter/ui/mmselectpage \
 	sw/uiconfig/swriter/ui/paradialog \
