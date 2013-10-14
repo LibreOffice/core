@@ -78,10 +78,6 @@
 #define MM_DOCTYPE_HTML             4
 #define MM_DOCTYPE_TEXT             5
 
-
-#define IM_WARNING                  1
-#define FI_WARNING                  2
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

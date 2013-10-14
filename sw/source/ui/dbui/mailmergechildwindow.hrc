@@ -44,10 +44,4 @@
 #define ST_FAILED                   80
 #define ST_TERMINATEQUERY           81
 
-#define IM_WARNING                  10
-#define FI_WARNING                  11
-#define FT_DETAILS                  12
-#define ED_DETAILS                  13
-#define PB_OK                       14
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

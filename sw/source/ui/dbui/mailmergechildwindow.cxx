@@ -24,6 +24,7 @@
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <mailmergechildwindow.hxx>
 #include <mmoutputpage.hxx>
@@ -241,36 +242,21 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
     }
 }
 
-class SwSendWarningBox_Impl : public ModalDialog
+class SwSendWarningBox_Impl : public MessageDialog
 {
-    FixedImage      aWarningImageIM;
-    FixedInfo       aWarningFI;
-    FixedText       aDetailFT;
-    MultiLineEdit   aDetailED;
-    FixedLine       aSeparatorFL;
-    OKButton        aOKPB;
-
+    VclMultiLineEdit  *m_pDetailED;
 public:
     SwSendWarningBox_Impl(Window* pParent, const String& rDetails);
-    ~SwSendWarningBox_Impl();
 };
 
-SwSendWarningBox_Impl::SwSendWarningBox_Impl(Window* pParent, const String& rDetails) :
-    ModalDialog(pParent, SW_RES( DLG_MM_SENDWARNING )),
-    aWarningImageIM(this, SW_RES( IM_WARNING         )),
-    aWarningFI(     this, SW_RES( FI_WARNING         )),
-    aDetailFT(      this, SW_RES( FT_DETAILS         )),
-    aDetailED(      this, SW_RES( ED_DETAILS         )),
-    aSeparatorFL(   this, SW_RES( FL_SEPARATOR       )),
-    aOKPB(          this, SW_RES(PB_OK))
+SwSendWarningBox_Impl::SwSendWarningBox_Impl(Window* pParent, const String& rDetails)
+    : MessageDialog(pParent, "WarnEmailDialog", "modules/swriter/ui/warnemaildialog.ui")
 {
-    FreeResource();
-    aWarningImageIM.SetImage(WarningBox::GetStandardImage());
-    aDetailED.SetText(rDetails);
-}
-
-SwSendWarningBox_Impl::~SwSendWarningBox_Impl()
-{
+    get(m_pDetailED, "errors");
+    m_pDetailED->SetMaxTextWidth(80 * m_pDetailED->approximate_char_width());
+    m_pDetailED->set_width_request(80 * m_pDetailED->approximate_char_width());
+    m_pDetailED->set_height_request(8 * m_pDetailED->GetTextHeight());
+    m_pDetailED->SetText(rDetails);
 }
 
 #define ITEMID_TASK     1
@@ -655,7 +641,8 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
         ++m_nErrorCount;
 
     UpdateTransferStatus( );
-    if(pError)
+
+    if (pError)
     {
         SwSendWarningBox_Impl* pDlg = new SwSendWarningBox_Impl(0, *pError);
         pDlg->Execute();

@@ -383,7 +383,6 @@
 #define HID_MAILMERGECHILD                                      "SW_HID_MAILMERGECHILD"
 #define HID_MM_MAILSTATUS_TLB                                   "SW_HID_MM_MAILSTATUS_TLB"
 #define HID_RETURN_TO_MAILMERGE                                 "SW_HID_RETURN_TO_MAILMERGE"
-#define HID_MM_SENDWARNING                                      "SW_HID_MM_SENDWARNING"
 
 #define HID_NID_TBL                                             "SW_HID_NID_TBL"
 #define HID_NID_FRM                                             "SW_HID_NID_FRM"
