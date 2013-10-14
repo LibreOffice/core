@@ -1077,12 +1077,12 @@ bool ORowSetValue::getBool()    const
                     const static OUString s_sFalse("false");
                     if ( sValue.equalsIgnoreAsciiCase(s_sTrue) || (sValue == "1") )
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         break;
                     }
                     else if ( sValue.equalsIgnoreAsciiCase(s_sFalse) || (sValue == "0") )
                     {
-                        bRet = sal_False;
+                        bRet = false;
                         break;
                     }
                 }
