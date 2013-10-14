@@ -897,8 +897,8 @@ bool SvpSalGraphics::CheckContext()
             }
         }
 
-        CGContextClip(mrContext);
-
+        if (!CGContextIsPathEmpty(mrContext))
+            CGContextClip(mrContext);
     }
 
 
