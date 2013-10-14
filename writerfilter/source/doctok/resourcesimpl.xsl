@@ -225,23 +225,7 @@ using namespace ::std;
       }
     }
 
-    void 
     </xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>::dump(OutputWithDepth &lt; string &gt; &amp; o) const
-    {
-        o.addItem("&lt;dump type='</xsl:text>
-        <xsl:value-of select='@name'/>
-        <xsl:text>'&gt;");
-        
-        WW8StructBase::dump(o);</xsl:text>
-        <xsl:for-each select='.//UML:Attribute[@name!="reserved"]'>
-          <xsl:apply-templates select='.' mode='dumpAttribute'/>
-        </xsl:for-each>
-
-        <xsl:text>
-        o.addItem("&lt;/dump&gt;");
-    }&#xa;</xsl:text>
   </xsl:template>
 
   <xsl:template match='UML:Attribute' mode='resolveAttribute'>

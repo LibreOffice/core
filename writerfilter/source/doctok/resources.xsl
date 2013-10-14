@@ -414,8 +414,6 @@ class </xsl:text>
     void resolveNoAuto(Properties &amp; rHandler);
   </xsl:if>
 
-  void dump(OutputWithDepth &lt; string &gt; &amp; o) const;
-
   void resolve(Properties &amp; rHandler);
 </xsl:template>
 
@@ -786,7 +784,6 @@ public:
       void resolveNoAuto(Properties &amp; rHandler);
     </xsl:if>
     <xsl:text>
-    virtual void dump(OutputWithDepth &lt; string &gt; &amp; o) const;
 
     virtual DffRecord * clone() const { return new </xsl:text>
     <xsl:value-of select="$classname"/>
