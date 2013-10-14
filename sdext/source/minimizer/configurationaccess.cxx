@@ -162,15 +162,15 @@ ConfigurationAccess::~ConfigurationAccess()
 {
 }
 
-OUString ConfigurationAccess::getPath( const PPPOptimizerTokenEnum eToken )
+OUString ConfigurationAccess::getPath( OUString const & token )
 {
     OUString aPath;
     try
     {
         static const OUString sProtocol( "vnd.sun.star.expand:" );
         Reference< container::XNameAccess > xSet( OpenConfiguration( true ), UNO_QUERY_THROW );
-        if ( xSet->hasByName( TKGet( eToken ) ) )
-            xSet->getByName( TKGet( eToken ) ) >>= aPath;
+        if ( xSet->hasByName( token ) )
+            xSet->getByName( token ) >>= aPath;
         if ( aPath.match( sProtocol, 0 ) )
         {
             OUString aTmp( aPath.copy( 20 ) );

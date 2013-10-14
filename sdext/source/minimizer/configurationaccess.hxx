@@ -87,7 +87,7 @@ class ConfigurationAccess
         ~ConfigurationAccess();
         void SaveConfiguration();
 
-        OUString getPath( const PPPOptimizerTokenEnum );
+        OUString getPath( OUString const & token );
         OUString getString( const PPPOptimizerTokenEnum ) const;
 
         // access to current OptimizerSettings (stored in the first entry of maSettings)

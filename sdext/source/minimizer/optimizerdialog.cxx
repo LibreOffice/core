@@ -118,7 +118,7 @@ void OptimizerDialog::InitRoadmap()
         InsertRoadmapItem( 3, sal_True, getString( STR_OLE_OBJECTS ), ITEM_ID_OLE_OPTIMIZATION );
         InsertRoadmapItem( 4, sal_True, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
-        OUString sBitmapPath( getPath( TK_BitmapPath ) );
+        OUString sBitmapPath( getPath( "BitmapPath" ) );
         OUString sBitmap( "/minimizepresi_80.png" );
         OUString sURL( sBitmapPath += sBitmap );
 
