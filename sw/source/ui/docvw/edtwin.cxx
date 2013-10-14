@@ -278,7 +278,7 @@ struct QuickHelpData
     }
 
     // Fills internal structures with hopefully helpful information.
-    void FillStrArr( SwWrtShell& rSh, const String& rWord );
+    void FillStrArr( SwWrtShell& rSh, const OUString& rWord );
     void SortAndFilter();
 };
 
@@ -727,7 +727,7 @@ sal_Bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, cons
 //return INVALID_HINT if language should not be explictly overridden, the correct
 //HintId to use for the eBufferLanguage otherwise
 static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView& rView,
-    const String &rInBuffer)
+    const OUString &rInBuffer)
 {
     sal_uInt16 nWhich = INVALID_HINT;
 
@@ -789,7 +789,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
                     // configuration switch that allows to give the preference
                     // to the OOo setting or the system setting explicitly
                     // and/or a better handling of the script type.
-                    i18n::UnicodeScript eType = rInBuffer.Len() ?
+                    i18n::UnicodeScript eType = !rInBuffer.isEmpty() ?
                         (i18n::UnicodeScript)GetAppCharClass().getScript( rInBuffer, 0 ) :
                         i18n::UnicodeScript_kScriptCount;
 
@@ -1527,7 +1527,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     TblChgWidthHeightType eTblChgMode = nsTblChgWidthHeightType::WH_COL_LEFT;    // initialization just for warning-free code
     sal_uInt16 nTblChgSize = 0;
     bool bStopKeyInputTimer = true;
-    String sFmlEntry;
+    OUString sFmlEntry;
 
     enum SW_KeyState { KS_Start,
                        KS_CheckKey, KS_InsChar, KS_InsTab,
@@ -1619,7 +1619,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     rSh.MoveSection( fnSectionCurr, fnSectionEnd );
                     rSh.Pop( sal_True );
                     rSh.EndSelect();
-                    sFmlEntry = '=';
+                    sFmlEntry = "=";
                 }
                 else
                     rSh.Pop( sal_False );
@@ -4472,8 +4472,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     const SvxURLField *pField = aVEvt.pURLField;
                                     if (pField)
                                     {
-                                        String sURL(pField->GetURL());
-                                        String sTarget(pField->GetTargetFrame());
+                                        OUString sURL(pField->GetURL());
+                                        OUString sTarget(pField->GetTargetFrame());
                                         ::LoadURL(rSh, sURL, nFilter, sTarget);
                                     }
                                     bCallShadowCrsr = sal_False;
@@ -4600,7 +4600,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else
         {
-            String aStyleName;
+            OUString aStyleName;
             switch ( m_pApplyTempl->eType )
             {
                 case SFX_STYLE_FAMILY_PARA:
@@ -4664,7 +4664,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
             uno::Reference< frame::XDispatchRecorder > xRecorder =
                     m_rView.GetViewFrame()->GetBindings().GetRecorder();
-            if ( aStyleName.Len() && xRecorder.is() )
+            if ( !aStyleName.isEmpty() && xRecorder.is() )
             {
                 SfxShell *pSfxShell = lcl_GetShellFromDispatcher( m_rView, TYPE(SwTextShell) );
                 if ( pSfxShell )
@@ -5065,16 +5065,16 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             else
             {
                 bCallBase = false;
-                String sRecord = rSh.DeleteExtTextInput();
+                OUString sRecord = rSh.DeleteExtTextInput();
                 uno::Reference< frame::XDispatchRecorder > xRecorder =
                         m_rView.GetViewFrame()->GetBindings().GetRecorder();
 
-                if ( sRecord.Len() )
+                if ( !sRecord.isEmpty() )
                 {
                     // convert quotes in IME text
                     // works on the last input character, this is escpecially in Korean text often done
                     // quotes that are inside of the string are not replaced!
-                    const sal_Unicode aCh = sRecord.GetChar(sRecord.Len() - 1);
+                    const sal_Unicode aCh = sRecord[sRecord.getLength() - 1];
                     SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
                     SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
                     if(pACorr &&
@@ -5670,9 +5670,9 @@ void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
     }
     else
     {
-        String sStr( m_aHelpStrings[ nCurArrPos ] );
-        sStr.Erase( 0, nLen );
-        sal_uInt16 nL = sStr.Len();
+        OUString sStr( m_aHelpStrings[ nCurArrPos ] );
+        sStr = sStr.copy( nLen );
+        sal_uInt16 nL = sStr.getLength();
         const sal_uInt16 nVal = EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE |
                                 EXTTEXTINPUT_ATTR_HIGHLIGHT;
         const std::vector<sal_uInt16> aAttrs( nL, nVal );
@@ -5703,17 +5703,17 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
     ClearCntnt();
 }
 
-void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
+void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
 {
     enum Capitalization { CASE_LOWER, CASE_UPPER, CASE_SENTENCE, CASE_OTHER };
 
     // Determine word capitalization
     const CharClass& rCC = GetAppCharClass();
-    const String sWordLower = rCC.lowercase( rWord );
+    const OUString sWordLower = rCC.lowercase( rWord );
     Capitalization aWordCase = CASE_OTHER;
-    if ( rWord.Len() > 0 )
+    if ( !rWord.isEmpty() )
     {
-        if ( rWord.GetChar(0) == sWordLower.GetChar(0) )
+        if ( rWord[0] == sWordLower[0] )
         {
             if ( rWord == sWordLower )
                 aWordCase = CASE_LOWER;
@@ -5721,8 +5721,8 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
         else
         {
             // First character is not lower case i.e. assume upper or title case
-            String sWordSentence = sWordLower;
-            sWordSentence.SetChar( 0, rWord.GetChar(0) );
+            OUString sWordSentence = sWordLower;
+            sWordSentence = sWordSentence.replaceAt( 0, 1, OUString(rWord[0]) );
             if ( rWord == sWordSentence )
                 aWordCase = CASE_SENTENCE;
             else
@@ -5742,18 +5742,17 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
     {
         for ( long n = 0; n < aNames.getLength(); ++n )
         {
-            const String& rStr( aNames[n].FullName );
+            const OUString& rStr( aNames[n].FullName );
             // Check string longer than word and case insensitive match
-            if( rStr.Len() > rWord.Len() &&
-                static_cast<String>( rCC.lowercase( rStr, 0, rWord.Len() ) )
-                == sWordLower )
+            if( rStr.getLength() > rWord.getLength() &&
+                rCC.lowercase( rStr, 0, rWord.getLength() ) == sWordLower )
             {
                 if ( aWordCase == CASE_LOWER )
                     m_aHelpStrings.push_back( rCC.lowercase( rStr ) );
                 else if ( aWordCase == CASE_SENTENCE )
                 {
-                    String sTmp = rCC.lowercase( rStr );
-                    sTmp.SetChar( 0, rStr.GetChar(0) );
+                    OUString sTmp = rCC.lowercase( rStr );
+                    sTmp = sTmp.replaceAt( 0, 1, OUString(rStr[0]) );
                     m_aHelpStrings.push_back( sTmp );
                 }
                 else if ( aWordCase == CASE_UPPER )
@@ -5769,19 +5768,19 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 
     // Add matching words from AutoCompleteWord list
     const SwAutoCompleteWord& rACList = rSh.GetAutoCompleteWords();
-    std::vector<String> strings;
+    std::vector<OUString> strings;
 
     if ( rACList.GetWordsMatching( rWord, strings ) )
     {
         for (unsigned int i= 0; i<strings.size(); i++)
         {
-            String aCompletedString = strings[i];
+            OUString aCompletedString = strings[i];
             if ( aWordCase == CASE_LOWER )
                 m_aHelpStrings.push_back( rCC.lowercase( aCompletedString ) );
             else if ( aWordCase == CASE_SENTENCE )
             {
-                String sTmp = rCC.lowercase( aCompletedString );
-                sTmp.SetChar( 0, aCompletedString.GetChar(0) );
+                OUString sTmp = rCC.lowercase( aCompletedString );
+                sTmp = sTmp.replaceAt( 0, 1, OUString(aCompletedString[0]) );
                 m_aHelpStrings.push_back( sTmp );
             }
             else if ( aWordCase == CASE_UPPER )

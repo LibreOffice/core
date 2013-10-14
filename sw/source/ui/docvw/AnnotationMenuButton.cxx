@@ -89,12 +89,12 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     else
     {
         SvtUserOptions aUserOpt;
-        String sAuthor;
-        if ( !(sAuthor = aUserOpt.GetFullName()).Len() )
+        OUString sAuthor;
+        if ( (sAuthor = aUserOpt.GetFullName()).isEmpty() )
         {
-            if ( !(sAuthor = aUserOpt.GetID()).Len() )
+            if ( (sAuthor = aUserOpt.GetID()).isEmpty() )
             {
-                sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
+                sAuthor = SW_RES( STR_REDLINE_UNKNOWN_AUTHOR );
             }
         }
         // do not allow to reply to ourself and no answer possible if this note is in a protected section

@@ -111,11 +111,9 @@ void SidebarTxtControl::RequestHelp(const HelpEvent &rEvt)
     if ( nResId &&
          mrDocView.GetWrtShell().GetContentAtPos( mrSidebarWin.GetAnchorPos(), aCntntAtPos ) )
     {
-        OUString sTxt(SW_RESSTR(nResId));
-        sTxt += ": ";
-        sTxt += aCntntAtPos.aFnd.pRedl->GetAuthorString();
-        sTxt += " - ";
-        sTxt += GetAppLangDateTimeString( aCntntAtPos.aFnd.pRedl->GetTimeStamp() );
+        OUString sTxt = SW_RESSTR( nResId ) + ": " +
+                        aCntntAtPos.aFnd.pRedl->GetAuthorString() + " - " +
+                        GetAppLangDateTimeString( aCntntAtPos.aFnd.pRedl->GetTimeStamp() );
         Help::ShowQuickHelp( this,PixelToLogic(Rectangle(rEvt.GetMousePosPixel(),Size(50,10))),sTxt);
     }
 }
@@ -271,8 +269,8 @@ void SidebarTxtControl::MouseButtonDown( const MouseEvent& rMEvt )
                 {
                     GetTextView()->MouseButtonDown( rMEvt );
                     SwWrtShell &rSh = mrDocView.GetWrtShell();
-                    String sURL( pURL->GetURL() );
-                    String sTarget( pURL->GetTargetFrame() );
+                    OUString sURL( pURL->GetURL() );
+                    OUString sTarget( pURL->GetTargetFrame() );
                     ::LoadURL(rSh, sURL, URLLOAD_NOFILTER, sTarget);
                     return;
                 }

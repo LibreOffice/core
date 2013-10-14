@@ -348,9 +348,9 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
  *  @param aMatch the prefix to search for
  *  @param aWords the words to search in
  */
-bool SwAutoCompleteWord::GetWordsMatching(String aMatch, std::vector<String>& aWords) const
+bool SwAutoCompleteWord::GetWordsMatching(OUString aMatch, std::vector<OUString>& aWords) const
 {
-    OUString aStringRoot = OUString( aMatch );
+    OUString aStringRoot = aMatch;
 
     std::vector<OUString> suggestions;
     m_LookupTree.findSuggestions(aStringRoot, suggestions);
@@ -362,7 +362,7 @@ bool SwAutoCompleteWord::GetWordsMatching(String aMatch, std::vector<String>& aW
 
     for (size_t i = 0; i < suggestions.size(); i++)
     {
-        aWords.push_back( String(suggestions[i]) );
+        aWords.push_back( suggestions[i] );
     }
 
     return true;

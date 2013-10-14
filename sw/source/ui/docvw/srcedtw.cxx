@@ -640,7 +640,7 @@ void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
     {
         sal_Bool bTempModified = IsModified();
         pTextEngine->RemoveAttribs( nPara, (sal_Bool)sal_True );
-        String aSource( pTextEngine->GetText( nPara ) );
+        OUString aSource( pTextEngine->GetText( nPara ) );
         pTextEngine->SetUpdateMode( sal_False );
         ImpDoHighlight( aSource, nPara );
         TextView* pTmp = pTextEngine->GetActiveView();

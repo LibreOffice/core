@@ -70,7 +70,7 @@ public:
     void CheckChangedList(const editeng::SortedAutoCompleteStrings& rNewLst);
 
     // Returns all words matching a given prefix aMatch.
-    bool GetWordsMatching(String aMatch, std::vector<String>& aWords) const;
+    bool GetWordsMatching(OUString aMatch, std::vector<OUString>& aWords) const;
 };
 
 

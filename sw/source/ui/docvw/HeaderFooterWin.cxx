@@ -188,7 +188,7 @@ void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineE
 
     // Compute the text size and get the box position & size from it
     Rectangle aTextRect;
-    GetTextBoundRect( aTextRect, String( m_sLabel ) );
+    GetTextBoundRect( aTextRect, OUString( m_sLabel ) );
     Rectangle aTextPxRect = LogicToPixel( aTextRect );
     FontMetric aFontMetric = GetFontMetric( GetFont() );
     Size  aBoxSize ( aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,
@@ -294,7 +294,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
 
     aSeq[2] = drawinglayer::primitive2d::Primitive2DReference( new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                 aTextMatrix,
-                String( m_sLabel ), 0, m_sLabel.getLength(),
+                OUString( m_sLabel ), 0, m_sLabel.getLength(),
                 std::vector< double >( ),
                 aFontAttr,
                 com::sun::star::lang::Locale(),
@@ -393,7 +393,7 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
     SwView& rView = GetEditWin()->GetView();
     SwWrtShell& rSh = rView.GetWrtShell();
 
-    const String& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
+    const OUString& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
     switch ( nSlot )
     {
         case FN_HEADERFOOTER_EDIT:
@@ -476,7 +476,7 @@ void SwHeaderFooterWin::MouseButtonDown( const MouseEvent& rMEvt )
         SwView& rView = GetEditWin()->GetView();
         SwWrtShell& rSh = rView.GetWrtShell();
 
-        const String& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
+        const OUString& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
         rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, true, false );
     }
     else
