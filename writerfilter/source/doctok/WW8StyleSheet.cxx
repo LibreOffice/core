@@ -22,22 +22,6 @@
 namespace writerfilter {
 namespace doctok {
 
-void WW8StyleSheet::initPayload()
-{
-    sal_uInt32 nCount = getEntryCount();
-
-    sal_uInt32 nOffset = get_size() + 2;
-    for (sal_uInt32 n = 0; n < nCount; ++n)
-    {
-        entryOffsets.push_back(nOffset);
-
-        sal_uInt32 cbStd = getU16(nOffset);
-        nOffset += cbStd + 2;
-    }
-
-    entryOffsets.push_back(nOffset);
-}
-
 sal_uInt32 WW8StyleSheet::getEntryCount()
 {
     return get_cstd();

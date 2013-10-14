@@ -23,43 +23,6 @@
 namespace writerfilter {
 namespace doctok {
 
-void WW8ListTable::initPayload()
-{
-    sal_uInt32 nCount = getEntryCount();
-
-    sal_uInt32 nOffset = 2;
-    sal_uInt32 nOffsetLevel = mnPlcfPayloadOffset;
-    for (sal_uInt32 n = 0; n < nCount; ++n)
-    {
-        WW8List aList(this, nOffset);
-
-        entryOffsets.push_back(nOffset);
-        payloadIndices.push_back(payloadOffsets.size());
-        nOffset += WW8List::getSize();
-
-        sal_uInt32 nLvlCount = aList.get_fSimpleList() ? 1 : 9;
-
-        for (sal_uInt32 i = 0; i < nLvlCount; ++i)
-        {
-            WW8ListLevel aLevel(this, nOffsetLevel);
-
-            payloadOffsets.push_back(nOffsetLevel);
-
-            nOffsetLevel += aLevel.calcSize();
-        }
-
-        if (nOffsetLevel > getCount())
-        {
-            nOffsetLevel = getCount();
-
-            break;
-        }
-    }
-
-    payloadOffsets.push_back(nOffsetLevel);
-    entryOffsets.push_back(nOffset);
-}
-
 sal_uInt32 WW8ListTable::getEntryCount()
 {
     return getU16(0);

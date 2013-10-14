@@ -22,38 +22,6 @@
 namespace writerfilter {
 namespace doctok {
 
-void WW8LFOTable::initPayload()
-{
-    sal_uInt32 nCount = getEntryCount();
-
-    sal_uInt32 nOffset = 4;
-    sal_uInt32 nOffsetLFOData = mnPlcfPayloadOffset;
-
-    for (sal_uInt32 n = 0; n < nCount; ++n)
-    {
-        WW8LFO aLFO(this, nOffset);
-
-        entryOffsets.push_back(nOffset);
-        nOffset += WW8LFO::getSize();
-
-        payloadOffsets.push_back(nOffsetLFOData);
-        payloadIndices.push_back(n);
-
-        nOffsetLFOData += 4;
-
-        sal_uInt32 nLvls = aLFO.get_clfolvl();
-
-        for (sal_uInt32 k = 0; k < nLvls; ++k)
-        {
-            WW8LFOLevel aLevel(this, nOffsetLFOData);
-            nOffsetLFOData += aLevel.calcSize();
-        }
-    }
-
-    entryOffsets.push_back(nOffset);
-    payloadOffsets.push_back(nOffsetLFOData);
-}
-
 sal_uInt32 WW8LFOTable::getEntryCount()
 {
     return getU32(0);

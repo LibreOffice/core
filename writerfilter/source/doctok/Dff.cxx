@@ -42,17 +42,11 @@ DffRecord::DffRecord(WW8StructBase * pParent, sal_uInt32 nOffset,
 
 Records_t::iterator DffRecord::begin()
 {
-    if (! bInitialized)
-        initChildren();
-
     return mRecords.begin();
 }
 
 Records_t::iterator DffRecord::end()
 {
-    if (! bInitialized)
-        initChildren();
-
     return mRecords.end();
 }
 
@@ -103,10 +97,6 @@ sal_uInt32 DffRecord::getInstance() const
 sal_uInt32 DffRecord::getRecordType() const
 {
     return getU16(0x2);
-}
-
-void DffRecord::initChildren()
-{
 }
 
 Records_t DffRecord::findRecords(sal_uInt32 nType, bool bRecursive, bool bAny)
@@ -353,10 +343,6 @@ DffBlock::DffBlock(const DffBlock & rSrc)
 {
 }
 
-void DffBlock::initChildren()
-{
-}
-
 Records_t DffBlock::findRecords(sal_uInt32 nType, bool bRecursive, bool bAny)
 {
     Records_t aResult;
@@ -447,17 +433,11 @@ DffRecord::Pointer_t DffBlock::getBlip(sal_uInt32 nBlip)
 
 Records_t::iterator DffBlock::begin()
 {
-    if (! bInitialized)
-        initChildren();
-
     return mRecords.begin();
 }
 
 Records_t::iterator DffBlock::end()
 {
-    if (! bInitialized)
-        initChildren();
-
     return mRecords.end();
 }
 

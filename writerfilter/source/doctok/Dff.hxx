@@ -42,8 +42,6 @@ protected:
     typedef vector<Pointer_t> Records_t;
     Records_t mRecords;
 
-    void initChildren();
-
 public:
 
     DffRecord(WW8Stream & rStream, sal_uInt32 nOffset, sal_uInt32 nCount);
@@ -104,9 +102,6 @@ class DffBlock : public WW8StructBase,
     sal_uInt32 mnPadding;
 
     Records_t mRecords;
-
-protected:
-    void initChildren();
 
 public:
     typedef boost::shared_ptr<DffBlock> Pointer_t;

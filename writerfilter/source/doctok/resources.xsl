@@ -229,12 +229,6 @@ class </xsl:text>
     virtual ~</xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:text>();&#xa;</xsl:text>
-    <xsl:if test='.//UML:Stereotype[@xmi.idref ="initimpl"]'>
-      <xsl:text>    void initImpl();&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test='.//UML:Stereotype[@xmi.idref ="plcf"]'>
-      <xsl:text>    void initPayload();</xsl:text>
-    </xsl:if>
     <xsl:text>
 
     /**

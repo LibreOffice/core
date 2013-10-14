@@ -22,28 +22,6 @@
 namespace writerfilter {
 namespace doctok {
 
-void WW8FontTable::initPayload()
-{
-    sal_uInt32 nCount = getU8(0);
-
-    sal_uInt32 nOffset = 1;
-
-    while (nCount > 0)
-    {
-        entryOffsets.push_back(nOffset);
-
-        sal_uInt32 nFFNSize = getU8(nOffset) + 1;
-
-        if (nFFNSize > 1)
-            nCount--;
-
-        nOffset += nFFNSize;
-    }
-
-    entryOffsets.push_back(nOffset);
-    mnPlcfPayloadOffset = nOffset;
-}
-
 sal_uInt32 WW8FontTable::getEntryCount()
 {
     return entryOffsets.size() - 1;
