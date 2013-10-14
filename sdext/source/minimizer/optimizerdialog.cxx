@@ -19,6 +19,7 @@
 
 
 #include "optimizerdialog.hxx"
+#include "pppoptimizer.hxx"
 #include "fileopendialog.hxx"
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
@@ -589,11 +590,10 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             }
             if ( bSuccessfullyExecuted )
             {
-                Sequence< Any > aArgs( 1 );
-                aArgs[ 0 ] <<= mrOptimizerDialog.GetFrame();
-
-                Reference < XDispatch > xDispatch( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    OUString("com.sun.star.comp.PPPOptimizer"), aArgs, mrOptimizerDialog.GetComponentContext() ), UNO_QUERY );
+                Reference < XDispatch > xDispatch(
+                    new PPPOptimizer(
+                        mrOptimizerDialog.GetComponentContext(),
+                        mrOptimizerDialog.GetFrame()));
 
                 URL aURL;
                 aURL.Protocol = OUString( "vnd.com.sun.star.comp.PPPOptimizer:"  );
@@ -607,8 +607,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 lArguments[ 2 ].Name = TKGet( TK_InformationDialog );
                 lArguments[ 2 ].Value <<= mrOptimizerDialog.GetFrame();
 
-                if( xDispatch.is() )
-                    xDispatch->dispatch( aURL, lArguments );
+                xDispatch->dispatch( aURL, lArguments );
 
                 mrOptimizerDialog.endExecute( bSuccessfullyExecuted );
             }

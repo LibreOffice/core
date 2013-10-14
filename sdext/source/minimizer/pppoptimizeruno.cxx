@@ -22,7 +22,6 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
-#include <pppoptimizer.hxx>
 #include <pppoptimizerdialog.hxx>
 
 using namespace ::rtl;
@@ -43,15 +42,7 @@ extern "C"
         if( pServiceManager )
         {
             Reference< XSingleComponentFactory > xFactory;
-            if( aImplName.equals( PPPOptimizer_getImplementationName() ) )
-            {
-                xFactory = createSingleComponentFactory(
-                        PPPOptimizer_createInstance,
-                        OUString::createFromAscii( pImplName ),
-                        PPPOptimizer_getSupportedServiceNames() );
-
-            }
-            else if( aImplName.equals( PPPOptimizerDialog_getImplementationName() ) )
+            if( aImplName.equals( PPPOptimizerDialog_getImplementationName() ) )
             {
                 xFactory = createSingleComponentFactory(
                         PPPOptimizerDialog_createInstance,

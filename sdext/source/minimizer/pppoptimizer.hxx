@@ -20,22 +20,18 @@
 #ifndef PPPOPTIMIZER_HXX
 #define PPPOPTIMIZER_HXX
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
 // ----------------
 // - PPPOptimizer -
 // ----------------
 
-class PPPOptimizer : public cppu::WeakImplHelper4<
-                                    com::sun::star::lang::XInitialization,
-                                    com::sun::star::lang::XServiceInfo,
+class PPPOptimizer : public cppu::WeakImplHelper2<
                                     com::sun::star::frame::XDispatchProvider,
                                     com::sun::star::frame::XDispatch >
 {
@@ -44,22 +40,10 @@ class PPPOptimizer : public cppu::WeakImplHelper4<
 
 public:
 
-                PPPOptimizer( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
+    PPPOptimizer(
+        css::uno::Reference<css::uno::XComponentContext> const & xContext,
+        css::uno::Reference< css::frame::XFrame > const & xFrame);
     virtual     ~PPPOptimizer();
-
-    // XInitialization
-    void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments )
-        throw( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException );
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw( com::sun::star::uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName )
-        throw( com::sun::star::uno::RuntimeException );
-
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( com::sun::star::uno::RuntimeException );
 
     // XDispatchProvider
     virtual com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > SAL_CALL queryDispatch(
@@ -83,11 +67,6 @@ public:
 
     static sal_Int64 GetFileSize( const OUString& rURL );
 };
-
-OUString PPPOptimizer_getImplementationName();
-com::sun::star::uno::Sequence< OUString > PPPOptimizer_getSupportedServiceNames();
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > PPPOptimizer_createInstance( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rSMgr )
-    throw( com::sun::star::uno::Exception );
 
 #endif // PPPOPTIMIZER_HXX
 

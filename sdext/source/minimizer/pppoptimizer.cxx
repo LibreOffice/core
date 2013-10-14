@@ -22,8 +22,6 @@
 #include "impoptimizer.hxx"
 #include <osl/file.hxx>
 
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -31,14 +29,15 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-#define SERVICE_NAME "com.sun.star.comp.PPPOptimizer"
-
 // ----------------
 // - PPPOptimizer -
 // ----------------
 
-PPPOptimizer::PPPOptimizer( const Reference< XComponentContext > &xContext ) :
-    mxContext( xContext )
+PPPOptimizer::PPPOptimizer(
+    css::uno::Reference<css::uno::XComponentContext> const & xContext,
+    css::uno::Reference< css::frame::XFrame > const & xFrame):
+    mxContext( xContext ),
+    mxController( xFrame->getController() )
 {
 }
 
@@ -46,44 +45,6 @@ PPPOptimizer::PPPOptimizer( const Reference< XComponentContext > &xContext ) :
 
 PPPOptimizer::~PPPOptimizer()
 {
-}
-
-// -----------------------------------------------------------------------------
-// XInitialization
-// -----------------------------------------------------------------------------
-
-void SAL_CALL PPPOptimizer::initialize( const Sequence< Any >& aArguments )
-    throw ( Exception, RuntimeException )
-{
-    if( aArguments.getLength() != 1 )
-        throw IllegalArgumentException();
-
-    Reference< XFrame > xFrame;
-    aArguments[ 0 ] >>= xFrame;
-    if ( xFrame.is() )
-        mxController = xFrame->getController();
-}
-
-// -----------------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------------
-
-OUString SAL_CALL PPPOptimizer::getImplementationName()
-    throw ( RuntimeException )
-{
-    return PPPOptimizer_getImplementationName();
-}
-
-sal_Bool SAL_CALL PPPOptimizer::supportsService( const OUString& rServiceName )
-    throw ( RuntimeException )
-{
-    return rServiceName == SERVICE_NAME;
-}
-
-Sequence< OUString > SAL_CALL PPPOptimizer::getSupportedServiceNames()
-    throw ( RuntimeException )
-{
-    return PPPOptimizer_getSupportedServiceNames();
 }
 
 // -----------------------------------------------------------------------------
@@ -175,27 +136,6 @@ sal_Int64 PPPOptimizer::GetFileSize( const OUString& rURL )
         }
     }
     return nFileSize;
-}
-
-// -----------------------------------------------------------------------------
-
-OUString PPPOptimizer_getImplementationName()
-{
-    return OUString( "com.sun.star.comp.PPPOptimizerImp" );
-}
-
-Sequence< OUString > PPPOptimizer_getSupportedServiceNames()
-{
-    Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME );
-    return aRet;
-}
-
-Reference< XInterface > PPPOptimizer_createInstance( const Reference< XComponentContext > & rSMgr )
-    throw( Exception )
-{
-    return (cppu::OWeakObject*) new PPPOptimizer( rSMgr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
