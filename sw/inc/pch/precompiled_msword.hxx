@@ -25,6 +25,7 @@
 #include <basic/basmgr.hxx>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/unordered_set.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -82,6 +83,12 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/xml/dom/XAttr.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
+#include <com/sun/star/xml/dom/XNode.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -145,6 +152,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/unoprnms.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <editeng/wrlmitem.hxx>
@@ -243,7 +251,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>

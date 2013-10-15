@@ -338,7 +338,9 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cstdio>
+#include <editeng/escapementitem.hxx>
 #include <editeng/svxenum.hxx>
+#include <editeng/unoprnms.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
@@ -379,6 +381,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/unopage.hxx>
 #include <time.h>
 #include <tools/globname.hxx>
 #include <tools/multisel.hxx>

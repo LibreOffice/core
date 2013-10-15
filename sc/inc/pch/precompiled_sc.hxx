@@ -62,6 +62,7 @@
 #include "i18nlangtag/lang.h"
 #include "i18nlangtag/mslangid.hxx"
 #include "libxml/xpath.h"
+#include "rtl/bootstrap.hxx"
 #include "rtl/math.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -77,6 +78,8 @@
 #include "svl/broadcast.hxx"
 #include "svl/intitem.hxx"
 #include "svl/itemset.hxx"
+#include "svl/sharedstring.hxx"
+#include "svl/sharedstringpool.hxx"
 #include "svl/smplhint.hxx"
 #include "svl/stritem.hxx"
 #include "svl/urihelper.hxx"
@@ -509,6 +512,7 @@
 #include <comphelper/uno3.hxx>
 #include <config_features.h>
 #include <config_mpl.h>
+#include <config_orcus.h>
 #include <config_telepathy.h>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
@@ -738,11 +742,13 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/parhtml.hxx>
 #include <svtools/sfxecode.hxx>
+#include <svtools/simptabl.hxx>
 #include <svtools/soerr.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/treelistbox.hxx>
+#include <svtools/treelistentry.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/xwindowitem.hxx>

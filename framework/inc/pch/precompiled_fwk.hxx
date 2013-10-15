@@ -260,6 +260,7 @@
 #include <comphelper/uno3.hxx>
 #include <config_features.h>
 #include <config_folders.h>
+#include <config_orcus.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>

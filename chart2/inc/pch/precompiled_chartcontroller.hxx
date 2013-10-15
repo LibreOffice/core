@@ -198,6 +198,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -299,7 +300,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/pathoptions.hxx>

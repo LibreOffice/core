@@ -81,6 +81,7 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cstdio>
 #include <i18nlangtag/languagetag.hxx>
 #include <iostream>

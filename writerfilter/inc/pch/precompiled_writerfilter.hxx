@@ -80,12 +80,10 @@
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -144,13 +142,13 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>

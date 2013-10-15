@@ -23,7 +23,6 @@
 #include "comphelper/scopeguard.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
-#include "officecfg/Office/Common.hxx"
 #include "osl/diagnose.h"
 #include "osl/time.h"
 #include "rtl/ref.hxx"
@@ -169,7 +168,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XLayer.hpp>
 #include <com/sun/star/drawing/XLayerManager.hpp>
@@ -179,7 +177,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/drawing/framework/AnchorBindingMode.hpp>
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
 #include <com/sun/star/drawing/framework/ConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/ModuleController.hpp>
@@ -191,7 +188,6 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
-#include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -303,7 +299,6 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -353,8 +348,8 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/configuration.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/expandmacro.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -476,7 +471,6 @@
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
-#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/module.hxx>
@@ -530,10 +524,10 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/taskpane.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/tplpitem.hxx>
@@ -599,8 +593,6 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/tabbar.hxx>
 #include <svtools/toolbarmenu.hxx>
-#include <svtools/toolpanel/toolpanel.hxx>
-#include <svtools/toolpanel/toolpaneldeck.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
@@ -626,7 +618,6 @@
 #include <svx/cube3d.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dlgctrl.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/e3dundo.hxx>
@@ -767,7 +758,6 @@
 #include <svx/view3d.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xcolit.hxx>
-#include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xexch.hxx>
@@ -871,9 +861,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/dibtools.hxx>
-#include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>

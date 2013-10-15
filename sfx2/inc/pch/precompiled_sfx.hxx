@@ -73,12 +73,8 @@
 #include "comphelper/storagehelper.hxx"
 #include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/compbase6.hxx"
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/interfacecontainer.hxx"
-#include <sfx2/dinfedt.hxx>
 #include "i18nlangtag/languagetag.hxx"
-#include <sfx2/imagemgr.hxx>
 #include "officecfg/Office/Common.hxx"
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
@@ -88,15 +84,10 @@
 #include "sal/config.h"
 #include "sal/types.h"
 #include "sax/tools/converter.hxx"
-#include <sfx2/sfxresid.hxx>
-#include <sfx2/sidebar/ControlFactory.hxx>
-#include <sfx2/sidebar/ControllerItem.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include "sot/storage.hxx"
 #include "svl/urihelper.hxx"
 #include "svtools/htmlkywd.hxx"
 #include "svtools/treelistentry.hxx"
-#include <sfx2/thumbnailview.hxx>
 #include "toolkit/awt/vclxdevice.hxx"
 #include "tools/datetime.hxx"
 #include "tools/debug.hxx"
@@ -185,7 +176,6 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/document/ChangedByOthersRequest.hpp>
 #include <com/sun/star/document/CmisProperty.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
@@ -536,7 +526,6 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/attributelist.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/configuration.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/docpasswordrequest.hxx>
@@ -613,7 +602,6 @@
 #include <map>
 #include <math.h>
 #include <memory>
-#include <sfx2/objsh.hxx>
 #include <officecfg/Inet.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/ProtocolHandler.hxx>
@@ -666,6 +654,7 @@
 #include <svl/documentlockfile.hxx>
 #include <svl/eitem.hxx>
 #include <svl/flagitem.hxx>
+#include <svl/grabbagitem.hxx>
 #include <svl/imageitm.hxx>
 #include <svl/inethist.hxx>
 #include <svl/inettype.hxx>
@@ -759,6 +748,7 @@
 #include <tools/rtti.hxx>
 #include <tools/shl.hxx>
 #include <tools/stream.hxx>
+#include <tools/string.hxx>
 #include <tools/svborder.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/time.hxx>

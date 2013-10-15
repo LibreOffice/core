@@ -18,6 +18,7 @@
 #include "com/sun/star/beans/XPropertySetInfo.hpp"
 #include "com/sun/star/text/XLineNumberingProperties.hpp"
 #include "comphelper/processfactory.hxx"
+#include "cppuhelper/exc_hlp.hxx"
 #include "sal/config.h"
 #include "svl/urihelper.hxx"
 #include "tools/debug.hxx"
@@ -499,6 +500,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <functional>
 #include <i18nlangtag/languagetag.hxx>

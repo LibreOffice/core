@@ -438,6 +438,7 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>

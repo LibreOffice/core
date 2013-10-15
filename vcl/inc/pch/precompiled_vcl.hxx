@@ -376,6 +376,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/zcodec.hxx>
+#include <touch/touch.h>
 #include <typeinfo>
 #include <ucbhelper/content.hxx>
 #include <unicode/ubidi.h>

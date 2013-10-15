@@ -559,6 +559,7 @@
 #include <tools/resary.hxx>
 #include <tools/shl.hxx>
 #include <tools/stream.hxx>
+#include <tools/string.hxx>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>

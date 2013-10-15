@@ -41,6 +41,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <ctype.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/thread.h>

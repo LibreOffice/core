@@ -57,6 +57,7 @@
 #include <basic/sbxvar.hxx>
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -624,6 +625,7 @@
 #include <osl/thread.hxx>
 #include <rsc/rscsfx.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
@@ -985,7 +987,6 @@
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
-#include <tools/inetmime.hxx>
 #include <tools/line.hxx>
 #include <tools/link.hxx>
 #include <tools/multisel.hxx>
@@ -1000,6 +1001,7 @@
 #include <tools/string.hxx>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
+#include <touch/touch.h>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <unicode/ubidi.h>

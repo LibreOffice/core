@@ -128,7 +128,6 @@
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
-#include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>

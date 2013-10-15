@@ -50,6 +50,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/propshlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <iterator>
@@ -62,6 +63,7 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
+#include <tools/string.hxx>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
