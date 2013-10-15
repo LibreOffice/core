@@ -14,14 +14,28 @@
 
 namespace formula {
 
+/**
+ * Single unit of vector reference consists of two physical arrays.
+ *
+ * <p>If the whole data array consists of only numeric values, mpStringArray
+ * will be NULL, and NaN values in the numeric array represent empty
+ * cells.</p>
+ *
+ * <p>If the whole data array consists of only string values, mpNumericArray
+ * will be NULL, and NULL values in the string array represent empty
+ * cells.</p>
+ *
+ * <p>If the data array consists of numeric and string values, then both
+ * mpNumericArray and mpStringArray will be non-NULL, and a string cell will
+ * be represented by a non-NULL pointer value in the string array.  If the
+ * string value is NULL, check the corresponding value in the numeric array.
+ * If the value in the numeric array is NaN, it's an empty cell, otherwise
+ * it's a numeric cell.</p>
+ */
 struct FORMULA_DLLPUBLIC VectorRefArray
 {
-    union {
-        const double* mpNumericArray;
-        rtl_uString** mpStringArray;
-    };
-
-    bool mbNumeric;
+    const double* mpNumericArray;
+    rtl_uString** mpStringArray;
 
     VectorRefArray();
     VectorRefArray( const double* pArray );
