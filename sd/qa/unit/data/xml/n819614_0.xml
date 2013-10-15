@@ -21,12 +21,7 @@
    <Line2 column1="0.000000" column2="101.000000" column3="0.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
-  <InteropGrabBag>
-   <PropertyValue name="OOXColor" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="OOXData" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="OOXLayout" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="OOXStyle" handle="0" propertyState="DIRECT_VALUE"/>
-  </InteropGrabBag>
+  <InteropGrabBag/>
  </XShape>
  <XShape positionX="182" positionY="2544" sizeX="25125" sizeY="16293" type="com.sun.star.drawing.GroupShape">
   <XShapes>
