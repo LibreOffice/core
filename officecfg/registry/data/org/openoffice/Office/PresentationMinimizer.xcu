@@ -18,10 +18,6 @@
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:package="org.openoffice.Office" oor:name="PresentationMinimizer">
-    <prop oor:name="BitmapPath" oor:type="xs:string">
-        <value>bitmaps</value>
-    </prop>
-
     <node oor:name="Strings">
         <prop oor:name="STR_SUN_OPTIMIZATION_WIZARD2">
             <value xml:lang="en-US">Presentation Minimizer</value>

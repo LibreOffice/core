@@ -820,4 +820,12 @@ Bitmap BMP_PRESENTERSCREEN_BUTTON_PLUS_DISABLED
     File = "presenterscreen-ButtonPlusDisabled.png";
 };
 
+// This definition is not used directly.
+// It is only here to be shipped in images.zip.
+// The bitmap itself is used from sdext/source/minimizer.
+Bitmap BMP_PRESENTATION_MINIMIZER
+{
+    File = "minimize_presi_80.png";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

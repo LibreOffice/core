@@ -123,9 +123,6 @@
 		</group>
 	</templates>
 	<component>
-        <prop oor:name="BitmapPath" oor:type="xs:string">
-            <info><desc>Bitmap path.</desc></info>
-        </prop>
 		<group oor:name="Strings">
                     <info><desc>UI strings.</desc></info>
 			<prop oor:name="STR_SUN_OPTIMIZATION_WIZARD2" oor:type="xs:string" oor:localized="true">
