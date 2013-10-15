@@ -74,7 +74,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange);
 template<typename tKey, typename tMember, typename fHashFunction>
 OUString lcl_dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rMap)
 {
-    OUString aResult("[", RTL_TEXTENCODING_ASCII_US);
+    OUString aResult("[");
 
     typename boost::unordered_map<tKey, tMember, fHashFunction>::const_iterator aIt;
 
