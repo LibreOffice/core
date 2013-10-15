@@ -2603,14 +2603,6 @@ static Writer& OutCSS1_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
 
     sal_uInt32 nHeight = ((const SvxFontHeightItem&)rHt).GetHeight();
-    if( rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT) )
-    {
-        // einen Hint nur dann ausgeben wenn es auch was bringt
-        sal_uInt16 nSize = rHTMLWrt.GetHTMLFontSize( nHeight );
-        if( rHTMLWrt.aFontHeights[nSize-1] == nHeight )
-            return rWrt;
-    }
-
     OString sHeight(OString::number(nHeight/20) + OString(sCSS1_UNIT_pt));
     rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_font_size, sHeight);
 

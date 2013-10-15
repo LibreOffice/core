@@ -2783,11 +2783,9 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
              append(static_cast<sal_Int32>(nSize)).append("\"");
         rWrt.Strm() << sOut.getStr();
 
-        if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr &&
-            rHTMLWrt.aFontHeights[nSize-1] != nHeight )
+        if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
         {
-            // wenn die Groesse keiner HTML-Groesse entspricht,
-            // wird sie noch zusatzlich als Style-Option exportiert
+            // always export font size as CSS option, too
             OutCSS1_HintStyleOpt( rWrt, rHt );
         }
         rWrt.Strm() << '>';
