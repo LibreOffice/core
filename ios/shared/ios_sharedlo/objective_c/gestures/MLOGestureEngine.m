@@ -327,7 +327,7 @@ static const BOOL ENABLE_LO_EVENTS_DURING_PINCH = NO;
         
         [self onScroll:state deltaY: limitedDeltaY];
         
-        lo_pan(limitedDeltaX, limitedDeltaY);
+        touch_lo_pan(limitedDeltaX, limitedDeltaY);
         
         return YES;
    }

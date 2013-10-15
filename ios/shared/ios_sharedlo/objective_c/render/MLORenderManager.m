@@ -317,8 +317,10 @@ typedef enum {X,Y,Z} MLOGestureDirection;
 // dispatch_async() consistently.
 
 
-void touch_ui_damaged(CGRect rect)
+void touch_ui_damaged(int minX, int minY, int width, int height)
 {
+    CGRect rect = CGRectMake(minX, minY, width, height);
+
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [[MLORenderManager getInstance] renderWithRect:rect];
