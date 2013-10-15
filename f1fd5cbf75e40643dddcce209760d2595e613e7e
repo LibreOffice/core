@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///eQ\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-15T15:44:16Z",
+      "side": 1,
+      "message": "Then let\u0027s also use EXC_FUNCENTRY_V_VA instead of EXC_FUNCENTRY_V_VR ;-)",
+      "revId": "f1fd5cbf75e40643dddcce209760d2595e613e7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
