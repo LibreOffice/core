@@ -165,10 +165,15 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       mbIsSynced(false),
       maRepositories()
 {
+    maTabPage.Hide();
     maTabControl.SetTabPage( FILTER_DOCS, &maTabPage );
+    maTabPage.Hide();
     maTabControl.SetTabPage( FILTER_SHEETS, &maTabPage );
+    maTabPage.Hide();
     maTabControl.SetTabPage( FILTER_PRESENTATIONS, &maTabPage );
+    maTabPage.Hide();
     maTabControl.SetTabPage( FILTER_DRAWS, &maTabPage );
+    maTabPage.Show();
 
     // Create popup menus
     mpActionMenu = new PopupMenu;
