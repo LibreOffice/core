@@ -302,12 +302,12 @@ bool SbiScanner::NextSym()
             (nCol + 1 < aLine.getLength() && aLine[nCol] == '.' && theBasicCharClass::get().isDigit(aLine[nCol + 1] & 0xFF)))
     {
         short exp = 0;
-        short comma = 0;
-        short ndig = 0;
-        short ncdig = 0;
+        short dec = 0;
         eScanType = SbxDOUBLE;
+        bool bScanError = false;
         bool bBufOverflow = false;
-        while(nCol < aLine.getLength() && strchr("0123456789.DEde", aLine[nCol]))
+        // All this because of 'D' or 'd' floating point type, sigh..
+        while(!bScanError && nCol < aLine.getLength() && strchr("0123456789.DEde", aLine[nCol]))
         {
             // from 4.1.1996: buffer full? -> go on scanning empty
             if( (p-buf) == (BUF_SIZE-1) )
@@ -319,64 +319,84 @@ bool SbiScanner::NextSym()
             // point or exponent?
             if(aLine[nCol] == '.')
             {
-                if( ++comma > 1 )
-                {
-                    ++pLine; ++nCol; continue;
-                }
+                if( ++dec > 1 )
+                    bScanError = true;
                 else
-                {
-                    *p = '.';
-                    ++p, ++pLine, ++nCol;
-                }
+                    *p++ = '.';
             }
             else if(strchr("DdEe", aLine[nCol]))
             {
                 if (++exp > 1)
+                    bScanError = true;
+                else
                 {
-                    ++pLine; ++nCol; continue;
-                }
-
-                *p = 'E';
-                ++p, ++pLine, ++nCol;
-
-                if(aLine[nCol] == '+')
-                    ++pLine, ++nCol;
-                else if(aLine[nCol] == '-')
-                {
-                    *p = '-';
-                    ++p, ++pLine, ++nCol;
+                    *p++ = 'E';
+                    if (nCol + 1 < aLine.getLength() && (aLine[nCol+1] == '+' || aLine[nCol+1] == '-'))
+                    {
+                        ++pLine, ++nCol;
+                        if( (p-buf) == (BUF_SIZE-1) )
+                        {
+                            bBufOverflow = true;
+                            continue;
+                        }
+                        *p++ = aLine[nCol];
+                    }
                 }
             }
             else
             {
-                *p = aLine[nCol];
-                ++p, ++pLine, ++nCol;
-                if( comma && !exp ) ++ncdig;
+                *p++ = aLine[nCol];
             }
-            if (!exp) ++ndig;
+            ++pLine, ++nCol;
         }
         *p = 0;
         aSym = p; bNumber = true;
 
-        if( comma > 1 || exp > 1 )
-        {   aError = OUString('.');
-            GenError( SbERR_BAD_CHAR_IN_NUMBER );   }
+        // For bad characters, scan and parse errors generate only one error.
+        SbError nError = 0;
+        if (bScanError)
+        {
+            --pLine, --nCol;
+            aError = OUString( aLine[nCol]);
+            nError = SbERR_BAD_CHAR_IN_NUMBER;
+        }
 
         rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
         const sal_Unicode* pParseEnd = buf;
         nVal = rtl_math_uStringToDouble( buf, buf+(p-buf), '.', ',', &eStatus, &pParseEnd );
-        if (eStatus != rtl_math_ConversionStatus_Ok || pParseEnd != buf+(p-buf))
-            GenError( SbERR_MATH_OVERFLOW );
+        if (pParseEnd != buf+(p-buf))
+        {
+            // e.g. "12e" or "12e+", or with bScanError "12d"+"E".
+            sal_Int32 nChars = buf+(p-buf) - pParseEnd;
+            pLine -= nChars;
+            nCol -= nChars;
+            // For bScanError, pLine and nCol were already decremented, just
+            // add that character to the parse end.
+            if (bScanError)
+                ++nChars;
+            // Copy error position from original string, not the buffer
+            // replacement where "12dE" => "12EE".
+            aError = aLine.copy( nCol, nChars);
+            nError = SbERR_BAD_CHAR_IN_NUMBER;
+        }
+        else if (eStatus != rtl_math_ConversionStatus_Ok)
+        {
+            // Keep the scan error and character at position, if any.
+            if (!nError)
+                nError = SbERR_MATH_OVERFLOW;
+        }
 
-        ndig = ndig - comma;
-        if( !comma && !exp )
+        if (nError)
+            GenError( nError );
+
+        if( !dec && !exp )
         {
             if( nVal >= SbxMININT && nVal <= SbxMAXINT )
                 eScanType = SbxINTEGER;
-            else
-            if( nVal >= SbxMINLNG && nVal <= SbxMAXLNG )
-                eScanType = SbxLONG;
+            else if( nVal >= SbxMINLNG && nVal <= SbxMAXLNG )
+                    eScanType = SbxLONG;
         }
+
         if( bBufOverflow )
             GenError( SbERR_MATH_OVERFLOW );
 

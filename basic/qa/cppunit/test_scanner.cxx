@@ -576,10 +576,12 @@ namespace
     CPPUNIT_ASSERT(errors == 0);
 
     symbols = getSymbols(source2, errors);
-    CPPUNIT_ASSERT(symbols.size() == 2);
-    CPPUNIT_ASSERT(symbols[0].number == 1.23);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].number == 1.2);
     CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
-    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(rtl::math::round( symbols[1].number, 12) == rtl::math::round( .3, 12));
+    CPPUNIT_ASSERT(symbols[1].type == SbxDOUBLE);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
     CPPUNIT_ASSERT(errors == 1);
 
     symbols = getSymbols(source3, errors);
@@ -627,10 +629,11 @@ namespace
     CPPUNIT_ASSERT(errors == 0);
 
     symbols = getSymbols(source9, errors);
-    CPPUNIT_ASSERT(symbols.size() == 2);
-    CPPUNIT_ASSERT(symbols[0].number == 12000);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].number == 12);
     CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
-    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].text == OUString("dE3"));
+    CPPUNIT_ASSERT(symbols[2].text == cr);
     CPPUNIT_ASSERT(errors == 1);
 
     symbols = getSymbols(source10, errors);
@@ -647,16 +650,16 @@ namespace
     CPPUNIT_ASSERT(symbols[1].text == cr);
     CPPUNIT_ASSERT(errors == 0);
 
-    /* FIXME: SbiScanner::NextSym() is total crap, the result of scanning
-     * "12e++3" should be something different than this.. */
     symbols = getSymbols(source12, errors);
-    CPPUNIT_ASSERT(symbols.size() == 4);
+    CPPUNIT_ASSERT(symbols.size() == 6);
     CPPUNIT_ASSERT(symbols[0].number == 12);
     CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
-    CPPUNIT_ASSERT(symbols[1].text == OUString("+"));
-    CPPUNIT_ASSERT(symbols[2].number == 3);
-    CPPUNIT_ASSERT(symbols[2].type == SbxINTEGER);
-    CPPUNIT_ASSERT(symbols[3].text == cr);
+    CPPUNIT_ASSERT(symbols[1].text == OUString("e"));
+    CPPUNIT_ASSERT(symbols[2].text == OUString("+"));
+    CPPUNIT_ASSERT(symbols[3].text == OUString("+"));
+    CPPUNIT_ASSERT(symbols[4].number == 3);
+    CPPUNIT_ASSERT(symbols[4].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[5].text == cr);
     CPPUNIT_ASSERT(errors == 1);
 
     symbols = getSymbols(source13, errors);
