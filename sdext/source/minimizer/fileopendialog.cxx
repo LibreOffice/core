@@ -46,8 +46,6 @@
 #include <com/sun/star/view/XControlAccess.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
-#include <rtl/ustrbuf.hxx>
-
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -140,29 +138,14 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                 }
                 if ( aExtensions.getLength() )
                 {
-                    OUString aExtension = aExtensions[0];
-
-                    const char filter[] = "*.";
-                    // the filter title must be formed in the same it is currently done
-                    // in the internal implementation: "UIName (.<extension>)"
-                    OUStringBuffer aUIName;
-                    // the filter must be in the form "*.<extension>"
-                    OUStringBuffer aFilter;
-
-                    // form the title: "<UIName> (.<extension)"
-                    aUIName.append( aIter->maUIName );
-                    aUIName.appendAscii( RTL_CONSTASCII_STRINGPARAM( " (." ));
-                    aUIName.append( aExtension );
-                    aUIName.append( sal_Unicode( ')' ) );
-                    // form the filter: "(*.<extension>)"
-                    aFilter.appendAscii( RTL_CONSTASCII_STRINGPARAM( filter ) );
-                    aFilter.append( aExtensions[0] );
-
-                    mxFilePicker->appendFilter( aUIName.makeStringAndClear(),
-                                                  aFilter.makeStringAndClear() );
-
+                    // The filter title must be formed in the same way it is
+                    // currently done in the internal implementation:
+                    OUString aTitle(
+                        aIter->maUIName + " (." + aExtensions[0] + ")");
+                    OUString aFilter("*." + aExtensions[0]);
+                    mxFilePicker->appendFilter(aTitle, aFilter);
                     if ( aIter->maFlags & 0x100 )
-                        mxFilePicker->setCurrentFilter( aIter->maUIName );
+                        mxFilePicker->setCurrentFilter(aTitle);
                 }
             }
         }
