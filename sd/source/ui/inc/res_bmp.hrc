@@ -189,6 +189,9 @@
 #define BMP_PRESENTERSCREEN_ANIMATION (RID_SD_START+591)
 #define BMP_PRESENTERSCREEN_TRANSITION (RID_SD_START+592)
 
+// free
+#define BMP_PRESENTATION_MINIMIZER (RID_SD_START+600)
+
 // ResourceIDs for Popup-Menus do not need a dummy string!!!
 
 #define RID_DRAW_TEXTOBJ_POPUP              RID_APP_START+43
