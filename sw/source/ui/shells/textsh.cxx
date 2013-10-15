@@ -766,7 +766,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     else
                     {
                         OUString sReturn = rSh.GetSelTxt();
-                        sReturn = sReturn.copy(0, std::min(255, sReturn.getLength()));
+                        sReturn = sReturn.copy(0, std::min<sal_Int32>(255, sReturn.getLength()));
                         aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
                     }
 

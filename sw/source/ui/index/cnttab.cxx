@@ -3947,9 +3947,9 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         sWrite += ";";
         sWrite += pEntry->sSecKey;
         sWrite += ";";
-        sWrite += pEntry->bCase ? "1" : "0";
+        sWrite += pEntry->bCase ? OUString("1") : OUString("0");
         sWrite += ";";
-        sWrite += pEntry->bWord ? "1" : "0";
+        sWrite += pEntry->bWord ? OUString("1") : OUString("0");
 
         if( sWrite.getLength() > 5 )
             rOutStr.WriteByteStringLine( sWrite, eTEnc );

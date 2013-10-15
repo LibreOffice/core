@@ -1013,7 +1013,7 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
                     else
                     {
                         OUString sSel(pOLV->GetSelected());
-                        sSel = sSel.copy(0, std::min(static_cast<sal_Int32>(255), sSel.getLength()));
+                        sSel = sSel.copy(0, std::min<sal_Int32>(255, sSel.getLength()));
                         aHLinkItem.SetName(comphelper::string::stripEnd(sSel, ' '));
                     }
 
