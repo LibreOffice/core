@@ -156,15 +156,20 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
     return false;
 }
 
-bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue)
+bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue, bool bMoto)
 {
     ExifIFD* ifd = NULL;
 
     while (aOffset <= aLength - 12 && aNumberOfTags > 0)
     {
         ifd = (ExifIFD*) &pExifData[aOffset];
+        sal_uInt16 tag = ifd->tag;
+        if (bMoto)
+        {
+            tag = OSL_SWAPWORD(ifd->tag);
+        }
 
-        if (ifd->tag == ORIENTATION)
+        if (tag == ORIENTATION)
         {
             if(bSetValue)
             {
@@ -172,10 +177,18 @@ bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffs
                 ifd->type = 3;
                 ifd->count = 1;
                 ifd->offset = maOrientation;
+                if (bMoto)
+                {
+                    ifd->tag = OSL_SWAPWORD(ifd->tag);
+                    ifd->offset = OSL_SWAPWORD(ifd->offset);
+                }
             }
             else
             {
-                maOrientation = convertToOrientation(ifd->offset);
+                sal_uInt32 nIfdOffset = ifd->offset;
+                if (bMoto)
+                    nIfdOffset = OSL_SWAPWORD(ifd->offset);
+                maOrientation = convertToOrientation(nIfdOffset);
             }
         }
 
@@ -211,20 +224,37 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
 
     TiffHeader* aTiffHeader = (TiffHeader*) &aExifData[0];
 
-    if( 0x4949 != aTiffHeader->byteOrder || 0x002A != aTiffHeader->tagAlign )
+    if(!(
+        (0x4949 == aTiffHeader->byteOrder && 0x2A00 != aTiffHeader->tagAlign ) || // Intel format
+        ( 0x4D4D == aTiffHeader->byteOrder && 0x002A != aTiffHeader->tagAlign ) // Motorola format
+        )
+      )
     {
         delete[] aExifData;
         return false;
     }
 
-    sal_uInt16 aOffset = aTiffHeader->offset;
+    bool bMoto = true; // Motorola, big-endian by default
+
+    if (aTiffHeader->byteOrder == 0x4949)
+    {
+        bMoto = false; // little-endian
+    }
+
+    sal_uInt16 aOffset = 0;
+    aOffset = aTiffHeader->offset;
+    if (bMoto)
+    {
+        aOffset = OSL_SWAPDWORD(aTiffHeader->offset);
+    }
 
     sal_uInt16 aNumberOfTags = aExifData[aOffset];
-    aNumberOfTags = aExifData[aOffset + 1];
-    aNumberOfTags <<= 8;
-    aNumberOfTags += aExifData[aOffset];
+    if (bMoto)
+    {
+        aNumberOfTags = ((aExifData[aOffset] << 8) | aExifData[aOffset+1]);
+    }
 
-    processIFD(aExifData, aLength, aOffset+2, aNumberOfTags, bSetValue);
+    processIFD(aExifData, aLength, aOffset+2, aNumberOfTags, bSetValue, bMoto);
 
     if (bSetValue)
     {
