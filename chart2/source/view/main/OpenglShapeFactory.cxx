@@ -66,7 +66,7 @@ namespace opengl {
 uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape(
     const uno::Reference< drawing::XDrawPage>& )
 {
-    return new DummyXShapes();
+    return new DummyChart();
 }
 
 //  methods for 3D shape creation
