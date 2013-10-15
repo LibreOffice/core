@@ -1675,6 +1675,10 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
             pISet = pOldI;
         }
+        else
+        {
+            nBreakCode = 2;
+        }
     }
 
     // Libreoffice 4.0 introduces support for page styles (SwPageDesc) with
