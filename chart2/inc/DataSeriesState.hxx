@@ -17,6 +17,7 @@
 #include <map>
 
 #include <com/sun/star/uno/Any.h>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 namespace chart {
 
@@ -49,7 +50,7 @@ struct DataSeriesProperties
     // hopefully this vector is empty most of the time
     std::vector< PropertyMap > aPointProps;
 
-    com::sun::star::chart::MissingValueTreatment eMissingValueTreatment;
+    sal_Int32 eMissingValueTreatment;
 };
 
 struct Axis
@@ -68,7 +69,7 @@ struct DataSeriesState
     DataSeriesProperties aProperties;
     // also contains bubble chart bubble size
     // apply values to properties with functor
-    std::map<OUString, DataSeries> aMappedProperties;
+    std::map<OUString, DataSequence> aMappedProperties;
     Axis aXAxis;
     Axis aYAxis;
 };

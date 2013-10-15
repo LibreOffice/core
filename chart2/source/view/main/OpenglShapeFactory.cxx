@@ -54,11 +54,12 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
-using chart::dummy::DummyXShape;
-using chart::dummy::DummyXShapes;
 
 namespace chart
 {
+
+using dummy::DummyXShape;
+using dummy::DummyXShapes;
 
 namespace opengl {
 
