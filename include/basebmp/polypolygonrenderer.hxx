@@ -154,7 +154,7 @@ namespace basebmp
         const sal_Int32 nMinY( basegfx::fround(aPolyBounds.getMinY()) );
         const sal_Int32 nMaxY(
             std::min(
-                nClipY2,
+                nClipY2-1,
                 basegfx::fround(aPolyBounds.getMaxY())));
 
         if( nMinY > nMaxY )
