@@ -2065,7 +2065,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 {
                     if (WW8ListManager::nMaxLevel == nListLevel)
                         nListLevel = 0;
-                    else if (WW8ListManager::nMaxLevel > nListLevel)
+                    if (WW8ListManager::nMaxLevel > nListLevel)
                     {
                         RegisterNumFmt(nLFOPosition, nListLevel);
                         nLFOPosition = USHRT_MAX;
