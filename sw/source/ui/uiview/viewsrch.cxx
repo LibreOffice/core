@@ -247,7 +247,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                             m_pWrtShell->Push();
                         OUString aReplace( m_pSrchItem->GetReplaceString() );
                         SearchOptions aTmp( m_pSrchItem->GetSearchOptions() );
-                        String *pBackRef = ReplaceBackReferences( aTmp, m_pWrtShell->GetCrsr() );
+                        OUString *pBackRef = ReplaceBackReferences( aTmp, m_pWrtShell->GetCrsr() );
                         if( pBackRef )
                             m_pSrchItem->SetReplaceString( *pBackRef );
                         Replace();

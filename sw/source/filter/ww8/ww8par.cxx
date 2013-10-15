@@ -4217,7 +4217,7 @@ void SwWW8ImplReader::ReadDocVars()
 {
     std::vector<OUString> aDocVarStrings;
     std::vector<ww::bytes> aDocVarStringIds;
-    std::vector<String> aDocValueStrings;
+    std::vector<OUString> aDocValueStrings;
     WW8ReadSTTBF(!bVer67, *pTableStream, pWwFib->fcStwUser,
         pWwFib->lcbStwUser, bVer67 ? 2 : 0, eStructCharSet,
         aDocVarStrings, &aDocVarStringIds, &aDocValueStrings);

@@ -283,7 +283,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
     }
 
-    std::vector<String> aFormats;
+    std::vector<OUString> aFormats;
     SwDoc* pDoc = pDocShell->GetDoc();
     const sal_uInt16 nArrLen = pDoc->GetFrmFmts()->size();
     sal_uInt16 i;

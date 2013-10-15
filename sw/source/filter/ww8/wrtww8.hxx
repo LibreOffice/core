@@ -400,7 +400,7 @@ private:
     HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&);
 };
 
-typedef ::std::pair<String, sal_uLong> aBookmarkPair;
+typedef ::std::pair<OUString, sal_uLong> aBookmarkPair;
 typedef std::vector<aBookmarkPair> SwImplBookmarks;
 typedef std::vector<aBookmarkPair>::iterator SwImplBookmarksIter;
 

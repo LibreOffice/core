@@ -43,7 +43,7 @@
 using namespace ::com::sun::star;
 using namespace util;
 
-String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
+OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
 
 static OUString
 lcl_CleanStr(const SwTxtNode& rNd, xub_StrLen const nStart, xub_StrLen& rEnd,
@@ -584,10 +584,10 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
             ((Ring*)pRegion)->MoveRingTo( &rCursor );
         }
 
-        ::std::auto_ptr<String> pRepl( (bRegExp)
+        ::std::unique_ptr<OUString> pRepl( (bRegExp)
                 ? ReplaceBackReferences( rSearchOpt, pCrsr ) : 0 );
         rCursor.GetDoc()->ReplaceRange( *pCrsr,
-            (pRepl.get()) ? *pRepl : String(rSearchOpt.replaceString),
+            (pRepl.get()) ? *pRepl : rSearchOpt.replaceString,
             bRegExp );
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );
 
@@ -645,9 +645,9 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNot
     return nRet;
 }
 
-String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
+OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
 {
-    String *pRet = 0;
+    OUString *pRet = 0;
     if( pPam && pPam->HasMark() &&
         SearchAlgorithms_REGEXP == rSearchOpt.algorithmType )
     {
@@ -663,7 +663,7 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
             {
                 OUString aReplaceStr( rSearchOpt.replaceString );
                 aSTxt.ReplaceBackReferences( aReplaceStr, rStr, aResult );
-                pRet = new String( aReplaceStr );
+                pRet = new OUString( aReplaceStr );
             }
         }
     }

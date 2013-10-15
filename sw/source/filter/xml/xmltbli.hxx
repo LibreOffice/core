@@ -62,7 +62,7 @@ class SwXMLTableContext : public XMLTextTableContext
         inline ColumnWidthInfo(sal_uInt16 wdth, bool isRel) : width(wdth), isRelative(isRel) {};
     };
     std::vector<ColumnWidthInfo> aColumnWidths;
-    std::vector<String> *pColumnDefaultCellStyleNames;
+    std::vector<OUString> *pColumnDefaultCellStyleNames;
 
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextCursor > xOldCursor;

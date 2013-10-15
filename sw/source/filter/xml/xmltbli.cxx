@@ -1567,7 +1567,7 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, bool bRelWidth2,
     {
         if( !pColumnDefaultCellStyleNames )
         {
-            pColumnDefaultCellStyleNames = new std::vector<String>;
+            pColumnDefaultCellStyleNames = new std::vector<OUString>;
             sal_uLong nCount = aColumnWidths.size() - 1;
             while( nCount-- )
                 pColumnDefaultCellStyleNames->push_back(String());

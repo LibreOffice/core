@@ -233,13 +233,13 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
         const SfxStyleSheetBase* pBase = pPool->First();
-        std::set<String> aNames;
+        std::set<OUString> aNames;
         while(pBase)
         {
             aNames.insert(pBase->GetName());
             pBase = pPool->Next();
         }
-        for(std::set<String>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
+        for(std::set<OUString>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
             rBox.InsertEntry(*it);
     }
 

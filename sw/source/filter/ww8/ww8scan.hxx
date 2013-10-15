@@ -152,7 +152,7 @@ class  WW8PLCFx_PCD;
  */
 void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen,
     sal_uInt16 nExtraLen, rtl_TextEncoding eCS, ::std::vector<OUString> &rArray,
-    ::std::vector<ww::bytes>* pExtraArray = 0, ::std::vector<String>* pValueArray = 0);
+    ::std::vector<ww::bytes>* pExtraArray = 0, ::std::vector<OUString>* pValueArray = 0);
 
 struct WW8FieldDesc
 {

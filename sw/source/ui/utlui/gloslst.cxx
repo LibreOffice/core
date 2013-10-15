@@ -277,7 +277,7 @@ void SwGlossaryList::Update()
     {
         for( size_t nPath = 0; nPath < rPathArr.size(); nPath++ )
         {
-            std::vector<String> aFoundGroupNames;
+            std::vector<OUString> aFoundGroupNames;
             std::vector<OUString> aFiles;
             std::vector<DateTime*> aDateTimeArr;
 
@@ -325,7 +325,7 @@ void SwGlossaryList::Update()
                 {
                     bool bFound = false;
                     OUString sCompareGroup = pGroup->sName.getToken(0, GLOS_DELIM);
-                    for(std::vector<String>::const_iterator j = aFoundGroupNames.begin(); j != aFoundGroupNames.end() && !bFound; ++j)
+                    for(std::vector<OUString>::const_iterator j = aFoundGroupNames.begin(); j != aFoundGroupNames.end() && !bFound; ++j)
                         bFound = (sCompareGroup == *j);
 
                     if(!bFound)

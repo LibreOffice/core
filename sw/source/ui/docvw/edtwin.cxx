@@ -5727,7 +5727,7 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
                 aWordCase = CASE_SENTENCE;
             else
             {
-                if ( rWord == static_cast<String>( rCC.uppercase( rWord ) ) )
+                if ( rWord == rCC.uppercase( rWord ) )
                     aWordCase = CASE_UPPER;
             }
         }

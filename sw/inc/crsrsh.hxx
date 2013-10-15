@@ -138,7 +138,7 @@ const int CRSR_POSOLD = 0x01,   // cursor stays at old position
           CRSR_POSCHG = 0x02;   // position changed by the layout
 
 /// Helperfunction to resolve backward references in regular expressions
-String *ReplaceBackReferences( const com::sun::star::util::SearchOptions& rSearchOpt, SwPaM* pPam );
+OUString *ReplaceBackReferences( const com::sun::star::util::SearchOptions& rSearchOpt, SwPaM* pPam );
 
 class SW_DLLPUBLIC SwCrsrShell
     : public ViewShell

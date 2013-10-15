@@ -406,7 +406,6 @@ namespace sw
 
             sal_uInt16 AddName( const OUString& rNm );
             virtual void Write(Writer &rWrt) = 0;
-            // std::vector<String> GetNames();
         };
 
         /** Given a SwNoTxtNode (ole/graphic) get original size

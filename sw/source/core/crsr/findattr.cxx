@@ -1129,10 +1129,10 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             ((Ring*)pRegion)->MoveRingTo( &rCursor );
         }
 
-        ::std::auto_ptr<String> pRepl( (bRegExp) ?
+        ::std::unique_ptr<OUString> pRepl( (bRegExp) ?
                 ReplaceBackReferences( *pSearchOpt, pCrsr ) : 0 );
         rCursor.GetDoc()->ReplaceRange( *pCrsr,
-            (pRepl.get()) ? *pRepl : String(pSearchOpt->replaceString),
+            (pRepl.get()) ? *pRepl : pSearchOpt->replaceString,
             bRegExp );
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );
 

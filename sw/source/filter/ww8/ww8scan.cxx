@@ -3788,7 +3788,7 @@ bool WW8PLCFx_FLD::GetPara(long nIdx, WW8FieldDesc& rF)
 /*  to be optimized like this:    */
 void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen,
     sal_uInt16 nExtraLen, rtl_TextEncoding eCS, std::vector<OUString> &rArray,
-    std::vector<ww::bytes>* pExtraArray, ::std::vector<String>* pValueArray)
+    std::vector<ww::bytes>* pExtraArray, ::std::vector<OUString>* pValueArray)
 {
     if (nLen==0)     // Handle Empty STTBF
         return;
