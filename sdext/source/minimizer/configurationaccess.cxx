@@ -83,21 +83,21 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
     if ( rSettings.is() )
     {
         OUString pNames[] = {
-            "Name",
-            "JPEGCompression",
-            "JPEGQuality",
-            "RemoveCropArea",
-            "ImageResolution",
-            "EmbedLinkedGraphics",
-            "OLEOptimization",
-            "OLEOptimizationType",
-            "DeleteUnusedMasterPages",
-            "DeleteHiddenSlides",
-            "DeleteNotesPages",
-            "SaveAs",
-//          "SaveAsURL",
-//          "FilterName",
-            "OpenNewDocument" };
+            OUString("Name"),
+            OUString("JPEGCompression"),
+            OUString("JPEGQuality"),
+            OUString("RemoveCropArea"),
+            OUString("ImageResolution"),
+            OUString("EmbedLinkedGraphics"),
+            OUString("OLEOptimization"),
+            OUString("OLEOptimizationType"),
+            OUString("DeleteUnusedMasterPages"),
+            OUString("DeleteHiddenSlides"),
+            OUString("DeleteNotesPages"),
+            OUString("SaveAs"),
+//          OUString("SaveAsURL"),
+//          OUString("FilterName"),
+            OUString("OpenNewDocument") };
 
         Any pValues[] = {
             Any( maName ),

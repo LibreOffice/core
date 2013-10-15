@@ -62,14 +62,14 @@ OUString InsertFixedText( InformationDialog& rInformationDialog, const OUString&
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
-        "Height",
-        "Label",
-        "MultiLine",
-        "PositionX",
-        "PositionY",
-        "Step",
-        "TabIndex",
-        "Width" };
+        OUString("Height"),
+        OUString("Label"),
+        OUString("MultiLine"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("Step"),
+        OUString("TabIndex"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( nHeight ),
@@ -101,13 +101,13 @@ OUString InsertImage(
     sal_Bool bScale )
 {
     OUString pNames[] = {
-        "Border",
-        "Height",
-        "ImageURL",
-        "PositionX",
-        "PositionY",
-        "ScaleImage",
-        "Width" };
+        OUString("Border"),
+        OUString("Height"),
+        OUString("ImageURL"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("ScaleImage"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( sal_Int16( 0 ) ),
@@ -131,14 +131,14 @@ OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& 
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
-        "Enabled",
-        "Height",
-        "Label",
-        "PositionX",
-        "PositionY",
-        "Step",
-        "TabIndex",
-        "Width" };
+        OUString("Enabled"),
+        OUString("Height"),
+        OUString("Label"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("Step"),
+        OUString("TabIndex"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( sal_True ),
@@ -165,15 +165,15 @@ OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rC
     sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, PPPOptimizerTokenEnum nResID )
 {
     OUString pNames[] = {
-        "Enabled",
-        "Height",
-        "Label",
-        "PositionX",
-        "PositionY",
-        "PushButtonType",
-        "Step",
-        "TabIndex",
-        "Width" };
+        OUString("Enabled"),
+        OUString("Height"),
+        OUString("Label"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("PushButtonType"),
+        OUString("Step"),
+        OUString("TabIndex"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( sal_True ),
@@ -217,13 +217,13 @@ void InformationDialog::InitDialog()
 
    // setting the dialog properties
     OUString pNames[] = {
-        "Closeable",
-        "Height",
-        "Moveable",
-        "PositionX",
-        "PositionY",
-        "Title",
-        "Width" };
+        OUString("Closeable"),
+        OUString("Height"),
+        OUString("Moveable"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("Title"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( sal_True ),

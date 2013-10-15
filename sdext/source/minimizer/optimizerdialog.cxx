@@ -54,13 +54,13 @@ void OptimizerDialog::InitDialog()
 {
    // setting the dialog properties
     OUString pNames[] = {
-        "Closeable",
-        "Height",
-        "Moveable",
-        "PositionX",
-        "PositionY",
-        "Title",
-        "Width" };
+        OUString("Closeable"),
+        OUString("Height"),
+        OUString("Moveable"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("Title"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( sal_True ),
@@ -86,12 +86,12 @@ void OptimizerDialog::InitRoadmap()
     try
     {
         OUString pNames[] = {
-            "Height",
-            "PositionX",
-            "PositionY",
-            "Step",
-            "TabIndex",
-            "Width" };
+            OUString("Height"),
+            OUString("PositionX"),
+            OUString("PositionY"),
+            OUString("Step"),
+            OUString("TabIndex"),
+            OUString("Width") };
 
         Any pValues[] = {
             Any( sal_Int32( DIALOG_HEIGHT - 26 ) ),

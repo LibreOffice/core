@@ -64,12 +64,12 @@ OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rCo
                         sal_Int32 nPosX, sal_Int32 nPosY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     OUString pNames[] = {
-        "Height",
-        "Orientation",
-        "PositionX",
-        "PositionY",
-        "Step",
-        "Width" };
+        OUString("Height"),
+        OUString("Orientation"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("Step"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( nHeight ),
@@ -95,15 +95,15 @@ OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rContr
     sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, sal_Bool bEnabled, PPPOptimizerTokenEnum nResID, sal_Int16 nPushButtonType )
 {
     OUString pNames[] = {
-        "Enabled",
-        "Height",
-        "Label",
-        "PositionX",
-        "PositionY",
-        "PushButtonType",
-        "Step",
-        "TabIndex",
-        "Width" };
+        OUString("Enabled"),
+        OUString("Height"),
+        OUString("Label"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("PushButtonType"),
+        OUString("Step"),
+        OUString("TabIndex"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( bEnabled  ),
@@ -132,14 +132,14 @@ OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rCo
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Bool bBold, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
-        "Height",
-        "Label",
-        "MultiLine",
-        "PositionX",
-        "PositionY",
-        "Step",
-        "TabIndex",
-        "Width" };
+        OUString("Height"),
+        OUString("Label"),
+        OUString("MultiLine"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("Step"),
+        OUString("TabIndex"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( nHeight ),
@@ -169,14 +169,14 @@ OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
-        "Enabled",
-        "Height",
-        "Label",
-        "PositionX",
-        "PositionY",
-        "Step",
-        "TabIndex",
-        "Width" };
+        OUString("Enabled"),
+        OUString("Height"),
+        OUString("Label"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("Step"),
+        OUString("TabIndex"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( sal_True ),
@@ -206,17 +206,17 @@ OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString
             double fEffectiveMin, double fEffectiveMax, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
-        "EffectiveMax",
-        "EffectiveMin",
-        "Enabled",
-        "Height",
-        "PositionX",
-        "PositionY",
-        "Repeat",
-        "Spin",
-        "Step",
-        "TabIndex",
-        "Width" };
+        OUString("EffectiveMax"),
+        OUString("EffectiveMin"),
+        OUString("Enabled"),
+        OUString("Height"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("Repeat"),
+        OUString("Spin"),
+        OUString("Step"),
+        OUString("TabIndex"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( fEffectiveMax ),
@@ -254,16 +254,16 @@ OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
-        "Dropdown",
-        "Enabled",
-        "Height",
-        "LineCount",
-        "PositionX",
-        "PositionY",
-        "Step",
-        "StringItemList",
-        "TabIndex",
-        "Width" };
+        OUString("Dropdown"),
+        OUString("Enabled"),
+        OUString("Height"),
+        OUString("LineCount"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("Step"),
+        OUString("StringItemList"),
+        OUString("TabIndex"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( sal_True ),
@@ -294,14 +294,14 @@ OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& r
     const OUString& rLabel, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
-        "Height",
-        "Label",
-        "MultiLine",
-        "PositionX",
-        "PositionY",
-        "Step",
-        "TabIndex",
-        "Width" };
+        OUString("Height"),
+        OUString("Label"),
+        OUString("MultiLine"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("Step"),
+        OUString("TabIndex"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( nHeight ),
@@ -331,17 +331,17 @@ OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rCont
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
-        "Dropdown",
-        "Enabled",
-        "Height",
-        "LineCount",
-        "MultiSelection",
-        "PositionX",
-        "PositionY",
-        "Step",
-        "StringItemList",
-        "TabIndex",
-        "Width" };
+        OUString("Dropdown"),
+        OUString("Enabled"),
+        OUString("Height"),
+        OUString("LineCount"),
+        OUString("MultiSelection"),
+        OUString("PositionX"),
+        OUString("PositionY"),
+        OUString("Step"),
+        OUString("StringItemList"),
+        OUString("TabIndex"),
+        OUString("Width") };
 
     Any pValues[] = {
         Any( sal_True ),
@@ -837,14 +837,14 @@ void OptimizerDialog::InitPage4()
 {
     {   // creating progress bar:
         OUString pNames[] = {
-            "Height",
-            "Name",
-            "PositionX",
-            "PositionY",
-            "ProgressValue",
-            "ProgressValueMax",
-            "ProgressValueMin",
-            "Width" };
+            OUString("Height"),
+            OUString("Name"),
+            OUString("PositionX"),
+            OUString("PositionY"),
+            OUString("ProgressValue"),
+            OUString("ProgressValueMax"),
+            OUString("ProgressValueMin"),
+            OUString("Width") };
 
         Any pValues[] = {
             Any( (sal_Int32)12 ),
