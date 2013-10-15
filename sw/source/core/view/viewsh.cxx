@@ -958,7 +958,7 @@ void ViewShell::SizeChgNotify()
             {
                 sal_uInt16 nVirtNum = pPage->GetVirtPageNum();
                  const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
-                String sDisplay = rNum.GetNumStr( nVirtNum );
+                OUString sDisplay = rNum.GetNumStr( nVirtNum );
                 PageNumNotify( this, pCnt->GetPhyPageNum(), nVirtNum, sDisplay );
             }
         }
