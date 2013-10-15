@@ -835,7 +835,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
 
             if( xParentContext.is() )
                 xContext = xParentContext->createUnknownChildContext( aNamespace, aElementName, xAttr );
-            else
+            else if( rEntity.mxDocumentHandler.is() )
                 xContext = rEntity.mxDocumentHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
 
             if( xContext.is() )
@@ -848,7 +848,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
         {
             if( xParentContext.is() )
                 xContext = xParentContext->createFastChildContext( nElementToken, xAttr );
-            else
+            else if( rEntity.mxDocumentHandler.is() )
                 xContext = rEntity.mxDocumentHandler->createFastChildContext( nElementToken, xAttr );
 
 
