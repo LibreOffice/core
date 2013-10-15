@@ -65,7 +65,6 @@ SvxFillToolBoxControl::SvxFillToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId
     pFillTypeLB     ( NULL ),
     pFillAttrLB     ( NULL ),
     bUpdate         ( sal_False ),
-    bIgnoreStatusUpdate( sal_False ),
     eLastXFS        ( XFILL_NONE )
 {
     addStatusListener( OUString( ".uno:FillColor" ));
@@ -96,9 +95,6 @@ void SvxFillToolBoxControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-
-    if ( bIgnoreStatusUpdate )
-        return;
 
     if( eState == SFX_ITEM_DISABLED )
     {
@@ -216,13 +212,6 @@ void SvxFillToolBoxControl::StateChanged(
             }
         }
     }
-}
-
-//========================================================================
-
-void SvxFillToolBoxControl::IgnoreStatusUpdate( sal_Bool bSet )
-{
-    bIgnoreStatusUpdate = bSet;
 }
 
 //========================================================================
@@ -670,10 +659,8 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
         aArgs[0].Name = OUString( "FillStyle" );
         aXFillStyleItem.QueryValue(  a );
         aArgs[0].Value = a;
-        ( (SvxFillToolBoxControl*)GetData() )->IgnoreStatusUpdate( sal_True );
         ((SvxFillToolBoxControl*)GetData())->Dispatch(
             OUString( ".uno:FillStyle" ), aArgs );
-        ( (SvxFillToolBoxControl*)GetData() )->IgnoreStatusUpdate( sal_False );
 
         switch( eXFS )
         {

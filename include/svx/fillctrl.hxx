@@ -54,7 +54,6 @@ private:
     SvxFillAttrBox*     pFillAttrLB;
 
     sal_Bool                bUpdate;
-    sal_Bool                bIgnoreStatusUpdate;
     sal_uInt16              eLastXFS;
 
 public:
@@ -67,7 +66,6 @@ public:
                                       const SfxPoolItem* pState );
     void                Update( const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
-    void                IgnoreStatusUpdate( sal_Bool bSet );
 };
 
 //========================================================================
