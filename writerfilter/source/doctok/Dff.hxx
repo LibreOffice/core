@@ -98,7 +98,6 @@ typedef vector<DffRecord::Pointer_t> Records_t;
 class DffBlock : public WW8StructBase,
                  public writerfilter::Reference<Properties>
 {
-    bool bInitialized;
     sal_uInt32 mnPadding;
 
     Records_t mRecords;

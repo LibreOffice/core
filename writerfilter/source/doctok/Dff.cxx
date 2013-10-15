@@ -325,21 +325,19 @@ Sprm::Kind DffRecord::getKind()
 
 DffBlock::DffBlock(WW8Stream & rStream, sal_uInt32 nOffset,
                    sal_uInt32 nCount, sal_uInt32 nPadding)
-: WW8StructBase(rStream, nOffset, nCount), bInitialized(false),
-  mnPadding(nPadding)
+: WW8StructBase(rStream, nOffset, nCount), mnPadding(nPadding)
 {
 }
 
 DffBlock::DffBlock(WW8StructBase * pParent, sal_uInt32 nOffset,
                    sal_uInt32 nCount, sal_uInt32 nPadding)
-: WW8StructBase(pParent, nOffset, nCount), bInitialized(false),
-  mnPadding(nPadding)
+: WW8StructBase(pParent, nOffset, nCount), mnPadding(nPadding)
 {
 }
 
 DffBlock::DffBlock(const DffBlock & rSrc)
 : WW8StructBase(rSrc), writerfilter::Reference<Properties>(rSrc),
-  bInitialized(false), mnPadding(rSrc.mnPadding)
+  mnPadding(rSrc.mnPadding)
 {
 }
 
