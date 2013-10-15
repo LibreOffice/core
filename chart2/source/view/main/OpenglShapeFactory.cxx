@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DummyShapeFactory.hxx"
+#include "OpenglShapeFactory.hxx"
 #include "DummyXShape.hxx"
 #include "ViewDefines.hxx"
 #include "Stripe.hxx"
@@ -54,13 +54,15 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
+using chart::dummy::DummyXShape;
+using chart::dummy::DummyXShapes;
 
 namespace chart
 {
 
-namespace dummy {
+namespace opengl {
 
-uno::Reference< drawing::XShapes > DummyShapeFactory::getOrCreateChartRootShape(
+uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape(
     const uno::Reference< drawing::XDrawPage>& )
 {
     return new DummyXShapes();
@@ -69,7 +71,7 @@ uno::Reference< drawing::XShapes > DummyShapeFactory::getOrCreateChartRootShape(
 //  methods for 3D shape creation
 
 uno::Reference<drawing::XShape>
-        DummyShapeFactory::createCube(
+        OpenglShapeFactory::createCube(
             const uno::Reference<drawing::XShapes>&
             , const drawing::Position3D& , const drawing::Direction3D&
             , sal_Int32
@@ -81,7 +83,7 @@ uno::Reference<drawing::XShape>
 }
 
 uno::Reference<drawing::XShape>
-        DummyShapeFactory::createCylinder(
+        OpenglShapeFactory::createCylinder(
             const uno::Reference<drawing::XShapes>&
           , const drawing::Position3D& , const drawing::Direction3D&
           , sal_Int32 )
@@ -90,7 +92,7 @@ uno::Reference<drawing::XShape>
 }
 
 uno::Reference<drawing::XShape>
-        DummyShapeFactory::createPyramid(
+        OpenglShapeFactory::createPyramid(
             const uno::Reference<drawing::XShapes>&
           , const drawing::Position3D& , const drawing::Direction3D&
           , double , bool
@@ -101,7 +103,7 @@ uno::Reference<drawing::XShape>
 }
 
 uno::Reference<drawing::XShape>
-        DummyShapeFactory::createCone(
+        OpenglShapeFactory::createCone(
             const uno::Reference<drawing::XShapes>&
           , const drawing::Position3D& , const drawing::Direction3D& 
           , double , sal_Int32 )
@@ -110,7 +112,7 @@ uno::Reference<drawing::XShape>
 }
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createPieSegment2D(
+        OpenglShapeFactory::createPieSegment2D(
                     const uno::Reference< drawing::XShapes >&
                     , double , double
                     , double , double
@@ -121,7 +123,7 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createPieSegment(
+        OpenglShapeFactory::createPieSegment(
                     const uno::Reference< drawing::XShapes >&
                     , double , double
                     , double , double
@@ -133,7 +135,7 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createStripe( const uno::Reference< drawing::XShapes >&
+        OpenglShapeFactory::createStripe( const uno::Reference< drawing::XShapes >&
                     , const Stripe&
                     , const uno::Reference< beans::XPropertySet >&
                     , const tPropertyNameMap&
@@ -145,7 +147,7 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createArea3D( const uno::Reference< drawing::XShapes >&
+        OpenglShapeFactory::createArea3D( const uno::Reference< drawing::XShapes >&
                     , const drawing::PolyPolygonShape3D&
                     , double )
 {
@@ -153,14 +155,14 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createArea2D( const uno::Reference< drawing::XShapes >&
+        OpenglShapeFactory::createArea2D( const uno::Reference< drawing::XShapes >&
                     , const drawing::PolyPolygonShape3D& )
 {
     return new DummyXShape();
 }
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createSymbol2D(
+        OpenglShapeFactory::createSymbol2D(
                       const uno::Reference< drawing::XShapes >&
                     , const drawing::Position3D&
                     , const drawing::Direction3D&
@@ -172,7 +174,7 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createGraphic2D(
+        OpenglShapeFactory::createGraphic2D(
                       const uno::Reference< drawing::XShapes >&
                     , const drawing::Position3D&
                     , const drawing::Direction3D&
@@ -182,21 +184,21 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShapes >
-        DummyShapeFactory::createGroup2D( const uno::Reference< drawing::XShapes >&
+        OpenglShapeFactory::createGroup2D( const uno::Reference< drawing::XShapes >&
         , OUString )
 {
     return new DummyXShapes();
 }
 
 uno::Reference< drawing::XShapes >
-        DummyShapeFactory::createGroup3D( const uno::Reference< drawing::XShapes >&
+        OpenglShapeFactory::createGroup3D( const uno::Reference< drawing::XShapes >&
         , OUString )
 {
     return new DummyXShapes();
 }
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createCircle2D( const uno::Reference< drawing::XShapes >&
+        OpenglShapeFactory::createCircle2D( const uno::Reference< drawing::XShapes >&
                     , const drawing::Position3D&
                     , const drawing::Direction3D& )
 {
@@ -204,7 +206,7 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
-    DummyShapeFactory::createCircle( const uno::Reference< drawing::XShapes >&
+    OpenglShapeFactory::createCircle( const uno::Reference< drawing::XShapes >&
                     , const awt::Size&
                     , const awt::Point& )
 {
@@ -212,7 +214,7 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createLine3D( const uno::Reference< drawing::XShapes >&
+        OpenglShapeFactory::createLine3D( const uno::Reference< drawing::XShapes >&
                     , const drawing::PolyPolygonShape3D&
                     , const VLineProperties& )
 {
@@ -220,7 +222,7 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createLine2D( const uno::Reference< drawing::XShapes >&
+        OpenglShapeFactory::createLine2D( const uno::Reference< drawing::XShapes >&
                     , const drawing::PointSequenceSequence&
                     , const VLineProperties* )
 {
@@ -228,20 +230,20 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
-    DummyShapeFactory::createLine ( const uno::Reference< drawing::XShapes >& ,
+    OpenglShapeFactory::createLine ( const uno::Reference< drawing::XShapes >& ,
             const awt::Size& , const awt::Point& )
 {
     return new DummyXShape();
 }
 
-uno::Reference< drawing::XShape > DummyShapeFactory::createInvisibleRectangle(
+uno::Reference< drawing::XShape > OpenglShapeFactory::createInvisibleRectangle(
             const uno::Reference< drawing::XShapes >&
             , const awt::Size& )
 {
     return new DummyXShape();
 }
 
-uno::Reference< drawing::XShape > DummyShapeFactory::createRectangle(
+uno::Reference< drawing::XShape > OpenglShapeFactory::createRectangle(
         const uno::Reference< drawing::XShapes >&
         , const awt::Size&
         , const awt::Point&
@@ -252,7 +254,7 @@ uno::Reference< drawing::XShape > DummyShapeFactory::createRectangle(
 }
 
 uno::Reference< drawing::XShape >
-    DummyShapeFactory::createRectangle(
+    OpenglShapeFactory::createRectangle(
             const uno::Reference<
             drawing::XShapes >& )
 {
@@ -260,7 +262,7 @@ uno::Reference< drawing::XShape >
 }
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createText( const uno::Reference< drawing::XShapes >&
+        OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >&
                     , const OUString&
                     , const tNameSequence&
                     , const tAnySequence&
@@ -271,7 +273,7 @@ uno::Reference< drawing::XShape >
 
 
 uno::Reference< drawing::XShape >
-        DummyShapeFactory::createText( const uno::Reference< drawing::XShapes >& ,
+        OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >& ,
                 const awt::Size& , const awt::Point& ,
                 uno::Sequence< uno::Reference< chart2::XFormattedString > > ,
                 const uno::Reference< beans::XPropertySet > ,
@@ -280,13 +282,13 @@ uno::Reference< drawing::XShape >
     return new DummyXShape();
 }
 
-void DummyShapeFactory::createSeries( const uno::Reference<
+void OpenglShapeFactory::createSeries( const uno::Reference<
         drawing::XShapes> & ,
         const DataSeriesState& )
 {
 }
 
-void DummyShapeFactory::pushNextSeriesState( const uno::Reference<
+void OpenglShapeFactory::pushNextSeriesState( const uno::Reference<
         drawing::XShapes> & ,
         const DataSeriesState& ,
         const DataSeriesState& )

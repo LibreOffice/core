@@ -7,16 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CHART2_DUMMY_SHAPE_FACTORY
-#define CHART2_DUMMY_SHAPE_FACTORY
+#ifndef CHART2_OPENGL_SHAPE_FACTORY
+#define CHART2_OPENGL_SHAPE_FACTORY
 
 #include "AbstractShapeFactory.hxx"
 
 namespace chart {
 
-namespace dummy {
+namespace opengl {
 
-class DummyShapeFactory : public chart::AbstractShapeFactory
+class OpenglShapeFactory : public chart::AbstractShapeFactory
 {
 public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >

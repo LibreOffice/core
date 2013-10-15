@@ -38,7 +38,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-#include "DummyShapeFactory.hxx"
+#include "OpenglShapeFactory.hxx"
 #include "ShapeFactory.hxx"
 
 using namespace com::sun::star;
@@ -54,7 +54,7 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Referen
         return pShapeFactory;
 
     if(getenv("CHART_DUMMY_FACTORY"))
-        pShapeFactory = new dummy::DummyShapeFactory();
+        pShapeFactory = new opengl::OpenglShapeFactory();
     else
         pShapeFactory = new ShapeFactory(xFactory);
 
