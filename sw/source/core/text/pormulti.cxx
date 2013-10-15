@@ -635,7 +635,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     else
         pRubyFont = NULL;
 
-    String aStr( rRuby.GetText(), nOffs, STRING_LEN );
+    OUString aStr = rRuby.GetText().copy( nOffs );
     SwFldPortion *pFld = new SwFldPortion( aStr, pRubyFont );
     pFld->SetNextOffset( nOffs );
     pFld->SetFollow( sal_True );

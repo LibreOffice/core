@@ -1546,7 +1546,7 @@ sal_Bool SwQuoVadisPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) c
 
 void SwQuoVadisPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    String aString( aExpand );
+    OUString aString( aExpand );
     aString += aErgo;
     rPH.Special( GetLen(), aString, GetWhichPor() );
 }

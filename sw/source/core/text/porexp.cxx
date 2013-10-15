@@ -47,7 +47,7 @@ sal_Bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) cons
 
 void SwExpandPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    String aString;
+    OUString aString;
     rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 

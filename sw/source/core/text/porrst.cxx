@@ -530,12 +530,12 @@ void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
             aTmpFont.SetProportion( nProp );  // a smaller font
             SwFontSave aFontSave( rInf, &aTmpFont );
 
-            String aOutString;
+            OUString aOutString;
 
             switch ( mcChar )
             {
                 case CHAR_ZWSP :
-                    aOutString = '/'; break;
+                    aOutString = "/"; break;
 //                case CHAR_LRM :
 //                    rTxt = sal_Unicode(0x2514); break;
 //                case CHAR_RLM :

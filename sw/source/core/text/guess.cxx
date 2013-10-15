@@ -394,9 +394,9 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
 #if OSL_DEBUG_LEVEL > 1
             // e.g., Schif-fahrt, referes to our string
-            const String aWord = xHyphWord->getWord();
+            const OUString aWord = xHyphWord->getWord();
             // e.g., Schiff-fahrt, referes to the word after hyphenation
-            const String aHyphenatedWord = xHyphWord->getHyphenatedWord();
+            const OUString aHyphenatedWord = xHyphWord->getHyphenatedWord();
             // e.g., Schif-fahrt: 5, referes to our string
             const sal_uInt16 nHyphenationPos = xHyphWord->getHyphenationPos();
             (void)nHyphenationPos;

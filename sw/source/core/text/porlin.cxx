@@ -387,7 +387,7 @@ sal_Bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &, OUString & ) const
 
 void SwLinePortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    String aString;
+    OUString aString;
     rPH.Special( GetLen(), aString, GetWhichPor(), Height(), Width() );
 }
 

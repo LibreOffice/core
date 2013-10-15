@@ -679,12 +679,12 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     if( !g_pBreakIt->GetBreakIter().is() )
         return;
 
-    const String& rTxt = rNode.GetTxt();
+    const OUString& rTxt = rNode.GetTxt();
 
     //
     // HIDDEN TEXT INFORMATION
     //
-    Range aRange( 0, rTxt.Len() ? rTxt.Len() - 1 : 0 );
+    Range aRange( 0, !rTxt.isEmpty() ? rTxt.getLength() - 1 : 0 );
     MultiSelection aHiddenMulti( aRange );
     CalcHiddenRanges( rNode, aHiddenMulti );
 
@@ -840,8 +840,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         xub_StrLen nEnd =
                 (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nChg, WEAK );
 
-        if( nEnd > rTxt.Len() )
-            nEnd = rTxt.Len();
+        if( nEnd > rTxt.getLength() )
+            nEnd = rTxt.getLength();
 
         nScript = (sal_uInt8)GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
 
@@ -852,7 +852,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         nChg = nEnd;
 
         // Get next script type or set to weak in order to exit
-        sal_uInt8 nNextScript = ( nEnd < rTxt.Len() ) ?
+        sal_uInt8 nNextScript = ( nEnd < rTxt.getLength() ) ?
            (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nEnd ) :
            (sal_uInt8)WEAK;
 
@@ -868,7 +868,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // UPDATE THE SCRIPT INFO ARRAYS:
     //
 
-    while ( nChg < rTxt.Len() || ( aScriptChanges.empty() && !rTxt.Len() ) )
+    while ( nChg < rTxt.getLength() || ( aScriptChanges.empty() && rTxt.isEmpty() ) )
     {
         SAL_WARN_IF( i18n::ScriptType::WEAK == nScript,
                 "sw.core", "Inserting WEAK into SwScriptInfo structure" );
@@ -877,8 +877,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         xub_StrLen nSearchStt = nChg;
         nChg = (xub_StrLen)g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nSearchStt, nScript );
 
-        if ( nChg > rTxt.Len() )
-            nChg = rTxt.Len();
+        if ( nChg > rTxt.getLength() )
+            nChg = rTxt.getLength();
 
         // #i28203#
         // for 'complex' portions, we make sure that a portion does not contain more
@@ -891,7 +891,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
             while( com::sun::star::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
             {
                 nNextCTLScriptStart = (xub_StrLen)ScriptTypeDetector::endOfCTLScriptType( rTxt, nNextCTLScriptStart );
-                if( nNextCTLScriptStart < rTxt.Len() && nNextCTLScriptStart < nChg )
+                if( nNextCTLScriptStart < rTxt.getLength() && nNextCTLScriptStart < nChg )
                     nCurrentScriptType = ScriptTypeDetector::getCTLScriptType( rTxt, nNextCTLScriptStart );
                 else
                     break;
@@ -901,10 +901,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
         // special case for dotted circle since it can be used with complex
         // before a mark, so we want it associated with the mark's script
-        if (nChg < rTxt.Len() && nChg > 0 && (i18n::ScriptType::WEAK ==
+        if (nChg < rTxt.getLength() && nChg > 0 && (i18n::ScriptType::WEAK ==
             g_pBreakIt->GetBreakIter()->getScriptType(rTxt,nChg - 1)))
         {
-            int8_t nType = u_charType(rTxt.GetChar(nChg) );
+            int8_t nType = u_charType(rTxt[nChg] );
             if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
                 nType == U_COMBINING_SPACING_MARK )
             {
@@ -932,7 +932,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
             while ( nLastCompression < nChg )
             {
-                sal_Unicode cChar = rTxt.GetChar( nLastCompression );
+                sal_Unicode cChar = rTxt[ nLastCompression ];
 
                 // examine current character
                 switch ( cChar )
@@ -1154,7 +1154,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
             } // end of kashida search
         }
 
-        if ( nChg < rTxt.Len() )
+        if ( nChg < rTxt.getLength() )
             nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg );
 
         nLastCompression = nChg;

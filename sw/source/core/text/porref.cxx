@@ -94,7 +94,7 @@ void SwIsoRefPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 void SwIsoRefPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    String aString;
+    OUString aString;
     rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 

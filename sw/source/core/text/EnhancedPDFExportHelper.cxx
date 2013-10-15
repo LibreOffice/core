@@ -678,7 +678,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 const SwNoTxtFrm* pNoTxtFrm   = static_cast<const SwNoTxtFrm*>(pFly->Lower());
                 const SwNoTxtNode* pNoTxtNode = static_cast<const SwNoTxtNode*>(pNoTxtFrm->GetNode());
 
-                const String aAlternateTxt( pNoTxtNode->GetTitle() );
+                const OUString aAlternateTxt( pNoTxtNode->GetTitle() );
                 mpPDFExtOutDevData->SetAlternateText( aAlternateTxt );
             }
         }
@@ -783,7 +783,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bActualText )
         {
-            const String aActualTxt( rInf.GetTxt(), rInf.GetIdx(), pPor->GetLen() );
+            const OUString aActualTxt = rInf.GetTxt().copy( rInf.GetIdx(), pPor->GetLen() );
             mpPDFExtOutDevData->SetActualText( aActualTxt );
         }
 
@@ -1004,7 +1004,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
         return;
 
     sal_uInt16 nPDFType = USHRT_MAX;
-    String aPDFType;
+    OUString aPDFType;
 
     switch ( pFrm->GetType() )
     {
@@ -1360,7 +1360,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         return;
 
     sal_uInt16 nPDFType = USHRT_MAX;
-    String aPDFType;
+    OUString aPDFType;
 
     switch ( pPor->GetWhichPor() )
     {
@@ -1670,14 +1670,14 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 {
                     // First, we create the destination, because there may be more
                     // than one link to this destination:
-                    String aURL( INetURLObject::decode(
+                    OUString aURL( INetURLObject::decode(
                         p->rINetAttr.GetINetFmt().GetValue(),
                         INET_HEX_ESCAPE,
                         INetURLObject::DECODE_UNAMBIGUOUS,
                         RTL_TEXTENCODING_UTF8 ) );
 
                     // We have to distinguish between intern and real URLs
-                    const bool bIntern = '#' == aURL.GetChar( 0 );
+                    const bool bIntern = '#' == aURL[0];
 
                     // _GetCrsr() is a SwShellCrsr, which is derived from
                     // SwSelPaintRects, therefore the rectangles of the current
@@ -1692,7 +1692,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     sal_Int32 nDestId = -1;
                     if ( bIntern )
                     {
-                        aURL.Erase( 0, 1 );
+                        aURL = aURL.copy( 1 );
                         mrSh.SwCrsrShell::ClearMark();
                         JumpToSwMark( &mrSh, aURL );
 
@@ -1762,14 +1762,14 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             if ( RES_DRAWFRMFMT != pFrmFmt->Which() &&
                  SFX_ITEM_SET == pFrmFmt->GetAttrSet().GetItemState( RES_URL, sal_True, &pItem ) )
             {
-                String aURL( static_cast<const SwFmtURL*>(pItem)->GetURL() );
-                const bool bIntern = '#' == aURL.GetChar( 0 );
+                OUString aURL( static_cast<const SwFmtURL*>(pItem)->GetURL() );
+                const bool bIntern = '#' == aURL[0];
 
                 // Create the destination for internal links:
                 sal_Int32 nDestId = -1;
                 if ( bIntern )
                 {
-                    aURL.Erase( 0, 1 );
+                    aURL = aURL.copy( 1 );
                     mrSh.SwCrsrShell::ClearMark();
                     JumpToSwMark( &mrSh, aURL );
 
@@ -1855,7 +1855,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // Destination Rectangle
                     const SwGetRefField* pField =
                         (SwGetRefField*)pFirst->GetFld();
-                    const String& rRefName = pField->GetSetRefName();
+                    const OUString& rRefName = pField->GetSetRefName();
                     mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo() );
                     const SwRect& rDestRect = mrSh.GetCharRect();
 
@@ -1897,7 +1897,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                                 // #i44368# Links in Header/Footer
                                 if ( bHeaderFooter )
                                 {
-                                    const String aDummy;
+                                    const OUString aDummy;
                                     MakeHeaderFooterLinks( *pPDFExtOutDevData, *pTNd, rLinkRect, nDestId, aDummy, true );
                                 }
                             }
@@ -2024,7 +2024,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
                     // Outline entry text
-                    const String& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText( i );
+                    const OUString& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText( i );
 
                     // Create a new outline item:
                     const sal_Int32 nOutlineId =
@@ -2080,11 +2080,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         const std::vector< vcl::PDFExtOutDevBookmarkEntry >::const_iterator aIEnd = rBookmarks.end();
         while ( aIBeg != aIEnd )
         {
-            String aBookmarkName( aIBeg->aBookmark );
-            const bool bIntern = '#' == aBookmarkName.GetChar( 0 );
+            OUString aBookmarkName( aIBeg->aBookmark );
+            const bool bIntern = '#' == aBookmarkName[0];
             if ( bIntern )
             {
-                aBookmarkName.Erase( 0, 1 );
+                aBookmarkName = aBookmarkName.copy( 1 );
                 JumpToSwMark( &mrSh, aBookmarkName );
 
                 // Destination Rectangle
