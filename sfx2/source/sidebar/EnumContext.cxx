@@ -73,14 +73,6 @@ EnumContext::EnumContext (
 
 
 
-sal_Int32 EnumContext::GetCombinedContext (void) const
-{
-    return CombinedEnumContext(meApplication, meContext);
-}
-
-
-
-
 sal_Int32 EnumContext::GetCombinedContext_DI (void) const
 {
     return CombinedEnumContext(GetApplication_DI(), meContext);
@@ -108,14 +100,6 @@ EnumContext::Application EnumContext::GetApplication_DI (void) const
          default:
              return meApplication;
      }
-}
-
-
-
-
-EnumContext::Application EnumContext::GetApplication (void) const
-{
-    return meApplication;
 }
 
 

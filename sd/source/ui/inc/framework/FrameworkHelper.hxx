@@ -194,17 +194,6 @@ public:
     cssu::Reference<cssdf::XView> GetView (
         const cssu::Reference<cssdf::XResourceId>& rxPaneOrViewId);
 
-    /** Return the XWindow that is represented by the pane with the
-        given resource id.
-    */
-    cssu::Reference<css::awt::XWindow> GetPaneWindow (
-        const cssu::Reference<cssdf::XResourceId>& rxPaneId);
-
-    /** Return the XResource object with the given resource id.
-    */
-    cssu::Reference<cssdf::XResource> GetResource (
-        const cssu::Reference<cssdf::XResourceId>& rxResourceId);
-
     /** Request the specified view to be displayed in the specified pane.
         When the pane is not visible its creation is also requested.  The
         update that creates the actual view object is done asynchronously.

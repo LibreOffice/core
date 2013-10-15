@@ -128,22 +128,6 @@ ResourceId::ResourceId (
 
 ResourceId::ResourceId (
     const OUString& rsResourceURL,
-    const ::std::vector<OUString>& rAnchorURLs)
-    : ResourceIdInterfaceBase(),
-      maResourceURLs(1+rAnchorURLs.size()),
-      mpURL()
-{
-    maResourceURLs[0] = rsResourceURL;
-    for (sal_uInt32 nIndex=0; nIndex<rAnchorURLs.size(); ++nIndex)
-        maResourceURLs[nIndex+1] = rAnchorURLs[nIndex];
-    ParseResourceURL();
-}
-
-
-
-
-ResourceId::ResourceId (
-    const OUString& rsResourceURL,
     const OUString& rsFirstAnchorURL,
     const Sequence<OUString>& rAnchorURLs)
     : ResourceIdInterfaceBase(),

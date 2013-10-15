@@ -509,61 +509,6 @@ Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneO
 
 
 
-Reference<awt::XWindow> FrameworkHelper::GetPaneWindow (const Reference<XResourceId>& rxPaneId)
-{
-    Reference<awt::XWindow> xWindow;
-
-    if (rxPaneId.is() && mxConfigurationController.is())
-    {
-        try
-        {
-            if (rxPaneId->getResourceURL().match(msPaneURLPrefix))
-            {
-                Reference<XPane> xPane (mxConfigurationController->getResource(rxPaneId), UNO_QUERY);
-                if (xPane.is())
-                    xWindow = xPane->getWindow();
-            }
-        }
-        catch (lang::DisposedException&)
-        {
-            Dispose();
-        }
-        catch (RuntimeException&)
-        {
-        }
-    }
-
-    return xWindow;
-}
-
-
-
-
-Reference<XResource> FrameworkHelper::GetResource (const Reference<XResourceId>& rxResourceId)
-{
-    Reference<XResource> xResource;
-
-    if (rxResourceId.is() && mxConfigurationController.is())
-    {
-        try
-        {
-            return mxConfigurationController->getResource(rxResourceId);
-        }
-        catch (lang::DisposedException&)
-        {
-            Dispose();
-        }
-        catch (RuntimeException&)
-        {
-        }
-    }
-
-    return NULL;
-}
-
-
-
-
 Reference<XResourceId> FrameworkHelper::RequestView (
     const OUString& rsResourceURL,
     const OUString& rsAnchorURL)

@@ -53,12 +53,6 @@ SwComboBox::SwComboBox(Window* pParent, WinBits nStyle)
     Init();
 }
 
-SwComboBox::SwComboBox(Window* pParent, const ResId& rId)
-    : ComboBox(pParent, rId)
-{
-    Init();
-}
-
 void SwComboBox::Init()
 {
     // create administration for the resource's Stringlist

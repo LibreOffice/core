@@ -110,12 +110,6 @@ public:
         const ::rtl::OUString& rsApplicationName,
         const ::rtl::OUString& rsContextName);
 
-    /** Return a number that encodes both the application and context
-        enums.
-        Use the CombinedEnumContext macro in switch() statements and comparisons.
-    */
-    sal_Int32 GetCombinedContext(void) const;
-
     /** This variant of the GetCombinedContext() method treats some
         application names as identical to each other.  Replacements
         made are:
@@ -126,7 +120,6 @@ public:
     sal_Int32 GetCombinedContext_DI(void) const;
 
     const ::rtl::OUString& GetApplicationName (void) const;
-    Application GetApplication (void) const;
     Application GetApplication_DI (void) const;
 
     const ::rtl::OUString& GetContextName (void) const;

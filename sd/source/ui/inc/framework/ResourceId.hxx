@@ -82,17 +82,6 @@ public:
         const OUString& rsResourceURL,
         const OUString& rsAnchorURL);
 
-    /** Create a new resource id for the specified resource type and the
-        given list of anchor URLs.
-        @param rsResourceURL
-            The URL of the actual resource.
-        @param rsAnchorURLs
-            The possibly empty list of anchor URLs.
-    */
-    ResourceId (
-        const OUString& rsResourceURL,
-        const ::std::vector<OUString>& rAnchorURLs);
-
     /** Create a new resource id with an anchor that consists of a sequence
         of URLs that is extended by a further URL.
         @param rsResourceURL
