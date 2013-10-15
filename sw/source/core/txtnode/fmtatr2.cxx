@@ -160,7 +160,7 @@ SfxPoolItem* SwFmtAutoFmt::Clone( SfxItemPool* ) const
 
 bool SwFmtAutoFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    String sCharFmtName = StylePool::nameOf( mpHandle );
+    OUString sCharFmtName = StylePool::nameOf( mpHandle );
     rVal <<= OUString( sCharFmtName );
     return true;
 }
