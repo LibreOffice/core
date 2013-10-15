@@ -17,6 +17,7 @@
 #include "txatbase.hxx"
 #include "fmtautofmt.hxx"
 #include "charfmt.hxx"
+#include "paratr.hxx"
 #include <svl/itemiter.hxx>
 #include <svl/intitem.hxx>
 
@@ -294,7 +295,7 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         writer.startElement("item");
         writer.writeFormatAttribute("whichId", TMP_FORMAT, pItem->Which());
         const char* pWhich = 0;
-        boost::optional<sal_Int32> oValue;
+        boost::optional<OString> oValue;
         switch (pItem->Which())
         {
             case RES_CHRATR_POSTURE: pWhich = "character posture"; break;
@@ -304,12 +305,13 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_CHRATR_CTL_POSTURE: pWhich = "character ctl posture"; break;
             case RES_CHRATR_CTL_WEIGHT: pWhich = "character ctl weight"; break;
             case RES_CHRATR_RSID: pWhich = "character rsid"; break;
-            case RES_PARATR_OUTLINELEVEL: pWhich = "paragraph outline level"; oValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue(); break;
+            case RES_PARATR_OUTLINELEVEL: pWhich = "paragraph outline level"; oValue = OString::number(static_cast<const SfxUInt16Item*>(pItem)->GetValue()); break;
+            case RES_PARATR_NUMRULE: pWhich = "paragraph numbering rule"; oValue = OUStringToOString(static_cast<const SwNumRuleItem*>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8); break;
         }
         if (pWhich)
             writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
         if (oValue)
-            writer.writeFormatAttribute("value", TMP_FORMAT, *oValue);
+            writer.writeFormatAttribute("value", "%s", BAD_CAST(oValue->getStr()));
         pItem = aIter.NextItem();
         writer.endElement();
     }
@@ -370,6 +372,23 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
         txt = txt.replace( i, '*' );
     OString txt8 = OUStringToOString( txt, RTL_TEXTENCODING_UTF8 );
     xmlTextWriterWriteString( writer, BAD_CAST( txt8.getStr()));
+
+    if (GetFmtColl())
+    {
+        SwTxtFmtColl* pColl = static_cast<SwTxtFmtColl*>(GetFmtColl());
+        writer.startElement("swtxtfmtcoll");
+        OString aName = OUStringToOString(pColl->GetName(), RTL_TEXTENCODING_UTF8);
+        writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
+        writer.endElement();
+    }
+
+    if (HasSwAttrSet())
+    {
+        writer.startElement("attrset");
+        const SwAttrSet& rAttrSet = GetSwAttrSet();
+        lcl_dumpSfxItemSet(writer, &rAttrSet);
+        writer.endElement();
+    }
 
     if (HasHints())
     {
