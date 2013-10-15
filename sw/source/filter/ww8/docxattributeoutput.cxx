@@ -4731,14 +4731,7 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
                 // paragraph in the document
                 if ( !m_bParagraphOpened && !m_bIsFirstParagraph)
                 {
-                    // Create a dummy paragraph if needed
-                    m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
-                    m_pSerializer->startElementNS( XML_w, XML_pPr, FSEND );
-
-                    m_rExport.SectionProperties( *pSectionInfo );
-
-                    m_pSerializer->endElementNS( XML_w, XML_pPr );
-                    m_pSerializer->endElementNS( XML_w, XML_p );
+                    // No paragraph opened, there's no point in writing a section then
                 }
                 else
                 {
