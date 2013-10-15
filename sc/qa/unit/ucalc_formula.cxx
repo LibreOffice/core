@@ -16,14 +16,88 @@
 #include "refdata.hxx"
 #include "scopetools.hxx"
 #include "formulacell.hxx"
+#include "formulagroup.hxx"
 #include "inputopt.hxx"
 #include "scmod.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
 
+#include "formula/vectortoken.hxx"
+
 #include <boost/scoped_ptr.hpp>
 
 using namespace formula;
+
+void Test::testFetchVectorRefArray()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // All numeric cells in Column A.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1);
+    m_pDoc->SetValue(ScAddress(0,1,0), 2);
+    m_pDoc->SetValue(ScAddress(0,2,0), 3);
+    m_pDoc->SetValue(ScAddress(0,3,0), 4);
+
+    sc::FormulaGroupContext aCxt;
+    formula::VectorRefArray aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(0,0,0), 4);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array is expected to be numeric cells only.", !aArray.mpStringArray);
+    CPPUNIT_ASSERT_EQUAL(1.0, aArray.mpNumericArray[0]);
+    CPPUNIT_ASSERT_EQUAL(2.0, aArray.mpNumericArray[1]);
+    CPPUNIT_ASSERT_EQUAL(3.0, aArray.mpNumericArray[2]);
+    CPPUNIT_ASSERT_EQUAL(4.0, aArray.mpNumericArray[3]);
+
+    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(0,0,0), 5);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array is expected to be numeric cells only.", !aArray.mpStringArray);
+    CPPUNIT_ASSERT_EQUAL(1.0, aArray.mpNumericArray[0]);
+    CPPUNIT_ASSERT_EQUAL(2.0, aArray.mpNumericArray[1]);
+    CPPUNIT_ASSERT_EQUAL(3.0, aArray.mpNumericArray[2]);
+    CPPUNIT_ASSERT_EQUAL(4.0, aArray.mpNumericArray[3]);
+    CPPUNIT_ASSERT_MESSAGE("Empty cell should be represented by a NaN.", rtl::math::isNan(aArray.mpNumericArray[4]));
+
+    // All string cells in Column B.  Note that the fetched string arrays are
+    // only to be compared case-insensitively.  Right now, we use upper cased
+    // strings to achieve case-insensitive-ness, but that may change. So,
+    // don't count on that.
+    m_pDoc->SetString(ScAddress(1,0,0), "Andy");
+    m_pDoc->SetString(ScAddress(1,1,0), "Bruce");
+    m_pDoc->SetString(ScAddress(1,2,0), "Charlie");
+    m_pDoc->SetString(ScAddress(1,3,0), "David");
+    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(1,0,0), 5);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array is expected to be string cells only.", !aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Failed on case in-sensitive equality test.", OUString(aArray.mpStringArray[0]).equalsIgnoreAsciiCaseAscii("Andy"));
+    CPPUNIT_ASSERT_MESSAGE("Failed on case in-sensitive equality test.", OUString(aArray.mpStringArray[1]).equalsIgnoreAsciiCaseAscii("Bruce"));
+    CPPUNIT_ASSERT_MESSAGE("Failed on case in-sensitive equality test.", OUString(aArray.mpStringArray[2]).equalsIgnoreAsciiCaseAscii("Charlie"));
+    CPPUNIT_ASSERT_MESSAGE("Failed on case in-sensitive equality test.", OUString(aArray.mpStringArray[3]).equalsIgnoreAsciiCaseAscii("David"));
+    CPPUNIT_ASSERT_MESSAGE("Empty cell should be represented by a NULL pointer.", !aArray.mpStringArray[4]);
+
+    // Mixture of numeric, string, and empty cells in Column C.
+    m_pDoc->SetString(ScAddress(2,0,0), "Header");
+    m_pDoc->SetValue(ScAddress(2,1,0), 11);
+    m_pDoc->SetValue(ScAddress(2,2,0), 12);
+    m_pDoc->SetValue(ScAddress(2,3,0), 13);
+    m_pDoc->SetString(ScAddress(2,5,0), "=SUM(C2:C4)");
+    m_pDoc->CalcAll();
+
+    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(2,0,0), 7);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
+    CPPUNIT_ASSERT_MESSAGE("Failed on case in-sensitive equality test.", OUString(aArray.mpStringArray[0]).equalsIgnoreAsciiCaseAscii("Header"));
+    CPPUNIT_ASSERT_MESSAGE("String value should be NULL for numeric cell.", aArray.mpStringArray[1] == NULL);
+    CPPUNIT_ASSERT_MESSAGE("String value should be NULL for numeric cell.", aArray.mpStringArray[2] == NULL);
+    CPPUNIT_ASSERT_MESSAGE("String value should be NULL for numeric cell.", aArray.mpStringArray[3] == NULL);
+    CPPUNIT_ASSERT_EQUAL(11.0, aArray.mpNumericArray[1]);
+    CPPUNIT_ASSERT_EQUAL(12.0, aArray.mpNumericArray[2]);
+    CPPUNIT_ASSERT_EQUAL(13.0, aArray.mpNumericArray[3]);
+    CPPUNIT_ASSERT_MESSAGE("This cell should be empty.", aArray.mpStringArray[4] == NULL && rtl::math::isNan(aArray.mpNumericArray[4]));
+    CPPUNIT_ASSERT_MESSAGE("String value should be NULL for numeric cell.", aArray.mpStringArray[5] == NULL);
+    CPPUNIT_ASSERT_EQUAL(36.0, aArray.mpNumericArray[5]);
+    CPPUNIT_ASSERT_MESSAGE("This cell should be empty.", aArray.mpStringArray[6] == NULL && rtl::math::isNan(aArray.mpNumericArray[6]));
+
+    m_pDoc->DeleteTab(0);
+}
 
 void Test::testFormulaHashAndTag()
 {

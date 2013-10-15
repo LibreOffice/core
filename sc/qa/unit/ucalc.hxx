@@ -84,6 +84,7 @@ public:
     void testRangeList();
     void testInput();
 
+    void testFetchVectorRefArray();
     void testFormulaHashAndTag();
     void testFormulaRefData();
     void testFormulaCompiler();
@@ -288,6 +289,7 @@ public:
     CPPUNIT_TEST(testSharedStringPool);
     CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
+    CPPUNIT_TEST(testFetchVectorRefArray);
     CPPUNIT_TEST(testFormulaHashAndTag);
     CPPUNIT_TEST(testFormulaRefData);
     CPPUNIT_TEST(testFormulaCompiler);
