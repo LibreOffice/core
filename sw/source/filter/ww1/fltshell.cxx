@@ -522,7 +522,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         break;
     case RES_FLTR_NUMRULE:          // Numrule 'reinsetzen
         {
-            const String& rNumNm = ((SfxStringItem*)rEntry.pAttr)->GetValue();
+            const OUString& rNumNm = ((SfxStringItem*)rEntry.pAttr)->GetValue();
             SwNumRule* pRul = pDoc->FindNumRulePtr( rNumNm );
             if( pRul )
             {
@@ -552,7 +552,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     case RES_FLTR_BOOKMARK:         // eigentlich nur fuer den Ende-Stack
         {
             SwFltBookmark* pB = (SwFltBookmark*)rEntry.pAttr;
-            const String& rName = ((SwFltBookmark*)rEntry.pAttr)->GetName();
+            const OUString& rName = ((SwFltBookmark*)rEntry.pAttr)->GetName();
 
             if (IsFlagSet(BOOK_TO_VAR_REF))
             {
@@ -1166,7 +1166,7 @@ SwFltShell& SwFltShell::operator << ( const sal_Unicode c )
 
 SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
 {
-    String aName(OUString("ErrorTag"));
+    OUString aName("ErrorTag");
     SwFieldType* pFT = GetDoc().GetFldType( RES_SETEXPFLD, aName, false );
     if( pFT == 0)
     {

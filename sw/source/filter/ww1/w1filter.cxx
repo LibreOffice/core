@@ -331,7 +331,7 @@ void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16)
 
     // Lese Inhalt des Bookmark
     // geht vermulich auch ueber Ww1PlainText
-    String aVal( rMan.GetText().GetText( Where(), nLen ) );
+    OUString aVal( rMan.GetText().GetText( Where(), nLen ) );
 
     // in 2 Schritten, da OS/2 zu doof ist
     SwFltBookmark aBook( rName, aVal, GetHandle(), sal_False );
@@ -536,10 +536,10 @@ extern void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
 
 void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
 {
-    String sType; // der typ als string
+    OUString sType; // der typ als string
     OUString sFormel; // die formel
-    String sFormat;
-    String sDTFormat;   // Datum / Zeit-Format
+    OUString sFormat;
+    OUString sDTFormat;   // Datum / Zeit-Format
     W1_FLD* pData = GetData(); // die an den plc gebunden daten
     OSL_ENSURE(pData->chGet()==19, "Ww1Fields"); // sollte beginn sein
 
@@ -712,11 +712,11 @@ oncemore:
         break;
         case 15: // title
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD), DI_TITEL, String(), 0);
+             rOut.GetSysFldType(RES_DOCINFOFLD), DI_TITEL, OUString(), 0);
         break;
         case 16: // subject
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD), DI_THEMA, String(), 0);
+             rOut.GetSysFldType(RES_DOCINFOFLD), DI_THEMA, OUString(), 0);
         break;
         case 17: // author
             pField = new SwAuthorField((SwAuthorFieldType*)
@@ -724,15 +724,15 @@ oncemore:
         break;
         case 18: // keywords
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD), DI_KEYS, String(), 0);
+             rOut.GetSysFldType(RES_DOCINFOFLD), DI_KEYS, OUString(), 0);
         break;
         case 19: // comments
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD), DI_COMMENT, String(), 0);
+             rOut.GetSysFldType(RES_DOCINFOFLD), DI_COMMENT, OUString(), 0);
         break;
         case 20: // last revised by
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD), DI_CHANGE|DI_SUB_AUTHOR, String());
+             rOut.GetSysFldType(RES_DOCINFOFLD), DI_CHANGE|DI_SUB_AUTHOR, OUString());
         break;
         case 21: // creation date
         case 22: // revision date
@@ -759,12 +759,12 @@ oncemore:
                         // WW_DONTKNOW -> Default bereits gesetzt
                     }
                     pField = new SwDocInfoField((SwDocInfoFieldType*)
-                        rOut.GetSysFldType(RES_DOCINFOFLD), nSub | nReg, String());
+                        rOut.GetSysFldType(RES_DOCINFOFLD), nSub | nReg, OUString());
                 }
         break;
         case 24: // revision number
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD),  DI_DOCNO, String(), 0);
+             rOut.GetSysFldType(RES_DOCINFOFLD),  DI_DOCNO, OUString(), 0);
         break;
         case 26: // number of pages
             pField = new SwDocStatField((SwDocStatFieldType*)
@@ -946,7 +946,7 @@ oncemore:
         {
             const sal_Unicode* pFormel = sFormel.getStr();
             const sal_Unicode* pDot = 0;
-            String sName;
+            OUString sName;
             while (*pFormel != '\0' && *pFormel != ' ')
             {
                 // ab hier koennte eine extension kommen
@@ -961,7 +961,7 @@ oncemore:
                             pFormel++;
                     }
                 if (*pFormel != '\0')
-                    sName += *pFormel++;
+                    sName += OUString(*pFormel++);
             }
             if( pDot )
             {
@@ -1400,7 +1400,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
         if (pF != 0)
         {
         // Fontname .........................................
-            aName = String( (sal_Char*)pF->szFfnGet(),
+            aName = OUString( (sal_Char*)pF->szFfnGet(), strlen( (sal_Char*)pF->szFfnGet() ),
                             RTL_TEXTENCODING_MS_1252 );
         // Pitch .............................................
             static const FontPitch ePitchA[] =
@@ -1948,7 +1948,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
     case 94: // embedded name SH:??? Was denn nun ? Embeddet oder Name ?
     case 98: // TIFF-Name
     {
-        String aDir( (sal_Char*)pPic->rgbGet(),
+        OUString aDir( (sal_Char*)pPic->rgbGet(),
                 (sal_uInt16)(pPic->lcbGet() - (sizeof(*pPic)-sizeof(pPic->rgb))),
                 RTL_TEXTENCODING_MS_1252 );
 
