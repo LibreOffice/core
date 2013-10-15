@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAY3///fw\u003d",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 4
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-15T15:11:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAY3///gM\u003d",
+      "revId": "5d167a9775d069636501f9605c3dcc9ad089fcfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAY3///gc\u003d",
         "filename": "formula/source/core/resource/core_resource.src",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2013-10-15T13:58:26Z",
       "side": 1,
       "message": "Heh, no :-)  These are the UI-visible function names, they should of course be COVARIANCE.P and COVARIANCE.S without he namespace prefix.",
+      "revId": "5d167a9775d069636501f9605c3dcc9ad089fcfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///fs\u003d",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 4
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-15T15:11:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAY3///gc\u003d",
       "revId": "5d167a9775d069636501f9605c3dcc9ad089fcfe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAY3///fo\u003d",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2352,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-15T15:11:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAY3///gY\u003d",
+      "revId": "5d167a9775d069636501f9605c3dcc9ad089fcfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAY3///gU\u003d",
         "filename": "sc/source/filter/excel/xlformula.cxx",
         "patchSetId": 4
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAY3///fk\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-15T15:11:43Z",
+      "side": 1,
+      "message": "Thanks for your expertise and excuses for my sillyness with respect to the duplicated COVARIANCE.P... (I rember testing COVARIANCE.P only, as I wanted to know if I had the _xlfn. prefix right this time.)\n\nDone, of course.",
+      "parentUuid": "AAAAY3///gU\u003d",
+      "revId": "5d167a9775d069636501f9605c3dcc9ad089fcfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAY3///gQ\u003d",
         "filename": "sc/source/filter/oox/formulabase.cxx",
         "patchSetId": 4
@@ -81,6 +153,24 @@
       "writtenOn": "2013-10-15T13:58:26Z",
       "side": 1,
       "message": "Please use the same entry syntax as in saFuncTable2013[] here, which means do not manually prefix \"_xlfn.\" but instead in the flag field (last entry field) use FUNCFLAG_MACROCALL_NEW to make this correctly work in FunctionProviderImpl::initFunc().\n\nAlso do not make up BIFF function IDs like 413 and 414 (which actually are already assigned to IMPRODUCT and SERIESSUM), use NOID instead.",
+      "revId": "5d167a9775d069636501f9605c3dcc9ad089fcfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///fg\u003d",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-15T15:11:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAY3///gQ\u003d",
       "revId": "5d167a9775d069636501f9605c3dcc9ad089fcfe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
