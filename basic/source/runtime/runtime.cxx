@@ -2706,8 +2706,7 @@ void SbiRuntime::StepPRINT()        // print TOS
         s = " ";    // one blank before
     }
     s += s1;
-    OString aByteStr(OUStringToOString(s, osl_getThreadTextEncoding()));
-    pIosys->Write( aByteStr );
+    pIosys->Write( s );
     Error( pIosys->GetError() );
 }
 
@@ -2722,8 +2721,7 @@ void SbiRuntime::StepPRINTF()       // print TOS in field
     }
     s.append(s1);
     comphelper::string::padToLength(s, 14, ' ');
-    OString aByteStr(OUStringToOString(s.makeStringAndClear(), osl_getThreadTextEncoding()));
-    pIosys->Write( aByteStr );
+    pIosys->Write( s.makeStringAndClear() );
     Error( pIosys->GetError() );
 }
 
@@ -2750,8 +2748,7 @@ void SbiRuntime::StepWRITE()        // write TOS
     {
         s += OUString(ch);
     }
-    OString aByteStr(OUStringToOString(s, osl_getThreadTextEncoding()));
-    pIosys->Write( aByteStr );
+    pIosys->Write( s );
     Error( pIosys->GetError() );
 }
 
@@ -3206,7 +3203,7 @@ void SbiRuntime::StepCLOSE( sal_uInt32 nOp1 )
 
 void SbiRuntime::StepPRCHAR( sal_uInt32 nOp1 )
 {
-    OString s(static_cast<sal_Char>(nOp1));
+    OUString s(static_cast<sal_Unicode>(nOp1));
     pIosys->Write( s );
     Error( pIosys->GetError() );
 }

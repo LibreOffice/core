@@ -75,11 +75,11 @@ class SbiIoSystem
     SbiStream* pChan[ CHANNELS ];
     OString aPrompt;
     OString aIn;
-    OString aOut;
+    OUString aOut;
     short     nChan;
     SbError   nError;
     void      ReadCon(OString&);
-    void      WriteCon(const OString&);
+    void      WriteCon(const OUString&);
 public:
     SbiIoSystem();
    ~SbiIoSystem();
@@ -93,7 +93,7 @@ public:
     void  Close();
     void  Read(OString&, short = 0);
     char  Read();
-    void  Write(const OString&, short = 0);
+    void  Write(const OUString&, short = 0);
     // 0 == bad channel or no SvStream (nChannel=0..CHANNELS-1)
     SbiStream* GetStream( short nChannel ) const;
     void  CloseAll(); // JSM

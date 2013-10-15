@@ -842,15 +842,14 @@ void SbiIoSystem::Shutdown()
     // anything left to PRINT?
     if( !aOut.isEmpty() )
     {
-        OUString aOutStr(OStringToOUString(aOut, osl_getThreadTextEncoding()));
 #if defined __GNUC__
         Window* pParent = Application::GetDefDialogParent();
-        MessBox( pParent, WinBits( WB_OK ), OUString(), aOutStr ).Execute();
+        MessBox( pParent, WinBits( WB_OK ), OUString(), aOut ).Execute();
 #else
-        MessBox( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), OUString(), aOutStr ).Execute();
+        MessBox( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), OUString(), aOut ).Execute();
 #endif
     }
-    aOut = OString();
+    aOut = OUString();
 }
 
 
@@ -894,7 +893,7 @@ char SbiIoSystem::Read()
     return ch;
 }
 
-void SbiIoSystem::Write(const OString& rBuf, short n)
+void SbiIoSystem::Write(const OUString& rBuf, short n)
 {
     if( !nChan )
     {
@@ -906,7 +905,7 @@ void SbiIoSystem::Write(const OString& rBuf, short n)
     }
     else
     {
-        nError = pChan[ nChan ]->Write( rBuf, n );
+        nError = pChan[ nChan ]->Write( OUStringToOString(rBuf, osl_getThreadTextEncoding()), n );
     }
 }
 
@@ -963,7 +962,7 @@ void SbiIoSystem::ReadCon(OString& rIn)
 
 // output of a MessageBox, if theres a CR in the console-buffer
 
-void SbiIoSystem::WriteCon(const OString& rText)
+void SbiIoSystem::WriteCon(const OUString& rText)
 {
     aOut += rText;
     sal_Int32 n1 = aOut.indexOf('\n');
@@ -982,18 +981,17 @@ void SbiIoSystem::WriteCon(const OString& rText)
         {
             n1 = n2;
         }
-        OString s(aOut.copy(0, n1));
+        OUString s(aOut.copy(0, n1));
         aOut = aOut.copy(n1);
         while (aOut[0] == '\n' || aOut[0] == '\r')
         {
             aOut = aOut.copy(1);
         }
-        OUString aStr(OStringToOUString(s, osl_getThreadTextEncoding()));
         {
             SolarMutexGuard aSolarGuard;
             if( !MessBox( GetpApp()->GetDefDialogParent(),
                         WinBits( WB_OK_CANCEL | WB_DEF_OK ),
-                        OUString(), aStr ).Execute() )
+                        OUString(), s ).Execute() )
             {
                 nError = SbERR_USER_ABORT;
             }
