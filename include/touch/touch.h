@@ -58,9 +58,9 @@ void touch_lo_pan(int deltaX, int deltaY);
 void touch_lo_zoom(int x, int y, float scale);
 void touch_lo_keyboard_input(int c);
 
-typedef enum { DOWN, MOVE, UP} LOMouseButtonState;
+typedef enum { DOWN, MOVE, UP} MLOMouseButtonState;
 
-void touch_lo_mouse_drag(int x, int y, LOMouseButtonState state);
+void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state);
 
 #ifdef __cplusplus
 }
