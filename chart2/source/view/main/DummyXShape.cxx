@@ -18,6 +18,11 @@ namespace chart {
 
 namespace dummy {
 
+DummyXShape::DummyXShape():
+    mpParent(NULL)
+{
+}
+
 OUString DummyXShape::getName()
     throw(uno::RuntimeException)
 {
@@ -217,15 +222,25 @@ void DummyXShapes::release()
 void DummyXShapes::add( const uno::Reference< drawing::XShape>& xShape )
     throw(uno::RuntimeException)
 {
-    maShapes.push_back(xShape);
+    DummyXShape* pChild = dynamic_cast<DummyXShape*>(xShape.get());
+    assert(pChild);
+    maUNOShapes.push_back(xShape);
+    pChild->setParent(static_cast< ::cppu::OWeakObject* >( this ));
+    maShapes.push_back(pChild);
 }
 
 void DummyXShapes::remove( const uno::Reference< drawing::XShape>& xShape )
     throw(uno::RuntimeException)
 {
-    std::vector< uno::Reference<drawing::XShape> >::iterator itr = std::find(maShapes.begin(), maShapes.end(), xShape);
-    if(itr != maShapes.end())
-        maShapes.erase(itr);
+    std::vector< uno::Reference<drawing::XShape> >::iterator itr = std::find(maUNOShapes.begin(), maUNOShapes.end(), xShape);
+
+    DummyXShape* pChild = dynamic_cast<DummyXShape*>((*itr).get());
+    std::vector< DummyXShape* >::iterator itrShape = std::find(maShapes.begin(), maShapes.end(), pChild);
+    if(itrShape != maShapes.end())
+        maShapes.erase(itrShape);
+
+    if(itr != maUNOShapes.end())
+        maUNOShapes.erase(itr);
 }
 
 uno::Type DummyXShapes::getElementType()
@@ -237,13 +252,13 @@ uno::Type DummyXShapes::getElementType()
 sal_Bool DummyXShapes::hasElements()
     throw(uno::RuntimeException)
 {
-    return !maShapes.empty();
+    return !maUNOShapes.empty();
 }
 
 sal_Int32 DummyXShapes::getCount()
     throw(uno::RuntimeException)
 {
-    return maShapes.size();
+    return maUNOShapes.size();
 }
 
 uno::Any DummyXShapes::getByIndex(sal_Int32 nIndex)
@@ -251,7 +266,7 @@ uno::Any DummyXShapes::getByIndex(sal_Int32 nIndex)
             uno::RuntimeException)
 {
     uno::Any aShape;
-    aShape <<= maShapes[nIndex];
+    aShape <<= maUNOShapes[nIndex];
     return aShape;
 }
 

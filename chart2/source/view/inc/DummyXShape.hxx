@@ -46,6 +46,7 @@ class DummyXShape : public cppu::WeakImplHelper6<
                     com::sun::star::lang::XServiceInfo >
 {
 public:
+    DummyXShape();
 
     // XNamed
     virtual OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -105,6 +106,7 @@ private:
     com::sun::star::awt::Size maSize;
 
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > mxParent;
+    DummyXShape* mpParent;
 
 };
 
@@ -141,7 +143,8 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    std::vector<com::sun::star::uno::Reference< com::sun::star::drawing::XShape > > maShapes;
+    std::vector<com::sun::star::uno::Reference< com::sun::star::drawing::XShape > > maUNOShapes;
+    std::vector<DummyXShape*> maShapes;
 };
 
 }
