@@ -1,0 +1,1684 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		681D78BA180C12D300D52D5E /* fundamentalrc in Resources */ = {isa = PBXBuildFile; fileRef = 681D78AF180C12D300D52D5E /* fundamentalrc */; };
+		681D78BB180C12D300D52D5E /* offapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B0180C12D300D52D5E /* offapi.rdb */; };
+		681D78BC180C12D300D52D5E /* oovbaapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B1180C12D300D52D5E /* oovbaapi.rdb */; };
+		681D78BD180C12D300D52D5E /* program in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B2180C12D300D52D5E /* program */; };
+		681D78BE180C12D300D52D5E /* rc in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B3180C12D300D52D5E /* rc */; };
+		681D78BF180C12D300D52D5E /* registry in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B4180C12D300D52D5E /* registry */; };
+		681D78C0180C12D300D52D5E /* services.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B5180C12D300D52D5E /* services.rdb */; };
+		681D78C1180C12D300D52D5E /* share in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B6180C12D300D52D5E /* share */; };
+		681D78C2180C12D300D52D5E /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B7180C12D300D52D5E /* udkapi.rdb */; };
+		681D78C3180C12D300D52D5E /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B8180C12D300D52D5E /* unorc */; };
+		681D78C6180C136400D52D5E /* ure in Resources */ = {isa = PBXBuildFile; fileRef = 681D78C5180C136400D52D5E /* ure */; };
+		688EAAE9180D3130003741B3 /* lo.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 688EAAE8180D3130003741B3 /* lo.xcconfig */; };
+		688EAB01180D67E9003741B3 /* libios_sharedlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 688EAAFE180D679F003741B3 /* libios_sharedlo.a */; };
+		689EBAEB18069FB7002F1CD7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689EBAEA18069FB7002F1CD7 /* UIKit.framework */; };
+		689EBAED18069FB7002F1CD7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689EBAEC18069FB7002F1CD7 /* Foundation.framework */; };
+		689EBAEF18069FB7002F1CD7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689EBAEE18069FB7002F1CD7 /* CoreGraphics.framework */; };
+		689EBAF718069FB7002F1CD7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 689EBAF618069FB7002F1CD7 /* main.m */; };
+		689EBAFD18069FB8002F1CD7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 689EBAFC18069FB8002F1CD7 /* Default.png */; };
+		689EBAFF18069FB8002F1CD7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 689EBAFE18069FB8002F1CD7 /* Default@2x.png */; };
+		689EBB0118069FB8002F1CD7 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 689EBB0018069FB8002F1CD7 /* Default-568h@2x.png */; };
+		689EBB2E1806CC3A002F1CD7 /* MLOAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 689EBB2B1806CC39002F1CD7 /* MLOAppDelegate.m */; };
+		689EBB2F1806CC3A002F1CD7 /* MLOAppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689EBB2D1806CC39002F1CD7 /* MLOAppViewController.m */; };
+		689EBBAE1806D370002F1CD7 /* MLOCachedFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 689EBBA61806D370002F1CD7 /* MLOCachedFile.m */; };
+		689EBBAF1806D370002F1CD7 /* MLOFileCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 689EBBA81806D370002F1CD7 /* MLOFileCacheManager.m */; };
+		689EBBB01806D370002F1CD7 /* MLOFileListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689EBBAA1806D370002F1CD7 /* MLOFileListViewController.m */; };
+		689EBBB11806D370002F1CD7 /* MLOFileManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 689EBBAC1806D370002F1CD7 /* MLOFileManagerViewController.m */; };
+		68B98C35180B38CD00FFEA35 /* MLOButtonBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C26180B38CD00FFEA35 /* MLOButtonBack.png */; };
+		68B98C36180B38CD00FFEA35 /* MLOButtonBack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C27180B38CD00FFEA35 /* MLOButtonBack@2x.png */; };
+		68B98C37180B38CD00FFEA35 /* MLOButtonEdit.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C28180B38CD00FFEA35 /* MLOButtonEdit.png */; };
+		68B98C38180B38CD00FFEA35 /* MLOButtonExpand.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C29180B38CD00FFEA35 /* MLOButtonExpand.png */; };
+		68B98C39180B38CD00FFEA35 /* MLOButtonFind.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C2A180B38CD00FFEA35 /* MLOButtonFind.png */; };
+		68B98C3A180B38CD00FFEA35 /* MLOButtonLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C2B180B38CD00FFEA35 /* MLOButtonLeft.png */; };
+		68B98C3B180B38CD00FFEA35 /* MLOButtonPrint.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C2C180B38CD00FFEA35 /* MLOButtonPrint.png */; };
+		68B98C3C180B38CD00FFEA35 /* MLOButtonRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C2D180B38CD00FFEA35 /* MLOButtonRight.png */; };
+		68B98C3D180B38CD00FFEA35 /* MLOButtonSave.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C2E180B38CD00FFEA35 /* MLOButtonSave.png */; };
+		68B98C3E180B38CD00FFEA35 /* MLOButtonSelectionHandle.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C2F180B38CD00FFEA35 /* MLOButtonSelectionHandle.png */; };
+		68B98C3F180B38CD00FFEA35 /* MLOButtonShrink.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C30180B38CD00FFEA35 /* MLOButtonShrink.png */; };
+		68B98C40180B38CD00FFEA35 /* MLOContextualMenuEdge.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C31180B38CD00FFEA35 /* MLOContextualMenuEdge.png */; };
+		68B98C41180B38CD00FFEA35 /* MLOLibreOfficeLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C32180B38CD00FFEA35 /* MLOLibreOfficeLogo.png */; };
+		68B98C42180B38CD00FFEA35 /* MLOMagnifier@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C33180B38CD00FFEA35 /* MLOMagnifier@2x.png */; };
+		68B98C43180B38CD00FFEA35 /* MLOMagnifierMask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C34180B38CD00FFEA35 /* MLOMagnifierMask@2x.png */; };
+		68B99ED3180BBEE900FFEA35 /* test1.odt in Resources */ = {isa = PBXBuildFile; fileRef = 68B99ED2180BBEE900FFEA35 /* test1.odt */; };
+		68B99ED8180BBF7100FFEA35 /* mlo-icon-57.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B99ED6180BBF7100FFEA35 /* mlo-icon-57.png */; };
+		68B99ED9180BBF7100FFEA35 /* mlo-icon-114.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B99ED7180BBF7100FFEA35 /* mlo-icon-114.png */; };
+		68B9A1EA180BDB7E00FFEA35 /* libacceptorlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0E9180BDB7E00FFEA35 /* libacceptorlo.a */; };
+		68B9A1EB180BDB7E00FFEA35 /* libacclo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0EA180BDB7E00FFEA35 /* libacclo.a */; };
+		68B9A1EC180BDB7E00FFEA35 /* libaffine_uno_uno.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0EB180BDB7E00FFEA35 /* libaffine_uno_uno.a */; };
+		68B9A1ED180BDB7E00FFEA35 /* libanalysislo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0EC180BDB7E00FFEA35 /* libanalysislo.a */; };
+		68B9A1EE180BDB7E00FFEA35 /* libanimcorelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0ED180BDB7E00FFEA35 /* libanimcorelo.a */; };
+		68B9A1EF180BDB7E00FFEA35 /* libavmedialo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0EE180BDB7E00FFEA35 /* libavmedialo.a */; };
+		68B9A1F0180BDB7E00FFEA35 /* libbasebmplo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0EF180BDB7E00FFEA35 /* libbasebmplo.a */; };
+		68B9A1F1180BDB7E00FFEA35 /* libbasegfxlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0F0180BDB7E00FFEA35 /* libbasegfxlo.a */; };
+		68B9A1F2180BDB7E00FFEA35 /* libbiblo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0F1180BDB7E00FFEA35 /* libbiblo.a */; };
+		68B9A1F3180BDB7E00FFEA35 /* libbinaryurplo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0F2180BDB7E00FFEA35 /* libbinaryurplo.a */; };
+		68B9A1F4180BDB7E00FFEA35 /* libboostdatetime.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0F3180BDB7E00FFEA35 /* libboostdatetime.a */; };
+		68B9A1F5180BDB7E00FFEA35 /* libboostsystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0F4180BDB7E00FFEA35 /* libboostsystem.a */; };
+		68B9A1F6180BDB7E00FFEA35 /* libbootstraplo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0F5180BDB7E00FFEA35 /* libbootstraplo.a */; };
+		68B9A1F7180BDB7E00FFEA35 /* libcached1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0F6180BDB7E00FFEA35 /* libcached1.a */; };
+		68B9A1F8180BDB7E00FFEA35 /* libcalclo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0F7180BDB7E00FFEA35 /* libcalclo.a */; };
+		68B9A1F9180BDB7E00FFEA35 /* libcanvasfactorylo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0F8180BDB7E00FFEA35 /* libcanvasfactorylo.a */; };
+		68B9A1FA180BDB7E00FFEA35 /* libcanvastoolslo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0F9180BDB7E00FFEA35 /* libcanvastoolslo.a */; };
+		68B9A1FB180BDB7E00FFEA35 /* libcdr-0.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0FA180BDB7E00FFEA35 /* libcdr-0.0.a */; };
+		68B9A1FC180BDB7E00FFEA35 /* libchartcontrollerlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0FB180BDB7E00FFEA35 /* libchartcontrollerlo.a */; };
+		68B9A1FD180BDB7E00FFEA35 /* libchartcorelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0FC180BDB7E00FFEA35 /* libchartcorelo.a */; };
+		68B9A1FE180BDB7E00FFEA35 /* libclucene.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0FD180BDB7E00FFEA35 /* libclucene.a */; };
+		68B9A1FF180BDB7E00FFEA35 /* libcmislib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0FE180BDB7E00FFEA35 /* libcmislib.a */; };
+		68B9A200180BDB7E00FFEA35 /* libcollator_data.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A0FF180BDB7E00FFEA35 /* libcollator_data.a */; };
+		68B9A201180BDB7E00FFEA35 /* libcomphelper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A100180BDB7E00FFEA35 /* libcomphelper.a */; };
+		68B9A202180BDB7E00FFEA35 /* libconfigmgrlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A101180BDB7E00FFEA35 /* libconfigmgrlo.a */; };
+		68B9A203180BDB7E00FFEA35 /* libconnectorlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A102180BDB7E00FFEA35 /* libconnectorlo.a */; };
+		68B9A204180BDB7E00FFEA35 /* libcppcanvaslo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A103180BDB7E00FFEA35 /* libcppcanvaslo.a */; };
+		68B9A205180BDB7E00FFEA35 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A104180BDB7E00FFEA35 /* libcrypto.a */; };
+		68B9A206180BDB7E00FFEA35 /* libctllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A105180BDB7E00FFEA35 /* libctllo.a */; };
+		68B9A207180BDB7E00FFEA35 /* libcuilo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A106180BDB7E00FFEA35 /* libcuilo.a */; };
+		68B9A208180BDB7E00FFEA35 /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A107180BDB7E00FFEA35 /* libcurl.a */; };
+		68B9A209180BDB7E00FFEA35 /* libdatelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A108180BDB7E00FFEA35 /* libdatelo.a */; };
+		68B9A20A180BDB7E00FFEA35 /* libdbalo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A109180BDB7E00FFEA35 /* libdbalo.a */; };
+		68B9A20B180BDB7E00FFEA35 /* libdbaselo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A10A180BDB7E00FFEA35 /* libdbaselo.a */; };
+		68B9A20C180BDB7E00FFEA35 /* libdbaxmllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A10B180BDB7E00FFEA35 /* libdbaxmllo.a */; };
+		68B9A20D180BDB7E00FFEA35 /* libdbmmlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A10C180BDB7E00FFEA35 /* libdbmmlo.a */; };
+		68B9A20E180BDB7E00FFEA35 /* libdbplo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A10D180BDB7E00FFEA35 /* libdbplo.a */; };
+		68B9A20F180BDB7E00FFEA35 /* libdbpool2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A10E180BDB7E00FFEA35 /* libdbpool2.a */; };
+		68B9A210180BDB7E00FFEA35 /* libdbtoolslo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A10F180BDB7E00FFEA35 /* libdbtoolslo.a */; };
+		68B9A211180BDB7E00FFEA35 /* libdbulo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A110180BDB7E00FFEA35 /* libdbulo.a */; };
+		68B9A212180BDB7E00FFEA35 /* libdeployment.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A111180BDB7E00FFEA35 /* libdeployment.a */; };
+		68B9A213180BDB7E00FFEA35 /* libdeploymentgui.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A112180BDB7E00FFEA35 /* libdeploymentgui.a */; };
+		68B9A214180BDB7E00FFEA35 /* libdeploymentmisclo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A113180BDB7E00FFEA35 /* libdeploymentmisclo.a */; };
+		68B9A215180BDB7E00FFEA35 /* libdesktopbe1lo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A114180BDB7E00FFEA35 /* libdesktopbe1lo.a */; };
+		68B9A216180BDB7E00FFEA35 /* libdict_ja.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A115180BDB7E00FFEA35 /* libdict_ja.a */; };
+		68B9A217180BDB7E00FFEA35 /* libdict_zh.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A116180BDB7E00FFEA35 /* libdict_zh.a */; };
+		68B9A218180BDB7E00FFEA35 /* libdrawinglayerlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A117180BDB7E00FFEA35 /* libdrawinglayerlo.a */; };
+		68B9A219180BDB7E00FFEA35 /* libeditenglo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A118180BDB7E00FFEA35 /* libeditenglo.a */; };
+		68B9A21A180BDB7E00FFEA35 /* libegilo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A119180BDB7E00FFEA35 /* libegilo.a */; };
+		68B9A21B180BDB7E00FFEA35 /* libembobj.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A11A180BDB7E00FFEA35 /* libembobj.a */; };
+		68B9A21C180BDB7E00FFEA35 /* libemboleobj.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A11B180BDB7E00FFEA35 /* libemboleobj.a */; };
+		68B9A21D180BDB7E00FFEA35 /* libemelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A11C180BDB7E00FFEA35 /* libemelo.a */; };
+		68B9A21E180BDB7E00FFEA35 /* libepblo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A11D180BDB7E00FFEA35 /* libepblo.a */; };
+		68B9A21F180BDB7E00FFEA35 /* libepglo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A11E180BDB7E00FFEA35 /* libepglo.a */; };
+		68B9A220180BDB7E00FFEA35 /* libepplo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A11F180BDB7E00FFEA35 /* libepplo.a */; };
+		68B9A221180BDB7E00FFEA35 /* libepslo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A120180BDB7E00FFEA35 /* libepslo.a */; };
+		68B9A222180BDB7E00FFEA35 /* libeptlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A121180BDB7E00FFEA35 /* libeptlo.a */; };
+		68B9A223180BDB7E00FFEA35 /* liberalo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A122180BDB7E00FFEA35 /* liberalo.a */; };
+		68B9A224180BDB7E00FFEA35 /* libetilo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A123180BDB7E00FFEA35 /* libetilo.a */; };
+		68B9A225180BDB7E00FFEA35 /* libevtattlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A124180BDB7E00FFEA35 /* libevtattlo.a */; };
+		68B9A226180BDB7F00FFEA35 /* libexpat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A125180BDB7E00FFEA35 /* libexpat.a */; };
+		68B9A227180BDB7F00FFEA35 /* libexplo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A126180BDB7E00FFEA35 /* libexplo.a */; };
+		68B9A228180BDB7F00FFEA35 /* libexpwraplo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A127180BDB7E00FFEA35 /* libexpwraplo.a */; };
+		68B9A229180BDB7F00FFEA35 /* libexslt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A128180BDB7E00FFEA35 /* libexslt.a */; };
+		68B9A22A180BDB7F00FFEA35 /* libexttextcat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A129180BDB7E00FFEA35 /* libexttextcat.a */; };
+		68B9A22B180BDB7F00FFEA35 /* libfastsaxlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A12A180BDB7E00FFEA35 /* libfastsaxlo.a */; };
+		68B9A22C180BDB7F00FFEA35 /* libfileacc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A12B180BDB7E00FFEA35 /* libfileacc.a */; };
+		68B9A22D180BDB7F00FFEA35 /* libfilelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A12C180BDB7E00FFEA35 /* libfilelo.a */; };
+		68B9A22E180BDB7F00FFEA35 /* libfilterconfiglo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A12D180BDB7E00FFEA35 /* libfilterconfiglo.a */; };
+		68B9A22F180BDB7F00FFEA35 /* libfindsofficepath.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A12E180BDB7E00FFEA35 /* libfindsofficepath.a */; };
+		68B9A230180BDB7F00FFEA35 /* libflashlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A12F180BDB7E00FFEA35 /* libflashlo.a */; };
+		68B9A231180BDB7F00FFEA35 /* libflatlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A130180BDB7E00FFEA35 /* libflatlo.a */; };
+		68B9A232180BDB7F00FFEA35 /* libforlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A131180BDB7E00FFEA35 /* libforlo.a */; };
+		68B9A233180BDB7F00FFEA35 /* libforuilo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A132180BDB7E00FFEA35 /* libforuilo.a */; };
+		68B9A234180BDB7F00FFEA35 /* libfpickerlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A133180BDB7E00FFEA35 /* libfpickerlo.a */; };
+		68B9A235180BDB7F00FFEA35 /* libfps_officelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A134180BDB7E00FFEA35 /* libfps_officelo.a */; };
+		68B9A236180BDB7F00FFEA35 /* libfrmlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A135180BDB7E00FFEA35 /* libfrmlo.a */; };
+		68B9A237180BDB7F00FFEA35 /* libfsstoragelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A136180BDB7E00FFEA35 /* libfsstoragelo.a */; };
+		68B9A238180BDB7F00FFEA35 /* libfwelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A137180BDB7E00FFEA35 /* libfwelo.a */; };
+		68B9A239180BDB7F00FFEA35 /* libfwilo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A138180BDB7E00FFEA35 /* libfwilo.a */; };
+		68B9A23A180BDB7F00FFEA35 /* libfwklo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A139180BDB7E00FFEA35 /* libfwklo.a */; };
+		68B9A23B180BDB7F00FFEA35 /* libfwllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A13A180BDB7E00FFEA35 /* libfwllo.a */; };
+		68B9A23C180BDB7F00FFEA35 /* libfwmlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A13B180BDB7E00FFEA35 /* libfwmlo.a */; };
+		68B9A23D180BDB7F00FFEA35 /* libgcc3_uno.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A13C180BDB7E00FFEA35 /* libgcc3_uno.a */; };
+		68B9A23E180BDB7F00FFEA35 /* libgraphicfilterlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A13D180BDB7E00FFEA35 /* libgraphicfilterlo.a */; };
+		68B9A23F180BDB7F00FFEA35 /* libguesslanglo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A13E180BDB7E00FFEA35 /* libguesslanglo.a */; };
+		68B9A240180BDB7F00FFEA35 /* libhatchwindowfactorylo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A13F180BDB7E00FFEA35 /* libhatchwindowfactorylo.a */; };
+		68B9A241180BDB7F00FFEA35 /* libhunspell.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A140180BDB7E00FFEA35 /* libhunspell.a */; };
+		68B9A242180BDB7F00FFEA35 /* libhwplo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A141180BDB7E00FFEA35 /* libhwplo.a */; };
+		68B9A243180BDB7F00FFEA35 /* libhyphen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A142180BDB7E00FFEA35 /* libhyphen.a */; };
+		68B9A244180BDB7F00FFEA35 /* libhyphenlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A143180BDB7E00FFEA35 /* libhyphenlo.a */; };
+		68B9A245180BDB7F00FFEA35 /* libi18nlangtag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A144180BDB7E00FFEA35 /* libi18nlangtag.a */; };
+		68B9A246180BDB7F00FFEA35 /* libi18npoollo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A145180BDB7E00FFEA35 /* libi18npoollo.a */; };
+		68B9A247180BDB7F00FFEA35 /* libi18nsearchlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A146180BDB7E00FFEA35 /* libi18nsearchlo.a */; };
+		68B9A248180BDB7F00FFEA35 /* libi18nutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A147180BDB7E00FFEA35 /* libi18nutil.a */; };
+		68B9A249180BDB7F00FFEA35 /* libicdlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A148180BDB7E00FFEA35 /* libicdlo.a */; };
+		68B9A24A180BDB7F00FFEA35 /* libicglo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A149180BDB7E00FFEA35 /* libicglo.a */; };
+		68B9A24B180BDB7F00FFEA35 /* libicudata.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A14A180BDB7E00FFEA35 /* libicudata.a */; };
+		68B9A24C180BDB7F00FFEA35 /* libicui18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A14B180BDB7E00FFEA35 /* libicui18n.a */; };
+		68B9A24D180BDB7F00FFEA35 /* libicutu.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A14C180BDB7E00FFEA35 /* libicutu.a */; };
+		68B9A24E180BDB7F00FFEA35 /* libicuuc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A14D180BDB7E00FFEA35 /* libicuuc.a */; };
+		68B9A24F180BDB7F00FFEA35 /* libidxlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A14E180BDB7E00FFEA35 /* libidxlo.a */; };
+		68B9A250180BDB7F00FFEA35 /* libimelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A14F180BDB7E00FFEA35 /* libimelo.a */; };
+		68B9A251180BDB7F00FFEA35 /* libindex_data.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A150180BDB7E00FFEA35 /* libindex_data.a */; };
+		68B9A252180BDB7F00FFEA35 /* libintrospectionlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A151180BDB7E00FFEA35 /* libintrospectionlo.a */; };
+		68B9A253180BDB7F00FFEA35 /* libinvocadaptlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A152180BDB7E00FFEA35 /* libinvocadaptlo.a */; };
+		68B9A254180BDB7F00FFEA35 /* libinvocationlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A153180BDB7E00FFEA35 /* libinvocationlo.a */; };
+		68B9A255180BDB7F00FFEA35 /* libipblo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A154180BDB7E00FFEA35 /* libipblo.a */; };
+		68B9A256180BDB7F00FFEA35 /* libipdlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A155180BDB7E00FFEA35 /* libipdlo.a */; };
+		68B9A257180BDB7F00FFEA35 /* libipslo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A156180BDB7E00FFEA35 /* libipslo.a */; };
+		68B9A258180BDB7F00FFEA35 /* libiptlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A157180BDB7E00FFEA35 /* libiptlo.a */; };
+		68B9A259180BDB7F00FFEA35 /* libipxlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A158180BDB7E00FFEA35 /* libipxlo.a */; };
+		68B9A25A180BDB7F00FFEA35 /* libiralo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A159180BDB7E00FFEA35 /* libiralo.a */; };
+		68B9A25B180BDB7F00FFEA35 /* libitglo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A15A180BDB7E00FFEA35 /* libitglo.a */; };
+		68B9A25C180BDB7F00FFEA35 /* libitilo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A15B180BDB7E00FFEA35 /* libitilo.a */; };
+		68B9A25D180BDB7F00FFEA35 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A15C180BDB7E00FFEA35 /* libjpeg.a */; };
+		68B9A25E180BDB7F00FFEA35 /* liblcms2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A15D180BDB7E00FFEA35 /* liblcms2.a */; };
+		68B9A25F180BDB7F00FFEA35 /* liblibotouchlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A15E180BDB7E00FFEA35 /* liblibotouchlo.a */; };
+		68B9A260180BDB7F00FFEA35 /* liblnglo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A15F180BDB7E00FFEA35 /* liblnglo.a */; };
+		68B9A261180BDB7F00FFEA35 /* liblnthlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A160180BDB7E00FFEA35 /* liblnthlo.a */; };
+		68B9A262180BDB7F00FFEA35 /* liblocalebe1lo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A161180BDB7E00FFEA35 /* liblocalebe1lo.a */; };
+		68B9A263180BDB7F00FFEA35 /* liblocaledata_en.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A162180BDB7E00FFEA35 /* liblocaledata_en.a */; };
+		68B9A264180BDB7F00FFEA35 /* liblocaledata_es.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A163180BDB7E00FFEA35 /* liblocaledata_es.a */; };
+		68B9A265180BDB7F00FFEA35 /* liblocaledata_euro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A164180BDB7E00FFEA35 /* liblocaledata_euro.a */; };
+		68B9A266180BDB7F00FFEA35 /* liblocaledata_others.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A165180BDB7E00FFEA35 /* liblocaledata_others.a */; };
+		68B9A267180BDB7F00FFEA35 /* liblog_uno_uno.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A166180BDB7E00FFEA35 /* liblog_uno_uno.a */; };
+		68B9A268180BDB7F00FFEA35 /* libmcnttype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A167180BDB7E00FFEA35 /* libmcnttype.a */; };
+		68B9A269180BDB7F00FFEA35 /* libmsfilterlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A168180BDB7E00FFEA35 /* libmsfilterlo.a */; };
+		68B9A26A180BDB7F00FFEA35 /* libmspub-0.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A169180BDB7E00FFEA35 /* libmspub-0.0.a */; };
+		68B9A26B180BDB7F00FFEA35 /* libmswordlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A16A180BDB7E00FFEA35 /* libmswordlo.a */; };
+		68B9A26C180BDB7F00FFEA35 /* libmtfrendererlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A16B180BDB7E00FFEA35 /* libmtfrendererlo.a */; };
+		68B9A26D180BDB7F00FFEA35 /* libmwaw-0.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A16C180BDB7E00FFEA35 /* libmwaw-0.1.a */; };
+		68B9A26E180BDB7F00FFEA35 /* libmysqllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A16D180BDB7E00FFEA35 /* libmysqllo.a */; };
+		68B9A26F180BDB7F00FFEA35 /* libmythes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A16E180BDB7E00FFEA35 /* libmythes.a */; };
+		68B9A270180BDB7F00FFEA35 /* libnamingservicelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A16F180BDB7E00FFEA35 /* libnamingservicelo.a */; };
+		68B9A271180BDB7F00FFEA35 /* libodfflatxmllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A170180BDB7E00FFEA35 /* libodfflatxmllo.a */; };
+		68B9A272180BDB7F00FFEA35 /* libodfgen-0.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A171180BDB7E00FFEA35 /* libodfgen-0.0.a */; };
+		68B9A273180BDB7F00FFEA35 /* liboffacclo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A172180BDB7E00FFEA35 /* liboffacclo.a */; };
+		68B9A274180BDB7F00FFEA35 /* libooopathutils.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A173180BDB7E00FFEA35 /* libooopathutils.a */; };
+		68B9A275180BDB7F00FFEA35 /* libooxlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A174180BDB7E00FFEA35 /* libooxlo.a */; };
+		68B9A276180BDB7F00FFEA35 /* liborcus-parser.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A175180BDB7E00FFEA35 /* liborcus-parser.a */; };
+		68B9A277180BDB7F00FFEA35 /* liborcus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A176180BDB7E00FFEA35 /* liborcus.a */; };
+		68B9A278180BDB7F00FFEA35 /* libpackage2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A177180BDB7E00FFEA35 /* libpackage2.a */; };
+		68B9A279180BDB7F00FFEA35 /* libpasswordcontainerlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A178180BDB7E00FFEA35 /* libpasswordcontainerlo.a */; };
+		68B9A27A180BDB7F00FFEA35 /* libpcrlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A179180BDB7E00FFEA35 /* libpcrlo.a */; };
+		68B9A27B180BDB7F00FFEA35 /* libpdffilterlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A17A180BDB7E00FFEA35 /* libpdffilterlo.a */; };
+		68B9A27C180BDB7F00FFEA35 /* libplacewarelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A17B180BDB7E00FFEA35 /* libplacewarelo.a */; };
+		68B9A27D180BDB7F00FFEA35 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A17C180BDB7E00FFEA35 /* libpng.a */; };
+		68B9A27E180BDB7F00FFEA35 /* libPresenterScreenlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A17D180BDB7E00FFEA35 /* libPresenterScreenlo.a */; };
+		68B9A27F180BDB7F00FFEA35 /* libpricinglo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A17E180BDB7E00FFEA35 /* libpricinglo.a */; };
+		68B9A280180BDB7F00FFEA35 /* libproxyfaclo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A17F180BDB7E00FFEA35 /* libproxyfaclo.a */; };
+		68B9A281180BDB7F00FFEA35 /* libraptor2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A180180BDB7E00FFEA35 /* libraptor2.a */; };
+		68B9A282180BDB7F00FFEA35 /* librasqal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A181180BDB7E00FFEA35 /* librasqal.a */; };
+		68B9A283180BDB7F00FFEA35 /* librdf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A182180BDB7E00FFEA35 /* librdf.a */; };
+		68B9A284180BDB7F00FFEA35 /* libreflectionlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A183180BDB7E00FFEA35 /* libreflectionlo.a */; };
+		68B9A285180BDB7F00FFEA35 /* libreg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A184180BDB7E00FFEA35 /* libreg.a */; };
+		68B9A286180BDB7F00FFEA35 /* libreglo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A185180BDB7E00FFEA35 /* libreglo.a */; };
+		68B9A287180BDB7F00FFEA35 /* libreslo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A186180BDB7E00FFEA35 /* libreslo.a */; };
+		68B9A288180BDB7F00FFEA35 /* librptlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A187180BDB7E00FFEA35 /* librptlo.a */; };
+		68B9A289180BDB7F00FFEA35 /* librptuilo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A188180BDB7E00FFEA35 /* librptuilo.a */; };
+		68B9A28A180BDB7F00FFEA35 /* librptxmllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A189180BDB7E00FFEA35 /* librptxmllo.a */; };
+		68B9A28B180BDB7F00FFEA35 /* libsal_textenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A18A180BDB7E00FFEA35 /* libsal_textenc.a */; };
+		68B9A28C180BDB7F00FFEA35 /* libsal_textenclo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A18B180BDB7E00FFEA35 /* libsal_textenclo.a */; };
+		68B9A28D180BDB7F00FFEA35 /* libsalcpprt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A18C180BDB7E00FFEA35 /* libsalcpprt.a */; };
+		68B9A28E180BDB7F00FFEA35 /* libsax_shared.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A18D180BDB7E00FFEA35 /* libsax_shared.a */; };
+		68B9A28F180BDB7F00FFEA35 /* libsaxlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A18E180BDB7E00FFEA35 /* libsaxlo.a */; };
+		68B9A290180BDB7F00FFEA35 /* libsblo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A18F180BDB7E00FFEA35 /* libsblo.a */; };
+		68B9A291180BDB7F00FFEA35 /* libscdlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A190180BDB7E00FFEA35 /* libscdlo.a */; };
+		68B9A292180BDB7F00FFEA35 /* libscfiltlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A191180BDB7E00FFEA35 /* libscfiltlo.a */; };
+		68B9A293180BDB7F00FFEA35 /* libsclo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A192180BDB7E00FFEA35 /* libsclo.a */; };
+		68B9A294180BDB7F00FFEA35 /* libscuilo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A193180BDB7E00FFEA35 /* libscuilo.a */; };
+		68B9A295180BDB7F00FFEA35 /* libsdbc2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A194180BDB7E00FFEA35 /* libsdbc2.a */; };
+		68B9A296180BDB7F00FFEA35 /* libsdbtlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A195180BDB7E00FFEA35 /* libsdbtlo.a */; };
+		68B9A297180BDB7F00FFEA35 /* libsddlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A196180BDB7E00FFEA35 /* libsddlo.a */; };
+		68B9A298180BDB7F00FFEA35 /* libsdfiltlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A197180BDB7E00FFEA35 /* libsdfiltlo.a */; };
+		68B9A299180BDB7F00FFEA35 /* libsdlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A198180BDB7E00FFEA35 /* libsdlo.a */; };
+		68B9A29A180BDB7F00FFEA35 /* libsduilo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A199180BDB7E00FFEA35 /* libsduilo.a */; };
+		68B9A29B180BDB7F00FFEA35 /* libsfxlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A19A180BDB7E00FFEA35 /* libsfxlo.a */; };
+		68B9A29C180BDB7F00FFEA35 /* libsimplecanvaslo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A19B180BDB7E00FFEA35 /* libsimplecanvaslo.a */; };
+		68B9A29D180BDB7F00FFEA35 /* libslideshowlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A19C180BDB7E00FFEA35 /* libslideshowlo.a */; };
+		68B9A29E180BDB7F00FFEA35 /* libsmdlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A19D180BDB7E00FFEA35 /* libsmdlo.a */; };
+		68B9A29F180BDB7F00FFEA35 /* libsmlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A19E180BDB7E00FFEA35 /* libsmlo.a */; };
+		68B9A2A0180BDB7F00FFEA35 /* libsofficeapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A19F180BDB7E00FFEA35 /* libsofficeapp.a */; };
+		68B9A2A1180BDB7F00FFEA35 /* libsotlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1A0180BDB7E00FFEA35 /* libsotlo.a */; };
+		68B9A2A2180BDB7F00FFEA35 /* libspelllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1A1180BDB7E00FFEA35 /* libspelllo.a */; };
+		68B9A2A3180BDB7F00FFEA35 /* libspllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1A2180BDB7E00FFEA35 /* libspllo.a */; };
+		68B9A2A4180BDB7F00FFEA35 /* libsrtrs1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1A3180BDB7E00FFEA35 /* libsrtrs1.a */; };
+		68B9A2A5180BDB7F00FFEA35 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1A4180BDB7E00FFEA35 /* libssl.a */; };
+		68B9A2A6180BDB7F00FFEA35 /* libstocserviceslo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1A5180BDB7E00FFEA35 /* libstocserviceslo.a */; };
+		68B9A2A7180BDB7F00FFEA35 /* libstore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1A6180BDB7E00FFEA35 /* libstore.a */; };
+		68B9A2A8180BDB7F00FFEA35 /* libstorelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1A7180BDB7E00FFEA35 /* libstorelo.a */; };
+		68B9A2A9180BDB7F00FFEA35 /* libstreamslo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1A8180BDB7E00FFEA35 /* libstreamslo.a */; };
+		68B9A2AA180BDB7F00FFEA35 /* libsvgfilterlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1A9180BDB7E00FFEA35 /* libsvgfilterlo.a */; };
+		68B9A2AB180BDB7F00FFEA35 /* libsvgiolo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1AA180BDB7E00FFEA35 /* libsvgiolo.a */; };
+		68B9A2AC180BDB7F00FFEA35 /* libsvllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1AB180BDB7E00FFEA35 /* libsvllo.a */; };
+		68B9A2AD180BDB7F00FFEA35 /* libsvtlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1AC180BDB7E00FFEA35 /* libsvtlo.a */; };
+		68B9A2AE180BDB7F00FFEA35 /* libsvxcorelo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1AD180BDB7E00FFEA35 /* libsvxcorelo.a */; };
+		68B9A2AF180BDB7F00FFEA35 /* libsvxlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1AE180BDB7E00FFEA35 /* libsvxlo.a */; };
+		68B9A2B0180BDB7F00FFEA35 /* libswdlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1AF180BDB7E00FFEA35 /* libswdlo.a */; };
+		68B9A2B1180BDB7F00FFEA35 /* libswlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1B0180BDB7E00FFEA35 /* libswlo.a */; };
+		68B9A2B2180BDB7F00FFEA35 /* libswuilo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1B1180BDB7E00FFEA35 /* libswuilo.a */; };
+		68B9A2B3180BDB7F00FFEA35 /* libt602filterlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1B2180BDB7E00FFEA35 /* libt602filterlo.a */; };
+		68B9A2B4180BDB7F00FFEA35 /* libtextconv_dict.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1B3180BDB7E00FFEA35 /* libtextconv_dict.a */; };
+		68B9A2B5180BDB7F00FFEA35 /* libtextconversiondlgslo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1B4180BDB7E00FFEA35 /* libtextconversiondlgslo.a */; };
+		68B9A2B6180BDB7F00FFEA35 /* libtextfdlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1B5180BDB7E00FFEA35 /* libtextfdlo.a */; };
+		68B9A2B7180BDB7F00FFEA35 /* libtextinstreamlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1B6180BDB7E00FFEA35 /* libtextinstreamlo.a */; };
+		68B9A2B8180BDB7F00FFEA35 /* libtextoutstreamlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1B7180BDB7E00FFEA35 /* libtextoutstreamlo.a */; };
+		68B9A2B9180BDB7F00FFEA35 /* libtklo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1B8180BDB7E00FFEA35 /* libtklo.a */; };
+		68B9A2BA180BDB7F00FFEA35 /* libtllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1B9180BDB7E00FFEA35 /* libtllo.a */; };
+		68B9A2BB180BDB7F00FFEA35 /* libucb1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1BA180BDB7E00FFEA35 /* libucb1.a */; };
+		68B9A2BC180BDB7F00FFEA35 /* libucbhelper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1BB180BDB7E00FFEA35 /* libucbhelper.a */; };
+		68B9A2BD180BDB7F00FFEA35 /* libucpcmis1lo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1BC180BDB7E00FFEA35 /* libucpcmis1lo.a */; };
+		68B9A2BE180BDB7F00FFEA35 /* libucpexpand1lo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1BD180BDB7E00FFEA35 /* libucpexpand1lo.a */; };
+		68B9A2BF180BDB7F00FFEA35 /* libucpextlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1BE180BDB7E00FFEA35 /* libucpextlo.a */; };
+		68B9A2C0180BDB7F00FFEA35 /* libucpfile1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1BF180BDB7E00FFEA35 /* libucpfile1.a */; };
+		68B9A2C1180BDB7F00FFEA35 /* libucpftp1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1C0180BDB7E00FFEA35 /* libucpftp1.a */; };
+		68B9A2C2180BDB7F00FFEA35 /* libucphier1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1C1180BDB7E00FFEA35 /* libucphier1.a */; };
+		68B9A2C3180BDB7F00FFEA35 /* libucppkg1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1C2180BDB7E00FFEA35 /* libucppkg1.a */; };
+		68B9A2C4180BDB7F00FFEA35 /* libucptdoc1lo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1C3180BDB7E00FFEA35 /* libucptdoc1lo.a */; };
+		68B9A2C5180BDB7F00FFEA35 /* libulingu.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1C4180BDB7E00FFEA35 /* libulingu.a */; };
+		68B9A2C6180BDB7F00FFEA35 /* libuno_cppu.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1C5180BDB7E00FFEA35 /* libuno_cppu.a */; };
+		68B9A2C7180BDB7F00FFEA35 /* libuno_cppuhelpergcc3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1C6180BDB7E00FFEA35 /* libuno_cppuhelpergcc3.a */; };
+		68B9A2C8180BDB7F00FFEA35 /* libuno_purpenvhelpergcc3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1C7180BDB7E00FFEA35 /* libuno_purpenvhelpergcc3.a */; };
+		68B9A2C9180BDB7F00FFEA35 /* libuno_sal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1C8180BDB7E00FFEA35 /* libuno_sal.a */; };
+		68B9A2CA180BDB7F00FFEA35 /* libuno_salhelpergcc3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1C9180BDB7E00FFEA35 /* libuno_salhelpergcc3.a */; };
+		68B9A2CB180BDB7F00FFEA35 /* libunoidl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1CA180BDB7E00FFEA35 /* libunoidl.a */; };
+		68B9A2CC180BDB7F00FFEA35 /* libunoidllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1CB180BDB7E00FFEA35 /* libunoidllo.a */; };
+		68B9A2CD180BDB7F00FFEA35 /* libunordflo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1CC180BDB7E00FFEA35 /* libunordflo.a */; };
+		68B9A2CE180BDB7F00FFEA35 /* libunoxmllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1CD180BDB7E00FFEA35 /* libunoxmllo.a */; };
+		68B9A2CF180BDB7F00FFEA35 /* libunsafe_uno_uno.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1CE180BDB7E00FFEA35 /* libunsafe_uno_uno.a */; };
+		68B9A2D0180BDB7F00FFEA35 /* libutllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1CF180BDB7E00FFEA35 /* libutllo.a */; };
+		68B9A2D1180BDB7F00FFEA35 /* libuuilo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1D0180BDB7E00FFEA35 /* libuuilo.a */; };
+		68B9A2D2180BDB7F00FFEA35 /* libuuresolverlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1D1180BDB7E00FFEA35 /* libuuresolverlo.a */; };
+		68B9A2D3180BDB7F00FFEA35 /* libvclcanvaslo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1D2180BDB7E00FFEA35 /* libvclcanvaslo.a */; };
+		68B9A2D4180BDB7F00FFEA35 /* libvcllo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1D3180BDB7E00FFEA35 /* libvcllo.a */; };
+		68B9A2D5180BDB7F00FFEA35 /* libvisio-0.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1D4180BDB7E00FFEA35 /* libvisio-0.0.a */; };
+		68B9A2D6180BDB7F00FFEA35 /* libwpd-0.9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1D5180BDB7E00FFEA35 /* libwpd-0.9.a */; };
+		68B9A2D7180BDB7F00FFEA35 /* libwpftdrawlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1D6180BDB7E00FFEA35 /* libwpftdrawlo.a */; };
+		68B9A2D8180BDB7F00FFEA35 /* libwpftwriterlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1D7180BDB7E00FFEA35 /* libwpftwriterlo.a */; };
+		68B9A2D9180BDB8000FFEA35 /* libwpg-0.2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1D8180BDB7E00FFEA35 /* libwpg-0.2.a */; };
+		68B9A2DA180BDB8000FFEA35 /* libwps-0.2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1D9180BDB7E00FFEA35 /* libwps-0.2.a */; };
+		68B9A2DB180BDB8000FFEA35 /* libwriterfilterlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1DA180BDB7E00FFEA35 /* libwriterfilterlo.a */; };
+		68B9A2DC180BDB8000FFEA35 /* libwriterperfect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1DB180BDB7E00FFEA35 /* libwriterperfect.a */; };
+		68B9A2DD180BDB8000FFEA35 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1DC180BDB7E00FFEA35 /* libxml2.a */; };
+		68B9A2DE180BDB8000FFEA35 /* libxmlfalo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1DD180BDB7E00FFEA35 /* libxmlfalo.a */; };
+		68B9A2DF180BDB8000FFEA35 /* libxmlfdlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1DE180BDB7E00FFEA35 /* libxmlfdlo.a */; };
+		68B9A2E0180BDB8000FFEA35 /* libxmlreader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1DF180BDB7E00FFEA35 /* libxmlreader.a */; };
+		68B9A2E1180BDB8000FFEA35 /* libxmlreaderlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1E0180BDB7E00FFEA35 /* libxmlreaderlo.a */; };
+		68B9A2E2180BDB8000FFEA35 /* libxmlscriptlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1E1180BDB7E00FFEA35 /* libxmlscriptlo.a */; };
+		68B9A2E3180BDB8000FFEA35 /* libxmlsecurity.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1E2180BDB7E00FFEA35 /* libxmlsecurity.a */; };
+		68B9A2E4180BDB8000FFEA35 /* libxoflo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1E3180BDB7E00FFEA35 /* libxoflo.a */; };
+		68B9A2E5180BDB8000FFEA35 /* libxolo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1E4180BDB7E00FFEA35 /* libxolo.a */; };
+		68B9A2E6180BDB8000FFEA35 /* libxsec_fw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1E5180BDB7E00FFEA35 /* libxsec_fw.a */; };
+		68B9A2E7180BDB8000FFEA35 /* libxslt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1E6180BDB7E00FFEA35 /* libxslt.a */; };
+		68B9A2E8180BDB8000FFEA35 /* libxsltdlglo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1E7180BDB7E00FFEA35 /* libxsltdlglo.a */; };
+		68B9A2E9180BDB8000FFEA35 /* libxsltfilterlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1E8180BDB7E00FFEA35 /* libxsltfilterlo.a */; };
+		68B9A2EA180BDB8000FFEA35 /* libxstor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B9A1E9180BDB7E00FFEA35 /* libxstor.a */; };
+		68C6FC51180AD0CA005ACB02 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 68C6FC4F180AD0CA005ACB02 /* libz.dylib */; };
+		68C6FC52180AD0CA005ACB02 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 68C6FC50180AD0CA005ACB02 /* libiconv.dylib */; };
+		68C6FC54180AD1B9005ACB02 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68C6FC53180AD1B9005ACB02 /* QuartzCore.framework */; };
+		68C6FC56180AD1FB005ACB02 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68C6FC55180AD1FB005ACB02 /* CoreText.framework */; };
+		68C6FC58180AD28C005ACB02 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68C6FC57180AD28C005ACB02 /* MessageUI.framework */; };
+		88E9476B180DB9B600771808 /* NSObject+MLOFileUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 88E9476A180DB9B600771808 /* NSObject+MLOFileUtils.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		688EAAFD180D679F003741B3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 688EAAF9180D679F003741B3 /* ios_sharedlo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 68FDBE2A18053A140064DD74;
+			remoteInfo = ios_sharedlo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		681D78AF180C12D300D52D5E /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = resource_link/fundamentalrc; sourceTree = SOURCE_ROOT; };
+		681D78B0180C12D300D52D5E /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = resource_link/offapi.rdb; sourceTree = SOURCE_ROOT; };
+		681D78B1180C12D300D52D5E /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = resource_link/oovbaapi.rdb; sourceTree = SOURCE_ROOT; };
+		681D78B2180C12D300D52D5E /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = resource_link/program; sourceTree = SOURCE_ROOT; };
+		681D78B3180C12D300D52D5E /* rc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rc; path = resource_link/rc; sourceTree = SOURCE_ROOT; };
+		681D78B4180C12D300D52D5E /* registry */ = {isa = PBXFileReference; lastKnownFileType = folder; name = registry; path = resource_link/registry; sourceTree = SOURCE_ROOT; };
+		681D78B5180C12D300D52D5E /* services.rdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = services.rdb; path = resource_link/services.rdb; sourceTree = SOURCE_ROOT; };
+		681D78B6180C12D300D52D5E /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = resource_link/share; sourceTree = SOURCE_ROOT; };
+		681D78B7180C12D300D52D5E /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = resource_link/udkapi.rdb; sourceTree = SOURCE_ROOT; };
+		681D78B8180C12D300D52D5E /* unorc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = unorc; path = resource_link/unorc; sourceTree = SOURCE_ROOT; };
+		681D78C5180C136400D52D5E /* ure */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ure; path = resource_link/ure; sourceTree = SOURCE_ROOT; };
+		688EAAE8180D3130003741B3 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = ../lo.xcconfig; sourceTree = "<group>"; };
+		688EAAF9180D679F003741B3 /* ios_sharedlo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ios_sharedlo.xcodeproj; path = ../shared/ios_sharedlo.xcodeproj; sourceTree = "<group>"; };
+		689EBAE718069FB7002F1CD7 /* MobileLibreOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobileLibreOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		689EBAEA18069FB7002F1CD7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		689EBAEC18069FB7002F1CD7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		689EBAEE18069FB7002F1CD7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		689EBAF218069FB7002F1CD7 /* MobileLibreOffice-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MobileLibreOffice-Info.plist"; sourceTree = "<group>"; };
+		689EBAF418069FB7002F1CD7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		689EBAF618069FB7002F1CD7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		689EBAF818069FB7002F1CD7 /* MobileLibreOffice-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MobileLibreOffice-Prefix.pch"; sourceTree = "<group>"; };
+		689EBAFC18069FB8002F1CD7 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		689EBAFE18069FB8002F1CD7 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		689EBB0018069FB8002F1CD7 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		689EBB2A1806CC39002F1CD7 /* MLOAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLOAppDelegate.h; sourceTree = "<group>"; };
+		689EBB2B1806CC39002F1CD7 /* MLOAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLOAppDelegate.m; sourceTree = "<group>"; };
+		689EBB2C1806CC39002F1CD7 /* MLOAppViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLOAppViewController.h; sourceTree = "<group>"; };
+		689EBB2D1806CC39002F1CD7 /* MLOAppViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLOAppViewController.m; sourceTree = "<group>"; };
+		689EBBA51806D370002F1CD7 /* MLOCachedFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLOCachedFile.h; sourceTree = "<group>"; };
+		689EBBA61806D370002F1CD7 /* MLOCachedFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLOCachedFile.m; sourceTree = "<group>"; };
+		689EBBA71806D370002F1CD7 /* MLOFileCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLOFileCacheManager.h; sourceTree = "<group>"; };
+		689EBBA81806D370002F1CD7 /* MLOFileCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLOFileCacheManager.m; sourceTree = "<group>"; };
+		689EBBA91806D370002F1CD7 /* MLOFileListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLOFileListViewController.h; sourceTree = "<group>"; };
+		689EBBAA1806D370002F1CD7 /* MLOFileListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLOFileListViewController.m; sourceTree = "<group>"; };
+		689EBBAB1806D370002F1CD7 /* MLOFileManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLOFileManagerViewController.h; sourceTree = "<group>"; };
+		689EBBAC1806D370002F1CD7 /* MLOFileManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLOFileManagerViewController.m; sourceTree = "<group>"; };
+		689EBBAD1806D370002F1CD7 /* MLOFileManagerViewController_Impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLOFileManagerViewController_Impl.h; sourceTree = "<group>"; };
+		68B98C26180B38CD00FFEA35 /* MLOButtonBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MLOButtonBack.png; path = Resources/Images/MLOButtonBack.png; sourceTree = "<group>"; };
+		68B98C27180B38CD00FFEA35 /* MLOButtonBack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MLOButtonBack@2x.png"; path = "Resources/Images/MLOButtonBack@2x.png"; sourceTree = "<group>"; };
+		68B98C28180B38CD00FFEA35 /* MLOButtonEdit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MLOButtonEdit.png; path = Resources/Images/MLOButtonEdit.png; sourceTree = "<group>"; };
+		68B98C29180B38CD00FFEA35 /* MLOButtonExpand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MLOButtonExpand.png; path = Resources/Images/MLOButtonExpand.png; sourceTree = "<group>"; };
+		68B98C2A180B38CD00FFEA35 /* MLOButtonFind.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MLOButtonFind.png; path = Resources/Images/MLOButtonFind.png; sourceTree = "<group>"; };
+		68B98C2B180B38CD00FFEA35 /* MLOButtonLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MLOButtonLeft.png; path = Resources/Images/MLOButtonLeft.png; sourceTree = "<group>"; };
+		68B98C2C180B38CD00FFEA35 /* MLOButtonPrint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MLOButtonPrint.png; path = Resources/Images/MLOButtonPrint.png; sourceTree = "<group>"; };
+		68B98C2D180B38CD00FFEA35 /* MLOButtonRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MLOButtonRight.png; path = Resources/Images/MLOButtonRight.png; sourceTree = "<group>"; };
+		68B98C2E180B38CD00FFEA35 /* MLOButtonSave.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MLOButtonSave.png; path = Resources/Images/MLOButtonSave.png; sourceTree = "<group>"; };
+		68B98C2F180B38CD00FFEA35 /* MLOButtonSelectionHandle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MLOButtonSelectionHandle.png; path = Resources/Images/MLOButtonSelectionHandle.png; sourceTree = "<group>"; };
+		68B98C30180B38CD00FFEA35 /* MLOButtonShrink.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MLOButtonShrink.png; path = Resources/Images/MLOButtonShrink.png; sourceTree = "<group>"; };
+		68B98C31180B38CD00FFEA35 /* MLOContextualMenuEdge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MLOContextualMenuEdge.png; path = Resources/Images/MLOContextualMenuEdge.png; sourceTree = "<group>"; };
+		68B98C32180B38CD00FFEA35 /* MLOLibreOfficeLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MLOLibreOfficeLogo.png; sourceTree = "<group>"; };
+		68B98C33180B38CD00FFEA35 /* MLOMagnifier@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MLOMagnifier@2x.png"; path = "Resources/Images/MLOMagnifier@2x.png"; sourceTree = "<group>"; };
+		68B98C34180B38CD00FFEA35 /* MLOMagnifierMask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MLOMagnifierMask@2x.png"; path = "Resources/Images/MLOMagnifierMask@2x.png"; sourceTree = "<group>"; };
+		68B99ED2180BBEE900FFEA35 /* test1.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = test1.odt; path = Resources/test1.odt; sourceTree = "<group>"; };
+		68B99ED6180BBF7100FFEA35 /* mlo-icon-57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mlo-icon-57.png"; sourceTree = "<group>"; };
+		68B99ED7180BBF7100FFEA35 /* mlo-icon-114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mlo-icon-114.png"; sourceTree = "<group>"; };
+		68B9A0E9180BDB7E00FFEA35 /* libacceptorlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libacceptorlo.a; path = lib_link/libacceptorlo.a; sourceTree = "<group>"; };
+		68B9A0EA180BDB7E00FFEA35 /* libacclo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libacclo.a; path = lib_link/libacclo.a; sourceTree = "<group>"; };
+		68B9A0EB180BDB7E00FFEA35 /* libaffine_uno_uno.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libaffine_uno_uno.a; path = lib_link/libaffine_uno_uno.a; sourceTree = "<group>"; };
+		68B9A0EC180BDB7E00FFEA35 /* libanalysislo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libanalysislo.a; path = lib_link/libanalysislo.a; sourceTree = "<group>"; };
+		68B9A0ED180BDB7E00FFEA35 /* libanimcorelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libanimcorelo.a; path = lib_link/libanimcorelo.a; sourceTree = "<group>"; };
+		68B9A0EE180BDB7E00FFEA35 /* libavmedialo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavmedialo.a; path = lib_link/libavmedialo.a; sourceTree = "<group>"; };
+		68B9A0EF180BDB7E00FFEA35 /* libbasebmplo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbasebmplo.a; path = lib_link/libbasebmplo.a; sourceTree = "<group>"; };
+		68B9A0F0180BDB7E00FFEA35 /* libbasegfxlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbasegfxlo.a; path = lib_link/libbasegfxlo.a; sourceTree = "<group>"; };
+		68B9A0F1180BDB7E00FFEA35 /* libbiblo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbiblo.a; path = lib_link/libbiblo.a; sourceTree = "<group>"; };
+		68B9A0F2180BDB7E00FFEA35 /* libbinaryurplo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbinaryurplo.a; path = lib_link/libbinaryurplo.a; sourceTree = "<group>"; };
+		68B9A0F3180BDB7E00FFEA35 /* libboostdatetime.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboostdatetime.a; path = lib_link/libboostdatetime.a; sourceTree = "<group>"; };
+		68B9A0F4180BDB7E00FFEA35 /* libboostsystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboostsystem.a; path = lib_link/libboostsystem.a; sourceTree = "<group>"; };
+		68B9A0F5180BDB7E00FFEA35 /* libbootstraplo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbootstraplo.a; path = lib_link/libbootstraplo.a; sourceTree = "<group>"; };
+		68B9A0F6180BDB7E00FFEA35 /* libcached1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcached1.a; path = lib_link/libcached1.a; sourceTree = "<group>"; };
+		68B9A0F7180BDB7E00FFEA35 /* libcalclo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcalclo.a; path = lib_link/libcalclo.a; sourceTree = "<group>"; };
+		68B9A0F8180BDB7E00FFEA35 /* libcanvasfactorylo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcanvasfactorylo.a; path = lib_link/libcanvasfactorylo.a; sourceTree = "<group>"; };
+		68B9A0F9180BDB7E00FFEA35 /* libcanvastoolslo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcanvastoolslo.a; path = lib_link/libcanvastoolslo.a; sourceTree = "<group>"; };
+		68B9A0FA180BDB7E00FFEA35 /* libcdr-0.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libcdr-0.0.a"; path = "lib_link/libcdr-0.0.a"; sourceTree = "<group>"; };
+		68B9A0FB180BDB7E00FFEA35 /* libchartcontrollerlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libchartcontrollerlo.a; path = lib_link/libchartcontrollerlo.a; sourceTree = "<group>"; };
+		68B9A0FC180BDB7E00FFEA35 /* libchartcorelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libchartcorelo.a; path = lib_link/libchartcorelo.a; sourceTree = "<group>"; };
+		68B9A0FD180BDB7E00FFEA35 /* libclucene.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libclucene.a; path = lib_link/libclucene.a; sourceTree = "<group>"; };
+		68B9A0FE180BDB7E00FFEA35 /* libcmislib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcmislib.a; path = lib_link/libcmislib.a; sourceTree = "<group>"; };
+		68B9A0FF180BDB7E00FFEA35 /* libcollator_data.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcollator_data.a; path = lib_link/libcollator_data.a; sourceTree = "<group>"; };
+		68B9A100180BDB7E00FFEA35 /* libcomphelper.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcomphelper.a; path = lib_link/libcomphelper.a; sourceTree = "<group>"; };
+		68B9A101180BDB7E00FFEA35 /* libconfigmgrlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libconfigmgrlo.a; path = lib_link/libconfigmgrlo.a; sourceTree = "<group>"; };
+		68B9A102180BDB7E00FFEA35 /* libconnectorlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libconnectorlo.a; path = lib_link/libconnectorlo.a; sourceTree = "<group>"; };
+		68B9A103180BDB7E00FFEA35 /* libcppcanvaslo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcppcanvaslo.a; path = lib_link/libcppcanvaslo.a; sourceTree = "<group>"; };
+		68B9A104180BDB7E00FFEA35 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = lib_link/libcrypto.a; sourceTree = "<group>"; };
+		68B9A105180BDB7E00FFEA35 /* libctllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libctllo.a; path = lib_link/libctllo.a; sourceTree = "<group>"; };
+		68B9A106180BDB7E00FFEA35 /* libcuilo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcuilo.a; path = lib_link/libcuilo.a; sourceTree = "<group>"; };
+		68B9A107180BDB7E00FFEA35 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = lib_link/libcurl.a; sourceTree = "<group>"; };
+		68B9A108180BDB7E00FFEA35 /* libdatelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdatelo.a; path = lib_link/libdatelo.a; sourceTree = "<group>"; };
+		68B9A109180BDB7E00FFEA35 /* libdbalo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdbalo.a; path = lib_link/libdbalo.a; sourceTree = "<group>"; };
+		68B9A10A180BDB7E00FFEA35 /* libdbaselo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdbaselo.a; path = lib_link/libdbaselo.a; sourceTree = "<group>"; };
+		68B9A10B180BDB7E00FFEA35 /* libdbaxmllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdbaxmllo.a; path = lib_link/libdbaxmllo.a; sourceTree = "<group>"; };
+		68B9A10C180BDB7E00FFEA35 /* libdbmmlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdbmmlo.a; path = lib_link/libdbmmlo.a; sourceTree = "<group>"; };
+		68B9A10D180BDB7E00FFEA35 /* libdbplo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdbplo.a; path = lib_link/libdbplo.a; sourceTree = "<group>"; };
+		68B9A10E180BDB7E00FFEA35 /* libdbpool2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdbpool2.a; path = lib_link/libdbpool2.a; sourceTree = "<group>"; };
+		68B9A10F180BDB7E00FFEA35 /* libdbtoolslo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdbtoolslo.a; path = lib_link/libdbtoolslo.a; sourceTree = "<group>"; };
+		68B9A110180BDB7E00FFEA35 /* libdbulo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdbulo.a; path = lib_link/libdbulo.a; sourceTree = "<group>"; };
+		68B9A111180BDB7E00FFEA35 /* libdeployment.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdeployment.a; path = lib_link/libdeployment.a; sourceTree = "<group>"; };
+		68B9A112180BDB7E00FFEA35 /* libdeploymentgui.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdeploymentgui.a; path = lib_link/libdeploymentgui.a; sourceTree = "<group>"; };
+		68B9A113180BDB7E00FFEA35 /* libdeploymentmisclo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdeploymentmisclo.a; path = lib_link/libdeploymentmisclo.a; sourceTree = "<group>"; };
+		68B9A114180BDB7E00FFEA35 /* libdesktopbe1lo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdesktopbe1lo.a; path = lib_link/libdesktopbe1lo.a; sourceTree = "<group>"; };
+		68B9A115180BDB7E00FFEA35 /* libdict_ja.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdict_ja.a; path = lib_link/libdict_ja.a; sourceTree = "<group>"; };
+		68B9A116180BDB7E00FFEA35 /* libdict_zh.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdict_zh.a; path = lib_link/libdict_zh.a; sourceTree = "<group>"; };
+		68B9A117180BDB7E00FFEA35 /* libdrawinglayerlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdrawinglayerlo.a; path = lib_link/libdrawinglayerlo.a; sourceTree = "<group>"; };
+		68B9A118180BDB7E00FFEA35 /* libeditenglo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libeditenglo.a; path = lib_link/libeditenglo.a; sourceTree = "<group>"; };
+		68B9A119180BDB7E00FFEA35 /* libegilo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libegilo.a; path = lib_link/libegilo.a; sourceTree = "<group>"; };
+		68B9A11A180BDB7E00FFEA35 /* libembobj.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libembobj.a; path = lib_link/libembobj.a; sourceTree = "<group>"; };
+		68B9A11B180BDB7E00FFEA35 /* libemboleobj.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libemboleobj.a; path = lib_link/libemboleobj.a; sourceTree = "<group>"; };
+		68B9A11C180BDB7E00FFEA35 /* libemelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libemelo.a; path = lib_link/libemelo.a; sourceTree = "<group>"; };
+		68B9A11D180BDB7E00FFEA35 /* libepblo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libepblo.a; path = lib_link/libepblo.a; sourceTree = "<group>"; };
+		68B9A11E180BDB7E00FFEA35 /* libepglo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libepglo.a; path = lib_link/libepglo.a; sourceTree = "<group>"; };
+		68B9A11F180BDB7E00FFEA35 /* libepplo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libepplo.a; path = lib_link/libepplo.a; sourceTree = "<group>"; };
+		68B9A120180BDB7E00FFEA35 /* libepslo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libepslo.a; path = lib_link/libepslo.a; sourceTree = "<group>"; };
+		68B9A121180BDB7E00FFEA35 /* libeptlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libeptlo.a; path = lib_link/libeptlo.a; sourceTree = "<group>"; };
+		68B9A122180BDB7E00FFEA35 /* liberalo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liberalo.a; path = lib_link/liberalo.a; sourceTree = "<group>"; };
+		68B9A123180BDB7E00FFEA35 /* libetilo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libetilo.a; path = lib_link/libetilo.a; sourceTree = "<group>"; };
+		68B9A124180BDB7E00FFEA35 /* libevtattlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevtattlo.a; path = lib_link/libevtattlo.a; sourceTree = "<group>"; };
+		68B9A125180BDB7E00FFEA35 /* libexpat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat.a; path = lib_link/libexpat.a; sourceTree = "<group>"; };
+		68B9A126180BDB7E00FFEA35 /* libexplo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexplo.a; path = lib_link/libexplo.a; sourceTree = "<group>"; };
+		68B9A127180BDB7E00FFEA35 /* libexpwraplo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpwraplo.a; path = lib_link/libexpwraplo.a; sourceTree = "<group>"; };
+		68B9A128180BDB7E00FFEA35 /* libexslt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexslt.a; path = lib_link/libexslt.a; sourceTree = "<group>"; };
+		68B9A129180BDB7E00FFEA35 /* libexttextcat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexttextcat.a; path = lib_link/libexttextcat.a; sourceTree = "<group>"; };
+		68B9A12A180BDB7E00FFEA35 /* libfastsaxlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfastsaxlo.a; path = lib_link/libfastsaxlo.a; sourceTree = "<group>"; };
+		68B9A12B180BDB7E00FFEA35 /* libfileacc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfileacc.a; path = lib_link/libfileacc.a; sourceTree = "<group>"; };
+		68B9A12C180BDB7E00FFEA35 /* libfilelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfilelo.a; path = lib_link/libfilelo.a; sourceTree = "<group>"; };
+		68B9A12D180BDB7E00FFEA35 /* libfilterconfiglo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfilterconfiglo.a; path = lib_link/libfilterconfiglo.a; sourceTree = "<group>"; };
+		68B9A12E180BDB7E00FFEA35 /* libfindsofficepath.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfindsofficepath.a; path = lib_link/libfindsofficepath.a; sourceTree = "<group>"; };
+		68B9A12F180BDB7E00FFEA35 /* libflashlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libflashlo.a; path = lib_link/libflashlo.a; sourceTree = "<group>"; };
+		68B9A130180BDB7E00FFEA35 /* libflatlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libflatlo.a; path = lib_link/libflatlo.a; sourceTree = "<group>"; };
+		68B9A131180BDB7E00FFEA35 /* libforlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libforlo.a; path = lib_link/libforlo.a; sourceTree = "<group>"; };
+		68B9A132180BDB7E00FFEA35 /* libforuilo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libforuilo.a; path = lib_link/libforuilo.a; sourceTree = "<group>"; };
+		68B9A133180BDB7E00FFEA35 /* libfpickerlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfpickerlo.a; path = lib_link/libfpickerlo.a; sourceTree = "<group>"; };
+		68B9A134180BDB7E00FFEA35 /* libfps_officelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfps_officelo.a; path = lib_link/libfps_officelo.a; sourceTree = "<group>"; };
+		68B9A135180BDB7E00FFEA35 /* libfrmlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfrmlo.a; path = lib_link/libfrmlo.a; sourceTree = "<group>"; };
+		68B9A136180BDB7E00FFEA35 /* libfsstoragelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfsstoragelo.a; path = lib_link/libfsstoragelo.a; sourceTree = "<group>"; };
+		68B9A137180BDB7E00FFEA35 /* libfwelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfwelo.a; path = lib_link/libfwelo.a; sourceTree = "<group>"; };
+		68B9A138180BDB7E00FFEA35 /* libfwilo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfwilo.a; path = lib_link/libfwilo.a; sourceTree = "<group>"; };
+		68B9A139180BDB7E00FFEA35 /* libfwklo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfwklo.a; path = lib_link/libfwklo.a; sourceTree = "<group>"; };
+		68B9A13A180BDB7E00FFEA35 /* libfwllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfwllo.a; path = lib_link/libfwllo.a; sourceTree = "<group>"; };
+		68B9A13B180BDB7E00FFEA35 /* libfwmlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfwmlo.a; path = lib_link/libfwmlo.a; sourceTree = "<group>"; };
+		68B9A13C180BDB7E00FFEA35 /* libgcc3_uno.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgcc3_uno.a; path = lib_link/libgcc3_uno.a; sourceTree = "<group>"; };
+		68B9A13D180BDB7E00FFEA35 /* libgraphicfilterlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgraphicfilterlo.a; path = lib_link/libgraphicfilterlo.a; sourceTree = "<group>"; };
+		68B9A13E180BDB7E00FFEA35 /* libguesslanglo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libguesslanglo.a; path = lib_link/libguesslanglo.a; sourceTree = "<group>"; };
+		68B9A13F180BDB7E00FFEA35 /* libhatchwindowfactorylo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhatchwindowfactorylo.a; path = lib_link/libhatchwindowfactorylo.a; sourceTree = "<group>"; };
+		68B9A140180BDB7E00FFEA35 /* libhunspell.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhunspell.a; path = lib_link/libhunspell.a; sourceTree = "<group>"; };
+		68B9A141180BDB7E00FFEA35 /* libhwplo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhwplo.a; path = lib_link/libhwplo.a; sourceTree = "<group>"; };
+		68B9A142180BDB7E00FFEA35 /* libhyphen.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhyphen.a; path = lib_link/libhyphen.a; sourceTree = "<group>"; };
+		68B9A143180BDB7E00FFEA35 /* libhyphenlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhyphenlo.a; path = lib_link/libhyphenlo.a; sourceTree = "<group>"; };
+		68B9A144180BDB7E00FFEA35 /* libi18nlangtag.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libi18nlangtag.a; path = lib_link/libi18nlangtag.a; sourceTree = "<group>"; };
+		68B9A145180BDB7E00FFEA35 /* libi18npoollo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libi18npoollo.a; path = lib_link/libi18npoollo.a; sourceTree = "<group>"; };
+		68B9A146180BDB7E00FFEA35 /* libi18nsearchlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libi18nsearchlo.a; path = lib_link/libi18nsearchlo.a; sourceTree = "<group>"; };
+		68B9A147180BDB7E00FFEA35 /* libi18nutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libi18nutil.a; path = lib_link/libi18nutil.a; sourceTree = "<group>"; };
+		68B9A148180BDB7E00FFEA35 /* libicdlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicdlo.a; path = lib_link/libicdlo.a; sourceTree = "<group>"; };
+		68B9A149180BDB7E00FFEA35 /* libicglo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicglo.a; path = lib_link/libicglo.a; sourceTree = "<group>"; };
+		68B9A14A180BDB7E00FFEA35 /* libicudata.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicudata.a; path = lib_link/libicudata.a; sourceTree = "<group>"; };
+		68B9A14B180BDB7E00FFEA35 /* libicui18n.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicui18n.a; path = lib_link/libicui18n.a; sourceTree = "<group>"; };
+		68B9A14C180BDB7E00FFEA35 /* libicutu.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicutu.a; path = lib_link/libicutu.a; sourceTree = "<group>"; };
+		68B9A14D180BDB7E00FFEA35 /* libicuuc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicuuc.a; path = lib_link/libicuuc.a; sourceTree = "<group>"; };
+		68B9A14E180BDB7E00FFEA35 /* libidxlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libidxlo.a; path = lib_link/libidxlo.a; sourceTree = "<group>"; };
+		68B9A14F180BDB7E00FFEA35 /* libimelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libimelo.a; path = lib_link/libimelo.a; sourceTree = "<group>"; };
+		68B9A150180BDB7E00FFEA35 /* libindex_data.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libindex_data.a; path = lib_link/libindex_data.a; sourceTree = "<group>"; };
+		68B9A151180BDB7E00FFEA35 /* libintrospectionlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libintrospectionlo.a; path = lib_link/libintrospectionlo.a; sourceTree = "<group>"; };
+		68B9A152180BDB7E00FFEA35 /* libinvocadaptlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libinvocadaptlo.a; path = lib_link/libinvocadaptlo.a; sourceTree = "<group>"; };
+		68B9A153180BDB7E00FFEA35 /* libinvocationlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libinvocationlo.a; path = lib_link/libinvocationlo.a; sourceTree = "<group>"; };
+		68B9A154180BDB7E00FFEA35 /* libipblo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libipblo.a; path = lib_link/libipblo.a; sourceTree = "<group>"; };
+		68B9A155180BDB7E00FFEA35 /* libipdlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libipdlo.a; path = lib_link/libipdlo.a; sourceTree = "<group>"; };
+		68B9A156180BDB7E00FFEA35 /* libipslo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libipslo.a; path = lib_link/libipslo.a; sourceTree = "<group>"; };
+		68B9A157180BDB7E00FFEA35 /* libiptlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libiptlo.a; path = lib_link/libiptlo.a; sourceTree = "<group>"; };
+		68B9A158180BDB7E00FFEA35 /* libipxlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libipxlo.a; path = lib_link/libipxlo.a; sourceTree = "<group>"; };
+		68B9A159180BDB7E00FFEA35 /* libiralo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libiralo.a; path = lib_link/libiralo.a; sourceTree = "<group>"; };
+		68B9A15A180BDB7E00FFEA35 /* libitglo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libitglo.a; path = lib_link/libitglo.a; sourceTree = "<group>"; };
+		68B9A15B180BDB7E00FFEA35 /* libitilo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libitilo.a; path = lib_link/libitilo.a; sourceTree = "<group>"; };
+		68B9A15C180BDB7E00FFEA35 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = lib_link/libjpeg.a; sourceTree = "<group>"; };
+		68B9A15D180BDB7E00FFEA35 /* liblcms2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblcms2.a; path = lib_link/liblcms2.a; sourceTree = "<group>"; };
+		68B9A15E180BDB7E00FFEA35 /* liblibotouchlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblibotouchlo.a; path = lib_link/liblibotouchlo.a; sourceTree = "<group>"; };
+		68B9A15F180BDB7E00FFEA35 /* liblnglo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblnglo.a; path = lib_link/liblnglo.a; sourceTree = "<group>"; };
+		68B9A160180BDB7E00FFEA35 /* liblnthlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblnthlo.a; path = lib_link/liblnthlo.a; sourceTree = "<group>"; };
+		68B9A161180BDB7E00FFEA35 /* liblocalebe1lo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblocalebe1lo.a; path = lib_link/liblocalebe1lo.a; sourceTree = "<group>"; };
+		68B9A162180BDB7E00FFEA35 /* liblocaledata_en.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblocaledata_en.a; path = lib_link/liblocaledata_en.a; sourceTree = "<group>"; };
+		68B9A163180BDB7E00FFEA35 /* liblocaledata_es.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblocaledata_es.a; path = lib_link/liblocaledata_es.a; sourceTree = "<group>"; };
+		68B9A164180BDB7E00FFEA35 /* liblocaledata_euro.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblocaledata_euro.a; path = lib_link/liblocaledata_euro.a; sourceTree = "<group>"; };
+		68B9A165180BDB7E00FFEA35 /* liblocaledata_others.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblocaledata_others.a; path = lib_link/liblocaledata_others.a; sourceTree = "<group>"; };
+		68B9A166180BDB7E00FFEA35 /* liblog_uno_uno.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblog_uno_uno.a; path = lib_link/liblog_uno_uno.a; sourceTree = "<group>"; };
+		68B9A167180BDB7E00FFEA35 /* libmcnttype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmcnttype.a; path = lib_link/libmcnttype.a; sourceTree = "<group>"; };
+		68B9A168180BDB7E00FFEA35 /* libmsfilterlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmsfilterlo.a; path = lib_link/libmsfilterlo.a; sourceTree = "<group>"; };
+		68B9A169180BDB7E00FFEA35 /* libmspub-0.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libmspub-0.0.a"; path = "lib_link/libmspub-0.0.a"; sourceTree = "<group>"; };
+		68B9A16A180BDB7E00FFEA35 /* libmswordlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmswordlo.a; path = lib_link/libmswordlo.a; sourceTree = "<group>"; };
+		68B9A16B180BDB7E00FFEA35 /* libmtfrendererlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmtfrendererlo.a; path = lib_link/libmtfrendererlo.a; sourceTree = "<group>"; };
+		68B9A16C180BDB7E00FFEA35 /* libmwaw-0.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libmwaw-0.1.a"; path = "lib_link/libmwaw-0.1.a"; sourceTree = "<group>"; };
+		68B9A16D180BDB7E00FFEA35 /* libmysqllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmysqllo.a; path = lib_link/libmysqllo.a; sourceTree = "<group>"; };
+		68B9A16E180BDB7E00FFEA35 /* libmythes.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmythes.a; path = lib_link/libmythes.a; sourceTree = "<group>"; };
+		68B9A16F180BDB7E00FFEA35 /* libnamingservicelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnamingservicelo.a; path = lib_link/libnamingservicelo.a; sourceTree = "<group>"; };
+		68B9A170180BDB7E00FFEA35 /* libodfflatxmllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libodfflatxmllo.a; path = lib_link/libodfflatxmllo.a; sourceTree = "<group>"; };
+		68B9A171180BDB7E00FFEA35 /* libodfgen-0.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libodfgen-0.0.a"; path = "lib_link/libodfgen-0.0.a"; sourceTree = "<group>"; };
+		68B9A172180BDB7E00FFEA35 /* liboffacclo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liboffacclo.a; path = lib_link/liboffacclo.a; sourceTree = "<group>"; };
+		68B9A173180BDB7E00FFEA35 /* libooopathutils.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libooopathutils.a; path = lib_link/libooopathutils.a; sourceTree = "<group>"; };
+		68B9A174180BDB7E00FFEA35 /* libooxlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libooxlo.a; path = lib_link/libooxlo.a; sourceTree = "<group>"; };
+		68B9A175180BDB7E00FFEA35 /* liborcus-parser.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "liborcus-parser.a"; path = "lib_link/liborcus-parser.a"; sourceTree = "<group>"; };
+		68B9A176180BDB7E00FFEA35 /* liborcus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liborcus.a; path = lib_link/liborcus.a; sourceTree = "<group>"; };
+		68B9A177180BDB7E00FFEA35 /* libpackage2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpackage2.a; path = lib_link/libpackage2.a; sourceTree = "<group>"; };
+		68B9A178180BDB7E00FFEA35 /* libpasswordcontainerlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpasswordcontainerlo.a; path = lib_link/libpasswordcontainerlo.a; sourceTree = "<group>"; };
+		68B9A179180BDB7E00FFEA35 /* libpcrlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcrlo.a; path = lib_link/libpcrlo.a; sourceTree = "<group>"; };
+		68B9A17A180BDB7E00FFEA35 /* libpdffilterlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpdffilterlo.a; path = lib_link/libpdffilterlo.a; sourceTree = "<group>"; };
+		68B9A17B180BDB7E00FFEA35 /* libplacewarelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libplacewarelo.a; path = lib_link/libplacewarelo.a; sourceTree = "<group>"; };
+		68B9A17C180BDB7E00FFEA35 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = lib_link/libpng.a; sourceTree = "<group>"; };
+		68B9A17D180BDB7E00FFEA35 /* libPresenterScreenlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPresenterScreenlo.a; path = lib_link/libPresenterScreenlo.a; sourceTree = "<group>"; };
+		68B9A17E180BDB7E00FFEA35 /* libpricinglo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpricinglo.a; path = lib_link/libpricinglo.a; sourceTree = "<group>"; };
+		68B9A17F180BDB7E00FFEA35 /* libproxyfaclo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libproxyfaclo.a; path = lib_link/libproxyfaclo.a; sourceTree = "<group>"; };
+		68B9A180180BDB7E00FFEA35 /* libraptor2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libraptor2.a; path = lib_link/libraptor2.a; sourceTree = "<group>"; };
+		68B9A181180BDB7E00FFEA35 /* librasqal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = librasqal.a; path = lib_link/librasqal.a; sourceTree = "<group>"; };
+		68B9A182180BDB7E00FFEA35 /* librdf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = librdf.a; path = lib_link/librdf.a; sourceTree = "<group>"; };
+		68B9A183180BDB7E00FFEA35 /* libreflectionlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreflectionlo.a; path = lib_link/libreflectionlo.a; sourceTree = "<group>"; };
+		68B9A184180BDB7E00FFEA35 /* libreg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreg.a; path = lib_link/libreg.a; sourceTree = "<group>"; };
+		68B9A185180BDB7E00FFEA35 /* libreglo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreglo.a; path = lib_link/libreglo.a; sourceTree = "<group>"; };
+		68B9A186180BDB7E00FFEA35 /* libreslo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreslo.a; path = lib_link/libreslo.a; sourceTree = "<group>"; };
+		68B9A187180BDB7E00FFEA35 /* librptlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = librptlo.a; path = lib_link/librptlo.a; sourceTree = "<group>"; };
+		68B9A188180BDB7E00FFEA35 /* librptuilo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = librptuilo.a; path = lib_link/librptuilo.a; sourceTree = "<group>"; };
+		68B9A189180BDB7E00FFEA35 /* librptxmllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = librptxmllo.a; path = lib_link/librptxmllo.a; sourceTree = "<group>"; };
+		68B9A18A180BDB7E00FFEA35 /* libsal_textenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsal_textenc.a; path = lib_link/libsal_textenc.a; sourceTree = "<group>"; };
+		68B9A18B180BDB7E00FFEA35 /* libsal_textenclo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsal_textenclo.a; path = lib_link/libsal_textenclo.a; sourceTree = "<group>"; };
+		68B9A18C180BDB7E00FFEA35 /* libsalcpprt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsalcpprt.a; path = lib_link/libsalcpprt.a; sourceTree = "<group>"; };
+		68B9A18D180BDB7E00FFEA35 /* libsax_shared.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsax_shared.a; path = lib_link/libsax_shared.a; sourceTree = "<group>"; };
+		68B9A18E180BDB7E00FFEA35 /* libsaxlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsaxlo.a; path = lib_link/libsaxlo.a; sourceTree = "<group>"; };
+		68B9A18F180BDB7E00FFEA35 /* libsblo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsblo.a; path = lib_link/libsblo.a; sourceTree = "<group>"; };
+		68B9A190180BDB7E00FFEA35 /* libscdlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libscdlo.a; path = lib_link/libscdlo.a; sourceTree = "<group>"; };
+		68B9A191180BDB7E00FFEA35 /* libscfiltlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libscfiltlo.a; path = lib_link/libscfiltlo.a; sourceTree = "<group>"; };
+		68B9A192180BDB7E00FFEA35 /* libsclo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsclo.a; path = lib_link/libsclo.a; sourceTree = "<group>"; };
+		68B9A193180BDB7E00FFEA35 /* libscuilo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libscuilo.a; path = lib_link/libscuilo.a; sourceTree = "<group>"; };
+		68B9A194180BDB7E00FFEA35 /* libsdbc2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsdbc2.a; path = lib_link/libsdbc2.a; sourceTree = "<group>"; };
+		68B9A195180BDB7E00FFEA35 /* libsdbtlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsdbtlo.a; path = lib_link/libsdbtlo.a; sourceTree = "<group>"; };
+		68B9A196180BDB7E00FFEA35 /* libsddlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsddlo.a; path = lib_link/libsddlo.a; sourceTree = "<group>"; };
+		68B9A197180BDB7E00FFEA35 /* libsdfiltlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsdfiltlo.a; path = lib_link/libsdfiltlo.a; sourceTree = "<group>"; };
+		68B9A198180BDB7E00FFEA35 /* libsdlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsdlo.a; path = lib_link/libsdlo.a; sourceTree = "<group>"; };
+		68B9A199180BDB7E00FFEA35 /* libsduilo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsduilo.a; path = lib_link/libsduilo.a; sourceTree = "<group>"; };
+		68B9A19A180BDB7E00FFEA35 /* libsfxlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsfxlo.a; path = lib_link/libsfxlo.a; sourceTree = "<group>"; };
+		68B9A19B180BDB7E00FFEA35 /* libsimplecanvaslo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsimplecanvaslo.a; path = lib_link/libsimplecanvaslo.a; sourceTree = "<group>"; };
+		68B9A19C180BDB7E00FFEA35 /* libslideshowlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libslideshowlo.a; path = lib_link/libslideshowlo.a; sourceTree = "<group>"; };
+		68B9A19D180BDB7E00FFEA35 /* libsmdlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsmdlo.a; path = lib_link/libsmdlo.a; sourceTree = "<group>"; };
+		68B9A19E180BDB7E00FFEA35 /* libsmlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsmlo.a; path = lib_link/libsmlo.a; sourceTree = "<group>"; };
+		68B9A19F180BDB7E00FFEA35 /* libsofficeapp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsofficeapp.a; path = lib_link/libsofficeapp.a; sourceTree = "<group>"; };
+		68B9A1A0180BDB7E00FFEA35 /* libsotlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsotlo.a; path = lib_link/libsotlo.a; sourceTree = "<group>"; };
+		68B9A1A1180BDB7E00FFEA35 /* libspelllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspelllo.a; path = lib_link/libspelllo.a; sourceTree = "<group>"; };
+		68B9A1A2180BDB7E00FFEA35 /* libspllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspllo.a; path = lib_link/libspllo.a; sourceTree = "<group>"; };
+		68B9A1A3180BDB7E00FFEA35 /* libsrtrs1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsrtrs1.a; path = lib_link/libsrtrs1.a; sourceTree = "<group>"; };
+		68B9A1A4180BDB7E00FFEA35 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = lib_link/libssl.a; sourceTree = "<group>"; };
+		68B9A1A5180BDB7E00FFEA35 /* libstocserviceslo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libstocserviceslo.a; path = lib_link/libstocserviceslo.a; sourceTree = "<group>"; };
+		68B9A1A6180BDB7E00FFEA35 /* libstore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libstore.a; path = lib_link/libstore.a; sourceTree = "<group>"; };
+		68B9A1A7180BDB7E00FFEA35 /* libstorelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libstorelo.a; path = lib_link/libstorelo.a; sourceTree = "<group>"; };
+		68B9A1A8180BDB7E00FFEA35 /* libstreamslo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libstreamslo.a; path = lib_link/libstreamslo.a; sourceTree = "<group>"; };
+		68B9A1A9180BDB7E00FFEA35 /* libsvgfilterlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsvgfilterlo.a; path = lib_link/libsvgfilterlo.a; sourceTree = "<group>"; };
+		68B9A1AA180BDB7E00FFEA35 /* libsvgiolo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsvgiolo.a; path = lib_link/libsvgiolo.a; sourceTree = "<group>"; };
+		68B9A1AB180BDB7E00FFEA35 /* libsvllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsvllo.a; path = lib_link/libsvllo.a; sourceTree = "<group>"; };
+		68B9A1AC180BDB7E00FFEA35 /* libsvtlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsvtlo.a; path = lib_link/libsvtlo.a; sourceTree = "<group>"; };
+		68B9A1AD180BDB7E00FFEA35 /* libsvxcorelo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsvxcorelo.a; path = lib_link/libsvxcorelo.a; sourceTree = "<group>"; };
+		68B9A1AE180BDB7E00FFEA35 /* libsvxlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsvxlo.a; path = lib_link/libsvxlo.a; sourceTree = "<group>"; };
+		68B9A1AF180BDB7E00FFEA35 /* libswdlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswdlo.a; path = lib_link/libswdlo.a; sourceTree = "<group>"; };
+		68B9A1B0180BDB7E00FFEA35 /* libswlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswlo.a; path = lib_link/libswlo.a; sourceTree = "<group>"; };
+		68B9A1B1180BDB7E00FFEA35 /* libswuilo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswuilo.a; path = lib_link/libswuilo.a; sourceTree = "<group>"; };
+		68B9A1B2180BDB7E00FFEA35 /* libt602filterlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libt602filterlo.a; path = lib_link/libt602filterlo.a; sourceTree = "<group>"; };
+		68B9A1B3180BDB7E00FFEA35 /* libtextconv_dict.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextconv_dict.a; path = lib_link/libtextconv_dict.a; sourceTree = "<group>"; };
+		68B9A1B4180BDB7E00FFEA35 /* libtextconversiondlgslo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextconversiondlgslo.a; path = lib_link/libtextconversiondlgslo.a; sourceTree = "<group>"; };
+		68B9A1B5180BDB7E00FFEA35 /* libtextfdlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextfdlo.a; path = lib_link/libtextfdlo.a; sourceTree = "<group>"; };
+		68B9A1B6180BDB7E00FFEA35 /* libtextinstreamlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextinstreamlo.a; path = lib_link/libtextinstreamlo.a; sourceTree = "<group>"; };
+		68B9A1B7180BDB7E00FFEA35 /* libtextoutstreamlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtextoutstreamlo.a; path = lib_link/libtextoutstreamlo.a; sourceTree = "<group>"; };
+		68B9A1B8180BDB7E00FFEA35 /* libtklo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtklo.a; path = lib_link/libtklo.a; sourceTree = "<group>"; };
+		68B9A1B9180BDB7E00FFEA35 /* libtllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtllo.a; path = lib_link/libtllo.a; sourceTree = "<group>"; };
+		68B9A1BA180BDB7E00FFEA35 /* libucb1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libucb1.a; path = lib_link/libucb1.a; sourceTree = "<group>"; };
+		68B9A1BB180BDB7E00FFEA35 /* libucbhelper.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libucbhelper.a; path = lib_link/libucbhelper.a; sourceTree = "<group>"; };
+		68B9A1BC180BDB7E00FFEA35 /* libucpcmis1lo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libucpcmis1lo.a; path = lib_link/libucpcmis1lo.a; sourceTree = "<group>"; };
+		68B9A1BD180BDB7E00FFEA35 /* libucpexpand1lo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libucpexpand1lo.a; path = lib_link/libucpexpand1lo.a; sourceTree = "<group>"; };
+		68B9A1BE180BDB7E00FFEA35 /* libucpextlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libucpextlo.a; path = lib_link/libucpextlo.a; sourceTree = "<group>"; };
+		68B9A1BF180BDB7E00FFEA35 /* libucpfile1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libucpfile1.a; path = lib_link/libucpfile1.a; sourceTree = "<group>"; };
+		68B9A1C0180BDB7E00FFEA35 /* libucpftp1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libucpftp1.a; path = lib_link/libucpftp1.a; sourceTree = "<group>"; };
+		68B9A1C1180BDB7E00FFEA35 /* libucphier1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libucphier1.a; path = lib_link/libucphier1.a; sourceTree = "<group>"; };
+		68B9A1C2180BDB7E00FFEA35 /* libucppkg1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libucppkg1.a; path = lib_link/libucppkg1.a; sourceTree = "<group>"; };
+		68B9A1C3180BDB7E00FFEA35 /* libucptdoc1lo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libucptdoc1lo.a; path = lib_link/libucptdoc1lo.a; sourceTree = "<group>"; };
+		68B9A1C4180BDB7E00FFEA35 /* libulingu.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libulingu.a; path = lib_link/libulingu.a; sourceTree = "<group>"; };
+		68B9A1C5180BDB7E00FFEA35 /* libuno_cppu.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuno_cppu.a; path = lib_link/libuno_cppu.a; sourceTree = "<group>"; };
+		68B9A1C6180BDB7E00FFEA35 /* libuno_cppuhelpergcc3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuno_cppuhelpergcc3.a; path = lib_link/libuno_cppuhelpergcc3.a; sourceTree = "<group>"; };
+		68B9A1C7180BDB7E00FFEA35 /* libuno_purpenvhelpergcc3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuno_purpenvhelpergcc3.a; path = lib_link/libuno_purpenvhelpergcc3.a; sourceTree = "<group>"; };
+		68B9A1C8180BDB7E00FFEA35 /* libuno_sal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuno_sal.a; path = lib_link/libuno_sal.a; sourceTree = "<group>"; };
+		68B9A1C9180BDB7E00FFEA35 /* libuno_salhelpergcc3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuno_salhelpergcc3.a; path = lib_link/libuno_salhelpergcc3.a; sourceTree = "<group>"; };
+		68B9A1CA180BDB7E00FFEA35 /* libunoidl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libunoidl.a; path = lib_link/libunoidl.a; sourceTree = "<group>"; };
+		68B9A1CB180BDB7E00FFEA35 /* libunoidllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libunoidllo.a; path = lib_link/libunoidllo.a; sourceTree = "<group>"; };
+		68B9A1CC180BDB7E00FFEA35 /* libunordflo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libunordflo.a; path = lib_link/libunordflo.a; sourceTree = "<group>"; };
+		68B9A1CD180BDB7E00FFEA35 /* libunoxmllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libunoxmllo.a; path = lib_link/libunoxmllo.a; sourceTree = "<group>"; };
+		68B9A1CE180BDB7E00FFEA35 /* libunsafe_uno_uno.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libunsafe_uno_uno.a; path = lib_link/libunsafe_uno_uno.a; sourceTree = "<group>"; };
+		68B9A1CF180BDB7E00FFEA35 /* libutllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libutllo.a; path = lib_link/libutllo.a; sourceTree = "<group>"; };
+		68B9A1D0180BDB7E00FFEA35 /* libuuilo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuuilo.a; path = lib_link/libuuilo.a; sourceTree = "<group>"; };
+		68B9A1D1180BDB7E00FFEA35 /* libuuresolverlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuuresolverlo.a; path = lib_link/libuuresolverlo.a; sourceTree = "<group>"; };
+		68B9A1D2180BDB7E00FFEA35 /* libvclcanvaslo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvclcanvaslo.a; path = lib_link/libvclcanvaslo.a; sourceTree = "<group>"; };
+		68B9A1D3180BDB7E00FFEA35 /* libvcllo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvcllo.a; path = lib_link/libvcllo.a; sourceTree = "<group>"; };
+		68B9A1D4180BDB7E00FFEA35 /* libvisio-0.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libvisio-0.0.a"; path = "lib_link/libvisio-0.0.a"; sourceTree = "<group>"; };
+		68B9A1D5180BDB7E00FFEA35 /* libwpd-0.9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwpd-0.9.a"; path = "lib_link/libwpd-0.9.a"; sourceTree = "<group>"; };
+		68B9A1D6180BDB7E00FFEA35 /* libwpftdrawlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwpftdrawlo.a; path = lib_link/libwpftdrawlo.a; sourceTree = "<group>"; };
+		68B9A1D7180BDB7E00FFEA35 /* libwpftwriterlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwpftwriterlo.a; path = lib_link/libwpftwriterlo.a; sourceTree = "<group>"; };
+		68B9A1D8180BDB7E00FFEA35 /* libwpg-0.2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwpg-0.2.a"; path = "lib_link/libwpg-0.2.a"; sourceTree = "<group>"; };
+		68B9A1D9180BDB7E00FFEA35 /* libwps-0.2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libwps-0.2.a"; path = "lib_link/libwps-0.2.a"; sourceTree = "<group>"; };
+		68B9A1DA180BDB7E00FFEA35 /* libwriterfilterlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwriterfilterlo.a; path = lib_link/libwriterfilterlo.a; sourceTree = "<group>"; };
+		68B9A1DB180BDB7E00FFEA35 /* libwriterperfect.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwriterperfect.a; path = lib_link/libwriterperfect.a; sourceTree = "<group>"; };
+		68B9A1DC180BDB7E00FFEA35 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = lib_link/libxml2.a; sourceTree = "<group>"; };
+		68B9A1DD180BDB7E00FFEA35 /* libxmlfalo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxmlfalo.a; path = lib_link/libxmlfalo.a; sourceTree = "<group>"; };
+		68B9A1DE180BDB7E00FFEA35 /* libxmlfdlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxmlfdlo.a; path = lib_link/libxmlfdlo.a; sourceTree = "<group>"; };
+		68B9A1DF180BDB7E00FFEA35 /* libxmlreader.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxmlreader.a; path = lib_link/libxmlreader.a; sourceTree = "<group>"; };
+		68B9A1E0180BDB7E00FFEA35 /* libxmlreaderlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxmlreaderlo.a; path = lib_link/libxmlreaderlo.a; sourceTree = "<group>"; };
+		68B9A1E1180BDB7E00FFEA35 /* libxmlscriptlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxmlscriptlo.a; path = lib_link/libxmlscriptlo.a; sourceTree = "<group>"; };
+		68B9A1E2180BDB7E00FFEA35 /* libxmlsecurity.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxmlsecurity.a; path = lib_link/libxmlsecurity.a; sourceTree = "<group>"; };
+		68B9A1E3180BDB7E00FFEA35 /* libxoflo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxoflo.a; path = lib_link/libxoflo.a; sourceTree = "<group>"; };
+		68B9A1E4180BDB7E00FFEA35 /* libxolo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxolo.a; path = lib_link/libxolo.a; sourceTree = "<group>"; };
+		68B9A1E5180BDB7E00FFEA35 /* libxsec_fw.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxsec_fw.a; path = lib_link/libxsec_fw.a; sourceTree = "<group>"; };
+		68B9A1E6180BDB7E00FFEA35 /* libxslt.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxslt.a; path = lib_link/libxslt.a; sourceTree = "<group>"; };
+		68B9A1E7180BDB7E00FFEA35 /* libxsltdlglo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxsltdlglo.a; path = lib_link/libxsltdlglo.a; sourceTree = "<group>"; };
+		68B9A1E8180BDB7E00FFEA35 /* libxsltfilterlo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxsltfilterlo.a; path = lib_link/libxsltfilterlo.a; sourceTree = "<group>"; };
+		68B9A1E9180BDB7E00FFEA35 /* libxstor.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxstor.a; path = lib_link/libxstor.a; sourceTree = "<group>"; };
+		68C6FC4F180AD0CA005ACB02 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		68C6FC50180AD0CA005ACB02 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		68C6FC53180AD1B9005ACB02 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		68C6FC55180AD1FB005ACB02 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		68C6FC57180AD28C005ACB02 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		88E94769180DB9B600771808 /* NSObject+MLOFileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MLOFileUtils.h"; sourceTree = "<group>"; };
+		88E9476A180DB9B600771808 /* NSObject+MLOFileUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MLOFileUtils.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		689EBAE418069FB7002F1CD7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				688EAB01180D67E9003741B3 /* libios_sharedlo.a in Frameworks */,
+				68C6FC51180AD0CA005ACB02 /* libz.dylib in Frameworks */,
+				68C6FC52180AD0CA005ACB02 /* libiconv.dylib in Frameworks */,
+				689EBAEB18069FB7002F1CD7 /* UIKit.framework in Frameworks */,
+				689EBAED18069FB7002F1CD7 /* Foundation.framework in Frameworks */,
+				689EBAEF18069FB7002F1CD7 /* CoreGraphics.framework in Frameworks */,
+				68C6FC54180AD1B9005ACB02 /* QuartzCore.framework in Frameworks */,
+				68C6FC56180AD1FB005ACB02 /* CoreText.framework in Frameworks */,
+				68C6FC58180AD28C005ACB02 /* MessageUI.framework in Frameworks */,
+				68B9A1EA180BDB7E00FFEA35 /* libacceptorlo.a in Frameworks */,
+				68B9A1EB180BDB7E00FFEA35 /* libacclo.a in Frameworks */,
+				68B9A1EC180BDB7E00FFEA35 /* libaffine_uno_uno.a in Frameworks */,
+				68B9A1ED180BDB7E00FFEA35 /* libanalysislo.a in Frameworks */,
+				68B9A1EE180BDB7E00FFEA35 /* libanimcorelo.a in Frameworks */,
+				68B9A1EF180BDB7E00FFEA35 /* libavmedialo.a in Frameworks */,
+				68B9A1F0180BDB7E00FFEA35 /* libbasebmplo.a in Frameworks */,
+				68B9A1F1180BDB7E00FFEA35 /* libbasegfxlo.a in Frameworks */,
+				68B9A1F2180BDB7E00FFEA35 /* libbiblo.a in Frameworks */,
+				68B9A1F3180BDB7E00FFEA35 /* libbinaryurplo.a in Frameworks */,
+				68B9A1F4180BDB7E00FFEA35 /* libboostdatetime.a in Frameworks */,
+				68B9A1F5180BDB7E00FFEA35 /* libboostsystem.a in Frameworks */,
+				68B9A1F6180BDB7E00FFEA35 /* libbootstraplo.a in Frameworks */,
+				68B9A1F7180BDB7E00FFEA35 /* libcached1.a in Frameworks */,
+				68B9A1F8180BDB7E00FFEA35 /* libcalclo.a in Frameworks */,
+				68B9A1F9180BDB7E00FFEA35 /* libcanvasfactorylo.a in Frameworks */,
+				68B9A1FA180BDB7E00FFEA35 /* libcanvastoolslo.a in Frameworks */,
+				68B9A1FB180BDB7E00FFEA35 /* libcdr-0.0.a in Frameworks */,
+				68B9A1FC180BDB7E00FFEA35 /* libchartcontrollerlo.a in Frameworks */,
+				68B9A1FD180BDB7E00FFEA35 /* libchartcorelo.a in Frameworks */,
+				68B9A1FE180BDB7E00FFEA35 /* libclucene.a in Frameworks */,
+				68B9A1FF180BDB7E00FFEA35 /* libcmislib.a in Frameworks */,
+				68B9A200180BDB7E00FFEA35 /* libcollator_data.a in Frameworks */,
+				68B9A201180BDB7E00FFEA35 /* libcomphelper.a in Frameworks */,
+				68B9A202180BDB7E00FFEA35 /* libconfigmgrlo.a in Frameworks */,
+				68B9A203180BDB7E00FFEA35 /* libconnectorlo.a in Frameworks */,
+				68B9A204180BDB7E00FFEA35 /* libcppcanvaslo.a in Frameworks */,
+				68B9A205180BDB7E00FFEA35 /* libcrypto.a in Frameworks */,
+				68B9A206180BDB7E00FFEA35 /* libctllo.a in Frameworks */,
+				68B9A207180BDB7E00FFEA35 /* libcuilo.a in Frameworks */,
+				68B9A208180BDB7E00FFEA35 /* libcurl.a in Frameworks */,
+				68B9A209180BDB7E00FFEA35 /* libdatelo.a in Frameworks */,
+				68B9A20A180BDB7E00FFEA35 /* libdbalo.a in Frameworks */,
+				68B9A20B180BDB7E00FFEA35 /* libdbaselo.a in Frameworks */,
+				68B9A20C180BDB7E00FFEA35 /* libdbaxmllo.a in Frameworks */,
+				68B9A20D180BDB7E00FFEA35 /* libdbmmlo.a in Frameworks */,
+				68B9A20E180BDB7E00FFEA35 /* libdbplo.a in Frameworks */,
+				68B9A20F180BDB7E00FFEA35 /* libdbpool2.a in Frameworks */,
+				68B9A210180BDB7E00FFEA35 /* libdbtoolslo.a in Frameworks */,
+				68B9A211180BDB7E00FFEA35 /* libdbulo.a in Frameworks */,
+				68B9A212180BDB7E00FFEA35 /* libdeployment.a in Frameworks */,
+				68B9A213180BDB7E00FFEA35 /* libdeploymentgui.a in Frameworks */,
+				68B9A214180BDB7E00FFEA35 /* libdeploymentmisclo.a in Frameworks */,
+				68B9A215180BDB7E00FFEA35 /* libdesktopbe1lo.a in Frameworks */,
+				68B9A216180BDB7E00FFEA35 /* libdict_ja.a in Frameworks */,
+				68B9A217180BDB7E00FFEA35 /* libdict_zh.a in Frameworks */,
+				68B9A218180BDB7E00FFEA35 /* libdrawinglayerlo.a in Frameworks */,
+				68B9A219180BDB7E00FFEA35 /* libeditenglo.a in Frameworks */,
+				68B9A21A180BDB7E00FFEA35 /* libegilo.a in Frameworks */,
+				68B9A21B180BDB7E00FFEA35 /* libembobj.a in Frameworks */,
+				68B9A21C180BDB7E00FFEA35 /* libemboleobj.a in Frameworks */,
+				68B9A21D180BDB7E00FFEA35 /* libemelo.a in Frameworks */,
+				68B9A21E180BDB7E00FFEA35 /* libepblo.a in Frameworks */,
+				68B9A21F180BDB7E00FFEA35 /* libepglo.a in Frameworks */,
+				68B9A220180BDB7E00FFEA35 /* libepplo.a in Frameworks */,
+				68B9A221180BDB7E00FFEA35 /* libepslo.a in Frameworks */,
+				68B9A222180BDB7E00FFEA35 /* libeptlo.a in Frameworks */,
+				68B9A223180BDB7E00FFEA35 /* liberalo.a in Frameworks */,
+				68B9A224180BDB7E00FFEA35 /* libetilo.a in Frameworks */,
+				68B9A225180BDB7E00FFEA35 /* libevtattlo.a in Frameworks */,
+				68B9A226180BDB7F00FFEA35 /* libexpat.a in Frameworks */,
+				68B9A227180BDB7F00FFEA35 /* libexplo.a in Frameworks */,
+				68B9A228180BDB7F00FFEA35 /* libexpwraplo.a in Frameworks */,
+				68B9A229180BDB7F00FFEA35 /* libexslt.a in Frameworks */,
+				68B9A22A180BDB7F00FFEA35 /* libexttextcat.a in Frameworks */,
+				68B9A22B180BDB7F00FFEA35 /* libfastsaxlo.a in Frameworks */,
+				68B9A22C180BDB7F00FFEA35 /* libfileacc.a in Frameworks */,
+				68B9A22D180BDB7F00FFEA35 /* libfilelo.a in Frameworks */,
+				68B9A22E180BDB7F00FFEA35 /* libfilterconfiglo.a in Frameworks */,
+				68B9A22F180BDB7F00FFEA35 /* libfindsofficepath.a in Frameworks */,
+				68B9A230180BDB7F00FFEA35 /* libflashlo.a in Frameworks */,
+				68B9A231180BDB7F00FFEA35 /* libflatlo.a in Frameworks */,
+				68B9A232180BDB7F00FFEA35 /* libforlo.a in Frameworks */,
+				68B9A233180BDB7F00FFEA35 /* libforuilo.a in Frameworks */,
+				68B9A234180BDB7F00FFEA35 /* libfpickerlo.a in Frameworks */,
+				68B9A235180BDB7F00FFEA35 /* libfps_officelo.a in Frameworks */,
+				68B9A236180BDB7F00FFEA35 /* libfrmlo.a in Frameworks */,
+				68B9A237180BDB7F00FFEA35 /* libfsstoragelo.a in Frameworks */,
+				68B9A238180BDB7F00FFEA35 /* libfwelo.a in Frameworks */,
+				68B9A239180BDB7F00FFEA35 /* libfwilo.a in Frameworks */,
+				68B9A23A180BDB7F00FFEA35 /* libfwklo.a in Frameworks */,
+				68B9A23B180BDB7F00FFEA35 /* libfwllo.a in Frameworks */,
+				68B9A23C180BDB7F00FFEA35 /* libfwmlo.a in Frameworks */,
+				68B9A23D180BDB7F00FFEA35 /* libgcc3_uno.a in Frameworks */,
+				68B9A23E180BDB7F00FFEA35 /* libgraphicfilterlo.a in Frameworks */,
+				68B9A23F180BDB7F00FFEA35 /* libguesslanglo.a in Frameworks */,
+				68B9A240180BDB7F00FFEA35 /* libhatchwindowfactorylo.a in Frameworks */,
+				68B9A241180BDB7F00FFEA35 /* libhunspell.a in Frameworks */,
+				68B9A242180BDB7F00FFEA35 /* libhwplo.a in Frameworks */,
+				68B9A243180BDB7F00FFEA35 /* libhyphen.a in Frameworks */,
+				68B9A244180BDB7F00FFEA35 /* libhyphenlo.a in Frameworks */,
+				68B9A245180BDB7F00FFEA35 /* libi18nlangtag.a in Frameworks */,
+				68B9A246180BDB7F00FFEA35 /* libi18npoollo.a in Frameworks */,
+				68B9A247180BDB7F00FFEA35 /* libi18nsearchlo.a in Frameworks */,
+				68B9A248180BDB7F00FFEA35 /* libi18nutil.a in Frameworks */,
+				68B9A249180BDB7F00FFEA35 /* libicdlo.a in Frameworks */,
+				68B9A24A180BDB7F00FFEA35 /* libicglo.a in Frameworks */,
+				68B9A24B180BDB7F00FFEA35 /* libicudata.a in Frameworks */,
+				68B9A24C180BDB7F00FFEA35 /* libicui18n.a in Frameworks */,
+				68B9A24D180BDB7F00FFEA35 /* libicutu.a in Frameworks */,
+				68B9A24E180BDB7F00FFEA35 /* libicuuc.a in Frameworks */,
+				68B9A24F180BDB7F00FFEA35 /* libidxlo.a in Frameworks */,
+				68B9A250180BDB7F00FFEA35 /* libimelo.a in Frameworks */,
+				68B9A251180BDB7F00FFEA35 /* libindex_data.a in Frameworks */,
+				68B9A252180BDB7F00FFEA35 /* libintrospectionlo.a in Frameworks */,
+				68B9A253180BDB7F00FFEA35 /* libinvocadaptlo.a in Frameworks */,
+				68B9A254180BDB7F00FFEA35 /* libinvocationlo.a in Frameworks */,
+				68B9A255180BDB7F00FFEA35 /* libipblo.a in Frameworks */,
+				68B9A256180BDB7F00FFEA35 /* libipdlo.a in Frameworks */,
+				68B9A257180BDB7F00FFEA35 /* libipslo.a in Frameworks */,
+				68B9A258180BDB7F00FFEA35 /* libiptlo.a in Frameworks */,
+				68B9A259180BDB7F00FFEA35 /* libipxlo.a in Frameworks */,
+				68B9A25A180BDB7F00FFEA35 /* libiralo.a in Frameworks */,
+				68B9A25B180BDB7F00FFEA35 /* libitglo.a in Frameworks */,
+				68B9A25C180BDB7F00FFEA35 /* libitilo.a in Frameworks */,
+				68B9A25D180BDB7F00FFEA35 /* libjpeg.a in Frameworks */,
+				68B9A25E180BDB7F00FFEA35 /* liblcms2.a in Frameworks */,
+				68B9A25F180BDB7F00FFEA35 /* liblibotouchlo.a in Frameworks */,
+				68B9A260180BDB7F00FFEA35 /* liblnglo.a in Frameworks */,
+				68B9A261180BDB7F00FFEA35 /* liblnthlo.a in Frameworks */,
+				68B9A262180BDB7F00FFEA35 /* liblocalebe1lo.a in Frameworks */,
+				68B9A263180BDB7F00FFEA35 /* liblocaledata_en.a in Frameworks */,
+				68B9A264180BDB7F00FFEA35 /* liblocaledata_es.a in Frameworks */,
+				68B9A265180BDB7F00FFEA35 /* liblocaledata_euro.a in Frameworks */,
+				68B9A266180BDB7F00FFEA35 /* liblocaledata_others.a in Frameworks */,
+				68B9A267180BDB7F00FFEA35 /* liblog_uno_uno.a in Frameworks */,
+				68B9A268180BDB7F00FFEA35 /* libmcnttype.a in Frameworks */,
+				68B9A269180BDB7F00FFEA35 /* libmsfilterlo.a in Frameworks */,
+				68B9A26A180BDB7F00FFEA35 /* libmspub-0.0.a in Frameworks */,
+				68B9A26B180BDB7F00FFEA35 /* libmswordlo.a in Frameworks */,
+				68B9A26C180BDB7F00FFEA35 /* libmtfrendererlo.a in Frameworks */,
+				68B9A26D180BDB7F00FFEA35 /* libmwaw-0.1.a in Frameworks */,
+				68B9A26E180BDB7F00FFEA35 /* libmysqllo.a in Frameworks */,
+				68B9A26F180BDB7F00FFEA35 /* libmythes.a in Frameworks */,
+				68B9A270180BDB7F00FFEA35 /* libnamingservicelo.a in Frameworks */,
+				68B9A271180BDB7F00FFEA35 /* libodfflatxmllo.a in Frameworks */,
+				68B9A272180BDB7F00FFEA35 /* libodfgen-0.0.a in Frameworks */,
+				68B9A273180BDB7F00FFEA35 /* liboffacclo.a in Frameworks */,
+				68B9A274180BDB7F00FFEA35 /* libooopathutils.a in Frameworks */,
+				68B9A275180BDB7F00FFEA35 /* libooxlo.a in Frameworks */,
+				68B9A276180BDB7F00FFEA35 /* liborcus-parser.a in Frameworks */,
+				68B9A277180BDB7F00FFEA35 /* liborcus.a in Frameworks */,
+				68B9A278180BDB7F00FFEA35 /* libpackage2.a in Frameworks */,
+				68B9A279180BDB7F00FFEA35 /* libpasswordcontainerlo.a in Frameworks */,
+				68B9A27A180BDB7F00FFEA35 /* libpcrlo.a in Frameworks */,
+				68B9A27B180BDB7F00FFEA35 /* libpdffilterlo.a in Frameworks */,
+				68B9A27C180BDB7F00FFEA35 /* libplacewarelo.a in Frameworks */,
+				68B9A27D180BDB7F00FFEA35 /* libpng.a in Frameworks */,
+				68B9A27E180BDB7F00FFEA35 /* libPresenterScreenlo.a in Frameworks */,
+				68B9A27F180BDB7F00FFEA35 /* libpricinglo.a in Frameworks */,
+				68B9A280180BDB7F00FFEA35 /* libproxyfaclo.a in Frameworks */,
+				68B9A281180BDB7F00FFEA35 /* libraptor2.a in Frameworks */,
+				68B9A282180BDB7F00FFEA35 /* librasqal.a in Frameworks */,
+				68B9A283180BDB7F00FFEA35 /* librdf.a in Frameworks */,
+				68B9A284180BDB7F00FFEA35 /* libreflectionlo.a in Frameworks */,
+				68B9A285180BDB7F00FFEA35 /* libreg.a in Frameworks */,
+				68B9A286180BDB7F00FFEA35 /* libreglo.a in Frameworks */,
+				68B9A287180BDB7F00FFEA35 /* libreslo.a in Frameworks */,
+				68B9A288180BDB7F00FFEA35 /* librptlo.a in Frameworks */,
+				68B9A289180BDB7F00FFEA35 /* librptuilo.a in Frameworks */,
+				68B9A28A180BDB7F00FFEA35 /* librptxmllo.a in Frameworks */,
+				68B9A28B180BDB7F00FFEA35 /* libsal_textenc.a in Frameworks */,
+				68B9A28C180BDB7F00FFEA35 /* libsal_textenclo.a in Frameworks */,
+				68B9A28D180BDB7F00FFEA35 /* libsalcpprt.a in Frameworks */,
+				68B9A28E180BDB7F00FFEA35 /* libsax_shared.a in Frameworks */,
+				68B9A28F180BDB7F00FFEA35 /* libsaxlo.a in Frameworks */,
+				68B9A290180BDB7F00FFEA35 /* libsblo.a in Frameworks */,
+				68B9A291180BDB7F00FFEA35 /* libscdlo.a in Frameworks */,
+				68B9A292180BDB7F00FFEA35 /* libscfiltlo.a in Frameworks */,
+				68B9A293180BDB7F00FFEA35 /* libsclo.a in Frameworks */,
+				68B9A294180BDB7F00FFEA35 /* libscuilo.a in Frameworks */,
+				68B9A295180BDB7F00FFEA35 /* libsdbc2.a in Frameworks */,
+				68B9A296180BDB7F00FFEA35 /* libsdbtlo.a in Frameworks */,
+				68B9A297180BDB7F00FFEA35 /* libsddlo.a in Frameworks */,
+				68B9A298180BDB7F00FFEA35 /* libsdfiltlo.a in Frameworks */,
+				68B9A299180BDB7F00FFEA35 /* libsdlo.a in Frameworks */,
+				68B9A29A180BDB7F00FFEA35 /* libsduilo.a in Frameworks */,
+				68B9A29B180BDB7F00FFEA35 /* libsfxlo.a in Frameworks */,
+				68B9A29C180BDB7F00FFEA35 /* libsimplecanvaslo.a in Frameworks */,
+				68B9A29D180BDB7F00FFEA35 /* libslideshowlo.a in Frameworks */,
+				68B9A29E180BDB7F00FFEA35 /* libsmdlo.a in Frameworks */,
+				68B9A29F180BDB7F00FFEA35 /* libsmlo.a in Frameworks */,
+				68B9A2A0180BDB7F00FFEA35 /* libsofficeapp.a in Frameworks */,
+				68B9A2A1180BDB7F00FFEA35 /* libsotlo.a in Frameworks */,
+				68B9A2A2180BDB7F00FFEA35 /* libspelllo.a in Frameworks */,
+				68B9A2A3180BDB7F00FFEA35 /* libspllo.a in Frameworks */,
+				68B9A2A4180BDB7F00FFEA35 /* libsrtrs1.a in Frameworks */,
+				68B9A2A5180BDB7F00FFEA35 /* libssl.a in Frameworks */,
+				68B9A2A6180BDB7F00FFEA35 /* libstocserviceslo.a in Frameworks */,
+				68B9A2A7180BDB7F00FFEA35 /* libstore.a in Frameworks */,
+				68B9A2A8180BDB7F00FFEA35 /* libstorelo.a in Frameworks */,
+				68B9A2A9180BDB7F00FFEA35 /* libstreamslo.a in Frameworks */,
+				68B9A2AA180BDB7F00FFEA35 /* libsvgfilterlo.a in Frameworks */,
+				68B9A2AB180BDB7F00FFEA35 /* libsvgiolo.a in Frameworks */,
+				68B9A2AC180BDB7F00FFEA35 /* libsvllo.a in Frameworks */,
+				68B9A2AD180BDB7F00FFEA35 /* libsvtlo.a in Frameworks */,
+				68B9A2AE180BDB7F00FFEA35 /* libsvxcorelo.a in Frameworks */,
+				68B9A2AF180BDB7F00FFEA35 /* libsvxlo.a in Frameworks */,
+				68B9A2B0180BDB7F00FFEA35 /* libswdlo.a in Frameworks */,
+				68B9A2B1180BDB7F00FFEA35 /* libswlo.a in Frameworks */,
+				68B9A2B2180BDB7F00FFEA35 /* libswuilo.a in Frameworks */,
+				68B9A2B3180BDB7F00FFEA35 /* libt602filterlo.a in Frameworks */,
+				68B9A2B4180BDB7F00FFEA35 /* libtextconv_dict.a in Frameworks */,
+				68B9A2B5180BDB7F00FFEA35 /* libtextconversiondlgslo.a in Frameworks */,
+				68B9A2B6180BDB7F00FFEA35 /* libtextfdlo.a in Frameworks */,
+				68B9A2B7180BDB7F00FFEA35 /* libtextinstreamlo.a in Frameworks */,
+				68B9A2B8180BDB7F00FFEA35 /* libtextoutstreamlo.a in Frameworks */,
+				68B9A2B9180BDB7F00FFEA35 /* libtklo.a in Frameworks */,
+				68B9A2BA180BDB7F00FFEA35 /* libtllo.a in Frameworks */,
+				68B9A2BB180BDB7F00FFEA35 /* libucb1.a in Frameworks */,
+				68B9A2BC180BDB7F00FFEA35 /* libucbhelper.a in Frameworks */,
+				68B9A2BD180BDB7F00FFEA35 /* libucpcmis1lo.a in Frameworks */,
+				68B9A2BE180BDB7F00FFEA35 /* libucpexpand1lo.a in Frameworks */,
+				68B9A2BF180BDB7F00FFEA35 /* libucpextlo.a in Frameworks */,
+				68B9A2C0180BDB7F00FFEA35 /* libucpfile1.a in Frameworks */,
+				68B9A2C1180BDB7F00FFEA35 /* libucpftp1.a in Frameworks */,
+				68B9A2C2180BDB7F00FFEA35 /* libucphier1.a in Frameworks */,
+				68B9A2C3180BDB7F00FFEA35 /* libucppkg1.a in Frameworks */,
+				68B9A2C4180BDB7F00FFEA35 /* libucptdoc1lo.a in Frameworks */,
+				68B9A2C5180BDB7F00FFEA35 /* libulingu.a in Frameworks */,
+				68B9A2C6180BDB7F00FFEA35 /* libuno_cppu.a in Frameworks */,
+				68B9A2C7180BDB7F00FFEA35 /* libuno_cppuhelpergcc3.a in Frameworks */,
+				68B9A2C8180BDB7F00FFEA35 /* libuno_purpenvhelpergcc3.a in Frameworks */,
+				68B9A2C9180BDB7F00FFEA35 /* libuno_sal.a in Frameworks */,
+				68B9A2CA180BDB7F00FFEA35 /* libuno_salhelpergcc3.a in Frameworks */,
+				68B9A2CB180BDB7F00FFEA35 /* libunoidl.a in Frameworks */,
+				68B9A2CC180BDB7F00FFEA35 /* libunoidllo.a in Frameworks */,
+				68B9A2CD180BDB7F00FFEA35 /* libunordflo.a in Frameworks */,
+				68B9A2CE180BDB7F00FFEA35 /* libunoxmllo.a in Frameworks */,
+				68B9A2CF180BDB7F00FFEA35 /* libunsafe_uno_uno.a in Frameworks */,
+				68B9A2D0180BDB7F00FFEA35 /* libutllo.a in Frameworks */,
+				68B9A2D1180BDB7F00FFEA35 /* libuuilo.a in Frameworks */,
+				68B9A2D2180BDB7F00FFEA35 /* libuuresolverlo.a in Frameworks */,
+				68B9A2D3180BDB7F00FFEA35 /* libvclcanvaslo.a in Frameworks */,
+				68B9A2D4180BDB7F00FFEA35 /* libvcllo.a in Frameworks */,
+				68B9A2D5180BDB7F00FFEA35 /* libvisio-0.0.a in Frameworks */,
+				68B9A2D6180BDB7F00FFEA35 /* libwpd-0.9.a in Frameworks */,
+				68B9A2D7180BDB7F00FFEA35 /* libwpftdrawlo.a in Frameworks */,
+				68B9A2D8180BDB7F00FFEA35 /* libwpftwriterlo.a in Frameworks */,
+				68B9A2D9180BDB8000FFEA35 /* libwpg-0.2.a in Frameworks */,
+				68B9A2DA180BDB8000FFEA35 /* libwps-0.2.a in Frameworks */,
+				68B9A2DB180BDB8000FFEA35 /* libwriterfilterlo.a in Frameworks */,
+				68B9A2DC180BDB8000FFEA35 /* libwriterperfect.a in Frameworks */,
+				68B9A2DD180BDB8000FFEA35 /* libxml2.a in Frameworks */,
+				68B9A2DE180BDB8000FFEA35 /* libxmlfalo.a in Frameworks */,
+				68B9A2DF180BDB8000FFEA35 /* libxmlfdlo.a in Frameworks */,
+				68B9A2E0180BDB8000FFEA35 /* libxmlreader.a in Frameworks */,
+				68B9A2E1180BDB8000FFEA35 /* libxmlreaderlo.a in Frameworks */,
+				68B9A2E2180BDB8000FFEA35 /* libxmlscriptlo.a in Frameworks */,
+				68B9A2E3180BDB8000FFEA35 /* libxmlsecurity.a in Frameworks */,
+				68B9A2E4180BDB8000FFEA35 /* libxoflo.a in Frameworks */,
+				68B9A2E5180BDB8000FFEA35 /* libxolo.a in Frameworks */,
+				68B9A2E6180BDB8000FFEA35 /* libxsec_fw.a in Frameworks */,
+				68B9A2E7180BDB8000FFEA35 /* libxslt.a in Frameworks */,
+				68B9A2E8180BDB8000FFEA35 /* libxsltdlglo.a in Frameworks */,
+				68B9A2E9180BDB8000FFEA35 /* libxsltfilterlo.a in Frameworks */,
+				68B9A2EA180BDB8000FFEA35 /* libxstor.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		688EAAEE180D561A003741B3 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				689EBAF118069FB7002F1CD7 /* Supporting Files */,
+				688EAAE8180D3130003741B3 /* lo.xcconfig */,
+			);
+			name = Config;
+			sourceTree = "<group>";
+		};
+		688EAAFA180D679F003741B3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				688EAAFE180D679F003741B3 /* libios_sharedlo.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		689EBADE18069FB7002F1CD7 = {
+			isa = PBXGroup;
+			children = (
+				688EAAF9180D679F003741B3 /* ios_sharedlo.xcodeproj */,
+				689EBAF018069FB7002F1CD7 /* MobileLibreOffice */,
+				688EAAEE180D561A003741B3 /* Config */,
+				689EBAE918069FB7002F1CD7 /* Frameworks */,
+				68B9A0E8180BDB6000FFEA35 /* Libs */,
+				88A2ED1B180D4796009F39C0 /* Resources */,
+				689EBAE818069FB7002F1CD7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		689EBAE818069FB7002F1CD7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				689EBAE718069FB7002F1CD7 /* MobileLibreOffice.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		689EBAE918069FB7002F1CD7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				68C6FC4F180AD0CA005ACB02 /* libz.dylib */,
+				68C6FC50180AD0CA005ACB02 /* libiconv.dylib */,
+				68C6FC57180AD28C005ACB02 /* MessageUI.framework */,
+				68C6FC53180AD1B9005ACB02 /* QuartzCore.framework */,
+				68C6FC55180AD1FB005ACB02 /* CoreText.framework */,
+				689EBAEA18069FB7002F1CD7 /* UIKit.framework */,
+				689EBAEC18069FB7002F1CD7 /* Foundation.framework */,
+				689EBAEE18069FB7002F1CD7 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		689EBAF018069FB7002F1CD7 /* MobileLibreOffice */ = {
+			isa = PBXGroup;
+			children = (
+				689EBBA41806D370002F1CD7 /* file_manager */,
+				689EBB2A1806CC39002F1CD7 /* MLOAppDelegate.h */,
+				689EBB2B1806CC39002F1CD7 /* MLOAppDelegate.m */,
+				689EBB2C1806CC39002F1CD7 /* MLOAppViewController.h */,
+				689EBB2D1806CC39002F1CD7 /* MLOAppViewController.m */,
+			);
+			path = MobileLibreOffice;
+			sourceTree = "<group>";
+		};
+		689EBAF118069FB7002F1CD7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				689EBAF218069FB7002F1CD7 /* MobileLibreOffice-Info.plist */,
+				689EBAF318069FB7002F1CD7 /* InfoPlist.strings */,
+				689EBAF618069FB7002F1CD7 /* main.m */,
+				689EBAF818069FB7002F1CD7 /* MobileLibreOffice-Prefix.pch */,
+				689EBAFC18069FB8002F1CD7 /* Default.png */,
+				689EBAFE18069FB8002F1CD7 /* Default@2x.png */,
+				689EBB0018069FB8002F1CD7 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			path = MobileLibreOffice;
+			sourceTree = "<group>";
+		};
+		689EBBA41806D370002F1CD7 /* file_manager */ = {
+			isa = PBXGroup;
+			children = (
+				689EBBA51806D370002F1CD7 /* MLOCachedFile.h */,
+				689EBBA61806D370002F1CD7 /* MLOCachedFile.m */,
+				689EBBA71806D370002F1CD7 /* MLOFileCacheManager.h */,
+				689EBBA81806D370002F1CD7 /* MLOFileCacheManager.m */,
+				689EBBA91806D370002F1CD7 /* MLOFileListViewController.h */,
+				689EBBAA1806D370002F1CD7 /* MLOFileListViewController.m */,
+				689EBBAB1806D370002F1CD7 /* MLOFileManagerViewController.h */,
+				689EBBAC1806D370002F1CD7 /* MLOFileManagerViewController.m */,
+				689EBBAD1806D370002F1CD7 /* MLOFileManagerViewController_Impl.h */,
+				88E94769180DB9B600771808 /* NSObject+MLOFileUtils.h */,
+				88E9476A180DB9B600771808 /* NSObject+MLOFileUtils.m */,
+			);
+			path = file_manager;
+			sourceTree = "<group>";
+		};
+		68B98C25180B38CD00FFEA35 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				68B99ED6180BBF7100FFEA35 /* mlo-icon-57.png */,
+				68B99ED7180BBF7100FFEA35 /* mlo-icon-114.png */,
+				68B98C32180B38CD00FFEA35 /* MLOLibreOfficeLogo.png */,
+			);
+			name = Images;
+			path = Resources/Images;
+			sourceTree = "<group>";
+		};
+		68B9A0E8180BDB6000FFEA35 /* Libs */ = {
+			isa = PBXGroup;
+			children = (
+				68B9A0E9180BDB7E00FFEA35 /* libacceptorlo.a */,
+				68B9A0EA180BDB7E00FFEA35 /* libacclo.a */,
+				68B9A0EB180BDB7E00FFEA35 /* libaffine_uno_uno.a */,
+				68B9A0EC180BDB7E00FFEA35 /* libanalysislo.a */,
+				68B9A0ED180BDB7E00FFEA35 /* libanimcorelo.a */,
+				68B9A0EE180BDB7E00FFEA35 /* libavmedialo.a */,
+				68B9A0EF180BDB7E00FFEA35 /* libbasebmplo.a */,
+				68B9A0F0180BDB7E00FFEA35 /* libbasegfxlo.a */,
+				68B9A0F1180BDB7E00FFEA35 /* libbiblo.a */,
+				68B9A0F2180BDB7E00FFEA35 /* libbinaryurplo.a */,
+				68B9A0F3180BDB7E00FFEA35 /* libboostdatetime.a */,
+				68B9A0F4180BDB7E00FFEA35 /* libboostsystem.a */,
+				68B9A0F5180BDB7E00FFEA35 /* libbootstraplo.a */,
+				68B9A0F6180BDB7E00FFEA35 /* libcached1.a */,
+				68B9A0F7180BDB7E00FFEA35 /* libcalclo.a */,
+				68B9A0F8180BDB7E00FFEA35 /* libcanvasfactorylo.a */,
+				68B9A0F9180BDB7E00FFEA35 /* libcanvastoolslo.a */,
+				68B9A0FA180BDB7E00FFEA35 /* libcdr-0.0.a */,
+				68B9A0FB180BDB7E00FFEA35 /* libchartcontrollerlo.a */,
+				68B9A0FC180BDB7E00FFEA35 /* libchartcorelo.a */,
+				68B9A0FD180BDB7E00FFEA35 /* libclucene.a */,
+				68B9A0FE180BDB7E00FFEA35 /* libcmislib.a */,
+				68B9A0FF180BDB7E00FFEA35 /* libcollator_data.a */,
+				68B9A100180BDB7E00FFEA35 /* libcomphelper.a */,
+				68B9A101180BDB7E00FFEA35 /* libconfigmgrlo.a */,
+				68B9A102180BDB7E00FFEA35 /* libconnectorlo.a */,
+				68B9A103180BDB7E00FFEA35 /* libcppcanvaslo.a */,
+				68B9A104180BDB7E00FFEA35 /* libcrypto.a */,
+				68B9A105180BDB7E00FFEA35 /* libctllo.a */,
+				68B9A106180BDB7E00FFEA35 /* libcuilo.a */,
+				68B9A107180BDB7E00FFEA35 /* libcurl.a */,
+				68B9A108180BDB7E00FFEA35 /* libdatelo.a */,
+				68B9A109180BDB7E00FFEA35 /* libdbalo.a */,
+				68B9A10A180BDB7E00FFEA35 /* libdbaselo.a */,
+				68B9A10B180BDB7E00FFEA35 /* libdbaxmllo.a */,
+				68B9A10C180BDB7E00FFEA35 /* libdbmmlo.a */,
+				68B9A10D180BDB7E00FFEA35 /* libdbplo.a */,
+				68B9A10E180BDB7E00FFEA35 /* libdbpool2.a */,
+				68B9A10F180BDB7E00FFEA35 /* libdbtoolslo.a */,
+				68B9A110180BDB7E00FFEA35 /* libdbulo.a */,
+				68B9A111180BDB7E00FFEA35 /* libdeployment.a */,
+				68B9A112180BDB7E00FFEA35 /* libdeploymentgui.a */,
+				68B9A113180BDB7E00FFEA35 /* libdeploymentmisclo.a */,
+				68B9A114180BDB7E00FFEA35 /* libdesktopbe1lo.a */,
+				68B9A115180BDB7E00FFEA35 /* libdict_ja.a */,
+				68B9A116180BDB7E00FFEA35 /* libdict_zh.a */,
+				68B9A117180BDB7E00FFEA35 /* libdrawinglayerlo.a */,
+				68B9A118180BDB7E00FFEA35 /* libeditenglo.a */,
+				68B9A119180BDB7E00FFEA35 /* libegilo.a */,
+				68B9A11A180BDB7E00FFEA35 /* libembobj.a */,
+				68B9A11B180BDB7E00FFEA35 /* libemboleobj.a */,
+				68B9A11C180BDB7E00FFEA35 /* libemelo.a */,
+				68B9A11D180BDB7E00FFEA35 /* libepblo.a */,
+				68B9A11E180BDB7E00FFEA35 /* libepglo.a */,
+				68B9A11F180BDB7E00FFEA35 /* libepplo.a */,
+				68B9A120180BDB7E00FFEA35 /* libepslo.a */,
+				68B9A121180BDB7E00FFEA35 /* libeptlo.a */,
+				68B9A122180BDB7E00FFEA35 /* liberalo.a */,
+				68B9A123180BDB7E00FFEA35 /* libetilo.a */,
+				68B9A124180BDB7E00FFEA35 /* libevtattlo.a */,
+				68B9A125180BDB7E00FFEA35 /* libexpat.a */,
+				68B9A126180BDB7E00FFEA35 /* libexplo.a */,
+				68B9A127180BDB7E00FFEA35 /* libexpwraplo.a */,
+				68B9A128180BDB7E00FFEA35 /* libexslt.a */,
+				68B9A129180BDB7E00FFEA35 /* libexttextcat.a */,
+				68B9A12A180BDB7E00FFEA35 /* libfastsaxlo.a */,
+				68B9A12B180BDB7E00FFEA35 /* libfileacc.a */,
+				68B9A12C180BDB7E00FFEA35 /* libfilelo.a */,
+				68B9A12D180BDB7E00FFEA35 /* libfilterconfiglo.a */,
+				68B9A12E180BDB7E00FFEA35 /* libfindsofficepath.a */,
+				68B9A12F180BDB7E00FFEA35 /* libflashlo.a */,
+				68B9A130180BDB7E00FFEA35 /* libflatlo.a */,
+				68B9A131180BDB7E00FFEA35 /* libforlo.a */,
+				68B9A132180BDB7E00FFEA35 /* libforuilo.a */,
+				68B9A133180BDB7E00FFEA35 /* libfpickerlo.a */,
+				68B9A134180BDB7E00FFEA35 /* libfps_officelo.a */,
+				68B9A135180BDB7E00FFEA35 /* libfrmlo.a */,
+				68B9A136180BDB7E00FFEA35 /* libfsstoragelo.a */,
+				68B9A137180BDB7E00FFEA35 /* libfwelo.a */,
+				68B9A138180BDB7E00FFEA35 /* libfwilo.a */,
+				68B9A139180BDB7E00FFEA35 /* libfwklo.a */,
+				68B9A13A180BDB7E00FFEA35 /* libfwllo.a */,
+				68B9A13B180BDB7E00FFEA35 /* libfwmlo.a */,
+				68B9A13C180BDB7E00FFEA35 /* libgcc3_uno.a */,
+				68B9A13D180BDB7E00FFEA35 /* libgraphicfilterlo.a */,
+				68B9A13E180BDB7E00FFEA35 /* libguesslanglo.a */,
+				68B9A13F180BDB7E00FFEA35 /* libhatchwindowfactorylo.a */,
+				68B9A140180BDB7E00FFEA35 /* libhunspell.a */,
+				68B9A141180BDB7E00FFEA35 /* libhwplo.a */,
+				68B9A142180BDB7E00FFEA35 /* libhyphen.a */,
+				68B9A143180BDB7E00FFEA35 /* libhyphenlo.a */,
+				68B9A144180BDB7E00FFEA35 /* libi18nlangtag.a */,
+				68B9A145180BDB7E00FFEA35 /* libi18npoollo.a */,
+				68B9A146180BDB7E00FFEA35 /* libi18nsearchlo.a */,
+				68B9A147180BDB7E00FFEA35 /* libi18nutil.a */,
+				68B9A148180BDB7E00FFEA35 /* libicdlo.a */,
+				68B9A149180BDB7E00FFEA35 /* libicglo.a */,
+				68B9A14A180BDB7E00FFEA35 /* libicudata.a */,
+				68B9A14B180BDB7E00FFEA35 /* libicui18n.a */,
+				68B9A14C180BDB7E00FFEA35 /* libicutu.a */,
+				68B9A14D180BDB7E00FFEA35 /* libicuuc.a */,
+				68B9A14E180BDB7E00FFEA35 /* libidxlo.a */,
+				68B9A14F180BDB7E00FFEA35 /* libimelo.a */,
+				68B9A150180BDB7E00FFEA35 /* libindex_data.a */,
+				68B9A151180BDB7E00FFEA35 /* libintrospectionlo.a */,
+				68B9A152180BDB7E00FFEA35 /* libinvocadaptlo.a */,
+				68B9A153180BDB7E00FFEA35 /* libinvocationlo.a */,
+				68B9A154180BDB7E00FFEA35 /* libipblo.a */,
+				68B9A155180BDB7E00FFEA35 /* libipdlo.a */,
+				68B9A156180BDB7E00FFEA35 /* libipslo.a */,
+				68B9A157180BDB7E00FFEA35 /* libiptlo.a */,
+				68B9A158180BDB7E00FFEA35 /* libipxlo.a */,
+				68B9A159180BDB7E00FFEA35 /* libiralo.a */,
+				68B9A15A180BDB7E00FFEA35 /* libitglo.a */,
+				68B9A15B180BDB7E00FFEA35 /* libitilo.a */,
+				68B9A15C180BDB7E00FFEA35 /* libjpeg.a */,
+				68B9A15D180BDB7E00FFEA35 /* liblcms2.a */,
+				68B9A15E180BDB7E00FFEA35 /* liblibotouchlo.a */,
+				68B9A15F180BDB7E00FFEA35 /* liblnglo.a */,
+				68B9A160180BDB7E00FFEA35 /* liblnthlo.a */,
+				68B9A161180BDB7E00FFEA35 /* liblocalebe1lo.a */,
+				68B9A162180BDB7E00FFEA35 /* liblocaledata_en.a */,
+				68B9A163180BDB7E00FFEA35 /* liblocaledata_es.a */,
+				68B9A164180BDB7E00FFEA35 /* liblocaledata_euro.a */,
+				68B9A165180BDB7E00FFEA35 /* liblocaledata_others.a */,
+				68B9A166180BDB7E00FFEA35 /* liblog_uno_uno.a */,
+				68B9A167180BDB7E00FFEA35 /* libmcnttype.a */,
+				68B9A168180BDB7E00FFEA35 /* libmsfilterlo.a */,
+				68B9A169180BDB7E00FFEA35 /* libmspub-0.0.a */,
+				68B9A16A180BDB7E00FFEA35 /* libmswordlo.a */,
+				68B9A16B180BDB7E00FFEA35 /* libmtfrendererlo.a */,
+				68B9A16C180BDB7E00FFEA35 /* libmwaw-0.1.a */,
+				68B9A16D180BDB7E00FFEA35 /* libmysqllo.a */,
+				68B9A16E180BDB7E00FFEA35 /* libmythes.a */,
+				68B9A16F180BDB7E00FFEA35 /* libnamingservicelo.a */,
+				68B9A170180BDB7E00FFEA35 /* libodfflatxmllo.a */,
+				68B9A171180BDB7E00FFEA35 /* libodfgen-0.0.a */,
+				68B9A172180BDB7E00FFEA35 /* liboffacclo.a */,
+				68B9A173180BDB7E00FFEA35 /* libooopathutils.a */,
+				68B9A174180BDB7E00FFEA35 /* libooxlo.a */,
+				68B9A175180BDB7E00FFEA35 /* liborcus-parser.a */,
+				68B9A176180BDB7E00FFEA35 /* liborcus.a */,
+				68B9A177180BDB7E00FFEA35 /* libpackage2.a */,
+				68B9A178180BDB7E00FFEA35 /* libpasswordcontainerlo.a */,
+				68B9A179180BDB7E00FFEA35 /* libpcrlo.a */,
+				68B9A17A180BDB7E00FFEA35 /* libpdffilterlo.a */,
+				68B9A17B180BDB7E00FFEA35 /* libplacewarelo.a */,
+				68B9A17C180BDB7E00FFEA35 /* libpng.a */,
+				68B9A17D180BDB7E00FFEA35 /* libPresenterScreenlo.a */,
+				68B9A17E180BDB7E00FFEA35 /* libpricinglo.a */,
+				68B9A17F180BDB7E00FFEA35 /* libproxyfaclo.a */,
+				68B9A180180BDB7E00FFEA35 /* libraptor2.a */,
+				68B9A181180BDB7E00FFEA35 /* librasqal.a */,
+				68B9A182180BDB7E00FFEA35 /* librdf.a */,
+				68B9A183180BDB7E00FFEA35 /* libreflectionlo.a */,
+				68B9A184180BDB7E00FFEA35 /* libreg.a */,
+				68B9A185180BDB7E00FFEA35 /* libreglo.a */,
+				68B9A186180BDB7E00FFEA35 /* libreslo.a */,
+				68B9A187180BDB7E00FFEA35 /* librptlo.a */,
+				68B9A188180BDB7E00FFEA35 /* librptuilo.a */,
+				68B9A189180BDB7E00FFEA35 /* librptxmllo.a */,
+				68B9A18A180BDB7E00FFEA35 /* libsal_textenc.a */,
+				68B9A18B180BDB7E00FFEA35 /* libsal_textenclo.a */,
+				68B9A18C180BDB7E00FFEA35 /* libsalcpprt.a */,
+				68B9A18D180BDB7E00FFEA35 /* libsax_shared.a */,
+				68B9A18E180BDB7E00FFEA35 /* libsaxlo.a */,
+				68B9A18F180BDB7E00FFEA35 /* libsblo.a */,
+				68B9A190180BDB7E00FFEA35 /* libscdlo.a */,
+				68B9A191180BDB7E00FFEA35 /* libscfiltlo.a */,
+				68B9A192180BDB7E00FFEA35 /* libsclo.a */,
+				68B9A193180BDB7E00FFEA35 /* libscuilo.a */,
+				68B9A194180BDB7E00FFEA35 /* libsdbc2.a */,
+				68B9A195180BDB7E00FFEA35 /* libsdbtlo.a */,
+				68B9A196180BDB7E00FFEA35 /* libsddlo.a */,
+				68B9A197180BDB7E00FFEA35 /* libsdfiltlo.a */,
+				68B9A198180BDB7E00FFEA35 /* libsdlo.a */,
+				68B9A199180BDB7E00FFEA35 /* libsduilo.a */,
+				68B9A19A180BDB7E00FFEA35 /* libsfxlo.a */,
+				68B9A19B180BDB7E00FFEA35 /* libsimplecanvaslo.a */,
+				68B9A19C180BDB7E00FFEA35 /* libslideshowlo.a */,
+				68B9A19D180BDB7E00FFEA35 /* libsmdlo.a */,
+				68B9A19E180BDB7E00FFEA35 /* libsmlo.a */,
+				68B9A19F180BDB7E00FFEA35 /* libsofficeapp.a */,
+				68B9A1A0180BDB7E00FFEA35 /* libsotlo.a */,
+				68B9A1A1180BDB7E00FFEA35 /* libspelllo.a */,
+				68B9A1A2180BDB7E00FFEA35 /* libspllo.a */,
+				68B9A1A3180BDB7E00FFEA35 /* libsrtrs1.a */,
+				68B9A1A4180BDB7E00FFEA35 /* libssl.a */,
+				68B9A1A5180BDB7E00FFEA35 /* libstocserviceslo.a */,
+				68B9A1A6180BDB7E00FFEA35 /* libstore.a */,
+				68B9A1A7180BDB7E00FFEA35 /* libstorelo.a */,
+				68B9A1A8180BDB7E00FFEA35 /* libstreamslo.a */,
+				68B9A1A9180BDB7E00FFEA35 /* libsvgfilterlo.a */,
+				68B9A1AA180BDB7E00FFEA35 /* libsvgiolo.a */,
+				68B9A1AB180BDB7E00FFEA35 /* libsvllo.a */,
+				68B9A1AC180BDB7E00FFEA35 /* libsvtlo.a */,
+				68B9A1AD180BDB7E00FFEA35 /* libsvxcorelo.a */,
+				68B9A1AE180BDB7E00FFEA35 /* libsvxlo.a */,
+				68B9A1AF180BDB7E00FFEA35 /* libswdlo.a */,
+				68B9A1B0180BDB7E00FFEA35 /* libswlo.a */,
+				68B9A1B1180BDB7E00FFEA35 /* libswuilo.a */,
+				68B9A1B2180BDB7E00FFEA35 /* libt602filterlo.a */,
+				68B9A1B3180BDB7E00FFEA35 /* libtextconv_dict.a */,
+				68B9A1B4180BDB7E00FFEA35 /* libtextconversiondlgslo.a */,
+				68B9A1B5180BDB7E00FFEA35 /* libtextfdlo.a */,
+				68B9A1B6180BDB7E00FFEA35 /* libtextinstreamlo.a */,
+				68B9A1B7180BDB7E00FFEA35 /* libtextoutstreamlo.a */,
+				68B9A1B8180BDB7E00FFEA35 /* libtklo.a */,
+				68B9A1B9180BDB7E00FFEA35 /* libtllo.a */,
+				68B9A1BA180BDB7E00FFEA35 /* libucb1.a */,
+				68B9A1BB180BDB7E00FFEA35 /* libucbhelper.a */,
+				68B9A1BC180BDB7E00FFEA35 /* libucpcmis1lo.a */,
+				68B9A1BD180BDB7E00FFEA35 /* libucpexpand1lo.a */,
+				68B9A1BE180BDB7E00FFEA35 /* libucpextlo.a */,
+				68B9A1BF180BDB7E00FFEA35 /* libucpfile1.a */,
+				68B9A1C0180BDB7E00FFEA35 /* libucpftp1.a */,
+				68B9A1C1180BDB7E00FFEA35 /* libucphier1.a */,
+				68B9A1C2180BDB7E00FFEA35 /* libucppkg1.a */,
+				68B9A1C3180BDB7E00FFEA35 /* libucptdoc1lo.a */,
+				68B9A1C4180BDB7E00FFEA35 /* libulingu.a */,
+				68B9A1C5180BDB7E00FFEA35 /* libuno_cppu.a */,
+				68B9A1C6180BDB7E00FFEA35 /* libuno_cppuhelpergcc3.a */,
+				68B9A1C7180BDB7E00FFEA35 /* libuno_purpenvhelpergcc3.a */,
+				68B9A1C8180BDB7E00FFEA35 /* libuno_sal.a */,
+				68B9A1C9180BDB7E00FFEA35 /* libuno_salhelpergcc3.a */,
+				68B9A1CA180BDB7E00FFEA35 /* libunoidl.a */,
+				68B9A1CB180BDB7E00FFEA35 /* libunoidllo.a */,
+				68B9A1CC180BDB7E00FFEA35 /* libunordflo.a */,
+				68B9A1CD180BDB7E00FFEA35 /* libunoxmllo.a */,
+				68B9A1CE180BDB7E00FFEA35 /* libunsafe_uno_uno.a */,
+				68B9A1CF180BDB7E00FFEA35 /* libutllo.a */,
+				68B9A1D0180BDB7E00FFEA35 /* libuuilo.a */,
+				68B9A1D1180BDB7E00FFEA35 /* libuuresolverlo.a */,
+				68B9A1D2180BDB7E00FFEA35 /* libvclcanvaslo.a */,
+				68B9A1D3180BDB7E00FFEA35 /* libvcllo.a */,
+				68B9A1D4180BDB7E00FFEA35 /* libvisio-0.0.a */,
+				68B9A1D5180BDB7E00FFEA35 /* libwpd-0.9.a */,
+				68B9A1D6180BDB7E00FFEA35 /* libwpftdrawlo.a */,
+				68B9A1D7180BDB7E00FFEA35 /* libwpftwriterlo.a */,
+				68B9A1D8180BDB7E00FFEA35 /* libwpg-0.2.a */,
+				68B9A1D9180BDB7E00FFEA35 /* libwps-0.2.a */,
+				68B9A1DA180BDB7E00FFEA35 /* libwriterfilterlo.a */,
+				68B9A1DB180BDB7E00FFEA35 /* libwriterperfect.a */,
+				68B9A1DC180BDB7E00FFEA35 /* libxml2.a */,
+				68B9A1DD180BDB7E00FFEA35 /* libxmlfalo.a */,
+				68B9A1DE180BDB7E00FFEA35 /* libxmlfdlo.a */,
+				68B9A1DF180BDB7E00FFEA35 /* libxmlreader.a */,
+				68B9A1E0180BDB7E00FFEA35 /* libxmlreaderlo.a */,
+				68B9A1E1180BDB7E00FFEA35 /* libxmlscriptlo.a */,
+				68B9A1E2180BDB7E00FFEA35 /* libxmlsecurity.a */,
+				68B9A1E3180BDB7E00FFEA35 /* libxoflo.a */,
+				68B9A1E4180BDB7E00FFEA35 /* libxolo.a */,
+				68B9A1E5180BDB7E00FFEA35 /* libxsec_fw.a */,
+				68B9A1E6180BDB7E00FFEA35 /* libxslt.a */,
+				68B9A1E7180BDB7E00FFEA35 /* libxsltdlglo.a */,
+				68B9A1E8180BDB7E00FFEA35 /* libxsltfilterlo.a */,
+				68B9A1E9180BDB7E00FFEA35 /* libxstor.a */,
+			);
+			name = Libs;
+			sourceTree = "<group>";
+		};
+		88A2ED1B180D4796009F39C0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				88A2ED1C180D47E3009F39C0 /* app */,
+				88A2ED1D180D47EA009F39C0 /* shared */,
+			);
+			name = Resources;
+			path = MobileLibreOffice;
+			sourceTree = "<group>";
+		};
+		88A2ED1C180D47E3009F39C0 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				68B99ED2180BBEE900FFEA35 /* test1.odt */,
+				68B98C25180B38CD00FFEA35 /* Images */,
+			);
+			name = app;
+			sourceTree = "<group>";
+		};
+		88A2ED1D180D47EA009F39C0 /* shared */ = {
+			isa = PBXGroup;
+			children = (
+				88A2ED1F180D481F009F39C0 /* static */,
+				88A2ED1E180D481A009F39C0 /* linked */,
+			);
+			name = shared;
+			sourceTree = "<group>";
+		};
+		88A2ED1E180D481A009F39C0 /* linked */ = {
+			isa = PBXGroup;
+			children = (
+				681D78C5180C136400D52D5E /* ure */,
+				681D78B2180C12D300D52D5E /* program */,
+				681D78B4180C12D300D52D5E /* registry */,
+				681D78B6180C12D300D52D5E /* share */,
+				681D78AF180C12D300D52D5E /* fundamentalrc */,
+				681D78B0180C12D300D52D5E /* offapi.rdb */,
+				681D78B1180C12D300D52D5E /* oovbaapi.rdb */,
+				681D78B3180C12D300D52D5E /* rc */,
+				681D78B5180C12D300D52D5E /* services.rdb */,
+				681D78B7180C12D300D52D5E /* udkapi.rdb */,
+				681D78B8180C12D300D52D5E /* unorc */,
+			);
+			name = linked;
+			sourceTree = "<group>";
+		};
+		88A2ED1F180D481F009F39C0 /* static */ = {
+			isa = PBXGroup;
+			children = (
+				88A2ED20180D4840009F39C0 /* Images */,
+			);
+			name = static;
+			sourceTree = "<group>";
+		};
+		88A2ED20180D4840009F39C0 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				68B98C26180B38CD00FFEA35 /* MLOButtonBack.png */,
+				68B98C27180B38CD00FFEA35 /* MLOButtonBack@2x.png */,
+				68B98C28180B38CD00FFEA35 /* MLOButtonEdit.png */,
+				68B98C29180B38CD00FFEA35 /* MLOButtonExpand.png */,
+				68B98C2A180B38CD00FFEA35 /* MLOButtonFind.png */,
+				68B98C2B180B38CD00FFEA35 /* MLOButtonLeft.png */,
+				68B98C2C180B38CD00FFEA35 /* MLOButtonPrint.png */,
+				68B98C2D180B38CD00FFEA35 /* MLOButtonRight.png */,
+				68B98C2E180B38CD00FFEA35 /* MLOButtonSave.png */,
+				68B98C2F180B38CD00FFEA35 /* MLOButtonSelectionHandle.png */,
+				68B98C30180B38CD00FFEA35 /* MLOButtonShrink.png */,
+				68B98C31180B38CD00FFEA35 /* MLOContextualMenuEdge.png */,
+				68B98C33180B38CD00FFEA35 /* MLOMagnifier@2x.png */,
+				68B98C34180B38CD00FFEA35 /* MLOMagnifierMask@2x.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		689EBAE618069FB7002F1CD7 /* MobileLibreOffice */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 689EBB0D18069FB8002F1CD7 /* Build configuration list for PBXNativeTarget "MobileLibreOffice" */;
+			buildPhases = (
+				68B98C23180B2FE500FFEA35 /* ShellScript */,
+				689EBAE318069FB7002F1CD7 /* Sources */,
+				689EBAE418069FB7002F1CD7 /* Frameworks */,
+				689EBAE518069FB7002F1CD7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MobileLibreOffice;
+			productName = MobileLibreOffice;
+			productReference = 689EBAE718069FB7002F1CD7 /* MobileLibreOffice.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		689EBADF18069FB7002F1CD7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = LibreOffice.org;
+			};
+			buildConfigurationList = 689EBAE218069FB7002F1CD7 /* Build configuration list for PBXProject "MobileLibreOffice" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 689EBADE18069FB7002F1CD7;
+			productRefGroup = 689EBAE818069FB7002F1CD7 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 688EAAFA180D679F003741B3 /* Products */;
+					ProjectRef = 688EAAF9180D679F003741B3 /* ios_sharedlo.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				689EBAE618069FB7002F1CD7 /* MobileLibreOffice */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		688EAAFE180D679F003741B3 /* libios_sharedlo.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libios_sharedlo.a;
+			remoteRef = 688EAAFD180D679F003741B3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		689EBAE518069FB7002F1CD7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				689EBAFD18069FB8002F1CD7 /* Default.png in Resources */,
+				689EBAFF18069FB8002F1CD7 /* Default@2x.png in Resources */,
+				689EBB0118069FB8002F1CD7 /* Default-568h@2x.png in Resources */,
+				68B99ED8180BBF7100FFEA35 /* mlo-icon-57.png in Resources */,
+				68B99ED9180BBF7100FFEA35 /* mlo-icon-114.png in Resources */,
+				68B98C35180B38CD00FFEA35 /* MLOButtonBack.png in Resources */,
+				68B98C36180B38CD00FFEA35 /* MLOButtonBack@2x.png in Resources */,
+				68B98C37180B38CD00FFEA35 /* MLOButtonEdit.png in Resources */,
+				68B98C38180B38CD00FFEA35 /* MLOButtonExpand.png in Resources */,
+				68B98C39180B38CD00FFEA35 /* MLOButtonFind.png in Resources */,
+				68B98C3A180B38CD00FFEA35 /* MLOButtonLeft.png in Resources */,
+				68B98C3B180B38CD00FFEA35 /* MLOButtonPrint.png in Resources */,
+				68B98C3C180B38CD00FFEA35 /* MLOButtonRight.png in Resources */,
+				68B98C3D180B38CD00FFEA35 /* MLOButtonSave.png in Resources */,
+				68B98C3E180B38CD00FFEA35 /* MLOButtonSelectionHandle.png in Resources */,
+				68B98C3F180B38CD00FFEA35 /* MLOButtonShrink.png in Resources */,
+				68B98C40180B38CD00FFEA35 /* MLOContextualMenuEdge.png in Resources */,
+				68B98C41180B38CD00FFEA35 /* MLOLibreOfficeLogo.png in Resources */,
+				68B98C42180B38CD00FFEA35 /* MLOMagnifier@2x.png in Resources */,
+				68B98C43180B38CD00FFEA35 /* MLOMagnifierMask@2x.png in Resources */,
+				68B99ED3180BBEE900FFEA35 /* test1.odt in Resources */,
+				681D78BA180C12D300D52D5E /* fundamentalrc in Resources */,
+				681D78BB180C12D300D52D5E /* offapi.rdb in Resources */,
+				681D78BC180C12D300D52D5E /* oovbaapi.rdb in Resources */,
+				681D78BD180C12D300D52D5E /* program in Resources */,
+				681D78BE180C12D300D52D5E /* rc in Resources */,
+				681D78BF180C12D300D52D5E /* registry in Resources */,
+				681D78C0180C12D300D52D5E /* services.rdb in Resources */,
+				681D78C1180C12D300D52D5E /* share in Resources */,
+				681D78C2180C12D300D52D5E /* udkapi.rdb in Resources */,
+				681D78C3180C12D300D52D5E /* unorc in Resources */,
+				681D78C6180C136400D52D5E /* ure in Resources */,
+				688EAAE9180D3130003741B3 /* lo.xcconfig in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		68B98C23180B2FE500FFEA35 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "dest_lib=lib_link\ndest_resource=resource_link\nsrc=$BUILDDIR/solver/unxiosr.pro\nsrc2=$BUILDDIR/instdir/unxiosr.pro\nproduct_ver=`sed -ne 's/^\\(export PRODUCTVERSION=\\)\\(.*\\)/\\2/p' $BUILDDIR/config_build.mk`\nbuildid=`git log -1 --format=%H`\n\nrm -rf $dest_lib $dest_resource\nmkdir -p $dest_lib $dest_resource\n\n# Libs #\nfor file in $src/lib/*.a; do\n    ln $file $dest_lib/${file##*/}\ndone\n\n# Resources #\nmkdir -p $dest_resource/ure\n\n# copy rdb files\ncp $src/bin/offapi.rdb          $dest_resource\ncp $src/bin/udkapi.rdb          $dest_resource\ncp $src/bin/oovbaapi.rdb        $dest_resource\ncp $src/xml/services.rdb        $dest_resource\ncp $src/xml/ure/services.rdb    $dest_resource/ure\n\n# copy \"registry\" files\nmkdir -p $dest_resource/registry/modules $dest_resource/registry/res\ncp $src/xml/*.xcd $dest_resource/registry\nmv $dest_resource/registry/fcfg_langpack_en-US.xcd $dest_resource/registry/res\ncp -R $src/xml/registry/* $dest_resource/registry\n\n# copy .res files\n# program/resource is hardcoded in tools/source/rc/resmgr.cxx. Sure,\n# we could set STAR_RESOURCE_PATH instead. sigh...\nmkdir -p $dest_resource/program/resource\ncp $src/bin/*en-US.res $dest_resource/program/resource\n\n# soffice.cfg\nmkdir -p $dest_resource/share/config\ncp -R $src2/share/config/soffice.cfg $dest_resource/share/config\n            \n# \"registry\"\nmkdir -p $dest_resource/share/registry/res\ncp $src/xml/*.xcd $dest_resource/share/registry\nmv $dest_resource/share/registry/fcfg_langpack_en-US.xcd $dest_resource/share/registry/res\ncp -R $src/xml/registry/* $dest_resource/share/registry\n            \n# Set up rc, the \"inifile\". See getIniFileName_Impl().\nfile=$dest_resource/rc\necho '[Bootstrap]'                                      >  $file\necho 'URE_BOOTSTRAP=file://$APP_DATA_DIR/fundamentalrc' >> $file\necho 'HOME=$APP_DATA_DIR/tmp'                           >> $file\n\n# Set up fundamentalrc, unorc, bootstraprc and versionrc.\n# Do we really need all these?\nfile=$dest_resource/fundamentalrc\necho '[Bootstrap]'                                      >  $file\necho 'BRAND_BASE_DIR=file://$APP_DATA_DIR'              >> $file\necho 'CONFIGURATION_LAYERS=xcsxcu:${BRAND_BASE_DIR}/registry module:${BRAND_BASE_DIR}/registry/modules res:${BRAND_BASE_DIR}/registry' >> $file\n\nfile=$dest_resource/unorc\necho '[Bootstrap]' > $file\n\n# bootstraprc must be in $BRAND_BASE_DIR/program\nmkdir -p $dest_resource/program\nfile=$dest_resource/program/bootstraprc\necho '[Bootstrap]'                                                              >  $file\necho 'InstallMode=<installmode>'                                                >> $file\necho \"ProductKey=LibreOffice $product_ver\"                                      >> $file\necho 'UserInstallation=file://$APP_DATA_DIR/../Library/Application%20Support'   >> $file\n\n# Is this really needed?\nfile=$dest_resource/program/versionrc\necho '[Version]'            >  $file\necho 'AllLanguages=en-US'   >> $file\necho 'BuildVersion='        >> $file\necho \"buildid=$buildid\"     >> $file\necho 'ProductMajor=360'     >> $file\necho 'ProductMinor=1'       >> $file\n           ";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		689EBAE318069FB7002F1CD7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				689EBAF718069FB7002F1CD7 /* main.m in Sources */,
+				689EBB2E1806CC3A002F1CD7 /* MLOAppDelegate.m in Sources */,
+				689EBB2F1806CC3A002F1CD7 /* MLOAppViewController.m in Sources */,
+				689EBBAE1806D370002F1CD7 /* MLOCachedFile.m in Sources */,
+				689EBBAF1806D370002F1CD7 /* MLOFileCacheManager.m in Sources */,
+				689EBBB01806D370002F1CD7 /* MLOFileListViewController.m in Sources */,
+				689EBBB11806D370002F1CD7 /* MLOFileManagerViewController.m in Sources */,
+				88E9476B180DB9B600771808 /* NSObject+MLOFileUtils.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		689EBAF318069FB7002F1CD7 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				689EBAF418069FB7002F1CD7 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		689EBB0B18069FB8002F1CD7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 688EAAE8180D3130003741B3 /* lo.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CLANG_X86_VECTOR_INSTRUCTIONS = default;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../shared/ios_sharedlo/objective_c,
+					../shared/ios_sharedlo/objective_c/utils,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = "";
+				LLVM_LTO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = armv7;
+			};
+			name = Debug;
+		};
+		689EBB0C18069FB8002F1CD7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 688EAAE8180D3130003741B3 /* lo.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CLANG_X86_VECTOR_INSTRUCTIONS = default;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../shared/ios_sharedlo/objective_c,
+					../shared/ios_sharedlo/objective_c/utils,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = "";
+				LLVM_LTO = YES;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = "";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = armv7;
+			};
+			name = Release;
+		};
+		689EBB0E18069FB8002F1CD7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MobileLibreOffice/MobileLibreOffice-Prefix.pch";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "MobileLibreOffice/MobileLibreOffice-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					lib_link,
+					"\"$(SRCROOT)/lib_link\"",
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/LibreOffice-crmuzqddmwkxdqbmiaaqrfadymen/Build/Products/Debug-iphoneos\"",
+				);
+				LLVM_LTO = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		689EBB0F18069FB8002F1CD7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MobileLibreOffice/MobileLibreOffice-Prefix.pch";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "MobileLibreOffice/MobileLibreOffice-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					lib_link,
+					"\"$(SRCROOT)/lib_link\"",
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/LibreOffice-crmuzqddmwkxdqbmiaaqrfadymen/Build/Products/Debug-iphoneos\"",
+				);
+				LLVM_LTO = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		689EBAE218069FB7002F1CD7 /* Build configuration list for PBXProject "MobileLibreOffice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				689EBB0B18069FB8002F1CD7 /* Debug */,
+				689EBB0C18069FB8002F1CD7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		689EBB0D18069FB8002F1CD7 /* Build configuration list for PBXNativeTarget "MobileLibreOffice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				689EBB0E18069FB8002F1CD7 /* Debug */,
+				689EBB0F18069FB8002F1CD7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 689EBADF18069FB7002F1CD7 /* Project object */;
+}
