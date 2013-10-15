@@ -462,7 +462,7 @@ OUString SwEditShell::GetDropTxt( const sal_uInt16 nChars ) const
      * always return a string even though there is a selection
      */
 
-    String aTxt;
+    OUString aTxt;
     SwPaM* pCrsr = GetCrsr();
     if ( IsMultiSelection() )
     {
@@ -521,10 +521,10 @@ void SwEditShell::ReplaceDropTxt( const OUString &rStr, SwPaM* pPaM )
 
 OUString SwEditShell::Calculate()
 {
-    String  aFormel;                    // the final formula
-    SwPaM   *pPaMLast = (SwPaM*)GetCrsr()->GetNext(),
-            *pPaM = pPaMLast;           // cursor pointers
-    SwCalc  aCalc( *GetDoc() );
+    OUString  aFormel;                    // the final formula
+    SwPaM     *pPaMLast = (SwPaM*)GetCrsr()->GetNext(),
+              *pPaM = pPaMLast;           // cursor pointers
+    SwCalc    aCalc( *GetDoc() );
     const CharClass& rCC = GetAppCharClass();
 
     do {
@@ -533,7 +533,7 @@ OUString SwEditShell::Calculate()
         {
             const SwPosition *pStart = pPaM->Start(), *pEnd = pPaM->End();
             xub_StrLen nStt = pStart->nContent.GetIndex();
-            String aStr = pTxtNd->GetExpandTxt( nStt, pEnd->nContent.
+            OUString aStr = pTxtNd->GetExpandTxt( nStt, pEnd->nContent.
                                                 GetIndex() - nStt );
 
             aStr = rCC.lowercase( aStr );
@@ -542,22 +542,22 @@ OUString SwEditShell::Calculate()
             bool bValidFlds = false;
             xub_StrLen nPos = 0;
 
-            while( nPos < aStr.Len() )
+            while( nPos < aStr.getLength() )
             {
-                ch = aStr.GetChar( nPos++ );
+                ch = aStr[ nPos++ ];
                 if( rCC.isLetter( aStr, nPos-1 ) || ch == '_' )
                 {
                     xub_StrLen nTmpStt = nPos-1;
-                    while(  nPos < aStr.Len() &&
-                            0 != ( ch = aStr.GetChar( nPos++ )) &&
+                    while(  nPos < aStr.getLength() &&
+                            0 != ( ch = aStr[ nPos++ ]) &&
                            (rCC.isLetterNumeric( aStr, nPos - 1 ) ||
                                ch == '_'|| ch == '.' ))
                         ;
 
-                    if( nPos < aStr.Len() )
+                    if( nPos < aStr.getLength() )
                         --nPos;
 
-                    String sVar( aStr.Copy( nTmpStt, nPos - nTmpStt ));
+                    OUString sVar = aStr.copy( nTmpStt, nPos - nTmpStt );
                     if( !::FindOperator( sVar ) &&
                         (::Find( sVar, aCalc.GetVarTable(),TBLSZ) ||
                          aCalc.VarLook( sVar )) )
@@ -569,15 +569,13 @@ OUString SwEditShell::Calculate()
                                                   pStart->nContent.GetIndex() );
                             bValidFlds = true;
                         }
-                        (( aFormel += '(' ) +=
-                                aCalc.GetStrResult( aCalc.VarLook( sVar )
-                                                        ->nValue )) += ')';
+                        aFormel += "(" + aCalc.GetStrResult( aCalc.VarLook( sVar )->nValue ) + ")";
                     }
                     else
                         aFormel += sVar;
                 }
                 else
-                    aFormel += ch;
+                    aFormel += OUString(ch);
             }
         }
     } while( pPaMLast != (pPaM = (SwPaM*)pPaM->GetNext()) );
@@ -702,13 +700,13 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
                 pTxtNd->GetNodes().IsDocNodes() )
             {
                 SwTxtINetFmt& rAttr = *pFnd;
-                String sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
+                OUString sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
                                     *rAttr.GetEnd() - *rAttr.GetStart() ) );
 
                 sTxt = comphelper::string::remove(sTxt, 0x0a);
                 sTxt = comphelper::string::strip(sTxt, ' ');
 
-                if( sTxt.Len() )
+                if( !sTxt.isEmpty() )
                 {
                     SwGetINetAttr* pNew = new SwGetINetAttr( sTxt, rAttr );
                     rArr.push_back( pNew );

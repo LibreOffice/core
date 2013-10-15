@@ -840,7 +840,7 @@ uno::Reference< XSpellAlternatives >
         if( pWrong->InWrongWord(nBegin,nLen) && !pNode->IsSymbol(nBegin) )
         {
             const OUString aText(pNode->GetTxt().copy(nBegin, nLen));
-            String aWord( aText );
+            OUString aWord( aText );
             aWord = comphelper::string::remove(aWord, CH_TXTATR_BREAKWORD);
             aWord = comphelper::string::remove(aWord, CH_TXTATR_INWORD);
 

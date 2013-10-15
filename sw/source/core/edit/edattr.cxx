@@ -86,7 +86,7 @@ sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
 
                 if (pNumRule)
                 {
-                    const String & aCharFmtName =
+                    const OUString & aCharFmtName =
                         pNumRule->Get(static_cast<sal_uInt16>(pTxtNd->GetActualListLevel())).GetCharFmtName();
                     SwCharFmt * pCharFmt =
                         GetDoc()->FindCharFmtByName(aCharFmtName);
@@ -450,7 +450,7 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
                             sal_uInt16 &rScrpt, bool bInSelection, bool bNum )
 {
     bool bRet = false;
-    String sExp;
+    OUString sExp;
 
     // consider numbering
     if ( bNum )
@@ -476,7 +476,7 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
                 if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
                 {
                     if ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
-                        sExp = rNumFmt.GetBulletChar();
+                        sExp = OUString(rNumFmt.GetBulletChar());
                     else
                         sExp = rTNd.GetNumString();
                 }
@@ -503,7 +503,7 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         }
     }
 
-    xub_StrLen nEnd = sExp.Len();
+    xub_StrLen nEnd = sExp.getLength();
     if ( nEnd )
     {
         xub_StrLen n;

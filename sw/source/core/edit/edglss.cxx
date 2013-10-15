@@ -47,7 +47,7 @@ sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName
 {
     SwDoc* pGDoc = rBlks.GetDoc();
 
-    String sBase;
+    OUString sBase;
     if(bSaveRelFile)
     {
         INetURLObject aURL( rBlks.GetFileName() );
@@ -87,7 +87,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
     SwDoc* pGDoc = rBlock.GetDoc();
     SwDoc* pMyDoc = GetDoc();
 
-    String sBase;
+    OUString sBase;
     if(bSaveRelFile)
     {
         INetURLObject aURL( rBlock.GetFileName() );
@@ -289,7 +289,7 @@ sal_Bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
         aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 #endif
         WriterRef xWrt;
-        SwReaderWriter::GetWriter( OUString(FILTER_TEXT), String(), xWrt );
+        SwReaderWriter::GetWriter( OUString(FILTER_TEXT), OUString(), xWrt );
         if( xWrt.Is() )
         {
             // write selected areas into a ASCII document

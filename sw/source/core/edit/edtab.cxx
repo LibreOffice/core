@@ -396,8 +396,8 @@ sal_Bool SwEditShell::IsTableBoxTextFormat() const
     if( ULONG_MAX == nNd )
         return sal_True;
 
-    const String& rTxt = GetDoc()->GetNodes()[ nNd ]->GetTxtNode()->GetTxt();
-    if( !rTxt.Len() )
+    const OUString& rTxt = GetDoc()->GetNodes()[ nNd ]->GetTxtNode()->GetTxt();
+    if( rTxt.isEmpty() )
         return sal_False;
 
     double fVal;
