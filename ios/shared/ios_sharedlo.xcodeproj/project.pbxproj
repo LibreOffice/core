@@ -479,8 +479,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"$(BUILDDIR)/config_host",
 					../../include,
-					"$(BUILDDIR)/config_build",
 					"$(BUILDDIR)/workdir/unxiosr.pro/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(BUILDDIR)/workdir/unxiosr.pro/UnoApiHeadersTarget/offapi/comprehensive",
 				);
@@ -514,8 +514,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
+					"$(BUILDDIR)/config_host",
 					../../include,
-					"$(BUILDDIR)/config_build",
 					"$(BUILDDIR)/workdir/unxiosr.pro/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(BUILDDIR)/workdir/unxiosr.pro/UnoApiHeadersTarget/offapi/comprehensive",
 				);
