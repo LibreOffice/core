@@ -35,6 +35,7 @@ public:
     void testN816593();
     void testPageBorder();
     void testN823651();
+    void testFdo36868();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -62,6 +63,7 @@ void Test::run()
         {"n816593.doc", &Test::testN816593},
         {"page-border.doc", &Test::testPageBorder},
         {"n823651.doc", &Test::testN823651},
+        {"fdo36868.doc", &Test::testFdo36868},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -283,6 +285,13 @@ void Test::testN823651()
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XTextRange> >(xStyle, "HeaderTextFirst")->getText();
     CPPUNIT_ASSERT_EQUAL(7.5f, getProperty<float>(getParagraphOfText(1, xText), "CharHeight"));
+}
+
+void Test::testFdo36868()
+{
+    OUString aText = parseDump("/root/page/body/txt[3]/Special[@nType='POR_NUMBER']", "rText");
+    // This was 1.1.
+    CPPUNIT_ASSERT_EQUAL(OUString("2.1"), aText);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
