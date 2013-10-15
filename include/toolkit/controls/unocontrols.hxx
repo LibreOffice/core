@@ -61,7 +61,6 @@
 #include <boost/optional.hpp>
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX                             "vnd.sun.star.GraphicObject:"
-#define UNO_NAME_GRAPHOBJ_URLPKGPREFIX                  "vnd.sun.star.Package:"
 
 class ImageHelper
 {
