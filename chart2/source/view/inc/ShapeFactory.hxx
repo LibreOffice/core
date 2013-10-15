@@ -189,6 +189,15 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget );
 
+    virtual void createSeries( const com::sun::star::uno::Reference<
+            com::sun::star::drawing::XShapes> & xTarget,
+            const DataSeriesState& rSeriesState );
+
+    virtual void pushNextSeriesState( const com::sun::star::uno::Reference<
+            com::sun::star::drawing::XShapes> & xTarget,
+            const DataSeriesState& rOldSeriesState,
+            const DataSeriesState& rNewSeriesState );
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
          getOrCreateChartRootShape( const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPage>& xPage );

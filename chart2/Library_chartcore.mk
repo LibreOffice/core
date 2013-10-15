@@ -25,7 +25,10 @@ $(eval $(call gb_Library_add_defs,chartcore,\
 
 $(eval $(call gb_Library_set_precompiled_header,chartcore,$(SRCDIR)/chart2/inc/pch/precompiled_chartcore))
 
-$(eval $(call gb_Library_use_external,chartcore,boost_headers))
+$(eval $(call gb_Library_use_externals,chartcore,\
+	boost_headers \
+	mdds_headers \
+))
 
 $(eval $(call gb_Library_use_custom_headers,chartcore,\
 	officecfg/registry \

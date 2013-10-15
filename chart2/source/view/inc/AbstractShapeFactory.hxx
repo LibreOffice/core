@@ -29,6 +29,8 @@
 
 #include <rtl/ustring.hxx>
 
+#include "DataSeriesState.hxx"
+
 namespace chart {
 
 
@@ -224,6 +226,16 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
          getOrCreateChartRootShape( const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPage>& xPage ) = 0;
+
+
+    virtual void createSeries( const com::sun::star::uno::Reference<
+            com::sun::star::drawing::XShapes> & xTarget,
+            const DataSeriesState& rSeriesState ) = 0;
+
+    virtual void pushNextSeriesState( const com::sun::star::uno::Reference<
+            com::sun::star::drawing::XShapes> & xTarget,
+            const DataSeriesState& rOldSeriesState,
+            const DataSeriesState& rNewSeriesState ) = 0;
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
          getChartRootShape( const ::com::sun::star::uno::Reference<

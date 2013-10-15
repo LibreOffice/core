@@ -280,6 +280,19 @@ uno::Reference< drawing::XShape >
     return new DummyXShape();
 }
 
+void DummyShapeFactory::createSeries( const uno::Reference<
+        drawing::XShapes> & ,
+        const DataSeriesState& )
+{
+}
+
+void DummyShapeFactory::pushNextSeriesState( const uno::Reference<
+        drawing::XShapes> & ,
+        const DataSeriesState& ,
+        const DataSeriesState& )
+{
+}
+
 } //namespace dummy
 
 } //namespace chart
