@@ -201,17 +201,17 @@ Download::getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort)
     sal_Int32 nProxyType = aValue.get< sal_Int32 >();
     if( 0 != nProxyType ) // type 0 means "direct connection to the internet
     {
-        if( rURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("http:")) )
+        if( rURL.startsWith("http:") )
         {
             rHost = getStringValue(xNameAccess, "ooInetHTTPProxyName");
             rPort = getInt32Value(xNameAccess, "ooInetHTTPProxyPort");
         }
-        else if( rURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("https:")) )
+        else if( rURL.startsWith("https:") )
         {
             rHost = getStringValue(xNameAccess, "ooInetHTTPSProxyName");
             rPort = getInt32Value(xNameAccess, "ooInetHTTPSProxyPort");
         }
-        else if( rURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("ftp:")) )
+        else if( rURL.startsWith("ftp:") )
         {
             rHost = getStringValue(xNameAccess, "ooInetFTPProxyName");
             rPort = getInt32Value(xNameAccess, "ooInetFTPProxyPort");

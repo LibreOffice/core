@@ -611,20 +611,6 @@ void UpdateHandler::updateState( UpdateState eState )
 }
 
 //--------------------------------------------------------------------
-void UpdateHandler::searchAndReplaceAll( OUString &rText,
-                                         const OUString &rWhat,
-                                         const OUString &rWith ) const
-{
-    sal_Int32 nIndex = rText.indexOf( rWhat );
-
-    while ( nIndex != -1 )
-    {
-        rText = rText.replaceAt( nIndex, rWhat.getLength(), rWith );
-        nIndex = rText.indexOf( rWhat, nIndex );
-    }
-}
-
-//--------------------------------------------------------------------
 OUString UpdateHandler::loadString( const uno::Reference< resource::XResourceBundle > xBundle,
                                          sal_Int32 nResourceId ) const
 {
@@ -646,14 +632,11 @@ OUString UpdateHandler::loadString( const uno::Reference< resource::XResourceBun
 
 OUString UpdateHandler::substVariables( const OUString &rSource ) const
 {
-    OUString sString( rSource );
-
-    searchAndReplaceAll( sString, "%NEXTVERSION", msNextVersion );
-    searchAndReplaceAll( sString, "%DOWNLOAD_PATH", msDownloadPath );
-    searchAndReplaceAll( sString, "%FILE_NAME", msDownloadFile );
-    searchAndReplaceAll( sString, "%PERCENT", OUString::number( mnPercent ) );
-
-    return sString;
+    return rSource
+        .replaceAll( "%NEXTVERSION", msNextVersion )
+        .replaceAll( "%DOWNLOAD_PATH", msDownloadPath )
+        .replaceAll( "%FILE_NAME", msDownloadFile )
+        .replaceAll( "%PERCENT", OUString::number( mnPercent ) );
 }
 
 //--------------------------------------------------------------------
@@ -866,13 +849,9 @@ void UpdateHandler::setFullVersion( OUString& rString )
 
     OUString aProductVersion;
     xNameAccess->getByName("ooSetupVersion") >>= aProductVersion;
-    sal_Int32 nVerIndex = rString.indexOf( aProductVersion );
-    if ( nVerIndex != -1 )
-    {
-        OUString aProductFullVersion;
-        xNameAccess->getByName("ooSetupVersionAboutBox") >>= aProductFullVersion;
-        rString = rString.replaceAt( nVerIndex, aProductVersion.getLength(), aProductFullVersion );
-    }
+    OUString aProductFullVersion;
+    xNameAccess->getByName("ooSetupVersionAboutBox") >>= aProductFullVersion;
+    rString = rString.replaceFirst( aProductVersion, aProductFullVersion );
 }
 
 //--------------------------------------------------------------------
@@ -996,10 +975,11 @@ bool UpdateHandler::showWarning( const OUString &rWarningText,
 //--------------------------------------------------------------------
 bool UpdateHandler::showOverwriteWarning( const OUString& rFileName ) const
 {
-    OUString aMsg( msReloadWarning );
-    searchAndReplaceAll( aMsg, "%FILENAME", rFileName );
-    searchAndReplaceAll( aMsg, "%DOWNLOAD_PATH", msDownloadPath );
-    return showWarning( aMsg, msReloadContinue, msReloadReload );
+    return showWarning(
+        (msReloadWarning
+         .replaceAll( "%FILENAME", rFileName )
+         .replaceAll( "%DOWNLOAD_PATH", msDownloadPath )),
+        msReloadContinue, msReloadReload );
 }
 
 //--------------------------------------------------------------------

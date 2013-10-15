@@ -156,7 +156,6 @@ private:
                                                 com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > const & rProps );
 
     void                    setFullVersion( OUString& rString );
-    void                    searchAndReplaceAll( OUString &rText, const OUString &rWhat, const OUString &rWith ) const;
 
 public:
                             UpdateHandler( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rxContext,

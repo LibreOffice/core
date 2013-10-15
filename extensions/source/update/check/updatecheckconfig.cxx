@@ -592,16 +592,13 @@ UpdateCheckConfig::commitChanges()
             for( sal_Int32 i=0; i<nChanges; ++i )
             {
                 aChangesSet[i].Accessor >>= aString;
-
-                // FIXME: use non IgnoreAsciiCase version as soon as it becomes available
-                if( aString.endsWithIgnoreAsciiCaseAsciiL(AUTOCHECK_ENABLED "']", sizeof(AUTOCHECK_ENABLED)+1) )
+                if( aString.endsWith(AUTOCHECK_ENABLED "']") )
                 {
                     sal_Bool bEnabled = sal_False;
                     aChangesSet[i].Element >>= bEnabled;
                     m_rListener->autoCheckStatusChanged(sal_True == bEnabled);
                 }
-                // FIXME: use non IgnoreAsciiCase version as soon as it becomes available
-                else if( aString.endsWithIgnoreAsciiCaseAsciiL(CHECK_INTERVAL "']", sizeof(CHECK_INTERVAL)+1) )
+                else if( aString.endsWith(CHECK_INTERVAL "']") )
                 {
                     m_rListener->autoCheckIntervalChanged();
                 }
