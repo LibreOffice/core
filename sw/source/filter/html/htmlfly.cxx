@@ -1675,10 +1675,10 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
     if( !bFound || nPos < 2 ) // mindetsens "#a|..."
         return;
 
-    String aURL( rURL.copy( 1 ) );
+    OUString aURL( rURL.copy( 1 ) );
 
     // nPos-1+1/3 (-1 wg. Erase)
-    OUString sCmp(comphelper::string::remove(aURL.Copy(bEncoded ? nPos+2 : nPos),
+    OUString sCmp(comphelper::string::remove(aURL.copy(bEncoded ? nPos+2 : nPos),
         ' '));
     if( sCmp.isEmpty() )
         return;
@@ -1694,8 +1694,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
         // Einfach nur in einem sortierten Array merken
         if( bEncoded )
         {
-            aURL.Erase( nPos, 2 );
-            aURL.SetChar( nPos-1, cMarkSeparator );
+            aURL = aURL.replaceAt( nPos - 1, 3, OUString(cMarkSeparator)  );
         }
         aImplicitMarks.insert( aURL );
     }
@@ -1703,7 +1702,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
     {
         // Hier brauchen wir Position und Name. Deshalb sortieren wir
         // ein sal_uInt16 und ein String-Array selbst
-        String aOutline( aURL.Copy( 0, nPos-1 ) );
+        OUString aOutline( aURL.copy( 0, nPos-1 ) );
         SwPosition aPos( *pCurPam->GetPoint() );
         if( pDoc->GotoOutline( aPos, aOutline ) )
         {
@@ -1717,8 +1716,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
             aOutlineMarkPoss.insert( aOutlineMarkPoss.begin()+nIns, nIdx );
             if( bEncoded )
             {
-                aURL.Erase( nPos, 2 );
-                aURL.SetChar( nPos-1, cMarkSeparator );
+                aURL = aURL.replaceAt( nPos - 1, 3, OUString(cMarkSeparator) );
             }
             aOutlineMarks.insert( aOutlineMarks.begin()+nIns, aURL );
         }

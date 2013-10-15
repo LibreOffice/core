@@ -1298,8 +1298,8 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
     if( !pFormImpl )
         pFormImpl = new SwHTMLForm_Impl( pDoc->GetDocShell() );
 
-    String aAction( sBaseURL );
-    String sName, sTarget;
+    OUString aAction( sBaseURL );
+    OUString sName, sTarget;
     sal_uInt16 nEncType = FormSubmitEncoding_URL;
     sal_uInt16 nMethod = FormSubmitMethod_GET;
     SvxMacroTableDtor aMacroTbl;
@@ -1358,11 +1358,11 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
 
         if( bSetEvent )
         {
-            String sEvent( rOption.GetString() );
-            if( sEvent.Len() )
+            OUString sEvent( rOption.GetString() );
+            if( !sEvent.isEmpty() )
             {
                 sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
-                String aScriptType2;
+                OUString aScriptType2;
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType2 = rDfltScriptType;
                 aMacroTbl.Insert( nEvent, SvxMacro( sEvent, aScriptType2, eScriptType2 ) );
@@ -1392,7 +1392,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
     aTmp <<= OUString(sName);
     xFormPropSet->setPropertyValue("Name", aTmp );
 
-    if( aAction.Len() )
+    if( !aAction.isEmpty() )
     {
         aAction = URIHelper::SmartRel2Abs(INetURLObject(sBaseURL), aAction, Link(), false);
     }
@@ -1416,11 +1416,10 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
     xFormPropSet->setPropertyValue(
         OUString("SubmitEncoding"), aTmp );
 
-    if( sTarget.Len() )
+    if( !sTarget.isEmpty() )
     {
-        aTmp <<= OUString(sTarget);
-        xFormPropSet->setPropertyValue(
-            OUString("TargetFrame"), aTmp );
+        aTmp <<= sTarget;
+        xFormPropSet->setPropertyValue( OUString("TargetFrame"), aTmp );
     }
 
     const uno::Reference< container::XIndexContainer > & rForms =
@@ -1461,7 +1460,7 @@ void SwHTMLParser::InsertInput()
     if( !pFormImpl || !pFormImpl->GetFormComps().is() )
         return;
 
-    String sImgSrc, aId, aClass, aStyle, sName;
+    OUString sImgSrc, aId, aClass, aStyle, sName;
     OUString sText;
     SvxMacroTableDtor aMacroTbl;
     std::vector<OUString> aUnoMacroTbl;
@@ -1479,7 +1478,7 @@ void SwHTMLParser::InsertInput()
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     SvKeyValueIterator *pHeaderAttrs = pFormImpl->GetHeaderAttrs();
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
-    const String& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
+    const OUString& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
 
     sal_uInt16 nKeepCRLFToken = HTML_O_VALUE;
     const HTMLOptions& rHTMLOptions = GetOptions( &nKeepCRLFToken );
@@ -1589,11 +1588,11 @@ void SwHTMLParser::InsertInput()
 
         if( bSetEvent )
         {
-            String sEvent( rOption.GetString() );
-            if( sEvent.Len() )
+            OUString sEvent( rOption.GetString() );
+            if( !sEvent.isEmpty() )
             {
                 sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
-                String aScriptType2;
+                OUString aScriptType2;
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType2 = rDfltScriptType;
                 aMacroTbl.Insert( nEvent, SvxMacro( sEvent, aScriptType2, eScriptType2 ) );
@@ -1604,7 +1603,7 @@ void SwHTMLParser::InsertInput()
     if( HTML_IT_IMAGE==eType )
     {
         // Image-Controls ohne Image-URL werden ignoriert (wie bei MS)
-        if( !sImgSrc.Len() )
+        if( sImgSrc.isEmpty() )
             return;
     }
     else
@@ -1862,7 +1861,7 @@ void SwHTMLParser::InsertInput()
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
         ParseStyleOptions( aStyle, aId, aClass, aCSS1ItemSet, aCSS1PropInfo );
-        if( aId.Len() )
+        if( !aId.isEmpty() )
             InsertBookmark( aId );
     }
 
@@ -1958,8 +1957,8 @@ void SwHTMLParser::NewTextArea()
         return;
     }
 
-    String aId, aClass, aStyle;
-    String sName;
+    OUString aId, aClass, aStyle;
+    OUString sName;
     sal_Int32 nTabIndex = TABINDEX_MAX + 1;
     SvxMacroTableDtor aMacroTbl;
     std::vector<OUString> aUnoMacroTbl;
@@ -1969,7 +1968,7 @@ void SwHTMLParser::NewTextArea()
     sal_Bool bDisabled = sal_False;
     SvKeyValueIterator *pHeaderAttrs = pFormImpl->GetHeaderAttrs();
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
-    const String& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
+    const OUString& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -2054,8 +2053,8 @@ void SwHTMLParser::NewTextArea()
 
         if( bSetEvent )
         {
-            String sEvent( rOption.GetString() );
-            if( sEvent.Len() )
+            OUString sEvent( rOption.GetString() );
+            if( !sEvent.isEmpty() )
             {
                 sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
                 if( EXTENDED_STYPE==eScriptType2 )
@@ -2133,7 +2132,7 @@ void SwHTMLParser::NewTextArea()
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
         ParseStyleOptions( aStyle, aId, aClass, aCSS1ItemSet, aCSS1PropInfo );
-        if( aId.Len() )
+        if( !aId.isEmpty() )
             InsertBookmark( aId );
     }
 
@@ -2246,8 +2245,8 @@ void SwHTMLParser::NewSelect()
     if( !pFormImpl || !pFormImpl->GetFormComps().is() )
         return;
 
-    String aId, aClass, aStyle;
-    String sName;
+    OUString aId, aClass, aStyle;
+    OUString sName;
     sal_Int32 nTabIndex = TABINDEX_MAX + 1;
     SvxMacroTableDtor aMacroTbl;
     std::vector<OUString> aUnoMacroTbl;
@@ -2257,7 +2256,7 @@ void SwHTMLParser::NewSelect()
     nSelectEntryCnt = 1;
     SvKeyValueIterator *pHeaderAttrs = pFormImpl->GetHeaderAttrs();
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
-    const String& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
+    const OUString& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -2332,8 +2331,8 @@ void SwHTMLParser::NewSelect()
 
         if( bSetEvent )
         {
-            String sEvent( rOption.GetString() );
-            if( sEvent.Len() )
+            OUString sEvent( rOption.GetString() );
+            if( !sEvent.isEmpty() )
             {
                 sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
                 if( EXTENDED_STYPE==eScriptType2 )
@@ -2412,7 +2411,7 @@ void SwHTMLParser::NewSelect()
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
         ParseStyleOptions( aStyle, aId, aClass, aCSS1ItemSet, aCSS1PropInfo );
-        if( aId.Len() )
+        if( !aId.isEmpty() )
             InsertBookmark( aId );
     }
 

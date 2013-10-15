@@ -493,7 +493,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_action).append("=\"");
         Strm() << sOut.makeStringAndClear().getStr();
-        String aURL( *(OUString*)aTmp.getValue() );
+        OUString aURL( *(OUString*)aTmp.getValue() );
         aURL = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), aURL);
         HTMLOutFuncs::Out_String( Strm(), aURL, eDestEnc, &aNonConvertableCharacters );
         sOut.append('\"');

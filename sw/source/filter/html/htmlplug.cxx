@@ -295,7 +295,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
 
 void SwHTMLParser::InsertEmbed()
 {
-    String aURL, aType, aName, aAlt, aId, aStyle, aClass;
+    OUString aURL, aType, aName, aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( USHRT_MAX, USHRT_MAX );
     sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False, bHidden = sal_False;
@@ -325,14 +325,14 @@ void SwHTMLParser::InsertEmbed()
             aName = rOption.GetString();
             break;
         case HTML_O_SRC:
-            if( !aURL.Len() )
+            if( aURL.isEmpty() )
                 aURL = rOption.GetString();
             break;
         case HTML_O_ALT:
             aAlt = rOption.GetString();
             break;
         case HTML_O_TYPE:
-            if( !aType.Len() )
+            if( aType.isEmpty() )
                 aType = rOption.GetString();
             break;
         case HTML_O_ALIGN:
@@ -401,14 +401,14 @@ void SwHTMLParser::InsertEmbed()
 
     // die URL aufbereiten
     INetURLObject aURLObj;
-    bool bHasURL = aURL.Len() &&
+    bool bHasURL = !aURL.isEmpty() &&
                    aURLObj.SetURL(
                        URIHelper::SmartRel2Abs(
                            INetURLObject(sBaseURL), aURL,
                            URIHelper::GetMaybeFileHdl()) );
 
     // do not insert plugin if it has neither URL nor type
-    bool bHasType = aType.Len() != 0;
+    bool bHasType = !aType.isEmpty();
     if( !bHasURL && !bHasType )
         return;
 
@@ -466,7 +466,7 @@ void SwHTMLParser::InsertEmbed()
         pDoc->Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
 
     // Namen am FrmFmt setzen
-    if( aName.Len() )
+    if( !aName.isEmpty() )
         pFlyFmt->SetName( aName );
 
     // den alternativen Text setzen
@@ -490,7 +490,7 @@ void SwHTMLParser::InsertEmbed()
 void SwHTMLParser::NewObject()
 {
     OUString aClassID;
-    String aName, aStandBy, aId, aStyle, aClass;
+    OUString aName, aStandBy, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
     sal_Int16 eVertOri = text::VertOrientation::TOP;
@@ -660,7 +660,7 @@ void SwHTMLParser::EndObject()
 #if HAVE_FEATURE_JAVA
 void SwHTMLParser::InsertApplet()
 {
-    String aCodeBase, aCode, aName, aAlt, aId, aStyle, aClass;
+    OUString aCodeBase, aCode, aName, aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
     sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False, bMayScript = sal_False;
@@ -726,14 +726,14 @@ void SwHTMLParser::InsertApplet()
                                   rOption.GetString() );
     }
 
-    if( !aCode.Len() )
+    if( aCode.isEmpty() )
     {
         delete pAppletImpl;
         pAppletImpl = 0;
         return;
     }
 
-    if ( aCodeBase.Len() )
+    if ( !aCodeBase.isEmpty() )
         aCodeBase = INetURLObject::GetAbsURL( sBaseURL, aCodeBase );
     pAppletImpl->CreateApplet( aCode, aName, bMayScript, aCodeBase, sBaseURL );//, aAlt );
     pAppletImpl->SetAltText( aAlt );
@@ -794,7 +794,7 @@ void SwHTMLParser::InsertParam()
     if( !pAppletImpl )
         return;
 
-    String aName, aValue;
+    OUString aName, aValue;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -811,7 +811,7 @@ void SwHTMLParser::InsertParam()
         }
     }
 
-    if( !aName.Len() )
+    if( aName.isEmpty() )
         return;
 
     pAppletImpl->AppendParam( aName, aValue );
@@ -822,7 +822,7 @@ void SwHTMLParser::InsertParam()
 
 void SwHTMLParser::InsertFloatingFrame()
 {
-    String aAlt, aId, aStyle, aClass;
+    OUString aAlt, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
     sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False;

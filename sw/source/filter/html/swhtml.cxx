@@ -1450,9 +1450,9 @@ void SwHTMLParser::NextToken( int nToken )
             xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
             if( nPos )
             {
-                const String& rText =
+                const OUString& rText =
                     pPam->GetPoint()->nNode.GetNode().GetTxtNode()->GetTxt();
-                sal_Unicode cLast = rText.GetChar(--nPos);
+                sal_Unicode cLast = rText[--nPos];
                 if( ' ' == cLast || '\x0a' == cLast)
                     aToken = aToken.copy(1);
             }
@@ -1905,7 +1905,7 @@ void SwHTMLParser::NextToken( int nToken )
                     SfxItemSet aItemSet( pDoc->GetAttrPool(),
                                          pCSS1Parser->GetWhichMap() );
                     SvxCSS1PropertyInfo aPropInfo;
-                    String aDummy;
+                    OUString aDummy;
                     ParseStyleOptions( aDummy, aDummy, aDummy, aItemSet,
                                        aPropInfo, 0, &rDir );
 
@@ -1947,7 +1947,7 @@ void SwHTMLParser::NextToken( int nToken )
             if( ' ' == aToken[ 3 ] &&
                 ' ' == aToken[ aToken.getLength()-3 ] )
             {
-                String aComment( aToken.copy( 3, aToken.getLength()-5 ) );
+                OUString aComment( aToken.copy( 3, aToken.getLength()-5 ) );
                 InsertComment(comphelper::string::strip(aComment, ' '));
             }
             else
@@ -2021,16 +2021,16 @@ void SwHTMLParser::NextToken( int nToken )
 
     if( bInsertUnknown )
     {
-        String aComment(OUString("HTML: <"));
+        OUString aComment("HTML: <");
         if( (HTML_TOKEN_ONOFF & nToken) != 0 && (1 & nToken) != 0 )
-            aComment += '/';
+            aComment += "/";
         aComment += sSaveToken;
         if( !aToken.isEmpty() )
         {
             UnescapeToken();
-            (aComment += ' ') += aToken;
+            (aComment += " ") += aToken;
         }
-        aComment += '>';
+        aComment += ">";
         InsertComment( aComment );
     }
 
@@ -2175,7 +2175,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
                         OSL_ENSURE( pTxtNd, "No text node" );
                         if( pTxtNd )
                         {
-                            const String& rText = pTxtNd->GetTxt();
+                            const OUString& rText = pTxtNd->GetTxt();
                             sal_uInt16 nScriptTxt =
                                 g_pBreakIt->GetBreakIter()->getScriptType(
                                             rText, pAttr->GetSttCnt() );
@@ -2821,7 +2821,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                 {
                 case RES_FLTR_BOOKMARK: // insert bookmark
                     {
-                        const String sName( ((SfxStringItem*)pAttr->pItem)->GetValue() );
+                        const OUString sName( ((SfxStringItem*)pAttr->pItem)->GetValue() );
                         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
                         IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark( sName );
                         if( ppBkmk != pMarkAccess->getMarksEnd() &&
@@ -3064,7 +3064,7 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
         const SwTxtNode *pTxtNd = pAttr->GetSttPara().GetNode()
                                             .GetTxtNode();
         OSL_ENSURE( pTxtNd, "No text node" );
-        const String& rText = pTxtNd->GetTxt();
+        const OUString& rText = pTxtNd->GetTxt();
         sal_uInt16 nScriptTxt = g_pBreakIt->GetBreakIter()->getScriptType(
                         rText, pAttr->GetSttCnt() );
         xub_StrLen nScriptEnd = (xub_StrLen)g_pBreakIt->GetBreakIter()
@@ -3751,7 +3751,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
 
     OSL_ENSURE( !nSize == !nFontHeight, "HTML-Font-Size != Font-Height" );
 
-    String aFontName, aStyleName;
+    OUString aFontName, aStyleName;
     FontFamily eFamily = FAMILY_DONTKNOW;   // Family und Pitch,
     FontPitch ePitch = PITCH_DONTKNOW;      // falls nicht gefunden
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
@@ -3772,9 +3772,9 @@ void SwHTMLParser::NewFontAttr( int nToken )
         sal_Int32 nStrPos = 0;
         while( nStrPos!= -1 )
         {
-            String aFName = aFace.getToken( 0, ',', nStrPos );
+            OUString aFName = aFace.getToken( 0, ',', nStrPos );
             aFName = comphelper::string::strip(aFName, ' ');
-            if( aFName.Len() )
+            if( !aFName.isEmpty() )
             {
                 if( !bFound && pFList )
                 {
@@ -3790,8 +3790,8 @@ void SwHTMLParser::NewFontAttr( int nToken )
                         }
                     }
                 }
-                if( aFontName.Len() )
-                    aFontName += ';';
+                if( !aFontName.isEmpty() )
+                    aFontName += ";";
                 aFontName += aFName;
             }
         }
@@ -3818,7 +3818,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
         }
         if( bColor )
             aItemSet.Put( SvxColorItem(aColor, RES_CHRATR_COLOR) );
-        if( aFontName.Len() )
+        if( !aFontName.isEmpty() )
         {
             SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_FONT );
             aItemSet.Put( aFont );
@@ -3847,7 +3847,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
         }
         if( bColor )
             InsertAttr( &aAttrTab.pFontColor, SvxColorItem(aColor, RES_CHRATR_COLOR), pCntxt );
-        if( aFontName.Len() )
+        if( !aFontName.isEmpty() )
         {
             SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc, RES_CHRATR_FONT );
             InsertAttr( &aAttrTab.pFont, aFont, pCntxt );
@@ -4840,7 +4840,7 @@ void SwHTMLParser::NewCharFmt( int nToken )
 void SwHTMLParser::InsertSpacer()
 {
     // und es ggf. durch die Optionen veraendern
-    String aId;
+    OUString aId;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     Size aSize( 0, 0);
@@ -5052,7 +5052,7 @@ SwTwips SwHTMLParser::GetCurrentBrowseWidth()
 
 void SwHTMLParser::InsertIDOption()
 {
-    String aId;
+    OUString aId;
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
@@ -5064,7 +5064,7 @@ void SwHTMLParser::InsertIDOption()
         }
     }
 
-    if( aId.Len() )
+    if( !aId.isEmpty() )
         InsertBookmark( aId );
 }
 
@@ -5089,7 +5089,7 @@ void SwHTMLParser::InsertLineBreak()
     // 6.) Wenn von keinem Rahmen der Umlauf geaendert wird, wird ein
     //     harter Zeilenumbruch eingefuegt
 
-    String aId, aStyle, aClass;             // die ID der Bookmark
+    OUString aId, aStyle, aClass;             // die ID der Bookmark
     sal_Bool bClearLeft = sal_False, bClearRight = sal_False;
     sal_Bool bCleared = sal_False;  // wurde ein CLEAR ausgefuehrt?
 
@@ -5238,7 +5238,7 @@ void SwHTMLParser::InsertHorzRule()
     sal_Bool bColor = sal_False;
 
     Color aColor;
-    String aId;
+    OUString aId;
 
     // dann holen wir mal die Optionen
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -5375,7 +5375,7 @@ void SwHTMLParser::InsertHorzRule()
     }
 
     // Bookmarks koennen nicht in Hyperlinks eingefueht werden
-    if( aId.Len() )
+    if( !aId.isEmpty() )
         InsertBookmark( aId );
 
     // den aktuellen Kontext vom Stack holen

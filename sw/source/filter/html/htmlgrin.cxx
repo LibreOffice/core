@@ -309,7 +309,7 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
 void SwHTMLParser::InsertImage()
 {
     // und jetzt auswerten
-    String sAltNm, aId, aClass, aStyle, aMap, sHTMLGrfName;
+    OUString sAltNm, aId, aClass, aStyle, aMap, sHTMLGrfName;
     OUString sGrfNm;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
@@ -411,11 +411,11 @@ void SwHTMLParser::InsertImage()
                 goto IMAGE_SETEVENT;
 IMAGE_SETEVENT:
                 {
-                    String sTmp( rOption.GetString() );
-                    if( sTmp.Len() )
+                    OUString sTmp( rOption.GetString() );
+                    if( !sTmp.isEmpty() )
                     {
                         sTmp = convertLineEnd(sTmp, GetSystemLineEnd());
-                        String sScriptType;
+                        OUString sScriptType;
                         if( EXTENDED_STYPE == eScriptType2 )
                             sScriptType = sDfltScriptType;
                         aMacroItem.SetMacro( nEvent,
@@ -482,7 +482,7 @@ IMAGE_SETEVENT:
 
         if( aAttrTab.pINetFmt )
         {
-            const String& rURL =
+            const OUString& rURL =
                 ((const SwFmtINetFmt&)aAttrTab.pINetFmt->GetItem()).GetValue();
 
             pCSS1Parser->SetATagStyles();
@@ -627,16 +627,16 @@ IMAGE_SETEVENT:
 
     // Image-Map setzen
     aMap = comphelper::string::stripEnd(aMap, ' ');
-    if( aMap.Len() )
+    if( !aMap.isEmpty() )
     {
         // Da wir nur lokale Image-Maps kennen nehmen wireinfach alles
         // hinter dem # als Namen
-        xub_StrLen nPos = aMap.Search( '#' );
-        String aName;
-        if ( STRING_NOTFOUND==nPos )
+        sal_Int32 nPos = aMap.indexOf( '#' );
+        OUString aName;
+        if ( -1 == nPos )
             aName = aMap ;
         else
-            aName = aMap.Copy(nPos+1);
+            aName = aMap.copy(nPos+1);
 
         ImageMap *pImgMap = FindImageMap( aName );
         if( pImgMap )
@@ -700,7 +700,7 @@ IMAGE_SETEVENT:
     SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                                   ->GetIndex()+1 ]->GetGrfNode();
 
-    if( sHTMLGrfName.Len() )
+    if( !sHTMLGrfName.isEmpty() )
     {
         pFlyFmt->SetName( sHTMLGrfName );
 
@@ -712,7 +712,7 @@ IMAGE_SETEVENT:
         }
     }
 
-    if( sAltNm.Len() )
+    if( !sAltNm.isEmpty() )
         pGrfNd->SetTitle( sAltNm );
 
     if( bSetTwipSize )
@@ -785,7 +785,7 @@ IMAGE_SETEVENT:
     // Ggf. Frames anlegen und Auto-gebundenen Rahmen registrieren
     RegisterFlyFrm( pFlyFmt );
 
-    if( aId.Len() )
+    if( !aId.isEmpty() )
         InsertBookmark( aId );
 }
 
@@ -1031,7 +1031,7 @@ void SwHTMLParser::NewAnchor()
     }
 
     SvxMacroTableDtor aMacroTbl;
-    String sHRef, aName, sTarget;
+    OUString sHRef, aName, sTarget;
     OUString aId, aStyle, aClass, aLang, aDir;
     sal_Bool bHasHRef = sal_False, bFixed = sal_False;
 
@@ -1097,11 +1097,11 @@ void SwHTMLParser::NewAnchor()
                 goto ANCHOR_SETEVENT;
 ANCHOR_SETEVENT:
                 {
-                    String sTmp( rOption.GetString() );
-                    if( sTmp.Len() )
+                    OUString sTmp( rOption.GetString() );
+                    if( !sTmp.isEmpty() )
                     {
                         sTmp = convertLineEnd(sTmp, GetSystemLineEnd());
-                        String sScriptType;
+                        OUString sScriptType;
                         if( EXTENDED_STYPE == eScriptType2 )
                             sScriptType = sDfltScriptType;
                         aMacroTbl.Insert( nEvent, SvxMacro( sTmp, sScriptType, eScriptType2 ));
@@ -1114,7 +1114,7 @@ ANCHOR_SETEVENT:
 
     // Sprungziele, die unseren ipmliziten Zielen entsprechen, schmeissen
     // wir hier ganz rigoros raus.
-    if( aName.Len() )
+    if( !aName.isEmpty() )
     {
         OUString sDecoded( INetURLObject::decode( aName, INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
@@ -1134,7 +1134,7 @@ ANCHOR_SETEVENT:
                     sCmp == "outline" ||
                     sCmp == "text" )
                 {
-                    aName.Erase();
+                    aName = "";
                 }
             }
         }
@@ -1147,7 +1147,7 @@ ANCHOR_SETEVENT:
     OUString aFtnName;
     OUString aStrippedClass( aClass );
     SwCSS1Parser::GetScriptFromClass( aStrippedClass, sal_False );
-    if( aStrippedClass.getLength() >=9  && bHasHRef && sHRef.Len() > 1 &&
+    if( aStrippedClass.getLength() >=9  && bHasHRef && sHRef.getLength() > 1 &&
         ('s' == aStrippedClass[0] || 'S' == aStrippedClass[0]) &&
         ('d' == aStrippedClass[1] || 'D' == aStrippedClass[1]) )
     {
@@ -1160,7 +1160,7 @@ ANCHOR_SETEVENT:
             bFtnEnSymbol = sal_True;
         if( bEnAnchor || bFtnAnchor || bFtnEnSymbol )
         {
-            aFtnName = sHRef.Copy( 1 );
+            aFtnName = sHRef.copy( 1 );
             aClass = aStrippedClass = aName = aEmptyStr;
             bHasHRef = sal_False;
         }
@@ -1181,7 +1181,7 @@ ANCHOR_SETEVENT:
 
     if( bHasHRef )
     {
-        if( sHRef.Len() )
+        if( !sHRef.isEmpty() )
         {
             sHRef = URIHelper::SmartRel2Abs( INetURLObject(sBaseURL), sHRef, Link(), false );
         }
@@ -1202,7 +1202,7 @@ ANCHOR_SETEVENT:
         // das Default-Attribut setzen
         InsertAttr( &aAttrTab.pINetFmt, aINetFmt, pCntxt );
     }
-    else if( aName.Len() )
+    else if( !aName.isEmpty() )
     {
         InsertBookmark( aName );
     }

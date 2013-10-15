@@ -411,7 +411,7 @@ OUString SwHTMLWriter::GetFootEndNoteSym( const SwFmtFtn& rFmtFtn )
         pInfo = rFmtFtn.IsEndNote() ? &pDoc->GetEndNoteInfo()
                                     : &pDoc->GetFtnInfo();
 
-    String sRet;
+    OUString sRet;
     if( pInfo )
         sRet = pInfo->GetPrefix();
     sRet += rFmtFtn.GetViewNumStr( *pDoc );

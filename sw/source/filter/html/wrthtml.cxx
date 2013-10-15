@@ -521,8 +521,8 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division);
 
-    const String& rName = rSection.GetSectionName();
-    if( rName.Len() && !bContinued )
+    const OUString& rName = rSection.GetSectionName();
+    if( !rName.isEmpty() && !bContinued )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id).
             append(RTL_CONSTASCII_STRINGPARAM("=\""));
@@ -541,23 +541,22 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
             append(RTL_CONSTASCII_STRINGPARAM("=\""));
         rHTMLWrt.Strm() << sOut.makeStringAndClear().getStr();
 
-        const String& aFName = rSection.GetLinkFileName();
-        String aURL( aFName.GetToken(0,sfx2::cTokenSeparator) );
-        String aFilter( aFName.GetToken(1,sfx2::cTokenSeparator) );
-        OUString aSection( aFName.GetToken(2,sfx2::cTokenSeparator) );
+        const OUString& aFName = rSection.GetLinkFileName();
+        OUString aURL( aFName.getToken(0,sfx2::cTokenSeparator) );
+        OUString aFilter( aFName.getToken(1,sfx2::cTokenSeparator) );
+        OUString aSection( aFName.getToken(2,sfx2::cTokenSeparator) );
 
-        String aEncURL( URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aURL ) );
+        OUString aEncURL( URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aURL ) );
         sal_Unicode cDelim = 255U;
-        bool bURLContainsDelim =
-            (STRING_NOTFOUND != aEncURL.Search( cDelim ) );
+        bool bURLContainsDelim = (-1 != aEncURL.indexOf( cDelim ) );
 
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aEncURL,
                                   rHTMLWrt.eDestEnc,
                                   &rHTMLWrt.aNonConvertableCharacters );
         const sal_Char *pDelim = "&#255;";
-        if( aFilter.Len() || !aSection.isEmpty() || bURLContainsDelim )
+        if( !aFilter.isEmpty() || !aSection.isEmpty() || bURLContainsDelim )
             rHTMLWrt.Strm() << pDelim;
-        if( aFilter.Len() )
+        if( !aFilter.isEmpty() )
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aFilter,
                                       rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         if( !aSection.isEmpty() || bURLContainsDelim  )
@@ -605,7 +604,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     rHTMLWrt.Strm() << '>';
 
     rHTMLWrt.bLFPossible = sal_True;
-    if( rName.Len() && !bContinued )
+    if( !rName.isEmpty() && !bContinued )
         rHTMLWrt.OutImplicitMark( rName, "region" );
 
     rHTMLWrt.IncIndentLevel();

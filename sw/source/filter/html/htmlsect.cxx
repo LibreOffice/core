@@ -642,7 +642,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
         // Insert fly frame. If the are columns, the fly frame's name is not
         // the sections name but a generated one.
-        String aFlyName( aEmptyStr );
+        OUString aFlyName( aEmptyStr );
         if( nCols < 2 )
         {
             aFlyName = aId;
@@ -688,7 +688,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         SetAttr( sal_True, sal_True, pPostIts );
 
         // Make section name unique.
-        String aName( pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : 0 ) );
+        OUString aName( pDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : 0 ) );
         SwSectionData aSection( CONTENT_SECTION, aName );
 
         SfxItemSet aFrmItemSet( pDoc->GetAttrPool(),

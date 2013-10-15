@@ -507,7 +507,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
 
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
-    String aNumRuleName;
+    OUString aNumRuleName;
     if( GetNumInfo().GetNumRule() )
     {
         aNumRuleName = GetNumInfo().GetNumRule()->GetName();
@@ -639,7 +639,7 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
     OSL_ENSURE( pTxtNode, "Kein Text-Node an PaM-Position" );
 
     OSL_ENSURE( GetNumInfo().GetNumRule(), "Kein Numerierungs-Regel" );
-    const String& rName = GetNumInfo().GetNumRule()->GetName();
+    const OUString& rName = GetNumInfo().GetNumRule()->GetName();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(rName) );
 
     pTxtNode->SetAttrListLevel( nLevel );

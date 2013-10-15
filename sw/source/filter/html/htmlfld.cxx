@@ -213,7 +213,7 @@ void SwHTMLParser::NewField()
     sal_Bool bKnownType = sal_False, bFixed = sal_False,
          bHasNumFmt = sal_False, bHasNumValue = sal_False;
     sal_uInt16 nType = 0;
-    String aValue, aNumFmt, aNumValue, aName;
+    OUString aValue, aNumFmt, aNumValue, aName;
     const HTMLOption *pSubOption=0, *pFmtOption=0;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -265,7 +265,7 @@ void SwHTMLParser::NewField()
          RES_AUTHORFLD == (RES_FIELDS)nType) )
     {
         SvtUserOptions aOpt;
-        const String& rUser = aOpt.GetFullName();
+        const OUString& rUser = aOpt.GetFullName();
         SwDocShell *pDocShell(pDoc->GetDocShell());
         OSL_ENSURE(pDocShell, "no SwDocShell");
         if (pDocShell) {
@@ -274,10 +274,10 @@ void SwHTMLParser::NewField()
             uno::Reference<document::XDocumentProperties> xDocProps(
                 xDPS->getDocumentProperties());
             OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
-            const String& rChanged = xDocProps->getModifiedBy();
-            const String& rCreated = xDocProps->getAuthor();
-            if( !rUser.Len() ||
-                (rChanged.Len() ? rUser != rChanged : rUser != rCreated) )
+            const OUString& rChanged = xDocProps->getModifiedBy();
+            const OUString& rCreated = xDocProps->getAuthor();
+            if( rUser.isEmpty() ||
+                (!rChanged.isEmpty() ? rUser != rChanged : rUser != rCreated) )
                 bFixed = sal_True;
         }
     }
@@ -336,17 +336,17 @@ void SwHTMLParser::NewField()
             {
                 nSub = DATEFLD;
                 pFmtTbl = aHTMLDateFldFmtTable;
-                if( aValue.Len() )
-                    nDate = (sal_uLong)aValue.ToInt32();
+                if( !aValue.isEmpty() )
+                    nDate = (sal_uLong)aValue.toInt32();
             }
             else
             {
                 nSub = TIMEFLD;
                 pFmtTbl = aHTMLTimeFldFmtTable;
-                if( aValue.Len() )
-                    nTime = (sal_uLong)aValue.ToInt32();
+                if( !aValue.isEmpty() )
+                    nTime = (sal_uLong)aValue.toInt32();
             }
-            if( aValue.Len() )
+            if( !aValue.isEmpty() )
                 nSub |= FIXEDFLD;
 
             SvNumberFormatter *pFormatter = pDoc->GetNumberFormatter();
@@ -419,8 +419,8 @@ void SwHTMLParser::NewField()
 
                 short nOff = 0;
 
-                if( (SvxExtNumType)nFmt!=SVX_NUM_CHAR_SPECIAL && aValue.Len() )
-                    nOff = (short)aValue.ToInt32();
+                if( (SvxExtNumType)nFmt!=SVX_NUM_CHAR_SPECIAL && !aValue.isEmpty() )
+                    nOff = (short)aValue.toInt32();
                 else if( (SwPageNumSubType)nSub == PG_NEXT  )
                     nOff = 1;
                 else if( (SwPageNumSubType)nSub == PG_PREV  )
@@ -466,7 +466,7 @@ void SwHTMLParser::NewField()
                 else
                     bHasNumValue = sal_False;
 
-                if( nSub >= DI_INFO1 && nSub <= DI_INFO4 && aName.Len() == 0 )
+                if( nSub >= DI_INFO1 && nSub <= DI_INFO4 && aName.isEmpty() )
                 {
                     // backward compatibility for OOo 2:
                     // map to names stored in AddMetaUserDefined

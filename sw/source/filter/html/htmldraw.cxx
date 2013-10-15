@@ -263,7 +263,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     OSL_ENSURE( !pMarquee, "Marquee in Marquee???" );
     aContents = "";
 
-    String aId, aStyle, aClass;
+    OUString aId, aStyle, aClass;
 
     long nWidth=0, nHeight=0;
     sal_Bool bPrcWidth = sal_False, bDirection = sal_False, bBGColor = sal_False;
@@ -379,7 +379,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     pPg->InsertObject( pMarquee );
 
-    if( aId.Len() )
+    if( !aId.isEmpty() )
         InsertBookmark( aId );
 
     // (Nur) Alternate leueft per Default von links nach rechts

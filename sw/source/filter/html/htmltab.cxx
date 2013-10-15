@@ -3120,7 +3120,7 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
 class _CellSaveStruct : public _SectionSaveStruct
 {
     OUString aStyle, aId, aClass, aLang, aDir;
-    String aBGImage;
+    OUString aBGImage;
     Color aBGColor;
     boost::shared_ptr<SvxBoxItem> m_pBoxItem;
 
@@ -3193,7 +3193,7 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
     bNoWrap( sal_False ),
     bNoBreak( sal_False )
 {
-    String aNumFmt, aValue;
+    OUString aNumFmt, aValue;
 
     if( bReadOpt )
     {
@@ -4249,7 +4249,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, sal_Bool bReadOptions,
         SvxAdjust eAdjust = eGrpAdjust;
         sal_Int16 eVertOri = eGrpVertOri;
         Color aBGColor;
-        String aBGImage, aStyle, aId, aClass;
+        OUString aBGImage, aStyle, aId, aClass;
         sal_Bool bBGColor = sal_False;
         pSaveStruct = new _RowSaveStruct;
 
@@ -4294,7 +4294,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, sal_Bool bReadOptions,
             }
         }
 
-        if( aId.Len() )
+        if( !aId.isEmpty() )
             InsertBookmark( aId );
 
         SvxBrushItem *pBrushItem =
