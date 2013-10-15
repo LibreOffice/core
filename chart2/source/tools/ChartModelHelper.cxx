@@ -24,6 +24,7 @@
 #include "ControllerLockGuard.hxx"
 #include "RangeHighlighter.hxx"
 #include "InternalDataProvider.hxx"
+#include "ChartModel.hxx"
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -103,6 +104,19 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
     return NULL;
 }
 
+uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( ChartModel& rModel )
+{
+    uno::Reference< XCoordinateSystem > XCooSys;
+    uno::Reference< XCoordinateSystemContainer > xCooSysCnt( rModel.getFirstDiagram(), uno::UNO_QUERY );
+    if( xCooSysCnt.is() )
+    {
+        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+        if( aCooSysSeq.getLength() )
+            XCooSys = aCooSysSeq[0];
+    }
+    return XCooSys;
+}
+
 uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< XCoordinateSystem > XCooSys;
@@ -114,6 +128,18 @@ uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( 
             XCooSys = aCooSysSeq[0];
     }
     return XCooSys;
+}
+
+::std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
+    ChartModel& rModel )
+{
+    ::std::vector< uno::Reference< XDataSeries > > aResult;
+
+    uno::Reference< XDiagram > xDiagram = rModel.getFirstDiagram();
+    if( xDiagram.is())
+        aResult = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+
+    return aResult;
 }
 
 ::std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
@@ -202,14 +228,14 @@ bool ChartModelHelper::isIncludeHiddenCells( const uno::Reference< frame::XModel
     return bIncluded;
 }
 
-bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const uno::Reference< frame::XModel >& xChartModel )
+bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, ChartModel& rModel )
 {
     bool bChanged = false;
     try
     {
-        ControllerLockGuard aLockedControllers( xChartModel );
+        ControllerLockGuard aLockedControllers( rModel );
 
-        uno::Reference< beans::XPropertySet > xDiagramProperties( ChartModelHelper::findDiagram(xChartModel), uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xDiagramProperties( rModel.getFirstDiagram(), uno::UNO_QUERY );
         if (xDiagramProperties.is())
         {
             bool bOldValue = bIncludeHiddenCells;
@@ -223,13 +249,9 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const un
 
             try
             {
-                uno::Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
-                if( xChartDoc.is() )
-                {
-                    uno::Reference< beans::XPropertySet > xDataProviderProperties( xChartDoc->getDataProvider(), uno::UNO_QUERY );
-                    if( xDataProviderProperties.is() )
-                        xDataProviderProperties->setPropertyValue("IncludeHiddenCells", aNewValue );
-                }
+                uno::Reference< beans::XPropertySet > xDataProviderProperties( rModel.getDataProvider(), uno::UNO_QUERY );
+                if( xDataProviderProperties.is() )
+                    xDataProviderProperties->setPropertyValue("IncludeHiddenCells", aNewValue );
             }
             catch( const beans::UnknownPropertyException& )
             {
@@ -238,7 +260,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const un
 
             try
             {
-                uno::Reference< chart2::data::XDataSource > xUsedData( DataSourceHelper::getUsedData( xChartModel ) );
+                uno::Reference< chart2::data::XDataSource > xUsedData( DataSourceHelper::getUsedData( rModel ) );
                 if( xUsedData.is() )
                 {
                     uno::Reference< beans::XPropertySet > xProp;

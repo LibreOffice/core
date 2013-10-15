@@ -134,7 +134,7 @@ bool ChartController::EndTextEdit()
                 ObjectIdentifier::getObjectPropertySet( aObjectCID, getModel() );
 
             // lock controllers till end of block
-            ControllerLockGuard aCLGuard( getModel() );
+            ControllerLockGuardUNO aCLGuard( getModel() );
 
             TitleHelper::setCompleteString( aString, uno::Reference<
                 ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );

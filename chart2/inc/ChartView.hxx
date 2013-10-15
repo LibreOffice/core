@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_MAIN_CHARTVIEW_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_MAIN_CHARTVIEW_HXX
 
+#include "ChartModel.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
 #include "ServiceMacros.hxx"
 #include <cppuhelper/implbase10.hxx>
@@ -77,12 +78,13 @@ class ChartView : public ::cppu::WeakImplHelper10<
 {
 public:
     ChartView(::com::sun::star::uno::Reference<
-               ::com::sun::star::uno::XComponentContext > const & xContext);
+               ::com::sun::star::uno::XComponentContext > const & xContext,
+               ChartModel& rModel);
+
     virtual ~ChartView();
 
     // ___lang::XServiceInfo___
     APPHELPER_XSERVICEINFO_DECL()
-    APPHELPER_SERVICE_FACTORY_HELPER(ChartView)
 
     // ___lang::XInitialization___
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
@@ -169,7 +171,6 @@ private: //methods
                       , bool bUseHighContrast );
     SdrPage* getSdrPage();
 
-    void impl_setChartModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
     void impl_deleteCoordinateSystems();
     void impl_notifyModeChangeListener( const OUString& rNewMode );
 
@@ -191,8 +192,8 @@ private: //member
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>
             m_xCC;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-            m_xChartModel;
+
+    chart::ChartModel& mrChartModel;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>
             m_xShapeFactory;

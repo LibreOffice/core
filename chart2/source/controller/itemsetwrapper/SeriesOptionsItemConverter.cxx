@@ -348,7 +348,10 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             {
                 bool bIncludeHiddenCells = static_cast<const SfxBoolItem &>(rItemSet.Get(nWhichId)).GetValue();
                 if (bIncludeHiddenCells != m_bIncludeHiddenCells)
-                    bChanged = ChartModelHelper::setIncludeHiddenCells( bIncludeHiddenCells, m_xChartModel );
+                {
+                    ChartModel* pModel = dynamic_cast<ChartModel*>(m_xChartModel.get());
+                    bChanged = ChartModelHelper::setIncludeHiddenCells( bIncludeHiddenCells, *pModel );
+                }
             }
         }
         break;

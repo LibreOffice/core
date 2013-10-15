@@ -23,9 +23,10 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "charttoolsdllapi.hxx"
+
+#include "ChartModel.hxx"
 
 namespace chart
 {
@@ -38,18 +39,15 @@ class OOO_DLLPUBLIC_CHARTTOOLS LegendHelper
 public:
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XLegend >
-        showLegend( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >& xModel
+        showLegend( ChartModel& rModel
                   , const ::com::sun::star::uno::Reference<
                        ::com::sun::star::uno::XComponentContext >& xContext );
 
-    static  void hideLegend( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >& xModel );
+    static  void hideLegend( ChartModel& rModel );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XLegend >
-        getLegend( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >& xModel
+        getLegend( ChartModel& rModel
                  , const ::com::sun::star::uno::Reference<
                        ::com::sun::star::uno::XComponentContext >& xContext = 0
                  , bool bCreate = false );

@@ -174,8 +174,6 @@ static const struct ::cppu::ImplementationEntry g_entries_chart2_model[] =
 // component exports
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL chartview_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL charttools_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL chartcore_component_getFactory(
@@ -191,12 +189,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL chartcore_component_getFactory(
     if (!pResult)
     {
         pResult = charttools_component_getFactory(
-            pImplName, pServiceManager, pRegistryKey);
-    }
-
-    if (!pResult)
-    {
-        pResult = chartview_component_getFactory(
             pImplName, pServiceManager, pRegistryKey);
     }
 

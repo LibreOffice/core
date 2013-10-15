@@ -41,7 +41,7 @@ public:
 private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > m_xModel;
-    boost::scoped_ptr< ControllerLockGuard > m_apControllerLockGuard;
+    boost::scoped_ptr< ControllerLockGuardUNO > m_apControllerLockGuard;
     AutoTimer       m_aTimer;
 
     DECL_LINK( TimerTimeout, void* );

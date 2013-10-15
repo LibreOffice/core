@@ -14,6 +14,7 @@ $(eval $(call gb_Library_set_include,chartcore,\
     -I$(SRCDIR)/chart2/source/model/inc \
     -I$(SRCDIR)/chart2/source/view/inc \
     -I$(SRCDIR)/chart2/source/inc \
+    -I$(SRCDIR)/chart2/inc \
 ))
 
 # not ideal - we should use a single core define ideally
@@ -100,7 +101,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/PlottingPositionHelper \
     chart2/source/view/main/PolarLabelPositionHelper \
     chart2/source/view/main/PropertyMapper \
-    chart2/source/view/main/_serviceregistration_view \
     chart2/source/view/main/ShapeFactory \
     chart2/source/view/main/AbstractShapeFactory \
     chart2/source/view/main/Stripe \

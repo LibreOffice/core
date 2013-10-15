@@ -327,6 +327,88 @@ bool ObjectIdentifier::operator<( const ObjectIdentifier& rOID ) const
 
 OUString ObjectIdentifier::createClassifiedIdentifierForObject(
           const Reference< uno::XInterface >& xObject
+        , ChartModel& rModel)
+{
+    OUString aRet;
+
+    enum ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
+    OUString aObjectID;
+    OUString aParentParticle;
+    OUString aDragMethodServiceName;
+    OUString aDragParameterString;
+
+    try
+    {
+        //title
+        Reference< XTitle > xTitle( xObject, uno::UNO_QUERY );
+        if( xTitle.is() )
+        {
+            TitleHelper::eTitleType aTitleType;
+            if( TitleHelper::getTitleType( aTitleType, xTitle, rModel ) )
+            {
+                eObjectType = OBJECTTYPE_TITLE;
+                aParentParticle = lcl_getTitleParentParticle( aTitleType );
+                aRet = ObjectIdentifier::createClassifiedIdentifierWithParent(
+                    eObjectType, aObjectID, aParentParticle, aDragMethodServiceName, aDragParameterString );
+            }
+            return aRet;
+
+        }
+
+        //axis
+        Reference< XAxis > xAxis( xObject, uno::UNO_QUERY );
+        if( xAxis.is() )
+        {
+            Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, rModel.getFirstDiagram() ) );
+            OUString aCooSysParticle( createParticleForCoordinateSystem( xCooSys, rModel ) );
+            sal_Int32 nDimensionIndex=-1;
+            sal_Int32 nAxisIndex=-1;
+            AxisHelper::getIndicesForAxis( xAxis, xCooSys, nDimensionIndex, nAxisIndex );
+            OUString aAxisParticle( createParticleForAxis( nDimensionIndex, nAxisIndex ) );
+            return createClassifiedIdentifierForParticles( aCooSysParticle, aAxisParticle );
+        }
+
+        //legend
+        Reference< XLegend > xLegend( xObject, uno::UNO_QUERY );
+        if( xLegend.is() )
+        {
+            return createClassifiedIdentifierForParticle( createParticleForLegend( xLegend, rModel ) );
+        }
+
+        //diagram
+        Reference< XDiagram > xDiagram( xObject, uno::UNO_QUERY );
+        if( xDiagram.is() )
+        {
+            return createClassifiedIdentifierForParticle( createParticleForDiagram( xDiagram, rModel ) );
+        }
+
+        //todo
+        //XDataSeries
+        //CooSys
+        //charttype
+        //datapoint?
+        //Gridproperties
+    }
+    catch(const uno::Exception& ex)
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    if( eObjectType != OBJECTTYPE_UNKNOWN )
+    {
+        aRet = ObjectIdentifier::createClassifiedIdentifierWithParent(
+            eObjectType, aObjectID, aParentParticle, aDragMethodServiceName, aDragParameterString );
+    }
+    else
+    {
+        OSL_FAIL("give object could not be identifed in createClassifiedIdentifierForObject");
+    }
+
+    return aRet;
+}
+
+OUString ObjectIdentifier::createClassifiedIdentifierForObject(
+          const Reference< uno::XInterface >& xObject
         , const Reference< frame::XModel >& xChartModel )
 {
     OUString aRet;
@@ -441,11 +523,48 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
 
 OUString ObjectIdentifier::createParticleForDiagram(
           const Reference< XDiagram >& /*xDiagram*/
+        , ChartModel& /*xChartModel*/ )
+{
+    static OUString aRet("D=0");
+    //todo: if more than one diagram is implemeted, add the correct diagram index here
+    return aRet;
+}
+
+OUString ObjectIdentifier::createParticleForDiagram(
+          const Reference< XDiagram >& /*xDiagram*/
         , const Reference< frame::XModel >& /*xChartModel*/ )
 {
     static OUString aRet("D=0");
     //todo: if more than one diagram is implemeted, add the correct diagram index here
     return aRet;
+}
+
+OUString ObjectIdentifier::createParticleForCoordinateSystem(
+          const Reference< XCoordinateSystem >& xCooSys
+        , ChartModel& rModel )
+{
+    OUStringBuffer aRet;
+
+    Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
+    Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
+    if( xCooSysContainer.is() )
+    {
+        sal_Int32 nCooSysIndex = 0;
+        uno::Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+        for( ; nCooSysIndex < aCooSysList.getLength(); ++nCooSysIndex )
+        {
+            Reference< XCoordinateSystem > xCurrentCooSys( aCooSysList[nCooSysIndex] );
+            if( xCooSys == xCurrentCooSys )
+            {
+                aRet = ObjectIdentifier::createParticleForDiagram( xDiagram, rModel );
+                aRet.appendAscii(":CS=");
+                aRet.append( OUString::number( nCooSysIndex ) );
+                break;
+            }
+        }
+    }
+
+    return aRet.makeStringAndClear();
 }
 
 OUString ObjectIdentifier::createParticleForCoordinateSystem(
@@ -536,6 +655,23 @@ OUString ObjectIdentifier::createParticleForSeries(
     aRet.append(getStringForType( OBJECTTYPE_DATA_SERIES ));
     aRet.appendAscii("=");
     aRet.append( OUString::number( nSeriesIndex ) );
+
+    return aRet.makeStringAndClear();
+}
+
+OUString ObjectIdentifier::createParticleForLegend(
+          const Reference< XLegend >& /*xLegend*/
+        , ChartModel& rModel )
+{
+    OUStringBuffer aRet;
+
+    Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
+    //todo: if more than one diagram is implemeted, find the correct diagram which is owner of the given legend
+
+    aRet.append( ObjectIdentifier::createParticleForDiagram( xDiagram, rModel ) );
+    aRet.appendAscii(":");
+    aRet.append(getStringForType( OBJECTTYPE_LEGEND ));
+    aRet.appendAscii("=");
 
     return aRet.makeStringAndClear();
 }

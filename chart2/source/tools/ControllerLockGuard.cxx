@@ -18,6 +18,7 @@
  */
 
 #include "ControllerLockGuard.hxx"
+#include "ChartModel.hxx"
 
 using namespace ::com::sun::star;
 
@@ -27,17 +28,26 @@ using ::com::sun::star::uno::Sequence;
 namespace chart
 {
 
-ControllerLockGuard::ControllerLockGuard( const Reference< frame::XModel > & xModel ) :
-        m_xModel( xModel )
+ControllerLockGuardUNO::ControllerLockGuardUNO( const uno::Reference< frame::XModel >& xModel ) :
+        mxModel( xModel )
 {
-    if( m_xModel.is())
-        m_xModel->lockControllers();
+    mxModel->lockControllers();
+}
+
+ControllerLockGuardUNO::~ControllerLockGuardUNO()
+{
+    mxModel->unlockControllers();
+}
+
+ControllerLockGuard::ControllerLockGuard( ChartModel& rModel ) :
+        mrModel( rModel )
+{
+    mrModel.lockControllers();
 }
 
 ControllerLockGuard::~ControllerLockGuard()
 {
-    if( m_xModel.is())
-        m_xModel->unlockControllers();
+    mrModel.unlockControllers();
 }
 
 ControllerLockHelper::ControllerLockHelper( const Reference< frame::XModel > & xModel ) :

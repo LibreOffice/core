@@ -195,7 +195,7 @@ void ChartController::executeDispatch_NewArrangement()
             UndoGuard aUndoGuard = UndoGuard(
                 SCH_RESSTR( STR_ACTION_REARRANGE_CHART ),
                 m_xUndoManager );
-            ControllerLockGuard aCtlLockGuard( xModel );
+            ControllerLockGuardUNO aCtlLockGuard( xModel );
 
             // diagram
             Reference< beans::XPropertyState > xState( xDiagram, uno::UNO_QUERY_THROW );
@@ -249,7 +249,7 @@ void ChartController::executeDispatch_ScaleText()
     UndoGuard aUndoGuard = UndoGuard(
         SCH_RESSTR( STR_ACTION_SCALE_TEXT ),
         m_xUndoManager );
-    ControllerLockGuard aCtlLockGuard( getModel() );
+    ControllerLockGuardUNO aCtlLockGuard( getModel() );
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ReferenceSizeProvider > apRefSizeProv( impl_createReferenceSizeProvider());
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -724,7 +724,7 @@ bool ChartController::executeDispatch_Delete()
                             ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
                         m_xUndoManager );
                     {
-                        ControllerLockGuard aCtlLockGuard( xModel );
+                        ControllerLockGuardUNO aCtlLockGuard( xModel );
                         xEqProp->setPropertyValue( "ShowEquation", uno::makeAny( false ));
                         xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( false ));
                     }
@@ -758,7 +758,7 @@ bool ChartController::executeDispatch_Delete()
                             ActionDescriptionProvider::DELETE, SCH_RESSTR( nId )),
                         m_xUndoManager );
                     {
-                        ControllerLockGuard aCtlLockGuard( xModel );
+                        ControllerLockGuardUNO aCtlLockGuard( xModel );
                         xErrorBarProp->setPropertyValue(
                             "ErrorBarStyle",
                             uno::makeAny( ::com::sun::star::chart::ErrorBarStyle::NONE ));
@@ -845,7 +845,8 @@ void ChartController::executeDispatch_ToggleLegend()
     Reference< frame::XModel > xModel( getModel() );
     UndoGuard aUndoGuard = UndoGuard(
         SCH_RESSTR( STR_ACTION_TOGGLE_LEGEND ), m_xUndoManager );
-    Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend( xModel ), uno::UNO_QUERY );
+    ChartModel* pModel = dynamic_cast<ChartModel*>(xModel.get());
+    Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend( *pModel ), uno::UNO_QUERY );
     bool bChanged = false;
     if( xLegendProp.is())
     {
@@ -865,7 +866,7 @@ void ChartController::executeDispatch_ToggleLegend()
     }
     else
     {
-        xLegendProp.set( LegendHelper::getLegend( xModel, m_xCC, true ), uno::UNO_QUERY );
+        xLegendProp.set( LegendHelper::getLegend( *pModel, m_xCC, true ), uno::UNO_QUERY );
         if( xLegendProp.is())
             bChanged = true;
     }
@@ -957,7 +958,8 @@ void ChartController::impl_switchDiagramPositioningToExcludingPositioning()
         ActionDescriptionProvider::POS_SIZE,
         ObjectNameProvider::getName( OBJECTTYPE_DIAGRAM)),
         m_xUndoManager );
-    if( DiagramHelper::switchDiagramPositioningToExcludingPositioning( m_aModel->getModel(), true, true ) )
+    ChartModel* pModel = dynamic_cast<ChartModel*>(m_aModel->getModel().get());
+    if( DiagramHelper::switchDiagramPositioningToExcludingPositioning( *pModel, true, true ) )
         aUndoGuard.commit();
 }
 

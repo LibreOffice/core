@@ -364,7 +364,7 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel)
 
 void ThreeD_SceneIllumination_TabPage::applyLightSourceToModel( sal_uInt32 nLightNumber )
 {
-    ControllerLockGuard aGuard( m_xChartModel );
+    ControllerLockGuardUNO aGuard( m_xChartModel );
     m_bInCommitToModel = true;
     sal_Int32 nIndex( nLightNumber );
     lcl_setLightSource( m_xSceneProperties, m_pLightSourceInfoList[nIndex].aLightSource, nIndex );
@@ -374,7 +374,7 @@ void ThreeD_SceneIllumination_TabPage::applyLightSourceToModel( sal_uInt32 nLigh
 void ThreeD_SceneIllumination_TabPage::applyLightSourcesToModel()
 {
     m_aTimerTriggeredControllerLock.startTimer();
-    ControllerLockGuard aGuard( m_xChartModel );
+    ControllerLockGuardUNO aGuard( m_xChartModel );
     for( sal_Int32 nL=0; nL<8; nL++)
         applyLightSourceToModel( nL );
     m_aTimerTriggeredControllerLock.startTimer();
@@ -542,7 +542,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, LightBut
     }
     else
     {
-        ControllerLockGuard aGuard( m_xChartModel );
+        ControllerLockGuardUNO aGuard( m_xChartModel );
         for( nL=0; nL<8; nL++)
         {
             LightButton* pLightButton = m_pLightSourceInfoList[nL].pButton;

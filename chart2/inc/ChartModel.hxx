@@ -106,8 +106,9 @@ typedef ::comphelper::WeakImplHelper22<
 }
 
 class UndoManager;
+class ChartView;
 
-class ChartModel : public impl::ChartModel_Base
+class OOO_DLLPUBLIC_CHARTTOOLS ChartModel : public impl::ChartModel_Base
 {
 
 private:
@@ -119,7 +120,9 @@ private:
     sal_Int32               m_nInLoad;
     sal_Bool volatile       m_bUpdateNotificationsPending;
 
-    OUString                                                             m_aResource;
+    ChartView* mpChartView;
+
+    OUString m_aResource;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aMediaDescriptor;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > m_xDocumentProperties;
     ::rtl::Reference< UndoManager >                                             m_pUndoManager;
@@ -216,9 +219,6 @@ private:
 
     void impl_adjustAdditionalShapesPositionAndSize(
         const ::com::sun::star::awt::Size& aVisualAreaSize );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
-        impl_getNumberFormatsSupplier();
 
 public:
     //no default constructor
@@ -576,6 +576,10 @@ public:
     // XDumper
     virtual OUString SAL_CALL dump()
         throw (com::sun::star::uno::RuntimeException);
+
+    // normal methods
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
+        getNumberFormatsSupplier();
 };
 
 }  // namespace chart

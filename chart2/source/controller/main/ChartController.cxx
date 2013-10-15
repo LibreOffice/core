@@ -1285,7 +1285,7 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
 
 void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
 {
-    ControllerLockGuard aCLGuard( getModel() );
+    ControllerLockGuardUNO aCLGuard( getModel() );
 
     //get selected series
     OUString aObjectCID(m_aSelection.getSelectedCID());

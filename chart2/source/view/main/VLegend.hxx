@@ -26,6 +26,8 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
+#include "ChartModel.hxx"
+
 #include <vector>
 
 namespace chart
@@ -43,14 +45,12 @@ public:
                  ::com::sun::star::chart2::XLegend > & xLegend,
              const ::com::sun::star::uno::Reference<
                  ::com::sun::star::uno::XComponentContext > & xContext,
-             const std::vector< LegendEntryProvider* >& rLegendEntryProviderList );
-
-    void init( const ::com::sun::star::uno::Reference<
+             const std::vector< LegendEntryProvider* >& rLegendEntryProviderList,
+            const ::com::sun::star::uno::Reference<
                             ::com::sun::star::drawing::XShapes >& xTargetPage,
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
-                        const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::frame::XModel > & xModel );
+                            ChartModel& rModel  );
 
     void setDefaultWritingMode( sal_Int16 nDefaultWritingMode );
 
@@ -83,8 +83,9 @@ private:
                     ::com::sun::star::chart2::XLegend >             m_xLegend;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >             m_xShape;
-    ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >               m_xModel;
+
+    ChartModel& mrModel;
+
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::uno::XComponentContext >      m_xContext;
 

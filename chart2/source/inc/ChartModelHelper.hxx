@@ -31,6 +31,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include "charttoolsdllapi.hxx"
 
+#include "ChartModel.hxx"
+
 #include <vector>
 
 namespace chart
@@ -58,7 +60,15 @@ public:
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XCoordinateSystem >
+        getFirstCoordinateSystem( ChartModel& rModel );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XCoordinateSystem >
         getFirstCoordinateSystem( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+
+    SAL_DLLPRIVATE static ::std::vector< ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XDataSeries > > getDataSeries(
+            ChartModel& rModel );
 
     SAL_DLLPRIVATE static ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries > > getDataSeries(
@@ -93,8 +103,7 @@ public:
     static bool isIncludeHiddenCells( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::frame::XModel >& xChartModel );
 
-    static bool setIncludeHiddenCells( bool bIncludeHiddenCells, const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::frame::XModel >& xChartModel );
+    static bool setIncludeHiddenCells( bool bIncludeHiddenCells, ChartModel& rModel);
 };
 
 } //namespace chart

@@ -63,7 +63,7 @@ protected:
 private:
     RangeSelectionListenerParent & m_rParent;
     OUString m_aRange;
-    ControllerLockGuard m_aControllerLockGuard;
+    ControllerLockGuardUNO m_aControllerLockGuard;
 };
 
 } //  namespace chart

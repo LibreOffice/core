@@ -343,7 +343,9 @@ InternalDataProvider::InternalDataProvider(
             {
                 vector< vector< uno::Any > > aNewCategories;//inner count is level
                 {
-                    ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(xChartModel), xChartModel );
+                    ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
+                    assert(pModel);
+                    ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(xChartModel), *pModel );
 
                     const Sequence< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
                     sal_Int32 nLevelCount = rSplitCategoriesList.getLength();

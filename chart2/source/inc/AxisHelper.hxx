@@ -28,6 +28,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
+#include "ChartModel.hxx"
+
 #include <vector>
 
 namespace chart
@@ -50,7 +52,7 @@ public:
                 ::com::sun::star::chart2::XScaling >& xScaling );
 
     static void checkDateAxis( ::com::sun::star::chart2::ScaleData& rScale, ExplicitCategoriesProvider* pExplicitCategoriesProvider, bool bChartTypeAllowsDateAxis );
-    static ::com::sun::star::chart2::ScaleData getDateCheckedScale( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
+    static ::com::sun::star::chart2::ScaleData getDateCheckedScale( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis, ChartModel& rModel );
 
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
                   const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis

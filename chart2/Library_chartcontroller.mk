@@ -13,6 +13,7 @@ $(eval $(call gb_Library_set_include,chartcontroller,\
     $$(INCLUDE) \
     -I$(SRCDIR)/chart2/source/controller/inc \
     -I$(SRCDIR)/chart2/source/inc \
+    -I$(SRCDIR)/chart2/inc \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,chartcontroller,$(SRCDIR)/chart2/inc/pch/precompiled_chartcontroller))

@@ -31,6 +31,7 @@
 #include "CloneHelper.hxx"
 #include "NameContainer.hxx"
 #include "UndoManager.hxx"
+#include "ChartView.hxx"
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
@@ -91,6 +92,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_bModified( sal_False )
     , m_nInLoad(0)
     , m_bUpdateNotificationsPending(false)
+    , mpChartView(NULL)
     , m_pUndoManager( NULL )
     , m_aControllers( m_aModelMutex )
     , m_nControllerLockCount(0)
@@ -128,6 +130,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_bModified( rOther.m_bModified )
     , m_nInLoad(0)
     , m_bUpdateNotificationsPending(false)
+    , mpChartView(NULL)
     , m_aResource( rOther.m_aResource )
     , m_aMediaDescriptor( rOther.m_aMediaDescriptor )
     , m_aControllers( m_aModelMutex )
@@ -182,6 +185,8 @@ ChartModel::~ChartModel()
     OSL_TRACE( "ChartModel: DTOR called" );
     if( m_xOldModelAgg.is())
         m_xOldModelAgg->setDelegator( NULL );
+
+    delete mpChartView;
 }
 
 void SAL_CALL ChartModel::initialize( const Sequence< Any >& /*rArguments*/ )
@@ -1004,7 +1009,7 @@ void SAL_CALL ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Siz
 {
     if( nAspect == embed::Aspects::MSOLE_CONTENT )
     {
-        ControllerLockGuard aLockGuard( this );
+        ControllerLockGuard aLockGuard( *this );
         bool bChanged =
             (m_aVisualAreaSize.Width != aSize.Width ||
              m_aVisualAreaSize.Height != aSize.Height);
@@ -1193,17 +1198,21 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
             case SERVICE_TRANSP_GRADIENT_TABLE:
             case SERVICE_MARKER_TABLE:
                 {
-                    uno::Reference< lang::XMultiServiceFactory > xFact(
-                        this->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
-                    if ( xFact.is() )
-                    {
-                        return xFact->createInstance( rServiceSpecifier );
-                    }
+                    if(!mpChartView)
+                        mpChartView = new ChartView( m_xContext, *this);
+                    return mpChartView->createInstance( rServiceSpecifier );
                 }
                 break;
             case SERVICE_NAMESPACE_MAP:
                 return Reference< uno::XInterface >( m_xXMLNamespaceMap );
         }
+    }
+    else if(rServiceSpecifier == CHART_VIEW_SERVICE_NAME)
+    {
+        if(!mpChartView)
+            mpChartView = new ChartView( m_xContext, *this);
+
+        return static_cast< ::cppu::OWeakObject* >( mpChartView );
     }
     else
     {
@@ -1246,7 +1255,7 @@ Sequence< OUString > SAL_CALL ChartModel::getAvailableServiceNames()
     return aResult;
 }
 
-Reference< util::XNumberFormatsSupplier > ChartModel::impl_getNumberFormatsSupplier()
+Reference< util::XNumberFormatsSupplier > ChartModel::getNumberFormatsSupplier()
 {
     if( !m_xNumberFormatsSupplier.is() )
     {
@@ -1268,7 +1277,7 @@ Reference< util::XNumberFormatsSupplier > ChartModel::impl_getNumberFormatsSuppl
     if( aIdentifier.getLength() == 16 && 0 == memcmp( SvNumberFormatsSupplierObj::getUnoTunnelId().getConstArray(),
                                                          aIdentifier.getConstArray(), 16 ) )
     {
-        Reference< lang::XUnoTunnel > xTunnel( impl_getNumberFormatsSupplier(), uno::UNO_QUERY );
+        Reference< lang::XUnoTunnel > xTunnel( getNumberFormatsSupplier(), uno::UNO_QUERY );
         if( xTunnel.is() )
             return xTunnel->getSomething( aIdentifier );
     }
@@ -1279,7 +1288,7 @@ Reference< util::XNumberFormatsSupplier > ChartModel::impl_getNumberFormatsSuppl
 uno::Reference< beans::XPropertySet > SAL_CALL ChartModel::getNumberFormatSettings()
     throw (uno::RuntimeException)
 {
-    Reference< util::XNumberFormatsSupplier > xSupplier( impl_getNumberFormatsSupplier() );
+    Reference< util::XNumberFormatsSupplier > xSupplier( getNumberFormatsSupplier() );
     if( xSupplier.is() )
         return xSupplier->getNumberFormatSettings();
     return uno::Reference< beans::XPropertySet >();
@@ -1288,7 +1297,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL ChartModel::getNumberFormatSettin
 uno::Reference< util::XNumberFormats > SAL_CALL ChartModel::getNumberFormats()
     throw (uno::RuntimeException)
 {
-    Reference< util::XNumberFormatsSupplier > xSupplier( impl_getNumberFormatsSupplier() );
+    Reference< util::XNumberFormatsSupplier > xSupplier( getNumberFormatsSupplier() );
     if( xSupplier.is() )
         return xSupplier->getNumberFormats();
     return uno::Reference< util::XNumberFormats >();

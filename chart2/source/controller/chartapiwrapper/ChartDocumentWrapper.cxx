@@ -31,6 +31,8 @@
 #include "chartview/DrawModelWrapper.hxx"
 #include "Chart2ModelContact.hxx"
 
+#include "ChartModel.hxx"
+
 #include "DiagramHelper.hxx"
 #include "DataSourceHelper.hxx"
 #include "ChartModelHelper.hxx"
@@ -501,7 +503,7 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
 
     try
     {
-        Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext,bNewValue ));
+        Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *m_spChart2ModelContact->getModel(), m_spChart2ModelContact->m_xContext,bNewValue ));
         if(xLegend.is())
         {
             Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY_THROW );
@@ -525,7 +527,7 @@ Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropert
     try
     {
         Reference< beans::XPropertySet > xLegendProp(
-            LegendHelper::getLegend( m_spChart2ModelContact->getChartModel() ), uno::UNO_QUERY );
+            LegendHelper::getLegend( *m_spChart2ModelContact->getModel() ), uno::UNO_QUERY );
         if( xLegendProp.is())
             aRet = xLegendProp->getPropertyValue("Show");
         else
@@ -722,7 +724,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getTitle()
 {
     if( !m_xTitle.is()  )
     {
-        ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
+        ControllerLockGuardUNO aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
         m_xTitle = new TitleWrapper( TitleHelper::MAIN_TITLE, m_spChart2ModelContact );
     }
     return m_xTitle;
@@ -733,7 +735,7 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getSubTitle()
 {
     if( !m_xSubTitle.is() )
     {
-        ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
+        ControllerLockGuardUNO aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
         m_xSubTitle = new TitleWrapper( TitleHelper::SUB_TITLE, m_spChart2ModelContact );
     }
     return m_xSubTitle;
@@ -833,7 +835,7 @@ void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& x
         return;
 
     // /-- locked controllers
-    ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
+    ControllerLockGuardUNO aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
     m_xChartData.set( new ChartDataWrapper( m_spChart2ModelContact, xNewData ) );
     // \-- locked controllers
 }
@@ -1022,7 +1024,7 @@ void ChartDocumentWrapper::impl_resetAddIn()
 
 void ChartDocumentWrapper::setBaseDiagram( const OUString& rBaseDiagram )
 {
-    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     m_aBaseDiagram = rBaseDiagram;
 
     uno::Reference< XDiagram > xDiagram( ChartDocumentWrapper::createInstance( rBaseDiagram ), uno::UNO_QUERY );
@@ -1045,7 +1047,7 @@ void ChartDocumentWrapper::setAddIn( const Reference< util::XRefreshable >& xAdd
     if( m_xAddIn == xAddIn )
         return;
 
-    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     impl_resetAddIn();
     m_xAddIn = xAddIn;
     // initialize AddIn with this as chart document
@@ -1291,7 +1293,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 {
                     // locked controllers
                     Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
-                    ControllerLockGuard aCtrlLockGuard( xModel );
+                    ControllerLockGuardUNO aCtrlLockGuard( xModel );
                     Reference< chart2::XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
                     ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
                     Reference< lang::XMultiServiceFactory > xTemplateManager( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
@@ -1307,7 +1309,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 else
                 {
                     // locked controllers
-                    ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
+                    ControllerLockGuardUNO aCtrlLockGuard( Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
                     xDia.set( xTemplate->createDiagramByDataSource(
                                   uno::Reference< chart2::data::XDataSource >(),
                                   uno::Sequence< beans::PropertyValue >()));

@@ -24,8 +24,8 @@
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include "charttoolsdllapi.hxx"
+#include "ChartModel.hxx"
 
 #include <vector>
 
@@ -73,8 +73,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider
 public:
     ExplicitCategoriesProvider( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel
-                       , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::frame::XModel >& xChartModel
+                       , ChartModel& rChartModel
                        );
     virtual ~ExplicitCategoriesProvider();
 
@@ -89,8 +88,7 @@ public:
     static OUString getCategoryByIndex(
           const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel
-        , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel >& xChartModel
+        , ChartModel& rModel
         , sal_Int32 nIndex );
 
     static ::com::sun::star::uno::Sequence< OUString > getExplicitSimpleCategories(
@@ -98,7 +96,7 @@ public:
 
     static void convertCategoryAnysToText( ::com::sun::star::uno::Sequence< OUString >& rOutTexts
         , const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rInAnys
-        , ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xChartModel );
+        , ChartModel& rModel );
 
     bool hasComplexCategories() const;
     sal_Int32 getCategoryLevelCount() const;
@@ -113,8 +111,7 @@ private: //member
     bool volatile m_bDirty;
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::chart2::XCoordinateSystem >   m_xCooSysModel;
-    ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::frame::XModel >               m_xChartModel;
+    ChartModel& mrModel;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
 

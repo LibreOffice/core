@@ -44,6 +44,7 @@
 #include "AxisIndexDefines.hxx"
 #include "AxisHelper.hxx"
 #include "ExplicitCategoriesProvider.hxx"
+#include "ChartModel.hxx"
 
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
@@ -186,13 +187,17 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     ScaleData aScale( xCrossingMainAxis->getScaleData() );
                     m_bIsCrossingAxisIsCategoryAxis = ( chart2::AxisType::CATEGORY == aScale.AxisType  );
                     if( m_bIsCrossingAxisIsCategoryAxis )
-                        m_aCategories = DiagramHelper::getExplicitSimpleCategories( Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY) );
+                    {
+                        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
+                        m_aCategories = DiagramHelper::getExplicitSimpleCategories( *pModel );
+                    }
                 }
 
                 m_bComplexCategoriesAxis = false;
                 if ( nDimensionIndex == 0 && aData.AxisType == chart2::AxisType::CATEGORY )
                 {
-                    ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
+                    ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
+                    ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, *pModel );
                     m_bComplexCategoriesAxis = aExplicitCategoriesProvider.hasComplexCategories();
                 }
             }

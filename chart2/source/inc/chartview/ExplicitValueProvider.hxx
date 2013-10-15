@@ -32,6 +32,8 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include "chartviewdllapi.hxx"
 
+#include "ChartModel.hxx"
+
 namespace chart
 {
 
@@ -69,16 +71,14 @@ public:
 
     static ::com::sun::star::awt::Rectangle
         addAxisTitleSizes(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xChartModel
+                ChartModel& rModel
             , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface >& xChartView
             , const ::com::sun::star::awt::Rectangle& rExcludingPositionAndSize );
 
     static ::com::sun::star::awt::Rectangle
         substractAxisTitleSizes(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xChartModel
+                ChartModel& rModel
             , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface >& xChartView
             , const ::com::sun::star::awt::Rectangle& rPositionAndSizeIncludingTitles );

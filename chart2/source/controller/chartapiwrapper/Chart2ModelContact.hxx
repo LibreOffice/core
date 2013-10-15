@@ -38,6 +38,7 @@
 namespace chart
 {
 class ExplicitValueProvider;
+class ChartModel;
 
 namespace wrapper
 {
@@ -56,6 +57,8 @@ public:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XModel > getChartModel() const;
+
+    ChartModel* getModel() const;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XChartDocument > getChart2Document() const;
@@ -144,6 +147,8 @@ public: //member
 private: //member
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::frame::XModel >   m_xChartModel;
+
+    ChartModel* mpModel;
 
     mutable ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XUnoTunnel >        m_xChartView;

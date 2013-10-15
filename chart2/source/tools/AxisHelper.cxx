@@ -96,11 +96,11 @@ bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
     return bReturn;
 }
 
-chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, const Reference< frame::XModel >& xChartModel )
+chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, ChartModel& rModel )
 {
     OSL_ENSURE(xChartModel.is(),"missing chart model");
     ScaleData aScale = xAxis->getScaleData();
-    Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+    Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
     if( aScale.AutoDateAxis && aScale.AxisType == AxisType::CATEGORY )
     {
         sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;
@@ -111,7 +111,7 @@ chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxi
     }
     if( aScale.AxisType == AxisType::DATE )
     {
-        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys,xChartModel );
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, rModel );
         if( !aExplicitCategoriesProvider.isDateAxis() )
             aScale.AxisType = AxisType::CATEGORY;
     }
@@ -152,7 +152,9 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
         //check whether we have a percent scale -> use percent format
         if( xNumberFormatsSupplier.is() )
         {
-            ScaleData aData = AxisHelper::getDateCheckedScale( xAxis, Reference< frame::XModel >( xNumberFormatsSupplier, uno::UNO_QUERY ) );
+            ChartModel* pModel = dynamic_cast<ChartModel*>( xNumberFormatsSupplier.get() );
+            assert(pModel);
+            ScaleData aData = AxisHelper::getDateCheckedScale( xAxis, *pModel );
             if( aData.AxisType==AxisType::PERCENT )
             {
                 sal_Int32 nPercentFormat = DiagramHelper::getPercentNumberFormat( xNumberFormatsSupplier );

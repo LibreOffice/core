@@ -31,6 +31,8 @@
 #include "chartview/ExplicitValueProvider.hxx"
 #include "ExplicitCategoriesProvider.hxx"
 
+#include "ChartModel.hxx"
+
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -432,7 +434,7 @@ void DataBrowserModel::insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
         }
 
         m_apDialogModel->startControllerLockTimer();
-        ControllerLockGuard aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+        ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
         xDataProvider->insertComplexCategoryLevel( nAfterColumnIndex+1 );
         updateFromModel();
     }
@@ -498,7 +500,7 @@ void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColu
             if( xDataProvider.is() )
             {
                 m_apDialogModel->startControllerLockTimer();
-                ControllerLockGuard aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+                ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
                 xDataProvider->deleteComplexCategoryLevel( nAtColumnIndex );
                 updateFromModel();
             }
@@ -526,7 +528,7 @@ void DataBrowserModel::swapDataPointForAllSeries( sal_Int32 nFirstIndex )
     Reference< chart2::XInternalDataProvider > xDataProvider(
         m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
     // lockControllers
-    ControllerLockGuard aGuard( m_apDialogModel->getChartModel());
+    ControllerLockGuardUNO aGuard( m_apDialogModel->getChartModel());
     if( xDataProvider.is())
         xDataProvider->swapDataPointWithNextOneForAllSequences( nFirstIndex );
     // unlockControllers
@@ -537,7 +539,7 @@ void DataBrowserModel::insertDataPointForAllSeries( sal_Int32 nAfterIndex )
     Reference< chart2::XInternalDataProvider > xDataProvider(
         m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
     // lockControllers
-    ControllerLockGuard aGuard( m_apDialogModel->getChartModel());
+    ControllerLockGuardUNO aGuard( m_apDialogModel->getChartModel());
     if( xDataProvider.is())
         xDataProvider->insertDataPointForAllSequences( nAfterIndex );
     // unlockControllers
@@ -548,7 +550,7 @@ void DataBrowserModel::removeDataPointForAllSeries( sal_Int32 nAtIndex )
     Reference< chart2::XInternalDataProvider > xDataProvider(
         m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
     // lockControllers
-    ControllerLockGuard aGuard( m_apDialogModel->getChartModel());
+    ControllerLockGuardUNO aGuard( m_apDialogModel->getChartModel());
     if( xDataProvider.is())
         xDataProvider->deleteDataPointForAllSequences( nAtIndex );
     // unlockControllers
@@ -663,7 +665,7 @@ bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const 
         bResult = true;
         try
         {
-            ControllerLockGuard aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+            ControllerLockGuardUNO aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
 
             // label
             if( nAtRow == -1 )
@@ -790,7 +792,8 @@ void DataBrowserModel::updateFromModel()
     if( lcl_ShowCategories( xDiagram ))
     {
         Reference< frame::XModel > xChartModel( m_xChartDocument, uno::UNO_QUERY );
-        ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(xChartModel), xChartModel );
+        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(xChartModel), *pModel );
 
         const Sequence< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
         sal_Int32 nLevelCount = rSplitCategoriesList.getLength();

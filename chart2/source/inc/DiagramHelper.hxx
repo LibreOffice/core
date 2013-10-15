@@ -33,6 +33,8 @@
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
+#include "ChartModel.hxx"
+
 #include <utility>
 #include <vector>
 
@@ -224,9 +226,7 @@ public:
                 ::com::sun::star::chart2::XDiagram > & xDiagram );
 
     static ::com::sun::star::uno::Sequence< OUString >
-        getExplicitSimpleCategories(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+        getExplicitSimpleCategories( ChartModel& rModel );
 
     SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< OUString >
         generateAutomaticCategoriesFromCooSys(
@@ -340,8 +340,7 @@ public:
 
     static ::com::sun::star::awt::Rectangle getDiagramRectangleFromModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
 
-    static bool switchDiagramPositioningToExcludingPositioning( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XModel >& xChartModel
+    static bool switchDiagramPositioningToExcludingPositioning( ChartModel& rModel
         , bool bResetModifiedState //set model back to unchanged if it was unchanged before
         , bool bConvertAlsoFromAutoPositioning );
 

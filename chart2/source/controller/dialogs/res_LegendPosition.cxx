@@ -25,6 +25,7 @@
 #include "ChartModelHelper.hxx"
 #include "macros.hxx"
 #include "LegendHelper.hxx"
+#include "ChartModel.hxx"
 
 #include <svtools/controldims.hrc>
 #include <com/sun/star/chart2/LegendPosition.hpp>
@@ -132,7 +133,8 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
     try
     {
         sal_Bool bShowLegend = static_cast<sal_Bool>(m_aCbxShow.IsChecked());
-        uno::Reference< beans::XPropertySet > xProp( LegendHelper::getLegend( xChartModel,m_xCC,bShowLegend ), uno::UNO_QUERY );
+        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
+        uno::Reference< beans::XPropertySet > xProp( LegendHelper::getLegend( *pModel,m_xCC,bShowLegend ), uno::UNO_QUERY );
         if( xProp.is() )
         {
             //show

@@ -29,6 +29,8 @@
 #include "AxisHelper.hxx"
 #include "DiagramHelper.hxx"
 
+#include "ChartModel.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
@@ -44,6 +46,7 @@ Chart2ModelContact::Chart2ModelContact(
     const Reference< uno::XComponentContext > & xContext ) :
         m_xContext( xContext ),
         m_xChartModel( 0 ),
+        mpModel( NULL ),
         m_xChartView(0)
 {
 }
@@ -58,6 +61,7 @@ void Chart2ModelContact::setModel( const ::com::sun::star::uno::Reference<
 {
     this->clear();
     m_xChartModel = xChartModel;
+    mpModel = dynamic_cast<ChartModel*>(xChartModel.get());
     uno::Reference< lang::XMultiServiceFactory > xTableFactory( xChartModel, uno::UNO_QUERY );
     if( xTableFactory.is() )
     {
@@ -78,11 +82,17 @@ void Chart2ModelContact::clear()
 {
     m_xChartModel = uno::WeakReference< frame::XModel >(0);
     m_xChartView.clear();
+    mpModel = NULL;
 }
 
 Reference< frame::XModel > Chart2ModelContact::getChartModel() const
 {
     return Reference< frame::XModel >( m_xChartModel.get(), uno::UNO_QUERY );
+}
+
+ChartModel* Chart2ModelContact::getModel() const
+{
+    return mpModel;
 }
 
 Reference< chart2::XChartDocument > Chart2ModelContact::getChart2Document() const
@@ -175,7 +185,7 @@ awt::Size Chart2ModelContact::GetPageSize() const
 awt::Rectangle Chart2ModelContact::SubstractAxisTitleSizes( const awt::Rectangle& rPositionRect )
 {
     awt::Rectangle aRect = ExplicitValueProvider::substractAxisTitleSizes(
-        m_xChartModel, getChartView(), rPositionRect );
+        *mpModel, getChartView(), rPositionRect );
     return aRect;
 }
 
@@ -185,7 +195,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
 
     //add axis title sizes to the diagram size
     aRect = ExplicitValueProvider::addAxisTitleSizes(
-        m_xChartModel, getChartView(), aRect );
+        *mpModel, getChartView(), aRect );
 
     return aRect;
 }
@@ -228,8 +238,8 @@ awt::Size Chart2ModelContact::GetLegendSize() const
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
     if( pProvider )
     {
-        uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( m_xChartModel ) );
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
+        uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *mpModel ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, *mpModel ) );
         aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
     }
     return aSize;
@@ -241,8 +251,8 @@ awt::Point Chart2ModelContact::GetLegendPosition() const
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
     if( pProvider )
     {
-        uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( m_xChartModel ) );
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
+        uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( *mpModel ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, *mpModel ) );
         aPoint = ToPoint( pProvider->getRectangleOfObject( aCID ) );
     }
     return aPoint;

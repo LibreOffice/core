@@ -158,7 +158,10 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
 
                 bool bChanged = false;
                 if ( eObjectType == OBJECTTYPE_LEGEND )
-                    bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( getModel(), false , true );
+                {
+                    ChartModel* pModel = dynamic_cast<ChartModel*>(getModel().get());
+                    bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( *pModel, false , true );
+                }
 
                 bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID(), getModel()
                             , aObjectRect, aPageRect );

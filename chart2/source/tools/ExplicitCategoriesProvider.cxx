@@ -31,6 +31,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 namespace chart
 {
@@ -42,10 +43,10 @@ using ::com::sun::star::uno::Sequence;
 using ::std::vector;
 
 ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2::XCoordinateSystem >& xCooSysModel
-                                                       , const uno::Reference< frame::XModel >& xChartModel )
+                                                       , ChartModel& rModel )
     : m_bDirty(true)
     , m_xCooSysModel( xCooSysModel )
-    , m_xChartModel( xChartModel )
+    , mrModel(rModel)
     , m_xOriginalCategories()
     , m_bIsExplicitCategoriesInited(false)
     , m_bIsDateAxis(false)
@@ -67,54 +68,50 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
 
         if( m_xOriginalCategories.is() )
         {
-            Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
-            if( xChartDoc.is() )
+            uno::Reference< data::XDataProvider > xDataProvider( mrModel.getDataProvider() );
+
+            OUString aCategoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
+            if( xDataProvider.is() && !aCategoriesRange.isEmpty() )
             {
-                uno::Reference< data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
+                const bool bFirstCellAsLabel = false;
+                const bool bHasCategories = false;
+                const uno::Sequence< sal_Int32 > aSequenceMapping;
 
-                OUString aCategoriesRange( DataSourceHelper::getRangeFromValues( m_xOriginalCategories ) );
-                if( xDataProvider.is() && !aCategoriesRange.isEmpty() )
+                uno::Reference< data::XDataSource > xColumnCategoriesSource( xDataProvider->createDataSource(
+                            DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, true /*bUseColumns*/
+                                , bFirstCellAsLabel, bHasCategories ) ) );
+
+                uno::Reference< data::XDataSource > xRowCategoriesSource( xDataProvider->createDataSource(
+                            DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, false /*bUseColumns*/
+                                , bFirstCellAsLabel, bHasCategories ) ) );
+
+                if( xColumnCategoriesSource.is() &&  xRowCategoriesSource.is() )
                 {
-                    const bool bFirstCellAsLabel = false;
-                    const bool bHasCategories = false;
-                    const uno::Sequence< sal_Int32 > aSequenceMapping;
+                    Sequence< Reference< data::XLabeledDataSequence> > aColumns = xColumnCategoriesSource->getDataSequences();
+                    Sequence< Reference< data::XLabeledDataSequence> > aRows = xRowCategoriesSource->getDataSequences();
 
-                    uno::Reference< data::XDataSource > xColumnCategoriesSource( xDataProvider->createDataSource(
-                         DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, true /*bUseColumns*/
-                            , bFirstCellAsLabel, bHasCategories ) ) );
-
-                    uno::Reference< data::XDataSource > xRowCategoriesSource( xDataProvider->createDataSource(
-                         DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, false /*bUseColumns*/
-                            , bFirstCellAsLabel, bHasCategories ) ) );
-
-                    if( xColumnCategoriesSource.is() &&  xRowCategoriesSource.is() )
+                    sal_Int32 nColumnCount = aColumns.getLength();
+                    sal_Int32 nRowCount = aRows.getLength();
+                    if( nColumnCount>1 && nRowCount>1 )
                     {
-                        Sequence< Reference< data::XLabeledDataSequence> > aColumns = xColumnCategoriesSource->getDataSequences();
-                        Sequence< Reference< data::XLabeledDataSequence> > aRows = xRowCategoriesSource->getDataSequences();
-
-                        sal_Int32 nColumnCount = aColumns.getLength();
-                        sal_Int32 nRowCount = aRows.getLength();
-                        if( nColumnCount>1 && nRowCount>1 )
+                        //we have complex categories
+                        //->split them in the direction of the first series
+                        //detect whether the first series is a row or a column
+                        bool bSeriesUsesColumns = true;
+                        ::std::vector< Reference< XDataSeries > > aSeries( ChartModelHelper::getDataSeries( mrModel ) );
+                        if( !aSeries.empty() )
                         {
-                            //we have complex categories
-                            //->split them in the direction of the first series
-                            //detect whether the first series is a row or a column
-                            bool bSeriesUsesColumns = true;
-                            ::std::vector< Reference< XDataSeries > > aSeries( ChartModelHelper::getDataSeries( xChartModel ) );
-                            if( !aSeries.empty() )
-                            {
-                                uno::Reference< data::XDataSource > xSeriesSource( aSeries.front(), uno::UNO_QUERY );
-                                OUString aStringDummy;
-                                bool bDummy;
-                                uno::Sequence< sal_Int32 > aSeqDummy;
-                                DataSourceHelper::readArguments( xDataProvider->detectArguments( xSeriesSource),
-                                               aStringDummy, aSeqDummy, bSeriesUsesColumns, bDummy, bDummy );
-                            }
-                            if( bSeriesUsesColumns )
-                                m_aSplitCategoriesList=aColumns;
-                            else
-                                m_aSplitCategoriesList=aRows;
+                            uno::Reference< data::XDataSource > xSeriesSource( aSeries.front(), uno::UNO_QUERY );
+                            OUString aStringDummy;
+                            bool bDummy;
+                            uno::Sequence< sal_Int32 > aSeqDummy;
+                            DataSourceHelper::readArguments( xDataProvider->detectArguments( xSeriesSource),
+                                    aStringDummy, aSeqDummy, bSeriesUsesColumns, bDummy, bDummy );
                         }
+                        if( bSeriesUsesColumns )
+                            m_aSplitCategoriesList=aColumns;
+                        else
+                            m_aSplitCategoriesList=aRows;
                     }
                 }
             }
@@ -175,30 +172,28 @@ std::vector<sal_Int32> lcl_getLimitingBorders( const std::vector< ComplexCategor
     return aLimitingBorders;
 }
 
-void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUString >& rOutTexts, const uno::Sequence< uno::Any >& rInAnys, Reference< frame::XModel > xChartModel )
+void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUString >& rOutTexts, const uno::Sequence< uno::Any >& rInAnys, ChartModel& rModel )
 {
     sal_Int32 nCount = rInAnys.getLength();
     if(!nCount)
         return;
     rOutTexts.realloc(nCount);
-    Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartModel, uno::UNO_QUERY );
     Reference< util::XNumberFormats > xNumberFormats;
-    if( xNumberFormatsSupplier.is() )
-         xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
+    xNumberFormats = Reference< util::XNumberFormats >( rModel.getNumberFormats() );
 
     sal_Int32 nAxisNumberFormat = 0;
-    Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+    Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
     if( xCooSysModel.is() )
     {
         Reference< chart2::XAxis > xAxis( xCooSysModel->getAxisByDimension(0,0) );
         nAxisNumberFormat = AxisHelper::getExplicitNumberFormatKeyForAxis(
-                  xAxis, xCooSysModel, xNumberFormatsSupplier, false );
+                  xAxis, xCooSysModel, rModel.getNumberFormatsSupplier(), false );
     }
 
     sal_Int32 nLabelColor;
     bool bColorChanged = false;
 
-    NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
+    NumberFormatterWrapper aNumberFormatterWrapper( rModel.getNumberFormatsSupplier() );
 
     for(sal_Int32 nN=0;nN<nCount;nN++)
     {
@@ -234,9 +229,9 @@ public:
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::data::XLabeledDataSequence> >& rSplitCategoriesList
-        , const Reference< frame::XModel >& xChartModel )
+        , ChartModel& rModel )
         : m_rSplitCategoriesList( rSplitCategoriesList )
-        , m_xChartModel( xChartModel )
+        , mrModel( rModel )
     {}
     virtual ~SplitCategoriesProvider_ForLabeledDataSequences()
     {}
@@ -248,7 +243,7 @@ private:
     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence> >& m_rSplitCategoriesList;
 
-    Reference< frame::XModel > m_xChartModel;
+    ChartModel& mrModel;
 };
 
 sal_Int32 SplitCategoriesProvider_ForLabeledDataSequences::getLevelCount() const
@@ -263,7 +258,7 @@ uno::Sequence< OUString > SplitCategoriesProvider_ForLabeledDataSequences::getSt
     {
         uno::Reference< data::XDataSequence > xDataSequence( xLabeledDataSequence->getValues() );
         if( xDataSequence.is() )
-            ExplicitCategoriesProvider::convertCategoryAnysToText( aRet, xDataSequence->getData(), m_xChartModel );
+            ExplicitCategoriesProvider::convertCategoryAnysToText( aRet, xDataSequence->getData(), mrModel );
     }
     return aRet;
 }
@@ -420,7 +415,7 @@ struct DatePlusIndexComparator
     }
 };
 
-bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataSequence, std::vector< DatePlusIndex >& rDateCategories, bool bIsAutoDate, Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier )
+bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataSequence, std::vector< DatePlusIndex >& rDateCategories, bool bIsAutoDate, ChartModel& rModel )
 {
     bool bOnlyDatesFound = true;
     bool bAnyDataFound = false;
@@ -431,17 +426,15 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
         sal_Int32 nCount = aValues.getLength();
         rDateCategories.reserve(nCount);
         Reference< util::XNumberFormats > xNumberFormats;
-        if( xNumberFormatsSupplier.is() )
-             xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
+        xNumberFormats = Reference< util::XNumberFormats >( rModel.getNumberFormats() );
 
         bool bOwnData = false;
         bool bOwnDataAnddAxisHasAnyFormat = false;
         bool bOwnDataAnddAxisHasDateFormat = false;
-        Reference< chart2::XChartDocument > xChartDoc( xNumberFormatsSupplier, uno::UNO_QUERY );
-        Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ) ) );
-        if( xChartDoc.is() && xCooSysModel.is() )
+        Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
+        if( xCooSysModel.is() )
         {
-            if( xChartDoc->hasInternalDataProvider() )
+            if( rModel.hasInternalDataProvider() )
             {
                 bOwnData = true;
                 Reference< beans::XPropertySet > xAxisProps( xCooSysModel->getAxisByDimension(0,0), uno::UNO_QUERY );
@@ -513,7 +506,7 @@ void ExplicitCategoriesProvider::init()
                 if(m_bIsDateAxis)
                 {
                     if( ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( m_xCooSysModel, 0 ), 2, 0 ) )
-                        m_bIsDateAxis = lcl_fillDateCategories( m_xOriginalCategories->getValues(), m_aDateCategories, m_bIsAutoDate, Reference< util::XNumberFormatsSupplier >( m_xChartModel.get(), uno::UNO_QUERY ) );
+                        m_bIsDateAxis = lcl_fillDateCategories( m_xOriginalCategories->getValues(), m_aDateCategories, m_bIsAutoDate, mrModel );
                     else
                         m_bIsDateAxis = false;
                 }
@@ -541,12 +534,12 @@ Sequence< OUString > ExplicitCategoriesProvider::getSimpleCategories()
             {
                 uno::Reference< data::XDataSequence > xDataSequence( m_xOriginalCategories->getValues() );
                 if( xDataSequence.is() )
-                    ExplicitCategoriesProvider::convertCategoryAnysToText( m_aExplicitCategories, xDataSequence->getData(), m_xChartModel );
+                    ExplicitCategoriesProvider::convertCategoryAnysToText( m_aExplicitCategories, xDataSequence->getData(), mrModel );
             }
             else
             {
                 m_aExplicitCategories = lcl_getExplicitSimpleCategories(
-                    SplitCategoriesProvider_ForLabeledDataSequences( m_aSplitCategoriesList, m_xChartModel ), m_aComplexCats );
+                    SplitCategoriesProvider_ForLabeledDataSequences( m_aSplitCategoriesList, mrModel ), m_aComplexCats );
             }
         }
         if(!m_aExplicitCategories.getLength())
@@ -567,12 +560,12 @@ const std::vector<ComplexCategory>* ExplicitCategoriesProvider::getCategoriesByL
 
 OUString ExplicitCategoriesProvider::getCategoryByIndex(
           const Reference< XCoordinateSystem >& xCooSysModel
-        , const uno::Reference< frame::XModel >& xChartModel
+        , ChartModel& rModel
         , sal_Int32 nIndex )
 {
     if( xCooSysModel.is())
     {
-        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSysModel, xChartModel );
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSysModel, rModel );
         Sequence< OUString > aCategories( aExplicitCategoriesProvider.getSimpleCategories());
         if( nIndex < aCategories.getLength())
             return aCategories[ nIndex ];

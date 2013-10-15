@@ -108,7 +108,7 @@ bool RangeSelectionHelper::chooseRange(
     const OUString & aUIString,
     RangeSelectionListenerParent & rListenerParent )
 {
-    ControllerLockGuard aGuard( Reference< frame::XModel >(m_xChartDocument, uno::UNO_QUERY ) );
+    ControllerLockGuardUNO aGuard( Reference< frame::XModel >(m_xChartDocument, uno::UNO_QUERY ) );
 
     bool bResult = true;
     raiseRangeSelectionDocument();

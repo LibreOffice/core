@@ -776,7 +776,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const OUStri
             const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
             if(pOutItemSet)
             {
-                ControllerLockGuard aCLGuard( getModel());
+                ControllerLockGuardUNO aCLGuard( getModel());
                 apItemConverter->ApplyItemSet( *pOutItemSet );//model should be changed now
                 bRet = true;
             }

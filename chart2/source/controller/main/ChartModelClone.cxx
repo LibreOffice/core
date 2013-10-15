@@ -191,12 +191,13 @@ namespace chart
         try
         {
             // /-- loccked controllers of destination
-            ControllerLockGuard aLockedControllers( i_model );
+            ControllerLockGuardUNO aLockedControllers( i_model );
             Reference< XChartDocument > xSource( i_modelToCopyFrom, UNO_QUERY_THROW );
             Reference< XChartDocument > xDestination( i_model, UNO_QUERY_THROW );
 
             // propagate the correct flag for plotting of hidden values to the data provider and all used sequences
-            ChartModelHelper::setIncludeHiddenCells( ChartModelHelper::isIncludeHiddenCells( i_modelToCopyFrom ) , i_model );
+            ChartModel* pModel = dynamic_cast<ChartModel*>(i_model.get());
+            ChartModelHelper::setIncludeHiddenCells( ChartModelHelper::isIncludeHiddenCells( i_modelToCopyFrom ) , *pModel );
 
             // diagram
             xDestination->setFirstDiagram( xSource->getFirstDiagram() );

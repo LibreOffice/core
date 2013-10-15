@@ -875,7 +875,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
     if( !m_bIsDirty )
         return true;
 
-    ControllerLockGuard aLockedControllers( m_rDialogModel.getChartModel() );
+    ControllerLockGuardUNO aLockedControllers( m_rDialogModel.getChartModel() );
 
     // @todo: validity check of field content
     bool bResult = true;

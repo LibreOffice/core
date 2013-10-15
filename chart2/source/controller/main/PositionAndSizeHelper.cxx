@@ -131,7 +131,7 @@ bool PositionAndSizeHelper::moveObject( const OUString& rObjectCID
                 , const awt::Rectangle& rPageRectangle
                 )
 {
-    ControllerLockGuard aLockedControllers( xChartModel );
+    ControllerLockGuardUNO aLockedControllers( xChartModel );
 
     awt::Rectangle aNewPositionAndSize( rNewPositionAndSize );
 

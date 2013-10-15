@@ -32,10 +32,10 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-Reference< chart2::XLegend > LegendHelper::showLegend( const Reference< frame::XModel >& xModel
+Reference< chart2::XLegend > LegendHelper::showLegend( ChartModel& rModel
                                                     , const uno::Reference< uno::XComponentContext >& xContext )
 {
-    uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( xModel, xContext, true );
+    uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( rModel, xContext, true );
     uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
     if( xProp.is())
     {
@@ -63,9 +63,9 @@ Reference< chart2::XLegend > LegendHelper::showLegend( const Reference< frame::X
     return xLegend;
 }
 
-void LegendHelper::hideLegend( const Reference< frame::XModel >& xModel )
+void LegendHelper::hideLegend( ChartModel& rModel )
 {
-    uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( xModel, 0, false );
+    uno::Reference< chart2::XLegend > xLegend = LegendHelper::getLegend( rModel, 0, false );
     uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
     if( xProp.is())
     {
@@ -74,37 +74,33 @@ void LegendHelper::hideLegend( const Reference< frame::XModel >& xModel )
 }
 
 uno::Reference< chart2::XLegend > LegendHelper::getLegend(
-      const uno::Reference< frame::XModel >& xModel
+      ChartModel& rModel
     , const uno::Reference< uno::XComponentContext >& xContext
     , bool bCreate )
 {
     uno::Reference< chart2::XLegend > xResult;
 
-    uno::Reference< chart2::XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
-    if( xChartDoc.is())
+    try
     {
-        try
+        uno::Reference< chart2::XDiagram > xDia( rModel.getFirstDiagram());
+        if( xDia.is() )
         {
-            uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram());
-            if( xDia.is() )
+            xResult.set( xDia->getLegend() );
+            if( bCreate && !xResult.is() && xContext.is() )
             {
-                xResult.set( xDia->getLegend() );
-                if( bCreate && !xResult.is() && xContext.is() )
-                {
-                    xResult.set( xContext->getServiceManager()->createInstanceWithContext(
-                        "com.sun.star.chart2.Legend", xContext ), uno::UNO_QUERY );
-                    xDia->setLegend( xResult );
-                }
-            }
-            else if(bCreate)
-            {
-                OSL_FAIL("need diagram for creation of legend");
+                xResult.set( xContext->getServiceManager()->createInstanceWithContext(
+                            "com.sun.star.chart2.Legend", xContext ), uno::UNO_QUERY );
+                xDia->setLegend( xResult );
             }
         }
-        catch( const uno::Exception & ex )
+        else if(bCreate)
         {
-            ASSERT_EXCEPTION( ex );
+            OSL_FAIL("need diagram for creation of legend");
         }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
     }
 
     return xResult;

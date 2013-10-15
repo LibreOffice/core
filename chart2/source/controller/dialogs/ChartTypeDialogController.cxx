@@ -322,7 +322,7 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
         uno::Reference< frame::XModel > xModel( xChartModel, uno::UNO_QUERY);
 
         // locked controllers
-        ControllerLockGuard aCtrlLockGuard( xModel );
+        ControllerLockGuardUNO aCtrlLockGuard( xModel );
         uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
         DiagramHelper::tTemplateWithServiceName aTemplateWithService(
             DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));

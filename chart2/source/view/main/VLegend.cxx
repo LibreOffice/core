@@ -779,21 +779,17 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
 VLegend::VLegend(
     const Reference< XLegend > & xLegend,
     const Reference< uno::XComponentContext > & xContext,
-    const std::vector< LegendEntryProvider* >& rLegendEntryProviderList ) :
+    const std::vector< LegendEntryProvider* >& rLegendEntryProviderList,
+    const Reference< drawing::XShapes >& xTargetPage,
+    const Reference< lang::XMultiServiceFactory >& xFactory,
+    ChartModel& rModel ) :
+        m_xTarget(xTargetPage),
+        m_xShapeFactory(xFactory),
         m_xLegend( xLegend ),
+        mrModel(rModel),
         m_xContext( xContext ),
         m_aLegendEntryProviderList( rLegendEntryProviderList )
 {
-}
-
-void VLegend::init(
-    const Reference< drawing::XShapes >& xTargetPage,
-    const Reference< lang::XMultiServiceFactory >& xFactory,
-    const Reference< frame::XModel >& xModel )
-{
-    m_xTarget = xTargetPage;
-    m_xShapeFactory = xFactory;
-    m_xModel = xModel;
 }
 
 void VLegend::setDefaultWritingMode( sal_Int16 nDefaultWritingMode )
@@ -833,7 +829,7 @@ void VLegend::createShapes(
     {
         //create shape and add to page
         AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
-        OUString aLegendParticle( ObjectIdentifier::createParticleForLegend( m_xLegend, m_xModel ) );
+        OUString aLegendParticle( ObjectIdentifier::createParticleForLegend( m_xLegend, mrModel ) );
         m_xShape.set( pShapeFactory->createGroup2D( m_xTarget,
                     ObjectIdentifier::createClassifiedIdentifierForParticle( aLegendParticle )),
                 uno::UNO_QUERY);

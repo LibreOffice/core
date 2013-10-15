@@ -26,6 +26,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "TitleHelper.hxx"
 #include "charttoolsdllapi.hxx"
+#include "ChartModel.hxx"
 
 // header for class OUString
 #include <rtl/ustring.hxx>
@@ -104,6 +105,11 @@ public:
     static OUString createClassifiedIdentifierForObject(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::uno::XInterface >& xObject
+        , ChartModel& rModel);
+
+    static OUString createClassifiedIdentifierForObject(
+          const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::uno::XInterface >& xObject
         , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
 
@@ -126,8 +132,18 @@ public:
     SAL_DLLPRIVATE static OUString createParticleForDiagram(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XDiagram >& xDiagram
+        , ChartModel& rModel);
+
+    SAL_DLLPRIVATE static OUString createParticleForDiagram(
+          const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XDiagram >& xDiagram
         , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
+
+    static OUString createParticleForCoordinateSystem(
+          const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XCoordinateSystem >& xCooSys
+        , ChartModel& rModel );
 
     static OUString createParticleForCoordinateSystem(
           const ::com::sun::star::uno::Reference<
@@ -143,6 +159,11 @@ public:
 
     static OUString createParticleForSeries( sal_Int32 nDiagramIndex, sal_Int32 nCooSysIndex
             , sal_Int32 nChartTypeIndex, sal_Int32 nSeriesIndex );
+
+    static OUString createParticleForLegend(
+          const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XLegend >& xLegend
+        , ChartModel& rModel );
 
     static OUString createParticleForLegend(
           const ::com::sun::star::uno::Reference<

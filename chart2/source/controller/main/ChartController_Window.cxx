@@ -749,7 +749,7 @@ void ChartController::execute_Tracking( const TrackingEvent& /* rTEvt */ )
 
 void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 {
-    ControllerLockGuard aCLGuard( getModel() );
+    ControllerLockGuardUNO aCLGuard( getModel() );
     bool bMouseUpWithoutMouseDown = !m_bWaitingForMouseUp;
     m_bWaitingForMouseUp = false;
     bool bNotifySelectionChange = false;
@@ -849,8 +849,9 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                             m_xUndoManager );
 
                         bool bChanged = false;
+                        ChartModel* pModel = dynamic_cast<ChartModel*>(getModel().get());
                         if ( eObjectType == OBJECTTYPE_LEGEND )
-                            bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( getModel(), false , true );
+                            bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( *pModel, false , true );
 
                         bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                                         , getModel()
@@ -1792,7 +1793,7 @@ bool ChartController::impl_moveOrResizeObject(
             UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
                     eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager );
             {
-                ControllerLockGuard aCLGuard( xChartModel );
+                ControllerLockGuardUNO aCLGuard( xChartModel );
                 if( bNeedShift )
                     xObjProp->setPropertyValue( "RelativePosition", uno::makeAny( aRelPos ));
                 if( bNeedResize || (eObjectType == OBJECTTYPE_DIAGRAM) )//Also set an explicat size at the diagram when an explicit position is set

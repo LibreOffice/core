@@ -471,7 +471,7 @@ void SAL_CALL ChartModel::initNew()
                 ASSERT_EXCEPTION( ex );
             }
         }
-        ChartModelHelper::setIncludeHiddenCells( false, this );
+        ChartModelHelper::setIncludeHiddenCells( false, *this );
     }
     catch( const uno::Exception & ex )
     {

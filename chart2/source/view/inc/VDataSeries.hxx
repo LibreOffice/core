@@ -52,7 +52,7 @@ public:
     sal_Int32 getLength() const;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence >     Model;
+        ::com::sun::star::chart2::data::XDataSequence > Model;
 
     mutable ::com::sun::star::uno::Sequence< double > Doubles;
 };

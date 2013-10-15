@@ -21,6 +21,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include "charttoolsdllapi.hxx"
+#include "ChartModel.hxx"
 
 namespace chart
 {
@@ -29,17 +30,26 @@ namespace chart
     unlockControllers in the DTOR.  Using this ensures that controllers do not
     remain locked when leaving a function even in case an exception is thrown.
  */
+class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockGuardUNO
+{
+public:
+    explicit ControllerLockGuardUNO(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > & xModel );
+    ~ControllerLockGuardUNO();
+
+private:
+    com::sun::star::uno::Reference< com::sun::star::frame::XModel > mxModel;
+};
+
 class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockGuard
 {
 public:
-    explicit ControllerLockGuard(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+    explicit ControllerLockGuard( ChartModel& rModel );
     ~ControllerLockGuard();
 
 private:
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > m_xModel;
+    ChartModel& mrModel;
 };
 
 /** This helper class can be used to pass a locking mechanism to other objects

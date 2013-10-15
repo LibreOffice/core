@@ -28,6 +28,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include "ChartModel.hxx"
+
 #include "charttoolsdllapi.hxx"
 
 #include <vector>
@@ -96,6 +98,10 @@ public:
         static ::com::sun::star::uno::Sequence< OUString > getUsedDataRanges(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XModel > & xChartModel );
+
+        static ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::data::XDataSource > getUsedData(
+                ChartModel& rModel );
 
         static ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::data::XDataSource > getUsedData(

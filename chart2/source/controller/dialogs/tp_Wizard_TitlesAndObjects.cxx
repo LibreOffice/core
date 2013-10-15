@@ -122,7 +122,7 @@ void TitlesAndObjectsTabPage::commitToModel()
     m_aTimerTriggeredControllerLock.startTimer();
     uno::Reference< frame::XModel >  xModel( m_xChartModel, uno::UNO_QUERY);
 
-    ControllerLockGuard aLockedControllers( xModel );
+    ControllerLockGuardUNO aLockedControllers( xModel );
 
     //commit title changes to model
     {

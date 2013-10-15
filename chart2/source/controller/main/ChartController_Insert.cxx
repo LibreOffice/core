@@ -117,7 +117,7 @@ void ChartController::executeDispatch_InsertAxes()
         if( aDlg.Execute() == RET_OK )
         {
             // lock controllers till end of block
-            ControllerLockGuard aCLGuard( getModel() );
+            ControllerLockGuardUNO aCLGuard( getModel() );
 
             InsertAxisOrGridDialogData aDialogOutput;
             aDlg.getResult( aDialogOutput );
@@ -155,7 +155,7 @@ void ChartController::executeDispatch_InsertGrid()
         if( aDlg.Execute() == RET_OK )
         {
             // lock controllers till end of block
-            ControllerLockGuard aCLGuard( getModel() );
+            ControllerLockGuardUNO aCLGuard( getModel() );
             InsertAxisOrGridDialogData aDialogOutput;
             aDlg.getResult( aDialogOutput );
             bool bChanged = AxisHelper::changeVisibilityOfGrids( xDiagram
@@ -187,7 +187,7 @@ void ChartController::executeDispatch_InsertTitles()
         if( aDlg.Execute() == RET_OK )
         {
             // lock controllers till end of block
-            ControllerLockGuard aCLGuard( getModel() );
+            ControllerLockGuardUNO aCLGuard( getModel() );
             TitleDialogData aDialogOutput( impl_createReferenceSizeProvider().release());
             aDlg.getResult( aDialogOutput );
             bool bChanged = aDialogOutput.writeDifferenceToModel( getModel(), m_xCC, &aDialogInput );
@@ -208,7 +208,8 @@ void ChartController::executeDispatch_DeleteLegend()
             ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_LEGEND )),
         m_xUndoManager );
 
-    LegendHelper::hideLegend( getModel() );
+    ChartModel* pModel = dynamic_cast<ChartModel*>(getModel().get());
+    LegendHelper::hideLegend( *pModel );
     aUndoGuard.commit();
 }
 
@@ -219,7 +220,8 @@ void ChartController::executeDispatch_InsertLegend()
             ActionDescriptionProvider::INSERT, SCH_RESSTR( STR_OBJECT_LEGEND )),
         m_xUndoManager );
 
-    Reference< chart2::XLegend > xLegend = LegendHelper::showLegend( getModel(), m_xCC );
+    ChartModel* pModel = dynamic_cast<ChartModel*>(getModel().get());
+    Reference< chart2::XLegend > xLegend = LegendHelper::showLegend( *pModel, m_xCC );
     aUndoGuard.commit();
 }
 
@@ -239,7 +241,7 @@ void ChartController::executeDispatch_OpenLegendDialog()
         if( aDlg.Execute() == RET_OK )
         {
             // lock controllers till end of block
-            ControllerLockGuard aCLGuard( getModel() );
+            ControllerLockGuardUNO aCLGuard( getModel() );
             bool bChanged = aDlg.writeToModel( getModel() );
             if( bChanged )
                 aUndoGuard.commit();
@@ -301,7 +303,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
             aDlg.FillItemSet( aOutItemSet );
             // lock controllers till end of block
-            ControllerLockGuard aCLGuard( getModel() );
+            ControllerLockGuardUNO aCLGuard( getModel() );
             bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
             if( bChanged )
                 aUndoGuard.commit();
@@ -409,7 +411,7 @@ void ChartController::executeDispatch_InsertTrendline()
         const SfxItemSet* pOutItemSet = aDialog.GetOutputItemSet();
         if( pOutItemSet )
         {
-            ControllerLockGuard aCLGuard( getModel() );
+            ControllerLockGuardUNO aCLGuard( getModel() );
             aItemConverter.ApplyItemSet( *pOutItemSet );
         }
         aUndoGuard.commit();
@@ -467,7 +469,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
             const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
             if( pOutItemSet )
             {
-                ControllerLockGuard aCLGuard( getModel() );
+                ControllerLockGuardUNO aCLGuard( getModel() );
                 aItemConverter.ApplyItemSet( *pOutItemSet );
             }
             aUndoGuard.commit();
@@ -505,7 +507,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
                 aDlg.FillItemSet( aOutItemSet );
 
                 // lock controllers till end of block
-                ControllerLockGuard aCLGuard( getModel() );
+                ControllerLockGuardUNO aCLGuard( getModel() );
                 bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
                 if( bChanged )
                     aUndoGuard.commit();

@@ -1002,17 +1002,11 @@ Sequence< OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const
 }
 
 Sequence< OUString > DiagramHelper::getExplicitSimpleCategories(
-            const Reference< XChartDocument >& xChartDoc )
+            ChartModel& rModel )
 {
-    Sequence< OUString > aRet;
-    uno::Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
-    if(xChartModel.is())
-    {
-        uno::Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
-        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
-        aRet = aExplicitCategoriesProvider.getSimpleCategories();
-    }
-    return aRet;
+    uno::Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
+    ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, rModel );
+    return aExplicitCategoriesProvider.getSimpleCategories();
 }
 
 namespace
@@ -1117,7 +1111,7 @@ void DiagramHelper::switchToDateCategories( const Reference< XChartDocument >& x
     Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
     if(xChartModel.is())
     {
-        ControllerLockGuard aCtrlLockGuard( xChartModel );
+        ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
 
         Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
         if( xCooSys.is() )
@@ -1133,7 +1127,7 @@ void DiagramHelper::switchToTextCategories( const Reference< XChartDocument >& x
     Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
     if(xChartModel.is())
     {
-        ControllerLockGuard aCtrlLockGuard( xChartModel );
+        ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
 
         Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
         if( xCooSys.is() )
@@ -1622,7 +1616,7 @@ void lcl_ensureRange0to1( double& rValue )
 bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >& xChartModel,
         const awt::Rectangle& rPosRect /*100th mm*/ )
 {
-    ControllerLockGuard aCtrlLockGuard( xChartModel );
+    ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
 
     bool bChanged = false;
     awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
@@ -1695,28 +1689,22 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference
 }
 
 bool DiagramHelper::switchDiagramPositioningToExcludingPositioning(
-    const uno::Reference< frame::XModel >& xChartModel
-    , bool bResetModifiedState, bool bConvertAlsoFromAutoPositioning )
+    ChartModel& rModel, bool bResetModifiedState, bool bConvertAlsoFromAutoPositioning )
 {
     //return true if something was changed
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
     if( nCurrentODFVersion > SvtSaveOptions::ODFVER_012 )
     {
-        uno::Reference< ::com::sun::star::chart::XChartDocument > xOldDoc( xChartModel, uno::UNO_QUERY ) ;
-        if( xOldDoc.is() )
-        {
-            uno::Reference< ::com::sun::star::chart::XDiagramPositioning > xDiagramPositioning( xOldDoc->getDiagram(), uno::UNO_QUERY );
-            if( xDiagramPositioning.is() && ( bConvertAlsoFromAutoPositioning || !xDiagramPositioning->isAutomaticDiagramPositioning() )
+        uno::Reference< ::com::sun::star::chart::XDiagramPositioning > xDiagramPositioning( rModel.getFirstDiagram(), uno::UNO_QUERY );
+        if( xDiagramPositioning.is() && ( bConvertAlsoFromAutoPositioning || !xDiagramPositioning->isAutomaticDiagramPositioning() )
                 && !xDiagramPositioning->isExcludingDiagramPositioning() )
-            {
-                ControllerLockGuard aCtrlLockGuard( xChartModel );
-                uno::Reference< util::XModifiable > xModifiable( xChartModel, uno::UNO_QUERY );
-                bool bModelWasModified = xModifiable.is() && xModifiable->isModified();
-                xDiagramPositioning->setDiagramPositionExcludingAxes( xDiagramPositioning->calculateDiagramPositionExcludingAxes() );
-                if(bResetModifiedState && !bModelWasModified && xModifiable.is() )
-                    xModifiable->setModified(sal_False);
-                return true;
-            }
+        {
+            ControllerLockGuard aCtrlLockGuard( rModel );
+            bool bModelWasModified = rModel.isModified();
+            xDiagramPositioning->setDiagramPositionExcludingAxes( xDiagramPositioning->calculateDiagramPositionExcludingAxes() );
+            if(bResetModifiedState && !bModelWasModified )
+                rModel.setModified(sal_False);
+            return true;
         }
     }
     return false;

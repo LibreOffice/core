@@ -176,7 +176,8 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
     if( aX.isEmpty() )
     {
-        aRet = ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, xChartModel, nPointIndex );
+        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
+        aRet = ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, *pModel, nPointIndex );
     }
     else
     {

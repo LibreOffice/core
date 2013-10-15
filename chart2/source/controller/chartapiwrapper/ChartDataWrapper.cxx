@@ -530,7 +530,7 @@ void SAL_CALL ChartDataWrapper::setAnyColumnDescriptions( const Sequence< Sequen
 void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDates ) throw (uno::RuntimeException)
 {
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
-    ControllerLockGuard aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
+    ControllerLockGuardUNO aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
     lcl_DateCategoriesOperator aOperator( rDates );
     applyData( aOperator );
     DiagramHelper::switchToDateCategories( xChartDoc );
@@ -682,7 +682,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
             aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
 
     // /-- locked controllers
-    ControllerLockGuard aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
+    ControllerLockGuardUNO aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
 
     // create and attach new data source
     switchToInternalDataProvider();

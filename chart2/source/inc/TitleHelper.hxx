@@ -26,6 +26,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 
+#include "ChartModel.hxx"
+
 namespace chart
 {
 
@@ -52,8 +54,13 @@ public:
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XTitle >
         getTitle( eTitleType nTitleIndex
+                    , ChartModel& rModel );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XTitle >
+        getTitle( eTitleType nTitleIndex
                     , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xModel );
+                        ::com::sun::star::frame::XModel >& xModel );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XTitle >
@@ -77,6 +84,11 @@ public:
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext
         , float * pDefaultCharHeight = 0 );
+
+    static bool getTitleType( eTitleType& rType
+                    , const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::XTitle >& xTitle
+                    , ChartModel& rModel);
 
     static bool getTitleType( eTitleType& rType
                     , const ::com::sun::star::uno::Reference<

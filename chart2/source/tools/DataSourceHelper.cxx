@@ -327,6 +327,32 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
         new DataSource( ContainerHelper::ContainerToSequence( aResult )));
 }
 
+uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
+    ChartModel& rModel )
+{
+    ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
+
+    uno::Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
+    uno::Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
+    if( xCategories.is() )
+        aResult.push_back( xCategories );
+
+    ::std::vector< uno::Reference< XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( rModel ) );
+    for( ::std::vector< uno::Reference< XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
+        ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
+    {
+        uno::Reference< data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
+        if( !xDataSource.is() )
+            continue;
+        uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
+        ::std::copy( aDataSequences.getConstArray(), aDataSequences.getConstArray() + aDataSequences.getLength(),
+                     ::std::back_inserter( aResult ));
+    }
+
+    return uno::Reference< chart2::data::XDataSource >(
+        new DataSource( ContainerHelper::ContainerToSequence( aResult )));
+}
+
 bool DataSourceHelper::detectRangeSegmentation(
     const uno::Reference<
         frame::XModel >& xChartModel
@@ -445,7 +471,7 @@ void DataSourceHelper::setRangeSegmentation(
     if( !xDataSource.is() )
         return;
 
-    ControllerLockGuard aCtrlLockGuard( xChartModel );
+    ControllerLockGuardUNO aCtrlLockGuard( xChartModel );
     xDiagram->setDiagramData( xDataSource, aArguments );
 }
 

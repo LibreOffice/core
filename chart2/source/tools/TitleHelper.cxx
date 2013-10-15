@@ -33,6 +33,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
+namespace {
+
 uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
       TitleHelper::eTitleType nTitleIndex
     , const uno::Reference< XDiagram >& xDiagram )
@@ -88,18 +90,13 @@ uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
 }
 
 uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleIndex
-                                              , const uno::Reference< frame::XModel >& xModel )
+                                              , const uno::Reference< XDiagram >& xDiagram )
 {
     uno::Reference< XTitled > xResult;
-    uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
-    uno::Reference< XDiagram > xDiagram;
-    if( xChartDoc.is())
-        xDiagram.set( xChartDoc->getFirstDiagram());
-
     switch( nTitleIndex )
     {
         case TitleHelper::MAIN_TITLE:
-            xResult.set( xModel, uno::UNO_QUERY );
+            SAL_WARN("chart2", "should not be reached");
             break;
         case TitleHelper::SUB_TITLE:
         case TitleHelper::X_AXIS_TITLE:
@@ -119,10 +116,55 @@ uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleInde
     return xResult;
 }
 
+uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleIndex
+                                              , const uno::Reference< frame::XModel >& xModel )
+{
+    if(nTitleIndex == TitleHelper::MAIN_TITLE)
+    {
+        uno::Reference< XTitled > xTitled( xModel, uno::UNO_QUERY );
+        return xTitled;
+    }
+
+    uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
+    uno::Reference< XDiagram > xDiagram;
+
+    if( xChartDoc.is())
+        xDiagram.set( xChartDoc->getFirstDiagram());
+
+    return lcl_getTitleParent( nTitleIndex, xDiagram );
+}
+
+}
+
+uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
+                            , ChartModel& rModel )
+{
+    if(nTitleIndex == TitleHelper::MAIN_TITLE)
+        return rModel.getTitleObject();
+
+    uno::Reference< XDiagram > xDiagram( rModel.getFirstDiagram(), uno::UNO_QUERY );
+    uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xDiagram ) );
+    if( xTitled.is())
+        return xTitled->getTitleObject();
+    return NULL;
+}
+
 uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
                             , const uno::Reference< frame::XModel >& xModel )
 {
-    uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xModel ) );
+    if(nTitleIndex == TitleHelper::MAIN_TITLE)
+    {
+        uno::Reference< XTitled > xTitled( xModel, uno::UNO_QUERY );
+        return xTitled->getTitleObject();
+    }
+
+    uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
+    uno::Reference< XDiagram > xDiagram;
+
+    if( xChartDoc.is())
+        xDiagram.set( xChartDoc->getFirstDiagram());
+
+    uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xDiagram ) );
     if( xTitled.is())
         return xTitled->getTitleObject();
     return NULL;
@@ -330,6 +372,28 @@ void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
     {
         xTitled->setTitleObject(NULL);
     }
+}
+
+bool TitleHelper::getTitleType( eTitleType& rType
+                    , const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::chart2::XTitle >& xTitle
+                    , ChartModel& rModel )
+{
+    if( !xTitle.is() )
+        return false;
+
+    Reference< chart2::XTitle > xCurrentTitle;
+    for( sal_Int32 nTitleType = TITLE_BEGIN; nTitleType < NORMAL_TITLE_END; nTitleType++ )
+    {
+        xCurrentTitle = TitleHelper::getTitle( static_cast<eTitleType>(nTitleType), rModel );
+        if( xCurrentTitle == xTitle )
+        {
+            rType = static_cast<eTitleType>(nTitleType);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool TitleHelper::getTitleType( eTitleType& rType

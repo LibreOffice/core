@@ -204,7 +204,7 @@ TitleWrapper::TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
         m_aEventListenerContainer( m_aMutex ),
         m_eTitleType(eTitleType)
 {
-    ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
+    ControllerLockGuardUNO aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
     if( !getTitleObject().is() ) //#i83831# create an empty title at the model, thus references to properties can be mapped mapped correctly
         TitleHelper::createTitle( m_eTitleType, OUString(), m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
 }
