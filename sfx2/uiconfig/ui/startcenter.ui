@@ -2,20 +2,91 @@
 <interface>
   <!-- interface-requires LibreOffice 1.0 -->
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkImage" id="calc_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/ods_16_8.png</property>
+  </object>
+  <object class="GtkImage" id="calc_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/ods_16_8.png</property>
+  </object>
+  <object class="GtkImage" id="database_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odb_16_8.png</property>
+  </object>
+  <object class="GtkImage" id="database_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odb_16_8.png</property>
+  </object>
+  <object class="GtkImage" id="draw_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odg_16_8.png</property>
+  </object>
+  <object class="GtkImage" id="draw_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odg_16_8.png</property>
+  </object>
+  <object class="GtkImage" id="impress_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odp_16_8.png</property>
+  </object>
+  <object class="GtkImage" id="impress_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="tooltip_text" translatable="yes">New Presentation</property>
+    <property name="pixbuf">res/odp_16_8.png</property>
+  </object>
+  <object class="GtkImage" id="math_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odf_16_8.png</property>
+  </object>
+  <object class="GtkImage" id="math_all_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odf_16_8.png</property>
+  </object>
+  <object class="GtkImage" id="open_image5">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_open.png</property>
+  </object>
+  <object class="GtkImage" id="open_image6">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_open.png</property>
+  </object>
+  <object class="GtkImage" id="open_image10">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_open.png</property>
+  </object>
   <object class="GtkImage" id="open_image7">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/folder_16.png</property>
+    <property name="pixbuf">cmd/sc_open.png</property>
+  </object>
+  <object class="GtkImage" id="open_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_open.png</property>
   </object>
   <object class="GtkImage" id="open_image8">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/folder_16.png</property>
+    <property name="pixbuf">cmd/sc_open.png</property>
   </object>
   <object class="GtkImage" id="open_image9">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/folder_16.png</property>
+    <property name="pixbuf">cmd/sc_open.png</property>
   </object>
   <object class="GtkBox" id="StartCenter">
     <property name="can_focus">False</property>
@@ -1037,111 +1108,40 @@
       </packing>
     </child>
   </object>
-  <object class="GtkImage" id="calc_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/ods_16_8.png</property>
-  </object>
-  <object class="GtkImage" id="calc_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/ods_16_8.png</property>
-  </object>
-  <object class="GtkImage" id="database_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odb_16_8.png</property>
-  </object>
-  <object class="GtkImage" id="database_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odb_16_8.png</property>
-  </object>
-  <object class="GtkImage" id="draw_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odg_16_8.png</property>
-  </object>
-  <object class="GtkImage" id="draw_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odg_16_8.png</property>
-  </object>
-  <object class="GtkImage" id="impress_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="tooltip_text" translatable="yes">New Presentation</property>
-    <property name="pixbuf">res/odp_16_8.png</property>
-  </object>
-  <object class="GtkImage" id="impress_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odp_16_8.png</property>
-  </object>
-  <object class="GtkImage" id="math_all_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odf_16_8.png</property>
-  </object>
-  <object class="GtkImage" id="math_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/odf_16_8.png</property>
-  </object>
-  <object class="GtkImage" id="open_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/folder_16.png</property>
-  </object>
-  <object class="GtkImage" id="open_image10">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/folder_16.png</property>
-  </object>
-  <object class="GtkImage" id="open_image5">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/folder_16.png</property>
-  </object>
-  <object class="GtkImage" id="open_image6">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/folder_16.png</property>
-  </object>
   <object class="GtkImage" id="templates_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/templates_16.png</property>
+    <property name="pixbuf">cmd/sc_newdoc.png</property>
   </object>
   <object class="GtkImage" id="templates_image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/templates_16.png</property>
+    <property name="pixbuf">cmd/sc_newdoc.png</property>
   </object>
   <object class="GtkImage" id="templates_image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/templates_16.png</property>
+    <property name="pixbuf">cmd/sc_newdoc.png</property>
   </object>
   <object class="GtkImage" id="templates_image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/templates_16.png</property>
+    <property name="pixbuf">cmd/sc_newdoc.png</property>
   </object>
   <object class="GtkImage" id="templates_image4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/templates_16.png</property>
+    <property name="pixbuf">cmd/sc_newdoc.png</property>
   </object>
   <object class="GtkImage" id="templates_image5">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/templates_16.png</property>
+    <property name="pixbuf">cmd/sc_newdoc.png</property>
   </object>
   <object class="GtkImage" id="templates_image6">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/templates_16.png</property>
+    <property name="pixbuf">cmd/sc_newdoc.png</property>
   </object>
   <object class="GtkImage" id="writer_all_image">
     <property name="visible">True</property>
