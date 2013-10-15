@@ -156,7 +156,7 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
     return false;
 }
 
-bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue, bool bMoto)
+bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffset, sal_uInt16 aNumberOfTags, bool bSetValue, bool bSwap)
 {
     ExifIFD* ifd = NULL;
 
@@ -164,7 +164,7 @@ bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffs
     {
         ifd = (ExifIFD*) &pExifData[aOffset];
         sal_uInt16 tag = ifd->tag;
-        if (bMoto)
+        if (bSwap)
         {
             tag = OSL_SWAPWORD(ifd->tag);
         }
@@ -177,7 +177,7 @@ bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffs
                 ifd->type = 3;
                 ifd->count = 1;
                 ifd->offset = maOrientation;
-                if (bMoto)
+                if (bSwap)
                 {
                     ifd->tag = OSL_SWAPWORD(ifd->tag);
                     ifd->offset = OSL_SWAPWORD(ifd->offset);
@@ -186,7 +186,7 @@ bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffs
             else
             {
                 sal_uInt32 nIfdOffset = ifd->offset;
-                if (bMoto)
+                if (bSwap)
                     nIfdOffset = OSL_SWAPWORD(ifd->offset);
                 maOrientation = convertToOrientation(nIfdOffset);
             }
@@ -224,37 +224,46 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
 
     TiffHeader* aTiffHeader = (TiffHeader*) &aExifData[0];
 
-    if(!(
-        (0x4949 == aTiffHeader->byteOrder && 0x2A00 != aTiffHeader->tagAlign ) || // Intel format
-        ( 0x4D4D == aTiffHeader->byteOrder && 0x002A != aTiffHeader->tagAlign ) // Motorola format
-        )
-      )
+    bool bIntel = aTiffHeader->byteOrder == 0x4949;      //big-endian
+    bool bMotorola = aTiffHeader->byteOrder == 0x4D4D;   //little-endian
+
+    if (!bIntel && !bMotorola)
     {
         delete[] aExifData;
         return false;
     }
 
-    bool bMoto = true; // Motorola, big-endian by default
+    bool bSwap = false;
 
-    if (aTiffHeader->byteOrder == 0x4949)
+#ifdef OSL_BIGENDIAN
+    if (bIntel)
+        bSwap = true;
+#else
+    if (bMotorola)
+        bSwap = true;
+#endif
+
+    if (bSwap)
     {
-        bMoto = false; // little-endian
+        aTiffHeader->tagAlign = OSL_SWAPWORD(aTiffHeader->tagAlign);
+        aTiffHeader->offset = OSL_SWAPDWORD(aTiffHeader->offset);
     }
 
-    sal_uInt16 aOffset = 0;
-    aOffset = aTiffHeader->offset;
-    if (bMoto)
+    if (aTiffHeader->tagAlign != 0x002A) // TIFF tag
     {
-        aOffset = OSL_SWAPDWORD(aTiffHeader->offset);
+        delete[] aExifData;
+        return false;
     }
+
+    sal_uInt16 aOffset = aTiffHeader->offset;
 
     sal_uInt16 aNumberOfTags = aExifData[aOffset];
-    if (bMoto)
+    if (bSwap)
     {
         aNumberOfTags = ((aExifData[aOffset] << 8) | aExifData[aOffset+1]);
     }
 
-    processIFD(aExifData, aLength, aOffset+2, aNumberOfTags, bSetValue, bMoto);
+    processIFD(aExifData, aLength, aOffset+2, aNumberOfTags, bSetValue, bSwap);
 
     if (bSetValue)
     {
