@@ -47,7 +47,6 @@ struct UnknownAttribute
     void FillAttribute( ::com::sun::star::xml::Attribute* pAttrib ) const;
 };
 
-typedef std::map< sal_Int32, OString > FastAttributeMap;
 typedef std::vector< UnknownAttribute > UnknownAttributeList;
 
 class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastAttributeList >
@@ -71,9 +70,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::xml::FastAttribute > SAL_CALL getFastAttributes() throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    FastAttributeMap maAttributes;
+    std::vector< sal_Int32 > maAttributeTokens;
+    std::vector< OString > maAttributeValues;
     UnknownAttributeList maUnknownAttributes;
-    FastAttributeMap::iterator maLastIter;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxTokenHandler;
 
 };

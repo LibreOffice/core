@@ -50,7 +50,6 @@ void UnknownAttribute::FillAttribute( Attribute* pAttrib ) const
 FastAttributeList::FastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xTokenHandler )
 : mxTokenHandler( xTokenHandler )
 {
-    maLastIter = maAttributes.end();
 }
 
 FastAttributeList::~FastAttributeList()
@@ -59,14 +58,15 @@ FastAttributeList::~FastAttributeList()
 
 void FastAttributeList::clear()
 {
-    maAttributes.clear();
+    maAttributeTokens.clear();
+    maAttributeValues.clear();
     maUnknownAttributes.clear();
-    maLastIter = maAttributes.end();
 }
 
 void FastAttributeList::add( sal_Int32 nToken, const OString& rValue )
 {
-    maAttributes[nToken] = rValue;
+    maAttributeTokens.push_back( nToken );
+    maAttributeValues.push_back( rValue );
 }
 
 void FastAttributeList::addUnknown( const OUString& rNamespaceURL, const OString& rName, const OString& rValue )
@@ -82,55 +82,53 @@ void FastAttributeList::addUnknown( const OString& rName, const OString& rValue 
 // XFastAttributeList
 sal_Bool FastAttributeList::hasAttribute( ::sal_Int32 Token ) throw (RuntimeException)
 {
-    maLastIter = maAttributes.find( Token );
-    return ( maLastIter != maAttributes.end() ) ? sal_True : sal_False;
+    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+        if (maAttributeTokens[i] == Token)
+            return sal_True;
+
+    return sal_False;
 }
 
 sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token ) throw (SAXException, RuntimeException)
 {
-    if( ( maLastIter == maAttributes.end() ) || ( ( *maLastIter ).first != Token ) )
-        maLastIter = maAttributes.find( Token );
+    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+        if (maAttributeTokens[i] == Token)
+        {
+            Sequence< sal_Int8 > aSeq( (sal_Int8*) maAttributeValues[i].getStr(), maAttributeValues[i].getLength() );
+            return mxTokenHandler->getTokenFromUTF8( aSeq );
+        }
 
-    if( maLastIter == maAttributes.end() )
-        throw SAXException();
-
-    Sequence< sal_Int8 > aSeq( (sal_Int8*)(*maLastIter).second.getStr(), (*maLastIter).second.getLength() ) ;
-    return mxTokenHandler->getTokenFromUTF8( aSeq );
+    throw SAXException();
 }
 
 sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default ) throw (RuntimeException)
 {
-    if( ( maLastIter == maAttributes.end() ) || ( ( *maLastIter ).first != Token ) )
-        maLastIter = maAttributes.find( Token );
+    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+        if (maAttributeTokens[i] == Token)
+        {
+            Sequence< sal_Int8 > aSeq( (sal_Int8*) maAttributeValues[i].getStr(), maAttributeValues[i].getLength() );
+            return mxTokenHandler->getTokenFromUTF8( aSeq );
+        }
 
-    if( maLastIter == maAttributes.end() )
-        return Default;
-
-    Sequence< sal_Int8 > aSeq( (sal_Int8*)(*maLastIter).second.getStr(), (*maLastIter).second.getLength() ) ;
-    return mxTokenHandler->getTokenFromUTF8( aSeq );
+    return Default;
 }
 
 OUString FastAttributeList::getValue( ::sal_Int32 Token ) throw (SAXException, RuntimeException)
 {
-    if( ( maLastIter == maAttributes.end() ) || ( ( *maLastIter ).first != Token ) )
-        maLastIter = maAttributes.find( Token );
+    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+        if (maAttributeTokens[i] == Token)
+            return OStringToOUString( maAttributeValues[i], RTL_TEXTENCODING_UTF8 );
 
-    if( maLastIter == maAttributes.end() )
-        throw SAXException();
-
-    return OStringToOUString( (*maLastIter).second, RTL_TEXTENCODING_UTF8 );
+    throw SAXException();
 }
 
 OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token ) throw (RuntimeException)
 {
-    if( ( maLastIter == maAttributes.end() ) || ( ( *maLastIter ).first != Token ) )
-        maLastIter = maAttributes.find( Token );
+    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
+        if (maAttributeTokens[i] == Token)
+            return OStringToOUString( maAttributeValues[i], RTL_TEXTENCODING_UTF8 );
 
-    OUString aRet;
-    if( maLastIter != maAttributes.end() )
-        aRet = OStringToOUString( (*maLastIter).second, RTL_TEXTENCODING_UTF8 );
-
-    return aRet;
+    return OUString();
 }
 Sequence< Attribute > FastAttributeList::getUnknownAttributes(  ) throw (RuntimeException)
 {
@@ -142,13 +140,12 @@ Sequence< Attribute > FastAttributeList::getUnknownAttributes(  ) throw (Runtime
 }
 Sequence< FastAttribute > FastAttributeList::getFastAttributes(  ) throw (RuntimeException)
 {
-    Sequence< FastAttribute > aSeq( maAttributes.size() );
+    Sequence< FastAttribute > aSeq( maAttributeTokens.size() );
     FastAttribute* pAttr = aSeq.getArray();
-    FastAttributeMap::iterator fastAttrIter = maAttributes.begin();
-    for(; fastAttrIter != maAttributes.end(); ++fastAttrIter )
+    for (size_t i = 0; i < maAttributeTokens.size(); ++i)
     {
-        pAttr->Token = fastAttrIter->first;
-        pAttr->Value = OStringToOUString( fastAttrIter->second, RTL_TEXTENCODING_UTF8 );
+        pAttr->Token = maAttributeTokens[i];
+        pAttr->Value = OStringToOUString( maAttributeValues[i], RTL_TEXTENCODING_UTF8 );
         pAttr++;
     }
     return aSeq;
