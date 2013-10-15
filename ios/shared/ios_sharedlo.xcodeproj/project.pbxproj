@@ -481,8 +481,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(BUILDDIR)/config_host",
 					../../include,
-					"$(BUILDDIR)/workdir/unxiosr.pro/UnoApiHeadersTarget/udkapi/comprehensive",
-					"$(BUILDDIR)/workdir/unxiosr.pro/UnoApiHeadersTarget/offapi/comprehensive",
+					"$(WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
+					"$(WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_NO_PIE = NO;
@@ -516,8 +516,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(BUILDDIR)/config_host",
 					../../include,
-					"$(BUILDDIR)/workdir/unxiosr.pro/UnoApiHeadersTarget/udkapi/comprehensive",
-					"$(BUILDDIR)/workdir/unxiosr.pro/UnoApiHeadersTarget/offapi/comprehensive",
+					"$(WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
+					"$(WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_NO_PIE = NO;
