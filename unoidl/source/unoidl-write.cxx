@@ -57,12 +57,11 @@ void badUsage() {
 OUString getArgumentUri(sal_uInt32 argument, bool * entities) {
     OUString arg;
     rtl_getAppCommandArg(argument, &arg.pData);
-    if (arg.startsWith("@")) {
+    if (arg.startsWith("@", &arg)) {
         if (entities == 0) {
             badUsage();
         }
         *entities = true;
-        arg = arg.copy(1);
     } else if (entities != 0) {
         *entities = false;
     }

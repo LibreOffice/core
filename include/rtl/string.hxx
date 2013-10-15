@@ -682,15 +682,22 @@ public:
     /**
       Check whether this string starts with a given substring.
 
-      @param str  the substring to be compared
+      @param str the substring to be compared
+
+      @param rest if non-null, and this function returns true, then assign a
+      copy of the remainder of this string to *rest
 
       @return true if and only if the given str appears as a substring at the
       start of this string
 
       @since LibreOffice 4.0
     */
-    bool startsWith(OString const & str) const {
-        return match(str, 0);
+    bool startsWith(OString const & str, OString * rest = 0) const {
+        bool b = match(str, 0);
+        if (b && rest != 0) {
+            *rest = copy(str.getLength());
+        }
+        return b;
     }
 
     /**
@@ -699,25 +706,37 @@ public:
      @since LibreOffice 4.0
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type startsWith( T& literal ) const
+    typename internal::ConstCharArrayDetector< T, bool >::Type startsWith(
+        T & literal, OString * rest = 0) const
     {
         RTL_STRING_CONST_FUNCTION
-        return match(literal, 0);
+        bool b = match(literal, 0);
+        if (b && rest != 0) {
+            *rest = copy(internal::ConstCharArrayDetector< T, void >::size - 1);
+        }
+        return b;
     }
 
     /**
       Check whether this string ends with a given substring.
 
-      @param str  the substring to be compared
+      @param str the substring to be compared
+
+      @param rest if non-null, and this function returns true, then assign a
+      copy of the remainder of this string to *rest
 
       @return true if and only if the given str appears as a substring at the
       end of this string
 
       @since LibreOffice 3.6
     */
-    bool endsWith(OString const & str) const {
-        return str.getLength() <= getLength()
+    bool endsWith(OString const & str, OString * rest = 0) const {
+        bool b = str.getLength() <= getLength()
             && match(str, getLength() - str.getLength());
+        if (b && rest != 0) {
+            *rest = copy(0, getLength() - str.getLength());
+        }
+        return b;
     }
 
     /**
@@ -726,12 +745,20 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type endsWith( T& literal ) const
+    typename internal::ConstCharArrayDetector< T, bool >::Type endsWith(
+        T & literal, OString * rest = 0) const
     {
         RTL_STRING_CONST_FUNCTION
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        return internal::ConstCharArrayDetector< T, void >::size - 1 <= getLength()
+        bool b = internal::ConstCharArrayDetector< T, void >::size - 1 <= getLength()
             && match(literal, getLength() - ( internal::ConstCharArrayDetector< T, void >::size - 1 ));
+        if (b && rest != 0) {
+            *rest = copy(
+                0,
+                (getLength()
+                 - (internal::ConstCharArrayDetector< T, void >::size - 1)));
+        }
+        return b;
     }
 
     /**

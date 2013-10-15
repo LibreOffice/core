@@ -261,9 +261,7 @@ unoidl::detail::SourceProviderEntity * findEntity_(
     assert(data != 0);
     assert(name != 0);
     OUString n;
-    if (name->startsWith(".")) {
-        n = name->copy(1);
-    } else {
+    if (!name->startsWith(".", &n)) {
         for (std::vector<OUString>::const_reverse_iterator i(data->modules.rbegin());
              i != data->modules.rend(); ++i)
         {
@@ -345,7 +343,7 @@ Found findEntity(
                         static_cast<unoidl::TypedefEntity *>(e->entity.get())
                         ->getType());
                     typeNucleus = t;
-                    while (typeNucleus.startsWith("[]")) {
+                    while (typeNucleus.startsWith("[]", &typeNucleus)) {
                         if (!args.empty()) {
                             error(
                                 location, yyscanner,
@@ -363,7 +361,6 @@ Found findEntity(
                             return FOUND_ERROR;
                         }
                         ++rank;
-                        typeNucleus = typeNucleus.copy(2);
                     }
                     sal_Int32 i = typeNucleus.indexOf('<');
                     if (i != -1) {

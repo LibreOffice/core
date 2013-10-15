@@ -923,15 +923,22 @@ public:
     /**
       Check whether this string starts with a given substring.
 
-      @param str  the substring to be compared
+      @param str the substring to be compared
+
+      @param rest if non-null, and this function returns true, then assign a
+      copy of the remainder of this string to *rest
 
       @return true if and only if the given str appears as a substring at the
       start of this string
 
       @since LibreOffice 4.0
     */
-    bool startsWith(OUString const & str) const {
-        return match(str, 0);
+    bool startsWith(OUString const & str, OUString * rest = 0) const {
+        bool b = match(str, 0);
+        if (b && rest != 0) {
+            *rest = copy(str.getLength());
+        }
+        return b;
     }
 
     /**
@@ -940,12 +947,17 @@ public:
      @since LibreOffice 4.0
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type startsWith( T& literal ) const
+    typename internal::ConstCharArrayDetector< T, bool >::Type startsWith(
+        T & literal, OUString * rest = 0) const
     {
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        return internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
+        bool b = internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
             && rtl_ustr_asciil_reverseEquals_WithLength( pData->buffer, literal,
                 internal::ConstCharArrayDetector< T, void >::size - 1);
+        if (b && rest != 0) {
+            *rest = copy(internal::ConstCharArrayDetector< T, void >::size - 1);
+        }
+        return b;
     }
 
     /**
@@ -956,14 +968,25 @@ public:
       values between 97 and 122 (ASCII a-z).
       This function can't be used for language specific comparison.
 
-      @param    str         the object (substring) to be compared.
-      @return true if this string starts with str, ignoring the case of ASCII
-      letters ("A"--"Z" and "a"--"z"); otherwise, false is returned
+      @param str the substring to be compared
+
+      @param rest if non-null, and this function returns true, then assign a
+      copy of the remainder of this string to *rest
+
+      @return true if and only if the given str appears as a substring at the
+      start of this string, ignoring the case of ASCII letters ("A"--"Z" and
+      "a"--"z")
+
       @since LibreOffice 4.0
     */
-    sal_Bool startsWithIgnoreAsciiCase( const OUString & str ) const SAL_THROW(())
+    bool startsWithIgnoreAsciiCase(OUString const & str, OUString * rest = 0)
+        const
     {
-        return matchIgnoreAsciiCase(str, 0);
+        bool b = matchIgnoreAsciiCase(str, 0);
+        if (b && rest != 0) {
+            *rest = copy(str.getLength());
+        }
+        return b;
     }
 
     /**
@@ -972,29 +995,41 @@ public:
      @since LibreOffice 4.0
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type startsWithIgnoreAsciiCase( T& literal ) const SAL_THROW(())
+    typename internal::ConstCharArrayDetector< T, bool >::Type
+    startsWithIgnoreAsciiCase(T & literal, OUString * rest = 0) const
     {
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        return (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+        bool b = (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
                     pData->buffer,
                     internal::ConstCharArrayDetector< T, void >::size - 1, literal,
                     internal::ConstCharArrayDetector< T, void >::size - 1)
                 == 0);
+        if (b && rest != 0) {
+            *rest = copy(internal::ConstCharArrayDetector< T, void >::size - 1);
+        }
+        return b;
     }
 
     /**
       Check whether this string ends with a given substring.
 
-      @param str  the substring to be compared
+      @param str the substring to be compared
+
+      @param rest if non-null, and this function returns true, then assign a
+      copy of the remainder of this string to *rest
 
       @return true if and only if the given str appears as a substring at the
       end of this string
 
       @since LibreOffice 3.6
     */
-    bool endsWith(OUString const & str) const {
-        return str.getLength() <= getLength()
+    bool endsWith(OUString const & str, OUString * rest = 0) const {
+        bool b = str.getLength() <= getLength()
             && match(str, getLength() - str.getLength());
+        if (b && rest != 0) {
+            *rest = copy(0, getLength() - str.getLength());
+        }
+        return b;
     }
 
     /**
@@ -1003,13 +1038,21 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type endsWith( T& literal ) const
+    typename internal::ConstCharArrayDetector< T, bool >::Type
+    endsWith(T & literal, OUString * rest = 0) const
     {
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        return internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
+        bool b = internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
             && rtl_ustr_asciil_reverseEquals_WithLength(
                 pData->buffer + pData->length - ( internal::ConstCharArrayDetector< T, void >::size - 1 ), literal,
                 internal::ConstCharArrayDetector< T, void >::size - 1);
+        if (b && rest != 0) {
+            *rest = copy(
+                0,
+                (getLength()
+                 - (internal::ConstCharArrayDetector< T, void >::size - 1)));
+        }
+        return b;
     }
 
     /**
@@ -1040,15 +1083,25 @@ public:
       values between 97 and 122 (ASCII a-z).
       This function can't be used for language specific comparison.
 
-      @param    str         the object (substring) to be compared.
-      @return true if this string ends with str, ignoring the case of ASCII
-      letters ("A"--"Z" and "a"--"z"); otherwise, false is returned
+      @param str the substring to be compared
+
+      @param rest if non-null, and this function returns true, then assign a
+      copy of the remainder of this string to *rest
+
+      @return true if and only if the given str appears as a substring at the
+      end of this string, ignoring the case of ASCII letters ("A"--"Z" and
+      "a"--"z")
+
       @since LibreOffice 3.6
     */
-    sal_Bool endsWithIgnoreAsciiCase( const OUString & str ) const SAL_THROW(())
+    bool endsWithIgnoreAsciiCase(OUString const & str, OUString * rest) const
     {
-        return str.getLength() <= getLength()
+        bool b =  str.getLength() <= getLength()
             && matchIgnoreAsciiCase(str, getLength() - str.getLength());
+        if (b && rest != 0) {
+            *rest = copy(0, getLength() - str.getLength());
+        }
+        return b;
     }
 
     /**
@@ -1057,15 +1110,23 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type endsWithIgnoreAsciiCase( T& literal ) const SAL_THROW(())
+    typename internal::ConstCharArrayDetector< T, bool >::Type
+    endsWithIgnoreAsciiCase(T & literal, OUString * rest = 0) const
     {
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
-        return internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
+        bool b = internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
             && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
                     pData->buffer + pData->length - ( internal::ConstCharArrayDetector< T, void >::size - 1 ),
                     internal::ConstCharArrayDetector< T, void >::size - 1, literal,
                     internal::ConstCharArrayDetector< T, void >::size - 1)
                 == 0);
+        if (b && rest != 0) {
+            *rest = copy(
+                0,
+                (getLength()
+                 - (internal::ConstCharArrayDetector< T, void >::size - 1)));
+        }
+        return b;
     }
 
     /**

@@ -1398,9 +1398,11 @@ rtl::Reference< Node > Access::getParentNode() {
 }
 
 rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
-    if (getNode()->kind() == Node::KIND_LOCALIZED_PROPERTY && name.match("*")) {
-        OUString locale(name.copy(1));
-        if (locale.match("*")) {
+    OUString locale;
+    if (getNode()->kind() == Node::KIND_LOCALIZED_PROPERTY
+        && name.startsWith("*", &locale))
+    {
+        if (locale.startsWith("*")) {
             SAL_WARN(
                 "configmgr",
                 ("access best-matching localized property value via"
@@ -1443,7 +1445,7 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
                  i != children.end(); ++i)
             {
                 OUString name2((*i)->getNameInternal());
-                if (name2.match(locale) &&
+                if (name2.startsWith(locale) &&
                     (name2.getLength() == locale.getLength() ||
                      name2[locale.getLength()] == '-' ||
                      name2[locale.getLength()] == '_'))

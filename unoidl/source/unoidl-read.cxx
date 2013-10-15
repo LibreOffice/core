@@ -91,9 +91,8 @@ OUString decomposeType(
     OUString nucl(type);
     *rank = 0;
     typeArguments->clear();
-    while (nucl.startsWith("[]")) {
+    while (nucl.startsWith("[]", &nucl)) {
         ++*rank;
-        nucl = nucl.copy(2);
     }
     sal_Int32 i = nucl.indexOf('<');
     if (i != -1) {

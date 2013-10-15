@@ -43,9 +43,7 @@
 #include "osl/mutex.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/ref.hxx"
-#include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "rtl/instance.hxx"
 #include "sal/log.hxx"
@@ -639,9 +637,7 @@ void Components::parseFiles(
             parseFiles(layer, extension, parseFile, stat.getFileURL(), true);
         } else {
             OUString file(stat.getFileName());
-            if (file.getLength() >= extension.getLength() &&
-                file.match(extension, file.getLength() - extension.getLength()))
-            {
+            if (file.endsWith(extension)) {
                 try {
                     parseFileLeniently(
                         parseFile, stat.getFileURL(), layer, data_, 0, 0, 0);
@@ -718,14 +714,8 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
         }
         if (stat.getFileType() != osl::FileStatus::Directory) { //TODO: symlinks
             OUString file(stat.getFileName());
-            if (file.getLength() >= RTL_CONSTASCII_LENGTH(".xcd") &&
-                file.matchAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(".xcd"),
-                    file.getLength() - RTL_CONSTASCII_LENGTH(".xcd")))
-            {
-                OUString name(
-                    file.copy(
-                        0, file.getLength() - RTL_CONSTASCII_LENGTH(".xcd")));
+            OUString name;
+            if (file.endsWith(".xcd", &name)) {
                 existingDeps.insert(name);
                 rtl::Reference< ParseManager > manager;
                 try {
