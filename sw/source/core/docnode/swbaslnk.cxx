@@ -395,7 +395,7 @@ sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
 
     if( GetObj() )
     {
-        String aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
+        OUString aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
         uno::Any aValue;
         GetObj()->GetData( aValue, aMimeType, !IsSynchron() && bWaitForData );
 

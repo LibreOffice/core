@@ -1008,7 +1008,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 int aNumRuleState = SFX_ITEM_UNKNOWN;
                 SwNumRuleItem aNumRuleItem;
                 int aListIdState = SFX_ITEM_UNKNOWN;
-                SfxStringItem aListIdItem( RES_PARATR_LIST_ID, String() );
+                SfxStringItem aListIdItem( RES_PARATR_LIST_ID, OUString() );
                 {
                     const SfxItemSet * pAttrSet = pDestTxtNd->GetpSwAttrSet();
                     if (pAttrSet != NULL)
@@ -1153,7 +1153,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             int aNumRuleState = SFX_ITEM_UNKNOWN;
             SwNumRuleItem aNumRuleItem;
             int aListIdState = SFX_ITEM_UNKNOWN;
-            SfxStringItem aListIdItem( RES_PARATR_LIST_ID, String() );
+            SfxStringItem aListIdItem( RES_PARATR_LIST_ID, OUString() );
             {
                 const SfxItemSet* pAttrSet = pDestTxtNd->GetpSwAttrSet();
                 if (pAttrSet != NULL)

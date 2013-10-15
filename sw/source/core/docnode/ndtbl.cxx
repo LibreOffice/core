@@ -346,7 +346,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
             pColArr = 0;
     }
 
-    String aTblName = GetUniqueTblName();
+    OUString aTblName = GetUniqueTblName();
 
     if( GetIDocumentUndoRedo().DoesUndo() )
     {

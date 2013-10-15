@@ -191,7 +191,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
         if( !bRestPersData && !bSavePersData && pDestDoc )
             bSavePersData = bRestPersData = sal_True;
 
-        String sNumRule;
+        OUString sNumRule;
         SwNodeIndex aInsPos( rInsPos );
         for( sal_uLong n = 0; n < nSz; n++ )
         {
