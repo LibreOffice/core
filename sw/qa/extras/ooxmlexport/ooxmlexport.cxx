@@ -122,6 +122,7 @@ public:
     void testSmartart();
     void testFdo69636();
     void testCharHighlight();
+    void testSectionAndHeader();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -241,6 +242,7 @@ void Test::run()
         {"smartart.docx", &Test::testSmartart},
         {"fdo69636.docx", &Test::testFdo69636},
         {"char_highlight.docx", &Test::testCharHighlight},
+        {"section_and_header.odt", &Test::testSectionAndHeader},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1586,6 +1588,22 @@ void Test::testCharHighlight()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), getProperty<sal_Int32>(xRun,"CharBackColor"));
     }
+}
+
+void Test::testSectionAndHeader()
+{
+    // Known issues when document was saved as docx:
+    //   * header disappeared (so this test verifies header presence)
+    //   * paragraph after section moved to a second page (verify page count == 1)
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
+    uno::Reference< text::XTextRange > xHeaderParagraph = getParagraphOfText( 1, xHeaderText );
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER CONTENT"), xHeaderParagraph->getString());
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
