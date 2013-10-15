@@ -269,7 +269,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
         {
             const SfxItemSet& rSet = pFmt->GetAttrSet();
             const SfxPoolItem* pItem;
-            String sPDesc;
+            OUString sPDesc;
             if(SFX_ITEM_SET == rSet.GetItemState(RES_PAGEDESC, sal_False, &pItem))
             {
                 const SwPageDesc* pDsc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
@@ -401,7 +401,7 @@ void sw_GetCellPosition(const OUString &rCellName,
  * @param rCellName2 e.g. "A1" (non-empty string with valid cell name)
  * @return -1 if cell_1 < cell_2; 0 if both cells are equal; +1 if cell_1 > cell_2
  */
-int sw_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName2 )
+int sw_CompareCellsByRowFirst( const OUString &rCellName1, const OUString &rCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
     sw_GetCellPosition( rCellName1, nCol1, nRow1 );
@@ -424,7 +424,7 @@ int sw_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName
  * @param rCellName2 e.g. "A1" (non-empty string with valid cell name)
  * @return -1 if cell_1 < cell_2; 0 if both cells are equal; +1 if cell_1 > cell_2
  */
-int sw_CompareCellsByColFirst( const String &rCellName1, const String &rCellName2 )
+int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
     sw_GetCellPosition( rCellName1, nCol1, nRow1 );
@@ -452,11 +452,11 @@ int sw_CompareCellsByColFirst( const String &rCellName1, const String &rCellName
  * @return -1 if cell_range_1 < cell_range_2; 0 if both cell ranges are equal; +1 if cell_range_1 > cell_range_2
  */
 int sw_CompareCellRanges(
-        const String &rRange1StartCell, const String &rRange1EndCell,
-        const String &rRange2StartCell, const String &rRange2EndCell,
+        const OUString &rRange1StartCell, const OUString &rRange1EndCell,
+        const OUString &rRange2StartCell, const OUString &rRange2EndCell,
         sal_Bool bCmpColsFirst )
 {
-    int (*pCompareCells)( const String &, const String & ) =
+    int (*pCompareCells)( const OUString &, const OUString & ) =
             bCmpColsFirst ? &sw_CompareCellsByColFirst : &sw_CompareCellsByRowFirst;
 
     int nCmpResStartCells = pCompareCells( rRange1StartCell, rRange2StartCell );
@@ -543,7 +543,7 @@ const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const 
  * @param [IN,OUT] rCell1 cell name (will be modified to upper-left corner), e.g. "A1" (non-empty string with valid cell name)
  * @param [IN,OUT] rCell2 cell name (will be modified to lower-right corner), e.g. "A1" (non-empty string with valid cell name)
  */
-void sw_NormalizeRange(String &rCell1, String &rCell2)
+void sw_NormalizeRange(OUString &rCell1, OUString &rCell2)
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
     sw_GetCellPosition( rCell1, nCol1, nRow1 );
@@ -574,7 +574,7 @@ void SwRangeDescriptor::Normalize()
 static SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRow)
 {
     SwXCell* pXCell = 0;
-    String sCellName = sw_GetCellName(nColumn, nRow);
+    OUString sCellName = sw_GetCellName(nColumn, nRow);
     SwTable* pTable = SwTable::FindTable( pFmt );
     SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
     if(pBox)
@@ -936,9 +936,9 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
         sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
         if(USHRT_MAX == nNdPos)
             sw_setString( *this, OUString(), sal_True );
-        String sFml(comphelper::string::stripStart(rFormula, ' '));
-        if( sFml.Len() && '=' == sFml.GetChar( 0 ) )
-                    sFml.Erase( 0, 1 );
+        OUString sFml(comphelper::string::stripStart(rFormula, ' '));
+        if( !sFml.isEmpty() && '=' == sFml[0] )
+                    sFml = sFml.copy( 1 );
         SwTblBoxFormula aFml( sFml );
         SwDoc* pMyDoc = GetDoc();
         UnoActionContext aAction(pMyDoc);
@@ -1578,7 +1578,7 @@ OUString SwXTextTableCursor::getRangeName(void) throw( uno::RuntimeException )
         const SwStartNode* pNode = pTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
         const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
         const SwTableBox* pEndBox = pTable->GetTblBox( pNode->GetIndex());
-        String aTmp( pEndBox->GetName() );
+        OUString aTmp( pEndBox->GetName() );
 
         if(pTblCrsr->HasMark())
         {
@@ -1595,7 +1595,7 @@ OUString SwXTextTableCursor::getRangeName(void) throw( uno::RuntimeException )
                 }
 
                 aTmp  = pStartBox->GetName();
-                aTmp += ':';
+                aTmp += ":";
                 aTmp += pEndBox->GetName();
             }
         }
@@ -1614,7 +1614,7 @@ sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& CellName, sal_Bool E
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
-        String sCellName(CellName);
+        OUString sCellName(CellName);
         bRet = pTblCrsr->GotoTblBox(sCellName);
     }
     return bRet;
@@ -2236,7 +2236,7 @@ uno::Reference< table::XCell > SwXTextTable::getCellByName(const OUString& CellN
     if(pFmt)
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
-        String sCellName(CellName);
+        OUString sCellName(CellName);
         SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
         if(pBox)
         {
@@ -2280,7 +2280,7 @@ uno::Reference< text::XTextTableCursor > SwXTextTable::createCursorByCellName(co
     if(pFmt)
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
-        String sCellName(CellName);
+        OUString sCellName(CellName);
         SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
         if(pBox && pBox->getRowSpan() > 0 )
         {
@@ -2347,12 +2347,11 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
                 if(!m_sTableName.isEmpty())
                 {
                     sal_uInt16 nIndex = 1;
-                    const String sTmpName(m_sTableName);
-                    String sTmpNameIndex(sTmpName);
+                    const OUString sTmpName(m_sTableName);
+                    OUString sTmpNameIndex(sTmpName);
                     while(pDoc->FindTblFmtByName( sTmpNameIndex, sal_True ) && nIndex < USHRT_MAX)
                     {
-                        sTmpNameIndex = sTmpName;
-                        sTmpNameIndex += nIndex++;
+                        sTmpNameIndex = sTmpName + OUString::number(nIndex++);
                     }
                     pDoc->SetTableName( *pTblFmt, sTmpNameIndex);
                 }
@@ -2451,8 +2450,8 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
 {
     SolarMutexGuard aGuard;
     uno::Reference< table::XCellRange >  aRef;
-    String sTLName(rTLName);
-    String sBRName(rBRName);
+    OUString sTLName(rTLName);
+    OUString sBRName(rBRName);
     const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
     if(pTLBox)
     {
@@ -2501,8 +2500,8 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_In
             aDesc.nBottom = nBottom;
             aDesc.nLeft   = nLeft;
             aDesc.nRight  = nRight;
-            String sTLName = sw_GetCellName(aDesc.nLeft, aDesc.nTop);
-            String sBRName = sw_GetCellName(aDesc.nRight, aDesc.nBottom);
+            OUString sTLName = sw_GetCellName(aDesc.nLeft, aDesc.nTop);
+            OUString sBRName = sw_GetCellName(aDesc.nRight, aDesc.nBottom);
 
             // please note that according to the 'if' statement at the begin
             // sTLName:sBRName already denotes the normalized range string
@@ -2526,10 +2525,10 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUSt
         SwTable* pTable = SwTable::FindTable( pFmt );
         if(!pTable->IsTblComplex())
         {
-            String sRange(aRange);
-            String sTLName(sRange.GetToken(0, ':'));
-            String sBRName(sRange.GetToken(1, ':'));
-            if(!sTLName.Len() || !sBRName.Len())
+            OUString sRange(aRange);
+            OUString sTLName(sRange.getToken(0, ':'));
+            OUString sBRName(sRange.getToken(1, ':'));
+            if(sTLName.isEmpty() || sBRName.isEmpty())
                 throw uno::RuntimeException();
             SwRangeDescriptor aDesc;
             aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
@@ -2991,7 +2990,7 @@ void SwXTextTable::autoFormat(const OUString& aName) throw( lang::IllegalArgumen
         if(!pTable->IsTblComplex())
         {
 
-            String sAutoFmtName(aName);
+            OUString sAutoFmtName(aName);
             SwTableAutoFmtTbl aAutoFmtTbl;
             aAutoFmtTbl.Load();
             for (sal_uInt16 i = aAutoFmtTbl.size(); i;)
@@ -3564,7 +3563,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
 
     if(pFmt)
     {
-        const String aOldName( pFmt->GetName() );
+        const OUString aOldName( pFmt->GetName() );
         SwFrmFmt* pTmpFmt;
         const SwFrmFmts* pTbl = pFmt->GetDoc()->GetTblFrmFmts();
         for( sal_uInt16 i = pTbl->size(); i; )
@@ -3786,8 +3785,8 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
             aNewDesc.nLeft   = nLeft + aRgDesc.nLeft;
             aNewDesc.nRight  = nRight + aRgDesc.nLeft;
             aNewDesc.Normalize();
-            String sTLName = sw_GetCellName(aNewDesc.nLeft, aNewDesc.nTop);
-            String sBRName = sw_GetCellName(aNewDesc.nRight, aNewDesc.nBottom);
+            OUString sTLName = sw_GetCellName(aNewDesc.nLeft, aNewDesc.nTop);
+            OUString sBRName = sw_GetCellName(aNewDesc.nRight, aNewDesc.nBottom);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
@@ -3825,10 +3824,10 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByName(const OUSt
         throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    String sRange(rRange);
-    String sTLName(sRange.GetToken(0, ':'));
-    String sBRName(sRange.GetToken(1, ':'));
-    if(!sTLName.Len() || !sBRName.Len())
+    OUString sRange(rRange);
+    OUString sTLName(sRange.getToken(0, ':'));
+    OUString sBRName(sRange.getToken(1, ':'));
+    if(sTLName.isEmpty() || sBRName.isEmpty())
         throw uno::RuntimeException();
     SwRangeDescriptor aDesc;
     aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
@@ -4764,7 +4763,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                 throw aExcept;
             }
 
-            String sTLName = sw_GetCellName(0, nIndex);
+            OUString sTLName = sw_GetCellName(0, nIndex);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             bool bAppend = false;
             if(!pTLBox)
@@ -4811,7 +4810,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
-            String sTLName = sw_GetCellName(0, nIndex);
+            OUString sTLName = sw_GetCellName(0, nIndex);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
@@ -4825,7 +4824,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
-                String sBLName = sw_GetCellName(0, nIndex + nCount - 1);
+                OUString sBLName = sw_GetCellName(0, nIndex + nCount - 1);
                 const SwTableBox* pBLBox = pTable->GetTblBox( sBLName );
                 if(pBLBox)
                 {
@@ -4976,7 +4975,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                 throw aExcept;
             }
 
-            String sTLName = sw_GetCellName(nIndex, 0);
+            OUString sTLName = sw_GetCellName(nIndex, 0);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             bool bAppend = false;
             if(!pTLBox)
@@ -5021,7 +5020,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
-            String sTLName = sw_GetCellName(nIndex, 0);
+            OUString sTLName = sw_GetCellName(nIndex, 0);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
@@ -5035,7 +5034,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
-                String sTRName = sw_GetCellName(nIndex + nCount - 1, 0);
+                OUString sTRName = sw_GetCellName(nIndex + nCount - 1, 0);
                 const SwTableBox* pTRBox = pTable->GetTblBox( sTRName );
                 if(pTRBox)
                 {

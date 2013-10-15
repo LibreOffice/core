@@ -421,14 +421,14 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                 {
                     OUString uTmp;
                     aValue >>= uTmp;
-                    aFtnInfo.aQuoVadis = String(uTmp);
+                    aFtnInfo.aQuoVadis = uTmp;
                 }
                 break;
                 case WID_BEGIN_NOTICE:
                 {
                     OUString uTmp;
                     aValue >>= uTmp;
-                    aFtnInfo.aErgoSum = String(uTmp);
+                    aFtnInfo.aErgoSum = uTmp;
                 }
                 break;
             }

@@ -495,8 +495,8 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
     sal_uInt16 n = 0;
     for(sal_uInt16 i = 0; i < nEntries; i++)
     {
-        String sProv(OUString::createFromAscii(aProvNamesId[i].pName));
-        if(sProv.Len())
+        OUString sProv(OUString::createFromAscii(aProvNamesId[i].pName));
+        if(!sProv.isEmpty())
         {
             pArray[n] = sProv;
             n++;
@@ -1488,7 +1488,7 @@ uno::Any SwXTextSections::getByName(const OUString& Name)
     uno::Any aRet;
     if(IsValid())
     {
-        String aName(Name);
+        OUString aName(Name);
         SwSectionFmts& rFmts = GetDoc()->GetSections();
         uno::Reference< XTextSection >  xSect;
         for(sal_uInt16 i = 0; i < rFmts.size(); i++)

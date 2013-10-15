@@ -288,7 +288,7 @@ SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException)
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
-        m_pImpl->m_sLabel = String(aLabel);
+        m_pImpl->m_sLabel = aLabel;
     }
     else
     {

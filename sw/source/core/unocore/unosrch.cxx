@@ -532,7 +532,7 @@ void SwXTextSearch::setSearchString(const OUString& rString)
                                         throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    sSearchText = String(rString);
+    sSearchText = rString;
 }
 
 OUString SwXTextSearch::getReplaceString(void) throw( uno::RuntimeException )
@@ -544,7 +544,7 @@ OUString SwXTextSearch::getReplaceString(void) throw( uno::RuntimeException )
 void SwXTextSearch::setReplaceString(const OUString& rReplaceString) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    sReplaceText = String(rReplaceString);
+    sReplaceText = rReplaceString;
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXTextSearch::getPropertySetInfo(void) throw( uno::RuntimeException )

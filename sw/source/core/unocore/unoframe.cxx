@@ -1241,7 +1241,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     }
                     SwPaM aGrfPaM(*pGrfNode);
                     Graphic aGraphic( xGraphic );
-                    pFmt->GetDoc()->ReRead( aGrfPaM, String(), String(), &aGraphic, 0 );
+                    pFmt->GetDoc()->ReRead( aGrfPaM, OUString(), OUString(), &aGraphic, 0 );
                 }
             }
         }

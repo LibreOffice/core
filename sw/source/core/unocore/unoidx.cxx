@@ -714,7 +714,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         {
             // convert file-format/API/external programmatic english name
             // to internal UI name before usage
-            String aName( SwStyleNameMapper::GetSpecialExtraUIName(
+            OUString aName( SwStyleNameMapper::GetSpecialExtraUIName(
                                 lcl_AnyToString(rValue) ) );
             rTOXBase.SetSequenceName( aName );
         }
@@ -1024,7 +1024,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 // convert internal UI name to
                 // file-format/API/external programmatic english name
                 // before usage
-                String aName( SwStyleNameMapper::GetSpecialExtraProgName(
+                OUString aName( SwStyleNameMapper::GetSpecialExtraProgName(
                                     pTOXBase->GetSequenceName() ) );
                 aRet <<= OUString( aName );
             }
@@ -2454,7 +2454,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     if(!IsValid())
         throw uno::RuntimeException();
 
-    String sToFind(rName);
+    OUString sToFind(rName);
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
@@ -2521,7 +2521,7 @@ throw (uno::RuntimeException)
     if(!IsValid())
         throw uno::RuntimeException();
 
-    String sToFind(rName);
+    OUString sToFind(rName);
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
@@ -2618,13 +2618,13 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
 
     const sal_Int32 nStyles = aSeq.getLength();
     const OUString* pStyles = aSeq.getConstArray();
-    String sSetStyles;
+    OUString sSetStyles;
     OUString aString;
     for(sal_Int32 i = 0; i < nStyles; i++)
     {
         if(i)
         {
-            sSetStyles += TOX_STYLE_DELIMITER;
+            sSetStyles += OUString(TOX_STYLE_DELIMITER);
         }
         SwStyleNameMapper::FillUIName(pStyles[i], aString,
                 nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
@@ -2653,7 +2653,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
     SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
-    const String& rStyles =
+    const OUString& rStyles =
         rTOXBase.GetStyleNames(static_cast<sal_uInt16>(nIndex));
     const sal_uInt16 nStyles = comphelper::string::getTokenCount(rStyles, TOX_STYLE_DELIMITER);
     uno::Sequence<OUString> aStyles(nStyles);
@@ -2662,7 +2662,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     for(sal_uInt16 i = 0; i < nStyles; i++)
     {
         SwStyleNameMapper::FillProgName(
-            rStyles.GetToken(i, TOX_STYLE_DELIMITER),
+            rStyles.getToken(i, TOX_STYLE_DELIMITER),
             aString,
             nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
             true);
@@ -2769,7 +2769,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
         throw lang::IllegalArgumentException();
     }
 
-    String sPattern;
+    OUString sPattern;
     const sal_Int32 nTokens = aSeq.getLength();
     const beans::PropertyValues* pTokens = aSeq.getConstArray();
     for(sal_Int32 i = 0; i < nTokens; i++)

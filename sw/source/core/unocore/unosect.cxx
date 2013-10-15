@@ -633,11 +633,10 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    String sLinkFileName(pSectionData->GetLinkFileName());
+                    OUString sLinkFileName(pSectionData->GetLinkFileName());
                     if (pSectionData->GetType() != DDE_LINK_SECTION)
                     {
-                        sLinkFileName = sfx2::cTokenSeparator;
-                        sLinkFileName += sfx2::cTokenSeparator;
+                        sLinkFileName = OUString(sfx2::cTokenSeparator) + OUString(sfx2::cTokenSeparator);
                         pSectionData->SetType(DDE_LINK_SECTION);
                     }
                     sLinkFileName = comphelper::string::setToken(sLinkFileName,
@@ -1710,7 +1709,7 @@ throw (uno::RuntimeException)
     {
         SwSection *const pSect = pFmt->GetSection();
         SwSectionData aSection(*pSect);
-        String sNewName(rName);
+        OUString sNewName(rName);
         aSection.SetSectionName(sNewName);
 
         const SwSectionFmts& rFmts = pFmt->GetDoc()->GetSections();

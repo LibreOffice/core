@@ -82,9 +82,9 @@ sal_Bool UCB_CopyFile( const OUString& rURL, const OUString& rNewURL, sal_Bool b
     try
     {
         INetURLObject aURL( rNewURL );
-        String sName( aURL.GetName() );
+        OUString sName( aURL.GetName() );
         aURL.removeSegment();
-        String sMainURL( aURL.GetMainURL(INetURLObject::NO_DECODE) );
+        OUString sMainURL( aURL.GetMainURL(INetURLObject::NO_DECODE) );
 
         ucbhelper::Content aTempContent( sMainURL,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),

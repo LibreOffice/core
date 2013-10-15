@@ -602,14 +602,14 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     {
         OUString uTmp;
         rValue >>= uTmp;
-        String sTypeName(uTmp);
+        OUString sTypeName(uTmp);
         SwFieldType * pType2 = m_pImpl->m_pDoc->GetFldType(
                 m_pImpl->m_nResTypeId, sTypeName, sal_False);
 
-        String sTable(SW_RES(STR_POOLCOLL_LABEL_TABLE));
-        String sDrawing(SW_RES(STR_POOLCOLL_LABEL_DRAWING));
-        String sFrame(SW_RES(STR_POOLCOLL_LABEL_FRAME));
-        String sIllustration(SW_RES(STR_POOLCOLL_LABEL_ABB));
+        OUString sTable(SW_RES(STR_POOLCOLL_LABEL_TABLE));
+        OUString sDrawing(SW_RES(STR_POOLCOLL_LABEL_DRAWING));
+        OUString sFrame(SW_RES(STR_POOLCOLL_LABEL_FRAME));
+        OUString sIllustration(SW_RES(STR_POOLCOLL_LABEL_ABB));
 
         if(pType2 ||
             (RES_SETEXPFLD == m_pImpl->m_nResTypeId &&
@@ -2608,8 +2608,8 @@ static sal_uInt16 lcl_GetIdByName( OUString& rName, OUString& rTypeName )
     {
         nResId = RES_SETEXPFLD;
 
-        String sFldTypName( rName.getToken( 1, '.' ));
-        String sUIName( SwStyleNameMapper::GetSpecialExtraUIName( sFldTypName ) );
+        OUString sFldTypName( rName.getToken( 1, '.' ));
+        OUString sUIName( SwStyleNameMapper::GetSpecialExtraUIName( sFldTypName ) );
 
         if( sUIName != sFldTypName )
             rName = comphelper::string::setToken(rName, 1, '.', sUIName);
@@ -2997,12 +2997,5 @@ void SwXFieldEnumeration::Impl::Modify(
         m_pDoc = 0;
 }
 
-String& GetString( const uno::Any& rAny, String& rStr )
-{
-    OUString aStr;
-    rAny >>= aStr;
-    rStr = String( aStr );
-    return rStr;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

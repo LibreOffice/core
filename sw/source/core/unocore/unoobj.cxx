@@ -173,7 +173,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
 #endif
     WriterRef xWrt;
     // TODO/MBA: looks like a BaseURL doesn't make sense here
-    SwReaderWriter::GetWriter( OUString(FILTER_TEXT_DLG), String(), xWrt );
+    SwReaderWriter::GetWriter( OUString(FILTER_TEXT_DLG), OUString(), xWrt );
     if( xWrt.Is() )
     {
         SwWriter aWriter( aStream, rPam );

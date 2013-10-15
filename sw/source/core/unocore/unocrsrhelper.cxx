@@ -338,7 +338,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 if (!pTmpNode)
                     pTmpNode = rPam.GetNode()->GetTxtNode();
 
-                String sRet;
+                OUString sRet;
                 if ( pTmpNode && pTmpNode->GetNum() )
                 {
                     sRet = pTmpNode->GetNumString();
@@ -426,7 +426,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     // #i91601#
                     else if ( rEntry.nWID == FN_UNO_LIST_ID )
                     {
-                        const String sListId = pTxtNd->GetListId();
+                        const OUString sListId = pTxtNd->GetListId();
                         *pAny <<= OUString(sListId);
                     }
                     else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
