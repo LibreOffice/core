@@ -100,6 +100,9 @@ endef
 
 gb_ScpMergeTarget_get_source = $(SRCDIR)/$(1).ulf
 
+$(dir $(call gb_ScpMergeTarget_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(dir $(call gb_ScpMergeTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
