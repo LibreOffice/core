@@ -12,7 +12,6 @@
 		681D78BC180C12D300D52D5E /* oovbaapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B1180C12D300D52D5E /* oovbaapi.rdb */; };
 		681D78BD180C12D300D52D5E /* program in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B2180C12D300D52D5E /* program */; };
 		681D78BE180C12D300D52D5E /* rc in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B3180C12D300D52D5E /* rc */; };
-		681D78BF180C12D300D52D5E /* registry in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B4180C12D300D52D5E /* registry */; };
 		681D78C0180C12D300D52D5E /* services.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B5180C12D300D52D5E /* services.rdb */; };
 		681D78C1180C12D300D52D5E /* share in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B6180C12D300D52D5E /* share */; };
 		681D78C2180C12D300D52D5E /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B7180C12D300D52D5E /* udkapi.rdb */; };
@@ -1447,7 +1446,6 @@
 				681D78BC180C12D300D52D5E /* oovbaapi.rdb in Resources */,
 				681D78BD180C12D300D52D5E /* program in Resources */,
 				681D78BE180C12D300D52D5E /* rc in Resources */,
-				681D78BF180C12D300D52D5E /* registry in Resources */,
 				681D78C0180C12D300D52D5E /* services.rdb in Resources */,
 				681D78C1180C12D300D52D5E /* share in Resources */,
 				681D78C2180C12D300D52D5E /* udkapi.rdb in Resources */,
