@@ -20,14 +20,15 @@
 #ifndef _BGFX_RANGE_B2IBOX_HXX
 #define _BGFX_RANGE_B2IBOX_HXX
 
+#include <ostream>
+#include <vector>
+
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/range/basicbox.hxx>
-#include <vector>
 #include <basegfx/basegfxdllapi.h>
-
 
 namespace basegfx
 {
@@ -255,6 +256,17 @@ namespace basegfx
     };
 
 } // end of namespace basegfx
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const basegfx::B2IBox& box )
+{
+    if (box.isEmpty())
+        return stream << "EMPTY";
+    else
+        return stream << box.getWidth() << 'x' << box.getHeight()
+                      << "@(" << box.getMinX() << "," << box.getMinY() << ")";
+}
 
 #endif /* _BGFX_RANGE_B2IBOX_HXX */
 

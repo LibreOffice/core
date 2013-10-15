@@ -20,22 +20,22 @@
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #define _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 
+#include <ostream>
+#include <vector>
+
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/basegfxdllapi.h>
-#include <vector>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 // predeclarations
 class ImplB2DPolyPolygon;
 
 namespace basegfx
 {
-    class B2DPolygon;
     class B2DHomMatrix;
 } // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
@@ -131,6 +131,22 @@ namespace basegfx
     typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
 
 } // end of namespace basegfx
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const basegfx::B2DPolyPolygon& poly )
+{
+    stream << "[" << poly.count() << ":";
+    for (sal_uInt32 i = 0; i < poly.count(); i++)
+    {
+        if (i > 0)
+            stream << ",";
+        stream << poly.getB2DPolygon(i);
+    }
+    stream << "]";
+
+    return stream;
+}
 
 #endif /* _BGFX_POLYGON_B2DPOLYPOLYGON_HXX */
 

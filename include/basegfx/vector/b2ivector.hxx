@@ -20,6 +20,8 @@
 #ifndef _BGFX_VECTOR_B2IVECTOR_HXX
 #define _BGFX_VECTOR_B2IVECTOR_HXX
 
+#include <ostream>
+
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -130,7 +132,6 @@ namespace basegfx
     };
 
     // external operators
-    //////////////////////////////////////////////////////////////////////////
 
     /** Transform vector by given transformation matrix.
 
@@ -140,6 +141,13 @@ namespace basegfx
     BASEGFX_DLLPUBLIC B2IVector operator*( const B2DHomMatrix& rMat, const B2IVector& rVec );
 
 } // end of namespace basegfx
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const basegfx::B2IVector& vector )
+{
+    return stream << "(" << vector.getX() << "," << vector.getY() << ")";
+}
 
 #endif /* _BGFX_VECTOR_B2IVECTOR_HXX */
 

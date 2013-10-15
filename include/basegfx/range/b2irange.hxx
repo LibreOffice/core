@@ -20,14 +20,15 @@
 #ifndef _BGFX_RANGE_B2IRANGE_HXX
 #define _BGFX_RANGE_B2IRANGE_HXX
 
+#include <ostream>
+#include <vector>
+
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/range/basicrange.hxx>
-#include <vector>
 #include <basegfx/basegfxdllapi.h>
-
 
 namespace basegfx
 {
@@ -281,6 +282,17 @@ namespace basegfx
                                                      const B2IRange&            rSecond );
 
 } // end of namespace basegfx
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const basegfx::B2IRange& range )
+{
+    if (range.isEmpty())
+        return stream << "EMPTY";
+    else
+        return stream << range.getWidth() << 'x' << range.getHeight()
+                      << "@(" << range.getMinX() << "," << range.getMinY() << ")";
+}
 
 #endif /* _BGFX_RANGE_B2IRANGE_HXX */
 
