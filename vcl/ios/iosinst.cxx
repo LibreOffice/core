@@ -155,7 +155,7 @@ public:
                      sal_uLong           nSalFrameStyle,
                      SystemParentData   *pSysParent )
         : SvpSalFrame( pInstance, pParent, nSalFrameStyle,
-                       true, basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA,
+                      true, basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA,
                        pSysParent )
     {
         enableDamageTracker();
@@ -339,7 +339,7 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
          it++ ) {
         IosSalFrame *pFrame = static_cast<IosSalFrame *>(*it);
         SalFrameGeometry aGeom = pFrame->GetGeometry();
-        CGRect bbox = CGRectMake( aGeom.nX, aGeom.nY, aGeom.nWidth, aGeom.nHeight );
+        CGRect bbox = CGRectMake( 0, 0, aGeom.nWidth, aGeom.nHeight );
         if ( pFrame->IsVisible() &&
              CGRectIntersectsRect( invalidRect, bbox ) ) {
 
@@ -353,7 +353,8 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
                 CGImageCreate( aDevice->getSize().getX(), aDevice->getSize().getY(),
                                8, 32, aDevice->getScanlineStride(),
                                CGColorSpaceCreateDeviceRGB(),
-                               kCGImageAlphaNoneSkipLast,
+                               //kCGImageAlphaNoneSkipLast,
+                               kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little,
                                provider,
                                NULL,
                                false,
@@ -428,27 +429,29 @@ void touch_lo_tap(int x, int y)
 }
 
 extern "C"
-void touch_lo_mouse_drag(int x, int y, LOMouseButtonState state)
+void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state)
 {
+
     SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
 
     if (pFocus) {
+
         MouseEvent aEvent;
         sal_uLong nEvent;
 
-        switch(state) {
-        case DOWN:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
-            nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
-            break;
-        case MOVE:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLEMOVE, MOUSE_LEFT);
-            nEvent = VCLEVENT_WINDOW_MOUSEMOVE;
-            break;
-        case UP:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
-            nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
-            break;
+        switch(state){
+            case DOWN:
+                aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
+                nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
+                break;
+            case MOVE:
+                aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLEMOVE, MOUSE_LEFT);
+                nEvent = VCLEVENT_WINDOW_MOUSEMOVE;
+                break;
+            case UP:
+                aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
+                nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
+                break;
         }
 
         Application::PostMouseEvent(nEvent, pFocus->GetWindow(), &aEvent);
