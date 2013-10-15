@@ -271,7 +271,7 @@ void ScOpenclTest::testFinacialFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(2,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
-        CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, 0.0001*fExcel);
     }
     xDocSh->DoClose();
     xDocShRes->DoClose();
