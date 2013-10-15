@@ -278,7 +278,7 @@ void SwDBField::Evaluate()
     sal_uInt32 nFmt;
 
     // search corresponding column name
-    String aColNm( ((SwDBFieldType*)GetTyp())->GetColumnName() );
+    OUString aColNm( ((SwDBFieldType*)GetTyp())->GetColumnName() );
 
     SvNumberFormatter* pDocFormatter = GetDoc()->GetNumberFormatter();
     pMgr->GetMergeColumnCnt(aColNm, GetLanguage(), aContent, &nValue, &nFmt);

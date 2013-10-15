@@ -62,21 +62,21 @@ public:
         {
             uno::Sequence< sal_Int8 > aSeq;
             rValue >>= aSeq;
-            String sStr( (sal_Char*)aSeq.getConstArray(), static_cast<xub_StrLen>(aSeq.getLength()),
+            OUString sStr( (sal_Char*)aSeq.getConstArray(), static_cast<xub_StrLen>(aSeq.getLength()),
                                DDE_TXT_ENCODING  );
 
             // remove not needed CR-LF at the end
-            xub_StrLen n = sStr.Len();
-            while( n && 0 == sStr.GetChar( n-1 ) )
+            xub_StrLen n = sStr.getLength();
+            while( n && 0 == sStr[ n-1 ] )
                 --n;
-            if( n && 0x0a == sStr.GetChar( n-1 ) )
+            if( n && 0x0a == sStr[ n-1 ] )
                 --n;
-            if( n && 0x0d == sStr.GetChar( n-1 ) )
+            if( n && 0x0d == sStr[ n-1 ] )
                 --n;
 
-            sal_Bool bDel = n != sStr.Len();
+            sal_Bool bDel = n != sStr.getLength();
             if( bDel )
-                sStr.Erase( n );
+                sStr = sStr.copy( 0, n );
 
             rFldType.SetExpansion( sStr );
             // set Expansion first! (otherwise this flag will be deleted)
