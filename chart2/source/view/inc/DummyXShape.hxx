@@ -10,11 +10,12 @@
 #ifndef CHART2_DUMMY_XSHAPE_HXX
 #define CHART2_DUMMY_XSHAPE_HXX
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -36,9 +37,10 @@ class DummyChart;
 
 struct OpenglContext;
 
-class DummyXShape : public cppu::WeakImplHelper5<
+class DummyXShape : public cppu::WeakImplHelper6<
                     ::com::sun::star::drawing::XShape,
                     com::sun::star::beans::XPropertySet,
+                    com::sun::star::beans::XMultiPropertySet,
                     com::sun::star::container::XNamed,
                     com::sun::star::container::XChild,
                     com::sun::star::lang::XServiceInfo >
@@ -66,6 +68,25 @@ public:
     virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XMultiPropertySet
+    virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
+        throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues(
+            const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL removePropertiesChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
 
     // XChild
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw(::com::sun::star::uno::RuntimeException);

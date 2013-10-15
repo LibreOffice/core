@@ -100,6 +100,34 @@ void DummyXShape::removeVetoableChangeListener( const OUString&, const uno::Refe
 {
 }
 
+void DummyXShape::setPropertyValues( const uno::Sequence< OUString >& ,
+        const uno::Sequence< uno::Any >& )
+throw (beans::PropertyVetoException, lang::IllegalArgumentException,
+        lang::WrappedTargetException, uno::RuntimeException)
+{
+}
+
+uno::Sequence< uno::Any > DummyXShape::getPropertyValues(
+        const uno::Sequence< OUString >& )
+    throw (uno::RuntimeException)
+{
+    return uno::Sequence< uno::Any >();
+}
+
+    void DummyXShape::addPropertiesChangeListener( const uno::Sequence< OUString >& , const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException)
+{
+}
+
+    void DummyXShape::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException)
+{
+}
+
+void DummyXShape::firePropertiesChangeEvent( const uno::Sequence< OUString >& ,
+        const uno::Reference< beans::XPropertiesChangeListener >& )
+    throw (uno::RuntimeException)
+{
+}
+
 OUString DummyXShape::getImplementationName()
     throw(uno::RuntimeException)
 {
