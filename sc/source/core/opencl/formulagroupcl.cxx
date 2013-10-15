@@ -227,12 +227,29 @@ public:
 private:
     bool bIsStartFixed, bIsEndFixed;
 };
+#define FunctionForReduction  0
+#define FunctionForSumOfProd  1
+#define FunctionForTwoArgs  2
+#define FunctionForThreeArgs  3
+
+typedef enum {
+    OpNopCode = FunctionForReduction,
+    OpCountCode = FunctionForReduction,
+    OpSumCode = FunctionForReduction,
+    OpSubCode = FunctionForReduction,
+    OpMulCode = FunctionForReduction,
+    OpDivCode = FunctionForReduction,
+    OpMinCode = FunctionForReduction,
+    OpMaxCode = FunctionForReduction,
+    OpSumProductCode = FunctionForSumOfProd,
+    OpEffectiveCode = FunctionForTwoArgs
+} OpCodeEnum;
 
 /// operator traits
 class OpNop {
 public:
     static std::string GetBottom(void) { return "0"; }
-    static const bool isReduction = true;
+    static const  size_t OpCodyValue = OpNopCode;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return lhs;
@@ -242,7 +259,7 @@ public:
 class OpCount {
 public:
     static std::string GetBottom(void) { return "0"; }
-    static const bool isReduction = true;
+    static const  size_t OpCodyValue = OpCountCode;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         std::stringstream ss;
@@ -255,7 +272,7 @@ public:
 class OpSum {
 public:
     static std::string GetBottom(void) { return "0"; }
-    static const bool isReduction = true;
+    static const  size_t OpCodyValue = OpSumCode;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         std::stringstream ss;
@@ -268,7 +285,7 @@ public:
 class OpSub {
 public:
     static std::string GetBottom(void) { return "0"; }
-    static const bool isReduction = true;
+    static const  size_t OpCodyValue = OpSubCode;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return lhs + "-" + rhs;
@@ -279,7 +296,7 @@ public:
 class OpMul {
 public:
     static std::string GetBottom(void) { return "1"; }
-    static const bool isReduction = true;
+    static const  size_t OpCodyValue = OpMulCode;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return lhs + "*" + rhs;
@@ -291,7 +308,7 @@ class OpDiv {
 public:
     static std::string GetBottom(void) { return "1.0"; }
     /// Technically not a reduction, but fits the framework.
-    static const bool isReduction = true;
+    static const  size_t OpCodyValue = OpDivCode;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return "(" + lhs + "/" + rhs + ")";
@@ -302,7 +319,7 @@ public:
 class OpMin {
 public:
     static std::string GetBottom(void) { return "MAXFLOAT"; }
-    static const bool isReduction = true;
+    static const  size_t OpCodyValue = OpMinCode;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return "fmin("+lhs + "," + rhs +")";
@@ -313,7 +330,7 @@ public:
 class OpMax {
 public:
     static std::string GetBottom(void) { return "-MAXFLOAT"; }
-    static const bool isReduction = true;
+    static const  size_t OpCodyValue = OpMaxCode;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return "fmax("+lhs + "," + rhs +")";
@@ -323,12 +340,22 @@ public:
 class OpSumProduct {
 public:
     static std::string GetBottom(void) { return "0"; }
-    static const bool isReduction = false;
+    static const  size_t OpCodyValue = OpSumProductCode;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return lhs + "*" + rhs;
     }
     static std::string BinFuncName(void) { return "fsum"; }
+};
+class OpEffective {
+public:
+    static std::string GetBottom(void) { return "0"; }
+    static const  size_t OpCodyValue = OpEffectiveCode;
+    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    {
+        return "pow(1.0+("+lhs + "/" + rhs +"),"+rhs+")-1.0";
+    }
+    static std::string BinFuncName(void) { return "Effective_Add"; }
 };
 
 class Op {
@@ -455,16 +482,44 @@ public:
         ss << "return tmp;\n";
         ss << "}";
     }
+        void GenSlidingWindowFunctionForTwoArgs(std::stringstream &ss)
+    {
+        ss << "\ndouble " << mSymName;
+        ss << "_"<< Op::BinFuncName() <<"(";
+        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            mvSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = " << Op::GetBottom() <<";\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "tmp = ";
+        ss << Op::Gen(mvSubArguments[0]->GenSlidingWindowDeclRef(),
+                mvSubArguments[1]->GenSlidingWindowDeclRef());
+        ss << ";\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
     virtual void GenSlidingWindowFunction(std::stringstream &ss) {
         for (unsigned i = 0; i < mvSubArguments.size(); i++)
         {
             mvSubArguments[i]->GenSlidingWindowFunction(ss);
             ss << "\n";
         }
-        if (!Op::isReduction)
-            GenSlidingWindowFunctionForSumOfProd(ss);
-        else
-            GenSlidingWindowFunctionForReduction(ss);
+        switch (Op::OpCodyValue)
+        {
+            case FunctionForReduction:
+                return GenSlidingWindowFunctionForReduction(ss);
+            case FunctionForSumOfProd:
+                return GenSlidingWindowFunctionForSumOfProd(ss);
+            case FunctionForTwoArgs:
+                return GenSlidingWindowFunctionForTwoArgs(ss);
+            default:
+                assert(0 && "Unsupported OpCodyValue");
+        }
+
     }
 
     /// Generate use/references to the argument
@@ -584,6 +639,13 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
             case ocSumProduct:
                 mvSubArguments.push_back(SoPHelper<OpSumProduct>(ts,
                     ft->Children[i]));
+                break;
+            case ocExternal:
+                if ( !(pChild->GetExternal().compareTo(OUString("com.sun.star.sheet.addin.Analysis.getEffect"))))
+                {
+                mvSubArguments.push_back(SoPHelper<OpEffective>(ts,
+                    ft->Children[i]));
+                }
                 break;
             default:
                 assert(0 && "Unsupported");
