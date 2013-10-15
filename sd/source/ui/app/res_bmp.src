@@ -820,4 +820,10 @@ Bitmap BMP_PRESENTERSCREEN_BUTTON_PLUS_DISABLED
     File = "presenterscreen-ButtonPlusDisabled.png";
 };
 
+// presentation minimizer bitmap
+Bitmap BMP_PRESENTATION_MINIMIZER
+{
+    File = "minimize_presi_80.png";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
