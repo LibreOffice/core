@@ -1284,12 +1284,7 @@ void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
             pDocSh->UpdateOle(GetViewData());
             UpdateScrollBars();
 
-            ScRangeList aChangeRanges;
-            HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
-            if (aHelperNotifyChanges.getMustPropagateChanges())
-            {
-                aChangeRanges.Append(aRange);
-            }
+            HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, aRange);
         }
     }
     else
@@ -1314,40 +1309,29 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
         pDocSh->UpdateOle(GetViewData());
         UpdateScrollBars();
 
-        ScRangeList aChangeRanges;
-        HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
-        if (aHelperNotifyChanges.getMustPropagateChanges())
+        if (ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh))
         {
+            ScRangeList aChangeRanges;
             ScRange aChangeRange( aRange );
-            switch ( eDir )
+            switch (eDir)
             {
                 case FILL_TO_BOTTOM:
-                    {
-                        aChangeRange.aStart.SetRow( aSourceRange.aEnd.Row() + 1 );
-                    }
+                    aChangeRange.aStart.SetRow( aSourceRange.aEnd.Row() + 1 );
                     break;
                 case FILL_TO_TOP:
-                    {
-                        aChangeRange.aEnd.SetRow( aSourceRange.aStart.Row() - 1 );
-                    }
+                    aChangeRange.aEnd.SetRow( aSourceRange.aStart.Row() - 1 );
                     break;
                 case FILL_TO_RIGHT:
-                    {
-                        aChangeRange.aStart.SetCol( aSourceRange.aEnd.Col() + 1 );
-                    }
+                    aChangeRange.aStart.SetCol( aSourceRange.aEnd.Col() + 1 );
                     break;
                 case FILL_TO_LEFT:
-                    {
-                        aChangeRange.aEnd.SetCol( aSourceRange.aStart.Col() - 1 );
-                    }
+                    aChangeRange.aEnd.SetCol( aSourceRange.aStart.Col() - 1 );
                     break;
                 default:
-                    {
-
-                    }
                     break;
             }
-            aChangeRanges.Append(aChangeRange);
+            aChangeRanges.Append( aChangeRange );
+            HelperNotifyChanges::Notify(*pModelObj, aChangeRanges);
         }
     }
 }

@@ -475,32 +475,34 @@ public:
             void            SetDocumentModified();
 };
 
-class HelperNotifyChanges
+//#i97876# Spreadsheet data changes are not notified
+namespace HelperNotifyChanges
 {
-    private:
-    ScModelObj* pModelObj;
-    bool mbMustPropagateChanges;
-    ScRangeList* mpChangeRanges;
-    OUString mpOperation;
+    inline ScModelObj* getMustPropagateChangesModel(ScDocShell &rDocShell)
+    {
+        ScModelObj* pModelObj = ScModelObj::getImplementation(rDocShell.GetModel());
+        if (pModelObj && pModelObj->HasChangesListeners())
+            return pModelObj;
+        return NULL;
+    }
 
-    public:
-    HelperNotifyChanges(ScRangeList* pChangeRanges, const OUString& pOperation)
+    inline void Notify(ScModelObj &rModelObj, const ScRangeList &rChangeRanges,
+        const OUString &rType = OUString("cell-change"),
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProperties =
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >())
     {
-        mpChangeRanges = pChangeRanges;
-        mpOperation = pOperation;
-        if ( pModelObj && pModelObj->HasChangesListeners() )
-            mbMustPropagateChanges = true;
+        rModelObj.NotifyChanges(rType, rChangeRanges, rProperties);
     }
-    ~HelperNotifyChanges()
+
+    inline void NotifyIfChangesListeners(ScDocShell &rDocShell, const ScRange &rRange,
+        const OUString &rType = OUString("cell-change"))
     {
-        if (mbMustPropagateChanges && mpChangeRanges)
+        if (ScModelObj* pModelObj = getMustPropagateChangesModel(rDocShell))
         {
-            pModelObj->NotifyChanges(mpOperation, *mpChangeRanges);
+            ScRangeList aChangeRanges;
+            aChangeRanges.Append(rRange);
+            Notify(*pModelObj, aChangeRanges, rType);
         }
-    }
-    bool getMustPropagateChanges()
-    {
-        return mbMustPropagateChanges;
     }
 };
 

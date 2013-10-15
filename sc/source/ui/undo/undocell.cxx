@@ -47,6 +47,25 @@
 
 using ::boost::shared_ptr;
 
+namespace HelperNotifyChanges
+{
+    void NotifyIfChangesListeners(ScDocShell &rDocShell, const ScAddress &rPos,
+        const ScUndoEnterData::ValuesType &rOldValues, const OUString &rType = OUString("cell-change"))
+    {
+        if (ScModelObj* pModelObj = getMustPropagateChangesModel(rDocShell))
+        {
+            ScRangeList aChangeRanges;
+
+            for (size_t i = 0, n = rOldValues.size(); i < n; ++i)
+            {
+                aChangeRanges.Append( ScRange(rPos.Col(), rPos.Row(), rOldValues[i].mnTab));
+            }
+
+            Notify(*pModelObj, aChangeRanges, rType);
+        }
+    }
+}
+
 TYPEINIT1(ScUndoCursorAttr, ScSimpleUndo);
 TYPEINIT1(ScUndoEnterData, ScSimpleUndo);
 TYPEINIT1(ScUndoEnterValue, ScSimpleUndo);
@@ -260,15 +279,7 @@ void ScUndoEnterData::Undo()
     DoChange();
     EndUndo();
 
-    ScRangeList aChangeRanges;
-    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
-    if (aHelperNotifyChanges.getMustPropagateChanges())
-    {
-        for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
-        {
-            aChangeRanges.Append( ScRange(maPos.Col(), maPos.Row(), maOldValues[i].mnTab));
-        }
-    }
+    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, maPos, maOldValues);
 }
 
 void ScUndoEnterData::Redo()
@@ -297,15 +308,7 @@ void ScUndoEnterData::Redo()
     DoChange();
     EndRedo();
 
-    ScRangeList aChangeRanges;
-    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
-    if (aHelperNotifyChanges.getMustPropagateChanges())
-    {
-        for (size_t i = 0, n = maOldValues.size(); i < n; ++i)
-        {
-            aChangeRanges.Append(ScRange(maPos.Col(), maPos.Row(), maOldValues[i].mnTab));
-        }
-    }
+    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, maPos, maOldValues);
 }
 
 void ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)

@@ -1703,23 +1703,24 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
 
     SelectionChanged();
 
+    ScModelObj* pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh);
+    if (!pModelObj)
+        return;
+
     ScRangeList aChangeRanges;
-    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
-    if (aHelperNotifyChanges.getMustPropagateChanges())
+    for (size_t i = 0, n = rPasteRanges.size(); i < n; ++i)
     {
-        for (size_t i = 0, n = rPasteRanges.size(); i < n; ++i)
+        const ScRange& r = *rPasteRanges[i];
+        ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd; ++itr)
         {
-            const ScRange& r = *rPasteRanges[i];
-            ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-            for (; itr != itrEnd; ++itr)
-            {
-                ScRange aChangeRange(r);
-                aChangeRange.aStart.SetTab(*itr);
-                aChangeRange.aEnd.SetTab(*itr);
-                aChangeRanges.Append(aChangeRange);
-            }
+            ScRange aChangeRange(r);
+            aChangeRange.aStart.SetTab(*itr);
+            aChangeRange.aEnd.SetTab(*itr);
+            aChangeRanges.Append(aChangeRange);
         }
     }
+    HelperNotifyChanges::Notify(*pModelObj, aChangeRanges);
 }
 
 

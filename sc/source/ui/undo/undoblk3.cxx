@@ -182,12 +182,7 @@ void ScUndoDeleteContents::Undo()
     DoChange( sal_True );
     EndUndo();
 
-    ScRangeList aChangeRanges;
-    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
-    if (aHelperNotifyChanges.getMustPropagateChanges())
-    {
-        aChangeRanges.Append(aRange);
-    }
+    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange);
 }
 
 void ScUndoDeleteContents::Redo()
@@ -196,12 +191,7 @@ void ScUndoDeleteContents::Redo()
     DoChange( false );
     EndRedo();
 
-    ScRangeList aChangeRanges;
-    HelperNotifyChanges aHelperNotifyChanges(&aChangeRanges, "cell-change");
-    if (aHelperNotifyChanges.getMustPropagateChanges())
-    {
-        aChangeRanges.Append(aRange);
-    }
+    HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange);
 }
 
 void ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)
