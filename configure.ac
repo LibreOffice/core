@@ -1404,10 +1404,11 @@ AC_ARG_WITH(epm,
 
 AC_ARG_WITH(package-format,
     AS_HELP_STRING([--with-package-format],
-        [Specify package format(s) for LibreOffice installsets. Default is the
-         "normal" one of the OS/Distribution. Possible values: aix, bsd, deb,
-         inst, tardist, osx, pkg, rpm, setld, native, portable, archive, dmg,
-          installed, msi. Example: --with-package-format="deb dmg"]),
+        [Specify package format(s) for LibreOffice installation sets. The
+         implicit --without-package-format leads to no installation sets being
+         generated. Possible values: aix, archive, bsd, deb, dmg, inst,
+         installed, msi, native, osx, pkg, portable, rpm, setld, and tardist.
+         Example: --with-package-format='deb rpm']),
 ,)
 
 AC_ARG_WITH(tls,
@@ -4400,7 +4401,7 @@ dnl ===================================================================
 dnl Test which package format to use
 dnl ===================================================================
 AC_MSG_CHECKING([which package format to use])
-if test -n "$with_package_format"; then
+if test -n "$with_package_format" -a "$with_package_format" != no; then
     for i in $with_package_format; do
         case "$i" in
         aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
@@ -4428,49 +4429,11 @@ msi - Windows .msi
         esac
     done
     PKGFORMAT="$with_package_format"
-elif test "$enable_epm" = "yes"; then
-    # defaults
-    case "$_os" in
-    Darwin)
-        PKGFORMAT=dmg
-        ;;
-    SunOS)
-        PKGFORMAT=pkg
-        ;;
-    Linux)
-        # if building on Debian, default should be deb...
-        if test -e /etc/debian_version; then
-            PKGFORMAT=deb
-        else
-            PKGFORMAT=rpm
-        fi
-        ;;
-    AIX)
-        PKGFORMAT=rpm
-        ;;
-    OpenBSD|DragonFly)
-        PKGFORMAT=portable
-        ;;
-    *BSD)
-        PKGFORMAT=bsd
-        ;;
-    WINNT)
-        PKGFORMAT=msi
-        ;;
-    # we never should get here since we check the arciecture/os at the beginning,
-    # but go sure...
-    *)
-        AC_MSG_ERROR([unknown system])
-    esac
+    AC_MSG_RESULT([$PKGFORMAT])
 else
-    if test "$WITH_MINGW" = "yes"; then
-        # when tested, we should default this to 'msi', instead of 'archive'
-        PKGFORMAT=archive
-    else
-        PKGFORMAT=native
-    fi
+    PKGFORMAT=
+    AC_MSG_RESULT([none])
 fi
-AC_MSG_RESULT([$PKGFORMAT])
 AC_SUBST(PKGFORMAT)
 
 dnl ===================================================================
@@ -7463,6 +7426,14 @@ if test "$enable_epm" = "yes"; then
     AC_SUBST(DPKG)
     AC_SUBST(PKGMK)
 else
+    for i in $PKGFORMAT; do
+        case "$i" in
+        aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable)
+            AC_MSG_ERROR(
+                [--with-package-format='$PKGFORMAT' requires --enable-epm])
+            ;;
+        esac
+    done
     AC_MSG_RESULT([no])
     EPM=NO
 fi

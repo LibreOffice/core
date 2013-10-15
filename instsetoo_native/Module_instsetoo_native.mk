@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,instsetoo_native))
 
-ifneq (,$(filter WNT,$(OS))$(filter-out NO,$(EPM)))
+ifneq (,$(PKGFORMAT)$(filter TRUE,$(LIBO_TEST_INSTALL)))
 
 $(eval $(call gb_Module_add_targets,instsetoo_native,\
 	CustomTarget_install \
