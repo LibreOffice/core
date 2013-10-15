@@ -14,7 +14,6 @@
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -24,10 +23,41 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/CircleKind.hpp>
+#include <com/sun/star/drawing/DoubleSequence.hpp>
+#include <com/sun/star/drawing/FlagSequence.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/NormalsKind.hpp>
+#include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/drawing/PolygonKind.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextureProjectionMode.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+#include <com/sun/star/drawing/Direction3D.hpp>
+#include <com/sun/star/drawing/Position3D.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/drawing/HomogenMatrix.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+
+#include "PropertyMapper.hxx"
+#include "VLineProperties.hxx"
+#include "Stripe.hxx"
 
 #include <rtl/ustring.hxx>
 
 #include <vector>
+#include <map>
+
+using namespace com::sun::star;
 
 namespace chart {
 
@@ -105,20 +135,193 @@ private:
     com::sun::star::awt::Point maPosition;
     com::sun::star::awt::Size maSize;
 
+    std::map<OUString, uno::Any> maProperties;
+
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > mxParent;
     DummyXShape* mpParent;
 
 };
 
-class DummyChart : public DummyXShape
+class DummyCube : public DummyXShape
 {
 public:
-    virtual DummyChart* getRootShape();
-
-    OpenglContext* getGlContext() { return mpContext; }
+    DummyCube(const drawing::Position3D &rPos, const drawing::Direction3D& rSize,
+            sal_Int32 nRotateZAngleHundredthDegree, const uno::Reference< beans::XPropertySet > xPropSet,
+            const tPropertyNameMap& rPropertyNaemMap, bool bRounded );
 
 private:
-    OpenglContext* mpContext;
+    sal_Int32 mnRotateZAngleHundredthDegree;
+    bool mbRounded;
+};
+
+class DummyCylinder : public DummyXShape
+{
+public:
+    DummyCylinder(const drawing::Position3D&, const drawing::Direction3D& rSize,
+            sal_Int32 nRotateZAngleHundredthDegree );
+private:
+    sal_Int32 mnRotateZAngleHundredthDegree;
+    bool mbRounded;
+};
+
+class DummyPyramid : public DummyXShape
+{
+public:
+    DummyPyramid(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
+            double fTopHeight, bool bRotateZ, uno::Reference< beans::XPropertySet > xPropSet,
+            const tPropertyNameMap& rPropertyNameMap );
+
+private:
+    double mfTopHeight;
+    bool bRotateZ;
+};
+
+class DummyCone : public DummyXShape
+{
+public:
+    DummyCone(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
+            double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree);
+
+private:
+    sal_Int32 mnRotateZAngleHundredthDegree;
+    double mfTopHeight;
+};
+
+class DummyPieSegment2D : public DummyXShape
+{
+public:
+    DummyPieSegment2D(double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
+            double fUnitCircleInnerRadius, double fUnitCircleOuterRadius,
+            const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene);
+
+private:
+    double mfUnitCircleStartAngleDegree;
+    double mfUnitCircleWidthAngleDegree;
+    double mfUnitCircleInnerRadius;
+    double mfUnitCircleOuterRadius;
+
+    drawing::Direction3D maOffset;
+    drawing::HomogenMatrix maUnitCircleToScene;
+};
+
+class DummyPieSegment : public DummyXShape
+{
+public:
+    DummyPieSegment(double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
+            double fUnitCircleInnerRadius, double fUnitCircleOuterRadius,
+            const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene,
+            double fDepth);
+
+private:
+    double mfUnitCircleStartAngleDegree;
+    double mfUnitCircleWidthAngleDegree;
+    double mfUnitCircleInnerRadius;
+    double mfUnitCircleOuterRadius;
+
+    drawing::Direction3D maOffset;
+    drawing::HomogenMatrix maUnitCircleToScene;
+
+    double mfDepth;
+};
+
+class DummyStripe : public DummyXShape
+{
+public:
+    DummyStripe(const Stripe& rStripe, uno::Reference< beans::XPropertySet > xPropSet,
+            const tPropertyNameMap& rPropertyNameMap, sal_Bool bDoubleSided,
+            short nRotatedTexture, bool bFlatNormals );
+
+private:
+    Stripe maStripe;
+
+    bool mbDoubleSided;
+    short mnRotatedTexture;
+    bool mbFlatNormals;
+};
+
+class DummyArea3D : public DummyXShape
+{
+public:
+    DummyArea3D(const drawing::PolyPolygonShape3D& rShape, double fDepth);
+
+private:
+    double mfDepth;
+    drawing::PolyPolygonShape3D maShapes;
+};
+
+class DummyArea2D : public DummyXShape
+{
+public:
+    DummyArea2D(const drawing::PolyPolygonShape3D& rShape);
+
+private:
+    drawing::PolyPolygonShape3D maShapes;
+};
+
+class DummySymbol2D : public DummyXShape
+{
+public:
+    DummySymbol2D(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
+            sal_Int32 nStandardSymbol, sal_Int32 nBorderColor, sal_Int32 nFillColor);
+
+private:
+    sal_Int32 mnStandardSymbol;
+};
+
+class DummyGraphic2D : public DummyXShape
+{
+public:
+    DummyGraphic2D(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
+            const uno::Reference< graphic::XGraphic > xGraphic );
+
+private:
+    uno::Reference< graphic::XGraphic > mxGraphic;
+};
+
+class DummyCircle : public DummyXShape
+{
+public:
+    DummyCircle(const awt::Point& rPosition, const awt::Size& rSize);
+
+};
+
+class DummyLine3D : public DummyXShape
+{
+public:
+    DummyLine3D(const drawing::PolyPolygonShape3D& rPoints, const VLineProperties& rProperties);
+
+private:
+    drawing::PolyPolygonShape3D maPoints;
+};
+
+class DummyLine2D : public DummyXShape
+{
+public:
+    DummyLine2D(const drawing::PointSequenceSequence& rPoints, const VLineProperties* pProperties);
+    DummyLine2D(const awt::Size& rSize, const awt::Point& rPosition);
+
+private:
+    drawing::PointSequenceSequence maPoints;
+};
+
+class DummyRectangle : public DummyXShape
+{
+public:
+    DummyRectangle();
+    DummyRectangle(const awt::Size& rSize);
+    DummyRectangle(const awt::Size& rSize, const awt::Point& rPoint, const tNameSequence& rNames,
+            const tAnySequence& rValues );
+};
+
+class DummyText : public DummyXShape
+{
+public:
+    DummyText(const OUString& rText, const tNameSequence& rNames,
+            const tAnySequence& rValues, const uno::Any& rTrans );
+
+private:
+    OUString aText;
+    uno::Any aTrans;
 };
 
 
@@ -145,6 +348,29 @@ public:
 private:
     std::vector<com::sun::star::uno::Reference< com::sun::star::drawing::XShape > > maUNOShapes;
     std::vector<DummyXShape*> maShapes;
+};
+
+class DummyChart : public DummyXShapes
+{
+public:
+    virtual DummyChart* getRootShape();
+
+    OpenglContext* getGlContext() { return mpContext; }
+
+private:
+    OpenglContext* mpContext;
+};
+
+class DummyGroup2D : public DummyXShapes
+{
+public:
+    DummyGroup2D(const OUString& rName);
+};
+
+class DummyGroup3D : public DummyXShapes
+{
+public:
+    DummyGroup3D(const OUString& rName);
 };
 
 }

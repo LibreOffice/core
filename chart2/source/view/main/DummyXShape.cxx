@@ -70,18 +70,23 @@ uno::Reference< beans::XPropertySetInfo > DummyXShape::getPropertySetInfo()
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
-void DummyXShape::setPropertyValue( const OUString& rName, const uno::Any& )
+void DummyXShape::setPropertyValue( const OUString& rName, const uno::Any& rValue)
     throw(beans::UnknownPropertyException, beans::PropertyVetoException,
             lang::IllegalArgumentException, lang::WrappedTargetException,
             uno::RuntimeException)
 {
     SAL_DEBUG("DummyXShape::setProperty: " << rName << " " << "Any");
+    maProperties[rName] = rValue;
 }
 
 uno::Any DummyXShape::getPropertyValue( const OUString& rName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SAL_DEBUG("DummyXShape::getPropertyValue: " << rName);
+    std::map<OUString, uno::Any>::iterator itr = maProperties.find(rName);
+    if(itr != maProperties.end())
+        return itr->second;
+
     return uno::Any();
 }
 
@@ -113,10 +118,19 @@ throw (beans::PropertyVetoException, lang::IllegalArgumentException,
 }
 
 uno::Sequence< uno::Any > DummyXShape::getPropertyValues(
-        const uno::Sequence< OUString >& )
+        const uno::Sequence< OUString >& rNames)
     throw (uno::RuntimeException)
 {
-    return uno::Sequence< uno::Any >();
+    uno::Sequence< uno::Any > aValues(rNames.getLength());
+    for(sal_Int32 i = 0; i < rNames.getLength(); ++i)
+    {
+        OUString aName = rNames[i];
+
+        std::map<OUString, uno::Any>::iterator itr = maProperties.find(aName);
+        if(itr != maProperties.end())
+            aValues[i] = itr->second;
+    }
+    return aValues;
 }
 
     void DummyXShape::addPropertiesChangeListener( const uno::Sequence< OUString >& , const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException)

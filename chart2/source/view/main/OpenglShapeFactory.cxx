@@ -60,216 +60,288 @@ namespace chart
 
 using dummy::DummyXShape;
 using dummy::DummyXShapes;
+using dummy::DummyCylinder;
+using dummy::DummyRectangle;
+using dummy::DummyPyramid;
+using dummy::DummyCone;
 
 namespace opengl {
 
 uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape(
     const uno::Reference< drawing::XDrawPage>& )
 {
-    return new DummyChart();
+    return new dummy::DummyChart();
 }
 
 //  methods for 3D shape creation
 
 uno::Reference<drawing::XShape>
         OpenglShapeFactory::createCube(
-            const uno::Reference<drawing::XShapes>&
-            , const drawing::Position3D& , const drawing::Direction3D&
-            , sal_Int32
-            , const uno::Reference< beans::XPropertySet >&
-            , const tPropertyNameMap&
-            , bool )
+            const uno::Reference<drawing::XShapes>& xTarget
+            , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
+            , sal_Int32 nRotateZAngleHundredthDegree
+            , const uno::Reference< beans::XPropertySet >& xSourceProp
+            , const tPropertyNameMap& rPropertyNameMap
+            , bool bRounded )
 {
-    return new DummyXShape();
+    dummy::DummyCube* pCube = new dummy::DummyCube(rPosition, rSize,
+            nRotateZAngleHundredthDegree, xSourceProp,
+            rPropertyNameMap, bRounded);
+    xTarget->add(pCube);
+    return pCube;
 }
 
 uno::Reference<drawing::XShape>
         OpenglShapeFactory::createCylinder(
-            const uno::Reference<drawing::XShapes>&
-          , const drawing::Position3D& , const drawing::Direction3D&
-          , sal_Int32 )
+            const uno::Reference<drawing::XShapes>& xTarget
+          , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
+          , sal_Int32 nRotateZAngleHundredthDegree )
 {
-    return new DummyXShape();
+    dummy::DummyCylinder* pCylinder = new dummy::DummyCylinder( rPosition, rSize,
+            nRotateZAngleHundredthDegree );
+    xTarget->add(pCylinder);
+    return pCylinder;
 }
 
 uno::Reference<drawing::XShape>
         OpenglShapeFactory::createPyramid(
-            const uno::Reference<drawing::XShapes>&
-          , const drawing::Position3D& , const drawing::Direction3D&
-          , double , bool
-          , const uno::Reference< beans::XPropertySet >&
-          , const tPropertyNameMap& )
+            const uno::Reference<drawing::XShapes>& xTarget
+          , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
+          , double fTopHeight, bool bRotateZ
+          , const uno::Reference< beans::XPropertySet >& xSourceProp
+          , const tPropertyNameMap& rPropertyNameMap )
 {
-    return new DummyXShape();
+    dummy::DummyPyramid* pPyramid = new dummy::DummyPyramid(rPosition, rSize,
+            fTopHeight, bRotateZ,
+            xSourceProp, rPropertyNameMap );
+    xTarget->add(pPyramid);
+    return pPyramid;
 }
 
 uno::Reference<drawing::XShape>
         OpenglShapeFactory::createCone(
-            const uno::Reference<drawing::XShapes>&
-          , const drawing::Position3D& , const drawing::Direction3D& 
-          , double , sal_Int32 )
+            const uno::Reference<drawing::XShapes>& xTarget
+          , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
+          , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree )
 {
-    return new DummyXShape();
+    dummy::DummyCone* pCone = new dummy::DummyCone(rPosition, rSize, fTopHeight,
+            nRotateZAngleHundredthDegree);
+    xTarget->add(pCone);
+    return pCone;
 }
 
 uno::Reference< drawing::XShape >
         OpenglShapeFactory::createPieSegment2D(
-                    const uno::Reference< drawing::XShapes >&
-                    , double , double
-                    , double , double
-                    , const drawing::Direction3D&
-                    , const drawing::HomogenMatrix& )
+                    const uno::Reference< drawing::XShapes >& xTarget
+                    , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
+                    , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
+                    , const drawing::Direction3D& rOffset
+                    , const drawing::HomogenMatrix& rUnitCircleToScene )
 {
-    return new DummyXShape();
+    dummy::DummyPieSegment2D* pSegment = new dummy::DummyPieSegment2D(fUnitCircleStartAngleDegree,
+            fUnitCircleWidthAngleDegree, fUnitCircleInnerRadius, fUnitCircleOuterRadius,
+            rOffset, rUnitCircleToScene);
+    xTarget->add(pSegment);
+    return pSegment;
 }
 
 uno::Reference< drawing::XShape >
         OpenglShapeFactory::createPieSegment(
-                    const uno::Reference< drawing::XShapes >&
-                    , double , double
-                    , double , double
-                    , const drawing::Direction3D&
-                    , const drawing::HomogenMatrix&
-                    , double )
+                    const uno::Reference< drawing::XShapes >& xTarget
+                    , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
+                    , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
+                    , const drawing::Direction3D& rOffset
+                    , const drawing::HomogenMatrix& rUnitCircleToScene
+                    , double fDepth )
 {
-    return new DummyXShape();
+    dummy::DummyPieSegment* pSegment = new dummy::DummyPieSegment(fUnitCircleStartAngleDegree,
+            fUnitCircleWidthAngleDegree, fUnitCircleInnerRadius, fUnitCircleOuterRadius,
+            rOffset, rUnitCircleToScene, fDepth);
+
+    xTarget->add(pSegment);
+    return pSegment;
 }
 
 uno::Reference< drawing::XShape >
-        OpenglShapeFactory::createStripe( const uno::Reference< drawing::XShapes >&
-                    , const Stripe&
-                    , const uno::Reference< beans::XPropertySet >&
-                    , const tPropertyNameMap&
-                    , sal_Bool
-                    , short
-                    , bool )
+        OpenglShapeFactory::createStripe( const uno::Reference< drawing::XShapes >& xTarget
+                    , const Stripe& rStripe
+                    , const uno::Reference< beans::XPropertySet >& xSourceProp
+                    , const tPropertyNameMap& rPropertyNameMap
+                    , sal_Bool bDoubleSided
+                    , short nRotatedTexture
+                    , bool bFlatNormals )
 {
-    return new DummyXShape();
+    dummy::DummyStripe* pStripe = new dummy::DummyStripe(rStripe,
+            xSourceProp, rPropertyNameMap,
+            bDoubleSided, nRotatedTexture,
+            bFlatNormals);
+    xTarget->add(pStripe);
+    return pStripe;
 }
 
 uno::Reference< drawing::XShape >
-        OpenglShapeFactory::createArea3D( const uno::Reference< drawing::XShapes >&
-                    , const drawing::PolyPolygonShape3D&
-                    , double )
+        OpenglShapeFactory::createArea3D( const uno::Reference< drawing::XShapes >& xTarget
+                    , const drawing::PolyPolygonShape3D& rPolyPolygon
+                    , double fDepth )
 {
-    return new DummyXShape();
+    dummy::DummyArea3D* pArea = new dummy::DummyArea3D(rPolyPolygon, fDepth);
+    xTarget->add(pArea);
+    return pArea;
 }
 
 uno::Reference< drawing::XShape >
-        OpenglShapeFactory::createArea2D( const uno::Reference< drawing::XShapes >&
-                    , const drawing::PolyPolygonShape3D& )
+        OpenglShapeFactory::createArea2D( const uno::Reference< drawing::XShapes >& xTarget
+                    , const drawing::PolyPolygonShape3D& rPolyPolygon )
 {
-    return new DummyXShape();
+    dummy::DummyArea2D* pArea = new dummy::DummyArea2D(rPolyPolygon);
+    xTarget->add(pArea);
+    return pArea;
 }
 
 uno::Reference< drawing::XShape >
         OpenglShapeFactory::createSymbol2D(
-                      const uno::Reference< drawing::XShapes >&
-                    , const drawing::Position3D&
-                    , const drawing::Direction3D&
-                    , sal_Int32
-                    , sal_Int32
-                    , sal_Int32 )
+                      const uno::Reference< drawing::XShapes >& xTarget
+                    , const drawing::Position3D& rPosition
+                    , const drawing::Direction3D& rSize
+                    , sal_Int32 nStandardSymbol
+                    , sal_Int32 nBorderColor
+                    , sal_Int32 nFillColor )
 {
-    return new DummyXShape();
+    dummy::DummySymbol2D* pSymbol = new dummy::DummySymbol2D(rPosition, rSize,
+            nStandardSymbol, nBorderColor, nFillColor);
+    xTarget->add(pSymbol);
+    return pSymbol;
 }
 
 uno::Reference< drawing::XShape >
         OpenglShapeFactory::createGraphic2D(
-                      const uno::Reference< drawing::XShapes >&
-                    , const drawing::Position3D&
-                    , const drawing::Direction3D&
-                    , const uno::Reference< graphic::XGraphic >& )
+                      const uno::Reference< drawing::XShapes >& xTarget
+                    , const drawing::Position3D& rPosition
+                    , const drawing::Direction3D& rSize
+                    , const uno::Reference< graphic::XGraphic >& xGraphic )
 {
-    return new DummyXShape();
+    dummy::DummyGraphic2D* pGraphic = new dummy::DummyGraphic2D(rPosition, rSize,
+            xGraphic);
+    xTarget->add(pGraphic);
+    return pGraphic;
 }
 
 uno::Reference< drawing::XShapes >
-        OpenglShapeFactory::createGroup2D( const uno::Reference< drawing::XShapes >&
-        , OUString )
+        OpenglShapeFactory::createGroup2D( const uno::Reference< drawing::XShapes >& xTarget
+        , OUString aName)
 {
-    return new DummyXShapes();
+    dummy::DummyGroup2D* pNewShape = new dummy::DummyGroup2D(aName);
+    xTarget->add(pNewShape);
+    return pNewShape;
 }
 
 uno::Reference< drawing::XShapes >
-        OpenglShapeFactory::createGroup3D( const uno::Reference< drawing::XShapes >&
-        , OUString )
+        OpenglShapeFactory::createGroup3D( const uno::Reference< drawing::XShapes >& xTarget
+        , OUString aName )
 {
-    return new DummyXShapes();
+    dummy::DummyGroup3D* pNewShape = new dummy::DummyGroup3D(aName);
+    xTarget->add(pNewShape);
+    return pNewShape;
 }
 
 uno::Reference< drawing::XShape >
-        OpenglShapeFactory::createCircle2D( const uno::Reference< drawing::XShapes >&
-                    , const drawing::Position3D&
-                    , const drawing::Direction3D& )
+        OpenglShapeFactory::createCircle2D( const uno::Reference< drawing::XShapes >& xTarget
+                    , const drawing::Position3D& rPosition
+                    , const drawing::Direction3D& rSize )
 {
-    return new DummyXShape();
+    drawing::Position3D aCenterPosition(
+            rPosition.PositionX - (rSize.DirectionX / 2.0),
+            rPosition.PositionY - (rSize.DirectionY / 2.0),
+            rPosition.PositionZ );
+    dummy::DummyCircle* pCircle = new dummy::DummyCircle(Position3DToAWTPoint( aCenterPosition ),
+            Direction3DToAWTSize( rSize ));
+    xTarget->add(pCircle);
+    return pCircle;
 }
 
 uno::Reference< drawing::XShape >
-    OpenglShapeFactory::createCircle( const uno::Reference< drawing::XShapes >&
-                    , const awt::Size&
-                    , const awt::Point& )
+    OpenglShapeFactory::createCircle( const uno::Reference< drawing::XShapes >& xTarget
+                    , const awt::Size& rSize
+                    , const awt::Point& rPosition )
 {
-    return new DummyXShape();
+    dummy::DummyCircle* pCircle = new dummy::DummyCircle(rPosition, rSize);
+    xTarget->add(pCircle);
+    return pCircle;
 }
 
 uno::Reference< drawing::XShape >
-        OpenglShapeFactory::createLine3D( const uno::Reference< drawing::XShapes >&
-                    , const drawing::PolyPolygonShape3D&
-                    , const VLineProperties& )
+        OpenglShapeFactory::createLine3D( const uno::Reference< drawing::XShapes >& xTarget
+                    , const drawing::PolyPolygonShape3D& rPoints
+                    , const VLineProperties& rLineProperties )
 {
-    return new DummyXShape();
+    dummy::DummyLine3D* pLine = new dummy::DummyLine3D(rPoints, rLineProperties);
+    xTarget->add(pLine);
+    return pLine;
 }
 
 uno::Reference< drawing::XShape >
-        OpenglShapeFactory::createLine2D( const uno::Reference< drawing::XShapes >&
-                    , const drawing::PointSequenceSequence&
-                    , const VLineProperties* )
+        OpenglShapeFactory::createLine2D( const uno::Reference< drawing::XShapes >& xTarget
+                    , const drawing::PointSequenceSequence& rPoints
+                    , const VLineProperties* pLineProperties )
 {
-    return new DummyXShape();
+    dummy::DummyLine2D* pLine = new dummy::DummyLine2D(rPoints, pLineProperties);
+    xTarget->add(pLine);
+    return pLine;
 }
 
 uno::Reference< drawing::XShape >
-    OpenglShapeFactory::createLine ( const uno::Reference< drawing::XShapes >& ,
-            const awt::Size& , const awt::Point& )
+    OpenglShapeFactory::createLine ( const uno::Reference< drawing::XShapes >& xTarget,
+            const awt::Size& rSize, const awt::Point& rPosition )
 {
-    return new DummyXShape();
+    dummy::DummyLine2D* pLine = new dummy::DummyLine2D(rSize, rPosition);
+    xTarget->add(pLine);
+    return pLine;
 }
 
 uno::Reference< drawing::XShape > OpenglShapeFactory::createInvisibleRectangle(
-            const uno::Reference< drawing::XShapes >&
-            , const awt::Size& )
+            const uno::Reference< drawing::XShapes >& xTarget
+            , const awt::Size& rSize )
 {
-    return new DummyXShape();
+    dummy::DummyRectangle* pRectangle = new dummy::DummyRectangle(rSize);
+    xTarget->add(pRectangle);
+    return pRectangle;
 }
 
 uno::Reference< drawing::XShape > OpenglShapeFactory::createRectangle(
-        const uno::Reference< drawing::XShapes >&
-        , const awt::Size&
-        , const awt::Point&
-        , const tNameSequence&
-        , const tAnySequence& )
+        const uno::Reference< drawing::XShapes >& xTarget
+        , const awt::Size& rSize
+        , const awt::Point& rPosition
+        , const tNameSequence& rPropNames
+        , const tAnySequence& rPropValues )
 {
-    return new DummyXShape();
+    dummy::DummyRectangle* pRectangle = new dummy::DummyRectangle(rSize, rPosition,
+            rPropNames, rPropValues);
+
+    xTarget->add(pRectangle);
+    return pRectangle;
 }
 
 uno::Reference< drawing::XShape >
     OpenglShapeFactory::createRectangle(
             const uno::Reference<
-            drawing::XShapes >& )
+            drawing::XShapes >& xTarget)
 {
-    return new DummyXShape();
+    dummy::DummyRectangle* pRectangle = new dummy::DummyRectangle();
+    xTarget->add(pRectangle);
+    return pRectangle;
 }
 
 uno::Reference< drawing::XShape >
-        OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >&
-                    , const OUString&
-                    , const tNameSequence&
-                    , const tAnySequence&
-                    , const uno::Any& )
+        OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget
+                    , const OUString& rText
+                    , const tNameSequence& rPropNames
+                    , const tAnySequence& rPropValues
+                    , const uno::Any& rATransformation )
 {
-    return new DummyXShape();
+    dummy::DummyText* pText = new dummy::DummyText( rText, rPropNames, rPropValues,
+            rATransformation );
+    xTarget->add(pText);
+    return pText;
 }
 
 
@@ -280,7 +352,8 @@ uno::Reference< drawing::XShape >
                 const uno::Reference< beans::XPropertySet > ,
                 double , const OUString& )
 {
-    return new DummyXShape();
+    // how the hell should we support that?
+    return uno::Reference< drawing::XShape >();
 }
 
 void OpenglShapeFactory::createSeries( const uno::Reference<
