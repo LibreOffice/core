@@ -22,6 +22,7 @@
 #include <map>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 #ifdef MD5_KERNEL
 #include <openssl/md5.h>
 #endif
@@ -32,13 +33,17 @@ namespace sc { namespace opencl {
 class FormulaTreeNode
 {
 public:
-    FormulaToken *CurrentFormula;
-    typedef std::vector<FormulaTreeNode *> Children_T;
-    Children_T Children;
+    FormulaTreeNode(FormulaToken *ft): mpCurrentFormula(ft)
+    {
+        Children.reserve(8);
+    }
+    std::vector<FormulaTreeNode *> Children;
     FormulaToken *GetFormulaToken(void) const
     {
-        return CurrentFormula;
+        return mpCurrentFormula;
     }
+private:
+    FormulaToken *const mpCurrentFormula;
 };
 /// Holds an input (read-only) argument reference to a SingleVectorRef.
 /// or a DoubleVectorRef for non-sliding-window argument of complex functions
@@ -87,11 +92,11 @@ public:
     const std::string &GetSymName(void) const { return mSymName; }
     FormulaToken *GetFormulaToken(void) const
     {
-        return mFormulaTree->CurrentFormula;
+        return mFormulaTree->GetFormulaToken();
     }
     virtual size_t GetWindowSize(void) const
     {
-        FormulaToken *pCur = mFormulaTree->CurrentFormula;
+        FormulaToken *pCur = mFormulaTree->GetFormulaToken();
         assert(pCur);
         if (auto *pCurDVR =
                 dynamic_cast<const formula::DoubleVectorRefToken *>(pCur))
@@ -115,7 +120,7 @@ protected:
 /// Map the buffer used by an argument and do necessary argument setting
 size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
 {
-    FormulaToken *ref = mFormulaTree->CurrentFormula;
+    FormulaToken *ref = mFormulaTree->GetFormulaToken();
     assert(mpClmem == NULL);
     double *pHostBuffer = NULL;
     size_t szHostBuffer = 0;
@@ -192,107 +197,6 @@ public:
     }
 };
 
-#if 0 // unused for now
-/// Arguments that are reduced from a another vector outside the dynamic kernel
-class DynamicKernelReducedArgument: public DynamicKernelArgument
-{
-public:
-    DynamicKernelReducedArgument(const std::string &s, FormulaTreeNode *ft):
-        DynamicKernelArgument(s, ft) {}
-    /// Generate declaration
-    virtual void GenDecl(std::stringstream &ss)
-    {
-        ss << "double "<<mSymName;
-    }
-
-    virtual std::string GenSlidingWindowDeclRef(void)
-    {
-        std::stringstream ss;
-        ss << mSymName << "[i]";
-        return ss.str();
-    }
-    /// Create buffer and pass the buffer to a given kernel
-    virtual size_t Marshal(cl_kernel, int, int);
-};
-
-size_t DynamicKernelReducedArgument::Marshal(cl_kernel k, int argno, int)
-{
-    FormulaToken *ref = mFormulaTree->CurrentFormula;
-    // May have variable arguments..Not handling them now
-    assert(mFormulaTree->Children.size() == ref->GetByte());
-    // if the argument of this reduce operation contains only
-    // fixed ranges, then each range is calculated by another
-    // kernel and will have only one reduction per
-    // range per vector
-    OpCode opc = ref->GetOpCode();
-    int total_nr = 0;
-    double cur_top = 0.0;
-    for (int j = 0; j < ref->GetByte(); j++)
-    {
-        FormulaToken *pChild = mFormulaTree->Children[j]->CurrentFormula;
-        assert(pChild);
-        const formula::DoubleVectorRefToken* pChildDVR =
-            dynamic_cast<const formula::DoubleVectorRefToken *>(pChild);
-        assert(pChildDVR);
-        // Pass that ..
-        double *pHostBuffer = const_cast<double*>(
-                pChildDVR->GetArrays()[0].mpNumericArray);
-        size_t nHostBuffer = pChildDVR->GetArrayLength();
-        // TODO either call an OpenCL reduce kerenl or use Bolt (preferred)
-        // This is a CPU quick hack just to show it works. But can be REALLY slow!!
-
-        unsigned int i = 0;
-        if (j == 0) {
-            if (pHostBuffer[0] == pHostBuffer[0] || nHostBuffer == 1)
-            {
-                cur_top = pHostBuffer[i++];
-            } else {
-                i++;
-                cur_top = pHostBuffer[i++];
-            }
-        }
-        if (cur_top == cur_top)
-            total_nr++;
-
-        for (; i < nHostBuffer; i++) {
-            double val = pHostBuffer[i];
-            if (val != val) //skip nan
-                continue;
-            else
-                total_nr++;
-            switch(opc)
-            {
-                case ocMin:
-                    cur_top = cur_top<val?cur_top:val;// fmin(cur_top, val);
-                    break;
-                case ocMax:
-                    cur_top = cur_top>val?cur_top:val;//fmax(cur_top, val);
-                    break;
-                case ocSum:
-                case ocAverage:
-                    cur_top = cur_top + val;
-                    break;
-                case ocCount:
-                    break;
-                default:
-                    assert(0);
-            }
-        }
-    }
-    if (opc == ocAverage)
-        cur_top /= total_nr;
-    else if (opc == ocCount)
-        cur_top = total_nr;
-    // Obtain cl context
-    KernelEnv kEnv;
-    OclCalc::setKernelEnv(&kEnv);
-    cl_int err;
-    // Pass the scalar result back to the rest of the formula kernel
-    err = clSetKernelArg(k, argno, sizeof(double), (void*)&cur_top);
-    assert(CL_SUCCESS == err);
-    return 1;
-}
-#endif // unused
 /// Handling a Double Vector that is used as a sliding window input
 /// to either a sliding window average or sum-of-products
 class DynamicKernelSlidingArgument: public DynamicKernelArgument
@@ -331,9 +235,9 @@ public:
     static const bool isReduction = true;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
-        return rhs;
+        return lhs;
     }
-    static std::string BinFuncName(void) { return "top"; }
+    static std::string BinFuncName(void) { return "nop"; }
 };
 class OpCount {
 public:
@@ -342,7 +246,7 @@ public:
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         std::stringstream ss;
-        ss << "(isNan(" << rhs << ")?"<<lhs<<":"<<lhs<<"+1.0)";
+        ss << "(isNan(" << lhs << ")?"<<rhs<<":"<<rhs<<"+1.0)";
         return ss.str();
     }
     static std::string BinFuncName(void) { return "fcount"; }
@@ -355,7 +259,7 @@ public:
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         std::stringstream ss;
-        ss << "fsum(" << rhs <<","<< lhs<<")";
+        ss << "fsum(" << lhs <<","<< rhs<<")";
         return ss.str();
     }
     static std::string BinFuncName(void) { return "fsum"; }
@@ -367,7 +271,7 @@ public:
     static const bool isReduction = true;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
-        return rhs + "-" + lhs;
+        return lhs + "-" + rhs;
     }
     static std::string BinFuncName(void) { return "fsub"; }
 };
@@ -390,7 +294,7 @@ public:
     static const bool isReduction = true;
     static std::string Gen(const std::string &lhs, const std::string &rhs)
     {
-        return "(" + rhs + "/" + lhs + ")";
+        return "(" + lhs + "/" + rhs + ")";
     }
     static std::string BinFuncName(void) { return "fdiv"; }
 };
@@ -519,7 +423,8 @@ public:
         ss << ") {\n\t";
         ss << "double tmp = " << Op::GetBottom() <<";\n\t";
         ss << "int gid0 = get_global_id(0);\n\t";
-        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        unsigned i = mvSubArguments.size();
+        while (i--)
         {
             FormulaToken *pCur = mvSubArguments[i]->GetFormulaToken();
             assert(pCur);
@@ -544,7 +449,7 @@ public:
             }
             ss << "tmp = ";
             // Generate the operation in binary form
-            ss << Op::Gen("tmp", mvSubArguments[i]->GenSlidingWindowDeclRef());
+            ss << Op::Gen(mvSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
             ss << ";\n\t";
         }
         ss << "return tmp;\n";
@@ -565,7 +470,7 @@ public:
     /// Generate use/references to the argument
     virtual void GenDeclRef(std::stringstream &ss) const
     {
-        FormulaToken *pChild = mFormulaTree->Children[0]->CurrentFormula;
+        FormulaToken *pChild = mFormulaTree->Children[0]->GetFormulaToken();
         assert(pChild);
         ss << mSymName << "_" << Op::BinFuncName() <<"(";
         size_t nItems = 0;
@@ -577,8 +482,8 @@ public:
             nItems += mvSubArguments[i]->GetWindowSize();
         }
         ss << ")";
-        if (mFormulaTree->CurrentFormula &&
-                mFormulaTree->CurrentFormula->GetOpCode() == ocAverage)
+        if (mFormulaTree->GetFormulaToken() &&
+                mFormulaTree->GetFormulaToken()->GetOpCode() == ocAverage)
         {
             ss << "/(double)"<<nItems;
         }
@@ -630,7 +535,7 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
 
     for (unsigned i = 0; i < nChildren; i++)
     {
-        FormulaToken *pChild = ft->Children[i]->CurrentFormula;
+        FormulaToken *pChild = ft->Children[i]->GetFormulaToken();
         assert(pChild);
         OpCode opc = pChild->GetOpCode();
         std::stringstream tmpname;
@@ -750,7 +655,7 @@ public:
         }
         // preambles
         decl << "int isNan(double a) { return a != a; }\n";
-        decl << "double fsum(double a, double b) { return (isNan(a))?b:a+b; }\n";
+        decl << "double fsum(double a, double b) { return isNan(a)?b:a+b; }\n";
         decl << "double fsub(double a, double b) { return a-b; }\n";
         decl << "double fmul(double a, double b) { return a*b; }\n";
         decl << "double fdiv(double a, double b) { return a/b; }\n";
@@ -868,7 +773,7 @@ DynamicKernel::~DynamicKernel()
 template <typename T>
 const DynamicKernelArgument *SymbolTable::DeclRefArg(FormulaTreeNode *t)
 {
-    FormulaToken *ref = t->CurrentFormula;
+    FormulaToken *ref = t->GetFormulaToken();
     ArgumentMap::iterator it = mSymbols.find(ref);
     if (it == mSymbols.end()) {
         // Allocate new symbols
@@ -933,8 +838,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         OpCode eOp = pCur->GetOpCode();
         if ( eOp != ocPush )
         {
-            FormulaTreeNode *m_currNode = new FormulaTreeNode;
-            m_currNode->CurrentFormula = pCur;
+            FormulaTreeNode *m_currNode = new FormulaTreeNode(pCur);
             sal_uInt8 m_ParamCount =  pCur->GetParamCount();
             for(int i=0; i<m_ParamCount; i++)
             {
@@ -948,18 +852,17 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
                 }
                 else
                 {
-                    FormulaTreeNode *m_ChildTreeNode = new FormulaTreeNode;
-                    m_ChildTreeNode->CurrentFormula = m_TempFormula;
+                    FormulaTreeNode *m_ChildTreeNode = new FormulaTreeNode(m_TempFormula);
                     m_currNode->Children.push_back(m_ChildTreeNode);
                 }
             }
+            std::reverse(m_currNode->Children.begin(), m_currNode->Children.end());
             m_hash_map[pCur] = m_currNode;
         }
         list.push_back(pCur);
     }
 
-    FormulaTreeNode *Root = new FormulaTreeNode;
-    Root->CurrentFormula = NULL;
+    FormulaTreeNode *Root = new FormulaTreeNode(NULL);
     Root->Children.push_back(m_hash_map[list.back()]);
     // Code generation
     mpKernel = new DynamicKernel(Root);
