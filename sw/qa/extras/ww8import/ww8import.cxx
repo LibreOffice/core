@@ -37,6 +37,7 @@ public:
     void testPageBorder();
     void testN823651();
     void testFdo36868();
+    void testListNolevel();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -65,6 +66,7 @@ void Test::run()
         {"page-border.doc", &Test::testPageBorder},
         {"n823651.doc", &Test::testN823651},
         {"fdo36868.doc", &Test::testFdo36868},
+        {"list-nolevel.doc", &Test::testListNolevel},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -299,6 +301,14 @@ void Test::testFdo36868()
     OUString aText = parseDump("/root/page/body/txt[3]/Special[@nType='POR_NUMBER']", "rText");
     // This was 1.1.
     CPPUNIT_ASSERT_EQUAL(OUString("2.1"), aText);
+}
+
+void Test::testListNolevel()
+{
+    // Similar to fdo#36868, numbering portions had wrong values.
+    OUString aText = parseDump("/root/page/body/txt[1]/Special[@nType='POR_NUMBER']", "rText");
+    // POR_NUMBER was completely missing.
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
