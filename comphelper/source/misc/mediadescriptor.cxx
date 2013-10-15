@@ -485,7 +485,7 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
 
         // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
         OUString sNormalizedURL = impl_normalizeURL( sURL );
-        return impl_openStreamWithURL( removeFragment(sURL), bLockFile );
+        return impl_openStreamWithURL( removeFragment(sNormalizedURL), bLockFile );
     }
     catch(const css::uno::Exception& ex)
     {
