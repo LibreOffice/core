@@ -376,6 +376,9 @@ findunusedcode:
               | grep -v ^WSObject \
               > unusedcode.easy
 
+findunusedheaders:
+	$(SRCDIR)/bin/find-unusedheaders.pl
+
 # the actual running of subsequentcheck is now done in "build" target => faster
 check: build
 
