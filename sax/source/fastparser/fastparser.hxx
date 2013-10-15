@@ -149,6 +149,7 @@ struct Entity : public ParserData
     void startElement( Event *pEvent );
     void characters( const OUString& sChars );
     void endElement();
+    EventList* getEventList();
 };
 
 // --------------------------------------------------------------------

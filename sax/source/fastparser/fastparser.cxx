@@ -326,6 +326,28 @@ void Entity::endElement()
     }
     maContextStack.pop();
 }
+
+EventList* Entity::getEventList()
+{
+    if (!mpProducedEvents)
+    {
+        osl::ResettableMutexGuard aGuard(maEventProtector);
+        if (!maUsedEvents.empty())
+        {
+            mpProducedEvents = maUsedEvents.front();
+            maUsedEvents.pop();
+            aGuard.clear(); // unlock
+            mpProducedEvents->clear();
+        }
+        if (!mpProducedEvents)
+        {
+            mpProducedEvents = new EventList();
+            mpProducedEvents->reserve(mnEventListSize);
+        }
+    }
+    return mpProducedEvents;
+}
+
 // --------------------------------------------------------------------
 // FastSaxParser implementation
 // --------------------------------------------------------------------
@@ -774,15 +796,11 @@ void FastSaxParser::deleteUsedEvents()
 void FastSaxParser::produce(const Event& aEvent)
 {
     Entity& rEntity = getEntity();
-    if (!rEntity.mpProducedEvents)
-    {
-        rEntity.mpProducedEvents = new EventList();
-        rEntity.mpProducedEvents->reserve(rEntity.mnEventListSize);
-    }
-    rEntity.mpProducedEvents->push_back( aEvent );
-    if (aEvent->maType == CallbackType::DONE ||
-        aEvent->maType == CallbackType::EXCEPTION ||
-        rEntity.mpProducedEvents->size() == rEntity.mnEventListSize)
+    EventList* pEventList = rEntity.getEventList();
+    pEventList->push_back( aEvent );
+    if (aEvent.maType == CallbackType::DONE ||
+        aEvent.maType == CallbackType::EXCEPTION ||
+        pEventList->size() == rEntity.mnEventListSize)
     {
         osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
 
@@ -794,14 +812,12 @@ void FastSaxParser::produce(const Event& aEvent)
             aGuard.reset(); // lock
         }
 
-        rEntity.maPendingEvents.push(rEntity.mpProducedEvents);
+        rEntity.maPendingEvents.push(pEventList);
         rEntity.mpProducedEvents = 0;
 
         aGuard.clear(); // unlock
 
         rEntity.maConsumeResume.set();
-
-        deleteUsedEvents();
     }
 }
 
