@@ -14,6 +14,8 @@ namespace formula {
 VectorRefArray::VectorRefArray() : mpNumericArray(NULL), mpStringArray(NULL) {}
 VectorRefArray::VectorRefArray( const double* pArray ) : mpNumericArray(pArray), mpStringArray(NULL) {}
 VectorRefArray::VectorRefArray( rtl_uString** pArray ) : mpNumericArray(NULL), mpStringArray(pArray) {}
+VectorRefArray::VectorRefArray( const double* pNumArray, rtl_uString** pStrArray ) :
+    mpNumericArray(pNumArray), mpStringArray(pStrArray) {}
 
 bool VectorRefArray::isValid() const
 {
