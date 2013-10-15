@@ -352,18 +352,7 @@ UpdateInformationProvider::UpdateInformationProvider(
 
     OUString aUserAgent( "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" );
     rtl::Bootstrap::expandMacros( aUserAgent );
-
-    for (sal_Int32 i = 0;;) {
-        i = aUserAgent.indexOfAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("<PRODUCT>"), i);
-        if (i == -1) {
-            break;
-        }
-        aUserAgent = aUserAgent.replaceAt(
-            i, RTL_CONSTASCII_LENGTH("<PRODUCT>"), product);
-        i += product.getLength();
-    }
-
+    aUserAgent = aUserAgent.replaceAll("<PRODUCT>", product);
     SAL_INFO("extensions.update", "UpdateUserAgent: " << aUserAgent);
 
     m_aRequestHeaderList[0].First = "Accept-Language";
