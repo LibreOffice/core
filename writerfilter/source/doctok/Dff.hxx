@@ -34,7 +34,6 @@ class DffBlock;
 class DffRecord : public WW8StructBase, public writerfilter::Reference<Properties>,
                   public Sprm
 {
-    bool bInitialized;
 public:
     typedef boost::shared_ptr<DffRecord> Pointer_t;
 

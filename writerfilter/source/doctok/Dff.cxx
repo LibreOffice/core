@@ -30,13 +30,13 @@ typedef boost::shared_ptr<WW8Value> WW8ValueSharedPointer_t;
 
 DffRecord::DffRecord(WW8Stream & rStream, sal_uInt32 nOffset,
                      sal_uInt32 nCount)
-: WW8StructBase(rStream, nOffset, nCount), bInitialized(false)
+: WW8StructBase(rStream, nOffset, nCount)
 {
 }
 
 DffRecord::DffRecord(WW8StructBase * pParent, sal_uInt32 nOffset,
                      sal_uInt32 nCount)
-: WW8StructBase(pParent, nOffset, nCount), bInitialized(false)
+: WW8StructBase(pParent, nOffset, nCount)
 {
 }
 
