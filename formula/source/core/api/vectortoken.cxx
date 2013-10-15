@@ -15,6 +15,11 @@ VectorRefArray::VectorRefArray() : mpNumericArray(NULL), mpStringArray(NULL) {}
 VectorRefArray::VectorRefArray( const double* pArray ) : mpNumericArray(pArray), mpStringArray(NULL) {}
 VectorRefArray::VectorRefArray( rtl_uString** pArray ) : mpNumericArray(NULL), mpStringArray(pArray) {}
 
+bool VectorRefArray::isValid() const
+{
+    return mpNumericArray || mpStringArray;
+}
+
 SingleVectorRefToken::SingleVectorRefToken( const double* pArray, size_t nLength ) :
     FormulaToken(svSingleVectorRef, ocPush), maArray(pArray), mnArrayLength(nLength) {}
 

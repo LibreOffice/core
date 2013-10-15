@@ -3420,7 +3420,7 @@ public:
                         // length.
 
                         formula::VectorRefArray aArray = mrDoc.FetchVectorRefArray(mrCxt, aRefPos, nLen);
-                        if (!aArray.mpNumericArray && !aArray.mpStringArray)
+                        if (!aArray.isValid())
                             return false;
 
                         formula::SingleVectorRefToken aTok(aArray, nLen);
@@ -3488,7 +3488,7 @@ public:
                     {
                         aRefPos.SetCol(i);
                         formula::VectorRefArray aArray = mrDoc.FetchVectorRefArray(mrCxt, aRefPos, nArrayLength);
-                        if (!aArray.mpNumericArray && !aArray.mpStringArray)
+                        if (!aArray.isValid())
                             return false;
 
                         aArrays.push_back(aArray);
