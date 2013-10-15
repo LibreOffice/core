@@ -206,9 +206,9 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
     SwUndoId const eUndoId( (0 == i_eUndoId) ? UNDO_START : i_eUndoId );
 
     OSL_ASSERT(UNDO_END != eUndoId);
-    String comment( (UNDO_START == eUndoId)
-        ?   String("??", RTL_TEXTENCODING_ASCII_US)
-        :   String(SW_RES(UNDO_BASE + eUndoId)) );
+    OUString comment( (UNDO_START == eUndoId)
+        ?   OUString("??")
+        :   OUString(SW_RES(UNDO_BASE + eUndoId)) );
     if (pRewriter)
     {
         OSL_ASSERT(UNDO_START != eUndoId);
@@ -255,7 +255,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
                 OSL_ENSURE(pListAction->GetId() == eUndoId,
                         "EndUndo(): given ID different from StartUndo()");
                 // comment set by caller of EndUndo
-                String comment = String(SW_RES(UNDO_BASE + eUndoId));
+                OUString comment = SW_RES(UNDO_BASE + eUndoId);
                 if (pRewriter)
                 {
                     comment = pRewriter->Apply(comment);
@@ -272,7 +272,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
                 // take comment of last contained action
                 // (note that this works recursively, i.e. the last contained
                 // action may be a list action created by StartUndo/EndUndo)
-                String const comment(pLastUndo->GetComment());
+                OUString const comment(pLastUndo->GetComment());
                 pListAction->SetComment(comment);
             }
             else
@@ -388,7 +388,7 @@ SwUndoId UndoManager::GetRepeatInfo(OUString *const o_pStr) const
     }
     if (o_pStr) // not repeatable -> clear comment
     {
-        *o_pStr = String();
+        *o_pStr = OUString();
     }
     return UNDO_EMPTY;
 }

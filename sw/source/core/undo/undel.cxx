@@ -516,9 +516,9 @@ static SwRewriter lcl_RewriterFromHistory(SwHistory & rHistory)
 
     for ( sal_uInt16 n = 0; n < rHistory.Count(); n++)
     {
-        String aDescr = rHistory[n]->GetDescription();
+        OUString aDescr = rHistory[n]->GetDescription();
 
-        if (aDescr.Len() > 0)
+        if (!aDescr.isEmpty())
         {
             aRewriter.AddRule(UndoArg2, aDescr);
 
@@ -552,14 +552,14 @@ static bool lcl_IsSpecialCharacter(sal_Unicode nChar)
     return false;
 }
 
-static String lcl_DenotedPortion(String rStr, xub_StrLen nStart,
+static OUString lcl_DenotedPortion(OUString rStr, xub_StrLen nStart,
                                  xub_StrLen nEnd)
 {
-    String aResult;
+    OUString aResult;
 
     if (nEnd - nStart > 0)
     {
-        sal_Unicode cLast = rStr.GetChar(nEnd - 1);
+        sal_Unicode cLast = rStr[nEnd - 1];
         if (lcl_IsSpecialCharacter(cLast))
         {
             switch(cLast)
@@ -587,7 +587,7 @@ static String lcl_DenotedPortion(String rStr, xub_StrLen nStart,
         else
         {
             aResult = SW_RESSTR(STR_START_QUOTE);
-            aResult += rStr.Copy(nStart, nEnd - nStart);
+            aResult += rStr.copy(nStart, nEnd - nStart);
             aResult += SW_RESSTR(STR_END_QUOTE);
         }
     }
@@ -652,7 +652,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
             aRewriter.AddRule(UndoArg2, sTableName);
             aRewriter.AddRule(UndoArg3, SW_RESSTR(STR_END_QUOTE));
 
-            String sTmp = aRewriter.Apply(SW_RES(STR_TABLE_NAME));
+            OUString sTmp = aRewriter.Apply(SW_RES(STR_TABLE_NAME));
             aResult.AddRule(UndoArg1, sTmp);
         }
         else
@@ -660,7 +660,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
     }
     else
     {
-        String aStr;
+        OUString aStr;
 
         if (pSttStr != NULL && pEndStr != NULL && pSttStr->isEmpty() &&
             pEndStr->isEmpty())
@@ -685,7 +685,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
             }
         }
 
-        aStr = ShortenString(aStr, nUndoStringLength, String(SW_RES(STR_LDOTS)));
+        aStr = ShortenString(aStr, nUndoStringLength, OUString(SW_RES(STR_LDOTS)));
         if (pHistory)
         {
             SwRewriter aRewriter = lcl_RewriterFromHistory(*pHistory);

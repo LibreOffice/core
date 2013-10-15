@@ -173,9 +173,9 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         for(sal_uInt16 i=0; i < aSortList.size(); ++i)
         {
             const SwTableBox* pSource = rTbl.GetTblBox(
-                    (const String&) *aSortList[i].SORT_TXT_TBL.TBL.pSource );
+                    *aSortList[i].SORT_TXT_TBL.TBL.pSource );
             const SwTableBox* pTarget = rTbl.GetTblBox(
-                    (const String&) *aSortList[i].SORT_TXT_TBL.TBL.pTarget );
+                    *aSortList[i].SORT_TXT_TBL.TBL.pTarget );
 
             // move back
             MoveCell(&rDoc, pSource, pTarget,

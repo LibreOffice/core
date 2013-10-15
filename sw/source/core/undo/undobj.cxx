@@ -269,7 +269,7 @@ bool SwUndo::CanRepeatImpl( ::sw::RepeatContext & ) const
 
 OUString SwUndo::GetComment() const
 {
-    String aResult;
+    OUString aResult;
 
     if (bCacheComment)
     {
@@ -286,7 +286,7 @@ OUString SwUndo::GetComment() const
     }
     else
     {
-        aResult = String(SW_RES(UNDO_BASE + GetId()));
+        aResult = SW_RES(UNDO_BASE + GetId());
 
         SwRewriter aRewriter = GetRewriter();
 
@@ -958,7 +958,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     RedlineMode_t eOld = rDoc.GetRedlineMode();
     rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES));
     //#i92154# let UI know about a new redline with comment
-    if (rDoc.GetDocShell() && (pRedl->GetComment() != String()) )
+    if (rDoc.GetDocShell() && (!pRedl->GetComment().isEmpty()) )
         rDoc.GetDocShell()->Broadcast(SwRedlineHint(pRedl,SWREDLINE_INSERTED));
 
     bool const bSuccess = rDoc.AppendRedline( pRedl, true );

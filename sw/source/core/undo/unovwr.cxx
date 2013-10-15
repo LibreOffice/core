@@ -308,12 +308,12 @@ SwRewriter SwUndoOverwrite::GetRewriter() const
 {
     SwRewriter aResult;
 
-    String aString;
+    OUString aString;
 
-    aString += String(SW_RES(STR_START_QUOTE));
+    aString += SW_RES(STR_START_QUOTE);
     aString += ShortenString(aInsStr, nUndoStringLength,
-                             String(SW_RES(STR_LDOTS)));
-    aString += String(SW_RES(STR_END_QUOTE));
+                             OUString(SW_RES(STR_LDOTS)));
+    aString += SW_RES(STR_END_QUOTE);
 
     aResult.AddRule(UndoArg1, aString);
 
@@ -322,13 +322,13 @@ SwRewriter SwUndoOverwrite::GetRewriter() const
 
 struct _UndoTransliterate_Data
 {
-    String          sText;
+    OUString        sText;
     SwHistory*      pHistory;
     Sequence< sal_Int32 >*  pOffsets;
     sal_uLong           nNdIdx;
     xub_StrLen      nStart, nLen;
 
-    _UndoTransliterate_Data( sal_uLong nNd, xub_StrLen nStt, xub_StrLen nStrLen, const String& rTxt )
+    _UndoTransliterate_Data( sal_uLong nNd, xub_StrLen nStt, xub_StrLen nStrLen, const OUString& rTxt )
         : sText( rTxt ), pHistory( 0 ), pOffsets( 0 ),
         nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}

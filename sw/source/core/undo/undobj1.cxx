@@ -334,7 +334,7 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
 // #111827#
 OUString SwUndoInsLayFmt::GetComment() const
 {
-    String aResult;
+    OUString aResult;
 
     // HACK: disable caching:
     // the SfxUndoManager calls GetComment() too early: the pFrmFmt does not

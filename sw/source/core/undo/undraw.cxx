@@ -62,7 +62,7 @@ IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
 #if OSL_DEBUG_LEVEL > 1
     sal_uInt16 nId = pUndo->GetId();
     (void)nId;
-    String sComment( pUndo->GetComment() );
+    OUString sComment( pUndo->GetComment() );
 #endif
 
     if (GetIDocumentUndoRedo().DoesUndo() &&
