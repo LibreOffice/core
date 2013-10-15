@@ -64,20 +64,15 @@ struct NameWithToken
 
 typedef std::vector<Event> EventList;
 
-enum CallbackType { START_ELEMENT, END_ELEMENT, CHARACTERS, DONE, EXCEPTION };
+enum CallbackType { INVALID, START_ELEMENT, END_ELEMENT, CHARACTERS, DONE, EXCEPTION };
 
 struct Event {
-    boost::optional< OUString > msChars;
-    boost::optional< sal_Int32 > mnElementToken;
-    boost::optional< OUString > maNamespace;
-    boost::optional< OUString > maElementName;
-    boost::optional< rtl::Reference< FastAttributeList > > mpAttributes;
+    OUString msChars;
+    sal_Int32 mnElementToken;
+    OUString msNamespace;
+    OUString msElementName;
+    rtl::Reference< FastAttributeList > mxAttributes;
     CallbackType maType;
-    Event(const CallbackType& t);
-    Event(const CallbackType& t, const OUString& sChars);
-    Event(const CallbackType& t, sal_Int32 nElementToken, const OUString& aNamespace,
-            const OUString& aElementName, FastAttributeList *pAttributes);
-    ~Event();
 };
 
 // --------------------------------------------------------------------
@@ -114,6 +109,8 @@ struct Entity : public ParserData
     static const size_t mnEventListSize = 1000;
     // unique for each Entity instance:
 
+    // Number of valid events in mpProducedEvents:
+    size_t mnProducedEventsSize;
     EventList *mpProducedEvents;
     std::queue< EventList * > maPendingEvents;
     std::queue< EventList * > maUsedEvents;
@@ -150,6 +147,7 @@ struct Entity : public ParserData
     void characters( const OUString& sChars );
     void endElement();
     EventList* getEventList();
+    Event& getEvent( CallbackType aType );
 };
 
 // --------------------------------------------------------------------
@@ -193,7 +191,7 @@ public:
     inline void popEntity()                         { maEntities.pop(); }
     Entity& getEntity()                             { return maEntities.top(); }
     void parse();
-    void produce( const Event& );
+    void produce( CallbackType aType );
 
 private:
     bool consume(EventList *);
