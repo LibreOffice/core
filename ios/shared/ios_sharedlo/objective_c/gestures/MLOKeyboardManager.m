@@ -108,4 +108,11 @@ void touch_ui_hide_keyboard()
     });
 }
 
+bool touch_ui_keyboard_visible()
+{
+    // Should return info whether the soft keyboard is currently displayed,
+    // or a hardware keyboard is attached/paired.
+    return false;
+}
+
 @end
