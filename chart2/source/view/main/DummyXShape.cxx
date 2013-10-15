@@ -155,6 +155,19 @@ void DummyXShape::setParent( const uno::Reference< uno::XInterface >& xParent )
     mxParent = xParent;
 }
 
+DummyChart* DummyXShape::getRootShape()
+{
+    assert(mxParent.is());
+    DummyXShape* pParent = dynamic_cast<DummyXShape*>(mxParent.get());
+    assert(pParent);
+    return pParent->getRootShape();
+}
+
+DummyChart* DummyChart::getRootShape()
+{
+    return this;
+}
+
 uno::Any DummyXShapes::queryInterface( const uno::Type& rType )
     throw(uno::RuntimeException)
 {

@@ -32,6 +32,10 @@ namespace chart {
 
 namespace dummy {
 
+class DummyChart;
+
+struct OpenglContext;
+
 class DummyXShape : public cppu::WeakImplHelper5<
                     ::com::sun::star::drawing::XShape,
                     com::sun::star::beans::XPropertySet,
@@ -72,6 +76,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
 
+    virtual DummyChart* getRootShape();
+
 private:
     OUString maName;
     com::sun::star::awt::Point maPosition;
@@ -80,6 +86,18 @@ private:
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > mxParent;
 
 };
+
+class DummyChart : public DummyXShape
+{
+public:
+    virtual DummyChart* getRootShape();
+
+    OpenglContext* getGlContext() { return mpContext; }
+
+private:
+    OpenglContext* mpContext;
+};
+
 
 class DummyXShapes : public DummyXShape, public com::sun::star::drawing::XShapes
 {
