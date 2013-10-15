@@ -33,9 +33,11 @@
 
 -(void)loSelectAll:(id) sender{
 
+#if 0 // No mlo_select_all() anywhere !?
     NSLog(@"Calling mlo_select_all()");
     mlo_select_all();
     NSLog(@"mlo_select_all() returned. reshowing contextualMenu");
+#endif
     [_selectionViewController showPostSelectAll];
 }
 
