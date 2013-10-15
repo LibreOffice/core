@@ -116,6 +116,21 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
              Any aAny = makeAny( aUnicodeText );
              return aAny;
         }
+        else if(CF_DIBV5 == fetc.getClipformat())
+        {
+            // #i123407# CF_DIBV5 has priority; if the try to fetch this failed,
+            // check CF_DIB availability as an alternative
+            fetc.setClipformat(CF_DIB);
+
+            try
+            {
+                clipDataStream = getClipboardData( fetc );
+            }
+            catch( UnsupportedFlavorException& )
+            {
+                throw; // pass through, tried all possibilities
+            }
+        }
         else
             throw; // pass through exception
     }
