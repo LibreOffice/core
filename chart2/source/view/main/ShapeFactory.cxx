@@ -2127,10 +2127,11 @@ void ShapeFactory::createSeries( const uno::Reference<
     throw uno::RuntimeException();
 }
 
-void ShapeFactory::pushNextSeriesState( const uno::Reference<
+void ShapeFactory::renderSeries( const uno::Reference<
         drawing::XShapes> & ,
         const DataSeriesState& ,
-        const DataSeriesState& )
+        const DataSeriesState&,
+        double )
 {
     // unsupported for now
     // do we actually want to support this in the normal

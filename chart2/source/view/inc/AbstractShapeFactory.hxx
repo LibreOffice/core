@@ -232,10 +232,11 @@ public:
             com::sun::star::drawing::XShapes> & xTarget,
             const DataSeriesState& rSeriesState ) = 0;
 
-    virtual void pushNextSeriesState( const com::sun::star::uno::Reference<
+    virtual void renderSeries( const com::sun::star::uno::Reference<
             com::sun::star::drawing::XShapes> & xTarget,
             const DataSeriesState& rOldSeriesState,
-            const DataSeriesState& rNewSeriesState ) = 0;
+            const DataSeriesState& rNewSeriesState,
+            double nPercent ) = 0;
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
          getChartRootShape( const ::com::sun::star::uno::Reference<

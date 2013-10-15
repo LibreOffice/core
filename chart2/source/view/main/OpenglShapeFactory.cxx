@@ -288,10 +288,11 @@ void OpenglShapeFactory::createSeries( const uno::Reference<
 {
 }
 
-void OpenglShapeFactory::pushNextSeriesState( const uno::Reference<
+void OpenglShapeFactory::renderSeries( const uno::Reference<
         drawing::XShapes> & ,
         const DataSeriesState& ,
-        const DataSeriesState& )
+        const DataSeriesState&,
+        double )
 {
 }
 
