@@ -104,7 +104,7 @@ void OptimizerDialog::InitRoadmap()
         sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
         Sequence< OUString >   aNames( pNames, nCount );
-        Sequence< Any >             aValues( pValues, nCount );
+        Sequence< Any >        aValues( pValues, nCount );
 
         mxRoadmapControlModel = insertControlModel( OUString( "com.sun.star.awt.UnoControlRoadmapModel"  ),
                                                               "rdmNavi", aNames, aValues  );
@@ -118,9 +118,10 @@ void OptimizerDialog::InitRoadmap()
         InsertRoadmapItem( 3, sal_True, getString( STR_OLE_OBJECTS ), ITEM_ID_OLE_OPTIMIZATION );
         InsertRoadmapItem( 4, sal_True, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
-        OUString sBitmapPath( getPath( "BitmapPath" ) );
-        OUString sBitmap( "/minimizepresi_80.png" );
-        OUString sURL( sBitmapPath += sBitmap );
+        // Well, that's messy, but the
+        // BMP_PRESENTATION_MINIMIZER from sd module cannot be used here directly
+        // that UNO wizard dialog should be converted to ui
+        OUString sURL( "private:graphicrepository/sd/res/minimize_presi_80.png" );
 
         xPropertySet->setPropertyValue( "ImageURL", Any( sURL ) );
         xPropertySet->setPropertyValue( "Activated", Any( (sal_Bool)sal_True ) );
