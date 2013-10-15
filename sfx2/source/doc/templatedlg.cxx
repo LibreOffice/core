@@ -147,16 +147,6 @@ static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailV
     return pItem1->mnId > pItem2->mnId;
 }
 
-class TemplateManagerPage : public TabPage
-{
-    private:
-        FixedText maFixedText;
-
-    public:
-        TemplateManagerPage( Window* pParent );
-        ~TemplateManagerPage( ) { };
-};
-
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     : ModelessDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
       maTabControl(this,SfxResId(TAB_CONTROL)),
