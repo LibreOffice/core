@@ -56,9 +56,12 @@ public:
             unsigned int nClipboardID, unsigned int nFilterVersion);
     void testSharedFormulaXLS();
     void testSharedFormulaXLSGroundWater();
+    void testSharedFormulaXLSStockHistory();
+
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSGroundWater);
+    CPPUNIT_TEST(testSharedFormulaXLSStockHistory);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -97,6 +100,39 @@ void ScOpenclTest::enableOpenCL(ScDocShell* pShell)
     pShell->SetFormulaOptions(rOpt);
 }
 
+void ScOpenclTest::testSharedFormulaXLSStockHistory()
+{
+#if 1
+    ScDocShellRef xDocSh = loadDoc("stock-history.", XLS);
+
+    enableOpenCL(xDocSh);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocShellRef xDocShRes = loadDoc("stock-history.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 33; i < 44; ++i)
+    {   // Cell H34:H44 in S&P 500 (tab 1)
+        double fLibre = pDoc->GetValue(ScAddress(7, i, 1));
+        double fExcel = pDocRes->GetValue(ScAddress(7, i, 1));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, 0.0001*fExcel);
+    }
+
+    for (SCROW i = 33; i < 44; ++i)
+    {   // Cell J34:J44 in S&P 500 (tab 1)
+        double fLibre = pDoc->GetValue(ScAddress(9, i, 1));
+        double fExcel = pDocRes->GetValue(ScAddress(9, i, 1));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, 0.0001*fExcel);
+    }
+
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+#endif
+}
 
 void ScOpenclTest::testSharedFormulaXLSGroundWater()
 {
