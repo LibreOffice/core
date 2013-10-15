@@ -56,18 +56,13 @@ bool decode(
     while (begin != end) {
         sal_Unicode c = encoded[begin++];
         if (c == '&') {
-            if (encoded.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("amp;"), begin))
-            {
+            if (encoded.match("amp;", begin)) {
                 buf.append(sal_Unicode('&'));
                 begin += RTL_CONSTASCII_LENGTH("amp;");
-            } else if (encoded.matchAsciiL(
-                           RTL_CONSTASCII_STRINGPARAM("quot;"), begin))
-            {
+            } else if (encoded.match("quot;", begin)) {
                 buf.append(sal_Unicode('"'));
                 begin += RTL_CONSTASCII_LENGTH("quot;");
-            } else if (encoded.matchAsciiL(
-                           RTL_CONSTASCII_STRINGPARAM("apos;"), begin))
-            {
+            } else if (encoded.match("apos;", begin)) {
                 buf.append(sal_Unicode('\''));
                 begin += RTL_CONSTASCII_LENGTH("apos;");
             } else {
