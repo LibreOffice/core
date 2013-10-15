@@ -519,24 +519,29 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
     return 0;
 }
 
-static OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
+static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties)
 {
-    OUString sRet;
-    const PropertyValue* pProperties = rProperties.getConstArray();
-    for(int nProp = 0; nProp < rProperties.getLength(); nProp++)
+    OUString sName;
+    const PropertyValue* pPropVal = rProperties.getConstArray();
+    const PropertyValue* const pEnd = pPropVal + rProperties.getLength();
+    for( ; pPropVal != pEnd; pPropVal++ )
     {
-        if(!pProperties[nProp].Name.compareToAscii("UIName"))
+        const OUString &rName = pPropVal->Name;
+        if (rName == "UIName")
         {
-            if ( pProperties[nProp].Value >>= sRet )
-                break;
+            OUString sUIName;
+            if ( ( pPropVal->Value >>= sUIName ) && sUIName.getLength() )
+                return sUIName;
         }
-        else if(!pProperties[nProp].Name.compareToAscii("Name"))
+        else if (rName == "Name")
         {
-            if ( !sRet.getLength() )
-                pProperties[nProp].Value >>= sRet;
+            pPropVal->Value >>= sName;
         }
     }
-    return sRet;
+
+    OSL_ENSURE( false, "Filter without UIName!" );
+
+    return sName;
 }
 
 IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
