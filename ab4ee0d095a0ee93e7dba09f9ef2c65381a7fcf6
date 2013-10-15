@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAY3///g8\u003d",
+        "filename": "sd/source/ui/app/res_bmp.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-10-15T12:48:23Z",
+      "side": 1,
+      "message": "yes, it is. Added a comment for that.",
+      "parentUuid": "AAAAY3///hs\u003d",
+      "revId": "ab4ee0d095a0ee93e7dba09f9ef2c65381a7fcf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAY3///ho\u003d",
         "filename": "sd/source/ui/inc/res_bmp.hrc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2013-10-15T10:23:02Z",
       "side": 1,
       "message": "what does that \"free\" mean?",
+      "revId": "ab4ee0d095a0ee93e7dba09f9ef2c65381a7fcf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///go\u003d",
+        "filename": "sd/source/ui/inc/res_bmp.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-10-15T12:48:23Z",
+      "side": 1,
+      "message": "that mean: between 592 (last used) and 600 (which i used) there are 7 free numbers.",
+      "parentUuid": "AAAAY3///ho\u003d",
       "revId": "ab4ee0d095a0ee93e7dba09f9ef2c65381a7fcf6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
