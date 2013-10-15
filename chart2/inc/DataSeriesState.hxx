@@ -20,11 +20,13 @@
 
 namespace chart {
 
-class DataSeries
+class DataSequence
 {
 public:
     typedef mdds::multi_type_vector<mdds::mtv::element_block_func> DataSeriesType;
 
+    // used for fast iteration through data series
+    // allows to easily skip empty data ranges
     DataSeriesType getDataSeries();
 
     size_t size();
@@ -43,7 +45,11 @@ struct DataSeriesProperties
 {
     typedef std::map< OUString, com::sun::star::uno::Any > PropertyMap;
     PropertyMap aSeriesProps;
+    // we might want to switch to multi_type_vector for better memory usage
+    // hopefully this vector is empty most of the time
     std::vector< PropertyMap > aPointProps;
+
+    com::sun::star::chart::MissingValueTreatment eMissingValueTreatment;
 };
 
 struct Axis
@@ -56,10 +62,13 @@ struct Axis
 
 struct DataSeriesState
 {
-    DataSeries aXValue;
-    DataSeries aYValue;
+    // length of the data series is min(aXValue.size(), aYValue.size());
+    DataSequence aXValue;
+    DataSequence aYValue;
     DataSeriesProperties aProperties;
-    std::map<OUString, DataSeries> aMapProperties;
+    // also contains bubble chart bubble size
+    // apply values to properties with functor
+    std::map<OUString, DataSeries> aMappedProperties;
     Axis aXAxis;
     Axis aYAxis;
 };
