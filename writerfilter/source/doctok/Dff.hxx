@@ -89,8 +89,6 @@ public:
     virtual string getName() const;
 
     virtual Kind getKind();
-
-    friend class DffBlock;
 };
 
 typedef vector<DffRecord::Pointer_t> Records_t;
