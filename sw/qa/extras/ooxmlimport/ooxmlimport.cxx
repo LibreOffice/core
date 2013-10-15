@@ -141,7 +141,7 @@ public:
     void testFdo43093();
 
     CPPUNIT_TEST_SUITE(Test);
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(WNT)
     CPPUNIT_TEST(run);
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -808,6 +808,7 @@ void Test::testN775899()
 
 void Test::testN777345()
 {
+#if !defined(MACOSX)
     // The problem was that v:imagedata inside v:rect was ignored.
     uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(getShape(1), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic = xSupplier->getReplacementGraphic();
@@ -815,6 +816,7 @@ void Test::testN777345()
     // If this changes later, feel free to update it, but make sure it's not
     // the checksum of a white/transparent placeholder rectangle.
     CPPUNIT_ASSERT_EQUAL(sal_uLong(2529763117U), aGraphic.GetChecksum());
+#endif
 }
 
 void Test::testN777337()
