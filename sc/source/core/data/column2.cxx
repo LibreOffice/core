@@ -2178,6 +2178,129 @@ bool appendDouble(
     return false;
 }
 
+formula::VectorRefArray appendToNumBlock(
+    ScDocument* pDoc, sc::FormulaGroupContext& rCxt, size_t nPos,
+    size_t nLenRequested, sc::CellStoreType::iterator it, const sc::CellStoreType::iterator& itEnd )
+{
+    sc::FormulaGroupContext::NumArrayType& rNumArray = rCxt.maNumArrays.back();
+    sc::FormulaGroupContext::StrArrayType* pStrArray = NULL;
+    svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
+    size_t nLenRemain = nLenRequested - nPos;
+
+    for (; it != itEnd; ++it)
+    {
+        switch (it->type)
+        {
+            case sc::element_type_string:
+            {
+                sc::string_block::iterator itData, itDataEnd;
+                getBlockIterators<sc::string_block>(it, nLenRemain, itData, itDataEnd);
+
+                if (!pStrArray)
+                {
+                    rCxt.maStrArrays.push_back(
+                        new sc::FormulaGroupContext::StrArrayType(nLenRequested, NULL));
+                    pStrArray = &rCxt.maStrArrays.back();
+                }
+
+                for (; itData != itDataEnd; ++itData, ++nPos)
+                    (*pStrArray)[nPos] = itData->getDataIgnoreCase();
+            }
+            break;
+            case sc::element_type_edittext:
+            {
+                sc::edittext_block::iterator itData, itDataEnd;
+                getBlockIterators<sc::edittext_block>(it, nLenRemain, itData, itDataEnd);
+
+                if (!pStrArray)
+                {
+                    rCxt.maStrArrays.push_back(
+                        new sc::FormulaGroupContext::StrArrayType(nLenRequested, NULL));
+                    pStrArray = &rCxt.maStrArrays.back();
+                }
+
+                for (; itData != itDataEnd; ++itData, ++nPos)
+                {
+                    OUString aStr = ScEditUtil::GetString(**itData, pDoc);
+                    (*pStrArray)[nPos] = rPool.intern(aStr).getDataIgnoreCase();
+                }
+            }
+            break;
+            case sc::element_type_formula:
+            {
+                sc::formula_block::iterator itData, itDataEnd;
+                getBlockIterators<sc::formula_block>(it, nLenRemain, itData, itDataEnd);
+
+                for (; itData != itDataEnd; ++itData, ++nPos)
+                {
+                    ScFormulaCell& rFC = **itData;
+                    sc::FormulaResultValue aRes = rFC.GetResult();
+                    if (aRes.meType == sc::FormulaResultValue::Invalid || aRes.mnError)
+                    {
+                        if (aRes.mnError == ScErrorCodes::errCircularReference)
+                        {
+                            // This cell needs to be recalculated on next visit.
+                            rFC.SetErrCode(0);
+                            rFC.SetDirtyVar();
+                        }
+                        return formula::VectorRefArray();
+                    }
+
+                    if (aRes.meType == sc::FormulaResultValue::Value)
+                        rNumArray[nPos] = aRes.mfValue;
+                    else
+                    {
+                        if (!pStrArray)
+                        {
+                            rCxt.maStrArrays.push_back(
+                                new sc::FormulaGroupContext::StrArrayType(nLenRequested, NULL));
+                            pStrArray = &rCxt.maStrArrays.back();
+                        }
+
+                        (*pStrArray)[nPos] = aRes.maString.getDataIgnoreCase();
+                    }
+                }
+            }
+            break;
+            case sc::element_type_empty:
+            {
+                if (nLenRemain > it->size)
+                {
+                    nPos += it->size;
+                    nLenRemain -= it->size;
+                }
+                else
+                {
+                    nPos = nLenRequested;
+                    nLenRemain = 0;
+                }
+            }
+            break;
+            case sc::element_type_numeric:
+            {
+                sc::numeric_block::iterator itData, itDataEnd;
+                getBlockIterators<sc::numeric_block>(it, nLenRemain, itData, itDataEnd);
+
+                for (; itData != itDataEnd; ++itData, ++nPos)
+                    rNumArray[nPos] = *itData;
+            }
+            break;
+            default:
+                return formula::VectorRefArray();
+        }
+
+        if (!nLenRemain)
+        {
+            if (pStrArray)
+                return formula::VectorRefArray(&rNumArray[0], &(*pStrArray)[0]);
+            else
+                return formula::VectorRefArray(&rNumArray[0]);
+        }
+    }
+
+    return formula::VectorRefArray();
+}
+
 formula::VectorRefArray appendToStringBlock(
     ScDocument* pDoc, sc::FormulaGroupContext& rCxt, size_t nPos,
     size_t nLenRequested, sc::CellStoreType::iterator it, const sc::CellStoreType::iterator& itEnd )
@@ -2343,7 +2466,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( sc::FormulaGroupContext& 
 
     size_t nLenRequested = nRow2 - nRow1 + 1;
     sc::CellStoreType::position_type aPos = maCells.position(nRow1);
-    size_t nLen = aPos.first->size - aPos.second;
+    size_t nLen = aPos.first->size - aPos.second; // length of data from first block
     switch (aPos.first->type)
     {
         case sc::element_type_numeric:
@@ -2362,14 +2485,11 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( sc::FormulaGroupContext& 
             std::advance(it, aPos.second);
             rCxt.maNumArrays.push_back(new sc::FormulaGroupContext::NumArrayType(it, itEnd));
             sc::FormulaGroupContext::NumArrayType& rArray = rCxt.maNumArrays.back();
-            rArray.reserve(nLenRequested);
+            rArray.resize(nLenRequested, fNan); // allocate to the requested length.
 
             // Fill the remaining array with values from the following blocks.
             ++aPos.first;
-            if (!appendDouble(rArray, nLenRequested - nLen, aPos.first, maCells.end()))
-                return formula::VectorRefArray();
-
-            return formula::VectorRefArray(&rArray[0]);
+            return appendToNumBlock(pDocument, rCxt, nLen, nLenRequested, aPos.first, maCells.end());
         }
         break;
         case sc::element_type_formula:
