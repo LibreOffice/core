@@ -57,17 +57,6 @@ sal_uInt32 WW8LFOLevel::calcSize()
 {
     sal_uInt32 nResult = WW8LFOLevel::getSize();
 
-    if (get_fFormatting())
-    {
-        WW8ListLevel aLevel(mpParent, mnOffsetInParent + nResult);
-
-        nResult += aLevel.calcSize();
-
-        sal_uInt32 nXstSize = mpParent->getU16(mnOffsetInParent + nResult);
-
-        nResult += (nXstSize + 1) * 2;
-    }
-
     return nResult;
 }
 

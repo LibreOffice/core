@@ -595,12 +595,6 @@
         <!--WW8 resources-->
         <!--Class ListLevel-->
         <UML:Class xmi.id="ListLevel" name="ListLevel">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="resolvenoauto"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>28</UML:TaggedValue.dataValue>

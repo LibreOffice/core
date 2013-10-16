@@ -48,60 +48,11 @@ sal_uInt32 WW8List::get_listlevel_count()
 }
 
 writerfilter::Reference<Properties>::Pointer_t
-WW8List::get_listlevel(sal_uInt32 nIndex)
+WW8List::get_listlevel(sal_uInt32 /*nIndex*/)
 {
-    WW8ListTable * pListTable = dynamic_cast<WW8ListTable *>(mpParent);
-    sal_uInt32 nPayloadIndex = pListTable->getPayloadIndex(mnIndex) + nIndex;
-    sal_uInt32 nPayloadOffset = pListTable->getPayloadOffset(nPayloadIndex);
-    sal_uInt32 nPayloadSize = pListTable->getPayloadSize(nPayloadIndex);
-
-    return writerfilter::Reference<Properties>::Pointer_t
-        (new WW8ListLevel(mpParent, nPayloadOffset, nPayloadSize));
+    return writerfilter::Reference<Properties>::Pointer_t();
 }
 
-OUString WW8ListLevel::get_xst()
-{
-    sal_uInt32 nOffset = WW8ListLevel::getSize();
-
-    nOffset += get_cbGrpprlPapx();
-    nOffset += get_cbGrpprlChpx();
-
-    return getString(nOffset);
-}
-
-void WW8ListLevel::resolveNoAuto(Properties & rHandler)
-{
-    sal_uInt32 nOffset = getSize();
-
-    {
-        WW8PropertySet::Pointer_t pSet
-            (new WW8PropertySetImpl(*this, nOffset, get_cbGrpprlPapx()));
-
-        WW8PropertiesReference aRef(pSet);
-        aRef.resolve(rHandler);
-    }
-
-    nOffset += get_cbGrpprlPapx();
-
-    {
-        WW8PropertySet::Pointer_t pSet
-            (new WW8PropertySetImpl(*this, nOffset, get_cbGrpprlChpx()));
-
-        WW8PropertiesReference aRef(pSet);
-        aRef.resolve(rHandler);
-    }
-}
-
-sal_uInt32 WW8ListLevel::calcSize()
-{
-    sal_uInt32 nResult = WW8ListLevel::getSize();
-
-    nResult += get_cbGrpprlPapx();
-    nResult += get_cbGrpprlChpx();
-    nResult += 2 + getU16(nResult) * 2;
-
-    return nResult;
-}
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
