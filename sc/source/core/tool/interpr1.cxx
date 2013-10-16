@@ -3658,6 +3658,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
+                    nFuncFmtType = NUMBERFORMAT_NUMBER;
                     nVal = pMat->GetMinValue(bTextAsZero);
                     if (nMin > nVal)
                         nMin = nVal;
