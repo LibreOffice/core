@@ -27,7 +27,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	canvas \
 	chart2 \
 	cli_ure \
-	$(call gb_Helper_optional,CLUCENE,clucene) \
 	$(call gb_Helper_optional,DESKTOP,codemaker) \
 	comphelper \
 	configmgr \
