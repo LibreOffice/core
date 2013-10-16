@@ -177,10 +177,15 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     if( nOriginalDepth > 8 )
     {
         const Color aCol(COL_GREEN);
-        CPPUNIT_ASSERT_MESSAGE( "Sixth pixel is not green",
-                                pRGBStart[5].Red == vcl::unotools::toDoubleColor(aCol.GetRed()) &&
-                                pRGBStart[5].Green == vcl::unotools::toDoubleColor(aCol.GetGreen()) &&
-                                pRGBStart[5].Blue == vcl::unotools::toDoubleColor(aCol.GetBlue()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "Sixth pixel is not green (red component)",
+            vcl::unotools::toDoubleColor(aCol.GetRed()), pRGBStart[5].Red);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "Sixth pixel is not green (green component)",
+            vcl::unotools::toDoubleColor(aCol.GetGreen()), pRGBStart[5].Green);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "Sixth pixel is not green (blue component)",
+            vcl::unotools::toDoubleColor(aCol.GetBlue()), pRGBStart[5].Blue);
     }
     else if( nDepth <= 8 )
     {
