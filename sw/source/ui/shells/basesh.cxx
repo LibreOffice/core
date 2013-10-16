@@ -961,7 +961,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     const PolyPolygon aPoly( pDlg->GetPolyPolygon() );
                     rSh.SetGraphicPolygon( &aPoly );
                     if ( pDlg->IsGraphicChanged() )
-                        rSh.ReRead( aEmptyStr, aEmptyStr, &pDlg->GetGraphic());
+                        rSh.ReRead( aEmptyOUStr, aEmptyOUStr, &pDlg->GetGraphic());
                     rSh.EndAction();
                 }
             }

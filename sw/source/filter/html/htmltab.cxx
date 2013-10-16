@@ -1077,7 +1077,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
 
     pBGBrush = pParser->CreateBrushItem(
                     pOptions->bBGColor ? &(pOptions->aBGColor) : 0,
-                    pOptions->aBGImage, aEmptyStr, aEmptyStr, aEmptyStr );
+                    pOptions->aBGImage, aEmptyOUStr, aEmptyOUStr, aEmptyOUStr );
 
     pContext = 0;
     pParentContents = 0;
@@ -3295,7 +3295,7 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
         nToken = HTML_TABLEDATA_ON;
         nColl = RES_POOLCOLL_TABLE;
     }
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken, nColl, aEmptyStr, sal_True );
+    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken, nColl, aEmptyOUStr, sal_True );
     if( SVX_ADJUST_END != eAdjust )
         rParser.InsertAttr( &rParser.aAttrTab.pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST),
                             pCntxt );

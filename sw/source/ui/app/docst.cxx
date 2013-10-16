@@ -442,7 +442,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 switch(nSlot)
                 {
                     case SID_STYLE_EDIT:
-                        nRet = Edit(aParam, aEmptyStr, nFamily, nMask, sal_False, OString(), pActShell );
+                        nRet = Edit(aParam, aEmptyOUStr, nFamily, nMask, sal_False, OString(), pActShell );
                         break;
                     case SID_STYLE_DELETE:
                         nRet = Delete(aParam, nFamily);
@@ -641,7 +641,7 @@ sal_uInt16 SwDocShell::Edit(
                         respectively "".*/
                     if( pColl->IsAssignedToListLevelOfOutlineStyle())
                     {
-                        SwNumRuleItem aItem(aEmptyStr);
+                        SwNumRuleItem aItem(aEmptyOUStr);
                         pDStyle->GetCollection()->SetFmtAttr( aItem );
                         pDStyle->GetCollection()->SetAttrOutlineLevel( 0 );
                     }
@@ -1249,7 +1249,7 @@ void SwDocShell::FormatPage(
     const OString& rPageId,
     SwWrtShell& rActShell )
 {
-    Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, sal_False, rPageId, &rActShell);
+    Edit( rPage, aEmptyOUStr, SFX_STYLE_FAMILY_PAGE, 0, sal_False, rPageId, &rActShell);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

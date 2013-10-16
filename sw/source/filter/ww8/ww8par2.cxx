@@ -3316,7 +3316,7 @@ void WW8TabDesc::SetNumRuleName( const OUString& rName )
 {
     sal_uInt16 nCol = GetLogicalWWCol();
     for (sal_uInt16 nSize = static_cast< sal_uInt16 >(aNumRuleNames.size()); nSize <= nCol; ++nSize)
-        aNumRuleNames.push_back(aEmptyStr);
+        aNumRuleNames.push_back(aEmptyOUStr);
     aNumRuleNames[nCol] = rName;
 }
 

@@ -77,7 +77,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
     for (sal_uInt16 i = m_pBookmarkBox->GetSelectEntryCount(); i; i-- )
         m_pBookmarkBox->RemoveEntryAt(m_pBookmarkBox->GetSelectEntryPos(i - 1));
 
-    m_pBookmarkBox->SetText(aEmptyStr);
+    m_pBookmarkBox->SetText(aEmptyOUStr);
     m_pDeleteBtn->Enable(sal_False);   // no further entries there
 
     m_pOkBtn->Enable();            // the OK handler deletes
@@ -111,7 +111,7 @@ void SwInsertBookmarkDlg::Apply()
         OUString sEntry(comphelper::string::remove(m_pBookmarkBox->GetText(),
             m_pBookmarkBox->GetMultiSelectionSeparator()));
 
-        rSh.SetBookmark( KeyCode(), sEntry, aEmptyStr );
+        rSh.SetBookmark( KeyCode(), sEntry, aEmptyOUStr );
         rReq.AppendItem( SfxStringItem( FN_INSERT_BOOKMARK, sEntry ) );
         rReq.Done();
     }

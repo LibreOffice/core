@@ -101,8 +101,8 @@ static sal_Bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
     SwTextBlocks * pBlock = ::GetGlossaries()->GetGroupDoc( rGroupName );
 
-    SvxMacro aStart(aEmptyStr, aEmptyStr);
-    SvxMacro aEnd(aEmptyStr, aEmptyStr);
+    SvxMacro aStart(aEmptyOUStr, aEmptyOUStr);
+    SvxMacro aEnd(aEmptyOUStr, aEmptyOUStr);
     SwGlossaryHdl* pGlosHdl;
 
     pGlosHdl = rSh.GetView().GetGlosHdl();

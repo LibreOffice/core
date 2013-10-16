@@ -112,7 +112,7 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const OUString& r
                     if (nCnt >= 3)
                     {
                         ::ReplacePoint(sDBName, true);
-                        SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, &rSh );
+                        SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyOUStr, 0, &rSh );
                         rFldMgr.InsertFld( aData );
                         sRet = sDBName;
                         bField = true;

@@ -1182,17 +1182,17 @@ void SwColumnPage::Update()
         }
         else
         {
-            aEd3.SetText(aEmptyStr);
-            aDistEd2.SetText(aEmptyStr);
+            aEd3.SetText(aEmptyOUStr);
+            aDistEd2.SetText(aEmptyOUStr);
         }
     }
     else
     {
-        aEd1.SetText(aEmptyStr);
-        aEd2.SetText(aEmptyStr);
-        aEd3.SetText(aEmptyStr);
-        aDistEd1.SetText(aEmptyStr);
-        aDistEd2.SetText(aEmptyStr);
+        aEd1.SetText(aEmptyOUStr);
+        aEd2.SetText(aEmptyOUStr);
+        aEd3.SetText(aEmptyOUStr);
+        aDistEd1.SetText(aEmptyOUStr);
+        aDistEd2.SetText(aEmptyOUStr);
     }
     UpdateColMgr(0);
 }

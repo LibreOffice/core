@@ -407,7 +407,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
             pGlosGroup->SetBaseURL( aTemp.GetMainURL(INetURLObject::NO_DECODE));
         }
         else
-            pGlosGroup->SetBaseURL( aEmptyStr );
+            pGlosGroup->SetBaseURL( aEmptyOUStr );
 
         sal_uInt16 nRet;
         if( pOnlyTxt )
@@ -705,8 +705,8 @@ void SwXAutoTextGroup::removeVetoableChangeListener(
 void SwXAutoTextGroup::Invalidate()
 {
     pGlossaries = 0;
-    sName = aEmptyStr;
-    m_sGroupName = aEmptyStr;
+    sName = aEmptyOUStr;
+    m_sGroupName = aEmptyOUStr;
 }
 
 OUString SwXAutoTextGroup::getImplementationName(void) throw( uno::RuntimeException )

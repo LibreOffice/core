@@ -1624,7 +1624,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
             SwFieldType* pFldType = pDoc->GetSysFldType(RES_DBNEXTSETFLD);
             pFld = new SwDBNextSetField((SwDBNextSetFieldType*)pFldType,
-                    m_pImpl->m_pProps->sPar3, aEmptyStr, aData);
+                    m_pImpl->m_pProps->sPar3, aEmptyOUStr, aData);
         }
         break;
         case SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET:
@@ -1828,7 +1828,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             SwAuthorityFieldType const type(pDoc);
             pFld = new SwAuthorityField(static_cast<SwAuthorityFieldType*>(
                         pDoc->InsertFldType(type)),
-                    aEmptyStr );
+                    aEmptyOUStr );
             if (m_pImpl->m_pProps->aPropSeq.getLength())
             {
                 uno::Any aVal;

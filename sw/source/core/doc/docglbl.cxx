@@ -277,7 +277,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         xDPS->getDocumentProperties());
                     OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
                     // the GlobalDoc is the template
-                    xDocProps->setTemplateName(aEmptyStr);
+                    xDocProps->setTemplateName(aEmptyOUStr);
                     ::util::DateTime uDT(aTmplDate.GetNanoSec(),
                         aTmplDate.GetSec(), aTmplDate.GetMin(),
                         aTmplDate.GetHour(), aTmplDate.GetDay(),

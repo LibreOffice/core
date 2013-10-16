@@ -359,8 +359,8 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
         if ( ( !IsFldEdit() || m_pSelectionLB->GetEntryCount() ) &&
              nOld != LISTBOX_ENTRY_NOTFOUND )
         {
-            m_pNameED->SetText(aEmptyStr);
-            m_pValueED->SetText(aEmptyStr);
+            m_pNameED->SetText(aEmptyOUStr);
+            m_pValueED->SetText(aEmptyOUStr);
         }
 
         switch (nTypeId)

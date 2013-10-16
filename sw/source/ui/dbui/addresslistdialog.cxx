@@ -525,7 +525,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEnt
         }
         sTable = pThis->m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
         if(sTable == pThis->m_sConnecting)
-           pThis->m_pListLB->SetEntryText(String(), pSelect, ITEMID_TABLE - 1);
+           pThis->m_pListLB->SetEntryText(OUString(), pSelect, ITEMID_TABLE - 1);
     }
     pThis->m_pEditPB->Enable(pUserData && !pUserData->sURL.isEmpty() &&
                     SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
@@ -619,7 +619,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             if( pUserData->xColumnsSupplier.is() )
                 m_pListLB->SetEntryText(m_aDBData.sCommand, pSelect, ITEMID_TABLE - 1);
             else
-                m_pListLB->SetEntryText(String(), pSelect, ITEMID_TABLE - 1);
+                m_pListLB->SetEntryText(OUString(), pSelect, ITEMID_TABLE - 1);
         }
         OUString sCommand = m_pListLB->GetEntryText(pSelect, ITEMID_TABLE - 1);
         m_pOK->Enable(pSelect && !sCommand.isEmpty());

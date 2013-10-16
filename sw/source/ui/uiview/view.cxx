@@ -1708,7 +1708,7 @@ void SwView::ScannerEventHdl( const EventObject& /*rEventObject*/ )
                 if( !!aScanBmp )
                 {
                     Graphic aGrf(aScanBmp);
-                    m_pWrtShell->Insert( aEmptyStr, aEmptyStr, aGrf );
+                    m_pWrtShell->Insert( aEmptyOUStr, aEmptyOUStr, aGrf );
                 }
             }
         }

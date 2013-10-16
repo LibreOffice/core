@@ -204,7 +204,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
         // page
     for( i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i )
-        m_pPageTemplBox->InsertEntry(SwStyleNameMapper::GetUIName( i, aEmptyStr ));
+        m_pPageTemplBox->InsertEntry(SwStyleNameMapper::GetUIName( i, aEmptyOUStr ));
 
     sal_uInt16 nCount = pSh->GetPageDescCnt();
     for(i = 0; i < nCount; ++i)

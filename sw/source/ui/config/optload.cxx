@@ -726,11 +726,11 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
         pOpt->UseCaption() = m_pCheckLB->IsChecked((sal_uInt16)m_pCheckLB->GetModel()->GetAbsPos(pEntry));
         OUString aName( m_pCategoryBox->GetText() );
         if (aName == m_sNone)
-            pOpt->SetCategory(aEmptyStr);
+            pOpt->SetCategory(aEmptyOUStr);
         else
             pOpt->SetCategory(comphelper::string::strip(aName, ' '));
         pOpt->SetNumType((sal_uInt16)(sal_uLong)m_pFormatBox->GetEntryData(m_pFormatBox->GetSelectEntryPos()));
-        pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString(aEmptyStr) );
+        pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString(aEmptyOUStr) );
         pOpt->SetPos(m_pPosBox->GetSelectEntryPos());
         sal_uInt16 nPos = m_pLbLevel->GetSelectEntryPos();
         sal_uInt16 nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
@@ -738,7 +738,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
         pOpt->SetSeparator(m_pEdDelim->GetText());
         pOpt->SetNumSeparator( m_pNumberingSeparatorED->GetText());
         if(!m_pCharStyleLB->GetSelectEntryPos())
-            pOpt->SetCharacterStyle(aEmptyStr);
+            pOpt->SetCharacterStyle(aEmptyOUStr);
         else
             pOpt->SetCharacterStyle(m_pCharStyleLB->GetSelectEntry());
         pOpt->CopyAttributes() = m_pApplyBorderCB->IsChecked();

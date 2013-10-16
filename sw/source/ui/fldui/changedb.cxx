@@ -97,7 +97,7 @@ void SwChangeDBDlg::FillDBPopup()
     const SwDBData& rDBData = pSh->GetDBData();
     OUString sDBName(rDBData.sDataSource);
     OUString sTableName(rDBData.sCommand);
-    m_pAvailDBTLB->Select(sDBName, sTableName, aEmptyStr);
+    m_pAvailDBTLB->Select(sDBName, sTableName, aEmptyOUStr);
 
     std::vector<OUString> aAllDBNames;
 

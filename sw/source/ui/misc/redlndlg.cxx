@@ -793,7 +793,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1,
                               OUString::number(aRedlines.size()));
-            aTmpStr = aRewriter.Apply(String(SW_RES(STR_N_REDLINES)));
+            aTmpStr = aRewriter.Apply(OUString(SW_RES(STR_N_REDLINES)));
         }
 
         SwRewriter aRewriter;
@@ -896,7 +896,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, FilterChangedHdl)
     if (pFilterTP->IsAction())
         sFilterAction = pFilterTP->GetLbAction()->GetSelectEntry();
     else
-        sFilterAction = aEmptyStr;
+        sFilterAction = aEmptyOUStr;
 
     Init();
 

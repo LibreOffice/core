@@ -1230,7 +1230,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             aDBFormatData.aLocale = LanguageTag( rSh.GetCurLang() ).getLocale();
             SwDBNextSetField aNxtDBFld( (SwDBNextSetFieldType*)rSh.
                                         GetFldType( 0, RES_DBNEXTSETFLD ),
-                                        OUString("1"), aEmptyStr, aDBData );
+                                        OUString("1"), aEmptyOUStr, aDBData );
 
 
             bool bSetCrsr = true;

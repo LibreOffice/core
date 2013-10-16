@@ -742,14 +742,14 @@ namespace sw
                 if (USHRT_MAX != pFltRedline->nAutorNoPrev)
                 {
                     SwRedlineData aData(pFltRedline->eTypePrev,
-                        pFltRedline->nAutorNoPrev, pFltRedline->aStampPrev, aEmptyStr,
+                        pFltRedline->nAutorNoPrev, pFltRedline->aStampPrev, aEmptyOUStr,
                         0);
 
                     mrDoc.AppendRedline(new SwRedline(aData, aRegion), true);
                 }
 
                 SwRedlineData aData(pFltRedline->eType, pFltRedline->nAutorNo,
-                        pFltRedline->aStamp, aEmptyStr, 0);
+                        pFltRedline->aStamp, aEmptyOUStr, 0);
 
                 SwRedline *const pNewRedline(new SwRedline(aData, aRegion));
                 // the point node may be deleted in AppendRedline, so park

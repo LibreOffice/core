@@ -162,7 +162,7 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
         bRet = sal_True;
         for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
-            SwFrmFmt *pFmt = pDoc->MakeFrmFmt( aEmptyStr, pDoc->GetDfltFrmFmt());
+            SwFrmFmt *pFmt = pDoc->MakeFrmFmt( aEmptyOUStr, pDoc->GetDfltFrmFmt());
             SwColumnFrm *pTmp = new SwColumnFrm( pFmt, pCont );
             pTmp->SetMaxFtnHeight( nMax );
             pTmp->Paste( pCont );

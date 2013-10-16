@@ -264,7 +264,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         ShowAutoText(::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
     }
     else
-        ShowAutoText(aEmptyStr, aEmptyStr);
+        ShowAutoText(aEmptyOUStr, aEmptyOUStr);
     // update controls
     NameModify(m_pShortNameEdit);
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
@@ -510,8 +510,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     {
         SfxItemSet aSet( pSh->GetAttrPool(), RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
 
-        SvxMacro aStart(aEmptyStr, aEmptyStr, STARBASIC);
-        SvxMacro aEnd(aEmptyStr, aEmptyStr, STARBASIC);
+        SvxMacro aStart(aEmptyOUStr, aEmptyOUStr, STARBASIC);
+        SvxMacro aEnd(aEmptyOUStr, aEmptyOUStr, STARBASIC);
         pGlossaryHdl->GetMacros(m_pShortNameEdit->GetText(), aStart, aEnd );
 
         SvxMacroItem aItem(RES_FRMMACRO);

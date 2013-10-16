@@ -695,7 +695,7 @@ IMAGE_SETEVENT:
 
     Graphic aEmptyGrf;
     aEmptyGrf.SetDefaultType();
-    SwFrmFmt *pFlyFmt = pDoc->Insert( *pPam, sGrfNm, aEmptyStr, &aEmptyGrf,
+    SwFrmFmt *pFlyFmt = pDoc->Insert( *pPam, sGrfNm, aEmptyOUStr, &aEmptyGrf,
                                       &aFrmSet, NULL, NULL );
     SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                                   ->GetIndex()+1 ]->GetGrfNode();
@@ -1161,7 +1161,7 @@ ANCHOR_SETEVENT:
         if( bEnAnchor || bFtnAnchor || bFtnEnSymbol )
         {
             aFtnName = sHRef.copy( 1 );
-            aClass = aStrippedClass = aName = aEmptyStr;
+            aClass = aStrippedClass = aName = aEmptyOUStr;
             bHasHRef = sal_False;
         }
     }

@@ -135,7 +135,7 @@ public:
     TYPEINFO();
 
     SwNumRuleItem()
-        : SfxStringItem( RES_PARATR_NUMRULE, aEmptyStr ) {}
+        : SfxStringItem( RES_PARATR_NUMRULE, aEmptyOUStr ) {}
 
     SwNumRuleItem( const OUString& rRuleName )
         : SfxStringItem( RES_PARATR_NUMRULE, rRuleName ) {}

@@ -874,7 +874,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             SfxMedium* pOrig = pSourceShell->GetView().GetDocShell()->GetMedium();
             OUString sSourceDocumentURL(pOrig->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ));
             const SfxFilter* pSfxFlt = SwIoSystem::GetFileFilter(
-                                                    sSourceDocumentURL, ::aEmptyStr );
+                                                    sSourceDocumentURL, ::aEmptyOUStr );
             const SfxFilter* pStoreToFilter = pSfxFlt;
             SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
             const OUString* pStoreToFilterOptions = 0;
@@ -956,7 +956,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 aPrtMonDlg.Show();
 
             // Progress, to prohibit KeyInputs
-            SfxProgress aProgress(pSourrceDocSh, ::aEmptyStr, 1);
+            SfxProgress aProgress(pSourrceDocSh, ::aEmptyOUStr, 1);
 
             // lock all dispatchers
             SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst(pSourrceDocSh);

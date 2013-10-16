@@ -1154,7 +1154,7 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
                                     OUString& rNames,
                                     sal_Unicode cQuote, sal_Bool bGeneric )
 {
-    rNames = aEmptyStr;
+    rNames = aEmptyOUStr;
     const OUString& rName = rFontItem.GetFamilyName();
     sal_Bool bContainsKeyword = sal_False;
     if( !rName.isEmpty() )

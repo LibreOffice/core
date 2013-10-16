@@ -734,7 +734,7 @@ IMPL_LINK( SwView, EndScrollHdl, SwScrollbar *, pScrollbar )
         if(nPgNum)
         {
             nPgNum = 0;
-            Help::ShowQuickHelp(pScrollbar, Rectangle(), aEmptyStr, 0);
+            Help::ShowQuickHelp(pScrollbar, Rectangle(), aEmptyOUStr, 0);
         }
         Point aPos( m_aVisArea.TopLeft() );
         bool bBorder = IsDocumentBorder();

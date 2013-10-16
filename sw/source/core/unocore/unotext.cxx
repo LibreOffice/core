@@ -605,7 +605,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     if (bAbsorb && !bAttribute)
     {
-        xRange->setString(aEmptyStr);
+        xRange->setString(aEmptyOUStr);
     }
     uno::Reference< text::XTextRange > xTempRange =
         (bAttribute && bAbsorb) ? xRange : xRange->getStart();

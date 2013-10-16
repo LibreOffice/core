@@ -63,7 +63,7 @@ SW_DLLPUBLIC OUString MakeSender()
         if (sToken == "COMPANY")
         {
             xub_StrLen nOldLen = sRet.getLength();
-            sRet += (String)rUserOpt.GetCompany();
+            sRet += rUserOpt.GetCompany();
             bLastLength = sRet.getLength() != nOldLen;
         }
         else if (sToken == "CR")
@@ -73,19 +73,19 @@ SW_DLLPUBLIC OUString MakeSender()
             bLastLength = true;
         }
         else if (sToken == "FIRSTNAME")
-            sRet += (String)rUserOpt.GetFirstName();
+            sRet += rUserOpt.GetFirstName();
         else if (sToken == "LASTNAME")
-            sRet += (String)rUserOpt.GetLastName();
+            sRet += rUserOpt.GetLastName();
         else if (sToken == "ADDRESS")
-            sRet += (String)rUserOpt.GetStreet();
+            sRet += rUserOpt.GetStreet();
         else if (sToken == "COUNTRY")
-            sRet += (String)rUserOpt.GetCountry();
+            sRet += rUserOpt.GetCountry();
         else if (sToken == "POSTALCODE")
-            sRet += (String)rUserOpt.GetZip();
+            sRet += rUserOpt.GetZip();
         else if (sToken == "CITY")
-            sRet += (String)rUserOpt.GetCity();
+            sRet += rUserOpt.GetCity();
         else if (sToken == "STATEPROV")
-            sRet += (String)rUserOpt.GetState();
+            sRet += rUserOpt.GetState();
         else if (!sToken.isEmpty()) //spaces
             sRet += sToken;
     }
@@ -95,7 +95,7 @@ SW_DLLPUBLIC OUString MakeSender()
 SwEnvItem::SwEnvItem() :
     SfxPoolItem(FN_ENVELOP)
 {
-    aAddrText       = aEmptyStr;
+    aAddrText       = aEmptyOUStr;
     bSend           = sal_True;
     aSendText       = MakeSender();
     lSendFromLeft   = 566; // 1 cm

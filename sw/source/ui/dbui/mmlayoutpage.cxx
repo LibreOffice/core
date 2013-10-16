@@ -382,13 +382,13 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                     }
                     else
                     {
-                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sExpression, aEmptyStr, 0, &rShell );
+                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sExpression, aEmptyOUStr, 0, &rShell );
                         aFldMgr.InsertFld( aData );
                     }
                 }
                 else
                 {
-                    SwInsertFld_Data aData(TYP_DBFLD, 0, sDB, aEmptyStr, 0, &rShell );
+                    SwInsertFld_Data aData(TYP_DBFLD, 0, sDB, aEmptyOUStr, 0, &rShell );
                     aFldMgr.InsertFld( aData );
                 }
             }
@@ -400,7 +400,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
             {
                 if(bHideEmptyParagraphs)
                 {
-                    SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, aEmptyStr, 0, &rShell );
+                    SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, aEmptyOUStr, 0, &rShell );
                     aFldMgr.InsertFld( aData );
                 }
                 sHideParagraphsExpression = "";
@@ -410,7 +410,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         }
         if(bHideEmptyParagraphs && !sHideParagraphsExpression.isEmpty())
         {
-            SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, aEmptyStr, 0, &rShell );
+            SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, aEmptyOUStr, 0, &rShell );
             aFldMgr.InsertFld( aData );
         }
     }
@@ -571,12 +571,12 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                     if(bHideEmptyParagraphs && !sHideParagraphsExpression.isEmpty())
                     {
                         OUString sComplete = "(" + sCondition + ") OR (" + sHideParagraphsExpression + ")";
-                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sComplete, aEmptyStr, 0, &rShell );
+                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sComplete, aEmptyOUStr, 0, &rShell );
                         aFldMgr.InsertFld( aData );
                     }
                     else
                     {
-                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sCondition, aEmptyStr, 0, &rShell );
+                        SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sCondition, aEmptyOUStr, 0, &rShell );
                         aFldMgr.InsertFld( aData );
                     }
                     //now the text has to be inserted
@@ -604,7 +604,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                                 }
                             }
                             sDB += sConvertedColumn;
-                            SwInsertFld_Data aData(TYP_DBFLD, 0, sDB, aEmptyStr, 0, &rShell );
+                            SwInsertFld_Data aData(TYP_DBFLD, 0, sDB, aEmptyOUStr, 0, &rShell );
                             aFldMgr.InsertFld( aData );
                         }
                         else

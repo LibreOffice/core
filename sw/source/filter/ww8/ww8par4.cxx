@@ -301,7 +301,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
                 GRAPHIC_BITMAP == aGraph.GetType()
             )
     {
-        pFmt = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr, &aGraph, pFlySet,
+        pFmt = rDoc.Insert(*pPaM, aEmptyOUStr, aEmptyOUStr, &aGraph, pFlySet,
             pGrfSet, NULL);
     }
     delete pTempSet;

@@ -1743,7 +1743,7 @@ public:
     void UpdateIndex( sal_uInt8 grpfIhdt );
 };
 
-void SwapQuotesInField(String &rFmt);
+void SwapQuotesInField(OUString &rFmt);
 
 Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize);
 std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx);

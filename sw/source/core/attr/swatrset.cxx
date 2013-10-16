@@ -241,8 +241,8 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             if( pSrcDoc != pDstDoc &&
                 SFX_ITEM_SET == GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ) )
             {
-                const String& rNm = ((SwNumRuleItem*)pItem)->GetValue();
-                if( rNm.Len() )
+                const OUString& rNm = ((SwNumRuleItem*)pItem)->GetValue();
+                if( !rNm.isEmpty() )
                 {
                     SwNumRule* pDestRule = pDstDoc->FindNumRulePtr( rNm );
                     if( pDestRule )
@@ -265,7 +265,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 {
                     const SwList* pList = pSrcDoc->getListByName( sListId );
                     // copy list style, if needed
-                    const String sDefaultListStyleName =
+                    const OUString sDefaultListStyleName =
                                             pList->GetDefaultListStyleName();
                     // #i92811#
                     const SwNumRule* pDstDocNumRule =

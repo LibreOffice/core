@@ -2155,7 +2155,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
     {
         const BitmapEx& rBmp = ViewShell::GetReplacementBitmap( false );
         Font aTmp( pOutDev->GetFont() );
-        Graphic::DrawEx( pOutDev, aEmptyStr, aTmp, rBmp, rOrg.Pos(), rOrg.SSize() );
+        Graphic::DrawEx( pOutDev, aEmptyOUStr, aTmp, rBmp, rOrg.Pos(), rOrg.SSize() );
     }
 }
 
@@ -3642,7 +3642,7 @@ void SwColumnFrm::PaintBreak( ) const
                             aFontSize, aFont, false, false );
 
                     Rectangle aTextRect;
-                    pOut->GetTextBoundRect( aTextRect, String( aBreakText ) );
+                    pOut->GetTextBoundRect( aTextRect, aBreakText );
                     long nTextOff = ( nWidth - aTextRect.GetWidth() ) / 2;
 
                     basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
@@ -7173,7 +7173,7 @@ const Font& SwPageFrm::GetEmptyPageFont()
         pEmptyPgFont = new Font;
         pEmptyPgFont->SetSize( Size( 0, 80 * 20 )); // == 80 pt
         pEmptyPgFont->SetWeight( WEIGHT_BOLD );
-        pEmptyPgFont->SetStyleName( aEmptyStr );
+        pEmptyPgFont->SetStyleName( aEmptyOUStr );
         pEmptyPgFont->SetName(OUString("Helvetica"));
         pEmptyPgFont->SetFamily( FAMILY_SWISS );
         pEmptyPgFont->SetTransparent( sal_True );

@@ -416,7 +416,7 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
             bRet = sal_False;
             if (aPasswdDlg.Execute())
             {
-                String sNewPasswd( aPasswdDlg.GetPassword() );
+                OUString sNewPasswd( aPasswdDlg.GetPassword() );
                 ::com::sun::star::uno::Sequence <sal_Int8 > aNewPasswd;
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if (SvPasswordHelper::CompareHashPassword(
@@ -591,7 +591,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
 
         bool bHidden            = true;
         bool bProtect           = true;
-        String sCondition;
+        OUString sCondition;
         bool bFirst             = true;
         bool bFileValid         = true;
         bool bFile              = true;
@@ -614,7 +614,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
             }
             else
             {
-                String sTemp(rData.GetCondition());
+                OUString sTemp(rData.GetCondition());
                 if(sCondition != sTemp)
                     bConditionValid = sal_False;
                 bHiddenValid      = (bHidden == rData.IsHidden());
@@ -687,11 +687,11 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         m_pCurName->SetText(pBox->GetEntryText(pEntry));
         m_pCurName->Enable();
         m_pDismiss->Enable();
-        String aFile = pRepr->GetFile();
-        String sSub = pRepr->GetSubRegion();
+        OUString aFile = pRepr->GetFile();
+        OUString sSub = pRepr->GetSubRegion();
         m_bSubRegionsFilled = false;
         m_pSubRegionED->Clear();
-        if(aFile.Len()||sSub.Len())
+        if( !aFile.isEmpty() || !sSub.isEmpty() )
         {
             m_pFileCB->Check(true);
             m_pFileNameED->SetText(aFile);
@@ -997,9 +997,9 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
                 pSectRepr->SetContent(sal_False);
             else
             {
-                pSectRepr->SetFile(aEmptyStr);
-                pSectRepr->SetSubRegion(aEmptyStr);
-                pSectRepr->GetSectionData().SetLinkFilePassword(aEmptyStr);
+                pSectRepr->SetFile(aEmptyOUStr);
+                pSectRepr->SetSubRegion(aEmptyOUStr);
+                pSectRepr->GetSectionData().SetLinkFilePassword(aEmptyOUStr);
             }
 
             pEntry = m_pTree->NextSelected(pEntry);
@@ -1179,8 +1179,8 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
         }
         else
         {
-            String sTmp(pEdit->GetText());
-            if(sTmp.Len())
+            OUString sTmp(pEdit->GetText());
+            if(!sTmp.isEmpty())
             {
                 SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
                 INetURLObject aAbs;
@@ -1190,7 +1190,7 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
                     aAbs, sTmp, URIHelper::GetMaybeFileHdl() );
             }
             pSectRepr->SetFile( sTmp );
-            pSectRepr->GetSectionData().SetLinkFilePassword( aEmptyStr );
+            pSectRepr->GetSectionData().SetLinkFilePassword( aEmptyOUStr );
         }
     }
     else
@@ -1272,7 +1272,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
                 if(RET_OK == aPasswdDlg.Execute())
                 {
-                    String sNewPasswd( aPasswdDlg.GetPassword() );
+                    OUString sNewPasswd( aPasswdDlg.GetPassword() );
                     if( aPasswdDlg.GetConfirm() == sNewPasswd )
                     {
                         SvPasswordHelper::GetHashPassword( pRepr->GetTempPasswd(), sNewPasswd );
@@ -1344,7 +1344,7 @@ IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit *, pEdit )
 
 IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
 {
-    String sFileName, sFilterName, sPassword;
+    OUString sFileName, sFilterName, sPassword;
     if ( _pFileDlg->GetError() == ERRCODE_NONE )
     {
         SfxMedium* pMedium = m_pDocInserter->CreateMedium();
@@ -1521,10 +1521,10 @@ short   SwInsertSectionTabDialog::Ok()
         aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_EDIT_IN_READONLY,
                     m_pSectionData->IsEditInReadonlyFlag()));
 
-        String sLinkFileName( m_pSectionData->GetLinkFileName() );
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_1, sLinkFileName.GetToken( 0, sfx2::cTokenSeparator )));
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_2, sLinkFileName.GetToken( 1, sfx2::cTokenSeparator )));
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_3, sLinkFileName.GetToken( 2, sfx2::cTokenSeparator )));
+        OUString sLinkFileName( m_pSectionData->GetLinkFileName() );
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_1, sLinkFileName.getToken( 0, sfx2::cTokenSeparator )));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_2, sLinkFileName.getToken( 1, sfx2::cTokenSeparator )));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_3, sLinkFileName.getToken( 2, sfx2::cTokenSeparator )));
         aRequest.Done();
     }
     return nRet;
@@ -1628,10 +1628,10 @@ sal_Bool SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
     {
         aSection.SetPassword(m_aNewPasswd);
     }
-    String sFileName = m_pFileNameED->GetText();
-    String sSubRegion = m_pSubRegionED->GetText();
+    OUString sFileName = m_pFileNameED->GetText();
+    OUString sSubRegion = m_pSubRegionED->GetText();
     sal_Bool bDDe = m_pDDECB->IsChecked();
-    if(m_pFileCB->IsChecked() && (sFileName.Len() || sSubRegion.Len() || bDDe))
+    if(m_pFileCB->IsChecked() && (!sFileName.isEmpty() || !sSubRegion.isEmpty() || bDDe))
     {
         OUString aLinkFile;
         if( bDDe )
@@ -1646,7 +1646,7 @@ sal_Bool SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
         }
         else
         {
-            if(sFileName.Len())
+            if(!sFileName.isEmpty())
             {
                 SfxMedium* pMedium = m_pWrtSh->GetView().GetDocShell()->GetMedium();
                 INetURLObject aAbs;
@@ -1716,7 +1716,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
             aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
             if(RET_OK == aPasswdDlg.Execute())
             {
-                String sNewPasswd( aPasswdDlg.GetPassword() );
+                OUString sNewPasswd( aPasswdDlg.GetPassword() );
                 if( aPasswdDlg.GetConfirm() == sNewPasswd )
                 {
                     SvPasswordHelper::GetHashPassword( m_aNewPasswd, sNewPasswd );
@@ -1737,8 +1737,8 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
 
 IMPL_LINK_NOARG_INLINE_START(SwInsertSectionTabPage, NameEditHdl)
 {
-    String  aName=m_pCurName->GetText();
-    GetTabDialog()->GetOKButton().Enable(aName.Len() && m_pCurName->GetEntryPos( aName ) == USHRT_MAX);
+    OUString aName = m_pCurName->GetText();
+    GetTabDialog()->GetOKButton().Enable(!aName.isEmpty() && m_pCurName->GetEntryPos( aName ) == USHRT_MAX);
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwInsertSectionTabPage, NameEditHdl)
@@ -1830,7 +1830,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
         }
     }
     else
-        m_sFilterName = m_sFilePasswd = aEmptyStr;
+        m_sFilterName = m_sFilePasswd = aEmptyOUStr;
 
     Application::SetDefDialogParent( m_pOldDefDlgParent );
     return 0;

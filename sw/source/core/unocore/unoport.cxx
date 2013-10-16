@@ -857,7 +857,7 @@ throw( uno::RuntimeException )
     if (!pUnoCrsr)
         throw uno::RuntimeException();
 
-    setString(aEmptyStr);
+    setString(aEmptyOUStr);
     pUnoCrsr->Remove(this);
 }
 

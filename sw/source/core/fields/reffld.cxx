@@ -1086,7 +1086,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
     {
         // then there are RefFields in the DescDox - so all RefFields in the SourceDoc
         // need to be converted to have unique IDs for both documents
-        _RefIdsMap aFntMap( aEmptyStr );
+        _RefIdsMap aFntMap( aEmptyOUStr );
         _RefIdsMaps aFldMap;
 
         SwIterator<SwFmtFld,SwFieldType> aIter( *this );

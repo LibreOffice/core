@@ -1613,7 +1613,7 @@ namespace
     {
         xub_StrLen              nStart;
         xub_StrLen              nLen;
-        String                  sChanged;
+        OUString                sChanged;
         Sequence< sal_Int32 >   aOffsets;
     };
 }
@@ -1853,7 +1853,7 @@ void SwTxtNode::TransliterateText(
                 // call to ReplaceTextOnly
                 swTransliterationChgData & rData =
                     aChanges[ aChanges.size() - 1 - i ];
-                nSum = nSum + rData.sChanged.Len() - rData.nLen;
+                nSum = nSum + rData.sChanged.getLength() - rData.nLen;
                 if (nSum > TXTNODE_MAX)
                 {
                     SAL_WARN("sw.core", "SwTxtNode::ReplaceTextOnly: "

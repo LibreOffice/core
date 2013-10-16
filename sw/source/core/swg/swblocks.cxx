@@ -318,7 +318,7 @@ OUString SwTextBlocks::GetLongName( sal_uInt16 n ) const
 {
     if( pImp )
         return pImp->GetLongName( n );
-    return aEmptyStr;
+    return aEmptyOUStr;
 }
 
 

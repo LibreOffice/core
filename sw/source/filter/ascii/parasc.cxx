@@ -116,7 +116,7 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
         if( pDoc->getPrinter( false ) )
             aTextFont = pDoc->getPrinter( false )->GetFontMetric( aTextFont );
         SvxFontItem aFont( aTextFont.GetFamily(), aTextFont.GetName(),
-                           aEmptyStr, aTextFont.GetPitch(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
+                           aEmptyOUStr, aTextFont.GetPitch(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
         pItemSet->Put( aFont );
         pItemSet->Put( aFont, RES_CHRATR_CJK_FONT );
         pItemSet->Put( aFont, RES_CHRATR_CTL_FONT );

@@ -1975,7 +1975,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
 
         for (aIt = aTmpSpzArray.begin(); aIt != aTmpSpzArray.end(); ++aIt)
         {
-            const String aString = (*aIt)->GetName();
+            const OUString aString = (*aIt)->GetName();
 
             /* rFmt is not a vaild successor or predecessor of
                itself */

@@ -89,7 +89,7 @@ namespace
 
         virtual void Update( Graphic& aGraphic )
         {
-            m_pShell->ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &aGraphic);
+            m_pShell->ReRead(aEmptyOUStr, aEmptyOUStr, (const Graphic*) &aGraphic);
         }
     };
 }
@@ -160,7 +160,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     aCrop.SetBottom( MM100_TO_TWIP( aScaledCropedRectangle.Bottom() ));
 
                     Graphic aCompressedGraphic( aDialog.GetCompressedGraphic() );
-                    rSh.ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &aCompressedGraphic);
+                    rSh.ReRead(aEmptyOUStr, aEmptyOUStr, (const Graphic*) &aCompressedGraphic);
 
                     rSh.SetAttr(aCrop);
 
@@ -570,7 +570,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                     GraphicObject aFilterObj( *pFilterObj );
                     if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
                         SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ))
-                        GetShell().ReRead( aEmptyStr, aEmptyStr,
+                        GetShell().ReRead( aEmptyOUStr, aEmptyOUStr,
                                            &aFilterObj.GetGraphic() );
                 }
             }
@@ -786,7 +786,7 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     Graphic aGraphic = *rShell.GetGraphic();
     GraphicNativeTransform aTransform(aGraphic);
     aTransform.rotate(aRotation);
-    rShell.ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &aGraphic);
+    rShell.ReRead(aEmptyOUStr, aEmptyOUStr, (const Graphic*) &aGraphic);
 
     SwFlyFrmAttrMgr aManager(false, &rShell, rShell.IsFrmSelected() ? FRMMGR_TYPE_NONE : FRMMGR_TYPE_GRF);
     Size aSize(aManager.GetSize().Height(), aManager.GetSize().Width());

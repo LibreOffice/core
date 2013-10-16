@@ -242,7 +242,7 @@ static void PutEEPoolItem( SfxItemSet &rEEItemSet,
         {
             const SvxBrushItem& rBrushItem = (const SvxBrushItem&)rSwItem;
             rEEItemSet.Put( XFillStyleItem(XFILL_SOLID) );
-            rEEItemSet.Put( XFillColorItem(aEmptyStr,
+            rEEItemSet.Put( XFillColorItem(aEmptyOUStr,
                             rBrushItem.GetColor()) );
         }
         break;
@@ -454,7 +454,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     if( bBGColor )
     {
         aItemSet.Put( XFillStyleItem(XFILL_SOLID) );
-        aItemSet.Put( XFillColorItem(aEmptyStr, aBGColor) );
+        aItemSet.Put( XFillColorItem(aEmptyOUStr, aBGColor) );
     }
 
     // Styles parsen (funktioniert hier nur fuer Attribute, die auch
@@ -823,7 +823,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     sal_uInt32 nFrmFlags = HTML_FRMOPTS_MARQUEE;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         nFrmFlags |= HTML_FRMOPTS_MARQUEE_CSS1;
-    OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyStr, nFrmFlags );
+    OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyOUStr, nFrmFlags );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFmt, nFrmFlags, &rSdrObject );
 

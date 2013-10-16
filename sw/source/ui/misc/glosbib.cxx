@@ -273,7 +273,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     if(!m_pGroupTLB->First())
         pButton->Enable(sal_False);
     //the content must be deleted - otherwise the new handler would be called in Apply()
-    m_pNameED->SetText(aEmptyStr);
+    m_pNameED->SetText(aEmptyOUStr);
     return 0;
 }
 
@@ -294,7 +294,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
     for (OUVector_t::iterator it(m_InsertedArr.begin());
             it != m_InsertedArr.end(); ++it)
     {
-        if (String(*it) == sEntry)
+        if (*it == sEntry)
         {
             m_InsertedArr.erase(it);
             m_InsertedArr.push_back(sNewName);

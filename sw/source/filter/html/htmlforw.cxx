@@ -1077,7 +1077,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     }
     OString aEndTags;
     if( nFrmOpts != 0 )
-        aEndTags = rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyStr, nFrmOpts );
+        aEndTags = rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyOUStr, nFrmOpts );
 
     if( rHTMLWrt.bCfgOutStyles )
     {
@@ -1139,7 +1139,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                         if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0))
                             eFamily = (FontFamily)*(sal_Int16*) aTmp.getValue();
                     }
-                    SvxFontItem aItem( eFamily, aFName, aEmptyStr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
+                    SvxFontItem aItem( eFamily, aFName, aEmptyOUStr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
                     aItemSet.Put( aItem );
                 }
             }

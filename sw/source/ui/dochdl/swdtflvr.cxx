@@ -145,7 +145,7 @@ using namespace nsTransferBufferType;
 
 class SwTrnsfrDdeLink : public ::sfx2::SvBaseLink
 {
-    String sName;
+    OUString sName;
     ::sfx2::SvLinkSourceRef refObj;
     SwTransferable& rTrnsfr;
     SwDocShell* pDocShell;
@@ -471,9 +471,9 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
             if( rURL.GetMap() )
                 pImageMap = new ImageMap( *rURL.GetMap() );
             else if( !rURL.GetURL().isEmpty() )
-                pTargetURL = new INetImage( aEmptyStr, rURL.GetURL(),
+                pTargetURL = new INetImage( aEmptyOUStr, rURL.GetURL(),
                                             rURL.GetTargetFrameName(),
-                                            aEmptyStr, Size() );
+                                            aEmptyOUStr, Size() );
         }
     }
 
@@ -662,7 +662,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 // write document storage
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, sal_False );
                 // mba: no BaseURL for clipboard
-                SfxMedium aMedium( xWorkStore, String() );
+                SfxMedium aMedium( xWorkStore, OUString() );
                 bRet = pEmbObj->DoSaveObjectAs( aMedium, sal_False );
                 pEmbObj->DoSaveCompleted();
 
@@ -706,15 +706,15 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         break;
 
     case SWTRANSFER_OBJECTTYPE_HTML:
-        GetHTMLWriter( aEmptyStr, String(), xWrt );
+        GetHTMLWriter( aEmptyOUStr, OUString(), xWrt );
         break;
 
     case SWTRANSFER_OBJECTTYPE_RTF:
-        GetRTFWriter( aEmptyStr, String(), xWrt );
+        GetRTFWriter( aEmptyOUStr, OUString(), xWrt );
         break;
 
     case SWTRANSFER_OBJECTTYPE_STRING:
-        GetASCWriter( aEmptyStr, String(), xWrt );
+        GetASCWriter( aEmptyOUStr, OUString(), xWrt );
         if( xWrt.Is() )
         {
             SwAsciiOptions aAOpt;
@@ -978,7 +978,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
         {
             pTargetURL = new INetImage( sGrfNm, rURL.GetURL(),
                                         rURL.GetTargetFrameName(),
-                                        aEmptyStr, Size() );
+                                        aEmptyOUStr, Size() );
             AddFormat( SOT_FORMATSTR_ID_INET_IMAGE );
         }
     }
@@ -1667,7 +1667,7 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
         rSh.SetChgLnk( Link() );
 
         const SwPosition& rInsPos = *rSh.GetCrsr()->Start();
-        SwReader aReader( *pStream, aEmptyStr, String(), *rSh.GetCrsr() );
+        SwReader aReader( *pStream, aEmptyOUStr, OUString(), *rSh.GetCrsr() );
         rSh.SaveTblBoxCntnt( &rInsPos );
         if( IsError( aReader.Read( *pRead )) )
             nResId = ERR_CLPBRD_READ;
@@ -1753,7 +1753,7 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     if( pRead )
     {
         SwPaM &rPAM = *rSh.GetCrsr();
-        SwReader aReader( xStore, aEmptyStr, rPAM );
+        SwReader aReader( xStore, aEmptyOUStr, rPAM );
         if( !IsError( aReader.Read( *pRead )) )
             nRet = 1;
         else if( bMsg )
@@ -1919,7 +1919,7 @@ int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
             //!!! check at FileSystem - only then it make sense to test graphics !!!
             Graphic aGraphic;
             GraphicFilter &rFlt = GraphicFilter::GetGraphicFilter();
-            nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( sURL, aEmptyStr, aGraphic, &rFlt );
+            nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( sURL, aEmptyOUStr, aGraphic, &rFlt );
 
             if( nRet )
             {
@@ -1930,29 +1930,29 @@ int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
                 {
                 case SW_PASTESDR_INSERT:
                     SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-                    rSh.Insert( sURL, aEmptyStr, aGraphic );
+                    rSh.Insert( sURL, aEmptyOUStr, aGraphic );
                     break;
 
                 case SW_PASTESDR_REPLACE:
                     if( rSh.IsObjSelected() )
                     {
-                        rSh.ReplaceSdrObj( sURL, aEmptyStr, &aGraphic );
+                        rSh.ReplaceSdrObj( sURL, aEmptyOUStr, &aGraphic );
                         Point aPt( pPt ? *pPt : rSh.GetCrsrDocPos() );
                         SwTransferable::SetSelInShell( rSh, sal_True, &aPt );
                     }
                     else
-                        rSh.ReRead( sURL, aEmptyStr, &aGraphic );
+                        rSh.ReRead( sURL, aEmptyOUStr, &aGraphic );
                     break;
 
                 case SW_PASTESDR_SETATTR:
                     if( rSh.IsObjSelected() )
                         rSh.Paste( aGraphic );
                     else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
-                        rSh.ReRead( sURL, aEmptyStr, &aGraphic );
+                        rSh.ReRead( sURL, aEmptyOUStr, &aGraphic );
                     else
                     {
                         SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-                        rSh.Insert( sURL, aEmptyStr, aGraphic );
+                        rSh.Insert( sURL, aEmptyOUStr, aGraphic );
                     }
                     break;
                 default:
@@ -2064,7 +2064,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
 
     SwFieldType* pTyp = 0;
     sal_uInt16 i = 1,j;
-    String aName;
+    OUString aName;
     sal_Bool bAlreadyThere = sal_False, bDoublePaste = sal_False;
     sal_uInt16 nSize = rWrtShell.GetFldTypeCount();
     const ::utl::TransliterationWrapper& rColl = ::GetAppCmpStrIgnore();
@@ -2077,7 +2077,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             pTyp = rWrtShell.GetFldType( j );
             if( RES_DDEFLD == pTyp->Which() )
             {
-                String sTmp( ((SwDDEFieldType*)pTyp)->GetCmd() );
+                OUString sTmp( ((SwDDEFieldType*)pTyp)->GetCmd() );
                 if( rColl.isEqual( sTmp, aCmd ) &&
                     sfx2::LINKUPDATE_ALWAYS == ((SwDDEFieldType*)pTyp)->GetType() )
                 {
@@ -2120,11 +2120,11 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                  ( 1 < comphelper::string::getTokenCount(aExpand, '\n') ||
                        comphelper::string::getTokenCount(aExpand, '\t') ) )
             {
-                String sTmp( aExpand );
+                OUString sTmp( aExpand );
                 xub_StrLen nRows = comphelper::string::getTokenCount(sTmp, '\n');
                 if( nRows )
                     --nRows;
-                sTmp = sTmp.GetToken( 0, '\n' );
+                sTmp = sTmp.getToken( 0, '\n' );
                 xub_StrLen nCols = comphelper::string::getTokenCount(sTmp, '\t');
 
                 // at least one column & row must be there
@@ -2274,7 +2274,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     {
         //!!! check at FileSystem - only then it makes sense to test the graphics !!!
         GraphicFilter &rFlt = GraphicFilter::GetGraphicFilter();
-        nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( aBkmk.GetURL(), aEmptyStr,
+        nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( aBkmk.GetURL(), aEmptyOUStr,
                                             aGraphic, &rFlt );
 
         if( !nRet && SW_PASTESDR_SETATTR == nAction &&
@@ -2302,7 +2302,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         //Check and Perform rotation if needed
         lclCheckAndPerformRotation(aGraphic);
 
-        String sURL;
+        OUString sURL;
         if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
             sURL = aBkmk.GetURL();
 
@@ -2310,18 +2310,18 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         {
         case SW_PASTESDR_INSERT:
             SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-            rSh.Insert( sURL, aEmptyStr, aGraphic );
+            rSh.Insert( sURL, aEmptyOUStr, aGraphic );
         break;
 
         case SW_PASTESDR_REPLACE:
             if( rSh.IsObjSelected() )
             {
-                rSh.ReplaceSdrObj( sURL, aEmptyStr, &aGraphic );
+                rSh.ReplaceSdrObj( sURL, aEmptyOUStr, &aGraphic );
                 Point aPt( pPt ? *pPt : rSh.GetCrsrDocPos() );
                 SwTransferable::SetSelInShell( rSh, sal_True, &aPt );
             }
             else
-                rSh.ReRead( sURL, aEmptyStr, &aGraphic );
+                rSh.ReRead( sURL, aEmptyOUStr, &aGraphic );
             break;
 
         case SW_PASTESDR_SETATTR:
@@ -2340,11 +2340,11 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
             else if( rSh.IsObjSelected() )
                 rSh.Paste( aGraphic );
             else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
-                rSh.ReRead( sURL, aEmptyStr, &aGraphic );
+                rSh.ReRead( sURL, aEmptyOUStr, &aGraphic );
             else
             {
                 SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-                rSh.Insert( aBkmk.GetURL(), aEmptyStr, aGraphic );
+                rSh.Insert( aBkmk.GetURL(), aEmptyOUStr, aGraphic );
             }
             break;
         default:
@@ -2374,7 +2374,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         if( pStream != NULL  &&
             !pStream->GetError()  &&
             // mba: no BaseURL for clipboard functionality
-            aMap.Read( *pStream, IMAP_FORMAT_DETECT, String() ) == IMAP_ERR_OK &&
+            aMap.Read( *pStream, IMAP_FORMAT_DETECT, OUString() ) == IMAP_ERR_OK &&
             aMap.GetIMapObjectCount() )
         {
             SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
@@ -2476,7 +2476,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
             INetURLObject aMediaURL;
 
             aMediaURL.SetSmartURL( sFile );
-            const String aMediaURLStr( aMediaURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            const OUString aMediaURLStr( aMediaURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
             if( ::avmedia::MediaWindow::isMediaURL( aMediaURLStr ) )
             {
@@ -2490,10 +2490,10 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                 sal_Bool bIsURLFile = SwTransferable::_CheckForURLOrLNKFile( rData, sFile, &sDesc );
 
                 //Own FileFormat? --> insert, not for StarWriter/Web
-                String sFileURL = URIHelper::SmartRel2Abs(INetURLObject(), sFile, Link(), false );
+                OUString sFileURL = URIHelper::SmartRel2Abs(INetURLObject(), sFile, Link(), false );
                 const SfxFilter* pFlt = SW_PASTESDR_SETATTR == nAction
                         ? 0 : SwIoSystem::GetFileFilter(
-                        sFileURL, aEmptyStr );
+                        sFileURL, aEmptyOUStr );
                 if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
                 {
                 // and then pull up the insert-region-dialog by PostUser event
@@ -2662,7 +2662,7 @@ int SwTransferable::_PasteFileList( TransferableDataHelper& rData,
         aFileList.Count() )
     {
         sal_uInt16 nAct = bLink ? SW_PASTESDR_SETATTR : SW_PASTESDR_INSERT;
-        String sFlyNm;
+        OUString sFlyNm;
         // iterate over the filelist
         for( sal_uLong n = 0, nEnd = aFileList.Count(); n < nEnd; ++n )
         {
@@ -2681,7 +2681,7 @@ int SwTransferable::_PasteFileList( TransferableDataHelper& rData,
                 nRet = 1;
             }
         }
-        if( sFlyNm.Len() )
+        if( !sFlyNm.isEmpty() )
             rSh.GotoFly( sFlyNm );
     }
     else if( bMsg )
@@ -2850,7 +2850,7 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData
             }
             pDlg->SetObjName( pClipboard->aObjDesc.maClassName,
                                 SW_RES( nResId ) );
-            pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, aEmptyStr );
+            pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, aEmptyOUStr );
         }
     }
     else
@@ -2860,9 +2860,9 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData
                                 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc );
 
         if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_EMBED_SOURCE, nDest ))
-            pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, aEmptyStr );
+            pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, aEmptyOUStr );
         if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_LINK_SOURCE, nDest ))
-            pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, aEmptyStr );
+            pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, aEmptyOUStr );
     }
 
     if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_LINK, nDest ))
@@ -2870,7 +2870,7 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData
 
     for( sal_uInt16* pIds = aPasteSpecialIds; *pIds; ++pIds )
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
-            pDlg->Insert( *pIds, aEmptyStr );
+            pDlg->Insert( *pIds, aEmptyOUStr );
 
     sal_uLong nFormat = pDlg->GetFormat( rData.GetTransferable() );
 
@@ -2934,7 +2934,7 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
 
     for( sal_uInt16* pIds = aPasteSpecialIds; *pIds; ++pIds )
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
-            rToFill.AddClipbrdFormat( *pIds, aEmptyStr );
+            rToFill.AddClipbrdFormat( *pIds, aEmptyOUStr );
 }
 
 void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
@@ -3068,7 +3068,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         {
             pTargetURL = new INetImage( sGrfNm, rURL.GetURL(),
                                         rURL.GetTargetFrameName(),
-                                        aEmptyStr, Size() );
+                                        aEmptyOUStr, Size() );
             AddFormat( SOT_FORMATSTR_ID_INET_IMAGE );
         }
     }
@@ -3564,11 +3564,11 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
                 rSh.ResetModified();
         }
         else
-            sName.Erase();
+            sName = "";
         rSh.DoUndo( bUndo );
     }
 
-    if( sName.Len() &&
+    if( !sName.isEmpty() &&
         0 != ( pDocShell = rSh.GetDoc()->GetDocShell() ) )
     {
         // then we create our "server" and connect to it
@@ -3577,7 +3577,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
         {
             refObj->AddConnectAdvise( this );
             refObj->AddDataAdvise( this,
-                            aEmptyStr,
+                            aEmptyOUStr,
                             ADVISEMODE_NODATA | ADVISEMODE_ONLYONCE );
             nOldTimeOut = refObj->GetUpdateTimeout();
             refObj->SetUpdateTimeout( 0 );

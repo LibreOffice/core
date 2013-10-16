@@ -1132,7 +1132,7 @@ sal_Bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_u
     }
     MovePage( fnPageCurr, fnPageStart );
     SwPaM aCpyPam( *GetCrsr()->GetPoint() );
-    String sStartingPageDesc = GetPageDesc( GetCurPageDesc()).GetName();
+    OUString sStartingPageDesc = GetPageDesc( GetCurPageDesc()).GetName();
     SwPageDesc* pDesc = rToFill.FindPageDescByName( sStartingPageDesc, sal_True );
     if( pDesc )
         rToFill.ChgCurPageDesc( *pDesc );
@@ -1480,7 +1480,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
 
                     if(GRAPHIC_NONE != rGraphic.GetType() && GRAPHIC_DEFAULT != rGraphic.GetType())
                     {
-                        aSet.Put(XFillBitmapItem(String(), rGraphic));
+                        aSet.Put(XFillBitmapItem(OUString(), rGraphic));
                         aSet.Put(XFillStyleItem(XFILL_BITMAP));
                     }
                 }
@@ -1563,7 +1563,7 @@ sal_Bool SwFEShell::Paste( const Graphic &rGrf )
         SfxItemSet aSet(GetAttrPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
 
         aSet.Put(XFillStyleItem(XFILL_BITMAP));
-        aSet.Put(XFillBitmapItem(aEmptyStr, rGrf));
+        aSet.Put(XFillBitmapItem(aEmptyOUStr, rGrf));
         pView->SetAttributes(aSet, false);
     }
     return bRet;

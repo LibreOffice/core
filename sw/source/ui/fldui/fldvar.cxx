@@ -199,8 +199,8 @@ IMPL_LINK_NOARG(SwFldVarPage, TypeHdl)
         bInit = sal_True;
         if (nOld != LISTBOX_ENTRY_NOTFOUND)
         {
-            m_pNameED->SetText(aEmptyStr);
-            m_pValueED->SetText(aEmptyStr);
+            m_pNameED->SetText(aEmptyOUStr);
+            m_pValueED->SetText(aEmptyOUStr);
         }
 
         m_pValueED->SetDropEnable(false);
@@ -275,8 +275,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             {
                 if (pBox)   // only when interacting via mouse
                 {
-                    m_pNameED->SetText(aEmptyStr);
-                    m_pValueED->SetText(aEmptyStr);
+                    m_pNameED->SetText(aEmptyOUStr);
+                    m_pValueED->SetText(aEmptyOUStr);
                 }
             }
             bValue = bName = bNumFmt = bInvisible = sal_True;
@@ -348,8 +348,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             {
                 if (!IsFldEdit())
                 {
-                    m_pNameED->SetText(aEmptyStr);
-                    m_pValueED->SetText(aEmptyStr);
+                    m_pNameED->SetText(aEmptyOUStr);
+                    m_pValueED->SetText(aEmptyOUStr);
                 }
 
                 if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
@@ -497,7 +497,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 m_pValueFT->SetText( SW_RESSTR( STR_OFFSET ));
 
                 if (IsFldEdit() || pBox)    // only when interacting via mouse
-                    m_pNameED->SetText(aEmptyStr);
+                    m_pNameED->SetText(aEmptyOUStr);
 
                 if (nSelPos != 0 && nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
@@ -509,8 +509,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             break;
 
         case TYP_GETREFPAGEFLD:
-            m_pNameED->SetText(aEmptyStr);
-            m_pValueED->SetText(aEmptyStr);
+            m_pNameED->SetText(aEmptyOUStr);
+            m_pValueED->SetText(aEmptyOUStr);
             break;
     }
 
@@ -696,7 +696,7 @@ sal_uInt16 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             if (!bSpecialFmt)
             {
                 m_pNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
-                sOldNumSel = aEmptyStr;
+                sOldNumSel = aEmptyOUStr;
             }
             else
                 if (nTypeId == TYP_GETFLD || nTypeId == TYP_FORMELFLD)

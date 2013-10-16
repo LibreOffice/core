@@ -229,7 +229,7 @@ static double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
 }
 
 SwCalc::SwCalc( SwDoc& rD )
-    : aErrExpr( aEmptyStr, SwSbxValue(), 0 )
+    : aErrExpr( aEmptyOUStr, SwSbxValue(), 0 )
     , nCommandPos(0)
     , rDoc( rD )
     , pLclData( m_aSysLocale.GetLocaleDataPtr() )
@@ -326,7 +326,7 @@ SwCalc::SwCalc( SwDoc& rD )
     const SwDocStat& rDocStat = rDoc.GetDocStat();
 
     SwSbxValue nVal;
-    String sTmpStr;
+    OUString sTmpStr;
     sal_uInt16 n;
 
     for( n = 0; n < 25; ++n )
@@ -347,15 +347,15 @@ SwCalc::SwCalc( SwDoc& rD )
 
     SvtUserOptions& rUserOptions = SW_MOD()->GetUserOptions();
 
-    ((SwCalcExp*)VarTable[ aHashValue[ 11 ] ])->nValue.PutString( (String)rUserOptions.GetFirstName() );
-    ((SwCalcExp*)VarTable[ aHashValue[ 12 ] ])->nValue.PutString( (String)rUserOptions.GetLastName() );
-    ((SwCalcExp*)VarTable[ aHashValue[ 13 ] ])->nValue.PutString( (String)rUserOptions.GetID() );
+    ((SwCalcExp*)VarTable[ aHashValue[ 11 ] ])->nValue.PutString( rUserOptions.GetFirstName() );
+    ((SwCalcExp*)VarTable[ aHashValue[ 12 ] ])->nValue.PutString( rUserOptions.GetLastName() );
+    ((SwCalcExp*)VarTable[ aHashValue[ 13 ] ])->nValue.PutString( rUserOptions.GetID() );
 
     for( n = 0; n < 11; ++n )
         ((SwCalcExp*)VarTable[ aHashValue[ n + 14 ] ])->nValue.PutString(
-                                        (String)rUserOptions.GetToken( aAdrToken[ n ] ));
+                                        rUserOptions.GetToken( aAdrToken[ n ] ));
 
-    nVal.PutString( (String)rUserOptions.GetToken( aAdrToken[ 11 ] ));
+    nVal.PutString( rUserOptions.GetToken( aAdrToken[ 11 ] ));
     sTmpStr = OUString::createFromAscii(sNTypeTab[25]);
     VarTable[ aHashValue[ 25 ] ]->pNext = new SwCalcExp( sTmpStr, nVal, 0 );
 
@@ -512,17 +512,17 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
     }
 
     // At this point the "real" case variable has to be used
-    String sTmpName( rStr );
+    OUString sTmpName( rStr );
     ::ReplacePoint( sTmpName );
 
     if( !ins )
     {
         SwNewDBMgr *pMgr = rDoc.GetNewDBMgr();
 
-        String sDBName(GetDBName( sTmpName ));
-        String sSourceName(sDBName.GetToken(0, DB_DELIM));
-        String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
-        if( pMgr && sSourceName.Len() && sTableName.Len() &&
+        OUString sDBName(GetDBName( sTmpName ));
+        OUString sSourceName(sDBName.getToken(0, DB_DELIM));
+        OUString sTableName(sDBName.getToken(0, ';').getToken(1, DB_DELIM));
+        if( pMgr && !sSourceName.isEmpty() && !sTableName.isEmpty() &&
             pMgr->OpenDataSource(sSourceName, sTableName, -1, false))
         {
             OUString sColumnName( GetColumnName( sTmpName ));
@@ -580,10 +580,10 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
                             SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) ))
     {
         SwNewDBMgr *pMgr = rDoc.GetNewDBMgr();
-        String sDBName(GetDBName( sTmpName ));
-        String sSourceName(sDBName.GetToken(0, DB_DELIM));
-        String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
-        if( pMgr && sSourceName.Len() && sTableName.Len() &&
+        OUString sDBName(GetDBName( sTmpName ));
+        OUString sSourceName(sDBName.getToken(0, DB_DELIM));
+        OUString sTableName(sDBName.getToken(0, ';').getToken(1, DB_DELIM));
+        if( pMgr && !sSourceName.isEmpty() && !sTableName.isEmpty() &&
             pMgr->OpenDataSource(sSourceName, sTableName, -1, false) &&
             !pMgr->IsInMerge())
         {
@@ -656,8 +656,8 @@ SwCalcOper SwCalc::GetToken()
     {
         // Parse any token.
         ParseResult aRes = pCharClass->parseAnyToken( sCommand, nCommandPos,
-                                                      coStartFlags, aEmptyStr,
-                                                      coContFlags, aEmptyStr );
+                                                      coStartFlags, aEmptyOUStr,
+                                                      coContFlags, aEmptyOUStr );
 
         bool bSetError = true;
         sal_Int32 nRealStt = nCommandPos + aRes.LeadingWhiteSpace;
@@ -669,12 +669,12 @@ SwCalcOper SwCalc::GetToken()
         }
         else if( aRes.TokenType & KParseType::IDENTNAME )
         {
-            String aName( sCommand.copy( nRealStt,
+            OUString aName( sCommand.copy( nRealStt,
                             aRes.EndPos - nRealStt ) );
             //#101436#: The variable may contain a database name. It must not be
             // converted to lower case! Instead all further comparisons must be
             // done case-insensitive
-            String sLowerCaseName = pCharClass->lowercase( aName );
+            OUString sLowerCaseName = pCharClass->lowercase( aName );
             // catch currency symbol
             if( sLowerCaseName == sCurrSym )
             {
@@ -713,18 +713,18 @@ SwCalcOper SwCalc::GetToken()
         }
         else if ( aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING )
         {
-            nNumberValue.PutString( String( aRes.DequotedNameOrString ));
+            nNumberValue.PutString( aRes.DequotedNameOrString );
             eCurrOper = CALC_NUMBER;
             bSetError = false;
         }
         else if( aRes.TokenType & KParseType::ONE_SINGLE_CHAR )
         {
-            String aName( sCommand.copy( nRealStt,
+            OUString aName( sCommand.copy( nRealStt,
                               aRes.EndPos - nRealStt ));
-            if( 1 == aName.Len() )
+            if( 1 == aName.getLength() )
             {
                 bSetError = false;
-                sal_Unicode ch = aName.GetChar( 0 );
+                sal_Unicode ch = aName[0];
                 switch( ch )
                 {
                 case ';':
@@ -819,11 +819,11 @@ SwCalcOper SwCalc::GetToken()
         }
         else if( aRes.TokenType & KParseType::BOOLEAN )
         {
-            String aName( sCommand.copy( nRealStt,
+            OUString aName( sCommand.copy( nRealStt,
                                          aRes.EndPos - nRealStt ));
-            if( aName.Len() )
+            if( !aName.isEmpty() )
             {
-                sal_Unicode ch = aName.GetChar(0);
+                sal_Unicode ch = aName[0];
 
                 bSetError = true;
                 if ('<' == ch || '>' == ch)
@@ -833,9 +833,9 @@ SwCalcOper SwCalc::GetToken()
                     SwCalcOper eTmp2 = ('<' == ch) ? CALC_LEQ : CALC_GEQ;
                     eCurrOper = ('<' == ch) ? CALC_LES : CALC_GRE;
 
-                    if( 2 == aName.Len() && '=' == aName.GetChar(1) )
+                    if( 2 == aName.getLength() && '=' == aName[1] )
                         eCurrOper = eTmp2;
-                    else if( 1 != aName.Len() )
+                    else if( 1 != aName.getLength() )
                         bSetError = true;
                 }
             }
@@ -970,7 +970,7 @@ SwCalcOper SwCalc::GetToken()
 
         case '[':
             {
-                String aStr;
+                OUString aStr;
                 bool bIgnore = false;
                 do {
                     while( 0 != ( ch = NextCh( sCommand, nCommandPos  )) &&
@@ -986,7 +986,7 @@ SwCalcOper SwCalc::GetToken()
                     if( !bIgnore )
                         break;
 
-                    aStr.SetChar( aStr.Len() - 1, ch );
+                    aStr.SetChar( aStr.getLength() - 1, ch );
                 } while( ch );
 
                 aVarName = aStr;
@@ -1026,7 +1026,7 @@ SwCalcOper SwCalc::GetToken()
                 if( ch )
                     --nCommandPos;
 
-                String aStr( sCommand.copy( nStt, nCommandPos-nStt ));
+                OUString aStr( sCommand.copy( nStt, nCommandPos-nStt ));
                 aStr = pCharClass->lowercase( aStr );
 
                 // catch currency symbol
@@ -1482,8 +1482,8 @@ OUString SwCalc::GetDBName(const OUString& rName)
             return rName.copy( 0, nPos );
     }
     SwDBData aData = rDoc.GetDBData();
-    String sRet = aData.sDataSource;
-    sRet += DB_DELIM;
+    OUString sRet = aData.sDataSource;
+    sRet += OUString(DB_DELIM);
     sRet += aData.sCommand;
     return sRet;
 }

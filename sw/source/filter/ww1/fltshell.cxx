@@ -651,7 +651,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     SwRedlineData aData(rFltRedline.eTypePrev,
                                         rFltRedline.nAutorNoPrev,
                                         rFltRedline.aStampPrev,
-                                        aEmptyStr,
+                                        aEmptyOUStr,
                                         0
                                         );
                     pDoc->AppendRedline(new SwRedline(aData, aRegion), true);
@@ -659,7 +659,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwRedlineData aData(rFltRedline.eType,
                                     rFltRedline.nAutorNo,
                                     rFltRedline.aStamp,
-                                    aEmptyStr,
+                                    aEmptyOUStr,
                                     0
                                     );
                 pDoc->AppendRedline( new SwRedline(aData, aRegion), true );
@@ -1183,7 +1183,7 @@ SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
 SwFltShell& SwFltShell::operator << (Graphic& rGraphic)
 {
     // embedded Grafik !!
-    GetDoc().Insert(*pPaM, aEmptyStr, aEmptyStr, &rGraphic, NULL, NULL, NULL);
+    GetDoc().Insert(*pPaM, aEmptyOUStr, aEmptyOUStr, &rGraphic, NULL, NULL, NULL);
     return *this;
 }
 

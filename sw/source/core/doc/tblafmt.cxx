@@ -741,7 +741,7 @@ void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
         else
         {
             // default
-            pFmt->SetValueFormat( aEmptyStr, LANGUAGE_SYSTEM,
+            pFmt->SetValueFormat( aEmptyOUStr, LANGUAGE_SYSTEM,
                                   ::GetAppLanguage() );
         }
     }
@@ -1171,7 +1171,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
 
                 for( sal_uInt16 i = 0; i < nAnz; ++i )
                 {
-                    pNew = new SwTableAutoFmt( aEmptyStr );
+                    pNew = new SwTableAutoFmt( aEmptyOUStr );
                     bRet = pNew->Load( rStream, aVersions );
                     if( bRet )
                     {

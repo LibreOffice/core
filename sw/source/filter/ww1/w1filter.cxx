@@ -916,7 +916,7 @@ oncemore:
         case 39: // fillin command
             pField = new SwInputField(
                 (SwInputFieldType*)rOut.GetSysFldType( RES_INPUTFLD ),
-                aEmptyStr, sFormel,
+                aEmptyOUStr, sFormel,
                 INP_TXT, 0 );       // sichtbar ( geht z.Zt. nicht anders )
         break;
         case 51: // macro button
@@ -1472,7 +1472,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
         }
     }
 // nun koennen wir den font basteln: .........................
-    return SvxFontItem(eFamily, aName, aEmptyStr, ePitch, eCharSet, RES_CHRATR_FONT);
+    return SvxFontItem(eFamily, aName, aEmptyOUStr, ePitch, eCharSet, RES_CHRATR_FONT);
 }
 
 /////////////////////////////////////////////////////////////////// Dop

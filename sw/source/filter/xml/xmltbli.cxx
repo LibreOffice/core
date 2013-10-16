@@ -1570,13 +1570,13 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, bool bRelWidth2,
             pColumnDefaultCellStyleNames = new std::vector<OUString>;
             sal_uLong nCount = aColumnWidths.size() - 1;
             while( nCount-- )
-                pColumnDefaultCellStyleNames->push_back(String());
+                pColumnDefaultCellStyleNames->push_back(OUString());
         }
 
         if(pDfltCellStyleName)
             pColumnDefaultCellStyleNames->push_back(*pDfltCellStyleName);
         else
-            pColumnDefaultCellStyleNames->push_back(String());
+            pColumnDefaultCellStyleNames->push_back(OUString());
     }
 }
 

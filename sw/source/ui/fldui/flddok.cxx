@@ -352,7 +352,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
                             m_pValueED->SetText(
                                 OUString::number(nOff + 1) );
                         else
-                            m_pValueED->SetText(aEmptyStr);
+                            m_pValueED->SetText(aEmptyOUStr);
                     }
                     else
                         m_pValueED->SetText(((SwPageNumberField*)GetCurField())->GetUserString());
@@ -532,7 +532,7 @@ IMPL_LINK_NOARG(SwFldDokPage, FormatHdl)
             m_pValueFT->SetText( sNewTxt );
 
         if (sOldTxt != m_pValueFT->GetText())
-            m_pValueED->SetText( aEmptyStr );
+            m_pValueED->SetText( aEmptyOUStr );
     }
 
     return 0;
@@ -624,7 +624,7 @@ sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
         m_pLevelED->GetText() != m_pLevelED->GetSavedValue() ||
         m_pDateOffsetED->GetText() != m_pDateOffsetED->GetSavedValue())
     {
-        InsertFld( nTypeId, nSubType, aEmptyStr, aVal, nFormat, ' ', m_pNumFormatLB->IsAutomaticLanguage() );
+        InsertFld( nTypeId, nSubType, aEmptyOUStr, aVal, nFormat, ' ', m_pNumFormatLB->IsAutomaticLanguage() );
     }
 
     return sal_False;

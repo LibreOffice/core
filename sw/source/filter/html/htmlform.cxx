@@ -239,7 +239,7 @@ public:
     void ReleaseShape() { xShape = 0; }
 
     OUString& GetText() { return sText; }
-    void EraseText() { sText = aEmptyStr; }
+    void EraseText() { sText = aEmptyOUStr; }
 
     std::vector<OUString>& GetStringList() { return aStringList; }
     void EraseStringList()
@@ -2578,7 +2578,7 @@ void SwHTMLParser::InsertSelectOption()
     }
 
     sal_uInt16 nEntryCnt = pFormImpl->GetStringList().size();
-    pFormImpl->GetStringList().push_back(aEmptyStr);
+    pFormImpl->GetStringList().push_back(aEmptyOUStr);
     pFormImpl->GetValueList().push_back(aValue);
     if( bLBEntrySelected )
     {

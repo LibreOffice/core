@@ -3919,12 +3919,12 @@ void SwHTMLParser::NewPara()
 
     // Styles parsen (Class nicht beruecksichtigen. Das geht nur, solange
     // keine der CSS1-Properties der Klasse hart formatiert werden muss!!!)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang, &aDir ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             OSL_ENSURE( aClass.isEmpty() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
@@ -4054,12 +4054,12 @@ void SwHTMLParser::NewHeading( int nToken )
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken), nTxtColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang, &aDir ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             OSL_ENSURE( aClass.isEmpty() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
@@ -4162,7 +4162,7 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, sal_uInt16 nColl )
         // Diese beiden Tags werden jetzt auf die PRE-Vorlage gemappt.
         // Fuer dem Fall, dass ein CLASS angegeben ist, loeschen wir
         // es damit wir nicht die CLASS der PRE-Vorlage bekommen.
-        aClass = aEmptyStr;
+        aClass = aEmptyOUStr;
     case HTML_BLOCKQUOTE_ON:
     case HTML_BLOCKQUOTE30_ON:
     case HTML_PREFORMTXT_ON:
@@ -4188,12 +4188,12 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, sal_uInt16 nColl )
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken), nColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang, &aDir ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             OSL_ENSURE( aClass.isEmpty() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
@@ -4330,7 +4330,7 @@ void SwHTMLParser::NewDefList()
 
         // und den der DT-Vorlage des aktuellen Levels
         SvxLRSpaceItem rLRSpace =
-            pCSS1Parser->GetTxtFmtColl( RES_POOLCOLL_HTML_DD, aEmptyStr )
+            pCSS1Parser->GetTxtFmtColl( RES_POOLCOLL_HTML_DD, aEmptyOUStr )
                        ->GetLRSpace();
         nLeft = nLeft + static_cast< sal_uInt16 >(rLRSpace.GetTxtLeft());
     }
@@ -4688,7 +4688,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
             if( RES_POOLCOLL_HTML_DD == nTopColl )
             {
                 const SvxLRSpaceItem& rDTLRSpace = pCSS1Parser
-                    ->GetTxtFmtColl( RES_POOLCOLL_HTML_DT, aEmptyStr )
+                    ->GetTxtFmtColl( RES_POOLCOLL_HTML_DT, aEmptyOUStr )
                     ->GetLRSpace();
                 nLeft -= rDTLRSpace.GetTxtLeft();
                 nRight -= rDTLRSpace.GetRight();
@@ -4811,12 +4811,12 @@ void SwHTMLParser::NewCharFmt( int nToken )
 
 
     // Styles parsen (zu Class siehe auch NewPara)
-    if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang, &aDir ) )
+    if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
+        if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             OSL_ENSURE( aClass.isEmpty() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
@@ -5286,7 +5286,7 @@ void SwHTMLParser::InsertHorzRule()
 
     // ... und in einem Kontext merken
     _HTMLAttrContext *pCntxt =
-        new _HTMLAttrContext( HTML_HORZRULE, RES_POOLCOLL_HTML_HR, aEmptyStr );
+        new _HTMLAttrContext( HTML_HORZRULE, RES_POOLCOLL_HTML_HR, aEmptyOUStr );
 
     PushContext( pCntxt );
 
@@ -5457,7 +5457,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
 
     SwPostItField aPostItFld(
         (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
-        aEmptyStr, sText.makeStringAndClear(), aEmptyStr, aEmptyStr, DateTime( DateTime::SYSTEM ) );
+        aEmptyOUStr, sText.makeStringAndClear(), aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
     SwFmtFld aFmtFld( aPostItFld );
     InsertAttr( aFmtFld );
 }

@@ -94,7 +94,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                 URIHelper::GetMaybeFileHdl()));
     }
     else
-        rBlocks.SetBaseURL( aEmptyStr );
+        rBlocks.SetBaseURL( aEmptyOUStr );
 
     SwNodeIndex aDocEnd( pD->GetNodes().GetEndOfContent() );
     SwNodeIndex aStart( *aDocEnd.GetNode().StartOfSectionNode(), 1 );

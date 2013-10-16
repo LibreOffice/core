@@ -51,7 +51,7 @@ void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
     }
     else
     {
-        sPreviewZoom = aEmptyStr;
+        sPreviewZoom = aEmptyOUStr;
         SvxZoomStatusBarControl::StateChanged(nSID, eState, pState);
     }
 }

@@ -138,7 +138,7 @@ static SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
             if( p && !p->IsDefault() )
                 pStyle->PresetParent( p->GetName() );
             else
-                pStyle->PresetParent( aEmptyStr );
+                pStyle->PresetParent( aEmptyOUStr );
         }
         else
             pStyle->SetPhysical(sal_False);
@@ -174,7 +174,7 @@ static SwTxtFmtColl* lcl_FindParaFmt(  SwDoc& rDoc,
             if( pColl->DerivedFrom() && !pColl->DerivedFrom()->IsDefault() )
                 pStyle->PresetParent( pColl->DerivedFrom()->GetName() );
             else
-                pStyle->PresetParent( aEmptyStr );
+                pStyle->PresetParent( aEmptyOUStr );
 
             SwTxtFmtColl& rNext = pColl->GetNextTxtFmtColl();
             pStyle->PresetFollow(rNext.GetName());
@@ -246,7 +246,7 @@ static const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
             if(pDesc->GetFollow())
                 pStyle->PresetFollow(pDesc->GetFollow()->GetName());
             else
-                pStyle->PresetParent( aEmptyStr );
+                pStyle->PresetParent( aEmptyOUStr );
         }
         else
             pStyle->SetPhysical(sal_False);
@@ -277,7 +277,7 @@ static const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
         if(pRule)
         {
             pStyle->SetPhysical(sal_True);
-            pStyle->PresetParent( aEmptyStr );
+            pStyle->PresetParent( aEmptyOUStr );
         }
         else
             pStyle->SetPhysical(sal_False);
@@ -2036,7 +2036,7 @@ void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
 // methods for DocStyleSheetPool
 SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, sal_Bool bOrg )
 : SfxStyleSheetBasePool( rDocument.GetAttrPool() )
-, mxStyleSheet( new SwDocStyleSheet( rDocument, aEmptyStr, this, SFX_STYLE_FAMILY_CHAR, 0 ) )
+, mxStyleSheet( new SwDocStyleSheet( rDocument, aEmptyOUStr, this, SFX_STYLE_FAMILY_CHAR, 0 ) )
 , rDoc( rDocument )
 {
     bOrganizer = bOrg;
@@ -2061,8 +2061,8 @@ SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
                                                 sal_uInt16          _nMask)
 {
     mxStyleSheet->PresetName(rName);
-    mxStyleSheet->PresetParent(aEmptyStr);
-    mxStyleSheet->PresetFollow(aEmptyStr);
+    mxStyleSheet->PresetParent(aEmptyOUStr);
+    mxStyleSheet->PresetFollow(aEmptyOUStr);
     mxStyleSheet->SetMask(_nMask) ;
     mxStyleSheet->SetFamily(eFam);
     mxStyleSheet->SetPhysical(sal_True);
@@ -2389,8 +2389,8 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
 SwStyleSheetIterator::SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
                                 SfxStyleFamily eFam, sal_uInt16 n )
     : SfxStyleSheetIterator( pBase, eFam, n ),
-    mxIterSheet( new SwDocStyleSheet( pBase->GetDoc(), aEmptyStr, pBase, SFX_STYLE_FAMILY_CHAR, 0 ) ),
-    mxStyleSheet( new SwDocStyleSheet( pBase->GetDoc(), aEmptyStr, pBase, SFX_STYLE_FAMILY_CHAR, 0 ) )
+    mxIterSheet( new SwDocStyleSheet( pBase->GetDoc(), aEmptyOUStr, pBase, SFX_STYLE_FAMILY_CHAR, 0 ) ),
+    mxStyleSheet( new SwDocStyleSheet( pBase->GetDoc(), aEmptyOUStr, pBase, SFX_STYLE_FAMILY_CHAR, 0 ) )
 {
     bFirstCalled = sal_False;
     nLastPos = 0;

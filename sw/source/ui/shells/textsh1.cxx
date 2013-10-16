@@ -266,11 +266,11 @@ static short lcl_AskRedlineMode(Window *pWin)
                         BUTTONDIALOG_OKBUTTON |
                         BUTTONDIALOG_FOCUSBUTTON;
 
-    aQBox.AddButton(String(SW_RES(STR_REDLINE_ACCEPT_ALL)), RET_OK, nBtnFlags);
+    aQBox.AddButton(OUString(SW_RES(STR_REDLINE_ACCEPT_ALL)), RET_OK, nBtnFlags);
     aQBox.GetPushButton( RET_OK )->SetHelpId(HID_AUTOFORMAT_ACCEPT);
-    aQBox.AddButton(String(SW_RES(STR_REDLINE_REJECT_ALL)), RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
+    aQBox.AddButton(OUString(SW_RES(STR_REDLINE_REJECT_ALL)), RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
     aQBox.GetPushButton( RET_CANCEL )->SetHelpId(HID_AUTOFORMAT_REJECT  );
-    aQBox.AddButton(String(SW_RES(STR_REDLINE_EDIT)), 2, 0);
+    aQBox.AddButton(OUString(SW_RES(STR_REDLINE_EDIT)), 2, 0);
     aQBox.GetPushButton( 2 )->SetHelpId(HID_AUTOFORMAT_EDIT_CHG);
     aQBox.SetButtonHelpText( RET_OK, OUString() );
 
@@ -583,7 +583,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pItem )
             {
                 OUString sName = ((SfxStringItem*)pItem)->GetValue();
-                rWrtSh.SetBookmark( KeyCode(), sName, aEmptyStr );
+                rWrtSh.SetBookmark( KeyCode(), sName, aEmptyOUStr );
             }
             else
             {
@@ -760,7 +760,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
 
                 if( !bDelSel && aFldMgr.GetCurFld() && TYP_FORMELFLD == aFldMgr.GetCurTypeId() )
-                    aFldMgr.UpdateCurFld( aFldMgr.GetCurFld()->GetFormat(), aEmptyStr, sFormula );
+                    aFldMgr.UpdateCurFld( aFldMgr.GetCurFld()->GetFormat(), aEmptyOUStr, sFormula );
                 else if( !sFormula.isEmpty() )
                 {
                     if( rWrtSh.IsCrsrInTbl() )
@@ -774,7 +774,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     {
                         SvNumberFormatter* pFormatter = rWrtSh.GetNumberFormatter();
                         sal_uLong nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM);
-                        SwInsertFld_Data aData(TYP_FORMELFLD, nsSwGetSetExpType::GSE_FORMULA, aEmptyStr, sFormula, nSysNumFmt);
+                        SwInsertFld_Data aData(TYP_FORMELFLD, nsSwGetSetExpType::GSE_FORMULA, aEmptyOUStr, sFormula, nSysNumFmt);
                         aFldMgr.InsertFld(aData);
                     }
                 }

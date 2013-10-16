@@ -242,7 +242,7 @@ extern void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );
 
 bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
 {
-    return 0 == GraphicFilter::GetGraphicFilter().ImportGraphic(rGraphic, aEmptyStr, rSrc,
+    return 0 == GraphicFilter::GetGraphicFilter().ImportGraphic(rGraphic, aEmptyOUStr, rSrc,
         GRFILTER_FORMAT_DONTKNOW);
 }
 
@@ -369,7 +369,7 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
 
     aFlySet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
 
-    SwFlyFrmFmt* pFlyFmt = rDoc.Insert(*pPaM, rFileName, aEmptyStr, pGraph,
+    SwFlyFrmFmt* pFlyFmt = rDoc.Insert(*pPaM, rFileName, aEmptyOUStr, pGraph,
         &aFlySet, &rGrfSet, NULL);
 
     // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden:
@@ -397,7 +397,7 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
     if( !pFlyFmt )                          // dann eben als Graphic
     {
 
-        pFlyFmt = rDoc.Insert( *pPaM, rFileName, aEmptyStr, pGraph, &aFlySet,
+        pFlyFmt = rDoc.Insert( *pPaM, rFileName, aEmptyOUStr, pGraph, &aFlySet,
             &rGrfSet, NULL);
     }
 
@@ -663,7 +663,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
                             if (!pRet)
                             {
-                                pRet = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr,
+                                pRet = rDoc.Insert(*pPaM, aEmptyOUStr, aEmptyOUStr,
                                     &rGraph, &aAttrSet, &aGrSet, NULL );
                             }
                         }

@@ -640,7 +640,7 @@ void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
         {
             if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_DEFAULT )
             {
-                SwNumRuleItem aItem(aEmptyStr);
+                SwNumRuleItem aItem(aEmptyOUStr);
                 pDerivedTxtFmtColl->SetFmtAttr( aItem );
             }
             if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_OUTLINELEVEL, sal_False ) == SFX_ITEM_DEFAULT )

@@ -185,7 +185,7 @@ void SwDropCapsPict::InitPrinter( void )
 ****************************************************************************/
 
 
-String GetDefaultString(sal_uInt16 nChars)
+OUString GetDefaultString(sal_uInt16 nChars)
 {
     OUString aStr;
     for (sal_uInt16 i = 0; i < nChars; i++)

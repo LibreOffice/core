@@ -286,7 +286,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
             if(TOX_AUTHORITIES == eCurrentTOXType.eType)
             {
                 const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
-                                                rSh.GetFldType(RES_AUTHORITY, aEmptyStr);
+                                                rSh.GetFldType(RES_AUTHORITY, aEmptyOUStr);
                 if(pFType)
                 {
                     OUString sBrackets;
@@ -432,7 +432,7 @@ SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
         if(TOX_AUTHORITIES == eType.eType)
         {
             const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
-                                            rSh.GetFldType(RES_AUTHORITY, aEmptyStr);
+                                            rSh.GetFldType(RES_AUTHORITY, aEmptyOUStr);
             if(pFType)
             {
                 OUString sBrackets(pFType->GetPrefix());
@@ -1011,7 +1011,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         if(rDesc.GetTitle())
             m_pTitleED->SetText(*rDesc.GetTitle());
         else
-            m_pTitleED->SetText(aEmptyStr);
+            m_pTitleED->SetText(aEmptyOUStr);
         m_pTitleED->SaveValue();
     }
 
@@ -1165,7 +1165,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
             if(m_pFromFileCB->IsChecked())
                 rDesc.SetAutoMarkURL(sAutoMarkURL);
             else
-                rDesc.SetAutoMarkURL(aEmptyStr);
+                rDesc.SetAutoMarkURL(aEmptyOUStr);
         }
         break;
         case TOX_ILLUSTRATIONS:
@@ -1193,7 +1193,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
             if(m_pBracketLB->GetSelectEntryPos())
                 rDesc.SetAuthBrackets(m_pBracketLB->GetSelectEntry());
             else
-                rDesc.SetAuthBrackets(aEmptyStr);
+                rDesc.SetAuthBrackets(aEmptyOUStr);
             rDesc.SetAuthSequence(m_pSequenceCB->IsChecked());
         }
         break;
@@ -1983,7 +1983,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         {
             SwWrtShell& rSh = pTOXDlg->GetWrtShell();
             const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
-                                    rSh.GetFldType(RES_AUTHORITY, aEmptyStr);
+                                    rSh.GetFldType(RES_AUTHORITY, aEmptyOUStr);
             if(pFType)
             {
                 if(pFType->IsSortByDocument())
@@ -2546,7 +2546,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
         }
     }
     m_pMainEntryStyleLB->SelectEntry( SwStyleNameMapper::GetUIName(
-                                RES_POOLCHR_IDX_MAIN_ENTRY, aEmptyStr ));
+                                RES_POOLCHR_IDX_MAIN_ENTRY, aEmptyOUStr ));
 }
 
 OUString SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
@@ -2676,7 +2676,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 {
                     bLastWasText = true;
                     SwFormToken aTemp(TOKEN_TEXT);
-                    Control* pCtrl = InsertItem(aEmptyStr, aTemp);
+                    Control* pCtrl = InsertItem(aEmptyOUStr, aTemp);
                     if(!pSetActiveControl)
                         pSetActiveControl = pCtrl;
                 }
@@ -2706,7 +2706,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
         {
             bLastWasText = true;
             SwFormToken aTemp(TOKEN_TEXT);
-            Control* pCtrl = InsertItem(aEmptyStr, aTemp);
+            Control* pCtrl = InsertItem(aEmptyOUStr, aTemp);
             if(!pSetActiveControl)
                 pSetActiveControl = pCtrl;
         }
@@ -3598,7 +3598,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
         m_pLevelLB->RemoveEntry(nPos);
         m_pLevelLB->InsertEntry(aStr, nPos);
         m_pLevelLB->SelectEntry(aStr);
-        m_pCurrentForm->SetTemplate(nPos, aEmptyStr);
+        m_pCurrentForm->SetTemplate(nPos, aEmptyOUStr);
         Modify();
     }
     return 0;

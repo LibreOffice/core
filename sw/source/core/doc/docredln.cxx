@@ -2124,7 +2124,7 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
         {
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1, OUString::number(nRet));
-            aTmpStr = aRewriter.Apply(String(SW_RES(STR_N_REDLINES)));
+            aTmpStr = aRewriter.Apply(OUString(SW_RES(STR_N_REDLINES)));
         }
 
         SwRewriter aRewriter;
@@ -2234,7 +2234,7 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
         {
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1, OUString::number(nRet));
-            aTmpStr = aRewriter.Apply(String(SW_RES(STR_N_REDLINES)));
+            aTmpStr = aRewriter.Apply(OUString(SW_RES(STR_N_REDLINES)));
         }
 
         SwRewriter aRewriter;

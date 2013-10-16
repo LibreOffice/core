@@ -1932,7 +1932,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
 //                {
 //                    SwNodeIndex aIdx(*pIdx, 1);
 //                    SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-//                    pNoTxt->SetAlternateText(aEmptyStr);
+//                    pNoTxt->SetAlternateText(aEmptyOUStr);
 //                }
 //            }
             // New attribute Title
@@ -1943,7 +1943,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                         "unexpected type of <pFmt> --> crash" );
                 // assure that <SdrObject> instance exists.
                 GetOrCreateSdrObject( pFlyFmt );
-                pFlyFmt->GetDoc()->SetFlyFrmTitle( *(pFlyFmt), aEmptyStr );
+                pFlyFmt->GetDoc()->SetFlyFrmTitle( *(pFlyFmt), aEmptyOUStr );
             }
             // New attribute Description
             else if( FN_UNO_DESCRIPTION == pEntry->nWID )
@@ -1953,7 +1953,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                         "unexpected type of <pFmt> --> crash" );
                 // assure that <SdrObject> instance exists.
                 GetOrCreateSdrObject( pFlyFmt );
-                pFlyFmt->GetDoc()->SetFlyFrmDescription( *(pFlyFmt), aEmptyStr );
+                pFlyFmt->GetDoc()->SetFlyFrmDescription( *(pFlyFmt), aEmptyOUStr );
             }
             else
             {

@@ -273,11 +273,11 @@ void SwNumPositionTabPage::InitControls()
     if(bSameDist)
         m_pDistNumMF->SetValue(m_pDistNumMF->Normalize(aNumFmtArr[nLvl]->GetCharTextDistance()), FUNIT_TWIP);
     else
-        m_pDistNumMF->SetText(aEmptyStr);
+        m_pDistNumMF->SetText(aEmptyOUStr);
     if(bSameIndent)
         m_pIndentMF->SetValue(m_pIndentMF->Normalize(-aNumFmtArr[nLvl]->GetFirstLineOffset()), FUNIT_TWIP);
     else
-        m_pIndentMF->SetText(aEmptyStr);
+        m_pIndentMF->SetText(aEmptyOUStr);
 
     if(bSameAdjust)
     {
@@ -323,14 +323,14 @@ void SwNumPositionTabPage::InitControls()
         }
         else
         {
-            m_pListtabMF->SetText(aEmptyStr);
+            m_pListtabMF->SetText(aEmptyOUStr);
         }
     }
     else
     {
         m_pListtabFT->Enable( false );
         m_pListtabMF->Enable( false );
-        m_pListtabMF->SetText(aEmptyStr);
+        m_pListtabMF->SetText(aEmptyOUStr);
     }
 
     if ( bSameAlignAt )
@@ -342,7 +342,7 @@ void SwNumPositionTabPage::InitControls()
     }
     else
     {
-        m_pAlignedAtMF->SetText(aEmptyStr);
+        m_pAlignedAtMF->SetText(aEmptyOUStr);
     }
 
     if ( bSameIndentAt )
@@ -352,11 +352,11 @@ void SwNumPositionTabPage::InitControls()
     }
     else
     {
-        m_pIndentAtMF->SetText(aEmptyStr);
+        m_pIndentAtMF->SetText(aEmptyOUStr);
     }
 
     if(sal_True == bSetDistEmpty)
-        m_pDistBorderMF->SetText(aEmptyStr);
+        m_pDistBorderMF->SetText(aEmptyOUStr);
 
     bInInintControl = sal_False;
 }
@@ -686,7 +686,7 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
 
     SetModified();
     if(!m_pDistBorderMF->IsEnabled())
-        m_pDistBorderMF->SetText(aEmptyStr);
+        m_pDistBorderMF->SetText(aEmptyOUStr);
 
     return 0;
 }
@@ -724,7 +724,7 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
     if(bSetValue)
         m_pDistBorderMF->SetValue(m_pDistBorderMF->Normalize(nValue), FUNIT_TWIP);
     else
-        m_pDistBorderMF->SetText(aEmptyStr);
+        m_pDistBorderMF->SetText(aEmptyOUStr);
     m_pDistBorderMF->Enable(bOn || bSingleSelection||0 != pOutlineDlg);
     bLastRelative = bOn;
     return 0;

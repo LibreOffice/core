@@ -738,7 +738,7 @@ void GetWW8Writer( const OUString& rFltName, const OUString& rBaseURL, WriterRef
 #endif
 }
 
-typedef sal_uLong ( SAL_CALL *SaveOrDel )( SfxObjectShell&, SotStorage&, sal_Bool, const String& );
+typedef sal_uLong ( SAL_CALL *SaveOrDel )( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
 typedef sal_uLong ( SAL_CALL *GetSaveWarning )( SfxObjectShell& );
 
 sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const OUString& rStorageName )

@@ -477,7 +477,7 @@ int sw_CompareCellRanges(
  * @param nRow row index (0-based)
  * @return the cell name
  */
-String sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
+OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 {
 #if OSL_DEBUG_LEVEL > 0
     {

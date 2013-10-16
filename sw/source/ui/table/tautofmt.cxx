@@ -493,7 +493,7 @@ IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 
 AutoFmtPreview::AutoFmtPreview(Window* pParent) :
         Window          ( pParent ),
-        aCurData        ( aEmptyStr ),
+        aCurData        ( aEmptyOUStr ),
         aVD             ( *this ),
         aScriptedText   ( aVD ),
         bFitWidth       ( sal_False ),

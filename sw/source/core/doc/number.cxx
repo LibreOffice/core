@@ -1232,7 +1232,7 @@ namespace numfunc
     {
         delete mpFont;
 
-        mpFont = new Font( msFontname, aEmptyStr, Size( 0, 14 ) );
+        mpFont = new Font( msFontname, aEmptyOUStr, Size( 0, 14 ) );
         mpFont->SetWeight( meFontWeight );
         mpFont->SetItalic( meFontItalic );
         mpFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );

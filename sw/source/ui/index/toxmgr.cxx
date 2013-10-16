@@ -153,7 +153,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
             if(rDesc.GetPhoneticReadingOfPrimKey())
                 pCurTOXMark->SetPrimaryKeyReading( *rDesc.GetPhoneticReadingOfPrimKey() );
             else
-                pCurTOXMark->SetPrimaryKeyReading( aEmptyStr );
+                pCurTOXMark->SetPrimaryKeyReading( aEmptyOUStr );
 
             if( rDesc.GetSecKey() && !rDesc.GetSecKey()->isEmpty() )
             {
@@ -161,25 +161,25 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
                 if(rDesc.GetPhoneticReadingOfSecKey())
                     pCurTOXMark->SetSecondaryKeyReading( *rDesc.GetPhoneticReadingOfSecKey() );
                 else
-                    pCurTOXMark->SetSecondaryKeyReading( aEmptyStr );
+                    pCurTOXMark->SetSecondaryKeyReading( aEmptyOUStr );
             }
             else
             {
-                pCurTOXMark->SetSecondaryKey( aEmptyStr );
-                pCurTOXMark->SetSecondaryKeyReading( aEmptyStr );
+                pCurTOXMark->SetSecondaryKey( aEmptyOUStr );
+                pCurTOXMark->SetSecondaryKeyReading( aEmptyOUStr );
             }
         }
         else
         {
-            pCurTOXMark->SetPrimaryKey( aEmptyStr );
-            pCurTOXMark->SetPrimaryKeyReading( aEmptyStr );
-            pCurTOXMark->SetSecondaryKey( aEmptyStr );
-            pCurTOXMark->SetSecondaryKeyReading( aEmptyStr );
+            pCurTOXMark->SetPrimaryKey( aEmptyOUStr );
+            pCurTOXMark->SetPrimaryKeyReading( aEmptyOUStr );
+            pCurTOXMark->SetSecondaryKey( aEmptyOUStr );
+            pCurTOXMark->SetSecondaryKeyReading( aEmptyOUStr );
         }
         if(rDesc.GetPhoneticReadingOfAltStr())
             pCurTOXMark->SetTextReading( *rDesc.GetPhoneticReadingOfAltStr() );
         else
-            pCurTOXMark->SetTextReading( aEmptyStr );
+            pCurTOXMark->SetTextReading( aEmptyOUStr );
         pCurTOXMark->SetMainEntry(rDesc.IsMainEntry());
     }
     else
@@ -358,7 +358,7 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             if(TOX_AUTHORITIES == eCurTOXType)
             {
                 SwAuthorityFieldType* pFType = (SwAuthorityFieldType*)
-                                                pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
+                                                pSh->GetFldType(RES_AUTHORITY, aEmptyOUStr);
                 if (!pFType)
                 {
                     SwAuthorityFieldType const type(pSh->GetDoc());

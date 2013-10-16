@@ -63,7 +63,7 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     pWrtShell(0),
     pView(0),
     pBindings(pBind),
-    aAktTableName(aEmptyStr)
+    aAktTableName(aEmptyOUStr)
     , m_bDoesUndo(true)
     , m_bResetUndo(false)
     , m_bCallUndo(false)

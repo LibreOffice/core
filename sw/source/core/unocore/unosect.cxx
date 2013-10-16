@@ -1511,11 +1511,11 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         {
             if (m_pImpl->m_bIsDescriptor)
             {
-                m_pImpl->m_pProps->m_sCondition = aEmptyStr;
+                m_pImpl->m_pProps->m_sCondition = aEmptyOUStr;
             }
             else
             {
-                pSectionData->SetCondition(aEmptyStr);
+                pSectionData->SetCondition(aEmptyOUStr);
             }
         }
         break;

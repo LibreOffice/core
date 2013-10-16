@@ -501,8 +501,8 @@ sal_Bool SwGlossaryHdl::Expand( const OUString& rShortName,
     }
     else
     {
-        SvxMacro aStartMacro(aEmptyStr, aEmptyStr, STARBASIC);
-        SvxMacro aEndMacro(aEmptyStr, aEmptyStr, STARBASIC);
+        SvxMacro aStartMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
+        SvxMacro aEndMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
         GetMacros( aShortName, aStartMacro, aEndMacro, pGlossary );
 
         // StartAction must not be before HasSelection and DelRight,
@@ -546,8 +546,8 @@ bool SwGlossaryHdl::InsertGlossary(const OUString &rName)
     if (!pGlos)
         return false;
 
-    SvxMacro aStartMacro(aEmptyStr, aEmptyStr, STARBASIC);
-    SvxMacro aEndMacro(aEmptyStr, aEmptyStr, STARBASIC);
+    SvxMacro aStartMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
+    SvxMacro aEndMacro(aEmptyOUStr, aEmptyOUStr, STARBASIC);
     GetMacros( rName, aStartMacro, aEndMacro, pGlos );
 
     // StartAction must not be before HasSelection and DelRight,

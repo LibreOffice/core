@@ -176,7 +176,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
 
                 if( i >= nSize )        // not found
                 {
-                    ((String&)rFldNm) = sSrch;
+                    ((OUString&)rFldNm) = sSrch;
                     break;      // exit while loop
                 }
                 ++nNum;

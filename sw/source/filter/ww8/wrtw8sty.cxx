@@ -1221,7 +1221,7 @@ void WW8_WrPlcSepx::WriteFtnEndTxt( WW8Export& rWrt, sal_uLong nCpStt )
         {
             pTxtPos->Append( nCpStt );
             rWrt.WriteStringAsPara( rInfo.aErgoSum );
-            rWrt.WriteStringAsPara( aEmptyStr );
+            rWrt.WriteStringAsPara( aEmptyOUStr );
             nCpStt = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         }
         else if( rWrt.bWrtWW8 )
@@ -1231,7 +1231,7 @@ void WW8_WrPlcSepx::WriteFtnEndTxt( WW8Export& rWrt, sal_uLong nCpStt )
         {
             pTxtPos->Append( nCpStt );
             rWrt.WriteStringAsPara( rInfo.aQuoVadis );
-            rWrt.WriteStringAsPara( aEmptyStr );
+            rWrt.WriteStringAsPara( aEmptyOUStr );
             nCpStt = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         }
         else if( rWrt.bWrtWW8 )
@@ -1295,7 +1295,7 @@ void WW8_WrPlcSepx::OutHeaderFooter( WW8Export& rWrt, bool bHeader,
     {
         pTxtPos->Append( rCpPos );
         rWrt.WriteHeaderFooterText( rFmt, bHeader);
-        rWrt.WriteStringAsPara( aEmptyStr ); // CR ans Ende ( sonst mault WW )
+        rWrt.WriteStringAsPara( aEmptyOUStr ); // CR ans Ende ( sonst mault WW )
         rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     }
     else if ( rWrt.bWrtWW8 )
@@ -1303,8 +1303,8 @@ void WW8_WrPlcSepx::OutHeaderFooter( WW8Export& rWrt, bool bHeader,
         pTxtPos->Append( rCpPos );
         if ((bHeader? rWrt.bHasHdr : rWrt.bHasFtr) && nBreakCode!=0)
         {
-            rWrt.WriteStringAsPara( aEmptyStr ); // Empty paragraph for empty header/footer
-            rWrt.WriteStringAsPara( aEmptyStr ); // a CR that WW8 needs for end of the stream
+            rWrt.WriteStringAsPara( aEmptyOUStr ); // Empty paragraph for empty header/footer
+            rWrt.WriteStringAsPara( aEmptyOUStr ); // a CR that WW8 needs for end of the stream
             rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         }
     }
@@ -1910,7 +1910,7 @@ bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
             ++nCpEnd;
             pTxtPos->Append( nCpEnd + 1 );  // End of last Header/Footer for PlcfHdd
 
-            rWrt.WriteStringAsPara( aEmptyStr ); // CR ans Ende ( sonst mault WW )
+            rWrt.WriteStringAsPara( aEmptyOUStr ); // CR ans Ende ( sonst mault WW )
         }
         rWrt.pFldHdFt->Finish( nCpEnd, rWrt.pFib->ccpText + rWrt.pFib->ccpFtn );
         rWrt.pFib->ccpHdr = nCpEnd - nCpStart;
@@ -2195,7 +2195,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
                 }
 
                 // CR at end of one textbox text ( otherwise WW gpft :-( )
-                rWrt.WriteStringAsPara( aEmptyStr );
+                rWrt.WriteStringAsPara( aEmptyOUStr );
             }
             break;
 
@@ -2223,7 +2223,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
 
     pTxtPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
     // CR ans Ende ( sonst mault WW )
-    rWrt.WriteStringAsPara( aEmptyStr );
+    rWrt.WriteStringAsPara( aEmptyOUStr );
 
     WW8_CP nCpEnd = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     pTxtPos->Append( nCpEnd );

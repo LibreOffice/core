@@ -189,7 +189,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
 
 OUString SwTOXSortTabBase::GetURL() const
 {
-    return aEmptyStr;
+    return aEmptyOUStr;
 }
 
 void SwTOXSortTabBase::FillText( SwTxtNode& rNd, const SwIndex& rInsPos,
@@ -695,15 +695,15 @@ OUString SwTOXTable::GetURL() const
 {
     const SwNode* pNd = aTOXSources[0].pNd;
     if (!pNd)
-        return String();
+        return OUString();
 
     pNd = pNd->FindTableNode();
     if (!pNd)
-        return String();
+        return OUString();
 
     const OUString sName = ((SwTableNode*)pNd)->GetTable().GetFrmFmt()->GetName();
     if ( sName.isEmpty() )
-        return String();
+        return OUString();
 
     return "#" + sName + OUString(cMarkSeparator) + "table";
 }
@@ -719,13 +719,13 @@ SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
 
 sal_uInt16 SwTOXAuthority::GetLevel() const
 {
-    String sText(((SwAuthorityField*)m_rField.GetFld())->
+    OUString sText(((SwAuthorityField*)m_rField.GetFld())->
                         GetFieldText(AUTH_FIELD_AUTHORITY_TYPE));
     //#i18655# the level '0' is the heading level therefor the values are incremented here
     sal_uInt16 nRet = 1;
     if( pTOXIntl->IsNumeric( sText ) )
     {
-        nRet = (sal_uInt16)sText.ToInt32();
+        nRet = (sal_uInt16)sText.toInt32();
         nRet++;
     }
     //illegal values are also set to 'ARTICLE' as non-numeric values are
@@ -734,7 +734,7 @@ sal_uInt16 SwTOXAuthority::GetLevel() const
     return nRet;
 }
 
-static String lcl_GetText(SwFmtFld const& rField)
+static OUString lcl_GetText(SwFmtFld const& rField)
 {
     return rField.GetFld()->ExpandField(true);
 }
@@ -748,17 +748,17 @@ void    SwTOXAuthority::FillText( SwTxtNode& rNd,
                         const SwIndex& rInsPos, sal_uInt16 nAuthField ) const
 {
     SwAuthorityField* pField = (SwAuthorityField*)m_rField.GetFld();
-    String sText;
+    OUString sText;
     if(AUTH_FIELD_IDENTIFIER == nAuthField)
     {
         sText = lcl_GetText(m_rField);
         const SwAuthorityFieldType* pType = (const SwAuthorityFieldType*)pField->GetTyp();
         sal_Unicode cChar = pType->GetPrefix();
         if(cChar && cChar != ' ')
-            sText.Erase(0, 1);
+            sText = sText.copy(1);
         cChar = pType->GetSuffix();
         if(cChar && cChar != ' ')
-            sText.Erase(sText.Len() - 1, 1);
+            sText = sText.copy(0, sText.getLength() - 1);
     }
     else if(AUTH_FIELD_AUTHORITY_TYPE == nAuthField)
     {

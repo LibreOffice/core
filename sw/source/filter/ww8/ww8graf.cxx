@@ -206,7 +206,7 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
         rSet.Put( XLineStyleItem( XLINE_NONE ) );
     }else{                                          // sichtbar
         Color aCol( WW8TransCol( rL.lnpc ) );           // LinienFarbe
-        rSet.Put( XLineColorItem( aEmptyStr, aCol ) );
+        rSet.Put( XLineColorItem( aEmptyOUStr, aCol ) );
         rSet.Put( XLineWidthItem( SVBT16ToShort( rL.lnpw ) ) );
                                                     // LinienDicke
         if( SVBT16ToShort( rL.lnps ) >= 1
@@ -223,7 +223,7 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
             case 3: break;                      // Dash Dot
             case 4: aD.SetDots( 2 ); break;     // Dash Dot Dot
             }
-            rSet.Put( XLineDashItem( aEmptyStr, aD ) );
+            rSet.Put( XLineDashItem( aEmptyOUStr, aD ) );
         }else{
             rSet.Put( XLineStyleItem( XLINE_SOLID ) );  // noetig fuer TextBox
         }
@@ -259,7 +259,7 @@ static void SetFill( SfxItemSet& rSet, WW8_DP_FILL& rFill )
         if (nPat <= 1 || ((sizeof(nPatA)/sizeof(nPatA[0])) <= nPat))
         {
             // Solid Background or unknown
-            rSet.Put(XFillColorItem(aEmptyStr, WW8TransCol(rFill.dlpcBg)));
+            rSet.Put(XFillColorItem(aEmptyOUStr, WW8TransCol(rFill.dlpcBg)));
         }
         else
         {                                      // Brush -> Farbmischung
@@ -271,7 +271,7 @@ static void SetFill( SfxItemSet& rSet, WW8_DP_FILL& rFill )
                         + (sal_uLong)aB.GetGreen() * ( 100 - nPatA[nPat] ) ) / 100 ) );
             aB.SetBlue( (sal_uInt8)( ( (sal_uLong)aF.GetBlue() * nPatA[nPat]
                         + (sal_uLong)aB.GetBlue() * ( 100 - nPatA[nPat] ) ) / 100 ) );
-            rSet.Put( XFillColorItem( aEmptyStr, aB ) );
+            rSet.Put( XFillColorItem( aEmptyOUStr, aB ) );
         }
     }
 }
@@ -287,7 +287,7 @@ static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND& rLe,
         aPolygon.append(::basegfx::B2DPoint(100.0, 0.0));
         aPolygon.append(::basegfx::B2DPoint(200.0, 330.0));
         aPolygon.setClosed(true);
-        rSet.Put( XLineEndItem( aEmptyStr, ::basegfx::B2DPolyPolygon(aPolygon) ) );
+        rSet.Put( XLineEndItem( aEmptyOUStr, ::basegfx::B2DPolyPolygon(aPolygon) ) );
         sal_uInt16 nSiz = SVBT16ToShort( rLt.lnpw )
                         * ( ( aSB >> 2 & 0x3 ) + ( aSB >> 4 & 0x3 ) );
         if( nSiz < 220 ) nSiz = 220;
@@ -302,7 +302,7 @@ static void SetLineEndAttr( SfxItemSet& rSet, WW8_DP_LINEEND& rLe,
         aPolygon.append(::basegfx::B2DPoint(100.0, 0.0));
         aPolygon.append(::basegfx::B2DPoint(200.0, 330.0));
         aPolygon.setClosed(true);
-        rSet.Put( XLineStartItem( aEmptyStr, ::basegfx::B2DPolyPolygon(aPolygon) ) );
+        rSet.Put( XLineStartItem( aEmptyOUStr, ::basegfx::B2DPolyPolygon(aPolygon) ) );
         sal_uInt16 nSiz = SVBT16ToShort( rLt.lnpw )
                         * ( ( aEB >> 2 & 0x3 ) + ( aEB >> 4 & 0x3 ) );
         if( nSiz < 220 ) nSiz = 220;
@@ -939,7 +939,7 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
         pRet->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
         delete pTemporaryText;
 
-        mpDrawEditEngine->SetText( aEmptyStr );
+        mpDrawEditEngine->SetText( aEmptyOUStr );
         mpDrawEditEngine->SetParaAttribs(0, mpDrawEditEngine->GetEmptyItemSet());
 
         //Strip out fields, leaving the result
@@ -1157,7 +1157,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         // Vorgehen: Text loeschen = auf 1 Absatz reduzieren
         // und an diesem Absatz die Absatzattribute und Styles loeschen
         // (Empfehlung JOE)
-        mpDrawEditEngine->SetText( aEmptyStr );
+        mpDrawEditEngine->SetText( aEmptyOUStr );
         mpDrawEditEngine->SetParaAttribs(0, mpDrawEditEngine->GetEmptyItemSet());
     }
 
@@ -2954,7 +2954,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
             // as a linked graphic -
             if (GRAPHIC_NONE == eType || CanUseRemoteLink(aGrfName))
             {
-                pRetFrmFmt = rDoc.Insert(*pPaM, aGrfName, aEmptyStr, 0,
+                pRetFrmFmt = rDoc.Insert(*pPaM, aGrfName, aEmptyOUStr, 0,
                     &rFlySet, &aGrSet, NULL);
                 bDone = true;
             }
@@ -2962,7 +2962,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         if (!bDone)
         {
             const Graphic& rGraph = pGrf->GetGraphic();
-            pRetFrmFmt = rDoc.Insert(*pPaM, aEmptyStr, aEmptyStr, &rGraph,
+            pRetFrmFmt = rDoc.Insert(*pPaM, aEmptyOUStr, aEmptyOUStr, &rGraph,
                 &rFlySet, &aGrSet, NULL);
         }
     }

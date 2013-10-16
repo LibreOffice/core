@@ -1322,7 +1322,7 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
 
     SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : 0 );
 
-    SwNumRuleItem aEmptyRule( aEmptyStr );
+    SwNumRuleItem aEmptyRule( aEmptyOUStr );
     const SwNode* pOutlNd = 0;
     for( ; nStt <= nEnd; ++nStt )
     {

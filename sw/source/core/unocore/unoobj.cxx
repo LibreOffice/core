@@ -460,7 +460,7 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
     }
     if (!pRuby.get())
     {
-        pRuby.reset(new SwFmtRuby(aEmptyStr));
+        pRuby.reset(new SwFmtRuby(aEmptyOUStr));
     }
     OUString sStyle;
     SwStyleNameMapper::FillUIName(sTmp, sStyle,

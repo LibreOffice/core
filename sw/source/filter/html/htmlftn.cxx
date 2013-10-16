@@ -46,7 +46,7 @@ struct SwHTMLFootEndNote_Impl
 sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent,
                              sal_Int32 nPos )
 {
-    rPart = aEmptyStr;
+    rPart = aEmptyOUStr;
     sal_Int32 nLen = rContent.getLength();
     if( nPos >= nLen )
     {
@@ -193,7 +193,7 @@ void SwHTMLParser::InsertFootEndNote( const OUString& rName, sal_Bool bEndNote,
     pFootEndNoteImpl->sName = pFootEndNoteImpl->sName.toAsciiUpperCase();
     pFootEndNoteImpl->bEndNote = bEndNote;
     pFootEndNoteImpl->bFixed = bFixed;
-    pFootEndNoteImpl->sContent = aEmptyStr;
+    pFootEndNoteImpl->sContent = aEmptyOUStr;
 }
 
 void SwHTMLParser::FinishFootEndNote()
@@ -215,8 +215,8 @@ void SwHTMLParser::FinishFootEndNote()
         pFootEndNoteImpl->aTxtFtns.push_back( pTxtFtn );
         pFootEndNoteImpl->aNames.push_back(pFootEndNoteImpl->sName);
     }
-    pFootEndNoteImpl->sName = aEmptyStr;
-    pFootEndNoteImpl->sContent = aEmptyStr;
+    pFootEndNoteImpl->sName = aEmptyOUStr;
+    pFootEndNoteImpl->sContent = aEmptyOUStr;
     pFootEndNoteImpl->bFixed = sal_False;
 }
 

@@ -306,14 +306,14 @@ OUString SwAutoFormat::GoNextPara()
         if( aNdIdx.GetIndex() >= aEndNdIdx.GetIndex() )
         {
             bEnde = true;
-            return aEmptyStr;
+            return aEmptyOUStr;
         }
 
         aNdIdx++;
         if( aNdIdx.GetIndex() >= aEndNdIdx.GetIndex() )
         {
             bEnde = true;
-            return aEmptyStr;
+            return aEmptyOUStr;
         }
         else
             pNewNd = &aNdIdx.GetNode();
@@ -325,7 +325,7 @@ OUString SwAutoFormat::GoNextPara()
         if( pNewNd->IsEndNode() )
         {
             bEnde = true;
-            return aEmptyStr;
+            return aEmptyOUStr;
         }
         else if( pNewNd->IsTableNode() )
             aNdIdx = *pNewNd->EndOfSectionNode();
@@ -1776,7 +1776,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
         DelPrevPara();
 
         DeleteCurrentParagraph( true, false );
-        DeleteCurNxtPara( aEmptyStr );
+        DeleteCurNxtPara( aEmptyOUStr );
 
         aDelPam.DeleteMark();
         aDelPam.GetPoint()->nNode = aNdIdx.GetIndex() + 1;

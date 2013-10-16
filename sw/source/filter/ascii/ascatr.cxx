@@ -106,7 +106,7 @@ bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
             if ( pHt->HasDummyChar() && nSwPos == *pHt->GetStart() )
             {
                 bRet = true;
-                String sOut;
+                OUString sOut;
                 switch( pHt->Which() )
                 {
                 case RES_TXTATR_FIELD:
@@ -128,7 +128,7 @@ bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
                     }
                     break;
                 }
-                if( sOut.Len() )
+                if( !sOut.isEmpty() )
                     rWrt.Strm().WriteUnicodeOrByteText( sOut );
             }
             else if( nSwPos < *pHt->GetStart() )
@@ -157,10 +157,10 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     if( !nStrPos && rWrt.bExportPargraphNumbering )
     {
-        String numString( rNd.GetNumString() );
-        if (numString.Len())
+        OUString numString( rNd.GetNumString() );
+        if (!numString.isEmpty())
         {
-            numString.Append(' ');
+            numString += " ";
             rWrt.Strm().WriteUnicodeOrByteText(numString);
         }
     }
@@ -180,7 +180,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
         if( !aAttrIter.OutAttr( nStrPos ))
         {
-            String aOutStr( aStr.copy( nStrPos, nNextAttr - nStrPos ) );
+            OUString aOutStr( aStr.copy( nStrPos, nNextAttr - nStrPos ) );
             if ( !bExportSoftHyphens )
                 aOutStr = comphelper::string::remove(aOutStr, CHAR_SOFTHYPHEN);
 

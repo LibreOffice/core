@@ -1297,9 +1297,8 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             OUString sFileName(pFileNames[nFile]);
             INetURLObject aFileUrl;
             aFileUrl.SetSmartURL( sFileName );
-            OUString sSectionName(String(aFileUrl.GetLastName(
-                INetURLObject::DECODE_UNAMBIGUOUS)).GetToken(0,
-                sfx2::cTokenSeparator));
+            OUString sSectionName(aFileUrl.GetLastName(
+                INetURLObject::DECODE_UNAMBIGUOUS).getToken(0, sfx2::cTokenSeparator));
             sal_uInt16 nSectCount = rSh.GetSectionFmtCount();
             OUString sTempSectionName(sSectionName);
             sal_uInt16 nAddNumber = 0;

@@ -520,7 +520,7 @@ SwDoc* Reader::GetTemplateDoc()
 
                         ReadXML->SetOrganizerMode( sal_True );
                         SfxMedium aMedium( aFileName, sal_False );
-                        SwReader aRdr( aMedium, aEmptyStr, pTemplate );
+                        SwReader aRdr( aMedium, aEmptyOUStr, pTemplate );
                         aRdr.Read( *ReadXML );
                         ReadXML->SetOrganizerMode( sal_False );
 

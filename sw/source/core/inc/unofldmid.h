@@ -21,7 +21,6 @@
 
 #include <tools/solar.h>
 
-class String;
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
 } } } }
@@ -54,8 +53,6 @@ namespace com { namespace sun { namespace star { namespace uno {
 #define FIELD_PROP_IS_FIELD_DISPLAYED   33
 
 #define FIELD_PROP_TEXT             34
-
-String& GetString( const com::sun::star::uno::Any&, String& rStr );
 
 #endif
 

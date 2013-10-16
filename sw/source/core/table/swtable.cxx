@@ -77,7 +77,7 @@ SV_IMPL_REF( SwServerObject )
 
 #define COLFUZZY 20
 
-void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
+void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
                     sal_Bool bChgAlign,sal_uLong nNdPos );
 //----------------------------------
 
@@ -164,17 +164,17 @@ void SwTableBox::setDummyFlag( bool bDummy )
 }
 
 //JP 15.09.98: Bug 55741 - Keep tabs (front and rear)
-static String& lcl_TabToBlankAtSttEnd( String& rTxt )
+static OUString& lcl_TabToBlankAtSttEnd( OUString& rTxt )
 {
     sal_Unicode c;
     xub_StrLen n;
 
-    for( n = 0; n < rTxt.Len() && ' ' >= ( c = rTxt.GetChar( n )); ++n )
+    for( n = 0; n < rTxt.getLength() && ' ' >= ( c = rTxt[n] ); ++n )
         if( '\x9' == c )
-            rTxt.SetChar( n, ' ' );
-    for( n = rTxt.Len(); n && ' ' >= ( c = rTxt.GetChar( --n )); )
+            rTxt = rTxt.replaceAt( n, 1, " " );
+    for( n = rTxt.getLength(); n && ' ' >= ( c = rTxt[--n] ); )
         if( '\x9' == c )
-            rTxt.SetChar( n, ' ' );
+            rTxt = rTxt.replaceAt( n, 1, " " );
     return rTxt;
 }
 
@@ -1346,13 +1346,13 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
 |*
 |*************************************************************************/
 
-static bool lcl_IsValidRowName( const String& rStr )
+static bool lcl_IsValidRowName( const OUString& rStr )
 {
     bool bIsValid = true;
-    xub_StrLen nLen = rStr.Len();
+    xub_StrLen nLen = rStr.getLength();
     for (xub_StrLen i = 0;  i < nLen && bIsValid;  ++i)
     {
-        const sal_Unicode cChar = rStr.GetChar(i);
+        const sal_Unicode cChar = rStr[i];
         if (cChar < '0' || cChar > '9')
             bIsValid = false;
     }
@@ -1900,7 +1900,7 @@ OUString SwTableBox::GetName() const
     if( !pSttNd )       // box without content?
     {
         // search for the next first box?
-        return aEmptyStr;
+        return aEmptyOUStr;
     }
 
     const SwTable& rTbl = pSttNd->FindTableNode()->GetTable();
@@ -2018,13 +2018,13 @@ void SwTable::SetHTMLTableLayout( SwHTMLTableLayout *p )
     pHTMLLayout = p;
 }
 
-void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
+void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
                     sal_Bool bChgAlign )
 {
     sal_uLong nNdPos = rBox.IsValidNumTxtNd( sal_True );
     ChgTextToNum( rBox,rTxt,pCol,bChgAlign,nNdPos);
 }
-void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
+void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
                     sal_Bool bChgAlign,sal_uLong nNdPos )
 {
 
@@ -2087,15 +2087,15 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
         if( pTNd->GetTxt() != rTxt )
         {
             // Exchange text. Bugfix to keep Tabs (front and back!)
-            const String& rOrig = pTNd->GetTxt();
+            const OUString& rOrig = pTNd->GetTxt();
             xub_StrLen n;
 
-            for( n = 0; n < rOrig.Len() && '\x9' == rOrig.GetChar( n ); ++n )
+            for( n = 0; n < rOrig.getLength() && '\x9' == rOrig[n]; ++n )
                 ;
-            for( ; n < rOrig.Len() && '\x01' == rOrig.GetChar( n ); ++n )
+            for( ; n < rOrig.getLength() && '\x01' == rOrig[n]; ++n )
                 ;
             SwIndex aIdx( pTNd, n );
-            for( n = rOrig.Len(); n && '\x9' == rOrig.GetChar( --n ); )
+            for( n = rOrig.getLength(); n && '\x9' == rOrig[--n]; )
                 ;
             n -= aIdx.GetIndex() - 1;
 
@@ -2107,7 +2107,7 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
 
             if( !pDoc->IsIgnoreRedline() && !pDoc->GetRedlineTbl().empty() )
             {
-                SwPaM aTemp(*pTNd, 0, *pTNd, rOrig.Len());
+                SwPaM aTemp(*pTNd, 0, *pTNd, rOrig.getLength());
                 pDoc->DeleteRedline(aTemp, true, USHRT_MAX);
             }
 
@@ -2118,7 +2118,7 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
 
             if( pDoc->IsRedlineOn() )
             {
-                SwPaM aTemp(*pTNd, 0, *pTNd, rTxt.Len());
+                SwPaM aTemp(*pTNd, 0, *pTNd, rTxt.getLength());
                 pDoc->AppendRedline(new SwRedline(nsRedlineType_t::REDLINE_INSERT, aTemp), true);
             }
         }
@@ -2148,7 +2148,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
         if( NUMBERFORMAT_TEXT != nFmt )
         {
             // special text format:
-            String sTmp, sTxt( pTNd->GetTxt() );
+            OUString sTmp, sTxt( pTNd->GetTxt() );
             OUString sTempIn(sTxt);
             OUString sTempOut;
             pDoc->GetNumberFormatter()->GetOutputString( sTempIn, nFmt, sTempOut, &pCol );
@@ -2157,7 +2157,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
             if( sTxt != sTmp )
             {
                 // exchange text
-                SwIndex aIdx( pTNd, sTxt.Len() );
+                SwIndex aIdx( pTNd, sTxt.getLength() );
                 // Reset DontExpand-Flags before exchange, to retrigger expansion
                 pTNd->DontExpandFmt( aIdx, false, false );
                 aIdx = 0;
@@ -2340,9 +2340,9 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                             if( ULONG_MAX != nNdPos )
                             {
                                 sal_uInt32 nTmpFmtIdx = nNewFmt;
-                                String aTxt( GetDoc()->GetNodes()[ nNdPos ]
+                                OUString aTxt( GetDoc()->GetNodes()[ nNdPos ]
                                                 ->GetTxtNode()->GetRedlineTxt());
-                                if( !aTxt.Len() )
+                                if( aTxt.isEmpty() )
                                     bChgTxt = false;
                                 else
                                 {
@@ -2361,7 +2361,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                                         {
                                             if( NUMBERFORMAT_NUMBER ==
                                                 pNumFmtr->GetType( nTmpFmt ))
-                                                aTxt += '%';
+                                                aTxt += "%";
 
                                             bIsNumFmt = pNumFmtr->IsNumberFormat(
                                                         aTxt, nTmpFmtIdx, fVal );
@@ -2427,11 +2427,11 @@ sal_Bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
     sal_uLong nNdPos = IsValidNumTxtNd( sal_True );
     if( ULONG_MAX != nNdPos )
     {
-        String aTxt( pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->
+        OUString aTxt( pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->
                             GetRedlineTxt() );
         // Keep Tabs
         lcl_TabToBlankAtSttEnd( aTxt );
-        rIsEmptyTxtNd = 0 == aTxt.Len();
+        rIsEmptyTxtNd = aTxt.isEmpty();
         SvNumberFormatter* pNumFmtr = GetFrmFmt()->GetDoc()->GetNumberFormatter();
 
         const SfxPoolItem* pItem;
@@ -2446,7 +2446,7 @@ sal_Bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
                 sal_uInt32 nTmpFmt = 0;
                 if( pNumFmtr->IsNumberFormat( aTxt, nTmpFmt, rNum ) &&
                     NUMBERFORMAT_NUMBER == pNumFmtr->GetType( nTmpFmt ))
-                    aTxt += '%';
+                    aTxt += "%";
             }
         }
         else
@@ -2612,7 +2612,7 @@ void SwTableBox::ActualiseValueBox()
             OUString sNewTxt;
             pNumFmtr->GetOutputString( fVal, nFmtId, sNewTxt, &pCol );
 
-            const String& rTxt = pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->GetTxt();
+            const OUString& rTxt = pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->GetTxt();
             if( rTxt != sNewTxt )
                 ChgTextToNum( *this, sNewTxt, pCol, sal_False ,nNdPos);
         }

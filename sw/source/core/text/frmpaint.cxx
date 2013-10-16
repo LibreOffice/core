@@ -488,7 +488,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 {
                     pFnt->SetFamily( FAMILY_DONTKNOW, SW_LATIN );
                     pFnt->SetName( numfunc::GetDefBulletFontname(), SW_LATIN );
-                    pFnt->SetStyleName( aEmptyStr, SW_LATIN );
+                    pFnt->SetStyleName( aEmptyOUStr, SW_LATIN );
                     pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SW_LATIN );
                 }
                 pFnt->SetVertical( 0, IsVertical() );

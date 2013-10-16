@@ -1113,7 +1113,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
 void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
 {
     bool bEmpty = mvPostItFlds.empty();
-    SwFieldType* pType = mpView->GetDocShell()->GetDoc()->GetFldType(RES_POSTITFLD, aEmptyStr,false);
+    SwFieldType* pType = mpView->GetDocShell()->GetDoc()->GetFldType(RES_POSTITFLD, aEmptyOUStr,false);
     SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
     SwFmtFld* pSwFmtFld = aIter.First();
     while(pSwFmtFld)

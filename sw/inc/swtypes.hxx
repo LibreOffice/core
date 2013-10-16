@@ -45,7 +45,6 @@ namespace utl{
 
 class Size;
 class ResMgr;
-class String;
 class SwPathFinder;
 class Graphic;
 class OutputDevice;
@@ -81,8 +80,7 @@ const SwTwips lMinBorder = 1134;
 #define GAPBETWEENPAGES 284L
 
 // Constant strings.
-SW_DLLPUBLIC extern String aEmptyStr;    // ""
-SW_DLLPUBLIC extern OUString aEmptyOUStr;  // remove once aEmptyStr can be changed to OUString
+SW_DLLPUBLIC extern OUString aEmptyOUStr;  // remove once aEmptyOUStr can be changed to OUString
 SW_DLLPUBLIC extern OUString aDotStr;      // '.'
 
 // For inserting of captions (what and where to insert).

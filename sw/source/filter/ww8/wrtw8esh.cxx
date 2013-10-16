@@ -338,7 +338,7 @@ void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
 
     aFFData.Write(pDataStrm);
 
-    OutputField(0, ww::eFORMCHECKBOX, aEmptyStr, WRITEFIELD_CLOSE);
+    OutputField(0, ww::eFORMCHECKBOX, aEmptyOUStr, WRITEFIELD_CLOSE);
 }
 
 void WW8Export::DoFormText(const SwInputField * pFld)
@@ -371,7 +371,7 @@ void WW8Export::DoFormText(const SwInputField * pFld)
     aFFData.setStatus(pFld->GetToolTip());
     aFFData.Write(pDataStrm);
 
-    OutputField(0, ww::eFORMTEXT, aEmptyStr, WRITEFIELD_CMD_END);
+    OutputField(0, ww::eFORMTEXT, aEmptyOUStr, WRITEFIELD_CMD_END);
 
     OUString const fieldStr( pFld->ExpandField(true) );
     SwWW8Writer::WriteString16(Strm(), fieldStr, false);
@@ -387,7 +387,7 @@ void WW8Export::DoFormText(const SwInputField * pFld)
     pChpPlc->AppendFkpEntry(Strm().Tell(),
                 sizeof( aArr2 ), aArr2 );
 
-    OutputField(0, ww::eFORMTEXT, aEmptyStr, WRITEFIELD_CLOSE);
+    OutputField(0, ww::eFORMTEXT, aEmptyOUStr, WRITEFIELD_CLOSE);
 }
 
 PlcDrawObj::~PlcDrawObj()
@@ -843,7 +843,7 @@ void WW8Export::AppendFlyInFlys(const sw::Frame& rFrmFmt,
     }
 
     if (rFrmFmt.IsInline())
-        OutputField(0, ww::eSHAPE, aEmptyStr, WRITEFIELD_CLOSE);
+        OutputField(0, ww::eSHAPE, aEmptyOUStr, WRITEFIELD_CLOSE);
 }
 
 MSWord_SdrAttrIter::MSWord_SdrAttrIter( MSWordExportBase& rWr,
@@ -1195,7 +1195,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
 
     bAnyWrite = 0 != nPara;
     if( !bAnyWrite )
-        WriteStringAsPara( aEmptyStr );
+        WriteStringAsPara( aEmptyOUStr );
 }
 
 void WinwordAnchoring::WriteData( EscherEx& rEx ) const
@@ -3002,7 +3002,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     rWW8Wrt.pChpPlc->AppendFkpEntry(rWW8Wrt.Strm().Tell(),sizeof(aSpecOLE),
         aSpecOLE);
     rWW8Wrt.WriteChar( 0x1 );
-    rWW8Wrt.OutputField(0, ww::eCONTROL, aEmptyStr, WRITEFIELD_END | WRITEFIELD_CLOSE);
+    rWW8Wrt.OutputField(0, ww::eCONTROL, aEmptyOUStr, WRITEFIELD_END | WRITEFIELD_CLOSE);
     return true;
 }
 

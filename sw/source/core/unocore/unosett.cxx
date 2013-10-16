@@ -1991,7 +1991,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                             pSetBrush = new SvxBrushItem(*pOrigBrush);
                         }
                         else
-                            pSetBrush = new SvxBrushItem(aEmptyStr, aEmptyStr, GPOS_AREA, RES_BACKGROUND);
+                            pSetBrush = new SvxBrushItem(aEmptyOUStr, aEmptyOUStr, GPOS_AREA, RES_BACKGROUND);
                     }
                     pSetBrush->PutValue( pData->aVal, MID_GRAPHIC_URL );
                 }
@@ -2010,7 +2010,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                                 pSetBrush = new SvxBrushItem(*pOrigBrush);
                             }
                             else
-                                pSetBrush = new SvxBrushItem(aEmptyStr, aEmptyStr, GPOS_AREA, RES_BACKGROUND);
+                                pSetBrush = new SvxBrushItem(aEmptyOUStr, aEmptyOUStr, GPOS_AREA, RES_BACKGROUND);
                         }
 
                         BitmapEx aBmp = VCLUnoHelper::GetBitmap( *pBitmap );

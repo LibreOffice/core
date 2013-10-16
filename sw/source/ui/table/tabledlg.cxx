@@ -806,7 +806,7 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
         i = nNoOfVisibleCols;
         while( i < MET_FIELDS )
         {
-            m_aFieldArr[i].SetText( aEmptyStr );
+            m_aFieldArr[i].SetText( aEmptyOUStr );
             m_pTextArr[i]->Disable();
             i++;
         }

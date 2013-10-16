@@ -3715,7 +3715,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 rBnd.Invalidate(SID_ATTR_POSITION);
             }
             rBnd.Invalidate(SID_ATTR_SIZE);
-            const SfxStringItem aCell( SID_TABLE_CELL, aEmptyStr );
+            const SfxStringItem aCell( SID_TABLE_CELL, aEmptyOUStr );
             rBnd.SetState( aCell );
         }
     }

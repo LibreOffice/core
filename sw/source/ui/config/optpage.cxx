@@ -600,7 +600,7 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
         aFont = pPrt->GetFontMetric( aFont );
     SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(nType);
     pColl->SetFmtAttr(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
-                aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
+                aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
@@ -678,7 +678,7 @@ sal_Bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
             if( pPrinter )
                 aFont = pPrinter->GetFontMetric( aFont );
             pWrtShell->SetDefault(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
-                                  aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
+                                  aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
             SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFmtAttr(nFontWhich);
             bMod = true;

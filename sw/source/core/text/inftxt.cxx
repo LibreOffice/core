@@ -822,7 +822,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
         m_pFnt = new SwFont( *pOldFnt );
         m_pFnt->SetFamily( FAMILY_DONTKNOW, m_pFnt->GetActual() );
         m_pFnt->SetName( numfunc::GetDefBulletFontname(), m_pFnt->GetActual() );
-        m_pFnt->SetStyleName( aEmptyStr, m_pFnt->GetActual() );
+        m_pFnt->SetStyleName( aEmptyOUStr, m_pFnt->GetActual() );
         m_pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, m_pFnt->GetActual() );
     }
 
@@ -1799,7 +1799,7 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
         {
             pNewFnt->SetFamily( FAMILY_DONTKNOW, pFnt->GetActual() );
             pNewFnt->SetName( numfunc::GetDefBulletFontname(), pFnt->GetActual() );
-            pNewFnt->SetStyleName( aEmptyStr, pFnt->GetActual() );
+            pNewFnt->SetStyleName( aEmptyOUStr, pFnt->GetActual() );
             pNewFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pFnt->GetActual() );
             pNewFnt->SetFixKerning( 0 );
         }

@@ -436,7 +436,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     rSet.Put( aBoxInfo );
 
 
-    SfxStringItem aFollow(SID_ATTR_PAGE_EXT1, aEmptyStr);
+    SfxStringItem aFollow(SID_ATTR_PAGE_EXT1, aEmptyOUStr);
     if(rPageDesc.GetFollow())
         aFollow.SetValue(rPageDesc.GetFollow()->GetName());
     rSet.Put(aFollow);

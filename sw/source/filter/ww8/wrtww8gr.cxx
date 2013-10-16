@@ -173,13 +173,13 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
                 {
                     Graphic aGr1;
                     GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-                    if( rGF.ImportGraphic( aGr1, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                    if( rGF.ImportGraphic( aGr1, aEmptyOUStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                     {
                         Graphic aGr2;
                         delete pGraphicStream;
                         pGraphicStream =
                                 ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( pRet->GetObjRef() ) );
-                        if( rGF.ImportGraphic( aGr2, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                        if( rGF.ImportGraphic( aGr2, aEmptyOUStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                         {
                             if ( aGr1 == aGr2 )
                                 bGraphicNeeded = false;
@@ -329,7 +329,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                     OutGrf(*mpParentFrame);
                 }
 
-                OutputField(0, ww::eEMBED, aEmptyStr,
+                OutputField(0, ww::eEMBED, aEmptyOUStr,
                     WRITEFIELD_END | WRITEFIELD_CLOSE);
 
                 if (bEndCR) //No newline in inline case
@@ -936,7 +936,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
                 {
                     Graphic aGr;
                     GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-                    if( rGF.ImportGraphic( aGr, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                    if( rGF.ImportGraphic( aGr, aEmptyOUStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                     {
                         //TODO/LATER: do we really want to use GDIMetafile?!
                         GDIMetaFile aMtf;

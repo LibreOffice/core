@@ -444,7 +444,7 @@ sal_Bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
         nOldFormat != nFormat || m_pFixedCB->GetState() != m_pFixedCB->GetSavedValue()
         || (DI_CUSTOM == nSubType && !aName.equals( m_sOldCustomFieldName )))
     {
-        InsertFld(nTypeId, nSubType, aName, aEmptyStr, nFormat,
+        InsertFld(nTypeId, nSubType, aName, aEmptyOUStr, nFormat,
                 ' ', m_pFormatLB->IsAutomaticLanguage());
     }
 

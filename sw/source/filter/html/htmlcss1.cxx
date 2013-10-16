@@ -369,7 +369,7 @@ void SwCSS1Parser::SetTableTxtColl( sal_Bool bHeader )
     SvxCSS1MapEntry *pStyleEntry = GetTag( sTag );
     if( pStyleEntry )
     {
-        pColl = GetTxtFmtColl( nPoolId, aEmptyStr );
+        pColl = GetTxtFmtColl( nPoolId, aEmptyOUStr );
         SetTxtCollAttrs( pColl, pStyleEntry->GetItemSet(),
                          pStyleEntry->GetPropertyInfo(), this );
     }
@@ -379,7 +379,7 @@ void SwCSS1Parser::SetTableTxtColl( sal_Bool bHeader )
     if( pStyleEntry )
     {
         if( !pColl )
-            pColl = GetTxtFmtColl( nPoolId, aEmptyStr );
+            pColl = GetTxtFmtColl( nPoolId, aEmptyOUStr );
         SetTxtCollAttrs( pColl, pStyleEntry->GetItemSet(),
                          pStyleEntry->GetPropertyInfo(), this );
     }
@@ -912,7 +912,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 nPoolCollId = RES_POOLCOLL_FOOTNOTE;
 
             if( nPoolCollId )
-                aClass = aEmptyStr;
+                aClass = aEmptyOUStr;
             else
                 nPoolCollId = RES_POOLCOLL_TEXT;
         }
@@ -998,7 +998,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             // ein X:first-line { float: left; ... }
 
             // Die Vorlage Suchen bzw. Anlegen
-            SwTxtFmtColl *pColl = GetTxtFmtColl( nPoolCollId, aEmptyStr );
+            SwTxtFmtColl *pColl = GetTxtFmtColl( nPoolCollId, aEmptyOUStr );
             SwTxtFmtColl* pParentColl = 0;
             if( !aClass.isEmpty() )
             {
@@ -1094,7 +1094,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     if( pNext )
         return sal_True;
 
-    SwCharFmt *pCFmt = GetChrFmt( static_cast< sal_uInt16 >(nToken2), aEmptyStr );
+    SwCharFmt *pCFmt = GetChrFmt( static_cast< sal_uInt16 >(nToken2), aEmptyOUStr );
     if( pCFmt )
     {
         SwCharFmt *pParentCFmt = 0;
@@ -1279,12 +1279,12 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
         if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdendnote) )
         {
             nTxtColl = RES_POOLCOLL_ENDNOTE;
-            aClass = aEmptyStr;
+            aClass = aEmptyOUStr;
         }
         else if( aClass.equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
         {
             nTxtColl = RES_POOLCOLL_FOOTNOTE;
-            aClass = aEmptyStr;
+            aClass = aEmptyOUStr;
         }
     }
 
@@ -1846,7 +1846,7 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const OUString& rIn )
     SwPageDesc *pMasterPageDesc =
         pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
-    SvxCSS1MapEntry *pPageEntry = GetPage( aEmptyStr, false );
+    SvxCSS1MapEntry *pPageEntry = GetPage( aEmptyOUStr, false );
     if( pPageEntry )
     {
         // @page (wirkt auf alle Seiten, die es schon gibt

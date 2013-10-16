@@ -791,7 +791,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY:
         {
-            SwFieldType* pType = pDoc->GetFldType(RES_AUTHORITY, aEmptyStr, sal_True);
+            SwFieldType* pType = pDoc->GetFldType(RES_AUTHORITY, aEmptyOUStr, sal_True);
             if(!pType)
             {
                 SwAuthorityFieldType aType(pDoc);

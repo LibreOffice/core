@@ -345,7 +345,7 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
 OUString SwIndexMarkPane::GetDefaultPhoneticReading( const OUString& rText )
 {
     if( !bIsPhoneticReadingEnabled )
-        return aEmptyStr;
+        return aEmptyOUStr;
 
     return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, LanguageTag::convertToLocale( nLangForPhoneticReading ));
 }
@@ -716,7 +716,7 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
         bool bHasText = (!m_pEntryED->GetText().isEmpty());
         if(!bHasText)
         {
-            m_pPhoneticED0->SetText(aEmptyStr);
+            m_pPhoneticED0->SetText(aEmptyOUStr);
             bPhoneticED0_ChangedByUser = sal_False;
         }
         else if(!bPhoneticED0_ChangedByUser)
@@ -917,9 +917,9 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
         sal_Bool bEnable = !pBox->GetText().isEmpty();
         if(!bEnable)
         {
-            m_pKey2DCB->SetText(aEmptyStr);
-            m_pPhoneticED1->SetText(aEmptyStr);
-            m_pPhoneticED2->SetText(aEmptyStr);
+            m_pKey2DCB->SetText(aEmptyOUStr);
+            m_pPhoneticED1->SetText(aEmptyOUStr);
+            m_pPhoneticED2->SetText(aEmptyOUStr);
             bPhoneticED1_ChangedByUser = sal_False;
             bPhoneticED2_ChangedByUser = sal_False;
         }
@@ -940,7 +940,7 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
     {
         if(pBox->GetText().isEmpty())
         {
-            m_pPhoneticED2->SetText(aEmptyStr);
+            m_pPhoneticED2->SetText(aEmptyOUStr);
             bPhoneticED2_ChangedByUser = sal_False;
         }
         else
@@ -1211,7 +1211,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
         if(!sEntry.isEmpty())
         {
             const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
-                                        pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
+                                        pSh->GetFldType(RES_AUTHORITY, aEmptyOUStr);
             const SwAuthEntry*  pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : 0;
             for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = pEntry ?
@@ -1221,7 +1221,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
     if (pBox->GetSelectEntry().isEmpty())
     {
         for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
-            m_sFields[i] = aEmptyStr;
+            m_sFields[i] = aEmptyOUStr;
     }
     m_pAuthorFI->SetText(m_sFields[AUTH_FIELD_AUTHOR]);
     m_pTitleFI->SetText(m_sFields[AUTH_FIELD_TITLE]);
@@ -1238,7 +1238,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
         OSL_ENSURE(!m_sFields[AUTH_FIELD_AUTHORITY_TYPE].isEmpty() , "No authority type is set!");
         //check if the entry already exists with different content
         const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
-                                        pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
+                                        pSh->GetFldType(RES_AUTHORITY, aEmptyOUStr);
         const SwAuthEntry*  pEntry = pFType ?
                 pFType->GetEntryByIdentifier( m_sFields[AUTH_FIELD_IDENTIFIER])
                 : 0;
@@ -1270,12 +1270,12 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
                     aNewData.SetAuthorField((ToxAuthorityField)i, m_sFields[i]);
                 pSh->ChangeAuthorityData(&aNewData);
             }
-            SwInsertFld_Data aData(TYP_AUTHORITY, 0, sFields, aEmptyStr, 0 );
+            SwInsertFld_Data aData(TYP_AUTHORITY, 0, sFields, aEmptyOUStr, 0 );
             aMgr.InsertFld( aData );
         }
         else if(aMgr.GetCurFld())
         {
-            aMgr.UpdateCurFld(0, sFields, aEmptyStr);
+            aMgr.UpdateCurFld(0, sFields, aEmptyOUStr);
         }
     }
     if(!bNewEntry)
@@ -1374,7 +1374,7 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
     else
     {
         const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
-                                    pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
+                                    pSh->GetFldType(RES_AUTHORITY, aEmptyOUStr);
         if(pFType)
         {
             std::vector<OUString> aIds;
@@ -1415,7 +1415,7 @@ IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit)
         else if(bIsFromComponent)
         {
             const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
-                                        pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
+                                        pSh->GetFldType(RES_AUTHORITY, aEmptyOUStr);
             bAllowed = !pFType || !pFType->GetEntryByIdentifier(sEntry);
         }
         else
@@ -1521,7 +1521,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
 
 
             const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
-                                        rSh.GetFldType(RES_AUTHORITY, aEmptyStr);
+                                        rSh.GetFldType(RES_AUTHORITY, aEmptyOUStr);
             if(pFType)
             {
                 std::vector<OUString> aIds;
@@ -1610,7 +1610,7 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox*, pBox)
 {
     const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
-                                rWrtSh.GetFldType(RES_AUTHORITY, aEmptyStr);
+                                rWrtSh.GetFldType(RES_AUTHORITY, aEmptyOUStr);
     if(pFType)
     {
         const SwAuthEntry* pEntry = pFType->GetEntryByIdentifier(

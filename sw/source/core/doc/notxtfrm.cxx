@@ -95,7 +95,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
     {
         pFont = new Font();
         pFont->SetWeight( WEIGHT_BOLD );
-        pFont->SetStyleName( aEmptyStr );
+        pFont->SetStyleName( aEmptyOUStr );
         pFont->SetName(OUString("Arial Unicode"));
         pFont->SetFamily( FAMILY_SWISS );
         pFont->SetTransparent( sal_True );

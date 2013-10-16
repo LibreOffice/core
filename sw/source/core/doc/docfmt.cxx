@@ -2349,7 +2349,7 @@ bool SwDoc::DontExpandFmt( const SwPosition& rPos, bool bFlag )
 
 SwTableBoxFmt* SwDoc::MakeTableBoxFmt()
 {
-    SwTableBoxFmt* pFmt = new SwTableBoxFmt( GetAttrPool(), aEmptyStr,
+    SwTableBoxFmt* pFmt = new SwTableBoxFmt( GetAttrPool(), aEmptyOUStr,
                                                 mpDfltFrmFmt );
     SetModified();
     return pFmt;
@@ -2357,7 +2357,7 @@ SwTableBoxFmt* SwDoc::MakeTableBoxFmt()
 
 SwTableLineFmt* SwDoc::MakeTableLineFmt()
 {
-    SwTableLineFmt* pFmt = new SwTableLineFmt( GetAttrPool(), aEmptyStr,
+    SwTableLineFmt* pFmt = new SwTableLineFmt( GetAttrPool(), aEmptyOUStr,
                                                 mpDfltFrmFmt );
     SetModified();
     return pFmt;

@@ -1405,7 +1405,7 @@ xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
             nCrsr = pLastFont->GetCrsrOfst( rInf );
         else
         {
-            String aTmp = CalcCaseMap( rInf.GetText() );
+            OUString aTmp = CalcCaseMap( rInf.GetText() );
             rInf.SetText( aTmp );
             nCrsr = pLastFont->GetCrsrOfst( rInf );
         }

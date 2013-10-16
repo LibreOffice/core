@@ -303,7 +303,7 @@ void SwHTMLWriter::OutBasic()
             const OUString& rModName = pModule->GetName();
             Strm() << SAL_NEWLINE_STRING;   // nicht einruecken!
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
-                                     sLang, eType, aEmptyStr,
+                                     sLang, eType, aEmptyOUStr,
                                      &rLibName, &rModName,
                                      eDestEnc, &aNonConvertableCharacters );
         }

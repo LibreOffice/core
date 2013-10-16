@@ -41,7 +41,7 @@ using namespace com::sun::star;
 
 // Constructor
 
-const String GetPalettePath()
+const OUString GetPalettePath()
 {
     SvtPathOptions aPathOpt;
     return aPathOpt.GetPalettePath();

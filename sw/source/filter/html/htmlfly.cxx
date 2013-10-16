@@ -1374,7 +1374,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
                                 : HTML_FRMOPTS_MULTICOL;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         nFrmFlags |= HTML_FRMOPTS_MULTICOL_CSS1;
-    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, nFrmFlags );
+    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyOUStr, nFrmFlags );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmFlags );
 
@@ -1422,7 +1422,7 @@ static Writer& OutHTML_FrmFmtAsSpacer( Writer& rWrt, const SwFrmFmt& rFrmFmt )
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     // ALIGN, WIDTH, HEIGHT
-    OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, HTML_FRMOPTS_SPACER );
+    OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyOUStr, HTML_FRMOPTS_SPACER );
 
     rWrt.Strm() << '>';
     if( !aEndTags.isEmpty() )
@@ -1459,7 +1459,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     sal_uLong nFrmFlags = HTML_FRMOPTS_DIV;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_BORDER_NONE ) )
        nFrmFlags |= HTML_FRMOPT_S_NOBORDER;
-    OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, nFrmFlags );
+    OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyOUStr, nFrmFlags );
     rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmFlags );
     rWrt.Strm() << '>';
 

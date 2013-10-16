@@ -98,7 +98,7 @@ void SwUndoFieldFromDoc::DoImpl()
         pDoc->UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
         SwFmtFld* pDstFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
 
-        if ( pDoc->GetFldType(RES_POSTITFLD, aEmptyStr,false) == pDstFmtFld->GetFld()->GetTyp() )
+        if ( pDoc->GetFldType(RES_POSTITFLD, aEmptyOUStr,false) == pDstFmtFld->GetFld()->GetTyp() )
             pDoc->GetDocShell()->Broadcast( SwFmtFldHint( pDstFmtFld, SWFMTFLD_INSERTED ) );
     }
 }

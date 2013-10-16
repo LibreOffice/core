@@ -220,7 +220,7 @@ ShellResource::ShellResource()
     aHyperlinkClick = aHyperlinkClick.replaceAll("%s", aModStr);
 
     for(sal_uInt16 i = 0; i < nCount; ++i)
-        aDocInfoLst.push_back(String(SW_RESSTR(FLD_DOCINFO_BEGIN + i)));
+        aDocInfoLst.push_back(OUString(SW_RESSTR(FLD_DOCINFO_BEGIN + i)));
 
     FreeResource();
 }

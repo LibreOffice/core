@@ -161,7 +161,7 @@ sal_Bool SwGrfNode::ReRead(
                     nNewType = OBJECT_CLIENT_DDE;
                 else
                 {
-                    sfx2::MakeLnkName( sCmd, 0, rGrfName, aEmptyStr, &rFltName );
+                    sfx2::MakeLnkName( sCmd, 0, rGrfName, aEmptyOUStr, &rFltName );
                     nNewType = OBJECT_CLIENT_GRF;
                 }
 
@@ -345,9 +345,9 @@ void SwGrfNode::onGraphicChanged()
 
     if(pFlyFmt)
     {
-        String aName;
-        String aTitle;
-        String aDesc;
+        OUString aName;
+        OUString aTitle;
+        OUString aDesc;
         const SvgDataPtr& rSvgDataPtr = GetGrf().getSvgData();
 
         if(rSvgDataPtr.get())
@@ -372,12 +372,12 @@ void SwGrfNode::onGraphicChanged()
             }
         }
 
-        if(aTitle.Len())
+        if(!aTitle.isEmpty())
         {
             SetTitle(aTitle);
         }
 
-        if(aDesc.Len())
+        if(!aDesc.isEmpty())
         {
             SetDescription(aDesc);
         }
@@ -447,7 +447,7 @@ Size SwGrfNode::GetTwipSize() const
 sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
 {
     Graphic aGraphic;
-    const String aURL(maGrfObj.GetUserData());
+    const OUString aURL(maGrfObj.GetUserData());
 
     if(!GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, rStrm))
     {
@@ -695,7 +695,7 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
         if( rFltName == "DDE" )
         {
             sal_Int32 nTmp = 0;
-            String sApp, sTopic, sItem;
+            OUString sApp, sTopic, sItem;
             sApp = rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp );
             sTopic = rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp );
             sItem = rGrfName.copy( nTmp );

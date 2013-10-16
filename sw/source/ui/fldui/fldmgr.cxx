@@ -845,7 +845,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         case TYP_POSTITFLD:
         {
             SwPostItFieldType* pType = (SwPostItFieldType*)pCurShell->GetFldType(0, RES_POSTITFLD);
-            pFld = new SwPostItField(pType, rData.sPar1, rData.sPar2, aEmptyStr, aEmptyStr, DateTime( DateTime::SYSTEM ));
+            pFld = new SwPostItField(pType, rData.sPar1, rData.sPar2, aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ));
             break;
         }
         case TYP_SCRIPTFLD:
@@ -1202,7 +1202,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
                 if(pTyp)
                 {
                     SwSetExpField* pExpFld =
-                        new SwSetExpField(pTyp, aEmptyStr, nFormatId);
+                        new SwSetExpField(pTyp, aEmptyOUStr, nFormatId);
 
                     // Don't change type of SwSetExpFieldType:
                     sal_uInt16 nOldSubType = pExpFld->GetSubType();

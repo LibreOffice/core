@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
     SvTreeListEntry* pSel = m_pAutoTextLB->FirstSelected();
     OUString sEntry;
     if( pSel )
-        sEntry = *(String*)pSel->GetUserData();
+        sEntry = *(OUString*)pSel->GetUserData();
     uno::Reference< text::XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
     OUString uEntry(sEntry);
 
