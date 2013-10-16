@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,harfbuzz))
 
-ifeq ($(ENABLE_HARFBUZZ)-$(SYSTEM_HARFBUZZ),TRUE-NO)
-
 $(eval $(call gb_Module_add_targets,harfbuzz,\
 	ExternalProject_harfbuzz \
 	UnpackedTarball_harfbuzz \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
