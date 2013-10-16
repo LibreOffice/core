@@ -181,7 +181,8 @@ void SvxHyperlinkInternetTp::GetCurentItemData ( OUString& rStrURL, OUString& aS
 
 OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 {
-    OUString aStrURL(maCbbTarget.GetText());
+    // erase leading and trailing whitespaces
+    OUString aStrURL( maCbbTarget.GetText().trim() );
 
     INetURLObject aURL(aStrURL);
 
