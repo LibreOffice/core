@@ -204,6 +204,7 @@ Entity::Entity( const ParserData& rData ) :
 
 Entity::Entity( const Entity& e ) :
     ParserData( e )
+    ,mbEnableThreads(e.mbEnableThreads)
     ,maStructSource(e.maStructSource)
     ,mpParser(e.mpParser)
     ,maConverter(e.maConverter)
@@ -330,6 +331,9 @@ EventList* Entity::getEventList()
 
 Event& Entity::getEvent( CallbackType aType )
 {
+    if (!mbEnableThreads)
+        return maSharedEvent;
+
     EventList* pEventList = getEventList();
     Event& rEvent = (*pEventList)[mnProducedEventsSize++];
     rEvent.maType = aType;
@@ -570,33 +574,42 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
             entity.mxDocumentHandler->startDocument();
         }
 
-        rtl::Reference<ParserThread> xParser;
-        xParser = new ParserThread(this);
-        xParser->launch();
-        bool done = false;
-        do {
-            rEntity.maConsumeResume.wait();
-            rEntity.maConsumeResume.reset();
+        rEntity.mbEnableThreads = (rEntity.maStructSource.aInputStream->available() > 10000);
 
-            osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
-            while (!rEntity.maPendingEvents.empty())
-            {
-                if (rEntity.maPendingEvents.size() <= rEntity.mnEventLowWater)
-                    rEntity.maProduceResume.set(); // start producer again
+        if (rEntity.mbEnableThreads)
+        {
+            rtl::Reference<ParserThread> xParser;
+            xParser = new ParserThread(this);
+            xParser->launch();
+            bool done = false;
+            do {
+                rEntity.maConsumeResume.wait();
+                rEntity.maConsumeResume.reset();
 
-                EventList *pEventList = rEntity.maPendingEvents.front();
-                rEntity.maPendingEvents.pop();
-                aGuard.clear(); // unlock
+                osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
+                while (!rEntity.maPendingEvents.empty())
+                {
+                    if (rEntity.maPendingEvents.size() <= rEntity.mnEventLowWater)
+                        rEntity.maProduceResume.set(); // start producer again
 
-                if (!consume(pEventList))
-                    done = true;
+                    EventList *pEventList = rEntity.maPendingEvents.front();
+                    rEntity.maPendingEvents.pop();
+                    aGuard.clear(); // unlock
 
-                aGuard.reset(); // lock
-                rEntity.maUsedEvents.push(pEventList);
-            }
-        } while (!done);
-        xParser->join();
-        deleteUsedEvents();
+                    if (!consume(pEventList))
+                        done = true;
+
+                    aGuard.reset(); // lock
+                    rEntity.maUsedEvents.push(pEventList);
+                }
+            } while (!done);
+            xParser->join();
+            deleteUsedEvents();
+        }
+        else
+        {
+            parse();
+        }
 
         // finish document
         if( entity.mxDocumentHandler.is() )
@@ -906,7 +919,8 @@ void FastSaxParser::parse()
     }
     while( nRead > 0 );
     rEntity.getEvent( CallbackType::DONE );
-    produce( CallbackType::DONE );
+    if (rEntity.mbEnableThreads)
+        produce( CallbackType::DONE );
 }
 
 //------------------------------------------
@@ -1023,7 +1037,10 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
 
         rEntity.maNamespaceStack.push( NameWithToken(rEvent.msNamespace, nNamespaceToken) );
         rEvent.msElementName = OUString(pName, nNameLen, RTL_TEXTENCODING_UTF8);
-        produce( CallbackType::START_ELEMENT );
+        if (rEntity.mbEnableThreads)
+            produce( CallbackType::START_ELEMENT );
+        else
+            rEntity.startElement( &rEvent );
     }
     catch (const Exception& e)
     {
@@ -1043,15 +1060,22 @@ void FastSaxParser::callbackEndElement( SAL_UNUSED_PARAMETER const XML_Char* )
         rEntity.maNamespaceStack.pop();
 
     rEntity.getEvent( CallbackType::END_ELEMENT );
-    produce( CallbackType::END_ELEMENT );
+    if (rEntity.mbEnableThreads)
+        produce( CallbackType::END_ELEMENT );
+    else
+        rEntity.endElement();
 }
 
 
 void FastSaxParser::callbackCharacters( const XML_Char* s, int nLen )
 {
-    Event& rEvent = getEntity().getEvent( CallbackType::CHARACTERS );
+    Entity& rEntity = getEntity();
+    Event& rEvent = rEntity.getEvent( CallbackType::CHARACTERS );
     rEvent.msChars = OUString(s, nLen, RTL_TEXTENCODING_UTF8);
-    produce( CallbackType::CHARACTERS );
+    if (rEntity.mbEnableThreads)
+        produce( CallbackType::CHARACTERS );
+    else
+        rEntity.characters( rEvent.msChars );
 }
 
 void FastSaxParser::callbackEntityDecl(

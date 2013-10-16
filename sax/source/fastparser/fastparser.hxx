@@ -107,6 +107,7 @@ struct Entity : public ParserData
 {
     // Amount of work producer sends to consumer in one iteration:
     static const size_t mnEventListSize = 1000;
+
     // unique for each Entity instance:
 
     // Number of valid events in mpProducedEvents:
@@ -120,9 +121,13 @@ struct Entity : public ParserData
     static const size_t mnEventHighWater = 8;
     osl::Condition maConsumeResume;
     osl::Condition maProduceResume;
+    // Event we use to store data if threading is disabled:
+    Event maSharedEvent;
 
     // copied in copy constructor:
 
+    // Allow to disable threading for small documents:
+    bool                                    mbEnableThreads;
     ::com::sun::star::xml::sax::InputSource maStructSource;
     XML_Parser                              mpParser;
     ::sax_expatwrap::XMLFile2UTFConverter   maConverter;
