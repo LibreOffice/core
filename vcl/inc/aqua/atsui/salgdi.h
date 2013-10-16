@@ -261,9 +261,6 @@ public:
     virtual sal_uInt16         SetFont( FontSelectPattern*, int nFallbackLevel );
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
-    // get kernign pairs of the current font
-    // return only PairCount if (pKernPairs == NULL)
-    virtual sal_uLong           GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;

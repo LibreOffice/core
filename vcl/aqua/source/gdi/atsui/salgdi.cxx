@@ -392,13 +392,6 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackL
 
 // -----------------------------------------------------------------------
 
-sal_uLong AquaSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
-{
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 static bool AddTempFontDir( const char* pDir )
 {
     FSRef aPathFSRef;
