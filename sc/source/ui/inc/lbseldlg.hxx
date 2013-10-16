@@ -39,7 +39,7 @@ private:
     DECL_LINK( DblClkHdl, void * );
 
 public:
-    ScSelEntryDlg(Window* pParent, const std::vector<String> &rEntryList);
+    ScSelEntryDlg(Window* pParent, const std::vector<OUString> &rEntryList);
 
     OUString GetSelectEntry() const;
 };

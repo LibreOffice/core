@@ -2079,7 +2079,7 @@ static void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
 {
     rEngine.SetUpdateMode( false );
 
-    rEngine.SetText(EMPTY_STRING);
+    rEngine.SetText(EMPTY_OUSTRING);
     //  keine Para-Attribute uebrigbehalten...
     const SfxItemSet& rPara = rEngine.GetParaAttribs(0);
     if (rPara.Count())

@@ -374,7 +374,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // Kopfzeile:
     // [leer][\TABELLE\][leer]
     //----------------------------------------
-    pEdEngine->SetText(EMPTY_STRING);
+    pEdEngine->SetText(EMPTY_OUSTRING);
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
     pTxtObj = pEdEngine->CreateTextObject();
     pHeaderItem->SetLeftArea  ( *pEmptyTxtObj );

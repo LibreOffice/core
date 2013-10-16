@@ -31,7 +31,7 @@ private:
 
     ScChangeAction  *pChangeAction;
     ScDocShell      *pDocShell;
-    String          aComment;
+    OUString        aComment;
     AbstractSvxPostItDialog* pDlg;
 
     DECL_LINK( PrevHdl, AbstractSvxPostItDialog* );

@@ -320,7 +320,7 @@ void ScDbNameDlg::UpdateNames()
     m_pEdName->SetUpdateMode( false );
     //-----------------------------------------------------------
     m_pEdName->Clear();
-    m_pEdAssign->SetText( EMPTY_STRING );
+    m_pEdAssign->SetText( EMPTY_OUSTRING );
 
     if (!rDBs.empty())
     {
@@ -459,12 +459,12 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 
                 UpdateNames();
 
-                m_pEdName->SetText( EMPTY_STRING );
+                m_pEdName->SetText( EMPTY_OUSTRING );
                 m_pEdName->GrabFocus();
                 m_pBtnAdd->SetText( aStrAdd );
                 m_pBtnAdd->Disable();
                 m_pBtnRemove->Disable();
-                m_pEdAssign->SetText( EMPTY_STRING );
+                m_pEdAssign->SetText( EMPTY_OUSTRING );
                 m_pBtnHeader->Check( sal_True );       // Default: mit Spaltenkoepfen
                 m_pBtnDoSize->Check( false );
                 m_pBtnKeepFmt->Check( false );
@@ -538,12 +538,12 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
 
             UpdateNames();
 
-            m_pEdName->SetText( EMPTY_STRING );
+            m_pEdName->SetText( EMPTY_OUSTRING );
             m_pEdName->GrabFocus();
             m_pBtnAdd->SetText( aStrAdd );
             m_pBtnAdd->Disable();
             m_pBtnRemove->Disable();
-            m_pEdAssign->SetText( EMPTY_STRING );
+            m_pEdAssign->SetText( EMPTY_OUSTRING );
             theCurArea = ScRange();
             m_pBtnHeader->Check( sal_True );       // Default: mit Spaltenkoepfen
             m_pBtnDoSize->Check( false );

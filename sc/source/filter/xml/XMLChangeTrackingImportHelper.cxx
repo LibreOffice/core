@@ -739,7 +739,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                         if (aCell.meType != CELLTYPE_FORMULA)
                         {
                             aNewCell = aCell;
-                            pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_STRING);
+                            pChangeActionContent->SetNewCell(aNewCell, pDoc, EMPTY_OUSTRING);
                             pChangeActionContent->SetNewValue(aCell, pDoc);
                         }
                         else

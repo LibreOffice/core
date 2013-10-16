@@ -126,7 +126,7 @@ void ScMoveTableDlg::ResetRenameInput()
 
     if (!pEdTabName->IsEnabled())
     {
-        pEdTabName->SetText(String());
+        pEdTabName->SetText(OUString());
         return;
     }
 

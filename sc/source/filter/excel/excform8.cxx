@@ -1276,7 +1276,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
 
     if (nFormulaLen == 0)
     {
-        aPool.Store(String("-/-"));
+        aPool.Store(OUString("-/-"));
         aPool >> aStack;
         rpArray = aPool[aStack.Get()];
         return ConvOK;

@@ -740,7 +740,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             }
             aEditAttribs.Put(   SvxFontItem(
                                     eFam,
-                                    SC10TOSTRING( pHeadFootLine->LogFont.lfFaceName ), EMPTY_STRING,
+                                    SC10TOSTRING( pHeadFootLine->LogFont.lfFaceName ), EMPTY_OUSTRING,
                                     PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ),
                                 EE_CHAR_FONTINFO );
             aEditAttribs.Put(   SvxFontHeightItem( std::abs( pHeadFootLine->LogFont.lfHeight ), 100, EE_CHAR_FONTHEIGHT ),
@@ -1182,7 +1182,7 @@ void Sc10Import::LoadPatternCollection()
                     case ffDecorative : eFam = FAMILY_DECORATIVE;   break;
                     default: eFam = FAMILY_DONTKNOW;        break;
                 }
-                rItemSet.Put( SvxFontItem( eFam, SC10TOSTRING( pPattern->LogFont.lfFaceName ), EMPTY_STRING,
+                rItemSet.Put( SvxFontItem( eFam, SC10TOSTRING( pPattern->LogFont.lfFaceName ), EMPTY_OUSTRING,
                         PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
                 rItemSet.Put( SvxFontHeightItem( std::abs( pPattern->LogFont.lfHeight ), 100, ATTR_FONT_HEIGHT ) );
                 Color TextColor( COL_BLACK );
@@ -1758,7 +1758,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
                         default: eFam = FAMILY_DONTKNOW;        break;
                     }
                     ScPatternAttr aScPattern(pDoc->GetPool());
-                    aScPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_STRING,
+                    aScPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_OUSTRING,
                         PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
                     aScPattern.GetItemSet().Put(SvxFontHeightItem(std::abs(pFont->Height), 100, ATTR_FONT_HEIGHT ));
                     pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);

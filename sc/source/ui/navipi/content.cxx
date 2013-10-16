@@ -1168,12 +1168,12 @@ void ScContentTree::DoDrag()
                         switch ( nType )
                         {
                             case SC_CONTENT_TABLE:
-                                pScMod->SetDragLink( aDocName, aText, EMPTY_STRING );
+                                pScMod->SetDragLink( aDocName, aText, EMPTY_OUSTRING );
                                 bDoLinkTrans = true;
                                 break;
                             case SC_CONTENT_RANGENAME:
                             case SC_CONTENT_DBAREA:
-                                pScMod->SetDragLink( aDocName, EMPTY_STRING, aText );
+                                pScMod->SetDragLink( aDocName, EMPTY_OUSTRING, aText );
                                 bDoLinkTrans = true;
                                 break;
 

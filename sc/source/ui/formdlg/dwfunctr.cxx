@@ -555,7 +555,7 @@ void ScFunctionDockWin::SetMyHeightToBo(Size &aNewSize)
 
 void ScFunctionDockWin::SetDescription()
 {
-    aFiFuncDesc.SetText( EMPTY_STRING );
+    aFiFuncDesc.SetText( EMPTY_OUSTRING );
     const ScFuncDesc* pDesc =
              (const ScFuncDesc*)pAllFuncList->GetEntryData(
                     pAllFuncList->GetSelectEntryPos() );

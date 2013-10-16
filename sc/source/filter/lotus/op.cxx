@@ -234,7 +234,7 @@ void OP_NamedRange( SvStream& r, sal_uInt16 /*n*/ )
         else
             strcpy( cBuf, cPuffer );           // #100211# - checked
 
-        String        aTmp( cBuf, pLotusRoot->eCharsetQ );
+        OUString      aTmp( cBuf, strlen(cBuf), pLotusRoot->eCharsetQ );
 
         aTmp = ScfTools::ConvertToScDefinedName( aTmp );
 
@@ -274,7 +274,7 @@ void OP_SymphNamedRange( SvStream& r, sal_uInt16 /*n*/ )
         else
             strcpy( cBuf, cPuffer );           // #100211# - checked
 
-        String    aTmp( cBuf, pLotusRoot->eCharsetQ );
+        OUString  aTmp( cBuf, strlen(cBuf), pLotusRoot->eCharsetQ );
         aTmp = ScfTools::ConvertToScDefinedName( aTmp );
 
         pLotusRoot->pRangeNames->Append( pRange, aTmp );
@@ -446,7 +446,7 @@ void OP_Note123( SvStream& r, sal_uInt16 n)
     r.Read( pText, n );
     pText[ n ] = 0;
 
-    String aNoteText(pText,pLotusRoot->eCharsetQ);
+    OUString aNoteText(pText, strlen(pText), pLotusRoot->eCharsetQ);
     delete [] pText;
 
     ScAddress aPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab) );
@@ -590,7 +590,7 @@ void OP_SheetName123( SvStream& rStream, sal_uInt16 nLength )
 
     if (!sSheetName.empty())
     {
-        String aName(&sSheetName[0], eCharVon);
+        OUString aName(&sSheetName[0], strlen(&sSheetName[0]), eCharVon);
         pDoc->RenameTab(nSheetNum, aName);
     }
 }

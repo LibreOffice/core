@@ -280,7 +280,7 @@ XclImpHFConverter::~XclImpHFConverter()
 void XclImpHFConverter::ParseString( const OUString& rHFString )
 {
     // edit engine objects
-    mrEE.SetText( EMPTY_STRING );
+    mrEE.SetText( EMPTY_OUSTRING );
     maInfos.clear();
     maInfos.resize( EXC_HF_PORTION_COUNT );
     meCurrObj = EXC_HF_CENTER;
@@ -357,7 +357,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                         }
                     break;
                     case 'F':           // file name
-                        InsertField( SvxFieldItem( SvxExtFileField( EMPTY_STRING, SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ), EE_FEATURE_FIELD ) );
+                        InsertField( SvxFieldItem( SvxExtFileField( EMPTY_OUSTRING, SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ), EE_FEATURE_FIELD ) );
                     break;
 
                     case 'U':           // underline
@@ -587,7 +587,7 @@ void XclImpHFConverter::SetNewPortion( XclImpHFPortion eNew )
         if( GetCurrObj().get() )
             mrEE.SetText( *GetCurrObj() );
         else
-            mrEE.SetText( EMPTY_STRING );
+            mrEE.SetText( EMPTY_OUSTRING );
         ResetFontData();
     }
 }

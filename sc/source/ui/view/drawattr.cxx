@@ -45,7 +45,7 @@ OUString SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
         case 6  : p = "SVX_SNAP_DRAW_PIE"       ; break;
         case 7  : p = "SVX_SNAP_DRAW_CIRCLECUT" ; break;
         case 8  : p = "SVX_SNAP_DRAW_TEXT"      ; break;
-        default : return EMPTY_STRING;
+        default : return EMPTY_OUSTRING;
     }
     return OUString::createFromAscii( p );
 }

@@ -2654,7 +2654,7 @@ void ScInterpreter::ScCellExternal()
                 PushString(ScGlobal::GetErrorString(pToken->GetError()));
             break;
             default:
-                PushString(ScGlobal::GetEmptyString());
+                PushString(ScGlobal::GetEmptyOUString());
         }
     }
     else if ( aInfoType == "TYPE" )
@@ -3251,7 +3251,7 @@ void ScInterpreter::ScT()
         case svDouble :
         {
             PopError();
-            PushString( EMPTY_STRING );
+            PushString( EMPTY_OUSTRING );
         }
         break;
         case svString :
@@ -8418,7 +8418,7 @@ void ScInterpreter::ScRept()
             PushError( errStringOverflow );
         }
         else if ( fAnz == 0.0 )
-            PushString( EMPTY_STRING );
+            PushString( EMPTY_OUSTRING );
         else
         {
             const xub_StrLen nLen = aStr.getLength();

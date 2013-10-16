@@ -1217,7 +1217,7 @@ static OUString lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32
     if (nNext > nLen)
         nNext = nLen;
     if ( nNext <= nStart )
-        return EMPTY_STRING;
+        return EMPTY_OUSTRING;
 
     const sal_Unicode* pStr = rLine.getStr();
 
@@ -1823,7 +1823,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 ScMarkData aMark;
                                 aMark.SelectTable( aPos.Tab(), true );
                                 pDoc->InsertMatrixFormula( nCol, nRow, nRefCol,
-                                    nRefRow, aMark, EMPTY_STRING, pCode );
+                                    nRefRow, aMark, EMPTY_OUSTRING, pCode );
                             }
                             else
                             {

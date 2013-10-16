@@ -379,7 +379,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
                 pDocShTables = NULL;
 
                 FillTables_Impl( NULL );
-                m_pFtPath->SetText( EMPTY_STRING );
+                m_pFtPath->SetText( EMPTY_OUSTRING );
             }
         }
 

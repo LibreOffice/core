@@ -707,7 +707,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if ( pDBCol )
                     {
-                        std::vector<String> aList;
+                        std::vector<OUString> aList;
                         const ScDBCollection::NamedDBs& rDBs = pDBCol->getNamedDBs();
                         ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
                         for (; itr != itrEnd; ++itr)
@@ -831,7 +831,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 sal_uInt32 nNumIndex = 0;
                                 double nVal;
                                 if (pDoc->GetFormatTable()->IsNumberFormat(aTemp1, nNumIndex, nVal))
-                                    aExpr1 =String( ::rtl::math::doubleToUString( nVal,
+                                    aExpr1 = OUString( ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                                             ScGlobal::pLocaleData->getNumDecimalSep()[0], sal_True));
                                 else
@@ -848,7 +848,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 sal_uInt32 nNumIndex = 0;
                                 double nVal;
                                 if (pDoc->GetFormatTable()->IsNumberFormat(aTemp2, nNumIndex, nVal))
-                                    aExpr2 =String( ::rtl::math::doubleToUString( nVal,
+                                    aExpr2 = OUString( ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
                                             ScGlobal::pLocaleData->getNumDecimalSep()[0], sal_True));
                                 else

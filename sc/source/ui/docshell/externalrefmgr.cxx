@@ -869,7 +869,7 @@ OUString ScExternalRefCache::getTableName(sal_uInt16 nFileId, size_t nCacheId) c
     if( DocItem* pDoc = getDocItem( nFileId ) )
         if( nCacheId < pDoc->maTableNames.size() )
             return pDoc->maTableNames[ nCacheId ].maRealName;
-    return EMPTY_STRING;
+    return EMPTY_OUSTRING;
 }
 
 void ScExternalRefCache::getAllTableNames(sal_uInt16 nFileId, vector<OUString>& rTabNames) const

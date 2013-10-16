@@ -1988,7 +1988,7 @@ OUString ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
                                    const ScAddress::Details& rDetails ) const
 {
     if ( !pDoc )
-        return EMPTY_STRING;
+        return EMPTY_OUSTRING;
     if ( Tab()+1 > pDoc->GetTableCount() )
         return ScGlobal::GetRscString( STR_NOREF_STR );
 

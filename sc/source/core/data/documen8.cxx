@@ -886,7 +886,7 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
                 aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
 
                 OUStringBuffer aBuf;
-                aBuf.append(String(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
+                aBuf.append(OUString(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
                 aBuf.appendAscii("\n\n");
                 aBuf.append(aFile);
                 ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
@@ -940,7 +940,7 @@ void ScDocument::UpdateDdeLinks(Window* pWin)
                     OUString aType = pDdeLink->GetAppl();
 
                     OUStringBuffer aBuf;
-                    aBuf.append(String(ScResId(SCSTR_DDEDOC_NOT_LOADED)));
+                    aBuf.append(OUString(ScResId(SCSTR_DDEDOC_NOT_LOADED)));
                     aBuf.appendAscii("\n\n");
                     aBuf.appendAscii("Source : ");
                     aBuf.append(aFile);

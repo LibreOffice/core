@@ -75,7 +75,7 @@ using ::std::vector;
 
 // line ends are now created with an empty name.
 // The checkForUniqueItem method then finds a unique name for the item's value.
-#define SC_LINEEND_NAME     EMPTY_STRING
+#define SC_LINEEND_NAME     EMPTY_OUSTRING
 
 enum DetInsertResult {              // Return-Werte beim Einfuegen in einen Level
             DET_INS_CONTINUE,
@@ -139,7 +139,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
 {
     nMaxLevel = 0;
 
-    aBoxSet.Put( XLineColorItem( EMPTY_STRING, Color( ScDetectiveFunc::GetArrowColor() ) ) );
+    aBoxSet.Put( XLineColorItem( EMPTY_OUSTRING, Color( ScDetectiveFunc::GetArrowColor() ) ) );
     aBoxSet.Put( XFillStyleItem( XFILL_NONE ) );
 
     //  Standard-Linienenden (wie aus XLineEndList::Create) selber zusammenbasteln,

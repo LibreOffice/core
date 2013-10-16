@@ -1054,7 +1054,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
     if (!aCurrent.isEmpty())
     {
-        nPos = pFilterBox->GetEntryPos(String(aCurrent));
+        nPos = pFilterBox->GetEntryPos(aCurrent);
     }
     if (LISTBOX_ENTRY_NOTFOUND == nPos && pFilterBox->GetEntryCount() > 0 )
         nPos = 0;
@@ -4343,7 +4343,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
         {
             ScViewFunc* pView = pViewData->GetView();
             if ( !rData.aLinkTable.isEmpty() )
-                pView->InsertTableLink( rData.aLinkDoc, EMPTY_STRING, EMPTY_STRING,
+                pView->InsertTableLink( rData.aLinkDoc, EMPTY_OUSTRING, EMPTY_OUSTRING,
                                         rData.aLinkTable );
             else if ( !rData.aLinkArea.isEmpty() )
             {
@@ -4352,7 +4352,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
                 pView->MoveCursorAbs( nPosX, nPosY, SC_FOLLOW_NONE, false, false );
 
-                pView->InsertAreaLink( rData.aLinkDoc, EMPTY_STRING, EMPTY_STRING,
+                pView->InsertAreaLink( rData.aLinkDoc, EMPTY_OUSTRING, EMPTY_OUSTRING,
                                         rData.aLinkArea, 0 );
             }
             else

@@ -1327,8 +1327,8 @@ void ScViewData::EditGrowY( sal_Bool bInitial )
         //  because this occurs in the normal progress of editing a formula.
         //  Subsequent calls with empty text might involve changed attributes (including
         //  font height), so they are treated like normal text.
-        String aText = pEngine->GetText(  0 );
-        if ( ( aText.Len() == 0 && bInitial ) || aText.GetChar(0) == (sal_Unicode)'=' )
+        OUString aText = pEngine->GetText(  0 );
+        if ( ( aText.isEmpty() && bInitial ) || aText[0] == '=' )
             nAllowedExtra = SC_GROWY_BIG_EXTRA;
     }
 
@@ -2585,7 +2585,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                     Color aGridColor( rTabSett.maGridColor );
                     if( aGridColor.GetColor() == COL_AUTO )
                         aGridColor.SetColor( SC_STD_GRIDCOLOR );
-                    pOptions->SetGridColor( aGridColor, EMPTY_STRING );
+                    pOptions->SetGridColor( aGridColor, EMPTY_OUSTRING );
                 }
 
                 // view mode and default zoom (for new sheets) from current sheet
@@ -2727,7 +2727,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                 uno::Sequence< OUString > aNames(xNameContainer->getElementNames());
                 for (sal_Int32 nTabPos = 0; nTabPos < aNames.getLength(); nTabPos++)
                 {
-                    String sTabName(aNames[nTabPos]);
+                    OUString sTabName(aNames[nTabPos]);
                     SCTAB nTab(0);
                     if (GetDocument()->GetTable(sTabName, nTab))
                     {
@@ -2752,7 +2752,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             OUString sValue;
             if(rSettings[i].Value >>= sValue)
             {
-                String sTabName(sValue);
+                OUString sTabName(sValue);
                 SCTAB nTab(0);
                 if (GetDocument()->GetTable(sTabName, nTab))
                     nTabNo = nTab;
@@ -2803,7 +2803,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             sal_Int64 nColor = 0;
             if (rSettings[i].Value >>= nColor)
             {
-                String aColorName;
+                OUString aColorName;
                 Color aColor(static_cast<sal_uInt32>(nColor));
                 // #i47435# set automatic grid color explicitly
                 if( aColor.GetColor() == COL_AUTO )

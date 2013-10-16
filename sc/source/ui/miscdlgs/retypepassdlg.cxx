@@ -369,7 +369,7 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
         if (aDlg.IsRemovePassword())
         {
             // Remove password from this item.
-            pProtected->setPassword(String());
+            pProtected->setPassword(OUString());
         }
         else
         {

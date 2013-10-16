@@ -838,7 +838,7 @@ void XclExpPivotCache::AddCalcFields( const ScDPObject& /*rDPObj*/ )
 
 void XclExpPivotCache::WriteDconref( XclExpStream& rStrm ) const
 {
-    XclExpString aRef( XclExpUrlHelper::EncodeUrl( GetRoot(), EMPTY_STRING, &maTabName ) );
+    XclExpString aRef( XclExpUrlHelper::EncodeUrl( GetRoot(), EMPTY_OUSTRING, &maTabName ) );
     rStrm.StartRecord( EXC_ID_DCONREF, 7 + aRef.GetSize() );
     rStrm   << static_cast< sal_uInt16 >( maExpSrcRange.aStart.Row() )
             << static_cast< sal_uInt16 >( maExpSrcRange.aEnd.Row() )

@@ -171,7 +171,7 @@ void ScLinkedAreaDlg::InitFromOldLink( const OUString& rFile, const OUString& rF
         m_pCbUrl->SetText( pMed->GetName() );
     }
     else
-        m_pCbUrl->SetText( EMPTY_STRING );
+        m_pCbUrl->SetText( EMPTY_OUSTRING );
 
     UpdateSourceRanges();
 
@@ -251,7 +251,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
             pSourceShell = NULL;
             aSourceRef.Clear();
 
-            m_pCbUrl->SetText( EMPTY_STRING );
+            m_pCbUrl->SetText( EMPTY_OUSTRING );
         }
     }
 
@@ -300,7 +300,7 @@ OUString ScLinkedAreaDlg::GetURL()
         SfxMedium* pMed = pSourceShell->GetMedium();
         return pMed->GetName();
     }
-    return EMPTY_STRING;
+    return EMPTY_OUSTRING;
 }
 
 OUString ScLinkedAreaDlg::GetFilter()

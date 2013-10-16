@@ -101,7 +101,7 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
     pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
     ScSetStringParam aParam;
     aParam.setTextInput();
-    pDoc->SetString(ScAddress(nCol,nRow,nTab), String(pString, pLotusRoot->eCharsetQ), &aParam);
+    pDoc->SetString(ScAddress(nCol,nRow,nTab), OUString(pString, strlen(pString), pLotusRoot->eCharsetQ), &aParam);
 }
 
 
@@ -506,7 +506,7 @@ RangeNameBufferWK3::~RangeNameBufferWK3()
 
 void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& rCRD )
 {
-    String aScName = ScfTools::ConvertToScDefinedName(rOrgName);
+    OUString aScName = ScfTools::ConvertToScDefinedName(rOrgName);
 
     Entry aInsert( rOrgName, aScName, rCRD );
 
@@ -558,8 +558,9 @@ sal_Bool RangeNameBufferWK3::FindRel( const OUString& rRef, sal_uInt16& rIndex )
 
 sal_Bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
 {
-    String              aTmp( rRef );
-    StringHashEntry     aRef( aTmp.Erase( 0, 1 ) ); // ohne '$' suchen!
+    OUString            aTmp( rRef );
+    aTmp = aTmp.copy(1);
+    StringHashEntry     aRef( aTmp ); // ohne '$' suchen!
 
     std::vector<Entry>::iterator itr;
     for ( itr = maEntries.begin(); itr != maEntries.end(); ++itr )

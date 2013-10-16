@@ -187,7 +187,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     }
     else
     {
-        aFtDbArea.SetText( EMPTY_STRING );
+        aFtDbArea.SetText( EMPTY_OUSTRING );
     }
 
     // Feldlisten einlesen und Eintraege selektieren:
@@ -220,7 +220,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
             aFieldLbArr[i]->SelectEntryPos( 0 ); // "keiner" selektieren
             aCondLbArr [i]->SelectEntryPos( 0 ); // "=" selektieren
             UpdateValueList( static_cast<sal_uInt16>(i) );
-            aValueEdArr[i]->SetText( EMPTY_STRING );
+            aValueEdArr[i]->SetText( EMPTY_OUSTRING );
         }
         aValueEdArr[i]->SetModifyHdl( LINK( this, ScPivotFilterDlg, ValModifyHdl ) );
     }
@@ -361,7 +361,7 @@ void ScPivotFilterDlg::ClearValueList( sal_uInt16 nList )
         pValList->Clear();
         pValList->InsertEntry( aStrNotEmpty, 0 );
         pValList->InsertEntry( aStrEmpty, 1 );
-        pValList->SetText( EMPTY_STRING );
+        pValList->SetText( EMPTY_OUSTRING );
     }
 }
 

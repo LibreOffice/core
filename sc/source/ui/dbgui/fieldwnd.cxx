@@ -1421,7 +1421,7 @@ ScDPSelectFieldControl::ScDPSelectFieldControl(
         ScPivotLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption, const char* pcHelpId) :
     ScDPHorFieldControl(pDialog, rResId, pCaption, pcHelpId)
 {
-    SetName(String(ScResId(STR_SELECT)));
+    SetName(OUString(ScResId(STR_SELECT)));
 }
 
 ScDPSelectFieldControl::~ScDPSelectFieldControl()

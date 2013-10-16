@@ -102,7 +102,6 @@ CollatorWrapper* ScGlobal::pCaseCollator = NULL;
 ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix = NULL;
 IntlWrapper*    ScGlobal::pScIntlWrapper = NULL;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
-String*         ScGlobal::pEmptyString = NULL;
 OUString*       ScGlobal::pEmptyOUString = NULL;
 OUString*       ScGlobal::pStrClipDocName = NULL;
 
@@ -514,11 +513,6 @@ SvxBrushItem* ScGlobal::GetButtonBrushItem()
     return pButtonBrushItem;
 }
 
-const String& ScGlobal::GetEmptyString()
-{
-    return *pEmptyString;
-}
-
 const OUString& ScGlobal::GetEmptyOUString()
 {
     return *pEmptyOUString;
@@ -534,7 +528,6 @@ ImageList* ScGlobal::GetOutlineSymbols()
 
 void ScGlobal::Init()
 {
-    pEmptyString = new String;
     pEmptyOUString = new OUString;
 
     //  Die Default-Sprache fuer Zahlenformate (ScGlobal::eLnge)
@@ -690,7 +683,6 @@ void ScGlobal::Clear()
 
     ScDocumentPool::DeleteVersionMaps();
 
-    DELETEZ(pEmptyString);
     DELETEZ(pEmptyOUString);
 }
 

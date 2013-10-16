@@ -1569,7 +1569,7 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
                     }
                     if ( !aFontName.isEmpty() )
                         pActEntry->aItemSet.Put( SvxFontItem( FAMILY_DONTKNOW,
-                            aFontName, EMPTY_STRING, PITCH_DONTKNOW,
+                            aFontName, EMPTY_OUSTRING, PITCH_DONTKNOW,
                             RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
                 }
                 break;
@@ -3085,7 +3085,7 @@ void ScHTMLQueryParser::FontOn( const ImportInfo& rInfo )
                 }
                 if ( !aFontName.isEmpty() )
                     mpCurrTable->PutItem( SvxFontItem( FAMILY_DONTKNOW,
-                        aFontName, EMPTY_STRING, PITCH_DONTKNOW,
+                        aFontName, EMPTY_OUSTRING, PITCH_DONTKNOW,
                         RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
             }
             break;

@@ -440,7 +440,7 @@ OUString ScDocumentLoader::GetOptions( SfxMedium& rMedium )
     if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
         return ((const SfxStringItem*)pItem)->GetValue();
 
-    return EMPTY_STRING;
+    return EMPTY_OUSTRING;
 }
 
 bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
@@ -590,7 +590,7 @@ OUString ScDocumentLoader::GetTitle() const
     if ( pDocShell )
         return pDocShell->GetTitle();
     else
-        return EMPTY_STRING;
+        return EMPTY_OUSTRING;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

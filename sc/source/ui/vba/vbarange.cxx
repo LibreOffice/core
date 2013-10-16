@@ -2028,7 +2028,7 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula) throw (uno::RuntimeExcepti
     ScTokenArray aTokenArray;
     (void)ScTokenConversion::ConvertToTokenArray( *getScDocument(), aTokenArray, aTokens );
 
-    getScDocShell()->GetDocFunc().EnterMatrix( *getScRangeList()[0], NULL, &aTokenArray, OUString(), sal_True, sal_True, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+    getScDocShell()->GetDocFunc().EnterMatrix( *getScRangeList()[0], NULL, &aTokenArray, OUString(), sal_True, sal_True, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
 }
 
 OUString

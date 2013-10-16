@@ -873,7 +873,7 @@ public:
     /** Returns true, if the OLE object will be shown as symbol. */
     inline bool         IsSymbol() const { return mbSymbol; }
     /** Returns the storage name for the OLE object. */
-    String              GetOleStorageName() const;
+    OUString            GetOleStorageName() const;
 
     /** Returns true, if this object is an OCX form control. */
     inline bool         IsOcxControl() const { return mbEmbedded && mbControl && mbUseCtlsStrm; }
@@ -1066,7 +1066,7 @@ private:
     const XclImpDffConvData& GetConvData() const;
 
     /** Reads contents of a hyperlink property and returns the extracted URL. */
-    String              ReadHlinkProperty( SvStream& rDffStrm ) const;
+    OUString            ReadHlinkProperty( SvStream& rDffStrm ) const;
 
     /** Processes a drawing container (all drawing data of a sheet). */
     void                ProcessDgContainer( SvStream& rDffStrm, const DffRecordHeader& rDgHeader );
@@ -1226,7 +1226,7 @@ public:
     void SetOleNameOverrideInfo( const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& rxOverrideInfo ) {  mxOleCtrlNameOverride = rxOverrideInfo; }
     /** Returns the name of overridden name ( or zero length string ) for
         associated object id. */
-    String GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId );
+    OUString GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId );
     // ------------------------------------------------------------------------
 private:
 

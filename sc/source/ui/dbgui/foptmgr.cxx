@@ -77,7 +77,7 @@ ScFilterOptionsMgr::~ScFilterOptionsMgr()
     sal_uInt16 i;
 
     for ( i=2; i<nEntries; i++ )
-        delete (String*)pLbCopyArea->GetEntryData( i );
+        delete (OUString*)pLbCopyArea->GetEntryData( i );
 }
 
 
@@ -131,7 +131,7 @@ void ScFilterOptionsMgr::Init()
 
         pBtnDestPers->Check( sal_True );         // beim Aufruf immer an
         pLbCopyArea->SelectEntryPos( 0 );
-        pEdCopyArea->SetText( EMPTY_STRING );
+        pEdCopyArea->SetText( EMPTY_OUSTRING );
 
         /*
          * Ueberpruefen, ob es sich bei dem uebergebenen
@@ -193,7 +193,7 @@ void ScFilterOptionsMgr::Init()
         else
         {
             pBtnCopyResult->Check( false );
-            pEdCopyArea->SetText( EMPTY_STRING );
+            pEdCopyArea->SetText( EMPTY_OUSTRING );
             pLbCopyArea->Disable();
             pEdCopyArea->Disable();
             pRbCopyArea->Disable();
@@ -201,7 +201,7 @@ void ScFilterOptionsMgr::Init()
         }
     }
     else
-        pEdCopyArea->SetText( EMPTY_STRING );
+        pEdCopyArea->SetText( EMPTY_OUSTRING );
 }
 
 //----------------------------------------------------------------------------
@@ -232,7 +232,7 @@ IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
         sal_uInt16 nSelPos = pLbCopyArea->GetSelectEntryPos();
 
         if ( nSelPos > 0 )
-            aString = *(String*)pLbCopyArea->GetEntryData( nSelPos );
+            aString = *(OUString*)pLbCopyArea->GetEntryData( nSelPos );
 
         pEdCopyArea->SetText( aString );
     }

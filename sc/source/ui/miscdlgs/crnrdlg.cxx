@@ -181,8 +181,8 @@ void ScColRowNameRangesDlg::Init()
     {
         pBtnColHead->Check( sal_True );
         pBtnRowHead->Check( false );
-        pEdAssign->SetText( EMPTY_STRING );
-        pEdAssign2->SetText( EMPTY_STRING );
+        pEdAssign->SetText( EMPTY_OUSTRING );
+        pEdAssign2->SetText( EMPTY_OUSTRING );
     }
 
     pLbRange->SetBorderStyle( WINDOW_BORDER_MONO );
@@ -279,13 +279,13 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,sal_Bool b
 
         if(bRef)
         {
-            pEdAssign->SetRefString( EMPTY_STRING );
-            pEdAssign2->SetRefString( EMPTY_STRING );
+            pEdAssign->SetRefString( EMPTY_OUSTRING );
+            pEdAssign2->SetRefString( EMPTY_OUSTRING );
         }
         else
         {
-            pEdAssign->SetText( EMPTY_STRING );
-            pEdAssign2->SetText( EMPTY_STRING );
+            pEdAssign->SetText( EMPTY_OUSTRING );
+            pEdAssign2->SetText( EMPTY_OUSTRING );
         }
 
         pBtnColHead->Disable();
@@ -481,7 +481,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     //-----------------------------------------------------------
     pLbRange->Clear();
     aRangeMap.clear();
-    pEdAssign->SetText( EMPTY_STRING );
+    pEdAssign->SetText( EMPTY_OUSTRING );
 
     size_t nCount, j;
     sal_uInt16 nPos; //@008 Hilfsvariable q eingefuegt
@@ -778,10 +778,10 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl)
             pEdAssign->GrabFocus();
             pBtnAdd->Disable();
             pBtnRemove->Disable();
-            pEdAssign->SetText( EMPTY_STRING );
+            pEdAssign->SetText( EMPTY_OUSTRING );
             pBtnColHead->Check( sal_True );
             pBtnRowHead->Check( false );
-            pEdAssign2->SetText( EMPTY_STRING );
+            pEdAssign2->SetText( EMPTY_OUSTRING );
             theCurArea = ScRange();
             theCurData = theCurArea;
             Range1SelectHdl( 0 );
@@ -864,11 +864,11 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
             pLbRange->GrabFocus();
             pBtnAdd->Disable();
             pBtnRemove->Disable();
-            pEdAssign->SetText( EMPTY_STRING );
+            pEdAssign->SetText( EMPTY_OUSTRING );
             theCurArea = theCurData = ScRange();
             pBtnColHead->Check( sal_True );
             pBtnRowHead->Check( false );
-            pEdAssign2->SetText( EMPTY_STRING );
+            pEdAssign2->SetText( EMPTY_OUSTRING );
             Range1SelectHdl( 0 );
         }
     }

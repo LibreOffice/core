@@ -545,7 +545,7 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
         }
         else
         {
-            pEd->SetText( EMPTY_STRING );
+            pEd->SetText( EMPTY_OUSTRING );
             if ( pEd == pEdDataArea )
                 pBtnAdd->Enable();
         }

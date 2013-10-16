@@ -4075,13 +4075,13 @@ sal_Bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMa
         if ( pTokenArray )
         {
             pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, EMPTY_STRING, pTokenArray, eGrammar);
+                    aMark, EMPTY_OUSTRING, pTokenArray, eGrammar);
         }
         else if ( pDoc->IsImportingXML() )
         {
             ScTokenArray* pCode = lcl_ScDocFunc_CreateTokenArrayXML( rString, rFormulaNmsp, eGrammar );
             pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, EMPTY_STRING, pCode, eGrammar);
+                    aMark, EMPTY_OUSTRING, pCode, eGrammar);
             delete pCode;
             pDoc->IncXMLImportedFormulaCount( rString.getLength() );
         }
@@ -4091,7 +4091,7 @@ sal_Bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMa
             aComp.SetGrammar(eGrammar);
             ScTokenArray* pCode = aComp.CompileString( rString );
             pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, EMPTY_STRING, pCode, eGrammar);
+                    aMark, EMPTY_OUSTRING, pCode, eGrammar);
             delete pCode;
         }
         else
@@ -5207,11 +5207,11 @@ sal_Bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNe
         if ( DeleteContents( aMark, IDF_CONTENTS, sal_True, bApi ) )
         {
             // GRAM_PODF_A1 for API compatibility.
-            bRet = EnterMatrix( aNewRange, &aMark, NULL, aFormula, bApi, false, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+            bRet = EnterMatrix( aNewRange, &aMark, NULL, aFormula, bApi, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
             if (!bRet)
             {
                 //  versuchen, alten Zustand wiederherzustellen
-                EnterMatrix( rOldRange, &aMark, NULL, aFormula, bApi, false, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+                EnterMatrix( rOldRange, &aMark, NULL, aFormula, bApi, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
             }
         }
 

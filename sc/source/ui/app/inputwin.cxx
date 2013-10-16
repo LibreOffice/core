@@ -2009,8 +2009,8 @@ void ScTextWnd::ImplInitSettings()
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ScTextWnd::CreateAccessible()
 {
     return new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), NULL, this,
-        OUString(String(ScResId(STR_ACC_EDITLINE_NAME))),
-        OUString(String(ScResId(STR_ACC_EDITLINE_DESCR))), ScAccessibleEditObject::EditLine);
+        OUString(ScResId(STR_ACC_EDITLINE_NAME)),
+        OUString(ScResId(STR_ACC_EDITLINE_DESCR)), ScAccessibleEditObject::EditLine);
 }
 
 void ScTextWnd::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )

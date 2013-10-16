@@ -215,7 +215,7 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
                 maEdits[i].SetText(aFieldName);
             }
             else
-                maEdits[i].SetText(String());
+                maEdits[i].SetText(OUString());
         }
     }
 

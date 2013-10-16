@@ -609,7 +609,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
 
     // fill edit field according to list box selection
     if( (nSelPos == 0) || (nSelPos == nAllSheetPos) )
-        pEd->SetText( EMPTY_STRING );
+        pEd->SetText( EMPTY_OUSTRING );
     else if( nSelPos == nUserDefPos && !pLb->IsTravelSelect() && pEd->GetText().isEmpty())
         pLb->SelectEntryPos( 0 );
     else if( nSelPos >= nFirstCustomPos )

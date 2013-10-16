@@ -288,7 +288,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     uno::Reference< XInputStream > xStream;
     uno::Reference< XContent > xContent;
     uno::Reference< XInteractionHandler > xInteraction;
-    String aURL;
+    OUString aURL;
     OUString sTemp;
     OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     OUString aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
@@ -323,7 +323,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( !aURL.Len() && lDescriptor[nProperty].Name == "FileName" )
+        else if( aURL.isEmpty() && lDescriptor[nProperty].Name == "FileName" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
@@ -375,11 +375,10 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
     const SfxFilter* pFilter = 0;
     OUString aPrefix = OUString( "private:factory/" );
-    if( aURL.Match( aPrefix ) == aPrefix.getLength() )
+    if( aURL.startsWith( aPrefix ) )
     {
-        OUString aPattern( aPrefix );
-        aPattern += "scalc";
-        if ( aURL.Match( aPattern ) >= aPattern.getLength() )
+        OUString aPattern = aPrefix + "scalc";
+        if ( aURL.startsWith( aPattern ) )
             pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
     }
     else

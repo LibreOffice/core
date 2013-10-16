@@ -313,7 +313,7 @@ static void lcl_Replace( EditView* pView, const OUString& rNewStr, const ESelect
 
         //  Dummy-InsertText fuer Update und Paint
         //  dafuer muss oben die Selektion aufgehoben werden (vor QuickInsertText)
-        pView->InsertText( EMPTY_STRING, false );
+        pView->InsertText( EMPTY_OUSTRING, false );
 
         xub_StrLen nLen = pEngine->GetTextLen(0);
         ESelection aSel( 0, nLen, 0, nLen );
@@ -1713,7 +1713,7 @@ void ScInputHandler::UpdateParenthesis()
                         pEngine->QuickSetAttribs( aSet, aSelOther );
 
                         //  Dummy-InsertText fuer Update und Paint (Selektion ist leer)
-                        pTableView->InsertText( EMPTY_STRING, false );
+                        pTableView->InsertText( EMPTY_OUSTRING, false );
 
                         bFound = true;
                     }
@@ -2873,7 +2873,7 @@ void ScInputHandler::CancelHandler()
         pExecuteSh->StopEditShell();
 
     aCursorPos.Set(MAXCOL+1,0,0);       // Flag, dass ungueltig
-    pEngine->SetText(String());
+    pEngine->SetText(OUString());
 
     if ( !pLastState && pExecuteSh )
         pExecuteSh->UpdateInputHandler( true );     // Status neu holen
@@ -3694,11 +3694,11 @@ IMPL_LINK( ScInputHandler, DelayTimer, Timer*, pTimer )
                 bInOwnChange = true;    // disable ModifyHdl (reset below)
 
                 pActiveViewSh = NULL;
-                pEngine->SetText( EMPTY_STRING );
+                pEngine->SetText( EMPTY_OUSTRING );
                 if ( pInputWin )
                 {
-                    pInputWin->SetPosString( EMPTY_STRING );
-                    pInputWin->SetTextString( EMPTY_STRING );
+                    pInputWin->SetPosString( EMPTY_OUSTRING );
+                    pInputWin->SetTextString( EMPTY_OUSTRING );
                     pInputWin->Disable();
                 }
 
@@ -3835,7 +3835,7 @@ EditView* ScInputHandler::GetFuncEditView()
             SetMode( SC_INPUT_TABLE );
             bCreatingFuncView = false;
             if ( pTableView )
-                pTableView->GetEditEngine()->SetText( EMPTY_STRING );
+                pTableView->GetEditEngine()->SetText( EMPTY_OUSTRING );
         }
         pView = pTableView;
     }

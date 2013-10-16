@@ -400,7 +400,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         else
         {
             mpMFLeftIndent->SetValue(0);
-            mpMFLeftIndent->SetText(String());
+            mpMFLeftIndent->SetText(OUString());
         }
         break;
     case FID_MERGE_TOGGLE:

@@ -296,8 +296,8 @@ public:
                                 const OUString& rExpr1, const OUString& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
                                 const OUString& rStyle,
-                                const OUString& rExprNmsp1 = EMPTY_STRING,
-                                const OUString& rExprNmsp2 = EMPTY_STRING,
+                                const OUString& rExprNmsp1 = EMPTY_OUSTRING,
+                                const OUString& rExprNmsp2 = EMPTY_OUSTRING,
                                 formula::FormulaGrammar::Grammar eGrammar1 = formula::FormulaGrammar::GRAM_DEFAULT,
                                 formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT );
             ScCondFormatEntry( ScConditionMode eOper,

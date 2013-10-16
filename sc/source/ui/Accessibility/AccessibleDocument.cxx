@@ -1386,7 +1386,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 mpTempAccEdit = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos),
                     mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
-                    OUString(String(ScResId(STR_ACC_EDITLINE_DESCR))), ScAccessibleEditObject::CellInEditMode);
+                    OUString(ScResId(STR_ACC_EDITLINE_DESCR)), ScAccessibleEditObject::CellInEditMode);
                 uno::Reference<XAccessible> xAcc = mpTempAccEdit;
 
                 AddChild(xAcc, sal_True);

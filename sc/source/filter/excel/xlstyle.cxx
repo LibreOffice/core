@@ -1542,7 +1542,7 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
             if( pBuiltIn->mpFormat )
                 rNumFmt.maFormat = OUString( pBuiltIn->mpFormat, strlen(pBuiltIn->mpFormat), RTL_TEXTENCODING_UTF8 );
             else
-                rNumFmt.maFormat = EMPTY_STRING;
+                rNumFmt.maFormat = EMPTY_OUSTRING;
 
             if( pBuiltIn->meOffset == PRV_NF_INDEX_REUSE )
                 aReuseMap[ pBuiltIn->mnXclNumFmt ] = pBuiltIn->mnXclReuseFmt;

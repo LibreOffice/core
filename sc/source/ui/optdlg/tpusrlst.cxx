@@ -523,7 +523,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             mpLbLists->Disable();
             mpFtEntries->Enable();
             mpEdEntries->Enable();
-            mpEdEntries->SetText( EMPTY_STRING );
+            mpEdEntries->SetText( EMPTY_OUSTRING );
             mpEdEntries->GrabFocus();
             mpBtnAdd->Disable();
             mpBtnModify->Disable();
@@ -552,7 +552,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             {
                 mpFtEntries->Disable();
                 mpEdEntries->Disable();
-                mpEdEntries->SetText( EMPTY_STRING );
+                mpEdEntries->SetText( EMPTY_OUSTRING );
                 mpBtnRemove->Disable();
             }
             mpBtnAdd->Disable();
@@ -674,7 +674,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
                     mpLbLists->Disable();
                     mpFtEntries->Disable();
                     mpEdEntries->Disable();
-                    mpEdEntries->SetText( EMPTY_STRING );
+                    mpEdEntries->SetText( EMPTY_OUSTRING );
                     mpBtnRemove->Disable();
                 }
             }

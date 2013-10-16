@@ -471,7 +471,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
         {
             Graphic aGraphic;
             *xStm >> aGraphic;
-            bRet = PasteGraphic( aPos, aGraphic, EMPTY_STRING, EMPTY_STRING );
+            bRet = PasteGraphic( aPos, aGraphic, EMPTY_OUSTRING, EMPTY_OUSTRING );
         }
     }
     else if ( nFormatId == SOT_FORMATSTR_ID_DRAWING )

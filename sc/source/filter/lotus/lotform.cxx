@@ -516,7 +516,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
                 break;
             case FT_ConstString:
             {
-                String  aTmp(ScfTools::read_zeroTerminated_uInt8s_ToOUString(aIn, nBytesLeft, eSrcChar));
+                OUString  aTmp(ScfTools::read_zeroTerminated_uInt8s_ToOUString(aIn, nBytesLeft, eSrcChar));
                 aStack << aPool.Store( aTmp );
             }
                 break;
@@ -535,12 +535,12 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
                 break;
             case FT_Nrref:
             {
-                String  aTmp(ScfTools::read_zeroTerminated_uInt8s_ToOUString(aIn, nBytesLeft, eSrcChar));
+                OUString  aTmp(ScfTools::read_zeroTerminated_uInt8s_ToOUString(aIn, nBytesLeft, eSrcChar));
                 if( rRangeNameBufferWK3.FindRel( aTmp, nRngIndex ) )
                     aStack << aPool.Store( nRngIndex );
                 else
             {
-                    String  aText( RTL_CONSTASCII_USTRINGPARAM( "NRREF " ) );
+                    OUString  aText( "NRREF ");
                     aText += aTmp;
                     aStack << aPool.Store( aText );
             }
@@ -548,12 +548,12 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
                 break;
             case FT_Absnref:
             {
-                String aTmp(ScfTools::read_zeroTerminated_uInt8s_ToOUString(aIn, nBytesLeft, eSrcChar));
+                OUString aTmp(ScfTools::read_zeroTerminated_uInt8s_ToOUString(aIn, nBytesLeft, eSrcChar));
                 if( rRangeNameBufferWK3.FindAbs( aTmp, nRngIndex ) )
                     aStack << aPool.Store( nRngIndex );
                 else
                 {
-                    String  aText( RTL_CONSTASCII_USTRINGPARAM( "ABSNREF " ) );
+                    OUString  aText( "ABSNREF " );
                     aText += aTmp;
                     aStack << aPool.Store( aText );
                 }

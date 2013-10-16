@@ -366,7 +366,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
 void ScValidationData::DoCalcError( ScFormulaCell* pCell ) const
 {
     if ( eErrorStyle == SC_VALERR_MACRO )
-        DoMacro( pCell->aPos, EMPTY_STRING, pCell, NULL );
+        DoMacro( pCell->aPos, EMPTY_OUSTRING, pCell, NULL );
 }
 
     // true -> Abbruch

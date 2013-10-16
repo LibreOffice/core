@@ -614,7 +614,7 @@ void ScTabPageSortOptions::Init()
         }
 
         m_pLbOutPos->SelectEntryPos( 0 );
-        m_pEdOutPos->SetText( EMPTY_STRING );
+        m_pEdOutPos->SetText( EMPTY_OUSTRING );
 
         // Check whether the field that is passed on is a database field:
 
@@ -724,7 +724,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
         m_pBtnCopyResult->Check( false );
         m_pLbOutPos->Disable();
         m_pEdOutPos->Disable();
-        m_pEdOutPos->SetText( EMPTY_STRING );
+        m_pEdOutPos->SetText( EMPTY_OUSTRING );
     }
 }
 

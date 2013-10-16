@@ -178,7 +178,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
             }
             else
             {
-                rEE.SetText( EMPTY_STRING );
+                rEE.SetText( EMPTY_OUSTRING );
                 rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection() );
                 if( const ScPatternAttr* pPattern = rDoc.getDoc().GetPattern( aScPos.Col(), aScPos.Row(), nScTab ) )
                 {
@@ -958,7 +958,7 @@ void XclImpWebQuery::Apply( ScDocument& rDoc, const OUString& rFilterName )
     if( !maURL.isEmpty() && (meMode != xlWQUnknown) && rDoc.GetDocumentShell() )
     {
         ScAreaLink* pLink = new ScAreaLink( rDoc.GetDocumentShell(),
-            maURL, rFilterName, EMPTY_STRING, maTables, maDestRange, mnRefresh * 60UL );
+            maURL, rFilterName, EMPTY_OUSTRING, maTables, maDestRange, mnRefresh * 60UL );
         rDoc.GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE,
             maURL, &rFilterName, &maTables );
     }

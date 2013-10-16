@@ -1674,7 +1674,7 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
     sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER | KParseTokens::ASC_UNDERSCORE;
     sal_Int32 nContFlags = nStartFlags;
     ParseResult aRes = ScGlobal::pCharClass->parsePredefinedToken(
-        KParseType::IDENTNAME, rString, 0, nStartFlags, EMPTY_STRING, nContFlags, EMPTY_STRING);
+        KParseType::IDENTNAME, rString, 0, nStartFlags, EMPTY_OUSTRING, nContFlags, EMPTY_OUSTRING);
     bool bNeedsQuote = !((aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rString.getLength());
 
     switch ( eConv )

@@ -858,7 +858,6 @@ public:
 
     svl::SharedString GetSharedString( const ScAddress& rPos ) const;
 
-    SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );
     sal_uInt16 GetStringForFormula( const ScAddress& rPos, OUString& rString );
     SC_DLLPUBLIC double GetValue( const ScAddress& rPos ) const;

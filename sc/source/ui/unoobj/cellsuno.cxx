@@ -5207,7 +5207,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
             // Actually GRAM_PODF_A1 is a don't-care here because of the token
             // array being set, it fits with other API compatibility grammars
             // though.
-            pDocSh->GetDocFunc().EnterMatrix( aRange, NULL, &aTokenArray, EMPTY_STRING, sal_True, sal_True, EMPTY_STRING, formula::FormulaGrammar::GRAM_PODF_A1 );
+            pDocSh->GetDocFunc().EnterMatrix( aRange, NULL, &aTokenArray, EMPTY_OUSTRING, sal_True, sal_True, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
         }
         else
         {

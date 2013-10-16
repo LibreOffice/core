@@ -455,14 +455,14 @@ void ScTPValidationValue::SetFirstFormula( const OUString& rFmlaStr )
         lclGetStringListFromFormula( aStringList, rFmlaStr, mcFmlaSep ) )
     {
         maEdList.SetText( aStringList );
-        maEdMin.SetText( EMPTY_STRING );
+        maEdMin.SetText( EMPTY_OUSTRING );
         // change validation mode to string list
         maLbAllow.SelectEntryPos( SC_VALIDDLG_ALLOW_LIST );
     }
     else
     {
         maEdMin.SetText( rFmlaStr );
-        maEdList.SetText( EMPTY_STRING );
+        maEdList.SetText( EMPTY_OUSTRING );
     }
 }
 
@@ -738,12 +738,12 @@ void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
     if ( rArgSet.GetItemState( FID_VALID_HELPTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
         pEdtTitle->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
-        pEdtTitle->SetText( EMPTY_STRING );
+        pEdtTitle->SetText( EMPTY_OUSTRING );
 
     if ( rArgSet.GetItemState( FID_VALID_HELPTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
         pEdInputHelp->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
-        pEdInputHelp->SetText( EMPTY_STRING );
+        pEdInputHelp->SetText( EMPTY_OUSTRING );
 }
 
 // -----------------------------------------------------------------------
@@ -832,12 +832,12 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
     if ( rArgSet.GetItemState( FID_VALID_ERRTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
         m_pEdtTitle->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
-        m_pEdtTitle->SetText( EMPTY_STRING );
+        m_pEdtTitle->SetText( EMPTY_OUSTRING );
 
     if ( rArgSet.GetItemState( FID_VALID_ERRTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
         m_pEdError->SetText( ((const SfxStringItem*)pItem)->GetValue() );
     else
-        m_pEdError->SetText( EMPTY_STRING );
+        m_pEdError->SetText( EMPTY_OUSTRING );
 
     SelectActionHdl( NULL );
 }

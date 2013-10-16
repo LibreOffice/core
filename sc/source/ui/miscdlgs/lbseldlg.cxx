@@ -32,7 +32,7 @@
 
 //==================================================================
 
-ScSelEntryDlg::ScSelEntryDlg(Window*  pParent, const std::vector<String> &rEntryList)
+ScSelEntryDlg::ScSelEntryDlg(Window*  pParent, const std::vector<OUString> &rEntryList)
     : ModalDialog(pParent, "SelectRangeDialog", "modules/scalc/ui/selectrange.ui")
 {
     get(m_pLb, "treeview");
@@ -40,7 +40,7 @@ ScSelEntryDlg::ScSelEntryDlg(Window*  pParent, const std::vector<String> &rEntry
     m_pLb->set_width_request(m_pLb->approximate_char_width() * 32);
     m_pLb->SetDoubleClickHdl( LINK( this, ScSelEntryDlg, DblClkHdl ) );
 
-    std::vector<String>::const_iterator pIter;
+    std::vector<OUString>::const_iterator pIter;
     for ( pIter = rEntryList.begin(); pIter != rEntryList.end(); ++pIter )
         m_pLb->InsertEntry(*pIter);
 

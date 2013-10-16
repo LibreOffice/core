@@ -626,7 +626,7 @@ void ScFilterDlg::ClearValueList( size_t nList )
         pValList->Clear();
         pValList->InsertEntry( aStrNotEmpty, 0 );
         pValList->InsertEntry( aStrEmpty, 1 );
-        pValList->SetText( EMPTY_STRING );
+        pValList->SetText( EMPTY_OUSTRING );
     }
 }
 

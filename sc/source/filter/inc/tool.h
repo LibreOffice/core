@@ -33,7 +33,7 @@ void        SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sa
 
 void        InitPage( void );
 
-String      DosToSystem( sal_Char *pSource );
+OUString    DosToSystem( sal_Char *pSource );
 
 double      SnumToDouble( sal_Int16 nVal );
 

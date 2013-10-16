@@ -993,7 +993,7 @@ void ScHeaderControl::DrawInvert( long /* nDragPos */ )
 
 OUString ScHeaderControl::GetDragHelp( long /* nVal */ )
 {
-    return EMPTY_STRING;
+    return EMPTY_OUSTRING;
 }
 
 void ScHeaderControl::SetMarking( sal_Bool /* bSet */ )

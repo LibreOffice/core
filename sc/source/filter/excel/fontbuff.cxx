@@ -141,7 +141,7 @@ void LotusFontBuffer::MakeFont( ENTRY* pEntry )
             break;
     }
 
-    pEntry->pFont = new SvxFontItem( eFamily, *pEntry->pTmpName, EMPTY_STRING, ePitch, eCharSet, ATTR_FONT );
+    pEntry->pFont = new SvxFontItem( eFamily, *pEntry->pTmpName, EMPTY_OUSTRING, ePitch, eCharSet, ATTR_FONT );
 
     delete pEntry->pTmpName;
     pEntry->pTmpName = NULL;

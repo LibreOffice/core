@@ -274,8 +274,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 sal_uLong nFormat = 0;
                 if ( pDlg )
                 {
-                    pDlg->Insert( SOT_FORMAT_STRING, EMPTY_STRING );
-                    pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_STRING );
+                    pDlg->Insert( SOT_FORMAT_STRING, EMPTY_OUSTRING );
+                    pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_OUSTRING );
 
                     TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );

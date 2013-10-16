@@ -2040,7 +2040,7 @@ ScDPLevel::ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL ) :
     nHier( nH ),
     nLev( nL ),
     pMembers( NULL ),
-    aSortInfo( EMPTY_STRING, sal_True, sheet::DataPilotFieldSortMode::NAME ),   // default: sort by name
+    aSortInfo( EMPTY_OUSTRING, sal_True, sheet::DataPilotFieldSortMode::NAME ),   // default: sort by name
     nSortMeasure( 0 ),
     nAutoMeasure( 0 ),
     bShowEmpty( false ),

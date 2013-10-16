@@ -137,7 +137,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     pViewData   = rQueryItem.GetViewData();
     pDoc        = pViewData ? pViewData->GetDocument()  : NULL;
 
-    pEdFilterArea->SetText( EMPTY_STRING );      // may be overwritten below
+    pEdFilterArea->SetText( EMPTY_OUSTRING );      // may be overwritten below
 
     if ( pViewData && pDoc )
     {

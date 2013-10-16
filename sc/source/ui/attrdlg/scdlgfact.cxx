@@ -836,7 +836,7 @@ AbstractScInsertTableDlg * ScAbstractDialogFactory_Impl::CreateScInsertTableDlg(
 }
 
 AbstractScSelEntryDlg * ScAbstractDialogFactory_Impl::CreateScSelEntryDlg ( Window* pParent,
-                                                        const std::vector<String> &rEntryList )
+                                                        const std::vector<OUString> &rEntryList )
 {
     ScSelEntryDlg * pDlg = new ScSelEntryDlg( pParent, rEntryList );
     return new AbstractScSelEntryDlg_Impl( pDlg );

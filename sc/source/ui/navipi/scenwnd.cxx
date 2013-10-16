@@ -57,7 +57,7 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
     {
         case 0:
             // no scenarios in current sheet
-            mrParent.SetComment( EMPTY_STRING );
+            mrParent.SetComment( EMPTY_OUSTRING );
         break;
 
         case 1:
@@ -92,7 +92,7 @@ void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryLis
             }
             SetUpdateMode( sal_True );
             SetNoSelection();
-            mrParent.SetComment( EMPTY_STRING );
+            mrParent.SetComment( EMPTY_OUSTRING );
         }
     }
 }

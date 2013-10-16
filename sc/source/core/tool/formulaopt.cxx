@@ -193,7 +193,7 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_SEP_ARRAY_ROW        3
 #define SCFORMULAOPT_SEP_ARRAY_COL        4
 #define SCFORMULAOPT_STRING_REF_SYNTAX    5
-#define SCFORMULAOPT_EMPTY_STRING_AS_ZERO 6
+#define SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO 6
 #define SCFORMULAOPT_OOXML_RECALC         7
 #define SCFORMULAOPT_ODF_RECALC           8
 #define SCFORMULAOPT_OPENCL_ENABLED       9
@@ -211,7 +211,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Syntax/SeparatorArrayRow",      // SCFORMULAOPT_SEP_ARRAY_ROW
         "Syntax/SeparatorArrayCol",      // SCFORMULAOPT_SEP_ARRAY_COL
         "Syntax/StringRefAddressSyntax", // SCFORMULAOPT_STRING_REF_SYNTAX
-        "Syntax/EmptyStringAsZero",      // SCFORMULAOPT_EMPTY_STRING_AS_ZERO
+        "Syntax/EmptyStringAsZero",      // SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO
         "Load/OOXMLRecalcMode",          // SCFORMULAOPT_OOXML_RECALC
         "Load/ODFRecalcMode",            // SCFORMULAOPT_ODF_RECALC
         "Calculation/OpenCL",            // SCFORMULAOPT_OPENCL_ENABLED
@@ -229,7 +229,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
 {
     Sequence<OUString> aPropNames = GetPropertyNames();
-    static sal_uInt16 aVals[] = { SCFORMULAOPT_GRAMMAR, SCFORMULAOPT_ENGLISH_FUNCNAME, SCFORMULAOPT_SEP_ARG, SCFORMULAOPT_SEP_ARRAY_ROW, SCFORMULAOPT_SEP_ARRAY_COL, SCFORMULAOPT_STRING_REF_SYNTAX, SCFORMULAOPT_EMPTY_STRING_AS_ZERO, SCFORMULAOPT_OOXML_RECALC, SCFORMULAOPT_ODF_RECALC, SCFORMULAOPT_OPENCL_ENABLED, SCFORMULAOPT_OPENCL_AUTOSELECT, SCFORMULAOPT_OPENCL_DEVICE };
+    static sal_uInt16 aVals[] = { SCFORMULAOPT_GRAMMAR, SCFORMULAOPT_ENGLISH_FUNCNAME, SCFORMULAOPT_SEP_ARG, SCFORMULAOPT_SEP_ARRAY_ROW, SCFORMULAOPT_SEP_ARRAY_COL, SCFORMULAOPT_STRING_REF_SYNTAX, SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO, SCFORMULAOPT_OOXML_RECALC, SCFORMULAOPT_ODF_RECALC, SCFORMULAOPT_OPENCL_ENABLED, SCFORMULAOPT_OPENCL_AUTOSELECT, SCFORMULAOPT_OPENCL_DEVICE };
     OSL_ENSURE( SAL_N_ELEMENTS(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
     PropsToIds aPropIdMap;
     for ( sal_uInt16 i=0; i<aPropNames.getLength(); ++i )
@@ -353,7 +353,7 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     GetCalcConfig().meStringRefAddressSyntax = eConv;
                 }
                 break;
-                case SCFORMULAOPT_EMPTY_STRING_AS_ZERO:
+                case SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO:
                 {
                     sal_Bool bVal = GetCalcConfig().mbEmptyStringAsZero;
                     pValues[nProp] >>= bVal;
@@ -487,7 +487,7 @@ void ScFormulaCfg::Commit()
                 pValues[nProp] <<= nVal;
             }
             break;
-            case SCFORMULAOPT_EMPTY_STRING_AS_ZERO:
+            case SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO:
             {
                 sal_Bool bVal = GetCalcConfig().mbEmptyStringAsZero;
                 pValues[nProp] <<= bVal;

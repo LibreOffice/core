@@ -218,7 +218,6 @@ const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
 #define HASATTR_PAINTEXT        ( HASATTR_LINES | HASATTR_SHADOW | HASATTR_CONDITIONAL )
 
-#define EMPTY_STRING ScGlobal::GetEmptyString()
 #define EMPTY_OUSTRING ScGlobal::GetEmptyOUString()
 
                                         //  layer id's for drawing
@@ -496,7 +495,6 @@ class ScGlobal
     static ScUserList*      pUserList;
     static OUString**       ppRscString;
     static OUString*        pStrScDoc;
-    static String*          pEmptyString;
     static OUString*        pEmptyOUString;
     static OUString*        pStrClipDocName;
     static SvxBrushItem*    pEmptyBrushItem;
@@ -589,7 +587,6 @@ public:
     static SvxBrushItem*    GetButtonBrushItem();
     static SvxBrushItem*    GetEmbeddedBrushItem()  { return pEmbeddedBrushItem; }
     static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
-    SC_DLLPUBLIC    static const String&    GetEmptyString();
     SC_DLLPUBLIC    static const OUString&    GetEmptyOUString();
     static const OUString&  GetScDocString();
 
