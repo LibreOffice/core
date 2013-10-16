@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Module_Module,boost))
 
-ifeq ($(SYSTEM_BOOST),NO)
-
 $(eval $(call gb_Module_add_targets,boost,\
 	StaticLibrary_boostdatetime \
 	StaticLibrary_boostsystem \
@@ -22,7 +20,5 @@ $(eval $(call gb_Module_add_targets,boost,\
 	StaticLibrary_boostthread \
 ))
 endif
-
-endif # SYSTEM_BOOST
 
 # vim: set noet sw=4 ts=4:

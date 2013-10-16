@@ -22,7 +22,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	basegfx \
 	basic \
 	bean \
-	$(call gb_Helper_optional,BOOST,boost) \
 	$(call gb_Helper_optional,BSH,beanshell) \
 	binaryurp \
 	bridges \
