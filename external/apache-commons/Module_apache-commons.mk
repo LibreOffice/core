@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Module_Module,apache-commons))
 
-ifneq ($(ENABLE_JAVA),)
-ifneq ($(filter APACHE_COMMONS,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_targets,apache-commons,\
 	ExternalPackage_apache_commons_logging \
 	ExternalProject_apache_commons_codec \
@@ -25,7 +23,5 @@ $(eval $(call gb_Module_add_targets,apache-commons,\
 	UnpackedTarball_apache_commons_lang \
 	UnpackedTarball_apache_commons_logging \
 ))
-endif
-endif
 
 # vim: set noet sw=4 ts=4:

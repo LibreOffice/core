@@ -16,7 +16,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,apache_commons_logging,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,apache_commons_logging,\
-	apache-commons/patches/logging.patch \
+	external/apache-commons/patches/logging.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

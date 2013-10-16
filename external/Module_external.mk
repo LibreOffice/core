@@ -19,6 +19,7 @@ endif
 
 $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,AFMS,afms) \
+	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
 	$(call gb_Helper_optional,HARFBUZZ,harfbuzz) \
 	$(call gb_Helper_optional,LIBPNG,libpng) \
 ))

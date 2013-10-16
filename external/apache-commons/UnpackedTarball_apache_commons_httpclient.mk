@@ -12,8 +12,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,apache_commons_httpclient))
 $(eval $(call gb_UnpackedTarball_set_tarball,apache_commons_httpclient,$(APACHE_COMMONS_HTTPCLIENT_TARBALL),,apache-commons))
 
 $(eval $(call gb_UnpackedTarball_add_patches,apache_commons_httpclient,\
-	apache-commons/patches/httpclient.patch \
-	apache-commons/patches/httpclient_no_javadoc.patch \
+	external/apache-commons/patches/httpclient.patch \
+	external/apache-commons/patches/httpclient_no_javadoc.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
