@@ -10,6 +10,15 @@
 #include "formularesult.hxx"
 #include "scmatrix.hxx"
 
+namespace sc {
+
+FormulaResultValue::FormulaResultValue() : meType(Invalid), mfValue(0.0), mnError(0) {}
+FormulaResultValue::FormulaResultValue( double fValue ) : meType(Value), mfValue(fValue), mnError(0) {}
+FormulaResultValue::FormulaResultValue( const svl::SharedString& rStr ) : meType(String), mfValue(0.0), maString(rStr), mnError(0) {}
+FormulaResultValue::FormulaResultValue( sal_uInt16 nErr ) : meType(Error), mfValue(0.0), mnError(nErr) {}
+
+}
+
 ScFormulaResult::ScFormulaResult() :
     mpToken(NULL), mnError(0), mbToken(true),
     mbEmpty(false), mbEmptyDisplayedAsString(false),
@@ -370,6 +379,44 @@ bool ScFormulaResult::GetErrorOrString( sal_uInt16& rErr, svl::SharedString& rSt
 
     rStr = GetString();
     return true;
+}
+
+sc::FormulaResultValue ScFormulaResult::GetResult() const
+{
+    if (mnError)
+        return sc::FormulaResultValue(mnError);
+
+    formula::StackVar sv = GetCellResultType();
+    sal_uInt16 nErr = 0;
+    if (sv == formula::svError)
+    {
+        if (GetType() == formula::svMatrixCell)
+        {
+            // don't need to test for mpToken here, GetType() already did it
+            nErr = static_cast<const ScMatrixCellResultToken*>(mpToken)->
+                GetUpperLeftToken()->GetError();
+        }
+        else if (mpToken)
+        {
+            nErr = mpToken->GetError();
+        }
+    }
+
+    if (nErr)
+        return sc::FormulaResultValue(nErr);
+
+    if (isValue(sv))
+        return sc::FormulaResultValue(GetDouble());
+
+    if (!mbToken)
+        // String result type needs token.
+        return sc::FormulaResultValue();
+
+    if (isString(sv))
+        return sc::FormulaResultValue(GetString());
+
+    // Invalid
+    return sc::FormulaResultValue();
 }
 
 sal_uInt16 ScFormulaResult::GetResultError() const

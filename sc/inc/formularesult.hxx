@@ -23,6 +23,26 @@
 #include "token.hxx"
 #include "scdllapi.h"
 
+namespace sc {
+
+struct FormulaResultValue
+{
+    enum Type { Invalid, Value, String, Error };
+
+    Type meType;
+
+    double mfValue;
+    svl::SharedString maString;
+    sal_uInt16 mnError;
+
+    FormulaResultValue();
+    FormulaResultValue( double fValue );
+    FormulaResultValue(const svl::SharedString& rStr );
+    FormulaResultValue( sal_uInt16 nErr );
+};
+
+}
+
 /** Store a variable formula cell result, balancing between runtime performance
     and memory consumption. */
 class ScFormulaResult
@@ -136,6 +156,7 @@ public:
 
     bool GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const;
     bool GetErrorOrString( sal_uInt16& rErr, svl::SharedString& rStr ) const;
+    sc::FormulaResultValue GetResult() const;
 
     /** Get error code if set or GetCellResultType() is formula::svError or svUnknown,
         else 0. */
