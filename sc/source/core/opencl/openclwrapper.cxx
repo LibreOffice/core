@@ -2819,7 +2819,7 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
     OpenclDevice::initOpenclAttr(&env);
 
     // why do we need this at all?
-    OpenclDevice::gpuEnv.mpArryDevsID = (cl_device_id*) malloc( 1 );
+    OpenclDevice::gpuEnv.mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) );
     OpenclDevice::gpuEnv.mpArryDevsID[0] = pDeviceId;
     return !OpenclDevice::initOpenclRunEnv(0);
 }
