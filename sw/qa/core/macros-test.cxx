@@ -135,7 +135,7 @@ void SwMacrosTest::testVba()
         sMsg.append ( aFileName );
         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 
-        String sUrl = testInfo[i].sMacroUrl;
+        OUString sUrl = testInfo[i].sMacroUrl;
         Any aRet;
         Sequence< sal_Int16 > aOutParamIndex;
         Sequence< Any > aOutParam;

@@ -20,14 +20,14 @@
 
 namespace CppUnit {
 template<>
-struct assertion_traits<String>
+struct assertion_traits<OUString>
 {
-    static bool equal(const String& x, const String& y)
+    static bool equal(const OUString& x, const OUString& y)
     {
         return x == y;
     }
 
-    static std::string toString(const String& x)
+    static std::string toString(const OUString& x)
     {
         OStringStream ost;
         ost << OUStringToOString(x, RTL_TEXTENCODING_UTF8).getStr();

@@ -163,8 +163,7 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     blackHole.SetMapMode( MAP_PIXEL );
     Rectangle rect;
     const FontMetric metric( blackHole.GetFontMetric() );
-    blackHole.GetTextBoundRect(
-        rect, String("XX:XX:XX") );
+    blackHole.GetTextBoundRect( rect, OUString("XX:XX:XX") );
     maSpriteSizePixel.setX( rect.getWidth() * 12 / 10 );
     maSpriteSizePixel.setY( metric.GetLineHeight() * 11 / 10 );
     mnYOffset = (metric.GetAscent() + (metric.GetLineHeight() / 20));

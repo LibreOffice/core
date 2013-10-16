@@ -633,7 +633,7 @@ namespace dlgprov
             ResMgr* pResMgr = SFX_APP()->GetSfxResManager();
             if( pResMgr )
             {
-                String aRes( ResId(STR_ERRUNOEVENTBINDUNG, *pResMgr) );
+                OUString aRes( ResId(STR_ERRUNOEVENTBINDUNG, *pResMgr) );
                 OUString aQuoteChar( "\""  );
 
                 OUString aOURes = aRes;

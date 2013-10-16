@@ -819,7 +819,7 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
     SmFontFormatList &rFntFmtList = GetFontFormatList();
     size_t nCnt = rFntFmtList.GetCount();
     SmFontFormat *pTmpFormat = new SmFontFormat[ nCnt ];
-    String       *pId     = new String      [ nCnt ];
+    OUString     *pId        = new OUString    [ nCnt ];
     size_t k;
     for (k = 0;  k < nCnt;  ++k)
     {
