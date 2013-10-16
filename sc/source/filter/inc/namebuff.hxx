@@ -172,22 +172,24 @@ class RangeNameBufferWK3
 {
 private:
     struct Entry
-        {
+    {
         StringHashEntry     aStrHashEntry;
         ScComplexRefData        aScComplexRefDataRel;
         OUString            aScAbsName;
         sal_uInt16              nAbsInd;        // == 0 -> noch keine Abs-Name!
         sal_uInt16              nRelInd;
         sal_Bool                bSingleRef;
-                            Entry( const OUString& rName, const OUString& rScName, const ScComplexRefData& rCRD ) :
-                                aStrHashEntry( rName ),
-                                aScComplexRefDataRel( rCRD ),
-                                aScAbsName( rScName )
+                            Entry( const OUString& rName, const OUString& rScName, const ScComplexRefData& rCRD )
+                                : aStrHashEntry( rName )
+                                , aScComplexRefDataRel( rCRD )
+                                , aScAbsName( rScName )
+                                , nAbsInd(0)
+                                , nRelInd(0)
+                                , bSingleRef(false)
                             {
-                                nAbsInd = 0;
                                 aScAbsName = "_ABS";
                             }
-        };
+    };
 
     ScTokenArray*           pScTokenArray;
     sal_uInt16                  nIntCount;
