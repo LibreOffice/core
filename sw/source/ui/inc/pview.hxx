@@ -52,7 +52,7 @@ class SwPagePreViewWin : public Window
     SwPagePreView&      mrView;
     bool                mbCalcScaleForPreviewLayout;
     Rectangle           maPaintedPreviewDocRect;
-    SwPagePreviewLayout* mpPgPrevwLayout;
+    SwPagePreviewLayout* mpPgPreviewLayout;
 
     void SetPagePreview( sal_uInt8 nRow, sal_uInt8 nCol );
 

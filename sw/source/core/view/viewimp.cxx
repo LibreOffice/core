@@ -100,7 +100,7 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     pSdrObjCached(NULL),
     nRestoreActions( 0 ),
     // OD 12.12.2002 #103492#
-    mpPgPrevwLayout( 0 )
+    mpPgPreviewLayout( 0 )
 {
     bResetHdlHiddenPaint =
     bSmoothUpdate = bStopSmooth = bStopPrt = sal_False;
@@ -112,7 +112,7 @@ SwViewImp::~SwViewImp()
     delete pAccMap;
 
     // OD 12.12.2002 #103492#
-    delete mpPgPrevwLayout;
+    delete mpPgPreviewLayout;
 
     //JP 29.03.96: after ShowSdrPage  HideSdrPage must also be executed!!!
     if( pDrawView )
@@ -271,7 +271,7 @@ void SwViewImp::InitPagePreviewLayout()
 {
     OSL_ENSURE( pSh->GetLayout(), "no layout - page preview layout can not be created.");
     if ( pSh->GetLayout() )
-        mpPgPrevwLayout = new SwPagePreviewLayout( *pSh, *(pSh->GetLayout()) );
+        mpPgPreviewLayout = new SwPagePreviewLayout( *pSh, *(pSh->GetLayout()) );
 }
 
 void SwViewImp::UpdateAccessible()
@@ -433,14 +433,14 @@ void SwViewImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
 }
 
 // OD 15.01.2003 #103492# - method signature change due to new page preview functionality
-void SwViewImp::UpdateAccessiblePreview( const std::vector<PrevwPage*>& _rPrevwPages,
+void SwViewImp::UpdateAccessiblePreview( const std::vector<PreviewPage*>& _rPreviewPages,
                                          const Fraction&  _rScale,
                                          const SwPageFrm* _pSelectedPageFrm,
-                                         const Size&      _rPrevwWinSize )
+                                         const Size&      _rPreviewWinSize )
 {
     if( IsAccessible() )
-        GetAccessibleMap().UpdatePreview( _rPrevwPages, _rScale,
-                                          _pSelectedPageFrm, _rPrevwWinSize );
+        GetAccessibleMap().UpdatePreview( _rPreviewPages, _rScale,
+                                          _pSelectedPageFrm, _rPreviewWinSize );
 }
 
 void SwViewImp::InvalidateAccessiblePreViewSelection( sal_uInt16 nSelPage )

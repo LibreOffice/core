@@ -47,7 +47,7 @@ class SdrObject;
 class Fraction;
 class SwPrintData;
 class SwPagePreviewLayout;
-struct PrevwPage;
+struct PreviewPage;
 class SwTxtFrm;
 // --> OD #i76669#
 namespace sdr { namespace contact {
@@ -96,7 +96,7 @@ class SwViewImp
     sal_uInt16 nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
     SwRect aSmoothRect;
 
-    SwPagePreviewLayout* mpPgPrevwLayout;
+    SwPagePreviewLayout* mpPgPreviewLayout;
 
     /**
        Returns if printer shall be stopped.
@@ -232,7 +232,7 @@ public:
 
     inline SwPagePreviewLayout* PagePreviewLayout()
     {
-        return mpPgPrevwLayout;
+        return mpPgPreviewLayout;
     }
 
     // Is this view accessible?
@@ -276,10 +276,10 @@ public:
 
     // update data for accessible preview
     // change method signature due to new page preview functionality
-    void UpdateAccessiblePreview( const std::vector<PrevwPage*>& _rPrevwPages,
+    void UpdateAccessiblePreview( const std::vector<PreviewPage*>& _rPreviewPages,
                                   const Fraction&  _rScale,
                                   const SwPageFrm* _pSelectedPageFrm,
-                                  const Size&      _rPrevwWinSize );
+                                  const Size&      _rPreviewWinSize );
 
     void InvalidateAccessiblePreViewSelection( sal_uInt16 nSelPage );
 

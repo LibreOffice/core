@@ -2163,7 +2163,7 @@ ViewShell::CreateAccessiblePreview()
     if ( IsPreView() && GetLayout()&& GetWin() )
     {
         return Imp()->GetAccessibleMap().GetDocumentPreview(
-                    PagePreviewLayout()->maPrevwPages,
+                    PagePreviewLayout()->maPreviewPages,
                     GetWin()->GetMapMode().GetScaleX(),
                     GetLayout()->GetPageByPageNum( PagePreviewLayout()->mnSelectedPageNum ),
                     PagePreviewLayout()->maWinSize );   //swmod 080305

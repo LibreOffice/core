@@ -27,23 +27,23 @@ class SwPageFrm;
 
 /** data structure for a preview page in the current preview layout
 */
-struct PrevwPage
+struct PreviewPage
 {
     const SwPageFrm*  pPage;
     bool        bVisible;
     Size        aPageSize;
-    Point       aPrevwWinPos;
+    Point       aPreviewWinPos;
     Point       aLogicPos;
     Point       aMapOffset;
 
-    inline PrevwPage();
+    inline PreviewPage();
 };
 
-inline PrevwPage::PrevwPage()
+inline PreviewPage::PreviewPage()
     : pPage( 0 ),
       bVisible( false ),
       aPageSize( Size(0,0) ),
-      aPrevwWinPos( Point(0,0) ),
+      aPreviewWinPos( Point(0,0) ),
       aLogicPos( Point(0,0) ),
       aMapOffset( Point(0,0) )
 {};

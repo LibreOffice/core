@@ -549,27 +549,27 @@ class SwAccPreviewData
         input/output parameter - reference to the logic page rectangle, which
         has to be adjusted.
 
-        @param _rPrevwPgSwRect
+        @param _rPreviewPgSwRect
         input parameter - constant reference to the corresponding preview page
         rectangle; needed to determine the visible part of the logic page rectangle.
 
-        @param _rPrevwWinSize
+        @param _rPreviewWinSize
         input paramter - constant reference to the preview window size in TWIP;
         needed to determine the visible part of the logic page rectangle
     */
     void AdjustLogicPgRectToVisibleArea( SwRect&         _iorLogicPgSwRect,
-                                         const SwRect&   _rPrevwPgSwRect,
-                                         const Size&     _rPrevwWinSize );
+                                         const SwRect&   _rPreviewPgSwRect,
+                                         const Size&     _rPreviewWinSize );
 
 public:
     SwAccPreviewData();
     ~SwAccPreviewData();
 
     void Update( const SwAccessibleMap& rAccMap,
-                 const std::vector<PrevwPage*>& _rPrevwPages,
+                 const std::vector<PreviewPage*>& _rPreviewPages,
                  const Fraction&  _rScale,
                  const SwPageFrm* _pSelectedPageFrm,
-                 const Size&      _rPrevwWinSize );
+                 const Size&      _rPreviewWinSize );
 
     void InvalidateSelection( const SwPageFrm* _pSelectedPageFrm );
 
@@ -599,10 +599,10 @@ SwAccPreviewData::~SwAccPreviewData()
 }
 
 void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
-                               const std::vector<PrevwPage*>& _rPrevwPages,
+                               const std::vector<PreviewPage*>& _rPreviewPages,
                                const Fraction&  _rScale,
                                const SwPageFrm* _pSelectedPageFrm,
-                               const Size&      _rPrevwWinSize )
+                               const Size&      _rPreviewWinSize )
 {
     // store preview scaling, maximal preview page size and selected page
     maScale = _rScale;
@@ -616,15 +616,15 @@ void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
 
     // loop on preview pages to calculate <maPreviewRects>, <maLogicRects> and
     // <maVisArea>
-    for ( std::vector<PrevwPage*>::const_iterator aPageIter = _rPrevwPages.begin();
-          aPageIter != _rPrevwPages.end();
+    for ( std::vector<PreviewPage*>::const_iterator aPageIter = _rPreviewPages.begin();
+          aPageIter != _rPreviewPages.end();
           ++aPageIter )
     {
         aPage = (*aPageIter)->pPage;
 
         // add preview page rectangle to <maPreviewRects>
-        Rectangle aPrevwPgRect( (*aPageIter)->aPrevwWinPos, (*aPageIter)->aPageSize );
-        maPreviewRects.push_back( aPrevwPgRect );
+        Rectangle aPreviewPgRect( (*aPageIter)->aPreviewWinPos, (*aPageIter)->aPageSize );
+        maPreviewRects.push_back( aPreviewPgRect );
 
         // add logic page rectangle to <maLogicRects>
         SwRect aLogicPgSwRect( aPage.GetBox( rAccMap ) );
@@ -636,8 +636,8 @@ void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
             if ( !(*aPageIter)->pPage->IsEmptyPage() )
             {
                 AdjustLogicPgRectToVisibleArea( aLogicPgSwRect,
-                                                SwRect( aPrevwPgRect ),
-                                                _rPrevwWinSize );
+                                                SwRect( aPreviewPgRect ),
+                                                _rPreviewWinSize );
             }
             if ( maVisArea.IsEmpty() )
                 maVisArea = aLogicPgSwRect;
@@ -700,30 +700,30 @@ void SwAccPreviewData::DisposePage(const SwPageFrm *pPageFrm )
 // adjust logic page retangle to its visible part
 void SwAccPreviewData::AdjustLogicPgRectToVisibleArea(
                             SwRect&         _iorLogicPgSwRect,
-                            const SwRect&   _rPrevwPgSwRect,
-                            const Size&     _rPrevwWinSize )
+                            const SwRect&   _rPreviewPgSwRect,
+                            const Size&     _rPreviewWinSize )
 {
     // determine preview window rectangle
-    const SwRect aPrevwWinSwRect( Point( 0, 0 ), _rPrevwWinSize );
+    const SwRect aPreviewWinSwRect( Point( 0, 0 ), _rPreviewWinSize );
     // calculate visible preview page rectangle
-    SwRect aVisPrevwPgSwRect( _rPrevwPgSwRect );
-    aVisPrevwPgSwRect.Intersection( aPrevwWinSwRect );
+    SwRect aVisPreviewPgSwRect( _rPreviewPgSwRect );
+    aVisPreviewPgSwRect.Intersection( aPreviewWinSwRect );
     // adjust logic page rectangle
     SwTwips nTmpDiff;
     // left
-    nTmpDiff = aVisPrevwPgSwRect.Left() - _rPrevwPgSwRect.Left();
+    nTmpDiff = aVisPreviewPgSwRect.Left() - _rPreviewPgSwRect.Left();
     if ( nTmpDiff > 0 )
         _iorLogicPgSwRect.Left( _iorLogicPgSwRect.Left() + nTmpDiff );
     // top
-    nTmpDiff = aVisPrevwPgSwRect.Top() - _rPrevwPgSwRect.Top();
+    nTmpDiff = aVisPreviewPgSwRect.Top() - _rPreviewPgSwRect.Top();
     if ( nTmpDiff > 0 )
         _iorLogicPgSwRect.Top( _iorLogicPgSwRect.Top() + nTmpDiff );
     // right
-    nTmpDiff = _rPrevwPgSwRect.Right() - aVisPrevwPgSwRect.Right();
+    nTmpDiff = _rPreviewPgSwRect.Right() - aVisPreviewPgSwRect.Right();
     if ( nTmpDiff > 0 )
         _iorLogicPgSwRect.Right( _iorLogicPgSwRect.Right() - nTmpDiff );
     // bottom
-    nTmpDiff = _rPrevwPgSwRect.Bottom() - aVisPrevwPgSwRect.Bottom();
+    nTmpDiff = _rPreviewPgSwRect.Bottom() - aVisPreviewPgSwRect.Bottom();
     if ( nTmpDiff > 0 )
         _iorLogicPgSwRect.Bottom( _iorLogicPgSwRect.Bottom() - nTmpDiff );
 }
@@ -1299,15 +1299,15 @@ uno::Reference< XAccessible > SwAccessibleMap::GetDocumentView( )
 }
 
 uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
-                                    const std::vector<PrevwPage*>& _rPrevwPages,
+                                    const std::vector<PreviewPage*>& _rPreviewPages,
                                     const Fraction&  _rScale,
                                     const SwPageFrm* _pSelectedPageFrm,
-                                    const Size&      _rPrevwWinSize )
+                                    const Size&      _rPreviewWinSize )
 {
     // create & update preview data object
     if( mpPreview == NULL )
         mpPreview = new SwAccPreviewData();
-    mpPreview->Update( *this, _rPrevwPages, _rScale, _pSelectedPageFrm, _rPrevwWinSize );
+    mpPreview->Update( *this, _rPreviewPages, _rScale, _pSelectedPageFrm, _rPreviewWinSize );
 
     uno::Reference<XAccessible> xAcc = _GetDocumentView( true );
     return xAcc;
@@ -2178,15 +2178,15 @@ sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrm& rParentFrm,
     return nIndex;
 }
 
-void SwAccessibleMap::UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages,
+void SwAccessibleMap::UpdatePreview( const std::vector<PreviewPage*>& _rPreviewPages,
                                      const Fraction&  _rScale,
                                      const SwPageFrm* _pSelectedPageFrm,
-                                     const Size&      _rPrevwWinSize )
+                                     const Size&      _rPreviewWinSize )
 {
     OSL_ENSURE( GetShell()->IsPreView(), "no preview?" );
     OSL_ENSURE( mpPreview != NULL, "no preview data?" );
 
-    mpPreview->Update( *this, _rPrevwPages, _rScale, _pSelectedPageFrm, _rPrevwWinSize );
+    mpPreview->Update( *this, _rPreviewPages, _rScale, _pSelectedPageFrm, _rPreviewWinSize );
 
     // propagate change of VisArea through the document's
     // accessibility tree; this will also send appropriate scroll
@@ -2524,14 +2524,14 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
     _orMapMode = aMapMode;
 }
 
-Size SwAccessibleMap::GetPreViewPageSize( sal_uInt16 _nPrevwPageNum ) const
+Size SwAccessibleMap::GetPreViewPageSize( sal_uInt16 _nPreviewPageNum ) const
 {
     OSL_ENSURE( mpVSh->IsPreView(), "no page preview accessible." );
     OSL_ENSURE( mpVSh->IsPreView() && ( mpPreview != NULL ),
                 "missing accessible preview data at page preview" );
     if ( mpVSh->IsPreView() && ( mpPreview != NULL ) )
     {
-        return mpVSh->PagePreviewLayout()->GetPrevwPageSizeByPageNum( _nPrevwPageNum );
+        return mpVSh->PagePreviewLayout()->GetPreviewPageSizeByPageNum( _nPreviewPageNum );
     }
     else
     {

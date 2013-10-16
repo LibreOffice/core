@@ -49,7 +49,7 @@ class SwAccessibleSelectedParas_Impl;
 class SwRect;
 class MapMode;
 class SwAccPreviewData;
-struct PrevwPage;
+struct PreviewPage;
 class Window;
 
 // real states for events
@@ -132,10 +132,10 @@ public:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> GetDocumentPreview(
-                            const std::vector<PrevwPage*>& _rPrevwPages,
+                            const std::vector<PreviewPage*>& _rPreviewPages,
                             const Fraction&  _rScale,
                             const SwPageFrm* _pSelectedPageFrm,
-                            const Size&      _rPrevwWinSize );
+                            const Size&      _rPreviewWinSize );
 
     ::rtl::Reference < SwAccessibleContext > GetContextImpl(
                                                  const SwFrm *pFrm,
@@ -166,12 +166,12 @@ public:
 
         @author OD
 
-        @param _nPrevwPageNum
+        @param _nPreviewPageNum
         input parameter - physical page number of page visible in the page preview
 
         @return an object of class <Size>
     */
-    Size GetPreViewPageSize( sal_uInt16 _nPrevwPageNum ) const;
+    Size GetPreViewPageSize( sal_uInt16 _nPreviewPageNum ) const;
 
     void RemoveContext( const SwFrm *pFrm );
     void RemoveContext( const SdrObject *pObj );
@@ -235,10 +235,10 @@ public:
                              Window& rChild ) const;
 
     // update preview data (and fire events if necessary)
-    void UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages,
+    void UpdatePreview( const std::vector<PreviewPage*>& _rPreviewPages,
                         const Fraction&  _rScale,
                         const SwPageFrm* _pSelectedPageFrm,
-                        const Size&      _rPrevwWinSize );
+                        const Size&      _rPreviewWinSize );
 
     void InvalidatePreViewSelection( sal_uInt16 nSelPage );
     bool IsPageSelected( const SwPageFrm *pPageFrm ) const;

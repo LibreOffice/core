@@ -33,7 +33,7 @@ class ViewShell;
 class SwRootFrm;
 class SwPageFrm;
 class Fraction;
-struct PrevwPage;
+struct PreviewPage;
 
 // =============================================================================
 /** page preview functionality in the writer
@@ -79,8 +79,8 @@ private:
     Rectangle   maPreviewDocRect;
     SwTwips     mnColWidth;
     SwTwips     mnRowHeight;
-    SwTwips     mnPrevwLayoutWidth;
-    SwTwips     mnPrevwLayoutHeight;
+    SwTwips     mnPreviewLayoutWidth;
+    SwTwips     mnPreviewLayoutHeight;
     bool        mbDoesLayoutColsFitIntoWindow;
     bool        mbDoesLayoutRowsFitIntoWindow;
 
@@ -91,10 +91,10 @@ private:
     Point       maPaintStartPageOffset;
     Point       maPaintPreviewDocOffset;
     Point       maAdditionalPaintOffset;
-    Rectangle   maPaintedPrevwDocRect;
+    Rectangle   maPaintedPreviewDocRect;
     sal_uInt16  mnSelectedPageNum;
 
-    std::vector<PrevwPage*> maPrevwPages;
+    std::vector<PreviewPage*> maPreviewPages;
 
     /** #i22014# - internal booleans to indicate, that a new print
        preview layout has been created during a paint. */
@@ -113,19 +113,19 @@ private:
 
         @author OD
     */
-    void _ClearPrevwLayoutSizes();
+    void _ClearPreviewLayoutSizes();
 
     /** helper method to clear data in preview page vectors
 
         @author OD
     */
-    void _ClearPrevwPageData();
+    void _ClearPreviewPageData();
 
     /** calculate page preview layout sizes
 
         @author OD
     */
-    void _CalcPrevwLayoutSizes();
+    void _CalcPreviewLayoutSizes();
 
     /** apply new zoom at given view shell
 
@@ -164,7 +164,7 @@ private:
 
         @author OD
     */
-    void _CalcDocPrevwPaintRect();
+    void _CalcDocPreviewPaintRect();
 
     /** determines preview data for a given page and a given preview offset
 
@@ -175,19 +175,19 @@ private:
         input parameter - constant reference to page frame, for which the
         preview data will be calculated.
 
-        @param _rPrevwOffset
+        @param _rPreviewOffset
         input parameter - constant reference to the offset the given page has
         in the current preview window.
         Note: Offset can be negative.
 
-        @param _opPrevwPage
+        @param _opPreviewPage
         output parameter - calculated preview data.
 
         @return boolean, indicating, if calculation was successful.
     */
     bool _CalcPreviewDataForPage( const SwPageFrm& _rPage,
-                                  const Point& _rPrevwOffset,
-                                  PrevwPage* _opPrevwPage );
+                                  const Point& _rPreviewOffset,
+                                  PreviewPage* _opPreviewPage );
 
     /** calculate preview pages
 
@@ -211,13 +211,13 @@ private:
         @return pointer to preview page of current preview pages. If page doesn't
         belongs to current preview pages, <0> is returned.
     */
-    const PrevwPage* _GetPrevwPageByPageNum( const sal_uInt16 _nPageNum ) const;
+    const PreviewPage* _GetPreviewPageByPageNum( const sal_uInt16 _nPageNum ) const;
 
     /** paint selection mark at page
 
         @author OD
     */
-    void _PaintSelectMarkAtPage( const PrevwPage* _aSelectedPrevwPage ) const;
+    void _PaintSelectMarkAtPage( const PreviewPage* _aSelectedPreviewPage ) const;
 
 public:
     /** constructor of <SwPagePreviewLayout>
@@ -246,7 +246,7 @@ public:
     */
     inline ~SwPagePreviewLayout()
     {
-        _ClearPrevwPageData();
+        _ClearPreviewPageData();
     }
 
     /** init page preview layout
@@ -448,7 +448,7 @@ public:
 
         @author OD
 
-        @param _aPrevwPos
+        @param _aPreviewPos
         input parameter - position inside the visible preview window.
 
         @param _orDocPos
@@ -468,7 +468,7 @@ public:
         @return boolean - indicating, that given preview position lays inside
         a shown document preview page, not an empty page.
     */
-    bool IsPrevwPosInDocPrevwPage( const Point  _aPrevwPos,
+    bool IsPreviewPosInDocPreviewPage( const Point  _aPreviewPos,
                                    Point&       _orDocPos,
                                    bool&        _obPosInEmptyPage,
                                    sal_uInt16&  _onPageNum ) const;
@@ -525,7 +525,7 @@ public:
     */
     sal_uInt16 GetColOfPage( sal_uInt16 _nPageNum ) const;
 
-    Size GetPrevwDocSize() const;
+    Size GetPreviewDocSize() const;
 
     /** get size of a preview page by its physical page number
 
@@ -537,7 +537,7 @@ public:
 
         @return an object of class <Size>
     */
-    Size GetPrevwPageSizeByPageNum( sal_uInt16 _nPageNum ) const;
+    Size GetPreviewPageSizeByPageNum( sal_uInt16 _nPageNum ) const;
 
     /** get virtual page number by its physical page number
 
@@ -576,7 +576,7 @@ public:
 
         @author FME
     */
-    sal_uInt16 GetNumberOfPreviewPages() { return sal::static_int_cast< sal_uInt16 >(maPrevwPages.size()); }
+    sal_uInt16 GetNumberOfPreviewPages() { return sal::static_int_cast< sal_uInt16 >(maPreviewPages.size()); }
 };
 
 #endif // _PAGEPREVIEWLAYOUT_HXX
