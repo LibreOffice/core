@@ -237,12 +237,6 @@ void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
 }
 
 
-sal_uLong SvpSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
-{
-    return 0;
-}
-
-
 const ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
 {
     if( !m_pServerFont[0] )
