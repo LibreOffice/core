@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Module_Module,cairo))
 
-ifeq ($(SYSTEM_CAIRO),NO)
-
 $(eval $(call gb_Module_add_targets,cairo,\
 	ExternalPackage_cairo \
 	ExternalPackage_pixman \
@@ -19,7 +17,5 @@ $(eval $(call gb_Module_add_targets,cairo,\
 	UnpackedTarball_cairo \
 	UnpackedTarball_pixman \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

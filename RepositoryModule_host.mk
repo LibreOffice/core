@@ -24,7 +24,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	bean \
 	binaryurp \
 	bridges \
-	$(call gb_Helper_optional,CAIRO,cairo) \
 	canvas \
 	chart2 \
 	cli_ure \
