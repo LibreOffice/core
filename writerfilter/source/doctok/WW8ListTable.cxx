@@ -23,22 +23,6 @@
 namespace writerfilter {
 namespace doctok {
 
-sal_uInt32 WW8ListTable::getEntryCount()
-{
-    return getU16(0);
-}
-
-writerfilter::Reference<Properties>::Pointer_t
-WW8ListTable::getEntry(sal_uInt32 nIndex)
-{
-    WW8List * pList = new WW8List(this, entryOffsets[nIndex]);
-
-    pList->setIndex(nIndex);
-
-    return writerfilter::Reference<Properties>::Pointer_t
-        (pList);
-}
-
 sal_uInt32 WW8List::get_listlevel_count()
 {
     if (get_fSimpleList())

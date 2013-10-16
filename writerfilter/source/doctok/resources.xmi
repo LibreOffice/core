@@ -2325,15 +2325,6 @@
         <!--Class List-->
         <!--Class ListTable-->
         <UML:Class xmi.id="ListTable" name="ListTable">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="plcf"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>rtf:LISTTABLE</UML:TaggedValue.dataValue>
