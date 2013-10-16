@@ -626,10 +626,6 @@ sal_Bool ViewShell::HasCharts() const
 
 void ViewShell::LayoutIdle()
 {
-#ifdef TCOVER
-    //for TCV-version: end of start phase of the application
-    TCovCall::Idle();
-#endif
     if( !mpOpt->IsIdle() || !GetWin() ||
         ( Imp()->HasDrawView() && Imp()->GetDrawView()->IsDragObj() ) )
         return;
