@@ -16,6 +16,24 @@
       "revId": "f1fd5cbf75e40643dddcce209760d2595e613e7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///dE\u003d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-16T06:02:27Z",
+      "side": 1,
+      "message": "Umm, well, yes, that;s why I prefer your nit picking to \u0027looks good, pushed\u0027. ;)\n\nDone in next patch set.",
+      "parentUuid": "AAAAY3///eQ\u003d",
+      "revId": "f1fd5cbf75e40643dddcce209760d2595e613e7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
