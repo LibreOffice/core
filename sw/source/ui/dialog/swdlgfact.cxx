@@ -415,6 +415,11 @@ OString AbstractFldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
     return pDlg->GetWindowState( nMask );
 }
 
+void AbstractFldInputDlg_Impl::EndDialog(long n)
+{
+    pDlg->EndDialog(n);
+}
+
 String AbstractInsFootNoteDlg_Impl::GetFontName()
 {
     return pDlg->GetFontName();

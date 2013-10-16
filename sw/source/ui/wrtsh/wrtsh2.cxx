@@ -124,8 +124,11 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
             else
                 bCancel = StartInputFldDlg( pField, sal_True, 0, &aDlgPos);
 
-            // Otherwise update error at multi-selection:
-            pTmp->GetField( i )->GetTyp()->UpdateFlds();
+            if (!bCancel)
+            {
+                // Otherwise update error at multi-selection:
+                pTmp->GetField( i )->GetTyp()->UpdateFlds();
+            }
         }
         pTmp->PopCrsr();
     }
@@ -133,6 +136,28 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
     if( !pLst )
         delete pTmp;
 }
+
+// Listener class: will close InputField dialog if input field(s)
+// is(are) deleted (for instance, by an extension) after the dialog shows up.
+// Otherwise, the for loop in SwWrtShell::UpdateInputFlds will crash when doing:
+//         'pTmp->GetField( i )->GetTyp()->UpdateFlds();'
+// on a deleted field.
+class FieldDeletionModify : public SwModify
+{
+    public:
+        FieldDeletionModify(AbstractFldInputDlg* pInputFieldDlg) : mpInputFieldDlg(pInputFieldDlg) {}
+
+        void Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
+        {
+            // Input fields have been deleted: better to close the dialog
+            if (pOld->Which() == RES_FIELD_DELETED)
+            {
+                mpInputFieldDlg->EndDialog(RET_CANCEL);
+            }
+        }
+    private:
+        AbstractFldInputDlg* mpInputFieldDlg;
+};
 
 // Start input dialog for a specific field
 
@@ -146,7 +171,16 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
+
+    // Register for possible input field deletion while dialog is open
+    FieldDeletionModify aModify(pDlg);
+    GetDoc()->GetUnoCallBack()->Add(&aModify);
+
     sal_Bool bRet = RET_CANCEL == pDlg->Execute();
+
+    // Dialog closed, remove modification listener
+    GetDoc()->GetUnoCallBack()->Remove(&aModify);
+
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
 
