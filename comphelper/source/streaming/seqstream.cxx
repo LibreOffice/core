@@ -33,7 +33,8 @@ using namespace ::osl;
 //---------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------
-SequenceInputStream::SequenceInputStream(const ByteSequence& rData)
+SequenceInputStream::SequenceInputStream(
+    css::uno::Sequence<sal_Int8> const & rData)
 :   m_aData(rData)
 ,   m_nPos(0)
 {

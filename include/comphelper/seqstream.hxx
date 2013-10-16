@@ -32,8 +32,6 @@
 namespace comphelper
 {
 
-    typedef ::com::sun::star::uno::Sequence<sal_Int8> ByteSequence;
-
 //==================================================================
 // SequenceInputStream
 // stream for reading data from a sequence of bytes
@@ -44,11 +42,11 @@ class COMPHELPER_DLLPUBLIC SequenceInputStream
 : public ::cppu::WeakImplHelper2< ::com::sun::star::io::XInputStream, ::com::sun::star::io::XSeekable >
 {
     ::osl::Mutex    m_aMutex;
-    ByteSequence    m_aData;
+    css::uno::Sequence<sal_Int8> m_aData;
     sal_Int32       m_nPos;
 
 public:
-    SequenceInputStream(const ByteSequence& rData);
+    SequenceInputStream(css::uno::Sequence<sal_Int8> const & rData);
 
 // com::sun::star::io::XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )

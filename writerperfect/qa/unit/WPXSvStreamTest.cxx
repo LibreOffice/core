@@ -59,7 +59,7 @@ shared_ptr<WPXInputStream> lcl_createStream()
 {
     using comphelper::SequenceInputStream;
 
-    const comphelper::ByteSequence aData(reinterpret_cast<const sal_Int8*>(aText), sizeof aText);
+    const css::uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aText), sizeof aText);
     const uno::Reference<io::XInputStream> xInputStream(new SequenceInputStream(aData));
 
     shared_ptr<WPXInputStream> pInputStream;
