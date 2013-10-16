@@ -58,7 +58,7 @@ class SvxHlinkDlgMarkWnd : public ModalDialog //FloatingWindow
 private:
     friend class SvxHlmarkTreeLBox;
 
-    PushButton      maBtApply;
+    PushButton      maBtOk;
     PushButton      maBtClose;
     SvxHlmarkTreeLBox maLbTree;
 
@@ -80,7 +80,7 @@ protected:
 
     virtual void Move ();
 
-    DECL_LINK (ClickApplyHdl_Impl, void * );
+    DECL_LINK (ClickOkHdl_Impl, void * );
     DECL_LINK (ClickCloseHdl_Impl, void * );
 
 public:
