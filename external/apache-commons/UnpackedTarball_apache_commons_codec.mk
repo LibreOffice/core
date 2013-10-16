@@ -18,7 +18,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,apache_commons_codec,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,apache_commons_codec,\
-	apache-commons/patches/codec.patch \
+	external/apache-commons/patches/codec.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

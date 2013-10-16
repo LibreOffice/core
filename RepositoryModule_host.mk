@@ -15,7 +15,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
 	android \
 	animations \
-	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
 	apple_remote \
 	avmedia \
 	basctl \
