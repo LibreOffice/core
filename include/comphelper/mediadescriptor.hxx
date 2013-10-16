@@ -289,18 +289,6 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     be created as new item. FALSE otherwise.
          */
         COMPHELPER_DLLPRIVATE sal_Bool impl_addInputStream( sal_Bool bLockFile );
-
-        /** @short  some URL parts can make trouble for opening streams (e.g. jumpmarks.)
-                    An URL should be "normalized" before its used.
-
-            @param  sURL
-                    the original URL (e.g. including a jumpmark)
-
-            @return [string]
-                    the "normalized" URL (e.g. without jumpmark)
-         */
-        COMPHELPER_DLLPRIVATE OUString impl_normalizeURL(const OUString& sURL);
-
 };
 
 } // namespace comphelper
