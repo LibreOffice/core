@@ -161,52 +161,16 @@ using namespace ::std;
     <xsl:choose>
       <xsl:when test=".//UML:Stereotype[@xmi.idref='ww8resource']">
         <xsl:text>::resolve(Properties &amp; </xsl:text>
-        <xsl:value-of select="$rHandler"/>
         <xsl:text>)</xsl:text>
       </xsl:when>
       <xsl:when test=".//UML:Stereotype[@xmi.idref='dffrecord']">
         <xsl:text>::resolveLocal(Properties &amp; </xsl:text>
-        <xsl:value-of select="$rHandler"/>
         <xsl:text>)</xsl:text>
       </xsl:when>
     </xsl:choose>
     <xsl:text>
-    {</xsl:text>
-    <xsl:if test='.//UML:Stereotype[@xmi.idref="debug"]'>
-      <xsl:text>
-        dump(output);</xsl:text>
-    </xsl:if>
-    <xsl:text>
-        try 
-        {</xsl:text>
-    <xsl:for-each select='.//UML:Attribute[@name!="reserved"]'>
-      <xsl:choose>
-        <xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select='.' mode='resolveAttribute'/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:for-each>
-    <xsl:for-each select='.//UML:Operation[@name!="reserved"]'>
-      <xsl:choose>
-        <xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select='.' mode='resolveOperation'/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:for-each>    
-    
-    <xsl:if test='.//UML:Stereotype[@xmi.idref = "resolvenoauto"]'>
-      resolveNoAuto(rHandler);
-    </xsl:if>
-    <xsl:text>
-      } catch (const Exception &amp; e) {
-         clog &lt;&lt; e.getText() &lt;&lt; endl;
-      }
+    {
     }
-
     </xsl:text>
   </xsl:template>
 
