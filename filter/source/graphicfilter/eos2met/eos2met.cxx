@@ -238,9 +238,7 @@ public:
     METWriter() :
         pMET(NULL), pGDIStack(NULL), nMETStrokeLineWidth(0), nMETChrAngle(0), pChrSetList(NULL), pCompDev(NULL)
     {
-#ifndef NO_GETAPPWINDOW
         pCompDev = reinterpret_cast< OutputDevice* >( Application::GetAppWindow() );
-#endif
         if( !pCompDev )
         {
             apDummyVDev.reset( new VirtualDevice );

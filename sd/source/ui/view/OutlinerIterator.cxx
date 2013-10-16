@@ -29,9 +29,7 @@
 #include "DrawViewShell.hxx"
 #include "drawview.hxx"
 #include "sdpage.hxx"
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "DrawDocShell.hxx"
 #include "Window.hxx"
 

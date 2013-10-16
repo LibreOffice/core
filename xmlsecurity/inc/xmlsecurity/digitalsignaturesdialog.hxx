@@ -30,10 +30,7 @@
 #include <xmlsecurity/documentsignaturehelper.hxx>
 #include <xmlsecurity/xmlsignaturehelper.hxx>
 
-
-#ifndef _STLP_VECTOR
 #include <vector>
-#endif
 
 namespace com {
 namespace sun {

@@ -24,10 +24,7 @@
 #include <rtl/ustring.hxx>
 #include "xmlsecurity/sigstruct.hxx"
 
-#ifndef _STLP_VECTOR
 #include <vector>
-#endif
-
 
 namespace com {
 namespace sun {

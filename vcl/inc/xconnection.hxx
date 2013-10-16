@@ -26,9 +26,7 @@
 
 #include "vcl/displayconnectiondispatch.hxx"
 
-#ifndef _STLP_LIST
 #include <list>
-#endif
 
 namespace vcl {
 

@@ -20,9 +20,7 @@
 #ifndef SD_PRESENTATION_VIEW_SHELL_HXX
 #define SD_PRESENTATION_VIEW_SHELL_HXX
 
-#ifndef SD_DRAW_VIEW_SHELL
 #include "DrawViewShell.hxx"
-#endif
 
 namespace sd {
 

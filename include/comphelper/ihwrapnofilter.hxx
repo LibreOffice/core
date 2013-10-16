@@ -21,21 +21,11 @@
 #define _COMPHELPER_INTERACTIONHANDLERWRAPPER_HXX_
 
 #include <com/sun/star/task/XInteractionHandler2.hpp>
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACITONREQUEST_
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_DOUBLEINITIALIZATIONEXCEPTION_
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
-#endif
 
 #include <cppuhelper/implbase2.hxx>
 #include "comphelper/comphelperdllapi.h"

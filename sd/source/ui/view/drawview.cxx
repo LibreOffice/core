@@ -57,9 +57,7 @@
 #include "sdresid.hxx"
 #include "Window.hxx"
 #include "unchss.hxx"
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "anminfo.hxx"
 #include "slideshow.hxx"
 #include <vcl/virdev.hxx>

@@ -20,12 +20,8 @@
 #define BASCTL_BASTYPE3_HXX
 
 #include <svheader.hxx>
-
 #include <svtools/svmedit.hxx>
-
 #include <iderid.hxx>
-
-#ifndef NO_SPECIALEDIT
 
 namespace basctl
 {
@@ -53,8 +49,6 @@ public:
 };
 
 } // namespace basctl
-
-#endif // NO_SPECIALEDIT
 
 #endif // BASCTL_BASTYPE3_HXX
 

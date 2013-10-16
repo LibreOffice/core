@@ -22,13 +22,9 @@
 #include <com/sun/star/scanner/ScannerManager.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef _SVX_SIZEITEM
 #include <editeng/sizeitem.hxx>
-#endif
 #include <svx/svdlayer.hxx>
-#ifndef _SVX_ZOOMITEM
 #include <sfx2/zoomitem.hxx>
-#endif
 #include <svx/svdpagv.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>

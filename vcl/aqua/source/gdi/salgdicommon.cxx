@@ -813,10 +813,8 @@ bool AquaSalGraphics::drawPolyLine(
     AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true );
 
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
-#ifndef NO_I97317_WORKAROUND
     // #i97317# workaround for Quartz having problems with drawing small polygons
     if( ! ((aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125)) )
-#endif
     {
         // use the path to prepare the graphics context
         CGContextSaveGState( mrContext );
@@ -867,10 +865,8 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
     }
 
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
-#ifndef NO_I97317_WORKAROUND
     // #i97317# workaround for Quartz having problems with drawing small polygons
     if( ! ((aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125)) )
-#endif
     {
         // use the path to prepare the graphics context
         CGContextSaveGState( mrContext );

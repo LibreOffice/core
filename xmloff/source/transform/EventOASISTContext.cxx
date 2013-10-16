@@ -26,12 +26,10 @@
 #include "TransformerActions.hxx"
 #include "TransformerBase.hxx"
 
-#ifndef OASIS_FILTER_OOO_1X
 // Used to parse Scripting Framework URLs
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
-#endif
 
 #include <boost/unordered_map.hpp>
 
@@ -181,9 +179,6 @@ bool ParseURL(
     const OUString& rAttrValue,
     OUString* pName, OUString* pLocation )
 {
-#ifdef OASIS_FILTER_OOO_1X
-    return ParseURLAsString( rAttrValue, pName, pLocation );
-#else
     Reference< com::sun::star::uno::XComponentContext >
         xContext = ::comphelper::getProcessComponentContext();
 
@@ -222,7 +217,6 @@ bool ParseURL(
         }
     }
     return sal_False;
-#endif
 }
 
 void XMLEventOASISTransformerContext::StartElement(

@@ -33,9 +33,7 @@
 #include <sfx2/objface.hxx>
 
 #include <svx/svxids.hrc>
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "sdresid.hxx"
 #include "DrawDocShell.hxx"
 #include "slideshow.hxx"

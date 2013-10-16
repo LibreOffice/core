@@ -61,9 +61,7 @@
 #include "sdmod.hxx"
 #include "fupoor.hxx"
 #include "slideshow.hxx"
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "sdpage.hxx"
 #include "Window.hxx"
 #include "sdresid.hxx"

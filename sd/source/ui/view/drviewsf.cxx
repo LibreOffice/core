@@ -42,9 +42,7 @@
 #include <svx/fmshell.hxx>
 #include <svl/cjkoptions.hxx>
 
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "Outliner.hxx"
 #include "app.hrc"
 

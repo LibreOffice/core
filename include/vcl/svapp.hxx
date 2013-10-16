@@ -242,10 +242,7 @@ public:
 
     virtual void                AppEvent( const ApplicationEvent& rAppEvent );
 
-#ifndef NO_GETAPPWINDOW
     static WorkWindow*          GetAppWindow();
-#endif
-
     static Window*              GetFocusWindow();
     static OutputDevice*        GetDefaultDevice();
 

@@ -31,9 +31,7 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdpage.hxx"
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"

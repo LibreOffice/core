@@ -37,9 +37,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
-#ifndef _RTL_USTRING_
 #include <rtl/ustring>
-#endif
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>

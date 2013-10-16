@@ -17,9 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <iostream>
-#ifndef _RTL_USTRING_
 #include <rtl/ustring>
-#endif
+
 ostream& operator<<( ostream& out,const OUString& bla );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

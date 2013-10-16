@@ -704,9 +704,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         }
 
         SwFmtCol aFmtCol;
-#ifndef WIDTH_SUPPORTED_BY_SECTIONS
         nPrcWidth = 100;
-#endif
 
         aFmtCol.Init( nCols, nGutter, nPrcWidth ? USHRT_MAX : nTwipWidth );
         aFrmItemSet.Put( aFmtCol );

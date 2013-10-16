@@ -37,11 +37,8 @@
 #include "imapinfo.hxx"
 #include "sdmod.hxx"
 #include "optsitem.hxx"
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "drawview.hxx"
-
 #include "fupoor.hxx"
 
 namespace sd {

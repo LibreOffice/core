@@ -17,13 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifndef _SVDLAYER
 #include <svx/svdlayer.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-
 
 #include "strings.hrc"
 #include "glob.hxx"

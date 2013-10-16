@@ -20,14 +20,10 @@
 #ifndef _XMLSECURITY_XMLSIGNATUREHELPER_HXX
 #define _XMLSECURITY_XMLSIGNATUREHELPER_HXX
 
-#ifndef _STLP_VECTOR
 #include <vector>
-#endif
 
 #include <tools/link.hxx>
-
 #include <rtl/ustring.hxx>
-
 #include <xmlsecurity/sigstruct.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>

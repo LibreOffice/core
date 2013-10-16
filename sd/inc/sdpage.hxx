@@ -33,9 +33,7 @@
 #include <svx/fmpage.hxx>
 #include "fadedef.h"
 #include "diadef.h"
-#ifndef _PRESENTATION
 #include "pres.hxx"
-#endif
 #include "shapelist.hxx"
 #include "misc/scopelock.hxx"
 #include "sddllapi.h"

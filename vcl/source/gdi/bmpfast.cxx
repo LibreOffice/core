@@ -19,9 +19,6 @@
 
 
 #include <bmpfast.hxx>
-
-#ifndef NO_OPTIMIZED_BITMAP_ACCESS
-
 #include <tools/debug.hxx>
 #include <vcl/bmpacc.hxx>
 
@@ -907,26 +904,5 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
 
     return false;
 }
-
-#else // NO_OPTIMIZED_BITMAP_ACCESS
-
-bool ImplFastBitmapConversion( BitmapBuffer&, const BitmapBuffer& )
-{
-    return false;
-}
-
-bool ImplFastBitmapBlending( BitmapWriteAccess&,
-    const BitmapReadAccess&, const BitmapReadAccess&,
-    const Size&, const Point& )
-{
-    return false;
-}
-
-bool ImplFastEraseBitmap( BitmapBuffer&, const BitmapColor& )
-{
-    return false;
-}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
