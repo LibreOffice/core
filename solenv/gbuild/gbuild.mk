@@ -26,7 +26,6 @@ GBUILDDIR:=$(SRCDIR)/solenv/gbuild
 # JAVA_HOME
 # LIBXML_CFLAGS
 # OS
-# PRODUCT
 # SOLARINC
 # SOLARLIB
 # UPD
@@ -87,8 +86,6 @@ ifneq ($(strip $(TIMELOG)$(timelog)),)
 gb_TIMELOG := 1
 endif
 
-# This used to be PRODUCT="" (for the same meaning as ENABLE_DBGUTIL="TRUE"),
-# but the product meaning is now only confusing.
 ifneq ($(ENABLE_DBGUTIL),)
 gb_ENABLE_DBGUTIL := $(true)
 else

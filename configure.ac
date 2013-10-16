@@ -3676,7 +3676,6 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     # versions (in case there are version specific problems with it)
     MSVC_USE_DEBUG_RUNTIME="TRUE"
     PROEXT=""
-    PRODUCT=""
 
     AC_MSG_RESULT([yes])
     # cppunit and graphite expose STL in public headers
@@ -3708,14 +3707,11 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
 else
     ENABLE_DBGUTIL=""
     MSVC_USE_DEBUG_RUNTIME=""
-    # PRODUCT is old concept, still used by build.pl .
-    PRODUCT="full"
     PROEXT=".pro"
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DBGUTIL)
 AC_SUBST(MSVC_USE_DEBUG_RUNTIME)
-AC_SUBST(PRODUCT)
 AC_SUBST(PROEXT)
 
 dnl Set the ENABLE_DEBUG variable.

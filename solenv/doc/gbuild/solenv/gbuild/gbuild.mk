@@ -39,7 +39,6 @@ static const Path UPD;
 static const String LIBXML_CFLAGS;
 static const String OS;
 static const Bool DEBUG;
-static const Bool PRODUCT;
 
 // gbuild global variables derived from the configure/environment
 // some of these are defined per platform
@@ -47,8 +46,6 @@ namespace gb
 {
     /// building with generated dependencies
     static const Bool FULLDEPS;
-    /// product build or non-product build with additional assertions and tests
-    static const Bool PRODUCT;
     /// command to run awk scripts
     static const Command AWK;
     /// command to compile c source files
