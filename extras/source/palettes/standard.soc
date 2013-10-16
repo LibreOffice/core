@@ -177,7 +177,7 @@
   <draw:color draw:name="Violet" draw:color="#9999ff"/>
   <draw:color draw:name="Bordeaux" draw:color="#993366"/>
   <draw:color draw:name="Pale yellow" draw:color="#ffffcc"/>
-  <draw:color draw:name="Pale green" draw:color="#ccffff"/>
+  <draw:color draw:name="Pale green" draw:color="#ccffcc"/>
   <draw:color draw:name="Dark violet" draw:color="#660066"/>
   <draw:color draw:name="Salmon" draw:color="#ff8080"/>
   <draw:color draw:name="Sea blue" draw:color="#0066cc"/>
