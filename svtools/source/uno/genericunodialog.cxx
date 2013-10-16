@@ -25,6 +25,7 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/extract.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <osl/diagnose.h>
@@ -97,15 +98,9 @@ Sequence<Type> SAL_CALL OGenericUnoDialog::getTypes(  ) throw(RuntimeException)
     );
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL OGenericUnoDialog::supportsService(const OUString& ServiceName) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-    const OUString* pArray = aSupported.getConstArray();
-    for (sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray)
-        if (pArray->equals(ServiceName))
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 //-------------------------------------------------------------------------

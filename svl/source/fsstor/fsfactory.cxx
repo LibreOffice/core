@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <ucbhelper/content.hxx>
@@ -168,13 +169,7 @@ OUString SAL_CALL FSStorageFactory::getImplementationName()
 sal_Bool SAL_CALL FSStorageFactory::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
-
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName == aSeq[nInd] )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL FSStorageFactory::getSupportedServiceNames()

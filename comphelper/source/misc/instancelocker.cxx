@@ -19,6 +19,7 @@
 
 
 #include "comphelper_module.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -187,29 +188,19 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
     m_bInitialized = sal_True;
 }
 
-
 // XServiceInfo
-// --------------------------------------------------------
 OUString SAL_CALL OInstanceLocker::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return getImplementationName_static();
 }
 
-// --------------------------------------------------------
 ::sal_Bool SAL_CALL OInstanceLocker::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq = getSupportedServiceNames();
-
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName == aSeq[nInd] )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-// --------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {

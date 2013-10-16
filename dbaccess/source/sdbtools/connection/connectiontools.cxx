@@ -23,6 +23,7 @@
 #include "datasourcemetadata.hxx"
 
 #include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/statementcomposer.hxx>
 
@@ -102,10 +103,7 @@ namespace sdbtools
 
     ::sal_Bool SAL_CALL ConnectionTools::supportsService(const OUString & _ServiceName) throw (RuntimeException)
     {
-        Sequence< OUString > aSupported( getSupportedServiceNames() );
-        const OUString* begin = aSupported.getConstArray();
-        const OUString* end = aSupported.getConstArray() + aSupported.getLength();
-        return ::std::find( begin, end, _ServiceName ) != end;
+        return cppu::supportsService(this, _ServiceName);
     }
 
     Sequence< OUString > SAL_CALL ConnectionTools::getSupportedServiceNames() throw (RuntimeException)

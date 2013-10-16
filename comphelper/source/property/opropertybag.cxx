@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/Property.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/thread.h>
@@ -142,13 +143,9 @@ namespace comphelper
         return getImplementationName_static();
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL OPropertyBag::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aServices( getSupportedServiceNames_static() );
-        const OUString* pStart = aServices.getConstArray();
-        const OUString* pEnd = aServices.getConstArray() + aServices.getLength();
-        return ::std::find( pStart, pEnd, rServiceName ) != pEnd;
+        return cppu::supportsService(this, rServiceName);
     }
 
     //--------------------------------------------------------------------

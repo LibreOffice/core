@@ -30,10 +30,10 @@
 #include "oox/helper/helper.hxx"
 #include "docprophandler.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
+
 namespace oox {
 namespace docprop {
-
-// ============================================================================
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
@@ -42,9 +42,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-
-
-// ============================================================================
 
 OUString SAL_CALL DocumentPropertiesImport_getImplementationName()
 {
@@ -62,8 +59,6 @@ Reference< XInterface > SAL_CALL DocumentPropertiesImport_createInstance( const 
 {
     return static_cast< ::cppu::OWeakObject* >( new DocumentPropertiesImport( rxContext ) );
 }
-
-// ============================================================================
 
 namespace {
 
@@ -103,15 +98,12 @@ Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxSto
 
 } // namespace
 
-// ============================================================================
-
 DocumentPropertiesImport::DocumentPropertiesImport( const Reference< XComponentContext >& rxContext ) :
     mxContext( rxContext )
 {
 }
 
 // XServiceInfo
-
 OUString SAL_CALL DocumentPropertiesImport::getImplementationName() throw (RuntimeException)
 {
     return DocumentPropertiesImport_getImplementationName();
@@ -119,11 +111,7 @@ OUString SAL_CALL DocumentPropertiesImport::getImplementationName() throw (Runti
 
 sal_Bool SAL_CALL DocumentPropertiesImport::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< OUString > aServiceNames = DocumentPropertiesImport_getSupportedServiceNames();
-    for( sal_Int32 nIndex = 0, nLength = aServiceNames.getLength(); nIndex < nLength; ++nIndex )
-        if( aServiceNames[ nIndex ] == rServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL DocumentPropertiesImport::getSupportedServiceNames() throw (RuntimeException)
@@ -132,7 +120,6 @@ Sequence< OUString > SAL_CALL DocumentPropertiesImport::getSupportedServiceNames
 }
 
 // XOOXMLDocumentPropertiesImporter
-
 void SAL_CALL DocumentPropertiesImport::importProperties(
         const Reference< XStorage >& rxSource, const Reference< XDocumentProperties >& rxDocumentProperties )
         throw (RuntimeException, IllegalArgumentException, SAXException, Exception)

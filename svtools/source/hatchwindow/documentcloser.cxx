@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <vcl/svapp.hxx>
@@ -220,29 +221,19 @@ void SAL_CALL ODocumentCloser::initialize( const uno::Sequence< uno::Any >& aArg
     m_bInitialized = sal_True;
 }
 
-
 // XServiceInfo
-// --------------------------------------------------------
 OUString SAL_CALL ODocumentCloser::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return impl_staticGetImplementationName();
 }
 
-// --------------------------------------------------------
 ::sal_Bool SAL_CALL ODocumentCloser::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
-
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName == aSeq[nInd] )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-// --------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL ODocumentCloser::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
@@ -250,14 +241,12 @@ uno::Sequence< OUString > SAL_CALL ODocumentCloser::getSupportedServiceNames()
 }
 
 // Static methods
-// --------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL ODocumentCloser::impl_staticGetSupportedServiceNames()
 {
     const OUString aServiceName( "com.sun.star.embed.DocumentCloser" );
     return uno::Sequence< OUString >( &aServiceName, 1 );
 }
 
-// --------------------------------------------------------
 OUString SAL_CALL ODocumentCloser::impl_staticGetImplementationName()
 {
     return OUString( "com.sun.star.comp.embed.DocumentCloser" );

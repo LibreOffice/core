@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/toolbox.hxx>
@@ -169,14 +169,7 @@ void SAL_CALL PopupWindowController::release() throw ()
 // XServiceInfo
 sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    const Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XInitialization

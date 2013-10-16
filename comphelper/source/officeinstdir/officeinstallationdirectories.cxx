@@ -20,6 +20,7 @@
 #include <config_folders.h>
 
 #include "comphelper_module.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 /**************************************************************************
                                 TODO
@@ -216,25 +217,14 @@ OfficeInstallationDirectories::getImplementationName()
     return getImplementationName_static();
 }
 
-//=========================================================================
 // virtual
 sal_Bool SAL_CALL
 OfficeInstallationDirectories::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    const uno::Sequence< OUString > & aNames
-        = getSupportedServiceNames();
-    const OUString * p = aNames.getConstArray();
-    for ( sal_Int32 nPos = 0; nPos < aNames.getLength(); nPos++ )
-    {
-        if ( p[ nPos ].equals( ServiceName ) )
-            return sal_True;
-    }
-    return sal_False;
-
+    return cppu::supportsService(this, ServiceName);
 }
 
-//=========================================================================
 // virtual
 uno::Sequence< OUString > SAL_CALL
 OfficeInstallationDirectories::getSupportedServiceNames()

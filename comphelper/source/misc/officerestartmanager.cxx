@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper_module.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "officerestartmanager.hxx"
 
 using namespace ::com::sun::star;
@@ -168,20 +169,11 @@ OUString SAL_CALL OOfficeRestartManager::getImplementationName() throw (uno::Run
     return getImplementationName_static();
 }
 
-// ----------------------------------------------------------
 ::sal_Bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServiceName ) throw (uno::RuntimeException)
 {
-    const uno::Sequence< OUString > & aSupportedNames = getSupportedServiceNames_static();
-    for ( sal_Int32 nInd = 0; nInd < aSupportedNames.getLength(); nInd++ )
-    {
-        if ( aSupportedNames[ nInd ].equals( aServiceName ) )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, aServiceName);
 }
 
-// ----------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return getSupportedServiceNames_static();

@@ -20,7 +20,9 @@
 #include "DatabaseDataProvider.hxx"
 #include "dbastrings.hrc"
 #include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbtools.hxx>
@@ -119,7 +121,7 @@ OUString SAL_CALL DatabaseDataProvider::getImplementationName(  ) throw(uno::Run
 
 sal_Bool SAL_CALL DatabaseDataProvider::supportsService( const OUString& _rServiceName ) throw(uno::RuntimeException)
 {
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 uno::Sequence< OUString > DatabaseDataProvider::getSupportedServiceNames_Static(  ) throw (uno::RuntimeException)

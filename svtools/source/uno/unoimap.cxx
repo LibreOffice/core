@@ -31,6 +31,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <list>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -383,18 +384,9 @@ uno::Sequence< sal_Int8 > SAL_CALL SvUnoImageMapObject::getImplementationId()
 }
 
 // XServiceInfo
-
 sal_Bool SAL_CALL SvUnoImageMapObject::supportsService( const  OUString& ServiceName ) throw(RuntimeException)
 {
-    const Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    const sal_Int32 nCount = aSNL.getLength();
-    for( sal_Int32 i = 0; i < nCount; i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL SvUnoImageMapObject::getSupportedServiceNames()

@@ -19,6 +19,7 @@
 
 
 #include "comphelper/ihwrapnofilter.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/document/NoSuchFilterRequest.hpp>
 
 //.........................................................................
@@ -98,10 +99,7 @@ namespace comphelper
     {
     }
 
-    //----------------------------------------------------------------------------------------------------
     // XServiceInfo
-    //----------------------------------------------------------------------------------------------------
-
     OUString SAL_CALL OIHWrapNoFilterDialog::getImplementationName()
         throw ( uno::RuntimeException )
     {
@@ -111,13 +109,7 @@ namespace comphelper
     ::sal_Bool SAL_CALL OIHWrapNoFilterDialog::supportsService( const OUString& ServiceName )
         throw ( uno::RuntimeException )
     {
-        uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
-
-        for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-            if ( ServiceName == aSeq[nInd] )
-                return sal_True;
-
-        return sal_False;
+        return cppu::supportsService(this, ServiceName);
     }
 
     uno::Sequence< OUString > SAL_CALL OIHWrapNoFilterDialog::getSupportedServiceNames()

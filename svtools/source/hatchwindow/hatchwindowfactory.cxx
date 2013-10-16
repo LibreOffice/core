@@ -21,6 +21,7 @@
 #include "hatchwindowfactory.hxx"
 #include "hatchwindow.hxx"
 #include "cppuhelper/factory.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
 #include "documentcloser.hxx"
@@ -66,34 +67,23 @@ uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchW
     return uno::Reference< embed::XHatchWindow >( static_cast< embed::XHatchWindow* >( pResult ) );
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL OHatchWindowFactory::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL OHatchWindowFactory::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
-
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName == aSeq[nInd] )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();
 }
-
-//-------------------------------------------------------------------------
 
 extern "C"
 {

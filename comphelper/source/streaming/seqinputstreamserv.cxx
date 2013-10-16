@@ -26,6 +26,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
@@ -102,12 +103,7 @@ OUString SAL_CALL SequenceInputStreamService::getImplementationName_static()
 
 ::sal_Bool SAL_CALL SequenceInputStreamService::supportsService( OUString const & serviceName ) throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > serviceNames = getSupportedServiceNames();
-    for ( ::sal_Int32 i = 0; i < serviceNames.getLength(); ++i ) {
-        if ( serviceNames[i] == serviceName )
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServiceNames() throw ( uno::RuntimeException )

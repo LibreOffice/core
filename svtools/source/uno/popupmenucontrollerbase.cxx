@@ -31,12 +31,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
-
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
-//
-
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -97,17 +92,9 @@ void SAL_CALL PopupMenuControllerBase::disposing()
 }
 
 // XServiceInfo
-
 sal_Bool SAL_CALL PopupMenuControllerBase::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    const Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XEventListener

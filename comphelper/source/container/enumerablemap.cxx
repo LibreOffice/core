@@ -32,6 +32,7 @@
 
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <typelib/typedescription.hxx>
@@ -693,14 +694,9 @@ namespace comphelper
         return getImplementationName_static();
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL EnumerableMap::supportsService( const OUString& _serviceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aServices( getSupportedServiceNames() );
-        for ( sal_Int32 i=0; i<aServices.getLength(); ++i )
-            if ( _serviceName == aServices[i] )
-                return sal_True;
-        return sal_False;
+        return cppu::supportsService(this, _serviceName);
     }
 
     //--------------------------------------------------------------------
