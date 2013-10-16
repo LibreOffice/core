@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_targets,sax,\
 
 $(eval $(call gb_Module_add_check_targets,sax,\
 	CppunitTest_sax \
+	CppunitTest_sax_attributes \
 	CppunitTest_sax_parser \
 ))
 
