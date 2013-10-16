@@ -17,15 +17,6 @@ ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_moduledir,external,msc-externals))
 endif
 
-ifeq ($(HAVE_READDIR_R),NO)
-ifneq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,external,\
-	UnpackedTarball_glibc \
-	StaticLibrary_gnu_readdir_r \
-))
-endif
-endif
-
 $(call gb_Helper_optional,LIBPNG,\
     $(eval $(call gb_Module_add_moduledir,external,libpng)))
 

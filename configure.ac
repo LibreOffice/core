@@ -9508,23 +9508,6 @@ if test "$_os" = "Linux"; then
     fi
 fi
 
-if test "$_os" != "WINNT"; then
-    AC_CHECK_FUNCS(readdir_r, HAVE_READDIR_R=YES, [HAVE_READDIR_R=NO])
-    if test "$HAVE_READDIR_R" = "YES"; then
-        SYSTEM_LIBC=YES
-    fi
-else
-    HAVE_READDIR_R=NO
-    SYSTEM_LIBC=YES
-fi
-
-if test "$HAVE_READDIR_R" = NO; then
-    BUILD_TYPE="$BUILD_TYPE GLIBC"
-fi
-
-AC_SUBST(HAVE_READDIR_R)
-AC_SUBST(SYSTEM_LIBC)
-
 dnl =========================================
 dnl Check for the Windows  SDK.
 dnl =========================================
