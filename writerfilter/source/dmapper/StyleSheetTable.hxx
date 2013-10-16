@@ -44,7 +44,7 @@ enum StyleType
     STYLE_TYPE_PARA,
     STYLE_TYPE_CHAR,
     STYLE_TYPE_TABLE,
-    STYLE_LIST
+    STYLE_TYPE_LIST
 };
 
 struct StyleSheetTable_Impl;

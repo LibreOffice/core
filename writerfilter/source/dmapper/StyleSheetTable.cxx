@@ -787,21 +787,24 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
         uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
         uno::Reference<container::XNameContainer> xCharStyles;
         uno::Reference<container::XNameContainer> xParaStyles;
+        uno::Reference<container::XNameContainer> xNumberingStyles;
 
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         xStyleFamilies->getByName(rPropNameSupplier.GetName( PROP_CHARACTER_STYLES )) >>= xCharStyles;
         xStyleFamilies->getByName(rPropNameSupplier.GetName( PROP_PARAGRAPH_STYLES )) >>= xParaStyles;
+        xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
         if(xCharStyles.is() && xParaStyles.is())
         {
             std::vector< StyleSheetEntryPtr >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
             while( aIt != m_pImpl->m_aStyleSheetEntries.end() )
             {
                 StyleSheetEntryPtr pEntry = *aIt;
-                if( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR || pEntry->nStyleTypeCode == STYLE_TYPE_PARA )
+                if( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR || pEntry->nStyleTypeCode == STYLE_TYPE_PARA || pEntry->nStyleTypeCode == STYLE_TYPE_LIST )
                 {
                     bool bParaStyle = pEntry->nStyleTypeCode == STYLE_TYPE_PARA;
+                    bool bListStyle = pEntry->nStyleTypeCode == STYLE_TYPE_LIST;
                     bool bInsert = false;
-                    uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : xCharStyles;
+                    uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : (bListStyle ? xNumberingStyles : xCharStyles);
                     uno::Reference< style::XStyle > xStyle;
                     OUString sConvertedStyleName = ConvertStyleName( pEntry->sStyleName );
 
@@ -821,7 +824,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         xStyle = uno::Reference< style::XStyle >(xDocFactory->createInstance(
                                     bParaStyle ?
                                         rPropNameSupplier.GetName( PROP_SERVICE_PARA_STYLE ) :
-                                        rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE )),
+                                        (bListStyle ? OUString("com.sun.star.style.NumberingStyle") : rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE ))),
                                         uno::UNO_QUERY_THROW);
                     }
                     if( !pEntry->sBaseStyleIdentifier.isEmpty() )
@@ -830,7 +833,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         {
                             //TODO: Handle cases where a paragraph <> character style relation is needed
                             StyleSheetEntryPtr pParent = FindStyleSheetByISTD( pEntry->sBaseStyleIdentifier );
-                            if (pParent.get() != NULL)
+                            // Writer core doesn't support numbering styles having a parent style, it seems
+                            if (pParent.get() != NULL && !bListStyle)
                                 xStyle->setParentStyle(ConvertStyleName( pParent->sStyleName ));
                         }
                         catch( const uno::RuntimeException& )
@@ -1020,9 +1024,9 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const uno::Exception& rException )
     {
-        OSL_FAIL( "Styles could not be imported completely");
+        SAL_WARN("writerfilter", "Styles could not be imported completely: " << rException.Message);
     }
 }
 
