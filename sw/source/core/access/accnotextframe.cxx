@@ -122,7 +122,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
             {
                 const OUString sOldDesc( msDesc );
 
-                const String& rDesc = pNd->GetDescription();
+                const OUString& rDesc = pNd->GetDescription();
                 msDesc = rDesc;
                 if ( msDesc.isEmpty() &&
                      msTitle != GetName() )

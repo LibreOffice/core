@@ -87,9 +87,9 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
         // #i73249#
         case RES_TITLE_CHANGED:
         {
-            const String& sOldTitle(
+            const OUString& sOldTitle(
                         dynamic_cast<const SwStringMsgPoolItem*>(pOld)->GetString() );
-            const String& sNewTitle(
+            const OUString& sNewTitle(
                         dynamic_cast<const SwStringMsgPoolItem*>(pNew)->GetString() );
             if ( sOldTitle == sNewTitle )
             {
@@ -118,7 +118,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
 
                 const SwFlyFrmFmt* pFlyFrmFmt =
                                 dynamic_cast<const SwFlyFrmFmt*>( pFlyFrm->GetFmt() );
-                const String& rDesc = pFlyFrmFmt->GetObjDescription();
+                const OUString& rDesc = pFlyFrmFmt->GetObjDescription();
                 msDesc = rDesc;
                 if ( msDesc.isEmpty() &&
                      msTitle != GetName() )

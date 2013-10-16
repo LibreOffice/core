@@ -216,8 +216,8 @@ void SwAccessiblePortionData::Finish()
     // include terminator values: always include two 'last character'
     // markers in the position arrays to make sure we always find one
     // position before the end
-    Special( 0, String(), POR_TERMINATE );
-    Special( 0, String(), POR_TERMINATE );
+    Special( 0, OUString(), POR_TERMINATE );
+    Special( 0, OUString(), POR_TERMINATE );
     LineBreak(0);
     LineBreak(0);
 
