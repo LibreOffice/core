@@ -1338,6 +1338,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocMax:
             case ocMaxA:
             case ocSum:
+            case ocSumIfs:
             case ocSumProduct:
             case ocCount:
             case ocCount2:
