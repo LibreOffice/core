@@ -950,11 +950,6 @@ void GenPspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
     }
 }
 
-sal_uLong GenPspGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
-{
-    return 0;
-}
-
 sal_Bool GenPspGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;

@@ -132,7 +132,6 @@ public:
     virtual void            SetTextColor( SalColor nSalColor );
     virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel );
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
-    virtual sal_uLong       GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     virtual void            GetDevFontList( ImplDevFontList* );
