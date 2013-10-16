@@ -245,6 +245,7 @@ class AbstractFldInputDlg_Impl : public AbstractFldInputDlg
     //from class SalFrame
     virtual void         SetWindowState( const OString & rStr ) ;
     virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const ;
+    virtual void EndDialog(long);
 };
 
 class SwInsFootNoteDlg;
