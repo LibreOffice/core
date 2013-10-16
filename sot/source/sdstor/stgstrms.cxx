@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
+#include <set>
 
 #include "sot/stg.hxx"
 #include "stgelem.hxx"
@@ -339,16 +340,23 @@ void StgStrm::scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize)
 
     bool bError = false;
     sal_Int32 nBgn = nStart;
-    sal_Int32 nOldBgn = -1;
     sal_Int32 nOptSize = 0;
-    while( nBgn >= 0 && nBgn != nOldBgn )
+
+    // Track already scanned PageNumbers here and use them to
+    // see if an  already counted page is re-visited
+    std::set< sal_Int32 > nUsedPageNumbers;
+
+    while( nBgn >= 0 && !bError )
     {
         if( nBgn >= 0 )
             m_aPagesCache.push_back(nBgn);
-        nOldBgn = nBgn;
         nBgn = pFat->GetNextPage( nBgn );
-        if( nBgn == nOldBgn )
+
+        if( nUsedPageNumbers.find(nBgn) != nUsedPageNumbers.end() )
             bError = true;
+        else
+            nUsedPageNumbers.insert(nBgn);
+
         nOptSize += nPageSize;
     }
     if (bError)
