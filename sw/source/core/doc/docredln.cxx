@@ -2119,7 +2119,7 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
     }
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        String aTmpStr;
+        OUString aTmpStr;
 
         {
             SwRewriter aRewriter;
@@ -2229,7 +2229,7 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
     }
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        String aTmpStr;
+        OUString aTmpStr;
 
         {
             SwRewriter aRewriter;
@@ -3025,7 +3025,7 @@ OUString SwRedlineData::GetDescr() const
 {
     OUString aResult;
 
-    aResult += String(SW_RES(STR_REDLINE_INSERT + GetType()));
+    aResult += SW_RES(STR_REDLINE_INSERT + GetType());
 
     return aResult;
 }
@@ -3788,11 +3788,11 @@ OUString SwRedline::GetDescr(sal_uInt16 nPos)
     }
 
     // replace $1 in description by description of the redlines text
-    String aTmpStr;
-    aTmpStr += String(SW_RES(STR_START_QUOTE));
+    OUString aTmpStr;
+    aTmpStr += SW_RES(STR_START_QUOTE);
     aTmpStr += ShortenString(pPaM->GetTxt(), nUndoStringLength,
-                             String(SW_RES(STR_LDOTS)));
-    aTmpStr += String(SW_RES(STR_END_QUOTE));
+                             OUString(SW_RES(STR_LDOTS)));
+    aTmpStr += SW_RES(STR_END_QUOTE);
 
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, aTmpStr);

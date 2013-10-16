@@ -587,28 +587,28 @@ static sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const OUString& rNam
     return nSavePos;
 }
 
-static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
+static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, OUString& rName )
 {
     // Valid numbers are (always just offsets!):
     //  ([Number]+\.)+  (as a regular expression!)
     //  (Number follwed by a period, with 5 repetitions)
     //  i.e.: "1.1.", "1.", "1.1.1."
     sal_Int32 nPos = 0;
-    String sNum = rName.GetToken( 0, '.', nPos );
+    OUString sNum = rName.getToken( 0, '.', nPos );
     if( -1 == nPos )
         return USHRT_MAX;           // invalid number!
 
     sal_uInt16 nLevelVal[ MAXLEVEL ];       // numbers of all levels
     memset( nLevelVal, 0, MAXLEVEL * sizeof( nLevelVal[0] ));
     sal_uInt8 nLevel = 0;
-    String sName( rName );
+    OUString sName( rName );
 
     while( -1 != nPos )
     {
         sal_uInt16 nVal = 0;
         sal_Unicode c;
-        for( sal_uInt16 n = 0; n < sNum.Len(); ++n )
-            if( '0' <= ( c = sNum.GetChar( n )) && c <= '9' )
+        for( sal_uInt16 n = 0; n < sNum.getLength(); ++n )
+            if( '0' <= ( c = sNum[ n ]) && c <= '9' )
             {
                 nVal *= 10;  nVal += c - '0';
             }
@@ -620,9 +620,9 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
         if( MAXLEVEL > nLevel )
             nLevelVal[ nLevel++ ] = nVal;
 
-        sName.Erase( 0, nPos );
+        sName = sName.copy( nPos );
         nPos = 0;
-        sNum = sName.GetToken( 0, '.', nPos );
+        sNum = sName.getToken( 0, '.', nPos );
         // #i4533# without this check all parts delimited by a dot are treated as outline numbers
         if(!comphelper::string::isdigitAsciiString(sNum))
             nPos = -1;
@@ -696,26 +696,26 @@ bool SwDoc::GotoOutline( SwPosition& rPos, const OUString& rName ) const
         const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
 
         // 1. step: via the Number:
-        String sName( rName );
+        OUString sName( rName );
         sal_uInt16 nFndPos = ::lcl_FindOutlineNum( GetNodes(), sName );
         if( USHRT_MAX != nFndPos )
         {
             SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
-            String sExpandedText = pNd->GetExpandTxt();
+            OUString sExpandedText = pNd->GetExpandTxt();
             //#i4533# leading numbers followed by a dot have been remove while
             //searching for the outline position
             //to compensate this they must be removed from the paragraphs text content, too
             sal_Int32 nPos = 0;
-            String sTempNum;
-            while(sExpandedText.Len() && (sTempNum = sExpandedText.GetToken(0, '.', nPos)).Len() &&
+            OUString sTempNum;
+            while(!sExpandedText.isEmpty() && !(sTempNum = sExpandedText.getToken(0, '.', nPos)).isEmpty() &&
                     -1 != nPos &&
                     comphelper::string::isdigitAsciiString(sTempNum))
             {
-                sExpandedText.Erase(0, nPos);
+                sExpandedText = sExpandedText.copy(nPos);
                 nPos = 0;
             }
 
-            if( !sExpandedText.Equals( sName ) )
+            if( sExpandedText != sName )
             {
                 sal_uInt16 nTmp = ::lcl_FindOutlineName( GetNodes(), sName, true );
                 if( USHRT_MAX != nTmp )             // found via the Name
@@ -739,7 +739,7 @@ bool SwDoc::GotoOutline( SwPosition& rPos, const OUString& rName ) const
         }
 
         // #i68289# additional search on hyperlink URL without its outline numbering part
-        if ( !sName.Equals( rName ) )
+        if ( sName != rName )
         {
             nFndPos = ::lcl_FindOutlineName( GetNodes(), sName, false );
             if( USHRT_MAX != nFndPos )
@@ -865,7 +865,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
     {
         if ( bCreateNewList )
         {
-            String sListId;
+            OUString sListId;
             if ( !bUpdateRule )
             {
                 // apply list id of list, which has been created for the new list style
@@ -874,7 +874,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
             else
             {
                 // create new list and apply its list id
-                SwList* pNewList = createList( String(), pNew->GetName() );
+                SwList* pNewList = createList( OUString(), pNew->GetName() );
                 OSL_ENSURE( pNewList,
                         "<SwDoc::SetNumRule(..)> - could not create new list. Serious defect -> please inform OD." );
                 sListId = pNewList->GetListId();
@@ -1048,7 +1048,7 @@ bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
         }
         // #i34097# DeleteAndDestroy deletes rName if
         // rName is directly taken from the numrule.
-        const String aTmpName( rName );
+        const OUString aTmpName( rName );
         delete (*mpNumRuleTbl)[ nPos ];
         mpNumRuleTbl->erase( mpNumRuleTbl->begin() + nPos );
         maNumRuleMap.erase(aTmpName);
@@ -2176,7 +2176,7 @@ sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
             pNew->SetPoolFmtId( USHRT_MAX );
             pNew->SetPoolHelpId( USHRT_MAX );
             pNew->SetPoolHlpFileId( UCHAR_MAX );
-            pNew->SetDefaultListId( String() );
+            pNew->SetDefaultListId( OUString() );
         }
         pNew->CheckCharFmts( this );
     }
@@ -2524,10 +2524,10 @@ SwList* SwDoc::createListForListStyle( const OUString& sListStyleName )
         return 0;
     }
 
-    String sListId( pNumRule->GetDefaultListId() ); // can be empty String
+    OUString sListId( pNumRule->GetDefaultListId() ); // can be empty String
     if ( getListByName( sListId ) )
     {
-        sListId = String();
+        sListId = OUString();
     }
     SwList* pNewList = createList( sListId, sListStyleName );
     maListStyleLists[sListStyleName] = pNewList;
@@ -2552,7 +2552,7 @@ SwList* SwDoc::getListForListStyle( const OUString& sListStyleName ) const
 
 void SwDoc::deleteListForListStyle( const OUString& sListStyleName )
 {
-    String sListId;
+    OUString sListId;
     {
         SwList* pList = getListForListStyle( sListStyleName );
         OSL_ENSURE( pList,
@@ -2562,7 +2562,7 @@ void SwDoc::deleteListForListStyle( const OUString& sListStyleName )
             sListId = pList->GetListId();
         }
     }
-    if ( sListId.Len() > 0 )
+    if ( !sListId.isEmpty() )
     {
         maListStyleLists.erase( sListStyleName );
         deleteList( sListId );
@@ -2585,11 +2585,11 @@ void SwDoc::trackChangeOfListStyleName( const OUString& sListStyleName,
 
 namespace listfunc
 {
-    const String MakeListIdUnique( const SwDoc& rDoc,
-                                   const String aSuggestedUniqueListId )
+    const OUString MakeListIdUnique( const SwDoc& rDoc,
+                                   const OUString aSuggestedUniqueListId )
     {
         long nHitCount = 0;
-        String aTmpStr = aSuggestedUniqueListId;
+        OUString aTmpStr = aSuggestedUniqueListId;
         while ( rDoc.getListByName( aTmpStr ) )
         {
             ++nHitCount;

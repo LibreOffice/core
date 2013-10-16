@@ -91,7 +91,7 @@ SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
     case RES_DDEFLD:
         {
             const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-            String sFldNm( rFldTyp.GetName() );
+            OUString sFldNm( rFldTyp.GetName() );
             for( ; i < nSize; ++i )
                 if( nFldWhich == (*mpFldTypes)[i]->Which() &&
                     rSCmp.isEqual( sFldNm, (*mpFldTypes)[i]->GetName() ))
@@ -158,7 +158,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
             RES_DDEFLD == nFldWhich, "Wrong FldType" );
 
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    const String& rFldNm = rFldTyp.GetName();
+    const OUString& rFldNm = rFldTyp.GetName();
     SwFieldType* pFnd;
 
     for( ; i < nSize; ++i )
@@ -168,8 +168,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
             // find new name
             sal_uInt16 nNum = 1;
             do {
-                String sSrch( rFldNm );
-                sSrch.Append( OUString::number( nNum ));
+                OUString sSrch = rFldNm + OUString::number( nNum );
                 for( i = INIT_FLDTYPES; i < nSize; ++i )
                     if( nFldWhich == (pFnd = (*mpFldTypes)[i])->Which() &&
                         rSCmp.isEqual( sSrch, pFnd->GetName() ) )
@@ -993,18 +992,18 @@ OUString LookString( SwHash** ppTbl, sal_uInt16 nSize, const OUString& rName,
     return OUString();
 }
 
-static String lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
+static OUString lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 {
     SwDBData aDBData( rDBFld.GetDBData( &rDoc ));
-    String sDBNumNm;
+    OUString sDBNumNm;
     SwDBData aDocData = rDoc.GetDBData();
 
     if( aDBData != aDocData )
     {
         sDBNumNm = aDBData.sDataSource;
-        sDBNumNm += DB_DELIM;
-        sDBNumNm += String(aDBData.sCommand);
-        sDBNumNm += DB_DELIM;
+        sDBNumNm += OUString(DB_DELIM);
+        sDBNumNm += aDBData.sCommand;
+        sDBNumNm += OUString(DB_DELIM);
     }
     sDBNumNm += SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD);
 
@@ -1057,7 +1056,7 @@ static void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFl
                     !pMgr->OpenDataSource( aDBData.sDataSource, aDBData.sCommand ))
                     break;
 
-                String sDBNumNm(lcl_GetDBVarName( rDoc, *pDBFld));
+                OUString sDBNumNm(lcl_GetDBVarName( rDoc, *pDBFld));
                 SwCalcExp* pExp = rCalc.VarLook( sDBNumNm );
                 if( pExp )
                     rCalc.VarChange( sDBNumNm, pExp->nValue.GetLong() + 1 );
@@ -1143,9 +1142,9 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
                 // set the new value in the hash table
                 // is the formula a field?
                 SwSetExpField* pSFld = (SwSetExpField*)pFld;
-                String aNew = LookString( ppHashTbl, rTblSize, pSFld->GetFormula() );
+                OUString aNew = LookString( ppHashTbl, rTblSize, pSFld->GetFormula() );
 
-                if( !aNew.Len() )               // nothing found, then the formula is
+                if( aNew.isEmpty() )               // nothing found, then the formula is
                     aNew = pSFld->GetFormula(); // the new value
 
                 // #i3141# - update expression of field as in method
@@ -1168,13 +1167,13 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
             break;
         case RES_DBFLD:
             {
-                const String& rName = pFld->GetTyp()->GetName();
+                const OUString& rName = pFld->GetTyp()->GetName();
 
                 // Insert entry in the hash table
                 // Entry present?
                 sal_uInt16 nPos;
                 SwHash* pFnd = Find( rName, ppHashTbl, rTblSize, &nPos );
-                String const value(pFld->ExpandField(IsClipBoard()));
+                OUString const value(pFld->ExpandField(IsClipBoard()));
                 if( pFnd )
                 {
                     // modify entry in the hash table
@@ -1231,8 +1230,8 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                 {
                     // Entry present?
                     sal_uInt16 nPos;
-                    const String& rNm = pFldType->GetName();
-                    String sExpand(((SwUserFieldType*)pFldType)->Expand(nsSwGetSetExpType::GSE_STRING, 0, 0));
+                    const OUString& rNm = pFldType->GetName();
+                    OUString sExpand(((SwUserFieldType*)pFldType)->Expand(nsSwGetSetExpType::GSE_STRING, 0, 0));
                     SwHash* pFnd = Find( rNm, pHashStrTbl, nStrFmtCnt, &nPos );
                     if( pFnd )
                         // modify entry in the hash table
@@ -1252,7 +1251,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     // The array is filled with all fields; start calculation.
     SwCalc aCalc( *this );
 
-    String sDBNumNm( SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) );
+    OUString sDBNumNm( SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) );
 
     // already set the current record number
     SwNewDBMgr* pMgr = GetNewDBMgr();
@@ -1267,7 +1266,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             nShownSections++;
     }
 
-    String aNew;
+    OUString aNew;
     for( _SetGetExpFlds::const_iterator it = mpUpdtFlds->GetSortLst()->begin(); it != mpUpdtFlds->GetSortLst()->end(); ++it )
     {
         SwSection* pSect = (SwSection*)(*it)->GetSection();
@@ -1357,13 +1356,13 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             if( pMgr->IsDataSourceOpen(aTmpDBData.sDataSource, aTmpDBData.sCommand, sal_False))
                 aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aTmpDBData.sDataSource, aTmpDBData.sCommand, aTmpDBData.nCommandType));
 
-            const String& rName = pFld->GetTyp()->GetName();
+            const OUString& rName = pFld->GetTyp()->GetName();
 
             // Add entry to hash table
             // Entry present?
             sal_uInt16 nPos;
             SwHash* pFnd = Find( rName, pHashStrTbl, nStrFmtCnt, &nPos );
-            String const value(pFld->ExpandField(IsClipBoard()));
+            OUString const value(pFld->ExpandField(IsClipBoard()));
             if( pFnd )
             {
                 // Modify entry in the hash table
@@ -1401,7 +1400,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                     aNew = LookString( pHashStrTbl, nStrFmtCnt,
                                 pSFld->GetFormula() );
 
-                    if( !aNew.Len() )               // nothing found then the formula is the new value
+                    if( aNew.isEmpty() )               // nothing found then the formula is the new value
                         aNew = pSFld->GetFormula();
 
                     // only update one field
@@ -1469,7 +1468,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                         }
                     }
 
-                    aNew += '=';
+                    aNew += "=";
                     aNew += pSFld->GetFormula();
 
                     SwSbxValue aValue = aCalc.Calculate( aNew );
@@ -1652,12 +1651,12 @@ void SwDoc::SetInitDBFields( sal_Bool b )
 }
 
 /// Get all databases that are used by fields
-static String lcl_DBDataToString(const SwDBData& rData)
+static OUString lcl_DBDataToString(const SwDBData& rData)
 {
-    String sRet = rData.sDataSource;
-    sRet += DB_DELIM;
-    sRet += (String)rData.sCommand;
-    sRet += DB_DELIM;
+    OUString sRet = rData.sDataSource;
+    sRet += OUString(DB_DELIM);
+    sRet += rData.sCommand;
+    sRet += OUString(DB_DELIM);
     sRet += OUString::number(rData.nCommandType);
     return sRet;
 }
@@ -1681,7 +1680,7 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
 
         if( pSect )
         {
-            String aCond( pSect->GetCondition() );
+            OUString aCond( pSect->GetCondition() );
             AddUsedDBToList( rDBNameList, FindUsedDBs( *pAllDBNames,
                                                 aCond, aUsedDBNames ) );
             aUsedDBNames.clear();
@@ -1759,27 +1758,27 @@ std::vector<OUString>& SwDoc::FindUsedDBs( const std::vector<OUString>& rAllDBNa
                                    std::vector<OUString>& rUsedDBNames )
 {
     const CharClass& rCC = GetAppCharClass();
-    String  sFormula(rFormula);
+    OUString  sFormula(rFormula);
 #ifndef UNX
     sFormula = rCC.uppercase( sFormula );
 #endif
 
-    xub_StrLen nPos;
+    sal_Int32 nPos;
     for (sal_uInt16 i = 0; i < rAllDBNames.size(); ++i )
     {
-        String pStr(rAllDBNames[i]);
+        OUString pStr(rAllDBNames[i]);
 
-        if( STRING_NOTFOUND != (nPos = sFormula.Search( pStr )) &&
-            sFormula.GetChar( nPos + pStr.Len() ) == '.' &&
+        if( -1 != (nPos = sFormula.indexOf( pStr )) &&
+            sFormula[ nPos + pStr.getLength() ] == '.' &&
             (!nPos || !rCC.isLetterNumeric( sFormula, nPos - 1 )))
         {
             // Look up table name
-            xub_StrLen nEndPos;
-            nPos += pStr.Len() + 1;
-            if( STRING_NOTFOUND != (nEndPos = sFormula.Search('.', nPos)) )
+            sal_Int32 nEndPos;
+            nPos += pStr.getLength() + 1;
+            if( -1 != (nEndPos = sFormula.indexOf('.', nPos)) )
             {
-                pStr.Append( DB_DELIM );
-                pStr.Append( sFormula.Copy( nPos, nEndPos - nPos ));
+                pStr += OUString( DB_DELIM );
+                pStr += sFormula.copy( nPos, nEndPos - nPos );
                 rUsedDBNames.push_back(pStr);
             }
         }
@@ -2463,7 +2462,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
 
 void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
 {
-    String sFldName;
+    OUString sFldName;
     switch( rType.Which() )
     {
     case RES_USERFLD :
@@ -2476,7 +2475,7 @@ void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
         OSL_ENSURE( !this, "kein gueltiger FeldTyp" );
     }
 
-    if( sFldName.Len() )
+    if( !sFldName.isEmpty() )
     {
         SetFieldsDirty( true );
         // look up and remove from the hash table
@@ -2496,7 +2495,7 @@ void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
 
 void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
 {
-    String sFldName;
+    OUString sFldName;
     switch( rType.Which() )
     {
     case RES_USERFLD :
@@ -2507,7 +2506,7 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
         break;
     }
 
-    if( sFldName.Len() )
+    if( !sFldName.isEmpty() )
     {
         SetFieldsDirty( true );
         // look up and remove from the hash table

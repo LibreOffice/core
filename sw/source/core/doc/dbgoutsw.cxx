@@ -51,7 +51,7 @@ static OString aDbgOutResult;
 bool bDbgOutStdErr = false;
 bool bDbgOutPrintAttrSet = false;
 
-char* db_pretty_print(const String* str, int flags, char* fmt)
+char* db_pretty_print(const OUString* str, int flags, char* fmt)
 {
     (void) fmt;
     (void) flags;
@@ -59,22 +59,22 @@ char* db_pretty_print(const String* str, int flags, char* fmt)
 }
 
 template<class T>
-static String lcl_dbg_out_SvPtrArr(const T & rArr)
+static OUString lcl_dbg_out_SvPtrArr(const T & rArr)
 {
-    String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
+    OUString aStr("[ ");
 
     for (typename T::const_iterator i(rArr.begin()); i != rArr.end(); ++i)
     {
         if (i != rArr.begin())
-            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+            aStr += ", ";
 
         if (*i)
             aStr += lcl_dbg_out(**i);
         else
-            aStr += String("(null)", RTL_TEXTENCODING_ASCII_US);
+            aStr += "(null)";
     }
 
-    aStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
+    aStr += " ]";
 
     return aStr;
 }
@@ -85,12 +85,12 @@ SW_DLLPUBLIC const char * dbg_out(const void * pVoid)
 
     sprintf(sBuffer, "%p", pVoid);
 
-    String aTmpStr(sBuffer, RTL_TEXTENCODING_ASCII_US);
+    OUString aTmpStr(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US);
 
     return dbg_out(aTmpStr);
 }
 
-SW_DLLPUBLIC const char * dbg_out(const String & aStr)
+SW_DLLPUBLIC const char * dbg_out(const OUString & aStr)
 {
     aDbgOutResult = OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
 
@@ -100,13 +100,6 @@ SW_DLLPUBLIC const char * dbg_out(const String & aStr)
     return aDbgOutResult.getStr();
 }
 
-SW_DLLPUBLIC const char * dbg_out(const OUString & aStr)
-{
-    aDbgOutResult = OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
-    return aDbgOutResult.getStr();
-}
-
-
 struct CompareUShort
 {
     bool operator()(sal_uInt16 a, sal_uInt16 b) const
@@ -115,137 +108,137 @@ struct CompareUShort
     }
 };
 
-map<sal_uInt16,String,CompareUShort> & GetItemWhichMap()
+map<sal_uInt16,OUString,CompareUShort> & GetItemWhichMap()
 {
-    static map<sal_uInt16,String,CompareUShort> aItemWhichMap;
+    static map<sal_uInt16,OUString,CompareUShort> aItemWhichMap;
     static bool bInitialized = false;
 
     if (! bInitialized)
     {
-        aItemWhichMap[RES_CHRATR_CASEMAP] = String("CHRATR_CASEMAP", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CHARSETCOLOR] = String("CHRATR_CHARSETCOLOR", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_COLOR] = String("CHRATR_COLOR", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CONTOUR] = String("CHRATR_CONTOUR", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CROSSEDOUT] = String("CHRATR_CROSSEDOUT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_ESCAPEMENT] = String("CHRATR_ESCAPEMENT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_FONT] = String("CHRATR_FONT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_FONTSIZE] = String("CHRATR_FONTSIZE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_KERNING] = String("CHRATR_KERNING", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_LANGUAGE] = String("CHRATR_LANGUAGE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_POSTURE] = String("CHRATR_POSTURE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_PROPORTIONALFONTSIZE] = String("CHRATR_PROPORTIONALFONTSIZE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_SHADOWED] = String("CHRATR_SHADOWED", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_UNDERLINE] = String("CHRATR_UNDERLINE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_OVERLINE] = String("CHRATR_OVERLINE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_WEIGHT] = String("CHRATR_WEIGHT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_WORDLINEMODE] = String("CHRATR_WORDLINEMODE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_AUTOKERN] = String("CHRATR_AUTOKERN", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_BLINK] = String("CHRATR_BLINK", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_NOHYPHEN] = String("CHRATR_NOHYPHEN", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_NOLINEBREAK] = String("CHRATR_NOLINEBREAK", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_BACKGROUND] = String("CHRATR_BACKGROUND", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_HIGHLIGHT] = String("CHRATR_HIGHLIGHT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CJK_FONT] = String("CHRATR_CJK_FONT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CJK_FONTSIZE] = String("CHRATR_CJK_FONTSIZE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CJK_LANGUAGE] = String("CHRATR_CJK_LANGUAGE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CJK_POSTURE] = String("CHRATR_CJK_POSTURE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CJK_WEIGHT] = String("CHRATR_CJK_WEIGHT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CTL_FONT] = String("CHRATR_CTL_FONT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CTL_FONTSIZE] = String("CHRATR_CTL_FONTSIZE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CTL_LANGUAGE] = String("CHRATR_CTL_LANGUAGE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CTL_POSTURE] = String("CHRATR_CTL_POSTURE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_CTL_WEIGHT] = String("CHRATR_CTL_WEIGHT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_ROTATE] = String("CHRATR_ROTATE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_EMPHASIS_MARK] = String("CHRATR_EMPHASIS_MARK", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_TWO_LINES] = String("CHRATR_TWO_LINES", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_SCALEW] = String("CHRATR_SCALEW", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_RELIEF] = String("CHRATR_RELIEF", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_HIDDEN] = String("CHRATR_HIDDEN", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_BOX] = String("CHRATR_BOX", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHRATR_SHADOW] = String("CHRATR_SHADOW", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_AUTOFMT] = String("TXTATR_AUTOFMT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_INETFMT] = String("TXTATR_INETFMT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_REFMARK] = String("TXTATR_REFMARK", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_TOXMARK] = String("TXTATR_TOXMARK", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_CHARFMT] = String("TXTATR_CHARFMT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_DUMMY5] = String("TXTATR_DUMMY5", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_CJK_RUBY] = String("TXTATR_CJK_RUBY", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_UNKNOWN_CONTAINER] = String("TXTATR_UNKNOWN_CONTAINER", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_META] = String("TXTATR_META", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_METAFIELD] = String("TXTATR_METAFIELD", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_FIELD] = String("TXTATR_FIELD", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_FLYCNT] = String("TXTATR_FLYCNT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_FTN] = String("TXTATR_FTN", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_DUMMY4] = String("TXTATR_DUMMY4", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_DUMMY3] = String("TXTATR_DUMMY3", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_DUMMY1] = String("TXTATR_DUMMY1", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_DUMMY2] = String("TXTATR_DUMMY2", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_LINESPACING] = String("PARATR_LINESPACING", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_ADJUST] = String("PARATR_ADJUST", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_SPLIT] = String("PARATR_SPLIT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_ORPHANS] = String("PARATR_ORPHANS", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_WIDOWS] = String("PARATR_WIDOWS", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_TABSTOP] = String("PARATR_TABSTOP", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_HYPHENZONE] = String("PARATR_HYPHENZONE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_DROP] = String("PARATR_DROP", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_REGISTER] = String("PARATR_REGISTER", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_NUMRULE] = String("PARATR_NUMRULE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_SCRIPTSPACE] = String("PARATR_SCRIPTSPACE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_HANGINGPUNCTUATION] = String("PARATR_HANGINGPUNCTUATION", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_FORBIDDEN_RULES] = String("PARATR_FORBIDDEN_RULES", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_VERTALIGN] = String("PARATR_VERTALIGN", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_SNAPTOGRID] = String("PARATR_SNAPTOGRID", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PARATR_CONNECT_BORDER] = String("PARATR_CONNECT_BORDER", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_FILL_ORDER] = String("FILL_ORDER", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_FRM_SIZE] = String("FRM_SIZE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PAPER_BIN] = String("PAPER_BIN", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_LR_SPACE] = String("LR_SPACE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_UL_SPACE] = String("UL_SPACE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PAGEDESC] = String("PAGEDESC", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_BREAK] = String("BREAK", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CNTNT] = String("CNTNT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_HEADER] = String("HEADER", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_FOOTER] = String("FOOTER", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PRINT] = String("PRINT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_OPAQUE] = String("OPAQUE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_PROTECT] = String("PROTECT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_SURROUND] = String("SURROUND", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_VERT_ORIENT] = String("VERT_ORIENT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_HORI_ORIENT] = String("HORI_ORIENT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_ANCHOR] = String("ANCHOR", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_BACKGROUND] = String("BACKGROUND", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_BOX] = String("BOX", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_SHADOW] = String("SHADOW", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_FRMMACRO] = String("FRMMACRO", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_COL] = String("COL", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_KEEP] = String("KEEP", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_URL] = String("URL", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_EDIT_IN_READONLY] = String("EDIT_IN_READONLY", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_LAYOUT_SPLIT] = String("LAYOUT_SPLIT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_CHAIN] = String("CHAIN", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TEXTGRID] = String("TEXTGRID", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_LINENUMBER  ] = String("LINENUMBER  ", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_FTN_AT_TXTEND] = String("FTN_AT_TXTEND", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_END_AT_TXTEND] = String("END_AT_TXTEND", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_COLUMNBALANCE] = String("COLUMNBALANCE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_FRAMEDIR] = String("FRAMEDIR", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_HEADER_FOOTER_EAT_SPACING] = String("HEADER_FOOTER_EAT_SPACING", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_ROW_SPLIT] = String("ROW_SPLIT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_MIRRORGRF] = String("GRFATR_MIRRORGRF", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_CROPGRF] = String("GRFATR_CROPGRF", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_ROTATION] = String("GRFATR_ROTATION", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_LUMINANCE] = String("GRFATR_LUMINANCE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_CONTRAST] = String("GRFATR_CONTRAST", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_CHANNELR] = String("GRFATR_CHANNELR", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_CHANNELG] = String("GRFATR_CHANNELG", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_CHANNELB] = String("GRFATR_CHANNELB", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_GAMMA] = String("GRFATR_GAMMA", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_INVERT] = String("GRFATR_INVERT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_TRANSPARENCY] = String("GRFATR_TRANSPARENCY", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_GRFATR_DRAWMODE] = String("GRFATR_DRAWMODE", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_BOXATR_FORMAT] = String("BOXATR_FORMAT", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_BOXATR_FORMULA] = String("BOXATR_FORMULA", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_BOXATR_VALUE] = String("BOXATR_VALUE", RTL_TEXTENCODING_ASCII_US);
+        aItemWhichMap[RES_CHRATR_CASEMAP] = OUString("CHRATR_CASEMAP");
+        aItemWhichMap[RES_CHRATR_CHARSETCOLOR] = OUString("CHRATR_CHARSETCOLOR");
+        aItemWhichMap[RES_CHRATR_COLOR] = OUString("CHRATR_COLOR");
+        aItemWhichMap[RES_CHRATR_CONTOUR] = OUString("CHRATR_CONTOUR");
+        aItemWhichMap[RES_CHRATR_CROSSEDOUT] = OUString("CHRATR_CROSSEDOUT");
+        aItemWhichMap[RES_CHRATR_ESCAPEMENT] = OUString("CHRATR_ESCAPEMENT");
+        aItemWhichMap[RES_CHRATR_FONT] = OUString("CHRATR_FONT");
+        aItemWhichMap[RES_CHRATR_FONTSIZE] = OUString("CHRATR_FONTSIZE");
+        aItemWhichMap[RES_CHRATR_KERNING] = OUString("CHRATR_KERNING");
+        aItemWhichMap[RES_CHRATR_LANGUAGE] = OUString("CHRATR_LANGUAGE");
+        aItemWhichMap[RES_CHRATR_POSTURE] = OUString("CHRATR_POSTURE");
+        aItemWhichMap[RES_CHRATR_PROPORTIONALFONTSIZE] = OUString("CHRATR_PROPORTIONALFONTSIZE");
+        aItemWhichMap[RES_CHRATR_SHADOWED] = OUString("CHRATR_SHADOWED");
+        aItemWhichMap[RES_CHRATR_UNDERLINE] = OUString("CHRATR_UNDERLINE");
+        aItemWhichMap[RES_CHRATR_OVERLINE] = OUString("CHRATR_OVERLINE");
+        aItemWhichMap[RES_CHRATR_WEIGHT] = OUString("CHRATR_WEIGHT");
+        aItemWhichMap[RES_CHRATR_WORDLINEMODE] = OUString("CHRATR_WORDLINEMODE");
+        aItemWhichMap[RES_CHRATR_AUTOKERN] = OUString("CHRATR_AUTOKERN");
+        aItemWhichMap[RES_CHRATR_BLINK] = OUString("CHRATR_BLINK");
+        aItemWhichMap[RES_CHRATR_NOHYPHEN] = OUString("CHRATR_NOHYPHEN");
+        aItemWhichMap[RES_CHRATR_NOLINEBREAK] = OUString("CHRATR_NOLINEBREAK");
+        aItemWhichMap[RES_CHRATR_BACKGROUND] = OUString("CHRATR_BACKGROUND");
+        aItemWhichMap[RES_CHRATR_HIGHLIGHT] = OUString("CHRATR_HIGHLIGHT");
+        aItemWhichMap[RES_CHRATR_CJK_FONT] = OUString("CHRATR_CJK_FONT");
+        aItemWhichMap[RES_CHRATR_CJK_FONTSIZE] = OUString("CHRATR_CJK_FONTSIZE");
+        aItemWhichMap[RES_CHRATR_CJK_LANGUAGE] = OUString("CHRATR_CJK_LANGUAGE");
+        aItemWhichMap[RES_CHRATR_CJK_POSTURE] = OUString("CHRATR_CJK_POSTURE");
+        aItemWhichMap[RES_CHRATR_CJK_WEIGHT] = OUString("CHRATR_CJK_WEIGHT");
+        aItemWhichMap[RES_CHRATR_CTL_FONT] = OUString("CHRATR_CTL_FONT");
+        aItemWhichMap[RES_CHRATR_CTL_FONTSIZE] = OUString("CHRATR_CTL_FONTSIZE");
+        aItemWhichMap[RES_CHRATR_CTL_LANGUAGE] = OUString("CHRATR_CTL_LANGUAGE");
+        aItemWhichMap[RES_CHRATR_CTL_POSTURE] = OUString("CHRATR_CTL_POSTURE");
+        aItemWhichMap[RES_CHRATR_CTL_WEIGHT] = OUString("CHRATR_CTL_WEIGHT");
+        aItemWhichMap[RES_CHRATR_ROTATE] = OUString("CHRATR_ROTATE");
+        aItemWhichMap[RES_CHRATR_EMPHASIS_MARK] = OUString("CHRATR_EMPHASIS_MARK");
+        aItemWhichMap[RES_CHRATR_TWO_LINES] = OUString("CHRATR_TWO_LINES");
+        aItemWhichMap[RES_CHRATR_SCALEW] = OUString("CHRATR_SCALEW");
+        aItemWhichMap[RES_CHRATR_RELIEF] = OUString("CHRATR_RELIEF");
+        aItemWhichMap[RES_CHRATR_HIDDEN] = OUString("CHRATR_HIDDEN");
+        aItemWhichMap[RES_CHRATR_BOX] = OUString("CHRATR_BOX");
+        aItemWhichMap[RES_CHRATR_SHADOW] = OUString("CHRATR_SHADOW");
+        aItemWhichMap[RES_TXTATR_AUTOFMT] = OUString("TXTATR_AUTOFMT");
+        aItemWhichMap[RES_TXTATR_INETFMT] = OUString("TXTATR_INETFMT");
+        aItemWhichMap[RES_TXTATR_REFMARK] = OUString("TXTATR_REFMARK");
+        aItemWhichMap[RES_TXTATR_TOXMARK] = OUString("TXTATR_TOXMARK");
+        aItemWhichMap[RES_TXTATR_CHARFMT] = OUString("TXTATR_CHARFMT");
+        aItemWhichMap[RES_TXTATR_DUMMY5] = OUString("TXTATR_DUMMY5");
+        aItemWhichMap[RES_TXTATR_CJK_RUBY] = OUString("TXTATR_CJK_RUBY");
+        aItemWhichMap[RES_TXTATR_UNKNOWN_CONTAINER] = OUString("TXTATR_UNKNOWN_CONTAINER");
+        aItemWhichMap[RES_TXTATR_META] = OUString("TXTATR_META");
+        aItemWhichMap[RES_TXTATR_METAFIELD] = OUString("TXTATR_METAFIELD");
+        aItemWhichMap[RES_TXTATR_FIELD] = OUString("TXTATR_FIELD");
+        aItemWhichMap[RES_TXTATR_FLYCNT] = OUString("TXTATR_FLYCNT");
+        aItemWhichMap[RES_TXTATR_FTN] = OUString("TXTATR_FTN");
+        aItemWhichMap[RES_TXTATR_DUMMY4] = OUString("TXTATR_DUMMY4");
+        aItemWhichMap[RES_TXTATR_DUMMY3] = OUString("TXTATR_DUMMY3");
+        aItemWhichMap[RES_TXTATR_DUMMY1] = OUString("TXTATR_DUMMY1");
+        aItemWhichMap[RES_TXTATR_DUMMY2] = OUString("TXTATR_DUMMY2");
+        aItemWhichMap[RES_PARATR_LINESPACING] = OUString("PARATR_LINESPACING");
+        aItemWhichMap[RES_PARATR_ADJUST] = OUString("PARATR_ADJUST");
+        aItemWhichMap[RES_PARATR_SPLIT] = OUString("PARATR_SPLIT");
+        aItemWhichMap[RES_PARATR_ORPHANS] = OUString("PARATR_ORPHANS");
+        aItemWhichMap[RES_PARATR_WIDOWS] = OUString("PARATR_WIDOWS");
+        aItemWhichMap[RES_PARATR_TABSTOP] = OUString("PARATR_TABSTOP");
+        aItemWhichMap[RES_PARATR_HYPHENZONE] = OUString("PARATR_HYPHENZONE");
+        aItemWhichMap[RES_PARATR_DROP] = OUString("PARATR_DROP");
+        aItemWhichMap[RES_PARATR_REGISTER] = OUString("PARATR_REGISTER");
+        aItemWhichMap[RES_PARATR_NUMRULE] = OUString("PARATR_NUMRULE");
+        aItemWhichMap[RES_PARATR_SCRIPTSPACE] = OUString("PARATR_SCRIPTSPACE");
+        aItemWhichMap[RES_PARATR_HANGINGPUNCTUATION] = OUString("PARATR_HANGINGPUNCTUATION");
+        aItemWhichMap[RES_PARATR_FORBIDDEN_RULES] = OUString("PARATR_FORBIDDEN_RULES");
+        aItemWhichMap[RES_PARATR_VERTALIGN] = OUString("PARATR_VERTALIGN");
+        aItemWhichMap[RES_PARATR_SNAPTOGRID] = OUString("PARATR_SNAPTOGRID");
+        aItemWhichMap[RES_PARATR_CONNECT_BORDER] = OUString("PARATR_CONNECT_BORDER");
+        aItemWhichMap[RES_FILL_ORDER] = OUString("FILL_ORDER");
+        aItemWhichMap[RES_FRM_SIZE] = OUString("FRM_SIZE");
+        aItemWhichMap[RES_PAPER_BIN] = OUString("PAPER_BIN");
+        aItemWhichMap[RES_LR_SPACE] = OUString("LR_SPACE");
+        aItemWhichMap[RES_UL_SPACE] = OUString("UL_SPACE");
+        aItemWhichMap[RES_PAGEDESC] = OUString("PAGEDESC");
+        aItemWhichMap[RES_BREAK] = OUString("BREAK");
+        aItemWhichMap[RES_CNTNT] = OUString("CNTNT");
+        aItemWhichMap[RES_HEADER] = OUString("HEADER");
+        aItemWhichMap[RES_FOOTER] = OUString("FOOTER");
+        aItemWhichMap[RES_PRINT] = OUString("PRINT");
+        aItemWhichMap[RES_OPAQUE] = OUString("OPAQUE");
+        aItemWhichMap[RES_PROTECT] = OUString("PROTECT");
+        aItemWhichMap[RES_SURROUND] = OUString("SURROUND");
+        aItemWhichMap[RES_VERT_ORIENT] = OUString("VERT_ORIENT");
+        aItemWhichMap[RES_HORI_ORIENT] = OUString("HORI_ORIENT");
+        aItemWhichMap[RES_ANCHOR] = OUString("ANCHOR");
+        aItemWhichMap[RES_BACKGROUND] = OUString("BACKGROUND");
+        aItemWhichMap[RES_BOX] = OUString("BOX");
+        aItemWhichMap[RES_SHADOW] = OUString("SHADOW");
+        aItemWhichMap[RES_FRMMACRO] = OUString("FRMMACRO");
+        aItemWhichMap[RES_COL] = OUString("COL");
+        aItemWhichMap[RES_KEEP] = OUString("KEEP");
+        aItemWhichMap[RES_URL] = OUString("URL");
+        aItemWhichMap[RES_EDIT_IN_READONLY] = OUString("EDIT_IN_READONLY");
+        aItemWhichMap[RES_LAYOUT_SPLIT] = OUString("LAYOUT_SPLIT");
+        aItemWhichMap[RES_CHAIN] = OUString("CHAIN");
+        aItemWhichMap[RES_TEXTGRID] = OUString("TEXTGRID");
+        aItemWhichMap[RES_LINENUMBER  ] = OUString("LINENUMBER  ");
+        aItemWhichMap[RES_FTN_AT_TXTEND] = OUString("FTN_AT_TXTEND");
+        aItemWhichMap[RES_END_AT_TXTEND] = OUString("END_AT_TXTEND");
+        aItemWhichMap[RES_COLUMNBALANCE] = OUString("COLUMNBALANCE");
+        aItemWhichMap[RES_FRAMEDIR] = OUString("FRAMEDIR");
+        aItemWhichMap[RES_HEADER_FOOTER_EAT_SPACING] = OUString("HEADER_FOOTER_EAT_SPACING");
+        aItemWhichMap[RES_ROW_SPLIT] = OUString("ROW_SPLIT");
+        aItemWhichMap[RES_GRFATR_MIRRORGRF] = OUString("GRFATR_MIRRORGRF");
+        aItemWhichMap[RES_GRFATR_CROPGRF] = OUString("GRFATR_CROPGRF");
+        aItemWhichMap[RES_GRFATR_ROTATION] = OUString("GRFATR_ROTATION");
+        aItemWhichMap[RES_GRFATR_LUMINANCE] = OUString("GRFATR_LUMINANCE");
+        aItemWhichMap[RES_GRFATR_CONTRAST] = OUString("GRFATR_CONTRAST");
+        aItemWhichMap[RES_GRFATR_CHANNELR] = OUString("GRFATR_CHANNELR");
+        aItemWhichMap[RES_GRFATR_CHANNELG] = OUString("GRFATR_CHANNELG");
+        aItemWhichMap[RES_GRFATR_CHANNELB] = OUString("GRFATR_CHANNELB");
+        aItemWhichMap[RES_GRFATR_GAMMA] = OUString("GRFATR_GAMMA");
+        aItemWhichMap[RES_GRFATR_INVERT] = OUString("GRFATR_INVERT");
+        aItemWhichMap[RES_GRFATR_TRANSPARENCY] = OUString("GRFATR_TRANSPARENCY");
+        aItemWhichMap[RES_GRFATR_DRAWMODE] = OUString("GRFATR_DRAWMODE");
+        aItemWhichMap[RES_BOXATR_FORMAT] = OUString("BOXATR_FORMAT");
+        aItemWhichMap[RES_BOXATR_FORMULA] = OUString("BOXATR_FORMULA");
+        aItemWhichMap[RES_BOXATR_VALUE] = OUString("BOXATR_VALUE");
 
         bInitialized = true;
     }
@@ -253,16 +246,16 @@ map<sal_uInt16,String,CompareUShort> & GetItemWhichMap()
     return aItemWhichMap;
 }
 
-static const String lcl_dbg_out(const SfxPoolItem & rItem)
+static const OUString lcl_dbg_out(const SfxPoolItem & rItem)
 {
-    String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
+    OUString aStr("[ ");
 
     if (GetItemWhichMap().find(rItem.Which()) != GetItemWhichMap().end())
         aStr += GetItemWhichMap()[rItem.Which()];
     else
         aStr += OUString::number(rItem.Which());
 
-    aStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
+    aStr += " ]";
 
     return aStr;
 }
@@ -274,35 +267,34 @@ SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem & rItem)
 
 SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem * pItem)
 {
-    return dbg_out(pItem ? lcl_dbg_out(*pItem) :
-                   String("(nil)", RTL_TEXTENCODING_ASCII_US));
+    return dbg_out(pItem ? lcl_dbg_out(*pItem) : OUString("(nil)"));
 }
 
-static const String lcl_dbg_out(const SfxItemSet & rSet)
+static const OUString lcl_dbg_out(const SfxItemSet & rSet)
 {
     SfxItemIter aIter(rSet);
     const SfxPoolItem * pItem;
     bool bFirst = true;
-    String aStr = String("[ ", RTL_TEXTENCODING_ASCII_US);
+    OUString aStr = "[ ";
 
     pItem = aIter.FirstItem();
 
     while (pItem )
     {
         if (!bFirst)
-            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+            aStr += ", ";
 
         if ((sal_uIntPtr)pItem != SAL_MAX_SIZE)
             aStr += lcl_dbg_out(*pItem);
         else
-            aStr += String("invalid", RTL_TEXTENCODING_ASCII_US);
+            aStr += "invalid";
 
         bFirst = false;
 
         pItem = aIter.NextItem();
     }
 
-    aStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
+    aStr += " ]";
 
     return aStr;
 }
@@ -312,17 +304,17 @@ SW_DLLPUBLIC const char * dbg_out(const SfxItemSet & rSet)
     return dbg_out(lcl_dbg_out(rSet));
 }
 
-static const String lcl_dbg_out(const SwTxtAttr & rAttr)
+static const OUString lcl_dbg_out(const SwTxtAttr & rAttr)
 {
-    String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
+    OUString aStr("[ ");
 
     aStr += OUString::number(*rAttr.GetStart());
-    aStr += String("->", RTL_TEXTENCODING_ASCII_US);
+    aStr += "->";
     aStr += OUString::number(*rAttr.GetEnd());
-    aStr += String(" ", RTL_TEXTENCODING_ASCII_US);
+    aStr += " ";
     aStr += lcl_dbg_out(rAttr.GetAttr());
 
-    aStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
+    aStr += " ]";
 
     return aStr;
 }
@@ -332,18 +324,18 @@ SW_DLLPUBLIC const char * dbg_out(const SwTxtAttr & rAttr)
     return dbg_out(lcl_dbg_out(rAttr));
 }
 
-static const String lcl_dbg_out(const SwpHints & rHints)
+static const OUString lcl_dbg_out(const SwpHints & rHints)
 {
-    String aStr("[ SwpHints\n", RTL_TEXTENCODING_ASCII_US);
+    OUString aStr("[ SwpHints\n");
 
     for (sal_uInt16 i = 0; i < rHints.Count(); i++)
     {
-        aStr += String("  ", RTL_TEXTENCODING_ASCII_US);
+        aStr += "  ";
         aStr += lcl_dbg_out(*rHints[i]);
-        aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
+        aStr += "\n";
     }
 
-    aStr += String("]\n", RTL_TEXTENCODING_ASCII_US);
+    aStr += "]\n";
 
     return aStr;
 }
@@ -353,18 +345,18 @@ SW_DLLPUBLIC const char * dbg_out(const SwpHints &rHints)
     return dbg_out(lcl_dbg_out(rHints));
 }
 
-static String lcl_dbg_out(const SwPosition & rPos)
+static OUString lcl_dbg_out(const SwPosition & rPos)
 {
-    String aStr("( ", RTL_TEXTENCODING_ASCII_US);
+    OUString aStr("( ");
 
     aStr += OUString::number(rPos.nNode.GetIndex());
-    aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+    aStr += ", ";
     aStr += OUString::number(rPos.nContent.GetIndex());
-    aStr += String(": ", RTL_TEXTENCODING_ASCII_US);
+    aStr += ": ";
     aStr += OUString::number
         (reinterpret_cast<sal_IntPtr>(rPos.nContent.GetIdxReg()), 16);
 
-    aStr += String(" )", RTL_TEXTENCODING_ASCII_US);
+    aStr += " )";
 
     return aStr;
 }
@@ -374,19 +366,19 @@ SW_DLLPUBLIC const char * dbg_out(const SwPosition & rPos)
     return dbg_out(lcl_dbg_out(rPos));
 }
 
-static String lcl_dbg_out(const SwPaM & rPam)
+static OUString lcl_dbg_out(const SwPaM & rPam)
 {
-   String aStr("[ Pt: ", RTL_TEXTENCODING_ASCII_US);
+   OUString aStr("[ Pt: ");
 
    aStr += lcl_dbg_out(*rPam.GetPoint());
 
    if (rPam.HasMark())
    {
-       aStr += String(", Mk: ", RTL_TEXTENCODING_ASCII_US);
+       aStr += ", Mk: ";
        aStr += lcl_dbg_out(*rPam.GetMark());
    }
 
-   aStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
+   aStr += " ]";
 
    return aStr;
 }
@@ -396,9 +388,9 @@ SW_DLLPUBLIC const char * dbg_out(const SwPaM & rPam)
     return dbg_out(lcl_dbg_out(rPam));
 }
 
-static String lcl_dbg_out(const SwNodeNum & )
+static OUString lcl_dbg_out(const SwNodeNum & )
 {
-    return String();/*rNum.ToString();*/
+    return OUString();/*rNum.ToString();*/
 }
 
 SW_DLLPUBLIC const char * dbg_out(const SwNodeNum & rNum)
@@ -406,19 +398,19 @@ SW_DLLPUBLIC const char * dbg_out(const SwNodeNum & rNum)
     return dbg_out(lcl_dbg_out(rNum));
 }
 
-static String lcl_dbg_out(const SwRect & rRect)
+static OUString lcl_dbg_out(const SwRect & rRect)
 {
-    String aResult("[ [", RTL_TEXTENCODING_ASCII_US);
+    OUString aResult("[ [");
 
     aResult += OUString::number(rRect.Left());
-    aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+    aResult += ", ";
     aResult += OUString::number(rRect.Top());
-    aResult += String("], [", RTL_TEXTENCODING_ASCII_US);
+    aResult += "], [";
     aResult += OUString::number(rRect.Right());
-    aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+    aResult += ", ";
     aResult += OUString::number(rRect.Bottom());
 
-    aResult += String("] ]", RTL_TEXTENCODING_ASCII_US);
+    aResult += "] ]";
 
     return aResult;
 }
@@ -428,24 +420,24 @@ SW_DLLPUBLIC const char * dbg_out(const SwRect & rRect)
     return dbg_out(lcl_dbg_out(rRect));
 }
 
-static String lcl_dbg_out(const SwFrmFmt & rFrmFmt)
+static OUString lcl_dbg_out(const SwFrmFmt & rFrmFmt)
 {
-    String aResult("[ ", RTL_TEXTENCODING_ASCII_US);
+    OUString aResult("[ ");
 
     char sBuffer[256];
     sprintf(sBuffer, "%p", &rFrmFmt);
 
-    aResult += String(sBuffer, RTL_TEXTENCODING_ASCII_US);
-    aResult += String("(", RTL_TEXTENCODING_ASCII_US);
+    aResult += OUString(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US);
+    aResult += "(";
     aResult += rFrmFmt.GetName();
-    aResult += String(")", RTL_TEXTENCODING_ASCII_US);
+    aResult += ")";
 
     if (rFrmFmt.IsAuto())
-        aResult += String("*", RTL_TEXTENCODING_ASCII_US);
+        aResult += "*";
 
-    aResult += String(" ,", RTL_TEXTENCODING_ASCII_US);
+    aResult += " ,";
     aResult += lcl_dbg_out(rFrmFmt.FindLayoutRect());
-    aResult += String(" ]", RTL_TEXTENCODING_ASCII_US);
+    aResult += " ]";
 
     return aResult;
 }
@@ -455,9 +447,9 @@ SW_DLLPUBLIC const char * dbg_out(const SwFrmFmt & rFrmFmt)
     return dbg_out(lcl_dbg_out(rFrmFmt));
 }
 
-static const String lcl_AnchoredFrames(const SwNode & rNode)
+static const OUString lcl_AnchoredFrames(const SwNode & rNode)
 {
-    String aResult("[", RTL_TEXTENCODING_ASCII_US);
+    OUString aResult("[");
 
     const SwDoc * pDoc = rNode.GetDoc();
     if (pDoc)
@@ -476,7 +468,7 @@ static const String lcl_AnchoredFrames(const SwNode & rNode)
                 if (pPos && &pPos->nNode.GetNode() == &rNode)
                 {
                     if (! bFirst)
-                        aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+                        aResult += ", ";
 
                     if (*i)
                         aResult += lcl_dbg_out(**i);
@@ -486,49 +478,43 @@ static const String lcl_AnchoredFrames(const SwNode & rNode)
         }
     }
 
-    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
+    aResult += "]";
 
     return aResult;
 }
 
-static String lcl_dbg_out_NumType(sal_Int16 nType)
+static OUString lcl_dbg_out_NumType(sal_Int16 nType)
 {
-    String aTmpStr;
+    OUString aTmpStr;
 
     switch (nType)
     {
     case SVX_NUM_NUMBER_NONE:
-        aTmpStr += String(" NONE", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += " NONE";
 
         break;
     case SVX_NUM_CHARS_UPPER_LETTER:
-        aTmpStr += String(" CHARS_UPPER_LETTER",
-                          RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += " CHARS_UPPER_LETTER";
 
         break;
     case SVX_NUM_CHARS_LOWER_LETTER:
-        aTmpStr += String(" CHARS_LOWER_LETTER",
-                          RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += " CHARS_LOWER_LETTER";
 
         break;
     case SVX_NUM_ROMAN_UPPER:
-        aTmpStr += String(" ROMAN_UPPER",
-                          RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += " ROMAN_UPPER";
 
         break;
     case SVX_NUM_ROMAN_LOWER:
-        aTmpStr += String(" ROMAN_LOWER",
-                          RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += " ROMAN_LOWER";
 
         break;
     case SVX_NUM_ARABIC:
-        aTmpStr += String(" ARABIC",
-                          RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += " ARABIC";
 
         break;
     default:
-        aTmpStr += String(" ??",
-                          RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += " ??";
 
         break;
     }
@@ -536,32 +522,32 @@ static String lcl_dbg_out_NumType(sal_Int16 nType)
     return aTmpStr;
 }
 
-static String lcl_dbg_out(const SwNode & rNode)
+static OUString lcl_dbg_out(const SwNode & rNode)
 {
-    String aTmpStr;
+    OUString aTmpStr;
 
-    aTmpStr += String("<node ", RTL_TEXTENCODING_ASCII_US);
-    aTmpStr += String("index=\"", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += "<node ";
+    aTmpStr += "index=\"";
     aTmpStr += OUString::number(rNode.GetIndex());
-    aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += "\"";
 
 #ifdef DBG_UTIL
-    aTmpStr += String(" serial=\"", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += " serial=\"";
     aTmpStr += OUString::number(rNode.GetSerial());
-    aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += "\"";
 #endif
 
-    aTmpStr += String(" type=\"", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += " type=\"";
     aTmpStr += OUString::number(sal_Int32( rNode.GetNodeType() ) );
-    aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += "\"";
 
-    aTmpStr += String(" pointer=\"", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += " pointer=\"";
 
     char aBuffer[128];
     sprintf(aBuffer, "%p", &rNode);
-    aTmpStr += String(aBuffer, RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += OUString(aBuffer, strlen(aBuffer), RTL_TEXTENCODING_ASCII_US);
 
-    aTmpStr += String("\">", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += "\">";
 
     const SwTxtNode * pTxtNode = rNode.GetTxtNode();
 
@@ -569,29 +555,29 @@ static String lcl_dbg_out(const SwNode & rNode)
     {
         const SfxItemSet * pAttrSet = pTxtNode->GetpSwAttrSet();
 
-        aTmpStr += String("<txt>", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += "<txt>";
         aTmpStr += pTxtNode->GetTxt().getLength() > 10 ? pTxtNode->GetTxt().copy(0, 10) : pTxtNode->GetTxt();
-        aTmpStr += String("</txt>", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += "</txt>";
 
         if (rNode.IsTableNode())
-            aTmpStr += String("<tbl/>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "<tbl/>";
 
-        aTmpStr += String("<outlinelevel>", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += "<outlinelevel>";
         aTmpStr += OUString::number(pTxtNode->GetAttrOutlineLevel()-1);
-        aTmpStr += String("</outlinelevel>", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += "</outlinelevel>";
 
         const SwNumRule * pNumRule = pTxtNode->GetNumRule();
 
         if (pNumRule != NULL)
         {
-            aTmpStr += String("<number>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "<number>";
             if ( pTxtNode->GetNum() )
             {
                 aTmpStr += lcl_dbg_out(*(pTxtNode->GetNum()));
             }
-            aTmpStr += String("</number>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "</number>";
 
-            aTmpStr += String("<rule>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "<rule>";
             aTmpStr += pNumRule->GetName();
 
             const SfxPoolItem * pItem = NULL;
@@ -599,90 +585,90 @@ static String lcl_dbg_out(const SwNode & rNode)
             if (pAttrSet && SFX_ITEM_SET ==
                 pAttrSet->GetItemState(RES_PARATR_NUMRULE, sal_False, &pItem))
             {
-                aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
+                aTmpStr += "(";
                 aTmpStr +=
                     static_cast<const SwNumRuleItem *>(pItem)->GetValue();
-                aTmpStr += String(")", RTL_TEXTENCODING_ASCII_US);
-                aTmpStr += String("*", RTL_TEXTENCODING_ASCII_US);
+                aTmpStr += ")";
+                aTmpStr += "*";
             }
 
             const SwNumFmt * pNumFmt = NULL;
-            aTmpStr += String("</rule>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "</rule>";
 
             if (pTxtNode->GetActualListLevel() > 0)
                 pNumFmt = pNumRule->GetNumFmt( static_cast< sal_uInt16 >(pTxtNode->GetActualListLevel()) );
 
             if (pNumFmt)
             {
-                aTmpStr += String("<numformat>", RTL_TEXTENCODING_ASCII_US);
+                aTmpStr += "<numformat>";
                 aTmpStr +=
                     lcl_dbg_out_NumType(pNumFmt->GetNumberingType());
-                aTmpStr += String("</numformat>", RTL_TEXTENCODING_ASCII_US);
+                aTmpStr += "</numformat>";
             }
         }
 
         if (pTxtNode->IsCountedInList())
-            aTmpStr += String("<counted/>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "<counted/>";
 
         SwFmtColl * pColl = pTxtNode->GetFmtColl();
 
         if (pColl)
         {
-            aTmpStr += String("<coll>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "<coll>";
             aTmpStr += pColl->GetName();
 
-            aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "(";
             aTmpStr += OUString::number
                 (static_cast<SwTxtFmtColl *>(pColl)->GetAssignedOutlineStyleLevel());
 
             const SwNumRuleItem & rItem =
                 static_cast<const SwNumRuleItem &>
                 (pColl->GetFmtAttr(RES_PARATR_NUMRULE));
-            const String sNumruleName = rItem.GetValue();
+            const OUString sNumruleName = rItem.GetValue();
 
-            if (sNumruleName.Len() > 0)
+            if (!sNumruleName.isEmpty())
             {
-                aTmpStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+                aTmpStr += ", ";
                 aTmpStr += sNumruleName;
             }
-            aTmpStr += String(")", RTL_TEXTENCODING_ASCII_US);
-            aTmpStr += String("</coll>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += ")";
+            aTmpStr += "</coll>";
         }
 
         SwFmtColl * pCColl = pTxtNode->GetCondFmtColl();
 
         if (pCColl)
         {
-            aTmpStr += String("<ccoll>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "<ccoll>";
             aTmpStr += pCColl->GetName();
-            aTmpStr += String("</ccoll>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "</ccoll>";
         }
 
-        aTmpStr += String("<frms>", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += "<frms>";
         aTmpStr += lcl_AnchoredFrames(rNode);
-        aTmpStr += String("</frms>", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += "</frms>";
 
         if (bDbgOutPrintAttrSet)
         {
-            aTmpStr += String("<attrs>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "<attrs>";
             aTmpStr += lcl_dbg_out(pTxtNode->GetSwAttrSet());
-            aTmpStr += String("</attrs>", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += "</attrs>";
         }
     }
     else if (rNode.IsStartNode())
     {
-        aTmpStr += String("<start end=\"", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += "<start end=\"";
 
         const SwStartNode * pStartNode = dynamic_cast<const SwStartNode *> (&rNode);
         if (pStartNode != NULL)
             aTmpStr += OUString::number(pStartNode->EndOfSectionNode()->GetIndex());
 
-        aTmpStr += String("\"/>", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += "\"/>";
     }
     else if (rNode.IsEndNode())
-        aTmpStr += String("<end/>", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += "<end/>";
 
-    aTmpStr += String("</node>", RTL_TEXTENCODING_ASCII_US);
+    aTmpStr += "</node>";
 
     return aTmpStr;
 }
@@ -716,7 +702,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwTxtNode * pNode)
         return NULL;
 }
 
-static void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, sal_uLong & nIndex)
+static void lcl_dbg_nodes_inner(OUString & aStr, SwNodes & rNodes, sal_uLong & nIndex)
 {
     SwNode * pNode = rNodes[nIndex];
     SwStartNode * pStartNode = dynamic_cast<SwStartNode *> (pNode);
@@ -730,17 +716,17 @@ static void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, sal_uLong & nIn
 
     bool bDone = false;
 
-    String aTag;
+    OUString aTag;
     if (pNode->IsTableNode())
-        aTag += String("table", RTL_TEXTENCODING_ASCII_US);
+        aTag += "table";
     else if (pNode->IsSectionNode())
-        aTag += String("section", RTL_TEXTENCODING_ASCII_US);
+        aTag += "section";
     else
-        aTag += String("nodes", RTL_TEXTENCODING_ASCII_US);
+        aTag += "nodes";
 
-    aStr += String("<", RTL_TEXTENCODING_ASCII_US);
+    aStr += "<";
     aStr += aTag;
-    aStr += String(">", RTL_TEXTENCODING_ASCII_US);
+    aStr += ">";
 
     while (! bDone)
     {
@@ -749,7 +735,7 @@ static void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, sal_uLong & nIn
         else
         {
             aStr += lcl_dbg_out(*pNode);
-            aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
+            aStr += "\n";
 
             nIndex++;
         }
@@ -760,14 +746,14 @@ static void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, sal_uLong & nIn
             pNode = rNodes[nIndex];
     }
 
-    aStr += String("</", RTL_TEXTENCODING_ASCII_US);
+    aStr += "</";
     aStr += aTag;
-    aStr += String(">\n", RTL_TEXTENCODING_ASCII_US);
+    aStr += ">\n";
 }
 
-static String lcl_dbg_out(SwNodes & rNodes)
+static OUString lcl_dbg_out(SwNodes & rNodes)
 {
-    String aStr("<nodes-array>", RTL_TEXTENCODING_ASCII_US);
+    OUString aStr("<nodes-array>");
 
     sal_uLong nIndex = 0;
     sal_uLong nCount = rNodes.Count();
@@ -777,7 +763,7 @@ static String lcl_dbg_out(SwNodes & rNodes)
         lcl_dbg_nodes_inner(aStr, rNodes, nIndex);
     }
 
-    aStr += String("</nodes-array>\n", RTL_TEXTENCODING_ASCII_US);
+    aStr += "</nodes-array>\n";
 
     return aStr;
 }
@@ -787,16 +773,16 @@ SW_DLLPUBLIC const char * dbg_out(SwNodes & rNodes)
     return dbg_out(lcl_dbg_out(rNodes));
 }
 
-static String lcl_dbg_out(const SwUndo & rUndo)
+static OUString lcl_dbg_out(const SwUndo & rUndo)
 {
-    String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
+    OUString aStr("[ ");
 
     aStr += OUString::number(
                 static_cast<SfxUndoAction const&>(rUndo).GetId());
-    aStr += String(": ", RTL_TEXTENCODING_ASCII_US);
+    aStr += ": ";
 
     aStr += rUndo.GetComment();
-    aStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
+    aStr += " ]";
 
     return aStr;
 }
@@ -806,17 +792,17 @@ SW_DLLPUBLIC const char * dbg_out(const SwUndo & rUndo)
     return dbg_out(lcl_dbg_out(rUndo));
 }
 
-static String lcl_dbg_out(SwOutlineNodes & rNodes)
+static OUString lcl_dbg_out(SwOutlineNodes & rNodes)
 {
-    String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
+    OUString aStr("[\n");
 
     for (sal_uInt16 i = 0; i < rNodes.size(); i++)
     {
         aStr += lcl_dbg_out(*rNodes[i]);
-        aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
+        aStr += "\n";
     }
 
-    aStr += String("]\n", RTL_TEXTENCODING_ASCII_US);
+    aStr += "]\n";
 
     return aStr;
 }
@@ -827,10 +813,10 @@ SW_DLLPUBLIC const char * dbg_out(SwOutlineNodes & rNodes)
 }
 
 //FIXME: this method seems to do nothing at all
-static String lcl_dbg_out(const SwRewriter & rRewriter)
+static OUString lcl_dbg_out(const SwRewriter & rRewriter)
 {
     (void) rRewriter;
-    String aResult;
+    OUString aResult;
 
     //aResult = rRewriter.ToString();
 
@@ -842,33 +828,33 @@ SW_DLLPUBLIC const char * dbg_out(const SwRewriter & rRewriter)
     return dbg_out(lcl_dbg_out(rRewriter));
 }
 
-static String lcl_dbg_out(const SvxNumberFormat & rFmt)
+static OUString lcl_dbg_out(const SvxNumberFormat & rFmt)
 {
-    String aResult;
+    OUString aResult;
 
     aResult = lcl_dbg_out_NumType(rFmt.GetNumberingType());
 
     return aResult;
 }
 
-static String lcl_dbg_out(const SwNumRule & rRule)
+static OUString lcl_dbg_out(const SwNumRule & rRule)
 {
-    String aResult("[ ", RTL_TEXTENCODING_ASCII_US);
+    OUString aResult("[ ");
 
     aResult += rRule.GetName();
-    aResult += String(" [", RTL_TEXTENCODING_ASCII_US);
+    aResult += " [";
 
     for (sal_uInt8 n = 0; n < MAXLEVEL; n++)
     {
         if (n > 0)
-            aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+            aResult += ", ";
 
         aResult += lcl_dbg_out(rRule.Get(n));
     }
 
-    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
+    aResult += "]";
 
-    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
+    aResult += "]";
 
     return aResult;
 }
@@ -878,13 +864,13 @@ SW_DLLPUBLIC const char * dbg_out(const SwNumRule & rRule)
     return dbg_out(lcl_dbg_out(rRule));
 }
 
-static String lcl_dbg_out(const SwTxtFmtColl & rFmt)
+static OUString lcl_dbg_out(const SwTxtFmtColl & rFmt)
 {
-    String aResult(rFmt.GetName());
+    OUString aResult(rFmt.GetName());
 
-    aResult += String("(", RTL_TEXTENCODING_ASCII_US);
+    aResult += "(";
     aResult += OUString::number(rFmt.GetAttrOutlineLevel());
-    aResult += String(")", RTL_TEXTENCODING_ASCII_US);
+    aResult += ")";
 
     return aResult;
 }
@@ -894,7 +880,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwTxtFmtColl & rFmt)
     return dbg_out(lcl_dbg_out(rFmt));
 }
 
-static String lcl_dbg_out(const SwFrmFmts & rFrmFmts)
+static OUString lcl_dbg_out(const SwFrmFmts & rFrmFmts)
 {
     return lcl_dbg_out_SvPtrArr<SwFrmFmts>(rFrmFmts);
 }
@@ -904,23 +890,23 @@ SW_DLLPUBLIC const char * dbg_out(const SwFrmFmts & rFrmFmts)
     return dbg_out(lcl_dbg_out(rFrmFmts));
 }
 
-static String lcl_dbg_out(const SwNumRuleTbl & rTbl)
+static OUString lcl_dbg_out(const SwNumRuleTbl & rTbl)
 {
-    String aResult("[", RTL_TEXTENCODING_ASCII_US);
+    OUString aResult("[");
 
     for (size_t n = 0; n < rTbl.size(); n++)
     {
         if (n > 0)
-            aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+            aResult += ", ";
 
         aResult += rTbl[n]->GetName();
 
         char sBuffer[256];
         sprintf(sBuffer, "(%p)", rTbl[n]);
-        aResult += String(sBuffer, RTL_TEXTENCODING_ASCII_US);
+        aResult += OUString(sBuffer, strlen(sBuffer), RTL_TEXTENCODING_ASCII_US);
     }
 
-    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
+    aResult += "]";
 
     return aResult;
 }
@@ -930,39 +916,39 @@ SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTbl & rTbl)
     return dbg_out(lcl_dbg_out(rTbl));
 }
 
-static String lcl_TokenType2Str(FormTokenType nType)
+static OUString lcl_TokenType2Str(FormTokenType nType)
 {
     switch(nType)
     {
     case TOKEN_ENTRY_NO:
-        return String("NO", RTL_TEXTENCODING_ASCII_US);
+        return OUString("NO");
     case TOKEN_ENTRY_TEXT:
-        return String("ENTRY_TEXT", RTL_TEXTENCODING_ASCII_US);
+        return OUString("ENTRY_TEXT");
     case TOKEN_ENTRY:
-        return String("ENTRY", RTL_TEXTENCODING_ASCII_US);
+        return OUString("ENTRY");
     case TOKEN_TAB_STOP:
-        return String("TAB_STOP", RTL_TEXTENCODING_ASCII_US);
+        return OUString("TAB_STOP");
     case TOKEN_TEXT:
-        return String("TOKEN_TEXT", RTL_TEXTENCODING_ASCII_US);
+        return OUString("TOKEN_TEXT");
     case TOKEN_PAGE_NUMS:
-        return String("NUMS", RTL_TEXTENCODING_ASCII_US);
+        return OUString("NUMS");
     case TOKEN_CHAPTER_INFO:
-        return String("CHAPTER_INFO", RTL_TEXTENCODING_ASCII_US);
+        return OUString("CHAPTER_INFO");
     case TOKEN_LINK_START:
-        return String("LINK_START", RTL_TEXTENCODING_ASCII_US);
+        return OUString("LINK_START");
     case TOKEN_LINK_END:
-        return String("LINK_END", RTL_TEXTENCODING_ASCII_US);
+        return OUString("LINK_END");
     case TOKEN_AUTHORITY:
-        return String("AUTHORITY", RTL_TEXTENCODING_ASCII_US);
+        return OUString("AUTHORITY");
     case TOKEN_END:
-        return String("END", RTL_TEXTENCODING_ASCII_US);
+        return OUString("END");
     default:
         OSL_FAIL("should not be reached");
-        return String("??", RTL_TEXTENCODING_ASCII_US);
+        return OUString("??");
     }
 }
 
-static String lcl_dbg_out(const SwFormToken & rToken)
+static OUString lcl_dbg_out(const SwFormToken & rToken)
 {
     return rToken.GetString();
 }
@@ -972,23 +958,23 @@ SW_DLLPUBLIC const char * dbg_out(const SwFormToken & rToken)
     return dbg_out(lcl_dbg_out(rToken));
 }
 
-static String lcl_dbg_out(const SwFormTokens & rTokens)
+static OUString lcl_dbg_out(const SwFormTokens & rTokens)
 {
-    String aStr("[", RTL_TEXTENCODING_ASCII_US);
+    OUString aStr("[");
 
     SwFormTokens::const_iterator aIt;
 
     for (aIt = rTokens.begin(); aIt != rTokens.end(); ++aIt)
     {
         if (aIt != rTokens.begin())
-            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+            aStr += ", ";
 
         aStr += lcl_TokenType2Str(aIt->eTokenType);
-        aStr += String(": ", RTL_TEXTENCODING_ASCII_US);
+        aStr += ": ";
         aStr += lcl_dbg_out(*aIt);
     }
 
-    aStr += String("]" , RTL_TEXTENCODING_ASCII_US);
+    aStr += "]";
 
     return aStr;
 }
@@ -998,15 +984,15 @@ SW_DLLPUBLIC const char * dbg_out(const SwFormTokens & rTokens)
     return dbg_out(lcl_dbg_out(rTokens));
 }
 
-static String lcl_dbg_out(const SwNodeRange & rRange)
+static OUString lcl_dbg_out(const SwNodeRange & rRange)
 {
-    String aStr("[", RTL_TEXTENCODING_ASCII_US);
+    OUString aStr("[");
 
     aStr += lcl_dbg_out(SwPosition(rRange.aStart));
-    aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+    aStr += ", ";
     aStr += lcl_dbg_out(SwPosition(rRange.aEnd));
 
-    aStr += String("]" , RTL_TEXTENCODING_ASCII_US);
+    aStr += "]";
 
     return aStr;
 }

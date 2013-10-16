@@ -86,7 +86,7 @@ inline bool GetRealURL( const SwGrfNode& rNd, OUString& rTxt )
     return bRet;
 }
 
-static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
+static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
                            const ViewShell &rSh, const SwNoTxtFrm *pFrm,
                            bool bDefect )
 {

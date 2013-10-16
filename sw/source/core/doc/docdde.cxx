@@ -67,11 +67,11 @@ namespace
 
 struct _FindItem
 {
-    const String m_Item;
+    const OUString m_Item;
     SwTableNode* pTblNd;
     SwSectionNode* pSectNd;
 
-    _FindItem(const String& rS)
+    _FindItem(const OUString& rS)
         : m_Item(rS), pTblNd(0), pSectNd(0)
     {}
 };
@@ -81,12 +81,12 @@ static bool lcl_FindSection( const SwSectionFmt* pSectFmt, _FindItem * const pIt
     SwSection* pSect = pSectFmt->GetSection();
     if( pSect )
     {
-        String sNm( (bCaseSensitive)
+        OUString sNm( (bCaseSensitive)
                 ? pSect->GetSectionName()
                 : GetAppCharClass().lowercase( pSect->GetSectionName() ));
-        String sCompare( (bCaseSensitive)
+        OUString sCompare( (bCaseSensitive)
                 ? pItem->m_Item
-                : String(GetAppCharClass().lowercase( pItem->m_Item ) ));
+                : GetAppCharClass().lowercase( pItem->m_Item ) );
         if( sNm == sCompare )
         {
             // found, so get the data
@@ -107,8 +107,8 @@ static bool lcl_FindSection( const SwSectionFmt* pSectFmt, _FindItem * const pIt
 
 static bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
 {
-    String sNm( GetAppCharClass().lowercase( pTableFmt->GetName() ));
-    if (sNm.Equals( pItem->m_Item ))
+    OUString sNm( GetAppCharClass().lowercase( pTableFmt->GetName() ));
+    if ( sNm == pItem->m_Item )
     {
         SwTable* pTmpTbl;
         SwTableBox* pFBox;
@@ -140,7 +140,7 @@ bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
             return SwServerObject(*pBkmk).GetData(rValue, rMimeType);
 
         // Do we already have the Item?
-        String sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
+        OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
         BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
         {
@@ -183,7 +183,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
             return SwServerObject(*pBkmk).SetData(rMimeType, rValue);
 
         // Do we already have the Item?
-        String sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
+        OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
         BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
         {
@@ -200,7 +200,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
         bCaseSensitive = false;
     }
 
-    String sItem(GetAppCharClass().lowercase(rItem));
+    OUString sItem(GetAppCharClass().lowercase(rItem));
     _FindItem aPara( sItem );
     BOOST_FOREACH( const SwFrmFmt* pFmt, *mpTblFrmFmtTbl )
     {
@@ -284,21 +284,21 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
     rpPam = 0;
     rpRange = 0;
 
-    String sItem( INetURLObject::decode( rStr, INET_HEX_ESCAPE,
+    OUString sItem( INetURLObject::decode( rStr, INET_HEX_ESCAPE,
                                          INetURLObject::DECODE_WITH_CHARSET,
                                         RTL_TEXTENCODING_UTF8 ));
 
-    xub_StrLen nPos = sItem.Search( cMarkSeparator );
+    sal_Int32 nPos = sItem.indexOf( cMarkSeparator );
 
     const CharClass& rCC = GetAppCharClass();
 
     // Extension for sections: not only link bookmarks/sections
     // but also frames (text!), tables, outlines:
-    if( STRING_NOTFOUND != nPos )
+    if( -1 != nPos )
     {
         bool bContinue = false;
-        String sName( sItem.Copy( 0, nPos ) );
-        OUString sCmp( sItem.Copy( nPos + 1 ));
+        OUString sName( sItem.copy( 0, nPos ) );
+        OUString sCmp( sItem.copy( nPos + 1 ));
         sItem = rCC.lowercase( sItem );
 
         _FindItem aPara( sName );
@@ -384,7 +384,7 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
         }
 
         //
-        _FindItem aPara( bCaseSensitive ? sItem : String(rCC.lowercase( sItem )) );
+        _FindItem aPara( bCaseSensitive ? sItem : rCC.lowercase( sItem ) );
 
         if( !mpSectionFmtTbl->empty() )
         {

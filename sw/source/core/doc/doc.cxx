@@ -1843,7 +1843,7 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
         {
             if( pNames )
             {
-                String pTmp(((SwFmtRefMark*)pItem)->GetRefName());
+                OUString pTmp(((SwFmtRefMark*)pItem)->GetRefName());
                 pNames->insert(pNames->begin() + nCount, pTmp);
             }
             nCount ++;
@@ -2420,10 +2420,10 @@ bool SwDoc::ConvertFieldsToText()
                         nWhich != RES_REFPAGEGETFLD&&
                         nWhich != RES_REFPAGESETFLD))
                 {
-                    String sText = pField->ExpandField(true);
+                    OUString sText = pField->ExpandField(true);
                     //database fields should not convert their command into text
                     if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
-                        sText.Erase();
+                        sText = "";
 
                     //now remove the field and insert the string
                     SwPaM aPam1(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
@@ -2603,12 +2603,12 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
             xub_StrLen nStart = rPam.Start()->nContent.GetIndex();
             xub_StrLen nEnd = rPam.End()->nContent.GetIndex();
 
-            aResult += String(SW_RES(STR_START_QUOTE));
+            aResult += SW_RES(STR_START_QUOTE);
             aResult += ShortenString(pTxtNode->GetTxt().
                                          copy(nStart, nEnd - nStart),
                                      nUndoStringLength,
-                                     String(SW_RES(STR_LDOTS)));
-            aResult += String(SW_RES(STR_END_QUOTE));
+                                     OUString(SW_RES(STR_LDOTS)));
+            aResult += SW_RES(STR_END_QUOTE);
 
             bOK = true;
         }
@@ -2616,13 +2616,13 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
     else if (0 != rPam.GetNode(sal_True))
     {
         if (0 != rPam.GetNode(sal_False))
-            aResult += String(SW_RES(STR_PARAGRAPHS));
+            aResult += SW_RES(STR_PARAGRAPHS);
 
         bOK = true;
     }
 
     if (! bOK)
-        aResult += String("??", RTL_TEXTENCODING_ASCII_US);
+        aResult += "??";
 
     return aResult;
 }

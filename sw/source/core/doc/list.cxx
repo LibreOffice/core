@@ -30,14 +30,14 @@
 class SwListImpl
 {
     public:
-        SwListImpl( const String sListId,
+        SwListImpl( const OUString sListId,
                     SwNumRule& rDefaultListStyle,
                     const SwNodes& rNodes );
         ~SwListImpl();
 
-        const String GetListId() const;
+        const OUString GetListId() const;
 
-        const String GetDefaultListStyleName() const;
+        const OUString GetDefaultListStyleName() const;
 
         void InsertListItem( SwNodeNum& rNodeNum,
                              const int nLevel );
@@ -53,9 +53,9 @@ class SwListImpl
 
     private:
         // unique identifier of the list
-        const String msListId;
+        const OUString msListId;
         // default list style for the list items, identified by the list style name
-        String msDefaultListStyleName;
+        OUString msDefaultListStyleName;
 
         // list trees for certain document ranges
         typedef std::pair<SwNodeNum*, SwPaM*> tListTreeForRange;
@@ -67,7 +67,7 @@ class SwListImpl
         void NotifyItemsOnListLevel( const int nLevel );
 };
 
-SwListImpl::SwListImpl( const String sListId,
+SwListImpl::SwListImpl( const OUString sListId,
                         SwNumRule& rDefaultListStyle,
                         const SwNodes& rNodes )
     : msListId( sListId ),
@@ -110,12 +110,12 @@ SwListImpl::~SwListImpl()
     }
 }
 
-const String SwListImpl::GetListId() const
+const OUString SwListImpl::GetListId() const
 {
     return msListId;
 }
 
-const String SwListImpl::GetDefaultListStyleName() const
+const OUString SwListImpl::GetDefaultListStyleName() const
 {
     return msDefaultListStyleName;
 }

@@ -548,7 +548,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     if( !pFrmFmt )
         pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_FRAME );
 
-    String sName;
+    OUString sName;
     if( !mbInReading )
         switch( rNode.GetNodeType() )
         {
@@ -1126,10 +1126,10 @@ static void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uIn
 static SwFlyFrmFmt *
 lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         SwUndoInsertLabel *const pUndo,
-        SwLabelType const eType, String const& rTxt, String const& rSeparator,
-            const String& rNumberingSeparator,
+        SwLabelType const eType, OUString const& rTxt, OUString const& rSeparator,
+            const OUString& rNumberingSeparator,
             const sal_Bool bBefore, const sal_uInt16 nId, const sal_uLong nNdIdx,
-            const String& rCharacterStyle,
+            const OUString& rCharacterStyle,
             const sal_Bool bCpyBrd )
 {
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
@@ -1368,8 +1368,8 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     {
         // #i61007# order of captions
         sal_Bool bOrderNumberingFirst = SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
-        // Work up string
-        String aTxt;
+        // Work up OUString
+        OUString aTxt;
         if( bOrderNumberingFirst )
         {
             aTxt = rNumberingSeparator;
@@ -1378,14 +1378,14 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         {
             aTxt += pType->GetName();
             if( !bOrderNumberingFirst )
-                aTxt += ' ';
+                aTxt += " ";
         }
-        xub_StrLen nIdx = aTxt.Len();
-        if( rTxt.Len() > 0 )
+        xub_StrLen nIdx = aTxt.getLength();
+        if( !rTxt.isEmpty() )
         {
             aTxt += rSeparator;
         }
-        xub_StrLen nSepIdx = aTxt.Len();
+        xub_StrLen nSepIdx = aTxt.getLength();
         aTxt += rTxt;
 
         // Insert string
@@ -1400,7 +1400,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 nIdx = 0;
             SwFmtFld aFmt( aFld );
             pNew->InsertItem( aFmt, nIdx, nIdx );
-            if(rCharacterStyle.Len())
+            if(!rCharacterStyle.isEmpty())
             {
                 SwCharFmt* pCharFmt = rDoc.FindCharFmtByName(rCharacterStyle);
                 if( !pCharFmt )
@@ -1476,11 +1476,11 @@ SwDoc::InsertLabel(
 static SwFlyFrmFmt *
 lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         SwUndoInsertLabel *const pUndo, SwDrawFrmFmt *const pOldFmt,
-        String const& rTxt,
-                                     const String& rSeparator,
-                                     const String& rNumberSeparator,
+        OUString const& rTxt,
+                                     const OUString& rSeparator,
+                                     const OUString& rNumberSeparator,
                                      const sal_uInt16 nId,
-                                     const String& rCharacterStyle,
+                                     const OUString& rCharacterStyle,
                                      SdrObject& rSdrObj )
 {
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
@@ -1664,7 +1664,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         sal_Bool bOrderNumberingFirst = SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
 
         // prepare string
-        String aTxt;
+        OUString aTxt;
         if( bOrderNumberingFirst )
         {
             aTxt = rNumberSeparator;
@@ -1673,11 +1673,11 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         {
             aTxt += pType->GetName();
             if( !bOrderNumberingFirst )
-                aTxt += ' ';
+                aTxt += " ";
         }
-        xub_StrLen nIdx = aTxt.Len();
+        xub_StrLen nIdx = aTxt.getLength();
         aTxt += rSeparator;
-        xub_StrLen nSepIdx = aTxt.Len();
+        xub_StrLen nSepIdx = aTxt.getLength();
         aTxt += rTxt;
 
         // insert text
@@ -1692,7 +1692,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 nIdx = 0;
             SwFmtFld aFmt( aFld );
             pNew->InsertItem( aFmt, nIdx, nIdx );
-            if ( rCharacterStyle.Len() )
+            if ( !rCharacterStyle.isEmpty() )
             {
                 SwCharFmt * pCharFmt = rDoc.FindCharFmtByName(rCharacterStyle);
                 if ( !pCharFmt )
@@ -1898,11 +1898,11 @@ IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
     return 0;
 }
 
-static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
+static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 {
     ResId aId( nDefStrId, *pSwResMgr );
-    String aName( aId );
-    xub_StrLen nNmLen = aName.Len();
+    OUString aName( aId );
+    xub_StrLen nNmLen = aName.getLength();
 
     const SwFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
 
@@ -2009,9 +2009,9 @@ void SwDoc::SetAllUniqueFlyNames()
     ResId nFrmId( STR_FRAME_DEFNAME, *pSwResMgr ),
           nGrfId( STR_GRAPHIC_DEFNAME, *pSwResMgr ),
           nOLEId( STR_OBJECT_DEFNAME, *pSwResMgr );
-    String sFlyNm( nFrmId );
-    String sGrfNm( nGrfId );
-    String sOLENm( nOLEId );
+    OUString sFlyNm( nFrmId );
+    OUString sGrfNm( nGrfId );
+    OUString sOLENm( nOLEId );
 
     if( 255 < ( n = GetSpzFrmFmts()->size() ))
         n = 255;
@@ -2031,17 +2031,17 @@ void SwDoc::SetAllUniqueFlyNames()
                 xub_StrLen nLen = 0;
                 if ( aNm.startsWith(sGrfNm) )
                 {
-                    nLen = sGrfNm.Len();
+                    nLen = sGrfNm.getLength();
                     pNum = &nGrfNum;
                 }
                 else if( aNm.startsWith(sFlyNm) )
                 {
-                    nLen = sFlyNm.Len();
+                    nLen = sFlyNm.getLength();
                     pNum = &nFlyNum;
                 }
                 else if( aNm.startsWith(sOLENm) )
                 {
-                    nLen = sOLENm.Len();
+                    nLen = sOLENm.getLength();
                     pNum = &nOLENum;
                 }
 

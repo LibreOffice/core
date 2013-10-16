@@ -967,7 +967,7 @@ public:
     const SwNode& GetEndNode() const;
 
     // for debugging
-    String GetText() const;
+    OUString GetText() const;
 };
 
 class SwCompareData : public CompareData
@@ -1027,9 +1027,9 @@ sal_uLong SwCompareLine::GetHashValue() const
 
     case ND_SECTIONNODE:
         {
-            String sStr( GetText() );
-            for( xub_StrLen n = 0; n < sStr.Len(); ++n )
-                ( nRet <<= 1 ) += sStr.GetChar( n );
+            OUString sStr( GetText() );
+            for( xub_StrLen n = 0; n < sStr.getLength(); ++n )
+                ( nRet <<= 1 ) += sStr[ n ];
         }
         break;
 
@@ -1183,7 +1183,7 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
     return bRet;
 }
 
-String SwCompareLine::GetText() const
+OUString SwCompareLine::GetText() const
 {
     OUString sRet;
     switch( rNode.GetNodeType() )
@@ -1242,9 +1242,9 @@ String SwCompareLine::GetText() const
 
 sal_uLong SwCompareLine::GetTxtNodeHashValue( const SwTxtNode& rNd, sal_uLong nVal )
 {
-    String sStr( rNd.GetExpandTxt() );
-    for( xub_StrLen n = 0; n < sStr.Len(); ++n )
-        ( nVal <<= 1 ) += sStr.GetChar( n );
+    OUString sStr( rNd.GetExpandTxt() );
+    for( xub_StrLen n = 0; n < sStr.getLength(); ++n )
+        ( nVal <<= 1 ) += sStr[ n ];
     return nVal;
 }
 
@@ -1637,7 +1637,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
         OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
 
         if( bUseDocInfo && xDocProps.is() ) {
-            String aTmp( 1 == xDocProps->getEditingCycles()
+            OUString aTmp( 1 == xDocProps->getEditingCycles()
                                 ? xDocProps->getAuthor()
                                 : xDocProps->getModifiedBy() );
             util::DateTime uDT( 1 == xDocProps->getEditingCycles()
@@ -1647,7 +1647,7 @@ void SwCompareData::SetRedlinesToDoc( sal_Bool bUseDocInfo )
             Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
             DateTime aDT(d,t);
 
-            if( aTmp.Len() )
+            if( !aTmp.isEmpty() )
             {
                 nAuthor = rDoc.InsertRedlineAuthor( aTmp );
                 aTimeStamp = aDT;

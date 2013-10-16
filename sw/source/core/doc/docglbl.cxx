@@ -228,7 +228,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     }
 
     INetURLObject aEntry(rPath);
-    String sLeading(aEntry.GetBase());
+    OUString sLeading(aEntry.GetBase());
     aEntry.removeSegment();
     OUString sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
     utl::TempFile aTemp(sLeading,&sExt,&sPath );
@@ -262,7 +262,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                                         : GetNodes().GetEndOfContent() );
 
             // Write out the Nodes completely
-            String sFileName;
+            OUString sFileName;
             if( pStartNd->GetIndex() + 1 < aEndIdx.GetIndex() )
             {
                 SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
@@ -334,13 +334,13 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
                     // do not insert a FileLinkSection in case of error
                     if( xDocSh->GetError() )
-                        sFileName.Erase();
+                        sFileName = "";
                 }
                 xDocSh->DoClose();
             }
 
             // We can now insert the section
-            if( sFileName.Len() )
+            if( !sFileName.isEmpty() )
             {
                 switch( eDocType )
                 {

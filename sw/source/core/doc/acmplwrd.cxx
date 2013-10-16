@@ -84,7 +84,7 @@ class SwAutoCompleteString
 #endif
     SwDocPtrVector aSourceDocs;
     public:
-        SwAutoCompleteString(const String& rStr, xub_StrLen nPos, xub_StrLen nLen);
+        SwAutoCompleteString(const OUString& rStr, xub_StrLen nPos, xub_StrLen nLen);
 
         ~SwAutoCompleteString();
         void        AddDocument(const SwDoc& rDoc);
@@ -176,7 +176,7 @@ void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
 }
 
 SwAutoCompleteString::SwAutoCompleteString(
-            const String& rStr, xub_StrLen const nPos, xub_StrLen const nLen)
+            const OUString& rStr, xub_StrLen const nPos, xub_StrLen const nLen)
     : editeng::IAutoCompleteString(String(rStr, nPos, nLen))
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -245,14 +245,14 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
             return sal_False;
     }
 
-    String aNewWord(rWord);
+    OUString aNewWord(rWord);
     aNewWord = comphelper::string::remove(aNewWord, CH_TXTATR_INWORD);
     aNewWord = comphelper::string::remove(aNewWord, CH_TXTATR_BREAKWORD);
 
     pImpl->AddDocument(rDoc);
     bool bRet = false;
-    xub_StrLen nWrdLen = aNewWord.Len();
-    while( nWrdLen && '.' == aNewWord.GetChar( nWrdLen-1 ))
+    xub_StrLen nWrdLen = aNewWord.getLength();
+    while( nWrdLen && '.' == aNewWord[ nWrdLen-1 ])
         --nWrdLen;
 
     if( !bLockWordLst && nWrdLen >= nMinWrdLen )

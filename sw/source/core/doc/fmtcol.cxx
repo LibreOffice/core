@@ -62,8 +62,8 @@ namespace TxtFmtCollFunc
             }
             if ( pNewNumRuleItem )
             {
-                String sNumRuleName = pNewNumRuleItem->GetValue();
-                if ( sNumRuleName.Len() == 0 ||
+                OUString sNumRuleName = pNewNumRuleItem->GetValue();
+                if ( sNumRuleName.isEmpty() ||
                      sNumRuleName != pTxtFmtColl->GetDoc()->GetOutlineNumRule()->GetName() )
                 {
                     // delete assignment of paragraph style to list level of outline style.
@@ -81,8 +81,8 @@ namespace TxtFmtCollFunc
         rTxtFmtColl.GetItemState( RES_PARATR_NUMRULE, sal_False, (const SfxPoolItem**)&pNumRuleItem );
         if ( pNumRuleItem )
         {
-            const String sNumRuleName = pNumRuleItem->GetValue();
-            if ( sNumRuleName.Len() > 0 )
+            const OUString sNumRuleName = pNumRuleItem->GetValue();
+            if ( !sNumRuleName.isEmpty() )
             {
                 pNumRule = rTxtFmtColl.GetDoc()->FindNumRulePtr( sNumRuleName );
             }

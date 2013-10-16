@@ -77,7 +77,7 @@ struct LinkStruct
     SwFmtINetFmt    aINetFmt;
     xub_StrLen nStartTextPos, nEndTextPos;
 
-    LinkStruct( const String& rURL, xub_StrLen nStart, xub_StrLen nEnd )
+    LinkStruct( const OUString& rURL, xub_StrLen nStart, xub_StrLen nEnd )
         : aINetFmt( rURL, aEmptyStr),
         nStartTextPos( nStart),
         nEndTextPos(nEnd) {}
@@ -339,7 +339,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
 {
     GetIDocumentUndoRedo().StartUndo( UNDO_INSTOX, NULL );
 
-    String sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), rTOX.GetTOXName() );
+    OUString sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), rTOX.GetTOXName() );
     SwPaM aPam( rPos );
     SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
     SwTOXBaseSection *const pNewSection = dynamic_cast<SwTOXBaseSection *>(
@@ -398,7 +398,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd
         pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
     }
 
-    String sSectNm = GetUniqueTOXBaseName(*rTOX.GetTOXType(), rTOX.GetTOXName());
+    OUString sSectNm = GetUniqueTOXBaseName(*rTOX.GetTOXType(), rTOX.GetTOXName());
 
     SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
 
@@ -671,7 +671,7 @@ bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName)
                     "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOXBase;
 
-    String sTmp = GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), rName);
+    OUString sTmp = GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), rName);
     bool bRet = sTmp == rName;
     if(bRet)
     {
@@ -963,8 +963,8 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                 aSortArr[nCnt]->GetType() == TOX_SORT_INDEX)
         {
             const SwTOXMark& rMark = aSortArr[nCnt]->pTxtMark->GetTOXMark();
-            const String sPrimKey = rMark.GetPrimaryKey();
-            const String sSecKey = rMark.GetSecondaryKey();
+            const OUString sPrimKey = rMark.GetPrimaryKey();
+            const OUString sSecKey = rMark.GetSecondaryKey();
             const SwTOXMark* pNextMark = 0;
             while(aSortArr.size() > (nCnt + nRange)&&
                     aSortArr[nCnt + nRange]->GetType() == TOX_SORT_INDEX &&
@@ -1021,7 +1021,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
-    String sDeli, sLastDeli;
+    OUString sDeli, sLastDeli;
     sal_uInt16  i = 0;
     while( i < aSortArr.size() )
     {
@@ -1037,10 +1037,10 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
                                    aSortArr[i]->GetLocale() );
 
         // Do we already have a Delimitter?
-        if( sDeli.Len() && sLastDeli != sDeli )
+        if( !sDeli.isEmpty() && sLastDeli != sDeli )
         {
             // We skip all that are less than a small Blank (these are special characters)
-            if( ' ' <= sDeli.GetChar( 0 ) )
+            if( ' ' <= sDeli[0] )
             {
                 SwTOXCustom* pCst = new SwTOXCustom( TextAndReading(sDeli, OUString()),
                                                      FORM_ALPHA_DELIMITTER,
@@ -1062,8 +1062,8 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( sal_uInt16 nLevel )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
-    const String& rName = GetTOXForm().GetTemplate( nLevel );
-    SwTxtFmtColl* pColl = rName.Len() ? pDoc->FindTxtFmtCollByName(rName) :0;
+    const OUString& rName = GetTOXForm().GetTemplate( nLevel );
+    SwTxtFmtColl* pColl = !rName.isEmpty() ? pDoc->FindTxtFmtCollByName(rName) :0;
     if( !pColl )
     {
         sal_uInt16 nPoolFmt = 0;
@@ -1210,12 +1210,12 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
-        String sTmpStyleNames = GetStyleNames(i);
+        OUString sTmpStyleNames = GetStyleNames(i);
         sal_uInt16 nTokenCount = comphelper::string::getTokenCount(sTmpStyleNames, TOX_STYLE_DELIMITER);
         for( sal_uInt16 nStyle = 0; nStyle < nTokenCount; ++nStyle )
         {
             SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName(
-                                    sTmpStyleNames.GetToken( nStyle,
+                                    sTmpStyleNames.getToken( nStyle,
                                                     TOX_STYLE_DELIMITER ));
             //TODO: no outline Collections in content indexes if OutlineLevels are already included
             if( !pColl ||
@@ -1519,9 +1519,9 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
 
 /// Generate String according to the Form and remove the
 /// special characters 0-31 and 255.
-static String lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel )
+static OUString lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel )
 {
-    String sRet;
+    OUString sRet;
 
     if( !rBase.pTxtMark && !rBase.aTOXSources.empty() )
     {   // only if it's not a Mark
@@ -1576,8 +1576,8 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
 
     // pTOXNd is only set at the first mark
     SwTxtNode* pTOXNd = (SwTxtNode*)aSortArr[nArrayIdx]->pTOXNd;
-    String& rTxt = (String&)pTOXNd->GetTxt();
-    rTxt.Erase();
+    OUString rTxt = pTOXNd->GetTxt();
+    rTxt = "";
     for(sal_uInt16 nIndex = nArrayIdx; nIndex < nArrayIdx + nCount; nIndex++)
     {
         if(nIndex > nArrayIdx)
@@ -1589,8 +1589,8 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
 
         SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
         xub_StrLen nLinkStartPosition = STRING_NOTFOUND;
-        String  sLinkCharacterStyle; // default to "Default" character style - which is none
-        String sURL;
+        OUString  sLinkCharacterStyle; // default to "Default" character style - which is none
+        OUString sURL;
         // create an enumerator
         // #i21237#
         SwFormTokens aPattern = GetTOXForm().GetPattern(nLvl);
@@ -1599,17 +1599,17 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
         while(aIt != aPattern.end()) // #i21237#
         {
             SwFormToken aToken = *aIt; // #i21237#
-            xub_StrLen nStartCharStyle = rTxt.Len();
+            xub_StrLen nStartCharStyle = rTxt.getLength();
             switch( aToken.eTokenType )
             {
             case TOKEN_ENTRY_NO:
                 // for TOC numbering
-                rTxt.Insert( lcl_GetNumString( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<sal_uInt8>(aToken.nOutlineLevel - 1)) );
+                rTxt += lcl_GetNumString( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) ) ;
                 break;
 
             case TOKEN_ENTRY_TEXT:
                 {
-                    SwIndex aIdx( pTOXNd, rTxt.Len() );
+                    SwIndex aIdx( pTOXNd, rTxt.getLength() );
                     rBase.FillText( *pTOXNd, aIdx );
                     rTxt = lcl_RemoveLineBreaks(rTxt);
                 }
@@ -1618,9 +1618,9 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
             case TOKEN_ENTRY:
                 {
                     // for TOC numbering
-                    rTxt.Insert( lcl_GetNumString( rBase, true, MAXLEVEL ));
+                    rTxt += lcl_GetNumString( rBase, true, MAXLEVEL );
 
-                    SwIndex aIdx( pTOXNd, rTxt.Len() );
+                    SwIndex aIdx( pTOXNd, rTxt.getLength() );
                     rBase.FillText( *pTOXNd, aIdx );
                     rTxt = lcl_RemoveLineBreaks(rTxt);
                 }
@@ -1628,7 +1628,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
 
             case TOKEN_TAB_STOP:
                 if (aToken.bWithTab) // #i21237#
-                    rTxt.Append('\t');
+                    rTxt += "\t";
 
                 if(SVX_TAB_ADJUST_END > aToken.eTabAlign)
                 {
@@ -1702,7 +1702,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                 break;
 
             case TOKEN_TEXT:
-                rTxt.Append( aToken.sText );
+                rTxt += aToken.sText;
                 break;
 
             case TOKEN_PAGE_NUMS:
@@ -1712,14 +1712,14 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     size_t nSize = rBase.aTOXSources.size();
                     if (nSize > 0)
                     {
-                        String aInsStr = OUString(cNumRepl);
+                        OUString aInsStr = OUString(cNumRepl);
                         for (size_t i = 1; i < nSize; ++i)
                         {
                             aInsStr += sPageDeli;
-                            aInsStr += cNumRepl;
+                            aInsStr += OUString(cNumRepl);
                         }
-                        aInsStr += cEndPageNum;
-                        rTxt.Append( aInsStr );
+                        aInsStr += OUString(cEndPageNum);
+                        rTxt += aInsStr;
                     }
                 }
                 break;
@@ -1752,12 +1752,12 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                             // would handle them.
                             if ( CF_NUM_NOPREPST_TITLE == aToken.nChapterFormat ||
                                  CF_NUMBER == aToken.nChapterFormat )
-                                rTxt.Insert(aFld.GetNumber()); // get the string number without pre/postfix
+                                rTxt += aFld.GetNumber(); // get the string number without pre/postfix
                             else if ( CF_NUMBER_NOPREPST == aToken.nChapterFormat ||
                                       CF_NUM_TITLE == aToken.nChapterFormat )
                             {
                                 rTxt += aFld.GetNumber();
-                                rTxt += ' ';
+                                rTxt += " ";
                                 rTxt += aFld.GetTitle();
                             }
                             else if(CF_TITLE == aToken.nChapterFormat)
@@ -1768,7 +1768,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                 break;
 
             case TOKEN_LINK_START:
-                nLinkStartPosition = rTxt.Len();
+                nLinkStartPosition = rTxt.getLength();
                 sLinkCharacterStyle = aToken.sCharStyleName;
             break;
 
@@ -1778,19 +1778,19 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                 {
                     SwIndex aIdx( pTOXNd, nLinkStartPosition );
                     // pTOXNd->Erase( aIdx, SwForm::nFormLinkSttLen );
-                    xub_StrLen nEnd = rTxt.Len();
+                    xub_StrLen nEnd = rTxt.getLength();
 
-                    if( !sURL.Len() )
+                    if( sURL.isEmpty() )
                     {
                         sURL = rBase.GetURL();
-                        if( !sURL.Len() )
+                        if( sURL.isEmpty() )
                             break;
                     }
                     LinkStruct* pNewLink = new LinkStruct(sURL, nLinkStartPosition,
                                                     nEnd);
                     pNewLink->aINetFmt.SetVisitedFmt(sLinkCharacterStyle);
                     pNewLink->aINetFmt.SetINetFmt(sLinkCharacterStyle);
-                    if(sLinkCharacterStyle.Len())
+                    if(!sLinkCharacterStyle.isEmpty())
                     {
                         sal_uInt16 nPoolId =
                             SwStyleNameMapper::GetPoolIdFromUIName( sLinkCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
@@ -1804,14 +1804,14 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     }
                     aLinkArr.push_back(pNewLink);
                     nLinkStartPosition = STRING_NOTFOUND;
-                    sLinkCharacterStyle.Erase();
+                    sLinkCharacterStyle = "";
                 }
                 break;
 
             case TOKEN_AUTHORITY:
                 {
                     ToxAuthorityField eField = (ToxAuthorityField)aToken.nAuthorityField;
-                    SwIndex aIdx( pTOXNd, rTxt.Len() );
+                    SwIndex aIdx( pTOXNd, rTxt.getLength() );
                     rBase.FillText( *pTOXNd, aIdx, static_cast<sal_uInt16>(eField) );
                 }
                 break;
@@ -1830,7 +1830,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                 {
                     SwFmtCharFmt aFmt( pCharFmt );
                     pTOXNd->InsertItem( aFmt, nStartCharStyle,
-                        rTxt.Len(), nsSetAttrMode::SETATTR_DONTEXPAND );
+                        rTxt.getLength(), nsSetAttrMode::SETATTR_DONTEXPAND );
                 }
             }
 
@@ -1877,8 +1877,8 @@ void SwTOXBaseSection::UpdatePageNum()
                 aSortArr[nCnt]->GetType() == TOX_SORT_INDEX)
         {
             const SwTOXMark& rMark = aSortArr[nCnt]->pTxtMark->GetTOXMark();
-            const String sPrimKey = rMark.GetPrimaryKey();
-            const String sSecKey = rMark.GetSecondaryKey();
+            const OUString sPrimKey = rMark.GetPrimaryKey();
+            const OUString sSecKey = rMark.GetSecondaryKey();
             const SwTOXMark* pNextMark = 0;
             while(aSortArr.size() > (nCnt + nRange)&&
                     aSortArr[nCnt + nRange]->GetType() == TOX_SORT_INDEX &&
@@ -1997,7 +1997,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     sal_uInt16 nOld = rNums[0],
            nBeg = nOld,
            nCount  = 0;
-    String aNumStr( SvxNumberType( rDescs[0]->GetNumType() ).
+    OUString aNumStr( SvxNumberType( rDescs[0]->GetNumType() ).
                     GetNumStr( nBeg ) );
     if( xCharStyleIdx && lcl_HasMainEntry( pMainEntryNums, nBeg ))
     {
@@ -2049,7 +2049,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                 else
                 {
                     if(nCount >= 2 )
-                        aNumStr += '-';
+                        aNumStr += "-";
                     else if(nCount == 1 )
                         aNumStr += sPageDeli;
                     //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
@@ -2063,7 +2063,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                 //the change of the character style must apply after sPageDeli is appended
                 if (xCharStyleIdx && bMainEntryChanges)
                 {
-                    xCharStyleIdx->push_back(aNumStr.Len());
+                    xCharStyleIdx->push_back(aNumStr.getLength());
                 }
                 aNumStr += aType.GetNumStr( nBeg );
                 nCount   = 0;
@@ -2088,7 +2088,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         else
         {
             if(nCount >= 2)
-                aNumStr +='-';
+                aNumStr += "-";
             else if(nCount == 1)
                 aNumStr += sPageDeli;
             //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
@@ -2103,7 +2103,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     if(pPageNoCharFmt)
     {
         SwFmtCharFmt aCharFmt( pPageNoCharFmt );
-        pNd->InsertItem(aCharFmt, nStartPos, nStartPos + aNumStr.Len(), nsSetAttrMode::SETATTR_DONTEXPAND);
+        pNd->InsertItem(aCharFmt, nStartPos, nStartPos + aNumStr.getLength(), nsSetAttrMode::SETATTR_DONTEXPAND);
     }
 
     // The main entries should get their character style
@@ -2111,7 +2111,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     {
         // eventually the last index must me appended
         if (xCharStyleIdx->size()&0x01)
-            xCharStyleIdx->push_back(aNumStr.Len());
+            xCharStyleIdx->push_back(aNumStr.getLength());
 
         // search by name
         SwDoc* pDoc = pNd->GetDoc();
@@ -2125,7 +2125,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
             pCharFmt = pDoc->MakeCharFmt(GetMainEntryCharStyle(), 0);
 
         // find the page numbers in aNumStr and set the character style
-        xub_StrLen nOffset = pNd->GetTxt().getLength() - aNumStr.Len();
+        xub_StrLen nOffset = pNd->GetTxt().getLength() - aNumStr.getLength();
         SwFmtCharFmt aCharFmt(pCharFmt);
         for (sal_uInt16 j = 0; j < xCharStyleIdx->size(); j += 2)
         {

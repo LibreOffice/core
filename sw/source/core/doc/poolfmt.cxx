@@ -331,7 +331,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         return GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
 
     ResId aResId( nResId + nId, *pSwResMgr );
-    String aNm( aResId );
+    OUString aNm( aResId );
 
     // A Set for all to-be-set Attributes
     SwAttrSet aSet( GetAttrPool(), aTxtFmtCollSetRange );
@@ -1114,7 +1114,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             }
 
     ResId aResId( nRCId + nId, *pSwResMgr );
-    String aNm( aResId );
+    OUString aNm( aResId );
     SwAttrSet aSet( GetAttrPool(), pWhichRange );
 
     {
@@ -1421,7 +1421,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     SwPageDesc* pNewPgDsc = 0;
     {
         const ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), *pSwResMgr );
-        const String aNm( aResId );
+        const OUString aNm( aResId );
         const bool bIsModified = IsModified();
 
         sal_uInt16 nPageDescIdx = 0;
@@ -1610,7 +1610,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     }
 
     ResId aResId( sal_uInt32(RC_POOLNUMRULE_BEGIN + nId - RES_POOLNUMRULE_BEGIN), *pSwResMgr );
-    String aNm( aResId );
+    OUString aNm( aResId );
 
     SwCharFmt *pNumCFmt = 0, *pBullCFmt = 0;
 

@@ -58,15 +58,15 @@ bool SwTable::IsTblComplexForChart( const OUString& rSelection ) const
     if( 2 < rSelection.getLength() )
     {
         // Remove brackets at the beginning and from the end
-        String sBox( rSelection );
-        if( '<' == sBox.GetChar( 0  ) ) sBox.Erase( 0, 1 );
-        if( '>' == sBox.GetChar( sBox.Len()-1  ) ) sBox.Erase( sBox.Len()-1 );
+        OUString sBox( rSelection );
+        if( '<' == sBox[0] ) sBox = sBox.copy( 0, 1 );
+        if( '>' == sBox[ sBox.getLength()-1  ] ) sBox = sBox.copy( 0, sBox.getLength()-1 );
 
-        xub_StrLen nSeparator = sBox.Search( ':' );
-        OSL_ENSURE( STRING_NOTFOUND != nSeparator, "no valid selection" );
+        sal_Int32 nSeparator = sBox.indexOf( ':' );
+        OSL_ENSURE( -1 != nSeparator, "no valid selection" );
 
-        pSttBox = GetTblBox( sBox.Copy( 0, nSeparator ));
-        pEndBox = GetTblBox( sBox.Copy( nSeparator+1 ));
+        pSttBox = GetTblBox( sBox.copy( 0, nSeparator ));
+        pEndBox = GetTblBox( sBox.copy( nSeparator+1 ));
     }
     else
     {
@@ -116,7 +116,7 @@ void SwDoc::DoUpdateAllCharts()
 
 void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
 {
-    String aName( rTbl.GetFrmFmt()->GetName() );
+    OUString aName( rTbl.GetFrmFmt()->GetName() );
     SwOLENode *pONd;
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -124,7 +124,7 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
     {
         ++aIdx;
         if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
-            aName.Equals( pONd->GetChartTblName() ) &&
+            aName == pONd->GetChartTblName() &&
             pONd->getLayoutFrm( rVSh.GetLayout() ) )
         {
             SwChartDataProvider *pPCD = GetChartDataProvider();
@@ -152,7 +152,7 @@ void SwDoc::UpdateCharts( const OUString &rName ) const
 
 void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
 {
-    const String aOldName( rTblFmt.GetName() );
+    const OUString aOldName( rTblFmt.GetName() );
 
     bool bNameFound = rNewName.isEmpty();
     if( !bNameFound )
@@ -216,7 +216,7 @@ void SwDoc::CreateChartInternalDataProviders( const SwTable *pTable )
 {
     if (pTable)
     {
-        String aName( pTable->GetFrmFmt()->GetName() );
+        OUString aName( pTable->GetFrmFmt()->GetName() );
         SwOLENode *pONd;
         SwStartNode *pStNd;
         SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -224,7 +224,7 @@ void SwDoc::CreateChartInternalDataProviders( const SwTable *pTable )
         {
             ++aIdx;
             if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
-                aName.Equals( pONd->GetChartTblName() ) /* OLE node is chart? */ &&
+                aName == pONd->GetChartTblName() /* OLE node is chart? */ &&
                 0 != (pONd->getLayoutFrm( GetCurrentLayout() )) /* chart frame is not hidden */ )
             {
                 uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();

@@ -197,18 +197,18 @@ OUString SwSortTxtElement::GetKey(sal_uInt16 nId) const
 {
     SwTxtNode* pTxtNd = aPos.GetNode().GetTxtNode();
     if( !pTxtNd )
-        return aEmptyStr;
+        return aEmptyOUStr;
 
     // for TextNodes
-    const String& rStr = pTxtNd->GetTxt();
+    const OUString& rStr = pTxtNd->GetTxt();
 
     sal_Unicode nDeli = pOptions->cDeli;
     sal_uInt16 nDCount = pOptions->aKeys[nId]->nColumnId, i = 1;
-    xub_StrLen nStart = 0;
+    sal_Int32 nStart = 0;
 
     // Find the delimiter
-    while( nStart != STRING_NOTFOUND && i < nDCount)
-        if( STRING_NOTFOUND != ( nStart = rStr.Search( nDeli, nStart ) ) )
+    while( nStart != -1 && i < nDCount)
+        if( -1 != ( nStart = rStr.indexOf( nDeli, nStart ) ) )
         {
             nStart++;
             i++;
@@ -216,8 +216,10 @@ OUString SwSortTxtElement::GetKey(sal_uInt16 nId) const
 
     // Found next delimiter or end of String
     // and copy
-    xub_StrLen nEnd = rStr.Search( nDeli, nStart+1 );
-    return rStr.Copy( nStart, nEnd-nStart );
+    sal_Int32 nEnd = rStr.indexOf( nDeli, nStart+1 );
+    if (nEnd == -1)
+        return rStr.copy( nStart );
+    return rStr.copy( nStart, nEnd-nStart );
 }
 
 /// SortingElement for Tables

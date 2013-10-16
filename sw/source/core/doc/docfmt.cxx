@@ -1883,8 +1883,8 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
             sal_False, &pItem ))
         {
             const SwNumRule* pRule;
-            const String& rName = ((SwNumRuleItem*)pItem)->GetValue();
-            if( rName.Len() &&
+            const OUString& rName = ((SwNumRuleItem*)pItem)->GetValue();
+            if( !rName.isEmpty() &&
                 0 != ( pRule = rColl.GetDoc()->FindNumRulePtr( rName )) &&
                 !pRule->IsAutoRule() )
             {
@@ -1926,7 +1926,7 @@ SwGrfFmtColl* SwDoc::CopyGrfColl( const SwGrfFmtColl& rColl )
     return pNewColl;
 }
 
-static SwPageDesc* lcl_FindPageDesc( const SwPageDescs& rArr, const String& rName )
+static SwPageDesc* lcl_FindPageDesc( const SwPageDescs& rArr, const OUString& rName )
 {
     for( sal_uInt16 n = rArr.size(); n; )
     {
@@ -1981,7 +1981,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
             ((SwFmtPageDesc*)pItem)->GetPageDesc() )
         {
             SwFmtPageDesc aPageDesc( *(SwFmtPageDesc*)pItem );
-            const String& rNm = aPageDesc.GetPageDesc()->GetName();
+            const OUString& rNm = aPageDesc.GetPageDesc()->GetName();
             SwPageDesc* pPageDesc = ::lcl_FindPageDesc( maPageDescs, rNm );
             if( !pPageDesc )
             {
