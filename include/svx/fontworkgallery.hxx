@@ -42,7 +42,6 @@ class SdrObject;
 class SdrModel;
 
 class SfxBindings;
-class SfxStatusForwarder;
 
 //------------------------------------------------------------------------
 

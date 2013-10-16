@@ -268,7 +268,6 @@ class SVX_DLLPUBLIC SvxColorExtToolBoxControl : public SfxToolBoxControl
     using SfxToolBoxControl::StateChanged;
     using SfxToolBoxControl::Select;
 
-    //  SfxStatusForwarder          aForward;
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
     Color                               mLastColor;
     sal_Bool                            bChoiceFromPalette;
