@@ -3657,7 +3657,11 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             {
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
-                    nMin = pMat->GetMinValue(bTextAsZero);
+                {
+                    nVal = pMat->GetMinValue(bTextAsZero);
+                    if (nMin > nVal)
+                        nMin = nVal;
+                }
             }
             break;
             case svString :
@@ -3750,7 +3754,9 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                 if (pMat)
                 {
                     nFuncFmtType = NUMBERFORMAT_NUMBER;
-                    nMax = pMat->GetMaxValue(bTextAsZero);
+                    nVal = pMat->GetMaxValue(bTextAsZero);
+                    if (nMax < nVal)
+                        nMax = nVal;
                 }
             }
             break;
