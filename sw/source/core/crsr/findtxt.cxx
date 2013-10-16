@@ -655,7 +655,7 @@ OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
         if( pTxtNode && pTxtNode->IsTxtNode() && pTxtNode == pPam->GetCntntNode( sal_False ) )
         {
             utl::TextSearch aSTxt( rSearchOpt );
-            const String& rStr = static_cast<const SwTxtNode*>(pTxtNode)->GetTxt();
+            const OUString& rStr = static_cast<const SwTxtNode*>(pTxtNode)->GetTxt();
             sal_Int32 nStart = pPam->Start()->nContent.GetIndex();
             sal_Int32 nEnd = pPam->End()->nContent.GetIndex();
             SearchResult aResult;

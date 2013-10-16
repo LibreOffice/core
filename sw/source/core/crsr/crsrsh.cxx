@@ -413,7 +413,7 @@ void SwCrsrShell::UpdateMarkedListLevel()
         if ( !pTxtNd->IsNumbered() )
         {
             m_pCurCrsr->_SetInFrontOfLabel( false );
-            MarkListLevel( String(), 0 );
+            MarkListLevel( OUString(), 0 );
         }
         else if ( m_pCurCrsr->IsInFrontOfLabel() )
         {
@@ -427,7 +427,7 @@ void SwCrsrShell::UpdateMarkedListLevel()
         }
         else
         {
-            MarkListLevel( String(), 0 );
+            MarkListLevel( OUString(), 0 );
         }
     }
 }

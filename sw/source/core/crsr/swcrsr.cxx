@@ -1344,13 +1344,13 @@ sal_Bool SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, con
     return bRet;
 }
 
-static String lcl_MaskDeletedRedlines( const SwTxtNode* pTxtNd )
+static OUString lcl_MaskDeletedRedlines( const SwTxtNode* pTxtNd )
 {
-    String aRes;
+    OUString aRes;
     if (pTxtNd)
     {
         //mask deleted redlines
-        String sNodeText(pTxtNd->GetTxt());
+        OUString sNodeText(pTxtNd->GetTxt());
         const SwDoc& rDoc = *pTxtNd->GetDoc();
         const bool nShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
         if ( nShowChg )
@@ -1367,8 +1367,8 @@ static String lcl_MaskDeletedRedlines( const SwTxtNode* pTxtNd )
                     xub_StrLen nStart, nEnd;
                     pRed->CalcStartEnd( pTxtNd->GetIndex(), nStart, nEnd );
 
-                    while ( nStart < nEnd && nStart < sNodeText.Len() )
-                        sNodeText.SetChar( nStart++, CH_TXTATR_INWORD );
+                    while ( nStart < nEnd && nStart < sNodeText.getLength() )
+                        sNodeText = sNodeText.replaceAt( nStart++, 1, OUString(CH_TXTATR_INWORD) );
                 }
             }
         }
@@ -1383,7 +1383,7 @@ sal_Bool SwCursor::GoSentence( SentenceMoveType eMoveType )
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
-        String sNodeText( lcl_MaskDeletedRedlines( pTxtNd ) );
+        OUString sNodeText( lcl_MaskDeletedRedlines( pTxtNd ) );
 
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
@@ -1407,8 +1407,8 @@ sal_Bool SwCursor::GoSentence( SentenceMoveType eMoveType )
                                         sNodeText,
                                         nPtPos, g_pBreakIt->GetLocale(
                                                     pTxtNd->GetLang( nPtPos ) ));
-                while (nPtPos != (sal_uInt16) -1 && ++nPtPos < sNodeText.Len()
-                       && sNodeText.GetChar(nPtPos)== ' ' /*isWhiteSpace( aTxt.GetChar(nPtPos)*/ )
+                while (nPtPos != (sal_uInt16) -1 && ++nPtPos < sNodeText.getLength()
+                       && sNodeText[nPtPos] == ' ' /*isWhiteSpace( aTxt.GetChar(nPtPos)*/ )
                     ;
                 break;
             }
@@ -1449,8 +1449,8 @@ sal_Bool SwCursor::ExpandToSentenceBorders()
         if (!HasMark())
             SetMark();
 
-        String sStartText( lcl_MaskDeletedRedlines( pStartNd ) );
-        String sEndText( pStartNd == pEndNd? sStartText : lcl_MaskDeletedRedlines( pEndNd ) );
+        OUString sStartText( lcl_MaskDeletedRedlines( pStartNd ) );
+        OUString sEndText( pStartNd == pEndNd? sStartText : lcl_MaskDeletedRedlines( pEndNd ) );
 
         SwCrsrSaveState aSave( *this );
         xub_StrLen nStartPos = Start()->nContent.GetIndex();

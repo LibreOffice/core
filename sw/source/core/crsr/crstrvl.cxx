@@ -2082,13 +2082,13 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
                         ? ( aPos < aCmpPos && aCurPos < aPos )
                         : ( aCmpPos < aPos && aPos < aCurPos ))
                     {
-                        String sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
+                        OUString sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
                                         *rAttr.GetEnd() - *rAttr.GetStart() ) );
 
                         sTxt = comphelper::string::remove(sTxt, 0x0a);
                         sTxt = comphelper::string::strip(sTxt, ' ');
 
-                        if( sTxt.Len() )
+                        if( !sTxt.isEmpty() )
                             aCmpPos = aPos;
                     }
                 }

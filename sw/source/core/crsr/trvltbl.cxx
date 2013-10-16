@@ -694,7 +694,7 @@ bool SwCrsrShell::IsTblComplexForChart()
     if( pTNd )
     {
         // in a table; check if table or section is balanced
-        String sSel;
+        OUString sSel;
         if( m_pTblCrsr )
             sSel = GetBoxNms();
         bRet = pTNd->GetTable().IsTblComplexForChart( sSel );
