@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,icu,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
+	icu/icu4c.10318.CVE-2013-2924_changeset_34076.patch \
 	icu/icu4c.10129.wintz.patch \
 	icu/icu4c-build.patch \
 	icu/icu4c-aix.patch \
