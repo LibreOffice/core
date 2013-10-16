@@ -12,17 +12,17 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,pixman))
 $(eval $(call gb_UnpackedTarball_set_tarball,pixman,$(PIXMAN_TARBALL),,cairo))
 
 $(eval $(call gb_UnpackedTarball_add_patches,pixman,\
-	cairo/pixman/pixman-0.24.4.patch \
+	external/cairo/pixman/pixman-0.24.4.patch \
 ))
 
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,pixman,\
-	cairo/pixman/pixman-0.24.4.android.patch \
+	external/cairo/pixman/pixman-0.24.4.android.patch \
 ))
 endif
 
 ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_UnpackedTarball_add_file,pixman,pixman,cairo/pixman/Makefile.win32.common))
+$(eval $(call gb_UnpackedTarball_add_file,pixman,pixman,external/cairo/pixman/Makefile.win32.common))
 endif
 
 # vim: set noet sw=4 ts=4:

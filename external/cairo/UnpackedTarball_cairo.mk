@@ -12,38 +12,38 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,cairo))
 $(eval $(call gb_UnpackedTarball_set_tarball,cairo,$(CAIRO_TARBALL),,cairo))
 
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
-	cairo/cairo/cairo-1.10.2.patch \
-	cairo/cairo/cairo.dlsym.lcdfilter.patch \
-	cairo/cairo/cairo-1.10.2-oldfontconfig.patch \
+	external/cairo/cairo/cairo-1.10.2.patch \
+	external/cairo/cairo/cairo.dlsym.lcdfilter.patch \
+	external/cairo/cairo/cairo-1.10.2-oldfontconfig.patch \
 ))
 
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
-	cairo/cairo/cairo-1.10.2.wntmsc.patch \
+	external/cairo/cairo/cairo-1.10.2.wntmsc.patch \
 ))
 endif
 
 # FIXME add cairo/cairo/cairo-1.10.2.no-atsui.patch for MACOSX >= 1070
 ifeq ($(OS),IOS)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
-	cairo/cairo/cairo-1.10.2.no-atsui.patch \
-	cairo/cairo/cairo-1.10.2.ios.patch \
+	external/cairo/cairo/cairo-1.10.2.no-atsui.patch \
+	external/cairo/cairo/cairo-1.10.2.ios.patch \
 ))
 endif
 
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
-	cairo/cairo/cairo-1.10.2.android.patch \
+	external/cairo/cairo/cairo-1.10.2.android.patch \
 ))
 endif
 
 ifneq (,$(filter ANDROID IOS,$(OS)))
-$(eval $(call gb_UnpackedTarball_add_file,cairo,.,cairo/cairo/dummy_pkg_config))
+$(eval $(call gb_UnpackedTarball_add_file,cairo,.,external/cairo/cairo/dummy_pkg_config))
 endif
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
-	cairo/cairo/no-flto-clang.patch \
+	external/cairo/cairo/no-flto-clang.patch \
 ))
 endif
 
