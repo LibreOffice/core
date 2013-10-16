@@ -236,10 +236,6 @@ public:
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel = 0 ) = 0;
 
-    // get kerning pairs of the current font
-    // return only PairCount if (pKernPairs == NULL)
-    virtual sal_uLong       GetKernPairs( sal_uLong nMaxPairCount, ImplKernPairData* ) = 0;
-
     // get the repertoire of the current font
     virtual const ImplFontCharMap*
                             GetImplFontCharMap() const = 0;
