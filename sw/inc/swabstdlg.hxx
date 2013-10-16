@@ -99,12 +99,13 @@ public:
     virtual OUString        GetCurrShortName() const = 0;
 };
 
-class AbstractFldInputDlg : public VclAbstractDialog
+class AbstractFldInputDlg : public VclAbstractTerminatedDialog
 {
 public:
     //from class SalFrame
     virtual void         SetWindowState( const OString & rStr ) = 0;
     virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0;
+    virtual void         EndDialog(long ) = 0;
 };
 
 class AbstractInsFootNoteDlg : public VclAbstractDialog
