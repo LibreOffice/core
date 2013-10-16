@@ -22,12 +22,7 @@ $(eval $(call gb_Module_add_targets,external,\
 endif
 
 ifeq ($(COM),MSC)
-$(eval $(call gb_Module_add_targets,external,\
-	Package_dbghelp \
-	$(if $(MSM_PATH),Package_msms) \
-	Package_msvc_dlls \
-	$(if $(filter YES,$(WITH_MOZAB4WIN)),Package_msvc80_dlls) \
-))
+$(eval $(call gb_Module_add_moduledir,external,msc-externals))
 endif
 
 ifeq ($(HAVE_READDIR_R),NO)
