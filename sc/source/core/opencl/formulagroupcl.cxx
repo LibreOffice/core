@@ -784,7 +784,6 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc, const ScAddress
                     const std::vector<formula::VectorRefArray>& rArrays = pDvr->GetArrays();
                     uint rArraysSize = rArrays.size();
                     int nMoreColSize = 0;
-                    DoubleVectorFormula *SvDoubleTemp = new DoubleVectorFormula();
                     nSrcDataSize = pDvr->GetArrayLength();
                     if( rArraysSize > 1 )
                     {
@@ -804,6 +803,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc, const ScAddress
                     else
                     {
                         dpOclSrcData = rArrays[0].mpNumericArray;
+                        DoubleVectorFormula *SvDoubleTemp = new DoubleVectorFormula();
                         SvDoubleTemp->mdpInputData = dpOclSrcData;
                         SvDoubleTemp->mnInputDataSize = nSrcDataSize;
                         SvDoubleTemp->mnInputStartPosition = mnpOclStartPos[nCountNum*mnRowSize];
