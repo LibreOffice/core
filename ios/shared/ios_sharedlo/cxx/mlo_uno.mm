@@ -471,7 +471,7 @@ mlo_is_document_open(void){
 
 extern "C"
 void
-lmo_select_all(void){
+mlo_select_all(void){
     getXDispatchHelper()->executeDispatch(getXDispatchProvider(),
                                           OUString(".uno:SelectAll"),
                                           OUString("_self"),
