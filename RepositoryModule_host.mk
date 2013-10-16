@@ -13,7 +13,6 @@ $(eval $(call gb_Module_Module,libreoffice))
 
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
-	$(call gb_Helper_optional,AFMS,afms) \
 	android \
 	animations \
 	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
