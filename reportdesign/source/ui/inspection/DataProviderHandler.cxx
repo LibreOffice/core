@@ -506,13 +506,13 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
     aSeq[2] <<= aParam;
 
     aParam.Name = OUString("Explanation");
-    aParam.Value <<= OUString(String(ModuleRes(RID_STR_EXPLANATION)));
+    aParam.Value <<= OUString(ModuleRes(RID_STR_EXPLANATION));
     aSeq[3] <<= aParam;
     aParam.Name = OUString("DetailLabel");
-    aParam.Value <<= OUString(String(ModuleRes(RID_STR_DETAILLABEL)));
+    aParam.Value <<= OUString(ModuleRes(RID_STR_DETAILLABEL));
     aSeq[4] <<= aParam;
     aParam.Name = OUString("MasterLabel");
-    aParam.Value <<= OUString(String(ModuleRes(RID_STR_MASTERLABEL)));
+    aParam.Value <<= OUString(ModuleRes(RID_STR_MASTERLABEL));
     aSeq[5] <<= aParam;
 
     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(

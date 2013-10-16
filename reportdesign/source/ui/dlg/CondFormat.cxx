@@ -449,7 +449,7 @@ namespace rptui
         short nRet = ModalDialog::Execute();
         if ( nRet == RET_OK )
         {
-            const String sUndoAction( ModuleRes( RID_STR_UNDO_CONDITIONAL_FORMATTING ) );
+            const OUString sUndoAction( ModuleRes( RID_STR_UNDO_CONDITIONAL_FORMATTING ) );
             const UndoContext aUndoContext( m_rController.getUndoManager(), sUndoAction );
             try
             {

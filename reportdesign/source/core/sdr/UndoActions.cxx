@@ -91,7 +91,7 @@ OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,sal_uInt16 nCommentID)
     DBG_CTOR(rpt_OCommentUndoAction,NULL);
     m_pController = static_cast< OReportModel& >( _rMod ).getController();
     if ( nCommentID )
-        m_strComment = String(ModuleRes(nCommentID));
+        m_strComment = ModuleRes(nCommentID);
 }
 OCommentUndoAction::~OCommentUndoAction()
 {

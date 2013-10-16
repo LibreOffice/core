@@ -139,7 +139,7 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
         for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
         {
             const sal_uInt16 nItemId = pToolBox->GetItemId(nPos);
-            if ( pToolBox->GetItemCommand(nItemId) == String(m_aCommandURL) )
+            if ( pToolBox->GetItemCommand(nItemId) == m_aCommandURL )
             {
                 m_nToolBoxId = nItemId;
                 break;

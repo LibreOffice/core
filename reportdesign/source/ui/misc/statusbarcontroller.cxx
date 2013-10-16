@@ -93,7 +93,7 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
         for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
         {
             const sal_uInt16 nItemId = pStatusBar->GetItemId(nPos);
-            if ( pStatusBar->GetItemCommand(nItemId) == String(m_aCommandURL) )
+            if ( pStatusBar->GetItemCommand(nItemId) == m_aCommandURL )
             {
                 m_nId = nItemId;
                 break;

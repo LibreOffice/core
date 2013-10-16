@@ -534,7 +534,7 @@ void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xS
 // -----------------------------------------------------------------------------
 void NavigatorTree::traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvTreeListEntry* _pParent)
 {
-    SvTreeListEntry* pFunctions = insertEntry(String(ModuleRes(RID_STR_FUNCTIONS)),_pParent,SID_RPT_NEW_FUNCTION,LIST_APPEND,new UserData(this,_xFunctions));
+    SvTreeListEntry* pFunctions = insertEntry(OUString(ModuleRes(RID_STR_FUNCTIONS)), _pParent, SID_RPT_NEW_FUNCTION, LIST_APPEND, new UserData(this,_xFunctions));
     const sal_Int32 nCount = _xFunctions->getCount();
     for (sal_Int32 i = 0; i< nCount; ++i)
     {
@@ -604,7 +604,7 @@ void NavigatorTree::traversePageFooter(const uno::Reference< report::XSection>& 
 void NavigatorTree::traverseGroups(const uno::Reference< report::XGroups>& _xGroups)
 {
     SvTreeListEntry* pReport = find(_xGroups->getReportDefinition());
-    insertEntry(String(ModuleRes(RID_STR_GROUPS)),pReport,SID_SORTINGANDGROUPING,LIST_APPEND,new UserData(this,_xGroups));
+    insertEntry(OUString(ModuleRes(RID_STR_GROUPS)), pReport, SID_SORTINGANDGROUPING, LIST_APPEND, new UserData(this,_xGroups));
 }
 // -----------------------------------------------------------------------------
 void NavigatorTree::traverseGroup(const uno::Reference< report::XGroup>& _xGroup)

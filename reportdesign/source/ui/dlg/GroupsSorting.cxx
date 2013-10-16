@@ -297,7 +297,7 @@ void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups
         m_bIgnoreEvent = true;
         {
             sal_Int32 nRow = _nRow;
-            const String sUndoAction(ModuleRes(RID_STR_UNDO_MOVE_GROUP));
+            const OUString sUndoAction(ModuleRes(RID_STR_UNDO_MOVE_GROUP));
             const UndoContext aUndoContext( m_pParent->m_pController->getUndoManager(), sUndoAction );
 
             uno::Reference< report::XGroups> xGroups = m_pParent->getGroups();
@@ -358,7 +358,7 @@ void OFieldExpressionControl::lateInit()
         SetFont(aFont);
 
         InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(OUString('0')) * 4)/*, sal_True */);
-        InsertDataColumn( FIELD_EXPRESSION, String(ModuleRes(STR_RPT_EXPRESSION)), 100);
+        InsertDataColumn( FIELD_EXPRESSION, OUString(ModuleRes(STR_RPT_EXPRESSION)), 100);
 
         m_pComboCell = new ComboBoxControl( &GetDataWindow() );
         m_pComboCell->SetSelectHdl(LINK(this,OFieldExpressionControl,CBChangeHdl));
@@ -422,8 +422,8 @@ sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
             if ( m_aGroupPositions[nRow] == NO_GROUP )
             {
                 bAppend = sal_True;
-                String sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
-                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, String() );
+                OUString sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
+                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString() );
                 xGroup = m_pParent->getGroups()->createGroup();
                 xGroup->setHeaderOn(sal_True);
 
@@ -566,7 +566,7 @@ sal_Bool OFieldExpressionControl::SeekRow( long _nRow )
 void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
-    String aText  =const_cast< OFieldExpressionControl*>(this)->GetCellText( m_nCurrentPos, nColumnId );
+    OUString aText  =const_cast< OFieldExpressionControl*>(this)->GetCellText( m_nCurrentPos, nColumnId );
 
     Point aPos( rRect.TopLeft() );
     Size aTextSize( GetDataWindow().GetTextHeight(),GetDataWindow().GetTextWidth( aText ));
@@ -778,8 +778,8 @@ void OFieldExpressionControl::DeleteRows()
             if ( bFirstTime )
             {
                 bFirstTime = false;
-                String sUndoAction(ModuleRes(RID_STR_UNDO_REMOVE_SELECTION));
-                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, String() );
+                OUString sUndoAction(ModuleRes(RID_STR_UNDO_REMOVE_SELECTION));
+                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, OUString() );
             }
 
             sal_Int32 nGroupPos = m_aGroupPositions[nIndex];
@@ -885,7 +885,7 @@ void OFieldExpressionControl::InsertRows( long nRow )
         {
             m_bIgnoreEvent = false;
             {
-                const String sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
+                const OUString sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
                 const UndoContext aUndoContext( m_pParent->m_pController->getUndoManager(), sUndoAction );
 
                 uno::Reference<report::XGroups> xGroups = m_pParent->getGroups();
@@ -984,7 +984,7 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
     for (size_t i = 0; i < sizeof (pControlsLst) / sizeof (pControlsLst[0]); ++i)
     {
         pControls[i]->Show(sal_True);
-        String sText = pControls[i]->GetText();
+        OUString sText = pControls[i]->GetText();
         OUString sNewText = aMnemonicGenerator.CreateMnemonic(sText);
         if ( sText != sNewText )
             pControls[i]->SetText(sNewText);
@@ -1253,7 +1253,7 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox*, pListBox )
 // -----------------------------------------------------------------------------
 void OGroupsSortingDialog::showHelpText(sal_uInt16 _nResId)
 {
-    m_aHelpWindow.SetText(String(ModuleRes(_nResId)));
+    m_aHelpWindow.SetText(OUString(ModuleRes(_nResId)));
 }
 // -----------------------------------------------------------------------------
 void OGroupsSortingDialog::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException)
@@ -1288,7 +1288,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         case sdbc::DataType::LONGVARCHAR:
         case sdbc::DataType::VARCHAR:
         case sdbc::DataType::CHAR:
-            m_aGroupOnLst.InsertEntry(String(ModuleRes(STR_RPT_PREFIXCHARS)));
+            m_aGroupOnLst.InsertEntry(OUString(ModuleRes(STR_RPT_PREFIXCHARS)));
             m_aGroupOnLst.SetEntryData(1,reinterpret_cast<void*>(report::GroupOn::PREFIX_CHARACTERS));
             break;
         case sdbc::DataType::DATE:
@@ -1298,13 +1298,13 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
                 sal_uInt16 nIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
                 for (sal_uInt16 i = 0; i < sizeof (nIds) / sizeof (nIds[0]); ++i)
                 {
-                    m_aGroupOnLst.InsertEntry(String(ModuleRes(nIds[i])));
+                    m_aGroupOnLst.InsertEntry(OUString(ModuleRes(nIds[i])));
                     m_aGroupOnLst.SetEntryData(i+1,reinterpret_cast<void*>(i+2));
                 }
             }
             break;
         default:
-            m_aGroupOnLst.InsertEntry(String(ModuleRes(STR_RPT_INTERVAL)));
+            m_aGroupOnLst.InsertEntry(OUString(ModuleRes(STR_RPT_INTERVAL)));
             m_aGroupOnLst.SetEntryData(1,reinterpret_cast<void*>(report::GroupOn::INTERVAL));
             break;
     }

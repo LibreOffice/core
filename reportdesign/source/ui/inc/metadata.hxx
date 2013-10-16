@@ -49,9 +49,9 @@ namespace rptui
         OPropertyInfoService(){}
         virtual ~OPropertyInfoService(){}
         // IPropertyInfoService
-        sal_Int32                           getPropertyId(const String& _rName) const;
-        String                              getPropertyTranslation(sal_Int32 _nId) const;
-        OString                        getPropertyHelpId(sal_Int32 _nId) const;
+        sal_Int32                           getPropertyId(const OUString& _rName) const;
+        OUString                            getPropertyTranslation(sal_Int32 _nId) const;
+        OString                             getPropertyHelpId(sal_Int32 _nId) const;
         sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const;
         static void                         getExcludeProperties(::std::vector< com::sun::star::beans::Property >& _rExcludeProperties,const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler);
 
@@ -63,7 +63,7 @@ namespace rptui
     protected:
         static const OPropertyInfoImpl* getPropertyInfo();
 
-        static const OPropertyInfoImpl* getPropertyInfo(const String& _rName);
+        static const OPropertyInfoImpl* getPropertyInfo(const OUString& _rName);
         static const OPropertyInfoImpl* getPropertyInfo(sal_Int32 _nId);
     };
 

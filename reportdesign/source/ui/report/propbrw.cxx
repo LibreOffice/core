@@ -337,11 +337,11 @@ OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterfac
     OUString aName;
     if ( !_aObjects.getLength() )
     {
-        aName = String(ModuleRes(RID_STR_BRWTITLE_NO_PROPERTIES));
+        aName = ModuleRes(RID_STR_BRWTITLE_NO_PROPERTIES);
     }
     else if ( _aObjects.getLength() == 1 )    // single selection
     {
-        aName = String(ModuleRes(RID_STR_BRWTITLE_PROPERTIES));
+        aName = ModuleRes(RID_STR_BRWTITLE_PROPERTIES);
 
         uno::Reference< container::XNameContainer > xNameCont(_aObjects[0],uno::UNO_QUERY);
         Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName("ReportComponent"), UNO_QUERY );
@@ -392,14 +392,14 @@ OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterfac
 
             if (nResId)
             {
-                aName += String(ModuleRes(nResId));
+                aName += ModuleRes(nResId);
             }
         }
     }
     else    // multiselection
     {
-        aName = String(ModuleRes(RID_STR_BRWTITLE_PROPERTIES));
-        aName += String(ModuleRes(RID_STR_BRWTITLE_MULTISELECT));
+        aName = ModuleRes(RID_STR_BRWTITLE_PROPERTIES);
+        aName += ModuleRes(RID_STR_BRWTITLE_MULTISELECT);
     }
 
     return aName;

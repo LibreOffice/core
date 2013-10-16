@@ -142,7 +142,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
             }
             else
             {
-                String sTitle = String(ModuleRes(RID_STR_DETAIL));
+                OUString sTitle = ModuleRes(RID_STR_DETAIL);
                 m_aStartMarker.setTitle(sTitle);
                 m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
             }
@@ -164,7 +164,7 @@ bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReport
     const bool bRet = _pIsSectionOn(&aReportHelper) && _pGetSection(&aReportHelper) == m_aReportSection.getSection();
     if ( bRet )
     {
-        String sTitle = String(ModuleRes(_nResId));
+        OUString sTitle = ModuleRes(_nResId);
         m_aStartMarker.setTitle(sTitle);
         m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
     }
@@ -313,8 +313,8 @@ void OSectionWindow::zoom(const Fraction& _aZoom)
 //-----------------------------------------------------------------------------
 IMPL_LINK( OSectionWindow, StartSplitHdl, Splitter*,  )
 {
-    const String sUndoAction( ModuleRes( RID_STR_UNDO_CHANGE_SIZE ) );
-    getViewsWindow()->getView()->getReportView()->getController().getUndoManager().EnterListAction( sUndoAction, String() );
+    const OUString sUndoAction( ModuleRes( RID_STR_UNDO_CHANGE_SIZE ) );
+    getViewsWindow()->getView()->getReportView()->getController().getUndoManager().EnterListAction( sUndoAction, OUString() );
     return 0L;
 }
 //------------------------------------------------------------------------------

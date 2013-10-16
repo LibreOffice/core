@@ -194,8 +194,8 @@ OUString OReportEngineJFree::getNewOutputName()
             aConvertedProperties[nPos].Name = OUString("OutputStorage");
 
             OUString sFileURL;
-            String sName = m_xReport->getCaption();
-            if ( !sName.Len() )
+            OUString sName = m_xReport->getCaption();
+            if ( sName.isEmpty() )
                 sName = m_xReport->getName();
             {
                 ::utl::TempFile aTestFile(sName, false, &sExt);

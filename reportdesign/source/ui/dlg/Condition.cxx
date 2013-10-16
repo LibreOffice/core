@@ -144,7 +144,7 @@ OColorPopup::OColorPopup(Window* _pParent,Condition* _pCondition)
     long nCount = pColorList->Count();
     XColorEntry* pEntry = NULL;
     Color aColWhite( COL_WHITE );
-    String aStrWhite( ModuleRes(STR_COLOR_WHITE) );
+    OUString aStrWhite( ModuleRes(STR_COLOR_WHITE) );
 
     if ( nCount > PALETTE_SIZE )
         // Show scrollbar if more than PALLETTE_SIZE colors are available
@@ -199,7 +199,7 @@ void OColorPopup::SetSlotId(sal_uInt16 _nSlotId)
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == _nSlotId || SID_BACKGROUND_COLOR == _nSlotId )
     {
         m_aColorSet.SetStyle( m_aColorSet.GetStyle() | WB_NONEFIELD );
-        m_aColorSet.SetText( String(ModuleRes( STR_TRANSPARENT )) );
+        m_aColorSet.SetText( OUString(ModuleRes( STR_TRANSPARENT )) );
     }
 }
 // -----------------------------------------------------------------------------
@@ -333,7 +333,7 @@ IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
             break;
     }
     if ( nTextId )
-        m_pColorFloat->SetText(String(ModuleRes(nTextId)));
+        m_pColorFloat->SetText(OUString(ModuleRes(nTextId)));
     m_pColorFloat->SetSlotId(nId);
     m_pColorFloat->SetPosPixel(m_aActions.GetItemPopupPosition(nId,m_pColorFloat->GetSizePixel()));
     m_pColorFloat->StartPopupMode(&m_aActions);

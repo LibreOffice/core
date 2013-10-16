@@ -855,7 +855,7 @@ OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
     }
 
     if (nResId)
-        aDefaultName = OUString( String(ModuleRes(nResId)) );
+        aDefaultName = ModuleRes(nResId);
 
     return aDefaultName;
 }

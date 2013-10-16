@@ -46,7 +46,7 @@ SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
     switch( _nPageId )
     {
         case RID_PAGEDIALOG_BACKGROUND:
-            AddTabPage( RID_SVXPAGE_BACKGROUND,String(ModuleRes(1)));
+            AddTabPage( RID_SVXPAGE_BACKGROUND, OUString(ModuleRes(1)));
             break;
         case RID_PAGEDIALOG_PAGE:
             AddTabPage(RID_SVXPAGE_PAGE, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), 0 );

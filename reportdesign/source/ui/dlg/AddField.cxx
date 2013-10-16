@@ -184,7 +184,7 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     m_pListBox->SetDeselectHdl(LINK( this, OAddFieldWindow, OnSelectHdl ) );
     m_pListBox->SetDoubleClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_pListBox->Show();
-    const String sTitle(ModuleRes(RID_STR_INSERT));
+    const OUString sTitle(ModuleRes(RID_STR_INSERT));
     m_aInsertButton.SetText(sTitle);
     m_aInsertButton.SetClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_aInsertButton.Show();

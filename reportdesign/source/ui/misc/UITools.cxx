@@ -161,14 +161,14 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
     OSL_ENSURE(_xGroup.is(),"Group is NULL -> GPF");
     if ( _xGroup->getHeaderOn() && _xGroup->getHeader()->getName().isEmpty() )
     {
-        OUString sName = String(ModuleRes(RID_STR_GROUPHEADER));
+        OUString sName = ModuleRes(RID_STR_GROUPHEADER);
         sName += OUString::number(_nPos);
         _xGroup->getHeader()->setName(sName);
     }
 
     if ( _xGroup->getFooterOn() && _xGroup->getFooter()->getName().isEmpty() )
     {
-        OUString sName = String(ModuleRes(RID_STR_GROUPFOOTER));
+        OUString sName = ModuleRes(RID_STR_GROUPFOOTER);
         sName += OUString::number(_nPos);
         _xGroup->getFooter()->setName(sName);
     }
@@ -1032,11 +1032,11 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
             bSuccess = aDlg.Execute() == RET_OK;
             if ( bSuccess )
             {
-                String sFormula = aDlg.getCurrentFormula();
+                OUString sFormula = aDlg.getCurrentFormula();
                 xub_StrLen nIndex = 0;
-                if ( sFormula.GetChar(0) == '=' )
+                if ( sFormula[0] == '=' )
                     nIndex = 1;
-                _in_out_rFormula = OUString("rpt:") + sFormula.Copy(nIndex);
+                _in_out_rFormula = "rpt:" + sFormula.copy(nIndex);
             }
         }
     }

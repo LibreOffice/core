@@ -93,7 +93,7 @@ public:
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
 
 protected:
-    void         HighlightFunctionParas(const String& aFormula);
+    void         HighlightFunctionParas(const OUString& aFormula);
 };
 
 // =============================================================================

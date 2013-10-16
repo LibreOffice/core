@@ -233,7 +233,7 @@ namespace rptui
         for ( size_t i=0; i<nCategories; ++i, ++pReturn )
         {
             pReturn->ProgrammaticName = OUString::createFromAscii( aCategories[i].programmaticName );
-            pReturn->UIName = String( ModuleRes( aCategories[i].uiNameResId ) );
+            pReturn->UIName = ModuleRes( aCategories[i].uiNameResId );
             pReturn->HelpURL = HelpIdUrl::getHelpURL( aCategories[i].helpId );
         }
 

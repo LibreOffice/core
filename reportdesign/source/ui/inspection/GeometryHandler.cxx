@@ -1588,7 +1588,7 @@ bool GeometryHandler::impl_dialogFilter_nothrow( OUString& _out_rSelectedClause,
         // create the dialog
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog = sdb::FilterDialog::createWithQuery(m_xContext, xComposer, m_xRowSet, xInspectorWindow);
 
-        const String aGcc3WorkaroundTemporary( ModuleRes(RID_STR_FILTER));
+        const OUString aGcc3WorkaroundTemporary( ModuleRes(RID_STR_FILTER));
         const OUString sPropertyUIName( aGcc3WorkaroundTemporary );
         // initialize the dialog
         xDialog->setTitle( sPropertyUIName );
@@ -1622,7 +1622,7 @@ void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
 
     ::Point aPos(VCLPoint(_aNewPos));
     if ( aPos.X() < 0 || aPos.Y() < 0 ) // TODO: have to check size with pos aka || (aPos.X() + aAwtSize.Width) > m_xSection->getReportDefinition()->
-        throw beans::PropertyVetoException(String(ModuleRes(RID_STR_ILLEGAL_POSITION)),xSourceReportComponent);
+        throw beans::PropertyVetoException(OUString(ModuleRes(RID_STR_ILLEGAL_POSITION)),xSourceReportComponent);
 
     ::Rectangle aSourceRect(aPos,VCLSize(_aSize));
 
@@ -1635,7 +1635,7 @@ void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
             const ::Rectangle aBoundRect(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
             const ::Rectangle aRect = aSourceRect.GetIntersection(aBoundRect);
             if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
-                throw beans::PropertyVetoException(String(ModuleRes( RID_STR_OVERLAP_OTHER_CONTROL)),xSourceReportComponent);
+                throw beans::PropertyVetoException(OUString(ModuleRes( RID_STR_OVERLAP_OTHER_CONTROL)),xSourceReportComponent);
         }
     }
 }
@@ -1758,7 +1758,7 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUS
             if ( nCount )
             {
                 const uno::Reference< report::XGroup> xGroup2(xGroups->getByIndex(nCount - 1),uno::UNO_QUERY_THROW);
-                OUString sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+                OUString sGroupName = ModuleRes(RID_STR_SCOPE_GROUP);
                 _rsNamePostFix = xGroup2->getExpression();
                 m_sScope = sGroupName.replaceFirst("%1",_rsNamePostFix);
                 xReturn = xGroup2.get();
@@ -1783,7 +1783,7 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUS
         for (sal_Int32 i = 0 ; i < nCount; ++i)
         {
             const uno::Reference< report::XGroup> xGroup(xGroups->getByIndex(i),uno::UNO_QUERY_THROW);
-            OUString sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+            OUString sGroupName = ModuleRes(RID_STR_SCOPE_GROUP);
             if ( m_sScope == sGroupName.replaceFirst("%1",xGroup->getExpression()) )
             {
                 _rsNamePostFix = xGroup->getExpression();
@@ -1829,7 +1829,7 @@ sal_Bool GeometryHandler::isDefaultFunction( const OUString& _sQuotedFunction
                             uno::Reference< report::XGroup> xGroup(aFind.first->second.second,uno::UNO_QUERY);
                             if ( xGroup.is() )
                             {
-                                OUString sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+                                OUString sGroupName = ModuleRes(RID_STR_SCOPE_GROUP);
                                 m_sScope = sGroupName.replaceFirst("%1",xGroup->getExpression());
                             }
                             else
@@ -1856,7 +1856,7 @@ sal_Bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< 
     sal_Bool bDefaultFunction = sal_False;
     try
     {
-        const String sFormula( _xFunction->getFormula() );
+        const OUString sFormula( _xFunction->getFormula() );
         util::SearchOptions aSearchOptions;
         aSearchOptions.algorithmType = util::SearchAlgorithms_REGEXP;
         aSearchOptions.searchFlag = 0x00000100;
@@ -1867,14 +1867,14 @@ sal_Bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< 
             aSearchOptions.searchString = aIter->m_sSearchString;
             utl::TextSearch aTextSearch(aSearchOptions);
             sal_Int32 start = 0;
-            sal_Int32 end = sFormula.Len();
-            if ( aTextSearch.SearchForward(sFormula,&start,&end) && start == 0 && end == sFormula.Len()) // default function found
+            sal_Int32 end = sFormula.getLength();
+            if ( aTextSearch.SearchForward(sFormula,&start,&end) && start == 0 && end == sFormula.getLength()) // default function found
             {
-                aSearchOptions.searchString = OUString("\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]");
+                aSearchOptions.searchString = "\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]";
                 utl::TextSearch aDataSearch(aSearchOptions);
                 aDataSearch.SearchForward(sFormula,&start,&end );
                 ++start;
-                _rDataField = sFormula.Copy(start,end-start-1);
+                _rDataField = sFormula.copy(start,end-start-1);
                 _rsDefaultFunctionName = aIter->m_sName;
                 break;
             }
@@ -1895,9 +1895,9 @@ void GeometryHandler::loadDefaultFunctions()
     {
         m_aCounterFunction.m_bPreEvaluated = sal_False;
         m_aCounterFunction.m_bDeepTraversing = sal_False;
-        m_aCounterFunction.m_sName = String(ModuleRes(RID_STR_F_COUNTER));
-        m_aCounterFunction.m_sFormula = OUString("rpt:[%FunctionName] + 1");
-        m_aCounterFunction.m_sSearchString = OUString("rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*");
+        m_aCounterFunction.m_sName = ModuleRes(RID_STR_F_COUNTER);
+        m_aCounterFunction.m_sFormula = "rpt:[%FunctionName] + 1";
+        m_aCounterFunction.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*";
         m_aCounterFunction.m_sInitialFormula.IsPresent = sal_True;
         m_aCounterFunction.m_sInitialFormula.Value = OUString("rpt:1");
 
@@ -1906,25 +1906,25 @@ void GeometryHandler::loadDefaultFunctions()
 
         aDefault.m_bPreEvaluated = sal_True;
 
-        aDefault.m_sName = String(ModuleRes(RID_STR_F_ACCUMULATION));
-        aDefault.m_sFormula = OUString("rpt:[%Column] + [%FunctionName]");
-        aDefault.m_sSearchString = OUString("rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]");
+        aDefault.m_sName = ModuleRes(RID_STR_F_ACCUMULATION);
+        aDefault.m_sFormula = "rpt:[%Column] + [%FunctionName]";
+        aDefault.m_sSearchString = "rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]";
         aDefault.m_sInitialFormula.IsPresent = sal_True;
-        aDefault.m_sInitialFormula.Value = OUString("rpt:[%Column]");
+        aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
         m_aDefaultFunctions.push_back(aDefault);
 
-        aDefault.m_sName = String(ModuleRes(RID_STR_F_MINIMUM));
-        aDefault.m_sFormula = OUString("rpt:IF([%Column] < [%FunctionName];[%Column];[%FunctionName])");
-        aDefault.m_sSearchString = OUString("rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*<[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)");
+        aDefault.m_sName = ModuleRes(RID_STR_F_MINIMUM);
+        aDefault.m_sFormula = "rpt:IF([%Column] < [%FunctionName];[%Column];[%FunctionName])";
+        aDefault.m_sSearchString = "rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*<[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)";
         aDefault.m_sInitialFormula.IsPresent = sal_True;
-        aDefault.m_sInitialFormula.Value = OUString("rpt:[%Column]");
+        aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
         m_aDefaultFunctions.push_back(aDefault);
 
-        aDefault.m_sName = String(ModuleRes(RID_STR_F_MAXIMUM));
-        aDefault.m_sFormula = OUString("rpt:IF([%Column] > [%FunctionName];[%Column];[%FunctionName])");
-        aDefault.m_sSearchString = OUString("rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*>[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)");
+        aDefault.m_sName = ModuleRes(RID_STR_F_MAXIMUM);
+        aDefault.m_sFormula = "rpt:IF([%Column] > [%FunctionName];[%Column];[%FunctionName])";
+        aDefault.m_sSearchString = "rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*>[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)";
         aDefault.m_sInitialFormula.IsPresent = sal_True;
-        aDefault.m_sInitialFormula.Value = OUString("rpt:[%Column]");
+        aDefault.m_sInitialFormula.Value = "rpt:[%Column]";
         m_aDefaultFunctions.push_back(aDefault);
     }
 }
@@ -2077,20 +2077,20 @@ bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunct
         const beans::Optional< OUString> aInitalFormula = aFind.first->second.first->getInitialFormula();
         if ( aInitalFormula.IsPresent )
         {
-            const String sFormula( aFind.first->second.first->getFormula() );
+            const OUString sFormula( aFind.first->second.first->getFormula() );
             util::SearchOptions aSearchOptions;
             aSearchOptions.algorithmType = util::SearchAlgorithms_REGEXP;
             aSearchOptions.searchFlag = 0x00000100;
             aSearchOptions.searchString = m_aCounterFunction.m_sSearchString;
             utl::TextSearch aTextSearch(aSearchOptions);
             sal_Int32 start = 0;
-            sal_Int32 end = sFormula.Len();
-            if ( aTextSearch.SearchForward(sFormula,&start,&end) && start == 0 && end == sFormula.Len()) // counter function found
+            sal_Int32 end = sFormula.getLength();
+            if ( aTextSearch.SearchForward(sFormula,&start,&end) && start == 0 && end == sFormula.getLength()) // counter function found
             {
                 const uno::Reference< report::XGroup > xGroup(aFind.first->second.second,uno::UNO_QUERY);
                 if ( xGroup.is() )
                 {
-                    OUString sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+                    OUString sGroupName = ModuleRes(RID_STR_SCOPE_GROUP);
                     _Out_sScope = sGroupName.replaceFirst("%1",xGroup->getExpression());
                 }
                 else
@@ -2112,8 +2112,8 @@ void GeometryHandler::impl_createFunction(const OUString& _sFunctionName,const O
     m_xFunction.set(report::Function::create(m_xContext));
     m_xFunction->setName( _sFunctionName );
 
-    const String sPlaceHolder1(RTL_CONSTASCII_USTRINGPARAM("%Column"));
-    const String sPlaceHolder2(RTL_CONSTASCII_USTRINGPARAM("%FunctionName"));
+    const OUString sPlaceHolder1("%Column");
+    const OUString sPlaceHolder2("%FunctionName");
     OUString sFormula(_aFunction.m_sFormula);
     sFormula = sFormula.replaceAll(sPlaceHolder1,_sDataField);
     sFormula = sFormula.replaceAll(sPlaceHolder2,_sFunctionName);

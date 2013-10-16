@@ -454,12 +454,12 @@ void lcl_insertMenuItemImages(
                 rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,sal_False));
                 if ( nId == SID_PAGEHEADERFOOTER )
                 {
-                    String sText = String(ModuleRes((_xReportDefinition.is() && _xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT));
+                    OUString sText = ModuleRes((_xReportDefinition.is() && _xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT);
                     rContextMenu.SetItemText(nId,sText);
                 }
                 else if ( nId == SID_REPORTHEADERFOOTER )
                 {
-                    String sText = String(ModuleRes((_xReportDefinition.is() && _xReportDefinition->getReportHeaderOn()) ? RID_STR_REPORTHEADERFOOTER_DELETE : RID_STR_REPORTHEADERFOOTER_INSERT));
+                    OUString sText = ModuleRes((_xReportDefinition.is() && _xReportDefinition->getReportHeaderOn()) ? RID_STR_REPORTHEADERFOOTER_DELETE : RID_STR_REPORTHEADERFOOTER_INSERT);
                     rContextMenu.SetItemText(nId,sText);
                 }
             }

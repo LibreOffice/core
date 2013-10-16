@@ -116,7 +116,7 @@ namespace rptui
         UndoContext( SfxUndoManager& i_undoManager, const OUString& i_undoTitle )
             :m_rUndoManager( i_undoManager )
         {
-            m_rUndoManager.EnterListAction( i_undoTitle, String() );
+            m_rUndoManager.EnterListAction( i_undoTitle, OUString() );
         }
 
         ~UndoContext()
@@ -155,7 +155,7 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC OCommentUndoAction : public SdrUndoAction
     {
     protected:
-        String                  m_strComment; // undo, redo comment
+        OUString                m_strComment; // undo, redo comment
         ::dbaui::IController*   m_pController;
 
     public:

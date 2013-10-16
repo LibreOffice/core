@@ -146,12 +146,12 @@ short ODateTimeDialog::Execute()
             sal_Int32 nWidth = 0;
             if ( m_pDate->IsChecked() )
             {
-                String sDateFormat = m_pDateListBox->GetEntry( m_pDateListBox->GetSelectEntryPos() );
+                OUString sDateFormat = m_pDateListBox->GetEntry( m_pDateListBox->GetSelectEntryPos() );
                 nWidth = LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MAP_100TH_MM);
             }
             if ( m_pTime->IsChecked() )
             {
-                String sDateFormat = m_pTimeListBox->GetEntry( m_pTimeListBox->GetSelectEntryPos() );
+                OUString sDateFormat = m_pTimeListBox->GetEntry( m_pTimeListBox->GetSelectEntryPos() );
                 nWidth = ::std::max<sal_Int32>(LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MAP_100TH_MM),nWidth);
             }
 

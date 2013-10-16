@@ -40,23 +40,23 @@ namespace rptui
     //========================================================================
     struct OPropertyInfoImpl
     {
-        String          sName;
-        String          sTranslation;
-        OString    sHelpId;
+        OUString        sName;
+        OUString        sTranslation;
+        OString         sHelpId;
         sal_Int32       nId;
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
-                        const OUString&      rName,
-                        sal_Int32                   _nId,
-                        const String&               aTranslation,
+                        const OUString&        rName,
+                        sal_Int32              _nId,
+                        const OUString&        aTranslation,
                         const OString&         _sHelpId,
-                        sal_uInt32                  _nUIFlags);
+                        sal_uInt32             _nUIFlags);
     };
 
     //------------------------------------------------------------------------
     OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
-                                   const String& aString, const OString& sHid, sal_uInt32 _nUIFlags)
+                                   const OUString& aString, const OString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
        ,sTranslation(aString)
        ,sHelpId(sHid)
@@ -80,7 +80,7 @@ namespace rptui
     //========================================================================
 #define DEF_INFO( ident, uinameres, helpid, flags )   \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
-            String( ModuleRes( RID_STR_##uinameres ) ), HID_RPT_PROP_##helpid, flags )
+            OUString( ModuleRes( RID_STR_##uinameres ) ), HID_RPT_PROP_##helpid, flags )
 
 #define DEF_INFO_1( ident, uinameres, helpid, flag1 ) \
     DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 )
@@ -156,17 +156,17 @@ namespace rptui
     }
 
     //------------------------------------------------------------------------
-    sal_Int32 OPropertyInfoService::getPropertyId(const String& _rName) const
+    sal_Int32 OPropertyInfoService::getPropertyId(const OUString& _rName) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_rName);
         return pInfo ? pInfo->nId : -1;
     }
 
     //------------------------------------------------------------------------
-    String OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
+    OUString OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->sTranslation : String();
+        return (pInfo) ? pInfo->sTranslation : OUString();
     }
 
     //------------------------------------------------------------------------
@@ -184,12 +184,12 @@ namespace rptui
     }
 
     //------------------------------------------------------------------------
-    const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const String& _rName)
+    const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const OUString& _rName)
     {
         // intialisierung
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0L, String(), "", 0);
+        OPropertyInfoImpl  aSearch(_rName, 0L, OUString(), "", 0);
 
         const OPropertyInfoImpl* pPropInfo = ::std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );
