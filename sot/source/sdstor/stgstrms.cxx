@@ -29,6 +29,7 @@
 #include <osl/file.hxx>
 #include <tools/tempfile.hxx>
 #include <tools/debug.hxx>
+#include <set>
 
 #include "sot/stg.hxx"
 #include "stgelem.hxx"
@@ -768,14 +769,26 @@ void StgDataStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
         // determine the actual size of the stream by scanning
         // the FAT chain and counting the # of pages allocated
         nSize = 0;
-        sal_Int32 nOldBgn = -1;
-        while( nBgn >= 0 && nBgn != nOldBgn )
+
+        // there may be files with double page numbers or loops of page
+        // references. This is not allowed. To be able to track this and
+        // to exit with an error, track already scanned PageNumbers here
+        // and use them to see if an already counted page is re-visited
+        std::set< sal_Int32 > nUsedPageNumbers;
+
+        while(nBgn >= 0)
         {
-            nOldBgn = nBgn;
-            nBgn = pFat->GetNextPage( nBgn );
-            if( nBgn == nOldBgn )
-                rIo.SetError( ERRCODE_IO_WRONGFORMAT );
-            nSize += nPageSize;
+            if(nUsedPageNumbers.find(nBgn) == nUsedPageNumbers.end())
+            {
+                nUsedPageNumbers.insert(nBgn);
+                nSize += nPageSize;
+                nBgn = pFat->GetNextPage(nBgn);
+            }
+            else
+            {
+                rIo.SetError(ERRCODE_IO_WRONGFORMAT);
+                nBgn = -1;
+            }
         }
     }
 }
