@@ -185,7 +185,7 @@ void WrappedResultSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xPar
                     break;
                 case DataType::BIT:
                 case DataType::BOOLEAN:
-                    _xParameter->updateBoolean(nPos,_rValue);
+                    _xParameter->updateBoolean(nPos,static_cast<bool>(_rValue));
                     break;
                 case DataType::TINYINT:
                     if ( _rValue.isSigned() )
