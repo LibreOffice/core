@@ -2178,7 +2178,7 @@ bool appendDouble(
     return false;
 }
 
-formula::VectorRefArray appendBlocks(
+formula::VectorRefArray appendToStringBlock(
     ScDocument* pDoc, sc::FormulaGroupContext& rCxt, size_t nPos,
     size_t nLenRequested, sc::CellStoreType::iterator it, const sc::CellStoreType::iterator& itEnd )
 {
@@ -2338,6 +2338,9 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( sc::FormulaGroupContext& 
     if (nRow1 > nRow2)
         return formula::VectorRefArray();
 
+    double fNan;
+    rtl::math::setNan(&fNan);
+
     size_t nLenRequested = nRow2 - nRow1 + 1;
     sc::CellStoreType::position_type aPos = maCells.position(nRow1);
     size_t nLen = aPos.first->size - aPos.second;
@@ -2450,7 +2453,7 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( sc::FormulaGroupContext& 
 
             // Fill the remaining array with values from the following blocks.
             ++aPos.first;
-            return appendBlocks(pDocument, rCxt, nLen, nLenRequested, aPos.first, maCells.end());
+            return appendToStringBlock(pDocument, rCxt, nLen, nLenRequested, aPos.first, maCells.end());
         }
         break;
         case sc::element_type_empty:
@@ -2458,8 +2461,6 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( sc::FormulaGroupContext& 
             if (nLenRequested <= nLen)
             {
                 // Fill the whole length with NaN's.
-                double fNan;
-                rtl::math::setNan(&fNan);
                 rCxt.maNumArrays.push_back(new sc::FormulaGroupContext::NumArrayType(nLenRequested, fNan));
                 return formula::VectorRefArray(&rCxt.maNumArrays.back()[0]);
             }
