@@ -6,7 +6,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-BUILDDIR = @BUILDDIR@
-INSTDIR = @INSTDIR@
-OUTDIR = @OUTDIR@
-WORKDIR = @WORKDIR@
+// Xcode configuration variables
+
+// To avoid confusion, the LO-specific ones that aren't as such used
+// by Xcode (but only expanded in option values) are prefixed with
+// LO_.
+
+LO_BUILDDIR = @BUILDDIR@
+LO_INSTDIR = @INSTDIR@
+LO_OUTDIR = @OUTDIR@
+LO_WORKDIR = @WORKDIR@
