@@ -627,14 +627,6 @@ X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
 
 // ---------------------------------------------------------------------------
 
-sal_uLong
-X11SalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
-{
-    return 0;
-}
-
-// ---------------------------------------------------------------------------
-
 sal_Bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
