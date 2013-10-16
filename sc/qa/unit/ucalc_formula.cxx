@@ -28,6 +28,44 @@
 
 using namespace formula;
 
+namespace {
+
+bool isEmpty( const formula::VectorRefArray& rArray, size_t nPos )
+{
+    if (rArray.mpStringArray)
+    {
+        if (rArray.mpStringArray[nPos])
+            return false;
+    }
+
+    if (rArray.mpNumericArray)
+        return rtl::math::isNan(rArray.mpNumericArray[nPos]);
+    else
+        return true;
+}
+
+bool equals( const formula::VectorRefArray& rArray, size_t nPos, double fVal )
+{
+    if (rArray.mpStringArray && rArray.mpStringArray[nPos])
+        // This is a string cell.
+        return false;
+
+    if (rArray.mpNumericArray && rArray.mpNumericArray[nPos] == fVal)
+        return true;
+
+    return false;
+}
+
+bool equals( const formula::VectorRefArray& rArray, size_t nPos, const OUString& rVal )
+{
+    if (!rArray.mpStringArray)
+        return false;
+
+    return OUString(rArray.mpStringArray[nPos]).equalsIgnoreAsciiCase(rVal);
+}
+
+}
+
 void Test::testFetchVectorRefArray()
 {
     m_pDoc->InsertTab(0, "Test");
@@ -54,7 +92,7 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_EQUAL(2.0, aArray.mpNumericArray[1]);
     CPPUNIT_ASSERT_EQUAL(3.0, aArray.mpNumericArray[2]);
     CPPUNIT_ASSERT_EQUAL(4.0, aArray.mpNumericArray[3]);
-    CPPUNIT_ASSERT_MESSAGE("Empty cell should be represented by a NaN.", rtl::math::isNan(aArray.mpNumericArray[4]));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 4));
 
     // All string cells in Column B.  Note that the fetched string arrays are
     // only to be compared case-insensitively.  Right now, we use upper cased
@@ -67,11 +105,11 @@ void Test::testFetchVectorRefArray()
     aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(1,0,0), 5);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array is expected to be string cells only.", !aArray.mpNumericArray);
-    CPPUNIT_ASSERT_MESSAGE("Failed on case in-sensitive equality test.", OUString(aArray.mpStringArray[0]).equalsIgnoreAsciiCaseAscii("Andy"));
-    CPPUNIT_ASSERT_MESSAGE("Failed on case in-sensitive equality test.", OUString(aArray.mpStringArray[1]).equalsIgnoreAsciiCaseAscii("Bruce"));
-    CPPUNIT_ASSERT_MESSAGE("Failed on case in-sensitive equality test.", OUString(aArray.mpStringArray[2]).equalsIgnoreAsciiCaseAscii("Charlie"));
-    CPPUNIT_ASSERT_MESSAGE("Failed on case in-sensitive equality test.", OUString(aArray.mpStringArray[3]).equalsIgnoreAsciiCaseAscii("David"));
-    CPPUNIT_ASSERT_MESSAGE("Empty cell should be represented by a NULL pointer.", !aArray.mpStringArray[4]);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 0, "Andy"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 1, "Bruce"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 2, "Charlie"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 3, "David"));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 4));
 
     // Mixture of numeric, string, and empty cells in Column C.
     m_pDoc->SetString(ScAddress(2,0,0), "Header");
@@ -84,17 +122,35 @@ void Test::testFetchVectorRefArray()
     aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(2,0,0), 7);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
-    CPPUNIT_ASSERT_MESSAGE("Failed on case in-sensitive equality test.", OUString(aArray.mpStringArray[0]).equalsIgnoreAsciiCaseAscii("Header"));
-    CPPUNIT_ASSERT_MESSAGE("String value should be NULL for numeric cell.", aArray.mpStringArray[1] == NULL);
-    CPPUNIT_ASSERT_MESSAGE("String value should be NULL for numeric cell.", aArray.mpStringArray[2] == NULL);
-    CPPUNIT_ASSERT_MESSAGE("String value should be NULL for numeric cell.", aArray.mpStringArray[3] == NULL);
-    CPPUNIT_ASSERT_EQUAL(11.0, aArray.mpNumericArray[1]);
-    CPPUNIT_ASSERT_EQUAL(12.0, aArray.mpNumericArray[2]);
-    CPPUNIT_ASSERT_EQUAL(13.0, aArray.mpNumericArray[3]);
-    CPPUNIT_ASSERT_MESSAGE("This cell should be empty.", aArray.mpStringArray[4] == NULL && rtl::math::isNan(aArray.mpNumericArray[4]));
-    CPPUNIT_ASSERT_MESSAGE("String value should be NULL for numeric cell.", aArray.mpStringArray[5] == NULL);
-    CPPUNIT_ASSERT_EQUAL(36.0, aArray.mpNumericArray[5]);
-    CPPUNIT_ASSERT_MESSAGE("This cell should be empty.", aArray.mpStringArray[6] == NULL && rtl::math::isNan(aArray.mpNumericArray[6]));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 0, "Header"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 1, 11));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 12));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 3, 13));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 4));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 5, 36));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 6));
+
+    // Mixed type again in Column D, but it starts with a numeric cell.
+    m_pDoc->SetValue(ScAddress(3,0,0), 10);
+    m_pDoc->SetString(ScAddress(3,1,0), "Below 10");
+    // Leave 2 empty cells.
+    m_pDoc->SetValue(ScAddress(3,4,0), 11);
+    m_pDoc->SetString(ScAddress(3,5,0), "=12");
+    m_pDoc->SetString(ScAddress(3,6,0), "=13");
+    m_pDoc->SetString(ScAddress(3,7,0), "=CONCATENATE(\"A\";\"B\";\"C\")");
+    m_pDoc->CalcAll();
+
+    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(3,0,0), 8);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 10));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 1, "Below 10"));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 2));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 3));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 4, 11));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 5, 12));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 6, 13));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 7, "ABC"));
 
     m_pDoc->DeleteTab(0);
 }
