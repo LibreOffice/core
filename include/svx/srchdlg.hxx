@@ -43,10 +43,6 @@ class SvxSearchController;
 
 struct SearchDlg_Impl;
 
-#ifndef NO_SVX_SEARCH
-
-// struct SearchAttrItem -------------------------------------------------
-
 struct SearchAttrItem
 {
     sal_uInt16          nSlot;
@@ -80,7 +76,6 @@ public:
     void Remove(size_t nPos, size_t nLen = 1);
 };
 
-#ifndef SV_NODIALOG
 
 // class SvxSearchDialogWrapper ------------------------------------------
 
@@ -98,10 +93,7 @@ public:
 };
 
 // class SvxSearchDialog -------------------------------------------------
-
 /*
-    {k:\svx\prototyp\dialog\svx/srchdlg.hxx}
-
     [Description]
     In this modeless dialog the attributes for a search are configured
     and a search is started from it. Several search types
@@ -262,14 +254,6 @@ inline sal_Bool SvxSearchDialog::HasReplaceAttributes() const
     sal_Bool bLen = !m_pReplaceAttrText->GetText().isEmpty();
     return ( m_pReplaceAttrText->IsEnabled() && bLen );
 }
-
-
-//////////////////////////////////////////////////////////////////////
-
-
-#endif  // SV_NODIALOG
-#endif  // NO_SVX_SEARCH
-
 
 #endif
 

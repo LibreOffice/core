@@ -29,14 +29,10 @@
 #include <editeng/tstpitem.hxx>
 #include <svx/flagsdef.hxx>
 
-// forward ---------------------------------------------------------------
-
 class TabWin_Impl;
 
 // class SvxTabulatorTabPage ---------------------------------------------
 /*
-    {k:\svx\prototyp\dialog\tabstop.bmp}
-
     [Description]
     In this TabPage tabulators are managed.
 

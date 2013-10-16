@@ -26,9 +26,6 @@
 #include <svx/dlgctrl.hxx>
 #include <editeng/brushitem.hxx>
 
-//------------------------------------------------------------------------
-// forwards:
-
 class BackgroundPreviewImpl;
 class SvxOpenGraphicDialog;
 struct SvxBackgroundTable_Impl;
@@ -37,8 +34,9 @@ struct SvxBackgroundPage_Impl;
 class SvxBrushItem;
 class XFillStyleItem;
 class XFillGradientItem;
+
 /** class SvxBackgroundTabPage --------------------------------------------
-{k:\svx\prototyp\dialog\backgrnd.bmp}
+
     [Description]
     With this TabPage a Brush (e. g. for a frame's background color)
     can be set.

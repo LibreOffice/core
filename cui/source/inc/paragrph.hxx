@@ -28,14 +28,10 @@
 #include <vcl/lstbox.hxx>
 #include <svx/flagsdef.hxx>
 
-// forward ---------------------------------------------------------------
-
 class SvxLineSpacingItem;
 
 // class SvxStdParagraphTabPage ------------------------------------------
-
-/*  {k:\svx\prototyp\dialog\parastd.bmp}
-
+/*
     [Description]
     With this TabPage standard attributes of a paragraph can be set
     (indention, distance, alignment, line spacing).
@@ -175,9 +171,7 @@ public:
 };
 
 // class SvxExtParagraphTabPage ------------------------------------------
-
-/*  {k:\svx\prototyp\dialog\paraext.bmp}
-
+/*
     [Description]
     With this TabPage special attributes of a paragraph can be set
     (hyphenation, pagebreak, orphan, widow, ...).

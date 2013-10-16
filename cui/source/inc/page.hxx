@@ -19,7 +19,6 @@
 #ifndef _SVX_PAGE_HXX
 #define _SVX_PAGE_HXX
 
-
 #include <sfx2/tabdlg.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
@@ -33,9 +32,7 @@
 #include <svx/flagsdef.hxx>
 
 // class SvxPageDescPage -------------------------------------------------
-
-/*  {k:\svx\prototyp\dialog\page.bmp}
-
+/*
     [Description]
     TabPage for page settings (size, margins, ...)
 
