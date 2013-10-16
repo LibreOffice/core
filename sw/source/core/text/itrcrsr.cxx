@@ -143,8 +143,16 @@ namespace {
 
         if ( rTxtNode.AreListLevelIndentsApplicable() )
         {
+            int nListLevel = rTxtNode.GetActualListLevel();
+
+            if (nListLevel < 0)
+                nListLevel = 0;
+
+            if (nListLevel >= MAXLEVEL)
+                nListLevel = MAXLEVEL - 1;
+
             const SwNumFmt& rNumFmt =
-                    rTxtNode.GetNumRule()->Get( static_cast<sal_uInt16>(rTxtNode.GetActualListLevel()) );
+                    rTxtNode.GetNumRule()->Get( static_cast<sal_uInt16>(nListLevel) );
             if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 bRet = true;
