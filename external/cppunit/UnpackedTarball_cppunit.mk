@@ -12,22 +12,22 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,cppunit))
 $(eval $(call gb_UnpackedTarball_set_tarball,cppunit,$(CPPUNIT_TARBALL),,cppunit))
 
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
-	cppunit/windows.patch \
-	cppunit/unix.patch \
-	cppunit/wundef.patch \
+	external/cppunit/windows.patch \
+	external/cppunit/unix.patch \
+	external/cppunit/wundef.patch \
 ))
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
-	cppunit/android.patch \
+	external/cppunit/android.patch \
 ))
 else ifeq ($(OS),IOS)
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
-	cppunit/ios.patch \
+	external/cppunit/ios.patch \
 ))
 endif
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
-	cppunit/disable-dynloading.patch \
+	external/cppunit/disable-dynloading.patch \
 ))
 endif
 
