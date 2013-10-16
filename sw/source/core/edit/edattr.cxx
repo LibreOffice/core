@@ -464,7 +464,15 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
             const SwNumRule* pNumRule = rTNd.GetNumRule();
             if(pNumRule)
             {
-                const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(rTNd.GetActualListLevel()) );
+                int nListLevel = rTNd.GetActualListLevel();
+
+                if (nListLevel < 0)
+                    nListLevel = 0;
+
+                if (nListLevel >= MAXLEVEL)
+                    nListLevel = MAXLEVEL - 1;
+
+                const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(nListLevel) );
                 if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
                 {
                     if ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
