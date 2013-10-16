@@ -301,8 +301,8 @@
 		</div>
 
 		<div id="ModifiedSourceCode">
-			<h2 id="sdffd23r3cefwefew" xml:lang="en-US">Used / Modified Source Code</h2>
-            <p id="sdffd23red32efew">For detailed information about used and/or modified source code, see the NOTICE file which is part of the installation.</p>
+			<h2 id="ModifiedSourceCodeHeading" xml:lang="en-US">Used / Modified Source Code</h2>
+            <p id="ModifiedSourceCodePara" xml:lang="en-US">For detailed information about used and/or modified source code, see the NOTICE file which is part of the installation.</p>
 		</div>
 	</body>
 </html>
