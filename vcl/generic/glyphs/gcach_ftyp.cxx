@@ -18,11 +18,6 @@
  */
 
 
-#ifdef WNT
-#include <svsys.h>
-#undef CreateFont
-#endif
-
 #include "gcach_ftyp.hxx"
 
 #include "vcl/svapp.hxx"
@@ -57,9 +52,6 @@
 #include FT_TRUETYPE_TAGS_H
 #include FT_TRUETYPE_IDS_H
 
-#ifndef FT_RENDER_MODE_MONO  // happens in the MACOSX build
-    #define FT_RENDER_MODE_MONO ft_render_mode_mono
-#endif
 #include "rtl/instance.hxx"
 
 typedef const FT_Vector* FT_Vector_CPtr;
@@ -67,16 +59,11 @@ typedef const FT_Vector* FT_Vector_CPtr;
 #include <vector>
 
 // TODO: move file mapping stuff to OSL
-#if defined(UNX)
-    #include <unistd.h>
-    #include <fcntl.h>
-    #include <sys/stat.h>
-    #include <sys/mman.h>
-    #include "vcl/fontmanager.hxx"
-#elif defined(WNT)
-    #include <io.h>
-    #define strncasecmp strnicmp
-#endif
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include "vcl/fontmanager.hxx"
 
 typedef const unsigned char* CPU8;
 inline sal_uInt16 NEXT_U16( CPU8& p ) { p+=2; return (p[-2]<<8)|p[-1]; }
@@ -187,7 +174,6 @@ bool FtFontFile::Map()
     if( mnRefCount++ <= 0 )
     {
         const char* pFileName = maNativeFileName.getStr();
-#if defined(UNX)
         int nFile = open( pFileName, O_RDONLY );
         if( nFile < 0 )
             return false;
@@ -200,32 +186,6 @@ bool FtFontFile::Map()
         if( mpFileMap == MAP_FAILED )
             mpFileMap = NULL;
         close( nFile );
-#elif defined(WNT)
-        void* pFileDesc = ::CreateFile( pFileName, GENERIC_READ, FILE_SHARE_READ,
-                        NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0 );
-        if( pFileDesc == INVALID_HANDLE_VALUE)
-            return false;
-
-        mnFileSize = ::GetFileSize( pFileDesc, NULL );
-        HANDLE aHandle = ::CreateFileMapping( pFileDesc, NULL, PAGE_READONLY, 0, mnFileSize, "TTF" );
-        mpFileMap = (const unsigned char*)::MapViewOfFile( aHandle, FILE_MAP_READ, 0, 0, mnFileSize );
-        ::CloseHandle( pFileDesc );
-#else
-        FILE* pFile = fopen( pFileName, "rb" );
-        if( !pFile )
-            return false;
-
-        struct stat aStat;
-        stat( pFileName, &aStat );
-        mnFileSize = aStat.st_size;
-        mpFileMap = new unsigned char[ mnFileSize ];
-        if( mnFileSize != fread( mpFileMap, 1, mnFileSize, pFile ) )
-        {
-            delete[] mpFileMap;
-            mpFileMap = NULL;
-        }
-        fclose( pFile );
-#endif
     }
 
     return (mpFileMap != NULL);
@@ -238,14 +198,7 @@ void FtFontFile::Unmap()
     if( (--mnRefCount > 0) || (mpFileMap == NULL) )
         return;
 
-#if defined(UNX)
     munmap( (char*)mpFileMap, mnFileSize );
-#elif defined(WNT)
-    UnmapViewOfFile( (LPCVOID)mpFileMap );
-#else
-    delete[] mpFileMap;
-#endif
-
     mpFileMap = NULL;
 }
 
