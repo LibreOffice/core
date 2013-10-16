@@ -17,7 +17,9 @@ ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_moduledir,external,msc-externals))
 endif
 
-$(call gb_Helper_optional,LIBPNG,\
-    $(eval $(call gb_Module_add_moduledir,external,libpng)))
+$(eval $(call gb_Module_add_moduledirs,external,\
+	$(call gb_Helper_optional,HARFBUZZ,harfbuzz) \
+	$(call gb_Helper_optional,LIBPNG,libpng) \
+))
 
 # vim: set noet sw=4 ts=4:
