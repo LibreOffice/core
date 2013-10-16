@@ -454,11 +454,15 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
         cppcanvas::VCLFactory::getInstance().createCanvas(
             Reference<css::rendering::XBitmapCanvas>(rxCanvas,UNO_QUERY)));
 
-    if (pCanvas.get()!=NULL)
+    if (pCanvas.get() != NULL)
     {
         BitmapEx aBitmapEx = SdResId(nid);
-        return cppcanvas::VCLFactory::getInstance().createBitmap(
-            pCanvas, aBitmapEx)->getUNOBitmap();
+        cppcanvas::BitmapSharedPtr xBitmap(
+            cppcanvas::VCLFactory::getInstance().createBitmap(pCanvas,
+                aBitmapEx));
+        if (xBitmap.get() == NULL)
+            return NULL;
+        return xBitmap->getUNOBitmap();
     }
 
     return NULL;
