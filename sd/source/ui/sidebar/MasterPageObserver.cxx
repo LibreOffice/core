@@ -229,7 +229,7 @@ void MasterPageObserver::Implementation::AddEventListener (
              aDocumentIterator!=maUsedMasterPages.end();
              ++aDocumentIterator)
         {
-            ::std::set<String>::reverse_iterator aNameIterator;
+            ::std::set<OUString>::reverse_iterator aNameIterator;
             for (aNameIterator=aDocumentIterator->second.rbegin();
                  aNameIterator!=aDocumentIterator->second.rend();
                  ++aNameIterator)
@@ -317,7 +317,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
 {
     // Create a set of names of the master pages used by the given document.
     sal_uInt16 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
-    ::std::set<String> aCurrentMasterPages;
+    ::std::set<OUString> aCurrentMasterPages;
     for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PK_STANDARD);
@@ -329,7 +329,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
                 RTL_TEXTENCODING_UTF8).getStr());
     }
 
-    typedef ::std::vector<String> StringList;
+    typedef ::std::vector<OUString> StringList;
     StringList aNewMasterPages;
     StringList aRemovedMasterPages;
     MasterPageContainer::iterator aOldMasterPagesDescriptor (
@@ -338,7 +338,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     {
         StringList::iterator I;
 
-        ::std::set<String>::iterator J;
+        ::std::set<OUString>::iterator J;
         int i=0;
         for (J=aOldMasterPagesDescriptor->second.begin();
              J!=aOldMasterPagesDescriptor->second.end();

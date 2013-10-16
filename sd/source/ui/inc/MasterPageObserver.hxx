@@ -39,7 +39,7 @@ class MasterPageObserver
     : public SdGlobalResource
 {
 public:
-    typedef ::std::set<String> MasterPageNameSet;
+    typedef ::std::set<OUString> MasterPageNameSet;
 
     /** Return the single instance of this class.
     */

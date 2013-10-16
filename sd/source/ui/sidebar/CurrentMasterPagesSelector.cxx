@@ -137,7 +137,7 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
     SdPage* pMasterPage;
     // Remember the names of the master pages that have been inserted to
     // avoid double insertion.
-    ::std::set<String> aMasterPageNames;
+    ::std::set<OUString> aMasterPageNames;
     for (sal_uInt16 nIndex=0; nIndex<nPageCount; nIndex++)
     {
         pMasterPage = mrDocument.GetMasterSdPage (nIndex, PK_STANDARD);
@@ -188,7 +188,7 @@ void CurrentMasterPagesSelector::UpdateSelection (void)
     // their master page into a set.
     sal_uInt16 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
     SdPage* pPage;
-    ::std::set<String> aNames;
+    ::std::set<OUString> aNames;
     sal_uInt16 nIndex;
     bool bLoop (true);
     for (nIndex=0; nIndex<nPageCount && bLoop; nIndex++)
