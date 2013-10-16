@@ -142,6 +142,7 @@ public:
     void testFdo43093();
     void testMultiColumnSeparator();
     void testSmartart();
+    void testFdo69548();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(WNT)
@@ -247,6 +248,7 @@ void Test::run()
         {"fdo43093.docx", &Test::testFdo43093},
         {"multi-column-separator-with-line.docx", &Test::testMultiColumnSeparator},
         {"smartart.docx", &Test::testSmartart},
+        {"fdo69548.docx", &Test::testFdo69548},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1681,6 +1683,12 @@ void Test::testMultiColumnSeparator()
     // Check for the Column Separator value.It should be TRUE as the document contains separator line.
     bool  bValue = getProperty< bool >(xTextColumns, "SeparatorLineIsOn");
     CPPUNIT_ASSERT(bValue);
+}
+
+void Test::testFdo69548()
+{
+    // The problem was that the last space in target URL was removed
+    CPPUNIT_ASSERT_EQUAL(OUString("#this is a bookmark"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
