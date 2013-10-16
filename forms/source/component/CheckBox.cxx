@@ -217,7 +217,7 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
 
     //////////////////////////////////////////////////////////////////
     // Set value in ControlModel
-    bool bValue;
+    bool bValue = false;
     if(DbUseBool())
     {
         bValue = m_xColumn->getBoolean();
