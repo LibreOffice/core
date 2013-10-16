@@ -7,12 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,beanshell))
+$(eval $(call gb_Module_Module,beanshell))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,beanshell,$(BSH_TARBALL),,beanshell))
-
-$(eval $(call gb_UnpackedTarball_add_patches,beanshell,\
-	beanshell/bsh-2.0b1-src.patch \
+$(eval $(call gb_Module_add_targets,beanshell,\
+	ExternalPackage_beanshell \
+	ExternalProject_beanshell \
+	UnpackedTarball_beanshell \
 ))
 
 # vim: set noet sw=4 ts=4:
