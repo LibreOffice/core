@@ -32,7 +32,6 @@
 #endif
 #define SID_TITLE                       (SID_SFX_START + 307)
 #define SID_DELETE                      (SID_SFX_START + 713)
-#define SID_INTERNET_ONLINE             (SID_SFX_START + 1370)
 
 // Don't let SID_CHAOS_END grow. Internal docking windows use the range between
 // SID_CHAOS_END and SID_LIB_START!! Look into sfxsids.hrc for more information!

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <svl/adrparse.hxx>
@@ -478,27 +477,6 @@ void SvxHyperlinkInternetTp::SetMarkStr ( const OUString& aStrMark )
     aStrURL += OUString(sUHash) + aStrMark;
 
     maCbbTarget.SetText ( aStrURL );
-}
-
-/*************************************************************************
-|*
-|* Enable Browse-Button in subject to the office is in onlinemode
-|*
-|************************************************************************/
-
-void SvxHyperlinkInternetTp::SetOnlineMode( sal_Bool /*bEnable*/ )
-{
-    // State of target-button in subject to the current url-string
-    // ( Can't display any targets in an document, if there is no
-    //   valid url to a document )
-    OUString aStrCurrentTarget(comphelper::string::stripEnd(maCbbTarget.GetText(), ' '));
-
-    if( aStrCurrentTarget.isEmpty() ||
-        aStrCurrentTarget.equalsIgnoreAsciiCase( sHTTPScheme ) ||
-        aStrCurrentTarget.equalsIgnoreAsciiCase( sHTTPSScheme ) )
-        maBtTarget.Enable( sal_False );
-    else
-        maBtTarget.Enable( sal_True );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

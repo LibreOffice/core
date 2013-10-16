@@ -38,7 +38,6 @@ using ::com::sun::star::frame::XFrame;
 
 SvxHlinkCtrl::SvxHlinkCtrl( sal_uInt16 _nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg )
 : SfxControllerItem ( _nId, rBindings )
-  ,aOnlineForwarder  ( SID_INTERNET_ONLINE , *this )
   ,aRdOnlyForwarder  ( SID_READONLY_MODE, *this )
 {
     pParent = pDlg;
@@ -51,11 +50,6 @@ void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
     {
         switch ( nSID )
         {
-            case SID_INTERNET_ONLINE :
-            {
-                pParent->EnableInetBrowse( !( (SfxBoolItem*)pState)->GetValue() );
-            }
-            break;
             case SID_HYPERLINK_GETLINK :
             {
                 pParent->SetPage ( (SvxHyperlinkItem*)pState);
@@ -328,19 +322,6 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
         mbGrabFocus = sal_False;
     }
     return nPageId;
-}
-
-/*************************************************************************
-|*
-|* Enable/Disable to browse targets in a html-doc
-|*
-|************************************************************************/
-
-void SvxHpLinkDlg::EnableInetBrowse( sal_Bool bEnable )
-{
-    SvxHyperlinkTabPageBase* pCurrentPage = ( SvxHyperlinkTabPageBase* )
-                                            GetTabPage ( GetCurPageId() );
-    pCurrentPage->SetOnlineMode( bEnable );
 }
 
 /*************************************************************************

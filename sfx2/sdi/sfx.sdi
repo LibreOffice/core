@@ -3111,33 +3111,6 @@ SfxVoidItem InsertObjectFloatingFrame SID_INSERT_FLOATINGFRAME
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem InternetOnline SID_INTERNET_ONLINE
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = TRUE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = TRUE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EXPLORER;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem IsLoading SID_DOC_LOADING
 
 [

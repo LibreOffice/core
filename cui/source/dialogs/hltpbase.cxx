@@ -309,13 +309,6 @@ void SvxHyperlinkTabPageBase::SetMarkStr ( const OUString& /*aStrMark*/ )
     // default-implemtation : do nothing
 }
 
-// This method will be called from the dialog-class if the state off
-// the online-mode has changed.
-void SvxHyperlinkTabPageBase::SetOnlineMode( sal_Bool /*bEnable*/ )
-{
-    // default-implemtation : do nothing
-}
-
 // Set initial focus
 void SvxHyperlinkTabPageBase::SetInitFocus()
 {

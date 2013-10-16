@@ -138,7 +138,6 @@ public:
 
     virtual sal_Bool AskApply ();
     virtual void DoApply ();
-    virtual void SetOnlineMode( sal_Bool bEnable );
     virtual void SetInitFocus();
     virtual void SetMarkStr ( const OUString& aStrMark );
     virtual void Reset( const SfxItemSet& );

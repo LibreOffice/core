@@ -40,7 +40,6 @@ class SvxHlinkCtrl : public SfxControllerItem
 private :
     SvxHpLinkDlg *pParent;
 
-    SfxStatusForwarder aOnlineForwarder;
     SfxStatusForwarder aRdOnlyForwarder;
 
 public :
@@ -83,7 +82,6 @@ public:
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
 
     sal_uInt16                  SetPage( SvxHyperlinkItem* pItem );
-    void                    EnableInetBrowse( sal_Bool bEnable = sal_True );
     void                    SetReadOnlyMode( sal_Bool bReadOnly = sal_False );
     inline sal_Bool     IsHTMLDoc() const { return mbIsHTMLDoc; }
 

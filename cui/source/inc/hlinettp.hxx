@@ -87,7 +87,6 @@ public:
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
     virtual void        SetMarkStr ( const OUString& aStrMark );
-    virtual void        SetOnlineMode( sal_Bool bEnable );
 
     virtual void        SetInitFocus();
 };
