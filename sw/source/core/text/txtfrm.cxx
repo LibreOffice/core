@@ -2184,8 +2184,16 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
     if ( pTxtNode && pTxtNode->IsNumbered() && pTxtNode->IsCountedInList() &&
          pTxtNode->GetNumRule() )
     {
+        int nListLevel = pTxtNode->GetActualListLevel();
+
+        if (nListLevel < 0)
+            nListLevel = 0;
+
+        if (nListLevel >= MAXLEVEL)
+            nListLevel = MAXLEVEL - 1;
+
         const SwNumFmt& rNumFmt =
-                pTxtNode->GetNumRule()->Get( static_cast<sal_uInt16>(pTxtNode->GetActualListLevel()) );
+                pTxtNode->GetNumRule()->Get( static_cast<sal_uInt16>(nListLevel) );
         if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             // keep current paragraph portion and apply dummy paragraph portion
