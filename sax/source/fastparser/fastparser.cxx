@@ -793,10 +793,10 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
                 {
                     sal_Int32 nAttributeToken = GetTokenWithPrefix( pPrefix, nPrefixLen, pName, nNameLen );
                     if( nAttributeToken != FastToken::DONTKNOW )
-                        rEntity.mxAttributes->add( nAttributeToken, OString(awAttributes[i+1]) );
+                        rEntity.mxAttributes->add( nAttributeToken, awAttributes[i+1] );
                     else
                         rEntity.mxAttributes->addUnknown( GetNamespaceURL( pPrefix, nPrefixLen ),
-                                OString(pName, nNameLen), OString(awAttributes[i+1]) );
+                                OString(pName, nNameLen), awAttributes[i+1] );
                 }
             }
             else
@@ -805,9 +805,9 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
                 {
                     sal_Int32 nAttributeToken = GetToken( pName, nNameLen );
                     if( nAttributeToken != FastToken::DONTKNOW )
-                        rEntity.mxAttributes->add( nAttributeToken, OString(awAttributes[i+1]) );
+                        rEntity.mxAttributes->add( nAttributeToken, awAttributes[i+1] );
                     else
-                        rEntity.mxAttributes->addUnknown( OString(pName, nNameLen), OString(awAttributes[i+1]) );
+                        rEntity.mxAttributes->addUnknown( OString(pName, nNameLen), awAttributes[i+1] );
                 }
             }
         }

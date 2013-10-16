@@ -40,9 +40,9 @@ struct UnknownAttribute
     OString maName;
     OString maValue;
 
-    UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& rValue );
+    UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue );
 
-    UnknownAttribute( const OString& rName, const OString& rValue );
+    UnknownAttribute( const OString& rName, const sal_Char* pValue );
 
     void FillAttribute( ::com::sun::star::xml::Attribute* pAttrib ) const;
 };
@@ -56,9 +56,10 @@ public:
     virtual ~FastAttributeList();
 
     void clear();
+    void add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength = 0 );
     void add( sal_Int32 nToken, const OString& rValue );
-    void addUnknown( const OUString& rNamespaceURL, const OString& rName, const OString& rValue );
-    void addUnknown( const OString& rName, const OString& rValue );
+    void addUnknown( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue );
+    void addUnknown( const OString& rName, const sal_Char* pValue );
 
     // XFastAttributeList
     virtual ::sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException);
@@ -70,11 +71,18 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::xml::FastAttribute > SAL_CALL getFastAttributes() throw (::com::sun::star::uno::RuntimeException);
 
 private:
+    inline sal_Int32 AttributeValueLength(sal_Int32 i);
+
+private:
+    sal_Char *mpChunk; ///< buffer to store all attribute values - null terminated strings
+    sal_Int32 mnChunkLength; ///< size of allocated memory for mpChunk
+    // maAttributeValues stores pointers, relative to mpChunk, for each attribute value string
+    // length of the string is maAttributeValues[n+1] - maAttributeValues[n] - 1
+    // maAttributeValues[0] == 0
+    std::vector< sal_Int32 > maAttributeValues;
     std::vector< sal_Int32 > maAttributeTokens;
-    std::vector< OString > maAttributeValues;
     UnknownAttributeList maUnknownAttributes;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxTokenHandler;
-
 };
 
 }

@@ -27,13 +27,13 @@ using namespace ::com::sun::star::xml::sax;
 namespace sax_fastparser
 {
 
-UnknownAttribute::UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& rValue )
-    : maNamespaceURL( rNamespaceURL ), maName( rName ), maValue( rValue )
+UnknownAttribute::UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue )
+    : maNamespaceURL( rNamespaceURL ), maName( rName ), maValue( pValue )
 {
 }
 
-UnknownAttribute::UnknownAttribute( const OString& rName, const OString& rValue )
-    : maName( rName ), maValue( rValue )
+UnknownAttribute::UnknownAttribute( const OString& rName, const sal_Char* pValue )
+    : maName( rName ), maValue( pValue )
 {
 }
 
@@ -50,33 +50,54 @@ void UnknownAttribute::FillAttribute( Attribute* pAttrib ) const
 FastAttributeList::FastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xTokenHandler )
 : mxTokenHandler( xTokenHandler )
 {
+    // random initial size of buffer to store attribute values
+    mnChunkLength = 58;
+    mpChunk = (sal_Char *) malloc( mnChunkLength );
+    maAttributeValues.push_back( 0 );
 }
 
 FastAttributeList::~FastAttributeList()
 {
+    free( mpChunk );
 }
 
 void FastAttributeList::clear()
 {
     maAttributeTokens.clear();
     maAttributeValues.clear();
+    maAttributeValues.push_back( 0 );
     maUnknownAttributes.clear();
+}
+
+void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength )
+{
+    maAttributeTokens.push_back( nToken );
+    if (nValueLength == 0)
+        nValueLength = strlen(pValue);
+    sal_Int32 nWritePosition = maAttributeValues.back();
+    maAttributeValues.push_back( maAttributeValues.back() + nValueLength + 1 );
+    if (maAttributeValues.back() > mnChunkLength)
+    {
+        mnChunkLength = maAttributeValues.back();
+        mpChunk = (sal_Char *) realloc( mpChunk, mnChunkLength );
+    }
+    strncpy(mpChunk + nWritePosition, pValue, nValueLength);
+    mpChunk[nWritePosition + nValueLength] = '\0';
 }
 
 void FastAttributeList::add( sal_Int32 nToken, const OString& rValue )
 {
-    maAttributeTokens.push_back( nToken );
-    maAttributeValues.push_back( rValue );
+    add( nToken, rValue.getStr(), rValue.getLength() );
 }
 
-void FastAttributeList::addUnknown( const OUString& rNamespaceURL, const OString& rName, const OString& rValue )
+void FastAttributeList::addUnknown( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue )
 {
-    maUnknownAttributes.push_back( UnknownAttribute( rNamespaceURL, rName, rValue ) );
+    maUnknownAttributes.push_back( UnknownAttribute( rNamespaceURL, rName, pValue ) );
 }
 
-void FastAttributeList::addUnknown( const OString& rName, const OString& rValue )
+void FastAttributeList::addUnknown( const OString& rName, const sal_Char* pValue )
 {
-    maUnknownAttributes.push_back( UnknownAttribute( rName, rValue ) );
+    maUnknownAttributes.push_back( UnknownAttribute( rName, pValue ) );
 }
 
 // XFastAttributeList
@@ -94,7 +115,7 @@ sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token ) throw (SAXExcept
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
         {
-            Sequence< sal_Int8 > aSeq( (sal_Int8*) maAttributeValues[i].getStr(), maAttributeValues[i].getLength() );
+            Sequence< sal_Int8 > aSeq( (sal_Int8*) mpChunk + maAttributeValues[i], AttributeValueLength(i) );
             return mxTokenHandler->getTokenFromUTF8( aSeq );
         }
 
@@ -106,7 +127,7 @@ sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
         {
-            Sequence< sal_Int8 > aSeq( (sal_Int8*) maAttributeValues[i].getStr(), maAttributeValues[i].getLength() );
+            Sequence< sal_Int8 > aSeq( (sal_Int8*) mpChunk + maAttributeValues[i], AttributeValueLength(i) );
             return mxTokenHandler->getTokenFromUTF8( aSeq );
         }
 
@@ -117,7 +138,7 @@ OUString FastAttributeList::getValue( ::sal_Int32 Token ) throw (SAXException, R
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
-            return OStringToOUString( maAttributeValues[i], RTL_TEXTENCODING_UTF8 );
+            return OUString( mpChunk + maAttributeValues[i], AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
 
     throw SAXException();
 }
@@ -126,7 +147,7 @@ OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token ) throw (Runtime
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == Token)
-            return OStringToOUString( maAttributeValues[i], RTL_TEXTENCODING_UTF8 );
+            return OUString( mpChunk + maAttributeValues[i], AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
 
     return OUString();
 }
@@ -145,10 +166,16 @@ Sequence< FastAttribute > FastAttributeList::getFastAttributes(  ) throw (Runtim
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
     {
         pAttr->Token = maAttributeTokens[i];
-        pAttr->Value = OStringToOUString( maAttributeValues[i], RTL_TEXTENCODING_UTF8 );
+        pAttr->Value = OUString( mpChunk + maAttributeValues[i], AttributeValueLength(i), RTL_TEXTENCODING_UTF8 );
         pAttr++;
     }
     return aSeq;
+}
+
+sal_Int32 FastAttributeList::AttributeValueLength(sal_Int32 i)
+{
+    // Pointers to null terminated strings
+    return maAttributeValues[i + 1] - maAttributeValues[i] - 1;
 }
 
 }
