@@ -37,7 +37,7 @@ public:
     {
         Children.reserve(8);
     }
-    std::vector<FormulaTreeNode *> Children;
+    std::vector<std::shared_ptr<FormulaTreeNode>> Children;
     FormulaToken *GetFormulaToken(void) const
     {
         return mpCurrentFormula;
@@ -52,7 +52,7 @@ private:
 /// by a Push operation in the given RPN.
 class DynamicKernelArgument {
 public:
-    DynamicKernelArgument(const std::string &s, FormulaTreeNode *ft):
+    DynamicKernelArgument(const std::string &s,  std::shared_ptr<FormulaTreeNode> ft):
         mSymName(s), mFormulaTree(ft), mpClmem(NULL) {}
     const std::string &GetNameAsString(void) const { return mSymName; }
     /// Generate declaration
@@ -112,7 +112,7 @@ public:
     }
 protected:
     const std::string mSymName;
-    FormulaTreeNode *mFormulaTree;
+    std::shared_ptr<FormulaTreeNode> mFormulaTree;
     // Used by marshaling
     cl_mem mpClmem;
 };
@@ -160,7 +160,7 @@ size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
 class DynamicKernelConstantArgument: public DynamicKernelArgument
 {
 public:
-    DynamicKernelConstantArgument(const std::string &s, FormulaTreeNode *ft):
+    DynamicKernelConstantArgument(const std::string &s, std::shared_ptr<FormulaTreeNode> ft):
         DynamicKernelArgument(s, ft) {}
     /// Generate declaration
     virtual void GenDecl(std::stringstream &ss)
@@ -202,7 +202,7 @@ public:
 class DynamicKernelSlidingArgument: public DynamicKernelArgument
 {
 public:
-    DynamicKernelSlidingArgument(const std::string &s, FormulaTreeNode *ft):
+    DynamicKernelSlidingArgument(const std::string &s, std::shared_ptr<FormulaTreeNode> ft):
         DynamicKernelArgument(s, ft)
     {
         FormulaToken *t = ft->GetFormulaToken();
@@ -464,7 +464,7 @@ class DynamicKernelSoPArguments: public DynamicKernelArgument
 public:
     typedef std::unique_ptr<DynamicKernelArgument> SubArgument;
 
-    DynamicKernelSoPArguments(const std::string &s, FormulaTreeNode *ft);
+    DynamicKernelSoPArguments(const std::string &s, std::shared_ptr<FormulaTreeNode> ft);
 
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal(cl_kernel k, int argno, int nVectorWidth)
@@ -538,7 +538,7 @@ private:
 
 template <class Op>
 std::unique_ptr<DynamicKernelArgument> SoPHelper(const std::string &ts,
-    FormulaTreeNode *ft)
+    std::shared_ptr<FormulaTreeNode> ft)
 {
     return std::unique_ptr<DynamicKernelArgument>(
         new DynamicKernelSoPArguments<Op>(ts, ft));
@@ -546,7 +546,7 @@ std::unique_ptr<DynamicKernelArgument> SoPHelper(const std::string &ts,
 
 template <class Op>
 DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
-    FormulaTreeNode *ft):
+    std::shared_ptr<FormulaTreeNode> ft):
     DynamicKernelArgument(s, ft) {
     size_t nChildren = ft->Children.size();
 
@@ -624,7 +624,7 @@ public:
     typedef std::list< std::shared_ptr<DynamicKernelArgument> > ArgumentList;
     SymbolTable(void):mCurId(0) {}
     template <class T>
-    const DynamicKernelArgument *DeclRefArg(FormulaTreeNode *);
+    const DynamicKernelArgument *DeclRefArg(std::shared_ptr<FormulaTreeNode>);
     /// Used to generate sliding window helpers
     void DumpSlidingWindowFunctions(std::stringstream &ss)
     {
@@ -664,7 +664,7 @@ void SymbolTable::Marshal(cl_kernel k, int nVectorWidth)
 /// Code generation
 class DynamicKernel {
 public:
-    DynamicKernel(FormulaTreeNode *r):mpRoot(r), mpProgram(NULL),
+    DynamicKernel(std::shared_ptr<FormulaTreeNode> r):mpRoot(r), mpProgram(NULL),
         mpKernel(NULL), mpResClmem(NULL) {}
     /// Code generation in OpenCL
     std::string CodeGen() {
@@ -765,8 +765,8 @@ public:
     ~DynamicKernel();
     cl_mem GetResultBuffer(void) const { return mpResClmem; }
 private:
-    void TraverseAST(FormulaTreeNode *);
-    FormulaTreeNode *mpRoot;
+    void TraverseAST(std::shared_ptr<FormulaTreeNode>);
+    std::shared_ptr<FormulaTreeNode> mpRoot;
     SymbolTable mSyms;
     std::stringstream mKernelSrc;
     std::string mKernelSignature;
@@ -796,7 +796,7 @@ DynamicKernel::~DynamicKernel()
 // kernel with argument with unique name and return so.
 // The template argument T must be a subclass of DynamicKernelArgument
 template <typename T>
-const DynamicKernelArgument *SymbolTable::DeclRefArg(FormulaTreeNode *t)
+const DynamicKernelArgument *SymbolTable::DeclRefArg(std::shared_ptr<FormulaTreeNode> t)
 {
     FormulaToken *ref = t->GetFormulaToken();
     ArgumentMap::iterator it = mSymbols.find(ref);
@@ -856,14 +856,14 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     // Constructing "AST"
     FormulaTokenIterator aCode = rCode;
     std::list<FormulaToken *> list;
-    std::map<FormulaToken *, FormulaTreeNode*> m_hash_map;
+    std::map<FormulaToken *, std::shared_ptr<FormulaTreeNode>> m_hash_map;
     FormulaToken*  pCur;
     while( (pCur = (FormulaToken*)(aCode.Next()) ) != NULL)
     {
         OpCode eOp = pCur->GetOpCode();
         if ( eOp != ocPush )
         {
-            FormulaTreeNode *m_currNode = new FormulaTreeNode(pCur);
+            std::shared_ptr<FormulaTreeNode> m_currNode = std::shared_ptr<FormulaTreeNode>(new FormulaTreeNode(pCur));
             sal_uInt8 m_ParamCount =  pCur->GetParamCount();
             for(int i=0; i<m_ParamCount; i++)
             {
@@ -877,7 +877,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
                 }
                 else
                 {
-                    FormulaTreeNode *m_ChildTreeNode = new FormulaTreeNode(m_TempFormula);
+                    std::shared_ptr<FormulaTreeNode> m_ChildTreeNode = std::shared_ptr<FormulaTreeNode>(new FormulaTreeNode(m_TempFormula));
                     m_currNode->Children.push_back(m_ChildTreeNode);
                 }
             }
@@ -887,7 +887,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         list.push_back(pCur);
     }
 
-    FormulaTreeNode *Root = new FormulaTreeNode(NULL);
+    std::shared_ptr<FormulaTreeNode> Root = std::shared_ptr<FormulaTreeNode>(new FormulaTreeNode(NULL));
     Root->Children.push_back(m_hash_map[list.back()]);
     // Code generation
     mpKernel = new DynamicKernel(Root);
