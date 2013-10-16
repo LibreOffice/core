@@ -219,6 +219,7 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     nIndent( 0 ),
     bAll( bAllP ),
     bTabHasGraphics( false ),
+    bTabAlignedLeft( false ),
     bCalcAsShown( pDocP->GetDocOptions().IsCalcAsShown() ),
     bTableDataWidth( sal_True ),
     bTableDataHeight( sal_True )
