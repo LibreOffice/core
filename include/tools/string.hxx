@@ -224,8 +224,6 @@ public:
 
     StringCompare       CompareTo( const UniString& rStr,
                                    xub_StrLen nLen = STRING_LEN ) const;
-    StringCompare       CompareToAscii( const sal_Char* pAsciiStr,
-                                        xub_StrLen nLen = STRING_LEN ) const;
     sal_Bool            Equals( const UniString& rStr ) const;
     sal_Bool            Equals( const UniString& rStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;

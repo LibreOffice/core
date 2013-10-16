@@ -29,7 +29,6 @@
 #include <algorithm>
 #include <tools/solar.h>        // UINTXX
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include "rtl/ustring.hxx"
 #include "hash_wrap.hxx"
 #include "sortedarray.hxx"

@@ -1543,19 +1543,18 @@ uno::Sequence< OUString > SwXTextSections::getElementNames(void)
     return aSeq;
 }
 
-sal_Bool SwXTextSections::hasByName(const OUString& Name)
+sal_Bool SwXTextSections::hasByName(const OUString& rName)
     throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
-    String aName(Name);
     if(IsValid())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
         for(sal_uInt16 i = 0; i < rFmts.size(); i++)
         {
             const SwSectionFmt* pFmt = rFmts[i];
-            if (aName == pFmt->GetSection()->GetSectionName())
+            if (rName == pFmt->GetSection()->GetSectionName())
             {
                 bRet = sal_True;
                 break;
@@ -1565,7 +1564,7 @@ sal_Bool SwXTextSections::hasByName(const OUString& Name)
     else
     {
         //Sonderbehandlung der dbg_ - Methoden
-        if( COMPARE_EQUAL != aName.CompareToAscii("dbg_", 4))
+        if( !rName.startsWith("dbg_"))
             throw uno::RuntimeException();
     }
     return bRet;

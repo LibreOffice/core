@@ -48,7 +48,6 @@ DBG_NAME( UniString )
 
 #include <strimp.cxx>
 #include <strucvt.cxx>
-#include <strascii.cxx>
 
 UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
 
