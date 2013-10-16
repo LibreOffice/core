@@ -503,4 +503,17 @@ void touch_lo_keyboard_did_hide()
     }
 }
 
+extern "C"
+void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int tileWidth, int tileHeight, int tilePosX, int tilePosY)
+{
+    // draws the area of one tile
+
+    SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
+    if (pFocus) {
+
+        // TODO: calling tile drawing code
+
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

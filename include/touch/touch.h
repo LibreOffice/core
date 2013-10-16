@@ -58,6 +58,8 @@ void touch_lo_pan(int deltaX, int deltaY);
 void touch_lo_zoom(int x, int y, float scale);
 void touch_lo_keyboard_input(int c);
 
+void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int tileWidth, int tileHeight, int tilePosX, int tilePosY);
+
 typedef enum { DOWN, MOVE, UP} MLOMouseButtonState;
 
 void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state);
