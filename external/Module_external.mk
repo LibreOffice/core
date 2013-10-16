@@ -10,12 +10,7 @@
 $(eval $(call gb_Module_Module,external))
 
 ifeq ($(OS)$(COM),WNTGCC)
-$(eval $(call gb_Module_add_targets,external,\
-	CustomTarget_jawt \
-	Package_jawt \
-	Package_mingw_dlls \
-	Package_mingw_gccdlls \
-))
+$(eval $(call gb_Module_add_moduledir,external,mingw-externals))
 endif
 
 ifeq ($(COM),MSC)
