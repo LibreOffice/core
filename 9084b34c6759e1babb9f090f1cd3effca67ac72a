@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///W8\u003d",
+        "filename": "connectivity/source/commontools/FValue.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-16T23:07:37Z",
+      "side": 1,
+      "message": "Shouldn\u0027t that better ensure that the result is actually only 0 or 1 instead of allowing the whole uInt8 range?\n\nNote that I\u0027m not familiar with this code, it may be that already for *this in the case of BIT and BOOLEAN it is ensured that content is only 0 or 1.",
+      "revId": "9084b34c6759e1babb9f090f1cd3effca67ac72a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
