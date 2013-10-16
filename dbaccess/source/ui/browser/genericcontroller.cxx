@@ -33,6 +33,7 @@
 #include <framework/titlehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/extract.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -960,14 +961,7 @@ bool OGenericUnoController::isUserDefinedFeature( const OUString& _rFeatureURL )
 
 sal_Bool SAL_CALL OGenericUnoController::supportsService(const OUString& ServiceName) throw(RuntimeException)
 {
-    Sequence< OUString > aSupported(getSupportedServiceNames());
-
-    const OUString* pArray = aSupported.getConstArray();
-    const OUString* pArrayEnd = aSupported.getConstArray() + aSupported.getLength();
-
-    for ( ;( pArray != pArrayEnd ) && !pArray->equals( ServiceName ); ++pArray )
-        ;
-    return pArray != pArrayEnd;
+    return cppu::supportsService(this, ServiceName);
 }
 
 void OGenericUnoController::startConnectionListening(const Reference< XConnection >& _rxConnection)

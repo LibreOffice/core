@@ -61,6 +61,7 @@
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <basic/sbmod.hxx>
 #include <boost/scoped_ptr.hpp>
 
@@ -2971,19 +2972,8 @@ sal_Bool SAL_CALL SfxLibraryContainer::supportsService( const OUString& _rServic
     throw (RuntimeException)
 {
     LibraryContainerMethodGuard aGuard( *this );
-    Sequence< OUString > aSupportedServices( getSupportedServiceNames() );
-    const OUString* pSupportedServices = aSupportedServices.getConstArray();
-    for ( sal_Int32 i=0; i<aSupportedServices.getLength(); ++i, ++pSupportedServices )
-    {
-        if ( *pSupportedServices == _rServiceName )
-        {
-            return sal_True;
-        }
-    }
-    return sal_False;
+    return cppu::supportsService(this, _rServiceName);
 }
-
-//============================================================================
 
 // Implementation class SfxLibrary
 

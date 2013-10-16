@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svl/itemprop.hxx>
 #include <svtools/grfmgr.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -139,19 +140,10 @@ OUString SAL_CALL GraphicRendererVCL::getImplementationName()
     return getImplementationName_Static();
 }
 
-// ------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
-    const OUString*              pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // ------------------------------------------------------------------------------

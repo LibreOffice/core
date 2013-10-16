@@ -24,6 +24,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <svl/itemprop.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -245,19 +246,10 @@ OUString SAL_CALL GraphicDescriptor::getImplementationName()
     return getImplementationName_Static();
 }
 
-// ------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
-    const OUString*              pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // ------------------------------------------------------------------------------

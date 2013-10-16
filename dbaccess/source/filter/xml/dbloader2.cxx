@@ -59,6 +59,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -195,13 +196,7 @@ OUString SAL_CALL DBTypeDetection::getImplementationName() throw(  )
 // XServiceInfo
 sal_Bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName) throw(  )
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pBegin  = aSNL.getConstArray();
-    const OUString * pEnd    = pBegin + aSNL.getLength();
-    for( ; pBegin != pEnd; ++pBegin)
-        if( *pBegin == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo

@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -252,17 +253,9 @@ uno::Sequence< sal_Int8 > SAL_CALL GenericPropertySet::getImplementationId()
 }
 
 // XServiceInfo
-
 sal_Bool SAL_CALL GenericPropertySet::supportsService( const  OUString& ServiceName ) throw(RuntimeException)
 {
-    Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); ++i )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 OUString SAL_CALL GenericPropertySet::getImplementationName() throw( RuntimeException )

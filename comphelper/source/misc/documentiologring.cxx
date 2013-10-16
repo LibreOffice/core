@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <comphelper_module.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "documentiologring.hxx"
 
@@ -135,26 +136,16 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
 }
 
 // XServiceInfo
-// ----------------------------------------------------------
 OUString SAL_CALL OSimpleLogRing::getImplementationName() throw (uno::RuntimeException)
 {
     return getImplementationName_static();
 }
 
-// ----------------------------------------------------------
 ::sal_Bool SAL_CALL OSimpleLogRing::supportsService( const OUString& aServiceName ) throw (uno::RuntimeException)
 {
-    const uno::Sequence< OUString > & aSupportedNames = getSupportedServiceNames_static();
-    for ( sal_Int32 nInd = 0; nInd < aSupportedNames.getLength(); nInd++ )
-    {
-        if ( aSupportedNames[ nInd ].equals( aServiceName ) )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, aServiceName);
 }
 
-// ----------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return getSupportedServiceNames_static();

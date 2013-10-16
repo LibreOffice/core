@@ -23,6 +23,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "oox/core/fastparser.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -382,10 +383,7 @@ OUString SAL_CALL FilterDetect::getImplementationName() throw( RuntimeException 
 
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName ) throw( RuntimeException )
 {
-    const Sequence< OUString > aServices = FilterDetect_getSupportedServiceNames();
-    const OUString* pArray = aServices.getConstArray();
-    const OUString* pArrayEnd = pArray + aServices.getLength();
-    return ::std::find( pArray, pArrayEnd, rServiceName ) != pArrayEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames() throw( RuntimeException )

@@ -73,6 +73,7 @@
 #include "cppu/unotype.hxx"
 #include "cppuhelper/queryinterface.hxx"
 #include "cppuhelper/weak.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "osl/interlck.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
@@ -224,13 +225,7 @@ sal_Bool Access::supportsService(OUString const & ServiceName)
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    css::uno::Sequence< OUString > names(getSupportedServiceNames());
-    for (sal_Int32 i = 0; i < names.getLength(); ++i) {
-        if (names[i] == ServiceName) {
-            return true;
-        }
-    }
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > Access::getSupportedServiceNames()
