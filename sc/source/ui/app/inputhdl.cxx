@@ -956,7 +956,8 @@ void ScInputHandler::ShowTipCursor()
                 {
                     sal_uInt16 nPosition = 0;
                     OUString aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
-                    if( aText[ aSel.nEndPos-1 ] == '=' )
+                    /* XXX: dubious, what is this condition supposed to exactly match? */
+                    if (aSel.nEndPos <= aText.getLength() && aText[ aSel.nEndPos-1 ] == '=')
                     {
                         break;
                     }
