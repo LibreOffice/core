@@ -180,10 +180,10 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     }
     else if (!bSwSrcView)
     {
-        const SwPagePreView* pPreView = dynamic_cast< const SwPagePreView* >(pView);
-        OSL_ENSURE(pPreView, "Unexpected type of the view shell");
-        if (pPreView)
-            nCurrentPage = pPreView->GetSelectedPage();
+        const SwPagePreview* pPreview = dynamic_cast< const SwPagePreview* >(pView);
+        OSL_ENSURE(pPreview, "Unexpected type of the view shell");
+        if (pPreview)
+            nCurrentPage = pPreview->GetSelectedPage();
     }
     return new SwPrintUIOptions( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
@@ -989,8 +989,8 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings(void)
     if(IsValid())
     {
         beans::PropertyValue* pArray = aSeq.getArray();
-        SwPagePreViewPrtData aData;
-        const SwPagePreViewPrtData* pData = pDocShell->GetDoc()->GetPreViewPrtData();
+        SwPagePreviewPrtData aData;
+        const SwPagePreviewPrtData* pData = pDocShell->GetDoc()->GetPreviewPrtData();
         if(pData)
             aData = *pData;
         Any aVal;
@@ -1066,9 +1066,9 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
     SolarMutexGuard aGuard;
     if(IsValid())
     {
-        SwPagePreViewPrtData aData;
+        SwPagePreviewPrtData aData;
         //if only a few properties are coming, then use the current settings
-        const SwPagePreViewPrtData* pData = pDocShell->GetDoc()->GetPreViewPrtData();
+        const SwPagePreviewPrtData* pData = pDocShell->GetDoc()->GetPreviewPrtData();
         if(pData)
             aData = *pData;
         const beans::PropertyValue* pProperties = aSettings.getConstArray();
@@ -1125,7 +1125,7 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
             if(bException)
                 throw RuntimeException();
         }
-        pDocShell->GetDoc()->SetPreViewPrtData(&aData);
+        pDocShell->GetDoc()->SetPreviewPrtData(&aData);
     }
     else
         throw RuntimeException();
@@ -2554,7 +2554,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 pViewShell = ((SwView*)m_pHiddenViewFrame->GetViewShell())->GetWrtShellPtr();
             }
             else
-                pViewShell = ((SwPagePreView*)pView)->GetViewShell();
+                pViewShell = ((SwPagePreview*)pView)->GetViewShell();
         }
 
         if (!pViewShell || !pViewShell->GetLayout())
@@ -2716,7 +2716,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if ( pSwView )
         pVwSh = pSwView->GetWrtShellPtr();
     else
-        pVwSh = ((SwPagePreView*)pView)->GetViewShell();
+        pVwSh = ((SwPagePreview*)pView)->GetViewShell();
 
     sal_Int32 nMaxRenderer = 0;
     if (!bIsSwSrcView && m_pRenderData)
@@ -2837,8 +2837,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     // #i117783#
     if ( bApplyPagePrintSettingsFromXPagePrintable )
     {
-        const SwPagePreViewPrtData* pPagePrintSettings =
-                                        pDocShell->GetDoc()->GetPreViewPrtData();
+        const SwPagePreviewPrtData* pPagePrintSettings =
+                                        pDocShell->GetDoc()->GetPreviewPrtData();
         if ( pPagePrintSettings &&
              ( pPagePrintSettings->GetRow() > 1 ||
                pPagePrintSettings->GetCol() > 1 ) )
@@ -2904,20 +2904,20 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
     //
     SfxViewShell    *pView = 0;
     SwView          *pSwView = 0;
-    SwPagePreView   *pSwPagePreView = 0;
+    SwPagePreview   *pSwPagePreview = 0;
     SwSrcView       *pSwSrcView = 0;
     SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, sal_False );
 
     // look for the view shell with the same controller in use,
     // otherwise look for a suitable view, preferably a SwView,
-    // if that one is not found use a SwPagePreView if found.
+    // if that one is not found use a SwPagePreview if found.
     while (pFrame)
     {
         pView = pFrame->GetViewShell();
         pSwView = dynamic_cast< SwView * >(pView);
         pSwSrcView = dynamic_cast< SwSrcView * >(pView);
-        if (!pSwPagePreView)
-            pSwPagePreView = dynamic_cast< SwPagePreView * >(pView);
+        if (!pSwPagePreview)
+            pSwPagePreview = dynamic_cast< SwPagePreview * >(pView);
         if (xController.is())
         {
             if (pView && pView->GetController() == xController)
@@ -2928,7 +2928,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
         pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell,  sal_False );
     }
 
-    OSL_ENSURE( pSwView || pSwPagePreView || pSwSrcView, "failed to get view shell" );
+    OSL_ENSURE( pSwView || pSwPagePreview || pSwSrcView, "failed to get view shell" );
     if (pView)
         rbIsSwSrcView = pSwSrcView != 0;
     return pView;
@@ -2992,7 +2992,7 @@ void SAL_CALL SwXTextDocument::render(
             else
             {
                 // the view shell should be SwView for documents PDF export
-                // or SwPagePreView for PDF export of the page preview
+                // or SwPagePreview for PDF export of the page preview
                 //!! (check for SwView first as in GuessViewShell) !!
                 OSL_ENSURE( pView, "!! view missing !!" );
                 const TypeId aSwViewTypeId = TYPE(SwView);
@@ -3004,7 +3004,7 @@ void SAL_CALL SwXTextDocument::render(
                     if ( pSwView )
                         pVwSh = pSwView->GetWrtShellPtr();
                     else
-                        pVwSh = ((SwPagePreView*)pView)->GetViewShell();
+                        pVwSh = ((SwPagePreview*)pView)->GetViewShell();
                 }
 
                 // get output device to use

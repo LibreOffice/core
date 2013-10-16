@@ -23,14 +23,14 @@
 
 #include <tools/solar.h>
 
-class SwPagePreViewPrtData
+class SwPagePreviewPrtData
 {
     sal_uLong nLeftSpace, nRightSpace, nTopSpace, nBottomSpace,
             nHorzSpace, nVertSpace;
     sal_uInt8 nRow, nCol;
     sal_Bool bLandscape : 1;
 public:
-    SwPagePreViewPrtData()
+    SwPagePreviewPrtData()
         : nLeftSpace(0), nRightSpace(0), nTopSpace(0), nBottomSpace(0),
             nHorzSpace(0), nVertSpace(0), nRow(1), nCol(1),
             bLandscape(0)

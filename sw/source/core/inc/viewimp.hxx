@@ -281,7 +281,7 @@ public:
                                   const SwPageFrm* _pSelectedPageFrm,
                                   const Size&      _rPreviewWinSize );
 
-    void InvalidateAccessiblePreViewSelection( sal_uInt16 nSelPage );
+    void InvalidateAccessiblePreviewSelection( sal_uInt16 nSelPage );
 
     // Fire all accessible events that have been collected so far
     void FireAccessibleEvents();

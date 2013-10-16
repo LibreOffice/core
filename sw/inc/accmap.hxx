@@ -171,7 +171,7 @@ public:
 
         @return an object of class <Size>
     */
-    Size GetPreViewPageSize( sal_uInt16 _nPreviewPageNum ) const;
+    Size GetPreviewPageSize( sal_uInt16 _nPreviewPageNum ) const;
 
     void RemoveContext( const SwFrm *pFrm );
     void RemoveContext( const SdrObject *pObj );
@@ -240,7 +240,7 @@ public:
                         const SwPageFrm* _pSelectedPageFrm,
                         const Size&      _rPreviewWinSize );
 
-    void InvalidatePreViewSelection( sal_uInt16 nSelPage );
+    void InvalidatePreviewSelection( sal_uInt16 nSelPage );
     bool IsPageSelected( const SwPageFrm *pPageFrm ) const;
 
     void FireEvents();

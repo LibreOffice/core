@@ -138,7 +138,7 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
         const SwFrm *pLower = rLower.GetSwFrm();
         if( pLower )
         {
-            if( rLower.IsAccessible( GetMap()->GetShell()->IsPreView() )  )
+            if( rLower.IsAccessible( GetMap()->GetShell()->IsPreview() )  )
             {
                 ::rtl::Reference< SwAccessibleContext > xAccImpl(
                     GetMap()->GetContextImpl( pLower, sal_False ) );

@@ -195,7 +195,7 @@ void ViewShell::DLPostPaint2(bool bPaintFormLayer)
 void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
 {
     // Nothing to do for the printer?
-    if ( !GetWin() || IsPreView() )
+    if ( !GetWin() || IsPreview() )
     {
         mbPaintWorks = sal_True;
         UISizeNotify();
@@ -482,7 +482,7 @@ sal_Bool ViewShell::AddPaintRect( const SwRect & rRect )
     {
         if( pSh->Imp() )
         {
-        if ( pSh->IsPreView() && pSh->GetWin() )
+        if ( pSh->IsPreview() && pSh->GetWin() )
             ::RepaintPagePreview( pSh, rRect );
         else
                 bRet |= pSh->Imp()->AddPaintRect( rRect );
@@ -501,7 +501,7 @@ void ViewShell::InvalidateWindows( const SwRect &rRect )
         {
             if ( pSh->GetWin() )
             {
-                if ( pSh->IsPreView() )
+                if ( pSh->IsPreview() )
                     ::RepaintPagePreview( pSh, rRect );
                 else if ( pSh->VisArea().IsOver( rRect ) )
                     pSh->GetWin()->Invalidate( rRect.SVRect() );
@@ -1454,7 +1454,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
         _PaintDesktop( aRegion );
 }
 
-// PaintDesktop is split in two, this part is also used by PreViewPage
+// PaintDesktop is split in two, this part is also used by PreviewPage
 void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
 {
     // OD 2004-04-23 #116347#
@@ -1658,7 +1658,7 @@ void ViewShell::Paint(const Rectangle &rRect)
             if( !GetOut()->GetConnectMetaFile() && GetOut()->IsClipRegion())
                 GetOut()->SetClipRegion();
 
-            if ( IsPreView() )
+            if ( IsPreview() )
             {
                 //When useful, process or destroy the old InvalidRect.
                 if ( aRect.IsInside( maInvalidRect ) )
@@ -1953,7 +1953,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     bReformat = bReformat || mpOpt->IsFldName() != rOpt.IsFldName();
 
     // The map mode is changed, minima/maxima will be attended by UI
-    if( mpOpt->GetZoom() != rOpt.GetZoom() && !IsPreView() )
+    if( mpOpt->GetZoom() != rOpt.GetZoom() && !IsPreview() )
     {
         MapMode aMode( pMyWin->GetMapMode() );
         Fraction aNewFactor( rOpt.GetZoom(), 100 );
@@ -2153,14 +2153,14 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > ViewShell::Create
 uno::Reference< ::com::sun::star::accessibility::XAccessible >
 ViewShell::CreateAccessiblePreview()
 {
-    OSL_ENSURE( IsPreView(),
+    OSL_ENSURE( IsPreview(),
                 "Can't create accessible preview for non-preview ViewShell" );
 
     // We require a layout and an XModel to be accessible.
     OSL_ENSURE( mpLayout, "no layout, no access" );
     OSL_ENSURE( GetWin(), "no window, no access" );
 
-    if ( IsPreView() && GetLayout()&& GetWin() )
+    if ( IsPreview() && GetLayout()&& GetWin() )
     {
         return Imp()->GetAccessibleMap().GetDocumentPreview(
                     PagePreviewLayout()->maPreviewPages,

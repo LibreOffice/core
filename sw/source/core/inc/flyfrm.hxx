@@ -225,7 +225,7 @@ public:
                      const sal_Bool _bForPaint = sal_False ) const;
 
 
-    // Paint on this shell (consider PreView, print flag, etc. recursively)?
+    // Paint on this shell (consider Preview, print flag, etc. recursively)?
     static sal_Bool IsPaint( SdrObject *pObj, const ViewShell *pSh );
 
     /** SwFlyFrm::IsBackgroundTransparent

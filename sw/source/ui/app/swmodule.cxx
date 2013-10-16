@@ -248,7 +248,7 @@ void SwDLL::RegisterFactories()
     if ( SvtModuleOptions().IsWriter() )
     {
         SwSrcView::RegisterFactory      ( 6 );
-        SwPagePreView::RegisterFactory  ( 7 );
+        SwPagePreview::RegisterFactory  ( 7 );
     }
 }
 
@@ -262,7 +262,7 @@ void SwDLL::RegisterInterfaces()
     SwWebGlosDocShell::RegisterInterface( pMod );
     SwView::RegisterInterface( pMod );
     SwWebView::RegisterInterface( pMod );
-    SwPagePreView::RegisterInterface( pMod );
+    SwPagePreview::RegisterInterface( pMod );
     SwSrcView::RegisterInterface( pMod );
 
 

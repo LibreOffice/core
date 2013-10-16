@@ -832,7 +832,7 @@ Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
 {
     if ( nAspect == ASPECT_THUMBNAIL )
     {
-        // PreView: set VisArea to the first page.
+        // Preview: set VisArea to the first page.
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 1 );
         SwCntntNode* pNd = pDoc->GetNodes().GoNext( &aIdx );
 
@@ -933,7 +933,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             else
             {
                 SfxBoolItem aBool( SID_PRINTPREVIEW, sal_False );
-                if( PTR_CAST( SwPagePreView, SfxViewShell::Current()) )
+                if( PTR_CAST( SwPagePreview, SfxViewShell::Current()) )
                     aBool.SetValue( sal_True );
                 rSet.Put( aBool );
             }

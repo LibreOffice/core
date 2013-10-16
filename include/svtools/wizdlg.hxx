@@ -92,7 +92,7 @@ Mit ShowButtonFixedLine() kann gesteuert werden, ob die zwischen den
 Buttons und der TabPage eine Trennlinie angezeigt werden soll.
 
 Mit SetViewWindow() und SetViewAlign() kann ein Control gesetzt werden,
-welches als PreView-Window oder fuer die Anzeige von schoenen Bitmaps
+welches als Preview-Window oder fuer die Anzeige von schoenen Bitmaps
 genutzt werden kann.
 
 --------------------------------------------------------------------------

@@ -314,7 +314,7 @@ interface TextPrintPreview
 
  //=========================================================================
 
-shell SwPagePreView
+shell SwPagePreview
 {
     import TextPrintPreview[Automation];
 }

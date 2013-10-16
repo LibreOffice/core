@@ -136,7 +136,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
     {
         const SwAccessibleChild& rLower = *aIter;
         const SwRect aBox( rLower.GetBox( *(GetMap()) ) );
-        if( rLower.IsAccessible( GetShell()->IsPreView() ) )
+        if( rLower.IsAccessible( GetShell()->IsPreview() ) )
         {
             Action eAction = NONE;
             if( aBox.IsOver( rNewVisArea ) )
@@ -367,7 +367,7 @@ void SwAccessibleContext::InvalidateChildrenStates( const SwFrm* _pFrm,
         if( pLower )
         {
             ::rtl::Reference< SwAccessibleContext > xAccImpl;
-            if( rLower.IsAccessible( GetShell()->IsPreView() ) )
+            if( rLower.IsAccessible( GetShell()->IsPreview() ) )
                 xAccImpl = GetMap()->GetContextImpl( pLower, sal_False );
             if( xAccImpl.is() )
                 xAccImpl->InvalidateStates( _nStates );
@@ -399,7 +399,7 @@ void SwAccessibleContext::DisposeChildren( const SwFrm *pFrm,
         if( pLower )
         {
             ::rtl::Reference< SwAccessibleContext > xAccImpl;
-            if( rLower.IsAccessible( GetShell()->IsPreView() ) )
+            if( rLower.IsAccessible( GetShell()->IsPreview() ) )
                 xAccImpl = GetMap()->GetContextImpl( pLower, sal_False );
             if( xAccImpl.is() )
                 xAccImpl->Dispose( bRecursive );
@@ -514,7 +514,7 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
                                           sal_Int16 nR,
                                           const SwFrm *pF )
     : SwAccessibleFrame( pM->GetVisArea().SVRect(), pF,
-                         pM->GetShell()->IsPreView() )
+                         pM->GetShell()->IsPreview() )
     , pMap( pM )
     , nClientId(0)
     , nRole( nR )
@@ -826,13 +826,13 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(sal_Bool bRelative)
     if( GetFrm()->IsPageFrm() &&
         static_cast < const SwPageFrm * >( GetFrm() )->IsEmptyPage() )
     {
-        OSL_ENSURE( GetShell()->IsPreView(), "empty page accessible?" );
-        if( GetShell()->IsPreView() )
+        OSL_ENSURE( GetShell()->IsPreview(), "empty page accessible?" );
+        if( GetShell()->IsPreview() )
         {
-            // adjust method call <GetMap()->GetPreViewPageSize()>
+            // adjust method call <GetMap()->GetPreviewPageSize()>
             sal_uInt16 nPageNum =
                 static_cast < const SwPageFrm * >( GetFrm() )->GetPhyPageNum();
-            aLogBounds.SSize( GetMap()->GetPreViewPageSize( nPageNum ) );
+            aLogBounds.SSize( GetMap()->GetPreviewPageSize( nPageNum ) );
         }
     }
     if( !aLogBounds.IsEmpty() )

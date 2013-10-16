@@ -988,7 +988,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
             else if ( pViewShell &&
                      !pViewShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
-                     !pViewShell->IsPreView() &&
+                     !pViewShell->IsPreview() &&
                       // #i9684# Stop animation during printing/pdf export.
                       pViewShell->GetWin() )
             {

@@ -178,7 +178,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     Timer               m_aTimer;         // for delayed ChgLnks during an action
     OUString            m_aPageStr;       // status view, current page
     OUString            m_sSwViewData,
-    //and the new cursor position if the user double click in the PagePreView
+    //and the new cursor position if the user double click in the PagePreview
                         m_sNewCrsrPos;
     // to support keyboard the number of the page to go to can be set too
     sal_uInt16              m_nNewPage;
@@ -265,7 +265,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     m_bPasteSpecialState : 1,
                     m_bInMailMerge : 1,
                     m_bInDtor : 1, //detect destructor to prevent creating of sub shells while closing
-                    m_bOldShellWasPagePreView : 1,
+                    m_bOldShellWasPagePreview : 1,
                     m_bIsPreviewDoubleClick : 1, // #i114045#
                     m_bMakeSelectionVisible : 1, // transport the bookmark selection
                     m_bAnnotationMode; ///< The real cursor position is inside an annotation.

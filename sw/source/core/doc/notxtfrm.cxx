@@ -202,7 +202,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     {
         StopAnimation();
         // #i6467# - no paint of placeholder for page preview
-        if ( pSh->GetWin() && !pSh->IsPreView() )
+        if ( pSh->GetWin() && !pSh->IsPreview() )
         {
             const SwNoTxtNode* pNd = GetNode()->GetNoTxtNode();
             OUString aTxt( pNd->GetTitle() );
@@ -573,7 +573,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         SET_CURR_SHELL( pSh );
                         if( pSh->GetWin() )
                         {
-                            if( pSh->IsPreView() )
+                            if( pSh->IsPreview() )
                                 ::RepaintPagePreview( pSh, Frm().SVRect() );
                             else
                                 pSh->GetWin()->Invalidate( Frm().SVRect() );
@@ -627,7 +627,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             ViewShell *pSh = pVSh;
             do {
                 SET_CURR_SHELL( pSh );
-                if( pSh->IsPreView() )
+                if( pSh->IsPreview() )
                 {
                     if( pSh->GetWin() )
                         ::RepaintPagePreview( pSh, aRect );
@@ -874,7 +874,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
             {
                 const bool bAnimate = rGrfObj.IsAnimated() &&
-                                         !pShell->IsPreView() &&
+                                         !pShell->IsPreview() &&
                                          !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
                 // #i9684# Stop animation during printing/pdf export
                                           pShell->GetWin();

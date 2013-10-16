@@ -554,7 +554,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
         // check if accessibility options allow blinking portions:
         const ViewShell* pSh = GetTxtFrm()->getRootFrm()->GetCurrShell();
         if ( pSh && ! pSh->GetAccessibilityOptions()->IsStopAnimatedText() &&
-             ! pSh->IsPreView() )
+             ! pSh->IsPreview() )
         {
             if( !pBlink )
                 pBlink = new SwBlink();

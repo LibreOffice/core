@@ -78,7 +78,7 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
     if ( pRoot->Frm().HasArea() )
         pDrawView->SetWorkArea( pRoot->Frm().SVRect() );
 
-    if ( GetShell()->IsPreView() )
+    if ( GetShell()->IsPreview() )
         pDrawView->SetAnimationEnabled( sal_False );
 
     pDrawView->SetUseIncompatiblePathCreateInterface( sal_False );
@@ -443,10 +443,10 @@ void SwViewImp::UpdateAccessiblePreview( const std::vector<PreviewPage*>& _rPrev
                                           _pSelectedPageFrm, _rPreviewWinSize );
 }
 
-void SwViewImp::InvalidateAccessiblePreViewSelection( sal_uInt16 nSelPage )
+void SwViewImp::InvalidateAccessiblePreviewSelection( sal_uInt16 nSelPage )
 {
     if( IsAccessible() )
-        GetAccessibleMap().InvalidatePreViewSelection( nSelPage );
+        GetAccessibleMap().InvalidatePreviewSelection( nSelPage );
 }
 
 SwAccessibleMap *SwViewImp::CreateAccessibleMap()

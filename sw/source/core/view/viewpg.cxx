@@ -54,9 +54,9 @@ SwPagePreviewLayout* ViewShell::PagePreviewLayout()
     return Imp()->PagePreviewLayout();
 }
 
-void ViewShell::ShowPreViewSelection( sal_uInt16 nSelPage )
+void ViewShell::ShowPreviewSelection( sal_uInt16 nSelPage )
 {
-    Imp()->InvalidateAccessiblePreViewSelection( nSelPage );
+    Imp()->InvalidateAccessiblePreviewSelection( nSelPage );
 }
 
 /** adjust view options for page preview
@@ -65,7 +65,7 @@ void ViewShell::ShowPreViewSelection( sal_uInt16 nSelPage )
 */
 void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
 {
-    if ( !IsPreView() )
+    if ( !IsPreview() )
     {
         OSL_FAIL( "view shell doesn't belongs to a page preview - no adjustment of its view options");
         return;

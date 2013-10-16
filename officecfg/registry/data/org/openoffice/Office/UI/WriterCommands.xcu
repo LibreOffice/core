@@ -936,7 +936,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:PrintPagePreView" oor:op="replace">
+      <node oor:name=".uno:PrintPagePreview" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Print document</value>
         </prop>

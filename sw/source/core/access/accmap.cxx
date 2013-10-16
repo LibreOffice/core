@@ -1026,7 +1026,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
                 {
                     const SwFrm* pParent = SwAccessibleFrame::GetParent(
                                                     SwAccessibleChild( pShape->first ),
-                                                    GetShell()->IsPreView() );
+                                                    GetShell()->IsPreview() );
                     aParents.push_back( pParent );
                 }
             }
@@ -1387,7 +1387,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                                     static_cast< const SwTabFrm *>( pFrm ) );
                     break;
                 case FRM_PAGE:
-                    OSL_ENSURE( GetShell()->IsPreView(),
+                    OSL_ENSURE( GetShell()->IsPreview(),
                                 "accessible page frames only in PagePreview" );
                     pAcc = new SwAccessiblePage( this, pFrm );
                     break;
@@ -1611,7 +1611,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
     OSL_ENSURE( !aFrmOrObj.GetSwFrm() || aFrmOrObj.GetSwFrm()->IsAccessibleFrm(),
             "non accessible frame should be disposed" );
 
-    if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+    if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
     {
         ::rtl::Reference< SwAccessibleContext > xAccImpl;
         ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
@@ -1637,7 +1637,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
                 // If there is none, look if the parent is accessible.
                 const SwFrm *pParent =
                         SwAccessibleFrame::GetParent( aFrmOrObj,
-                                                      GetShell()->IsPreView());
+                                                      GetShell()->IsPreview());
 
                 if( pParent )
                 {
@@ -1730,7 +1730,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                                            const SwRect& rOldBox )
 {
     SwAccessibleChild aFrmOrObj( pFrm, pObj, pWindow );
-    if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+    if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
     {
         ::rtl::Reference< SwAccessibleContext > xAccImpl;
         ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
@@ -1758,7 +1758,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                     // If not, there is nothing to do.
                     const SwFrm *pParent =
                         SwAccessibleFrame::GetParent( aFrmOrObj,
-                                                      GetShell()->IsPreView());
+                                                      GetShell()->IsPreview());
 
                     if( pParent )
                     {
@@ -1812,7 +1812,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
 void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
 {
     SwAccessibleChild aFrmOrObj( pFrm );
-    if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+    if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
     {
         uno::Reference < XAccessible > xAcc;
         {
@@ -1850,7 +1850,7 @@ void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
 void SwAccessibleMap::InvalidateAttr( const SwTxtFrm& rTxtFrm )
 {
     SwAccessibleChild aFrmOrObj( &rTxtFrm );
-    if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+    if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
     {
         uno::Reference < XAccessible > xAcc;
         {
@@ -1916,7 +1916,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
         }
     }
 
-    OSL_ENSURE( bShapeSelected || aFrmOrObj.IsAccessible(GetShell()->IsPreView()),
+    OSL_ENSURE( bShapeSelected || aFrmOrObj.IsAccessible(GetShell()->IsPreview()),
             "frame is not accessible" );
 
     uno::Reference < XAccessible > xOldAcc;
@@ -2013,7 +2013,7 @@ void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
     // Start with the frame or the first upper that is accessible
     SwAccessibleChild aFrmOrObj( _pFrm );
     while( aFrmOrObj.GetSwFrm() &&
-            !aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+            !aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
         aFrmOrObj = aFrmOrObj.GetSwFrm()->GetUpper();
     if( !aFrmOrObj.GetSwFrm() )
         aFrmOrObj = GetShell()->GetLayout();
@@ -2041,7 +2041,7 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
 {
     // first, see if this frame is accessible, and if so, get the respective
     SwAccessibleChild aFrmOrObj( pFrm );
-    if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+    if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
     {
         uno::Reference < XAccessible > xAcc;
         {
@@ -2102,7 +2102,7 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
 {
     // first, see if this frame is accessible, and if so, get the respective
     SwAccessibleChild aFrmOrObj( &_rTxtFrm );
-    if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+    if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
     {
         uno::Reference < XAccessible > xAcc;
         {
@@ -2148,7 +2148,7 @@ sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrm& rParentFrm,
     sal_Int32 nIndex( -1 );
 
     SwAccessibleChild aFrmOrObj( &rParentFrm );
-    if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+    if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
     {
         uno::Reference < XAccessible > xAcc;
         {
@@ -2183,7 +2183,7 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PreviewPage*>& _rPreviewP
                                      const SwPageFrm* _pSelectedPageFrm,
                                      const Size&      _rPreviewWinSize )
 {
-    OSL_ENSURE( GetShell()->IsPreView(), "no preview?" );
+    OSL_ENSURE( GetShell()->IsPreview(), "no preview?" );
     OSL_ENSURE( mpPreview != NULL, "no preview data?" );
 
     mpPreview->Update( *this, _rPreviewPages, _rScale, _pSelectedPageFrm, _rPreviewWinSize );
@@ -2218,9 +2218,9 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PreviewPage*>& _rPreviewP
         InvalidateCursorPosition( xAcc );
 }
 
-void SwAccessibleMap::InvalidatePreViewSelection( sal_uInt16 nSelPage )
+void SwAccessibleMap::InvalidatePreviewSelection( sal_uInt16 nSelPage )
 {
-    OSL_ENSURE( GetShell()->IsPreView(), "no preview?" );
+    OSL_ENSURE( GetShell()->IsPreview(), "no preview?" );
     OSL_ENSURE( mpPreview != NULL, "no preview data?" );
 
     mpPreview->InvalidateSelection( GetShell()->GetLayout()->GetPageByPageNum( nSelPage ) );
@@ -2515,7 +2515,7 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
                                   MapMode&     _orMapMode ) const
 {
     MapMode aMapMode = GetShell()->GetWin()->GetMapMode();
-    if( GetShell()->IsPreView() )
+    if( GetShell()->IsPreview() )
     {
         OSL_ENSURE( mpPreview != NULL, "need preview data" );
 
@@ -2524,12 +2524,12 @@ void SwAccessibleMap::GetMapMode( const Point& _rPoint,
     _orMapMode = aMapMode;
 }
 
-Size SwAccessibleMap::GetPreViewPageSize( sal_uInt16 _nPreviewPageNum ) const
+Size SwAccessibleMap::GetPreviewPageSize( sal_uInt16 _nPreviewPageNum ) const
 {
-    OSL_ENSURE( mpVSh->IsPreView(), "no page preview accessible." );
-    OSL_ENSURE( mpVSh->IsPreView() && ( mpPreview != NULL ),
+    OSL_ENSURE( mpVSh->IsPreview(), "no page preview accessible." );
+    OSL_ENSURE( mpVSh->IsPreview() && ( mpPreview != NULL ),
                 "missing accessible preview data at page preview" );
-    if ( mpVSh->IsPreView() && ( mpPreview != NULL ) )
+    if ( mpVSh->IsPreview() && ( mpPreview != NULL ) )
     {
         return mpVSh->PagePreviewLayout()->GetPreviewPageSizeByPageNum( _nPreviewPageNum );
     }
@@ -2737,10 +2737,10 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
 
 const SwRect& SwAccessibleMap::GetVisArea() const
 {
-    OSL_ENSURE( !GetShell()->IsPreView() || (mpPreview != NULL),
+    OSL_ENSURE( !GetShell()->IsPreview() || (mpPreview != NULL),
                 "preview without preview data?" );
 
-    return GetShell()->IsPreView()
+    return GetShell()->IsPreview()
            ? mpPreview->GetVisArea()
            : GetShell()->VisArea();
 }

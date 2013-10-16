@@ -142,7 +142,7 @@ class SwNodes;
 class SwNumRule;
 class SwNumRuleTbl;
 class SwPageDesc;
-class SwPagePreViewPrtData;
+class SwPagePreviewPrtData;
 class SwRedline;
 class SwRedlineTbl;
 class SwRootFrm;
@@ -362,7 +362,7 @@ class SW_DLLPUBLIC SwDoc :
 
     SwUnoCrsrTbl    *mpUnoCrsrTbl;
 
-    SwPagePreViewPrtData *mpPgPViewPrtData;  ///< Indenting / spacing for printing of page view.
+    SwPagePreviewPrtData *mpPgPViewPrtData;  ///< Indenting / spacing for printing of page view.
     SwPaM           *mpExtInputRing;
 
     SwLayouter      *mpLayouter;     /**< ::com::sun::star::frame::Controller for complex layout formatting
@@ -1866,13 +1866,13 @@ public:
     /// Only for SW-textbloxks! Does not pay any attention to layout!
     void ClearDoc();        // Deletes all content!
 
-    /// Query /set data for PagePreView.
-    const SwPagePreViewPrtData* GetPreViewPrtData() const { return mpPgPViewPrtData; }
+    /// Query /set data for PagePreview.
+    const SwPagePreviewPrtData* GetPreviewPrtData() const { return mpPgPViewPrtData; }
 
     // If pointer == 0 destroy pointer in document.
     // Else copy object.
     // Pointer is not transferred to ownership by document!
-    void SetPreViewPrtData( const SwPagePreViewPrtData* pData );
+    void SetPreviewPrtData( const SwPagePreviewPrtData* pData );
 
     /** update all modified OLE-Objects. The modification is called over the
      StarOne - Interface */

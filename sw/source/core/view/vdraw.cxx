@@ -95,7 +95,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         sal_uLong nOldDrawMode = pOutDev->GetDrawMode();
         if( GetShell()->GetWin() &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-            (!GetShell()->IsPreView()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
+            (!GetShell()->IsPreview()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
         {
             pOutDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
                                 DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );

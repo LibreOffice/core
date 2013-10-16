@@ -75,7 +75,7 @@
 #define CMD_FN_FORMAT_PAGE_DLG                      ".uno:PageDialog"
 #define CMD_FN_PAGEDOWN                             ".uno:PageDown"
 #define CMD_FN_PAGEUP                               ".uno:PageUp"
-#define CMD_FN_PRINT_PAGEPREVIEW                    ".uno:PrintPagePreView"
+#define CMD_FN_PRINT_PAGEPREVIEW                    ".uno:PrintPagePreview"
 #define CMD_FN_TABLE_SET_READ_ONLY_CELLS            ".uno:Protect"
 #define CMD_FN_REMOVE_CUR_TOX                       ".uno:RemoveTableOf"
 #define CMD_FN_FORMAT_RESET                         ".uno:ResetAttributes"

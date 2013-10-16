@@ -191,9 +191,9 @@ OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,con
         nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(static_cast<sal_Int32>(aCurrentDate.GetDate())),STANDARD_DB_DATE);
     }
 
-    uno::Reference< util::XNumberFormatPreviewer> xPreViewer(m_pController->getReportNumberFormatter(),uno::UNO_QUERY);
-    OSL_ENSURE(xPreViewer.is(),"XNumberFormatPreviewer is null!");
-    return xPreViewer->convertNumberToPreviewString(sFormat,nValue,m_nLocale,sal_True);
+    uno::Reference< util::XNumberFormatPreviewer> xPreviewer(m_pController->getReportNumberFormatter(),uno::UNO_QUERY);
+    OSL_ENSURE(xPreviewer.is(),"XNumberFormatPreviewer is null!");
+    return xPreviewer->convertNumberToPreviewString(sFormat,nValue,m_nLocale,sal_True);
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )

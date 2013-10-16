@@ -727,7 +727,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_bWheelScrollInProgress(false),
     m_bInMailMerge(sal_False),
     m_bInDtor(sal_False),
-    m_bOldShellWasPagePreView(sal_False),
+    m_bOldShellWasPagePreview(sal_False),
     m_bIsPreviewDoubleClick(sal_False),
     m_bAnnotationMode(false)
 {
@@ -784,12 +784,12 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     {
         pExistingSh = pOldSh;
         // determine type of existing view
-        if( pExistingSh->IsA( TYPE( SwPagePreView ) ) )
+        if( pExistingSh->IsA( TYPE( SwPagePreview ) ) )
         {
-            m_sSwViewData = ((SwPagePreView*)pExistingSh)->GetPrevSwViewData();
-            m_sNewCrsrPos = ((SwPagePreView*)pExistingSh)->GetNewCrsrPos();
-            m_nNewPage = ((SwPagePreView*)pExistingSh)->GetNewPage();
-            m_bOldShellWasPagePreView = sal_True;
+            m_sSwViewData = ((SwPagePreview*)pExistingSh)->GetPrevSwViewData();
+            m_sNewCrsrPos = ((SwPagePreview*)pExistingSh)->GetNewCrsrPos();
+            m_nNewPage = ((SwPagePreview*)pExistingSh)->GetNewPage();
+            m_bOldShellWasPagePreview = sal_True;
             m_bIsPreviewDoubleClick = !m_sNewCrsrPos.isEmpty() || m_nNewPage != USHRT_MAX;
         }
         else if( pExistingSh->IsA( TYPE( SwSrcView ) ) )
@@ -811,7 +811,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     {
         SwDoc& rDoc = *((SwDocShell*)pDocSh)->GetDoc();
 
-        if( !bOldShellWasSrcView && pWebDShell && !m_bOldShellWasPagePreView )
+        if( !bOldShellWasSrcView && pWebDShell && !m_bOldShellWasPagePreview )
             aUsrPref.setBrowseMode( sal_True );
         else
             aUsrPref.setBrowseMode( rDoc.get(IDocumentSettingAccess::BROWSE_MODE) );
@@ -829,26 +829,26 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             aUsrPref.SetViewLayoutColumns( 1 );
         }
         m_pWrtShell = new SwWrtShell( rDoc, m_pEditWin, *this, &aUsrPref );
-        // creating an SwView from a SwPagePreView needs to
+        // creating an SwView from a SwPagePreview needs to
         // add the ViewShell to the ring of the other ViewShell(s)
-        if(m_bOldShellWasPagePreView)
+        if(m_bOldShellWasPagePreview)
         {
-            ViewShell& rPreviewViewShell = *((SwPagePreView*)pExistingSh)->GetViewShell();
+            ViewShell& rPreviewViewShell = *((SwPagePreview*)pExistingSh)->GetViewShell();
             m_pWrtShell->MoveTo(&rPreviewViewShell);
             // to update the field command et.al. if necessary
-            const SwViewOption* pPreViewOpt = rPreviewViewShell.GetViewOptions();
-            if( pPreViewOpt->IsFldName() != aUsrPref.IsFldName() ||
-                    pPreViewOpt->IsShowHiddenField() != aUsrPref.IsShowHiddenField() ||
-                    pPreViewOpt->IsShowHiddenPara() != aUsrPref.IsShowHiddenPara() ||
-                    pPreViewOpt->IsShowHiddenChar() != aUsrPref.IsShowHiddenChar() )
+            const SwViewOption* pPreviewOpt = rPreviewViewShell.GetViewOptions();
+            if( pPreviewOpt->IsFldName() != aUsrPref.IsFldName() ||
+                    pPreviewOpt->IsShowHiddenField() != aUsrPref.IsShowHiddenField() ||
+                    pPreviewOpt->IsShowHiddenPara() != aUsrPref.IsShowHiddenPara() ||
+                    pPreviewOpt->IsShowHiddenChar() != aUsrPref.IsShowHiddenChar() )
                 rPreviewViewShell.ApplyViewOptions(aUsrPref);
             // reset design mode at draw view for form
             // shell, if needed.
-            if ( ((SwPagePreView*)pExistingSh)->ResetFormDesignMode() &&
+            if ( ((SwPagePreview*)pExistingSh)->ResetFormDesignMode() &&
                  m_pWrtShell->HasDrawView() )
             {
                 SdrView* pDrawView = m_pWrtShell->GetDrawView();
-                pDrawView->SetDesignMode( ((SwPagePreView*)pExistingSh)->FormDesignModeToReset() );
+                pDrawView->SetDesignMode( ((SwPagePreview*)pExistingSh)->FormDesignModeToReset() );
             }
         }
     }
@@ -1185,7 +1185,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
             m_pWrtShell->SetMacroExecAllowed( false );
 // os: changed: The user data has to be read if the view is switched back from page preview
 // go to the last editing position when opening own files
-            if(m_bOldShellWasPagePreView || bIsOwnDocument)
+            if(m_bOldShellWasPagePreview || bIsOwnDocument)
             {
                 m_pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
                 if( bSelectObj )
@@ -1203,7 +1203,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
             // is lost.
 // os: changed: The user data has to be read if the view is switched back from page preview
 // go to the last editing position when opening own files
-            if(m_bOldShellWasPagePreView || bIsOwnDocument )
+            if(m_bOldShellWasPagePreview || bIsOwnDocument )
             {
                 if ( bBrowse )
                     SetVisArea( aVis.TopLeft() );
@@ -1367,7 +1367,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 // os: changed: The user data has to be read if the view is switched back from page preview
 // go to the last editing position when opening own files
                     m_pViewImpl->SetRestorePosition(aCrsrPos, bSelectObj);
-                    if(m_bOldShellWasPagePreView|| bIsOwnDocument)
+                    if(m_bOldShellWasPagePreview|| bIsOwnDocument)
                     {
                         m_pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
 
@@ -1434,7 +1434,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 
 // os: changed: The user data has to be read if the view is switched back from page preview
 // go to the last editing position when opening own files
-                if(m_bOldShellWasPagePreView||bIsOwnDocument)
+                if(m_bOldShellWasPagePreview||bIsOwnDocument)
                 {
                     if ( bBrowse && bGotVisibleLeft && bGotVisibleTop )
                     {

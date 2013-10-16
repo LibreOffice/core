@@ -348,7 +348,7 @@ sal_Bool SwAccessibleFrame::IsEditable( ViewShell *pVSh ) const
 
     OSL_ENSURE( pVSh, "no view shell" );
     if( pVSh && (pVSh->GetViewOptions()->IsReadonly() ||
-                 pVSh->IsPreView()) )
+                 pVSh->IsPreview()) )
         return sal_False;
 
     if( !pFrm->IsRootFrm() && pFrm->IsProtected() )

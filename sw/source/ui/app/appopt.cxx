@@ -169,7 +169,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     }
     if(bTextDialog)
         pRet->Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));
-    if( PTR_CAST( SwPagePreView, SfxViewShell::Current())!=0)
+    if( PTR_CAST( SwPagePreview, SfxViewShell::Current())!=0)
     {
         SfxBoolItem aBool(SfxBoolItem(SID_PRINTPREVIEW, sal_True));
         pRet->Put(aBool);

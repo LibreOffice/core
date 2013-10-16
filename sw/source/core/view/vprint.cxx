@@ -128,7 +128,7 @@ void SwPaintQueue::Repaint()
         do
         {   ViewShell *pSh = pPt->pSh;
             SET_CURR_SHELL( pSh );
-            if ( pSh->IsPreView() )
+            if ( pSh->IsPreview() )
             {
                 if ( pSh->GetWin() )
                 {
@@ -615,7 +615,7 @@ void ViewShell::PrepareForPrint( const SwPrintData &rOptions )
         OUString sLayerNm;
         sLayerNm = "Controls";
         // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
-        if ( !IsPreView() )
+        if ( !IsPreview() )
         {
             pDrawView->SetLayerPrintable( sLayerNm, rOptions.bPrintControl );
         }

@@ -59,7 +59,7 @@ class SfxViewShell;
 class SwViewOption;
 class SwViewImp;
 class SwPrintData;
-class SwPagePreViewPrtData;
+class SwPagePreviewPrtData;
 class Window;
 class OutputDevice;
 class SwLayIdle;
@@ -90,7 +90,7 @@ enum FrameControlType
 };
 
 // Define for flags needed in ctor or layers below.
-// Currently the PreView flag is needed for DrawPage.
+// Currently the Preview flag is needed for DrawPage.
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
 #define VSHELLFLAG_SHARELAYOUT          ((long)0x2)//swmod 080125 flag
 typedef boost::shared_ptr<SwRootFrm> SwRootFrmPtr;
@@ -147,7 +147,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
     sal_Bool  mbViewLocked      :1;  // Lock visible range;
                                     // in this case MakeVisible is ineffectual.
     sal_Bool  mbInEndAction     :1;  // Avoid problems, cf. viewsh.cxx.
-    sal_Bool  mbPreView         :1;  // If sal_True it is a PreView-ViewShell.
+    sal_Bool  mbPreview         :1;  // If sal_True it is a Preview-ViewShell.
     sal_Bool  mbFrameView       :1;  // If sal_True it is a  (HTML-)Frame.
     sal_Bool  mbEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
                                     // of scrollbars.
@@ -174,7 +174,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
 
     SW_DLLPRIVATE void PaintDesktop( const SwRect & );  // Collect values for painting of desktop
                                                         // and calling.
-    // PaintDesktop split. This pars is also used by PreViewPage.
+    // PaintDesktop split. This pars is also used by PreviewPage.
     SW_DLLPRIVATE void _PaintDesktop( const SwRegionRects &rRegion );
 
     SW_DLLPRIVATE sal_Bool CheckInvalidForPaint( const SwRect & );  // Direct Paint or rather
@@ -477,7 +477,7 @@ public:
     inline const SfxItemPool& GetAttrPool() const;
                  SfxItemPool& GetAttrPool();
 
-    sal_Bool IsPreView() const { return mbPreView; }
+    sal_Bool IsPreview() const { return mbPreview; }
 
     sal_Bool IsFrameView()  const { return mbFrameView; }
     void SetFrameView( const Size& rBrowseBorder )
@@ -499,7 +499,7 @@ public:
         ::com::sun::star::accessibility::XAccessible >
             CreateAccessiblePreview();
 
-    void ShowPreViewSelection( sal_uInt16 nSelPage );
+    void ShowPreviewSelection( sal_uInt16 nSelPage );
     void InvalidateAccessibleFocus();
 
     // Apply Accessiblity options.

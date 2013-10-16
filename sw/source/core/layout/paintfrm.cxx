@@ -1514,7 +1514,7 @@ static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
 
         if ( !pFly->GetFmt()->GetPrint().GetValue() &&
                 (OUTDEV_PRINTER == pGlobalShell->GetOut()->GetOutDevType() ||
-                pGlobalShell->IsPreView()))
+                pGlobalShell->IsPreview()))
             continue;
 
         const bool bLowerOfSelf = pSelfFly && pFly->IsLowerOf( pSelfFly );
@@ -3553,7 +3553,7 @@ void SwPageFrm::PaintBreak( ) const
     if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
          !pGlobalShell->GetViewOptions()->IsPDFExport() &&
          !pGlobalShell->GetViewOptions()->IsReadonly() &&
-         !pGlobalShell->IsPreView() )
+         !pGlobalShell->IsPreview() )
     {
         const SwFrm* pBodyFrm = Lower();
         while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
@@ -3590,7 +3590,7 @@ void SwColumnFrm::PaintBreak( ) const
     if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
          !pGlobalShell->GetViewOptions()->IsPDFExport() &&
          !pGlobalShell->GetViewOptions()->IsReadonly() &&
-         !pGlobalShell->IsPreView() )
+         !pGlobalShell->IsPreview() )
     {
         const SwFrm* pBodyFrm = Lower();
         while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
@@ -3697,7 +3697,7 @@ void SwPageFrm::PaintDecorators( ) const
 
             if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER &&
                  !pGlobalShell->GetViewOptions()->IsPDFExport() &&
-                 !pGlobalShell->IsPreView() &&
+                 !pGlobalShell->IsPreview() &&
                  !pGlobalShell->GetViewOptions()->IsReadonly() &&
                  !pGlobalShell->GetViewOptions()->getBrowseMode() &&
                  ( pGlobalShell->IsShowHeaderFooterSeparator( Header ) ||
@@ -3826,11 +3826,11 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
     if ( 0 == ( pUserCall = GetUserCall(pObj) ) )
         return sal_True;
 
-    //Attribute dependant, don't paint for printer or PreView
+    //Attribute dependant, don't paint for printer or Preview
     sal_Bool bPaint =  pFlyOnlyDraw ||
                        ((SwContact*)pUserCall)->GetFmt()->GetPrint().GetValue();
     if ( !bPaint )
-        bPaint = pSh->GetWin() && !pSh->IsPreView();
+        bPaint = pSh->GetWin() && !pSh->IsPreview();
 
     if ( bPaint )
     {
@@ -4214,7 +4214,7 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         SwLayoutFrm::Paint( rRect );
     }
     // OD 10.01.2003 #i6467# - no light grey rectangle for page preview
-    else if ( pGlobalShell->GetWin() && !pGlobalShell->IsPreView() )
+    else if ( pGlobalShell->GetWin() && !pGlobalShell->IsPreview() )
     {
         // OD 10.01.2003 #i6467# - intersect output rectangle with table frame
         SwRect aTabRect( Prt() );

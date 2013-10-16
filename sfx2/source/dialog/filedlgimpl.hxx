@@ -64,7 +64,7 @@ namespace sfx2
         OUString             maSelectFilter;
         OUString             maButtonLabel;
 
-        Timer                       maPreViewTimer;
+        Timer                       maPreviewTimer;
         Graphic                     maGraphic;
 
         const short                 m_nDialogType;

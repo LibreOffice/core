@@ -6421,7 +6421,7 @@ SfxBoolItem PrintLayout FN_PRINT_LAYOUT
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem PrintPagePreView FN_PRINT_PAGEPREVIEW
+SfxVoidItem PrintPagePreview FN_PRINT_PAGEPREVIEW
 ()
 [
     /* flags: */

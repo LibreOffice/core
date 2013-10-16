@@ -114,7 +114,7 @@ SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
 
     SetHitTolerancePixel( GetMarkHdlSizePixel()/2 );
 
-    SetPrintPreview( rI.GetShell()->IsPreView() );
+    SetPrintPreview( rI.GetShell()->IsPreview() );
 
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Writer());

@@ -1782,9 +1782,9 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
                     nValue = DBTypeConversion::toNullDate(DBTypeConversion::getNULLDate(xNumberFormatter->getNumberFormatsSupplier()),nValue);
                 }
 
-                Reference< ::com::sun::star::util::XNumberFormatPreviewer> xPreViewer(xNumberFormatter,UNO_QUERY);
-                OSL_ENSURE(xPreViewer.is(),"XNumberFormatPreviewer is null!");
-                sDefault = xPreViewer->convertNumberToPreviewString(sFormat,nValue,aLocale,sal_True);
+                Reference< ::com::sun::star::util::XNumberFormatPreviewer> xPreviewer(xNumberFormatter,UNO_QUERY);
+                OSL_ENSURE(xPreviewer.is(),"XNumberFormatPreviewer is null!");
+                sDefault = xPreviewer->convertNumberToPreviewString(sFormat,nValue,aLocale,sal_True);
             }
             else if ( !(_bCheck && sDefault.isEmpty()) )
                 sDefault = xNumberFormatter->formatString(nFormatKey, sDefault.isEmpty() ? sFormat : sDefault);

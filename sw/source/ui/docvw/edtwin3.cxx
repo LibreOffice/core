@@ -63,8 +63,8 @@ void SizeNotify(ViewShell* pVwSh, const Size &rSize)
     {
         if (pSfxVwSh->ISA(SwView))
             ((SwView *)pSfxVwSh)->DocSzChgd(rSize);
-        else if (pSfxVwSh->ISA(SwPagePreView))
-            ((SwPagePreView *)pSfxVwSh)->DocSzChgd( rSize );
+        else if (pSfxVwSh->ISA(SwPagePreview))
+            ((SwPagePreview *)pSfxVwSh)->DocSzChgd( rSize );
     }
 }
 
@@ -117,8 +117,8 @@ TblChgMode GetTblChgDefaultMode()
 void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
-    if (pSfxVwSh && pSfxVwSh->ISA( SwPagePreView ))
-        ((SwPagePreView *)pSfxVwSh)->RepaintCoreRect( rRect );
+    if (pSfxVwSh && pSfxVwSh->ISA( SwPagePreview ))
+        ((SwPagePreview *)pSfxVwSh)->RepaintCoreRect( rRect );
 }
 
 bool JumpToSwMark( ViewShell* pVwSh, const OUString& rMark )

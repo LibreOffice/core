@@ -173,7 +173,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView =
     mbEndActionByVirDev = sal_False;
     mbPaintWorks = mbEnableSmooth = sal_True;
-    mbPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
+    mbPreview = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
     // --> OD 2005-02-11 #i38810# - Do not reset modified state of document,
     // if it's already been modified.
@@ -185,7 +185,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
 
     // OD 28.03.2003 #108470# - initialize print preview layout after layout
     // is created in <ViewShell::Init(..)> - called above.
-    if ( mbPreView )
+    if ( mbPreview )
     {
         // OD 12.12.2002 #103492# - init page preview layout
         mpImp->InitPagePreviewLayout();
@@ -248,7 +248,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     mbPaintWorks = mbEnableSmooth = sal_True;
     mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView =
     mbEndActionByVirDev = sal_False;
-    mbPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
+    mbPreview = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
     // OD 12.12.2002 #103492#
     if( nFlags & VSHELLFLAG_SHARELAYOUT ) //swmod 080125
         mpLayout = rShell.mpLayout;
@@ -263,7 +263,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     mpOut = pOutput;
 
     // OD 12.12.2002 #103492#
-    if ( mbPreView )
+    if ( mbPreview )
         mpImp->InitPagePreviewLayout();
 
     ((SwHiddenTxtFieldType*)mpDoc->GetSysFldType( RES_HIDDENTXTFLD ))->

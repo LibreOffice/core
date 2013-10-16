@@ -909,14 +909,14 @@ void SwDoc::ClearDoc()
     DelPageDesc( nDummyPgDsc );
 }
 
-void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
+void SwDoc::SetPreviewPrtData( const SwPagePreviewPrtData* pNew )
 {
     if( pNew )
     {
         if( mpPgPViewPrtData )
             *mpPgPViewPrtData = *pNew;
         else
-            mpPgPViewPrtData = new SwPagePreViewPrtData( *pNew );
+            mpPgPViewPrtData = new SwPagePreviewPrtData( *pNew );
     }
     else if( mpPgPViewPrtData )
         DELETEZ( mpPgPViewPrtData );

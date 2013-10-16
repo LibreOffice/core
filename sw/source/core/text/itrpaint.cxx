@@ -431,7 +431,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         const SwTwips nOldY = GetInfo().Y();
 
         if( !GetNextLine() &&
-            GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreView() &&
+            GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreview() &&
             GetInfo().GetOpt().IsParagraph() && !GetTxtFrm()->GetFollow() &&
             GetInfo().GetIdx() >= GetInfo().GetTxt().getLength() )
         {
@@ -445,7 +445,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             aEnd.Paint( GetInfo() );
             GetInfo().Y( nOldY );
         }
-        if( GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreView() )
+        if( GetInfo().GetVsh() && !GetInfo().GetVsh()->IsPreview() )
         {
             const sal_Bool bNextUndersized =
                 ( GetTxtFrm()->GetNext() &&

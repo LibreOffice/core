@@ -403,13 +403,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
                 SfxViewShell* pViewShell = SfxViewShell::Current();
                 SwView* pCurrView = dynamic_cast< SwView *> ( pViewShell );
-                sal_Bool bCurrent = IS_TYPE( SwPagePreView, pViewShell );
+                sal_Bool bCurrent = IS_TYPE( SwPagePreview, pViewShell );
 
-                while( pTmpFrm )    // search PreView
+                while( pTmpFrm )    // search Preview
                 {
                     if( IS_TYPE( SwView, pTmpFrm->GetViewShell()) )
                         bOnly = false;
-                    else if( IS_TYPE( SwPagePreView, pTmpFrm->GetViewShell()))
+                    else if( IS_TYPE( SwPagePreview, pTmpFrm->GetViewShell()))
                     {
                         pTmpFrm->GetFrame().Appear();
                         bFound = true;
@@ -433,7 +433,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if( nSlotId )
                 {
-                    // PagePreView in the WebDocShell
+                    // PagePreview in the WebDocShell
                     // is found under Id ViewShell2.
                     if( ISA(SwWebDocShell) && SID_VIEWSHELL1 == nSlotId )
                         nSlotId = SID_VIEWSHELL2;

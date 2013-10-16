@@ -152,9 +152,9 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
 
     // with Uno, only sdbcx::View, but not the Module should be changed
     bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
-    // fob PreView off
-    SwPagePreView* pPPView;
-    if( !pCurrView && 0 != (pPPView = PTR_CAST( SwPagePreView, SfxViewShell::Current())) )
+    // fob Preview off
+    SwPagePreview* pPPView;
+    if( !pCurrView && 0 != (pPPView = PTR_CAST( SwPagePreview, SfxViewShell::Current())) )
     {
         if(!bViewOnly)
             pPref->SetUIOptions( rUsrPref );

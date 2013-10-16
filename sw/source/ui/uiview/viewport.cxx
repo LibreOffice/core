@@ -841,7 +841,7 @@ void ViewResizePixel( const Window &rRef,
                     sal_Bool bWebView,
                     sal_Bool bVRulerRight )
 {
-// ViewResizePixel is also used by PreView!!!
+// ViewResizePixel is also used by Preview!!!
 
     const sal_Bool bHRuler = pHRuler && pHRuler->IsVisible();
     const long nHLinSzHeight = bHRuler ?

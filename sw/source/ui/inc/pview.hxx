@@ -32,7 +32,7 @@ class SwViewOption;
 class SwDocShell;
 class SwScrollbar;
 class ViewShell;
-class SwPagePreView;
+class SwPagePreview;
 class ImageButton;
 class Button;
 class SwRect;
@@ -42,14 +42,14 @@ class SvtAccessibilityOptions;
 class SwPagePreviewLayout;
 
 // Delete member <mnVirtPage> and its accessor
-class SwPagePreViewWin : public Window
+class SwPagePreviewWin : public Window
 {
     ViewShell*          mpViewShell;
     sal_uInt16              mnSttPage;
     sal_uInt8                mnRow, mnCol;
     Size                maPxWinSize;
     Fraction            maScale;
-    SwPagePreView&      mrView;
+    SwPagePreview&      mrView;
     bool                mbCalcScaleForPreviewLayout;
     Rectangle           maPaintedPreviewDocRect;
     SwPagePreviewLayout* mpPgPreviewLayout;
@@ -59,8 +59,8 @@ class SwPagePreViewWin : public Window
     using Window::Scroll;
 
 public:
-    SwPagePreViewWin( Window* pParent, SwPagePreView& rView );
-    ~SwPagePreViewWin();
+    SwPagePreviewWin( Window* pParent, SwPagePreview& rView );
+    ~SwPagePreviewWin();
 
     // calls ViewShell::Paint
     virtual void Paint( const Rectangle& rRect );
@@ -145,14 +145,14 @@ public:
 /**
  * View of a document
  */
-class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
+class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
 {
     // ViewWindow and handle to core
     // current dispatcher shell
-    SwPagePreViewWin        aViewWin;
+    SwPagePreviewWin        aViewWin;
     //viewdata of the previous SwView and the new crsrposition
     OUString                sSwViewData;
-    //and the new cursor position if the user double click in the PagePreView
+    //and the new cursor position if the user double click in the PagePreview
     OUString                sNewCrsrPos;
     // to support keyboard the number of the page to go to can be set too
     sal_uInt16                  nNewPage;
@@ -216,7 +216,7 @@ protected:
     void         SetZoom(SvxZoomType eSet, sal_uInt16 nFactor);
 
 public:
-    SFX_DECL_VIEWFACTORY(SwPagePreView);
+    SFX_DECL_VIEWFACTORY(SwPagePreview);
     SFX_DECL_INTERFACE(SW_PAGEPREVIEW)
     TYPEINFO();
 
@@ -286,12 +286,12 @@ public:
     */
     void SetVScrollbarThumbPos( const sal_uInt16 _nNewThumbPos );
 
-    SwPagePreView( SfxViewFrame* pFrame, SfxViewShell* );
-    ~SwPagePreView();
+    SwPagePreview( SfxViewFrame* pFrame, SfxViewShell* );
+    ~SwPagePreview();
 };
 
 // ----------------- inline methods ----------------------
-inline void SwPagePreView::AdjustEditWin()
+inline void SwPagePreview::AdjustEditWin()
 {
     OuterResizePixel( Point(), GetFrameWindow()->GetOutputSizePixel() );
 }

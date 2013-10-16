@@ -761,7 +761,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
 
         //invalidate all edit windows
         const TypeId aSwViewTypeId = TYPE(SwView);
-        const TypeId aSwPreViewTypeId = TYPE(SwPagePreView);
+        const TypeId aSwPreviewTypeId = TYPE(SwPagePreview);
         const TypeId aSwSrcViewTypeId = TYPE(SwSrcView);
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while(pViewShell)
@@ -769,15 +769,15 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
             if(pViewShell->GetWindow())
             {
                 if((pViewShell->IsA(aSwViewTypeId) ||
-                    pViewShell->IsA(aSwPreViewTypeId) ||
+                    pViewShell->IsA(aSwPreviewTypeId) ||
                     pViewShell->IsA(aSwSrcViewTypeId)))
                 {
                     if(bAccessibility)
                     {
                         if(pViewShell->IsA(aSwViewTypeId))
                             ((SwView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
-                        else if(pViewShell->IsA(aSwPreViewTypeId))
-                            ((SwPagePreView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                        else if(pViewShell->IsA(aSwPreviewTypeId))
+                            ((SwPagePreview*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
                     }
                     pViewShell->GetWindow()->Invalidate();
                 }
