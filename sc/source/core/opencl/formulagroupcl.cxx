@@ -227,155 +227,236 @@ public:
 private:
     bool bIsStartFixed, bIsEndFixed;
 };
-#define FunctionForReduction  0
-#define FunctionForSumOfProd  1
-#define FunctionForTwoArgs  2
-#define FunctionForThreeArgs  3
 
-typedef enum {
-    OpNopCode = FunctionForReduction,
-    OpCountCode = FunctionForReduction,
-    OpSumCode = FunctionForReduction,
-    OpSubCode = FunctionForReduction,
-    OpMulCode = FunctionForReduction,
-    OpDivCode = FunctionForReduction,
-    OpMinCode = FunctionForReduction,
-    OpMaxCode = FunctionForReduction,
-    OpSumProductCode = FunctionForSumOfProd,
-    OpEffectiveCode = FunctionForTwoArgs
-} OpCodeEnum;
+/// Abstract class for code generation
+class SlidingFunctionBase {
+public:
+    typedef std::unique_ptr<DynamicKernelArgument> SubArgument;
+    typedef std::vector<SubArgument> SubArguments;
+    virtual void GenSlidingWindowFunction(std::stringstream &,
+        const std::string, SubArguments &) = 0;
+    virtual ~SlidingFunctionBase() {};
+};
+
+class OpBase {
+public:
+    virtual std::string GetBottom(void) = 0;
+    virtual std::string Gen(const std::string &lhs, const std::string &rhs) = 0;
+    virtual std::string BinFuncName(void) const = 0;
+    virtual ~OpBase() {}
+};
+
+class Reduction: public SlidingFunctionBase, public OpBase
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = " << GetBottom() <<";\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        unsigned i = vSubArguments.size();
+        while (i--)
+        {
+            FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+            assert(pCur);
+            if (const formula::DoubleVectorRefToken* pCurDVR =
+                dynamic_cast<const formula::DoubleVectorRefToken *>(pCur))
+            {
+                size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+                ss << "for (int i = ";
+                if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
+                    ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n\t\t";
+                } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
+                    ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n\t\t";
+                } else {
+                    ss << "0; i < "<< nCurWindowSize <<"; i++)\n\t\t";
+                }
+            }
+            ss << "tmp = ";
+            // Generate the operation in binary form
+            ss << Gen(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
+            ss << ";\n\t";
+        }
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+};
+
+class SumOfProduct: public SlidingFunctionBase, public OpBase
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        FormulaToken *pCur = vSubArguments[0]->GetFormulaToken();
+        assert(pCur);
+        const formula::DoubleVectorRefToken* pCurDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+        size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = 0.0;\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "for (int i = 0; i <" << nCurWindowSize << "; i++)\n\t\t";
+        ss << "tmp += ";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << "*";
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+        }
+        ss << ";\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+};
+
+class Binary: public SlidingFunctionBase, public OpBase
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = " << GetBottom() <<";\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "tmp = ";
+        ss << Gen(vSubArguments[0]->GenSlidingWindowDeclRef(),
+                vSubArguments[1]->GenSlidingWindowDeclRef());
+        ss << ";\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+};
 
 /// operator traits
-class OpNop {
+class OpNop: public Reduction {
 public:
-    static std::string GetBottom(void) { return "0"; }
-    static const  size_t OpCodyValue = OpNopCode;
-    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return lhs;
     }
-    static std::string BinFuncName(void) { return "nop"; }
+    virtual std::string BinFuncName(void) const { return "nop"; }
 };
-class OpCount {
+
+class OpCount: public Reduction {
 public:
-    static std::string GetBottom(void) { return "0"; }
-    static const  size_t OpCodyValue = OpCountCode;
-    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         std::stringstream ss;
         ss << "(isNan(" << lhs << ")?"<<rhs<<":"<<rhs<<"+1.0)";
         return ss.str();
     }
-    static std::string BinFuncName(void) { return "fcount"; }
+    virtual std::string BinFuncName(void) const { return "fcount"; }
 };
 
-class OpSum {
+class OpSum: public Reduction {
 public:
-    static std::string GetBottom(void) { return "0"; }
-    static const  size_t OpCodyValue = OpSumCode;
-    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         std::stringstream ss;
         ss << "fsum(" << lhs <<","<< rhs<<")";
         return ss.str();
     }
-    static std::string BinFuncName(void) { return "fsum"; }
+    virtual std::string BinFuncName(void) const { return "fsum"; }
 };
 
-class OpSub {
+class OpSub: public Reduction {
 public:
-    static std::string GetBottom(void) { return "0"; }
-    static const  size_t OpCodyValue = OpSubCode;
-    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return lhs + "-" + rhs;
     }
-    static std::string BinFuncName(void) { return "fsub"; }
+    virtual std::string BinFuncName(void) const { return "fsub"; }
 };
 
-class OpMul {
+class OpMul: public Reduction {
 public:
-    static std::string GetBottom(void) { return "1"; }
-    static const  size_t OpCodyValue = OpMulCode;
-    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string GetBottom(void) { return "1"; }
+    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return lhs + "*" + rhs;
     }
-    static std::string BinFuncName(void) { return "fmul"; }
+    virtual std::string BinFuncName(void) const { return "fmul"; }
 };
 
-class OpDiv {
+/// Technically not a reduction, but fits the framework.
+class OpDiv: public Reduction {
 public:
-    static std::string GetBottom(void) { return "1.0"; }
-    /// Technically not a reduction, but fits the framework.
-    static const  size_t OpCodyValue = OpDivCode;
-    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string GetBottom(void) { return "1.0"; }
+    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return "(" + lhs + "/" + rhs + ")";
     }
-    static std::string BinFuncName(void) { return "fdiv"; }
+    virtual std::string BinFuncName(void) const { return "fdiv"; }
 };
 
-class OpMin {
+class OpMin: public Reduction {
 public:
-    static std::string GetBottom(void) { return "MAXFLOAT"; }
-    static const  size_t OpCodyValue = OpMinCode;
-    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string GetBottom(void) { return "MAXFLOAT"; }
+    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return "fmin("+lhs + "," + rhs +")";
     }
-    static std::string BinFuncName(void) { return "fmin"; }
+    virtual std::string BinFuncName(void) const { return "fmin"; }
 };
 
-class OpMax {
+class OpMax: public Reduction {
 public:
-    static std::string GetBottom(void) { return "-MAXFLOAT"; }
-    static const  size_t OpCodyValue = OpMaxCode;
-    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string GetBottom(void) { return "-MAXFLOAT"; }
+    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return "fmax("+lhs + "," + rhs +")";
     }
-    static std::string BinFuncName(void) { return "fmax"; }
+    virtual std::string BinFuncName(void) const { return "fmax"; }
 };
-class OpSumProduct {
+class OpSumProduct: public SumOfProduct {
 public:
-    static std::string GetBottom(void) { return "0"; }
-    static const  size_t OpCodyValue = OpSumProductCode;
-    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return lhs + "*" + rhs;
     }
-    static std::string BinFuncName(void) { return "fsum"; }
+    virtual std::string BinFuncName(void) const { return "fsum"; }
 };
-class OpEffective {
+class OpEffective: public Binary {
 public:
-    static std::string GetBottom(void) { return "0"; }
-    static const  size_t OpCodyValue = OpEffectiveCode;
-    static std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
     {
         return "pow(1.0+("+lhs + "/" + rhs +"),"+rhs+")-1.0";
     }
-    static std::string BinFuncName(void) { return "Effective_Add"; }
+    virtual std::string BinFuncName(void) const { return "Effective_Add"; }
 };
 
-class Op {
-public:
-    static std::string BinFuncName(OpCode op)
-    {
-        switch (op)
-        {
-            case ocAverage:
-            case ocSum:
-                return OpSum::BinFuncName();
-            case ocMin:
-                return OpMin::BinFuncName();
-            case ocMax:
-                return OpMax::BinFuncName();
-            default:
-                assert(0 && "Unsupported op");
-        };
-    }
-};
 /// Helper functions that have multiple buffers
 template<class Op>
 class DynamicKernelSoPArguments: public DynamicKernelArgument
@@ -396,130 +477,10 @@ public:
         return i;
     }
 
-    //// Generate sliding window helper. An example for sum
-    ///  double custom_sliding_dotproduct(int nWindow, __global *sliding) {
-    ///    int nr = get_global_size(0);
-    ///    double tmp = 0.0;
-    ///    for (int i = 0; i < nWindow; i++) {
-    ///        tmp += sliding[i+get_global_id(0)];
-    ///    }
-    ///    return tmp;
-    ///  }
-    /// FIXME: optimization
-    void GenSlidingWindowFunctionForSumOfProd(std::stringstream &ss)
-    {
-        FormulaToken *pCur = mvSubArguments[0]->GetFormulaToken();
-        assert(pCur);
-        const formula::DoubleVectorRefToken* pCurDVR =
-            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-        size_t nCurWindowSize = pCurDVR->GetRefRowSize();
-        ss << "\ndouble " << mSymName;
-        ss << "_"<< Op::BinFuncName() <<"(";
-        for (unsigned i = 0; i < mvSubArguments.size(); i++)
-        {
-            if (i)
-                ss << ",";
-            mvSubArguments[i]->GenSlidingWindowDecl(ss);
-        }
-        ss << ") {\n\t";
-        ss << "double tmp = 0.0;\n\t";
-        ss << "int gid0 = get_global_id(0);\n\t";
-        ss << "for (int i = 0; i <" << nCurWindowSize << "; i++)\n\t\t";
-        ss << "tmp += ";
-        for (unsigned i = 0; i < mvSubArguments.size(); i++)
-        {
-            if (i)
-                ss << "*";
-            ss << mvSubArguments[i]->GenSlidingWindowDeclRef();
-        }
-        ss << ";\n\t";
-        ss << "return tmp;\n";
-        ss << "}";
-    }
-
-    void GenSlidingWindowFunctionForReduction(std::stringstream &ss)
-    {
-        ss << "\ndouble " << mSymName;
-        ss << "_"<< Op::BinFuncName() <<"(";
-        for (unsigned i = 0; i < mvSubArguments.size(); i++)
-        {
-            if (i)
-                ss << ",";
-            mvSubArguments[i]->GenSlidingWindowDecl(ss);
-        }
-        ss << ") {\n\t";
-        ss << "double tmp = " << Op::GetBottom() <<";\n\t";
-        ss << "int gid0 = get_global_id(0);\n\t";
-        unsigned i = mvSubArguments.size();
-        while (i--)
-        {
-            FormulaToken *pCur = mvSubArguments[i]->GetFormulaToken();
-            assert(pCur);
-            if (const formula::DoubleVectorRefToken* pCurDVR =
-                dynamic_cast<const formula::DoubleVectorRefToken *>(pCur))
-            {
-                size_t nCurWindowSize = pCurDVR->GetRefRowSize();
-                ss << "for (int i = ";
-                if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-                    ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n\t\t";
-                } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-                    ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n\t\t";
-                } else {
-                    ss << "0; i < "<< nCurWindowSize <<"; i++)\n\t\t";
-                }
-#if 0
-            } else if (auto *pCurSVR =
-                dynamic_cast<const formula::SingleVectorRefToken *>(pCur)) {
-                size_t nCurWindowSize = pCurSVR->GetArrayLength();
-                ss << "for (int i = 0; i < "<< nCurWindowSize <<"; i++)\n\t\t";
-#endif
-            }
-            ss << "tmp = ";
-            // Generate the operation in binary form
-            ss << Op::Gen(mvSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
-            ss << ";\n\t";
-        }
-        ss << "return tmp;\n";
-        ss << "}";
-    }
-        void GenSlidingWindowFunctionForTwoArgs(std::stringstream &ss)
-    {
-        ss << "\ndouble " << mSymName;
-        ss << "_"<< Op::BinFuncName() <<"(";
-        for (unsigned i = 0; i < mvSubArguments.size(); i++)
-        {
-            if (i)
-                ss << ",";
-            mvSubArguments[i]->GenSlidingWindowDecl(ss);
-        }
-        ss << ") {\n\t";
-        ss << "double tmp = " << Op::GetBottom() <<";\n\t";
-        ss << "int gid0 = get_global_id(0);\n\t";
-        ss << "tmp = ";
-        ss << Op::Gen(mvSubArguments[0]->GenSlidingWindowDeclRef(),
-                mvSubArguments[1]->GenSlidingWindowDeclRef());
-        ss << ";\n\t";
-        ss << "return tmp;\n";
-        ss << "}";
-    }
     virtual void GenSlidingWindowFunction(std::stringstream &ss) {
         for (unsigned i = 0; i < mvSubArguments.size(); i++)
-        {
             mvSubArguments[i]->GenSlidingWindowFunction(ss);
-            ss << "\n";
-        }
-        switch (Op::OpCodyValue)
-        {
-            case FunctionForReduction:
-                return GenSlidingWindowFunctionForReduction(ss);
-            case FunctionForSumOfProd:
-                return GenSlidingWindowFunctionForSumOfProd(ss);
-            case FunctionForTwoArgs:
-                return GenSlidingWindowFunctionForTwoArgs(ss);
-            default:
-                assert(0 && "Unsupported OpCodyValue");
-        }
-
+        CodeGen.GenSlidingWindowFunction(ss, mSymName, mvSubArguments);
     }
 
     /// Generate use/references to the argument
@@ -527,7 +488,7 @@ public:
     {
         FormulaToken *pChild = mFormulaTree->Children[0]->GetFormulaToken();
         assert(pChild);
-        ss << mSymName << "_" << Op::BinFuncName() <<"(";
+        ss << mSymName << "_" << CodeGen.BinFuncName() <<"(";
         size_t nItems = 0;
         for (unsigned i = 0; i < mvSubArguments.size(); i++)
         {
@@ -572,6 +533,7 @@ public:
     }
 private:
     std::vector<SubArgument> mvSubArguments;
+    Op CodeGen;
 };
 
 template <class Op>
@@ -641,7 +603,8 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     ft->Children[i]));
                 break;
             case ocExternal:
-                if ( !(pChild->GetExternal().compareTo(OUString("com.sun.star.sheet.addin.Analysis.getEffect"))))
+                if ( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getEffect"))))
                 {
                 mvSubArguments.push_back(SoPHelper<OpEffective>(ts,
                     ft->Children[i]));
