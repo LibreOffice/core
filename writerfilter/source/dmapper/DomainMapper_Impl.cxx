@@ -2225,14 +2225,10 @@ void FieldContext::AppendCommand(const OUString& rPart)
 
         if (bInString)
         {
-            if (bInStringNext)
+            sPart += OUString(' ');
+            sPart += sToken;
+            if (!bInStringNext)
             {
-                sPart += OUString(' ');
-                sPart += sToken;
-            }
-            else
-            {
-                sPart += sToken;
                 aResult.push_back(sPart);
             }
         }
