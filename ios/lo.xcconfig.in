@@ -16,3 +16,8 @@ LO_BUILDDIR = @BUILDDIR@
 LO_INSTDIR = @INSTDIR@
 LO_OUTDIR = @OUTDIR@
 LO_WORKDIR = @WORKDIR@
+
+// These are actual Xcode-known settings. The corresponding autoconf
+// variables are prefixed with XCODE_ to make it clear in configure.ac
+// what they will be used for.
+CLANG_CXX_LIBRARY = @XCODE_CLANG_CXX_LIBRARY@

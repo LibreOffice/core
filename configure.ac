@@ -2911,6 +2911,7 @@ if test $_os = iOS; then
     for sdkver in 7.0 6.1 6.0; do
         t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$sdkver.sdk
         if test -d $t; then
+            ios_sdk=$sdkver
             sysroot=$t
             break
         fi
@@ -2956,9 +2957,27 @@ if test $_os = iOS; then
     # Just add -fvisibility=hidden to CC and CXX directly so that the 3rd-party libs also
     # get compiled with it, to avoid ld warnings when linking all that together into one
     # executable.
-    # Also, use libc++.
+    # Use libc++ if opted in only, and only when building against iOS 7 SDK or newer.
+
+    XCODE_CLANG_CXX_LIBRARY=libstdc++
+    case $ios_sdk in
+    6.*)
+        if test "$enable_libc__" = yes; then
+            AC_MSG_ERROR([--enable-libc++ requires using Xcode 5 and iOS SDK 7 or newer it seems])
+        fi
+        ;;
+    *)
+        if test "$enable_libc__" = yes; then
+            XCODE_CLANG_CXX_LIBRARY=libc++
+        fi
+        ;;
+    esac
+
+    stdlib="-stdlib=$XCODE_CLANG_CXX_LIBRARY"
+
     CC="`xcrun -find clang` -arch $arch -fvisibility=hidden -isysroot $sysroot $lto $versionmin"
-    CXX="`xcrun -find clang++` -arch $arch -fvisibility=hidden -stdlib=libc++ -isysroot $sysroot $lto $versionmin"
+    CXX="`xcrun -find clang++` -arch $arch -fvisibility=hidden $stdlib -isysroot $sysroot $lto $versionmin"
+
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
     NM=`xcrun -find nm`
@@ -2966,6 +2985,8 @@ if test $_os = iOS; then
     LIBTOOL=`xcrun -find libtool`
     RANLIB=`xcrun -find ranlib`
 fi
+
+AC_SUBST(XCODE_CLANG_CXX_LIBRARY)
 
 AC_MSG_CHECKING([whether to treat the installation as read-only])
 
