@@ -63,8 +63,6 @@ SfxGrabBagItem::SetGrabBag(std::__debug::map<rtl::OUString, com::sun::star::uno:
 SfxTemplatePanelControl::SetParagraphFamily()
 SmFontPickList::Contains(Font const&) const
 SmParser::Insert(rtl::OUString const&, int)
-String::Append(unsigned short const*)
-String::Append(unsigned short const*, unsigned short)
 String::Assign(unsigned short const*)
 String::Insert(String const&, unsigned short, unsigned short, unsigned short)
 String::String(char)

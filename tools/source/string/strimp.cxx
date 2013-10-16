@@ -203,35 +203,6 @@ STRING& STRING::Append( const STRING& rStr )
     return *this;
 }
 
-STRING& STRING::Append( const STRCODE* pCharStr )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_ASSERT( pCharStr, "String::Append() - pCharStr is NULL" );
-
-    // determine string length
-    sal_Int32 nLen = mpData->mnLen;
-    sal_Int32 nCopyLen = ImplStringLen( pCharStr );
-
-    // detect overflow
-    nCopyLen = ImplGetCopyLen( nLen, nCopyLen );
-
-    if ( nCopyLen )
-    {
-        // allocate string of new size
-        STRINGDATA* pNewData = ImplAllocData( nLen+nCopyLen );
-
-        // copy string
-        memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
-        memcpy( pNewData->maStr+nLen, pCharStr, nCopyLen*sizeof( STRCODE ) );
-
-        // free old string
-        STRING_RELEASE((STRING_TYPE *)mpData);
-        mpData = pNewData;
-    }
-
-    return *this;
-}
-
 void STRING::SetChar( xub_StrLen nIndex, STRCODE c )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

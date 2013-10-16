@@ -282,48 +282,6 @@ STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, sal_Int32& rIndex ) co
     }
 }
 
-STRING& STRING::Append( const STRCODE* pCharStr, xub_StrLen nCharLen )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_ASSERT( pCharStr, "String::Append() - pCharStr is NULL" );
-
-    if ( nCharLen == STRING_LEN )
-        nCharLen = ImplStringLen( pCharStr );
-
-#ifdef DBG_UTIL
-    if ( DbgIsAssert() )
-    {
-        for ( xub_StrLen i = 0; i < nCharLen; i++ )
-        {
-            if ( !pCharStr[i] )
-            {
-                OSL_FAIL( "String::Append() : nLen is wrong" );
-            }
-        }
-    }
-#endif
-
-    // Catch overflow
-    sal_Int32 nLen = mpData->mnLen;
-    sal_Int32 nCopyLen = ImplGetCopyLen( nLen, nCharLen );
-
-    if ( nCopyLen )
-    {
-        // allocate string of new size
-        STRINGDATA* pNewData = ImplAllocData( nLen+nCopyLen );
-
-        // copy string
-        memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
-        memcpy( pNewData->maStr+nLen, pCharStr, nCopyLen*sizeof( STRCODE ) );
-
-        // free old string
-        STRING_RELEASE((STRING_TYPE *)mpData);
-        mpData = pNewData;
-    }
-
-    return *this;
-}
-
 STRING& STRING::Append( STRCODE c )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

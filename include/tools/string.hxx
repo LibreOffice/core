@@ -133,10 +133,15 @@ private:
     TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr, xub_StrLen nLen );
     TOOLS_DLLPRIVATE UniString( sal_Unicode c );
     TOOLS_DLLPRIVATE UniString& Assign( const sal_Unicode* pCharStr, xub_StrLen nLen );
+    TOOLS_DLLPRIVATE UniString& Append( const sal_Unicode* pCharStr );
+    TOOLS_DLLPRIVATE UniString& Append( const sal_Unicode* pCharStr, xub_StrLen nLen );
     TOOLS_DLLPRIVATE UniString& Expand( xub_StrLen nCount, sal_Unicode cExpandChar );
     TOOLS_DLLPRIVATE sal_Bool   Equals( const sal_Unicode* pCharStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
     TOOLS_DLLPRIVATE xub_StrLen Search( const sal_Unicode* pCharStr, xub_StrLen nIndex = 0 ) const;
+
+    TOOLS_DLLPRIVATE UniString& operator +=( const sal_Unicode* pCharStr );
+
 public:
                         UniString();
                         UniString( const ResId& rResId );
@@ -191,8 +196,6 @@ public:
         { return operator =(static_cast< sal_Unicode >(c)); }
 
     UniString&          Append( const UniString& rStr );
-    UniString&          Append( const sal_Unicode* pCharStr );
-    UniString&          Append( const sal_Unicode* pCharStr, xub_StrLen nLen );
     UniString&          Append( sal_Unicode c );
     inline UniString & Append(char c) // ...but allow "Append('a')"
         { return Append(static_cast< sal_Unicode >(c)); }
@@ -200,8 +203,6 @@ public:
                             { return Append( rStr ); }
     UniString&          operator +=( const OUString& rStr )
                             { return Append( UniString(rStr) ); }
-    UniString&          operator +=( const sal_Unicode* pCharStr )
-                            { return Append( pCharStr ); }
     UniString&          operator +=( sal_Unicode c )
                             { return Append( c ); }
     inline UniString & operator +=(char c) // ...but allow "+= 'a'"
