@@ -489,9 +489,7 @@ StreamAndStorageNames lcl_GetStreamStorageNames( const OUString sUserData )
         }
         else
         {
-            sal_Int32 nPathStart = aProt.getLength();
-            if (sUserData.startsWith("./"))
-                nPathStart += 2;
+            const sal_Int32 nPathStart = aProt.getLength();
             aNames.sStorage = sUserData.copy( nPathStart, nPos-nPathStart );
             aNames.sStream = sUserData.copy( nPos+1 );
         }
