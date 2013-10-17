@@ -38,7 +38,9 @@ run_mozilla() {
     if [ $? -eq 2 ]; then
       "$1" "$2" &
     else
-      "$1" -remote "openURL($2, new-window)" &
+      "$1" -remote \
+        "openURL($(printf '%s' "$2" \
+          | sed -e 's/(/%28/g' -e 's/)/%29/g' -e 's/,/%2C/g'),new-window)" &
     fi
   else
     "$1" "$2" &
