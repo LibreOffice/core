@@ -36,7 +36,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	cppuhelper \
 	cpputools \
 	$(call gb_Helper_optional,CRASHREP,crashrep) \
-	$(call gb_Helper_optional,CT2N,ct2n) \
 	cui \
 	$(call gb_Helper_optional,CURL,curl) \
 	dbaccess \

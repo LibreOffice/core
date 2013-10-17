@@ -12,8 +12,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,ConvertTextToNumber))
 $(eval $(call gb_UnpackedTarball_set_tarball,ConvertTextToNumber,$(CT2N_TARBALL),0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,ConvertTextToNumber,\
-	ct2n/ConvertTextToNumber-1.3.2-no-license.patch \
-	ct2n/ConvertTextToNumber-1.3.2-no-visible-by-default.patch \
+	external/ct2n/ConvertTextToNumber-1.3.2-no-license.patch \
+	external/ct2n/ConvertTextToNumber-1.3.2-no-visible-by-default.patch \
 ))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,ConvertTextToNumber,\
