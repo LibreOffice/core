@@ -29,19 +29,12 @@
  * Non-DESKTOP implies no traditional help mechanism, and to some
  * extent (as noticed, and as possible without making the code too
  * ugly) the related code is ifdeffed out.
+ *
+ * Non-DESKTOP implies no traditional desktop-style GUI elements like
+ * toolbars and scrollbars presented by the LO code.
  */
 
 #define HAVE_FEATURE_DESKTOP 0
-
-/* DESKTOP_GUI_ELEMENTS
- *
- * In the non-DESKTOP case, whether to still display (and enable
- * interactive use of) traditional desktop-style GUI elements like
- * toolbars and scrollbars, drawn and handled using mostly the normal
- * LO code.
- */
-
-#define HAVE_FEATURE_DESKTOP_GUI_ELEMENTS 0
 
 /* X11
  *

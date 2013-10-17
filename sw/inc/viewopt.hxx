@@ -446,7 +446,7 @@ public:
 
     sal_Bool    IsViewVScrollBar() const
         {
-#if HAVE_FEATURE_DESKTOP_GUI_ELEMENTS
+#if HAVE_FEATURE_DESKTOP
             return nUIOptions & VIEWOPT_2_VSCROLLBAR ? sal_True : sal_False;
 #else
             return sal_False;
@@ -454,7 +454,7 @@ public:
         }
     sal_Bool    IsViewHScrollBar() const
         {
-#if HAVE_FEATURE_DESKTOP_GUI_ELEMENTS
+#if HAVE_FEATURE_DESKTOP
             return nUIOptions & VIEWOPT_2_HSCROLLBAR ? sal_True : sal_False;
 #else
             return sal_False;
@@ -501,7 +501,7 @@ public:
 
     sal_Bool        IsViewAnyRuler() const
         {
-#if HAVE_FEATURE_DESKTOP_GUI_ELEMENTS
+#if HAVE_FEATURE_DESKTOP
             return 0 != (nUIOptions & VIEWOPT_2_ANY_RULER);
 #else
             return sal_False;
@@ -512,7 +512,7 @@ public:
 
     sal_Bool        IsViewHRuler(sal_Bool bDirect = sal_False)     const
                         {
-#if HAVE_FEATURE_DESKTOP_GUI_ELEMENTS
+#if HAVE_FEATURE_DESKTOP
                             sal_Bool bRet = sal::static_int_cast< sal_Bool >( bDirect  ?
                                     0 != (nUIOptions & VIEWOPT_2_H_RULER) :
                                     !bReadonly ?
@@ -529,7 +529,7 @@ public:
 
     sal_Bool            IsViewVRuler(sal_Bool bDirect = sal_False) const
                         {
-#if HAVE_FEATURE_DESKTOP_GUI_ELEMENTS
+#if HAVE_FEATURE_DESKTOP
                             sal_Bool bRet = sal::static_int_cast< sal_Bool >( bDirect  ?
                                     0 !=(nUIOptions & VIEWOPT_2_V_RULER) :
                                     !bReadonly ?

@@ -1240,7 +1240,7 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
 //--------------------------------------------------------------------
 void SfxDispatcher::SetMenu_Impl()
 {
-#if HAVE_FEATURE_DESKTOP_GUI_ELEMENTS
+#if HAVE_FEATURE_DESKTOP
     if ( pImp->pFrame )
     {
         SfxViewFrame* pTop = pImp->pFrame->GetTopViewFrame();
