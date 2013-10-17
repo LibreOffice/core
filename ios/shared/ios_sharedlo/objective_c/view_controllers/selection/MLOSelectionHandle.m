@@ -7,7 +7,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "MLOSelectionHandle.h"
-#import "MLOMainViewController_Impl.h"
+#import "MLOMainViewController_Friend.h"
 #import "MLOSelectionViewController_Impl.h"
 #import "MLOGestureEngine_Impl.h"
 #import "MLOResourceImage.h"

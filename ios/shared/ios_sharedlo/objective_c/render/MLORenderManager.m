@@ -249,42 +249,45 @@ typedef enum {X,Y,Z} MLOGestureDirection;
 }
 
 -(void) renderWithRect:(CGRect) rect{
+
+    if(ENABLE_LO_DESKTOP){
     
-    switch(self.currentGesture){
-        case PAN:
-            {
-                NSTimeInterval now = CACurrentMediaTime();
-                
-                NSTimeInterval delta =  LO_RENDER_BACKOFF_MIN +
-                                        LO_RENDER_BACK_OFF_MAX_DELTA * [self currentZoomRatio];
-                
-                NSTimeInterval releaseTime = now + delta;
-                
-                NSTimeInterval currentReleaseTime = self.renderBlockReleaseTime;
-                
-                NSInteger currentFrameId = self.frameIdCounter++;
-                
-                if(now > currentReleaseTime){
-               
-                    [self pereodicRender:rect releaseTime:releaseTime];
-               
-                }else{
+        switch(self.currentGesture){
+            case PAN:
+                {
+                    NSTimeInterval now = CACurrentMediaTime();
                     
-                    [self performBlock:^{
+                    NSTimeInterval delta =  LO_RENDER_BACKOFF_MIN +
+                                            LO_RENDER_BACK_OFF_MAX_DELTA * [self currentZoomRatio];
+                    
+                    NSTimeInterval releaseTime = now + delta;
+                    
+                    NSTimeInterval currentReleaseTime = self.renderBlockReleaseTime;
+                    
+                    NSInteger currentFrameId = self.frameIdCounter++;
+                    
+                    if(now > currentReleaseTime){
+                   
+                        [self pereodicRender:rect releaseTime:releaseTime];
+                   
+                    }else{
                         
-                        if((self.renderBlockReleaseTime == currentReleaseTime)
-                           && (currentFrameId==0)){
-                           
-                            [self pereodicRender:rect releaseTime:releaseTime];
-                        }
-                    }afterDelay:delta];
+                        [self performBlock:^{
+                            
+                            if((self.renderBlockReleaseTime == currentReleaseTime)
+                               && (currentFrameId==0)){
+                               
+                                [self pereodicRender:rect releaseTime:releaseTime];
+                            }
+                        }afterDelay:delta];
+                    }
                 }
-            }
+                break;
+            case PINCH:
+            case NO_GESTURE:
+                [[self getNextBuffer] setNeedsDisplayInRect:rect];
             break;
-        case PINCH:
-        case NO_GESTURE:
-            [[self getNextBuffer] setNeedsDisplayInRect:rect];
-        break;
+        }
     }
  }
 

@@ -10,12 +10,11 @@
 #import "MLOInvoker.h"
 
 @class MLOMainViewController;
-@interface MLOManager : UIResponder <UIApplicationDelegate,UITextViewDelegate>
-@property (strong,nonatomic) MLOMainViewController * mainViewController;
+@interface MLOManager : UIResponder <UIApplicationDelegate>
+@property MLOMainViewController * mainViewController;
 
 +(MLOManager *) getInstance;
 
--(BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 -(void)openInLibreOfficeFilePath:(NSString *) filePath fileNameWithExtension:(NSString *) fileName superView:(UIView *) superview window:(UIWindow *) window invoker:(NSObject<MLOInvoker> *) invoker;
 -(void)openInLibreOfficeFilePath:(NSString *) filePath superView:(UIView *) superview window:(UIWindow *) window invoker:(NSObject<MLOInvoker> *) invoker;
 -(void) hideLibreOffice;
@@ -23,5 +22,4 @@
 -(NSString *)extension;
 -(CGRect)bounds;
 -(void)start;
-
 @end

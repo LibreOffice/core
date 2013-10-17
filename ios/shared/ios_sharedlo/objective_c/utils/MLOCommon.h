@@ -9,6 +9,11 @@
 #ifndef __Mobile_LibreOffice_MLOCommon_h__
 #define __Mobile_LibreOffice_MLOCommon_h__
 
+typedef enum { LO_APP, TILE_TESTER} MLOAppRole;
+#define MLOAppRoleString(enum) [@[@"LO_APP",@"RENDER_TILE_TESTER"] objectAtIndex:enum]
+static const MLOAppRole APP_ROLE = MLO_APP_ROLE;
+static const BOOL ENABLE_LO_DESKTOP = APP_ROLE == LO_APP;
+
 static const BOOL
     LOG_DRAW_RECT = NO,
     LOG_GET_VIEW_DATA = YES,

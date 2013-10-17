@@ -7,7 +7,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "MLOScrollerData.h"
-#import "MLOMainViewController_Impl.h"
+#import "MLOMainViewController_Friend.h"
 #import "MLOGestureEngine_Impl.h"
 #import "MLOScrollerGridViewController.h"
 #import "MLOScrollerTooltip.h"

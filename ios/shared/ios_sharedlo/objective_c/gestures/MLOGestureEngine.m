@@ -7,7 +7,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "MLOAnimation.h"
-#import "MLOMainViewController_Impl.h"
+#import "MLOMainViewController_Friend.h"
 #import "MLORenderManager_Impl.h"
 #import "MLOSelectionViewController.h"
 #import "MLOScrollerViewController.h"

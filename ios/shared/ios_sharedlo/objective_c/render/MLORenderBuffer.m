@@ -53,45 +53,46 @@ static CGFloat averageFps,maxFps;
 
 - (void)drawRect:(CGRect)rect
 {
+    if(ENABLE_LO_DESKTOP){
+        CGContextRef context = UIGraphicsGetCurrentContext();
+       
+        //rect = self.frame;
+        LOG_RECT(rect, @"drawRect");
+        
+        CGContextSaveGState(context);
+        CGContextSetFillColorWithColor(context,[UIColor whiteColor].CGColor);
+        CGContextTranslateCTM(context, 0, _manager.bufferFrame.size.height);
+        CGContextScaleCTM(context, 1, -1);
+        CGContextScaleCTM(context, 1, 1);
+        NSDate *startDate = [NSDate date];
+        
+        [_manager loRenderWillBegin];
+        
+        touch_lo_render_windows(context, rect.origin.y, rect.origin.y, rect.size.width, rect.size.height);
 
-    CGContextRef context = UIGraphicsGetCurrentContext();
-   
-    //rect = self.frame;
-    LOG_RECT(rect, @"drawRect");
-    
-    CGContextSaveGState(context);
-    CGContextSetFillColorWithColor(context,[UIColor whiteColor].CGColor);
-    CGContextTranslateCTM(context, 0, _manager.bufferFrame.size.height);
-    CGContextScaleCTM(context, 1, -1);
-    CGContextScaleCTM(context, 1, 1);
-    NSDate *startDate = [NSDate date];
-    
-    [_manager loRenderWillBegin];
-    
-    touch_lo_render_windows(context, rect.origin.y, rect.origin.y, rect.size.width, rect.size.height);
-
-    CGContextRestoreGState(context);
-    
-    CGFloat duration =  [[NSDate date] timeIntervalSinceDate: startDate];
-    
-    maxFps = max(maxFps,1.0f/duration);
-    
-    static float totalTime = 0,counter = 0;
-    
-    totalTime +=duration;
-    counter++;
-    
-    CGFloat averageTime = totalTime / counter;
-    if(averageTime >MIN_AVERAGE_RENDER_TIME_THRESHOLD){
-        averageFps = 1.0f/ averageTime;
-    }
-    
-    if(LOG_DRAW_RECT){
-        NSLog(@"drawRect: lo_render_windows: time=%f sec, average=%f sec, fps=%f",
-              duration, averageTime, averageFps);
-    }
-    if(_manager.currentGesture != PINCH){
-        [_manager swapPreviousBuffer:_previous withNextBuffer:self];
+        CGContextRestoreGState(context);
+        
+        CGFloat duration =  [[NSDate date] timeIntervalSinceDate: startDate];
+        
+        maxFps = max(maxFps,1.0f/duration);
+        
+        static float totalTime = 0,counter = 0;
+        
+        totalTime +=duration;
+        counter++;
+        
+        CGFloat averageTime = totalTime / counter;
+        if(averageTime >MIN_AVERAGE_RENDER_TIME_THRESHOLD){
+            averageFps = 1.0f/ averageTime;
+        }
+        
+        if(LOG_DRAW_RECT){
+            NSLog(@"drawRect: lo_render_windows: time=%f sec, average=%f sec, fps=%f",
+                  duration, averageTime, averageFps);
+        }
+        if(_manager.currentGesture != PINCH){
+            [_manager swapPreviousBuffer:_previous withNextBuffer:self];
+        }
     }
 }
 

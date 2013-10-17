@@ -7,7 +7,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "MLOTopbarViewController.h"
-#import "MLOMainViewController_Impl.h"
+#import "MLOMainViewController_Friend.h"
 #import "MLOMainViewController.h"
 #import "MLOButton.h"
 #import "MLOResourceImage.h"
