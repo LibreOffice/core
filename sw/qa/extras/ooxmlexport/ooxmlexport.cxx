@@ -122,6 +122,7 @@ public:
     void testSmartart();
     void testFdo69636();
     void testCharHighlight();
+    void testFdo69644();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -241,6 +242,7 @@ void Test::run()
         {"smartart.docx", &Test::testSmartart},
         {"fdo69636.docx", &Test::testFdo69636},
         {"char_highlight.docx", &Test::testCharHighlight},
+        {"fdo69644.docx", &Test::testFdo69644},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1586,6 +1588,15 @@ void Test::testCharHighlight()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), getProperty<sal_Int32>(xRun,"CharBackColor"));
     }
+}
+
+void Test::testFdo69644()
+{
+    // The problem was that the exporter exported the table definition
+    // with only 3 columns, instead of 5 columns.
+    // Check that the table grid is exported with 5 columns
+    xmlDocPtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 5);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
