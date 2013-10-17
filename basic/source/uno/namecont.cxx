@@ -2971,7 +2971,6 @@ void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifie
 sal_Bool SAL_CALL SfxLibraryContainer::supportsService( const OUString& _rServiceName )
     throw (RuntimeException)
 {
-    LibraryContainerMethodGuard aGuard( *this );
     return cppu::supportsService(this, _rServiceName);
 }
 

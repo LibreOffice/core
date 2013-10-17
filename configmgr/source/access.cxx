@@ -72,8 +72,8 @@
 #include "comphelper/sequenceasvector.hxx"
 #include "cppu/unotype.hxx"
 #include "cppuhelper/queryinterface.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "cppuhelper/weak.hxx"
-#include <cppuhelper/supportsservice.hxx>
 #include "osl/interlck.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
@@ -222,9 +222,6 @@ OUString Access::getImplementationName() throw (css::uno::RuntimeException)
 sal_Bool Access::supportsService(OUString const & ServiceName)
     throw (css::uno::RuntimeException)
 {
-    assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
-    checkLocalizedPropertyAccess();
     return cppu::supportsService(this, ServiceName);
 }
 
