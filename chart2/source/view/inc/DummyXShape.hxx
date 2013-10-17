@@ -130,12 +130,14 @@ public:
 
     virtual DummyChart* getRootShape();
 
+protected:
+
+    std::map<OUString, uno::Any> maProperties;
+
 private:
     OUString maName;
     com::sun::star::awt::Point maPosition;
     com::sun::star::awt::Size maSize;
-
-    std::map<OUString, uno::Any> maProperties;
 
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > mxParent;
     DummyXShape* mpParent;

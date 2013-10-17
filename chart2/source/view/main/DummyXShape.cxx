@@ -203,14 +203,34 @@ void DummyXShape::setParent( const uno::Reference< uno::XInterface >& xParent )
     mxParent = xParent;
 }
 
+namespace {
+
+void setProperties( uno::Reference< beans::XPropertySet > xPropSet, const tPropertyNameMap& rPropertyNameMap,
+        std::map<OUString, uno::Any>& rTargetMap )
+{
+    tNameSequence aNames;
+    tAnySequence aValues;
+    PropertyMapper::getMultiPropertyLists( aNames, aValues,
+            xPropSet, rPropertyNameMap );
+
+    sal_Int32 nSize = std::min(aNames.getLength(), aValues.getLength());
+    for(sal_Int32 i = 0; i < nSize; ++i)
+    {
+        rTargetMap[aNames[i]] = aValues[i];
+    }
+}
+
+}
+
 DummyCube::DummyCube(const drawing::Position3D &rPos, const drawing::Direction3D& rSize,
-        sal_Int32 nRotateZAngleHundredthDegree, const uno::Reference< beans::XPropertySet > ,
-        const tPropertyNameMap& , bool bRounded ):
+        sal_Int32 nRotateZAngleHundredthDegree, const uno::Reference< beans::XPropertySet > xPropSet,
+        const tPropertyNameMap& rPropertyNameMap, bool bRounded ):
     mnRotateZAngleHundredthDegree(nRotateZAngleHundredthDegree),
     mbRounded(bRounded)
 {
     setPosition(Position3DToAWTPoint(rPos));
     setSize(Direction3DToAWTSize(rSize));
+    setProperties(xPropSet, rPropertyNameMap, maProperties);
 }
 
 DummyCylinder::DummyCylinder(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
@@ -222,13 +242,14 @@ DummyCylinder::DummyCylinder(const drawing::Position3D& rPos, const drawing::Dir
 }
 
 DummyPyramid::DummyPyramid(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
-        double fTopHeight, bool bRotateZ, uno::Reference< beans::XPropertySet > ,
-        const tPropertyNameMap& ):
+        double fTopHeight, bool bRotateZ, uno::Reference< beans::XPropertySet > xPropSet,
+        const tPropertyNameMap& rPropertyNameMap):
     mfTopHeight(fTopHeight),
     mbRotateZ(bRotateZ)
 {
     setPosition(Position3DToAWTPoint(rPos));
     setSize(Direction3DToAWTSize(rSize));
+    setProperties(xPropSet, rPropertyNameMap, maProperties);
 }
 
 DummyCone::DummyCone(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
@@ -266,14 +287,15 @@ DummyPieSegment::DummyPieSegment(double fUnitCircleStartAngleDegree, double fUni
 {
 }
 
-DummyStripe::DummyStripe(const Stripe& rStripe, uno::Reference< beans::XPropertySet > ,
-        const tPropertyNameMap& , sal_Bool bDoubleSided,
+DummyStripe::DummyStripe(const Stripe& rStripe, uno::Reference< beans::XPropertySet > xPropSet,
+        const tPropertyNameMap& rPropertyNameMap, sal_Bool bDoubleSided,
         short nRotatedTexture, bool bFlatNormals ):
     maStripe(rStripe),
     mbDoubleSided(bDoubleSided),
     mnRotatedTexture(nRotatedTexture),
     mbFlatNormals(bFlatNormals)
 {
+    setProperties(xPropSet, rPropertyNameMap, maProperties);
 }
 
 DummyArea3D::DummyArea3D(const drawing::PolyPolygonShape3D& rShape, double fDepth):
