@@ -58,7 +58,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
 	$(call gb_Helper_optional,HELP,helpcontent2) \
 	hwpfilter \
-	$(call gb_Helper_optional,HYPHEN,hyphen) \
 	i18nlangtag \
 	i18npool \
 	i18nutil \
