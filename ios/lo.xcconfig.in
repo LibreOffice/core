@@ -15,6 +15,7 @@
 LO_BUILDDIR = @BUILDDIR@
 LO_INSTDIR = @INSTDIR@
 LO_OUTDIR = @OUTDIR@
+LO_SRCDIR = @SRC_ROOT@
 LO_WORKDIR = @WORKDIR@
 
 // These are actual Xcode-known settings. The corresponding autoconf

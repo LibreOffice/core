@@ -479,7 +479,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(LO_BUILDDIR)/config_host",
-					../../include,
+					"$(LO_SRCDIR)/include",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
 				);
@@ -513,7 +513,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(LO_BUILDDIR)/config_host",
-					../../include,
+					"$(LO_SRCDIR)/include",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
 				);
