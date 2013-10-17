@@ -309,8 +309,10 @@ private:
     /** Generates on-the-fly LangID and registers the maBcp47,mnLangID pair.
 
         @param  nRegisterID
-                If not 0 and not LANGUAGE_DONTKNOW, use that ID instead of
-                generating an on-the-fly ID.
+                If not 0 and not LANGUAGE_DONTKNOW, suggest (!) to use that ID
+                instead of generating an on-the-fly ID. Implementation may
+                still generate an ID if the suggested ID is already used for
+                another language tag.
 
         @return NULL if no ID could be obtained or registration failed.
      */
@@ -616,10 +618,10 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
 
     osl::MutexGuard aGuard( theMutex::get());
 
-    MapBcp47& rMap = theMapBcp47::get();
-    MapBcp47::const_iterator it( rMap.find( maBcp47));
+    MapBcp47& rMapBcp47 = theMapBcp47::get();
+    MapBcp47::const_iterator it( rMapBcp47.find( maBcp47));
     bool bOtherImpl = false;
-    if (it != rMap.end())
+    if (it != rMapBcp47.end())
     {
         SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: found impl for '" << maBcp47 << "'");
         pImpl = (*it).second;
@@ -639,23 +641,47 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
     {
         SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: new impl for '" << maBcp47 << "'");
         pImpl.reset( new LanguageTagImpl( *this));
-        rMap.insert( ::std::make_pair( maBcp47, pImpl));
+        rMapBcp47.insert( ::std::make_pair( maBcp47, pImpl));
     }
 
     if (!bOtherImpl || !pImpl->mbInitializedLangID)
     {
-        LanguageType nLang = ((nRegisterID == 0 || nRegisterID == LANGUAGE_DONTKNOW) ?
-                getNextOnTheFlyLanguage() : nRegisterID);
-        if (!nLang)
+        if (nRegisterID == 0 || nRegisterID == LANGUAGE_DONTKNOW)
+            nRegisterID = getNextOnTheFlyLanguage();
+        else
+        {
+            // Accept a suggested ID only if it is not mapped yet to something
+            // different, otherwise we would end up with ambiguous assignments
+            // of different language tags, for example for the same primary
+            // LangID with "no", "nb" and "nn".
+            const MapLangID& rMapLangID = theMapLangID::get();
+            MapLangID::const_iterator itID( rMapLangID.find( nRegisterID));
+            if (itID != rMapLangID.end())
+            {
+                if ((*itID).second->maBcp47 != maBcp47)
+                {
+                    SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: not using suggested 0x"
+                            << ::std::hex << nRegisterID << " for '" << maBcp47 << "' have '"
+                            << (*itID).second->maBcp47 << "'");
+                    nRegisterID = getNextOnTheFlyLanguage();
+                }
+                else
+                {
+                    SAL_WARN( "i18nlangtag", "LanguageTag::registerOnTheFly: suggested 0x"
+                            << ::std::hex << nRegisterID << " for '" << maBcp47 << "' already registered");
+                }
+            }
+        }
+        if (!nRegisterID)
         {
             // out of IDs, nothing to register
             return pImpl;
         }
-        pImpl->mnLangID = nLang;
+        pImpl->mnLangID = nRegisterID;
         pImpl->mbInitializedLangID = true;
         if (pImpl.get() != this)
         {
-            mnLangID = nLang;
+            mnLangID = nRegisterID;
             mbInitializedLangID = true;
         }
     }
@@ -675,6 +701,13 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
     }
 
     return pImpl;
+}
+
+
+static bool lcl_isKnownOnTheFlyID( LanguageType nLang )
+{
+    return nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM &&
+        (LanguageTag::isOnTheFlyID( nLang) || (nLang == MsLangId::getPrimaryLanguage( nLang)));
 }
 
 
@@ -884,10 +917,8 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
                 if (!pImpl->mbInitializedLangID)
                     pImpl->convertLocaleToLang( true);
                 // Unconditionally insert (round-trip is possible) for
-                // on-the-fly IDs and (generated or not) primary language IDs.
-                bool bInsert = (pImpl->mnLangID != LANGUAGE_DONTKNOW &&
-                        (LanguageTag::isOnTheFlyID( pImpl->mnLangID) ||
-                         (pImpl->mnLangID == MsLangId::getPrimaryLanguage( pImpl->mnLangID))));
+                // on-the-fly IDs and (generated or not) suggested IDs.
+                bool bInsert = lcl_isKnownOnTheFlyID( pImpl->mnLangID);
                 OUString aBcp47;
                 if (!bInsert)
                 {
@@ -1309,8 +1340,8 @@ void LanguageTagImpl::convertLocaleToLang( bool bAllowOnTheFlyID )
             if (isValidBcp47())
             {
                 // For language-only (including script) look if we know some
-                // locale of that language and if so use the primary language
-                // ID of that instead of generating an on-the-fly-ID.
+                // locale of that language and if so try to use the primary
+                // language ID of that instead of generating an on-the-fly ID.
                 if (getCountry().isEmpty() && isIsoODF())
                 {
                     lang::Locale aLoc( MsLangId::Conversion::lookupFallbackLocale( maLocale));
@@ -1319,10 +1350,8 @@ void LanguageTagImpl::convertLocaleToLang( bool bAllowOnTheFlyID )
                     if (aLoc.Language != "en" || getLanguage() == "en")
                     {
                         mnLangID = MsLangId::Conversion::convertLocaleToLanguage( aLoc);
-                        // LANGUAGE_DONTKNOW is all bits of primary language,
-                        // so this is ok even if the conversion failed, which
-                        // it should not anyway..
-                        mnLangID = MsLangId::getPrimaryLanguage( mnLangID);
+                        if (mnLangID != LANGUAGE_DONTKNOW)
+                            mnLangID = MsLangId::getPrimaryLanguage( mnLangID);
                     }
                 }
                 registerOnTheFly( mnLangID);

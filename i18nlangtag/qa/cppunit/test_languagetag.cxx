@@ -335,11 +335,33 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Variant == "" );
         LanguageType de_LangID = de.getLanguageType();
         CPPUNIT_ASSERT( de_LangID != LANGUAGE_GERMAN );
-        CPPUNIT_ASSERT( MsLangId::getPrimaryLanguage( de_LangID) == MsLangId::getPrimaryLanguage( LANGUAGE_GERMAN) );
+        CPPUNIT_ASSERT( de_LangID == MsLangId::getPrimaryLanguage( LANGUAGE_GERMAN) );
         CPPUNIT_ASSERT( de.makeFallback().getBcp47() == "de-DE");
         // Check registered mapping.
         LanguageTag de_l( de_LangID);
         CPPUNIT_ASSERT( de_l.getBcp47() == s_de );
+    }
+
+    // "bo" and "dz" share the same primary language ID, only one gets it
+    // assigned, "dz" language-only has a special mapping.
+    {
+        LanguageTag bo( "bo", true );
+        CPPUNIT_ASSERT( bo.getLanguageType() == MsLangId::getPrimaryLanguage( LANGUAGE_TIBETAN) );
+        LanguageTag dz( "dz", true );
+        CPPUNIT_ASSERT( dz.getLanguageType() == LANGUAGE_USER_DZONGKHA_MAP_LONLY );
+    }
+
+    // "no", "nb" and "nn" share the same primary language ID, which even is
+    // assigned to "no-NO" for legacy so none gets it assigned, all on-the-fly.
+    {
+        LanguageTag no( "no", true );
+        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( no.getLanguageType()) );
+        LanguageTag nb( "nb", true );
+        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( nb.getLanguageType()) );
+        LanguageTag nn( "nn", true );
+        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( nn.getLanguageType()) );
+        LanguageTag no_NO( "no-NO", true );
+        CPPUNIT_ASSERT( no_NO.getLanguageType() == LANGUAGE_NORWEGIAN );
     }
 
     // 'de-1901' derived from 'de-DE-1901' grandfathered to check that it is

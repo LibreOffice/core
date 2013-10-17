@@ -352,6 +352,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_TIBETAN,                     "bo", "CN", false },   // CN politically correct?
     { LANGUAGE_USER_TIBETAN_INDIA,          "bo", "IN", false },
     { LANGUAGE_DZONGKHA,                    "dz", "BT", false },
+    { LANGUAGE_USER_DZONGKHA_MAP_LONLY,     "dz", ""  , false },    // because of the MS error, see lang.h
     { LANGUAGE_TURKMEN,                     "tk", "TM", false },
     { LANGUAGE_WELSH,                       "cy", "GB", false },
     { LANGUAGE_SESOTHO,                     "st", "ZA", false },

@@ -446,6 +446,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_KURDISH_IRAN          0x1226  /* sublang 0x04, Arabic script */
 #define LANGUAGE_USER_SARDINIAN             0x0627
 /* was reserved for Dzongkha but turned down with #i53497#: 0x0628 */  /* obsoleted by LANGUAGE_DZONGKHA */
+#define LANGUAGE_USER_DZONGKHA_MAP_LONLY    0xF851  /* to map "dz" only, because of the MS error, and preserve CTL information, sub 0x3e */
 #define LANGUAGE_USER_SWAHILI_TANZANIA      0x8041  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SWAHILI)) */
 #define LANGUAGE_OBSOLETE_USER_BRETON       0x0629
 #define LANGUAGE_USER_BRETON                LANGUAGE_BRETON_FRANCE
