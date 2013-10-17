@@ -37,6 +37,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,HSQLDB,hsqldb) \
 	$(call gb_Helper_optional,HUNSPELL,hunspell) \
 	$(call gb_Helper_optional,HYPHEN,hyphen) \
+	$(call gb_Helper_optional,ICU,icu) \
 	$(call gb_Helper_optional,LIBATOMIC_OPS,libatomic_ops) \
 	$(call gb_Helper_optional,LIBPNG,libpng) \
 ))
