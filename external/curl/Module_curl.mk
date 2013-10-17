@@ -9,12 +9,10 @@
 
 $(eval $(call gb_Module_Module,curl))
 
-ifeq ($(SYSTEM_CURL),NO)
 $(eval $(call gb_Module_add_targets,curl,\
 	UnpackedTarball_curl \
 	ExternalPackage_curl \
 	ExternalProject_curl \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:
