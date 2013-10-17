@@ -684,7 +684,7 @@ sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
         {
             SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
             OUString sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
-            if( sSelected == sEntry.copy( 1, sSelected.getLength() - 2 ) )
+            if( sEntry == sSelected.copy( 1, sSelected.getLength() - 2 ) )
             {
                 nRet = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
                 break;
