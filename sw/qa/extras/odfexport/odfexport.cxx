@@ -8,6 +8,8 @@
  */
 
 #include <swmodeltestbase.hxx>
+
+#if !defined(MACOSX) && !defined(WNT)
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -15,52 +17,20 @@
 class Test : public SwModelTestBase
 {
 public:
-    void testFdo38244();
-    void testFirstHeaderFooter();
-    void testTextframeGradient();
-    void testFdo60769();
-    void testFdo58949();
-    void testCharacterBorder();
-    void testFdo43807();
-    void testTextframeTransparentShadow();
+    Test() : SwModelTestBase("/sw/qa/extras/odfexport/data/", "writer8") {}
 
-    CPPUNIT_TEST_SUITE(Test);
-#if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(run);
-#endif
-    CPPUNIT_TEST_SUITE_END();
-
-private:
-    void run();
+    /**
+     * Blacklist handling
+     */
+    bool mustTestImportOf(const char* filename) const {
+        // Only test import of .odt document
+        return OString(filename).endsWith(".odt");
+    }
 };
 
-void Test::run()
-{
-    MethodEntry<Test> aMethods[] = {
-        {"fdo38244.odt", &Test::testFdo38244},
-        {"first-header-footer.odt", &Test::testFirstHeaderFooter},
-        {"textframe-gradient.odt", &Test::testTextframeGradient},
-        {"fdo60769.odt", &Test::testFdo60769},
-        {"fdo58949.docx", &Test::testFdo58949},
-        {"charborder.odt", &Test::testCharacterBorder },
-        {"fdo43807.odt", &Test::testFdo43807 },
-        {"textframe-transparent-shadow.odt", &Test::testTextframeTransparentShadow},
-    };
-    header();
-    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
-    {
-        MethodEntry<Test>& rEntry = aMethods[i];
-        load("/sw/qa/extras/odfexport/data/", rEntry.pName);
-        // If the testcase is stored in some other format, it's pointless to test.
-        if (OString(rEntry.pName).endsWith(".odt"))
-            (this->*rEntry.pMethod)();
-        reload("writer8");
-        (this->*rEntry.pMethod)();
-        finish();
-    }
-}
+#define DECLARE_ODT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 
-void Test::testFdo38244()
+DECLARE_ODT_TEST(testFdo38244, "fdo38244.odt")
 {
     // See ooxmlexport's testFdo38244().
 
@@ -86,7 +56,7 @@ void Test::testFdo38244()
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 }
 
-void Test::testFirstHeaderFooter()
+DECLARE_ODT_TEST(testFirstHeaderFooter, "first-header-footer.odt")
 {
     // Test import and export of the header-first token.
 
@@ -105,7 +75,7 @@ void Test::testFirstHeaderFooter()
     CPPUNIT_ASSERT_EQUAL(OUString("Left footer2"),  parseDump("/root/page[6]/footer/txt/text()"));
 }
 
-void Test::testTextframeGradient()
+DECLARE_ODT_TEST(testTextframeGradient, "textframe-gradient.odt")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -126,7 +96,7 @@ void Test::testTextframeGradient()
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
 }
 
-void Test::testFdo60769()
+DECLARE_ODT_TEST(testFdo60769, "fdo60769.odt")
 {
     // Test multi-paragraph comment range feature.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -152,7 +122,7 @@ void Test::testFdo60769()
     }
 }
 
-void Test::testFdo58949()
+DECLARE_ODT_TEST(testFdo58949, "fdo58949.docx")
 {
     /*
      * The problem was that the exporter didn't insert "Obj102" to the
@@ -169,7 +139,7 @@ void Test::testFdo58949()
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("Obj102")));
 }
 
-void Test::testCharacterBorder()
+DECLARE_ODT_TEST(testCharacterBorder, "charborder.odt")
 {
     // Make sure paragraph and character attributes don't interfere
     // First paragraph has a paragraph border and a character border included by the paragraph style
@@ -324,7 +294,7 @@ void Test::testCharacterBorder()
     }
 }
 
-void Test::testFdo43807()
+DECLARE_ODT_TEST(testFdo43807, "fdo43807.odt")
 {
     uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Drop Caps"),getProperty<OUString>(xSet,"DropCapCharStyleName"));
@@ -333,15 +303,14 @@ void Test::testFdo43807()
     CPPUNIT_ASSERT_EQUAL(OUString("User Defined Drop Caps"),getProperty<OUString>(xSet,"DropCapCharStyleName"));
 }
 
-void Test::testTextframeTransparentShadow()
+DECLARE_ODT_TEST(testTextframeTransparentShadow, "textframe-transparent-shadow.odt")
 {
     uno::Reference<drawing::XShape> xPicture = getShape(1);
     // ODF stores opacity of 75%, that means 25% transparency.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(25), getProperty<sal_Int32>(xPicture, "ShadowTransparence"));
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
