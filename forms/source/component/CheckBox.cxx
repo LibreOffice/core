@@ -211,17 +211,13 @@ bool OCheckBoxModel::DbUseBool()
 }
 
 //------------------------------------------------------------------------------
-#if defined __GNUC__ && ! defined __clang__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#endif
 Any OCheckBoxModel::translateDbColumnToControlValue()
 {
     Any aValue;
 
     //////////////////////////////////////////////////////////////////
     // Set value in ControlModel
-    bool bValue;
+    bool bValue = bool(); // avoid warning
     if(DbUseBool())
     {
         bValue = m_xColumn->getBoolean();
@@ -247,17 +243,13 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
     {
         // Since above either bValue is initialised, either aValue.hasValue(),
         // bValue cannot be used uninitialised here.
-        // But GCC does not see/understand that, which breaks -Werror builds.
-        // And Clang compiler does not support #pragma GCC diagnostic
-        // within a function, moved them to outside the function.
+        // But GCC does not see/understand that, which breaks -Werror builds,
+        // so we explicitly default-initialise it.
         aValue <<= (sal_Int16)( bValue ? STATE_CHECK : STATE_NOCHECK );
     }
 
     return aValue;
 }
-#if defined __GNUC__ && ! defined __clang__
-#pragma GCC diagnostic pop
-#endif
 
 //-----------------------------------------------------------------------------
 sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
