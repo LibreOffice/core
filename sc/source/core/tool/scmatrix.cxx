@@ -1986,11 +1986,13 @@ size_t ScMatrix::Count(bool bCountStrings) const
     return pImpl->Count(bCountStrings);
 }
 
-size_t ScMatrix::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const {
+size_t ScMatrix::MatchDoubleInColumns(double fValue, size_t nCol1, size_t nCol2) const
+{
     return pImpl->MatchDoubleInColumns(fValue, nCol1, nCol2);
 }
 
-size_t ScMatrix::MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const {
+size_t ScMatrix::MatchStringInColumns(const svl::SharedString& rStr, size_t nCol1, size_t nCol2) const
+{
     return pImpl->MatchStringInColumns(rStr, nCol1, nCol2);
 }
 
