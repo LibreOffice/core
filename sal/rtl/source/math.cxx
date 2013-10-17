@@ -825,6 +825,10 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                 // offset
                 while (p != pEnd && isDigit(*p))
                     ++p;
+                if (p == pFirstExpDigit)
+                {   // no digits in exponent, reset end of scan
+                    p = pExponent;
+                }
             }
             else
             {

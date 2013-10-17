@@ -81,6 +81,12 @@ public:
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(RTL_CONSTASCII_LENGTH("1")), end);
         CPPUNIT_ASSERT_EQUAL(1.0, res);
+        res = rtl::math::stringToDouble(
+            rtl::OUString("0e"),
+            sal_Unicode('.'), sal_Unicode(','), &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(RTL_CONSTASCII_LENGTH("1")), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
     }
 
     CPPUNIT_TEST_SUITE(Test);
