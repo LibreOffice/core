@@ -212,53 +212,6 @@ xub_StrLen STRING::Match( const STRING& rStr ) const
     return STRING_MATCH;
 }
 
-STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, sal_Int32& rIndex ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    const STRCODE*  pStr            = mpData->maStr;
-    xub_StrLen      nLen            = (xub_StrLen)mpData->mnLen;
-    xub_StrLen      nTok            = 0;
-    sal_Int32      nFirstChar      = rIndex;
-    xub_StrLen      i               = nFirstChar;
-
-    // Determine token position and length
-    pStr += i;
-    while ( i < nLen )
-    {
-        // Increase token count if match
-        if ( *pStr == cTok )
-        {
-            ++nTok;
-
-            if ( nTok == nToken )
-                nFirstChar = i+1;
-            else
-            {
-                if ( nTok > nToken )
-                    break;
-            }
-        }
-
-        ++pStr,
-        ++i;
-    }
-
-    if ( nTok >= nToken )
-    {
-        if ( i < nLen )
-            rIndex = i+1;
-        else
-            rIndex = -1;
-        return Copy( nFirstChar, i-nFirstChar );
-    }
-    else
-    {
-        rIndex = -1;
-        return STRING();
-    }
-}
-
 STRING& STRING::Append( STRCODE c )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

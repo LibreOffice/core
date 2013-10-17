@@ -234,9 +234,6 @@ public:
     xub_StrLen          Search( sal_Unicode c, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          Search( const UniString& rStr, xub_StrLen nIndex = 0 ) const;
 
-    UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok, sal_Int32& rIndex ) const;
-    UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok = ';' ) const;
-
     const sal_Unicode*  GetBuffer() const { return mpData->maStr; }
 
     friend sal_Bool     operator == ( const UniString& rStr1,   const UniString& rStr2 )
@@ -256,12 +253,6 @@ public:
 inline UniString UniString::Copy( xub_StrLen nIndex, xub_StrLen nCount ) const
 {
     return UniString( *this, nIndex, nCount );
-}
-
-inline UniString UniString::GetToken( xub_StrLen nToken, sal_Unicode cTok ) const
-{
-    sal_Int32 nTempPos = 0;
-    return GetToken( nToken, cTok, nTempPos );
 }
 
 template< typename charT, typename traits > std::basic_ostream<charT, traits> &
