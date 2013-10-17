@@ -87,6 +87,9 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(ENABLE_NPAPI_FROM_BROWSER),pluginapp.bin) \
 	soffice_bin \
 	spadmin.bin \
+	$(if $(filter $(GUIBASE)$(ENABLE_GTK),unxTRUE), \
+		xid-fullscreen-on-all-monitors \
+	) \
 	$(if $(filter $(GUIBASE)$(ENABLE_TDE),unxTRUE), \
 		tdefilepicker \
 	) \

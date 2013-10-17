@@ -30,6 +30,9 @@
 #include <generic/genprn.h>
 #include <generic/geninst.h>
 #include <headless/svpgdi.hxx>
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
+#include <rtl/process.h>
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -89,6 +92,8 @@
 #define GSM_DBUS_PATH           "/org/gnome/SessionManager"
 #define GSM_DBUS_INTERFACE      "org.gnome.SessionManager"
 #endif
+
+#include <config_folders.h>
 
 // make compile on gtk older than 2.10
 #if GTK_MINOR_VERSION < 10
@@ -3528,9 +3533,53 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     return sal_False;
 }
 
+#if !GTK_CHECK_VERSION(3,8,0)
+static OString getDisplayString()
+{
+    int nParams = rtl_getAppCommandArgCount();
+    OUString aParam;
+    for( int i = 0; i < nParams; i++ )
+    {
+        rtl_getAppCommandArg( i, &aParam.pData );
+        if( i < nParams-1 && (aParam == "-display" || aParam == "--display" ) )
+        {
+            rtl_getAppCommandArg( i+1, &aParam.pData );
+            return OUStringToOString( aParam, osl_getThreadTextEncoding() );
+        }
+    }
+    return OString();
+}
+#endif
+
 gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
+
+#if !GTK_CHECK_VERSION(3,8,0)
+    //Spawn off a helper program that will attempt to set this fullscreen
+    //window to span all displays.
+    if (pThis->m_bFullscreen && pThis->m_bSpanMonitorsWhenFullscreen)
+    {
+        GdkWindow* gdkwin = gtk_widget_get_window(pThis->m_pWindow);
+        if (gdkwin)
+        {
+            OUString sProgramURL( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/xid-fullscreen-on-all-monitors");
+            rtl::Bootstrap::expandMacros(sProgramURL);
+            OUString sProgram;
+            if (osl::FileBase::getSystemPathFromFileURL(sProgramURL, sProgram) == osl::File::E_None)
+            {
+                OString sFinalProgram(OUStringToOString(sProgram, osl_getThreadTextEncoding())
+                    + " " + OString::number((int)GDK_WINDOW_XID(gdkwin)));
+                OString sDisplay(getDisplayString());
+                if (!sDisplay.isEmpty())
+                {
+                    sFinalProgram += "--display " + sDisplay;
+                }
+                system(sFinalProgram.getStr());
+            }
+        }
+    }
+#endif
 
     bool bSetFocus = pThis->m_bSetFocusOnMap;
     pThis->m_bSetFocusOnMap = false;

@@ -39,6 +39,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
 
 ifneq ($(ENABLE_GTK),)
 $(eval $(call gb_Module_add_targets,vcl,\
+    Executable_xid_fullscreen_on_all_monitors \
     Library_vclplug_gtk \
 ))
 endif

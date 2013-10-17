@@ -123,6 +123,16 @@ File gid_File_Bin_KdeFilePicker
     Name = "kdefilepicker";
 End
 #endif
+
+#ifdef ENABLE_GTK
+File gid_File_Bin_XidFullscreen
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+    Name = "xid-fullscreen-on-all-monitors";
+End
+#endif
+
 #endif
 
 #ifdef MACOSX
