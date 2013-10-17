@@ -20,17 +20,17 @@
 $(eval $(call gb_Library_Library,vcl))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx vcl/cl.fpicker))
 else ifeq ($(OS),WNT)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows vcl/vcl.fpicker))
 else ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android vcl/vcl.fpicker))
 else ifeq ($(OS),IOS)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios vcl/vcl.fpicker))
 else ifeq ($(ENABLE_HEADLESS),TRUE)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.headless))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.headless vcl/vcl.fpicker))
 else
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx vcl/vcl.fpicker))
 endif
 
 $(eval $(call gb_Library_set_precompiled_header,vcl,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
@@ -62,19 +62,22 @@ $(eval $(call gb_Library_use_externals,vcl,\
 
 $(eval $(call gb_Library_use_libraries,vcl,\
     svl \
+    svt \
+    sal \
     tl \
     utl \
     sot \
     ucbhelper \
     basegfx \
     comphelper \
+    cppu \
     cppuhelper \
     i18nlangtag \
     i18nutil \
     cppu \
     sal \
     xmlreader \
-	$(gb_UWINAPI) \
+    $(gb_UWINAPI) \
 ))
 
 ifeq ($(OS),MACOSX)
@@ -123,6 +126,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/components/dtranscomp \
     vcl/source/components/factory \
     vcl/source/components/fontident \
+    vcl/source/components/fpicker \
     vcl/source/control/button \
     vcl/source/control/combobox \
     vcl/source/control/ctrl \
