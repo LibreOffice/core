@@ -136,7 +136,8 @@ namespace msword {
 enum StyleType
 {
     STYLE_TYPE_PARA,
-    STYLE_TYPE_CHAR
+    STYLE_TYPE_CHAR,
+    STYLE_TYPE_LIST
 };
 
 class AttributeOutputBase

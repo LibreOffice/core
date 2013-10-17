@@ -1506,8 +1506,10 @@ public:
 class MSWordStyles
 {
     MSWordExportBase& m_rExport;
-    SwFmt** pFmtA;
+    SwFmt** pFmtA; ///< Slot <-> Character and paragraph style array (0 for list styles).
     sal_uInt16 nUsedSlots;
+    bool m_bListStyles; ///< If list styles are requested to be exported as well.
+    std::map<sal_uInt16, const SwNumRule*> m_aNumRules; ///< Slot <-> List style map.
 
     /// We need to build style id's for DOCX export; ideally we should roundtrip that, but this is good enough.
     std::vector<OString> m_aStyleIds;
@@ -1520,6 +1522,7 @@ class MSWordStyles
 
     /// Get slot number during building the style table.
     sal_uInt16 BuildGetSlot( const SwFmt& rFmt );
+    sal_uInt16 BuildGetSlot( const SwNumRule& rNumRule );
 
     /// Return information about one style.
     void GetStyleData( SwFmt* pFmt, bool& bFmtColl, sal_uInt16& nBase, sal_uInt16& nNext );
@@ -1533,13 +1536,14 @@ class MSWordStyles
 
     /// Outputs one style - called (in a loop) from OutputStylesTable().
     void OutputStyle( SwFmt* pFmt, sal_uInt16 nPos );
+    void OutputStyle( const SwNumRule* pNumRule, sal_uInt16 nPos );
 
     // No copying
     MSWordStyles( const MSWordStyles& );
     MSWordStyles& operator=( const MSWordStyles& );
 
 public:
-    MSWordStyles( MSWordExportBase& rExport );
+    MSWordStyles( MSWordExportBase& rExport, bool bListStyles = false );
     ~MSWordStyles();
 
     /// Output the styles table.

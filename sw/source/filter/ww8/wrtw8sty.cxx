@@ -139,8 +139,9 @@ sal_uInt16 MSWordExportBase::GetId( const SwTxtFmtColl& rColl ) const
 
 
 //typedef pFmtT
-MSWordStyles::MSWordStyles( MSWordExportBase& rExport )
-    : m_rExport( rExport )
+MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
+    : m_rExport( rExport ),
+    m_bListStyles(bListStyles)
 {
     // if exist any Foot-/End-Notes then get from the EndNoteInfo struct
     // the CharFormats. They will create it!
@@ -152,7 +153,8 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport )
         m_rExport.pDoc->GetFtnInfo().GetCharFmt( *m_rExport.pDoc );
     }
     sal_uInt16 nAlloc = WW8_RESERVED_SLOTS + m_rExport.pDoc->GetCharFmts()->size() - 1 +
-                                         m_rExport.pDoc->GetTxtFmtColls()->size() - 1;
+                                         m_rExport.pDoc->GetTxtFmtColls()->size() - 1 +
+                                         (bListStyles ? m_rExport.pDoc->GetNumRuleTbl().size() - 1 : 0);
 
     // somewhat generous ( free for up to 15 )
     pFmtA = new SwFmt*[ nAlloc ];
@@ -203,6 +205,11 @@ sal_uInt16 MSWordStyles::BuildGetSlot( const SwFmt& rFmt )
             break;
     }
     return nRet;
+}
+
+sal_uInt16 MSWordStyles::BuildGetSlot(const SwNumRule&)
+{
+    return nUsedSlots++;
 }
 
 sal_uInt16 MSWordStyles::GetWWId( const SwFmt& rFmt ) const
@@ -293,6 +300,19 @@ void MSWordStyles::BuildStylesTable()
         SwTxtFmtColl* pFmt = rArr2[n];
         pFmtA[ BuildGetSlot( *pFmt ) ] = pFmt;
     }
+
+    if (!m_bListStyles)
+        return;
+
+    const SwNumRuleTbl& rNumRuleTbl = m_rExport.pDoc->GetNumRuleTbl();
+    for (size_t i = 0; i < rNumRuleTbl.size(); ++i)
+    {
+        const SwNumRule* pNumRule = rNumRuleTbl[i];
+        if (pNumRule->IsAutoRule() || pNumRule->GetName().startsWith("WWNum"))
+            continue;
+        sal_uInt16 nSlot = BuildGetSlot(*pNumRule);
+        m_aNumRules[nSlot] = pNumRule;
+    }
 }
 
 void MSWordStyles::BuildStyleIds()
@@ -304,7 +324,7 @@ void MSWordStyles::BuildStyleIds()
 
     for (sal_uInt16 n = 1; n < nUsedSlots; ++n)
     {
-        const OUString aName(pFmtA[n]? pFmtA[n]->GetName(): OUString());
+        const OUString aName(pFmtA[n]? pFmtA[n]->GetName(): (m_aNumRules.find(n) != m_aNumRules.end() ? m_aNumRules[n]->GetName() : OUString()));
 
         OStringBuffer aStyleIdBuf(aName.getLength());
         for (int i = 0; i < aName.getLength(); ++i)
@@ -572,6 +592,15 @@ void WW8AttributeOutput::DefaultStyle( sal_uInt16 nStyle )
     }
 }
 
+void MSWordStyles::OutputStyle(const SwNumRule* pNumRule, sal_uInt16 nPos)
+{
+    m_rExport.AttrOutput().StartStyle( pNumRule->GetName(), STYLE_TYPE_LIST,
+            /*nBase =*/ 0, /*nWwNext =*/ 0, /*nWWId =*/ 0, nPos,
+            /*bAutoUpdateFmt =*/ false );
+
+    m_rExport.AttrOutput().EndStyle();
+}
+
 // OutputStyle applies for TxtFmtColls and CharFmts
 void MSWordStyles::OutputStyle( SwFmt* pFmt, sal_uInt16 nPos )
 {
@@ -677,7 +706,12 @@ void MSWordStyles::OutputStylesTable()
 
     sal_uInt16 n;
     for ( n = 0; n < nUsedSlots; n++ )
-        OutputStyle( pFmtA[n], n );
+    {
+        if (m_aNumRules.find(n) != m_aNumRules.end())
+            OutputStyle(m_aNumRules[n], n);
+        else
+            OutputStyle( pFmtA[n], n );
+    }
 
     m_rExport.AttrOutput().EndStyles( nUsedSlots );
 

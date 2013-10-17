@@ -3599,8 +3599,15 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId, bool bAutoUpdate )
 {
+    const char* pType = 0;
+    switch (eType)
+    {
+        case STYLE_TYPE_PARA: pType = "paragraph"; break;
+        case STYLE_TYPE_CHAR: pType = "character"; break;
+        case STYLE_TYPE_LIST: pType = "numbering"; break;
+    }
     m_pSerializer->startElementNS( XML_w, XML_style,
-            FSNS( XML_w, XML_type ), (eType == STYLE_TYPE_PARA ? "paragraph": "character"),
+            FSNS( XML_w, XML_type ), pType,
             FSNS( XML_w, XML_styleId ), m_rExport.pStyles->GetStyleId(nId).getStr(),
             FSEND );
 
@@ -3608,14 +3615,14 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
             FSNS( XML_w, XML_val ), OUStringToOString( OUString( rName ), RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 
-    if ( nBase != 0x0FFF )
+    if ( nBase != 0x0FFF && eType != STYLE_TYPE_LIST)
     {
         m_pSerializer->singleElementNS( XML_w, XML_basedOn,
                 FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nBase).getStr(),
                 FSEND );
     }
 
-    if ( nNext != nId )
+    if ( nNext != nId && eType != STYLE_TYPE_LIST)
     {
         m_pSerializer->singleElementNS( XML_w, XML_next,
                 FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nNext).getStr(),

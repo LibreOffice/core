@@ -457,7 +457,7 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
 
 void DocxExport::InitStyles()
 {
-    pStyles = new MSWordStyles( *this );
+    pStyles = new MSWordStyles( *this, /*bListStyles =*/ true );
 
     // setup word/styles.xml and the relations + content type
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),

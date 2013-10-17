@@ -1372,9 +1372,6 @@ void Test::testCharacterBorder()
 
 void Test::testStyleInheritance()
 {
-    // This document has several issues to fix, more checks will be here to
-    // test its various aspects
-
     // Check that now styleId's are more like what MSO produces
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
     // the 1st style always must be Normal
@@ -1440,6 +1437,9 @@ void Test::testStyleInheritance()
         if (aLatentStyleException[i].Name == "name")
             aName = aLatentStyleException[i].Value.get<OUString>();
     CPPUNIT_ASSERT_EQUAL(OUString("Normal"), aName); // This checks the "name" attribute of the first exception.
+
+    // This numbering style wasn't roundtripped.
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoList']/w:name", "val", "No List");
 }
 
 void Test::testSmartart()
