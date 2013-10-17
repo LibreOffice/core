@@ -217,7 +217,7 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
 
     //////////////////////////////////////////////////////////////////
     // Set value in ControlModel
-    bool bValue = false;
+    bool bValue;
     if(DbUseBool())
     {
         bValue = m_xColumn->getBoolean();
@@ -241,7 +241,17 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
     }
     else if ( !aValue.hasValue() )
     {
+        // Since above either bValue is initialised, either aValue.hasValue(),
+        // bValue cannot be used uninitialised here.
+        // But GCC does not see/understand that, which breaks -Werror builds.
+#if defined __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
         aValue <<= (sal_Int16)( bValue ? STATE_CHECK : STATE_NOCHECK );
+#if defined __GNUC__
+#pragma GCC diagnostic pop
+#endif
     }
 
     return aValue;
