@@ -8,6 +8,7 @@
  */
 
 #include "DummyXShape.hxx"
+#include "CommonConverters.hxx"
 #include <rtl/ustring.hxx>
 
 #include <algorithm>
@@ -200,6 +201,161 @@ void DummyXShape::setParent( const uno::Reference< uno::XInterface >& xParent )
     throw(lang::NoSupportException, uno::RuntimeException)
 {
     mxParent = xParent;
+}
+
+DummyCube::DummyCube(const drawing::Position3D &rPos, const drawing::Direction3D& rSize,
+        sal_Int32 nRotateZAngleHundredthDegree, const uno::Reference< beans::XPropertySet > ,
+        const tPropertyNameMap& , bool bRounded ):
+    mnRotateZAngleHundredthDegree(nRotateZAngleHundredthDegree),
+    mbRounded(bRounded)
+{
+    setPosition(Position3DToAWTPoint(rPos));
+    setSize(Direction3DToAWTSize(rSize));
+}
+
+DummyCylinder::DummyCylinder(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
+            sal_Int32 nRotateZAngleHundredthDegree ):
+    mnRotateZAngleHundredthDegree(nRotateZAngleHundredthDegree)
+{
+    setPosition(Position3DToAWTPoint(rPos));
+    setSize(Direction3DToAWTSize(rSize));
+}
+
+DummyPyramid::DummyPyramid(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
+        double fTopHeight, bool bRotateZ, uno::Reference< beans::XPropertySet > ,
+        const tPropertyNameMap& ):
+    mfTopHeight(fTopHeight),
+    mbRotateZ(bRotateZ)
+{
+    setPosition(Position3DToAWTPoint(rPos));
+    setSize(Direction3DToAWTSize(rSize));
+}
+
+DummyCone::DummyCone(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
+        double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree):
+    mnRotateZAngleHundredthDegree(nRotateZAngleHundredthDegree),
+    mfTopHeight(fTopHeight)
+{
+    setPosition(Position3DToAWTPoint(rPos));
+    setSize(Direction3DToAWTSize(rSize));
+}
+
+DummyPieSegment2D::DummyPieSegment2D(double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
+        double fUnitCircleInnerRadius, double fUnitCircleOuterRadius,
+        const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene):
+    mfUnitCircleStartAngleDegree(fUnitCircleStartAngleDegree),
+    mfUnitCircleWidthAngleDegree(fUnitCircleWidthAngleDegree),
+    mfUnitCircleInnerRadius(fUnitCircleInnerRadius),
+    mfUnitCircleOuterRadius(fUnitCircleOuterRadius),
+    maOffset(rOffset),
+    maUnitCircleToScene(rUnitCircleToScene)
+{
+}
+
+DummyPieSegment::DummyPieSegment(double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
+        double fUnitCircleInnerRadius, double fUnitCircleOuterRadius,
+        const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene,
+        double fDepth ):
+    mfUnitCircleStartAngleDegree(fUnitCircleStartAngleDegree),
+    mfUnitCircleWidthAngleDegree(fUnitCircleWidthAngleDegree),
+    mfUnitCircleInnerRadius(fUnitCircleInnerRadius),
+    mfUnitCircleOuterRadius(fUnitCircleOuterRadius),
+    maOffset(rOffset),
+    maUnitCircleToScene(rUnitCircleToScene),
+    mfDepth(fDepth)
+{
+}
+
+DummyStripe::DummyStripe(const Stripe& rStripe, uno::Reference< beans::XPropertySet > ,
+        const tPropertyNameMap& , sal_Bool bDoubleSided,
+        short nRotatedTexture, bool bFlatNormals ):
+    maStripe(rStripe),
+    mbDoubleSided(bDoubleSided),
+    mnRotatedTexture(nRotatedTexture),
+    mbFlatNormals(bFlatNormals)
+{
+}
+
+DummyArea3D::DummyArea3D(const drawing::PolyPolygonShape3D& rShape, double fDepth):
+    mfDepth(fDepth),
+    maShapes(rShape)
+{
+}
+
+DummyArea2D::DummyArea2D(const drawing::PolyPolygonShape3D& rShape):
+    maShapes(rShape)
+{
+}
+
+DummySymbol2D::DummySymbol2D(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
+        sal_Int32 nStandardSymbol, sal_Int32 , sal_Int32 ):
+    mnStandardSymbol(nStandardSymbol)
+{
+    setPosition(Position3DToAWTPoint(rPos));
+    setSize(Direction3DToAWTSize(rSize));
+}
+
+DummyCircle::DummyCircle(const awt::Point& rPos, const awt::Size& rSize)
+{
+    setPosition(rPos);
+    setSize(rSize);
+}
+
+DummyLine3D::DummyLine3D(const drawing::PolyPolygonShape3D& rPoints, const VLineProperties& ):
+    maPoints(rPoints)
+{
+}
+
+DummyLine2D::DummyLine2D(const drawing::PointSequenceSequence& rPoints, const VLineProperties* ):
+    maPoints(rPoints)
+{
+}
+
+DummyLine2D::DummyLine2D(const awt::Size& rSize, const awt::Point& rPosition)
+{
+    setPosition(rPosition);
+    setSize(rSize);
+}
+
+DummyRectangle::DummyRectangle()
+{
+}
+
+DummyRectangle::DummyRectangle(const awt::Size& rSize)
+{
+    setSize(rSize);
+}
+
+DummyRectangle::DummyRectangle(const awt::Size& rSize, const awt::Point& rPoint, const tNameSequence& ,
+        const tAnySequence& )
+{
+    setSize(rSize);
+    setPosition(rPoint);
+}
+
+DummyText::DummyText(const OUString& rText, const tNameSequence& ,
+        const tAnySequence& , const uno::Any& rTrans ):
+    maText(rText),
+    maTrans(rTrans)
+{
+}
+
+DummyGroup3D::DummyGroup3D(const OUString& rName)
+{
+    setName(rName);
+}
+
+DummyGroup2D::DummyGroup2D(const OUString& rName)
+{
+    setName(rName);
+}
+
+DummyGraphic2D::DummyGraphic2D(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
+        const uno::Reference< graphic::XGraphic > xGraphic ):
+    mxGraphic(xGraphic)
+{
+    setPosition(Position3DToAWTPoint(rPos));
+    setSize(Direction3DToAWTSize(rSize));
 }
 
 DummyChart* DummyXShape::getRootShape()

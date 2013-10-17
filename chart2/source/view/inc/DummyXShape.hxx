@@ -147,7 +147,7 @@ class DummyCube : public DummyXShape
 public:
     DummyCube(const drawing::Position3D &rPos, const drawing::Direction3D& rSize,
             sal_Int32 nRotateZAngleHundredthDegree, const uno::Reference< beans::XPropertySet > xPropSet,
-            const tPropertyNameMap& rPropertyNaemMap, bool bRounded );
+            const tPropertyNameMap& rPropertyNameMap, bool bRounded );
 
 private:
     sal_Int32 mnRotateZAngleHundredthDegree;
@@ -161,7 +161,6 @@ public:
             sal_Int32 nRotateZAngleHundredthDegree );
 private:
     sal_Int32 mnRotateZAngleHundredthDegree;
-    bool mbRounded;
 };
 
 class DummyPyramid : public DummyXShape
@@ -173,7 +172,7 @@ public:
 
 private:
     double mfTopHeight;
-    bool bRotateZ;
+    bool mbRotateZ;
 };
 
 class DummyCone : public DummyXShape
@@ -320,8 +319,8 @@ public:
             const tAnySequence& rValues, const uno::Any& rTrans );
 
 private:
-    OUString aText;
-    uno::Any aTrans;
+    OUString maText;
+    uno::Any maTrans;
 };
 
 
