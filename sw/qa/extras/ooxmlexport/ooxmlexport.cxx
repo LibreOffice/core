@@ -1534,6 +1534,15 @@ DECLARE_OOXML_TEST(testCustomXmlGrabBag, "customxml.docx")
    CPPUNIT_ASSERT(CustomXml); // Grab Bag has all the expected elements
 }
 
+DECLARE_OOXML_TEST(testFdo69644, "fdo69644.docx")
+{
+    // The problem was that the exporter exported the table definition
+    // with only 3 columns, instead of 5 columns.
+    // Check that the table grid is exported with 5 columns
+    xmlDocPtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 5);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

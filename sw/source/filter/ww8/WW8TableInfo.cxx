@@ -190,10 +190,43 @@ TableBoxVectorPtr WW8TableNodeInfoInner::getTableBoxesOfRow()
     return pResult;
 }
 
-GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase)
+GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase, bool calculateColumnsFromAllRows)
 {
     GridColsPtr pResult(new GridCols);
-    WidthsPtr pWidths(getWidthsOfRow());
+    WidthsPtr pWidths;
+
+    // Check which columns should be checked - only the current row,
+    // or all the rows together
+    if (calculateColumnsFromAllRows)
+    {
+        // Calculate the width of all the columns based on ALL the rows.
+        // The difference is that this kind of draws vertical lines,
+        // so that if the rows look like this:
+        //
+        //  ------------------------
+        //  |                   |  |
+        //  ------------------------
+        //  |   |                  |
+        //  ------------------------
+        //  |       |              |
+        //  ------------------------
+        //
+        // then the actual column widths will be broken down like this:
+        //
+        //  ------------------------
+        //  |   |   |           |  |
+        //  ------------------------
+        //
+        // See the example at
+        // http://officeopenxml.com/WPtableGrid.php
+        // Under "Word 2007 Example"
+        pWidths = getColumnWidthsBasedOnAllRows();
+    }
+    else
+    {
+        // Calculate the width of all the columns based on the current row
+        pWidths = getWidthsOfRow();
+    }
 
     const SwFrmFmt *pFmt = getTable()->GetFrmFmt();
     OSL_ENSURE(pFmt,"Impossible");
@@ -224,6 +257,65 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase)
     }
 
     return pResult;
+}
+
+WidthsPtr WW8TableNodeInfoInner::getColumnWidthsBasedOnAllRows()
+{
+    WidthsPtr pWidths;
+
+    WW8TableCellGrid::Pointer_t pCellGrid =
+        mpParent->getParent()->getCellGridForTable(getTable(), false);
+
+    if (pCellGrid.get() == NULL)
+    {
+        const SwTable * pTable = getTable();
+        const SwTableLines& rTableLines = pTable->GetTabLines();
+        sal_uInt16 nNumOfLines = rTableLines.size();
+
+        // Go over all the rows - and for each row - calculate where
+        // there is a separator between columns
+        WidthsPtr pSeparators(new Widths);
+        for ( sal_uInt32 nLineIndex = 0; nLineIndex < nNumOfLines; nLineIndex++)
+        {
+            const SwTableLine *pCurrentLine = rTableLines[nLineIndex];
+            const SwTableBoxes & rTabBoxes = pCurrentLine->GetTabBoxes();
+            sal_uInt32 nBoxes = rTabBoxes.size();
+            if ( nBoxes > MAXTABLECELLS )
+                nBoxes = MAXTABLECELLS;
+
+            sal_uInt32 nSeparatorPosition = 0;
+            for (sal_uInt32 nBoxIndex = 0; nBoxIndex < nBoxes; nBoxIndex++)
+            {
+                const SwFrmFmt* pBoxFmt = rTabBoxes[ nBoxIndex ]->GetFrmFmt();
+                const SwFmtFrmSize& rLSz = pBoxFmt->GetFrmSize();
+                nSeparatorPosition += rLSz.GetWidth();
+                pSeparators->push_back(nSeparatorPosition);
+            }
+        }
+
+        // Sort the separator positions and remove any duplicates
+        std::sort(pSeparators->begin(), pSeparators->end());
+        std::vector<sal_uInt32>::iterator it = std::unique(pSeparators->begin(), pSeparators->end());
+        pSeparators->erase(it, pSeparators->end());
+
+        // Calculate the widths based on the position of the unique & sorted
+        // column separators
+        pWidths = WidthsPtr(new Widths);
+        sal_uInt32 nPreviousWidth = 0;
+        Widths::const_iterator aItEnd2 = pSeparators->end();
+        for (Widths::const_iterator aIt2 = pSeparators->begin(); aIt2 != aItEnd2; ++aIt2)
+        {
+            sal_uInt32 nCurrentWidth = *aIt2;
+            pWidths->push_back(nCurrentWidth - nPreviousWidth);
+            nPreviousWidth = nCurrentWidth;
+        }
+    }
+    else
+    {
+        pWidths = pCellGrid->getWidthsOfRow(this);
+    }
+
+    return pWidths;
 }
 
 WidthsPtr WW8TableNodeInfoInner::getWidthsOfRow()

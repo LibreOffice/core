@@ -2168,8 +2168,8 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     // Write the table grid infos
     m_pSerializer->startElementNS( XML_w, XML_tblGrid, FSEND );
     sal_Int32 nPrv = 0;
-    ww8::GridColsPtr pGridCols = GetGridCols( pTableTextNodeInfoInner );
-    for ( ww8::GridCols::const_iterator it = pGridCols->begin(); it != pGridCols->end(); ++it )
+    ww8::WidthsPtr pColumnWidths = GetColumnWidths( pTableTextNodeInfoInner );
+    for ( ww8::Widths::const_iterator it = pColumnWidths->begin(); it != pColumnWidths->end(); ++it )
     {
         sal_Int32 nWidth  =  sal_Int32( *it ) - nPrv;
         m_pSerializer->singleElementNS( XML_w, XML_gridCol,

@@ -2310,6 +2310,12 @@ ww8::GridColsPtr AttributeOutputBase::GetGridCols( ww8::WW8TableNodeInfoInner::P
     return pTableTextNodeInfoInner->getGridColsOfRow(*this);
 }
 
+ww8::WidthsPtr AttributeOutputBase::GetColumnWidths( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+{
+    // Get the column widths based on ALL the rows, not just the current row
+    return pTableTextNodeInfoInner->getGridColsOfRow(*this, true);
+}
+
 void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableTextNodeInfoInner, sal_uInt32& rPageSize, bool& rRelBoxSize )
 {
     sal_uInt32 nPageSize = 0;
