@@ -471,11 +471,10 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                 if ( pO )
                 {
                     Any aAny;
-                    sdr::glue::Point aGluePoint;
                     Reference< XShape > aXShape( pO->getUnoShape(), UNO_QUERY );
                     Reference< XShape > aXConnector( pPtr->pCObj->getUnoShape(), UNO_QUERY );
-                    sdr::glue::List* pList = pO->GetGluePointList(true);
-                    sdr::glue::PointVector aGluePointVector(pList ? pList->getVector() : sdr::glue::PointVector());
+                    sdr::glue::GluePointProvider& rProvider = pO->GetGluePointProvider();
+                    const sdr::glue::GluePointVector aGluePointVector(rProvider.getUserGluePointVector());
                     sal_Bool bValidGluePoint = sal_False;
                     sal_Int32 nId = nC;
                     sal_uInt32 nInventor = pO->GetObjInventor();
@@ -524,10 +523,9 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             break;
                             case OBJ_POLY :
                             {
-                                // TTTT:GLUE if ( pList && ( pList->GetCount() > nC ) )
                                 if(aGluePointVector.size() > nC)
                                 {
-                                    const sdr::glue::Point* pCandidate = aGluePointVector[nC];
+                                    const sdr::glue::GluePoint* pCandidate = aGluePointVector[nC];
 
                                     if(pCandidate)
                                     {
@@ -536,12 +534,8 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     }
                                     else
                                     {
-                                        OSL_ENSURE(false, "Got sdr::glue::PointVector with empty entries (!)");
+                                        OSL_ENSURE(false, "Got sdr::glue::GluePointVector with empty entries (!)");
                                     }
-
-                                    // TTTT:GLUE
-                                    //bValidGluePoint = sal_True;
-                                    //nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 3 );
                                 }
                                 else
                                 {
@@ -566,36 +560,16 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
 
                                                     if ( eFlags == POLY_NORMAL )
                                                     {
-                                                        if ( nC == nPointCount )
+                                                        if ( nC == nPointCount && rProvider.allowsUserGluePoints() )
                                                         {
                                                             const Point& rPoint = rPolygon.GetPoint( j );
                                                             const double fX((rPoint.X() - aBoundRect.Left()) / (aBoundRect.GetWidth() ? aBoundRect.GetWidth() : 1));
                                                             const double fY((rPoint.Y() - aBoundRect.Top()) / (aBoundRect.GetHeight() ? aBoundRect.GetHeight() : 1));
 
-                                                            // TTTT:GLUE bUserDefined == true okay?
-                                                            sdr::glue::Point& rNew = pList->add(sdr::glue::Point(basegfx::B2DPoint(fX, fY)));
+                                                            // create that single GluePoint at polygon point position
+                                                            sdr::glue::GluePoint& rNew = rProvider.addUserGluePoint(sdr::glue::GluePoint(basegfx::B2DPoint(fX, fY)));
                                                             nId = rNew.getID() + 4;
                                                             bNotFound = sal_False;
-
-                                                            //const Point& rPoint = rPolygon.GetPoint( j );
-                                                            //double fXRel = rPoint.X() - aBoundRect.Left();
-                                                            //double fYRel = rPoint.Y() - aBoundRect.Top();
-                                                            //sal_Int32 nWidth = aBoundRect.GetWidth();
-                                                            //if ( !nWidth )
-                                                            //    nWidth = 1;
-                                                            //sal_Int32 nHeight= aBoundRect.GetHeight();
-                                                            //if ( !nHeight )
-                                                            //    nHeight = 1;
-                                                            //fXRel /= (double)nWidth;
-                                                            //fXRel *= 10000;
-                                                            //fYRel /= (double)nHeight;
-                                                            //fYRel *= 10000;
-                                                            //aGluePoint.SetPos( basegfx::B2DPoint( fXRel, fYRel ) );
-                                                            //aGluePoint.SetPercent( true );
-                                                            //aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
-                                                            //aGluePoint.setEscapeDirections(sdr::glue::Point::ESCAPE_DIRECTION_SMART);
-                                                            //nId = (sal_Int32)((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 3 );
-                                                            //bNotFound = sal_False;
                                                         }
                                                         nPointCount++;
                                                     }
@@ -634,7 +608,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 {
                                     if(aGluePointVector.size() > nC)
                                     {
-                                        const sdr::glue::Point* pCandidate = aGluePointVector[nC];
+                                        const sdr::glue::GluePoint* pCandidate = aGluePointVector[nC];
 
                                         if(pCandidate)
                                         {
@@ -643,16 +617,9 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                         }
                                         else
                                         {
-                                            OSL_ENSURE(false, "Got sdr::glue::PointVector with empty entries (!)");
+                                            OSL_ENSURE(false, "Got sdr::glue::GluePointVector with empty entries (!)");
                                         }
                                     }
-
-                                    // TTTT:GLUE
-                                    //if ( pList && ( pList->GetCount() > nC ) )
-                                    //{
-                                    //    bValidGluePoint = sal_True;
-                                    //    nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 3 );
-                                    //}
                                 }
                                 else if ( nGluePointType == EnhancedCustomShapeGluePointType::RECT )
                                 {
@@ -774,14 +741,12 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                 aGeometryItem.SetPropertyValue( sPath, aProp );
                                                 bValidGluePoint = sal_True;
                                                 ((SdrObjCustomShape*)pO)->SetMergedItem( aGeometryItem );
+                                                const sdr::glue::GluePointProvider& rProvider = pO->GetGluePointProvider();
+                                                const sdr::glue::GluePointVector aGluePointVector(rProvider.getUserGluePointVector());
 
-                                                // TTTT:GLUE false okay here?
-                                                const sdr::glue::List* pLst = pO->GetGluePointList(false);
-                                                const sdr::glue::PointVector aGPVector(pLst ? pLst->getVector() : sdr::glue::PointVector());
-
-                                                if((sal_Int32)aGPVector.size() > nGluePoints)
+                                                if(aGluePointVector.size() > nGluePoints)
                                                 {
-                                                    const sdr::glue::Point* pCandidate = aGPVector[nGluePoints];
+                                                    const sdr::glue::GluePoint* pCandidate = aGluePointVector[nGluePoints];
 
                                                     if(pCandidate)
                                                     {
@@ -789,14 +754,9 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                     }
                                                     else
                                                     {
-                                                        OSL_ENSURE(false, "Got sdr::glue::PointVector with empty entries (!)");
+                                                        OSL_ENSURE(false, "Got sdr::glue::GluePointVector with empty entries (!)");
                                                     }
                                                 }
-
-                                                // TTTT:GLUE
-                                                //const sdr::glue::List* pLst = pO->GetGluePointList(true);
-                                                //if ( (sal_Int32)pLst->GetCount() > nGluePoints )
-                                                //    nId = (sal_Int32)((*pLst)[ (sal_uInt16)nGluePoints ].GetId() + 3 );
                                             }
                                         }
                                     }

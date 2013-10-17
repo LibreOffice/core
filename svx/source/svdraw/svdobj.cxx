@@ -327,7 +327,7 @@ SdrObjUserData* SdrObjUserDataList::RemoveUserData(sal_uInt32 nNum)
 SdrObjGeoData::SdrObjGeoData()
 :   maSdrObjectTransformation(),
     maObjectAnchor(0.0, 0.0),
-    mpGPL(0),
+    mpGluePointProvider(0),
     mnLayerID(0),
     mbMoveProtect(false),
     mbSizeProtect(false),
@@ -338,14 +338,16 @@ SdrObjGeoData::SdrObjGeoData()
 
 SdrObjGeoData::~SdrObjGeoData()
 {
-    delete mpGPL;
+    if(mpGluePointProvider)
+    {
+        delete mpGluePointProvider;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrObjPlusData::SdrObjPlusData()
 :   mpUserDataList(0),
-    mpGluePoints(0),
     maObjName(),
     maObjTitle(),
     maObjDescription(),
@@ -360,11 +362,6 @@ SdrObjPlusData::~SdrObjPlusData()
     if(mpUserDataList)
     {
         delete mpUserDataList;
-    }
-
-    if(mpGluePoints)
-    {
-        delete mpGluePoints;
     }
 }
 
@@ -392,12 +389,6 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
                 }
             }
         }
-    }
-
-    // copy GluePoints
-    if(mpGluePoints)
-    {
-        pNeuPlusData->mpGluePoints = new sdr::glue::List(*mpGluePoints);
     }
 
     // copy object name, title and description
@@ -485,12 +476,12 @@ sdr::contact::ViewContact& SdrObject::GetViewContact() const
     return *mpViewContact;
 }
 
-sdr::gluepoint::GluePointProvider* SdrObject::CreateObjectSpecificGluePointProvider()
+sdr::glue::GluePointProvider* SdrObject::CreateObjectSpecificGluePointProvider()
 {
-    return new sdr::gluepoint::GluePointProvider();
+    return new sdr::glue::StandardGluePointProvider();
 }
 
-sdr::gluepoint::GluePointProvider& SdrObject::GetGluePointProvider() const
+sdr::glue::GluePointProvider& SdrObject::GetGluePointProvider() const
 {
     if(!mpGluePointProvider)
     {
@@ -975,7 +966,7 @@ void SdrObject::copyDataFromSdrObject(const SdrObject& rSource)
 
         if(rSource.mpGluePointProvider)
         {
-            mpGluePointProvider = &rSource.GetGluePointProvider().Clone();
+            mpGluePointProvider = rSource.mpGluePointProvider->Clone();
         }
 
         maSdrObjectTransformation = rSource.maSdrObjectTransformation.getB2DHomMatrix();
@@ -1576,25 +1567,16 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
     rGeo.mbVisible = mbVisible;
     rGeo.mnLayerID = mnLayerID;
 
-    // Benutzerdefinierte Klebepunkte
-    if(mpPlusData && mpPlusData->mpGluePoints)
+    // gluepoints
+    if(mpGluePointProvider)
     {
-        if(rGeo.mpGPL)
+        if(rGeo.mpGluePointProvider)
         {
-            *rGeo.mpGPL = *mpPlusData->mpGluePoints;
+            delete rGeo.mpGluePointProvider;
+            rGeo.mpGluePointProvider = 0;
         }
-        else
-        {
-            rGeo.mpGPL = new sdr::glue::List(*mpPlusData->mpGluePoints);
-        }
-    }
-    else
-    {
-        if(rGeo.mpGPL)
-        {
-            delete rGeo.mpGPL;
-            rGeo.mpGPL = 0;
-        }
+
+        rGeo.mpGluePointProvider = mpGluePointProvider->Clone();
     }
 }
 
@@ -1620,27 +1602,16 @@ void SdrObject::RestGeoData(const SdrObjGeoData& rGeo)
     mbVisible = rGeo.mbVisible;
     mnLayerID = rGeo.mnLayerID;
 
-    // Benutzerdefinierte Klebepunkte
-    if(rGeo.mpGPL)
+    // gluepoints
+    if(rGeo.mpGluePointProvider)
     {
-        ImpForcePlusData();
+        if(mpGluePointProvider)
+        {
+            delete mpGluePointProvider;
+            mpGluePointProvider = 0;
+        }
 
-        if(mpPlusData->mpGluePoints)
-        {
-            *mpPlusData->mpGluePoints = *rGeo.mpGPL;
-        }
-        else
-        {
-            mpPlusData->mpGluePoints = new sdr::glue::List(*rGeo.mpGPL);
-        }
-    }
-    else
-    {
-        if(mpPlusData && mpPlusData->mpGluePoints)
-        {
-            delete mpPlusData->mpGluePoints;
-            mpPlusData->mpGluePoints = 0;
-        }
+        mpGluePointProvider = rGeo.mpGluePointProvider->Clone();
     }
 }
 
@@ -2061,80 +2032,6 @@ void SdrObject::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHar
         GetProperties().SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
         SetChanged();
     }
-}
-
-sdr::glue::Point SdrObject::GetVertexGluePoint(sal_uInt32 nPosNum) const
-{
-    basegfx::B2DPoint aGluePosition(0.5, 0.5);
-
-    switch(nPosNum)
-    {
-        default: //case 0: TopCenter
-        {
-            aGluePosition.setY(0.0);
-            break;
-        }
-        case 1: // RightCenter
-        {
-            aGluePosition.setX(1.0);
-            break;
-        }
-        case 2: // BottomCenter
-        {
-            aGluePosition.setY(1.0);
-            break;
-        }
-        case 3: // LeftCenter
-        {
-            aGluePosition.setX(0.0);
-            break;
-        }
-    }
-
-    // create GluePoint, need to set UserDefined to false for these default GluePoints
-    return sdr::glue::Point(
-        aGluePosition,
-        sdr::glue::Point::ESCAPE_DIRECTION_SMART,
-        sdr::glue::Point::Alignment_Center,
-        sdr::glue::Point::Alignment_Center,
-        true,   // mbRelative
-        false); // mbUserDefined
-
-    // TTTT:GLUE
-    //aGluePosition = getSdrObjectTransformation() * aGluePosition;
-    //sdr::glue::Point aGP(aGluePosition - sdr::legacy::GetSnapRange(*this).getCenter());
-    //aGP.SetPercent(false);
-    //
-    //return aGP;
-}
-
-// TTTT:GLUE
-//const sdr::glue::List* SdrObject::GetGluePointList() const
-//{
-//  if(mpPlusData)
-//    {
-//        return mpPlusData->mpGluePoints;
-//    }
-//
-//  return 0;
-//}
-
-sdr::glue::List* SdrObject::GetGluePointList(bool bForce) const
-{
-    if(bForce)
-    {
-        if(!mpPlusData)
-        {
-            const_cast< SdrObject* >(this)->ImpForcePlusData();
-        }
-
-        if(!mpPlusData->mpGluePoints)
-        {
-            const_cast< SdrObject* >(this)->mpPlusData->mpGluePoints = new sdr::glue::List;
-        }
-    }
-
-    return mpPlusData ? mpPlusData->mpGluePoints : 0;
 }
 
 void extractLineContourFromPrimitive2DSequence(
@@ -2628,9 +2525,9 @@ void SdrObject::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransfo
     if(rTransformation != getSdrObjectTransformation())
     {
         basegfx::B2DVector aOldAbsoluteScale;
-        sdr::glue::List* pGPL = GetGluePointList(false);
+        const bool bTransformGluePoints(mpGluePointProvider && mpGluePointProvider->hasUserGluePoints());
 
-        if(pGPL)
+        if(bTransformGluePoints)
         {
             // remember old absolute size
             aOldAbsoluteScale = basegfx::absolute(getSdrObjectScale());
@@ -2641,7 +2538,7 @@ void SdrObject::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransfo
         maSdrObjectTransformation.setB2DHomMatrix(rTransformation);
         SetChanged();
 
-        if(pGPL)
+        if(bTransformGluePoints)
         {
             // get new absolute size
             const basegfx::B2DVector aNewAbsoluteScale(basegfx::absolute(getSdrObjectScale()));
@@ -2649,7 +2546,7 @@ void SdrObject::setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransfo
             if(!aOldAbsoluteScale.equal(aNewAbsoluteScale))
             {
                 // adapt the non-relative gluepoints according to their alignments
-                pGPL->adaptToChangedScale(aOldAbsoluteScale, aNewAbsoluteScale);
+                mpGluePointProvider->adaptUserGluePointsToChangedScale(aOldAbsoluteScale, aNewAbsoluteScale);
             }
         }
     }

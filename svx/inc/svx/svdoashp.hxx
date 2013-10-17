@@ -90,11 +90,11 @@ private:
     // double fObjectRotation;
 
 protected:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::glue::GluePointProvider* CreateObjectSpecificGluePointProvider();
 
 public:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     // to allow sdr::properties::CustomShapeProperties access
     friend class sdr::properties::CustomShapeProperties;
 
@@ -111,9 +111,6 @@ public:
 
     // #i37011# centralize throw-away of render geometry
     void InvalidateRenderGeometry();
-
-    // TTTT:GLUE #i38892#
-    // void ImpCheckCustomGluePointsAreAdded();
 
     // returns the new text range that corresponds to the current logic range. The return value can be empty if nothing changed.
     basegfx::B2DRange ImpCalculateTextFrame();
@@ -215,9 +212,6 @@ public:
     virtual SdrObjGeoData *NewGeoData() const;
     virtual void          SaveGeoData(SdrObjGeoData &rGeo) const;
     virtual void          RestGeoData(const SdrObjGeoData &rGeo);
-
-    virtual sdr::glue::List* GetGluePointList(bool bForce) const;
-    // TTTT:GLUE virtual sdr::glue::List* ForceGluePointList();
 
     virtual void AddToHdlList(SdrHdlList& rHdlList) const;
 

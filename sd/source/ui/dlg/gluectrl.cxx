@@ -34,6 +34,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/gluepoint.hxx>
 
 #include "strings.hrc"
 #include "gluectrl.hxx"
@@ -48,11 +49,11 @@ using namespace ::com::sun::star::frame;
 #define ESCDIR_COUNT 5
 static sal_uInt16 aEscDirArray[] =
 {
-    sdr::glue::Point::ESCAPE_DIRECTION_SMART,
-    sdr::glue::Point::ESCAPE_DIRECTION_LEFT,
-    sdr::glue::Point::ESCAPE_DIRECTION_RIGHT,
-    sdr::glue::Point::ESCAPE_DIRECTION_TOP,
-    sdr::glue::Point::ESCAPE_DIRECTION_BOTTOM
+    sdr::glue::GluePoint::ESCAPE_DIRECTION_SMART,
+    sdr::glue::GluePoint::ESCAPE_DIRECTION_LEFT,
+    sdr::glue::GluePoint::ESCAPE_DIRECTION_RIGHT,
+    sdr::glue::GluePoint::ESCAPE_DIRECTION_TOP,
+    sdr::glue::GluePoint::ESCAPE_DIRECTION_BOTTOM
 };
 
 

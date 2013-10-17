@@ -547,10 +547,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                 else
                                                 {
                                                     // set position of connection point of original connected object
-                                                    const sdr::glue::List* pGlueList = pConnObj->GetGluePointList(false);
-                                                    if(pGlueList)
+                                                    const sdr::glue::GluePointProvider& rProvider = pConnObj->GetGluePointProvider();
+
+                                                    if(rProvider.hasUserGluePoints())
                                                     {
-                                                        const sdr::glue::Point* pCandidate = pGlueList->findByID(rConn0.GetConnectorId());
+                                                        const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(rConn0.GetConnectorId());
 
                                                         if(pCandidate)
                                                         {
@@ -558,17 +559,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                                             pCloneEdge->SetTailPoint(false, aPosition + aVector);
                                                         }
-
-                                                        // TTTT:GLUE
-                                                        //sal_uInt32 nInd = pGlueList->FindGluePoint(rConn0.GetConnectorId());
-                                                        //
-                                                        //if(SDRGLUEPOINT_NOTFOUND != nInd)
-                                                        //{
-                                                        //    const sdr::glue::Point& rGluePoint = (*pGlueList)[nInd];
-                                                        //    basegfx::B2DPoint aPosition = rGluePoint.GetAbsolutePos(sdr::legacy::GetSnapRange(*pConnObj));
-                                                        //    aPosition += aVector;
-                                                        //    pCloneEdge->SetTailPoint(false, aPosition);
-                                                        //}
                                                     }
                                                 }
                                             }
@@ -588,10 +578,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                 else
                                                 {
                                                     // set position of connection point of original connected object
-                                                    const sdr::glue::List* pGlueList = pConnObj->GetGluePointList(false);
-                                                    if(pGlueList)
+                                                    const sdr::glue::GluePointProvider& rProvider = pConnObj->GetGluePointProvider();
+
+                                                    if(rProvider.hasUserGluePoints())
                                                     {
-                                                        const sdr::glue::Point* pCandidate = pGlueList->findByID(rConn1.GetConnectorId());
+                                                        const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(rConn1.GetConnectorId());
 
                                                         if(pCandidate)
                                                         {
@@ -599,17 +590,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                                             pCloneEdge->SetTailPoint(true, aPosition + aVector);
                                                         }
-
-                                                        // TTTT:GLUE
-                                                        //sal_uInt32 nInd = pGlueList->FindGluePoint(rConn1.GetConnectorId());
-                                                        //
-                                                        //if(SDRGLUEPOINT_NOTFOUND != nInd)
-                                                        //{
-                                                        //    const sdr::glue::Point& rGluePoint = (*pGlueList)[nInd];
-                                                        //    basegfx::B2DPoint aPosition = rGluePoint.GetAbsolutePos(sdr::legacy::GetSnapRange(*pConnObj));
-                                                        //    aPosition += aVector;
-                                                        //    pCloneEdge->SetTailPoint(true, aPosition);
-                                                        //}
                                                     }
                                                 }
                                             }

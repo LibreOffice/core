@@ -88,11 +88,12 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
             pTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
 
-            // TTTT:GLUE
             // gluepoints
-            for(sal_uInt32 i(0); i < 4; i++)
+            const sdr::glue::GluePointProvider& rProvider = rObject.GetGluePointProvider();
+
+            for(sal_uInt32 i(0); i < rProvider.getAutoGluePointCount(); i++)
             {
-                const sdr::glue::Point aGluePoint(rObject.GetVertexGluePoint(i));
+                const sdr::glue::GluePoint aGluePoint(rProvider.getAutoGluePointByIndex(i));
                 const basegfx::B2DPoint aPosition(rObject.getSdrObjectTransformation() * aGluePoint.getUnitPosition());
                 const basegfx::B2DRange aBigRange(aPosition - aHalfLogicSize, aPosition + aHalfLogicSize);
                 const basegfx::B2DPolygon aTempPoly(basegfx::tools::createPolygonFromRect(aBigRange));

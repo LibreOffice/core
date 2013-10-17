@@ -45,7 +45,6 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
-#include <svx/sdrglue.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdattrx.hxx>
@@ -55,7 +54,6 @@
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdrglue.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svl/itemiter.hxx>
@@ -75,6 +73,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -947,49 +946,37 @@ bool SdrPaintView::KeyInput(const KeyEvent& /*rKEvt*/, Window* /*pWin*/)
 
 void SdrPaintView::GlueInvalidate() const
 {
-    const sal_uInt32 nWindowCount(PaintWindowCount());
-
-    for(sal_uInt32 nWinNum(0); nWinNum < nWindowCount; nWinNum++)
+    if(mpPageView)
     {
-        SdrPaintWindow* pPaintWindow = GetPaintWindow(nWinNum);
+        // start at current ObjectList (evtl. entered groups)
+        const SdrObjList* pOL = mpPageView->GetCurrentObjectList();
+        const sal_uInt32 nObjAnz(pOL->GetObjCount());
 
-        if(pPaintWindow->OutputToWindow())
+        for(sal_uInt32 nObjNum(0); nObjNum < nObjAnz; nObjNum++)
         {
-            OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-            const basegfx::B2DVector aLogicHalfSevenPix(rOutDev.GetInverseViewTransformation() * basegfx::B2DVector(3.5, 3.5));
+            const SdrObject* pObj = pOL->GetObj(nObjNum);
 
-            if(mpPageView)
+            if(pObj)
             {
-                const SdrObjList* pOL = mpPageView->GetCurrentObjectList();
-                const sal_uInt32 nObjAnz(pOL->GetObjCount());
+                const sdr::glue::GluePointProvider& rProvider = pObj->GetGluePointProvider();
 
-                for(sal_uInt32 nObjNum(0); nObjNum < nObjAnz; nObjNum++)
+                if(rProvider.hasUserGluePoints())
                 {
-                    const SdrObject* pObj = pOL->GetObj(nObjNum);
-                    const sdr::glue::List* pGPL = pObj ? pObj->GetGluePointList(false) : 0;
-
-                    if(pGPL)
+                    // SdrObject has GluePoints, thus invalidate VOC to force recreation. Do this in
+                    // just the VOC belonging to this PageWindow's ObjectContacts, not in all views
+                    for(sal_uInt32 b(0); b < mpPageView->PageWindowCount(); b++)
                     {
-                        const sdr::glue::PointVector aGluePointVecor(pGPL->getVector());
+                        const SdrPageWindow& rPageWindow = *(mpPageView->GetPageWindow(b));
+                        sdr::contact::ObjectContact& rObjectContact = rPageWindow.GetObjectContact();
+                        sdr::contact::ViewObjectContact& rVOC = pObj->GetViewContact().GetViewObjectContact(rObjectContact);
 
-                        for(sal_uInt32 a(0); a < aGluePointVecor.size(); a++)
-                        {
-                            const sdr::glue::Point* pCandidate = aGluePointVecor[a];
-
-                            if(pCandidate)
-                            {
-                                const basegfx::B2DPoint aPos(pObj->getSdrObjectTransformation() * pCandidate->getUnitPosition());
-                                const basegfx::B2DRange aRange(aPos - aLogicHalfSevenPix, aPos + aLogicHalfSevenPix);
-
-                                InvalidateOneWin((Window&)rOutDev, aRange);
-                            }
-                            else
-                            {
-                                OSL_ENSURE(false, "Got sdr::glue::PointVector with empty entries (!)");
-                            }
-                        }
+                        rVOC.ActionChanged();
                     }
                 }
+            }
+            else
+            {
+                OSL_ENSURE(false, "Got selection with empty slots (!)");
             }
         }
     }

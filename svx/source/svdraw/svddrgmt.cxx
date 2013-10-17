@@ -539,16 +539,15 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
 
                 if(aMarkedGluePoints.size())
                 {
-                    // TTTT:GLUE
-                    const sdr::glue::List* pGPL = pSdrObjCandidate->GetGluePointList(false);
+                    const sdr::glue::GluePointProvider& rProvider = pSdrObjCandidate->GetGluePointProvider();
 
-                    if(pGPL)
+                    if(rProvider.hasUserGluePoints())
                     {
                         for(sdr::selection::Indices::const_iterator aCurrent(aMarkedGluePoints.begin());
                             aCurrent != aMarkedGluePoints.end(); aCurrent++)
                         {
                             const sal_uInt32 nObjPt(*aCurrent);
-                            const sdr::glue::Point* pCandidate = pGPL->findByID(nObjPt);
+                            const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(nObjPt);
 
                             if(pCandidate)
                             {
@@ -1700,9 +1699,9 @@ void SdrDragMove::MoveSdrDrag(const basegfx::B2DPoint& rPoint)
 
                     if(rMarkedGluePoints.size())
                     {
-                        const sdr::glue::List* pGPL = pObj->GetGluePointList(false);
+                        const sdr::glue::GluePointProvider& rProvider = pObj->GetGluePointProvider();
 
-                        if(pGPL)
+                        if(rProvider.hasUserGluePoints())
                         {
                             // the SdrObject candidate with potentially moved GluePoints is identified. GetObjectMatrix,
                             // but take care for objects with zero width/height. Also prepare inverse transformation
@@ -1714,7 +1713,7 @@ void SdrDragMove::MoveSdrDrag(const basegfx::B2DPoint& rPoint)
                             for(sdr::selection::Indices::const_iterator aCurrent(rMarkedGluePoints.begin()); aCurrent != rMarkedGluePoints.end(); aCurrent++)
                             {
                                 const sal_uInt32 nId(*aCurrent);
-                                const sdr::glue::Point* pGlueCandidate = pGPL->findByID(nId);
+                                const sdr::glue::GluePoint* pGlueCandidate = rProvider.findUserGluePointByID(nId);
 
                                 if(pGlueCandidate)
                                 {
@@ -1793,7 +1792,6 @@ bool SdrDragMove::EndSdrDrag(bool bCopy)
             basegfx::tools::createTranslateB2DHomMatrix(DragStat().GetNow() - DragStat().GetPrev()),
             SDRREPFUNC_OBJ_MOVE,
             bCopy);
-        // TTTT:GLUE getSdrView().MoveMarkedGluePoints(DragStat().GetNow() - DragStat().GetPrev(), bCopy);
     }
     else
     {
@@ -2098,7 +2096,6 @@ bool SdrDragResize::EndSdrDrag(bool bCopy)
             aTransform,
             SDRREPFUNC_OBJ_MOVE,
             bCopy);
-        // TTTT:GLUE getSdrView().ResizeMarkedGluePoints(DragStat().GetRef1(), maScale, bCopy);
     }
     else
     {
@@ -2228,7 +2225,6 @@ bool SdrDragRotate::EndSdrDrag(bool bCopy)
                 basegfx::tools::createRotateAroundPoint(DragStat().GetRef1(), mfDeltaRotation),
                 SDRREPFUNC_OBJ_ROTATE,
                 bCopy);
-            // TTTT:GLUE getSdrView().RotateMarkedGluePoints(DragStat().GetRef1(), mfDeltaRotation, bCopy);
         }
         else
         {

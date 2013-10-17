@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase2.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/sdrglue.hxx>
 #include <svx/svdpage.hxx>
 
 using namespace ::com::sun::star;
@@ -90,17 +89,17 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement ) thr
 {
     if( mpObject.is() )
     {
-        sdr::glue::List* pList = mpObject->GetGluePointList(true);
+        sdr::glue::GluePointProvider& rProvider = mpObject->GetGluePointProvider();
 
-        if( pList )
+        if(rProvider.allowsUserGluePoints())
         {
             drawing::GluePoint2 aUnoGlue;
 
             if( aElement >>= aUnoGlue )
             {
                 const basegfx::B2DVector aAbsoluteScale(basegfx::absolute(mpObject->getSdrObjectScale()));
-                const sdr::glue::Point aSdrGlue(aUnoGlue, aAbsoluteScale);
-                const sdr::glue::Point& rAdded = pList->add(aSdrGlue);
+                sdr::glue::GluePoint aSdrGlue(aUnoGlue, aAbsoluteScale);
+                const sdr::glue::GluePoint& rAdded = rProvider.addUserGluePoint(aSdrGlue);
 
                 // only repaint, no objectchange
                 mpObject->ActionChanged();
@@ -120,15 +119,15 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier ) 
     if( mpObject.is() && ( Identifier >= NON_USER_DEFINED_GLUE_POINTS ))
     {
         const sal_uInt32 nId(Identifier - NON_USER_DEFINED_GLUE_POINTS);
-        sdr::glue::List* pList = mpObject->GetGluePointList(false);
+        sdr::glue::GluePointProvider& rProvider = mpObject->GetGluePointProvider();
 
-        if(pList)
+        if(rProvider.hasUserGluePoints())
         {
-            const sdr::glue::Point* pCandidate = pList->findByID(nId);
+            const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(nId);
 
             if(pCandidate)
             {
-                pList->remove(*pCandidate);
+                rProvider.removeUserGluePoint(*pCandidate);
 
                 // only repaint, no objectchange
                 mpObject->ActionChanged();
@@ -136,23 +135,6 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier ) 
                 return;
             }
         }
-
-        // TTTT:GLUE
-        //const sal_uInt32 nCount = pList ? pList->GetCount() : 0;
-        //sal_uInt32 i;
-        //
-        //for( i = 0; i < nCount; i++ )
-        //{
-        //    if( (*pList)[i].GetId() == nId )
-        //    {
-        //        pList->Delete( i );
-        //
-        //        // only repaint, no objectchange
-        //        mpObject->ActionChanged();
-        //
-        //        return;
-        //    }
-        //}
     }
 
     throw container::NoSuchElementException();
@@ -169,17 +151,17 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
             throw lang::IllegalArgumentException();
 
         const sal_uInt32 nId(Identifier - NON_USER_DEFINED_GLUE_POINTS);
-        sdr::glue::List* pList = mpObject->GetGluePointList(false);
+        sdr::glue::GluePointProvider& rProvider = mpObject->GetGluePointProvider();
 
-        if(pList)
+        if(rProvider.hasUserGluePoints())
         {
-            sdr::glue::Point* pCandidate = pList->findByID(nId);
+            sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(nId);
 
             if(pCandidate)
             {
                 // change the glue point (but start with a new GluePoint)
                 const basegfx::B2DVector aAbsoluteScale(basegfx::absolute(mpObject->getSdrObjectScale()));
-                const sdr::glue::Point aSdrGlue(aGluePoint, aAbsoluteScale);
+                const sdr::glue::GluePoint aSdrGlue(aGluePoint, aAbsoluteScale);
 
                 *pCandidate = aSdrGlue;
 
@@ -190,24 +172,6 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
             }
         }
 
-        // TTTT:GLUE
-        //const sal_uInt32 nCount = pList ? pList->GetCount() : 0;
-        //sal_uInt32 i;
-        //for( i = 0; i < nCount; i++ )
-        //{
-        //    if( (*pList)[i].GetId() == nId )
-        //    {
-        //        // change the glue point
-        //        sdr::glue::Point& rTempPoint = (*pList)[i];
-        //        convert( aGluePoint, rTempPoint );
-        //
-        //        // only repaint, no objectchange
-        //        mpObject->ActionChanged();
-        //
-        //        return;
-        //    }
-        //}
-
         throw container::NoSuchElementException();
     }
 }
@@ -217,9 +181,11 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
 {
     if(mpObject.is())
     {
+        const sdr::glue::GluePointProvider& rProvider = mpObject->GetGluePointProvider();
+
         if( Identifier < NON_USER_DEFINED_GLUE_POINTS ) // default glue point?
         {
-            const sdr::glue::Point aTempPoint(mpObject->GetVertexGluePoint(Identifier));
+            const sdr::glue::GluePoint aTempPoint(rProvider.getAutoGluePointByIndex(Identifier));
             const basegfx::B2DVector aAbsoluteScale(basegfx::absolute(mpObject->getSdrObjectScale()));
             const drawing::GluePoint2 aGluePoint(aTempPoint.convertToGluePoint2(aAbsoluteScale));
 
@@ -228,11 +194,10 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
         else
         {
             const sal_uInt32 nId(Identifier - NON_USER_DEFINED_GLUE_POINTS);
-            const sdr::glue::List* pList = mpObject->GetGluePointList(false);
 
-            if(pList)
+            if(rProvider.hasUserGluePoints())
             {
-                const sdr::glue::Point* pCandidate = pList->findByID(nId);
+                const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(nId);
 
                 if(pCandidate)
                 {
@@ -242,25 +207,6 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
                     return uno::makeAny( aGluePoint );
                 }
             }
-
-            // TTTT:GLUE
-            //const sal_uInt32 nCount = pList ? pList->GetCount() : 0;
-            //
-            //for( sal_uInt32 i = 0; i < nCount; i++ )
-            //{
-            //    const sdr::glue::Point& rTempPoint = (*pList)[i];
-            //    if( rTempPoint.GetId() == nId )
-            //    {
-            //        // #i38892#
-            //        if(rTempPoint.IsUserDefined())
-            //        {
-            //            aGluePoint.IsUserDefined = sal_True;
-            //        }
-            //
-            //        convert( rTempPoint, aGluePoint );
-            //        return uno::makeAny( aGluePoint );
-            //    }
-            //}
         }
     }
 
@@ -271,8 +217,8 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers() thro
 {
     if( mpObject.is() )
     {
-        const sdr::glue::List* pList = mpObject->GetGluePointList(false);
-        const sdr::glue::PointVector aGluePointVector(pList ? pList->getVector() : sdr::glue::PointVector());
+        const sdr::glue::GluePointProvider& rProvider = mpObject->GetGluePointProvider();
+        const sdr::glue::GluePointVector aGluePointVector(rProvider.getUserGluePointVector());
         uno::Sequence< sal_Int32 > aIdSequence(aGluePointVector.size() + NON_USER_DEFINED_GLUE_POINTS);
         sal_Int32 *pIdentifier = aIdSequence.getArray();
         sal_uInt32 i(0);
@@ -284,7 +230,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers() thro
 
         for(i = 0; i < aGluePointVector.size(); i++)
         {
-            const sdr::glue::Point* pCandidate = aGluePointVector[i];
+            const sdr::glue::GluePoint* pCandidate = aGluePointVector[i];
 
             if(pCandidate)
             {
@@ -295,19 +241,6 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers() thro
                 OSL_ENSURE(false, "Got a sdr::glue::PointVector with empty entries (!)");
             }
         }
-
-        // TTTT:GLUE
-        //const sal_uInt32 nCount = pList ? pList->GetCount() : 0;
-        //sal_uInt32 i;
-        //
-        //uno::Sequence< sal_Int32 > aIdSequence( nCount + NON_USER_DEFINED_GLUE_POINTS );
-        //sal_Int32 *pIdentifier = aIdSequence.getArray();
-        //
-        //for( i = 0; i < NON_USER_DEFINED_GLUE_POINTS; i++ )
-        //    *pIdentifier++ = i;
-        //
-        //for( i = 0; i < nCount; i++ )
-        //    *pIdentifier++ = ( (*pList)[i].GetId() + NON_USER_DEFINED_GLUE_POINTS ) - 1;
 
         return aIdSequence;
     }
@@ -325,18 +258,18 @@ void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32, const uno::Any& E
 {
     if( mpObject.is() )
     {
-        sdr::glue::List* pList = mpObject->GetGluePointList(true);
+        sdr::glue::GluePointProvider& rProvider = mpObject->GetGluePointProvider();
 
-        if( pList )
+        if(rProvider.allowsUserGluePoints())
         {
             drawing::GluePoint2 aUnoGlue;
 
             if( Element >>= aUnoGlue )
             {
                 const basegfx::B2DVector aAbsoluteScale(basegfx::absolute(mpObject->getSdrObjectScale()));
-                const sdr::glue::Point aSdrGlue(aUnoGlue, aAbsoluteScale);
+                sdr::glue::GluePoint aSdrGlue(aUnoGlue, aAbsoluteScale);
 
-                pList->add(aSdrGlue);
+                rProvider.addUserGluePoint(aSdrGlue);
 
                 // only repaint, no objectchange
                 mpObject->ActionChanged();
@@ -355,39 +288,25 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIndex( sal_Int32 Index ) throw(lang
 {
     if( mpObject.is() )
     {
-        sdr::glue::List* pList = mpObject->GetGluePointList(true);
+        sdr::glue::GluePointProvider& rProvider = mpObject->GetGluePointProvider();
 
-        if( pList )
+        if(rProvider.hasUserGluePoints())
         {
             Index -= 4;
 
             if(Index >= 0)
             {
-                const sdr::glue::Point* pCandidate = pList->findByID(Index);
+                const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(Index);
 
                 if(pCandidate)
                 {
-                    pList->remove(*pCandidate);
+                    rProvider.removeUserGluePoint(*pCandidate);
 
                     // only repaint, no objectchange
                     mpObject->ActionChanged();
 
                     return;
                 }
-
-                // TTTT:GLUE
-                //{
-                //    const sdr::glue::Point* pCandidate = pList->findByID(sal_uInt32 nID) const;
-                //
-                //
-                //
-                //    pList->Delete( (sal_uInt32)Index );
-                //
-                //    // only repaint, no objectchange
-                //    mpObject->ActionChanged();
-                //
-                //    return;
-                //}
             }
         }
     }
@@ -407,17 +326,17 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIndex( sal_Int32 Index, const uno:
 
     if( mpObject.is() && Index >= 0 )
     {
-        const sdr::glue::List* pList = mpObject->GetGluePointList(false);
-        const sdr::glue::PointVector aGluePointVector(pList ? pList->getVector() : sdr::glue::PointVector());
+        const sdr::glue::GluePointProvider& rProvider = mpObject->GetGluePointProvider();
+        const sdr::glue::GluePointVector aGluePointVector(rProvider.getUserGluePointVector());
 
         if(Index < (sal_Int32)aGluePointVector.size())
         {
-            sdr::glue::Point* pCandidate = aGluePointVector[Index];
+            sdr::glue::GluePoint* pCandidate = aGluePointVector[Index];
 
             if(pCandidate)
             {
                 const basegfx::B2DVector aAbsoluteScale(basegfx::absolute(mpObject->getSdrObjectScale()));
-                const sdr::glue::Point aSdrGlue(aUnoGlue, aAbsoluteScale);
+                const sdr::glue::GluePoint aSdrGlue(aUnoGlue, aAbsoluteScale);
 
                 *pCandidate = aSdrGlue;
 
@@ -428,13 +347,6 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIndex( sal_Int32 Index, const uno:
             {
                 OSL_ENSURE(false, "Got a sdr::glue::PointVector with empty entries (!)");
             }
-
-            // TTTT:GLUE
-            //rGlue = (*pList)[(sal_uInt32)Index];
-            //convert( aUnoGlue, rGlue );
-            //
-            //// only repaint, no objectchange
-            //mpObject->ActionChanged();
         }
     }
 
@@ -452,8 +364,8 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::getCount() throw(uno::RuntimeException
         // and any number of user defined glue points
         nCount += 4;
 
-        const sdr::glue::List* pList = mpObject->GetGluePointList(false);
-        const sdr::glue::PointVector aGluePointVector(pList ? pList->getVector() : sdr::glue::PointVector());
+        const sdr::glue::GluePointProvider& rProvider = mpObject->GetGluePointProvider();
+        const sdr::glue::GluePointVector aGluePointVector(rProvider.getUserGluePointVector());
 
         nCount += aGluePointVector.size();
     }
@@ -465,9 +377,11 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index ) throw(lan
 {
     if(Index >= 0 && mpObject.is())
     {
-        if( Index < 4 ) // default glue point?
+        const sdr::glue::GluePointProvider& rProvider = mpObject->GetGluePointProvider();
+
+        if(Index < 4) // default glue point?
         {
-            const sdr::glue::Point aTempPoint(mpObject->GetVertexGluePoint(Index));
+            const sdr::glue::GluePoint aTempPoint(rProvider.getAutoGluePointByIndex(Index));
             const basegfx::B2DVector aAbsoluteScale(basegfx::absolute(mpObject->getSdrObjectScale()));
             const drawing::GluePoint2 aGluePoint(aTempPoint.convertToGluePoint2(aAbsoluteScale));
             uno::Any aAny;
@@ -478,12 +392,11 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index ) throw(lan
         else
         {
             Index -= 4;
-            const sdr::glue::List* pList = mpObject->GetGluePointList(false);
-            const sdr::glue::PointVector aGluePointVector(pList ? pList->getVector() : sdr::glue::PointVector());
+            const sdr::glue::GluePointVector aGluePointVector(rProvider.getUserGluePointVector());
 
-            if(pList && Index < (sal_Int32)aGluePointVector.size())
+            if(Index < (sal_Int32)aGluePointVector.size())
             {
-                const sdr::glue::Point* pCandidate = aGluePointVector[Index];
+                const sdr::glue::GluePoint* pCandidate = aGluePointVector[Index];
 
                 if(pCandidate)
                 {
@@ -498,14 +411,6 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index ) throw(lan
                 {
                     OSL_ENSURE(false, "Got a sdr::glue::PointVector with empty entries (!)");
                 }
-
-                // TTTT:GLUE
-                //rTempPoint = (*pList)[(sal_uInt32)Index];
-                //aGluePoint.IsUserDefined = sal_True;
-                //convert( rTempPoint, aGluePoint );
-                //uno::Any aAny;
-                //aAny <<= aGluePoint;
-                //return aAny;
             }
         }
     }

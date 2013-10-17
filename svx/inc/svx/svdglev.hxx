@@ -28,7 +28,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // predefines
 
-class sdr::glue::Point;
+class sdr::glue::GluePoint;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,8 +37,7 @@ class SVX_DLLPUBLIC SdrGlueEditView: public SdrPolyEditView
 private:
     // Markierte Klebepunkte kopieren und anstelle der alten markieren
     void ImpCopyMarkedGluePoints();
-    typedef void (*PGlueDoFunc)(sdr::glue::Point&, const SdrObject* pObj, const void*, const void*, const void*, const void*, const void*);
-    // TTTT:GLUE typedef void (*PGlueTrFunc)(basegfx::B2DPoint&, const void*, const void*, const void*, const void*, const void*);
+    typedef void (*PGlueDoFunc)(sdr::glue::GluePoint&, const SdrObject* pObj, const void*, const void*, const void*, const void*, const void*);
     void ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1 = 0, const void* p2 = 0, const void* p3 = 0, const void* p4 = 0, const void* p5 = 0);
     void ImpTransformMarkedGluePoints(const basegfx::B2DHomMatrix& rTransform);
 
@@ -73,8 +72,8 @@ public:
     //      SDRVERTALIGN_TOP
     //      SDRVERTALIGN_BOTTOM
     //      SDRVERTALIGN_DONTCARE (nur bei Get())
-    sdr::glue::Point::Alignment GetMarkedGluePointsAlign(bool bVert) const;
-    void SetMarkedGluePointsAlign(bool bVert, sdr::glue::Point::Alignment nAlign);
+    sdr::glue::GluePoint::Alignment GetMarkedGluePointsAlign(bool bVert) const;
+    void SetMarkedGluePointsAlign(bool bVert, sdr::glue::GluePoint::Alignment nAlign);
     bool IsSetMarkedGluePointsAlignPossible() const { return !IsReadOnly() && areGluesSelected(); }
 
     // Alle merkierten Klebepunkte entfernen
@@ -82,11 +81,6 @@ public:
 
     // central GluePoint transformator
     void TransformMarkedGluePoints(const basegfx::B2DHomMatrix& rTransformation, const SdrRepeatFunc aRepFunc, bool bCopy = false);
-
-    // TTTT:GLUE
-    //void MoveMarkedGluePoints(const basegfx::B2DVector& rDelta, bool bCopy = false);
-    //void ResizeMarkedGluePoints(const basegfx::B2DPoint& rRef, const basegfx::B2DVector& rScale, bool bCopy = false);
-    //void RotateMarkedGluePoints(const basegfx::B2DPoint& rRef, double fAngle, bool bCopy = false);
 };
 
 #endif //_SVDGLEV_HXX

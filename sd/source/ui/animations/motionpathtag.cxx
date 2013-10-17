@@ -770,37 +770,6 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
             }
 
             mrView.MoveHandleByVector(*pHdl, basegfx::B2DVector(fX, fY), 0, pDragMethod);
-
-            // TTTT:HANDLE
-            //const basegfx::B2DPoint aStartPoint(pHdl->getPosition());
-            //const basegfx::B2DPoint aEndPoint(aStartPoint + basegfx::B2DPoint(fX, fY));
-            //
-            //// start dragging
-            //rtl::Reference< MotionPathTag > xTag( this );
-            //SdrDragMethod* pDragMethod = 0;
-            //
-            //mrView.BegDragObj(aStartPoint, pHdl, 0.0, pDragMethod);
-            //
-            //if(mrView.IsDragObj())
-            //{
-            //  const bool bWasNoSnap(mrView.GetDragStat().IsNoSnap());
-            //  const bool bWasSnapEnabled(mrView.IsSnapEnabled());
-            //
-            //  // switch snapping off
-            //  if(!bWasNoSnap)
-            //      ((SdrDragStat&)mrView.GetDragStat()).SetNoSnap(true);
-            //  if(bWasSnapEnabled)
-            //      mrView.SetSnapEnabled(false);
-            //
-            //  mrView.MovAction(aEndPoint);
-            //  mrView.EndDragObj();
-            //
-            //  // restore snap
-            //  if(!bWasNoSnap)
-            //      ((SdrDragStat&)mrView.GetDragStat()).SetNoSnap(bWasNoSnap);
-            //  if(bWasSnapEnabled)
-            //      mrView.SetSnapEnabled(bWasSnapEnabled);
-            //}
         }
         else
         {

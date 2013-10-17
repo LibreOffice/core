@@ -55,8 +55,8 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define SDRESC_VERT (sdr::glue::Point::ESCAPE_DIRECTION_TOP|sdr::glue::Point::ESCAPE_DIRECTION_BOTTOM)
-#define SDRESC_HORZ (sdr::glue::Point::ESCAPE_DIRECTION_LEFT|sdr::glue::Point::ESCAPE_DIRECTION_RIGHT)
+#define SDRESC_VERT (sdr::glue::GluePoint::ESCAPE_DIRECTION_TOP|sdr::glue::GluePoint::ESCAPE_DIRECTION_BOTTOM)
+#define SDRESC_HORZ (sdr::glue::GluePoint::ESCAPE_DIRECTION_LEFT|sdr::glue::GluePoint::ESCAPE_DIRECTION_RIGHT)
 #define SDRESC_ALL (SDRESC_HORZ|SDRESC_VERT)
 
 SdrObjConnection::~SdrObjConnection()
@@ -72,52 +72,35 @@ void SdrObjConnection::ResetVars()
     mbAutoVertex = false;
 }
 
-bool SdrObjConnection::TakeGluePoint(sdr::glue::Point& rGP/* TTTT:GLUE, bool bSetAbsPos*/) const
+bool SdrObjConnection::TakeGluePoint(sdr::glue::GluePoint& rGP) const
 {
     bool bRet(false);
 
     if(mpConnectedSdrObject)
     {
         // Ein Obj muss schon angedockt sein!
+        const sdr::glue::GluePointProvider& rProvider = mpConnectedSdrObject->GetGluePointProvider();
+
         if(mbAutoVertex)
         {
-            rGP = mpConnectedSdrObject->GetVertexGluePoint(mnConnectorId);
+            rGP = rProvider.getAutoGluePointByIndex(mnConnectorId);
             bRet = true;
         }
         else
         {
-            const sdr::glue::List* pGPL = mpConnectedSdrObject->GetGluePointList(false);
 
-            if(pGPL)
+            if(rProvider.hasUserGluePoints())
             {
-                sdr::glue::Point* pCandidate = pGPL->findByID(mnConnectorId);
+                const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(mnConnectorId);
 
                 if(pCandidate)
                 {
                     rGP = *pCandidate;
                     bRet = true;
                 }
-
-                // TTTT:GLUE
-                //const sal_uInt32 nNum(pGPL->FindGluePoint(mnConnectorId));
-                //
-                //if(SDRGLUEPOINT_NOTFOUND != nNum)
-                //{
-                //    rGP=(*pGPL)[nNum];
-                //    bRet = true;
-                //}
             }
         }
     }
-
-    //if(bRet && bSetAbsPos)
-    //{
-    //
-    //
-    //    const basegfx::B2DPoint aPt(rGP.GetAbsolutePos(sdr::legacy::GetSnapRange(*mpConnectedSdrObject)));
-    //
-    //    rGP.SetPos(aPt + maObjOfs);
-    //}
 
     return bRet;
 }
@@ -209,6 +192,149 @@ sdr::properties::BaseProperties* SdrEdgeObj::CreateObjectSpecificProperties()
 sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfSdrEdgeObj(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// GluePoint section
+
+namespace sdr
+{
+    namespace glue
+    {
+        // SdrEdgeObj implements it's own GluePointProvider since
+        // - it does not support UserGluePoints -> use GluePointProvider
+        // - it supports AutoGluePoints, but different from standard -> replace
+        //   AutoGluePoint methods
+
+        class SdrEdgeObjGluePointProvider : public GluePointProvider
+        {
+        private:
+            // we need a reference to the owner object, given as reference in
+            // the constructor to express that it will always be set
+            const SdrEdgeObj*           mpSource;
+
+        protected:
+            SdrEdgeObjGluePointProvider(const SdrEdgeObjGluePointProvider& rCandidate);
+            virtual GluePointProvider& operator=(const GluePointProvider& rCandidate);
+
+        public:
+            // construction, destruction, copying
+            SdrEdgeObjGluePointProvider(const SdrEdgeObj& rSource);
+            virtual ~SdrEdgeObjGluePointProvider();
+
+            // copying
+            virtual GluePointProvider* Clone() const;
+
+            // AutoGluePoint read access (read only)
+            virtual sal_uInt32 getAutoGluePointCount() const;
+            virtual GluePoint getAutoGluePointByIndex(sal_uInt32 nIndex) const;
+        };
+
+        SdrEdgeObjGluePointProvider::SdrEdgeObjGluePointProvider(const SdrEdgeObj& rSource)
+        :   GluePointProvider(),
+            mpSource(&rSource)
+        {
+        }
+
+        SdrEdgeObjGluePointProvider::~SdrEdgeObjGluePointProvider()
+        {
+        }
+
+        SdrEdgeObjGluePointProvider::SdrEdgeObjGluePointProvider(const SdrEdgeObjGluePointProvider& rCandidate)
+        :   GluePointProvider(),
+            mpSource(rCandidate.mpSource)
+        {
+        }
+
+        GluePointProvider& SdrEdgeObjGluePointProvider::operator=(const GluePointProvider& rCandidate)
+        {
+            // call parent to copy UserGluePoints
+            GluePointProvider::operator=(rCandidate);
+
+            const SdrEdgeObjGluePointProvider* pSource = dynamic_cast< const SdrEdgeObjGluePointProvider* >(&rCandidate);
+
+            if(pSource)
+            {
+                mpSource = pSource->mpSource;
+            }
+
+            return *this;
+        }
+
+        GluePointProvider* SdrEdgeObjGluePointProvider::Clone() const
+        {
+            return new SdrEdgeObjGluePointProvider(*this);
+        }
+
+        sal_uInt32 SdrEdgeObjGluePointProvider::getAutoGluePointCount() const
+        {
+            // to stay compatible, also use four points (anyways UNO API uses a fixed count of four
+            // currently). Seel below, 0,1 create the same point, 2 the start, 3, the end
+            return 4;
+        }
+
+        GluePoint SdrEdgeObjGluePointProvider::getAutoGluePointByIndex(sal_uInt32 nIndex) const
+        {
+            // no error with indices, just repeatedly return last GluePoint as fallback
+            const basegfx::B2DPolygon aEdgeTrack(mpSource->GetEdgeTrackPath());
+            const sal_uInt32 nPntAnz(aEdgeTrack.count());
+            basegfx::B2DPoint aOldPoint(0.0, 0.0);
+
+            if(nPntAnz)
+            {
+                switch(nIndex)
+                {
+                    case 2:
+                    {
+                        if(!mpSource->GetConnectedNode(true))
+                        {
+                            aOldPoint = aEdgeTrack.getB2DPoint(0);
+                        }
+                        break;
+                    }
+                    case 3:
+                    {
+                        if(!mpSource->GetConnectedNode(false))
+                        {
+                            aOldPoint = aEdgeTrack.getB2DPoint(nPntAnz - 1);
+                        }
+                        break;
+                    }
+                    default:
+                    {
+                        if(1 == (nPntAnz & 1))
+                        {
+                            aOldPoint = aEdgeTrack.getB2DPoint(nPntAnz / 2);
+                        }
+                        else
+                        {
+                            aOldPoint = (aEdgeTrack.getB2DPoint((nPntAnz/2) - 1) + aEdgeTrack.getB2DPoint(nPntAnz/2)) * 0.5;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            // need to make absolute position relative. temporarily correct zero sizes for invert
+            basegfx::B2DHomMatrix aTransform(basegfx::tools::guaranteeMinimalScaling(mpSource->getSdrObjectTransformation()));
+
+            aTransform.invert();
+            aOldPoint = aTransform * aOldPoint;
+
+            return sdr::glue::GluePoint(
+                aOldPoint,
+                sdr::glue::GluePoint::ESCAPE_DIRECTION_SMART,
+                sdr::glue::GluePoint::Alignment_Center,
+                sdr::glue::GluePoint::Alignment_Center,
+                true,   // mbRelative
+                false); // mbUserDefined
+        }
+    } // end of namespace glue
+} // end of namespace sdr
+
+sdr::glue::GluePointProvider* SdrEdgeObj::CreateObjectSpecificGluePointProvider()
+{
+    return new sdr::glue::SdrEdgeObjGluePointProvider(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -468,64 +594,6 @@ sal_uInt16 SdrEdgeObj::GetObjIdentifier() const
     return sal_uInt16(OBJ_EDGE);
 }
 
-sdr::glue::Point SdrEdgeObj::GetVertexGluePoint(sal_uInt32 nNum) const
-{
-    //basegfx::B2DPoint aPoint(0.0, 0.0);
-    const sal_uInt32 nPntAnz(maEdgeTrack.count());
-    basegfx::B2DPoint aOldPoint;
-
-    if(nPntAnz)
-    {
-        if(2 == nNum && !GetConnectedNode(true))
-        {
-            aOldPoint = maEdgeTrack.getB2DPoint(0);
-        }
-        else if(3 == nNum && !GetConnectedNode(false))
-        {
-            aOldPoint = maEdgeTrack.getB2DPoint(nPntAnz - 1);
-        }
-        else
-        {
-            if(1 == (nPntAnz & 1))
-            {
-                aOldPoint = maEdgeTrack.getB2DPoint(nPntAnz / 2);
-            }
-            else
-            {
-                aOldPoint = (maEdgeTrack.getB2DPoint((nPntAnz/2) - 1) + maEdgeTrack.getB2DPoint(nPntAnz/2)) * 0.5;
-            }
-        }
-    }
-
-    // TTTT:GLUE
-    //sdr::glue::Point aGP(aOldPoint);
-    //aGP.SetPercent(false);
-
-    // need to make absolute position relative. temporarily correct zero sizes for invert
-    basegfx::B2DHomMatrix aTransform(basegfx::tools::guaranteeMinimalScaling(getSdrObjectTransformation()));
-
-    aTransform.invert();
-    aOldPoint = aTransform * aOldPoint;
-
-    return sdr::glue::Point(
-        aOldPoint,
-        sdr::glue::Point::ESCAPE_DIRECTION_SMART,
-        sdr::glue::Point::Alignment_Center,
-        sdr::glue::Point::Alignment_Center,
-        true,   // mbRelative
-        false); // mbUserDefined
-}
-
-sdr::glue::List* SdrEdgeObj::GetGluePointList(bool /*bForce*/) const
-{
-    return NULL; // Keine benutzerdefinierten Klebepunkte fuer Verbinder #31671#
-}
-
-//sdr::glue::List* SdrEdgeObj::ForceGluePointList()
-//{
-//  return NULL; // Keine benutzerdefinierten Klebepunkte fuer Verbinder #31671#
-//}
-
 void SdrEdgeObj::ConnectToNode(bool bTail1, SdrObject* pObj)
 {
     SdrObjConnection& rCon=GetConnection(bTail1);
@@ -574,37 +642,41 @@ bool SdrEdgeObj::CheckNodeConnection(bool bTail1) const
 
     if(rCon.mpConnectedSdrObject && rCon.mpConnectedSdrObject->getSdrPageFromSdrObject() == getSdrPageFromSdrObject() && nPtAnz)
     {
-        const sdr::glue::List* pGPL = rCon.mpConnectedSdrObject->GetGluePointList(false);
-        const sdr::glue::PointVector aGluePointVector(pGPL ? pGPL->getVector() : sdr::glue::PointVector());
-        const sal_uInt32 nConAnz(aGluePointVector.size());
-        const sal_uInt32 nGesAnz(nConAnz + 4);
-        const basegfx::B2DPoint aTail(bTail1 ? maEdgeTrack.getB2DPoint(0) : maEdgeTrack.getB2DPoint(nPtAnz - 1));
+        const sdr::glue::GluePointProvider& rProvider = rCon.mpConnectedSdrObject->GetGluePointProvider();
 
-        for(sal_uInt32 i(0); i < nGesAnz && !bRet; i++)
+        if(rProvider.hasUserGluePoints())
         {
-            if(i < nConAnz)
-            {
-                // UserDefined or CustomShape
-                const sdr::glue::Point* pCandidate = aGluePointVector[i];
+            const sdr::glue::GluePointVector aGluePointVector(rProvider.getUserGluePointVector());
+            const sal_uInt32 nConAnz(aGluePointVector.size());
+            const sal_uInt32 nGesAnz(nConAnz + rProvider.getAutoGluePointCount());
+            const basegfx::B2DPoint aTail(bTail1 ? maEdgeTrack.getB2DPoint(0) : maEdgeTrack.getB2DPoint(nPtAnz - 1));
 
-                if(pCandidate)
+            for(sal_uInt32 i(0); i < nGesAnz && !bRet; i++)
+            {
+                if(i < nConAnz)
                 {
-                    const basegfx::B2DPoint aGluePos(rCon.mpConnectedSdrObject->getSdrObjectTransformation() * pCandidate->getUnitPosition());
+                    // UserDefined or CustomShape
+                    const sdr::glue::GluePoint* pCandidate = aGluePointVector[i];
+
+                    if(pCandidate)
+                    {
+                        const basegfx::B2DPoint aGluePos(rCon.mpConnectedSdrObject->getSdrObjectTransformation() * pCandidate->getUnitPosition());
+
+                        bRet = (aTail == aGluePos);
+                    }
+                    else
+                    {
+                        OSL_ENSURE(false, "Got sdr::glue::PointVector with emty entries (!)");
+                    }
+                }
+                else //if (i<nConAnz+4)
+                {
+                    // Vertex
+                    const sdr::glue::GluePoint aPt(rProvider.getAutoGluePointByIndex(i - nConAnz));
+                    const basegfx::B2DPoint aGluePos(rCon.mpConnectedSdrObject->getSdrObjectTransformation() * aPt.getUnitPosition());
 
                     bRet = (aTail == aGluePos);
                 }
-                else
-                {
-                    OSL_ENSURE(false, "Got sdr::glue::PointVector with emty entries (!)");
-                }
-            }
-            else //if (i<nConAnz+4)
-            {
-                // Vertex
-                const sdr::glue::Point aPt(rCon.mpConnectedSdrObject->GetVertexGluePoint(i - nConAnz));
-                const basegfx::B2DPoint aGluePos(rCon.mpConnectedSdrObject->getSdrObjectTransformation() * aPt.getUnitPosition());
-
-                bRet = (aTail == aGluePos);
             }
         }
     }
@@ -726,22 +798,22 @@ sal_uInt16 SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const basegfx::B2DPoint&
         if (byMitt) nRet|=SDRESC_VERT;
         if (bxMitt) nRet|=SDRESC_HORZ;
         if (dxl<dxr) { // Links
-            if (dyo<dyu) nRet|=sdr::glue::Point::ESCAPE_DIRECTION_LEFT | sdr::glue::Point::ESCAPE_DIRECTION_TOP;
-            else nRet|=sdr::glue::Point::ESCAPE_DIRECTION_LEFT | sdr::glue::Point::ESCAPE_DIRECTION_BOTTOM;
+            if (dyo<dyu) nRet|=sdr::glue::GluePoint::ESCAPE_DIRECTION_LEFT | sdr::glue::GluePoint::ESCAPE_DIRECTION_TOP;
+            else nRet|=sdr::glue::GluePoint::ESCAPE_DIRECTION_LEFT | sdr::glue::GluePoint::ESCAPE_DIRECTION_BOTTOM;
         } else {       // Rechts
-            if (dyo<dyu) nRet|=sdr::glue::Point::ESCAPE_DIRECTION_RIGHT | sdr::glue::Point::ESCAPE_DIRECTION_TOP;
-            else nRet|=sdr::glue::Point::ESCAPE_DIRECTION_RIGHT | sdr::glue::Point::ESCAPE_DIRECTION_BOTTOM;
+            if (dyo<dyu) nRet|=sdr::glue::GluePoint::ESCAPE_DIRECTION_RIGHT | sdr::glue::GluePoint::ESCAPE_DIRECTION_TOP;
+            else nRet|=sdr::glue::GluePoint::ESCAPE_DIRECTION_RIGHT | sdr::glue::GluePoint::ESCAPE_DIRECTION_BOTTOM;
         }
         return nRet;
     }
     if (dx<dy) { // waagerecht
         if (bxMitt) return SDRESC_HORZ;
-        if (dxl<dxr) return sdr::glue::Point::ESCAPE_DIRECTION_LEFT;
-        else return sdr::glue::Point::ESCAPE_DIRECTION_RIGHT;
+        if (dxl<dxr) return sdr::glue::GluePoint::ESCAPE_DIRECTION_LEFT;
+        else return sdr::glue::GluePoint::ESCAPE_DIRECTION_RIGHT;
     } else {     // senkrecht
         if (byMitt) return SDRESC_VERT;
-        if (dyo<dyu) return sdr::glue::Point::ESCAPE_DIRECTION_TOP;
-        else return sdr::glue::Point::ESCAPE_DIRECTION_BOTTOM;
+        if (dyo<dyu) return sdr::glue::GluePoint::ESCAPE_DIRECTION_TOP;
+        else return sdr::glue::GluePoint::ESCAPE_DIRECTION_BOTTOM;
     }
 }
 
@@ -828,7 +900,7 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
         basegfx::B2DPoint aPt1(maEdgeTrack.getB2DPoint(0));
         basegfx::B2DPoint aPt2(maEdgeTrack.getB2DPoint(nCount - 1));
         const basegfx::B2DRange aBaseRange(aPt1, aPt2);
-        sdr::glue::Point aGP1,aGP2;
+        sdr::glue::GluePoint aGP1,aGP2;
         sal_uInt16 nEsc1(SDRESC_ALL);
         sal_uInt16 nEsc2(SDRESC_ALL);
         basegfx::B2DRange aBoundRange1;
@@ -851,8 +923,6 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
                 aBoundRange1 = rCon1.mpConnectedSdrObject->getObjectRange(0);
             }
 
-            // TTTT:GLUE aBoundRange1.transform(basegfx::tools::createTranslateB2DHomMatrix(rCon1.maObjOfs));
-
             const sal_Int32 nH(((SdrEdgeNode1HorzDistItem&)rSet.Get(SDRATTR_EDGENODE1HORZDIST)).GetValue());
             const sal_Int32 nV(((SdrEdgeNode1VertDistItem&)rSet.Get(SDRATTR_EDGENODE1VERTDIST)).GetValue());
 
@@ -862,7 +932,7 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
         }
         else
         {
-            aBewareRange1 = aBoundRange1 = basegfx::B2DRange(aPt1); // TTTT:GLUE + rCon1.maObjOfs);
+            aBewareRange1 = aBoundRange1 = basegfx::B2DRange(aPt1);
         }
 
         if(bCon2)
@@ -876,8 +946,6 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
                 aBoundRange2 = rCon2.mpConnectedSdrObject->getObjectRange(0);
             }
 
-            // TTTT:GLUE aBoundRange2.transform(basegfx::tools::createTranslateB2DHomMatrix(rCon2.maObjOfs));
-
             const sal_Int32 nH(((SdrEdgeNode2HorzDistItem&)rSet.Get(SDRATTR_EDGENODE2HORZDIST)).GetValue());
             const sal_Int32 nV(((SdrEdgeNode2VertDistItem&)rSet.Get(SDRATTR_EDGENODE2VERTDIST)).GetValue());
 
@@ -887,7 +955,7 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
         }
         else
         {
-            aBewareRange2 = aBoundRange2 = basegfx::B2DRange(aPt2); // TTTT:GLUE + rCon2.maObjOfs);
+            aBewareRange2 = aBoundRange2 = basegfx::B2DRange(aPt2);
         }
 
         sal_uInt32 nBestQual=0xFFFFFFFF;
@@ -933,14 +1001,14 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
                 rCon1.mnConnectorId = nNum1;
             }
 
-            if(bCon1 && rCon1.TakeGluePoint(aGP1/*TTTT:GLUE, true*/))
+            if(bCon1 && rCon1.TakeGluePoint(aGP1))
             {
                 aPt1 = rCon1.mpConnectedSdrObject->getSdrObjectTransformation() * aGP1.getUnitPosition();
                 nEsc1 = aGP1.getEscapeDirections();
 
-                if(sdr::glue::Point::ESCAPE_DIRECTION_SMART == nEsc1)
+                if(sdr::glue::GluePoint::ESCAPE_DIRECTION_SMART == nEsc1)
                 {
-                    nEsc1 = ImpCalcEscAngle(rCon1.mpConnectedSdrObject, aPt1); // TTTT:GLUE - rCon1.maObjOfs);
+                    nEsc1 = ImpCalcEscAngle(rCon1.mpConnectedSdrObject, aPt1);
                 }
             }
 
@@ -951,24 +1019,24 @@ basegfx::B2DPolygon SdrEdgeObj::ImpCalcEdgeTrack(
                     rCon2.mnConnectorId = nNum2;
                 }
 
-                if(bCon2 && rCon2.TakeGluePoint(aGP2/*TTTT:GLUE, true*/))
+                if(bCon2 && rCon2.TakeGluePoint(aGP2))
                 {
                     aPt2 = rCon2.mpConnectedSdrObject->getSdrObjectTransformation() * aGP2.getUnitPosition();
                     nEsc2 = aGP2.getEscapeDirections();
 
-                    if(sdr::glue::Point::ESCAPE_DIRECTION_SMART == nEsc2)
+                    if(sdr::glue::GluePoint::ESCAPE_DIRECTION_SMART == nEsc2)
                     {
-                        nEsc2 = ImpCalcEscAngle(rCon2.mpConnectedSdrObject, aPt2); // TTTT:GLUE - rCon2.maObjOfs);
+                        nEsc2 = ImpCalcEscAngle(rCon2.mpConnectedSdrObject, aPt2);
                     }
                 }
 
                 for(long nA1(0); nA1 < 36000; nA1 += 9000)
                 {
-                    const sal_uInt16 nE1(!nA1 ? sdr::glue::Point::ESCAPE_DIRECTION_RIGHT : 9000 == nA1 ? sdr::glue::Point::ESCAPE_DIRECTION_TOP : 18000 == nA1 ? sdr::glue::Point::ESCAPE_DIRECTION_LEFT : 27000 == nA1 ? sdr::glue::Point::ESCAPE_DIRECTION_BOTTOM : 0);
+                    const sal_uInt16 nE1(!nA1 ? sdr::glue::GluePoint::ESCAPE_DIRECTION_RIGHT : 9000 == nA1 ? sdr::glue::GluePoint::ESCAPE_DIRECTION_TOP : 18000 == nA1 ? sdr::glue::GluePoint::ESCAPE_DIRECTION_LEFT : 27000 == nA1 ? sdr::glue::GluePoint::ESCAPE_DIRECTION_BOTTOM : 0);
 
                     for(long nA2(0); nA2 < 36000; nA2 += 9000)
                     {
-                        const sal_uInt16 nE2(!nA2 ? sdr::glue::Point::ESCAPE_DIRECTION_RIGHT : 9000 == nA2 ? sdr::glue::Point::ESCAPE_DIRECTION_TOP : 18000 == nA2 ? sdr::glue::Point::ESCAPE_DIRECTION_LEFT : 27000 == nA2 ? sdr::glue::Point::ESCAPE_DIRECTION_BOTTOM : 0);
+                        const sal_uInt16 nE2(!nA2 ? sdr::glue::GluePoint::ESCAPE_DIRECTION_RIGHT : 9000 == nA2 ? sdr::glue::GluePoint::ESCAPE_DIRECTION_TOP : 18000 == nA2 ? sdr::glue::GluePoint::ESCAPE_DIRECTION_LEFT : 27000 == nA2 ? sdr::glue::GluePoint::ESCAPE_DIRECTION_BOTTOM : 0);
 
                         if((nEsc1 & nE1) && (nEsc2 & nE2))
                         {
@@ -2192,17 +2260,6 @@ basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(SdrDragMethod& rDragMeth
         SdrObjConnection aMyCon1(maCon1);
         SdrObjConnection aMyCon2(maCon2);
 
-        // TTTT:GLUE
-        //if (bTail1)
-        //{
-        //    aMyCon1.maObjOfs *= rDragMethod.getCurrentTransformation();
-        //}
-        //
-        //if (bTail2)
-        //{
-        //    aMyCon2.maObjOfs *= rDragMethod.getCurrentTransformation();
-        //}
-
         SdrEdgeInfoRec aInfo(maEdgeInfo);
         aResult = ImpCalcEdgeTrack(aMyCon1, aMyCon2, &aInfo);
     }
@@ -2368,24 +2425,26 @@ void SdrEdgeObj::FindConnector(
                     // Die Userdefined Konnektoren haben absolute Prioritaet.
                     // Danach kommt Vertex, Corner und Mitte(Best) gleich priorisiert.
                     // Zum Schluss kommt noch ein HitTest aufs Obj.
-                    const sdr::glue::List* pGPL = pObj->GetGluePointList(false);
-                    const sdr::glue::PointVector aGluePointVector(pGPL ? pGPL->getVector() : sdr::glue::PointVector());
-                    const sal_uInt32 nConAnz(aGluePointVector.size());
-                    sal_uInt32 nGesAnz=nConAnz+9;
+                    const sdr::glue::GluePointProvider& rProvider = pObj->GetGluePointProvider();
+                    const sdr::glue::GluePointVector aUserGluePointVector(rProvider.getUserGluePointVector());
+                    const sal_uInt32 nUserGluePointCount(aUserGluePointVector.size());
+                    const sal_uInt32 nAutoGluePointCount(rProvider.getAutoGluePointCount());
+                    const sal_uInt32 nAllGluePointCount(nUserGluePointCount + nAutoGluePointCount + 1);
                     bool bUserFnd=false;
                     sal_uInt32 nBestDist=0xFFFFFFFF;
-                    for (sal_uInt32 i=0; i<nGesAnz; i++)
+
+                    for (sal_uInt32 i=0; i<nAllGluePointCount; i++)
                     {
-                        bool bUser=i<nConAnz;
-                        bool bVertex=i>=nConAnz+0 && i<nConAnz+4;
-                        bool bCenter=i==nConAnz+4;
+                        const bool bUser(i < nUserGluePointCount);
+                        const bool bVertex(i >= nUserGluePointCount && i < nUserGluePointCount + nAutoGluePointCount);
+                        const bool bCenter(i + 1 == nAllGluePointCount);
                         bool bOk=false;
                         Point aConPos;
                         sal_uInt32 nConNum=i;
 
                         if(bUser)
                         {
-                            const sdr::glue::Point* pCandidate = aGluePointVector[nConNum];
+                            const sdr::glue::GluePoint* pCandidate = aUserGluePointVector[nConNum];
 
                             if(pCandidate)
                             {
@@ -2402,9 +2461,9 @@ void SdrEdgeObj::FindConnector(
                         }
                         else if (bVertex && !bUserFnd)
                         {
-                            nConNum = nConNum - nConAnz;
+                            nConNum = nConNum - nUserGluePointCount;
 
-                            const sdr::glue::Point aLocalPt(pObj->GetVertexGluePoint(nConNum));
+                            const sdr::glue::GluePoint aLocalPt(rProvider.getAutoGluePointByIndex(nConNum));
                             const basegfx::B2DPoint aPoint(pObj->getSdrObjectTransformation() * aLocalPt.getUnitPosition());
 
                             aConPos = Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
@@ -2749,17 +2808,20 @@ void SdrEdgeObj::setGluePointIndex(bool bTail, sal_Int32 nIndex /* = -1 */ )
 
     if( nIndex > 3 )
     {
-        // TTTT:GLUE no more; check if this works
-        // nIndex -= 3;     // SJ: the start api index is 0, whereas the implementation in svx starts from 1
-        nIndex -= 4;        // SJ: the start api index is 0, whereas the implementation in svx starts from 1
+        nIndex -= 4; // The start api index and the implementation index is now both 0
 
         // for user defined glue points we have
         // to get the id for this index first
-        const sdr::glue::List* pList = rConn1.GetObject() ? rConn1.GetObject()->GetGluePointList(false) : NULL;
+        const SdrObject* pCandidate = rConn1.GetObject();
 
-        if(!pList || !pList->findByID(nIndex))
+        if(pCandidate)
         {
-            return;
+            const sdr::glue::GluePointProvider& rProvider = pCandidate->GetGluePointProvider();
+
+            if(!rProvider.hasUserGluePoints() || !rProvider.findUserGluePointByID(nIndex))
+            {
+                return;
+            }
         }
     }
     else if( nIndex < 0 )

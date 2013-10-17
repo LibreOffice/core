@@ -2304,9 +2304,9 @@ void EnhancedCustomShape2d::ApplyGluePoints(SdrObject* pTarget)
 
         if(nCount)
         {
-            sdr::glue::List* pList = pTarget->GetGluePointList(true);
+            sdr::glue::GluePointProvider& rProvider = pTarget->GetGluePointProvider();
 
-            if(pList)
+            if(rProvider.allowsUserGluePoints())
             {
                 // positions from GetPoint(seqGluePoints) are relative to absolute object size
                 const basegfx::B2DVector aObjectScale(
@@ -2318,36 +2318,21 @@ void EnhancedCustomShape2d::ApplyGluePoints(SdrObject* pTarget)
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {
                     const basegfx::B2DPoint aPosition(GetPoint(seqGluePoints[a], sal_True, sal_True));
-                    const sdr::glue::Point aNew(
-                        aPosition * aScaleToUnit,
-                        sdr::glue::Point::ESCAPE_DIRECTION_SMART,
-                        sdr::glue::Point::Alignment_Minimum,
-                        sdr::glue::Point::Alignment_Minimum);
 
-                    pList->add(aNew);
+                    // caution: These custom-defined GluePoints are *not* UserDefined, set to false
+                    sdr::glue::GluePoint aNew(
+                        aPosition * aScaleToUnit,
+                        sdr::glue::GluePoint::ESCAPE_DIRECTION_SMART,
+                        sdr::glue::GluePoint::Alignment_Minimum,
+                        sdr::glue::GluePoint::Alignment_Minimum,
+                        true,       // Relative
+                        false);     // UserDefined
+
+                    rProvider.addUserGluePoint(aNew);
                 }
             }
         }
     }
-
-    // TTTT:GLUE
-    //if ( pObj && seqGluePoints.getLength() )
-    //{
-    //    sal_uInt32 i, nCount = seqGluePoints.getLength();
-    //    for ( i = 0; i < nCount; i++ )
-    //    {
-    //        sdr::glue::Point aGluePoint;
-    //
-    //        aGluePoint.SetPos( GetPoint( seqGluePoints[ i ], sal_True, sal_True ) );
-    //        aGluePoint.SetPercent( sal_False );
-    //
-    //        aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
-    //        aGluePoint.setEscapeDirections( sdr::glue::Point::ESCAPE_DIRECTION_SMART );
-    //        sdr::glue::List* pList = pObj->GetGluePointList(true);
-    //        if( pList )
-    //            /* sal_uInt16 nId = */ pList->Insert( aGluePoint );
-    //    }
-    //}
 }
 
 SdrObject* EnhancedCustomShape2d::CreateLineGeometry()

@@ -2179,7 +2179,6 @@ void SdrView::SetMasterPagePaintCaching(bool bOn)
     }
 }
 
-// TTTT:HANDLE
 void SdrView::MoveHandleByVector(const SdrHdl& rHdl, const basegfx::B2DVector& rDistance, Window* pMakeVisibleWindow, SdrDragMethod* pOwnDragMethod)
 {
     if(!rDistance.equalZero())

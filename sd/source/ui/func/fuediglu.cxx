@@ -381,29 +381,29 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
 
         case SID_GLUE_ESCDIR_LEFT:
         {
-            mpView->SetMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_LEFT,
-                    !mpView->IsMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_LEFT ) );
+            mpView->SetMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_LEFT,
+                    !mpView->IsMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_LEFT ) );
         }
         break;
 
         case SID_GLUE_ESCDIR_RIGHT:
         {
-            mpView->SetMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_RIGHT,
-                    !mpView->IsMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_RIGHT ) );
+            mpView->SetMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_RIGHT,
+                    !mpView->IsMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_RIGHT ) );
         }
         break;
 
         case SID_GLUE_ESCDIR_TOP:
         {
-            mpView->SetMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_TOP,
-                    !mpView->IsMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_TOP ) );
+            mpView->SetMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_TOP,
+                    !mpView->IsMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_TOP ) );
         }
         break;
 
         case SID_GLUE_ESCDIR_BOTTOM:
         {
-            mpView->SetMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_BOTTOM,
-                    !mpView->IsMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_BOTTOM ) );
+            mpView->SetMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_BOTTOM,
+                    !mpView->IsMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_BOTTOM ) );
         }
         break;
 
@@ -418,37 +418,37 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
 
         case SID_GLUE_HORZALIGN_CENTER:
         {
-            mpView->SetMarkedGluePointsAlign(false, sdr::glue::Point::Alignment_Center);
+            mpView->SetMarkedGluePointsAlign(false, sdr::glue::GluePoint::Alignment_Center);
         }
         break;
 
         case SID_GLUE_HORZALIGN_LEFT:
         {
-            mpView->SetMarkedGluePointsAlign(false, sdr::glue::Point::Alignment_Minimum);
+            mpView->SetMarkedGluePointsAlign(false, sdr::glue::GluePoint::Alignment_Minimum);
         }
         break;
 
         case SID_GLUE_HORZALIGN_RIGHT:
         {
-            mpView->SetMarkedGluePointsAlign(false, sdr::glue::Point::Alignment_Maximum);
+            mpView->SetMarkedGluePointsAlign(false, sdr::glue::GluePoint::Alignment_Maximum);
         }
         break;
 
         case SID_GLUE_VERTALIGN_CENTER:
         {
-            mpView->SetMarkedGluePointsAlign(true, sdr::glue::Point::Alignment_Center);
+            mpView->SetMarkedGluePointsAlign(true, sdr::glue::GluePoint::Alignment_Center);
         }
         break;
 
         case SID_GLUE_VERTALIGN_TOP:
         {
-            mpView->SetMarkedGluePointsAlign(true, sdr::glue::Point::Alignment_Minimum);
+            mpView->SetMarkedGluePointsAlign(true, sdr::glue::GluePoint::Alignment_Minimum);
         }
         break;
 
         case SID_GLUE_VERTALIGN_BOTTOM:
         {
-            mpView->SetMarkedGluePointsAlign(true, sdr::glue::Point::Alignment_Maximum);
+            mpView->SetMarkedGluePointsAlign(true, sdr::glue::GluePoint::Alignment_Maximum);
         }
         break;
     }

@@ -32,7 +32,6 @@
 #include <vcl/timer.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx>
-#include <svx/sdrglue.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xenum.hxx>
@@ -45,6 +44,7 @@
 #include <svx/svdpool.hxx>
 #include <boost/utility.hpp>
 #include <svl/poolitem.hxx>
+#include <svx/gluepoint.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -210,16 +210,16 @@ public:
 class SVX_DLLPUBLIC SdrObjGeoData
 {
 public:
-    basegfx::B2DHomMatrix   maSdrObjectTransformation;
-    basegfx::B2DPoint       maObjectAnchor;
-    sdr::glue::List*        mpGPL;
-    SdrLayerID              mnLayerID;
+    basegfx::B2DHomMatrix           maSdrObjectTransformation;
+    basegfx::B2DPoint               maObjectAnchor;
+    sdr::glue::GluePointProvider*   mpGluePointProvider;
+    SdrLayerID                      mnLayerID;
 
     /// bitfield
-    bool                    mbMoveProtect : 1;
-    bool                    mbSizeProtect : 1;
-    bool                    mbNoPrint : 1;
-    bool                    mbVisible : 1;
+    bool                            mbMoveProtect : 1;
+    bool                            mbSizeProtect : 1;
+    bool                            mbNoPrint : 1;
+    bool                            mbVisible : 1;
 
 public:
     SdrObjGeoData();
@@ -232,7 +232,6 @@ class SdrObjPlusData
 {
 public:
     SdrObjUserDataList*         mpUserDataList; // applikationsspeziefische Daten
-    sdr::glue::List*            mpGluePoints;   // Klebepunkte zum Ankleben von Objektverbindern
 
     // object name, title and description
     String                      maObjName;
@@ -352,11 +351,11 @@ private:
     // on-demand members
     sdr::properties::BaseProperties*                    mpProperties;
     sdr::contact::ViewContact*                          mpViewContact;
-    sdr::gluepoint::GluePointProvider*                  mpGluePointProvider;
+    sdr::glue::GluePointProvider*                       mpGluePointProvider;
 
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-    virtual sdr::gluepoint::GluePointProvider* CreateObjectSpecificGluePointProvider();
+    virtual sdr::glue::GluePointProvider* CreateObjectSpecificGluePointProvider();
 
     /** only for internal use! */
     SvxShape* getSvxShape() const;
@@ -480,7 +479,7 @@ public:
     // acces to on-demand members
     virtual sdr::properties::BaseProperties& GetProperties() const;
     sdr::contact::ViewContact& GetViewContact() const;
-    sdr::gluepoint::GluePointProvider& GetGluePointProvider() const;
+    sdr::glue::GluePointProvider& GetGluePointProvider() const;
 
     // DrawContact support: Methods for handling Object changes
     void ActionChanged() const;
@@ -702,34 +701,6 @@ public:
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
     bool IsMacroHit(const SdrObjMacroHitRec& rRec) const { return CheckMacroHit(rRec)!=NULL; }
-
-    // Konnektoren. (siehe auch Dokumentation in SvdoEdge.HXX, SdrEdgeObj
-    //               sowie SvdGlue.HXX und SvdGlEV.HXX)
-    // Es gibt Knoten und Kanten. Eine Kante kann theoretisch auch Knoten
-    // sein, das ist jedoch in dieser Version noch nicht implementiert.
-    // Ein Knoten hat eine Anzahl von Klebepunkten, wo Kanten angeklebt
-    // werden koennen.
-    // Eine Kante kann
-    // - ohne Verbindungen sein
-    // - an einem Ende auf der Wiese stehen und am anderen Ende an
-    //   genau einem Knoten gebunden sein
-    // - an beiden Enden mit jeweils genau einem Knoten verbunden sein.
-    // Die Kante ist Listener bei seinen bis zu 2 Knoten.
-    // Wird der Knoten verschoben oder Resized, folgen alle angebundenen
-    // Kanten. Ebenso bei SetGluePoint()... am Knoten.
-    // Beim Verschieben/Resizen der Kante wird dagegen die Verbindung
-    // geloesst.
-
-    // Automatische Klebepunkte:
-    // je 4 Scheitelpunkt- und Eckpositionen muss ein Knotenobjekt liefern
-    // i.d.R. 0=oben, 1=rechts, 2=unten, 3=links
-    virtual sdr::glue::Point GetVertexGluePoint(sal_uInt32 nNum) const;
-
-    // Liste aller Klebepunkte. Kann NULL sein.
-    virtual sdr::glue::List* GetGluePointList(bool bForce) const;
-
-    // Nach veraendern der GluePointList muss man am Obj SendRepaintBroadcast rufen!
-    // TTTT:GLUE virtual sdr::glue::List* ForceGluePointList();
 
     /** sets the writing mode of the object's context
 

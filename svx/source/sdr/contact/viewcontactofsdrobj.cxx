@@ -154,23 +154,22 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::createGluePointPrimitive2DSequence() const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            const sdr::glue::List* pGluePointList = GetSdrObject().GetGluePointList(false);
+            const sdr::glue::GluePointProvider& rProvider = GetSdrObject().GetGluePointProvider();
 
-            if(pGluePointList)
+            if(rProvider.hasUserGluePoints())
             {
-                const sdr::glue::PointVector aGluePoints(pGluePointList->getVector());
+                const sdr::glue::GluePointVector aGluePoints(rProvider.getUserGluePointVector());
                 const sal_uInt32 nCount(aGluePoints.size());
 
                 if(nCount)
                 {
-                    // TTTT:GLUE
                     // prepare primitives; positions are in unit coordinates
                     const basegfx::B2DHomMatrix& rTransformation = GetSdrObject().getSdrObjectTransformation();
                     std::vector< basegfx::B2DPoint > aPointVector;
 
                     for(sal_uInt32 a(0); a < nCount; a++)
                     {
-                        const sdr::glue::Point* pCandidate = aGluePoints[a];
+                        const sdr::glue::GluePoint* pCandidate = aGluePoints[a];
 
                         if(pCandidate)
                         {
@@ -178,7 +177,7 @@ namespace sdr
                         }
                         else
                         {
-                            OSL_ENSURE(false, "sdr::glue::PointVector with empty entries (!)");
+                            OSL_ENSURE(false, "sdr::glue::GluePointVector with empty entries (!)");
                         }
                     }
 

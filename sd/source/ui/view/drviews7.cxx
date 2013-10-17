@@ -459,18 +459,18 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         else
         {
             // Horizontale Ausrichtung
-            const sdr::glue::Point::Alignment nHorz(mpDrawView->GetMarkedGluePointsAlign(false));
+            const sdr::glue::GluePoint::Alignment nHorz(mpDrawView->GetMarkedGluePointsAlign(false));
 
-            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_CENTER, nHorz == sdr::glue::Point::Alignment_Center ) );
-            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_LEFT,   nHorz == sdr::glue::Point::Alignment_Minimum ) );
-            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_RIGHT,  nHorz == sdr::glue::Point::Alignment_Maximum ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_CENTER, nHorz == sdr::glue::GluePoint::Alignment_Center ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_LEFT,   nHorz == sdr::glue::GluePoint::Alignment_Minimum ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_RIGHT,  nHorz == sdr::glue::GluePoint::Alignment_Maximum ) );
 
             // Vertikale Ausrichtung
-            const sdr::glue::Point::Alignment nVert(mpDrawView->GetMarkedGluePointsAlign(true));
+            const sdr::glue::GluePoint::Alignment nVert(mpDrawView->GetMarkedGluePointsAlign(true));
 
-            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_CENTER, nVert == sdr::glue::Point::Alignment_Center ) );
-            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_TOP,    nVert == sdr::glue::Point::Alignment_Minimum ) );
-            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_BOTTOM, nVert == sdr::glue::Point::Alignment_Maximum ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_CENTER, nVert == sdr::glue::GluePoint::Alignment_Center ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_TOP,    nVert == sdr::glue::GluePoint::Alignment_Minimum ) );
+            rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_BOTTOM, nVert == sdr::glue::GluePoint::Alignment_Maximum ) );
         }
 
         // Punkt einfuegen
@@ -478,25 +478,25 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         // Autrittsrichtung
         // Links
-        eState = mpDrawView->IsMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_LEFT );
+        eState = mpDrawView->IsMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_LEFT );
         if( eState == STATE_DONTKNOW )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_LEFT );
         else
             rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_LEFT, eState == STATE_CHECK ) );
         // Rechts
-        eState = mpDrawView->IsMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_RIGHT );
+        eState = mpDrawView->IsMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_RIGHT );
         if( eState == STATE_DONTKNOW )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_RIGHT );
         else
             rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_RIGHT, eState == STATE_CHECK ) );
         // Oben
-        eState = mpDrawView->IsMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_TOP );
+        eState = mpDrawView->IsMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_TOP );
         if( eState == STATE_DONTKNOW )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_TOP );
         else
             rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_TOP, eState == STATE_CHECK ) );
         // Unten
-        eState = mpDrawView->IsMarkedGluePointsEscDir( sdr::glue::Point::ESCAPE_DIRECTION_BOTTOM );
+        eState = mpDrawView->IsMarkedGluePointsEscDir( sdr::glue::GluePoint::ESCAPE_DIRECTION_BOTTOM );
         if( eState == STATE_DONTKNOW )
             rSet.InvalidateItem( SID_GLUE_ESCDIR_BOTTOM );
         else

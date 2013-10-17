@@ -812,46 +812,6 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     {
                         // move handle with index nHandleIndex
                         mpView->MoveHandleByVector(*pHdl, aMove, mpWindow, 0);
-
-                        // TTTT:HANDLE
-                        //if(pHdl && !aMove.equalZero())
-                        //{
-                        //  // now move the Handle
-                        //  const basegfx::B2DPoint aStartPoint(pHdl->getPosition());
-                        //  const basegfx::B2DPoint aEndPoint(aStartPoint + aMove);
-                        //  const SdrDragStat& rDragStat = mpView->GetDragStat();
-                        //
-                        //  // start dragging
-                        //  mpView->BegDragObj(aStartPoint, pHdl, 0.0);
-                        //
-                        //    if(mpView->IsDragObj())
-                        //  {
-                        //      const bool bWasNoSnap(rDragStat.IsNoSnap());
-                        //      const bool bWasSnapEnabled(mpView->IsSnapEnabled());
-                        //
-                        //      // switch snapping off
-                        //      if(!bWasNoSnap)
-                        //          ((SdrDragStat&)rDragStat).SetNoSnap(true);
-                        //      if(bWasSnapEnabled)
-                        //          mpView->SetSnapEnabled(false);
-                        //
-                        //      mpView->MovAction(aEndPoint);
-                        //      mpView->EndDragObj();
-                        //
-                        //      // restore snap
-                        //      if(!bWasNoSnap)
-                        //          ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
-                        //      if(bWasSnapEnabled)
-                        //          mpView->SetSnapEnabled(bWasSnapEnabled);
-                        //  }
-                        //
-                        //  // make moved handle visible
-                        //  const basegfx::B2DRange aVisRange(
-                        //      aEndPoint - basegfx::B2DPoint(100.0, 100.0),
-                        //      aEndPoint + basegfx::B2DPoint(100.0, 100.0));
-                        //
-                        //  mpView->MakeVisibleAtView(aVisRange, *mpWindow);
-                        //}
                     }
 
                     // #109007#

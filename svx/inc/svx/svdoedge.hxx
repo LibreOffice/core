@@ -25,7 +25,6 @@
 #define _SVDOEDGE_HXX
 
 #include <svx/svdotext.hxx>
-#include <svx/sdrglue.hxx>
 #include <svx/svxdllapi.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
@@ -49,7 +48,6 @@ private:
     friend class                SdrCreateView;
 
 protected:
-    // TTTT:GLUE basegfx::B2DPoint          maObjOfs;       // Wird beim Draggen eines Knotens gesetzt
     SdrObject*                  mpConnectedSdrObject;          // Referenziertes Objekt
     sal_uInt16                  mnConnectorId;        // Konnektornummer
 
@@ -63,7 +61,7 @@ public:
     SdrObjConnection() { ResetVars(); }
 
     void ResetVars();
-    bool TakeGluePoint(sdr::glue::Point& rGP/* TTTT:GLUE, bool bSetAbsolutePos*/) const;
+    bool TakeGluePoint(sdr::glue::GluePoint& rGP) const;
 
     inline void SetBestConnection( bool rB ) { mbBestConnection = rB; };
     inline void SetBestVertex( bool rB ) { mbBestVertex = rB; };
@@ -152,8 +150,9 @@ private:
     friend class                ImpEdgeHdl;
 
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::glue::GluePointProvider* CreateObjectSpecificGluePointProvider();
 
     SdrObjConnection            maCon1;  // Verbindungszustand des Linienanfangs
     SdrObjConnection            maCon2;  // Verbindungszustand des Linienendes
@@ -212,9 +211,6 @@ public:
     SdrObjConnection& GetConnection(bool bTail1) { return *(bTail1 ? &maCon1 : &maCon2); }
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual sdr::glue::Point GetVertexGluePoint(sal_uInt32 nNum) const;
-    virtual sdr::glue::List* GetGluePointList(bool bForce) const;
-    // TTTT:GLUE virtual sdr::glue::List* ForceGluePointList();
 
     // bTail1=true: Linienanfang, sonst LinienEnde
     // pObj=NULL: Disconnect

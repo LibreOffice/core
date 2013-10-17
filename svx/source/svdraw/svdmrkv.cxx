@@ -1069,17 +1069,15 @@ void SdrMarkView::CreateMarkHandles(SdrHdlList& rTarget)
 
         if(!aMarkedGluePoints.empty())
         {
-            const sdr::glue::List* pGPL=pObj->GetGluePointList(false);
+            const sdr::glue::GluePointProvider& rProvider = pObj->GetGluePointProvider();
 
-            if(pGPL)
+            if(rProvider.hasUserGluePoints())
             {
-                // TTTT:GLUE const basegfx::B2DRange aObjSnapRange(sdr::legacy::GetSnapRange(*pObj));
-
                 for(sdr::selection::Indices::const_iterator aCurrent(aMarkedGluePoints.begin());
                     aCurrent != aMarkedGluePoints.end(); aCurrent++)
                 {
                     const sal_uInt32 nId(*aCurrent);
-                    const sdr::glue::Point* pCandidate = pGPL->findByID(nId);
+                    const sdr::glue::GluePoint* pCandidate = rProvider.findUserGluePointByID(nId);
 
                     if(pCandidate)
                     {
@@ -1088,17 +1086,6 @@ void SdrMarkView::CreateMarkHandles(SdrHdlList& rTarget)
 
                         pGlueHdl->SetObjHdlNum(nId);
                     }
-
-                    // TTTT:GLUE
-                    //const sal_uInt32 nNumGP(pGPL->FindGluePoint(nId));
-                    //
-                    //if(SDRGLUEPOINT_NOTFOUND != nNumGP)
-                    //{
-                    //    const sdr::glue::Point& rGP=(*pGPL)[nNumGP];
-                    //    basegfx::B2DPoint aPos(rGP.GetAbsolutePos(aObjSnapRange));
-                    //    SdrHdl* pGlueHdl = new SdrHdl(rTarget, pObj, HDL_GLUE, aPos);
-                    //    pGlueHdl->SetObjHdlNum(nId);
-                    //}
                 }
             }
         }

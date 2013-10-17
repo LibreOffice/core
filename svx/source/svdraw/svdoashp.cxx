@@ -1812,148 +1812,6 @@ void SdrObjCustomShape::setSdrObjectTransformation(const basegfx::B2DHomMatrix& 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// TTTT:GLUE
-//void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
-//{
-//  const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
-//
-//  if(pSdrObject)
-//  {
-//      const sdr::glue::List* pSource = pSdrObject->GetGluePointList(false);
-//
-//      if(pSource && pSource->GetCount())
-//      {
-//          //if(!SdrTextObj::GetGluePointList())
-//          //{
-//          //  SdrTextObj::ForceGluePointList();
-//          //}
-//
-//          const sdr::glue::List* pList = SdrTextObj::GetGluePointList(true);
-//
-//          if(pList)
-//          {
-//              sdr::glue::List aNewList;
-//              sal_uInt16 a;
-//
-//              // build transform matrix from helper object to local
-//              basegfx::B2DHomMatrix aTransFromHelperToLocal(pSdrObject->getSdrObjectTransformation());
-//              aTransFromHelperToLocal.invert();
-//              aTransFromHelperToLocal = getSdrObjectTransformation() * aTransFromHelperToLocal;
-//
-//              for(a = 0; a < pSource->GetCount(); a++)
-//              {
-//                  sdr::glue::Point aCopy((*pSource)[a]);
-//                  aCopy.SetUserDefined(false);
-//
-//                  basegfx::B2DPoint aGluePos(aCopy.GetPos());
-//                  aGluePos *= aTransFromHelperToLocal;
-//                  aCopy.SetPos(aGluePos);
-//
-//                  aNewList.Insert(aCopy);
-//              }
-//
-//              for(a = 0; a < pList->GetCount(); a++)
-//              {
-//                  const sdr::glue::Point& rCandidate = (*pList)[a];
-//
-//                  if(rCandidate.IsUserDefined())
-//                  {
-//                      aNewList.Insert(rCandidate);
-//                  }
-//              }
-//
-//              // copy new list to local. This is NOT very convenient behaviour, the local
-//              // GluePointList should not be set, but be delivered by using GetGluePointList(),
-//              // maybe on demand. Since the local object is changed here, this is assumed to
-//              // be a result of GetGluePointList and thus the list is copied
-//              if(mpPlusData)
-//              {
-//                  *mpPlusData->mpGluePoints = aNewList;
-//              }
-//          }
-//      }
-//  }
-//}
-
-sdr::glue::List* SdrObjCustomShape::GetGluePointList(bool bForce) const
-{
-    sdr::glue::List* pOld = GetGluePointList(false);
-    sdr::glue::List* pNew = GetGluePointList(bForce);
-
-    if(bForce && !pOld && pNew)
-    {
-        // new list was created, add GluePoints from created visualization as non-user-defined GluePoints
-        const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
-
-        if(pSdrObject)
-        {
-            const sdr::glue::List* pSource = pSdrObject->GetGluePointList(false);
-
-            if(pSource)
-            {
-                // build transform from helper object unit coordinates to target object unit coordinates;
-                // we need the inverse of the target object transform. temporarily correct zero sizes for invert
-                basegfx::B2DHomMatrix aInvLocal(basegfx::tools::guaranteeMinimalScaling(getSdrObjectTransformation()));
-                aInvLocal.invert();
-
-                // build full transform
-                basegfx::B2DHomMatrix aFullHelperUnitToTargetUnit(aInvLocal * pSdrObject->getSdrObjectTransformation());
-
-                // get vector, change and copy points
-                const sdr::glue::PointVector aCandidates(pSource->getVector());
-
-                for(sal_uInt32 a(0); a < aCandidates.size(); a++)
-                {
-                    const sdr::glue::Point* pCandidate(aCandidates[a]);
-
-                    if(pCandidate)
-                    {
-                        const basegfx::B2DPoint aNewPos(aFullHelperUnitToTargetUnit * pCandidate->getUnitPosition());
-                        const sdr::glue::Point aNewPoint(
-                            aNewPos,
-                            pCandidate->getEscapeDirections(),
-                            pCandidate->getHorizontalAlignment(),
-                            pCandidate->getVerticalAlignment(),
-                            pCandidate->getRelative(),
-                            false);
-
-                        pNew->add(aNewPoint);
-                    }
-                    else
-                    {
-                        OSL_ENSURE(false, "Got empty slot in sdr::glue::PointVector (!)");
-                    }
-                }
-            }
-        }
-
-        // TTTT:GLUE check here (!)
-        // Add custom glues here (!)
-        // ((SdrObjCustomShape*)this)->ImpCheckCustomGluePointsAreAdded();
-    }
-
-    return mpPlusData ? mpPlusData->mpGluePoints : 0;
-
-    //((SdrObjCustomShape*)this)->ImpCheckCustomGluePointsAreAdded();
-    //return SdrTextObj::GetGluePointList();
-}
-
-//// #i38892# TTTT:GLUE
-//sdr::glue::List* SdrObjCustomShape::ForceGluePointList()
-//{
-//  if(SdrTextObj::ForceGluePointList())
-//  {
-//      ImpCheckCustomGluePointsAreAdded();
-//      return SdrTextObj::ForceGluePointList();
-//  }
-//  else
-//  {
-//      return 0L;
-//  }
-//}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void SdrObjCustomShape::AddToHdlList(SdrHdlList& rHdlList) const
 {
     // add handles from parent object
@@ -2894,7 +2752,270 @@ sdr::contact::ViewContact* SdrObjCustomShape::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfSdrObjCustomShape(*this);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace glue
+    {
+        // SdrEdgeObj implements it's own GluePointProvider since
+        // - it supports standard AutoGluePoints -> StandardGluePointProvider
+        // - it needs to add some non-user-defined UserGluePoints -> replace
+        //   UserGluePoint methods
+        //
+        // This is a little bit tricky since this implementation has to 'mix' two
+        // sources of UserGluePoints:
+        // - custom-defined ones from the CustomShape visualization geometry (these
+        //   will have the UserDefined-flag on 'false', see
+        //   EnhancedCustomShape2d::ApplyGluePoints)
+        // - the 'real', user-defined local ones
+        //
+        // This 'mix' still has to keep the unique ID paradigm at inserting new
+        // GluePoints. Assuming that the visualization geometry
+        // - will always create the same numer and list of GluePoints
+        // - is able to create these on demand before user-defined ones are added
+        // this mix is done on the fly in the implementatin below
+
+        class SdrObjCustomShapeGluePointProvider : public StandardGluePointProvider
+        {
+        private:
+            // access to the owner object; always valid due to the
+            // lifetime being less or the same as the owner object
+            const SdrObjCustomShape*            mpSource;
+
+        protected:
+            SdrObjCustomShapeGluePointProvider(const SdrObjCustomShapeGluePointProvider& rCandidate);
+            virtual GluePointProvider& operator=(const GluePointProvider& rCandidate);
+
+            // helper: get access to the custom-defined UserGluePoints' GluePointProvider. This
+            // may/should create the CustomShape visualization geometry and the custom-defined
+            // UserGluePoints with them
+            GluePointProvider* getUserDefinedGluePointProvider() const;
+
+        public:
+            // construction, destruction, copying
+            SdrObjCustomShapeGluePointProvider(const SdrObjCustomShape& rSource);
+            virtual ~SdrObjCustomShapeGluePointProvider();
+
+            // copying
+            virtual GluePointProvider* Clone() const;
+
+            // add new GluePoint, it gets a new ID assigned and a reference to the
+            // new instance (copied to list) is returned. It will assert when
+            // already added
+            virtual GluePoint& addUserGluePoint(GluePoint& rNew);
+
+            // remove GluePoint (will assert if it was not added)
+            virtual void removeUserGluePoint(const GluePoint& rNew);
+
+            // check on content
+            virtual bool hasUserGluePoints() const;
+
+            // find UserGluePoint by ID
+            virtual GluePoint* findUserGluePointByID(sal_uInt32 nID) const;
+
+            // get vector of UserGluePoints (pointers to the real points)
+            virtual const GluePointVector getUserGluePointVector() const;
+
+            // adapt UserGluePoints to changed absolute scale, e.g. when not relative and alignments have to be addressed
+            virtual void adaptUserGluePointsToChangedScale(const basegfx::B2DVector& rOldScale, const basegfx::B2DVector& rNewScale);
+        };
+
+        SdrObjCustomShapeGluePointProvider::SdrObjCustomShapeGluePointProvider(const SdrObjCustomShape& rSource)
+        :   StandardGluePointProvider(),
+            mpSource(&rSource)
+        {
+        }
+
+        SdrObjCustomShapeGluePointProvider::~SdrObjCustomShapeGluePointProvider()
+        {
+        }
+
+        SdrObjCustomShapeGluePointProvider::SdrObjCustomShapeGluePointProvider(const SdrObjCustomShapeGluePointProvider& rCandidate)
+        :   StandardGluePointProvider(),
+            mpSource(rCandidate.mpSource)
+        {
+        }
+
+        GluePointProvider& SdrObjCustomShapeGluePointProvider::operator=(const GluePointProvider& rCandidate)
+        {
+            // call parent to copy UserGluePoints
+            StandardGluePointProvider::operator=(rCandidate);
+
+            const SdrObjCustomShapeGluePointProvider* pSource = dynamic_cast< const SdrObjCustomShapeGluePointProvider* >(&rCandidate);
+
+            if(pSource)
+            {
+                // copy source SdrObject
+                mpSource = pSource->mpSource;
+            }
+
+            return *this;
+        }
+
+        GluePointProvider* SdrObjCustomShapeGluePointProvider::Clone() const
+        {
+            return new SdrObjCustomShapeGluePointProvider(*this);
+        }
+
+        GluePointProvider* SdrObjCustomShapeGluePointProvider::getUserDefinedGluePointProvider() const
+        {
+            const SdrObject* pGeometryVisualization = mpSource->GetSdrObjectFromCustomShape();
+
+            if(pGeometryVisualization)
+            {
+                return &pGeometryVisualization->GetGluePointProvider();
+            }
+
+            return 0;
+        }
+
+        GluePoint& SdrObjCustomShapeGluePointProvider::addUserGluePoint(GluePoint& rNew)
+        {
+            if(StandardGluePointProvider::hasUserGluePoints())
+            {
+                // there are already user-defined UserGluePoints, thus the biggest ID
+                // is already set and a newly added one will be based on it, increasing
+                // it; call parent
+                return StandardGluePointProvider::addUserGluePoint(rNew);
+            }
+
+            // no user-defined UserGluePoints yet; check if we have custom-defined oones
+            GluePointProvider* pSource = getUserDefinedGluePointProvider();
+
+            if(!pSource || !pSource->hasUserGluePoints())
+            {
+                // no custom-defined UserGluePoints; call parent
+                return StandardGluePointProvider::addUserGluePoint(rNew);
+            }
+
+            // we have to add the first user-defined UserGluePoint and there are
+            // custom-defined ones. Call parent to get the needed instance
+            GluePoint& rRetval = StandardGluePointProvider::addUserGluePoint(rNew);
+
+            // test if add did work; if yes, a changed entry will be returned
+            if(&rRetval != &rNew)
+            {
+                // get new highest ID
+                const GluePointVector aCustomGluePoints(pSource->getUserGluePointVector());
+
+                if(aCustomGluePoints.empty())
+                {
+                    // error: pSource->hasUserGluePoints() had answered true before
+                    OSL_ENSURE(false, "no custom-defined UserGluePoints, but was stated so before (!)");
+                }
+                else
+                {
+                    const GluePoint* pLastCustomGluePoint = aCustomGluePoints.back();
+
+                    if(pLastCustomGluePoint)
+                    {
+                        // correct ID at new, first user-defined UserGluePoint
+                        setIdAtGluePoint(rRetval, pLastCustomGluePoint->getID() + 1);
+                    }
+                    else
+                    {
+                        // error: not empty, but no last
+                        OSL_ENSURE(false, "custom-defined UserGluePoints, but empty last entry (!)");
+                    }
+                }
+            }
+
+            return rRetval;
+        }
+
+        void SdrObjCustomShapeGluePointProvider::removeUserGluePoint(const GluePoint& rNew)
+        {
+            // non-user-defined GluePoints cannot be removed, thus just call parent and
+            // try to remove locally. This method does not need to be overloaded, but it
+            // is better for documentation purposes
+            StandardGluePointProvider::removeUserGluePoint(rNew);
+        }
+
+        bool SdrObjCustomShapeGluePointProvider::hasUserGluePoints() const
+        {
+            if(StandardGluePointProvider::hasUserGluePoints())
+            {
+                // if we alraedy have own user-defined GluePoints we are done
+                return true;
+            }
+
+            GluePointProvider* pSource = getUserDefinedGluePointProvider();
+
+            if(pSource)
+            {
+                // return state of custom shape defining geometry
+                return pSource->hasUserGluePoints();
+            }
+
+            return false;
+        }
+
+        GluePoint* SdrObjCustomShapeGluePointProvider::findUserGluePointByID(sal_uInt32 nID) const
+        {
+            // call parent
+            GluePoint* pRetval = StandardGluePointProvider::findUserGluePointByID(nID);
+
+            if(pRetval)
+            {
+                // done if found locally
+                return pRetval;
+            }
+
+            GluePointProvider* pSource = getUserDefinedGluePointProvider();
+
+            if(pSource)
+            {
+                // try to get from custom shape defining geometry
+                pRetval = pSource->findUserGluePointByID(nID);
+            }
+
+            return pRetval;
+        }
+
+        const GluePointVector SdrObjCustomShapeGluePointProvider::getUserGluePointVector() const
+        {
+            GluePointProvider* pSource = getUserDefinedGluePointProvider();
+
+            if(!pSource)
+            {
+                // no CustomShape GluePoints, return local state by calling parent
+                return StandardGluePointProvider::getUserGluePointVector();
+            }
+
+            if(!StandardGluePointProvider::hasUserGluePoints())
+            {
+                // no local GluePoints, return from custom
+                return pSource->getUserGluePointVector();
+            }
+
+            // need to mix both; add custom first
+            GluePointVector aRetval(pSource->getUserGluePointVector());
+            const GluePointVector aLocal(StandardGluePointProvider::getUserGluePointVector());
+
+            aRetval.insert(aRetval.end(), aLocal.begin(), aLocal.end());
+            return aRetval;
+        }
+
+        void SdrObjCustomShapeGluePointProvider::adaptUserGluePointsToChangedScale(const basegfx::B2DVector& rOldScale, const basegfx::B2DVector& rNewScale)
+        {
+            // non-user-defined GluePoints cannot be adapted/changed, thus just
+            // call parent. This method does not need to be overloaded, but it
+            // is better for documentation purposes
+            StandardGluePointProvider::adaptUserGluePointsToChangedScale(rOldScale, rNewScale);
+        }
+
+    } // end of namespace glue
+} // end of namespace sdr
+
+sdr::glue::GluePointProvider* SdrObjCustomShape::CreateObjectSpecificGluePointProvider()
+{
+    return new sdr::glue::SdrObjCustomShapeGluePointProvider(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // #i33136#
+
 bool SdrObjCustomShape::doConstructOrthogonal(const ::rtl::OUString& rName)
 {
     bool bRetval(false);

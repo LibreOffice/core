@@ -852,18 +852,13 @@ bool SdrDragView::BegInsGluePoint(const basegfx::B2DPoint& rPnt)
         pObj->TakeObjNameSingul(aName);
         aStr.SearchAndReplaceAscii("%1", aName);
         maInsPointUndoStr = aStr;
-        sdr::glue::List* pGPL=pObj->GetGluePointList(true);
+        sdr::glue::GluePointProvider& rProvider = pObj->GetGluePointProvider();
 
-        if(pGPL)
+        if(rProvider.allowsUserGluePoints())
         {
-            sdr::glue::Point& rNew = pGPL->add(sdr::glue::Point());
+            sdr::glue::GluePoint& rNew = rProvider.addUserGluePoint(sdr::glue::GluePoint());
             const sal_uInt32 nGlueId(rNew.getID());
             SdrHdl* pHdl = 0;
-
-            // TTTT:GLUE
-            //const sal_uInt32 nGlueIdx(pGPL->Insert(sdr::glue::Point()));
-            //sdr::glue::Point& rGP=(*pGPL)[nGlueIdx];
-            //const sal_uInt32 nGlueId(rGP.GetId());
 
             // the moved candidate is identified. GetObjectMatrix, but take care for objects
             // with zero width/height
@@ -871,7 +866,6 @@ bool SdrDragView::BegInsGluePoint(const basegfx::B2DPoint& rPnt)
 
             aCorrectedObjectTransformation.invert();
             rNew.setUnitPosition(aCorrectedObjectTransformation * rPnt);
-            // rGP.SetAbsolutePos(rPnt, sdr::legacy::GetSnapRange(*pObj));
 
             if(MarkGluePoint(pObj, nGlueId))
             {
