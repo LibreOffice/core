@@ -7772,7 +7772,9 @@ fi
 dnl ===================================================================
 dnl Check for system cppunit
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([cppunit],[CPPUNIT],[cppunit >= 1.12.0])
+if test "$cross_compiling" != "yes"; then
+    libo_CHECK_SYSTEM_MODULE([cppunit],[CPPUNIT],[cppunit >= 1.12.0])
+fi
 
 dnl ===================================================================
 dnl Check whether freetype is available

@@ -16,15 +16,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/unix.patch \
 	external/cppunit/wundef.patch \
 ))
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
-	external/cppunit/android.patch \
-))
-else ifeq ($(OS),IOS)
-$(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
-	external/cppunit/ios.patch \
-))
-endif
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/disable-dynloading.patch \
