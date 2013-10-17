@@ -9,9 +9,13 @@
 
 $(eval $(call gb_Module_Module,libpng))
 
+ifeq ($(SYSTEM_LIBPNG),NO)
+
 $(eval $(call gb_Module_add_targets,libpng,\
 	StaticLibrary_png \
 	UnpackedTarball_png \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:
