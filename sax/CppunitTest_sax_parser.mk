@@ -21,6 +21,10 @@ $(eval $(call gb_CppunitTest_use_libraries,sax_parser, \
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,sax_parser, \
+	boost_headers \
+))
+
 $(eval $(call gb_CppunitTest_use_sdk_api,sax_parser))
 
 $(eval $(call gb_CppunitTest_use_ure,sax_parser))
