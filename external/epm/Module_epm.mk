@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Module_Module,epm))
 
-ifeq (EPM,$(filter EPM,$(BUILD_TYPE)))
-
 ifneq ($(CROSS_COMPILING),YES)
 
 $(eval $(call gb_Module_add_targets,epm,\
@@ -18,8 +16,6 @@ $(eval $(call gb_Module_add_targets,epm,\
 	ExternalProject_epm \
 	UnpackedTarball_epm \
 ))
-
-endif
 
 endif
 
