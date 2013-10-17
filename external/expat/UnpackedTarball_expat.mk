@@ -12,7 +12,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,expat))
 $(eval $(call gb_UnpackedTarball_set_tarball,expat,$(EXPAT_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,expat,\
-	expat/expat-2.1.0.patch \
+	external/expat/expat-2.1.0.patch \
 ))
 
 # This is a bit hackish.

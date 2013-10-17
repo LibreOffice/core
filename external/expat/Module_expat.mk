@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Module_Module,expat))
 
-ifeq ($(SYSTEM_EXPAT),NO)
-
 $(eval $(call gb_Module_add_targets,expat,\
 	UnpackedTarball_expat \
 	StaticLibrary_expat \
@@ -34,8 +32,6 @@ ifeq ($(BUILD_X64),TRUE)
 $(eval $(call gb_Module_add_targets,expat,\
 	StaticLibrary_expat_x64 \
 ))
-endif
-
 endif
 
 # vim: set noet sw=4 ts=4:

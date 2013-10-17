@@ -46,7 +46,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	embeddedobj \
 	embedserv \
 	eventattacher \
-	$(call gb_Helper_optional,EXPAT,expat) \
 	extensions \
 	external \
 	extras \
