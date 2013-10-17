@@ -9,12 +9,10 @@
 
 $(eval $(call gb_Module_Module,hsqldb))
 
-ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,hsqldb,\
 	ExternalPackage_hsqldb \
 	ExternalProject_hsqldb \
 	UnpackedTarball_hsqldb \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:
