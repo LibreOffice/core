@@ -101,6 +101,32 @@ sub invalid_distro($$)
     closedir ($dirh);
 }
 
+# Alloc $ACLOCAL to specify which aclocal to use
+$aclocal = $ENV{ACLOCAL} ? $ENV{ACLOCAL} : 'aclocal';
+
+my $system = `uname -s`;
+chomp $system;
+
+sanity_checks ($system) unless($system eq 'Darwin');
+
+my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
+
+$aclocal_flags .= " -I $src_path/m4";
+$aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin');
+$aclocal_flags .= " -I /opt/freeware/share/aclocal" if ($system eq 'AIX');
+
+$ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
+
+if ($src_path ne $build_path)
+{
+    system ("ln -sf $src_path/configure.ac configure.ac");
+    system ("ln -sf $src_path/g g");
+}
+system ("$aclocal $aclocal_flags") && die "Failed to run aclocal";
+unlink ("configure");
+system ("autoconf -I ${src_path}") && die "Failed to run autoconf";
+die "Failed to generate the configure script" if (! -f "configure");
+
 # Handle help arguments first, so we don't clobber autogen.lastrun
 for my $arg (@ARGV) {
     if ($arg =~ /^(--help|-h|-\?)$/) {
@@ -151,32 +177,6 @@ for my $arg (@args) {
         $ENV{$1} = $2;
     }
 }
-
-# Alloc $ACLOCAL to specify which aclocal to use
-$aclocal = $ENV{ACLOCAL} ? $ENV{ACLOCAL} : 'aclocal';
-
-my $system = `uname -s`;
-chomp $system;
-
-sanity_checks ($system) unless($system eq 'Darwin');
-
-my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
-
-$aclocal_flags .= " -I $src_path/m4";
-$aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin');
-$aclocal_flags .= " -I /opt/freeware/share/aclocal" if ($system eq 'AIX');
-
-$ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
-
-if ($src_path ne $build_path)
-{
-    system ("ln -sf $src_path/configure.ac configure.ac");
-    system ("ln -sf $src_path/g g");
-}
-system ("$aclocal $aclocal_flags") && die "Failed to run aclocal";
-unlink ("configure");
-system ("autoconf -I ${src_path}") && die "Failed to run autoconf";
-die "Failed to generate the configure script" if (! -f "configure");
 
 if (defined $ENV{NOCONFIGURE}) {
     print "Skipping configure process.";
