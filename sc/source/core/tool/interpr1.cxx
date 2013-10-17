@@ -57,6 +57,7 @@
 #include "queryparam.hxx"
 #include "queryentry.hxx"
 #include "tokenarray.hxx"
+#include "compare.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -80,41 +81,6 @@ bool ScInterpreter::bGlobalStackInUse = false;
 
 using namespace formula;
 using ::std::auto_ptr;
-
-struct ScCompare
-{
-    double  nVal[2];
-    OUString* pVal[2];
-    bool    bVal[2];
-    bool    bEmpty[2];
-        ScCompare( OUString* p1, OUString* p2 )
-        {
-            pVal[ 0 ] = p1;
-            pVal[ 1 ] = p2;
-            bEmpty[0] = false;
-            bEmpty[1] = false;
-        }
-};
-
-struct ScCompareOptions
-{
-    ScQueryEntry        aQueryEntry;
-    bool                bRegEx;
-    bool                bMatchWholeCell;
-    bool                bIgnoreCase;
-
-                        ScCompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg );
-private:
-                        // Not implemented, prevent usage.
-                        ScCompareOptions();
-                        ScCompareOptions( const ScCompareOptions & );
-     ScCompareOptions&  operator=( const ScCompareOptions & );
-};
-
-//-----------------------------------------------------------------------------
-// Functions
-//-----------------------------------------------------------------------------
-
 
 void ScInterpreter::ScIfJump()
 {
@@ -823,180 +789,10 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
     return false;
 }
 
-
-ScCompareOptions::ScCompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg ) :
-    aQueryEntry(rEntry),
-    bRegEx(bReg),
-    bMatchWholeCell(pDoc->GetDocOptions().IsMatchWholeCell()),
-    bIgnoreCase(true)
-{
-    bRegEx = (bRegEx && (aQueryEntry.eOp == SC_EQUAL || aQueryEntry.eOp == SC_NOT_EQUAL));
-    // Interpreter functions usually are case insensitive, except the simple
-    // comparison operators, for which these options aren't used. Override in
-    // struct if needed.
-}
-
-
-double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOptions )
-{
-    // Keep DoubleError if encountered
-    // #i40539# if bEmpty is set, bVal/nVal are uninitialized
-    if ( !rComp.bEmpty[0] && rComp.bVal[0] && !::rtl::math::isFinite( rComp.nVal[0]))
-        return rComp.nVal[0];
-    if ( !rComp.bEmpty[1] && rComp.bVal[1] && !::rtl::math::isFinite( rComp.nVal[1]))
-        return rComp.nVal[1];
-
-    size_t nStringQuery = 0;    // 0:=no, 1:=0, 2:=1
-    double fRes = 0;
-    if ( rComp.bEmpty[ 0 ] )
-    {
-        if ( rComp.bEmpty[ 1 ] )
-            ;       // empty cell == empty cell, fRes 0
-        else if( rComp.bVal[ 1 ] )
-        {
-            if ( !::rtl::math::approxEqual( rComp.nVal[ 1 ], 0.0 ) )
-            {
-                if ( rComp.nVal[ 1 ] < 0.0 )
-                    fRes = 1;       // empty cell > -x
-                else
-                    fRes = -1;      // empty cell < x
-            }
-            // else: empty cell == 0.0
-        }
-        else
-        {
-            if ( !rComp.pVal[ 1 ]->isEmpty() )
-                fRes = -1;      // empty cell < "..."
-            // else: empty cell == ""
-        }
-    }
-    else if ( rComp.bEmpty[ 1 ] )
-    {
-        if( rComp.bVal[ 0 ] )
-        {
-            if ( !::rtl::math::approxEqual( rComp.nVal[ 0 ], 0.0 ) )
-            {
-                if ( rComp.nVal[ 0 ] < 0.0 )
-                    fRes = -1;      // -x < empty cell
-                else
-                    fRes = 1;       // x > empty cell
-            }
-            // else: empty cell == 0.0
-        }
-        else
-        {
-            if ( !rComp.pVal[ 0 ]->isEmpty() )
-                fRes = 1;       // "..." > empty cell
-            // else: "" == empty cell
-        }
-    }
-    else if( rComp.bVal[ 0 ] )
-    {
-        if( rComp.bVal[ 1 ] )
-        {
-            if ( !::rtl::math::approxEqual( rComp.nVal[ 0 ], rComp.nVal[ 1 ] ) )
-            {
-                if( rComp.nVal[ 0 ] - rComp.nVal[ 1 ] < 0 )
-                    fRes = -1;
-                else
-                    fRes = 1;
-            }
-        }
-        else
-        {
-            fRes = -1;          // number is less than string
-            nStringQuery = 2;   // 1+1
-        }
-    }
-    else if( rComp.bVal[ 1 ] )
-    {
-        fRes = 1;               // string is greater than number
-        nStringQuery = 1;       // 0+1
-    }
-    else
-    {
-        // Both strings.
-        if (pOptions)
-        {
-            // All similar to ScTable::ValidQuery(), *rComp.pVal[1] actually
-            // is/must be identical to *rEntry.pStr, which is essential for
-            // regex to work through GetSearchTextPtr().
-            ScQueryEntry& rEntry = pOptions->aQueryEntry;
-            OSL_ENSURE(rEntry.GetQueryItem().maString.getString().equals(*rComp.pVal[1]), "ScInterpreter::CompareFunc: broken options");
-            if (pOptions->bRegEx)
-            {
-                sal_Int32 nStart = 0;
-                sal_Int32 nStop  = rComp.pVal[0]->getLength();
-                bool bMatch = rEntry.GetSearchTextPtr(
-                        !pOptions->bIgnoreCase)->SearchForward( *rComp.pVal[0],
-                            &nStart, &nStop);
-                if (bMatch && pOptions->bMatchWholeCell && (nStart != 0 || nStop != rComp.pVal[0]->getLength()))
-                    bMatch = false;     // RegEx must match entire string.
-                fRes = (bMatch ? 0 : 1);
-            }
-            else if (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL)
-            {
-                ::utl::TransliterationWrapper* pTransliteration =
-                    (pOptions->bIgnoreCase ? ScGlobal::GetpTransliteration() :
-                     ScGlobal::GetCaseTransliteration());
-                bool bMatch;
-                if (pOptions->bMatchWholeCell)
-                    bMatch = pTransliteration->isEqual( *rComp.pVal[0], *rComp.pVal[1]);
-                else
-                {
-                    OUString aCell( pTransliteration->transliterate(
-                                *rComp.pVal[0], ScGlobal::eLnge, 0,
-                                rComp.pVal[0]->getLength(), NULL));
-                    OUString aQuer( pTransliteration->transliterate(
-                                *rComp.pVal[1], ScGlobal::eLnge, 0,
-                                rComp.pVal[1]->getLength(), NULL));
-                    bMatch = (aCell.indexOf( aQuer ) != -1);
-                }
-                fRes = (bMatch ? 0 : 1);
-            }
-            else if (pOptions->bIgnoreCase)
-                fRes = (double) ScGlobal::GetCollator()->compareString(
-                        *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
-            else
-                fRes = (double) ScGlobal::GetCaseCollator()->compareString(
-                        *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
-        }
-        else if (pDok->GetDocOptions().IsIgnoreCase())
-            fRes = (double) ScGlobal::GetCollator()->compareString(
-                *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
-        else
-            fRes = (double) ScGlobal::GetCaseCollator()->compareString(
-                *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
-    }
-
-    if (nStringQuery && pOptions)
-    {
-        const ScQueryEntry& rEntry = pOptions->aQueryEntry;
-        const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
-        if (!rItems.empty())
-        {
-            const ScQueryEntry::Item& rItem = rItems[0];
-            if (rItem.meType != ScQueryEntry::ByString && !rItem.maString.isEmpty() &&
-                (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL))
-            {
-                // As in ScTable::ValidQuery() match a numeric string for a
-                // number query that originated from a string, e.g. in SUMIF
-                // and COUNTIF. Transliteration is not needed here.
-                bool bEqual = (*rComp.pVal[nStringQuery-1]) == rItem.maString.getString();
-                // match => fRes=0, else fRes=1
-                fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
-            }
-        }
-    }
-
-    return fRes;
-}
-
-
 double ScInterpreter::Compare()
 {
     OUString aVal1, aVal2;
-    ScCompare aComp( &aVal1, &aVal2 );
+    sc::Compare aComp( &aVal1, &aVal2 );
     for( short i = 1; i >= 0; i-- )
     {
         switch ( GetRawStackType() )
@@ -1078,14 +874,14 @@ double ScInterpreter::Compare()
     if( nGlobalError )
         return 0;
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    return CompareFunc( aComp );
+    return sc::CompareFunc(pDok->GetDocOptions().IsIgnoreCase(), aComp);
 }
 
 
-sc::RangeMatrix ScInterpreter::CompareMat( ScCompareOptions* pOptions )
+sc::RangeMatrix ScInterpreter::CompareMat( sc::CompareOptions* pOptions )
 {
     OUString aVal1, aVal2;
-    ScCompare aComp( &aVal1, &aVal2 );
+    sc::Compare aComp( &aVal1, &aVal2 );
     sc::RangeMatrix aMat[2];
     ScAddress aAdr;
     for( short i = 1; i >= 0; i-- )
@@ -1178,7 +974,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScCompareOptions* pOptions )
                                 aComp.bEmpty[i] = false;
                             }
                         }
-                        aRes.mpMat->PutDouble(CompareFunc(aComp, pOptions), j, k);
+                        aRes.mpMat->PutDouble(sc::CompareFunc(pDok->GetDocOptions().IsIgnoreCase(), aComp, pOptions), j, k);
                     }
                     else
                         aRes.mpMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), j, k);
@@ -1190,7 +986,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScCompareOptions* pOptions )
             short i = ( aMat[0].mpMat ? 0 : 1);
             SCSIZE nC, nR;
             aMat[i].mpMat->GetDimensions(nC, nR);
-            aRes.mpMat = GetNewMat( nC, nR);
+            aRes.mpMat = GetNewMat(nC, nR, false);
             if (!aRes.mpMat)
                 return aRes;
 
@@ -1201,25 +997,48 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScCompareOptions* pOptions )
             aRes.mnRow2 = aMat[i].mnRow2;
             aRes.mnTab2 = aMat[i].mnTab2;
 
-            for (SCSIZE j = 0; j < nC; ++j)
+            ScMatrix& rMat = *aMat[i].mpMat;
+            ScMatrix& rResMat = *aRes.mpMat;
+            ScMatrix::PosRef pMatPos(rMat.GetPosition(0, 0));
+            ScMatrixValue aVal;
+            std::vector<double> aResMatValues;
+            aResMatValues.reserve(nC*nR);
+            for (size_t j = 0, n = nC*nR; j < n; ++j)
             {
-                for (SCSIZE k = 0; k < nR; ++k)
+                aVal = rMat.Get(*pMatPos);
+                switch (aVal.nType)
                 {
-                    if (aMat[i].mpMat->IsValue(j, k))
+                    case SC_MATVAL_VALUE:
+                    case SC_MATVAL_BOOLEAN:
                     {
                         aComp.bVal[i] = true;
-                        aComp.nVal[i] = aMat[i].mpMat->GetDouble(j, k);
+                        aComp.nVal[i] = aVal.fVal;
                         aComp.bEmpty[i] = false;
                     }
-                    else
+                    break;
+                    case SC_MATVAL_STRING:
                     {
                         aComp.bVal[i] = false;
-                        *aComp.pVal[i] = aMat[i].mpMat->GetString(j, k).getString();
-                        aComp.bEmpty[i] = aMat[i].mpMat->IsEmpty(j, k);
+                        *aComp.pVal[i] = aVal.aStr.getString();
+                        aComp.bEmpty[i] = false;
                     }
-                    aRes.mpMat->PutDouble(CompareFunc(aComp, pOptions), j, k);
+                    break;
+                    case SC_MATVAL_EMPTY:
+                    case SC_MATVAL_EMPTYPATH:
+                    {
+                        aComp.bVal[i] = false;
+                        *aComp.pVal[i] = svl::SharedString::getEmptyString().getString();
+                        aComp.bEmpty[i] = aVal.nType == SC_MATVAL_EMPTY;
+                    }
+                    break;
+                    default:
+                        ;
                 }
+
+                aResMatValues.push_back(sc::CompareFunc(pDok->GetDocOptions().IsIgnoreCase(), aComp, pOptions));
+                rMat.NextPosition(*pMatPos);
             }
+            rResMat.PutDouble(&aResMatValues[0], aResMatValues.size(), 0, 0);
         }
     }
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
@@ -1227,7 +1046,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScCompareOptions* pOptions )
 }
 
 
-ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, ScCompareOptions& rOptions )
+ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, sc::CompareOptions& rOptions )
 {
     short nSaveCurFmtType = nCurFmtType;
     short nSaveFuncFmtType = nFuncFmtType;
@@ -5139,7 +4958,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             if (pQueryMatrix)
             {
                 // Never case-sensitive.
-                ScCompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
+                sc::CompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
                 ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
                 if (nGlobalError || !pResultMatrix)
                 {
@@ -5434,7 +5253,7 @@ void ScInterpreter::ScCountIf()
                 if (pQueryMatrix)
                 {
                     // Never case-sensitive.
-                    ScCompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
+                    sc::CompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
                     ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
                     if (nGlobalError || !pResultMatrix)
                     {
@@ -5690,7 +5509,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                 if (pQueryMatrix)
                 {
                     // Never case-sensitive.
-                    ScCompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
+                    sc::CompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
                     ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
                     if (nGlobalError || !pResultMatrix)
                     {

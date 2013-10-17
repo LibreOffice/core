@@ -42,8 +42,6 @@ struct ScQueryParam;
 struct ScDBQueryParamBase;
 struct ScQueryEntry;
 
-struct ScCompare;
-struct ScCompareOptions;
 struct ScSingleRefData;
 struct ScComplexRefData;
 
@@ -54,6 +52,8 @@ struct ScRefCellValue;
 namespace sc {
 
 struct RangeMatrix;
+struct Compare;
+struct CompareOptions;
 
 }
 
@@ -382,16 +382,12 @@ void ScChoseJump();
 // Returns true if last jump was executed and result matrix pushed.
 bool JumpMatrix( short nStackLevel );
 
-/** @param pOptions
-        NULL means case sensitivity document option is to be used!
- */
-double CompareFunc( const ScCompare& rComp, ScCompareOptions* pOptions = NULL );
 double Compare();
 /** @param pOptions
         NULL means case sensitivity document option is to be used!
  */
-sc::RangeMatrix CompareMat( ScCompareOptions* pOptions = NULL );
-ScMatrixRef QueryMat( const ScMatrixRef& pMat, ScCompareOptions& rOptions );
+sc::RangeMatrix CompareMat( sc::CompareOptions* pOptions = NULL );
+ScMatrixRef QueryMat( const ScMatrixRef& pMat, sc::CompareOptions& rOptions );
 void ScEqual();
 void ScNotEqual();
 void ScLess();
