@@ -504,7 +504,7 @@ void touch_lo_keyboard_did_hide()
 }
 
 extern "C"
-void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int tileWidth, int tileHeight, int tilePosX, int tilePosY)
+void touch_lo_draw_tile(void * /*context*/, int /*contextWidth*/, int /*contextHeight*/, int /*tilePosX*/, int /*tilePosY*/, int /*tileWidth*/, int /*tileHeight*/)
 {
     // draws the area of one tile
 

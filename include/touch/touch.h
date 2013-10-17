@@ -58,7 +58,12 @@ void touch_lo_pan(int deltaX, int deltaY);
 void touch_lo_zoom(int x, int y, float scale);
 void touch_lo_keyboard_input(int c);
 
-void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int tileWidth, int tileHeight, int tilePosX, int tilePosY);
+/** Draw part of the document.
+
+tilePosX, tilePosY, tileWidth, tileHeight address the part of the document to be drawn.
+context, contextHeight, contextWidth specify where to draw.
+*/
+void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int tilePosX, int tilePosY, int tileWidth, int tileHeight);
 
 typedef enum { DOWN, MOVE, UP} MLOMouseButtonState;
 
