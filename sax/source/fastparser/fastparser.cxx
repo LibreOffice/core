@@ -76,8 +76,8 @@ private:
         }
         catch (const SAXParseException& e)
         {
-            mpParser->getEntity().getEvent( CallbackType::EXCEPTION );
-            mpParser->produce( CallbackType::EXCEPTION );
+            mpParser->getEntity().getEvent( EXCEPTION );
+            mpParser->produce( EXCEPTION );
         }
     }
 };
@@ -798,8 +798,8 @@ void FastSaxParser::deleteUsedEvents()
 void FastSaxParser::produce( CallbackType aType )
 {
     Entity& rEntity = getEntity();
-    if (aType == CallbackType::DONE ||
-        aType == CallbackType::EXCEPTION ||
+    if (aType == DONE ||
+        aType == EXCEPTION ||
         rEntity.mnProducedEventsSize == rEntity.mnEventListSize)
     {
         osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
@@ -829,18 +829,18 @@ bool FastSaxParser::consume(EventList *pEventList)
     {
         switch ((*aEventIt).maType)
         {
-            case CallbackType::START_ELEMENT:
+            case START_ELEMENT:
                 rEntity.startElement( &(*aEventIt) );
                 break;
-            case CallbackType::END_ELEMENT:
+            case END_ELEMENT:
                 rEntity.endElement();
                 break;
-            case CallbackType::CHARACTERS:
+            case CHARACTERS:
                 rEntity.characters( (*aEventIt).msChars );
                 break;
-            case CallbackType::DONE:
+            case DONE:
                 return false;
-            case CallbackType::EXCEPTION:
+            case EXCEPTION:
             {
                 assert( rEntity.maSavedException.hasValue() );
                 // Error during parsing !
@@ -918,9 +918,9 @@ void FastSaxParser::parse()
         }
     }
     while( nRead > 0 );
-    rEntity.getEvent( CallbackType::DONE );
+    rEntity.getEvent( DONE );
     if (rEntity.mbEnableThreads)
-        produce( CallbackType::DONE );
+        produce( DONE );
 }
 
 //------------------------------------------
@@ -943,7 +943,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
     }
 
     // create attribute map and process namespace instructions
-    Event& rEvent = getEntity().getEvent( CallbackType::START_ELEMENT );
+    Event& rEvent = getEntity().getEvent( START_ELEMENT );
     if (rEvent.mxAttributes.is())
         rEvent.mxAttributes->clear();
     else
@@ -1038,7 +1038,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
         rEntity.maNamespaceStack.push( NameWithToken(rEvent.msNamespace, nNamespaceToken) );
         rEvent.msElementName = OUString(pName, nNameLen, RTL_TEXTENCODING_UTF8);
         if (rEntity.mbEnableThreads)
-            produce( CallbackType::START_ELEMENT );
+            produce( START_ELEMENT );
         else
             rEntity.startElement( &rEvent );
     }
@@ -1059,9 +1059,9 @@ void FastSaxParser::callbackEndElement( SAL_UNUSED_PARAMETER const XML_Char* )
     if( !rEntity.maNamespaceStack.empty() )
         rEntity.maNamespaceStack.pop();
 
-    rEntity.getEvent( CallbackType::END_ELEMENT );
+    rEntity.getEvent( END_ELEMENT );
     if (rEntity.mbEnableThreads)
-        produce( CallbackType::END_ELEMENT );
+        produce( END_ELEMENT );
     else
         rEntity.endElement();
 }
@@ -1070,10 +1070,10 @@ void FastSaxParser::callbackEndElement( SAL_UNUSED_PARAMETER const XML_Char* )
 void FastSaxParser::callbackCharacters( const XML_Char* s, int nLen )
 {
     Entity& rEntity = getEntity();
-    Event& rEvent = rEntity.getEvent( CallbackType::CHARACTERS );
+    Event& rEvent = rEntity.getEvent( CHARACTERS );
     rEvent.msChars = OUString(s, nLen, RTL_TEXTENCODING_UTF8);
     if (rEntity.mbEnableThreads)
-        produce( CallbackType::CHARACTERS );
+        produce( CHARACTERS );
     else
         rEntity.characters( rEvent.msChars );
 }
