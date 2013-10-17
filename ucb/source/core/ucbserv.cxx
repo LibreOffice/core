@@ -24,10 +24,10 @@
 #include "ucbprops.hxx"
 #include "provprox.hxx"
 #include "cmdenv.hxx"
+#include "FileAccess.hxx"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
 
 //=========================================================================
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucb_component_getFactory(
@@ -76,8 +76,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucb_component_getFactory(
     else if ( UcbContentProviderProxyFactory::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
-        xFactory
-            = UcbContentProviderProxyFactory::createServiceFactory( xSMgr );
+        xFactory = UcbContentProviderProxyFactory::createServiceFactory( xSMgr );
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -87,11 +86,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucb_component_getFactory(
     else if ( ucb_cmdenv::UcbCommandEnvironment::getImplementationName_Static().
                 compareToAscii( pImplName ) == 0 )
     {
-        xFactory
-            = ucb_cmdenv::UcbCommandEnvironment::createServiceFactory( xSMgr );
+        xFactory = ucb_cmdenv::UcbCommandEnvironment::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+    // FilePicker
+    else if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
+    {
+        xFactory = cppu::createSingleFactory(xSMgr,
+                                             OUString::createFromAscii( pImplName ),
+                                             FileAccess_CreateInstance,
+                                             FileAccess_getSupportedServiceNames() );
+    }
 
     if ( xFactory.is() )
     {

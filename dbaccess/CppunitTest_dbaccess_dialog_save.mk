@@ -28,7 +28,6 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_dialog_save, \
     sdbt \
     drawinglayer \
     editeng \
-    fileacc \
     for \
     forui \
     i18nlangtag \
@@ -79,7 +78,6 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_dialog_save,\
     dbaccess/util/dbu \
     dbaccess/util/sdbt \
     dbaccess/source/filter/xml/dbaxml \
-    fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
     framework/util/fwk \

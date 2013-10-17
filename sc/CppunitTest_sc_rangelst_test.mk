@@ -37,7 +37,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_rangelst_test, \
     cppuhelper \
     drawinglayer \
     editeng \
-    fileacc \
     for \
     forui \
     i18nlangtag \
@@ -89,7 +88,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_rangelst_test,\
     dbaccess/util/dba \
     embeddedobj/util/embobj \
     eventattacher/source/evtatt \
-    fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
     framework/util/fwk \

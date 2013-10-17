@@ -25,7 +25,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_import_tests, \
     cppuhelper \
     drawinglayer \
     editeng \
-    fileacc \
     for \
     forui \
     i18nlangtag \
@@ -73,7 +72,6 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     dbaccess/util/dba \
     desktop/source/deployment/deployment \
     embeddedobj/util/embobj \
-    fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     filter/source/svg/svgfilter \
     forms/util/frm \
