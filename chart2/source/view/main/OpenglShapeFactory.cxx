@@ -55,8 +55,18 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
+
 namespace chart
 {
+
+SAL_CALL extern "C" {
+
+SAL_DLLPUBLIC_EXPORT opengl::OpenglShapeFactory* getOpenglShapeFactory()
+{
+    return new opengl::OpenglShapeFactory();
+}
+
+}
 
 using dummy::DummyXShape;
 using dummy::DummyXShapes;

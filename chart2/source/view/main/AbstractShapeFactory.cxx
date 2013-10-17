@@ -38,6 +38,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
+#include <osl/module.hxx>
+
 #include "OpenglShapeFactory.hxx"
 #include "ShapeFactory.hxx"
 
@@ -45,6 +47,29 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 
 namespace chart {
+
+namespace {
+
+typedef opengl::OpenglShapeFactory* (*__getOpenglShapeFactory)(void);
+
+static void SAL_CALL thisModule() {}
+
+osl::Module* getOpenGLModule()
+{
+    static osl::Module aModule;
+    if (aModule.is())
+        // Already loaded.
+        return &aModule;
+
+    OUString aLibName(SVLIBRARY("chartopengl"));
+    bool bLoaded = aModule.loadRelative(&thisModule, aLibName);
+    if (!bLoaded)
+        bLoaded = aModule.load(aLibName);
+
+    return bLoaded ? &aModule : NULL;
+}
+
+}
 
 AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Reference< lang::XMultiServiceFactory> xFactory)
 {
@@ -54,8 +79,21 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Referen
         return pShapeFactory;
 
     if(getenv("CHART_DUMMY_FACTORY"))
-        pShapeFactory = new opengl::OpenglShapeFactory();
-    else
+    {
+        osl::Module* pModule = getOpenGLModule();
+        if(pModule)
+        {
+            oslGenericFunction fn = pModule->getFunctionSymbol("getOpenglShapeFactory");
+            if(fn)
+            {
+
+                pShapeFactory = reinterpret_cast<__getOpenglShapeFactory>(fn)();
+            }
+        }
+    }
+
+
+    if(!pShapeFactory)
         pShapeFactory = new ShapeFactory(xFactory);
 
     return pShapeFactory;

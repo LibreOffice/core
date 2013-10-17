@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,chart2))
 $(eval $(call gb_Module_add_targets,chart2,\
     Library_chartcontroller \
     Library_chartcore \
+	Library_chartopengl \
 	UIConfig_chart2 \
 ))
 

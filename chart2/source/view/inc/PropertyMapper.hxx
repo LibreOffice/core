@@ -23,6 +23,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
+#include "charttoolsdllapi.hxx"
+
 namespace chart
 {
 
@@ -41,7 +43,7 @@ typedef ::comphelper::MakeSequence< OUString >      tMakeNameSequence;
 typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > tAnySequence;
 typedef ::comphelper::MakeSequence< ::com::sun::star::uno::Any >      tMakeAnySequence;
 
-class PropertyMapper
+class OOO_DLLPUBLIC_CHARTTOOLS PropertyMapper
 {
 public:
     static void setMappedProperties(

@@ -96,8 +96,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/Clipping \
     chart2/source/view/main/DataPointSymbolSupplier \
     chart2/source/view/main/DrawModelWrapper \
-    chart2/source/view/main/OpenglShapeFactory \
-    chart2/source/view/main/DummyXShape \
     chart2/source/view/main/LabelPositionHelper \
     chart2/source/view/main/Linear3DTransformation \
     chart2/source/view/main/PlotterBase \
