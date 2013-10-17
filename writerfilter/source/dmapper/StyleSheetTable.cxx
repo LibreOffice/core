@@ -826,6 +826,31 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                                         rPropNameSupplier.GetName( PROP_SERVICE_PARA_STYLE ) :
                                         (bListStyle ? OUString("com.sun.star.style.NumberingStyle") : rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE ))),
                                         uno::UNO_QUERY_THROW);
+
+                        // Numbering styles have to be inserted early, as e.g. the NumberingRules property is only available after insertion.
+                        if (bListStyle)
+                        {
+                            xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle ) );
+                            xStyle.set(xStyles->getByName(sConvertedStyleName), uno::UNO_QUERY_THROW);
+
+                            StyleSheetPropertyMap* pPropertyMap = dynamic_cast<StyleSheetPropertyMap*>(pEntry->pProperties.get());
+                            if (pPropertyMap->GetListId() == -1)
+                            {
+                                // No properties? Word default is 'none', Writer one is 'arabic', handle this.
+                                uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
+                                uno::Reference<container::XIndexReplace> xNumberingRules;
+                                xPropertySet->getPropertyValue("NumberingRules") >>= xNumberingRules;
+                                uno::Reference<container::XIndexAccess> xIndexAccess(xNumberingRules, uno::UNO_QUERY_THROW);
+                                for (sal_Int32 i = 0; i < xIndexAccess->getCount(); ++i)
+                                {
+                                    uno::Sequence< beans::PropertyValue > aLvlProps(1);
+                                    aLvlProps[0].Name = "NumberingType";
+                                    aLvlProps[0].Value <<= style::NumberingType::NUMBER_NONE;
+                                    xNumberingRules->replaceByIndex(i, uno::makeAny(aLvlProps));
+                                    xPropertySet->setPropertyValue("NumberingRules", uno::makeAny(xNumberingRules));
+                                }
+                            }
+                        }
                     }
                     if( !pEntry->sBaseStyleIdentifier.isEmpty() )
                     {
@@ -1015,7 +1040,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             OSL_FAIL( "Some style properties could not be set");
                         }
                     }
-                    if(bInsert)
+                    // Numbering style got inserted earlier.
+                    if(bInsert && !bListStyle)
                     {
                         xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
                     }
