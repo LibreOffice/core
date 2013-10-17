@@ -211,7 +211,7 @@ bool OCheckBoxModel::DbUseBool()
 }
 
 //------------------------------------------------------------------------------
-#if defined __GNUC__
+#if defined __GNUC__ && ! defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
@@ -248,14 +248,14 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
         // Since above either bValue is initialised, either aValue.hasValue(),
         // bValue cannot be used uninitialised here.
         // But GCC does not see/understand that, which breaks -Werror builds.
-        // Since the MacOS X compiler does not support #pragma GCC diagnostic
+        // And Clang compiler does not support #pragma GCC diagnostic
         // within a function, moved them to outside the function.
         aValue <<= (sal_Int16)( bValue ? STATE_CHECK : STATE_NOCHECK );
     }
 
     return aValue;
 }
-#if defined __GNUC__
+#if defined __GNUC__ && ! defined __clang__
 #pragma GCC diagnostic pop
 #endif
 
