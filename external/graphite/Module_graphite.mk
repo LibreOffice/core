@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,graphite))
 
-ifeq ($(SYSTEM_GRAPHITE),NO)
-
 $(eval $(call gb_Module_add_targets,graphite,\
 	StaticLibrary_graphite \
 	UnpackedTarball_graphite \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
