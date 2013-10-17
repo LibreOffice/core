@@ -33,7 +33,7 @@ which() {
 # checks for the original mozilla start script(s)
 # and restrict the "-remote" semantics to those.
 run_mozilla() {
-  if file "$1" | grep "script" > /dev/null && grep "NPL" "$1" > /dev/null; then
+  if file "$1" | grep script > /dev/null && grep NPL "$1" > /dev/null; then
     "$1" -remote 'ping()' 2>/dev/null >/dev/null
     if [ $? -eq 2 ]; then
       "$1" "$2" &
@@ -46,7 +46,7 @@ run_mozilla() {
 }
 
 # special handling for mailto: uris
-if echo $1 | grep '^mailto:' > /dev/null; then
+if echo "$1" | grep '^mailto:' > /dev/null; then
   # check for xdg-email
   mailer=`which xdg-email`
   if [ ! -z "$mailer" ]; then
