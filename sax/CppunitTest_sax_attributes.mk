@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sax_attributes, \
 
 $(eval $(call gb_CppunitTest_use_libraries,sax_attributes, \
 	cppu \
+	cppuhelper \
 	sal \
 	sax \
 	$(gb_UWINAPI) \
