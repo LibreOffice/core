@@ -104,7 +104,8 @@ public:
 
     TableBoxVectorPtr getTableBoxesOfRow();
     WidthsPtr getWidthsOfRow();
-    GridColsPtr getGridColsOfRow(AttributeOutputBase & rBase);
+    WidthsPtr getColumnWidthsBasedOnAllRows();
+    GridColsPtr getGridColsOfRow(AttributeOutputBase & rBase, bool calculateColumnsFromAllRows = false);
     RowSpansPtr getRowSpansOfRow();
 
 #ifdef DBG_UTIL
