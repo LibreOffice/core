@@ -47,90 +47,179 @@
 class Test : public SwModelTestBase
 {
 public:
-    void testZoom();
-    void defaultTabStopNotInStyles();
-    void testFdo38244();
-    void testMathEscape();
-    void testFdo51034();
-    void testMathAccents();
-    void testMathD();
-    void testMathEscaping();
-    void testMathLim();
-    void testMathMalformedXml();
-    void testMathMatrix();
-    void testMathMso2k7();
-    void testMathNary();
-    void testMathOverbraceUnderbrace();
-    void testMathOverstrike();
-    void testMathPlaceholders();
-    void testMathRad();
-    void testMathSubscripts();
-    void testMathVerticalStacks();
-    void testTablePosition();
-    void testFdo47669();
-    void testTableBorders();
-    void testFdo51550();
-    void testN789482();
-    //void test1Table1Page();
-    void testTextFrames();
-    void testTextFrameBorders();
-    void testTextframeGradient();
-    void testCellBtlr();
-    void testTableStylerPrSz();
-    void testMathLiteral();
-    void testFdo48557();
-    void testI120928();
-    void testFdo64826();
-    void testPageBackground();
-    void testPageGraphicBackground();
-    void testFdo65265();
-    void testFdo65655();
-    void testFDO63053();
-    void testWatermark();
-    void testFdo43093();
-    void testFdo64238_a();
-    void testFdo64238_b();
-    void testFdo56679();
-    void testFdo65400();
-    void testFdo66543();
-    void testN822175();
-    void testFdo66688();
-    void testFdo66773();
-    void testFdo58577();
-    void testBnc581614();
-    void testFdo66929();
-    void testFdo66145();
-    void testPageBorderSpacingExportCase2();
-    void testGrabBag();
-    void testFdo66781();
-    void testFdo60990();
-    void testFdo65718();
-    void testFdo64350();
-    void testFdo67013();
-    void testParaShadow();
-    void testTableFloating();
-    void testTableFloatingMargins();
-    void testFdo44689_start_page_7();
-    void testFdo67737();
-    void testTransparentShadow();
-    void testBnc834035();
-    void testFdo68418();
-    void testA4AndBorders();
-    void testFdo68787();
-    void testCharacterBorder();
-    void testStyleInheritance();
-    void testSmartart();
-    void testFdo69636();
-    void testCharHighlight();
+    // static int testIndex;
+public:
+
+#define DECLARE_OOXML_TEST(testname, filename) \
+    void testname(); \
+    void testname##_Import() { runImportTestPart(&Test::testname, filename); } \
+    void testname##_Import_Export_Import() { runImportExportImportTestPart(&Test::testname, filename); }
+
+#define RUN_OOXML_TEST(testname) \
+        CPPUNIT_TEST( testname##_Import ); \
+        CPPUNIT_TEST( testname##_Import_Export_Import );
+
+    DECLARE_OOXML_TEST(testZoom,"zoom.docx")
+    DECLARE_OOXML_TEST(defaultTabStopNotInStyles,"empty.odt")
+    DECLARE_OOXML_TEST(testFdo38244,"fdo38244.docx")
+    DECLARE_OOXML_TEST(testMathEscape,"math-escape.docx")
+    DECLARE_OOXML_TEST(testFdo51034,"fdo51034.odt")
+    DECLARE_OOXML_TEST(testMathAccents,"math-accents.docx")
+    DECLARE_OOXML_TEST(testMathD,"math-d.docx")
+    DECLARE_OOXML_TEST(testMathEscaping,"math-escaping.docx")
+    DECLARE_OOXML_TEST(testMathLim,"math-lim.docx")
+    DECLARE_OOXML_TEST(testMathMalformedXml,"math-malformed_xml.docx")
+    DECLARE_OOXML_TEST(testMathMatrix,"math-matrix.docx")
+    DECLARE_OOXML_TEST(testMathMso2k7,"math-mso2k7.docx")
+    DECLARE_OOXML_TEST(testMathNary,"math-nary.docx")
+    DECLARE_OOXML_TEST(testMathOverbraceUnderbrace,"math-overbrace_underbrace.docx")
+    DECLARE_OOXML_TEST(testMathOverstrike,"math-overstrike.docx")
+    DECLARE_OOXML_TEST(testMathPlaceholders,"math-placeholders.docx")
+    DECLARE_OOXML_TEST(testMathRad,"math-rad.docx")
+    DECLARE_OOXML_TEST(testMathSubscripts,"math-subscripts.docx")
+    DECLARE_OOXML_TEST(testMathVerticalStacks,"math-vertical_stacks.docx")
+    DECLARE_OOXML_TEST(testTablePosition,"table-position.docx")
+    DECLARE_OOXML_TEST(testFdo47669,"fdo47669.docx")
+    DECLARE_OOXML_TEST(testTableBorders,"table-borders.docx")
+    DECLARE_OOXML_TEST(testFdo51550,"fdo51550.odt")
+    DECLARE_OOXML_TEST(testN789482,"n789482.docx")
+    DECLARE_OOXML_TEST(test1Table1Page,"1-table-1-page.docx")
+    DECLARE_OOXML_TEST(testTextFrames,"textframes.odt")
+    DECLARE_OOXML_TEST(testTextFrameBorders,"textframe-borders.docx")
+    DECLARE_OOXML_TEST(testTextframeGradient,"textframe-gradient.docx")
+    DECLARE_OOXML_TEST(testCellBtlr,"cell-btlr.docx")
+    DECLARE_OOXML_TEST(testTableStylerPrSz,"table-style-rPr-sz.docx")
+    DECLARE_OOXML_TEST(testMathLiteral,"math-literal.docx")
+    DECLARE_OOXML_TEST(testFdo48557,"fdo48557.odt")
+    DECLARE_OOXML_TEST(testI120928,"i120928.docx")
+    DECLARE_OOXML_TEST(testFdo64826,"fdo64826.docx")
+    DECLARE_OOXML_TEST(testPageBackground,"page-background.docx")
+    DECLARE_OOXML_TEST(testPageGraphicBackground,"page-graphic-background.odt")
+    DECLARE_OOXML_TEST(testFdo65265,"fdo65265.docx")
+    DECLARE_OOXML_TEST(testFdo65655,"fdo65655.docx")
+    DECLARE_OOXML_TEST(testFDO63053,"fdo63053.docx" )
+    DECLARE_OOXML_TEST(testWatermark,"watermark.docx")
+    DECLARE_OOXML_TEST(testFdo43093,"fdo43093.docx")
+    DECLARE_OOXML_TEST(testFdo64238_a,"fdo64238_a.docx")
+    DECLARE_OOXML_TEST(testFdo64238_b,"fdo64238_b.docx")
+    DECLARE_OOXML_TEST(testFdo66145,"fdo66145.docx")
+    DECLARE_OOXML_TEST(testFdo56679,"fdo56679.docx")
+    DECLARE_OOXML_TEST(testFdo65400,"fdo65400.docx")
+    DECLARE_OOXML_TEST(testFdo66543,"fdo66543.docx")
+    DECLARE_OOXML_TEST(testN822175,"n822175.odt")
+    DECLARE_OOXML_TEST(testFdo66688,"fdo66688.docx")
+    DECLARE_OOXML_TEST(testFdo66773,"fdo66773.docx")
+    DECLARE_OOXML_TEST(testFdo58577,"fdo58577.odt")
+    DECLARE_OOXML_TEST(testBnc581614,"bnc581614.doc")
+    DECLARE_OOXML_TEST(testFdo66929,"fdo66929.docx")
+    DECLARE_OOXML_TEST(testPageBorderSpacingExportCase2,"page-borders-export-case-2.docx")
+    DECLARE_OOXML_TEST(testGrabBag,"grabbag.docx")
+    DECLARE_OOXML_TEST(testFdo66781,"fdo66781.docx")
+    DECLARE_OOXML_TEST(testFdo60990,"fdo60990.odt")
+    DECLARE_OOXML_TEST(testFdo65718,"fdo65718.docx")
+    DECLARE_OOXML_TEST(testFdo64350,"fdo64350.docx")
+    DECLARE_OOXML_TEST(testFdo67013,"fdo67013.docx")
+    DECLARE_OOXML_TEST(testParaShadow,"para-shadow.docx")
+    DECLARE_OOXML_TEST(testTableFloating,"table-floating.docx")
+    DECLARE_OOXML_TEST(testTableFloatingMargins,"table-floating-margins.docx")
+    DECLARE_OOXML_TEST(testFdo44689_start_page_7,"fdo44689_start_page_7.docx")
+    DECLARE_OOXML_TEST(testFdo67737,"fdo67737.docx")
+    DECLARE_OOXML_TEST(testTransparentShadow,"transparent-shadow.docx")
+    DECLARE_OOXML_TEST(testBnc834035,"bnc834035.odt")
+    DECLARE_OOXML_TEST(testFdo68418,"fdo68418.docx")
+    DECLARE_OOXML_TEST(testA4AndBorders,"a4andborders.docx")
+    DECLARE_OOXML_TEST(testFdo68787,"fdo68787.docx")
+    DECLARE_OOXML_TEST(testCharacterBorder,"charborder.odt")
+    DECLARE_OOXML_TEST(testStyleInheritance,"style-inheritance.docx")
+    DECLARE_OOXML_TEST(testSmartart,"smartart.docx")
+    DECLARE_OOXML_TEST(testFdo69636,"fdo69636.docx")
+    DECLARE_OOXML_TEST(testCharHighlight,"char_highlight.docx")
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(WNT)
-    CPPUNIT_TEST(run);
+    RUN_OOXML_TEST(testZoom)
+    RUN_OOXML_TEST(defaultTabStopNotInStyles)
+    RUN_OOXML_TEST(testFdo38244)
+    RUN_OOXML_TEST(testMathEscape)
+    RUN_OOXML_TEST(testFdo51034)
+    RUN_OOXML_TEST(testMathAccents)
+    RUN_OOXML_TEST(testMathD)
+    RUN_OOXML_TEST(testMathEscaping)
+    RUN_OOXML_TEST(testMathLim)
+    RUN_OOXML_TEST(testMathMalformedXml)
+    RUN_OOXML_TEST(testMathMatrix)
+    RUN_OOXML_TEST(testMathMso2k7)
+    RUN_OOXML_TEST(testMathNary)
+    RUN_OOXML_TEST(testMathOverbraceUnderbrace)
+    RUN_OOXML_TEST(testMathOverstrike)
+    RUN_OOXML_TEST(testMathPlaceholders)
+    RUN_OOXML_TEST(testMathRad)
+    RUN_OOXML_TEST(testMathSubscripts)
+    RUN_OOXML_TEST(testMathVerticalStacks)
+    RUN_OOXML_TEST(testTablePosition)
+    RUN_OOXML_TEST(testFdo47669)
+    RUN_OOXML_TEST(testTableBorders)
+    RUN_OOXML_TEST(testFdo51550)
+    RUN_OOXML_TEST(testN789482)
+    // RUN_OOXML_TEST(test1Table1Page) doesn't work at least on openSUSE12
+    RUN_OOXML_TEST(testTextFrames)
+    RUN_OOXML_TEST(testTextFrameBorders)
+    RUN_OOXML_TEST(testTextframeGradient)
+    RUN_OOXML_TEST(testCellBtlr)
+    RUN_OOXML_TEST(testTableStylerPrSz)
+    RUN_OOXML_TEST(testMathLiteral)
+    RUN_OOXML_TEST(testFdo48557)
+    RUN_OOXML_TEST(testI120928)
+    RUN_OOXML_TEST(testFdo64826)
+    RUN_OOXML_TEST(testPageBackground)
+    RUN_OOXML_TEST(testPageGraphicBackground)
+    RUN_OOXML_TEST(testFdo65265)
+    RUN_OOXML_TEST(testFdo65655)
+    RUN_OOXML_TEST(testFDO63053)
+    RUN_OOXML_TEST(testWatermark)
+    RUN_OOXML_TEST(testFdo43093)
+    RUN_OOXML_TEST(testFdo64238_a)
+    RUN_OOXML_TEST(testFdo64238_b)
+    RUN_OOXML_TEST(testFdo66145)
+    RUN_OOXML_TEST(testFdo56679)
+    RUN_OOXML_TEST(testFdo65400)
+    RUN_OOXML_TEST(testFdo66543)
+    RUN_OOXML_TEST(testN822175)
+    RUN_OOXML_TEST(testFdo66688)
+    RUN_OOXML_TEST(testFdo66773)
+    RUN_OOXML_TEST(testFdo58577)
+    RUN_OOXML_TEST(testBnc581614)
+    RUN_OOXML_TEST(testFdo66929)
+    RUN_OOXML_TEST(testPageBorderSpacingExportCase2)
+    RUN_OOXML_TEST(testGrabBag)
+    RUN_OOXML_TEST(testFdo66781)
+    RUN_OOXML_TEST(testFdo60990)
+    RUN_OOXML_TEST(testFdo65718)
+    RUN_OOXML_TEST(testFdo64350)
+    RUN_OOXML_TEST(testFdo67013)
+    RUN_OOXML_TEST(testParaShadow)
+    RUN_OOXML_TEST(testTableFloating)
+    RUN_OOXML_TEST(testTableFloatingMargins)
+    RUN_OOXML_TEST(testFdo44689_start_page_7)
+    RUN_OOXML_TEST(testFdo67737)
+    RUN_OOXML_TEST(testTransparentShadow)
+    RUN_OOXML_TEST(testBnc834035)
+    RUN_OOXML_TEST(testFdo68418)
+    RUN_OOXML_TEST(testA4AndBorders)
+    RUN_OOXML_TEST(testFdo68787)
+    RUN_OOXML_TEST(testCharacterBorder)
+    RUN_OOXML_TEST(testStyleInheritance)
+    RUN_OOXML_TEST(testSmartart)
+    RUN_OOXML_TEST(testFdo69636)
+    RUN_OOXML_TEST(testCharHighlight)
 #endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void run();
+
+    void runImportTestPart(void (Test::*pMethod)(), const char* filename);
+    void runImportExportImportTestPart(void (Test::*pMethod)(), const char* filename);
+
     /**
      * Given that some problem doesn't affect the result in the importer, we
      * test the resulting file directly, by opening the zip file, parsing an
@@ -163,103 +252,32 @@ private:
     OUString getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute);
 };
 
-void Test::run()
+void Test::runImportTestPart(void (Test::*pMethod)(), const char* filename)
 {
-    MethodEntry<Test> aMethods[] = {
-        {"zoom.docx", &Test::testZoom},
-        {"empty.odt", &Test::defaultTabStopNotInStyles},
-        {"fdo38244.docx", &Test::testFdo38244},
-        {"math-escape.docx", &Test::testMathEscape},
-        {"fdo51034.odt", &Test::testFdo51034},
-        {"math-accents.docx", &Test::testMathAccents},
-        {"math-d.docx", &Test::testMathD},
-        {"math-escaping.docx", &Test::testMathEscaping},
-        {"math-lim.docx", &Test::testMathLim},
-        {"math-malformed_xml.docx", &Test::testMathMalformedXml},
-        {"math-matrix.docx", &Test::testMathMatrix},
-        {"math-mso2k7.docx", &Test::testMathMso2k7},
-        {"math-nary.docx", &Test::testMathNary},
-        {"math-overbrace_underbrace.docx", &Test::testMathOverbraceUnderbrace},
-        {"math-overstrike.docx", &Test::testMathOverstrike},
-        {"math-placeholders.docx", &Test::testMathPlaceholders},
-        {"math-rad.docx", &Test::testMathRad},
-        {"math-subscripts.docx", &Test::testMathSubscripts},
-        {"math-vertical_stacks.docx", &Test::testMathVerticalStacks},
-        {"table-position.docx", &Test::testTablePosition},
-        {"fdo47669.docx", &Test::testFdo47669},
-        {"table-borders.docx", &Test::testTableBorders},
-        {"fdo51550.odt", &Test::testFdo51550},
-        {"n789482.docx", &Test::testN789482},
-//      {"1-table-1-page.docx", &Test::test1Table1Page}, // doesn't work on openSUSE12.2 at least
-        {"textframes.odt", &Test::testTextFrames},
-        {"textframe-borders.docx", &Test::testTextFrameBorders},
-        {"textframe-gradient.docx", &Test::testTextframeGradient},
-        {"cell-btlr.docx", &Test::testCellBtlr},
-        {"table-style-rPr-sz.docx", &Test::testTableStylerPrSz},
-        {"math-literal.docx", &Test::testMathLiteral},
-        {"fdo48557.odt", &Test::testFdo48557},
-        {"i120928.docx", &Test::testI120928},
-        {"fdo64826.docx", &Test::testFdo64826},
-        {"page-background.docx", &Test::testPageBackground},
-        {"page-graphic-background.odt", &Test::testPageGraphicBackground},
-        {"fdo65265.docx", &Test::testFdo65265},
-        {"fdo65655.docx", &Test::testFdo65655},
-        {"fdo63053.docx" , &Test::testFDO63053},
-        {"watermark.docx", &Test::testWatermark},
-        {"fdo43093.docx", &Test::testFdo43093},
-        {"fdo64238_a.docx", &Test::testFdo64238_a},
-        {"fdo64238_b.docx", &Test::testFdo64238_b},
-        {"fdo66145.docx", &Test::testFdo66145},
-        {"fdo56679.docx", &Test::testFdo56679},
-        {"fdo65400.docx", &Test::testFdo65400},
-        {"fdo66543.docx", &Test::testFdo66543},
-        {"n822175.odt", &Test::testN822175},
-        {"fdo66688.docx", &Test::testFdo66688},
-        {"fdo66773.docx", &Test::testFdo66773},
-        {"fdo58577.odt", &Test::testFdo58577},
-        {"bnc581614.doc", &Test::testBnc581614},
-        {"fdo66929.docx", &Test::testFdo66929},
-        {"page-borders-export-case-2.docx", &Test::testPageBorderSpacingExportCase2},
-        {"grabbag.docx", &Test::testGrabBag},
-        {"fdo66781.docx", &Test::testFdo66781},
-        {"fdo60990.odt", &Test::testFdo60990},
-        {"fdo65718.docx", &Test::testFdo65718},
-        {"fdo64350.docx", &Test::testFdo64350},
-        {"fdo67013.docx", &Test::testFdo67013},
-        {"para-shadow.docx", &Test::testParaShadow},
-        {"table-floating.docx", &Test::testTableFloating},
-        {"table-floating-margins.docx", &Test::testTableFloatingMargins},
-        {"fdo44689_start_page_7.docx", &Test::testFdo44689_start_page_7},
-        {"fdo67737.docx", &Test::testFdo67737},
-        {"transparent-shadow.docx", &Test::testTransparentShadow},
-        {"bnc834035.odt", &Test::testBnc834035},
-        {"fdo68418.docx", &Test::testFdo68418},
-        {"a4andborders.docx", &Test::testA4AndBorders},
-        {"fdo68787.docx", &Test::testFdo68787},
-        {"charborder.odt", &Test::testCharacterBorder},
-        {"style-inheritance.docx", &Test::testStyleInheritance},
-        {"smartart.docx", &Test::testSmartart},
-        {"fdo69636.docx", &Test::testFdo69636},
-        {"char_highlight.docx", &Test::testCharHighlight},
-    };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
         "math-escape.docx",
         "math-mso2k7.docx",
     };
     std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
-    header();
-    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
+
+    // If the testcase is stored in some other format, it's pointless to test.
+    if (OString(filename).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end())
     {
-        MethodEntry<Test>& rEntry = aMethods[i];
-        load("/sw/qa/extras/ooxmlexport/data/", rEntry.pName);
-        // If the testcase is stored in some other format, it's pointless to test.
-        if (OString(rEntry.pName).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), rEntry.pName) == vBlacklist.end())
-            (this->*rEntry.pMethod)();
-        reload("Office Open XML Text");
-        (this->*rEntry.pMethod)();
+        header();
+        load("/sw/qa/extras/ooxmlexport/data/", filename);
+        (this->*pMethod)();
         finish();
     }
+}
+
+void Test::runImportExportImportTestPart(void (Test::*pMethod)(), const char* filename)
+{
+    header();
+    load("/sw/qa/extras/ooxmlexport/data/", filename);
+    reload("Office Open XML Text");
+    (this->*pMethod)();
+    finish();
 }
 
 xmlDocPtr Test::parseExport(const OUString& rStreamName)
@@ -687,7 +705,7 @@ void Test::testN789482()
     getRun(xParagraph, 5, " After.");
 }
 
-/*void Test::test1Table1Page()
+void Test::test1Table1Page()
 {
     // 2 problem for this document after export:
     //   - invalid sectPr inserted at the beginning of the page
@@ -697,7 +715,7 @@ void Test::testN789482()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
-}*/
+}
 
 void Test::testTextFrames()
 {
