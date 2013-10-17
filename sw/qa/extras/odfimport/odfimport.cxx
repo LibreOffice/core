@@ -6,11 +6,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <swmodeltestbase.hxx>
+
+#if !defined(MACOSX) && !defined(WNT)
+
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
-#include <swmodeltestbase.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -25,68 +28,16 @@ typedef std::pair<OUString, com::sun::star::uno::Sequence< com::sun::star::table
 
 class Test : public SwModelTestBase
 {
-public:
-    void testEmptySvgFamilyName();
-    void testHideAllSections();
-    void testOdtBorders();
-    void testPageStyleLayoutDefault();
-    void testPageStyleLayoutRight();
-    void testFdo61952();
-    void testFdo60842();
-    void testFdo56272();
-    void testFdo55814();
-    void testFdo68839();
-    void testFdo37606();
-    void testFdo37606Copy();
-    void testFdo69862();
-    void testFdo69979();
-    void testSpellmenuRedline();
-
-    CPPUNIT_TEST_SUITE(Test);
-#if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(run);
-#endif
-    CPPUNIT_TEST_SUITE_END();
-
-private:
-    void run();
+    public:
+        Test() : SwModelTestBase("/sw/qa/extras/odfimport/data/", "writer8") {}
 };
 
-void Test::run()
-{
-    MethodEntry<Test> aMethods[] = {
-        {"empty-svg-family-name.odt", &Test::testEmptySvgFamilyName},
-        {"fdo53210.odt", &Test::testHideAllSections},
-        {"borders_ooo33.odt", &Test::testOdtBorders},
-        {"hello.odt", &Test::testPageStyleLayoutDefault},
-        {"hello.odt", &Test::testPageStyleLayoutRight},
-        {"hello.odt", &Test::testFdo61952},
-        {"fdo60842.odt", &Test::testFdo60842},
-        {"fdo56272.odt", &Test::testFdo56272},
-        {"fdo55814.odt", &Test::testFdo55814},
-        {"fdo68839.odt", &Test::testFdo68839},
-        {"fdo37606.odt", &Test::testFdo37606},
-        {"fdo37606.odt", &Test::testFdo37606Copy},
-        {"fdo69862.odt", &Test::testFdo69862},
-        {"fdo69979.odt", &Test::testFdo69979},
-        {"spellmenu-redline.odt", &Test::testSpellmenuRedline},
-    };
-    header();
-    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
-    {
-        MethodEntry<Test>& rEntry = aMethods[i];
-        load("/sw/qa/extras/odfimport/data/",  rEntry.pName);
-        (this->*rEntry.pMethod)();
-        finish();
-    }
-}
-
-void Test::testEmptySvgFamilyName()
+DECLARE_SW_IMPORT_TEST(testEmptySvgFamilyName, "empty-svg-family-name.odt", Test)
 {
     // .odt import did crash on the empty font list (which I think is valid according SVG spec)
 }
 
-void Test::testHideAllSections()
+DECLARE_SW_IMPORT_TEST(testHideAllSections, "fdo53210.odt", Test)
 {
     // This document has a section that is conditionally hidden, but has no empty paragraph after it.
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -98,7 +49,7 @@ void Test::testHideAllSections()
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
 }
 
-void Test::testOdtBorders()
+DECLARE_SW_IMPORT_TEST(testOdtBorders, "borders_ooo33.odt", Test)
 {
     AllBordersMap map;
     uno::Sequence< table::BorderLine > tempSequence(4);
@@ -285,21 +236,21 @@ void Test::testOdtBorders()
     } while(xParaEnum->hasMoreElements());
 }
 
-void Test::testPageStyleLayoutDefault()
+DECLARE_SW_IMPORT_TEST(testPageStyleLayoutDefault, "hello.odt", Test)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
     // This was style::PageStyleLayout_MIRRORED.
     CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_ALL, getProperty<style::PageStyleLayout>(xPropertySet, "PageStyleLayout"));
 }
 
-void Test::testPageStyleLayoutRight()
+DECLARE_SW_IMPORT_TEST(testPageStyleLayoutRight, "hello.odt", Test)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
     // This caused a crash.
     xPropertySet->setPropertyValue("PageStyleLayout", uno::makeAny(style::PageStyleLayout_RIGHT));
 }
 
-void Test::testFdo61952()
+DECLARE_SW_IMPORT_TEST(testFdo61952, "hello.odt", Test)
 {
     uno::Reference<beans::XPropertySet> xPara(getParagraph(0), uno::UNO_QUERY);
     xPara->setPropertyValue("PageDescName", uno::makeAny(OUString("Left Page")));
@@ -308,7 +259,7 @@ void Test::testFdo61952()
     xPara->setPropertyValue("PageDescName", uno::makeAny(OUString("Right Page")));
 }
 
-void Test::testFdo60842()
+DECLARE_SW_IMPORT_TEST(testFdo60842, "fdo60842.odt", Test)
 {
     uno::Reference<text::XTextContent> const xTable(getParagraphOrTable(0));
     getCell(xTable, "A1", "");
@@ -318,14 +269,14 @@ void Test::testFdo60842()
     getCell(xTable, "E1", "01/04/2012");
 }
 
-void Test::testFdo56272()
+DECLARE_SW_IMPORT_TEST(testFdo56272, "fdo56272.odt", Test)
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Vertical position was incorrect.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); // Was -2371
 }
 
-void Test::testFdo55814()
+DECLARE_SW_IMPORT_TEST(testFdo55814, "fdo55814.odt", Test)
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -347,7 +298,7 @@ void lcl_CheckShape(
     CPPUNIT_ASSERT_EQUAL(rExpected, xNamed->getName());
 }
 
-void Test::testFdo68839()
+DECLARE_SW_IMPORT_TEST(testFdo68839, "fdo68839.odt", Test)
 {
     // check names
     lcl_CheckShape(getShape(1), "FrameXXX");
@@ -371,7 +322,7 @@ void Test::testFdo68839()
             getProperty<OUString>(xFrame2, "ChainNextName"));
 }
 
-void Test::testFdo37606()
+DECLARE_SW_IMPORT_TEST(testFdo37606, "fdo37606.odt", Test)
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
@@ -409,7 +360,7 @@ void Test::testFdo37606()
     }
 }
 
-void Test::testFdo37606Copy()
+DECLARE_SW_IMPORT_TEST(testFdo37606Copy, "fdo37606.odt", Test)
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
@@ -433,7 +384,7 @@ void Test::testFdo37606Copy()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 }
 
-void Test::testFdo69862()
+DECLARE_SW_IMPORT_TEST(testFdo69862, "fdo69862.odt", Test)
 {
     // The test doc is special in that it starts with a table and it also has a footnote.
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -449,7 +400,7 @@ void Test::testFdo69862()
     CPPUNIT_ASSERT_EQUAL(OUString("H" "\x01" "ello."), rEnd.GetTxt());
 }
 
-void Test::testFdo69979()
+DECLARE_SW_IMPORT_TEST(testFdo69979, "fdo69979.odt", Test)
 {
     // The test doc is special in that it starts with a table and it also has a header.
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -465,7 +416,7 @@ void Test::testFdo69979()
     CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetTxt());
 }
 
-void Test::testSpellmenuRedline()
+DECLARE_SW_IMPORT_TEST(testSpellmenuRedline, "spellmenu-redline.odt", Test)
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
@@ -479,8 +430,7 @@ void Test::testSpellmenuRedline()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_PREV_CHANGE), aPopup.GetItemId(aPopup.GetItemCount() - 1));
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
