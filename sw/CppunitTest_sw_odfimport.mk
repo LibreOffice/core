@@ -54,7 +54,6 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfimport,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
 	embeddedobj/util/embobj \
-    fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \

@@ -46,7 +46,6 @@ $(eval $(call gb_CppunitTest_use_components,cppcanvas_test,\
 	canvas/source/cairo/cairocanvas \
 	canvas/source/factory/canvasfactory \
     configmgr/source/configmgr \
-    fileaccess/source/fileacc \
     i18npool/util/i18npool \
 	linguistic/source/lng \
 	package/util/package2 \

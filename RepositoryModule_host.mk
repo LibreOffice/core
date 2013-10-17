@@ -55,7 +55,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	extensions \
 	external \
 	extras \
-	fileaccess \
 	filter \
 	$(call gb_Helper_optional,LIBATOMIC_OPS,libatomic_ops) \
 	$(call gb_Helper_optional,FIREBIRD,firebird) \

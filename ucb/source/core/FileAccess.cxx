@@ -54,8 +54,7 @@
 
 #include <vector>
 
-#define IMPLEMENTATION_NAME "com.sun.star.comp.ucb.SimpleFileAccess"
-#define SERVICE_NAME "com.sun.star.ucb.SimpleFileAccess"
+#include "FileAccess.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -73,10 +72,7 @@ using ::std::vector;
 namespace
 {
 
-
-//===========================================================================
 // Implementation XSimpleFileAccess
-
 typedef cppu::WeakImplHelper1< XSimpleFileAccess3 > FileAccessHelper;
 class OCommandEnvironment;
 
@@ -96,7 +92,6 @@ class OFileAccess : public FileAccessHelper
 public:
     OFileAccess( const Reference< XComponentContext > & xContext )
         : m_xContext( xContext), mpEnvironment( NULL ) {}
-
     // Methods
     virtual void SAL_CALL copy( const OUString& SourceURL, const OUString& DestURL ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL move( const OUString& SourceURL, const OUString& DestURL ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -119,10 +114,7 @@ public:
     virtual void SAL_CALL setHidden( const OUString& FileURL, sal_Bool bHidden ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 };
 
-
-//===========================================================================
 // Implementation XActiveDataSink
-
 typedef cppu::WeakImplHelper1< XActiveDataSink > ActiveDataSinkHelper;
 
 class OActiveDataSink : public ActiveDataSinkHelper
@@ -138,22 +130,7 @@ public:
         throw(RuntimeException);
 };
 
-void OActiveDataSink::setInputStream( const Reference< XInputStream >& aStream )
-    throw(RuntimeException)
-{
-    mxStream = aStream;
-}
-
-Reference< XInputStream > OActiveDataSink::getInputStream()
-    throw(RuntimeException)
-{
-    return mxStream;
-}
-
-
-//===========================================================================
 // Implementation XActiveDataStreamer
-
 typedef cppu::WeakImplHelper1< XActiveDataStreamer > ActiveDataStreamerHelper;
 
 class OActiveDataStreamer : public ActiveDataStreamerHelper
@@ -169,23 +146,7 @@ public:
         throw(RuntimeException);
 };
 
-void OActiveDataStreamer::setStream( const Reference< XStream >& aStream )
-    throw(RuntimeException)
-{
-    mxStream = aStream;
-}
-
-Reference< XStream > OActiveDataStreamer::getStream()
-    throw(RuntimeException)
-{
-    return mxStream;
-}
-
-
-
-//===========================================================================
 // Implementation XCommandEnvironment
-
 typedef cppu::WeakImplHelper1< XCommandEnvironment > CommandEnvironmentHelper;
 
 class OCommandEnvironment : public CommandEnvironmentHelper
@@ -205,6 +166,30 @@ public:
         throw(RuntimeException);
 };
 
+void OActiveDataSink::setInputStream( const Reference< XInputStream >& aStream )
+    throw(RuntimeException)
+{
+    mxStream = aStream;
+}
+
+Reference< XInputStream > OActiveDataSink::getInputStream()
+    throw(RuntimeException)
+{
+    return mxStream;
+}
+
+void OActiveDataStreamer::setStream( const Reference< XStream >& aStream )
+    throw(RuntimeException)
+{
+    mxStream = aStream;
+}
+
+Reference< XStream > OActiveDataStreamer::getStream()
+    throw(RuntimeException)
+{
+    return mxStream;
+}
+
 Reference< XInteractionHandler > OCommandEnvironment::getInteractionHandler()
     throw(RuntimeException)
 {
@@ -217,8 +202,6 @@ Reference< XProgressHandler > OCommandEnvironment::getProgressHandler()
     Reference< XProgressHandler > xRet;
     return xRet;
 }
-
-//===========================================================================
 
 void OFileAccess::transferImpl( const OUString& rSource,
                                 const OUString& rDest,
@@ -775,54 +758,18 @@ void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
     aCnt.setPropertyValue("IsHidden", aAny );
 }
 
-//==================================================================================================
-//==================================================================================================
-//==================================================================================================
+}; // namespace end
 
 Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMultiServiceFactory > & xSMgr )
 {
     return Reference < XInterface >( ( cppu::OWeakObject * ) new OFileAccess( comphelper::getComponentContext(xSMgr) ) );
 }
 
-
 Sequence< OUString > FileAccess_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(SERVICE_NAME );
+    seqNames.getArray()[0] = OUString( IMPLEMENTATION_NAME );
     return seqNames;
 }
-
-
-}
-
-//==================================================================================================
-// Component exports
-
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL fileacc_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-{
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( cppu::createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            FileAccess_CreateInstance,
-            FileAccess_getSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
-}
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

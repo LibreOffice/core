@@ -121,7 +121,6 @@ gb_MERGEDLIBS := \
 	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
 	drawinglayer \
 	editeng \
-	fileacc \
 	filterconfig \
 	fsstorage \
 	fwe \

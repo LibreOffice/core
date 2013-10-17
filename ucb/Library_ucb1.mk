@@ -26,7 +26,9 @@ $(eval $(call gb_Library_use_libraries,ucb1,\
 	cppu \
 	cppuhelper \
 	sal \
+	tl \
 	ucbhelper \
+	utl \
 	$(gb_UWINAPI) \
 ))
 
@@ -39,6 +41,7 @@ $(eval $(call gb_Library_add_exception_objects,ucb1,\
 	ucb/source/core/ucbprops \
 	ucb/source/core/ucbserv \
 	ucb/source/core/ucbstore \
+	ucb/source/core/FileAccess \
 	ucb/source/regexp/regexp \
 ))
 

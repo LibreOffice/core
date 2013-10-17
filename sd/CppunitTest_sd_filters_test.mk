@@ -31,7 +31,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_filters_test, \
     cppuhelper \
     drawinglayer \
     editeng \
-    fileacc \
     i18nlangtag \
     i18nutil \
     msfilter \
@@ -77,7 +76,6 @@ $(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
     configmgr/source/configmgr \
     dbaccess/util/dba \
     embeddedobj/util/embobj \
-    fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \

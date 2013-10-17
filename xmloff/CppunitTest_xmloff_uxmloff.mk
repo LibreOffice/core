@@ -53,7 +53,6 @@ $(eval $(call gb_CppunitTest_use_libraries,xmloff_uxmloff, \
 
 $(eval $(call gb_CppunitTest_use_components,xmloff_uxmloff,\
     configmgr/source/configmgr \
-    fileaccess/source/fileacc \
     i18npool/util/i18npool \
     sax/source/expatwrap/expwrap \
     ucb/source/core/ucb1 \
