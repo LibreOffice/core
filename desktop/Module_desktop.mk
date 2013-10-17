@@ -13,6 +13,8 @@ $(eval $(call gb_Module_add_targets,desktop,\
     AllLangResTarget_deployment \
     AllLangResTarget_deploymentgui \
     AllLangResTarget_dkt \
+    CustomTarget_desktop_unopackages_install \
+    GeneratedPackage_desktop_unopackages_install \
     Library_deployment \
     Library_deploymentgui \
     Library_deploymentmisc \
