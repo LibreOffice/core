@@ -1021,6 +1021,8 @@ OUString ORowSetValue::getString( ) const
                 }
                 break;
             case DataType::BIT:
+                aRet = OUString::number(static_cast<bool>(*this));
+                break;
             case DataType::BOOLEAN:
                 aRet = OUString::boolean(static_cast<bool>(*this));
                 break;
