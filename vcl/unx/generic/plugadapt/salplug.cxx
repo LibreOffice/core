@@ -220,11 +220,7 @@ SalInstance *CreateSalInstance()
         aUsePlugin = "svp";
     else
     {
-        static const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
-        if( pUsePlugin )
-            aUsePlugin = OUString::createFromAscii( pUsePlugin );
-        else
-            rtl::Bootstrap::get( "SAL_USE_VCLPLUGIN", aUsePlugin );
+        rtl::Bootstrap::get( "SAL_USE_VCLPLUGIN", aUsePlugin );
     }
 
     if( !aUsePlugin.isEmpty() )

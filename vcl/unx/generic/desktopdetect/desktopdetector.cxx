@@ -24,6 +24,7 @@
 
 #include <unx/desktops.hxx>
 
+#include "rtl/bootstrap.hxx"
 #include "rtl/process.h"
 #include "rtl/ustrbuf.hxx"
 #include "osl/module.h"
@@ -303,10 +304,10 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
     // get display to connect to
     const char* pDisplayStr = getenv( "DISPLAY" );
 
-    const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
+    OUString plugin;
+    rtl::Bootstrap::get("SAL_USE_VCLPLUGIN", plugin);
 
-    if ((pUsePlugin && (strcmp(pUsePlugin, "svp") == 0))
-        || Application::IsHeadlessModeRequested())
+    if (plugin == "svp" || Application::IsHeadlessModeRequested())
         pDisplayStr = NULL;
     else
     {
