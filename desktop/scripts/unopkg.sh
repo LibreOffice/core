@@ -59,14 +59,10 @@ for arg in $@
 do
   case "$arg" in
        -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
-       -v) VERBOSE=true;;
-       --verbose) VERBOSE=true;;
-       --shared) SHARED=true;;
+       --shared) umask 0022;;
+           # make sure shared extensions will be readable by all users
   esac
 done
-
-#make sure shared extensions will be readable by all users
-[ "$SHARED" = true ] && umask 0022
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "$sd_prog/../ure-link/bin/javaldx" ] ; then
