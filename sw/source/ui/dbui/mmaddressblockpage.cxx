@@ -571,8 +571,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_PUNCTUATION );
         pEntry = m_pAddressElementsLB->InsertEntry(OUString(SW_RES(ST_TEXT       )));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_TEXT       );
-        ResStringArray aSalutArr(SW_RES(
-                    eType == GREETING_MALE ? RA_SALUTATION_MALE : RA_SALUTATION_FEMALE));
+        ResStringArray aSalutArr(SW_RES(RA_SALUTATION));
         sal_uInt16 i;
         for(i = 0; i < aSalutArr.Count(); ++i)
             m_aSalutations.push_back(aSalutArr.GetString(i));

@@ -230,24 +230,13 @@ String ST_TEXT
 {
     Text[ en-US ] = "Text";
 };
-StringArray RA_SALUTATION_MALE
+StringArray RA_SALUTATION
 {
     ItemList [en-US]=
     {
-        < "Dear Mr. <2>," ; > ;
-        < "Mr. <2>," ; > ;
-        < "Dear <1>," ; > ;
-        < "Hello <1>," ; > ;
-    };
-};
-StringArray RA_SALUTATION_FEMALE
-{
-    ItemList [en-US]=
-    {
-        < "Dear Mrs. <2>," ; > ;
-        < "Ms. <2>," ; > ;
-        < "Dear <1>," ; > ;
-        < "Hello <1>," ; > ;
+        < "Dear" ; > ;
+        < "Hello" ; > ;
+        < "Hi" ; > ;
     };
 };
 StringArray RA_PUNCTUATION
