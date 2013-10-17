@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,ConvertTextToNumber))
 
-ifneq (,$(filter CT2N,$(BUILD_TYPE)))
-
 $(eval $(call gb_Module_add_targets,ConvertTextToNumber,\
 	ExternalPackage_ct2n \
 	UnpackedTarball_ct2n \
 ))
-
-endif
 
 # vim:set noet sw=4 ts=4:
