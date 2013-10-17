@@ -232,13 +232,6 @@ String ST_TEXT
 };
 StringArray RA_SALUTATION_MALE
 {
-    ItemList =
-    {
-        < "Sehr geehrter Herr <2>," ; > ;
-        < "Lieber Herr <2>," ; > ;
-        < "Hallo Herr <2>," ; > ;
-        < "Hallo <1>," ; > ;
-    };
     ItemList [en-US]=
     {
         < "Dear Mr. <2>," ; > ;
@@ -249,13 +242,6 @@ StringArray RA_SALUTATION_MALE
 };
 StringArray RA_SALUTATION_FEMALE
 {
-    ItemList =
-    {
-        < "Sehr geehrte Frau <2>," ; > ;
-        < "Liebe Frau <2>," ; > ;
-        < "Hallo Frau <2>," ; > ;
-        < "Hallo <1>," ; > ;
-    };
     ItemList [en-US]=
     {
         < "Dear Mrs. <2>," ; > ;
@@ -266,13 +252,6 @@ StringArray RA_SALUTATION_FEMALE
 };
 StringArray RA_PUNCTUATION
 {
-    ItemList =
-    {
-        < "," ; > ;
-        < ":" ; > ;
-        < "!" ; > ;
-        < "(kein)" ; > ;
-    };
     ItemList [en-US]=
     {
         < "," ; > ;
