@@ -1061,14 +1061,14 @@ void RtfAttributeOutput::DefaultStyle( sal_uInt16 /*nStyle*/ )
     /* noop, the default style is always 0 in RTF */
 }
 
-void RtfAttributeOutput::StartStyle( const OUString& rName, bool bPapFmt,
+void RtfAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId,
         bool /* bAutoUpdate */ )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rName = '" << rName << "'");
 
     m_aStylesheet.append('{');
-    if (bPapFmt)
+    if (eType == STYLE_TYPE_PARA)
         m_aStylesheet.append(OOO_STRING_SVTOOLS_RTF_S);
     else
         m_aStylesheet.append( OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_CS);

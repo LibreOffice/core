@@ -372,7 +372,7 @@ void WW8AttributeOutput::EndStyle()
     m_rWW8Export.pO->clear();
 }
 
-void WW8AttributeOutput::StartStyle( const OUString& rName, bool bPapFmt, sal_uInt16 nWwBase,
+void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal_uInt16 nWwBase,
     sal_uInt16 nWwNext, sal_uInt16 nWwId, sal_uInt16 /*nId*/, bool bAutoUpdate )
 {
     sal_uInt8 aWW8_STD[ sizeof( WW8_STD ) ];
@@ -384,11 +384,11 @@ void WW8AttributeOutput::StartStyle( const OUString& rName, bool bPapFmt, sal_uI
     Set_UInt16( pData, nBit16 );
 
     nBit16 = nWwBase << 4;          // istdBase
-    nBit16 |= bPapFmt ? 1 : 2;      // sgc
+    nBit16 |= (eType == STYLE_TYPE_PARA ? 1 : 2);      // sgc
     Set_UInt16( pData, nBit16 );
 
     nBit16 = nWwNext << 4;          // istdNext
-    nBit16 |= bPapFmt ? 2 : 1;      // cupx
+    nBit16 |= (eType == STYLE_TYPE_PARA ? 2 : 1);      // cupx
     Set_UInt16( pData, nBit16 );
 
     pData += sizeof( sal_uInt16 );      // bchUpe
@@ -615,7 +615,7 @@ void MSWordStyles::OutputStyle( SwFmt* pFmt, sal_uInt16 nPos )
             }
         }
 
-        m_rExport.AttrOutput().StartStyle( aName, bFmtColl,
+        m_rExport.AttrOutput().StartStyle( aName, (bFmtColl ? STYLE_TYPE_PARA : STYLE_TYPE_CHAR),
                 nBase, nWwNext, GetWWId( *pFmt ), nPos,
                 pFmt->IsAutoUpdateFmt() );
 

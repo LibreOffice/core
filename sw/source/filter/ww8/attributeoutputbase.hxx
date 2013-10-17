@@ -132,6 +132,13 @@ namespace msword {
     const sal_uInt8 PageBreak   = 0xC;
 }
 
+/// Type of a style in the style table.
+enum StyleType
+{
+    STYLE_TYPE_PARA,
+    STYLE_TYPE_CHAR
+};
+
 class AttributeOutputBase
 {
 public:
@@ -260,7 +267,7 @@ public:
     virtual void DefaultStyle( sal_uInt16 nStyle ) = 0;
 
     /// Start of a style in the styles table.
-    virtual void StartStyle( const OUString& rName, bool bPapFmt,
+    virtual void StartStyle( const OUString& rName, StyleType eType,
             sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId,
             bool bAutoUpdate ) = 0;
 

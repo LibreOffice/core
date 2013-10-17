@@ -225,7 +225,7 @@ public:
     void OutputDefaultItem(const SfxPoolItem& rHt);
 
     /// Start of a style in the styles table.
-    virtual void StartStyle( const OUString& rName, bool bPapFmt,
+    virtual void StartStyle( const OUString& rName, StyleType eType,
             sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId,
             bool bAutoUpdate );
 
