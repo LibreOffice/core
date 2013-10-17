@@ -149,7 +149,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 5 // description of parameter 2  Weeknum_add
         {
-            Text [ en-US ] = "A number from 1 to 3 that specifies the day with which a week begins";
+            Text [ en-US ] = "Indicates the first day of the week (1 = Sunday, other values = Monday)";
         };
     };
 
