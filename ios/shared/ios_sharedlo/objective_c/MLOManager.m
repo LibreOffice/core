@@ -136,23 +136,6 @@ static const NSTimeInterval FADE_IN_DURATION = 0.3;
     }
 }
 
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    NSLog(@"textView: %@ shouldChangeTextInRange:[%u,%u] replacementText:%@", textView, range.location, range.length, text);
-    
-    int length =[text length];
-    
-    for (NSUInteger i = 0; i < length; i++){
-        
-        touch_lo_keyboard_input([text characterAtIndex: i]);
-    }
-    if(length>0){
-        [self.mainViewController onTextEdit];
-    }
-    
-    return NO;
-}
 -(void) hideLibreOffice{
     
     [self.invoker willHideLibreOffice];

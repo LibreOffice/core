@@ -8,7 +8,7 @@
 
 #import "MLOThesaurusViewController.h"
 #import "MLOSelectionViewController_Impl.h"
-#import "MLOMainViewController_Impl.h"
+#import "MLOMainViewController_Friend.h"
 #import "MLOGestureEngine_Impl.h"
 
 static const CGFloat THESAURUS_PADDING = 100.0f;

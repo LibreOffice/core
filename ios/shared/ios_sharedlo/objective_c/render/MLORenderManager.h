@@ -22,7 +22,7 @@ static const BOOL ENABLE_PINCH_RENDERING_VIA_IOS = YES;
 -(void) panDeltaX:(CGFloat) deltaX deltaY:(CGFloat) deltaY;
 -(void) pinchDeltaX:(CGFloat)deltaX deltaY:(CGFloat)deltaY scale:(CGFloat)scale;
 -(void) endGestures;
--(void)setWidth:(NSInteger) width height:(NSInteger) height;
+-(void) setWidth:(NSInteger) width height:(NSInteger) height;
 -(void) renderInContext:(CGContextRef) context;
 -(CGPoint) getShiftFromCanvasCenter;
 -(void)renderNow;

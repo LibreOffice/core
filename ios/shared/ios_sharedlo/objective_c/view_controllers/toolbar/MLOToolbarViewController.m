@@ -11,7 +11,7 @@
 #import "MLOToolbarButton.h"
 #import "MLOFinder.h"
 #import "MLOToolbarViewController_Impl.h"
-#import "MLOMainViewController_Impl.h"
+#import "MLOMainViewController_Friend.h"
 #import "MLOResourceImage.h"
 #import "MLOTopbarViewController.h"
 #import "MLOKeyboardManager.h"

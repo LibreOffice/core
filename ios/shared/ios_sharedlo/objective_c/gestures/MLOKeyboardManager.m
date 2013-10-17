@@ -7,7 +7,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "MLOKeyboardManager.h"
-#import "MLOMainViewController_Impl.h"
+#import "MLOMainViewController_Friend.h"
 #import "MLOManager.h"
 #import "MLOGestureEngine_Impl.h"
 #include <touch/touch.h>
@@ -64,9 +64,15 @@
 -(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     NSLog(@"textView: %@ shouldChangeTextInRange:[%u,%u] replacementText:%@", textView, range.location, range.length, text);
+
+    NSInteger length = [text length];
     
-    for (NSUInteger i = 0; i < [text length]; i++){
+    for (NSUInteger i = 0; i < length; i++){
         touch_lo_keyboard_input([text characterAtIndex: i]);
+    }
+
+    if(length>0){
+        [self.mainViewController onTextEdit];
     }
     return NO;
 }

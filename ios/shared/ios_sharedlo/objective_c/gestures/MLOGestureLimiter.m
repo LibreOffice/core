@@ -8,7 +8,7 @@
 
 #import "MLOGestureLimiter.h"
 #import "MLOGestureEngine_Impl.h"
-#import "MLOMainViewController_Impl.h"
+#import "MLOMainViewController_Friend.h"
 #import "MLOScrollerData.h"
 #import "MLOScrollerViewController.h"
 #import "MLORenderManager_Impl.h"

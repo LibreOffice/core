@@ -9,7 +9,7 @@
 #import "MLOFinder.h"
 #import "MLOToolbarButton.h"
 #import "MLOButton.h"
-#import "MLOMainViewController_Impl.h"
+#import "MLOMainViewController_Friend.h"
 #import "MLOGestureEngine_Impl.h"
 #import "MLORenderManager.h"
 #import "MLOSubView.h"
