@@ -45,22 +45,6 @@ run_mozilla() {
   fi
 }
 
-# checks the browser value for a %s as defined in
-# http://www.catb.org/~esr/BROWSER/index.html
-run_browser() {
-  echo "$1|$2" | awk '
-{
-    FS="|";
-    $syscmd="";
-    if (index($1,"%s") > 0) {
-        $syscmd=sprintf($1,$2);
-    } else {
-        $syscmd=sprintf("%s \"%s\"",$1,$2);
-    }
-    system($syscmd " &");
-}' > /dev/null
-}
-
 # special handling for mailto: uris
 if echo $1 | grep '^mailto:' > /dev/null; then
   # check for xdg-email
