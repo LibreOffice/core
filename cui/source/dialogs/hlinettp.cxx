@@ -27,7 +27,6 @@
 
 sal_Char const sAnonymous[]    = "anonymous";
 sal_Char const sHTTPScheme[]   = INET_HTTP_SCHEME;
-sal_Char const sHTTPSScheme[]  = INET_HTTPS_SCHEME;
 sal_Char const sFTPScheme[]    = INET_FTP_SCHEME;
 
 /*************************************************************************
