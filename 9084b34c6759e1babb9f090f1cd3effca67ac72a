@@ -16,6 +16,24 @@
       "revId": "9084b34c6759e1babb9f090f1cd3effca67ac72a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///Vw\u003d",
+        "filename": "connectivity/source/commontools/FValue.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-10-17T01:37:34Z",
+      "side": 1,
+      "message": "When fixing a regression, I considered it safest to revert to the old behaviour. The relevant part of the diff from commit 2bd856e6 is:\n\n-                aRet \u003d ::rtl::OUString::valueOf((sal_Int32)(sal_Bool)*this);\n+                aRet \u003d OUString::boolean(static_cast\u003cbool\u003e(*this));\n\nSo I essentially reverted that, but changing from the \"old\" deprecated valueOf to the preferred number.\n\n\nYour question, however, merits examination. It is guaranteed to be 0 or 1, because the above code calls \"operator sal_uInt8\", which calls getUInt8(), which (in the case getTypeKind() \u003d\u003d BIT or BOOLEAN which interests us here) does\n\n sal_uInt8 nRet \u003d m_aValue.m_bBool;\n return nRet;\n\nSince m_bBool is a bool (not a sal_Bool), this is guaranteed by the C++ standard to be 0 or 1.",
+      "parentUuid": "AAAAY3///W8\u003d",
+      "revId": "9084b34c6759e1babb9f090f1cd3effca67ac72a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
