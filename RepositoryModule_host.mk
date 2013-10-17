@@ -61,7 +61,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	i18nlangtag \
 	i18npool \
 	i18nutil \
-	$(call gb_Helper_optional,ICU,icu) \
 	idl \
 	$(call gb_Helper_optional,DESKTOP,idlc) \
 	instsetoo_native \

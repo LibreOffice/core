@@ -18,17 +18,17 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,icu,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
-	icu/icu4c.10318.CVE-2013-2924_changeset_34076.patch \
-	icu/icu4c.10129.wintz.patch \
-	icu/icu4c-build.patch \
-	icu/icu4c-aix.patch \
-	icu/icu4c-wchar_t.patch \
-	icu/icu4c-warnings.patch \
-	icu/icu4c-macosx.patch \
-	icu/icu4c-solarisgcc.patch \
-	icu/icu4c-mkdir.patch \
-	icu/icu4c-buffer-overflow.patch \
-	icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch \
+	external/icu/icu4c.10318.CVE-2013-2924_changeset_34076.patch \
+	external/icu/icu4c.10129.wintz.patch \
+	external/icu/icu4c-build.patch \
+	external/icu/icu4c-aix.patch \
+	external/icu/icu4c-wchar_t.patch \
+	external/icu/icu4c-warnings.patch \
+	external/icu/icu4c-macosx.patch \
+	external/icu/icu4c-solarisgcc.patch \
+	external/icu/icu4c-mkdir.patch \
+	external/icu/icu4c-buffer-overflow.patch \
+	external/icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch \
 ))
 
 # vim: set noet sw=4 ts=4:

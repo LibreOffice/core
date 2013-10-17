@@ -9,12 +9,10 @@
 
 $(eval $(call gb_Module_Module,icu))
 
-ifeq ($(SYSTEM_ICU),NO)
 $(eval $(call gb_Module_add_targets,icu,\
 	UnpackedTarball_icu \
 	ExternalPackage_icu \
 	ExternalProject_icu \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:
