@@ -76,7 +76,6 @@ $(eval $(call gb_CppunitTest_use_ure,sw_uwriter))
 $(eval $(call gb_CppunitTest_use_components,sw_uwriter,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    fileaccess/source/fileacc \
     framework/util/fwk \
     i18npool/util/i18npool \
     package/util/package2 \

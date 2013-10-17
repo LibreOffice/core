@@ -2911,7 +2911,6 @@ gb_Gallery__UNO_COMPONENTS := \
 	comphelper/util/comphelp \
 	configmgr/source/configmgr \
 	drawinglayer/drawinglayer \
-	fileaccess/source/fileacc \
 	framework/util/fwk \
 	i18npool/util/i18npool \
 	package/source/xstor/xstor \

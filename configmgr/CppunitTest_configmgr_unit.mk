@@ -38,7 +38,6 @@ $(eval $(call gb_CppunitTest_use_configuration,configmgr_unit))
 
 $(eval $(call gb_CppunitTest_use_components,configmgr_unit,\
     configmgr/source/configmgr \
-    fileaccess/source/fileacc \
     i18npool/util/i18npool \
     i18npool/source/search/i18nsearch \
     sax/source/expatwrap/expwrap \

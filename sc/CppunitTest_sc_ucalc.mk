@@ -88,7 +88,6 @@ $(eval $(call gb_CppunitTest_use_ure,sc_ucalc))
 
 $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     configmgr/source/configmgr \
-    fileaccess/source/fileacc \
     framework/util/fwk \
     i18npool/util/i18npool \
     i18npool/source/search/i18nsearch \

@@ -526,7 +526,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	dict_ja \
 	dict_zh \
 	embobj \
-	fileacc \
 	$(if $(ENABLE_JAVA),hsqldb) \
 	i18nlangtag \
 	i18nutil \

@@ -25,7 +25,6 @@ $(eval $(call gb_CppunitTest_use_libraries,dbaccess_macros_test, \
     sdbt \
     drawinglayer \
     editeng \
-    fileacc \
     for \
     forui \
     i18nlangtag \
@@ -75,7 +74,6 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_macros_test,\
     dbaccess/util/dbu \
     dbaccess/util/sdbt \
     dbaccess/source/filter/xml/dbaxml \
-    fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
     framework/util/fwk \
