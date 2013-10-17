@@ -14,7 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,fontconfig,$(FONTCONFIG_TARBALL),,f
 $(eval $(call gb_UnpackedTarball_set_patchlevel,fontconfig,3))
 
 $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
-	fontconfig/fontconfig-2.8.0.patch \
+	external/fontconfig/fontconfig-2.8.0.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
