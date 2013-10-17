@@ -63,15 +63,15 @@ void AttributesTest::test()
     aAttributeList.addUnknown("a", "a");
     aAttributeList.addUnknown("b", "b", "b");
     aAttributeList.addUnknown("c", "c");
-    CPPUNIT_ASSERT_EQUAL( 3, aAttributeList.getUnknownAttributes().getLength() );
+    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 3, aAttributeList.getUnknownAttributes().getLength() );
 
-    CPPUNIT_ASSERT_EQUAL( 2, aAttributeList.getFastAttributes().getLength() );
+    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 2, aAttributeList.getFastAttributes().getLength() );
 
     aAttributeList.clear();
     CPPUNIT_ASSERT( !aAttributeList.hasAttribute(1) );
-    CPPUNIT_ASSERT_EQUAL( 0, aAttributeList.getFastAttributes().getLength() );
+    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 0, aAttributeList.getFastAttributes().getLength() );
     aAttributeList.addUnknown("c", "c");
-    CPPUNIT_ASSERT_EQUAL( 1, aAttributeList.getUnknownAttributes().getLength() );
+    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 1, aAttributeList.getUnknownAttributes().getLength() );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( AttributesTest );
