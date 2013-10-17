@@ -60,7 +60,7 @@ namespace rptui
         virtual void    RequestHelp( const HelpEvent& rHEvt );
         using Window::Notify;
 
-        void            setTitle(const String& _sTitle);
+        void            setTitle(const OUString& _sTitle);
         sal_Int32       getMinHeight() const;
 
         /** shows or hides the ruler.

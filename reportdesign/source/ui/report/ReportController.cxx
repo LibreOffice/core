@@ -3281,15 +3281,13 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
     SequenceAsHashMap aMap(_aArgs);
     sal_Bool bStateOfPage = aMap.getUnpackedValueOrDefault(PROPERTY_STATE,sal_False);
 
-    String sFunction = String(ModuleRes(STR_RPT_PN_PAGE));
-    OUString sPageNumber("PageNumber()");
-    sFunction.SearchAndReplace(OUString("#PAGENUMBER#"),sPageNumber);
+    OUString sFunction( ModuleRes(STR_RPT_PN_PAGE).toString() );
+    sFunction = sFunction.replaceFirst("#PAGENUMBER#", "PageNumber()");
 
     if ( bStateOfPage )
     {
-        OUString sPageCount("PageCount()");
-        sFunction += String(ModuleRes(STR_RPT_PN_PAGE_OF));
-        sFunction.SearchAndReplace(OUString("#PAGECOUNT#"),sPageCount);
+        sFunction += ModuleRes(STR_RPT_PN_PAGE_OF).toString();
+        sFunction = sFunction.replaceFirst("#PAGECOUNT#", "PageCount()");
     }
 
     sal_Bool bInPageHeader = aMap.getUnpackedValueOrDefault(PROPERTY_PAGEHEADERON,sal_True);

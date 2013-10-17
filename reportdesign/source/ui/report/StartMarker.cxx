@@ -235,7 +235,7 @@ void OStartMarker::Resize()
     m_aImage.SetPosSizePixel(aPos,aImageSize);
 }
 // -----------------------------------------------------------------------------
-void OStartMarker::setTitle(const String& _sTitle)
+void OStartMarker::setTitle(const OUString& _sTitle)
 {
     m_aText.SetText(_sTitle);
 }

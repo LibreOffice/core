@@ -202,9 +202,8 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create "writer" section (new tab page in dialog)
     SvtModuleOptions aModOpt;
-    String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
-    aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
-                                    aModOpt.GetModuleName( SvtModuleOptions::E_SWRITER ) );
+    OUString aAppGroupname( aLocalizedStrings.GetString( 0 ) );
+    aAppGroupname = aAppGroupname.replaceFirst( "%s", aModOpt.GetModuleName( SvtModuleOptions::E_SWRITER ) );
     m_aUIProperties[ nIdx++ ].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage");
 
     // create sub section for Contents

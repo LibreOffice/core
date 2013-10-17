@@ -58,28 +58,6 @@ sal_Int32 UniString::ToInt32() const
     return rtl_ustr_toInt32( mpData->maStr, 10 );
 }
 
-xub_StrLen STRING::SearchAndReplace( STRCODE c, STRCODE cRep, xub_StrLen nIndex )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    sal_Int32       nLen = mpData->mnLen;
-    const STRCODE*  pStr = mpData->maStr;
-    pStr += nIndex;
-    while ( nIndex < nLen )
-    {
-        if ( *pStr == c )
-        {
-            ImplCopyData();
-            mpData->maStr[nIndex] = cRep;
-            return nIndex;
-        }
-        ++pStr,
-        ++nIndex;
-    }
-
-    return STRING_NOTFOUND;
-}
-
 STRING& STRING::Insert( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen,
                         xub_StrLen nIndex )
 {
@@ -314,20 +292,6 @@ STRING& STRING::Assign( STRCODE c )
     mpData = ImplAllocData( 1 );
     mpData->maStr[0] = c;
     return *this;
-}
-
-xub_StrLen STRING::SearchAndReplace( const STRING& rStr, const STRING& rRepStr,
-                                     xub_StrLen nIndex )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rRepStr, STRING, DBGCHECKSTRING );
-
-    xub_StrLen nSPos = Search( rStr, nIndex );
-    if ( nSPos != STRING_NOTFOUND )
-        Replace( nSPos, rStr.Len(), rRepStr );
-
-    return nSPos;
 }
 
 STRING& STRING::Assign( const STRCODE* pCharStr )

@@ -233,11 +233,6 @@ public:
     xub_StrLen          Search( sal_Unicode c, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          Search( const UniString& rStr, xub_StrLen nIndex = 0 ) const;
 
-    xub_StrLen          SearchAndReplace( sal_Unicode c, sal_Unicode cRep,
-                                          xub_StrLen nIndex = 0 );
-    xub_StrLen          SearchAndReplace( const UniString& rStr, const UniString& rRepStr,
-                                          xub_StrLen nIndex = 0 );
-
     UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok, sal_Int32& rIndex ) const;
     UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok = ';' ) const;
 

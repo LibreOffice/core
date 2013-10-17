@@ -392,10 +392,9 @@ void ORptUndoPropertyAction::setProperty(sal_Bool _bOld)
 
 OUString ORptUndoPropertyAction::GetComment() const
 {
-    String aStr(ModuleRes(RID_STR_UNDO_PROPERTY).toString());
+    OUString aStr( ModuleRes(RID_STR_UNDO_PROPERTY).toString() );
 
-    aStr.SearchAndReplace(OUString('#'), m_aPropertyName);
-    return aStr;
+    return aStr.replaceFirst("#", m_aPropertyName);
 }
 
 OUndoPropertyGroupSectionAction::OUndoPropertyGroupSectionAction(SdrModel& _rMod
