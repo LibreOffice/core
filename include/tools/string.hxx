@@ -105,6 +105,9 @@ private:
     TOOLS_DLLPRIVATE inline void ImplCopyData();
     TOOLS_DLLPRIVATE inline sal_Unicode * ImplCopyStringData(sal_Unicode *);
 
+    StringCompare       CompareTo( const UniString& rStr,
+                                   xub_StrLen nLen = STRING_LEN ) const;
+
                         UniString( const int* pDummy );    // not implemented: to prevent UniString( NULL )
                         UniString(int); // not implemented; to detect misuses of
                                         // UniString(sal_Unicode)
@@ -222,8 +225,6 @@ public:
     UniString&          Erase( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN );
     UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
 
-    StringCompare       CompareTo( const UniString& rStr,
-                                   xub_StrLen nLen = STRING_LEN ) const;
     sal_Bool            Equals( const UniString& rStr ) const;
     sal_Bool            Equals( const UniString& rStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;

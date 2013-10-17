@@ -562,7 +562,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     return MoveParagraph( aPam, nOffs, true );
 }
 
-static sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
+static sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const OUString& rName,
                             bool bExact )
 {
     sal_uInt16 nSavePos = USHRT_MAX;
@@ -570,15 +570,14 @@ static sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
     for( sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
     {
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
-        String sTxt( pTxtNd->GetExpandTxt() );
-        if( sTxt.Equals( rName ) )
+        OUString sTxt( pTxtNd->GetExpandTxt() );
+        if (sTxt == rName)
         {
             // Found "exact", set Pos to the Node
             nSavePos = n;
             break;
         }
-        else if( !bExact && USHRT_MAX == nSavePos &&
-                    COMPARE_EQUAL == sTxt.CompareTo( rName, rName.Len()) )
+        else if( !bExact && USHRT_MAX == nSavePos && sTxt.startsWith(rName) )
         {
             // maybe we just found the text's first part
             nSavePos = n;
