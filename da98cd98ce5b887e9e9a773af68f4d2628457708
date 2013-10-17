@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///Po\u003d",
+        "filename": "scaddins/source/analysis/analysis.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-17T19:01:02Z",
+      "side": 1,
+      "message": "Well, even that is not correct, actually it is \"1 or something else\" ... compare with the 2nd parameter of WEEKNUM that is identical.",
+      "revId": "da98cd98ce5b887e9e9a773af68f4d2628457708",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
