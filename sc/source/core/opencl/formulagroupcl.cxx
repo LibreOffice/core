@@ -18,6 +18,9 @@
 
 #include "openclwrapper.hxx"
 
+#include "formulagroupcl_public.hxx"
+#include "formulagroupcl_finacial.hxx"
+
 #include<list>
 #include <map>
 #include <iostream>
@@ -52,7 +55,8 @@ private:
 /// by a Push operation in the given RPN.
 class DynamicKernelArgument {
 public:
-    DynamicKernelArgument(const std::string &s,  std::shared_ptr<FormulaTreeNode> ft):
+    DynamicKernelArgument(const std::string &s,
+       std::shared_ptr<FormulaTreeNode> ft):
         mSymName(s), mFormulaTree(ft), mpClmem(NULL) {}
     const std::string &GetNameAsString(void) const { return mSymName; }
     /// Generate declaration
@@ -109,6 +113,7 @@ public:
         } else {
             assert(0 && "Unreachable");
         }
+        return 0;
     }
 protected:
     const std::string mSymName;
@@ -160,8 +165,9 @@ size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
 class DynamicKernelConstantArgument: public DynamicKernelArgument
 {
 public:
-    DynamicKernelConstantArgument(const std::string &s, std::shared_ptr<FormulaTreeNode> ft):
-        DynamicKernelArgument(s, ft) {}
+    DynamicKernelConstantArgument(const std::string &s,
+        std::shared_ptr<FormulaTreeNode> ft):
+            DynamicKernelArgument(s, ft) {}
     /// Generate declaration
     virtual void GenDecl(std::stringstream &ss)
     {
@@ -202,7 +208,8 @@ public:
 class DynamicKernelSlidingArgument: public DynamicKernelArgument
 {
 public:
-    DynamicKernelSlidingArgument(const std::string &s, std::shared_ptr<FormulaTreeNode> ft):
+    DynamicKernelSlidingArgument(const std::string &s,
+        std::shared_ptr<FormulaTreeNode> ft):
         DynamicKernelArgument(s, ft)
     {
         FormulaToken *t = ft->GetFormulaToken();
@@ -240,9 +247,13 @@ public:
 
 class OpBase {
 public:
-    virtual std::string GetBottom(void) = 0;
-    virtual std::string Gen(const std::string &lhs, const std::string &rhs) = 0;
-    virtual std::string BinFuncName(void) const = 0;
+    typedef std::vector<std::string> ArgVector;
+    typedef std::vector<std::string>::iterator ArgVectorIter;
+    virtual std::string GetBottom(void) {return "";};
+    virtual std::string Gen(const std::string &/*lhs*/,
+        const std::string &/*rhs*/){return "";}
+    virtual std::string Gen(ArgVector& /*argVector*/){return "";};
+    virtual std::string BinFuncName(void)const {return "";};
     virtual ~OpBase() {}
 };
 
@@ -327,12 +338,13 @@ public:
     }
 };
 
-class Binary: public SlidingFunctionBase, public OpBase
+class Normal: public SlidingFunctionBase, public OpBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
     {
+        ArgVector argVector;
         ss << "\ndouble " << sSymName;
         ss << "_"<< BinFuncName() <<"(";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -340,13 +352,13 @@ public:
             if (i)
                 ss << ",";
             vSubArguments[i]->GenSlidingWindowDecl(ss);
+            argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
         }
         ss << ") {\n\t";
         ss << "double tmp = " << GetBottom() <<";\n\t";
         ss << "int gid0 = get_global_id(0);\n\t";
         ss << "tmp = ";
-        ss << Gen(vSubArguments[0]->GenSlidingWindowDeclRef(),
-                vSubArguments[1]->GenSlidingWindowDeclRef());
+        ss << Gen(argVector);
         ss << ";\n\t";
         ss << "return tmp;\n";
         ss << "}";
@@ -357,7 +369,7 @@ public:
 class OpNop: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "0"; }
-    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string Gen(const std::string &lhs, const std::string &)
     {
         return lhs;
     }
@@ -447,12 +459,14 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "fsum"; }
 };
-class OpEffective: public Binary {
+class OpEffective: public Normal {
 public:
     virtual std::string GetBottom(void) { return "0"; }
-    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string Gen(ArgVector& argVector)
     {
-        return "pow(1.0+("+lhs + "/" + rhs +"),"+rhs+")-1.0";
+        std::string result = "pow(1.0+("+ argVector[0] + "/" +
+          argVector[1] +")," +  argVector[1]+")-1.0";
+        return result;
     }
     virtual std::string BinFuncName(void) const { return "Effective_Add"; }
 };
@@ -464,7 +478,8 @@ class DynamicKernelSoPArguments: public DynamicKernelArgument
 public:
     typedef std::unique_ptr<DynamicKernelArgument> SubArgument;
 
-    DynamicKernelSoPArguments(const std::string &s, std::shared_ptr<FormulaTreeNode> ft);
+    DynamicKernelSoPArguments(const std::string &s,
+        std::shared_ptr<FormulaTreeNode> ft);
 
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal(cl_kernel k, int argno, int nVectorWidth)
@@ -664,8 +679,8 @@ void SymbolTable::Marshal(cl_kernel k, int nVectorWidth)
 /// Code generation
 class DynamicKernel {
 public:
-    DynamicKernel(std::shared_ptr<FormulaTreeNode> r):mpRoot(r), mpProgram(NULL),
-        mpKernel(NULL), mpResClmem(NULL) {}
+    DynamicKernel(std::shared_ptr<FormulaTreeNode> r):mpRoot(r),
+        mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL) {}
     /// Code generation in OpenCL
     std::string CodeGen() {
         // Travese the tree of expression and declare symbols used
@@ -679,11 +694,8 @@ public:
             decl << "#pragma OPENCL EXTENSION cl_amd_fp64: enable\n";
         }
         // preambles
-        decl << "int isNan(double a) { return a != a; }\n";
-        decl << "double fsum(double a, double b) { return isNan(a)?b:a+b; }\n";
-        decl << "double fsub(double a, double b) { return a-b; }\n";
-        decl << "double fmul(double a, double b) { return a*b; }\n";
-        decl << "double fdiv(double a, double b) { return a/b; }\n";
+        decl << publicFunc;
+        decl << finacialFunc;
         mSyms.DumpSlidingWindowFunctions(decl);
         decl << "__kernel void DynamicKernel" << GetMD5();
         decl << "(\n__global double *result";
@@ -704,8 +716,8 @@ public:
             std::stringstream md5s;
             // Compute MD5SUM of kernel body to obtain the name
             unsigned char result[MD5_DIGEST_LENGTH];
-            MD5(reinterpret_cast<const unsigned char *>(mKernelSrc.str().c_str()),
-                    mKernelSrc.str().length(), result);
+             MD5(reinterpret_cast<const unsigned char *>
+                (mKernelSrc.str().c_str()), mKernelSrc.str().length(), result);
             for(int i=0; i < MD5_DIGEST_LENGTH; i++) {
                 md5s << std::hex << (int)result[i];
             }
@@ -796,7 +808,8 @@ DynamicKernel::~DynamicKernel()
 // kernel with argument with unique name and return so.
 // The template argument T must be a subclass of DynamicKernelArgument
 template <typename T>
-const DynamicKernelArgument *SymbolTable::DeclRefArg(std::shared_ptr<FormulaTreeNode> t)
+const DynamicKernelArgument *SymbolTable::DeclRefArg(
+                  std::shared_ptr<FormulaTreeNode> t)
 {
     FormulaToken *ref = t->GetFormulaToken();
     ArgumentMap::iterator it = mSymbols.find(ref);
@@ -828,12 +841,14 @@ public:
 
     virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat );
     virtual bool interpret( ScDocument& rDoc, const ScAddress& rTopPos,
-                           const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode );
-    void generateRPNCode(ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rCode);
+                const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode );
+    void generateRPNCode(ScDocument& rDoc,
+                const ScAddress& rPos, ScTokenArray& rCode);
     DynamicKernel *mpKernel;
 };
 
-void FormulaGroupInterpreterOpenCL::generateRPNCode(ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rCode)
+void FormulaGroupInterpreterOpenCL::generateRPNCode(ScDocument& rDoc,
+            const ScAddress& rPos, ScTokenArray& rCode)
 {
     // First, generate an RPN (reverse polish notation) token array.
     ScCompiler aComp(&rDoc, rPos, rCode);
@@ -842,7 +857,7 @@ void FormulaGroupInterpreterOpenCL::generateRPNCode(ScDocument& rDoc, const ScAd
     // Now, calling FirstRPN() and NextRPN() will return tokens from the RPN token array.
 }
 
-ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& rMat )
+ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
 {
     return NULL;
 }
@@ -863,7 +878,8 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         OpCode eOp = pCur->GetOpCode();
         if ( eOp != ocPush )
         {
-            std::shared_ptr<FormulaTreeNode> m_currNode = std::shared_ptr<FormulaTreeNode>(new FormulaTreeNode(pCur));
+            std::shared_ptr<FormulaTreeNode> m_currNode =
+                 std::shared_ptr<FormulaTreeNode>(new FormulaTreeNode(pCur));
             sal_uInt8 m_ParamCount =  pCur->GetParamCount();
             for(int i=0; i<m_ParamCount; i++)
             {
@@ -877,17 +893,21 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
                 }
                 else
                 {
-                    std::shared_ptr<FormulaTreeNode> m_ChildTreeNode = std::shared_ptr<FormulaTreeNode>(new FormulaTreeNode(m_TempFormula));
+                    std::shared_ptr<FormulaTreeNode> m_ChildTreeNode =
+                      std::shared_ptr<FormulaTreeNode>(
+                               new FormulaTreeNode(m_TempFormula));
                     m_currNode->Children.push_back(m_ChildTreeNode);
                 }
             }
-            std::reverse(m_currNode->Children.begin(), m_currNode->Children.end());
+            std::reverse(m_currNode->Children.begin(),
+                                m_currNode->Children.end());
             m_hash_map[pCur] = m_currNode;
         }
         list.push_back(pCur);
     }
 
-    std::shared_ptr<FormulaTreeNode> Root = std::shared_ptr<FormulaTreeNode>(new FormulaTreeNode(NULL));
+    std::shared_ptr<FormulaTreeNode> Root =
+            std::shared_ptr<FormulaTreeNode>(new FormulaTreeNode(NULL));
     Root->Children.push_back(m_hash_map[list.back()]);
     // Code generation
     mpKernel = new DynamicKernel(Root);
@@ -928,7 +948,8 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT sc::FormulaGroupInterpreter* SAL_CALL createFormulaGroupOpenCLInterpreter()
+SAL_DLLPUBLIC_EXPORT sc::FormulaGroupInterpreter* SAL_CALL
+                   createFormulaGroupOpenCLInterpreter()
 {
 #if 0// USE_GROUNDWATER_INTERPRETER
     if (getenv("SC_GROUNDWATER"))
@@ -943,15 +964,18 @@ SAL_DLLPUBLIC_EXPORT size_t getOpenCLPlatformCount()
     return sc::opencl::getOpenCLPlatformCount();
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL fillOpenCLInfo(sc::OpenclPlatformInfo* pInfos, size_t nInfoSize)
+SAL_DLLPUBLIC_EXPORT void SAL_CALL fillOpenCLInfo(
+               sc::OpenclPlatformInfo* pInfos, size_t nInfoSize)
 {
-    const std::vector<sc::OpenclPlatformInfo>& rPlatforms = sc::opencl::fillOpenCLInfo();
+    const std::vector<sc::OpenclPlatformInfo>& rPlatforms =
+                 sc::opencl::fillOpenCLInfo();
     size_t n = std::min(rPlatforms.size(), nInfoSize);
     for (size_t i = 0; i < n; ++i)
         pInfos[i] = rPlatforms[i];
 }
 
-SAL_DLLPUBLIC_EXPORT bool SAL_CALL switchOpenClDevice(const OUString* pDeviceId, bool bAutoSelect)
+SAL_DLLPUBLIC_EXPORT bool SAL_CALL switchOpenClDevice(
+                       const OUString* pDeviceId, bool bAutoSelect)
 {
     return sc::opencl::switchOpenclDevice(pDeviceId, bAutoSelect);
 }

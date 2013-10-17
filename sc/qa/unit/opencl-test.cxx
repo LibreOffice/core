@@ -265,13 +265,14 @@ void ScOpenclTest::testFinacialFormula()
     enableOpenCL(xDocSh);   ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("FinancialFormulaTest.", XLS);
-    ScDocument* pDocRes = xDocShRes->GetDocument();   CPPUNIT_ASSERT(pDocRes);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = pDoc->GetValue(ScAddress(2,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, 0.0001*fExcel);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
     xDocShRes->DoClose();
