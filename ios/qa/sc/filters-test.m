@@ -133,7 +133,6 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
         "ComponentTarget/chart2/source/chartcore.component",
         "ComponentTarget/comphelper/util/comphelp.component",
         "ComponentTarget/eventattacher/source/evtatt.component",
-        "ComponentTarget/fileaccess/source/fileacc.component",
         "ComponentTarget/filter/source/config/cache/filterconfig1.component",
         "ComponentTarget/oox/util/oox.component",
         "ComponentTarget/package/source/xstor/xstor.component",

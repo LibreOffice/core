@@ -53,7 +53,6 @@ $(eval $(call gb_CppunitTest_use_components,sw_htmlexport,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     embeddedobj/util/embobj \
-    fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
 	forms/util/frm \
     framework/util/fwk \

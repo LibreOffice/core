@@ -25,7 +25,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_macros_test, \
     cppuhelper \
     drawinglayer \
     editeng \
-    fileacc \
     for \
     forui \
     i18nlangtag \
@@ -73,7 +72,6 @@ $(eval $(call gb_CppunitTest_use_components,sw_macros_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
-    fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
     framework/util/fwk \

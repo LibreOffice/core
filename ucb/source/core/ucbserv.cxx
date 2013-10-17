@@ -24,10 +24,10 @@
 #include "ucbprops.hxx"
 #include "provprox.hxx"
 #include "cmdenv.hxx"
+#include "FileAccess.hxx"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
 
 //=========================================================================
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucb_component_getFactory(
@@ -91,7 +91,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucb_component_getFactory(
             = ucb_cmdenv::UcbCommandEnvironment::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+    // FilePicker
+    else if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
+    {
+        xFactory = cppu::createSingleFactory(
+            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            OUString::createFromAscii( pImplName ),
+            FileAccess_CreateInstance,
+            FileAccess_getSupportedServiceNames() );
+    }
 
     if ( xFactory.is() )
     {

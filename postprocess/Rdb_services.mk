@@ -26,7 +26,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	dtrans/util/mcnttype \
 	embeddedobj/util/embobj \
 	eventattacher/source/evtatt \
-	fileaccess/source/fileacc \
 	filter/source/config/cache/filterconfig1 \
 	filter/source/flash/flash \
 	filter/source/graphic/graphicfilter \

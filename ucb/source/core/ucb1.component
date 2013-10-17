@@ -34,4 +34,7 @@
   <implementation name="com.sun.star.comp.ucb.UniversalContentBroker">
     <service name="com.sun.star.ucb.UniversalContentBroker"/>
   </implementation>
+  <implementation name="com.sun.star.comp.ucb.SimpleFileAccess">
+    <service name="com.sun.star.ucb.SimpleFileAccess"/>
+  </implementation>
 </component>

@@ -68,7 +68,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 			cppcanvas \
 			drawinglayer \
 			editeng \
-			fileaccess \
 			framework \
 			harfbuzz \
 			lcms2 \
