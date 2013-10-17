@@ -9,7 +9,6 @@
 
 $(eval $(call gb_Module_Module,hunspell))
 
-ifeq ($(SYSTEM_HUNSPELL),NO)
 $(eval $(call gb_Module_add_targets,hunspell,\
 	UnpackedTarball_hunspell \
 ))
@@ -21,7 +20,6 @@ else
 $(eval $(call gb_Module_add_targets,hunspell,\
 	ExternalProject_hunspell \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:

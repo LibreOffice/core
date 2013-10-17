@@ -57,7 +57,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	framework \
 	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
 	$(call gb_Helper_optional,HELP,helpcontent2) \
-	$(call gb_Helper_optional,HUNSPELL,hunspell) \
 	hwpfilter \
 	$(call gb_Helper_optional,HYPHEN,hyphen) \
 	i18nlangtag \
