@@ -479,7 +479,7 @@ StreamAndStorageNames lcl_GetStreamStorageNames( const OUString sUserData )
         return aNames;
 
     const OUString aProt( "vnd.sun.star.Package:" );
-    if (sUserData.startsWith(aProt))
+    if (sUserData.startsWithIgnoreAsciiCase(aProt))
     {
         // 6.0 (XML) Package
         const sal_Int32 nPos = sUserData.indexOf('/');
