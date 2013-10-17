@@ -18,14 +18,14 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,hsqldb,\
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,hsqldb,\
-	hsqldb/patches/i96823.patch \
-	hsqldb/patches/i97032.patch \
-	hsqldb/patches/i103528.patch \
-	hsqldb/patches/i104901.patch \
-	hsqldb/patches/fdo36824.patch \
-	hsqldb/patches/limit_as_table_alias.patch \
+	external/hsqldb/patches/i96823.patch \
+	external/hsqldb/patches/i97032.patch \
+	external/hsqldb/patches/i103528.patch \
+	external/hsqldb/patches/i104901.patch \
+	external/hsqldb/patches/fdo36824.patch \
+	external/hsqldb/patches/limit_as_table_alias.patch \
 	$(if $(filter YES,$(HSQLDB_USE_JDBC_4_1)),\
-		hsqldb/patches/jdbc-4.1.patch \
+		external/hsqldb/patches/jdbc-4.1.patch \
 	) \
 ))
 
