@@ -312,65 +312,19 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
     sal_Int16 nScript;
     switch( nLang )
     {
-        // CJK
-        // all LANGUAGE_CHINESE_... are caught below
-        case LANGUAGE_JAPANESE:
-        case LANGUAGE_KOREAN:
-        case LANGUAGE_KOREAN_JOHAB:
-        case LANGUAGE_USER_KOREAN_NORTH:
-            nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
+        // CTL
+        case LANGUAGE_MONGOLIAN_MONGOLIAN:
+        case LANGUAGE_USER_KURDISH_IRAN:
+        case LANGUAGE_USER_KURDISH_IRAQ:
+        case LANGUAGE_USER_KYRGYZ_CHINA:
+            nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
             break;
 
-        // CTL
-        // all LANGUAGE_ARABIC_... are caught below
-        case LANGUAGE_AMHARIC_ETHIOPIA:
-        case LANGUAGE_ASSAMESE:
-        case LANGUAGE_BENGALI:
-        case LANGUAGE_BENGALI_BANGLADESH:
-        case LANGUAGE_BURMESE:
-        case LANGUAGE_FARSI:
-        case LANGUAGE_HEBREW:
-        case LANGUAGE_YIDDISH:
-        case LANGUAGE_USER_YIDDISH_US:
-        case LANGUAGE_MARATHI:
-        case LANGUAGE_PUNJABI:
-        case LANGUAGE_GUJARATI:
-        case LANGUAGE_HINDI:
-        case LANGUAGE_KANNADA:
-        case LANGUAGE_KASHMIRI:
-        case LANGUAGE_KASHMIRI_INDIA:
-        case LANGUAGE_KHMER:
-        case LANGUAGE_LAO:
-        case LANGUAGE_MALAYALAM:
-        case LANGUAGE_MANIPURI:
-        case LANGUAGE_MONGOLIAN_MONGOLIAN:
-        case LANGUAGE_NEPALI:
-        case LANGUAGE_NEPALI_INDIA:
-        case LANGUAGE_ORIYA:
-        case LANGUAGE_SANSKRIT:
-        case LANGUAGE_SINDHI:
-        case LANGUAGE_SINDHI_PAKISTAN:
-        case LANGUAGE_SINHALESE_SRI_LANKA:
-        case LANGUAGE_SYRIAC:
-        case LANGUAGE_TAMIL:
-        case LANGUAGE_TELUGU:
-        case LANGUAGE_THAI:
-        case LANGUAGE_TIBETAN:
-        case LANGUAGE_DZONGKHA:
-        case LANGUAGE_USER_TIBETAN_INDIA:
-        case LANGUAGE_URDU_PAKISTAN:
-        case LANGUAGE_URDU_INDIA:
-        case LANGUAGE_USER_KURDISH_IRAQ:
-        case LANGUAGE_USER_KURDISH_IRAN:
-        case LANGUAGE_DHIVEHI:
-        case LANGUAGE_USER_BODO_INDIA:
-        case LANGUAGE_USER_DOGRI_INDIA:
-        case LANGUAGE_USER_MAITHILI_INDIA:
-        case LANGUAGE_UIGHUR_CHINA:
-        case LANGUAGE_USER_LIMBU:
-        case LANGUAGE_USER_KYRGYZ_CHINA:
-        case LANGUAGE_USER_NKO:
-            nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
+        // "Western"
+        case LANGUAGE_MONGOLIAN:
+        case LANGUAGE_USER_KURDISH_SYRIA:
+        case LANGUAGE_USER_KURDISH_TURKEY:
+            nScript = ::com::sun::star::i18n::ScriptType::LATIN;
             break;
 
 // currently not knowing scripttype - defaulted to LATIN:
@@ -383,22 +337,62 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 #define LANGUAGE_TATAR                      0x0444
 */
 
-    default:
-        switch ( nLang & LANGUAGE_MASK_PRIMARY )
-        {
-            // CJK catcher
-            case LANGUAGE_CHINESE & LANGUAGE_MASK_PRIMARY:
-                nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
-                break;
-            // CTL catcher
-            case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY:
-                nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
-                break;
-            // Western (actually not necessarily Latin but also Cyrillic, for example)
-            default:
-                nScript = ::com::sun::star::i18n::ScriptType::LATIN;
-        }
-        break;
+        default:
+            switch ( nLang & LANGUAGE_MASK_PRIMARY )
+            {
+                // CJK catcher
+                case LANGUAGE_CHINESE  & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_JAPANESE & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_KOREAN   & LANGUAGE_MASK_PRIMARY:
+                    nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
+                    break;
+
+                    // CTL catcher
+                case LANGUAGE_AMHARIC_ETHIOPIA    & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_ASSAMESE            & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_BENGALI             & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_BURMESE             & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_DHIVEHI             & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_FARSI               & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_GUJARATI            & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_HEBREW              & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_HINDI               & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_KANNADA             & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_KASHMIRI            & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_KHMER               & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_LAO                 & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_MALAYALAM           & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_MANIPURI            & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_MARATHI             & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_NEPALI              & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_ORIYA               & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_PUNJABI             & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_SANSKRIT            & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_SINDHI              & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_SINHALESE_SRI_LANKA & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_SYRIAC              & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_TAMIL               & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_TELUGU              & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_THAI                & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_TIBETAN             & LANGUAGE_MASK_PRIMARY:  // also LANGUAGE_DZONGKHA
+                case LANGUAGE_UIGHUR_CHINA        & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_URDU_INDIA          & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_USER_BODO_INDIA     & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_USER_DOGRI_INDIA    & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_USER_LIMBU          & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_USER_MAITHILI_INDIA & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_USER_NKO            & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_YIDDISH             & LANGUAGE_MASK_PRIMARY:
+                    nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
+                    break;
+
+                // Western (actually not necessarily Latin but also Cyrillic,
+                // for example)
+                default:
+                    nScript = ::com::sun::star::i18n::ScriptType::LATIN;
+            }
+            break;
     }
     return nScript;
 }
