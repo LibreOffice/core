@@ -55,9 +55,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	unotools \
 	ure \
 	xmlreader \
-	$(call gb_Helper_optional,BOOST,boost) \
-	$(call gb_Helper_optional,CLUCENE,clucene) \
-	$(call gb_Helper_optional,CPPUNIT,cppunit) \
 	$(call gb_Helper_optional_for_host,DESKTOP, \
 		$(if $(filter YES,$(WITH_GALLERY_BUILD)), \
 			avmedia \
