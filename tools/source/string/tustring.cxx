@@ -186,32 +186,6 @@ sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen 
     return (ImplStringCompareWithoutZero( mpData->maStr+nIndex, rStr.mpData->maStr, nLen ) == 0);
 }
 
-xub_StrLen STRING::Match( const STRING& rStr ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
-    // return if string is empty
-    if ( !mpData->mnLen )
-        return STRING_MATCH;
-
-    // Search the string for unmatching chars
-    const STRCODE*  pStr1 = mpData->maStr;
-    const STRCODE*  pStr2 = rStr.mpData->maStr;
-    xub_StrLen      i = 0;
-    while ( i < mpData->mnLen )
-    {
-        // Abort on the first unmatching char
-        if ( *pStr1 != *pStr2 )
-            return i;
-        ++pStr1,
-        ++pStr2,
-        ++i;
-    }
-
-    return STRING_MATCH;
-}
-
 STRING& STRING::Append( STRCODE c )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
