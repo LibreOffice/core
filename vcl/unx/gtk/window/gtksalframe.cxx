@@ -2209,7 +2209,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
     if (maGeometry.nDisplayScreenNumber == nNewScreen && eType == SET_RETAIN_SIZE)
         return;
 
-    GdkScreen *pScreen;
+    GdkScreen *pScreen = NULL;
     GdkRectangle aNewMonitor;
 
     bool bSpanAllScreens = nNewScreen == (unsigned int)-1;
