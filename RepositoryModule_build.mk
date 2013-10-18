@@ -87,7 +87,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 		helpcompiler \
 		xmlhelp \
 	) \
-	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	$(call gb_Helper_optional,LIBXML2,libxml2) \
 	$(call gb_Helper_optional,LIBXSLT,libxslt) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \

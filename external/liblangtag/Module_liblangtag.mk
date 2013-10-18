@@ -9,16 +9,11 @@
 
 $(eval $(call gb_Module_Module,liblangtag))
 
-ifeq ($(ENABLE_LIBLANGTAG),TRUE)
-ifeq ($(SYSTEM_LIBLANGTAG),NO)
-
 $(eval $(call gb_Module_add_targets,liblangtag,\
 	UnpackedTarball_langtag \
 	ExternalPackage_langtag_data \
 	ExternalProject_langtag \
 	ExternalPackage_liblangtag_data \
 ))
-endif
-endif
 
 # vim: set noet sw=4 ts=4:
