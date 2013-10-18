@@ -875,7 +875,7 @@ double ScInterpreter::Compare()
     if( nGlobalError )
         return 0;
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    return sc::CompareFunc(pDok->GetDocOptions().IsIgnoreCase(), aComp);
+    return sc::CompareFunc(aComp);
 }
 
 
@@ -976,7 +976,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( sc::CompareOptions* pOptions )
                                 aComp.bEmpty[i] = false;
                             }
                         }
-                        aRes.mpMat->PutDouble(sc::CompareFunc(pDok->GetDocOptions().IsIgnoreCase(), aComp, pOptions), j, k);
+                        aRes.mpMat->PutDouble(sc::CompareFunc(aComp, pOptions), j, k);
                     }
                     else
                         aRes.mpMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), j, k);

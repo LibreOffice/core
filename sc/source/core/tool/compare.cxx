@@ -38,10 +38,7 @@ CompareOptions::CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bo
     // struct if needed.
 }
 
-/** @param pOptions
-        NULL means case sensitivity document option is to be used!
- */
-double CompareFunc( bool bIgnoreCase, const Compare& rComp, CompareOptions* pOptions )
+double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
 {
     // Keep DoubleError if encountered
     // #i40539# if bEmpty is set, bVal/nVal are uninitialized
@@ -165,7 +162,7 @@ double CompareFunc( bool bIgnoreCase, const Compare& rComp, CompareOptions* pOpt
                 fRes = (double) ScGlobal::GetCaseCollator()->compareString(
                         *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
         }
-        else if (bIgnoreCase)
+        else if (rComp.mbIgnoreCase)
             fRes = (double) ScGlobal::GetCollator()->compareString(
                 *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
         else

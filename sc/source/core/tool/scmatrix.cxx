@@ -1332,7 +1332,7 @@ class CompareMatrixFunc : std::unary_function<MatrixImplType::element_block_type
 
     void compare()
     {
-        maResValues.push_back(sc::CompareFunc(mrComp.mbIgnoreCase, mrComp, mpOptions));
+        maResValues.push_back(sc::CompareFunc(mrComp, mpOptions));
     }
 
 public:

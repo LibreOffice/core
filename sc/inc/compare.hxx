@@ -62,7 +62,10 @@ private:
     CompareOptions& operator=( const CompareOptions & );
 };
 
-double CompareFunc( bool bIgnoreCase, const Compare& rComp, CompareOptions* pOptions = NULL );
+/** @param pOptions
+        NULL means case sensitivity document option is to be used!
+ */
+double CompareFunc( const Compare& rComp, CompareOptions* pOptions = NULL );
 
 }
 
