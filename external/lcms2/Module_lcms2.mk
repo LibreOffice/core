@@ -7,14 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,lcms2))
+$(eval $(call gb_Module_Module,lcms2))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,lcms2,$(LCMS2_TARBALL)))
-$(eval $(call gb_UnpackedTarball_set_patchlevel,lcms2,3))
-
-$(eval $(call gb_UnpackedTarball_add_patches,lcms2,\
-	lcms2/lcms2.patch \
-	lcms2/lcms2-2.4-windows.patch \
+$(eval $(call gb_Module_add_targets,lcms2,\
+	UnpackedTarball_lcms2 \
+	ExternalPackage_lcms2 \
+	ExternalProject_lcms2 \
 ))
 
 # vim: set noet sw=4 ts=4:
