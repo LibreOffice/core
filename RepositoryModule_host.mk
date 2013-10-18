@@ -70,7 +70,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	jvmaccess \
 	jvmfwk \
 	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
-	$(call gb_Helper_optional,CDR,libcdr) \
 	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	$(call gb_Helper_optional,MSPUB,libmspub) \
