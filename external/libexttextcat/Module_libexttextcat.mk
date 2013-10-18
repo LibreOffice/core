@@ -9,7 +9,6 @@
 
 $(eval $(call gb_Module_Module,libexttextcat))
 
-ifeq ($(SYSTEM_LIBEXTTEXTCAT),NO)
 $(eval $(call gb_Module_add_targets,libexttextcat,\
 	ExternalPackage_fingerprint \
 	UnpackedTarball_exttextcat \
@@ -22,7 +21,6 @@ else
 $(eval $(call gb_Module_add_targets,libexttextcat,\
 	ExternalProject_exttextcat \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:
