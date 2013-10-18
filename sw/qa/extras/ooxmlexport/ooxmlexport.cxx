@@ -122,6 +122,7 @@ public:
     void testSmartart();
     void testFdo69636();
     void testCharHighlight();
+    void testMultiColumnLineSeparator();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(WNT)
@@ -241,6 +242,7 @@ void Test::run()
         {"smartart.docx", &Test::testSmartart},
         {"fdo69636.docx", &Test::testFdo69636},
         {"char_highlight.docx", &Test::testCharHighlight},
+        {"multi-column-line-separator-SAVED.docx", &Test::testMultiColumnLineSeparator},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1578,6 +1580,13 @@ void Test::testCharHighlight()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), getProperty<sal_Int32>(xRun,"CharBackColor"));
     }
 }
+
+void Test::testMultiColumnLineSeparator()
+{
+    // Check for the Column Separator value.It should be FALSE as the document doesnt contains separator line.
+    xmlDocPtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:sectPr/w:cols","sep","false");
+ }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
