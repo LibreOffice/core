@@ -60,7 +60,7 @@ ModalDialog DLG_OPTIONS
     {
         Pos = MAP_APPFONT ( 25 , 65 ) ;
         Size = MAP_APPFONT ( 150 , 16 ) ;
-        Text = "Export All Slides (Uncheck exports current slide)" ;
+        Text [ en-US ] = "Export All Slides (Uncheck exports current slide)" ;
     };
     CheckBox BOOL_EXPORT_MULTIPLE_FILES
     {
@@ -73,7 +73,7 @@ ModalDialog DLG_OPTIONS
     {
         Pos = MAP_APPFONT ( 25 , 80 ) ;
         Size = MAP_APPFONT ( 150 , 16 ) ;
-        Text = "Export As Multiple Files" ;
+        Text [ en-US ] = "Export As Multiple Files" ;
     };
     CheckBox BOOL_EXPORT_BACKGROUNDS
     {
@@ -86,7 +86,7 @@ ModalDialog DLG_OPTIONS
     {
         Pos = MAP_APPFONT ( 35 , 95 ) ;
         Size = MAP_APPFONT ( 100 , 16 ) ;
-        Text = "Export Backgrounds" ;
+        Text [ en-US ] = "Export Backgrounds" ;
     };
     CheckBox BOOL_EXPORT_BACKGROUND_OBJECTS
     {
@@ -99,7 +99,7 @@ ModalDialog DLG_OPTIONS
     {
         Pos = MAP_APPFONT ( 35 , 107) ;
         Size = MAP_APPFONT ( 100 , 16 ) ;
-        Text = "Export Background Objects" ;
+        Text [ en-US ] = "Export Background Objects" ;
     };
     CheckBox BOOL_EXPORT_SLIDE_CONTENTS
     {
@@ -112,7 +112,7 @@ ModalDialog DLG_OPTIONS
     {
         Pos = MAP_APPFONT ( 35 , 119 ) ;
         Size = MAP_APPFONT ( 100 , 16 ) ;
-        Text = "Export Slide Contents" ;
+        Text [ en-US ] = "Export Slide Contents" ;
     };
     CheckBox BOOL_EXPORT_SOUND
     {
@@ -125,7 +125,7 @@ ModalDialog DLG_OPTIONS
     {
         Pos = MAP_APPFONT ( 25 , 134 ) ;
         Size = MAP_APPFONT ( 100 , 16 ) ;
-        Text = "Export Verilogix Slide Annotations" ;
+        Text [ en-US ] = "Export Verilogix Slide Annotations" ;
     };
     CheckBox BOOL_EXPORT_OLE_AS_JPEG
     {
@@ -138,7 +138,7 @@ ModalDialog DLG_OPTIONS
     {
         Pos = MAP_APPFONT ( 25 , 146 ) ;
         Size = MAP_APPFONT ( 100 , 16 ) ;
-        Text = "Export OLE Objects as JPEG images" ;
+        Text [ en-US ] = "Export OLE Objects as JPEG images" ;
     };
 
 
