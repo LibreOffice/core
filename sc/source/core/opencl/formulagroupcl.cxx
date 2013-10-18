@@ -478,6 +478,64 @@ public:
 
     }
 };
+class IRR: Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        FormulaToken* pCur = vSubArguments[0]->GetFormulaToken();
+        assert(pCur);
+        const formula::DoubleVectorRefToken* pCurDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+        size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+        std::cout << "........................" << pCur->GetType() << std::endl;
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n";
+        ss << "#define  Epsilon   1.0E-7\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "double fSchaetzwert = ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n\t";
+        ss << "double fEps = 1.0;\n\t";
+        ss << "double x = 0.0, xNeu = 0.0, fZaehler = 0.0, fNenner = 0.0;\n\t";
+        ss << "double nCount = 0.0;\n\t";
+        ss << "if (fSchaetzwert == -1.0)\n\t\t";
+        ss << "x = 0.1;\n\t";
+        ss << "else\n\t\t";
+        ss << "x = fSchaetzwert;\n\t";
+        ss << "unsigned short nItCount = 0;\n\t";
+        ss << "while (fEps > Epsilon && nItCount < 20){\n\t\t";
+        ss << "nCount = 0.0;\n\t\tfZaehler = 0.0;\n\t\tfNenner = 0.0;\n\t\t";
+        ss << "for (int i = 0; i <" << nCurWindowSize << "; i++){\n\t\t\t";
+        ss << "fZaehler += " << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " / pow(1.0+x, nCount);\n\t\t\t";
+        ss << "fNenner  += -nCount * ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " / pow(1.0+x,nCount+1.0);\n\t\t\t";
+        ss << "nCount+=1;\n\t\t}\n\t\t";
+        ss << "xNeu = x - fZaehler / fNenner;\n\t\t";
+        ss << "fEps = fabs(xNeu - x);\n\t\t";
+        ss << "x = xNeu;\n\t\t";
+        ss << "nItCount++;\n\t}\n\t";
+        ss << "if (fSchaetzwert == 0.0 && fabs(x) < Epsilon)\n\t\t";
+        ss << "x = 0.0;\n\t";
+        ss << "if (fEps < Epsilon)\n\t\t";
+        ss << "return x;\n\t";
+        ss << "else\n\t\treturn (double)523;\n}";
+    }
+};
+class OpIRR: public IRR{
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string BinFuncName(void) const { return "IRR"; }
+};
 class XNPV:Normal
 {
     public:
@@ -1166,6 +1224,10 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 break;
             case ocSumProduct:
                 mvSubArguments.push_back(SoPHelper<OpSumProduct>(ts,
+                    ft->Children[i]));
+                break;
+            case ocIRR:
+                mvSubArguments.push_back(SoPHelper<OpIRR>(ts,
                     ft->Children[i]));
                 break;
             case ocRMZ:
