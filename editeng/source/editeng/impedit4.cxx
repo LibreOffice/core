@@ -2124,7 +2124,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
                     rEditView.pImpEditView->SetEditSelection( aCurrentOldPosition->Max() );
                 }
 
-                sal_uInt16 nScriptType = GetI18NScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+                sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
                 sal_uInt16 nLangWhichId = EE_CHAR_LANGUAGE;
                 switch(nScriptType)
                 {
@@ -2171,7 +2171,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
                 LanguageType eCurLanguage = GetLanguage( aCurrentPaM );
                 if(eCurLanguage != aCurrentNewPortion->eLanguage)
                 {
-                    sal_uInt16 nScriptType = GetI18NScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+                    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
                     sal_uInt16 nLangWhichId = EE_CHAR_LANGUAGE;
                     switch(nScriptType)
                     {
