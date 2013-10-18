@@ -128,7 +128,8 @@ DiscoveryService::~DiscoveryService()
 
 void SAL_CALL DiscoveryService::run()
 {
-  // Kept for backwrad compatibility
+    osl::Thread::setName("DiscoveryService");
+    // Kept for backwrad compatibility
     char aBuffer[BUFFER_SIZE];
     while ( true )
     {

@@ -603,6 +603,7 @@ void ICEConnectionObserver::terminate(oslThread iceThread)
 
 void ICEConnectionWorker(void * data)
 {
+    osl::Thread::setName("ICEConnectionWorker");
     ICEConnectionObserver * pThis = static_cast< ICEConnectionObserver * >(
         data);
     for (;;)

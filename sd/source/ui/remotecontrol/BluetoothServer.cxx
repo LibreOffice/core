@@ -684,7 +684,7 @@ void BluetoothServer::cleanupCommunicators()
 void SAL_CALL BluetoothServer::run()
 {
     SAL_INFO( "sdremote.bluetooth", "BluetoothServer::run called" );
-
+    osl::Thread::setName("BluetoothServer");
 #ifdef LINUX_BLUETOOTH
     DBusConnection *pConnection = dbusConnectToNameOnBus();
     if( !pConnection )

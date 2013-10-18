@@ -3734,6 +3734,7 @@ void SelectionManager::run( void* pThis )
 #if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "SelectionManager::run\n" );
 #endif
+    osl::Thread::setName("SelectionManager");
     // dispatch until the cows come home
 
     SelectionManager* This = (SelectionManager*)pThis;
