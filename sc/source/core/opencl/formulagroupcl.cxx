@@ -562,6 +562,57 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "Cumipmt"; }
 };
+class OpCumprinc: public Normal
+{
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+         {
+             ArgVector argVector;
+             ss << "\ndouble " << sSymName;
+             ss << "_"<< BinFuncName() <<"(";
+             for (unsigned i = 0; i < vSubArguments.size(); i++)
+             {
+                 if (i)
+                   ss << ",";
+                   vSubArguments[i]->GenSlidingWindowDecl(ss);
+                   argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
+             }
+             ss << ") {\n\t";
+             ss << "double tmp = " << GetBottom() <<";\n\t";
+             ss << "int gid0 = get_global_id(0);\n\t";
+             ss <<"double fRmz;\n\t";
+             ss <<"double fRate = "<<argVector[0]<<",fVal = "<<argVector[2]
+                  <<";\n\t";
+             ss <<"int nStartPer = (int)"<<argVector[3]<<", nEndPer = (int)"
+                  <<argVector[4]<<";\n\t";
+             ss <<"int nNumPeriods = (int)"<<argVector[1]<<", nPayType = (int)"
+                  <<argVector[5]<<";\n\t";
+             ss <<"fRmz = GetRmz( fRate, nNumPeriods,fVal,0.0,nPayType );\n\t";
+             ss <<"uint nStart = nStartPer ;\n\t";
+             ss <<"uint nEnd = nEndPer ;\n\t";
+             ss <<"if(nStart == 1)\n\t";
+             ss <<"{\n\t\t";
+             ss <<"if( nPayType <= 0 )\n\t\t\t";
+             ss <<"tmp = fRmz + fVal * fRate;\n\t\t";
+             ss <<"else\n\t\t\t";
+             ss <<"tmp = fRmz;\n\t\t";
+             ss <<"nStart=nStart+1;\n\t";
+             ss <<"}\n\t";
+             ss <<"for( uint i = nStart ; i <= nEnd ; i++ )\n\t";
+             ss <<"{\n\t\t";
+             ss <<"if( nPayType > 0 )\n\t\t\t";
+             ss <<"tmp += fRmz - ( GetZw( fRate,convert_double(i - 2), fRmz, fVal, 1 ) - fRmz ) * fRate; ";
+             ss <<"\n\t\telse\n\t\t\t";
+             ss <<"tmp += fRmz - GetZw( fRate, convert_double(i - 1), fRmz, fVal, 0 ) * fRate;\n\t";
+             ss <<"}\n\t";
+             ss << "return tmp;\n";
+             ss << "}";
+        }
+        virtual std::string BinFuncName(void) const { return "cumprinc"; }
+
+};
 
 
 /// Helper functions that have multiple buffers
@@ -728,6 +779,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 {
                     mvSubArguments.push_back(SoPHelper<OpNominal>(ts,
                         ft->Children[i]));
+                }
+                if ( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getCumprinc"))))
+                {
+                mvSubArguments.push_back(SoPHelper<OpCumprinc>(ts,
+                    ft->Children[i]));
                 }
 
                 break;
