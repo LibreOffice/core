@@ -787,6 +787,38 @@ public:
         virtual std::string BinFuncName(void) const { return "cumprinc"; }
 
 };
+class OpYield: public Normal {
+public:
+ 	virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ArgVector argVector;
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+            argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = " <<"0"<<";\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "tmp = getYield_( GetNullDate(), ";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            ss<<vSubArguments[i]->GenSlidingWindowDeclRef();
+           // argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
+        }
+        ss << ");\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+    virtual std::string BinFuncName(void) const { return "Yield"; }
+};
 class OpFvschedule: public Fvschedule{
 public:
     virtual std::string GetBottom(void) { return "0"; }
@@ -1055,67 +1087,72 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     mvSubArguments.push_back(SoPHelper<OpEffective>(ts,
                         ft->Children[i]));
                 }
-                if ( !(pChild->GetExternal().compareTo(OUString(
+                else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getCumipmt"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpCumipmt>(ts,
                         ft->Children[i]));
                 }
-                if ( !(pChild->GetExternal().compareTo(OUString(
+                else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getNominal"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpNominal>(ts,
                         ft->Children[i]));
                 }
-                if ( !(pChild->GetExternal().compareTo(OUString(
+                else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getCumprinc"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpCumprinc>(ts,
                         ft->Children[i]));
                 }
-                if ( !(pChild->GetExternal().compareTo(OUString(
+                else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getXnpv"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpXNPV>(ts,
                         ft->Children[i]));
                 }
-                if ( !(pChild->GetExternal().compareTo(OUString(
+                else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getPricemat"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpPriceMat>(ts,
                         ft->Children[i]));
                 }
-                if ( !(pChild->GetExternal().compareTo(OUString(
+                else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getReceived"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpReceived>(ts,
                         ft->Children[i]));
                 }
-                if( !(pChild->GetExternal().compareTo(OUString(
+                else if( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getTbilleq"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpTbilleq>(ts,
                         ft->Children[i]));
                 }
-                if( !(pChild->GetExternal().compareTo(OUString(
+                else if( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getTbillprice"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpTbillprice>(ts,
                             ft->Children[i]));
                 }
-               if( !(pChild->GetExternal().compareTo(OUString(
+               else if( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getTbillyield"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpTbillyield>(ts,
                        ft->Children[i]));
                 }
-                if (!(pChild->GetExternal().compareTo(OUString(
+                else if (!(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getFvschedule"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpFvschedule>(ts,
                         ft->Children[i]));
                 }
-
+                else if ( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getYield"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpYield>(ts,
+                        ft->Children[i]));
+                }
                 break;
             default:
                 assert(0 && "Unsupported");
