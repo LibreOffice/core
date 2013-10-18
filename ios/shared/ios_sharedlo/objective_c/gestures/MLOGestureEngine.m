@@ -455,4 +455,18 @@ static const BOOL ENABLE_LO_EVENTS_DURING_PINCH = NO;
 
 @end
 
-
+void touch_ui_selection_start(MLOSelectionKind kind,
+                              const void *documentHandle,
+                              MLORect *rectangles,
+                              int rectangleCount,
+                              void *preview){
+    // Note that this is called on the LO thread
+    NSLog(@"==> touch_ui_selection_start");
+    for(size_t i = 0; i < rectangleCount; ++i){
+        NSLog(@"  %fx%f@(%f,%f)",
+              rectangles[i].size.width,
+              rectangles[i].size.height,
+              rectangles[i].origin.x,
+              rectangles[i].origin.y);
+    }
+}
