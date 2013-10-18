@@ -584,7 +584,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
             ((Ring*)pRegion)->MoveRingTo( &rCursor );
         }
 
-        ::std::unique_ptr<OUString> pRepl( (bRegExp)
+        boost::scoped_ptr<OUString> pRepl( (bRegExp)
                 ? ReplaceBackReferences( rSearchOpt, pCrsr ) : 0 );
         rCursor.GetDoc()->ReplaceRange( *pCrsr,
             (pRepl.get()) ? *pRepl : rSearchOpt.replaceString,

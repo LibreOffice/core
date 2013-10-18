@@ -1129,7 +1129,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             ((Ring*)pRegion)->MoveRingTo( &rCursor );
         }
 
-        ::std::unique_ptr<OUString> pRepl( (bRegExp) ?
+        boost::scoped_ptr<OUString> pRepl( (bRegExp) ?
                 ReplaceBackReferences( *pSearchOpt, pCrsr ) : 0 );
         rCursor.GetDoc()->ReplaceRange( *pCrsr,
             (pRepl.get()) ? *pRepl : pSearchOpt->replaceString,
