@@ -79,7 +79,7 @@ OString translateUnoToCppType(
         if (sort == codemaker::UnoType::SORT_INTERFACE_TYPE
             && nucleus == "com.sun.star.uno.XInterface")
         {
-            buf.append("::com::sun::star::uno::XInterface");
+            buf.append("::css::uno::XInterface");
         } else {
             //TODO: check that nucleus is a valid (UTF-8) identifier
             buf.append(u2b(nucleus));
