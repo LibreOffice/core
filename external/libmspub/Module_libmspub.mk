@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,libmspub))
 
-ifeq ($(SYSTEM_MSPUB),NO)
-
 $(eval $(call gb_Module_add_targets,libmspub,\
 	ExternalProject_libmspub \
 	UnpackedTarball_libmspub \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
