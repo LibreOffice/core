@@ -195,6 +195,9 @@ Reference< XFastContextHandler > BlipContext::createFastChildContext(
         case A_TOKEN( clrChange ):
             return new ColorChangeContext( *this, rxAttribs, mrBlipProps );
 
+        case A_TOKEN( duotone ):
+            return new DuotoneContext( *this, rxAttribs, mrBlipProps );
+
         case A_TOKEN( lum ):
             mrBlipProps.moBrightness = aAttribs.getInteger( XML_bright );
             mrBlipProps.moContrast = aAttribs.getInteger( XML_contrast );
@@ -204,6 +207,29 @@ Reference< XFastContextHandler > BlipContext::createFastChildContext(
 }
 
 // ============================================================================
+
+DuotoneContext::DuotoneContext( ContextHandler& rParent,
+        const Reference< XFastAttributeList >& rxAttribs, BlipFillProperties& rBlipProps ) :
+    ContextHandler( rParent ),
+    mrBlipProps( rBlipProps ),
+    mnColorIndex( 0 )
+{
+    AttributeList aAttribs( rxAttribs );
+    mrBlipProps.maDuotoneColors[0].setUnused();
+    mrBlipProps.maDuotoneColors[1].setUnused();
+}
+
+DuotoneContext::~DuotoneContext()
+{
+}
+
+Reference< XFastContextHandler > DuotoneContext::createFastChildContext(
+        sal_Int32 /*nElement*/, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+{
+    if( mnColorIndex < 2 )
+        return new ColorValueContext( *this, mrBlipProps.maDuotoneColors[mnColorIndex++] );
+    return 0;
+}
 
 BlipFillContext::BlipFillContext( ContextHandler& rParent,
         const Reference< XFastAttributeList >& rxAttribs, BlipFillProperties& rBlipProps ) :

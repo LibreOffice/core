@@ -42,6 +42,15 @@ interface XGraphicTransformer : ::com::sun::star::uno::XInterface
     com::sun::star::graphic::XGraphic colorChange( [ in ] com::sun::star::graphic::XGraphic In,
         [ in ] long ColorFrom, [ in ] byte tolerance, [ in ] long ColorTo, [ in ] byte AlphaTo )
             raises( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** applies Duotone effect
+
+        @returns
+            The modified graphic
+    */
+    com::sun::star::graphic::XGraphic applyDuotone( [ in ] com::sun::star::graphic::XGraphic In,
+        [ in ] long ColorOne, [ in ] long ColorTwo )
+            raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 
 } ; } ; } ; } ;
