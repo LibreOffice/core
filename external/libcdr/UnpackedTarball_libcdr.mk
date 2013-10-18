@@ -12,7 +12,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libcdr))
 $(eval $(call gb_UnpackedTarball_set_tarball,libcdr,$(CDR_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libcdr,\
-	libcdr/libcdr-wpx_seek_end.patch.1 \
+	external/libcdr/libcdr-wpx_seek_end.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

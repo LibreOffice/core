@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,libcdr))
 
-ifeq ($(SYSTEM_CDR),NO)
-
 $(eval $(call gb_Module_add_targets,libcdr,\
 	ExternalProject_libcdr \
 	UnpackedTarball_libcdr \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
