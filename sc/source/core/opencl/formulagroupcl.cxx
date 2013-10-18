@@ -490,6 +490,62 @@ class XNPV:Normal
         ss << "}";
     }
 };
+class PriceMat:Normal
+{
+        public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "double result=0;\n\t";
+        ss<< "int nNullDate = GetNullDate( );\n\t";
+        ss <<"int settle = ";
+        ss<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss <<";\n\t";
+
+        ss <<"int mat = ";
+        ss<<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss <<";\n\t";
+
+        ss <<"int issue = ";
+        ss<<vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss <<";\n\t";
+
+        ss <<"double rate = ";
+        ss<<vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss <<";\n\t";
+
+        ss <<"double yield = ";
+        ss<<vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss <<";\n\t";
+
+         ss <<"int  nBase = ";
+        ss<<vSubArguments[5]->GenSlidingWindowDeclRef();
+        ss <<";\n\t";
+
+        ss<< "double      fIssMat = GetYearFrac( nNullDate, issue, mat, nBase );\n\t";
+        ss<<"double      fIssSet = GetYearFrac( nNullDate, issue, settle, nBase );\n\t";
+        ss<<"double      fSetMat = GetYearFrac( nNullDate, settle, mat, nBase );\n\t";
+        ss<<"result = 1.0 + fIssMat * rate;\n\t";
+        ss<<"result /= 1.0 + fSetMat * yield;\n\t";
+        ss<<"result -= fIssSet * rate;\n\t";
+        ss<<"result*= 100.0;\n\t";
+        ss<<"return result;\n\t";
+
+       ss<<"}\n";
+
+        
+    }
+};
 /// operator traits
 class OpNop: public Reduction {
 public:
@@ -656,7 +712,7 @@ public:
              ss <<"fRmz,fVal,1)- fRmz ) * fRate; ";
              ss <<"\n\t\telse\n\t\t\t";
              ss <<"tmp += fRmz - GetZw( fRate, convert_double(i - 1),";
-             ss <<"fRmz,,fVal,0 ) * fRate;\n";
+             ss <<"fRmz,fVal,0 ) * fRate;\n";
              ss <<"}\n\t";
              ss << "return tmp;\n";
              ss << "}";
@@ -664,7 +720,12 @@ public:
         virtual std::string BinFuncName(void) const { return "cumprinc"; }
 
 };
-
+class OpPriceMat:public PriceMat
+{
+    public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string BinFuncName(void) const { return "PriceMat"; }
+};
 
 /// Helper functions that have multiple buffers
 template<class Op>
@@ -841,6 +902,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     "com.sun.star.sheet.addin.Analysis.getXnpv"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpXNPV>(ts,
+                        ft->Children[i]));
+                }
+                if ( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getPricemat"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpPriceMat>(ts,
                         ft->Children[i]));
                 }
 
