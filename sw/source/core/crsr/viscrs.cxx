@@ -267,7 +267,8 @@ void SwSelPaintRects::Show()
 #endif
         else if(!empty())
         {
-#if !HAVE_FEATURE_DESKTOP && defined IOS
+#if !HAVE_FEATURE_DESKTOP
+#ifdef IOS
             const OutputDevice* pOut = GetShell()->GetWin();
             if ( ! pOut )
                 pOut = GetShell()->GetOut();
@@ -281,6 +282,9 @@ void SwSelPaintRects::Show()
                                       size.Width(), size.Height());
             }
             touch_ui_selection_start(MLOSelectionText, GetShell(), rects, size(), NULL);
+#else
+            // Not yet implemented
+#endif
 #else
             SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
             rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
