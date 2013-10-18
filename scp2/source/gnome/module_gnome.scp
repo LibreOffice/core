@@ -34,7 +34,8 @@ Module gid_Module_Optional_Gnome
       gid_File_Share_Registry_Gnome_Xcd,
 #endif
       gid_File_Bin_Gnome_Open_Url,
-      gid_File_Bin_Gnome_Open_Url_Bin
+      gid_File_Bin_Gnome_Open_Url_Bin,
+      gid_File_Bin_XidFullscreen
     );
 End
 
