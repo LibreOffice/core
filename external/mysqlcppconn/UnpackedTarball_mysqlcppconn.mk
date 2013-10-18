@@ -11,13 +11,13 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,mysqlcppconn))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,mysqlcppconn,$(MYSQLCPPCONN_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_add_file,mysqlcppconn,cppconn/config.h,mysqlcppconn/config.h))
+$(eval $(call gb_UnpackedTarball_add_file,mysqlcppconn,cppconn/config.h,external/mysqlcppconn/config.h))
 
-$(eval $(call gb_UnpackedTarball_add_file,mysqlcppconn,driver/nativeapi/binding_config.h,mysqlcppconn/binding_config.h))
+$(eval $(call gb_UnpackedTarball_add_file,mysqlcppconn,driver/nativeapi/binding_config.h,external/mysqlcppconn/binding_config.h))
 
 $(eval $(call gb_UnpackedTarball_add_patches,mysqlcppconn,\
-	mysqlcppconn/patches/mysql-connector-c++-1.1.0.patch \
-	mysqlcppconn/patches/default_to_protocol_tcp.patch \
+	external/mysqlcppconn/patches/mysql-connector-c++-1.1.0.patch \
+	external/mysqlcppconn/patches/default_to_protocol_tcp.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
