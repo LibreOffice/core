@@ -2,6 +2,6 @@
 
 module_directory:=$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
-include $(module_directory)/../solenv/gbuild/partial_build.mk
+include $(module_directory)/../../solenv/gbuild/partial_build.mk
 
 # vim: set noet sw=4 ts=4:

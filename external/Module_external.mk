@@ -46,6 +46,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	$(call gb_Helper_optional,LIBPNG,libpng) \
+	$(call gb_Helper_optional,MSPUB,libmspub) \
 ))
 
 # vim: set noet sw=4 ts=4:
