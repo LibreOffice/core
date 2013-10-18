@@ -1851,12 +1851,12 @@ AC_ARG_WITH(
     [with_doxygen=yes])
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2012/2010>],
+    AS_HELP_STRING([--with-visual-studio=<2012/2010/2013>],
         [Specify which Visual Studio version to use in case several are
          are installed. If not specified, the order of preference is
-         2012, 2010 (including Express editions).])
+         2012, 2010, 2013 (including Express editions).])
     [
-                          Usage:     --with-visual-studio=<2012/2010>
+                          Usage:     --with-visual-studio=<2012/2010/2013>
     ],
 ,)
 
@@ -3361,6 +3361,8 @@ map_vs_year_to_version()
         vsversion=10.0;;
     2012)
         vsversion=11.0;;
+    2013)
+        vsversion=12.0;;
     *)
         AC_MSG_ERROR([Assertion failure - invalid argument "$1" to map_vs_year_to_version()]);;
     esac
@@ -3377,14 +3379,14 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # By default we prefer 2012, then 2010
-        vsversions="11.0 10.0"
+        # By default we prefer 2012, then 2010, then 2013
+        vsversions="11.0 10.0 12.0"
     fi
 }
 
 find_msvs()
 {
-    # Find Visual Studio 2012/2010
+    # Find Visual Studio 2012/2010/2013
     # Args: $1 (optional) : versions to check, in the order of preference
     # Return value: $vstest
 
@@ -3408,7 +3410,7 @@ find_msvs()
 
 find_msvc()
 {
-    # Find Visual C++ 2012/2010
+    # Find Visual C++ 2012/2010/2013
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot
 
@@ -3439,6 +3441,10 @@ find_msvc()
             vcyear=2012
             vcnum=110
             ;;
+        12.0)
+            vcyear=2013
+            vcnum=120
+            ;;
         esac
     fi
 }
@@ -3454,7 +3460,7 @@ if test "$_os" = "WINNT"; then
             if test -n "$with_visual_studio"; then
                 AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
             else
-                AC_MSG_ERROR([No Visual Studio 2012 or 2010 installation found])
+                AC_MSG_ERROR([No Visual Studio 2012, 2010 or 2013 installation found])
             fi
         fi
 
@@ -3483,7 +3489,11 @@ if test "$_os" = "WINNT"; then
         MSPDB_PATH=
 
         if test "$BITNESS_OVERRIDE" = ""; then
-            MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
+			if test "$vcnum" = "120"; then
+				MSPDB_PATH="$VC_PRODUCT_DIR/../VC/bin"
+			else
+				MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
+			fi
         else
             MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
         fi
@@ -3553,6 +3563,10 @@ if test "$_os" = "WINNT"; then
             110)
                 COMEX=14
                 WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.0 7.1A"
+                ;;
+            120)
+                COMEX=15
+                WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.1A 8.1 8.0"
                 ;;
             esac
 
