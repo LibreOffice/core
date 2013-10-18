@@ -822,6 +822,36 @@ public:
     virtual std::string GetBottom(void) { return "0"; }
     virtual std::string BinFuncName(void) const { return "Fvschedule"; }
 };
+class OpYieldmat: public Normal {
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = " <<"0"<<";\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "tmp = GetYieldmat( GetNullDate(), ";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            ss<<vSubArguments[i]->GenSlidingWindowDeclRef();
+        }
+        ss << ");\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+    virtual std::string BinFuncName(void) const { return "Yieldmat"; }
+};
 class OpReceived:public Normal
 {
 public:
@@ -1184,6 +1214,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                    "com.sun.star.sheet.addin.Analysis.getYielddisc"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpYielddisc>(ts,
+                        ft->Children[i]));
+                }
+                else    if ( !(pChild->GetExternal().compareTo(OUString(
+                     "com.sun.star.sheet.addin.Analysis.getYieldmat"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpYieldmat>(ts,
                         ft->Children[i]));
                 }
                 break;
