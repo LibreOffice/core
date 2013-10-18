@@ -720,6 +720,35 @@ public:
         virtual std::string BinFuncName(void) const { return "cumprinc"; }
 
 };
+class OpReceived:public Normal
+{
+public:
+        virtual std::string GetBottom(void) { return "0"; }
+        virtual void GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string sSymName, SubArguments &vSubArguments)
+        {
+            ArgVector argVector;
+            ss << "\ndouble " << sSymName;
+            ss << "_"<< BinFuncName() <<"(";
+            for (unsigned i = 0; i < vSubArguments.size(); i++)
+            {
+                if (i)
+                    ss << ",";
+                vSubArguments[i]->GenSlidingWindowDecl(ss);
+                argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
+            }
+            ss << ") {\n\t";
+            ss << "double tmp = " << GetBottom() <<";\n\t";
+            ss << "int gid0 = get_global_id(0);\n\t";
+            ss << "tmp = "<<argVector[2]<<"/(1.0-("<<argVector[3];
+            ss <<" * GetYearDiff( GetNullDate(),(int)"<<argVector[0];
+            ss <<",(int)"<<argVector[1]<<",(int)"<<argVector[4]<<")));";
+            ss << "\n\treturn tmp;\n";
+            ss << "}";
+        }
+virtual std::string BinFuncName(void) const { return "Received"; }
+
+};
 class OpPriceMat:public PriceMat
 {
     public:
@@ -908,6 +937,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     "com.sun.star.sheet.addin.Analysis.getPricemat"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpPriceMat>(ts,
+                        ft->Children[i]));
+                }
+                if ( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getReceived"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpReceived>(ts,
                         ft->Children[i]));
                 }
 
