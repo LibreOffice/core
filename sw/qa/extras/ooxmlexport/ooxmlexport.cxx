@@ -1532,6 +1532,13 @@ DECLARE_OOXML_TEST(testCharHighlight, "char_highlight.docx")
     }
 }
 
+DECLARE_OOXML_TEST(testMultiColumnLineSeparator, "multi-column-line-separator-SAVED.docx")
+{
+    // Check for the Column Separator value.It should be FALSE as the document doesnt contains separator line.
+    xmlDocPtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:sectPr/w:cols","sep","false");
+}
+
 DECLARE_OOXML_TEST(testCustomXmlGrabBag, "customxml.docx")
 {
    // The problem was that item[n].xml and itemProps[n].xml and .rels files for item[n].xml
