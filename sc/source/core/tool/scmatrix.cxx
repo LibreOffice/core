@@ -141,10 +141,13 @@ class CompareMatrixElemFunc : std::unary_function<MatrixImplType::element_block_
     static _Comp maComp;
 
     MatrixImplType maNewMat;
-    std::deque<bool> maNewMatValues;
+    std::vector<bool> maNewMatValues;
 public:
     CompareMatrixElemFunc( size_t nRow, size_t nCol ) :
-        maNewMat(nRow, nCol, false) {}
+        maNewMat(nRow, nCol, false)
+    {
+        maNewMatValues.reserve(nRow*nCol);
+    }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
