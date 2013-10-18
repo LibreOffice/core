@@ -634,6 +634,57 @@ class PriceMat:Normal
         
     }
 };
+class MIRR: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        FormulaToken* pCur = vSubArguments[0]->GetFormulaToken();
+        assert(pCur);
+        const formula::DoubleVectorRefToken* pCurDVR =
+        dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+        size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = " << GetBottom() <<";\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "double invest = "<<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << " + 1.0;\n\t";
+        ss << "double reinvest ="<<vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << " + 1.0;\n\t";
+        ss << "double NPV_invest = 0.0;\n\t";
+        ss << "double Pow_invest = 1.0;\n\t";
+        ss << "double NPV_reinvest = 0.0;\n\t";
+        ss << "double Pow_reinvest = 1.0;\n\t";
+        ss << "int nCount = 0;\n\t";
+        ss << "for (int i = 0; i < " << nCurWindowSize << "; i++)\n\t";
+        ss << "{\n\t\t";
+        ss << "if("<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " > 0.0)\n\t\t\t";
+        ss << "NPV_reinvest += "<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " * Pow_reinvest;\n\t\t";
+        ss << "else if("<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " < 0.0)\n\t\t\t";
+        ss << "NPV_invest += "<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " * Pow_invest;\n\t\t";
+        ss << "Pow_reinvest /= reinvest;\n\t\t";
+        ss << "Pow_invest /= invest;\n\t\t";
+        ss << "nCount++;\n\t";
+        ss << "}\n\t";
+        ss << "tmp =  -NPV_reinvest / NPV_invest *  pow( reinvest, (double) nCount - 1 );\n\t";
+        ss << "tmp =  pow( tmp, 1.0 / (nCount - 1) ) - 1.0;\n\t";
+        ss << "return (double)tmp;\n";
+        ss << "}";
+    }
+};
 /// operator traits
 class OpNop: public Reduction {
 public:
@@ -1080,6 +1131,11 @@ class OpTbillyield:public Normal{
     }
     virtual std::string BinFuncName(void) const { return "fTbillyield"; }
 };
+class OpMIRR: public MIRR{
+ public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string BinFuncName(void) const { return "MIRR"; }
+};  
 /// Helper functions that have multiple buffers
 template<class Op>
 class DynamicKernelSoPArguments: public DynamicKernelArgument
@@ -1230,6 +1286,9 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 mvSubArguments.push_back(SoPHelper<OpIRR>(ts,
                     ft->Children[i]));
                 break;
+            case ocMIRR:
+                mvSubArguments.push_back(SoPHelper<OpMIRR>(ts,
+                    ft->Children[i]));
             case ocRMZ:
                 mvSubArguments.push_back(SoPHelper<OpRMZ>(ts,
                     ft->Children[i]));
