@@ -629,7 +629,7 @@ sal_Bool PPTWriterBase::GetStyleSheets()
                                             {
                                                 if ( nInstance == EPP_TEXTTYPE_Body )
                                                 {
-                                                    sal_Unicode cTemp = aStyle[aStyle.getLength() - 1];
+                                                    sal_Unicode cTemp = aStyle.lastChar();
                                                     aStyle = aStyle.copy(0, aStyle.getLength() - 1) + OUString(++cTemp);
                                                     if ( aXFamily->hasByName( aStyle ) )
                                                     {

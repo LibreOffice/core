@@ -426,6 +426,19 @@ public:
     }
 
     /**
+      Returns the last character in the string.
+
+      @return the last character in the string.
+
+      @since LibreOffice 4.2
+    */
+    sal_Unicode lastChar() const {
+        assert(getLength() > 0);
+        return getStr()[getLength() - 1];
+    }
+
+
+    /**
       Compares two strings.
 
       The comparison is based on the numeric value of each character in
