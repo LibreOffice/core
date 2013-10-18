@@ -1803,28 +1803,31 @@ sal_uInt16 ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
 
         const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
 
-        // find the first(!) script type position that holds the
-        // complete selection. Thus it will work for selections as
-        // well as with just moving the cursor from char to char.
+        // find all the scripts of this range
         sal_uInt16 nS = ( nPara == nStartPara ) ? aSel.Min().GetIndex() : 0;
         sal_uInt16 nE = ( nPara == nEndPara ) ? aSel.Max().GetIndex() : pParaPortion->GetNode()->Len();
-        for ( size_t n = 0; n < rTypes.size(); n++ )
+
+        //no selection, just bare cursor
+        if (nStartPara == nEndPara && nS == nE)
         {
-            if (rTypes[n].nStartPos <= nS  &&  nE <= rTypes[n].nEndPos)
+            //If we are not at the start of the paragraph we want the properties of the
+            //preceding character. Otherwise get the properties of the next (or what the
+            //next would have if it existed)
+            if (nS != 0)
+                --nS;
+            else
+                ++nE;
+        }
+
+        for (size_t n = 0; n < rTypes.size(); ++n)
+        {
+            bool bStartInRange = rTypes[n].nStartPos <= nS && nS < rTypes[n].nEndPos;
+            bool bEndInRange = rTypes[n].nStartPos < nE && nE <= rTypes[n].nEndPos;
+
+            if (bStartInRange || bEndInRange)
             {
                 if ( rTypes[n].nScriptType != i18n::ScriptType::WEAK )
-                {
                     nScriptType |= GetItemScriptType ( rTypes[n].nScriptType );
-                }
-                else
-                {
-                    if ( !nScriptType && n )
-                    {
-                        // #93548# When starting with WEAK, use prev ScriptType...
-                        nScriptType = rTypes[n-1].nScriptType;
-                    }
-                }
-                break;
             }
         }
     }
