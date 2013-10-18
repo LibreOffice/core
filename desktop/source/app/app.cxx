@@ -84,6 +84,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
+#include <officecfg/Setup.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/uri.hxx>
@@ -316,6 +317,52 @@ bool cleanExtensionCache() {
         rc != osl::FileBase::E_None, "desktop.app",
         "cannot close " << fw.getURL() << " after writing: " << +rc);
     return true;
+}
+
+bool shouldLaunchQuickstart()
+{
+    bool bQuickstart = Desktop::GetCommandLineArgs().IsQuickstart();
+    if (!bQuickstart)
+    {
+        const SfxPoolItem* pItem=0;
+        SfxItemSet aQLSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
+        SFX_APP()->GetOptions(aQLSet);
+        SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, sal_False, &pItem);
+        if (SFX_ITEM_SET == eState)
+            bQuickstart = ((SfxBoolItem*)pItem)->GetValue();
+    }
+    return bQuickstart;
+}
+
+void SetRestartState() {
+    try {
+        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Setup::Office::OfficeRestartInProgress::set(true, batch);
+        batch->commit();
+    } catch (css::uno::Exception & e) {
+        SAL_WARN("desktop.app", "ignoring Exception \"" << e.Message << "\"");
+    }
+}
+
+void DoRestartActionsIfNecessary(bool quickstart) {
+    if (quickstart) {
+        try {
+            if (officecfg::Setup::Office::OfficeRestartInProgress::get()) {
+                boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+                    comphelper::ConfigurationChanges::create());
+                officecfg::Setup::Office::OfficeRestartInProgress::set(
+                    false, batch);
+                batch->commit();
+                css::office::Quickstart::createStart(
+                    comphelper::getProcessComponentContext(),
+                    shouldLaunchQuickstart());
+            }
+        } catch (css::uno::Exception & e) {
+            SAL_WARN(
+                "desktop.app", "ignoring Exception \"" << e.Message << "\"");
+        }
+    }
 }
 
 }
@@ -1857,22 +1904,6 @@ void Desktop::FlushConfiguration()
             comphelper::getProcessComponentContext()),
         css::uno::UNO_QUERY_THROW)->flush();
 }
-
-sal_Bool Desktop::shouldLaunchQuickstart()
-{
-    sal_Bool bQuickstart = GetCommandLineArgs().IsQuickstart();
-    if (!bQuickstart)
-    {
-        const SfxPoolItem* pItem=0;
-        SfxItemSet aQLSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
-        SFX_APP()->GetOptions(aQLSet);
-        SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, sal_False, &pItem);
-        if (SFX_ITEM_SET == eState)
-            bQuickstart = ((SfxBoolItem*)pItem)->GetValue();
-    }
-    return bQuickstart;
-}
-
 
 sal_Bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >& rxContext )
 {

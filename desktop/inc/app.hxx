@@ -118,9 +118,6 @@ class Desktop : public Application
         // first-start (ever) related methods
         static sal_Bool         CheckExtensionDependencies();
 
-        static void             DoRestartActionsIfNecessary( sal_Bool bQuickStart );
-        static void             SetRestartState();
-
         void                    SynchronizeExtensionRepositories();
         void                    SetSplashScreenText( const OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
@@ -141,7 +138,6 @@ class Desktop : public Application
         sal_Bool                InitializeInstallation( const OUString& rAppFilename );
         bool                    InitializeConfiguration();
         void                    FlushConfiguration();
-        static sal_Bool         shouldLaunchQuickstart();
         sal_Bool                InitializeQuickstartMode( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const OUString& aMsg );
