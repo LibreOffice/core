@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,libvisio))
 
-ifeq ($(SYSTEM_VISIO),NO)
-
 $(eval $(call gb_Module_add_targets,libvisio,\
 	ExternalProject_libvisio \
 	UnpackedTarball_libvisio \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
