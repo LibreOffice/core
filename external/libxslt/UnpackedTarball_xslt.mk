@@ -12,14 +12,14 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,xslt))
 $(eval $(call gb_UnpackedTarball_set_tarball,xslt,$(LIBXSLT_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,xslt,\
-	libxslt/libxslt-configure.patch \
-	libxslt/libxslt-win_manifest.patch \
-	libxslt/libxslt-mingw.patch \
-	libxslt/libxslt-internal-symbols.patch \
-	libxslt/libxslt-aix.patch \
-	libxslt/libxslt-vc10.patch \
-	libxslt/libxslt-1.1.26-memdump.patch \
-	$(if $(filter ANDROID,$(OS)),libxslt/libxslt-android.patch) \
+	external/libxslt/libxslt-configure.patch \
+	external/libxslt/libxslt-win_manifest.patch \
+	external/libxslt/libxslt-mingw.patch \
+	external/libxslt/libxslt-internal-symbols.patch \
+	external/libxslt/libxslt-aix.patch \
+	external/libxslt/libxslt-vc10.patch \
+	external/libxslt/libxslt-1.1.26-memdump.patch \
+	$(if $(filter ANDROID,$(OS)),external/libxslt/libxslt-android.patch) \
 ))
 
 # vim: set noet sw=4 ts=4:

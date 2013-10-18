@@ -72,7 +72,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
 	librelogo \
 	libxmlsec \
-	$(call gb_Helper_optional,LIBXSLT,libxslt) \
 	lingucomponent \
 	linguistic \
 	lotuswordpro \
