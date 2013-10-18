@@ -11,6 +11,6 @@
 @class MLOAppRoleTileTester;
 @protocol MLOTestingTileSubviewControllerProtocol <NSObject>
 -(id)initWithTester:(MLOAppRoleTileTester *)tester;
--(void)addToMainViewController;
+-(void)addToSuperview;
 -(void)resize;
 @end

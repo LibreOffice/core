@@ -12,59 +12,67 @@
 #import "MLOTestingTileRendererViewController.h"
 #import "MLOTestingTileParametersViewController.h"
 
-@interface MLOAppRoleTileTester ()
-@property MLOTestingTileRendererViewController * renderer;
-@property MLOTestingTileParametersViewController * params;
-@end
 
 @implementation MLOAppRoleTileTester
 
 -(void)initSubviews{
-    
+    NSLog(@"%@ initSubviews",self);
     self.renderer = [[MLOTestingTileRendererViewController alloc] initWithTester:self];
     self.params = [[MLOTestingTileParametersViewController alloc] initWithTester:self];
-    
+   
+}
+
+-(NSString *)description{
+    return @"MLOAppRoleTileTester";
 }
 
 
 -(void)setWidth:(CGFloat) width height:(CGFloat) height{
+    NSLog(@"%@ setWidth:height",self);
     if(width > height){
         CGFloat halfWidth = width/2.0f;
         self.renderer.view.frame =CGRectMake(0, 0, halfWidth, height);
         self.params.view.frame =CGRectMake(halfWidth,0, halfWidth, height);
     }else{
         CGFloat halfHeight = height/2.0f;
-        self.renderer.view.frame =CGRectMake(0, 0, width, halfHeight);
-        self.params.view.frame =CGRectMake(width,halfHeight, width, halfHeight);
+        self.params.view.frame =CGRectMake(0, 0, width, halfHeight);
+        self.renderer.view.frame =CGRectMake(0,halfHeight, width, halfHeight);
     }
     [self.renderer resize];
     [self.params resize];
+
 }
 -(void)addSubviews{
+    NSLog(@"%@ addSubviews",self);
 
-    [self.renderer addToMainViewController];
-    [self.params addToMainViewController];
+    [self.renderer addToSuperview];
+    [self.params addToSuperview];
 
     [self.mainViewController resize];
 }
 
 -(void)rotate{
-
+    NSLog(@"%@ rotate",self);
     MLOMainViewController * main = [self mainViewController];
     
     [main resize];
 
     [main.topbar onRotate];
+
+    [self.renderer resize];
+    [self.params resize];
 }
 
 
 -(void)showLibreOffice{
-
+    NSLog(@"%@ showLibreOffice",self);
 }
 -(void)hideLibreOffice{
+    NSLog(@"%@ hideLibreOffice",self);
 }
 
 -(void)initWindow:(UIWindow *) window{
+    NSLog(@"%@ initWindow",self);
 
 }
 @end

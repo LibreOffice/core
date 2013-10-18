@@ -8,9 +8,12 @@
 
 #import "MLOTestingTileRendererViewController.h"
 #import "MLOAppRoleTileTester.h"
+#import "MLOTestingTile.h"
 
 @interface MLOTestingTileRendererViewController ()
 @property MLOAppRoleTileTester * tester;
+@property UIScrollView * scrollView;
+@property MLOTestingTile * tile;
 @end
 
 @implementation MLOTestingTileRendererViewController
@@ -19,14 +22,34 @@
     self = [self init];
     if(self){
         self.tester = tester;
-
+        [self initScrollView];
     }
+    NSLog(@"%@ initWithTester",self);
     return self;
 }
--(void)resize{
-    
-}
--(void)addToMainViewController{
 
+-(void)initScrollView{
+    self.scrollView = [UIScrollView new];
+    self.view = self.scrollView;
+}
+-(void)resize{
+    NSLog(@"%@ resize",self);
+    [self.tile resize];
+}
+-(NSString *)description{
+    return @"MLOAppRoleTileTester";
+}
+-(void)addToSuperview{
+    NSLog(@"%@ addToSuperview",self);
+
+    [self.tester.view addSubview:self.view];
+}
+-(void)render{
+
+    [self.tile removeFromSuperview];
+    self.tile = [[MLOTestingTile alloc] initWithTester:self.tester];
+    [self.scrollView addSubview:self.tile];
+    self.scrollView.contentSize = self.tile.frame.size;
+    
 }
 @end

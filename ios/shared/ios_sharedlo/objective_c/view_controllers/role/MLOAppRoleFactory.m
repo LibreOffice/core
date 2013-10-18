@@ -16,6 +16,8 @@
 +(MLOAppRoleBase *) getInstanceWithMainViewController:(MLOMainViewController *) mainViewController{
     MLOAppRoleBase * role;
 
+    NSLog(@"Creating app role: %@",MLOAppRoleString(APP_ROLE));
+
     switch (APP_ROLE) {
         case LO_APP:
         {

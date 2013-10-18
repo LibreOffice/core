@@ -6,9 +6,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#import "MLOViewController.h"
-#import "MLOTestingTileSubviewControllerProtocol.h"
-
-@interface MLOTestingTileParametersViewController : MLOViewController<MLOTestingTileSubviewControllerProtocol>
-@property CGFloat contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight;
+#import "MLOSubView.h"
+@class MLOAppRoleTileTester;
+@interface MLOTestingTile : MLOSubView
+-(id)initWithTester:(MLOAppRoleTileTester *) tester;
+-(void)resize;
 @end

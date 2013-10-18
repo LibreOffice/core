@@ -10,5 +10,5 @@
 #import "MLOTestingTileSubviewControllerProtocol.h"
 
 @interface MLOTestingTileRendererViewController : MLOViewController<MLOTestingTileSubviewControllerProtocol>
-
+-(void)render;
 @end
