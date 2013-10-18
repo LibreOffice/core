@@ -852,6 +852,37 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "Yieldmat"; }
 };
+class OpRMZ: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = 0;\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss<<"double abl = pow(1.0+"<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ","<<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss<<");\n\ttmp-="<<vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss<<";\n\ttmp-="<<vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss<<"*abl;\n\t"<<"tmp =tmp/(1.0+"<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<"*"<<vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss<<") / ( (abl-1.0)/"<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ");\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+	virtual std::string BinFuncName(void) const { return "PMT"; }
+};
 class OpReceived:public Normal
 {
 public:
@@ -1135,6 +1166,10 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 break;
             case ocSumProduct:
                 mvSubArguments.push_back(SoPHelper<OpSumProduct>(ts,
+                    ft->Children[i]));
+                break;
+            case ocRMZ:
+                mvSubArguments.push_back(SoPHelper<OpRMZ>(ts,
                     ft->Children[i]));
                 break;
             case ocExternal:
