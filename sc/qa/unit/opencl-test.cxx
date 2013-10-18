@@ -316,6 +316,15 @@ void ScOpenclTest::testFinacialFormula()
         double fExcel = pDocRes->GetValue(ScAddress(5,i,6));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
+    //[AMLOEXT-28]
+    for (SCROW i = 1; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3,i,7));
+        double fExcel = pDocRes->GetValue(ScAddress(3,i,7));
+        std::cerr<<"fLibre:"<<i<<":"<<fLibre<<endl;
+        std::cerr<<"fExcel:"<<i<<":"<<fExcel<<endl;
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
