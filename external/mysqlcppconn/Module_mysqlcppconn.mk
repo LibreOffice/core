@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,mysqlcppconn))
 
-ifeq ($(SYSTEM_MYSQL_CPPCONN),NO)
-
 $(eval $(call gb_Module_add_targets,mysqlcppconn,\
 	UnpackedTarball_mysqlcppconn \
 	Library_mysqlcppconn \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
