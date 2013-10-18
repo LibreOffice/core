@@ -35,7 +35,7 @@ endif
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8@2>:
 
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
-	$(foreach patch,$(liborcus_patches),liborcus/$(patch)) \
+	$(foreach patch,$(liborcus_patches),external/liborcus/$(patch)) \
 ))
 
 # vim: set noet sw=4 ts=4:

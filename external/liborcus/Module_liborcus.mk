@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,liborcus))
 
-ifeq ($(ENABLE_ORCUS)-$(SYSTEM_LIBORCUS),TRUE-NO)
-
 $(eval $(call gb_Module_add_targets,liborcus,\
 	ExternalProject_liborcus \
 	UnpackedTarball_liborcus \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
