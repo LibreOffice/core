@@ -3703,7 +3703,7 @@ void SwPageFrm::PaintDecorators( ) const
 */
 sal_Bool SwFlyFrm::IsBackgroundTransparent() const
 {
-    sal_Bool bBackgroundTransparent = GetFmt()->IsBackgroundTransparent();
+    sal_Bool bBackgroundTransparent = !GetFmt()->IsBackgroundTransparent();
     if ( !bBackgroundTransparent &&
          static_cast<const SwFlyFrmFmt*>(GetFmt())->IsBackgroundBrushInherited() )
     {
