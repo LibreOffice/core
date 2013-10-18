@@ -167,7 +167,7 @@ public:
     };
 
     typedef boost::interprocess::unique_ptr<Pos, PosDeleter> PosRef;
-    typedef boost::interprocess::unique_ptr<ConstPos, PosDeleter> ConstPosRef;
+    typedef boost::interprocess::unique_ptr<ConstPos, ConstPosDeleter> ConstPosRef;
 
     /// The maximum number of elements a matrix may have at runtime.
     inline static size_t GetElementsMax()
@@ -406,6 +406,8 @@ public:
 
     void GetDoubleArray( std::vector<double>& rArray ) const;
     void MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const;
+
+    ScMatrix& operator+= ( const ScMatrix& r );
 
 #if DEBUG_MATRIX
     void Dump() const;

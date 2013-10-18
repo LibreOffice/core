@@ -304,6 +304,7 @@ public:
 
     void GetDoubleArray( std::vector<double>& rArray ) const;
     void MergeDoubleArray( std::vector<double>& rArray, ScMatrix::Op eOp ) const;
+    void AddValues( const ScMatrixImpl& rMat );
 
 #if DEBUG_MATRIX
     void Dump() const;
@@ -1696,6 +1697,61 @@ void ScMatrixImpl::MergeDoubleArray( std::vector<double>& rArray, ScMatrix::Op e
     }
 }
 
+void ScMatrixImpl::AddValues( const ScMatrixImpl& rMat )
+{
+    const MatrixImplType& rOther = rMat.maMat;
+    MatrixImplType::size_pair_type aSize = maMat.size();
+    if (aSize != rOther.size())
+        // Geometry must match.
+        return;
+
+    // For now, we only add two matricies if and only if 1) the receiving
+    // matrix consists only of one numeric block, and 2) the other matrix
+    // consists of either one numeric block or one boolean block.  In the
+    // future, we may want to be more flexible support matricies that consist
+    // of multiple blocks.
+
+    MatrixImplType::position_type aPos1 = maMat.position(0, 0);
+    MatrixImplType::const_position_type aPos2 = rOther.position(0, 0);
+    if (MatrixImplType::to_mtm_type(aPos1.first->type) != mdds::mtm::element_numeric)
+        return;
+
+    if (aPos1.first->size != aPos2.first->size)
+        return;
+
+    if (aPos1.first->size != aSize.row * aSize.column)
+        return;
+
+    MatrixImplType::numeric_block_type::iterator it =
+        MatrixImplType::numeric_block_type::begin(*aPos1.first->data);
+    MatrixImplType::numeric_block_type::iterator itEnd =
+        MatrixImplType::numeric_block_type::end(*aPos1.first->data);
+
+    switch (MatrixImplType::to_mtm_type(aPos2.first->type))
+    {
+        case mdds::mtm::element_boolean:
+        {
+            MatrixImplType::boolean_block_type::iterator it2 =
+                MatrixImplType::boolean_block_type::begin(*aPos2.first->data);
+
+            for (; it != itEnd; ++it, ++it2)
+                *it += *it2;
+        }
+        break;
+        case mdds::mtm::element_numeric:
+        {
+            MatrixImplType::numeric_block_type::iterator it2 =
+                MatrixImplType::numeric_block_type::begin(*aPos2.first->data);
+
+            for (; it != itEnd; ++it, ++it2)
+                *it += *it2;
+        }
+        break;
+        default:
+            ;
+    }
+}
+
 #if DEBUG_MATRIX
 void ScMatrixImpl::Dump() const
 {
@@ -2191,6 +2247,12 @@ void ScMatrix::GetDoubleArray( std::vector<double>& rArray ) const
 void ScMatrix::MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const
 {
     pImpl->MergeDoubleArray(rArray, eOp);
+}
+
+ScMatrix& ScMatrix::operator+= ( const ScMatrix& r )
+{
+    pImpl->AddValues(*r.pImpl);
+    return *this;
 }
 
 #if DEBUG_MATRIX

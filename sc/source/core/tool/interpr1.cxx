@@ -5477,19 +5477,9 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                         SetError( errIllegalParameter);
                     }
 
-                    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-                    {
-                        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-                        {
-                            if (pResultMatrix->IsValue( nCol, nRow) &&
-                                    pResultMatrix->GetDouble( nCol, nRow))
-                            {
-                                SCSIZE nC = nCol + nColDiff;
-                                SCSIZE nR = nRow + nRowDiff;
-                                pResMat->PutDouble(pResMat->GetDouble(nC, nR)+1.0, nC, nR);
-                            }
-                        }
-                    }
+                    // query and result matrices have same geometry, and the
+                    // result matrix is filled with boolean values.
+                    *pResMat += *pResultMatrix;
                 }
                 else
                 {
