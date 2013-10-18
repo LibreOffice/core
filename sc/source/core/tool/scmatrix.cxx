@@ -136,33 +136,67 @@ struct ElemLessEqualZero : public unary_function<double, bool>
 };
 
 template<typename _Comp>
-void compareMatrix(MatrixImplType& rMat)
+class CompareMatrixElemFunc : std::unary_function<MatrixImplType::element_block_node_type, void>
 {
-    MatrixImplType::size_pair_type aDim = rMat.size();
-    MatrixImplType aNewMat(aDim.row, aDim.column, false); // initialize with boolean block.  faster this way.
+    static _Comp maComp;
 
-    _Comp aComp;
-    for (size_t i = 0; i < aDim.row; ++i)
+    MatrixImplType maNewMat;
+    std::deque<bool> maNewMatValues;
+public:
+    CompareMatrixElemFunc( size_t nRow, size_t nCol ) :
+        maNewMat(nRow, nCol, false) {}
+
+    void operator() (const MatrixImplType::element_block_node_type& node)
     {
-        for (size_t j = 0; j < aDim.column; ++j)
+        switch (node.type)
         {
-            MatrixImplType::const_position_type aPos = rMat.position(i, j);
-            mdds::mtm::element_t eType = rMat.get_type(aPos);
-            if (eType != mdds::mtm::element_numeric && eType != mdds::mtm::element_boolean)
-                // must be of numeric type (boolean can be numeric).
-                continue;
+            case mdds::mtm::element_numeric:
+            {
+                typedef MatrixImplType::numeric_block_type block_type;
 
-            double fVal = rMat.get_numeric(aPos);
-            if (!::rtl::math::isFinite(fVal))
-                /* FIXME: this silently skips an error instead of propagating it! */
-                continue;
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+                for (; it != itEnd; ++it)
+                {
+                    double fVal = *it;
+                    if (!rtl::math::isFinite(fVal))
+                    {
+                        /* FIXME: this silently skips an error instead of propagating it! */
+                        maNewMatValues.push_back(false);
+                        continue;
+                    }
 
-            bool b = aComp(fVal);
-            aNewMat.set(i, j, b);
+                    maNewMatValues.push_back(maComp(fVal));
+                }
+            }
+            break;
+            case mdds::mtm::element_boolean:
+            {
+                typedef MatrixImplType::boolean_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+                for (; it != itEnd; ++it)
+                {
+                    double fVal = *it ? 1.0 : 0.0;
+                    maNewMatValues.push_back(maComp(fVal));
+                }
+            }
+            break;
+            case mdds::mtm::element_string:
+            case mdds::mtm::element_empty:
+            default:
+                // Fill it with false.
+                maNewMatValues.resize(maNewMatValues.size() + node.size, false);
         }
     }
-    aNewMat.swap(rMat);
-}
+
+    void swap( MatrixImplType& rMat )
+    {
+        maNewMat.set(0, 0, maNewMatValues.begin(), maNewMatValues.end());
+        rMat.swap(maNewMat);
+    }
+};
 
 }
 
@@ -901,32 +935,50 @@ void ScMatrixImpl::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, 
 
 void ScMatrixImpl::CompareEqual()
 {
-    compareMatrix<ElemEqualZero>(maMat);
+    MatrixImplType::size_pair_type aSize = maMat.size();
+    CompareMatrixElemFunc<ElemEqualZero> aFunc(aSize.row, aSize.column);
+    maMat.walk(aFunc);
+    aFunc.swap(maMat);
 }
 
 void ScMatrixImpl::CompareNotEqual()
 {
-    compareMatrix<ElemNotEqualZero>(maMat);
+    MatrixImplType::size_pair_type aSize = maMat.size();
+    CompareMatrixElemFunc<ElemNotEqualZero> aFunc(aSize.row, aSize.column);
+    maMat.walk(aFunc);
+    aFunc.swap(maMat);
 }
 
 void ScMatrixImpl::CompareLess()
 {
-    compareMatrix<ElemLessZero>(maMat);
+    MatrixImplType::size_pair_type aSize = maMat.size();
+    CompareMatrixElemFunc<ElemLessZero> aFunc(aSize.row, aSize.column);
+    maMat.walk(aFunc);
+    aFunc.swap(maMat);
 }
 
 void ScMatrixImpl::CompareGreater()
 {
-    compareMatrix<ElemGreaterZero>(maMat);
+    MatrixImplType::size_pair_type aSize = maMat.size();
+    CompareMatrixElemFunc<ElemGreaterZero> aFunc(aSize.row, aSize.column);
+    maMat.walk(aFunc);
+    aFunc.swap(maMat);
 }
 
 void ScMatrixImpl::CompareLessEqual()
 {
-    compareMatrix<ElemLessEqualZero>(maMat);
+    MatrixImplType::size_pair_type aSize = maMat.size();
+    CompareMatrixElemFunc<ElemLessEqualZero> aFunc(aSize.row, aSize.column);
+    maMat.walk(aFunc);
+    aFunc.swap(maMat);
 }
 
 void ScMatrixImpl::CompareGreaterEqual()
 {
-    compareMatrix<ElemGreaterEqualZero>(maMat);
+    MatrixImplType::size_pair_type aSize = maMat.size();
+    CompareMatrixElemFunc<ElemGreaterEqualZero> aFunc(aSize.row, aSize.column);
+    maMat.walk(aFunc);
+    aFunc.swap(maMat);
 }
 
 namespace {
@@ -1357,8 +1409,6 @@ public:
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
-        using namespace mdds::mtv;
-
         switch (node.type)
         {
             case mdds::mtm::element_numeric:
