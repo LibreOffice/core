@@ -71,7 +71,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	jvmfwk \
 	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
 	librelogo \
-	$(call gb_Helper_optional,WPG,libwpg) \
 	$(call gb_Helper_optional,WPS,libwps) \
 	$(call gb_Helper_optional,LIBXML2,libxml2) \
 	libxmlsec \

@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,libwpg))
 
-ifeq ($(SYSTEM_WPG),NO)
-
 $(eval $(call gb_Module_add_targets,libwpg,\
 	ExternalProject_libwpg \
 	UnpackedTarball_libwpg \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
