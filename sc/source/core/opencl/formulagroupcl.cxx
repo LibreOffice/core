@@ -1093,6 +1093,118 @@ class OpPriceMat:public PriceMat
     virtual std::string GetBottom(void) { return "0"; }
     virtual std::string BinFuncName(void) const { return "PriceMat"; }
 };
+class RATE: Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double result;\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "bool bValid = true, bFound = false;\n\t";
+        ss << "double fX, fXnew, fTerm, fTermDerivation;\n\t";
+        ss << "double fGeoSeries, fGeoSeriesDerivation;\n\t";
+        ss << "int nIterationsMax = 150;\n\t";
+        ss << "int nCount = 0;\n\t";
+        ss << "double fEpsilonSmall = 1.0E-14;\n\t";
+        ss << vSubArguments[3]->GenSlidingWindowDeclRef() << " = ";
+        ss << vSubArguments[3]->GenSlidingWindowDeclRef() << " - ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << " * ";
+        ss << vSubArguments[4]->GenSlidingWindowDeclRef() << ";\n\t";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef() << " = ";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef() << " + ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << " * ";
+        ss << vSubArguments[4]->GenSlidingWindowDeclRef()<< ";\n\t";
+        ss << "if (" << vSubArguments[0]->GenSlidingWindowDeclRef() << " == ";
+        ss << "Round( " << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n\t";
+        ss << "{\n\t\t";
+        ss << "fX = " << vSubArguments[5]->GenSlidingWindowDeclRef() << ";\n\t\t";
+        ss << "double fPowN, fPowNminus1;\n\t\t";
+        ss << "while (!bFound && nCount < nIterationsMax)\n\t\t" << "{\n\t\t\t";
+        ss << "fPowNminus1 = pow( 1.0+fX, ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "-1.0);\n\t\t\t";
+        ss << "fPowN = fPowNminus1 * (1.0+fX);\n\t\t\t";
+        ss << "if (approxEqual( fabs(fX), 0.0))\n\t\t\t" << "{\n\t\t\t\t";
+        ss << "fGeoSeries = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n\t\t\t\t";
+        ss << "fGeoSeriesDerivation = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " * (" << vSubArguments[0]->GenSlidingWindowDeclRef() << " -1.0)/2.0;\n\t\t\t";
+        ss << "}\n\t\t\t" << "else\n\t\t\t{\n\t\t\t\t";
+        ss << "fGeoSeries = (fPowN-1.0)/fX;\n\t\t\t\t";
+        ss << "fGeoSeriesDerivation = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << " * ";
+        ss << "fPowNminus1 / fX - fGeoSeries / fX;\n\t\t\t" << "}\n\t\t\t";
+        ss << "fTerm = " << vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss << " + " << vSubArguments[2]->GenSlidingWindowDeclRef() << " * ";
+        ss << "fPowN + "<<vSubArguments[1]->GenSlidingWindowDeclRef() << " * fGeoSeries;\n\t\t\t";
+        ss << "fTermDerivation = " << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << " * " << vSubArguments[0]->GenSlidingWindowDeclRef() << " * fPowNminus1 + ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << " * fGeoSeriesDerivation;\n\t\t\t";
+        ss << "if (fabs(fTerm) < fEpsilonSmall)\n\t\t\t\t";
+        ss << "bFound = true;\n\t\t\t";
+        ss << "else\n\t\t\t{\n\t\t\t\t";
+        ss << "if (approxEqual( fabs(fTermDerivation), 0.0))\n\t\t\t\t\t";
+        ss << "fXnew = fX + 1.1 * SCdEpsilon;\n\t\t\t\t";
+        ss << "else\n\t\t\t\t\tfXnew = fX - fTerm / fTermDerivation;\n\t\t\t\t" ;
+        ss << "nCount++;\n\t\t\t\t";
+        ss << "bFound = (fabs(fXnew - fX) < SCdEpsilon);\n\t\t\t\t";
+        ss << "fX = fXnew;\n\t\t\t" << "}\n\t\t}\n\t}\n\telse\n\t{\n\t\t";
+        ss << "fX = (" << vSubArguments[5]->GenSlidingWindowDeclRef();
+        ss << " < -1.0) ? -1.0 : " << vSubArguments[5]->GenSlidingWindowDeclRef() << ";\n\t\t";
+        ss << "while (bValid && !bFound && nCount < nIterationsMax)\n\t\t" << "{\n\t\t\t";
+        ss << "if (approxEqual( fabs(fX), 0.0)){\n\t\t\t\t";
+        ss << "fGeoSeries = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n\t\t\t\t";
+        ss << "fGeoSeriesDerivation = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << " * (";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "-1.0)/2.0;\n\t\t\t";
+        ss << "}else{\n\t\t\t\t";
+        ss << "fGeoSeries = (pow( 1.0+fX, ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ") - 1.0) / fX;\n\t\t\t\t";
+        ss << "fGeoSeriesDerivation = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << " * pow( 1.0+fX, ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "-1.0) / fX - fGeoSeries / fX;\n\t\t\t}\n\t\t\t";
+        ss << "fTerm = " << vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss << " + " << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << " * pow(1.0 + fX, " << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ") + " << vSubArguments[1]->GenSlidingWindowDeclRef() << " * fGeoSeries;\n\t\t\t";
+        ss << "fTermDerivation = " << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << " * " << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " * " << "pow( 1.0+fX, ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << " -1.0) + ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "* fGeoSeriesDerivation;\n\t\t\t";
+        ss << "if (fabs(fTerm) < fEpsilonSmall)\n\t\t\t\t";
+        ss << "bFound = true;\n\t\t\t";
+        ss << "else{\n\t\t\t\t";
+        ss << "if (approxEqual( fabs(fTermDerivation), 0.0))\n\t\t\t\t\t";
+        ss << "fXnew = fX + 1.1 * SCdEpsilon;\n\t\t\t\t";
+        ss << "else\n\t\t\t\t\t";
+        ss << "fXnew = fX - fTerm / fTermDerivation;\n\t\t\t\t";
+        ss << "nCount++;\n\t\t\t\t";
+        ss << "bFound = (fabs(fXnew - fX) < SCdEpsilon);\n\t\t\t\t";
+        ss << "fX = fXnew;\n\t\t\t\t";
+        ss << "bValid = (fX >= -1.0);\n\t\t\t";
+        ss << "}\n\t\t}\n\t}\n\t";
+        ss << vSubArguments[5]->GenSlidingWindowDeclRef() << "= fX;\n\t";
+        ss << "result = bValid && bFound;\n\t";
+        ss << "result = fX;\n\t";
+        ss << "return result;\n";
+        ss << "}";
+    }
+};
+class OpIntrate: public RATE {
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string BinFuncName(void) const { return "rate"; }
+};
+
 class OpTbillyield:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
@@ -1289,8 +1401,13 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
             case ocMIRR:
                 mvSubArguments.push_back(SoPHelper<OpMIRR>(ts,
                     ft->Children[i]));
+                break;
             case ocRMZ:
                 mvSubArguments.push_back(SoPHelper<OpRMZ>(ts,
+                    ft->Children[i]));
+                break;
+            case ocZins:
+                mvSubArguments.push_back(SoPHelper<OpIntrate>(ts,
                     ft->Children[i]));
                 break;
             case ocExternal:
