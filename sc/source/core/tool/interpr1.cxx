@@ -5432,11 +5432,9 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     SCSIZE nResC, nResR;
                     nResC = nCol2 - nCol1 + 1;
                     nResR = nRow2 - nRow1 + 1;
-                    pResMat = GetNewMat(nResC, nResR);
+                    pResMat = GetNewMat(nResC, nResR, false);
                     if (!pResMat)
                         SetError( errIllegalParameter);
-                    else
-                        pResMat->FillDouble( 0.0, 0, 0, nResC-1, nResR-1);
                 }
 
                 ScQueryParam rParam;
