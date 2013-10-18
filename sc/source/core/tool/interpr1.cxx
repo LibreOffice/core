@@ -793,6 +793,7 @@ double ScInterpreter::Compare()
 {
     OUString aVal1, aVal2;
     sc::Compare aComp( &aVal1, &aVal2 );
+    aComp.mbIgnoreCase = pDok->GetDocOptions().IsIgnoreCase();
     for( short i = 1; i >= 0; i-- )
     {
         switch ( GetRawStackType() )
@@ -882,6 +883,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( sc::CompareOptions* pOptions )
 {
     OUString aVal1, aVal2;
     sc::Compare aComp( &aVal1, &aVal2 );
+    aComp.mbIgnoreCase = pDok->GetDocOptions().IsIgnoreCase();
     sc::RangeMatrix aMat[2];
     ScAddress aAdr;
     for( short i = 1; i >= 0; i-- )
@@ -983,7 +985,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( sc::CompareOptions* pOptions )
         }
         else if (aMat[0].mpMat || aMat[1].mpMat)
         {
-            short i = ( aMat[0].mpMat ? 0 : 1);
+            size_t i = ( aMat[0].mpMat ? 0 : 1);
             SCSIZE nC, nR;
             aMat[i].mpMat->GetDimensions(nC, nR);
             aRes.mpMat = GetNewMat(nC, nR, false);
@@ -999,46 +1001,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( sc::CompareOptions* pOptions )
 
             ScMatrix& rMat = *aMat[i].mpMat;
             ScMatrix& rResMat = *aRes.mpMat;
-            ScMatrix::PosRef pMatPos(rMat.GetPosition(0, 0));
-            ScMatrixValue aVal;
-            std::vector<double> aResMatValues;
-            aResMatValues.reserve(nC*nR);
-            for (size_t j = 0, n = nC*nR; j < n; ++j)
-            {
-                aVal = rMat.Get(*pMatPos);
-                switch (aVal.nType)
-                {
-                    case SC_MATVAL_VALUE:
-                    case SC_MATVAL_BOOLEAN:
-                    {
-                        aComp.bVal[i] = true;
-                        aComp.nVal[i] = aVal.fVal;
-                        aComp.bEmpty[i] = false;
-                    }
-                    break;
-                    case SC_MATVAL_STRING:
-                    {
-                        aComp.bVal[i] = false;
-                        *aComp.pVal[i] = aVal.aStr.getString();
-                        aComp.bEmpty[i] = false;
-                    }
-                    break;
-                    case SC_MATVAL_EMPTY:
-                    case SC_MATVAL_EMPTYPATH:
-                    {
-                        aComp.bVal[i] = false;
-                        *aComp.pVal[i] = svl::SharedString::getEmptyString().getString();
-                        aComp.bEmpty[i] = aVal.nType == SC_MATVAL_EMPTY;
-                    }
-                    break;
-                    default:
-                        ;
-                }
-
-                aResMatValues.push_back(sc::CompareFunc(pDok->GetDocOptions().IsIgnoreCase(), aComp, pOptions));
-                rMat.NextPosition(*pMatPos);
-            }
-            rResMat.PutDouble(&aResMatValues[0], aResMatValues.size(), 0, 0);
+            rMat.CompareMatrix(rResMat, aComp, i, pOptions);
         }
     }
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;

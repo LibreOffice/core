@@ -36,6 +36,13 @@ class ScInterpreter;
 class SvNumberFormatter;
 class ScMatrixImpl;
 
+namespace sc {
+
+struct Compare;
+struct CompareOptions;
+
+}
+
 /**
  * Try NOT to use this struct.  This struct should go away in a hopefully
  * not so distant futture.
@@ -393,6 +400,9 @@ public:
 
     double GetMaxValue( bool bTextAsZero ) const;
     double GetMinValue( bool bTextAsZero ) const;
+
+    void CompareMatrix(
+        ScMatrix& rResMat, sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions = NULL ) const;
 
     void GetDoubleArray( std::vector<double>& rArray ) const;
     void MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const;

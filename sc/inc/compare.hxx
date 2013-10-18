@@ -35,7 +35,10 @@ struct Compare
     bool bVal[2];
     bool bEmpty[2];
 
-    Compare( OUString* p1, OUString* p2 )
+    bool mbIgnoreCase;
+
+    Compare( OUString* p1, OUString* p2 ) :
+        mbIgnoreCase(true)
     {
         pVal[0] = p1;
         pVal[1] = p2;

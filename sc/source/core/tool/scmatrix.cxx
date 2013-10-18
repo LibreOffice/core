@@ -23,6 +23,7 @@
 #include "formula/errorcodes.hxx"
 #include "interpre.hxx"
 #include "mtvelements.hxx"
+#include "compare.hxx"
 
 #include <svl/zforlist.hxx>
 #include "svl/sharedstring.hxx"
@@ -264,6 +265,9 @@ public:
 
     double GetMaxValue( bool bTextAsZero ) const;
     double GetMinValue( bool bTextAsZero ) const;
+
+    void CompareMatrix( ScMatrix& rResMat, sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const;
+
     void GetDoubleArray( std::vector<double>& rArray ) const;
     void MergeDoubleArray( std::vector<double>& rArray, ScMatrix::Op eOp ) const;
 
@@ -1318,6 +1322,97 @@ public:
     }
 };
 
+class CompareMatrixFunc : std::unary_function<MatrixImplType::element_block_type, void>
+{
+    sc::Compare& mrComp;
+    size_t mnMatPos;
+    sc::CompareOptions* mpOptions;
+
+    std::vector<double> maResValues;
+
+    void compare()
+    {
+        maResValues.push_back(sc::CompareFunc(mrComp.mbIgnoreCase, mrComp, mpOptions));
+    }
+
+public:
+    CompareMatrixFunc( size_t nResSize, sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) :
+        mrComp(rComp), mnMatPos(nMatPos), mpOptions(pOptions)
+    {
+        maResValues.reserve(nResSize);
+    }
+
+    void operator() (const MatrixImplType::element_block_node_type& node)
+    {
+        using namespace mdds::mtv;
+
+        switch (node.type)
+        {
+            case mdds::mtm::element_numeric:
+            {
+                typedef MatrixImplType::numeric_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+                for (; it != itEnd; ++it)
+                {
+                    mrComp.bVal[mnMatPos] = true;
+                    mrComp.nVal[mnMatPos] = *it;
+                    mrComp.bEmpty[mnMatPos] = false;
+                    compare();
+                }
+            }
+            break;
+            case mdds::mtm::element_boolean:
+            {
+                typedef MatrixImplType::boolean_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+                for (; it != itEnd; ++it)
+                {
+                    mrComp.bVal[mnMatPos] = true;
+                    mrComp.nVal[mnMatPos] = *it;
+                    mrComp.bEmpty[mnMatPos] = false;
+                    compare();
+                }
+            }
+            break;
+            case mdds::mtm::element_string:
+            {
+                typedef MatrixImplType::string_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+                for (; it != itEnd; ++it)
+                {
+                    const svl::SharedString& rStr = *it;
+                    mrComp.bVal[mnMatPos] = false;
+                    *mrComp.pVal[mnMatPos] = rStr.getString();
+                    mrComp.bEmpty[mnMatPos] = false;
+                    compare();
+                }
+            }
+            break;
+            case mdds::mtm::element_empty:
+            {
+                mrComp.bVal[mnMatPos] = false;
+                *mrComp.pVal[mnMatPos] = svl::SharedString::getEmptyString().getString();
+                mrComp.bEmpty[mnMatPos] = true;
+                for (size_t i = 0; i < node.size; ++i)
+                    compare();
+            }
+            default:
+                ;
+        }
+    }
+
+    const std::vector<double>& getValues() const
+    {
+        return maResValues;
+    }
+};
+
 class ToDoubleArray : std::unary_function<MatrixImplType::element_block_type, void>
 {
     std::vector<double> maArray;
@@ -1494,6 +1589,20 @@ double ScMatrixImpl::GetMinValue( bool bTextAsZero ) const
     CalcMaxMinValue<MinOp> aFunc(bTextAsZero);
     maMat.walk(aFunc);
     return aFunc.getValue();
+}
+
+void ScMatrixImpl::CompareMatrix(
+    ScMatrix& rResMat, sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const
+{
+    MatrixImplType::size_pair_type aSize = maMat.size();
+    size_t nSize = aSize.column * aSize.row;
+    CompareMatrixFunc aFunc(nSize, rComp, nMatPos, pOptions);
+    maMat.walk(aFunc);
+
+    // We assume the result matrix has the same dimension as this matrix.
+    const std::vector<double>& rResVal = aFunc.getValues();
+    if (nSize == rResVal.size())
+        rResMat.PutDouble(&rResVal[0], rResVal.size(), 0, 0);
 }
 
 void ScMatrixImpl::GetDoubleArray( std::vector<double>& rArray ) const
@@ -2004,6 +2113,11 @@ double ScMatrix::GetMaxValue( bool bTextAsZero ) const
 double ScMatrix::GetMinValue( bool bTextAsZero ) const
 {
     return pImpl->GetMinValue(bTextAsZero);
+}
+
+void ScMatrix::CompareMatrix( ScMatrix& rResMat, sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const
+{
+    pImpl->CompareMatrix(rResMat, rComp, nMatPos, pOptions);
 }
 
 void ScMatrix::GetDoubleArray( std::vector<double>& rArray ) const
