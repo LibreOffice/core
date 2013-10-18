@@ -591,6 +591,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_KUMYK                 0x068A
 #define LANGUAGE_USER_NOGAI                 0x068B
 #define LANGUAGE_USER_KARAKALPAK_LATIN      0x068C
+#define LANGUAGE_USER_LADIN                 0x068D
 
 
 /* Primary language ID range for on-the-fly assignment. */

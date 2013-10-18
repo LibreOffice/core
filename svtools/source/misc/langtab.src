@@ -373,6 +373,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Kumyk" ; LANGUAGE_USER_KUMYK ; > ;
         < "Nogai" ; LANGUAGE_USER_NOGAI ; > ;
         < "Karakalpak Latin" ; LANGUAGE_USER_KARAKALPAK_LATIN ; > ;
+        < "Ladin" ; LANGUAGE_USER_LADIN ; > ;
     };
 };
 
