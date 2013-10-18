@@ -225,14 +225,14 @@ published service Content
                                 com::sun::star::ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE.
                                 Support for DOCUMENT is mandatory, all others are optional.
                             </li>
-                            <li>com::sun::star::ucb">OpenCommandArgument::Priority:
+                            <li>com::sun::star::ucb::OpenCommandArgument::Priority:
                                 can be set, but implementation may ignore the value
                             </li>
                             <li>com::sun::star::ucb::OpenCommandArgument::Sink:
                                 a sink, where the implementation can put the document data into.
                             </li>
                             <li>com::sun::star::ucb::OpenCommandArgument::Properties: empty ( ignored )</li>
-                            <li>com::sun::star::ucb">OpenCommandArgument2::SortingInfo: empty ( ignored )</li>
+                            <li>com::sun::star::ucb::OpenCommandArgument2::SortingInfo: empty ( ignored )</li>
                         </ul>
                         <p>The exceution must be aborted by the implementation of this command
                         (by throwing a CommandAbortedException), if an
@@ -451,7 +451,7 @@ published service Content
                 <tr>
                     <td>addProperty</td>
                     <td>void</td>
-                    <td><type>PropertyCommandArgument</type> aCmdArg</td>
+                    <td>PropertyCommandArgument aCmdArg</td>
                     <td>
                         Adds a new properties to the content.
                         <p>
@@ -462,7 +462,7 @@ published service Content
                             match the one specified in <member scope="com::sun::star::beans">Property::Type</member>.
                         </p>
                         <p>Note that the dynamic properties must be kept persistent. The
-                        service <type>Store</type> (UCB persistence service) may be used to
+                        service Store (UCB persistence service) may be used to
                         implement this.</p>
                         <p><b>Important:</b> The implementation must at least support
                         adding properties of the following basic data types:</p>
@@ -480,11 +480,11 @@ published service Content
                             </ul>
                         </p>
                         <p>
-                            Raises a <type scope="com::sun::star::beans">PropertyExistException</type>
+                            Raises a ::com::sun::star::beans::PropertyExistException
                             if a property with the same name already exists;
-                           <type scope="com::sun::star::beans">IllegalTypeException</type>
+                           ::com::sun::star::beans::IllegalTypeException
                            if the property has an unsupported type;
-                           <type scope="com::sun::star::lang">IllegalArgumentException</type>
+                           ::com::sun::star::lang::IllegalArgumentException
                            if the Name of the property is empty.</p>
                         <blockquote>
                             Note: This command is new since Apache OpenOffice 4.0, LibreOffice 4.2 and replaces the deprecated interface method
@@ -497,9 +497,9 @@ published service Content
                     <td>void</td>
                     <td>string PropertyName</td>
                     <td>Removes the properties from the content.
-                        <p>Raises a <type scope="com::sun::star::beans">UnknownPropertyException</type>
+                        <p>Raises a ::com::sun::star::beans::UnknownPropertyException
                         if the property does not exist;
-                        <type scope="com::sun::star::beans">NotRemoveableException</type>
+                        ::com::sun::star::beans::NotRemoveableException
                         if the property is not removable.</p>
                         <blockquote>
                             Note: This command is new since Apache OpenOffice 4.0, LibreOffice 4.2 and replaces the deprecated interface method
