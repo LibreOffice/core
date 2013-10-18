@@ -838,16 +838,19 @@ void wwFont::WriteDocx( DocxAttributeOutput* rAttrOutput ) const
 {
     // no font embedding, panose id, subsetting, ... implemented
 
-    rAttrOutput->StartFont( msFamilyNm );
+    if (!msFamilyNm.isEmpty())
+    {
+        rAttrOutput->StartFont( msFamilyNm );
 
-    if ( mbAlt )
-        rAttrOutput->FontAlternateName( msAltNm );
-    rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ), meChrSet );
-    rAttrOutput->FontFamilyType( meFamily );
-    rAttrOutput->FontPitchType( mePitch );
-    rAttrOutput->EmbedFont( msFamilyNm, meFamily, mePitch, meChrSet );
+        if ( mbAlt )
+            rAttrOutput->FontAlternateName( msAltNm );
+        rAttrOutput->FontCharset( sw::ms::rtl_TextEncodingToWinCharset( meChrSet ), meChrSet );
+        rAttrOutput->FontFamilyType( meFamily );
+        rAttrOutput->FontPitchType( mePitch );
+        rAttrOutput->EmbedFont( msFamilyNm, meFamily, mePitch, meChrSet );
 
-    rAttrOutput->EndFont();
+        rAttrOutput->EndFont();
+    }
 }
 
 void wwFont::WriteRtf( const RtfAttributeOutput* rAttrOutput ) const

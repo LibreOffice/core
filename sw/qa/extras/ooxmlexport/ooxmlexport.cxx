@@ -1532,6 +1532,23 @@ DECLARE_OOXML_TEST(testCharHighlight, "char_highlight.docx")
     }
 }
 
+DECLARE_OOXML_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
+{
+    // Check no empty font name is exported
+    // This test does not fail, if the document contains a font with empty name.
+
+    xmlDocPtr pXmlFontTable = parseExport("word/fontTable.xml");
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlFontTable, "/w:fonts/w:font");
+    sal_Int32 length = xmlXPathNodeSetGetLength(pXmlNodes);
+    for(sal_Int32 index = 0; index < length; index++){
+        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[index];
+        OUString attrVal = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST("name")));
+         if (attrVal == ""){
+            CPPUNIT_FAIL("Font name is empty.");
+        }
+    }
+}
+
 DECLARE_OOXML_TEST(testMultiColumnLineSeparator, "multi-column-line-separator-SAVED.docx")
 {
     // Check for the Column Separator value.It should be FALSE as the document doesnt contains separator line.
