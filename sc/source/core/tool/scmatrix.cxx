@@ -302,7 +302,7 @@ public:
 
     void CompareMatrix( ScMatrix& rResMat, sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const;
 
-    void GetDoubleArray( std::vector<double>& rArray ) const;
+    void GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero ) const;
     void MergeDoubleArray( std::vector<double>& rArray, ScMatrix::Op eOp ) const;
     void AddValues( const ScMatrixImpl& rMat );
 
@@ -1482,8 +1482,11 @@ class ToDoubleArray : std::unary_function<MatrixImplType::element_block_type, vo
     std::vector<double> maArray;
     std::vector<double>::iterator miPos;
     double mfNaN;
+    bool mbEmptyAsZero;
+
 public:
-    ToDoubleArray(size_t nSize) : maArray(nSize, 0.0), miPos(maArray.begin())
+    ToDoubleArray( size_t nSize, bool bEmptyAsZero ) :
+        maArray(nSize, 0.0), miPos(maArray.begin()), mbEmptyAsZero(bEmptyAsZero)
     {
         rtl::math::setNan(&mfNaN);
     }
@@ -1517,7 +1520,17 @@ public:
             }
             break;
             case mdds::mtm::element_empty:
-                std::advance(miPos, node.size);
+            {
+                if (mbEmptyAsZero)
+                {
+                    std::advance(miPos, node.size);
+                    return;
+                }
+
+                for (size_t i = 0; i < node.size; ++i, ++miPos)
+                    *miPos = mfNaN;
+            }
+            break;
             default:
                 ;
         }
@@ -1669,10 +1682,10 @@ void ScMatrixImpl::CompareMatrix(
         rResMat.PutDouble(&rResVal[0], rResVal.size(), 0, 0);
 }
 
-void ScMatrixImpl::GetDoubleArray( std::vector<double>& rArray ) const
+void ScMatrixImpl::GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero ) const
 {
     MatrixImplType::size_pair_type aSize = maMat.size();
-    ToDoubleArray aFunc(aSize.row*aSize.column);
+    ToDoubleArray aFunc(aSize.row*aSize.column, bEmptyAsZero);
     maMat.walk(aFunc);
     aFunc.swap(rArray);
 }
@@ -2239,9 +2252,9 @@ void ScMatrix::CompareMatrix( ScMatrix& rResMat, sc::Compare& rComp, size_t nMat
     pImpl->CompareMatrix(rResMat, rComp, nMatPos, pOptions);
 }
 
-void ScMatrix::GetDoubleArray( std::vector<double>& rArray ) const
+void ScMatrix::GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero ) const
 {
-    pImpl->GetDoubleArray(rArray);
+    pImpl->GetDoubleArray(rArray, bEmptyAsZero);
 }
 
 void ScMatrix::MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const

@@ -5360,7 +5360,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             }
 
             if (nGlobalError)
-                continue;   // and bail out, no need to evaluate other arguments
+                return 0;   // and bail out, no need to evaluate other arguments
 
             // take range
             nParam = 1;
@@ -5398,6 +5398,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                         if (!pQueryMatrix)
                         {
                             SetError( errIllegalParameter);
+                            return 0;
                         }
                         nCol1 = 0;
                         nRow1 = 0;
@@ -5411,9 +5412,13 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     break;
                 default:
                     SetError( errIllegalParameter);
+                    return 0;
             }
             if ( nTab1 != nTab2 )
+            {
                 SetError( errIllegalArgument);
+                return 0;
+            }
 
             // All reference ranges must be of same dimension and size.
             if (!nDimensionCols)
@@ -5421,80 +5426,87 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             if (!nDimensionRows)
                 nDimensionRows = nRow2 - nRow1 + 1;
             if ((nDimensionCols != (nCol2 - nCol1 + 1)) || (nDimensionRows != (nRow2 - nRow1 + 1)))
+            {
                 SetError ( errIllegalArgument);
+                return 0;
+            }
 
             // recalculate matrix values
-            if (nGlobalError == 0)
+            if (nGlobalError)
+                return 0;
+
+            // initialize temporary result matrix
+            if (!pResMat)
             {
-                // initialize temporary result matrix
+                SCSIZE nResC, nResR;
+                nResC = nCol2 - nCol1 + 1;
+                nResR = nRow2 - nRow1 + 1;
+                pResMat = GetNewMat(nResC, nResR, false);
                 if (!pResMat)
                 {
-                    SCSIZE nResC, nResR;
-                    nResC = nCol2 - nCol1 + 1;
-                    nResR = nRow2 - nRow1 + 1;
-                    pResMat = GetNewMat(nResC, nResR, false);
-                    if (!pResMat)
-                        SetError( errIllegalParameter);
+                    SetError( errIllegalParameter);
+                    return 0;
+                }
+            }
+
+            ScQueryParam rParam;
+            rParam.nRow1       = nRow1;
+            rParam.nRow2       = nRow2;
+
+            ScQueryEntry& rEntry = rParam.GetEntry(0);
+            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+            rEntry.bDoQuery = true;
+            if (!bIsString)
+            {
+                rItem.meType = ScQueryEntry::ByValue;
+                rItem.mfVal = fVal;
+                rEntry.eOp = SC_EQUAL;
+            }
+            else
+            {
+                rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0);
+                sal_uInt32 nIndex = 0;
+                bool bNumber = pFormatter->IsNumberFormat(
+                        rItem.maString.getString(), nIndex, rItem.mfVal);
+                rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+                if (rItem.meType == ScQueryEntry::ByString)
+                    rParam.bRegExp = MayBeRegExp(rItem.maString.getString(), pDok);
+            }
+            ScAddress aAdr;
+            aAdr.SetTab( nTab1 );
+            rParam.nCol1  = nCol1;
+            rParam.nCol2  = nCol2;
+            rEntry.nField = nCol1;
+            SCsCOL nColDiff = -nCol1;
+            SCsROW nRowDiff = -nRow1;
+            if (pQueryMatrix)
+            {
+                // Never case-sensitive.
+                sc::CompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
+                ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
+                if (nGlobalError || !pResultMatrix)
+                {
+                    SetError( errIllegalParameter);
+                    return 0;
                 }
 
-                ScQueryParam rParam;
-                rParam.nRow1       = nRow1;
-                rParam.nRow2       = nRow2;
-
-                ScQueryEntry& rEntry = rParam.GetEntry(0);
-                ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-                rEntry.bDoQuery = true;
-                if (!bIsString)
+                // query and result matrices have same geometry, and the
+                // result matrix is filled with boolean values.
+                *pResMat += *pResultMatrix;
+            }
+            else
+            {
+                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
+                // Increment Entry.nField in iterator when switching to next column.
+                aCellIter.SetAdvanceQueryParamEntryField( true );
+                if ( aCellIter.GetFirst() )
                 {
-                    rItem.meType = ScQueryEntry::ByValue;
-                    rItem.mfVal = fVal;
-                    rEntry.eOp = SC_EQUAL;
-                }
-                else
-                {
-                    rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0);
-                    sal_uInt32 nIndex = 0;
-                    bool bNumber = pFormatter->IsNumberFormat(
-                            rItem.maString.getString(), nIndex, rItem.mfVal);
-                    rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
-                    if (rItem.meType == ScQueryEntry::ByString)
-                        rParam.bRegExp = MayBeRegExp(rItem.maString.getString(), pDok);
-                }
-                ScAddress aAdr;
-                aAdr.SetTab( nTab1 );
-                rParam.nCol1  = nCol1;
-                rParam.nCol2  = nCol2;
-                rEntry.nField = nCol1;
-                SCsCOL nColDiff = -nCol1;
-                SCsROW nRowDiff = -nRow1;
-                if (pQueryMatrix)
-                {
-                    // Never case-sensitive.
-                    sc::CompareOptions aOptions( pDok, rEntry, rParam.bRegExp);
-                    ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
-                    if (nGlobalError || !pResultMatrix)
+                    do
                     {
-                        SetError( errIllegalParameter);
-                    }
-
-                    // query and result matrices have same geometry, and the
-                    // result matrix is filled with boolean values.
-                    *pResMat += *pResultMatrix;
-                }
-                else
-                {
-                    ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
-                    // Increment Entry.nField in iterator when switching to next column.
-                    aCellIter.SetAdvanceQueryParamEntryField( true );
-                    if ( aCellIter.GetFirst() )
-                    {
-                        do
-                        {
-                            SCSIZE nC = aCellIter.GetCol() + nColDiff;
-                            SCSIZE nR = aCellIter.GetRow() + nRowDiff;
-                            pResMat->PutDouble(pResMat->GetDouble(nC, nR)+1.0, nC, nR);
-                        } while ( aCellIter.GetNext() );
-                    }
+                        SCSIZE nC = aCellIter.GetCol() + nColDiff;
+                        SCSIZE nR = aCellIter.GetRow() + nRowDiff;
+                        pResMat->PutDouble(pResMat->GetDouble(nC, nR)+1.0, nC, nR);
+                    } while ( aCellIter.GetNext() );
                 }
             }
             nParamCount -= 2;
@@ -5555,13 +5567,20 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                     break;
                 default:
                     SetError( errIllegalParameter);
+                    return 0;
             }
             if ( nMainTab1 != nMainTab2 )
+            {
                 SetError( errIllegalArgument);
+                return 0;
+            }
 
             // All reference ranges must be of same dimension and size.
             if ((nDimensionCols != (nMainCol2 - nMainCol1 + 1)) || (nDimensionRows != (nMainRow2 - nMainRow1 + 1)))
+            {
                 SetError ( errIllegalArgument);
+                return 0;
+            }
 
             if (nGlobalError)
                 return 0;   // bail out
@@ -5571,28 +5590,34 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
             aAdr.SetTab( nMainTab1 );
             if (pMainMatrix)
             {
-                SCSIZE nC, nR;
-                pResMat->GetDimensions(nC, nR);
-                for (SCSIZE nCol = 0; nCol < nC; ++nCol)
+                std::vector<double> aResValues, aMainValues;
+                pResMat->GetDoubleArray(aResValues, true);
+                pMainMatrix->GetDoubleArray(aMainValues, false); // Map empty values to NaN's.
+                if (aResValues.size() != aMainValues.size())
                 {
-                    for (SCSIZE nRow = 0; nRow < nR; ++nRow)
+                    SetError( errIllegalArgument);
+                    return 0;
+                }
+
+                std::vector<double>::const_iterator itRes = aResValues.begin(), itResEnd = aResValues.end();
+                std::vector<double>::const_iterator itMain = aMainValues.begin();
+                for (; itRes != itResEnd; ++itRes, ++itMain)
+                {
+                    if (*itRes != nQueryCount)
+                        continue;
+
+                    fVal = *itMain;
+                    if (rtl::math::isNan(fVal))
+                        continue;
+
+                    ++fCount;
+                    if (bNull && fVal != 0.0)
                     {
-                        if (pResMat->GetDouble( nCol, nRow) == nQueryCount)
-                        {
-                            if (pMainMatrix->IsValue( nCol, nRow))
-                            {
-                                fVal = pMainMatrix->GetDouble( nCol, nRow);
-                                ++fCount;
-                                if ( bNull && fVal != 0.0 )
-                                {
-                                    bNull = false;
-                                    fMem = fVal;
-                                }
-                                else
-                                    fSum += fVal;
-                            }
-                        }
+                        bNull = false;
+                        fMem = fVal;
                     }
+                    else
+                        fSum += fVal;
                 }
             }
             else

@@ -404,7 +404,15 @@ public:
     void CompareMatrix(
         ScMatrix& rResMat, sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions = NULL ) const;
 
-    void GetDoubleArray( std::vector<double>& rArray ) const;
+    /**
+     * Convert the content of matrix into a linear array of numeric values.
+     * String elements are mapped to NaN's and empty elements are mapped to
+     * either NaN or zero values.
+     *
+     * @param bEmptyAsZero if true empty elements are mapped to zero values,
+     *                     otherwise they become NaN values.
+     */
+    void GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero = true ) const;
     void MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const;
 
     ScMatrix& operator+= ( const ScMatrix& r );
