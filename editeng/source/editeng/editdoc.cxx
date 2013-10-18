@@ -1755,8 +1755,9 @@ void ContentNode::SetWrongList( WrongList* p )
 
 void ContentNode::CreateWrongList()
 {
-    DBG_ASSERT(!mpWrongList, "WrongList already exist!");
-    mpWrongList.reset(new WrongList);
+    SAL_WARN_IF( mpWrongList && !mpWrongList->empty(), "editeng", "WrongList already exist!");
+    if (!mpWrongList || !mpWrongList->empty())
+        mpWrongList.reset(new WrongList);
 }
 
 void ContentNode::DestroyWrongList()
