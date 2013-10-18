@@ -1828,7 +1828,7 @@ sal_uInt16 ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
             }
         }
     }
-    return nScriptType ? nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
+    return nScriptType ? nScriptType : SvtLanguageOptions::GetScriptTypeOfLanguage( GetDefaultLanguage() );
 }
 
 sal_Bool ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
