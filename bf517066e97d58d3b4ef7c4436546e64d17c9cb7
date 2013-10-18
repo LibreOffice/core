@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///Mk\u003d",
+        "filename": "ucb/source/core/FileAccess.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-18T08:17:23Z",
+      "side": 1,
+      "message": "The only things this file should contain are the entities needed from ucbserv.cxx, i.e., the definition of IMPLEMENTATION_NAME and declarations of FileAccess_CreateInstance and FileAccess_getSupportedServiceNames (plus any headers and/or forward declarations to make the file self-contained, plus header guards).  Otherwise, since the definition of OFileAccess is still in an anonymous namespace, this will lead to warnings/errors about undefined entities with internal linkage.\nSomething like:\n\n  /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */\n  /*\n   * This file is part of the LibreOffice project.\n   *\n   * This Source Code Form is subject to the terms of the Mozilla Public\n   * License, v. 2.0. If a copy of the MPL was not distributed with this\n   * file, You can obtain one at http://mozilla.org/MPL/2.0/.\n   *\n   * This file incorporates work covered by the following license notice:\n   *\n   *   Licensed to the Apache Software Foundation (ASF) under one or more\n   *   contributor license agreements. See the NOTICE file distributed\n   *   with this work for additional information regarding copyright\n   *   ownership. The ASF licenses this file to you under the Apache\n   *   License, Version 2.0 (the \"License\"); you may not use this file\n   *   except in compliance with the License. You may obtain a copy of\n   *   the License at http://www.apache.org/licenses/LICENSE-2.0 .\n   */\n  \n  #ifndef INCLUDED_UCB_SOURCE_CORE_FILEACCESS_HXX\n  #define INCLUDED_UCB_SOURCE_CORE_FILEACCESS_HXX\n  \n  #include \"sal/config.h\"\n  \n  #include \"com/sun/star/uno/Reference.hxx\"\n  #include \"com/sun/star/uno/Sequence.hxx\"\n  #include \"rtl/ustring.hxx\"\n  #include \"sal/types.h\"\n  \n  namespace com { namespace sun { namespace star {\n      namespace lang { class XMultiServiceFactory; }\n      namespace uno { class XInterface; }\n  } } }\n  \n  #define IMPLEMENTATION_NAME \"com.sun.star.comp.ucb.SimpleFileAccess\"\n  \n  css::uno::Reference\u003ccss::uno::XInterface\u003e SAL_CALL FileAccess_CreateInstance(\n      css::uno::Reference\u003ccss::lang::XMultiServiceFactory\u003e const \u0026 xSMgr);\n  \n  css::uno::Sequence\u003cOUString\u003e FileAccess_getSupportedServiceNames();\n  \n  #endif\n  \n  /* vim:set shiftwidth\u003d4 softtabstop\u003d4 expandtab: */",
+      "revId": "bf517066e97d58d3b4ef7c4436546e64d17c9cb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///Mg\u003d",
+        "filename": "ucb/source/core/ucbserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-18T08:17:23Z",
+      "side": 1,
+      "message": "xSMgr already contains the appropriately casted pServiceManager, use that\n(and the non-null check of pServiceManager three lines above can go, it is just cargo cult)",
+      "revId": "bf517066e97d58d3b4ef7c4436546e64d17c9cb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
