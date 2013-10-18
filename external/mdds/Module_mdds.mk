@@ -9,12 +9,8 @@
 
 $(eval $(call gb_Module_Module,mdds))
 
-ifeq ($(SYSTEM_MDDS),NO)
-
 $(eval $(call gb_Module_add_targets,mdds,\
 	UnpackedTarball_mdds \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
