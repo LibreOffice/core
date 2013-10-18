@@ -16,23 +16,11 @@
 @property int selectionRectangleCount;
 @end
 
-#define HANDLE_BLOB 20
+#define HANDLE_BLOB 40
 #define HANDLE_STEM_WIDTH 6
-#define HANDLE_STEM_HEIGHT 20
+#define HANDLE_STEM_HEIGHT 40
 
 @implementation View
-
-#if 0
-- (id) initWithFrame:(CGRect)rect
-{
-    self = [super initWithFrame:rect];
-    if (self) {
-        self.selectionRectangles = NULL;
-        self.selectionRectangleCount = 0;
-    }
-    return self;
-}
-#endif
 
 - (CGRect) topLeftResizeHandle
 {
@@ -166,38 +154,71 @@
 
 - (void)panGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
+    static enum { NONE, TOPLEFT, BOTTOMRIGHT } draggedHandle = NONE;
     static CGFloat previousX = 0.0f, previousY = 0.0f;
 
     CGPoint translation = [gestureRecognizer translationInView:self];
 
-    if ([gestureRecognizer numberOfTouches] == 1) {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan &&
+        gestureRecognizer.numberOfTouches == 1) {
         if (CGRectContainsPoint([self topLeftResizeHandle],
-                                [gestureRecognizer locationInView:self])) {
+                                [gestureRecognizer locationInView:self]))
+            draggedHandle = TOPLEFT;
+        else if (CGRectContainsPoint([self bottomRightResizeHandle],
+                                     [gestureRecognizer locationInView:self]))
+            draggedHandle = BOTTOMRIGHT;
+    }
 
-            self.selectionRectangles[0].origin.x += translation.x;
-            self.selectionRectangles[0].origin.y += translation.y;
-            self.selectionRectangles[0].size.width -= translation.x;
-            self.selectionRectangles[0].size.height -= translation.y;
+    if (draggedHandle == TOPLEFT) {
+        const int N = self.selectionRectangleCount;
 
-            touch_lo_selection_attempt_resize(self.documentHandle,
-                                              self.selectionRectangles,
-                                              self.selectionRectangleCount);
-            return;
-        } else if (CGRectContainsPoint([self bottomRightResizeHandle],
-                                       [gestureRecognizer locationInView:self])) {
+        self.selectionRectangles[0].origin.x += translation.x;
+        self.selectionRectangles[0].origin.y += translation.y;
+        self.selectionRectangles[0].size.width -= translation.x;
+        self.selectionRectangles[0].size.height -= translation.y;
 
-            const int N = self.selectionRectangleCount - 1;
+#if 0
+        touch_lo_selection_attempt_resize(self.documentHandle,
+                                          self.selectionRectangles,
+                                          self.selectionRectangleCount);
+#else
+        touch_lo_mouse(self.selectionRectangles[0].origin.x,
+                       self.selectionRectangles[0].origin.y,
+                       DOWN, NONE);
+        touch_lo_mouse(self.selectionRectangles[N-1].origin.x +
+                       self.selectionRectangles[N-1].size.width,
+                       self.selectionRectangles[N-1].origin.y +
+                       self.selectionRectangles[N-1].size.height,
+                       UP, NONE);
+#endif
+        if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
+            draggedHandle = NONE;
+        return;
+    } else if (draggedHandle == BOTTOMRIGHT) {
+        const int N = self.selectionRectangleCount;
 
-            self.selectionRectangles[N].origin.x += translation.x;
-            self.selectionRectangles[N].origin.y += translation.y;
-            self.selectionRectangles[N].size.width -= translation.x;
-            self.selectionRectangles[N].size.height -= translation.y;
+        self.selectionRectangles[N-1].origin.x += translation.x;
+        self.selectionRectangles[N-1].origin.y += translation.y;
+        self.selectionRectangles[N-1].size.width += translation.x;
+        self.selectionRectangles[N-1].size.height += translation.y;
 
-            touch_lo_selection_attempt_resize(self.documentHandle,
-                                              self.selectionRectangles,
-                                              self.selectionRectangleCount);
-            return;
-        }
+#if 0
+        touch_lo_selection_attempt_resize(self.documentHandle,
+                                          self.selectionRectangles,
+                                          self.selectionRectangleCount);
+#else
+        touch_lo_mouse(self.selectionRectangles[0].origin.x,
+                       self.selectionRectangles[0].origin.y,
+                       DOWN, NONE);
+        touch_lo_mouse(self.selectionRectangles[N-1].origin.x +
+                       self.selectionRectangles[N-1].size.width,
+                       self.selectionRectangles[N-1].origin.y +
+                       self.selectionRectangles[N-1].size.height,
+                       UP, NONE);
+#endif
+        if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
+            draggedHandle = NONE;
+        return;
     }
 
     if (gestureRecognizer.state != UIGestureRecognizerStateBegan) {
@@ -238,6 +259,17 @@
     }
 }
 
+static int compare_rects(const void *a, const void *b)
+{
+    const CGRect *ra = a;
+    const CGRect *rb = b;
+
+    if (ra->origin.y != rb->origin.y)
+        return ra->origin.y - rb->origin.y;
+    else
+        return ra->origin.x - rb->origin.x;
+}
+
 - (void)startSelectionOfType:(MLOSelectionKind)kind withNumber:(int)number ofRectangles:(CGRect *)rects forDocument:(const void *)document
 {
     (void) kind;
@@ -256,6 +288,9 @@
     self.selectionRectangles = rects;
     self.selectionRectangleCount = number;
     self.documentHandle = document;
+
+    // The selection rectangle provided by LO are not sorted in any sane way
+    qsort(self.selectionRectangles, self.selectionRectangleCount, sizeof(self.selectionRectangles[0]), compare_rects);
 
     [self requestSelectionRedisplay];
 }

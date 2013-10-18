@@ -89,12 +89,17 @@ void touch_ui_selection_none();
 // where that is wanted, and this all is work in progress. Prefixed by
 // touch_lo_.
 
+typedef enum { DOWN, MOVE, UP} MLOMouseButtonState;
+typedef enum { NONE, SHIFT, META } MLOModifiers;
+typedef int MLOModifierMask;
+
 void touch_lo_keyboard_did_hide();
 
 void touch_lo_runMain();
 void touch_lo_set_view_size(int width, int height);
 void touch_lo_render_windows(void *context, int minX, int minY, int width, int height);
 void touch_lo_tap(int x, int y);
+void touch_lo_mouse(int x, int y, MLOMouseButtonState state, MLOModifierMask modifiers);
 void touch_lo_pan(int deltaX, int deltaY);
 void touch_lo_zoom(int x, int y, float scale);
 void touch_lo_keyboard_input(int c);
@@ -105,8 +110,6 @@ tilePosX, tilePosY, tileWidth, tileHeight address the part of the document to be
 context, contextHeight, contextWidth specify where to draw.
 */
 void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int tilePosX, int tilePosY, int tileWidth, int tileHeight);
-
-typedef enum { DOWN, MOVE, UP} MLOMouseButtonState;
 
 void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state);
 

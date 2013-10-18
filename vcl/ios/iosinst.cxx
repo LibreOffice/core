@@ -413,16 +413,42 @@ void touch_lo_render_windows(void *context, int minX, int minY, int width, int h
 extern "C"
 void touch_lo_tap(int x, int y)
 {
+    touch_lo_mouse(x, y, DOWN, NONE);
+    touch_lo_mouse(x, y, UP, NONE);
+}
+
+extern "C"
+void touch_lo_mouse(int x, int y, MLOMouseButtonState state, MLOModifierMask modifiers)
+{
     SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
+
     if (pFocus) {
         MouseEvent aEvent;
         sal_uLong nEvent;
+        sal_uInt16 nModifiers = 0;
 
-        aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
-        nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
-        Application::PostMouseEvent(nEvent, pFocus->GetWindow(), &aEvent);
+        if (modifiers & SHIFT)
+            nModifiers |= KEY_SHIFT;
 
-        nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
+        if (modifiers & META)
+            nModifiers |= KEY_MOD1;
+
+        switch (state) {
+        case DOWN:
+            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT, nModifiers);
+            nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
+            break;
+        case MOVE:
+            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLEMOVE, MOUSE_LEFT, nModifiers);
+            nEvent = VCLEVENT_WINDOW_MOUSEMOVE;
+            break;
+        case UP:
+            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT, nModifiers);
+            nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
+            break;
+        default:
+            assert(false);
+        }
         Application::PostMouseEvent(nEvent, pFocus->GetWindow(), &aEvent);
     }
 }
@@ -430,29 +456,7 @@ void touch_lo_tap(int x, int y)
 extern "C"
 void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state)
 {
-    SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
-
-    if (pFocus) {
-        MouseEvent aEvent;
-        sal_uLong nEvent;
-
-        switch(state) {
-        case DOWN:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
-            nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
-            break;
-        case MOVE:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLEMOVE, MOUSE_LEFT);
-            nEvent = VCLEVENT_WINDOW_MOUSEMOVE;
-            break;
-        case UP:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
-            nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
-            break;
-        }
-
-        Application::PostMouseEvent(nEvent, pFocus->GetWindow(), &aEvent);
-    }
+    touch_lo_mouse(x, y, state, NONE);
 }
 
 extern "C"
