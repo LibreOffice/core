@@ -67,24 +67,6 @@ struct custom_string_trait
 
 typedef mdds::multi_type_matrix<custom_string_trait> MatrixImplType;
 
-struct ScMatrix::Pos
-{
-    MatrixImplType::position_type maPos;
-    MatrixImplType::position_type maPosFlag;
-};
-
-struct ScMatrix::ConstPos
-{
-    MatrixImplType::const_position_type maPos;
-    MatrixImplType::const_position_type maPosFlag;
-
-    ConstPos() {}
-    ConstPos( const ScMatrix::ConstPos& r ) :
-        maPos(r.maPos), maPosFlag(r.maPosFlag) {}
-    ConstPos( const ScMatrix::Pos& r ) :
-        maPos(r.maPos), maPosFlag(r.maPosFlag) {}
-};
-
 namespace {
 
 struct ElemEqualZero : public unary_function<double, bool>
@@ -251,7 +233,6 @@ public:
     svl::SharedString GetString( SCSIZE nIndex) const;
     svl::SharedString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
     ScMatrixValue Get(SCSIZE nC, SCSIZE nR) const;
-    ScMatrixValue Get( const ScMatrix::ConstPos& rPos ) const;
     bool IsString( SCSIZE nIndex ) const;
     bool IsString( SCSIZE nC, SCSIZE nR ) const;
     bool IsEmpty( SCSIZE nC, SCSIZE nR ) const;
@@ -261,24 +242,6 @@ public:
     bool IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
     bool IsBoolean( SCSIZE nC, SCSIZE nR ) const;
     bool IsNumeric() const;
-
-    ScMatrix::Pos* GetPosition( size_t nC, size_t nR );
-    ScMatrix::ConstPos* GetConstPosition( size_t nC, size_t nR ) const;
-
-    bool NextPosition( ScMatrix::Pos& rPos );
-    bool NextPosition( ScMatrix::ConstPos& rPos ) const;
-
-    bool IsValue( const ScMatrix::ConstPos& rPos ) const;
-    bool IsEmpty( const ScMatrix::ConstPos& rPos ) const;
-    double GetDouble( const ScMatrix::ConstPos& rPos ) const;
-    svl::SharedString GetString( const ScMatrix::ConstPos& rPos ) const;
-
-    void PutDouble( double fVal, ScMatrix::Pos& rPos );
-    void PutString( const svl::SharedString& rStr, ScMatrix::Pos& rPos );
-    void PutEmpty( ScMatrix::Pos& rPos );
-    void PutEmptyPath( ScMatrix::Pos& rPos );
-    void PutError( sal_uInt16 nErr, ScMatrix::Pos& rPos );
-    void PutBoolean( bool bVal, ScMatrix::Pos& rPos );
 
     void MatCopy(ScMatrixImpl& mRes) const;
     void MatTrans(ScMatrixImpl& mRes) const;
@@ -672,34 +635,6 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
     return aVal;
 }
 
-ScMatrixValue ScMatrixImpl::Get( const ScMatrix::ConstPos& rPos ) const
-{
-    ScMatrixValue aVal;
-    mdds::mtm::element_t eType = maMat.get_type(rPos.maPos);
-    switch (eType)
-    {
-        case mdds::mtm::element_boolean:
-            aVal.nType = SC_MATVAL_BOOLEAN;
-            aVal.fVal = maMat.get_boolean(rPos.maPos);
-        break;
-        case mdds::mtm::element_numeric:
-            aVal.nType = SC_MATVAL_VALUE;
-            aVal.fVal = MatrixImplType::numeric_block_type::at(*rPos.maPos.first->data, rPos.maPos.second);
-        break;
-        case mdds::mtm::element_string:
-            aVal.nType = SC_MATVAL_STRING;
-            aVal.aStr = MatrixImplType::string_block_type::at(*rPos.maPos.first->data, rPos.maPos.second);
-        break;
-        case mdds::mtm::element_empty:
-            // Empty path equals empty plus flag.
-            aVal.nType = maMatFlag.get_boolean(rPos.maPosFlag) ? SC_MATVAL_EMPTYPATH : SC_MATVAL_EMPTY;
-            aVal.fVal = 0.0;
-        default:
-            ;
-    }
-    return aVal;
-}
-
 bool ScMatrixImpl::IsString( SCSIZE nIndex ) const
 {
     SCSIZE nC, nR;
@@ -783,123 +718,6 @@ bool ScMatrixImpl::IsBoolean( SCSIZE nC, SCSIZE nR ) const
 bool ScMatrixImpl::IsNumeric() const
 {
     return maMat.numeric();
-}
-
-ScMatrix::Pos* ScMatrixImpl::GetPosition( size_t nC, size_t nR )
-{
-    ScMatrix::Pos* pRet = new ScMatrix::Pos;
-    pRet->maPos = maMat.position(nR, nC);
-    pRet->maPosFlag = maMatFlag.position(nR, nC);
-    return pRet;
-}
-
-ScMatrix::ConstPos* ScMatrixImpl::GetConstPosition( size_t nC, size_t nR ) const
-{
-    ScMatrix::ConstPos* pRet = new ScMatrix::ConstPos;
-    pRet->maPos = maMat.position(nR, nC);
-    pRet->maPosFlag = maMatFlag.position(nR, nC);
-    return pRet;
-}
-
-bool ScMatrixImpl::NextPosition( ScMatrix::Pos& rPos )
-{
-    rPos.maPos = MatrixImplType::next_position(rPos.maPos);
-    rPos.maPosFlag = MatrixImplType::next_position(rPos.maPosFlag);
-    return rPos.maPos != maMat.end_position();
-}
-
-bool ScMatrixImpl::NextPosition( ScMatrix::ConstPos& rPos ) const
-{
-    rPos.maPos = MatrixImplType::next_position(rPos.maPos);
-    rPos.maPosFlag = MatrixImplType::next_position(rPos.maPosFlag);
-    return rPos.maPos != maMat.end_position();
-}
-
-bool ScMatrixImpl::IsValue( const ScMatrix::ConstPos& rPos ) const
-{
-    switch (maMat.get_type(rPos.maPos))
-    {
-        case mdds::mtm::element_boolean:
-        case mdds::mtm::element_numeric:
-            return true;
-        default:
-            ;
-    }
-    return false;
-}
-
-bool ScMatrixImpl::IsEmpty( const ScMatrix::ConstPos& rPos ) const
-{
-    return maMat.get_type(rPos.maPos) == mdds::mtm::element_empty && !maMatFlag.get_boolean(rPos.maPosFlag);
-}
-
-double ScMatrixImpl::GetDouble( const ScMatrix::ConstPos& rPos ) const
-{
-    double fVal = maMat.get_numeric(rPos.maPos);
-    if (pErrorInterpreter)
-    {
-        sal_uInt16 nError = GetDoubleErrorValue(fVal);
-        if (nError)
-            SetErrorAtInterpreter( nError);
-    }
-    return fVal;
-}
-
-
-svl::SharedString ScMatrixImpl::GetString( const ScMatrix::ConstPos& rPos ) const
-{
-    double fErr = 0.0;
-    switch (maMat.get_type(rPos.maPos))
-    {
-        case mdds::mtm::element_string:
-            return maMat.get_string(rPos.maPos);
-        case mdds::mtm::element_empty:
-            return svl::SharedString::getEmptyString();
-        case mdds::mtm::element_numeric:
-        case mdds::mtm::element_boolean:
-            OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
-            fErr = maMat.get_numeric(rPos.maPos);
-        default:
-            OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
-    }
-
-    SetErrorAtInterpreter(GetDoubleErrorValue(fErr));
-    return svl::SharedString::getEmptyString();
-}
-
-void ScMatrixImpl::PutDouble( double fVal, ScMatrix::Pos& rPos )
-{
-    if (maMat.get_type(rPos.maPos) == mdds::mtm::element_numeric)
-        MatrixImplType::numeric_block_type::at(*rPos.maPos.first->data, rPos.maPos.second) = fVal;
-    else
-        rPos.maPos = maMat.set(rPos.maPos, fVal);
-}
-
-void ScMatrixImpl::PutString( const svl::SharedString& rStr, ScMatrix::Pos& rPos )
-{
-    rPos.maPos = maMat.set(rPos.maPos, rStr);
-}
-
-void ScMatrixImpl::PutEmpty( ScMatrix::Pos& rPos )
-{
-    rPos.maPos = maMat.set_empty(rPos.maPos);
-    rPos.maPosFlag = maMatFlag.set(rPos.maPosFlag, false); // zero flag to indicate that this is 'empty', not 'empty path'.
-}
-
-void ScMatrixImpl::PutEmptyPath( ScMatrix::Pos& rPos )
-{
-    rPos.maPos = maMat.set_empty(rPos.maPos);
-    rPos.maPosFlag = maMatFlag.set(rPos.maPosFlag, true); // non-zero flag to indicate empty 'path'.
-}
-
-void ScMatrixImpl::PutError( sal_uInt16 nErr, ScMatrix::Pos& rPos )
-{
-    rPos.maPos = maMat.set(rPos.maPos, CreateDoubleError(nErr));
-}
-
-void ScMatrixImpl::PutBoolean( bool bVal, ScMatrix::Pos& rPos )
-{
-    rPos.maPos = maMat.set(rPos.maPos, bVal);
 }
 
 void ScMatrixImpl::MatCopy(ScMatrixImpl& mRes) const
@@ -1995,16 +1813,6 @@ ScMatrixValue ScMatrix::Get(SCSIZE nC, SCSIZE nR) const
     return pImpl->Get(nC, nR);
 }
 
-ScMatrixValue ScMatrix::Get( const Pos& rPos ) const
-{
-    return pImpl->Get(rPos);
-}
-
-ScMatrixValue ScMatrix::Get( const ConstPos& rPos ) const
-{
-    return pImpl->Get(rPos);
-}
-
 sal_Bool ScMatrix::IsString( SCSIZE nIndex ) const
 {
     return pImpl->IsString(nIndex);
@@ -2048,106 +1856,6 @@ sal_Bool ScMatrix::IsBoolean( SCSIZE nC, SCSIZE nR ) const
 sal_Bool ScMatrix::IsNumeric() const
 {
     return pImpl->IsNumeric();
-}
-
-ScMatrix::Pos* ScMatrix::GetPosition( size_t nC, size_t nR )
-{
-    return pImpl->GetPosition(nC, nR);
-}
-
-ScMatrix::ConstPos* ScMatrix::GetConstPosition( size_t nC, size_t nR ) const
-{
-    return pImpl->GetConstPosition(nC, nR);
-}
-
-void ScMatrix::DeletePosition( const Pos* p )
-{
-    delete p;
-}
-
-void ScMatrix::DeletePosition( const ConstPos* p )
-{
-    delete p;
-}
-
-bool ScMatrix::NextPosition( Pos& rPos )
-{
-    return pImpl->NextPosition(rPos);
-}
-
-bool ScMatrix::NextPosition( ConstPos& rPos ) const
-{
-    return pImpl->NextPosition(rPos);
-}
-
-bool ScMatrix::IsValue( const Pos& rPos ) const
-{
-    return pImpl->IsValue(rPos);
-}
-
-bool ScMatrix::IsValue( const ConstPos& rPos ) const
-{
-    return pImpl->IsValue(rPos);
-}
-
-bool ScMatrix::IsEmpty( const Pos& rPos ) const
-{
-    return pImpl->IsEmpty(rPos);
-}
-
-bool ScMatrix::IsEmpty( const ConstPos& rPos ) const
-{
-    return pImpl->IsEmpty(rPos);
-}
-
-double ScMatrix::GetDouble( const Pos& rPos ) const
-{
-    return pImpl->GetDouble(rPos);
-}
-
-double ScMatrix::GetDouble( const ConstPos& rPos ) const
-{
-    return pImpl->GetDouble(rPos);
-}
-
-svl::SharedString ScMatrix::GetString( const Pos& rPos ) const
-{
-    return pImpl->GetString(rPos);
-}
-
-svl::SharedString ScMatrix::GetString( const ConstPos& rPos ) const
-{
-    return pImpl->GetString(rPos);
-}
-
-void ScMatrix::PutDouble( double fVal, Pos& rPos )
-{
-    pImpl->PutDouble(fVal, rPos);
-}
-
-void ScMatrix::PutString( const svl::SharedString& rStr, Pos& rPos )
-{
-    pImpl->PutString(rStr, rPos);
-}
-
-void ScMatrix::PutEmpty( Pos& rPos )
-{
-    pImpl->PutEmpty(rPos);
-}
-
-void ScMatrix::PutEmptyPath( Pos& rPos )
-{
-    pImpl->PutEmptyPath(rPos);
-}
-
-void ScMatrix::PutError( sal_uInt16 nErr, Pos& rPos )
-{
-    pImpl->PutError(nErr, rPos);
-}
-
-void ScMatrix::PutBoolean( bool bVal, Pos& rPos )
-{
-    pImpl->PutBoolean(bVal, rPos);
 }
 
 void ScMatrix::MatCopy(ScMatrix& mRes) const

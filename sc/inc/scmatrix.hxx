@@ -144,31 +144,6 @@ public:
             mfFirst(r.mfFirst), mfRest(r.mfRest), mnCount(r.mnCount) {}
     };
 
-    struct Pos;
-    struct ConstPos;
-
-    static void DeletePosition( const Pos* p );
-    static void DeletePosition( const ConstPos* p );
-
-    struct PosDeleter : std::unary_function<const Pos*, void>
-    {
-        void operator() (const Pos* p)
-        {
-            DeletePosition(p);
-        }
-    };
-
-    struct ConstPosDeleter : std::unary_function<const ConstPos*, void>
-    {
-        void operator() (const ConstPos* p)
-        {
-            DeletePosition(p);
-        }
-    };
-
-    typedef boost::interprocess::unique_ptr<Pos, PosDeleter> PosRef;
-    typedef boost::interprocess::unique_ptr<ConstPos, ConstPosDeleter> ConstPosRef;
-
     /// The maximum number of elements a matrix may have at runtime.
     inline static size_t GetElementsMax()
     {
@@ -321,8 +296,6 @@ public:
     /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
     /// an empty string!
     ScMatrixValue Get( SCSIZE nC, SCSIZE nR) const;
-    ScMatrixValue Get( const Pos& rPos ) const;
-    ScMatrixValue Get( const ConstPos& rPos ) const;
 
     /// @return <TRUE/> if string or empty or empty path, in fact non-value.
     sal_Bool IsString( SCSIZE nIndex ) const;
@@ -350,31 +323,6 @@ public:
 
     /// @return <TRUE/> if entire matrix is numeric, including booleans, with no strings or empties
     sal_Bool IsNumeric() const;
-
-    Pos* GetPosition( size_t nC, size_t nR );
-    ConstPos* GetConstPosition( size_t nC, size_t nR ) const;
-
-    bool NextPosition( Pos& rPos );
-    bool NextPosition( ConstPos& rPos ) const;
-
-    bool IsValue( const Pos& rPos ) const;
-    bool IsValue( const ConstPos& rPos ) const;
-
-    bool IsEmpty( const Pos& rPos ) const;
-    bool IsEmpty( const ConstPos& rPos ) const;
-
-    double GetDouble( const Pos& rPos ) const;
-    double GetDouble( const ConstPos& rPos ) const;
-
-    svl::SharedString GetString( const Pos& rPos ) const;
-    svl::SharedString GetString( const ConstPos& rPos ) const;
-
-    void PutDouble( double fVal, Pos& rPos );
-    void PutString( const svl::SharedString& rStr, Pos& rPos );
-    void PutEmpty( Pos& rPos );
-    void PutEmptyPath( Pos& rPos );
-    void PutError( sal_uInt16 nErr, Pos& rPos );
-    void PutBoolean( bool bVal, Pos& rPos );
 
     void MatTrans( ScMatrix& mRes) const;
     void MatCopy ( ScMatrix& mRes) const;
