@@ -1542,6 +1542,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = armv7;
 			};
@@ -1582,6 +1583,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = armv7;
@@ -1591,6 +1593,7 @@
 		689EBB0E18069FB8002F1CD7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1669,6 +1672,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = armv7;
 			};
@@ -1677,6 +1681,7 @@
 		88A13310181023A40091F25E /* Debug_tile_tester */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

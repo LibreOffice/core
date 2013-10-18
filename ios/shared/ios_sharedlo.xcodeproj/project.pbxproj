@@ -48,9 +48,11 @@
 		889B7929180FF928005A3149 /* MLOAppRoleLoApp.m in Sources */ = {isa = PBXBuildFile; fileRef = 889B7928180FF928005A3149 /* MLOAppRoleLoApp.m */; };
 		889B792C180FF967005A3149 /* MLOAppRoleTileTester.m in Sources */ = {isa = PBXBuildFile; fileRef = 889B792B180FF967005A3149 /* MLOAppRoleTileTester.m */; };
 		889B7930180FFBA5005A3149 /* MLOAppRoleBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 889B792F180FFBA5005A3149 /* MLOAppRoleBase.m */; };
+		88A083BA18115E8D009C75BE /* MLOTestingTile.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A083B918115E8D009C75BE /* MLOTestingTile.m */; };
 		88A132FC181020320091F25E /* MLOTestingTileRendererViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A132FB181020320091F25E /* MLOTestingTileRendererViewController.m */; };
 		88A132FF1810204E0091F25E /* MLOTestingTileParametersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A132FE1810204E0091F25E /* MLOTestingTileParametersViewController.m */; };
 		88A1330B1810213F0091F25E /* MLOAppRoleFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A1330A1810213E0091F25E /* MLOAppRoleFactory.m */; };
+		88A13318181040BC0091F25E /* MLOTestingTileParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A13317181040BC0091F25E /* MLOTestingTileParameter.m */; };
 		88A2ED23180D4D7C009F39C0 /* MLOKeyboardManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88A2ED22180D4D7C009F39C0 /* MLOKeyboardManager.m */; };
 /* End PBXBuildFile section */
 
@@ -157,6 +159,8 @@
 		889B792E180FFBA5005A3149 /* MLOAppRoleBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLOAppRoleBase.h; path = role/MLOAppRoleBase.h; sourceTree = "<group>"; };
 		889B792F180FFBA5005A3149 /* MLOAppRoleBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLOAppRoleBase.m; path = role/MLOAppRoleBase.m; sourceTree = "<group>"; };
 		889B793618101709005A3149 /* MLOAppRoleProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLOAppRoleProtocol.h; path = role/MLOAppRoleProtocol.h; sourceTree = "<group>"; };
+		88A083B818115E8D009C75BE /* MLOTestingTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLOTestingTile.h; path = testing_tiles/MLOTestingTile.h; sourceTree = "<group>"; };
+		88A083B918115E8D009C75BE /* MLOTestingTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLOTestingTile.m; path = testing_tiles/MLOTestingTile.m; sourceTree = "<group>"; };
 		88A132FA181020320091F25E /* MLOTestingTileRendererViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLOTestingTileRendererViewController.h; path = testing_tiles/MLOTestingTileRendererViewController.h; sourceTree = "<group>"; };
 		88A132FB181020320091F25E /* MLOTestingTileRendererViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLOTestingTileRendererViewController.m; path = testing_tiles/MLOTestingTileRendererViewController.m; sourceTree = "<group>"; };
 		88A132FD1810204E0091F25E /* MLOTestingTileParametersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLOTestingTileParametersViewController.h; path = testing_tiles/MLOTestingTileParametersViewController.h; sourceTree = "<group>"; };
@@ -164,6 +168,8 @@
 		88A13300181020E40091F25E /* MLOTestingTileSubviewControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MLOTestingTileSubviewControllerProtocol.h; path = testing_tiles/MLOTestingTileSubviewControllerProtocol.h; sourceTree = "<group>"; };
 		88A133091810213E0091F25E /* MLOAppRoleFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MLOAppRoleFactory.h; path = role/MLOAppRoleFactory.h; sourceTree = "<group>"; };
 		88A1330A1810213E0091F25E /* MLOAppRoleFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MLOAppRoleFactory.m; path = role/MLOAppRoleFactory.m; sourceTree = "<group>"; };
+		88A13316181040BC0091F25E /* MLOTestingTileParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLOTestingTileParameter.h; sourceTree = "<group>"; };
+		88A13317181040BC0091F25E /* MLOTestingTileParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLOTestingTileParameter.m; sourceTree = "<group>"; };
 		88A2ED21180D4D7C009F39C0 /* MLOKeyboardManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLOKeyboardManager.h; sourceTree = "<group>"; };
 		88A2ED22180D4D7C009F39C0 /* MLOKeyboardManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLOKeyboardManager.m; sourceTree = "<group>"; };
 		88E94760180D4E9800771808 /* MLOToolbarViewController_Impl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MLOToolbarViewController_Impl.h; sourceTree = "<group>"; };
@@ -405,8 +411,12 @@
 			children = (
 				88A132FA181020320091F25E /* MLOTestingTileRendererViewController.h */,
 				88A132FB181020320091F25E /* MLOTestingTileRendererViewController.m */,
+				88A083B818115E8D009C75BE /* MLOTestingTile.h */,
+				88A083B918115E8D009C75BE /* MLOTestingTile.m */,
 				88A132FD1810204E0091F25E /* MLOTestingTileParametersViewController.h */,
 				88A132FE1810204E0091F25E /* MLOTestingTileParametersViewController.m */,
+				88A13316181040BC0091F25E /* MLOTestingTileParameter.h */,
+				88A13317181040BC0091F25E /* MLOTestingTileParameter.m */,
 				88A13300181020E40091F25E /* MLOTestingTileSubviewControllerProtocol.h */,
 			);
 			name = testing_tiles;
@@ -504,6 +514,8 @@
 				88A132FC181020320091F25E /* MLOTestingTileRendererViewController.m in Sources */,
 				88A132FF1810204E0091F25E /* MLOTestingTileParametersViewController.m in Sources */,
 				88A1330B1810213F0091F25E /* MLOAppRoleFactory.m in Sources */,
+				88A13318181040BC0091F25E /* MLOTestingTileParameter.m in Sources */,
+				88A083BA18115E8D009C75BE /* MLOTestingTile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,6 +536,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -547,6 +560,7 @@
 				LLVM_LTO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -581,6 +595,7 @@
 				LINK_WITH_STANDARD_LIBRARIES = NO;
 				LLVM_LTO = YES;
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -633,6 +648,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -656,6 +672,7 @@
 				LLVM_LTO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug_tile_tester;
 		};

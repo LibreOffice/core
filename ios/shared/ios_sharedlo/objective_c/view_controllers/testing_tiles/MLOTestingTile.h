@@ -1,4 +1,4 @@
-// -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+// -*- Mode: Objective-C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //
 // This file is part of the LibreOffice project.
 //
@@ -6,11 +6,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#import <Foundation/Foundation.h>
-
+#import "MLOSubView.h"
 @class MLOAppRoleTileTester;
-@protocol MLOTestingTileSubviewControllerProtocol <NSObject>
--(id)initWithTester:(MLOAppRoleTileTester *)tester;
--(void)addToSuperview;
+@interface MLOTestingTile : MLOSubView
+-(id)initWithTester:(MLOAppRoleTileTester *) tester;
 -(void)resize;
 @end

@@ -10,5 +10,5 @@
 #import "MLOTestingTileSubviewControllerProtocol.h"
 
 @interface MLOTestingTileParametersViewController : MLOViewController<MLOTestingTileSubviewControllerProtocol>
-
+@property CGFloat contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight;
 @end

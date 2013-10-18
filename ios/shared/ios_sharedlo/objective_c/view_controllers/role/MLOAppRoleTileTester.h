@@ -7,7 +7,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #import "MLOAppRoleBase.h"
-
+@class MLOTestingTileRendererViewController,MLOTestingTileParametersViewController;
 @interface MLOAppRoleTileTester : MLOAppRoleBase
+@property MLOTestingTileRendererViewController * renderer;
+@property MLOTestingTileParametersViewController * params;
 
 @end

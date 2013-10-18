@@ -20,6 +20,10 @@ static const NSTimeInterval ROTATE_FLASH_DURATION=0.5f;
 
 @implementation MLOAppRoleLoApp
 
+-(NSString *)description{
+    return @"MLOAppRoleLoApp";
+}
+
 -(void)initSubviews{
     MLOMainViewController * main = [self mainViewController];
     main.scroller = [[MLOScrollerViewController alloc] initWithMainViewController:main];

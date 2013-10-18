@@ -82,6 +82,7 @@ static const CGFloat
                                    self.view.frame.size.width,
                                    self.view.frame.size.height - TOP_BAR_HEIGHT);
     self.canvas = [[UIView alloc] initWithFrame:canvasRect];
+    self.role.view = self.canvas;
     self.canvas.clipsToBounds = YES;
     self.canvas.backgroundColor = [UIColor whiteColor];
 }
