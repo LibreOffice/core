@@ -23,6 +23,7 @@
 #include "internal/rtllifecycle.h"
 #include "sal/macros.h"
 #include "osl/diagnose.h"
+#include <osl/thread.h>
 
 #include <cassert>
 #include <string.h>
@@ -1507,6 +1508,7 @@ static DWORD WINAPI
 #endif /* SAL_UNX || SAL_W32 */
 rtl_cache_wsupdate_all (void * arg)
 {
+    osl_setThreadName("rtl_cache_wsupdate_all");
     unsigned int seconds = sal::static_int_cast< unsigned int >(
         reinterpret_cast< sal_uIntPtr >(arg));
 
