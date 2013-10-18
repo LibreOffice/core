@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,neon))
 
-ifeq ($(SYSTEM_NEON),NO)
-
 $(eval $(call gb_Module_add_targets,neon,\
 	Library_neon \
 	UnpackedTarball_neon \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

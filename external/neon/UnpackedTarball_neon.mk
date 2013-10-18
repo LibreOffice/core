@@ -12,15 +12,15 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,neon))
 $(eval $(call gb_UnpackedTarball_set_tarball,neon,$(NEON_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_files,neon,src,\
-	neon/configs/config.h \
+	external/neon/configs/config.h \
 ))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,neon,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,neon,\
-	neon/neon.patch \
-	neon/neon_ne_set_request_flag.patch \
-	neon/neon_with_gnutls.patch \
+	external/neon/neon.patch \
+	external/neon/neon_ne_set_request_flag.patch \
+	external/neon/neon_with_gnutls.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
