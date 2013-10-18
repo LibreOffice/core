@@ -23,10 +23,27 @@
 class UIPreviewApp : public Application
 {
 public:
+    virtual void Init();
     virtual int Main();
 };
 
 using namespace com::sun::star;
+
+void UIPreviewApp::Init()
+{
+    uno::Reference<uno::XComponentContext> xContext =
+        cppu::defaultBootstrap_InitialComponentContext();
+    uno::Reference<lang::XMultiComponentFactory> xFactory =
+        xContext->getServiceManager();
+    uno::Reference<lang::XMultiServiceFactory> xSFactory =
+        uno::Reference<lang::XMultiServiceFactory> (xFactory, uno::UNO_QUERY_THROW);
+    comphelper::setProcessServiceFactory(xSFactory);
+
+    // Create UCB (for backwards compatibility, in case some code still uses
+    // plain createInstance w/o args directly to obtain an instance):
+    ::ucb::UniversalContentBroker::create(
+        comphelper::getProcessComponentContext() );
+}
 
 int UIPreviewApp::Main()
 {
@@ -43,19 +60,6 @@ int UIPreviewApp::Main()
         fprintf(stderr, "Usage: ui-previewer file.ui\n");
         return EXIT_FAILURE;
     }
-
-    uno::Reference<uno::XComponentContext> xContext =
-        cppu::defaultBootstrap_InitialComponentContext();
-    uno::Reference<lang::XMultiComponentFactory> xFactory =
-        xContext->getServiceManager();
-    uno::Reference<lang::XMultiServiceFactory> xSFactory =
-        uno::Reference<lang::XMultiServiceFactory> (xFactory, uno::UNO_QUERY_THROW);
-    comphelper::setProcessServiceFactory(xSFactory);
-
-    // Create UCB (for backwards compatibility, in case some code still uses
-    // plain createInstance w/o args directly to obtain an instance):
-    ::ucb::UniversalContentBroker::create(
-        comphelper::getProcessComponentContext() );
 
     // turn on tooltips
     Help::EnableQuickHelp();
