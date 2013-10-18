@@ -11,13 +11,13 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,mariadb))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,mariadb,$(MARIADB_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_add_file,mariadb,include/mysql_version.h,libmariadb/configs/mysql_version.h))
+$(eval $(call gb_UnpackedTarball_add_file,mariadb,include/mysql_version.h,external/libmariadb/configs/mysql_version.h))
 
 ifneq ($(OS),WNT)
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_UnpackedTarball_add_file,mariadb,include/my_config.h,libmariadb/configs/mac_my_config.h))
+$(eval $(call gb_UnpackedTarball_add_file,mariadb,include/my_config.h,external/libmariadb/configs/mac_my_config.h))
 else
-$(eval $(call gb_UnpackedTarball_add_file,mariadb,include/my_config.h,libmariadb/configs/linux_my_config.h))
+$(eval $(call gb_UnpackedTarball_add_file,mariadb,include/my_config.h,external/libmariadb/configs/linux_my_config.h))
 endif
 endif # $(OS),WNT
 
@@ -27,11 +27,11 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,mariadb,1))
 # <https://mariadb.atlassian.net/browse/CONC-18> "no external definition of
 # non-static inline local_thr_alarm in libmariadb/net.c":
 $(eval $(call gb_UnpackedTarball_add_patches,mariadb,\
-    libmariadb/mariadb-thread.patch \
-    libmariadb/mariadb-swap.patch \
-    libmariadb/mariadb-trunk-40.patch \
-    libmariadb/mariadb-static-inline.patch \
-    libmariadb/mariadb-msvc.patch.1 \
+    external/libmariadb/mariadb-thread.patch \
+    external/libmariadb/mariadb-swap.patch \
+    external/libmariadb/mariadb-trunk-40.patch \
+    external/libmariadb/mariadb-static-inline.patch \
+    external/libmariadb/mariadb-msvc.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,mariadb,\

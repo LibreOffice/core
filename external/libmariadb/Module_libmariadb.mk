@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,libmariadb))
 
-ifeq ($(SYSTEM_MARIADB),NO)
-
 $(eval $(call gb_Module_add_targets,libmariadb,\
 	StaticLibrary_mariadb \
 	UnpackedTarball_mariadb \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
