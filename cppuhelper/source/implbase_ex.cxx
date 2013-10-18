@@ -52,9 +52,9 @@ static inline void checkInterface( Type const & rType )
     if (TypeClass_INTERFACE != rType.getTypeClass())
     {
         OUStringBuffer buf( 64 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("querying for interface \"") );
+        buf.append( OUString("querying for interface \"") );
         buf.append( rType.getTypeName() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\": no interface type!") );
+        buf.append( OUString("\": no interface type!") );
         OUString msg( buf.makeStringAndClear() );
 #if OSL_DEBUG_LEVEL > 0
         OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
@@ -102,9 +102,9 @@ static inline type_entry * __getTypeEntries( class_data * cd )
                 if (rType.getTypeClass() != TypeClass_INTERFACE)
                 {
                     OUStringBuffer buf( 48 );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("type \"") );
+                    buf.append( OUString("type \"") );
                     buf.append( rType.getTypeName() );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" is no interface type!") );
+                    buf.append( OUString("\" is no interface type!") );
                     OUString msg( buf.makeStringAndClear() );
 #if OSL_DEBUG_LEVEL > 0
                     OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
@@ -215,9 +215,9 @@ static inline void * __queryDeepNoXInterface(
         else
         {
             OUStringBuffer buf( 64 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("cannot get type description for type \"") );
+            buf.append( OUString("cannot get type description for type \"") );
             buf.append( pEntries[ n ].m_type.typeRef->pTypeName );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+            buf.append( OUString("\"!") );
             OUString msg( buf.makeStringAndClear() );
 #if OSL_DEBUG_LEVEL > 0
             OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
