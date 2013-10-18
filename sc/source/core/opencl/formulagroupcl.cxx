@@ -364,6 +364,41 @@ public:
         ss << "}";
     }
 };
+class RRI: public SlidingFunctionBase, public OpBase
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = " << GetBottom() <<";\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "tmp = pow(";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss<<"/";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss<<",1.0/";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<")-1;\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+};
+class OpRRI:public RRI
+{
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string BinFuncName(void) const { return "RRI"; }
+};
+
 class OpNominal: public Normal
 {
 public:
@@ -1409,6 +1444,9 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
             case ocZins:
                 mvSubArguments.push_back(SoPHelper<OpIntrate>(ts,
                     ft->Children[i]));
+                break;
+            case ocZGZ:
+                mvSubArguments.push_back(SoPHelper<OpRRI>(ts, ft->Children[i]));
                 break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
