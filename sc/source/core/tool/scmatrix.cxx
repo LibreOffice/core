@@ -122,11 +122,11 @@ class CompareMatrixElemFunc : std::unary_function<MatrixImplType::element_block_
 {
     static _Comp maComp;
 
-    MatrixImplType maNewMat;
     std::vector<bool> maNewMatValues;
+    size_t mnRow;
+    size_t mnCol;
 public:
-    CompareMatrixElemFunc( size_t nRow, size_t nCol ) :
-        maNewMat(nRow, nCol, false)
+    CompareMatrixElemFunc( size_t nRow, size_t nCol ) : mnRow(nRow), mnCol(nCol)
     {
         maNewMatValues.reserve(nRow*nCol);
     }
@@ -178,8 +178,8 @@ public:
 
     void swap( MatrixImplType& rMat )
     {
-        maNewMat.set(0, 0, maNewMatValues.begin(), maNewMatValues.end());
-        rMat.swap(maNewMat);
+        MatrixImplType aNewMat(mnRow, mnCol, maNewMatValues.begin(), maNewMatValues.end());
+        rMat.swap(aNewMat);
     }
 };
 
