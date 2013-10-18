@@ -109,7 +109,7 @@ static OUString GetConnectorShapeType( sal_Int32 nType )
 
 
 void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFilterBase */,
-    const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape )
+    const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape, const awt::Size &aSize )
 {
     if ( mnShapePresetType >= 0 )
     {
@@ -213,8 +213,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap[ PROP_Type ] <<= OUString( "ooxml-non-primitive" );
         aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
         aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
-        awt::Size aSize;
-        awt::Rectangle aViewBox( 0, 0, aSize.Width * 360, aSize.Height * 360 );
+        awt::Rectangle aViewBox( 0, 0, aSize.Width, aSize.Height );
         aPropertyMap[ PROP_ViewBox ] <<= aViewBox;
 
         Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentValues( maAdjustmentGuideList.size() );
