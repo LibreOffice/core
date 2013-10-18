@@ -24,6 +24,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	cfgex \
 	concat-deps \
 	cpp \
+	cppunittester \
 	$(if $(filter MSC,$(COM)), \
 		gcc-wrapper \
 		g++-wrapper \
@@ -443,11 +444,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	unobootstrapprotector \
 	unoexceptionprotector \
 	unotest \
-))
-
-# this is packaged in the "Test" instset, in the "program" dir :-/
-$(eval $(call gb_Helper_register_executables,OOO, \
-	cppunittester \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \

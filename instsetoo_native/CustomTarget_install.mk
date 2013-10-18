@@ -114,9 +114,6 @@ else # LIBO_TEST_INSTALL
 ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
 	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,$(PKGFORMAT))
 endif
-ifeq (,$(filter WNT MACOSX,$(OS)))
-	$(call instsetoo_native_install_command,not-used,en-US,_Test,,$(PKGFORMAT))
-endif
 ifeq (HELP,$(filter HELP,$(BUILD_TYPE))$(filter MACOSX,$(OS)))
 	$(foreach lang,$(gb_HELP_LANGS),\
 		$(call instsetoo_native_install_command,ooohelppack,$(lang),,-helppack,$(PKGFORMAT)))

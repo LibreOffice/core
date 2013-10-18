@@ -25,7 +25,6 @@ $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/packinfo_office.txt,
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/packinfo_office_help.txt,packinfo_office_help.txt))
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/packinfo_office_lang.txt,packinfo_office_lang.txt))
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/packinfo_sdkoo.txt,packinfo_sdkoo.txt))
-$(eval $(call gb_Package_add_file,setup_native/packinfo,bin/packinfo_test.txt,packinfo_test.txt))
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/packinfo_ure.txt,packinfo_ure.txt))
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/shellscripts.txt,shellscripts.txt))
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/shellscripts_core01.txt,shellscripts_core01.txt))
