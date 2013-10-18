@@ -3850,7 +3850,7 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
             }
         }
     }
-    if (fCount < (_bStexy ? 3.0 : 1.0)) // fCount==1 is handled by checking denominator later on
+    if (fCount < (_bStexy ? 3.0 : (_bSample ? 2.0 : 1.0))) // fCount==1 is handled by checking denominator later on
         PushNoValue();
     else
     {
