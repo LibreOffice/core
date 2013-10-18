@@ -9,14 +9,10 @@
 
 $(eval $(call gb_Module_Module,lpsolve))
 
-ifeq ($(ENABLE_LPSOLVE),TRUE)
-ifeq ($(SYSTEM_LPSOLVE),NO)
 $(eval $(call gb_Module_add_targets,lpsolve,\
 	UnpackedTarball_lpsolve \
 	ExternalPackage_lpsolve \
 	ExternalProject_lpsolve \
 ))
-endif
-endif
 
 # vim: set noet sw=4 ts=4:

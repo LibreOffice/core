@@ -17,18 +17,18 @@ ifeq ($(OS_FOR_BUILD),WNT)
 
 $(eval $(call gb_UnpackedTarball_set_patchflags,lpsolve,--binary))
 $(eval $(call gb_UnpackedTarball_add_patches,lpsolve,\
-	lpsolve/lp_solve_5.5-windows.patch \
+	external/lpsolve/lp_solve_5.5-windows.patch \
 ))
 
 else
 
 $(eval $(call gb_UnpackedTarball_add_patches,lpsolve,\
-	lpsolve/lp_solve-aix.patch \
-	lpsolve/lp_solve-fixed-warn.patch \
-	lpsolve/lp_solve_5.5.patch \
+	external/lpsolve/lp_solve-aix.patch \
+	external/lpsolve/lp_solve-fixed-warn.patch \
+	external/lpsolve/lp_solve_5.5.patch \
 ))
 
-$(eval $(call gb_UnpackedTarball_add_file,lpsolve,lpsolve55/ccc.static,lpsolve/ccc.static))
+$(eval $(call gb_UnpackedTarball_add_file,lpsolve,lpsolve55/ccc.static,external/lpsolve/ccc.static))
 
 endif
 # vim: set noet sw=4 ts=4:

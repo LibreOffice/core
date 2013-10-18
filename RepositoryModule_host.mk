@@ -75,7 +75,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	lingucomponent \
 	linguistic \
 	lotuswordpro \
-	$(call gb_Helper_optional,LPSOLVE,lpsolve) \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	$(call gb_Helper_optional,MARIADB,libmariadb) \
 	$(call gb_Helper_optional,MDDS,mdds) \
