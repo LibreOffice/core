@@ -1057,8 +1057,10 @@ public:
         {
             case mdds::mtm::element_numeric:
             {
-                mdds::mtv::numeric_element_block::const_iterator it = mdds::mtv::numeric_element_block::begin(*node.data);
-                mdds::mtv::numeric_element_block::const_iterator itEnd = mdds::mtv::numeric_element_block::end(*node.data);
+                typedef MatrixImplType::numeric_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                 {
                     if (mbFirst)
@@ -1074,8 +1076,10 @@ public:
             break;
             case mdds::mtm::element_boolean:
             {
-                mdds::mtv::boolean_element_block::const_iterator it = mdds::mtv::boolean_element_block::begin(*node.data);
-                mdds::mtv::boolean_element_block::const_iterator itEnd = mdds::mtv::boolean_element_block::end(*node.data);
+                typedef MatrixImplType::boolean_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                 {
                     if (mbFirst)
@@ -1177,8 +1181,10 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
     {
         case mdds::mtm::element_numeric:
         {
-            MatrixImplType::numeric_block_type::const_iterator it = MatrixImplType::numeric_block_type::begin(*node.data);
-            MatrixImplType::numeric_block_type::const_iterator itEnd = MatrixImplType::numeric_block_type::end(*node.data);
+            typedef MatrixImplType::numeric_block_type block_type;
+
+            block_type::const_iterator it = block_type::begin(*node.data);
+            block_type::const_iterator itEnd = block_type::end(*node.data);
             for (; it != itEnd; ++it, nCount++)
             {
                 if (*it == maMatchValue)
@@ -1190,8 +1196,10 @@ size_t WalkAndMatchElements<double>::compare(const MatrixImplType::element_block
         }
         case mdds::mtm::element_boolean:
         {
-            MatrixImplType::boolean_block_type::const_iterator it = MatrixImplType::boolean_block_type::begin(*node.data);
-            MatrixImplType::boolean_block_type::const_iterator itEnd = MatrixImplType::boolean_block_type::end(*node.data);
+            typedef MatrixImplType::boolean_block_type block_type;
+
+            block_type::const_iterator it = block_type::begin(*node.data);
+            block_type::const_iterator itEnd = block_type::end(*node.data);
             for (; it != itEnd; ++it, ++nCount)
             {
                 if (int(*it) == maMatchValue)
@@ -1218,8 +1226,10 @@ size_t WalkAndMatchElements<svl::SharedString>::compare(const MatrixImplType::el
     {
         case mdds::mtm::element_string:
         {
-            MatrixImplType::string_block_type::const_iterator it = MatrixImplType::string_block_type::begin(*node.data);
-            MatrixImplType::string_block_type::const_iterator itEnd = MatrixImplType::string_block_type::end(*node.data);
+            typedef MatrixImplType::string_block_type block_type;
+
+            block_type::const_iterator it = block_type::begin(*node.data);
+            block_type::const_iterator itEnd = block_type::end(*node.data);
             for (; it != itEnd; ++it, ++nCount)
             {
                 if (it->getDataIgnoreCase() == maMatchValue.getDataIgnoreCase())
@@ -1247,8 +1257,8 @@ struct MaxOp
     }
 
     static double boolValue(
-        mdds::mtv::boolean_element_block::const_iterator it,
-        mdds::mtv::boolean_element_block::const_iterator itEnd)
+        MatrixImplType::boolean_block_type::const_iterator it,
+        MatrixImplType::boolean_block_type::const_iterator itEnd)
     {
         // If the array has at least one true value, the maximum value is 1.
         it = std::find(it, itEnd, true);
@@ -1265,8 +1275,8 @@ struct MinOp
     }
 
     static double boolValue(
-        mdds::mtv::boolean_element_block::const_iterator it,
-        mdds::mtv::boolean_element_block::const_iterator itEnd)
+        MatrixImplType::boolean_block_type::const_iterator it,
+        MatrixImplType::boolean_block_type::const_iterator itEnd)
     {
         // If the array has at least one false value, the minimum value is 0.
         it = std::find(it, itEnd, false);
@@ -1288,22 +1298,25 @@ public:
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
-        using namespace mdds::mtv;
 
         switch (node.type)
         {
             case mdds::mtm::element_numeric:
             {
-                numeric_element_block::const_iterator it = numeric_element_block::begin(*node.data);
-                numeric_element_block::const_iterator itEnd = numeric_element_block::end(*node.data);
+                typedef MatrixImplType::numeric_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                     mfVal = _Op::compare(mfVal, *it);
             }
             break;
             case mdds::mtm::element_boolean:
             {
-                boolean_element_block::const_iterator it = boolean_element_block::begin(*node.data);
-                boolean_element_block::const_iterator itEnd = boolean_element_block::end(*node.data);
+                typedef MatrixImplType::boolean_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
                 double fVal = _Op::boolValue(it, itEnd);
                 mfVal = _Op::compare(mfVal, fVal);
             }
