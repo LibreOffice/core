@@ -314,18 +314,25 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         }
         else
         {
-            ScPatternAttr aAttr( *pDoc->GetSelectionPattern( pDoc->GetPreviewSelection() ) );
-            if ( ScStyleSheet* pPreviewStyle = pDoc->GetPreviewCellStyle() )
-                aAttr.SetStyleSheet( pPreviewStyle );
-            pDoc->SetPreviewCellStyle(NULL);
+            // No mark at all happens when creating a new document, in which
+            // case the selection pattern obtained would be empty (created of
+            // GetPool()) anyway and nothing needs to be applied.
+            ScMarkData aPreviewMark( pDoc->GetPreviewSelection());
+            if (aPreviewMark.IsMarked() || aPreviewMark.IsMultiMarked())
+            {
+                ScPatternAttr aAttr( *pDoc->GetSelectionPattern( aPreviewMark ) );
+                if ( ScStyleSheet* pPreviewStyle = pDoc->GetPreviewCellStyle() )
+                    aAttr.SetStyleSheet( pPreviewStyle );
+                pDoc->SetPreviewCellStyle(NULL);
 
-            SfxItemSet aItemSet( GetPool() );
+                SfxItemSet aItemSet( GetPool() );
 
-            ScPatternAttr aNewAttrs( GetViewData()->GetDocument()->GetPool() );
-            SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
-            rNewSet.Put( aItemSet, false );
-            pDoc->ApplySelectionPattern( aNewAttrs, pDoc->GetPreviewSelection() );
-            pTabViewShell->UpdateSelectionArea(  pDoc->GetPreviewSelection(), &aAttr );
+                ScPatternAttr aNewAttrs( GetViewData()->GetDocument()->GetPool() );
+                SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
+                rNewSet.Put( aItemSet, false );
+                pDoc->ApplySelectionPattern( aNewAttrs, aPreviewMark );
+                pTabViewShell->UpdateSelectionArea( aPreviewMark, &aAttr );
+            }
         }
     }
     else if (   (nSlotId == SID_STYLE_NEW)
