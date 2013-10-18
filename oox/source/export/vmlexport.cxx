@@ -563,7 +563,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         aStream.Write(aStruct.pBuf + nHeaderSize, aStruct.nPropSize - nHeaderSize);
                         aStream.Seek(0);
                         Graphic aGraphic;
-                        GraphicConverter::Import(aStream, aGraphic, CVT_PNG);
+                        GraphicConverter::Import(aStream, aGraphic, CVT_UNKNOWN);
                         OUString aImageId = m_pTextExport->GetDrawingML().WriteImage( aGraphic );
                         pAttrList->add(FSNS(XML_r, XML_id), OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
                     }
