@@ -219,4 +219,33 @@ bool touch_ui_keyboard_visible()
     return keyboardShows;
 }
 
+void touch_ui_selection_start(MLOSelectionKind kind,
+                              const void *documentHandle,
+                              MLORect *rectangles,
+                              int rectangleCount,
+                              void *preview)
+{
+    (void) preview;
+
+    // Note that this is called on the LO thread
+    NSLog(@"==> touch_ui_selection_start");
+    for(int i = 0; i < rectangleCount; ++i){
+        NSLog(@"  %fx%f@(%f,%f)",
+              rectangles[i].size.width,
+              rectangles[i].size.height,
+              rectangles[i].origin.x,
+              rectangles[i].origin.y);
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+            [theView startSelectionOfType:kind withNumber:rectangleCount ofRectangles:rectangles forDocument:documentHandle];
+        });
+}
+
+void touch_ui_selection_none()
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+            [theView startSelectionOfType:MLOSelectionNone withNumber:0 ofRectangles:NULL forDocument:NULL];
+        });
+}
+
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

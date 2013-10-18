@@ -18,8 +18,24 @@
 
 #if !HAVE_FEATURE_DESKTOP
 
+// Let's try this way: Use Quartz 2D types for iOS, and LO's basegfx
+// types for others, when/if this API is used for others. But of
+// course, it is quite likely that some degree of redesign is needed
+// at such a stage anyway...
+
+#ifdef IOS
+#include <premac.h>
+#include <CoreGraphics/CoreGraphics.h>
+#include <postmac.h>
+#else
+#include <basegfx/range/b2ibox.hxx>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
+#if 0
+} // To avoid an editor indenting all inside the extern "C"
+#endif
 #endif
 
 // These functions are the interface between the upper GUI layers of a
@@ -40,6 +56,31 @@ void touch_ui_damaged(int minX, int minY, int width, int height);
 void touch_ui_show_keyboard();
 void touch_ui_hide_keyboard();
 bool touch_ui_keyboard_visible();
+
+typedef enum {
+    MLOSelectionNone,
+    MLOSelectionText,
+    MLOSelectionGraphic
+} MLOSelectionKind;
+
+#ifdef IOS
+typedef CGRect MLORect;
+#else
+typedef basegfx::B2IBox MLORect;
+#endif
+
+void touch_ui_selection_start(MLOSelectionKind kind,
+                              const void *documentHandle,
+                              MLORect *rectangles,
+                              int rectangleCount,
+                              void *preview);
+
+void touch_ui_selection_resize_done(bool success,
+                                    const void *documentHandle,
+                                    MLORect *rectangles,
+                                    int rectangleCount);
+
+void touch_ui_selection_none();
 
 // 2) Those implmented in the lower layers to be called by the upper
 // layer, in cases where we don't want to include a bunch of the
@@ -68,6 +109,10 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int 
 typedef enum { DOWN, MOVE, UP} MLOMouseButtonState;
 
 void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state);
+
+void touch_lo_selection_attempt_resize(const void *documentHandle,
+                                       MLORect *selectedRectangles,
+                                       int numberOfRectangles);
 
 #ifdef __cplusplus
 }

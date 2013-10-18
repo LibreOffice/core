@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
@@ -41,6 +43,8 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
+
+#include <touch/touch.h>
 
 extern void SwCalcPixStatics( OutputDevice *pOut );
 
@@ -184,8 +188,10 @@ void SwVisCrsr::_SetPosAndShow()
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
 :   SwRects(),
-    pCShell( &rCSh ),
-    mpCursorOverlay(0)
+    pCShell( &rCSh )
+#if HAVE_FEATURE_DESKTOP
+    , mpCursorOverlay(0)
+#endif
 {
 }
 
@@ -198,19 +204,23 @@ void SwSelPaintRects::swapContent(SwSelPaintRects& rSwap)
 {
     SwRects::swap(rSwap);
 
+#if HAVE_FEATURE_DESKTOP
     // #i75172# also swap mpCursorOverlay
     sdr::overlay::OverlayObject* pTempOverlay = getCursorOverlay();
     setCursorOverlay(rSwap.getCursorOverlay());
     rSwap.setCursorOverlay(pTempOverlay);
+#endif
 }
 
 void SwSelPaintRects::Hide()
 {
+#if HAVE_FEATURE_DESKTOP
     if(mpCursorOverlay)
     {
         delete mpCursorOverlay;
         mpCursorOverlay = 0;
     }
+#endif
 
     SwRects::clear();
 }
@@ -225,6 +235,7 @@ void SwSelPaintRects::Show()
         SwRects::clear();
         FillRects();
 
+#if HAVE_FEATURE_DESKTOP
         // get new rects
         std::vector< basegfx::B2DRange > aNewRanges;
 
@@ -250,8 +261,27 @@ void SwSelPaintRects::Show()
                 mpCursorOverlay = 0;
             }
         }
+#else
+        if (false)
+            ;
+#endif
         else if(!empty())
         {
+#if !HAVE_FEATURE_DESKTOP && defined IOS
+            const OutputDevice* pOut = GetShell()->GetWin();
+            if ( ! pOut )
+                pOut = GetShell()->GetOut();
+            // Buffer will be deallocated in the UI layer
+            CGRect *rects = (CGRect *) malloc((sizeof(CGRect))*size());
+            for (size_t i = 0; i < size(); ++i)
+            {
+                Point origin = pOut->LogicToPixel((*this)[i].Pos());
+                Size size = pOut->LogicToPixel((*this)[i].SSize());
+                rects[i] = CGRectMake(origin.X(), origin.Y(),
+                                      size.Width(), size.Height());
+            }
+            touch_ui_selection_start(MLOSelectionText, GetShell(), rects, size(), NULL);
+#else
             SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
             rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
@@ -270,9 +300,20 @@ void SwSelPaintRects::Show()
 
                 xTargetOverlay->add(*mpCursorOverlay);
             }
+#endif
         }
     }
 }
+
+#if !HAVE_FEATURE_DESKTOP
+
+extern "C" void touch_lo_selection_attempt_resize(const void * /* documentHandle */,
+                                                  MLORect * /* selectedRectangles */,
+                                                  int /* numberOfRectangles */)
+{
+}
+
+#endif
 
 void SwSelPaintRects::Invalidate( const SwRect& rRect )
 {

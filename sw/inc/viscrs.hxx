@@ -19,6 +19,8 @@
 #ifndef _VISCRS_HXX
 #define _VISCRS_HXX
 
+#include <config_features.h>
+
 #include <vcl/cursor.hxx>
 #include "swcrsr.hxx"
 #include "swrect.hxx"
@@ -71,11 +73,13 @@ class SwSelPaintRects : public SwRects
     virtual void Paint( const Rectangle& rRect );
     virtual void FillRects() = 0;
 
+#if HAVE_FEATURE_DESKTOP
     sdr::overlay::OverlayObject*    mpCursorOverlay;
 
     // access to mpCursorOverlay for swapContent
     sdr::overlay::OverlayObject* getCursorOverlay() const { return mpCursorOverlay; }
     void setCursorOverlay(sdr::overlay::OverlayObject* pNew) { mpCursorOverlay = pNew; }
+#endif
 
 public:
     SwSelPaintRects( const SwCrsrShell& rCSh );

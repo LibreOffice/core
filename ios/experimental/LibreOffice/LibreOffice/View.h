@@ -9,6 +9,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import <touch/touch.h>
+
 @interface View : UIView
 {
 @public
@@ -18,6 +20,7 @@
 - (void)tapGesture:(UITapGestureRecognizer *)gestureRecognizer;
 - (void)panGesture:(UIPanGestureRecognizer *)gestureRecognizer;
 - (void)longPressGesture:(UILongPressGestureRecognizer *)gestureRecognizer;
+- (void)startSelectionOfType:(MLOSelectionKind)kind withNumber:(int)number ofRectangles:(CGRect *)rects forDocument:(const void *)document;
 
 @end
 
