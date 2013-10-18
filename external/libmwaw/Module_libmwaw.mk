@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,libmwaw))
 
-ifeq ($(SYSTEM_MWAW),NO)
-
 $(eval $(call gb_Module_add_targets,libmwaw,\
 	ExternalProject_libmwaw \
 	UnpackedTarball_libmwaw \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

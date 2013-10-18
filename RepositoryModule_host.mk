@@ -70,7 +70,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	jvmaccess \
 	jvmfwk \
 	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
-	$(call gb_Helper_optional,MWAW,libmwaw) \
 	$(call gb_Helper_optional,ODFGEN,libodfgen) \
 	$(call gb_Helper_optional,ORCUS,liborcus) \
 	librelogo \
