@@ -9,7 +9,6 @@
 
 $(eval $(call gb_Module_Module,mythes))
 
-ifeq ($(SYSTEM_MYTHES),NO)
 $(eval $(call gb_Module_add_targets,mythes,\
 	UnpackedTarball_mythes \
 ))
@@ -21,7 +20,6 @@ else
 $(eval $(call gb_Module_add_targets,mythes,\
 	ExternalProject_mythes \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:
