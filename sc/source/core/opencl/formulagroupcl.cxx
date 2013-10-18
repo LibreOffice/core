@@ -789,10 +789,10 @@ public:
 };
 class OpYield: public Normal {
 public:
- 	virtual void GenSlidingWindowFunction(std::stringstream &ss,
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
     {
-        ArgVector argVector;
+
         ss << "\ndouble " << sSymName;
         ss << "_"<< BinFuncName() <<"(";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -800,7 +800,6 @@ public:
             if (i)
                 ss << ",";
             vSubArguments[i]->GenSlidingWindowDecl(ss);
-            argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
         }
         ss << ") {\n\t";
         ss << "double tmp = " <<"0"<<";\n\t";
@@ -811,7 +810,6 @@ public:
             if (i)
                 ss << ",";
             ss<<vSubArguments[i]->GenSlidingWindowDeclRef();
-           // argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
         }
         ss << ");\n\t";
         ss << "return tmp;\n";
@@ -853,6 +851,35 @@ public:
         }
 virtual std::string BinFuncName(void) const { return "Received"; }
 
+};
+class OpYielddisc: public Normal {
+public:
+virtual void GenSlidingWindowFunction(std::stringstream &ss,
+     const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = " <<"0"<<";\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "tmp = ("<<vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss<<"/"<<vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss<<" ) - 1.0;\n\t";
+        ss << "tmp /= GetYearFrac( GetNullDate(),";
+        ss<<vSubArguments[0]->GenSlidingWindowDeclRef()<<",";
+        ss<<vSubArguments[1]->GenSlidingWindowDeclRef()<<",";
+        ss<<vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss << ");\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+}
+virtual std::string BinFuncName(void) const { return "Yielddisc"; }
 };
 class OpTbillprice:public Normal{
     public:
@@ -1151,6 +1178,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     "com.sun.star.sheet.addin.Analysis.getYield"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpYield>(ts,
+                        ft->Children[i]));
+                }
+                else if ( !(pChild->GetExternal().compareTo(OUString(
+                   "com.sun.star.sheet.addin.Analysis.getYielddisc"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpYielddisc>(ts,
                         ft->Children[i]));
                 }
                 break;
