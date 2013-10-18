@@ -107,6 +107,7 @@ private:
 
     StringCompare       CompareTo( const UniString& rStr,
                                    xub_StrLen nLen = STRING_LEN ) const;
+    UniString&          Erase( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN );
 
                         UniString( const int* pDummy );    // not implemented: to prevent UniString( NULL )
                         UniString(int); // not implemented; to detect misuses of
@@ -222,7 +223,6 @@ public:
                                 xub_StrLen nIndex = STRING_LEN );
     UniString&          Insert( sal_Unicode c, xub_StrLen nIndex = STRING_LEN );
     UniString&          Replace( xub_StrLen nIndex, xub_StrLen nLen, const UniString& rStr );
-    UniString&          Erase( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN );
     UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
 
     sal_Bool            Equals( const UniString& rStr ) const;
