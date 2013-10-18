@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libvisio))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libvisio,$(VISIO_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libvisio,1))
+
+$(eval $(call gb_UnpackedTarball_add_patches,libvisio,\
+	libvisio/0001-fdo-70480-do-not-crash-reading-malformed-zip.patch \
+))
+
 # vim: set noet sw=4 ts=4:
