@@ -830,7 +830,8 @@ bool wwFont::Write(SvStream *pTableStrm) const
 void wwFont::WriteDocx( DocxAttributeOutput* rAttrOutput ) const
 {
     // no font embedding, panose id, subsetting, ... implemented
-
+if(msFamilyNm!="")
+{
     rAttrOutput->StartFont( msFamilyNm );
 
     if ( mbAlt )
@@ -841,6 +842,7 @@ void wwFont::WriteDocx( DocxAttributeOutput* rAttrOutput ) const
     rAttrOutput->EmbedFont( msFamilyNm, meFamily, mePitch, meChrSet );
 
     rAttrOutput->EndFont();
+}
 }
 
 void wwFont::WriteRtf( const RtfAttributeOutput* rAttrOutput ) const
