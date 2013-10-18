@@ -77,7 +77,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	lotuswordpro \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	$(call gb_Helper_optional,MARIADBC,mysqlc) \
-	$(call gb_Helper_optional,NEON,neon) \
 	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
 	np_sdk \
 	$(call gb_Helper_optional,NSS,nss) \
