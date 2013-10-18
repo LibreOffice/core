@@ -28,7 +28,6 @@
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
 #include <svx/dialogs.hrc>
-#include <svx/sdrglue.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>

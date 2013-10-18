@@ -672,7 +672,6 @@
 #include "svx/svddef.hxx"
 #include "svx/svdetc.hxx"
 #include "editeng/measfld.hxx"
-#include "svx/sdrglue.hxx"
 #include "svx/svditer.hxx"
 #include "svx/svdlayer.hxx"
 #include "svx/svdoashp.hxx"

@@ -204,7 +204,6 @@
 #include <basic/sbxcore.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdsob.hxx>
-#include <svx/svdglue.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <callform.hxx>

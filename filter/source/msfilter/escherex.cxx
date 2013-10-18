@@ -155,7 +155,7 @@ EscherExClientAnchor_Base::~EscherExClientAnchor_Base()
 EscherPropertyContainer::EscherPropertyContainer()
 :   mpGraphicProvider(0),
     mpPicOutStrm(0),
-    mpObjectRange(),
+    maObjectRange(),
     mpSortStruct(0),
     mnSortCount(0),
     mnSortBufSize(64),
@@ -172,7 +172,7 @@ EscherPropertyContainer::EscherPropertyContainer(
     basegfx::B2DRange& rObjectRange)         // FillBitmaps or GraphicObjects.
 :   mpGraphicProvider(&rGraphProv),
     mpPicOutStrm(pPiOutStrm),
-    mpObjectRange(&rObjectRange),
+    maObjectRange(rObjectRange),
     mpSortStruct(0),
     mnSortCount(0),
     mnSortBufSize(64),
@@ -1329,7 +1329,7 @@ bool EscherPropertyContainer::CreateGraphicProperties( const ::com::sun::star::u
         AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
         uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
 
-        if ( mpGraphicProvider && mpPicOutStrm && mpObjectRange && aXPropSet.is() )
+        if ( mpGraphicProvider && mpPicOutStrm && !maObjectRange.isEmpty() && aXPropSet.is() )
         {
             ::com::sun::star::uno::Any aAny;
             ::com::sun::star::awt::Rectangle* pVisArea = NULL;
@@ -1339,7 +1339,7 @@ bool EscherPropertyContainer::CreateGraphicProperties( const ::com::sun::star::u
                 aAny >>= (*pVisArea);
             }
 
-            const basegfx::B2DRange aRange(0.0, 0.0, mpObjectRange->getWidth(), mpObjectRange->getHeight());
+            const basegfx::B2DRange aRange(0.0, 0.0, maObjectRange.getWidth(), maObjectRange.getHeight());
             const sal_uInt32 nBlibId(mpGraphicProvider->GetBlibID(*mpPicOutStrm, aUniqueId, aRange, pVisArea, NULL));
 
             if ( nBlibId )
@@ -1350,29 +1350,6 @@ bool EscherPropertyContainer::CreateGraphicProperties( const ::com::sun::star::u
             }
             delete pVisArea;
         }
-
-        // TTTT: Check if this works; not sure if this is correct and on the correct place
-        // pShapeBoundRect -> mpObjectRange
-        //
-        //if ( mpGraphicProvider && mpPicOutStrm && pShapeBoundRect && aXPropSet.is() )
-        //{
-        //  ::com::sun::star::uno::Any aAny;
-        //  ::com::sun::star::awt::Rectangle* pVisArea = NULL;
-        //  if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ) ) )
-        //  {
-        //      pVisArea = new ::com::sun::star::awt::Rectangle;
-        //      aAny >>= (*pVisArea);
-        //  }
-        //  Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
-        //  sal_uInt32 nBlibId = mpGraphicProvider->GetBlibID( *mpPicOutStrm, aUniqueId, aRect, pVisArea, NULL );
-        //  if ( nBlibId )
-        //  {
-        //      AddOpt( ESCHER_Prop_pib, nBlibId, true );
-        //      ImplCreateGraphicAttributes( aXPropSet, nBlibId, false );
-        //      bRetValue = true;
-        //  }
-        //  delete pVisArea;
-        //}
     }
     return bRetValue;
 }
@@ -1503,7 +1480,7 @@ GraphicObject lclDrawHatch(
 
 bool EscherPropertyContainer::CreateEmbeddedHatchProperties( const ::com::sun::star::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground )
 {
-    const basegfx::B2DRange aRange(mpObjectRange ? *mpObjectRange : basegfx::B2DRange(0.0, 0.0, 28000.0, 21000.0));
+    const basegfx::B2DRange aRange(maObjectRange.isEmpty() ? basegfx::B2DRange(0.0, 0.0, 28000.0, 21000.0) : maObjectRange);
     GraphicObject aGraphicObject = lclDrawHatch(rHatch, rBackColor, bFillBackground, aRange);
     ByteString aUniqueId = aGraphicObject.GetUniqueID();
     bool bRetValue = ImplCreateEmbeddedBmp( aUniqueId );
@@ -1607,7 +1584,9 @@ bool EscherPropertyContainer::CreateGraphicProperties(
 
                 const basegfx::B2DRange aRange(
                     basegfx::B2DTuple(0.0, 0.0),
-                    mpObjectRange ? mpObjectRange->getRange() : basegfx::B2DTuple(28000.0, 21000.0));
+                    maObjectRange.isEmpty() ?
+                        basegfx::B2DTuple(28000.0, 21000.0) :
+                        maObjectRange.getRange());
                 aGraphicObject = lclDrawHatch(aHatch, aBackColor, bFillBackground, aRange);
                 aUniqueId = aGraphicObject.GetUniqueID();
                 eBitmapMode = ::com::sun::star::drawing::BitmapMode_REPEAT;
@@ -1811,12 +1790,12 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             else
                 AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
 
-            if(aUniqueId.Len() && mpObjectRange)
+            if(aUniqueId.Len() && !maObjectRange.isEmpty())
             {
                 // write out embedded graphic
                 if(mpGraphicProvider && mpPicOutStrm)
                 {
-                    const basegfx::B2DRange aRange(0.0, 0.0, mpObjectRange->getWidth(), mpObjectRange->getHeight());
+                    const basegfx::B2DRange aRange(0.0, 0.0, maObjectRange.getWidth(), maObjectRange.getHeight());
                     const sal_uInt32 nBlibId(mpGraphicProvider->GetBlibID(*mpPicOutStrm, aUniqueId, aRange, NULL, pGraphicAttr));
 
                     if ( nBlibId )
@@ -1838,7 +1817,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 {
                     EscherGraphicProvider aProvider;
                     SvMemoryStream aMemStrm;
-                    const basegfx::B2DRange aRange(0.0, 0.0, mpObjectRange->getWidth(), mpObjectRange->getHeight());
+                    const basegfx::B2DRange aRange(0.0, 0.0, maObjectRange.getWidth(), maObjectRange.getHeight());
 
                     if(aProvider.GetBlibID(aMemStrm, aUniqueId, aRange, NULL, pGraphicAttr))
                     {
@@ -3930,21 +3909,6 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
                         if ( rProp.Value >>= rShapeType )
                             eShapeType = EnhancedCustomShapeTypeNames::Get( rShapeType );
                     }
-                    // TTTT: Need to remove "MirroredX" and "MirroredY" attributes
-                    // for CustomShapeGeometry completely
-                    //
-                    //else if ( rProp.Name.equalsAscii( "MirroredX" ) )
-                    //{
-                    //  sal_Bool bMirroredX = sal_Bool();
-                    //  if ( ( rProp.Value >>= bMirroredX ) && bMirroredX )
-                    //      nMirrorFlags  |= SHAPEFLAG_FLIPH;
-                    //}
-                    //else if ( rProp.Name.equalsAscii( "MirroredY" ) )
-                    //{
-                    //  sal_Bool bMirroredY = sal_Bool();
-                    //  if ( ( rProp.Value >>= bMirroredY ) && bMirroredY )
-                    //      nMirrorFlags  |= SHAPEFLAG_FLIPV;
-                    //}
                 }
             }
         }
@@ -3967,9 +3931,9 @@ bool EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const ::com::sun
         ByteString  aUniqueId = aGraphicObject.GetUniqueID();
         if ( aUniqueId.Len() )
         {
-            if(mpGraphicProvider && mpPicOutStrm && mpObjectRange)
+            if(mpGraphicProvider && mpPicOutStrm && !maObjectRange.isEmpty())
             {
-                const basegfx::B2DRange aRange(0.0, 0.0, mpObjectRange->getWidth(), mpObjectRange->getHeight());
+                const basegfx::B2DRange aRange(0.0, 0.0, maObjectRange.getWidth(), maObjectRange.getHeight());
                 const sal_uInt32 nBlibId(mpGraphicProvider->GetBlibID(*mpPicOutStrm, aUniqueId, aRange, NULL));
 
                 if ( nBlibId )

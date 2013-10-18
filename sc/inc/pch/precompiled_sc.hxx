@@ -165,7 +165,6 @@
 #include <svx/sdprcitm.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
 #include <svx/sdtaitm.hxx>
-#include <svx/svdglue.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>

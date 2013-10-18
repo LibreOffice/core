@@ -204,7 +204,6 @@
 #include <svx/svdsob.hxx>
 #include <vcl/button.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdglue.hxx>
 #include <svx/svdlayer.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svdmrkv.hxx>

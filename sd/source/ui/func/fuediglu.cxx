@@ -27,9 +27,7 @@
 #include "fuediglu.hxx"
 #include <svl/eitem.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/sdrglue.hxx>
 #include <sfx2/request.hxx>
-
 
 #include "app.hrc"
 #include "strings.hrc"
