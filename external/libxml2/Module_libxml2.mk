@@ -9,14 +9,10 @@
 
 $(eval $(call gb_Module_Module,libxml2))
 
-ifeq ($(SYSTEM_LIBXML),NO)
-
 $(eval $(call gb_Module_add_targets,libxml2,\
 	ExternalPackage_xml2 \
 	ExternalProject_xml2 \
 	UnpackedTarball_xml2 \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
