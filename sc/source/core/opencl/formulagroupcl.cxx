@@ -445,9 +445,51 @@ public:
         ss << "tmp *= fRate;\n";
         ss << "return tmp;\n";
         ss << "}";
+
     }
 };
+class XNPV:Normal
+{
+    public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        FormulaToken *pCur = vSubArguments[1]->GetFormulaToken();
+        assert(pCur);
+        const formula::DoubleVectorRefToken* pCurDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+        size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"( ";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
 
+        ss << ") {\n\t";
+        ss << "double result = 0.0;\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "int i=0;\n\t";
+        ss << "double dateNull = ";
+        ss<< vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+        ss << "for (i = 0; i <" << nCurWindowSize << "; i++)\n\t\t";
+        ss << "{\n\t";
+        ss << "result += ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << "/(pow((";
+        ss<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss <<"+1),(";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << "-dateNull)/365));\n\t";
+        ss <<"}\n\t";
+
+        ss << "return result;\n";
+        ss << "}";
+    }
+};
 /// operator traits
 class OpNop: public Reduction {
 public:
@@ -561,6 +603,13 @@ public:
         return "";
     }
     virtual std::string BinFuncName(void) const { return "Cumipmt"; }
+};
+class OpXNPV:public XNPV{
+
+    public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string BinFuncName(void) const { return "XNPV"; }
+
 };
 class OpCumprinc: public Normal
 {
@@ -783,8 +832,14 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getCumprinc"))))
                 {
-                mvSubArguments.push_back(SoPHelper<OpCumprinc>(ts,
-                    ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper<OpCumprinc>(ts,
+                        ft->Children[i]));
+                }
+                if ( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getXnpv"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpXNPV>(ts,
+                        ft->Children[i]));
                 }
 
                 break;
