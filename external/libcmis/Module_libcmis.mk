@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,libcmis))
 
-ifeq ($(SYSTEM_CMIS),NO)
-
 $(eval $(call gb_Module_add_targets,libcmis,\
 	StaticLibrary_cmis \
 	UnpackedTarball_cmis \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
