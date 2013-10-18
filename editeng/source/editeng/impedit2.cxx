@@ -1757,7 +1757,7 @@ private:
 
 }
 
-sal_uInt16 ImpEditEngine::GetScriptType( const EditPaM& rPaM, sal_uInt16* pEndPos ) const
+sal_uInt16 ImpEditEngine::GetI18NScriptType( const EditPaM& rPaM, sal_uInt16* pEndPos ) const
 {
     sal_uInt16 nScriptType = 0;
 
@@ -1785,7 +1785,7 @@ sal_uInt16 ImpEditEngine::GetScriptType( const EditPaM& rPaM, sal_uInt16* pEndPo
     return nScriptType ? nScriptType : GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
 }
 
-sal_uInt16 ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
+sal_uInt16 ImpEditEngine::GetItemScriptType( const EditSelection& rSel ) const
 {
     EditSelection aSel( rSel );
     aSel.Adjust( aEditDoc );
@@ -1827,7 +1827,7 @@ sal_uInt16 ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
             if (bStartInRange || bEndInRange)
             {
                 if ( rTypes[n].nScriptType != i18n::ScriptType::WEAK )
-                    nScriptType |= GetItemScriptType ( rTypes[n].nScriptType );
+                    nScriptType |= ::GetItemScriptType( rTypes[n].nScriptType );
             }
         }
     }
@@ -3775,7 +3775,7 @@ sal_uInt16 ImpEditEngine::GetChar(
                 if ( nChar && ( nChar < pParaPortion->GetNode()->Len() ) )
                 {
                     EditPaM aPaM( pParaPortion->GetNode(), nChar+1 );
-                    sal_uInt16 nScriptType = GetScriptType( aPaM );
+                    sal_uInt16 nScriptType = GetI18NScriptType( aPaM );
                     if ( nScriptType == i18n::ScriptType::COMPLEX )
                     {
                         uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );

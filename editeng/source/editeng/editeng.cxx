@@ -511,7 +511,7 @@ sal_uInt16 EditEngine::GetScriptType( const ESelection& rSelection ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     EditSelection aSel( pImpEditEngine->CreateSel( rSelection ) );
-    return pImpEditEngine->GetScriptType( aSel );
+    return pImpEditEngine->GetItemScriptType( aSel );
 }
 
 LanguageType EditEngine::GetLanguage(const EditPaM& rPaM) const
@@ -739,7 +739,7 @@ const ParaPortion* EditEngine::GetPrevVisPortion(const ParaPortion* pCurPortion)
 
 sal_uInt16 EditEngine::GetScriptType(const EditSelection& rSel) const
 {
-    return pImpEditEngine->GetScriptType(rSel);
+    return pImpEditEngine->GetItemScriptType(rSel);
 }
 
 void EditEngine::RemoveParaPortion(sal_Int32 nNode)

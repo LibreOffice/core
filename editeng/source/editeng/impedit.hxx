@@ -592,10 +592,10 @@ private:
 
 
     void                InitScriptTypes( sal_Int32 nPara );
-    sal_uInt16              GetScriptType( const EditPaM& rPaM, sal_uInt16* pEndPos = NULL ) const;
-    sal_uInt16              GetScriptType( const EditSelection& rSel ) const;
-    sal_Bool                IsScriptChange( const EditPaM& rPaM ) const;
-    sal_Bool                HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const;
+    sal_uInt16          GetI18NScriptType( const EditPaM& rPaM, sal_uInt16* pEndPos = NULL ) const;
+    sal_uInt16          GetItemScriptType( const EditSelection& rSel ) const;
+    sal_Bool            IsScriptChange( const EditPaM& rPaM ) const;
+    sal_Bool            HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const;
 
     sal_Bool                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, sal_uInt16 nStartPos, sal_Int32* pDXArray, sal_uInt16 n100thPercentFromMax, sal_Bool bManipulateDXArray );
     void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth );

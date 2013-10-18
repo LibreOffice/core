@@ -598,7 +598,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             if ( nStartPos != 0 )
             {
                 aAttribItems.Clear();
-                lcl_FindValidAttribs( aAttribItems, pNode, nStartPos, GetScriptType( EditPaM( pNode, 0 ) ) );
+                lcl_FindValidAttribs( aAttribItems, pNode, nStartPos, GetI18NScriptType( EditPaM( pNode, 0 ) ) );
                 if ( aAttribItems.Count() )
                 {
                     // These attributes may not apply to the entire paragraph:
@@ -634,7 +634,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             else
             {
                 aAttribItems.Clear();
-                sal_uInt16 nScriptType = GetScriptType( EditPaM( pNode, nIndex+1 ) );
+                sal_uInt16 nScriptType = GetI18NScriptType( EditPaM( pNode, nIndex+1 ) );
                 if ( !n || IsScriptChange( EditPaM( pNode, nIndex ) ) )
                 {
                     SfxItemSet aAttribs = GetAttribs( nNode, nIndex+1, nIndex+1 );
@@ -1029,7 +1029,7 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
 
     // Templates are not saved!
     // (Only the name and family, template itself must be in App!)
-    pTxtObj->mpImpl->SetScriptType(GetScriptType(aSel));
+    pTxtObj->mpImpl->SetScriptType(GetItemScriptType(aSel));
 
     // iterate over the paragraphs ...
     sal_Int32 nNode;
@@ -1414,7 +1414,7 @@ void ImpEditEngine::SetAllMisspellRanges( const std::vector<editeng::MisspellRan
 
 LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM, sal_uInt16* pEndPos ) const
 {
-    short nScriptType = GetScriptType( rPaM, pEndPos ); // pEndPos will be valid now, pointing to ScriptChange or NodeLen
+    short nScriptType = GetI18NScriptType( rPaM, pEndPos ); // pEndPos will be valid now, pointing to ScriptChange or NodeLen
     sal_uInt16 nLangId = GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType );
     const SvxLanguageItem* pLangItem = &(const SvxLanguageItem&)rPaM.GetNode()->GetContentAttribs().GetItem( nLangId );
     const EditCharAttrib* pAttr = rPaM.GetNode()->GetCharAttribs().FindAttrib( nLangId, rPaM.GetIndex() );
@@ -1750,7 +1750,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
 
             // check script type to the right of the start of the current portion
             EditPaM aPaM( CreateEditPaM( EPaM(aCurStart.nPara, nLangIdx) ) );
-            sal_Bool bIsAsianScript = (i18n::ScriptType::ASIAN == GetScriptType( aPaM ));
+            sal_Bool bIsAsianScript = (i18n::ScriptType::ASIAN == GetI18NScriptType( aPaM ));
             // not yet processed text part with for conversion
             // not suitable language found that needs to be changed?
             if (bAllowImplicitChangesForNotConvertibleText &&

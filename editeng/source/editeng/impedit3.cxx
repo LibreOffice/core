@@ -1095,8 +1095,8 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if( bScriptSpace && ( _nPortionEnd < pNode->Len() ) && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, _nPortionEnd ) ) )
                 {
                     sal_Bool bAllow = sal_False;
-                    sal_uInt16 nScriptTypeLeft = GetScriptType( EditPaM( pNode, _nPortionEnd ) );
-                    sal_uInt16 nScriptTypeRight = GetScriptType( EditPaM( pNode, _nPortionEnd+1 ) );
+                    sal_uInt16 nScriptTypeLeft = GetI18NScriptType( EditPaM( pNode, _nPortionEnd ) );
+                    sal_uInt16 nScriptTypeRight = GetI18NScriptType( EditPaM( pNode, _nPortionEnd+1 ) );
                     if ( ( nScriptTypeLeft == i18n::ScriptType::ASIAN ) || ( nScriptTypeRight == i18n::ScriptType::ASIAN ) )
                         bAllow = sal_True;
 
@@ -2002,7 +2002,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     {
         EditPaM aPaM( pNode, nChar+1 );
         LanguageType eLang = GetLanguage(aPaM);
-        sal_uInt16 nScript = GetScriptType(aPaM);
+        sal_uInt16 nScript = GetI18NScriptType(aPaM);
         if ( MsLangId::getPrimaryLanguage( eLang) == LANGUAGE_ARABIC_PRIMARY_ONLY )
             // Arabic script is handled later.
             continue;
@@ -2556,7 +2556,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
 
     rFont = pNode->GetCharAttribs().GetDefFont();
 
-    short nScriptType = GetScriptType( EditPaM( pNode, nPos ) );
+    short nScriptType = GetI18NScriptType( EditPaM( pNode, nPos ) );
     if ( ( nScriptType == i18n::ScriptType::ASIAN ) || ( nScriptType == i18n::ScriptType::COMPLEX ) )
     {
         const SvxFontItem& rFontItem = (const SvxFontItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) );
@@ -3012,7 +3012,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     aTmpFont.SetFillColor( COL_LIGHTGRAY );
                                     aTmpFont.SetTransparent( sal_False );
                                 }
-                                else if ( GetScriptType( EditPaM( pPortion->GetNode(), nIndex+1 ) ) == i18n::ScriptType::COMPLEX )
+                                else if ( GetI18NScriptType( EditPaM( pPortion->GetNode(), nIndex+1 ) ) == i18n::ScriptType::COMPLEX )
                                 {
                                     aTmpFont.SetFillColor( COL_LIGHTCYAN );
                                     aTmpFont.SetTransparent( sal_False );
@@ -4303,7 +4303,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
     else
     {
         ContentNode* pNode = GetEditDoc().GetObject( nPara );
-        short nScriptType = GetScriptType( EditPaM( pNode, nIndex+1 ) );
+        short nScriptType = GetI18NScriptType( EditPaM( pNode, nIndex+1 ) );
         bCTL = nScriptType == i18n::ScriptType::COMPLEX;
         // this change was discussed in issue 37190
         bR2L = GetRightToLeft( nPara, nIndex + 1) % 2 ? sal_True : sal_False;
@@ -4385,7 +4385,7 @@ sal_Bool ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortio
 
     sal_Bool bCompressed = sal_False;
 
-    if ( GetScriptType( EditPaM( pNode, nStartPos+1 ) ) == i18n::ScriptType::ASIAN )
+    if ( GetI18NScriptType( EditPaM( pNode, nStartPos+1 ) ) == i18n::ScriptType::ASIAN )
     {
         long nNewPortionWidth = pTextPortion->GetSize().Width();
         sal_uInt16 nPortionLen = pTextPortion->GetLen();
