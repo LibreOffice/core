@@ -196,6 +196,7 @@ class GtkSalFrame : public SalFrame
     guint                           m_nGSMCookie;
     int                             m_nWorkArea;
     bool                            m_bFullscreen;
+    bool                            m_bSpanMonitorsWhenFullscreen;
     bool                            m_bDefaultPos;
     bool                            m_bDefaultSize;
     bool                            m_bSendModChangeOnRelease;

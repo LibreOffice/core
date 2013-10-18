@@ -970,6 +970,7 @@ void GtkSalFrame::InitCommon()
     m_pCurrentCursor    = NULL;
     m_nKeyModifiers     = 0;
     m_bFullscreen       = false;
+    m_bSpanMonitorsWhenFullscreen = false;
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
     m_bSendModChangeOnRelease = false;
@@ -2203,42 +2204,67 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
     if (maGeometry.nDisplayScreenNumber == nNewScreen && eType == SET_RETAIN_SIZE)
         return;
 
-    gint nMonitor;
-    bool bSameMonitor = false;
-    GdkScreen *pScreen = getDisplay()->getSystem()->getScreenMonitorFromIdx( nNewScreen, nMonitor );
-    if (!pScreen)
+    GdkScreen *pScreen;
+    GdkRectangle aNewMonitor;
+
+    bool bSpanAllScreens = nNewScreen == (unsigned int)-1;
+    m_bSpanMonitorsWhenFullscreen = bSpanAllScreens && getDisplay()->getSystem()->GetDisplayScreenCount() > 1;
+
+    if (m_bSpanMonitorsWhenFullscreen)   //span all screens
     {
-        g_warning ("Attempt to move GtkSalFrame to invalid screen %d => "
-                   "fallback to current\n", nNewScreen);
         pScreen = gtk_widget_get_screen( m_pWindow );
-        bSameMonitor = true;
+        aNewMonitor.x = 0;
+        aNewMonitor.y = 0;
+        aNewMonitor.width = gdk_screen_get_width(pScreen);
+        aNewMonitor.height = gdk_screen_get_height(pScreen);
     }
+    else
+    {
+        gint nMonitor;
+        bool bSameMonitor = false;
 
-    // Heavy lifting, need to move screen ...
-    if( pScreen != gtk_widget_get_screen( m_pWindow ))
-        gtk_window_set_screen( GTK_WINDOW( m_pWindow ), pScreen );
+        if (!bSpanAllScreens)
+        {
+            pScreen = getDisplay()->getSystem()->getScreenMonitorFromIdx( nNewScreen, nMonitor );
+            if (!pScreen)
+            {
+                g_warning ("Attempt to move GtkSalFrame to invalid screen %d => "
+                           "fallback to current\n", nNewScreen);
+            }
+        }
 
-    gint nOldMonitor = gdk_screen_get_monitor_at_window(
-                            pScreen, widget_get_window( m_pWindow ) );
-    if (bSameMonitor)
-        nMonitor = nOldMonitor;
+        if (!pScreen)
+        {
+            pScreen = gtk_widget_get_screen( m_pWindow );
+            bSameMonitor = true;
+        }
 
-#if OSL_DEBUG_LEVEL > 1
-    if( nMonitor == nOldMonitor )
-        g_warning( "An apparently pointless SetScreen - should we elide it ?" );
-#endif
+        // Heavy lifting, need to move screen ...
+        if( pScreen != gtk_widget_get_screen( m_pWindow ))
+            gtk_window_set_screen( GTK_WINDOW( m_pWindow ), pScreen );
 
-    GdkRectangle aOldMonitor, aNewMonitor;
-    gdk_screen_get_monitor_geometry( pScreen, nOldMonitor, &aOldMonitor );
-    gdk_screen_get_monitor_geometry( pScreen, nMonitor, &aNewMonitor );
+        gint nOldMonitor = gdk_screen_get_monitor_at_window(
+                                pScreen, widget_get_window( m_pWindow ) );
+        if (bSameMonitor)
+            nMonitor = nOldMonitor;
+
+    #if OSL_DEBUG_LEVEL > 1
+        if( nMonitor == nOldMonitor )
+            g_warning( "An apparently pointless SetScreen - should we elide it ?" );
+    #endif
+
+        GdkRectangle aOldMonitor;
+        gdk_screen_get_monitor_geometry( pScreen, nOldMonitor, &aOldMonitor );
+        gdk_screen_get_monitor_geometry( pScreen, nMonitor, &aNewMonitor );
+
+        maGeometry.nX = aNewMonitor.x + maGeometry.nX - aOldMonitor.x;
+        maGeometry.nY = aNewMonitor.y + maGeometry.nY - aOldMonitor.y;
+    }
 
     bool bResize = false;
     bool bVisible = IS_WIDGET_MAPPED( m_pWindow );
     if( bVisible )
         Show( sal_False );
-
-    maGeometry.nX = aNewMonitor.x + maGeometry.nX - aOldMonitor.x;
-    maGeometry.nY = aNewMonitor.y + maGeometry.nY - aOldMonitor.y;
 
     if( eType == SET_FULLSCREEN )
     {
@@ -2251,8 +2277,8 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
 
         // #i110881# for the benefit of compiz set a max size here
         // else setting to fullscreen fails for unknown reasons
-        m_aMaxSize.Width() = aNewMonitor.width+100;
-        m_aMaxSize.Height() = aNewMonitor.height+100;
+        m_aMaxSize.Width() = aNewMonitor.width;
+        m_aMaxSize.Height() = aNewMonitor.height;
     }
 
     if( pSize && eType == SET_UN_FULLSCREEN )
@@ -2277,14 +2303,19 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
 
 #if !GTK_CHECK_VERSION(3,0,0)
     // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
-    if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+   if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
 #endif
     {
+#if GTK_CHECK_VERSION(3,8,0)
+        gdk_window_set_fullscreen_mode( gtk_widget_get_window(m_pWindow), m_bSpanMonitorsWhenFullscreen
+            ? GDK_FULLSCREEN_ON_ALL_MONITORS : GDK_FULLSCREEN_ON_CURRENT_MONITOR );
+#endif
         if( eType == SET_FULLSCREEN )
             gtk_window_fullscreen( GTK_WINDOW( m_pWindow ) );
         else if( eType == SET_UN_FULLSCREEN )
             gtk_window_unfullscreen( GTK_WINDOW( m_pWindow ) );
     }
+
     if( eType == SET_UN_FULLSCREEN &&
         !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
         gtk_window_set_resizable( GTK_WINDOW( m_pWindow ), FALSE );
