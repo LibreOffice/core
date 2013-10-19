@@ -883,6 +883,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
 {
     OUString aVal1, aVal2;
     sc::Compare aComp( &aVal1, &aVal2 );
+    aComp.meOp = eOp;
     aComp.mbIgnoreCase = pDok->GetDocOptions().IsIgnoreCase();
     sc::RangeMatrix aMat[2];
     ScAddress aAdr;
@@ -1033,32 +1034,6 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
         ScMatrix& rMat = *aMat[i].mpMat;
         ScMatrix& rResMat = *aRes.mpMat;
         rMat.CompareMatrix(rResMat, aComp, i, pOptions);
-
-        switch (eOp)
-        {
-            case SC_EQUAL:
-                aRes.mpMat->CompareEqual();
-                break;
-            case SC_LESS:
-                aRes.mpMat->CompareLess();
-                break;
-            case SC_GREATER:
-                aRes.mpMat->CompareGreater();
-                break;
-            case SC_LESS_EQUAL:
-                aRes.mpMat->CompareLessEqual();
-                break;
-            case SC_GREATER_EQUAL:
-                aRes.mpMat->CompareGreaterEqual();
-                break;
-            case SC_NOT_EQUAL:
-                aRes.mpMat->CompareNotEqual();
-                break;
-            default:
-                OSL_TRACE( "ScInterpreter::QueryMat: unhandled comparison operator: %d", (int)eOp);
-                aRes.mpMat.reset();
-                return aRes;
-        }
     }
 
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;

@@ -1217,12 +1217,36 @@ class CompareMatrixFunc : std::unary_function<MatrixImplType::element_block_type
     sc::Compare& mrComp;
     size_t mnMatPos;
     sc::CompareOptions* mpOptions;
-
-    std::vector<double> maResValues;
+    std::vector<bool> maResValues;
 
     void compare()
     {
-        maResValues.push_back(sc::CompareFunc(mrComp, mpOptions));
+        double fVal = sc::CompareFunc(mrComp, mpOptions);
+        bool bRes = false;
+        switch (mrComp.meOp)
+        {
+            case SC_EQUAL:
+                bRes = fVal == 0.0;
+            break;
+            case SC_LESS:
+                bRes = fVal < 0.0;
+            break;
+            case SC_GREATER:
+                bRes = fVal > 0.0;
+            break;
+            case SC_LESS_EQUAL:
+                bRes = fVal <= 0.0;
+            break;
+            case SC_GREATER_EQUAL:
+                bRes = fVal >= 0.0;
+            break;
+            case SC_NOT_EQUAL:
+                bRes = fVal != 0.0;
+            break;
+            default:
+                OSL_TRACE( "CompareMatrixFunc: unhandled comparison operator: %d", (int)mrComp.meOp);
+        }
+        maResValues.push_back(bRes);
     }
 
 public:
@@ -1295,7 +1319,7 @@ public:
         }
     }
 
-    const std::vector<double>& getValues() const
+    const std::vector<bool>& getValues() const
     {
         return maResValues;
     }
@@ -1501,9 +1525,9 @@ void ScMatrixImpl::CompareMatrix(
     maMat.walk(aFunc);
 
     // We assume the result matrix has the same dimension as this matrix.
-    const std::vector<double>& rResVal = aFunc.getValues();
+    const std::vector<bool>& rResVal = aFunc.getValues();
     if (nSize == rResVal.size())
-        rResMat.PutDouble(&rResVal[0], rResVal.size(), 0, 0);
+        rResMat.pImpl->maMat.set(0, 0, rResVal.begin(), rResVal.end());
 }
 
 void ScMatrixImpl::GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero ) const

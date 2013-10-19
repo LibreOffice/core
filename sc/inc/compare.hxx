@@ -35,9 +35,11 @@ struct Compare
     bool bVal[2];
     bool bEmpty[2];
 
+    ScQueryOp meOp;
     bool mbIgnoreCase;
 
     Compare( OUString* p1, OUString* p2 ) :
+        meOp(SC_EQUAL),
         mbIgnoreCase(true)
     {
         pVal[0] = p1;

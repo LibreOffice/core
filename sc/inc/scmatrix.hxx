@@ -109,6 +109,8 @@ struct ScMatrixValue
  */
 class SC_DLLPUBLIC ScMatrix
 {
+    friend class ScMatrixImpl;
+
     ScMatrixImpl*   pImpl;
     mutable size_t  nRefCnt;    // reference count
 
