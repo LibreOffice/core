@@ -29,14 +29,6 @@ import org.libreoffice.impressremote.util.Preferences;
 import org.libreoffice.impressremote.util.SavedStates;
 
 public class ComputersActivity extends SherlockFragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-    private static final class TabsIndices {
-        private TabsIndices() {
-        }
-
-        public static final int BLUETOOTH = 0;
-        public static final int WIFI = 1;
-    }
-
     private boolean mBluetoothWasEnabled;
 
     @Override
@@ -52,9 +44,9 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
 
     private void saveBluetoothState(Bundle aSavedInstanceState) {
         // In more ideal world this work should be done at the service.
-        // Unfortunately service cannot save or restore its state
-        // but enabling or disabling Bluetooth is quite a long operation,
-        // so we have more chances to manage state right at the activity.
+        // Unfortunately service cannot save or restore its state.
+        // On other hand we should remember Bluetooth state exactly
+        // after the app’s start and pass it during recreation cycle.
 
         if (!BluetoothOperator.isAvailable()) {
             return;
@@ -78,7 +70,7 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     private void setUpTitle() {
         // Looks hacky but it seems to be the best way to set activity’s title
         // different to application’s label. The other way is setting title
-        // to intents filter but it shows wrong label for recent apps screen.
+        // to intents filter but it shows wrong label for recent apps screen then.
 
         ActionBar aActionBar = getSupportActionBar();
 
@@ -111,8 +103,10 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
     private void setUpTabs() {
         ActionBar aActionBar = getSupportActionBar();
 
-        aActionBar.addTab(buildActionBarTab(R.string.title_bluetooth), TabsIndices.BLUETOOTH);
-        aActionBar.addTab(buildActionBarTab(R.string.title_wifi), TabsIndices.WIFI);
+        aActionBar.addTab(buildActionBarTab(
+            R.string.title_bluetooth), ComputersPagerAdapter.PagesIndices.BLUETOOTH);
+        aActionBar.addTab(buildActionBarTab(
+            R.string.title_wifi), ComputersPagerAdapter.PagesIndices.WIFI);
     }
 
     private ActionBar.Tab buildActionBarTab(int aTitleResourceId) {
@@ -203,11 +197,11 @@ public class ComputersActivity extends SherlockFragmentActivity implements Actio
         MenuItem aComputerAddingMenuItem = aMenu.findItem(R.id.menu_add_computer);
 
         switch (getSupportActionBar().getSelectedNavigationIndex()) {
-            case TabsIndices.BLUETOOTH:
+            case ComputersPagerAdapter.PagesIndices.BLUETOOTH:
                 aComputerAddingMenuItem.setVisible(false);
                 break;
 
-            case TabsIndices.WIFI:
+            case ComputersPagerAdapter.PagesIndices.WIFI:
                 aComputerAddingMenuItem.setVisible(true);
 
             default:

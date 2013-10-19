@@ -17,8 +17,8 @@ import org.libreoffice.impressremote.fragment.ComputersFragment;
 public class ComputersPagerAdapter extends FragmentPagerAdapter {
     private static final int PAGER_SIZE = 2;
 
-    private static final class PagerPositions {
-        private PagerPositions() {
+    public static final class PagesIndices {
+        private PagesIndices() {
         }
 
         public static final int BLUETOOTH = 0;
@@ -32,10 +32,10 @@ public class ComputersPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int aPosition) {
         switch (aPosition) {
-            case PagerPositions.BLUETOOTH:
+            case PagesIndices.BLUETOOTH:
                 return ComputersFragment.newInstance(ComputersFragment.Type.BLUETOOTH);
 
-            case PagerPositions.WIFI:
+            case PagesIndices.WIFI:
                 return ComputersFragment.newInstance(ComputersFragment.Type.WIFI);
 
             default:
