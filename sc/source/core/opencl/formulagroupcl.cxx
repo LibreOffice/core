@@ -364,6 +364,33 @@ public:
         ss << "}";
     }
 };
+class OpNominal: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = 0;\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss<<"tmp=( pow( "<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<"+ 1.0, 1.0 / "<<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss<<" ) - 1.0 ) *"<<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss<<";\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+    virtual std::string BinFuncName(void) const { return "NOMINAL_ADD"; }
+};
+
 class Cumipmt: public Normal
 {
 public:
@@ -696,6 +723,13 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     mvSubArguments.push_back(SoPHelper<OpCumipmt>(ts,
                         ft->Children[i]));
                 }
+                if ( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getNominal"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpNominal>(ts,
+                        ft->Children[i]));
+                }
+
                 break;
             default:
                 assert(0 && "Unsupported");
