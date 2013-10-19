@@ -628,7 +628,7 @@ static const GActionEntry app_entries[] = {
 gboolean ensure_dbus_setup( gpointer data )
 {
     GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( data );
-    GdkWindow* gdkWindow = gtk_widget_get_window( pSalFrame->getWindow() );
+    GdkWindow* gdkWindow = widget_get_window( pSalFrame->getWindow() );
 
     if ( gdkWindow != NULL && g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) == NULL )
     {
@@ -2312,7 +2312,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
 #endif
     {
 #if GTK_CHECK_VERSION(3,8,0)
-        gdk_window_set_fullscreen_mode( gtk_widget_get_window(m_pWindow), m_bSpanMonitorsWhenFullscreen
+        gdk_window_set_fullscreen_mode( widget_get_window(m_pWindow), m_bSpanMonitorsWhenFullscreen
             ? GDK_FULLSCREEN_ON_ALL_MONITORS : GDK_FULLSCREEN_ON_CURRENT_MONITOR );
 #endif
         if( eType == SET_FULLSCREEN )
@@ -3560,7 +3560,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
     //window to span all displays.
     if (pThis->m_bFullscreen && pThis->m_bSpanMonitorsWhenFullscreen)
     {
-        GdkWindow* gdkwin = gtk_widget_get_window(pThis->m_pWindow);
+        GdkWindow* gdkwin = widget_get_window(pThis->m_pWindow);
         if (gdkwin)
         {
             OUString sProgramURL( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/xid-fullscreen-on-all-monitors");
