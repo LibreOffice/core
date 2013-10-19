@@ -1511,7 +1511,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 {
                     rtl_uString *pStr = rtl_uString_alloc(nL);
                     rIStream.Read(pStr->buffer, nL*sizeof(sal_Unicode));
-                    rC.GetText() = OUString(pStr, SAL_NO_ACQUIRE);
+                    rC.SetText((OUString(pStr, SAL_NO_ACQUIRE)));
                 }
 
                 // StyleSheetName
