@@ -26,6 +26,7 @@
 #include "com/sun/star/frame/XDispatchHelper.hpp"
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include "com/sun/star/frame/XComponentLoader.hpp"
+#include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/awt/XScrollBar.hpp"
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -83,6 +84,7 @@ Reference<XSearchable> openedXSearchable;
 Reference<XSelectionSupplier> openedXSelectionSupplier;
 Reference<XFrame> openedXFrame;
 Reference<XDispatchProvider> openedXDispatchProvider;
+Reference<XStorable> openedXStorable;
 
 Reference<XIndexAccess> currentFindAll;
 rtl::OUString lastSearch;
@@ -227,6 +229,15 @@ Reference<XDispatchHelper> getXDispatchHelper(){
     Reference<XDispatchHelper> helper = DispatchHelper::create(getXComponentContext());
     LOG_EVAL(helper, @"XDispatchHelper");
     return helper;
+}
+
+Reference<XStorable> getXStorable(){
+    if(!openedXStorable.get()){
+        Reference<XStorable> stroable(getXModel(),UNO_QUERY);
+        openedXStorable.set(stroable);
+        LOG_EVAL(openedXStorable, @"XDispatchProvider");
+    }
+    return openedXStorable;
 }
 
 NSString * createFileUri(NSString * file){
@@ -477,4 +488,18 @@ mlo_select_all(void){
                                           OUString("_self"),
                                           0,
                                           Sequence<PropertyValue >());
+}
+
+extern "C"
+void
+mlo_save(void){
+    if(mlo_is_document_open()){
+        Reference<XStorable> storable =getXStorable();
+        if(storable->isReadonly()){
+            NSLog(@"Cannot save changes. File is read only");
+        }else{
+            storable->store();
+            NSLog(@"saved changes");
+        }
+    }
 }

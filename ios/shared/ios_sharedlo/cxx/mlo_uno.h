@@ -23,6 +23,7 @@ extern "C" {
     void mlo_get_selection(NSMutableString * mutableString);
     void mlo_fetch_view_data(NSMutableString * mutableString);
     void mlo_select_all(void);
+    void mlo_save(void);
 
 #ifdef __cplusplus
 }

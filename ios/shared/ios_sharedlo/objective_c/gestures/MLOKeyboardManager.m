@@ -15,6 +15,7 @@
 @interface MLOKeyboardManager ()
 @property MLOMainViewController * mainViewController;
 @property UITextView * textView;
+@property BOOL allowLoToinvokdeKeyboard;
 @property BOOL isShown;
 @end
 
@@ -39,6 +40,13 @@
 }
 -(void)addToMainViewController{
     [self.mainViewController.canvas addSubview:self.textView];
+}
+-(void)hideLibreOffice{
+    self.allowLoToinvokdeKeyboard =NO;
+    [self hide];
+}
+-(void)showLibreOffice{
+    self.allowLoToinvokdeKeyboard =NO;
 }
 -(void)initTextView{
     self.textView = [[UITextView alloc] initWithFrame:CGRECT_ONE];
@@ -77,6 +85,13 @@
     return NO;
 }
 
+-(void)loInvokeKeyboard{
+    if(self.allowLoToinvokdeKeyboard){
+        [self show];
+    }else{
+        self.allowLoToinvokdeKeyboard = YES;
+    }
+}
 
 -(BOOL)canBecomeFirstResponder{
     return YES;
@@ -103,7 +118,7 @@
 void touch_ui_show_keyboard()
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[MLOManager getInstance].mainViewController.keyboard show];
+        [[MLOManager getInstance].mainViewController.keyboard loInvokeKeyboard];
     });
 }
 
@@ -118,7 +133,7 @@ bool touch_ui_keyboard_visible()
 {
     // Should return info whether the soft keyboard is currently displayed,
     // or a hardware keyboard is attached/paired.
-    return false;
+    return [MLOManager getInstance].mainViewController.keyboard.isShown;
 }
 
 @end
