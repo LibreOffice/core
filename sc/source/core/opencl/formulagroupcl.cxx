@@ -652,9 +652,11 @@ public:
              ss <<"for( uint i = nStart ; i <= nEnd ; i++ )\n\t";
              ss <<"{\n\t\t";
              ss <<"if( nPayType > 0 )\n\t\t\t";
-             ss <<"tmp += fRmz - ( GetZw( fRate,convert_double(i - 2), fRmz, fVal, 1 ) - fRmz ) * fRate; ";
+             ss <<"tmp += fRmz - ( GetZw( fRate,convert_double(i - 2),";
+             ss <<"fRmz,fVal,1)- fRmz ) * fRate; ";
              ss <<"\n\t\telse\n\t\t\t";
-             ss <<"tmp += fRmz - GetZw( fRate, convert_double(i - 1), fRmz, fVal, 0 ) * fRate;\n\t";
+             ss <<"tmp += fRmz - GetZw( fRate, convert_double(i - 1),";
+             ss <<"fRmz,,fVal,0 ) * fRate;\n";
              ss <<"}\n\t";
              ss << "return tmp;\n";
              ss << "}";
@@ -1072,7 +1074,6 @@ void FormulaGroupInterpreterOpenCL::generateRPNCode(ScDocument& rDoc,
     ScCompiler aComp(&rDoc, rPos, rCode);
     aComp.SetGrammar(rDoc.GetGrammar());
     aComp.CompileTokenArray(); // Create RPN token array.
-    // Now, calling FirstRPN() and NextRPN() will return tokens from the RPN token array.
 }
 
 ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
