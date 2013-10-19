@@ -202,6 +202,8 @@ public:
     ScMatrix(SCSIZE nC, SCSIZE nR);
     ScMatrix(SCSIZE nC, SCSIZE nR, double fInitVal);
 
+    ScMatrix( size_t nC, size_t nR, const std::vector<bool>& rInitVals );
+
     /** Clone the matrix. */
     ScMatrix* Clone() const;
 
@@ -351,8 +353,8 @@ public:
     double GetMaxValue( bool bTextAsZero ) const;
     double GetMinValue( bool bTextAsZero ) const;
 
-    void CompareMatrix(
-        ScMatrix& rResMat, sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions = NULL ) const;
+    ScMatrixRef CompareMatrix(
+        sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions = NULL ) const;
 
     /**
      * Convert the content of matrix into a linear array of numeric values.

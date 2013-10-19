@@ -1018,11 +1018,6 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
     else if (aMat[0].mpMat || aMat[1].mpMat)
     {
         size_t i = ( aMat[0].mpMat ? 0 : 1);
-        SCSIZE nC, nR;
-        aMat[i].mpMat->GetDimensions(nC, nR);
-        aRes.mpMat = GetNewMat(nC, nR, false);
-        if (!aRes.mpMat)
-            return aRes;
 
         aRes.mnCol1 = aMat[i].mnCol1;
         aRes.mnRow1 = aMat[i].mnRow1;
@@ -1032,8 +1027,9 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
         aRes.mnTab2 = aMat[i].mnTab2;
 
         ScMatrix& rMat = *aMat[i].mpMat;
-        ScMatrix& rResMat = *aRes.mpMat;
-        rMat.CompareMatrix(rResMat, aComp, i, pOptions);
+        aRes.mpMat = rMat.CompareMatrix(aComp, i, pOptions);
+        if (!aRes.mpMat)
+            return aRes;
     }
 
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;

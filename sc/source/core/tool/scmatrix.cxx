@@ -200,6 +200,9 @@ class ScMatrixImpl
 public:
     ScMatrixImpl(SCSIZE nC, SCSIZE nR);
     ScMatrixImpl(SCSIZE nC, SCSIZE nR, double fInitVal);
+
+    ScMatrixImpl( size_t nC, size_t nR, const std::vector<bool>& rInitVals );
+
     ~ScMatrixImpl();
 
     void Clear();
@@ -269,7 +272,7 @@ public:
     double GetMaxValue( bool bTextAsZero ) const;
     double GetMinValue( bool bTextAsZero ) const;
 
-    void CompareMatrix( ScMatrix& rResMat, sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const;
+    ScMatrixRef CompareMatrix( sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const;
 
     void GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero ) const;
     void MergeDoubleArray( std::vector<double>& rArray, ScMatrix::Op eOp ) const;
@@ -288,6 +291,9 @@ ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR) :
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR, double fInitVal) :
     maMat(nR, nC, fInitVal), maMatFlag(nR, nC), pErrorInterpreter(NULL), mbCloneIfConst(true) {}
+
+ScMatrixImpl::ScMatrixImpl( size_t nC, size_t nR, const std::vector<bool>& rInitVals ) :
+    maMat(nR, nC, rInitVals.begin(), rInitVals.end()), maMatFlag(nR, nC), pErrorInterpreter(NULL), mbCloneIfConst(true) {}
 
 ScMatrixImpl::~ScMatrixImpl()
 {
@@ -1516,8 +1522,8 @@ double ScMatrixImpl::GetMinValue( bool bTextAsZero ) const
     return aFunc.getValue();
 }
 
-void ScMatrixImpl::CompareMatrix(
-    ScMatrix& rResMat, sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const
+ScMatrixRef ScMatrixImpl::CompareMatrix(
+    sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const
 {
     MatrixImplType::size_pair_type aSize = maMat.size();
     size_t nSize = aSize.column * aSize.row;
@@ -1526,8 +1532,10 @@ void ScMatrixImpl::CompareMatrix(
 
     // We assume the result matrix has the same dimension as this matrix.
     const std::vector<bool>& rResVal = aFunc.getValues();
-    if (nSize == rResVal.size())
-        rResMat.pImpl->maMat.set(0, 0, rResVal.begin(), rResVal.end());
+    if (nSize != rResVal.size())
+        ScMatrixRef();
+
+    return ScMatrixRef(new ScMatrix(aSize.column, aSize.row, rResVal));
 }
 
 void ScMatrixImpl::GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero ) const
@@ -1677,6 +1685,13 @@ ScMatrix::ScMatrix( SCSIZE nC, SCSIZE nR) :
 
 ScMatrix::ScMatrix(SCSIZE nC, SCSIZE nR, double fInitVal) :
     pImpl(new ScMatrixImpl(nC, nR, fInitVal)), nRefCnt(0)
+{
+    SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
+    SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
+}
+
+ScMatrix::ScMatrix( size_t nC, size_t nR, const std::vector<bool>& rInitVals ) :
+    pImpl(new ScMatrixImpl(nC, nR, rInitVals)), nRefCnt(0)
 {
     SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
     SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
@@ -1985,9 +2000,10 @@ double ScMatrix::GetMinValue( bool bTextAsZero ) const
     return pImpl->GetMinValue(bTextAsZero);
 }
 
-void ScMatrix::CompareMatrix( ScMatrix& rResMat, sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const
+ScMatrixRef ScMatrix::CompareMatrix(
+    sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const
 {
-    pImpl->CompareMatrix(rResMat, rComp, nMatPos, pOptions);
+    return pImpl->CompareMatrix(rComp, nMatPos, pOptions);
 }
 
 void ScMatrix::GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero ) const
