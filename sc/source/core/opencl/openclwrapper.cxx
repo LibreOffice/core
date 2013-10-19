@@ -667,24 +667,15 @@ int OpenclDevice::initOpenclRunEnv( int argc )
         if( gpuEnv.mnKhrFp64Flag )
         {
             printf("----use khr double type in kernel----\n");
-            status = compileKernelFile( &gpuEnv, "-D KHR_DP_EXTENSION -Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16" );
         }
         else if( gpuEnv.mnAmdFp64Flag )
         {
             printf("----use amd double type in kernel----\n");
-            status = compileKernelFile( &gpuEnv, "-D AMD_DP_EXTENSION -Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16" );
         }
         else
         {
             printf("----use float type in kernel----\n");
-            status = compileKernelFile( &gpuEnv, "-Dfp_t=float -Dfp_t4=float4 -Dfp_t16=float16" );
         }
-        if (status == 0 || gpuEnv.maKernels.empty())
-        {
-            printf("compileKernelFile failed.\n");
-            return 1;
-        }
-        printf("compileKernelFile successed.\n");
         isInited = 1;
     }
     return 0;
