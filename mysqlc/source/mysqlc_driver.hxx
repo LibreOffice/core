@@ -63,6 +63,10 @@ namespace connectivity
                                             // of all the Connection objects
                                             // for this Driver
 #ifndef SYSTEM_MYSQL_CPPCONN
+#ifdef BUNDLE_MARIADB
+            oslModule       m_hCConnModule;
+            bool            m_bAttemptedLoadCConn;
+#endif
             oslModule       m_hCppConnModule;
             bool            m_bAttemptedLoadCppConn;
 #endif
