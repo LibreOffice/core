@@ -143,6 +143,7 @@ public:
     void testMultiColumnSeparator();
     void testSmartart();
     void testFdo69548();
+    void testChartSeries();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(WNT)
@@ -244,6 +245,7 @@ void Test::run()
         {"default-sect-break-cols.docx", &Test::testDefaultSectBreakCols},
         {"fdo69636.docx", &Test::testFdo69636},
         {"chart-prop.docx", &Test::testChartProp},
+        {"chart-prop.docx", &Test::testChartSeries},
         {"bnc779620.docx", &Test::testBnc779620},
         {"fdo43093.docx", &Test::testFdo43093},
         {"multi-column-separator-with-line.docx", &Test::testMultiColumnSeparator},
@@ -1606,6 +1608,26 @@ void Test::testChartProp()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(15240), getProperty<sal_Int32>(xPropertySet, "Width"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8890), getProperty<sal_Int32>(xPropertySet, "Height"));
 }
+
+
+void Test::testChartSeries()
+{
+    //The problem was that chart series were not imported correctly
+    CPPUNIT_ASSERT( getShape(1).is() );
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference< chart2::XChartDocument > xChartDoc;
+    xChartDoc.set( xPropertySet->getPropertyValue( "Model" ), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xChartDoc.is() );
+    CPPUNIT_ASSERT( xChartDoc->getDataProvider().is() );
+    uno::Reference<beans::XPropertySet> xProp(xChartDoc->getDataProvider(), uno::UNO_QUERY );
+    uno::Reference< chart2::XAnyDescriptionAccess > xAnyDescriptionAccess ( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT( xAnyDescriptionAccess.is() );
+    uno::Sequence< OUString > seriesList = xAnyDescriptionAccess->getColumnDescriptions();
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 1"), seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 2"), seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), seriesList[2]);
+}
+
 
 void Test::testBnc779620()
 {

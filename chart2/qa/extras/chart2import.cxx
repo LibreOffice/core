@@ -11,6 +11,12 @@
 
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XChartData.hpp>
+#include <com/sun/star/chart2/XInternalDataProvider.hpp>
+#include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
+#include <com/sun/star/chart/XChartDataArray.hpp>
 
 class Chart2ImportTest : public ChartTest
 {
@@ -18,11 +24,17 @@ public:
     void Fdo60083();
     void testSteppedLines();
     void testErrorBarRange();
+    void testODTChartSeries();
+    void testXLSXChartSeries();
+    void testXLSChartSeries();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
     CPPUNIT_TEST(testSteppedLines);
     CPPUNIT_TEST(testErrorBarRange);
+    CPPUNIT_TEST(testODTChartSeries);
+    CPPUNIT_TEST(testXLSXChartSeries);
+    CPPUNIT_TEST(testXLSChartSeries);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -149,6 +161,49 @@ void Chart2ImportTest::testSteppedLines()
         CPPUNIT_ASSERT_EQUAL(eCurveStyle, curveStyle[nSheet]);
     }
 }
+uno::Sequence < OUString > getChartColumnDescriptions( uno::Reference< chart::XChartDocument > xChart1Doc)
+{
+    CPPUNIT_ASSERT(xChart1Doc.is());
+    uno::Reference< chart::XChartDataArray > xChartData ( xChart1Doc->getData(), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartData.is());
+    uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
+    return seriesList;
+}
+
+
+void Chart2ImportTest::testODTChartSeries()
+{
+    load("/chart2/qa/extras/data/ods/", "chart.ods");
+     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    uno::Sequence < OUString > seriesList = getChartColumnDescriptions( xChart1Doc);
+    CPPUNIT_ASSERT_EQUAL(OUString("Col 1"), seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Col2"), seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Col 33"), seriesList[2]);
+
+}
+
+void Chart2ImportTest::testXLSXChartSeries()
+{
+    load("/chart2/qa/extras/data/xlsx/", "chart.xlsx");
+     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    uno::Sequence < OUString > seriesList = getChartColumnDescriptions(xChart1Doc );
+    CPPUNIT_ASSERT_EQUAL(OUString("Col 1"), seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Col2"), seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Col 33"), seriesList[2]);
+
+}
+
+void Chart2ImportTest::testXLSChartSeries()
+{
+    load("/chart2/qa/extras/data/xls/", "chart.xls");
+     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    uno::Sequence < OUString > seriesList = getChartColumnDescriptions(xChart1Doc );
+    CPPUNIT_ASSERT_EQUAL(OUString("Col 1"), seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Col 2"), seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Col 3"), seriesList[2]);
+
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
 

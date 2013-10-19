@@ -66,6 +66,8 @@ $(eval $(call gb_CppunitTest_use_ure,sd_import_tests))
 
 $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     animations/source/animcore/animcore \
+    chart2/source/controller/chartcontroller \
+    chart2/source/chartcore \
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -90,6 +92,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     sot/util/sot \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
+    svx/util/svx \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/expand/ucpexpand1 \
