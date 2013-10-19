@@ -9,7 +9,7 @@
 
 ifeq ($(ENABLE_REPORTBUILDER),TRUE)
 ifneq ($(SYSTEM_JFREEREPORT),YES)
-include $(SRCDIR)/jfreereport/version.mk
+include $(SRCDIR)/external/jfreereport/version.mk
 endif
 endif
 
