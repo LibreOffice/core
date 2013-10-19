@@ -58,8 +58,6 @@
  *  For LWP filter architecture prototype - cell layouts
  */
 
-#include <tools/string.hxx>
-
 #include "lwpcelllayout.hxx"
 #include "lwpfoundry.hxx"
 #include "lwpobjfactory.hxx"

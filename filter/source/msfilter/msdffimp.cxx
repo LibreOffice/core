@@ -59,7 +59,6 @@
 #include <editeng/charscaleitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>

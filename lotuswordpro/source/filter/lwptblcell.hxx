@@ -64,8 +64,6 @@
 #ifndef _LWPLAYOUTNUMERICSOVERRIDE_HXX_
 #define _LWPLAYOUTNUMERICSOVERRIDE_HXX_
 
-#include <tools/string.hxx>
-
 #include "lwpobj.hxx"
 #include "lwpatomholder.hxx"
 #include "lwpstory.hxx"

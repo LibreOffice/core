@@ -68,6 +68,7 @@
 #include "lwptblformula.hxx"
 
 #include "lwptablelayout.hxx"
+#include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
 #include <boost/scoped_array.hpp>
 

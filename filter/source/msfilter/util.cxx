@@ -9,7 +9,6 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
-#include <tools/string.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/svapp.hxx>
