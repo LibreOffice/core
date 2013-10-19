@@ -55,7 +55,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
             ;       // empty cell == empty cell, fRes 0
         else if( rComp.bVal[ 1 ] )
         {
-            if ( !::rtl::math::approxEqual( rComp.nVal[ 1 ], 0.0 ) )
+            if (rComp.nVal[1] != 0.0)
             {
                 if ( rComp.nVal[ 1 ] < 0.0 )
                     fRes = 1;       // empty cell > -x
@@ -75,7 +75,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
     {
         if( rComp.bVal[ 0 ] )
         {
-            if ( !::rtl::math::approxEqual( rComp.nVal[ 0 ], 0.0 ) )
+            if (rComp.nVal[0] != 0.0)
             {
                 if ( rComp.nVal[ 0 ] < 0.0 )
                     fRes = -1;      // -x < empty cell
