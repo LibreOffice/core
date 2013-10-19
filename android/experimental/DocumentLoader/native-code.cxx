@@ -16,7 +16,6 @@ extern "C"
     extern void * dba_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dbaxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * evtatt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * fileacc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * frm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fsstorage_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwk_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -63,7 +62,6 @@ lo_get_libmap(void)
         { "libdbalo.a", dba_component_getFactory },
         { "libdbaxmllo.a", dbaxml_component_getFactory },
         { "libevtattlo.a", evtatt_component_getFactory },
-        { "libfileacc.a", fileacc_component_getFactory },
         { "libfrmlo.a", frm_component_getFactory },
         { "libfsstoragelo.a", fsstorage_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
