@@ -879,7 +879,7 @@ double ScInterpreter::Compare()
 }
 
 
-sc::RangeMatrix ScInterpreter::CompareMat( sc::CompareOptions* pOptions )
+sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pOptions )
 {
     OUString aVal1, aVal2;
     sc::Compare aComp( &aVal1, &aVal2 );
@@ -987,6 +987,32 @@ sc::RangeMatrix ScInterpreter::CompareMat( sc::CompareOptions* pOptions )
                     aRes.mpMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), j, k);
             }
         }
+
+        switch (eOp)
+        {
+            case SC_EQUAL:
+                aRes.mpMat->CompareEqual();
+                break;
+            case SC_LESS:
+                aRes.mpMat->CompareLess();
+                break;
+            case SC_GREATER:
+                aRes.mpMat->CompareGreater();
+                break;
+            case SC_LESS_EQUAL:
+                aRes.mpMat->CompareLessEqual();
+                break;
+            case SC_GREATER_EQUAL:
+                aRes.mpMat->CompareGreaterEqual();
+                break;
+            case SC_NOT_EQUAL:
+                aRes.mpMat->CompareNotEqual();
+                break;
+            default:
+                OSL_TRACE( "ScInterpreter::QueryMat: unhandled comparison operator: %d", (int)eOp);
+                aRes.mpMat.reset();
+                return aRes;
+        }
     }
     else if (aMat[0].mpMat || aMat[1].mpMat)
     {
@@ -1007,6 +1033,32 @@ sc::RangeMatrix ScInterpreter::CompareMat( sc::CompareOptions* pOptions )
         ScMatrix& rMat = *aMat[i].mpMat;
         ScMatrix& rResMat = *aRes.mpMat;
         rMat.CompareMatrix(rResMat, aComp, i, pOptions);
+
+        switch (eOp)
+        {
+            case SC_EQUAL:
+                aRes.mpMat->CompareEqual();
+                break;
+            case SC_LESS:
+                aRes.mpMat->CompareLess();
+                break;
+            case SC_GREATER:
+                aRes.mpMat->CompareGreater();
+                break;
+            case SC_LESS_EQUAL:
+                aRes.mpMat->CompareLessEqual();
+                break;
+            case SC_GREATER_EQUAL:
+                aRes.mpMat->CompareGreaterEqual();
+                break;
+            case SC_NOT_EQUAL:
+                aRes.mpMat->CompareNotEqual();
+                break;
+            default:
+                OSL_TRACE( "ScInterpreter::QueryMat: unhandled comparison operator: %d", (int)eOp);
+                aRes.mpMat.reset();
+                return aRes;
+        }
     }
 
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
@@ -1024,7 +1076,7 @@ ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, sc::CompareOptions
         PushString(rItem.maString.getString());
     else
         PushDouble(rItem.mfVal);
-    ScMatrixRef pResultMatrix = CompareMat( &rOptions).mpMat;
+    ScMatrixRef pResultMatrix = CompareMat(rOptions.aQueryEntry.eOp, &rOptions).mpMat;
     nCurFmtType = nSaveCurFmtType;
     nFuncFmtType = nSaveFuncFmtType;
     if (nGlobalError || !pResultMatrix)
@@ -1033,30 +1085,6 @@ ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, sc::CompareOptions
         return pResultMatrix;
     }
 
-    switch (rOptions.aQueryEntry.eOp)
-    {
-        case SC_EQUAL:
-            pResultMatrix->CompareEqual();
-            break;
-        case SC_LESS:
-            pResultMatrix->CompareLess();
-            break;
-        case SC_GREATER:
-            pResultMatrix->CompareGreater();
-            break;
-        case SC_LESS_EQUAL:
-            pResultMatrix->CompareLessEqual();
-            break;
-        case SC_GREATER_EQUAL:
-            pResultMatrix->CompareGreaterEqual();
-            break;
-        case SC_NOT_EQUAL:
-            pResultMatrix->CompareNotEqual();
-            break;
-        default:
-            SetError( errIllegalArgument);
-            OSL_TRACE( "ScInterpreter::QueryMat: unhandled comparison operator: %d", (int)rOptions.aQueryEntry.eOp);
-    }
     return pResultMatrix;
 }
 
@@ -1064,14 +1092,13 @@ void ScInterpreter::ScEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        sc::RangeMatrix aMat = CompareMat();
+        sc::RangeMatrix aMat = CompareMat(SC_EQUAL);
         if (!aMat.mpMat)
         {
             PushIllegalParameter();
             return;
         }
 
-        aMat.mpMat->CompareEqual();
         PushMatrix(aMat);
     }
     else
@@ -1083,14 +1110,13 @@ void ScInterpreter::ScNotEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        sc::RangeMatrix aMat = CompareMat();
+        sc::RangeMatrix aMat = CompareMat(SC_NOT_EQUAL);
         if (!aMat.mpMat)
         {
             PushIllegalParameter();
             return;
         }
 
-        aMat.mpMat->CompareNotEqual();
         PushMatrix(aMat);
     }
     else
@@ -1102,14 +1128,13 @@ void ScInterpreter::ScLess()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        sc::RangeMatrix aMat = CompareMat();
+        sc::RangeMatrix aMat = CompareMat(SC_LESS);
         if (!aMat.mpMat)
         {
             PushIllegalParameter();
             return;
         }
 
-        aMat.mpMat->CompareLess();
         PushMatrix(aMat);
     }
     else
@@ -1121,14 +1146,13 @@ void ScInterpreter::ScGreater()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        sc::RangeMatrix aMat = CompareMat();
+        sc::RangeMatrix aMat = CompareMat(SC_GREATER);
         if (!aMat.mpMat)
         {
             PushIllegalParameter();
             return;
         }
 
-        aMat.mpMat->CompareGreater();
         PushMatrix(aMat);
     }
     else
@@ -1140,14 +1164,13 @@ void ScInterpreter::ScLessEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        sc::RangeMatrix aMat = CompareMat();
+        sc::RangeMatrix aMat = CompareMat(SC_LESS_EQUAL);
         if (!aMat.mpMat)
         {
             PushIllegalParameter();
             return;
         }
 
-        aMat.mpMat->CompareLessEqual();
         PushMatrix(aMat);
     }
     else
@@ -1159,14 +1182,13 @@ void ScInterpreter::ScGreaterEqual()
 {
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        sc::RangeMatrix aMat = CompareMat();
+        sc::RangeMatrix aMat = CompareMat(SC_GREATER_EQUAL);
         if (!aMat.mpMat)
         {
             PushIllegalParameter();
             return;
         }
 
-        aMat.mpMat->CompareGreaterEqual();
         PushMatrix(aMat);
     }
     else

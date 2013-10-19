@@ -386,7 +386,7 @@ double Compare();
 /** @param pOptions
         NULL means case sensitivity document option is to be used!
  */
-sc::RangeMatrix CompareMat( sc::CompareOptions* pOptions = NULL );
+sc::RangeMatrix CompareMat( ScQueryOp eOp, sc::CompareOptions* pOptions = NULL );
 ScMatrixRef QueryMat( const ScMatrixRef& pMat, sc::CompareOptions& rOptions );
 void ScEqual();
 void ScNotEqual();
