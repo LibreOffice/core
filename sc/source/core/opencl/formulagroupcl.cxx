@@ -696,7 +696,7 @@ class OpTbilleq:public Normal{
         ss <<";\n";
 
         ss<<"tmp001+=1.0;\n";
-        ss<<"int   nDiff = GetDiffDate360( GetNullDate(), tmp000, tmp001, true);\n";
+        ss<<"int   nDiff =GetDiffDate360(GetNullDate(),tmp000,tmp001,true);\n";
         ss<<"tmp =( 365 * tmp002 ) / ( 360 - ( tmp002 * ( nDiff ) ) );\n";
         ss << "return tmp;\n";
         ss << "}";
@@ -718,7 +718,8 @@ public:
                  if (i)
                    ss << ",";
                    vSubArguments[i]->GenSlidingWindowDecl(ss);
-                   argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
+                   argVector.push_back(vSubArguments[i]
+                    ->GenSlidingWindowDeclRef());
              }
              ss << ") {\n\t";
              ss << "double tmp = " << GetBottom() <<";\n\t";
@@ -771,7 +772,8 @@ public:
                 if (i)
                     ss << ",";
                 vSubArguments[i]->GenSlidingWindowDecl(ss);
-                argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
+                argVector.push_back(vSubArguments[i]
+                    ->GenSlidingWindowDeclRef());
             }
             ss << ") {\n\t";
             ss << "double tmp = " << GetBottom() <<";\n\t";
@@ -814,7 +816,7 @@ class OpTbillprice:public Normal{
         ss <<";\n";
 
         ss<<"tmp001+=1.0;\n";
-        ss<<"double  fFraction = GetYearFrac( GetNullDate(), tmp000, tmp001, 0 );  // method: USA 30/360\n";
+        ss<<"double  fFraction =GetYearFrac(GetNullDate(),tmp000,tmp001,0);\n";
         ss<<"tmp = 100.0 * ( 1.0 - tmp002 * fFraction );\n";
         ss << "return tmp;\n";
         ss << "}\n";
