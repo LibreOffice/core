@@ -407,8 +407,10 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     // BasicImport
 
     BasicImport::BasicImport( const Reference< frame::XModel >& rxModel, bool bOasis )
-        :m_xModel( rxModel )
-        ,m_bOasis( bOasis )
+        : XMLNS_UID(0)
+        , XMLNS_XLINK_UID(0)
+        , m_xModel(rxModel)
+        , m_bOasis(bOasis)
     {
     }
 
