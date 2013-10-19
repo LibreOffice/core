@@ -77,7 +77,7 @@ public:
     // (e.g. to set default values, before 'blindly' reading lots of groups)
 
     void SetF(sal_uInt16 nG, double fF);
-    void SetS(sal_uInt16 nG, const char * sS); // (will be copied)
+    void SetS(); // (will be copied)
 
 private:
 

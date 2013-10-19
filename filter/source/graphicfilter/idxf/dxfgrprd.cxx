@@ -162,7 +162,7 @@ sal_uInt16 DXFGroupReader::Read()
     else
     {
         nG = 0;
-        SetS( 0, "EOF" );
+        SetS();
         if ( nGCount != 0xffffffff )
         {
             // InfoBox(NULL,String("Fehler ab Gruppe Nr ")+String(nGCount)).Execute();
@@ -241,23 +241,9 @@ void DXFGroupReader::SetF(sal_uInt16 nG, double fF)
 }
 
 
-void DXFGroupReader::SetS(sal_uInt16 nG, const char * sS)
+void DXFGroupReader::SetS()
 {
-    char* pPtr = NULL;
-    if ( nG < 10 )
-        pPtr = S0_9[ nG ];
-    else if ( nG == 100 )
-        pPtr = S100;
-    else if ( nG == 102 )
-        pPtr = S102;
-    else
-    {
-        nG -= 999;
-        if ( nG < 11 )
-            pPtr = S999_1009[ nG ];
-    }
-    if ( pPtr )
-        strncpy( pPtr, sS, DXF_MAX_STRING_LEN + 1 );
+    strncpy(S0_9[0], "EOF", DXF_MAX_STRING_LEN + 1 );
 }
 
 
