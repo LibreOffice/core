@@ -88,6 +88,7 @@ static const NSTimeInterval ROTATE_FLASH_DURATION=0.5f;
 -(void)showLibreOffice{
 
     [self.mainViewController.toolbar showLibreOffice];
+    [self.mainViewController.keyboard showLibreOffice];
 }
 
 -(void)hideLibreOffice{
@@ -98,7 +99,7 @@ static const NSTimeInterval ROTATE_FLASH_DURATION=0.5f;
     [main.gestureEngine hideLibreOffice];
     [main.scroller hideLibreOffice];
     [main.selection reset];
-    [main.keyboard hide];
+    [main.keyboard hideLibreOffice];
 }
 
 -(void)initWindow:(UIWindow *) window{

@@ -15,6 +15,7 @@
 #import "MLOResourceImage.h"
 #import "MLOTopbarViewController.h"
 #import "MLOKeyboardManager.h"
+#import "mlo_uno.h"
 
 @interface MLOToolbarViewController ()
 @property NSArray * buttons;
@@ -32,9 +33,9 @@
         self.mainViewController = mainViewController;
         self.buttons=@[[self createExpandButton],
                        [self createFindButton],
-                       [self createEditButton]//,
-                       //[self createPrintButton],
-                       //[self createSaveButton]
+                       [self createEditButton],
+                       [self createSaveButton]
+                       //[self createPrintButton]
                        ];
         self.tappable = NO;
         
@@ -129,8 +130,8 @@
 -(MLOToolbarButton *)createSaveButton{
     return [MLOToolbarButton
                 buttonWithImage:    [MLOResourceImage save]
-                onTap:              MLO_TOOLBAR_BUTTON_STUB_CALLBACK
-                tapRelease:         RETAP_OR_OTHER_TAPPED];
+                onTap:              ^{ mlo_save(); }
+                tapRelease:         AUTOMATIC];
 }
 
 @end

@@ -15,4 +15,6 @@
 -(void)addToMainViewController;
 -(void)show;
 -(void)hide;
+-(void)showLibreOffice;
+-(void)hideLibreOffice;
 @end
