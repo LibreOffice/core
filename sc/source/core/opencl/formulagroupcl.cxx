@@ -667,6 +667,42 @@ class OpXNPV:public XNPV{
     virtual std::string BinFuncName(void) const { return "XNPV"; }
 
 };
+class OpTbilleq:public Normal{
+    public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "   int gid0 = get_global_id(0);\n";
+        ss << "double tmp = 0;\n\t";
+        ss << "double tmp000=";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss <<";\n";
+
+        ss << "double tmp001=";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss <<";\n";
+
+        ss << "double tmp002=";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss <<";\n";
+
+        ss<<"tmp001++;\n";
+        ss<<"int   nDiff = GetDiffDate360( GetNullDate(), tmp000, tmp001, true);\n";
+        ss<<"tmp =( 365 * tmp002 ) / ( 360 - ( tmp002 * ( nDiff ) ) );\n";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+    virtual std::string BinFuncName(void) const { return "fTbilleq"; }
+};
 class OpCumprinc: public Normal
 {
 public:
@@ -943,6 +979,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     "com.sun.star.sheet.addin.Analysis.getReceived"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpReceived>(ts,
+                        ft->Children[i]));
+                }
+                if( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getTbilleq"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpTbilleq>(ts,
                         ft->Children[i]));
                 }
 
