@@ -27,15 +27,9 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,mariadb,1))
 # <https://mariadb.atlassian.net/browse/CONC-18> "no external definition of
 # non-static inline local_thr_alarm in libmariadb/net.c":
 $(eval $(call gb_UnpackedTarball_add_patches,mariadb,\
-    external/libmariadb/mariadb-thread.patch \
     external/libmariadb/mariadb-swap.patch \
-    external/libmariadb/mariadb-trunk-40.patch \
-    external/libmariadb/mariadb-static-inline.patch \
+    external/libmariadb/mariadb-trunk-101.patch \
     external/libmariadb/mariadb-msvc.patch.1 \
-))
-
-$(eval $(call gb_UnpackedTarball_fix_end_of_line,mariadb,\
-	libmysql/libmysql_exports.def \
 ))
 
 # vim: set noet sw=4 ts=4:

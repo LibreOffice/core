@@ -1,6 +1,4 @@
 
-#define HAVE_GETHOSTBYNAME_R_GLIBC2_STYLE 1
-
 /*
  * Include file constants (processed in LibmysqlIncludeFiles.txt 1
  */
@@ -60,7 +58,7 @@
 /* #undef HAVE_BFILL */
 /* #undef HAVE_BMOVE */
 #define HAVE_BZERO 1
-/* #undef HAVE_CLOCK_GETTIME */
+#define HAVE_CLOCK_GETTIME 1
 /* #undef HAVE_COMPRESS */
 /* #undef HAVE_CRYPT */
 #define HAVE_DLERROR 1
@@ -69,7 +67,7 @@
 #define HAVE_FCNTL 1
 /* #undef HAVE_FCONVERT */
 #define HAVE_FDATASYNC 1
-/* #undef HAVE_FESETROUND */
+#define HAVE_FESETROUND 1
 #define HAVE_FINITE 1
 #define HAVE_FSEEKO 1
 #define HAVE_FSYNC 1
@@ -91,7 +89,7 @@
 #define HAVE_INITGROUPS 1
 #define HAVE_LDIV 1
 #define HAVE_LOCALTIME_R 1
-/* #undef HAVE_LOG2 */
+#define HAVE_LOG2 1
 #define HAVE_LONGJMP 1
 #define HAVE_LSTAT 1
 #define HAVE_MADVISE 1
@@ -108,19 +106,19 @@
 #define HAVE_POLL 1
 #define HAVE_PREAD 1
 /* #undef HAVE_PTHREAD_ATTR_CREATE */
-/* #undef HAVE_PTHREAD_ATTR_GETSTACKSIZE */
+#define HAVE_PTHREAD_ATTR_GETSTACKSIZE 1
 /* #undef HAVE_PTHREAD_ATTR_SETPRIO */
 #define HAVE_PTHREAD_ATTR_SETSCHEDPARAM 1
 #define HAVE_PTHREAD_ATTR_SETSCOPE 1
-/* #undef HAVE_PTHREAD_ATTR_SETSTACKSIZE */
+#define HAVE_PTHREAD_ATTR_SETSTACKSIZE 1
 /* #undef HAVE_PTHREAD_CONDATTR_CREATE */
 /* #undef HAVE_PTHREAD_INIT */
-/* #undef HAVE_PTHREAD_KEY_DELETE */
-/* #undef HAVE_PTHREAD_KILL */
-/* #undef HAVE_PTHREAD_RWLOCK_RDLOCK */
+#define HAVE_PTHREAD_KEY_DELETE 1
+#define HAVE_PTHREAD_KILL 1
+#define HAVE_PTHREAD_RWLOCK_RDLOCK 1
 /* #undef HAVE_PTHREAD_SETPRIO_NP */
 #define HAVE_PTHREAD_SETSCHEDPARAM 1
-/* #undef HAVE_PTHREAD_SIGMASK */
+#define HAVE_PTHREAD_SIGMASK 1
 /* #undef HAVE_PTHREAD_THREADMASK */
 /* #undef HAVE_PTHREAD_YIELD_NP */
 #define HAVE_READDIR_R 1
@@ -137,6 +135,7 @@
 #define HAVE_SIGWAIT 1
 #define HAVE_SLEEP 1
 #define HAVE_SNPRINTF 1
+/* #undef HAVE_SQLITE */
 #define HAVE_STPCPY 1
 #define HAVE_STRERROR 1
 /* #undef HAVE_STRLCPY */
@@ -160,127 +159,107 @@
  */
 /* Types we may use */
 #define SIZEOF_CHAR 1
-#ifdef SIZEOF_CHAR
+#if SIZEOF_CHAR
 # define HAVE_CHAR 1
 #endif
 
-#if defined(__x86_64__) || defined(__x86_64) || defined(__amd64__)
 #define SIZEOF_CHARP 8
-#else
-#define SIZEOF_CHARP 4
-#endif
-#ifdef SIZEOF_CHARP
+#if SIZEOF_CHARP
 # define HAVE_CHARP 1
 #endif
 
 #define SIZEOF_SHORT 2
-#ifdef SIZEOF_SHORT
+#if SIZEOF_SHORT
 # define HAVE_SHORT 1
 #endif
 
 #define SIZEOF_INT 4
-#ifdef SIZEOF_INT
+#if SIZEOF_INT
 # define HAVE_INT 1
 #endif
 
-#if defined(__x86_64__) || defined(__x86_64) || defined(__amd64__)
 #define SIZEOF_LONG 8
-#else
-#define SIZEOF_LONG 4
-#endif
-#ifdef SIZEOF_LONG
+#if SIZEOF_LONG
 # define HAVE_LONG 1
 #endif
 
 #define SIZEOF_LONG_LONG 8
-#ifdef SIZEOF_LONG_LONG
+#if SIZEOF_LONG_LONG
 # define HAVE_LONG_LONG 1
 #endif
 
-#if defined(__x86_64__) || defined(__x86_64) || defined(__amd64__)
 #define SIZEOF_OFF_T 8
-#else
-#define SIZEOF_OFF_T 4
-#endif
-#ifdef SIZEOF_OFF_T
+#if SIZEOF_OFF_T
 # define HAVE_OFF_T 1
 #endif
 
 #define SIZEOF_SIGSET_T 128
-#ifdef SIZEOF_SIGSET_T
+#if SIZEOF_SIGSET_T
 # define HAVE_SIGSET_T 1
 #endif
 
-#if defined(__x86_64__) || defined(__x86_64) || defined(__amd64__)
 #define SIZEOF_SIZE_T 8
-#else
-#define SIZEOF_SIZE_T 4
-#endif
-#ifdef SIZEOF_SIZE_T
+#if SIZEOF_SIZE_T
 # define HAVE_SIZE_T 1
 #endif
 
 /* #undef SIZEOF_UCHAR */
-#ifdef SIZEOF_UCHAR
+#if SIZEOF_UCHAR
 # define HAVE_UCHAR 1
 #endif
 
 #define SIZEOF_UINT 4
-#ifdef SIZEOF_UINT
+#if SIZEOF_UINT
 # define HAVE_UINT 1
 #endif
 
-#if defined(__x86_64__) || defined(__x86_64) || defined(__amd64__)
 #define SIZEOF_ULONG 8
-#else
-#define SIZEOF_ULONG 4
-#endif
-#ifdef SIZEOF_ULONG
+#if SIZEOF_ULONG
 # define HAVE_ULONG 1
 #endif
 
 /* #undef SIZEOF_INT8 */
-#ifdef SIZEOF_INT8
+#if SIZEOF_INT8
 # define HAVE_INT8 1
 #endif
 /* #undef SIZEOF_UINT8 */
-#ifdef SIZEOF_UINT8
+#if SIZEOF_UINT8
 # define HAVE_UINT8 1
 #endif
 
 /* #undef SIZEOF_INT16 */
-#ifdef SIZEOF_INT16
+#if SIZEOF_INT16
 # define HAVE_INT16 1
 #endif
 /* #undef SIZEOF_UINT16 */
-#ifdef SIZEOF_UINT16
+#if SIZEOF_UINT16
 # define HAVE_UINT16 1
 #endif
 
 /* #undef SIZEOF_INT32 */
-#ifdef SIZEOF_INT32
+#if SIZEOF_INT32
 # define HAVE_INT32 1
 #endif
 /* #undef SIZEOF_UINT32 */
-#ifdef SIZEOF_UINT32
+#if SIZEOF_UINT32
 # define HAVE_UINT32 1
 #endif
 /* #undef SIZEOF_U_INT32_T */
-#ifdef SIZEOF_U_INT32_T
+#if SIZEOF_U_INT32_T
 # define HAVE_U_INT32_T 1
 #endif
 
 /* #undef SIZEOF_INT64 */
-#ifdef SIZEOF_INT64
+#if SIZEOF_INT64
 # define HAVE_INT64 1
 #endif
 /* #undef SIZEOF_UINT64 */
-#ifdef SIZEOF_UINT64
+#if SIZEOF_UINT64
 # define HAVE_UINT64 1
 #endif
 
 /* #undef SIZEOF_SOCKLEN_T */
-#ifdef SIZEOF_SOCKLEN_T
+#if SIZEOF_SOCKLEN_T
 # define HAVE_SOCKLEN_T 1
 #endif
 
@@ -295,3 +274,5 @@
 /* #undef HAVE_THREADS */
 #define SHAREDIR "share"
 #define DEFAULT_CHARSET_HOME "/usr/local"
+#define PLUGINDIR "/usr/local/lib/plugin"
+
