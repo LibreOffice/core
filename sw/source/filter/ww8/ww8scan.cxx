@@ -5919,10 +5919,8 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
     {
         sal_uInt16 a16Bit;
 
-        if(  2 > nRead ) break;
         rSt >> cstd;
 
-        if(  4 > nRead ) break;
         rSt >> cbSTDBaseInFile;
 
         if(  6 > nRead ) break;
