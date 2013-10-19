@@ -141,7 +141,6 @@ private:
     TOOLS_DLLPRIVATE UniString& Expand( xub_StrLen nCount, sal_Unicode cExpandChar );
     TOOLS_DLLPRIVATE sal_Bool   Equals( const sal_Unicode* pCharStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
-    TOOLS_DLLPRIVATE xub_StrLen Search( const sal_Unicode* pCharStr, xub_StrLen nIndex = 0 ) const;
 
     TOOLS_DLLPRIVATE UniString& operator +=( const sal_Unicode* pCharStr );
 
@@ -226,9 +225,6 @@ public:
     sal_Bool            Equals( const UniString& rStr ) const;
     sal_Bool            Equals( const UniString& rStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
-
-    xub_StrLen          Search( sal_Unicode c, xub_StrLen nIndex = 0 ) const;
-    xub_StrLen          Search( const UniString& rStr, xub_StrLen nIndex = 0 ) const;
 
     const sal_Unicode*  GetBuffer() const { return mpData->maStr; }
 
