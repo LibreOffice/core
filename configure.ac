@@ -1520,6 +1520,11 @@ AC_ARG_WITH(system-mariadb,
          extension.]),,
     [with_system_mariadb="$with_system_libs"])
 
+AC_ARG_ENABLE(bundle-mariadb,
+    AS_HELP_STRING([--enable-bundle-mariadb],
+        [When using MariaDB/MySQL libraries already on system, bundle them with the MariaDB Connector/LibreOffice extension.])
+)
+
 AC_ARG_WITH(system-mysql-cppconn,
     AS_HELP_STRING([--with-system-mysql-cppconn],
         [Use MySQL C++ Connector libraries already on system.]),,
@@ -8185,11 +8190,12 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
     if test "$with_system_mariadb" = "yes"; then
         AC_MSG_RESULT([external])
         SYSTEM_MARIADB=YES
-        AC_PATH_PROG(MARIADBCONFIG, [mariadb_config])
+        #AC_PATH_PROG(MARIADBCONFIG, [mariadb_config])
         if test -z "$MARIADBCONFIG"; then
             AC_PATH_PROG(MARIADBCONFIG, [mysql_config])
             if test -z "$MARIADBCONFIG"; then
-                AC_MSG_ERROR([mariadb_config and mysql_config are missing. Install MariaDB or MySQL package.])
+                #AC_MSG_ERROR([mariadb_config and mysql_config are missing. Install MariaDB or MySQL package.])
+                AC_MSG_ERROR([mysql_config is missing. Install MySQL client library development package.])
             fi
         fi
         AC_MSG_CHECKING([MariaDB version])
@@ -8202,10 +8208,36 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
         fi
         AC_MSG_CHECKING([for MariaDB Client library])
         MARIADB_CFLAGS=`$MARIADBCONFIG --cflags`
-        MARIADB_LIBS=`$MARIADBCONFIG --libs`
-        AC_MSG_RESULT([includes $MARIADB_CFLAGS, libraries $MARIADB_LIBS])
+        MARIADB_LIBS=`$MARIADBCONFIG --libs_r`
+        AC_MSG_RESULT([includes '$MARIADB_CFLAGS', libraries '$MARIADB_LIBS'])
+        AC_MSG_CHECKING([whether to bundle the MySQL/MariaDB client library])
+        if test "$enable_bundle_mariadb" = "yes"; then
+            AC_MSG_RESULT([yes])
+            BUNDLE_MARIADB=YES
+            LIBMARIADB=lib$(echo "${MARIADB_LIBS}" | sed -e 's/[[[:space:]]]\+-l/\n/g' | grep -E '(mysqlclient|mariadb)')
+            if test "$_os" = "Darwin"; then
+                LIBMARIADB=${LIBMARIADB}.dylib
+            elif test "$_os" = "WINNT"; then
+                LIBMARIADB=${LIBMARIADB}.dll
+            else
+                LIBMARIADB=${LIBMARIADB}.so
+            fi
+            LIBMARIADB_PATH=$($MARIADBCONFIG --variable=pkglibdir)
+            AC_MSG_CHECKING([for $LIBMARIADB in $LIBMARIADB_PATH])
+            if test -e "$LIBMARIADB_PATH/$LIBMARIADB"; then
+                AC_MSG_RESULT([found.])
+                PathFormat "$LIBMARIADB_PATH"
+                LIBMARIADB_PATH="$formatted_path"
+            else
+                AC_MSG_ERROR([not found.])
+            fi
+        else
+            AC_MSG_RESULT([no])
+            BUNDLE_MARIADB=NO
+        fi
     else
         AC_MSG_RESULT([internal])
+        AC_MSG_ERROR([libmariadb is known to be broken as of 2013-10; use libmysqlclient])
         SYSTEM_MARIADB=NO
         MARIADB_CFLAGS="-I${WORKDIR}/UnpackedTarball/mariadb/include"
         MARIADB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lmariadblib"
@@ -8215,6 +8247,9 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
     AC_SUBST(SYSTEM_MARIADB)
     AC_SUBST(MARIADB_CFLAGS)
     AC_SUBST(MARIADB_LIBS)
+    AC_SUBST(LIBMARIADB)
+    AC_SUBST(LIBMARIADB_PATH)
+    AC_SUBST(BUNDLE_MARIADB)
 
     AC_LANG_PUSH([C++])
     dnl ===================================================================
