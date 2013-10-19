@@ -243,7 +243,8 @@ void DXFGroupReader::SetF(sal_uInt16 nG, double fF)
 
 void DXFGroupReader::SetS()
 {
-    strncpy(S0_9[0], "EOF", DXF_MAX_STRING_LEN + 1 );
+    strncpy(S0_9[0], "EOF", DXF_MAX_STRING_LEN);
+    S0_9[0][DXF_MAX_STRING_LEN] = 0;
 }
 
 
