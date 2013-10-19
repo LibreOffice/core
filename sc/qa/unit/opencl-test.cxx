@@ -274,6 +274,13 @@ void ScOpenclTest::testFinacialFormula()
         double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
+    // AMLOEXT-22
+    for (SCROW i = 1; i <= 10; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(6,i,1));
+        double fExcel = pDocRes->GetValue(ScAddress(6,i,1));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
@@ -290,13 +297,15 @@ void ScOpenclTest::setUp()
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xCalcComponent =
-        getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
+        getMultiServiceFactory()->
+            createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 }
 
 void ScOpenclTest::tearDown()
 {
-    uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
+    uno::Reference< lang::XComponent >
+        ( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
     test::BootstrapFixture::tearDown();
 }
 
