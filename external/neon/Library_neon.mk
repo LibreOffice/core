@@ -80,7 +80,7 @@ $(eval $(call gb_Library_use_system_win32_libs,neon,\
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_ldflags,neon,\
-	/DEF:$(SRCDIR)/neon/neon.def \
+	/DEF:$(SRCDIR)/external/neon/neon.def \
 ))
 endif
 
