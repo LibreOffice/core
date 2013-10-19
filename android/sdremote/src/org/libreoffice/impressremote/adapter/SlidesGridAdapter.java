@@ -73,11 +73,11 @@ public class SlidesGridAdapter extends BaseAdapter {
     }
 
     private ViewHolder getViewHolder(View aView) {
-        if (aView.getTag() != null) {
-            return (ViewHolder) aView.getTag();
+        if (aView.getTag() == null) {
+            aView.setTag(buildViewHolder(aView));
         }
 
-        return buildViewHolder(aView);
+        return (ViewHolder) aView.getTag();
     }
 
     private static final class ViewHolder {
