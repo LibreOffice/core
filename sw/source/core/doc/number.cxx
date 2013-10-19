@@ -737,7 +737,16 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
             bool bMakeNumStringForPhantom( false );
             if ( pWorkingNodeNum->IsPhantom() )
             {
-                SwNumFmt aFmt( Get( static_cast<sal_uInt16>(pWorkingNodeNum->GetLevelInListTree()) ) );
+                int nListLevel = pWorkingNodeNum->GetLevelInListTree();
+
+                if (nListLevel < 0)
+                    nListLevel = 0;
+
+                if (nListLevel >= MAXLEVEL)
+                    nListLevel = MAXLEVEL - 1;
+
+
+                SwNumFmt aFmt( Get( static_cast<sal_uInt16>(nListLevel) ) );
                 bMakeNumStringForPhantom = aFmt.IsEnumeration() &&
                                            SVX_NUM_NUMBER_NONE != aFmt.GetNumberingType();
 
