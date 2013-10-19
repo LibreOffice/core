@@ -86,8 +86,16 @@ sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
 
                 if (pNumRule)
                 {
+                    int nListLevel = pTxtNd->GetActualListLevel();
+
+                    if (nListLevel < 0)
+                        nListLevel = 0;
+
+                    if (nListLevel >= MAXLEVEL)
+                        nListLevel = MAXLEVEL - 1;
+
                     const OUString & aCharFmtName =
-                        pNumRule->Get(static_cast<sal_uInt16>(pTxtNd->GetActualListLevel())).GetCharFmtName();
+                        pNumRule->Get(static_cast<sal_uInt16>(nListLevel)).GetCharFmtName();
                     SwCharFmt * pCharFmt =
                         GetDoc()->FindCharFmtByName(aCharFmtName);
 
