@@ -23,7 +23,6 @@ extern "C"
     extern void * evtatt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * expwrap_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fastsax_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * fileacc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * filterconfig1_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * frm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fsstorage_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -89,7 +88,6 @@ lo_get_libmap(void)
         { "libevtattlo.a", evtatt_component_getFactory },
         { "libexpwrap.uno.a", expwrap_component_getFactory },
         { "libfastsax.uno.a", fastsax_component_getFactory },
-        { "libfileacc.a", fileacc_component_getFactory },
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfrmlo.a", frm_component_getFactory },
         { "libfsstoragelo.a", fsstorage_component_getFactory },
