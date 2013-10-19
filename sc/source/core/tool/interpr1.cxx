@@ -940,70 +940,75 @@ sc::RangeMatrix ScInterpreter::CompareMat( sc::CompareOptions* pOptions )
     }
 
     sc::RangeMatrix aRes;
-    if( !nGlobalError )
+
+    if (nGlobalError)
     {
-        if (aMat[0].mpMat && aMat[1].mpMat)
+        nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
+        return aRes;
+    }
+
+    if (aMat[0].mpMat && aMat[1].mpMat)
+    {
+        SCSIZE nC0, nC1;
+        SCSIZE nR0, nR1;
+        aMat[0].mpMat->GetDimensions(nC0, nR0);
+        aMat[1].mpMat->GetDimensions(nC1, nR1);
+        SCSIZE nC = std::max( nC0, nC1 );
+        SCSIZE nR = std::max( nR0, nR1 );
+        aRes.mpMat = GetNewMat( nC, nR);
+        if (!aRes.mpMat)
+            return aRes;
+        for ( SCSIZE j=0; j<nC; j++ )
         {
-            SCSIZE nC0, nC1;
-            SCSIZE nR0, nR1;
-            aMat[0].mpMat->GetDimensions(nC0, nR0);
-            aMat[1].mpMat->GetDimensions(nC1, nR1);
-            SCSIZE nC = std::max( nC0, nC1 );
-            SCSIZE nR = std::max( nR0, nR1 );
-            aRes.mpMat = GetNewMat( nC, nR);
-            if (!aRes.mpMat)
-                return aRes;
-            for ( SCSIZE j=0; j<nC; j++ )
+            for ( SCSIZE k=0; k<nR; k++ )
             {
-                for ( SCSIZE k=0; k<nR; k++ )
+                SCSIZE nCol = j, nRow = k;
+                if (aMat[0].mpMat->ValidColRowOrReplicated(nCol, nRow) &&
+                    aMat[1].mpMat->ValidColRowOrReplicated(nCol, nRow))
                 {
-                    SCSIZE nCol = j, nRow = k;
-                    if (aMat[0].mpMat->ValidColRowOrReplicated(nCol, nRow) &&
-                        aMat[1].mpMat->ValidColRowOrReplicated(nCol, nRow))
+                    for ( short i=1; i>=0; i-- )
                     {
-                        for ( short i=1; i>=0; i-- )
+                        if (aMat[i].mpMat->IsString(j, k))
                         {
-                            if (aMat[i].mpMat->IsString(j, k))
-                            {
-                                aComp.bVal[i] = false;
-                                *aComp.pVal[i] = aMat[i].mpMat->GetString(j, k).getString();
-                                aComp.bEmpty[i] = aMat[i].mpMat->IsEmpty(j, k);
-                            }
-                            else
-                            {
-                                aComp.bVal[i] = true;
-                                aComp.nVal[i] = aMat[i].mpMat->GetDouble(j, k);
-                                aComp.bEmpty[i] = false;
-                            }
+                            aComp.bVal[i] = false;
+                            *aComp.pVal[i] = aMat[i].mpMat->GetString(j, k).getString();
+                            aComp.bEmpty[i] = aMat[i].mpMat->IsEmpty(j, k);
                         }
-                        aRes.mpMat->PutDouble(sc::CompareFunc(aComp, pOptions), j, k);
+                        else
+                        {
+                            aComp.bVal[i] = true;
+                            aComp.nVal[i] = aMat[i].mpMat->GetDouble(j, k);
+                            aComp.bEmpty[i] = false;
+                        }
                     }
-                    else
-                        aRes.mpMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), j, k);
+                    aRes.mpMat->PutDouble(sc::CompareFunc(aComp, pOptions), j, k);
                 }
+                else
+                    aRes.mpMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), j, k);
             }
         }
-        else if (aMat[0].mpMat || aMat[1].mpMat)
-        {
-            size_t i = ( aMat[0].mpMat ? 0 : 1);
-            SCSIZE nC, nR;
-            aMat[i].mpMat->GetDimensions(nC, nR);
-            aRes.mpMat = GetNewMat(nC, nR, false);
-            if (!aRes.mpMat)
-                return aRes;
-
-            aRes.mnCol1 = aMat[i].mnCol1;
-            aRes.mnRow1 = aMat[i].mnRow1;
-            aRes.mnTab1 = aMat[i].mnTab1;
-            aRes.mnCol2 = aMat[i].mnCol2;
-            aRes.mnRow2 = aMat[i].mnRow2;
-            aRes.mnTab2 = aMat[i].mnTab2;
-
-            ScMatrix& rMat = *aMat[i].mpMat;
-            ScMatrix& rResMat = *aRes.mpMat;
-            rMat.CompareMatrix(rResMat, aComp, i, pOptions);
-        }
     }
+    else if (aMat[0].mpMat || aMat[1].mpMat)
+    {
+        size_t i = ( aMat[0].mpMat ? 0 : 1);
+        SCSIZE nC, nR;
+        aMat[i].mpMat->GetDimensions(nC, nR);
+        aRes.mpMat = GetNewMat(nC, nR, false);
+        if (!aRes.mpMat)
+            return aRes;
+
+        aRes.mnCol1 = aMat[i].mnCol1;
+        aRes.mnRow1 = aMat[i].mnRow1;
+        aRes.mnTab1 = aMat[i].mnTab1;
+        aRes.mnCol2 = aMat[i].mnCol2;
+        aRes.mnRow2 = aMat[i].mnRow2;
+        aRes.mnTab2 = aMat[i].mnTab2;
+
+        ScMatrix& rMat = *aMat[i].mpMat;
+        ScMatrix& rResMat = *aRes.mpMat;
+        rMat.CompareMatrix(rResMat, aComp, i, pOptions);
+    }
+
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
     return aRes;
 }
