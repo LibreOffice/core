@@ -5747,8 +5747,10 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
             refStrm->SetBufferSize( nOldBuffSize );
             refStrm.Clear();
         }
-        else if (pIn)
+        else
+        {
             pIn->ResetError();
+        }
 
     }
     return nRet;
