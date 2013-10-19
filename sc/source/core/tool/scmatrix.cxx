@@ -183,6 +183,9 @@ public:
     }
 };
 
+template<typename _Comp>
+_Comp CompareMatrixElemFunc<_Comp>::maComp;
+
 }
 
 class ScMatrixImpl
