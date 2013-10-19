@@ -1493,8 +1493,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
         }
     }
 
-    if( !mpVDev )
-        OSL_FAIL( "SVGTextWriter::writeTextPortion: invalid virtual device." );
+    assert(mpVDev); //invalid virtual device
 
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
