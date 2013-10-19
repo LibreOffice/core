@@ -26,4 +26,10 @@ ifeq ($(SYSTEM_MYSQL_CPPCONN),NO)
 $(eval $(call gb_Extension_add_library,mysql-connector-ooo,mysqlcppconn))
 endif
 
+ifeq ($(BUNDLE_MARIADB),YES)
+$(eval $(call gb_Extension_add_files,mysql-connector-ooo,,\
+       $(LIBMARIADB_PATH)/$(LIBMARIADB) \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
