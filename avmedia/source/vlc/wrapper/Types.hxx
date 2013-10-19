@@ -23,7 +23,7 @@ typedef void ( *libvlc_callback_t ) ( const struct libvlc_event_t *, void * );
 #define libvlc_MediaPlayerEndReached 0x109
 
 // event structure pieces we use
-typedef struct libvlc_event_t
+struct libvlc_event_t
 {
     int   type;  // event type
     void *p_obj; // object emitting that event
@@ -35,7 +35,14 @@ typedef struct libvlc_event_t
         const char *dummy2;
       } padding;
     } u;
-} libvlc_event_t;
+};
+
+struct libvlc_track_description_t
+{
+    int i_id;
+    char *psz_name;
+    libvlc_track_description_t *p_next;
+};
 
 }
 

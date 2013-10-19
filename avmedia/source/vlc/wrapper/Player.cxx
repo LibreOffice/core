@@ -12,7 +12,7 @@
 #include "Player.hxx"
 #include "Media.hxx"
 #include "SymbolLoader.hxx"
- #include "Common.hxx"
+#include "Common.hxx"
 
 struct libvlc_media_t;
 
@@ -52,6 +52,12 @@ namespace
     int ( *libvlc_video_get_size ) ( libvlc_media_player_t *p_mi, unsigned num,
                                      unsigned *px, unsigned *py );
     int ( *libvlc_video_get_track_count ) ( libvlc_media_player_t *p_mi );
+    int ( *libvlc_video_set_track ) ( libvlc_media_player_t *p_mi, int i_track );
+    libvlc_track_description_t* ( *libvlc_video_get_track_description ) ( libvlc_media_player_t *p_mi );
+
+    int ( *libvlc_audio_get_track ) ( libvlc_media_player_t *p_mi );
+    libvlc_track_description_t * ( *libvlc_audio_get_track_description ) (libvlc_media_player_t *p_mi );
+    int ( *libvlc_audio_set_track ) (libvlc_media_player_t *p_mi, int i_track);
 }
 
 namespace avmedia
@@ -90,7 +96,12 @@ namespace wrapper
             SYM_MAP( libvlc_media_player_retain ),
             SYM_MAP( libvlc_video_set_scale ),
             SYM_MAP( libvlc_video_get_size ),
-            SYM_MAP( libvlc_video_get_track_count )
+            SYM_MAP( libvlc_video_get_track_count ),
+            SYM_MAP( libvlc_video_set_track ),
+            SYM_MAP( libvlc_video_get_track_description ),
+            SYM_MAP( libvlc_audio_get_track ),
+            SYM_MAP( libvlc_audio_get_track_description ),
+            SYM_MAP( libvlc_audio_set_track )
         };
 
         return InitApiMap( VLC_PLAYER_API );
@@ -121,7 +132,26 @@ namespace wrapper
 
     bool Player::play()
     {
-        return libvlc_media_player_play( mPlayer ) == 0;
+        const bool status = ( libvlc_media_player_play( mPlayer ) == 0 );
+        if ( libvlc_video_get_track_count( mPlayer ) > 0 )
+        {
+            const libvlc_track_description_t *description = libvlc_video_get_track_description( mPlayer );
+
+            for ( ; description->p_next != NULL; description = description->p_next );
+
+            libvlc_video_set_track( mPlayer, description->i_id );
+        }
+
+        if ( libvlc_audio_get_track( mPlayer ) > 0 )
+        {
+            const libvlc_track_description_t *description = libvlc_audio_get_track_description( mPlayer );
+
+            for ( ; description->p_next != NULL; description = description->p_next );
+
+            libvlc_audio_set_track( mPlayer, description->i_id );
+        }
+
+        return status;
     }
 
     void Player::pause()
