@@ -829,7 +829,44 @@ class OpPriceMat:public PriceMat
     virtual std::string GetBottom(void) { return "0"; }
     virtual std::string BinFuncName(void) const { return "PriceMat"; }
 };
+class OpTbillyield:public Normal{
+    public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "double tmp = 0;\n\t";
+        ss << "double tmp000=";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss <<";\n";
 
+        ss << "double tmp001=";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss <<";\n";
+        ss << "double tmp002=";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss <<";\n";
+        ss <<"int nDiff=GetDiffDate360(GetNullDate(),tmp000,tmp001,true);\n";
+        ss <<"nDiff++;\n";
+        ss <<"tmp=100.0;\n";
+        ss <<"tmp /= tmp002;\n";
+        ss <<"tmp-=1.0;\n";
+        ss <<"tmp= tmp/( nDiff );\n";
+        ss <<"tmp *= 360.0;\n";
+        ss <<"return tmp;\n";
+        ss << "}\n";
+    }
+    virtual std::string BinFuncName(void) const { return "fTbillyield"; }
+};
 /// Helper functions that have multiple buffers
 template<class Op>
 class DynamicKernelSoPArguments: public DynamicKernelArgument
@@ -1030,6 +1067,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 {
                     mvSubArguments.push_back(SoPHelper<OpTbillprice>(ts,
                             ft->Children[i]));
+                }
+               if( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getTbillyield"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpTbillyield>(ts,
+                       ft->Children[i]));
                 }
 
                 break;
