@@ -11,7 +11,10 @@
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
-
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XInternalDataProvider.hpp>
+#include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <vcl/svapp.hxx>
 
 #include <swmodeltestbase.hxx>
@@ -37,6 +40,7 @@ public:
     void testN823651();
     void testFdo36868();
     void testListNolevel();
+    void testChartSeries();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -66,6 +70,7 @@ void Test::run()
         {"n823651.doc", &Test::testN823651},
         {"fdo36868.doc", &Test::testFdo36868},
         {"list-nolevel.doc", &Test::testListNolevel},
+        {"chart.doc", &Test::testChartSeries},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -302,6 +307,24 @@ void Test::testListNolevel()
     OUString aText = parseDump("/root/page/body/txt[1]/Special[@nType='POR_NUMBER']", "rText");
     // POR_NUMBER was completely missing.
     CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
+}
+
+void Test::testChartSeries()
+{
+    CPPUNIT_ASSERT( getShape(1).is() );
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    uno::Reference< chart2::XChartDocument > xChartDoc;
+    xChartDoc.set( xPropertySet->getPropertyValue( "Model" ), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xChartDoc.is() );
+    CPPUNIT_ASSERT( xChartDoc->getDataProvider().is() );
+    uno::Reference<beans::XPropertySet> xProp(xChartDoc->getDataProvider(), uno::UNO_QUERY );
+    uno::Reference< chart2::XAnyDescriptionAccess > xAnyDescriptionAccess ( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT( xAnyDescriptionAccess.is() );
+    uno::Sequence< OUString > seriesList = xAnyDescriptionAccess->getColumnDescriptions();
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

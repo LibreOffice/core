@@ -46,26 +46,37 @@ $(eval $(call gb_CppunitTest_use_api,sw_ww8import,\
 $(eval $(call gb_CppunitTest_use_ure,sw_ww8import))
 
 $(eval $(call gb_CppunitTest_use_components,sw_ww8import,\
-	basic/util/sb \
+    basic/util/sb \
+    chart2/source/controller/chartcontroller \
+    chart2/source/chartcore \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    dbaccess/util/dba \
+    embeddedobj/util/embobj \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
     linguistic/source/lng \
+    oox/util/oox \
+    package/source/xstor/xstor \
     package/util/package2 \
-    sw/util/msword \
+    sax/source/expatwrap/expwrap \
+    sax/source/fastparser/fastsax \
     sw/util/sw \
     sw/util/swd \
+    sw/util/msword \
     sfx2/util/sfx \
     svl/source/fsstor/fsstorage \
+    svl/util/svl \
     svtools/util/svt \
+    svx/util/svx \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
+    unotools/util/utl \
     unoxml/source/service/unoxml \
+    writerfilter/util/writerfilter \
+    xmloff/util/xo \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
 ))
 

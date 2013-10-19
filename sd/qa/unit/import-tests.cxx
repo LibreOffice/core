@@ -24,6 +24,13 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/table/XTableChartsSupplier.hpp>
+#include <com/sun/star/chart/XChartData.hpp>
+#include <com/sun/star/chart/XChartDataArray.hpp>
+
 
 using namespace ::com::sun::star;
 
@@ -36,6 +43,9 @@ public:
     void testN759180();
     void testN778859();
     void testFdo64512();
+    void testPPTChartSeries();
+    void testPPTXChartSeries();
+    void testODPChartSeries();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -43,6 +53,9 @@ public:
     CPPUNIT_TEST(testN759180);
     CPPUNIT_TEST(testN778859);
     CPPUNIT_TEST(testFdo64512);
+    CPPUNIT_TEST(testPPTChartSeries);
+    CPPUNIT_TEST(testPPTXChartSeries);
+    CPPUNIT_TEST(testODPChartSeries);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -225,6 +238,54 @@ void SdFiltersTest::testFdo64512()
         xNode->getTarget(), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_MESSAGE( "inner node not referencing svg shape",
                             xTargetShape != xSvgShape );
+}
+uno::Sequence < OUString > getChartColumnDescriptions(::sd::DrawDocShellRef xDocShRef)
+{
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+     xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(
+    xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT(xPage.is());
+    uno::Reference< beans::XPropertySet > xShapeProps(
+     xPage->getByIndex(0), uno::UNO_QUERY );
+    CPPUNIT_ASSERT(xShapeProps.is());
+    uno::Reference< frame::XModel > xDocModel;
+    xShapeProps->getPropertyValue("Model") >>= xDocModel;
+    CPPUNIT_ASSERT(xDocModel.is());
+    uno::Reference< chart::XChartDocument > xChart1Doc( xDocModel, uno::UNO_QUERY_THROW );
+    uno::Reference< chart::XChartDataArray > xChartData ( xChart1Doc->getData(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartData.is());
+    uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
+    return seriesList;
+}
+void SdFiltersTest::testPPTChartSeries()
+{
+    //test chart series names for ppt
+    uno::Sequence < OUString > seriesList = getChartColumnDescriptions(loadURL(getURLFromSrc("/sd/qa/unit/data/chart.ppt")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
+
+}
+
+void SdFiltersTest::testPPTXChartSeries()
+{
+    //test chart series names for pptx
+    uno::Sequence < OUString > seriesList = getChartColumnDescriptions(loadURL(getURLFromSrc("/sd/qa/unit/data/chart.pptx")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[3]);
+
+}
+
+void SdFiltersTest::testODPChartSeries()
+{
+    //test chart series names for odp
+    uno::Sequence < OUString > seriesList = getChartColumnDescriptions(loadURL(getURLFromSrc("/sd/qa/unit/data/chart.odp")));
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);

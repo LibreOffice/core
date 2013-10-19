@@ -51,6 +51,8 @@ $(eval $(call gb_CppunitTest_use_ure,sw_odfimport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_odfimport,\
 	basic/util/sb \
+    chart2/source/controller/chartcontroller \
+    chart2/source/chartcore \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
 	embeddedobj/util/embobj \
@@ -67,6 +69,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfimport,\
     sfx2/util/sfx \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
+    svx/util/svx \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \

@@ -33,6 +33,9 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart/XChartDataArray.hpp>
+
+#include <com/sun/star/chart/XChartDocument.hpp>
 
 #include <iostream>
 
@@ -87,8 +90,7 @@ void ChartTest::tearDown()
     test::BootstrapFixture::tearDown();
 
 }
-
-Reference< chart2::XChartDocument > getChartDocFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > xComponent )
+Reference< lang::XComponent > getChartCompFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > xComponent )
 {
     // let us assume that we only have one chart per sheet
 
@@ -114,8 +116,12 @@ Reference< chart2::XChartDocument > getChartDocFromSheet( sal_Int32 nSheet, uno:
     uno::Reference< lang::XComponent > xChartComp( xEmbObjectSupplier->getEmbeddedObject(), UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xChartComp.is());
 
-    uno::Reference< chart2::XChartDocument > xChartDoc ( xChartComp, UNO_QUERY_THROW );
+    return xChartComp;
 
+}
+Reference< chart2::XChartDocument > getChartDocFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > xComponent )
+{
+    uno::Reference< chart2::XChartDocument > xChartDoc ( getChartCompFromSheet(nSheet, xComponent), UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xChartDoc.is());
     return xChartDoc;
 }
