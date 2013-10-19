@@ -221,36 +221,6 @@ STRING& STRING::Assign( STRCODE c )
     return *this;
 }
 
-STRING& STRING::Assign( const STRCODE* pCharStr )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_ASSERT( pCharStr, "String::Assign() - pCharStr is NULL" );
-
-    xub_StrLen nLen = ImplStringLen( pCharStr );
-
-    if ( !nLen )
-    {
-        STRING_NEW((STRING_TYPE **)&mpData);
-    }
-    else
-    {
-        // copy without allocation if string length is identical
-        if ( (nLen == mpData->mnLen) && (mpData->mnRefCount == 1) )
-            memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
-        else
-        {
-            // free old string
-            STRING_RELEASE((STRING_TYPE *)mpData);
-
-            // allocate string of new size and copy
-            mpData = ImplAllocData( nLen );
-            memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
-        }
-    }
-
-    return *this;
-}
-
 xub_StrLen ImplStringLen( const sal_Char* pStr )
 {
     const sal_Char* pTempStr = pStr;
