@@ -785,6 +785,42 @@ public:
 virtual std::string BinFuncName(void) const { return "Received"; }
 
 };
+class OpTbillprice:public Normal{
+    public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "double tmp = 0;\n\t";
+        ss << "double tmp000=";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss <<";\n";
+
+        ss << "double tmp001=";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss <<";\n";
+
+        ss << "double tmp002=";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss <<";\n";
+
+        ss<<"tmp001+=1.0;\n";
+        ss<<"double  fFraction = GetYearFrac( GetNullDate(), tmp000, tmp001, 0 );  // method: USA 30/360\n";
+        ss<<"tmp = 100.0 * ( 1.0 - tmp002 * fFraction );\n";
+        ss << "return tmp;\n";
+        ss << "}\n";
+    }
+    virtual std::string BinFuncName(void) const { return "fTbillprice"; }
+};
 class OpPriceMat:public PriceMat
 {
     public:
@@ -986,6 +1022,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 {
                     mvSubArguments.push_back(SoPHelper<OpTbilleq>(ts,
                         ft->Children[i]));
+                }
+                if( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getTbillprice"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpTbillprice>(ts,
+                            ft->Children[i]));
                 }
 
                 break;
