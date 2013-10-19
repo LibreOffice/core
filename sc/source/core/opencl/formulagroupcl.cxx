@@ -695,7 +695,7 @@ class OpTbilleq:public Normal{
         ss << vSubArguments[2]->GenSlidingWindowDeclRef();
         ss <<";\n";
 
-        ss<<"tmp001++;\n";
+        ss<<"tmp001+=1.0;\n";
         ss<<"int   nDiff = GetDiffDate360( GetNullDate(), tmp000, tmp001, true);\n";
         ss<<"tmp =( 365 * tmp002 ) / ( 360 - ( tmp002 * ( nDiff ) ) );\n";
         ss << "return tmp;\n";
