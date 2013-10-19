@@ -66,8 +66,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 			drawinglayer \
 			editeng \
 			framework \
-			harfbuzz \
-			lcms2 \
 			linguistic \
 			nss \
 			package \
