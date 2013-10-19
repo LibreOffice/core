@@ -1515,9 +1515,6 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
                                           Color aTextColor,
                                           sal_Bool bApplyMapping )
 {
-    if( !mpContext )
-        OSL_FAIL( "SVGTextWriter::implWriteTextPortion: invalid context object." );
-
     Point                                   aPos;
     Point                                   aBaseLinePos( rPos );
     const FontMetric                        aMetric( mpVDev->GetFontMetric() );
@@ -1601,6 +1598,8 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     }
 
     addFontAttributes( /* isTexTContainer: */ false );
+    assert(mpContext); //invalid context object
+
     mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
 
     OUString sTextContent = rText;
