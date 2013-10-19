@@ -107,11 +107,13 @@ public:
     SwDropCapsPict(Window *pParent, WinBits nBits)
         : Control(pParent, nBits)
         , mpPage(NULL)
+        , mnLines(0)
         , mnTotLineH(0)
         , mnLineH(0)
         , mnTextH(0)
-        , mpPrinter( NULL )
-        , mbDelPrinter( false )
+        , mnDistance(00
+        , mpPrinter(NULL)
+        , mbDelPrinter(false)
     {}
 
     void SetDropCapsPage(SwDropCapsPage* pPage) { mpPage = pPage; }
