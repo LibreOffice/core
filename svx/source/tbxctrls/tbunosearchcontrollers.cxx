@@ -625,9 +625,10 @@ void SAL_CALL UpDownSearchToolboxController::statusChanged( const css::frame::Fe
 // MatchCaseToolboxController
 
 MatchCaseToolboxController::MatchCaseToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-    :svt::ToolboxController( rxContext,
-    css::uno::Reference< css::frame::XFrame >(),
-    OUString(COMMAND_MATCHCASE) )
+    : svt::ToolboxController( rxContext,
+        css::uno::Reference< css::frame::XFrame >(),
+        OUString(COMMAND_MATCHCASE) )
+    , m_pMatchCaseControl(NULL)
 {
 }
 
