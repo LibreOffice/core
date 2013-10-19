@@ -1661,7 +1661,8 @@ ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const OUString& rNm) 
     pDocShell( pDocSh ),
     aName( rNm ),
     aPropSet( lcl_GetDBRangePropertyMap() ),
-    bIsUnnamed(false)
+    bIsUnnamed(false),
+    aTab( 0 )
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 }
