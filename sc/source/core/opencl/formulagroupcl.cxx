@@ -364,6 +364,62 @@ public:
         ss << "}";
     }
 };
+class Cumipmt: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+
+        ss << "   int gid0 = get_global_id(0);\n";
+        ss << "   double fRmz;\n";
+        ss << "   double fRate=";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ",fVal=";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+        ss << "int nStartPer=";
+        ss << vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss << ",nEndPer=";
+        ss << vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss << ",nNumPeriods=";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << ",nPayType=";
+        ss << vSubArguments[5]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+        ss << "fRmz = GetRmz( fRate, nNumPeriods, fVal, 0.0, nPayType );\n";
+        ss << "double tmp = 0.0;\n";
+        ss << "uint  nStart =  nStartPer ;\n";
+        ss << "uint  nEnd =  nEndPer ;\n";
+        ss << " if( nStart == 1 )\n";
+        ss << "    {\n";
+        ss << "        if( nPayType <= 0 )\n";
+        ss << "            tmp = -fVal;\n";
+        ss << "        nStart++;\n";
+        ss << "    }\n";
+        ss << " for( uint i = nStart ; i <= nEnd ; i++ )\n";
+        ss << " {\n";
+        ss << "     if( nPayType > 0 )\n";
+        ss << "        tmp += GetZw( fRate, convert_double( i - 2 ), ";
+        ss << "fRmz, fVal, 1 ) - fRmz;\n";
+        ss << "     else\n";
+        ss << "        tmp += GetZw( fRate, convert_double( i - 1 ), ";
+        ss << "fRmz, fVal, 0 );\n";
+        ss << " }\n";
+        ss << "tmp *= fRate;\n";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+};
 
 /// operator traits
 class OpNop: public Reduction {
@@ -470,6 +526,16 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "Effective_Add"; }
 };
+class OpCumipmt: public Cumipmt {
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string Gen(ArgVector& )
+    {
+        return "";
+    }
+    virtual std::string BinFuncName(void) const { return "Cumipmt"; }
+};
+
 
 /// Helper functions that have multiple buffers
 template<class Op>
@@ -621,8 +687,14 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getEffect"))))
                 {
-                mvSubArguments.push_back(SoPHelper<OpEffective>(ts,
-                    ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper<OpEffective>(ts,
+                        ft->Children[i]));
+                }
+                if ( !(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getCumipmt"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpCumipmt>(ts,
+                        ft->Children[i]));
                 }
                 break;
             default:
