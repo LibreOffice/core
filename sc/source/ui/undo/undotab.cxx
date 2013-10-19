@@ -1039,7 +1039,8 @@ bool ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const OUString& rDoc ) :
     ScSimpleUndo( pShell ),
     aDocName( rDoc ),
-    nCount( 0 )
+    nCount( 0 ),
+    nRefreshDelay( 0 )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     SCTAB nTabCount = pDoc->GetTableCount();
