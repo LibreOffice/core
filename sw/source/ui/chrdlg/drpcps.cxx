@@ -111,7 +111,7 @@ public:
         , mnTotLineH(0)
         , mnLineH(0)
         , mnTextH(0)
-        , mnDistance(00
+        , mnDistance(0)
         , mpPrinter(NULL)
         , mbDelPrinter(false)
     {}
