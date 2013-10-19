@@ -29,14 +29,10 @@ namespace
     const ::rtl::OUString VLC_SERVICENAME = "com.sun.star.media.Manager_VLC";
 
     const char * const VLC_ARGS[] = {
-        "-Vdummy",
-#ifdef WNT
         "--demux",
         "ffmpeg",
-#endif
-        "--verbose=2"//,
-        //"--file-logging",
-        //"--logfile=C:/home/dev/log/vlc_log"
+        "--no-mouse-events",
+        "--verbose=-1"
     };
 }
 

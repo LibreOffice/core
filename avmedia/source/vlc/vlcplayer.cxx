@@ -1,4 +1,3 @@
-#include <iostream>
 #include <boost/bind.hpp>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
