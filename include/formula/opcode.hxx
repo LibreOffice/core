@@ -222,6 +222,8 @@ enum OpCodeEnum
         ocVarP              = SC_OPCODE_VAR_P,
         ocStDev             = SC_OPCODE_ST_DEV,
         ocStDevP            = SC_OPCODE_ST_DEV_P,
+        ocStDevP_MS         = SC_OPCODE_ST_DEV_P_MS,
+        ocStDevS            = SC_OPCODE_ST_DEV_S,
         ocB                 = SC_OPCODE_B,
         ocNormDist          = SC_OPCODE_NORM_DIST,
         ocExpDist           = SC_OPCODE_EXP_DIST,
