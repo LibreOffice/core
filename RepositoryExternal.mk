@@ -3033,7 +3033,7 @@ gb_ExternalExecutable__register_ucpp :=
 else # ! SYSTEM_UCPP
 
 define gb_ExternalExecutable__register_ucpp
-$(call gb_ExternalExecutable_set_internal,ucpp)
+$(call gb_ExternalExecutable_set_internal,ucpp,$(INSTROOT_FOR_BUILD)/$(SDKDIRNAME)/bin/ucpp$(gb_Executable_EXT_for_build))
 
 endef
 
