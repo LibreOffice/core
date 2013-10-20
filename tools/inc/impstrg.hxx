@@ -21,10 +21,6 @@
 
 #include <tools/tools.h>
 
-// Debug methode for Strings
-
-const char* DbgCheckUniString( const void* pString );
-
 // Helper functions for Strings
 
 xub_StrLen ImplStringLen( const sal_Char* pStr );

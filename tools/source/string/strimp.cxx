@@ -32,18 +32,6 @@ static sal_Int32 ImplStringCompareWithoutZero( const STRCODE* pStr1, const STRCO
     return nRet;
 }
 
-#ifdef DBG_UTIL
-const char* DBGCHECKSTRING( const void* pString )
-{
-    STRING* p = (STRING*)pString;
-
-    if ( p->GetBuffer()[p->Len()] != 0 )
-        return "String damaged: aStr[nLen] != 0";
-
-    return NULL;
-}
-#endif
-
 static STRINGDATA* ImplAllocData( sal_Int32 nLen )
 {
     STRINGDATA* pData   = (STRINGDATA*)rtl_allocateMemory( sizeof(STRINGDATA)+(nLen*sizeof( STRCODE )) );
@@ -96,16 +84,11 @@ inline sal_Int32 ImplGetCopyLen( sal_Int32 nStrLen, sal_Int32 nCopyLen )
 STRING::STRING()
     : mpData(NULL)
 {
-    DBG_CTOR( STRING, DBGCHECKSTRING );
-
     STRING_NEW((STRING_TYPE **)&mpData);
 }
 
 STRING::STRING( const STRING& rStr )
 {
-    DBG_CTOR( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
     // Set pointer to argument string and increase reference counter
     STRING_ACQUIRE((STRING_TYPE *)rStr.mpData);
     mpData = rStr.mpData;
@@ -114,9 +97,6 @@ STRING::STRING( const STRING& rStr )
 STRING::STRING( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen )
 : mpData( NULL )
 {
-    DBG_CTOR( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
     if ( nPos > rStr.mpData->mnLen )
         nLen = 0;
     else
@@ -150,17 +130,12 @@ STRING::STRING( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen )
 
 STRING::~STRING()
 {
-    DBG_DTOR( STRING, DBGCHECKSTRING );
-
     // free string data
     STRING_RELEASE((STRING_TYPE *)mpData);
 }
 
 STRING& STRING::Append( const STRING& rStr )
 {
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
     // Assignment is sufficient if string is empty
     sal_Int32 nLen = mpData->mnLen;
     if ( !nLen )
@@ -194,7 +169,6 @@ STRING& STRING::Append( const STRING& rStr )
 
 void STRING::SetChar( xub_StrLen nIndex, STRCODE c )
 {
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_ASSERT( nIndex < mpData->mnLen, "String::SetChar() - nIndex > String.Len()" );
 
     // copy data if necessary
@@ -204,9 +178,6 @@ void STRING::SetChar( xub_StrLen nIndex, STRCODE c )
 
 STRING& STRING::Insert( const STRING& rStr, xub_StrLen nIndex )
 {
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
     // detect overflow
     sal_Int32 nCopyLen = ImplGetCopyLen( mpData->mnLen, rStr.mpData->mnLen );
 

@@ -42,10 +42,6 @@ DBG_NAME( UniString )
 #define STRING_RELEASE  rtl_uString_release
 #define STRING_NEW      rtl_uString_new
 
-#if defined DBG_UTIL
-#define DBGCHECKSTRING  DbgCheckUniString
-#endif
-
 #include <strimp.cxx>
 #include <strucvt.cxx>
 
@@ -53,15 +49,11 @@ UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
 
 sal_Int32 UniString::ToInt32() const
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-
     return rtl_ustr_toInt32( mpData->maStr, 10 );
 }
 
 STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 {
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
     // Don't insert 0 char or string size is maximum
     if ( !c || (mpData->mnLen == STRING_MAXLEN) )
         return *this;
@@ -88,9 +80,6 @@ STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 
 StringCompare STRING::CompareTo( const STRING& rStr, xub_StrLen nLen ) const
 {
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
     if ( mpData == rStr.mpData )
         return COMPARE_EQUAL;
 
@@ -123,8 +112,6 @@ sal_Bool operator==(const UniString& rStr1, const UniString& rStr2)
 
 STRING& STRING::Append( STRCODE c )
 {
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
     // don't append null characters and keep string length < maxlen
     sal_Int32 nLen = mpData->mnLen;
     if ( c && (nLen < STRING_MAXLEN) )

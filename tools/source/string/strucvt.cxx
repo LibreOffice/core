@@ -20,7 +20,6 @@
 UniString::UniString( const char* pByteStr,
                       rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {
-    DBG_CTOR( UniString, DbgCheckUniString );
     DBG_ASSERT( pByteStr, "UniString::UniString() - pByteStr is NULL" );
 
     mpData = NULL;
@@ -32,7 +31,6 @@ UniString::UniString( const char* pByteStr,
 UniString::UniString( const char* pByteStr, xub_StrLen nLen,
                       rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {
-    DBG_CTOR( UniString, DbgCheckUniString );
     DBG_ASSERT( pByteStr, "UniString::UniString() - pByteStr is NULL" );
 
     if ( nLen == STRING_LEN )
@@ -47,8 +45,6 @@ UniString::UniString( const char* pByteStr, xub_StrLen nLen,
 UniString::UniString( const OUString& rStr )
     : mpData(NULL)
 {
-    DBG_CTOR( UniString, DbgCheckUniString );
-
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
                "Overflowing OUString -> UniString cut to zero length");
 
@@ -66,8 +62,6 @@ UniString::UniString( const OUString& rStr )
 
 UniString& UniString::Assign( const OUString& rStr )
 {
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
                "Overflowing OUString -> UniString cut to zero length");
 
@@ -94,8 +88,6 @@ UniString::UniString( const ResId& rResId )
     : mpData(NULL)
 {
     OUString sStr(rResId.toString());
-
-    DBG_CTOR( UniString, DbgCheckUniString );
 
     OSL_ENSURE(sStr.pData->length < STRING_MAXLEN,
                "Overflowing OUString -> UniString cut to zero length");
