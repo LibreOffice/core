@@ -138,7 +138,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
     pBindings->QueryState( SID_THES, pItem );
     OUString aThesLookUpStr;
     SfxStringItem *pStrItem = dynamic_cast< SfxStringItem * >(pItem);
-    sal_Int32 nDelimPos = STRING_LEN;
+    sal_Int32 nDelimPos = -1;
     if (pStrItem)
     {
         aThesLookUpStr = pStrItem->GetValue();
