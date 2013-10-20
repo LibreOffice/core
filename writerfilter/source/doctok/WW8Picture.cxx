@@ -23,25 +23,6 @@ namespace writerfilter {
 namespace doctok
 {
 
-void WW8PICF::resolveNoAuto(Properties & /*rHandler*/)
-{
-}
-
-writerfilter::Reference<Properties>::Pointer_t
-WW8PICF::get_DffRecord()
-{
-    writerfilter::Reference<Properties>::Pointer_t
-        pRet(new DffBlock(this, get_cbHeader(), getCount() - get_cbHeader(),
-                          0));
-    return pRet;
-}
-
-writerfilter::Reference<Properties>::Pointer_t
-WW8PICF::get_ffdata()
-{
-    return writerfilter::Reference<Properties>::Pointer_t();
-}
-
 writerfilter::Reference<Properties>::Pointer_t
 WW8FSPA::get_shape()
 {
