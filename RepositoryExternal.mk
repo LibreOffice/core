@@ -2953,13 +2953,11 @@ endef
 
 endif
 
-ifeq (,$(SYSTEM_UCPP))
 define gb_Executable__register_idlc
 $(call gb_Executable_add_runtime_dependencies,idlc,\
-	$(call gb_Executable_get_target_for_build,ucpp) \
+	$(call gb_ExternalExecutable_get_dependencies,ucpp) \
 )
 endef
-endif
 
 define gb_Executable__register_localize
 $(call gb_Executable_add_runtime_dependencies,localize,\
@@ -3027,6 +3025,19 @@ $(call gb_ExternalExecutable_add_dependencies,xsltproc,$(call gb_Package_get_tar
 endef
 
 endif # SYSTEM_LIBXSLT_FOR_BUILD
+
+ifneq (,$(SYSTEM_UCPP))
+
+gb_ExternalExecutable__register_ucpp :=
+
+else # ! SYSTEM_UCPP
+
+define gb_ExternalExecutable__register_ucpp
+$(call gb_ExternalExecutable_set_internal,ucpp)
+
+endef
+
+endif # SYSTEM_UCPP
 
 ifeq (,$(PYTHON_FOR_BUILD))
 

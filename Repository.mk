@@ -728,6 +728,7 @@ $(eval $(call gb_ExternalExecutable_register_executables,\
 	genccode \
 	gencmn \
 	python \
+	ucpp \
 	xmllint \
 	xsltproc \
 ))
