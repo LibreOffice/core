@@ -41,6 +41,7 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
+#include <exception>
 #include <new>
 
 namespace {
@@ -394,7 +395,7 @@ public:
     virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
     parse(
         OUString const & scheme, OUString const & schemeSpecificPart)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 private:
     Parser(Parser &); // not implemented
@@ -427,17 +428,12 @@ css::uno::Sequence< OUString > Parser::getSupportedServiceNames()
 css::uno::Reference< css::uri::XUriReference >
 Parser::parse(
     OUString const & scheme, OUString const & schemeSpecificPart)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if (!parseSchemeSpecificPart(schemeSpecificPart)) {
         return 0;
     }
-    try {
-        return new UrlReference(scheme, schemeSpecificPart);
-    } catch (std::bad_alloc &) {
-        throw css::uno::RuntimeException(
-            OUString("std::bad_alloc"), 0);
-    }
+    return new UrlReference(scheme, schemeSpecificPart);
 }
 
 }

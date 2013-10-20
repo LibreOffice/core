@@ -49,6 +49,7 @@
 
 #include <algorithm>
 #include /*MSVC trouble: <cstdlib>*/ <stdlib.h>
+#include <exception>
 #include <new>
 #include <vector>
 
@@ -191,7 +192,6 @@ private:
     stoc::uriproc::UriReference m_base;
 };
 
-// throws std::bad_alloc
 css::uno::Reference< css::uri::XUriReference > parseGeneric(
     OUString const & scheme, OUString const & schemeSpecificPart)
 {
@@ -291,7 +291,7 @@ public:
 
     virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
     parse(OUString const & uriReference)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
     makeAbsolute(
@@ -343,7 +343,8 @@ css::uno::Sequence< OUString > Factory::getSupportedServiceNames()
 }
 
 css::uno::Reference< css::uri::XUriReference > Factory::parse(
-    OUString const & uriReference) throw (css::uno::RuntimeException)
+    OUString const & uriReference)
+    throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 fragment = uriReference.indexOf('#');
     if (fragment == -1) {
@@ -403,18 +404,10 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
             }
         }
     }
-    css::uno::Reference< css::uri::XUriReference > uriRef;
-    if (parser.is()) {
-        uriRef = parser->parse(scheme, schemeSpecificPart);
-    } else {
-        try {
-            uriRef = parseGeneric(scheme, schemeSpecificPart);
-        } catch (std::bad_alloc &) {
-            throw css::uno::RuntimeException(
-                OUString("std::bad_alloc"),
-                static_cast< cppu::OWeakObject * >(this));
-        }
-    }
+    css::uno::Reference< css::uri::XUriReference > uriRef(
+        parser.is()
+        ? parser->parse(scheme, schemeSpecificPart)
+        : parseGeneric(scheme, schemeSpecificPart));
     if (uriRef.is() && fragment != uriReference.getLength()) {
         uriRef->setFragment(uriReference.copy(fragment + 1));
     }

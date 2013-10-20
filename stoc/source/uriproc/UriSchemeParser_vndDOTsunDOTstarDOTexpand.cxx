@@ -21,6 +21,7 @@
 
 #include "stocservices.hxx"
 
+#include <exception>
 #include <new>
 
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
@@ -172,7 +173,7 @@ public:
     parse(
         OUString const & scheme,
         OUString const & schemeSpecificPart)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
 private:
     Parser(Parser &); // not defined
@@ -204,18 +205,12 @@ css::uno::Sequence< OUString > Parser::getSupportedServiceNames()
 
 css::uno::Reference< css::uri::XUriReference > Parser::parse(
     OUString const & scheme, OUString const & schemeSpecificPart)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if (!parseSchemeSpecificPart(schemeSpecificPart)) {
         return css::uno::Reference< css::uri::XUriReference >();
     }
-    try {
-        return new UrlReference(scheme, schemeSpecificPart);
-    } catch (::std::bad_alloc &) {
-        throw css::uno::RuntimeException(
-            OUString("std::bad_alloc"),
-            css::uno::Reference< css::uno::XInterface >());
-    }
+    return new UrlReference(scheme, schemeSpecificPart);
 }
 
 }
