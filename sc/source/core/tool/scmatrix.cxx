@@ -1264,6 +1264,8 @@ public:
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
+        sc::Compare::Cell& rCell = mrComp.maCells[mnMatPos];
+
         switch (node.type)
         {
             case mdds::mtm::element_numeric:
@@ -1274,9 +1276,9 @@ public:
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                 {
-                    mrComp.bVal[mnMatPos] = true;
-                    mrComp.nVal[mnMatPos] = *it;
-                    mrComp.bEmpty[mnMatPos] = false;
+                    rCell.mbValue = true;
+                    rCell.mbEmpty = false;
+                    rCell.mfValue = *it;
                     compare();
                 }
             }
@@ -1289,9 +1291,9 @@ public:
                 block_type::const_iterator itEnd = block_type::end(*node.data);
                 for (; it != itEnd; ++it)
                 {
-                    mrComp.bVal[mnMatPos] = true;
-                    mrComp.nVal[mnMatPos] = *it;
-                    mrComp.bEmpty[mnMatPos] = false;
+                    rCell.mbValue = true;
+                    rCell.mbEmpty = false;
+                    rCell.mfValue = *it;
                     compare();
                 }
             }
@@ -1305,18 +1307,18 @@ public:
                 for (; it != itEnd; ++it)
                 {
                     const svl::SharedString& rStr = *it;
-                    mrComp.bVal[mnMatPos] = false;
-                    *mrComp.pVal[mnMatPos] = rStr.getString();
-                    mrComp.bEmpty[mnMatPos] = false;
+                    rCell.mbValue = false;
+                    rCell.mbEmpty = false;
+                    *rCell.mpStr = rStr.getString();
                     compare();
                 }
             }
             break;
             case mdds::mtm::element_empty:
             {
-                mrComp.bVal[mnMatPos] = false;
-                *mrComp.pVal[mnMatPos] = svl::SharedString::getEmptyString().getString();
-                mrComp.bEmpty[mnMatPos] = true;
+                rCell.mbValue = false;
+                rCell.mbEmpty = true;
+                *rCell.mpStr = svl::SharedString::getEmptyString().getString();
                 for (size_t i = 0; i < node.size; ++i)
                     compare();
             }

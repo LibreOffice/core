@@ -796,20 +796,22 @@ double ScInterpreter::Compare()
     aComp.mbIgnoreCase = pDok->GetDocOptions().IsIgnoreCase();
     for( short i = 1; i >= 0; i-- )
     {
+        sc::Compare::Cell& rCell = aComp.maCells[i];
+
         switch ( GetRawStackType() )
         {
             case svEmptyCell:
                 Pop();
-                aComp.bEmpty[ i ] = true;
+                rCell.mbEmpty = true;
                 break;
             case svMissing:
             case svDouble:
-                aComp.nVal[ i ] = GetDouble();
-                aComp.bVal[ i ] = true;
+                rCell.mfValue = GetDouble();
+                rCell.mbValue = true;
                 break;
             case svString:
-                *aComp.pVal[ i ] = GetString().getString();
-                aComp.bVal[ i ] = false;
+                *rCell.mpStr = GetString().getString();
+                rCell.mbValue = false;
                 break;
             case svDoubleRef :
             case svSingleRef :
@@ -820,18 +822,18 @@ double ScInterpreter::Compare()
                 ScRefCellValue aCell;
                 aCell.assign(*pDok, aAdr);
                 if (aCell.hasEmptyValue())
-                    aComp.bEmpty[i] = true;
+                    rCell.mbEmpty = true;
                 else if (aCell.hasString())
                 {
                     svl::SharedString aStr;
                     GetCellString(aStr, aCell);
-                    *aComp.pVal[i] = aStr.getString();
-                    aComp.bVal[i] = false;
+                    *rCell.mpStr = aStr.getString();
+                    rCell.mbValue = false;
                 }
                 else
                 {
-                    aComp.nVal[i] = GetCellValue(aAdr, aCell);
-                    aComp.bVal[i] = true;
+                    rCell.mfValue = GetCellValue(aAdr, aCell);
+                    rCell.mbValue = true;
                 }
             }
             break;
@@ -852,16 +854,16 @@ double ScInterpreter::Compare()
                     break;
                 }
                 if (pMat->IsEmpty(0, 0))
-                    aComp.bEmpty[i] = true;
+                    rCell.mbEmpty = true;
                 else if (pMat->IsString(0, 0))
                 {
-                    *aComp.pVal[i] = pMat->GetString(0, 0).getString();
-                    aComp.bVal[i] = false;
+                    *rCell.mpStr = pMat->GetString(0, 0).getString();
+                    rCell.mbValue = false;
                 }
                 else
                 {
-                    aComp.nVal[i] = pMat->GetDouble(0, 0);
-                    aComp.bVal[i] = true;
+                    rCell.mfValue = pMat->GetDouble(0, 0);
+                    rCell.mbValue = true;
                 }
             }
             break;
@@ -889,20 +891,22 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
     ScAddress aAdr;
     for( short i = 1; i >= 0; i-- )
     {
+        sc::Compare::Cell& rCell = aComp.maCells[i];
+
         switch (GetRawStackType())
         {
             case svEmptyCell:
                 Pop();
-                aComp.bEmpty[ i ] = true;
+                rCell.mbEmpty = true;
                 break;
             case svMissing:
             case svDouble:
-                aComp.nVal[ i ] = GetDouble();
-                aComp.bVal[ i ] = true;
+                rCell.mfValue = GetDouble();
+                rCell.mbValue = true;
                 break;
             case svString:
-                *aComp.pVal[ i ] = GetString().getString();
-                aComp.bVal[ i ] = false;
+                *rCell.mpStr = GetString().getString();
+                rCell.mbValue = false;
                 break;
             case svSingleRef:
             {
@@ -910,18 +914,18 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                 ScRefCellValue aCell;
                 aCell.assign(*pDok, aAdr);
                 if (aCell.hasEmptyValue())
-                    aComp.bEmpty[i] = true;
+                    rCell.mbEmpty = true;
                 else if (aCell.hasString())
                 {
                     svl::SharedString aStr;
                     GetCellString(aStr, aCell);
-                    *aComp.pVal[i] = aStr.getString();
-                    aComp.bVal[i] = false;
+                    *rCell.mpStr = aStr.getString();
+                    rCell.mbValue = false;
                 }
                 else
                 {
-                    aComp.nVal[i] = GetCellValue(aAdr, aCell);
-                    aComp.bVal[i] = true;
+                    rCell.mfValue = GetCellValue(aAdr, aCell);
+                    rCell.mbValue = true;
                 }
             }
             break;
@@ -969,17 +973,19 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                 {
                     for ( short i=1; i>=0; i-- )
                     {
+                        sc::Compare::Cell& rCell = aComp.maCells[i];
+
                         if (aMat[i].mpMat->IsString(j, k))
                         {
-                            aComp.bVal[i] = false;
-                            *aComp.pVal[i] = aMat[i].mpMat->GetString(j, k).getString();
-                            aComp.bEmpty[i] = aMat[i].mpMat->IsEmpty(j, k);
+                            rCell.mbValue = false;
+                            *rCell.mpStr = aMat[i].mpMat->GetString(j, k).getString();
+                            rCell.mbEmpty = aMat[i].mpMat->IsEmpty(j, k);
                         }
                         else
                         {
-                            aComp.bVal[i] = true;
-                            aComp.nVal[i] = aMat[i].mpMat->GetDouble(j, k);
-                            aComp.bEmpty[i] = false;
+                            rCell.mbValue = true;
+                            rCell.mfValue = aMat[i].mpMat->GetDouble(j, k);
+                            rCell.mbEmpty = false;
                         }
                     }
                     aRes.mpMat->PutDouble(sc::CompareFunc(aComp, pOptions), j, k);

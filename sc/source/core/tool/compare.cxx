@@ -26,6 +26,19 @@
 
 namespace sc {
 
+Compare::Cell::Cell() :
+    mfValue(0.0), mpStr(NULL), mbValue(false), mbEmpty(false) {}
+
+Compare::Cell::Cell( OUString* p ) :
+    mfValue(0.0), mpStr(p), mbValue(false), mbEmpty(false) {}
+
+Compare::Compare( OUString* p1, OUString* p2 ) :
+    meOp(SC_EQUAL), mbIgnoreCase(true)
+{
+    maCells[0] = Cell(p1);
+    maCells[1] = Cell(p2);
+}
+
 CompareOptions::CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg ) :
     aQueryEntry(rEntry),
     bRegEx(bReg),
@@ -40,24 +53,27 @@ CompareOptions::CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bo
 
 double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
 {
+    const Compare::Cell& rCell1 = rComp.maCells[0];
+    const Compare::Cell& rCell2 = rComp.maCells[1];
+
     // Keep DoubleError if encountered
     // #i40539# if bEmpty is set, bVal/nVal are uninitialized
-    if ( !rComp.bEmpty[0] && rComp.bVal[0] && !::rtl::math::isFinite( rComp.nVal[0]))
-        return rComp.nVal[0];
-    if ( !rComp.bEmpty[1] && rComp.bVal[1] && !::rtl::math::isFinite( rComp.nVal[1]))
-        return rComp.nVal[1];
+    if (!rCell1.mbEmpty && rCell1.mbValue && !rtl::math::isFinite(rCell1.mfValue))
+        return rCell1.mfValue;
+    if (!rCell2.mbEmpty && rCell2.mbValue && !rtl::math::isFinite(rCell2.mfValue))
+        return rCell2.mfValue;
 
     size_t nStringQuery = 0;    // 0:=no, 1:=0, 2:=1
     double fRes = 0;
-    if ( rComp.bEmpty[ 0 ] )
+    if (rCell1.mbEmpty)
     {
-        if ( rComp.bEmpty[ 1 ] )
+        if (rCell2.mbEmpty)
             ;       // empty cell == empty cell, fRes 0
-        else if( rComp.bVal[ 1 ] )
+        else if (rCell2.mbValue)
         {
-            if (rComp.nVal[1] != 0.0)
+            if (rCell2.mfValue != 0.0)
             {
-                if ( rComp.nVal[ 1 ] < 0.0 )
+                if (rCell2.mfValue < 0.0)
                     fRes = 1;       // empty cell > -x
                 else
                     fRes = -1;      // empty cell < x
@@ -66,18 +82,18 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
         }
         else
         {
-            if ( !rComp.pVal[ 1 ]->isEmpty() )
+            if (!rCell2.mpStr->isEmpty())
                 fRes = -1;      // empty cell < "..."
             // else: empty cell == ""
         }
     }
-    else if ( rComp.bEmpty[ 1 ] )
+    else if (rCell2.mbEmpty)
     {
-        if( rComp.bVal[ 0 ] )
+        if (rCell1.mbValue)
         {
-            if (rComp.nVal[0] != 0.0)
+            if (rCell1.mfValue != 0.0)
             {
-                if ( rComp.nVal[ 0 ] < 0.0 )
+                if (rCell1.mfValue < 0.0)
                     fRes = -1;      // -x < empty cell
                 else
                     fRes = 1;       // x > empty cell
@@ -86,18 +102,18 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
         }
         else
         {
-            if ( !rComp.pVal[ 0 ]->isEmpty() )
+            if (!rCell1.mpStr->isEmpty())
                 fRes = 1;       // "..." > empty cell
             // else: "" == empty cell
         }
     }
-    else if( rComp.bVal[ 0 ] )
+    else if (rCell1.mbValue)
     {
-        if( rComp.bVal[ 1 ] )
+        if (rCell2.mbValue)
         {
-            if ( !::rtl::math::approxEqual( rComp.nVal[ 0 ], rComp.nVal[ 1 ] ) )
+            if (!rtl::math::approxEqual(rCell1.mfValue, rCell2.mfValue))
             {
-                if( rComp.nVal[ 0 ] - rComp.nVal[ 1 ] < 0 )
+                if (rCell1.mfValue - rCell2.mfValue < 0)
                     fRes = -1;
                 else
                     fRes = 1;
@@ -109,7 +125,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
             nStringQuery = 2;   // 1+1
         }
     }
-    else if( rComp.bVal[ 1 ] )
+    else if (rCell2.mbValue)
     {
         fRes = 1;               // string is greater than number
         nStringQuery = 1;       // 0+1
@@ -123,15 +139,15 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
             // is/must be identical to *rEntry.pStr, which is essential for
             // regex to work through GetSearchTextPtr().
             ScQueryEntry& rEntry = pOptions->aQueryEntry;
-            OSL_ENSURE(rEntry.GetQueryItem().maString.getString().equals(*rComp.pVal[1]), "ScInterpreter::CompareFunc: broken options");
+            OSL_ENSURE(rEntry.GetQueryItem().maString.getString().equals(*rCell2.mpStr), "ScInterpreter::CompareFunc: broken options");
             if (pOptions->bRegEx)
             {
                 sal_Int32 nStart = 0;
-                sal_Int32 nStop  = rComp.pVal[0]->getLength();
+                sal_Int32 nStop  = rCell1.mpStr->getLength();
                 bool bMatch = rEntry.GetSearchTextPtr(
-                        !pOptions->bIgnoreCase)->SearchForward( *rComp.pVal[0],
-                            &nStart, &nStop);
-                if (bMatch && pOptions->bMatchWholeCell && (nStart != 0 || nStop != rComp.pVal[0]->getLength()))
+                        !pOptions->bIgnoreCase)->SearchForward(
+                            *rCell1.mpStr, &nStart, &nStop);
+                if (bMatch && pOptions->bMatchWholeCell && (nStart != 0 || nStop != rCell1.mpStr->getLength()))
                     bMatch = false;     // RegEx must match entire string.
                 fRes = (bMatch ? 0 : 1);
             }
@@ -142,32 +158,32 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
                      ScGlobal::GetCaseTransliteration());
                 bool bMatch;
                 if (pOptions->bMatchWholeCell)
-                    bMatch = pTransliteration->isEqual( *rComp.pVal[0], *rComp.pVal[1]);
+                    bMatch = pTransliteration->isEqual(*rCell1.mpStr, *rCell2.mpStr);
                 else
                 {
                     OUString aCell( pTransliteration->transliterate(
-                                *rComp.pVal[0], ScGlobal::eLnge, 0,
-                                rComp.pVal[0]->getLength(), NULL));
+                                *rCell1.mpStr, ScGlobal::eLnge, 0,
+                                rCell1.mpStr->getLength(), NULL));
                     OUString aQuer( pTransliteration->transliterate(
-                                *rComp.pVal[1], ScGlobal::eLnge, 0,
-                                rComp.pVal[1]->getLength(), NULL));
+                                *rCell2.mpStr, ScGlobal::eLnge, 0,
+                                rCell2.mpStr->getLength(), NULL));
                     bMatch = (aCell.indexOf( aQuer ) != -1);
                 }
                 fRes = (bMatch ? 0 : 1);
             }
             else if (pOptions->bIgnoreCase)
                 fRes = (double) ScGlobal::GetCollator()->compareString(
-                        *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
+                        *rCell1.mpStr, *rCell2.mpStr);
             else
                 fRes = (double) ScGlobal::GetCaseCollator()->compareString(
-                        *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
+                        *rCell1.mpStr, *rCell2.mpStr);
         }
         else if (rComp.mbIgnoreCase)
             fRes = (double) ScGlobal::GetCollator()->compareString(
-                *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
+                *rCell1.mpStr, *rCell2.mpStr);
         else
             fRes = (double) ScGlobal::GetCaseCollator()->compareString(
-                *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
+                *rCell1.mpStr, *rCell2.mpStr);
     }
 
     if (nStringQuery && pOptions)
@@ -183,7 +199,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
                 // As in ScTable::ValidQuery() match a numeric string for a
                 // number query that originated from a string, e.g. in SUMIF
                 // and COUNTIF. Transliteration is not needed here.
-                bool bEqual = (*rComp.pVal[nStringQuery-1]) == rItem.maString.getString();
+                bool bEqual = (*rComp.maCells[nStringQuery-1].mpStr) == rItem.maString.getString();
                 // match => fRes=0, else fRes=1
                 fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
             }

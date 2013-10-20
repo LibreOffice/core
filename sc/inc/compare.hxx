@@ -30,23 +30,23 @@ namespace sc {
 
 struct Compare
 {
-    double nVal[2];
-    OUString* pVal[2];
-    bool bVal[2];
-    bool bEmpty[2];
+    struct Cell
+    {
+        double mfValue;
+        OUString* mpStr;
+        bool mbValue;
+        bool mbEmpty;
+
+        Cell();
+        Cell( OUString* p );
+    };
+
+    Cell maCells[2];
 
     ScQueryOp meOp;
     bool mbIgnoreCase;
 
-    Compare( OUString* p1, OUString* p2 ) :
-        meOp(SC_EQUAL),
-        mbIgnoreCase(true)
-    {
-        pVal[0] = p1;
-        pVal[1] = p2;
-        bEmpty[0] = false;
-        bEmpty[1] = false;
-    }
+    Compare( OUString* p1, OUString* p2 );
 };
 
 struct CompareOptions
