@@ -23,7 +23,6 @@
 #include <vcl/fpicker.hrc>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/string.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
@@ -155,8 +154,7 @@ public:
 
     NSString* getResString( sal_Int16 aId )
     {
-        String   aResString;
-        OUString aResOUString;
+        OUString aResString;
 
         const SolarMutexGuard aGuard;
 
@@ -167,22 +165,20 @@ public:
             // translate the control id to a resource id
             sal_Int16 aResId = CtrlIdToResId( aId );
             if ( aResId > -1 )
-                aResString = String( ResId( aResId, *m_ResMgr ) );
+                aResString = ResId( aResId, *m_ResMgr );
             else
             {
                 aResId = OtherCtrlIdToResId( aId );
                 if ( aResId > -1 ) {
-                    aResString = String( ResId( aResId, *m_OtherResMgr ) );
+                    aResString = ResId( aResId, *m_OtherResMgr );
                 }
             }
-            if ( aResId > -1 )
-                aResOUString = OUString( aResString );
         }
         catch(...)
         {
         }
 
-        return [NSString stringWithOUString:aResOUString];
+        return [NSString stringWithOUString:aResString];
     }
 
 public:
