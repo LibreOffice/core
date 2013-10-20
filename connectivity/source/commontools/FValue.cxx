@@ -682,7 +682,7 @@ ORowSetValue& ORowSetValue::operator=(const bool _rRH)
         free();
 
     m_aValue.m_bBool = _rRH;
-    m_eTypeKind = DataType::BIT;
+    m_eTypeKind = DataType::BOOLEAN;
     m_bNull = sal_False;
 
     return *this;
