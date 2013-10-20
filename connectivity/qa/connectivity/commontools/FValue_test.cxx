@@ -20,6 +20,8 @@
 #include <test/bootstrapfixture.hxx>
 
 #include "connectivity/FValue.hxx"
+#include <com/sun/star/sdbc/DataType.hpp>
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
 namespace connectivity { namespace commontools {
@@ -46,7 +48,10 @@ public:
     void test_float();
     void test_double();
 
-    void test_getString();
+    void test_bool_getString();
+    void test_bit_getString();
+
+    void test_bool_creation();
 
     CPPUNIT_TEST_SUITE(FValueTest);
 
@@ -67,7 +72,9 @@ public:
     CPPUNIT_TEST(test_float);
     CPPUNIT_TEST(test_double);
 
-    CPPUNIT_TEST(test_getString);
+    CPPUNIT_TEST(test_bool_getString);
+    CPPUNIT_TEST(test_bit_getString);
+    CPPUNIT_TEST(test_bool_creation);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -286,25 +293,96 @@ void FValueTest::test_double()
     CPPUNIT_ASSERT_MESSAGE("double conversion from Any didn't work", src_double == trg_double);
 }
 
-void FValueTest::test_getString()
+void FValueTest::test_bool_getString()
 {
     bool src_bool_1 = true;
     ORowSetValue v_1(src_bool_1);
     OUString trg_bool_1 = v_1.getString();
 
-    std::cerr << "src_bool_1" << src_bool_1 << std::endl;
+    std::cerr << "src_bool_1: " << src_bool_1 << std::endl;
     std::cerr << "trg_bool_1: " << trg_bool_1 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("bool to string conversion to ORowSetValue didn't work", trg_bool_1 == "1");
+    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool to string conversion didn't work", trg_bool_1 == "true");
 
     bool src_bool_0 = false;
     ORowSetValue v_0(src_bool_0);
     OUString trg_bool_0 = v_0.getString();
 
-    std::cerr << "src_bool_0" << src_bool_0 << std::endl;
+    std::cerr << "src_bool_0: " << src_bool_0 << std::endl;
     std::cerr << "trg_bool_0: " << trg_bool_0 << std::endl;
 
-    CPPUNIT_ASSERT_MESSAGE("bool to string conversion to ORowSetValue didn't work", trg_bool_0 == "0");
+    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool to string conversion didn't work", trg_bool_0 == "false");
+}
+
+void FValueTest::test_bit_getString()
+{
+    bool src_bool_1 = true;
+    ORowSetValue v_1(src_bool_1);
+    v_1.setTypeKind(DataType::BIT);
+    OUString trg_bool_1 = v_1.getString();
+
+    std::cerr << "src_bit_1: " << src_bool_1 << std::endl;
+    std::cerr << "trg_bit_1: " << trg_bool_1 << std::endl;
+
+    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bit to string conversion didn't work", trg_bool_1 == "1");
+
+    bool src_bool_0 = false;
+    ORowSetValue v_0(src_bool_0);
+    v_0.setTypeKind(DataType::BIT);
+    OUString trg_bool_0 = v_0.getString();
+
+    std::cerr << "src_bit_0: " << src_bool_0 << std::endl;
+    std::cerr << "trg_bit_0: " << trg_bool_0 << std::endl;
+
+    CPPUNIT_ASSERT_MESSAGE("ORowSetValue bit to string conversion didn't work", trg_bool_0 == "0");
+}
+
+void FValueTest::test_bool_creation()
+{
+    OUString s1("1");
+    OUString s0("0");
+    OUString sTrue("true");
+    OUString sTrUe("tRuE");
+    OUString sFalse("false");
+    ORowSetValue vTrue(true);
+    ORowSetValue vFalse(false);
+
+    {
+        ORowSetValue v(s1);
+        v.setTypeKind(DataType::BOOLEAN);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vTrue);
+    }
+
+    {
+        ORowSetValue v(s0);
+        v.setTypeKind(DataType::BOOLEAN);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vFalse);
+    }
+
+    {
+        ORowSetValue v(sTrue);
+        v.setTypeKind(DataType::BOOLEAN);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vTrue);
+    }
+
+    {
+        ORowSetValue v(sTrUe);
+        v.setTypeKind(DataType::BOOLEAN);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vTrue);
+    }
+
+    {
+        ORowSetValue v(sFalse);
+        v.setTypeKind(DataType::BOOLEAN);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vFalse);
+    }
+
+    {
+        ORowSetValue v(s0);
+        v.setTypeKind(DataType::BOOLEAN);
+        CPPUNIT_ASSERT_MESSAGE("ORowSetValue bool creation from string didn't work", v == vFalse);
+    }
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FValueTest);
