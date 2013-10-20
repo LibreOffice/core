@@ -21,6 +21,7 @@
 #include <boost/scoped_array.hpp>
 
 
+#include <osl/file.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/rc.h>
@@ -29,6 +30,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/imagerepository.hxx>
@@ -149,6 +151,20 @@ Image::Image( const uno::Reference< graphic::XGraphic >& rxGraphic ) :
 
     const Graphic aGraphic( rxGraphic );
     ImplInit( aGraphic.GetBitmapEx() );
+}
+
+Image::Image( const OUString &rFileUrl ) :
+    mpImplData( NULL )
+{
+    DBG_CTOR( Image, NULL );
+    OUString aTmp;
+    osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
+    Graphic aGraphic;
+    const OUString aFilterName( IMP_PNG );
+    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
+    {
+        ImplInit( aGraphic.GetBitmapEx() );
+    }
 }
 
 Image::~Image()

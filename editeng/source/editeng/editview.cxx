@@ -862,26 +862,6 @@ sal_Bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMa
     return pImpEditView->IsWrongSpelledWord( aPaM , bMarkIfWrong );
 }
 
-
-static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
-{
-    Image aRes;
-    OUString aTmp;
-    osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
-//    OString aPath = OString( aTmp.getStr(), aTmp.getLength(), osl_getThreadTextEncoding() );
-#if defined(WNT)
-//    aTmp = lcl_Win_GetShortPathName( aTmp );
-#endif
-    Graphic aGraphic;
-    const OUString aFilterName(  IMP_PNG  );
-    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
-    {
-        aRes = Image( aGraphic.GetBitmapEx() );
-    }
-    return aRes;
-}
-
-
 void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 {
     DBG_CHKTHIS( EditView, 0 );
@@ -1036,7 +1016,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                                 xSvcInfo->getImplementationName()) );
                         if (!aDictionaryImageUrl.isEmpty() )
                         {
-                            Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
+                            Image aImage( aDictionaryImageUrl );
                             pInsertMenu->SetItemImage( nPos, aImage );
                         }
                     }
