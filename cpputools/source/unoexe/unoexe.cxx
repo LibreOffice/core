@@ -106,9 +106,9 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
         if (*pnIndex >= rtl_getAppCommandArgCount() || pValue->copy(1).equals(dash))
         {
             OUStringBuffer buf( 32 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("incomplete option \"-") );
+            buf.append( OUString("incomplete option \"-") );
             buf.appendAscii( pOpt );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" given!") );
+            buf.append( OUString("\" given!") );
             throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
         }
         else
@@ -173,9 +173,9 @@ void createInstance(
     if (! x.is())
     {
         OUStringBuffer buf( 64 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("cannot get service instance \"") );
+        buf.append( OUString("cannot get service instance \"") );
         buf.append( rServiceName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+        buf.append( OUString("\"!") );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
     }
 
@@ -183,12 +183,12 @@ void createInstance(
     if (! rxOut.is())
     {
         OUStringBuffer buf( 64 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("service instance \"") );
+        buf.append( OUString("service instance \"") );
         buf.append( rServiceName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" does not support demanded interface \"") );
+        buf.append( OUString("\" does not support demanded interface \"") );
         const Type & rType = ::getCppuType( (const Reference< T > *)0 );
         buf.append( rType.getTypeName() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+        buf.append( OUString("\"!") );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
     }
 }
@@ -223,9 +223,9 @@ static Reference< XInterface > loadComponent(
         else
         {
             OUStringBuffer buf( 64 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("unknown extension of \"") );
+            buf.append( OUString("unknown extension of \"") );
             buf.append( rLocation );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!  No loader available!") );
+            buf.append( OUString("\"!  No loader available!") );
             throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
         }
 
@@ -257,11 +257,11 @@ static Reference< XInterface > loadComponent(
         if (! xInstance.is())
         {
             OUStringBuffer buf( 64 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("activating component \"") );
+            buf.append( OUString("activating component \"") );
             buf.append( rImplName );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" from location \"") );
+            buf.append( OUString("\" from location \"") );
             buf.append( rLocation );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" failed!") );
+            buf.append( OUString("\" failed!") );
             throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
         }
 
@@ -270,9 +270,9 @@ static Reference< XInterface > loadComponent(
     else
     {
         OUStringBuffer buf( 64 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("location \"") );
+        buf.append( OUString("location \"") );
         buf.append( rLocation );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" has no extension!  Cannot determine loader to be used!") );
+        buf.append( OUString("\" has no extension!  Cannot determine loader to be used!") );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
     }
 }
@@ -371,9 +371,9 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
         out( rExc.Message );
     }
     OUStringBuffer buf( 64 );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("no such element \"") );
+    buf.append( OUString("no such element \"") );
     buf.append( rName );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
+    buf.append( OUString("\"!") );
     throw NoSuchElementException( buf.makeStringAndClear(), Reference< XInterface >() );
 }
 
@@ -462,8 +462,7 @@ SAL_IMPLEMENT_MAIN()
             throw RuntimeException("give component exOR service name!", Reference< XInterface >() );
         if (aImplName.isEmpty() && aServiceName.isEmpty())
         {
-            if (! aUnoUrl.endsWithIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM(";uno.ComponentContext") ))
+            if (! aUnoUrl.endsWithIgnoreAsciiCase( OUString(";uno.ComponentContext") ))
                 throw RuntimeException(
                     OUString("expected UNO-URL with instance name uno.ComponentContext!" ),
                     Reference<XInterface>() );

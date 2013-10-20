@@ -727,9 +727,8 @@ void OPropertySetHelper::fire
                     {
                         OSL_TRACE(
                             OUStringToOString(
-                                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                              "caught RuntimeException while "
-                                              "firing listeners: ") ) +
+                                OUString( "caught RuntimeException while "
+                                          "firing listeners: " ) +
                                 exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
@@ -784,9 +783,8 @@ void OPropertySetHelper::fire
                     {
                         OSL_TRACE(
                             OUStringToOString(
-                                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                              "caught RuntimeException while "
-                                              "firing listeners: ") ) +
+                                OUString( "caught RuntimeException while "
+                                          "firing listeners: " ) +
                                 exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
@@ -834,9 +832,8 @@ void OPropertySetHelper::fire
                     {
                         OSL_TRACE(
                             OUStringToOString(
-                                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                              "caught RuntimeException while "
-                                              "firing listeners: ") ) +
+                                OUString( "caught RuntimeException while "
+                                          "firing listeners: " ) +
                                 exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
