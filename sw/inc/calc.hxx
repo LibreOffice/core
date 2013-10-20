@@ -21,12 +21,8 @@
 #define SW_CALC_HXX
 
 #include <vector>
-
-#include <tools/string.hxx>
-#include <unotools/syslocale.hxx>
-
 #include <basic/sbxvar.hxx>
-
+#include <unotools/syslocale.hxx>
 #include "swdllapi.h"
 
 class CharClass;

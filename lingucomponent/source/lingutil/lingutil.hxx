@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 
 #include <vector>
 #include <list>

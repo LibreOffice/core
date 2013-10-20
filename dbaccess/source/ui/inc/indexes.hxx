@@ -20,7 +20,6 @@
 #ifndef _DBAUI_INDEXES_HXX_
 #define _DBAUI_INDEXES_HXX_
 
-#include <tools/string.hxx>
 #include <comphelper/stl_types.hxx>
 
 namespace dbaui

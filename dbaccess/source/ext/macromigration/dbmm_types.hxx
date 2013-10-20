@@ -20,7 +20,7 @@
 #ifndef DBACCESS_DBMM_TYPES_HXX
 #define DBACCESS_DBMM_TYPES_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 namespace dbmm
 {

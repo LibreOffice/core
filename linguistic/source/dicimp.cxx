@@ -26,7 +26,6 @@
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

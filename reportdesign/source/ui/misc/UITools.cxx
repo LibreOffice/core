@@ -27,7 +27,6 @@
 #include "reportformula.hxx"
 
 #include <tools/diagnose_ex.h>
-#include <tools/string.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

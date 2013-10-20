@@ -19,8 +19,7 @@
 #ifndef _SWDBMGR_HXX
 #define _SWDBMGR_HXX
 
-
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include "swdllapi.h"

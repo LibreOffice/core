@@ -18,7 +18,6 @@
  */
 
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/stream.hxx>
 #include <osl/mutex.hxx>

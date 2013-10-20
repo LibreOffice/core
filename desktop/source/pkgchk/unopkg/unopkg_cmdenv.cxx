@@ -22,7 +22,6 @@
 #include "../../deployment/gui/dp_gui_shared.hxx"
 #include "unopkg_shared.h"
 #include "osl/thread.h"
-#include "tools/string.hxx"
 #include "tools/resmgr.hxx"
 #include "cppuhelper/implbase3.hxx"
 #include "cppuhelper/exc_hlp.hxx"

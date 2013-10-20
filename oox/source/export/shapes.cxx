@@ -60,7 +60,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <unotools/fontcvt.hxx>
 #include <vcl/graph.hxx>

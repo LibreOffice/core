@@ -22,7 +22,6 @@
 
 #include <map>
 #include <tools/mempool.hxx>
-#include <tools/string.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/nfkeytab.hxx>
 #include <editeng/svxfont.hxx>

@@ -18,7 +18,7 @@
  */
 
 #include "swtypes.hxx"
-#include "tools/string.hxx"
+#include <rtl/ustring.hxx>
 
 #include <bodyfrm.hxx>
 #include <cellfrm.hxx>

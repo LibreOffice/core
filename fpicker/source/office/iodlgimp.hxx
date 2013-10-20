@@ -21,7 +21,6 @@
 
 #include <PlacesListBox.hxx>
 
-#include <tools/string.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>

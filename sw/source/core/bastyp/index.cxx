@@ -21,8 +21,8 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 
 TYPEINIT0(SwIndexReg);
 

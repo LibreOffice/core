@@ -34,7 +34,7 @@
 #include "rtl/strbuf.hxx"
 
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
-    const ScAddress& rOutPos, const CharSet eNach, sal_uInt32 nDifOption )
+    const ScAddress& rOutPos, const rtl_TextEncoding eNach, sal_uInt32 nDifOption )
 {
     SCCOL       nEndCol;
     SCROW       nEndRow;
@@ -49,13 +49,13 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* p
 
 
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
-    const ScRange&rRange, const CharSet eCharSet, sal_uInt32 nDifOption )
+    const ScRange&rRange, const rtl_TextEncoding eCharSet, sal_uInt32 nDifOption )
 {
     OSL_ENSURE( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range not sorted!" );
     OSL_ENSURE( rRange.aStart.Tab() == rRange.aEnd.Tab(),
         "ScExportDif(): only one table please!" );
 
-    const CharSet eStreamCharSet = rOut.GetStreamCharSet();
+    const rtl_TextEncoding eStreamCharSet = rOut.GetStreamCharSet();
     if ( eStreamCharSet != eCharSet )
         rOut.SetStreamCharSet( eCharSet );
 

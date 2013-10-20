@@ -20,7 +20,6 @@
 #ifndef _COMMAND_HXX
 #define _COMMAND_HXX
 
-#include <tools/string.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
 

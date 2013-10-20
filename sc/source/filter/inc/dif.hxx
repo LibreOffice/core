@@ -61,12 +61,12 @@ class ScPatternAttr;
 class DifParser
 {
 public:
-    OUString              aData;
+    OUString            aData;
     double              fVal;
-    sal_uInt32              nVector;
-    sal_uInt32              nVal;
-    sal_uInt32              nNumFormat;
-    CharSet             eCharSet;
+    sal_uInt32          nVector;
+    sal_uInt32          nVal;
+    sal_uInt32          nNumFormat;
+    rtl_TextEncoding    eCharSet;
 private:
     SvNumberFormatter*  pNumFormatter;
     SvStream&           rIn;
@@ -80,7 +80,7 @@ private:
     static inline sal_Bool  IsEOD( const sal_Unicode* pRef );
     static inline sal_Bool  Is1_0( const sal_Unicode* pRef );
 public:
-                        DifParser( SvStream&, const sal_uInt32 nOption, ScDocument&, CharSet );
+                        DifParser( SvStream&, const sal_uInt32 nOption, ScDocument&, rtl_TextEncoding );
 
     TOPIC               GetNextTopic( void );
 

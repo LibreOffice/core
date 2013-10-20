@@ -23,7 +23,7 @@
 #include <database.hxx>
 #include <globals.hxx>
 #include <command.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 
 #define BR 0x8000

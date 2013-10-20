@@ -19,7 +19,7 @@
 
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <rtl/instance.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

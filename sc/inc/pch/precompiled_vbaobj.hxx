@@ -314,7 +314,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/eventcfg.hxx>
 #include <vbahelper/helperdecl.hxx>

@@ -19,17 +19,13 @@
 #ifndef SW_VIEWIMP_HXX
 #define SW_VIEWIMP_HXX
 
-#include <vector>
-
-#include <vcl/timer.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/color.hxx>
-
 #include <svx/svdtypes.hxx>
-
-#include <tools/string.hxx>
-
-#include <swtypes.hxx>
+#include <vcl/timer.hxx>
 #include <swrect.hxx>
+#include <swtypes.hxx>
+#include <vector>
 
 class ViewShell;
 class SwFlyFrm;

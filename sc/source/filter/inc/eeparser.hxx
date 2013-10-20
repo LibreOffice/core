@@ -20,7 +20,6 @@
 #ifndef SC_EEPARSER_HXX
 #define SC_EEPARSER_HXX
 
-#include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <vcl/graph.hxx>
 #include <svl/itemset.hxx>

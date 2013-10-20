@@ -20,11 +20,11 @@
 #ifndef _IODETECT_HXX_
 #define _IODETECT_HXX_
 
+#include <osl/endian.h>
+#include <rtl/ustring.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <osl/endian.h>
-#include <tools/string.hxx>
 #include <swddllapi.h>
 
 #define FILTER_RTF      "RTF"       ///< RTF filter

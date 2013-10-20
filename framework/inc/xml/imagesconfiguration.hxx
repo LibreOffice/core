@@ -21,7 +21,6 @@
 #define FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
 
 #include <framework/fwedllapi.h>
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/color.hxx>
 

@@ -28,7 +28,6 @@
 #ifndef __PLUGIN_INC_PLCOM_HXX
 #define __PLUGIN_INC_PLCOM_HXX
 
-#include <tools/string.hxx>
 #include <list>
 
 class XPlugin_Impl;

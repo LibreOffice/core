@@ -24,7 +24,6 @@
 #include <com/sun/star/util/Date.hpp>
 #include <tools/date.hxx>
 #include <tools/inetmime.hxx>
-#include <tools/string.hxx>
 
 #include <srcharg.hxx>
 

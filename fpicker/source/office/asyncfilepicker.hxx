@@ -21,7 +21,6 @@
 #define SVTOOLS_SOURCE_FILEPICKER_ASYNCFILEPICKER_HXX
 
 #include <tools/link.hxx>
-#include <tools/string.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.h>

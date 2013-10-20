@@ -29,6 +29,7 @@
 #include <vector>
 
 #include <tools/color.hxx>
+#include <tools/string.hxx>
 #include <viewopt.hxx>
 
 class SwWrongList;

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_DP_RESOURCE_H
 #define INCLUDED_DP_RESOURCE_H
 
-#include "tools/string.hxx"
 #include "tools/resid.hxx"
 #include <i18nlangtag/languagetag.hxx>
 #include "dp_misc.h"

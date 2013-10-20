@@ -28,7 +28,6 @@
 
 #include <svl/languageoptions.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <tools/string.hxx>
 #include <tools/resary.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/outdev.hxx>

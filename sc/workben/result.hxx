@@ -21,7 +21,7 @@
 #define SC_RESULT_HXX
 
 #include <vcl/timer.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 

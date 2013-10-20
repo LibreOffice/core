@@ -101,7 +101,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <uno/environment.h>
 #include <vcl/animate.hxx>
 #include <vcl/bitmapex.hxx>

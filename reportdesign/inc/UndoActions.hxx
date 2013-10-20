@@ -42,7 +42,6 @@
 #include <svl/lstner.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdundo.hxx>
-#include <tools/string.hxx>
 
 #include <functional>
 #include <memory>

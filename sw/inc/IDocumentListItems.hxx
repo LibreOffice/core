@@ -21,7 +21,7 @@
 #define IDOCUMENTLISTITEMS_HXX_INCLUDED
 
 #include <vector>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 class SwNodeNum;
 
 /** Provides numbered items of a document.

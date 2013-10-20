@@ -19,7 +19,7 @@
 
 #ifdef DBG_UTIL
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemiter.hxx>
 #include <string>

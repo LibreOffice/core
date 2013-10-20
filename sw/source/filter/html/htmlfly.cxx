@@ -24,7 +24,6 @@
 #include <comphelper/string.hxx>
 #include <svx/svxids.hrc>
 #include "hintids.hxx"
-#include <tools/string.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>

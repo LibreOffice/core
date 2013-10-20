@@ -28,7 +28,6 @@
 #include <vcl/svapp.hxx>
 #include <usr/ustring.hxx>
 #include <usr/weak.hxx>
-#include <tools/string.hxx>
 #include <osl/conditn.hxx>
 
 using namespace usr;

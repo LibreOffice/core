@@ -21,7 +21,6 @@
 
 #include "queryview.hxx"
 #include <vcl/split.hxx>
-#include <tools/string.hxx>
 #include "QEnumTypes.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "querycontroller.hxx"

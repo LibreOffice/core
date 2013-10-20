@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <vector>
-#include <tools/string.hxx>
 #include <comphelper/stl_types.hxx>
 #include "TypeInfo.hxx"
 #include "WTypeSelect.hxx"

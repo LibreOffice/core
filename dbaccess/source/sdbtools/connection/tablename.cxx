@@ -28,7 +28,6 @@
 
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/string.hxx>
 
 namespace sdbtools
 {

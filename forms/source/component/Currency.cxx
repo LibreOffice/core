@@ -19,7 +19,6 @@
 
 #include "Currency.hxx"
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>

@@ -19,7 +19,7 @@
 #ifndef _FTNINFO_HXX
 #define _FTNINFO_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include "swdllapi.h"
 #include <calbck.hxx>
 #include <editeng/numitem.hxx>

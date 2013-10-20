@@ -23,7 +23,7 @@
 #include <frmatr.hxx>
 #include <swtypes.hxx> // For MAXLEVEL.
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class SwDoc; // For friend.
 

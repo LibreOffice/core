@@ -23,7 +23,6 @@
 #include "TableWindowData.hxx"
 #include <vector>
 #include <tools/rtti.hxx>
-#include <tools/string.hxx>
 #include <boost/shared_ptr.hpp>
 
 namespace dbaui

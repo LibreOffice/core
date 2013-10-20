@@ -23,7 +23,6 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/string.hxx>
 #include <tools/resmgr.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>

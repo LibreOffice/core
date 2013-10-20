@@ -54,7 +54,6 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/ole/axbinarywriter.hxx"
-#include "tools/string.hxx"
 namespace oox {
 namespace ole {
 

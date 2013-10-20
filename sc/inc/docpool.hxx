@@ -20,8 +20,8 @@
 #ifndef SC_SCDOCPOL_HXX
 #define SC_SCDOCPOL_HXX
 
+#include <rtl/ustring.hxx>
 #include <svl/itempool.hxx>
-#include <tools/string.hxx>
 #include "scdllapi.h"
 
 class ScStyleSheet;

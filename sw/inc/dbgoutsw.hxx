@@ -22,9 +22,9 @@
 #ifdef DBG_UTIL
 
 #include <boost/unordered_map.hpp>
+#include <rtl/ustring.hxx>
 #include <tox.hxx>
 #include <cstdio>
-#include "tools/string.hxx"
 
 class SwNode;
 class SwTxtAttr;

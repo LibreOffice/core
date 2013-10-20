@@ -22,6 +22,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
+#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>

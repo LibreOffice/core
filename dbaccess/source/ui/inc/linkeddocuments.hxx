@@ -31,7 +31,6 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
-#include <tools/string.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
 class Window;

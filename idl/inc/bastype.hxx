@@ -24,7 +24,6 @@
 #include <sal/types.h>
 #include <tools/globname.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 
 class SvStringHashEntry;
 class SvIdlDataBase;

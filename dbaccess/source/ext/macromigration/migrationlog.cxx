@@ -23,7 +23,6 @@
 #include "migrationlog.hxx"
 
 #include <comphelper/anytostring.hxx>
-#include <tools/string.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <vector>

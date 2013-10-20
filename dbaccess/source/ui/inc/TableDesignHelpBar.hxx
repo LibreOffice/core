@@ -19,7 +19,6 @@
 #ifndef DBAUI_TABLEDESIGNHELPBAR_HXX
 #define DBAUI_TABLEDESIGNHELPBAR_HXX
 
-#include <tools/string.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include "IClipBoardTest.hxx"

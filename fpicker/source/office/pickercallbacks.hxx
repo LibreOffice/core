@@ -20,8 +20,8 @@
 #ifndef SVTOOLS_PICKER_CALLBACKS_HXX
 #define SVTOOLS_PICKER_CALLBACKS_HXX
 
-#include <tools/string.hxx>
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 class Control;
 

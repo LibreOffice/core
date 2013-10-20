@@ -18,7 +18,6 @@
  */
 
 #include <sal/macros.h>
-#include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/lngmisc.hxx>

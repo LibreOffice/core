@@ -38,9 +38,9 @@ protected:
 
     SvStream&           aOut;           // Ausgabe-Stream
     ScDocument*         pD;             // Dokument
-    CharSet             eZielChar;      // Ziel-Zeichensatz
+    rtl_TextEncoding    eZielChar;      // Ziel-Zeichensatz
 public:
-                        ExportTyp( SvStream& aStream, ScDocument* pDoc, CharSet eDest ):
+                        ExportTyp( SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding eDest ):
                             aOut( aStream )
                         {
                             eZielChar = eDest;

@@ -20,8 +20,8 @@
 #ifndef SC_PROGRESS_HXX
 #define SC_PROGRESS_HXX
 
+#include <rtl/ustring.hxx>
 #include <sfx2/progress.hxx>
-#include <tools/string.hxx>
 #include "scdllapi.h"
 
 class ScDocument;

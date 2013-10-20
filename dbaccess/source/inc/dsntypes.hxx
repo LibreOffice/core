@@ -22,7 +22,6 @@
 
 #include <comphelper/stl_types.hxx>
 #include "dbadllapi.hxx"
-#include <tools/string.hxx>
 #include <connectivity/DriversConfig.hxx>
 
 namespace dbaccess

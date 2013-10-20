@@ -19,8 +19,7 @@
 #ifndef _FMTRFMRK_HXX
 #define _FMTRFMRK_HXX
 
-
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 
 class SwTxtRefMark;

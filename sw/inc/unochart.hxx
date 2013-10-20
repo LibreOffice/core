@@ -48,7 +48,6 @@
 #include <cppuhelper/implbase10.hxx> // helper for implementations
 #include <cppuhelper/weakref.hxx>
 
-#include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
 

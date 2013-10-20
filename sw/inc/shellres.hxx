@@ -20,7 +20,7 @@
 #define _SHELLRES_HXX
 
 #include <swdllapi.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/rc.hxx>
 #include <vcl/bitmap.hxx>
 

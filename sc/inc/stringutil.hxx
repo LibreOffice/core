@@ -20,10 +20,9 @@
 #ifndef SC_STRINGUTIL_HXX
 #define SC_STRINGUTIL_HXX
 
-#include "rtl/ustring.hxx"
-#include "tools/string.hxx"
+#include <rtl/ustring.hxx>
 #include "scdllapi.h"
-#include "i18nlangtag/lang.h"
+#include <i18nlangtag/lang.h>
 
 class SvNumberFormatter;
 

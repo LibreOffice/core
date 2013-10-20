@@ -63,7 +63,6 @@
 #include <com/sun/star/container/XHierarchicalName.hpp>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <tools/string.hxx>
 
 #include <svl/urihelper.hxx>
 #include <svl/filenotation.hxx>

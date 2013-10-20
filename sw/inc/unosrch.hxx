@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase3.hxx> // helper for implementations
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class SfxItemPropertySet;
 class SwXTextDocument;

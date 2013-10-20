@@ -28,7 +28,6 @@
 #include "salhelper/simplereferenceobject.hxx"
 #include "svl/urihelper.hxx"
 #include "svtools/treelistentry.hxx"
-#include "tools/string.hxx"
 #include "vcl/metric.hxx"
 #include "vcl/svapp.hxx"
 #include <algorithm>

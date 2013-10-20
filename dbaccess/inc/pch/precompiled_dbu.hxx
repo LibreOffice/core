@@ -436,7 +436,6 @@
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>
 #include <typelib/typedescription.hxx>

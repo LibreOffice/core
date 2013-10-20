@@ -21,7 +21,7 @@
 #define _SWCALWRP_HXX
 
 #include <i18nlangtag/lang.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <salhelper/singletonref.hxx>
 

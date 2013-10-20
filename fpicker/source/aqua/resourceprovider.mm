@@ -23,7 +23,6 @@
 #include <vcl/fpicker.hrc>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/string.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 

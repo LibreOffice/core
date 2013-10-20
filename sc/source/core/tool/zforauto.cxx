@@ -44,7 +44,7 @@ ScNumFormatAbbrev::ScNumFormatAbbrev(sal_uLong nFormat,
     PutFormatIndex(nFormat, rFormatter);
 }
 
-void ScNumFormatAbbrev::Load( SvStream& rStream, CharSet eByteStrSet )
+void ScNumFormatAbbrev::Load( SvStream& rStream, rtl_TextEncoding eByteStrSet )
 {
     sal_uInt16 nSysLang, nLang;
     sFormatstring = rStream.ReadUniOrByteString( eByteStrSet );
@@ -55,7 +55,7 @@ void ScNumFormatAbbrev::Load( SvStream& rStream, CharSet eByteStrSet )
         eSysLnge = Application::GetSettings().GetLanguageTag().getLanguageType();
 }
 
-void ScNumFormatAbbrev::Save( SvStream& rStream, CharSet eByteStrSet ) const
+void ScNumFormatAbbrev::Save( SvStream& rStream, rtl_TextEncoding eByteStrSet ) const
 {
     rStream.WriteUniOrByteString( sFormatstring, eByteStrSet );
     rStream << (sal_uInt16) eSysLnge << (sal_uInt16) eLnge;

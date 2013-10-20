@@ -22,7 +22,6 @@
 
 #include "address.hxx"
 #include <svl/lstner.hxx>
-#include <tools/string.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 

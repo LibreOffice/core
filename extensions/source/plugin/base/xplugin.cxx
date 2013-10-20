@@ -47,7 +47,6 @@
 #include <plugin/impl.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/string.hxx>
 #include <vcl/svapp.hxx>
 #include <salhelper/timer.hxx>
 #include <osl/file.hxx>

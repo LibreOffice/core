@@ -92,7 +92,7 @@ struct LOTUS_ROOT
     ScDocument*         pDoc;
     LotusRangeList*     pRangeNames;
     ScRangeName*        pScRangeName;
-    CharSet             eCharsetQ;
+    rtl_TextEncoding    eCharsetQ;
     Lotus123Typ         eFirstType;
     Lotus123Typ         eActType;
     ScRange             aActRange;
@@ -100,7 +100,7 @@ struct LOTUS_ROOT
     LotusFontBuffer*    pFontBuff;
     LotAttrTable*       pAttrTable;
 
-                        LOTUS_ROOT( ScDocument* pDocP, CharSet eQ );
+                        LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ );
                         ~LOTUS_ROOT();
 };
 

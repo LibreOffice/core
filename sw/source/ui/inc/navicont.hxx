@@ -20,7 +20,7 @@
 #ifndef _NAVICONT_HXX
 #define _NAVICONT_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class SwDocShell;
 class TransferDataContainer;

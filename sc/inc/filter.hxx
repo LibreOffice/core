@@ -20,8 +20,9 @@
 #ifndef SC_FILTER_HXX
 #define SC_FILTER_HXX
 
-#include <tools/string.hxx>
 #include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <tools/solar.h>
 
 #include "scdllapi.h"
 
@@ -84,7 +85,7 @@ class ScEEAbsImport {
 class ScFormatFilterPlugin {
   public:
     // various import filters
-    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet eSrc = RTL_TEXTENCODING_DONTKNOW ) = 0;
+    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW ) = 0;
     virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc ) = 0;
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) = 0;
         // eFormat == EIF_AUTO  -> matching filter is used automatically
@@ -93,7 +94,7 @@ class ScFormatFilterPlugin {
         // eFormat == EIF_BIFF_LE4 -> only non storage files _might_ be read successfully
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) = 0;
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
-                 const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
+                 const rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
     virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
     virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0,
                                    bool bCalcWidthHeight = true, SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
@@ -104,14 +105,14 @@ class ScFormatFilterPlugin {
     virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName ) = 0;
 
     // various export filters
-    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, CharSet eDest ) = 0;
-    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const CharSet eDest,
+    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) = 0;
+    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest,
                                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
-    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest,
+    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest,
                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
-    virtual FltError ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, bool bAll,
+    virtual FltError ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,
                   const OUString& rStreamPath, OUString& rNonConvertibleChars ) = 0;
-    virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest ) = 0;
+    virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) = 0;
 
     virtual ScOrcusFilters* GetOrcusFilters() = 0;
 

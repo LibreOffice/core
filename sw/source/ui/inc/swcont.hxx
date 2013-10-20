@@ -20,7 +20,7 @@
 #ifndef _SWCONT_HXX
 #define _SWCONT_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class SwContentType;
 

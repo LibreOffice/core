@@ -26,7 +26,6 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>

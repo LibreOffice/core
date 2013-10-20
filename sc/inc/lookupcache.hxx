@@ -24,7 +24,6 @@
 #include "global.hxx"
 #include "formula/token.hxx"
 #include <svl/listener.hxx>
-#include <tools/string.hxx>
 
 #include <boost/unordered_map.hpp>
 

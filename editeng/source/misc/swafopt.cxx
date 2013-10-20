@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/keycodes.hxx>
-#include <tools/string.hxx>
-#include <tools/gen.hxx>
-
 #include <editeng/swafopt.hxx>
+#include <tools/gen.hxx>
+#include <vcl/keycodes.hxx>
 
 SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     : aBulletFont( OUString("StarSymbol"),

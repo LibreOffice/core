@@ -20,7 +20,7 @@
 #ifndef IDOCUMENTLISTSACCESS_HXX_INCLUDED
 #define IDOCUMENTLISTSACCESS_HXX_INCLUDED
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class SwList;
 

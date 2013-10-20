@@ -20,7 +20,7 @@
 #define _RETRIEVEINPUTSTREAM_HXX
 
 #include <observablethread.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <retrievedinputstreamdata.hxx>
 

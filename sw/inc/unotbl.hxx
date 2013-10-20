@@ -40,7 +40,6 @@
 #include <cppuhelper/interfacecontainer.h>
 
 #include <comphelper/uno3.hxx>
-#include <tools/string.hxx>
 
 #include <calbck.hxx>
 #include <TextCursorHelper.hxx>

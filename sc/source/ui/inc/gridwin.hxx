@@ -20,7 +20,6 @@
 #ifndef SC_GRIDWIN_HXX
 #define SC_GRIDWIN_HXX
 
-#include <tools/string.hxx>
 #include <svtools/transfer.hxx>
 #include "viewutil.hxx"
 #include "viewdata.hxx"

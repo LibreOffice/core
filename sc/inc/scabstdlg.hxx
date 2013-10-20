@@ -21,7 +21,6 @@
 #define _SC_ABSTDLG_HXX
 
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <vcl/syswin.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

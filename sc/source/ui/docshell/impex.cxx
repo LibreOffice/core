@@ -2083,7 +2083,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
 
 bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
 {
-    // CharSet is ignored in ScExportHTML, read from Load/Save HTML options
+    // rtl_TextEncoding is ignored in ScExportHTML, read from Load/Save HTML options
     ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
         aStreamPath, aNonConvertibleChars );
     return rStrm.GetError() == SVSTREAM_OK;
@@ -2091,7 +2091,7 @@ bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
 
 bool ScImportExport::Doc2RTF( SvStream& rStrm )
 {
-    //  CharSet is ignored in ScExportRTF
+    //  rtl_TextEncoding is ignored in ScExportRTF
     ScFormatFilter::Get().ScExportRTF( rStrm, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW );
     return rStrm.GetError() == SVSTREAM_OK;
 }
@@ -2207,7 +2207,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
       OSL_FAIL("Missing file filters");
     }
     virtual ~ScFormatFilterMissing() {}
-    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet ) RETURN_ERROR
+    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding ) RETURN_ERROR
     virtual FltError ScImportQuattroPro( SfxMedium &, ScDocument * ) RETURN_ERROR
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) RETURN_ERROR
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) RETURN_ERROR
@@ -2220,12 +2220,12 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const OUString&, const ScRange&, bool ) { return NULL; }
     virtual OUString       GetHTMLRangeNameList( ScDocument*, const OUString& ) { return OUString(); }
 
-    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, CharSet ) RETURN_ERROR
+    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, rtl_TextEncoding ) RETURN_ERROR
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress&, const CharSet, sal_uInt32 ) RETURN_ERROR
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const CharSet, sal_uInt32 ) RETURN_ERROR
     virtual FltError ScExportHTML( SvStream&, const OUString&, ScDocument*, const ScRange&, const CharSet, bool,
                   const OUString&, OUString& ) RETURN_ERROR
-    virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const CharSet ) RETURN_ERROR
+    virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding ) RETURN_ERROR
 
     virtual ScOrcusFilters* GetOrcusFilters() { return NULL; }
 };

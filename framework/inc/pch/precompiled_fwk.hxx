@@ -325,7 +325,6 @@
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wintypes.hxx>
 #include <tools/wldcrd.hxx>

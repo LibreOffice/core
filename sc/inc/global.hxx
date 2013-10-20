@@ -660,8 +660,8 @@ SC_DLLPUBLIC    static xub_StrLen       FindUnquoted( const OUString& rString, s
      */
 SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar, sal_Unicode cQuote = '\'' );
 
-    static  CharSet         GetCharsetValue( const OUString& rCharSet );
-    static  OUString        GetCharsetString( CharSet eVal );
+    static  rtl_TextEncoding GetCharsetValue( const OUString& rCharSet );
+    static  OUString        GetCharsetString( rtl_TextEncoding eVal );
 
     /// a "ReadOnly" formatter for UNO/XML export
     static  SvNumberFormatter*  GetEnglishFormatter();

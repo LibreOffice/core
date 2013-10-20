@@ -20,7 +20,6 @@
 #define DBAUI_GENERALUNDO_HXX
 
 #include <svl/undo.hxx>
-#include <tools/string.hxx>
 #include "moduledbu.hxx"
 
 namespace dbaui

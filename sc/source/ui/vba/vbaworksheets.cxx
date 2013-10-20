@@ -38,7 +38,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <ooo/vba/excel/XApplication.hpp>
-#include <tools/string.hxx>
 #include "tabvwsh.hxx"
 
 #include "vbaglobals.hxx"

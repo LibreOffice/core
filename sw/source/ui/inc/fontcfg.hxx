@@ -19,8 +19,8 @@
 #ifndef _FONTCFG_HXX
 #define _FONTCFG_HXX
 
+#include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
-#include <tools/string.hxx>
 #include <i18nlangtag/lang.h>
 #include <osl/diagnose.h>
 #include "swdllapi.h"

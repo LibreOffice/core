@@ -20,7 +20,7 @@
 #ifndef m_LOGINERR_HXX
 #define m_LOGINERR_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 //=========================================================================
 

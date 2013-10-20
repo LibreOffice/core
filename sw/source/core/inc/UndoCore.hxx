@@ -22,7 +22,7 @@
 
 #include <undobj.hxx>
 #include <calbck.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class SfxItemSet;
 class SwFmtColl;

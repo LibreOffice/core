@@ -21,9 +21,7 @@
 #define SC_AUTOSTYL_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
-
-#include <tools/string.hxx>
-
+#include <rtl/ustring.hxx>
 #include <vcl/timer.hxx>
 
 class ScDocShell;

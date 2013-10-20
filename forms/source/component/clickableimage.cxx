@@ -31,7 +31,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/ActionEvent.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>

@@ -21,7 +21,6 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/syswin.hxx>

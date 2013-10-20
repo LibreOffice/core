@@ -20,7 +20,7 @@
 #ifndef LIST_HXX_INCLUDED
 #define LIST_HXX_INCLUDED
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class SwNumRule;
 class SwNodes;

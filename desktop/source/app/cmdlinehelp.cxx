@@ -24,7 +24,6 @@
 #endif
 #include <comphelper/string.hxx>
 #include <sal/types.h>
-#include <tools/string.hxx>
 #include <vcl/msgbox.hxx>
 #include <rtl/bootstrap.hxx>
 #include <app.hxx>

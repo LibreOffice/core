@@ -19,20 +19,16 @@
 #ifndef _CCOLL_HXX
 #define _CCOLL_HXX
 
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
-#include <tools/string.hxx>
 #include <sfx2/tabdlg.hxx>
-
-#include <vcl/fixed.hxx>
-
-#include <vcl/button.hxx>
 #include <svtools/svtabbx.hxx>
-
+#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include "swdllapi.h"
 #include "cmdid.h"
-
-#include <rtl/string.hxx>
 
 //***********************************************************
 

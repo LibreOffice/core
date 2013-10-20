@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <cppuhelper/interfacecontainer.h>
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
 
 #include "defs.hxx"

@@ -340,7 +340,7 @@ private:
     LanguageType        eLanguage;                      // default language
     LanguageType        eCjkLanguage;                   // default language for asian text
     LanguageType        eCtlLanguage;                   // default language for complex text
-    CharSet             eSrcSet;                        // during reading: source character set
+    rtl_TextEncoding    eSrcSet;                        // during reading: source character set
 
     /** The compiler grammar used in document storage. GRAM_PODF for ODF 1.1
         documents, GRAM_ODFF for ODF 1.2 documents. */
@@ -1597,11 +1597,11 @@ public:
 
     SC_DLLPUBLIC void           CopyStdStylesFrom( ScDocument* pSrcDoc );
 
-    CharSet         GetSrcCharSet() const   { return eSrcSet; }
+    rtl_TextEncoding GetSrcCharSet() const   { return eSrcSet; }
     sal_uLong           GetSrcVersion() const   { return nSrcVer; }
     SCROW           GetSrcMaxRow() const    { return nSrcMaxRow; }
 
-    void            SetSrcCharSet( CharSet eNew )   { eSrcSet = eNew; }
+    void            SetSrcCharSet( rtl_TextEncoding eNew )   { eSrcSet = eNew; }
     void            UpdateFontCharSet();
 
     void FillInfo(
@@ -1915,7 +1915,7 @@ public:
                 points times sizeof(sal_Unicode) is returned. */
     sal_Int32       GetMaxStringLen( SCTAB nTab, SCCOL nCol,
                                      SCROW nRowStart, SCROW nRowEnd,
-                                     CharSet eCharSet ) const;
+                                     rtl_TextEncoding eCharSet ) const;
     /** Maximum string length of numerical cells of a column, e.g. for dBase export.
         @return String length in characters (!) including the decimal
                 separator, and the decimal precision needed. */

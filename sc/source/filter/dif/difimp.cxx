@@ -21,7 +21,7 @@
 #include <math.h>
 
 #include <svl/zforlist.hxx>
-
+#include <tools/string.hxx>
 #include "attrib.hxx"
 #include "dif.hxx"
 #include "docpool.hxx"
@@ -49,7 +49,7 @@ const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
 
 
 FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
-                        const CharSet eVon, sal_uInt32 nDifOption )
+                        const rtl_TextEncoding eVon, sal_uInt32 nDifOption )
 {
     DifParser   aDifParser( rIn, nDifOption, *pDoc, eVon );
 
@@ -234,7 +234,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 }
 
 
-DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rDoc, CharSet e ) :
+DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rDoc, rtl_TextEncoding e ) :
     rIn( rNewIn )
 {
     eCharSet = e;

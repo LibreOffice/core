@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <tools/string.hxx>
 
 #include <boost/unordered_map.hpp>
 #include <set>

@@ -23,6 +23,7 @@
 #include <math.h>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/string.hxx>
 #include "formula/errorcodes.hxx"
 #include "formula/tokenarray.hxx"
 #include "scdll.hxx"

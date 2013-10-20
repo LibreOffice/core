@@ -19,7 +19,7 @@
 #ifndef _SORTOPT_HXX
 #define _SORTOPT_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include "swdllapi.h"
 #include <vector>
 

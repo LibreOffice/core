@@ -36,7 +36,6 @@
 #include "DateTime.hxx"
 
 #include <sfx2/filedlghelper.hxx>
-#include <tools/string.hxx>
 #include <tools/diagnose_ex.h>
 #include "rptui_slotid.hrc"
 #include "reportformula.hxx"

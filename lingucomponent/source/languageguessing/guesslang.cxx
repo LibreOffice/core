@@ -26,7 +26,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <tools/string.hxx>
 
 #include <simpleguesser.hxx>
 #include <guess.hxx>

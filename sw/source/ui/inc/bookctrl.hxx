@@ -19,8 +19,8 @@
 #ifndef _BOOKCTRL_HXX
 #define _BOOKCTRL_HXX
 
+#include <rtl/ustring.hxx>
 #include <sfx2/stbitem.hxx>
-#include <tools/string.hxx>
 
 // class BookmarkToolBoxControl -------------------------------------------
 

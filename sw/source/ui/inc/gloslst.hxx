@@ -20,9 +20,8 @@
 #ifndef _GLOSLST_HXX
 #define _GLOSLST_HXX
 
-
+#include <rtl/ustring.hxx>
 #include <tools/datetime.hxx>
-#include <tools/string.hxx>
 #include <vcl/timer.hxx>
 
 class SwGlossaries;

@@ -20,7 +20,6 @@
 #include <services/mediatypedetectionhelper.hxx>
 #include <services.h>
 #include <svl/inettype.hxx>
-#include <tools/string.hxx>
 
 namespace framework
 {

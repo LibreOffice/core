@@ -27,7 +27,6 @@
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <tools/string.hxx>
 
 #include <vector>
 

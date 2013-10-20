@@ -24,7 +24,6 @@
 #include "gridwizard.hxx"
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <tools/string.hxx>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

@@ -45,7 +45,7 @@
 //------------------------------------------------------------------
 
 FltError ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
-        const ScRange& rRange, const CharSet /*eNach*/ )
+        const ScRange& rRange, const rtl_TextEncoding /*eNach*/ )
 {
     ScRTFExport aEx( rStrm, pDoc, rRange );
     return aEx.Write();

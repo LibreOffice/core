@@ -19,7 +19,7 @@
 
 #include <ctype.h>
 #include <stdio.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

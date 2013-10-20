@@ -29,7 +29,6 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/container/XChild.hpp>

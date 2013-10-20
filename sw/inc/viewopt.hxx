@@ -23,7 +23,6 @@
 #include <config_features.h>
 
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
 #include <tools/color.hxx>
 
 #include <sfx2/zoomitem.hxx>

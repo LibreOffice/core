@@ -73,7 +73,6 @@
 #include <connectivity/dbtools.hxx>
 
 #include <boost/bind.hpp>
-#include <tools/string.hxx>
 #include "metadata.hxx"
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>

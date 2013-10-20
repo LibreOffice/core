@@ -70,8 +70,6 @@
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 
-#include <tools/string.hxx>
-
 //zhangyun showdataform
 #include <sfx2/sfxdlg.hxx>
 #include "scabstdlg.hxx"

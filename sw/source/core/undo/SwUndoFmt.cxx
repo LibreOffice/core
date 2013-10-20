@@ -19,7 +19,6 @@
 
 
 #include <tools/resid.hxx>
-#include <tools/string.hxx>
 
 #include <poolfmt.hxx>
 #include <charfmt.hxx>

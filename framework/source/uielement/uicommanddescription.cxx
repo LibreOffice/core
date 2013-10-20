@@ -36,7 +36,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <unotools/configmgr.hxx>
-#include <tools/string.hxx>
 
 #include <vcl/mnemonic.hxx>
 #include <comphelper/sequence.hxx>

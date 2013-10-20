@@ -21,7 +21,7 @@
 #define _PAD_HELPER_HXX_
 
 #include <list>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/resid.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>

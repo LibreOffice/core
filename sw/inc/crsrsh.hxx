@@ -22,7 +22,6 @@
 #include <com/sun/star/i18n/WordType.hpp>
 
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/rtti.hxx>
 

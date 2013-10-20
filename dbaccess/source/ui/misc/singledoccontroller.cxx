@@ -25,7 +25,6 @@
 #include "moduledbu.hxx"
 
 #include <svl/undo.hxx>
-#include <tools/string.hxx>
 #include <osl/diagnose.h>
 
 #include <boost/scoped_ptr.hpp>

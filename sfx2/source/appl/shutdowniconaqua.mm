@@ -21,7 +21,7 @@
 #include "unotools/moduleoptions.hxx"
 #include "unotools/dynamicmenuoptions.hxx"
 #include "unotools/historyoptions.hxx"
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include "tools/urlobj.hxx"
 #include "osl/file.h"
 #include "comphelper/sequenceashashmap.hxx"

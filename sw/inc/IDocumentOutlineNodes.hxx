@@ -20,8 +20,8 @@
 #ifndef IDOCUMENTOUTLINENODES_HXX_INCLUDED
 #define IDOCUMENTOUTLINENODES_HXX_INCLUDED
 
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <tools/string.hxx>
 #include <vector>
 class SwTxtNode;
 

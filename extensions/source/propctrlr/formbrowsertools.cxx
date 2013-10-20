@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "formresid.hrc"
 #include "modulepcr.hxx"
-#include <tools/string.hxx>
 #include "formstrings.hxx"
 
 //............................................................................

@@ -29,7 +29,6 @@
 #include <osl/socket.hxx>
 #include <osl/security.hxx>
 #include <unotools/bootstrap.hxx>
-#include <tools/string.hxx>
 #include <tools/config.hxx>
 
 #include "lockfile.hxx"

@@ -20,7 +20,6 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>

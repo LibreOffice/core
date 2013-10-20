@@ -22,7 +22,6 @@
 #include "frm_resource.hxx"
 
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 
 
 namespace xforms

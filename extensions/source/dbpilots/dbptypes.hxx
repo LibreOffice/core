@@ -21,7 +21,6 @@
 #define _EXTENSIONS_DBP_DBPTYPES_HXX_
 
 #include <comphelper/stl_types.hxx>
-#include <tools/string.hxx>
 
 //.........................................................................
 namespace dbp

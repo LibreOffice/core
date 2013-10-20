@@ -20,8 +20,6 @@
 #ifndef SC_RANGEUTL_HXX
 #define SC_RANGEUTL_HXX
 
-#include <tools/string.hxx>
-
 #include "address.hxx"
 #include "rangenam.hxx"
 #include "dbdata.hxx"

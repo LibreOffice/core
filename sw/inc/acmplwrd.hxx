@@ -24,7 +24,7 @@
 
 #include <editeng/swafopt.hxx>
 #include <editeng/Trie.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class SwDoc;
 class SwAutoCompleteWord_Impl;

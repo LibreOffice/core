@@ -21,8 +21,8 @@
 #define SW_UNDO_INSERT_HXX
 
 #include <undobj.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/mempool.hxx>
-#include <tools/string.hxx>
 #include <swtypes.hxx>
 #include <IDocumentContentOperations.hxx>
 

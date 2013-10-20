@@ -20,8 +20,9 @@
 #ifndef _HASH_HXX
 #define _HASH_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/ref.hxx>
-#include <tools/string.hxx>
+#include <tools/solar.h>
 #include <vector>
 
 class SvHashTable

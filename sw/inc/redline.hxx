@@ -20,7 +20,7 @@
 #define _REDLINE_HXX
 
 #include <tools/datetime.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include <pam.hxx>
 

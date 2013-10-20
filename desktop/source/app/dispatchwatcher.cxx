@@ -27,7 +27,6 @@
 
 #include "dispatchwatcher.hxx"
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/synchronousdispatch.hxx>
 #include <com/sun/star/util/XCloseable.hpp>

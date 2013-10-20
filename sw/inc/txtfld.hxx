@@ -20,7 +20,7 @@
 #define _TXTFLD_HXX
 
 #include <txatbase.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class SwTxtNode;
 

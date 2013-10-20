@@ -21,7 +21,6 @@
 #define _EXTENSIONS_PROPCTRLR_PROPERTYINFO_HXX_
 
 #include <sal/types.h>
-#include <tools/string.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <vector>

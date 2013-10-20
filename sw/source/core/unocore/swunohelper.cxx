@@ -31,8 +31,7 @@
 #include <comphelper/types.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
-#include <tools/string.hxx>
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/content.hxx>
 #include <swunohelper.hxx>

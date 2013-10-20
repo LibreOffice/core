@@ -21,7 +21,6 @@
 #define SC_TARGUNO_HXX
 
 #include <svl/lstner.hxx>
-#include <tools/string.hxx>
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

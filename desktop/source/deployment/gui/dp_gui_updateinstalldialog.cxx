@@ -26,7 +26,6 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "tools/resid.hxx"
 #include "tools/solar.h"
-#include "tools/string.hxx"
 #include "vcl/dialog.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"

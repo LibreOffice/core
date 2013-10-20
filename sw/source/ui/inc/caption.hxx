@@ -19,7 +19,7 @@
 #ifndef _CAPTION_HXX
 #define _CAPTION_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/globname.hxx>
 #include <SwCapObjType.hxx>
 #include "swdllapi.h"

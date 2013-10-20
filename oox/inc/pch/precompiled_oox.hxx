@@ -20,7 +20,6 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "sal/log.hxx"
-#include "tools/string.hxx"
 #include <algorithm>
 #include <assert.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -387,7 +386,6 @@
 #include <tools/multisel.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/time.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
