@@ -167,15 +167,6 @@ STRING& STRING::Append( const STRING& rStr )
     return *this;
 }
 
-void STRING::SetChar( xub_StrLen nIndex, STRCODE c )
-{
-    DBG_ASSERT( nIndex < mpData->mnLen, "String::SetChar() - nIndex > String.Len()" );
-
-    // copy data if necessary
-    ImplCopyData();
-    mpData->maStr[nIndex] = c;
-}
-
 STRING& STRING::Insert( const STRING& rStr, xub_StrLen nIndex )
 {
     // detect overflow

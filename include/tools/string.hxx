@@ -181,7 +181,7 @@ public:
 
     UniString&          Append( const UniString& rStr );
     UniString&          Append( sal_Unicode c );
-    inline UniString & Append(char c) // ...but allow "Append('a')"
+    UniString & Append(char c) // ...but allow "Append('a')"
         { return Append(static_cast< sal_Unicode >(c)); }
     UniString&          operator +=( const UniString& rStr )
                             { return Append( rStr ); }
@@ -189,18 +189,15 @@ public:
                             { return Append( UniString(rStr) ); }
     UniString&          operator +=( sal_Unicode c )
                             { return Append( c ); }
-    inline UniString & operator +=(char c) // ...but allow "+= 'a'"
+    UniString & operator +=(char c) // ...but allow "+= 'a'"
         { return operator +=(static_cast< sal_Unicode >(c)); }
-
-    void                SetChar( xub_StrLen nIndex, sal_Unicode c );
-    sal_Unicode         GetChar( xub_StrLen nIndex ) const
-                            { return mpData->maStr[nIndex]; }
 
     xub_StrLen          Len() const { return (xub_StrLen)mpData->mnLen; }
 
     UniString&          Insert( const UniString& rStr, xub_StrLen nIndex = STRING_LEN );
     UniString&          Insert( sal_Unicode c, xub_StrLen nIndex = STRING_LEN );
-    UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
+    UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const
+        { return UniString( *this, nIndex, nCount ); }
 
     const sal_Unicode*  GetBuffer() const { return mpData->maStr; }
 
@@ -216,11 +213,6 @@ public:
     friend sal_Bool     operator >= ( const UniString& rStr1,   const UniString& rStr2 )
                             { return !(operator < ( rStr1, rStr2 )); }
 };
-
-inline UniString UniString::Copy( xub_StrLen nIndex, xub_StrLen nCount ) const
-{
-    return UniString( *this, nIndex, nCount );
-}
 
 template< typename charT, typename traits > std::basic_ostream<charT, traits> &
 operator <<(
