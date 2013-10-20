@@ -47,11 +47,6 @@ DBG_NAME( UniString )
 
 UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
 
-sal_Int32 UniString::ToInt32() const
-{
-    return rtl_ustr_toInt32( mpData->maStr, 10 );
-}
-
 STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 {
     // Don't insert 0 char or string size is maximum

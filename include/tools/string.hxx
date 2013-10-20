@@ -174,8 +174,6 @@ public:
                             { return Append( UniString( concat ) ); }
 #endif
 
-    sal_Int32           ToInt32() const;
-
     UniString&          operator =( const OUString& rStr )
                             { return Assign( rStr ); }
 
