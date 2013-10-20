@@ -167,32 +167,4 @@ STRING& STRING::Append( const STRING& rStr )
     return *this;
 }
 
-STRING& STRING::Insert( const STRING& rStr, xub_StrLen nIndex )
-{
-    // detect overflow
-    sal_Int32 nCopyLen = ImplGetCopyLen( mpData->mnLen, rStr.mpData->mnLen );
-
-    if ( !nCopyLen )
-        return *this;
-
-    // adjust index if necessary
-    if ( nIndex > mpData->mnLen )
-        nIndex = static_cast< xub_StrLen >(mpData->mnLen);
-
-    // allocate string of new size
-    STRINGDATA* pNewData = ImplAllocData( mpData->mnLen+nCopyLen );
-
-    // copy string
-    memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
-    memcpy( pNewData->maStr+nIndex, rStr.mpData->maStr, nCopyLen*sizeof( STRCODE ) );
-    memcpy( pNewData->maStr+nIndex+nCopyLen, mpData->maStr+nIndex,
-            (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
-
-    // free old string
-    STRING_RELEASE((STRING_TYPE *)mpData);
-    mpData = pNewData;
-
-    return *this;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

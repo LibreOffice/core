@@ -47,32 +47,6 @@ DBG_NAME( UniString )
 
 UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
 
-STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
-{
-    // Don't insert 0 char or string size is maximum
-    if ( !c || (mpData->mnLen == STRING_MAXLEN) )
-        return *this;
-
-    // Adjust string index
-    if ( nIndex > mpData->mnLen )
-        nIndex = static_cast< xub_StrLen >(mpData->mnLen);
-
-    // allocate string of new size
-    STRINGDATA* pNewData = ImplAllocData( mpData->mnLen+1 );
-
-    // copy string
-    memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
-    pNewData->maStr[nIndex] = c;
-    memcpy( pNewData->maStr+nIndex+1, mpData->maStr+nIndex,
-            (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
-
-    // free old data
-    STRING_RELEASE((STRING_TYPE *)mpData);
-    mpData = pNewData;
-
-    return *this;
-}
-
 StringCompare STRING::CompareTo( const STRING& rStr, xub_StrLen nLen ) const
 {
     if ( mpData == rStr.mpData )
