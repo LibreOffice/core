@@ -21,7 +21,6 @@
 #include "stocservices.hxx"
 
 #include "UriReference.hxx"
-#include "supportsService.hxx"
 
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
@@ -34,6 +33,7 @@
 #include "com/sun/star/uri/XVndSunStarScriptUrlReference.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/uri.hxx"
@@ -414,8 +414,7 @@ OUString Parser::getImplementationName()
 sal_Bool Parser::supportsService(OUString const & serviceName)
     throw (css::uno::RuntimeException)
 {
-    return stoc::uriproc::supportsService(
-        getSupportedServiceNames(), serviceName);
+    return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > Parser::getSupportedServiceNames()

@@ -36,6 +36,7 @@
 #include "com/sun/star/util/XMacroExpander.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "cppuhelper/weak.hxx"
 #include "rtl/textenc.h"
 #include "rtl/uri.h"
@@ -45,7 +46,6 @@
 #include "sal/types.h"
 
 #include "UriReference.hxx"
-#include "supportsService.hxx"
 
 namespace {
 
@@ -192,8 +192,7 @@ OUString Parser::getImplementationName()
 ::sal_Bool Parser::supportsService(OUString const & serviceName)
     throw (css::uno::RuntimeException)
 {
-    return ::stoc::uriproc::supportsService(
-        getSupportedServiceNames(), serviceName);
+    return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > Parser::getSupportedServiceNames()

@@ -34,7 +34,6 @@ $(eval $(call gb_Library_add_exception_objects,stocservices,\
     stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTexpand \
     stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript \
     stoc/source/uriproc/VndSunStarPkgUrlReferenceFactory \
-    stoc/source/uriproc/supportsService \
 ))
 
 # vim:set noet sw=4 ts=4:

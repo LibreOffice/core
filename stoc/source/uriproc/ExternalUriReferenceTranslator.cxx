@@ -20,8 +20,6 @@
 
 #include "stocservices.hxx"
 
-#include "supportsService.hxx"
-
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -31,6 +29,7 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/uri/XExternalUriReferenceTranslator.hpp"
 #include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/thread.h"
 #include "rtl/string.h"
@@ -89,8 +88,7 @@ OUString Translator::getImplementationName()
 sal_Bool Translator::supportsService(OUString const & serviceName)
     throw (css::uno::RuntimeException)
 {
-    return stoc::uriproc::supportsService(
-        getSupportedServiceNames(), serviceName);
+    return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > Translator::getSupportedServiceNames()

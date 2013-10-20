@@ -42,6 +42,7 @@
 #include "com/sun/star/uri/XUriSchemeParser.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/supportsservice.hxx"
 #include "cppuhelper/weak.hxx"
 #include "rtl/character.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -50,7 +51,6 @@
 
 #include "UriReference.hxx"
 #include "stocservices.hxx"
-#include "supportsService.hxx"
 
 namespace {
 
@@ -320,8 +320,7 @@ OUString Factory::getImplementationName()
 sal_Bool Factory::supportsService(OUString const & serviceName)
     throw (css::uno::RuntimeException)
 {
-    return stoc::uriproc::supportsService(
-        getSupportedServiceNames(), serviceName);
+    return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > Factory::getSupportedServiceNames()
