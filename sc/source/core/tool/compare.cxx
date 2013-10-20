@@ -357,6 +357,26 @@ double CompareFunc( double fCell1, double fCell2 )
     return fRes;
 }
 
+double CompareEmptyToNumericFunc( double fCell2 )
+{
+    // Keep DoubleError if encountered
+    // #i40539# if bEmpty is set, bVal/nVal are uninitialized
+    if (!rtl::math::isFinite(fCell2))
+        return fCell2;
+
+    double fRes = 0;
+    if (fCell2 != 0.0)
+    {
+        if (fCell2 < 0.0)
+            fRes = 1;       // empty cell > -x
+        else
+            fRes = -1;      // empty cell < x
+    }
+    // else: empty cell == 0.0
+
+    return fRes;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

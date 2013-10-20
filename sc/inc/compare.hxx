@@ -70,6 +70,11 @@ double CompareFunc( double fCell1, const Compare::Cell& rCell2, CompareOptions* 
 double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* pOptions = NULL );
 double CompareFunc( double fCell1, double fCell2 );
 
+/**
+ * Left cell is empty while the right cell is numeric.
+ */
+double CompareEmptyToNumericFunc( double fCell2 );
+
 }
 
 #endif

@@ -1359,6 +1359,13 @@ class CompareMatrixToNumericFunc : std::unary_function<MatrixImplType::element_b
         maResValues.push_back(evaluate(fVal, mrComp.meOp));
     }
 
+    void compareLeftEmpty( size_t nSize )
+    {
+        double fVal = sc::CompareEmptyToNumericFunc(mfRightValue);
+        bool bRes = evaluate(fVal, mrComp.meOp);
+        maResValues.resize(maResValues.size() + nSize, bRes);
+    }
+
 public:
     CompareMatrixToNumericFunc( size_t nResSize, sc::Compare& rComp, double fRightValue, sc::CompareOptions* pOptions ) :
         mrComp(rComp), mfRightValue(fRightValue), mpOptions(pOptions)
@@ -1409,13 +1416,8 @@ public:
             }
             break;
             case mdds::mtm::element_empty:
-            {
-                rCell.mbValue = false;
-                rCell.mbEmpty = true;
-                rCell.maStr = svl::SharedString::getEmptyString();
-                for (size_t i = 0; i < node.size; ++i)
-                    compare();
-            }
+                compareLeftEmpty(node.size);
+            break;
             default:
                 ;
         }
@@ -1627,7 +1629,9 @@ ScMatrixRef ScMatrixImpl::CompareMatrix(
     {
         if (rComp.maCells[1].mbValue && !rComp.maCells[1].mbEmpty)
         {
-            // Matrix on the left, and a numeric value on the right.
+            // Matrix on the left, and a numeric value on the right.  Use a
+            // function object that has much less branching for much better
+            // performance.
             CompareMatrixToNumericFunc aFunc(nSize, rComp, rComp.maCells[1].mfValue, pOptions);
             maMat.walk(aFunc);
 
