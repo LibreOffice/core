@@ -128,27 +128,6 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
     }
 }
 
-
-//--------------------------------------------------------------------
-
-
-static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
-{
-    Image aRes;
-
-    OUString aTmp;
-    osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
-
-    Graphic aGraphic;
-    const OUString aFilterName( IMP_PNG  );
-    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
-    {
-        aRes = Image( aGraphic.GetBitmapEx() );
-    }
-    return aRes;
-}
-
-
 PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 {
 
@@ -188,7 +167,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
             OUString sThesImplName( aHelper.GetThesImplName( aLocale ) );
             OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName ) );
             if (!sThesImplName.isEmpty() && !aSynonymsImageUrl.isEmpty())
-                aImage = Image( lcl_GetImageFromPngUrl( aSynonymsImageUrl ) );
+                aImage = Image( aSynonymsImageUrl );
 
             for (sal_uInt16 i = 0; (size_t)i < nNumSynonyms; ++i)
             {

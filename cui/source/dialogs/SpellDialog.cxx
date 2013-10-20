@@ -802,19 +802,6 @@ void SpellDialog::SetLanguage( sal_uInt16 nLang )
     m_pLanguageLB->SelectLanguage( nLang );
 }
 
-static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
-{
-    Image aRes;
-    OUString aTmp;
-    osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
-    Graphic aGraphic;
-    const OUString aFilterName( IMP_PNG );
-    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
-    {
-        aRes = Image( aGraphic.GetBitmapEx() );
-    }
-    return aRes;
-}
 void SpellDialog::SetTitle_Impl(LanguageType nLang)
 {
     OUString sTitle = rParent.HasGrammarChecking() ? m_sTitleSpellingGrammar : m_sTitleSpelling;
@@ -876,7 +863,7 @@ int SpellDialog::InitUserDicts()
                         xSvcInfo->getImplementationName()) );
                 if (!aDictionaryImageUrl.isEmpty())
                 {
-                    Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
+                    Image aImage( aDictionaryImageUrl );
                     pMenu->SetItemImage( nItemId, aImage );
                 }
             }

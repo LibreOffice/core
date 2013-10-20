@@ -228,22 +228,6 @@ void SwSpellPopup::fillLangPopupMenu(
     pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_MORE )), 0 );
 }
 
-
-static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
-{
-    Image aRes;
-    OUString aTmp;
-    osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
-    Graphic aGraphic;
-    const OUString aFilterName( IMP_PNG );
-    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
-    {
-        aRes = Image( aGraphic.GetBitmapEx() );
-    }
-    return aRes;
-}
-
-
 OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
 {
     OUString aLabel;
@@ -322,7 +306,7 @@ SwSpellPopup::SwSpellPopup(
             if (xNamed.is())
             {
                 aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName() );
-                aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
+                aImage = Image( aSuggestionImageUrl );
             }
         }
 
@@ -416,7 +400,7 @@ SwSpellPopup::SwSpellPopup(
                                 xSvcInfo->getImplementationName() ) );
                         if (!aDictionaryImageUrl.isEmpty())
                         {
-                            Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
+                            Image aImage( aDictionaryImageUrl );
                             pMenu->SetItemImage( nItemId, aImage );
                         }
                     }
@@ -537,7 +521,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
             if (xInfo.is())
             {
                 aSuggestionImageUrl = SvtLinguConfig().GetSpellAndGrammarContextSuggestionImage( xInfo->getImplementationName() );
-                aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
+                aImage = Image( aSuggestionImageUrl );
             }
         }
 
