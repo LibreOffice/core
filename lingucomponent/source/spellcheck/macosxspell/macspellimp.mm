@@ -369,8 +369,7 @@ Reference< XSpellAlternatives >
 
             // now return an empty alternative for no suggestions or the list of alternatives if some found
         SpellAlternatives *pAlt = new SpellAlternatives;
-            String aTmp(rWord);
-        pAlt->SetWordLanguage( aTmp, nLang );
+        pAlt->SetWordLanguage( rWord, nLang );
         pAlt->SetFailureType( SpellFailure::SPELLING_ERROR );
         pAlt->SetAlternatives( aStr );
         xRes = pAlt;
