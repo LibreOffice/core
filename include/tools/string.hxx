@@ -190,8 +190,6 @@ public:
                             { return Assign( rStr ); }
     UniString&          operator =( const OUString& rStr )
                             { return Assign( rStr ); }
-    UniString&          operator =( const sal_Unicode* pCharStr )
-                            { return Assign( pCharStr ); }
     UniString&          operator =( sal_Unicode c )
                             { return Assign( c ); }
     inline UniString & operator =(char c) // ...but allow "= 'a'"
