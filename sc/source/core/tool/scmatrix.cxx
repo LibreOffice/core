@@ -1218,6 +1218,34 @@ public:
     }
 };
 
+inline bool evaluate( double fVal, ScQueryOp eOp )
+{
+    switch (eOp)
+    {
+        case SC_EQUAL:
+            return fVal == 0.0;
+        case SC_LESS:
+            return fVal < 0.0;
+        case SC_GREATER:
+            return fVal > 0.0;
+        break;
+        case SC_LESS_EQUAL:
+            return fVal <= 0.0;
+        break;
+        case SC_GREATER_EQUAL:
+            return fVal >= 0.0;
+        break;
+        case SC_NOT_EQUAL:
+            return fVal != 0.0;
+        break;
+        default:
+            ;
+    }
+
+    OSL_TRACE( "evaluate: unhandled comparison operator: %d", (int)eOp);
+    return false;
+}
+
 class CompareMatrixFunc : std::unary_function<MatrixImplType::element_block_type, void>
 {
     sc::Compare& mrComp;
@@ -1228,31 +1256,7 @@ class CompareMatrixFunc : std::unary_function<MatrixImplType::element_block_type
     void compare()
     {
         double fVal = sc::CompareFunc(mrComp.maCells[0], mrComp.maCells[1], mrComp.mbIgnoreCase, mpOptions);
-        bool bRes = false;
-        switch (mrComp.meOp)
-        {
-            case SC_EQUAL:
-                bRes = fVal == 0.0;
-            break;
-            case SC_LESS:
-                bRes = fVal < 0.0;
-            break;
-            case SC_GREATER:
-                bRes = fVal > 0.0;
-            break;
-            case SC_LESS_EQUAL:
-                bRes = fVal <= 0.0;
-            break;
-            case SC_GREATER_EQUAL:
-                bRes = fVal >= 0.0;
-            break;
-            case SC_NOT_EQUAL:
-                bRes = fVal != 0.0;
-            break;
-            default:
-                OSL_TRACE( "CompareMatrixFunc: unhandled comparison operator: %d", (int)mrComp.meOp);
-        }
-        maResValues.push_back(bRes);
+        maResValues.push_back(evaluate(fVal, mrComp.meOp));
     }
 
 public:
@@ -1296,6 +1300,96 @@ public:
                     rCell.mfValue = *it;
                     compare();
                 }
+            }
+            break;
+            case mdds::mtm::element_string:
+            {
+                typedef MatrixImplType::string_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+                for (; it != itEnd; ++it)
+                {
+                    const svl::SharedString& rStr = *it;
+                    rCell.mbValue = false;
+                    rCell.mbEmpty = false;
+                    rCell.maStr = rStr;
+                    compare();
+                }
+            }
+            break;
+            case mdds::mtm::element_empty:
+            {
+                rCell.mbValue = false;
+                rCell.mbEmpty = true;
+                rCell.maStr = svl::SharedString::getEmptyString();
+                for (size_t i = 0; i < node.size; ++i)
+                    compare();
+            }
+            default:
+                ;
+        }
+    }
+
+    const std::vector<bool>& getValues() const
+    {
+        return maResValues;
+    }
+};
+
+/**
+ * Left-hand side is a matrix while the right-hand side is a numeric value.
+ */
+class CompareMatrixToNumericFunc : std::unary_function<MatrixImplType::element_block_type, void>
+{
+    sc::Compare& mrComp;
+    double mfRightValue;
+    sc::CompareOptions* mpOptions;
+    std::vector<bool> maResValues;
+
+    void compare()
+    {
+        double fVal = sc::CompareFunc(mrComp.maCells[0], mfRightValue, mpOptions);
+        maResValues.push_back(evaluate(fVal, mrComp.meOp));
+    }
+
+    void compareLeftNumeric( double fLeftVal )
+    {
+        double fVal = sc::CompareFunc(fLeftVal, mfRightValue);
+        maResValues.push_back(evaluate(fVal, mrComp.meOp));
+    }
+
+public:
+    CompareMatrixToNumericFunc( size_t nResSize, sc::Compare& rComp, double fRightValue, sc::CompareOptions* pOptions ) :
+        mrComp(rComp), mfRightValue(fRightValue), mpOptions(pOptions)
+    {
+        maResValues.reserve(nResSize);
+    }
+
+    void operator() (const MatrixImplType::element_block_node_type& node)
+    {
+        sc::Compare::Cell& rCell = mrComp.maCells[0];
+
+        switch (node.type)
+        {
+            case mdds::mtm::element_numeric:
+            {
+                typedef MatrixImplType::numeric_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+                for (; it != itEnd; ++it)
+                    compareLeftNumeric(*it);
+            }
+            break;
+            case mdds::mtm::element_boolean:
+            {
+                typedef MatrixImplType::boolean_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+                for (; it != itEnd; ++it)
+                    compareLeftNumeric(*it);
             }
             break;
             case mdds::mtm::element_string:
@@ -1529,6 +1623,23 @@ ScMatrixRef ScMatrixImpl::CompareMatrix(
 {
     MatrixImplType::size_pair_type aSize = maMat.size();
     size_t nSize = aSize.column * aSize.row;
+    if (nMatPos == 0)
+    {
+        if (rComp.maCells[1].mbValue && !rComp.maCells[1].mbEmpty)
+        {
+            // Matrix on the left, and a numeric value on the right.
+            CompareMatrixToNumericFunc aFunc(nSize, rComp, rComp.maCells[1].mfValue, pOptions);
+            maMat.walk(aFunc);
+
+            // We assume the result matrix has the same dimension as this matrix.
+            const std::vector<bool>& rResVal = aFunc.getValues();
+            if (nSize != rResVal.size())
+                ScMatrixRef();
+
+            return ScMatrixRef(new ScMatrix(aSize.column, aSize.row, rResVal));
+        }
+    }
+
     CompareMatrixFunc aFunc(nSize, rComp, nMatPos, pOptions);
     maMat.walk(aFunc);
 

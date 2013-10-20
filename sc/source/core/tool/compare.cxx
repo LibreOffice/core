@@ -208,6 +208,155 @@ double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bo
     return fRes;
 }
 
+double CompareFunc( double fCell1, const Compare::Cell& rCell2, CompareOptions* pOptions )
+{
+    // Keep DoubleError if encountered
+    // #i40539# if bEmpty is set, bVal/nVal are uninitialized
+    if (!rtl::math::isFinite(fCell1))
+        return fCell1;
+    if (!rCell2.mbEmpty && rCell2.mbValue && !rtl::math::isFinite(rCell2.mfValue))
+        return rCell2.mfValue;
+
+    bool bStringQuery = false;
+    double fRes = 0;
+    if (rCell2.mbEmpty)
+    {
+        if (fCell1 != 0.0)
+        {
+            if (fCell1 < 0.0)
+                fRes = -1;      // -x < empty cell
+            else
+                fRes = 1;       // x > empty cell
+        }
+        // else: empty cell == 0.0
+    }
+    else
+    {
+        if (rCell2.mbValue)
+        {
+            if (!rtl::math::approxEqual(fCell1, rCell2.mfValue))
+            {
+                if (fCell1 - rCell2.mfValue < 0)
+                    fRes = -1;
+                else
+                    fRes = 1;
+            }
+        }
+        else
+        {
+            fRes = -1;          // number is less than string
+            bStringQuery = true;
+        }
+    }
+
+    if (bStringQuery && pOptions)
+    {
+        const ScQueryEntry& rEntry = pOptions->aQueryEntry;
+        const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+        if (!rItems.empty())
+        {
+            const ScQueryEntry::Item& rItem = rItems[0];
+            if (rItem.meType != ScQueryEntry::ByString && !rItem.maString.isEmpty() &&
+                (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL))
+            {
+                // As in ScTable::ValidQuery() match a numeric string for a
+                // number query that originated from a string, e.g. in SUMIF
+                // and COUNTIF. Transliteration is not needed here.
+                bool bEqual = rCell2.maStr == rItem.maString;
+
+                // match => fRes=0, else fRes=1
+                fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
+            }
+        }
+    }
+
+    return fRes;
+}
+
+double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* pOptions )
+{
+    // Keep DoubleError if encountered
+    // #i40539# if bEmpty is set, bVal/nVal are uninitialized
+    if (!rCell1.mbEmpty && rCell1.mbValue && !rtl::math::isFinite(rCell1.mfValue))
+        return rCell1.mfValue;
+    if (!rtl::math::isFinite(fCell2))
+        return fCell2;
+
+    bool bStringQuery = false;
+    double fRes = 0;
+    if (rCell1.mbEmpty)
+    {
+        if (fCell2 != 0.0)
+        {
+            if (fCell2 < 0.0)
+                fRes = 1;       // empty cell > -x
+            else
+                fRes = -1;      // empty cell < x
+        }
+        // else: empty cell == 0.0
+    }
+    else if (rCell1.mbValue)
+    {
+        if (!rtl::math::approxEqual(rCell1.mfValue, fCell2))
+        {
+            if (rCell1.mfValue - fCell2 < 0)
+                fRes = -1;
+            else
+                fRes = 1;
+        }
+    }
+    else
+    {
+        fRes = 1;               // string is greater than number
+        bStringQuery = true;
+    }
+
+    if (bStringQuery && pOptions)
+    {
+        const ScQueryEntry& rEntry = pOptions->aQueryEntry;
+        const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+        if (!rItems.empty())
+        {
+            const ScQueryEntry::Item& rItem = rItems[0];
+            if (rItem.meType != ScQueryEntry::ByString && !rItem.maString.isEmpty() &&
+                (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL))
+            {
+                // As in ScTable::ValidQuery() match a numeric string for a
+                // number query that originated from a string, e.g. in SUMIF
+                // and COUNTIF. Transliteration is not needed here.
+                bool bEqual = rCell1.maStr == rItem.maString;
+
+                // match => fRes=0, else fRes=1
+                fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
+            }
+        }
+    }
+
+    return fRes;
+}
+
+double CompareFunc( double fCell1, double fCell2 )
+{
+    // Keep DoubleError if encountered
+    // #i40539# if bEmpty is set, bVal/nVal are uninitialized
+    if (!rtl::math::isFinite(fCell1))
+        return fCell1;
+    if (!rtl::math::isFinite(fCell2))
+        return fCell2;
+
+    double fRes = 0.0;
+
+    if (!rtl::math::approxEqual(fCell1, fCell2))
+    {
+        if (fCell1 - fCell2 < 0.0)
+            fRes = -1;
+        else
+            fRes = 1;
+    }
+
+    return fRes;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
