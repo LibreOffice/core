@@ -2609,7 +2609,7 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
                     displayValue = displayValue.replaceAll( "&quot;", "\"" );
                     displayValue = displayValue.replaceAll( "&amp;", "&" );
                     listValues.push_back( displayValue );
-                    if( sLine.indexOf( sSelected ) != STRING_NOTFOUND )
+                    if( sLine.indexOf( sSelected ) != -1 )
                         selectedIndices.push_back( static_cast< sal_Int16 >( listValues.size() ) - 1 );
                 }
             }
