@@ -190,6 +190,7 @@
 		688EAAF8180D6773003741B3 /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				68FDBE3018053A140064DD74 /* Supporting Files */,
 				689EBADD1806975D002F1CD7 /* lo.xcconfig */,
 			);
 			name = Config;
@@ -377,7 +378,6 @@
 			children = (
 				689EBB301806D221002F1CD7 /* cxx */,
 				689EBB3B1806D22C002F1CD7 /* objective_c */,
-				68FDBE3018053A140064DD74 /* Supporting Files */,
 			);
 			path = ios_sharedlo;
 			sourceTree = "<group>";
@@ -388,6 +388,7 @@
 				68FDBE3118053A140064DD74 /* ios_sharedlo-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			path = ios_sharedlo;
 			sourceTree = "<group>";
 		};
 		889B7926180FF8DF005A3149 /* role */ = {
@@ -557,7 +558,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_NO_PIE = NO;
 				LINK_WITH_STANDARD_LIBRARIES = NO;
-				LLVM_LTO = YES;
+				LLVM_LTO = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -593,7 +594,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_NO_PIE = NO;
 				LINK_WITH_STANDARD_LIBRARIES = NO;
-				LLVM_LTO = YES;
+				LLVM_LTO = NO;
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				VALIDATE_PRODUCT = YES;
@@ -605,11 +606,12 @@
 			buildSettings = {
 				DSTROOT = /tmp/ios_sharedlo.dst;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_LINK_WITH_DYNAMIC_LIBRARIES = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios_sharedlo/ios_sharedlo-Prefix.pch";
 				LD_NO_PIE = NO;
 				LINK_WITH_STANDARD_LIBRARIES = NO;
+				LLVM_LTO = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -622,11 +624,12 @@
 			buildSettings = {
 				DSTROOT = /tmp/ios_sharedlo.dst;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_LINK_WITH_DYNAMIC_LIBRARIES = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios_sharedlo/ios_sharedlo-Prefix.pch";
 				LD_NO_PIE = NO;
 				LINK_WITH_STANDARD_LIBRARIES = NO;
+				LLVM_LTO = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -669,7 +672,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_NO_PIE = NO;
 				LINK_WITH_STANDARD_LIBRARIES = NO;
-				LLVM_LTO = YES;
+				LLVM_LTO = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -681,11 +684,12 @@
 			buildSettings = {
 				DSTROOT = /tmp/ios_sharedlo.dst;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_LINK_WITH_DYNAMIC_LIBRARIES = NO;
+				GCC_LINK_WITH_DYNAMIC_LIBRARIES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios_sharedlo/ios_sharedlo-Prefix.pch";
 				LD_NO_PIE = NO;
 				LINK_WITH_STANDARD_LIBRARIES = NO;
+				LLVM_LTO = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
