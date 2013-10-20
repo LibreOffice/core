@@ -155,9 +155,21 @@
 - (void)panGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
     static enum { NONE, TOPLEFT, BOTTOMRIGHT } draggedHandle = NONE;
-    static CGFloat previousX = 0.0f, previousY = 0.0f;
+    static CGFloat previousX, previousY;
 
     CGPoint translation = [gestureRecognizer translationInView:self];
+
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        previousX = previousY = 0;
+    }
+
+    CGFloat deltaX = translation.x - previousX;
+    CGFloat deltaY = translation.y - previousY;
+
+    NSLog(@"drag: %f,%f", deltaX, deltaY);
+
+    previousX = translation.x;
+    previousY = translation.y;
 
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan &&
         gestureRecognizer.numberOfTouches == 1) {
@@ -172,16 +184,17 @@
     if (draggedHandle == TOPLEFT) {
         const int N = self.selectionRectangleCount;
 
-        self.selectionRectangles[0].origin.x += translation.x;
-        self.selectionRectangles[0].origin.y += translation.y;
-        self.selectionRectangles[0].size.width -= translation.x;
-        self.selectionRectangles[0].size.height -= translation.y;
+        self.selectionRectangles[0].origin.x += deltaX;
+        self.selectionRectangles[0].origin.y += deltaY;
+        self.selectionRectangles[0].size.width -= deltaX;
+        self.selectionRectangles[0].size.height -= deltaY;
 
 #if 0
         touch_lo_selection_attempt_resize(self.documentHandle,
                                           self.selectionRectangles,
                                           self.selectionRectangleCount);
 #else
+        touch_lo_tap(0, 0);
         touch_lo_mouse(self.selectionRectangles[0].origin.x,
                        self.selectionRectangles[0].origin.y,
                        DOWN, NONE);
@@ -197,16 +210,15 @@
     } else if (draggedHandle == BOTTOMRIGHT) {
         const int N = self.selectionRectangleCount;
 
-        self.selectionRectangles[N-1].origin.x += translation.x;
-        self.selectionRectangles[N-1].origin.y += translation.y;
-        self.selectionRectangles[N-1].size.width += translation.x;
-        self.selectionRectangles[N-1].size.height += translation.y;
+        self.selectionRectangles[N-1].size.width += deltaX;
+        self.selectionRectangles[N-1].size.height += deltaY;
 
 #if 0
         touch_lo_selection_attempt_resize(self.documentHandle,
                                           self.selectionRectangles,
                                           self.selectionRectangleCount);
 #else
+        touch_lo_tap(0, 0);
         touch_lo_mouse(self.selectionRectangles[0].origin.x,
                        self.selectionRectangles[0].origin.y,
                        DOWN, NONE);
@@ -222,16 +234,10 @@
     }
 
     if (gestureRecognizer.state != UIGestureRecognizerStateBegan) {
-        int deltaX = translation.x - previousX;
-        int deltaY = translation.y - previousY;
-
         // NSLog(@"panGesture: pan (delta): (%d,%d)", deltaX, deltaY);
 
         touch_lo_pan(deltaX, deltaY);
     }
-
-    previousX = translation.x;
-    previousY = translation.y;
 }
 
 - (void)pinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer
