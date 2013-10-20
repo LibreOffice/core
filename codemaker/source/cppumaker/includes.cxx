@@ -41,8 +41,8 @@ Includes::Includes(
     rtl::Reference< TypeManager > const & manager,
     codemaker::cppumaker::Dependencies const & dependencies, bool hpp):
     m_manager(manager), m_map(dependencies.getMap()), m_hpp(hpp),
-    m_includeCassert(false), m_includeAny(dependencies.hasAnyDependency()),
-    m_includeReference(false),
+    m_includeCassert(false), m_includeException(false),
+    m_includeAny(dependencies.hasAnyDependency()), m_includeReference(false),
     m_includeSequence(dependencies.hasSequenceDependency()),
     m_includeType(dependencies.hasTypeDependency()),
     m_includeCppuMacrosHxx(false), m_includeCppuUnotypeHxx(false),
@@ -147,8 +147,14 @@ void Includes::dump(FileStream & out, OUString const * companionHdl) {
         }
     }
     out << "#include \"sal/config.h\"\n";
-    if (m_includeCassert) {
-        out << "\n#include <cassert>\n";
+    if (m_includeCassert || m_includeException) {
+        out << "\n";
+        if (m_includeCassert) {
+            out << "#include <cassert>\n";
+        }
+        if (m_includeException) {
+            out << "#include <exception>\n";
+        }
     }
     if (companionHdl) {
         out << "\n";

@@ -465,6 +465,7 @@ void CppuType::addDefaultHIncludes(codemaker::cppumaker::Includes & includes)
     if (m_typeMgr->getSort(name_)
         == codemaker::UnoType::SORT_INTERFACE_TYPE)
     {
+        includes.addException();
         includes.addReference();
     }
 }
@@ -479,6 +480,7 @@ void CppuType::addDefaultHxxIncludes(codemaker::cppumaker::Includes & includes)
     if (m_typeMgr->getSort(name_)
         == codemaker::UnoType::SORT_INTERFACE_TYPE)
     {
+        includes.addException();
         includes.addReference();
     }
 }
@@ -1582,7 +1584,7 @@ void InterfaceType::dumpExceptionSpecification(
         if (!first) {
             out << ", ";
         }
-        out << "::css::uno::RuntimeException";
+        out << "::css::uno::RuntimeException, ::std::exception";
     }
     out << ")";
 #if !defined DBG_UTIL

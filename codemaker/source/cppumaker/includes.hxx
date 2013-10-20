@@ -40,6 +40,7 @@ public:
 
     void add(OString const & entityName);
     void addCassert() { m_includeCassert = true; }
+    void addException() { m_includeException = true; }
     void addAny() { m_includeAny = true; }
     void addReference() { m_includeReference = true; }
     void addSequence() { m_includeSequence = true; }
@@ -75,6 +76,7 @@ private:
     Dependencies::Map m_map;
     bool m_hpp;
     bool m_includeCassert;
+    bool m_includeException;
     bool m_includeAny;
     bool m_includeReference;
     bool m_includeSequence;
