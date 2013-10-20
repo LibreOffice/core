@@ -53,7 +53,6 @@ struct CompareOptions
     ScQueryEntry        aQueryEntry;
     bool                bRegEx;
     bool                bMatchWholeCell;
-    bool                bIgnoreCase;
 
     CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg );
 private:
@@ -66,7 +65,7 @@ private:
 /** @param pOptions
         NULL means case sensitivity document option is to be used!
  */
-double CompareFunc( const Compare& rComp, CompareOptions* pOptions = NULL );
+double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bool bIgnoreCase, CompareOptions* pOptions = NULL );
 
 }
 

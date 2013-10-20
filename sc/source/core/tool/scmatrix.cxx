@@ -1227,7 +1227,7 @@ class CompareMatrixFunc : std::unary_function<MatrixImplType::element_block_type
 
     void compare()
     {
-        double fVal = sc::CompareFunc(mrComp, mpOptions);
+        double fVal = sc::CompareFunc(mrComp.maCells[0], mrComp.maCells[1], mrComp.mbIgnoreCase, mpOptions);
         bool bRes = false;
         switch (mrComp.meOp)
         {
