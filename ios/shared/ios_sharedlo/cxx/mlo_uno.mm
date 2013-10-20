@@ -365,6 +365,7 @@ mlo_close(void){
         openedXSelectionSupplier.clear();
         openedXFrame.clear();
         openedXDispatchProvider.clear();
+        openedXStorable.clear();
         resetLastSearch();
         
         NSLog(@"XComponent disposed successfully");
