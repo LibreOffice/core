@@ -197,7 +197,12 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
                 // As in ScTable::ValidQuery() match a numeric string for a
                 // number query that originated from a string, e.g. in SUMIF
                 // and COUNTIF. Transliteration is not needed here.
-                bool bEqual = rComp.maCells[nStringQuery-1].maStr == rItem.maString;
+                bool bEqual = false;
+                if (nStringQuery == 1)
+                    bEqual = rCell1.maStr == rItem.maString;
+                else
+                    bEqual = rCell2.maStr == rItem.maString;
+
                 // match => fRes=0, else fRes=1
                 fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
             }
