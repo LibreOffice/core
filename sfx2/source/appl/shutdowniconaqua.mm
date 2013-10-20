@@ -226,14 +226,12 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
         {
             // Do handle file URL differently => convert it to a system
             // path and abbreviate it with a special function:
-            String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
-            
-            ::rtl::OUString aSystemPath( aFileSystemPath );
+            ::rtl::OUString aSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
             ::rtl::OUString aCompactedSystemPath;
             
             oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
             if ( !nError )
-                aMenuTitle = String( aCompactedSystemPath );
+                aMenuTitle = aCompactedSystemPath;
             else
                 aMenuTitle = aSystemPath;
         }
@@ -343,7 +341,7 @@ static void appendMenuItem( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const rtl::OUS
     }
 }
 
-static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const String& i_rTitle )
+static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUString& i_rTitle )
 {
     if( ! pRecentDelegate )
         pRecentDelegate = [[RecentMenuDelegate alloc] init];
