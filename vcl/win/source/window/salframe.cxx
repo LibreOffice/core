@@ -4818,12 +4818,12 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
         hfntOld = (HFONT) SelectObject(pDI->hDC, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
 
         SIZE strSize;
-        String aStr( pSalMenuItem->mText );
-        GetTextExtentPoint32W( pDI->hDC, (LPWSTR) aStr.GetBuffer(),
-                                aStr.Len(), &strSize );
+        OUString aStr( pSalMenuItem->mText );
+        GetTextExtentPoint32W( pDI->hDC, (LPWSTR) aStr.getStr(),
+                                aStr.getLength(), &strSize );
 
         if(!DrawStateW( pDI->hDC, (HBRUSH)NULL, (DRAWSTATEPROC)NULL,
-            (LPARAM)(LPWSTR) aStr.GetBuffer(),
+            (LPARAM)(LPWSTR) aStr.getStr(),
             (WPARAM)0, aRect.left, aRect.top + (lineHeight - strSize.cy)/2, 0, 0,
             DST_PREFIXTEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
             ImplWriteLastError(GetLastError(), "ImplDrawItem");
@@ -4832,15 +4832,15 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
         {
             SIZE strSizeA;
             aStr = pSalMenuItem->mAccelText;
-            GetTextExtentPoint32W( pDI->hDC, (LPWSTR) aStr.GetBuffer(),
-                                    aStr.Len(), &strSizeA );
+            GetTextExtentPoint32W( pDI->hDC, (LPWSTR) aStr.getStr(),
+                                    aStr.getLength(), &strSizeA );
             TEXTMETRIC tm;
             GetTextMetrics( pDI->hDC, &tm );
 
             // position the accelerator string to the right but leave space for the
             // (potential) submenu arrow (tm.tmMaxCharWidth)
             if(!DrawStateW( pDI->hDC, (HBRUSH)NULL, (DRAWSTATEPROC)NULL,
-                (LPARAM)(LPWSTR) aStr.GetBuffer(),
+                (LPARAM)(LPWSTR) aStr.getStr(),
                 (WPARAM)0, aRect.right-strSizeA.cx-tm.tmMaxCharWidth, aRect.top + (lineHeight - strSizeA.cy)/2, 0, 0,
                 DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
                 ImplWriteLastError(GetLastError(), "ImplDrawItem");
