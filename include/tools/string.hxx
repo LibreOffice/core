@@ -63,12 +63,10 @@ typedef rtl_TextEncoding CharSet;
 
 #ifdef STRING32
 #define STRING_NOTFOUND    ((xub_StrLen)0x7FFFFFFF)
-#define STRING_MATCH       ((xub_StrLen)0x7FFFFFFF)
 #define STRING_LEN         ((xub_StrLen)0x7FFFFFFF)
 #define STRING_MAXLEN      ((xub_StrLen)0x7FFFFFFF)
 #else
 #define STRING_NOTFOUND    ((xub_StrLen)0xFFFF)
-#define STRING_MATCH       ((xub_StrLen)0xFFFF)
 #define STRING_LEN         ((xub_StrLen)0xFFFF)
 #define STRING_MAXLEN      ((xub_StrLen)0xFFFF)
 #endif
