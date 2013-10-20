@@ -1847,8 +1847,9 @@ IMPL_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
     }
     else if( nType == CUSTOM_TYPE_DATETIME)
     {
-        pLine->m_aDateField.SetPosSizePixel( pLine->m_aDatePos, pLine->m_aDateTimeSize );
-        pLine->m_aTimeField.SetPosSizePixel(pLine->m_aTimePos, pLine->m_aDateTimeSize );
+        const long nPosY( pLine->m_aDateField.GetPosPixel().Y() );
+        pLine->m_aDateField.SetPosPixel( ::Point( m_nDatePosX, nPosY ) );
+        pLine->m_aTimeField.SetPosPixel( ::Point( m_nTimePosX, nPosY ) );
     }
 
     return 0;
@@ -1871,10 +1872,15 @@ IMPL_LINK( CustomPropertiesWindow, RemoveHdl, CustomPropertiesRemoveButton*, pBu
             if ( pLine->m_bIsRemoved )
                 continue;
 
-            Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit,
-                                    &pLine->m_aDateField, &pLine->m_aTimeField,
-                                    &pLine->m_aDurationField, &pLine->m_aEditButton,
-                                    &pLine->m_aYesNoButton, &pLine->m_aRemoveButton, NULL };
+            Window* pWindows[] = {  &pLine->m_aNameBox,
+                                    &pLine->m_aTypeBox,
+                                    &pLine->m_aValueEdit,
+                                    &pLine->m_aDateField,
+                                    &pLine->m_aTimeField,
+                                    &pLine->m_aDurationField,
+                                    &pLine->m_aEditButton,
+                                    &pLine->m_aYesNoButton,
+                                    &pLine->m_aRemoveButton, NULL };
             Window** pCurrent = pWindows;
             while ( *pCurrent )
             {
@@ -2042,6 +2048,9 @@ void CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
 
     m_nLineHeight =
         ( m_aRemoveButton.GetPosPixel().Y() * 2 ) + m_aRemoveButton.GetSizePixel().Height();
+
+    m_nDatePosX = m_aDateField.GetPosPixel().X();
+    m_nTimePosX = m_aTimeField.GetPosPixel().X();
 }
 
 sal_uInt16 CustomPropertiesWindow::GetVisibleLineCount() const
@@ -2096,10 +2105,6 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
         pCurrent++;
         pNewCurrent++;
     }
-    //
-    pNewLine->m_aDatePos = pNewLine->m_aDateField.GetPosPixel();
-    pNewLine->m_aTimePos = pNewLine->m_aTimeField.GetPosPixel();
-    pNewLine->m_aDateTimeSize = pNewLine->m_aDateField.GetSizePixel();
 
     double nTmpValue = 0;
     bool bTmpValue = false;
@@ -2208,8 +2213,15 @@ void CustomPropertiesWindow::DoScroll( sal_Int32 nNewPos )
         if ( pLine->m_bIsRemoved )
             continue;
 
-        Window* pWindows[] = {  &pLine->m_aNameBox, &pLine->m_aTypeBox, &pLine->m_aValueEdit, &pLine->m_aDurationField,
-                                &pLine->m_aYesNoButton, &pLine->m_aRemoveButton, NULL };
+        Window* pWindows[] = {  &pLine->m_aNameBox,
+                                &pLine->m_aTypeBox,
+                                &pLine->m_aValueEdit,
+                                &pLine->m_aDurationField,
+                                &pLine->m_aEditButton,
+                                &pLine->m_aDateField,
+                                &pLine->m_aTimeField,
+                                &pLine->m_aYesNoButton,
+                                &pLine->m_aRemoveButton, NULL };
         Window** pCurrent = pWindows;
         while ( *pCurrent )
         {

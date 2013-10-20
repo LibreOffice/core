@@ -440,13 +440,9 @@ struct CustomPropertyLine
     CustomPropertiesTimeField       m_aTimeField;
     const String                    m_sDurationFormat;
     CustomPropertiesDurationField   m_aDurationField;
-    CustomPropertiesEditButton     m_aEditButton;
+    CustomPropertiesEditButton      m_aEditButton;
     CustomPropertiesYesNoButton     m_aYesNoButton;
     CustomPropertiesRemoveButton    m_aRemoveButton;
-
-    Point                           m_aDatePos;
-    Point                           m_aTimePos;
-    Size                            m_aDateTimeSize;
 
     bool                            m_bIsRemoved;
     bool                            m_bTypeLostFocus;
@@ -470,6 +466,9 @@ private:
     PushButton                          m_aEditButton;
     CustomPropertiesYesNoButton         m_aYesNoButton;
     ImageButton                         m_aRemoveButton;
+
+    long                                m_nDatePosX;
+    long                                m_nTimePosX;
 
     sal_Int32                           m_nLineHeight;
     sal_Int32                           m_nScrollPos;
