@@ -2425,6 +2425,8 @@ void Test::testFunctionLists()
         "SMALL",
         "STANDARDIZE",
         "STDEV",
+        "STDEV.P",
+        "STDEV.S",
         "STDEVA",
         "STDEVP",
         "STDEVPA",

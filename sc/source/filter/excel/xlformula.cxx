@@ -408,7 +408,9 @@ static const XclFunctionInfo saFuncTable_Oox[] =
 static const XclFunctionInfo saFuncTable_2010[] =
 {
     EXC_FUNCENTRY_V_VA(         ocCovarianceP,   2,  2,  0,  "COVARIANCE.P" ),
-    EXC_FUNCENTRY_V_VA(         ocCovarianceS,   2,  2,  0,  "COVARIANCE.S" )
+    EXC_FUNCENTRY_V_VA(         ocCovarianceS,   2,  2,  0,  "COVARIANCE.S" ),
+    EXC_FUNCENTRY_V_RX(         ocStDevP_MS,     1, MX,  0,  "STDEV.P" ),
+    EXC_FUNCENTRY_V_RX(         ocStDevS,        1, MX,  0,  "STDEV.S" )
 };
 
 /** Functions new in Excel 2013.

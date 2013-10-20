@@ -5183,6 +5183,30 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ;
         };
     };
+     // -=*# Resource for function STDEV.S #*=-
+    Resource SC_OPCODE_ST_DEV_S
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates the standard deviation based on a sample." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_STABW );
+            VAR_ARGS;   0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number " ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ;
+        };
+    };
      // -=*# Resource for function STABWA #*=-
     Resource SC_OPCODE_ST_DEV_A
     {
@@ -5209,6 +5233,30 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     };
      // -=*# Resource for function STABWN #*=-
     Resource SC_OPCODE_ST_DEV_P
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates the standard deviation based on the entire population." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_STABWN );
+            VAR_ARGS;   0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number " ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ;
+        };
+    };
+     // -=*# Resource for function STDEV.P #*=-
+    Resource SC_OPCODE_ST_DEV_P_MS
     {
         String 1 // Description
         {

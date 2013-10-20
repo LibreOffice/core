@@ -4013,9 +4013,11 @@ StackVar ScInterpreter::Interpret()
                 case ocVarA             : ScVar( true );                break;
                 case ocVarP             : ScVarP( false );              break;
                 case ocVarPA            : ScVarP( true );               break;
-                case ocStDev            : ScStDev( false );             break;
+                case ocStDev            :
+                case ocStDevS           : ScStDev( false );             break;
                 case ocStDevA           : ScStDev( true );              break;
-                case ocStDevP           : ScStDevP( false );            break;
+                case ocStDevP           :
+                case ocStDevP_MS        : ScStDevP( false );            break;
                 case ocStDevPA          : ScStDevP( true );             break;
                 case ocBW               : ScBW();                       break;
                 case ocDIA              : ScDIA();                      break;

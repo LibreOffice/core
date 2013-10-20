@@ -188,6 +188,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_ST_DEV_A { Text = "STDEVA" ; };
     String SC_OPCODE_ST_DEV_P { Text = "STDEVP" ; };
     String SC_OPCODE_ST_DEV_P_A { Text = "STDEVPA" ; };
+    String SC_OPCODE_ST_DEV_P_MS { Text = "COM.MICROSOFT.STDEV.P" ; };
+    String SC_OPCODE_ST_DEV_S { Text = "COM.MICROSOFT.STDEV.S" ; };
     String SC_OPCODE_B { Text = "BINOM.DIST.RANGE" ; };
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
@@ -538,6 +540,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ST_DEV_A { Text = "STDEVA" ; };
     String SC_OPCODE_ST_DEV_P { Text = "STDEVP" ; };
     String SC_OPCODE_ST_DEV_P_A { Text = "STDEVPA" ; };
+    String SC_OPCODE_ST_DEV_P_MS { Text = "STDEV.P" ; };
+    String SC_OPCODE_ST_DEV_S { Text = "STDEV.S" ; };
     String SC_OPCODE_B { Text = "B" ; };
     String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
     String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
@@ -1306,6 +1310,14 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_ST_DEV_P_A
     {
         Text [ en-US ] = "STDEVPA" ;
+    };
+    String SC_OPCODE_ST_DEV_P_MS
+    {
+        Text [ en-US ] = "STDEV.P" ;
+    };
+    String SC_OPCODE_ST_DEV_S
+    {
+        Text [ en-US ] = "STDEV.S" ;
     };
     String SC_OPCODE_B
     {
