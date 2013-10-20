@@ -144,18 +144,6 @@ STRING& STRING::Append( STRCODE c )
     return *this;
 }
 
-STRING& STRING::Assign( STRCODE c )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_ASSERT( c, "String::Assign() - c is 0" );
-
-    // initialize maintenance data
-    STRING_RELEASE((STRING_TYPE *)mpData);
-    mpData = ImplAllocData( 1 );
-    mpData->maStr[0] = c;
-    return *this;
-}
-
 xub_StrLen ImplStringLen( const sal_Char* pStr )
 {
     const sal_Char* pTempStr = pStr;

@@ -106,11 +106,11 @@ private:
     StringCompare       CompareTo( const UniString& rStr,
                                    xub_StrLen nLen = STRING_LEN ) const;
 
+    UniString&          Assign( const OUString& rStr );
+
                         UniString( const int* pDummy );    // not implemented: to prevent UniString( NULL )
                         UniString(int); // not implemented; to detect misuses of
                                         // UniString(sal_Unicode)
-    void                Assign(int); // not implemented; to detect misuses of
-                                     // Assign(sal_Unicode)
     void                operator =(int); // not implemented; to detect misuses
                                          // of operator =(sal_Unicode)
     void                Append(int); // not implemented; to detect misuses of
@@ -133,8 +133,6 @@ private:
     TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr );
     TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr, xub_StrLen nLen );
     TOOLS_DLLPRIVATE UniString( sal_Unicode c );
-    TOOLS_DLLPRIVATE UniString& Assign( const sal_Unicode* pCharStr );
-    TOOLS_DLLPRIVATE UniString& Assign( const sal_Unicode* pCharStr, xub_StrLen nLen );
     TOOLS_DLLPRIVATE UniString& Append( const sal_Unicode* pCharStr );
     TOOLS_DLLPRIVATE UniString& Append( const sal_Unicode* pCharStr, xub_StrLen nLen );
     TOOLS_DLLPRIVATE UniString& Expand( xub_StrLen nCount, sal_Unicode cExpandChar );
@@ -178,20 +176,8 @@ public:
 
     sal_Int32           ToInt32() const;
 
-    UniString&          Assign( const UniString& rStr );
-    UniString&          Assign( const OUString& rStr );
-    UniString&          Assign( sal_Unicode c );
-    inline UniString & Assign(char c) // ...but allow "Assign('a')"
-        { return Assign(static_cast< sal_Unicode >(c)); }
-
-    UniString&          operator =( const UniString& rStr )
-                            { return Assign( rStr ); }
     UniString&          operator =( const OUString& rStr )
                             { return Assign( rStr ); }
-    UniString&          operator =( sal_Unicode c )
-                            { return Assign( c ); }
-    inline UniString & operator =(char c) // ...but allow "= 'a'"
-        { return operator =(static_cast< sal_Unicode >(c)); }
 
     UniString&          Append( const UniString& rStr );
     UniString&          Append( sal_Unicode c );
