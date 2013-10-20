@@ -17,11 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
 
-#include "stocservices.hxx"
-
-#include "UriReference.hxx"
-#include "supportsService.hxx"
+#include <algorithm>
+#include <cassert>
+#include <cstdlib>
+#include <exception>
+#include <new>
+#include <vector>
 
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
@@ -40,40 +43,27 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/weak.hxx"
-#include "osl/diagnose.h"
 #include "rtl/character.hxx"
-#include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-#include <algorithm>
-#include /*MSVC trouble: <cstdlib>*/ <stdlib.h>
-#include <exception>
-#include <new>
-#include <vector>
+#include "UriReference.hxx"
+#include "stocservices.hxx"
+#include "supportsService.hxx"
 
 namespace {
-
-//TODO: move comphelper::string::misc into something like
-//sal/salhelper and use those instead
-
-sal_Unicode toLowerCase(sal_Unicode c) {
-    return rtl::isAsciiUpperCase(c) ? c + ('a' - 'A') : c;
-}
-
-bool equalIgnoreCase(sal_Unicode c1, sal_Unicode c2) {
-    return toLowerCase(c1) == toLowerCase(c2);
-}
 
 bool equalIgnoreEscapeCase(OUString const & s1, OUString const & s2) {
     if (s1.getLength() == s2.getLength()) {
         for (sal_Int32 i = 0; i < s1.getLength();) {
             if (s1[i] == '%' && s2[i] == '%' && s1.getLength() - i > 2
-                && rtl::isAsciiHexDigit(s1[i + 1]) && rtl::isAsciiHexDigit(s1[i + 2])
-                && rtl::isAsciiHexDigit(s2[i + 1]) && rtl::isAsciiHexDigit(s2[i + 2])
-                && equalIgnoreCase(s1[i + 1], s2[i + 1])
-                && equalIgnoreCase(s1[i + 2], s2[i + 2]))
+                && rtl::isAsciiHexDigit(s1[i + 1])
+                && rtl::isAsciiHexDigit(s1[i + 2])
+                && rtl::isAsciiHexDigit(s2[i + 1])
+                && rtl::isAsciiHexDigit(s2[i + 2])
+                && rtl::compareIgnoreAsciiCase(s1[i + 1], s2[i + 1]) == 0
+                && rtl::compareIgnoreAsciiCase(s1[i + 2], s2[i + 2]) == 0)
             {
                 i += 3;
             } else if (s1[i] != s2[i]) {
@@ -94,8 +84,8 @@ sal_Int32 parseScheme(OUString const & uriReference) {
             sal_Unicode c = uriReference[i];
             if (c == ':') {
                 return i;
-            } else if (!rtl::isAsciiAlpha(c) && !rtl::isAsciiDigit(c) && c != '+' && c != '-'
-                       && c != '.')
+            } else if (!rtl::isAsciiAlpha(c) && !rtl::isAsciiDigit(c)
+                       && c != '+' && c != '-' && c != '.')
             {
                 break;
             }
@@ -248,7 +238,7 @@ void processSegments(
     bool base, bool processSpecialSegments)
 {
     sal_Int32 count = uriReference->getPathSegmentCount() - (base ? 1 : 0);
-    OSL_ASSERT(count <= SAL_MAX_INT32 - 1 && -count >= SAL_MIN_INT32 + 1);
+    assert(count <= SAL_MAX_INT32 - 1 && -count >= SAL_MIN_INT32 + 1);
     for (sal_Int32 i = 0; i < count; ++i) {
         if (processSpecialSegments) {
             OUString segment(uriReference->getPathSegment(i));
@@ -258,9 +248,7 @@ void processSegments(
                 }
                 continue;
             } else if ( segment == ".." ) {
-                if (segments.empty()
-                    || /*MSVC trouble: std::*/abs(segments.back()) == 1)
-                {
+                if (segments.empty() || std::abs(segments.back()) == 1) {
                     segments.push_back(base ? -1 : 1);
                 } else {
                     segments.pop_back();
@@ -354,25 +342,24 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
     OUString schemeSpecificPart;
     OUString serviceName;
     sal_Int32 n = parseScheme(uriReference);
-    OSL_ASSERT(n < fragment);
+    assert(n < fragment);
     if (n >= 0) {
         scheme = uriReference.copy(0, n);
         schemeSpecificPart = uriReference.copy(n + 1, fragment - (n + 1));
         OUStringBuffer buf;
-        buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.uri.UriSchemeParser_"));
+        buf.append("com.sun.star.uri.UriSchemeParser_");
         for (sal_Int32 i = 0; i < scheme.getLength(); ++i) {
             sal_Unicode c = scheme[i];
             if (rtl::isAsciiUpperCase(c)) {
-                buf.append(toLowerCase(c));
+                buf.append(static_cast<sal_Unicode>(rtl::toAsciiLowerCase(c)));
             } else if (c == '+') {
-                buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("PLUS"));
+                buf.append("PLUS");
             } else if (c == '-') {
-                buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("HYPHEN"));
+                buf.append("HYPHEN");
             } else if (c == '.') {
-                buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("DOT"));
+                buf.append("DOT");
             } else {
-                OSL_ASSERT(rtl::isAsciiLowerCase(c) || rtl::isAsciiDigit(c));
+                assert(rtl::isAsciiLowerCase(c) || rtl::isAsciiDigit(c));
                 buf.append(c);
             }
         }
@@ -393,8 +380,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
                 throw;
             } catch (const css::uno::Exception & e) {
                 throw css::lang::WrappedTargetRuntimeException(
-                    OUString("creating service ")
-                        + serviceName,
+                    "creating service " + serviceName,
                     static_cast< cppu::OWeakObject * >(this),
                     css::uno::makeAny(e)); //TODO: preserve type of e
             }
@@ -441,10 +427,10 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
         OUStringBuffer abs(baseUriReference->getScheme());
         abs.append(static_cast< sal_Unicode >(':'));
         if (uriReference->hasAuthority()) {
-            abs.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+            abs.append("//");
             abs.append(uriReference->getAuthority());
         } else if (baseUriReference->hasAuthority()) {
-            abs.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+            abs.append("//");
             abs.append(baseUriReference->getAuthority());
         }
         if (uriReference->hasRelativePath()) {
@@ -498,7 +484,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
                         if (!slash) {
                             abs.append(static_cast< sal_Unicode >('/'));
                         }
-                        abs.appendAscii(RTL_CONSTASCII_STRINGPARAM(".."));
+                        abs.append("..");
                         slash = *i < 0;
                         if (slash) {
                             abs.append(static_cast< sal_Unicode >('/'));
@@ -509,7 +495,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
                         break;
 
                     default:
-                        OSL_ASSERT(false);
+                        assert(false);
                         break;
                     }
                 }
@@ -553,7 +539,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                 uriReference->getAuthority()))
         {
             if (uriReference->hasAuthority()) {
-                rel.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                rel.append("//");
                 rel.append(uriReference->getAuthority());
             }
             rel.append(uriReference->getPath());
@@ -582,8 +568,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
             }
             if (i == 0 && preferAbsoluteOverRelativePath
                 && (preferAuthorityOverRelativePath
-                    || !uriReference->getPath().matchAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("//"))))
+                    || !uriReference->getPath().startsWith("//")))
             {
                 if (baseUriReference->getPath().getLength() > 1
                     || uriReference->getPath().getLength() > 1)
@@ -591,11 +576,10 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                     if (uriReference->getPath().isEmpty()) {
                         rel.append(static_cast< sal_Unicode >('/'));
                     } else {
-                        OSL_ASSERT(uriReference->getPath()[0] == '/');
-                        if (uriReference->getPath().matchAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM("//"))) {
-                            OSL_ASSERT(uriReference->hasAuthority());
-                            rel.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                        assert(uriReference->getPath()[0] == '/');
+                        if (uriReference->getPath().startsWith("//")) {
+                            assert(uriReference->hasAuthority());
+                            rel.append("//");
                             rel.append(uriReference->getAuthority());
                         }
                         rel.append(uriReference->getPath());
@@ -607,7 +591,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                     if (segments) {
                         rel.append(static_cast< sal_Unicode >('/'));
                     }
-                    rel.appendAscii(RTL_CONSTASCII_STRINGPARAM(".."));
+                    rel.append("..");
                     segments = true;
                 }
                 if (i < count2 - 1
@@ -626,16 +610,10 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                             rel.append(static_cast< sal_Unicode >('/'));
                         }
                         OUString s(uriReference->getPathSegment(i));
-                        if (encodeRetainedSpecialSegments
-                            && s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".")))
-                        {
-                            rel.appendAscii(RTL_CONSTASCII_STRINGPARAM("%2E"));
-                        } else if (encodeRetainedSpecialSegments
-                                   && s.equalsAsciiL(
-                                       RTL_CONSTASCII_STRINGPARAM("..")))
-                        {
-                            rel.appendAscii(
-                                RTL_CONSTASCII_STRINGPARAM("%2E%2E"));
+                        if (encodeRetainedSpecialSegments && s == ".") {
+                            rel.append("%2E");
+                        } else if (encodeRetainedSpecialSegments && s == "..") {
+                            rel.append("%2E%2E");
                         } else {
                             rel.append(s);
                         }
@@ -667,8 +645,7 @@ css::uno::Reference< css::uno::XInterface > create(
     try {
         return static_cast< cppu::OWeakObject * >(new Factory(context));
     } catch (std::bad_alloc &) {
-        throw css::uno::RuntimeException(
-            OUString("std::bad_alloc"), 0);
+        throw css::uno::RuntimeException("std::bad_alloc", 0);
     }
 }
 
@@ -678,7 +655,7 @@ OUString getImplementationName() {
 
 css::uno::Sequence< OUString > getSupportedServiceNames() {
     css::uno::Sequence< OUString > s(1);
-    s[0] = OUString("com.sun.star.uri.UriReferenceFactory");
+    s[0] = "com.sun.star.uri.UriReferenceFactory";
     return s;
 }
 
