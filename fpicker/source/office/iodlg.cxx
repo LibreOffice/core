@@ -2176,7 +2176,7 @@ short SvtFileDialog::PrepareExecute()
     // create and show instance for set path
     INetURLObject aFolderURL( _aPath );
     OUString aFileName( aFolderURL.getName( INetURLObject::LAST_SEGMENT, false ) );
-    xub_StrLen nFileNameLen = aFileName.getLength();
+    sal_Int32 nFileNameLen = aFileName.getLength();
     bool bFileToSelect = nFileNameLen != 0;
     if ( bFileToSelect && aFileName[ nFileNameLen - 1 ] != INET_PATH_TOKEN )
     {

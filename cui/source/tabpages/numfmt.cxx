@@ -75,7 +75,7 @@ static sal_uInt16 pRanges[] =
 
 SvxNumberPreview::SvxNumberPreview(Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
-    , mnPos(STRING_NOTFOUND)
+    , mnPos(-1)
     , mnChar(0x0)
 {
     Font aFont( GetFont() );

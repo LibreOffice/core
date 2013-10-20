@@ -371,8 +371,7 @@ public:
 
     /**
         Return the position of a matching closing cQuote if the character at
-        position nPos is between two matching cQuote, otherwise return
-        STRING_NOTFOUND.
+        position nPos is between two matching cQuote, otherwise return -1.
         If nPos points to an opening cQuote the position of the matching
         closing cQuote is returned.
         If nPos points to a closing cQuote nPos is returned.

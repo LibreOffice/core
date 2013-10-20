@@ -350,7 +350,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
             aMatchName += "/";
     }
 
-    xub_StrLen nMatchLen = aMatchName.getLength();
+    sal_Int32 nMatchLen = aMatchName.getLength();
 
     INetURLObject aFolderObj( rURL );
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
@@ -1344,7 +1344,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
 
             // in case the path is "~username" then there should
             // be no trailing slash at the end
-            if( nNameEnd == STRING_NOTFOUND )
+            if( nNameEnd == -1 )
                 bTrailingSlash = sal_False;
         }
 

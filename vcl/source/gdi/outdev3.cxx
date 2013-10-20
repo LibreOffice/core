@@ -6142,7 +6142,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
     long        nTextHeight     = rTargetDevice.GetTextHeight();
     TextAlign   eAlign          = rTargetDevice.GetTextAlign();
-    sal_Int32   nMnemonicPos    = STRING_NOTFOUND;
+    sal_Int32   nMnemonicPos    = -1;
 
     OUString aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
@@ -6307,7 +6307,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         long nMnemonicX = 0;
         long nMnemonicY = 0;
         long nMnemonicWidth = 0;
-        if ( nMnemonicPos != STRING_NOTFOUND )
+        if ( nMnemonicPos != -1 )
         {
             sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.getLength() );
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray, 0, aStr.getLength() );
@@ -6327,7 +6327,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             _rLayout.DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
             if ( bDrawMnemonics )
             {
-                if ( nMnemonicPos != STRING_NOTFOUND )
+                if ( nMnemonicPos != -1 )
                     rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             }
             rTargetDevice.Pop();
@@ -6337,7 +6337,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
             _rLayout.DrawText( aPos, aStr, 0, STRING_LEN, pVector, pDisplayText );
             if ( bDrawMnemonics )
             {
-                if ( nMnemonicPos != STRING_NOTFOUND )
+                if ( nMnemonicPos != -1 )
                     rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
             }
         }
@@ -6718,7 +6718,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         nLen = rStr.getLength() - nIndex;
 
     OUString   aStr = rStr;
-    sal_Int32  nMnemonicPos = STRING_NOTFOUND;
+    sal_Int32  nMnemonicPos = -1;
 
     long        nMnemonicX = 0;
     long        nMnemonicY = 0;
@@ -6726,7 +6726,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     if ( (nStyle & TEXT_DRAW_MNEMONIC) && nLen > 1 )
     {
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
-        if ( nMnemonicPos != STRING_NOTFOUND )
+        if ( nMnemonicPos != -1 )
         {
             if( nMnemonicPos < nIndex )
                 --nIndex;
@@ -6803,7 +6803,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
         if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
         {
-            if ( nMnemonicPos != STRING_NOTFOUND )
+            if ( nMnemonicPos != -1 )
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
         SetTextColor( aOldTextColor );
@@ -6815,7 +6815,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
         if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
         {
-            if ( nMnemonicPos != STRING_NOTFOUND )
+            if ( nMnemonicPos != -1 )
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
         }
     }
@@ -6834,7 +6834,7 @@ long OutputDevice::GetCtrlTextWidth( const OUString& rStr,
     {
         sal_Int32  nMnemonicPos;
         OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
-        if ( nMnemonicPos != STRING_NOTFOUND )
+        if ( nMnemonicPos != -1 )
         {
             if ( nMnemonicPos < nIndex )
                 nIndex--;
@@ -6854,14 +6854,14 @@ OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rM
     sal_Int32  nLen    = aStr.getLength();
     sal_Int32  i       = 0;
 
-    rMnemonicPos = STRING_NOTFOUND;
+    rMnemonicPos = -1;
     while ( i < nLen )
     {
         if ( aStr[ i ] == '~' )
         {
             if ( aStr[ i+1 ] != '~' )
             {
-                if ( rMnemonicPos == STRING_NOTFOUND )
+                if ( rMnemonicPos == -1 )
                     rMnemonicPos = i;
                 aStr = aStr.replaceAt( i, 1, "" );
                 nLen--;

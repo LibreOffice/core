@@ -2596,11 +2596,11 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
 
 static OUString getShortenedString( const OUString& i_rLong, Window* i_pWin, long i_nMaxWidth )
 {
-    sal_Int32 nPos = STRING_NOTFOUND;
+    sal_Int32 nPos = -1;
     OUString aNonMnem( OutputDevice::GetNonMnemonicString( i_rLong, nPos ) );
     aNonMnem = i_pWin->GetEllipsisString( aNonMnem, i_nMaxWidth, TEXT_DRAW_CENTERELLIPSIS );
     // re-insert mnemonic
-    if( nPos != STRING_NOTFOUND )
+    if( nPos != -1 )
     {
         if( nPos < aNonMnem.getLength() && i_rLong[nPos+1] == aNonMnem[nPos] )
         {
