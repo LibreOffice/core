@@ -58,49 +58,6 @@ sal_Int32 UniString::ToInt32() const
     return rtl_ustr_toInt32( mpData->maStr, 10 );
 }
 
-STRING& STRING::Insert( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen,
-                        xub_StrLen nIndex )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
-    // Determine string length
-    if ( nPos > rStr.mpData->mnLen )
-        nLen = 0;
-    else
-    {
-        // Correct length if necessary
-        sal_Int32 nMaxLen = rStr.mpData->mnLen-nPos;
-        if ( nLen > nMaxLen )
-            nLen = static_cast< xub_StrLen >(nMaxLen);
-    }
-
-    // Detect overflow
-    sal_Int32 nCopyLen = ImplGetCopyLen( mpData->mnLen, nLen );
-
-    if ( !nCopyLen )
-        return *this;
-
-    // Correct index if necessary
-    if ( nIndex > mpData->mnLen )
-        nIndex = static_cast< xub_StrLen >(mpData->mnLen);
-
-    // Determine new length and allocate string
-    STRINGDATA* pNewData = ImplAllocData( mpData->mnLen+nCopyLen );
-
-    // copy string to newdata
-    memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
-    memcpy( pNewData->maStr+nIndex, rStr.mpData->maStr+nPos, nCopyLen*sizeof( STRCODE ) );
-    memcpy( pNewData->maStr+nIndex+nCopyLen, mpData->maStr+nIndex,
-            (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
-
-    // release old data
-    STRING_RELEASE((STRING_TYPE *)mpData);
-    mpData = pNewData;
-
-    return *this;
-}
-
 STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

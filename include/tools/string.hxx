@@ -142,6 +142,8 @@ private:
     TOOLS_DLLPRIVATE UniString& Expand( xub_StrLen nCount, sal_Unicode cExpandChar );
     TOOLS_DLLPRIVATE sal_Bool   Equals( const sal_Unicode* pCharStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
+    TOOLS_DLLPRIVATE UniString& Insert( const UniString& rStr, xub_StrLen nPos, xub_StrLen nLen,
+                                xub_StrLen nIndex = STRING_LEN );
 
     TOOLS_DLLPRIVATE UniString& operator +=( const sal_Unicode* pCharStr );
 
@@ -215,8 +217,6 @@ public:
     xub_StrLen          Len() const { return (xub_StrLen)mpData->mnLen; }
 
     UniString&          Insert( const UniString& rStr, xub_StrLen nIndex = STRING_LEN );
-    UniString&          Insert( const UniString& rStr, xub_StrLen nPos, xub_StrLen nLen,
-                                xub_StrLen nIndex = STRING_LEN );
     UniString&          Insert( sal_Unicode c, xub_StrLen nIndex = STRING_LEN );
     UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
 
