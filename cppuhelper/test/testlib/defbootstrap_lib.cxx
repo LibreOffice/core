@@ -42,7 +42,7 @@ static sal_Bool tryService(const char * serviceName)
     ::osl::Module::getUrlFromAddress((void *)tryService, libraryFileUrl);
 
     OUString iniName = libraryFileUrl.copy(0, libraryFileUrl.lastIndexOf((sal_Unicode)'.')); // cut the library extension
-    iniName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE(""))); // add the rc file extension
+    iniName += OUString(SAL_CONFIGFILE("")); // add the rc file extension
 
 #if OSL_DEBUG_LEVEL > 1
     OString sIniName = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);

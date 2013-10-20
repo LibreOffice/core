@@ -137,17 +137,16 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             != rtl_Random_E_None )
             throw BootstrapException( "random pool error!" );
         rtl_random_destroyPool( hPool );
-        ::rtl::OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "uno" ) );
+        ::rtl::OUStringBuffer buf("uno");
         for ( sal_uInt32 i = 0; i < ARLEN( bytes ); ++i )
             buf.append( static_cast< sal_Int32 >( bytes[ i ] ) );
         OUString sPipeName( buf.makeStringAndClear() );
 
         // accept string
         OSL_ASSERT( buf.isEmpty() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "--accept=pipe,name=" ) );
+        buf.append( OUString( "--accept=pipe,name=" ) );
         buf.append( sPipeName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ";urp;" ) );
+        buf.append( OUString( ";urp;" ) );
 
         // arguments
         OUString args [] = {
@@ -201,10 +200,9 @@ Reference< XComponentContext > SAL_CALL bootstrap()
 
         // connection string
         OSL_ASSERT( buf.isEmpty() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "uno:pipe,name=" ) );
+        buf.append( OUString( "uno:pipe,name=" ) );
         buf.append( sPipeName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-            ";urp;StarOffice.ComponentContext" ) );
+        buf.append( OUString( ";urp;StarOffice.ComponentContext" ) );
         OUString sConnectString( buf.makeStringAndClear() );
 
         // wait until office is started
@@ -236,7 +234,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
 
 OUString bootstrap_expandUri(OUString const & uri) {
     static char const PREFIX[] = "vnd.sun.star.expand:";
-    return uri.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(PREFIX))
+    return uri.match(OUString(PREFIX))
         ? cppuhelper::detail::expandMacros(
             rtl::Uri::decode(
                 uri.copy(RTL_CONSTASCII_LENGTH(PREFIX)),

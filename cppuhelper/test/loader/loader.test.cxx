@@ -83,14 +83,14 @@ static rtl::OUString s_test__cppu_loadSharedLibComponentFactory(char const * pSe
                                                  RTL_TEXTENCODING_ASCII_US);
 
     result += rtl::OUString("\ts_test__cppu_loadSharedLibComponentFactory ");
-    result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(\""));
+    result += rtl::OUString("(\"");
     result += servicePurpose;
-    result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\") - "));
+    result += rtl::OUString("\") - ");
 
     try {
         uno::Reference<uno::XInterface> xObject(
             cppu::loadSharedLibComponentFactory(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX "TestComponent.uno" SAL_DLLEXTENSION)),
+                rtl::OUString(SAL_DLLPREFIX "TestComponent.uno" SAL_DLLEXTENSION),
                 rtl::OUString(),
                 rtl::OUString("impl.test.TestComponent") + servicePurpose,
                 uno::Reference<lang::XMultiServiceFactory>(),
@@ -103,15 +103,15 @@ static rtl::OUString s_test__cppu_loadSharedLibComponentFactory(char const * pSe
 
         else
         {
-            result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAILED - got: \""));
+            result += rtl::OUString("FAILED - got: \"");
             result += envDcp_purpose;
-            result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"\n"));
+            result += rtl::OUString("\"\n");
         }
     }
     catch(uno::Exception & exception) {
-        result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAILED - got: \""));
+        result += rtl::OUString("FAILED - got: \"");
         result += exception.Message;
-        result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"\n"));
+        result += rtl::OUString("\"\n");
     }
 
     return result;
@@ -126,9 +126,9 @@ static rtl::OUString s_test__cppu_writeSharedLibComponentInfo(char const * pServ
                                                  RTL_TEXTENCODING_ASCII_US);
 
     result += rtl::OUString("\ts_test__cppu_writeSharedLibComponentInfo ");
-    result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(\""));
+    result += rtl::OUString("(\"");
     result += servicePurpose;
-    result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\") - "));
+    result += rtl::OUString("\") - ");
 
     char buff[256];
     strcpy(buff, "TestComponent.uno=");
@@ -138,7 +138,7 @@ static rtl::OUString s_test__cppu_writeSharedLibComponentInfo(char const * pServ
 
     try {
         cppu::writeSharedLibComponentInfo(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX "TestComponent.uno" SAL_DLLEXTENSION)),
+            rtl::OUString(SAL_DLLPREFIX "TestComponent.uno" SAL_DLLEXTENSION),
             rtl::OUString(),
             uno::Reference<lang::XMultiServiceFactory>(),
             uno::Reference<registry::XRegistryKey>(new MyKey)
@@ -150,15 +150,15 @@ static rtl::OUString s_test__cppu_writeSharedLibComponentInfo(char const * pServ
 
         else
         {
-            result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAILED - got: \""));
+            result += rtl::OUString("FAILED - got: \"");
             result += envDcp_purpose;
-            result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"\n"));
+            result += rtl::OUString("\"\n");
         }
     }
     catch(uno::Exception & exception) {
-        result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAILED - got: \""));
+        result += rtl::OUString("FAILED - got: \"");
         result += exception.Message;
-        result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"\n"));
+        result += rtl::OUString("\"\n");
     }
 
     return result;
