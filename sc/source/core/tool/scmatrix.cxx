@@ -1309,7 +1309,7 @@ public:
                     const svl::SharedString& rStr = *it;
                     rCell.mbValue = false;
                     rCell.mbEmpty = false;
-                    *rCell.mpStr = rStr.getString();
+                    rCell.maStr = rStr;
                     compare();
                 }
             }
@@ -1318,7 +1318,7 @@ public:
             {
                 rCell.mbValue = false;
                 rCell.mbEmpty = true;
-                *rCell.mpStr = svl::SharedString::getEmptyString().getString();
+                rCell.maStr = svl::SharedString::getEmptyString();
                 for (size_t i = 0; i < node.size; ++i)
                     compare();
             }

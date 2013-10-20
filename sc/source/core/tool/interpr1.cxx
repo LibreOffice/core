@@ -791,8 +791,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
 
 double ScInterpreter::Compare()
 {
-    OUString aVal1, aVal2;
-    sc::Compare aComp( &aVal1, &aVal2 );
+    sc::Compare aComp;
     aComp.mbIgnoreCase = pDok->GetDocOptions().IsIgnoreCase();
     for( short i = 1; i >= 0; i-- )
     {
@@ -810,7 +809,7 @@ double ScInterpreter::Compare()
                 rCell.mbValue = true;
                 break;
             case svString:
-                *rCell.mpStr = GetString().getString();
+                rCell.maStr = GetString();
                 rCell.mbValue = false;
                 break;
             case svDoubleRef :
@@ -827,7 +826,7 @@ double ScInterpreter::Compare()
                 {
                     svl::SharedString aStr;
                     GetCellString(aStr, aCell);
-                    *rCell.mpStr = aStr.getString();
+                    rCell.maStr = aStr;
                     rCell.mbValue = false;
                 }
                 else
@@ -857,7 +856,7 @@ double ScInterpreter::Compare()
                     rCell.mbEmpty = true;
                 else if (pMat->IsString(0, 0))
                 {
-                    *rCell.mpStr = pMat->GetString(0, 0).getString();
+                    rCell.maStr = pMat->GetString(0, 0);
                     rCell.mbValue = false;
                 }
                 else
@@ -883,8 +882,7 @@ double ScInterpreter::Compare()
 
 sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pOptions )
 {
-    OUString aVal1, aVal2;
-    sc::Compare aComp( &aVal1, &aVal2 );
+    sc::Compare aComp;
     aComp.meOp = eOp;
     aComp.mbIgnoreCase = pDok->GetDocOptions().IsIgnoreCase();
     sc::RangeMatrix aMat[2];
@@ -905,7 +903,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                 rCell.mbValue = true;
                 break;
             case svString:
-                *rCell.mpStr = GetString().getString();
+                rCell.maStr = GetString();
                 rCell.mbValue = false;
                 break;
             case svSingleRef:
@@ -919,7 +917,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                 {
                     svl::SharedString aStr;
                     GetCellString(aStr, aCell);
-                    *rCell.mpStr = aStr.getString();
+                    rCell.maStr = aStr;
                     rCell.mbValue = false;
                 }
                 else
@@ -978,7 +976,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                         if (aMat[i].mpMat->IsString(j, k))
                         {
                             rCell.mbValue = false;
-                            *rCell.mpStr = aMat[i].mpMat->GetString(j, k).getString();
+                            rCell.maStr = aMat[i].mpMat->GetString(j, k);
                             rCell.mbEmpty = aMat[i].mpMat->IsEmpty(j, k);
                         }
                         else

@@ -22,7 +22,7 @@
 
 #include "queryentry.hxx"
 
-#include "rtl/ustring.hxx"
+#include "svl/sharedstring.hxx"
 
 class ScDocument;
 
@@ -33,12 +33,11 @@ struct Compare
     struct Cell
     {
         double mfValue;
-        OUString* mpStr;
+        svl::SharedString maStr;
         bool mbValue;
         bool mbEmpty;
 
         Cell();
-        Cell( OUString* p );
     };
 
     Cell maCells[2];
@@ -46,7 +45,7 @@ struct Compare
     ScQueryOp meOp;
     bool mbIgnoreCase;
 
-    Compare( OUString* p1, OUString* p2 );
+    Compare();
 };
 
 struct CompareOptions

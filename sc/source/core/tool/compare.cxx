@@ -27,17 +27,10 @@
 namespace sc {
 
 Compare::Cell::Cell() :
-    mfValue(0.0), mpStr(NULL), mbValue(false), mbEmpty(false) {}
+    mfValue(0.0), mbValue(false), mbEmpty(false) {}
 
-Compare::Cell::Cell( OUString* p ) :
-    mfValue(0.0), mpStr(p), mbValue(false), mbEmpty(false) {}
-
-Compare::Compare( OUString* p1, OUString* p2 ) :
-    meOp(SC_EQUAL), mbIgnoreCase(true)
-{
-    maCells[0] = Cell(p1);
-    maCells[1] = Cell(p2);
-}
+Compare::Compare() :
+    meOp(SC_EQUAL), mbIgnoreCase(true) {}
 
 CompareOptions::CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg ) :
     aQueryEntry(rEntry),
@@ -82,7 +75,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
         }
         else
         {
-            if (!rCell2.mpStr->isEmpty())
+            if (!rCell2.maStr.isEmpty())
                 fRes = -1;      // empty cell < "..."
             // else: empty cell == ""
         }
@@ -102,7 +95,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
         }
         else
         {
-            if (!rCell1.mpStr->isEmpty())
+            if (!rCell1.maStr.isEmpty())
                 fRes = 1;       // "..." > empty cell
             // else: "" == empty cell
         }
@@ -139,15 +132,15 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
             // is/must be identical to *rEntry.pStr, which is essential for
             // regex to work through GetSearchTextPtr().
             ScQueryEntry& rEntry = pOptions->aQueryEntry;
-            OSL_ENSURE(rEntry.GetQueryItem().maString.getString().equals(*rCell2.mpStr), "ScInterpreter::CompareFunc: broken options");
+            OSL_ENSURE(rEntry.GetQueryItem().maString == rCell2.maStr, "ScInterpreter::CompareFunc: broken options");
             if (pOptions->bRegEx)
             {
                 sal_Int32 nStart = 0;
-                sal_Int32 nStop  = rCell1.mpStr->getLength();
+                sal_Int32 nStop  = rCell1.maStr.getLength();
                 bool bMatch = rEntry.GetSearchTextPtr(
                         !pOptions->bIgnoreCase)->SearchForward(
-                            *rCell1.mpStr, &nStart, &nStop);
-                if (bMatch && pOptions->bMatchWholeCell && (nStart != 0 || nStop != rCell1.mpStr->getLength()))
+                            rCell1.maStr.getString(), &nStart, &nStop);
+                if (bMatch && pOptions->bMatchWholeCell && (nStart != 0 || nStop != rCell1.maStr.getLength()))
                     bMatch = false;     // RegEx must match entire string.
                 fRes = (bMatch ? 0 : 1);
             }
@@ -156,34 +149,39 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
                 ::utl::TransliterationWrapper* pTransliteration =
                     (pOptions->bIgnoreCase ? ScGlobal::GetpTransliteration() :
                      ScGlobal::GetCaseTransliteration());
-                bool bMatch;
+                bool bMatch = false;
                 if (pOptions->bMatchWholeCell)
-                    bMatch = pTransliteration->isEqual(*rCell1.mpStr, *rCell2.mpStr);
+                {
+                    if (pOptions->bIgnoreCase)
+                        bMatch = rCell1.maStr.getDataIgnoreCase() == rCell2.maStr.getDataIgnoreCase();
+                    else
+                        bMatch = rCell1.maStr.getData() == rCell2.maStr.getData();
+                }
                 else
                 {
                     OUString aCell( pTransliteration->transliterate(
-                                *rCell1.mpStr, ScGlobal::eLnge, 0,
-                                rCell1.mpStr->getLength(), NULL));
+                                rCell1.maStr.getString(), ScGlobal::eLnge, 0,
+                                rCell1.maStr.getLength(), NULL));
                     OUString aQuer( pTransliteration->transliterate(
-                                *rCell2.mpStr, ScGlobal::eLnge, 0,
-                                rCell2.mpStr->getLength(), NULL));
+                                rCell2.maStr.getString(), ScGlobal::eLnge, 0,
+                                rCell2.maStr.getLength(), NULL));
                     bMatch = (aCell.indexOf( aQuer ) != -1);
                 }
                 fRes = (bMatch ? 0 : 1);
             }
             else if (pOptions->bIgnoreCase)
                 fRes = (double) ScGlobal::GetCollator()->compareString(
-                        *rCell1.mpStr, *rCell2.mpStr);
+                        rCell1.maStr.getString(), rCell2.maStr.getString());
             else
                 fRes = (double) ScGlobal::GetCaseCollator()->compareString(
-                        *rCell1.mpStr, *rCell2.mpStr);
+                        rCell1.maStr.getString(), rCell2.maStr.getString());
         }
         else if (rComp.mbIgnoreCase)
             fRes = (double) ScGlobal::GetCollator()->compareString(
-                *rCell1.mpStr, *rCell2.mpStr);
+                rCell1.maStr.getString(), rCell2.maStr.getString());
         else
             fRes = (double) ScGlobal::GetCaseCollator()->compareString(
-                *rCell1.mpStr, *rCell2.mpStr);
+                rCell1.maStr.getString(), rCell2.maStr.getString());
     }
 
     if (nStringQuery && pOptions)
@@ -199,7 +197,7 @@ double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
                 // As in ScTable::ValidQuery() match a numeric string for a
                 // number query that originated from a string, e.g. in SUMIF
                 // and COUNTIF. Transliteration is not needed here.
-                bool bEqual = (*rComp.maCells[nStringQuery-1].mpStr) == rItem.maString.getString();
+                bool bEqual = rComp.maCells[nStringQuery-1].maStr == rItem.maString;
                 // match => fRes=0, else fRes=1
                 fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
             }
