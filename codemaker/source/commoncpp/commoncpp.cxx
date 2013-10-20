@@ -55,9 +55,9 @@ OString scopedCppName(OString const & type, bool ns_alias)
     } while( nPos != -1 );
 
     OString s(tmpBuf.makeStringAndClear());
-    if (ns_alias && s.indexOf("::com::sun::star::") == 0)
+    if (ns_alias && s.startsWith("::com::sun::star::", &s))
     {
-        return s.replaceAt(0, 18, "css::"); // nicer shorthand
+        s = "::css::" + s; // nicer shorthand
     }
 
     return s;
@@ -73,7 +73,7 @@ OString translateUnoToCppType(
             "void", "::sal_Bool", "::sal_Int8", "::sal_Int16", "::sal_uInt16",
             "::sal_Int32", "::sal_uInt32", "::sal_Int64", "::sal_uInt64",
             "float", "double", "::sal_Unicode", "rtl::OUString",
-            "::com::sun::star::uno::Type", "::com::sun::star::uno::Any" };
+            "::css::uno::Type", "::css::uno::Any" };
         buf.append(cppTypes[sort]);
     } else {
         if (sort == codemaker::UnoType::SORT_INTERFACE_TYPE
