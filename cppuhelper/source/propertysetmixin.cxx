@@ -76,8 +76,8 @@
 #include "salhelper/simplereferenceobject.hxx"
 
 #include <algorithm>
+#include <exception>
 #include <map>
-#include <new>
 #include <set>
 #include <vector>
 
@@ -320,7 +320,7 @@ public:
     explicit Info(Data * data): m_data(data) {}
 
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties()
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     virtual css::beans::Property SAL_CALL getPropertyByName(
         rtl::OUString const & name)
@@ -335,27 +335,21 @@ private:
 };
 
 css::uno::Sequence< css::beans::Property > Info::getProperties()
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
-    try {
-        OSL_ASSERT(m_data->properties.size() <= SAL_MAX_INT32);
-        css::uno::Sequence< css::beans::Property > s(
-            static_cast< sal_Int32 >(m_data->properties.size()));
-        sal_Int32 n = 0;
-        for (Data::PropertyMap::iterator i(m_data->properties.begin());
-             i != m_data->properties.end(); ++i)
-        {
-            if (i->second.present) {
-                s[n++] = i->second.property;
-            }
+    OSL_ASSERT(m_data->properties.size() <= SAL_MAX_INT32);
+    css::uno::Sequence< css::beans::Property > s(
+        static_cast< sal_Int32 >(m_data->properties.size()));
+    sal_Int32 n = 0;
+    for (Data::PropertyMap::iterator i(m_data->properties.begin());
+         i != m_data->properties.end(); ++i)
+    {
+        if (i->second.present) {
+            s[n++] = i->second.property;
         }
-        s.realloc(n);
-        return s;
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< cppu::OWeakObject * >(this));
     }
+    s.realloc(n);
+    return s;
 }
 
 css::beans::Property Info::getPropertyByName(rtl::OUString const & name)
@@ -1116,14 +1110,10 @@ css::uno::Any PropertySetMixinImpl::queryInterface(css::uno::Type const & type)
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo >
-PropertySetMixinImpl::getPropertySetInfo() throw (css::uno::RuntimeException) {
-    try {
-        return new Info(m_impl);
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
-    }
+PropertySetMixinImpl::getPropertySetInfo()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return new Info(m_impl);
 }
 
 void PropertySetMixinImpl::setPropertyValue(
@@ -1131,33 +1121,21 @@ void PropertySetMixinImpl::setPropertyValue(
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
-    try {
-        m_impl->setProperty(
-            static_cast< css::beans::XPropertySet * >(this), propertyName,
-            value, false, false, 1);
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
-    }
+    m_impl->setProperty(
+        static_cast< css::beans::XPropertySet * >(this), propertyName, value,
+        false, false, 1);
 }
 
 css::uno::Any PropertySetMixinImpl::getPropertyValue(
     rtl::OUString const & propertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
-    try {
-        return m_impl->getProperty(
-            static_cast< css::beans::XPropertySet * >(this), propertyName, 0);
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
-    }
+    return m_impl->getProperty(
+        static_cast< css::beans::XPropertySet * >(this), propertyName, 0);
 }
 
 void PropertySetMixinImpl::addPropertyChangeListener(
@@ -1165,29 +1143,23 @@ void PropertySetMixinImpl::addPropertyChangeListener(
     css::uno::Reference< css::beans::XPropertyChangeListener > const & listener)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::beans::XPropertyChangeListener >(
         listener, css::uno::UNO_QUERY_THROW); // reject NULL listener
     checkUnknown(propertyName);
-    try {
-        bool disposed;
-        {
-            osl::MutexGuard g(m_impl->mutex);
-            disposed = m_impl->disposed;
-            if (!disposed) {
-                m_impl->boundListeners[propertyName].insert(listener);
-            }
+    bool disposed;
+    {
+        osl::MutexGuard g(m_impl->mutex);
+        disposed = m_impl->disposed;
+        if (!disposed) {
+            m_impl->boundListeners[propertyName].insert(listener);
         }
-        if (disposed) {
-            listener->disposing(
-                css::lang::EventObject(
-                    static_cast< css::beans::XPropertySet * >(this)));
-        }
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+    if (disposed) {
+        listener->disposing(
+            css::lang::EventObject(
+                static_cast< css::beans::XPropertySet * >(this)));
     }
 }
 
@@ -1196,24 +1168,18 @@ void PropertySetMixinImpl::removePropertyChangeListener(
     css::uno::Reference< css::beans::XPropertyChangeListener > const & listener)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     OSL_ASSERT(listener.is());
     checkUnknown(propertyName);
-    try {
-        osl::MutexGuard g(m_impl->mutex);
-        Impl::BoundListenerMap::iterator i(
-            m_impl->boundListeners.find(propertyName));
-        if (i != m_impl->boundListeners.end()) {
-            BoundListenerBag::iterator j(i->second.find(listener));
-            if (j != i->second.end()) {
-                i->second.erase(j);
-            }
+    osl::MutexGuard g(m_impl->mutex);
+    Impl::BoundListenerMap::iterator i(
+        m_impl->boundListeners.find(propertyName));
+    if (i != m_impl->boundListeners.end()) {
+        BoundListenerBag::iterator j(i->second.find(listener));
+        if (j != i->second.end()) {
+            i->second.erase(j);
         }
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
     }
 }
 
@@ -1222,29 +1188,23 @@ void PropertySetMixinImpl::addVetoableChangeListener(
     css::uno::Reference< css::beans::XVetoableChangeListener > const & listener)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::beans::XVetoableChangeListener >(
         listener, css::uno::UNO_QUERY_THROW); // reject NULL listener
     checkUnknown(propertyName);
-    try {
-        bool disposed;
-        {
-            osl::MutexGuard g(m_impl->mutex);
-            disposed = m_impl->disposed;
-            if (!disposed) {
-                m_impl->vetoListeners[propertyName].insert(listener);
-            }
+    bool disposed;
+    {
+        osl::MutexGuard g(m_impl->mutex);
+        disposed = m_impl->disposed;
+        if (!disposed) {
+            m_impl->vetoListeners[propertyName].insert(listener);
         }
-        if (disposed) {
-            listener->disposing(
-                css::lang::EventObject(
-                    static_cast< css::beans::XPropertySet * >(this)));
-        }
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+    if (disposed) {
+        listener->disposing(
+            css::lang::EventObject(
+                static_cast< css::beans::XPropertySet * >(this)));
     }
 }
 
@@ -1253,24 +1213,17 @@ void PropertySetMixinImpl::removeVetoableChangeListener(
     css::uno::Reference< css::beans::XVetoableChangeListener > const & listener)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
     OSL_ASSERT(listener.is());
     checkUnknown(propertyName);
-    try {
-        osl::MutexGuard g(m_impl->mutex);
-        Impl::VetoListenerMap::iterator i(
-            m_impl->vetoListeners.find(propertyName));
-        if (i != m_impl->vetoListeners.end()) {
-            Impl::VetoListenerBag::iterator j(i->second.find(listener));
-            if (j != i->second.end()) {
-                i->second.erase(j);
-            }
+    osl::MutexGuard g(m_impl->mutex);
+    Impl::VetoListenerMap::iterator i(m_impl->vetoListeners.find(propertyName));
+    if (i != m_impl->vetoListeners.end()) {
+        Impl::VetoListenerBag::iterator j(i->second.find(listener));
+        if (j != i->second.end()) {
+            i->second.erase(j);
         }
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
     }
 }
 
@@ -1279,68 +1232,52 @@ void PropertySetMixinImpl::setFastPropertyValue(
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
-    try {
-        m_impl->setProperty(
-            static_cast< css::beans::XPropertySet * >(this),
-            m_impl->translateHandle(
-                static_cast< css::beans::XPropertySet * >(this), handle),
-            value, false, false, 1);
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
-    }
+    m_impl->setProperty(
+        static_cast< css::beans::XPropertySet * >(this),
+        m_impl->translateHandle(
+            static_cast< css::beans::XPropertySet * >(this), handle),
+        value, false, false, 1);
 }
 
 css::uno::Any PropertySetMixinImpl::getFastPropertyValue(sal_Int32 handle)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
-    try {
-        return m_impl->getProperty(
-            static_cast< css::beans::XPropertySet * >(this),
-            m_impl->translateHandle(
-                static_cast< css::beans::XPropertySet * >(this), handle),
-            0);
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
-    }
+    return m_impl->getProperty(
+        static_cast< css::beans::XPropertySet * >(this),
+        m_impl->translateHandle(
+            static_cast< css::beans::XPropertySet * >(this), handle),
+        0);
 }
 
 css::uno::Sequence< css::beans::PropertyValue >
-PropertySetMixinImpl::getPropertyValues() throw (css::uno::RuntimeException) {
-    try {
-        css::uno::Sequence< css::beans::PropertyValue > s(
-            m_impl->handleMap.getLength());
-        sal_Int32 n = 0;
-        for (sal_Int32 i = 0; i < m_impl->handleMap.getLength(); ++i) {
-            try {
-                s[n].Value = m_impl->getProperty(
-                    static_cast< css::beans::XPropertySet * >(this),
-                    m_impl->handleMap[i], &s[n].State);
-            } catch (css::beans::UnknownPropertyException &) {
-                continue;
-            } catch (css::lang::WrappedTargetException & e) {
-                throw css::lang::WrappedTargetRuntimeException(
-                    e.Message, static_cast< css::beans::XPropertySet * >(this),
-                    e.TargetException);
-            }
-            s[n].Name = m_impl->handleMap[i];
-            s[n].Handle = i;
-            ++n;
+PropertySetMixinImpl::getPropertyValues()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    css::uno::Sequence< css::beans::PropertyValue > s(
+        m_impl->handleMap.getLength());
+    sal_Int32 n = 0;
+    for (sal_Int32 i = 0; i < m_impl->handleMap.getLength(); ++i) {
+        try {
+            s[n].Value = m_impl->getProperty(
+                static_cast< css::beans::XPropertySet * >(this),
+                m_impl->handleMap[i], &s[n].State);
+        } catch (css::beans::UnknownPropertyException &) {
+            continue;
+        } catch (css::lang::WrappedTargetException & e) {
+            throw css::lang::WrappedTargetRuntimeException(
+                e.Message, static_cast< css::beans::XPropertySet * >(this),
+                e.TargetException);
         }
-        s.realloc(n);
-        return s;
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+        s[n].Name = m_impl->handleMap[i];
+        s[n].Handle = i;
+        ++n;
     }
+    s.realloc(n);
+    return s;
 }
 
 void PropertySetMixinImpl::setPropertyValues(
@@ -1348,33 +1285,26 @@ void PropertySetMixinImpl::setPropertyValues(
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
+        css::uno::RuntimeException, std::exception)
 {
-    try {
-        for (sal_Int32 i = 0; i < props.getLength(); ++i) {
-            if (props[i].Handle != -1
-                && (props[i].Name
-                    != m_impl->translateHandle(
-                        static_cast< css::beans::XPropertySet * >(this),
-                        props[i].Handle)))
-            {
-                throw css::beans::UnknownPropertyException(
-                    (rtl::OUString("name ")
-                     + props[i].Name
-                     + rtl::OUString(" does not match handle ")
-                     + rtl::OUString::number(props[i].Handle)),
-                    static_cast< css::beans::XPropertySet * >(this));
-            }
-            m_impl->setProperty(
-                static_cast< css::beans::XPropertySet * >(this), props[i].Name,
-                props[i].Value,
-                props[i].State == css::beans::PropertyState_AMBIGUOUS_VALUE,
-                props[i].State == css::beans::PropertyState_DEFAULT_VALUE, 0);
+    for (sal_Int32 i = 0; i < props.getLength(); ++i) {
+        if (props[i].Handle != -1
+            && (props[i].Name
+                != m_impl->translateHandle(
+                    static_cast< css::beans::XPropertySet * >(this),
+                    props[i].Handle)))
+        {
+            throw css::beans::UnknownPropertyException(
+                (rtl::OUString("name ") + props[i].Name
+                 + rtl::OUString(" does not match handle ")
+                 + rtl::OUString::number(props[i].Handle)),
+                static_cast< css::beans::XPropertySet * >(this));
         }
-    } catch (std::bad_alloc &) {
-        //TODO  OutOfMemoryException:
-        throw css::uno::RuntimeException(
-            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+        m_impl->setProperty(
+            static_cast< css::beans::XPropertySet * >(this), props[i].Name,
+            props[i].Value,
+            props[i].State == css::beans::PropertyState_AMBIGUOUS_VALUE,
+            props[i].State == css::beans::PropertyState_DEFAULT_VALUE, 0);
     }
 }
 

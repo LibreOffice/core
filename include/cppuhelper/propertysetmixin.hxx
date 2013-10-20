@@ -21,6 +21,9 @@
 #define INCLUDED_CPPUHELPER_PROPERTYSETMIXIN_HXX
 
 #include "sal/config.h"
+
+#include <exception>
+
 #include "com/sun/star/beans/PropertyVetoException.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
 #include "com/sun/star/beans/XFastPropertySet.hpp"
@@ -266,7 +269,8 @@ protected:
     // @see com::sun::star::beans::XPropertySet::getPropertySetInfo
     virtual
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >
-    SAL_CALL getPropertySetInfo() throw (com::sun::star::uno::RuntimeException);
+    SAL_CALL getPropertySetInfo()
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     // @see com::sun::star::beans::XPropertySet::setPropertyValue
     virtual void SAL_CALL setPropertyValue(
@@ -277,7 +281,7 @@ protected:
             com::sun::star::beans::PropertyVetoException,
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     // @see com::sun::star::beans::XPropertySet::getPropertyValue
     virtual com::sun::star::uno::Any SAL_CALL getPropertyValue(
@@ -285,7 +289,7 @@ protected:
         throw (
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     /**
        @short Adds a
@@ -303,7 +307,7 @@ protected:
         throw (
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     // @see com::sun::star::beans::XPropertySet::removePropertyChangeListener
     virtual void SAL_CALL removePropertyChangeListener(
@@ -313,7 +317,7 @@ protected:
         throw (
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     /**
        @short Adds a
@@ -331,7 +335,7 @@ protected:
         throw (
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     // @see com::sun::star::beans::XPropertySet::removeVetoableChangeListener
     virtual void SAL_CALL removeVetoableChangeListener(
@@ -341,7 +345,7 @@ protected:
         throw (
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     // @see com::sun::star::beans::XFastPropertySet::setFastPropertyValue
     virtual void SAL_CALL setFastPropertyValue(
@@ -351,7 +355,7 @@ protected:
             com::sun::star::beans::PropertyVetoException,
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     // @see com::sun::star::beans::XFastPropertySet::getFastPropertyValue
     virtual com::sun::star::uno::Any SAL_CALL getFastPropertyValue(
@@ -359,12 +363,13 @@ protected:
         throw (
             com::sun::star::beans::UnknownPropertyException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
     // @see com::sun::star::beans::XPropertyAccess::getPropertyValues
     virtual
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
-    SAL_CALL getPropertyValues() throw (com::sun::star::uno::RuntimeException);
+    SAL_CALL getPropertyValues()
+        throw (com::sun::star::uno::RuntimeException, std::exception);
 
     // @see com::sun::star::beans::XPropertyAccess::setPropertyValues
     virtual void SAL_CALL setPropertyValues(
@@ -375,7 +380,7 @@ protected:
             com::sun::star::beans::PropertyVetoException,
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
+            com::sun::star::uno::RuntimeException, std::exception);
 
 private:
     PropertySetMixinImpl( const PropertySetMixinImpl&); // not defined
