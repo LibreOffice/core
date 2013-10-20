@@ -43,7 +43,11 @@ get_library_gbuild_sha()
     local module="$1"
 
     pushd ${SRCDIR?} > /dev/null
-    git ls-tree HEAD | grep "\t${module?}$" | cut -f 1 | cut -d " " -f 3
+    if [ -d "${SRCDIR}/external/${module?}" ] ; then
+        git ls-tree -d HEAD "external/${module?}" | cut -f 1 | cut -d " " -f 3
+    else
+        git ls-tree -d HEAD | "{module?}" | cut -f 1 | cut -d " " -f 3
+    fi
     popd ${SRCDIR?} > /dev/null
 }
 
