@@ -140,8 +140,6 @@ private:
     TOOLS_DLLPRIVATE UniString& Append( const sal_Unicode* pCharStr );
     TOOLS_DLLPRIVATE UniString& Append( const sal_Unicode* pCharStr, xub_StrLen nLen );
     TOOLS_DLLPRIVATE UniString& Expand( xub_StrLen nCount, sal_Unicode cExpandChar );
-    TOOLS_DLLPRIVATE sal_Bool   Equals( const sal_Unicode* pCharStr,
-                                xub_StrLen nIndex, xub_StrLen nLen ) const;
     TOOLS_DLLPRIVATE UniString& Insert( const UniString& rStr, xub_StrLen nPos, xub_StrLen nLen,
                                 xub_StrLen nIndex = STRING_LEN );
 
@@ -220,14 +218,9 @@ public:
     UniString&          Insert( sal_Unicode c, xub_StrLen nIndex = STRING_LEN );
     UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
 
-    sal_Bool            Equals( const UniString& rStr ) const;
-    sal_Bool            Equals( const UniString& rStr,
-                                xub_StrLen nIndex, xub_StrLen nLen ) const;
-
     const sal_Unicode*  GetBuffer() const { return mpData->maStr; }
 
-    friend sal_Bool     operator == ( const UniString& rStr1,   const UniString& rStr2 )
-                            { return rStr1.Equals( rStr2 ); }
+    friend sal_Bool     operator == ( const UniString& rStr1,   const UniString& rStr2 );
     friend sal_Bool     operator != ( const UniString& rStr1,   const UniString& rStr2 )
                             { return !(operator == ( rStr1, rStr2 )); }
     friend sal_Bool     operator <  ( const UniString& rStr1,   const UniString& rStr2 )

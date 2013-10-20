@@ -110,37 +110,15 @@ StringCompare STRING::CompareTo( const STRING& rStr, xub_StrLen nLen ) const
         return COMPARE_GREATER;
 }
 
-sal_Bool STRING::Equals( const STRING& rStr ) const
+sal_Bool operator==(const UniString& rStr1, const UniString& rStr2)
 {
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
-    if ( mpData == rStr.mpData )
+    if ( rStr1.mpData == rStr2.mpData )
         return sal_True;
 
-    if ( mpData->mnLen != rStr.mpData->mnLen )
+    if ( rStr1.mpData->mnLen != rStr2.mpData->mnLen )
         return sal_False;
 
-    return (ImplStringCompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
-}
-
-sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
-    // Are there enough codes for comparing?
-    if ( nIndex > mpData->mnLen )
-        return (rStr.mpData->mnLen == 0);
-    sal_Int32 nMaxLen = mpData->mnLen-nIndex;
-    if ( nMaxLen < nLen )
-    {
-        if ( rStr.mpData->mnLen != nMaxLen )
-            return sal_False;
-        nLen = static_cast< xub_StrLen >(nMaxLen);
-    }
-
-    return (ImplStringCompareWithoutZero( mpData->maStr+nIndex, rStr.mpData->maStr, nLen ) == 0);
+    return (ImplStringCompareWithoutZero( rStr1.mpData->maStr, rStr2.mpData->maStr, rStr1.mpData->mnLen ) == 0);
 }
 
 STRING& STRING::Append( STRCODE c )
