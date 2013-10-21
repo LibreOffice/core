@@ -885,7 +885,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     sal_uInt8 nNextLevel = nCurrLevel;
     bool bFldBidi = false;
 
-    if ( CH_TXTATR_BREAKWORD == GetChar( rPos ) )
+    if ( rPos < GetTxt().getLength() && CH_TXTATR_BREAKWORD == GetChar( rPos ) )
     {
         bFldBidi = true;
     }

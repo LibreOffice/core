@@ -151,24 +151,33 @@ void Imp_SkipDouble(const OUString& rStr, sal_Int32& rPos, const sal_Int32)
     sal_Unicode aChar(rStr[rPos]);
 
     if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
-        aChar = rStr[++rPos];
+    {
+        ++rPos;
+        aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
+    }
 
     while((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
         || sal_Unicode('.') == aChar)
     {
-        aChar = rStr[++rPos];
+        ++rPos;
+        aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
     }
 
     if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
     {
-        aChar = rStr[++rPos];
+        ++rPos;
+        aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
 
         if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
-            aChar = rStr[++rPos];
+        {
+            ++rPos;
+            aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
+        }
 
         while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
         {
-            aChar = rStr[++rPos];
+            ++rPos;
+            aChar = rPos >= rStr.getLength() ? 0 : rStr[rPos];
         }
     }
 }
@@ -182,31 +191,36 @@ double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 
     if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
     {
         sNumberString.append(rStr[rPos]);
-        aChar = rStr[++rPos];
+        ++rPos;
+        aChar = rPos >= nLen ? 0 : rStr[rPos];
     }
 
     while((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
         || sal_Unicode('.') == aChar)
     {
         sNumberString.append(rStr[rPos]);
-        aChar = rStr[++rPos];
+        ++rPos;
+        aChar = rPos >= nLen ? 0 : rStr[rPos];
     }
 
     if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
     {
         sNumberString.append(rStr[rPos]);
-        aChar = rStr[++rPos];
+        ++rPos;
+        aChar = rPos >= nLen ? 0 : rStr[rPos];
 
         if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
         {
             sNumberString.append(rStr[rPos]);
-            aChar = rStr[++rPos];
+            ++rPos;
+            aChar = rPos >= nLen ? 0 : rStr[rPos];
         }
 
         while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
         {
             sNumberString.append(rStr[rPos]);
-            aChar = rStr[++rPos];
+            ++rPos;
+            aChar = rPos >= nLen ? 0 : rStr[rPos];
         }
     }
 

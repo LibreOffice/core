@@ -4843,7 +4843,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                 nBreakPos++;
             nPos = nBreakPos;
 
-            if ( ( rStr[ nPos ] == '\r' ) || ( rStr[ nPos ] == '\n' ) )
+            if ( nPos < nLen && ( ( rStr[ nPos ] == '\r' ) || ( rStr[ nPos ] == '\n' ) ) )
             {
                 nPos++;
                 // CR/LF?

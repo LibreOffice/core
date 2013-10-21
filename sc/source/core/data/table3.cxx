@@ -2161,7 +2161,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         {
             bFound = false;
             GetUpperCellString(nCol1 + 2, nRow, aCellStr);
-            if (aCellStr[0] == '<')
+            if (aCellStr.startsWith("<"))
             {
                 if (aCellStr[1] == '>')
                     rEntry.eOp = SC_NOT_EQUAL;
@@ -2170,14 +2170,14 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
                 else
                     rEntry.eOp = SC_LESS;
             }
-            else if (aCellStr[0] == '>')
+            else if (aCellStr.startsWith(">"))
             {
                 if (aCellStr[1] == '=')
                     rEntry.eOp = SC_GREATER_EQUAL;
                 else
                     rEntry.eOp = SC_GREATER;
             }
-            else if (aCellStr[0] == '=')
+            else if (aCellStr.startsWith("="))
                 rEntry.eOp = SC_EQUAL;
 
         }

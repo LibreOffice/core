@@ -2045,16 +2045,16 @@ namespace
                 {
                     // Muessen wir Konvertieren
                     if ( ((eLineEnd != LINEEND_LF) && (rIn[i] == '\n')) ||
-                         ((eLineEnd == LINEEND_CRLF) && (rIn[i+1] != '\n')) ||
+                         ((eLineEnd == LINEEND_CRLF) && (i+1) < nStrLen && (rIn[i+1] != '\n')) ||
                          ((eLineEnd == LINEEND_LF) &&
-                          ((rIn[i] == '\r') || (rIn[i+1] == '\r'))) ||
+                          ((rIn[i] == '\r') || ((i+1) < nStrLen && rIn[i+1] == '\r'))) ||
                          ((eLineEnd == LINEEND_CR) &&
-                          ((rIn[i] == '\n') || (rIn[i+1] == '\n'))) )
+                          ((rIn[i] == '\n') || ((i+1) < nStrLen && rIn[i+1] == '\n'))) )
                         bConvert = true;
                 }
 
-                // skip char if \r\n oder \n\r
-                if ( ((rIn[i+1] == '\r') || (rIn[i+1] == '\n')) &&
+                // skip char if \r\n or \n\r
+                if ( (i+1) < nStrLen && ((rIn[i+1] == '\r') || (rIn[i+1] == '\n')) &&
                      (rIn[i] != rIn[i+1]) )
                     ++i;
             }
@@ -2087,7 +2087,7 @@ namespace
                         aNewData.append('\n');
                 }
 
-                if ( ((rIn[i+1] == '\r') || (rIn[i+1] == '\n')) &&
+                if ( (i+1) < nStrLen && ((rIn[i+1] == '\r') || (rIn[i+1] == '\n')) &&
                      (rIn[i] != rIn[i+1]) )
                     ++i;
             }

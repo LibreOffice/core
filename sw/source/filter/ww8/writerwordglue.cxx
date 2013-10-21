@@ -827,9 +827,9 @@ namespace sw
                         if (!(IsPreviousAM(rParams, nI) && IsNextPM(rParams, nI)))
                         {
                             rParams = rParams.replaceAt(nI, 1, "\\/");
+                            nLen++;
                         }
                         nI++;
-                        nLen++;
                     }
 
                     // Deal with language differences in date format expression.

@@ -648,7 +648,7 @@ xub_StrLen SwTxtFrm::FindBrk( const OUString &rTxt,
                               const sal_Int32 nEnd ) const
 {
     sal_Int32 nFound = nStart;
-    const sal_Int32 nEndLine = std::min( nEnd, rTxt.getLength() );
+    const sal_Int32 nEndLine = std::min( nEnd, rTxt.getLength() - 1 );
 
     // Wir ueberlesen erst alle Blanks am Anfang der Zeile (vgl. Bug 2235).
     while( nFound <= nEndLine && ' ' == rTxt[nFound] )

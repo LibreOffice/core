@@ -3022,7 +3022,7 @@ sal_Int32 ScXMLImport::GetRangeType(const OUString sRangeType) const
     sal_Int16 i = 0;
     while (i <= sRangeType.getLength())
     {
-        if ((sRangeType[i] == ' ') || (i == sRangeType.getLength()))
+        if ((i == sRangeType.getLength()) || (sRangeType[i] == ' '))
         {
             OUString sTemp = sBuffer.makeStringAndClear();
             if (sTemp.compareToAscii(SC_REPEAT_COLUMN) == 0)
