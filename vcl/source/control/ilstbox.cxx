@@ -184,12 +184,10 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
 
         try
         {
-            // XXX even though XCollator::compareString returns a sal_Int32 the only
-            // defined values are {-1, 0, 1} which is compatible with StringCompare
-            StringCompare eComp = (StringCompare)rSorter.compare(rStr, pTemp->maStr);
+            sal_Int32 nComp = rSorter.compare(rStr, pTemp->maStr);
 
             // fast insert for sorted data
-            if ( eComp != COMPARE_LESS )
+            if ( nComp >= 0 )
             {
                 insPos = maEntries.size();
                 maEntries.push_back(pNewEntry);
@@ -199,8 +197,8 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
                 nLow  = mnMRUCount;
                 pTemp = (ImplEntryType*)GetEntry( (sal_uInt16)nLow );
 
-                eComp = (StringCompare)rSorter.compare(rStr, pTemp->maStr);
-                if ( eComp != COMPARE_GREATER )
+                nComp = rSorter.compare(rStr, pTemp->maStr);
+                if ( nComp <= 0 )
                 {
                     insPos = 0;
                     maEntries.insert(maEntries.begin(),pNewEntry);
@@ -214,13 +212,13 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
                         nMid = (nLow + nHigh) / 2;
                         pTemp = (ImplEntryType*)GetEntry( nMid );
 
-                        eComp = (StringCompare)rSorter.compare(rStr, pTemp->maStr);
+                        nComp = rSorter.compare(rStr, pTemp->maStr);
 
-                        if ( eComp == COMPARE_LESS )
+                        if ( nComp < 0 )
                             nHigh = nMid-1;
                         else
                         {
-                            if ( eComp == COMPARE_GREATER )
+                            if ( nComp > 0 )
                                 nLow = nMid + 1;
                             else
                                 break;
@@ -228,7 +226,7 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
                     }
                     while ( nLow <= nHigh );
 
-                    if ( eComp != COMPARE_LESS )
+                    if ( nComp >= 0 )
                         nMid++;
 
                     insPos = nMid;
