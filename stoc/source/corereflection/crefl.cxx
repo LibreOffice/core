@@ -19,6 +19,7 @@
 
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>
@@ -161,14 +162,7 @@ OUString IdlReflectionServiceImpl::getImplementationName()
 sal_Bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    const Sequence< OUString > & rSNL = getSupportedServiceNames();
-    const OUString * pArray = rSNL.getConstArray();
-    for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-    {
-        if (pArray[nPos] == rServiceName)
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
 //__________________________________________________________________________________________________
 Sequence< OUString > IdlReflectionServiceImpl::getSupportedServiceNames()

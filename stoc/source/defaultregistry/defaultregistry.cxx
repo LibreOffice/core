@@ -26,6 +26,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <registry/registry.hxx>
 
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -1213,20 +1214,12 @@ OUString SAL_CALL NestedRegistryImpl::getImplementationName(  )
     return stoc_bootstrap::defreg_getImplementationName();
 }
 
-//*************************************************************************
 sal_Bool SAL_CALL NestedRegistryImpl::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    Guard< Mutex > aGuard( m_mutex );
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//*************************************************************************
 Sequence<OUString> SAL_CALL NestedRegistryImpl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {

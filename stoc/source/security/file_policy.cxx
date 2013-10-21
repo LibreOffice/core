@@ -29,6 +29,7 @@
 #include <cppuhelper/access_control.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/security/XAccessController.hpp>
@@ -531,16 +532,7 @@ OUString FilePolicy::getImplementationName()
 sal_Bool FilePolicy::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pNames = aSNL.getConstArray();
-    for ( sal_Int32 nPos = aSNL.getLength(); --nPos; )
-    {
-        if (serviceName.equals( pNames[ nPos ] ))
-        {
-            return sal_True;
-        }
-    }
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 //__________________________________________________________________________________________________
 Sequence< OUString > FilePolicy::getSupportedServiceNames()

@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -172,7 +173,6 @@ Reference< XInterface > SAL_CALL FontIdentificator_createInstance( const Referen
     return static_cast< ::cppu::OWeakObject * >( new FontIdentificator );
 }
 
-
 // XServiceInfo
 OUString SAL_CALL FontIdentificator::getImplementationName() throw (RuntimeException)
 {
@@ -181,13 +181,7 @@ OUString SAL_CALL FontIdentificator::getImplementationName() throw (RuntimeExcep
 
 sal_Bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rServiceName ) throw (RuntimeException)
 {
-    Sequence< OUString > aSN( FontIdentificator_getSupportedServiceNames() );
-    for( sal_Int32 nService = 0; nService < aSN.getLength(); nService++ )
-    {
-        if( aSN[nService] == i_rServiceName )
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, i_rServiceName);
 }
 
 Sequence< OUString > SAL_CALL FontIdentificator::getSupportedServiceNames() throw (RuntimeException)

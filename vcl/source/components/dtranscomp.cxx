@@ -42,12 +42,11 @@
 #include "cppuhelper/compbase1.hxx"
 #include "cppuhelper/compbase2.hxx"
 #include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
-// -----------------------------------------------------------------------
 
 namespace vcl
 {
@@ -148,14 +147,7 @@ Sequence< OUString > GenericClipboard::getSupportedServiceNames() throw( Runtime
 
 sal_Bool GenericClipboard::supportsService( const OUString& ServiceName ) throw( RuntimeException )
 {
-    Sequence< OUString > aServices( getSupportedServiceNames() );
-    sal_Int32 nServices = aServices.getLength();
-    for( sal_Int32 i = 0; i < nServices; i++ )
-    {
-        if( aServices[i] == ServiceName )
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Reference< ::com::sun::star::datatransfer::XTransferable > GenericClipboard::getContents() throw( RuntimeException )

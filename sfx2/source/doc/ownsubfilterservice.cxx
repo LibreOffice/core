@@ -19,6 +19,7 @@
 
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <ownsubfilterservice.hxx>
 #include <sfx2/objsh.hxx>
@@ -121,30 +122,19 @@ void SAL_CALL OwnSubFilterService::initialize( const uno::Sequence< uno::Any >& 
         throw lang::IllegalArgumentException();
 }
 
-
 // XServiceInfo
-
-//-------------------------------------------------------------------------
 OUString SAL_CALL OwnSubFilterService::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL OwnSubFilterService::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq = impl_getStaticSupportedServiceNames();
-
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName == aSeq[nInd] )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OwnSubFilterService::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {

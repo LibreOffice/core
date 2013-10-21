@@ -33,6 +33,7 @@
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>
@@ -114,19 +115,12 @@ OUString SAL_CALL DllComponentLoader::getImplementationName(  )
     return stoc_bootstrap::loader_getImplementationName();
 }
 
-//*************************************************************************
 sal_Bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//*************************************************************************
 Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
     throw(::com::sun::star::uno::RuntimeException)
 {

@@ -25,6 +25,7 @@
  *************************************************************************/
 
 #include "cppuhelper/factory.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 #include "tdoc_documentcontentfactory.hxx"
 
@@ -64,23 +65,14 @@ OUString SAL_CALL DocumentContentFactory::getImplementationName()
     return getImplementationName_Static();
 }
 
-//=========================================================================
 // virtual
 sal_Bool SAL_CALL
 DocumentContentFactory::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for ( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-    {
-        if ( pArray[ i ] == ServiceName )
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//=========================================================================
 // virtual
 uno::Sequence< OUString > SAL_CALL
 DocumentContentFactory::getSupportedServiceNames()

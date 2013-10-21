@@ -449,14 +449,7 @@ OUString TestImpl::getImplementationName()
 sal_Bool TestImpl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
-    const Sequence< OUString > & rSNL = getSupportedServiceNames();
-    const OUString * pArray = rSNL.getConstArray();
-    for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-    {
-        if (pArray[nPos] == rServiceName)
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
 //__________________________________________________________________________________________________
 Sequence< OUString > TestImpl::getSupportedServiceNames()
