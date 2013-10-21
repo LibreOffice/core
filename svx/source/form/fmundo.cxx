@@ -53,7 +53,6 @@
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
-#include <comphelper/componentcontext.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -114,8 +113,12 @@ private:
 
         try
         {
-            ::comphelper::ComponentContext const aContext( ::comphelper::getProcessComponentContext() );
-            Reference< XScriptListener > const xScriptListener( aContext.createComponent( "ooo.vba.EventListener" ), UNO_QUERY_THROW );
+            css::uno::Reference<css::uno::XComponentContext> context(
+                comphelper::getProcessComponentContext());
+            Reference< XScriptListener > const xScriptListener(
+                context->getServiceManager()->createInstanceWithContext(
+                    "ooo.vba.EventListener", context),
+                UNO_QUERY_THROW);
             Reference< XPropertySet > const xListenerProps( xScriptListener, UNO_QUERY_THROW );
             // SfxObjectShellRef is good here since the model controls the lifetime of the shell
             SfxObjectShellRef const xObjectShell = m_rModel.GetObjectShell();

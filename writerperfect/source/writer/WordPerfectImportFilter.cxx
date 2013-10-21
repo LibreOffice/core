@@ -20,7 +20,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <xmloff/attrlist.hxx>
 #include <sfx2/passwd.hxx>
 #include <ucbhelper/content.hxx>
@@ -128,8 +127,10 @@ throw (RuntimeException)
     }
 
     // An XML import service: what we push sax messages to..
-    OUString sXMLImportService (  "com.sun.star.comp.Writer.XMLOasisImporter"  );
-    Reference < XDocumentHandler > xInternalHandler( comphelper::ComponentContext( mxContext ).createComponent( sXMLImportService ), UNO_QUERY );
+    Reference < XDocumentHandler > xInternalHandler(
+        mxContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.comp.Writer.XMLOasisImporter", mxContext),
+        css::uno::UNO_QUERY_THROW);
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
     Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);

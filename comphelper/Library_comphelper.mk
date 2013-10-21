@@ -76,7 +76,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/comphelper_module \
     comphelper/source/misc/comphelper_services \
     comphelper/source/misc/componentbase \
-    comphelper/source/misc/componentcontext \
     comphelper/source/misc/componentmodule \
     comphelper/source/misc/configuration \
     comphelper/source/misc/configurationhelper \

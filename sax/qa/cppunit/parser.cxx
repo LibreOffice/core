@@ -15,7 +15,6 @@
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 
 #include <test/bootstrapfixture.hxx>
-#include <comphelper/componentcontext.hxx>
 
 using namespace css;
 using namespace css::xml::sax;
@@ -45,8 +44,10 @@ private:
 void ParserTest::setUp()
 {
     test::BootstrapFixture::setUp();
-    mxParser.set( comphelper::ComponentContext(m_xContext).createComponent(
-                "com.sun.star.xml.sax.FastParser"), uno::UNO_QUERY );
+    mxParser.set(
+        m_xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.xml.sax.FastParser", m_xContext),
+        uno::UNO_QUERY );
     CPPUNIT_ASSERT_MESSAGE("No FastParser!", mxParser.is());
     mxParser->setTokenHandler(
         css::xml::sax::FastTokenHandler::create(m_xContext));

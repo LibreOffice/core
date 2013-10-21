@@ -26,7 +26,6 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/smplhint.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 
@@ -103,11 +102,11 @@ cssu::Reference<css::rendering::XCanvas> SAL_CALL SidebarPanel::getCanvas (void)
         aArg[3] = makeAny(sal_False);
         aArg[4] = makeAny(mpPanel->GetComponentInterface());
 
-        const ::comphelper::ComponentContext aComponentContext (::comphelper::getProcessServiceFactory());
+        css::uno::Reference<css::uno::XComponentContext> context(
+            comphelper::getProcessComponentContext());
         mxCanvas = Reference<rendering::XCanvas>(
-            aComponentContext.createComponentWithArguments(
-                "com.sun.star.rendering.Canvas.VCL",
-                aArg),
+            context->getServiceManager()->createInstanceWithArgumentsAndContext(
+                "com.sun.star.rendering.Canvas.VCL", aArg, context),
             UNO_QUERY);
     }
 
