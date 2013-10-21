@@ -39,10 +39,9 @@ namespace
     typedef ::std::pair< AccessibleEventNotifier::TClientId,
             AccessibleEventObject > ClientEvent;
 
-    typedef ::cppu::OInterfaceContainerHelper EventListeners;
-    typedef ::std::map< AccessibleEventNotifier::TClientId, EventListeners*,
+    typedef ::std::map< AccessibleEventNotifier::TClientId,
+                ::cppu::OInterfaceContainerHelper*,
                 ::std::less< AccessibleEventNotifier::TClientId > > ClientMap;
-
 
     struct lclMutex
         : public rtl::Static< ::osl::Mutex, lclMutex > {};
@@ -132,7 +131,8 @@ namespace comphelper
         TClientId nNewClientId = generateId( );
 
         // the event listeners for the new client
-        EventListeners* pNewListeners = new EventListeners( lclMutex::get() );
+        ::cppu::OInterfaceContainerHelper *const pNewListeners =
+            new ::cppu::OInterfaceContainerHelper( lclMutex::get() );
             // note that we're using our own mutex here, so the listener containers for all
             // our clients share this same mutex.
             // this is a reminiscense to the days where the notifier was asynchronous. Today this is
@@ -164,7 +164,7 @@ namespace comphelper
     void AccessibleEventNotifier::revokeClientNotifyDisposing( const TClientId _nClient,
             const Reference< XInterface >& _rxEventSource ) SAL_THROW( ( ) )
     {
-        EventListeners * pListeners(0);
+        ::cppu::OInterfaceContainerHelper* pListeners(0);
 
         {
             // rhbz#1001768 drop the mutex before calling disposeAndClear
