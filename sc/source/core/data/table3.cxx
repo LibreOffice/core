@@ -2330,7 +2330,7 @@ sal_uLong ScTable::GetCodeCount() const
 }
 
 sal_Int32 ScTable::GetMaxStringLen( SCCOL nCol, SCROW nRowStart,
-        SCROW nRowEnd, CharSet eCharSet ) const
+        SCROW nRowEnd, rtl_TextEncoding eCharSet ) const
 {
     if ( ValidCol(nCol) )
         return aCol[nCol].GetMaxStringLen( nRowStart, nRowEnd, eCharSet );

@@ -90,7 +90,7 @@ const double ImportExcel::fExcToTwips =
     ( double ) TWIPS_PER_CHAR / 256.0;
 
 
-ImportTyp::ImportTyp( ScDocument* pDoc, CharSet eQ )
+ImportTyp::ImportTyp( ScDocument* pDoc, rtl_TextEncoding eQ )
 {
     eQuellChar = eQ;
     pD = pDoc;

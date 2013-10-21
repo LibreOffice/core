@@ -451,7 +451,7 @@ public:
     void        CompileNameFormula( bool bCreateFormulaString );
     void        CompileColRowNameFormula();
 
-    sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const;
+    sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const;
     xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
                                        SCROW nRowStart, SCROW nRowEnd ) const;
 

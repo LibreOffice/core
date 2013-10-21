@@ -28,6 +28,7 @@
 #include <sal/macros.h>
 #include <tools/rcid.h>
 #include <tools/solar.h>
+#include <tools/string.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>

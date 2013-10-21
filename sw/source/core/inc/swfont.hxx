@@ -84,7 +84,7 @@ class SwSubFont : public SvxFont
 
     inline void SetColor( const Color& rColor );
     inline void SetFillColor( const Color& rColor );
-    inline void SetCharSet( const CharSet eCharSet );
+    inline void SetCharSet( const rtl_TextEncoding eCharSet );
     inline void SetPitch( const FontPitch ePitch );
     inline void SetAlign( const FontAlign eAlign );
     inline void SetUnderline( const FontUnderline eUnderline );
@@ -236,7 +236,7 @@ public:
     inline void SetWeight( const FontWeight eWeight, const sal_uInt8 nWhich );
     inline void SetItalic( const FontItalic eItalic, const sal_uInt8 nWhich );
     inline void SetLanguage( LanguageType eNewLang, const sal_uInt8 nWhich );
-    inline void SetCharSet( const CharSet eCharSet, const sal_uInt8 nWhich );
+    inline void SetCharSet( const rtl_TextEncoding eCharSet, const sal_uInt8 nWhich );
     inline void SetPitch( const FontPitch ePitch, const sal_uInt8 nWhich );
     inline void SetRelief( const FontRelief eNew );
 
@@ -513,13 +513,13 @@ inline void SwFont::SetStyleName( const OUString& rStyle, const sal_uInt8 nWhich
 }
 
 // gekapselte SV-Font-Methode
-inline void SwSubFont::SetCharSet( const CharSet eCharSet )
+inline void SwSubFont::SetCharSet( const rtl_TextEncoding eCharSet )
 {
     pMagic = 0;
     Font::SetCharSet( eCharSet );
 }
 
-inline void SwFont::SetCharSet( const CharSet eCharSet, const sal_uInt8 nWhich )
+inline void SwFont::SetCharSet( const rtl_TextEncoding eCharSet, const sal_uInt8 nWhich )
 {
     bFntChg = sal_True;
     aSub[nWhich].SetCharSet( eCharSet );

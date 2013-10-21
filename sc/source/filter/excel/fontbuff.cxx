@@ -121,7 +121,7 @@ void LotusFontBuffer::MakeFont( ENTRY* pEntry )
 {
     FontFamily      eFamily = FAMILY_DONTKNOW;
     FontPitch       ePitch = PITCH_DONTKNOW;
-    CharSet         eCharSet = RTL_TEXTENCODING_DONTKNOW;
+    rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
 
     switch( pEntry->nType )
     {

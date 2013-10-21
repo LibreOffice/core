@@ -404,10 +404,10 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
 }
 
 bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
-    CharSet *pCharSet, bool *pSwap, LineEnd *pLineEnd, bool bEncodedFilter)
+    rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd, bool bEncodedFilter)
 {
     bool bSwap = false;
-    CharSet eCharSet = RTL_TEXTENCODING_DONTKNOW;
+    rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
     bool bLE = true;
     /*See if it's a known unicode type*/
     if (rLen >= 2)

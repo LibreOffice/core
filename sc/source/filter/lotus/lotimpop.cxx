@@ -38,7 +38,7 @@
 #include "lotattr.hxx"
 #include "stringutil.hxx"
 
-LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, CharSet eQ )
+LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ )
     :
         pDoc( pDocP),
         pRangeNames( new LotusRangeList),
@@ -65,7 +65,7 @@ LOTUS_ROOT::~LOTUS_ROOT()
 static osl::Mutex aLotImpSemaphore;
 
 
-ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, CharSet eQ ) :
+ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding eQ ) :
     ImportTyp( pDoc, eQ ),
     pIn( &aStream ),
     aConv( *pIn, eQ, false )

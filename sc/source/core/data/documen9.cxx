@@ -553,7 +553,7 @@ void ScDocument::UpdateFontCharSet()
 
     bool bUpdateOld = ( nSrcVer < SC_FONTCHARSET );
 
-    CharSet eSysSet = osl_getThreadTextEncoding();
+    rtl_TextEncoding eSysSet = osl_getThreadTextEncoding();
     if ( eSrcSet != eSysSet || bUpdateOld )
     {
         sal_uInt32 nCount,i;

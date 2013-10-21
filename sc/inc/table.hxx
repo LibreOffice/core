@@ -824,7 +824,7 @@ public:
     bool        HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const;
 
     sal_Int32   GetMaxStringLen( SCCOL nCol,
-                                    SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const;
+                                    SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const;
     xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
                                        SCCOL nCol,
                                        SCROW nRowStart, SCROW nRowEnd ) const;

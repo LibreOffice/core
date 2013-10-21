@@ -44,7 +44,7 @@ private:
     bool        bQuotedFieldAsText;
     bool        bDetectSpecialNumber;
     sal_Unicode cTextSep;
-    CharSet     eCharSet;
+    rtl_TextEncoding eCharSet;
     LanguageType eLang;
     bool        bCharSetSystem;
     long        nStartRow;
@@ -68,7 +68,7 @@ public:
 
     void            InterpretColumnList( const OUString& rString );
 
-    CharSet             GetCharSet() const      { return eCharSet; }
+    rtl_TextEncoding    GetCharSet() const      { return eCharSet; }
     bool                GetCharSetSystem() const    { return bCharSetSystem; }
     const OUString&     GetFieldSeps() const    { return aFieldSeps; }
     bool                IsMergeSeps() const     { return bMergeFieldSeps; }
@@ -82,7 +82,7 @@ public:
     long                GetStartRow() const     { return nStartRow; }
     LanguageType        GetLanguage() const     { return eLang; }
 
-    void    SetCharSet( CharSet eNew )          { eCharSet = eNew; }
+    void    SetCharSet( rtl_TextEncoding eNew ) { eCharSet = eNew; }
     void    SetCharSetSystem( bool bSet )       { bCharSetSystem = bSet; }
     void    SetFixedLen( bool bSet )            { bFixedLen = bSet; }
     void    SetFieldSeps( const OUString& rStr )  { aFieldSeps = rStr; }

@@ -2146,7 +2146,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
             FontFamily eFamily;
             OUString aFontName;
             FontPitch ePitch;
-            CharSet eSrcCharSet;
+            rtl_TextEncoding eSrcCharSet;
             if( GetFontParams( i, eFamily, aFontName, ePitch, eSrcCharSet )
                 && aFontName=="Wingdings" )
             {

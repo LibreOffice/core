@@ -341,7 +341,7 @@ void LotusToSc::Reset( const ScAddress& rEingPos )
 }
 
 
-LotusToSc::LotusToSc( SvStream &rStream, CharSet e, sal_Bool b ) :
+LotusToSc::LotusToSc( SvStream &rStream, rtl_TextEncoding e, sal_Bool b ) :
     LotusConverterBase( rStream, 128 )
 {
     eSrcChar = e;

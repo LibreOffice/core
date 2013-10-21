@@ -143,10 +143,10 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     SC_DLLPRIVATE bool SaveCurrentChart( SfxMedium& rMedium );
 
-    SC_DLLPRIVATE sal_uLong         DBaseImport( const OUString& rFullFileName, CharSet eCharSet,
+    SC_DLLPRIVATE sal_uLong         DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
                                              ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc );
     SC_DLLPRIVATE sal_uLong DBaseExport(
-        const OUString& rFullFileName, CharSet eCharSet, bool& bHasMemo );
+        const OUString& rFullFileName, rtl_TextEncoding eCharSet, bool& bHasMemo );
 
     SC_DLLPRIVATE static bool       MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
     SC_DLLPRIVATE static bool       KillFile( const INetURLObject& rURL );

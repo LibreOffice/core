@@ -48,11 +48,11 @@ class ExcelToSc;
 class ImportTyp
 {
 protected:
-    CharSet             eQuellChar;     // Quell-Zeichensatz
+    rtl_TextEncoding    eQuellChar;     // Quell-Zeichensatz
     ScDocument*         pD;             // Dokument
 
 public:
-                        ImportTyp( ScDocument*, CharSet eSrc );
+                        ImportTyp( ScDocument*, rtl_TextEncoding eSrc );
     virtual             ~ImportTyp();
 
     virtual FltError    Read( void );

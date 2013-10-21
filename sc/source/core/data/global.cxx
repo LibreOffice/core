@@ -688,7 +688,7 @@ void ScGlobal::Clear()
 
 //------------------------------------------------------------------------
 
-CharSet ScGlobal::GetCharsetValue( const OUString& rCharSet )
+rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )
 {
     // new TextEncoding values
     if ( CharClass::isAsciiNumeric( rCharSet ) )
@@ -696,7 +696,7 @@ CharSet ScGlobal::GetCharsetValue( const OUString& rCharSet )
         sal_Int32 nVal = rCharSet.toInt32();
         if ( !nVal || nVal == RTL_TEXTENCODING_DONTKNOW )
             return osl_getThreadTextEncoding();
-        return (CharSet) nVal;
+        return (rtl_TextEncoding) nVal;
     }
     // old CharSet values for compatibility
     else if (rCharSet.equalsIgnoreAsciiCase("ANSI")     ) return RTL_TEXTENCODING_MS_1252;
@@ -713,7 +713,7 @@ CharSet ScGlobal::GetCharsetValue( const OUString& rCharSet )
 
 //------------------------------------------------------------------------
 
-OUString ScGlobal::GetCharsetString( CharSet eVal )
+OUString ScGlobal::GetCharsetString( rtl_TextEncoding eVal )
 {
     const sal_Char* pChar;
     switch ( eVal )

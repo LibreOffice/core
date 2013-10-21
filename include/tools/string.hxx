@@ -50,15 +50,6 @@ class UniString;
                                              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |\
                                              RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT)
 
-// CharSet
-
-#ifndef ENUM_CHARSET_DECLARED
-#define ENUM_CHARSET_DECLARED
-
-typedef rtl_TextEncoding CharSet;
-
-#endif
-
 // String-Types
 
 #ifdef STRING32

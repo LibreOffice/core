@@ -78,7 +78,7 @@ private:
     inline void         Skip( const sal_uInt16 nNumBytes );
     // -------------------------------------------------------------------
 public:
-                        ImportLotus( SvStream&, ScDocument*, CharSet eSrc );
+                        ImportLotus( SvStream&, ScDocument*, rtl_TextEncoding eSrc );
 
     virtual             ~ImportLotus();
 

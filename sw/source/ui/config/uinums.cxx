@@ -221,7 +221,7 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
 
 SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
 {
-    CharSet eEncoding = osl_getThreadTextEncoding();
+    rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
     maName = rStream.ReadUniOrByteString(eEncoding);
 
     char c;
@@ -260,7 +260,7 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 
 void SwNumRulesWithName::Store( SvStream &rStream )
 {
-    CharSet eEncoding = osl_getThreadTextEncoding();
+    rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
     rStream.WriteUniOrByteString(maName, eEncoding);
 
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
@@ -317,7 +317,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
                                                         sal_uInt16 nVersion )
     : nCharPoolId( USHRT_MAX )
 {
-    CharSet eEncoding = osl_getThreadTextEncoding();
+    rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
     {
         sal_uInt16 nUS;
         short nShort;
@@ -379,7 +379,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         {
             Font aFont( static_cast<FontFamily>(nFamily), Size( nWidth, nHeight ) );
             aFont.SetName( aName );
-            aFont.SetCharSet( (CharSet)nCharSet );
+            aFont.SetCharSet( (rtl_TextEncoding)nCharSet );
             aFont.SetPitch( (FontPitch)nPitch );
 
             aFmt.SetBulletFont( &aFont );
@@ -452,7 +452,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::~_SwNumFmtGlobal()
 
 void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
 {
-    CharSet eEncoding = osl_getThreadTextEncoding();
+    rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
     {
         OUString aName;
         sal_uInt16 nFamily = FAMILY_DONTKNOW, nCharSet = 0, nPitch = 0;

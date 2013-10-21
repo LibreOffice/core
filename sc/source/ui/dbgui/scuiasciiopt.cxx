@@ -676,7 +676,7 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
     if( (pCharSetBox == pLbCharSet) && (pCharSetBox->GetSelectEntryCount() == 1) )
     {
         SetPointer( Pointer( POINTER_WAIT ) );
-        CharSet eOldCharSet = meCharSet;
+        rtl_TextEncoding eOldCharSet = meCharSet;
         SetSelectedCharSet();
         // switching char-set invalidates 8bit -> String conversions
         if (eOldCharSet != meCharSet)

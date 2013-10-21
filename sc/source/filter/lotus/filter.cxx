@@ -54,8 +54,8 @@ WKTYP               eTyp;
 extern sal_Bool         bEOF;           // zeigt Ende der Datei
 sal_Bool                bEOF;
 
-extern CharSet      eCharVon;
-CharSet             eCharVon;
+extern rtl_TextEncoding eCharVon;
+rtl_TextEncoding        eCharVon;
 
 extern ScDocument*  pDoc;           // Aufhaenger zum Dokumentzugriff
 ScDocument*         pDoc;
@@ -200,7 +200,7 @@ WKTYP ScanVersion( SvStream& aStream )
     return eWK_UNKNOWN;
 }
 
-FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, CharSet eSrc )
+FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {
     aStream.Seek( 0UL );
 

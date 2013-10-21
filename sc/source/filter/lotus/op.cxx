@@ -57,8 +57,8 @@
 extern WKTYP eTyp;           // -> filter.cxx, aktueller Dateityp
 extern sal_Bool bEOF;           // -> filter.cxx, zeigt Dateiende an
 extern sal_uInt8 nDefaultFormat; // -> tool.cxx, Default-Zellenformat
-extern ScDocument* pDoc;           // -> filter.cxx, Aufhaenger zum Dokumentzugriff
-extern CharSet eCharVon;       // -> filter.cxx, character set specified
+extern ScDocument* pDoc;            // -> filter.cxx, Aufhaenger zum Dokumentzugriff
+extern rtl_TextEncoding eCharVon;   // -> filter.cxx, character set specified
 
 static sal_uInt16 nDefWidth = ( sal_uInt16 ) ( TWIPS_PER_CHAR * 10 );
 

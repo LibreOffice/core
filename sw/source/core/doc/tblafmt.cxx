@@ -473,7 +473,7 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
     {
         sal_uInt16 eSys, eLge;
         // --- from 680/dr25 on: store strings as UTF-8
-        CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
+        rtl_TextEncoding eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         sNumFmtString = rStream.ReadUniOrByteString( eCharSet );
         rStream >> eSys >> eLge;
         eSysLanguage = (LanguageType) eSys;
@@ -908,7 +908,7 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
     {
         sal_Bool b;
         // --- from 680/dr25 on: store strings as UTF-8
-        CharSet eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
+        rtl_TextEncoding eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         m_aName = rStream.ReadUniOrByteString( eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
         {
@@ -1154,7 +1154,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
                     OSL_ENSURE( !this, "The Header contains more or newer Data" );
                     rStream.Seek( nPos + nCnt );
                 }
-                rStream.SetStreamCharSet( (CharSet)nChrSet );
+                rStream.SetStreamCharSet( (rtl_TextEncoding)nChrSet );
                 rStream.SetVersion( nFileVers );
             }
 

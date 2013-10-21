@@ -312,8 +312,8 @@ public:
     {
         return pOutlineNumrule;
     }
-    CharSet GetCharSet() const;
-    CharSet GetCJKCharSet() const;
+    rtl_TextEncoding GetCharSet() const;
+    rtl_TextEncoding GetCJKCharSet() const;
 };
 
 //-----------------------------------------
@@ -1808,8 +1808,8 @@ public:     // eigentlich private, geht aber leider nur public
     const OUString& GetBaseURL() const { return sBaseURL; }
     // Laden eines kompletten DocFiles
     sal_uLong LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
-    CharSet GetCurrentCharSet();
-    CharSet GetCurrentCJKCharSet();
+    rtl_TextEncoding GetCurrentCharSet();
+    rtl_TextEncoding GetCurrentCJKCharSet();
 
     void PostProcessAttrs();
 };

@@ -94,7 +94,7 @@ public:
     sal_Unicode nFieldSepCode;
     sal_Unicode nTextSepCode;
     OUString    aStrFont;
-    CharSet     eCharSet;
+    rtl_TextEncoding eCharSet;
     sal_Bool    bFixedWidth;
     sal_Bool    bSaveAsShown;
     sal_Bool    bQuoteAllText;

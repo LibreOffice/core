@@ -2395,7 +2395,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     return bTableRowEnd;
 }
 
-CharSet SwWW8ImplReader::GetCurrentCharSet()
+rtl_TextEncoding SwWW8ImplReader::GetCurrentCharSet()
 {
     /*
     #i2015
@@ -2403,7 +2403,7 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
     character run that has set the charset, if not then fallback to the
     current underlying paragraph style.
     */
-    CharSet eSrcCharSet = eHardCharSet;
+    rtl_TextEncoding eSrcCharSet = eHardCharSet;
     if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
     {
         if (!maFontSrcCharSets.empty())
@@ -2434,7 +2434,7 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
 }
 
 //Takashi Ono for CJK
-CharSet SwWW8ImplReader::GetCurrentCJKCharSet()
+rtl_TextEncoding SwWW8ImplReader::GetCurrentCJKCharSet()
 {
     /*
     #i2015
@@ -2442,7 +2442,7 @@ CharSet SwWW8ImplReader::GetCurrentCJKCharSet()
     character run that has set the charset, if not then fallback to the
     current underlying paragraph style.
     */
-    CharSet eSrcCharSet = eHardCharSet;
+    rtl_TextEncoding eSrcCharSet = eHardCharSet;
     if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
     {
         if (!maFontSrcCJKCharSets.empty())
@@ -2652,9 +2652,9 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     else
         nStrLen = STRING_MAXLEN-1;
 
-    const CharSet eSrcCharSet = bVer67 ? GetCurrentCharSet() :
+    const rtl_TextEncoding eSrcCharSet = bVer67 ? GetCurrentCharSet() :
         RTL_TEXTENCODING_MS_1252;
-    const CharSet eSrcCJKCharSet = bVer67 ? GetCurrentCJKCharSet() :
+    const rtl_TextEncoding eSrcCJKCharSet = bVer67 ? GetCurrentCJKCharSet() :
         RTL_TEXTENCODING_MS_1252;
 
     // allocate unicode string data

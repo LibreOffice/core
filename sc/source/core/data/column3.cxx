@@ -2475,7 +2475,7 @@ class MaxStringLenHandler
     sal_Int32 mnMaxLen;
     const ScColumn& mrColumn;
     SvNumberFormatter* mpFormatter;
-    CharSet meCharSet;
+    rtl_TextEncoding meCharSet;
     bool mbOctetEncoding;
 
     void processCell(size_t nRow, ScRefCellValue& rCell)
@@ -2507,7 +2507,7 @@ class MaxStringLenHandler
     }
 
 public:
-    MaxStringLenHandler(const ScColumn& rColumn, CharSet eCharSet) :
+    MaxStringLenHandler(const ScColumn& rColumn, rtl_TextEncoding eCharSet) :
         mnMaxLen(0),
         mrColumn(rColumn),
         mpFormatter(rColumn.GetDoc().GetFormatTable()),
@@ -2545,7 +2545,7 @@ public:
 
 }
 
-sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const
+sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, rtl_TextEncoding eCharSet ) const
 {
     MaxStringLenHandler aFunc(*this, eCharSet);
     sc::ParseAllNonEmpty(maCells.begin(), maCells, nRowStart, nRowEnd, aFunc);

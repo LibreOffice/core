@@ -291,7 +291,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
 
 #endif // !DISABLE_DBCONNECTIVITY
 
-sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, CharSet eCharSet,
+sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
                                ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc )
 {
 #ifdef DISABLE_DBCONNECTIVITY
@@ -486,7 +486,7 @@ inline bool IsAsciiAlpha( sal_Unicode c )
 void lcl_GetColumnTypes(
     ScDocShell& rDocShell, const ScRange& rDataRange, bool bHasFieldNames,
     OUString* pColNames, sal_Int32* pColTypes, sal_Int32* pColLengths,
-    sal_Int32* pColScales, bool& bHasMemo, CharSet eCharSet )
+    sal_Int32* pColScales, bool& bHasMemo, rtl_TextEncoding eCharSet )
 {
     //  updating of column titles didn't work in 5.2 and isn't always wanted
     //  (saving normally shouldn't modify the document)
@@ -770,7 +770,7 @@ inline void lcl_getLongVarCharString(
 
 #endif // !DISABLE_DBCONNECTIVITY
 
-sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharSet, bool& bHasMemo )
+sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding eCharSet, bool& bHasMemo )
 {
 #ifdef DISABLE_DBCONNECTIVITY
     (void) rFullFileName;

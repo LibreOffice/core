@@ -76,7 +76,7 @@ class ScImportAsciiDlg : public ModalDialog
     OUString                    maFieldSeparators;  // selected field separators
     sal_Unicode                 mcTextSep;
 
-    CharSet                     meCharSet;          /// Selected char set.
+    rtl_TextEncoding            meCharSet;          /// Selected char set.
     bool                        mbCharSetSystem;    /// Is System char set selected?
     ScImportAsciiCall           meCall;             /// How the dialog is called (see asciiopt.hxx)
 

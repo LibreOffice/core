@@ -3359,7 +3359,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
     }
 }
 bool SwWW8ImplReader::GetFontParams( sal_uInt16 nFCode, FontFamily& reFamily,
-    OUString& rName, FontPitch& rePitch, CharSet& reCharSet )
+    OUString& rName, FontPitch& rePitch, rtl_TextEncoding& reCharSet )
 {
     // Die Defines, aus denen diese Tabellen erzeugt werden, stehen in windows.h
     static const FontPitch ePitchA[] =
@@ -3434,7 +3434,7 @@ bool SwWW8ImplReader::SetNewFontAttr(sal_uInt16 nFCode, bool bSetEnums,
     FontFamily eFamily;
     OUString aName;
     FontPitch ePitch;
-    CharSet eSrcCharSet;
+    rtl_TextEncoding eSrcCharSet;
 
     if( !GetFontParams( nFCode, eFamily, aName, ePitch, eSrcCharSet ) )
     {
@@ -3473,7 +3473,7 @@ bool SwWW8ImplReader::SetNewFontAttr(sal_uInt16 nFCode, bool bSetEnums,
         return false;
     }
 
-    CharSet eDstCharSet = eSrcCharSet;
+    rtl_TextEncoding eDstCharSet = eSrcCharSet;
 
     SvxFontItem aFont( eFamily, aName, aEmptyOUStr, ePitch, eDstCharSet, nWhich);
 

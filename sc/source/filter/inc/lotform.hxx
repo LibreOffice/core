@@ -62,7 +62,7 @@ enum FUNC_TYPE
 class LotusToSc : public LotusConverterBase
 {
 private:
-    CharSet             eSrcChar;
+    rtl_TextEncoding    eSrcChar;
     TokenId             nAddToken;  // ')+1.0'
     TokenId             nSubToken;  // ~
     TokenId             n0Token;    // '0.0';
@@ -88,7 +88,7 @@ private:
     void                NegToken( TokenId& rParam );
                         // ACHTUNG: wie ~, nur wird '-(<rParam>)' gebildet
 public:
-                        LotusToSc( SvStream& aStr, CharSet eSrc, sal_Bool b );
+                        LotusToSc( SvStream& aStr, rtl_TextEncoding eSrc, sal_Bool b );
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula );
 

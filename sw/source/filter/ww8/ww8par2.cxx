@@ -598,7 +598,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     const sal_uInt8* pTxt, bool bOutline)
 {
     bool bInsert = false;                       // Default
-    CharSet eCharSet = eStructCharSet;
+    rtl_TextEncoding eCharSet = eStructCharSet;
 
     const WW8_FFN* pF = pFonts->GetFont(SVBT16ToShort(rAV.ftc)); // FontInfo
     bool bListSymbol = pF && ( pF->chs == 2 );      // Symbol/WingDings/...
@@ -4472,14 +4472,14 @@ void WW8RStyle::Import()
     pIo->pAktColl = 0;
 }
 
-CharSet SwWW8StyInf::GetCharSet() const
+rtl_TextEncoding SwWW8StyInf::GetCharSet() const
 {
     if ((pFmt) && (pFmt->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
         return eRTLFontSrcCharSet;
     return eLTRFontSrcCharSet;
 }
 
-CharSet SwWW8StyInf::GetCJKCharSet() const
+rtl_TextEncoding SwWW8StyInf::GetCJKCharSet() const
 {
     if ((pFmt) && (pFmt->GetFrmDir().GetValue() == FRMDIR_HORI_RIGHT_TOP))
         return eRTLFontSrcCharSet;

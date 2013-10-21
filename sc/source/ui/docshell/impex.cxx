@@ -2212,7 +2212,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) RETURN_ERROR
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) RETURN_ERROR
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress&,
-                 const CharSet, sal_uInt32 ) RETURN_ERROR
+                 const rtl_TextEncoding, sal_uInt32 ) RETURN_ERROR
     virtual FltError ScImportRTF( SvStream&, const OUString&, ScDocument*, ScRange& ) RETURN_ERROR
     virtual FltError ScImportHTML( SvStream&, const OUString&, ScDocument*, ScRange&, double, bool, SvNumberFormatter*, bool ) RETURN_ERROR
 
@@ -2221,9 +2221,9 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual OUString       GetHTMLRangeNameList( ScDocument*, const OUString& ) { return OUString(); }
 
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, rtl_TextEncoding ) RETURN_ERROR
-    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress&, const CharSet, sal_uInt32 ) RETURN_ERROR
-    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const CharSet, sal_uInt32 ) RETURN_ERROR
-    virtual FltError ScExportHTML( SvStream&, const OUString&, ScDocument*, const ScRange&, const CharSet, bool,
+    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress&, const rtl_TextEncoding, sal_uInt32 ) RETURN_ERROR
+    virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding, sal_uInt32 ) RETURN_ERROR
+    virtual FltError ScExportHTML( SvStream&, const OUString&, ScDocument*, const ScRange&, const rtl_TextEncoding, bool,
                   const OUString&, OUString& ) RETURN_ERROR
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding ) RETURN_ERROR
 

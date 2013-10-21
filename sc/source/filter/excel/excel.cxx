@@ -144,7 +144,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
 
 
 static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
-        SvStream* pMedStrm, sal_Bool bBiff8, CharSet eNach )
+        SvStream* pMedStrm, sal_Bool bBiff8, rtl_TextEncoding eNach )
 {
     // try to open an OLE storage
     SotStorageRef xRootStrg = new SotStorage( pMedStrm, false );
@@ -198,7 +198,7 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
 }
 
 FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
-    ExportFormatExcel eFormat, CharSet eNach )
+    ExportFormatExcel eFormat, rtl_TextEncoding eNach )
 {
     if( eFormat != ExpBiff5 && eFormat != ExpBiff8 )
         return eERR_NI;

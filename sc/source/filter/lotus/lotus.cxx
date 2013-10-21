@@ -29,10 +29,10 @@
 
 //------------------------------------------------------------------------
 
-extern FltError ScImportLotus123old( SvStream&, ScDocument*, CharSet eSrc );
+extern FltError ScImportLotus123old( SvStream&, ScDocument*, rtl_TextEncoding eSrc );
         // alter Krempel in filter.cxx!
 
-FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, CharSet eSrc )
+FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {
         ScFilterOptions aFilterOpt;
     sal_Bool bWithWK3 = aFilterOpt.GetWK3Flag();

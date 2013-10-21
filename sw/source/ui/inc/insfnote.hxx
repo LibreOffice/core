@@ -36,7 +36,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
 
     // everything for the character(s)
     OUString        m_aFontName;
-    CharSet         eCharSet;
+    rtl_TextEncoding eCharSet;
     sal_Bool        bExtCharAvailable;
     sal_Bool        bEdit;
 
@@ -68,7 +68,7 @@ public:
     SwInsFootNoteDlg(Window * pParent, SwWrtShell &rSh, sal_Bool bEd = sal_False);
     ~SwInsFootNoteDlg();
 
-    CharSet         GetCharSet() { return eCharSet; }
+    rtl_TextEncoding GetCharSet() { return eCharSet; }
     sal_Bool        IsExtCharAvailable() { return bExtCharAvailable; }
     OUString        GetFontName() { return m_aFontName; }
     sal_Bool        IsEndNote() { return m_pEndNoteBtn->IsChecked(); }

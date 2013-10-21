@@ -1771,12 +1771,12 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
 {
     sal_Unicode cDelim    = rAsciiOpt.nFieldSepCode;
     sal_Unicode cStrDelim = rAsciiOpt.nTextSepCode;
-    CharSet eCharSet      = rAsciiOpt.eCharSet;
+    rtl_TextEncoding eCharSet      = rAsciiOpt.eCharSet;
     bool bFixedWidth      = rAsciiOpt.bFixedWidth;
     bool bSaveAsShown     = rAsciiOpt.bSaveAsShown;
     bool bShowFormulas    = rAsciiOpt.bSaveFormulas;
 
-    CharSet eOldCharSet = rStream.GetStreamCharSet();
+    rtl_TextEncoding eOldCharSet = rStream.GetStreamCharSet();
     rStream.SetStreamCharSet( eCharSet );
     sal_uInt16 nOldNumberFormatInt = rStream.GetNumberFormatInt();
     OString aStrDelimEncoded;    // only used if not Unicode
