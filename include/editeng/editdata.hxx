@@ -21,7 +21,8 @@
 #ifndef _MyEDITDATA_HXX
 #define _MyEDITDATA_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/solar.h>
 #include "editeng/editengdllapi.h"
 
 class SfxItemSet;

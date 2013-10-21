@@ -27,7 +27,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
-#include <tools/string.hxx>
 #include <editeng/swafopt.hxx>
 #include "editeng/editengdllapi.h"
 

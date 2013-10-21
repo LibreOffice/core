@@ -34,7 +34,6 @@
 #include "formula/grammar.hxx"
 #include "formula/token.hxx"
 #include "formula/ExternalReferenceHelper.hxx"
-#include <tools/string.hxx>
 
 #define FORMULA_MAXJUMPCOUNT    32  /* maximum number of jumps (ocChose) */
 #define FORMULA_MAXTOKENS     8192  /* maximum number of tokens in formula */

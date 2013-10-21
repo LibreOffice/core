@@ -260,7 +260,7 @@ sal_uLong SwASCIIParser::ReadChars()
     {
         sal_uLong nLen, nOrig;
         nOrig = nLen = rInput.Read(pArr, ASC_BUFFLEN);
-        CharSet eCharSet;
+        rtl_TextEncoding eCharSet;
         bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet, &bSwapUnicode);
         OSL_ENSURE(bRet, "Autodetect of text import without nag dialog must "
             "have failed");
@@ -276,7 +276,7 @@ sal_uLong SwASCIIParser::ReadChars()
 
     rtl_TextToUnicodeConverter hConverter=0;
     rtl_TextToUnicodeContext hContext=0;
-    CharSet currentCharSet = pUseMe->GetCharSet();
+    rtl_TextEncoding currentCharSet = pUseMe->GetCharSet();
     if (RTL_TEXTENCODING_UCS2 != currentCharSet)
     {
         if( currentCharSet == RTL_TEXTENCODING_DONTKNOW )

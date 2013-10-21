@@ -21,7 +21,6 @@
 #define SC_USERLIST_HXX
 
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include "scdllapi.h"
 
 #include <boost/ptr_container/ptr_vector.hpp>

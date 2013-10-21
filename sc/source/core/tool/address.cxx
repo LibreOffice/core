@@ -32,6 +32,7 @@
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
 #include <comphelper/string.hxx>
 #include <sfx2/objsh.hxx>
+#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;

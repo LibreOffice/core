@@ -529,7 +529,7 @@ class SwFltShell
 //
     OUString sBaseURL;
     sal_uInt16 nPageDescOffset; // fuers update der pagedescs
-    CharSet eSrcCharSet; // charset der quelle
+    rtl_TextEncoding eSrcCharSet; // charset der quelle
     friend class SwFltControlStack;
     sal_Bool bNewDoc;
     sal_Bool bStdPD;
@@ -541,7 +541,7 @@ public:
 
     SwDoc& GetDoc()                 { return *aStack.pDoc; }
 
-    CharSet SetCharSet(CharSet eNew)    { CharSet eOld = eSrcCharSet;
+    rtl_TextEncoding SetCharSet(rtl_TextEncoding eNew)    { rtl_TextEncoding eOld = eSrcCharSet;
                                           eSrcCharSet = eNew;
                                           return eOld;
                                         }

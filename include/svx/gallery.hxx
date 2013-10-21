@@ -21,7 +21,6 @@
 #define _GALLERY_HXX_
 
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <vector>
 #include "svx/svxdllapi.h"

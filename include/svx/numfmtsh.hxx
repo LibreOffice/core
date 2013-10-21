@@ -19,7 +19,6 @@
 #ifndef _SVX_NUMFMTSH_HXX
 #define _SVX_NUMFMTSH_HXX
 
-#include <tools/string.hxx>
 #include <i18nlangtag/lang.h>
 
 #include "svx/svxdllapi.h"

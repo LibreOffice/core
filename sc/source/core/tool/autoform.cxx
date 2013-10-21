@@ -362,13 +362,13 @@ sal_Bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVe
     if( 0 == rVersions.nNumFmtVersion )
     {
         // --- from 680/dr25 on: store strings as UTF-8
-        CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
+        rtl_TextEncoding eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         aNumFormat.Load( rStream, eCharSet );
     }
 
     //  adjust charset in font
-    CharSet eSysSet = osl_getThreadTextEncoding();
-    CharSet eSrcSet = rStream.GetStreamCharSet();
+    rtl_TextEncoding eSysSet = osl_getThreadTextEncoding();
+    rtl_TextEncoding eSrcSet = rStream.GetStreamCharSet();
     if( eSrcSet != eSysSet && aFont.GetCharSet() == eSrcSet )
         aFont.SetCharSet(eSysSet);
 

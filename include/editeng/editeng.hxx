@@ -31,6 +31,7 @@
 #include <i18nlangtag/lang.h>
 #include "editeng/editengdllapi.h"
 
+#include <tools/lineend.hxx>
 #include <tools/rtti.hxx>   // due to typedef TypeId
 
 #include <editeng/eedata.hxx>
