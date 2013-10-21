@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cstring>
+
 #include <sal/types.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
@@ -195,7 +199,8 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     TTGlobalFontInfo aTTInfo;
     ::GetTTGlobalFontInfo( pSftFont, &aTTInfo );
     rInfo.m_nFontType   = FontSubsetInfo::SFNT_TTF;
-    rInfo.m_aPSName     = String( aTTInfo.psname, RTL_TEXTENCODING_UTF8 );
+    rInfo.m_aPSName     = OUString(
+        aTTInfo.psname, std::strlen(aTTInfo.psname), RTL_TEXTENCODING_UTF8 );
     rInfo.m_aFontBBox   = Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
                                     Point( aTTInfo.xMax, aTTInfo.yMax ) );
     rInfo.m_nCapHeight  = aTTInfo.yMax; // Well ...
