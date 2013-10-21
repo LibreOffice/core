@@ -26,7 +26,6 @@
 #include <sfx2/msg.hxx>
 #include <tools/resid.hxx>
 
-struct SfxFormalArgument;
 struct SfxInterface_Impl;
 class  SfxConfigItem;
 class  SfxModule;
