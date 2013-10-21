@@ -21,7 +21,8 @@ $(eval $(call gb_Module_Module,sw))
 
 $(eval $(call gb_Module_add_targets,sw,\
     AllLangResTarget_sw \
-    Executable_tiledrendering \
+    $(if $(filter DESKTOP,$(BUILD_TYPE)), \
+        Executable_tiledrendering) \
     Library_msword \
     Library_sw \
     Library_swd \
