@@ -83,7 +83,7 @@ protected:
 
     virtual void            Command( const CommandEvent& rCEvt );
 
-    virtual StringCompare   ColCompare(SvTreeListEntry*,SvTreeListEntry*);
+    virtual sal_Int32       ColCompare(SvTreeListEntry*,SvTreeListEntry*);
 public:
 
     SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);

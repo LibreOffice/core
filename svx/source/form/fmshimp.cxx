@@ -425,7 +425,7 @@ namespace
                     const OUString* pMethodsNames = aMethodsNames.getConstArray();
                     for (k=0; k<aMethodsNames.getLength(); ++k, ++pMethodsNames)
                     {
-                        if ((*pMethodsNames).compareTo(pCurrent->EventMethod) != COMPARE_EQUAL)
+                        if ((*pMethodsNames) != pCurrent->EventMethod)
                             // the current ScriptEventDescriptor doesn't match the current listeners current method
                             continue;
 

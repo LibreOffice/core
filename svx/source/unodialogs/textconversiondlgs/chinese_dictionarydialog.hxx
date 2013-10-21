@@ -99,7 +99,7 @@ private:
     OUString makeTabString( const DictionaryEntry& rEntry ) const;
 
     DECL_LINK( CompareHdl, SvSortData* );
-    StringCompare ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry* pRight );
+    sal_Int32 ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry* pRight );
     SvLBoxItem* getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16 nColumn ) const;
 
 public:

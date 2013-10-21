@@ -344,7 +344,7 @@ void ShutdownIcon::FromTemplate()
         Reference < ::com::sun::star::frame::XDispatch > xDisp;
         if ( xProv.is() )
         {
-            if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
+            if (aTargetURL.Protocol == "slot:")
                 xDisp = xProv->queryDispatch( aTargetURL, OUString(), 0 );
             else
                 xDisp = xProv->queryDispatch( aTargetURL, OUString("_blank"), 0 );

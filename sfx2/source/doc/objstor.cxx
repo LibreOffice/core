@@ -2183,7 +2183,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
     for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
     {
         const beans::PropertyValue& rFilterProp = aProps[nFilterProp];
-        if ( rFilterProp.Name.compareToAscii("FilterService") == COMPARE_EQUAL )
+        if (rFilterProp.Name == "FilterService")
         {
             rFilterProp.Value >>= aFilterImplName;
             break;
@@ -2312,7 +2312,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
         {
             const beans::PropertyValue& rFilterProp = aProps[nFilterProp];
-            if ( rFilterProp.Name.compareToAscii("FilterService") == COMPARE_EQUAL )
+            if (rFilterProp.Name == "FilterService")
             {
                 rFilterProp.Value >>= aFilterImplName;
                 break;
@@ -3313,7 +3313,7 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
                 // TODO/LATER: there should be a way to detect whether an object with such a MediaType can exist
                 //             probably it should be placed in the MimeType-ClassID table or in standalone table
                 if ( !aMediaType.isEmpty()
-                  && aMediaType.compareToAscii( "application/vnd.sun.star.oleobject" ) != COMPARE_EQUAL )
+                  && aMediaType != "application/vnd.sun.star.oleobject" )
                 {
                     ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
                     aDataFlavor.MimeType = aMediaType;
@@ -3455,7 +3455,7 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
                 // TODO/LATER: there should be a way to detect whether an object with such a MediaType can exist
                 //             probably it should be placed in the MimeType-ClassID table or in standalone table
                 if ( !aMediaType.isEmpty()
-                  && aMediaType.compareToAscii( "application/vnd.sun.star.oleobject" ) != COMPARE_EQUAL )
+                  && aMediaType != "application/vnd.sun.star.oleobject" )
                 {
                     ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
                     aDataFlavor.MimeType = aMediaType;

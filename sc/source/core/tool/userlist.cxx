@@ -143,7 +143,7 @@ OUString ScUserListData::GetSubStr(sal_uInt16 nIndex) const
         return OUString();
 }
 
-StringCompare ScUserListData::Compare(const OUString& rSubStr1, const OUString& rSubStr2) const
+sal_Int32 ScUserListData::Compare(const OUString& rSubStr1, const OUString& rSubStr2) const
 {
     sal_uInt16 nIndex1, nIndex2;
     bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
@@ -153,22 +153,22 @@ StringCompare ScUserListData::Compare(const OUString& rSubStr1, const OUString& 
         if (bFound2)
         {
             if (nIndex1 < nIndex2)
-                return COMPARE_LESS;
+                return -1;
             else if (nIndex1 > nIndex2)
-                return COMPARE_GREATER;
+                return 1;
             else
-                return COMPARE_EQUAL;
+                return 0;
         }
         else
-            return COMPARE_LESS;
+            return -1;
     }
     else if (bFound2)
-        return COMPARE_GREATER;
+        return 1;
     else
-        return (StringCompare) ScGlobal::GetCaseTransliteration()->compareString( rSubStr1, rSubStr2 );
+        return ScGlobal::GetCaseTransliteration()->compareString( rSubStr1, rSubStr2 );
 }
 
-StringCompare ScUserListData::ICompare(const OUString& rSubStr1, const OUString& rSubStr2) const
+sal_Int32 ScUserListData::ICompare(const OUString& rSubStr1, const OUString& rSubStr2) const
 {
     sal_uInt16 nIndex1, nIndex2;
     bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
@@ -178,19 +178,19 @@ StringCompare ScUserListData::ICompare(const OUString& rSubStr1, const OUString&
         if (bFound2)
         {
             if (nIndex1 < nIndex2)
-                return COMPARE_LESS;
+                return -1;
             else if (nIndex1 > nIndex2)
-                return COMPARE_GREATER;
+                return 1;
             else
-                return COMPARE_EQUAL;
+                return 0;
         }
         else
-            return COMPARE_LESS;
+            return -1;
     }
     else if (bFound2)
-        return COMPARE_GREATER;
+        return 1;
     else
-        return (StringCompare) ScGlobal::GetpTransliteration()->compareString( rSubStr1, rSubStr2 );
+        return ScGlobal::GetpTransliteration()->compareString( rSubStr1, rSubStr2 );
 }
 
 ScUserList::ScUserList()

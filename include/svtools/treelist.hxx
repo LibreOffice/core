@@ -26,7 +26,6 @@
 
 #include <tools/solar.h>
 #include <tools/link.hxx>
-#include <tools/string.hxx>
 #include <tools/debug.hxx>
 
 #include <limits.h>
@@ -223,7 +222,7 @@ public:
 
     void                SetSortMode( SvSortMode eMode ) { eSortMode = eMode; }
     SvSortMode          GetSortMode() const { return eSortMode; }
-    StringCompare Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const;
+    sal_Int32           Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const;
     void                SetCompareHdl( const Link& rLink ) { aCompareLink = rLink; }
     const Link&         GetCompareHdl() const { return aCompareLink; }
     void                Resort();

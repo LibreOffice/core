@@ -236,7 +236,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
             for ( sal_Int32 i = 0; i < nProps; ++i )
             {
                 const ::com::sun::star::beans::PropertyValue& rProp = aTypeProps[i];
-                if ( rProp.Name.compareToAscii("Extensions") == COMPARE_EQUAL )
+                if (rProp.Name == "Extensions")
                 {
                     ::com::sun::star::uno::Sequence < OUString > aExtensions;
                     if ( ( rProp.Value >>= aExtensions ) && aExtensions.getLength() > 0 )

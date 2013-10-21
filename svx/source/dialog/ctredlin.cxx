@@ -148,16 +148,16 @@ SvxRedlinTable::~SvxRedlinTable()
     delete pCommentSearcher;
 }
 
-StringCompare SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRight)
+sal_Int32 SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRight)
 {
-    StringCompare eCompare=COMPARE_EQUAL;
+    sal_Int32 nCompare = 0;
 
     if(aColCompareLink.IsSet())
     {
         SvSortData aRedlinCompare;
         aRedlinCompare.pLeft=pLeft;
         aRedlinCompare.pRight=pRight;
-        eCompare=(StringCompare) aColCompareLink.Call(&aRedlinCompare);
+        nCompare = aColCompareLink.Call(&aRedlinCompare);
     }
     else
     {
@@ -170,24 +170,24 @@ StringCompare SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry*
             {
                 if(pLeftData->aDateTime < pRightData->aDateTime)
                 {
-                    eCompare=COMPARE_LESS;
+                    nCompare = -1;
                 }
                 else if(pLeftData->aDateTime > pRightData->aDateTime)
                 {
-                    eCompare=COMPARE_GREATER;
+                    nCompare = 1;
                 }
             }
             else
-                eCompare=SvSimpleTable::ColCompare(pLeft,pRight);
+                nCompare = SvSimpleTable::ColCompare(pLeft,pRight);
         }
         else
         {
-            eCompare=SvSimpleTable::ColCompare(pLeft,pRight);
+            nCompare = SvSimpleTable::ColCompare(pLeft,pRight);
         }
 
     }
 
-    return eCompare;
+    return nCompare;
 }
 void SvxRedlinTable::SetCalcView(sal_Bool bFlag)
 {

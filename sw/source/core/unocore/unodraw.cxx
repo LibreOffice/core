@@ -2132,7 +2132,7 @@ OUString SwXShape::getImplementationName(void) throw( uno::RuntimeException )
 sal_Bool SwXShape::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     sal_Bool bRet = sal_False;
-    if(COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.drawing.Shape"))
+    if (rServiceName == "com.sun.star.drawing.Shape")
         bRet = sal_True;
     else if(xShapeAgg.is())
     {

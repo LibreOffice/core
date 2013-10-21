@@ -3402,16 +3402,16 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
             eLeft = etQueryContainer;
 
         if ( eLeft == eRight )
-            return COMPARE_EQUAL;
+            return 0;
 
         if ( ( eLeft == etTableContainer ) && ( eRight == etQueryContainer ) )
-            return COMPARE_GREATER;
+            return 1;
 
         if ( ( eLeft == etQueryContainer ) && ( eRight == etTableContainer ) )
-            return COMPARE_LESS;
+            return -1;
 
         SAL_WARN("dbaccess.ui",  "SbaTableQueryBrowser::OnTreeEntryCompare: unexpected case!" );
-        return COMPARE_EQUAL;
+        return 0;
     }
 
     const SvLBoxString* pLeftTextItem = static_cast<const SvLBoxString*>(pLHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));

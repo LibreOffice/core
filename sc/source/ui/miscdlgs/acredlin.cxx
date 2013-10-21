@@ -1881,7 +1881,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, FilterModified)
 
 IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
 {
-    StringCompare eCompare=COMPARE_EQUAL;
+    sal_Int32 nCompare = 0;
     SCCOL nSortCol= static_cast<SCCOL>(pTheView->GetSortedCol());
 
     if(pSortData)
@@ -1897,11 +1897,10 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
             if(pLeftData!=NULL && pRightData!=NULL)
             {
                 if(pLeftData->aDateTime < pRightData->aDateTime)
-                    eCompare=COMPARE_LESS;
+                    nCompare = -1;
                 else if(pLeftData->aDateTime > pRightData->aDateTime)
-                    eCompare=COMPARE_GREATER;
-
-                return eCompare;
+                    nCompare = 1;
+                return nCompare;
             }
         }
         else if(CALC_POS==nSortCol)
@@ -1911,24 +1910,24 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
 
             if(pLeftData!=NULL && pRightData!=NULL)
             {
-                eCompare=COMPARE_GREATER;
+                nCompare = 1;
 
                 if(pLeftData->nTable < pRightData->nTable)
-                    eCompare=COMPARE_LESS;
+                    nCompare = -1;
                 else if(pLeftData->nTable == pRightData->nTable)
                 {
                     if(pLeftData->nRow < pRightData->nRow)
-                        eCompare=COMPARE_LESS;
+                        nCompare = -1;
                     else if(pLeftData->nRow == pRightData->nRow)
                     {
                         if(pLeftData->nCol < pRightData->nCol)
-                            eCompare=COMPARE_LESS;
+                            nCompare = -1;
                         else if(pLeftData->nCol == pRightData->nCol)
-                            eCompare=COMPARE_EQUAL;
+                            nCompare = 0;
                     }
                 }
 
-                return eCompare;
+                return nCompare;
             }
         }
 
@@ -1943,17 +1942,18 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
             if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
                 nLeftKind == SV_ITEM_ID_LBOXSTRING )
             {
-                eCompare= (StringCompare) ScGlobal::GetCaseCollator()->compareString(
+                nCompare = ScGlobal::GetCaseCollator()->compareString(
                                         ((SvLBoxString*)pLeftItem)->GetText(),
                                         ((SvLBoxString*)pRightItem)->GetText());
 
-                if(eCompare==COMPARE_EQUAL) eCompare=COMPARE_LESS;
+                if (nCompare == 0)
+                    nCompare = -1;
             }
         }
 
 
     }
-    return eCompare;
+    return nCompare;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

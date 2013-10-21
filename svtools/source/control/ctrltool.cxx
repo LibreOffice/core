@@ -128,18 +128,18 @@ static sal_Int32 ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
 {
     //Sort non italic before italics
     if ( pInfo1->GetItalic() < pInfo2->GetItalic() )
-        return COMPARE_LESS;
+        return -1;
     else if ( pInfo1->GetItalic() > pInfo2->GetItalic() )
-        return COMPARE_GREATER;
+        return 1;
 
     //Sort normal weight to the start, followed by lightest to heaviest weights
     int nWeight1 = sortWeightValue(pInfo1->GetWeight());
     int nWeight2 = sortWeightValue(pInfo2->GetWeight());
 
     if ( nWeight1 < nWeight2 )
-        return COMPARE_LESS;
+        return -1;
     else if ( nWeight1 > nWeight2 )
-        return COMPARE_GREATER;
+        return 1;
 
     return pInfo1->GetStyleName().compareTo( pInfo2->GetStyleName() );
 }

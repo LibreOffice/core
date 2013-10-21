@@ -839,7 +839,7 @@ typedef ::std::vector< XclExpTabName >  XclExpTabNameVec;
 inline bool operator<( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )
 {
     // compare the sheet names only
-    return ScGlobal::GetCollator()->compareString( rArg1.first, rArg2.first ) == COMPARE_LESS;
+    return ScGlobal::GetCollator()->compareString( rArg1.first, rArg2.first ) < 0;
 }
 
 void XclExpTabInfo::CalcSortedIndexes()

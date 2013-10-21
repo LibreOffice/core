@@ -1148,8 +1148,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
     OUString aUpVal2( aStrVal2 );
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
-        if ( ScGlobal::GetCollator()->compareString( aUpVal1, aUpVal2 )
-                == COMPARE_GREATER )
+        if (ScGlobal::GetCollator()->compareString( aUpVal1, aUpVal2 ) > 0)
         {
             //  richtige Reihenfolge fuer Wertebereich
             OUString aTemp( aUpVal1 ); aUpVal1 = aUpVal2; aUpVal2 = aTemp;
@@ -1159,11 +1158,11 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
     {
         case SC_COND_EQUAL:
             bValid = (ScGlobal::GetCollator()->compareString(
-                rArg, aUpVal1 ) == COMPARE_EQUAL);
+                rArg, aUpVal1 ) == 0);
         break;
         case SC_COND_NOTEQUAL:
             bValid = (ScGlobal::GetCollator()->compareString(
-                rArg, aUpVal1 ) != COMPARE_EQUAL);
+                rArg, aUpVal1 ) != 0);
         break;
         case SC_COND_TOP_PERCENT:
         case SC_COND_BOTTOM_PERCENT:
@@ -1197,23 +1196,23 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
             switch ( eOp )
             {
                 case SC_COND_GREATER:
-                    bValid = ( nCompare == COMPARE_GREATER );
+                    bValid = ( nCompare > 0 );
                     break;
                 case SC_COND_EQGREATER:
-                    bValid = ( nCompare == COMPARE_EQUAL || nCompare == COMPARE_GREATER );
+                    bValid = ( nCompare >= 0 );
                     break;
                 case SC_COND_LESS:
-                    bValid = ( nCompare == COMPARE_LESS );
+                    bValid = ( nCompare < 0 );
                     break;
                 case SC_COND_EQLESS:
-                    bValid = ( nCompare == COMPARE_EQUAL || nCompare == COMPARE_LESS );
+                    bValid = ( nCompare <= 0 );
                     break;
                 case SC_COND_BETWEEN:
                 case SC_COND_NOTBETWEEN:
                     //  Test auf NOTBETWEEN:
-                    bValid = ( nCompare == COMPARE_LESS ||
+                    bValid = ( nCompare < 0 ||
                         ScGlobal::GetCollator()->compareString( rArg,
-                        aUpVal2 ) == COMPARE_GREATER );
+                        aUpVal2 ) > 0 );
                     if ( eOp == SC_COND_BETWEEN )
                         bValid = !bValid;
                     break;

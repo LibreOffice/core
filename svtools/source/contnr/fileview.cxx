@@ -1874,7 +1874,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
     }
 
     if ( !bHideTransFile &&
-        ( rFilter.isEmpty() || ( rFilter.compareToAscii( ALL_FILES_FILTER ) == COMPARE_EQUAL ) ) )
+        ( rFilter.isEmpty() || ( rFilter == ALL_FILES_FILTER ) ) )
         // when replacing names, there is always something to filter (no view of ".nametranslation.table")
         return;
 

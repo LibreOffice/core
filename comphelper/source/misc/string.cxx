@@ -331,7 +331,8 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
             break;
     }
 
-    //Squeeze these down to -1, 0, 1 in case it gets casted to a StringCompare
+    //Squeeze these down to -1, 0, 1 in case there is an assumption those are
+    //the only valid returns
     if (nRet > 0)
         nRet = 1;
     else if (nRet < 0)

@@ -55,8 +55,8 @@ public:
     size_t GetSubCount() const;
     bool GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex) const;
     OUString GetSubStr(sal_uInt16 nIndex) const;
-    StringCompare Compare(const OUString& rSubStr1, const OUString& rSubStr2) const;
-    StringCompare ICompare(const OUString& rSubStr1, const OUString& rSubStr2) const;
+    sal_Int32 Compare(const OUString& rSubStr1, const OUString& rSubStr2) const;
+    sal_Int32 ICompare(const OUString& rSubStr1, const OUString& rSubStr2) const;
 };
 
 /**

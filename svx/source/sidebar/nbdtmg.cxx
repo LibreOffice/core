@@ -370,7 +370,7 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
     {
         if ( (cChar == pActualBullets[i]->cBulletChar||
             (cChar == 9830 && 57356 == pActualBullets[i]->cBulletChar) ||
-            (cChar == 9632 && 57354 == pActualBullets[i]->cBulletChar)))// && pFont && (pFont->GetName().CompareTo(pActualBullets[i]->aFont.GetName())==COMPARE_EQUAL))
+            (cChar == 9632 && 57354 == pActualBullets[i]->cBulletChar)))
         {
             return i+1;
         }
@@ -638,13 +638,12 @@ sal_uInt16 GraphyicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uI
 
     if ( pGrf )
     {
-        //const String* pGrfName = pBrsh->GetGraphicLink();
         Graphic aGraphic;
         for (sal_uInt16 i=0; i < aGrfDataLst.size(); ++i)
         {
             GrfBulDataRelation* pEntry = aGrfDataLst[i];
             sal_Bool bExist = sal_False;
-            if ( pEntry) // && pEntry->sGrfName.CompareTo(*pGrfName)==COMPARE_EQUAL )
+            if ( pEntry)
                 bExist = GalleryExplorer::GetGraphicObj(GALLERY_THEME_BULLETS, pEntry->nGallaryIndex,&aGraphic);
             if (bExist) {
                 Bitmap aSum=pGrf->GetBitmap();
@@ -988,7 +987,6 @@ sal_uInt16 MixBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 
                 if ( (cChar == ((BulletsSettings_Impl*)(pActualBullets[i]->pBullets))->cBulletChar||
                     (cChar == 9830 && 57356 == ((BulletsSettings_Impl*)(pActualBullets[i]->pBullets))->cBulletChar) ||
                     (cChar == 9632 && 57354 == ((BulletsSettings_Impl*)(pActualBullets[i]->pBullets))->cBulletChar)))//&&
-                    //(pFont && pFont->GetName().CompareTo(((BulletsSettings_Impl*)(pActualBullets[i]->pBullets))->aFont.GetName())==COMPARE_EQUAL) )
                 {
                     return pActualBullets[i]->nIndex;
                 }
@@ -1016,8 +1014,7 @@ sal_uInt16 MixBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 
                         {
                             return pActualBullets[i]->nIndex;
                         }
-                    }else { //if ( pEntry && pGrfName && pEntry->sGrfName.CompareTo(*pGrfName)==COMPARE_EQUAL )
-                        //bExist = GalleryExplorer::GetGraphicObj(GALLERY_THEME_BULLETS, pActualBullets[i]->nIndexDefault-1,pSrGrf);
+                    }else {
                         Graphic aSrGrf;
                         if (pEntry)
                             GalleryExplorer::GetGraphicObj(GALLERY_THEME_BULLETS, pActualBullets[i]->nIndexDefault,&aSrGrf);

@@ -404,7 +404,7 @@ IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
     SvTreeListEntry* pRight = (SvTreeListEntry*)(pData->pRight );
 
     if (GetParent(pRight) && GetParent(GetParent(pRight)))
-        return COMPARE_GREATER; // don't sort column names
+        return 1; // don't sort column names
 
     return DefaultCompare(pData);   // otherwise call base class
 }

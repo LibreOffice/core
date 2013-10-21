@@ -979,7 +979,7 @@ OUString ViewShellBase::GetInitialViewShellType (void)
         for (sal_Int32 n=0; n<aProperties.getLength(); n++)
         {
             const beans::PropertyValue& rProperty (aProperties[n]);
-            if (rProperty.Name.compareToAscii(sUNO_View_PageKind) == COMPARE_EQUAL)
+            if (rProperty.Name == sUNO_View_PageKind)
             {
                 sal_Int16 nPageKind = 0;
                 rProperty.Value >>= nPageKind;

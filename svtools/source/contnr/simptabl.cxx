@@ -445,9 +445,9 @@ SvLBoxItem* SvSimpleTable::GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nP
     return pItem;
 }
 
-StringCompare SvSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRight)
+sal_Int32 SvSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRight)
 {
-    StringCompare eCompare=COMPARE_EQUAL;
+    sal_Int32 nCompare = 0;
 
     SvLBoxItem* pLeftItem = GetEntryAtPos( pLeft, nSortCol);
     SvLBoxItem* pRightItem = GetEntryAtPos( pRight, nSortCol);
@@ -464,13 +464,14 @@ StringCompare SvSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* 
             IntlWrapper aIntlWrapper( Application::GetSettings().GetLanguageTag() );
             const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
 
-            eCompare=(StringCompare)pCollator->compareString( ((SvLBoxString*)pLeftItem)->GetText(),
+            nCompare = pCollator->compareString( ((SvLBoxString*)pLeftItem)->GetText(),
                                     ((SvLBoxString*)pRightItem)->GetText());
 
-            if(eCompare==COMPARE_EQUAL) eCompare=COMPARE_LESS;
+            if (nCompare == 0)
+                nCompare = -1;
         }
     }
-    return eCompare;
+    return nCompare;
 }
 
 IMPL_LINK( SvSimpleTable, CompareHdl, SvSortData*, pData)

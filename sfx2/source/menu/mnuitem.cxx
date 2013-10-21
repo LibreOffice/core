@@ -427,7 +427,7 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
     xTrans->parseStrict( aTargetURL );
 
     Reference < XDispatch > xDisp;
-    if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
+    if (aTargetURL.Protocol == "slot:")
         xDisp = xDesktop->queryDispatch( aTargetURL, OUString(), 0 );
     else
     {

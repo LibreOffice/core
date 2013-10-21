@@ -394,7 +394,7 @@ bool ScFuncDesc::isParameterOptional(sal_uInt32 _nPos) const
 
 bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
 {
-    return (ScGlobal::GetCaseCollator()->compareString(*a->pFuncName, *b->pFuncName ) == COMPARE_LESS);
+    return (ScGlobal::GetCaseCollator()->compareString(*a->pFuncName, *b->pFuncName ) < 0);
 }
 
 //===================================================================

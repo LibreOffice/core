@@ -1655,11 +1655,11 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         bExcept = true;
         for(sal_uInt16 j = 0; j < SAL_N_ELEMENTS( aNumPropertyNames ); j++)
         {
-            if( pDocShell && j >= NotInChapterFirst && j <= NotInChapterLast )
+            if (pDocShell && j >= NotInChapterFirst && j <= NotInChapterLast)
                 continue;
-            if( !pDocShell && j >= InChapterFirst && j <= InChapterLast )
+            if (!pDocShell && j >= InChapterFirst && j <= InChapterLast)
                 continue;
-            if(COMPARE_EQUAL == rProp.Name.compareToAscii(aNumPropertyNames[j]))
+            if (rProp.Name.equalsAscii(aNumPropertyNames[j]))
             {
                 bExcept = false;
                 break;

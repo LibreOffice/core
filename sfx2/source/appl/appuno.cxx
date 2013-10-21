@@ -2053,14 +2053,13 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     Reference < XDispatch > xDisp;
     const SfxSlot* pSlot = 0;
     SfxDispatcher* pAppDisp = SFX_APP()->GetAppDispatcher_Impl();
-    if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL ||
-         aURL.Protocol.compareToAscii( "commandId:" ) == COMPARE_EQUAL )
+    if ( aURL.Protocol == "slot:" || aURL.Protocol == "commandId:" )
     {
         nId = (sal_uInt16) aURL.Path.toInt32();
         SfxShell* pShell;
         pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, sal_True, sal_True );
     }
-    else if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
+    else if ( aURL.Protocol == ".uno:" )
     {
         // Support ".uno" commands. Map commands to slotid
         bMasterCommand = SfxOfficeDispatch::IsMasterUnoCommand( aURL );

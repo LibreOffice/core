@@ -1393,66 +1393,68 @@ int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
     OUString aStr1, aStr2;
     sal_Int32 nComp;
     if ( rStartPos1.Tab() == rStartPos2.Tab() )
-        nComp = COMPARE_EQUAL;
+        nComp = 0;
     else
     {
         ps1->pDoc->GetName( rStartPos1.Tab(), aStr1 );
         ps2->pDoc->GetName( rStartPos2.Tab(), aStr2 );
         nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
     }
-    switch ( nComp )
+    if (nComp < 0)
     {
-        case COMPARE_LESS:
+        return -1;
+    }
+    else if (nComp > 0)
+    {
+        return 1;
+    }
+    else
+    {
+        // gleiche Tabs
+        if ( rStartPos1.Col() < rStartPos2.Col() )
             return -1;
-        //break;
-        case COMPARE_GREATER:
+        if ( rStartPos1.Col() > rStartPos2.Col() )
             return 1;
-        //break;
-        default:
-            // gleiche Tabs
-            if ( rStartPos1.Col() < rStartPos2.Col() )
-                return -1;
-            if ( rStartPos1.Col() > rStartPos2.Col() )
-                return 1;
-            // gleiche Cols
-            if ( rStartPos1.Row() < rStartPos2.Row() )
-                return -1;
-            if ( rStartPos1.Row() > rStartPos2.Row() )
-                return 1;
-            // erste Ecke gleich, zweite Ecke
+        // gleiche Cols
+        if ( rStartPos1.Row() < rStartPos2.Row() )
+            return -1;
+        if ( rStartPos1.Row() > rStartPos2.Row() )
+            return 1;
+        // erste Ecke gleich, zweite Ecke
+        {
+            const ScAddress& rEndPos1 = ps1->pPair->GetRange(0).aEnd;
+            const ScAddress& rEndPos2 = ps2->pPair->GetRange(0).aEnd;
+            if ( rEndPos1.Tab() == rEndPos2.Tab() )
+                nComp = 0;
+            else
             {
-                const ScAddress& rEndPos1 = ps1->pPair->GetRange(0).aEnd;
-                const ScAddress& rEndPos2 = ps2->pPair->GetRange(0).aEnd;
-                if ( rEndPos1.Tab() == rEndPos2.Tab() )
-                    nComp = COMPARE_EQUAL;
-                else
-                {
-                    ps1->pDoc->GetName( rEndPos1.Tab(), aStr1 );
-                    ps2->pDoc->GetName( rEndPos2.Tab(), aStr2 );
-                    nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
-                }
-                switch ( nComp )
-                {
-                    case COMPARE_LESS:
-                        return -1;
-                    //break;
-                    case COMPARE_GREATER:
-                        return 1;
-                    //break;
-                    default:
-                        // gleiche Tabs
-                        if ( rEndPos1.Col() < rEndPos2.Col() )
-                            return -1;
-                        if ( rEndPos1.Col() > rEndPos2.Col() )
-                            return 1;
-                        // gleiche Cols
-                        if ( rEndPos1.Row() < rEndPos2.Row() )
-                            return -1;
-                        if ( rEndPos1.Row() > rEndPos2.Row() )
-                            return 1;
-                        return 0;
-                }
+                ps1->pDoc->GetName( rEndPos1.Tab(), aStr1 );
+                ps2->pDoc->GetName( rEndPos2.Tab(), aStr2 );
+                nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
             }
+            if (nComp < 0)
+            {
+                return -1;
+            }
+            else if (nComp > 0)
+            {
+                return 1;
+            }
+            else
+            {
+                // gleiche Tabs
+                if ( rEndPos1.Col() < rEndPos2.Col() )
+                    return -1;
+                if ( rEndPos1.Col() > rEndPos2.Col() )
+                    return 1;
+                // gleiche Cols
+                if ( rEndPos1.Row() < rEndPos2.Row() )
+                    return -1;
+                if ( rEndPos1.Row() > rEndPos2.Row() )
+                    return 1;
+                return 0;
+            }
+        }
     }
 #ifndef _MSC_VER // MSVC is good enough to warn about unreachable code here.
                  // Or stupid enough to bother warning about it, depending

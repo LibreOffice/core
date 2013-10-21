@@ -635,8 +635,8 @@ sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
     IntlWrapper aIntlWrapper( Application::GetSettings().GetLanguageTag() );
     const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
     for(SvTreeListEntry *pTmpEntry=FirstChild(pTarget);
-        pTmpEntry && COMPARE_LESS==pCollator->compareString(
-            GetEntryText(pTmpEntry),GetEntryText(pEntry));
+        pTmpEntry && pCollator->compareString(
+            GetEntryText(pTmpEntry),GetEntryText(pEntry)) < 0;
         pTmpEntry=NextSibling(pTmpEntry),lPos++) ;
 
     return bRet? (sal_Bool)2: sal_False;

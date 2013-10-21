@@ -366,15 +366,15 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
         const OUString   aName( rMediaProperties[ i ].Name );
         const uno::Any          aValue( rMediaProperties[ i ].Value );
 
-        if( COMPARE_EQUAL == aName.compareToAscii( "URL" ) )
+        if (aName == "URL")
         {
             aValue >>= aURL;
         }
-        else if( COMPARE_EQUAL == aName.compareToAscii( "InputStream" ) )
+        else if (aName == "InputStream")
         {
             aValue >>= xIStm;
         }
-        else if( COMPARE_EQUAL == aName.compareToAscii( "Bitmap" ) )
+        else if (aName == "Bitmap")
         {
             aValue >>= xBtm;
         }
@@ -442,21 +442,21 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         const OUString   aName( rMediaProperties[ i ].Name );
         const uno::Any          aValue( rMediaProperties[ i ].Value );
 
-        if( COMPARE_EQUAL == aName.compareToAscii( "URL" ) )
+        if (aName == "URL")
         {
             OUString aURL;
             aValue >>= aURL;
             aPath = aURL;
         }
-        else if( COMPARE_EQUAL == aName.compareToAscii( "InputStream" ) )
+        else if (aName == "InputStream")
         {
             aValue >>= xIStm;
         }
-        else if( COMPARE_EQUAL == aName.compareToAscii( "Bitmap" ) )
+        else if (aName == "Bitmap")
         {
             aValue >>= xBtm;
         }
-        else if( COMPARE_EQUAL == aName.compareToAscii( "FilterData" ) )
+        else if (aName == "FilterData")
         {
             aValue >>= aFilterData;
         }
@@ -471,15 +471,15 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         const OUString   aName( aFilterData[ i ].Name );
         const uno::Any          aValue( aFilterData[ i ].Value );
 
-        if( COMPARE_EQUAL == aName.compareToAscii( "ExternalWidth" ) )
+        if (aName == "ExternalWidth")
         {
             aValue >>= nExtWidth;
         }
-        else if( COMPARE_EQUAL == aName.compareToAscii( "ExternalHeight" ) )
+        else if (aName == "ExternalHeight")
         {
             aValue >>= nExtHeight;
         }
-        else if( COMPARE_EQUAL == aName.compareToAscii( "ExternalMapMode" ) )
+        else if (aName == "ExternalMapMode")
         {
             aValue >>= nExtMapMode;
         }
@@ -646,17 +646,17 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
         const OUString   aName(  rFilterData[ i ].Name );
         const uno::Any          aValue( rFilterData[ i ].Value );
 
-        if( COMPARE_EQUAL == aName.compareToAscii( "PixelWidth" ) )
+        if (aName == "PixelWidth")
             aValue >>= nPixelWidth;
-        else if( COMPARE_EQUAL == aName.compareToAscii( "PixelHeight" ) )
+        else if (aName == "PixelHeight")
             aValue >>= nPixelHeight;
-        else if( COMPARE_EQUAL == aName.compareToAscii( "LogicalSize" ) )
+        else if (aName == "LogicalSize")
             aValue >>= aLogicalSize;
-        else if (COMPARE_EQUAL == aName.compareToAscii( "GraphicCropLogic" ) )
+        else if (aName == "GraphicCropLogic")
             aValue >>= aCropLogic;
-        else if (COMPARE_EQUAL == aName.compareToAscii( "RemoveCropArea" ) )
+        else if (aName == "RemoveCropArea")
             aValue >>= bRemoveCropArea;
-        else if (COMPARE_EQUAL == aName.compareToAscii( "ImageResolution" ) )
+        else if (aName == "ImageResolution")
             aValue >>= nImageResolution;
     }
     if ( rGraphic.GetType() == GRAPHIC_BITMAP )
@@ -784,7 +784,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
         const OUString   aName( rMediaProperties[ i ].Name );
         const uno::Any          aValue( rMediaProperties[ i ].Value );
 
-        if( COMPARE_EQUAL == aName.compareToAscii( "URL" ) )
+        if (aName == "URL")
         {
             OUString aURL;
 
@@ -792,7 +792,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             pOStm = ::utl::UcbStreamHelper::CreateStream( aURL, STREAM_WRITE | STREAM_TRUNC );
             aPath = aURL;
         }
-        else if( COMPARE_EQUAL == aName.compareToAscii( "OutputStream" ) )
+        else if (aName == "OutputStream")
         {
             uno::Reference< io::XStream > xOStm;
 
@@ -813,51 +813,51 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             const OUString   aName( rMediaProperties[ i ].Name );
             const uno::Any          aValue( rMediaProperties[ i ].Value );
 
-            if( COMPARE_EQUAL == aName.compareToAscii( "FilterData" ) )
+            if (aName == "FilterData")
             {
                 aValue >>= aFilterDataSeq;
             }
-            else if( COMPARE_EQUAL == aName.compareToAscii( "MimeType" ) )
+            else if (aName == "MimeType")
             {
                 OUString aMimeType;
 
                 aValue >>= aMimeType;
 
-                if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_BMP ) )
+                if (aMimeType == MIMETYPE_BMP)
                     pFilterShortName = "bmp";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_EPS ) )
+                else if (aMimeType == MIMETYPE_EPS)
                     pFilterShortName = "eps";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_GIF ) )
+                else if (aMimeType == MIMETYPE_GIF)
                     pFilterShortName = "gif";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_JPG ) )
+                else if (aMimeType == MIMETYPE_JPG)
                     pFilterShortName = "jpg";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_MET ) )
+                else if (aMimeType == MIMETYPE_MET)
                     pFilterShortName = "met";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_PNG ) )
+                else if (aMimeType == MIMETYPE_PNG)
                     pFilterShortName = "png";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_PCT ) )
+                else if (aMimeType == MIMETYPE_PCT)
                     pFilterShortName = "pct";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_PBM ) )
+                else if (aMimeType == MIMETYPE_PBM)
                     pFilterShortName = "pbm";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_PGM ) )
+                else if (aMimeType == MIMETYPE_PGM)
                     pFilterShortName = "pgm";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_PPM ) )
+                else if (aMimeType == MIMETYPE_PPM)
                     pFilterShortName = "ppm";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_RAS ) )
+                else if (aMimeType == MIMETYPE_RAS)
                     pFilterShortName = "ras";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_SVM ) )
+                else if (aMimeType == MIMETYPE_SVM)
                     pFilterShortName = "svm";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_TIF ) )
+                else if (aMimeType == MIMETYPE_TIF)
                     pFilterShortName = "tif";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_EMF ) )
+                else if (aMimeType == MIMETYPE_EMF)
                     pFilterShortName = "emf";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_WMF ) )
+                else if (aMimeType == MIMETYPE_WMF)
                     pFilterShortName = "wmf";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_XPM ) )
+                else if (aMimeType == MIMETYPE_XPM)
                     pFilterShortName = "xpm";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_SVG ) )
+                else if (aMimeType == MIMETYPE_SVG)
                     pFilterShortName = "svg";
-                else if( COMPARE_EQUAL == aMimeType.compareToAscii( MIMETYPE_VCLGRAPHIC ) )
+                else if (aMimeType == MIMETYPE_VCLGRAPHIC)
                     pFilterShortName = MIMETYPE_VCLGRAPHIC;
             }
         }

@@ -1498,16 +1498,16 @@ SvViewDataEntry* SvListView::GetViewData( SvTreeListEntry* pEntry )
     return itr->second;
 }
 
-StringCompare SvTreeList::Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const
+sal_Int32 SvTreeList::Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const
 {
     if( aCompareLink.IsSet())
     {
         SvSortData aSortData;
         aSortData.pLeft = pLeft;
         aSortData.pRight = pRight;
-        return (StringCompare)aCompareLink.Call( &aSortData );
+        return aCompareLink.Call( &aSortData );
     }
-    return COMPARE_EQUAL;
+    return 0;
 }
 
 void SvTreeList::Resort()
@@ -1576,27 +1576,27 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry* pEntry, SvTreeListEntry* pPar
         long i = 0;
         long j = rChildList.size()-1;
         long k;
-        StringCompare eCompare = COMPARE_GREATER;
+        sal_Int32 nCompare = 1;
 
         do
         {
             k = (i+j)/2;
             const SvTreeListEntry* pTempEntry = &rChildList[k];
-            eCompare = Compare( pEntry, pTempEntry );
-            if( eSortMode == SortDescending && eCompare != COMPARE_EQUAL )
+            nCompare = Compare( pEntry, pTempEntry );
+            if( eSortMode == SortDescending && nCompare != 0 )
             {
-                if( eCompare == COMPARE_LESS )
-                    eCompare = COMPARE_GREATER;
+                if( nCompare < 0 )
+                    nCompare = 1;
                 else
-                    eCompare = COMPARE_LESS;
+                    nCompare = -1;
             }
-            if( eCompare == COMPARE_GREATER )
+            if( nCompare > 0 )
                 i = k + 1;
             else
                 j = k - 1;
-        } while( (eCompare != COMPARE_EQUAL) && (i <= j) );
+        } while( (nCompare != 0) && (i <= j) );
 
-        if( eCompare != COMPARE_EQUAL )
+        if( nCompare != 0 )
         {
             if (i > static_cast<long>(rChildList.size()-1)) // not found, end of list
                 rPos = ULONG_MAX;

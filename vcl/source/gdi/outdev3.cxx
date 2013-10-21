@@ -691,41 +691,40 @@ sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) 
 {
     // compare their width, weight, italic and style name
     if( GetWidthType() < rOther.GetWidthType() )
-        return COMPARE_LESS;
+        return -1;
     else if( GetWidthType() > rOther.GetWidthType() )
-        return COMPARE_GREATER;
+        return 1;
 
     if( GetWeight() < rOther.GetWeight() )
-        return COMPARE_LESS;
+        return -1;
     else if( GetWeight() > rOther.GetWeight() )
-        return COMPARE_GREATER;
+        return 1;
 
     if( GetSlant() < rOther.GetSlant() )
-        return COMPARE_LESS;
+        return -1;
     else if( GetSlant() > rOther.GetSlant() )
-        return COMPARE_GREATER;
+        return 1;
 
-    sal_Int32 eCompare = GetFamilyName().compareTo( rOther.GetFamilyName() );
-    return eCompare;
+    return GetFamilyName().compareTo( rOther.GetFamilyName() );
 }
 
 sal_Int32 PhysicalFontFace::CompareWithSize( const PhysicalFontFace& rOther ) const
 {
-    sal_Int32 eCompare = CompareIgnoreSize( rOther );
-    if( eCompare != COMPARE_EQUAL )
-        return eCompare;
+    sal_Int32 nCompare = CompareIgnoreSize( rOther );
+    if (nCompare != 0)
+        return nCompare;
 
     if( mnHeight < rOther.mnHeight )
-        return COMPARE_LESS;
+        return -1;
     else if( mnHeight > rOther.mnHeight )
-        return COMPARE_GREATER;
+        return 1;
 
     if( mnWidth < rOther.mnWidth )
-        return COMPARE_LESS;
+        return -1;
     else if( mnWidth > rOther.mnWidth )
-        return COMPARE_GREATER;
+        return 1;
 
-    return COMPARE_EQUAL;
+    return 0;
 }
 
 struct FontMatchStatus
@@ -1030,9 +1029,9 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
     for(; (pData=*ppHere) != NULL; ppHere=&pData->mpNext )
     {
         sal_Int32 eComp = pNewData->CompareWithSize( *pData );
-        if( eComp == COMPARE_GREATER )
+        if( eComp > 0 )
             continue;
-        if( eComp == COMPARE_LESS )
+        if( eComp < 0 )
             break;
 
         // ignore duplicate if its quality is worse

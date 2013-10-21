@@ -512,7 +512,7 @@ sal_uInt16  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
     sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
     for(sal_uInt16 i = 0; i < nEntries; i++ )
     {
-        if( COMPARE_EQUAL == rServiceName.compareToAscii(aProvNamesId[i].pName))
+        if (rServiceName.equalsAscii(aProvNamesId[i].pName))
             return aProvNamesId[i].nType;
     }
     return SW_SERVICE_INVALID;
