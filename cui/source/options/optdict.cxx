@@ -371,9 +371,9 @@ sal_uInt16 SvxEditDictionaryDialog::GetLBInsertPos(const OUString &rDicWord)
         SvTreeListEntry* pEntry = pWordsLB->GetEntry(j);
         DBG_ASSERT( pEntry, "NULL pointer");
         OUString aNormEntry( getNormDicEntry_Impl( rDicWord ) );
-        StringCompare eCmpRes = (StringCompare)pCollator->
+        sal_Int32 nCmpRes = pCollator->
             compareString( aNormEntry, getNormDicEntry_Impl( pWordsLB->GetEntryText(pEntry, 0) ) );
-        if( COMPARE_LESS == eCmpRes )
+        if (nCmpRes < 0)
             break;
     }
     if (j < pWordsLB->GetEntryCount())   // entry found?
