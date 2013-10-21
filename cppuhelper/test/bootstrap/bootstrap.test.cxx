@@ -75,13 +75,13 @@ static bool s_check_object_is_in(void * pObject)
 static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPurpose,
                                                   rtl::OUString const & servicePurpose)
 {
-    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO))
+    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(UNO_LB_UNO)
                                                + clientPurpose, NULL));
     if (clientPurpose.getLength() && !envGuard.is())
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tcouldn't get purpose env: \""));
+        s_comment += rtl::OUString("\t\tcouldn't get purpose env: \"");
         s_comment += clientPurpose;
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\" - FAILURE\n"));
+        s_comment += rtl::OUString("\" - FAILURE\n");
 
         return;
     }
@@ -90,7 +90,7 @@ static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPu
 
     uno::Reference<uno::XInterface> xItf(
         cppu::loadSharedLibComponentFactory(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX "TestComponent.uno" SAL_DLLEXTENSION)),
+            rtl::OUString(SAL_DLLPREFIX "TestComponent.uno" SAL_DLLEXTENSION),
 #ifdef WIN32
             rtl::OUString(""),
 #else
@@ -110,16 +110,16 @@ static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPu
 
     if (!clientPurpose.equals(servicePurpose) && !s_check_object_is_in(xItf.get()))
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tcouldn't find object in current purpose \""));
+        s_comment += rtl::OUString("\t\tcouldn't find object in current purpose \"");
         s_comment += clientPurpose;
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\" - FAILURE\n"));
+        s_comment += rtl::OUString("\" - FAILURE\n");
     }
 
     if (!cppu::EnvDcp::getPurpose(uno::Environment::getCurrent().getTypeName()).equals(clientPurpose))
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tdid not enter client purpose \""));
+        s_comment += rtl::OUString("\t\tdid not enter client purpose \"");
         s_comment += clientPurpose;
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\" - FAILURE\n"));
+        s_comment += rtl::OUString("\" - FAILURE\n");
     }
 }
 
@@ -183,13 +183,13 @@ static rtl::OUString s_getSDrive(void)
 
 static void s_test__createSimpleRegistry(rtl::OUString const & clientPurpose)
 {
-    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO))
+    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(UNO_LB_UNO)
                                                + clientPurpose, NULL));
     if (clientPurpose.getLength() && !envGuard.is())
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tcouldn't get purpose env: \""));
+        s_comment += rtl::OUString("\t\tcouldn't get purpose env: \"");
         s_comment += clientPurpose;
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\" - FAILURE\n"));
+        s_comment += rtl::OUString("\" - FAILURE\n");
 
         return;
     }
@@ -205,9 +205,9 @@ static void s_test__createSimpleRegistry(rtl::OUString const & clientPurpose)
 
     if (clientPurpose.getLength() != 0 && !s_check_object_is_in(registry.get()))
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tcouldn't find object in current purpose \""));
+        s_comment += rtl::OUString("\t\tcouldn't find object in current purpose \"");
         s_comment += clientPurpose;
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\" - FAILURE\n"));
+        s_comment += rtl::OUString("\" - FAILURE\n");
     }
 }
 
@@ -228,13 +228,13 @@ static void s_test__createSimpleRegistry__purpose(void)
 
 static void s_test__bootstrap_InitialComponentContext(rtl::OUString const & clientPurpose)
 {
-    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO))
+    cppu::EnvGuard envGuard(uno::Environment(rtl::OUString(UNO_LB_UNO)
                                                + clientPurpose, NULL));
     if (clientPurpose.getLength() && !envGuard.is())
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tcouldn't get purpose env: \""));
+        s_comment += rtl::OUString("\t\tcouldn't get purpose env: \"");
         s_comment += clientPurpose;
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\" - FAILURE\n"));
+        s_comment += rtl::OUString("\" - FAILURE\n");
 
         return;
     }
@@ -253,9 +253,9 @@ static void s_test__bootstrap_InitialComponentContext(rtl::OUString const & clie
 
     if (clientPurpose.getLength() != 0 && !s_check_object_is_in(xContext.get()))
     {
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t\tcouldn't find object in current purpose \""));
+        s_comment += rtl::OUString("\t\tcouldn't find object in current purpose \"");
         s_comment += clientPurpose;
-        s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\" - FAILURE\n"));
+        s_comment += rtl::OUString("\" - FAILURE\n");
     }
 
     uno::Reference<lang::XComponent> xComponent(xContext, uno::UNO_QUERY_THROW);

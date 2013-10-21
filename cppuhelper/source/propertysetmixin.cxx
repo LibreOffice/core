@@ -234,19 +234,13 @@ void Data::initProperties(
                 {
                     t = resolveTypedefs(t);
                     sal_Int16 n;
-                    if (t->getName().matchAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.beans.Ambiguous<")))
+                    if (t->getName().startsWith( "com.sun.star.beans.Ambiguous<" ))
                     {
                         n = css::beans::PropertyAttribute::MAYBEAMBIGUOUS;
-                    } else if (t->getName().matchAsciiL(
-                                   RTL_CONSTASCII_STRINGPARAM(
-                                       "com.sun.star.beans.Defaulted<")))
+                    } else if (t->getName().startsWith( "com.sun.star.beans.Defaulted<" ))
                     {
                         n = css::beans::PropertyAttribute::MAYBEDEFAULT;
-                    } else if (t->getName().matchAsciiL(
-                                   RTL_CONSTASCII_STRINGPARAM(
-                                       "com.sun.star.beans.Optional<")))
+                    } else if (t->getName().startsWith( "com.sun.star.beans.Optional<" ))
                     {
                         n = css::beans::PropertyAttribute::MAYBEVOID;
                     } else {
@@ -672,8 +666,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
     bool isDefaulted = false;
     while (undoAmbiguous || undoDefaulted || undoOptional) {
         if (undoAmbiguous
-            && value.getValueTypeName().matchAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("com.sun.star.beans.Ambiguous<")))
+            && value.getValueTypeName().startsWith( "com.sun.star.beans.Ambiguous<" ))
         {
             css::uno::Reference< css::reflection::XIdlClass > ambiguous(
                 getReflection(value.getValueTypeName()));
@@ -705,9 +698,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
             }
             undoAmbiguous = false;
         } else if (undoDefaulted
-                   && value.getValueTypeName().matchAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM(
-                           "com.sun.star.beans.Defaulted<")))
+                   && value.getValueTypeName().startsWith( "com.sun.star.beans.Defaulted<" ))
         {
             css::uno::Reference< css::reflection::XIdlClass > defaulted(
                 getReflection(value.getValueTypeName()));
@@ -740,9 +731,7 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
             }
             undoDefaulted = false;
         } else if (undoOptional
-                   && value.getValueTypeName().matchAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM(
-                           "com.sun.star.beans.Optional<")))
+                   && value.getValueTypeName().startsWith( "com.sun.star.beans.Optional<" ))
         {
             css::uno::Reference< css::reflection::XIdlClass > optional(
                 getReflection(value.getValueTypeName()));
@@ -836,8 +825,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
     OSL_ASSERT(
         (wrapAmbiguous || !isAmbiguous) && (wrapDefaulted || !isDefaulted));
     if (wrapAmbiguous
-        && type->getName().matchAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.beans.Ambiguous<")))
+        && type->getName().startsWith( "com.sun.star.beans.Ambiguous<" ))
     {
         css::uno::Any strct;
         type->createObject(strct);
@@ -873,8 +861,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         }
         return strct;
     } else if (wrapDefaulted
-               && type->getName().matchAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("com.sun.star.beans.Defaulted<")))
+               && type->getName().startsWith( "com.sun.star.beans.Defaulted<" ))
     {
         css::uno::Any strct;
         type->createObject(strct);
@@ -910,8 +897,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         }
         return strct;
     } else if (wrapOptional
-               && type->getName().matchAsciiL(
-                   RTL_CONSTASCII_STRINGPARAM("com.sun.star.beans.Optional<")))
+               && type->getName().startsWith( "com.sun.star.beans.Optional<" ))
     {
         css::uno::Any strct;
         type->createObject(strct);
