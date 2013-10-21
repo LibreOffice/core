@@ -1824,6 +1824,18 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     SetPropertyValues(rPaM, rPropSet, aValues, nAttrMode, bTableMode);
 }
 
+// FN_UNO_PARA_STYLE is known to set attributes for nodes, inside
+// SwUnoCursorHelper::SetTxtFmtColl, instead of extending item set.
+// We need to get them from nodes in next call to GetCrsrAttr.
+// The rest could cause similar problems in theory, so we just list them here.
+inline bool propertyCausesSideEffectsInNodes(sal_uInt16 nWID)
+{
+    return nWID == FN_UNO_PARA_STYLE ||
+           nWID == FN_UNO_CHARFMT_SEQUENCE ||
+           nWID == FN_UNO_NUM_START_VALUE ||
+           nWID == FN_UNO_NUM_RULES;
+}
+
 void SwUnoCursorHelper::SetPropertyValues(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
     const uno::Sequence< beans::PropertyValue > &rPropertyValues,
@@ -1873,20 +1885,28 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         SfxItemSet aItemSet(pDoc->GetAttrPool(), &aWhichPairs[0]);
 
         // Fetch, overwrite, and re-set the attributes from the core
-        SwUnoCursorHelper::GetCrsrAttr( rPaM, aItemSet );
 
-        for (sal_Int32 i = 0; ( i < rPropertyValues.getLength() &&
-                                i < (sal_Int32)aEntries.size() ); ++i)
+        bool bPreviousPropertyCausesSideEffectsInNodes = false;
+        for (size_t i = 0; i < aEntries.size(); ++i)
         {
-            const uno::Any &rValue = rPropertyValues[i].Value;
             SfxItemPropertySimpleEntry const*const pEntry = aEntries[i];
-            if (!pEntry)
-                continue;
+            bool bPropertyCausesSideEffectsInNodes =
+                propertyCausesSideEffectsInNodes(pEntry->nWID);
+
+            // we need to get up-to-date item set from nodes
+            if (i == 0 || bPreviousPropertyCausesSideEffectsInNodes)
+                SwUnoCursorHelper::GetCrsrAttr(rPaM, aItemSet);
+
+            const uno::Any &rValue = rPropertyValues[i].Value;
+            // this can set some attributes in nodes' mpAttrSet
             if (!SwUnoCursorHelper::SetCursorPropertyValue(*pEntry, rValue, rPaM, aItemSet))
                 rPropSet.setPropertyValue(*pEntry, rValue, aItemSet);
-        }
 
-        SwUnoCursorHelper::SetCrsrAttr(rPaM, aItemSet, nAttrMode, bTableMode);
+            if (i + 1 == aEntries.size() || bPropertyCausesSideEffectsInNodes)
+                SwUnoCursorHelper::SetCrsrAttr(rPaM, aItemSet, nAttrMode, bTableMode);
+
+            bPreviousPropertyCausesSideEffectsInNodes = bPropertyCausesSideEffectsInNodes;
+        }
     }
 
     if (!aUnknownExMsg.isEmpty())

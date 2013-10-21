@@ -390,8 +390,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     const SfxItemPropertyMap &rMap = m_rPropSet.getPropertyMap();
     SwParaSelection aParaSel( aCursor );
 
-    // FIXME: this should be replaced with the significantly faster
-    // SwUnoCursorHelper::SetPropertyValues...
+    uno::Sequence< beans::PropertyValue > aValues( rPropertyNames.getLength() );
     for (sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
         SfxItemPropertySimpleEntry const*const pEntry =
@@ -410,9 +409,10 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     + pPropertyNames[nProp],
                 static_cast< cppu::OWeakObject * >(&m_rThis));
         }
-        SwUnoCursorHelper::SetPropertyValue(aCursor, m_rPropSet,
-                pPropertyNames[nProp], pValues[nProp]);
+        aValues[nProp].Name = pPropertyNames[nProp];
+        aValues[nProp].Value = pValues[nProp];
     }
+    SwUnoCursorHelper::SetPropertyValues(aCursor, m_rPropSet, aValues);
 }
 
 void SAL_CALL SwXParagraph::setPropertyValues(

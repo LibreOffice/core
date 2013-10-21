@@ -459,6 +459,7 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         const uno::Any* pValues = rValues.getConstArray();
         const SfxItemPropertyMap& rMap = m_pPropSet->getPropertyMap();
+        uno::Sequence< beans::PropertyValue > aValues( rPropertyNames.getLength() );
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
             const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
@@ -467,9 +468,10 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw beans::PropertyVetoException ("Property is read-only: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
-            SwUnoCursorHelper::SetPropertyValue( *pUnoCrsr, *m_pPropSet,
-                     pPropertyNames[nProp], pValues[nProp]);
+            aValues[nProp].Name = pPropertyNames[nProp];
+            aValues[nProp].Value = pValues[nProp];
         }
+        SwUnoCursorHelper::SetPropertyValues( *pUnoCrsr, *m_pPropSet, aValues );
     }
 }
 

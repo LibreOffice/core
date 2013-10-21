@@ -1309,50 +1309,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         aPam.Move( fnMoveBackward, fnGoNode );
     }
-#if 1 // This section should be removed in favour of the one below when it works.
-    if (rProperties.getLength())
-    {
-        // now set the properties
-        SfxItemPropertySet const*const pParaPropSet =
-            aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH);
-        const SfxItemPropertyMap &rParagraphMap =
-            pParaPropSet->getPropertyMap();
 
-        const beans::PropertyValue* pValues = rProperties.getConstArray();
-
-        for (sal_Int32 nProp = 0; nProp < rProperties.getLength(); ++nProp)
-        {
-            if (!rParagraphMap.getByName(pValues[nProp].Name))
-            {
-                bIllegalException = true;
-                break;
-            }
-            try
-            {
-                SwUnoCursorHelper::SetPropertyValue(aPam, *pParaPropSet,
-                    pValues[nProp].Name, pValues[nProp].Value);
-            }
-            catch (const lang::IllegalArgumentException& rIllegal)
-            {
-                sMessage = rIllegal.Message;
-                bIllegalException = true;
-                break;
-            }
-            catch (const uno::RuntimeException& rRuntime)
-            {
-                sMessage = rRuntime.Message;
-                bRuntimeException = true;
-                break;
-            }
-        }
-    }
-#else
     try
     {
         SfxItemPropertySet const*const pParaPropSet =
             aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH);
-        if (!bIllegalException)
-            SwUnoCursorHelper::SetPropertyValues(aPam, *pParaPropSet, rProperties);
+
+        SwUnoCursorHelper::SetPropertyValues(aPam, *pParaPropSet, rProperties);
     }
     catch (const lang::IllegalArgumentException& rIllegal)
     {
@@ -1364,7 +1327,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         sMessage = rRuntime.Message;
         bRuntimeException = true;
     }
-#endif
 
     m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
     if (bIllegalException || bRuntimeException)
