@@ -354,6 +354,9 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
 
     if(pExtraRGB)
     {
+        // #i123478# shockingly, BitmapBuffer does not free the memory it is controlling
+        // in it's destructor, this *has to be done handish*. Doing it here now
+        delete[] pExtraRGB->mpBits;
         delete pExtraRGB;
     }
     else
@@ -492,6 +495,9 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
 
     if(pExtraA)
     {
+        // #i123478# shockingly, BitmapBuffer does not free the memory it is controlling
+        // in it's destructor, this *has to be done handish*. Doing it here now
+        delete[] pExtraA->mpBits;
         delete pExtraA;
     }
     else
@@ -506,6 +512,9 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
 
     if(pExtraRGB)
     {
+        // #i123478# shockingly, BitmapBuffer does not free the memory it is controlling
+        // in it's destructor, this *has to be done handish*. Doing it here now
+        delete[] pExtraRGB->mpBits;
         delete pExtraRGB;
     }
     else
