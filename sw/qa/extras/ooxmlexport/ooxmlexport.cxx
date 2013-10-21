@@ -1588,6 +1588,14 @@ DECLARE_OOXML_TEST(testVMLData, "TestVMLData.docx")
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:shape", "stroked").match("f"));
 }
 
+DECLARE_OOXML_TEST(testImageData, "image_data.docx")
+{
+    // The problem was exporter was exporting v:imagedata data for shape in w:pict as v:fill w element.
+
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:shape/v:imagedata", "detectmouseclick").match("t"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
