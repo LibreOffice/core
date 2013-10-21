@@ -18,6 +18,8 @@ LO_OUTDIR = @OUTDIR@
 LO_SRCDIR = @SRC_ROOT@
 LO_WORKDIR = @WORKDIR@
 
+LO_LDFLAGS = 
+
 // These are actual Xcode-known settings. The corresponding autoconf
 // variables are prefixed with XCODE_ to make it clear in configure.ac
 // what they will be used for.
