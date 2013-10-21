@@ -1738,11 +1738,8 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
 
 // -----------------------------------------------------------------------
 
-sal_uLong WinSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs )
+sal_uLong WinSalGraphics::GetKernPairs()
 {
-    DBG_ASSERT( sizeof( KERNINGPAIR ) == sizeof( ImplKernPairData ),
-                "WinSalGraphics::GetKernPairs(): KERNINGPAIR != ImplKernPairData" );
-
     if ( mbFontKernInit )
     {
         if( mpFontKernPairs )
@@ -1767,18 +1764,7 @@ sal_uLong WinSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKer
         std::sort( mpFontKernPairs, mpFontKernPairs + mnFontKernPairCount, ImplCmpKernData );
     }
 
-    if( !pKernPairs )
-        return mnFontKernPairCount;
-    else if( mpFontKernPairs )
-    {
-        if ( nPairs < mnFontKernPairCount )
-            nPairs = mnFontKernPairCount;
-        memcpy( pKernPairs, mpFontKernPairs,
-                nPairs*sizeof( ImplKernPairData ) );
-        return nPairs;
-    }
-
-    return 0;
+    return mnFontKernPairCount;
 }
 
 // -----------------------------------------------------------------------

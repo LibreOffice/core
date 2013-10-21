@@ -29,7 +29,6 @@ class ServerFont;
 class GlyphCachePeer;
 class ServerFontLayoutEngine;
 class ServerFontLayout;
-struct ImplKernPairData;
 class ImplFontOptions;
 
 #include <tools/gen.hxx>

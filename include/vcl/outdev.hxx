@@ -43,7 +43,6 @@
 struct ImplOutDevData;
 class ImplFontEntry;
 struct ImplObjStack;
-struct ImplKernPairData;
 struct SystemGraphicsData;
 struct SystemFontData;
 struct SystemTextLayoutData;

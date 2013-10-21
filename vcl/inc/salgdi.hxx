@@ -35,7 +35,6 @@ class ImplDevFontList;
 class SalBitmap;
 class FontSelectPattern;
 class ImplFontMetricData;
-struct ImplKernPairData;
 class PhysicalFontFace;
 class ImplFontCharMap;
 class SalLayout;

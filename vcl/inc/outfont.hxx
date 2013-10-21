@@ -268,18 +268,6 @@ private:
     mutable int                     mnFallbackCount;
 };
 
-// --------------------
-// - ImplKernPairData -
-// --------------------
-
-struct ImplKernPairData
-{
-    sal_uInt16          mnChar1;
-    sal_uInt16          mnChar2;
-    long                mnKern;
-};
-
-
 // -----------------------
 // - ImplFontMetricData -
 // -----------------------

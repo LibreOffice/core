@@ -270,8 +270,7 @@ private:
     bool tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap);
 
     // get kernign pairs of the current font
-    // return only PairCount if (pKernPairs == NULL)
-    sal_uLong               GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
+    sal_uLong               GetKernPairs();
 
 public:
     // public SalGraphics methods, the interface to the independent vcl part

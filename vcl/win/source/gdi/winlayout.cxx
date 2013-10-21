@@ -2928,7 +2928,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         {
             // TODO: directly cache kerning info in the rFontInstance
             // TODO: get rid of kerning methods+data in WinSalGraphics object
-            GetKernPairs( 0, NULL );
+            GetKernPairs();
             rFontInstance.SetKernData( mnFontKernPairCount, mpFontKernPairs );
         }
 
