@@ -99,44 +99,13 @@ private:
 
     UniString&          Assign( const OUString& rStr );
     UniString&          Append( const UniString& rStr );
-
-                        UniString( const int* pDummy );    // not implemented: to prevent UniString( NULL )
-                        UniString(int); // not implemented; to detect misuses of
-                                        // UniString(sal_Unicode)
-    void                operator =(int); // not implemented; to detect misuses
-                                         // of operator =(sal_Unicode)
-    void                Append(int); // not implemented; to detect misuses of
-                                     // Append(sal_Unicode)
-
-    //detect and reject use of RTL_CONSTASCII_STRINGPARAM instead of RTL_CONSTASCII_USTRINGPARAM
-    TOOLS_DLLPRIVATE UniString( const sal_Char*, sal_Int32 );
-
-    //detect and reject wrong way to attempt to create a UniString from a substring of
-    //a OString
-    TOOLS_DLLPRIVATE UniString(const OString& rByteStr, xub_StrLen nPos, xub_StrLen nLen,
-    sal_uInt32       nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS);
-
-    //no longer implemented
-    TOOLS_DLLPRIVATE UniString( const OString& rByteStr,
-                                   rtl_TextEncoding eTextEncoding,
-                                   sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
-    TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr );
-    TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr, xub_StrLen nLen );
-    TOOLS_DLLPRIVATE UniString( sal_Unicode c );
 public:
                         UniString();
                         UniString( const ResId& rResId );
                         UniString( const UniString& rStr );
                         UniString( const UniString& rStr, xub_StrLen nPos, xub_StrLen nLen );
                         UniString( const OUString& rStr );
-                        UniString(char c); // ...but allow "UniString('a')"
-                        UniString( const sal_Char* pByteStr,
-                                   rtl_TextEncoding eTextEncoding,
-                                   sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
-                        UniString( const sal_Char* pByteStr, xub_StrLen nLen,
-                                   rtl_TextEncoding eTextEncoding,
-                                   sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
-                        ~UniString();
+                       ~UniString();
 
     operator OUString () const
     {

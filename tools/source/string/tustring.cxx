@@ -45,8 +45,6 @@ DBG_NAME( UniString )
 #include <strimp.cxx>
 #include <strucvt.cxx>
 
-UniString::UniString(char c): mpData(ImplAllocData(1)) { mpData->maStr[0] = c; }
-
 StringCompare STRING::CompareTo( const STRING& rStr, xub_StrLen nLen ) const
 {
     if ( mpData == rStr.mpData )

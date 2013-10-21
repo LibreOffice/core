@@ -17,31 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-UniString::UniString( const char* pByteStr,
-                      rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
-{
-    DBG_ASSERT( pByteStr, "UniString::UniString() - pByteStr is NULL" );
-
-    mpData = NULL;
-    rtl_string2UString( (rtl_uString **)(&mpData),
-                        pByteStr, ImplStringLen( pByteStr ),
-                        eTextEncoding, nCvtFlags );
-}
-
-UniString::UniString( const char* pByteStr, xub_StrLen nLen,
-                      rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
-{
-    DBG_ASSERT( pByteStr, "UniString::UniString() - pByteStr is NULL" );
-
-    if ( nLen == STRING_LEN )
-        nLen = ImplStringLen( pByteStr );
-
-    mpData = NULL;
-    rtl_string2UString( (rtl_uString **)(&mpData),
-                        pByteStr, nLen,
-                        eTextEncoding, nCvtFlags );
-}
-
 UniString::UniString( const OUString& rStr )
     : mpData(NULL)
 {
