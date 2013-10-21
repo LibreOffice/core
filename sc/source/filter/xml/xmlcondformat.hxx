@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef SC_XMLCONDFORMAT_HXX
+#define SC_XMLCONDFORMAT_HXX
+
 #include <xmloff/xmlictxt.hxx>
 #include "xmlimprt.hxx"
 #include "rangelst.hxx"
@@ -188,5 +191,7 @@ public:
 
     virtual ~ScXMLDateContext() {}
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

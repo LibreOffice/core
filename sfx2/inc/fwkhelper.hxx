@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef _SFX_FWKHELPER_HXX_
+#define _SFX_FWKHELPER_HXX_
+
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include <com/sun/star/uno/Reference.hxx>
@@ -27,5 +30,7 @@
 SFX2_DLLPUBLIC void SAL_CALL RefreshToolbars(
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame
 );
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

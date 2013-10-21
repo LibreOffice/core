@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef SC_CONDFORMATDLGENTRY_HXX
+#define SC_CONDFORMATDLGENTRY_HXX
+
 #include "colorscale.hxx"
 #include "conditio.hxx"
 #include <formula/funcutl.hxx>
@@ -276,5 +279,7 @@ public:
     virtual void SetInactive();
     virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::ICONSET; }
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

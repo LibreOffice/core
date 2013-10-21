@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef SC_NAMEMGRTABLE_HXX
+#define SC_NAMEMGRTABLE_HXX
+
 #include <svtools/simptabl.hxx>
 #include <vcl/ctrl.hxx>
 
@@ -68,5 +71,7 @@ public:
     DECL_LINK( ScrollHdl, void*);
     DECL_LINK( HeaderEndDragHdl, void*);
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef _INCLUDED_ANIMCORE_FACTREG_HXX_
+#define _INCLUDED_ANIMCORE_FACTREG_HXX_
+
 namespace animcore {
 
 #define DECL_NODE_FACTORY(N)\
@@ -38,5 +41,7 @@ DECL_NODE_FACTORY( COMMAND );
 DECL_NODE_FACTORY( TargetPropertiesCreator );
 
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

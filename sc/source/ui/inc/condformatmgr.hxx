@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef SC_CONDFORMATMGR_HXX
+#define SC_CONDFORMATMGR_HXX
+
 #include "sc.hrc"
 
 #include <vcl/dialog.hxx>
@@ -91,5 +94,7 @@ private:
 
     bool mbModified;
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

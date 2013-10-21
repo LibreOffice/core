@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef _BASIC_BASICCHARCLASS_HXX
+#define _BASIC_BASICCHARCLASS_HXX
+
 #include <unotools/charclass.hxx>
 #include <rtl/instance.hxx>
 
@@ -38,5 +41,7 @@ public:
 };
 
 class theBasicCharClass: public rtl::Static<BasicCharClass, theBasicCharClass> {};
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

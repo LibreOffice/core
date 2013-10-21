@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef _CPPU_THREADPOOL_CURRENT_HXX_
+#define _CPPU_THREADPOOL_CURRENT_HXX_
+
 #include "rtl/byteseq.h"
 
 typedef struct _uno_ExtEnvironment uno_ExtEnvironment;
@@ -38,5 +41,7 @@ struct IdContainer
 
 IdContainer * getIdContainer() SAL_THROW(());
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

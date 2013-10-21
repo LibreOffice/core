@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#ifndef CONNECTIVITY_PARAMETERSUBSTITUTION_HXX
+#define CONNECTIVITY_PARAMETERSUBSTITUTION_HXX
+
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -60,5 +64,7 @@ namespace connectivity
 // ==================================
 } // connectivity
 // ==================================
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

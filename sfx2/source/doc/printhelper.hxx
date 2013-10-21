@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef SFX_PRINTHELPER_HXX
+#define SFX_PRINTHELPER_HXX
+
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
@@ -59,5 +62,7 @@ private:
     IMPL_PrintListener_DataContainer* m_pData ;
     virtual void impl_setPrinter(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh);
 } ;
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
