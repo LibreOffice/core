@@ -446,7 +446,7 @@ sal_Int16 SAL_CALL unicode::getScriptClassFromUScriptCode(UScriptCode eScript)
     return nRet;
 }
 
-OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
+OString SAL_CALL unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
 {
     OString sRet;
     switch (eScript)

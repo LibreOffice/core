@@ -53,7 +53,7 @@ public:
     static sal_Int16 SAL_CALL getScriptClassFromUScriptCode(UScriptCode eScript);
 
     //Return a language that can be written in a given ISO 15924 script code
-    static OString SAL_CALL getExemplerLanguageForUScriptCode(UScriptCode eScript);
+    static OString SAL_CALL getExemplarLanguageForUScriptCode(UScriptCode eScript);
 };
 
 #endif

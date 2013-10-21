@@ -900,11 +900,11 @@ namespace
         return bIsImpossible;
     }
 
-    LanguageTag getExemplerLangTagForCodePoint(sal_uInt32 currentChar)
+    LanguageTag getExemplarLangTagForCodePoint(sal_uInt32 currentChar)
     {
         int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
         UScriptCode eScript = static_cast<UScriptCode>(script);
-        OStringBuffer aBuf(unicode::getExemplerLanguageForUScriptCode(eScript));
+        OStringBuffer aBuf(unicode::getExemplarLanguageForUScriptCode(eScript));
         const char* pScriptCode = uscript_getShortName(eScript);
         if (pScriptCode)
             aBuf.append('-').append(pScriptCode);
@@ -1014,7 +1014,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
             //#i105784#/rhbz#527719  improve selection of fallback font
             if (aLangAttrib.isEmpty())
             {
-                aLangTag = getExemplerLangTagForCodePoint(nCode);
+                aLangTag = getExemplarLangTagForCodePoint(nCode);
                 aLangAttrib = mapToFontConfigLangTag(aLangTag);
             }
         }
@@ -1144,7 +1144,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                         //scripts to default to a given language.
                         for (sal_Int32 i = 0; i < nRemainingLen; ++i)
                         {
-                            LanguageTag aOurTag = getExemplerLangTagForCodePoint(pRemainingCodes[i]);
+                            LanguageTag aOurTag = getExemplarLangTagForCodePoint(pRemainingCodes[i]);
                             OString sTag = OUStringToOString(aOurTag.getBcp47(), RTL_TEXTENCODING_UTF8);
                             if (m_aPreviousLangSupportRequests.find(sTag) != m_aPreviousLangSupportRequests.end())
                                 continue;
