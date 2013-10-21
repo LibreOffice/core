@@ -911,7 +911,7 @@ OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
             sRet = "woe";
             break;
 #endif
-#if (U_ICU_VERSION_MAJOR_NUM > 4)
+#if (U_ICU_VERSION_MAJOR_NUM >= 49)
         case USCRIPT_ANATOLIAN_HIEROGLYPHS:
             sRet = "hlu";
             break;
@@ -920,6 +920,14 @@ OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
             break;
         case USCRIPT_TIRHUTA:
             sRet = "mai";
+            break;
+#endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 52)
+        case USCRIPT_CAUCASIAN_ALBANIAN:
+            sRet = "xag";
+            break;
+        case USCRIPT_MAHAJANI:
+            sRet = "mwr";
             break;
 #endif
     }
