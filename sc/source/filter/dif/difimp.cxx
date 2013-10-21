@@ -21,7 +21,6 @@
 #include <math.h>
 
 #include <svl/zforlist.hxx>
-#include <tools/string.hxx>
 #include "attrib.hxx"
 #include "dif.hxx"
 #include "docpool.hxx"
@@ -371,7 +370,6 @@ TOPIC DifParser::GetNextTopic( void )
             case S_Data:
                 OSL_ENSURE( aLine.getLength() >= 2,
                     "+GetNextTopic(): <String> ist zu kurz!" );
-                OSL_ENSURE( aLine.getLength() - 2 <= STRING_MAXLEN, "GetNextTopic(): line doesn't fit into data");
                 if( aLine.getLength() > 2 )
                     aData = aLine.copy( 1, aLine.getLength() - 2 );
                 else
