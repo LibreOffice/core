@@ -305,7 +305,7 @@ public:
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
-    virtual sal_uLong           GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
+    sal_uLong               GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     // get the layout capabilities of the current font
