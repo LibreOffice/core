@@ -855,7 +855,7 @@ void HtmlExport::ExportWebCast()
     if (maCGIPath.isEmpty())
         maCGIPath = ".";
 
-    if (maCGIPath[maCGIPath.getLength() - 1] != '/')
+    if (!maCGIPath.endsWith("/"))
         maCGIPath += "/";
 
     if( meScript == SCRIPT_ASP )
@@ -867,7 +867,7 @@ void HtmlExport::ExportWebCast()
         if (maURLPath.isEmpty())
             maURLPath = ".";
 
-        if (maURLPath[maURLPath.getLength() - 1] != '/')
+        if (!maURLPath.endsWith("/"))
             maURLPath += "/";
     }
 

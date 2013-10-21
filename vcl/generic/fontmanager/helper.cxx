@@ -358,7 +358,7 @@ void psp::normPath( OString& rPath )
     // on many different platforms let's play it safe
     OString aPath = rPath.replaceAll("//", "/");
 
-    if( !aPath.isEmpty() && aPath[aPath.getLength()-1] == '/' )
+    if( aPath.endsWith("/") )
         aPath = aPath.copy(0, aPath.getLength()-1);
 
     if( ( aPath.indexOf("./") != -1 ||

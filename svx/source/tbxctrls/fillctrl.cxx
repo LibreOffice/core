@@ -28,8 +28,8 @@
 
 #define DELAY_TIMEOUT           300
 
-#define TMP_STR_BEGIN   '['
-#define TMP_STR_END     ']'
+#define TMP_STR_BEGIN   "["
+#define TMP_STR_END     "]"
 
 #include "svx/drawitem.hxx"
 #include "svx/xattr.hxx"
@@ -259,13 +259,13 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         {
                             // Last entry gets tested against temporary color
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr[0] == TMP_STR_BEGIN &&
-                                 aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
+                            if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
+                                 aTmpStr.endsWith(TMP_STR_END) )
                             {
                                 pFillAttrLB->RemoveEntry( nCount - 1 );
                             }
                         }
-                        aTmpStr = OUString(TMP_STR_BEGIN) + aString + OUString(TMP_STR_END);
+                        aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
                         //pFillAttrLB->SetUpdateMode( sal_False );
                         sal_uInt16 nPos = pFillAttrLB->InsertEntry( aColor, aTmpStr );
@@ -293,13 +293,13 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         {
                             // Last entry gets tested against temporary entry
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr[0] == TMP_STR_BEGIN &&
-                                 aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
+                            if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
+                                 aTmpStr.endsWith(TMP_STR_END) )
                             {
                                 pFillAttrLB->RemoveEntry( nCount - 1 );
                             }
                         }
-                        aTmpStr = OUString(TMP_STR_BEGIN) + aString + OUString(TMP_STR_END);
+                        aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
                         XGradientEntry* pEntry = new XGradientEntry( pGradientItem->GetGradientValue(), aTmpStr );
                         XGradientList aGradientList( "" );
@@ -338,13 +338,13 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         {
                             // Last entry gets tested against temporary entry
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr[0] == TMP_STR_BEGIN &&
-                                 aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
+                            if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
+                                 aTmpStr.endsWith(TMP_STR_END) )
                             {
                                 pFillAttrLB->RemoveEntry( nCount - 1 );
                             }
                         }
-                        aTmpStr = OUString(TMP_STR_BEGIN) + aString + OUString(TMP_STR_END);
+                        aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
                         XHatchEntry* pEntry = new XHatchEntry( pHatchItem->GetHatchValue(), aTmpStr );
                         XHatchList aHatchList( "" );
@@ -390,13 +390,13 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         {
                             // Last entry gets tested against temporary entry
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr[0] == TMP_STR_BEGIN &&
-                                 aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
+                            if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
+                                 aTmpStr.endsWith(TMP_STR_END) )
                             {
                                 pFillAttrLB->RemoveEntry( nCount - 1 );
                             }
                         }
-                        aTmpStr = OUString(TMP_STR_BEGIN) + aString + OUString(TMP_STR_END);
+                        aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
                         XBitmapEntry* pEntry = new XBitmapEntry(pBitmapItem->GetGraphicObject(), aTmpStr);
                         XBitmapListRef xBitmapList =
@@ -673,7 +673,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
             {
                 // Entry gets tested against temporary color
                 OUString aTmpStr = pLbFillAttr->GetSelectEntry();
-                if( aTmpStr[0] == TMP_STR_BEGIN && aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
+                if( aTmpStr.startsWith(TMP_STR_BEGIN) && aTmpStr.endsWith(TMP_STR_END) )
                 {
                     aTmpStr = aTmpStr.copy(1, aTmpStr.getLength()-2);
                 }

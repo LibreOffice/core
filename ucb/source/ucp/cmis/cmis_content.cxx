@@ -569,7 +569,7 @@ namespace cmis
                         OUString sPath = m_sObjectPath;
 
                         // Get rid of the trailing slash problem
-                        if ( sPath[ sPath.getLength( ) - 1 ] == '/' )
+                        if ( sPath.endsWith("/") )
                             sPath = sPath.copy( 0, sPath.getLength() - 1 );
 
                         // Get the last segment
@@ -1862,7 +1862,7 @@ namespace cmis
 
                     URL aUrl( m_sURL );
                     OUString sPath( m_sObjectPath );
-                    if ( sPath[sPath.getLength( ) - 1] != '/' )
+                    if ( !sPath.endsWith("/") )
                         sPath += "/";
                     sPath += STD_TO_OUSTR( ( *it )->getName( ) );
                     OUString sId = STD_TO_OUSTR( ( *it )->getId( ) );

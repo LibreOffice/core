@@ -56,11 +56,7 @@ OUString getSpecialDateName(double fValue, bool bFirst, SvNumberFormatter* pForm
 
 bool ScDPUtil::isDuplicateDimension(const OUString& rName)
 {
-    if (rName.isEmpty())
-        return false;
-
-    sal_Unicode cLast = rName[rName.getLength()-1];
-    return cLast == sal_Unicode('*');
+    return rName.endsWith("*");
 }
 
 OUString ScDPUtil::getSourceDimensionName(const OUString& rName)

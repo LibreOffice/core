@@ -64,11 +64,11 @@ OUString getParentName( const OUString& aFileName )
     sal_Int32 lastIndex = aFileName.lastIndexOf( sal_Unicode('/') );
     OUString aParent = aFileName.copy( 0, lastIndex );
 
-    if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
-        aParent += OUString("/");
+    if( aParent.endsWith(":") && aParent.getLength() == 6 )
+        aParent += "/";
 
     if( 0 == aParent.compareToAscii( "file://" ) )
-        aParent = OUString("file:///");
+        aParent = "file:///";
 
     return aParent;
 }
@@ -80,7 +80,7 @@ bool ensuredir( const OUString& rUnqPath )
         return false;
 
     // remove trailing slash
-    if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )
+    if ( rUnqPath.endsWith("/") )
         aPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
     else
         aPath = rUnqPath;
@@ -172,8 +172,7 @@ OUString ConstructTempDir_Impl( const OUString* pParent )
     }
 
     // Make sure that directory ends with a separator
-    sal_Int32 i = aName.getLength();
-    if( i>0 && aName[i-1] != '/' )
+    if( !aName.isEmpty() && !aName.endsWith("/") )
         aName += "/";
 
     return aName;
@@ -434,7 +433,7 @@ OUString TempFile::SetTempNameBaseDirectory( const OUString &rBaseName )
     OUString aUnqPath( rBaseName );
 
     // remove trailing slash
-    if ( rBaseName[ rBaseName.getLength() - 1 ] == sal_Unicode( '/' ) )
+    if ( rBaseName.endsWith("/") )
         aUnqPath = rBaseName.copy( 0, rBaseName.getLength() - 1 );
 
     // try to create the directory

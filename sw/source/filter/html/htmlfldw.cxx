@@ -464,10 +464,9 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         const OUString& rComment = pFld->GetPar2();
         sal_Bool bWritten = sal_False;
 
-        if( (rComment.getLength() >= 6 && '<' == rComment[0] &&
-            '>' == rComment[rComment.getLength()-1] &&
-            rComment.copy( 1, 4 ).equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_meta) ) ||
-              (rComment.getLength() >= 7 &&
+        if( (rComment.getLength() >= 6 && rComment.startsWith("<") && rComment.endsWith(">") &&
+             rComment.copy( 1, 4 ).equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_meta) ) ||
+            (rComment.getLength() >= 7 &&
              rComment.startsWith( "<!--" ) &&
              rComment.endsWith( "-->" )) )
         {
@@ -481,7 +480,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             bWritten = sal_True;
         }
         else if( rComment.getLength() >= 7 &&
-                 '>' == rComment[rComment.getLength()-1] &&
+                 rComment.endsWith(">") &&
                  rComment.startsWithIgnoreAsciiCase( "HTML:" ) )
         {
             OUString sComment(comphelper::string::stripStart(rComment.copy(5), ' '));

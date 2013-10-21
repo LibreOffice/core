@@ -1354,7 +1354,7 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
     {
         xub_StrLen nIndex = 0;
         OUString sPara = pTextEngine->GetText( nPara );
-        if(!sPara.isEmpty() && sPara[sPara.getLength() - 1] != ' ')
+        if(!sPara.isEmpty() && !sPara.endsWith(" "))
         {
             TextPaM aPaM(nPara, sPara.getLength());
             pTextEngine->ReplaceText(TextSelection( aPaM ), OUString(' '));

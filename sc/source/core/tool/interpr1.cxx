@@ -7192,7 +7192,7 @@ void ScInterpreter::ScAddressFunc()
         }
         /* TODO: yet unsupported external reference in CONV_XL_R1C1 syntax may
          * need some extra handling to isolate Tab from Doc. */
-        if (sTabStr[0] != '\'' || sTabStr[sTabStr.getLength()-1] != '\'')
+        if (sTabStr[0] != '\'' || !sTabStr.endsWith("'"))
             ScCompiler::CheckTabQuotes( sTabStr, eConv);
         if (!aDoc.isEmpty())
             sTabStr = aDoc + sTabStr;
@@ -8329,7 +8329,7 @@ bool ScInterpreter::MayBeRegExp( const OUString& rStr, const ScDocument* pDoc  )
 {
     if ( pDoc && !pDoc->GetDocOptions().IsFormulaRegexEnabled() )
         return false;
-    if ( rStr.isEmpty() || (rStr.getLength() == 1 && rStr[0] != '.') )
+    if ( rStr.isEmpty() || (rStr.getLength() == 1 && !rStr.startsWith(".")) )
         return false;   // single meta characters can not be a regexp
     static const sal_Unicode cre[] = { '.','*','+','?','[',']','^','$','\\','<','>','(',')','|', 0 };
     const sal_Unicode* p1 = rStr.getStr();

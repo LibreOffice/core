@@ -28,8 +28,8 @@
 
 #include <svx/dialogs.hrc>
 
-#define TMP_STR_BEGIN   '['
-#define TMP_STR_END     ']'
+#define TMP_STR_BEGIN   "["
+#define TMP_STR_END     "]"
 
 #define DELAY_TIMEOUT           100
 
@@ -318,13 +318,13 @@ void SvxColorBox::Update( const XLineColorItem* pItem )
             {
                 // Last entry gets tested against temporary color
                 aTmpStr = GetEntry( nCount - 1 );
-                if(  aTmpStr[0] == TMP_STR_BEGIN &&
-                     aTmpStr[aTmpStr.getLength()-1] == TMP_STR_END )
+                if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
+                     aTmpStr.endsWith(TMP_STR_END) )
                 {
                     RemoveEntry( nCount - 1 );
                 }
             }
-            aTmpStr = OUString(TMP_STR_BEGIN) + aString + OUString(TMP_STR_END);
+            aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
             sal_uInt16 nPos = InsertEntry( aColor, aTmpStr );
             SelectEntryPos( nPos );

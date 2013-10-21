@@ -162,7 +162,7 @@ css::uno::Any Content::execute(
         uri += "/";
         break;
     case '2':
-        if (uri.getLength() > 0 && uri[uri.getLength() - 1] == '/') {
+        if (uri.endsWith("/")) {
             uri = uri.copy(0, uri.getLength() -1);
         }
         break;

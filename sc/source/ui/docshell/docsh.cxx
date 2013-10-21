@@ -2012,7 +2012,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
             {
                 sal_Unicode c = aUniString[0];
                 bString = (c == cStrDelim || c == ' ' ||
-                        aUniString[aUniString.getLength()-1] == ' ' ||
+                        aUniString.endsWith(" ") ||
                         aUniString.indexOf(cStrDelim) >= 0);
                 if (!bString && cDelim != 0)
                     bString = (aUniString.indexOf(cDelim) >= 0);

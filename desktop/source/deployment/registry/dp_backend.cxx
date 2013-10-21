@@ -238,7 +238,7 @@ void PackageRegistryBackend::deleteTempFolder(
         erase_path( folderUrl, Reference<XCommandEnvironment>(),
                     false /* no throw: ignore errors */ );
 
-        if (folderUrl[folderUrl.getLength() - 1] == '_')
+        if (folderUrl.endsWith("_"))
         {
             const OUString  tempFile = folderUrl.copy(0, folderUrl.getLength() - 1);
             erase_path( tempFile, Reference<XCommandEnvironment>(),

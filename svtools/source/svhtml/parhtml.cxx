@@ -907,8 +907,7 @@ int HTMLParser::_GetNextRawToken()
                                 : aTok.compareTo(aEndToken) );
                         }
                     }
-                    if( bReadComment && '>'==nNextCh && aTok.getLength() >= 2 &&
-                        aTok.endsWith( "--" ) )
+                    if( bReadComment && '>'==nNextCh && aTok.endsWith( "--" ) )
                     {
                         // End of comment of style <!----->
                         bReadComment = false;
@@ -1214,8 +1213,7 @@ int HTMLParser::_GetNextToken()
                         // generate pending HTML_<TOKEN>_OFF for HTML_<TOKEN>_ON
                         // Do not convert this to a single HTML_<TOKEN>_OFF
                         // which lead to fdo#56772.
-                        if ((HTML_TOKEN_ONOFF & nRet) && (aToken.getLength() >= 1) &&
-                                ('/' == aToken[aToken.getLength()-1]))
+                        if ((HTML_TOKEN_ONOFF & nRet) && aToken.endsWith("/"))
                         {
                             mnPendingOffToken = nRet + 1;       // HTML_<TOKEN>_ON -> HTML_<TOKEN>_OFF
                             aToken = aToken.replaceAt( aToken.getLength()-1, 1, "");   // remove trailing '/'
@@ -1275,8 +1273,7 @@ int HTMLParser::_GetNextToken()
                         // Read until closing %>. If not found restart at first >.
                         while( !bDone && !rInput.IsEof() && IsParserWorking() )
                         {
-                            bDone = '>'==nNextCh && aToken.getLength() >= 1 &&
-                                    '%' == aToken[ aToken.getLength()-1 ];
+                            bDone = '>'==nNextCh && aToken.endsWith("%");
                             if( !bDone )
                             {
                                 aToken += OUString(nNextCh);
@@ -2127,7 +2124,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
     if ( bHTTPEquiv && i_pHTTPHeader )
     {
         // Netscape seems to just ignore a closing ", so we do too
-        if ( !aContent.isEmpty() && '"' == aContent[ aContent.getLength()-1 ] )
+        if ( aContent.endsWith("\"") )
         {
             aContent = aContent.copy( 0, aContent.getLength() - 1 );
         }

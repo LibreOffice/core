@@ -1042,12 +1042,12 @@ void XMLPlaceholderFieldImportContext::PrepareField(
     OUString aContent = GetContent();
     sal_Int32 nStart = 0;
     sal_Int32 nLength = aContent.getLength();
-    if ((nLength > 0) && (aContent.getStr()[0] == '<'))
+    if (aContent.startsWith("<"))
     {
         --nLength;
         ++nStart;
     }
-    if ((nLength > 0) && (aContent.getStr()[aContent.getLength()-1] == '>'))
+    if (aContent.endsWith(">"))
     {
         --nLength;
     }

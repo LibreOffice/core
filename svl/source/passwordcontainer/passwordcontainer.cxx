@@ -788,8 +788,8 @@ UrlRecord PasswordContainer::find(
             else
             {
                 OUString tmpUrl( aUrl );
-                if ( tmpUrl.getStr()[tmpUrl.getLength() - 1] != (sal_Unicode)'/' )
-                    tmpUrl += OUString("/");
+                if ( !tmpUrl.endsWith("/") )
+                    tmpUrl += "/";
 
                 aIter = m_aContainer.lower_bound( tmpUrl );
                 if( aIter != m_aContainer.end() && aIter->first.match( tmpUrl ) )
@@ -919,7 +919,7 @@ void SAL_CALL PasswordContainer::remove( const OUString& aURL, const OUString& a
             if( aInd > 0 && aUrl.getLength()-1 == aInd )
                 aUrl = aUrl.copy( 0, aUrl.getLength() - 1 );
             else
-                aUrl += OUString("/");
+                aUrl += "/";
 
             aIter = m_aContainer.find( aUrl );
         }
@@ -960,7 +960,7 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& aURL, const O
             if( aInd > 0 && aUrl.getLength()-1 == aInd )
                 aUrl = aUrl.copy( 0, aUrl.getLength() - 1 );
             else
-                aUrl += OUString("/");
+                aUrl += "/";
 
             aIter = m_aContainer.find( aUrl );
         }

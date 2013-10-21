@@ -199,11 +199,11 @@ namespace fileaccess {
         sal_Int32 lastIndex = aFileName.lastIndexOf( sal_Unicode('/') );
         OUString aParent = aFileName.copy( 0,lastIndex );
 
-        if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
-            aParent += OUString("/");
+        if( aParent.endsWith(":") && aParent.getLength() == 6 )
+            aParent += "/";
 
         if ( aParent == "file://" )
-            aParent = OUString("file:///");
+            aParent = "file:///";
 
         return aParent;
     }

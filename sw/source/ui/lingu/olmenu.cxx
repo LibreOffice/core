@@ -677,8 +677,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             // if orginal word has a trailing . (likely the end of a sentence)
             // and the replacement text hasn't, then add it to the replacement
             if (!aTmp.isEmpty() && !aOrig.isEmpty() &&
-                '.' == aOrig[ aOrig.getLength() - 1] && /* !IsAlphaNumeric ??*/
-                '.' != aTmp[ aTmp.getLength() - 1])
+                aOrig.endsWith(".") && /* !IsAlphaNumeric ??*/
+                !aTmp.endsWith("."))
             {
                 aTmp += ".";
             }

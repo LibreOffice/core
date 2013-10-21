@@ -96,8 +96,7 @@ void HTMLParser::RemoveSGMLComment( OUString &rString, sal_Bool bFull )
 
 
     // remove SGML comments
-    if( rString.getLength() >= 4 &&
-        rString.startsWith( "<!--" ) )
+    if( rString.startsWith( "<!--" ) )
     {
         sal_Int32 nPos = 3;
         if( bFull )
@@ -117,8 +116,7 @@ void HTMLParser::RemoveSGMLComment( OUString &rString, sal_Bool bFull )
         rString = rString.copy( nPos, rString.getLength() - nPos );
     }
 
-    if( rString.getLength() >=3 &&
-        rString.endsWith("-->") )
+    if( rString.endsWith("-->") )
     {
         rString = rString.copy( 0, rString.getLength()-3 );
         if( bFull )

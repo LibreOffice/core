@@ -1834,8 +1834,8 @@ sal_Bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
                 aFmt.SetBulletFont( &rActBulletFont );
 
             sal_Unicode cChar = 0;
-            if( pLevelSettings->sBulletChar.getLength() )
-                cChar = pLevelSettings->sBulletChar.getStr()[0];
+            if( !pLevelSettings->sBulletChar.isEmpty() )
+                cChar = pLevelSettings->sBulletChar[0];
             if( Application::GetSettings().GetLayoutRTL() )
             {
                             if( 0 == i && cChar == BulletsTypeMgr::aDynamicBulletTypes[5] )

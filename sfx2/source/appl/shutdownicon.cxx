@@ -525,7 +525,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                 else
                 {
                     OUString    aBaseDirURL = sFiles[0];
-                    if ( !aBaseDirURL.isEmpty() && aBaseDirURL[aBaseDirURL.getLength()-1] != '/' )
+                    if ( !aBaseDirURL.isEmpty() && !aBaseDirURL.endsWith("/") )
                         aBaseDirURL += "/";
 
                     int iFiles;

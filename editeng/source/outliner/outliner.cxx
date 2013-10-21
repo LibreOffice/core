@@ -439,7 +439,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
     {
         OUString aText(convertLineEnd(rText, LINEEND_LF));
 
-        if (aText[aText.getLength()-1] == '\x0A')
+        if (aText.endsWith("\x0A"))
             aText = aText.copy(0, aText.getLength()-1); // Delete the last break
 
         sal_uInt16 nCount = comphelper::string::getTokenCount(aText, '\x0A');
