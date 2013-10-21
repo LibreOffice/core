@@ -101,7 +101,6 @@ private:
     UniString&          Append( const UniString& rStr );
 public:
                         UniString();
-                        UniString( const ResId& rResId );
                         UniString( const UniString& rStr );
                         UniString( const OUString& rStr );
                        ~UniString();

@@ -59,25 +59,6 @@ UniString& UniString::Assign( const OUString& rStr )
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 
-UniString::UniString( const ResId& rResId )
-    : mpData(NULL)
-{
-    OUString sStr(rResId.toString());
-
-    OSL_ENSURE(sStr.pData->length < STRING_MAXLEN,
-               "Overflowing OUString -> UniString cut to zero length");
-
-    if (sStr.pData->length < STRING_MAXLEN)
-    {
-        mpData = reinterpret_cast< UniStringData * >(sStr.pData);
-        STRING_ACQUIRE((STRING_TYPE *)mpData);
-    }
-    else
-    {
-        STRING_NEW((STRING_TYPE **)&mpData);
-    }
-}
-
 OUString ResId::toString() const
 {
     SetRT( RSC_STRING );
