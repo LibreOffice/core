@@ -74,7 +74,7 @@ private:
         {
             mpParser->parse();
         }
-        catch (const SAXParseException& e)
+        catch (const SAXParseException&)
         {
             mpParser->getEntity().getEvent( EXCEPTION );
             mpParser->produce( EXCEPTION );
