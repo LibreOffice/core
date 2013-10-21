@@ -344,9 +344,10 @@ SbiToken SbiTokenizer::Next()
         return eCurTok = EOLN;
     }
 
-    if( aSym[0] == '\n' )
+    if( aSym.startsWith("\n") )
     {
-        bEos = true; return eCurTok = EOLN;
+        bEos = true;
+        return eCurTok = EOLN;
     }
     bEos = false;
 

@@ -2027,7 +2027,7 @@ sal_Bool SwTxtFormatter::AllowRepaintOpt() const
     const xub_StrLen nReformat = GetInfo().GetReformatStart();
     if( bOptimizeRepaint && STRING_LEN != nReformat )
     {
-        const sal_Unicode cCh = GetInfo().GetTxt()[ nReformat ];
+        const sal_Unicode cCh = nReformat >= GetInfo().GetTxt().getLength() ? 0 : GetInfo().GetTxt()[ nReformat ];
         bOptimizeRepaint = ( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
                             || ! GetInfo().HasHint( nReformat );
     }

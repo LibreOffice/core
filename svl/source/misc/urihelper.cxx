@@ -527,7 +527,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd, true,
                                          true)) ;
-                    if (i != nPrefixEnd && rText[i] == (sal_Unicode)'#')
+                    if (i != nPrefixEnd && i != rEnd && rText[i] == '#')
                     {
                         ++i;
                         while (i != rEnd
@@ -555,7 +555,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     sal_Int32 nUriEnd = i;
                     while (i != rEnd
                            && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
-                    if (i != nPrefixEnd && rText[i] == '#')
+                    if (i != nPrefixEnd && i != rEnd && rText[i] == '#')
                     {
                         ++i;
                         while (i != rEnd

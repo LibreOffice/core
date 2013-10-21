@@ -208,14 +208,14 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
             }
 
             // Search for next word
-            do
+            nIndex++;
+            while ( nIndex < nLen )
             {
-                nIndex++;
                 c = aKey[ nIndex ];
                 if ( c == ' ' )
                     break;
+                nIndex++;
             }
-            while ( nIndex < nLen );
             nIndex++;
         }
         while ( nIndex < nLen );

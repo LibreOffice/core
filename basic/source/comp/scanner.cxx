@@ -401,13 +401,16 @@ bool SbiScanner::NextSym()
             GenError( SbERR_MATH_OVERFLOW );
 
         // type recognition?
-        SbxDataType t(GetSuffixType(aLine[nCol]));
-        if( t != SbxVARIANT )
+        if( nCol < aLine.getLength() )
         {
-            eScanType = t;
-            ++pLine;
-            ++nCol;
-        }
+            SbxDataType t(GetSuffixType(aLine[nCol]));
+            if( t != SbxVARIANT )
+            {
+                eScanType = t;
+                ++pLine;
+                ++nCol;
+            }
+       }
     }
 
     // Hex/octal number? Read in and convert:
@@ -531,7 +534,7 @@ bool SbiScanner::NextSym()
 PrevLineCommentLbl:
 
     if( bPrevLineExtentsComment || (eScanType != SbxSTRING &&
-                                    ( aSym[0] == '\'' || aSym.equalsIgnoreAsciiCase( "REM" ) ) ) )
+                                    ( aSym.startsWith("'") || aSym.equalsIgnoreAsciiCase( "REM" ) ) ) )
     {
         bPrevLineExtentsComment = false;
         aSym = OUString("REM");

@@ -88,24 +88,28 @@ namespace basegfx
                 {
                     if (sal_Unicode('.') == aChar) separator_seen = true;
                     sNumberString.append(rStr[io_rPos]);
-                    aChar = rStr[++io_rPos];
+                    io_rPos++;
+                    aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
                 }
 
                 if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
                 {
                     sNumberString.append(rStr[io_rPos]);
-                    aChar = rStr[++io_rPos];
+                    io_rPos++;
+                    aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
 
                     if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
                     {
                         sNumberString.append(rStr[io_rPos]);
-                        aChar = rStr[++io_rPos];
+                        io_rPos++;
+                        aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
                     }
 
                     while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
                     {
                         sNumberString.append(rStr[io_rPos]);
-                        aChar = rStr[++io_rPos];
+                        io_rPos++;
+                        aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
                     }
                 }
 

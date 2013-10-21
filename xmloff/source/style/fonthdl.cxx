@@ -81,7 +81,7 @@ bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno::Any
             nFirst++;
 
         // remove quotes
-        sal_Unicode c = rStrImpValue[nFirst];
+        sal_Unicode c = nFirst > nLast ? 0 : rStrImpValue[nFirst];
         if( nFirst < nLast && (sal_Unicode('\'') == c || sal_Unicode('\"') == c) && rStrImpValue[nLast] == c )
         {
             nFirst++;
