@@ -20,7 +20,7 @@
 #ifndef _SV_SIMPTABL_HXX
 #define _SV_SIMPTABL_HXX
 
-#include "svtools/svtdllapi.h"
+#include <svtools/svtdllapi.h>
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 
