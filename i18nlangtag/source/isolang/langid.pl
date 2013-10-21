@@ -267,13 +267,13 @@ sub main()
         my $coun = $2;
         $lang = lc($lang);
         $coun = uc($coun);
-        #     { LANGUAGE_AFRIKAANS,                   "af", "ZA" },
+        #     { LANGUAGE_AFRIKAANS,                   "af", "ZA", false },
         @resultlist = grepFile(
-            '^\s*\{\s*\w+\s*,\s*\"' . $lang . '\"\s*,\s*\"'  . $coun . '\"\s*\}\s*,',
+            '^\s*\{\s*\w+\s*,\s*\"' . $lang . '\"\s*,\s*\"'  . $coun . '\"\s*,\s*\w+\s*\}\s*,',
             "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", ());
         for $result (@resultlist)
         {
-            if ($result =~ /^\s*\{\s*(\w+)\s*,\s*\"\w+\"\s*,\s*\"(\w+)?\"\s*\}\s*,/)
+            if ($result =~ /^\s*\{\s*(\w+)\s*,\s*\"\w+\"\s*,\s*\"(\w+)?\"\s*,\s*\w+\s*\}\s*,/)
             {
                 push( @greplist, '\b' . $1 . '\b');
                 $modifier = "";     # complete identifier now case sensitive
@@ -305,15 +305,15 @@ sub main()
             }
         }
 
-        #     { LANGUAGE_AFRIKAANS,                   "af", "ZA" },
+        #     { LANGUAGE_AFRIKAANS,                   "af", "ZA", false },
         @resultlist = grepFile(
-            $modifier . '^\s*\{\s*.*' . $grepdef . '.*\s*,\s*\".*\"\s*,\s*\".*\"\s*\}\s*,',
+            $modifier . '^\s*\{\s*.*' . $grepdef . '.*\s*,\s*\".*\"\s*,\s*\".*\"\s*,\s*\w+\s*\}\s*,',
             "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", ());
 
         my @langcoungreplist;
         for $result (@resultlist)
         {
-            if ($result =~ /^\s*\{\s*\w+\s*,\s*\"(\w+)\"\s*,\s*\"(\w+)?\"\s*\}\s*,/)
+            if ($result =~ /^\s*\{\s*\w+\s*,\s*\"(\w+)\"\s*,\s*\"(\w+)?\"\s*,\s*\w+\s*\}\s*,/)
             {
                 my $lang = $1;
                 my $coun = $2;
