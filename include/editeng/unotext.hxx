@@ -278,12 +278,12 @@ protected:
     virtual void getPropertyValue( const SfxItemPropertySimpleEntry* pMap, com::sun::star::uno::Any& rAny, const SfxItemSet& rSet ) throw(::com::sun::star::beans::UnknownPropertyException );
     virtual void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const com::sun::star::uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::IllegalArgumentException );
 
-public:
     SvxUnoTextRangeBase( const SvxItemPropertySet* _pSet ) throw();
     SvxUnoTextRangeBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet ) throw();
     SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) throw();
     virtual ~SvxUnoTextRangeBase() throw();
 
+public:
     // Internal
     const ESelection&       GetSelection() const throw() { CheckSelection( ((SvxUnoTextRangeBase*)this)->maSelection, mpEditSource->GetTextForwarder() ); return maSelection; };
     void                    SetSelection( const ESelection& rSelection ) throw();
@@ -394,13 +394,13 @@ class EDITENG_DLLPUBLIC SvxUnoTextBase  : public SvxUnoTextRangeBase,
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >   xParentText;
 
-public:
     SvxUnoTextBase( ) throw();
     SvxUnoTextBase( const SvxItemPropertySet* _pSet ) throw();
     SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > xParent ) throw();
     SvxUnoTextBase( const SvxUnoTextBase& rText ) throw();
     virtual ~SvxUnoTextBase() throw();
 
+public:
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextBase )
 
     ESelection InsertField( const SvxFieldItem& rField ) throw();
