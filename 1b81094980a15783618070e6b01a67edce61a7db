@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///Dk\u003d",
+        "filename": "cppuhelper/source/bootstrap.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-21T09:07:24Z",
+      "side": 1,
+      "message": "you can use the new OUString::startsWith(..., OUString * rest \u003d 0) parameter here to avoid having to call uri.copy(RTL_CONSTASCII_LENGTH(PREFIX)), and also removing the need to have an explicit PREFIX variable at all,\n\n  return uri.startsWith(\"vnd.sun.star.expand:\", \u0026uri)\n      ? cppuhelper::detail::expandMacros(\n          rtl::Uri::decode(\n              uri, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8))\n      : uri;",
+      "revId": "1b81094980a15783618070e6b01a67edce61a7db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///Dg\u003d",
+        "filename": "cppuhelper/source/implbase_ex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-21T09:07:24Z",
+      "side": 1,
+      "message": "SAL_WARN has its own streaming idiom to construct the message, there is no need to compose an OUString upfront:\n\n  SAL_WARN(\n      \"cppuhelper\",\n      \"querying for interface \\\"\" \u003c\u003c rType.getTypeName() \u003c\u003c \"\\\": no interface type!\");",
+      "revId": "1b81094980a15783618070e6b01a67edce61a7db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///Dc\u003d",
+        "filename": "cppuhelper/source/implbase_ex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-21T09:07:24Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "1b81094980a15783618070e6b01a67edce61a7db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///DY\u003d",
+        "filename": "cppuhelper/source/implbase_ex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-21T09:07:24Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "1b81094980a15783618070e6b01a67edce61a7db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///DU\u003d",
+        "filename": "cppuhelper/source/unourl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-21T09:07:24Z",
+      "side": 1,
+      "message": "OUString::startsWithIgnoreAsciiCase has an overload for string literals,\n\n  if (!rUrl.startsWithIgnoreAsciiCase(\"uno:\"))",
+      "revId": "1b81094980a15783618070e6b01a67edce61a7db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3///DQ\u003d",
+        "filename": "cppuhelper/test/bootstrap/bootstrap.test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-21T09:07:24Z",
+      "side": 1,
+      "message": "no need to construct a temporary OUString here,\n\n  cppu::EnvGuard envGuard(uno::Environment(UNO_LB_UNO + clientPurpose, NULL);",
+      "revId": "1b81094980a15783618070e6b01a67edce61a7db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
