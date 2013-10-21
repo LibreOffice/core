@@ -29,6 +29,7 @@
 #include <uno/dispatcher.h> // declaration of generic uno interface
 #include <uno/mapping.hxx> // mapping stuff
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/tencinfo.h>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -251,21 +252,11 @@ OUString SAL_CALL X11Clipboard::getImplementationName(  )
     return OUString(X11_CLIPBOARD_IMPLEMENTATION_NAME);
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool SAL_CALL X11Clipboard::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    Sequence < OUString > SupportedServicesNames = X11Clipboard_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if (SupportedServicesNames[n] == ServiceName)
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
-// ------------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL X11Clipboard::getSupportedServiceNames(    )
     throw(RuntimeException)

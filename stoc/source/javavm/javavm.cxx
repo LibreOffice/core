@@ -54,6 +54,7 @@
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implementationentry.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "jvmaccess/classpath.hxx"
 #include "jvmaccess/unovirtualmachine.hxx"
 #include "jvmaccess/virtualmachine.hxx"
@@ -650,11 +651,7 @@ sal_Bool SAL_CALL
 JavaVirtualMachine::supportsService(OUString const & rServiceName)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > aNames(getSupportedServiceNames());
-    for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
-        if (aNames[i] == rServiceName)
-            return true;
-    return false;
+    return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL

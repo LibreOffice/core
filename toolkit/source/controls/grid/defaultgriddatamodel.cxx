@@ -22,6 +22,7 @@
 
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/componentguard.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ref.hxx>
@@ -427,13 +428,11 @@ namespace toolkit
         return aImplName;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     sal_Bool SAL_CALL DefaultGridDataModel::supportsService( const OUString& ServiceName ) throw (RuntimeException)
     {
-        return ServiceName.equalsAscii( szServiceName_DefaultGridDataModel );
+        return cppu::supportsService(this, ServiceName);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Sequence< OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         static const OUString aServiceName( OUString::createFromAscii( szServiceName_DefaultGridDataModel ) );

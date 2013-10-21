@@ -27,6 +27,7 @@
 #include <FPServiceInfo.hxx>
 
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
@@ -652,15 +653,7 @@ OUString SAL_CALL UnxFilePicker::getImplementationName()
 sal_Bool SAL_CALL UnxFilePicker::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > SupportedServicesNames = FilePicker_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-    {
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL UnxFilePicker::getSupportedServiceNames()

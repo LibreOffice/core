@@ -43,6 +43,7 @@
 #include <cppuhelper/implementationentry.hxx>
 
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -322,14 +323,7 @@ OUString SAL_CALL JavaComponentLoader::getImplementationName()
 sal_Bool SAL_CALL JavaComponentLoader::supportsService(const OUString & ServiceName)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    sal_Bool bSupport = sal_False;
-
-    Sequence<OUString> aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getArray();
-    for(sal_Int32 i = 0; i < aSNL.getLength() && !bSupport; ++ i)
-        bSupport = pArray[i] == ServiceName;
-
-    return bSupport;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()

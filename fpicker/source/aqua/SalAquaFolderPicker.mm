@@ -24,6 +24,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -220,20 +221,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
 sal_Bool SAL_CALL SalAquaFolderPicker::supportsService( const rtl::OUString& sServiceName )
     throw( uno::RuntimeException )
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "serviceName", sServiceName);
-
-    sal_Bool retVal = sal_False;
-    uno::Sequence <rtl::OUString> supportedServicesNames = FolderPicker_getSupportedServiceNames();
-
-    for( sal_Int32 n = supportedServicesNames.getLength(); n--; ) {
-        if( supportedServicesNames[n] == sServiceName ) {
-            retVal = sal_True;
-            break;
-        }
-    }
-
-    DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
-    return retVal;
+    return cppu::supportsService(this, sServiceName);
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL SalAquaFolderPicker::getSupportedServiceNames()

@@ -25,6 +25,7 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -188,38 +189,27 @@ namespace sfx2
         return xInstance;
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL SfxModelFactory::getImplementationName(  ) throw (RuntimeException)
     {
         return m_sImplementationName;
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL SfxModelFactory::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
-        return ::std::find(
-            m_aServiceNames.getConstArray(),
-            m_aServiceNames.getConstArray() + m_aServiceNames.getLength(),
-            _rServiceName
-        )  != m_aServiceNames.getConstArray() + m_aServiceNames.getLength();
+        return cppu::supportsService(this, _rServiceName);
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL SfxModelFactory::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return m_aServiceNames;
     }
 
-    //--------------------------------------------------------------------
     Reference< XSingleServiceFactory > createSfxModelFactory( const Reference< XMultiServiceFactory >& _rxServiceFactory,
             const OUString& _rImplementationName, const SfxModelFactoryFunc _pComponentFactoryFunc,
             const Sequence< OUString >& _rServiceNames )
     {
         return new SfxModelFactory( _rxServiceFactory, _rImplementationName, _pComponentFactoryFunc, _rServiceNames );
     }
-
-//........................................................................
 } // namespace sfx2
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

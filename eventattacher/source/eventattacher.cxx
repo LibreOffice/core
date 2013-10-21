@@ -38,6 +38,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::registry;
@@ -314,19 +315,12 @@ OUString SAL_CALL EventAttacherImpl::getImplementationName(  )
     return OUString(  IMPLNAME  );
 }
 
-//*************************************************************************
 sal_Bool SAL_CALL EventAttacherImpl::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//*************************************************************************
 Sequence<OUString> SAL_CALL EventAttacherImpl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {

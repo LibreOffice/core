@@ -25,6 +25,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
@@ -461,14 +462,7 @@ OUString ODataInputStream::getImplementationName() throw ()
 // XServiceInfo
 sal_Bool ODataInputStream::supportsService(const OUString& ServiceName) throw ()
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
@@ -869,14 +863,7 @@ OUString ODataOutputStream::getImplementationName() throw ()
 // XServiceInfo
 sal_Bool ODataOutputStream::supportsService(const OUString& ServiceName) throw ()
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
@@ -884,9 +871,6 @@ Sequence< OUString > ODataOutputStream::getSupportedServiceNames(void) throw ()
 {
     return ODataOutputStream_getSupportedServiceNames();
 }
-
-
-
 
 Reference< XInterface > SAL_CALL ODataOutputStream_CreateInstance(
     SAL_UNUSED_PARAMETER const Reference < XComponentContext > & )
@@ -1195,14 +1179,7 @@ OUString OObjectOutputStream::getImplementationName() throw ()
 // XServiceInfo
 sal_Bool OObjectOutputStream::supportsService(const OUString& ServiceName) throw ()
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
@@ -1470,14 +1447,7 @@ OUString OObjectInputStream::getImplementationName() throw ()
 // XServiceInfo
 sal_Bool OObjectInputStream::supportsService(const OUString& ServiceName) throw ()
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
@@ -1485,9 +1455,6 @@ Sequence< OUString > OObjectInputStream::getSupportedServiceNames(void) throw ()
 {
     return OObjectInputStream_getSupportedServiceNames();
 }
-
-
-
 
 Reference< XInterface > SAL_CALL OObjectInputStream_CreateInstance( const Reference < XComponentContext > & rCtx ) throw(Exception)
 {

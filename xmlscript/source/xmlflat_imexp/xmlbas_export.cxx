@@ -26,6 +26,7 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -111,16 +112,9 @@ namespace xmlscript
     }
 
     // XServiceInfo
-
     sal_Bool XMLBasicExporterBase::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aNames( getSupportedServiceNames() );
-        const OUString* pNames = aNames.getConstArray();
-        const OUString* pEnd = pNames + aNames.getLength();
-        for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-            ;
-
-        return pNames != pEnd;
+        return cppu::supportsService(this, rServiceName);
     }
 
     // XInitialization

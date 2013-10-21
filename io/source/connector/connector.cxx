@@ -24,6 +24,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "cppuhelper/unourl.hxx"
 #include "rtl/malformeduriexception.hxx"
 
@@ -192,14 +193,7 @@ namespace stoc_connector
 
         sal_Bool OConnector::supportsService(const OUString& ServiceName) throw()
     {
-        Sequence< OUString > aSNL = getSupportedServiceNames();
-        const OUString * pArray = aSNL.getConstArray();
-
-        for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-            if( pArray[i] == ServiceName )
-                return sal_True;
-
-        return sal_False;
+        return cppu::supportsService(this, ServiceName);
     }
 
         Sequence< OUString > OConnector::getSupportedServiceNames(void) throw()

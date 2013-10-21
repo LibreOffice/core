@@ -35,6 +35,7 @@
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
@@ -968,16 +969,7 @@ OUString AccessController::getImplementationName()
 sal_Bool AccessController::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pNames = aSNL.getConstArray();
-    for ( sal_Int32 nPos = aSNL.getLength(); --nPos; )
-    {
-        if (serviceName.equals( pNames[ nPos ] ))
-        {
-            return sal_True;
-        }
-    }
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 //__________________________________________________________________________________________________
 Sequence< OUString > AccessController::getSupportedServiceNames()

@@ -33,6 +33,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -906,14 +907,7 @@ OUString FactoryImpl::getImplementationName()
 sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
-    const Sequence< OUString > & rSNL = getSupportedServiceNames();
-    const OUString * pArray = rSNL.getConstArray();
-    for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-    {
-        if (pArray[nPos].equals( rServiceName ))
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
 //______________________________________________________________________________
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()

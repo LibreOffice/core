@@ -23,6 +23,7 @@
 #include "cppuhelper/compbase2.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -155,23 +156,12 @@ uno::Sequence< OUString > ExpandContentProviderImpl::getSupportedServiceNames()
     return supportedServices();
 }
 
-//______________________________________________________________________________
-sal_Bool ExpandContentProviderImpl::supportsService(
-    OUString const & serviceName )
+sal_Bool ExpandContentProviderImpl::supportsService(OUString const & serviceName )
     throw (uno::RuntimeException)
 {
-//     check();
-    uno::Sequence< OUString > supported_services( getSupportedServiceNames() );
-    OUString const * ar = supported_services.getConstArray();
-    for ( sal_Int32 pos = supported_services.getLength(); pos--; )
-    {
-        if (ar[ pos ].equals( serviceName ))
-            return true;
-    }
-    return false;
+    return cppu::supportsService(this, serviceName);
 }
 
-//______________________________________________________________________________
 OUString ExpandContentProviderImpl::expandUri(
     uno::Reference< ucb::XContentIdentifier > const & xIdentifier ) const
 {

@@ -20,6 +20,7 @@
 #include "gridcolumn.hxx"
 
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/servicenames.hxx>
 
@@ -264,17 +265,11 @@ namespace toolkit
         return OUString( "org.openoffice.comp.toolkit.GridColumn" );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     sal_Bool SAL_CALL GridColumn::supportsService( const OUString& i_serviceName ) throw (RuntimeException)
     {
-        const Sequence< OUString > aServiceNames( getSupportedServiceNames() );
-        for ( sal_Int32 i=0; i<aServiceNames.getLength(); ++i )
-            if ( aServiceNames[i] == i_serviceName )
-                return sal_True;
-        return sal_False;
+        return cppu::supportsService(this, i_serviceName);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL GridColumn::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         const OUString aServiceName( OUString::createFromAscii( szServiceName_GridColumn ) );
