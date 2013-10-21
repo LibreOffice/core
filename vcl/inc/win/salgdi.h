@@ -269,6 +269,10 @@ private:
     // local helpers
     bool tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap);
 
+    // get kernign pairs of the current font
+    // return only PairCount if (pKernPairs == NULL)
+    sal_uLong               GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
+
 public:
     // public SalGraphics methods, the interface to the independent vcl part
 
@@ -303,9 +307,6 @@ public:
     virtual sal_uInt16         SetFont( FontSelectPattern*, int nFallbackLevel );
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
-    // get kernign pairs of the current font
-    // return only PairCount if (pKernPairs == NULL)
-    sal_uLong               GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     // get the layout capabilities of the current font
