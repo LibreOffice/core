@@ -219,7 +219,7 @@ OUString SwWW8ImplReader::ConvertFFileName(const OUString& rOrg)
     aName = aName.replaceAll("%20", OUString(' '));
 
     // remove attached quotation marks
-    if (!aName.isEmpty() &&  '"' == aName[aName.getLength()-1])
+    if (aName.endsWith("\""))
         aName = aName.copy(0, aName.getLength()-1);
 
     // Need the more sophisticated url converter.
@@ -2107,7 +2107,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
                         ? true : false;
                     bNewVText = false;
                 }
-                else if( aVText[aVText.getLength()-1] == ']' )
+                else if( aVText.endsWith("]") )
                     bBracket  = false;
             }
             break;
@@ -3335,7 +3335,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
                     if ( aReadParam.SkipToNextToken()==-2 )
                     {
                         sMark = aReadParam.GetResult();
-                        if( !sMark.isEmpty() && '"' == sMark[ sMark.getLength()-1 ])
+                        if( sMark.endsWith("\""))
                             sMark = sMark.copy( 0, sMark.getLength() - 1 );
 
                     }

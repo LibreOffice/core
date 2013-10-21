@@ -3220,10 +3220,10 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         if (aRow.find((*iter).xText) != aRow.end())
                         {
                             OUString aCompText = aRow[(*iter).xText];
-                            aCompText += OUString(" ");
+                            aCompText += " ";
                             OString aVal = m_xParser->getContext().getIntlKeywordAscii(IParseContext::KEY_AND);
                             aCompText += OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US);
-                            aCompText += OUString(" ");
+                            aCompText += " ";
                             aCompText += ::comphelper::getString(pRefValues[j].Value);
                             aRow[(*iter).xText] = aCompText;
                         }

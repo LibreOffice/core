@@ -1127,7 +1127,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 case DataType::VARCHAR:
                                 case DataType::LONGVARCHAR:
                                 case DataType::CLOB:
-                                    if(aText[0] != '\'' || aText[aText.getLength() -1] != '\'')
+                                    if(!aText.startsWith("'") || !aText.endsWith("'"))
                                     {
                                         aText = aText.replaceAll("'", "''");
                                         aText = "'" + aText + "'";

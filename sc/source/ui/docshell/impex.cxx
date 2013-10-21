@@ -2022,9 +2022,8 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                  * writes in SYLK. */
                         }
                         if ( pFCell->GetMatrixFlag() != MM_NONE &&
-                                aCellStr.getLength() > 2 &&
-                                aCellStr[0] == '{' &&
-                                aCellStr[aCellStr.getLength()-1] == '}' )
+                                aCellStr.startsWith("{") &&
+                                aCellStr.endsWith("}") )
                         {   // cut off matrix {} characters
                             aCellStr = aCellStr.copy(1, aCellStr.getLength()-2);
                         }

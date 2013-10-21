@@ -2217,7 +2217,7 @@ void FieldContext::AppendCommand(const OUString& rPart)
             bInStringNext = true;
             sToken = sToken.copy(1);
         }
-        if (sToken.getStr()[sToken.getLength() - 1] == '"')
+        if (sToken.endsWith("\""))
         {
             bInStringNext = false;
             sToken = sToken.copy(0, sToken.getLength() - 1);

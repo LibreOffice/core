@@ -263,7 +263,7 @@ namespace
         }
 
         if ( nColCount )
-            sSql = sSql.replaceAt(sSql.getLength()-1,1,OUString(")"));
+            sSql = sSql.replaceAt(sSql.getLength()-1, 1, ")");
         return sSql;
     }
 }

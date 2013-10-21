@@ -51,7 +51,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, co
 
         if ( rTree[0] == '/' )
             ++i;
-        if ( rTree[rTree.getLength() - 1] == '/' )
+        if ( rTree.endsWith("/") )
             --nTokenCount;
 
         Any aAny;

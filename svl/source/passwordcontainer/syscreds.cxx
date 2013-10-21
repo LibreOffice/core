@@ -141,8 +141,8 @@ namespace
                 else
                 {
                     OUString tmpUrl( aUrl );
-                    if ( tmpUrl.getStr()[tmpUrl.getLength() - 1] != (sal_Unicode)'/' )
-                      tmpUrl += OUString("/");
+                    if ( !tmpUrl.endsWith("/") )
+                      tmpUrl += "/";
 
                     aIter = rContainer.lower_bound( tmpUrl );
                     if( aIter != rContainer.end() && aIter->match( tmpUrl ) )

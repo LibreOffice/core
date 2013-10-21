@@ -1325,7 +1325,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
             bool bShared = (m_context == "shared");
             if (bShared)
             {
-                OSL_ASSERT(title2[title2.getLength() -1] == '_');
+                OSL_ASSERT(title2.endsWith("_"));
                 title2 = title2.copy(0, title2.getLength() -1);
             }
             OUString titleEncoded =  ::rtl::Uri::encode(

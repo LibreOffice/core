@@ -67,7 +67,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         OString outputUrl;
         if (options.isValid("-O")) {
             outputUrl = convertToFileUrl(options.getOption("-O"));
-            if (outputUrl[outputUrl.getLength() - 1] != '/') {
+            if (!outputUrl.endsWith("/")) {
                 outputUrl += "/";
             }
             outputUrl += "stdin.urd";
@@ -112,7 +112,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if ( options.isValid("-O") )
         {
             outputFile = (options.getOption("-O"));
-            if ('/' != outputFile.getStr()[outputFile.getLength()-1]) {
+            if (!outputFile.endsWith("/")) {
                 outputFile += OString('/');
             }
             outputFile += strippedFileName.replaceAt(

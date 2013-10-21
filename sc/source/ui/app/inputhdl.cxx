@@ -1426,7 +1426,7 @@ void ScInputHandler::PasteManualTip()
                 if ( aInsert[0] == '"' )
                     aInsert = aInsert.copy(1);
                 xub_StrLen nInsLen = aInsert.getLength();
-                if ( nInsLen && aInsert[nInsLen-1] == '"' )
+                if ( aInsert.endsWith("\"") )
                     aInsert = aInsert.copy( 0, nInsLen-1 );
             }
             else if ( aSel.nEndPos )
@@ -2056,10 +2056,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             else
                 aStr = GetEditText(pEngine);
 
-            if (aStr.getLength() > 3 &&                   // Matrix-Formel ?
-                aStr[0] == '{' &&
-                aStr[1] == '=' &&
-                aStr[aStr.getLength()-1] == '}')
+            if (aStr.startsWith("{=") && aStr.endsWith("}") )  // Matrix-Formel ?
             {
                 aStr = aStr.copy(1, aStr.getLength() -2);
                 pEngine->SetText(aStr);
