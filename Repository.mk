@@ -99,6 +99,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 		kdefilepicker \
 	) \
 	ui-previewer \
+	tiledrendering \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
 	xpdfimport \
 	$(if $(filter WNT,$(OS)), \
