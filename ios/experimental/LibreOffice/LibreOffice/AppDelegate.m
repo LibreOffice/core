@@ -228,14 +228,6 @@ void touch_ui_selection_start(MLOSelectionKind kind,
     (void) preview;
 
     // Note that this is called on the LO thread
-    NSLog(@"==> touch_ui_selection_start");
-    for(int i = 0; i < rectangleCount; ++i){
-        NSLog(@"  %fx%f@(%f,%f)",
-              rectangles[i].size.width,
-              rectangles[i].size.height,
-              rectangles[i].origin.x,
-              rectangles[i].origin.y);
-    }
     dispatch_async(dispatch_get_main_queue(), ^{
             [theView startSelectionOfType:kind withNumber:rectangleCount ofRectangles:rectangles forDocument:documentHandle];
         });
