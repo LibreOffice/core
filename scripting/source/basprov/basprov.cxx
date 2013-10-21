@@ -27,6 +27,7 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/uri.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
@@ -180,29 +181,16 @@ namespace basprov
         return bIsShared;
     }
 
-    // -----------------------------------------------------------------------------
     // XServiceInfo
-    // -----------------------------------------------------------------------------
-
     OUString BasicProviderImpl::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_BasicProviderImpl();
     }
 
-    // -----------------------------------------------------------------------------
-
     sal_Bool BasicProviderImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aNames( getSupportedServiceNames() );
-        const OUString* pNames = aNames.getConstArray();
-        const OUString* pEnd = pNames + aNames.getLength();
-        for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-            ;
-
-        return pNames != pEnd;
+        return cppu::supportsService(this, rServiceName);
     }
-
-    // -----------------------------------------------------------------------------
 
     Sequence< OUString > BasicProviderImpl::getSupportedServiceNames(  ) throw (RuntimeException)
     {

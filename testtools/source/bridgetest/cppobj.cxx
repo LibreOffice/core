@@ -30,6 +30,7 @@
 #include <cppuhelper/factory.hxx>
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/compbase_ex.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include "com/sun/star/uno/Any.hxx"
@@ -1154,14 +1155,7 @@ OUString Test_Impl::getImplementationName()
 sal_Bool Test_Impl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
-    const Sequence< OUString > & rSNL = getSupportedServiceNames();
-    const OUString * pArray = rSNL.getConstArray();
-    for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-    {
-        if (pArray[nPos] == rServiceName)
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
 //__________________________________________________________________________________________________
 Sequence< OUString > Test_Impl::getSupportedServiceNames()

@@ -111,6 +111,8 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 
+#include <cppuhelper/supportsservice.hxx>
+
 #include <boost/scoped_ptr.hpp>
 
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
@@ -1992,16 +1994,7 @@ OUString SAL_CALL SfxAppDispatchProvider::getImplementationName() throw( css::un
 /* XServiceInfo */
 sal_Bool SAL_CALL SfxAppDispatchProvider::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )
 {
-    css::uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames();
-    const OUString*         pArray          = seqServiceNames.getConstArray();
-    for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
-    {
-        if ( pArray[nCounter] == sServiceName )
-        {
-            return sal_True;
-        }
-    }
-    return sal_False;
+    return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */

@@ -32,6 +32,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <rtl/bootstrap.hxx>
@@ -96,15 +97,7 @@ sal_Bool SAL_CALL
 ContentProvider::supportsService(const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString* pArray = aSNL.getArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-    {
-        if( pArray[ i ] == ServiceName )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

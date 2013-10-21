@@ -22,6 +22,7 @@
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <uno/mapping.hxx>
 
@@ -134,17 +135,10 @@ OUString Test_Manager_Impl::getImplementationName() throw()
     return OUString(IMPLEMENTATION_NAME);
 }
 
-//*************************************************************************
 // Test_Manager_Impl::supportsService
-//
 sal_Bool Test_Manager_Impl::supportsService( const OUString& ServiceName ) throw()
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 //*************************************************************************

@@ -32,6 +32,7 @@
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/factory.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
 #include "com/sun/star/reflection/XProxyFactory.hpp"
@@ -440,21 +441,12 @@ OUString FactoryImpl::getImplementationName()
     return proxyfac_getImplementationName();
 }
 
-//______________________________________________________________________________
 sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
-    Sequence< OUString > const & rSNL = getSupportedServiceNames();
-    OUString const * pArray = rSNL.getConstArray();
-    for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-    {
-        if (rServiceName.equals( pArray[ nPos ] ))
-            return true;
-    }
-    return false;
+    return cppu::supportsService(this, rServiceName);
 }
 
-//______________________________________________________________________________
 Sequence< OUString > FactoryImpl::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
