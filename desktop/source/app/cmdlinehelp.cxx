@@ -184,6 +184,9 @@ namespace desktop
         // Just re-use the help dialog for now.
         CmdlineHelpDialog aDlg;
         aDlg.m_pftHead->SetText(aVersionMsg);
+        aDlg.m_pftLeft->SetText("");
+        aDlg.m_pftRight->SetText("");
+        aDlg.m_pftBottom->SetText("");
         aDlg.Execute();
 #endif
     }
