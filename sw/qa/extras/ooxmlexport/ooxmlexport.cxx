@@ -123,6 +123,7 @@ public:
     void testFdo69636();
     void testCharHighlight();
     void testVMLData();
+    void testImageData();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(WNT)
@@ -243,6 +244,7 @@ void Test::run()
         {"fdo69636.docx", &Test::testFdo69636},
         {"char_highlight.docx", &Test::testCharHighlight},
         {"TestVMLData.docx", &Test::testVMLData},
+        {"image_data.docx", &Test::testImageData},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1586,6 +1588,13 @@ void Test::testVMLData(){
     // vml data shoud not come under w:rPr element.
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:shape", "stroked").match("f"));
+}
+
+void Test::testImageData(){
+    // The problem was exporter was exporting v:imagedata data for shape in w:pict as v:fill w element.
+
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/w:pict/v:shape/v:imagedata", "detectmouseclick").match("t"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -3266,7 +3266,7 @@ void DocxAttributeOutput::WriteVMLDrawing( const SdrObject* sdrObj, const SwFrmF
    }
 
    m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
-
+   m_rDrawingML.SetFS(m_pSerializer);
    // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
 
    SwFmtHoriOrient rHoriOri = (rFrmFmt).GetHoriOrient();
