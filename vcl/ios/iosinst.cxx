@@ -24,6 +24,7 @@
 #include <basebmp/scanlineformats.hxx>
 #include <vcl/msgbox.hxx>
 #include <touch/touch.h>
+#include <touch/touch-impl.h>
 
 #include "ios/iosinst.hxx"
 #include "headless/svpdummies.hxx"
@@ -505,6 +506,32 @@ void touch_lo_keyboard_did_hide()
         aEvent = MouseEvent(Point(0, 0), 0, MOUSE_LEAVEWINDOW, MOUSE_LEFT);
         Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEMOVE, pFocus->GetWindow(), &aEvent);
     }
+}
+
+IMPL_LINK( IosSalInstance, SelectionEndMove, SelectionEndMoveArg*, pArg )
+{
+    touch_lo_selection_end_move_impl(pArg->documentHandle, pArg->x, pArg->y);
+
+    delete pArg;
+
+    return 0;
+}
+
+extern "C"
+void touch_lo_selection_end_move(const void *documentHandle,
+                                 int x,
+                                 int y)
+{
+    IosSalInstance *pInstance = IosSalInstance::getInstance();
+
+    if ( pInstance == NULL )
+        return;
+
+    IosSalInstance::SelectionEndMoveArg *pArg = new IosSalInstance::SelectionEndMoveArg;
+    pArg->documentHandle = documentHandle;
+    pArg->x = x;
+    pArg->y = y;
+    Application::PostUserEvent( LINK( pInstance, IosSalInstance, SelectionEndMove), pArg );
 }
 
 extern "C"

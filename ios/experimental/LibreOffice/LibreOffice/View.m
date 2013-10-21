@@ -101,7 +101,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    NSLog(@"View drawRect: %dx%d@(%d,%d)", (int) rect.size.width, (int) rect.size.height, (int) rect.origin.x, (int) rect.origin.y);
+    // NSLog(@"View drawRect: %dx%d@(%d,%d)", (int) rect.size.width, (int) rect.size.height, (int) rect.origin.x, (int) rect.origin.y);
     // NSLog(@"statusBarOrientation: %ld", (long)[[UIApplication sharedApplication] statusBarOrientation]);
 
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -157,44 +157,50 @@
     static enum { NONE, TOPLEFT, BOTTOMRIGHT } draggedHandle = NONE;
     static CGFloat previousX, previousY;
 
+    CGPoint location = [gestureRecognizer locationInView:self];
     CGPoint translation = [gestureRecognizer translationInView:self];
 
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         previousX = previousY = 0;
     }
 
-    CGFloat deltaX = translation.x - previousX;
-    CGFloat deltaY = translation.y - previousY;
+    CGPoint delta;
+    delta.x = translation.x - previousX;
+    delta.y = translation.y - previousY;
 
-    NSLog(@"drag: %f,%f", deltaX, deltaY);
+    // NSLog(@"location: (%f,%f) , drag: (%f,%f)", location.x, location.y, delta.x, delta.y);
 
     previousX = translation.x;
     previousY = translation.y;
 
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan &&
         gestureRecognizer.numberOfTouches == 1) {
-        if (CGRectContainsPoint([self topLeftResizeHandle],
-                                [gestureRecognizer locationInView:self]))
+        if (CGRectContainsPoint([self topLeftResizeHandle], location)) {
+            NSLog(@"===> dragging TOPLEFT handle");
             draggedHandle = TOPLEFT;
-        else if (CGRectContainsPoint([self bottomRightResizeHandle],
-                                     [gestureRecognizer locationInView:self]))
+        } else if (CGRectContainsPoint([self bottomRightResizeHandle], location)) {
+            NSLog(@"===> dragging BOTTOMRIGHT handle");
             draggedHandle = BOTTOMRIGHT;
+        }
     }
 
     if (draggedHandle == TOPLEFT) {
         const int N = self.selectionRectangleCount;
 
-        self.selectionRectangles[0].origin.x += deltaX;
-        self.selectionRectangles[0].origin.y += deltaY;
-        self.selectionRectangles[0].size.width -= deltaX;
-        self.selectionRectangles[0].size.height -= deltaY;
+        CGPoint old = self.selectionRectangles[0].origin;
+
+        self.selectionRectangles[0].origin = location;
+        self.selectionRectangles[0].size.width -= (location.x - old.x);
+        self.selectionRectangles[0].size.height -= (location.y - old.y);
 
 #if 0
         touch_lo_selection_attempt_resize(self.documentHandle,
                                           self.selectionRectangles,
                                           self.selectionRectangleCount);
 #else
-        touch_lo_tap(0, 0);
+        touch_lo_tap((self.selectionRectangles[0].origin.x + self.selectionRectangles[N-1].origin.x) / 2,
+                     (self.selectionRectangles[0].origin.y + self.selectionRectangles[N-1].origin.y) / 2);
+
         touch_lo_mouse(self.selectionRectangles[0].origin.x,
                        self.selectionRectangles[0].origin.y,
                        DOWN, NONE);
@@ -208,35 +214,16 @@
             draggedHandle = NONE;
         return;
     } else if (draggedHandle == BOTTOMRIGHT) {
-        const int N = self.selectionRectangleCount;
 
-        self.selectionRectangles[N-1].size.width += deltaX;
-        self.selectionRectangles[N-1].size.height += deltaY;
+        touch_lo_selection_end_move(self.documentHandle, location.x, location.y);
 
-#if 0
-        touch_lo_selection_attempt_resize(self.documentHandle,
-                                          self.selectionRectangles,
-                                          self.selectionRectangleCount);
-#else
-        touch_lo_tap(0, 0);
-        touch_lo_mouse(self.selectionRectangles[0].origin.x,
-                       self.selectionRectangles[0].origin.y,
-                       DOWN, NONE);
-        touch_lo_mouse(self.selectionRectangles[N-1].origin.x +
-                       self.selectionRectangles[N-1].size.width,
-                       self.selectionRectangles[N-1].origin.y +
-                       self.selectionRectangles[N-1].size.height,
-                       UP, NONE);
-#endif
         if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
             draggedHandle = NONE;
         return;
     }
 
     if (gestureRecognizer.state != UIGestureRecognizerStateBegan) {
-        // NSLog(@"panGesture: pan (delta): (%d,%d)", deltaX, deltaY);
-
-        touch_lo_pan(deltaX, deltaY);
+        touch_lo_pan(delta.x, delta.y);
     }
 }
 

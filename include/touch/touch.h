@@ -82,12 +82,14 @@ void touch_ui_selection_resize_done(bool success,
 
 void touch_ui_selection_none();
 
-// 2) Those implmented in the lower layers to be called by the upper
+// 2) Those implemented in the lower layers to be called by the upper
 // layer, in cases where we don't want to include a bunch of the
 // "normal" LibreOffice C++ headers in an otherwise purely Objective-C
 // CocoaTouch-based source file. Of course it depends on the case
 // where that is wanted, and this all is work in progress. Prefixed by
-// touch_lo_.
+// touch_lo_. All these are called on the UI thread and except for
+// those so marked schedule work to be done asynchronously on the LO
+// thread.
 
 typedef enum { DOWN, MOVE, UP} MLOMouseButtonState;
 typedef enum { NONE, SHIFT, META } MLOModifiers;
@@ -95,9 +97,7 @@ typedef int MLOModifierMask;
 
 void touch_lo_keyboard_did_hide();
 
-void touch_lo_runMain();
 void touch_lo_set_view_size(int width, int height);
-void touch_lo_render_windows(void *context, int minX, int minY, int width, int height);
 void touch_lo_tap(int x, int y);
 void touch_lo_mouse(int x, int y, MLOMouseButtonState state, MLOModifierMask modifiers);
 void touch_lo_pan(int deltaX, int deltaY);
@@ -113,9 +113,24 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int 
 
 void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state);
 
+// Move the end of the selection to (x,y)
+// (work in progress, of course there should be a corresponding function
+// to move the start of the selection, too.)
+void touch_lo_selection_end_move(const void *documentHandle,
+                                 int x,
+                                 int y);
+
 void touch_lo_selection_attempt_resize(const void *documentHandle,
                                        MLORect *selectedRectangles,
                                        int numberOfRectangles);
+
+// Special case: synchronous: waits for the rendering to complete
+void touch_lo_render_windows(void *context, int minX, int minY, int width, int height);
+
+// Special case: This is the function that is called in the newly
+// created LO thread to run the LO code.
+void touch_lo_runMain();
+
 
 #ifdef __cplusplus
 }

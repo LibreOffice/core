@@ -52,6 +52,7 @@ public:
     void damaged( IosSalFrame *frame,
                   const basegfx::B2IBox& rDamageRect);
 
+    // Functions scheduled to be run as "user events" in the LO thread
     typedef struct {
         bool done;
         CGContextRef context;
@@ -60,6 +61,12 @@ public:
     DECL_LINK( RenderWindows, RenderWindowsArg* );
 
     DECL_LINK( DisplayConfigurationChanged, void* );
+
+    typedef struct {
+        const void *documentHandle;
+        int x, y;
+    } SelectionEndMoveArg;
+    DECL_LINK( SelectionEndMove, SelectionEndMoveArg* );
 
     pthread_mutex_t m_aRenderMutex;
     pthread_cond_t m_aRenderCond;

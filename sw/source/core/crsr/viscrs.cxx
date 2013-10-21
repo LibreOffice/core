@@ -37,6 +37,7 @@
 #include <ndtxt.hxx>
 #include <scriptinfo.hxx>
 #include <mdiexp.hxx>
+#include <wrtsh.hxx>
 #include <comcore.hrc>
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -272,16 +273,21 @@ void SwSelPaintRects::Show()
             const OutputDevice* pOut = GetShell()->GetWin();
             if ( ! pOut )
                 pOut = GetShell()->GetOut();
-            // Buffer will be deallocated in the UI layer
-            CGRect *rects = (CGRect *) malloc((sizeof(CGRect))*size());
-            for (size_t i = 0; i < size(); ++i)
+            SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(const_cast<SwCrsrShell*>(GetShell()));
+            if ( pWrtShell )
             {
-                Point origin = pOut->LogicToPixel((*this)[i].Pos());
-                Size size = pOut->LogicToPixel((*this)[i].SSize());
-                rects[i] = CGRectMake(origin.X(), origin.Y(),
-                                      size.Width(), size.Height());
+                // Buffer will be deallocated in the UI layer
+                CGRect *rects = (CGRect *) malloc((sizeof(CGRect))*size());
+                for (size_t i = 0; i < size(); ++i)
+                {
+                    Point origin = pOut->LogicToPixel((*this)[i].Pos());
+                    Size size = pOut->LogicToPixel((*this)[i].SSize());
+                    rects[i] = CGRectMake(origin.X(), origin.Y(),
+                                          size.Width(), size.Height());
+                }
+                // GetShell returns a SwCrsrShell which actually is a SwWrtShell
+                touch_ui_selection_start(MLOSelectionText, pWrtShell, rects, size(), NULL);
             }
-            touch_ui_selection_start(MLOSelectionText, GetShell(), rects, size(), NULL);
 #else
             // Not yet implemented
 #endif

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <swtypes.hxx>
 #include <hintids.hxx>
@@ -65,6 +66,8 @@
 #include <unotools/charclass.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+
+#include <touch/touch-impl.h>
 
 #include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>
@@ -2682,6 +2685,35 @@ static bool lcl_urlOverBackground(SwWrtShell& rSh, const Point& rDocPos)
 
     return rSh.GetContentAtPos(rDocPos, aSwContentAtPos) && pSelectableObj->GetLayer() == rSh.GetDoc()->GetHellId();
 }
+
+#if !HAVE_FEATURE_DESKTOP
+
+void touch_lo_selection_end_move_impl(const void *documentHandle,
+                                      int x,
+                                      int y)
+{
+    SwWrtShell *pWrtShell = reinterpret_cast<SwWrtShell*>(const_cast<void*>(documentHandle));
+
+    if (!pWrtShell)
+        return;
+
+    const OutputDevice *pOut = pWrtShell->GetWin();
+    if (!pOut)
+        pOut = pWrtShell->GetOut();
+
+    const Point aDocPos( pOut->PixelToLogic( Point(x, y) ) );
+
+    // SAL _ DEBUG("touch_lo_selection_end_move_impl: " << Point(x, y) << " => " << aDocPos);
+
+    pWrtShell->ChgCurrPam( aDocPos );
+
+    {
+        SwMvContext aMvContext( pWrtShell );
+        pWrtShell->SetCursor( &aDocPos, sal_False );
+    }
+}
+
+#endif
 
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
