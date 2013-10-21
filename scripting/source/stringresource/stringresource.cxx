@@ -28,6 +28,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -139,13 +140,7 @@ OUString StringResourceImpl::getImplementationName(  ) throw (RuntimeException)
 
 sal_Bool StringResourceImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< OUString > aNames( getSupportedServiceNames() );
-    const OUString* pNames = aNames.getConstArray();
-    const OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > StringResourceImpl::getSupportedServiceNames(  ) throw (RuntimeException)
@@ -2315,20 +2310,10 @@ OUString StringResourceWithStorageImpl::getImplementationName(  ) throw (Runtime
     return getImplementationName_StringResourceWithStorageImpl();
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool StringResourceWithStorageImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< OUString > aNames( getSupportedServiceNames() );
-    const OUString* pNames = aNames.getConstArray();
-    const OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, rServiceName);
 }
-
-// -----------------------------------------------------------------------------
 
 Sequence< OUString > StringResourceWithStorageImpl::getSupportedServiceNames(  ) throw (RuntimeException)
 {
@@ -2652,20 +2637,10 @@ OUString StringResourceWithLocationImpl::getImplementationName(  ) throw (Runtim
     return getImplementationName_StringResourceWithLocationImpl();
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool StringResourceWithLocationImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< OUString > aNames( getSupportedServiceNames() );
-    const OUString* pNames = aNames.getConstArray();
-    const OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, rServiceName);
 }
-
-// -----------------------------------------------------------------------------
 
 Sequence< OUString > StringResourceWithLocationImpl::getSupportedServiceNames(  ) throw (RuntimeException)
 {

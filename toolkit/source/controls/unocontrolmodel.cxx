@@ -30,6 +30,7 @@
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/macros.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uuid.h>
 #include <tools/diagnose_ex.h>
@@ -1030,14 +1031,7 @@ OUString UnoControlModel::getImplementationName(  ) throw(::com::sun::star::uno:
 
 sal_Bool UnoControlModel::supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    ::com::sun::star::uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == rServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
 
 ::com::sun::star::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)

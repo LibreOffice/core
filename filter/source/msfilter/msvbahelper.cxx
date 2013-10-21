@@ -28,6 +28,7 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
@@ -543,10 +544,7 @@ OUString SAL_CALL VBAMacroResolver::getImplementationName() throw (uno::RuntimeE
 
 sal_Bool SAL_CALL VBAMacroResolver::supportsService( const OUString& rService ) throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aServices = VBAMacroResolver_getSupportedServiceNames();
-    const OUString* pArray = aServices.getConstArray();
-    const OUString* pArrayEnd = pArray + aServices.getLength();
-    return ::std::find( pArray, pArrayEnd, rService ) != pArrayEnd;
+    return cppu::supportsService(this, rService);
 }
 
 uno::Sequence< OUString > SAL_CALL VBAMacroResolver::getSupportedServiceNames() throw (uno::RuntimeException)

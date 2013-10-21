@@ -20,6 +20,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -703,15 +704,7 @@ OUString SAL_CALL KDE4FilePicker::getImplementationName()
 sal_Bool SAL_CALL KDE4FilePicker::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > SupportedServicesNames = FilePicker_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-    {
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSupportedServiceNames()

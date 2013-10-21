@@ -23,6 +23,7 @@
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
@@ -204,19 +205,11 @@ throw (css::uno::RuntimeException)
     return aNames;
 }
 
-
-::sal_Bool SAL_CALL VCLXMenu::supportsService(
-    const OUString& rServiceName )
+::sal_Bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )
 throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > aServiceNames( getSupportedServiceNames() );
-
-    if ( aServiceNames[ 0 ] == rServiceName )
-        return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, rServiceName);
 }
-
 
 css::uno::Any VCLXMenu::queryInterface(
     const css::uno::Type & rType )

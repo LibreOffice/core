@@ -51,6 +51,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <framework/interaction.hxx>
 #include <rtl/ustring.h>
 #include <sot/storinfo.hxx>
@@ -658,16 +659,7 @@ OUString SAL_CALL SfxFrameLoader_Impl::getImplementationName() throw( RuntimeExc
 /* XServiceInfo */
 sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    Sequence< OUString > seqServiceNames = getSupportedServiceNames();
-    const OUString*         pArray          = seqServiceNames.getConstArray();
-    for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
-    {
-        if ( pArray[nCounter] == sServiceName )
-        {
-            return sal_True ;
-        }
-    }
-    return sal_False ;
+    return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */

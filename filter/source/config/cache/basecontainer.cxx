@@ -25,9 +25,9 @@
 #include <com/sun/star/document/FilterConfigRefresh.hpp>
 #include <com/sun/star/uno/Type.h>
 #include <comphelper/enumhelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
-
 
 #define LOAD_IMPLICIT
 
@@ -166,21 +166,8 @@ OUString SAL_CALL BaseContainer::getImplementationName()
 sal_Bool SAL_CALL BaseContainer::supportsService(const OUString& sServiceName)
     throw (css::uno::RuntimeException)
 {
-    // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-
-          sal_Int32        c      = m_lServiceNames.getLength();
-    const OUString* pNames = m_lServiceNames.getConstArray();
-    for (sal_Int32 i=0; i<c; ++i)
-    {
-        if (pNames[i].equals(sServiceName))
-            return sal_True;
-    }
-    return sal_False;
-    // <- SAFE
+    return cppu::supportsService(this, sServiceName);
 }
-
-
 
 css::uno::Sequence< OUString > SAL_CALL BaseContainer::getSupportedServiceNames()
     throw (css::uno::RuntimeException)

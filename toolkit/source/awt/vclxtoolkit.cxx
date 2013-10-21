@@ -43,6 +43,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/uuid.h>
@@ -1381,16 +1382,7 @@ OUString VCLXToolkit::getImplementationName() throw(::com::sun::star::uno::Runti
 
 sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    ::com::sun::star::uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString* pArray = aSNL.getConstArray();
-    const OUString* pArrayEnd = aSNL.getConstArray();
-    for (; pArray != pArrayEnd; ++pArray )
-        if( *pArray == rServiceName )
-            break;
-
-    return pArray != pArrayEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 ::com::sun::star::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)

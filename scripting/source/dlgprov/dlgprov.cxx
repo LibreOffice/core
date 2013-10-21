@@ -44,6 +44,7 @@
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
@@ -592,20 +593,10 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return getImplementationName_DialogProviderImpl();
     }
 
-    // -----------------------------------------------------------------------------
-
     sal_Bool DialogProviderImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aNames( getSupportedServiceNames() );
-        const OUString* pNames = aNames.getConstArray();
-        const OUString* pEnd = pNames + aNames.getLength();
-        for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-            ;
-
-        return pNames != pEnd;
+        return cppu::supportsService(this, rServiceName);
     }
-
-    // -----------------------------------------------------------------------------
 
     Sequence< OUString > DialogProviderImpl::getSupportedServiceNames(  ) throw (RuntimeException)
     {

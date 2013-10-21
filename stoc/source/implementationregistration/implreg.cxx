@@ -26,6 +26,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <uno/mapping.hxx>
 #include <osl/thread.h>
@@ -1334,12 +1335,7 @@ OUString ImplementationRegistration::getImplementationName() throw(RuntimeExcept
 // XServiceInfo
 sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName) throw(RuntimeException)
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo

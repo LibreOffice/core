@@ -19,7 +19,7 @@
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 
 #include "xpackcreator.hxx"
 
@@ -164,27 +164,18 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
         throw io::IOException(); // TODO/LATER: can't proceed with creation
 }
 
-//-------------------------------------------------------------------------
 OUString SAL_CALL OPackageStructureCreator::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
 
-//-------------------------------------------------------------------------
 sal_Bool SAL_CALL OPackageStructureCreator::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq = impl_getStaticSupportedServiceNames();
-
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName == aSeq[nInd] )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OPackageStructureCreator::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {

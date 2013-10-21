@@ -25,6 +25,7 @@
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
@@ -1433,16 +1434,7 @@ OUString UnoControl::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool UnoControl::supportsService( const OUString& rServiceName ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString* pArray = aSNL.getConstArray();
-    const OUString* pArrayEnd = aSNL.getConstArray() + aSNL.getLength();
-    for (; pArray != pArrayEnd; ++pArray )
-        if( *pArray == rServiceName )
-            break;
-
-    return pArray != pArrayEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > UnoControl::getSupportedServiceNames(  ) throw(RuntimeException)

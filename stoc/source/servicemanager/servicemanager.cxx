@@ -35,7 +35,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/compbase6.hxx>
 #include <cppuhelper/compbase7.hxx>
-
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -1116,13 +1116,7 @@ OUString OServiceManager::getImplementationName()
 sal_Bool OServiceManager::supportsService(const OUString& ServiceName)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    check_undisposed();
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo

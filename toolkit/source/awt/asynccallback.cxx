@@ -24,6 +24,7 @@
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/implbase2.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/awt/XRequestCallback.hpp"
 
@@ -92,12 +93,7 @@ OUString SAL_CALL AsyncCallback::getImplementationName() throw (css::uno::Runtim
 
 ::sal_Bool SAL_CALL AsyncCallback::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException)
 {
-    const css::uno::Sequence< OUString > serviceNames = comp_AsyncCallback::_getSupportedServiceNames();
-    for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
-        if (serviceNames[i] == serviceName)
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL AsyncCallback::getSupportedServiceNames() throw (css::uno::RuntimeException)

@@ -27,6 +27,7 @@
 
 #include <comphelper/anycompare.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
@@ -833,17 +834,11 @@ namespace toolkit
         return OUString( "org.openoffice.comp.toolkit.SortableGridDataModel" );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL SortableGridDataModel::supportsService( const OUString& i_serviceName ) throw (RuntimeException)
     {
-        Sequence< OUString > const aServiceNames( getSupportedServiceNames() );
-        for ( sal_Int32 i=0; i<aServiceNames.getLength(); ++i )
-            if ( aServiceNames[i] == i_serviceName )
-                return sal_True;
-        return sal_False;
+        return cppu::supportsService(this, i_serviceName);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Sequence< OUString > SAL_CALL SortableGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< OUString > aServiceNames(1);
