@@ -43,7 +43,7 @@
 
 inline bool IsWarning( sal_uLong nErr )
 {
-    return 0 != ( nErr & ERRCODE_WARNING_MASK & nErr );
+    return 0 != ( nErr & ERRCODE_WARNING_MASK );
 }
 
 #endif
