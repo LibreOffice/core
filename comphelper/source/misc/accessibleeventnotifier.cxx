@@ -24,6 +24,7 @@
 #include <comphelper/guarding.hxx>
 
 #include <map>
+#include <limits>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -43,46 +44,71 @@ namespace
                 ::cppu::OInterfaceContainerHelper*,
                 ::std::less< AccessibleEventNotifier::TClientId > > ClientMap;
 
+    /// key is the end of the interval, value is the start of the interval
+    typedef ::std::map<AccessibleEventNotifier::TClientId,
+                AccessibleEventNotifier::TClientId> IntervalMap;
+
     struct lclMutex
         : public rtl::Static< ::osl::Mutex, lclMutex > {};
     struct Clients
         : public rtl::Static< ClientMap, Clients > {};
+    struct FreeIntervals
+        : public rtl::StaticWithInit<IntervalMap, FreeIntervals> {
+            IntervalMap operator() () {
+                IntervalMap map;
+                map.insert(::std::make_pair(
+                    ::std::numeric_limits<AccessibleEventNotifier::TClientId>::max(), 1));
+                return map;
+            }
+        };
+
+    static void releaseId(AccessibleEventNotifier::TClientId const nId)
+    {
+        IntervalMap & rFreeIntervals(FreeIntervals::get());
+        IntervalMap::iterator const upper(rFreeIntervals.upper_bound(nId));
+        assert(upper != rFreeIntervals.end());
+        assert(nId < upper->second); // second is start of the interval!
+        if (nId + 1 == upper->second)
+        {
+            --upper->second; // add nId to existing interval
+        }
+        else
+        {
+            IntervalMap::iterator const lower(rFreeIntervals.lower_bound(nId));
+            if (lower != rFreeIntervals.end() && lower->first == nId - 1)
+            {
+                // add nId by replacing lower with new merged entry
+                rFreeIntervals.insert(::std::make_pair(nId, lower->second));
+                rFreeIntervals.erase(lower);
+            }
+            else // otherwise just add new 1-element interval
+            {
+                rFreeIntervals.insert(::std::make_pair(nId, nId));
+            }
+        }
+        // currently it's not checked whether intervals can be merged now
+        // hopefully that won't be a problem in practice
+    }
 
     /// generates a new client id
     static AccessibleEventNotifier::TClientId generateId()
     {
-        AccessibleEventNotifier::TClientId nBiggestUsedId = 0;
-        AccessibleEventNotifier::TClientId nFreeId = 0;
-
-        // look through all registered clients until we find a "gap" in the ids
-
-        // Note that the following relies on the fact the elements in the map
-        // are traveled with ascending keys (aka client ids)
-        ClientMap &rClients = Clients::get();
-        for (   ClientMap::const_iterator aLookup = rClients.begin();
-                aLookup != rClients.end();
-                ++aLookup
-            )
+        IntervalMap & rFreeIntervals(FreeIntervals::get());
+        assert(!rFreeIntervals.empty());
+        IntervalMap::iterator const iter(rFreeIntervals.begin());
+        AccessibleEventNotifier::TClientId const nFirst = iter->first;
+        AccessibleEventNotifier::TClientId const nFreeId = iter->second;
+        assert(nFreeId <= nFirst);
+        if (nFreeId != nFirst)
         {
-            AccessibleEventNotifier::TClientId nCurrent = aLookup->first;
-            OSL_ENSURE( nCurrent > nBiggestUsedId,
-                "AccessibleEventNotifier::generateId: "
-                "map is expected to be sorted ascending!" );
-
-            if ( nCurrent - nBiggestUsedId > 1 )
-            {   // found a "gap"
-                nFreeId = nBiggestUsedId + 1;
-                break;
-            }
-
-            nBiggestUsedId = nCurrent;
+            ++iter->second; // remove nFreeId from interval
+        }
+        else
+        {
+            rFreeIntervals.erase(iter); // remove 1-element interval
         }
 
-        if ( !nFreeId )
-            nFreeId = nBiggestUsedId + 1;
-
-        OSL_ENSURE( rClients.end() == rClients.find( nFreeId ),
-            "AccessibleEventNotifier::generateId: algorithm broken!" );
+        assert(Clients::get().end() == Clients::get().find(nFreeId));
 
         return nFreeId;
     }
@@ -158,6 +184,7 @@ namespace comphelper
         // remove it from the clients map
         delete aClientPos->second;
         Clients::get().erase( aClientPos );
+        releaseId(_nClient);
     }
 
     //---------------------------------------------------------------------
@@ -183,6 +210,7 @@ namespace comphelper
             // implementations have re-entrance problems and call into
             // revokeClient while we are notifying from here)
             Clients::get().erase(aClientPos);
+            releaseId(_nClient);
         }
 
         // notify the "disposing" event for this client
