@@ -613,7 +613,7 @@ struct ImplEnumInfo
 
 // =======================================================================
 
-static CharSet ImplCharSetToSal( BYTE nCharSet )
+static rtl_TextEncoding ImplCharSetToSal( BYTE nCharSet )
 {
     rtl_TextEncoding eTextEncoding;
 
@@ -2060,8 +2060,10 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
         return false;
 
     // convert byte strings to unicode
-    rDFA.SetFamilyName(String( aBuffer + nNameOfs, osl_getThreadTextEncoding() ));
-    rDFA.SetStyleName(String( aBuffer + nStyleOfs, osl_getThreadTextEncoding() ));
+    char *pName = aBuffer + nNameOfs;
+    rDFA.SetFamilyName(OUString(pName, strlen(pName), osl_getThreadTextEncoding()));
+    char *pStyle = aBuffer + nStyleOfs;
+    rDFA.SetStyleName(OUString(pStyle, strlen(pStyle), osl_getThreadTextEncoding() ));
 
     // byte offset 0x4C7: OS2_fsSelection
     const char nFSS = aBuffer[ 0x4C7 ];
@@ -2181,12 +2183,12 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
             String aEmptyString;
 
             OUString aBootStrap;
-            rtl::Bootstrap::get( String( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aBootStrap );
-            aBootStrap += String( RTL_CONSTASCII_USTRINGPARAM( "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) ) );
+            rtl::Bootstrap::get( OUString("BRAND_BASE_DIR"), aBootStrap );
+            aBootStrap += OUString("/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) );
             rtl::Bootstrap aBootstrap( aBootStrap );
             OUString aUserPath;
             aBootstrap.getFrom( OUString( "UserInstallation" ), aUserPath );
-            aUserPath += String( RTL_CONSTASCII_USTRINGPARAM("/user/config/fontnames.dat") );
+            aUserPath += "/user/config/fontnames.dat";
             String aBaseURL = aPath.copy( 0, aPath.lastIndexOf('/')+1 );
             mpFontAttrCache = new ImplFontAttrCache( aUserPath, aBaseURL );
 
