@@ -22,13 +22,8 @@
 
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
-#include <osl/thread.hxx>
-#include <osl/conditn.hxx>
-#include <cppuhelper/interfacecontainer.h>
-#include "comphelper/comphelperdllapi.h"
 
-#include <map>
-#include <list>
+#include <comphelper/comphelperdllapi.h>
 
 //.........................................................................
 namespace comphelper
@@ -43,12 +38,6 @@ namespace comphelper
     // typedefs
     public:
         typedef sal_uInt32  TClientId;
-
-        typedef ::std::pair< TClientId, ::com::sun::star::accessibility::AccessibleEventObject >
-                                                                                    ClientEvent;
-
-        typedef ::cppu::OInterfaceContainerHelper                                   EventListeners;
-        typedef ::std::map< TClientId, EventListeners*, ::std::less< TClientId > >  ClientMap;
 
     protected:
         AccessibleEventNotifier( );     // never implemented
@@ -130,25 +119,6 @@ namespace comphelper
                         const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent
                     ) SAL_THROW( ( ) );
 
-    private:
-        /// generates a new client id
-        COMPHELPER_DLLPRIVATE static    TClientId   generateId();
-
-        /** looks up a client in our client map, asserts if it cannot find it or no event thread is present
-
-            @precond
-                to be called with our mutex locked
-
-            @param _nClient
-                the id of the client to loopup
-            @param _rPos
-                out-parameter for the position of the client in the client map
-
-            @return
-                <TRUE/> if and only if the client could be found and <arg>_rPos</arg> has been filled with
-                it's position
-        */
-        COMPHELPER_DLLPRIVATE static    sal_Bool    implLookupClient( const TClientId _nClient, ClientMap::iterator& _rPos );
     };
 
 //.........................................................................

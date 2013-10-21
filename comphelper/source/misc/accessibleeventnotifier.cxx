@@ -20,7 +20,10 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <comphelper/guarding.hxx>
+
+#include <map>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -33,35 +36,39 @@ using namespace ::comphelper;
 //---------------------------------------------------------------------
 namespace
 {
+    typedef ::std::pair< AccessibleEventNotifier::TClientId,
+            AccessibleEventObject > ClientEvent;
+
+    typedef ::cppu::OInterfaceContainerHelper EventListeners;
+    typedef ::std::map< AccessibleEventNotifier::TClientId, EventListeners*,
+                ::std::less< AccessibleEventNotifier::TClientId > > ClientMap;
+
+
     struct lclMutex
         : public rtl::Static< ::osl::Mutex, lclMutex > {};
     struct Clients
-        : public rtl::Static< AccessibleEventNotifier::ClientMap, Clients > {};
-}
+        : public rtl::Static< ClientMap, Clients > {};
 
-//.........................................................................
-namespace comphelper
-{
-//.........................................................................
-
-    //---------------------------------------------------------------------
-    AccessibleEventNotifier::TClientId AccessibleEventNotifier::generateId()
+    /// generates a new client id
+    static AccessibleEventNotifier::TClientId generateId()
     {
-        TClientId nBiggestUsedId = 0;
-        TClientId nFreeId = 0;
+        AccessibleEventNotifier::TClientId nBiggestUsedId = 0;
+        AccessibleEventNotifier::TClientId nFreeId = 0;
 
         // look through all registered clients until we find a "gap" in the ids
 
-        // Note that the following relies on the fact the elements in the map are traveled with
-        // ascending keys (aka client ids)
-        AccessibleEventNotifier::ClientMap &rClients = Clients::get();
+        // Note that the following relies on the fact the elements in the map
+        // are traveled with ascending keys (aka client ids)
+        ClientMap &rClients = Clients::get();
         for (   ClientMap::const_iterator aLookup = rClients.begin();
                 aLookup != rClients.end();
                 ++aLookup
             )
         {
-            TClientId nCurrent = aLookup->first;
-            OSL_ENSURE( nCurrent > nBiggestUsedId, "AccessibleEventNotifier::generateId: map is expected to be sorted ascending!" );
+            AccessibleEventNotifier::TClientId nCurrent = aLookup->first;
+            OSL_ENSURE( nCurrent > nBiggestUsedId,
+                "AccessibleEventNotifier::generateId: "
+                "map is expected to be sorted ascending!" );
 
             if ( nCurrent - nBiggestUsedId > 1 )
             {   // found a "gap"
@@ -80,6 +87,41 @@ namespace comphelper
 
         return nFreeId;
     }
+
+    /** looks up a client in our client map, asserts if it cannot find it or
+        no event thread is present
+
+        @precond
+            to be called with our mutex locked
+
+        @param nClient
+            the id of the client to loopup
+        @param rPos
+            out-parameter for the position of the client in the client map
+
+        @return
+            <TRUE/> if and only if the client could be found and
+            <arg>rPos</arg> has been filled with it's position
+    */
+    static sal_Bool implLookupClient(
+            const AccessibleEventNotifier::TClientId nClient,
+            ClientMap::iterator& rPos )
+    {
+        // look up this client
+        ClientMap &rClients = Clients::get();
+        rPos = rClients.find( nClient );
+        OSL_ENSURE( rClients.end() != rPos,
+            "AccessibleEventNotifier::implLookupClient: invalid client id "
+            "(did you register your client?)!" );
+
+        return ( rClients.end() != rPos );
+    }
+}
+
+//.........................................................................
+namespace comphelper
+{
+//.........................................................................
 
     //---------------------------------------------------------------------
     AccessibleEventNotifier::TClientId AccessibleEventNotifier::registerClient( )
@@ -101,17 +143,6 @@ namespace comphelper
 
         // outta here
         return nNewClientId;
-    }
-
-    //---------------------------------------------------------------------
-    sal_Bool AccessibleEventNotifier::implLookupClient( const TClientId _nClient, ClientMap::iterator& _rPos )
-    {
-        // look up this client
-        AccessibleEventNotifier::ClientMap &rClients = Clients::get();
-        _rPos = rClients.find( _nClient );
-        OSL_ENSURE( rClients.end() != _rPos, "AccessibleEventNotifier::implLookupClient: invalid client id (did you register your client?)!" );
-
-        return ( rClients.end() != _rPos );
     }
 
     //---------------------------------------------------------------------
