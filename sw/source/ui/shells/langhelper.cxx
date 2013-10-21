@@ -607,7 +607,7 @@ namespace SwLangHelper
         if (!rWrtSh.IsEndPara())
             rWrtSh.MovePara( fnParaCurr, fnParaEnd );
     #if OSL_DEBUG_LEVEL > 1
-        String aSelTxt;
+        OUString aSelTxt;
         rWrtSh.GetSelectedText( aSelTxt );
         (void) aSelTxt;
     #endif
