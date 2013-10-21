@@ -107,6 +107,7 @@ private:
                                    xub_StrLen nLen = STRING_LEN ) const;
 
     UniString&          Assign( const OUString& rStr );
+    UniString&          Append( const UniString& rStr );
 
                         UniString( const int* pDummy );    // not implemented: to prevent UniString( NULL )
                         UniString(int); // not implemented; to detect misuses of
@@ -115,8 +116,6 @@ private:
                                          // of operator =(sal_Unicode)
     void                Append(int); // not implemented; to detect misuses of
                                      // Append(sal_Unicode)
-    void                operator +=(int); // not implemented; to detect misuses
-                                          // of operator +=(sal_Unicode)
 
     //detect and reject use of RTL_CONSTASCII_STRINGPARAM instead of RTL_CONSTASCII_USTRINGPARAM
     TOOLS_DLLPRIVATE UniString( const sal_Char*, sal_Int32 );
@@ -133,12 +132,6 @@ private:
     TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr );
     TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr, xub_StrLen nLen );
     TOOLS_DLLPRIVATE UniString( sal_Unicode c );
-    TOOLS_DLLPRIVATE UniString& Append( const sal_Unicode* pCharStr );
-    TOOLS_DLLPRIVATE UniString& Append( const sal_Unicode* pCharStr, xub_StrLen nLen );
-    TOOLS_DLLPRIVATE UniString& Expand( xub_StrLen nCount, sal_Unicode cExpandChar );
-
-    TOOLS_DLLPRIVATE UniString& operator +=( const sal_Unicode* pCharStr );
-
 public:
                         UniString();
                         UniString( const ResId& rResId );
@@ -175,18 +168,8 @@ public:
     UniString&          operator =( const OUString& rStr )
                             { return Assign( rStr ); }
 
-    UniString&          Append( const UniString& rStr );
-    UniString&          Append( sal_Unicode c );
-    UniString & Append(char c) // ...but allow "Append('a')"
-        { return Append(static_cast< sal_Unicode >(c)); }
-    UniString&          operator +=( const UniString& rStr )
-                            { return Append( rStr ); }
     UniString&          operator +=( const OUString& rStr )
                             { return Append( UniString(rStr) ); }
-    UniString&          operator +=( sal_Unicode c )
-                            { return Append( c ); }
-    UniString & operator +=(char c) // ...but allow "+= 'a'"
-        { return operator +=(static_cast< sal_Unicode >(c)); }
 
     xub_StrLen          Len() const { return (xub_StrLen)mpData->mnLen; }
 

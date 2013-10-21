@@ -79,27 +79,6 @@ sal_Bool operator==(const UniString& rStr1, const UniString& rStr2)
     return (ImplStringCompareWithoutZero( rStr1.mpData->maStr, rStr2.mpData->maStr, rStr1.mpData->mnLen ) == 0);
 }
 
-STRING& STRING::Append( STRCODE c )
-{
-    // don't append null characters and keep string length < maxlen
-    sal_Int32 nLen = mpData->mnLen;
-    if ( c && (nLen < STRING_MAXLEN) )
-    {
-        // allocate string of new size
-        STRINGDATA* pNewData = ImplAllocData( nLen+1 );
-
-        // copy string
-        memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
-        pNewData->maStr[nLen] = c;
-
-        // free old string
-        STRING_RELEASE((STRING_TYPE *)mpData);
-        mpData = pNewData;
-    }
-
-    return *this;
-}
-
 xub_StrLen ImplStringLen( const sal_Char* pStr )
 {
     const sal_Char* pTempStr = pStr;
