@@ -390,7 +390,37 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "NOMINAL_ADD"; }
 };
-
+class Fvschedule: Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        std::cout << vSubArguments.size() << std::endl;
+        FormulaToken* pCur = vSubArguments[1]->GetFormulaToken();
+        assert(pCur);
+        const formula::DoubleVectorRefToken* pCurDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+        size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = 1.0;\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "for (int i = 0; i <" << nCurWindowSize << "; i++)\n\t\t";
+        ss << "tmp *= " << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << " + 1.0;\n\t";
+        ss << "return (double)tmp * " << vSubArguments[0]
+            ->GenSlidingWindowDeclRef();
+        ss << ";\n}";
+    }
+};
 class Cumipmt: public Normal
 {
 public:
@@ -757,6 +787,11 @@ public:
         virtual std::string BinFuncName(void) const { return "cumprinc"; }
 
 };
+class OpFvschedule: public Fvschedule{
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string BinFuncName(void) const { return "Fvschedule"; }
+};
 class OpReceived:public Normal
 {
 public:
@@ -1073,6 +1108,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 {
                     mvSubArguments.push_back(SoPHelper<OpTbillyield>(ts,
                        ft->Children[i]));
+                }
+                if (!(pChild->GetExternal().compareTo(OUString(
+                    "com.sun.star.sheet.addin.Analysis.getFvschedule"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpFvschedule>(ts,
+                        ft->Children[i]));
                 }
 
                 break;
