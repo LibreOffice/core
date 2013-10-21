@@ -187,9 +187,6 @@ distclean : clean compilerplugins-clean
 cmd:
 	echo "custom cmd" && ( $(cmd) )
 
-usedcxxfiles:
-	$(GNUMAKE) -f $(SRCDIR)/Makefile.gbuild $(@)
-
 #
 # Fetch
 #
