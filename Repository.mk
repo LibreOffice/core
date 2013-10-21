@@ -438,20 +438,16 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 
 endif
 
-# these libraries are packaged in the "Test" instset, in the "program" dir :-/
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	smoketest \
-	test \
-	unobootstrapprotector \
-	unoexceptionprotector \
-	unotest \
-))
-
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
+	smoketest \
 	subsequenttest \
+	test \
 	testtools_cppobj \
 	testtools_bridgetest \
 	testtools_constructors \
+	unobootstrapprotector \
+	unoexceptionprotector \
+	unotest \
 	scqahelper \
 	unowinreg \
 ))
