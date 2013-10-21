@@ -94,40 +94,6 @@ STRING::STRING( const STRING& rStr )
     mpData = rStr.mpData;
 }
 
-STRING::STRING( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen )
-: mpData( NULL )
-{
-    if ( nPos > rStr.mpData->mnLen )
-        nLen = 0;
-    else
-    {
-        // correct length if necessary
-        sal_Int32 nMaxLen = rStr.mpData->mnLen-nPos;
-        if ( nLen > nMaxLen )
-            nLen = static_cast< xub_StrLen >(nMaxLen);
-    }
-
-    if ( nLen )
-    {
-        // Increase reference counter if it suffices
-        if ( (nPos == 0) && (nLen == rStr.mpData->mnLen) )
-        {
-            STRING_ACQUIRE((STRING_TYPE *)rStr.mpData);
-            mpData = rStr.mpData;
-        }
-        else
-        {
-            // otherwise, copy string
-            mpData = ImplAllocData( nLen );
-            memcpy( mpData->maStr, rStr.mpData->maStr+nPos, nLen*sizeof( STRCODE ) );
-        }
-    }
-    else
-    {
-        STRING_NEW((STRING_TYPE **)&mpData);
-    }
-}
-
 STRING::~STRING()
 {
     // free string data

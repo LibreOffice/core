@@ -103,7 +103,6 @@ public:
                         UniString();
                         UniString( const ResId& rResId );
                         UniString( const UniString& rStr );
-                        UniString( const UniString& rStr, xub_StrLen nPos, xub_StrLen nLen );
                         UniString( const OUString& rStr );
                        ~UniString();
 
@@ -132,9 +131,6 @@ public:
                             { return Append( UniString(rStr) ); }
 
     xub_StrLen          Len() const { return (xub_StrLen)mpData->mnLen; }
-
-    UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const
-        { return UniString( *this, nIndex, nCount ); }
 
     const sal_Unicode*  GetBuffer() const { return mpData->maStr; }
 
