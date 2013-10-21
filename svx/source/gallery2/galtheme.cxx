@@ -19,6 +19,8 @@
 
 #include "sal/config.h"
 
+#include <algorithm>
+
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
@@ -1310,24 +1312,24 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
         else
         {
             aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-            aPath = aPath.copy( 0, aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() );
+            aPath = aPath.copy( 0, std::min(aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength(), aPath.getLength()) );
             bRel = aPath == aRelURL1.GetMainURL( INetURLObject::NO_DECODE );
 
             if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > ( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() + 1 ) ) )
             {
                 aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                aPath = aPath.copy( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength() );
+                aPath = aPath.copy( std::min(aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).getLength(), aPath.getLength()) );
             }
             else
             {
                 aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                aPath = aPath.copy( 0, aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() );
+                aPath = aPath.copy( 0, std::min(aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength(), aPath.getLength()) );
                 bRel = aPath == aRelURL2.GetMainURL( INetURLObject::NO_DECODE );
 
                 if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() > ( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() + 1 ) ) )
                 {
                     aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
-                    aPath = aPath.copy( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength() );
+                    aPath = aPath.copy( std::min(aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).getLength(), aPath.getLength()) );
                 }
                 else
                     aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
