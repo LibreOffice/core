@@ -18,7 +18,7 @@
  */
 
 #include <string.h>
-
+#include <rtl/ustrbuf.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/rc.hxx>
@@ -77,5 +77,47 @@ Date::Date( const ResId& rResId ) : nDate(0)
     if ( 0x04 & nObjMask )
         SetDay( (sal_uInt16)pResMgr->ReadShort() );
 }
+
+OUString ResId::toString() const
+{
+    SetRT( RSC_STRING );
+    ResMgr* pResMgr = GetResMgr();
+
+    if ( !pResMgr || !pResMgr->GetResource( *this ) )
+    {
+        OUString sRet;
+
+#if OSL_DEBUG_LEVEL > 0
+        sRet = OUStringBuffer().
+            append("<resource id ").
+            append(static_cast<sal_Int32>(GetId())).
+            append(" not found>").
+            makeStringAndClear();
+#endif
+
+        if( pResMgr )
+            pResMgr->PopContext();
+
+        return sRet;
+    }
+
+    // String loading
+    RSHEADER_TYPE * pResHdr = (RSHEADER_TYPE*)pResMgr->GetClass();
+
+    sal_Int32 nStringLen = rtl_str_getLength( (char*)(pResHdr+1) );
+    OUString sRet((const char*)(pResHdr+1), nStringLen, RTL_TEXTENCODING_UTF8);
+
+    sal_uInt32 nSize = sizeof( RSHEADER_TYPE )
+        + sal::static_int_cast< sal_uInt32 >(nStringLen) + 1;
+    nSize += nSize % 2;
+    pResMgr->Increment( nSize );
+
+    ResHookProc pImplResHookProc = ResMgr::GetReadStringHook();
+    if ( pImplResHookProc )
+        sRet = pImplResHookProc(sRet);
+    return sRet;
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
