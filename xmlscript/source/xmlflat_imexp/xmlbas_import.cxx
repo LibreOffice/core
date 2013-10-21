@@ -25,6 +25,7 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -569,20 +570,12 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     }
 
     // XServiceInfo
-
     sal_Bool XMLBasicImporterBase::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aNames( getSupportedServiceNames() );
-        const OUString* pNames = aNames.getConstArray();
-        const OUString* pEnd = pNames + aNames.getLength();
-        for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-            ;
-
-        return pNames != pEnd;
+        return cppu::supportsService(this, rServiceName);
     }
 
     // XImporter
-
     void XMLBasicImporterBase::setTargetDocument( const Reference< XComponent >& rxDoc )
         throw (IllegalArgumentException, RuntimeException)
     {

@@ -22,6 +22,7 @@
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
+#include <cppuhelper/supportsservice.hxx>
 
 // component helper namespace
 namespace comp_DialogModelProvider {
@@ -165,12 +166,7 @@ OUString SAL_CALL DialogModelProvider::getImplementationName() throw (css::uno::
 
 ::sal_Bool SAL_CALL DialogModelProvider::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > serviceNames = comp_DialogModelProvider::_getSupportedServiceNames();
-    for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
-        if (serviceNames[i] == serviceName)
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getSupportedServiceNames() throw (css::uno::RuntimeException)

@@ -80,6 +80,7 @@
 
 
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/document/XCompatWriterDocProperties.hpp>
 #include <com/sun/star/beans/PropertyBag.hpp>
 
@@ -382,20 +383,7 @@ public:
 
     virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException)
     {
-        css::uno::Sequence< OUString > sServiceNames= getSupportedServiceNames();
-        sal_Int32 nLen = sServiceNames.getLength();
-        OUString* pIt = sServiceNames.getArray();
-        OUString* pEnd = ( pIt + nLen );
-        sal_Bool bRes = sal_False;
-        for ( ; pIt != pEnd; ++pIt )
-        {
-            if ( pIt->equals( ServiceName ) )
-            {
-                bRes = sal_True;
-                break;
-            }
-        }
-        return bRes;
+        return cppu::supportsService(this, ServiceName);
     }
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)

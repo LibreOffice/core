@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -96,13 +97,7 @@ OUString VCLXAccessibleComponent::getImplementationName() throw (uno::RuntimeExc
 
 sal_Bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aNames( getSupportedServiceNames() );
-    const OUString* pNames = aNames.getConstArray();
-    const OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames() throw (uno::RuntimeException)

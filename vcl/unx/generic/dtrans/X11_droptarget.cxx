@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <cppuhelper/supportsservice.hxx>
 #include <X11_selection.hxx>
 
 using namespace x11;
@@ -182,38 +182,20 @@ void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
     }
 }
 
-// --------------------------------------------------------------------------
-
-/*
- *  XServiceInfo
- */
-
-// ------------------------------------------------------------------------
-
+// XServiceInfo
 OUString DropTarget::getImplementationName() throw()
 {
     return OUString(XDND_DROPTARGET_IMPLEMENTATION_NAME);
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool DropTarget::supportsService( const OUString& ServiceName ) throw()
 {
-    Sequence < OUString > SupportedServicesNames = Xdnd_dropTarget_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if (SupportedServicesNames[n] == ServiceName)
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
-// ------------------------------------------------------------------------
 
 Sequence< OUString > DropTarget::getSupportedServiceNames() throw()
 {
     return Xdnd_dropTarget_getSupportedServiceNames();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

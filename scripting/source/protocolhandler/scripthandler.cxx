@@ -44,6 +44,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <framework/documentundoguard.hxx>
 
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -414,21 +415,10 @@ throw( RuntimeException )
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL ScriptProtocolHandler::supportsService(
-const OUString& sServiceName )
+sal_Bool SAL_CALL ScriptProtocolHandler::supportsService(const OUString& sServiceName )
 throw( RuntimeException )
 {
-    Sequence< OUString > seqServiceNames = getSupportedServiceNames();
-    const OUString* pArray = seqServiceNames.getConstArray();
-    for ( sal_Int32 nCounter = 0; nCounter < seqServiceNames.getLength(); nCounter++ )
-    {
-        if ( pArray[ nCounter ] == sServiceName )
-        {
-            return sal_True ;
-        }
-    }
-
-    return sal_False ;
+    return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */

@@ -19,6 +19,7 @@
 
 
 #include "cppuhelper/factory.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 
 #include "cmdenv.hxx"
@@ -88,14 +89,7 @@ sal_Bool SAL_CALL
 UcbCommandEnvironment::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for ( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-    {
-        if ( pArray[ i ] == ServiceName )
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 //=========================================================================

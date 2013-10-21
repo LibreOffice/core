@@ -66,6 +66,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/solarmutex.hxx>
 
+#include <cppuhelper/supportsservice.hxx>
+
 #define DRAG_EVENT_MASK ButtonPressMask         |\
                               ButtonReleaseMask     |\
                               PointerMotionMask     |\
@@ -4153,27 +4155,14 @@ OUString SelectionManagerHolder::getImplementationName() throw()
     return OUString(XDND_IMPLEMENTATION_NAME);
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool SelectionManagerHolder::supportsService( const OUString& ServiceName ) throw()
 {
-    Sequence < OUString > SupportedServicesNames = Xdnd_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if (SupportedServicesNames[n] == ServiceName)
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
-// ------------------------------------------------------------------------
 
 Sequence< OUString > SelectionManagerHolder::getSupportedServiceNames() throw()
 {
     return Xdnd_getSupportedServiceNames();
 }
-
-
-// ------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

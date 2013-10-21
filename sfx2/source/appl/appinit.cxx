@@ -42,6 +42,7 @@
 #include <unotools/historyoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/edit.hxx>
 
@@ -128,17 +129,7 @@ OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (Runt
 
 ::sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName ) throw (RuntimeException)
 {
-    Sequence< OUString > lNames  = getSupportedServiceNames();
-    ::sal_Int32                 c       = lNames.getLength();
-    ::sal_Int32                 i       = 0;
-
-    for (i=0; i<c; ++i)
-    {
-        if (lNames[i].equals(sServiceName))
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, sServiceName);
 }
 
 Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceNames() throw (RuntimeException)

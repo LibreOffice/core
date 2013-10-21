@@ -23,6 +23,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/mediadescriptor.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -755,23 +756,10 @@ BrowseNodeFactoryImpl::getSupportedServiceNames()
     return bnf_getSupportedServiceNames();
 }
 
-sal_Bool BrowseNodeFactoryImpl::supportsService(
-    OUString const & serviceName )
+sal_Bool BrowseNodeFactoryImpl::supportsService(OUString const & serviceName )
     throw (RuntimeException)
 {
-//     check();
-
-    Sequence< OUString > supported_services(
-        getSupportedServiceNames() );
-
-    OUString const * ar = supported_services.getConstArray();
-
-    for ( sal_Int32 pos = supported_services.getLength(); pos--; )
-    {
-        if (ar[ pos ].equals( serviceName ))
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 } // namespace browsenodefactory

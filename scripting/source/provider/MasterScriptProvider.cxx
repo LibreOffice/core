@@ -23,6 +23,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -807,20 +808,10 @@ throw( RuntimeException )
     return OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
 }
 
-//*************************************************************************
 sal_Bool SAL_CALL MasterScriptProvider::supportsService( const OUString& serviceName )
 throw( RuntimeException )
 {
-    Sequence< OUString > serviceNames( getSupportedServiceNames() );
-    OUString const * pNames = serviceNames.getConstArray();
-    for ( sal_Int32 nPos = serviceNames.getLength(); nPos--; )
-    {
-        if ( serviceName.equals( pNames[ nPos ] ) )
-        {
-            return sal_True;
-        }
-    }
-    return sal_False;
+    return cppu::supportsService(this, serviceName);
 }
 
 //*************************************************************************
