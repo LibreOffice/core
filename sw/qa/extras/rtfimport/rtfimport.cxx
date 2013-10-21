@@ -167,6 +167,7 @@ public:
     void testFdo68076();
     void testFdo68291();
     void testFdo69384();
+    void testFdo70221();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -319,6 +320,7 @@ void Test::run()
         {"fdo68076.rtf", &Test::testFdo68076},
         {"fdo68291.odt", &Test::testFdo68291},
         {"hello.rtf", &Test::testFdo69384},
+        {"fdo70221.rtf", &Test::testFdo70221},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1537,6 +1539,14 @@ void Test::testFdo69384()
     // Import got interrupted in the middle of style sheet table import,
     // resuling in missing styles and text.
     getStyles("ParagraphStyles")->getByName("Text body justified");
+}
+
+void Test::testFdo70221()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // The picture was imported twice.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -3779,6 +3779,7 @@ int RTFDocumentImpl::pushState()
         case DESTINATION_SHAPETEXT:
         case DESTINATION_FORMFIELD:
         case DESTINATION_FIELDINSTRUCTION:
+        case DESTINATION_PICT:
             m_aStates.top().nDestinationState = DESTINATION_NORMAL;
             break;
         case DESTINATION_MNUM:
