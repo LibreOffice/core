@@ -1705,7 +1705,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaTextArrayAction*    pAct = (MetaTextArrayAction*)pAction;
                 OString aText(OUStringToOString(pAct->GetText(),
                     rActualCharSet));
-                OUString                aUniText = pAct->GetText().copy( pAct->GetIndex(), pAct->GetLen() );
+                OUString                aUniText = pAct->GetText().copy( pAct->GetIndex(), std::min<sal_Int32>(pAct->GetText().getLength() - pAct->GetIndex(), pAct->GetLen()) );
                 sal_uLong               nAryLen;
                 sal_uLong               nLen = pAct->GetLen();
                 const sal_uLong         nTextLen = aText.getLength();
