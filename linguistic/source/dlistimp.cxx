@@ -22,7 +22,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
@@ -781,10 +780,10 @@ void * SAL_CALL DicList_getFactory( const sal_Char * pImplName,
 }
 
 
-xub_StrLen lcl_GetToken( OUString &rToken,
+static sal_Int32 lcl_GetToken( OUString &rToken,
             const OUString &rText, xub_StrLen nPos, const OUString &rDelim )
 {
-    xub_StrLen nRes = STRING_LEN;
+    sal_Int32 nRes = -1;
 
     if (rText.isEmpty() ||  nPos >= rText.getLength())
         rToken = "";
@@ -796,7 +795,7 @@ xub_StrLen lcl_GetToken( OUString &rToken,
     }
     else
     {
-        xub_StrLen  i;
+        sal_Int32 i;
         for (i = nPos;  i < rText.getLength();  ++i)
         {
             if (-1 != rDelim.indexOf( rText[i] ))
@@ -828,8 +827,8 @@ static void AddInternal(
             "ensure no '.'");
 
         OUString      aToken;
-        xub_StrLen  nPos = 0;
-        while (STRING_LEN !=
+        sal_Int32 nPos = 0;
+        while (-1 !=
                     (nPos = lcl_GetToken( aToken, rNew, nPos, aDelim )))
         {
             if( !aToken.isEmpty()  &&  !IsNumeric( aToken ) )
