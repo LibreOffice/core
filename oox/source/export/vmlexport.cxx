@@ -555,6 +555,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     if ( rProps.GetOpt( ESCHER_Prop_fillBackColor, nValue ) )
                         impl_AddColor( pAttrList, XML_color2, nValue );
 
+                    bool imageData = false;
                     EscherPropSortStruct aStruct;
                     if ( rProps.GetOpt( ESCHER_Prop_fillBlip, aStruct ) && m_pTextExport)
                     {
@@ -563,9 +564,10 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         aStream.Write(aStruct.pBuf + nHeaderSize, aStruct.nPropSize - nHeaderSize);
                         aStream.Seek(0);
                         Graphic aGraphic;
-                        GraphicConverter::Import(aStream, aGraphic, CVT_PNG);
+                        GraphicConverter::Import(aStream, aGraphic);
                         OUString aImageId = m_pTextExport->GetDrawingML().WriteImage( aGraphic );
                         pAttrList->add(FSNS(XML_r, XML_id), OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
+                        imageData = true;
                     }
 
                     if ( rProps.GetOpt( ESCHER_Prop_fNoFillHitTest, nValue ) )
@@ -575,7 +577,10 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         // Partly undo the transformation at the end of EscherPropertyContainer::CreateFillProperties(): VML opacity is 0..1.
                         pAttrList->add(XML_opacity, OString::number(double((nValue * 100) >> 16) / 100));
 
-                    m_pSerializer->singleElementNS( XML_v, XML_fill, XFastAttributeListRef( pAttrList ) );
+                    if (imageData)
+                        m_pSerializer->singleElementNS( XML_v, XML_imagedata, XFastAttributeListRef( pAttrList ) );
+                    else
+                        m_pSerializer->singleElementNS( XML_v, XML_fill, XFastAttributeListRef( pAttrList ) );
                 }
                 bAlreadyWritten[ ESCHER_Prop_fillType ] = true;
                 bAlreadyWritten[ ESCHER_Prop_fillColor ] = true;
