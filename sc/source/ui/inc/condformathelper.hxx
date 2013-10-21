@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef SC_CONDFORMATHELPER_HXX
+#define SC_CONDFORMATHELPER_HXX
+
 #include <rtl/ustring.hxx>
 #include "conditio.hxx"
 
@@ -31,5 +34,7 @@ public:
     static SC_DLLPUBLIC OUString GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
             OUString aStr1 = OUString(), OUString aStr2 = OUString() );
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

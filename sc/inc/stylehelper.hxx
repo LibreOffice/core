@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef SC_STYLEHELPER_HXX
+#define SC_STYLEHELPER_HXX
+
 #include <rtl/ustring.hxx>
 
 class ScStyleNameConversion
@@ -25,5 +28,7 @@ public:
     static OUString DisplayToProgrammaticName( const OUString& rDispName, sal_uInt16 nType );
     static OUString ProgrammaticToDisplayName( const OUString& rProgName, sal_uInt16 nType );
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

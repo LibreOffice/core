@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef _INCLUDED_BASIC_RTLPROTO_HXX_
+#define _INCLUDED_BASIC_RTLPROTO_HXX_
+
 #include <basic/sbstar.hxx>
 #include "sbtrace.hxx"
 
@@ -367,5 +370,7 @@ extern RTLFUNC(TraceCommand);
 
 extern double Now_Impl();
 extern void Wait_Impl( bool bDurationBased, SbxArray& rPar );
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

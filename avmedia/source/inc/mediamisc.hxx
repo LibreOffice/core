@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef _AVMEDIA_MEDIAMISC_HXX
+#define _AVMEDIA_MEDIAMISC_HXX
+
 class ResMgr;
 
 #define AVMEDIA_RESID( nId ) ResId( nId, * ::avmedia::GetResMgr() )
@@ -38,5 +41,7 @@ namespace avmedia
 {
     ResMgr* GetResMgr();
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

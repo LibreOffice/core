@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef SC_CONDFORMATDLG_HXX
+#define SC_CONDFORMATDLG_HXX
+
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>
@@ -120,5 +123,7 @@ public:
     DECL_LINK( RangeGetFocusHdl, formula::RefEdit* );
     DECL_LINK( RangeLoseFocusHdl, void* );
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
