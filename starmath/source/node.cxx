@@ -802,8 +802,8 @@ void SmExpressionNode::CreateTextFromNode(OUString &rText)
             pNode->CreateTextFromNode(rText);
             //Just a bit of foo to make unary +asd -asd +-asd -+asd look nice
             if (pNode->GetType() == NMATH)
-                if ((nSize != 2) || ((rText[rText.getLength()-1] != '+') &&
-                    (rText[rText.getLength()-1] != '-')))
+                if ((nSize != 2) ||
+                    ( !rText.endsWith("+") && !rText.endsWith("-") ))
                     rText += " ";
         }
 

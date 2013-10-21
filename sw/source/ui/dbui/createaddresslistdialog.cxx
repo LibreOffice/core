@@ -421,7 +421,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 {
                     OUString sHeader = sLine.getToken( 0, '\t', nIndex );
                     OSL_ENSURE(sHeader.getLength() > 2 &&
-                            sHeader[0] == '\"' && sHeader[sHeader.getLength() - 1] == '\"',
+                            sHeader.startsWith("\"") && sHeader.endsWith("\""),
                             "Wrong format of header");
                     if(sHeader.getLength() > 2)
                     {
@@ -438,8 +438,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 for( sal_Int32 nToken = 0; nToken < nDataCount; ++nToken)
                 {
                     OUString sData = sLine.getToken( 0, '\t', nIndex );
-                    OSL_ENSURE(sData.getLength() >= 2 &&
-                                sData[0] == '\"' && sData[sData.getLength() - 1] == '\"',
+                    OSL_ENSURE( sData.startsWith("\"") && sData.endsWith("\""),
                             "Wrong format of line");
                     if(sData.getLength() >= 2)
                         aNewData.push_back(sData.copy(1, sData.getLength() - 2));

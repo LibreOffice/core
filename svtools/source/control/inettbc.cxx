@@ -240,7 +240,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
             // note: if this doesn't work, we're not interested in: we're checking the
             // untouched sCompletion then
 
-        if ( !sURL.isEmpty() && ( sURL[sURL.getLength()-1] != '/' ))
+        if ( !sURL.isEmpty() && !sURL.endsWith("/") )
         {
             OUString sUpperURL( sURL.toAsciiUpperCase() );
 
@@ -316,9 +316,9 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
 #endif
 
     sal_Bool bExectMatch = bPureHomePath
-                || aText.compareTo( "." ) == 0
-                || (aText.getLength() > 1 && aText.copy( aText.getLength() - 2, 2 ).compareTo( "/." ) == 0)
-                || (aText.getLength() > 2 && aText.copy( aText.getLength() - 3, 3 ).compareTo( "/.." ) == 0);
+                || aText == "."
+                || aText.endsWith("/.")
+                || aText.endsWith("/..");
 
     // for pure home paths ( ~username ) the '.' at the end of rMatch
     // means that it poits to root catalog
@@ -346,7 +346,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
         aMatchName = aMatchName.toAsciiLowerCase();
 
         // if the matchstring ends with a slash, we must search for this also
-        if ( rMatch[ rMatch.getLength()-1 ] == '/' )
+        if ( rMatch.endsWith("/") )
             aMatchName += "/";
     }
 
@@ -435,7 +435,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
                         OUString aInput( aText );
                         if ( nMatchLen )
                         {
-                            if ((aText.getLength() && aText[ aText.getLength() - 1 ] == '.') || bPureHomePath)
+                            if (aText.endsWith(".") || bPureHomePath)
                             {
                                 // if a "special folder" URL was typed, don't touch the user input
                                 aMatch = aMatch.copy( nMatchLen );
@@ -508,7 +508,7 @@ OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUStrin
             // HRO: INetURLObject::smatRel2Abs does not recognize '\\' as a relative path
             //      but in case of "\\\\" INetURLObject is right - this is an absolute path !
 
-            if( aText.indexOf( '\\' ) == 0 && (aText.getLength() < 2 || aText[ 1 ] != '\\') )
+            if( aText.startsWith("\\") && (aText.getLength() < 2 || aText[ 1 ] != '\\') )
             {
                 // cut to first segment
                 OUString aTmp = INetURLObject::GetScheme( eBaseProt );
@@ -535,7 +535,7 @@ OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUStrin
             INetURLObject aTmp( aObj.smartRel2Abs( aSmart, bWasAbsolute ) );
 #endif
 
-            if ( aText[ aText.getLength() - 1 ] == '.' )
+            if ( aText.endsWith(".") )
                 // INetURLObject appends a final slash for the directories "." and "..", this is a bug!
                 // Remove it as a workaround
                 aTmp.removeFinalSlash();
@@ -788,7 +788,7 @@ void SvtMatchContext_Impl::doExecute()
                     if( bFull )
                         continue;
 
-                    if( aText.compareTo( aCurMainURL, aText.getLength() ) == 0 )
+                    if( aCurMainURL.startsWith(aText) )
                     {
                         if( aText.getLength() < aCurMainURL.getLength() )
                             Insert( aCurMainURL, aCurMainURL );
@@ -978,7 +978,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 
                     if ( !aURL.isEmpty() )
                     {
-                        sal_Bool bFound = aURL[aURL.getLength()-1] == '/' ;
+                        sal_Bool bFound = aURL.endsWith("/");
                         if ( !bFound )
                         {
                             OUString aUpperURL( aURL );
@@ -1363,7 +1363,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
         }
         else
         {
-            if( aParseTilde[ aParseTilde.getLength() - 1 ] != '/' )
+            if( !aParseTilde.endsWith("/") )
                 aParseTilde += "/";
             if( aText.getLength() > 2 )
                 aParseTilde += aText.copy( 2 );

@@ -118,7 +118,7 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     // negative?
     if ( bCurrency )
     {
-        if ( aStr[0] == '(' && aStr[aStr.getLength()-1] == ')' )
+        if ( aStr.startsWith("(") && aStr.endsWith(")") )
             bNegative = true;
         if ( !bNegative )
         {

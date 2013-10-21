@@ -5191,7 +5191,7 @@ sal_Bool ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNe
 
     OUString aFormula;
     pDoc->GetFormula( nStartCol, nStartRow, nTab, aFormula );
-    if ( aFormula[0] == '{' && aFormula[aFormula.getLength()-1] == '}' )
+    if ( aFormula.startsWith("{") && aFormula.endsWith("}") )
     {
         OUString aUndo = ScGlobal::GetRscString( STR_UNDO_RESIZEMATRIX );
         if (bUndo)

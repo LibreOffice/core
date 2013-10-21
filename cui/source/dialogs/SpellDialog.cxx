@@ -524,11 +524,11 @@ namespace
         OUString aString = rErrorText;
 
         //dots are sometimes part of the spelled word but they are not necessarily part of the replacement
-        bool bDot = !aString.isEmpty() && aString[aString.getLength() - 1] == '.';
+        bool bDot = aString.endsWith(".");
 
         aString = rSuggestedReplacement;
 
-        if(bDot && (aString.isEmpty() || aString[aString.getLength() - 1] != '.'))
+        if(bDot && (aString.isEmpty() || !aString.endsWith(".")))
             aString += ".";
 
         return aString;

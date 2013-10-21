@@ -933,7 +933,7 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
     else {
         sGID += ".";
         sGID += pResData->sId;
-        while (!sGID.isEmpty() && sGID[sGID.getLength() - 1] == '.') {
+        while (sGID.endsWith(".")) {
             sGID = sGID.copy(0, sGID.getLength() - 1);
         }
     }

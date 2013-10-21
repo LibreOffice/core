@@ -129,9 +129,7 @@ void cppu::decodeRdbUri(rtl::OUString * uri, bool * optional, bool * directory)
     if (*optional) {
         *uri = uri->copy(1);
     }
-    *directory = uri->getLength() >= 3 && (*uri)[0] == '<'
-        && (*uri)[uri->getLength() - 2] == '>'
-        && (*uri)[uri->getLength() - 1] == '*';
+    *directory = uri->startsWith("<") && uri->endsWith(">*");
     if (*directory) {
         *uri = uri->copy(1, uri->getLength() - 3);
     }

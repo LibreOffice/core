@@ -138,7 +138,7 @@ void LngParser::WritePO(PoOfstream &aPOStream,
 bool LngParser::isNextGroup(OString &sGroup_out, const OString &sLine_in)
 {
     const OString sLineTrim = sLine_in.trim();
-    if ((sLineTrim[0] == '[') && (sLineTrim[sLineTrim.getLength() - 1] == ']'))
+    if (sLineTrim.startsWith("[") && sLineTrim.endsWith("]"))
     {
         sGroup_out = getBracketedContent(sLineTrim).trim();
         return true;
@@ -184,9 +184,7 @@ sal_Bool LngParser::Merge(
     {
         OString sLine( *(*pLines)[ nPos ] );
         sLine = sLine.trim();
-        if (!sLine.isEmpty() &&
-            ( sLine[0] == '[' ) &&
-            ( sLine[sLine.getLength() - 1] == ']' ))
+        if ( sLine.startsWith("[") && sLine.endsWith("]") )
         {
             sGroup = getBracketedContent(sLine).trim();
             bGroup = sal_True;
@@ -211,9 +209,7 @@ sal_Bool LngParser::Merge(
         {
             OString sLine( *(*pLines)[ nPos ] );
             sLine = sLine.trim();
-            if (!sLine.isEmpty() &&
-                ( sLine[0] == '[' ) &&
-                ( sLine[sLine.getLength() - 1] == ']' ))
+            if ( sLine.startsWith("[") && sLine.endsWith("]") )
             {
                 sGroup = getBracketedContent(sLine).trim();
                 bGroup = sal_True;

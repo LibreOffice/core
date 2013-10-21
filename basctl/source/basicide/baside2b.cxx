@@ -720,7 +720,7 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
     if( aPortions.size() == 0 )
         return;
 
-    if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != TT_STRING) )
+    if( aLine.getLength() > 0 && !aLine.endsWith("\"") && (aPortions[aPortions.size()-1].tokenType != TT_STRING) )
     {
         GetEditView()->InsertText(OUString("\""));
         //leave the cursor on it's place: inside the two double quotes

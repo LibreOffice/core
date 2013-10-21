@@ -111,7 +111,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             throw BootstrapException(
                 "cannot convert soffice installation path to URL!");
         }
-        if (!path.isEmpty() && path[path.getLength() - 1] != '/') {
+        if (!path.isEmpty() && !path.endsWith("/")) {
             path += "/";
         }
 
