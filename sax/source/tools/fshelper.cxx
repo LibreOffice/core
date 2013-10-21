@@ -19,7 +19,7 @@
 
 #include <sax/fshelper.hxx>
 #include "fastserializer.hxx"
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
+#include <com/sun/star/xml/sax/FastTokenHandler.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -32,8 +32,7 @@ FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >&
     mpSerializer(new FastSaxSerializer())
 {
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_SET_THROW );
-    Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager(), UNO_SET_THROW );
-    mxTokenHandler.set( xFactory->createInstanceWithContext("com.sun.star.xml.sax.FastTokenHandler", xContext ), UNO_QUERY_THROW );
+    mxTokenHandler = css::xml::sax::FastTokenHandler::create(xContext);
 
     mpSerializer->setFastTokenHandler( mxTokenHandler );
     mpSerializer->setOutputStream( xOutputStream );

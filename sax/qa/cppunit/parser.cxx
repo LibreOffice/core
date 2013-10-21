@@ -10,9 +10,9 @@
 #include <sal/config.h>
 
 #include <com/sun/star/io/Pipe.hpp>
+#include <com/sun/star/xml/sax/FastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -26,7 +26,6 @@ class ParserTest: public test::BootstrapFixture
 {
     InputSource maInput;
     uno::Reference< XFastParser > mxParser;
-    uno::Reference< XFastTokenHandler > mxTokenHandler;
     uno::Reference< XFastDocumentHandler > mxDocumentHandler;
 
 public:
@@ -49,10 +48,8 @@ void ParserTest::setUp()
     mxParser.set( comphelper::ComponentContext(m_xContext).createComponent(
                 "com.sun.star.xml.sax.FastParser"), uno::UNO_QUERY );
     CPPUNIT_ASSERT_MESSAGE("No FastParser!", mxParser.is());
-    mxTokenHandler.set( comphelper::ComponentContext(m_xContext).createComponent(
-                "com.sun.star.xml.sax.FastTokenHandler"), uno::UNO_QUERY );
-    CPPUNIT_ASSERT_MESSAGE("No TokenHandler!", mxTokenHandler.is());
-    mxParser->setTokenHandler( mxTokenHandler );
+    mxParser->setTokenHandler(
+        css::xml::sax::FastTokenHandler::create(m_xContext));
 }
 
 void ParserTest::tearDown()
