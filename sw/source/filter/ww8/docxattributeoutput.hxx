@@ -371,6 +371,8 @@ private:
     /// writes a diagram
     void WriteDiagram(const SdrObject* sdrObject, const Size& size);
 
+    /// writes VML data
+    void WriteVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft );
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
@@ -637,6 +639,7 @@ private:
     void WritePostponedMath();
     void WritePostponedDiagram();
     void WritePostponedChart();
+    void WritePostponedVMLDrawing();
     void WriteCommentRanges();
 
     void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = sal_False );
@@ -736,6 +739,16 @@ private:
         Size size;
     };
     std::list< PostponedDiagram >* m_postponedDiagram;
+
+    struct PostponedVMLDrawing
+    {
+        PostponedVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt* frm, const Point* pt ) : object( sdrObj ), frame( frm ), vpt( pt ) {};
+        const SdrObject* object;
+        const SwFrmFmt* frame;
+        const Point* vpt;
+    };
+    std::list< PostponedVMLDrawing >* m_postponedVMLDrawing;
+
     const SwOLENode* m_postponedMath;
     const SdrObject* m_postponedChart;
     Size m_postponedChartSize;

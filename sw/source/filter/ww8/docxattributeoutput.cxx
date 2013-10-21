@@ -1038,6 +1038,9 @@ void DocxAttributeOutput::StartRunProperties()
 
     OSL_ASSERT( m_postponedDiagram == NULL );
     m_postponedDiagram = new std::list< PostponedDiagram >;
+
+    OSL_ASSERT( m_postponedVMLDrawing == NULL );
+    m_postponedVMLDrawing = new std::list< PostponedVMLDrawing >;
 }
 
 void DocxAttributeOutput::InitCollectedRunProperties()
@@ -1154,6 +1157,9 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     WritePostponedDiagram();
     //We need to write w:drawing tag after the w:rPr.
     WritePostponedChart();
+
+    //We need to write w:drawing tag after the w:rPr.
+    WritePostponedVMLDrawing();
 
     // merge the properties _before_ the run text (strictly speaking, just
     // after the start of the run)
@@ -3220,6 +3226,55 @@ void DocxAttributeOutput::WritePostponedMath()
     m_postponedMath = NULL;
 }
 
+/*
+ * Write w:pict hierarchy  end element of w:rPr tag.
+ */
+void DocxAttributeOutput::WritePostponedVMLDrawing()
+{
+    if(m_postponedVMLDrawing == NULL)
+        return;
+
+    for( std::list< PostponedVMLDrawing >::iterator it = m_postponedVMLDrawing->begin();
+         it != m_postponedVMLDrawing->end();
+         ++it )
+    {
+        WriteVMLDrawing(it->object, *(it->frame), *(it->vpt));
+    }
+    delete m_postponedVMLDrawing;
+    m_postponedVMLDrawing = NULL;
+}
+
+void DocxAttributeOutput::WriteVMLDrawing( const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft )
+{
+   bool bSwapInPage = false;
+   if ( !(sdrObj)->GetPage() )
+   {
+       if ( SdrModel* pModel = m_rExport.pDoc->GetDrawModel() )
+       {
+           if ( SdrPage *pPage = pModel->GetPage( 0 ) )
+           {
+               bSwapInPage = true;
+               const_cast< SdrObject* >( sdrObj )->SetPage( pPage );
+           }
+       }
+   }
+
+   m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
+
+   // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
+
+   SwFmtHoriOrient rHoriOri = (rFrmFmt).GetHoriOrient();
+   SwFmtVertOrient rVertOri = (rFrmFmt).GetVertOrient();
+   m_rExport.VMLExporter().AddSdrObject( *(sdrObj),
+        rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
+        rHoriOri.GetRelationOrient(),
+        rVertOri.GetRelationOrient(), (&rNdTopLeft) );
+   m_pSerializer->endElementNS( XML_w, XML_pict );
+
+   if ( bSwapInPage )
+       const_cast< SdrObject* >( sdrObj )->SetPage( 0 );
+}
+
 void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& rNdTopLeft )
 {
     m_pSerializer->mark();
@@ -3257,35 +3312,12 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                     }
                     else
                     {
-                        bool bSwapInPage = false;
-                        if ( !pSdrObj->GetPage() )
-                        {
-                            if ( SdrModel* pModel = m_rExport.pDoc->GetDrawModel() )
-                            {
-                                if ( SdrPage *pPage = pModel->GetPage( 0 ) )
-                                {
-                                    bSwapInPage = true;
-                                    const_cast< SdrObject* >( pSdrObj )->SetPage( pPage );
-                                }
-                            }
+                        if ( m_postponedVMLDrawing == NULL )
+                            WriteVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft);
+                        else // we are writing out attributes, but w:pict should not be inside w:rPr,
+                        {    // so write it out later
+                             m_postponedVMLDrawing->push_back( PostponedVMLDrawing( pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft ) );
                         }
-
-                        m_pSerializer->startElementNS( XML_w, XML_pict,
-                                FSEND );
-
-                        // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
-                        const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt();
-                        SwFmtHoriOrient rHoriOri = rFrmFmt.GetHoriOrient();
-                        SwFmtVertOrient rVertOri = rFrmFmt.GetVertOrient();
-                        m_rExport.VMLExporter().AddSdrObject( *pSdrObj,
-                                rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
-                                rHoriOri.GetRelationOrient(),
-                                rVertOri.GetRelationOrient(), &rNdTopLeft );
-
-                        m_pSerializer->endElementNS( XML_w, XML_pict );
-
-                        if ( bSwapInPage )
-                            const_cast< SdrObject* >( pSdrObj )->SetPage( 0 );
                     }
                 }
             }
@@ -6120,6 +6152,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_startedHyperlink( false ),
       m_postponedGraphic( NULL ),
       m_postponedDiagram( NULL ),
+      m_postponedVMLDrawing(NULL),
       m_postponedMath( NULL ),
       m_postponedChart( NULL ),
       pendingPlaceholder( NULL ),
