@@ -17,6 +17,11 @@ $(eval $(call gb_Library_set_include,chartopengl,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_externals,chartopengl,\
+	boost_headers \
+	mdds_headers \
+))
+
 $(eval $(call gb_Library_use_sdk_api,chartopengl))
 
 $(eval $(call gb_Library_use_externals,chartopengl,\
@@ -32,8 +37,6 @@ $(eval $(call gb_Library_use_libraries,chartopengl,\
     vcl \
     $(gb_UWINAPI) \
 ))
-
-$(eval $(call gb_Library_set_precompiled_header,chartopengl,$(SRCDIR)/chart2/inc/pch/precompiled_chartopengl))
 
 $(eval $(call gb_Library_add_exception_objects,chartopengl,\
     chart2/source/glew/glew \

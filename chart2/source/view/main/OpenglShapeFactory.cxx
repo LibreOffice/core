@@ -59,7 +59,7 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-SAL_CALL extern "C" {
+extern "C" {
 
 SAL_DLLPUBLIC_EXPORT opengl::OpenglShapeFactory* getOpenglShapeFactory()
 {
