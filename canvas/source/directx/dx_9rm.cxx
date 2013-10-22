@@ -31,6 +31,9 @@
                                    // has 3 vertices)
 #include <string.h>
 
+#include <osl/thread.h>
+#include <osl/time.h>
+
 #include <vcl/syschild.hxx>
 #include <vcl/window.hxx>
 
