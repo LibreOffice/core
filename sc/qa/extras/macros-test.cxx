@@ -70,8 +70,6 @@ void ScMacrosTest::testMSP()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load MasterScriptProviderProblem.ods", xComponent.is());
 
-    OUString aURL("vnd.sun.Star.script:Standard.Module1.TestMSP?language=Basic&location=document");
-    String sUrl = aURL;
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
     Sequence< Any > aOutParam;
@@ -83,7 +81,10 @@ void ScMacrosTest::testMSP()
     ScDocShell* xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
     CPPUNIT_ASSERT(xDocSh != NULL);
 
-    pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
+    pFoundShell->CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.TestMSP?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
     OUString sResult;
     aRet >>= sResult;
 
@@ -102,8 +103,6 @@ void ScMacrosTest::testStarBasic()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
 
-    OUString aURL("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document");
-    String sUrl = aURL;
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
     Sequence< Any > aOutParam;
@@ -115,7 +114,10 @@ void ScMacrosTest::testStarBasic()
     ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
+    pFoundShell->CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
     double aValue;
     pDoc->GetValue(0,0,0,aValue);
     std::cout << "returned value = " << aValue << std::endl;
@@ -238,7 +240,6 @@ void ScMacrosTest::testVba()
         OUString sMsg( "Failed to load " + aFileName );
         CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 
-        String sUrl = testInfo[i].sMacroUrl;
         Any aRet;
         Sequence< sal_Int16 > aOutParamIndex;
         Sequence< Any > aOutParam;
@@ -256,7 +257,9 @@ void ScMacrosTest::testVba()
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
         std::cout << "about to invoke vba test in " << OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
 
-        pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
+        pFoundShell->CallXScript(
+            xComponent, testInfo[i].sMacroUrl, aParams, aRet, aOutParamIndex,
+            aOutParam);
         OUString aStringRes;
         aRet >>= aStringRes;
         std::cout << "value of Ret " << OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
