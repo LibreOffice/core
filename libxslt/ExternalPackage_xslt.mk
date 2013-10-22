@@ -42,12 +42,11 @@ $(eval $(call gb_ExternalPackage_add_library_for_install,xslt,bin/libexslt.dll,w
 $(eval $(call gb_ExternalPackage_add_file,xslt,bin/xsltproc.exe,win32/bin.msvc/xsltproc.exe))
 endif
 else # OS!=WNT
-$(eval $(call gb_ExternalPackage_add_file,xslt,lib/libxslt.so.1.1.26,libxslt/.libs/libxslt.so.1.1.26))
 $(eval $(call gb_ExternalPackage_add_library_for_install,xslt,lib/libxslt.so.1,libxslt/.libs/libxslt.so.1.1.26))
 $(eval $(call gb_ExternalPackage_add_file,xslt,lib/libxslt.so,libxslt/.libs/libxslt.so.1.1.26))
-$(eval $(call gb_ExternalPackage_add_file,xslt,lib/libexslt.so.0.8.15,libexslt/.libs/libexslt.so.0.8.15))
 $(eval $(call gb_ExternalPackage_add_library_for_install,xslt,lib/libexslt.so.0,libexslt/.libs/libexslt.so.0.8.15))
 $(eval $(call gb_ExternalPackage_add_file,xslt,lib/libexslt.so,libexslt/.libs/libexslt.so.0.8.15))
 $(eval $(call gb_ExternalPackage_add_file,xslt,bin/xsltproc,xsltproc/.libs/xsltproc))
 endif
+
 # vim: set noet sw=4 ts=4:
