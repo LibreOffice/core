@@ -35,9 +35,9 @@ $(eval $(call gb_ExternalPackage_add_library_for_install,xml2,bin/libxml2.dll,wi
 $(eval $(call gb_ExternalPackage_add_file,xml2,bin/xmllint.exe,win32/bin.msvc/xmllint.exe))
 endif
 else # OS!=WNT
-$(eval $(call gb_ExternalPackage_add_file,xml2,lib/libxml2.so.2.7.6,.libs/libxml2.so.2.7.6))
 $(eval $(call gb_ExternalPackage_add_library_for_install,xml2,lib/libxml2.so.2,.libs/libxml2.so.2.7.6,xml2))
 $(eval $(call gb_ExternalPackage_add_file,xml2,lib/libxml2.so,.libs/libxml2.so.2.7.6))
 $(eval $(call gb_ExternalPackage_add_file,xml2,bin/xmllint,.libs/xmllint))
 endif
+
 # vim: set noet sw=4 ts=4:
