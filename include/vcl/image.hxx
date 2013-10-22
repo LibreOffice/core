@@ -58,7 +58,7 @@ public:
                     Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap );
                     Image( const Bitmap& rBitmap, const Color& rColor );
                     Image( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic );
-                    Image( const OUString &rFileUrl );
+                    explicit Image( const OUString &rPNGFileUrl );
                     ~Image();
 
     Size            GetSizePixel() const;
