@@ -115,7 +115,7 @@ static void initAppMenu()
                 if( pAppMenu )
                 {
                     // insert about entry
-                    String aAbout( ResId( SV_STDTEXT_ABOUT, *pMgr ) );
+                    OUString aAbout( ResId( SV_STDTEXT_ABOUT, *pMgr ) );
                     NSString* pString = CreateNSString( aAbout );
                     NSMenuItem* pNewItem = [pAppMenu insertItemWithTitle: pString
                                                      action: @selector(showAbout:)
@@ -130,7 +130,7 @@ static void initAppMenu()
                     }
 
                     // insert preferences entry
-                    String aPref( ResId( SV_STDTEXT_PREFERENCES, *pMgr ) );
+                    OUString aPref( ResId( SV_STDTEXT_PREFERENCES, *pMgr ) );
                     pString = CreateNSString( aPref );
                     pNewItem = [pAppMenu insertItemWithTitle: pString
                                          action: @selector(showPreferences:)
@@ -152,7 +152,7 @@ static void initAppMenu()
                     pNewItem = [pAppMenu itemAtIndex: 4];
                     if( pNewItem )
                     {
-                        pString = CreateNSString( String( ResId( SV_MENU_MAC_SERVICES, *pMgr ) ) );
+                        pString = CreateNSString( OUString( ResId( SV_MENU_MAC_SERVICES, *pMgr ) ) );
                         [pNewItem  setTitle: pString];
                         if( pString )
                             [pString release];
@@ -162,7 +162,7 @@ static void initAppMenu()
                     pNewItem = [pAppMenu itemAtIndex: 6];
                     if( pNewItem )
                     {
-                        pString = CreateNSString( String( ResId( SV_MENU_MAC_HIDEAPP, *pMgr ) ) );
+                        pString = CreateNSString( OUString( ResId( SV_MENU_MAC_HIDEAPP, *pMgr ) ) );
                         [pNewItem  setTitle: pString];
                         if( pString )
                             [pString release];
@@ -172,7 +172,7 @@ static void initAppMenu()
                     pNewItem = [pAppMenu itemAtIndex: 7];
                     if( pNewItem )
                     {
-                        pString = CreateNSString( String( ResId( SV_MENU_MAC_HIDEALL, *pMgr ) ) );
+                        pString = CreateNSString( OUString( ResId( SV_MENU_MAC_HIDEALL, *pMgr ) ) );
                         [pNewItem  setTitle: pString];
                         if( pString )
                             [pString release];
@@ -182,7 +182,7 @@ static void initAppMenu()
                     pNewItem = [pAppMenu itemAtIndex: 8];
                     if( pNewItem )
                     {
-                        pString = CreateNSString( String( ResId( SV_MENU_MAC_SHOWALL, *pMgr ) ) );
+                        pString = CreateNSString( OUString( ResId( SV_MENU_MAC_SHOWALL, *pMgr ) ) );
                         [pNewItem  setTitle: pString];
                         if( pString )
                             [pString release];
@@ -192,7 +192,7 @@ static void initAppMenu()
                     pNewItem = [pAppMenu itemAtIndex: 10];
                     if( pNewItem )
                     {
-                        pString = CreateNSString( String( ResId( SV_MENU_MAC_QUITAPP, *pMgr ) ) );
+                        pString = CreateNSString( OUString( ResId( SV_MENU_MAC_QUITAPP, *pMgr ) ) );
                         [pNewItem  setTitle: pString];
                         if( pString )
                             [pString release];
@@ -922,7 +922,7 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
     mpMenuItem( nil )
 {
     // Delete mnemonics
-    String aText( comphelper::string::remove(pItemData->aText, '~') );
+    OUString aText( comphelper::string::remove(pItemData->aText, '~') );
 
     if (pItemData->eType == MENUITEM_SEPARATOR)
     {

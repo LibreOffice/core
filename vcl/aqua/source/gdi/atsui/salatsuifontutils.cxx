@@ -38,7 +38,7 @@
 // since neither head's macStyle nor OS/2's panose are easily available
 // during font enumeration. macStyle bits would be not sufficient anyway
 // and SFNT fonts on Mac usually do not contain an OS/2 table.
-static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttributes& rDFA )
+static void UpdateAttributesFromPSName( const OUString& rPSName, ImplDevFontAttributes& rDFA )
 {
     OString aPSName( OUStringToOString( rPSName, RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase() );
 
@@ -163,20 +163,20 @@ static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttrib
 
    // #i100020# special heuristic for names with single-char styles
    // NOTE: we are checking name that hasn't been lower-cased
-   if( rPSName.Len() > 3 )
+   if( rPSName.getLength() > 3 )
    {
-        int i = rPSName.Len();
-        sal_Unicode c = rPSName.GetChar( --i );
+        int i = rPSName.getLength();
+        sal_Unicode c = rPSName[--i];
         if( c == 'C' ) { // "capitals"
             rDFA.SetFamilyType(FAMILY_DECORATIVE);
-            c = rPSName.GetChar( --i );
+            c = rPSName[--i];
         }
         if( c == 'O' ) { // CFF-based OpenType
-            c = rPSName.GetChar( --i );
+            c = rPSName[--i];
         }
         if( c == 'I' ) { // "italic"
             rDFA.SetItalic(ITALIC_NORMAL);
-            c = rPSName.GetChar( --i );
+            c = rPSName[--i];
         }
         if( c == 'B' )   // "bold"
             rDFA.SetWeight(WEIGHT_BOLD);
