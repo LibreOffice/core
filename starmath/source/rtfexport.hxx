@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SM_RTFEXPORT_HXX
-#define SM_RTFEXPORT_HXX
+#ifndef INCLUDED_STARMATH_SOURCE_RTFEXPORT_HXX
+#define INCLUDED_STARMATH_SOURCE_RTFEXPORT_HXX
 
 #include "wordexportbase.hxx"
 

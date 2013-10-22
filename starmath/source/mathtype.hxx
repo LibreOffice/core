@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef MATHTYPE_HXX
-#define MATHTYPE_HXX
+#ifndef INCLUDED_STARMATH_SOURCE_MATHTYPE_HXX
+#define INCLUDED_STARMATH_SOURCE_MATHTYPE_HXX
 
 #include "node.hxx"
 #include "eqnolefilehdr.hxx"

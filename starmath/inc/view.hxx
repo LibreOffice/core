@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef VIEW_HXX
-#define VIEW_HXX
+#ifndef INCLUDED_STARMATH_INC_VIEW_HXX
+#define INCLUDED_STARMATH_INC_VIEW_HXX
 
 #include <sfx2/dockwin.hxx>
 #include <sfx2/viewsh.hxx>

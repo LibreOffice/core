@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef SMVISITORS_H
-#define SMVISITORS_H
+#ifndef INCLUDED_STARMATH_INC_VISITORS_HXX
+#define INCLUDED_STARMATH_INC_VISITORS_HXX
 
 #include "node.hxx"
 #include "caret.hxx"
@@ -487,6 +487,6 @@ private:
     OUStringBuffer aCmdText;
 };
 
-#endif /* SMVISITORS_H */
+#endif // INCLUDED_STARMATH_INC_VISITORS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

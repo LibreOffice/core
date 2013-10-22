@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef EDIT_HXX
-#define EDIT_HXX
+#ifndef INCLUDED_STARMATH_INC_EDIT_HXX
+#define INCLUDED_STARMATH_INC_EDIT_HXX
 
 #include <vcl/window.hxx>
 #include <vcl/timer.hxx>

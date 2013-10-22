@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SM_OOXMLIMPORT_HXX
-#define SM_OOXMLIMPORT_HXX
+#ifndef INCLUDED_STARMATH_SOURCE_OOXMLIMPORT_HXX
+#define INCLUDED_STARMATH_SOURCE_OOXMLIMPORT_HXX
 
 #include <oox/mathml/importutils.hxx>
 
