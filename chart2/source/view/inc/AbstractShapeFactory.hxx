@@ -227,6 +227,8 @@ public:
          getOrCreateChartRootShape( const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XDrawPage>& xPage ) = 0;
 
+    virtual void setPageSize( com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > xChartShapes, const com::sun::star::awt::Size& rSize ) = 0;
+
 
     virtual void createSeries( const com::sun::star::uno::Reference<
             com::sun::star::drawing::XShapes> & xTarget,

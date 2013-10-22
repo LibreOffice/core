@@ -77,10 +77,56 @@ using dummy::DummyCone;
 
 namespace opengl {
 
-uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape(
-    const uno::Reference< drawing::XDrawPage>& )
+namespace {
+
+uno::Reference< drawing::XShapes > getChartShape(
+    const uno::Reference< drawing::XDrawPage>& xDrawPage )
 {
-    return new dummy::DummyChart();
+    uno::Reference< drawing::XShapes > xRet;
+    uno::Reference< drawing::XShapes > xShapes( xDrawPage, uno::UNO_QUERY );
+    if( xShapes.is() )
+    {
+        sal_Int32 nCount = xShapes->getCount();
+        uno::Reference< drawing::XShape > xShape;
+        for( sal_Int32 nN = nCount; nN--; )
+        {
+            if( xShapes->getByIndex( nN ) >>= xShape )
+            {
+
+                OUString aRet;
+
+                uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+                xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
+                if( aRet.equals("com.sun.star.chart2.shapes") )
+                {
+                    xRet = uno::Reference< drawing::XShapes >( xShape, uno::UNO_QUERY );
+                    break;
+                }
+            }
+        }
+    }
+    return xRet;
+}
+
+}
+
+uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape(
+    const uno::Reference< drawing::XDrawPage>& xDrawPage )
+{
+    uno::Reference< drawing::XShapes > xRet( getChartShape( xDrawPage ) );
+    if( !xRet.is()  )
+    {
+        //create the root shape
+        xRet = new dummy::DummyChart();
+        xDrawPage->add(uno::Reference< drawing::XShape >(xRet, uno::UNO_QUERY_THROW));
+    }
+    return xRet;
+}
+
+void OpenglShapeFactory::setPageSize( uno::Reference < drawing::XShapes > xChartShapes, const awt::Size& rSize )
+{
+    uno::Reference< drawing::XShape > xShape(xChartShapes, uno::UNO_QUERY_THROW);
+    xShape->setSize(rSize);
 }
 
 //  methods for 3D shape creation

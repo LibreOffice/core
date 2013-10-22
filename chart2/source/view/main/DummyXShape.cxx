@@ -11,6 +11,9 @@
 #include "CommonConverters.hxx"
 #include <rtl/ustring.hxx>
 
+#include <vcl/window.hxx>
+#include <tools/gen.hxx>
+
 #include <algorithm>
 
 using namespace com::sun::star;
@@ -460,6 +463,362 @@ uno::Any DummyXShapes::getByIndex(sal_Int32 nIndex)
     uno::Any aShape;
     aShape <<= maUNOShapes[nIndex];
     return aShape;
+}
+
+bool DummyChart::initWindow()
+{
+    const SystemEnvData* sysData(mpWindow->GetSystemData());
+#if defined( WNT )
+    GLWin.hWnd = sysData->hWnd;
+#elif defined( UNX )
+    GLWin.dpy = reinterpret_cast<unx::Display*>(sysData->pDisplay);
+
+    if( unx::glXQueryExtension( GLWin.dpy, NULL, NULL ) == false )
+        return false;
+
+    GLWin.win = sysData->aWindow;
+
+    OSL_TRACE("parent window: %d", GLWin.win);
+
+    unx::XWindowAttributes xattr;
+    unx::XGetWindowAttributes( GLWin.dpy, GLWin.win, &xattr );
+
+    GLWin.screen = XScreenNumberOfScreen( xattr.screen );
+
+    unx::XVisualInfo* vi( NULL );
+#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+    unx::XVisualInfo* visinfo;
+    unx::XVisualInfo* firstVisual( NULL );
+#endif
+    static int attrList3[] =
+    {
+        GLX_RGBA,//only TrueColor or DirectColor
+        //single buffered
+        GLX_RED_SIZE,4,//use the maximum red bits, with a minimum of 4 bits
+        GLX_GREEN_SIZE,4,//use the maximum green bits, with a minimum of 4 bits
+        GLX_BLUE_SIZE,4,//use the maximum blue bits, with a minimum of 4 bits
+        GLX_DEPTH_SIZE,0,//no depth buffer
+        None
+    };
+    static int attrList2[] =
+    {
+        GLX_RGBA,//only TrueColor or DirectColor
+        /// single buffered
+        GLX_RED_SIZE,4,/// use the maximum red bits, with a minimum of 4 bits
+        GLX_GREEN_SIZE,4,/// use the maximum green bits, with a minimum of 4 bits
+        GLX_BLUE_SIZE,4,/// use the maximum blue bits, with a minimum of 4 bits
+        GLX_DEPTH_SIZE,1,/// use the maximum depth bits, making sure there is a depth buffer
+        None
+    };
+    static int attrList1[] =
+    {
+        GLX_RGBA,//only TrueColor or DirectColor
+        GLX_DOUBLEBUFFER,/// only double buffer
+        GLX_RED_SIZE,4,/// use the maximum red bits, with a minimum of 4 bits
+        GLX_GREEN_SIZE,4,/// use the maximum green bits, with a minimum of 4 bits
+        GLX_BLUE_SIZE,4,/// use the maximum blue bits, with a minimum of 4 bits
+        GLX_DEPTH_SIZE,0,/// no depth buffer
+        None
+    };
+    static int attrList0[] =
+    {
+        GLX_RGBA,//only TrueColor or DirectColor
+        GLX_DOUBLEBUFFER,/// only double buffer
+        GLX_RED_SIZE,4,/// use the maximum red bits, with a minimum of 4 bits
+        GLX_GREEN_SIZE,4,/// use the maximum green bits, with a minimum of 4 bits
+        GLX_BLUE_SIZE,4,/// use the maximum blue bits, with a minimum of 4 bits
+        GLX_DEPTH_SIZE,1,/// use the maximum depth bits, making sure there is a depth buffer
+        None
+    };
+    static int* attrTable[] =
+    {
+        attrList0,
+        attrList1,
+        attrList2,
+        attrList3,
+        NULL
+    };
+    int** pAttributeTable = attrTable;
+    const SystemEnvData* pChildSysData = NULL;
+    pWindow.reset();
+
+#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+    unx::GLXFBConfig* fbconfigs = NULL;
+    int nfbconfigs, value, i = 0;
+#endif
+
+    while( *pAttributeTable )
+    {
+        // try to find a visual for the current set of attributes
+        vi = unx::glXChooseVisual( GLWin.dpy,
+                GLWin.screen,
+                *pAttributeTable );
+
+#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+        if( vi ) {
+            if( !firstVisual )
+                firstVisual = vi;
+            OSL_TRACE("trying VisualID %08X", vi->visualid);
+            fbconfigs = glXGetFBConfigs (GLWin.dpy, GLWin.screen, &nfbconfigs);
+
+            for ( ; i < nfbconfigs; i++)
+            {
+                visinfo = glXGetVisualFromFBConfig (GLWin.dpy, fbconfigs[i]);
+                if( !visinfo || visinfo->visualid != vi->visualid )
+                    continue;
+
+                glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i], GLX_DRAWABLE_TYPE, &value);
+                if (!(value & GLX_PIXMAP_BIT))
+                    continue;
+
+                glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i],
+                        GLX_BIND_TO_TEXTURE_TARGETS_EXT,
+                        &value);
+                if (!(value & GLX_TEXTURE_2D_BIT_EXT))
+                    continue;
+
+                glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i],
+                        GLX_BIND_TO_TEXTURE_RGB_EXT,
+                        &value);
+                if (value == sal_False)
+                    continue;
+
+                glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i],
+                        GLX_BIND_TO_MIPMAP_TEXTURE_EXT,
+                        &value);
+                if (value == sal_False)
+                    continue;
+
+                // TODO: handle non Y inverted cases
+                break;
+            }
+
+            if( i != nfbconfigs || ( firstVisual && pAttributeTable[1] == NULL ) ) {
+                if( i != nfbconfigs ) {
+                    vi = glXGetVisualFromFBConfig( GLWin.dpy, fbconfigs[i] );
+                    // TODO:moggi
+                    // mbHasTFPVisual = true;
+                    OSL_TRACE("found visual suitable for texture_from_pixmap");
+                } else {
+                    vi = firstVisual;
+                    // TODO:moggi
+                    // mbHasTFPVisual = false;
+                    OSL_TRACE("did not find visual suitable for texture_from_pixmap, using %08X", vi->visualid);
+                }
+#else
+                if( vi ) {
+#endif
+                    SystemWindowData winData;
+                    winData.nSize = sizeof(winData);
+                    OSL_TRACE("using VisualID %08X", vi->visualid);
+                    winData.pVisual = (void*)(vi->visual);
+                    pWindow.reset(new SystemChildWindow(mpWindow.get(), 0, &winData, sal_False));
+                    pChildSysData = pWindow->GetSystemData();
+
+                    if( pChildSysData ) {
+                        break;
+                    } else {
+                        pWindow.reset();
+                    }
+                }
+#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+            }
+#endif
+
+            ++pAttributeTable;
+        }
+#endif
+
+#if defined( WNT )
+        SystemWindowData winData;
+        winData.nSize = sizeof(winData);
+        pWindow.reset(new SystemChildWindow(mpWindow.get(), 0, &winData, sal_False));
+#endif
+
+        if( pWindow )
+        {
+            pWindow->SetMouseTransparent( sal_True );
+            pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+            pWindow->EnableEraseBackground( sal_False );
+            pWindow->SetControlForeground();
+            pWindow->SetControlBackground();
+            pWindow->EnablePaint(sal_False);
+#if defined( WNT )
+            GLWin.hWnd = sysData->hWnd;
+#elif defined( UNX )
+            GLWin.dpy = reinterpret_cast<unx::Display*>(pChildSysData->pDisplay);
+            GLWin.win = pChildSysData->aWindow;
+#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+            //TODO: moggi
+            /*
+            if( mbHasTFPVisual )
+                GLWin.fbc = fbconfigs[i];
+                */
+#endif
+            GLWin.vi = vi;
+            GLWin.GLXExtensions = unx::glXQueryExtensionsString( GLWin.dpy, GLWin.screen );
+            OSL_TRACE("available GLX extensions: %s", GLWin.GLXExtensions);
+#endif
+
+        return false;
+        }
+
+    return true;
+}
+
+namespace {
+
+static bool errorTriggered;
+int oglErrorHandler( unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/ )
+{
+    errorTriggered = true;
+
+    return 0;
+}
+
+}
+
+bool DummyChart::initOpengl()
+{
+    mpWindow->setPosSizePixel(0,0,0,0);
+    GLWin.Width = 0;
+    GLWin.Height = 0;
+
+#if defined( WNT )
+    GLWin.hDC = GetDC(GLWin.hWnd);
+#elif defined( UNX )
+    GLWin.ctx = glXCreateContext(GLWin.dpy,
+                                 GLWin.vi,
+                                 0,
+                                 GL_TRUE);
+    if( GLWin.ctx == NULL )
+    {
+        OSL_TRACE("unable to create GLX context");
+        return false;
+    }
+#endif
+
+#if defined( WNT )
+    PIXELFORMATDESCRIPTOR PixelFormatFront =                    // PixelFormat Tells Windows How We Want Things To Be
+    {
+        sizeof(PIXELFORMATDESCRIPTOR),
+        1,                              // Version Number
+        PFD_DRAW_TO_WINDOW |
+        PFD_SUPPORT_OPENGL |
+        PFD_DOUBLEBUFFER,
+        PFD_TYPE_RGBA,                  // Request An RGBA Format
+        (BYTE)32,                       // Select Our Color Depth
+        0, 0, 0, 0, 0, 0,               // Color Bits Ignored
+        0,                              // No Alpha Buffer
+        0,                              // Shift Bit Ignored
+        0,                              // No Accumulation Buffer
+        0, 0, 0, 0,                     // Accumulation Bits Ignored
+        64,                             // 32 bit Z-BUFFER
+        0,                              // 0 bit stencil buffer
+        0,                              // No Auxiliary Buffer
+        0,                              // now ignored
+        0,                              // Reserved
+        0, 0, 0                         // Layer Masks Ignored
+    };
+    int WindowPix = ChoosePixelFormat(GLWin.hDC,&PixelFormatFront);
+    SetPixelFormat(GLWin.hDC,WindowPix,&PixelFormatFront);
+    GLWin.hRC  = wglCreateContext(GLWin.hDC);
+    wglMakeCurrent(GLWin.hDC,GLWin.hRC);
+#elif defined( UNX )
+    if( !glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx ) )
+    {
+        OSL_TRACE("unable to select current GLX context");
+        return false;
+    }
+
+    int glxMinor, glxMajor;
+    double nGLXVersion = 0;
+    if( glXQueryVersion( GLWin.dpy, &glxMajor, &glxMinor ) )
+      nGLXVersion = glxMajor + 0.1*glxMinor;
+    OSL_TRACE("available GLX version: %f", nGLXVersion);
+
+    GLWin.GLExtensions = glGetString( GL_EXTENSIONS );
+    OSL_TRACE("available GL  extensions: %s", GLWin.GLExtensions);
+
+    // TODO: moggi
+    // mbTextureFromPixmap = GLWin.HasGLXExtension( "GLX_EXT_texture_from_pixmap" );
+    // mbGenerateMipmap = GLWin.HasGLExtension( "GL_SGIS_generate_mipmap" );
+
+    if( GLWin.HasGLXExtension("GLX_SGI_swap_control" ) )
+    {
+        // enable vsync
+        typedef GLint (*glXSwapIntervalProc)(GLint);
+        glXSwapIntervalProc glXSwapInterval = (glXSwapIntervalProc) unx::glXGetProcAddress( (const GLubyte*) "glXSwapIntervalSGI" );
+        if( glXSwapInterval ) {
+        int (*oldHandler)(unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/);
+
+        // replace error handler temporarily
+        oldHandler = unx::XSetErrorHandler( oglErrorHandler );
+
+        errorTriggered = false;
+
+        glXSwapInterval( 1 );
+
+        // sync so that we possibly get an XError
+        unx::glXWaitGL();
+        XSync(GLWin.dpy, false);
+
+        if( errorTriggered )
+            OSL_TRACE("error when trying to set swap interval, NVIDIA or Mesa bug?");
+        else
+            OSL_TRACE("set swap interval to 1 (enable vsync)");
+
+        // restore the error handler
+        unx::XSetErrorHandler( oldHandler );
+        }
+    }
+#endif
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glClearColor (0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+#if defined( WNT )
+    SwapBuffers(GLWin.hDC);
+#elif defined( UNX )
+    unx::glXSwapBuffers(GLWin.dpy, GLWin.win);
+#endif
+
+    glEnable(GL_LIGHTING);
+    GLfloat light_direction[] = { 0.0 , 0.0 , 1.0 };
+    GLfloat materialDiffuse[] = { 1.0 , 1.0 , 1.0 , 1.0};
+    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_direction);
+    glMaterialfv(GL_FRONT,GL_DIFFUSE,materialDiffuse);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_NORMALIZE);
+
+    return true;
+}
+
+DummyChart::DummyChart():
+    mpWindow(new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL))
+{
+    setName("com.sun.star.chart2.shapes");
+    createGLContext();
+}
+
+void DummyChart::createGLContext()
+{
+
+}
+
+void DummyChart::setPosition( const awt::Point& aPosition )
+    throw( uno::RuntimeException )
+{
+    DummyXShape::setPosition(aPosition);
+}
+
+void DummyChart::setSize( const awt::Size& aSize )
+    throw( beans::PropertyVetoException, uno::RuntimeException )
+{
+    DummyXShape::setSize(aSize);
+    mpWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
+    pWindow->SetSizePixel(Size(aSize.Width, aSize.Height));
 }
 
 }

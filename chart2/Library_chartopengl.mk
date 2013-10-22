@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_libraries,chartopengl,\
     cppu \
     cppuhelper \
     sal \
+    vcl \
     $(gb_UWINAPI) \
 ))
 
@@ -43,6 +44,8 @@ else ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,chartopengl,\
     -ldl \
     -lGL \
+    -lGLU \
+    -lX11 \
 ))
 endif
 

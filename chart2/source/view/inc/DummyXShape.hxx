@@ -56,6 +56,39 @@
 
 #include <vector>
 #include <map>
+#include <boost/scoped_ptr.hpp>
+
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <vcl/window.hxx>
+#include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
+
+#if defined( _WIN32 )
+    #include <GL/glu.h>
+    #include <GL/glext.h>
+    #include <GL/wglext.h>
+#elif defined( MACOSX )
+    #include "premac.h"
+    #include <Cocoa/Cocoa.h>
+    #include "postmac.h"
+#elif defined( UNX )
+    #include <GL/glu.h>
+    #include <GL/glext.h>
+
+    namespace unx
+    {
+        #include <X11/keysym.h>
+        #include <X11/X.h>
+        #define GLX_GLXEXT_PROTOTYPES 1
+        #include <GL/glx.h>
+        #include <GL/glxext.h>
+    }
+#endif
+
+class SystemWindow;
+class SystemChildWindow;
 
 using namespace com::sun::star;
 
@@ -354,12 +387,53 @@ private:
 class DummyChart : public DummyXShapes
 {
 public:
+    DummyChart();
     virtual DummyChart* getRootShape();
 
     OpenglContext* getGlContext() { return mpContext; }
 
+    virtual void SAL_CALL setPosition( const ::com::sun::star::awt::Point& aPosition ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setSize( const ::com::sun::star::awt::Size& aSize ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException);
+
 private:
+
+    /// Holds the information of our new child window
+    struct GLWindow
+    {
+#if defined( _WIN32 )
+        HWND                    hWnd;
+        HDC                     hDC;
+        HGLRC                   hRC;
+#elif defined( MACOSX )
+#elif defined( UNX )
+        unx::Display*           dpy;
+        int                     screen;
+        unx::Window             win;
+#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+        unx::GLXFBConfig        fbc;
+#endif
+        unx::XVisualInfo*       vi;
+        unx::GLXContext         ctx;
+
+        bool HasGLXExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
+        const char*             GLXExtensions;
+#endif
+        unsigned int            bpp;
+        unsigned int            Width;
+        unsigned int            Height;
+        const GLubyte*          GLExtensions;
+
+        bool HasGLExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, GLExtensions ); }
+    } GLWin;    /// Holds the information of our new child window
+
+    void createGLContext();
+
+    bool initWindow();
+    bool initOpengl();
+
     OpenglContext* mpContext;
+    boost::scoped_ptr<Window> mpWindow;
+    boost::scoped_ptr<SystemChildWindow> pWindow;
 };
 
 class DummyGroup2D : public DummyXShapes
