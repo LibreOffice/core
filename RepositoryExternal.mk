@@ -2254,8 +2254,10 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(OUTDIR)/inc/mozilla \
 )
 
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/nspr4.lib \
+)
 $(call gb_LinkTarget_use_libraries,$(1),\
-	nspr4 \
 	xpcom \
 	xpcom_core \
 )
@@ -2639,27 +2641,48 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
 )
 
-$(call gb_LinkTarget_use_libraries,$(1),\
-	nspr4 \
-	nss3 \
-	smime3 \
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/nspr4.lib \
+	$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/nss3.lib \
+	$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/smime3.lib \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib \
+	-lnspr4 \
+	-lnss3 \
+	-lsmime3 \
+)
+endif
 
 endef
 
 define gb_LinkTarget__use_plc4
 $(call gb_LinkTarget_use_package,$(1),nss)
-$(call gb_LinkTarget_use_libraries,$(1),\
-    plc4 \
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/plc4.lib \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+    -L$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib -lplc4 \
+)
+endif
 
 endef
 
 define gb_LinkTarget__use_ssl3
 $(call gb_LinkTarget_use_package,$(1),nss)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	ssl3 \
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/ssl3.lib \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib -lssl3 \
+)
+endif
 
 endef
 

@@ -31,33 +31,6 @@ $(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,lib,\
 		mozilla/dist/out/lib/libssl3.dylib \
 ))
 else ifeq ($(OS),WNT)
-ifeq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_files,nss,lib,\
-		mozilla/dist/out/lib/nspr4.lib \
-		mozilla/dist/out/lib/nss3.lib \
-		mozilla/dist/out/lib/nssdbm3.lib \
-		mozilla/dist/out/lib/nssutil3.lib \
-		mozilla/dist/out/lib/plc4.lib \
-		mozilla/dist/out/lib/plds4.lib \
-		mozilla/dist/out/lib/smime3.lib \
-		mozilla/dist/out/lib/softokn3.lib \
-		mozilla/dist/out/lib/sqlite3.lib \
-		mozilla/dist/out/lib/ssl3.lib \
-))
-else
-$(eval $(call gb_ExternalPackage_add_files,nss,lib,\
-		mozilla/nsprpub/out/pr/src/libnspr4.dll.a \
-		mozilla/dist/out/lib/libnss3.dll.a \
-		mozilla/dist/out/lib/libnssdbm3.dll.a \
-		mozilla/dist/out/lib/libnssutil3.dll.a \
-		mozilla/nsprpub/out/lib/libc/src/libplc4.dll.a \
-		mozilla/nsprpub/out/lib/ds/libplds4.dll.a \
-		mozilla/dist/out/lib/libsmime3.dll.a \
-		mozilla/dist/out/lib/libsoftokn3.dll.a \
-		mozilla/dist/out/lib/libsqlite3.dll.a \
-		mozilla/dist/out/lib/libssl3.dll.a \
-))
-endif
 $(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,bin,\
 		mozilla/dist/out/lib/freebl3.dll \
 		mozilla/dist/out/lib/nspr4.dll \

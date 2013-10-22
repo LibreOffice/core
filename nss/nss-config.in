@@ -102,7 +102,7 @@ if test -z "$includedir"; then
     includedir=@includedir@
 fi
 if test -z "$libdir"; then
-    libdir=${exec_prefix}/lib
+    libdir=${WORKDIR}/UnpackedTarball/nss/mozilla/dist/out/lib
 fi
 
 if test "$echo_prefix" = "yes"; then
