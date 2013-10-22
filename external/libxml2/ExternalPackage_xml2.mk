@@ -11,28 +11,18 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,xml2,xml2))
 
 $(eval $(call gb_ExternalPackage_use_external_project,xml2,xml2))
 
-ifneq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_file,xml2,bin/xml2-config,xml2-config))
-endif
-
+ifneq ($(DISABLE_DYNLOADING),TRUE)
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_library_for_install,xml2,lib/libxml2.2.dylib,.libs/libxml2.2.dylib,xml2))
-$(eval $(call gb_ExternalPackage_add_file,xml2,bin/xmllint,.libs/xmllint))
-else ifeq ($(DISABLE_DYNLOADING),TRUE)
-ifneq ($(CROSS_COMPILING),YES)
-$(eval $(call gb_ExternalPackage_add_file,xml2,bin/xmllint,.libs/xmllint))
-endif
 else ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(eval $(call gb_ExternalPackage_add_library_for_install,xml2,bin/libxml2.dll,.libs/libxml2.dll,xml2))
-$(eval $(call gb_ExternalPackage_add_file,xml2,bin/xmllint.exe,.libs/xmllint.exe))
 else # COM=MSC
 $(eval $(call gb_ExternalPackage_add_library_for_install,xml2,bin/libxml2.dll,win32/bin.msvc/libxml2.dll,xml2))
-$(eval $(call gb_ExternalPackage_add_file,xml2,bin/xmllint.exe,win32/bin.msvc/xmllint.exe))
 endif
 else # OS!=WNT
 $(eval $(call gb_ExternalPackage_add_library_for_install,xml2,lib/libxml2.so.2,.libs/libxml2.so.2.7.6,xml2))
-$(eval $(call gb_ExternalPackage_add_file,xml2,bin/xmllint,.libs/xmllint))
 endif
+endif # DISABLE_DYNLOADING
 
 # vim: set noet sw=4 ts=4:
