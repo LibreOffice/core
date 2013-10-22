@@ -594,7 +594,7 @@ void EditorWindow::HandleAutoCorrect()
 {
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine =  aSel.GetStart().GetPara();
-    sal_uLong nIndex =  aSel.GetStart().GetIndex();
+    sal_uInt16 nIndex =  aSel.GetStart().GetIndex();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
     const OUString& sActSubName = GetActualSubName( nLine ); // the actual procedure
 
@@ -671,7 +671,7 @@ void EditorWindow::HandleAutoCorrect()
 TextSelection EditorWindow::GetLastHighlightPortionTextSelection()
 {//creates a text selection from the highlight portion on the cursor
     sal_uLong nLine = GetEditView()->GetSelection().GetStart().GetPara();
-    sal_uLong nIndex = GetEditView()->GetSelection().GetStart().GetIndex();
+    sal_uInt16 nIndex = GetEditView()->GetSelection().GetStart().GetIndex();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );

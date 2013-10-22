@@ -44,7 +44,11 @@ enum TokenTypes
     TT_PARAMETER
 };
 
-struct HighlightPortion { sal_uInt16 nBegin; sal_uInt16 nEnd; TokenTypes tokenType; };
+struct HighlightPortion {
+    sal_Int32 nBegin;
+    sal_Int32 nEnd;
+    TokenTypes tokenType;
+};
 
 /////////////////////////////////////////////////////////////////////////
 // Auxiliary class to support JavaScript modules, next to find functions which

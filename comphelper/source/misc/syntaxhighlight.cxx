@@ -678,8 +678,8 @@ void SimpleTokenizer_Impl::getHighlightPortions( sal_uInt32 nParseLine, const OU
     {
         HighlightPortion portion;
 
-        portion.nBegin = (sal_uInt16)(pStartPos - mpStringBegin);
-        portion.nEnd = (sal_uInt16)(pEndPos - mpStringBegin);
+        portion.nBegin = pStartPos - mpStringBegin;
+        portion.nEnd = pEndPos - mpStringBegin;
         portion.tokenType = eType;
 
         portions.push_back(portion);
