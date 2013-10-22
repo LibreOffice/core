@@ -21,8 +21,8 @@
 #include "corestrings.hrc"
 #include <tools/debug.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "Tools.hxx"
 // =============================================================================
 namespace reportdesign
@@ -88,7 +88,7 @@ uno::Sequence< OUString > SAL_CALL OFunction::getSupportedServiceNames(  ) throw
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OFunction::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, ServiceName);
 }
 // -----------------------------------------------------------------------------
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OFunction::getPropertySetInfo(  ) throw(uno::RuntimeException)

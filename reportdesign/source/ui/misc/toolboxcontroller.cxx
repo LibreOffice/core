@@ -41,7 +41,7 @@
 #include <editeng/colritem.hxx>
 #include <svx/tbxcustomshapes.hxx>
 
-#include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <memory>
 
@@ -76,7 +76,7 @@ Sequence< OUString> OToolboxController::getSupportedServiceNames_Static(void) th
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OToolboxController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, ServiceName);
 }
 //-------------------------------------------------------------------------
 Sequence< OUString> SAL_CALL OToolboxController::getSupportedServiceNames() throw(RuntimeException)

@@ -19,6 +19,7 @@
 
 #include "statusbarcontroller.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
 #include <svx/zoomsliderctrl.hxx>
 #include <svx/zoomctrl.hxx>
 #include <svx/svxids.hrc>
@@ -44,7 +45,6 @@ OUString SAL_CALL OStatusbarController::getImplementationName() throw( RuntimeEx
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------------
 OUString OStatusbarController::getImplementationName_Static() throw( RuntimeException )
 {
     return OUString("com.sun.star.report.comp.StatusbarController");
@@ -59,7 +59,7 @@ Sequence< OUString> OStatusbarController::getSupportedServiceNames_Static(void) 
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OStatusbarController::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, ServiceName);
 }
 //-------------------------------------------------------------------------
 Sequence< OUString> SAL_CALL OStatusbarController::getSupportedServiceNames() throw(RuntimeException)

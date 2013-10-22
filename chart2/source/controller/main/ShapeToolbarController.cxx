@@ -20,7 +20,7 @@
 #include "ShapeToolbarController.hxx"
 
 #include <osl/mutex.hxx>
-#include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -54,7 +54,7 @@ Sequence< OUString > ShapeToolbarController::getSupportedServiceNames_Static() t
 
 ::sal_Bool ShapeToolbarController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
 {
-    return ::comphelper::existsValue( ServiceName, getSupportedServiceNames_Static() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 Sequence< OUString > ShapeToolbarController::getSupportedServiceNames() throw (uno::RuntimeException)

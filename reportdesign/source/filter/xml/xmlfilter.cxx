@@ -41,6 +41,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -428,7 +429,7 @@ uno::Sequence< OUString > SAL_CALL ORptFilter::getSupportedServiceNames(  ) thro
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL ORptFilter::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, ServiceName);
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescriptor )

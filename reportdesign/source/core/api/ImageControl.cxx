@@ -22,11 +22,11 @@
 #include "corestrings.hrc"
 #include "core_resource.hrc"
 #include "core_resource.hxx"
-#include <comphelper/sequence.hxx>
 #include "Tools.hxx"
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/property.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "FormatCondition.hxx"
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
@@ -203,7 +203,7 @@ uno::Sequence< OUString > SAL_CALL OImageControl::getSupportedServiceNames(  ) t
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OImageControl::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, ServiceName);
 }
 // -----------------------------------------------------------------------------
 // XReportComponent

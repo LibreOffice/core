@@ -18,8 +18,8 @@
  */
 #include "dbloader2.hxx"
 #include <tools/urlobj.hxx>
-#include <comphelper/sequence.hxx>
-// -------------------------------------------------------------------------
+#include <cppuhelper/supportsservice.hxx>
+
 namespace rptxml
 {
 
@@ -94,7 +94,7 @@ OUString SAL_CALL ORptTypeDetection::getImplementationName() throw(  )
 // XServiceInfo
 sal_Bool SAL_CALL ORptTypeDetection::supportsService(const OUString& ServiceName) throw(  )
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, ServiceName);
 }
 // -------------------------------------------------------------------------
 // XServiceInfo

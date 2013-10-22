@@ -21,6 +21,7 @@
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/implbase3.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/inspection/XStringRepresentation.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
@@ -31,7 +32,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <comphelper/sequence.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <connectivity/dbconversion.hxx>
 #include "formresid.hrc"
@@ -149,7 +149,7 @@ OUString  SAL_CALL StringRepresentation::getImplementationName() throw (uno::Run
 
 ::sal_Bool SAL_CALL StringRepresentation::supportsService(OUString const & serviceName) throw (uno::RuntimeException)
 {
-    return ::comphelper::existsValue(serviceName,comp_StringRepresentation::_getSupportedServiceNames());
+    return cppu::supportsService(this, serviceName);
 }
 
 uno::Sequence< OUString >  SAL_CALL StringRepresentation::getSupportedServiceNames() throw (uno::RuntimeException)

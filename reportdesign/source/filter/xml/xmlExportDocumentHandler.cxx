@@ -22,9 +22,9 @@
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
-#include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlement.hxx>
@@ -99,13 +99,11 @@ OUString SAL_CALL ExportDocumentHandler::getImplementationName(  ) throw(uno::Ru
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------
 sal_Bool SAL_CALL ExportDocumentHandler::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_static());
+    return cppu::supportsService(this, ServiceName);
 }
 
-//------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL ExportDocumentHandler::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported;
@@ -114,7 +112,6 @@ uno::Sequence< OUString > SAL_CALL ExportDocumentHandler::getSupportedServiceNam
     return ::comphelper::concatSequences(getSupportedServiceNames_static(),aSupported);
 }
 
-//------------------------------------------------------------------------
 OUString ExportDocumentHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.report.ExportDocumentHandler");

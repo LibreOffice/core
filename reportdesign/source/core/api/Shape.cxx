@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <comphelper/property.hxx>
-#include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
@@ -151,7 +151,7 @@ uno::Sequence< OUString > SAL_CALL OShape::getSupportedServiceNames(  ) throw(un
 sal_Bool SAL_CALL OShape::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
 
-    return m_sServiceName == ServiceName || ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, ServiceName);
 }
 // -----------------------------------------------------------------------------
 // XReportComponent

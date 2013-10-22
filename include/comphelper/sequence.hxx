@@ -40,16 +40,6 @@ namespace comphelper
     */
     COMPHELPER_DLLPUBLIC staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rList, const OUString& _rValue, sal_Bool _bOnlyFirst = sal_False);
 
-    /** Checks if the name exists
-     *
-     * \param Value   The value to search for.
-     * \param _aList  The list in which to search for the value.
-     * \return <TRUE/> if the value can be found, otherwise <FALSE/>.
-     */
-    COMPHELPER_DLLPUBLIC sal_Bool existsValue(const OUString& Value,const ::com::sun::star::uno::Sequence< OUString >& _aList);
-
-
-    //-------------------------------------------------------------------------
     namespace internal
     {
         template <class T>
