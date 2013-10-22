@@ -58,6 +58,12 @@
 #include <map>
 #include <boost/scoped_ptr.hpp>
 
+#if defined( _WIN32 )
+#include "prewin.h"
+#include "windows.h"
+#include "postwin.h"
+#endif
+
 
 #include <GL/gl.h>
 #include <GL/glu.h>
