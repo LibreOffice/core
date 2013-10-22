@@ -29,8 +29,6 @@ namespace doctok
 {
 using std::vector;
 
-class DffBlock;
-
 class DffRecord : public WW8StructBase, public writerfilter::Reference<Properties>,
                   public Sprm
 {
@@ -91,38 +89,6 @@ public:
 };
 
 typedef vector<DffRecord::Pointer_t> Records_t;
-
-class DffBlock : public WW8StructBase,
-                 public writerfilter::Reference<Properties>
-{
-    sal_uInt32 mnPadding;
-
-    Records_t mRecords;
-
-public:
-    typedef boost::shared_ptr<DffBlock> Pointer_t;
-
-    DffBlock(WW8Stream & rStream, sal_uInt32 nOffset, sal_uInt32 nCount, sal_uInt32 nPadding);
-    DffBlock(WW8StructBase * pParent, sal_uInt32 nOffset, sal_uInt32 nCount, sal_uInt32 nPadding);
-    DffBlock(const DffBlock & rSrc);
-    virtual ~DffBlock() {}
-
-    Records_t findRecords(sal_uInt32 nType, bool bRecursive = true,
-                          bool bAny = false);
-
-    void findRecords(sal_uInt32 nType, Records_t & rRecords,
-                     bool bRecursive = true, bool bAny = false);
-
-    DffRecord::Pointer_t getShape(sal_uInt32 nSpid);
-    DffRecord::Pointer_t getBlip(sal_uInt32 nBlip);
-
-    Records_t::iterator begin();
-    Records_t::iterator end();
-
-    /* Properties methods */
-    virtual void resolve(Properties & rHandler);
-    virtual string getType() const;
-};
 
 }}
 
