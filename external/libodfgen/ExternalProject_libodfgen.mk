@@ -17,6 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,libodfgen,\
 
 $(eval $(call gb_ExternalProject_use_externals,libodfgen,\
 	boost_headers \
+	etonyek \
 	wpd \
 	wpg \
 ))
