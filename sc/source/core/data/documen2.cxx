@@ -22,6 +22,7 @@
 
 #include <editeng/editeng.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
+#include <osl/thread.h>
 #include <svx/xtable.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svx/svdpool.hxx>

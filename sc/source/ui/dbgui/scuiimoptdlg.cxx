@@ -27,6 +27,7 @@
 #include "scresid.hxx"
 #include "imoptdlg.hrc"
 #include <comphelper/string.hxx>
+#include <osl/thread.h>
 #include <rtl/tencinfo.h>
 
 //========================================================================

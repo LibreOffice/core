@@ -24,7 +24,7 @@
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
-
+#include <osl/thread.h>
 #include <vcl/help.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/securityoptions.hxx>

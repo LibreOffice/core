@@ -20,6 +20,7 @@
 #include "sal/config.h"
 
 #include <boost/static_assert.hpp>
+#include <osl/thread.h>
 #include <rtl/math.h>
 #include <comphelper/string.hxx>
 #include <tools/config.hxx>

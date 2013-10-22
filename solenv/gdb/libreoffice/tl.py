@@ -10,27 +10,6 @@
 import gdb
 
 from libreoffice.util import printing
-from libreoffice.util.string import StringPrinterHelper
-
-class StringPrinter(StringPrinterHelper):
-    '''Prints ByteString or UniString'''
-
-    def __init__(self, typename, val, encoding = None):
-        super(StringPrinter, self).__init__(typename, val, encoding)
-
-    def valid(self):
-        data = self.val['mpData']
-        # mnRefCount is not a good indicator: it seems there could be
-        # cases where it is negative (-7FFFFFED)
-        return data #and data.dereference()['mnRefCount'] > 0
-
-    def data(self):
-        assert self.val['mpData']
-        return self.val['mpData'].dereference()['maStr']
-
-    def length(self):
-        assert self.val['mpData']
-        return self.val['mpData'].dereference()['mnLen']
 
 class BigIntPrinter(object):
     '''Prints big integer'''
@@ -376,10 +355,6 @@ def build_pretty_printers():
     global printer
 
     printer = printing.Printer('libreoffice/tl')
-
-    # old-style strings
-    printer.add('ByteString', StringPrinter)
-    printer.add('String', lambda name, val: StringPrinter(name, val, 'utf-16'))
 
     # old-style containers
     printer.add('DynArray', LinearContainerPrinter)

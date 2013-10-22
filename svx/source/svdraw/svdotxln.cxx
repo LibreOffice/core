@@ -20,6 +20,7 @@
 #include "sal/config.h"
 
 #include <comphelper/processfactory.hxx>
+#include <osl/thread.h>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/content.hxx>

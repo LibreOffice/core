@@ -25,6 +25,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/langitem.hxx>
+#include <osl/thread.h>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>

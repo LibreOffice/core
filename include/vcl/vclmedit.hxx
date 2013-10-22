@@ -20,6 +20,7 @@
 #ifndef _VCLMEDIT_HXX
 #define _VCLMEDIT_HXX
 
+#include <tools/lineend.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/dllapi.h>

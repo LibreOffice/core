@@ -21,6 +21,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <osl/thread.h>
 #include <tools/vcompat.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>

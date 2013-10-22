@@ -26,6 +26,7 @@
 #include "scuiasciiopt.hxx"
 #include "asciiopt.hrc"
 #include <comphelper/string.hxx>
+#include <osl/thread.h>
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
 #include "editutil.hxx"

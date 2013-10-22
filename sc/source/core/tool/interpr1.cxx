@@ -22,6 +22,7 @@
 #include "scitems.hxx"
 #include <editeng/langitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <osl/thread.h>
 #include <svx/algitem.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>

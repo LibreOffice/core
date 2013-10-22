@@ -20,6 +20,7 @@
 
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
+#include <osl/thread.h>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
 #include <sfx2/docfile.hxx>

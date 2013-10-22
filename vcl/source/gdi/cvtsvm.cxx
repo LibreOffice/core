@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <string.h>
+#include <osl/thread.h>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>

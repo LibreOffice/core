@@ -22,7 +22,7 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <comphelper/string.hxx>
 #include <svl/fstathelper.hxx>
-
+#include <osl/thread.h>
 #include <unotools/textsearch.hxx>
 
 #include <sfx2/docfile.hxx>

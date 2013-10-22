@@ -28,6 +28,7 @@
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
+#include <tools/lineend.hxx>
 
 #include <vector>
 #include <deque>

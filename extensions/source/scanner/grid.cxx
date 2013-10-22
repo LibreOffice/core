@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
-
+#include <sal/config.h>
+#include <osl/thread.h>
 #include <grid.hrc>
 #include <cstdio>
 #include <math.h> // for M_LN10 and M_E

@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/graph.hxx>
+#include <osl/thread.h>
 #include <tools/poly.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>

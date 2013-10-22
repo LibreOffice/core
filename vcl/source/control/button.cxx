@@ -19,6 +19,7 @@
 
 
 #include <tools/debug.hxx>
+#include <tools/lineend.hxx>
 #include <tools/poly.hxx>
 #include <tools/rc.h>
 

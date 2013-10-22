@@ -19,6 +19,7 @@
 
 #include <comphelper/string.hxx>
 #include <svl/urlbmk.hxx>
+#include <osl/thread.h>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>

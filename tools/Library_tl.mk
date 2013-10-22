@@ -83,7 +83,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/stream/strmsys \
     tools/source/stream/vcompat \
     tools/source/string/tenccvt \
-    tools/source/string/tustring \
     tools/source/string/reversemap \
     tools/source/zcodec/zcodec \
 ))

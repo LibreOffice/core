@@ -28,7 +28,8 @@
 #include <cmath>
 #include <limits.h>
 
-#include "tools/debug.hxx"
+#include <tools/debug.hxx>
+#include <tools/lineend.hxx>
 #include "sal/log.hxx"
 
 #include "vcl/svapp.hxx"
