@@ -1646,15 +1646,32 @@ void DrawViewShell::ShowUIControls (bool bVisible)
     maTabControl.Show (bVisible);
 }
 
-void DrawViewShell::ShowSlideShow(SfxRequest& rReq)
+namespace slideshowhelp
 {
-    Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
-    if( xPresentation.is() )
+    void ShowSlideShow(SfxRequest& rReq, SdDrawDocument &rDoc)
     {
-        if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
+        Reference< XPresentation2 > xPresentation( rDoc.getPresentation() );
+        if( xPresentation.is() )
         {
-            if( (SID_PRESENTATION == rReq.GetSlot() ) )
+            if (SID_REHEARSE_TIMINGS == rReq.GetSlot())
+                xPresentation->rehearseTimings();
+            else if (rDoc.getPresentationSettings().mbCustomShow)
             {
+                //fdo#69975 if a custom show has been set, then
+                //use it whether or not we've been asked to
+                //start from the current or first slide
+                xPresentation->start();
+            }
+            else if (SID_PRESENTATION_CURRENT_SLIDE == rReq.GetSlot())
+            {
+                //If there is no custom show set, start will automatically
+                //start at the current page
+                xPresentation->start();
+            }
+            else
+            {
+                //Start at page 0, this would blow away any custom
+                //show settings if any were set
                 Sequence< PropertyValue > aArguments(1);
                 PropertyValue aPage;
                 OUString sValue("0");
@@ -1666,16 +1683,13 @@ void DrawViewShell::ShowSlideShow(SfxRequest& rReq)
 
                 xPresentation->startWithArguments( aArguments );
             }
-            else
-            {
-                xPresentation->start();
-            }
-        }
-        else
-        {
-            xPresentation->rehearseTimings();
         }
     }
+}
+
+void DrawViewShell::ShowSlideShow(SfxRequest& rReq)
+{
+    slideshowhelp::ShowSlideShow(rReq, *GetDoc());
 }
 
 void DrawViewShell::StopSlideShow (bool /*bCloseFrame*/)
