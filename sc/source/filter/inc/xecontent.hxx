@@ -104,7 +104,7 @@ public:
     virtual             ~XclExpHyperlink();
 
     /** Returns the cell representation text or 0, if not available. */
-    inline const OUString* GetRepr() const { return mxRepr.get(); }
+    inline const OUString* GetRepr() const { return m_Repr.isEmpty() ? 0 : &m_Repr; }
 
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
@@ -121,14 +121,13 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    typedef boost::scoped_ptr< OUString > StringPtr;
     typedef boost::scoped_ptr< SvStream > SvStreamPtr;
 
     ScAddress           maScPos;            /// Position of the hyperlink.
-    StringPtr           mxRepr;             /// Cell representation text.
+    OUString            m_Repr;             /// Cell representation text.
     SvStreamPtr         mxVarData;          /// Buffer stream with variable data.
     sal_uInt32          mnFlags;            /// Option flags.
-    XclExpStringRef     mxTextMark;         /// Location within mxRepr
+    XclExpStringRef     mxTextMark;         /// Location within m_Repr
     OUString     msTarget;           /// Target URL
 };
 

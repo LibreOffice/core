@@ -350,7 +350,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         aXclStrm << sal_uInt16( 0 );
 
         mnFlags |= EXC_HLINK_DESCR;
-        mxRepr.reset( new OUString( rRepr ) );
+        m_Repr = rRepr;
     }
 
     // file link or URL
@@ -387,8 +387,8 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
                     << sal_uInt16( 0x0003 );
         aLink.WriteBuffer( aXclStrm );                          // NO flags
 
-        if( !mxRepr.get() )
-            mxRepr.reset( new OUString( aFileName ) );
+        if (m_Repr.isEmpty())
+            m_Repr = aFileName;
 
         msTarget = XclXmlUtils::ToOUString( aLink );
         // ooxml expects the file:/// part appended ( or at least
@@ -404,8 +404,8 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         aXclStrm    << sal_uInt16( 0 );
 
         mnFlags |= EXC_HLINK_BODY | EXC_HLINK_ABS;
-        if( !mxRepr.get() )
-            mxRepr.reset( new OUString( rUrl ) );
+        if (m_Repr.isEmpty())
+            m_Repr = rUrl;
 
         msTarget = XclXmlUtils::ToOUString( aUrl );
     }
@@ -513,7 +513,7 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
                                         ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
                                         : NULL,
             // OOXTODO: XML_tooltip,    from record HLinkTooltip 800h wzTooltip
-            XML_display,            XclXmlUtils::ToOString( *mxRepr ).getStr(),
+            XML_display,            XclXmlUtils::ToOString(m_Repr).getStr(),
             FSEND );
 }
 
