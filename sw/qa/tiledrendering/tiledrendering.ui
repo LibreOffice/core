@@ -22,10 +22,10 @@
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkLabel" id="labelContentWidth">
+                      <object class="GtkLabel" id="labelContextWidth">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">contentWidth</property>
+                        <property name="label" translatable="yes">contextWidth</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -34,10 +34,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="labelContentHeight">
+                      <object class="GtkLabel" id="labelContextHeight">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">contentHeight</property>
+                        <property name="label" translatable="yes">contextHeight</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -106,7 +106,7 @@
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkSpinButton" id="spinContentWidth">
+                      <object class="GtkSpinButton" id="spinContextWidth">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
@@ -120,7 +120,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spinContentHeight">
+                      <object class="GtkSpinButton" id="spinContextHeight">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
