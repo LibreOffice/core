@@ -38,6 +38,7 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
+import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
@@ -118,8 +119,6 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
      */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
-        XInterface oObj = null;
-
         if (xSheetDoc != null) {
             XComponent oComp = UnoRuntime.queryInterface(
                                        XComponent.class, xSheetDoc);
@@ -241,20 +240,37 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
             throw new StatusException(Status.failed("Couldn't change mode"));
         }
 
-        shortWait();
-
-        AccessibilityTools at = new AccessibilityTools();
-
-        XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), xModel);
-        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-
-        oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE, "A");
-
-        if (oObj == null) {
-            log.println("Version with a fixed #103863#");
-            oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot,
-                                                 AccessibleRole.TABLE_CELL,
-                                                 true);
+        XInterface oObj = null;
+        for (int i = 0;; ++i) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                XAccessible xRoot = AccessibilityTools.getAccessibleObject(
+                    AccessibilityTools.getCurrentWindow(
+                        (XMultiServiceFactory) Param.getMSF(), xModel));
+                if (xRoot != null) {
+                    oObj = AccessibilityTools.getAccessibleObjectForRole(
+                        xRoot, AccessibleRole.TABLE, "A");
+                    if (oObj == null) {
+                        log.println("Version with a fixed #103863#?");
+                        oObj = AccessibilityTools.getAccessibleObjectForRole(
+                            xRoot, AccessibleRole.TABLE_CELL, true);
+                    }
+                    if (oObj != null) {
+                        break;
+                    }
+                }
+            } catch (DisposedException e) {
+                log.println("Ignoring DisposedException");
+            }
+            if (i == 20) { // give up after 10 sec
+                throw new RuntimeException(
+                    "Couldn't get AccessibleRolte.TABLE/TABLE_CELL object");
+            }
+            log.println("No TABLE/TABLE_CELL found yet, retrying");
         }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
@@ -268,17 +284,5 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
         });
 
         return tEnv;
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
     }
 }
