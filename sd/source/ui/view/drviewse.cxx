@@ -1648,29 +1648,35 @@ namespace slideshowhelp
         Reference< XPresentation2 > xPresentation( rDoc.getPresentation() );
         if( xPresentation.is() )
         {
-            if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
+            if (SID_REHEARSE_TIMINGS == rReq.GetSlot())
+                xPresentation->rehearseTimings();
+            else if (rDoc.getPresentationSettings().mbCustomShow)
             {
-                if( (SID_PRESENTATION == rReq.GetSlot() ) )
-                {
-                    Sequence< PropertyValue > aArguments(1);
-                    PropertyValue aPage;
-                    OUString sValue("0");
-
-                    aPage.Name = "FirstPage";
-                    aPage.Value <<= sValue;
-
-                    aArguments[0] = aPage;
-
-                    xPresentation->startWithArguments( aArguments );
-                }
-                else
-                {
-                    xPresentation->start();
-                }
+                //fdo#69975 if a custom show has been set, then
+                //use it whether or not we've been asked to
+                //start from the current or first slide
+                xPresentation->start();
+            }
+            else if (SID_PRESENTATION_CURRENT_SLIDE == rReq.GetSlot())
+            {
+                //If there is no custom show set, start will automatically
+                //start at the current page
+                xPresentation->start();
             }
             else
             {
-                xPresentation->rehearseTimings();
+                //Start at page 0, this would blow away any custom
+                //show settings if any were set
+                Sequence< PropertyValue > aArguments(1);
+                PropertyValue aPage;
+                OUString sValue("0");
+
+                aPage.Name = "FirstPage";
+                aPage.Value <<= sValue;
+
+                aArguments[0] = aPage;
+
+                xPresentation->startWithArguments( aArguments );
             }
         }
     }
