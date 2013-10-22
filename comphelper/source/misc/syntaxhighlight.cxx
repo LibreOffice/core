@@ -676,13 +676,9 @@ void SimpleTokenizer_Impl::getHighlightPortions( sal_uInt32 nParseLine, const OU
     // Loop over all the tokens
     while( getNextToken( eType, pStartPos, pEndPos ) )
     {
-        HighlightPortion portion;
-
-        portion.nBegin = pStartPos - mpStringBegin;
-        portion.nEnd = pEndPos - mpStringBegin;
-        portion.tokenType = eType;
-
-        portions.push_back(portion);
+        portions.push_back(
+            HighlightPortion(
+                pStartPos - mpStringBegin, pEndPos - mpStringBegin, eType));
     }
 }
 

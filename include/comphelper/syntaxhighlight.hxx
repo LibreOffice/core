@@ -48,6 +48,11 @@ struct HighlightPortion {
     sal_Int32 nBegin;
     sal_Int32 nEnd;
     TokenTypes tokenType;
+
+    HighlightPortion(
+        sal_Int32 theBegin, sal_Int32 theEnd, TokenTypes theTokenType):
+        nBegin(theBegin), nEnd(theEnd), tokenType(theTokenType)
+    {}
 };
 
 /////////////////////////////////////////////////////////////////////////
