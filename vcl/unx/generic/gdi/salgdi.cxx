@@ -928,18 +928,18 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
            drawPolyLine( pPoints[i], pPtAry[i], true );
 }
 
-sal_Bool X11SalGraphics::drawPolyLineBezier( sal_uLong, const SalPoint*, const BYTE* )
+sal_Bool X11SalGraphics::drawPolyLineBezier( sal_uLong, const SalPoint*, const sal_uInt8* )
 {
     return sal_False;
 }
 
-sal_Bool X11SalGraphics::drawPolygonBezier( sal_uLong, const SalPoint*, const BYTE* )
+sal_Bool X11SalGraphics::drawPolygonBezier( sal_uLong, const SalPoint*, const sal_uInt8* )
 {
     return sal_False;
 }
 
 sal_Bool X11SalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
-                                                const SalPoint* const*, const BYTE* const* )
+                                                const SalPoint* const*, const sal_uInt8* const* )
 {
     return sal_False;
 }
