@@ -157,7 +157,7 @@ SAL_CALL bootstrap();
  * @since UDK 3.2.8
  */
 CPPUHELPER_DLLPUBLIC ::rtl::OUString
-SAL_CALL bootstrap_expandUri(::rtl::OUString const & uri);
+SAL_CALL bootstrap_expandUri(::rtl::OUString uri);
 /// @endcond
 
 } // end namespace cppu

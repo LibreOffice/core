@@ -80,20 +80,18 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
         return "void";
 
     OUStringBuffer buf( 64 );
-    buf.append( (sal_Unicode)'(' );
-    buf.append( pTypeRef->pTypeName );
-    buf.append( (sal_Unicode)')' );
+    buf.append( "(" + pTypeRef->pTypeName + ")" );
 
     switch (pTypeRef->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( (sal_Int64)*(void **)pVal, 16 );
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
+        buf.append( "{ " );
         typelib_TypeDescription * pTypeDescr = 0;
         ::typelib_typedescriptionreference_getDescription( &pTypeDescr, pTypeRef );
         OSL_ASSERT( pTypeDescr );
@@ -107,7 +105,7 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
         {
             buf.append( val2str( pVal, ((typelib_TypeDescription *)pCompType->pBaseTypeDescription)->pWeakRef ) );
             if (nDescr)
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
+                buf.append( ", " );
         }
 
         typelib_TypeDescriptionReference ** ppTypeRefs = pCompType->ppTypeRefs;
@@ -117,18 +115,18 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
         for ( sal_Int32 nPos = 0; nPos < nDescr; ++nPos )
         {
             buf.append( ppMemberNames[ nPos ] );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" = ") );
+            buf.append( " = " );
             typelib_TypeDescription * pMemberType = 0;
             TYPELIB_DANGER_GET( &pMemberType, ppTypeRefs[ nPos ] );
             buf.append( val2str( (char *)pVal + pMemberOffsets[ nPos ], pMemberType->pWeakRef ) );
             TYPELIB_DANGER_RELEASE( pMemberType );
             if (nPos < (nDescr -1))
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
+                buf.append( ", " );
         }
 
         ::typelib_typedescription_release( pTypeDescr );
 
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
+        buf.append( " }" );
         break;
     }
     case typelib_TypeClass_SEQUENCE:
@@ -145,29 +143,29 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
 
         if (nElements)
         {
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
+            buf.append( "{ " );
             char * pElements = pSequence->elements;
             for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
             {
                 buf.append( val2str( pElements + (nElementSize * nPos), pElementTypeDescr->pWeakRef ) );
                 if (nPos < (nElements -1))
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
+                    buf.append( ", " );
             }
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
+            buf.append( " }" );
         }
         else
         {
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{}") );
+            buf.append( "{}" );
         }
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         TYPELIB_DANGER_RELEASE( pTypeDescr );
         break;
     }
     case typelib_TypeClass_ANY:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("{ ") );
+        buf.append( "{ " );
         buf.append( val2str( ((uno_Any *)pVal)->pData,
                              ((uno_Any *)pVal)->pType ) );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" }") );
+        buf.append( " }" );
         break;
     case typelib_TypeClass_TYPE:
         buf.append( (*(typelib_TypeDescriptionReference **)pVal)->pTypeName );
@@ -202,9 +200,9 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
     }
     case typelib_TypeClass_BOOLEAN:
         if (*(sal_Bool *)pVal)
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("true") );
+            buf.append( "true" );
         else
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("false") );
+            buf.append( "false" );
         break;
     case typelib_TypeClass_CHAR:
         buf.append( (sal_Unicode)'\'' );
@@ -218,28 +216,28 @@ static OUString val2str( void const * pVal, typelib_TypeDescriptionReference * p
         buf.append( *(double *)pVal );
         break;
     case typelib_TypeClass_BYTE:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( (sal_Int32)*(sal_Int8 *)pVal, 16 );
         break;
     case typelib_TypeClass_SHORT:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( (sal_Int32)*(sal_Int16 *)pVal, 16 );
         break;
     case typelib_TypeClass_UNSIGNED_SHORT:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( (sal_Int32)*(sal_uInt16 *)pVal, 16 );
         break;
     case typelib_TypeClass_LONG:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( *(sal_Int32 *)pVal, 16 );
         break;
     case typelib_TypeClass_UNSIGNED_LONG:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
         buf.append( (sal_Int64)*(sal_uInt32 *)pVal, 16 );
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("0x") );
+        buf.append( "0x" );
 #if defined(__GNUC__) && defined(SPARC)
 // I guess this really should check if there are strict alignment
 // requirements, not just "GCC on SPARC".
@@ -414,7 +412,7 @@ void ComponentContext::insertByName(
         new ContextEntry(
             element,
             /* lateInit_: */
-            name.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("/singletons/") ) &&
+            name.startsWith( "/singletons/" ) &&
             !element.hasValue() ) );
     MutexGuard guard( m_mutex );
     ::std::pair<t_map::iterator, bool> insertion( m_map.insert(
@@ -454,7 +452,7 @@ void ComponentContext::replaceByName(
         throw container::NoSuchElementException(
             "no such element: " + name,
             static_cast<OWeakObject *>(this) );
-    if (name.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("/singletons/") ) &&
+    if (name.startsWith( "/singletons/" ) &&
         !element.hasValue())
     {
         iFind->second->value.clear();
@@ -606,10 +604,9 @@ Any ComponentContext::lookupMap( OUString const & rName )
     {
         Any caught( getCaughtException() );
         OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                             "exception occurred raising singleton \"") );
+        buf.append( "exception occurred raising singleton \"" );
         buf.append( rName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\": ") );
+        buf.append( "\": " );
         buf.append( exc.Message );
         throw lang::WrappedTargetRuntimeException(
             buf.makeStringAndClear(), static_cast<OWeakObject *>(this),caught );
@@ -705,7 +702,7 @@ void ComponentContext::disposing()
 
         // service manager disposed separately
         if (!m_xSMgr.is() ||
-            !iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_SINGLETON) ))
+            !iPos->first.startsWith( SMGR_SINGLETON ))
         {
             if (pEntry->lateInit)
             {

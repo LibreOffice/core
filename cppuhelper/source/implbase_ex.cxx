@@ -51,15 +51,8 @@ static inline void checkInterface( Type const & rType )
 {
     if (TypeClass_INTERFACE != rType.getTypeClass())
     {
-        OUStringBuffer buf( 64 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("querying for interface \"") );
-        buf.append( rType.getTypeName() );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\": no interface type!") );
-        OUString msg( buf.makeStringAndClear() );
-#if OSL_DEBUG_LEVEL > 0
-        OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( str.getStr() );
-#endif
+        OUString msg( "querying for interface \"" + rType.getTypeName() + "\": no interface type!" );
+        SAL_WARN( "cppuhelper", msg );
         throw RuntimeException( msg, Reference< XInterface >() );
     }
 }
@@ -101,15 +94,8 @@ static inline type_entry * __getTypeEntries( class_data * cd )
                 OSL_ENSURE( ! isXInterface( rType.getTypeLibType()->pTypeName ), "### want to implement XInterface: template argument is XInterface?!?!?!" );
                 if (rType.getTypeClass() != TypeClass_INTERFACE)
                 {
-                    OUStringBuffer buf( 48 );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("type \"") );
-                    buf.append( rType.getTypeName() );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" is no interface type!") );
-                    OUString msg( buf.makeStringAndClear() );
-#if OSL_DEBUG_LEVEL > 0
-                    OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
-                    OSL_FAIL( str.getStr() );
-#endif
+                    OUString msg( "type \"" + rType.getTypeName() + "\" is no interface type!" );
+                    SAL_WARN( "cppuhelper", msg );
                     throw RuntimeException( msg, Reference< XInterface >() );
                 }
                 // ref is statically held by getCppuType()
@@ -214,15 +200,8 @@ static inline void * __queryDeepNoXInterface(
         }
         else
         {
-            OUStringBuffer buf( 64 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("cannot get type description for type \"") );
-            buf.append( pEntries[ n ].m_type.typeRef->pTypeName );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
-            OUString msg( buf.makeStringAndClear() );
-#if OSL_DEBUG_LEVEL > 0
-            OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_FAIL( str.getStr() );
-#endif
+            OUString msg( "cannot get type description for type \"" + OUString(pEntries[ n ].m_type.typeRef->pTypeName) + "\"!" );
+            SAL_WARN( "cppuhelper", msg );
             throw RuntimeException( msg, Reference< XInterface >() );
         }
     }
