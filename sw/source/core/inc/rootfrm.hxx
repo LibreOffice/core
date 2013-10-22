@@ -80,10 +80,8 @@ class SwRootFrm: public SwLayoutFrm
     sal_Bool    bCheckSuperfluous   :1; //Leere Seiten suchen?
     sal_Bool    bIdleFormat         :1; //Idle-Formatierer anwerfen?
     sal_Bool    bBrowseWidthValid   :1; //Ist nBrowseWidth gueltig?
-    sal_Bool    bDummy2             :1; //Unbenutzt
     sal_Bool    bTurboAllowed       :1;
     sal_Bool    bAssertFlyPages     :1; //Ggf. weitere Seiten fuer Flys einfuegen?
-    sal_Bool    bDummy              :1; //Unbenutzt
     sal_Bool    bIsVirtPageNum      :1; //gibt es eine virtuelle Seitennummer ?
     sal_Bool    bIsNewLayout        :1; //Layout geladen oder neu erzeugt.
     sal_Bool    bCallbackActionEnabled:1; //Keine Action in Benachrichtung erwuenscht
