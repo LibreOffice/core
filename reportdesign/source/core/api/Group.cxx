@@ -27,6 +27,7 @@
 #include "Tools.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/property.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "Functions.hxx"
 
 // =============================================================================
@@ -97,7 +98,7 @@ uno::Sequence< OUString> SAL_CALL OGroup::getSupportedServiceNames() throw(uno::
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OGroup::supportsService( const OUString& _rServiceName ) throw(uno::RuntimeException)
 {
-    return ::comphelper::existsValue(_rServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, _rServiceName);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OGroup::dispose() throw(uno::RuntimeException)

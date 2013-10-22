@@ -22,8 +22,8 @@
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "Tools.hxx"
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include "ReportHelperImpl.hxx"
@@ -88,7 +88,7 @@ uno::Sequence< OUString > SAL_CALL OFormatCondition::getSupportedServiceNames(  
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OFormatCondition::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, ServiceName);
 }
 // -----------------------------------------------------------------------------
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OFormatCondition::getPropertySetInfo(  ) throw(uno::RuntimeException)

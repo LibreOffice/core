@@ -18,10 +18,10 @@
  */
 #include "GeometryHandler.hxx"
 
-#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/mimeconfighelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "uistrings.hrc"
 #include "reportformula.hxx"
@@ -257,25 +257,21 @@ OUString SAL_CALL GeometryHandler::getImplementationName(  ) throw(uno::RuntimeE
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------
 sal_Bool SAL_CALL GeometryHandler::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_static());
+    return cppu::supportsService(this, ServiceName);
 }
 
-//------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL GeometryHandler::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
 
-//------------------------------------------------------------------------
 OUString GeometryHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.report.GeometryHandler");
 }
 
-//------------------------------------------------------------------------
 uno::Sequence< OUString > GeometryHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported(1);
@@ -283,7 +279,6 @@ uno::Sequence< OUString > GeometryHandler::getSupportedServiceNames_static(  ) t
     return aSupported;
 }
 
-//------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL GeometryHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new GeometryHandler( _rxContext ));

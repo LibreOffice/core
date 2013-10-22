@@ -79,15 +79,6 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rLi
         return aRetSeq;
     }
 }
-// -----------------------------------------------------------------------------
-sal_Bool existsValue(const OUString& Value,const staruno::Sequence< OUString >& _aList)
-{
-    const OUString * pIter   = _aList.getConstArray();
-    const OUString * pEnd    = pIter + _aList.getLength();
-    return ::std::find(pIter,pEnd,Value) != pEnd;
-}
-
-//.........................................................................
 }   // namespace comphelper
 //.........................................................................
 

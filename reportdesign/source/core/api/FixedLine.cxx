@@ -21,9 +21,9 @@
 #include "corestrings.hrc"
 #include "core_resource.hrc"
 #include "core_resource.hxx"
-#include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/property.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "Tools.hxx"
 #include "FormatCondition.hxx"
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -239,7 +239,7 @@ uno::Sequence< OUString > SAL_CALL OFixedLine::getSupportedServiceNames(  ) thro
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OFixedLine::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, ServiceName);
 }
 // -----------------------------------------------------------------------------
 // XReportComponent

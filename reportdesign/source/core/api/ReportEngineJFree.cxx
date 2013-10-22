@@ -22,10 +22,10 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/string.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -119,7 +119,7 @@ uno::Sequence< OUString > SAL_CALL OReportEngineJFree::getSupportedServiceNames(
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OReportEngineJFree::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, ServiceName);
 }
 // -----------------------------------------------------------------------------
 // XReportEngine

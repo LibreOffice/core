@@ -19,9 +19,9 @@
 #include "DataProviderHandler.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "uistrings.hrc"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
@@ -72,31 +72,26 @@ DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext 
     }
 }
 
-//------------------------------------------------------------------------
 OUString SAL_CALL DataProviderHandler::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------
 sal_Bool SAL_CALL DataProviderHandler::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_static());
+    return cppu::supportsService(this, ServiceName);
 }
 
-//------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL DataProviderHandler::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
 
-//------------------------------------------------------------------------
 OUString DataProviderHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.report.DataProviderHandler");
 }
 
-//------------------------------------------------------------------------
 uno::Sequence< OUString > DataProviderHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported(1);
@@ -104,7 +99,6 @@ uno::Sequence< OUString > DataProviderHandler::getSupportedServiceNames_static( 
     return aSupported;
 }
 
-//------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL DataProviderHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new DataProviderHandler( _rxContext ));

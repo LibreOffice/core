@@ -25,10 +25,10 @@
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
-#include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlement.hxx>
@@ -70,13 +70,11 @@ OUString SAL_CALL ImportDocumentHandler::getImplementationName(  ) throw(uno::Ru
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------
 sal_Bool SAL_CALL ImportDocumentHandler::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_static());
+    return cppu::supportsService(this, ServiceName);
 }
 
-//------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL ImportDocumentHandler::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported;
@@ -85,13 +83,11 @@ uno::Sequence< OUString > SAL_CALL ImportDocumentHandler::getSupportedServiceNam
     return ::comphelper::concatSequences(getSupportedServiceNames_static(),aSupported);
 }
 
-//------------------------------------------------------------------------
 OUString ImportDocumentHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.report.ImportDocumentHandler");
 }
 
-//------------------------------------------------------------------------
 uno::Sequence< OUString > ImportDocumentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported(1);

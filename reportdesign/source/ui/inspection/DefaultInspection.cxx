@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "DefaultInspection.hxx"
-#include <comphelper/sequence.hxx>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <RptResId.hrc>
 #include "ModuleHelper.hxx"
 #include "helpids.hrc"
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
@@ -64,37 +64,31 @@ namespace rptui
         DBG_CTOR(DefaultComponentInspectorModel,NULL);
     }
 
-    //------------------------------------------------------------------------
     DefaultComponentInspectorModel::~DefaultComponentInspectorModel()
     {
         DBG_DTOR(DefaultComponentInspectorModel,NULL);
     }
 
-    //------------------------------------------------------------------------
     OUString SAL_CALL DefaultComponentInspectorModel::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
 
-    //------------------------------------------------------------------------
     sal_Bool SAL_CALL DefaultComponentInspectorModel::supportsService( const OUString& ServiceName ) throw(RuntimeException)
     {
-        return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_static());
+        return cppu::supportsService(this, ServiceName);
     }
 
-    //------------------------------------------------------------------------
     Sequence< OUString > SAL_CALL DefaultComponentInspectorModel::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //------------------------------------------------------------------------
     OUString DefaultComponentInspectorModel::getImplementationName_Static(  ) throw(RuntimeException)
     {
         return OUString("com.sun.star.comp.report.DefaultComponentInspectorModel");
     }
 
-    //------------------------------------------------------------------------
     Sequence< OUString > DefaultComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aSupported(1);
@@ -102,7 +96,6 @@ namespace rptui
         return aSupported;
     }
 
-    //------------------------------------------------------------------------
     Reference< XInterface > SAL_CALL DefaultComponentInspectorModel::create( const Reference< XComponentContext >& _rxContext )
     {
         return *(new DefaultComponentInspectorModel( _rxContext ));
