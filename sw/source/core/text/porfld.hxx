@@ -246,14 +246,6 @@ public:
     OUTPUT_OPERATOR
 };
 
-
-CLASSIO( SwHiddenPortion )
-CLASSIO( SwNumberPortion )
-CLASSIO( SwBulletPortion )
-CLASSIO( SwGrfNumPortion )
-CLASSIO( SwCombinedPortion )
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

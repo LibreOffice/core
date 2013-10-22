@@ -165,17 +165,6 @@ public:
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo& rInf ) const;
 };
 
-
-
-/*************************************************************************
- *                  inline - Implementations
- *************************************************************************/
-
-CLASSIO( SwBreakPortion )
-CLASSIO( SwEndPortion )
-CLASSIO( SwKernPortion )
-CLASSIO( SwArrowPortion )
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

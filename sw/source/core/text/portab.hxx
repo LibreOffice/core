@@ -140,14 +140,6 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
 };
 
-
-CLASSIO( SwTabPortion )
-CLASSIO( SwTabLeftPortion )
-CLASSIO( SwTabRightPortion )
-CLASSIO( SwTabCenterPortion )
-CLASSIO( SwTabDecimalPortion )
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

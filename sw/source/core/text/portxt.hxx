@@ -99,10 +99,6 @@ class SwFieldFormPortion : public SwTxtPortion
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 };
 
-
-CLASSIO( SwTxtPortion )
-CLASSIO( SwHolePortion )
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -399,9 +399,6 @@ inline void SwParaPortion::FormatReset()
 inline SwLinePortion *SwLineLayout::GetFirstPortion() const
 { return( pPortion ? pPortion : (SwLinePortion*)this ); }
 
-CLASSIO( SwLineLayout )
-CLASSIO( SwParaPortion )
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

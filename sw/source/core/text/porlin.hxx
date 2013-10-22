@@ -31,8 +31,6 @@ class SwTxtFormatInfo;
 class SwPortionHandler;
 
 // The portions output operators are virtual methods of the portion.
-// The CLASSIO macro implements the 'levitating' function.
-// In doing so we end up with both benefits: virtual output operators and general utility
 #ifdef DBG_UTIL
 #define OUTPUT_OPERATOR  virtual SvStream &operator<<( SvStream & aOs ) const;
 #else
@@ -236,12 +234,6 @@ inline void SwLinePortion::Truncate()
     if ( pPortion )
         _Truncate();
 }
-
-
-//$ ostream
-#define CLASSIO( class )
-
-CLASSIO( SwLinePortion )
 
 #endif
 

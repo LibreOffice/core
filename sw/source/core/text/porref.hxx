@@ -54,14 +54,6 @@ public:
     OUTPUT_OPERATOR
 };
 
-/*************************************************************************
- *                  inline - Implementations
- *************************************************************************/
-
-CLASSIO( SwRefPortion )
-CLASSIO( SwIsoRefPortion )
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

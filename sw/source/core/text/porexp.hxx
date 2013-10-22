@@ -90,12 +90,6 @@ public:
     OUTPUT_OPERATOR
 };
 
-
-CLASSIO( SwExpandPortion )
-CLASSIO( SwBlankPortion )
-CLASSIO( SwPostItsPortion )
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

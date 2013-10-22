@@ -115,11 +115,6 @@ inline void SwGluePortion::MoveHalfGlue( SwGluePortion *pTarget )
     MoveGlue( pTarget, GetPrtGlue() / 2 );
 }
 
-CLASSIO( SwGluePortion )
-CLASSIO( SwFixPortion )
-CLASSIO( SwMarginPortion )
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

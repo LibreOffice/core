@@ -103,12 +103,6 @@ public:
     OUTPUT_OPERATOR
 };
 
-CLASSIO( SwHyphPortion )
-CLASSIO( SwHyphStrPortion )
-CLASSIO( SwSoftHyphPortion )
-CLASSIO( SwSoftHyphStrPortion )
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -55,14 +55,6 @@ public:
     OUTPUT_OPERATOR
 };
 
-/*************************************************************************
- *                  inline - Implementations
- *************************************************************************/
-
-CLASSIO( SwToxPortion )
-CLASSIO( SwIsoToxPortion )
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

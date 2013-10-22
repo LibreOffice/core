@@ -253,8 +253,6 @@ inline bool SwMultiPortion::HasBrackets() const
     return IsDouble() ? 0 != ((SwDoubleLinePortion*)this)->GetBrackets() : false;
 }
 
-CLASSIO( SwMultiPortion )
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

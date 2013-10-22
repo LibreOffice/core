@@ -108,12 +108,6 @@ public:
     OUTPUT_OPERATOR
 };
 
-CLASSIO( SwFtnPortion )
-CLASSIO( SwFtnNumPortion )
-CLASSIO( SwQuoVadisPortion )
-CLASSIO( SwErgoSumPortion )
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
