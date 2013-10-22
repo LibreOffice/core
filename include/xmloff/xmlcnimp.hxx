@@ -20,8 +20,8 @@
 #ifndef _XMLOFF_XMLCNIMP_HXX
 #define _XMLOFF_XMLCNIMP_HXX
 
-#include "xmloff/dllapi.h"     //XMLOFF_DLLPUBLIC
-#include <sal/types.h>         //sal_uInt16 and sal_Bool
+#include "xmloff/dllapi.h"
+#include <sal/types.h>
 #include <boost/scoped_ptr.hpp>
 
 class SvXMLAttrCollection; //Forward declaration only.

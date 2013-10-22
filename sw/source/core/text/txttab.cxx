@@ -27,7 +27,7 @@
 #include <frmatr.hxx>
 #include <SwPortionHandler.hxx>
 
-#include "viewopt.hxx"  // SwViewOptions
+#include "viewopt.hxx"
 #include "portab.hxx"
 #include "inftxt.hxx"
 #include "itrform2.hxx"

@@ -20,7 +20,7 @@
 
 #include "propertysetbase.hxx"
 
-#include <cppuhelper/typeprovider.hxx>  // for getImplementationId()
+#include <cppuhelper/typeprovider.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>

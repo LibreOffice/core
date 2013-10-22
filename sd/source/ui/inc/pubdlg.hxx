@@ -26,7 +26,7 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/dialog.hxx>
-#include "resltn.hxx"       // enum PublishingResolution
+#include "resltn.hxx"
 #include "pres.hxx"
 #include "assclass.hxx"
 

@@ -19,14 +19,14 @@
 #ifndef _GRFATR_HXX
 #define _GRFATR_HXX
 
-#include <hintids.hxx>      // For the WhichIds @@@ must be included first @@@
+#include <hintids.hxx>
 #include <tools/gen.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/grfcrop.hxx>
 #include "swdllapi.h"
-#include <swatrset.hxx>     // For inlines.
-#include <format.hxx>       // For inlines.
+#include <swatrset.hxx>
+#include <format.hxx>
 
 /******************************************************************************
  *  class SwMirrorGrf

@@ -66,7 +66,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <svtools/embedhlp.hxx>
 #include <svx/charthelper.hxx>
-#include <dview.hxx> // #i99665#
+#include <dview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>

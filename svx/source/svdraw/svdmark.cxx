@@ -26,11 +26,11 @@
 #include <svx/svdpage.hxx>
 #include "svx/svditer.hxx"
 #include <svx/svdpagv.hxx>
-#include <svx/svdopath.hxx> // To turn off
-#include <svx/svdogrp.hxx>  // the cache at
-#include <svx/svdorect.hxx> // GetMarkDescription.
-#include "svx/svdstr.hrc"   // names taken from the resource
-#include "svx/svdglob.hxx"  // StringCache
+#include <svx/svdopath.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdorect.hxx>
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <svx/obj3d.hxx>

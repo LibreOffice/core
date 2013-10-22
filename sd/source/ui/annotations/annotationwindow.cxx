@@ -33,7 +33,7 @@
 #include <svx/svdview.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <editeng/editstat.hxx> //EditEngine flags
+#include <editeng/editstat.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>

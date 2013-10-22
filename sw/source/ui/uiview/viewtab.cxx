@@ -45,8 +45,8 @@
 #include "cmdid.h"
 #include "viewopt.hxx"
 #include "tabcol.hxx"
-#include "frmfmt.hxx"       // Current format
-#include "pagedesc.hxx"     // Current page format
+#include "frmfmt.hxx"
+#include "pagedesc.hxx"
 #include "wview.hxx"
 #include "fmtcol.hxx"
 #include "section.hxx"

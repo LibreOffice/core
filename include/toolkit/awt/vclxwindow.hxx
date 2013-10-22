@@ -39,7 +39,7 @@
 #include <cppuhelper/implbase9.hxx>
 #include <osl/mutex.hxx>
 
-#include <tools/gen.hxx>    // Size
+#include <tools/gen.hxx>
 #include <tools/link.hxx>
 
 #include <stdarg.h>

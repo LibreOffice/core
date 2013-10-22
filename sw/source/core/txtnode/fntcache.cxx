@@ -31,12 +31,12 @@
 #include <viewopt.hxx>
 #include <fntcache.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <swfont.hxx>       // CH_BLANK + CH_BULLET
+#include <swfont.hxx>
 #include <wrong.hxx>
 #include "dbg_lay.hxx"
-#include <txtfrm.hxx>       // SwTxtFrm
+#include <txtfrm.hxx>
 #include <pagefrm.hxx>
-#include <pagedesc.hxx> // SwPageDesc
+#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <scriptinfo.hxx>
 #include <editeng/brushitem.hxx>

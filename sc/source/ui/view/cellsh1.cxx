@@ -60,13 +60,13 @@
 #include "editable.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
-#include "dpgroup.hxx"      // for ScDPNumGroupInfo
+#include "dpgroup.hxx"
 #include "spellparam.hxx"
 #include "postit.hxx"
 #include "clipparam.hxx"
 #include "pivot.hxx"
-#include "dpsdbtab.hxx"     // ScImportSourceDesc
-#include "dpshttab.hxx"     // ScSheetSourceDesc
+#include "dpsdbtab.hxx"
+#include "dpshttab.hxx"
 #include "dbdata.hxx"
 #include "docsh.hxx"
 #include "cliputil.hxx"

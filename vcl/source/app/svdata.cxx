@@ -35,8 +35,8 @@
 #include "vcl/svapp.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/msgbox.hxx"
-#include "vcl/button.hxx" // for Button::GetStandardText
-#include "vcl/dockwin.hxx"  // for DockingManager
+#include "vcl/button.hxx"
+#include "vcl/dockwin.hxx"
 #include "salinst.hxx"
 #include "salframe.hxx"
 #include "svdata.hxx"

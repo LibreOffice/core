@@ -19,7 +19,7 @@
 #ifndef _TXTATR_HXX
 #define _TXTATR_HXX
 
-#include <txatbase.hxx>     // SwTxtAttr/SwTxtAttrEnd
+#include <txatbase.hxx>
 #include <calbck.hxx>
 
 

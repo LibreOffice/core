@@ -26,7 +26,7 @@
 #include "globstr.hrc"
 #include "dpitemdata.hxx"
 
-#include "document.hxx"     // for DumpState only!
+#include "document.hxx"
 #include "stlalgorithm.hxx"
 #include "dpresfilter.hxx"
 #include "dputil.hxx"
@@ -36,7 +36,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <math.h>
-#include <float.h>          //! Test !!!
+#include <float.h>
 #include <algorithm>
 #include <boost/unordered_map.hpp>
 #include <boost/scoped_ptr.hpp>

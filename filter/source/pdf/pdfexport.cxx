@@ -46,7 +46,7 @@
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
 
-#include "unotools/saveopt.hxx" // only for testing of relative saving options in PDF
+#include "unotools/saveopt.hxx"
 
 #include "vcl/graphictools.hxx"
 #include "com/sun/star/beans/XPropertySet.hpp"

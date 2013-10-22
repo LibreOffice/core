@@ -20,17 +20,17 @@
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <txtftn.hxx>
-#include <acorrect.hxx>     // AutoCorrect
+#include <acorrect.hxx>
 #include <UndoManager.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
-#include <doctxm.hxx>       // when moving: correct indexes
+#include <doctxm.hxx>
 #include <ftnidx.hxx>
-#include <mdiexp.hxx>       // status bar
-#include <mvsave.hxx>       // structures to save when moving/deleting
+#include <mdiexp.hxx>
+#include <mvsave.hxx>
 #include <redline.hxx>
-#include <rootfrm.hxx>      // for UpdateFtn
-#include <splargs.hxx>      // for Spell
+#include <rootfrm.hxx>
+#include <splargs.hxx>
 #include <txtfrm.hxx>
 #include <UndoSplitMove.hxx>
 #include <UndoRedline.hxx>

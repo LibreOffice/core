@@ -31,7 +31,7 @@
 #include <svx/dialogs.hrc>
 #include <svtools/unitconv.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/xtable.hxx>       // XColorList
+#include <svx/xtable.hxx>
 #include "chardlg.hxx"
 #include "editeng/fontitem.hxx"
 #include <editeng/postitem.hxx>

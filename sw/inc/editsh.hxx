@@ -24,7 +24,7 @@
 #include <vcl/font.hxx>
 #include <editeng/swafopt.hxx>
 #include "swdllapi.h"
-#include <crsrsh.hxx>   // For base class.
+#include <crsrsh.hxx>
 #include <itabenum.hxx>
 #include <swdbdata.hxx>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>

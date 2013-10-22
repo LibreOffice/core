@@ -27,7 +27,7 @@
 #include "compiler.hxx"
 #include "brdcst.hxx"
 #include "markdata.hxx"
-#include "detfunc.hxx"          // for Notes in Sort/Swap
+#include "detfunc.hxx"
 #include "postit.hxx"
 #include "globalnames.hxx"
 #include "cellvalue.hxx"

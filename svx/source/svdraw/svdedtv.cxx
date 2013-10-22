@@ -20,7 +20,7 @@
 #include <vcl/metaact.hxx>
 #include <svx/svdedtv.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/svdograf.hxx>  // for Possibilities
+#include <svx/svdograf.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdopage.hxx>
@@ -28,9 +28,9 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdpoev.hxx>  // for the PolyPossiblities
-#include "svx/svdstr.hrc"   // names taken from the resource
-#include "svx/svdglob.hxx"  // StringCache
+#include <svx/svdpoev.hxx>
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include <svx/e3dsceneupdater.hxx>
 #include <rtl/strbuf.hxx>
 

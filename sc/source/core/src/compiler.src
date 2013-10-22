@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sc.hrc" // Definition RID_XXX
-#include <formula/compiler.hrc> // Definition SC_OPCODE_XXX (interne OpCodes)
+#include "sc.hrc"
+#include <formula/compiler.hrc>
 
 Resource RID_FUNCTION_CATEGORIES
 {

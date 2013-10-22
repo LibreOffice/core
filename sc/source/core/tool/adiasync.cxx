@@ -23,7 +23,7 @@
 #include "brdcst.hxx"
 #include "global.hxx"
 #include "document.hxx"
-#include "sc.hrc"       // FID_DATACHANGED
+#include "sc.hrc"
 #include <osl/thread.h>
 
 ScAddInAsyncs theAddInAsyncTbl;

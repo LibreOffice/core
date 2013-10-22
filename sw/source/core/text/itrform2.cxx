@@ -31,29 +31,29 @@
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
 #include <editeng/charrotateitem.hxx>
-#include <layfrm.hxx>       // GetFrmRstHeight, etc
+#include <layfrm.hxx>
 #include <viewsh.hxx>
-#include <viewopt.hxx>      // SwViewOptions
-#include <paratr.hxx>       // SwFmtDrop
+#include <viewopt.hxx>
+#include <paratr.hxx>
 #include <itrform2.hxx>
 #include <porrst.hxx>
-#include <portab.hxx>       // pLastTab->
-#include <porfly.hxx>       // CalcFlyWidth
-#include <portox.hxx>       // WhichTxtPortion
-#include <porref.hxx>       // WhichTxtPortion
-#include <porfld.hxx>       // SwNumberPortion for CalcAscent()
-#include <porftn.hxx>       // SwFtnPortion
+#include <portab.hxx>
+#include <porfly.hxx>
+#include <portox.hxx>
+#include <porref.hxx>
+#include <porfld.hxx>
+#include <porftn.hxx>
 #include <porhyph.hxx>
 #include <pordrop.hxx>
 #include <guess.hxx>
-#include <blink.hxx>        // pBlink
-#include <ftnfrm.hxx>       // WhichFirstPortion() -> move it
-#include <redlnitr.hxx>     // SwRedlineItr
+#include <blink.hxx>
+#include <ftnfrm.hxx>
+#include <redlnitr.hxx>
 #include <pagefrm.hxx>
-#include <pagedesc.hxx>     // SwPageDesc
+#include <pagedesc.hxx>
 #include <tgrditem.hxx>
-#include <doc.hxx>          // SwDoc
-#include <pormulti.hxx>     // SwMultiPortion
+#include <doc.hxx>
+#include <pormulti.hxx>
 #include <unotools/charclass.hxx>
 
 #include <vector>
@@ -61,7 +61,7 @@
 #include <config_graphite.h>
 
 #if OSL_DEBUG_LEVEL > 1
-#include <ndtxt.hxx>        // pSwpHints, output operator
+#include <ndtxt.hxx>
 #endif
 
 using namespace ::com::sun::star;

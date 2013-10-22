@@ -44,7 +44,7 @@
 #include <com/sun/star/awt/ImagePosition.hpp>
 
 #include <sax/tools/converter.hxx>
-#include <tools/wintypes.hxx>       // for check states
+#include <tools/wintypes.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>

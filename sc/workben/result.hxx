@@ -27,7 +27,7 @@
 
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
 
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >* XResultListenerPtr;

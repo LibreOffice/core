@@ -20,7 +20,7 @@
 #ifndef _MANIFEST_IMPORT_HXX
 #define _MANIFEST_IMPORT_HXX
 
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <comphelper/sequenceasvector.hxx>
 #include <vector>

@@ -48,7 +48,7 @@
 #include "cellatr.hxx"
 #include "swddetbl.hxx"
 #include "ddefld.hxx"
-#include <sfx2/linkmgr.hxx>  // for cTokenSeparator
+#include <sfx2/linkmgr.hxx>
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"
 

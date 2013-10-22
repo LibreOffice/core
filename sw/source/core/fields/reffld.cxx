@@ -58,7 +58,7 @@
 
 #include <set>
 #include <map>
-#include <algorithm> // min, max
+#include <algorithm>
 
 #include <sfx2/childwin.hxx>
 

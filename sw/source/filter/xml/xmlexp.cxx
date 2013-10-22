@@ -61,7 +61,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-#include <pausethreadstarting.hxx> // #i73788#
+#include <pausethreadstarting.hxx>
 
 
 using namespace ::com::sun::star;

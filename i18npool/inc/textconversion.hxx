@@ -25,7 +25,7 @@
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
 #include <osl/module.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {

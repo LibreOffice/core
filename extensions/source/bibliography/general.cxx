@@ -26,7 +26,7 @@
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
 #include "general.hxx"
 #include "sections.hrc"
 #include "bibresid.hxx"

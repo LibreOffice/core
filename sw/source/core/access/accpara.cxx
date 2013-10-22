@@ -44,10 +44,10 @@
 #include <accpara.hxx>
 #include <access.hrc>
 #include <accportions.hxx>
-#include <sfx2/viewsh.hxx>          // for ExecuteAtViewShell(...)
-#include <sfx2/viewfrm.hxx>         // for ExecuteAtViewShell(...)
-#include <sfx2/dispatch.hxx>        // for ExecuteAtViewShell(...)
-#include <unotools/charclass.hxx>   // for GetWordBoundary
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
+#include <unotools/charclass.hxx>
 #include <unocrsr.hxx>
 #include <unoport.hxx>
 #include <doc.hxx>
@@ -68,7 +68,7 @@
 // #i10825#
 #include <parachangetrackinginfo.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
-#include <comphelper/stlunosequence.hxx> // #i92233#
+#include <comphelper/stlunosequence.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <algorithm>

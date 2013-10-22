@@ -31,7 +31,7 @@
 #include <grfpage.hrc>
 #include <rtl/ustring.hxx>
 #include <cuires.hrc>
-#include <svx/dialogs.hrc> // for RID_SVXPAGE_GRFCROP
+#include <svx/dialogs.hrc>
 
 #define CM_1_TO_TWIP        567
 #define TWIP_TO_INCH        1440

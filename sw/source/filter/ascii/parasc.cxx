@@ -36,8 +36,8 @@
 #include <pagedesc.hxx>
 #include <breakit.hxx>
 #include <swerror.h>
-#include <statstr.hrc>          // ResId for the status bar
-#include <mdiexp.hxx>           // ...Percent()
+#include <statstr.hrc>
+#include <mdiexp.hxx>
 #include <poolfmt.hxx>
 
 #include "vcl/metric.hxx"

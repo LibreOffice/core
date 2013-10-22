@@ -19,7 +19,7 @@
 #ifndef _PORLIN_HXX
 #define _PORLIN_HXX
 
-#include "possiz.hxx"       // SwPosSize
+#include "possiz.hxx"
 
 #ifdef DBG_UTIL
 #include <libxml/xmlwriter.h>

@@ -34,9 +34,9 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/svdograf.hxx> // for SwapInAll()
-#include <svx/svdoedge.hxx> // for copying the connectors
-#include <svx/svdoole2.hxx> // special case OLE at SdrExchangeFormat
+#include <svx/svdograf.hxx>
+#include <svx/svdoedge.hxx>
+#include <svx/svdoole2.hxx>
 #include "svx/svditer.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdlayer.hxx>

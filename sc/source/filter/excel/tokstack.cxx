@@ -24,7 +24,7 @@
 #include "global.hxx"
 #include "scmatrix.hxx"
 
-#include <stdio.h> // printf
+#include <stdio.h>
 
 const sal_uInt16    TokenPool::nScTokenOff = 8192;
 

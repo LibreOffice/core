@@ -53,10 +53,10 @@
 #include <IDocumentSettingAccess.hxx>
 #include <vcl/window.hxx>
 #include <charatr.hxx>
-#include <viewsh.hxx>       // Bildschirmabgleich
+#include <viewsh.hxx>
 #include <swfont.hxx>
-#include <fntcache.hxx>     // FontCache
-#include <txtfrm.hxx>       // SwTxtFrm
+#include <fntcache.hxx>
+#include <txtfrm.hxx>
 #include <scriptinfo.hxx>
 
 #ifdef DBG_UTIL

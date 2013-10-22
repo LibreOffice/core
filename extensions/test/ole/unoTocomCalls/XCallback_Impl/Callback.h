@@ -21,7 +21,7 @@
 #ifndef __CALLBACK_H_
 #define __CALLBACK_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CCallback

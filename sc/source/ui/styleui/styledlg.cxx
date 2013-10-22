@@ -31,9 +31,9 @@
 #include <svl/cjkoptions.hxx>
 
 #include "styledlg.hxx"
-#include "tabpages.hxx"     // Zellvorlagen
-#include "tphf.hxx"         // Seitenvorlage: Kopf-/Fusszeilen
-#include "tptable.hxx"      // Seitenvorlage: Tabelle
+#include "tabpages.hxx"
+#include "tphf.hxx"
+#include "tptable.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
 #include <svx/svxdlg.hxx>

@@ -62,13 +62,13 @@
 
 #include <rtl/strbuf.hxx>
 #include "osl/conditn.hxx"
-#include "tools/rcid.h" // RSC_STRING
-#include "tools/errinf.hxx" // ErrorHandler, ErrorContext, ...
+#include "tools/rcid.h"
+#include "tools/errinf.hxx"
 #include "osl/mutex.hxx"
 #include "osl/thread.hxx"
 #include "tools/diagnose_ex.h"
-#include "comphelper/documentconstants.hxx" // ODFVER_012_TEXT
-#include "svtools/sfxecode.hxx" // ERRCODE_SFX_*
+#include "comphelper/documentconstants.hxx"
+#include "svtools/sfxecode.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"
 #include "unotools/configmgr.hxx"

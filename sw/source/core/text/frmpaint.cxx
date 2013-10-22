@@ -20,10 +20,10 @@
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <hintids.hxx>
-#include <tools/shl.hxx> // SW_MOD
+#include <tools/shl.hxx>
 #include <editeng/pgrditem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <pagedesc.hxx> // SwPageDesc
+#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <paratr.hxx>
 
@@ -32,18 +32,18 @@
 #include <charfmt.hxx>
 #include "rootfrm.hxx"
 #include <pagefrm.hxx>
-#include <viewsh.hxx>   // ViewShell
-#include <viewimp.hxx>  // SwViewImp
-#include <viewopt.hxx>  // SwViewOption
-#include <frmtool.hxx>  // DrawGraphic
-#include <txtfrm.hxx>   // SwTxtFrm
-#include <itrpaint.hxx> // SwTxtPainter
-#include <txtpaint.hxx> // SwSaveClip
-#include <txtcache.hxx> // SwTxtLineAccess
-#include <flyfrm.hxx>   // SwFlyFrm
-#include <redlnitr.hxx> // SwRedlineItr
-#include <swmodule.hxx> // SW_MOD
-#include <tabfrm.hxx>   // SwTabFrm (Redlining)
+#include <viewsh.hxx>
+#include <viewimp.hxx>
+#include <viewopt.hxx>
+#include <frmtool.hxx>
+#include <txtfrm.hxx>
+#include <itrpaint.hxx>
+#include <txtpaint.hxx>
+#include <txtcache.hxx>
+#include <flyfrm.hxx>
+#include <redlnitr.hxx>
+#include <swmodule.hxx>
+#include <tabfrm.hxx>
 #include <numrule.hxx>
 #include <SwGrammarMarkUp.hxx>
 

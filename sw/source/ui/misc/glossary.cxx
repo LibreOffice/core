@@ -52,7 +52,7 @@
 #include <glossary.hxx>
 #include <gloshdl.hxx>
 #include <glosbib.hxx>
-#include <initui.hxx>                   // for ::GetGlossaries()
+#include <initui.hxx>
 #include <glosdoc.hxx>
 #include <macassgn.hxx>
 #include <swevent.hxx>

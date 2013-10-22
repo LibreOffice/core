@@ -19,7 +19,7 @@
 #ifndef _SFXIDPOOL_HXX
 #define _SFXIDPOOL_HXX
 
-#include <limits.h>     // USHRT_MAX
+#include <limits.h>
 #include "bitset.hxx"
 
 // class IdPool ----------------------------------------------------------

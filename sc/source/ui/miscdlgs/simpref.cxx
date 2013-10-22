@@ -25,7 +25,7 @@
 #include "scresid.hxx"
 #include "globstr.hrc"
 #include "simpref.hrc"
-#include "rangenam.hxx"     // IsNameValid
+#include "rangenam.hxx"
 #include "simpref.hxx"
 #include "scmod.hxx"
 

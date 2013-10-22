@@ -25,7 +25,7 @@
 #include "cuitabarea.hxx"
 #include "svx/svdmodel.hxx"
 #include "border.hxx"
-#include <svx/dialogs.hrc> // RID_SVXPAGE_...
+#include <svx/dialogs.hrc>
 
 SvxFormatCellsDialog::SvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel )
 : SfxTabDialog        ( pParent, CUI_RES( RID_SVX_FORMAT_CELLS_DLG ), pAttr )

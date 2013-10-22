@@ -41,7 +41,7 @@
 #include <svtools/parhtml.hxx>
 #include <sot/formats.hxx>
 
-#include "scitems.hxx"      // fuer tbxctrls etc.
+#include "scitems.hxx"
 #include "scmod.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
@@ -111,7 +111,7 @@
 #include <svx/imapdlg.hxx>
 
 #include "editutil.hxx"
-#include <svx/svdfield.hxx>     //  SdrRegisterFieldClasses
+#include <svx/svdfield.hxx>
 
 #include "dwfunctr.hxx"
 #include "acredlin.hxx"

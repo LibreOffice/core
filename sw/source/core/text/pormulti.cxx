@@ -24,26 +24,26 @@
 #include <editeng/charrotateitem.hxx>
 #include <vcl/outdev.hxx>
 #include <fmtfld.hxx>
-#include <fldbas.hxx>      // SwField
+#include <fldbas.hxx>
 #include <txatbase.hxx>
-#include <fmtruby.hxx>  // SwFmtRuby
-#include <txtatr.hxx>   // SwTxtRuby
+#include <fmtruby.hxx>
+#include <txtatr.hxx>
 #include <charfmt.hxx>
 #include <txtinet.hxx>
 #include <fchrfmt.hxx>
-#include <layfrm.hxx>       // GetUpper()
+#include <layfrm.hxx>
 #include <SwPortionHandler.hxx>
-#include <pormulti.hxx>     // SwMultiPortion
-#include <inftxt.hxx>       // SwTxtSizeInfo
-#include <itrpaint.hxx>     // SwTxtPainter
-#include <viewopt.hxx>      // SwViewOptions
-#include <itrform2.hxx>     // SwTxtFormatter
-#include <porfld.hxx>       // SwFldPortion
+#include <pormulti.hxx>
+#include <inftxt.hxx>
+#include <itrpaint.hxx>
+#include <viewopt.hxx>
+#include <itrform2.hxx>
+#include <porfld.hxx>
 #include <porglue.hxx>
 #include <breakit.hxx>
 #include <pagefrm.hxx>
 #include <rowfrm.hxx>
-#include <pagedesc.hxx> // SwPageDesc
+#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <swtable.hxx>
 #include <fmtfsize.hxx>

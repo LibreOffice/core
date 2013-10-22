@@ -57,7 +57,7 @@
 #include <fmtsrnd.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
-#include <fmtfollowtextflow.hxx> // #i30669#
+#include <fmtfollowtextflow.hxx>
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <flyfrm.hxx>

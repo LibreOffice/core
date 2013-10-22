@@ -36,17 +36,17 @@
 #include <viewopt.hxx>
 #include <pgfnote.hxx>
 #include <pggrid.hxx>
-#include <tmpdlg.hxx>       // the dialog
-#include <column.hxx>       // columns
-#include <drpcps.hxx>       // initials
-#include <frmpage.hxx>      // frames
-#include <wrap.hxx>         // frames
-#include <frmmgr.hxx>       // frames
-#include <ccoll.hxx>        // CondColl
+#include <tmpdlg.hxx>
+#include <column.hxx>
+#include <drpcps.hxx>
+#include <frmpage.hxx>
+#include <wrap.hxx>
+#include <frmmgr.hxx>
+#include <ccoll.hxx>
 #include <swuiccoll.hxx>
-#include <docstyle.hxx>     //
-#include <fmtcol.hxx>       //
-#include <macassgn.hxx>     //
+#include <docstyle.hxx>
+#include <fmtcol.hxx>
+#include <macassgn.hxx>
 #include <poolfmt.hxx>
 #include <uitool.hxx>
 #include <shellres.hxx>

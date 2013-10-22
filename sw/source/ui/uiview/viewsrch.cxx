@@ -48,7 +48,7 @@
 #include <workctrl.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // for Undo-Ids
+#include <swundo.hxx>
 #include <uitool.hxx>
 #include <cmdid.h>
 #include <docsh.hxx>

@@ -22,7 +22,7 @@
 #include <tools/fract.hxx>
 #include <tools/color.hxx>
 #include "swdllapi.h"
-#include <swtypes.hxx>  ///< For SwTwips.
+#include <swtypes.hxx>
 #include <frmfmt.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/borderline.hxx>

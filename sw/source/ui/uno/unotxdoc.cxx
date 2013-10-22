@@ -50,7 +50,7 @@
 #include <unosrch.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/objsh.hxx>   // SfxObjectShellRef <-> SV_DECL_REF(SfxObjectShell)
+#include <sfx2/objsh.hxx>
 #include <unoprnms.hxx>
 #include <unostyle.hxx>
 #include <unodraw.hxx>
@@ -107,14 +107,14 @@
 #include <numrule.hxx>
 
 #include <editeng/langitem.hxx>
-#include <docary.hxx>      //SwCharFmts
+#include <docary.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <format.hxx>
-#include <charfmt.hxx>    //SwCharFmt
-#include <fmtcol.hxx>     //SwTxtFmtColl
-#include <unostyle.hxx>   //SwAutoStyleFamily
-#include <istyleaccess.hxx> // handling of automatic styles
+#include <charfmt.hxx>
+#include <fmtcol.hxx>
+#include <unostyle.hxx>
+#include <istyleaccess.hxx>
 
 #include <svl/stylepool.hxx>
 #include <swatrset.hxx>

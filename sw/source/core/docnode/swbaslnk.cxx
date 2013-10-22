@@ -28,7 +28,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/boxitem.hxx>
-#include <svx/svxids.hrc>       // For the EventIds
+#include <svx/svxids.hrc>
 #include <sfx2/linkmgr.hxx>
 #include <svtools/soerr.hxx>
 #include <fmtfsize.hxx>

@@ -28,9 +28,9 @@
 #include <fchrfmt.hxx>
 #include <fmtinfmt.hxx>
 #include <charfmt.hxx>
-#include <ndtxt.hxx>        // SwCharFmt, SwTxtNode
-#include <poolfmt.hxx>      // RES_POOLCHR_INET_...
-#include <doc.hxx>          // SwDoc
+#include <ndtxt.hxx>
+#include <poolfmt.hxx>
+#include <doc.hxx>
 #include <fmtruby.hxx>
 #include <fmtmeta.hxx>
 

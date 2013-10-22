@@ -18,8 +18,8 @@
  */
 
 #include <cstddef>
-#include <stdio.h> // C99 snprintf not necessarily in <cstdio>
-#include <string.h> // wntmsci10 does not know <cstring> std::strcmp
+#include <stdio.h>
+#include <string.h>
 
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>

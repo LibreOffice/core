@@ -18,7 +18,7 @@
  */
 
 
-#include <ctype.h> // don't ask. msdev breaks otherwise...
+#include <ctype.h>
 #include "dx_winstuff.hxx"
 #include "dx_spritecanvas.hxx"
 #include "dx_canvasfont.hxx"

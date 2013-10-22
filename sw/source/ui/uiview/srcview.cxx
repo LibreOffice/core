@@ -70,7 +70,7 @@
 #include <sfx2/msg.hxx>
 #include <shellio.hxx>
 
-#include <cmdid.h>          // FN_       ...
+#include <cmdid.h>
 #include <helpid.h>
 #include <globals.hrc>
 #include <shells.hrc>

@@ -36,11 +36,11 @@
 #include <frame.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
-#include <ndtxt.hxx>   // for SwTxtNode
+#include <ndtxt.hxx>
 #include <grfatr.hxx>
 #include <flyfrm.hxx>
 #include <swtable.hxx>
-#include <swundo.hxx>  // UNDO_START, UNDO_END
+#include <swundo.hxx>
 #include <calc.hxx>
 #include <edimp.hxx>
 #include <ndgrf.hxx>

@@ -20,7 +20,7 @@
 #define _I18N_CHARACTERCLASSIFICATIONIMPL_HXX_
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
 #include <vector>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

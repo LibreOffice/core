@@ -23,7 +23,7 @@
 #include <canvas/rendering/isurfaceproxy.hxx>
 #include <canvas/rendering/isurfaceproxymanager.hxx>
 #include "dx_ibitmap.hxx"
-#include "dx_canvasfont.hxx" //winstuff
+#include "dx_canvasfont.hxx"
 #include "dx_gdiplususer.hxx"
 #include "dx_rendermodule.hxx"
 

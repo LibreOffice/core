@@ -22,7 +22,7 @@
 #include <osl/thread.h>
 #include <basic/sbx.hxx>
 #include "sb.hxx"
-#include <string.h>     // memset() etc
+#include <string.h>
 #include "image.hxx"
 #include <codegen.hxx>
 SbiImage::SbiImage()

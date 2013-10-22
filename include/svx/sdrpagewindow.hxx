@@ -26,7 +26,7 @@
 #include <com/sun/star/util/XModeChangeListener.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/svdtypes.hxx> // for SdrLayerID
+#include <svx/svdtypes.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include "svx/svxdllapi.h"
 

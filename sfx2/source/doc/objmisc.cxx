@@ -25,7 +25,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
-#include <svtools/svparser.hxx> // SvKeyValue
+#include <svtools/svparser.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
@@ -129,7 +129,7 @@ using namespace ::com::sun::star::container;
 #include "../appl/app.hrc"
 #include <sfx2/sfxdlg.hxx>
 #include "appbaslib.hxx"
-#include <openflag.hxx>                 // SFX_STREAM_READWRITE
+#include <openflag.hxx>
 
 // class SfxHeaderAttributes_Impl ----------------------------------------
 

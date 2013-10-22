@@ -23,8 +23,8 @@
 
 #include "strings.hrc"
 #include "glob.hxx"
-#include "glob.hrc"         // STR_BCKGRND, STR_BCKGRNDOBJ
-#include "app.hrc"          // SID_SWITCHPAGE
+#include "glob.hrc"
+#include "app.hrc"
 
 #include "unmodpg.hxx"
 #include "sdpage.hxx"

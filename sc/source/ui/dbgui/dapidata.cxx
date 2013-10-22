@@ -42,7 +42,7 @@ using namespace com::sun::star;
 #include "sc.hrc"
 #include "dapitype.hrc"
 #include "miscuno.hxx"
-#include "dpsdbtab.hxx"         // ScImportSourceDesc
+#include "dpsdbtab.hxx"
 
 //-------------------------------------------------------------------------
 

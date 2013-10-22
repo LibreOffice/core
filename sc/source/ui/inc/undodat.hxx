@@ -21,8 +21,8 @@
 #define SC_UNDODAT_HXX
 
 #include "undobase.hxx"
-#include "rangeutl.hxx"     // ScArea
-#include "rangelst.hxx"     // ScRangeListRef
+#include "rangeutl.hxx"
+#include "rangelst.hxx"
 #include "sortparam.hxx"
 #include "queryparam.hxx"
 #include "subtotalparam.hxx"

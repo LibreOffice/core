@@ -27,7 +27,7 @@
 #include <stack>
 #include <set>
 
-#include <math.h> // prevent conflict between exception and std::exception
+#include <math.h>
 #include <functional>
 
 

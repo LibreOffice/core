@@ -41,7 +41,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
-#include <initui.hxx>                   // for ::GetGlossaries()
+#include <initui.hxx>
 #include <cmdid.h>
 #include <swerror.h>
 #include <misc.hrc>

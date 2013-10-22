@@ -27,7 +27,7 @@
 #include <algorithm>
 
 #include <hintids.hxx>
-#include <string.h>             // memcpy()
+#include <string.h>
 #include <osl/endian.h>
 #include <docsh.hxx>
 
@@ -77,8 +77,8 @@
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <tools/urlobj.hxx>
-#include <mdiexp.hxx>           // Progress
-#include <statstr.hrc>          // ResId for the status bar
+#include <mdiexp.hxx>
+#include <statstr.hrc>
 #include <fmtline.hxx>
 #include <fmtfsize.hxx>
 #include <comphelper/extract.hxx>
@@ -111,7 +111,7 @@
 #include "WW8Sttbf.hxx"
 #include <editeng/charrotateitem.hxx>
 #include "WW8FibData.hxx"
-#include "numrule.hxx"//For i120928
+#include "numrule.hxx"
 
 using namespace css;
 using namespace sw::util;

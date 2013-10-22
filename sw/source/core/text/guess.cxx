@@ -19,14 +19,14 @@
 
 #include <ctype.h>
 #include <editeng/unolingu.hxx>
-#include <tools/shl.hxx>    // needed for SW_MOD() macro
+#include <tools/shl.hxx>
 #include <dlelstnr.hxx>
 #include <swmodule.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <guess.hxx>
 #include <inftxt.hxx>
 #include <pagefrm.hxx>
-#include <pagedesc.hxx> // SwPageDesc
+#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <com/sun/star/i18n/BreakType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>

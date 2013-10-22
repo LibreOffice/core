@@ -26,7 +26,7 @@
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"       // -> Slot IDs
+#include "sc.hrc"
 
 #include "subtdlg.hxx"
 #include "subtdlg.hrc"

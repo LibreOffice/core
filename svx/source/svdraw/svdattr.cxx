@@ -44,13 +44,13 @@
 #include <unotools/intlwrapper.hxx>
 #include <vcl/svapp.hxx>
 
-#include "svx/svdglob.hxx"  // string cache
+#include "svx/svdglob.hxx"
 #include "svx/svdstr.hrc"
 
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svx/svdattr.hxx>
-#include <svx/svdmodel.hxx>  // for DEGREE_CHAR
+#include <svx/svdmodel.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svx3ditems.hxx>
@@ -99,7 +99,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/xtable.hxx>    // for RGB_Color()
+#include <svx/xtable.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

@@ -24,8 +24,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdundo.hxx>
-#include "svx/svdstr.hrc"   // names taken from the resource
-#include "svx/svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include <svx/svdtrans.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

@@ -29,7 +29,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 
-#include <string.h> // for strcmp
+#include <string.h>
 #include <vector>
 #include <limits>
 #include <algorithm>

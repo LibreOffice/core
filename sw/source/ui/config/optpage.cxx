@@ -30,7 +30,7 @@
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <uitool.hxx>
-#include <cfgitems.hxx> //Items for Sw-pages
+#include <cfgitems.hxx>
 #include <poolfmt.hxx>
 #include <uiitems.hxx>
 #include <initui.hxx>

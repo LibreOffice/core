@@ -65,7 +65,7 @@
 
 #include "rtl/bootstrap.h"
 
-#include <string.h> // memcmp
+#include <string.h>
 
 using namespace com::sun::star;
 

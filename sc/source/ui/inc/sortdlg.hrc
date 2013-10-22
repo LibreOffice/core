@@ -18,7 +18,7 @@
  */
 
 
-#include "sc.hrc"   // -> RID_SCDLG_SORT
+#include "sc.hrc"
                     // -> RID_SCPAGE_SORT_FIELDS
                     // -> SCSTR_NONAME
                     // -> SCSTR_UNDEFINED

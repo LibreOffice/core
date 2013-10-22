@@ -22,7 +22,7 @@
 #include "optchart.hxx"
 #include <dialmgr.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/svxids.hrc> // for SID_SCH_EDITOPTIONS
+#include <svx/svxids.hrc>
 
 namespace
 {

@@ -24,9 +24,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <cppuhelper/implbase3.hxx> // helper for implementations
+#include <uno/lbnames.h>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <vector>

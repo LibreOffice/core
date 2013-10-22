@@ -51,7 +51,7 @@ class SwList;
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <swatrset.hxx>
-#include <toxe.hxx>             // enums
+#include <toxe.hxx>
 #include <flyenum.hxx>
 #include <flypos.hxx>
 #include <itabenum.hxx>

@@ -33,7 +33,7 @@
 #include <com/sun/star/i18n/LocaleCalendar.hpp>
 #include <unotools/digitgroupingiterator.hxx>
 
-#include <svl/zforlist.hxx> // NUMBERFORMAT_XXX
+#include <svl/zforlist.hxx>
 #include "zforscan.hxx"
 #include <svl/zformat.hxx>
 

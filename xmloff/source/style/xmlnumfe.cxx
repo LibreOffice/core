@@ -39,7 +39,7 @@
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/families.hxx>
-#include <xmloff/xmlnumfi.hxx>      // SvXMLNumFmtDefaults
+#include <xmloff/xmlnumfi.hxx>
 
 #include <svl/nfsymbol.hxx>
 #include <xmloff/xmltoken.hxx>

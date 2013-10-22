@@ -51,7 +51,7 @@
 #include "cuicharmap.hxx"
 #include <editeng/unolingu.hxx>
 #include <dialmgr.hxx>
-#include <svx/svxids.hrc> // SID_OPEN_SMARTTAGSOPTIONS
+#include <svx/svxids.hrc>
 
 static LanguageType eLastDialogLanguage = LANGUAGE_SYSTEM;
 

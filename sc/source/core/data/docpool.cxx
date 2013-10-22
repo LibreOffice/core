@@ -64,7 +64,7 @@
 #include "attrib.hxx"
 #include "patattr.hxx"
 #include "globstr.hrc"
-#include "sc.hrc"           // Slot-IDs
+#include "sc.hrc"
 
 #define SC_MAX_POOLREF      (SFX_ITEMS_OLD_MAXREF - 39)
 #define SC_SAFE_POOLREF     (SC_MAX_POOLREF + 20)

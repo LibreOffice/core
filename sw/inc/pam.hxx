@@ -19,13 +19,13 @@
 #ifndef _PAM_HXX
 #define _PAM_HXX
 
-#include <stddef.h>         ///< For MemPool.
+#include <stddef.h>
 #include <sal/types.h>
 #include <tools/mempool.hxx>
-#include <cshtyp.hxx>       ///< For function definitions.
-#include <ring.hxx>         ///< Super class.
-#include <index.hxx>        ///< For SwIndex.
-#include <ndindex.hxx>      ///< For SwNodeIndex.
+#include <cshtyp.hxx>
+#include <ring.hxx>
+#include <index.hxx>
+#include <ndindex.hxx>
 #include "swdllapi.h"
 
 class SwFmt;

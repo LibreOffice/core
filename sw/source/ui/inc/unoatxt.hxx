@@ -31,9 +31,9 @@
 #include <com/sun/star/text/XText.hpp>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
-#include <cppuhelper/implbase2.hxx> // helper for implementations
-#include <cppuhelper/implbase5.hxx> // helper for implementations
-#include <cppuhelper/implbase6.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
 #include <svtools/unoevent.hxx>
 class SwTextBlocks;
 class SwGlossaries;

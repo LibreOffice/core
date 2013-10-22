@@ -35,7 +35,7 @@
 
 #include <functional>
 #include <cstdlib>
-#include <string.h> // for strcmp
+#include <string.h>
 #include <algorithm>
 
 

@@ -32,7 +32,7 @@
 
 #include <boost/bind.hpp>
 
-#include <cmath> // for trigonometry and fabs
+#include <cmath>
 #include <algorithm>
 #include <functional>
 #include <limits>

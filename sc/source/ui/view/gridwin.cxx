@@ -20,7 +20,7 @@
 
 #include "scitems.hxx"
 
-#include <memory> //auto_ptr
+#include <memory>
 #include <editeng/adjustitem.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/editview.hxx>
@@ -46,8 +46,8 @@
 #include <comphelper/classids.hxx>
 #include <sal/macros.h>
 
-#include <svx/svdview.hxx>      // fuer Command-Handler (COMMAND_INSERTTEXT)
-#include <editeng/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
+#include <svx/svdview.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
@@ -82,10 +82,10 @@
 #include "editutil.hxx"
 #include "scresid.hxx"
 #include "inputhdl.hxx"
-#include "uiitems.hxx"          // Filter-Dialog - auslagern !!!
+#include "uiitems.hxx"
 #include "filtdlg.hxx"
-#include "impex.hxx"            // Sylk-ID fuer CB
-#include "formulacell.hxx"             // fuer Edit-Felder
+#include "impex.hxx"
+#include "formulacell.hxx"
 #include "patattr.hxx"
 #include "notemark.hxx"
 #include "rfindlst.hxx"

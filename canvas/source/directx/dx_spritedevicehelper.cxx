@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ctype.h> // don't ask. msdev breaks otherwise...
+#include <ctype.h>
 #include <vcl/window.hxx>
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>

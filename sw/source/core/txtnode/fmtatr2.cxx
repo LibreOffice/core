@@ -31,9 +31,9 @@
 #include <txtatr.hxx>
 #include <fmtruby.hxx>
 #include <charfmt.hxx>
-#include <hints.hxx>        // SwUpdateAttr
+#include <hints.hxx>
 #include <unostyle.hxx>
-#include <unoevent.hxx>     // SwHyperlinkEventDescriptor
+#include <unoevent.hxx>
 #include <com/sun/star/text/RubyAdjust.hpp>
 
 #include <cmdid.h>
@@ -41,11 +41,11 @@
 #include <SwStyleNameMapper.hxx>
 
 #include <fmtmeta.hxx>
-#include <ndtxt.hxx> // for meta
-#include <doc.hxx> // for meta
+#include <ndtxt.hxx>
+#include <doc.hxx>
 #include <unometa.hxx>
 #include <docsh.hxx>
-#include <svl/zforlist.hxx> // GetNumberFormat
+#include <svl/zforlist.hxx>
 
 #include <boost/bind.hpp>
 #include <algorithm>

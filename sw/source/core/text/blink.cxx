@@ -19,11 +19,11 @@
 
 
 #include "viewsh.hxx"
-#include "rootfrm.hxx"  // GetOleShell()
-#include "txtfrm.hxx"   // FindRootFrm()
+#include "rootfrm.hxx"
+#include "txtfrm.hxx"
 #include "blink.hxx"
 #include "porlin.hxx"
-#include "porlay.hxx"   // SwLineLayout
+#include "porlay.hxx"
 
 // Sichtbare Zeit:
 #define BLINK_ON_TIME       2400L

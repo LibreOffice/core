@@ -63,7 +63,7 @@
 #include <sfx2/viewsh.hxx>
 #include "nochaos.hxx"
 #include <sfx2/fcontnr.hxx>
-#include "helper.hxx"   // SfxContentHelper::Kill()
+#include "helper.hxx"
 #include "sfxpicklist.hxx"
 
 using namespace ::com::sun::star::uno;

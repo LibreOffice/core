@@ -28,7 +28,7 @@
 
 #include <cstdlib>
 #include <memory>
-#include <stdio.h> // <iostream> or <cstdio> do not work well on all platforms
+#include <stdio.h>
 
 using ucb::cachemap::Object1;
 using ucb::cachemap::Object2;

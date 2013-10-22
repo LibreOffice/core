@@ -31,7 +31,7 @@
 #include "modcfg.hxx"
 #include "swtable.hxx"
 #include "docsh.hxx"
-#include "pagedesc.hxx"     // Aktuelles Seitenformat
+#include "pagedesc.hxx"
 #include <frmatr.hxx>
 #include <editeng/frmdiritem.hxx>
 

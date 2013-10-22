@@ -30,8 +30,8 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <uno/lbnames.h>
+#include <cppuhelper/implbase1.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <map>

@@ -36,7 +36,7 @@
 #include "refupdat.hxx"
 #include "markdata.hxx"
 #include "progress.hxx"
-#include "hints.hxx"        // fuer Paint-Broadcast
+#include "hints.hxx"
 #include "prnsave.hxx"
 #include "tabprotection.hxx"
 #include "sheetevents.hxx"

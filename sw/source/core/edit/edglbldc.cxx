@@ -24,7 +24,7 @@
 #include <ndtxt.hxx>
 #include <docary.hxx>
 #include <swwait.hxx>
-#include <swundo.hxx> // for UndoIds
+#include <swundo.hxx>
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <edglbldc.hxx>

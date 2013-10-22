@@ -27,13 +27,13 @@
 
 #include <IShellCursorSupplier.hxx>
 #include "swdllapi.h"
-#include <swtypes.hxx>          // for SWPOSDOC
-#include <viewsh.hxx>           // for ViewShell
-#include <calbck.hxx>           // for SwClient
-#include <cshtyp.hxx>           // for CursorShell types
-#include <crstate.hxx>          // for CursorMove-States
-#include <toxe.hxx>             // SwTOXSearchDir
-#include <tblsel.hxx>           // SwTblSearchType
+#include <swtypes.hxx>
+#include <viewsh.hxx>
+#include <calbck.hxx>
+#include <cshtyp.hxx>
+#include <crstate.hxx>
+#include <toxe.hxx>
+#include <tblsel.hxx>
 #include <viscrs.hxx>
 #include <node.hxx>
 #include <tblsel.hxx>

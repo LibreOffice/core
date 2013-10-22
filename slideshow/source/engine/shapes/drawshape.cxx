@@ -49,7 +49,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <cmath> // for trigonometry and fabs
+#include <cmath>
 #include <algorithm>
 #include <functional>
 #include <limits>

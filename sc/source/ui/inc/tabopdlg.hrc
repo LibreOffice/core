@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sc.hrc" // ->RID_SCDLG_TABOP
+#include "sc.hrc"
 
 #define ED_FORMULARANGE         1
 #define ED_ROWCELL              2

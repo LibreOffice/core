@@ -71,7 +71,7 @@
 #include "nsIDirectoryService.h"
 #include "nsDirectoryServiceDefs.h"
 #include "nsAppDirectoryServiceDefs.h"
-#include "nsIChromeRegistry.h" // chromeReg
+#include "nsIChromeRegistry.h"
 #include "nsIStringBundle.h"
 #include "nsIObserverService.h"
 #include "nsHashtable.h"

@@ -22,7 +22,7 @@
 #include <tools/fract.hxx>
 #include <scriptinfo.hxx>
 
-#include "swrect.hxx"   // SwRepaint
+#include "swrect.hxx"
 #include "portxt.hxx"
 #include "swfont.hxx"
 

@@ -19,7 +19,7 @@
 
 #include <sal/types.h>
 
-#include <stdlib.h> // wntmsci10 does not like <cstdlib>
+#include <stdlib.h>
 
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>

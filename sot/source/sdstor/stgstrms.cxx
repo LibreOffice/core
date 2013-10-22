@@ -19,7 +19,7 @@
 
 #include <algorithm>
 
-#include <string.h>     // memcpy()
+#include <string.h>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>

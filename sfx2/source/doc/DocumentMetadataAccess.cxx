@@ -47,7 +47,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 
-#include <libxml/tree.h>    // for xmlValidateNCName
+#include <libxml/tree.h>
 
 #include <boost/bind.hpp>
 #include <boost/shared_array.hpp>

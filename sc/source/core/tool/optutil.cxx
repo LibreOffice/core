@@ -20,7 +20,7 @@
 #include <vcl/svapp.hxx>
 
 #include "optutil.hxx"
-#include "global.hxx"       // for pSysLocale
+#include "global.hxx"
 #include <unotools/syslocale.hxx>
 
 sal_Bool ScOptionsUtil::IsMetricSystem()

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <viewopt.hxx>  // SwViewOptions
+#include <viewopt.hxx>
 #include <SwPortionHandler.hxx>
 #include <inftxt.hxx>
 #include <porexp.hxx>

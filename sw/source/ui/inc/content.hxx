@@ -18,7 +18,7 @@
  */
 #ifndef _CONTENT_HXX
 #define _CONTENT_HXX
-#include <limits.h>     // USHRT_MAX
+#include <limits.h>
 #include "swcont.hxx"
 
 #include <vcl/menu.hxx>

@@ -29,7 +29,7 @@
 #include <fntcache.hxx>
 #include <swfont.hxx>
 #include <breakit.hxx>
-#include <txtfrm.hxx>       // SwTxtFrm
+#include <txtfrm.hxx>
 #include <scriptinfo.hxx>
 
 using namespace ::com::sun::star::i18n;

@@ -22,18 +22,18 @@
 #include <tools/shl.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <swmodule.hxx>
-#include <redline.hxx>      // SwRedline
-#include <txtatr.hxx>       // SwTxt ...
-#include <docary.hxx>       // SwRedlineTbl
-#include <itratr.hxx>       // SwAttrIter
-#include <ndtxt.hxx>        // SwTxtNode
-#include <doc.hxx>          // SwDoc
+#include <redline.hxx>
+#include <txtatr.hxx>
+#include <docary.hxx>
+#include <itratr.hxx>
+#include <ndtxt.hxx>
+#include <doc.hxx>
 #include <rootfrm.hxx>
 #include <breakit.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/settings.hxx>
-#include <txtfrm.hxx>       // SwTxtFrm
+#include <txtfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <redlnitr.hxx>
 #include <extinput.hxx>

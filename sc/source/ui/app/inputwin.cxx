@@ -34,7 +34,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/imgmgr.hxx>
-#include <stdlib.h>     // qsort
+#include <stdlib.h>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <vcl/cursor.hxx>

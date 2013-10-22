@@ -32,7 +32,7 @@
 #include <shellio.hxx>
 #include <swblocks.hxx>
 #include <ndtxt.hxx>
-#include <mdiexp.hxx>       // Progress
+#include <mdiexp.hxx>
 #include <SwXMLTextBlocks.hxx>
 #include <docsh.hxx>
 #include <swunohelper.hxx>

@@ -38,8 +38,8 @@
 #include "solvrdlg.hxx"
 #include "optsolver.hxx"
 #include "tabopdlg.hxx"
-#include "autoform.hxx"         // Core
-#include "autofmt.hxx"          // Dialog
+#include "autoform.hxx"
+#include "autofmt.hxx"
 #include "consdlg.hxx"
 #include "filtdlg.hxx"
 #include "dbnamdlg.hxx"
@@ -50,7 +50,7 @@
 #include "rangeutl.hxx"
 #include "crnrdlg.hxx"
 #include "formula.hxx"
-#include "formulacell.hxx"             // Input Status Edit-Zellen
+#include "formulacell.hxx"
 #include "acredlin.hxx"
 #include "highred.hxx"
 #include "simpref.hxx"

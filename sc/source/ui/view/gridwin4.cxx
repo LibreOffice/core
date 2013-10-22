@@ -36,11 +36,11 @@
 #include "output.hxx"
 #include "document.hxx"
 #include "attrib.hxx"
-#include "patattr.hxx"          // InvertSimple
+#include "patattr.hxx"
 #include "dbdata.hxx"
 #include "docoptio.hxx"
 #include "notemark.hxx"
-#include "dbfunc.hxx"           // oder GetPageBreakData an die ViewData
+#include "dbfunc.hxx"
 #include "scmod.hxx"
 #include "inputhdl.hxx"
 #include "rfindlst.hxx"
@@ -48,7 +48,7 @@
 #include "pagedata.hxx"
 #include "docpool.hxx"
 #include "globstr.hrc"
-#include "docsh.hxx"            // oder GetSfxInPlaceObject
+#include "docsh.hxx"
 #include "cbutton.hxx"
 #include "invmerge.hxx"
 #include "editutil.hxx"

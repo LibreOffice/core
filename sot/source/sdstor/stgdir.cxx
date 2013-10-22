@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>     // memcpy()
+#include <string.h>
 
 #include "sot/stg.hxx"
 #include "stgelem.hxx"

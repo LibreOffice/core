@@ -28,9 +28,9 @@
 #include <tools/bigint.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "svx/svdglob.hxx"  // StringCache
+#include "svx/svdglob.hxx"
 #include "svx/svditer.hxx"
-#include "svx/svdstr.hrc"   // names taken from the resource
+#include "svx/svdstr.hrc"
 
 #include <svx/AffineMatrixItem.hxx>
 #include <svx/e3dsceneupdater.hxx>
@@ -38,16 +38,16 @@
 #include <svx/rectenum.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/svdattr.hxx>  // for Get/SetGeoAttr
+#include <svx/svdattr.hxx>
 #include <svx/svdedtv.hxx>
-#include <svx/svdetc.hxx>   // for SearchOutlinerItems
-#include <svx/svdlayer.hxx> // for MergeNotPersistAttr
-#include <svx/svdopath.hxx>  // for Crook
+#include <svx/svdetc.hxx>
+#include <svx/svdlayer.hxx>
+#include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/svxids.hrc>   // for SID_ATTR_TRANSFORM_...
+#include <svx/svxids.hrc>
 #include <svx/sxallitm.hxx>
 #include <svx/sxmovitm.hxx>
 #include <svx/sxreaitm.hxx>

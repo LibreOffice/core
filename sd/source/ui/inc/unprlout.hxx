@@ -21,7 +21,7 @@
 #define _SD_UNPRLOUT_HXX
 
 #include "sdundo.hxx"
-#include "pres.hxx"                 // enum AutoLayout
+#include "pres.hxx"
 
 class SdDrawDocument;
 class SdPage;

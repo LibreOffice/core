@@ -25,7 +25,7 @@
 #include <editeng/svxenum.hxx>
 
 #include "swtypes.hxx"
-#include "node.hxx"     ///< For SwStartNode
+#include "node.hxx"
 
 
 class SwTableBox;

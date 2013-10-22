@@ -21,7 +21,7 @@
 
 #include "swdllapi.h"
 #include <frmatr.hxx>
-#include <swtypes.hxx> // For MAXLEVEL.
+#include <swtypes.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <rtl/ustring.hxx>
 

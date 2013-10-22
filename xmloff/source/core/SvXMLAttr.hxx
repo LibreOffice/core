@@ -10,7 +10,7 @@
 #ifndef _XMLOFF_SVXMLATTR_HXX
 #define _XMLOFF_SVXMLATTR_HXX
 
-#include <rtl/ustring.hxx>   //OUString
+#include <rtl/ustring.hxx>
 
 class SvXMLAttr {
 private:

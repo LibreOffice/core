@@ -20,9 +20,9 @@
 #ifndef _MACSPELLIMP_H_
 #define _MACSPELLIMP_H_
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <cppuhelper/implbase6.hxx> // helper for implementations
+#include <uno/lbnames.h>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase6.hxx>
 
 #ifdef MACOSX
 #include <premac.h>

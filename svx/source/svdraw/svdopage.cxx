@@ -19,8 +19,8 @@
 
 
 #include <svx/svdopage.hxx>
-#include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // the object's name
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>

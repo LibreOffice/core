@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <pam.hxx>              // fuer SwPam
+#include <pam.hxx>
 #include <doc.hxx>
-#include <ndtxt.hxx>            // class SwTxtNode
-#include <fltini.hxx>           // Ww1Reader
+#include <ndtxt.hxx>
+#include <fltini.hxx>
 #include <w1par.hxx>
 #include <swfltopt.hxx>
-#include <mdiexp.hxx>           // StatLine...()
-#include <swerror.h>            // ERR_WW1_...
-#include <statstr.hrc>          // ResId fuer Statusleiste
+#include <mdiexp.hxx>
+#include <swerror.h>
+#include <statstr.hrc>
 
 //----------------------------------------
 //    Initialisieren der Feld-FilterFlags

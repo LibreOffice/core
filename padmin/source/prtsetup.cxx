@@ -18,7 +18,7 @@
  */
 
 #include "prtsetup.hxx"
-#include "helper.hxx" // for PaResId
+#include "helper.hxx"
 #include "rtsetup.hrc"
 #include "cmddlg.hxx"
 

@@ -27,7 +27,7 @@
 #include "border.hrc"
 #include "helpid.hrc"
 
-#include <svx/xtable.hxx>               // XColorList
+#include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>

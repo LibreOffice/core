@@ -37,7 +37,7 @@
 #include "cuires.hrc"
 #include "acccfg.hrc"
 
-#include <svx/svxids.hrc> // SID_CHARMAP, SID_ATTR_SPECIALCHAR
+#include <svx/svxids.hrc>
 
 //-----------------------------------------------
 // include interface declarations

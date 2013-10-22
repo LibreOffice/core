@@ -20,7 +20,7 @@
 #define _HINTIDS_HXX
 
 #include <tools/solar.h>
-#include <sal/types.h>          // for sal_Unicode
+#include <sal/types.h>
 #include "swdllapi.h"
 
 // For SwTxtHints without end index the following char is added:

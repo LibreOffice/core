@@ -12,9 +12,9 @@
 
 #include "SvXMLAttr.hxx"
 
-#include <xmloff/nmspmap.hxx>  //SvXMLNamespaceMap
-#include <rtl/ustring.hxx>     //OUString
-#include <sal/types.h>         //sal_uInt16 and sal_Bool
+#include <xmloff/nmspmap.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <vector>
 
 class SvXMLAttrCollection

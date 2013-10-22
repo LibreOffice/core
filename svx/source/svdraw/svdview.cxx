@@ -19,16 +19,16 @@
 
 #include <editeng/eeitem.hxx>
 
-#include "svx/svdstr.hrc"   // names taken from the resource
-#include "svx/svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdedxv.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdopath.hxx> // for GetContext
-#include <svx/svdograf.hxx> // for GetContext
-#include <svx/svdomedia.hxx> // for GetContext
-#include <svx/svdetc.hxx>   // for SdrEngineDefaults
+#include <svx/svdopath.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdomedia.hxx>
+#include <svx/svdetc.hxx>
 
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
@@ -36,8 +36,8 @@
 
 #include "svx/svdoutl.hxx"
 #include "svx/svdview.hxx"
-#include "editeng/editview.hxx" // for GetField
-#include "editeng/flditem.hxx"  // for URLField
+#include "editeng/editview.hxx"
+#include "editeng/flditem.hxx"
 #include "svx/obj3d.hxx"
 #include "svx/svddrgmt.hxx"
 #include "svx/svdotable.hxx"

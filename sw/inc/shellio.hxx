@@ -35,7 +35,7 @@
 #include <tools/ref.hxx>
 #include <swdllapi.h>
 #include <swtypes.hxx>
-#include <docfac.hxx>   // SwDocFac
+#include <docfac.hxx>
 #include <iodetect.hxx>
 #include <IMark.hxx>
 

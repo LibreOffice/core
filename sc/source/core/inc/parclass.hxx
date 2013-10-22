@@ -21,7 +21,7 @@
 #define SC_PARCLASS_HXX
 
 #include "formula/opcode.hxx"
-#include <sys/types.h>  // size_t
+#include <sys/types.h>
 
 namespace formula
 {

@@ -32,7 +32,7 @@
 #include <rolbck.hxx>
 #include <acorrect.hxx>
 #include <docary.hxx>
-#include <comcore.hrc> // #111827#
+#include <comcore.hrc>
 #include <undo.hrc>
 
 using namespace ::com::sun::star;

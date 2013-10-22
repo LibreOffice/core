@@ -28,9 +28,9 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <cppuhelper/implbase3.hxx> // helper for implementations
-#include <cppuhelper/implbase4.hxx> // helper for implementations
-#include <cppuhelper/implbase6.hxx> // helper for implementations
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <svl/itemprop.hxx>

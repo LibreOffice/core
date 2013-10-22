@@ -71,7 +71,7 @@
 #include "chartlis.hxx"
 #include "chartlock.hxx"
 #include "refupdat.hxx"
-#include "validat.hxx"      // fuer HasMacroCalls
+#include "validat.hxx"
 #include "markdata.hxx"
 #include "scmod.hxx"
 #include "printopt.hxx"

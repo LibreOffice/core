@@ -27,7 +27,7 @@
 
 #include <win/wincomp.hxx>
 
-#include <set>  // for hMenu validation
+#include <set>
 #include <map>
 
 class AutoTimer;

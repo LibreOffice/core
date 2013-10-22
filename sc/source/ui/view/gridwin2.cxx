@@ -32,7 +32,7 @@
 #include "pagedata.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
-#include "dpoutput.hxx"     // ScDPPositionData
+#include "dpoutput.hxx"
 #include "dpshttab.hxx"
 #include "dbdocfun.hxx"
 #include "checklistmenu.hxx"

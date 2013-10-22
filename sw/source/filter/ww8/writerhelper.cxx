@@ -26,30 +26,30 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 
-#include <algorithm>                //std::swap
-#include <functional>               //std::binary_function
-#include <svl/itemiter.hxx>  //SfxItemIter
-#include <svx/svdobj.hxx>        //SdrObject
-#include <svx/svdoole2.hxx>      //SdrOle2Obj
-#include <svx/fmglob.hxx>        //FmFormInventor
-#include <editeng/formatbreakitem.hxx>       //SvxFmtBreakItem
-#include <editeng/tstpitem.hxx>      //SvxTabStopItem
-#include <ndtxt.hxx>             //SwTxtNode
-#include <ndnotxt.hxx>          //SwNoTxtNode
-#include <fmtcntnt.hxx>         //SwFmtCntnt
-#include <swtable.hxx>          //SwTable
-#include <frmfmt.hxx>           //SwFrmFmt
-#include <flypos.hxx>           //SwPosFlyFrms
-#include <fmtanchr.hxx>         //SwFmtAnchor
-#include <ndgrf.hxx>            //SwGrfNode
-#include <fmtfsize.hxx>         //SwFmtFrmSize
-#include <SwStyleNameMapper.hxx> //SwStyleNameMapper
-#include <docary.hxx>            //SwCharFmts
-#include <charfmt.hxx>           //SwCharFmt
-#include <fchrfmt.hxx>           //SwFmtCharFmt
+#include <algorithm>
+#include <functional>
+#include <svl/itemiter.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/fmglob.hxx>
+#include <editeng/formatbreakitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <ndtxt.hxx>
+#include <ndnotxt.hxx>
+#include <fmtcntnt.hxx>
+#include <swtable.hxx>
+#include <frmfmt.hxx>
+#include <flypos.hxx>
+#include <fmtanchr.hxx>
+#include <ndgrf.hxx>
+#include <fmtfsize.hxx>
+#include <SwStyleNameMapper.hxx>
+#include <docary.hxx>
+#include <charfmt.hxx>
+#include <fchrfmt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <numrule.hxx>
-#include <vcl/svapp.hxx>//For i120928
+#include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
 using namespace nsSwGetPoolIdFromName;

@@ -31,7 +31,7 @@
 #include "cuioptgenrl.hxx"
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <svx/svxids.hrc> // SID_FIELD_GRABFOCUS
+#include <svx/svxids.hrc>
 
 #include <boost/ref.hpp>
 #include <boost/make_shared.hpp>

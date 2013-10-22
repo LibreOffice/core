@@ -22,7 +22,7 @@
 #include <tools/solar.h>
 #include <SwGetPoolIdFromName.hxx>
 
-#include <limits.h>     //For LONG_MAX.
+#include <limits.h>
 #include <com/sun/star/uno/Reference.h>
 #include "swdllapi.h"
 #include <i18nlangtag/languagetag.hxx>

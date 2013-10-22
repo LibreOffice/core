@@ -42,7 +42,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 
-#include <docufld.hxx> // SwPostItField
+#include <docufld.hxx>
 #include <txtfld.hxx>
 #include <ndtxt.hxx>
 #include <view.hxx>

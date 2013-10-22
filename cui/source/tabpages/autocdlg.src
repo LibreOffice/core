@@ -20,7 +20,7 @@
 #include "autocdlg.hrc"
 #include <cuires.hrc>
 #include "helpid.hrc"
-#include <svx/svxids.hrc> // SID_AUTOFORMAT
+#include <svx/svxids.hrc>
 
 /**************************************************************************/
 /*                                                                        */

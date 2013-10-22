@@ -21,7 +21,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <osl/mutex.hxx>
 
-#include <stdlib.h> // qsort/bsearch
+#include <stdlib.h>
 #include <tools/debug.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>

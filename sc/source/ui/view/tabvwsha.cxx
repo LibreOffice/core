@@ -35,7 +35,7 @@
 #include "attrib.hxx"
 #include "patattr.hxx"
 #include "document.hxx"
-#include "formulacell.hxx"             // Input Status Edit-Zellen
+#include "formulacell.hxx"
 #include "globstr.hrc"
 #include "scmod.hxx"
 #include "inputhdl.hxx"

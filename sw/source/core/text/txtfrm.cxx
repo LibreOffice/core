@@ -30,13 +30,13 @@
 #include <editeng/pgrditem.hxx>
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
-#include <doc.hxx>      // GetDoc()
+#include <doc.hxx>
 #include "rootfrm.hxx"
-#include <pagefrm.hxx>  // InvalidateSpelling
+#include <pagefrm.hxx>
 #include <rootfrm.hxx>
-#include <viewsh.hxx>   // ViewShell
-#include <pam.hxx>      // SwPosition
-#include <ndtxt.hxx>        // SwTxtNode
+#include <viewsh.hxx>
+#include <pam.hxx>
+#include <ndtxt.hxx>
 #include <txtatr.hxx>
 #include <paratr.hxx>
 #include <viewopt.hxx>
@@ -44,7 +44,7 @@
 #include <flyfrm.hxx>
 #include <tabfrm.hxx>
 #include <frmtool.hxx>
-#include <pagedesc.hxx> // SwPageDesc
+#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <dbg_lay.hxx>
 #include <fmtfld.hxx>
@@ -54,20 +54,20 @@
 #include <charatr.hxx>
 #include <ftninfo.hxx>
 #include <fmtline.hxx>
-#include <txtfrm.hxx>       // SwTxtFrm
-#include <sectfrm.hxx>      // SwSectFrm
-#include <itrform2.hxx>       // Iteratoren
-#include <widorp.hxx>       // SwFrmBreak
+#include <txtfrm.hxx>
+#include <sectfrm.hxx>
+#include <itrform2.hxx>
+#include <widorp.hxx>
 #include <txtcache.hxx>
-#include <fntcache.hxx>     // GetLineSpace benutzt pLastFont
+#include <fntcache.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <lineinfo.hxx>
 #include <SwPortionHandler.hxx>
 #include <dcontact.hxx>
 #include <sortedobjs.hxx>
-#include <txtflcnt.hxx>     // SwTxtFlyCnt
-#include <fmtflcnt.hxx>     // SwFmtFlyCnt
-#include <fmtcntnt.hxx>     // SwFmtCntnt
+#include <txtflcnt.hxx>
+#include <fmtflcnt.hxx>
+#include <fmtcntnt.hxx>
 #include <numrule.hxx>
 #include <swtable.hxx>
 #include <fldupde.hxx>

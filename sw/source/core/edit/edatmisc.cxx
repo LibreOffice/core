@@ -18,12 +18,12 @@
  */
 
 #include <editsh.hxx>
-#include <doc.hxx>      // for aNodes
+#include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <pam.hxx>      // for SwPaM
-#include <edimp.hxx>    // for MACROS
-#include <swundo.hxx>   // for the UndoIds
-#include <ndtxt.hxx>    // fot Get-/ChgFmt Set-/GetAttrXXX
+#include <pam.hxx>
+#include <edimp.hxx>
+#include <swundo.hxx>
+#include <ndtxt.hxx>
 
 /*
  * hard formatting (Attribute)

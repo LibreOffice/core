@@ -40,24 +40,24 @@
 #include <editeng/SpellPortions.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
-#include <initui.hxx>               // for SpellPointer
+#include <initui.hxx>
 #include <uitool.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <basesh.hxx>
-#include <docsh.hxx>                // CheckSpellChanges
-#include <viewopt.hxx>              // Viewoptions
-#include <swundo.hxx>               // for Undo-Ids
-#include <hyp.hxx>                  // hyphenation
-#include <olmenu.hxx>               // PopupMenu for OnlineSpelling
-#include <pam.hxx>                  // Spelling: Multiselection
+#include <docsh.hxx>
+#include <viewopt.hxx>
+#include <swundo.hxx>
+#include <hyp.hxx>
+#include <olmenu.hxx>
+#include <pam.hxx>
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <ndtxt.hxx>
 #include <vcl/lstbox.hxx>
 #include <cmdid.h>
 #include <globals.hrc>
-#include <comcore.hrc>              // STR_MULT_INTERACT_SPELL_WARN
+#include <comcore.hrc>
 #include <view.hrc>
 #include <hhcwrp.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -76,7 +76,7 @@
 #include <rtl/ustring.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
-#include "stmenu.hxx"              // PopupMenu for smarttags
+#include "stmenu.hxx"
 #include <svx/dialogs.hrc>
 #include <svtools/langtab.hxx>
 #include <unomid.h>

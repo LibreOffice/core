@@ -18,7 +18,7 @@
  */
 #ifndef _WRT_FN_HXX
 #define _WRT_FN_HXX
-#include "hintids.hxx"      // fuer die Konstanten
+#include "hintids.hxx"
 
 // einige Forward-Deklarationen
 class SwNode;

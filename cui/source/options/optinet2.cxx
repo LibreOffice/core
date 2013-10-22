@@ -50,7 +50,7 @@
 #include "helpid.hrc"
 #include <svx/ofaitem.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <svx/svxids.hrc> // slot ids, mostly for changetracking
+#include <svx/svxids.hrc>
 
 // for security TP
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>

@@ -20,13 +20,13 @@
 #include <hintids.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editsh.hxx>
-#include <doc.hxx>      // fuer SwTxtFmtColls
+#include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <edimp.hxx>    // fuer MACROS
+#include <edimp.hxx>
 #include <ndtxt.hxx>
 #include <paratr.hxx>
 #include <fmtpdsc.hxx>
-#include <viewopt.hxx>  // Formular view
+#include <viewopt.hxx>
 #include <SwRewriter.hxx>
 #include <numrule.hxx>
 #include <swundo.hxx>

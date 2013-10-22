@@ -29,7 +29,7 @@
 #include "drawdoc.hxx"
 #include "DrawViewShell.hxx"
 #include "ViewShell.hxx"
-#include "fuzoom.hxx" // because of SidArrayZoom[]
+#include "fuzoom.hxx"
 
 #include <vcl/msgbox.hxx>
 #include <svx/svdpagv.hxx>

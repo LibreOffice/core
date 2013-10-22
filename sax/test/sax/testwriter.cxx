@@ -20,7 +20,7 @@
 #include <stdio.h>
 
 #include <com/sun/star/test/XSimpleTest.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>  // for the multiservice-factories
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

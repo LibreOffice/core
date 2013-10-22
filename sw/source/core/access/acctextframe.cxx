@@ -32,7 +32,7 @@
 #include <flyfrm.hxx>
 #include <accmap.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <hints.hxx> // #i73249#
+#include <hints.hxx>
 #include "acctextframe.hxx"
 
 using namespace ::com::sun::star;

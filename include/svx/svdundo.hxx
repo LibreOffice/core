@@ -24,7 +24,7 @@
 #include <svl/undo.hxx>
 #include <svl/style.hxx>
 #include <tools/gen.hxx>
-#include <svx/svdtypes.hxx> // for enum RepeatFuncts
+#include <svx/svdtypes.hxx>
 #include <svx/svdsob.hxx>
 #include "svx/svxdllapi.h"
 

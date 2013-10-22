@@ -32,7 +32,7 @@
 #include "validat.hxx"
 #include "document.hxx"
 #include "unonames.hxx"
-#include "styleuno.hxx"     // ScStyleNameConversion
+#include "styleuno.hxx"
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
 #include "stylehelper.hxx"

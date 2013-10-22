@@ -22,15 +22,15 @@
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 
-#include <sfx2/linkmgr.hxx>         // LinkManager
+#include <sfx2/linkmgr.hxx>
 #include <unotools/charclass.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
-#include <swserv.hxx>           // for server functionality
+#include <swserv.hxx>
 #include <IMark.hxx>
 #include <bookmrk.hxx>
-#include <section.hxx>          // for SwSectionFmt
-#include <swtable.hxx>          // for SwTable
+#include <section.hxx>
+#include <swtable.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>

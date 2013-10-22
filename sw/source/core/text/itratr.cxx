@@ -34,13 +34,13 @@
 #include <frmfmt.hxx>
 #include <fmtfld.hxx>
 #include <doc.hxx>
-#include <viewsh.hxx>   // ViewShell
+#include <viewsh.hxx>
 #include <rootfrm.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <dcontact.hxx>
-#include <fldbas.hxx>      // SwField
-#include <pam.hxx>         // SwPosition        (lcl_MinMaxNode)
+#include <fldbas.hxx>
+#include <pam.hxx>
 #include <itratr.hxx>
 #include <htmltbl.hxx>
 #include <swtable.hxx>

@@ -31,7 +31,7 @@
 #include "document.hxx"
 #include "docoptio.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"       // -> Slot-IDs
+#include "sc.hrc"
 #include "optdlg.hrc"
 
 #include "tpcalc.hxx"

@@ -22,7 +22,7 @@
 #include <vcl/svapp.hxx>
 
 #include "addinlis.hxx"
-#include "miscuno.hxx" // SC_IMPL_SERVICE_INFO
+#include "miscuno.hxx"
 #include "document.hxx"
 #include "brdcst.hxx"
 #include "sc.hrc"

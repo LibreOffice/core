@@ -18,7 +18,7 @@
  */
 
 
-#include <svx/dialogs.hrc> // -> RID_SVXSTR_TEXTENCODING_TABLE
+#include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include "svx/txenctab.hxx"
 #include <tools/shl.hxx>

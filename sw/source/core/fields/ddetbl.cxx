@@ -24,7 +24,7 @@
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <swddetbl.hxx>
-#include <ddefld.hxx> // for FieldType
+#include <ddefld.hxx>
 #include <ndindex.hxx>
 #include <fldupde.hxx>
 #include <swtblfmt.hxx>

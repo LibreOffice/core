@@ -41,7 +41,7 @@
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
-#include <com/sun/star/text/ChapterFormat.hpp> //i90246
+#include <com/sun/star/text/ChapterFormat.hpp>
 
 #include <sax/tools/converter.hxx>
 

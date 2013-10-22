@@ -33,8 +33,8 @@
 #define OSL_ENSURE( a, b )
 
 #else                       // dump
-#include <swerror.h>        // ERR_WW6_...
-#include <swtypes.hxx>      // DELETEZ
+#include <swerror.h>
+#include <swtypes.hxx>
 
 #endif                      // dump
 #include <comphelper/processfactory.hxx>
@@ -42,7 +42,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <editeng/unolingu.hxx>
-#include <vcl/svapp.hxx>    // Application  #i90932#
+#include <vcl/svapp.hxx>
 
 #include <stdio.h>
 

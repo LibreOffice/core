@@ -37,7 +37,7 @@
 #include <fmtfld.hxx>
 #include <tox.hxx>
 #include <txttxmrk.hxx>
-#include <docfld.hxx>   // for expression fields
+#include <docfld.hxx>
 #include <docufld.hxx>
 #include <ddefld.hxx>
 #include <usrfld.hxx>
@@ -54,7 +54,7 @@
 #include <authfld.hxx>
 #include <txtinet.hxx>
 #include <fmtcntnt.hxx>
-#include <poolfmt.hrc>      // for InitFldTypes
+#include <poolfmt.hrc>
 
 #include <SwUndoField.hxx>
 #include "switerator.hxx"

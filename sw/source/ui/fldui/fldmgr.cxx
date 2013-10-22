@@ -51,9 +51,9 @@
 #include <svl/zformat.hxx>
 #include <vcl/mnemonic.hxx>
 #include <view.hxx>
-#include <wrtsh.hxx>        // active window
-#include <doc.hxx>      // active window
-#include <docsh.hxx>        // active window
+#include <wrtsh.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
 #include <swmodule.hxx>
 #include <charatr.hxx>
 #include <fmtinfmt.hxx>

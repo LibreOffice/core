@@ -129,7 +129,7 @@ static nsresult enumSubs(nsIAbDirectory * parentDir,nsISupportsArray * array)
     return rv;
 }
 
-#include <prmem.h> //need for PR_FREEIF
+#include <prmem.h>
 static nsresult insertPABDescription()
 {
     nsresult rv = NS_OK ;

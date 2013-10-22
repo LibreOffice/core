@@ -25,8 +25,8 @@
 
 #include <tools/solar.h>
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <uno/lbnames.h>
+#include <cppuhelper/implbase1.hxx>
 
 
 namespace linguistic

@@ -39,7 +39,7 @@
 #include <toolkit/awt/vclxdevice.hxx>
 
 #include <ctype.h>
-#include <float.h>  // DBL_MAX
+#include <float.h>
 
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>

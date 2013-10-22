@@ -21,7 +21,7 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <fldbas.hxx>           // UpdateFlds of the chapter numbering
+#include <fldbas.hxx>
 #include <docary.hxx>
 
 bool CompareSwOutlineNodes::operator()( SwNode* const& lhs, SwNode* const& rhs) const

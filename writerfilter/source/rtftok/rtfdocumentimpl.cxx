@@ -39,11 +39,11 @@
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <oox/mathml/import.hxx>
-#include <doctok/sprmids.hxx> // NS_sprm namespace
-#include <doctok/resourceids.hxx> // NS_rtf namespace
-#include <ooxml/resourceids.hxx> // NS_ooxml namespace
-#include <ooxml/OOXMLFastTokens.hxx> // ooxml namespace
-#include <oox/token/namespaces.hxx> // oox namespace
+#include <doctok/sprmids.hxx>
+#include <doctok/resourceids.hxx>
+#include <ooxml/resourceids.hxx>
+#include <ooxml/OOXMLFastTokens.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <dmapper/GraphicHelpers.hxx>
 

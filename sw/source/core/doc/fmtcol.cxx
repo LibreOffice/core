@@ -22,7 +22,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <doc.hxx>          // for GetAttrPool
+#include <doc.hxx>
 #include <fmtcol.hxx>
 #include <fmtcolfunc.hxx>
 #include <hints.hxx>

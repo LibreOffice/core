@@ -22,9 +22,9 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdorect.hxx> // for SetXPolyDirty in MovCreate at SolidDragging
-#include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // the object's name
+#include <svx/svdorect.hxx>
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 #include <svx/svdoashp.hxx>
 #include <tools/bigint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

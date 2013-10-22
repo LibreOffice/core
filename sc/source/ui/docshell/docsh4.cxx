@@ -25,7 +25,7 @@
 
 using namespace ::com::sun::star;
 
-#include <math.h>       // prevent conflict between exception and std::exception
+#include <math.h>
 
 #include "scitems.hxx"
 #include <sfx2/fcontnr.hxx>
@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
 #include "globstr.hrc"
 #include "global.hxx"
 #include "dbdocfun.hxx"
-#include "printfun.hxx"              // DrawToDev
+#include "printfun.hxx"
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "impex.hxx"
@@ -82,7 +82,7 @@ using namespace ::com::sun::star;
 #include "chartlis.hxx"
 #include "chartpos.hxx"
 #include "waitoff.hxx"
-#include "tablink.hxx"      // ScDocumentLoader statics
+#include "tablink.hxx"
 #include "drwlayer.hxx"
 #include "docoptio.hxx"
 #include "undostyl.hxx"

@@ -51,7 +51,7 @@
 #include "validat.hxx"
 #include "scresid.hxx"
 
-#include "validate.hrc" // ScValidationDlg
+#include "validate.hrc"
 #include "scui_def.hxx"
 #include "scabstdlg.hxx"
 #include "impex.hxx"

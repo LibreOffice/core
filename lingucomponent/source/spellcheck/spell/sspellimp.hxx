@@ -20,9 +20,9 @@
 #ifndef _LINGU2_SPELLIMP_HXX_
 #define _LINGU2_SPELLIMP_HXX_
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <cppuhelper/implbase6.hxx> // helper for implementations
+#include <uno/lbnames.h>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>

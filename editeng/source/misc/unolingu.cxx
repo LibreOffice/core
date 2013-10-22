@@ -41,7 +41,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/ucbhelper.hxx>

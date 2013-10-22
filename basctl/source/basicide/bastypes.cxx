@@ -21,7 +21,7 @@
 #include "basidesh.hrc"
 #include "helpid.hrc"
 
-#include "baside2.hxx" // unfortunately pModulWindow is needed partly...
+#include "baside2.hxx"
 #include "baside3.hxx"
 #include "basobj.hxx"
 #include "iderdll.hxx"

@@ -31,7 +31,7 @@
 #include "bib.hrc"
 #include <toolkit/helper/vclunohelper.hxx>
 #include "bibconfig.hxx"
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
 #include <vcl/svapp.hxx>
 #include "bibliography.hrc"
 #include <comphelper/processfactory.hxx>

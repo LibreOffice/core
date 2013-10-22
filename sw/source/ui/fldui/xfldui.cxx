@@ -29,7 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <fldmgr.hxx>
 #include <dbmgr.hxx>
-#include <wrtsh.hxx>        // active window
+#include <wrtsh.hxx>
 #include <view.hxx>
 #include <swmodule.hxx>
 

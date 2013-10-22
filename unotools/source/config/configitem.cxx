@@ -48,7 +48,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::configuration;
 
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
 
 #ifdef DBG_UTIL
 static inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, const Exception& rEx)

@@ -30,9 +30,9 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdhdl.hxx>
-#include <svx/svdview.hxx>  // for MovCreate when using curves
-#include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // the object's name
+#include <svx/svdview.hxx>
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnclit.hxx>

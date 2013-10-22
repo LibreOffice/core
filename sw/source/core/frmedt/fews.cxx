@@ -39,15 +39,15 @@
 #include <tabfrm.hxx>
 #include <cellfrm.hxx>
 #include <flyfrms.hxx>
-#include <txtfrm.hxx>       // SwTxtFrm
+#include <txtfrm.hxx>
 #include <mdiexp.hxx>
 #include <edimp.hxx>
 #include <pagedesc.hxx>
 #include <fmtanchr.hxx>
 #include <environmentofanchoredobject.hxx>
-#include <ndtxt.hxx> // #i22341#
+#include <ndtxt.hxx>
 #include <dflyobj.hxx>
-#include <dcontact.hxx> // #i26791#
+#include <dcontact.hxx>
 
 
 using namespace com::sun::star;

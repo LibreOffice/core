@@ -20,7 +20,7 @@
 #ifndef SC_CHART2UNO_HXX
 #define SC_CHART2UNO_HXX
 
-#include "cellsuno.hxx"     // for XModifyListenerArr_Impl / ScLinkListener
+#include "cellsuno.hxx"
 #include "rangelst.hxx"
 #include "externalrefmgr.hxx"
 #include "types.hxx"

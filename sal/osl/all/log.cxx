@@ -17,8 +17,8 @@
 #include <cstring>
 #include <sstream>
 
-#include <stdio.h> // vsnprintf
-#include <string.h> // strdup
+#include <stdio.h>
+#include <string.h>
 
 #include "osl/thread.hxx"
 #include "rtl/string.h"

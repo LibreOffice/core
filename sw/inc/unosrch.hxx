@@ -22,7 +22,7 @@
 #include <com/sun/star/util/XPropertyReplace.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase3.hxx> // helper for implementations
+#include <cppuhelper/implbase3.hxx>
 #include <rtl/ustring.hxx>
 
 class SfxItemPropertySet;

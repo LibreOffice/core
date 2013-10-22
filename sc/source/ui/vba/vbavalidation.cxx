@@ -18,7 +18,7 @@
  */
 
 #include "vbavalidation.hxx"
-#include "vbaformatcondition.hxx" //#i108860
+#include "vbaformatcondition.hxx"
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>

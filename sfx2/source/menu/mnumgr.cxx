@@ -26,7 +26,7 @@
 #endif
 
 #include <string>
-#include <cstdarg>  // std::va_list
+#include <cstdarg>
 
 #include <vcl/pointr.hxx>
 

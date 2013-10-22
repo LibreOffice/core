@@ -21,13 +21,13 @@
 #include <vcl/outdev.hxx>
 #include <IDocumentSettingAccess.hxx>
 
-#include "frame.hxx"       // CalcFlyAdjust()
+#include "frame.hxx"
 #include "paratr.hxx"
 #include "itrtxt.hxx"
 #include "porglue.hxx"
 #include "porlay.hxx"
-#include "porfly.hxx"       // CalcFlyAdjust()
-#include "pordrop.hxx"       // CalcFlyAdjust()
+#include "porfly.hxx"
+#include "pordrop.hxx"
 #include "pormulti.hxx"
 #include <portab.hxx>
 

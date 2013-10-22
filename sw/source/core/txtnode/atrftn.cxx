@@ -18,8 +18,8 @@
  */
 
 #include <doc.hxx>
-#include <cntfrm.hxx>       // OSL_ENSURE(in ~SwTxtFtn()
-#include <pagefrm.hxx>      // RemoveFtn()
+#include <cntfrm.hxx>
+#include <pagefrm.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
 #include <ftnidx.hxx>

@@ -24,7 +24,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/vclmedit.hxx> // #i68101#
+#include <vcl/vclmedit.hxx>
 
 /// Dialog for editing a name
 class SvxNameDialog : public ModalDialog

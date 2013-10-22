@@ -19,7 +19,7 @@
 
 #include "rtl/string.h"
 #include "stgole.hxx"
-#include "sot/storinfo.hxx"     // Read/WriteClipboardFormat()
+#include "sot/storinfo.hxx"
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4342)

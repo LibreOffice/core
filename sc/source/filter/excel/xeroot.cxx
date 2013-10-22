@@ -39,7 +39,7 @@
 #include "xestyle.hxx"
 #include "xeroot.hxx"
 
-#include "excrecds.hxx"  // for filter manager
+#include "excrecds.hxx"
 #include "tabprotection.hxx"
 #include "document.hxx"
 #include "scextopt.hxx"

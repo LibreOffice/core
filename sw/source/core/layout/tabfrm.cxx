@@ -56,9 +56,9 @@
 #include "rowfrm.hxx"
 #include "cellfrm.hxx"
 #include "flyfrms.hxx"
-#include "txtfrm.hxx"       //HasFtn()
+#include "txtfrm.hxx"
 #include "htmltbl.hxx"
-#include "sectfrm.hxx"  //SwSectionFrm
+#include "sectfrm.hxx"
 #include <fmtfollowtextflow.hxx>
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>

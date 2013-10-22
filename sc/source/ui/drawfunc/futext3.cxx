@@ -32,7 +32,7 @@
 #include "global.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
-#include "tabvwsh.hxx"          // oder GetDocument irgendwo
+#include "tabvwsh.hxx"
 #include "document.hxx"
 #include "editutil.hxx"
 #include "futext.hxx"

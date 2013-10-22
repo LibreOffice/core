@@ -21,7 +21,7 @@
 #include <hintids.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
-#include <svx/xtable.hxx>               // XColorList
+#include <svx/xtable.hxx>
 #include <sal/macros.h>
 #include <vcl/field.hxx>
 #include <vcl/svapp.hxx>

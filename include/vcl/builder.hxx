@@ -12,7 +12,7 @@
 
 #include <typeinfo>
 #include <osl/module.hxx>
-#include <tools/resmgr.hxx> //for poxy ResHookProc typedef
+#include <tools/resmgr.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <xmlreader/xmlreader.hxx>

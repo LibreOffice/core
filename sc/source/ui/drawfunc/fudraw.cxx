@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/editeng.hxx>  // EditEngine::IsSimpleCharInput
+#include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>

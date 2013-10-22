@@ -58,7 +58,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/xfltrit.hxx>
 #include <filter/msfilter/msdffimp.hxx>
-#include <grfatr.hxx>           // class SwCropGrf
+#include <grfatr.hxx>
 #include <fmtornt.hxx>
 #include <fmtcntnt.hxx>
 #include <frmfmt.hxx>
@@ -70,12 +70,12 @@
 #include <ndtxt.hxx>
 #include <dcontact.hxx>
 #include <docsh.hxx>
-#include <mdiexp.hxx>           // Progress
+#include <mdiexp.hxx>
 #include <fmtcnct.hxx>
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"
-#include "ww8par.hxx"           // class SwWWImplReader
-#include "ww8par2.hxx"          // SwWW8StyInf
+#include "ww8par.hxx"
+#include "ww8par2.hxx"
 #include "ww8graf.hxx"
 #include <fmtinfmt.hxx>
 #include <editeng/eeitem.hxx>

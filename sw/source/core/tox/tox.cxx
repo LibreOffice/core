@@ -31,7 +31,7 @@
 #include <paratr.hxx>
 #include <editeng/tstpitem.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <hints.hxx> // SwPtrMsgPoolItem
+#include <hints.hxx>
 #include <algorithm>
 #include <functional>
 #include <switerator.hxx>

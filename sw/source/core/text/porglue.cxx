@@ -18,13 +18,13 @@
  */
 
 #include "swrect.hxx"
-#include "paratr.hxx"   // pTabStop, ADJ*
-#include "viewopt.hxx"  // SwViewOptions
+#include "paratr.hxx"
+#include "viewopt.hxx"
 #include <SwPortionHandler.hxx>
 #include "porglue.hxx"
 #include "inftxt.hxx"
-#include "porlay.hxx"   // SwParaPortion, SetFull
-#include "porfly.hxx"   // SwParaPortion, SetFull
+#include "porlay.hxx"
+#include "porfly.hxx"
 #include <comphelper/string.hxx>
 
 /*************************************************************************

@@ -20,7 +20,7 @@
 
 #include <paralist.hxx>
 
-#include <editeng/outliner.hxx>  // only because of Paragraph, this must be changed!
+#include <editeng/outliner.hxx>
 #include <editeng/numdef.hxx>
 
 #include <osl/diagnose.h>

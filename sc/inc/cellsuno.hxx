@@ -20,8 +20,8 @@
 #ifndef SC_CELLSUNO_HXX
 #define SC_CELLSUNO_HXX
 
-#include "global.hxx"           // ScRange, ScAddress
-#include "rangelst.hxx"         // ScRangeList
+#include "global.hxx"
+#include "rangelst.hxx"
 
 #include <editeng/unotext.hxx>
 #include <formula/grammar.hxx>

@@ -23,13 +23,13 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
-#include <mdiexp.hxx>           // ...Percent()
+#include <mdiexp.hxx>
 #include <docary.hxx>
 #include <fmtcntnt.hxx>
 #include <frmfmt.hxx>
 #include <wrtasc.hxx>
 
-#include <statstr.hrc>          // ResId for status bar
+#include <statstr.hrc>
 
 //-----------------------------------------------------------------
 

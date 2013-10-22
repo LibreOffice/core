@@ -22,7 +22,7 @@
 
 #include "txttypes.hxx"
 #include "breakit.hxx"
-#include "porrst.hxx"   // SwHangingPortion
+#include "porrst.hxx"
 
 class SwTxtFormatInfo;
 

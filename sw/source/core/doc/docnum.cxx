@@ -27,7 +27,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <doctxm.hxx>       // pTOXBaseRing
+#include <doctxm.hxx>
 #include <poolfmt.hxx>
 #include <UndoCore.hxx>
 #include <UndoRedline.hxx>

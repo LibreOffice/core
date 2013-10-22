@@ -41,11 +41,11 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
-#include <cppuhelper/interfacecontainer.h>  //OMultiTypeInterfaceContainerHelper
-#include <cppuhelper/implbase2.hxx> // helper for implementations
-#include <cppuhelper/implbase4.hxx> // helper for implementations
-#include <cppuhelper/implbase6.hxx> // helper for implementations
-#include <cppuhelper/implbase10.hxx> // helper for implementations
+#include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase10.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <tools/link.hxx>

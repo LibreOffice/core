@@ -29,7 +29,7 @@
 #include <toxe.hxx>
 #include <calbck.hxx>
 
-#include <vector> // #i21237#
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace text { class XDocumentIndexMark; }

@@ -66,8 +66,8 @@
 #include <vcl/svapp.hxx>
 
 #include <svx/svdmodel.hxx>
-#include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // the object's name
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include "unomlstr.hxx"

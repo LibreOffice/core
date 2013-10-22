@@ -20,7 +20,7 @@
 #ifndef SC_TOOL_H
 #define SC_TOOL_H
 
-#include <attrib.hxx>    //!!! noch noetig?????
+#include <attrib.hxx>
 #include <document.hxx>
 
 // Defaultwerte

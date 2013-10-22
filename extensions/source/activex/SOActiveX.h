@@ -22,7 +22,7 @@
 #ifndef __SOACTIVEX_H_
 #define __SOACTIVEX_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"
 
 #pragma warning (disable:4505)
     // permanently suppress "unreferenced local function has been removed" warning

@@ -29,7 +29,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/timer.hxx>
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class BibDataManager;

@@ -29,7 +29,7 @@
 
 #include <tools/resid.hxx>
 #include <fmtornt.hxx>
-#include <swtypes.hxx>      // empty string
+#include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <uinums.hxx>
 #include <poolfmt.hxx>

@@ -101,7 +101,7 @@
 #include "table.hrc"
 #include <modcfg.hxx>
 #include <instable.hxx>
-#include <svx/fmshell.hxx> // for FN_XFORMS_DESIGN_MODE
+#include <svx/fmshell.hxx>
 #include <SwRewriter.hxx>
 #include <comcore.hrc>
 

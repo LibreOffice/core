@@ -20,7 +20,7 @@
 #ifndef _WRTWW8_HXX
 #define _WRTWW8_HXX
 
-#include <tools/solar.h>        // UINTXX
+#include <tools/solar.h>
 #include <tools/gen.hxx>
 #include <editeng/editdata.hxx>
 #include <boost/optional.hpp>

@@ -21,7 +21,7 @@
 #define SC_FUMARK_HXX
 
 #include "fupoor.hxx"
-#include "rangelst.hxx"         // ScRangeListRef
+#include "rangelst.hxx"
 
 
 /** Function for drawing a rectangle */

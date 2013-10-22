@@ -36,14 +36,14 @@
 #include <editeng/charrotateitem.hxx>
 #include <editeng/pgrditem.hxx>
 #include <msfilter.hxx>
-#include <pam.hxx>              // fuer SwPam
+#include <pam.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <ndtxt.hxx>            // class SwTxtNode
-#include <paratr.hxx>           // SwNumRuleItem
-#include <poolfmt.hxx>          // RES_POOLCOLL_STANDARD
-#include <swtable.hxx>          // class SwTableLines, ...
-#include <tblsel.hxx>           // class _SwSelBox
+#include <ndtxt.hxx>
+#include <paratr.hxx>
+#include <poolfmt.hxx>
+#include <swtable.hxx>
+#include <tblsel.hxx>
 #include <mdiexp.hxx>
 #include <fmtpdsc.hxx>
 #include <txtftn.hxx>
@@ -52,14 +52,14 @@
 #include <fmtftn.hxx>
 #include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <fltshell.hxx>         // for the attribute stack
+#include <fltshell.hxx>
 #include <fmtanchr.hxx>
 #include <fmtrowsplt.hxx>
-#include <fmtfollowtextflow.hxx> // #i33818#
+#include <fmtfollowtextflow.hxx>
 #include <numrule.hxx>
 #include "../inc/wwstyles.hxx"
 #include "writerhelper.hxx"
-#include "ww8struc.hxx"         // struct TC
+#include "ww8struc.hxx"
 #include "ww8par.hxx"
 #include "ww8par2.hxx"
 

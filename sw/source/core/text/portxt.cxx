@@ -21,19 +21,19 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <i18nlangtag/mslangid.hxx>
-#include <hintids.hxx>     // CH_TXTATR
+#include <hintids.hxx>
 #include <EnhancedPDFExportHelper.hxx>
 #include <SwPortionHandler.hxx>
 #include <porlay.hxx>
 #include <inftxt.hxx>
-#include <guess.hxx>    // SwTxtGuess, line break
+#include <guess.hxx>
 #include <porglue.hxx>
-#include <portab.hxx>       // pLastTab->
-#include <porfld.hxx>       // SwFldPortion
+#include <portab.hxx>
+#include <porfld.hxx>
 #include <wrong.hxx>
 #include <viewsh.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <viewopt.hxx>  // SwViewOptions
+#include <viewopt.hxx>
 #include <editeng/borderline.hxx>
 
 #include <IMark.hxx>

@@ -25,7 +25,7 @@
 
 #include <errno.h>
 #include <time.h>
-#include <cstdarg>  // combinations
+#include <cstdarg>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>

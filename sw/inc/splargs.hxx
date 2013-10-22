@@ -22,7 +22,7 @@
 #include <i18nlangtag/lang.h>
 #include <tools/solar.h>
 #include <tools/gen.hxx>
-#include <limits.h>       // USHRT_MAX
+#include <limits.h>
 
 class SwTxtNode;
 class SwIndex;

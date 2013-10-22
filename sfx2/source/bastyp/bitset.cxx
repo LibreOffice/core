@@ -21,8 +21,8 @@
 
 #include "bitset.hxx"
 
-#include <string.h>     // memset(), memcpy()
-#include <limits.h>     // USHRT_MAX
+#include <string.h>
+#include <limits.h>
 #include <algorithm>
 
 //====================================================================

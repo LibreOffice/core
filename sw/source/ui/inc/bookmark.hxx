@@ -24,7 +24,7 @@
 
 #include <vcl/button.hxx>
 
-#include "swlbox.hxx"       // SwComboBox
+#include "swlbox.hxx"
 
 class SwWrtShell;
 class SfxRequest;

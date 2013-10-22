@@ -52,7 +52,7 @@
 #include <acorrect.hxx>
 #include <dcontact.hxx>
 
-#include <comcore.hrc> // #111827#
+#include <comcore.hrc>
 #include <undo.hrc>
 
 using namespace ::com::sun::star;

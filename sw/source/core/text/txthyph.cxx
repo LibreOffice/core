@@ -21,14 +21,14 @@
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <EnhancedPDFExportHelper.hxx>
-#include <viewopt.hxx>  // SwViewOptions
+#include <viewopt.hxx>
 #include <viewsh.hxx>
 #include <SwPortionHandler.hxx>
-#include <porhyph.hxx>  //
+#include <porhyph.hxx>
 #include <inftxt.hxx>
-#include <itrform2.hxx> //
-#include <guess.hxx>    //
-#include <splargs.hxx>  // SwInterHyphInfo
+#include <itrform2.hxx>
+#include <guess.hxx>
+#include <splargs.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

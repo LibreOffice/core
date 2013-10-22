@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h> // memset(), memcpy()
+#include <string.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <unotools/charclass.hxx>

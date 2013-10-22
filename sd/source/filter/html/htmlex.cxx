@@ -62,7 +62,7 @@
 #include <svl/style.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
-#include <tools/urlobj.hxx>               // INetURLObject
+#include <tools/urlobj.hxx>
 #include <vcl/bmpacc.hxx>
 #include <svtools/sfxecode.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>

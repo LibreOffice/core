@@ -35,7 +35,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
-#include <rootfrm.hxx>  //For DelPageDesc
+#include <rootfrm.hxx>
 #include <frmtool.hxx>
 #include <poolfmt.hxx>
 #include <docsh.hxx>

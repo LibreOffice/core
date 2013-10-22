@@ -24,8 +24,8 @@
 #include "global.hxx"
 #include "rechead.hxx"
 #include "scerrors.hxx"
-#include "scmod.hxx"        // SC_MOD
-#include "inputopt.hxx"     // GetExpandRefs
+#include "scmod.hxx"
+#include "inputopt.hxx"
 #include "patattr.hxx"
 #include "hints.hxx"
 #include "markdata.hxx"
@@ -34,7 +34,7 @@
 #include "tokenarray.hxx"
 #include "refupdatecontext.hxx"
 
-#include <tools/shl.hxx>        // SHL_CALC
+#include <tools/shl.hxx>
 #include <tools/rtti.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/itemset.hxx>

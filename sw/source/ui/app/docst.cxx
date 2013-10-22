@@ -64,7 +64,7 @@
 #include "docstyle.hxx"
 #include "uiitems.hxx"
 #include "fmtcol.hxx"
-#include "frmmgr.hxx"       //SwFrmValid
+#include "frmmgr.hxx"
 #include "swevent.hxx"
 #include "edtwin.hxx"
 #include "unochart.hxx"

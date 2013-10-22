@@ -55,7 +55,7 @@
 #include <fmtcnct.hxx>
 #include <frmfmt.hxx>
 #include <txtflcnt.hxx>
-#include <docfld.hxx>       // for ExpressionFields
+#include <docfld.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
@@ -73,8 +73,8 @@
 #include <swundo.hxx>
 #include <flypos.hxx>
 #include <UndoInsert.hxx>
-#include <expfld.hxx>       // InsertLabel
-#include <poolfmt.hxx>      // PoolTemplate Ids
+#include <expfld.hxx>
+#include <poolfmt.hxx>
 #include <docary.hxx>
 #include <swtable.hxx>
 #include <tblsel.hxx>
@@ -85,7 +85,7 @@
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>
 #include <PostItMgr.hxx>
-#include <comcore.hrc>      // STR ResIds
+#include <comcore.hrc>
 
 #include <unoframe.hxx>
 

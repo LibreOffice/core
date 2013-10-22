@@ -20,12 +20,12 @@
 #include <switerator.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
-#include <pam.hxx>      // for GetBodyTxtNode
+#include <pam.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <expfld.hxx>
-#include <docfld.hxx>   // for _SetGetExpFld
+#include <docfld.hxx>
 #include <unofldmid.h>
 
 using namespace ::com::sun::star;

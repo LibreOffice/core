@@ -35,7 +35,7 @@
 #include "splitwin.hxx"
 #include <sfx2/msgpool.hxx>
 #include "sfx2/sfxresid.hxx"
-#include <sfx2/request.hxx>      // SFX_ITEMSET_SET
+#include <sfx2/request.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
 #include <tools/rcid.h>

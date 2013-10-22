@@ -33,7 +33,7 @@
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
 
-#include <frmfmt.hxx> // #i73249#
+#include <frmfmt.hxx>
 
 SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
                   const sal_uInt8 nNdType,

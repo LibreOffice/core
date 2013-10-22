@@ -51,7 +51,7 @@
  *----------------------------------------------------------------------
  */
 
-#include <sal/types.h> // just for SAL_DLLPUBLIC_EXPORT
+#include <sal/types.h>
 
 #define XP_UNIX 1
 

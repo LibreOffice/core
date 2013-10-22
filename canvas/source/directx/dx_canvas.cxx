@@ -18,7 +18,7 @@
  */
 
 
-#include <ctype.h> // don't ask. msdev breaks otherwise...
+#include <ctype.h>
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>

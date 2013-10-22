@@ -40,8 +40,8 @@
 #include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <editsh.hxx>
-#include <undobj.hxx>           // fuer Undo Insert-Dokument
-#include <swundo.hxx>           // fuer Undo Insert-Dokument
+#include <undobj.hxx>
+#include <swundo.hxx>
 #include <swtable.hxx>
 #include <tblsel.hxx>
 #include <pagedesc.hxx>

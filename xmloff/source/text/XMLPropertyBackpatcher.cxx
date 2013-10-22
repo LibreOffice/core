@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include "XMLPropertyBackpatcher.hxx"
-#include <xmloff/txtimp.hxx>    // XMLTextImportHelper partially implemented here
+#include <xmloff/txtimp.hxx>
 
 
 using ::std::vector;

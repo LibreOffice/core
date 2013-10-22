@@ -18,8 +18,8 @@
  */
 
 #include "svdconv.hxx"
-#include "svx/svdglob.hxx"   // StringCache
-#include "svx/svdstr.hrc"    // the object's name
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

@@ -19,7 +19,7 @@
 #ifndef _SFX2_OPENGRF_HXX
 #define _SFX2_OPENGRF_HXX
 
-#include <memory>       // auto_ptr
+#include <memory>
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/dllapi.h>
 

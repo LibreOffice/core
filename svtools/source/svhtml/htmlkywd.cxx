@@ -18,10 +18,10 @@
  */
 
 
-#include <limits.h>                     // for USHRT_MAX
-#include <sal/types.h>                  // for sal_Char, sal_Unicode, etc
-#include <stdlib.h>                     // for bsearch, qsort
-#include <string.h>                     // for strcmp
+#include <limits.h>
+#include <sal/types.h>
+#include <stdlib.h>
+#include <string.h>
 #include <rtl/ustring.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>

@@ -19,7 +19,7 @@
 
 
 #include <vcl/xtextedt.hxx>
-#include <vcl/svapp.hxx>  // International
+#include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>

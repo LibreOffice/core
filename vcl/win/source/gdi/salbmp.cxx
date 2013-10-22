@@ -19,7 +19,7 @@
 
 
 #include <svsys.h>
-#include <vcl/bitmap.hxx> // for BitmapSystemData
+#include <vcl/bitmap.hxx>
 #include <vcl/salbtype.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <win/wincomp.hxx>

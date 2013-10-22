@@ -20,7 +20,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>

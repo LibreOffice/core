@@ -8,7 +8,7 @@
  */
 
 #include "SvXMLAttrCollection.hxx"
-#include <limits.h>   //USHRT_MAX
+#include <limits.h>
 
 bool SvXMLAttrCollection::operator ==( const SvXMLAttrCollection& rCmp ) const
 {

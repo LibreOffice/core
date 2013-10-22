@@ -29,10 +29,10 @@
 #include "formula/errorcodes.hxx"
 #include "formula/token.hxx"
 #include "brdcst.hxx"
-#include "docoptio.hxx"         // GetStdPrecision for GetMaxNumberStringLen
+#include "docoptio.hxx"
 #include "subtotal.hxx"
 #include "markdata.hxx"
-#include "detfunc.hxx"          // For Notes for DeleteRange
+#include "detfunc.hxx"
 #include "postit.hxx"
 #include "stringutil.hxx"
 #include "docpool.hxx"

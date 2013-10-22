@@ -27,7 +27,7 @@
 #include <ndnotxt.hxx>
 #include <flyfrm.hxx>
 #include <cntfrm.hxx>
-#include <hints.hxx> //#i73249#
+#include <hints.hxx>
 #include "accnotextframe.hxx"
 
 using namespace ::com::sun::star;

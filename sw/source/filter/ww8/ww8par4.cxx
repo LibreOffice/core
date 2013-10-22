@@ -40,8 +40,8 @@
 #include <frmfmt.hxx>
 #include <pam.hxx>
 #include <ndgrf.hxx>
-#include <docsh.hxx>            // fuer Ole-Node
-#include <mdiexp.hxx>           // Progress
+#include <docsh.hxx>
+#include <mdiexp.hxx>
 #include <redline.hxx>
 #include <fltshell.hxx>
 #include <unodraw.hxx>
@@ -53,7 +53,7 @@
 
 #include "ww8scan.hxx"
 #include "ww8par.hxx"
-#include "ww8par2.hxx"          // WWFlyPara::BoxUpWidth()
+#include "ww8par2.hxx"
 
 struct OLE_MFP
 {

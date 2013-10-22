@@ -82,7 +82,7 @@
 #include <edtwin.hxx>
 #include <globals.hrc>
 #include <hintids.hxx>
-#include <initui.hxx>               // for SpellPointer
+#include <initui.hxx>
 #include <langhelper.hxx>
 #include <chrdlgmodes.hxx>
 #include <pardlg.hxx>

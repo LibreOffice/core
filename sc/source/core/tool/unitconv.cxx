@@ -22,7 +22,7 @@
 
 #include "unitconv.hxx"
 #include "global.hxx"
-#include "viewopti.hxx"         //! move ScLinkConfigItem to separate header!
+#include "viewopti.hxx"
 
 using namespace utl;
 using namespace com::sun::star::uno;

@@ -43,18 +43,18 @@
 #include <editeng/langitem.hxx>
 #include <fmtfld.hxx>
 #include <fmtanchr.hxx>
-#include <pam.hxx>              // fuer SwPam
+#include <pam.hxx>
 #include <doc.hxx>
-#include <charatr.hxx>          // class SwFmtFld
-#include <flddat.hxx>           // class SwDateTimeField
-#include <docufld.hxx>          // class SwPageNumberField
-#include <reffld.hxx>           // class SwGetRefField
+#include <charatr.hxx>
+#include <flddat.hxx>
+#include <docufld.hxx>
+#include <reffld.hxx>
 #include <IMark.hxx>
-#include <expfld.hxx>           // class SwSetExpField
-#include <dbfld.hxx>            // class SwDBField
+#include <expfld.hxx>
+#include <dbfld.hxx>
 #include <usrfld.hxx>
 #include <tox.hxx>
-#include <section.hxx>          // class SwSection
+#include <section.hxx>
 #include <ndtxt.hxx>
 #include <fmtinfmt.hxx>
 #include <chpfld.hxx>
@@ -70,7 +70,7 @@
 #include <pagedesc.hxx>
 #include <SwStyleNameMapper.hxx>
 
-#include "ww8scan.hxx"          // WW8FieldDesc
+#include "ww8scan.hxx"
 #include "ww8par.hxx"
 #include "ww8par2.hxx"
 #include "writerhelper.hxx"
@@ -78,7 +78,7 @@
 #include <unotools/fltrcfg.hxx>
 #include <xmloff/odffields.hxx>
 
-#include <algorithm> // #i24377#
+#include <algorithm>
 
 #define MAX_FIELDLEN 64000
 

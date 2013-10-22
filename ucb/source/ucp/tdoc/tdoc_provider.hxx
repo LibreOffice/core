@@ -24,9 +24,9 @@
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include "ucbhelper/providerhelper.hxx"
-#include "tdoc_uri.hxx" // for TDOC_URL_SCHEME
+#include "tdoc_uri.hxx"
 #include "tdoc_docmgr.hxx"
-#include "tdoc_storage.hxx" // for StorageAccessMode
+#include "tdoc_storage.hxx"
 
 namespace com { namespace sun { namespace star { namespace embed {
     class XStorage;

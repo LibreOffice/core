@@ -38,9 +38,9 @@
 #include "hints.hxx"
 #include "filter.hxx"
 
-#include "attrib.hxx"           // raus, wenn ResetAttrib am Dokument
-#include "patattr.hxx"          // raus, wenn ResetAttrib am Dokument
-#include "docpool.hxx"          // raus, wenn ResetAttrib am Dokument
+#include "attrib.hxx"
+#include "patattr.hxx"
+#include "docpool.hxx"
 
 #include "sc.hrc"
 #include "scabstdlg.hxx"

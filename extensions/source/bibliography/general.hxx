@@ -32,7 +32,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/scrbar.hxx>
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
 #include "bibshortcuthandler.hxx"
 
 

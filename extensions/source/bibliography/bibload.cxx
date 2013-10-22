@@ -26,7 +26,7 @@
 #include <svl/urihelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
@@ -60,7 +60,7 @@
 #include "framectr.hxx"
 #include "datman.hxx"
 #include <bibconfig.hxx>
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#include <cppuhelper/implbase4.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

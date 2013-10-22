@@ -74,7 +74,7 @@
 #include "hints.hxx"
 #include "detdata.hxx"
 #include "dpobject.hxx"
-#include "detfunc.hxx"      // for UpdateAllComments
+#include "detfunc.hxx"
 #include "scmod.hxx"
 #include "dociter.hxx"
 #include "progress.hxx"

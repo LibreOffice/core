@@ -47,8 +47,8 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include <uno/dispatcher.h> // declaration of generic uno interface
-#include <uno/mapping.hxx> // mapping stuff
+#include <uno/dispatcher.h>
+#include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
 

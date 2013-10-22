@@ -68,7 +68,7 @@
 #include <sfx2/evntconf.hxx>
 #include "appdata.hxx"
 #include "workwin.hxx"
-#include "helper.hxx"   // SfxContentHelper::...
+#include "helper.hxx"
 #include "app.hrc"
 #include "sfx2/sfxresid.hxx"
 #include "shutdownicon.hxx"

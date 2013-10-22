@@ -35,7 +35,7 @@
 using namespace com::sun::star;
 
 #ifdef DISABLE_DYNLOADING
-#include <dlfcn.h>              //  For RTLD_DEFAULT
+#include <dlfcn.h>
 #endif
 
 namespace

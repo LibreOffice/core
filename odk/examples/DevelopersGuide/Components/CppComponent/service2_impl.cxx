@@ -33,7 +33,7 @@
  *
  *************************************************************************/
 
-#include <cppuhelper/implbase3.hxx> // "3" implementing three interfaces
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 

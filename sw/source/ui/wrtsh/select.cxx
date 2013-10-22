@@ -33,7 +33,7 @@
 #include <mdiexp.hxx>
 #include <fmtcol.hxx>
 #include <frmfmt.hxx>
-#include <swundo.hxx>                   // for Undo-Ids
+#include <swundo.hxx>
 #include <swevent.hxx>
 #include <swdtflvr.hxx>
 #include <crsskip.hxx>

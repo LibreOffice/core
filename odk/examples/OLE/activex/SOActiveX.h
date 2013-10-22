@@ -38,7 +38,7 @@
 #ifndef __SOACTIVEX_H_
 #define __SOACTIVEX_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"
 #include <ExDispID.h>
 #include <ExDisp.h>
 #include <shlguid.h>

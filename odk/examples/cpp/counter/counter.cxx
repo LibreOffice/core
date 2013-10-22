@@ -46,8 +46,8 @@
 
 #include <stdio.h>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/queryinterface.hxx> // helper for queryInterface() impl
-#include <cppuhelper/factory.hxx> // helper for component factory
+#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/factory.hxx>
 // generated c++ interfaces
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

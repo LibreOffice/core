@@ -19,13 +19,13 @@
 
 
 #include "hintids.hxx"
-#include "cntfrm.hxx"       // _GetFly
+#include "cntfrm.hxx"
 #include "doc.hxx"
 #include <IDocumentUndoRedo.hxx>
-#include "pam.hxx"          // fuer SwTxtFlyCnt
-#include "flyfrm.hxx"       // fuer SwTxtFlyCnt
-#include "ndtxt.hxx"        // SwFlyFrmFmt
-#include "frmfmt.hxx"       // SwFlyFrmFmt
+#include "pam.hxx"
+#include "flyfrm.hxx"
+#include "ndtxt.hxx"
+#include "frmfmt.hxx"
 #include <fmtflcnt.hxx>
 #include <txtflcnt.hxx>
 #include <fmtanchr.hxx>

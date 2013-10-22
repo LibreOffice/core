@@ -22,8 +22,8 @@
 
 #include <functional>
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase5.hxx> // helper for implementations
+#include <uno/lbnames.h>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>

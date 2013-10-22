@@ -32,7 +32,7 @@
 #include "uiitems.hxx"
 #include "scresid.hxx"
 #include "docsh.hxx"
-#include "sc.hrc"       // -> Slot-IDs
+#include "sc.hrc"
 #include "optdlg.hrc"
 #include "globstr.hrc"
 #include <appoptio.hxx>

@@ -37,7 +37,7 @@
 #include <hints.hxx>
 #include <fntcache.hxx>
 
-#include <statstr.hrc>  // Text fuer SfxProgress
+#include <statstr.hrc>
 #include <comcore.hrc>
 
 #include <IDocumentFieldsAccess.hxx>

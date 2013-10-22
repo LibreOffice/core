@@ -20,7 +20,7 @@
 #include <hintids.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>         // for Undo-Ids
+#include <swundo.hxx>
 #include <globals.hrc>
 #include <splargs.hxx>
 
@@ -34,7 +34,7 @@
 #include <sdrhhcwrap.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <mdiexp.hxx>       // Progress
+#include <mdiexp.hxx>
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <index.hxx>

@@ -23,7 +23,7 @@
 
 #include <svx/svxids.hrc>
 #include <editeng/memberids.hrc>
-#include <float.h> // for DBL_MIN
+#include <float.h>
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <unotbl.hxx>
@@ -74,7 +74,7 @@
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
-#include <svl/zforlist.hxx>     // SvNumberFormatter
+#include <svl/zforlist.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/lrspitem.hxx>

@@ -36,9 +36,9 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
       (this class behaves the same way)
 */
 
-#include <stdio.h>          // for: sprintf()
-#include <float.h>          // for: DBL_DIG, DBL_EPSILON
-#include <math.h>           // for: floor(), fabs(), log10(), pow()
+#include <stdio.h>
+#include <float.h>
+#include <math.h>
 
 //=================================================================
 //=========================== DEFINES =============================

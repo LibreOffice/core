@@ -27,7 +27,7 @@
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdoedge.hxx>
-#include <svx/svdpage.hxx> // SdrObjList
+#include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxelditm.hxx>
 #include <svx/sxmkitm.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ndtxt.hxx"        // GetNode()
-#include "pam.hxx"          // SwPosition
+#include "ndtxt.hxx"
+#include "pam.hxx"
 #include "frmtool.hxx"
 #include "viewopt.hxx"
 #include "paratr.hxx"
@@ -31,18 +31,18 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
-#include <pormulti.hxx>     // SwMultiPortion
+#include <pormulti.hxx>
 #include <doc.hxx>
 #include <sortedobjs.hxx>
 
 #include <unicode/ubidi.h>
 
-#include "txtfrm.hxx"       // SwTxtFrm
-#include "inftxt.hxx"       // SwTxtSizeInfo
-#include "itrtxt.hxx"       // SwTxtCursor
-#include "crstate.hxx"      // SwTxtCursor
-#include "viewsh.hxx"       // InvalidateWindows
-#include "swfntcch.hxx"     // SwFontAccess
+#include "txtfrm.hxx"
+#include "inftxt.hxx"
+#include "itrtxt.hxx"
+#include "crstate.hxx"
+#include "viewsh.hxx"
+#include "swfntcch.hxx"
 #include "flyfrm.hxx"
 
 

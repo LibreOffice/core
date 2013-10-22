@@ -22,7 +22,7 @@
 #include <sfx2/XmlIdRegistry.hxx>
 
 #include <osl/mutex.hxx>
-#include <vcl/svapp.hxx> // solarmutex
+#include <vcl/svapp.hxx>
 
 #include <rtl/random.h>
 

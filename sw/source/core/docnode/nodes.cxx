@@ -29,14 +29,14 @@
 #include <numrule.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
-#include <swtable.hxx>      // fuer erzuegen / loeschen der Table-Frames
+#include <swtable.hxx>
 #include <tblsel.hxx>
 #include <section.hxx>
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
 #include <frame.hxx>
 #include <txtatr.hxx>
-#include <tox.hxx> // InvalidateTOXMark
+#include <tox.hxx>
 
 #include <docsh.hxx>
 #include <svl/smplhint.hxx>

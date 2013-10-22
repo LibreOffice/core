@@ -38,7 +38,7 @@
 #include <docsh.hxx>
 #include <globdoc.hxx>
 #include <shellio.hxx>
-#include <swundo.hxx>       // for the UndoIds
+#include <swundo.hxx>
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <poolfmt.hxx>

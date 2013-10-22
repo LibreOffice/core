@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ctype.h>      // isdigit(), isalpha()
+#include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

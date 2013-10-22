@@ -29,7 +29,7 @@
 #include "scresid.hxx"
 
 #include "globstr.hrc"
-#include "sc.hrc" // consdlg.hrc has been deleted
+#include "sc.hrc"
 
 #define _CONSDLG_CXX
 #include "consdlg.hxx"

@@ -29,13 +29,13 @@
 #include <svx/svddrag.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdocapt.hxx> // for Import of SdrFileVersion 2
-#include <svx/svdpagv.hxx> // for
-#include <svx/svdview.hxx> // the
-#include <svx/svdundo.hxx> // macro example
+#include <svx/svdocapt.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svdundo.hxx>
 #include <svx/svdopath.hxx>
-#include "svx/svdglob.hxx"  // Stringcache
-#include "svx/svdstr.hrc"   // the object's name
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>

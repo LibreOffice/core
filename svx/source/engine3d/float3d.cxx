@@ -41,7 +41,7 @@
 #include <svx/dlgutil.hxx>
 
 #include <svx/dialmgr.hxx>
-#include <svx/viewpt3d.hxx> // Projection Type
+#include <svx/viewpt3d.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>

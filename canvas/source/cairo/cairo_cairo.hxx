@@ -31,7 +31,7 @@ class  OutputDevice;
 class  Window;
 class  Size;
 
-#include <cairo.h>  //cannot be inside a namespace, otherwise Quartz fails to compile.
+#include <cairo.h>
 
 namespace cairo {
     typedef cairo_t Cairo;

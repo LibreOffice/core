@@ -43,7 +43,7 @@
 #include <i18nutil/scripttypedetector.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
-#include <oox/export/drawingml.hxx> // for SubstituteBullet
+#include <oox/export/drawingml.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>

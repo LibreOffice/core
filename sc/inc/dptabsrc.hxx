@@ -20,7 +20,7 @@
 #ifndef SC_DPTABSRC_HXX
 #define SC_DPTABSRC_HXX
 
-#include "global.hxx"       // enum ScSubTotalFunc
+#include "global.hxx"
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>

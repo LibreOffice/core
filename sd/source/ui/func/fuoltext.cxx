@@ -35,7 +35,7 @@
 #include "ViewShell.hxx"
 #include "OutlineViewShell.hxx"
 
-#include <stdio.h>          // for SlotFilter listing
+#include <stdio.h>
 
 namespace sd {
 

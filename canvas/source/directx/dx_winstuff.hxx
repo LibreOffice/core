@@ -55,7 +55,7 @@
 #undef WB_RIGHT
 
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h> // TODO(Q1): extract minimal set of required headers for gdiplus
+#include <windows.h>
 
 #if DIRECTX_VERSION < 0x0900
 

@@ -34,7 +34,7 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "drwtrans.hxx"
-#include "transobj.hxx"     // SetDrawClipDoc
+#include "transobj.hxx"
 #include "drawutil.hxx"
 #include "scmod.hxx"
 #include "globstr.hrc"

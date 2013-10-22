@@ -57,7 +57,7 @@
 *************************************************************************/
 
 
-#include <string.h>     // strlen()
+#include <string.h>
 
 #if defined( _MSC_VER )
 #pragma warning(once: 4068)

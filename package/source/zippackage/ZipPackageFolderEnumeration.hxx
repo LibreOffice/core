@@ -19,7 +19,7 @@
 #ifndef _ZIP_PACKAGE_FOLDER_ENUMERATION_HXX
 #define _ZIP_PACKAGE_FOLDER_ENUMERATION_HXX
 
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <HashMaps.hxx>

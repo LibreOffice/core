@@ -38,7 +38,7 @@
 #include "olinetab.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
-#include "dociter.hxx"      // for lcl_EmptyExcept
+#include "dociter.hxx"
 #include "editable.hxx"
 #include "attrib.hxx"
 #include "drwlayer.hxx"

@@ -24,20 +24,20 @@
 #include <editeng/brushitem.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
-#include <viewopt.hxx>  // SwViewOptions
+#include <viewopt.hxx>
 #include <SwPortionHandler.hxx>
 #include <porlay.hxx>
 #include <porfld.hxx>
 #include <inftxt.hxx>
-#include <blink.hxx>    // pBlink
-#include <frmtool.hxx>  // DrawGraphic
+#include <blink.hxx>
+#include <frmtool.hxx>
 #include <viewsh.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
 #include "rootfrm.hxx"
 #include <breakit.hxx>
 #include <porrst.hxx>
-#include <porftn.hxx>   // SwFtnPortion
+#include <porftn.hxx>
 #include <accessibilityoptions.hxx>
 #include <editeng/lrspitem.hxx>
 

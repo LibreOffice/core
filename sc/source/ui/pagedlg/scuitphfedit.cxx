@@ -51,7 +51,7 @@
 #include "AccessibleEditObject.hxx"
 
 #include "scuitphfedit.hxx"
-#include <memory> // header file for auto_ptr
+#include <memory>
 
 // STATIC DATA -----------------------------------------------------------
 

@@ -52,7 +52,7 @@
 #include "hints.hxx"
 #include "tabfrm.hxx"
 #include "txtfrm.hxx"
-#include "notxtfrm.hxx"   // GetGrfArea
+#include "notxtfrm.hxx"
 #include "flyfrms.hxx"
 #include "sectfrm.hxx"
 #include <vcl/svapp.hxx>

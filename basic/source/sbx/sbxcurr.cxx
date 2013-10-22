@@ -19,7 +19,7 @@
 
 
 #include <tools/errcode.hxx>
-#include <vcl/svapp.hxx>        // for SvtSysLocale
+#include <vcl/svapp.hxx>
 
 #include <basic/sbx.hxx>
 #include <basic/sbxvar.hxx>

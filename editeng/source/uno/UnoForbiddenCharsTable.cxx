@@ -21,7 +21,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <editeng/unolingu.hxx> // LocalToLanguage, LanguageToLocale
+#include <editeng/unolingu.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

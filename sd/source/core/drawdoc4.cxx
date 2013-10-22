@@ -41,7 +41,7 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/numdef.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/dialmgr.hxx>                  // SVX_RESSTR
+#include <svx/dialmgr.hxx>
 #include <editeng/bulletitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/sxmsuitm.hxx>

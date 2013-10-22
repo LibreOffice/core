@@ -82,7 +82,7 @@
 #include "attrib.hxx"
 #include "asciiopt.hxx"
 #include "waitoff.hxx"
-#include "docpool.hxx"      // LoadCompleted
+#include "docpool.hxx"
 #include "progress.hxx"
 #include "pntlock.hxx"
 #include "docuno.hxx"

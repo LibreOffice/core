@@ -40,7 +40,7 @@
 #include <algorithm>
 #include <stack>
 
-#include <math.h> // fabs, sqrt, sin, cos, tan, atan, atan2
+#include <math.h>
 using namespace EnhancedCustomShape;
 using namespace com::sun::star;
 using namespace com::sun::star::drawing;

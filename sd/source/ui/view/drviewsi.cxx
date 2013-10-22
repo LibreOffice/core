@@ -43,8 +43,8 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "anminfo.hxx"
-#include "unoaprms.hxx"                 // Undo-Action
-#include "sdundogr.hxx"                 // Undo Gruppe
+#include "unoaprms.hxx"
+#include "sdundogr.hxx"
 #include "drawview.hxx"
 #include "Window.hxx"
 #include "sdresid.hxx"

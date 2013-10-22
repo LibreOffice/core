@@ -18,7 +18,7 @@
  */
 
 
-#include "fldbas.hxx"          // fuer FieldType
+#include "fldbas.hxx"
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <docufld.hxx>
@@ -29,9 +29,9 @@
 #include "ddefld.hxx"
 #include "usrfld.hxx"
 #include "expfld.hxx"
-#include "swfont.hxx"       // fuer GetFldsColor
-#include "ndtxt.hxx"        // SwTxtNode
-#include "calc.hxx"         // Update fuer UserFields
+#include "swfont.hxx"
+#include "ndtxt.hxx"
+#include "calc.hxx"
 #include "hints.hxx"
 #include <IDocumentFieldsAccess.hxx>
 #include <fieldhint.hxx>

@@ -27,13 +27,13 @@
 #include <vector>
 #include <list>
 #include <algorithm>
-#include <tools/solar.h>        // UINTXX
+#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include "rtl/ustring.hxx"
 #include "hash_wrap.hxx"
 #include "sortedarray.hxx"
 
-#include "ww8struc.hxx"         // FIB, STSHI, STD...
+#include "ww8struc.hxx"
 #include <types.hxx>
 
 #include <unomid.h>

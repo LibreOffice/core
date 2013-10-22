@@ -20,7 +20,7 @@
 #ifndef SFX_PANELIST_HXX
 #define SFX_PANELIST_HXX
 
-#include <vcl/taskpanelist.hxx>     // includes also vcl/window.hxx
+#include <vcl/taskpanelist.hxx>
 
 namespace sfx2
 {

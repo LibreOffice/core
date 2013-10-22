@@ -29,7 +29,7 @@
 #include "ftnfrm.hxx"
 #include "txtftn.hxx"
 #include "fmtftn.hxx"
-#include <txtfrm.hxx>   // SwTxtFrm
+#include <txtfrm.hxx>
 #include <switerator.hxx>
 
 /*************************************************************************

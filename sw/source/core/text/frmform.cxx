@@ -21,32 +21,32 @@
 #include <hintids.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
-#include <pagefrm.hxx>      // ChangeFtnRef
-#include <ndtxt.hxx>        // MakeFrm()
-#include <dcontact.hxx>     // SwDrawContact
-#include <dflyobj.hxx>      // SwVirtFlyDrawObj
+#include <pagefrm.hxx>
+#include <ndtxt.hxx>
+#include <dcontact.hxx>
+#include <dflyobj.hxx>
 #include <flyfrm.hxx>
-#include <ftnfrm.hxx>       // SwFtnFrm
+#include <ftnfrm.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <paratr.hxx>
-#include <viewopt.hxx>      // SwViewOptions
-#include <viewsh.hxx>       // ViewShell
+#include <viewopt.hxx>
+#include <viewsh.hxx>
 #include <frmatr.hxx>
 #include <pam.hxx>
 #include <flyfrms.hxx>
 #include <fmtanchr.hxx>
-#include <itrform2.hxx>     // SwTxtFormatter
-#include <widorp.hxx>       // Widows and Orphans
+#include <itrform2.hxx>
+#include <widorp.hxx>
 #include <txtcache.hxx>
-#include <porrst.hxx>       // SwEmptyPortion
-#include <blink.hxx>        // pBlink
-#include <porfld.hxx>       // SwFldPortion
-#include <sectfrm.hxx>      // SwSectionFrm
-#include <pormulti.hxx>     // SwMultiPortion
+#include <porrst.hxx>
+#include <blink.hxx>
+#include <porfld.hxx>
+#include <sectfrm.hxx>
+#include <pormulti.hxx>
 
 #include <rootfrm.hxx>
-#include <frmfmt.hxx>       // SwFrmFmt
+#include <frmfmt.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 

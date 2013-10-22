@@ -43,9 +43,9 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/svdoedge.hxx>  // for broadcasting connectors to Move
-#include "svx/svdglob.hxx"   // StringCache
-#include "svx/svdstr.hrc"    // the object's name
+#include <svx/svdoedge.hxx>
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 #include <editeng/eeitem.hxx>
 #include "editeng/editstat.hxx"
 #include <svx/svdoutl.hxx>

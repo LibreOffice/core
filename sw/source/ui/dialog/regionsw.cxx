@@ -41,7 +41,7 @@
 #include <view.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // for Undo-Ids
+#include <swundo.hxx>
 #include <column.hxx>
 #include <fmtfsize.hxx>
 #include <shellio.hxx>

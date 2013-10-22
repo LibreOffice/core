@@ -30,7 +30,7 @@
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 #include <com/sun/star/sheet/NoConvergenceException.hpp>
 
-#include <cppuhelper/implbase5.hxx> // helper for implementations
+#include <cppuhelper/implbase5.hxx>
 
 #include "analysisdefs.hxx"
 #include "analysishelper.hxx"

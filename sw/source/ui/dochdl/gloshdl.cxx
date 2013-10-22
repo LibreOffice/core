@@ -33,15 +33,15 @@
 #include <fmtcol.hxx>
 #include <docary.hxx>
 #include <wrtsh.hxx>
-#include <uitool.hxx>                   // error messages
+#include <uitool.hxx>
 #include <view.hxx>
 #include <swevent.hxx>
 #include <gloshdl.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
-#include <swundo.hxx>                   // for Undo-Ids
+#include <swundo.hxx>
 #include <expfld.hxx>
-#include <initui.hxx>                   // for ::GetGlossaries()
+#include <initui.hxx>
 #include <gloslst.hxx>
 #include <swdtflvr.hxx>
 #include <docsh.hxx>

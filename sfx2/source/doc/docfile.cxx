@@ -79,7 +79,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svl/itemset.hxx>
 #include <svl/intitem.hxx>
-#include <svtools/svparser.hxx> // SvKeyValue
+#include <svtools/svparser.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <unotools/streamwrap.hxx>
@@ -107,15 +107,15 @@
 #include <com/sun/star/document/DocumentRevisionListPersistence.hpp>
 
 #include "helper.hxx"
-#include <sfx2/request.hxx>      // SFX_ITEMSET_SET
-#include <sfx2/app.hxx>          // GetFilterMatcher
-#include <sfx2/frame.hxx>        // LoadTargetFrame
-#include <sfx2/fcontnr.hxx>      // SfxFilterMatcher
-#include <sfx2/docfilt.hxx>      // SfxFilter
-#include <sfx2/objsh.hxx>        // CheckOpenMode
-#include <sfx2/docfac.hxx>       // GetFilterContainer
+#include <sfx2/request.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfac.hxx>
 #include "doc.hrc"
-#include "openflag.hxx"     // SFX_STREAM_READONLY etc.
+#include "openflag.hxx"
 #include "sfx2/sfxresid.hxx"
 #include <sfx2/appuno.hxx>
 #include "sfxacldetect.hxx"

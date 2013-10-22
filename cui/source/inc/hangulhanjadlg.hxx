@@ -33,7 +33,7 @@
 #include <svtools/valueset.hxx>
 
 #include <vector>
-#include <memory>   // for auto_ptr
+#include <memory>
 
 class SvxCommonLinguisticControl;
 //.............................................................................

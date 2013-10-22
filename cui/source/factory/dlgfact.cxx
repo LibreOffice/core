@@ -77,9 +77,9 @@
 #include "page.hxx"
 #include "postdlg.hxx"
 #include "grfpage.hxx"
-#include "scriptdlg.hxx" // for ScriptOrgDialog
-#include "selector.hxx" // for SvxScriptSelectorDialog
-#include "macropg.hxx" // for SvxMacroAssignDlg
+#include "scriptdlg.hxx"
+#include "selector.hxx"
+#include "macropg.hxx"
 #include "sdrcelldlg.hxx"
 #include "newtabledlg.hxx"
 #include "macroass.hxx"

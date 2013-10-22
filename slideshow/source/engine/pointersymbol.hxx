@@ -23,7 +23,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
-#include <boost/utility.hpp> // for noncopyable
+#include <boost/utility.hpp>
 #include <vector>
 
 using namespace com::sun::star;

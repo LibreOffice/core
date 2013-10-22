@@ -61,8 +61,8 @@
 #include "sdattr.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "unoaprms.hxx"                 // Undo-Action
-#include "sdundogr.hxx"                 // Undo Gruppe
+#include "unoaprms.hxx"
+#include "sdundogr.hxx"
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
 #include "FrameView.hxx"

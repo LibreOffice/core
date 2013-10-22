@@ -22,7 +22,7 @@
 
 #include "doc.hxx"
 #include "docary.hxx"
-#include "swundo.hxx"           // fuer die UndoIds
+#include "swundo.hxx"
 #include "pam.hxx"
 
 #include <UndoCore.hxx>

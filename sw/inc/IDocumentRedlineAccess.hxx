@@ -23,7 +23,7 @@
  #include <sal/types.h>
  #include <tools/solar.h>
 
- #include <limits.h> // USHRT_MAX
+ #include <limits.h>
 
  #include <com/sun/star/uno/Sequence.hxx>
 

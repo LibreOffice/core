@@ -24,7 +24,7 @@
 #include "hints.hxx"
 #include "editsrc.hxx"
 #include "cellsuno.hxx"
-#include "servuno.hxx"      // fuer IDs
+#include "servuno.hxx"
 #include "unonames.hxx"
 #include "editutil.hxx"
 

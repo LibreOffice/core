@@ -25,7 +25,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/morebtn.hxx>
 #include <svtools/stdctrl.hxx>
-#include "global.hxx" // -> ScQueryParam
+#include "global.hxx"
 #include "address.hxx"
 #include "anyrefdg.hxx"
 #include "queryparam.hxx"

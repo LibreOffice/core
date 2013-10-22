@@ -18,7 +18,7 @@
  */
 
 
-#include <functional> // needed under Solaris when including <algorithm>...
+#include <functional>
 
 #include <algorithm>
 #include <limits>

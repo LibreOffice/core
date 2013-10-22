@@ -35,7 +35,7 @@
 #include "widorp.hxx"
 #include "txtfrm.hxx"
 #include "itrtxt.hxx"
-#include "sectfrm.hxx"  //SwSectionFrm
+#include "sectfrm.hxx"
 #include "ftnfrm.hxx"
 
 #undef WIDOWTWIPS

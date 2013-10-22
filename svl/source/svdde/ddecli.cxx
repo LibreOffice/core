@@ -19,7 +19,7 @@
 
 
 #define UNICODE
-#include <string.h> // memset
+#include <string.h>
 #include <algorithm>
 #include "ddeimp.hxx"
 #include <svl/svdde.hxx>

@@ -25,9 +25,9 @@
 #include "frmtool.hxx"
 #include "colfrm.hxx"
 #include "pagefrm.hxx"
-#include "bodyfrm.hxx"   // ColumnFrms now with BodyFrm
-#include "rootfrm.hxx"   // wg. RemoveFtns
-#include "sectfrm.hxx"   // wg. FtnAtEnd-Flag
+#include "bodyfrm.hxx"
+#include "rootfrm.hxx"
+#include "sectfrm.hxx"
 #include "switerator.hxx"
 
 // ftnfrm.cxx:

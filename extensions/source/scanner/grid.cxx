@@ -21,7 +21,7 @@
 #include <osl/thread.h>
 #include <grid.hrc>
 #include <cstdio>
-#include <math.h> // for M_LN10 and M_E
+#include <math.h>
 
 #include <cmath>
 

@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <pam.hxx>          // GetSpaces
-#include <frminf.hxx>       // SwTxtFrminfo
-#include <itrtxt.hxx>       // SwTxtMargin
+#include <pam.hxx>
+#include <frminf.hxx>
+#include <itrtxt.hxx>
 
 /*************************************************************************
  *                   SwTxtMargin::GetTxtStart()

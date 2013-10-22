@@ -23,7 +23,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/vclmedit.hxx>
-#include <sfx2/basedlgs.hxx>        ///< for SfxModalDialog
+#include <sfx2/basedlgs.hxx>
 #include <vector>
 
 // class AboutDialog -----------------------------------------------------

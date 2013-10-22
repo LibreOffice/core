@@ -70,7 +70,7 @@
 #include <frmmgr.hxx>
 #include <shellio.hxx>
 #include <uinums.hxx>
-#include <swundo.hxx>  // for Undo-Ids
+#include <swundo.hxx>
 #include <swcli.hxx>
 #include <poolfmt.hxx>
 #include <wview.hxx>

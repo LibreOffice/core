@@ -41,7 +41,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <float.h>              // DBL_MIN
+#include <float.h>
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
@@ -68,7 +68,7 @@
 #include "editsrc.hxx"
 #include "notesuno.hxx"
 #include "fielduno.hxx"
-#include "docuno.hxx"       // ScTableColumnsObj etc
+#include "docuno.hxx"
 #include "datauno.hxx"
 #include "dapiuno.hxx"
 #include "chartuno.hxx"
@@ -91,7 +91,7 @@
 #include "formulacell.hxx"
 #include "undocell.hxx"
 #include "undotab.hxx"
-#include "undoblk.hxx"      // fuer lcl_ApplyBorder - nach docfunc verschieben!
+#include "undoblk.hxx"
 #include "stlsheet.hxx"
 #include "dbdata.hxx"
 #include "attrib.hxx"

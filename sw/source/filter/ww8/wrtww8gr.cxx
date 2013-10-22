@@ -36,7 +36,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
-#include <editeng/lrspitem.hxx> // SvxLRSpaceItem
+#include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svx/svdoole2.hxx>
@@ -44,8 +44,8 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <fmtanchr.hxx>
 #include <ndgrf.hxx>
-#include <frmfmt.hxx>       // class SwFlyFrmFmt
-#include <grfatr.hxx>       // class SwCropGrf
+#include <frmfmt.hxx>
+#include <grfatr.hxx>
 #include <ndole.hxx>
 #include <ndtxt.hxx>
 #include <fmtfsize.hxx>

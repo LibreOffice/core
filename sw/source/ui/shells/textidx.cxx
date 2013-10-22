@@ -32,7 +32,7 @@
 #include "cmdid.h"
 #include "view.hxx"
 #include "wrtsh.hxx"
-#include "swundo.hxx"                   // for Undo-Ids
+#include "swundo.hxx"
 #include "textsh.hxx"
 #include "idxmrk.hxx"
 #include "cnttab.hxx"

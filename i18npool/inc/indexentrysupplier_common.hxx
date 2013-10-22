@@ -21,7 +21,7 @@
 #define _I18N_INDEXENTRYSUPPLIER_COMMON_HXX_
 
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <collatorImpl.hxx>
 

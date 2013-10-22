@@ -25,7 +25,7 @@
 
 #include <editeng/editdata.hxx>
 #include <editeng/bulletitem.hxx>
-#include <svx/svxids.hrc>   // fuer SID_OBJECT_SELECT
+#include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>
 #include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
@@ -57,8 +57,8 @@
 #include "ViewShell.hxx"
 #include "res_bmp.hrc"
 #include "glob.hrc"
-#include "prlayout.hxx"         // enum PresentationObjects
-#include "prltempl.hrc"         // TAB_PRES_LAYOUT_TEMPLATE_x
+#include "prlayout.hxx"
+#include "prltempl.hrc"
 #include <svx/xfillit.hxx>
 #include "sdresid.hxx"
 #include "OutlineViewShell.hxx"

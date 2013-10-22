@@ -51,9 +51,9 @@
 #include <fmtfordr.hxx>
 #include <fmtpdsc.hxx>
 #include <pvprtdat.hxx>
-#include <rootfrm.hxx>  // So that the RootDtor is being called
+#include <rootfrm.hxx>
 #include <layouter.hxx>
-#include <pagedesc.hxx> // So that the PageDescs can be destroyed
+#include <pagedesc.hxx>
 #include <ndtxt.hxx>
 #include <printdata.hxx>
 #include <docfld.hxx>
@@ -62,12 +62,12 @@
 #include <docstat.hxx>
 #include <charfmt.hxx>
 #include <frmfmt.hxx>
-#include <rolbck.hxx>           // Undo attributes, SwHistory
-#include <poolfmt.hxx>          // for the Pool template
+#include <rolbck.hxx>
+#include <poolfmt.hxx>
 #include <dbmgr.hxx>
 #include <docsh.hxx>
-#include <acorrect.hxx>         // for the automatic adding of exceptions
-#include <visiturl.hxx>         // for the URLChange message
+#include <acorrect.hxx>
+#include <visiturl.hxx>
 #include <docary.hxx>
 #include <lineinfo.hxx>
 #include <drawdoc.hxx>
@@ -89,7 +89,7 @@
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
-#include <cmdid.h>              // for the default printer in SetJob
+#include <cmdid.h>
 
 #include <pausethreadstarting.hxx>
 #include <numrule.hxx>
@@ -97,7 +97,7 @@
 #include <listfunc.hxx>
 
 #include <sfx2/Metadatable.hxx>
-#include <fmtmeta.hxx> // MetaFieldManager
+#include <fmtmeta.hxx>
 #include <boost/foreach.hpp>
 
 using namespace ::com::sun::star;

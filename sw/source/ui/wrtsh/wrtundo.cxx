@@ -21,7 +21,7 @@
 #include <sfx2/app.hxx>
 #include <svl/slstitm.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // for Undo-Ids
+#include <swundo.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <swdtflvr.hxx>
 #include <svtools/svtresid.hxx>

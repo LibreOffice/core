@@ -26,7 +26,7 @@
 #include <sfx2/viewsh.hxx>
 
 #include "sc.hrc"
-#include "global.hxx"       // ScAddress
+#include "global.hxx"
 #include "scresid.hxx"
 #include "reffact.hxx"
 #include "document.hxx"

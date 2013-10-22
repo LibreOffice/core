@@ -50,24 +50,24 @@
 #include <wdocsh.hxx>
 #include <fesh.hxx>
 #include <pam.hxx>
-#include <viewimp.hxx>      // Imp->SetFirstVisPageInvalid()
+#include <viewimp.hxx>
 #include <layact.hxx>
 #include <ndtxt.hxx>
 #include <fldbas.hxx>
-#include <docfld.hxx>       // _SetGetExpFld
-#include <docufld.hxx>      // PostItFld /-Type
+#include <docfld.hxx>
+#include <docufld.hxx>
 #include <shellres.hxx>
 #include <viewopt.hxx>
-#include <printdata.hxx>    // SwPrintData
+#include <printdata.hxx>
 #include <pagedesc.hxx>
-#include <poolfmt.hxx>      // for RES_POOLPAGE_JAKET
-#include <mdiexp.hxx>       // for accessing status bar
-#include <statstr.hrc>      //      -- " --
+#include <poolfmt.hxx>
+#include <mdiexp.hxx>
+#include <statstr.hrc>
 #include <ptqueue.hxx>
 #include <tabfrm.hxx>
-#include <txtfrm.hxx>       // MinPrtLine
-#include <viscrs.hxx>       // SwShellCrsr
-#include <fmtpdsc.hxx>      // SwFmtPageDesc
+#include <txtfrm.hxx>
+#include <viscrs.hxx>
+#include <fmtpdsc.hxx>
 #include <globals.hrc>
 
 using namespace ::com::sun::star;

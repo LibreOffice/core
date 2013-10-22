@@ -22,7 +22,7 @@
 #include "globals.hrc"
 #include "app.hrc"
 #include "swerror.h"
-#include "comcore.hrc" // MS:   Why are there resources at the Core-Side now
+#include "comcore.hrc"
 
 String STR_COMCORE_READERROR
 {

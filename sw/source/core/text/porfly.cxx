@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dcontact.hxx" // SwDrawContact
-#include "dflyobj.hxx"  // SwVirtFlyDrawObj
-#include "pam.hxx"      // SwPosition
-#include "flyfrm.hxx"   // SwFlyInCntFrm
+#include "dcontact.hxx"
+#include "dflyobj.hxx"
+#include "pam.hxx"
+#include "flyfrm.hxx"
 #include "rootfrm.hxx"
-#include "frmfmt.hxx"   // SwFrmFmt
+#include "frmfmt.hxx"
 #include "viewsh.hxx"
 
 #include <vcl/outdev.hxx>
@@ -33,10 +33,10 @@
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
 #include "flyfrms.hxx"
-#include "txatbase.hxx" // SwTxtAttr
+#include "txatbase.hxx"
 #include "porfly.hxx"
-#include "porlay.hxx"   // SetFly
-#include "inftxt.hxx"   // SwTxtPaintInfo
+#include "porlay.hxx"
+#include "inftxt.hxx"
 
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>

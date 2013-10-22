@@ -59,7 +59,7 @@
 #include "sc.hrc"
 #include "filter.hxx"
 #include "scextopt.hxx"
-#include "tabvwsh.hxx"      //  wegen GetViewFrame
+#include "tabvwsh.hxx"
 #include "compiler.hxx"
 
 #include "asciiopt.hxx"

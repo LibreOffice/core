@@ -42,7 +42,7 @@
 #include <fmtcntnt.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
-#include <frmtool.hxx>  // Notify_Background
+#include <frmtool.hxx>
 #include <flyfrm.hxx>
 #include <frmfmt.hxx>
 #include <dflyobj.hxx>

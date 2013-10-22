@@ -29,7 +29,7 @@
 #include <pagedesc.hxx>
 #include <swtable.hxx>
 #include <frmtool.hxx>
-#include <doc.hxx>          // for GetAttrPool
+#include <doc.hxx>
 #include <poolfmt.hrc>
 #include <poolfmt.hxx>
 #include <switerator.hxx>

@@ -34,11 +34,11 @@
 #include <unotools/localedatawrapper.hxx>
 #include <sdrhhcwrap.hxx>
 #include <frmfmt.hxx>
-#include <docsh.hxx>        //     "     "     "
-#include <wrtsh.hxx>        //  MakeVisible
+#include <docsh.hxx>
+#include <wrtsh.hxx>
 #include <view.hxx>
-#include <dcontact.hxx>     // Spelling von DrawObj
-#include <doc.hxx>        //     "     "     "
+#include <dcontact.hxx>
+#include <doc.hxx>
 #include <docary.hxx>
 #include <edtwin.hxx>
 

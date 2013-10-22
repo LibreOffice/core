@@ -23,7 +23,7 @@
 #include <editsh.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>
 #include <edimp.hxx>
 #include <IMark.hxx>
 #include <docary.hxx>

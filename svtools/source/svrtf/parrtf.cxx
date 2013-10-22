@@ -18,7 +18,7 @@
  */
 
 
-#include <stdio.h>                      // for EOF
+#include <stdio.h>
 #include <rtl/tencinfo.h>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>

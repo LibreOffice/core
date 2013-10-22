@@ -176,7 +176,7 @@ namespace connectivity
 #endif
 }
 
-#include <ctype.h>      //isdigit
+#include <ctype.h>
 namespace dbtools
 {
 //------------------------------------------------------------------

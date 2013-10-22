@@ -20,9 +20,9 @@
 #ifndef _LINGU2_THESIMP_HXX_
 #define _LINGU2_THESIMP_HXX_
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <cppuhelper/implbase5.hxx> // helper for implementations
+#include <uno/lbnames.h>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/XComponent.hpp>

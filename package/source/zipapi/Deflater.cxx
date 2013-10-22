@@ -20,7 +20,7 @@
 #include <package/Deflater.hxx>
 #include <zlib.h>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
-#include <string.h> // for memset
+#include <string.h>
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star;

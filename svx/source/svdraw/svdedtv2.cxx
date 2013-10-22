@@ -20,16 +20,16 @@
 #include <svx/svdedtv.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/svdogrp.hxx>   // for grouping objects
-#include <svx/svdovirt.hxx>  // for VirtualObject bundling (Writer)
-#include <svx/svdopath.hxx>  // for CombineObjects
+#include <svx/svdogrp.hxx>
+#include <svx/svdovirt.hxx>
+#include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include "svx/svditer.hxx"
-#include <svx/svdograf.hxx>  // for Possibilities
-#include <svx/svdoole2.hxx>  // and Mtf-Import
-#include "svx/svdstr.hrc"   // names taken from the resource
-#include "svx/svdglob.hxx"  // StringCache
+#include <svx/svdograf.hxx>
+#include <svx/svdoole2.hxx>
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include "svdfmtf.hxx"
 #include <svx/svdetc.hxx>
 #include <sfx2/basedlgs.hxx>

@@ -18,9 +18,9 @@
  */
 
 #include "hintids.hxx"
-#include "flyfrm.hxx"     // SwFlyInCntFrm
-#include "viewopt.hxx"  // SwViewOptions
-#include "txtatr.hxx"  // SwINetFmt
+#include "flyfrm.hxx"
+#include "viewopt.hxx"
+#include "txtatr.hxx"
 #include <tools/multisel.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -30,10 +30,10 @@
 #include <frmatr.hxx>
 #include <sfx2/printer.hxx>
 #include <fmtfld.hxx>
-#include <fldbas.hxx>      // SwField
+#include <fldbas.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
-#include <pagedesc.hxx> // SwPageDesc
+#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 
 // #i12836# enhanced pdf export
@@ -43,18 +43,18 @@
 #include "flyfrms.hxx"
 #include "viewsh.hxx"
 #include "itrpaint.hxx"
-#include "txtfrm.hxx"   // pFrm
+#include "txtfrm.hxx"
 #include "txtfly.hxx"
 #include "swfont.hxx"
 #include "txtpaint.hxx"
-#include "portab.hxx"   // SwTabPortion::IsFilled
-#include "porfly.hxx"     // SwFlyCntPortion
-#include "porfld.hxx"   // SwGrfNumPortion
-#include "frmfmt.hxx"   // LRSpace
-#include "txatbase.hxx" // SwTxtAttr
-#include "charfmt.hxx"  // SwFmtCharFmt
-#include "redlnitr.hxx" // SwRedlineItr
-#include "porrst.hxx"   // SwArrowPortion
+#include "portab.hxx"
+#include "porfly.hxx"
+#include "porfld.hxx"
+#include "frmfmt.hxx"
+#include "txatbase.hxx"
+#include "charfmt.hxx"
+#include "redlnitr.hxx"
+#include "porrst.hxx"
 #include "pormulti.hxx"
 
 /*************************************************************************

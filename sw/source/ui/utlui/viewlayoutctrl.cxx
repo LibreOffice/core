@@ -24,7 +24,7 @@
 #include <svl/eitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <utlui.hrc>
-#include <swtypes.hxx>  // for pathfinder
+#include <swtypes.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
 

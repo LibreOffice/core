@@ -27,12 +27,12 @@
 #include <editsh.hxx>
 #include <edimp.hxx>
 #include <frmfmt.hxx>
-#include <swundo.hxx>       // for UndoIds
+#include <swundo.hxx>
 #include <ndtxt.hxx>
-#include <swtable.hxx>      // for table copying
-#include <shellio.hxx>      // SwTextBlocks
+#include <swtable.hxx>
+#include <shellio.hxx>
 #include <acorrect.hxx>
-#include <swerror.h>        // SwTextBlocks
+#include <swerror.h>
 
 void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const OUString& rStr )
 {

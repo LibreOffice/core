@@ -23,7 +23,7 @@
 
 #include <basegfx/numeric/ftools.hxx>
 
-#include <cmath> // for fmod
+#include <cmath>
 #include <algorithm>
 
 

@@ -27,7 +27,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svx/svxids.hrc>   // SID_ATTR_...
+#include <svx/svxids.hrc>
 
 #include <cuires.hrc>
 #include <svx/postattr.hxx>

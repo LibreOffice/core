@@ -22,7 +22,7 @@
 
 #include <vcl/seleng.hxx>
 
-#include "viewdata.hxx"     // ScSplitPos
+#include "viewdata.hxx"
 
 // ---------------------------------------------------------------------------
 

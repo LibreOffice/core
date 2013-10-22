@@ -42,7 +42,7 @@
 #include <svx/xlnstit.hxx>
 
 #include <editeng/editdata.hxx>
-#include <editeng/editeng.hxx>   // for EditEngine::CreatePool()
+#include <editeng/editeng.hxx>
 
 #include <svx/xtable.hxx>
 
@@ -53,12 +53,12 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdotext.hxx>  // for ReformatAllTextObjects and CalcFieldValue
+#include <svx/svdotext.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdoole2.hxx>
-#include "svx/svdglob.hxx"  // StringCache
-#include "svx/svdstr.hrc"   // object's name
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 #include "svdoutlinercache.hxx"
 
 #include "svx/xflclit.hxx"

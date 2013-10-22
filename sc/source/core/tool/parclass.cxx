@@ -34,7 +34,7 @@
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <rtl/strbuf.hxx>
 #include "compiler.hxx"
-#include "sc.hrc"   // VAR_ARGS
+#include "sc.hrc"
 #endif
 
 /* Following assumptions are made:

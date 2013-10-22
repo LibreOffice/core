@@ -24,7 +24,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <vcl/gdimtf.hxx>
 #include <svl/itemset.hxx>
-#include "resltn.hxx"       // enum PublishingResolution
+#include "resltn.hxx"
 #include <svtools/colrdlg.hxx>
 #include <svtools/ehdl.hxx>
 

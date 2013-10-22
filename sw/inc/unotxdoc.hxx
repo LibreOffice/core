@@ -65,8 +65,8 @@
 #include <svx/fmdmod.hxx>
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase2.hxx> // helper for implementations
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase4.hxx>
 
 #include <unobaseclass.hxx>
 #include <viewopt.hxx>

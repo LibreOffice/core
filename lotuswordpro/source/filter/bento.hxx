@@ -71,8 +71,8 @@ using namespace std;
 
 #include "ut.hxx"
 #include "utlist.hxx"
-#include <tools/stream.hxx> // SvStream definition
-#include <sot/storage.hxx>  // SotStorageStream definition, add by  10/24/2005
+#include <tools/stream.hxx>
+#include <sot/storage.hxx>
 
 namespace OpenStormBento
 {

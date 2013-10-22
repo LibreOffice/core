@@ -22,13 +22,13 @@
 #include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
-#include <swundo.hxx>       // for the UndoIds
+#include <swundo.hxx>
 #include <section.hxx>
 #include <edimp.hxx>
-#include <sectfrm.hxx>      // SwSectionFrm
-#include <cntfrm.hxx>       // SwCntntFrm
-#include <tabfrm.hxx>       // SwTabFrm
-#include <rootfrm.hxx>      // SwRootFrm
+#include <sectfrm.hxx>
+#include <cntfrm.hxx>
+#include <tabfrm.hxx>
+#include <rootfrm.hxx>
 
 
 SwSection const*

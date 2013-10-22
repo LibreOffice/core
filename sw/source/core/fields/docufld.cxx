@@ -70,9 +70,9 @@
 #include <pagedesc.hxx>
 #include <fmtpdsc.hxx>
 #include <doc.hxx>
-#include <rootfrm.hxx>      // AuthorField
-#include <pagefrm.hxx>      //
-#include <cntfrm.hxx>       //
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <cntfrm.hxx>
 #include <pam.hxx>
 #include <viewsh.hxx>
 #include <dbmgr.hxx>

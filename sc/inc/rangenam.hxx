@@ -20,7 +20,7 @@
 #ifndef SC_RANGENAM_HXX
 #define SC_RANGENAM_HXX
 
-#include "global.hxx" // -> enum UpdateRefMode
+#include "global.hxx"
 #include "address.hxx"
 #include "formula/grammar.hxx"
 #include "scdllapi.h"

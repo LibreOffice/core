@@ -28,8 +28,8 @@
 #include <tools/helpers.hxx>
 
 #include "svdconv.hxx"
-#include "svx/svdglob.hxx"   // StringCache
-#include "svx/svdstr.hrc"    // the object's name
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 
 #include <svx/sdr/contact/viewcontactofsdrcaptionobj.hxx>
 #include <svx/sdr/properties/captionproperties.hxx>
@@ -43,7 +43,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdtrans.hxx>
-#include <svx/svdview.hxx>   // for RectSnap
+#include <svx/svdview.hxx>
 #include <svx/sxcaitm.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svx/sxcgitm.hxx>

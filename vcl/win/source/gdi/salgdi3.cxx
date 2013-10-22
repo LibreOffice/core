@@ -34,7 +34,7 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/matrix/b2dhommatrixtools.hxx"
 
-#include "unotools/fontcfg.hxx" // for IMPL_FONT_ATTR_SYMBOL
+#include "unotools/fontcfg.hxx"
 
 #include "tools/stream.hxx"
 #include "tools/helpers.hxx"
@@ -45,7 +45,7 @@
 #include "win/salgdi.h"
 
 #include "fontsubset.hxx"
-#include "outdev.h"         // for ImplGlyphFallbackFontSubstitution
+#include "outdev.h"
 #include "sft.hxx"
 
 #include <algorithm>

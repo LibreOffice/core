@@ -18,8 +18,8 @@
  */
 
 #include <sfx2/dialoghelper.hxx>
-#include <sfx2/viewsh.hxx>      // SfxViewShell
-#include <sfx2/printer.hxx>     // Printer
+#include <sfx2/viewsh.hxx>
+#include <sfx2/printer.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
@@ -43,31 +43,31 @@
 // Item set includes
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
-#include <svl/stritem.hxx>                  // SfxStringItem
+#include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
 
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/editids.hrc>      // #define SID_ATTR_*
-#include <editeng/fontitem.hxx>     // SvxFontItem
-#include <editeng/postitem.hxx>     // SvxPostureItem
-#include <editeng/udlnitem.hxx>     // SvxUnderlineItem
-#include <editeng/crossedoutitem.hxx>     // SvxCrossedOutItem
-#include <editeng/contouritem.hxx>     // SvxContourItem
-#include <editeng/wghtitem.hxx>     // SvxWeightItem
-#include <editeng/fhgtitem.hxx>     // SvxFontHeightItem
-#include <editeng/shdditem.hxx>     // SvxShadowedItem
-#include <editeng/escapementitem.hxx>     // SvxEscapementItem
-#include <editeng/wrlmitem.hxx>     // SvxWordLineModeItem
-#include <editeng/cmapitem.hxx>     // SvxWordLineModeItem
-#include <editeng/kernitem.hxx>     // SvxKerningItem
-#include <editeng/brushitem.hxx>     // SvxBrushItem
-#include <editeng/colritem.hxx>     // SvxColorItem
-#include <editeng/emphasismarkitem.hxx>     // SvxEmphasisMarkItem
-#include <editeng/charreliefitem.hxx>       // SvxCharReliefItem
-#include <editeng/twolinesitem.hxx>         // SvxTwoLinesItem
-#include <editeng/charscaleitem.hxx>        // SvxCharScaleWidthItem
-#include <editeng/langitem.hxx>     // SvxLanguageItem
+#include <editeng/editids.hrc>
+#include <editeng/fontitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/escapementitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/emphasismarkitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/langitem.hxx>
 
 // define ----------------------------------------------------------------
 

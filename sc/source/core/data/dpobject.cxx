@@ -27,8 +27,8 @@
 #include "dpgroup.hxx"
 #include "document.hxx"
 #include "rechead.hxx"
-#include "pivot.hxx"        // PIVOT_DATA_FIELD
-#include "dapiuno.hxx"      // ScDataPilotConversion
+#include "pivot.hxx"
+#include "dapiuno.hxx"
 #include "miscuno.hxx"
 #include "scerrors.hxx"
 #include "refupdat.hxx"
@@ -71,7 +71,7 @@
 #include <sal/macros.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <svl/zforlist.hxx>     // IsNumberFormat
+#include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <vector>

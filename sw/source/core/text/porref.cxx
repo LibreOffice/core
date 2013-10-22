@@ -18,10 +18,10 @@
  */
 
 #include <SwPortionHandler.hxx>
-#include "viewopt.hxx"  // SwViewOptions
+#include "viewopt.hxx"
 
 #include "porref.hxx"
-#include "inftxt.hxx"       // GetTxtSize()
+#include "inftxt.hxx"
 
 /*************************************************************************
  *               virtual SwRefPortion::Paint()

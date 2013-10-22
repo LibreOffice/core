@@ -32,7 +32,7 @@
 #include "editeng/editengdllapi.h"
 
 #include <tools/lineend.hxx>
-#include <tools/rtti.hxx>   // due to typedef TypeId
+#include <tools/rtti.hxx>
 
 #include <editeng/eedata.hxx>
 

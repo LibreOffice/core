@@ -23,7 +23,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include <algorithm> // STL
+#include <algorithm>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>

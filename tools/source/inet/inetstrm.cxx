@@ -23,7 +23,7 @@
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 
-#include <ctype.h> // toupper
+#include <ctype.h>
 
 inline bool SAL_CALL ascii_isWhitespace( sal_Unicode ch )
 {

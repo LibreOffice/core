@@ -33,7 +33,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
 
-#include "document.hxx"     // for MapMode init in PasteDraw
+#include "document.hxx"
 #include "viewfunc.hxx"
 #include "tabvwsh.hxx"
 #include "drawview.hxx"

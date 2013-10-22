@@ -20,7 +20,7 @@
 #ifndef _SDSTOR_STGOLE_HXX
 #define _SDSTOR_STGOLE_HXX
 
-#include <string.h> // memset()
+#include <string.h>
 
 #include "sot/stg.hxx"
 #include "stgelem.hxx"

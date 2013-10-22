@@ -50,7 +50,7 @@
 #include "rangeseq.hxx"
 #include "funcdesc.hxx"
 #include "svl/sharedstring.hxx"
-#include "formulaopt.hxx"  //fdo50118
+#include "formulaopt.hxx"
 
 using namespace com::sun::star;
 

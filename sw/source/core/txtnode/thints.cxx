@@ -56,7 +56,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
-#include <rolbck.hxx>           // fuer SwRegHistory
+#include <rolbck.hxx>
 #include <ddefld.hxx>
 #include <docufld.hxx>
 #include <expfld.hxx>

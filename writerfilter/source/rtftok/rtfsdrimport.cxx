@@ -24,7 +24,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
-#include <ooxml/resourceids.hxx> // NS_ooxml namespace
+#include <ooxml/resourceids.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
 #include <svx/svdtrans.hxx>

@@ -32,10 +32,10 @@
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/task/InteractionClassification.hpp"
 
-#include "tools/solar.h" // sal_uInt16
-#include "tools/errcode.hxx" // ErrCode
-#include "tools/rc.hxx" // Resource
-#include "tools/wintypes.hxx" // WinBits
+#include "tools/solar.h"
+#include "tools/errcode.hxx"
+#include "tools/rc.hxx"
+#include "tools/wintypes.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace awt {

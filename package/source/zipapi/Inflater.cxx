@@ -19,7 +19,7 @@
 
 #include <package/Inflater.hxx>
 #include <zlib.h>
-#include <string.h> // for memset
+#include <string.h>
 
 using namespace com::sun::star::uno;
 using namespace ZipUtils;

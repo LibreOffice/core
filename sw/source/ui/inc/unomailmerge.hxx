@@ -21,9 +21,9 @@
 #define _UNOMAILMERGE_HXX_
 
 #include <functional>
-#include <cppuhelper/implbase5.hxx> // WeakImplHelper4
-#include <cppuhelper/interfacecontainer.hxx>    // OMultiTypeInterfaceContainerHelperVar
-#include <unotools/configitem.hxx>  // !! needed for OMultiTypeInterfaceContainerHelperVar !!
+#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
+#include <unotools/configitem.hxx>
 
 
 #include <com/sun/star/task/XJob.hpp>

@@ -48,15 +48,15 @@
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
-#include <fldbas.hxx>           // RES_SETEXPFLD
-#include <charatr.hxx>          // class SwFmtRefMark
-#include <swtable.hxx>          // class SwTableLines, ...
+#include <fldbas.hxx>
+#include <charatr.hxx>
+#include <swtable.hxx>
 #include <tox.hxx>
-#include <expfld.hxx>           // SwExpField
-#include <section.hxx>          // class SwSection
-#include <tblsel.hxx>           // class SwSelBoxes
+#include <expfld.hxx>
+#include <section.hxx>
+#include <tblsel.hxx>
 #include <pagedesc.hxx>
-#include <docsh.hxx>            // class SwDocSh
+#include <docsh.hxx>
 #include <fltshell.hxx>
 #include <viewsh.hxx>
 #include <shellres.hxx>

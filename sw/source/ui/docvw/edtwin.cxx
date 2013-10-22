@@ -133,7 +133,7 @@
 
 #include <IMark.hxx>
 #include <doc.hxx>
-#include <txatbase.hxx> // FIXME this sucks
+#include <txatbase.hxx>
 #include <xmloff/odffields.hxx>
 
 #include <PostItMgr.hxx>

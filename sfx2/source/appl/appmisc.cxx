@@ -75,7 +75,7 @@
 #include "openflag.hxx"
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objface.hxx>
-#include "helper.hxx"   // SfxContentHelper::Kill()
+#include "helper.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 

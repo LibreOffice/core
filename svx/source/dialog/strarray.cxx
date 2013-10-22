@@ -19,7 +19,7 @@
 
 #include <tools/shl.hxx>
 
-#include <svx/dialogs.hrc> // -> RID_SVXSTR_LANGUAGE_TABLE
+#include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/strarray.hxx>
 

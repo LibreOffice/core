@@ -28,7 +28,7 @@
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <boost/unordered_map.hpp>
 #include <accselectionhelper.hxx>
-#include <calbck.hxx> // #i108125#
+#include <calbck.hxx>
 
 class SwTxtFrm;
 class SwTxtNode;

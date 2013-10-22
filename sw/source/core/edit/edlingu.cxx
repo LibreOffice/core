@@ -38,20 +38,20 @@
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <rootfrm.hxx>      // SwRootFrm
+#include <rootfrm.hxx>
 #include <pam.hxx>
-#include <swundo.hxx>       // for the UndoIds
-#include <ndtxt.hxx>        // AdjHyphPos
-#include <viewopt.hxx>      // HyphStart/End
-#include <viscrs.hxx>       // SwShellCrsr
-#include <SwGrammarMarkUp.hxx> // SwWrongList
-#include <mdiexp.hxx>       // status display
-#include <statstr.hrc>      // StatLine-String
+#include <swundo.hxx>
+#include <ndtxt.hxx>
+#include <viewopt.hxx>
+#include <viscrs.hxx>
+#include <SwGrammarMarkUp.hxx>
+#include <mdiexp.hxx>
+#include <statstr.hrc>
 #include <cntfrm.hxx>
 #include <crsskip.hxx>
 #include <splargs.hxx>
-#include <redline.hxx>      // SwRedline
-#include <docary.hxx>       // SwRedlineTbl
+#include <redline.hxx>
+#include <docary.hxx>
 #include <docsh.hxx>
 #include <txatbase.hxx>
 #include <txtfrm.hxx>

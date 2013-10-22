@@ -21,13 +21,13 @@
 #include "porlay.hxx"
 #include "itrform2.hxx"
 #include "porglue.hxx"
-#include "porexp.hxx"   // SwQuoVadisPortion
-#include "blink.hxx"    // pBlink
-#include "redlnitr.hxx" // SwRedlineItr
-#include "porfly.hxx"   // SwFlyCntPortion
-#include <porrst.hxx>   // SwHangingPortion
-#include <pormulti.hxx> // SwMultiPortion
-#include <pordrop.hxx> // SwDropPortion
+#include "porexp.hxx"
+#include "blink.hxx"
+#include "redlnitr.hxx"
+#include "porfly.hxx"
+#include <porrst.hxx>
+#include <pormulti.hxx>
+#include <pordrop.hxx>
 #include <breakit.hxx>
 #include <unicode/uchar.h>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -44,8 +44,8 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
-#include <docary.hxx>   // SwRedlineTbl
-#include <redline.hxx>  // SwRedline
+#include <docary.hxx>
+#include <redline.hxx>
 #include <section.hxx>
 #include <switerator.hxx>
 #include <IDocumentRedlineAccess.hxx>

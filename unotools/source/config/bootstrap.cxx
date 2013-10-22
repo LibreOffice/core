@@ -32,7 +32,7 @@
 // ---------------------------------------------------------------------------------------
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
-#include <osl/process.h> // for osl_getExecutableFile
+#include <osl/process.h>
 #include "tools/getprocessworkingdir.hxx"
 
 // ---------------------------------------------------------------------------------------

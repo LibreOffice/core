@@ -29,7 +29,7 @@
     #error include 'afxctl.h' before including this file
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CMfcControlApp : See MfcControl.cpp for implementation.

@@ -20,9 +20,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <svx/svdlayer.hxx>
-#include <svx/svdmodel.hxx> // for Broadcasting
-#include "svx/svdglob.hxx"  // StringCache
-#include "svx/svdstr.hrc"   // names taken from the resource
+#include <svx/svdmodel.hxx>
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 
 sal_Bool SetOfByte::IsEmpty() const
 {

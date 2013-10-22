@@ -24,8 +24,8 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/implbase2.hxx> // helper for implementations
-#include <cppuhelper/implbase3.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <comphelper/ChainablePropertySet.hxx>
 #include <comphelper/SettingsHelper.hxx>
 #include <usrpref.hxx>

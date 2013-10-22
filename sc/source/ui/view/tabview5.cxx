@@ -41,7 +41,7 @@
 #include "hiranges.hxx"
 #include "drawview.hxx"
 #include "drwlayer.hxx"
-#include "fusel.hxx"                // Start-Function
+#include "fusel.hxx"
 #include "seltrans.hxx"
 #include "scmod.hxx"
 #include "AccessibilityHints.hxx"

@@ -25,7 +25,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svl/zforlist.hxx>     // SvNumberFormatter
+#include <svl/zforlist.hxx>
 #include <svx/charthelper.hxx>
 
 #include <XMLRangeHelper.hxx>

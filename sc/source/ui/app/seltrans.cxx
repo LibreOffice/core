@@ -31,7 +31,7 @@
 #include "transobj.hxx"
 #include "drwtrans.hxx"
 #include "scmod.hxx"
-#include "dbfunc.hxx"   // for CopyToClip
+#include "dbfunc.hxx"
 #include "docsh.hxx"
 #include "drawview.hxx"
 #include "drwlayer.hxx"

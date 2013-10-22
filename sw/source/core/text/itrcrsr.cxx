@@ -31,7 +31,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/borderline.hxx>
 #include <frmatr.hxx>
-#include <pagedesc.hxx> // SwPageDesc
+#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <pagefrm.hxx>
@@ -39,12 +39,12 @@
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
-#include "porglue.hxx"      // SwFlyCnt
-#include "porfld.hxx"       // SwFldPortion::IsFollow()
-#include "porfly.hxx"       // GetFlyCrsrOfst()
+#include "porglue.hxx"
+#include "porfld.hxx"
+#include "porfly.hxx"
 #include "pordrop.hxx"
-#include "crstate.hxx"      // SwCrsrMoveState
-#include <pormulti.hxx>     // SwMultiPortion
+#include "crstate.hxx"
+#include <pormulti.hxx>
 // #i111284#
 #include <numrule.hxx>
 

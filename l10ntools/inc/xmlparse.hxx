@@ -27,7 +27,7 @@
 
 #include <signal.h>
 
-#include <libxml/xmlexports.h> // define XMLCALL so expat.h does not redefine it
+#include <libxml/xmlexports.h>
 #include <expat.h>
 
 #include <rtl/string.hxx>

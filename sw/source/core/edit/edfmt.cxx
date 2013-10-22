@@ -25,7 +25,7 @@
 #include <fchrfmt.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
-#include "ndtxt.hxx"    // for GetXXXFmt
+#include "ndtxt.hxx"
 #include "hints.hxx"
 
 sal_uInt16 SwEditShell::GetCharFmtCount() const

@@ -34,8 +34,8 @@
 #include "reffact.hxx"
 #include "scresid.hxx"
 #include "dwfunctr.hxx"
-#include "sc.hrc"       // -> SID_TOOL_xxx
-#include "drawattr.hxx" // -> SvxDrawToolItem
+#include "sc.hrc"
+#include "drawattr.hxx"
 #include "spelldialog.hxx"
 
 

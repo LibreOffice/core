@@ -20,9 +20,9 @@
 #ifndef _LINGUISTIC_LNGSVCMGR_HXX_
 #define _LINGUISTIC_LNGSVCMGR_HXX_
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase3.hxx> // helper for implementations
-#include <cppuhelper/interfacecontainer.h>  //OMultiTypeInterfaceContainerHelper
+#include <uno/lbnames.h>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/interfacecontainer.h>
 
 
 #include <com/sun/star/uno/Reference.h>

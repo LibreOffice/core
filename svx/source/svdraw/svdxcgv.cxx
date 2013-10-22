@@ -28,15 +28,15 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/svdoole2.hxx> // to not have OLE in SdrClipboardFormat
+#include <svx/svdoole2.hxx>
 #include <svx/svdorect.hxx>
-#include <svx/svdoedge.hxx> // for connectors via the clipboard
-#include <svx/svdopage.hxx> // for connectors via the clipboard
+#include <svx/svdoedge.hxx>
+#include <svx/svdopage.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/svdtrans.hxx> // for GetMapFactor, to rescale at PasteModel
-#include "svx/svdstr.hrc"   // names taken from the resource
-#include "svx/svdglob.hxx"  // StringCache
+#include <svx/svdtrans.hxx>
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include "svx/xoutbmp.hxx"
 #include <vcl/metaact.hxx>
 #include <svl/poolitem.hxx>

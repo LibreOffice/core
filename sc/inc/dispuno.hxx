@@ -24,7 +24,7 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <svl/lstner.hxx>
-#include "global.hxx"       ///< ScImportParam
+#include "global.hxx"
 #include <boost/ptr_container/ptr_vector.hpp>
 
 

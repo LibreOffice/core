@@ -40,7 +40,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <multmrk.hxx>
-#include <swundo.hxx>                   // for Undo-Ids
+#include <swundo.hxx>
 #include <cmdid.h>
 #include <index.hrc>
 #include <idxmrk.hrc>

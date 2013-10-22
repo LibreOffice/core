@@ -79,7 +79,7 @@ static void syslog( int priority, const char * message, ...)
 }
 #else
 
-    #include <sys/fcntl.h>      // For O_RDWR etc.
+    #include <sys/fcntl.h>
     #include <sys/time.h>
     #include <sys/socket.h>
     #include <syslog.h>

@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-#include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
+#include <usr/reflserv.hxx>
 
 #include <usr/factoryhlp.hxx>
 #include "testfactreg.hxx"

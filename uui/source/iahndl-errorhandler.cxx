@@ -28,8 +28,8 @@
 #include "com/sun/star/task/XInteractionDisapprove.hpp"
 #include "com/sun/star/task/XInteractionRetry.hpp"
 
-#include "tools/errinf.hxx" // ErrorHandler, ErrorContext, ...
-#include "svtools/svtools.hrc" // RID_ERRHDL
+#include "tools/errinf.hxx"
+#include "svtools/svtools.hrc"
 
 #include "ids.hrc"
 #include "getcontinuations.hxx"

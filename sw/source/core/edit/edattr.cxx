@@ -27,9 +27,9 @@
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <editsh.hxx>
-#include <edimp.hxx>    // for MACROS
+#include <edimp.hxx>
 #include <doc.hxx>
-#include <swundo.hxx>   // for UNDO-Ids
+#include <swundo.hxx>
 #include <ndtxt.hxx>
 #include <ftnidx.hxx>
 #include <expfld.hxx>
@@ -39,10 +39,10 @@
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <crsskip.hxx>
-#include <txtfrm.hxx>       // SwTxtFrm
+#include <txtfrm.hxx>
 #include <scriptinfo.hxx>
 #include <svl/ctloptions.hxx>
-#include <charfmt.hxx>  // #i27615#
+#include <charfmt.hxx>
 #include <numrule.hxx>
 
 #include <algorithm>

@@ -21,7 +21,7 @@
 #include <ctype.h>
 #include <float.h>
 #include <hintids.hxx>
-#include <hints.hxx>    // for SwAttrSetChg
+#include <hints.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -35,7 +35,7 @@
 #include <fmtfld.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
-#include <docary.hxx>   // for RedlineTbl()
+#include <docary.hxx>
 #include <frame.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>

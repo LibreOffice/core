@@ -25,7 +25,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/tabarea.hxx>
 
-#include "prlayout.hxx" // for enum PresentationObjects
+#include "prlayout.hxx"
 
 
 class SfxObjectShell;

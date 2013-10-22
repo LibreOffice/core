@@ -22,7 +22,7 @@
 #ifndef SC_XLTRACER_HXX
 #define SC_XLTRACER_HXX
 
-#include "global.hxx"        // ScAddress
+#include "global.hxx"
 #include "xltools.hxx"
 
 // As Trace features become implemented, we can safely delete the enum entry as

@@ -35,7 +35,7 @@
 #include <uitool.hxx>
 #include <fmtinfmt.hxx>
 #include <macassgn.hxx>
-#include <chrdlg.hxx>       // the dialog
+#include <chrdlg.hxx>
 #include <swmodule.hxx>
 #include <poolfmt.hxx>
 

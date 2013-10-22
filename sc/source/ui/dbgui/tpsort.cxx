@@ -37,7 +37,7 @@
 #include "userlist.hxx"
 #include "rangeutl.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"       // -> Slot IDs
+#include "sc.hrc"
 #include "globstr.hrc"
 
 #include "sortkeydlg.hxx"

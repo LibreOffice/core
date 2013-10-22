@@ -36,7 +36,7 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
 
-#include <tools/solar.h>        // for the F_PI180 define
+#include <tools/solar.h>
 #include <tools/gen.hxx>
 #include <tools/mapunit.hxx>
 #include <editeng/unoprnms.hxx>

@@ -21,7 +21,7 @@
 
 #include "svl/svldllapi.h"
 
-#include <cstdarg>  // std::va_list and friends
+#include <cstdarg>
 #include <svl/poolitem.hxx>
 #include <tools/rtti.hxx>
 #include <tools/solar.h>

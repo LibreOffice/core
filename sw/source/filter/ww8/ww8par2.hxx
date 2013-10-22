@@ -20,14 +20,14 @@
 #ifndef _WW8PAR2_HXX
 #define _WW8PAR2_HXX
 
-#include <swtypes.hxx>  // enum RndStdIds
+#include <swtypes.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <editeng/lrspitem.hxx>
 
-#include "ww8scan.hxx"  // class WW8Style
-#include "ww8par.hxx"   // WW8_BRC5
+#include "ww8scan.hxx"
+#include "ww8par.hxx"
 
 class WW8RStyle;
 

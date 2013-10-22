@@ -46,9 +46,9 @@
 #include <dialmgr.hxx>
 #include <sfx2/module.hxx>
 #include <svl/stritem.hxx>
-#include <svx/dialogs.hrc>  // for RID_SVXPAGE_PAGE
+#include <svx/dialogs.hrc>
 #include <editeng/eerdll.hxx>
-#include <editeng/editrids.hrc> // for RID_SVXSTR_PAPERBIN...,
+#include <editeng/editrids.hrc>
 #include <svx/svxids.hrc>
 
 // #i4219#
@@ -57,7 +57,7 @@
 #include <svl/aeitem.hxx>
 #include <sfx2/request.hxx>
 
-#include <numpages.hxx>     // for GetI18nNumbering()
+#include <numpages.hxx>
 
 // static ----------------------------------------------------------------
 

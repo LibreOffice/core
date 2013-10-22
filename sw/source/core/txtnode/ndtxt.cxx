@@ -52,16 +52,16 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
-#include <pam.hxx>        // for SwPosition
+#include <pam.hxx>
 #include <fldbas.hxx>
 #include <paratr.hxx>
 #include <txtfrm.hxx>
 #include <ftnfrm.hxx>
 #include <ftnboss.hxx>
 #include <rootfrm.hxx>
-#include <pagedesc.hxx>   // for SwPageDesc
-#include <expfld.hxx>     // for SwTblField
-#include <section.hxx>    // for SwSection
+#include <pagedesc.hxx>
+#include <expfld.hxx>
+#include <section.hxx>
 #include <mvsave.hxx>
 #include <swcache.hxx>
 #include <SwGrammarMarkUp.hxx>

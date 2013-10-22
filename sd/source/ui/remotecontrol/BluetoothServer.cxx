@@ -38,7 +38,7 @@
 #endif
 
 #ifdef MACOSX
-  #include <osl/conditn.hxx> // Include this early to avoid error as check() gets defined by some SDK header to empty
+  #include <osl/conditn.hxx>
   #include <premac.h>
   #if MACOSX_SDK_VERSION == 1070 || MACOSX_SDK_VERSION == 1080
     #import <IOBluetooth/IOBluetooth.h>

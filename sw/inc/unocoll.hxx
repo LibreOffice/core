@@ -25,10 +25,10 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <cppuhelper/implbase2.hxx> // helper for implementations
-#include <cppuhelper/implbase3.hxx> // helper for implementations
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <IMark.hxx>
 #include <unobaseclass.hxx>
 #include "swdllapi.h"

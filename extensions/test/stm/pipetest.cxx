@@ -25,8 +25,8 @@
 
 #include <usr/factoryhlp.hxx>
 
-#include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
-#include <usr/weak.hxx>      // OWeakObject
+#include <usr/reflserv.hxx>
+#include <usr/weak.hxx>
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>

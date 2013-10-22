@@ -37,8 +37,8 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdmodel.hxx>
-#include "svx/svdglob.hxx"  // string cache
-#include "svx/svdstr.hrc"   // the object's name
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx>

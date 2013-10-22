@@ -25,7 +25,7 @@
 
 #include "pormulti.hxx"
 #include <pagefrm.hxx>
-#include <pagedesc.hxx> // SwPageDesc
+#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <porfld.hxx>
 

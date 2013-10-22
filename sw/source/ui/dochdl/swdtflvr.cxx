@@ -90,8 +90,8 @@
 #include <view.hxx>
 #include <docsh.hxx>
 #include <wdocsh.hxx>
-#include <fldbas.hxx>       //DDE
-#include <swundo.hxx>       // for Undo-Ids
+#include <fldbas.hxx>
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndole.hxx>
 #include <swwait.hxx>
@@ -100,7 +100,7 @@
 #include <SwCapObjType.hxx>
 #include <cmdid.h>
 #include <dochdl.hrc>
-#include <comcore.hrc> // #111827#
+#include <comcore.hrc>
 #include <sot/stg.hxx>
 #include <svx/svditer.hxx>
 #include <editeng/eeitem.hxx>

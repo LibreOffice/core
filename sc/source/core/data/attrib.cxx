@@ -37,7 +37,7 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
-#include "textuno.hxx"  // ScHeaderFooterContentObj
+#include "textuno.hxx"
 
 using namespace com::sun::star;
 

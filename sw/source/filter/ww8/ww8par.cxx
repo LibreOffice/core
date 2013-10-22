@@ -63,8 +63,8 @@
 #include <ftninfo.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
-#include <ndtxt.hxx>            // class SwTxtNode
-#include <pagedesc.hxx>         // class SwPageDesc
+#include <ndtxt.hxx>
+#include <pagedesc.hxx>
 #include <paratr.hxx>
 #include <fmtclbl.hxx>
 #include <section.hxx>
@@ -73,10 +73,10 @@
 #include <swfltopt.hxx>
 #include <viewsh.hxx>
 #include <shellres.hxx>
-#include <mdiexp.hxx>           // Progress
-#include <statstr.hrc>          // ResId for Statusbar
-#include <swerror.h>            // ERR_WW8_...
-#include <swtable.hxx>          // class SwTableLines, ...
+#include <mdiexp.hxx>
+#include <statstr.hrc>
+#include <swerror.h>
+#include <swtable.hxx>
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
 
@@ -91,13 +91,13 @@
 #include <fmtflcnt.hxx>
 #include <txatbase.hxx>
 
-#include "ww8par2.hxx"          // class WW8RStyle, class WW8AnchorPara
+#include "ww8par2.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
-#include <svl/itemiter.hxx>     //SfxItemIter
+#include <svl/itemiter.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <basic/basmgr.hxx>

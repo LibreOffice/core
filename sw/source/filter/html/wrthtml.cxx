@@ -59,10 +59,10 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
-#include <mdiexp.hxx>       // ...Percent()
+#include <mdiexp.hxx>
 #include <fltini.hxx>
 #include <viewopt.hxx>
-#include <IMark.hxx>        // fuer SwBookmark ...
+#include <IMark.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <section.hxx>
@@ -74,7 +74,7 @@
 #include <htmlnum.hxx>
 #include <htmlfly.hxx>
 #include <swmodule.hxx>
-#include <statstr.hrc>      // ResId fuer Statusleiste
+#include <statstr.hrc>
 #include <swerror.h>
 #include <rtl/strbuf.hxx>
 

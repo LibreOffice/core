@@ -66,7 +66,7 @@
 #include "pagedesc.hxx"
 #include "poolfmt.hxx"
 #include <editeng/frmdiritem.hxx>
-#include <swfntcch.hxx> // SwFontAccess
+#include <swfntcch.hxx>
 #include <sortedobjs.hxx>
 #include <switerator.hxx>
 #include <vcl/svapp.hxx>

@@ -17,7 +17,7 @@
 #include <vector>
 #include <iostream>
 
-#include <osl/conditn.hxx> // Include this early to avoid error as check() gets defined by some SDK header to empty
+#include <osl/conditn.hxx>
 #include <premac.h>
 #import <CoreFoundation/CoreFoundation.h>
 #include <postmac.h>

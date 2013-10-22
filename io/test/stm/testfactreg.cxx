@@ -22,7 +22,7 @@
 
 #include <osl/diagnose.h>
 
-#include <cppuhelper/factory.hxx>  // for EXTERN_SERVICE_CALLTYPE
+#include <cppuhelper/factory.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;

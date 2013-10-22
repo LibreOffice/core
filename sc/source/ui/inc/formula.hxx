@@ -21,7 +21,7 @@
 #define SC_FORMULA_HXX
 
 #include "anyrefdg.hxx"
-#include "global.hxx"       // ScAddress
+#include "global.hxx"
 #include <svtools/stdctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>

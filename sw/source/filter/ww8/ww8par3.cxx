@@ -76,7 +76,7 @@
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "ww8par.hxx"
-#include "ww8par2.hxx"  // wg. Listen-Attributen in Styles
+#include "ww8par2.hxx"
 
 #include <IMark.hxx>
 #include <unotools/fltrcfg.hxx>

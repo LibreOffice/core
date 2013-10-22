@@ -18,7 +18,7 @@
  */
 
 
-#include <hintids.hxx>      // define ITEMIDs
+#include <hintids.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/frame.hxx>
 #include <vcl/msgbox.hxx>
@@ -31,10 +31,10 @@
 #include <sfx2/linkmgr.hxx>
 #include <fmtinfmt.hxx>
 #include <frmatr.hxx>
-#include <swtypes.hxx>      // SET_CURR_SHELL
+#include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#include <fldbas.hxx>       // Fields
+#include <fldbas.hxx>
 #include <expfld.hxx>
 #include <ddefld.hxx>
 #include <docufld.hxx>
@@ -42,9 +42,9 @@
 #include <swundo.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <viewopt.hxx>      // SwViewOptions
-#include <frmfmt.hxx>       // for UpdateTable
-#include <swtable.hxx>      // for UpdateTable
+#include <viewopt.hxx>
+#include <frmfmt.hxx>
+#include <swtable.hxx>
 #include <mdiexp.hxx>
 #include <view.hxx>
 #include <swevent.hxx>

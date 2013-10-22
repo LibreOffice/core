@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <osl/conditn.hxx> // Include this early to avoid error as check() gets defined by some SDK header to empty
+#include <osl/conditn.hxx>
 
 #include <premac.h>
  #import <CoreFoundation/CoreFoundation.h>

@@ -53,7 +53,7 @@
 #include "drwtrans.hxx"
 #include "rangenam.hxx"
 #include "dbdata.hxx"
-#include "impex.hxx"            // Sylk-ID fuer CB
+#include "impex.hxx"
 #include "chgtrack.hxx"
 #include "waitoff.hxx"
 #include "scmod.hxx"

@@ -22,7 +22,7 @@
 #include "frmtool.hxx"
 #include "hints.hxx"
 #include <fmtornt.hxx>
-#include "txtfrm.hxx"       //fuer IsLocked()
+#include "txtfrm.hxx"
 #include "flyfrms.hxx"
 // OD 2004-01-19 #110582#
 #include <dflyobj.hxx>

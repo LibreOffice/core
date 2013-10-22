@@ -45,7 +45,7 @@
 #include "swddetbl.hxx"
 #include <ndole.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <sfx2/linkmgr.hxx>  // for cTokenSeparator
+#include <sfx2/linkmgr.hxx>
 #include "unotbl.hxx"
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"

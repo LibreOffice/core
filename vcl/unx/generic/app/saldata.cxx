@@ -23,7 +23,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
-#include <stdio.h> // snprintf, seems not to be in namespace std on every platform
+#include <stdio.h>
 #include <limits.h>
 #include <errno.h>
 #include <pthread.h>

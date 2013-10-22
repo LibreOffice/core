@@ -21,7 +21,7 @@
 
 #include <cstddef>
 
-#include <stdlib.h> // getenv
+#include <stdlib.h>
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wrkwin.hxx>

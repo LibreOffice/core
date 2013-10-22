@@ -41,13 +41,13 @@
 #include <IMark.hxx>
 #include <section.hxx>
 #include <docary.hxx>
-#include <doc.hxx>                      // for the SwSectionFmt-Array
+#include <doc.hxx>
 #include <basesh.hxx>
 #include <wdocsh.hxx>
 #include <view.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // for Undo-Ids
+#include <swundo.hxx>
 #include <column.hxx>
 #include <fmtfsize.hxx>
 #include <shellio.hxx>

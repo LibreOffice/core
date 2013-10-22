@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cmdid.h>          // Function-Ids
+#include <cmdid.h>
 
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <hintids.hxx>
-#include <cmdid.h>          // Funktion-Ids
+#include <cmdid.h>
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
@@ -48,8 +48,8 @@
 #include <wrtsh.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <uitool.hxx>
-#include <initui.hxx>                   // for ::GetGlossaries()
-#include <fldbas.hxx>      //for UpdateFields
+#include <initui.hxx>
+#include <fldbas.hxx>
 #include <wview.hxx>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
@@ -62,7 +62,7 @@
 #include <unotools/lingucfg.hxx>
 #include <editeng/unolingu.hxx>
 #include <globals.hrc>
-#include <globals.h>        // e.g. global Constants
+#include <globals.h>
 #include <svl/slstitm.hxx>
 #include "swabstdlg.hxx"
 #include <swwrtshitem.hxx>

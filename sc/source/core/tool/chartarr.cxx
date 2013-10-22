@@ -20,7 +20,7 @@
 #include "scitems.hxx"
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
-#include <float.h>              // DBL_MIN
+#include <float.h>
 
 #include "chartarr.hxx"
 #include "document.hxx"

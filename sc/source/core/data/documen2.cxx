@@ -68,7 +68,7 @@
 #include "validat.hxx"
 #include "progress.hxx"
 #include "detdata.hxx"
-#include "sc.hrc"               // FID_DATACHANGED
+#include "sc.hrc"
 #include "ddelink.hxx"
 #include "chgtrack.hxx"
 #include "chgviset.hxx"

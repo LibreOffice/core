@@ -54,7 +54,7 @@
 #include "helpids.hrc"
 #include "resourcemanager.hxx"
 
-#include <vcl/msgbox.hxx> // Until encrypted docs work...
+#include <vcl/msgbox.hxx>
 #include <unotools/configitem.hxx>
 
 

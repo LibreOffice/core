@@ -26,7 +26,7 @@
 #include <vcl/textdata.hxx>
 #include <textdoc.hxx>
 #include <textdat2.hxx>
-#include <svdata.hxx> // ImplGetResMgr()
+#include <svdata.hxx>
 #include <tools/resid.hxx>
 
 TYPEINIT1( TextUndo, SfxUndoAction );

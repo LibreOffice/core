@@ -33,7 +33,7 @@
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 #include <com/sun/star/sheet/addin/XDateFunctions.hpp>
 #include <com/sun/star/sheet/addin/XMiscFunctions.hpp>
-#include <cppuhelper/implbase6.hxx>             // helper for implementations
+#include <cppuhelper/implbase6.hxx>
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>

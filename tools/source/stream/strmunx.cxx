@@ -30,7 +30,7 @@
 #include <vector>
 
 #include <osl/mutex.hxx>
-#include <osl/thread.h> // osl_getThreadTextEncoding
+#include <osl/thread.h>
 
 // class FileBase
 #include <osl/file.hxx>

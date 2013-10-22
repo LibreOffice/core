@@ -21,8 +21,8 @@
 #define _LINGUISTIC_IPRCACHE_HXX_
 
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <uno/lbnames.h>
+#include <cppuhelper/implbase2.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XEventListener.hpp>

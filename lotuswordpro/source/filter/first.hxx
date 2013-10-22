@@ -56,7 +56,7 @@
 #ifndef FIRST_HXX
 #define FIRST_HXX
 
-#include "bento.hxx"        // Public header
+#include "bento.hxx"
 
 //#define ASSERT(cond) UT_ASSERT(cond)
 namespace OpenStormBento

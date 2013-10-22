@@ -32,15 +32,15 @@
 #include <map>
 #include <utility>
 
-#include "ww8struc.hxx"     // WW8_BRC
-#include "ww8scan.hxx"  // WW8Fib
+#include "ww8struc.hxx"
+#include "ww8scan.hxx"
 #include "ww8glsy.hxx"
 #include "wrtww8.hxx"
 #include "../inc/msfilter.hxx"
 #include <xmloff/odffields.hxx>
 #include <IMark.hxx>
 
-#include <swtypes.hxx>  // enum RndStdIds
+#include <swtypes.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>

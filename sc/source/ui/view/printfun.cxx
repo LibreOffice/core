@@ -27,7 +27,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <editeng/editstat.hxx>     // EE_CNTRL_RTFSTYLESHEETS
+#include <editeng/editstat.hxx>
 #include <svx/fmview.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/lrspitem.hxx>

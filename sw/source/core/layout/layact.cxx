@@ -34,13 +34,13 @@
 #include "flyfrm.hxx"
 #include "frmtool.hxx"
 #include "dcontact.hxx"
-#include "ndtxt.hxx"    // OnlineSpelling
+#include "ndtxt.hxx"
 #include "frmfmt.hxx"
 #include "swregion.hxx"
-#include "viewopt.hxx"  // test OnlineSpelling using internal TabPage
-#include "pam.hxx"      // OnlineSpelling needed because of the current cursor position
+#include "viewopt.hxx"
+#include "pam.hxx"
 #include "dbg_lay.hxx"
-#include "layouter.hxx" // LoopControlling
+#include "layouter.hxx"
 #include "docstat.hxx"
 #include "swevent.hxx"
 

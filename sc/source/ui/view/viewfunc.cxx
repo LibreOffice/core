@@ -37,7 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/wrkwin.hxx>
-#include <stdlib.h>             // qsort
+#include <stdlib.h>
 
 #include "viewfunc.hxx"
 #include "tabvwsh.hxx"

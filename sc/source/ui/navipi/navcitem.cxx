@@ -23,7 +23,7 @@
 #include "navcitem.hxx"
 #include "global.hxx"
 #include "navipi.hxx"
-#include "sc.hrc"       // -> Item-IDs
+#include "sc.hrc"
 
 // STATIC DATA -----------------------------------------------------------
 

@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <map>
-#include "dpgroup.hxx"      ///< for ScDPNumGroupInfo
+#include "dpgroup.hxx"
 #include "scdllapi.h"
 #include "dptypes.hxx"
 

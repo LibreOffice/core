@@ -22,32 +22,32 @@
 #include <txtfld.hxx>
 #include <charfmt.hxx>
 
-#include "viewsh.hxx"   // NewFldPortion, GetDoc()
-#include "doc.hxx"      // NewFldPortion, GetSysFldType()
-#include "rootfrm.hxx"  // Info ueber virt. PageNumber
-#include "pagefrm.hxx"  // NewFldPortion, GetVirtPageNum()
-#include "ndtxt.hxx"    // NewNumberPortion, pHints->GetNum()
-#include "fldbas.hxx"      // SwField
-#include "viewopt.hxx"  // SwViewOptions
-#include "flyfrm.hxx"   //IsInBody()
+#include "viewsh.hxx"
+#include "doc.hxx"
+#include "rootfrm.hxx"
+#include "pagefrm.hxx"
+#include "ndtxt.hxx"
+#include "fldbas.hxx"
+#include "viewopt.hxx"
+#include "flyfrm.hxx"
 #include "viewimp.hxx"
-#include "txtatr.hxx"   // SwTxtFld
-#include "swfont.hxx"   // NewFldPortion, new SwFont
-#include "fntcache.hxx"   // NewFldPortion, SwFntAccess
+#include "txtatr.hxx"
+#include "swfont.hxx"
+#include "fntcache.hxx"
 #include "porfld.hxx"
-#include "porftn.hxx"   // NewExtraPortion
-#include "porref.hxx"   // NewExtraPortion
-#include "portox.hxx"   // NewExtraPortion
-#include "porhyph.hxx"   // NewExtraPortion
-#include "porfly.hxx"   // NewExtraPortion
-#include "itrform2.hxx"   // SwTxtFormatter
+#include "porftn.hxx"
+#include "porref.hxx"
+#include "portox.hxx"
+#include "porhyph.hxx"
+#include "porfly.hxx"
+#include "itrform2.hxx"
 #include "chpfld.hxx"
 #include "dbfld.hxx"
 #include "expfld.hxx"
 #include "docufld.hxx"
-#include "pagedesc.hxx"  // NewFldPortion, GetNum()
-#include <pormulti.hxx>     // SwMultiPortion
-#include "fmtmeta.hxx" // lcl_NewMetaPortion
+#include "pagedesc.hxx"
+#include <pormulti.hxx>
+#include "fmtmeta.hxx"
 
 
 /*************************************************************************

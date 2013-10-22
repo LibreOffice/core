@@ -18,7 +18,7 @@
  */
 
 #include <ZipPackageBuffer.hxx>
-#include <string.h> // for memcpy
+#include <string.h>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;

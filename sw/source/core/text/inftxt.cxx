@@ -46,18 +46,18 @@
 #include <swmodule.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <viewsh.hxx>   // ViewShell
-#include <viewopt.hxx>  // SwViewOptions
-#include <frmtool.hxx>  // DrawGraphic
+#include <viewsh.hxx>
+#include <viewopt.hxx>
+#include <frmtool.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
-#include <paratr.hxx>   // SwFmtDrop
-#include <rootfrm.hxx>  // SwRootFrm
-#include <inftxt.hxx>   // SwTxtInfo
-#include <blink.hxx>    // SwBlink
-#include <noteurl.hxx>  // SwNoteURL
-#include <porftn.hxx>   // SwFtnPortion
-#include <porrst.hxx>   // SwHangingPortion
+#include <paratr.hxx>
+#include <rootfrm.hxx>
+#include <inftxt.hxx>
+#include <blink.hxx>
+#include <noteurl.hxx>
+#include <porftn.hxx>
+#include <porrst.hxx>
 #include <itratr.hxx>
 #include <accessibilityoptions.hxx>
 #include <wrong.hxx>

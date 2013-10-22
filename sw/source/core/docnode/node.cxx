@@ -40,7 +40,7 @@
 #include <cntfrm.hxx>
 #include <flyfrm.hxx>
 #include <txtfrm.hxx>
-#include <tabfrm.hxx>  // SwTabFrm
+#include <tabfrm.hxx>
 #include <viewsh.hxx>
 #include <paratr.hxx>
 #include <ftnidx.hxx>

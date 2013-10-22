@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "nssrenam.h" // rename problematic symbols
+#include "nssrenam.h"
 #include "cert.h"
 #include "secerr.h"
 #include "ocsp.h"

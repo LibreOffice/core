@@ -22,7 +22,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
 
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>

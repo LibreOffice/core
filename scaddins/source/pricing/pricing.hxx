@@ -38,7 +38,7 @@
 #include <com/sun/star/sheet/XAddIn.hpp>
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 #include <com/sun/star/sheet/addin/XPricingFunctions.hpp>
-#include <cppuhelper/implbase5.hxx>             // helper for implementations
+#include <cppuhelper/implbase5.hxx>
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>

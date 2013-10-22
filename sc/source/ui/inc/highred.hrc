@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sc.hrc" // -> RID_SCDLG_CHANGES
+#include "sc.hrc"
 
 #define BTN_OK               1
 #define BTN_CANCEL          2

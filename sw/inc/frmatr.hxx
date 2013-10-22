@@ -19,8 +19,8 @@
 #ifndef _FRMATR_HXX
 #define _FRMATR_HXX
 
-#include <hintids.hxx> // IDs of attributes before frmitems to make sure
-#include <format.hxx>  // they are available for implementation of the inlines.
+#include <hintids.hxx>
+#include <format.hxx>
 
 // Inlines
 

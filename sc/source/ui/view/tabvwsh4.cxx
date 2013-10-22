@@ -57,7 +57,7 @@
 #include "inputopt.hxx"
 #include "inputwin.hxx"
 #include "scresid.hxx"
-#include "dbdata.hxx"       // fuer ReImport
+#include "dbdata.hxx"
 #include "reffact.hxx"
 #include "viewuno.hxx"
 #include "dispuno.hxx"

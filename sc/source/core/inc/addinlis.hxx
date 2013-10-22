@@ -20,7 +20,7 @@
 #ifndef SC_ADDINLIS_HXX
 #define SC_ADDINLIS_HXX
 
-#include "adiasync.hxx" // for ScAddInDocs PtrArr
+#include "adiasync.hxx"
 #include <com/sun/star/sheet/XResultListener.hpp>
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

@@ -30,20 +30,20 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <grfatr.hxx>           // class SwCropGrf
+#include <grfatr.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <fltshell.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
-#include <ndtxt.hxx>            // class SwTxtNode
-#include <mdiexp.hxx>           // Progress
+#include <ndtxt.hxx>
+#include <mdiexp.hxx>
 #include "writerwordglue.hxx"
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"
-#include "ww8par.hxx"           // class SwWWImplReader
-#include "ww8par2.hxx"          // struct WWFlyPara
+#include "ww8par.hxx"
+#include "ww8par2.hxx"
 #include "ww8graf.hxx"
 #include <vcl/graphicfilter.hxx>
 #include <vcl/wmf.hxx>

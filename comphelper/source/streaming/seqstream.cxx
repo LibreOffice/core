@@ -19,7 +19,7 @@
 
 #include <comphelper/seqstream.hxx>
 
-#include <memory.h> // for memcpy
+#include <memory.h>
 
 namespace comphelper
 {

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>  // for getenv()
+#include <stdlib.h>
 #include <stdio.h>
 
 #ifdef MACOSX

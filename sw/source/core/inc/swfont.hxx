@@ -25,8 +25,8 @@
 #include <tools/gen.hxx>
 #include <editeng/svxfont.hxx>
 #include <swtypes.hxx>
-#include <drawfont.hxx>     // SwDrawTextInfo
-#include <editeng/borderline.hxx> // SvxBorderLine
+#include <drawfont.hxx>
+#include <editeng/borderline.hxx>
 #include <boost/optional.hpp>
 
 class SfxItemSet;

@@ -105,7 +105,7 @@
 #include "svx/svditer.hxx"
 #include <svx/xpoly.hxx>
 #include "svx/xattr.hxx"
-#include <filter/msfilter/msdffimp.hxx> // externally visible header file
+#include <filter/msfilter/msdffimp.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>

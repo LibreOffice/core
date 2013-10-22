@@ -20,7 +20,7 @@
 #include "hintids.hxx"
 #include <sfx2/objface.hxx>
 #include <sfx2/app.hxx>
-#include <svl/srchitem.hxx> //***
+#include <svl/srchitem.hxx>
 #include <basic/sbxvar.hxx>
 #include <svx/svxids.hrc>
 

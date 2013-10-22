@@ -27,7 +27,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>   // #i119941
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <cppuhelper/implbase1.hxx>
 
 #include <cppuhelper/implbase2.hxx>

@@ -27,13 +27,13 @@
 
 #include <sfx2/objsh.hxx>
 #include "types.hxx"
-#include <svl/itempool.hxx>     //SfxItemPool
-#include <svl/itemset.hxx>      //SfxItemSet
-#include <format.hxx>               //SwFmt
-#include <node.hxx>                 //SwCntntNode
-#include <pam.hxx>                  //SwPaM
-#include <tools/poly.hxx>           //Polygon, PolyPolygon
-#include <doc.hxx>                  //SwDoc
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <format.hxx>
+#include <node.hxx>
+#include <pam.hxx>
+#include <tools/poly.hxx>
+#include <doc.hxx>
 
 class SwTxtFmtColl;
 class SwCharFmt;

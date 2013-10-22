@@ -23,7 +23,7 @@
 #include <vcl/field.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/svdoattr.hxx>
-#include <svx/svdtrans.hxx> // GeoStat
+#include <svx/svdtrans.hxx>
 #include <tools/datetime.hxx>
 #include <svx/xtextit0.hxx>
 #include "svdtext.hxx"

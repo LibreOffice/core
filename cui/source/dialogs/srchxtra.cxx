@@ -25,14 +25,14 @@
 #include <sfx2/objsh.hxx>
 #include <cuires.hrc>
 #include "srchxtra.hrc"
-#include <svx/svxitems.hrc> // RID_ATTR_BEGIN
-#include <svx/dialmgr.hxx>  // item resources
+#include <svx/svxitems.hrc>
+#include <svx/dialmgr.hxx>
 #include <editeng/flstitem.hxx>
 #include "chardlg.hxx"
 #include "paragrph.hxx"
 #include <dialmgr.hxx>
 #include "backgrnd.hxx"
-#include <svx/dialogs.hrc> // RID_SVXPAGE_...
+#include <svx/dialogs.hrc>
 #include <tools/resary.hxx>
 #include <rtl/strbuf.hxx>
 #include "svtools/treelistentry.hxx"

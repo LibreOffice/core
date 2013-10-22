@@ -21,7 +21,7 @@
 #ifndef __SIMPLE_H_
 #define __SIMPLE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CSimple

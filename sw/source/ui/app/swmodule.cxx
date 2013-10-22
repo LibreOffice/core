@@ -31,7 +31,7 @@
 #include <svx/insctrl.hxx>
 #include <svx/selctrl.hxx>
 #include <svx/linectrl.hxx>
-#include <svx/tbxctl.hxx>            // at the moment wrong include-protection!
+#include <svx/tbxctl.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/tbcontrl.hxx>
 #include <svx/verttexttbxctrl.hxx>

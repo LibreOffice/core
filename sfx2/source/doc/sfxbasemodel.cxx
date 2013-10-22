@@ -51,11 +51,11 @@
 #include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <comphelper/enumhelper.hxx>  // can be removed when this is a "real" service
+#include <comphelper/enumhelper.hxx>
 
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/processfactory.hxx>  // can be removed when this is a "real" service
+#include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>

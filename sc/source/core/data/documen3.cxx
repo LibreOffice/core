@@ -52,9 +52,9 @@
 #include "dociter.hxx"
 #include "detdata.hxx"
 #include "detfunc.hxx"
-#include "inputopt.hxx"     // GetExpandRefs
+#include "inputopt.hxx"
 #include "chartlis.hxx"
-#include "sc.hrc"           // SID_LINK
+#include "sc.hrc"
 #include "hints.hxx"
 #include "dpobject.hxx"
 #include "drwlayer.hxx"

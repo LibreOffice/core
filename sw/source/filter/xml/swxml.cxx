@@ -68,7 +68,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
-#include <sfx2/docfilt.hxx> // #i70748#
+#include <sfx2/docfilt.hxx>
 #include <istyleaccess.hxx>
 
 #include <sfx2/DocumentMetadataAccess.hxx>

@@ -32,7 +32,7 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "sc.hrc"
-#include "drwlayer.hxx"     // GetVisibleName
+#include "drwlayer.hxx"
 #include "retypepassdlg.hxx"
 #include "tabprotection.hxx"
 

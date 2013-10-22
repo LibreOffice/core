@@ -26,7 +26,7 @@
 #include <unotools/configitem.hxx>
 #include <unotools/configpaths.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <svl/poolitem.hxx> //Any2Bool
+#include <svl/poolitem.hxx>
 #include <svl/smplhint.hxx>
 #include <osl/mutex.hxx>
 

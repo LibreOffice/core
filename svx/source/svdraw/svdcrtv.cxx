@@ -21,7 +21,7 @@
 #include <svx/svdcrtv.hxx>
 #include "svx/xattr.hxx"
 #include <svx/svdundo.hxx>
-#include <svx/svdocapt.hxx> // special case: transparent filling after Create
+#include <svx/svdocapt.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>

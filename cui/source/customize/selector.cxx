@@ -23,8 +23,8 @@
 #include <vcl/vclmedit.hxx>
 #include "selector.hxx"
 #include <dialmgr.hxx>
-#include <svx/fmresids.hrc> // for RID_SVXIMG_...
-#include <svx/dialmgr.hxx>  // for RID_SVXIMG_...
+#include <svx/fmresids.hrc>
+#include <svx/dialmgr.hxx>
 #include <cuires.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>

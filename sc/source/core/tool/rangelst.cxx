@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>             // qsort
+#include <stdlib.h>
 #include <comphelper/string.hxx>
 #include <unotools/collatorwrapper.hxx>
 

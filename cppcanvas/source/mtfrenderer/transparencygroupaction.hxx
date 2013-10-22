@@ -24,7 +24,7 @@
 #include <cppcanvas/renderer.hxx>
 #include <action.hxx>
 
-#include <memory> // auto_ptr
+#include <memory>
 
 namespace basegfx {
     class B2DPoint;

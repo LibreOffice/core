@@ -20,7 +20,7 @@
 #include <unotools/charclass.hxx>
 #include <editsh.hxx>
 #include <fldbas.hxx>
-#include <ndtxt.hxx>        // GetCurFld
+#include <ndtxt.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <fmtfld.hxx>

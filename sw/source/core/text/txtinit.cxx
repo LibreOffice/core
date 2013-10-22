@@ -19,8 +19,8 @@
 
 
 #include "swcache.hxx"
-#include "fntcache.hxx"     // pFntCache ( SwFont/ScrFont-PrtFont cache )
-#include "swfntcch.hxx"     // pSwFontCache ( SwAttrSet/SwFont cache )
+#include "fntcache.hxx"
+#include "swfntcch.hxx"
 #include "txtfrm.hxx"
 #include "txtcache.hxx"
 #include "porlay.hxx"
@@ -34,10 +34,10 @@
 #include "porftn.hxx"
 #include "porhyph.hxx"
 #include "pordrop.hxx"
-#include "blink.hxx"    // Blink manager
-#include "init.hxx"     // Declarations for _TextInit() and _TextFinit()
-#include "txtfly.hxx"   // SwContourCache
-#include "dbg_lay.hxx"  // Layout Debug file output
+#include "blink.hxx"
+#include "init.hxx"
+#include "txtfly.hxx"
+#include "dbg_lay.hxx"
 
 SwCache *SwTxtFrm::pTxtCache = 0;
 long SwTxtFrm::nMinPrtLine = 0;

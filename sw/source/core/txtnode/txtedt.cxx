@@ -35,7 +35,7 @@
 #include <splargs.hxx>
 #include <viewopt.hxx>
 #include <acmplwrd.hxx>
-#include <doc.hxx>      // GetDoc()
+#include <doc.hxx>
 #include <docsh.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -53,8 +53,8 @@
 #include <crstate.hxx>
 #include <UndoOverwrite.hxx>
 #include <txatritr.hxx>
-#include <redline.hxx>      // SwRedline
-#include <docary.hxx>       // SwRedlineTbl
+#include <redline.hxx>
+#include <docary.hxx>
 #include <scriptinfo.hxx>
 #include <docstat.hxx>
 #include <editsh.hxx>

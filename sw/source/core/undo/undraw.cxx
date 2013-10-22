@@ -37,7 +37,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <frame.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>

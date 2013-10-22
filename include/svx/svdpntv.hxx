@@ -25,7 +25,7 @@
 #include <svl/smplhint.hxx>
 #include <svl/undo.hxx>
 #include <svx/svddrag.hxx>
-#include <svx/svdlayer.hxx>  // fuer SetOfByte
+#include <svx/svdlayer.hxx>
 #include <vcl/window.hxx>
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/awt/XControlContainer.hpp>

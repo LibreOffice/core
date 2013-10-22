@@ -20,7 +20,7 @@
 #ifndef _FRAMEWORK_SCRIPT_PROVIDER_FUNCTIONIMPL_HXX_
 #define  _FRAMEWORK_SCRIPT_PROVIDER_FUNCTIONIMPL_HXX_
 
-#include <cppuhelper/implbase1.hxx> // helper for XInterface, XTypeProvider etc.
+#include <cppuhelper/implbase1.hxx>
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

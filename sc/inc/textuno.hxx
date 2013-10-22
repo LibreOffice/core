@@ -20,7 +20,7 @@
 #ifndef SC_TEXTSUNO_HXX
 #define SC_TEXTSUNO_HXX
 
-#include "global.hxx"           // ScRange, ScAddress
+#include "global.hxx"
 #include "address.hxx"
 #include <editeng/unotext.hxx>
 #include <svl/brdcst.hxx>

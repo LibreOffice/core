@@ -52,8 +52,8 @@
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <viewsh.hxx>   // ViewShell
-#include <viewopt.hxx>  // SwViewOptions
+#include <viewsh.hxx>
+#include <viewopt.hxx>
 
 #define STACK_INCREMENT 4
 

@@ -26,7 +26,7 @@
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 
 
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
 #include <cppu/macros.hxx>
 #include <com/sun/star/uno/Reference.h>
 

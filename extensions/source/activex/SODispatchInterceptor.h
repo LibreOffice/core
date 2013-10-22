@@ -26,7 +26,7 @@
 #pragma once
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"
 #include <ExDispID.h>
 #include <ExDisp.h>
 #include <shlguid.h>

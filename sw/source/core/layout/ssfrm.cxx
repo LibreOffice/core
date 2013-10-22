@@ -28,7 +28,7 @@
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
 #include <flyfrm.hxx>
-#include <txtfrm.hxx>       // ClearPara()
+#include <txtfrm.hxx>
 #include <cellfrm.hxx>
 #include <swtable.hxx>
 #include <fmtfsize.hxx>

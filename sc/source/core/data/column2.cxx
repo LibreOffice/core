@@ -31,7 +31,7 @@
 #include "editutil.hxx"
 #include "subtotal.hxx"
 #include "markdata.hxx"
-#include "compiler.hxx"         // ScTokenArray GetCodeLen
+#include "compiler.hxx"
 #include "dbdata.hxx"
 #include "fillinfo.hxx"
 #include "segmenttree.hxx"

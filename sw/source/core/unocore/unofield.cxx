@@ -84,7 +84,7 @@
 #include <textapi.hxx>
 #include <editeng/outliner.hxx>
 #include <docsh.hxx>
-#include <fmtmeta.hxx> // MetaFieldManager
+#include <fmtmeta.hxx>
 #include <switerator.hxx>
 #include <bookmrk.hxx>
 #include <rtl/strbuf.hxx>

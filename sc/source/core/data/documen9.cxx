@@ -49,7 +49,7 @@
 #include "rechead.hxx"
 #include "poolhelp.hxx"
 #include "docpool.hxx"
-#include "detfunc.hxx"      // for UpdateAllComments
+#include "detfunc.hxx"
 #include "editutil.hxx"
 #include "postit.hxx"
 #include "charthelper.hxx"

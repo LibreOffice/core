@@ -28,7 +28,7 @@
 #include <osl/thread.h>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
-#include <stdio.h>      //sprintf
+#include <stdio.h>
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>

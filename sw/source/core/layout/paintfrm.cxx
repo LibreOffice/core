@@ -80,7 +80,7 @@
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
 #define COL_NOTES_SIDEPANE_SCROLLAREA       RGB_COLORDATA(230,230,220)
 
-#include <svtools/borderhelper.hxx> //Need for svtools::DrawLine
+#include <svtools/borderhelper.hxx>
 
 #include "pagefrm.hrc"
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>

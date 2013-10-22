@@ -72,7 +72,7 @@
 #include "rfindlst.hxx"
 #include "inputopt.hxx"
 #include "simpleformulacalc.hxx"
-#include "compiler.hxx"         // fuer Formel-Preview
+#include "compiler.hxx"
 #include "editable.hxx"
 #include "funcdesc.hxx"
 #include "markdata.hxx"

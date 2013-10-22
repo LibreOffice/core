@@ -20,10 +20,10 @@
 
 #include "../inc/wwstyles.hxx"
 
-#include <functional>               //std::unary_function
-#include <algorithm>                //std::find_if
+#include <functional>
+#include <algorithm>
 #include "rtl/ustring.hxx"
-#include "staticassert.hxx"      //StaticAssert
+#include "staticassert.hxx"
 
 namespace
 {

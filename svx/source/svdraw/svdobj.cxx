@@ -46,12 +46,12 @@
 #include <tools/line.hxx>
 #include <vcl/cvtsvm.hxx>
 #include <vcl/graphictools.hxx>
-#include <vcl/metaact.hxx>   // for TakeContour
+#include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vector>
 
 #include "svx/shapepropertynotifier.hxx"
-#include "svx/svdglob.hxx"   // StringCache
+#include "svx/svdglob.hxx"
 #include "svx/svdotable.hxx"
 #include "svx/xlinjoit.hxx"
 
@@ -71,26 +71,26 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svdocapt.hxx>  // Factory
-#include <svx/svdocirc.hxx>  // Factory
-#include <svx/svdoedge.hxx>  // Factory
-#include <svx/svdograf.hxx>  // Factory
-#include <svx/svdogrp.hxx>   // Factory
-#include <svx/svdomeas.hxx>  // Factory
+#include <svx/svdocapt.hxx>
+#include <svx/svdocirc.hxx>
+#include <svx/svdoedge.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdomeas.hxx>
 #include <svx/svdomedia.hxx>
-#include <svx/svdoole2.hxx>  // Factory
-#include <svx/svdopage.hxx>  // Factory
-#include <svx/svdopath.hxx>  // Factory
-#include <svx/svdorect.hxx>  // Factory
-#include <svx/svdotext.hxx>  // Factory
-#include <svx/svdouno.hxx>   // Factory
-#include <svx/svdovirt.hxx>  // for Add/Del Ref
+#include <svx/svdoole2.hxx>
+#include <svx/svdopage.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdorect.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/svdouno.hxx>
+#include <svx/svdovirt.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
-#include <svx/svdstr.hrc>    // the object's name
+#include <svx/svdstr.hrc>
 #include <svx/svdtrans.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/svdview.hxx>   // for Dragging (check Ortho)
+#include <svx/svdview.hxx>
 #include <svx/sxlayitm.hxx>
 #include <svx/sxlogitm.hxx>
 #include <svx/sxmovitm.hxx>

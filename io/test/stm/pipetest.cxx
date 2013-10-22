@@ -28,7 +28,7 @@
 
 #include <cppuhelper/factory.hxx>
 
-#include <cppuhelper/implbase1.hxx>      // OWeakObject
+#include <cppuhelper/implbase1.hxx>
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>

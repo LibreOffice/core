@@ -22,7 +22,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <comphelper/stl_types.hxx>
 

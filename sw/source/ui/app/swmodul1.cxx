@@ -28,7 +28,7 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <cppuhelper/implbase1.hxx> // helper for implementations
+#include <cppuhelper/implbase1.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -50,7 +50,7 @@
 #include <docsh.hxx>
 #include <dbmgr.hxx>
 #include <uinums.hxx>
-#include <prtopt.hxx>   // for PrintOptions
+#include <prtopt.hxx>
 #include <navicfg.hxx>
 #include <doc.hxx>
 #include <cmdid.h>

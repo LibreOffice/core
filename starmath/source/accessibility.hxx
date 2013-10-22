@@ -39,7 +39,7 @@
 #include <svl/brdcst.hxx>
 
 #include <editeng/editeng.hxx>
-#include <editeng/unoedsrc.hxx> // SvxEditSource, SvxTextForwarder, SvxViewForwarder, SvxEditViewForwarder
+#include <editeng/unoedsrc.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <edit.hxx>
 

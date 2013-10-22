@@ -25,9 +25,9 @@
 
 #include "view.hxx"
 #include "basesh.hxx"
-#include "wrtsh.hxx"        //
+#include "wrtsh.hxx"
 #include "cmdid.h"
-#include "bookmark.hxx"     // SwInsertBookmarkDlg
+#include "bookmark.hxx"
 #include "IMark.hxx"
 #include "globals.hrc"
 

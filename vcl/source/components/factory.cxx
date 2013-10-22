@@ -19,8 +19,8 @@
 
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <uno/dispatcher.h> // declaration of generic uno interface
-#include <uno/mapping.hxx> // mapping stuff
+#include <uno/dispatcher.h>
+#include <uno/mapping.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/dllapi.h>

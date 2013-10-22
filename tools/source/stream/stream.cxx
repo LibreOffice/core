@@ -23,8 +23,8 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <ctype.h>  // isspace
-#include <stdlib.h> // strtol, _crotl
+#include <ctype.h>
+#include <stdlib.h>
 
 #include "boost/static_assert.hpp"
 

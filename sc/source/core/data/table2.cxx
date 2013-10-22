@@ -26,7 +26,7 @@
 #include "olinetab.hxx"
 #include "rechead.hxx"
 #include "stlpool.hxx"
-#include "attarray.hxx"     // Iterator
+#include "attarray.hxx"
 #include "markdata.hxx"
 #include "progress.hxx"
 #include "dociter.hxx"

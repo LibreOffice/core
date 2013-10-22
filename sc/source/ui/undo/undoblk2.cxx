@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"              // SearchItem
+#include "scitems.hxx"
 
 #include "undoblk.hxx"
 #include "document.hxx"
@@ -28,7 +28,7 @@
 #include "global.hxx"
 #include "target.hxx"
 
-#include "undoolk.hxx"              // TODO move GetUndo in Document
+#include "undoolk.hxx"
 
 TYPEINIT1(ScUndoWidthOrHeight,      SfxUndoAction);
 

@@ -18,7 +18,7 @@
  */
 
 
-#include <ctype.h> // don't ask. msdev breaks otherwise...
+#include <ctype.h>
 #include <canvas/debug.hxx>
 #include <canvas/canvastools.hxx>
 #include <tools/diagnose_ex.h>

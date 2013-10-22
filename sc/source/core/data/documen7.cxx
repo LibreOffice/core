@@ -23,14 +23,14 @@
 #include "brdcst.hxx"
 #include "bcaslot.hxx"
 #include "formulacell.hxx"
-#include "formula/errorcodes.hxx"       // errCircularReference
+#include "formula/errorcodes.hxx"
 #include "scerrors.hxx"
 #include "docoptio.hxx"
 #include "refupdat.hxx"
 #include "table.hxx"
 #include "progress.hxx"
-#include "scmod.hxx"        // SC_MOD
-#include "inputopt.hxx"     // GetExpandRefs
+#include "scmod.hxx"
+#include "inputopt.hxx"
 #include "conditio.hxx"
 #include "colorscale.hxx"
 #include "sheetevents.hxx"

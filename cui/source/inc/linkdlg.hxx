@@ -26,8 +26,8 @@
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 
-#include <svtools/svmedit.hxx>  // MultiLineEdit
-#include <svtools/svtabbx.hxx>  // MultiLineEdit
+#include <svtools/svmedit.hxx>
+#include <svtools/svtabbx.hxx>
 
 /********************** SvUpdateLinksDialog ******************************
 *************************************************************************/

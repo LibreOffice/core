@@ -27,7 +27,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <svx/fntszctl.hxx>     //
+#include <svx/fntszctl.hxx>
 #include <svx/dialogs.hrc>
 #include <editeng/fhgtitem.hxx>
 #include "editeng/fontitem.hxx"

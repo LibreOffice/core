@@ -24,7 +24,7 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <rtl/instance.hxx>
-#include <cppuhelper/factory.hxx>   // helper for factories
+#include <cppuhelper/factory.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>

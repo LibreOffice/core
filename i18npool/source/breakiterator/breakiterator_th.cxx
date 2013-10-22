@@ -20,7 +20,7 @@
 #include <breakiterator_th.hxx>
 #include <wtt.h>
 
-#include <string.h> // for memset
+#include <string.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

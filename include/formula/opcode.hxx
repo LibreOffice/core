@@ -20,7 +20,7 @@
 #ifndef FORMULA_OPCODE_HXX
 #define FORMULA_OPCODE_HXX
 
-#include "formula/compiler.hrc"                     // OpCodes
+#include "formula/compiler.hrc"
 #include <tools/solar.h>
 
 enum OpCodeEnum

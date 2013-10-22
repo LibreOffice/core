@@ -23,7 +23,7 @@
 #include "comcore.hrc"
 #include "crsskip.hxx"
 #include "doc.hxx"
-#include "docsh.hxx"        //CheckSpellChanges
+#include "docsh.hxx"
 #include "edtwin.hxx"
 #include "helpid.h"
 #include "hintids.hxx"

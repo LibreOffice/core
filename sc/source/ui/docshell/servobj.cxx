@@ -25,7 +25,7 @@
 #include "impex.hxx"
 #include "brdcst.hxx"
 #include "rangenam.hxx"
-#include "sc.hrc"               // SC_HINT_AREAS_CHANGED
+#include "sc.hrc"
 
 using namespace formula;
 

@@ -40,12 +40,12 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
-#include <rootfrm.hxx>          // So that the RootDtor is called.
+#include <rootfrm.hxx>
 #include <poolfmt.hxx>
-#include <viewsh.hxx>           // for MakeDrawView
+#include <viewsh.hxx>
 #include <drawdoc.hxx>
 #include <UndoDraw.hxx>
-#include <swundo.hxx>           // for the UndoIds
+#include <swundo.hxx>
 #include <dcontact.hxx>
 #include <dview.hxx>
 #include <mvsave.hxx>

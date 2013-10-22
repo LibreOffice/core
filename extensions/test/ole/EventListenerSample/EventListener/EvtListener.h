@@ -21,7 +21,7 @@
 #ifndef __EVTLISTENER_H_
 #define __EVTLISTENER_H_
 
-#include "resource.h"       // Hauptsymbole
+#include "resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CEvtListener

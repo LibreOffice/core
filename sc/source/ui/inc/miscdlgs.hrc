@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sc.hrc"   // -> RID_SCDLG_INSCELL
+#include "sc.hrc"
                     // -> RID_SCDLG_INSCONT
                     // -> RID_SCDLG_MOVETAB
                     // -> RID_SCDLG_STRINPUT

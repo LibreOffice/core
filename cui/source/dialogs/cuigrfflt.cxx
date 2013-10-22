@@ -27,7 +27,7 @@
 #include "cuigrfflt.hxx"
 #include "grfflt.hrc"
 #include <cuires.hrc>
-#include <svx/dialogs.hrc> // RID_SVX_GRFFILTER_DLG_...
+#include <svx/dialogs.hrc>
 
 // --------------------------------------
 // - GraphicFilterDialog::PreviewWindow -

@@ -22,14 +22,14 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <paratr.hxx>
-#include <txtfrm.hxx>   // Format()
+#include <txtfrm.hxx>
 #include <charfmt.hxx>
-#include <viewopt.hxx>  // SwViewOption
-#include <viewsh.hxx>   // ViewShell
+#include <viewopt.hxx>
+#include <viewsh.hxx>
 #include <pordrop.hxx>
 #include <itrform2.hxx>
-#include <txtpaint.hxx> // SwSaveClip
-#include <blink.hxx>    // pBlink
+#include <txtpaint.hxx>
+#include <blink.hxx>
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>

@@ -88,16 +88,16 @@
 #include <txtfld.hxx>
 #include <txtftn.hxx>
 #include <poolfmt.hxx>
-#include <doc.hxx>          // Doc for footnotes
+#include <doc.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <paratr.hxx>
-#include <fldbas.hxx>       // for SwField
-#include <docufld.hxx>      // for SwField
+#include <fldbas.hxx>
+#include <docufld.hxx>
 #include <expfld.hxx>
-#include <pagedesc.hxx>     // for SwPageDesc
-#include <flddat.hxx>       // for Date fields
-#include <ndtxt.hxx>        // for Numrules
+#include <pagedesc.hxx>
+#include <flddat.hxx>
+#include <ndtxt.hxx>
 #include <swrect.hxx>
 #include <reffld.hxx>
 #include <ftninfo.hxx>

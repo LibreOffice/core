@@ -45,7 +45,7 @@
 
 #include <svx/svdattr.hxx>
 #include <editeng/outliner.hxx>
-#include <svx/xtable.hxx>           // for RGB_Color
+#include <svx/xtable.hxx>
 #include <editeng/bulletitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjustitem.hxx>

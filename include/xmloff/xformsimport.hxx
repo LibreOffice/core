@@ -22,7 +22,7 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 
-#include <tools/solar.h> // for sal_uInt16
+#include <tools/solar.h>
 #include <com/sun/star/uno/Reference.hxx>
 
 class SvXMLImport;

@@ -18,10 +18,10 @@
  */
 
 #include <frame.hxx>
-#include <hintids.hxx>          // contains RES_.. IDs
+#include <hintids.hxx>
 #include <hints.hxx>
-#include <swcache.hxx>          // mba: get rid of that dependency
-#include <swfntcch.hxx>         // mba: get rid of that dependency
+#include <swcache.hxx>
+#include <swfntcch.hxx>
 
 static SwClientIter* pClientIters = 0;
 

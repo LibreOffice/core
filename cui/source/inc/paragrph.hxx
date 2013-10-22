@@ -22,8 +22,8 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/relfld.hxx>       // SvxRelativeField
-#include <svx/paraprev.hxx>     // Preview
+#include <svx/relfld.hxx>
+#include <svx/paraprev.hxx>
 #include <svx/frmdirlbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <svx/flagsdef.hxx>

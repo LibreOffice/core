@@ -50,7 +50,7 @@
 #include <expfld.hxx>
 #include <docufld.hxx>
 #include <ftninfo.hxx>
-#include <section.hxx>          // class SwSection
+#include <section.hxx>
 #include <fltini.hxx>
 #include <w1par.hxx>
 #include <docsh.hxx>

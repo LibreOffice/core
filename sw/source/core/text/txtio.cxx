@@ -121,8 +121,8 @@ const char *GetPrepName( const PrepareHint )
 #else
 #include <limits.h>
 #include <stdlib.h>
-#include "swtypes.hxx"      // ZTCCONST
-#include "swfont.hxx"     // SwDropPortion
+#include "swtypes.hxx"
+#include "swfont.hxx"
 
 #define CONSTCHAR( name, string ) static const sal_Char name[] = string
 

@@ -33,7 +33,7 @@
 #include <reportformula.hxx>
 #include <toolkit/helper/property.hxx>
 
-#include <tools/color.hxx> // COL_TRANSPARENT
+#include <tools/color.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <unotools/confignode.hxx>
 

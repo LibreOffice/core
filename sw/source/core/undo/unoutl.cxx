@@ -19,7 +19,7 @@
 
 
 #include "doc.hxx"
-#include "swundo.hxx"           // fuer die UndoIds
+#include "swundo.hxx"
 #include "pam.hxx"
 #include "ndtxt.hxx"
 

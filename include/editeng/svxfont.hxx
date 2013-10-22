@@ -19,7 +19,7 @@
 #ifndef _SVX_SVXFONT_HXX
 #define _SVX_SVXFONT_HXX
 
-#include <limits.h>     // USHRT_MAX
+#include <limits.h>
 #include <editeng/svxenum.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/font.hxx>

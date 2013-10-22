@@ -22,7 +22,7 @@
 
 #include "sal/config.h"
 
-#include <boost/unordered_map.hpp> // using the boost container because it explicitly allows recursive types
+#include <boost/unordered_map.hpp>
 #include <set>
 
 #include "boost/noncopyable.hpp"

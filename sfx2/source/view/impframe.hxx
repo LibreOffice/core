@@ -21,7 +21,7 @@
 #define _SFX_IMPFRAME_HXX
 
 #include <sfx2/frame.hxx>
-#include <sfx2/viewfrm.hxx>                  // SvBorder
+#include <sfx2/viewfrm.hxx>
 
 class SfxViewFrame;
 #include <com/sun/star/frame/XController.hpp>

@@ -19,7 +19,7 @@
 
 #ifndef BIBTOOLS_HXX
 
-#include <vcl/taskpanelist.hxx>     // includes also vcl/window.hxx
+#include <vcl/taskpanelist.hxx>
 
 namespace bib
 {

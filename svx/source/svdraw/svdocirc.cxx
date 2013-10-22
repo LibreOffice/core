@@ -26,8 +26,8 @@
 #include <math.h>
 #include <svl/style.hxx>
 
-#include "svx/svdglob.hxx"   // StringCache
-#include "svx/svdstr.hrc"    // the object's name
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 
 #include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <svx/sdr/properties/circleproperties.hxx>
@@ -36,11 +36,11 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdocirc.hxx>
-#include <svx/svdopath.hxx> // for the object conversion
+#include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdtrans.hxx>
-#include <svx/svdview.hxx>  // for dragging (Ortho)
+#include <svx/svdview.hxx>
 #include <svx/sxciaitm.hxx>
 #include <svx/sxcikitm.hxx>
 #include <svx/xlnedit.hxx>

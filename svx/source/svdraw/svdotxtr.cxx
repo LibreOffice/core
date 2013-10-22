@@ -23,8 +23,8 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/svdpage.hxx>   // for Convert
-#include <svx/svdmodel.hxx>  // for Convert
+#include <svx/svdpage.hxx>
+#include <svx/svdmodel.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/sdr/properties/itemsettools.hxx>

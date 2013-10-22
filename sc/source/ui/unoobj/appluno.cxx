@@ -34,7 +34,7 @@
 #include "inputopt.hxx"
 #include "printopt.hxx"
 #include "userlist.hxx"
-#include "sc.hrc"           // VAR_ARGS
+#include "sc.hrc"
 #include "unonames.hxx"
 #include "funcdesc.hxx"
 #include <com/sun/star/sheet/FunctionArgument.hpp>

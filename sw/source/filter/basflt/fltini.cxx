@@ -18,7 +18,7 @@
  */
 
 #include <string.h>
-#include <stdio.h>                      // sscanf
+#include <stdio.h>
 #include <hintids.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>

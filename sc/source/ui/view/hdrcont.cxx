@@ -26,8 +26,8 @@
 #include "sc.hrc"
 #include "tabvwsh.hxx"
 #include "hdrcont.hxx"
-#include "scmod.hxx"        // Optionen
-#include "inputopt.hxx"     // Optionen
+#include "scmod.hxx"
+#include "inputopt.hxx"
 #include "gridmerg.hxx"
 #include "document.hxx"
 #include "markdata.hxx"

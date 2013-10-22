@@ -27,15 +27,15 @@
 // LO/windows.h conflict
 #undef WB_LEFT
 #undef WB_RIGHT
-#include "msdasc.h"        // OLE DB Service Component header
+#include "msdasc.h"
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
 #include "stdio.h"
 
-#include <initguid.h>  // Include only once in your application
-#include <adoid.h>     // needed for CLSID_CADOConnection
-#include <adoint.h>    // needed for ADOConnection
+#include <initguid.h>
+#include <adoid.h>
+#include <adoint.h>
 
 #include "adodatalinks.hxx"
 

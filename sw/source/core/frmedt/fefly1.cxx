@@ -54,7 +54,7 @@
 #include <ndtxt.hxx>
 #include <edimp.hxx>
 #include <swtable.hxx>
-#include <mvsave.hxx>       // storage structures for Move/Delete
+#include <mvsave.hxx>
 #include <ndgrf.hxx>
 #include <flyfrms.hxx>
 #include <flypos.hxx>
@@ -65,7 +65,7 @@
 #include <notxtfrm.hxx>
 #include <HandleAnchorNodeChg.hxx>
 #include <frmatr.hxx>
-#include <fmtsrnd.hxx> // #i89920#
+#include <fmtsrnd.hxx>
 #include <ndole.hxx>
 #include <editeng/opaqitem.hxx>
 

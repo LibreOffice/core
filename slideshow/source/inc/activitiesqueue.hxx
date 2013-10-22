@@ -28,7 +28,7 @@
 #include <canvas/elapsedtime.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp> // for boost::noncopyable
+#include <boost/utility.hpp>
 
 
 /* Definition of ActivitiesQueue class */

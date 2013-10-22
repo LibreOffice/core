@@ -22,8 +22,8 @@
 
 #include "global.hxx"
 #include "dpobject.hxx"
-#include "rangeutl.hxx"     // ScArea
-#include "cellsuno.hxx"     // for XModifyListenerArr_Impl
+#include "rangeutl.hxx"
+#include "cellsuno.hxx"
 
 #include <svl/lstner.hxx>
 #include <svl/itemprop.hxx>

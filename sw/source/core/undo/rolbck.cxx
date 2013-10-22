@@ -38,19 +38,19 @@
 #include <fmtcnct.hxx>
 #include <frmfmt.hxx>
 #include <ftnidx.hxx>
-#include <doc.hxx>              // SwDoc.GetNodes()
+#include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
-#include <ndtxt.hxx>            // SwTxtNode
+#include <ndtxt.hxx>
 #include <paratr.hxx>
 #include <cellatr.hxx>
 #include <fldbas.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
-#include <ndgrf.hxx>            // SwGrfNode
+#include <ndgrf.hxx>
 #include <UndoCore.hxx>
 #include <IMark.hxx>
-#include <charfmt.hxx> // #i27615#
+#include <charfmt.hxx>
 #include <comcore.hrc>
 #include <undo.hrc>
 #include <bookmrk.hxx>

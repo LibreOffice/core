@@ -18,8 +18,8 @@
  */
 
 
-#include <string.h>      // memcpy()
-#include <stdio.h>       // fprintf(), stderr
+#include <string.h>
+#include <stdio.h>
 #include <string>
 
 #include <unotools/localedatawrapper.hxx>

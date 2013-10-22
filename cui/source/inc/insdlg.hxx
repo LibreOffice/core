@@ -30,7 +30,7 @@
 #include <vcl/field.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/svmedit.hxx>  // MultiLineEdit
+#include <svtools/svmedit.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 
 class VclFrame;

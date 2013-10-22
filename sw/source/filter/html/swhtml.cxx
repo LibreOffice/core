@@ -82,13 +82,13 @@
 #include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <mdiexp.hxx>           // ...Percent()
+#include <mdiexp.hxx>
 #include <expfld.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
-#include <IMark.hxx>        // fuer SwBookmark ...
+#include <IMark.hxx>
 #include <docsh.hxx>
-#include <editsh.hxx>       // fuer Start/EndAction
+#include <editsh.hxx>
 #include <docufld.hxx>
 #include <swcss1.hxx>
 #include <htmlvsh.hxx>
@@ -102,7 +102,7 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#include <statstr.hrc>          // ResId fuer Statusleiste
+#include <statstr.hrc>
 #include <swerror.h>
 
 #define FONTSIZE_MASK           7

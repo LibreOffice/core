@@ -19,11 +19,11 @@
 
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <doc.hxx>
-#include <frame.hxx>        // SwChapterFieldType::ChangeExpansion()
-#include <pam.hxx>          // for GetBodyTxtNode
+#include <frame.hxx>
+#include <pam.hxx>
 #include <ndtxt.hxx>
 #include <chpfld.hxx>
-#include <expfld.hxx>       // for GetBodyTxtNode
+#include <expfld.hxx>
 #include <unofldmid.h>
 #include <numrule.hxx>
 

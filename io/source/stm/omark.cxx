@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/weak.hxx>      // OWeakObject
+#include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase5.hxx>
 
 #include <osl/mutex.hxx>

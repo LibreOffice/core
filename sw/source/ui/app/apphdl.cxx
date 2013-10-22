@@ -55,21 +55,21 @@
 #include <srcview.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#include <cmdid.h>          // Function-Ids
+#include <cmdid.h>
 #include <initui.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
 #include <wdocsh.hxx>
 #include <wview.hxx>
 #include <usrpref.hxx>
-#include <gloslst.hxx>      // SwGlossaryList
-#include <glosdoc.hxx>      // SwGlossaryList
+#include <gloslst.hxx>
+#include <glosdoc.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <modcfg.hxx>
-#include <globals.h>        // e.g. global Constants
+#include <globals.h>
 #include <app.hrc>
 #include <fontcfg.hxx>
 #include <barcfg.hxx>

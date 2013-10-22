@@ -35,7 +35,7 @@
 
 #include <svtools/grfmgr.hxx>
 
-#include <tools/rtti.hxx>   // due to typedef TypeId
+#include <tools/rtti.hxx>
 #include <vector>
 
 class OutlinerEditEng;

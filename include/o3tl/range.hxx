@@ -21,7 +21,7 @@
 #define INCLUDED_O3TL_RANGE_HXX
 
 
-#include <cstring>  // for std::size_t
+#include <cstring>
 #include <boost/assert.hpp>
 
 

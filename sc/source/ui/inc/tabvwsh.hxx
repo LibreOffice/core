@@ -25,11 +25,11 @@
 #include <sfx2/viewfac.hxx>
 #include <editeng/svxenum.hxx>
 #include "scdllapi.h"
-#include "dbfunc.hxx"           // -> tabview
+#include "dbfunc.hxx"
 #include "target.hxx"
-#include "rangelst.hxx"         // ScRangeListRef
+#include "rangelst.hxx"
 #include "shellids.hxx"
-#include "tabprotection.hxx" // for ScPasswordHash
+#include "tabprotection.hxx"
 
 #include <boost/ptr_container/ptr_map.hpp>
 

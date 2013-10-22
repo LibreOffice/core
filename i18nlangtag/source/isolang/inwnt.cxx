@@ -25,8 +25,8 @@
 #ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
 #endif
-#include <windef.h>     // needed by winnls.h
-#include <winbase.h>    // needed by winnls.h
+#include <windef.h>
+#include <winbase.h>
 #include <winnls.h>
 #ifdef _MSC_VER
 #pragma warning(pop)

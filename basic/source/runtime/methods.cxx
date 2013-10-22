@@ -84,7 +84,7 @@ using namespace com::sun::star::uno;
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 #if defined (WNT)
-#include <direct.h>   // _getdcwd get current work directory, _chdrive
+#include <direct.h>
 #endif
 
 #include <basic/sbobjmod.hxx>

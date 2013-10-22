@@ -74,7 +74,7 @@
 #include <textsh.hxx>
 #include <frmfmt.hxx>
 #include <tablemgr.hxx>
-#include <swundo.hxx>       // for Undo-IDs
+#include <swundo.hxx>
 #include <shellio.hxx>
 #include <frmdlg.hxx>
 #include <usrpref.hxx>

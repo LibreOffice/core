@@ -28,7 +28,7 @@
 #include <editeng/unoedhlp.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
-#include <editeng/editobj.hxx>      // only for the GetText crutch
+#include <editeng/editobj.hxx>
 
 #include <editeng/unofored.hxx>
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>         // for strchr()
+#include <string.h>
 
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -28,12 +28,12 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
-#include <mvsave.hxx>       // structures for Saving by Move/Delete
+#include <mvsave.hxx>
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 #include <rubylist.hxx>
 #include <pam.hxx>
-#include <swundo.hxx>       // for the UndoIds
+#include <swundo.hxx>
 #include <breakit.hxx>
 #include <crsskip.hxx>
 

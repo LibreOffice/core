@@ -25,23 +25,23 @@
 #include <fmtftn.hxx>
 #include <fmtclbl.hxx>
 #include "sectfrm.hxx"
-#include "section.hxx"      // SwSection
-#include "frmtool.hxx"      // StackHack
-#include "doc.hxx"          // SwDoc
-#include "cntfrm.hxx"       // SwCntntFrm
-#include "rootfrm.hxx"      // SwRootFrm
-#include "pagefrm.hxx"      // SwPageFrm
-#include "fmtpdsc.hxx"      // SwFmtPageDesc
-#include "fmtcntnt.hxx"     // SwFmtCntnt
-#include "ndindex.hxx"      // SwNodeIndex
+#include "section.hxx"
+#include "frmtool.hxx"
+#include "doc.hxx"
+#include "cntfrm.hxx"
+#include "rootfrm.hxx"
+#include "pagefrm.hxx"
+#include "fmtpdsc.hxx"
+#include "fmtcntnt.hxx"
+#include "ndindex.hxx"
 #include "ftnidx.hxx"
-#include "txtfrm.hxx"       // SwTxtFrm
-#include "fmtclds.hxx"      // SwFmtCol
-#include "colfrm.hxx"       // SwColumnFrm
-#include "tabfrm.hxx"       // SwTabFrm
-#include "flyfrm.hxx"       // SwFlyFrm
-#include "ftnfrm.hxx"       // SwFtnFrm
-#include "layouter.hxx"     // SwLayouter
+#include "txtfrm.hxx"
+#include "fmtclds.hxx"
+#include "colfrm.hxx"
+#include "tabfrm.hxx"
+#include "flyfrm.hxx"
+#include "ftnfrm.hxx"
+#include "layouter.hxx"
 #include "dbg_lay.hxx"
 #include "viewsh.hxx"
 #include "viewopt.hxx"

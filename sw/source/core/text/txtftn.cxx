@@ -39,17 +39,17 @@
 // #i28701#
 #include <sortedobjs.hxx>
 
-#include "swfont.hxx"   // new SwFont
+#include "swfont.hxx"
 #include "porftn.hxx"
 #include "porfly.hxx"
 #include "porlay.hxx"
 #include "txtfrm.hxx"
 #include "itrform2.hxx"
-#include "ftnfrm.hxx"   // FindQuoVadisFrm(),
+#include "ftnfrm.hxx"
 #include "pagedesc.hxx"
-#include "redlnitr.hxx" // SwRedlnItr
-#include "sectfrm.hxx"  // SwSectionFrm
-#include "layouter.hxx" // Endnote-Collection
+#include "redlnitr.hxx"
+#include "sectfrm.hxx"
+#include "layouter.hxx"
 #include "frmtool.hxx"
 #include "ndindex.hxx"
 

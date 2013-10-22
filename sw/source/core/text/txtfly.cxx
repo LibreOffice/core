@@ -23,20 +23,20 @@
 
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
-#include "pam.hxx"          // SwPosition
-#include "swregion.hxx"     // SwRegionRects
-#include "dflyobj.hxx"      // SdrObject
-#include "flyfrm.hxx"       // SwFlyFrm
-#include "frmtool.hxx"      // ::DrawGraphic
-#include "porfly.hxx"       // NewFlyCntPortion
-#include "porfld.hxx"       // SwGrfNumPortion
-#include "txtfly.hxx"       // SwTxtFly
-#include "txtpaint.hxx"     // SwSaveClip
-#include "txtatr.hxx"       // SwTxtFlyCnt
+#include "pam.hxx"
+#include "swregion.hxx"
+#include "dflyobj.hxx"
+#include "flyfrm.hxx"
+#include "frmtool.hxx"
+#include "porfly.hxx"
+#include "porfld.hxx"
+#include "txtfly.hxx"
+#include "txtpaint.hxx"
+#include "txtatr.hxx"
 #include "notxtfrm.hxx"
-#include "fmtcnct.hxx"      // SwFmtChain
+#include "fmtcnct.hxx"
 #include "inftxt.hxx"
-#include <pormulti.hxx>     // SwMultiPortion
+#include <pormulti.hxx>
 #include <svx/obj3d.hxx>
 #include <editeng/txtrange.hxx>
 #include <editeng/lrspitem.hxx>
@@ -46,7 +46,7 @@
 #include <fmtsrnd.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
-#include <pagedesc.hxx> // SwPageDesc
+#include <pagedesc.hxx>
 #include <tgrditem.hxx>
 #include <sortedobjs.hxx>
 #include <layouter.hxx>
@@ -57,7 +57,7 @@
 
 #ifdef DBG_UTIL
 #include "viewsh.hxx"
-#include "viewopt.hxx"  // SwViewOptions, only for testing (Test2)
+#include "viewopt.hxx"
 #include "doc.hxx"
 #endif
 

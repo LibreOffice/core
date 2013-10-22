@@ -23,7 +23,7 @@
 #define YY_EXIT 1               // YY_FATAL will not halt the application
 
 #ifndef _CSTDARG_
-#include <cstdarg>      // std::va_list
+#include <cstdarg>
 #endif
 
 #include <string.h>

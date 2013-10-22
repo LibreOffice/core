@@ -26,8 +26,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <uno/dispatcher.h> // declaration of generic uno interface
-#include <uno/mapping.hxx> // mapping stuff
+#include <uno/dispatcher.h>
+#include <uno/mapping.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/tencinfo.h>

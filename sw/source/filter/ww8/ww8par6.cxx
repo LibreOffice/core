@@ -70,10 +70,10 @@
 #include <doctok/sprmids.hxx>
 #include <fmtpdsc.hxx>
 #include <node.hxx>
-#include <ndtxt.hxx> // SwTxtNode, siehe unten: JoinNode()
-#include <pam.hxx>              // fuer SwPam
+#include <ndtxt.hxx>
+#include <pam.hxx>
 #include <doc.hxx>
-#include <pagedesc.hxx>         // class SwPageDesc
+#include <pagedesc.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <fchrfmt.hxx>
@@ -90,11 +90,11 @@
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
 #include <swtable.hxx>
-#include <fltini.hxx>   //For CalculateFlySize
+#include <fltini.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "ww8scan.hxx"
-#include "ww8par2.hxx"          // class WW8RStyle, class WwAnchorPara
+#include "ww8par2.hxx"
 #include "ww8graf.hxx"
 
 // #i27767#

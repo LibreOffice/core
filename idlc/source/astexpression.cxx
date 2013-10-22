@@ -25,7 +25,7 @@
 
 #include <limits.h>
 #include <float.h>
-#include <memory> // auto_ptr<>
+#include <memory>
 
 using namespace ::rtl;
 

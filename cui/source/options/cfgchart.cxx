@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <tools/stream.hxx>            // header for SvStream
+#include <tools/stream.hxx>
 #include "cfgchart.hxx"
 #include <dialmgr.hxx>
 #include <cuires.hrc>

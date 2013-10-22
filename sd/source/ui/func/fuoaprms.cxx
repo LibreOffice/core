@@ -37,8 +37,8 @@
 #include "drawdoc.hxx"
 #include "ViewShell.hxx"
 #include "anminfo.hxx"
-#include "unoaprms.hxx"                 // Undo-Action
-#include "sdundogr.hxx"                 // Undo Group
+#include "unoaprms.hxx"
+#include "sdundogr.hxx"
 #include "View.hxx"
 #include "sdabstdlg.hxx"
 #include "sdresid.hxx"

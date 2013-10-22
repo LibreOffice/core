@@ -55,18 +55,18 @@
 #include <swwait.hxx>
 #include <printdata.hxx>
 #include <frmatr.hxx>
-#include <view.hxx>         // for the current view
+#include <view.hxx>
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
-#include <wrtsh.hxx>        // connection to Core
-#include <docsh.hxx>        // document creation
+#include <wrtsh.hxx>
+#include <docsh.hxx>
 #include <basesh.hxx>
 #include <viewopt.hxx>
 #include <wdocsh.hxx>
 #include <swmodule.hxx>
 #include <globdoc.hxx>
 #include <usrpref.hxx>
-#include <shellio.hxx>      // I/O
+#include <shellio.hxx>
 #include <docstyle.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -83,7 +83,7 @@
 #include <ftnidx.hxx>
 #include <fldbas.hxx>
 #include <docary.hxx>
-#include <swerror.h>        // Error messages
+#include <swerror.h>
 #include <helpid.h>
 #include <cmdid.h>
 #include <globals.hrc>

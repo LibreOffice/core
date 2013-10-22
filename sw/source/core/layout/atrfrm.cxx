@@ -67,7 +67,7 @@
 #include <svtools/grfmgr.hxx>
 #include <unomid.h>
 #include <comcore.hrc>
-#include <svx/svdundo.hxx> // #111827#
+#include <svx/svdundo.hxx>
 #include <sortedobjs.hxx>
 #include <HandleAnchorNodeChg.hxx>
 #include <switerator.hxx>

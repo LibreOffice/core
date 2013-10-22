@@ -25,7 +25,7 @@
 #include <svx/AccessibleShape.hxx>
 #include <viewsh.hxx>
 #include <fesh.hxx>
-#include <vcl/svapp.hxx>        // for SolarMutex
+#include <vcl/svapp.hxx>
 #include <flyfrm.hxx>
 
 using namespace ::com::sun::star;

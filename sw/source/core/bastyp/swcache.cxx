@@ -19,7 +19,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <swcache.hxx>
-#include <limits.h>     // USHRT_MAX
+#include <limits.h>
 
 #ifdef DBG_UTIL
 void SwCache::Check()

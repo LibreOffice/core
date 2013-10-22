@@ -19,7 +19,7 @@
 
 
 #include "sbcomp.hxx"
-#include <basic/sbx.hxx>        // because of ...IMPL_REF(...sbxvariable)
+#include <basic/sbx.hxx>
 #include "expr.hxx"
 
 /***************************************************************************

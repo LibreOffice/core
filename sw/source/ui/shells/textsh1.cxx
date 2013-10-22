@@ -68,7 +68,7 @@
 #include <docstat.hxx>
 #include <outline.hxx>
 #include <tablemgr.hxx>
-#include <swundo.hxx>       // for Undo-IDs
+#include <swundo.hxx>
 #include <reffld.hxx>
 #include <docsh.hxx>
 #include <mdiexp.hxx>

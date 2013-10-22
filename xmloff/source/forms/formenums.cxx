@@ -33,7 +33,7 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
-#include <tools/wintypes.hxx>       // for check states
+#include <tools/wintypes.hxx>
 #include <xmloff/xmltoken.hxx>
 
 namespace xmloff

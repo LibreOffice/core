@@ -28,7 +28,7 @@
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include "anyrefdg.hxx"
-#include "global.hxx"       // ScAddress
+#include "global.hxx"
 #include "privsplt.hxx"
 #include "funcdesc.hxx"
 

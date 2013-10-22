@@ -39,7 +39,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/unomodel.hxx>
-#include <svx/svditer.hxx> // #i50824#
+#include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
 #include <unotools/streamwrap.hxx>
 #include <fmtanchr.hxx>

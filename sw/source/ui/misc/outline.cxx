@@ -42,7 +42,7 @@
 #include <viewopt.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <helpid.h>
-#include <globals.hrc>      // for template name 'none'
+#include <globals.hrc>
 #include <misc.hrc>
 #include <paratr.hxx>
 

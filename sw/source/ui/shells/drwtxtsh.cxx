@@ -50,7 +50,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#include <initui.hxx>               // for SpellPointer
+#include <initui.hxx>
 #include <drwtxtsh.hxx>
 #include <swundo.hxx>
 #include <breakit.hxx>

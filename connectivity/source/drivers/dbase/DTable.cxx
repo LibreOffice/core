@@ -34,7 +34,7 @@
 #include <svl/zforlist.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
-#include <stdio.h>      //sprintf
+#include <stdio.h>
 #include <ucbhelper/content.hxx>
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>

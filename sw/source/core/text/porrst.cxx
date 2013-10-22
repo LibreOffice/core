@@ -26,21 +26,21 @@
 #include <editeng/pgrditem.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <viewsh.hxx>   // ViewShell
+#include <viewsh.hxx>
 #include <viewopt.hxx>
-#include <ndtxt.hxx>    // SwTxtNode
-#include <pagefrm.hxx>  // SwPageFrm
+#include <ndtxt.hxx>
+#include <pagefrm.hxx>
 #include <paratr.hxx>
 #include <SwPortionHandler.hxx>
 #include <porrst.hxx>
 #include <inftxt.hxx>
-#include <txtpaint.hxx> // ClipVout
-#include <swfntcch.hxx> // SwFontAccess
+#include <txtpaint.hxx>
+#include <swfntcch.hxx>
 #include <tgrditem.hxx>
-#include <pagedesc.hxx> // SwPageDesc
+#include <pagedesc.hxx>
 #include <frmatr.hxx>
-#include <redlnitr.hxx> // SwRedlineItr
-#include <porfly.hxx>   // SwFlyPortion
+#include <redlnitr.hxx>
+#include <porfly.hxx>
 #include <atrhndl.hxx>
 #include "rootfrm.hxx"
 

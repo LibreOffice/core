@@ -25,12 +25,12 @@
 #include <rootfrm.hxx>
 #include <viewimp.hxx>
 #include <viewopt.hxx>
-#include <txtfrm.hxx>       // Zugriff auf TxtCache
+#include <txtfrm.hxx>
 #include <notxtfrm.hxx>
 #include <fntcache.hxx>
 #include <docufld.hxx>
 #include <ptqueue.hxx>
-#include <dview.hxx>        // SdrView
+#include <dview.hxx>
 #include <ndgrf.hxx>
 #include <ndindex.hxx>
 #include <accessibilityoptions.hxx>

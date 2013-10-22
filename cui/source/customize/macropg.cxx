@@ -39,7 +39,7 @@
 #include <cuires.hrc>
 #include "headertablistbox.hxx"
 #include "macropg_impl.hxx"
-#include <svx/dialogs.hrc> // RID_SVXPAGE_MACROASSIGN
+#include <svx/dialogs.hrc>
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <algorithm>

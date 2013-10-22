@@ -19,7 +19,7 @@
 
 
 #include <crsskip.hxx>
-#include <hintids.hxx>  //_always_ before the solar-items
+#include <hintids.hxx>
 
 #include <sfx2/lnkbase.hxx>
 #include <fmtfld.hxx>

@@ -30,7 +30,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/CharType.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx>
 
 #include <vector>
 

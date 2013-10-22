@@ -30,7 +30,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
-#include <com/sun/star/document/XEmbeddedScripts.hpp> //Michael E. Bohn
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/XApplicationBase.hpp>
 

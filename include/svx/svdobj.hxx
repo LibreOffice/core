@@ -28,8 +28,8 @@
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/svdsob.hxx>
-#include <svx/svdtypes.hxx> // fuer SdrLayerID
-#include <svx/svdglue.hxx> // Klebepunkte
+#include <svx/svdtypes.hxx>
+#include <svx/svdglue.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xenum.hxx>

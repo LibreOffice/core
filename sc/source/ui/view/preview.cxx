@@ -46,7 +46,7 @@
 #include "scmod.hxx"
 #include "markdata.hxx"
 #include "globstr.hrc"
-#include "sc.hrc"           // for ShellInvalidate
+#include "sc.hrc"
 #include "AccessibleDocumentPagePreview.hxx"
 #include <vcl/lineinfo.hxx>
 #include <svx/algitem.hxx>

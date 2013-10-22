@@ -18,7 +18,7 @@
  */
 
 #include "EnhancedCustomShapeFontWork.hxx"
-#include <tools/solar.h>               // UINTXX
+#include <tools/solar.h>
 #include <svx/svddef.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>

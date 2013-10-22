@@ -38,7 +38,7 @@
 #include <svx/svdpagv.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <cmdid.h>
-#include <poolfmt.hrc>      // for InitFldTypes
+#include <poolfmt.hrc>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
 #include <fmtfsize.hxx>
@@ -67,12 +67,12 @@
 #include "ndole.hxx"
 #include "ndgrf.hxx"
 #include "ndtxt.hxx"
-#include "viewopt.hxx"                  // for GetHTMLMode
+#include "viewopt.hxx"
 #include "swundo.hxx"
 #include "notxtfrm.hxx"
 #include "txtfrm.hxx"
 #include "txatbase.hxx"
-#include "mdiexp.hxx"                   // for update of the statusline during dragging
+#include "mdiexp.hxx"
 #include <sortedobjs.hxx>
 #include <HandleAnchorNodeChg.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

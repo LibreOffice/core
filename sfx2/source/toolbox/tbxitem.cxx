@@ -22,7 +22,7 @@
 #include <ctime>
 #endif
 
-#include <string>           // prevent conflict with STL includes
+#include <string>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>

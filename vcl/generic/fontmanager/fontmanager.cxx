@@ -65,7 +65,7 @@
 #include <boost/unordered_set.hpp>
 #include <algorithm>
 
-#include "adobeenc.tab" // get encoding table for AFM metrics
+#include "adobeenc.tab"
 
 #ifdef CALLGRIND_COMPILE
 #include <valgrind/callgrind.h>

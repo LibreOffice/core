@@ -37,7 +37,7 @@
 #include "attrib.hxx"
 
 
-#include <vcl/svapp.hxx>    // GetSettings()
+#include <vcl/svapp.hxx>
 
 #include "globstr.hrc"
 #include "sc.hrc"

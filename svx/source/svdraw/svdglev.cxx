@@ -22,8 +22,8 @@
 #include <math.h>
 
 #include <svx/svdundo.hxx>
-#include "svx/svdstr.hrc"   // names taken from the resource
-#include "svx/svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdtrans.hxx>

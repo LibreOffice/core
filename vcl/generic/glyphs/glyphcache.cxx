@@ -32,7 +32,7 @@
 #include <graphite_features.hxx>
 #endif
 
-#include <rtl/ustring.hxx>      // used only for string=>hashvalue
+#include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 

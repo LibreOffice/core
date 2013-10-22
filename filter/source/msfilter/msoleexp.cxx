@@ -40,7 +40,7 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <svtools/embedhlp.hxx>
-#include <filter/msfilter/msdffimp.hxx> // extern sichtbare Header-Datei
+#include <filter/msfilter/msdffimp.hxx>
 
 #include "filter/msfilter/msoleexp.hxx"
 

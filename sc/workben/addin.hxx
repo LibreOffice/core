@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <stardiv/starcalc/test/XTestAddIn.hpp>
 
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#include <cppuhelper/implbase4.hxx>
 
 
 com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ScTestAddIn_CreateInstance(

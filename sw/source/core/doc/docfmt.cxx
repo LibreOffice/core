@@ -39,16 +39,16 @@
 #include <IDocumentUndoRedo.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
-#include <hints.hxx>            // for SwHyphenBug (in SetDefault)
+#include <hints.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <UndoCore.hxx>
 #include <UndoAttribute.hxx>
 #include <UndoInsert.hxx>
 #include <ndgrf.hxx>
-#include <pagedesc.hxx>         // For special treatment in InsFrmFmt
-#include <rolbck.hxx>           // Undo-Attr
-#include <mvsave.hxx>           // serve: Recognize changes
+#include <pagedesc.hxx>
+#include <rolbck.hxx>
+#include <mvsave.hxx>
 #include <txatbase.hxx>
 #include <swtable.hxx>
 #include <swtblfmt.hxx>

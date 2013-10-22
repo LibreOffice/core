@@ -73,48 +73,48 @@
 #include <swtable.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <swundo.hxx>           // for the  UndoIds
+#include <swundo.hxx>
 #include <UndoCore.hxx>
 #include <UndoInsert.hxx>
 #include <UndoSplitMove.hxx>
 #include <UndoTable.hxx>
-#include <pagedesc.hxx>         // DTor
+#include <pagedesc.hxx>
 #include <breakit.hxx>
 #include <ndole.hxx>
 #include <ndgrf.hxx>
-#include <rolbck.hxx>           // Undo attr
-#include <doctxm.hxx>           // for the index stuff
+#include <rolbck.hxx>
+#include <doctxm.hxx>
 #include <grfatr.hxx>
-#include <poolfmt.hxx>          // pool template ids
-#include <mvsave.hxx>           // for server functionality
+#include <poolfmt.hxx>
+#include <mvsave.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <scriptinfo.hxx>
-#include <acorrect.hxx>         // auto correction
-#include <mdiexp.hxx>           // status indicator
+#include <acorrect.hxx>
+#include <mdiexp.hxx>
 #include <docstat.hxx>
 #include <docary.hxx>
 #include <redline.hxx>
 #include <fldupde.hxx>
 #include <swbaslnk.hxx>
 #include <printdata.hxx>
-#include <cmdid.h>              // for the dflt printer in SetJob
-#include <statstr.hrc>          // StatLine string
+#include <cmdid.h>
+#include <statstr.hrc>
 #include <comcore.hrc>
 #include <SwUndoTOXChange.hxx>
 #include <SwUndoFmt.hxx>
 #include <unocrsr.hxx>
 #include <docsh.hxx>
 #include <viewopt.hxx>
-#include <docfld.hxx>           // _SetGetExpFld
-#include <docufld.hxx>          // SwPostItField
+#include <docfld.hxx>
+#include <docufld.hxx>
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <txtfrm.hxx>
 #include <attrhint.hxx>
 #include <view.hxx>
 
-#include <wdocsh.hxx>           // SwWebDocShell
-#include <prtopt.hxx>           // SwPrintOptions
+#include <wdocsh.hxx>
+#include <prtopt.hxx>
 
 #include <vector>
 #include <map>

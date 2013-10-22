@@ -62,8 +62,8 @@
 #include <comphelper/classids.hxx>
 #include <fmtcol.hxx>
 #include <swevent.hxx>
-#include <view.hxx>         // for the current view
-#include <docsh.hxx>        // creation of documents
+#include <view.hxx>
+#include <docsh.hxx>
 #include <docary.hxx>
 #include <wrtsh.hxx>
 #include <fldbas.hxx>

@@ -51,7 +51,7 @@
 #include "docsh.hxx"
 #include "doc.hxx"
 #include "globals.hrc"
-#include "cmdid.h"          // FN_       ...
+#include "cmdid.h"
 #include "globdoc.hxx"
 #include "wview.hxx"
 #include "shells.hrc"
