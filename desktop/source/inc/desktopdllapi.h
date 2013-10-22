@@ -8,6 +8,7 @@
  */
 
 #ifndef INCLUDED_DESKTOP_SOURCE_INC_DESKTOPDLLAPI_H
+#define INCLUDED_DESKTOP_SOURCE_INC_DESKTOPDLLAPI_H
 
 #include <sal/config.h>
 #include <sal/types.h>

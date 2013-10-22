@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_OLEWRAPCLIENT_HXX
+#define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_OLEWRAPCLIENT_HXX
+
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <platform.h>
@@ -45,5 +48,7 @@ public:
     STDMETHODIMP OnShowWindow(BOOL);
     STDMETHODIMP RequestNewObjectLayout(void);
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

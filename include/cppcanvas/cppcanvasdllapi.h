@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CPPCANVASDLLAPI_H
-#define  INCLUDED_CPPCANVASDLLAPI_H
+
+#ifndef INCLUDED_CPPCANVAS_CPPCANVASDLLAPI_H
+#define INCLUDED_CPPCANVAS_CPPCANVASDLLAPI_H
 
 #if defined CPPCANVAS_DLLIMPLEMENTATION
 

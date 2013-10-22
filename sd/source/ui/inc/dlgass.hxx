@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INC_DLGASS
-#define INC_DLGASS
+#ifndef INCLUDED_SD_SOURCE_UI_INC_DLGASS_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_DLGASS_HXX
 
 #include <vcl/group.hxx>
 #include <vcl/edit.hxx>
