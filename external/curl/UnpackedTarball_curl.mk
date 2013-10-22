@@ -19,7 +19,6 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,curl,\
 ))
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-7.26.0.patch \
-	external/curl/curl-7.26.0_nspr.patch \
 	external/curl/curl-aix.patch \
 	external/curl/curl-7.26.0_win.patch \
 	external/curl/curl-7.26.0_mingw.patch \

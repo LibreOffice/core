@@ -11,11 +11,6 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,nss,nss))
 
 $(eval $(call gb_ExternalPackage_use_external_project,nss,nss))
 
-$(eval $(call gb_ExternalPackage_add_files,nss,bin,\
-	config/nspr-config \
-	config/nss-config \
-))
-
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,lib,\
 		mozilla/dist/out/lib/libfreebl3.dylib \

@@ -20,13 +20,6 @@ $(call gb_ExternalProject_get_state_target,nss,configure):
 	mozilla/nsprpub/configure --includedir=$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		$(if $(filter MSCX,$(COM)$(CPU)),--enable-64bit) \
-	&& sed -e 's%@prefix@%$(OUTDIR)%' \
-		-e 's%@includedir@%$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/public/nss%' \
-		-e 's%@MOD_MAJOR_VERSION@%$(NSS_MAJOR)%' \
-		-e 's%@MOD_MINOR_VERSION@%$(NSS_MINOR)%' \
-		-e 's%@MOD_PATCH_VERSION@%$(NSS_PATCH)%' \
-		$(SRCDIR)/nss/nss-config.in > $(EXTERNAL_WORKDIR)/config/nss-config \
-	&& chmod a+x $(EXTERNAL_WORKDIR)/config/nss-config \
 	,,nss_configure.log)
 
 ifeq ($(OS),WNT)
