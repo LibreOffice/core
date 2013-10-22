@@ -659,7 +659,7 @@ sal_uInt16 SimpleTokenizer_Impl::parseLine( sal_uInt32 nParseLine, const OUStrin
 }
 
 void SimpleTokenizer_Impl::getHighlightPortions( sal_uInt32 nParseLine, const OUString& rLine,
-                                                    /*out*/HighlightPortions& portions  )
+                                                 /*out*/std::vector<HighlightPortion>& portions  )
 {
     // Set the position to the beginning of the source string
     mpStringBegin = mpActualPos = rLine.getStr();
@@ -731,7 +731,7 @@ void SyntaxHighlighter::notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDiff
 }
 
 void SyntaxHighlighter::getHighlightPortions( sal_uInt32 nLine, const OUString& rLine,
-                                            /*out*/HighlightPortions& portions )
+                                              /*out*/std::vector<HighlightPortion>& portions )
 {
     m_pSimpleTokenizer->getHighlightPortions( nLine, rLine, portions );
 }

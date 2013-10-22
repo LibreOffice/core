@@ -174,7 +174,7 @@ void MultiLineEditSyntaxHighlight::UpdateData()
         aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
 
         GetTextEngine()->RemoveAttribs( nLine, sal_True );
-        HighlightPortions aPortions;
+        std::vector<HighlightPortion> aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
         for ( size_t i = 0; i < aPortions.size(); i++ )
         {

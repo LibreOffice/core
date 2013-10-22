@@ -150,7 +150,7 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
                                 strlen(reinterpret_cast<const char*>(codeSnippet)),
                                 RTL_TEXTENCODING_UTF8 );
     m_Highlighter.notifyChange ( 0, 0, &strLine, 1 );
-    HighlightPortions portions;
+    std::vector<HighlightPortion> portions;
     m_Highlighter.getHighlightPortions( 0, strLine, portions );
     for ( size_t i=0; i<portions.size(); i++ )
     {

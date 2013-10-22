@@ -594,7 +594,7 @@ void EditorWindow::HandleAutoCorrect()
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
     const OUString& sActSubName = GetActualSubName( nLine ); // the actual procedure
 
-    HighlightPortions aPortions;
+    std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
 
     if( aPortions.size() == 0 )
@@ -668,7 +668,7 @@ TextSelection EditorWindow::GetLastHighlightPortionTextSelection()
     sal_uLong nLine = GetEditView()->GetSelection().GetStart().GetPara();
     sal_uLong nIndex = GetEditView()->GetSelection().GetStart().GetIndex();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
-    HighlightPortions aPortions;
+    std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
 
     HighlightPortion& r = aPortions[aPortions.size()-1];
@@ -714,7 +714,7 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
     sal_uLong nLine =  aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
 
-    HighlightPortions aPortions;
+    std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
 
     if( aPortions.size() == 0 )
@@ -735,7 +735,7 @@ void EditorWindow::HandleProcedureCompletion()
     sal_uLong nLine = aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) );
 
-    HighlightPortions aPortions;
+    std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
 
     if( aPortions.size() == 0 )
@@ -785,7 +785,7 @@ void EditorWindow::HandleProcedureCompletion()
         for( sal_uLong i = nLine+1; i < pEditEngine->GetParagraphCount(); ++i )
         {//searching forward for end token, or another sub/function definition
             OUString aCurrLine = pEditEngine->GetText( i );
-            HighlightPortions aCurrPortions;
+            std::vector<HighlightPortion> aCurrPortions;
             aHighlighter.getHighlightPortions( i, aCurrLine, aCurrPortions );
 
             if( aCurrPortions.size() >= 3 )
@@ -818,12 +818,12 @@ void EditorWindow::HandleCodeCompletion()
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
     std::vector< OUString > aVect; //vector to hold the base variable+methods for the nested reflection
 
-    HighlightPortions aPortions;
+    std::vector<HighlightPortion> aPortions;
     aLine = aLine.copy(0, aSel.GetEnd().GetIndex());
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
     if( aPortions.size() > 0 )
     {//use the syntax highlighter to grab out nested reflection calls, eg. aVar.aMethod("aa").aOtherMethod ..
-        for( HighlightPortions::reverse_iterator aIt = aPortions.rbegin(); aIt != aPortions.rend(); ++aIt )
+        for( std::vector<HighlightPortion>::reverse_iterator aIt = aPortions.rbegin(); aIt != aPortions.rend(); ++aIt )
         {
             HighlightPortion r = *aIt;
             if( r.tokenType == TT_WHITESPACE ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
@@ -1186,7 +1186,7 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
 
         bool const bWasModified = pEditEngine->IsModified();
         pEditEngine->RemoveAttribs( nLine, true );
-        HighlightPortions aPortions;
+        std::vector<HighlightPortion> aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
 
         for ( size_t i = 0; i < aPortions.size(); i++ )

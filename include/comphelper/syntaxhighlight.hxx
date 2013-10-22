@@ -46,9 +46,6 @@ enum TokenTypes
 
 struct HighlightPortion { sal_uInt16 nBegin; sal_uInt16 nEnd; TokenTypes tokenType; };
 
-
-typedef std::vector<HighlightPortion> HighlightPortions;
-
 /////////////////////////////////////////////////////////////////////////
 // Auxiliary class to support JavaScript modules, next to find functions which
 // will later will be used for syntax highlighting
@@ -108,7 +105,7 @@ public:
 
     sal_uInt16 parseLine( sal_uInt32 nLine, const OUString* aSource );
     void getHighlightPortions( sal_uInt32 nParseLine, const OUString& rLine,
-                                                    /*out*/HighlightPortions& portions );
+                               /*out*/std::vector<HighlightPortion>& portions );
     void setKeyWords( const char** ppKeyWords, sal_uInt16 nCount );
 };
 
@@ -140,7 +137,7 @@ public:
                                 const OUString* pChangedLines, sal_uInt32 nArrayLength);
 
     void getHighlightPortions( sal_uInt32 nLine, const OUString& rLine,
-                                            HighlightPortions& pPortions );
+                               std::vector<HighlightPortion>& pPortions );
 
     HighlighterLanguage GetLanguage() { return eLanguage;}
 };
