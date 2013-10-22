@@ -63,6 +63,7 @@
 #include "sdabstdlg.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "DrawViewShell.hxx"
+#include "slideshow.hxx"
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
@@ -334,34 +335,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
 void OutlineViewShell::ShowSlideShow(SfxRequest& rReq)
 {
-    Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
-    if( xPresentation.is() )
-    {
-        if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
-        {
-            if( (SID_PRESENTATION == rReq.GetSlot() ) )
-            {
-                Sequence< PropertyValue > aArguments(1);
-                PropertyValue aPage;
-                OUString sValue("0");
-
-                aPage.Name = "FirstPage";
-                aPage.Value <<= sValue;
-
-                aArguments[0] = aPage;
-
-                xPresentation->startWithArguments( aArguments );
-            }
-            else
-            {
-                xPresentation->start();
-            }
-        }
-        else
-        {
-            xPresentation->rehearseTimings();
-        }
-    }
+    slideshowhelp::ShowSlideShow(rReq, *GetDoc());
 }
 
 void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
