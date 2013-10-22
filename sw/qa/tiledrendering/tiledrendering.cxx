@@ -33,21 +33,26 @@ using namespace com::sun::star;
 
 class TiledRenderingDialog: public ModalDialog{
 public:
-    TiledRenderingDialog() : ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "qa/sw/ui/tiledrendering.ui"){
+    TiledRenderingDialog() : ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "qa/sw/ui/tiledrendering.ui")
+    {
         PushButton * renderButton;
         get(renderButton,"buttonRenderTile");
         renderButton->SetClickHdl( LINK( this, TiledRenderingDialog, RenderHdl));
+        SetStyle(GetStyle()|WB_CLOSEABLE);
     }
-    virtual ~TiledRenderingDialog(){}
+    virtual ~TiledRenderingDialog()
+    {
+    }
 
     DECL_LINK ( RenderHdl, Button * );
 
-    sal_Int32 extractInt(const char * name){
-            NumericField * pField;
-            get(pField,name);
-            OUString aString(pField->GetText());
-            SAL_INFO("TiledRenderingDialog","param " << name << " returned " << aString);
-            return aString.toInt32();
+    sal_Int32 extractInt(const char * name)
+    {
+        NumericField * pField;
+        get(pField,name);
+        OUString aString(pField->GetText());
+        std::cerr << "param " << name << " returned " << aString <<"/n";
+        return aString.toInt32();
     }
 
 };
@@ -60,8 +65,7 @@ IMPL_LINK ( TiledRenderingDialog,  RenderHdl, Button *, EMPTYARG )
     extractInt("spinTilePosY");
     extractInt("spinTileWidth");
     extractInt("spinTileHeight");
-
-   return 1;
+    return 1;
 }
 
 void UIPreviewApp::Init()
@@ -89,7 +93,6 @@ int UIPreviewApp::Main()
     //   osl::File::getFileURLFromSystemPath(GetCommandLineParam(i), aFileUrl);
     //    uifiles.push_back(aFileUrl);
     //}
-
     //if (uifiles.empty())
     //{
     //    fprintf(stderr, "Usage: ui-previewer file.ui\n");
@@ -105,21 +108,6 @@ int UIPreviewApp::Main()
         TiledRenderingDialog pDialog;
 
         pDialog.Execute();
-/*
-        {
-            VclBuilder aBuilder(pDialog, OUString(), "sw/qa/tiledrendering/tiledrendering.ui");
-            Dialog *pRealDialog = dynamic_cast<Dialog*>(aBuilder.get_widget_root());
-
-            if (!pRealDialog)
-                pRealDialog = pDialog;
-
-            if (pRealDialog)
-            {
-                pRealDialog->SetText(OUString("LibreOffice ui-previewer"));
-                pRealDialog->SetStyle(pDialog->GetStyle()|WB_CLOSEABLE);
-                pRealDialog->Execute();
-            }
-        }*/
     }
     catch (const uno::Exception &e)
     {
@@ -128,12 +116,6 @@ int UIPreviewApp::Main()
 
     return EXIT_SUCCESS;
 }
-
-void render(){
-
-
-}
-
 
 void vclmain::createApplication()
 {
