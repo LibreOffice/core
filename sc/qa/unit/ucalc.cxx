@@ -3224,7 +3224,7 @@ void Test::testMoveBlock()
     ScPostIt* pNoteA1 = m_pDoc->GetOrCreateNote(aAddrA1);
     pNoteA1->SetText(aAddrA1, aHelloA1);
     ScAddress aAddrB1 (1, 0, 0);
-    String aHelloB1("Hello world in B1");
+    OUString aHelloB1("Hello world in B1");
     ScPostIt* pNoteB1 = m_pDoc->GetOrCreateNote(aAddrB1);
     pNoteB1->SetText(aAddrB1, aHelloB1);
     ScAddress aAddrC1 (2, 0, 0);
