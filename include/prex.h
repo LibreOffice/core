@@ -30,7 +30,6 @@
 #define Boolean     HIDE_XLIB_Boolean
 #define Font        HIDE_XLIB_Font
 #define Icon        HIDE_XLIB_Icon
-#define String      HIDE_XLIB_String
 
 /* Types from <X11/X.h> that clash, but we do use. */
 #define Cursor      XLIB_Cursor
@@ -52,9 +51,6 @@ extern "C" {
 
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
-
-#undef  String
-#define String      XLIB_String
 
 #undef  KeyCode
 #define KeyCode         XLIB_KeyCode //undef in intrinsics

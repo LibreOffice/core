@@ -32,7 +32,6 @@
 #undef BOOL
 #undef Font
 #undef Cursor
-#undef String
 #undef KeyCode
 #undef Region
 #undef Icon
