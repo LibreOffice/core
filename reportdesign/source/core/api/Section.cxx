@@ -19,6 +19,7 @@
 #include "Section.hxx"
 #include <comphelper/enumhelper.hxx>
 #include <connectivity/dbtools.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -194,7 +195,7 @@ uno::Sequence< OUString> SAL_CALL OSection::getSupportedServiceNames() throw(uno
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OSection::supportsService( const OUString& _rServiceName ) throw(uno::RuntimeException)
 {
-    return ::comphelper::existsValue(_rServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, _rServiceName);
 }
 // -----------------------------------------------------------------------------
 void OSection::init()

@@ -20,13 +20,13 @@
 #include "xmlExport.hxx"
 #include "xmlAutoStyle.hxx"
 #include <xmloff/ProgressBarHelper.hxx>
-#include <comphelper/sequence.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "xmlEnums.hxx"
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/numehelp.hxx>
@@ -336,7 +336,7 @@ uno::Sequence< OUString > SAL_CALL ORptExport::getSupportedServiceNames(  ) thro
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL ORptExport::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+    return cppu::supportsService(this, ServiceName);
 }
 // -----------------------------------------------------------------------------
 void ORptExport::exportFunctions(const Reference<XIndexAccess>& _xFunctions)

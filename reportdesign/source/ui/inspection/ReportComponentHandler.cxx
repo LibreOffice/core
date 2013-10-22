@@ -18,9 +18,9 @@
  */
 #include "ReportComponentHandler.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <comphelper/sequence.hxx>
 #include "uistrings.hrc"
 #include <comphelper/types.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
@@ -53,31 +53,26 @@ ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentCo
     }
 }
 
-//------------------------------------------------------------------------
 OUString SAL_CALL ReportComponentHandler::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------------
 sal_Bool SAL_CALL ReportComponentHandler::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_static());
+    return cppu::supportsService(this, ServiceName);
 }
 
-//------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
 
-//------------------------------------------------------------------------
 OUString ReportComponentHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.report.ReportComponentHandler");
 }
 
-//------------------------------------------------------------------------
 uno::Sequence< OUString > ReportComponentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSupported(1);
@@ -85,7 +80,6 @@ uno::Sequence< OUString > ReportComponentHandler::getSupportedServiceNames_stati
     return aSupported;
 }
 
-//------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL ReportComponentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new ReportComponentHandler( _rxContext ));
