@@ -78,6 +78,7 @@
 		BE9086FF16FF02B3004400A1 /* svptext.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svptext.cxx; path = ../../../../vcl/headless/svptext.cxx; sourceTree = "<group>"; };
 		BE90870016FF02B3004400A1 /* svpvd.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpvd.cxx; path = ../../../../vcl/headless/svpvd.cxx; sourceTree = "<group>"; };
 		BE954A2E1704F9500040D517 /* iosinst.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iosinst.cxx; path = ../../../../vcl/ios/iosinst.cxx; sourceTree = "<group>"; };
+		BE9B03C8181671C000E1B0CF /* edws.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = edws.cxx; path = ../../../../sw/source/core/edit/edws.cxx; sourceTree = "<group>"; };
 		BEB752BD180C90D0005B5696 /* outmap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = outmap.cxx; path = ../../../../vcl/source/gdi/outmap.cxx; sourceTree = "<group>"; };
 		BEBF3E3A17002D0200C454AC /* svapp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svapp.cxx; path = ../../../../vcl/source/app/svapp.cxx; sourceTree = "<group>"; };
 		BEBF3E3B17002D0200C454AC /* svmain.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svmain.cxx; path = ../../../../vcl/source/app/svmain.cxx; sourceTree = "<group>"; };
@@ -281,6 +282,7 @@
 				BE2CB96318082A7800953CB4 /* edtwin.cxx */,
 				BE2CB96418082A7800953CB4 /* edtwin2.cxx */,
 				BE2CB96518082A7800953CB4 /* edtwin3.cxx */,
+				BE9B03C8181671C000E1B0CF /* edws.cxx */,
 				BE02DE57175F2E2A00ED4032 /* guess.cxx */,
 				BE2CB9611808297500953CB4 /* select.cxx */,
 				BE2CB962180829DD00953CB4 /* txtcrsr.cxx */,
