@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _INTERCEPT_HXX_
-#define _INTERCEPT_HXX_
+#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_INC_INTERCEPT_HXX
+#define INCLUDED_EMBEDDEDOBJ_SOURCE_INC_INTERCEPT_HXX
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase3.hxx>

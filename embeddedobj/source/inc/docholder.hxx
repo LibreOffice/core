@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DOCHOLDER_HXX_
-#define _DOCHOLDER_HXX_
+#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_INC_DOCHOLDER_HXX
+#define INCLUDED_EMBEDDEDOBJ_SOURCE_INC_DOCHOLDER_HXX
 
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>

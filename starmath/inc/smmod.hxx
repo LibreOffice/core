@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SMMOD_HXX
-#define _SMMOD_HXX
+#ifndef INCLUDED_STARMATH_INC_SMMOD_HXX
+#define INCLUDED_STARMATH_INC_SMMOD_HXX
 
 #include <tools/resary.hxx>
 #include <svl/lstner.hxx>
@@ -138,6 +138,6 @@ public:
 
 #define SM_MOD() ( *(SmModule**) GetAppData(SHL_SM) )
 
-#endif                                 // _SDMOD_HXX
+#endif // INCLUDED_STARMATH_INC_SMMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
