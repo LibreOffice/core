@@ -3911,7 +3911,7 @@ void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, ::boost::op
 
     FastAttributeList* pAttr = m_pSerializer->createAttrList();
 
-    // -1 means no restart: then don't output that attribute if it is negative
+    // boost::none means no restart: then don't output that attribute if it is negative
     if ( oPageRestartNumber )
        pAttr->add( FSNS( XML_w, XML_start ), OString::number( oPageRestartNumber.get() ) );
 
