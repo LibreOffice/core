@@ -511,7 +511,6 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
     pMedium = pMed;
     if ( !pMedium )
     {
-        bIsTmp = sal_True;
         pMedium = new SfxMedium;
     }
 

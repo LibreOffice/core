@@ -196,9 +196,8 @@ private:
                                           // storage that contains the object
     SfxStyleSheetBasePool*      pStyleSheetPool;    // StyleSheets
     SfxObjectCreateMode         eCreateMode;      // Purpose of the object
-    sal_Bool                    bHasName :1,      // sal_True  := existing object,
+    sal_Bool                    bHasName :1;      // sal_True  := existing object,
                                                   // sal_False := new object
-                                bIsTmp :1;        // temporary Storage
     sal_Bool                    bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
 
 private:

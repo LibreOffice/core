@@ -977,7 +977,6 @@ void SfxObjectShell::SetNamedVisibility_Impl()
 void SfxObjectShell::SetNoName()
 {
     bHasName = 0;
-    bIsTmp = sal_True;
     GetModel()->attachResource( OUString(), GetModel()->getArgs() );
 }
 
