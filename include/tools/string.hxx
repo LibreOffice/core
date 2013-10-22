@@ -24,14 +24,11 @@
 
 /*******************************************************************************
  * THIS CODE IS DEPRECATED.  DO NOT USE IT IN ANY NEW CODE.
- * There will not be any fixes to the code here.
  ******************************************************************************/
 
 #define STRING_NOTFOUND    ((xub_StrLen)0xFFFF)
 #define STRING_LEN         ((xub_StrLen)0xFFFF)
 #define STRING_MAXLEN      ((xub_StrLen)0xFFFF)
-
-enum StringCompare { COMPARE_LESS = -1, COMPARE_EQUAL = 0, COMPARE_GREATER = 1 };
 
 #endif
 
