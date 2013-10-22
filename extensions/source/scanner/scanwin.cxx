@@ -255,7 +255,8 @@ void ImpTwain::ImplOpenSourceManager()
         {
             nCurState = 2;
 
-            if( ( ( pDSM = (DSMENTRYPROC) pMod->getSymbol( OUString( TWAIN_FUNCNAME  ) ) ) != NULL ) &&
+            pDSM = (DSMENTRYPROC) pMod->getSymbol(OUString(TWAIN_FUNCNAME));
+            if (pDSM &&
                 ( PFUNC( &aAppIdent, NULL, DG_CONTROL, DAT_PARENT, MSG_OPENDSM, &hTwainWnd ) == TWRC_SUCCESS ) )
             {
                 nCurState = 3;
