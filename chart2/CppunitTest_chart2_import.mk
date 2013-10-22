@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_import, \
     sax \
     sb \
     sc \
+    sw \
     sfx \
     sot \
     svl \
@@ -66,11 +67,11 @@ $(eval $(call gb_CppunitTest_use_ure,chart2_import))
 
 $(eval $(call gb_CppunitTest_use_components,chart2_import,\
     basic/util/sb \
+    animations/source/animcore/animcore \
     chart2/source/controller/chartcontroller \
     chart2/source/chartcore \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    dbaccess/util/dba \
     embeddedobj/util/embobj \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
@@ -83,6 +84,8 @@ $(eval $(call gb_CppunitTest_use_components,chart2_import,\
     package/util/package2 \
     sax/source/expatwrap/expwrap \
     sax/source/fastparser/fastsax \
+    sw/util/sw \
+    sw/util/swd \
     sc/util/sc \
     sc/util/scd \
     sc/util/scfilt \
