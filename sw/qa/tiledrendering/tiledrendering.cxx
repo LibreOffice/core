@@ -19,6 +19,8 @@
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclmain.hxx>
+#include <vcl/field.hxx>
+#include <vcl/button.hxx>
 
 class UIPreviewApp : public Application
 {
@@ -28,6 +30,39 @@ public:
 };
 
 using namespace com::sun::star;
+
+class TiledRenderingDialog: public ModalDialog{
+public:
+    TiledRenderingDialog() : ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "qa/sw/ui/tiledrendering.ui"){
+        PushButton * renderButton;
+        get(renderButton,"buttonRenderTile");
+        renderButton->SetClickHdl( LINK( this, TiledRenderingDialog, RenderHdl));
+    }
+    virtual ~TiledRenderingDialog(){}
+
+    DECL_LINK ( RenderHdl, Button * );
+
+    sal_Int32 extractInt(const char * name){
+            NumericField * pField;
+            get(pField,name);
+            OUString aString(pField->GetText());
+            SAL_INFO("TiledRenderingDialog","param " << name << " returned " << aString);
+            return aString.toInt32();
+    }
+
+};
+
+IMPL_LINK ( TiledRenderingDialog,  RenderHdl, Button *, EMPTYARG )
+{
+    extractInt("spinContextWidth");
+    extractInt("spinContextHeight");
+    extractInt("spinTilePosX");
+    extractInt("spinTilePosY");
+    extractInt("spinTileWidth");
+    extractInt("spinTileHeight");
+
+   return 1;
+}
 
 void UIPreviewApp::Init()
 {
@@ -47,13 +82,13 @@ void UIPreviewApp::Init()
 
 int UIPreviewApp::Main()
 {
-    std::vector<OUString> uifiles;
-    for (sal_uInt16 i = 0; i < GetCommandLineParamCount(); ++i)
-    {
-        OUString aFileUrl;
-        osl::File::getFileURLFromSystemPath(GetCommandLineParam(i), aFileUrl);
-        uifiles.push_back(aFileUrl);
-    }
+    //std::vector<OUString> uifiles;
+    //for (sal_uInt16 i = 0; i < GetCommandLineParamCount(); ++i)
+    //{
+    //    OUString aFileUrl;
+    //   osl::File::getFileURLFromSystemPath(GetCommandLineParam(i), aFileUrl);
+    //    uifiles.push_back(aFileUrl);
+    //}
 
     //if (uifiles.empty())
     //{
@@ -66,9 +101,10 @@ int UIPreviewApp::Main()
 
     try
     {
-        Dialog *pDialog = new ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "qa/sw/ui/tiledrendering.ui");
 
-        pDialog->Execute();
+        TiledRenderingDialog pDialog;
+
+        pDialog.Execute();
 /*
         {
             VclBuilder aBuilder(pDialog, OUString(), "sw/qa/tiledrendering/tiledrendering.ui");
@@ -84,8 +120,6 @@ int UIPreviewApp::Main()
                 pRealDialog->Execute();
             }
         }*/
-
-        delete pDialog;
     }
     catch (const uno::Exception &e)
     {
@@ -94,6 +128,12 @@ int UIPreviewApp::Main()
 
     return EXIT_SUCCESS;
 }
+
+void render(){
+
+
+}
+
 
 void vclmain::createApplication()
 {
