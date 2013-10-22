@@ -540,7 +540,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     // All other will remain TT_UNKNOWN
 
     // Save end position
-    rpEndPos = mpActualPos;
+    rpEndPos = *mpActualPos == CHAR_EOF ? mpActualPos - 1 : mpActualPos;
     return sal_True;
 }
 
