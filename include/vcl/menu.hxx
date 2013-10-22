@@ -148,7 +148,7 @@ protected:
     SAL_DLLPRIVATE Menu*            ImplGetStartMenu();
     SAL_DLLPRIVATE Menu*            ImplFindSelectMenu();
     SAL_DLLPRIVATE Menu*            ImplFindMenu( sal_uInt16 nId );
-    SAL_DLLPRIVATE Size             ImplCalcSize( Window* pWin );
+    SAL_DLLPRIVATE Size             ImplCalcSize( const Window* pWin );
     SAL_DLLPRIVATE sal_Bool             ImplIsVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_Bool             ImplIsSelectable( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16           ImplGetVisibleItemCount() const;
@@ -168,7 +168,7 @@ protected:
 
     // returns native check and option menu symbol height in rCheckHeight and rRadioHeight
     // return value is maximum width and height of checkboxes and radiobuttons
-    SAL_DLLPRIVATE Size             ImplGetNativeCheckAndRadioSize( Window*, long& rCheckHeight, long& rRadioHeight ) const;
+    SAL_DLLPRIVATE Size             ImplGetNativeCheckAndRadioSize( const Window*, long& rCheckHeight, long& rRadioHeight ) const;
 
     // returns native submenu arrow size and spacing from right border
     // return value is whether it's supported natively

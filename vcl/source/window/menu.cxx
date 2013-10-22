@@ -2252,7 +2252,7 @@ void Menu::SetAccessible( const ::com::sun::star::uno::Reference< ::com::sun::st
     mxAccessible = rxAccessible;
 }
 
-Size Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, long& rRadioHeight ) const
+Size Menu::ImplGetNativeCheckAndRadioSize( const Window* pWin, long& rCheckHeight, long& rRadioHeight ) const
 {
     long nCheckWidth = 0, nRadioWidth = 0;
     rCheckHeight = rRadioHeight = 0;
@@ -2367,7 +2367,7 @@ void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
 
 // -----------------------------------------------------------------------
 
-Size Menu::ImplCalcSize( Window* pWin )
+Size Menu::ImplCalcSize( const Window* pWin )
 {
     // | Check/Radio/Image| Text| Accel/Popup|
 
