@@ -71,9 +71,6 @@ struct HighlightPortion {
 #define CHAR_SPACE              0x0100
 #define CHAR_EOL                0x0200
 
-#define CHAR_EOF                0x00
-
-
 // Language mode of the Highlighter (possibly to be refined later with keyword
 // lists, C comment flags)
 enum HighlighterLanguage

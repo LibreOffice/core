@@ -270,7 +270,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     rpStartPos = mpActualPos;
 
     sal_Unicode c = peekChar();
-    if( c == CHAR_EOF )
+    if( c == 0 )
         return sal_False;
 
     getChar();
@@ -331,7 +331,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                     {
                         // Remove all characters until end of line or EOF
                         sal_Unicode cPeek = peekChar();
-                        while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == sal_False )
+                        while( cPeek != 0 && testCharFlags( cPeek, CHAR_EOL ) == sal_False )
                         {
                             c = getChar();
                             cPeek = peekChar();
@@ -372,7 +372,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
             if (cPeekNext=='-')
             {
                 // Remove all characters until end of line or EOF
-                while( cPeekNext != CHAR_EOF && testCharFlags( cPeekNext, CHAR_EOL ) == sal_False )
+                while( cPeekNext != 0 && testCharFlags( cPeekNext, CHAR_EOL ) == sal_False )
                 {
                     getChar();
                     cPeekNext = peekChar();
@@ -386,7 +386,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
            if (cPeekNext=='/')
            {
                // Remove all characters until end of line or EOF
-               while( cPeekNext != CHAR_EOF && testCharFlags( cPeekNext, CHAR_EOL ) == sal_False )
+               while( cPeekNext != 0 && testCharFlags( cPeekNext, CHAR_EOL ) == sal_False )
                {
                    getChar();
                    cPeekNext = peekChar();
@@ -403,7 +403,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
 
                 // Remove all characters until end of line or EOF
                 sal_Unicode cPeek = c;
-                while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == sal_False )
+                while( cPeek != 0 && testCharFlags( cPeek, CHAR_EOL ) == sal_False )
                 {
                     getChar();
                     cPeek = peekChar();
@@ -497,7 +497,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
         while( peekChar() != cEndString )
         {
             // Detect EOF before getChar(), so we do not loose EOF
-            if( peekChar() == CHAR_EOF )
+            if( peekChar() == 0 )
             {
                 // ERROR: unterminated string literal
                 reType = TT_ERROR;
@@ -540,7 +540,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     // All other will remain TT_UNKNOWN
 
     // Save end position
-    rpEndPos = *mpActualPos == CHAR_EOF ? mpActualPos - 1 : mpActualPos;
+    rpEndPos = *mpActualPos == 0 ? mpActualPos - 1 : mpActualPos;
     return sal_True;
 }
 
