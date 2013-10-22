@@ -212,9 +212,9 @@ ImplDevFontAttributes ImplFontAttrCache::GetFontAttr( const OUString& rFontFileN
 
 void ImplFontAttrCache::AddFontAttr( const OUString& rFontFileName, const ImplDevFontAttributes& rDFA )
 {
-    SAL_WARN_IF(!rFontFileName.Len() || rDFA.GetFamilyName().isEmpty(),
+    SAL_WARN_IF(rFontFileName.isEmpty() || rDFA.GetFamilyName().isEmpty(),
         "vcl.gdi", "ImplFontNameCache::AddFontName - invalid data!");
-    if ( rFontFileName.Len() && !rDFA.GetFamilyName().isEmpty() )
+    if ( !rFontFileName.isEmpty() && !rDFA.GetFamilyName().isEmpty() )
     {
         aFontAttributes.insert( FontAttrMap::value_type( OptimizeURL( rFontFileName ), rDFA ) );
         bModified = TRUE;
@@ -1859,7 +1859,7 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
                 pInfo->mbCourier = FALSE;
             OUString aName = OUString(reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName));
             pInfo->mpName = &aName;
-            memcpy( pInfo->mpLogFontW->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.Len()+1)*sizeof( wchar_t ) );
+            memcpy( pInfo->mpLogFontW->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.getLength()+1)*sizeof( wchar_t ) );
             pInfo->mpLogFontW->lfCharSet = pLogFont->elfLogFont.lfCharSet;
             EnumFontFamiliesExW( pInfo->mhDC, pInfo->mpLogFontW, (FONTENUMPROCW)SalEnumFontsProcExW,
                                  (LPARAM)(void*)pInfo, 0 );
