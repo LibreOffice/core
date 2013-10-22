@@ -432,7 +432,6 @@ private:
     bool initWindow();
     bool initOpengl();
 
-    OpenglContext* mpContext;
     boost::scoped_ptr<Window> mpWindow;
     boost::scoped_ptr<SystemChildWindow> pWindow;
 };
