@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3///Ao\u003d",
+        "filename": "svtools/source/control/inettbc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-10-22T08:30:55Z",
+      "side": 1,
+      "message": "Typo, here?",
+      "revId": "86c038c6fe983d9186a372c56968c660f06e371d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
