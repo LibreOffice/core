@@ -35,7 +35,6 @@
 #define Region MacOSRegion
 #define SetCursor MacOSSetCursor
 #define Size MacOSSize
-#define StringPtr MacOSStringPtr
 #define TimeValue MacOSTimeValue
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

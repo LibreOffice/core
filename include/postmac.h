@@ -35,7 +35,6 @@
 #undef Region
 #undef SetCursor
 #undef Size
-#undef StringPtr
 #undef TimeValue
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
