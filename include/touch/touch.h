@@ -113,9 +113,12 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int 
 
 void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state);
 
+// Move the start of the selection to (x,y)
+void touch_lo_selection_start_move(const void *documentHandle,
+                                   int x,
+                                   int y);
+
 // Move the end of the selection to (x,y)
-// (work in progress, of course there should be a corresponding function
-// to move the start of the selection, too.)
 void touch_lo_selection_end_move(const void *documentHandle,
                                  int x,
                                  int y);

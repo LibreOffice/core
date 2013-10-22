@@ -2688,6 +2688,33 @@ static bool lcl_urlOverBackground(SwWrtShell& rSh, const Point& rDocPos)
 
 #if !HAVE_FEATURE_DESKTOP
 
+void touch_lo_selection_start_move_impl(const void *documentHandle,
+                                        int x,
+                                        int y)
+{
+    SwWrtShell *pWrtShell = reinterpret_cast<SwWrtShell*>(const_cast<void*>(documentHandle));
+
+    if (!pWrtShell)
+        return;
+
+    const OutputDevice *pOut = pWrtShell->GetWin();
+    if (!pOut)
+        pOut = pWrtShell->GetOut();
+
+    const Point aDocPos( pOut->PixelToLogic( Point(x, y) ) );
+
+    pWrtShell->ChgCurrPam( aDocPos );
+
+    // Keep mark normally at the start and point at the end,
+    // just exchange for the duration of moving the start.
+    pWrtShell->GetCrsr()->Exchange();
+    {
+        SwMvContext aMvContext( pWrtShell );
+        pWrtShell->SwCrsrShell::SetCrsr( aDocPos );
+    }
+    pWrtShell->GetCrsr()->Exchange();
+}
+
 void touch_lo_selection_end_move_impl(const void *documentHandle,
                                       int x,
                                       int y)
@@ -2703,13 +2730,11 @@ void touch_lo_selection_end_move_impl(const void *documentHandle,
 
     const Point aDocPos( pOut->PixelToLogic( Point(x, y) ) );
 
-    // SAL _ DEBUG("touch_lo_selection_end_move_impl: " << Point(x, y) << " => " << aDocPos);
-
     pWrtShell->ChgCurrPam( aDocPos );
 
     {
         SwMvContext aMvContext( pWrtShell );
-        pWrtShell->SetCursor( &aDocPos, sal_False );
+        pWrtShell->SwCrsrShell::SetCrsr( aDocPos );
     }
 }
 

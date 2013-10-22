@@ -154,71 +154,59 @@
 
 - (void)panGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
+    const int N = self.selectionRectangleCount;
+
     static enum { NONE, TOPLEFT, BOTTOMRIGHT } draggedHandle = NONE;
-    static CGFloat previousX, previousY;
+    static CGPoint previous;
+    static CGPoint dragOffset;
 
     CGPoint location = [gestureRecognizer locationInView:self];
     CGPoint translation = [gestureRecognizer translationInView:self];
 
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        previousX = previousY = 0;
+        previous = CGPointMake(0, 0);
     }
 
     CGPoint delta;
-    delta.x = translation.x - previousX;
-    delta.y = translation.y - previousY;
+    delta.x = translation.x - previous.x;
+    delta.y = translation.y - previous.y;
 
     // NSLog(@"location: (%f,%f) , drag: (%f,%f)", location.x, location.y, delta.x, delta.y);
 
-    previousX = translation.x;
-    previousY = translation.y;
+    previous = translation;
 
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan &&
         gestureRecognizer.numberOfTouches == 1) {
         if (CGRectContainsPoint([self topLeftResizeHandle], location)) {
             NSLog(@"===> dragging TOPLEFT handle");
             draggedHandle = TOPLEFT;
+            dragOffset.x = location.x - self.selectionRectangles[0].origin.x;
+            dragOffset.y = location.y - self.selectionRectangles[0].origin.y;
         } else if (CGRectContainsPoint([self bottomRightResizeHandle], location)) {
             NSLog(@"===> dragging BOTTOMRIGHT handle");
             draggedHandle = BOTTOMRIGHT;
+            dragOffset.x = location.x - self.selectionRectangles[N-1].origin.x;
+            dragOffset.y = location.y - self.selectionRectangles[N-1].origin.y;
         }
     }
 
     if (draggedHandle == TOPLEFT) {
-        const int N = self.selectionRectangleCount;
 
-        CGPoint old = self.selectionRectangles[0].origin;
+        touch_lo_selection_start_move(self.documentHandle,
+                                      location.x - dragOffset.x, location.y - dragOffset.y);
 
-        self.selectionRectangles[0].origin = location;
-        self.selectionRectangles[0].size.width -= (location.x - old.x);
-        self.selectionRectangles[0].size.height -= (location.y - old.y);
-
-#if 0
-        touch_lo_selection_attempt_resize(self.documentHandle,
-                                          self.selectionRectangles,
-                                          self.selectionRectangleCount);
-#else
-        touch_lo_tap((self.selectionRectangles[0].origin.x + self.selectionRectangles[N-1].origin.x) / 2,
-                     (self.selectionRectangles[0].origin.y + self.selectionRectangles[N-1].origin.y) / 2);
-
-        touch_lo_mouse(self.selectionRectangles[0].origin.x,
-                       self.selectionRectangles[0].origin.y,
-                       DOWN, NONE);
-        touch_lo_mouse(self.selectionRectangles[N-1].origin.x +
-                       self.selectionRectangles[N-1].size.width,
-                       self.selectionRectangles[N-1].origin.y +
-                       self.selectionRectangles[N-1].size.height,
-                       UP, NONE);
-#endif
         if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
             draggedHandle = NONE;
+
         return;
     } else if (draggedHandle == BOTTOMRIGHT) {
 
-        touch_lo_selection_end_move(self.documentHandle, location.x, location.y);
+        touch_lo_selection_end_move(self.documentHandle,
+                                    location.x - dragOffset.x, location.y - dragOffset.y);
 
         if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
             draggedHandle = NONE;
+
         return;
     }
 

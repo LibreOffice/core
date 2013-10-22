@@ -20,6 +20,10 @@ extern "C" {
 // "Implementation" of touch_lo_* functions, called on the LO thread through
 // the PostUserEvent mechanism. Not called by UI thread code.
 
+void touch_lo_selection_start_move_impl(const void *documentHandle,
+                                        int x,
+                                        int y);
+
 void touch_lo_selection_end_move_impl(const void *documentHandle,
                                       int x,
                                       int y);

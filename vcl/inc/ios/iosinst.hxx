@@ -65,6 +65,12 @@ public:
     typedef struct {
         const void *documentHandle;
         int x, y;
+    } SelectionStartMoveArg;
+    DECL_LINK( SelectionStartMove, SelectionStartMoveArg* );
+
+    typedef struct {
+        const void *documentHandle;
+        int x, y;
     } SelectionEndMoveArg;
     DECL_LINK( SelectionEndMove, SelectionEndMoveArg* );
 

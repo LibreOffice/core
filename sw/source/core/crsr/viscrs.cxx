@@ -262,36 +262,8 @@ void SwSelPaintRects::Show()
                 mpCursorOverlay = 0;
             }
         }
-#else
-        if (false)
-            ;
-#endif
         else if(!empty())
         {
-#if !HAVE_FEATURE_DESKTOP
-#ifdef IOS
-            const OutputDevice* pOut = GetShell()->GetWin();
-            if ( ! pOut )
-                pOut = GetShell()->GetOut();
-            SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(const_cast<SwCrsrShell*>(GetShell()));
-            if ( pWrtShell )
-            {
-                // Buffer will be deallocated in the UI layer
-                CGRect *rects = (CGRect *) malloc((sizeof(CGRect))*size());
-                for (size_t i = 0; i < size(); ++i)
-                {
-                    Point origin = pOut->LogicToPixel((*this)[i].Pos());
-                    Size size = pOut->LogicToPixel((*this)[i].SSize());
-                    rects[i] = CGRectMake(origin.X(), origin.Y(),
-                                          size.Width(), size.Height());
-                }
-                // GetShell returns a SwCrsrShell which actually is a SwWrtShell
-                touch_ui_selection_start(MLOSelectionText, pWrtShell, rects, size(), NULL);
-            }
-#else
-            // Not yet implemented
-#endif
-#else
             SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
             rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
@@ -310,8 +282,38 @@ void SwSelPaintRects::Show()
 
                 xTargetOverlay->add(*mpCursorOverlay);
             }
-#endif
         }
+#else
+        const OutputDevice* pOut = GetShell()->GetWin();
+        if ( ! pOut )
+            pOut = GetShell()->GetOut();
+        SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(const_cast<SwCrsrShell*>(GetShell()));
+        if (!empty())
+        {
+            if (pWrtShell)
+            {
+                // Buffer will be deallocated in the UI layer
+                MLORect *rects = (MLORect *) malloc((sizeof(MLORect))*size());
+                for (size_t i = 0; i < size(); ++i)
+                {
+                    Point origin = pOut->LogicToPixel((*this)[i].Pos());
+                    Size size = pOut->LogicToPixel((*this)[i].SSize());
+#ifdef IOS
+                    rects[i] = CGRectMake(origin.X(), origin.Y(),
+                                          size.Width(), size.Height());
+#else
+                    // Not yet implemented
+#endif
+                }
+                // GetShell returns a SwCrsrShell which actually is a SwWrtShell
+                touch_ui_selection_start(MLOSelectionText, pWrtShell, rects, size(), NULL);
+            }
+        }
+        else
+        {
+            touch_ui_selection_none();
+        }
+#endif
     }
 }
 

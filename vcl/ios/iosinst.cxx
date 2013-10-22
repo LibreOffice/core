@@ -508,6 +508,32 @@ void touch_lo_keyboard_did_hide()
     }
 }
 
+IMPL_LINK( IosSalInstance, SelectionStartMove, SelectionStartMoveArg*, pArg )
+{
+    touch_lo_selection_start_move_impl(pArg->documentHandle, pArg->x, pArg->y);
+
+    delete pArg;
+
+    return 0;
+}
+
+extern "C"
+void touch_lo_selection_start_move(const void *documentHandle,
+                                   int x,
+                                   int y)
+{
+    IosSalInstance *pInstance = IosSalInstance::getInstance();
+
+    if ( pInstance == NULL )
+        return;
+
+    IosSalInstance::SelectionStartMoveArg *pArg = new IosSalInstance::SelectionStartMoveArg;
+    pArg->documentHandle = documentHandle;
+    pArg->x = x;
+    pArg->y = y;
+    Application::PostUserEvent( LINK( pInstance, IosSalInstance, SelectionStartMove), pArg );
+}
+
 IMPL_LINK( IosSalInstance, SelectionEndMove, SelectionEndMoveArg*, pArg )
 {
     touch_lo_selection_end_move_impl(pArg->documentHandle, pArg->x, pArg->y);
