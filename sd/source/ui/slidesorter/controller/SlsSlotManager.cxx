@@ -884,34 +884,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
 
 void SlotManager::ShowSlideShow( SfxRequest& rReq)
 {
-    Reference< XPresentation2 > xPresentation( mrSlideSorter.GetModel().GetDocument()->getPresentation() );
-    if( xPresentation.is() )
-    {
-        if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
-        {
-            if( (SID_PRESENTATION == rReq.GetSlot() ) )
-            {
-                Sequence< PropertyValue > aArguments(1);
-                PropertyValue aPage;
-                OUString sValue("0");
-
-                aPage.Name = "FirstPage";
-                aPage.Value <<= sValue;
-
-                aArguments[0] = aPage;
-
-                xPresentation->startWithArguments( aArguments );
-            }
-            else
-            {
-                xPresentation->start();
-            }
-        }
-        else
-        {
-            xPresentation->rehearseTimings();
-        }
-    }
+    slideshowhelp::ShowSlideShow(rReq, *mrSlideSorter.GetModel().GetDocument());
 }
 
 void SlotManager::RenameSlide (void)

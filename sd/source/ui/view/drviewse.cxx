@@ -1641,36 +1641,44 @@ void DrawViewShell::ShowUIControls (bool bVisible)
     maTabControl.Show (bVisible);
 }
 
-void DrawViewShell::ShowSlideShow(SfxRequest& rReq)
+namespace slideshowhelp
 {
-    Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
-    if( xPresentation.is() )
+    void ShowSlideShow(SfxRequest& rReq, SdDrawDocument &rDoc)
     {
-        if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
+        Reference< XPresentation2 > xPresentation( rDoc.getPresentation() );
+        if( xPresentation.is() )
         {
-            if( (SID_PRESENTATION == rReq.GetSlot() ) )
+            if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
             {
-                Sequence< PropertyValue > aArguments(1);
-                PropertyValue aPage;
-                OUString sValue("0");
+                if( (SID_PRESENTATION == rReq.GetSlot() ) )
+                {
+                    Sequence< PropertyValue > aArguments(1);
+                    PropertyValue aPage;
+                    OUString sValue("0");
 
-                aPage.Name = "FirstPage";
-                aPage.Value <<= sValue;
+                    aPage.Name = "FirstPage";
+                    aPage.Value <<= sValue;
 
-                aArguments[0] = aPage;
+                    aArguments[0] = aPage;
 
-                xPresentation->startWithArguments( aArguments );
+                    xPresentation->startWithArguments( aArguments );
+                }
+                else
+                {
+                    xPresentation->start();
+                }
             }
             else
             {
-                xPresentation->start();
+                xPresentation->rehearseTimings();
             }
         }
-        else
-        {
-            xPresentation->rehearseTimings();
-        }
     }
+}
+
+void DrawViewShell::ShowSlideShow(SfxRequest& rReq)
+{
+    slideshowhelp::ShowSlideShow(rReq, *GetDoc());
 }
 
 void DrawViewShell::StopSlideShow (bool /*bCloseFrame*/)
