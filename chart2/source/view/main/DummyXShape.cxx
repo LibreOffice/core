@@ -396,10 +396,27 @@ DummyChart* DummyChart::getRootShape()
     return this;
 }
 
+#define QUERYINT( xint ) \
+    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
+        aAny <<= uno::Reference< xint >(this)
+
 uno::Any DummyXShapes::queryInterface( const uno::Type& rType )
     throw(uno::RuntimeException)
 {
     return DummyXShape::queryInterface(rType);
+}
+
+uno::Any DummyXShapes::queryAggregation( const uno::Type & rType )
+    throw(uno::RuntimeException)
+{
+    uno::Any aAny;
+
+    //QUERYINT( drawing::XShapeGroup );
+    QUERYINT( drawing::XShapes );
+    else
+        return DummyXShape::queryAggregation( rType );
+
+    return aAny;
 }
 
 void DummyXShapes::acquire()

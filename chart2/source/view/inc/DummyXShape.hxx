@@ -100,7 +100,7 @@ class DummyChart;
 
 struct OpenglContext;
 
-class DummyXShape : public cppu::WeakImplHelper6<
+class DummyXShape : public cppu::WeakAggImplHelper6<
                     ::com::sun::star::drawing::XShape,
                     com::sun::star::beans::XPropertySet,
                     com::sun::star::beans::XMultiPropertySet,
@@ -364,6 +364,7 @@ class DummyXShapes : public DummyXShape, public com::sun::star::drawing::XShapes
 public:
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Any SAL_CALL queryAggregation( const com::sun::star::uno::Type& rType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
 
