@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cassert>
+
 #include "helpid.hrc"
 #include "baside2.hrc"
 
@@ -597,17 +601,18 @@ void EditorWindow::HandleAutoCorrect()
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
 
-    if( aPortions.size() == 0 )
+    if( aPortions.empty() )
         return;
 
-    HighlightPortion& r = aPortions[aPortions.size()-1];
+    HighlightPortion& r = aPortions.back();
     if( nIndex != aPortions.size()-1 )
     {//cursor is not standing at the end of the line
-        for( size_t i = 0; i < aPortions.size(); i++ )
+        for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
+             i != aPortions.end(); ++i)
         {
-            if( aPortions[i].nEnd == nIndex )
+            if( i->nEnd == nIndex )
             {
-                r = aPortions[i];
+                r = *i;
                 break;
             }
         }
@@ -671,14 +676,16 @@ TextSelection EditorWindow::GetLastHighlightPortionTextSelection()
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
 
-    HighlightPortion& r = aPortions[aPortions.size()-1];
+    assert(!aPortions.empty());
+    HighlightPortion& r = aPortions.back();
     if( nIndex != aPortions.size()-1 )
     {//cursor is not standing at the end of the line
-        for( size_t i = 0; i < aPortions.size(); i++ )
+        for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
+             i != aPortions.end(); ++i)
         {
-            if( aPortions[i].nEnd == nIndex )
+            if( i->nEnd == nIndex )
             {
-                r = aPortions[i];
+                r = *i;
                 break;
             }
         }
@@ -717,10 +724,10 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
 
-    if( aPortions.size() == 0 )
+    if( aPortions.empty() )
         return;
 
-    if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions[aPortions.size()-1].tokenType != TT_STRING) )
+    if( aLine.getLength() > 0 && aLine[aLine.getLength()-1] != '"' && (aPortions.back().tokenType != TT_STRING) )
     {
         GetEditView()->InsertText(OUString("\""));
         //leave the cursor on it's place: inside the two double quotes
@@ -738,7 +745,7 @@ void EditorWindow::HandleProcedureCompletion()
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
 
-    if( aPortions.size() == 0 )
+    if( aPortions.empty() )
         return;
 
     OUString sProcType;
@@ -746,18 +753,18 @@ void EditorWindow::HandleProcedureCompletion()
     bool bFoundType = false;
     bool bFoundName = false;
 
-    for ( size_t i = 0; i < aPortions.size(); i++ )
+    for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
+         i != aPortions.end(); ++i)
     {
-        HighlightPortion& r = aPortions[i];
-        OUString sTokStr = aLine.copy(r.nBegin, r.nEnd - r.nBegin);
+        OUString sTokStr = aLine.copy(i->nBegin, i->nEnd - i->nBegin);
 
-        if( r.tokenType == 9 && ( sTokStr.equalsIgnoreAsciiCase("sub")
+        if( i->tokenType == 9 && ( sTokStr.equalsIgnoreAsciiCase("sub")
             || sTokStr.equalsIgnoreAsciiCase("function")) )
         {
             sProcType = sTokStr;
             bFoundType = true;
         }
-        if( r.tokenType == 1 && bFoundType )
+        if( i->tokenType == 1 && bFoundType )
         {
             sProcName = sTokStr;
             bFoundName = true;
@@ -790,7 +797,7 @@ void EditorWindow::HandleProcedureCompletion()
 
             if( aCurrPortions.size() >= 3 )
             {//at least 3 tokens: (sub|function) whitespace idetifier ....
-                HighlightPortion& r = aCurrPortions[0];
+                HighlightPortion& r = aCurrPortions.front();
                 OUString sStr = aCurrLine.copy(r.nBegin, r.nEnd - r.nBegin);
 
                 if( r.tokenType == 9 )
@@ -821,18 +828,19 @@ void EditorWindow::HandleCodeCompletion()
     std::vector<HighlightPortion> aPortions;
     aLine = aLine.copy(0, aSel.GetEnd().GetIndex());
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-    if( aPortions.size() > 0 )
+    if( !aPortions.empty() )
     {//use the syntax highlighter to grab out nested reflection calls, eg. aVar.aMethod("aa").aOtherMethod ..
-        for( std::vector<HighlightPortion>::reverse_iterator aIt = aPortions.rbegin(); aIt != aPortions.rend(); ++aIt )
+        for( std::vector<HighlightPortion>::reverse_iterator i(
+                 aPortions.rbegin());
+             i != aPortions.rend(); ++i)
         {
-            HighlightPortion r = *aIt;
-            if( r.tokenType == TT_WHITESPACE ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
+            if( i->tokenType == TT_WHITESPACE ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
                 break;
-            if( r.tokenType == TT_IDENTIFIER || r.tokenType == TT_KEYWORDS ) // extract the identifers(methods, base variable)
+            if( i->tokenType == TT_IDENTIFIER || i->tokenType == TT_KEYWORDS ) // extract the identifers(methods, base variable)
             /* an example: Dim aLocVar2 as com.sun.star.beans.PropertyValue
              * here, aLocVar2.Name, and PropertyValue's Name field is treated as a keyword(?!)
              * */
-                aVect.insert( aVect.begin(), aLine.copy(r.nBegin, r.nEnd - r.nBegin) );
+                aVect.insert( aVect.begin(), aLine.copy(i->nBegin, i->nEnd - i->nBegin) );
         }
 
         if( aVect.size() == 0 )//nothing to do
@@ -1189,11 +1197,11 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
         std::vector<HighlightPortion> aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
 
-        for ( size_t i = 0; i < aPortions.size(); i++ )
+        for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
+             i != aPortions.end(); ++i)
         {
-            HighlightPortion& r = aPortions[i];
-            Color const aColor = rModulWindow.GetLayout().GetSyntaxColor(r.tokenType);
-            pEditEngine->SetAttrib( TextAttribFontColor(aColor), nLine, r.nBegin, r.nEnd, true );
+            Color const aColor = rModulWindow.GetLayout().GetSyntaxColor(i->tokenType);
+            pEditEngine->SetAttrib( TextAttribFontColor(aColor), nLine, i->nBegin, i->nEnd, true );
         }
 
         pEditEngine->SetModified( bWasModified );

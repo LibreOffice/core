@@ -152,14 +152,14 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
     m_Highlighter.notifyChange ( 0, 0, &strLine, 1 );
     std::vector<HighlightPortion> portions;
     m_Highlighter.getHighlightPortions( 0, strLine, portions );
-    for ( size_t i=0; i<portions.size(); i++ )
+    for (std::vector<HighlightPortion>::iterator i(portions.begin());
+         i != portions.end(); ++i)
     {
-        HighlightPortion& r = portions[i];
-        OString sToken(OUStringToOString(strLine.copy(r.nBegin, r.nEnd-r.nBegin), RTL_TEXTENCODING_UTF8));
+        OString sToken(OUStringToOString(strLine.copy(i->nBegin, i->nEnd-i->nBegin), RTL_TEXTENCODING_UTF8));
         xmlNodePtr text = xmlNewText((const xmlChar*)sToken.getStr());
-        if ( r.tokenType != TT_WHITESPACE )
+        if ( i->tokenType != TT_WHITESPACE )
         {
-            xmlChar* typeStr = getTypeString( r.tokenType );
+            xmlChar* typeStr = getTypeString( i->tokenType );
             curNode = xmlNewTextChild( paragraph, 0, (xmlChar*)"item", 0 );
             xmlNewProp( curNode, (xmlChar*)"type", typeStr );
             xmlAddChild( curNode, text );

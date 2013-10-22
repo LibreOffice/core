@@ -176,10 +176,10 @@ void MultiLineEditSyntaxHighlight::UpdateData()
         GetTextEngine()->RemoveAttribs( nLine, sal_True );
         std::vector<HighlightPortion> aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        for ( size_t i = 0; i < aPortions.size(); i++ )
+        for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
+             i != aPortions.end(); ++i)
         {
-            HighlightPortion& r = aPortions[i];
-            GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(r.tokenType) ), nLine, r.nBegin, r.nEnd, sal_True );
+            GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(i->tokenType) ), nLine, i->nBegin, i->nEnd, sal_True );
         }
     }
     GetTextView()->ShowCursor( false, true );
