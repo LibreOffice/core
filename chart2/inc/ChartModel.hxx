@@ -120,6 +120,7 @@ private:
     sal_Int32               m_nInLoad;
     sal_Bool volatile       m_bUpdateNotificationsPending;
 
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xChartView; // for the ref count
     ChartView* mpChartView;
 
     OUString m_aResource;

@@ -680,6 +680,7 @@ int oglErrorHandler( unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/ )
 
 bool DummyChart::initOpengl()
 {
+    initWindow();
     mpWindow->setPosSizePixel(0,0,0,0);
     GLWin.Width = 0;
     GLWin.Height = 0;
@@ -804,7 +805,7 @@ DummyChart::DummyChart():
 
 void DummyChart::createGLContext()
 {
-
+    initOpengl();
 }
 
 void DummyChart::setPosition( const awt::Point& aPosition )
