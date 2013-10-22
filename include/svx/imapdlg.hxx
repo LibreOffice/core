@@ -17,32 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifndef _IMAPDLG_HXX_
-#define _IMAPDLG_HXX_
+#ifndef INCLUDED_SVX_IMAPDLG_HXX
+#define INCLUDED_SVX_IMAPDLG_HXX
 
 #include <svtools/inettbc.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/basedlgs.hxx>
-
 #include <vcl/fixed.hxx>
-
 #include <vcl/combobox.hxx>
-
 #include <vcl/edit.hxx>
-
 #include <vcl/toolbox.hxx>
-
 #include <vcl/status.hxx>
 #include "svx/svxdllapi.h"
 #include <vector>
 
-
-#ifndef _GOMISC_HXX
 class ImageMap;
-#endif
-
 
 /*************************************************************************
 |*
@@ -65,9 +55,6 @@ class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
                                const TargetList* pTargetList = NULL, void* pEditingObj = NULL );
 };
 
-
-#ifndef _REDUCED_IMAPDLG_HXX_
-#define _REDUCED_IMAPDLG_HXX_
 
 class SvxIMapDlg;
 
@@ -173,8 +160,6 @@ public:
                         GetWindow() ) )
 
 
-#endif // _REDUCED_IMAPDLG_HXX_
-#endif // _IMAPDLG_HXX_
-
+#endif // INCLUDED_SVX_IMAPDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
