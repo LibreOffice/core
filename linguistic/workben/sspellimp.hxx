@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGU2_SPELLIMP_HXX_
-#define _LINGU2_SPELLIMP_HXX_
+#ifndef INCLUDED_LINGUISTIC_WORKBEN_SSPELLIMP_HXX
+#define INCLUDED_LINGUISTIC_WORKBEN_SSPELLIMP_HXX
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase1.hxx> // helper for implementations

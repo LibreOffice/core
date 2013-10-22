@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SFX_SIDEBAR_TOOLBOX_HXX
-#define SFX_SIDEBAR_TOOLBOX_HXX
+#ifndef INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
+#define INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
 
 #include "sfx2/dllapi.h"
 #include "vcl/toolbox.hxx"

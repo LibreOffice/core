@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __XFACTORY_HXX_
-#define __XFACTORY_HXX_
+#ifndef INCLUDED_EMBEDDEDOBJ_TEST_MAINTHREADEXECUTOR_XEXECUTOR_HXX
+#define INCLUDED_EMBEDDEDOBJ_TEST_MAINTHREADEXECUTOR_XEXECUTOR_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/task/XJob.hpp>

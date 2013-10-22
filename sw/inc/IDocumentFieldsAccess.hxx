@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IDOCUMENTFIELDSACCESS_HXX_INCLUDED
-#define IDOCUMENTFIELDSACCESS_HXX_INCLUDED
+#ifndef INCLUDED_SW_INC_IDOCUMENTFIELDSACCESS_HXX
+#define INCLUDED_SW_INC_IDOCUMENTFIELDSACCESS_HXX
 
 #include <sal/types.h>
 #include <tools/solar.h>
@@ -133,6 +133,6 @@ protected:
     virtual ~IDocumentFieldsAccess() {};
  };
 
- #endif // IDOCUMENTLINKSADMINISTRATION_HXX_INCLUDED
+#endif // INCLUDED_SW_INC_IDOCUMENTFIELDSACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

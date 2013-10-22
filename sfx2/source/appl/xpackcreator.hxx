@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __XFACTORY_HXX_
-#define __XFACTORY_HXX_
+#ifndef INCLUDED_SFX2_SOURCE_APPL_XPACKCREATOR_HXX
+#define INCLUDED_SFX2_SOURCE_APPL_XPACKCREATOR_HXX
 
 #include <com/sun/star/embed/XPackageStructureCreator.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

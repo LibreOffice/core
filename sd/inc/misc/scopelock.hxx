@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SCOPELOCK_HXX
-#define _SD_SCOPELOCK_HXX
+#ifndef INCLUDED_SD_INC_MISC_SCOPELOCK_HXX
+#define INCLUDED_SD_INC_MISC_SCOPELOCK_HXX
 
 #include <sal/types.h>
 
@@ -49,6 +49,6 @@ private:
 
 } // namespace sd
 
-#endif     // _SD_UNDOMANAGER_HXX
+#endif // INCLUDED_SD_INC_MISC_SCOPELOCK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
