@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef NODE_HXX
-#define NODE_HXX
+#ifndef INCLUDED_EDITENG_NODE_HXX
+#define INCLUDED_EDITENG_NODE_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -97,6 +97,6 @@ public:
     static Node* our_pNodeNullPointer;
 };
 
-#endif // NODE_HXX
+#endif // INCLUDED_EDITENG_NODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

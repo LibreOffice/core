@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __XSTORAGE_HXX_
-#define __XSTORAGE_HXX_
+#ifndef INCLUDED_PACKAGE_SOURCE_XSTOR_XSTORAGE_HXX
+#define INCLUDED_PACKAGE_SOURCE_XSTOR_XSTORAGE_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/embed/XStorage2.hpp>

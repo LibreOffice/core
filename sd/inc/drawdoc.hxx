@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DRAWDOC_HXX
-#define _DRAWDOC_HXX
+#ifndef INCLUDED_SD_INC_DRAWDOC_HXX
+#define INCLUDED_SD_INC_DRAWDOC_HXX
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
@@ -678,6 +678,6 @@ private:
 
 }
 
-#endif // _DRAWDOC_HXX
+#endif // INCLUDED_SD_INC_DRAWDOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __XFACTORY_HXX_
-#define __XFACTORY_HXX_
+#ifndef INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_XFACTORY_HXX
+#define INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_XFACTORY_HXX
 
 #include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

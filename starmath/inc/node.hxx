@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef NODE_HXX
-#define NODE_HXX
+#ifndef INCLUDED_STARMATH_INC_NODE_HXX
+#define INCLUDED_STARMATH_INC_NODE_HXX
 
 #include <vector>
 #include <ostream>
