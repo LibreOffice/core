@@ -208,9 +208,10 @@ void DummyXShape::setParent( const uno::Reference< uno::XInterface >& xParent )
 
 namespace {
 
-void setProperties( uno::Reference< beans::XPropertySet > xPropSet, const tPropertyNameMap& rPropertyNameMap,
-        std::map<OUString, uno::Any>& rTargetMap )
+void setProperties( uno::Reference< beans::XPropertySet > , const tPropertyNameMap& ,
+        std::map<OUString, uno::Any>& )
 {
+/*
     tNameSequence aNames;
     tAnySequence aValues;
     PropertyMapper::getMultiPropertyLists( aNames, aValues,
@@ -221,6 +222,7 @@ void setProperties( uno::Reference< beans::XPropertySet > xPropSet, const tPrope
     {
         rTargetMap[aNames[i]] = aValues[i];
     }
+*/
 }
 
 }
@@ -682,6 +684,7 @@ bool DummyChart::initWindow()
 
     return true;
 }
+#if defined( UNX )
 
 namespace {
 
@@ -694,6 +697,8 @@ int oglErrorHandler( unx::Display* /*dpy*/, unx::XErrorEvent* /*evnt*/ )
 }
 
 }
+
+#endif
 
 bool DummyChart::initOpengl()
 {

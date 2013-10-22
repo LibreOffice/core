@@ -397,8 +397,6 @@ public:
     DummyChart();
     virtual DummyChart* getRootShape();
 
-    OpenglContext* getGlContext() { return mpContext; }
-
     virtual void SAL_CALL setPosition( const ::com::sun::star::awt::Point& aPosition ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setSize( const ::com::sun::star::awt::Size& aSize ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException);
 

@@ -47,6 +47,8 @@ $(eval $(call gb_Library_add_exception_objects,chartopengl,\
 ifeq ($(strip $(OS)),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,chartopengl,\
     opengl32 \
+	gdi32 \
+	glu32 \
 ))
 else ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,chartopengl,\
