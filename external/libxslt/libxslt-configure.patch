@@ -57,13 +57,13 @@
 +#includedir=@includedir@
 +#libdir=@libdir@
 +
-+prefix=${SOLARVERSION}/${INPATH}
-+exec_prefix=${SOLARVERSION}/${INPATH}
++prefix=${WORKDIR}/UnpackedTarball/xslt
++exec_prefix=${WORKDIR}/UnpackedTarball/xsltproc
  exec_prefix_set=no
 -includedir=@includedir@
 -libdir=@libdir@
-+includedir=${SOLARVERSION}/${INPATH}/inc${UPDMINOREXT}/external
-+libdir=${SOLARVERSION}/${INPATH}/lib${UPDMINOREXT}
++includedir=${WORKDIR}/UnpackedTarball/xslt/libxslt
++libdir=${WORKDIR}/UnpackedTarball/xslt/libxslt/.libs
  
  usage()
  {
