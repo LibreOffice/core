@@ -165,15 +165,11 @@ ChartView::ChartView(
     , m_bSdrViewIsInEditMode(sal_False)
     , m_aResultingDiagramRectangleExcludingAxes(0,0,0,0)
 {
+    init();
 }
 
-void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments )
-                throw ( uno::Exception, uno::RuntimeException)
+void ChartView::init()
 {
-    OSL_PRECOND(aArguments.getLength() >= 1,"need 1 argument to initialize the view: xModel");
-    if( !(aArguments.getLength() >= 1) )
-        return;
-
     if( !m_pDrawModelWrapper.get() )
     {
         SolarMutexGuard aSolarGuard;
@@ -182,6 +178,12 @@ void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments
         m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
         StartListening( m_pDrawModelWrapper->getSdrModel(), false /*bPreventDups*/ );
     }
+}
+
+void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& )
+                throw ( uno::Exception, uno::RuntimeException)
+{
+    init();
 }
 
 ChartView::~ChartView()

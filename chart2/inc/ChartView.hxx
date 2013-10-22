@@ -76,6 +76,9 @@ class ChartView : public ::cppu::WeakImplHelper10<
         , public ExplicitValueProvider
         , private SfxListener
 {
+private:
+    void init();
+
 public:
     ChartView(::com::sun::star::uno::Reference<
                ::com::sun::star::uno::XComponentContext > const & xContext,
