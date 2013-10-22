@@ -267,7 +267,7 @@ private:
 
     double update();
 
-    void createSlideList( bool bAll, bool bStartWithActualSlide, const OUString& rPresSlide );
+    void createSlideList( bool bAll, const OUString& rPresSlide );
 
     void displayCurrentSlide (const bool bSkipAllMainSequenceEffects = false);
 

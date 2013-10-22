@@ -974,7 +974,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
         }
 
         // build page list
-        createSlideList( maPresSettings.mbAll, false, aPresSlide );
+        createSlideList( maPresSettings.mbAll, aPresSlide );
 
         // remember Slide number from where the show was started
         if( pStartPage )
@@ -2467,7 +2467,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
 
 // ---------------------------------------------------------
 
-void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, const OUString& rPresSlide )
+void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
 {
     const long nSlideCount = mpDoc->GetSdPageCount( PK_STANDARD );
 
@@ -2475,7 +2475,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
     {
         SdCustomShow*   pCustomShow;
 
-        if( !bStartWithActualSlide && mpDoc->GetCustomShowList() && maPresSettings.mbCustomShow )
+        if( mpDoc->GetCustomShowList() && maPresSettings.mbCustomShow )
             pCustomShow = mpDoc->GetCustomShowList()->GetCurObject();
         else
             pCustomShow = NULL;
