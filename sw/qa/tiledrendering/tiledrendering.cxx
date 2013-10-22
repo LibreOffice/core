@@ -55,21 +55,23 @@ int UIPreviewApp::Main()
         uifiles.push_back(aFileUrl);
     }
 
-    if (uifiles.empty())
-    {
-        fprintf(stderr, "Usage: ui-previewer file.ui\n");
-        return EXIT_FAILURE;
-    }
+    //if (uifiles.empty())
+    //{
+    //    fprintf(stderr, "Usage: ui-previewer file.ui\n");
+    //    return EXIT_FAILURE;
+    //}
 
     // turn on tooltips
     Help::EnableQuickHelp();
 
     try
     {
-        Dialog *pDialog = new Dialog(DIALOG_NO_PARENT, WB_STDDIALOG);
+        Dialog *pDialog = new ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "sw/qa/tiledrendering/tiledrendering.ui");
 
+        pDialog->Execute();
+/*
         {
-            VclBuilder aBuilder(pDialog, OUString(), uifiles[0]);
+            VclBuilder aBuilder(pDialog, OUString(), "sw/qa/tiledrendering/tiledrendering.ui");
             Dialog *pRealDialog = dynamic_cast<Dialog*>(aBuilder.get_widget_root());
 
             if (!pRealDialog)
@@ -81,7 +83,7 @@ int UIPreviewApp::Main()
                 pRealDialog->SetStyle(pDialog->GetStyle()|WB_CLOSEABLE);
                 pRealDialog->Execute();
             }
-        }
+        }*/
 
         delete pDialog;
     }
