@@ -34,7 +34,6 @@ using namespace com::sun::star::lang;
 using namespace cppu;
 
 using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 
 namespace cppu {
 
@@ -725,12 +724,7 @@ void OPropertySetHelper::fire
                     }
                     catch (RuntimeException & exc)
                     {
-                        OSL_TRACE(
-                            OUStringToOString(
-                                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                              "caught RuntimeException while "
-                                              "firing listeners: ") ) +
-                                exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc.Message);
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
                     }
@@ -782,12 +776,7 @@ void OPropertySetHelper::fire
                     }
                     catch (RuntimeException & exc)
                     {
-                        OSL_TRACE(
-                            OUStringToOString(
-                                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                              "caught RuntimeException while "
-                                              "firing listeners: ") ) +
-                                exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc.Message);
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
                     }
@@ -832,12 +821,7 @@ void OPropertySetHelper::fire
                     }
                     catch (RuntimeException & exc)
                     {
-                        OSL_TRACE(
-                            OUStringToOString(
-                                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                              "caught RuntimeException while "
-                                              "firing listeners: ") ) +
-                                exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc.Message);
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
                     }

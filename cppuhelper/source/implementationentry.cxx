@@ -18,14 +18,12 @@
  */
 
 #include <cppuhelper/implementationentry.hxx>
-#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
 using rtl::OUString;
-using rtl::OUStringBuffer;
 
 namespace cppu {
 
@@ -40,12 +38,9 @@ sal_Bool component_writeInfoHelper(
         {
             for( sal_Int32 i = 0; entries[i].create ; i ++ )
             {
-                OUStringBuffer buf( 124 );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/") );
-                buf.append( entries[i].getImplementationName() );
-                buf.appendAscii(RTL_CONSTASCII_STRINGPARAM( "/UNO/SERVICES" ) );
+                OUString sKey = "/" + entries[i].getImplementationName() + "/UNO/SERVICES";
                 Reference< XRegistryKey > xNewKey(
-                    reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( buf.makeStringAndClear()  ) );
+                    reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( sKey ) );
 
                 Sequence< OUString > seq = entries[i].getSupportedServiceNames();
                 const OUString *pArray = seq.getConstArray();
