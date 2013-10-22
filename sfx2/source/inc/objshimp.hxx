@@ -71,7 +71,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bClosing:1,         // sal_True while Close(), to prevent recurrences Notification
                         bIsSaving:1,
                         bPasswd:1,
-                        bIsTmp:1,
                         bIsNamedVisible:1,
                         bIsTemplate:1,
                         bIsAbortingImport:1,  // Import operation should be canceled.
