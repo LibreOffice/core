@@ -760,13 +760,20 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 
 define gb_LinkTarget__use_libxml2
 $(call gb_LinkTarget_use_package,$(1),xml2)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	xml2 \
-)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	-I$(call gb_UnpackedTarball_get_dir,xml2)/include \
 )
+
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc/libxml2.lib \
+)
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,xml2)/.libs -lxml2 \
+)
+endif
 
 endef
 define gb_ExternalProject__use_libxml2
@@ -811,9 +818,16 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	-I$(call gb_UnpackedTarball_get_dir,xslt) \
 )
-$(call gb_LinkTarget_use_libraries,$(1),\
-	xslt \
+
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,xslt)/win32/bin.msvc/libxslt.lib \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,xslt)/libxslt/.libs -lxslt \
+)
+endif
 
 endef
 
@@ -824,9 +838,15 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,xslt) \
 )
 
-$(call gb_LinkTarget_use_libraries,$(1),\
-	exslt \
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,xslt)/win32/bin.msvc/libexslt.lib \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,xslt)/libexslt/.libs -lexslt \
+)
+endif
 
 endef
 
