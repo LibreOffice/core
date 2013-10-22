@@ -214,6 +214,11 @@ private:
     sal_Int32   mnInPlaceConfigEvent;
 };
 
+namespace slideshowhelp
+{
+    void ShowSlideShow(SfxRequest& rReq, SdDrawDocument &rDoc);
+}
+
 }
 
 #endif /* _SD_SLIDESHOW_HXX */
