@@ -133,7 +133,6 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS )
     : SvxStandardDialog(pParent, "BreakDialog", "modules/swriter/ui/insertbreak.ui")
     , rSh(rS)
     , nKind(0)
-    , oPgNum(boost::none)
     , bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
 {
     get(m_pLineBtn, "linerb");

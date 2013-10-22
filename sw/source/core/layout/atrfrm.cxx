@@ -559,7 +559,6 @@ SwFmtPageDesc::SwFmtPageDesc( const SwFmtPageDesc &rCpy )
 SwFmtPageDesc::SwFmtPageDesc( const SwPageDesc *pDesc )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( (SwPageDesc*)pDesc ),
-    oNumOffset( boost::none ),
     nDescNameIdx( 0xFFFF ), // IDX_NO_VALUE
     pDefinedIn( 0 )
 {

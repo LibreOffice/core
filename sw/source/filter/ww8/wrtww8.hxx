@@ -155,7 +155,7 @@ struct WW8_SepInfo
     ::boost::optional<sal_uInt16> oPgRestartNo;
 
     WW8_SepInfo()
-        : pPageDesc(0), pSectionFmt(0), pPDNd(0), pNumNd(0), nLnNumRestartNo(0), oPgRestartNo(boost::none)
+        : pPageDesc(0), pSectionFmt(0), pPDNd(0), pNumNd(0), nLnNumRestartNo(0)
 
     {}
 
