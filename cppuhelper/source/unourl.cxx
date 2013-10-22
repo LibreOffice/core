@@ -209,7 +209,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
 {
-    if (!rUrl.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("uno:"), 0))
+    if (!rUrl.startsWithIgnoreAsciiCase("uno:"))
         throw rtl::MalformedUriException(
             rtl::OUString("UNO URL does not start with \"uno:\""));
     sal_Int32 i = RTL_CONSTASCII_LENGTH("uno:");
