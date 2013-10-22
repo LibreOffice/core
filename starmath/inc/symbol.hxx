@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SYMBOL_HXX
-#define SYMBOL_HXX
+#ifndef INCLUDED_STARMATH_INC_SYMBOL_HXX
+#define INCLUDED_STARMATH_INC_SYMBOL_HXX
 
 #include <vcl/font.hxx>
 #include <svl/lstner.hxx>

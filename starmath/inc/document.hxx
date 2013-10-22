@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOCUMENT_HXX
-#define DOCUMENT_HXX
+#ifndef INCLUDED_STARMATH_INC_DOCUMENT_HXX
+#define INCLUDED_STARMATH_INC_DOCUMENT_HXX
 
 #define SMDLL   1
 

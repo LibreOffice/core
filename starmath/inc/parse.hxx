@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef PARSE_HXX
-#define PARSE_HXX
+#ifndef INCLUDED_STARMATH_INC_PARSE_HXX
+#define INCLUDED_STARMATH_INC_PARSE_HXX
 
 #include <vcl/svapp.hxx>
 

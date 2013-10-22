@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ELEMENTSDOCKINGWINDOW_HXX_
-#define _ELEMENTSDOCKINGWINDOW_HXX_
+#ifndef INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
+#define INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
 
 #include <sfx2/dockwin.hxx>
 #include <svx/dlgctrl.hxx>

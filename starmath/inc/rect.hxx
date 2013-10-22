@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RECT_HXX
-#define RECT_HXX
+#ifndef INCLUDED_STARMATH_INC_RECT_HXX
+#define INCLUDED_STARMATH_INC_RECT_HXX
 
 #include <new>
 

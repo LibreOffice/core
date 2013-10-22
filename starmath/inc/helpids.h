@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef STARMATH_HELPIDS_H
-#define STARMATH_HELPIDS_H
+#ifndef INCLUDED_STARMATH_INC_HELPIDS_H
+#define INCLUDED_STARMATH_INC_HELPIDS_H
 
 #define HID_SMA_FONTDIALOG                                "STARMATH_HID_SMA_FONTDIALOG"
 #define HID_SMA_DISTANCEDIALOG                            "STARMATH_HID_SMA_DISTANCEDIALOG"

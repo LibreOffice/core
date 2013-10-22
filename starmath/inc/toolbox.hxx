@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLBOX_HXX
-#define TOOLBOX_HXX
+#ifndef INCLUDED_STARMATH_INC_TOOLBOX_HXX
+#define INCLUDED_STARMATH_INC_TOOLBOX_HXX
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SM_TYPEDETECT_HXX
-#define _SM_TYPEDETECT_HXX
+#ifndef INCLUDED_STARMATH_SOURCE_SMDETECT_HXX
+#define INCLUDED_STARMATH_SOURCE_SMDETECT_HXX
 
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>

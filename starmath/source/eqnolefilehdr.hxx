@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __EQNOLEFILEHDR_HXX__
-#define __EQNOLEFILEHDR_HXX__
+#ifndef INCLUDED_STARMATH_SOURCE_EQNOLEFILEHDR_HXX
+#define INCLUDED_STARMATH_SOURCE_EQNOLEFILEHDR_HXX
 
 #include <sal/types.h>
 #include <sot/storage.hxx>

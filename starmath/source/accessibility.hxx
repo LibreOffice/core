@@ -21,8 +21,8 @@
 #pragma hdrstop
 #endif
 
-#ifndef _ACCESSIBILITY_HXX_
-#define _ACCESSIBILITY_HXX_
+#ifndef INCLUDED_STARMATH_SOURCE_ACCESSIBILITY_HXX
+#define INCLUDED_STARMATH_SOURCE_ACCESSIBILITY_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>

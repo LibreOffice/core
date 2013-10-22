@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SM_WORDEXPORTBASE_HXX
-#define SM_WORDEXPORTBASE_HXX
+#ifndef INCLUDED_STARMATH_SOURCE_WORDEXPORTBASE_HXX
+#define INCLUDED_STARMATH_SOURCE_WORDEXPORTBASE_HXX
 
 #include "node.hxx"
 
