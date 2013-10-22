@@ -272,6 +272,7 @@ Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
 
 Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
 {
+    sal_Int32 nMaxValues = 0;
     Reference< XLabeledDataSequence > xLabeledSeq;
     /*  Find first existing category sequence. The bahaviour of Excel 2007 is
         different to Excel 2003, which always used the category sequence of the
@@ -283,6 +284,24 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
             SeriesConverter aSeriesConv( *this, **aIt );
             xLabeledSeq = aSeriesConv.createCategorySequence( "categories" );
         }
+        else if( nMaxValues <= 0 && (*aIt)->maSources.has( SeriesModel::VALUES ) )
+        {
+            DataSourceModel *pValues = (*aIt)->maSources.get( SeriesModel::VALUES ).get();
+            if( pValues->mxDataSeq.is() )
+                nMaxValues = pValues->mxDataSeq.get()->maData.size();
+        }
+    }
+    /* n#839727 Create Category Sequence when none are found */
+    if( !xLabeledSeq.is() && mrModel.maSeries.size() > 0 ) {
+        if( nMaxValues < 0 )
+            nMaxValues = 2;
+        SeriesModel &aModel = mrModel.maSeries.create();
+        DataSourceModel &aSrc = aModel.maSources.create( SeriesModel::CATEGORIES );
+        DataSequenceModel &aSeq = aSrc.mxDataSeq.create();
+        for( sal_Int32 i = 0; i < nMaxValues; i++ )
+            aSeq.maData[ i ] <<= OUString::number( i + 1 );
+        SeriesConverter aSeriesConv( *this,  aModel );
+        xLabeledSeq = aSeriesConv.createCategorySequence( "categories" );
     }
     return xLabeledSeq;
 }
