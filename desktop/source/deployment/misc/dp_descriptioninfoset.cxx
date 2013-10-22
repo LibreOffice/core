@@ -324,9 +324,8 @@ namespace dp_misc {
 DescriptionInfoset getDescriptionInfoset(OUString const & sExtensionFolderURL)
 {
     Reference< css::xml::dom::XNode > root;
-    Reference<css::uno::XComponentContext> context =
-        comphelper_getProcessComponentContext();
-    OSL_ASSERT(context.is());
+    Reference<css::uno::XComponentContext> context(
+        comphelper::getProcessComponentContext());
     try {
         root =
             ExtensionDescription(

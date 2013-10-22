@@ -548,7 +548,7 @@ void syncRepositories(
     {
         xExtensionManager =
             deployment::ExtensionManager::get(
-                comphelper_getProcessComponentContext());
+                comphelper::getProcessComponentContext());
 
         if (xExtensionManager.is())
         {

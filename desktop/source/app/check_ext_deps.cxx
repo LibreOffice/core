@@ -392,7 +392,8 @@ sal_Bool Desktop::CheckExtensionDependencies()
         return false;
     }
 
-    uno::Reference< uno::XComponentContext > xContext = comphelper_getProcessComponentContext();
+    uno::Reference< uno::XComponentContext > xContext(
+        comphelper::getProcessComponentContext());
 
     bool bDependenciesValid = impl_checkDependencies( xContext );
 
@@ -414,7 +415,7 @@ void Desktop::SynchronizeExtensionRepositories()
 {
     SAL_INFO( "desktop.app", "desktop (jl) ::Desktop::SynchronizeExtensionRepositories");
     uno::Reference< uno::XComponentContext > context(
-        comphelper_getProcessComponentContext());
+        comphelper::getProcessComponentContext());
     uno::Reference< ucb::XCommandEnvironment > silent(
         new SilentCommandEnv(context, this));
     if (m_bCleanedExtensionCache) {

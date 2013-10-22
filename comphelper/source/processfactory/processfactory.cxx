@@ -99,15 +99,4 @@ Reference< XComponentContext > getProcessComponentContext()
 
 } // namespace comphelper
 
-extern "C" {
-uno::XComponentContext * comphelper_getProcessComponentContext()
-{
-    uno::Reference<uno::XComponentContext> xRet;
-    xRet = ::comphelper::getProcessComponentContext();
-    if (xRet.is())
-        xRet->acquire();
-    return xRet.get();
-}
-} // extern "C"
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

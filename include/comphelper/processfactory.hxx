@@ -71,14 +71,6 @@ getProcessComponentContext();
 
 }
 
-
-extern "C" {
-/// @internal ATTENTION returns ACQUIRED pointer! release it explicitly!
-COMPHELPER_DLLPUBLIC
-::com::sun::star::uno::XComponentContext *
-comphelper_getProcessComponentContext();
-} // extern "C"
-
 #endif // _COMPHELPER_PROCESSFACTORY_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -162,8 +162,8 @@ protected:
 
 void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage )
 {
-    Reference<XComponentContext> xContext (comphelper_getProcessComponentContext());
-    xAnnotation.set( new Annotation(xContext, pPage) );
+    xAnnotation.set(
+        new Annotation(comphelper::getProcessComponentContext(), pPage));
     pPage->addAnnotation(xAnnotation);
 }
 
