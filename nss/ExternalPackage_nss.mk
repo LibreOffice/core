@@ -53,9 +53,7 @@ $(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,lib,\
 		mozilla/dist/out/lib/libsmime3.so \
 		mozilla/dist/out/lib/libsoftokn3.so \
 		mozilla/dist/out/lib/libssl3.so \
-))
-$(eval $(call gb_ExternalPackage_add_files,nss,lib/sqlite,\
-	        mozilla/dist/out/lib/libsqlite3.so \
+		mozilla/dist/out/lib/libsqlite3.so \
 ))
 endif
 
