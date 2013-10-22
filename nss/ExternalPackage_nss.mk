@@ -30,9 +30,6 @@ $(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,lib,\
 		mozilla/dist/out/lib/libsoftokn3.dylib \
 		mozilla/dist/out/lib/libssl3.dylib \
 ))
-$(eval $(call gb_ExternalPackage_add_files,nss,lib/sqlite,\
-	        $(if $(filter 1060 1070 1080,$(MAC_OS_X_VERSION_MIN_REQUIRED)),,mozilla/dist/out/lib/libsqlite3.dylib) \
-))
 else ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_files,nss,lib,\

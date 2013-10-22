@@ -61,14 +61,13 @@ The direct link:
 
 == libsqlite3 ==
 
-The problem described here was found on Mac with OS 10.6
-NSS cannot use the system sqlite on Mac because the base line is still MacOS
-10.4. That system sqlite is incompatible with the softokn3 in nss which requires
-a later version of sqlite.
-When we used a more current Mac SDK then we could set
+The system sqlite in Mac OS X versions older than 10.6 is incompatible
+with the softokn3 in nss which requires a later version of sqlite.
+Since the baseline is Mac OS X 10.6 we use
 NSS_USE_SYSTEM_SQLITE=1
 to build using the system sqlite.
 
+The problem described here was found on Mac with OS 10.6
 We cannot deliver sqlite in the lib directory of the solver. This directory is
 used by tools of the build environment. Using the sqlite from NSS breaks the
 tools if they use system libraries which are linked with the system
