@@ -19,6 +19,11 @@ $(eval $(call gb_Library_set_include,chartopengl,\
 
 $(eval $(call gb_Library_use_sdk_api,chartopengl))
 
+$(eval $(call gb_Library_use_externals,chartopengl,\
+	boost_headers \
+	mesa_headers \
+))
+
 $(eval $(call gb_Library_use_libraries,chartopengl,\
     chartcore \
     cppu \
