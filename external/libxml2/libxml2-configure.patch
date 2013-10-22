@@ -97,10 +97,10 @@
 +#includedir=@includedir@
 +#libdir=@libdir@
 +
-+prefix=${SOLARVERSION}/${INPATH}
-+exec_prefix=${SOLARVERSION}/${INPATH}
++prefix=${WORKDIR}/UnpackedTarball/xml2
++exec_prefix=${WORKDIR}/UnpackedTarball/xml2
 +includedir=${WORKDIR}/UnpackedTarball/xml2/include
-+libdir=${SOLARVERSION}/${INPATH}/lib${UPDMINOREXT}
++libdir=${WORKDIR}/UnpackedTarball/xml2/.libs
  
  usage()
  {
