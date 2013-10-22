@@ -144,7 +144,7 @@ git archive --format=tar --prefix="${base_name?}" -o "${OUT_DIR}/${base_name}.ta
 
 
 concatenate_list=
-for module in dictionaries helcontent2 translations ; do
+for module in dictionaries helpcontent2 translations ; do
     if [ ! -f ${module?}/.git ] ; then
 	echo "Warning: module $module is not present" 1>&2
     else
