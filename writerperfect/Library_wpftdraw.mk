@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_static_libraries,wpftdraw,\
 
 $(eval $(call gb_Library_use_externals,wpftdraw,\
 	cdr \
+	etonyek \
 	mspub \
 	odfgen \
 	visio \
