@@ -22,8 +22,7 @@
 #include <txatbase.hxx>
 #include <calbck.hxx>
 
-
-class SwTxtNode;    // For SwTxtFld.
+class SwTxtNode;
 class SwCharFmt;
 
 namespace sw {

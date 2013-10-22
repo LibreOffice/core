@@ -46,14 +46,12 @@ namespace utl {
 
 class SwTxtFmtColl;
 class SwCntntFrm;
-class SwTxtFld;                 ///< For GetTxtFld().
 class SfxItemSet;
 class SwUndoTransliterate;
-
-struct SwSpellArgs;             ///< for Spell(), splargs.hxx
-struct SwConversionArgs;        ///< for Convert(), splargs.hxx
-class SwInterHyphInfo;          ///< for Hyphenate(), splargs.hxx
-class SwWrongList;              ///< For OnlineSpelling.
+struct SwSpellArgs;
+struct SwConversionArgs;
+class SwInterHyphInfo;
+class SwWrongList;
 class SwGrammarMarkUp;
 class OutputDevice;
 class SwScriptInfo;

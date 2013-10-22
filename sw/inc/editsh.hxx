@@ -65,15 +65,14 @@ class SwTxtFmtColl;
 class SwGrfNode;
 class SwFlyFrmFmt;
 
-class SwFrmFmt;         ///< For GetTxtNodeFmts().
+class SwFrmFmt;
 class SwCharFmt;
 class SwExtTextInput;
-class SwRootFrm;        ///< For CTOR.
 class Graphic;
 class GraphicObject;
-class SwFmtINetFmt;     ///< InsertURL.
+class SwFmtINetFmt;
 class SwTable;
-class SwTextBlocks;     ///< For GlossaryRW.
+class SwTextBlocks;
 class SwFmtFtn;
 class SwSection;
 class SwSectionData;

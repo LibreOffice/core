@@ -25,7 +25,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <rtl/ustring.hxx>
 
-class SwDoc; // For friend.
+class SwDoc;
 
 class SwFmtColl : public SwFmt
 {

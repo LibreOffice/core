@@ -24,7 +24,7 @@
 #include <sal/types.h>
 #include <boost/scoped_ptr.hpp>
 
-class SvXMLAttrCollection; //Forward declaration only.
+class SvXMLAttrCollection;
 
 class XMLOFF_DLLPUBLIC SvXMLAttrContainerData
 {
