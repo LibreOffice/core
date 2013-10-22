@@ -35,6 +35,7 @@
 #include "dbustrings.hrc"
 #include "dbu_misc.hrc"
 #include <connectivity/dbconversion.hxx>
+#include <osl/thread.h>
 #include <sfx2/sfxhtml.hxx>
 #include <svl/numuno.hxx>
 #include <connectivity/dbtools.hxx>
