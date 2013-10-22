@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZH////c\u003d",
+        "filename": "include/vcl/image.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-10-22T12:50:13Z",
+      "side": 1,
+      "message": "this single-parameter constructor adds an implicit conversion from OUString to Image, which is probably not a good idea.  to prevent that, C++ constructors that can be called with a single argument need to have the \"explicit\" keyword (just fixed that in commit \n61027a637760087ee716f64ae0f216ef2a640108)",
+      "revId": "288f0029c69ab0532165877637a146f774d5e740",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
