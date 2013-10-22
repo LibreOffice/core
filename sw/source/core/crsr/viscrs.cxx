@@ -297,12 +297,14 @@ void SwSelPaintRects::Show()
                 for (size_t i = 0; i < size(); ++i)
                 {
                     Point origin = pOut->LogicToPixel((*this)[i].Pos());
-                    Size size = pOut->LogicToPixel((*this)[i].SSize());
+                    Size ssize = pOut->LogicToPixel((*this)[i].SSize());
 #ifdef IOS
                     rects[i] = CGRectMake(origin.X(), origin.Y(),
-                                          size.Width(), size.Height());
+                                          ssize.Width(), ssize.Height());
 #else
                     // Not yet implemented
+                    (void) origin;
+                    (void) ssize;
 #endif
                 }
                 // GetShell returns a SwCrsrShell which actually is a SwWrtShell
