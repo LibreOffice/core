@@ -659,7 +659,7 @@ throw( uno::RuntimeException )
 sal_Bool SAL_CALL SalAquaFilePicker::supportsService( const rtl::OUString& sServiceName )
 throw( uno::RuntimeException )
 {
-    return cppu:supportsService(this, sServiceName);
+    return cppu::supportsService(this, sServiceName);
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSupportedServiceNames()
