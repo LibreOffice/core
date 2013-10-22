@@ -33,7 +33,7 @@ public:
     virtual void        EnterListAction( sal_uInt16 nNameResId );
     virtual void        EndListAction();
 
-    virtual sal_Bool    SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const String& rText, sal_Bool bApi );
+    virtual sal_Bool    SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, sal_Bool bApi );
     virtual bool SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction );
     virtual bool SetStringCell( const ScAddress& rPos, const OUString& rStr, bool bInteraction );
     virtual bool SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction );
@@ -43,14 +43,14 @@ public:
         const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish,
         bool bApi, const formula::FormulaGrammar::Grammar eGrammar );
     virtual bool        ShowNote( const ScAddress& rPos, bool bShow = true );
-    virtual bool        SetNoteText( const ScAddress& rPos, const String& rNoteText, sal_Bool bApi );
-    virtual sal_Bool    RenameTable( SCTAB nTab, const String& rName, sal_Bool bRecord, sal_Bool bApi );
+    virtual bool        SetNoteText( const ScAddress& rPos, const OUString& rNoteText, sal_Bool bApi );
+    virtual sal_Bool    RenameTable( SCTAB nTab, const OUString& rName, sal_Bool bRecord, sal_Bool bApi );
     virtual sal_Bool    ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
-                                sal_Bool bRecord, sal_Bool bApi );
-    virtual sal_Bool    ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
-                                sal_Bool bRecord, sal_Bool bApi );
+                                         sal_Bool bRecord, sal_Bool bApi );
+    virtual sal_Bool    ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
+                                    sal_Bool bRecord, sal_Bool bApi );
     virtual sal_Bool    MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
-                                sal_Bool bRecord, sal_Bool bApi );
+                                    sal_Bool bRecord, sal_Bool bApi );
 };
 
 #endif

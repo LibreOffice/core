@@ -321,7 +321,7 @@ void ScDocFuncSend::EndListAction()
     SendMessage( aOp );
 }
 
-sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const String& rText, sal_Bool bApi )
+sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, sal_Bool bApi )
 {
     ScChangeOpWriter aOp( "setNormalString" );
     aOp.appendAddress( rPos );
@@ -404,7 +404,7 @@ bool ScDocFuncSend::ShowNote( const ScAddress& rPos, bool bShow )
     return true; // needs some code auditing action
 }
 
-bool ScDocFuncSend::SetNoteText( const ScAddress& rPos, const String& rNoteText, sal_Bool bApi )
+bool ScDocFuncSend::SetNoteText( const ScAddress& rPos, const OUString& rNoteText, sal_Bool bApi )
 {
     ScChangeOpWriter aOp( "setNoteText" );
     aOp.appendAddress( rPos );
@@ -414,8 +414,8 @@ bool ScDocFuncSend::SetNoteText( const ScAddress& rPos, const String& rNoteText,
     return true; // needs some code auditing action
 }
 
-sal_Bool ScDocFuncSend::RenameTable( SCTAB nTab, const String& rName,
-                              sal_Bool bRecord, sal_Bool bApi )
+sal_Bool ScDocFuncSend::RenameTable( SCTAB nTab, const OUString& rName,
+                                     sal_Bool bRecord, sal_Bool bApi )
 {
     ScChangeOpWriter aOp( "renameTable" );
     aOp.appendInt( nTab );
@@ -427,14 +427,14 @@ sal_Bool ScDocFuncSend::RenameTable( SCTAB nTab, const String& rName,
 }
 
 sal_Bool ScDocFuncSend::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
-                                  sal_Bool bRecord, sal_Bool bApi )
+                                         sal_Bool bRecord, sal_Bool bApi )
 {
     SAL_INFO( "sc.tubes", "ApplyAttributes not implemented!" );
     return ScDocFunc::ApplyAttributes( rMark, rPattern, bRecord, bApi );
 }
 
-sal_Bool ScDocFuncSend::ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
-                             sal_Bool bRecord, sal_Bool bApi )
+sal_Bool ScDocFuncSend::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
+                                    sal_Bool bRecord, sal_Bool bApi )
 {
     SAL_INFO( "sc.tubes", "ApplyStyle not implemented!" );
     return ScDocFunc::ApplyStyle( rMark, rStyleName, bRecord, bApi );
