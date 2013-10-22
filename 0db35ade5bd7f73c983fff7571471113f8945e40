@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAY3//+/4\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-22T08:39:14Z",
+      "side": 1,
+      "message": "btw, feel free to drop the \"Related\" from the commit message; by convention, that is only used when a commit does not directly address the mentioned issue, but only relates to it in some way (like clean-up done in addition to another commit that actually fixes the issue)",
+      "revId": "0db35ade5bd7f73c983fff7571471113f8945e40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
