@@ -3032,7 +3032,8 @@ gb_ExternalExecutable__register_xmllint :=
 else # ! SYSTEM_LIBXML_FOR_BUILD
 
 define gb_ExternalExecutable__register_xmllint
-$(call gb_ExternalExecutable_set_internal,xmllint,$(OUTDIR_FOR_BUILD)/bin/xmllint$(gb_Executable_EXT_for_build))
+$(call gb_ExternalExecutable_set_internal,xmllint,$(WORKDIR_FOR_BUILD)/UnpackedTarball/xml2/$(if $(filter MSC,$(COM)),win32/bin.msvc)/xmllint$(gb_Executable_EXT_for_build))
+$(call gb_ExternalExecutable_add_dependencies,xmllint,$(call gb_Package_get_target,xml2))
 
 endef
 
@@ -3045,7 +3046,7 @@ gb_ExternalExecutable__register_xsltproc :=
 else # ! SYSTEM_LIBXSLT_FOR_BUILD
 
 define gb_ExternalExecutable__register_xsltproc
-$(call gb_ExternalExecutable_set_internal,xsltproc,$(OUTDIR_FOR_BUILD)/bin/xsltproc$(gb_Executable_EXT_for_build))
+$(call gb_ExternalExecutable_set_internal,xsltproc,$(WORKDIR_FOR_BUILD)/UnpackedTarball/xslt/$(if $(filter MSC,$(COM)),win32/bin.msvc,xsltproc)/xsltproc$(gb_Executable_EXT_for_build))
 $(call gb_ExternalExecutable_add_dependencies,xsltproc,$(call gb_Package_get_target,xslt))
 
 endef

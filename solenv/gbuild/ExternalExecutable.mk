@@ -111,9 +111,10 @@ endef
 
 # FIXME need to subst in some more $$ in gb_Helper_set_ld_path here - ugly
 # but other uses (gb_CppunitTest_CPPTESTPRECOMMAND) require less $$ - ugly
+# FIXME hack to avoid dependency into workdir - those must be added explicitly
 define gb_ExternalExecutable__set_internal
 gb_ExternalExecutable_$(1)_EXECUTABLE := $(2)
-gb_ExternalExecutable_$(1)_DEPENDENCIES := $(2)
+gb_ExternalExecutable_$(1)_DEPENDENCIES := $(if $(findstring $(WORKDIR_FOR_BUILD),$(2)),,$(2))
 gb_ExternalExecutable_$(1)_PRECOMMAND := $(subst $$,$$$$,$(gb_Helper_set_ld_path))
 
 endef
