@@ -626,8 +626,8 @@ bool SwLayHelper::CheckInsertPage()
         {
             pDesc = rpPage->GetPageDesc()->GetFollow();
 
-            SwFmtPageDesc rFollowDesc( pDesc );
-            oPgNum = rFollowDesc.GetNumOffset();
+            SwFmtPageDesc aFollowDesc( pDesc );
+            oPgNum = aFollowDesc.GetNumOffset();
             if ( oPgNum )
                 ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(sal_True);
         }
