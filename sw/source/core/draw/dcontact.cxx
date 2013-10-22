@@ -1062,7 +1062,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
 
     //Put on Action, but not if presently anywhere an action runs.
     ViewShell *pSh = 0, *pOrg;
-    SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();//swmod 080317
+    SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();
     if ( pTmpRoot && pTmpRoot->IsCallbackActionEnabled() )
     {
         pDoc->GetEditShell( &pOrg );

@@ -478,7 +478,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         aNewAnchor.SetPageNum( rAnchor.GetPageNum() );
 
     Point aDrawSavePt, aDrawOldPt;
-    if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
+    if( pDoc->GetCurrentViewShell() )
     {
         if( RES_DRAWFRMFMT == pFrmFmt->Which() )
         {

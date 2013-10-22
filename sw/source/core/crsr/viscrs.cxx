@@ -426,7 +426,7 @@ void SwShellCrsr::FillRects()
         (GetMark()->nNode == GetPoint()->nNode ||
         (GetMark()->nNode.GetNode().IsCntntNode() &&
          GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) )   ))
-        GetShell()->GetLayout()->CalcFrmRects( *this, GetShell()->IsTableMode() );  //swmod 071107//swmod 071225
+        GetShell()->GetLayout()->CalcFrmRects( *this, GetShell()->IsTableMode() );
 }
 
 void SwShellCrsr::Show()
@@ -501,7 +501,7 @@ short SwShellCrsr::MaxReplaceArived()
             for( nActCnt = aArr[n]; nActCnt--; )
                 pSh->StartAction();
             pSh = (ViewShell*)pSh->GetNext();
-        }   //swmod 071107 //swmod 071225
+        }
     }
     else
         // otherwise from the Basic, and than switch to RET_YES

@@ -113,7 +113,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
 
     // if there is no layout or it is in a hidden section, MakeFrms is not needed
     const SwSectionNode* pSectNd;
-    if( !GetDoc()->GetCurrentViewShell() || //swmod 071108//swmod 071225
+    if( !GetDoc()->GetCurrentViewShell() ||
         ( 0 != (pSectNd = pNode->FindSectionNode()) &&
             pSectNd->GetSection().IsHiddenFlag() ))
         return pNode;
@@ -280,7 +280,7 @@ xub_StrLen SwTxtNode::Len() const
 static void lcl_ChangeFtnRef( SwTxtNode &rNode )
 {
     SwpHints *pSwpHints = rNode.GetpSwpHints();
-    if( pSwpHints && rNode.GetDoc()->GetCurrentViewShell() )    //swmod 071108//swmod 071225
+    if( pSwpHints && rNode.GetDoc()->GetCurrentViewShell() )
     {
         SwTxtAttr* pHt;
         SwCntntFrm* pFrm = NULL;
@@ -486,7 +486,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         const SwRootFrm *pRootFrm;
         if ( (nTxtLen != nSplitPos) ||
             ( (pRootFrm = pNode->GetDoc()->GetCurrentLayout()) != 0 &&
-              pRootFrm->IsAnyShellAccessible() ) )  //swmod 080218
+              pRootFrm->IsAnyShellAccessible() ) )
         {
             // dann sage den Frames noch, das am Ende etwas "geloescht" wurde
             if( 1 == nTxtLen - nSplitPos )

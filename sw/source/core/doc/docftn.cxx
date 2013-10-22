@@ -255,7 +255,7 @@ SwFtnInfo::SwFtnInfo(SwTxtFmtColl *pFmt) :
 
 void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 {
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
+    SwRootFrm* pTmpRoot = GetCurrentLayout();
     if( !(GetFtnInfo() == rInfo) )
     {
         const SwFtnInfo &rOld = GetFtnInfo();
@@ -281,14 +281,14 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 
         if (pTmpRoot)
         {
-            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080304
+            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
             if ( bFtnPos )
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllRemoveFtns));//swmod 080305
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllRemoveFtns));
             else
             {
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));//swmod 080304
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));
                 if ( bFtnDesc )
-                    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_False));//swmod 080304
+                    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_False));
                 if ( bExtra )
                 {
                     // For messages regarding ErgoSum etc. we save the extra code and use the
@@ -303,7 +303,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
                     }
                 }
             }
-        }   //swmod 080219
+        }
         if( FTNNUM_PAGE != rInfo.eNum )
             GetFtnIdxs().UpdateAllFtn();
         else if( bFtnChrFmts )
@@ -324,7 +324,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 
 void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 {
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
+    SwRootFrm* pTmpRoot = GetCurrentLayout();
     if( !(GetEndNoteInfo() == rInfo) )
     {
         if(GetIDocumentUndoRedo().DoesUndo())
@@ -356,7 +356,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             if ( bFtnDesc )
             {
                 std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_True));//swmod 080304
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_True));
             }
             if ( bExtra )
             {
@@ -371,7 +371,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                         pTxtFtn->SetNumber(rFtn.GetNumber(), rFtn.GetNumStr());
                 }
             }
-        }   //swmod 080219
+        }
         if( bNumChg )
             GetFtnIdxs().UpdateAllFtn();
         else if( bFtnChrFmts )
@@ -394,7 +394,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
                        sal_uInt16 nNumber, bool bIsEndNote )
 {
     SwFtnIdxs& rFtnArr = GetFtnIdxs();
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
+    SwRootFrm* pTmpRoot = GetCurrentLayout();
 
     const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
     const sal_uLong nSttNd = pStt->nNode.GetIndex();
@@ -494,7 +494,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
         {
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
             std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));
-        }   //swmod 080304pTmpRoot->UpdateFtnNums();    //swmod 080219
+        }
         SetModified();
     }
     else

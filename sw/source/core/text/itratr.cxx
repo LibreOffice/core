@@ -428,13 +428,13 @@ static sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUStri
     return bRet;
 }
 
-sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const//swmodtest 080307
+sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const
 {
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     aIter.Seek( nBegin );
     return aIter.GetFnt()->IsSymbol(
-        const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()) );//swmod 080311
+        const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()) );
 }
 
 class SwMinMaxNodeArgs
@@ -697,7 +697,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
             {
                 OUString sTmp( cChar );
                 SwDrawTextInfo aDrawInf( const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()),
-                    *pOut, 0, sTmp, 0, 1, 0, sal_False );//swmod 080311
+                    *pOut, 0, sTmp, 0, 1, 0, sal_False );
                 nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                 aArg.nWordWidth += nAktWidth;
                 aArg.nRowWidth += nAktWidth;

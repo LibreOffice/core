@@ -46,7 +46,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
     {
         pNdIdx = new SwNodeIndex( rIdx );
     }
-    else if( pFmt->GetDoc()->GetCurrentViewShell() )    //swmod 071108//swmod 071225
+    else if( pFmt->GetDoc()->GetCurrentViewShell() )
     {
         if( RES_FLYFRMFMT == pFmt->Which() )
         {

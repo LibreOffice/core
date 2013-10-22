@@ -5060,7 +5060,7 @@ void _TblSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc
     SwTableNode *pTblNd = pTCntxt->GetTableNode();
     OSL_ENSURE( pTblNd, "Wo ist der Tabellen-Node" );
 
-    if( pDoc->GetCurrentViewShell() && pTblNd ) //swmod 071108//swmod 071225
+    if( pDoc->GetCurrentViewShell() && pTblNd )
     {
         // Existiert schon ein Layout, dann muss an dieser Tabelle die
         // BoxFrames neu erzeugt werden.

@@ -1287,7 +1287,7 @@ sal_Bool SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, con
         // set the cursor to the layout position
         Point aPt( *pPt );
         pLayout->GetCrsrOfst( GetPoint(), aPt );
-    }   //swmod 071107 //swmod 071225
+    }
 
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )

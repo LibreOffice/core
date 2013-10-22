@@ -745,7 +745,7 @@ bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, bool bAtStart ) const
 
 /// Collect table of contents content
 void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
-                              const bool        _bNewTOX )//swmodtest 080307
+                              const bool        _bNewTOX )
 {
     const SwSectionNode* pSectNd;
     if( !SwTOXBase::GetRegisteredIn()->GetDepends() ||
@@ -1013,7 +1013,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     for ( std::set<SwRootFrm*>::iterator pLayoutIter = aAllLayouts.begin(); pLayoutIter != aAllLayouts.end(); ++pLayoutIter)
     {
         SwFrm::CheckPageDescs( (SwPageFrm*)(*pLayoutIter)->Lower() );
-    }//swmod 080310
+    }
 
     SetProtect( SwTOXBase::IsProtected() );
 }

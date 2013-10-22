@@ -138,7 +138,7 @@ void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes )
     if (rTblCrsr.IsChgd() || !rTblCrsr.GetSelectedBoxesCount())
     {
         SwTableCursor* pTCrsr = (SwTableCursor*)&rTblCrsr;
-        pTCrsr->GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *pTCrsr );  //swmod 080218
+        pTCrsr->GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *pTCrsr );
     }
 
     if (rTblCrsr.GetSelectedBoxesCount())

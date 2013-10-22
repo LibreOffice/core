@@ -930,7 +930,7 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 void SwDrawView::DeleteMarked()
 {
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
-    SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();//swmod 080317
+    SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();
     if ( pTmpRoot )
         pTmpRoot->StartAllAction();
     pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
@@ -953,7 +953,7 @@ void SwDrawView::DeleteMarked()
     }
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
     if( pTmpRoot )
-        pTmpRoot->EndAllAction();   //swmod 080218
+        pTmpRoot->EndAllAction();
 }
 
 // support enhanced text edit for draw objects

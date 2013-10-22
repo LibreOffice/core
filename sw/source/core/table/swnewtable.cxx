@@ -1395,7 +1395,7 @@ sal_Bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rBoxes, *this );
 
-    if( bSameHeight && pDoc->GetCurrentViewShell() )    //swmod 071108//swmod 071225
+    if( bSameHeight && pDoc->GetCurrentViewShell() )
     {
         SwSplitLines aRowLines;
         SwSplitLines aSplitLines;

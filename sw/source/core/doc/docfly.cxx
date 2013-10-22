@@ -146,7 +146,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
                             const SwFrmFmt* pFlyFmt )
 {
     Point aRet;
-    if( rDoc.GetCurrentViewShell() )    //swmod 071107//swmod 071225
+    if( rDoc.GetCurrentViewShell() )
         switch( rAnch.GetAnchorId() )
         {
         case FLY_AS_CHAR:
@@ -752,7 +752,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // We need to find a TextNode, because only there we can anchor a
                     // content-bound DrawObject.
                         SwCrsrMoveState aState( MV_SETONLYTEXT );
-                        GetCurrentLayout()->GetCrsrOfst( &aPos, aPoint, &aState );  //swmod 080218
+                        GetCurrentLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
                     }
                     else
                     {

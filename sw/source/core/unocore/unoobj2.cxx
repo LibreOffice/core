@@ -188,7 +188,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
             ? FLY_AT_CHAR : FLY_AT_PARA);
     const SwCntntFrm* pCFrm;
     const SwCntntNode* pCNd;
-    if( pDoc->GetCurrentViewShell() &&  //swmod 071108//swmod 071225
+    if( pDoc->GetCurrentViewShell() &&
         0 != (pCNd = rIdx.GetNode().GetCntntNode()) &&
         0 != (pCFrm = pCNd->getLayoutFrm( pDoc->GetCurrentLayout())) )
     {

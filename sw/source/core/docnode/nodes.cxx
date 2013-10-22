@@ -343,7 +343,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
     if( bNewFrms )
         bNewFrms = &GetDoc()->GetNodes() == (const SwNodes*)&rNds &&
-                    GetDoc()->GetCurrentViewShell();    //swmod 071108//swmod 071225
+                    GetDoc()->GetCurrentViewShell();
 
     if( bNewFrms )
     {
@@ -2044,7 +2044,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
     SwNode* pFrmNd = 0;
 
     // no layout -> skip
-    if( GetDoc()->GetCurrentViewShell() )   //swmod 071108//swmod 071225
+    if( GetDoc()->GetCurrentViewShell() )
     {
         SwNode* pSttNd = &rFrmIdx.GetNode();
 

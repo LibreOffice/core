@@ -663,7 +663,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
 
     // Set up frames
     if( GetCurrentViewShell() )
-        pFmt->MakeFrms();           // ???  //swmod 071108//swmod 071225
+        pFmt->MakeFrms();           // ???
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1030,12 +1030,12 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
 
     // If we don't have a layout we can't get page anchored FlyFrames.
     // Also, page anchored FlyFrames are only returned if no range is specified.
-    if( !GetCurrentViewShell() || pCmpRange )   //swmod 071108//swmod 071225
+    if( !GetCurrentViewShell() || pCmpRange )
     {
         return aRetval;
     }
 
-    SwPageFrm *pPage = (SwPageFrm*)GetCurrentLayout()->GetLower();  //swmod 080218
+    SwPageFrm *pPage = (SwPageFrm*)GetCurrentLayout()->GetLower();
     while( pPage )
     {
         if( pPage->GetSortedObjs() )
@@ -1798,7 +1798,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
 
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
+    SwRootFrm* pTmpRoot = GetCurrentLayout();
     if( pTmpRoot &&
         !SfxProgress::GetActiveProgress( mpDocShell ) )
     {
@@ -1823,7 +1823,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             if (bIsOnlineSpell && bIsAutoGrammar)
                 StartGrammarChecking( *this );
         }
-        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080320
+        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
         std::set<SwRootFrm*>::iterator pLayIter = aAllLayouts.begin();
         for ( ;pLayIter != aAllLayouts.end();++pLayIter )
         {
@@ -1873,7 +1873,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             GetUpdtFlds().SetInUpdateFlds( false );
             GetUpdtFlds().SetFieldsDirty( false );
         }
-    }   //swmod 080219
+    }
 #ifdef TIMELOG
     if( pModLogFile && 1 != (long)pModLogFile )
         delete pModLogFile, ((long&)pModLogFile) = 1;
@@ -1884,7 +1884,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
 {
     ViewShell *pSh, *pStartSh;
-    pSh = pStartSh = pThis->GetCurrentViewShell();  //swmod 071108//swmod 071225
+    pSh = pStartSh = pThis->GetCurrentViewShell();
     if( pStartSh )
         do {
             if( pSh->GetWin() )
@@ -2123,7 +2123,7 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
     // Because Redlines are also attached to Start and EndNoden,
     // the Index must not necessarily be from a ContentNode.
     SwNode* pNd = &rIdx.GetNode();
-    if( pNd->IsCntntNode() && mpCurrentView )//swmod 071029//swmod 071225
+    if( pNd->IsCntntNode() && mpCurrentView )
     {
         const SwFrm *pFrm = pNd->GetCntntNode()->getLayoutFrm( GetCurrentLayout() );
         if( pFrm )
@@ -2266,7 +2266,7 @@ ViewShell *SwDoc::GetCurrentViewShell()
     return mpCurrentView;
 }
 
-//swmod 080219
+
 // It must be able to communicate to a ViewShell. This is going to be removed later.
 const SwRootFrm *SwDoc::GetCurrentLayout() const
 {
@@ -2306,6 +2306,6 @@ std::set<SwRootFrm*> SwDoc::GetAllLayouts()
     }
 
     return aAllLayouts;
-} //swmod 070825
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

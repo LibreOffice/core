@@ -506,7 +506,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 pFmt->SetFmtAttr(aAnchor);
                 // Damit die Frames bei Einfuegen in existierendes Doc
                 //  erzeugt werden (erst nach Setzen des Ankers!):
-                if(pDoc->GetCurrentViewShell()  //swmod 071108//swmod 071225
+                if(pDoc->GetCurrentViewShell()
                    && (FLY_AT_PARA == pFmt->GetAnchor().GetAnchorId()))
                 {
                     pFmt->MakeFrms();
@@ -1722,7 +1722,7 @@ void SwFltOutDoc::EndTable()
     rStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
     rEndStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
 
-    if (GetDoc().GetCurrentViewShell()){    //swmod 071108//swmod 071225
+    if (GetDoc().GetCurrentViewShell()){
         SwTableNode* pTableNode = GetDoc().IsIdxInTbl(
             pPaM->GetPoint()->nNode);
         pTableNode->DelFrms();

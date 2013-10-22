@@ -167,7 +167,7 @@ sal_Bool SwDDETable::NoDDETable()
                                    GetTabLines().begin(), GetTabLines().end() ); // move lines
     GetTabLines().clear();
 
-    if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
+    if( pDoc->GetCurrentViewShell() )
         ((SwDDEFieldType*)aDepend.GetRegisteredIn())->DecRefCnt();
 
     pTblNd->SetNewTable( pNewTbl );       // replace table

@@ -159,7 +159,7 @@ static sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& r
             SwCrsrMoveState aState( MV_SETONLYTEXT );
             SwPosition aPos( rDoc.GetNodes() );
             aTmpPnt.setX(aTmpPnt.getX() - 1);                   // do not land in the fly!
-            rDoc.GetCurrentLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );    //swmod 071108//swmod 071225
+            rDoc.GetCurrentLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );
             pNewAnch = ::FindAnchor(
                 aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( rFrm.getRootFrm(), 0, 0, sal_False ),
                 aTmpPnt )->FindFlyFrm();
@@ -955,7 +955,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffse
     StartUndo();
 
     long nNewPage;
-    SwRootFrm* pTmpRootFrm = GetLayout();//swmod 080317
+    SwRootFrm* pTmpRootFrm = GetLayout();
     sal_uInt16 nMaxPage = pTmpRootFrm->GetPageNum();
     bool bTmpAssert = false;
     for( sal_uInt16 n = 0; n < rFillArr.size(); ++n )

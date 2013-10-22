@@ -166,7 +166,7 @@ void SwFtnIdxs::UpdateAllFtn()
 
     SwUpdFtnEndNtAtEnd aNumArr;
 
-    SwRootFrm* pTmpRoot = pDoc->GetCurrentLayout();//swmod 080305
+    SwRootFrm* pTmpRoot = pDoc->GetCurrentLayout();
     std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
     // For normal Footnotes per-chapter and per-document numbering are treated separately.
     // For Endnotes we only have document-wise numbering.
@@ -236,7 +236,7 @@ void SwFtnIdxs::UpdateAllFtn()
     }
 
     if( pTmpRoot && FTNNUM_PAGE == rFtnInfo.eNum )
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));//swmod 0
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));
 }
 
 SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, sal_uInt16* pFndPos ) const

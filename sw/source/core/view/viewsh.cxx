@@ -528,7 +528,7 @@ void ViewShell::MakeVisible( const SwRect &rRect )
                     StartAction();
                     ScrollMDI( this, rRect, USHRT_MAX, USHRT_MAX );
                     EndAction();
-                } while( nOldH != pRoot->Frm().Height() && nLoopCnt-- );    //swmod 071108//swmod 071225
+                } while( nOldH != pRoot->Frm().Height() && nLoopCnt-- );
             }
 #if OSL_DEBUG_LEVEL > 0
             else
@@ -1021,7 +1021,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
             // If possible, don't scroll the application background
             // (PaintDesktop).  Also limit the left and right side of
             // the scroll range to the pages.
-            const SwPageFrm *pPage = (SwPageFrm*)GetLayout()->Lower();  //swmod 071108//swmod 071225
+            const SwPageFrm *pPage = (SwPageFrm*)GetLayout()->Lower();
             if ( pPage->Frm().Top() > pOldPage->Frm().Top() )
                 pPage = (SwPageFrm*)pOldPage;
             SwRect aBoth( VisArea() );
@@ -1383,7 +1383,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
     //Unfortunately we must at any rate Paint the rectangles next to the pages,
     //as these are not painted at VisPortChgd.
     bool bBorderOnly = false;
-    const SwRootFrm *pRoot = GetLayout();//swmod 080305
+    const SwRootFrm *pRoot = GetLayout();
     if ( rRect.Top() > pRoot->Frm().Bottom() )
     {
         const SwFrm *pPg = pRoot->Lower();
@@ -1405,7 +1405,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
 
     if ( bBorderOnly )
     {
-        const SwFrm *pPage =pRoot->Lower(); //swmod 071108//swmod 071225
+        const SwFrm *pPage =pRoot->Lower();
         SwRect aLeft( rRect ), aRight( rRect );
         while ( pPage )
         {
@@ -2144,7 +2144,7 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > ViewShell::Create
     OSL_ENSURE( mpLayout, "no layout, no access" );
     OSL_ENSURE( GetWin(), "no window, no access" );
 
-    if( mpDoc->GetCurrentViewShell() && GetWin() )   //swmod 071108
+    if( mpDoc->GetCurrentViewShell() && GetWin() )
         xAcc = Imp()->GetAccessibleMap().GetDocumentView();
 
     return xAcc;
@@ -2166,7 +2166,7 @@ ViewShell::CreateAccessiblePreview()
                     PagePreviewLayout()->maPreviewPages,
                     GetWin()->GetMapMode().GetScaleX(),
                     GetLayout()->GetPageByPageNum( PagePreviewLayout()->mnSelectedPageNum ),
-                    PagePreviewLayout()->maWinSize );   //swmod 080305
+                    PagePreviewLayout()->maWinSize );
     }
     return NULL;
 }

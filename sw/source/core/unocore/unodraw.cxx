@@ -706,7 +706,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     {
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aTmp(MM100_TO_TWIP(aMM100Pos.X), MM100_TO_TWIP(aMM100Pos.Y));
-        pDoc->GetCurrentLayout()->GetCrsrOfst( pPam->GetPoint(), aTmp, &aState );   //swmod 080218
+        pDoc->GetCurrentLayout()->GetCrsrOfst( pPam->GetPoint(), aTmp, &aState );
         aAnchor.SetAnchor( pPam->GetPoint() );
 
         // #i32349# - adjustment of vertical positioning
@@ -1235,7 +1235,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     aValue >>= nPositionLayoutDir;
                     pFmt->SetPositionLayoutDir( nPositionLayoutDir );
                 }
-                else if( pDoc->GetCurrentLayout())  //swmod 080218
+                else if( pDoc->GetCurrentLayout())
                 {
                     UnoActionContext aCtx(pDoc);
                     if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
@@ -1448,7 +1448,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             {
                     aKeepedPosition = getPosition();
             }
-            if( pFmt && pFmt->GetDoc()->GetCurrentViewShell() ) //swmod 071108//swmod 071225
+            if( pFmt && pFmt->GetDoc()->GetCurrentViewShell() )
             {
                 UnoActionContext aCtx(pFmt->GetDoc());
                 xPrSet->setPropertyValue(rPropertyName, aValue);

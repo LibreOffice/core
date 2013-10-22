@@ -152,7 +152,7 @@ protected:
     sal_Bool            bIsPagePreview : 1; // The preview mustn't print field/footnote/... shadings.
     sal_Bool            bSelectionInReadonly : 1; // Determines whether selection is switched on in readonly documents.
     sal_Bool            mbFormView : 1;
-    sal_Bool            mbBrowseMode : 1;    // swmod 080130.
+    sal_Bool            mbBrowseMode : 1;
     sal_Bool            mbBookView : 1;      // View mode for page preview.
     sal_Bool            mbViewLayoutBookMode : 1; // Book view mode for edit view.
     sal_Bool        bShowPlaceHolderFields : 1; // Only used in printing!

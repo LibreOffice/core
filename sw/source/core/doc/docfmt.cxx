@@ -2089,7 +2089,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                             bool bCopyPoolIds )
 {
     bool bNotifyLayout = false;
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
+    SwRootFrm* pTmpRoot = GetCurrentLayout();
 
     rDstDesc.SetLandscape( rSrcDesc.GetLandscape() );
     rDstDesc.SetNumType( rSrcDesc.GetNumType() );
@@ -2163,8 +2163,8 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
     if( bNotifyLayout && pTmpRoot )
     {
-        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080225
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));//swmod 080226
+        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
     }
 
     // If foot notes change the pages have to be triggered

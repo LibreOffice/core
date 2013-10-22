@@ -149,11 +149,11 @@ public:
     //MasterObjekte aus der Page entfernen (von den Ctoren gerufen).
     static void RemoveMasterObjs( SdrPage *pPg );
 
-    void AllCheckPageDescs() const;//swmod 080226
-    void AllInvalidateAutoCompleteWords() const;//swmod 080305
+    void AllCheckPageDescs() const;
+    void AllInvalidateAutoCompleteWords() const;
     void AllAddPaintRect() const;
-    void AllRemoveFtns() ;//swmod 080305
-    void AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const;//swmod 080307
+    void AllRemoveFtns() ;
+    void AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const;
     //Virtuelles Device ausgeben (z.B. wenn Animationen ins Spiel kommen)
     static sal_Bool FlushVout();
     //Clipping sparen, wenn im Vout eh genau das Cliprechteck ausgegeben wird

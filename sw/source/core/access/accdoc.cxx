@@ -49,7 +49,7 @@ using lang::IndexOutOfBoundsException;
 
 SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *_pMap ) :
     SwAccessibleContext( _pMap, AccessibleRole::DOCUMENT,
-                         _pMap->GetShell()->GetLayout() ),//swmod 071107//swmod 071225
+                         _pMap->GetShell()->GetLayout() ),
     mxParent( _pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
     mpChildWin( 0 )
 {

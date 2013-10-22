@@ -202,7 +202,7 @@ SwDoc::SwDoc()
     mpGrfFmtCollTbl( new SwGrfFmtColls() ),
     mpTOXTypes( new SwTOXTypes() ),
     mpDefTOXBases( new SwDefTOXBase_Impl() ),
-    mpCurrentView( 0 ),  //swmod 071225
+    mpCurrentView( 0 ),
     mpDrawModel( 0 ),
     mpUpdtFlds( new SwDocUpdtFld( this ) ),
     mpFldTypes( new SwFldTypes() ),
@@ -818,7 +818,7 @@ void SwDoc::ClearDoc()
     // create the first one over and over again (without attributes/style etc.
     SwTxtNode* pFirstNd = GetNodes().MakeTxtNode( aSttIdx, mpDfltTxtFmtColl );
 
-    if( mpCurrentView )  //swmod 071029//swmod 071225
+    if( mpCurrentView )
     {
         // set the layout to the dummy pagedesc
         pFirstNd->SetAttr( SwFmtPageDesc( pDummyPgDsc ));
@@ -887,7 +887,7 @@ void SwDoc::ClearDoc()
         DeleteAndDestroy(*mpFrmFmtTbl, 1, mpFrmFmtTbl->size());
         mpFrmFmtTbl->push_back( mpCurrentView->GetLayout()->GetFmt() );
     }
-    else    //swmod 071029//swmod 071225
+    else
         DeleteAndDestroy(*mpFrmFmtTbl, 1, mpFrmFmtTbl->size());
 
     mxForbiddenCharsTable.clear();
@@ -984,7 +984,7 @@ void SwDoc::UpdateLinks( bool bUI )
                 SfxMedium* pMedium = GetDocShell()->GetMedium();
                 SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
                 Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
-                if( GetCurrentViewShell() && !GetEditShell( &pVSh ) && !pVSh )  //swmod 071108//swmod 071225
+                if( GetCurrentViewShell() && !GetEditShell( &pVSh ) && !pVSh )
                 {
                     ViewShell aVSh( *this, 0, 0 );
 

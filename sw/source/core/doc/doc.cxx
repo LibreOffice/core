@@ -438,7 +438,7 @@ void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
         std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
         pTmpRoot->EndAllAction();
-    }//swmod 080310
+    }
     SetModified();
 }
 
@@ -538,7 +538,7 @@ void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
             std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
             std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
             pTmpRoot->EndAllAction();
-        }//swmod 080310
+        }
         SetModified();
     }
 }
@@ -2021,18 +2021,18 @@ static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
  ************************************************************************/
 void SwDoc::SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags )
 {
-    std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080307
+    std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
     OSL_ENSURE( GetCurrentLayout(), "SpellAgain: Where's my RootFrm?" );
     if( bInvalid )
     {
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::AllInvalidateSmartTagsOrSpelling),bSmartTags));//swmod 080305
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::AllInvalidateSmartTagsOrSpelling),bSmartTags));
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::SetNeedGrammarCheck), true) );
         if ( bSmartTags )
             GetNodes().ForEach( lcl_CheckSmartTagsAgain, &bOnlyWrong );
         GetNodes().ForEach( lcl_SpellAndGrammarAgain, &bOnlyWrong );
     }
 
-    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::SetIdleFlags));//swmod 080307
+    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::SetIdleFlags));
 }
 
 void SwDoc::InvalidateAutoCompleteFlag()
@@ -2041,15 +2041,15 @@ void SwDoc::InvalidateAutoCompleteFlag()
     if( pTmpRoot )
     {
         std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllInvalidateAutoCompleteWords));//swmod 080305
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllInvalidateAutoCompleteWords));
         for( sal_uLong nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
         {
             SwTxtNode* pTxtNode = GetNodes()[ nNd ]->GetTxtNode();
             if ( pTxtNode ) pTxtNode->SetAutoCompleteWordDirty( true );
         }
 
-        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::SetIdleFlags));//swmod 080228
-    }   //swmod 080219
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::SetIdleFlags));
+    }
 }
 
 const SwFmtINetFmt* SwDoc::FindINetAttr( const OUString& rName ) const

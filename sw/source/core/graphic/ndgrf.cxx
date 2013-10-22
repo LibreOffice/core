@@ -678,7 +678,7 @@ sal_Bool SwGrfNode::RestorePersistentData()
         IDocumentLinksAdministration* pIDLA = getIDocumentLinksAdministration();
         refLink->SetVisible( pIDLA->IsVisibleLinks() );
         pIDLA->GetLinkManager().InsertDDELink( refLink );
-        if( getIDocumentLayoutAccess()->GetCurrentLayout() )    //swmod 080218
+        if( getIDocumentLayoutAccess()->GetCurrentLayout() )
             refLink->Update();
     }
     return sal_True;

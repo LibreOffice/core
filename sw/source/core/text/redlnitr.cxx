@@ -49,7 +49,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
 {
     // Beim HTML-Import kann es vorkommen, dass kein Layout existiert.
     SwRootFrm* pRootFrm = rTxtNode.getIDocumentLayoutAccess()->GetCurrentLayout();
-    pShell = pRootFrm ? pRootFrm->GetCurrShell() : 0;   //swmod 080218
+    pShell = pRootFrm ? pRootFrm->GetCurrShell() : 0;
 
     pScriptInfo = &rScrInf;
 

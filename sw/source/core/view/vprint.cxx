@@ -527,9 +527,9 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
     // create a new view, or it has none, than we create the first view.
     ViewShell *pSh;
     if( pDoc->GetCurrentViewShell() )
-        pSh = new ViewShell( *pDoc->GetCurrentViewShell(), 0, pOleOut,VSHELLFLAG_SHARELAYOUT );//swmod 080129
-    else    //swmod 071108//swmod 071225
-        pSh = new ViewShell( *pDoc, 0, pOpt, pOleOut);//swmod 080129
+        pSh = new ViewShell( *pDoc->GetCurrentViewShell(), 0, pOleOut,VSHELLFLAG_SHARELAYOUT );
+    else
+        pSh = new ViewShell( *pDoc, 0, pOpt, pOleOut);
 
     {
         SET_CURR_SHELL( pSh );

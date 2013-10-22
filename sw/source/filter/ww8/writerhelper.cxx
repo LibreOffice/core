@@ -816,7 +816,7 @@ namespace sw
         }
 
         InsertedTablesManager::InsertedTablesManager(const SwDoc &rDoc)
-            : mbHasRoot(rDoc.GetCurrentLayout())    //swmod 080218
+            : mbHasRoot(rDoc.GetCurrentLayout())
         {
         }
 

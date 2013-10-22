@@ -482,7 +482,7 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
     // FlyFrames an alternative method is used now in that case.
     if( RES_FLYFRMFMT == pFmt->Which() )
     {
-        if( pFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )   //swmod 071107//swmod 071225
+        if( pFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )
         {
             // See if there is an SdrObject for it
             SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( *pFrmFmt );
@@ -779,7 +779,7 @@ SdrModel* SwDoc::_MakeDrawModel()
             SfxSimpleHint aHnt( SW_BROADCAST_DRAWVIEWS_CREATED );
             GetDocShell()->Broadcast( aHnt );
         }
-    }   //swmod 071029//swmod 071225
+    }
     return mpDrawModel;
 }
 

@@ -331,7 +331,7 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByVisArea( const SwDoc& rDoc )
 sal_uInt16 SwHTMLTableLayout::GetBrowseWidth( const SwDoc& rDoc )
 {
     // If we have a layout, we can get the width from there.
-    const SwRootFrm *pRootFrm = rDoc.GetCurrentLayout();    //swmod 080218
+    const SwRootFrm *pRootFrm = rDoc.GetCurrentLayout();
     if( pRootFrm )
     {
         const SwFrm *pPageFrm = pRootFrm->GetLower();
@@ -1691,13 +1691,13 @@ void SwHTMLTableLayout::_Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc )
 
     SwRootFrm *pRoot = (SwRootFrm*)GetDoc()->GetCurrentViewShell()->GetLayout();
     if ( pRoot && pRoot->IsCallbackActionEnabled() )
-        pRoot->StartAllAction();    //swmod 071108//swmod 071225
+        pRoot->StartAllAction();
 
     // Else we can set the widths, in which we have to run Pass 2 in each case.
     SetWidths( sal_True, nAbsAvail );
 
     if ( pRoot && pRoot->IsCallbackActionEnabled() )
-        pRoot->EndAllAction( sal_True );    //True per VirDev (browsing is calmer) //swmod 071108//swmod 071225
+        pRoot->EndAllAction( sal_True );    //True per VirDev (browsing is calmer)
 }
 
 IMPL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void*, EMPTYARG )

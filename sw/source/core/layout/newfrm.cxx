@@ -655,7 +655,7 @@ void SwRootFrm::AllCheckPageDescs() const
 {
     CheckPageDescs( (SwPageFrm*)this->Lower() );
 }
-//swmod 080226
+
 void SwRootFrm::AllInvalidateAutoCompleteWords() const
 {
     SwPageFrm *pPage = (SwPageFrm*)this->Lower();
@@ -664,11 +664,11 @@ void SwRootFrm::AllInvalidateAutoCompleteWords() const
         pPage->InvalidateAutoCompleteWords();
         pPage = (SwPageFrm*)pPage->GetNext();
     }
-}//swmod 080305
+}
 void SwRootFrm::AllAddPaintRect() const
 {
     GetCurrShell()->AddPaintRect( this->Frm() );
-}//swmod 080305
+}
 void SwRootFrm::AllRemoveFtns()
 {
     RemoveFtns();
@@ -683,7 +683,7 @@ void SwRootFrm::AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const
 
         pPage->InvalidateSpelling();
         pPage = (SwPageFrm*)pPage->GetNext();
-    }   //swmod 080218
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

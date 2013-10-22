@@ -302,7 +302,7 @@ SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
 SwDataChanged::~SwDataChanged()
 {
     // JP 09.04.96: Only if the Layout is available (thus during input)
-    if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
+    if( pDoc->GetCurrentViewShell() )
     {
         const ::sfx2::SvLinkSources& rServers = pDoc->GetLinkManager().GetServers();
 

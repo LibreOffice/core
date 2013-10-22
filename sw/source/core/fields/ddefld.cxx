@@ -301,7 +301,7 @@ void SwDDEFieldType::_RefCntChgd()
     {
         refLink->SetVisible( pDoc->IsVisibleLinks() );
         pDoc->GetLinkManager().InsertDDELink( refLink );
-        if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
+        if( pDoc->GetCurrentViewShell() )
             UpdateNow();
     }
     else

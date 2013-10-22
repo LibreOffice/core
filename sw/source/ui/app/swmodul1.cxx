@@ -619,7 +619,7 @@ void SwModule::CheckSpellChanges( bool bOnlineSpelling,
              pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, &aType ) )
         {
             SwDoc* pTmp = pDocSh->GetDoc();
-            if ( pTmp->GetCurrentViewShell() )  //swmod 071108//swmod 071225
+            if ( pTmp->GetCurrentViewShell() )
             {
                 pTmp->SpellItAgainSam( bInvalid, bOnlyWrong, bSmartTags );
                 ViewShell* pViewShell = 0;

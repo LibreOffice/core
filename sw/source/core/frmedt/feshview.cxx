@@ -1631,7 +1631,7 @@ sal_Bool SwFEShell::ImpEndCreate()
         SwPosition aPos( GetDoc()->GetNodes() );
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aPoint( aPt.getX(), aPt.getY() + rBound.GetHeight()/2 );
-        GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState ); //swmod 080317
+        GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
 
         // characterbinding not allowed in readonly-content
         if( !aPos.nNode.GetNode().IsProtect() )

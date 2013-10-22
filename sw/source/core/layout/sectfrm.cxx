@@ -143,7 +143,7 @@ SwSectionFrm::~SwSectionFrm()
     {
         SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm )
-            pRootFrm->RemoveFromList( this );   //swmod 071108//swmod 071225
+            pRootFrm->RemoveFromList( this );
         if( IsFollow() )
         {
             SwSectionFrm *pMaster = FindMaster();
@@ -224,7 +224,7 @@ void SwSectionFrm::DelEmpty( sal_Bool bRemove )
                 getRootFrm()->RemoveFromList( this );
         }
         else if( getRootFrm() )
-            getRootFrm()->InsertEmptySct( this );   //swmod 071108//swmod 071225
+            getRootFrm()->InsertEmptySct( this );
         pSection = NULL;  // like this a reanimation is virtually impossible though
     }
 }

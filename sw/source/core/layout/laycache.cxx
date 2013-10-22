@@ -173,7 +173,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
 
 void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 {
-    if( rDoc.GetCurrentLayout() ) // the layout itself ..   //swmod 080218
+    if( rDoc.GetCurrentLayout() ) // the layout itself ..
     {
         SwLayCacheIoImpl aIo( rStream, true );
         // We want to save the relative index, so we need the index
@@ -181,7 +181,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
         sal_uLong nStartOfContent = rDoc.GetNodes().GetEndOfContent().
                                 StartOfSectionNode()->GetIndex();
         // The first page..
-        SwPageFrm* pPage = (SwPageFrm*)rDoc.GetCurrentLayout()->Lower();    //swmod 080218
+        SwPageFrm* pPage = (SwPageFrm*)rDoc.GetCurrentLayout()->Lower();
 
         aIo.OpenRec( SW_LAYCACHE_IO_REC_PAGES );
         aIo.OpenFlagRec( 0, 0 );

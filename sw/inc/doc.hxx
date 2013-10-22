@@ -314,7 +314,7 @@ class SW_DLLPUBLIC SwDoc :
     SwTOXTypes      *mpTOXTypes;         ///< Tables/indices
     SwDefTOXBase_Impl * mpDefTOXBases;   ///< defaults of SwTOXBase's
 
-    ViewShell       *mpCurrentView;  ///< SwDoc should get a new member mpCurrentView//swmod 071225
+    ViewShell       *mpCurrentView;  ///< SwDoc should get a new member mpCurrentView
     SdrModel        *mpDrawModel;        ///< StarView Drawing
 
     SwDocUpdtFld    *mpUpdtFlds;         ///< Struct for updating fields
@@ -946,17 +946,17 @@ public:
 
     /** IDocumentLayoutAccess
     */
-    virtual void SetCurrentViewShell( ViewShell* pNew );//swmod 071225
+    virtual void SetCurrentViewShell( ViewShell* pNew );
     virtual SwLayouter* GetLayouter();
     virtual const SwLayouter* GetLayouter() const;
     virtual void SetLayouter( SwLayouter* pNew );
     virtual SwFrmFmt* MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet );
     virtual void DelLayoutFmt( SwFrmFmt *pFmt );
     virtual SwFrmFmt* CopyLayoutFmt( const SwFrmFmt& rSrc, const SwFmtAnchor& rNewAnchor, bool bSetTxtFlyAtt, bool bMakeFrms );
-    virtual const ViewShell *GetCurrentViewShell() const;   //swmod 080219
-    virtual ViewShell *GetCurrentViewShell(); ///< swmod 080219 It must be able to communicate to a ViewShell.This is going to be removerd later.
+    virtual const ViewShell *GetCurrentViewShell() const;
+    virtual ViewShell *GetCurrentViewShell(); ///< It must be able to communicate to a ViewShell.This is going to be removerd later.
     virtual const SwRootFrm *GetCurrentLayout() const;
-    virtual SwRootFrm *GetCurrentLayout();//swmod 080219
+    virtual SwRootFrm *GetCurrentLayout();
     virtual bool HasLayout() const;
     void ClearSwLayouterEntries();
 
@@ -1156,7 +1156,7 @@ public:
     OUString GetUniqueOLEName() const;
     OUString GetUniqueFrameName() const;
 
-    std::set<SwRootFrm*> GetAllLayouts();//swmod 080225
+    std::set<SwRootFrm*> GetAllLayouts();
 
     void SetFlyName( SwFlyFrmFmt& rFmt, const OUString& rName );
     const SwFlyFrmFmt* FindFlyByName( const OUString& rName, sal_Int8 nNdTyp = 0 ) const;
@@ -1877,7 +1877,7 @@ public:
     /** update all modified OLE-Objects. The modification is called over the
      StarOne - Interface */
     void SetOLEObjModified()
-    {   if( GetCurrentViewShell() ) maOLEModifiedTimer.Start(); }    //swmod 071107//swmod 071225
+    {   if( GetCurrentViewShell() ) maOLEModifiedTimer.Start(); }
 
     // -------------------- Uno - Interfaces ---------------------------
     const SwUnoCrsrTbl& GetUnoCrsrTbl() const       { return *mpUnoCrsrTbl; }

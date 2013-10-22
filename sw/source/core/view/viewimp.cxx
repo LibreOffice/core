@@ -47,7 +47,7 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
 {
     OSL_ENSURE( pDrawView, "SwViewImp::Init without DrawView" );
     //Create PageView if it doesn't exist
-    SwRootFrm *pRoot = pSh->GetLayout();    //swmod 071108//swmod 071225
+    SwRootFrm *pRoot = pSh->GetLayout();
     if ( !pSdrPageView )
     {
         IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
@@ -279,10 +279,10 @@ void SwViewImp::UpdateAccessible()
     // We require a layout and an XModel to be accessible.
     IDocumentLayoutAccess* pIDLA = GetShell()->getIDocumentLayoutAccess();
     Window *pWin = GetShell()->GetWin();
-    OSL_ENSURE( GetShell()->GetLayout(), "no layout, no access" );  //swmod 071108//swmod 071225
+    OSL_ENSURE( GetShell()->GetLayout(), "no layout, no access" );
     OSL_ENSURE( pWin, "no window, no access" );
 
-    if( IsAccessible() && pIDLA->GetCurrentViewShell() && pWin )    //swmod 071108//swmod 071225
+    if( IsAccessible() && pIDLA->GetCurrentViewShell() && pWin )
         GetAccessibleMap().GetDocumentView();
 }
 

@@ -26,7 +26,7 @@
 #include <swtypes.hxx>
 #include <ring.hxx>
 #include <swrect.hxx>
-#include <boost/shared_ptr.hpp> // swmod 080115
+#include <boost/shared_ptr.hpp>
 #include <stack>
 #include <vcl/mapmod.hxx>
 #include <vcl/print.hxx>
@@ -92,7 +92,7 @@ enum FrameControlType
 // Define for flags needed in ctor or layers below.
 // Currently the Preview flag is needed for DrawPage.
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
-#define VSHELLFLAG_SHARELAYOUT          ((long)0x2)//swmod 080125 flag
+#define VSHELLFLAG_SHARELAYOUT          ((long)0x2)
 typedef boost::shared_ptr<SwRootFrm> SwRootFrmPtr;
 
 class SW_DLLPUBLIC ViewShell : public Ring
@@ -273,7 +273,7 @@ public:
     // Invalidate first visible page for all Shells in ring.
     void SetFirstVisPageInvalid();
 
-    SwRootFrm   *GetLayout() const;// swmod 080116
+    SwRootFrm   *GetLayout() const;
     sal_Bool         IsNewLayout() const; // Has Layout been loaded or created?
 
      Size GetDocSize() const;   // Get document size.

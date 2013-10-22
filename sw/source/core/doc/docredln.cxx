@@ -2741,7 +2741,7 @@ void SwRedlineTbl::Remove( sal_uInt16 nP )
 
     ViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
-        0 != ( pSh = pDoc->GetCurrentViewShell()) ) //swmod 071108//swmod 071225
+        0 != ( pSh = pDoc->GetCurrentViewShell()) )
         pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
 }
 
@@ -2762,7 +2762,7 @@ void SwRedlineTbl::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 
     ViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
-        0 != ( pSh = pDoc->GetCurrentViewShell() ) )    //swmod 071108//swmod 071225
+        0 != ( pSh = pDoc->GetCurrentViewShell() ) )
         pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
 }
 

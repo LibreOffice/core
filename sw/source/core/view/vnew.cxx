@@ -125,7 +125,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
             mpLayout->Init( mpDoc->GetDfltFrmFmt() );
         }
     }
-    SizeChgNotify();    //swmod 071108
+    SizeChgNotify();
 
     // --> #i31958#
     // XForms mode: initialize XForms mode, based on design mode (draw view)
@@ -250,7 +250,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     mbEndActionByVirDev = sal_False;
     mbPreview = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
     // OD 12.12.2002 #103492#
-    if( nFlags & VSHELLFLAG_SHARELAYOUT ) //swmod 080125
+    if( nFlags & VSHELLFLAG_SHARELAYOUT )
         mpLayout = rShell.mpLayout;
 
     SET_CURR_SHELL( this );
@@ -332,7 +332,7 @@ ViewShell::~ViewShell()
                 delete mpDoc, mpDoc = 0;
             else
                 GetLayout()->ResetNewLayout();
-        }//swmod 080317
+        }
 
         delete mpOpt;
 

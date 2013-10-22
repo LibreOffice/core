@@ -331,7 +331,7 @@ SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
         } while( pVSh != ( pSh = (ViewShell*)pSh->GetNext() ));
     }
     else if( ppSh )
-        *ppSh = 0;  //swmod 071029//swmod 071225
+        *ppSh = 0;
 
     return 0;
 }
