@@ -2140,9 +2140,15 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	-I$(call gb_UnpackedTarball_get_dir,firebird)/gen/firebird/include \
 )
-$(call gb_LinkTarget_use_libraries,$(1),\
-    fbembed \
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,firebird)/gen/firebird/bin/ifbembed.lib \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,firebird)/gen/firebird/lib -lfbembed \
+)
+endif
 
 endef
 
