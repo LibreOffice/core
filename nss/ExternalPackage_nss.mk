@@ -73,9 +73,6 @@ $(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,bin,\
 		mozilla/dist/out/lib/ssl3.dll \
 ))
 else # OS!=WNT/MACOSX
-$(eval $(call gb_ExternalPackage_add_files,nss,lib,\
-		mozilla/dist/out/lib/libnsssysinit.so \
-))
 $(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,lib,\
 		mozilla/dist/out/lib/libfreebl3.so \
 		mozilla/dist/out/lib/libnspr4.so \
