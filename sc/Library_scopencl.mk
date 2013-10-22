@@ -21,6 +21,7 @@ $(eval $(call gb_Library_use_sdk_api,scopencl))
 
 $(eval $(call gb_Library_use_externals,scopencl,\
         boost_headers \
+		mdds_headers \
 ))
 
 $(eval $(call gb_Library_use_libraries,scopencl,\
