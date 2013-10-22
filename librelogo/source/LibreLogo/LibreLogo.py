@@ -48,7 +48,7 @@ __COLORS__ = ['BLACK', 0x000000], ['SILVER', 0xc0c0c0], ['GRAY', 0x808080], \
     ['AQUA', 0x00ffff], ['PINK', 0xffc0cb], ['TOMATO', 0xff6347], \
     ['ORANGE', 0xffa500], ['GOLD', 0xffd700], ['VIOLET', 0x9400d3], \
     ['SKYBLUE', 0x87ceeb], ['CHOCOLATE', 0xd2691e], ['BROWN', 0xa52a2a], \
-    ['INVISIBLE', 0xff000000]
+    ['INVISIBLE', 0xffffffff]
 __STRCONST__ = [i[0] for i in __COLORS__] + ['NONE', 'BEVEL', 'MITER', 'ROUNDED', 'SOLID', 'DASH', 'DOTTED', 'BOLD', 'ITALIC', 'UPRIGHT', 'NORMAL', "HOUR", "PT", "INCH", "MM", "CM"]
 __SLEEP_SLICE_IN_MILLISECONDS__ = 500
 __PT_TO_TWIP__ = 20
