@@ -653,7 +653,7 @@ void LayoutMenu::Fill (void)
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
                 aBmp.Mirror (BMP_MIRROR_HORZ);
 
-            InsertItem (i, aBmp, SdResId (pInfo->mnStrResId));
+            InsertItem(i, Image(aBmp), SdResId (pInfo->mnStrResId));
             SetItemData (i, new AutoLayout(pInfo->maAutoLayout));
             n++;
         }

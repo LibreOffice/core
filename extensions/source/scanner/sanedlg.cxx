@@ -109,8 +109,8 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
     maOldLink = mrSane.SetReloadOptionsHdl( LINK( this, SaneDlg, ReloadSaneOptionsHdl ) );
 
     maOptionBox.SetNodeBitmaps(
-        Bitmap( SaneResId( RID_SCAN_BITMAP_PLUS ) ),
-        Bitmap( SaneResId( RID_SCAN_BITMAP_MINUS ) )
+        Image(Bitmap( SaneResId(RID_SCAN_BITMAP_PLUS) )),
+        Image(Bitmap( SaneResId(RID_SCAN_BITMAP_MINUS) ))
         );
     maOptionBox.SetStyle( maOptionBox.GetStyle()|
                           WB_HASLINES           |

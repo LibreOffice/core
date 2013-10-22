@@ -976,14 +976,14 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
             sal_uInt16 nPos = pImageList->GetImagePos( aCommandURLSequence[i] );
             if ( nPos == IMAGELIST_IMAGE_NOTFOUND )
             {
-                pImageList->AddImage( aCommandURLSequence[i], xGraphic );
+                pImageList->AddImage(aCommandURLSequence[i], Image(xGraphic));
                 if ( !pInsertedImages )
                     pInsertedImages = new CmdToXGraphicNameAccess();
                 pInsertedImages->addElement( aCommandURLSequence[i], xGraphic );
             }
             else
             {
-                pImageList->ReplaceImage( aCommandURLSequence[i], xGraphic );
+                pImageList->ReplaceImage(aCommandURLSequence[i], Image(xGraphic));
                 if ( !pReplacedImages )
                     pReplacedImages = new CmdToXGraphicNameAccess();
                 pReplacedImages->addElement( aCommandURLSequence[i], xGraphic );

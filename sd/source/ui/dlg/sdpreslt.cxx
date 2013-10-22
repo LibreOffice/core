@@ -152,7 +152,7 @@ void SdPresLayoutDlg::FillValueSet()
             aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
             maLayoutNames.push_back(aLayoutName);
 
-            Bitmap aBitmap(mpDocSh->GetPagePreviewBitmap(pMaster, 90));
+            Image aBitmap(Bitmap(mpDocSh->GetPagePreviewBitmap(pMaster, 90)));
             maVS.InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
         }
     }
@@ -255,7 +255,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
                             aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
                             maLayoutNames.push_back(aLayoutName);
 
-                            Bitmap aBitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster, 90));
+                            Image aBitmap(Bitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster, 90)));
                             maVS.InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
                         }
                     }
@@ -272,7 +272,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
                 // empty layout
                 maLayoutNames.push_back(maStrNone);
                 maVS.InsertItem( (sal_uInt16) maLayoutNames.size(),
-                        Bitmap( SdResId( BMP_FOIL_NONE ) ), maStrNone );
+                        Image(Bitmap(SdResId(BMP_FOIL_NONE))), maStrNone );
             }
 
             if (!bCancel)

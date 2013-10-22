@@ -151,7 +151,8 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pIn
         OUString aText( SD_RESSTR( pInfo->mnStrResId ) );
         BitmapEx aBmp(  SdResId( pInfo->mnBmpResId ) );
 
-        pValue->InsertItem( static_cast<sal_uInt16>(pInfo->maAutoLayout)+1, aBmp, aText );
+        pValue->InsertItem(static_cast<sal_uInt16>(pInfo->maAutoLayout)+1,
+                Image(aBmp), aText);
 
         aLayoutItemSize.Width()  = std::max( aLayoutItemSize.Width(),  aBmp.GetSizePixel().Width()  );
         aLayoutItemSize.Height() = std::max( aLayoutItemSize.Height(), aBmp.GetSizePixel().Height() );

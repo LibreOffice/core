@@ -177,8 +177,12 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     // Create popup menus
     mpActionMenu = new PopupMenu;
-    mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString(),SfxResId(IMG_ACTION_SORT));
-    mpActionMenu->InsertItem(MNI_ACTION_REFRESH,SfxResId(STR_ACTION_REFRESH).toString(),SfxResId(IMG_ACTION_REFRESH));
+    mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,
+        SfxResId(STR_ACTION_SORT_NAME).toString(),
+        Image(SfxResId(IMG_ACTION_SORT)));
+    mpActionMenu->InsertItem(MNI_ACTION_REFRESH,
+        SfxResId(STR_ACTION_REFRESH).toString(),
+        Image(SfxResId(IMG_ACTION_REFRESH)));
     mpActionMenu->InsertItem(MNI_ACTION_DEFAULT,SfxResId(STR_ACTION_DEFAULT).toString());
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 

@@ -337,7 +337,7 @@ void InsertionIndicatorOverlay::Paint (
     if ( ! IsVisible())
         return;
 
-    rDevice.DrawImage(maLocation, maIcon);
+    rDevice.DrawImage(maLocation, Image(maIcon));
 }
 
 

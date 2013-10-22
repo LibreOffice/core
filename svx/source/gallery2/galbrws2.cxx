@@ -1392,8 +1392,8 @@ IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl)
         aListBmpEx.Scale( aLargeSize );
     }
 
-    maViewBox.SetItemImage( TBX_ID_ICON, aIconBmpEx );
-    maViewBox.SetItemImage( TBX_ID_LIST, aListBmpEx );
+    maViewBox.SetItemImage(TBX_ID_ICON, Image(aIconBmpEx));
+    maViewBox.SetItemImage(TBX_ID_LIST, Image(aListBmpEx));
     maViewBox.SetSizePixel( maViewBox.CalcWindowSizePixel() );
 
     Resize();

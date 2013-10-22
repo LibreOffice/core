@@ -365,10 +365,11 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
             if (eType == SYMBOL_IMAGE)
             {
                 Bitmap aBitmap(VclResId(mapStockToImageResource(rImageInfo.m_sStock)));
+                Image const aImage(aBitmap);
                 if (!aI->m_bRadio)
-                    pTargetButton->SetModeImage(aBitmap);
+                    pTargetButton->SetModeImage(aImage);
                 else
-                    pTargetRadio->SetModeRadioImage(aBitmap);
+                    pTargetRadio->SetModeRadioImage(aImage);
             }
             switch (rImageInfo.m_nSize)
             {

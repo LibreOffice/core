@@ -516,8 +516,8 @@ void SvxLineEndWindow::FillValueSet()
         Point aPt1( aBmpSize.Width(), 0 );
 
         aVD.DrawBitmap( Point(), aBmp );
-        aLineEndSet.InsertItem( 1, aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
-        aLineEndSet.InsertItem( 2, aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
+        aLineEndSet.InsertItem(1, Image(aVD.GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
+        aLineEndSet.InsertItem(2, Image(aVD.GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
 
         delete pLineEndList->Remove( nCount );
 
@@ -529,8 +529,10 @@ void SvxLineEndWindow::FillValueSet()
             OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
             aVD.DrawBitmap( aPt0, aBmp );
-            aLineEndSet.InsertItem( (sal_uInt16)((i+1L)*2L+1L), aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
-            aLineEndSet.InsertItem( (sal_uInt16)((i+2L)*2L),    aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
+            aLineEndSet.InsertItem((sal_uInt16)((i+1L)*2L+1L),
+                    Image(aVD.GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
+            aLineEndSet.InsertItem((sal_uInt16)((i+2L)*2L),
+                    Image(aVD.GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
         }
         nLines = std::min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
         aLineEndSet.SetLineCount( nLines );

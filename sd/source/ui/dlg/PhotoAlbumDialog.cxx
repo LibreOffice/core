@@ -609,7 +609,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
             aBmp.Scale( nYRatio, nYRatio );
 
         aBmp.Convert( BMP_CONVERSION_24BIT );
-        pImg->SetImage( aBmp );
+        pImg->SetImage(Image(aBmp));
     }
     else
     {

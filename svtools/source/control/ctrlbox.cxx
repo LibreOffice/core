@@ -973,7 +973,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
                     GetColorLine2( GetEntryCount( ) ),
                     GetColorDist( GetEntryCount( ) ),
                     pData->GetStyle(), aBmp );
-            ListBox::InsertEntry( OUString( " " ), aBmp, LISTBOX_APPEND );
+            ListBox::InsertEntry(OUString(" "), Image(aBmp), LISTBOX_APPEND);
             if ( n == nTypePos )
                 SelectEntryPos( GetEntryCount() - 1 );
         }

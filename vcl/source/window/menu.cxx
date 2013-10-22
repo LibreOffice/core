@@ -1303,10 +1303,11 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
         if ( !bSep )
         {
             Bitmap aBmp( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
+            Image const aImg(aBmp);
             if ( !aText.isEmpty() )
-                InsertItem( nItemId, aText, aBmp, nStatus, OString(), nPos );
+                InsertItem( nItemId, aText, aImg, nStatus, OString(), nPos );
             else
-                InsertItem( nItemId, aBmp, nStatus, OString(), nPos );
+                InsertItem( nItemId, aImg, nStatus, OString(), nPos );
         }
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
     }

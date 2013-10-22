@@ -93,12 +93,12 @@ namespace {
                 aCopyStart.Crop(aCropRectStart);
                 rListBoxStart.InsertEntry(
                     pEntry->GetName(),
-                    aCopyStart);
+                    Image(aCopyStart));
 
                 aCopyEnd.Crop(aCropRectEnd);
                 rListBoxEnd.InsertEntry(
                     pEntry->GetName(),
-                    aCopyEnd);
+                    Image(aCopyEnd));
             }
             else
             {
@@ -122,7 +122,8 @@ namespace {
         rListBox.InsertEntry(rList.GetStringForUiNoLine());
 
         // entry for solid line
-        rListBox.InsertEntry(rList.GetStringForUiSolidLine(), rList.GetBitmapForUISolidLine());
+        rListBox.InsertEntry(rList.GetStringForUiSolidLine(),
+                Image( rList.GetBitmapForUISolidLine()));
 
         for(sal_uInt32 i(0); i < nCount; i++)
         {
@@ -133,7 +134,7 @@ namespace {
             {
                 rListBox.InsertEntry(
                     pEntry->GetName(),
-                    aBitmap);
+                    Image(aBitmap));
                 // delete pBitmap;
             }
             else

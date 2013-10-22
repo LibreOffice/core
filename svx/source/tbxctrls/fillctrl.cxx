@@ -309,7 +309,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
 
                         if( !aBmp.IsEmpty() )
                         {
-                            ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), aBmp );
+                            pFillAttrLB->InsertEntry(pEntry->GetName(), Image(aBmp));
                             pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
                             //delete pBmp;
                         }
@@ -354,7 +354,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
 
                         if( !aBmp.IsEmpty() )
                         {
-                            ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), aBmp );
+                            pFillAttrLB->InsertEntry(pEntry->GetName(), Image(aBmp));
                             pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
                             //delete pBmp;
                         }

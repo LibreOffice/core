@@ -1057,7 +1057,7 @@ void HatchingLB::Fill( const XHatchListRef &pList )
         pEntry = pList->GetHatch( i );
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
-            InsertEntry( pEntry->GetName(), aBitmap );
+            InsertEntry(pEntry->GetName(), Image(aBitmap));
         else
             InsertEntry( pEntry->GetName() );
     }
@@ -1072,7 +1072,7 @@ void HatchingLB::Append( const XHatchEntry& rEntry, const Bitmap& rBitmap )
 {
     if(!rBitmap.IsEmpty())
     {
-        InsertEntry( rEntry.GetName(), rBitmap );
+        InsertEntry(rEntry.GetName(), Image(rBitmap));
     }
     else
     {
@@ -1090,7 +1090,7 @@ void HatchingLB::Modify( const XHatchEntry& rEntry, sal_uInt16 nPos, const Bitma
 
     if( !rBitmap.IsEmpty() )
     {
-        InsertEntry( rEntry.GetName(), rBitmap, nPos );
+        InsertEntry( rEntry.GetName(), Image(rBitmap), nPos );
     }
     else
     {
@@ -1111,7 +1111,7 @@ void FillAttrLB::Fill( const XHatchListRef &pList )
         pEntry = pList->GetHatch( i );
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
-            ListBox::InsertEntry( pEntry->GetName(), aBitmap );
+            ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
         else
             InsertEntry( pEntry->GetName() );
     }
@@ -1156,7 +1156,7 @@ void GradientLB::Fill( const XGradientListRef &pList )
         pEntry = pList->GetGradient( i );
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
-            InsertEntry( pEntry->GetName(), aBitmap );
+            InsertEntry(pEntry->GetName(), Image(aBitmap));
         else
             InsertEntry( pEntry->GetName() );
     }
@@ -1171,7 +1171,7 @@ void GradientLB::Append( const XGradientEntry& rEntry, const Bitmap& rBitmap )
 {
     if(!rBitmap.IsEmpty())
     {
-        InsertEntry( rEntry.GetName(), rBitmap );
+        InsertEntry(rEntry.GetName(), Image(rBitmap));
     }
     else
     {
@@ -1189,7 +1189,7 @@ void GradientLB::Modify( const XGradientEntry& rEntry, sal_uInt16 nPos, const Bi
 
     if(!rBitmap.IsEmpty())
     {
-        InsertEntry( rEntry.GetName(), rBitmap, nPos );
+        InsertEntry( rEntry.GetName(), Image(rBitmap), nPos );
     }
     else
     {
@@ -1234,7 +1234,7 @@ void FillAttrLB::Fill( const XGradientListRef &pList )
         pEntry = pList->GetGradient( i );
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
-            ListBox::InsertEntry( pEntry->GetName(), aBitmap );
+            ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
         else
             InsertEntry( pEntry->GetName() );
     }
@@ -1340,7 +1340,7 @@ void BitmapLB::Fill( const XBitmapListRef &pList )
         pEntry = pList->GetBitmap(i);
         maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
         formatBitmapExToSize(maBitmapEx, aSize);
-        InsertEntry(pEntry->GetName(), maBitmapEx);
+        InsertEntry(pEntry->GetName(), Image(maBitmapEx));
     }
 
     AdaptDropDownLineCountToMaximum();
@@ -1356,7 +1356,7 @@ void BitmapLB::Append(const Size& rSize, const XBitmapEntry& rEntry)
     if(!maBitmapEx.IsEmpty())
     {
         formatBitmapExToSize(maBitmapEx, rSize);
-        InsertEntry(rEntry.GetName(), maBitmapEx);
+        InsertEntry(rEntry.GetName(), Image(maBitmapEx));
     }
     else
     {
@@ -1376,7 +1376,7 @@ void BitmapLB::Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 
     if(!maBitmapEx.IsEmpty())
     {
         formatBitmapExToSize(maBitmapEx, rSize);
-        InsertEntry(rEntry.GetName(), maBitmapEx, nPos);
+        InsertEntry(rEntry.GetName(), Image(maBitmapEx), nPos);
     }
     else
     {
@@ -1405,7 +1405,7 @@ void FillAttrLB::Fill( const XBitmapListRef &pList )
         pEntry = pList->GetBitmap( i );
         maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
         formatBitmapExToSize(maBitmapEx, aSize);
-        ListBox::InsertEntry(pEntry->GetName(), maBitmapEx);
+        ListBox::InsertEntry(pEntry->GetName(), Image(maBitmapEx));
     }
 
     AdaptDropDownLineCountToMaximum();
@@ -1474,7 +1474,8 @@ void LineLB::Fill( const XDashListRef &pList )
         InsertEntry(pList->GetStringForUiNoLine());
 
         // entry for solid line
-        InsertEntry(pList->GetStringForUiSolidLine(), pList->GetBitmapForUISolidLine());
+        InsertEntry(pList->GetStringForUiSolidLine(),
+                Image(pList->GetBitmapForUISolidLine()));
     }
 
     // entries for dashed lines
@@ -1489,7 +1490,7 @@ void LineLB::Fill( const XDashListRef &pList )
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
         {
-            InsertEntry( pEntry->GetName(), aBitmap );
+            InsertEntry(pEntry->GetName(), Image(aBitmap));
         }
         else
             InsertEntry( pEntry->GetName() );
@@ -1505,7 +1506,7 @@ void LineLB::Append( const XDashEntry& rEntry, const Bitmap& rBitmap )
 {
     if(!rBitmap.IsEmpty())
     {
-        InsertEntry( rEntry.GetName(), rBitmap );
+        InsertEntry(rEntry.GetName(), Image(rBitmap));
     }
     else
     {
@@ -1523,7 +1524,7 @@ void LineLB::Modify( const XDashEntry& rEntry, sal_uInt16 nPos, const Bitmap& rB
 
     if(!rBitmap.IsEmpty())
     {
-        InsertEntry( rEntry.GetName(), rBitmap, nPos );
+        InsertEntry( rEntry.GetName(), Image(rBitmap), nPos );
     }
     else
     {
@@ -1577,8 +1578,9 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
             aVD.SetOutputSizePixel( aBmpSize, sal_False );
             aVD.DrawBitmap( Point(), aBitmap );
             InsertEntry( pEntry->GetName(),
-                aVD.GetBitmap( bStart ? Point() : Point( aBmpSize.Width() / 2, 0 ),
-                    Size( aBmpSize.Width() / 2, aBmpSize.Height() ) ) );
+                Image(aVD.GetBitmap(
+                    (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
+                    Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
             //delete pBitmap;
         }
         else
@@ -1602,7 +1604,9 @@ void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool
         aVD.DrawBitmap(Point(), rBitmap);
         InsertEntry(
             rEntry.GetName(),
-            aVD.GetBitmap(bStart ? Point() : Point(aBmpSize.Width() / 2, 0 ), Size(aBmpSize.Width() / 2, aBmpSize.Height())));
+            Image(aVD.GetBitmap(
+                (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
+                Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
     }
     else
     {
@@ -1627,7 +1631,9 @@ void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_uInt16 nPos, const Bitm
         aVD.DrawBitmap(Point(), rBitmap);
         InsertEntry(
             rEntry.GetName(),
-            aVD.GetBitmap(bStart ? Point() : Point( aBmpSize.Width() / 2, 0 ), Size( aBmpSize.Width() / 2, aBmpSize.Height())),
+            Image(aVD.GetBitmap(
+                    (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
+                    Size(aBmpSize.Width() / 2, aBmpSize.Height()))),
             nPos);
     }
     else

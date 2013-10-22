@@ -1334,7 +1334,7 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType e
     maEdEntry( this, ScResId( ED_ICON_SET_ENTRY_VALUE ) ),
     maLbEntryType( this, ScResId( LB_ICON_SET_ENTRY_TYPE ) )
 {
-    maImgIcon.SetImage(ScIconSetFormat::getBitmap( eType, i ));
+    maImgIcon.SetImage(Image(ScIconSetFormat::getBitmap(eType, i)));
     if(pEntry)
     {
         switch(pEntry->GetType())

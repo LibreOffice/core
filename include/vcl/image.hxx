@@ -51,13 +51,13 @@ class VCL_DLLPUBLIC Image
 
 public:
                     Image();
-                    Image( const ResId& rResId );
+                    explicit Image( const ResId& rResId );
                     Image( const Image& rImage );
-                    Image( const BitmapEx& rBitmapEx );
-                    Image( const Bitmap& rBitmap );
+                    explicit Image( const BitmapEx& rBitmapEx );
+                    explicit Image( const Bitmap& rBitmap );
                     Image( const Bitmap& rBitmap, const Bitmap& rMaskBitmap );
                     Image( const Bitmap& rBitmap, const Color& rColor );
-                    Image( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic );
+                    explicit Image( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic );
                     explicit Image( const OUString &rPNGFileUrl );
                     ~Image();
 
@@ -83,8 +83,8 @@ private:
 class VCL_DLLPUBLIC ImageList
 {
 public:
-                    ImageList( sal_uInt16 nInit = 8, sal_uInt16 nGrow = 4 );
-                    ImageList( const ResId& rResId );
+                    explicit ImageList( sal_uInt16 nInit = 8, sal_uInt16 nGrow = 4 );
+                    explicit ImageList( const ResId& rResId );
                     ImageList( const ::std::vector< OUString >& rNameVector,
                                const OUString& rPrefix,
                                const Color* pMaskColor = NULL );

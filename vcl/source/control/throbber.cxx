@@ -204,11 +204,10 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
 void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList )
 {
     ::std::vector< Image > aImages( rImageList.getLength() );
-    ::std::copy(
-        rImageList.getConstArray(),
-        rImageList.getConstArray() + rImageList.getLength(),
-        aImages.begin()
-    );
+    for (sal_Int32 i = 0; i < rImageList.getLength(); ++i)
+    {
+        aImages[i] = Image(rImageList[i]);
+    }
     setImageList( aImages );
 }
 

@@ -235,8 +235,8 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
                            WB_HSCROLL |
                            WB_HASBUTTONSATROOT |
                            WB_QUICK_SEARCH /* i31275 */ );
-    SetNodeBitmaps( Bitmap( SdResId( BMP_EXPAND ) ),
-                    Bitmap( SdResId( BMP_COLLAPSE ) ) );
+    SetNodeBitmaps( Image(Bitmap( SdResId(BMP_EXPAND) )),
+                    Image(Bitmap( SdResId(BMP_COLLAPSE) )));
 
     SetDragDropMode(
          SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY |

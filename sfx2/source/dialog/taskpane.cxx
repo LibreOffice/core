@@ -178,7 +178,7 @@ namespace sfx2
                         const OUString sCommandName( aCommandName.makeStringAndClear() );
 
                         const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, sal_False ) );
-                        return aPanelImage.GetXGraphic();
+                        return aPanelImage;
                     }
 
                     // otherwise, delegate to the GraphicProvider

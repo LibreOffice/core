@@ -46,19 +46,19 @@ PageColumnControl::PageColumnControl(
 
     if ( bLandscape )
     {
-        mpColumnValueSet->AddItem( SW_RES(IMG_ONE_L), 0, SW_RES(STR_ONE), 0 );
-        mpColumnValueSet->AddItem( SW_RES(IMG_TWO_L), 0, SW_RES(STR_TWO), 0 );
-        mpColumnValueSet->AddItem( SW_RES(IMG_THREE_L), 0, SW_RES(STR_THREE), 0 );
-        mpColumnValueSet->AddItem( SW_RES(IMG_LEFT_L), 0, SW_RES(STR_LEFT), 0 );
-        mpColumnValueSet->AddItem( SW_RES(IMG_RIGHT_L), 0, SW_RES(STR_RIGHT), 0 );
+        mpColumnValueSet->AddItem(Image(SW_RES(IMG_ONE_L)), 0, SW_RES(STR_ONE), 0 );
+        mpColumnValueSet->AddItem(Image(SW_RES(IMG_TWO_L)), 0, SW_RES(STR_TWO), 0 );
+        mpColumnValueSet->AddItem(Image(SW_RES(IMG_THREE_L)), 0, SW_RES(STR_THREE), 0 );
+        mpColumnValueSet->AddItem(Image(SW_RES(IMG_LEFT_L)), 0, SW_RES(STR_LEFT), 0 );
+        mpColumnValueSet->AddItem(Image(SW_RES(IMG_RIGHT_L)), 0, SW_RES(STR_RIGHT), 0 );
     }
     else
     {
-        mpColumnValueSet->AddItem( SW_RES(IMG_ONE), 0, SW_RES(STR_ONE), 0 );
-        mpColumnValueSet->AddItem( SW_RES(IMG_TWO), 0, SW_RES(STR_TWO), 0 );
-        mpColumnValueSet->AddItem( SW_RES(IMG_THREE), 0, SW_RES(STR_THREE), 0 );
-        mpColumnValueSet->AddItem( SW_RES(IMG_LEFT), 0, SW_RES(STR_LEFT), 0 );
-        mpColumnValueSet->AddItem( SW_RES(IMG_RIGHT), 0, SW_RES(STR_RIGHT), 0 );
+        mpColumnValueSet->AddItem(Image(SW_RES(IMG_ONE)), 0, SW_RES(STR_ONE), 0 );
+        mpColumnValueSet->AddItem(Image(SW_RES(IMG_TWO)), 0, SW_RES(STR_TWO), 0 );
+        mpColumnValueSet->AddItem(Image(SW_RES(IMG_THREE)), 0, SW_RES(STR_THREE), 0 );
+        mpColumnValueSet->AddItem(Image(SW_RES(IMG_LEFT)), 0, SW_RES(STR_LEFT), 0 );
+        mpColumnValueSet->AddItem(Image(SW_RES(IMG_RIGHT)), 0, SW_RES(STR_RIGHT), 0 );
     }
 
     mpColumnValueSet->SetNoSelection();

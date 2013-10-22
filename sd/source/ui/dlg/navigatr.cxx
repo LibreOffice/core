@@ -837,7 +837,7 @@ void SdNavigatorWin::ApplyImageList()
 {
 
     maToolbox.SetImageList( maImageList );
-    maToolbox.SetItemImage( TBI_SHAPE_FILTER, BitmapEx( SdResId( BMP_GRAPHIC ) ) );
+    maToolbox.SetItemImage(TBI_SHAPE_FILTER, Image(BitmapEx(SdResId(BMP_GRAPHIC))));
 
     SetDragImage();
 }

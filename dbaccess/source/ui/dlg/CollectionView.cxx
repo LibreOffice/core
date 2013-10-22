@@ -89,8 +89,8 @@ OCollectionView::OCollectionView( Window * pParent
     m_aName.GrabFocus();
 
     m_aNewFolder.SetStyle( m_aNewFolder.GetStyle() | WB_NOPOINTERFOCUS );
-    m_aUp.SetModeImage(ModuleRes(IMG_NAVIGATION_BTN_UP_SC));
-    m_aNewFolder.SetModeImage(ModuleRes(IMG_NAVIGATION_CREATEFOLDER_SC));
+    m_aUp.SetModeImage(Image(ModuleRes(IMG_NAVIGATION_BTN_UP_SC)));
+    m_aNewFolder.SetModeImage(Image(ModuleRes(IMG_NAVIGATION_CREATEFOLDER_SC)));
 
     m_aView.SetDoubleClickHdl( LINK( this, OCollectionView, Dbl_Click_FileView ) );
     m_aView.EnableAutoResize();

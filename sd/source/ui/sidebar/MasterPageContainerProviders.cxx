@@ -108,7 +108,7 @@ Image TemplatePreviewProvider::operator() (
     (void)pPage;
     (void)rRenderer;
 
-    return ThumbnailView::readThumbnail(msURL);
+    return Image(ThumbnailView::readThumbnail(msURL));
 }
 
 

@@ -41,8 +41,10 @@ PageOrientationControl::PageOrientationControl(
 
     // initialize <ValueSetWithText> control
     {
-        mpOrientationValueSet->AddItem( SW_RES(IMG_PORTRAIT), 0, SW_RES(STR_PORTRAIT), 0 );
-        mpOrientationValueSet->AddItem( SW_RES(IMG_LANDSCAPE), 0, SW_RES(STR_LANDSCAPE), 0 );
+        mpOrientationValueSet->AddItem(Image(SW_RES(IMG_PORTRAIT)), 0,
+                SW_RES(STR_PORTRAIT), 0);
+        mpOrientationValueSet->AddItem(Image(SW_RES(IMG_LANDSCAPE)), 0,
+                    SW_RES(STR_LANDSCAPE), 0 );
     }
 
     Link aLink = LINK(this, PageOrientationControl,ImplOrientationHdl );

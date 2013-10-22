@@ -1808,7 +1808,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
             if ( ! xIconList.hasElements())
                 break;
 
-            aIcon = Graphic(xIconList[0]).GetBitmapEx();
+            aIcon = Image(Graphic(xIconList[0]).GetBitmapEx());
         }
         while(false);
     }
