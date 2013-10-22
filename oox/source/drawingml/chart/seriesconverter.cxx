@@ -660,7 +660,8 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         {
             // Use number format code from Value series
             DataSourceModel* pValues = mrModel.maSources.get( SeriesModel::VALUES ).get();
-            xLabels->maNumberFormat.maFormatCode = pValues->mxDataSeq->maFormatCode;
+            if( pValues )
+                xLabels->maNumberFormat.maFormatCode = pValues->mxDataSeq->maFormatCode;
         }
         DataLabelsConverter aLabelsConv( *this, *xLabels );
         aLabelsConv.convertFromModel( xDataSeries, rTypeGroup );
