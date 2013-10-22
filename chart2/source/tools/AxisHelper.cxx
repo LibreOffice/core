@@ -98,7 +98,6 @@ bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
 
 chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, ChartModel& rModel )
 {
-    OSL_ENSURE(xChartModel.is(),"missing chart model");
     ScaleData aScale = xAxis->getScaleData();
     Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( rModel ) );
     if( aScale.AutoDateAxis && aScale.AxisType == AxisType::CATEGORY )
