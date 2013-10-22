@@ -671,7 +671,7 @@ void SwAsciiOptions::WriteUserData(OUString& rStr)
 
 extern "C" {
     Reader *ImportRTF();
-    void ExportRTF( const String&, const String& rBaseURL, WriterRef& );
+    void ExportRTF( const OUString&, const OUString& rBaseURL, WriterRef& );
     Reader *ImportDOC();
     void ExportDOC( const OUString&, const OUString& rBaseURL, WriterRef& );
     sal_uLong SaveOrDelMSVBAStorage_ww8( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
