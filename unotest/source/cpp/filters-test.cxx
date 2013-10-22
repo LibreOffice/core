@@ -111,7 +111,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
             sal_uInt32 nEndTime = osl_getGlobalTimer();
 
             if (bEncrypted)
-                CPPUNIT_ASSERT(osl::FileBase::E_None == osl::File::remove(sTmpFile));
+                CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::File::remove(sTmpFile));
 
             fprintf(stderr, "%s,%" SAL_PRIuUINT32"\n",
                 bRes?"Pass":"Fail",nEndTime-nStartTime);
