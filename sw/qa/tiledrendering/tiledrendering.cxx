@@ -66,7 +66,7 @@ int UIPreviewApp::Main()
 
     try
     {
-        Dialog *pDialog = new ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "sw/qa/tiledrendering/tiledrendering.ui");
+        Dialog *pDialog = new ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "qa/sw/ui/tiledrendering.ui");
 
         pDialog->Execute();
 /*
