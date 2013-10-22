@@ -88,7 +88,7 @@ static bool bImplSalCourierNew = false;
 // -----------------------------------------------------------------------
 
 // TODO: also support temporary TTC font files
-typedef std::map< String, ImplDevFontAttributes > FontAttrMap;
+typedef std::map< OUString, ImplDevFontAttributes > FontAttrMap;
 
 class ImplFontAttrCache
 {
@@ -108,8 +108,8 @@ public:
                               const OUString& rBaseURL);
             ~ImplFontAttrCache();
 
-    ImplDevFontAttributes  GetFontAttr( const String& rFontFileName ) const;
-    void                   AddFontAttr( const String& rFontFileName, const ImplDevFontAttributes& );
+    ImplDevFontAttributes  GetFontAttr( const OUString& rFontFileName ) const;
+    void                   AddFontAttr( const OUString& rFontFileName, const ImplDevFontAttributes& );
 };
 
 ImplFontAttrCache::ImplFontAttrCache( const OUString& rFileNameURL, const OUString& rBaseURL ) : aBaseURL( rBaseURL )
@@ -130,12 +130,12 @@ ImplFontAttrCache::ImplFontAttrCache( const OUString& rFileNameURL, const OUStri
         return;  // ignore cache and rewrite if no match
 
     // read the cache entries from the file
-    String aFontFileURL, aFontName;
+    OUString aFontFileURL;
     ImplDevFontAttributes aDFA;
     for(;;)
     {
         aFontFileURL = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(aCacheFile, RTL_TEXTENCODING_UTF8);
-        if( !aFontFileURL.Len() )
+        if( aFontFileURL.isEmpty() )
             break;
         aDFA.SetFamilyName(read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(aCacheFile, RTL_TEXTENCODING_UTF8));
 
@@ -169,7 +169,7 @@ ImplFontAttrCache::~ImplFontAttrCache()
             FontAttrMap::const_iterator aIter = aFontAttributes.begin();
             while ( aIter != aFontAttributes.end() )
             {
-                const String rFontFileURL( (*aIter).first );
+                const OUString rFontFileURL( (*aIter).first );
                 const ImplDevFontAttributes& rDFA( (*aIter).second );
                 write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rFontFileURL, RTL_TEXTENCODING_UTF8);
                 write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rDFA.GetFamilyName(), RTL_TEXTENCODING_UTF8);
@@ -199,7 +199,7 @@ OUString ImplFontAttrCache::OptimizeURL( const OUString& rURL ) const
     return aOptimizedFontFileURL;
 }
 
-ImplDevFontAttributes ImplFontAttrCache::GetFontAttr( const String& rFontFileName ) const
+ImplDevFontAttributes ImplFontAttrCache::GetFontAttr( const OUString& rFontFileName ) const
 {
     ImplDevFontAttributes aDFA;
     FontAttrMap::const_iterator it = aFontAttributes.find( OptimizeURL( rFontFileName ) );
@@ -210,7 +210,7 @@ ImplDevFontAttributes ImplFontAttrCache::GetFontAttr( const String& rFontFileNam
     return aDFA;
 }
 
-void ImplFontAttrCache::AddFontAttr( const String& rFontFileName, const ImplDevFontAttributes& rDFA )
+void ImplFontAttrCache::AddFontAttr( const OUString& rFontFileName, const ImplDevFontAttributes& rDFA )
 {
     SAL_WARN_IF(!rFontFileName.Len() || rDFA.GetFamilyName().isEmpty(),
         "vcl.gdi", "ImplFontNameCache::AddFontName - invalid data!");
@@ -600,7 +600,7 @@ struct ImplEnumInfo
 {
     HDC                 mhDC;
     ImplDevFontList*    mpList;
-    String*             mpName;
+    OUString*           mpName;
     LOGFONTA*           mpLogFontA;
     LOGFONTW*           mpLogFontW;
     UINT                mnPreferedCharSet;
@@ -1801,7 +1801,7 @@ int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
                 pInfo->mbCourier = stricmp( pLogFont->elfLogFont.lfFaceName, "Courier" ) == 0;
             else
                 pInfo->mbCourier = FALSE;
-            String aName( ImplSalGetUniString( pLogFont->elfLogFont.lfFaceName ) );
+            OUString aName( ImplSalGetUniString( pLogFont->elfLogFont.lfFaceName ) );
             pInfo->mpName = &aName;
             strncpy( pInfo->mpLogFontA->lfFaceName, pLogFont->elfLogFont.lfFaceName, LF_FACESIZE );
             pInfo->mpLogFontA->lfCharSet = pLogFont->elfLogFont.lfCharSet;
@@ -1857,7 +1857,7 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
                 pInfo->mbCourier = ImplSalWICompareAscii( pLogFont->elfLogFont.lfFaceName, "Courier" ) == 0;
             else
                 pInfo->mbCourier = FALSE;
-            String aName = OUString(reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName));
+            OUString aName = OUString(reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName));
             pInfo->mpName = &aName;
             memcpy( pInfo->mpLogFontW->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.Len()+1)*sizeof( wchar_t ) );
             pInfo->mpLogFontW->lfCharSet = pLogFont->elfLogFont.lfCharSet;
@@ -2001,7 +2001,7 @@ void ImplReleaseTempFonts( SalData& rSalData )
 
 // -----------------------------------------------------------------------
 
-static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
+static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
     ImplDevFontAttributes& rDFA )
 {
     OUString aUSytemPath;
@@ -2171,7 +2171,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         OUString aPath;
         osl_getExecutableFile( &aPath.pData );
         aPath = aPath.copy( 0, aPath.lastIndexOf('/') );
-        String aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
+        OUString aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
         aFontDirUrl += OUString("/" LIBO_SHARE_FOLDER "/fonts/truetype");
 
         // collect fonts in font path that could not be registered
@@ -2180,7 +2180,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         if( rcOSL == osl::FileBase::E_None )
         {
             osl::DirectoryItem aDirItem;
-            String aEmptyString;
+            OUString aEmptyString;
 
             OUString aBootStrap;
             rtl::Bootstrap::get( OUString("BRAND_BASE_DIR"), aBootStrap );
@@ -2189,7 +2189,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
             OUString aUserPath;
             aBootstrap.getFrom( OUString( "UserInstallation" ), aUserPath );
             aUserPath += "/user/config/fontnames.dat";
-            String aBaseURL = aPath.copy( 0, aPath.lastIndexOf('/')+1 );
+            OUString aBaseURL = aPath.copy( 0, aPath.lastIndexOf('/')+1 );
             mpFontAttrCache = new ImplFontAttrCache( aUserPath, aBaseURL );
 
             while( aFontDir.getNextItem( aDirItem, 10 ) == osl::FileBase::E_None )
