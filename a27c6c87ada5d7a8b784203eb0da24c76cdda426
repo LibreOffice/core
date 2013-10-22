@@ -16,6 +16,24 @@
       "revId": "a27c6c87ada5d7a8b784203eb0da24c76cdda426",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAY3//+/o\u003d",
+        "filename": "svtools/source/control/inettbc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-22T08:45:07Z",
+      "side": 1,
+      "message": "that\u0027s nonsense, of course; please ignore",
+      "parentUuid": "AAAAY3//+/w\u003d",
+      "revId": "a27c6c87ada5d7a8b784203eb0da24c76cdda426",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
