@@ -23,11 +23,6 @@
 #undef WB_LEFT
 #undef WB_RIGHT
 
-#define UINT64 USE_WIN_UINT64
-#define INT64 USE_WIN_INT64
-#define UINT32 USE_WIN_UINT32
-#define INT32 USE_WIN_INT32
-
 #include <tools/presys.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
@@ -37,11 +32,6 @@
 #pragma warning(pop)
 #endif
 #include <tools/postsys.h>
-
-#undef UINT64
-#undef INT64
-#undef UINT32
-#undef INT32
 
 #endif
 #include <com/sun/star/uno/Exception.hpp>
