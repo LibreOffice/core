@@ -456,27 +456,34 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 }
                 break;
             case ocDiv:
-                mvSubArguments.push_back(SoPHelper<OpDiv>(ts, ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper<OpDiv>(ts,
+                    ft->Children[i]));
                 break;
             case ocMul:
-                mvSubArguments.push_back(SoPHelper<OpMul>(ts, ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper<OpMul>(ts,
+                    ft->Children[i]));
                 break;
             case ocSub:
-                mvSubArguments.push_back(SoPHelper<OpSub>(ts, ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper<OpSub>(ts,
+                    ft->Children[i]));
                 break;
             case ocAdd:
             case ocSum:
             case ocAverage:
-                mvSubArguments.push_back(SoPHelper<OpSum>(ts, ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper<OpSum>(ts,
+                    ft->Children[i]));
                 break;
             case ocMin:
-                mvSubArguments.push_back(SoPHelper<OpMin>(ts, ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper<OpMin>(ts,
+                    ft->Children[i]));
                 break;
             case ocMax:
-                mvSubArguments.push_back(SoPHelper<OpMax>(ts, ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper<OpMax>(ts,
+                    ft->Children[i]));
                 break;
             case ocCount:
-                mvSubArguments.push_back(SoPHelper<OpCount>(ts, ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper<OpCount>(ts,
+                    ft->Children[i]));
                 break;
             case ocSumProduct:
                 mvSubArguments.push_back(SoPHelper<OpSumProduct>(ts,
@@ -499,13 +506,20 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     ft->Children[i]));
                 break;
             case ocZGZ:
-                mvSubArguments.push_back(SoPHelper<OpRRI>(ts, ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper<OpRRI>(ts,
+                    ft->Children[i]));
                 break;
             case ocKapz:
-                mvSubArguments.push_back(SoPHelper<OpPPMT>(ts, ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper<OpPPMT>(ts,
+                    ft->Children[i]));
                 break;
             case ocFisher:
-                mvSubArguments.push_back(SoPHelper<OpFisher>(ts, ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper<OpFisher>(ts,
+                    ft->Children[i]));
+                break;
+            case ocFisherInv:
+                mvSubArguments.push_back(SoPHelper<OpFisherInv>(ts,
+                    ft->Children[i]));
                 break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
