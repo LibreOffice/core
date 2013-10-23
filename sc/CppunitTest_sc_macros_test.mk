@@ -9,7 +9,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_macros_test))
 
-$(eval $(call gb_CppunitTest_use_external,sc_macros_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sc_macros_test, \
+    boost_headers \
+    mdds_headers \
+))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_macros_test, \
     sc/qa/extras/macros-test \
