@@ -197,7 +197,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,\
 ))
 
 define gb_LinkTarget__use_cppunit
-$(call gb_LinkTarget_use_package,$(1),cppunit)
+$(call gb_LinkTarget_use_external_project,$(1),cppunit)
 
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,cppunit/include)\
