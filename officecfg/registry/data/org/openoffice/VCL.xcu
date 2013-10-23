@@ -1540,7 +1540,13 @@
           <value>Normal,SansSerif</value>
         </prop>
       </node>
-      <node oor:name="candara" oor:op="replace">
+      <node oor:name="carlito" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>calibri;hiraginomarugothicpronw3;hiraginomarugothicprow3</value>
+        </prop>
+        <prop oor:name="SubstFontsMS">
+          <value>Calibri</value>
+        </prop>
         <prop oor:name="FontType">
           <value>Normal,SansSerif</value>
         </prop>
@@ -1551,6 +1557,22 @@
         </prop>
         <prop oor:name="FontType">
           <value>Normal,Serif</value>
+        </prop>
+      </node>
+      <node oor:name="caladea" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>cambria;applelisung</value>
+        </prop>
+        <prop oor:name="SubstFontsMS">
+          <value>Cambria</value>
+        </prop>
+        <prop oor:name="FontType">
+          <value>Normal,Serif</value>
+        </prop>
+      </node>
+      <node oor:name="candara" oor:op="replace">
+        <prop oor:name="FontType">
+          <value>Normal,SansSerif</value>
         </prop>
       </node>
       <node oor:name="consolas" oor:op="replace">
