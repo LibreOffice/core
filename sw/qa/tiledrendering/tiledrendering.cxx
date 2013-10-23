@@ -129,7 +129,10 @@ IMPL_LINK ( TiledRenderingDialog,  RenderHdl, Button *, EMPTYARG )
         aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
 
         pViewShell->PaintTile(&aDevice, Rectangle(tilePosX, tilePosY, tileWidth, tileHeight));
-        //TODO now get it to the 'context'
+
+        // copy the aDevice content to mpImage
+        BitmapEx aBitmap(aDevice.GetBitmapEx(Point(0,0), aDevice.GetOutputSizePixel()));
+        mpImage->SetImage(Image(aBitmap));
     }
 
     return 1;
