@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XLNASIT_HXX
-#define _SVX_XLNASIT_HXX
+#ifndef INCLUDED_SVX_XLNASIT_HXX
+#define INCLUDED_SVX_XLNASIT_HXX
 
 
 #include <svl/poolitem.hxx>

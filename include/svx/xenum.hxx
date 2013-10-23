@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XENUM_HXX
-#define _XENUM_HXX
+#ifndef INCLUDED_SVX_XENUM_HXX
+#define INCLUDED_SVX_XENUM_HXX
 
 enum XLineStyle         { XLINE_NONE, XLINE_SOLID, XLINE_DASH };
 enum XDashStyle         { XDASH_RECT, XDASH_ROUND, XDASH_RECTRELATIVE,
@@ -35,6 +35,6 @@ enum XFormTextShadow    { XFTSHADOW_NONE, XFTSHADOW_NORMAL, XFTSHADOW_SLANT};
 enum XBitmapType        { XBITMAP_IMPORT, XBITMAP_8X8 };
 
 
-#endif      // _XENUM_HXX
+#endif // INCLUDED_SVX_XENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

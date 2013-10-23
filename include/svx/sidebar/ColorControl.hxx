@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_COLORCONTROL_HXX
-#define SVX_COLORCONTROL_HXX
+#ifndef INCLUDED_SVX_SIDEBAR_COLORCONTROL_HXX
+#define INCLUDED_SVX_SIDEBAR_COLORCONTROL_HXX
 
 #include "svx/sidebar/PopupControl.hxx"
 
@@ -86,6 +86,6 @@ private:
 
 } } // end of namespace svx::sidebar
 
-#endif // SVX_COLORCONTROL_HXX
+#endif // INCLUDED_SVX_SIDEBAR_COLORCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

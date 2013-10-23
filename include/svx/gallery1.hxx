@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_GALLERY1_HXX_
-#define _SVX_GALLERY1_HXX_
+#ifndef INCLUDED_SVX_GALLERY1_HXX
+#define INCLUDED_SVX_GALLERY1_HXX
 
 #include <rtl/ustring.hxx>
 #include <svl/brdcst.hxx>
@@ -148,6 +148,6 @@ public:
     sal_Bool                    IsMultiPath() const { return bMultiPath; }
 };
 
-#endif // _SVX_GALLERY1_HXX_
+#endif // INCLUDED_SVX_GALLERY1_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

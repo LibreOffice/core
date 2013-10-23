@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDGGAITM_HXX
-#define _SDGGAITM_HXX
+#ifndef INCLUDED_SVX_SDGGAITM_HXX
+#define INCLUDED_SVX_SDGGAITM_HXX
 
 #include <svl/intitem.hxx>
 #include <svx/svddef.hxx>
@@ -44,6 +44,6 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
-#endif // _SDGGAITM_HXX
+#endif // INCLUDED_SVX_SDGGAITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

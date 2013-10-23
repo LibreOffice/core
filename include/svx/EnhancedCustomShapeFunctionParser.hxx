@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
-#define _ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
+#ifndef INCLUDED_SVX_ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
+#define INCLUDED_SVX_ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
 
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>
@@ -203,6 +203,6 @@ private:
 
 }
 
-#endif /* _ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX */
+#endif // INCLUDED_SVX_ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

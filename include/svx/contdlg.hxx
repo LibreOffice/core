@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONTDLG_HXX_
-#define _CONTDLG_HXX_
+#ifndef INCLUDED_SVX_CONTDLG_HXX
+#define INCLUDED_SVX_CONTDLG_HXX
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/ctrlitem.hxx>
@@ -43,7 +43,7 @@ class SVX_DLLPUBLIC SvxContourDlgChildWindow : public SfxChildWindow
 };
 
 #ifndef _REDUCED_ContourDlg_HXX_
-#define _REDUCED_CONTDLG_HXX_
+#define _REDUCED INCLUDED_SVX_CONTDLG_HXX
 
 class SvxSuperContourDlg;
 
@@ -92,7 +92,7 @@ public:
                                             const sal_uIntPtr nFlags = 0L );
 };
 
-#endif // _REDUCED_CONTDLG_HXX_
-#endif // _CONTDLG_HXX_
+#endif // _REDUCED INCLUDED_SVX_CONTDLG_HXX
+#endif // INCLUDED_SVX_CONTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

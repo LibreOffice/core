@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SELECTIONCONTROLLER_HXX
-#define _SELECTIONCONTROLLER_HXX
+#ifndef INCLUDED_SVX_SELECTIONCONTROLLER_HXX
+#define INCLUDED_SVX_SELECTIONCONTROLLER_HXX
 
 #include "svx/svxdllapi.h"
 
@@ -74,6 +74,6 @@ public:
 
 }
 
-#endif //_SELECTIONCONTROLLER_HXX
+#endif // INCLUDED_SVX_SELECTIONCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

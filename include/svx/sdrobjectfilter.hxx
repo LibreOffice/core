@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDROBJECTFILTER_HXX
-#define SDROBJECTFILTER_HXX
+#ifndef INCLUDED_SVX_SDROBJECTFILTER_HXX
+#define INCLUDED_SVX_SDROBJECTFILTER_HXX
 
 #include "svx/svxdllapi.h"
 
@@ -46,6 +46,6 @@ namespace svx
 } // namespace svx
 //........................................................................
 
-#endif // SDROBJECTFILTER_HXX
+#endif // INCLUDED_SVX_SDROBJECTFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

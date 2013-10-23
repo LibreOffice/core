@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XLINJOIT_HXX
-#define _SVX_XLINJOIT_HXX
+#ifndef INCLUDED_SVX_XLINJOIT_HXX
+#define INCLUDED_SVX_XLINJOIT_HXX
 
 #include <svl/eitem.hxx>
 #include <svx/xenum.hxx>
@@ -50,6 +50,6 @@ public:
     com::sun::star::drawing::LineJoint GetValue() const { return (com::sun::star::drawing::LineJoint) SfxEnumItem::GetValue(); }
 };
 
-#endif // _SVX_XLINJOIT_HXX
+#endif // INCLUDED_SVX_XLINJOIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

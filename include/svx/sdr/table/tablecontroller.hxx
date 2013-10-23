@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_TABLECONTROLLER_HXX_
-#define _SVX_TABLECONTROLLER_HXX_
+#ifndef INCLUDED_SVX_SDR_TABLE_TABLECONTROLLER_HXX
+#define INCLUDED_SVX_SDR_TABLE_TABLECONTROLLER_HXX
 
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/table/XTable.hpp>
@@ -162,6 +162,6 @@ private:
 
 } }
 
-#endif // _SVX_TABLECONTROLLER_HXX_
+#endif // INCLUDED_SVX_SDR_TABLE_TABLECONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

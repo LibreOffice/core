@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_UNOMOD_HXX
-#define SVX_UNOMOD_HXX
+#ifndef INCLUDED_SVX_UNOMOD_HXX
+#define INCLUDED_SVX_UNOMOD_HXX
 
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

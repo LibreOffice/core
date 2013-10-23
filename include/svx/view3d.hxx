@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _E3D_VIEW3D_HXX
-#define _E3D_VIEW3D_HXX
+#ifndef INCLUDED_SVX_VIEW3D_HXX
+#define INCLUDED_SVX_VIEW3D_HXX
 
 #include <svx/svdview.hxx>
 #include <svx/def3d.hxx>
@@ -256,6 +256,6 @@ public:
     void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = NULL, sal_Bool bOnly3DAttr=sal_False);
 };
 
-#endif // _E3D_VIEW3D_HXX
+#endif // INCLUDED_SVX_VIEW3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

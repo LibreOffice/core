@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDITER_HXX
-#define _SVDITER_HXX
+#ifndef INCLUDED_SVX_SVDITER_HXX
+#define INCLUDED_SVX_SVDITER_HXX
 
 #include <vector>
 
@@ -74,6 +74,6 @@ public:
     sal_uInt32 Count() { return maObjList.size(); }
 };
 
-#endif //_SVDITER_HXX
+#endif // INCLUDED_SVX_SVDITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

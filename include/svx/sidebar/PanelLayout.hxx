@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SIDEBAR_PANELLAYOUT_HXX
-#define SIDEBAR_PANELLAYOUT_HXX
+#ifndef INCLUDED_SVX_SIDEBAR_PANELLAYOUT_HXX
+#define INCLUDED_SVX_SIDEBAR_PANELLAYOUT_HXX
 
 #include <svx/svxdllapi.h>
 

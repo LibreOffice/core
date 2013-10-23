@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ZOOMSLIDER_STBCONTRL_HXX
-#define _ZOOMSLIDER_STBCONTRL_HXX
+#ifndef INCLUDED_SVX_ZOOMSLIDERCTRL_HXX
+#define INCLUDED_SVX_ZOOMSLIDERCTRL_HXX
 
 #include <sfx2/stbitem.hxx>
 #include "svx/svxdllapi.h"

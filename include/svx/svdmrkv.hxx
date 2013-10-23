@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDMRKV_HXX
-#define _SVDMRKV_HXX
+#ifndef INCLUDED_SVX_SVDMRKV_HXX
+#define INCLUDED_SVX_SVDMRKV_HXX
 
 #include <svx/svdmark.hxx>
 #include <svx/svdhdl.hxx>
@@ -476,6 +476,6 @@ public:
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDMRKV_HXX
+#endif // INCLUDED_SVX_SVDMRKV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDRPAGEWINDOW_HXX
-#define _SDRPAGEWINDOW_HXX
+#ifndef INCLUDED_SVX_SDRPAGEWINDOW_HXX
+#define INCLUDED_SVX_SDRPAGEWINDOW_HXX
 
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -126,6 +126,6 @@ typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDRPAGEWINDOW_HXX
+#endif // INCLUDED_SVX_SDRPAGEWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

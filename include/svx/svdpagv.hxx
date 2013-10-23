@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDPAGV_HXX
-#define _SVDPAGV_HXX
+#ifndef INCLUDED_SVX_SVDPAGV_HXX
+#define INCLUDED_SVX_SVDPAGV_HXX
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <cppuhelper/implbase4.hxx>
@@ -264,6 +264,6 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDPAGV_HXX
+#endif // INCLUDED_SVX_SVDPAGV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

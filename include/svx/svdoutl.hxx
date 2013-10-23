@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOUTL_HXX
-#define _SVDOUTL_HXX
+#ifndef INCLUDED_SVX_SVDOUTL_HXX
+#define INCLUDED_SVX_SVDOUTL_HXX
 
 #include <editeng/outliner.hxx>
 #include "svx/svxdllapi.h"
@@ -47,6 +47,6 @@ public:
     virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor);
 };
 
-#endif //_SVDOUTL_HXX
+#endif // INCLUDED_SVX_SVDOUTL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDCAPT_HXX
-#define _SVDCAPT_HXX
+#ifndef INCLUDED_SVX_SVDOCAPT_HXX
+#define INCLUDED_SVX_SVDOCAPT_HXX
 
 #include <svx/svdorect.hxx>
 #include "svx/svxdllapi.h"

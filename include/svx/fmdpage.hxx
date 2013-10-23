@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_FMDPAGE_HXX
-#define _SVX_FMDPAGE_HXX
+#ifndef INCLUDED_SVX_FMDPAGE_HXX
+#define INCLUDED_SVX_FMDPAGE_HXX
 
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <svx/unopage.hxx>
@@ -62,6 +62,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 };
 
-#endif // _SVX_FMDPAGE_HXX
+#endif // INCLUDED_SVX_FMDPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

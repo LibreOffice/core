@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDHDL_HXX
-#define _SVDHDL_HXX
+#ifndef INCLUDED_SVX_SVDHDL_HXX
+#define INCLUDED_SVX_SVDHDL_HXX
 
 #include <tools/gen.hxx>
 
@@ -548,6 +548,6 @@ protected:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDHDL_HXX
+#endif // INCLUDED_SVX_SVDHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

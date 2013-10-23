@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SMARTTAGMGR_HXX
-#define _SMARTTAGMGR_HXX
+#ifndef INCLUDED_SVX_SMARTTAGMGR_HXX
+#define INCLUDED_SVX_SMARTTAGMGR_HXX
 
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/Reference.hxx>

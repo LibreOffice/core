@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SVX_SVXCOMMANDS_HRC
-#define SVX_SVXCOMMANDS_HRC
+#ifndef INCLUDED_SVX_SVXCOMMANDS_H
+#define INCLUDED_SVX_SVXCOMMANDS_H
 
 #define CMD_SID_INET_DLG                            ".uno:InternetDialog"
 #define CMD_SID_OBJECT_ALIGN_CENTER                 ".uno:AlignCenter"

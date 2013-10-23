@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOGRP_HXX
-#define _SVDOGRP_HXX
+#ifndef INCLUDED_SVX_SVDOGRP_HXX
+#define INCLUDED_SVX_SVDOGRP_HXX
 
 #include <svx/svdobj.hxx>
 #include "svx/svxdllapi.h"
@@ -110,6 +110,6 @@ public:
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 };
 
-#endif //_SVDOGRP_HXX
+#endif // INCLUDED_SVX_SVDOGRP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

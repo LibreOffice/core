@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XMLEXCHG_HXX_
-#define _SVX_XMLEXCHG_HXX_
+#ifndef INCLUDED_SVX_XMLEXCHG_HXX
+#define INCLUDED_SVX_XMLEXCHG_HXX
 
 #include <rtl/ustring.hxx>
 #include <svtools/transfer.hxx>
@@ -89,6 +89,6 @@ namespace svx
 }   // namespace svx
 //........................................................................
 
-#endif // _SVX_XMLEXCHG_HXX_
+#endif // INCLUDED_SVX_XMLEXCHG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

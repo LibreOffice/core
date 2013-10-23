@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACTIONDESCRIPTIONPROVIDER_HXX
-#define _SVX_ACTIONDESCRIPTIONPROVIDER_HXX
+#ifndef INCLUDED_SVX_ACTIONDESCRIPTIONPROVIDER_HXX
+#define INCLUDED_SVX_ACTIONDESCRIPTIONPROVIDER_HXX
 
 #include "svx/svxdllapi.h"
 

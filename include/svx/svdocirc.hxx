@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOCIRC_HXX
-#define _SVDOCIRC_HXX
+#ifndef INCLUDED_SVX_SVDOCIRC_HXX
+#define INCLUDED_SVX_SVDOCIRC_HXX
 
 #include <svx/svdorect.hxx>
 #include "svx/svxdllapi.h"
@@ -141,6 +141,6 @@ public:
 
 };
 
-#endif //_SVDOCIRC_HXX
+#endif // INCLUDED_SVX_SVDOCIRC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

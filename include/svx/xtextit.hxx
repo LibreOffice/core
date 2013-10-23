@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XTEXTITEM_HXX
-#define _SVX_XTEXTITEM_HXX
+#ifndef INCLUDED_SVX_XTEXTIT_HXX
+#define INCLUDED_SVX_XTEXTIT_HXX
 
 #include <svx/xenum.hxx>
 #include <svl/metitem.hxx>

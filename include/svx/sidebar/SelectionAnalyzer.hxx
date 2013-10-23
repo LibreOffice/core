@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_SIDEBAR_SELECTION_ANALYZER_HXX_
-#define _SVX_SIDEBAR_SELECTION_ANALYZER_HXX_
+#ifndef INCLUDED_SVX_SIDEBAR_SELECTIONANALYZER_HXX
+#define INCLUDED_SVX_SIDEBAR_SELECTIONANALYZER_HXX
 
 #include <sfx2/sidebar/EnumContext.hxx>
 #include "svx/svxdllapi.h"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XPROPERTYTABLE_HXX
-#define _SVX_XPROPERTYTABLE_HXX
+#ifndef INCLUDED_SVX_XPROPERTYTABLE_HXX
+#define INCLUDED_SVX_XPROPERTYTABLE_HXX
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include "svx/svxdllapi.h"

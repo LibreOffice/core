@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVX_RUBYDLG_HXX_
-#define _SVX_RUBYDLG_HXX_
+#ifndef INCLUDED_SVX_RUBYDIALOG_HXX
+#define INCLUDED_SVX_RUBYDIALOG_HXX
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -171,7 +171,7 @@ public:
     virtual void        Deactivate();
 };
 
-#endif // _SVX_RUBYDLG_HXX_
+#endif // INCLUDED_SVX_RUBYDIALOG_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

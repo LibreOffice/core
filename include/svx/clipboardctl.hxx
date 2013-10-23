@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_CLIPBOARDCTL_HXX_
-#define _SVX_CLIPBOARDCTL_HXX_
+#ifndef INCLUDED_SVX_CLIPBOARDCTL_HXX
+#define INCLUDED_SVX_CLIPBOARDCTL_HXX
 
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/ctrlitem.hxx>

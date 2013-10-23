@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FONTLB_HXX
-#define SVX_FONTLB_HXX
+#ifndef INCLUDED_SVX_FONTLB_HXX
+#define INCLUDED_SVX_FONTLB_HXX
 
 #include <svtools/svtabbx.hxx>
 #include <svtools/svlbitm.hxx>

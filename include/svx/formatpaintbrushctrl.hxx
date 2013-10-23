@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FORMATPAINTBRUSHCTRL_HXX
-#define _SVX_FORMATPAINTBRUSHCTRL_HXX
+#ifndef INCLUDED_SVX_FORMATPAINTBRUSHCTRL_HXX
+#define INCLUDED_SVX_FORMATPAINTBRUSHCTRL_HXX
 
 // header for class SfxToolBoxControl
 #include <sfx2/tbxctrl.hxx>

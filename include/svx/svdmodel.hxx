@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDMODEL_HXX
-#define _SVDMODEL_HXX
+#ifndef INCLUDED_SVX_SVDMODEL_HXX
+#define INCLUDED_SVX_SVDMODEL_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -683,7 +683,7 @@ typedef tools::WeakReference< SdrModel > SdrModelWeakRef;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDMODEL_HXX
+#endif // INCLUDED_SVX_SVDMODEL_HXX
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
             +-----------+

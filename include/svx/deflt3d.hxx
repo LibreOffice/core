@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _E3D_DEFLT3D_HXX
-#define _E3D_DEFLT3D_HXX
+#ifndef INCLUDED_SVX_DEFLT3D_HXX
+#define INCLUDED_SVX_DEFLT3D_HXX
 
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
@@ -124,6 +124,6 @@ public:
     void SetDefaultExtrudeCloseBack(const sal_Bool bNew) { bDefaultExtrudeCloseBack = bNew; }
 };
 
-#endif          // _E3D_DEFLT3D_HXX
+#endif // INCLUDED_SVX_DEFLT3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

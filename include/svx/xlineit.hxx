@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XLINIIT_HXX
-#define _SVX_XLINIIT_HXX
+#ifndef INCLUDED_SVX_XLINEIT_HXX
+#define INCLUDED_SVX_XLINEIT_HXX
 
 #include <svx/xit.hxx>
 #include <svx/xcolit.hxx>

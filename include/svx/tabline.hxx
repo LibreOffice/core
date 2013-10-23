@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_TAB_LINE_HXX
-#define _SVX_TAB_LINE_HXX
+#ifndef INCLUDED_SVX_TABLINE_HXX
+#define INCLUDED_SVX_TABLINE_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/group.hxx>
@@ -48,6 +48,6 @@ class SdrObject;
 #define SVX_SYMBOLTYPE_BRUSHITEM  (-1)  //Symbol ist als Graphic im Item enthalten:
 #define SVX_SYMBOLTYPE_UNKNOWN  (-100) //unbekannt/nicht initialisiert
 
-#endif // _SVX_TAB_LINE_HXX
+#endif // INCLUDED_SVX_TABLINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

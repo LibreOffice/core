@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_FONTWORK_HXX
-#define _SVX_FONTWORK_HXX
+#ifndef INCLUDED_SVX_FONTWORK_HXX
+#define INCLUDED_SVX_FONTWORK_HXX
 
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
@@ -166,6 +166,6 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void SetActive(bool bActivate = true);
 };
 
-#endif      // _SVX_FONTWORK_HXX
+#endif // INCLUDED_SVX_FONTWORK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

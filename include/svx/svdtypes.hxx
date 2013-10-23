@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDTYPES_HXX
-#define _SVDTYPES_HXX
+#ifndef INCLUDED_SVX_SVDTYPES_HXX
+#define INCLUDED_SVX_SVDTYPES_HXX
 
 #include <tools/solar.h>
 
@@ -129,6 +129,6 @@ enum SdrRepeatFunc {SDRREPFUNC_OBJ_NONE,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDTYPES_HXX
+#endif // INCLUDED_SVX_SVDTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

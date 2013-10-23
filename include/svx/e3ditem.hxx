@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVXE3DITEM_HXX
-#define _SVXE3DITEM_HXX
+#ifndef INCLUDED_SVX_E3DITEM_HXX
+#define INCLUDED_SVX_E3DITEM_HXX
 
 #include <svl/poolitem.hxx>
 #include <basegfx/vector/b3dvector.hxx>

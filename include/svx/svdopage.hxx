@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOPAGE_HXX
-#define _SVDOPAGE_HXX
+#ifndef INCLUDED_SVX_SVDOPAGE_HXX
+#define INCLUDED_SVX_SVDOPAGE_HXX
 
 #include <svx/svdobj.hxx>
 #include <svx/sdrpageuser.hxx>
@@ -65,6 +65,6 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDOPAGE_HXX
+#endif // INCLUDED_SVX_SVDOPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SDR_UNDOMANAGER_HXX
-#define _SDR_UNDOMANAGER_HXX
+#ifndef INCLUDED_SVX_SDRUNDOMANAGER_HXX
+#define INCLUDED_SVX_SDRUNDOMANAGER_HXX
 
 #include "svx/svxdllapi.h"
 #include <sal/types.h>
@@ -65,7 +65,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_UNDOMANAGER_HXX
+#endif // INCLUDED_SVX_SDRUNDOMANAGER_HXX
 // eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

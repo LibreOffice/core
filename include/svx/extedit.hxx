@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _EXTEDIT_HXX
-#define _EXTEDIT_HXX
+#ifndef INCLUDED_SVX_EXTEDIT_HXX
+#define INCLUDED_SVX_EXTEDIT_HXX
 
 #include <svtools/grfmgr.hxx>
 #include <osl/file.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_ATTRIBUTE_SDRFORMTEXTATTRIBUTE_HXX
-#define _SDR_ATTRIBUTE_SDRFORMTEXTATTRIBUTE_HXX
+#ifndef INCLUDED_SVX_SDR_ATTRIBUTE_SDRFORMTEXTATTRIBUTE_HXX
+#define INCLUDED_SVX_SDR_ATTRIBUTE_SDRFORMTEXTATTRIBUTE_HXX
 
 #include <sal/types.h>
 #include <svx/xenum.hxx>
@@ -78,6 +78,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // _SDR_ATTRIBUTE_SDRFORMTEXTATTRIBUTE_HXX
+#endif // INCLUDED_SVX_SDR_ATTRIBUTE_SDRFORMTEXTATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

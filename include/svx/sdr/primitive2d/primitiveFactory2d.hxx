@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDR_PRIMITIVE2D_PRIMITIVEFACTORY2D_HXX
-#define INCLUDED_SDR_PRIMITIVE2D_PRIMITIVEFACTORY2D_HXX
+#ifndef INCLUDED_SVX_SDR_PRIMITIVE2D_PRIMITIVEFACTORY2D_HXX
+#define INCLUDED_SVX_SDR_PRIMITIVE2D_PRIMITIVEFACTORY2D_HXX
 
 #include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 #include <cppuhelper/compbase1.hxx>
@@ -71,6 +71,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_SDR_PRIMITIVE2D_PRIMITIVEFACTORY2D_HXX
+#endif // INCLUDED_SVX_SDR_PRIMITIVE2D_PRIMITIVEFACTORY2D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

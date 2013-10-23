@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_ANIMATION_OBJECTANIMATOR_HXX
-#define _SDR_ANIMATION_OBJECTANIMATOR_HXX
+#ifndef INCLUDED_SVX_SDR_ANIMATION_OBJECTANIMATOR_HXX
+#define INCLUDED_SVX_SDR_ANIMATION_OBJECTANIMATOR_HXX
 
 #include <sal/types.h>
 #include <vector>
@@ -44,6 +44,6 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_ANIMATION_OBJECTANIMATOR_HXX
+#endif // INCLUDED_SVX_SDR_ANIMATION_OBJECTANIMATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

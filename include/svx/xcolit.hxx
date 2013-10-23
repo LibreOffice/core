@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XCOLORITEM_HXX
-#define _SVX_XCOLORITEM_HXX
+#ifndef INCLUDED_SVX_XCOLIT_HXX
+#define INCLUDED_SVX_XCOLIT_HXX
 
 #include <tools/color.hxx>
 #include "svx/svxdllapi.h"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDPOOL_HXX
-#define _SVDPOOL_HXX
+#ifndef INCLUDED_SVX_SVDPOOL_HXX
+#define INCLUDED_SVX_SVDPOOL_HXX
 
 #include <svx/xpool.hxx>
 #include <svx/svddef.hxx>
@@ -49,6 +49,6 @@ public:
     static void TakeItemName(sal_uInt16 nWhich, OUString& rItemName);
 };
 
-#endif // _SVDPOOL_HXX
+#endif // INCLUDED_SVX_SVDPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

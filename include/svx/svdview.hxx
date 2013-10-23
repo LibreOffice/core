@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDVIEW_HXX
-#define _SVDVIEW_HXX
+#ifndef INCLUDED_SVX_SVDVIEW_HXX
+#define INCLUDED_SVX_SVDVIEW_HXX
 
 // HACK to avoid too deep includes and to have some
 // levels free in svdmark itself (MS compiler include depth limit)
@@ -256,7 +256,7 @@ public:
     virtual void onAccessibilityOptionsChanged();
 };
 
-#endif //_SVDVIEW_HXX
+#endif // INCLUDED_SVX_SVDVIEW_HXX
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
-#define _SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
+#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
+#define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
@@ -109,6 +109,6 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
+#endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

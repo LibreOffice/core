@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_XFILLIT0_HXX
-#define SVX_XFILLIT0_HXX
+#ifndef INCLUDED_SVX_XFILLIT0_HXX
+#define INCLUDED_SVX_XFILLIT0_HXX
 
 #include <svl/eitem.hxx>
 

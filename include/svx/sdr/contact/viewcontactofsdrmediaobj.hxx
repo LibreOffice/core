@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_CONTACT_VIEWCONTACTOFSDRMEDIAOBJ_HXX
-#define _SDR_CONTACT_VIEWCONTACTOFSDRMEDIAOBJ_HXX
+#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDRMEDIAOBJ_HXX
+#define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDRMEDIAOBJ_HXX
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include "svx/svxdllapi.h"
@@ -78,6 +78,6 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_CONTACT_VIEWCONTACTOFSDRMEDIAOBJ_HXX
+#endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDRMEDIAOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDEDTV_HXX
-#define _SVDEDTV_HXX
+#ifndef INCLUDED_SVX_SVDEDTV_HXX
+#define INCLUDED_SVX_SVDEDTV_HXX
 
 #include <svx/svdmrkv.hxx>
 #include <svx/xpoly.hxx>
@@ -424,6 +424,6 @@ public:
     virtual void ModelHasChanged();
 };
 
-#endif //_SVDEDTV_HXX
+#endif // INCLUDED_SVX_SVDEDTV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

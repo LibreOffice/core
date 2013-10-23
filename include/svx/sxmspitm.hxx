@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SXMSPITM_HXX
-#define _SXMSPITM_HXX
+#ifndef INCLUDED_SVX_SXMSPITM_HXX
+#define INCLUDED_SVX_SXMSPITM_HXX
 
 #include <svx/svddef.hxx>
 #include <svx/sdynitm.hxx>

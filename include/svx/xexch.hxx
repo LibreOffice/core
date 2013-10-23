@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XEXCH_HXX
-#define _SVX_XEXCH_HXX
+#ifndef INCLUDED_SVX_XEXCH_HXX
+#define INCLUDED_SVX_XEXCH_HXX
 
 
 #include <tools/stream.hxx>
@@ -54,6 +54,6 @@ public:
     XFillAttrSetItem*   GetXFillAttrSetItem() { return pXFillAttrSetItem; }
 };
 
-#endif                  // _SVX_XEXCH_HXX
+#endif // INCLUDED_SVX_XEXCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

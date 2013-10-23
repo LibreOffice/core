@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOASHP_HXX
-#define _SVDOASHP_HXX
+#ifndef INCLUDED_SVX_SVDOASHP_HXX
+#define INCLUDED_SVX_SVDOASHP_HXX
 
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
@@ -258,6 +258,6 @@ public:
     using SdrTextObj::NbcSetOutlinerParaObject;
 };
 
-#endif //_SVDOASHP_HXX
+#endif // INCLUDED_SVX_SVDOASHP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

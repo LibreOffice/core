@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_DIALCONTROL_HXX
-#define SVX_DIALCONTROL_HXX
+#ifndef INCLUDED_SVX_DIALCONTROL_HXX
+#define INCLUDED_SVX_DIALCONTROL_HXX
 
 #include <memory>
 #include <vcl/ctrl.hxx>

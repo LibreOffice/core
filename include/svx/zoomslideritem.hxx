@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_ZOOMSLIDERITEM_HXX
-#define _SVX_ZOOMSLIDERITEM_HXX
+#ifndef INCLUDED_SVX_ZOOMSLIDERITEM_HXX
+#define INCLUDED_SVX_ZOOMSLIDERITEM_HXX
 
 #include <svl/intitem.hxx>
 #include <svx/svxids.hrc>

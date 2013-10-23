@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_TBCONTRL_HXX
-#define _SVX_TBCONTRL_HXX
+#ifndef INCLUDED_SVX_TBCONTRL_HXX
+#define INCLUDED_SVX_TBCONTRL_HXX
 
 /*--------------------------------------------------------------*\
 
@@ -384,6 +384,6 @@ public:
                                               const SfxPoolItem* pState );
 };
 
-#endif // #ifndef _SVX_TBCONTRL_HXX
+#endif // INCLUDED_SVX_TBCONTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

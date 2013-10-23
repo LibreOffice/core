@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDR_PRIMITIVE2D_SDRATTRIBUTECREATOR_HXX
-#define INCLUDED_SDR_PRIMITIVE2D_SDRATTRIBUTECREATOR_HXX
+#ifndef INCLUDED_SVX_SDR_PRIMITIVE2D_SDRATTRIBUTECREATOR_HXX
+#define INCLUDED_SVX_SDR_PRIMITIVE2D_SDRATTRIBUTECREATOR_HXX
 
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
@@ -129,6 +129,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_SDR_PRIMITIVE2D_SDRATTRIBUTECREATOR_HXX
+#endif // INCLUDED_SVX_SDR_PRIMITIVE2D_SDRATTRIBUTECREATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SDTAITM_HXX
-#define _SDTAITM_HXX
+#ifndef INCLUDED_SVX_SDTAITM_HXX
+#define INCLUDED_SVX_SDTAITM_HXX
 
 #include <svl/eitem.hxx>
 #include <svx/svddef.hxx>

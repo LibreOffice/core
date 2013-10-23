@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_GALMISC_HXX_
-#define _SVX_GALMISC_HXX_
+#ifndef INCLUDED_SVX_GALMISC_HXX
+#define INCLUDED_SVX_GALMISC_HXX
 
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>

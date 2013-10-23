@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_TBXCOLOR_HXX
-#define _SVX_TBXCOLOR_HXX
+#ifndef INCLUDED_SVX_TBXCOLOR_HXX
+#define INCLUDED_SVX_TBXCOLOR_HXX
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include "svx/svxdllapi.h"
@@ -59,6 +59,6 @@ namespace svx
 } // namespace svx
 //........................................................................
 
-#endif // #ifndef _SVX_TBXCOLOR_HXX
+#endif // INCLUDED_SVX_TBXCOLOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

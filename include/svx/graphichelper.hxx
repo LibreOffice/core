@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GRAPHICHELPER_HXX
-#define _GRAPHICHELPER_HXX
+#ifndef INCLUDED_SVX_GRAPHICHELPER_HXX
+#define INCLUDED_SVX_GRAPHICHELPER_HXX
 
 #include <vcl/graph.hxx>
 #include <svx/svxdllapi.h>

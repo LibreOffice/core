@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDRHITTESTHELPER_HXX
-#define _SDRHITTESTHELPER_HXX
+#ifndef INCLUDED_SVX_SDRHITTESTHELPER_HXX
+#define INCLUDED_SVX_SDRHITTESTHELPER_HXX
 
 #include "svx/svxdllapi.h"
 #include <tools/gen.hxx>
@@ -63,6 +63,6 @@ SVX_DLLPUBLIC bool ViewObjectContactPrimitiveHit(
 
 /////////////////////////////////////////////////////////////////////
 
-#endif //_SDRHITTESTHELPER_HXX
+#endif // INCLUDED_SVX_SDRHITTESTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

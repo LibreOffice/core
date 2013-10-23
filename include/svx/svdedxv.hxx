@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDEDXV_HXX
-#define _SVDEDXV_HXX
+#ifndef INCLUDED_SVX_SVDEDXV_HXX
+#define INCLUDED_SVX_SVDEDXV_HXX
 
 #include <rtl/ref.hxx>
 #include "svx/svxdllapi.h"
@@ -282,6 +282,6 @@ protected:
 
 };
 
-#endif //_SVDEDXV_HXX
+#endif // INCLUDED_SVX_SVDEDXV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

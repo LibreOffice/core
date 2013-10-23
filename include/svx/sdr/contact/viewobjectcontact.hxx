@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
-#define _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
+#ifndef INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACT_HXX
+#define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 
 #include <sal/types.h>
 
@@ -142,6 +142,6 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_CONTACT_VIEWOBJECTCONTACT_HXX
+#endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

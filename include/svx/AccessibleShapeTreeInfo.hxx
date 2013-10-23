@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_TREE_INFO_HXX
-#define _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_TREE_INFO_HXX
+#ifndef INCLUDED_SVX_ACCESSIBLESHAPETREEINFO_HXX
+#define INCLUDED_SVX_ACCESSIBLESHAPETREEINFO_HXX
 
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

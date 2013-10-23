@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_IPOLYPOLYGONEDITORCONTROLLER_HXX
-#define _SDR_IPOLYPOLYGONEDITORCONTROLLER_HXX
+#ifndef INCLUDED_SVX_IPOLYPOLYGONEDITORCONTROLLER_HXX
+#define INCLUDED_SVX_IPOLYPOLYGONEDITORCONTROLLER_HXX
 
 #include "svx/svxdllapi.h"
 #include <svx/svdedtv.hxx>
@@ -67,6 +67,6 @@ protected:
     ~IPolyPolygonEditorController() {}
 };
 
-#endif //_SDR_IPOLYPOLYGONEDITORCONTROLLER_HXX
+#endif // INCLUDED_SVX_IPOLYPOLYGONEDITORCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

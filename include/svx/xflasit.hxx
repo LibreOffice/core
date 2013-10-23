@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XFLASIT_HXX
-#define _SVX_XFLASIT_HXX
+#ifndef INCLUDED_SVX_XFLASIT_HXX
+#define INCLUDED_SVX_XFLASIT_HXX
 
 #include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"

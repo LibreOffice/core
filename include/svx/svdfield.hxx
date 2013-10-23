@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDFIELD_HXX
-#define _SVDFIELD_HXX
+#ifndef INCLUDED_SVX_SVDFIELD_HXX
+#define INCLUDED_SVX_SVDFIELD_HXX
 
 #include "svx/svxdllapi.h"
 
 void SVX_DLLPUBLIC SdrRegisterFieldClasses();
 
-#endif //_SVDFIELD_HXX
+#endif // INCLUDED_SVX_SVDFIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

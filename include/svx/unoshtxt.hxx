@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_UNOSHTXT_HXX
-#define SVX_UNOSHTXT_HXX
+#ifndef INCLUDED_SVX_UNOSHTXT_HXX
+#define INCLUDED_SVX_UNOSHTXT_HXX
 
 #include <memory>
 #include <editeng/unoedsrc.hxx>

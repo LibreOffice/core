@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XFLFTRIT_HXX
-#define _SVX_XFLFTRIT_HXX
+#ifndef INCLUDED_SVX_XFLFTRIT_HXX
+#define INCLUDED_SVX_XFLFTRIT_HXX
 
 #include <svx/xflgrit.hxx>
 #include "svx/svxdllapi.h"

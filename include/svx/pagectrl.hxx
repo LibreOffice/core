@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_PAGECTRL_HXX
-#define _SVX_PAGECTRL_HXX
+#ifndef INCLUDED_SVX_PAGECTRL_HXX
+#define INCLUDED_SVX_PAGECTRL_HXX
 
 #include <vcl/window.hxx>
 #include "svx/svxdllapi.h"
@@ -157,7 +157,7 @@ public:
     virtual Size GetOptimalSize() const;
 };
 
-#endif // #ifndef _SVX_PAGECTRL_HXX
+#endif // INCLUDED_SVX_PAGECTRL_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

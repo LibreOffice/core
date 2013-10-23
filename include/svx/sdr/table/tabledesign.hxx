@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_TABLE_DESIGN_HXX
-#define _SDR_TABLE_DESIGN_HXX
+#ifndef INCLUDED_SVX_SDR_TABLE_TABLEDESIGN_HXX
+#define INCLUDED_SVX_SDR_TABLE_TABLEDESIGN_HXX
 
 #include "svx/svxdllapi.h"
 

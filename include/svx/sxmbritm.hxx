@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SXMBRITM_HXX
-#define _SXMBRITM_HXX
+#ifndef INCLUDED_SVX_SXMBRITM_HXX
+#define INCLUDED_SVX_SXMBRITM_HXX
 
 #include <svx/svddef.hxx>
 

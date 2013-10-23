@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XBTMPIT_HXX
-#define _SVX_XBTMPIT_HXX
+#ifndef INCLUDED_SVX_XBTMPIT_HXX
+#define INCLUDED_SVX_XBTMPIT_HXX
 
 #include <svx/svxdllapi.h>
 #include <svx/xit.hxx>

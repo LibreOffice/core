@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVXSWFRAMEEXAMPLE_HXX
-#define _SVXSWFRAMEEXAMPLE_HXX
+#ifndef INCLUDED_SVX_SWFRAMEEXAMPLE_HXX
+#define INCLUDED_SVX_SWFRAMEEXAMPLE_HXX
 
 #include <vcl/window.hxx>
 #include <tools/color.hxx>
@@ -91,6 +91,6 @@ public:
 };
 
 
-#endif // _SVXSWFRAMEEXAMPLE_HXX
+#endif // INCLUDED_SVX_SWFRAMEEXAMPLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

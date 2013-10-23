@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDSNPV_HXX
-#define _SVDSNPV_HXX
+#ifndef INCLUDED_SVX_SVDSNPV_HXX
+#define INCLUDED_SVX_SVDSNPV_HXX
 
 #include <svx/svdpntv.hxx>
 #include <svx/svdhlpln.hxx>
@@ -309,6 +309,6 @@ public:
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDSNPV_HXX
+#endif // INCLUDED_SVX_SVDSNPV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

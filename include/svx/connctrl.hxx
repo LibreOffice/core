@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_CONNCTRL_HXX
-#define _SVX_CONNCTRL_HXX
+#ifndef INCLUDED_SVX_CONNCTRL_HXX
+#define INCLUDED_SVX_CONNCTRL_HXX
 
 #include <vcl/ctrl.hxx>
 #include "svx/svxdllapi.h"
@@ -62,6 +62,6 @@ public:
 };
 
 
-#endif // _SVX_CONNCTRL_HXX
+#endif // INCLUDED_SVX_CONNCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

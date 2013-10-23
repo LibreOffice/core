@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_DBTOOLSCLIENT_HXX
-#define SVX_DBTOOLSCLIENT_HXX
+#ifndef INCLUDED_SVX_DBTOOLSCLIENT_HXX
+#define INCLUDED_SVX_DBTOOLSCLIENT_HXX
 
 #include <connectivity/virtualdbtools.hxx>
 #include <osl/mutex.hxx>
@@ -198,7 +198,7 @@ namespace svxform
 }   // namespace svxform
 //........................................................................
 
-#endif // SVX_DBTOOLSCLIENT_HXX
+#endif // INCLUDED_SVX_DBTOOLSCLIENT_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

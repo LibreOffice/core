@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBILITY_IACCESSIBLE_VIEW_FORWARDER_HXX
-#define _SVX_ACCESSIBILITY_IACCESSIBLE_VIEW_FORWARDER_HXX
+#ifndef INCLUDED_SVX_IACCESSIBLEVIEWFORWARDER_HXX
+#define INCLUDED_SVX_IACCESSIBLEVIEWFORWARDER_HXX
 
 #include <sal/types.h>
 #include <tools/gen.hxx>

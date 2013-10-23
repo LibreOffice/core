@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDGLEV_HXX
-#define _SVDGLEV_HXX
+#ifndef INCLUDED_SVX_SVDGLEV_HXX
+#define INCLUDED_SVX_SVDGLEV_HXX
 
 #include "svx/svxdllapi.h"
 #include <svx/svdpoev.hxx>
@@ -90,6 +90,6 @@ public:
     void AlignMarkedGluePoints(SdrHorAlign eHor, SdrVertAlign eVert);
 };
 
-#endif //_SVDGLEV_HXX
+#endif // INCLUDED_SVX_SVDGLEV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

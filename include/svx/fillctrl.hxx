@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FILLCTRL_HXX
-#define _FILLCTRL_HXX
+#ifndef INCLUDED_SVX_FILLCTRL_HXX
+#define INCLUDED_SVX_FILLCTRL_HXX
 
 #include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -92,6 +92,6 @@ public:
     virtual void Resize();
 };
 
-#endif      // _FILLCTRL_HXX
+#endif // INCLUDED_SVX_FILLCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

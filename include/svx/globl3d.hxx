@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _E3D_GLOBL3D_HXX
-#define _E3D_GLOBL3D_HXX
+#ifndef INCLUDED_SVX_GLOBL3D_HXX
+#define INCLUDED_SVX_GLOBL3D_HXX
 
 #include <tools/solar.h>
 
@@ -37,6 +37,6 @@ const sal_uInt16 E3D_LATHEOBJ_ID    = 7;
 const sal_uInt16 E3D_COMPOUNDOBJ_ID = 8;
 const sal_uInt16 E3D_POLYGONOBJ_ID  = 9;
 
-#endif      // _E3D_GLOBL3D_HXX
+#endif // INCLUDED_SVX_GLOBL3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

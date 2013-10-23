@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_GALBRWS_HXX_
-#define _SVX_GALBRWS_HXX_
+#ifndef INCLUDED_SVX_GALBRWS_HXX
+#define INCLUDED_SVX_GALBRWS_HXX
 
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dockwin.hxx>
@@ -77,6 +77,6 @@ public:
     sal_Bool                KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };
 
-#endif // _SVX_GALBRWS_HXX_
+#endif // INCLUDED_SVX_GALBRWS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

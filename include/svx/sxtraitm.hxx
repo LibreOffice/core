@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SXTRAITM_HXX
-#define _SXTRAITM_HXX
+#ifndef INCLUDED_SVX_SXTRAITM_HXX
+#define INCLUDED_SVX_SXTRAITM_HXX
 
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>

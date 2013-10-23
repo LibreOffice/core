@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_FMGRIDCL_HXX
-#define _SVX_FMGRIDCL_HXX
+#ifndef INCLUDED_SVX_FMGRIDCL_HXX
+#define INCLUDED_SVX_FMGRIDCL_HXX
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -201,6 +201,6 @@ protected:
     sal_Bool isColumnSelected(sal_uInt16 nColumnId,DbGridColumn* _pColumn);
 };
 
-#endif // _SVX_FMGRIDCL_HXX
+#endif // INCLUDED_SVX_FMGRIDCL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

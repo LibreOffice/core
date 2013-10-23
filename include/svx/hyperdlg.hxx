@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_TAB_HYPERLINK_HXX
-#define _SVX_TAB_HYPERLINK_HXX
+#ifndef INCLUDED_SVX_HYPERDLG_HXX
+#define INCLUDED_SVX_HYPERDLG_HXX
 
 #include <sfx2/childwin.hxx>
 #include "svx/svxdllapi.h"
@@ -44,6 +44,6 @@ public:
     virtual sal_Bool    QueryClose();
 };
 
-#endif // _SVX_TAB_HYPERLINK_HXX
+#endif // INCLUDED_SVX_HYPERDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

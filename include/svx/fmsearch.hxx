@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FMSEARCH_HXX
-#define _FMSEARCH_HXX
+#ifndef INCLUDED_SVX_FMSEARCH_HXX
+#define INCLUDED_SVX_FMSEARCH_HXX
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <comphelper/stl_types.hxx>
@@ -73,6 +73,6 @@ struct FmSearchContext
     OUString                sFieldDisplayNames;     // if not empty : names to be displayed for the searchable fields (must have the same token count as strUsedFields !)
 };
 
-#endif // _FMSEARCH_HXX
+#endif // INCLUDED_SVX_FMSEARCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

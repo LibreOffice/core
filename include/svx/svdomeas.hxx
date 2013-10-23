@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOMEAS_HXX
-#define _SVDOMEAS_HXX
+#ifndef INCLUDED_SVX_SVDOMEAS_HXX
+#define INCLUDED_SVX_SVDOMEAS_HXX
 
 #include <svx/svdotext.hxx>
 #include "svx/svxdllapi.h"
@@ -205,6 +205,6 @@ public:
 //
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDOMEAS_HXX
+#endif // INCLUDED_SVX_SVDOMEAS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

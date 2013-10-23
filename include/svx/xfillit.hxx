@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FILLITEM_HXX
-#define _SVX_FILLITEM_HXX
+#ifndef INCLUDED_SVX_XFILLIT_HXX
+#define INCLUDED_SVX_XFILLIT_HXX
 
 #include <vcl/bitmap.hxx>
 #include <svx/xcolit.hxx>

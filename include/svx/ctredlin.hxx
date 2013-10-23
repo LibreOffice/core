@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_CTREDLIN_HXX
-#define _SVX_CTREDLIN_HXX
+#ifndef INCLUDED_SVX_CTREDLIN_HXX
+#define INCLUDED_SVX_CTREDLIN_HXX
 
 #include <svtools/headbar.hxx>
 #include <svtools/simptabl.hxx>
@@ -386,6 +386,6 @@ public:
 };
 
 
-#endif // _SVX_CTREDLIN_HXX
+#endif // INCLUDED_SVX_CTREDLIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

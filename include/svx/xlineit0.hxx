@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XLINEIT0_HXX
-#define _SVX_XLINEIT0_HXX
+#ifndef INCLUDED_SVX_XLINEIT0_HXX
+#define INCLUDED_SVX_XLINEIT0_HXX
 
 #include <svx/xenum.hxx>
 #include <svl/eitem.hxx>

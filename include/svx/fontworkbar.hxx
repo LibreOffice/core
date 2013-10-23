@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FONTWORK_BAR_HXX
-#define _SVX_FONTWORK_BAR_HXX
+#ifndef INCLUDED_SVX_FONTWORKBAR_HXX
+#define INCLUDED_SVX_FONTWORKBAR_HXX
 
 #include <sfx2/shell.hxx>
 #include <sfx2/module.hxx>
@@ -50,6 +50,6 @@ public:
 
 }
 
-#endif          // _SVX_FONTWORK_BAR_HXX
+#endif // INCLUDED_SVX_FONTWORKBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

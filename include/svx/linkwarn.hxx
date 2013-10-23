@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_LINKWARN_HXX
-#define _SFX_LINKWARN_HXX
+#ifndef INCLUDED_SVX_LINKWARN_HXX
+#define INCLUDED_SVX_LINKWARN_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -42,6 +42,6 @@ public:
     virtual ~SvxLinkWarningDialog();
 };
 
-#endif // #ifndef _SFX_LINKWARN_HXX
+#endif // INCLUDED_SVX_LINKWARN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

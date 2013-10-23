@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLSECURITY_STBCONTRL_HXX
-#define _XMLSECURITY_STBCONTRL_HXX
+#ifndef INCLUDED_SVX_XMLSECCTRL_HXX
+#define INCLUDED_SVX_XMLSECCTRL_HXX
 
 #include <sfx2/stbitem.hxx>
 #include "svx/svxdllapi.h"

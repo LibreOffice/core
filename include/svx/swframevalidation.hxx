@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVXSWFRAMEVALIDATION_HXX
-#define _SVXSWFRAMEVALIDATION_HXX
+#ifndef INCLUDED_SVX_SWFRAMEVALIDATION_HXX
+#define INCLUDED_SVX_SWFRAMEVALIDATION_HXX
 #include <sal/types.h>
 #include <tools/gen.hxx>
 #include <limits.h>

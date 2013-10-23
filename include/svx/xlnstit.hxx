@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XLNSTIT_HXX
-#define _SVX_XLNSTIT_HXX
+#ifndef INCLUDED_SVX_XLNSTIT_HXX
+#define INCLUDED_SVX_XLNSTIT_HXX
 
 #include <svx/xit.hxx>
 #include "svx/svxdllapi.h"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOGRAF_HXX
-#define _SVDOGRAF_HXX
+#ifndef INCLUDED_SVX_SVDOGRAF_HXX
+#define INCLUDED_SVX_SVDOGRAF_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <vcl/graph.hxx>
@@ -198,6 +198,6 @@ public:
     virtual SdrObject* getFullDragClone() const;
 };
 
-#endif //_SVDOGRAF_HXX
+#endif // INCLUDED_SVX_SVDOGRAF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

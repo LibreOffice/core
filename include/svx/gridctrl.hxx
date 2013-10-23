@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_GRIDCTRL_HXX
-#define _SVX_GRIDCTRL_HXX
+#ifndef INCLUDED_SVX_GRIDCTRL_HXX
+#define INCLUDED_SVX_GRIDCTRL_HXX
 
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
@@ -601,6 +601,6 @@ private:
 SV_IMPL_REF(DbGridRow);
 
 
-#endif // _SVX_GRIDCTRL_HXX
+#endif // INCLUDED_SVX_GRIDCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

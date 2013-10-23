@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOSHPRP_HXX
-#define _SVX_UNOSHPRP_HXX
+#ifndef INCLUDED_SVX_UNOSHPRP_HXX
+#define INCLUDED_SVX_UNOSHPRP_HXX
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>

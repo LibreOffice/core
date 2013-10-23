@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVX_F3DCHILD_HXX
-#define _SVX_F3DCHILD_HXX
+#ifndef INCLUDED_SVX_F3DCHILD_HXX
+#define INCLUDED_SVX_F3DCHILD_HXX
 
 
 #include <sfx2/childwin.hxx>
@@ -39,6 +39,6 @@ class SVX_DLLPUBLIC Svx3DChildWindow : public SfxChildWindow
     SFX_DECL_CHILDWINDOW_WITHID(Svx3DChildWindow);
 };
 
-#endif      // _SVX_F3DCHILD_HXX
+#endif // INCLUDED_SVX_F3DCHILD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _E3D_CUBE3D_HXX
-#define _E3D_CUBE3D_HXX
+#ifndef INCLUDED_SVX_CUBE3D_HXX
+#define INCLUDED_SVX_CUBE3D_HXX
 
 #include <svx/obj3d.hxx>
 #include "svx/svxdllapi.h"
@@ -83,6 +83,6 @@ public:
     virtual OUString TakeObjNamePlural() const;
 };
 
-#endif          // _E3D_CUBE3D_HXX
+#endif // INCLUDED_SVX_CUBE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

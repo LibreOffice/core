@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDUNDO_HXX
-#define _SVDUNDO_HXX
+#ifndef INCLUDED_SVX_SVDUNDO_HXX
+#define INCLUDED_SVX_SVDUNDO_HXX
 
 #include <svl/solar.hrc>
 #include <svl/undo.hxx>
@@ -775,6 +775,6 @@ public:
     virtual SdrUndoAction* CreateUndoPageChangeMasterPage(SdrPage& rChangedPage);
 };
 
-#endif //_SVDUNDO_HXX
+#endif // INCLUDED_SVX_SVDUNDO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

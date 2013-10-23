@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDDRAG_HXX
-#define _SVDDRAG_HXX
+#ifndef INCLUDED_SVX_SVDDRAG_HXX
+#define INCLUDED_SVX_SVDDRAG_HXX
 
 
 #include <tools/gen.hxx>
@@ -178,6 +178,6 @@ public:
     void TakeCreateRect(Rectangle& rRect) const;
 };
 
-#endif //_SVDDRAG_HXX
+#endif // INCLUDED_SVX_SVDDRAG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

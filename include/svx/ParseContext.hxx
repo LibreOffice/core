@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SVX_QUERYDESIGNCONTEXT_HXX
-#define SVX_QUERYDESIGNCONTEXT_HXX
+#ifndef INCLUDED_SVX_PARSECONTEXT_HXX
+#define INCLUDED_SVX_PARSECONTEXT_HXX
 
 #include <connectivity/IParseContext.hxx>
 #include <rtl/ustring.hxx>
@@ -71,7 +71,7 @@ namespace svxform
         const OSystemParseContext* getParseContext() const;
     };
 }
-#endif // SVX_QUERYDESIGNCONTEXT_HXX
+#endif // INCLUDED_SVX_PARSECONTEXT_HXX
 
 
 

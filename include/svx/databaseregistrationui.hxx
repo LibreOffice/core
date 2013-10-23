@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_DATABASE_REGISTRATION_UI_HXX
-#define SVX_DATABASE_REGISTRATION_UI_HXX
+#ifndef INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
+#define INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
 
 #include "svx/svxdllapi.h"
 #include <tools/solar.h>
@@ -42,6 +42,6 @@ namespace svx
 }   // namespace svx
 //........................................................................
 
-#endif // SVX_DATABASE_REGISTRATION_UI_HXX
+#endif // INCLUDED_SVX_DATABASEREGISTRATIONUI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

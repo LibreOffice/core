@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XFLBCKIT_HXX
-#define _SVX_XFLBCKIT_HXX
+#ifndef INCLUDED_SVX_XFLBCKIT_HXX
+#define INCLUDED_SVX_XFLBCKIT_HXX
 
 #include <svl/eitem.hxx>
 #include "svx/svxdllapi.h"

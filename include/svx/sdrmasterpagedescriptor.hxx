@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_MASTERPAGEDESCRIPTOR_HXX
-#define _SDR_MASTERPAGEDESCRIPTOR_HXX
+#ifndef INCLUDED_SVX_SDRMASTERPAGEDESCRIPTOR_HXX
+#define INCLUDED_SVX_SDRMASTERPAGEDESCRIPTOR_HXX
 
 #include <svx/sdrpageuser.hxx>
 #include <svx/svdsob.hxx>
@@ -89,6 +89,6 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_MASTERPAGEDESCRIPTOR_HXX
+#endif // INCLUDED_SVX_SDRMASTERPAGEDESCRIPTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

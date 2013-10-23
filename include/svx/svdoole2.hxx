@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOOLE2_HXX
-#define _SVDOOLE2_HXX
+#ifndef INCLUDED_SVX_SVDOOLE2_HXX
+#define INCLUDED_SVX_SVDOOLE2_HXX
 
 #include <svtools/embedhlp.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -190,6 +190,6 @@ public:
     virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 };
 
-#endif //_SVDOOLE2_HXX
+#endif // INCLUDED_SVX_SVDOOLE2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

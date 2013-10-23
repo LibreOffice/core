@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_DBCHARSETHELPER_HXX
-#define SVX_DBCHARSETHELPER_HXX
+#ifndef INCLUDED_SVX_DBCHARSETHELPER_HXX
+#define INCLUDED_SVX_DBCHARSETHELPER_HXX
 #include "svx/svxdllapi.h"
 #include "svx/dbtoolsclient.hxx"
 

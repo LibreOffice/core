@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_GALTHEME_HXX_
-#define _SVX_GALTHEME_HXX_
+#ifndef INCLUDED_SVX_GALTHEME_HXX
+#define INCLUDED_SVX_GALTHEME_HXX
 
 #include "svx/svxdllapi.h"
 

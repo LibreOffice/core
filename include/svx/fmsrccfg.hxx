@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FMSRCCF_HXX_
-#define _FMSRCCF_HXX_
+#ifndef INCLUDED_SVX_FMSRCCFG_HXX
+#define INCLUDED_SVX_FMSRCCFG_HXX
 
 #include <unotools/configvaluecontainer.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -142,6 +142,6 @@ namespace svxform
 
 // ===================================================================================================
 
-#endif // _FMSRCCF_HXX_
+#endif // INCLUDED_SVX_FMSRCCFG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

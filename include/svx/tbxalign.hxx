@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TBXALIGN_HXX
-#define _TBXALIGN_HXX
+#ifndef INCLUDED_SVX_TBXALIGN_HXX
+#define INCLUDED_SVX_TBXALIGN_HXX
 
 #include <sfx2/tbxctrl.hxx>
 #include "svx/svxdllapi.h"

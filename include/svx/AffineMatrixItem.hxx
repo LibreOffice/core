@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_AFFINEMATRIXITEM_HXX
-#define _SVX_AFFINEMATRIXITEM_HXX
+#ifndef INCLUDED_SVX_AFFINEMATRIXITEM_HXX
+#define INCLUDED_SVX_AFFINEMATRIXITEM_HXX
 
 #include <svx/svxdllapi.h>
 #include <svl/poolitem.hxx>
@@ -48,7 +48,7 @@ public:
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
-#endif // _SVX_AFFINEMATRIXITEM_HXX
+#endif // INCLUDED_SVX_AFFINEMATRIXITEM_HXX
 
 // eof
 

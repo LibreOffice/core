@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_OPTGENRL_HXX
-#define _SVX_OPTGENRL_HXX
+#ifndef INCLUDED_SVX_OPTGENRL_HXX
+#define INCLUDED_SVX_OPTGENRL_HXX
 
 // Defines for setting the focus of a Edit via a slot from external.
 #define UNKNOWN_EDIT    ((sal_uInt16)0)
@@ -37,6 +37,6 @@
 #define FAX_EDIT        ((sal_uInt16)14)
 #define EMAIL_EDIT      ((sal_uInt16)15)
 
-#endif // #ifndef _SVX_OPTGENRL_HXX
+#endif // INCLUDED_SVX_OPTGENRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

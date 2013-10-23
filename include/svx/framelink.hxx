@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FRAMELINK_HXX
-#define SVX_FRAMELINK_HXX
+#ifndef INCLUDED_SVX_FRAMELINK_HXX
+#define INCLUDED_SVX_FRAMELINK_HXX
 
 #include <algorithm>
 #include <sal/types.h>

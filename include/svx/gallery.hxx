@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GALLERY_HXX_
-#define _GALLERY_HXX_
+#ifndef INCLUDED_SVX_GALLERY_HXX
+#define INCLUDED_SVX_GALLERY_HXX
 
 #include <tools/solar.h>
 #include <tools/urlobj.hxx>
@@ -85,6 +85,6 @@ public:
     static sal_Bool                 EndLocking( sal_uIntPtr nThemeId );
 };
 
-#endif // _GALLERY_HXX_
+#endif // INCLUDED_SVX_GALLERY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

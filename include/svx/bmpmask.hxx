@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _BMPMASK_HXX_
-#define _BMPMASK_HXX_
+#ifndef INCLUDED_SVX_BMPMASK_HXX
+#define INCLUDED_SVX_BMPMASK_HXX
 
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dockwin.hxx>
@@ -176,6 +176,6 @@ private:
     SVX_DLLPRIVATE void SetAccessibleNames (void);
 };
 
-#endif // _BMPMASK_HXX_
+#endif // INCLUDED_SVX_BMPMASK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

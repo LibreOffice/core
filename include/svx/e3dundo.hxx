@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _E3D_UNDO_HXX
-#define _E3D_UNDO_HXX
+#ifndef INCLUDED_SVX_E3DUNDO_HXX
+#define INCLUDED_SVX_E3DUNDO_HXX
 
 #include <svx/svdundo.hxx>
 #include <svx/scene3d.hxx>
@@ -107,6 +107,6 @@ class SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
         virtual void Repeat();
 };
 
-#endif          // _E3D_CUBE3D_HXX
+#endif // INCLUDED_SVX_E3DUNDO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _E3D_POLYSC3D_HXX
-#define _E3D_POLYSC3D_HXX
+#ifndef INCLUDED_SVX_POLYSC3D_HXX
+#define INCLUDED_SVX_POLYSC3D_HXX
 
 #include <svx/svdpage.hxx>
 #include <svx/scene3d.hxx>
@@ -40,6 +40,6 @@ public:
     virtual E3dPolyScene* Clone() const;
 };
 
-#endif          // _E3D_POLYSC3D_HXX
+#endif // INCLUDED_SVX_POLYSC3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

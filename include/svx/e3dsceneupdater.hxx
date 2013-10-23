@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _E3D_SCENEUPDATER_HXX
-#define _E3D_SCENEUPDATER_HXX
+#ifndef INCLUDED_SVX_E3DSCENEUPDATER_HXX
+#define INCLUDED_SVX_E3DSCENEUPDATER_HXX
 
 #include <svx/svxdllapi.h>
 
@@ -63,6 +63,6 @@ public:
     ~E3DModifySceneSnapRectUpdater();
 };
 
-#endif          // _E3D_SCENEUPDATER_HXX
+#endif // INCLUDED_SVX_E3DSCENEUPDATER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

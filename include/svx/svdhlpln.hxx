@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDHLPLN_HXX
-#define _SVDHLPLN_HXX
+#ifndef INCLUDED_SVX_SVDHLPLN_HXX
+#define INCLUDED_SVX_SVDHLPLN_HXX
 
 #include <sal/types.h>
 #include <tools/color.hxx>
@@ -102,6 +102,6 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDHLPLN_HXX
+#endif // INCLUDED_SVX_SVDHLPLN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDXCGV_HXX
-#define _SVDXCGV_HXX
+#ifndef INCLUDED_SVX_SVDXCGV_HXX
+#define INCLUDED_SVX_SVDXCGV_HXX
 
 #include <svx/svdedxv.hxx>
 
@@ -115,6 +115,6 @@ public:
     sal_Bool            PasteClipboard( OutputDevice* pOut = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT, sal_uInt32 nOptions = 0 );
 };
 
-#endif //_SVDXCGV_HXX
+#endif // INCLUDED_SVX_SVDXCGV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

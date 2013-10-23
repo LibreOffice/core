@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XTABLE_HXX
-#define _XTABLE_HXX
+#ifndef INCLUDED_SVX_XTABLE_HXX
+#define INCLUDED_SVX_XTABLE_HXX
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -432,6 +432,6 @@ inline XBitmapListRef XPropertyList::AsBitmapList() { return XBitmapListRef( sta
 inline XLineEndListRef XPropertyList::AsLineEndList() { return XLineEndListRef( static_cast<XLineEndList *> (this) ); }
 inline XGradientListRef XPropertyList::AsGradientList() { return XGradientListRef( static_cast<XGradientList *> (this) ); }
 
-#endif // _XTABLE_HXX
+#endif // INCLUDED_SVX_XTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

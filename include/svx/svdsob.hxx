@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDSOB_HXX
-#define _SVDSOB_HXX
+#ifndef INCLUDED_SVX_SVDSOB_HXX
+#define INCLUDED_SVX_SVDSOB_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/stream.hxx>
@@ -112,6 +112,6 @@ inline SvStream& operator>>(SvStream& rIn, SetOfByte& rSet)
     return rIn;
 }
 
-#endif // _SVDSOB_HXX
+#endif // INCLUDED_SVX_SVDSOB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

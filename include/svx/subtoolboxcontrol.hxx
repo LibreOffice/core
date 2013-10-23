@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_SUBTOOLBOXCONTROL_HXX
-#define _SVX_SUBTOOLBOXCONTROL_HXX
+#ifndef INCLUDED_SVX_SUBTOOLBOXCONTROL_HXX
+#define INCLUDED_SVX_SUBTOOLBOXCONTROL_HXX
 
 #include "svx/svxdllapi.h"
 #include <sfx2/tbxctrl.hxx>

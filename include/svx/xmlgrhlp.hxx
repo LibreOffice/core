@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLGRHLP_HXX
-#define _XMLGRHLP_HXX
+#ifndef INCLUDED_SVX_XMLGRHLP_HXX
+#define INCLUDED_SVX_XMLGRHLP_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include <osl/mutex.hxx>

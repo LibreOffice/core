@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOTEXT_HXX
-#define _SVDOTEXT_HXX
+#ifndef INCLUDED_SVX_SVDOTEXT_HXX
+#define INCLUDED_SVX_SVDOTEXT_HXX
 
 #include <vcl/field.hxx>
 #include <svx/itextprovider.hxx>
@@ -592,6 +592,6 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDOTEXT_HXX
+#endif // INCLUDED_SVX_SVDOTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

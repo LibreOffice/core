@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XPOOL_HXX
-#define _XPOOL_HXX
+#ifndef INCLUDED_SVX_XPOOL_HXX
+#define INCLUDED_SVX_XPOOL_HXX
 
 #include <svl/itempool.hxx>
 #include <svx/xdef.hxx>
@@ -49,6 +49,6 @@ protected:
     virtual ~XOutdevItemPool();
 };
 
-#endif      // _XPOOL_HXX
+#endif // INCLUDED_SVX_XPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

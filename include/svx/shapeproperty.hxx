@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SHAPEPROPERTY_HXX
-#define SVX_SHAPEPROPERTY_HXX
+#ifndef INCLUDED_SVX_SHAPEPROPERTY_HXX
+#define INCLUDED_SVX_SHAPEPROPERTY_HXX
 
 //........................................................................
 namespace svx
@@ -46,6 +46,6 @@ namespace svx
 } // namespace svx
 //........................................................................
 
-#endif // SVX_SHAPEPROPERTY_HXX
+#endif // INCLUDED_SVX_SHAPEPROPERTY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDPNTV_HXX
-#define _SVDPNTV_HXX
+#ifndef INCLUDED_SVX_SVDPNTV_HXX
+#define INCLUDED_SVX_SVDPNTV_HXX
 
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
@@ -549,6 +549,6 @@ public:
     const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
 };
 
-#endif //_SVDPNTV_HXX
+#endif // INCLUDED_SVX_SVDPNTV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

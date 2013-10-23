@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDCRTV_HXX
-#define _SVDCRTV_HXX
+#ifndef INCLUDED_SVX_SVDCRTV_HXX
+#define INCLUDED_SVX_SVDCRTV_HXX
 
 #include <svx/svddrgv.hxx>
 #include "svx/svxdllapi.h"
@@ -176,6 +176,6 @@ public:
     sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
 };
 
-#endif //_SVDCRTV_HXX
+#endif // INCLUDED_SVX_SVDCRTV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XPOLY_HXX
-#define _XPOLY_HXX
+#ifndef INCLUDED_SVX_XPOLY_HXX
+#define INCLUDED_SVX_XPOLY_HXX
 
 #include <tools/solar.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -179,6 +179,6 @@ public:
      explicit XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon);
 };
 
-#endif      // _XPOLY_HXX
+#endif // INCLUDED_SVX_XPOLY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

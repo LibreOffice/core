@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FMSRCIMP_HXX
-#define _FMSRCIMP_HXX
+#ifndef INCLUDED_SVX_FMSRCIMP_HXX
+#define INCLUDED_SVX_FMSRCIMP_HXX
 
 #include <svx/fmtools.hxx>
 #include "svx/svxdllapi.h"
@@ -382,6 +382,6 @@ private:
     DECL_LINK(OnNewRecordCount, void*);
 };
 
-#endif // _FMSRCIMP_HXX
+#endif // INCLUDED_SVX_FMSRCIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

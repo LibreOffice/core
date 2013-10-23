@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _E3D_LATHE3D_HXX
-#define _E3D_LATHE3D_HXX
+#ifndef INCLUDED_SVX_LATHE3D_HXX
+#define INCLUDED_SVX_LATHE3D_HXX
 
 #include <svx/obj3d.hxx>
 #include "svx/svxdllapi.h"
@@ -109,6 +109,6 @@ private:
     virtual SdrAttrObj* GetBreakObj();
 };
 
-#endif          // _E3D_LATHE3D_HXX
+#endif // INCLUDED_SVX_LATHE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
-#define _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
+#ifndef INCLUDED_SVX_ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
+#define INCLUDED_SVX_ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
 
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>

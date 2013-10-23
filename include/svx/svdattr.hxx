@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDATTR_HXX
-#define _SVDATTR_HXX
+#ifndef INCLUDED_SVX_SVDATTR_HXX
+#define INCLUDED_SVX_SVDATTR_HXX
 
 #include <svl/solar.hrc>
 #include <tools/solar.h>

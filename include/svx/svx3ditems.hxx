@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX3DITEMS_HXX
-#define _SVX3DITEMS_HXX
+#ifndef INCLUDED_SVX_SVX3DITEMS_HXX
+#define INCLUDED_SVX_SVX3DITEMS_HXX
 
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -366,6 +366,6 @@ public:
     SVX_DLLPRIVATE virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
 };
 
-#endif // _SVX3DITEMS_HXX
+#endif // INCLUDED_SVX_SVX3DITEMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XPROPERTYENTRY_HXX
-#define _XPROPERTYENTRY_HXX
+#ifndef INCLUDED_SVX_XPROPERTYENTRY_HXX
+#define INCLUDED_SVX_XPROPERTYENTRY_HXX
 
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
@@ -45,6 +45,6 @@ public:
     const Bitmap& GetUiBitmap() const { return maUiBitmap; }
 };
 
-#endif // _XPROPERTYENTRY_HXX
+#endif // INCLUDED_SVX_XPROPERTYENTRY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

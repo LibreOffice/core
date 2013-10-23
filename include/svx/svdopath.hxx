@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOPATH_HXX
-#define _SVDOPATH_HXX
+#ifndef INCLUDED_SVX_SVDOPATH_HXX
+#define INCLUDED_SVX_SVDOPATH_HXX
 
 #include <svx/svdotext.hxx>
 #include <svx/xpoly.hxx>
@@ -188,6 +188,6 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDOPATH_HXX
+#endif // INCLUDED_SVX_SVDOPATH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
-#define INCLUDED_SVX_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#ifndef INCLUDED_SVX_SDR_PRIMITIVE2D_SVX_PRIMITIVETYPES2D_HXX
+#define INCLUDED_SVX_SDR_PRIMITIVE2D_SVX_PRIMITIVETYPES2D_HXX
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
@@ -51,6 +51,6 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // INCLUDED_SVX_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#endif // INCLUDED_SVX_SDR_PRIMITIVE2D_SVX_PRIMITIVETYPES2D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

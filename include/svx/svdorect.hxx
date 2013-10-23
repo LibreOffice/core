@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDORECT_HXX
-#define _SVDORECT_HXX
+#ifndef INCLUDED_SVX_SVDORECT_HXX
+#define INCLUDED_SVX_SVDORECT_HXX
 
 #include <svx/svdotext.hxx>
 #include "svx/svxdllapi.h"
@@ -121,6 +121,6 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 };
 
-#endif //_SVDORECT_HXX
+#endif // INCLUDED_SVX_SVDORECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

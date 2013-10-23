@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FMGLOB_HXX
-#define _SVX_FMGLOB_HXX
+#ifndef INCLUDED_SVX_FMGLOB_HXX
+#define INCLUDED_SVX_FMGLOB_HXX
 
 #include <tools/solar.h>
 #include <svx/svdobj.hxx>

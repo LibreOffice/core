@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_UNOWPAGE_HXX
-#define _SVX_UNOWPAGE_HXX
+#ifndef INCLUDED_SVX_UNOPAGE_HXX
+#define INCLUDED_SVX_UNOPAGE_HXX
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/interfacecontainer.hxx>

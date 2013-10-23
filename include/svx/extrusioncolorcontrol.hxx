@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_EXTRUSIONCOLORCONTROL_HXX
-#define _SVX_EXTRUSIONCOLORCONTROL_HXX
+#ifndef INCLUDED_SVX_EXTRUSIONCOLORCONTROL_HXX
+#define INCLUDED_SVX_EXTRUSIONCOLORCONTROL_HXX
 
 #include <sfx2/tbxctrl.hxx>
 #include "svx/svxdllapi.h"
@@ -45,6 +45,6 @@ public:
 
 }
 
-#endif      // _SVX_EXTRUSIONCOLORCONTROL_HXX
+#endif // INCLUDED_SVX_EXTRUSIONCOLORCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MSDFFDEF_HXX
-#define _MSDFFDEF_HXX
+#ifndef INCLUDED_SVX_MSDFFDEF_HXX
+#define INCLUDED_SVX_MSDFFDEF_HXX
 
 #include <sal/types.h>
 #include <tools/solar.h>

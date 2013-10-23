@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SDSHITM_HXX
-#define _SDSHITM_HXX
+#ifndef INCLUDED_SVX_SDSHITM_HXX
+#define INCLUDED_SVX_SDSHITM_HXX
 
 #include <svx/sdooitm.hxx>
 #include <svx/svddef.hxx>

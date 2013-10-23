@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDTRANS_HXX
-#define _SVDTRANS_HXX
+#ifndef INCLUDED_SVX_SVDTRANS_HXX
+#define INCLUDED_SVX_SVDTRANS_HXX
 
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
@@ -297,6 +297,6 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDTRANS_HXX
+#endif // INCLUDED_SVX_SVDTRANS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDASAITM_HXX
-#define _SDASAITM_HXX
+#ifndef INCLUDED_SVX_SDASAITM_HXX
+#define INCLUDED_SVX_SDASAITM_HXX
 
 #include <vector>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XFLGRIT_HXX
-#define _SVX_XFLGRIT_HXX
+#ifndef INCLUDED_SVX_XFLGRIT_HXX
+#define INCLUDED_SVX_XFLGRIT_HXX
 
 #include <svx/xit.hxx>
 #include <svx/xgrad.hxx>

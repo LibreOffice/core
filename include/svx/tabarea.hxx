@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_TAB_AREA_HXX
-#define _SVX_TAB_AREA_HXX
+#ifndef INCLUDED_SVX_TABAREA_HXX
+#define INCLUDED_SVX_TABAREA_HXX
 
 // enum ------------------------------------------------------------------
 
@@ -47,6 +47,6 @@ typedef sal_uInt16 ChangeType; // auch in tab_line.hxx (mitpflegen !!!)
 #define CT_CHANGED              ( (ChangeType) 0x0002 )
 #define CT_SAVED                ( (ChangeType) 0x0004 )
 
-#endif // _SVX_TAB_AREA_HXX
+#endif // INCLUDED_SVX_TABAREA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

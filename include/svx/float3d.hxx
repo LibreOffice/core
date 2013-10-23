@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FLOAT3D_HXX
-#define _SVX_FLOAT3D_HXX
+#ifndef INCLUDED_SVX_FLOAT3D_HXX
+#define INCLUDED_SVX_FLOAT3D_HXX
 
 #include <sfx2/ctrlitem.hxx>
 #include <vcl/fixed.hxx>
@@ -286,6 +286,6 @@ public:
     sal_Bool GetState() const { return bState; }
 };
 
-#endif      // _SVX_FLOAT3D_HXX
+#endif // INCLUDED_SVX_FLOAT3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

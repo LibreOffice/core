@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDDRGMT_HXX
-#define _SVDDRGMT_HXX
+#ifndef INCLUDED_SVX_SVDDRGMT_HXX
+#define INCLUDED_SVX_SVDDRGMT_HXX
 
 #include <svx/svddrgv.hxx>
 #include "svx/svxdllapi.h"
@@ -299,6 +299,6 @@ public:
     virtual Pointer GetSdrDragPointer() const;
 };
 
-#endif //_SVDDRGMT_HXX
+#endif // INCLUDED_SVX_SVDDRGMT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

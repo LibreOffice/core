@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOAPI_HXX_
-#define _SVX_UNOAPI_HXX_
+#ifndef INCLUDED_SVX_UNOAPI_HXX
+#define INCLUDED_SVX_UNOAPI_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -89,6 +89,6 @@ SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
 SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
     SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rApiName) throw();
 
-#endif // _SVX_UNOAPI_HXX_
+#endif // INCLUDED_SVX_UNOAPI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

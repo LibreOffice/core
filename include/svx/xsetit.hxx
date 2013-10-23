@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XSETITEM_HXX
-#define _SVX_XSETITEM_HXX
+#ifndef INCLUDED_SVX_XSETIT_HXX
+#define INCLUDED_SVX_XSETIT_HXX
 
 #include <svx/xit.hxx>
 #include <svl/metitem.hxx>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_DLGUTIL_HXX
-#define _SVX_DLGUTIL_HXX
+#ifndef INCLUDED_SVX_DLGUTIL_HXX
+#define INCLUDED_SVX_DLGUTIL_HXX
 
 #include <svtools/unitconv.hxx>
 #include <svx/svxdllapi.h>

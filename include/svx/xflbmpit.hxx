@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XFLBMPIT_HXX
-#define _SVX_XFLBMPIT_HXX
+#ifndef INCLUDED_SVX_XFLBMPIT_HXX
+#define INCLUDED_SVX_XFLBMPIT_HXX
 
 #include <svl/eitem.hxx>
 #include "svx/rectenum.hxx"

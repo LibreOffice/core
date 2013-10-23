@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XOUTBMP_HXX
-#define _XOUTBMP_HXX
+#ifndef INCLUDED_SVX_XOUTBMP_HXX
+#define INCLUDED_SVX_XOUTBMP_HXX
 
 #include <vcl/graph.hxx>
 #include <com/sun/star/uno/Sequence.h>
@@ -69,6 +69,6 @@ public:
 
 SVX_DLLPUBLIC sal_Bool DitherBitmap( Bitmap& rBitmap );
 
-#endif // _XOUTBMP_HXX
+#endif // INCLUDED_SVX_XOUTBMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

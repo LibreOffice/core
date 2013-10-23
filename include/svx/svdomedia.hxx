@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVDOMEDIA_HXX
-#define SVDOMEDIA_HXX
+#ifndef INCLUDED_SVX_SVDOMEDIA_HXX
+#define INCLUDED_SVX_SVDOMEDIA_HXX
 
 #include <svx/svdorect.hxx>
 #include <avmedia/mediaitem.hxx>
@@ -83,6 +83,6 @@ private:
         ::boost::scoped_ptr<Impl> m_pImpl;
 };
 
-#endif // SVDOMEDIA_HXX
+#endif // INCLUDED_SVX_SVDOMEDIA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

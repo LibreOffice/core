@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDGMOITM_HXX
-#define _SDGMOITM_HXX
+#ifndef INCLUDED_SVX_SDGMOITM_HXX
+#define INCLUDED_SVX_SDGMOITM_HXX
 
 #include <svtools/grfmgr.hxx>
 #include <svl/eitem.hxx>
@@ -51,6 +51,6 @@ public:
 
 };
 
-#endif // _SDGMOITM_HXX
+#endif // INCLUDED_SVX_SDGMOITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

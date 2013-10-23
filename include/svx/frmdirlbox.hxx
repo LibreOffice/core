@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FRMDIRLBOX_HXX
-#define _SVX_FRMDIRLBOX_HXX
+#ifndef INCLUDED_SVX_FRMDIRLBOX_HXX
+#define INCLUDED_SVX_FRMDIRLBOX_HXX
 
 #include <vcl/lstbox.hxx>
 #include <sfx2/itemconnect.hxx>

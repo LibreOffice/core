@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CHARTHELPER_HXX
-#define CHARTHELPER_HXX
+#ifndef INCLUDED_SVX_CHARTHELPER_HXX
+#define INCLUDED_SVX_CHARTHELPER_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -62,6 +62,6 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //CHARTHELPER_HXX
+#endif // INCLUDED_SVX_CHARTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

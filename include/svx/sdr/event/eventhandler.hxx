@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_EVENT_EVENTHANDLER_HXX
-#define _SDR_EVENT_EVENTHANDLER_HXX
+#ifndef INCLUDED_SVX_SDR_EVENT_EVENTHANDLER_HXX
+#define INCLUDED_SVX_SDR_EVENT_EVENTHANDLER_HXX
 
 #include <sal/types.h>
 
@@ -127,6 +127,6 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_EVENT_EVENTHANDLER_HXX
+#endif // INCLUDED_SVX_SDR_EVENT_EVENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

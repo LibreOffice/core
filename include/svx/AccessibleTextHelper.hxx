@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
-#define _SVX_ACCESSILE_TEXT_HELPER_HXX_
+#ifndef INCLUDED_SVX_ACCESSIBLETEXTHELPER_HXX
+#define INCLUDED_SVX_ACCESSIBLETEXTHELPER_HXX
 
 #include <memory>
 #include <sal/types.h>
@@ -420,6 +420,6 @@ namespace accessibility
 
 } // end of namespace accessibility
 
-#endif /* _SVX_ACCESSILE_TEXT_HELPER_HXX_ */
+#endif // INCLUDED_SVX_ACCESSIBLETEXTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

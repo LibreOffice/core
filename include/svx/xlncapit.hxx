@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XLNCAPIT_HXX
-#define _SVX_XLNCAPIT_HXX
+#ifndef INCLUDED_SVX_XLNCAPIT_HXX
+#define INCLUDED_SVX_XLNCAPIT_HXX
 
 #include <svx/svxdllapi.h>
 #include <svl/eitem.hxx>
@@ -50,6 +50,6 @@ public:
     com::sun::star::drawing::LineCap GetValue() const;
 };
 
-#endif // _SVX_XLNCAPIT_HXX
+#endif // INCLUDED_SVX_XLNCAPIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

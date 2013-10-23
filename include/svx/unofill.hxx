@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOFILL_HXX_
-#define _SVX_UNOFILL_HXX_
+#ifndef INCLUDED_SVX_UNOFILL_HXX
+#define INCLUDED_SVX_UNOFILL_HXX
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include "svx/svxdllapi.h"
@@ -32,6 +32,6 @@ SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterfac
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvxUnoMarkerTable_createInstance( SdrModel* pModel );
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvxUnoDashTable_createInstance( SdrModel* pModel );
 
-#endif // _SVX_UNOFILL_HXX_
+#endif // INCLUDED_SVX_UNOFILL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

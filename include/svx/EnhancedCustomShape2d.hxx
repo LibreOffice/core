@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENHANCEDCUSTOMSHAPE2D_HXX
-#define _ENHANCEDCUSTOMSHAPE2D_HXX
+#ifndef INCLUDED_SVX_ENHANCEDCUSTOMSHAPE2D_HXX
+#define INCLUDED_SVX_ENHANCEDCUSTOMSHAPE2D_HXX
 
 #include <svx/msdffdef.hxx>
 #include <svx/sdasitm.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_OVERLAY_OVERLAYMANAGER_HXX
-#define _SDR_OVERLAY_OVERLAYMANAGER_HXX
+#ifndef INCLUDED_SVX_SDR_OVERLAY_OVERLAYMANAGER_HXX
+#define INCLUDED_SVX_SDR_OVERLAY_OVERLAYMANAGER_HXX
 
 #include <boost/utility.hpp>
 #include <rtl/ref.hxx>
@@ -146,6 +146,6 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_OVERLAY_OVERLAYMANAGER_HXX
+#endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

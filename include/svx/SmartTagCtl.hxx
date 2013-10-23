@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_SMARTTAGSCONTROL_HXX
-#define _SVX_SMARTTAGSCONTROL_HXX
+#ifndef INCLUDED_SVX_SMARTTAGCTL_HXX
+#define INCLUDED_SVX_SMARTTAGCTL_HXX
 
 #include <tools/link.hxx>
 #include <sfx2/mnuitem.hxx>

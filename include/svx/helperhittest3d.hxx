@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_HELPERHITTEST_HXX
-#define INCLUDED_SVX_HELPERHITTEST_HXX
+#ifndef INCLUDED_SVX_HELPERHITTEST3D_HXX
+#define INCLUDED_SVX_HELPERHITTEST3D_HXX
 
 #include "svx/svxdllapi.h"
 #include <sal/types.h>
@@ -97,6 +97,6 @@ bool checkHitSingle3DObject(
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // INCLUDED_SVX_HELPERHITTEST_HXX
+#endif // INCLUDED_SVX_HELPERHITTEST3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

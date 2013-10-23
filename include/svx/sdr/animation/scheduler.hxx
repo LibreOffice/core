@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_ANIMATION_SCHEDULER_HXX
-#define _SDR_ANIMATION_SCHEDULER_HXX
+#ifndef INCLUDED_SVX_SDR_ANIMATION_SCHEDULER_HXX
+#define INCLUDED_SVX_SDR_ANIMATION_SCHEDULER_HXX
 
 #include <sal/types.h>
 #include <vcl/timer.hxx>
@@ -143,6 +143,6 @@ namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_ANIMATION_SCHEDULER_HXX
+#endif // INCLUDED_SVX_SDR_ANIMATION_SCHEDULER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

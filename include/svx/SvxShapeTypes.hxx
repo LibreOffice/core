@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
-#define _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
+#ifndef INCLUDED_SVX_SVXSHAPETYPES_HXX
+#define INCLUDED_SVX_SVXSHAPETYPES_HXX
 
 #include <svx/ShapeTypeHandler.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>

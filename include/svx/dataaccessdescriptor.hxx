@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
-#define _SVX_DATACCESSDESCRIPTOR_HXX_
+#ifndef INCLUDED_SVX_DATAACCESSDESCRIPTOR_HXX
+#define INCLUDED_SVX_DATAACCESSDESCRIPTOR_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -130,7 +130,7 @@ namespace svx
 }   // namespace svx
 //........................................................................
 
-#endif // _SVX_DATACCESSDESCRIPTOR_HXX_
+#endif // INCLUDED_SVX_DATAACCESSDESCRIPTOR_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

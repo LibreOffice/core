@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_SVDOTABLE_HXX
-#define _SVX_SVDOTABLE_HXX
+#ifndef INCLUDED_SVX_SVDOTABLE_HXX
+#define INCLUDED_SVX_SVDOTABLE_HXX
 
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

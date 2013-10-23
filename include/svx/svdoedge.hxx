@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOEDGE_HXX
-#define _SVDOEDGE_HXX
+#ifndef INCLUDED_SVX_SVDOEDGE_HXX
+#define INCLUDED_SVX_SVDOEDGE_HXX
 
 #include <svx/svdotext.hxx>
 #include <svx/svdglue.hxx>
@@ -433,6 +433,6 @@ public:
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDOEDGE_HXX
+#endif // INCLUDED_SVX_SVDOEDGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

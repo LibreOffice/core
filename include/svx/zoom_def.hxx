@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ZOOM_DEF_HXX
-#define _SVX_ZOOM_DEF_HXX
+#ifndef INCLUDED_SVX_ZOOM_DEF_HXX
+#define INCLUDED_SVX_ZOOM_DEF_HXX
 
 #define ZOOMBTN_OPTIMAL     ((sal_uInt16)0x0001)
 #define ZOOMBTN_PAGEWIDTH   ((sal_uInt16)0x0002)

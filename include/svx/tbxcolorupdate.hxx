@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_TBXCOLORUPDATE_HXX
-#define SVX_TBXCOLORUPDATE_HXX
+#ifndef INCLUDED_SVX_TBXCOLORUPDATE_HXX
+#define INCLUDED_SVX_TBXCOLORUPDATE_HXX
 
 #include <svx/svxdllapi.h>
 
@@ -64,6 +64,6 @@ namespace svx
 } // namespace svx
 //........................................................................
 
-#endif // SVX_TBXCOLORUPDATE_HXX
+#endif // INCLUDED_SVX_TBXCOLORUPDATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

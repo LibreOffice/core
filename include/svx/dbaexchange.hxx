@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_DBAEXCHANGE_HXX_
-#define _SVX_DBAEXCHANGE_HXX_
+#ifndef INCLUDED_SVX_DBAEXCHANGE_HXX
+#define INCLUDED_SVX_DBAEXCHANGE_HXX
 
 #include <svtools/transfer.hxx>
 #include <comphelper/stl_types.hxx>
@@ -285,6 +285,6 @@ namespace svx
 }   // namespace svx
 //........................................................................
 
-#endif // _SVX_DBAEXCHANGE_HXX_
+#endif // INCLUDED_SVX_DBAEXCHANGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

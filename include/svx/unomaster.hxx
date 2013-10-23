@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOMASTER_HXX
-#define _SVX_UNOMASTER_HXX
+#ifndef INCLUDED_SVX_UNOMASTER_HXX
+#define INCLUDED_SVX_UNOMASTER_HXX
 
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Any.h>

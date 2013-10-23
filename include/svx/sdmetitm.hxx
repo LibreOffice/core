@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SDMETITM_HXX
-#define _SDMETITM_HXX
+#ifndef INCLUDED_SVX_SDMETITM_HXX
+#define INCLUDED_SVX_SDMETITM_HXX
 
 #include <svl/intitem.hxx>
 #include "svx/svxdllapi.h"

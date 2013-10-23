@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDGLUE_HXX
-#define _SVDGLUE_HXX
+#ifndef INCLUDED_SVX_SVDGLUE_HXX
+#define INCLUDED_SVX_SVDGLUE_HXX
 
 class Window;
 class OutputDevice;
@@ -142,6 +142,6 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif //_SVDGLUE_HXX
+#endif // INCLUDED_SVX_SVDGLUE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

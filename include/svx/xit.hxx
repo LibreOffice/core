@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XIT_HXX
-#define _SVX_XIT_HXX
+#ifndef INCLUDED_SVX_XIT_HXX
+#define INCLUDED_SVX_XIT_HXX
 
 #include <svl/stritem.hxx>
 #include <svx/xtable.hxx>

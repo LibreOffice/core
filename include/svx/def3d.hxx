@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_DEF3D_HXX
-#define _SVX_DEF3D_HXX
+#ifndef INCLUDED_SVX_DEF3D_HXX
+#define INCLUDED_SVX_DEF3D_HXX
 
 #include <math.h>
 #include <tools/solar.h>

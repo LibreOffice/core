@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDOBJ_HXX
-#define _SVDOBJ_HXX
+#ifndef INCLUDED_SVX_SVDOBJ_HXX
+#define INCLUDED_SVX_SVDOBJ_HXX
 
 #include <memory>
 #include <typeinfo>
@@ -1113,6 +1113,6 @@ template< typename T > T* SdrObject::CloneHelper() const
     return pObj;
 }
 
-#endif //_SVDOBJ_HXX
+#endif // INCLUDED_SVX_SVDOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

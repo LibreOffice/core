@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FMPAGE_HXX
-#define _SVX_FMPAGE_HXX
+#ifndef INCLUDED_SVX_FMPAGE_HXX
+#define INCLUDED_SVX_FMPAGE_HXX
 
 #include <svx/svdpage.hxx>
 #include <comphelper/uno3.hxx>
@@ -77,6 +77,6 @@ public:
                             const HelpEvent& rEvt );
 };
 
-#endif          // _SVX_FMPAGE_HXX
+#endif // INCLUDED_SVX_FMPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDMARK_HXX
-#define _SVDMARK_HXX
+#ifndef INCLUDED_SVX_SVDMARK_HXX
+#define INCLUDED_SVX_SVDMARK_HXX
 
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
@@ -293,6 +293,6 @@ namespace sdr
     };
 } // end of namespace sdr
 
-#endif //_SVDMARK_HXX
+#endif // INCLUDED_SVX_SVDMARK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

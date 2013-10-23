@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_DATABASELOCATIONINPUT_HXX
-#define SVX_DATABASELOCATIONINPUT_HXX
+#ifndef INCLUDED_SVX_DATABASELOCATIONINPUT_HXX
+#define INCLUDED_SVX_DATABASELOCATIONINPUT_HXX
 
 #include "svx/svxdllapi.h"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -82,6 +82,6 @@ namespace svx
 } // namespace svx
 //........................................................................
 
-#endif // SVX_DATABASELOCATIONINPUT_HXX
+#endif // INCLUDED_SVX_DATABASELOCATIONINPUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

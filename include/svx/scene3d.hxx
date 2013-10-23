@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _E3D_SCENE3D_HXX
-#define _E3D_SCENE3D_HXX
+#ifndef INCLUDED_SVX_SCENE3D_HXX
+#define INCLUDED_SVX_SCENE3D_HXX
 
 #include <svx/camera3d.hxx>
 #include <tools/b3dtrans.hxx>
@@ -234,6 +234,6 @@ public:
     virtual void BrkCreate(SdrDragStat& rStat);
 };
 
-#endif          // _E3D_SCENE3D_HXX
+#endif // INCLUDED_SVX_SCENE3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
