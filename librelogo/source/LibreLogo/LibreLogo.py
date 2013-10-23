@@ -1237,11 +1237,13 @@ def __groupstart__(name = ""):
 
 def create_svg_animation(m):
     global _
-    if int(m.group(1)) > 2:
-        if int(m.group(1))-3 in _.shapecache:
-          t = _.shapecache[int(m.group(1))-3]
-          if t != "0":
-            return '<g id="id%s" opacity="0"><animate attributeName="opacity" from="0" to="100" begin="%sms" dur="1ms" fill="freeze"/>' % (m.group(1), t)
+    id = int(m.group(1))
+    if id - 3 in _.shapecache:
+        t = _.shapecache[id-3]
+        opacity = "100" if t == "0" else "0"
+        name = "" if id != 3 else "id=\"first\""
+        start = "%sms;last.end+%sms" % (t, t) if id == 3 else "first.end+%dms" % (int(t) - int(_.shapecache[0]))
+        return '<g id="id%s" opacity="0"><animate %s attributeName="opacity" from="100" to="100" begin="%s" dur="1ms" fill="freeze"/><animate attributeName="opacity" from="100" to="%s" begin="last.end" dur="1ms" fill="freeze"/>' % (m.group(1), name, start, opacity)
     return m.group()
 
 def create_valid_svg_file(filename):
@@ -1252,7 +1254,12 @@ def create_valid_svg_file(filename):
     s = re.sub('(?s)<defs class="EmbeddedBulletChars">.*(?=<defs class="TextEmbeddedBitmaps")', '', s) # remove unused parts
     s = re.sub('(?s)(<path stroke-width="[^"]*"[^<]*)stroke-width="[^"]*"', '\\1', s) # double stroke-width
     s = re.sub('(?s)<svg\\s+version="1.2"', '<svg version="1.1"', s) # for W3C Validator
-    s = re.sub('<g id="id([0-9]+)">', create_svg_animation, s)
+    if _.time > 0:
+        s = re.sub('<g id="id([0-9]+)">', create_svg_animation, s)
+        m = re.match('(?s)(.*<animate[^>]*first[.]end.([0-9]+)[^>]* dur=")1ms"', s)
+        lasttime = _.time - int(m.group(2)) - int(_.shapecache[0]) + 1
+        if lasttime > 1:
+            s = re.sub('(?s)(.*<animate[^>]*first[.]end.([0-9]+)[^>]* dur=")1ms"', m.group(1) + str(lasttime) + 'ms" id="last"',  s)
     with open(filename, 'w') as f:
         f.write(s)
 
