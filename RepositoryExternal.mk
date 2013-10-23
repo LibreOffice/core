@@ -1153,10 +1153,6 @@ define gb_LinkTarget__use_icui18n
 $(call gb_LinkTarget_add_libs,$(1),-licui18n)
 
 endef
-define gb_LinkTarget__use_icutu
-$(call gb_LinkTarget_add_libs,$(1),-licutu)
-
-endef
 define gb_LinkTarget__use_icuuc
 $(call gb_LinkTarget_add_libs,$(1),-licuuc)
 
@@ -1199,7 +1195,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 endif
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	icutu$(gb_ICU_suffix) \
 	icuuc$(gb_ICU_suffix) \
 ))
 
@@ -1228,21 +1223,6 @@ $(call gb_LinkTarget_add_libs,$(1),\
 else
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib -licui18n$(gb_ICU_suffix) \
-)
-endif
-
-endef
-
-define gb_LinkTarget__use_icutu
-$(call gb_LinkTarget_use_package,$(1),icu)
-
-ifeq ($(OS),WNT)
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,icu)/source/lib/icutu$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
-)
-else
-$(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib -licutu$(gb_ICU_suffix) \
 )
 endif
 

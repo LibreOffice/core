@@ -21,14 +21,12 @@ $(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,bin,\
 	source/lib/icudt$(ICU_MAJOR).dll \
 	source/lib/icuuc$(ICU_MAJOR).dll \
 	source/lib/icuin$(ICU_MAJOR).dll \
-	source/lib/icutu$(ICU_MAJOR).dll \
 ))
 else
 $(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,bin,\
 	source/lib/icudt$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icuuc$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icuin$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
-	source/lib/icutu$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 ))
 endif # $(COM)
 
@@ -38,7 +36,6 @@ $(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,lib,\
 	source/lib/libicudatalo.so \
 	source/lib/libicuuclo.so \
 	source/lib/libicui18nlo.so \
-	source/lib/libicutulo.so \
 ))
 
 else # $(OS) != WNT/ANDROID
@@ -46,7 +43,6 @@ else # $(OS) != WNT/ANDROID
 $(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicuuc$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicui18n$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicutu$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicutu$(gb_Library_DLLEXT).$(icu_VERSION)))
 
 endif # $(OS)
 endif # DISABLE_DYNLOADING

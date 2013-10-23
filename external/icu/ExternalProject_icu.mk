@@ -40,7 +40,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source) \
 			--disable-layout --disable-static --enable-shared --disable-samples \
 		&& $(MAKE) \
-		&&  for lib in icudata icuin icuuc icutu; do \
+		&&  for lib in icudata icuin icuuc; do \
 			touch $$lib; \
 			done \
 	,source)
@@ -90,8 +90,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
 			$(gb_Package_SOURCEDIR_icu)/source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION) \
 			$(gb_Package_SOURCEDIR_icu)/source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION) \
-			$(gb_Package_SOURCEDIR_icu)/source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION) \
-			$(gb_Package_SOURCEDIR_icu)/source/lib/libicutu$(gb_Library_DLLEXT).$(icu_VERSION)) \
+			$(gb_Package_SOURCEDIR_icu)/source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)) \
 	,source)
 
 endif
