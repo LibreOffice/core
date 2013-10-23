@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_DEEPTCONTEXT_HXX
-#define _XMLOFF_DEEPTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_DEEPTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_DEEPTCONTEXT_HXX
 
 #include <rtl/ref.hxx>
 
@@ -72,6 +72,6 @@ public:
     virtual void ExportContent();
 };
 
-#endif  //  _XMLOFF_DEEPTCONTEXT_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_DEEPTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_METAEXPORTCOMPONENT_HXX
-#define _XMLOFF_METAEXPORTCOMPONENT_HXX
+#ifndef INCLUDED_XMLOFF_INC_METAEXPORTCOMPONENT_HXX
+#define INCLUDED_XMLOFF_INC_METAEXPORTCOMPONENT_HXX
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_TABLE_TABLE_HXX_
-#define _XMLOFF_TABLE_TABLE_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_TABLE_TABLE_HXX
+#define INCLUDED_XMLOFF_SOURCE_TABLE_TABLE_HXX
 
 #include "xmloff/xmltoken.hxx"
 

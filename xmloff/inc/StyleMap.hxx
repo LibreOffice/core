@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_STYLEMAP_HXX
-#define _XMLOFF_STYLEMAP_HXX
+#ifndef INCLUDED_XMLOFF_INC_STYLEMAP_HXX
+#define INCLUDED_XMLOFF_INC_STYLEMAP_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -83,6 +83,6 @@ public:
                 const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-#endif  //  _XMLOFF_STYLEMAP_HXX
+#endif // INCLUDED_XMLOFF_INC_STYLEMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

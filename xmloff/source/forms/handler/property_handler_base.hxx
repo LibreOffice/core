@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_PROPERTY_HANDLER_BASE_HXX
-#define XMLOFF_PROPERTY_HANDLER_BASE_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_HANDLER_PROPERTY_HANDLER_BASE_HXX
+#define INCLUDED_XMLOFF_SOURCE_FORMS_HANDLER_PROPERTY_HANDLER_BASE_HXX
 
 #include "forms/property_handler.hxx"
 
@@ -48,6 +48,6 @@ namespace xmloff
 
 } // namespace xmloff
 
-#endif // XMLOFF_PROPERTY_HANDLER_BASE_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_FORMS_HANDLER_PROPERTY_HANDLER_BASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_RENAMEELEMTCONTEXT_HXX
-#define _XMLOFF_RENAMEELEMTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_RENAMEELEMTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_RENAMEELEMTCONTEXT_HXX
 
 #include <xmloff/xmltoken.hxx>
 #include "TransformerContext.hxx"

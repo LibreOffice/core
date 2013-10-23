@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MULTI_PROPERTY_SET_HANDLER_HXX
-#define _MULTI_PROPERTY_SET_HANDLER_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_CHART_MULTIPROPERTYSETHANDLER_HXX
+#define INCLUDED_XMLOFF_SOURCE_CHART_MULTIPROPERTYSETHANDLER_HXX
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLOFF_DOMEXPORT_HXX
-#define _XMLOFF_DOMEXPORT_HXX
+#ifndef INCLUDED_XMLOFF_INC_DOMEXPORT_HXX
+#define INCLUDED_XMLOFF_INC_DOMEXPORT_HXX
 
 // the Solaris compiler apparently needs the following include:
 #include <com/sun/star/uno/Reference.hxx>

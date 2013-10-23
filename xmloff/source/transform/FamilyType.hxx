@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_FAMILYTYPE_HXX
-#define _XMLOFF_FAMILYTYPE_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_FAMILYTYPE_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_FAMILYTYPE_HXX
 
 enum XMLFamilyType
 {
@@ -48,6 +48,6 @@ enum XMLFamilyType
     XML_FAMILY_TYPE_END
 };
 
-#endif  //  _XMLOFF_FAMILYTYPE_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_FAMILYTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_ANIM_HXX
-#define _XMLOFF_ANIM_HXX
+#ifndef INCLUDED_XMLOFF_INC_ANIM_HXX
+#define INCLUDED_XMLOFF_INC_ANIM_HXX
 
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -92,6 +92,6 @@ extern SvXMLEnumMapEntry aXML_AnimationSpeed_EnumMap[];
 void SdXMLImplSetEffect( ::com::sun::star::presentation::AnimationEffect eEffect, XMLEffect& eKind, XMLEffectDirection& eDirection, sal_Int16& nStartScale, bool& bIn );
 ::com::sun::star::presentation::AnimationEffect ImplSdXMLgetEffect( XMLEffect eKind, XMLEffectDirection eDirection, sal_Int16 nStartScale, bool bIn );
 
-#endif  //  _XMLOFF_ANIM_HXX
+#endif // INCLUDED_XMLOFF_INC_ANIM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

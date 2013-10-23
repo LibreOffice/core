@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLINDEXTEMPLATECONTEXT_HXX_
-#define _XMLOFF_XMLINDEXTEMPLATECONTEXT_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXTEMPLATECONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXTEMPLATECONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmltoken.hxx>

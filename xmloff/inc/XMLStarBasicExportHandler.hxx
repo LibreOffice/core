@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLSTARBASICEXPORTHANDLER_HXX
-#define _XMLOFF_XMLSTARBASICEXPORTHANDLER_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLSTARBASICEXPORTHANDLER_HXX
+#define INCLUDED_XMLOFF_INC_XMLSTARBASICEXPORTHANDLER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>

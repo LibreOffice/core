@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLERRORBARSTYLEPROPERTYHDL_HXX_
-#define _XMLERRORBARSTYLEPROPERTYHDL_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CHART_XMLERRORBARSTYLEPROPERTYHDL_HXX
+#define INCLUDED_XMLOFF_SOURCE_CHART_XMLERRORBARSTYLEPROPERTYHDL_HXX
 
 #include <xmloff/EnumPropertyHdl.hxx>
 
@@ -30,6 +30,6 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif  // _XMLERRORBARSTYLEPROPERTYHDL_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_CHART_XMLERRORBARSTYLEPROPERTYHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

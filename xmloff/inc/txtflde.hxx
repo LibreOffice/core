@@ -21,8 +21,8 @@
  *  XML export of all text fields
  */
 
-#ifndef _XMLOFF_TXTFLDE_HXX
-#define _XMLOFF_TXTFLDE_HXX
+#ifndef INCLUDED_XMLOFF_INC_TXTFLDE_HXX
+#define INCLUDED_XMLOFF_INC_TXTFLDE_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include "xmloff/xmlnmspe.hxx"

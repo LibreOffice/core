@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SCH_XMLEXPORT_HXX_
-#define SCH_XMLEXPORT_HXX_
+#ifndef INCLUDED_XMLOFF_INC_SCHXMLEXPORT_HXX
+#define INCLUDED_XMLOFF_INC_SCHXMLEXPORT_HXX
 
 #include <xmloff/SchXMLExportHelper.hxx>
 #include "SchXMLAutoStylePoolP.hxx"
@@ -63,6 +63,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 };
 
-#endif  // SCH_XMLEXPORT_HXX_
+#endif // INCLUDED_XMLOFF_INC_SCHXMLEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

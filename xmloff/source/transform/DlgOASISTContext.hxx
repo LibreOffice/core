@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_DLGOASISTCONTEXT_HXX
-#define _XMLOFF_DLGOASISTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_DLGOASISTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_DLGOASISTCONTEXT_HXX
 
 #include "TransformerContext.hxx"
 
@@ -34,6 +34,6 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-#endif  //  _XMLOFF_DLGOASISTCONTEXT_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_DLGOASISTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

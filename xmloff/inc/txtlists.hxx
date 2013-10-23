@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_TXTLISTS_HXX
-#define _XMLOFF_TXTLISTS_HXX
+#ifndef INCLUDED_XMLOFF_INC_TXTLISTS_HXX
+#define INCLUDED_XMLOFF_INC_TXTLISTS_HXX
 
 #include <rtl/ustring.hxx>
 #include <comphelper/stl_types.hxx>

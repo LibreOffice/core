@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_TRANSFORMERACTIONS_HXX
-#define _XMLOFF_TRANSFORMERACTIONS_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERACTIONS_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERACTIONS_HXX
 
 #include <rtl/ustring.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -143,6 +143,6 @@ public:
     void Add( XMLTransformerActionInit *pInit );
 };
 
-#endif  //  _XMLOFF_TRANSFORMERACTIONS_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERACTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

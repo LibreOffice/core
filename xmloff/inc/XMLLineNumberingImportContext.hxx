@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLLINENUMBERINGIMPORTCONTEXT_HXX_
-#define _XMLOFF_XMLLINENUMBERINGIMPORTCONTEXT_HXX_
+#ifndef INCLUDED_XMLOFF_INC_XMLLINENUMBERINGIMPORTCONTEXT_HXX
+#define INCLUDED_XMLOFF_INC_XMLLINENUMBERINGIMPORTCONTEXT_HXX
 
 #include <xmloff/xmlstyle.hxx>
 #include <rtl/ustring.hxx>

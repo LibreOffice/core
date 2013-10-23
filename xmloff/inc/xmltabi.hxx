@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLTABI_HXX
-#define _XMLOFF_XMLTABI_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLTABI_HXX
+#define INCLUDED_XMLOFF_INC_XMLTABI_HXX
 
 #include "XMLElementPropertyContext.hxx"
 
@@ -49,6 +49,6 @@ public:
 };
 
 
-#endif  //  _XMLOFF_XMLTABI_HXX
+#endif // INCLUDED_XMLOFF_INC_XMLTABI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

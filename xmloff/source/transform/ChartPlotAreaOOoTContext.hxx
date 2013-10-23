@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef XMLOFF_XMLCHARTPLOTAREAOOOTCONTEXT_HXX
-#define XMLOFF_XMLCHARTPLOTAREAOOOTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_CHARTPLOTAREAOOOTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_CHARTPLOTAREAOOOTCONTEXT_HXX
 
 #include "ProcAttrTContext.hxx"
 #include "TContextVector.hxx"
@@ -52,7 +52,7 @@ private:
     XMLAxisContextVector m_aChildContexts;
 };
 
-// XMLOFF_XMLCHARTPLOTAREAOOOTCONTEXT_HXX
+// INCLUDED_XMLOFF_SOURCE_TRANSFORM_CHARTPLOTAREAOOOTCONTEXT_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_EVENTIMPORTHELPER_HXX
-#define _XMLOFF_EVENTIMPORTHELPER_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLEVENTIMPORTHELPER_HXX
+#define INCLUDED_XMLOFF_INC_XMLEVENTIMPORTHELPER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <xmloff/xmlevent.hxx>

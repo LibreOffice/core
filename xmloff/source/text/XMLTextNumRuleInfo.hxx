@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLTEXTNUMRULEINFO_HXX
-#define _XMLOFF_XMLTEXTNUMRULEINFO_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTNUMRULEINFO_HXX
+#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTNUMRULEINFO_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -173,6 +173,6 @@ inline void XMLTextNumRuleInfo::Reset()
     mbContinueingPreviousSubTree = sal_False;
     msListLabelString = "";
 }
-#endif  //  _XMLOFF_XMLTEXTNUMRULEINFO_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTNUMRULEINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

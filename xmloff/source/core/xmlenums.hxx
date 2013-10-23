@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLENUMS_HXX_
-#define _XMLENUMS_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CORE_XMLENUMS_HXX
+#define INCLUDED_XMLOFF_SOURCE_CORE_XMLENUMS_HXX
 
 enum XMLForbiddenCharactersEnum
 {

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_FORMS_LAYERIMPORT_HXX_
-#define _XMLOFF_FORMS_LAYERIMPORT_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_LAYERIMPORT_HXX
+#define INCLUDED_XMLOFF_SOURCE_FORMS_LAYERIMPORT_HXX
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
@@ -173,6 +173,6 @@ namespace xmloff
 
 }   // namespace xmloff
 
-#endif // _XMLOFF_FORMS_LAYERIMPORT_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_FORMS_LAYERIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_SOURCE_FORMS_GRIDCOLUMNPROPTRANSLATOR_HXX
-#define XMLOFF_SOURCE_FORMS_GRIDCOLUMNPROPTRANSLATOR_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_GRIDCOLUMNPROPTRANSLATOR_HXX
+#define INCLUDED_XMLOFF_SOURCE_FORMS_GRIDCOLUMNPROPTRANSLATOR_HXX
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -64,6 +64,6 @@ namespace xmloff
 
 } // namespace xmloff
 
-#endif // XMLOFF_SOURCE_FORMS_GRIDCOLUMNPROPTRANSLATOR_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_FORMS_GRIDCOLUMNPROPTRANSLATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

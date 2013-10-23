@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SCH_XML_TRANSPORTTYPES_HXX_
-#define SCH_XML_TRANSPORTTYPES_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CHART_TRANSPORTTYPES_HXX
+#define INCLUDED_XMLOFF_SOURCE_CHART_TRANSPORTTYPES_HXX
 
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
@@ -213,6 +213,6 @@ struct DataRowPointStyle
 typedef ::std::multimap< OUString, ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XDataSequence > > tSchXMLRangeSequenceMap;
 
-#endif  // SCH_XML_TRANSPORTTYPES_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_CHART_TRANSPORTTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
-#define _XMLOFF_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
+#define INCLUDED_XMLOFF_INC_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/xmlictxt.hxx>
@@ -67,6 +67,6 @@ public:
 
 };
 
-#endif  //  _XMLOFF_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
+#endif // INCLUDED_XMLOFF_INC_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

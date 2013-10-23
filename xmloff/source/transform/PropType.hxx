@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROPTYPE_HXX
-#define _XMLOFF_PROPTYPE_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_PROPTYPE_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_PROPTYPE_HXX
 
 enum  XMLPropType
 {
@@ -39,6 +39,6 @@ enum  XMLPropType
     XML_PROP_TYPE_END
 };
 
-#endif  //  _XMLOFF_PROPTYPE_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_PROPTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

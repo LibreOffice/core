@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLBITMAPREPEATOFFSETPROPERTYHANDLER_HXX
-#define _XMLOFF_XMLBITMAPREPEATOFFSETPROPERTYHANDLER_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLBITMAPREPEATOFFSETPROPERTYHANDLER_HXX
+#define INCLUDED_XMLOFF_INC_XMLBITMAPREPEATOFFSETPROPERTYHANDLER_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 
@@ -52,6 +52,6 @@ public:
             const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif      // _XMLOFF_XMLBITMAPREPEATOFFSETPROPERTYHANDLER_HXX
+#endif // INCLUDED_XMLOFF_INC_XMLBITMAPREPEATOFFSETPROPERTYHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

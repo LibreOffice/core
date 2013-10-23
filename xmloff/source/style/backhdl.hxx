@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROPERTYHANDLER_BRUSHTYPES_HXX
-#define _XMLOFF_PROPERTYHANDLER_BRUSHTYPES_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_BACKHDL_HXX
+#define INCLUDED_XMLOFF_SOURCE_STYLE_BACKHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 #include <com/sun/star/style/GraphicLocation.hpp>
@@ -41,6 +41,6 @@ private:
     void MergeXMLVertPos( ::com::sun::star::style::GraphicLocation& ePos, ::com::sun::star::style::GraphicLocation eVert ) const;
 };
 
-#endif      // _XMLOFF_PROPERTYHANDLER_BRUSHTYPES_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_STYLE_BACKHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

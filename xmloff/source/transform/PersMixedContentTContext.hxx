@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PERSMIXEDCONTENTTCONTEXT_HXX
-#define _XMLOFF_PERSMIXEDCONTENTTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_PERSMIXEDCONTENTTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_PERSMIXEDCONTENTTCONTEXT_HXX
 
 #include <rtl/ref.hxx>
 
@@ -57,6 +57,6 @@ public:
     virtual ~XMLPersMixedContentTContext();
 };
 
-#endif  //  _XMLOFF_PERSMIXEDCONTENTTCONTEXT_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_PERSMIXEDCONTENTTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

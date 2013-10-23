@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLBITMAPLOGICALSIZEPROPERTYHANDLER_HXX
-#define _XMLOFF_XMLBITMAPLOGICALSIZEPROPERTYHANDLER_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLBITMAPLOGICALSIZEPROPERTYHANDLER_HXX
+#define INCLUDED_XMLOFF_INC_XMLBITMAPLOGICALSIZEPROPERTYHANDLER_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 
@@ -50,6 +50,6 @@ public:
             const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif      // _XMLOFF_XMLBITMAPLOGICALSIZEPROPERTYHANDLER_HXX
+#endif // INCLUDED_XMLOFF_INC_XMLBITMAPLOGICALSIZEPROPERTYHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLOFF_XMLBASE64EXPORT_HXX
-#define _XMLOFF_XMLBASE64EXPORT_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLBASE64EXPORT_HXX
+#define INCLUDED_XMLOFF_INC_XMLBASE64EXPORT_HXX
 
 #include <com/sun/star/uno/Reference.h>
 

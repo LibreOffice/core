@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_PROPERTY_META_DATA_HXX
-#define XMLOFF_PROPERTY_META_DATA_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTY_META_DATA_HXX
+#define INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTY_META_DATA_HXX
 
 #include "property_description.hxx"
 
@@ -51,6 +51,6 @@ namespace xmloff { namespace metadata
 
 } } // namespace xmloff::metadata
 
-#endif // XMLOFF_PROPERTY_META_DATA_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTY_META_DATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

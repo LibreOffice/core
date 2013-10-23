@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLSCRIPTCONTEXTFACTORY_HXX
-#define _XMLOFF_XMLSCRIPTCONTEXTFACTORY_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLSCRIPTCONTEXTFACTORY_HXX
+#define INCLUDED_XMLOFF_INC_XMLSCRIPTCONTEXTFACTORY_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <xmloff/xmlevent.hxx>
@@ -55,6 +55,6 @@ public:
                   const OUString & rLanguage);
 };
 
-#endif // _XMLOFF_XMLSCRIPTCONTEXTFACTORY_HXX
+#endif // INCLUDED_XMLOFF_INC_XMLSCRIPTCONTEXTFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

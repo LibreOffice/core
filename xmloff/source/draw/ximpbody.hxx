@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XIMPBODY_HXX
-#define _XIMPBODY_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPBODY_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPBODY_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"
@@ -65,6 +65,6 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 
-#endif  //  _XIMPBODY_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPBODY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

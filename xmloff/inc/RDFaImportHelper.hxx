@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RDFAIMPORTHELPER_HXX
-#define RDFAIMPORTHELPER_HXX
+#ifndef INCLUDED_XMLOFF_INC_RDFAIMPORTHELPER_HXX
+#define INCLUDED_XMLOFF_INC_RDFAIMPORTHELPER_HXX
 
 #include <vector>
 
@@ -90,6 +90,6 @@ public:
 
 } // namespace xmloff
 
-#endif // RDFAIMPORTHELPER_HXX
+#endif // INCLUDED_XMLOFF_INC_RDFAIMPORTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

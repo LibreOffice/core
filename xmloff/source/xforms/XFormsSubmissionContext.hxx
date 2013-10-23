@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XFORMSSUBMISSIONCONTEXT_HXX
-#define _XMLOFF_XFORMSSUBMISSIONCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_XFORMS_XFORMSSUBMISSIONCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_XFORMS_XFORMSSUBMISSIONCONTEXT_HXX
 
 #include "TokenContext.hxx"
 #include <com/sun/star/uno/Reference.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLINDEXSIMPLEENTRYCONTEXT_HXX_
-#define _XMLOFF_XMLINDEXSIMPLEENTRYCONTEXT_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXSIMPLEENTRYCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXSIMPLEENTRYCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>

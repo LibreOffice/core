@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_DOMBUILDERCONTEXT_HXX
-#define _XMLOFF_DOMBUILDERCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_INC_DOMBUILDERCONTEXT_HXX
+#define INCLUDED_XMLOFF_INC_DOMBUILDERCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_FLATTCONTEXT_HXX
-#define _XMLOFF_FLATTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_FLATTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_FLATTCONTEXT_HXX
 
 #include "PersAttrListTContext.hxx"
 
@@ -58,6 +58,6 @@ public:
     const OUString& GetTextContent() const { return m_aCharacters; }
 };
 
-#endif  //  _XMLOFF_FLATTCONTEXT_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_FLATTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

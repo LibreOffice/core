@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLINDEXTOCSOURCECONTEXT_HXX_
-#define _XMLOFF_XMLINDEXTOCSOURCECONTEXT_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXTOCSOURCECONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXTOCSOURCECONTEXT_HXX
 
 #include "XMLIndexSourceBaseContext.hxx"
 #include <com/sun/star/uno/Reference.h>

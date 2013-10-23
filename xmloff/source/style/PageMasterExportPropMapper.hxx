@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PAGEMASTEREXPORTPROPMAPPER_HXX
-#define _XMLOFF_PAGEMASTEREXPORTPROPMAPPER_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTEREXPORTPROPMAPPER_HXX
+#define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTEREXPORTPROPMAPPER_HXX
 
 #include <xmloff/xmlexppr.hxx>
 #include "XMLBackgroundImageExport.hxx"

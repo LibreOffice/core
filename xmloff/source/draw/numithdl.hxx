@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROPERTYHANDLER_NUMRULE_HXX
-#define _XMLOFF_PROPERTYHANDLER_NUMRULE_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_NUMITHDL_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_NUMITHDL_HXX
 
 #include <com/sun/star/ucb/XAnyCompare.hpp>
 #include <xmloff/xmlprhdl.hxx>
@@ -41,6 +41,6 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif      // _XMLOFF_PROPERTYHANDLER_NUMRULE_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_DRAW_NUMITHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

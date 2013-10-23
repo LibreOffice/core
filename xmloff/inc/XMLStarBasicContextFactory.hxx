@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLSTARBASICCONTEXTFACTORY_HXX
-#define _XMLOFF_XMLSTARBASICCONTEXTFACTORY_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLSTARBASICCONTEXTFACTORY_HXX
+#define INCLUDED_XMLOFF_INC_XMLSTARBASICCONTEXTFACTORY_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <xmloff/xmlevent.hxx>

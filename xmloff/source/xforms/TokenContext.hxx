@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_TOKENCONTEXT_HXX
-#define _XMLOFF_TOKENCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_XFORMS_TOKENCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_XFORMS_TOKENCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 

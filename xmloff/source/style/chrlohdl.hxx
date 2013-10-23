@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROPERTYHANDLER_CHARLOCALETYPES_HXX
-#define _XMLOFF_PROPERTYHANDLER_CHARLOCALETYPES_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_CHRLOHDL_HXX
+#define INCLUDED_XMLOFF_SOURCE_STYLE_CHRLOHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 
@@ -69,6 +69,6 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif      // _XMLOFF_PROPERTYHANDLER_CHARLOCALETYPES_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_STYLE_CHRLOHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

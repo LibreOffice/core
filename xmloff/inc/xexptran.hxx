@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XEXPTRANSFORM_HXX
-#define _XEXPTRANSFORM_HXX
+#ifndef INCLUDED_XMLOFF_INC_XEXPTRAN_HXX
+#define INCLUDED_XMLOFF_INC_XEXPTRAN_HXX
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
@@ -166,6 +166,6 @@ public:
     const com::sun::star::drawing::FlagSequenceSequence& GetFlagSequenceSequence() const { return maPoly.Flags; }
 };
 
-#endif  //  _XEXPTRANSFORM_HXX
+#endif // INCLUDED_XMLOFF_INC_XEXPTRAN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

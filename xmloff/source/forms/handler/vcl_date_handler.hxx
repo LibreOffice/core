@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_VCL_DATE_HANDLER_HXX
-#define XMLOFF_VCL_DATE_HANDLER_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_HANDLER_VCL_DATE_HANDLER_HXX
+#define INCLUDED_XMLOFF_SOURCE_FORMS_HANDLER_VCL_DATE_HANDLER_HXX
 
 #include "property_handler_base.hxx"
 
@@ -39,6 +39,6 @@ namespace xmloff
 
 } // namespace xmloff
 
-#endif // XMLOFF_VCL_DATE_HANDLER_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_FORMS_HANDLER_VCL_DATE_HANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

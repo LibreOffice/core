@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
-#define _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
+#ifndef INCLUDED_XMLOFF_INC_XMLIMAGEMAPCONTEXT_HXX
+#define INCLUDED_XMLOFF_INC_XMLIMAGEMAPCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <rtl/ustring.hxx>

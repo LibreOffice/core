@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDXMLEXP_IMPL_HXX
-#define _SDXMLEXP_IMPL_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_SDXMLEXP_IMPL_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_SDXMLEXP_IMPL_HXX
 
 #include <xmloff/xmlexp.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XIMP3DSCENE_HXX
-#define _XIMP3DSCENE_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DSCENE_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DSCENE_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"
@@ -67,6 +67,6 @@ public:
         { return mxShapes; }
 };
 
-#endif  //  _XIMPGROUP_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DSCENE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLERRORINDICATORPROPERTYHDL_HXX_
-#define _XMLERRORINDICATORPROPERTYHDL_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CHART_XMLERRORINDICATORPROPERTYHDL_HXX
+#define INCLUDED_XMLOFF_SOURCE_CHART_XMLERRORINDICATORPROPERTYHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 
@@ -35,6 +35,6 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif  // _XMLERRORINDICATORPROPERTYHDL_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_CHART_XMLERRORINDICATORPROPERTYHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

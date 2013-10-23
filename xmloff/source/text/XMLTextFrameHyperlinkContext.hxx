@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
-#define _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
 
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>

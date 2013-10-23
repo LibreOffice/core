@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
-#define XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_FONTHDL_HXX
+#define INCLUDED_XMLOFF_SOURCE_STYLE_FONTHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 
@@ -71,6 +71,6 @@ public:
 };
 
 
-#endif // XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_STYLE_FONTHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

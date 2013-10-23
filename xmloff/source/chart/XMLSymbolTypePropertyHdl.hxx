@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLSYMBOLTYPEPROPERTYHDL_HXX_
-#define _XMLSYMBOLTYPEPROPERTYHDL_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CHART_XMLSYMBOLTYPEPROPERTYHDL_HXX
+#define INCLUDED_XMLOFF_SOURCE_CHART_XMLSYMBOLTYPEPROPERTYHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 
@@ -34,6 +34,6 @@ private:
     bool m_bIsNamedSymbol;
 };
 
-#endif  // _XMLSYMBOLTYPEPROPERTYHDL_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_CHART_XMLSYMBOLTYPEPROPERTYHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

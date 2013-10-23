@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SVXMLATTRCOLLECTION_HXX_
-#define SVXMLATTRCOLLECTION_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CORE_SVXMLATTRCOLLECTION_HXX
+#define INCLUDED_XMLOFF_SOURCE_CORE_SVXMLATTRCOLLECTION_HXX
 
 #include "SvXMLAttr.hxx"
 
@@ -63,7 +63,7 @@ private:
     sal_uInt16 GetPrefixPos( size_t i ) const;
 };
 
-#endif /* SVXMLATTRCOLLECTION_HXX_ */
+#endif // INCLUDED_XMLOFF_SOURCE_CORE_SVXMLATTRCOLLECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

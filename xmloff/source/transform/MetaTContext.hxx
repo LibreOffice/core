@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_METATCONTEXT_HXX
-#define _XMLOFF_METATCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_METATCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_METATCONTEXT_HXX
 
 #include <rtl/ref.hxx>
 #include <comphelper/stl_types.hxx>
@@ -68,6 +68,6 @@ public:
     virtual void Characters( const OUString& rChars );
 };
 
-#endif  //  _XMLOFF_METATCONTEXT_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_METATCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLREDLINEEXPORT_HXX
-#define _XMLOFF_XMLREDLINEEXPORT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLREDLINEEXPORT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLREDLINEEXPORT_HXX
 
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.h>

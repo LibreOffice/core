@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_METAIMPORTCOMPONENT_HXX
-#define _XMLOFF_METAIMPORTCOMPONENT_HXX
+#ifndef INCLUDED_XMLOFF_INC_METAIMPORTCOMPONENT_HXX
+#define INCLUDED_XMLOFF_INC_METAIMPORTCOMPONENT_HXX
 
 #include <xmloff/xmlimp.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLTEXTCOLUMNSCONTEXT_HXX
-#define _XMLTEXTCOLUMNSCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLTEXTCOLUMNSCONTEXT_HXX
+#define INCLUDED_XMLOFF_INC_XMLTEXTCOLUMNSCONTEXT_HXX
 
 #include "XMLElementPropertyContext.hxx"
 

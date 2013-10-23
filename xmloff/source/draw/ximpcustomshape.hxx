@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XIMPCUSTOMSHAPE_HXX_
-#define _XMLOFF_XIMPCUSTOMSHAPE_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPCUSTOMSHAPE_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPCUSTOMSHAPE_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmluconv.hxx>

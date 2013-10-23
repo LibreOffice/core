@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_ACTIONMAPTYPESOASIS_HXX
-#define _XMLOFF_ACTIONMAPTYPESOASIS_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_ACTIONMAPTYPESOASIS_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_ACTIONMAPTYPESOASIS_HXX
 
 enum ActionMapTypesOOo
 {
@@ -85,6 +85,6 @@ enum ActionMapTypesOOo
     MAX_OASIS_ACTIONS
 };
 
-#endif  //  _XMLOFF_ACTIONMAPTYPESOASIS_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_ACTIONMAPTYPESOASIS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

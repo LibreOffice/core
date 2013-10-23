@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XIMPLINK_HXX
-#define _XIMPLINK_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPLINK_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPLINK_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"
@@ -53,6 +53,6 @@ public:
     virtual void EndElement();
 };
 
-#endif  //  _XIMPLINK_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPLINK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

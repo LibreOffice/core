@@ -23,8 +23,8 @@
  *  (except variable related + database display field: see txtvfldi.hxx)
  */
 
-#ifndef _XMLOFF_TXTFLDI_HXX
-#define _XMLOFF_TXTFLDI_HXX
+#ifndef INCLUDED_XMLOFF_INC_TXTFLDI_HXX
+#define INCLUDED_XMLOFF_INC_TXTFLDI_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/text/PageNumberType.hpp>

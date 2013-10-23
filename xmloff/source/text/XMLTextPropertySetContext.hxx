@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLTEXTPROPERTYSETCONTEXT_HXX
-#define _XMLOFF_XMLTEXTPROPERTYSETCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTPROPERTYSETCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTPROPERTYSETCONTEXT_HXX
 
 #include <xmloff/xmlprcon.hxx>
 
@@ -51,6 +51,6 @@ public:
 };
 
 
-#endif  //  _XMLOFF_XMLTEXTPROPERTYSETCONTEXT_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTPROPERTYSETCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

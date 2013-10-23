@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_NUMBERSTYLESEXPORT_HXX
-#define _XMLOFF_NUMBERSTYLESEXPORT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XMLNUMBERSTYLESEXPORT_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_XMLNUMBERSTYLESEXPORT_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -41,6 +41,6 @@ public:
     static OUString getDateStyleName(const sal_Int32 nDateFormat );
 };
 
-#endif  //  _XMLOFF_NUMBERSTYLESEXPORT_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_DRAW_XMLNUMBERSTYLESEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_TCONTEXTVECTOR_HXX
-#define _XMLOFF_TCONTEXTVECTOR_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_TCONTEXTVECTOR_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TCONTEXTVECTOR_HXX
 
 #include <rtl/ref.hxx>
 
@@ -30,6 +30,6 @@ class XMLTransformerContextVector :
 {
 };
 
-#endif  //  _XMLOFF_TCONTEXTVECTOR_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_TCONTEXTVECTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

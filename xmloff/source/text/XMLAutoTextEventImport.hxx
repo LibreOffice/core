@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLAUTOTEXTEVENTIMPORT_HXX
-#define _XMLOFF_XMLAUTOTEXTEVENTIMPORT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLAUTOTEXTEVENTIMPORT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLAUTOTEXTEVENTIMPORT_HXX
 
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/uno/Reference.hxx>

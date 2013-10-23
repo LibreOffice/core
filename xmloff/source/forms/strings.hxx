@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_FORMS_STRINGS_HXX_
-#define _XMLOFF_FORMS_STRINGS_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_STRINGS_HXX
+#define INCLUDED_XMLOFF_SOURCE_FORMS_STRINGS_HXX
 
 namespace xmloff
 {
@@ -205,6 +205,6 @@ namespace xmloff
 
 }   // namespace xmloff
 
-#endif // _XMLOFF_FORMS_STRINGS_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_FORMS_STRINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

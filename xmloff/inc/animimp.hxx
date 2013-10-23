@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_ANIMIMP_HXX
-#define _XMLOFF_ANIMIMP_HXX
+#ifndef INCLUDED_XMLOFF_INC_ANIMIMP_HXX
+#define INCLUDED_XMLOFF_INC_ANIMIMP_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -44,6 +44,6 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 
-#endif  //  _XMLOFF_ANIMIMP_HXX
+#endif // INCLUDED_XMLOFF_INC_ANIMIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

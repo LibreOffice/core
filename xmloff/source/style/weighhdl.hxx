@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROPERTYHANDLER_FONTWEIGHTTYPES_HXX
-#define _XMLOFF_PROPERTYHANDLER_FONTWEIGHTTYPES_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_WEIGHHDL_HXX
+#define INCLUDED_XMLOFF_SOURCE_STYLE_WEIGHHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 
@@ -35,6 +35,6 @@ public:
 };
 
 
-#endif      // _XMLOFF_PROPERTYHANDLER_FONTWEIGHTTYPES_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_STYLE_WEIGHHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_TRANSGRADIENTSTYLE_HXX
-#define _XMLOFF_TRANSGRADIENTSTYLE_HXX
+#ifndef INCLUDED_XMLOFF_INC_TRANSGRADIENTSTYLE_HXX
+#define INCLUDED_XMLOFF_INC_TRANSGRADIENTSTYLE_HXX
 
 
 #include <sal/types.h>
@@ -59,6 +59,6 @@ public:
     sal_Bool exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue );
 };
 
-#endif // _XMLOFF_TRANSGRADIENTSTYLE_HXX
+#endif // INCLUDED_XMLOFF_INC_TRANSGRADIENTSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_LAYEREXP_HXX
-#define _XMLOFF_LAYEREXP_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_LAYEREXP_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_LAYEREXP_HXX
 
 class SvXMLExport;
 
@@ -28,6 +28,6 @@ public:
     static void exportLayer( SvXMLExport& rExport );
 };
 
-#endif  //  _XMLOFF_ANIMEXP_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_DRAW_LAYEREXP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PROPIMP0_HXX
-#define _PROPIMP0_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_PROPIMP0_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_PROPIMP0_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 
@@ -65,6 +65,6 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif  //  _PROPIMP0_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_DRAW_PROPIMP0_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

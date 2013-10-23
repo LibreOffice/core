@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SCH_XMLTABLECONTEXT_HXX_
-#define _SCH_XMLTABLECONTEXT_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLTABLECONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLTABLECONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include "SchXMLImport.hxx"
@@ -189,6 +189,6 @@ public:
     virtual void EndElement();
 };
 
-#endif  // _SCH_XMLTABLECONTEXT_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLTABLECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

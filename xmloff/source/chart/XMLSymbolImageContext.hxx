@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLOFF_SYMBOLIMAGECONTEXT_HXX_
-#define _XMLOFF_SYMBOLIMAGECONTEXT_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CHART_XMLSYMBOLIMAGECONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_CHART_XMLSYMBOLIMAGECONTEXT_HXX
 
 #include "XMLElementPropertyContext.hxx"
 
@@ -48,6 +48,6 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
 };
 
-#endif  // _XMLOFF_SYMBOLIMAGECONTEXT_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_CHART_XMLSYMBOLIMAGECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

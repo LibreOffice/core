@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_MERGEELEMTCONTEXT_HXX
-#define _XMLOFF_MERGEELEMTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_MERGEELEMTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_MERGEELEMTCONTEXT_HXX
 
 #include <rtl/ref.hxx>
 #include "FlatTContext.hxx"

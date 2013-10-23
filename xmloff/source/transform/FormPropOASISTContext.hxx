@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_FORMPROPOASISTCONTEXT_HXX
-#define _XMLOFF_FORMPROPOASISTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_FORMPROPOASISTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_FORMPROPOASISTCONTEXT_HXX
 
 #include "RenameElemTContext.hxx"
 
@@ -43,6 +43,6 @@ public:
     virtual void EndElement();
 };
 
-#endif  //  _XMLOFF_FORMPROPOASISTCONTEXT_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_FORMPROPOASISTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

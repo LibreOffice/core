@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_CONTROLOOOTCONTEXT_HXX
-#define _XMLOFF_CONTROLOOOTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_CONTROLOOOTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_CONTROLOOOTCONTEXT_HXX
 
 #include "TransformerContext.hxx"
 
@@ -49,6 +49,6 @@ public:
     virtual void Characters( const OUString& rChars );
 };
 
-#endif  //  _XMLOFF_CONTROLOOOTCONTEXT_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_CONTROLOOOTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

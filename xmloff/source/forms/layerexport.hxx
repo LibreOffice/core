@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_FORMS_LAYEREXPORT_HXX_
-#define _XMLOFF_FORMS_LAYEREXPORT_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_LAYEREXPORT_HXX
+#define INCLUDED_XMLOFF_SOURCE_FORMS_LAYEREXPORT_HXX
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -298,6 +298,6 @@ namespace xmloff
 
 }   // namespace xmloff
 
-#endif // _XMLOFF_FORMS_LAYEREXPORT_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_FORMS_LAYEREXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

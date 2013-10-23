@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDXMLIMP_IMPL_HXX
-#define _SDXMLIMP_IMPL_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_SDXMLIMP_IMPL_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_SDXMLIMP_IMPL_HXX
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/frame/XModel.hpp>

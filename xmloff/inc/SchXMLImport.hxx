@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SCH_XMLIMPORT_HXX_
-#define SCH_XMLIMPORT_HXX_
+#ifndef INCLUDED_XMLOFF_INC_SCHXMLIMPORT_HXX
+#define INCLUDED_XMLOFF_INC_SCHXMLIMPORT_HXX
 
 #include <xmloff/SchXMLImportHelper.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -178,6 +178,6 @@ public:
     virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 };
 
-#endif  // SCH_XMLIMPORT_HXX_
+#endif // INCLUDED_XMLOFF_INC_SCHXMLIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

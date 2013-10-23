@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLELEMENTPROPERTYCONTEXT_HXX
-#define _XMLOFF_XMLELEMENTPROPERTYCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLELEMENTPROPERTYCONTEXT_HXX
+#define INCLUDED_XMLOFF_INC_XMLELEMENTPROPERTYCONTEXT_HXX
 
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlictxt.hxx>

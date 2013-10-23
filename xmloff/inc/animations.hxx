@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_ANIMATIONS_HXX
-#define _XMLOFF_ANIMATIONS_HXX
+#ifndef INCLUDED_XMLOFF_INC_ANIMATIONS_HXX
+#define INCLUDED_XMLOFF_INC_ANIMATIONS_HXX
 
 #include <xmloff/xmltoken.hxx>
 
@@ -55,6 +55,6 @@ extern const struct ImplAttributeNameConversion* getAnimationAttributeNamesConve
 
 }
 
-#endif  //  _XMLOFF_ANIMATIONS_HXX
+#endif // INCLUDED_XMLOFF_INC_ANIMATIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

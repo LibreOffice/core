@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROPERTYHANDLER_DURATIONS_HXX
-#define _XMLOFF_PROPERTYHANDLER_DURATIONS_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_DURATIONHDL_HXX
+#define INCLUDED_XMLOFF_SOURCE_STYLE_DURATIONHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SCH_XMLCHARTCONTEXT_HXX_
-#define _SCH_XMLCHARTCONTEXT_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLCHARTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLCHARTCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Sequence.h>
@@ -154,6 +154,6 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-#endif  // _SCH_XMLCHARTCONTEXT_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLCHARTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

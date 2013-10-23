@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLANCHORTYPEPROPHDL_HXX
-#define _XMLOFF_XMLANCHORTYPEPROPHDL_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLANCHORTYPEPROPHDL_HXX
+#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLANCHORTYPEPROPHDL_HXX
 
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <xmloff/xmlprhdl.hxx>
@@ -41,6 +41,6 @@ public:
                  ::com::sun::star::text::TextContentAnchorType& rType );
 };
 
-#endif  //  _XMLOFF_XMLANCHORTYPEPROPHDL_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TEXT_XMLANCHORTYPEPROPHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

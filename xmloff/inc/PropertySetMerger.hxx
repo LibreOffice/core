@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
-#define _XMLOFF_PROPERTYSETMERGER_HXX_
+#ifndef INCLUDED_XMLOFF_INC_PROPERTYSETMERGER_HXX
+#define INCLUDED_XMLOFF_INC_PROPERTYSETMERGER_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 

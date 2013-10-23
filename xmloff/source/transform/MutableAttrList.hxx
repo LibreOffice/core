@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_MUTABLEATTRLIST_HXX
-#define _XMLOFF_MUTABLEATTRLIST_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_MUTABLEATTRLIST_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_MUTABLEATTRLIST_HXX
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -75,6 +75,6 @@ public:
 };
 
 
-#endif  //  _XMLOFF_MUTABLEATTRLIST_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_MUTABLEATTRLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

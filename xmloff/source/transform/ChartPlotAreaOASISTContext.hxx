@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef XMLOFF_XMLCHARTPLOTAREAOASISTCONTEXT_HXX
-#define XMLOFF_XMLCHARTPLOTAREAOASISTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_CHARTPLOTAREAOASISTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_CHARTPLOTAREAOASISTCONTEXT_HXX
 
 #include "ProcAttrTContext.hxx"
 #include "PersAttrListTContext.hxx"
@@ -44,7 +44,7 @@ private:
     ::rtl::Reference< XMLPersAttrListTContext > m_rCategoriesContext;
 };
 
-// XMLOFF_XMLCHARTPLOTAREAOASISTCONTEXT_HXX
+// INCLUDED_XMLOFF_SOURCE_TRANSFORM_CHARTPLOTAREAOASISTCONTEXT_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

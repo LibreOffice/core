@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDPROPLS_HXX
-#define _SDPROPLS_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_SDPROPLS_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_SDPROPLS_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <xmloff/xmlnume.hxx>
@@ -294,6 +294,6 @@ public:
                             ) const;
 };
 
-#endif  //  _SDPROPLS_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_DRAW_SDPROPLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

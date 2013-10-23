@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENHANCED_CUSTOMSHAPE_TOKEN_HXX
-#define _ENHANCED_CUSTOMSHAPE_TOKEN_HXX
+#ifndef INCLUDED_XMLOFF_INC_ENHANCEDCUSTOMSHAPETOKEN_HXX
+#define INCLUDED_XMLOFF_INC_ENHANCEDCUSTOMSHAPETOKEN_HXX
 
 #include <rtl/ustring.hxx>
 

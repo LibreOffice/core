@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLBASICI_HXX
-#define _XMLOFF_XMLBASICI_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_SCRIPT_XMLBASICI_HXX
+#define INCLUDED_XMLOFF_SOURCE_SCRIPT_XMLBASICI_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XXMLOasisBasicImporter.hpp>
@@ -71,6 +71,6 @@ public:
     virtual void Characters( const OUString& rChars );
 };
 
-#endif // _XMLOFF_XMLBASICI_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_SCRIPT_XMLBASICI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

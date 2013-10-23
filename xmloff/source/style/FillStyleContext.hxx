@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_FILLSTYLECONTEXTS_HXX_
-#define _XMLOFF_FILLSTYLECONTEXTS_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_FILLSTYLECONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_STYLE_FILLSTYLECONTEXT_HXX
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <xmloff/xmlstyle.hxx>
@@ -150,6 +150,6 @@ public:
     virtual sal_Bool IsTransient() const;
 };
 
-#endif  // _XMLOFF_FILLSTYLECONTEXTS_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_STYLE_FILLSTYLECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

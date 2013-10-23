@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLBASICEXPORTFILTER_HXX
-#define _XMLOFF_XMLBASICEXPORTFILTER_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLBASICEXPORTFILTER_HXX
+#define INCLUDED_XMLOFF_INC_XMLBASICEXPORTFILTER_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -58,6 +58,6 @@ public:
         throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 };
 
-#endif // _XMLOFF_XMLBASICEXPORTFILTER_HXX
+#endif // INCLUDED_XMLOFF_INC_XMLBASICEXPORTFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

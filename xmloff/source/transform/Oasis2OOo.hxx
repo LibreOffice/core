@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_OASIS2OOO_HXX
-#define _XMLOFF_OASIS2OOO_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_OASIS2OOO_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_OASIS2OOO_HXX
 
 #include "ActionMapTypesOASIS.hxx"
 #include "TransformerBase.hxx"
@@ -58,6 +58,6 @@ public:
                                              sal_Bool bForm );
 };
 
-#endif  //  _XMLOFF_OASIS2OOO_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_OASIS2OOO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

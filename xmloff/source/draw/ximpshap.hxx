@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XIMPSHAPE_HXX
-#define _XIMPSHAPE_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
+#define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
@@ -640,6 +640,6 @@ private:
     sal_Bool maTemplateStylesUsed[6];
 };
 
-#endif  //  _XIMPSHAPE_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

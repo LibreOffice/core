@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PAGEMASTERPROPHDL_HXX_
-#define _XMLOFF_PAGEMASTERPROPHDL_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPHDL_HXX
+#define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 #include <rtl/ustring.hxx>

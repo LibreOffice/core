@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XML_CHART_ENUM_CONVERTER_HXX_
-#define _XML_CHART_ENUM_CONVERTER_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLENUMCONVERTER_HXX
+#define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLENUMCONVERTER_HXX
 
 #include <xmloff/EnumPropertyHdl.hxx>
 
@@ -28,6 +28,6 @@ public:
     static XMLEnumPropertyHdl& getLegendExpansionConverter();//returns a singleton
 };
 
-#endif  // _XML_CHART_ENUM_CONVERTER_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLENUMCONVERTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

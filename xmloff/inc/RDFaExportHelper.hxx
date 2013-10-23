@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef RDFAEXPORTHELPER_HXX
-#define RDFAEXPORTHELPER_HXX
+#ifndef INCLUDED_XMLOFF_INC_RDFAEXPORTHELPER_HXX
+#define INCLUDED_XMLOFF_INC_RDFAEXPORTHELPER_HXX
 
 #include <com/sun/star/uno/Reference.h>
 
@@ -66,6 +66,6 @@ public:
 
 } // namespace xmloff
 
-#endif // RDFAEXPORTHELPER_HXX
+#endif // INCLUDED_XMLOFF_INC_RDFAEXPORTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

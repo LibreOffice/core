@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_EVENTOOOTCONTEXT_HXX
-#define _XMLOFF_EVENTOOOTCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTOOOTCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTOOOTCONTEXT_HXX
 
 #include "DeepTContext.hxx"
 
@@ -52,6 +52,6 @@ public:
     virtual sal_Bool IsPersistent() const;
 };
 
-#endif  //  _XMLOFF_EVENTOOOTCONTEXT_HXX
+#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTOOOTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

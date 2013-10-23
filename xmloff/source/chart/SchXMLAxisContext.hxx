@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SCH_XMLAXISCONTEXT_HXX_
-#define _SCH_XMLAXISCONTEXT_HXX_
+#ifndef INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLAXISCONTEXT_HXX
+#define INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLAXISCONTEXT_HXX
 
 #include "SchXMLImport.hxx"
 #include "transporttypes.hxx"
@@ -70,6 +70,6 @@ private:
     void SetAxisTitle();
 };
 
-#endif  // _SCH_XMLAXISCONTEXT_HXX_
+#endif // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLAXISCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

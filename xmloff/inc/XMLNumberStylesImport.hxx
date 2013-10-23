@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
-#define _XMLOFF_NUMBERSTYLESIMPORT_HXX
+#ifndef INCLUDED_XMLOFF_INC_XMLNUMBERSTYLESIMPORT_HXX
+#define INCLUDED_XMLOFF_INC_XMLNUMBERSTYLESIMPORT_HXX
 
 #include <xmloff/xmlnumfi.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -64,6 +64,6 @@ public:
     sal_Int32 GetDrawKey() const { return mnKey; }
 };
 
-#endif  //  _XMLOFF_NUMBERSTYLESIMPORT_HXX
+#endif // INCLUDED_XMLOFF_INC_XMLNUMBERSTYLESIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
