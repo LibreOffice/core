@@ -83,7 +83,6 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
     {
-        std::cout << vSubArguments.size() << std::endl;
         FormulaToken* pCur = vSubArguments[1]->GetFormulaToken();
         assert(pCur);
         const formula::DoubleVectorRefToken* pCurDVR =
@@ -100,14 +99,33 @@ public:
         ss << ") {\n\t";
         ss << "double tmp = 1.0;\n\t";
         ss << "int gid0 = get_global_id(0);\n\t";
-        ss << "for (int i = 0; i <" << nCurWindowSize << "; i++)\n\t\t";
-        ss << "tmp *= " << vSubArguments[1]->GenSlidingWindowDeclRef();
-        ss << " + 1.0;\n\t";
-        ss << "return (double)tmp * " << vSubArguments[0]
-            ->GenSlidingWindowDeclRef();
+        ss << "double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+        #ifdef  ISNAN
+        ss << "if (isNan(arg0))\n\t\t";
+        ss << "arg0 = 0;\n\t";
+        #endif
+        ss << "double arg1;\n\t";
+        ss << "int arrayLength = " << pCurDVR->GetArrayLength() << ";\n\t";
+        #ifdef  ISNAN
+        ss << "for (int i = 0; i + gid0 < arrayLength &&";
+        ss << " i < " << nCurWindowSize << "; i++){\n\t\t";
+        #else
+        ss << "for (int i = 0; i < " << nCurWindowSize << "; i++){\n\t\t";
+        #endif
+        ss << "arg1 = ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n\t\t\t";
+        #ifdef ISNAN
+        ss << "if (isNan(arg1))\n\t\t\t\t";
+        ss << "arg1 = 0;\n\t\t\t";
+        #endif
+        ss << "tmp *= arg1 + 1.0;\n\t\t";
+        ss << "}\n\t";
+        ss << "return (double)tmp * arg0";
         ss << ";\n}";
     }
 };
+
 class Cumipmt: public Normal
 {
 public:
@@ -192,20 +210,33 @@ public:
         ss << "double fEps = 1.0;\n\t";
         ss << "double x = 0.0, xNeu = 0.0, fZaehler = 0.0, fNenner = 0.0;\n\t";
         ss << "double nCount = 0.0;\n\t";
-        ss << "if (fSchaetzwert == -1.0)\n\t\t";
+        #ifdef  ISNAN
+        ss << "if (isNan(fSchaetzwert))\n\t\t";
         ss << "x = 0.1;\n\t";
         ss << "else\n\t\t";
+        #endif
         ss << "x = fSchaetzwert;\n\t";
         ss << "unsigned short nItCount = 0;\n\t";
         ss << "while (fEps > Epsilon && nItCount < 20){\n\t\t";
         ss << "nCount = 0.0;\n\t\tfZaehler = 0.0;\n\t\tfNenner = 0.0;\n\t\t";
-        ss << "for (int i = 0; i <" << nCurWindowSize << "; i++){\n\t\t\t";
-        ss << "fZaehler += " << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " / pow(1.0+x, nCount);\n\t\t\t";
-        ss << "fNenner  += -nCount * ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " / pow(1.0+x,nCount+1.0);\n\t\t\t";
-        ss << "nCount+=1;\n\t\t}\n\t\t";
+        ss << "double arg0;\n\t\t";
+        ss << "int arrayLength = " << pCurDVR->GetArrayLength() << ";\n\t";
+        #ifdef  ISNAN
+        ss << "for (int i = 0; i + gid0 < arrayLength &&";
+        ss << " i < " << nCurWindowSize << "; i++){\n\t\t\t";
+        #else
+        ss << "for (int i = 0; i < " << nCurWindowSize << "; i++){\n\t\t\t";
+        #endif
+        ss << "arg0 = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n\t\t\t";
+        #ifdef  ISNAN
+        ss << "if (isNan(arg0))\n\t\t\t\t";
+        ss << "continue;\n\t\t\t";
+        #endif
+        ss << "fZaehler += arg0  / pow(1.0+x, nCount);\n\t\t\t";
+        ss << "fNenner  += -nCount * arg0 / pow(1.0+x,nCount+1.0);\n\t\t\t";
+        ss << "nCount+=1;\n";
+        ss << "\n\t\t}\n\t\t";
         ss << "xNeu = x - fZaehler / fNenner;\n\t\t";
         ss << "fEps = fabs(xNeu - x);\n\t\t";
         ss << "x = xNeu;\n\t\t";
@@ -214,7 +245,9 @@ public:
         ss << "x = 0.0;\n\t";
         ss << "if (fEps < Epsilon)\n\t\t";
         ss << "return x;\n\t";
-        ss << "else\n\t\treturn (double)523;\n}";
+        ss << "else\n\t\t";
+        ss << "return (double)523;\n";
+        ss << "}";
     }
 };
 class OpIRR: public IRR{
@@ -222,6 +255,7 @@ public:
     virtual std::string GetBottom(void) { return "0"; }
     virtual std::string BinFuncName(void) const { return "IRR"; }
 };
+
 class XNPV:Normal
 {
     public:
@@ -339,35 +373,53 @@ public:
         ss << ") {\n\t";
         ss << "double tmp = " << GetBottom() <<";\n\t";
         ss << "int gid0 = get_global_id(0);\n\t";
-        ss << "double invest = "<<vSubArguments[1]->GenSlidingWindowDeclRef();
-        ss << " + 1.0;\n\t";
-        ss << "double reinvest ="<<vSubArguments[2]->GenSlidingWindowDeclRef();
-        ss << " + 1.0;\n\t";
+        ss << "double arg0, arg1, arg2;\n\t";
+        ss << "arg1 = " << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+        ss << "arg2 = " << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+        #ifdef  ISNAN
+        ss << "if (isNan(arg1))\n\t\t";
+        ss << "arg1 = 0.0;\n\t";
+        ss << "if (isNan(arg2))\n\t\t";
+        ss << "arg2 = 0.0;\n\t";
+        #endif
+        ss << "double invest = arg1 + 1.0;\n\t";
+        ss << "double reinvest = arg2 + 1.0;\n\t";
         ss << "double NPV_invest = 0.0;\n\t";
         ss << "double Pow_invest = 1.0;\n\t";
         ss << "double NPV_reinvest = 0.0;\n\t";
         ss << "double Pow_reinvest = 1.0;\n\t";
         ss << "int nCount = 0;\n\t";
-        ss << "for (int i = 0; i < " << nCurWindowSize << "; i++)\n\t";
-        ss << "{\n\t\t";
-        ss << "if("<<vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " > 0.0)\n\t\t\t";
-        ss << "NPV_reinvest += "<<vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " * Pow_reinvest;\n\t\t";
-        ss << "else if("<<vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " < 0.0)\n\t\t\t";
-        ss << "NPV_invest += "<<vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " * Pow_invest;\n\t\t";
+        ss << "int arrayLength = " << pCurDVR->GetArrayLength() << ";\n\t";
+        #ifdef  ISNAN
+        ss << "for (int i = 0; i + gid0 < arrayLength &&";
+        ss << " i < " << nCurWindowSize << "; i++){\n\t\t";
+        #else
+        ss << "for (int i = 0; i < " << nCurWindowSize << "; i++){\n\t\t";
+        #endif
+        ss << "arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n\t\t";
+        #ifdef  ISNAN
+        ss << "if (isNan(arg0))\n\t\t\t";
+        ss << "continue;\n\t\t";
+        #endif
+        ss << "if (arg0 > 0.0)\n\t\t\t";
+        ss << "NPV_reinvest += arg0 * Pow_reinvest;\n\t\t";
+        ss << "else if (arg0 < 0.0)\n\t\t\t";
+        ss << "NPV_invest += arg0 * Pow_invest;\n\t\t";
         ss << "Pow_reinvest /= reinvest;\n\t\t";
         ss << "Pow_invest /= invest;\n\t\t";
         ss << "nCount++;\n\t";
         ss << "}\n\t";
-        ss << "tmp =  -NPV_reinvest / NPV_invest *  pow( reinvest, (double) nCount - 1 );\n\t";
-        ss << "tmp =  pow( tmp, 1.0 / (nCount - 1) ) - 1.0;\n\t";
+        ss << "tmp = ";
+        ss << "-NPV_reinvest /NPV_invest * pow(reinvest,(double)nCount-1);\n\t";
+        ss << "tmp =  pow(tmp, 1.0 / (nCount - 1)) - 1.0;\n\t";
         ss << "return (double)tmp;\n";
         ss << "}";
     }
 };
+
 
 class OpEffective: public Normal {
 public:
@@ -784,6 +836,7 @@ class OpPriceMat:public PriceMat
     virtual std::string GetBottom(void) { return "0"; }
     virtual std::string BinFuncName(void) const { return "PriceMat"; }
 };
+
 class RATE: Normal
 {
 public:
@@ -798,6 +851,12 @@ public:
                 ss << ",";
             vSubArguments[i]->GenSlidingWindowDecl(ss);
         }
+
+        FormulaToken* pCur = vSubArguments[5]->GetFormulaToken();
+        assert(pCur);
+        const formula::SingleVectorRefToken* pSVR =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+        assert(pSVR);
         ss << ") {\n\t";
         ss << "double result;\n\t";
         ss << "int gid0 = get_global_id(0);\n\t";
@@ -807,74 +866,76 @@ public:
         ss << "int nIterationsMax = 150;\n\t";
         ss << "int nCount = 0;\n\t";
         ss << "double fEpsilonSmall = 1.0E-14;\n\t";
-        ss << vSubArguments[3]->GenSlidingWindowDeclRef() << " = ";
-        ss << vSubArguments[3]->GenSlidingWindowDeclRef() << " - ";
-        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << " * ";
-        ss << vSubArguments[4]->GenSlidingWindowDeclRef() << ";\n\t";
-        ss << vSubArguments[2]->GenSlidingWindowDeclRef() << " = ";
-        ss << vSubArguments[2]->GenSlidingWindowDeclRef() << " + ";
-        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << " * ";
-        ss << vSubArguments[4]->GenSlidingWindowDeclRef()<< ";\n\t";
-        ss << "if (" << vSubArguments[0]->GenSlidingWindowDeclRef() << " == ";
-        ss << "Round( " << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n\t";
-        ss << "{\n\t\t";
-        ss << "fX = " << vSubArguments[5]->GenSlidingWindowDeclRef() << ";\n\t\t";
+        ss << "double arg0, arg1, arg2, arg3, arg4, arg5;\n\t";
+        ss << "arg0=" << vSubArguments[0]->GenSlidingWindowDeclRef()<<";\n\t";
+        ss << "arg1=" << vSubArguments[1]->GenSlidingWindowDeclRef()<<";\n\t";
+        ss << "arg2=" << vSubArguments[2]->GenSlidingWindowDeclRef()<<";\n\t";
+        ss << "arg3=" << vSubArguments[3]->GenSlidingWindowDeclRef()<<";\n\t";
+        ss << "arg4=" << vSubArguments[4]->GenSlidingWindowDeclRef()<<";\n\t";
+        ss << "arg5=" << vSubArguments[5]->GenSlidingWindowDeclRef()<<";\n\t";
+        ss << "int guessLen = " << pSVR->GetArrayLength() << ";\n\t";
+        #ifdef  ISNAN
+        ss << "if (isNan(arg0) || isNan(arg1) || isNan(arg2)){\n\t\t";
+        ss << "result = 523;\n\t\t";
+        ss << "return result;\n\t}\n\t";
+        ss << "if (isNan(arg3))\n\t\t";
+        ss << "arg3 = 0.0;\n\t";
+        ss << "if (isNan(arg4))\n\t\t";
+        ss << "arg4 = 0.0;\n\t";
+        ss << "if (isNan(arg5))\n\t\t";
+        ss << "arg5 = 0.1;\n\t";
+        ss << "if (gid0 >= guessLen)\n\t\t";
+        ss << "arg5 = 0.1;\n\t";
+        #endif
+        ss << "arg3 = arg3 - arg1 * arg4;\n\t";
+        ss << "arg2 = arg2 + arg1 * arg4;\n\t";
+        ss << "if (arg0 == Round(arg0)){\n\t\t";
+        ss << "fX = arg5;\n\t\t";
         ss << "double fPowN, fPowNminus1;\n\t\t";
-        ss << "while (!bFound && nCount < nIterationsMax)\n\t\t" << "{\n\t\t\t";
-        ss << "fPowNminus1 = pow( 1.0+fX, ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "-1.0);\n\t\t\t";
+        ss << "while (!bFound && nCount < nIterationsMax)\n\t\t";
+        ss << "{\n\t\t\t";
+        ss << "fPowNminus1 = pow( 1.0+fX, arg0-1.0);\n\t\t\t";
         ss << "fPowN = fPowNminus1 * (1.0+fX);\n\t\t\t";
         ss << "if (approxEqual( fabs(fX), 0.0))\n\t\t\t" << "{\n\t\t\t\t";
-        ss << "fGeoSeries = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n\t\t\t\t";
-        ss << "fGeoSeriesDerivation = " << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " * (" << vSubArguments[0]->GenSlidingWindowDeclRef() << " -1.0)/2.0;\n\t\t\t";
+        ss << "fGeoSeries = arg0;\n\t\t\t\t";
+        ss << "fGeoSeriesDerivation = arg0 * (arg0-1.0)/2.0;\n\t\t\t";
         ss << "}\n\t\t\t" << "else\n\t\t\t{\n\t\t\t\t";
         ss << "fGeoSeries = (fPowN-1.0)/fX;\n\t\t\t\t";
-        ss << "fGeoSeriesDerivation = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << " * ";
-        ss << "fPowNminus1 / fX - fGeoSeries / fX;\n\t\t\t" << "}\n\t\t\t";
-        ss << "fTerm = " << vSubArguments[3]->GenSlidingWindowDeclRef();
-        ss << " + " << vSubArguments[2]->GenSlidingWindowDeclRef() << " * ";
-        ss << "fPowN + "<<vSubArguments[1]->GenSlidingWindowDeclRef() << " * fGeoSeries;\n\t\t\t";
-        ss << "fTermDerivation = " << vSubArguments[2]->GenSlidingWindowDeclRef();
-        ss << " * " << vSubArguments[0]->GenSlidingWindowDeclRef() << " * fPowNminus1 + ";
-        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << " * fGeoSeriesDerivation;\n\t\t\t";
+        ss << "fGeoSeriesDerivation =";
+        ss << " arg0 * fPowNminus1 / fX - fGeoSeries /fX;";
+        ss << "\n\t\t\t" << "}\n\t\t\t";
+        ss << "fTerm = arg3 + arg2 *fPowN+ arg1 * fGeoSeries;\n\t\t\t";
+        ss << "fTermDerivation = arg2 * arg0 * fPowNminus1 +";
+        ss << " arg1 * fGeoSeriesDerivation;\n\t\t\t";
         ss << "if (fabs(fTerm) < fEpsilonSmall)\n\t\t\t\t";
         ss << "bFound = true;\n\t\t\t";
         ss << "else\n\t\t\t{\n\t\t\t\t";
-        ss << "if (approxEqual( fabs(fTermDerivation), 0.0))\n\t\t\t\t\t";
+        ss << "if (approxEqual(fabs(fTermDerivation), 0.0))\n\t\t\t\t\t";
         ss << "fXnew = fX + 1.1 * SCdEpsilon;\n\t\t\t\t";
-        ss << "else\n\t\t\t\t\tfXnew = fX - fTerm / fTermDerivation;\n\t\t\t\t" ;
+        ss << "else\n\t\t\t\t\tfXnew = fX - fTerm / fTermDerivation;\n\t\t";
         ss << "nCount++;\n\t\t\t\t";
         ss << "bFound = (fabs(fXnew - fX) < SCdEpsilon);\n\t\t\t\t";
         ss << "fX = fXnew;\n\t\t\t" << "}\n\t\t}\n\t}\n\telse\n\t{\n\t\t";
-        ss << "fX = (" << vSubArguments[5]->GenSlidingWindowDeclRef();
-        ss << " < -1.0) ? -1.0 : " << vSubArguments[5]->GenSlidingWindowDeclRef() << ";\n\t\t";
-        ss << "while (bValid && !bFound && nCount < nIterationsMax)\n\t\t" << "{\n\t\t\t";
-        ss << "if (approxEqual( fabs(fX), 0.0)){\n\t\t\t\t";
-        ss << "fGeoSeries = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n\t\t\t\t";
-        ss << "fGeoSeriesDerivation = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << " * (";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "-1.0)/2.0;\n\t\t\t";
+        ss << "fX = (arg5 < -1.0) ? -1.0 : arg5;\n\t\t";
+        ss << "while (bValid && !bFound && nCount < nIterationsMax)\n\t\t";
+        ss << "{\n\t\t\t";
+        ss << "if (approxEqual(fabs(fX), 0.0)){\n\t\t\t\t";
+        ss << "fGeoSeries = arg0;\n\t\t\t\t";
+        ss << "fGeoSeriesDerivation = arg0 * (arg0-1.0)/2.0;\n\t\t\t";
         ss << "}else{\n\t\t\t\t";
-        ss << "fGeoSeries = (pow( 1.0+fX, ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ") - 1.0) / fX;\n\t\t\t\t";
-        ss << "fGeoSeriesDerivation = ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << " * pow( 1.0+fX, ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "-1.0) / fX - fGeoSeries / fX;\n\t\t\t}\n\t\t\t";
-        ss << "fTerm = " << vSubArguments[3]->GenSlidingWindowDeclRef();
-        ss << " + " << vSubArguments[2]->GenSlidingWindowDeclRef();
-        ss << " * pow(1.0 + fX, " << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << ") + " << vSubArguments[1]->GenSlidingWindowDeclRef() << " * fGeoSeries;\n\t\t\t";
-        ss << "fTermDerivation = " << vSubArguments[2]->GenSlidingWindowDeclRef();
-        ss << " * " << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " * " << "pow( 1.0+fX, ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef() << " -1.0) + ";
-        ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "* fGeoSeriesDerivation;\n\t\t\t";
+        ss << "fGeoSeries = (pow( 1.0+fX, arg0) - 1.0) / fX;\n\t\t\t\t";
+        ss << "fGeoSeriesDerivation =";
+        ss << " arg0 * pow(1.0+fX,arg0-1.0) /";
+        ss << " fX - fGeoSeries / fX;\n\t\t\t}\n\t\t\t";
+        ss << "fTerm = arg3 + arg2 *pow(1.0+fX, arg0)";
+        ss << "+ arg1 * fGeoSeries;\n\t\t\t";
+        ss << "fTermDerivation =";
+        ss << "arg2*arg0*pow(1.0+fX,arg0-1.0)";
+        ss << "+arg1*fGeoSeriesDerivation;\n\t\t\t";
         ss << "if (fabs(fTerm) < fEpsilonSmall)\n\t\t\t\t";
         ss << "bFound = true;\n\t\t\t";
         ss << "else{\n\t\t\t\t";
-        ss << "if (approxEqual( fabs(fTermDerivation), 0.0))\n\t\t\t\t\t";
+        ss << "if (approxEqual(fabs(fTermDerivation), 0.0))\n\t\t\t\t\t";
         ss << "fXnew = fX + 1.1 * SCdEpsilon;\n\t\t\t\t";
         ss << "else\n\t\t\t\t\t";
         ss << "fXnew = fX - fTerm / fTermDerivation;\n\t\t\t\t";
@@ -883,9 +944,10 @@ public:
         ss << "fX = fXnew;\n\t\t\t\t";
         ss << "bValid = (fX >= -1.0);\n\t\t\t";
         ss << "}\n\t\t}\n\t}\n\t";
-        ss << vSubArguments[5]->GenSlidingWindowDeclRef() << "= fX;\n\t";
-        ss << "result = bValid && bFound;\n\t";
+        ss << "if (bValid && bFound)\n\t\t";
         ss << "result = fX;\n\t";
+        ss << "else\n\t\t";
+        ss << "result = 523;\n\t";
         ss << "return result;\n";
         ss << "}";
     }

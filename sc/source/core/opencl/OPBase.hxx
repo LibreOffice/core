@@ -13,6 +13,7 @@
 #include <algorithm>
 
 #include <memory>
+#define ISNAN
 using namespace formula;
 
 namespace sc { namespace opencl {
