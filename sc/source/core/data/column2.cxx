@@ -1238,7 +1238,7 @@ SCROW ScColumn::GetNotePosition( size_t nIndex ) const
     size_t nCount = 0; // Number of notes encountered so far.
     for (; it != itEnd; ++it)
     {
-        if (!it->type != sc::element_type_cellnote)
+        if (it->type != sc::element_type_cellnote)
             // Skip the empty blocks.
             continue;
 
