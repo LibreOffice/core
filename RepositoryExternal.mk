@@ -1268,9 +1268,9 @@ endef
 define gb_LinkTarget__use_openssl
 $(call gb_LinkTarget_use_package,$(1),openssl)
 ifeq ($(OS),WNT)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	crypto \
-	ssl \
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,openssl)/out32dll/ssleay32.lib \
+	$(call gb_UnpackedTarball_get_dir,openssl)/out32dll/libeay32.lib \
 )
 else
 $(call gb_LinkTarget_use_static_libraries,$(1),\
