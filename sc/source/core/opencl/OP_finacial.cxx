@@ -77,7 +77,7 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "NOMINAL_ADD"; }
 };
-class Fvschedule: Normal
+class Fvschedule: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
@@ -183,7 +183,7 @@ public:
 
     }
 };
-class IRR: Normal
+class IRR: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
@@ -256,7 +256,7 @@ public:
     virtual std::string BinFuncName(void) const { return "IRR"; }
 };
 
-class XNPV:Normal
+class XNPV: public Normal
 {
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
@@ -298,7 +298,7 @@ class XNPV:Normal
         ss << "}";
     }
 };
-class PriceMat:Normal
+class PriceMat: public Normal
 {
         public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
@@ -837,7 +837,7 @@ class OpPriceMat:public PriceMat
     virtual std::string BinFuncName(void) const { return "PriceMat"; }
 };
 
-class RATE: Normal
+class RATE: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,

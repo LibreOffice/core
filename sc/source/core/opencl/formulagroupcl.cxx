@@ -99,7 +99,7 @@ public:
     {
         GenDecl(ss);
     }
-    virtual std::string GenSlidingWindowDeclRef(void) const
+    virtual std::string GenSlidingWindowDeclRef(bool=false) const
     {
         assert(GetFormulaToken()->GetType() == formula::svDouble);
         return mSymName;
@@ -138,7 +138,7 @@ public:
     }
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
 
-    virtual std::string GenSlidingWindowDeclRef(void) const
+    virtual std::string GenSlidingWindowDeclRef(bool=false) const
     {
         std::stringstream ss;
         if (!bIsStartFixed && !bIsEndFixed)
@@ -171,6 +171,7 @@ public:
         ss << "double tmp = " << GetBottom() <<";\n\t";
         ss << "int gid0 = get_global_id(0);\n\t";
         unsigned i = vSubArguments.size();
+        size_t nItems = 0;
         while (i--)
         {
             FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -187,15 +188,21 @@ public:
                 } else {
                     ss << "0; i < "<< nCurWindowSize <<"; i++)\n\t\t";
                 }
+                nItems += nCurWindowSize;
+            } else {
+                nItems += 1;
             }
             ss << "tmp = ";
             // Generate the operation in binary form
             ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
             ss << ";\n\t";
         }
-        ss << "return tmp;\n";
-        ss << "}";
+        ss << "return tmp";
+        if (isAverage())
+            ss << "/(double)"<<nItems;
+        ss << ";\n}";
     }
+    virtual bool isAverage() const { return false; }
 };
 
 class SumOfProduct: public SlidingFunctionBase, public OpBase
@@ -204,11 +211,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
     {
-        FormulaToken *pCur = vSubArguments[0]->GetFormulaToken();
-        assert(pCur);
-        const formula::DoubleVectorRefToken* pCurDVR =
-            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
-        size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+        size_t nCurWindowSize = 0;
         ss << "\ndouble " << sSymName;
         ss << "_"<< BinFuncName() <<"(";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -216,6 +219,9 @@ public:
             if (i)
                 ss << ",";
             vSubArguments[i]->GenSlidingWindowDecl(ss);
+            size_t nCurChildWindowSize = vSubArguments[i]->GetWindowSize();
+            nCurWindowSize = (nCurWindowSize < nCurChildWindowSize) ?
+                nCurChildWindowSize:nCurWindowSize;
         }
         ss << ") {\n\t";
         ss << "double tmp = 0.0;\n\t";
@@ -226,7 +232,7 @@ public:
         {
             if (i)
                 ss << "*";
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+            ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
         }
         ss << ";\n\t";
         ss << "return tmp;\n";
@@ -267,6 +273,10 @@ public:
         return ss.str();
     }
     virtual std::string BinFuncName(void) const { return "fsum"; }
+};
+
+class OpAverage: public OpSum {
+    virtual bool isAverage() const { return true; }
 };
 
 class OpSub: public Reduction {
@@ -326,7 +336,7 @@ public:
     {
         return lhs + "*" + rhs;
     }
-    virtual std::string BinFuncName(void) const { return "fsum"; }
+    virtual std::string BinFuncName(void) const { return "fsop"; }
 };
 /// Helper functions that have multiple buffers
 template<class Op>
@@ -375,7 +385,14 @@ public:
 
     virtual size_t GetWindowSize(void) const
     {
-        return 1;
+        size_t nCurWindowSize = 0;
+        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        {
+            size_t nCurChildWindowSize = mvSubArguments[i]->GetWindowSize();
+            nCurWindowSize = (nCurWindowSize < nCurChildWindowSize) ?
+                nCurChildWindowSize:nCurWindowSize;
+        }
+        return nCurWindowSize;
     }
 
     /// When declared as input to a sliding window function
@@ -388,26 +405,28 @@ public:
             (*it)->GenSlidingWindowDecl(ss);
         }
     }
-
-    virtual std::string GenSlidingWindowDeclRef(void) const
+    /// Generate either a function call to each children
+    /// or direclty inline it if we are already inside a loop
+    virtual std::string GenSlidingWindowDeclRef(bool nested=false) const
     {
         std::stringstream ss;
-        FormulaToken *pChild = mFormulaTree->Children[0]->GetFormulaToken();
-        assert(pChild);
-        ss << mSymName << "_" << CodeGen.BinFuncName() <<"(";
-        size_t nItems = 0;
-        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        if (!nested)
         {
-            if (i)
-                ss << ", ";
-            mvSubArguments[i]->GenDeclRef(ss);
-            nItems += mvSubArguments[i]->GetWindowSize();
-        }
-        ss << ")";
-        if (mFormulaTree->GetFormulaToken() &&
-                mFormulaTree->GetFormulaToken()->GetOpCode() == ocAverage)
-        {
-            ss << "/(double)"<<nItems;
+            ss << mSymName << "_" << CodeGen.BinFuncName() <<"(";
+            for (unsigned i = 0; i < mvSubArguments.size(); i++)
+            {
+                if (i)
+                    ss << ", ";
+                if (!nested)
+                    mvSubArguments[i]->GenDeclRef(ss);
+                else
+                    ss << mvSubArguments[i]->GenSlidingWindowDeclRef(true);
+            }
+            ss << ")";
+        } else {
+            assert(mvSubArguments.size() == 2);
+            ss << "(" << CodeGen.Gen2(mvSubArguments[0]->GenSlidingWindowDeclRef(true),
+                         mvSubArguments[1]->GenSlidingWindowDeclRef(true)) << ")";
         }
         return ss.str();
     }
@@ -469,8 +488,11 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 break;
             case ocAdd:
             case ocSum:
-            case ocAverage:
                 mvSubArguments.push_back(SoPHelper<OpSum>(ts,
+                    ft->Children[i]));
+                break;
+            case ocAverage:
+                mvSubArguments.push_back(SoPHelper<OpAverage>(ts,
                     ft->Children[i]));
                 break;
             case ocMin:
@@ -678,7 +700,7 @@ public:
         decl << "(\n__global double *result, ";
         DK->GenSlidingWindowDecl(decl);
         decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
-            DK->GenSlidingWindowDeclRef() << ";\n}\n";
+            DK->GenSlidingWindowDeclRef(false) << ";\n}\n";
         mFullProgramSrc = decl.str();
 #if 1
         std::cerr<< "Program to be compiled = \n" << mFullProgramSrc << "\n";

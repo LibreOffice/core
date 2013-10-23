@@ -56,7 +56,7 @@ public:
         GenDecl(ss);
     }
     /// When referenced in a sliding window function
-    virtual std::string GenSlidingWindowDeclRef(void) const
+    virtual std::string GenSlidingWindowDeclRef(bool=false) const
     {
         std::stringstream ss;
         ss << mSymName << "[gid0]";
