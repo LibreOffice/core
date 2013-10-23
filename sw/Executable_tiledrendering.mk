@@ -16,6 +16,12 @@ $(eval $(call gb_Executable_use_api,tiledrendering,\
     udkapi \
 ))
 
+$(eval $(call gb_Executable_set_include,tiledrendering,\
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/ui/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Executable_use_static_libraries,tiledrendering,\
     vclmain \
 ))

@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
@@ -22,7 +18,15 @@
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/virdev.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <swmodule.hxx>
+#include <wrtsh.hxx>
+
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -55,6 +59,12 @@ class TiledRenderingDialog: public ModalDialog
 {
 private:
     TiledRenderingApp *mpApp;
+    NumericField *mpContextWidth;
+    NumericField *mpContextHeight;
+    NumericField *mpTilePosX;
+    NumericField *mpTilePosY;
+    NumericField *mpTileWidth;
+    NumericField *mpTileHeight;
     FixedImage *mpImage;
 
 public:
@@ -72,6 +82,12 @@ public:
 
         SetStyle(GetStyle()|WB_CLOSEABLE);
 
+        get(mpContextWidth, "spinContextWidth");
+        get(mpContextHeight, "spinContextHeight");
+        get(mpTilePosX, "spinTilePosX");
+        get(mpTilePosY, "spinTilePosY");
+        get(mpTileWidth, "spinTileWidth");
+        get(mpTileHeight, "spinTileHeight");
         get(mpImage, "imageTile");
     }
 
@@ -82,24 +98,40 @@ public:
     DECL_LINK ( RenderHdl, Button * );
     DECL_LINK ( ChooseDocumentHdl, Button * );
 
-    sal_Int32 ExtractInt(const char * name)
+    int extractInt(const NumericField *pField)
     {
-        NumericField * pField;
-        get(pField, name);
         OUString aString(pField->GetText());
         return aString.toInt32();
     }
-
 };
 
 IMPL_LINK ( TiledRenderingDialog,  RenderHdl, Button *, EMPTYARG )
 {
-    ExtractInt("spinContextWidth");
-    ExtractInt("spinContextHeight");
-    ExtractInt("spinTilePosX");
-    ExtractInt("spinTilePosY");
-    ExtractInt("spinTileWidth");
-    ExtractInt("spinTileHeight");
+    int contextWidth = extractInt(mpContextWidth);
+    int contextHeight = extractInt(mpContextHeight);
+    int tilePosX = extractInt(mpTilePosX);
+    int tilePosY = extractInt(mpTilePosY);
+    int tileWidth = extractInt(mpTileWidth);
+    int tileHeight = extractInt(mpTileHeight);
+
+    // do the same thing we are doing in touch_lo_draw_tile()
+    SwWrtShell *pViewShell = GetActiveWrtShell();
+
+    if (pViewShell)
+    {
+        // TODO create a VirtualDevice based on SystemGraphicsData instead so
+        // that we get direct rendering; something like:
+        //
+        // SystemGraphicsData aData;
+        // [setup the aData]
+        // VirtualDevice aDevice(&aData, [color depth]);
+        VirtualDevice aDevice;
+        aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
+
+        pViewShell->PaintTile(&aDevice, Rectangle(tilePosX, tilePosY, tileWidth, tileHeight));
+        //TODO now get it to the 'context'
+    }
+
     return 1;
 }
 
