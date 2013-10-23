@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZH///88\u003d",
+        "filename": "cppuhelper/source/bootstrap.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-23T06:36:49Z",
+      "side": 1,
+      "message": "IMO this \"trick\" of making uri a non-const lvalue suitable as argument in the startsWith call is too confusing for clients of bootstrap_expandUri who look at the declaration in bootstrap.hxx and wonder why the parameter lacks the common \"const \u0026\".  I would rephrase the below with an additional var\n\n  OUString rest;\n  return uri.startsWith(\"vnd.sun.star.expand:\", \u0026rest) ...",
+      "revId": "3db314f2251c2ff1847fab19eb88ea9c570f86e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
