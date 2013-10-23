@@ -600,12 +600,16 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
         aBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
         aBlockPos.miCellNotePos = maCellNotes.begin();
 
-        if ( nDelFlag & IDF_NOTE )
-            DeleteCellNotes( aBlockPos, nStartRow, nEndRow );
-
         // Delete the cells for real.
         std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(aBlockPos, *this));
         CellStorageModified();
+    }
+
+    if (nDelFlag & IDF_NOTE)
+    {
+        sc::ColumnBlockPosition aBlockPos;
+        aBlockPos.miCellNotePos = maCellNotes.begin();
+        DeleteCellNotes(aBlockPos, nStartRow, nEndRow);
     }
 
     if ( nDelFlag & IDF_EDITATTR )
