@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_ISURFACE_HXX
-#define INCLUDED_CANVAS_ISURFACE_HXX
+#ifndef INCLUDED_CANVAS_RENDERING_ISURFACE_HXX
+#define INCLUDED_CANVAS_RENDERING_ISURFACE_HXX
 
 #include <sal/types.h>
 
@@ -77,6 +77,6 @@ namespace canvas
     typedef ::boost::shared_ptr< ISurface > ISurfaceSharedPtr;
 }
 
-#endif /* INCLUDED_CANVAS_ISURFACE_HXX */
+#endif // INCLUDED_CANVAS_RENDERING_ISURFACE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

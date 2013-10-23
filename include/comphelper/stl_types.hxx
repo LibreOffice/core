@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#define _COMPHELPER_STLTYPES_HXX_
+#ifndef INCLUDED_COMPHELPER_STL_TYPES_HXX
+#define INCLUDED_COMPHELPER_STL_TYPES_HXX
 
 #include "sal/config.h"
 
@@ -268,6 +268,6 @@ OutputIter intersperse(
     typedef ::std::set< valuetype, comparefct > classname;  \
     DECLARE_STL_ITERATORS(classname)                        \
 
-#endif  // _COMPHELPER_STLTYPES_HXX_
+#endif // INCLUDED_COMPHELPER_STL_TYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

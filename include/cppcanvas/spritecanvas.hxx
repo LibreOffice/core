@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_SPRITECANVAS_HXX
-#define _CPPCANVAS_SPRITECANVAS_HXX
+#ifndef INCLUDED_CPPCANVAS_SPRITECANVAS_HXX
+#define INCLUDED_CPPCANVAS_SPRITECANVAS_HXX
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -71,6 +71,6 @@ namespace cppcanvas
 
 }
 
-#endif /* _CPPCANVAS_SPRITECANVAS_HXX */
+#endif // INCLUDED_CPPCANVAS_SPRITECANVAS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

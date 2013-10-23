@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_OFFICE_RESOURCE_BUNDLE_HXX
-#define COMPHELPER_OFFICE_RESOURCE_BUNDLE_HXX
+#ifndef INCLUDED_COMPHELPER_OFFICERESOURCEBUNDLE_HXX
+#define INCLUDED_COMPHELPER_OFFICERESOURCEBUNDLE_HXX
 
 #include <comphelper/comphelperdllapi.h>
 
@@ -89,6 +89,6 @@ namespace comphelper
 } // namespace comphelper
 //........................................................................
 
-#endif // COMPHELPER_OFFICE_RESOURCE_BUNDLE_HXX
+#endif // INCLUDED_COMPHELPER_OFFICERESOURCEBUNDLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

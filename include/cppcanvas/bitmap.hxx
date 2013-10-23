@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_BITMAP_HXX
-#define _CPPCANVAS_BITMAP_HXX
+#ifndef INCLUDED_CPPCANVAS_BITMAP_HXX
+#define INCLUDED_CPPCANVAS_BITMAP_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -69,6 +69,6 @@ namespace cppcanvas
     typedef ::boost::shared_ptr< ::cppcanvas::Bitmap > BitmapSharedPtr;
 }
 
-#endif /* _CPPCANVAS_BITMAP_HXX */
+#endif // INCLUDED_CPPCANVAS_BITMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

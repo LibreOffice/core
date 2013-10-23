@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_GUARDING_HXX_
-#define _COMPHELPER_GUARDING_HXX_
+#ifndef INCLUDED_COMPHELPER_GUARDING_HXX
+#define INCLUDED_COMPHELPER_GUARDING_HXX
 
 #include <osl/mutex.hxx>
 
@@ -51,6 +51,6 @@ typedef ORelease< ::osl::Mutex >    MutexRelease;
 }   // namespace comphelper
 //.........................................................................
 
-#endif // _COMPHELPER_GUARDING_HXX_
+#endif // INCLUDED_COMPHELPER_GUARDING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

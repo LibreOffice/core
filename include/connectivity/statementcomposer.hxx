@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_STATEMENTCOMPOSER_HXX
-#define CONNECTIVITY_STATEMENTCOMPOSER_HXX
+#ifndef INCLUDED_CONNECTIVITY_STATEMENTCOMPOSER_HXX
+#define INCLUDED_CONNECTIVITY_STATEMENTCOMPOSER_HXX
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
@@ -97,6 +97,6 @@ namespace dbtools
 } // namespace dbtools
 //........................................................................
 
-#endif // CONNECTIVITY_STATEMENTCOMPOSER_HXX
+#endif // INCLUDED_CONNECTIVITY_STATEMENTCOMPOSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CPPUHELPER_COMPBASE12_HXX_
-#define _CPPUHELPER_COMPBASE12_HXX_
+#ifndef INCLUDED_CPPUHELPER_COMPBASE12_HXX
+#define INCLUDED_CPPUHELPER_COMPBASE12_HXX
 
 #include <cppuhelper/implbase12.hxx>
 #include <cppuhelper/compbase_ex.hxx>

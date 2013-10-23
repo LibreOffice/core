@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
-#define _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#ifndef INCLUDED_COMPHELPER_SEQUENCEASHASHMAP_HXX
+#define INCLUDED_COMPHELPER_SEQUENCEASHASHMAP_HXX
 
 #include <boost/unordered_map.hpp>
 
@@ -308,6 +308,6 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
 
 } // namespace comphelper
 
-#endif // _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#endif // INCLUDED_COMPHELPER_SEQUENCEASHASHMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

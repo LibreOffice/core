@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_SHAREDMUTEX_HXX
-#define COMPHELPER_SHAREDMUTEX_HXX
+#ifndef INCLUDED_COMPHELPER_SHAREDMUTEX_HXX
+#define INCLUDED_COMPHELPER_SHAREDMUTEX_HXX
 
 #include "comphelper/comphelperdllapi.h"
 
@@ -81,6 +81,6 @@ namespace comphelper
 } // namespace comphelper
 //........................................................................
 
-#endif // COMPHELPER_SHAREDMUTEX_HXX
+#endif // INCLUDED_COMPHELPER_SHAREDMUTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

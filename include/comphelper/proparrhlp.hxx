@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#define _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#ifndef INCLUDED_COMPHELPER_PROPARRHLP_HXX
+#define INCLUDED_COMPHELPER_PROPARRHLP_HXX
 
 #include <comphelper/stl_types.hxx>
 #include <comphelper/propagg.hxx>
@@ -169,7 +169,7 @@ template <class TYPE> inline
 }
 //... namespace comphelper ................................................
 
-#endif // _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#endif // INCLUDED_COMPHELPER_PROPARRHLP_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

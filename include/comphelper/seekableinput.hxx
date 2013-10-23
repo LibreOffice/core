@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _COMPHELPER_STREAM_SEEKABLEINPUT_HXX_
-#define _COMPHELPER_STREAM_SEEKABLEINPUT_HXX_
+#ifndef INCLUDED_COMPHELPER_SEEKABLEINPUT_HXX
+#define INCLUDED_COMPHELPER_SEEKABLEINPUT_HXX
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Reference.hxx>

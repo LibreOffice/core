@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CPPUHELPERDLLAPI_H
-#define INCLUDED_CPPUHELPERDLLAPI_H
+#ifndef INCLUDED_CPPUHELPER_CPPUHELPERDLLAPI_H
+#define INCLUDED_CPPUHELPER_CPPUHELPERDLLAPI_H
 
 #include "sal/types.h"
 
@@ -29,6 +29,6 @@
 #endif
 #define CPPUHELPER_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_CPPUHELPERDLLAPI_H */
+#endif // INCLUDED_CPPUHELPER_CPPUHELPERDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

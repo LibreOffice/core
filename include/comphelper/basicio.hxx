@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_BASIC_IO_HXX_
-#define _COMPHELPER_BASIC_IO_HXX_
+#ifndef INCLUDED_COMPHELPER_BASICIO_HXX
+#define INCLUDED_COMPHELPER_BASICIO_HXX
 
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -94,6 +94,6 @@ const staruno::Reference<stario::XObjectOutputStream>& operator << (const starun
 }   // namespace comphelper
 //.........................................................................
 
-#endif // _COMPHELPER_BASIC_IO_HXX_
+#endif // INCLUDED_COMPHELPER_BASICIO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

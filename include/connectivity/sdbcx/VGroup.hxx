@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_SDBCX_GROUP_HXX_
-#define _CONNECTIVITY_SDBCX_GROUP_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SDBCX_VGROUP_HXX
+#define INCLUDED_CONNECTIVITY_SDBCX_VGROUP_HXX
 
 #include <osl/diagnose.h>
 
@@ -97,7 +97,7 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_SDBCX_GROUP_HXX_
+#endif // INCLUDED_CONNECTIVITY_SDBCX_VGROUP_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

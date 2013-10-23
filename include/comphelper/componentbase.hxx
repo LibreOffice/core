@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_COMPONENTBASE_HXX
-#define COMPHELPER_COMPONENTBASE_HXX
+#ifndef INCLUDED_COMPHELPER_COMPONENTBASE_HXX
+#define INCLUDED_COMPHELPER_COMPONENTBASE_HXX
 
 #include "comphelper/comphelperdllapi.h"
 #include <cppuhelper/interfacecontainer.hxx>
@@ -149,6 +149,6 @@ namespace comphelper
 } // namespace ComponentBase
 //........................................................................
 
-#endif // COMPHELPER_COMPONENTBASE_HXX
+#endif // INCLUDED_COMPHELPER_COMPONENTBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

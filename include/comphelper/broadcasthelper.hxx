@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#define _COMPHELPER_BROADCASTHELPER_HXX_
+#ifndef INCLUDED_COMPHELPER_BROADCASTHELPER_HXX
+#define INCLUDED_COMPHELPER_BROADCASTHELPER_HXX
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -58,6 +58,6 @@ namespace comphelper
         mutable ::osl::Mutex m_aMutex;
     };
 }
-#endif // _COMPHELPER_BROADCASTHELPER_HXX_
+#endif // INCLUDED_COMPHELPER_BROADCASTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

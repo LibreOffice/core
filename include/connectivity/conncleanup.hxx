@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_CONNCLEANUP_HXX_
-#define _CONNECTIVITY_CONNCLEANUP_HXX_
+#ifndef INCLUDED_CONNECTIVITY_CONNCLEANUP_HXX
+#define INCLUDED_CONNECTIVITY_CONNCLEANUP_HXX
 
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -85,6 +85,6 @@ namespace dbtools
 }   // namespace dbtools
 //.........................................................................
 
-#endif // _CONNECTIVITY_CONNCLEANUP_HXX_
+#endif // INCLUDED_CONNECTIVITY_CONNCLEANUP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

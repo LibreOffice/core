@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_PARAMETERCONTINUATION_HXX_INCLUDED
-#define CONNECTIVITY_PARAMETERCONTINUATION_HXX_INCLUDED
+#ifndef INCLUDED_CONNECTIVITY_PARAMETERCONT_HXX
+#define INCLUDED_CONNECTIVITY_PARAMETERCONT_HXX
 
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <comphelper/interaction.hxx>
@@ -47,6 +47,6 @@ namespace dbtools
         void operator =(const OParameterContinuation&);
     };
 } // dbtools
-#endif //CONNECTIVITY_PARAMETERCONTINUATION_HXX_INCLUDED
+#endif // INCLUDED_CONNECTIVITY_PARAMETERCONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

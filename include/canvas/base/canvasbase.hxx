@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_CANVASBASE_HXX
-#define INCLUDED_CANVAS_CANVASBASE_HXX
+#ifndef INCLUDED_CANVAS_BASE_CANVASBASE_HXX
+#define INCLUDED_CANVAS_BASE_CANVASBASE_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -469,6 +469,6 @@ namespace canvas
     };
 }
 
-#endif /* INCLUDED_CANVAS_CANVASBASE_HXX */
+#endif // INCLUDED_CANVAS_BASE_CANVASBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

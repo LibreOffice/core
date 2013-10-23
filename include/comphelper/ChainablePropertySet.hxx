@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_CHAINABLEPROPERTYSET_HXX_
-#define _COMPHELPER_CHAINABLEPROPERTYSET_HXX_
+#ifndef INCLUDED_COMPHELPER_CHAINABLEPROPERTYSET_HXX
+#define INCLUDED_COMPHELPER_CHAINABLEPROPERTYSET_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>

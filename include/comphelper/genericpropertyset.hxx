@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
-#define _COMPHELPER_GENERICPROPERTYSET_HXX_
+#ifndef INCLUDED_COMPHELPER_GENERICPROPERTYSET_HXX
+#define INCLUDED_COMPHELPER_GENERICPROPERTYSET_HXX
 
 #include <comphelper/propertysetinfo.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -29,6 +29,6 @@ namespace comphelper
     COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GenericPropertySet_CreateInstance( PropertySetInfo* pInfo );
 }
 
-#endif // _COMPHELPER_GENERICPROPERTYSET_HXX_
+#endif // INCLUDED_COMPHELPER_GENERICPROPERTYSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

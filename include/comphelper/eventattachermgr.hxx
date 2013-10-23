@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_EVENTATTACHERMGR_HXX_
-#define _COMPHELPER_EVENTATTACHERMGR_HXX_
+#ifndef INCLUDED_COMPHELPER_EVENTATTACHERMGR_HXX
+#define INCLUDED_COMPHELPER_EVENTATTACHERMGR_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include "comphelper/comphelperdllapi.h"
@@ -47,6 +47,6 @@ createEventAttacherManager(
 
 }
 
-#endif // _COMPHELPER_EVENTATTACHERMGR_HXX_
+#endif // INCLUDED_COMPHELPER_EVENTATTACHERMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

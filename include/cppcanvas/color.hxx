@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_COLOR_HXX
-#define _CPPCANVAS_COLOR_HXX
+#ifndef INCLUDED_CPPCANVAS_COLOR_HXX
+#define INCLUDED_CPPCANVAS_COLOR_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -84,6 +84,6 @@ namespace cppcanvas
 
 }
 
-#endif /* _CPPCANVAS_COLOR_HXX */
+#endif // INCLUDED_CPPCANVAS_COLOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

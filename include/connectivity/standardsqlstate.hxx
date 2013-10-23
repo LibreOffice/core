@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_STANDARD_SQL_STATE_HXX
-#define CONNECTIVITY_STANDARD_SQL_STATE_HXX
+#ifndef INCLUDED_CONNECTIVITY_STANDARDSQLSTATE_HXX
+#define INCLUDED_CONNECTIVITY_STANDARDSQLSTATE_HXX
 
 //.........................................................................
 namespace dbtools
@@ -63,6 +63,6 @@ namespace dbtools
 }   // namespace dbtools
 //.........................................................................
 
-#endif // CONNECTIVITY_STANDARD_SQL_STATE_HXX
+#endif // INCLUDED_CONNECTIVITY_STANDARDSQLSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

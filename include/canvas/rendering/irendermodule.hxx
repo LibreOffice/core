@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_IRENDERMODULE_HXX
-#define INCLUDED_CANVAS_IRENDERMODULE_HXX
+#ifndef INCLUDED_CANVAS_RENDERING_IRENDERMODULE_HXX
+#define INCLUDED_CANVAS_RENDERING_IRENDERMODULE_HXX
 
 #include <sal/types.h>
 
@@ -138,6 +138,6 @@ namespace canvas
     };
 }
 
-#endif /* INCLUDED_CANVAS_IRENDERMODULE_HXX */
+#endif // INCLUDED_CANVAS_RENDERING_IRENDERMODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

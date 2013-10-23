@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_INDEXCOLUMNSHELPER_HXX
-#define CONNECTIVITY_INDEXCOLUMNSHELPER_HXX
+#ifndef INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX
+#define INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX
 
 #include "connectivity/sdbcx/VCollection.hxx"
 #include "connectivity/dbtoolsdllapi.hxx"
@@ -39,6 +39,6 @@ namespace connectivity
                         const ::std::vector< OUString> &_rVector);
     };
 }
-#endif // CONNECTIVITY_INDEXCOLUMNSHELPER_HXX
+#endif // INCLUDED_CONNECTIVITY_TINDEXCOLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

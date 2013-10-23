@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_ATTRIBUTE_LIST_HXX
-#define _COMPHELPER_ATTRIBUTE_LIST_HXX
+#ifndef INCLUDED_COMPHELPER_ATTRIBUTELIST_HXX
+#define INCLUDED_COMPHELPER_ATTRIBUTELIST_HXX
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -61,6 +61,6 @@ public:
 
 } // namespace comphelper
 
-#endif // _COMPHELPER_ATTRIBUTE_LIST_HXX
+#endif // INCLUDED_COMPHELPER_ATTRIBUTELIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

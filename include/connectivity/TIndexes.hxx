@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_INDEXESHELPER_HXX
-#define CONNECTIVITY_INDEXESHELPER_HXX
+#ifndef INCLUDED_CONNECTIVITY_TINDEXES_HXX
+#define INCLUDED_CONNECTIVITY_TINDEXES_HXX
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sdbcx/VCollection.hxx"
@@ -45,6 +45,6 @@ namespace connectivity
     };
 }
 
-#endif // CONNECTIVITY_INDEXESHELPER_HXX
+#endif // INCLUDED_CONNECTIVITY_TINDEXES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

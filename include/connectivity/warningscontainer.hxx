@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBTOOLS_WARNINGSCONTAINER_HXX
-#define DBTOOLS_WARNINGSCONTAINER_HXX
+#ifndef INCLUDED_CONNECTIVITY_WARNINGSCONTAINER_HXX
+#define INCLUDED_CONNECTIVITY_WARNINGSCONTAINER_HXX
 
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -97,6 +97,6 @@ namespace dbtools
 }   // namespace dbtools
 //.........................................................................
 
-#endif // DBTOOLS_WARNINGSCONTAINER_HXX
+#endif // INCLUDED_CONNECTIVITY_WARNINGSCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

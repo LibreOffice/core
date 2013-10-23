@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_ACCESSIBLE_TEXT_HELPER_HXX
-#define COMPHELPER_ACCESSIBLE_TEXT_HELPER_HXX
+#ifndef INCLUDED_COMPHELPER_ACCESSIBLETEXTHELPER_HXX
+#define INCLUDED_COMPHELPER_ACCESSIBLETEXTHELPER_HXX
 
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
@@ -139,7 +139,7 @@ namespace comphelper
 }   // namespace comphelper
 //..............................................................................
 
-#endif // COMPHELPER_ACCESSIBLE_TEXT_HELPER_HXX
+#endif // INCLUDED_COMPHELPER_ACCESSIBLETEXTHELPER_HXX
 
 
 // -----------------------------------------------------------------------------

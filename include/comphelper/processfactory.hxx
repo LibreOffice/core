@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#define _COMPHELPER_PROCESSFACTORY_HXX_
+#ifndef INCLUDED_COMPHELPER_PROCESSFACTORY_HXX
+#define INCLUDED_COMPHELPER_PROCESSFACTORY_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -71,6 +71,6 @@ getProcessComponentContext();
 
 }
 
-#endif // _COMPHELPER_PROCESSFACTORY_HXX_
+#endif // INCLUDED_COMPHELPER_PROCESSFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

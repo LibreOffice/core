@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_ICACHEDPRIMITIVE_HXX
-#define INCLUDED_CANVAS_ICACHEDPRIMITIVE_HXX
+#ifndef INCLUDED_CANVAS_RENDERING_ICACHEDPRIMITIVE_HXX
+#define INCLUDED_CANVAS_RENDERING_ICACHEDPRIMITIVE_HXX
 
 #include <sal/types.h>
 
@@ -55,6 +55,6 @@ namespace canvas
     typedef ::boost::shared_ptr< ICachedPrimitive > ICachedPrimitiveSharedPtr;
 }
 
-#endif /* INCLUDED_CANVAS_ICACHEDPRIMITIVE_HXX */
+#endif // INCLUDED_CANVAS_RENDERING_ICACHEDPRIMITIVE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

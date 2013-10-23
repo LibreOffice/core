@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _COMPHELPER_STREAM_OSLFILEWRAPPER_HXX_
-#define _COMPHELPER_STREAM_OSLFILEWRAPPER_HXX_
+#ifndef INCLUDED_COMPHELPER_OSLFILE2STREAMWRAP_HXX
+#define INCLUDED_COMPHELPER_OSLFILE2STREAMWRAP_HXX
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -75,6 +75,6 @@ private:
 }   // namespace comphelper
 
 
-#endif // _COMPHELPER_STREAM_OSLFILEWRAPPER_HXX_
+#endif // INCLUDED_COMPHELPER_OSLFILE2STREAMWRAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

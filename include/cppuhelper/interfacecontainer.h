@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
-#define _CPPUHELPER_INTERFACECONTAINER_H_
+#ifndef INCLUDED_CPPUHELPER_INTERFACECONTAINER_H
+#define INCLUDED_CPPUHELPER_INTERFACECONTAINER_H
 
 #include <vector>
 #include <osl/mutex.hxx>

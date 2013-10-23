@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
-#define _CPPUHELPER_QUERYINTERFACE_HXX_
+#ifndef INCLUDED_CPPUHELPER_QUERYINTERFACE_HXX
+#define INCLUDED_CPPUHELPER_QUERYINTERFACE_HXX
 
 #include "sal/config.h"
 #include "com/sun/star/uno/Any.hxx"

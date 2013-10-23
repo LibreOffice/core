@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_TEXT_HXX
-#define _CPPCANVAS_TEXT_HXX
+#ifndef INCLUDED_CPPCANVAS_TEXT_HXX
+#define INCLUDED_CPPCANVAS_TEXT_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <cppcanvas/canvasgraphic.hxx>
@@ -40,6 +40,6 @@ namespace cppcanvas
     typedef ::boost::shared_ptr< ::cppcanvas::Text > TextSharedPtr;
 }
 
-#endif /* _CPPCANVAS_TEXT_HXX */
+#endif // INCLUDED_CPPCANVAS_TEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

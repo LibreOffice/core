@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_COMPONENTGUARD_HXX
-#define COMPHELPER_COMPONENTGUARD_HXX
+#ifndef INCLUDED_COMPHELPER_COMPONENTGUARD_HXX
+#define INCLUDED_COMPHELPER_COMPONENTGUARD_HXX
 
 #include <com/sun/star/lang/DisposedException.hpp>
 
@@ -58,6 +58,6 @@ namespace comphelper
 } // namespace comphelper
 //......................................................................................................................
 
-#endif // COMPHELPER_COMPONENTGUARD_HXX
+#endif // INCLUDED_COMPHELPER_COMPONENTGUARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#define _CPPUHELPER_FACTORY_HXX_
+#ifndef INCLUDED_CPPUHELPER_FACTORY_HXX
+#define INCLUDED_CPPUHELPER_FACTORY_HXX
 
 #include <rtl/ustring.hxx>
 #include <uno/dispatcher.h>

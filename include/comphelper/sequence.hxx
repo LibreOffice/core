@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#define _COMPHELPER_SEQUENCE_HXX_
+#ifndef INCLUDED_COMPHELPER_SEQUENCE_HXX
+#define INCLUDED_COMPHELPER_SEQUENCE_HXX
 
 #include <algorithm>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -354,6 +354,6 @@ namespace comphelper
 //.........................................................................
 
 
-#endif // _COMPHELPER_SEQUENCE_HXX_
+#endif // INCLUDED_COMPHELPER_SEQUENCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

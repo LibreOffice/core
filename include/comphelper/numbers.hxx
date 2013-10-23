@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_NUMBERS_HXX_
-#define _COMPHELPER_NUMBERS_HXX_
+#ifndef INCLUDED_COMPHELPER_NUMBERS_HXX
+#define INCLUDED_COMPHELPER_NUMBERS_HXX
 
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
@@ -62,6 +62,6 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
-#endif // _COMPHELPER_NUMBERS_HXX_
+#endif // INCLUDED_COMPHELPER_NUMBERS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

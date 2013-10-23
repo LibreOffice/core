@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#define _CPPUHELPER_IMPLBASE5_HXX_
+#ifndef INCLUDED_CPPUHELPER_IMPLBASE5_HXX
+#define INCLUDED_CPPUHELPER_IMPLBASE5_HXX
 
 #include <cppuhelper/implbase_ex.hxx>
 #include <rtl/instance.hxx>

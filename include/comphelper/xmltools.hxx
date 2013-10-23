@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _XMLCHAFF_HXX
-#define _XMLCHAFF_HXX
+#ifndef INCLUDED_COMPHELPER_XMLTOOLS_HXX
+#define INCLUDED_COMPHELPER_XMLTOOLS_HXX
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_OFOPXMLHELPER_HXX
-#define _COMPHELPER_OFOPXMLHELPER_HXX
+#ifndef INCLUDED_COMPHELPER_OFOPXMLHELPER_HXX
+#define INCLUDED_COMPHELPER_OFOPXMLHELPER_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/beans/StringPair.hpp>

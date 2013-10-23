@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#define _COMPHELPER_PROPERTY_HXX_
+#ifndef INCLUDED_COMPHELPER_PROPERTY_HXX
+#define INCLUDED_COMPHELPER_PROPERTY_HXX
 
 #include <cppuhelper/proptypehlp.hxx>
 #include <comphelper/extract.hxx>
@@ -200,6 +200,6 @@ COMPHELPER_DLLPUBLIC sal_Bool tryPropertyValue(staruno::Any& _rConvertedValue, s
 }
 //... namespace comphelper .......................................................
 
-#endif // _COMPHELPER_PROPERTY_HXX_
+#endif // INCLUDED_COMPHELPER_PROPERTY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

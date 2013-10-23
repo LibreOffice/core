@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_TYPEGENERATION_HXX_
-#define _COMPHELPER_TYPEGENERATION_HXX_
+#ifndef INCLUDED_COMPHELPER_TYPEGENERATION_HXX
+#define INCLUDED_COMPHELPER_TYPEGENERATION_HXX
 
 #include <sal/types.h>
 #include "comphelper/comphelperdllapi.h"

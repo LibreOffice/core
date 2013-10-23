@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef COMPHELPER_INC_COMPHELPER_COMPONENTMODULE_HXX
-#define COMPHELPER_INC_COMPHELPER_COMPONENTMODULE_HXX
+#ifndef INCLUDED_COMPHELPER_COMPONENTMODULE_HXX
+#define INCLUDED_COMPHELPER_COMPONENTMODULE_HXX
 
 #include <comphelper/comphelperdllapi.h>
 
@@ -256,6 +256,6 @@ namespace comphelper
 } // namespace comphelper
 //........................................................................
 
-#endif // COMPHELPER_INC_COMPHELPER_COMPONENTMODULE_HXX
+#endif // INCLUDED_COMPHELPER_COMPONENTMODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

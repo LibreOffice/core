@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
-#define _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SDBCX_VDESCRIPTOR_HXX
+#define INCLUDED_CONNECTIVITY_SDBCX_VDESCRIPTOR_HXX
 
 #include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -90,6 +90,6 @@ namespace connectivity
     }
 
 }
-#endif // _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
+#endif // INCLUDED_CONNECTIVITY_SDBCX_VDESCRIPTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

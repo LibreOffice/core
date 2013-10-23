@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_DRIVERSCONFIG_HXX_INCLUDED
-#define CONNECTIVITY_DRIVERSCONFIG_HXX_INCLUDED
+#ifndef INCLUDED_CONNECTIVITY_DRIVERSCONFIG_HXX
+#define INCLUDED_CONNECTIVITY_DRIVERSCONFIG_HXX
 
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -75,6 +75,6 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xORB;
     };
 }
-#endif // CONNECTIVITY_DRIVERSCONFIG_HXX_INCLUDED
+#endif // INCLUDED_CONNECTIVITY_DRIVERSCONFIG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

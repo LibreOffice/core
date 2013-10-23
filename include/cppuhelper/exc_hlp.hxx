@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPUHELPER_EXC_HLP_HXX_
-#define _CPPUHELPER_EXC_HLP_HXX_
+#ifndef INCLUDED_CPPUHELPER_EXC_HLP_HXX
+#define INCLUDED_CPPUHELPER_EXC_HLP_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 #include "cppuhelperdllapi.h"

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_IPARSECONTEXT_HXX
-#define CONNECTIVITY_IPARSECONTEXT_HXX
+#ifndef INCLUDED_CONNECTIVITY_IPARSECONTEXT_HXX
+#define INCLUDED_CONNECTIVITY_IPARSECONTEXT_HXX
 
 namespace connectivity { class OSQLParseNode; }
 
@@ -99,6 +99,6 @@ namespace connectivity
     };
 }
 
-#endif // CONNECTIVITY_IPARSECONTEXT_HXX
+#endif // INCLUDED_CONNECTIVITY_IPARSECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

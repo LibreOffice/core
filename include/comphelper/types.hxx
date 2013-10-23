@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_TYPES_HXX_
-#define _COMPHELPER_TYPES_HXX_
+#ifndef INCLUDED_COMPHELPER_TYPES_HXX
+#define INCLUDED_COMPHELPER_TYPES_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -169,6 +169,6 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
-#endif // _COMPHELPER_TYPES_HXX_
+#endif // INCLUDED_COMPHELPER_TYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

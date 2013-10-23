@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_SQLSTATEMENTHELPER_HXX_
-#define _CONNECTIVITY_SQLSTATEMENTHELPER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SQLSTATEMENTHELPER_HXX
+#define INCLUDED_CONNECTIVITY_SQLSTATEMENTHELPER_HXX
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -38,6 +38,6 @@ namespace dbtools
 }   // namespace dbtools
 //.........................................................................
 
-#endif // _CONNECTIVITY_SQLSTATEMENTHELPER_HXX_
+#endif // INCLUDED_CONNECTIVITY_SQLSTATEMENTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

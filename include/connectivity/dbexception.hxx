@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#define _DBHELPER_DBEXCEPTION_HXX_
+#ifndef INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
+#define INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include "connectivity/standardsqlstate.hxx"
@@ -328,7 +328,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
 }   // namespace dbtools
 //.........................................................................
 
-#endif // _DBHELPER_DBEXCEPTION_HXX_
+#endif // INCLUDED_CONNECTIVITY_DBEXCEPTION_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

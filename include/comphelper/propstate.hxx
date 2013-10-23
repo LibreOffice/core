@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_PROPERTY_STATE_HXX_
-#define _COMPHELPER_PROPERTY_STATE_HXX_
+#ifndef INCLUDED_COMPHELPER_PROPSTATE_HXX
+#define INCLUDED_COMPHELPER_PROPSTATE_HXX
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -100,6 +100,6 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
-#endif // _COMPHELPER_PROPERTY_STATE_HXX_
+#endif // INCLUDED_COMPHELPER_PROPSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

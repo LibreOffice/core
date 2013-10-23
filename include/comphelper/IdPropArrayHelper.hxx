@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
-#define COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
+#ifndef INCLUDED_COMPHELPER_IDPROPARRAYHELPER_HXX
+#define INCLUDED_COMPHELPER_IDPROPARRAYHELPER_HXX
 
 #include <cppuhelper/component.hxx>
 #include <osl/mutex.hxx>
@@ -112,6 +112,6 @@ namespace comphelper
         return (*s_pMap)[nId];
     }
 }
-#endif // COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
+#endif // INCLUDED_COMPHELPER_IDPROPARRAYHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

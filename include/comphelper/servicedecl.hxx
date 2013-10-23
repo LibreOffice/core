@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef COMPHELPER_SERVICEDECL_HXX_INCLUDED
-#define COMPHELPER_SERVICEDECL_HXX_INCLUDED
+#ifndef INCLUDED_COMPHELPER_SERVICEDECL_HXX
+#define INCLUDED_COMPHELPER_SERVICEDECL_HXX
 
 #include <comphelper/comphelperdllapi.h>
 #include <cppuhelper/implbase1.hxx>
@@ -404,6 +404,6 @@ extern "C" \
 #define COMPHELPER_SERVICEDECL_EXPORTS8(compName,comp0_,comp1_,comp2_,comp3_,comp4_,comp5_,comp6_,comp7_) \
     COMPHELPER_SERVICEDECL_make_exports(compName,(comp0_)(comp1_)(comp2_)(comp3_)(comp4_)(comp5_)(comp6_)(comp7_))
 
-#endif //  ! defined(COMPHELPER_SERVICEDECL_HXX_INCLUDED)
+#endif //  ! defined( INCLUDED_COMPHELPER_SERVICEDECL_HXX)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

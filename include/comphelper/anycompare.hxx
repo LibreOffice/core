@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_ANYCOMPARE_HXX
-#define COMPHELPER_ANYCOMPARE_HXX
+#ifndef INCLUDED_COMPHELPER_ANYCOMPARE_HXX
+#define INCLUDED_COMPHELPER_ANYCOMPARE_HXX
 
 #include "comphelper/comphelperdllapi.h"
 
@@ -214,6 +214,6 @@ namespace comphelper
 } // namespace comphelper
 //......................................................................................................................
 
-#endif // COMPHELPER_ANYCOMPARE_HXX
+#endif // INCLUDED_COMPHELPER_ANYCOMPARE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

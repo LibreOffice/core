@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_RENDERER_HXX
-#define _CPPCANVAS_RENDERER_HXX
+#ifndef INCLUDED_CPPCANVAS_RENDERER_HXX
+#define INCLUDED_CPPCANVAS_RENDERER_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -139,6 +139,6 @@ namespace cppcanvas
     typedef ::boost::shared_ptr< ::cppcanvas::Renderer > RendererSharedPtr;
 }
 
-#endif /* _CPPCANVAS_RENDERER_HXX */
+#endif // INCLUDED_CPPCANVAS_RENDERER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

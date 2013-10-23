@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_CANVASGRAPHIC_HXX
-#define _CPPCANVAS_CANVASGRAPHIC_HXX
+#ifndef INCLUDED_CPPCANVAS_CANVASGRAPHIC_HXX
+#define INCLUDED_CPPCANVAS_CANVASGRAPHIC_HXX
 
 #include <sal/types.h>
 
@@ -152,6 +152,6 @@ namespace cppcanvas
     typedef ::boost::shared_ptr< ::cppcanvas::CanvasGraphic > CanvasGraphicSharedPtr;
 }
 
-#endif /* _CPPCANVAS_CANVASGRAPHIC_HXX */
+#endif // INCLUDED_CPPCANVAS_CANVASGRAPHIC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

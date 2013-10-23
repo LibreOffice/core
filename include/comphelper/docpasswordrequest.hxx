@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_DOCPASSWORDREQUEST_HXX
-#define COMPHELPER_DOCPASSWORDREQUEST_HXX
+#ifndef INCLUDED_COMPHELPER_DOCPASSWORDREQUEST_HXX
+#define INCLUDED_COMPHELPER_DOCPASSWORDREQUEST_HXX
 
 #include "comphelper/comphelperdllapi.h"
 #include <com/sun/star/task/PasswordRequestMode.hpp>

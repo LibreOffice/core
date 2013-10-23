@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_ISURFACEPROXYMANAGER_HXX
-#define INCLUDED_CANVAS_ISURFACEPROXYMANAGER_HXX
+#ifndef INCLUDED_CANVAS_RENDERING_ISURFACEPROXYMANAGER_HXX
+#define INCLUDED_CANVAS_RENDERING_ISURFACEPROXYMANAGER_HXX
 
 #include <canvas/rendering/irendermodule.hxx>
 #include <canvas/rendering/icolorbuffer.hxx>
@@ -69,6 +69,6 @@ namespace canvas
     CANVASTOOLS_DLLPUBLIC ISurfaceProxyManagerSharedPtr createSurfaceProxyManager( const IRenderModuleSharedPtr& rRenderModule );
 }
 
-#endif /* INCLUDED_CANVAS_ISURFACEPROXYMANAGER_HXX */
+#endif // INCLUDED_CANVAS_RENDERING_ISURFACEPROXYMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_UNWRAPARGS_HXX_INCLUDED
-#define COMPHELPER_UNWRAPARGS_HXX_INCLUDED
+#ifndef INCLUDED_COMPHELPER_UNWRAPARGS_HXX
+#define INCLUDED_COMPHELPER_UNWRAPARGS_HXX
 
 #include "rtl/ustrbuf.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
@@ -133,6 +133,6 @@ BOOST_PP_REPEAT(COMPHELPER_UNWRAPARGS_MAX_ARGS, COMPHELPER_UNWRAPARGS_make, ~)
 
 } // namespace comphelper
 
-#endif //  ! defined(COMPHELPER_UNWRAPARGS_HXX_INCLUDED)
+#endif //  ! defined( INCLUDED_COMPHELPER_UNWRAPARGS_HXX)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

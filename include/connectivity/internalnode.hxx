@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONNECTIVITY_SQLINTERNALNODE_HXX
-#define _CONNECTIVITY_SQLINTERNALNODE_HXX
+#ifndef INCLUDED_CONNECTIVITY_INTERNALNODE_HXX
+#define INCLUDED_CONNECTIVITY_INTERNALNODE_HXX
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include <connectivity/sqlnode.hxx>
@@ -46,6 +46,6 @@ namespace connectivity
     };
 }
 
-#endif  //_CONNECTIVITY_SQLINTERNALNODE_HXX
+#endif // INCLUDED_CONNECTIVITY_INTERNALNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

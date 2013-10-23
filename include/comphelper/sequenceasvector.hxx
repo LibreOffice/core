@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_SEQUENCEASVECTOR_HXX_
-#define _COMPHELPER_SEQUENCEASVECTOR_HXX_
+#ifndef INCLUDED_COMPHELPER_SEQUENCEASVECTOR_HXX
+#define INCLUDED_COMPHELPER_SEQUENCEASVECTOR_HXX
 
 #include <vector>
 #include <algorithm>
@@ -242,6 +242,6 @@ class SequenceAsVector : public ::std::vector< TElementType >
 
 } // namespace comphelper
 
-#endif // _COMPHELPER_SEQUENCEASVECTOR_HXX_
+#endif // INCLUDED_COMPHELPER_SEQUENCEASVECTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_ACCESSIBLE_SELECTION_HELPER_HXX
-#define COMPHELPER_ACCESSIBLE_SELECTION_HELPER_HXX
+#ifndef INCLUDED_COMPHELPER_ACCESSIBLESELECTIONHELPER_HXX
+#define INCLUDED_COMPHELPER_ACCESSIBLESELECTIONHELPER_HXX
 
 #include <comphelper/uno3.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
@@ -119,6 +119,6 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
-#endif // COMPHELPER_ACCESSIBLE_SELECTION_HELPER_HXX
+#endif // INCLUDED_COMPHELPER_ACCESSIBLESELECTIONHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

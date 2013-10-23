@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_WEAKEVENTLISTENER_HXX
-#define COMPHELPER_WEAKEVENTLISTENER_HXX
+#ifndef INCLUDED_COMPHELPER_WEAKEVENTLISTENER_HXX
+#define INCLUDED_COMPHELPER_WEAKEVENTLISTENER_HXX
 
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -176,7 +176,7 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
-#endif// COMPHELPER_WEAKEVENTLISTENER_HXX
+#endif // INCLUDED_COMPHELPER_WEAKEVENTLISTENER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef COMPHELPER_EXPANDMACRO_HXX_INCLUDED
-#define COMPHELPER_EXPANDMACRO_HXX_INCLUDED
+#ifndef INCLUDED_COMPHELPER_EXPANDMACRO_HXX
+#define INCLUDED_COMPHELPER_EXPANDMACRO_HXX
 
 #include "rtl/ustring.hxx"
 #include "comphelper/comphelperdllapi.h"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPUHELPER_PROPSHLP_HXX
-#define _CPPUHELPER_PROPSHLP_HXX
+#ifndef INCLUDED_CPPUHELPER_PROPSHLP_HXX
+#define INCLUDED_CPPUHELPER_PROPSHLP_HXX
 
 #include <rtl/alloc.h>
 

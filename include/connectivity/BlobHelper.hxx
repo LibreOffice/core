@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONNECTIVITY_BLOBHELPER_HXX_
-#define _CONNECTIVITY_BLOBHELPER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_BLOBHELPER_HXX
+#define INCLUDED_CONNECTIVITY_BLOBHELPER_HXX
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include <com/sun/star/sdbc/XBlob.hpp>
@@ -39,6 +39,6 @@ namespace connectivity
     };
 }
 
-#endif //_CONNECTIVITY_BLOBHELPER_HXX_
+#endif // INCLUDED_CONNECTIVITY_BLOBHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

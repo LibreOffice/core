@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_STDTYPEDEFS_HXX
-#define CONNECTIVITY_STDTYPEDEFS_HXX
+#ifndef INCLUDED_CONNECTIVITY_STDTYPEDEFS_HXX
+#define INCLUDED_CONNECTIVITY_STDTYPEDEFS_HXX
 
 #include "sal/config.h"
 
@@ -35,6 +35,6 @@ namespace connectivity
     typedef ::std::map< sal_Int32,OUString>  TInt2StringMap;
 }
 
-#endif // CONNECTIVITY_STDTYPEDEFS_HXX
+#endif // INCLUDED_CONNECTIVITY_STDTYPEDEFS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

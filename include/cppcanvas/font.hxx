@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_FONT_HXX
-#define _CPPCANVAS_FONT_HXX
+#ifndef INCLUDED_CPPCANVAS_FONT_HXX
+#define INCLUDED_CPPCANVAS_FONT_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -50,6 +50,6 @@ namespace cppcanvas
     typedef ::boost::shared_ptr< ::cppcanvas::Font > FontSharedPtr;
 }
 
-#endif /* _CPPCANVAS_FONT_HXX */
+#endif // INCLUDED_CPPCANVAS_FONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

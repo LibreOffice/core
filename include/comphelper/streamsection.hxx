@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_STREAMSECTION_HXX_
-#define _COMPHELPER_STREAMSECTION_HXX_
+#ifndef INCLUDED_COMPHELPER_STREAMSECTION_HXX
+#define INCLUDED_COMPHELPER_STREAMSECTION_HXX
 
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/io/XDataInputStream.hpp>
@@ -73,6 +73,6 @@ public:
 
 }   // namespace comphelper
 
-#endif // _COMPHELPER_STREAMSECTION_HXX_
+#endif // INCLUDED_COMPHELPER_STREAMSECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_PREDICATEINPUT_HXX
-#define CONNECTIVITY_PREDICATEINPUT_HXX
+#ifndef INCLUDED_CONNECTIVITY_PREDICATEINPUT_HXX
+#define INCLUDED_CONNECTIVITY_PREDICATEINPUT_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -120,6 +120,6 @@ namespace dbtools
 }   // namespace dbtools
 //.........................................................................
 
-#endif // CONNECTIVITY_PREDICATEINPUT_HXX
+#endif // INCLUDED_CONNECTIVITY_PREDICATEINPUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

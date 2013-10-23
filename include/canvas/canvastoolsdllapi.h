@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CANVAS_DLLAPI_H
-#define _CANVAS_DLLAPI_H
+#ifndef INCLUDED_CANVAS_CANVASTOOLSDLLAPI_H
+#define INCLUDED_CANVAS_CANVASTOOLSDLLAPI_H
 
 #include "sal/config.h"
 #include "sal/types.h"

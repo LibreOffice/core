@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_PROPERTYINFOHASH_HXX_
-#define _COMPHELPER_PROPERTYINFOHASH_HXX_
+#ifndef INCLUDED_COMPHELPER_PROPERTYINFOHASH_HXX
+#define INCLUDED_COMPHELPER_PROPERTYINFOHASH_HXX
 
 #include <rtl/ustring.hxx>
 #include <comphelper/TypeGeneration.hxx>

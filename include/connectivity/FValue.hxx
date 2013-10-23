@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
-#define _CONNECTIVITY_FILE_VALUE_HXX_
+#ifndef INCLUDED_CONNECTIVITY_FVALUE_HXX
+#define INCLUDED_CONNECTIVITY_FVALUE_HXX
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -533,7 +533,7 @@ namespace connectivity
     typedef ::rtl::Reference< OValueRefVector >             OValueRefRow;
 }
 
-#endif // #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#endif // INCLUDED_CONNECTIVITY_FVALUE_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

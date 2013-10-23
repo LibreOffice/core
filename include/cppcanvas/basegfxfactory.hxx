@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPCANVAS_BASEGFXFACTORY_HXX
-#define _CPPCANVAS_BASEGFXFACTORY_HXX
+#ifndef INCLUDED_CPPCANVAS_BASEGFXFACTORY_HXX
+#define INCLUDED_CPPCANVAS_BASEGFXFACTORY_HXX
 
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/bitmapcanvas.hxx>
@@ -84,6 +84,6 @@ namespace cppcanvas
 
 }
 
-#endif /* _CPPCANVAS_BASEGFXFACTORY_HXX */
+#endif // INCLUDED_CPPCANVAS_BASEGFXFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_FILTERMANAGER_HXX
-#define CONNECTIVITY_FILTERMANAGER_HXX
+#ifndef INCLUDED_CONNECTIVITY_FILTERMANAGER_HXX
+#define INCLUDED_CONNECTIVITY_FILTERMANAGER_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>

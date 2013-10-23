@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
-#define _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
+#ifndef INCLUDED_COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
+#define INCLUDED_COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -262,6 +262,6 @@ namespace comphelper
 
 }
 
-#endif // _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
+#endif // INCLUDED_COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

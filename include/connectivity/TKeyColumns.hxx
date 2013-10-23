@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_TKEYCOLUMNS_HXX
-#define CONNECTIVITY_TKEYCOLUMNS_HXX
+#ifndef INCLUDED_CONNECTIVITY_TKEYCOLUMNS_HXX
+#define INCLUDED_CONNECTIVITY_TKEYCOLUMNS_HXX
 
 #include "connectivity/sdbcx/VCollection.hxx"
 #include "connectivity/TKey.hxx"
@@ -39,6 +39,6 @@ namespace connectivity
                         const ::std::vector< OUString> &_rVector);
     };
 }
-#endif // CONNECTIVITY_TKEYCOLUMNS_HXX
+#endif // INCLUDED_CONNECTIVITY_TKEYCOLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

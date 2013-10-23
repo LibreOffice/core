@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_PARAMWRAPPER_HXX
-#define CONNECTIVITY_PARAMWRAPPER_HXX
+#ifndef INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
+#define INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include <connectivity/FValue.hxx>
@@ -195,6 +195,6 @@ namespace param
 } } // namespace dbtools::param
 //........................................................................
 
-#endif // CONNECTIVITY_PARAMWRAPPER_HXX
+#endif // INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

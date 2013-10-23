@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_ACCESSIBLE_CONTEXT_HELPER_HXX
-#define COMPHELPER_ACCESSIBLE_CONTEXT_HELPER_HXX
+#ifndef INCLUDED_COMPHELPER_ACCESSIBLECONTEXTHELPER_HXX
+#define INCLUDED_COMPHELPER_ACCESSIBLECONTEXTHELPER_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -339,7 +339,7 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
-#endif // COMPHELPER_ACCESSIBLE_CONTEXT_HELPER_HXX
+#endif // INCLUDED_COMPHELPER_ACCESSIBLECONTEXTHELPER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

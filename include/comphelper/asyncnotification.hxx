@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_ASYNCNOTIFICATION_HXX
-#define COMPHELPER_ASYNCNOTIFICATION_HXX
+#ifndef INCLUDED_COMPHELPER_ASYNCNOTIFICATION_HXX
+#define INCLUDED_COMPHELPER_ASYNCNOTIFICATION_HXX
 
 #include "sal/config.h"
 
@@ -179,6 +179,6 @@ namespace comphelper
 } // namespace comphelper
 //........................................................................
 
-#endif // COMPHELPER_ASYNCNOTIFICATION_HXX
+#endif // INCLUDED_COMPHELPER_ASYNCNOTIFICATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

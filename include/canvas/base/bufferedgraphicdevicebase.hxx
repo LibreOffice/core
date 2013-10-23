@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_BUFFEREDGRAPHICDEVICEBASE_HXX
-#define INCLUDED_CANVAS_BUFFEREDGRAPHICDEVICEBASE_HXX
+#ifndef INCLUDED_CANVAS_BASE_BUFFEREDGRAPHICDEVICEBASE_HXX
+#define INCLUDED_CANVAS_BASE_BUFFEREDGRAPHICDEVICEBASE_HXX
 
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -271,6 +271,6 @@ namespace canvas
     };
 }
 
-#endif /* INCLUDED_CANVAS_BUFFEREDGRAPHICDEVICEBASE_HXX */
+#endif // INCLUDED_CANVAS_BASE_BUFFEREDGRAPHICDEVICEBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

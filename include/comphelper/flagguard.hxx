@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_FLAGGUARD_HXX
-#define COMPHELPER_FLAGGUARD_HXX
+#ifndef INCLUDED_COMPHELPER_FLAGGUARD_HXX
+#define INCLUDED_COMPHELPER_FLAGGUARD_HXX
 
 #include "comphelper/scopeguard.hxx"
 
@@ -73,6 +73,6 @@ namespace comphelper
 } // namespace comphelper
 //......................................................................................................................
 
-#endif // COMPHELPER_FLAGGUARD_HXX
+#endif // INCLUDED_COMPHELPER_FLAGGUARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_SDBCX_CATALOG_HXX_
-#define _CONNECTIVITY_SDBCX_CATALOG_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SDBCX_VCATALOG_HXX
+#define INCLUDED_CONNECTIVITY_SDBCX_VCATALOG_HXX
 
 #include <osl/diagnose.h>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -120,6 +120,6 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_SDBCX_CATALOG_HXX_
+#endif // INCLUDED_CONNECTIVITY_SDBCX_VCATALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

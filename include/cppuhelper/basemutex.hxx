@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CPPUHELPER_BASEMUTEX_HXX_
-#define _CPPUHELPER_BASEMUTEX_HXX_
+#ifndef INCLUDED_CPPUHELPER_BASEMUTEX_HXX
+#define INCLUDED_CPPUHELPER_BASEMUTEX_HXX
 
 #include <osl/mutex.hxx>
 
@@ -38,6 +38,6 @@ namespace cppu
         mutable ::osl::Mutex m_aMutex;
     };
 }
-#endif // _CPPUHELPER_BASEMUTEX_HXX_
+#endif // INCLUDED_CPPUHELPER_BASEMUTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

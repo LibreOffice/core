@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_MAKESEQUENCE_HXX_INCLUDED
-#define COMPHELPER_MAKESEQUENCE_HXX_INCLUDED
+#ifndef INCLUDED_COMPHELPER_MAKESEQUENCE_HXX
+#define INCLUDED_COMPHELPER_MAKESEQUENCE_HXX
 
 #include "com/sun/star/uno/Sequence.hxx"
 #include "boost/preprocessor/cat.hpp"
@@ -75,6 +75,6 @@ BOOST_PP_REPEAT_FROM_TO(2, BOOST_PP_ADD(COMPHELPER_MAKESEQUENCE_MAX_ARGS, 1),
 
 } // namespace comphelper
 
-#endif //  ! defined(COMPHELPER_MAKESEQUENCE_HXX_INCLUDED)
+#endif //  ! defined( INCLUDED_COMPHELPER_MAKESEQUENCE_HXX)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_ZCONNECTIONWRAPPER_HXX_
-#define _CONNECTIVITY_ZCONNECTIONWRAPPER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_CONNECTIONWRAPPER_HXX
+#define INCLUDED_CONNECTIVITY_CONNECTIONWRAPPER_HXX
 
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -87,6 +87,6 @@ namespace connectivity
                     ,const OUString& _rPassword = OUString());
     };
 }
-#endif // _CONNECTIVITY_ZCONNECTIONWRAPPER_HXX_
+#endif // INCLUDED_CONNECTIVITY_CONNECTIONWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

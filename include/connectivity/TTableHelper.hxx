@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_TABLEHELPER_HXX
-#define CONNECTIVITY_TABLEHELPER_HXX
+#ifndef INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX
+#define INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sdbcx/VTable.hxx"
@@ -161,6 +161,6 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XIndexAlteration>  getIndexService() const;
     };
 }
-#endif // CONNECTIVITY_TABLEHELPER_HXX
+#endif // INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_NUMBEREDCOLLECTION_HXX_
-#define _COMPHELPER_NUMBEREDCOLLECTION_HXX_
+#ifndef INCLUDED_COMPHELPER_NUMBEREDCOLLECTION_HXX
+#define INCLUDED_COMPHELPER_NUMBEREDCOLLECTION_HXX
 
 #include "comphelper/comphelperdllapi.h"
 
@@ -171,6 +171,6 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
 
 } // namespace comphelper
 
-#endif // _COMPHELPER_NUMBEREDCOLLECTION_HXX_
+#endif // INCLUDED_COMPHELPER_NUMBEREDCOLLECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

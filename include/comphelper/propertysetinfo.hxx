@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_PROPERTSETINFO_HXX_
-#define _COMPHELPER_PROPERTSETINFO_HXX_
+#ifndef INCLUDED_COMPHELPER_PROPERTYSETINFO_HXX
+#define INCLUDED_COMPHELPER_PROPERTYSETINFO_HXX
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/implbase1.hxx>

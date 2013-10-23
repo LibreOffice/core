@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_DISAMBIGUATIONHELPER_HXX
-#define INCLUDED_CANVAS_DISAMBIGUATIONHELPER_HXX
+#ifndef INCLUDED_CANVAS_BASE_DISAMBIGUATIONHELPER_HXX
+#define INCLUDED_CANVAS_BASE_DISAMBIGUATIONHELPER_HXX
 
 #include <osl/mutex.hxx>
 
@@ -76,6 +76,6 @@ protected:
     };
 }
 
-#endif /* INCLUDED_CANVAS_DISAMBIGUATIONHELPER_HXX */
+#endif // INCLUDED_CANVAS_BASE_DISAMBIGUATIONHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

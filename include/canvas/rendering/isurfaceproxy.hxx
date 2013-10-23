@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_ISURFACEPROXY_HXX
-#define INCLUDED_CANVAS_ISURFACEPROXY_HXX
+#ifndef INCLUDED_CANVAS_RENDERING_ISURFACEPROXY_HXX
+#define INCLUDED_CANVAS_RENDERING_ISURFACEPROXY_HXX
 
 #include <canvas/rendering/irendermodule.hxx>
 
@@ -102,6 +102,6 @@ namespace canvas
     typedef ::boost::shared_ptr< ISurfaceProxy > ISurfaceProxySharedPtr;
 }
 
-#endif /* INCLUDED_CANVAS_ISURFACEPROXY_HXX */
+#endif // INCLUDED_CANVAS_RENDERING_ISURFACEPROXY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

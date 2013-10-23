@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_SERVICEINFOHELPER_HXX
-#define COMPHELPER_SERVICEINFOHELPER_HXX
+#ifndef INCLUDED_COMPHELPER_SERVICEINFOHELPER_HXX
+#define INCLUDED_COMPHELPER_SERVICEINFOHELPER_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "comphelper/comphelperdllapi.h"

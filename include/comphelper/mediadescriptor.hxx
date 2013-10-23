@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
-#define _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#ifndef INCLUDED_COMPHELPER_MEDIADESCRIPTOR_HXX
+#define INCLUDED_COMPHELPER_MEDIADESCRIPTOR_HXX
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <rtl/ustring.hxx>
@@ -293,6 +293,6 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
 
 } // namespace comphelper
 
-#endif // _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#endif // INCLUDED_COMPHELPER_MEDIADESCRIPTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

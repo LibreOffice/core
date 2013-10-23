@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_VIRTUAL_DBTOOLS_HXX
-#define CONNECTIVITY_VIRTUAL_DBTOOLS_HXX
+#ifndef INCLUDED_CONNECTIVITY_VIRTUALDBTOOLS_HXX
+#define INCLUDED_CONNECTIVITY_VIRTUALDBTOOLS_HXX
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -363,6 +363,6 @@ namespace connectivity
 }   // namespace connectivity
 //........................................................................
 
-#endif // CONNECTIVITY_VIRTUAL_DBTOOLS_HXX
+#endif // INCLUDED_CONNECTIVITY_VIRTUALDBTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

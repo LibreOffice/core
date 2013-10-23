@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_ACCESSIBLE_WRAPPER_HXX
-#define COMPHELPER_ACCESSIBLE_WRAPPER_HXX
+#ifndef INCLUDED_COMPHELPER_ACCESSIBLEWRAPPER_HXX
+#define INCLUDED_COMPHELPER_ACCESSIBLEWRAPPER_HXX
 
 #include <comphelper/proxyaggregation.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -405,6 +405,6 @@ namespace comphelper
 }   // namespace accessibility
 //.............................................................................
 
-#endif // COMPHELPER_ACCESSIBLE_WRAPPER_HXX
+#endif // INCLUDED_COMPHELPER_ACCESSIBLEWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

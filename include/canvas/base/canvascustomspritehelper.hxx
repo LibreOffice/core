@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_CANVASCUSTOMSPRITEHELPER_HXX
-#define INCLUDED_CANVAS_CANVASCUSTOMSPRITEHELPER_HXX
+#ifndef INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEHELPER_HXX
+#define INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEHELPER_HXX
 
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
@@ -282,6 +282,6 @@ namespace canvas
     };
 }
 
-#endif /* INCLUDED_CANVAS_CANVASCUSTOMSPRITEHELPER_HXX */
+#endif // INCLUDED_CANVAS_BASE_CANVASCUSTOMSPRITEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

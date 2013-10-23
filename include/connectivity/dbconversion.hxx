@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBHELPER_DBCONVERSION_HXX_
-#define _DBHELPER_DBCONVERSION_HXX_
+#ifndef INCLUDED_CONNECTIVITY_DBCONVERSION_HXX
+#define INCLUDED_CONNECTIVITY_DBCONVERSION_HXX
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -204,6 +204,6 @@ namespace dbtools
 }   // namespace dbtools
 //.........................................................................
 
-#endif // _DBHELPER_DBCONVERSION_HXX_
+#endif // INCLUDED_CONNECTIVITY_DBCONVERSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_SERVICEHELPER_HXX_
-#define _COMPHELPER_SERVICEHELPER_HXX_
+#ifndef INCLUDED_COMPHELPER_SERVICEHELPER_HXX
+#define INCLUDED_COMPHELPER_SERVICEHELPER_HXX
 
 #include <rtl/uuid.h>
 #include <rtl/instance.hxx>
@@ -102,6 +102,6 @@ sal_Int64 SAL_CALL classname::getSomething( const ::com::sun::star::uno::Sequenc
 }
 
 
-#endif // _COMPHELPER_SERVICEHELPER_HXX_
+#endif // INCLUDED_COMPHELPER_SERVICEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

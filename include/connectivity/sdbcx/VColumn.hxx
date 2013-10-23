@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
-#define _CONNECTIVITY_SDBCX_COLUMN_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SDBCX_VCOLUMN_HXX
+#define INCLUDED_CONNECTIVITY_SDBCX_VCOLUMN_HXX
 
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -113,6 +113,6 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_SDBCX_COLUMN_HXX_
+#endif // INCLUDED_CONNECTIVITY_SDBCX_VCOLUMN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

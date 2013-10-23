@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_UNO3_HXX_
-#define _COMPHELPER_UNO3_HXX_
+#ifndef INCLUDED_COMPHELPER_UNO3_HXX
+#define INCLUDED_COMPHELPER_UNO3_HXX
 
 #include <osl/interlck.h>
 #include <rtl/instance.hxx>
@@ -270,6 +270,6 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
-#endif // _COMPHELPER_UNO3_HXX_
+#endif // INCLUDED_COMPHELPER_UNO3_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

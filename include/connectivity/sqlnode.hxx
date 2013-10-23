@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONNECTIVITY_SQLNODE_HXX
-#define _CONNECTIVITY_SQLNODE_HXX
+#ifndef INCLUDED_CONNECTIVITY_SQLNODE_HXX
+#define INCLUDED_CONNECTIVITY_SQLNODE_HXX
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/dbmetadata.hxx"
@@ -465,6 +465,6 @@ namespace connectivity
     #define SQL_ISPUNCTUATION(pParseNode, aString) ((pParseNode)->getNodeType() == SQL_NODE_PUNCTUATION && !(pParseNode)->getTokenValue().compareToAscii(aString))
 }
 
-#endif  //_CONNECTIVITY_SQLNODE_HXX
+#endif // INCLUDED_CONNECTIVITY_SQLNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

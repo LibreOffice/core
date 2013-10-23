@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_SDBCX_TYPEDEF_HXX_
-#define _CONNECTIVITY_SDBCX_TYPEDEF_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SDBCX_VTYPEDEF_HXX
+#define INCLUDED_CONNECTIVITY_SDBCX_VTYPEDEF_HXX
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <cppuhelper/compbase3.hxx>
@@ -35,6 +35,6 @@ namespace connectivity
     }
 }
 
-#endif // _CONNECTIVITY_SDBCX_TYPEDEF_HXX_
+#endif // INCLUDED_CONNECTIVITY_SDBCX_VTYPEDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_TKEY_HXX
-#define CONNECTIVITY_TKEY_HXX
+#ifndef INCLUDED_CONNECTIVITY_TKEY_HXX
+#define INCLUDED_CONNECTIVITY_TKEY_HXX
 
 #include "connectivity/dbtoolsdllapi.hxx"
 #include <connectivity/sdbcx/VKey.hxx>
@@ -41,7 +41,7 @@ namespace connectivity
         inline OTableHelper* getTable() const { return m_pTable; }
     };
 }
-#endif // CONNECTIVITY_TKEY_HXX
+#endif // INCLUDED_CONNECTIVITY_TKEY_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

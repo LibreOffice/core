@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#define _CONNECTIVITY_DBTOOLS_HXX_
+#ifndef INCLUDED_CONNECTIVITY_DBTOOLS_HXX
+#define INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 
 #include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
@@ -795,6 +795,6 @@ namespace dbtools
 }   // namespace dbtools
 //.........................................................................
 
-#endif // _CONNECTIVITY_DBTOOLS_HXX_
+#endif // INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

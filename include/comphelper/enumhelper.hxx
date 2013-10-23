@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_ENUMHELPER_HXX_
-#define _COMPHELPER_ENUMHELPER_HXX_
+#ifndef INCLUDED_COMPHELPER_ENUMHELPER_HXX
+#define INCLUDED_COMPHELPER_ENUMHELPER_HXX
 
 #include <vector>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -136,7 +136,7 @@ public:
 }
 //... namespace comphelper .......................................................
 
-#endif // _COMPHELPER_ENUMHELPER_HXX_
+#endif // INCLUDED_COMPHELPER_ENUMHELPER_HXX
 
 
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COMPHELPER_FILEFORMAT_H_
-#define _COMPHELPER_FILEFORMAT_H_
+#ifndef INCLUDED_COMPHELPER_FILEFORMAT_H
+#define INCLUDED_COMPHELPER_FILEFORMAT_H
 
 /* file format versions *************************************************/
 
