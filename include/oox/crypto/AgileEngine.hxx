@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef AGILE_ENGINE_HXX
-#define AGILE_ENGINE_HXX
+#ifndef INCLUDED_OOX_CRYPTO_AGILEENGINE_HXX
+#define INCLUDED_OOX_CRYPTO_AGILEENGINE_HXX
 
 #include "CryptTools.hxx"
 #include "CryptoEngine.hxx"

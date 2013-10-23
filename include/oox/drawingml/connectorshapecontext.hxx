@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_CONNECTORSHAPECONTEXT_HXX
-#define OOX_DRAWINGML_CONNECTORSHAPECONTEXT_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_CONNECTORSHAPECONTEXT_HXX
+#define INCLUDED_OOX_DRAWINGML_CONNECTORSHAPECONTEXT_HXX
 
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/shapecontext.hxx"
@@ -36,6 +36,6 @@ public:
 
 } }
 
-#endif  //  OOX_DRAWINGML_CONNECTORSHAPECONTEXT_HXX
+#endif // INCLUDED_OOX_DRAWINGML_CONNECTORSHAPECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

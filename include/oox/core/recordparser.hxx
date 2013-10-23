@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_CORE_RECORDPARSER_HXX
-#define OOX_CORE_RECORDPARSER_HXX
+#ifndef INCLUDED_OOX_CORE_RECORDPARSER_HXX
+#define INCLUDED_OOX_CORE_RECORDPARSER_HXX
 
 #include <map>
 #include <com/sun/star/io/IOException.hpp>

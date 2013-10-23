@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _OSL_DIAGNOSE_H_
-#define _OSL_DIAGNOSE_H_
+#ifndef INCLUDED_OSL_DIAGNOSE_H
+#define INCLUDED_OSL_DIAGNOSE_H
 
 #include "sal/config.h"
 
@@ -199,6 +199,6 @@ SAL_DLLPUBLIC pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugM
 #define OSL_THIS_FUNC ""
 #endif
 
-#endif /* _OSL_DIAGNOSE_H_ */
+#endif // INCLUDED_OSL_DIAGNOSE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

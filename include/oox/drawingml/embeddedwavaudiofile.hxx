@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_EMBEDDEDWAVAUDIOFILE_HXX
-#define OOX_DRAWINGML_EMBEDDEDWAVAUDIOFILE_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_EMBEDDEDWAVAUDIOFILE_HXX
+#define INCLUDED_OOX_DRAWINGML_EMBEDDEDWAVAUDIOFILE_HXX
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>

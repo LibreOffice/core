@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef OSL_DIAGNOSE_HXX_INCLUDED
-#define OSL_DIAGNOSE_HXX_INCLUDED
+#ifndef INCLUDED_OSL_DIAGNOSE_HXX
+#define INCLUDED_OSL_DIAGNOSE_HXX
 
 #include "sal/config.h"
 
@@ -206,6 +206,6 @@ private:
 
 /// @endcond
 
-#endif // ! defined(OSL_DIAGNOSE_HXX_INCLUDED)
+#endif // ! defined( INCLUDED_OSL_DIAGNOSE_HXX)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

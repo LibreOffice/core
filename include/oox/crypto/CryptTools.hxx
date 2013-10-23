@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CRYPT_TOOLS_HXX
-#define CRYPT_TOOLS_HXX
+#ifndef INCLUDED_OOX_CRYPTO_CRYPTTOOLS_HXX
+#define INCLUDED_OOX_CRYPTO_CRYPTTOOLS_HXX
 
 #include <config_oox.h>
 

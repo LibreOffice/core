@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_SOCKET_H_
-#define _OSL_SOCKET_H_
+#ifndef INCLUDED_OSL_SOCKET_H
+#define INCLUDED_OSL_SOCKET_H
 
 #include <rtl/ustring.h>
 #include <rtl/byteseq.h>
@@ -915,6 +915,6 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_writeSocket( oslSocket Socket, const void *
 }
 #endif
 
-#endif  /* _OSL_SOCKET_H_ */
+#endif // INCLUDED_OSL_SOCKET_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

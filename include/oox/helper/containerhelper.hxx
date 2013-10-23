@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_HELPER_CONTAINERHELPER_HXX
-#define OOX_HELPER_CONTAINERHELPER_HXX
+#ifndef INCLUDED_OOX_HELPER_CONTAINERHELPER_HXX
+#define INCLUDED_OOX_HELPER_CONTAINERHELPER_HXX
 
 #include <map>
 #include <vector>

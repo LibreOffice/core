@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_SOCKET_DECL_HXX_
-#define _OSL_SOCKET_DECL_HXX_
+#ifndef INCLUDED_OSL_SOCKET_DECL_HXX
+#define INCLUDED_OSL_SOCKET_DECL_HXX
 
 #include <osl/socket.h>
 #include <rtl/ustring.hxx>

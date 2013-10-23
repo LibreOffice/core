@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_CORE_FRAGMENTHANDLER_HXX
-#define OOX_CORE_FRAGMENTHANDLER_HXX
+#ifndef INCLUDED_OOX_CORE_FRAGMENTHANDLER_HXX
+#define INCLUDED_OOX_CORE_FRAGMENTHANDLER_HXX
 
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <cppuhelper/implbase1.hxx>

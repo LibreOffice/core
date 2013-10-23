@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _OSL_CONDITION_H_
-#define _OSL_CONDITION_H_
+#ifndef INCLUDED_OSL_CONDITN_H
+#define INCLUDED_OSL_CONDITN_H
 
 #include "sal/config.h"
 
@@ -83,6 +83,6 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition);
 }
 #endif
 
-#endif /* _OSL_CONDITION_H_ */
+#endif // INCLUDED_OSL_CONDITN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

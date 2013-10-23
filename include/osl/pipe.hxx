@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _OSL_PIPE_HXX_
-#define _OSL_PIPE_HXX_
+#ifndef INCLUDED_OSL_PIPE_HXX
+#define INCLUDED_OSL_PIPE_HXX
 
 #include <osl/pipe_decl.hxx>
 

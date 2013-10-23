@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_PPT_PPTGRAPHICSHAPECONTEXT_HXX
-#define OOX_PPT_PPTGRAPHICSHAPECONTEXT_HXX
+#ifndef INCLUDED_OOX_PPT_PPTGRAPHICSHAPECONTEXT_HXX
+#define INCLUDED_OOX_PPT_PPTGRAPHICSHAPECONTEXT_HXX
 
 #include "oox/drawingml/graphicshapecontext.hxx"
 

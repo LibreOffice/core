@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_MODULE_HXX_
-#define _OSL_MODULE_HXX_
+#ifndef INCLUDED_OSL_MODULE_HXX
+#define INCLUDED_OSL_MODULE_HXX
 
 #include <rtl/ustring.hxx>
 #include <osl/module.h>

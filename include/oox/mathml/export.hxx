@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _OOXMLEXPORT_HXX
-#define _OOXMLEXPORT_HXX
+#ifndef INCLUDED_OOX_MATHML_EXPORT_HXX
+#define INCLUDED_OOX_MATHML_EXPORT_HXX
 
 #include <sax/fshelper.hxx>
 #include <rtl/strbuf.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_VML_VMLINPUTSTREAM_HXX
-#define OOX_VML_VMLINPUTSTREAM_HXX
+#ifndef INCLUDED_OOX_VML_VMLINPUTSTREAM_HXX
+#define INCLUDED_OOX_VML_VMLINPUTSTREAM_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase1.hxx>

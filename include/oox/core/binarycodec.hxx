@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_CORE_BINARYCODEC_HXX
-#define OOX_CORE_BINARYCODEC_HXX
+#ifndef INCLUDED_OOX_CORE_BINARYCODEC_HXX
+#define INCLUDED_OOX_CORE_BINARYCODEC_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>

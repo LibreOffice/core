@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_CORE_RELATIONSHANDLER_HXX
-#define OOX_CORE_RELATIONSHANDLER_HXX
+#ifndef INCLUDED_OOX_CORE_RELATIONSHANDLER_HXX
+#define INCLUDED_OOX_CORE_RELATIONSHANDLER_HXX
 
 #include "oox/core/fragmenthandler.hxx"
 

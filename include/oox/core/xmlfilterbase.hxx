@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_CORE_XMLFILTERBASE_HXX
-#define OOX_CORE_XMLFILTERBASE_HXX
+#ifndef INCLUDED_OOX_CORE_XMLFILTERBASE_HXX
+#define INCLUDED_OOX_CORE_XMLFILTERBASE_HXX
 
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>

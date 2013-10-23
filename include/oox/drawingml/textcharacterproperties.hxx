@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_TEXTCHARACTERPROPERTIES_HXX
-#define OOX_DRAWINGML_TEXTCHARACTERPROPERTIES_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_TEXTCHARACTERPROPERTIES_HXX
+#define INCLUDED_OOX_DRAWINGML_TEXTCHARACTERPROPERTIES_HXX
 
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"

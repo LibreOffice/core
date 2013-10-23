@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_TEXTRUN_HXX
-#define OOX_DRAWINGML_TEXTRUN_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_TEXTRUN_HXX
+#define INCLUDED_OOX_DRAWINGML_TEXTRUN_HXX
 
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -57,6 +57,6 @@ typedef boost::shared_ptr< TextRun > TextRunPtr;
 
 } }
 
-#endif  //  OOX_DRAWINGML_TEXTRUN_HXX
+#endif // INCLUDED_OOX_DRAWINGML_TEXTRUN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

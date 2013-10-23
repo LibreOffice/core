@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_MUTEX_HXX_
-#define _OSL_MUTEX_HXX_
+#ifndef INCLUDED_OSL_MUTEX_HXX
+#define INCLUDED_OSL_MUTEX_HXX
 
 #ifdef __cplusplus
 
@@ -241,6 +241,6 @@ namespace osl
 }
 
 #endif  /* __cplusplus */
-#endif  /* _OSL_MUTEX_HXX_ */
+#endif // INCLUDED_OSL_MUTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

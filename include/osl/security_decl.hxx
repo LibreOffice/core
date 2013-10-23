@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_SECURITY_DECL_HXX_
-#define _OSL_SECURITY_DECL_HXX_
+#ifndef INCLUDED_OSL_SECURITY_DECL_HXX
+#define INCLUDED_OSL_SECURITY_DECL_HXX
 
 #include <rtl/ustring.hxx>
 #   include <osl/security.h>
@@ -105,6 +105,6 @@ public:
 
 }
 
-#endif  // _OSL_SECURITY_HXX_
+#endif // INCLUDED_OSL_SECURITY_DECL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

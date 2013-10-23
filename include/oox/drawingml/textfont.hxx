@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGNML_TEXTFONT_HXX
-#define OOX_DRAWINGNML_TEXTFONT_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_TEXTFONT_HXX
+#define INCLUDED_OOX_DRAWINGML_TEXTFONT_HXX
 
 #include <rtl/ustring.hxx>
 

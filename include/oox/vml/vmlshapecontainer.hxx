@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_VML_VMLSHAPECONTAINER_HXX
-#define OOX_VML_VMLSHAPECONTAINER_HXX
+#ifndef INCLUDED_OOX_VML_VMLSHAPECONTAINER_HXX
+#define INCLUDED_OOX_VML_VMLSHAPECONTAINER_HXX
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include "oox/helper/refmap.hxx"

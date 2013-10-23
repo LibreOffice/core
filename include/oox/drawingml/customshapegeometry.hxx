@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_CUSTOMSHAPEGEOMETRY_HXX
-#define OOX_DRAWINGML_CUSTOMSHAPEGEOMETRY_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_CUSTOMSHAPEGEOMETRY_HXX
+#define INCLUDED_OOX_DRAWINGML_CUSTOMSHAPEGEOMETRY_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "oox/helper/propertymap.hxx"
@@ -66,6 +66,6 @@ private:
 
 } }
 
-#endif // OOX_DRAWINGML_CUSTOMSHAPEGEOMETRY_HXX
+#endif // INCLUDED_OOX_DRAWINGML_CUSTOMSHAPEGEOMETRY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

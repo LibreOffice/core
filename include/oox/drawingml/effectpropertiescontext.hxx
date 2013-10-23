@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
-#define OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
+#define INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
 
 #include "oox/core/contexthandler2.hxx"
 #include "oox/dllapi.h"
@@ -35,6 +35,6 @@ protected:
 
 } }
 
-#endif // OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
+#endif // INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

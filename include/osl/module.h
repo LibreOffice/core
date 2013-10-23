@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_MODULE_H_
-#define _OSL_MODULE_H_
+#ifndef INCLUDED_OSL_MODULE_H
+#define INCLUDED_OSL_MODULE_H
 
 #include "sal/config.h"
 
@@ -246,6 +246,6 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress(
 }
 #endif
 
-#endif  /* _OSL_MODULE_H_  */
+#endif // INCLUDED_OSL_MODULE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_POWERPOINT_SLIDEPERSIST_HXX
-#define OOX_POWERPOINT_SLIDEPERSIST_HXX
+#ifndef INCLUDED_OOX_PPT_SLIDEPERSIST_HXX
+#define INCLUDED_OOX_PPT_SLIDEPERSIST_HXX
 
 #include <boost/shared_ptr.hpp>
 #include "oox/drawingml/shape.hxx"
@@ -156,6 +156,6 @@ private:
 
 } }
 
-#endif // OOX_POWERPOINT_SLIDEPERSIST_HXX
+#endif // INCLUDED_OOX_PPT_SLIDEPERSIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

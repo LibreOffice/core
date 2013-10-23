@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_VML_VMLTEXTBOX_HXX
-#define OOX_VML_VMLTEXTBOX_HXX
+#ifndef INCLUDED_OOX_VML_VMLTEXTBOX_HXX
+#define INCLUDED_OOX_VML_VMLTEXTBOX_HXX
 
 #include <vector>
 #include <rtl/ustring.hxx>

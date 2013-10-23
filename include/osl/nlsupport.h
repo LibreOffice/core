@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _OSL_NLSUPPORT_H_
-#define _OSL_NLSUPPORT_H_
+#ifndef INCLUDED_OSL_NLSUPPORT_H
+#define INCLUDED_OSL_NLSUPPORT_H
 
 #include "sal/config.h"
 
@@ -51,7 +51,7 @@ SAL_DLLPUBLIC rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale(
 }
 #endif
 
-#endif  /* _OSL_NLSUPPORT_H_ */
+#endif // INCLUDED_OSL_NLSUPPORT_H
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

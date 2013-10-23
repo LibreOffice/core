@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_PROFILE_HXX_
-#define _OSL_PROFILE_HXX_
+#ifndef INCLUDED_OSL_PROFILE_HXX
+#define INCLUDED_OSL_PROFILE_HXX
 
 #include "profile.h"
 #include <rtl/ustring.hxx>
@@ -190,7 +190,7 @@ namespace osl {
     };
 }
 
-#endif  /* _OSL_PROFILE_HXX_ */
+#endif // INCLUDED_OSL_PROFILE_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

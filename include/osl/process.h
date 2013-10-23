@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _OSL_PROCESS_H_
-#define _OSL_PROCESS_H_
+#ifndef INCLUDED_OSL_PROCESS_H
+#define INCLUDED_OSL_PROCESS_H
 
 #include "sal/config.h"
 
@@ -446,6 +446,6 @@ SAL_DLLPUBLIC oslSocket SAL_CALL osl_receiveResourcePipe(
 }
 #endif
 
-#endif    /* _OSL_PROCESS_H_ */
+#endif // INCLUDED_OSL_PROCESS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

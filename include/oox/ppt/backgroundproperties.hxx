@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_POWERPOINT_BACKGROUNDPROPERTIES_HXX
-#define OOX_POWERPOINT_BACKGROUNDPROPERTIES_HXX
+#ifndef INCLUDED_OOX_PPT_BACKGROUNDPROPERTIES_HXX
+#define INCLUDED_OOX_PPT_BACKGROUNDPROPERTIES_HXX
 
 #include "oox/core/fragmenthandler2.hxx"
 #include "oox/drawingml/fillproperties.hxx"
@@ -39,6 +39,6 @@ protected:
 
 } }
 
-#endif // OOX_POWERPOINT_BACKGROUNDPROPERTIES_HXX
+#endif // INCLUDED_OOX_PPT_BACKGROUNDPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

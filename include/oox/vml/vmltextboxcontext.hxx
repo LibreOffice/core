@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_VML_VMLTEXTBOXCONTEXT_HXX
-#define OOX_VML_VMLTEXTBOXCONTEXT_HXX
+#ifndef INCLUDED_OOX_VML_VMLTEXTBOXCONTEXT_HXX
+#define INCLUDED_OOX_VML_VMLTEXTBOXCONTEXT_HXX
 
 #include "oox/core/contexthandler2.hxx"
 #include "oox/vml/vmltextbox.hxx"

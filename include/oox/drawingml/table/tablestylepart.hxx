@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_TABLESTYLEPART_HXX
-#define OOX_DRAWINGML_TABLESTYLEPART_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLEPART_HXX
+#define INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLEPART_HXX
 
 #include <rtl/ustring.hxx>
 #include <boost/optional.hpp>
@@ -68,6 +68,6 @@ private:
 
 } } }
 
-#endif  //  OOX_DRAWINGML_TABLESTYLEPART_HXX
+#endif // INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLEPART_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_HELPER_TEXTINPUTSTREAM_HXX
-#define OOX_HELPER_TEXTINPUTSTREAM_HXX
+#ifndef INCLUDED_OOX_HELPER_TEXTINPUTSTREAM_HXX
+#define INCLUDED_OOX_HELPER_TEXTINPUTSTREAM_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>

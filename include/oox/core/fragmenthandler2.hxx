@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_CORE_FRAGMENTHANDLER2_HXX
-#define OOX_CORE_FRAGMENTHANDLER2_HXX
+#ifndef INCLUDED_OOX_CORE_FRAGMENTHANDLER2_HXX
+#define INCLUDED_OOX_CORE_FRAGMENTHANDLER2_HXX
 
 #include "oox/core/contexthandler2.hxx"
 #include "oox/core/fragmenthandler.hxx"

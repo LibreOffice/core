@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_HELPER_ATTRIBUTELIST_HXX
-#define OOX_HELPER_ATTRIBUTELIST_HXX
+#ifndef INCLUDED_OOX_HELPER_ATTRIBUTELIST_HXX
+#define INCLUDED_OOX_HELPER_ATTRIBUTELIST_HXX
 
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>

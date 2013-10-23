@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef ANDROID_BOOSTRAP_H
-#define ANDROID_BOOSTRAP_H
+#ifndef INCLUDED_OSL_DETAIL_ANDROID_BOOTSTRAP_H
+#define INCLUDED_OSL_DETAIL_ANDROID_BOOTSTRAP_H
 
 #if defined(ANDROID)
 

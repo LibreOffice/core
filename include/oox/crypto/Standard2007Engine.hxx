@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef STANDARD_2007_ENGINE_HXX
-#define STANDARD_2007_ENGINE_HXX
+#ifndef INCLUDED_OOX_CRYPTO_STANDARD2007ENGINE_HXX
+#define INCLUDED_OOX_CRYPTO_STANDARD2007ENGINE_HXX
 
 #include "CryptTools.hxx"
 #include "CryptoEngine.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_TEXTBODY_HXX
-#define OOX_DRAWINGML_TEXTBODY_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_TEXTBODY_HXX
+#define INCLUDED_OOX_DRAWINGML_TEXTBODY_HXX
 
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/textbodyproperties.hxx"
@@ -68,6 +68,6 @@ protected:
 
 } }
 
-#endif  //  OOX_DRAWINGML_TEXTBODY_HXX
+#endif // INCLUDED_OOX_DRAWINGML_TEXTBODY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

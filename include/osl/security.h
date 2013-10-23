@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_SECURITY_H_
-#define _OSL_SECURITY_H_
+#ifndef INCLUDED_OSL_SECURITY_H
+#define INCLUDED_OSL_SECURITY_H
 
 #include "sal/config.h"
 
@@ -158,6 +158,6 @@ SAL_DLLPUBLIC void SAL_CALL osl_unloadUserProfile(
 }
 #endif
 
-#endif  /* _OSL_SECURITY_H_ */
+#endif // INCLUDED_OSL_SECURITY_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

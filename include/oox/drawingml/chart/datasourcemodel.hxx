@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_CHART_DATASOURCEMODEL_HXX
-#define OOX_DRAWINGML_CHART_DATASOURCEMODEL_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_CHART_DATASOURCEMODEL_HXX
+#define INCLUDED_OOX_DRAWINGML_CHART_DATASOURCEMODEL_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 #include "oox/drawingml/chart/modelbase.hxx"

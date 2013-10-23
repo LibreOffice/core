@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OOX_OLE_AXBINARYWRITER_HXX
-#define OOX_OLE_AXBINARYWRITER_HXX
+#ifndef INCLUDED_OOX_OLE_AXBINARYWRITER_HXX
+#define INCLUDED_OOX_OLE_AXBINARYWRITER_HXX
 
 #include <utility>
 #include "oox/helper/binaryoutputstream.hxx"

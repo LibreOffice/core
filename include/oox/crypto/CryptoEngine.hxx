@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef CRYPTO_ENGINE_HXX
-#define CRYPTO_ENGINE_HXX
+#ifndef INCLUDED_OOX_CRYPTO_CRYPTOENGINE_HXX
+#define INCLUDED_OOX_CRYPTO_CRYPTOENGINE_HXX
 
 #include <vector>
 

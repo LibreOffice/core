@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DUMP_DFFDUMPER_HXX
-#define OOX_DUMP_DFFDUMPER_HXX
+#ifndef INCLUDED_OOX_DUMP_DFFDUMPER_HXX
+#define INCLUDED_OOX_DUMP_DFFDUMPER_HXX
 
 #include "oox/dump/dumperbase.hxx"
 

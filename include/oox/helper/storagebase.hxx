@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_HELPER_STORAGEBASE_HXX
-#define OOX_HELPER_STORAGEBASE_HXX
+#ifndef INCLUDED_OOX_HELPER_STORAGEBASE_HXX
+#define INCLUDED_OOX_HELPER_STORAGEBASE_HXX
 
 #include <vector>
 #include <com/sun/star/uno/Reference.hxx>

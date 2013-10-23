@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef COMPONENT_MAPPING_H
-#define COMPONENT_MAPPING_H
+#ifndef INCLUDED_OSL_DETAIL_COMPONENT_MAPPING_H
+#define INCLUDED_OSL_DETAIL_COMPONENT_MAPPING_H
 
 #ifdef DISABLE_DYNLOADING
 
@@ -37,6 +37,6 @@ const lib_to_component_mapping *lo_get_libmap(void);
 
 #endif /* DISABLE_DYNLOADING */
 
-#endif /* COMPONENT_MAPPING_H */
+#endif // INCLUDED_OSL_DETAIL_COMPONENT_MAPPING_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _STARMATHIMPORTUTILS_HXX
-#define _STARMATHIMPORTUTILS_HXX
+#ifndef INCLUDED_OOX_MATHML_IMPORTUTILS_HXX
+#define INCLUDED_OOX_MATHML_IMPORTUTILS_HXX
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <oox/token/tokens.hxx>

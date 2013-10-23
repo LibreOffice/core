@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OOX_DRAWINGML_EFFECTPROPERTIES_HXX
-#define OOX_DRAWINGML_EFFECTPROPERTIES_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIES_HXX
+#define INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIES_HXX
 
 #include "oox/drawingml/fillproperties.hxx"
 

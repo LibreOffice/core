@@ -18,8 +18,8 @@
  */
 
 
-#ifndef OOX_DRAWINGML_TIMENODE_HXX
-#define OOX_DRAWINGML_TIMENODE_HXX
+#ifndef INCLUDED_OOX_PPT_TIMENODE_HXX
+#define INCLUDED_OOX_PPT_TIMENODE_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <vector>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_POWERPOINT_QUICKDIAGRAMMINGLAYOUT_HXX
-#define OOX_POWERPOINT_QUICKDIAGRAMMINGLAYOUT_HXX
+#ifndef INCLUDED_OOX_PPT_DGMLAYOUT_HXX
+#define INCLUDED_OOX_PPT_DGMLAYOUT_HXX
 
 #include "oox/core/xmlfilterbase.hxx"
 
@@ -58,6 +58,6 @@ private:
 
 } }
 
-#endif // OOX_POWERPOINT_QUICKDIAGRAMMINGLAYOUT_HXX
+#endif // INCLUDED_OOX_PPT_DGMLAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

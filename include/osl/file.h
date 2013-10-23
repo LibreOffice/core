@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_FILE_H_
-#define _OSL_FILE_H_
+#ifndef INCLUDED_OSL_FILE_H
+#define INCLUDED_OSL_FILE_H
 
 #include "sal/config.h"
 
@@ -1633,7 +1633,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createTempFile(
 }
 #endif
 
-#endif  /* _OSL_FILE_H_ */
+#endif // INCLUDED_OSL_FILE_H
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

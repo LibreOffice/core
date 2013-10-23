@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_DIAGRAM_HXX
-#define OOX_DRAWINGML_DIAGRAM_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_DIAGRAM_DIAGRAM_HXX
+#define INCLUDED_OOX_DRAWINGML_DIAGRAM_DIAGRAM_HXX
 
 #include <rtl/ustring.hxx>
 #include "oox/drawingml/shape.hxx"

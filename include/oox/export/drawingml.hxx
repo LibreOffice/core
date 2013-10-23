@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OOX_EXPORT_DRAWINGML_HXX_
-#define _OOX_EXPORT_DRAWINGML_HXX_
+#ifndef INCLUDED_OOX_EXPORT_DRAWINGML_HXX
+#define INCLUDED_OOX_EXPORT_DRAWINGML_HXX
 
 #include <oox/dllapi.h>
 #include <sax/fshelper.hxx>

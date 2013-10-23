@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_TYPES_HXX
-#define OOX_DRAWINGML_TYPES_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_DRAWINGMLTYPES_HXX
+#define INCLUDED_OOX_DRAWINGML_DRAWINGMLTYPES_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/style/TabAlign.hpp>

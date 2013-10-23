@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_TEXTPARAGRAPH_HXX
-#define OOX_DRAWINGML_TEXTPARAGRAPH_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPH_HXX
+#define INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPH_HXX
 
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -66,6 +66,6 @@ typedef boost::shared_ptr< TextParagraph > TextParagraphPtr;
 
 } }
 
-#endif  //  OOX_DRAWINGML_TEXTPARAGRAPH_HXX
+#endif // INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

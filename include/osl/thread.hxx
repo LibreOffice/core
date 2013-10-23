@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _THREAD_HXX_
-#define _THREAD_HXX_
+#ifndef INCLUDED_OSL_THREAD_HXX
+#define INCLUDED_OSL_THREAD_HXX
 
 #include "sal/config.h"
 

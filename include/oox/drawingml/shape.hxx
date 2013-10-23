@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_SHAPE_HXX
-#define OOX_DRAWINGML_SHAPE_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_SHAPE_HXX
+#define INCLUDED_OOX_DRAWINGML_SHAPE_HXX
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
@@ -280,6 +280,6 @@ private:
 
 } }
 
-#endif  //  OOX_DRAWINGML_SHAPE_HXX
+#endif // INCLUDED_OOX_DRAWINGML_SHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

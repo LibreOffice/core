@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
-#define OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
+#define INCLUDED_OOX_DRAWINGML_CHART_TITLECONTEXT_HXX
 
 #include "oox/drawingml/chart/chartcontextbase.hxx"
 

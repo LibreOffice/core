@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OOX_EXPORT_SHAPES_HXX_
-#define _OOX_EXPORT_SHAPES_HXX_
+#ifndef INCLUDED_OOX_EXPORT_SHAPES_HXX
+#define INCLUDED_OOX_EXPORT_SHAPES_HXX
 
 #include <oox/dllapi.h>
 #include <com/sun/star/uno/XReference.hpp>
@@ -165,6 +165,6 @@ public:
 
 }}
 
-#endif /* ndef _OOX_EXPORT_SHAPES_HXX_ */
+#endif /* ndef INCLUDED_OOX_EXPORT_SHAPES_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

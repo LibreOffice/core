@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
-#define OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
+#define INCLUDED_OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
 
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include "oox/helper/helper.hxx"

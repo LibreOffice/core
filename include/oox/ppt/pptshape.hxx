@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_PPT_PRESENTATION_PPTSHAPE_HXX
-#define OOX_PPT_PRESENTATION_PPTSHAPE_HXX
+#ifndef INCLUDED_OOX_PPT_PPTSHAPE_HXX
+#define INCLUDED_OOX_PPT_PPTSHAPE_HXX
 
 #include "oox/drawingml/shape.hxx"
 #include "oox/ppt/slidepersist.hxx"
@@ -70,6 +70,6 @@ protected:
 
 } }
 
-#endif  //  OOX_PPT_PRESENTATION_PPTSHAPE_HXX
+#endif // INCLUDED_OOX_PPT_PPTSHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

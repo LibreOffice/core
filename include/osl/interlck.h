@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_INTERLOCK_H_
-#define _OSL_INTERLOCK_H_
+#ifndef INCLUDED_OSL_INTERLCK_H
+#define INCLUDED_OSL_INTERLCK_H
 
 #include "sal/config.h"
 
@@ -86,7 +86,7 @@ SAL_DLLPUBLIC oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInte
 #endif
 
 
-#endif  /* _OSL_INTERLOCK_H_ */
+#endif // INCLUDED_OSL_INTERLCK_H
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

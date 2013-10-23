@@ -8,8 +8,8 @@
  */
 
 
-#ifndef OOX_PPT_COMMENTS_HXX
-#define OOX_PPT_COMMENTS_HXX
+#ifndef INCLUDED_OOX_PPT_COMMENTS_HXX
+#define INCLUDED_OOX_PPT_COMMENTS_HXX
 
 #include <vector>
 #include <com/sun/star/util/DateTime.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_OLE_AXCONTROLFRAGMENT_HXX
-#define OOX_OLE_AXCONTROLFRAGMENT_HXX
+#ifndef INCLUDED_OOX_OLE_AXCONTROLFRAGMENT_HXX
+#define INCLUDED_OOX_OLE_AXCONTROLFRAGMENT_HXX
 
 #include "oox/core/fragmenthandler2.hxx"
 
