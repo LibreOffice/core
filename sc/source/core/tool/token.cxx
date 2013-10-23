@@ -1351,6 +1351,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocKapz:
             case ocFisher:
             case ocFisherInv:
+            case ocGamma:
                 // Don't change the state.
             break;
             default:
