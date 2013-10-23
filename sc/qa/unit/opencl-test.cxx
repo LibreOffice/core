@@ -60,6 +60,7 @@ public:
     void testFinacialFormula();
     void testStatisticalFormulaFisher();
     void testStatisticalFormulaFisherInv();
+    void testStatisticalFormulaGamma();
 
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
@@ -68,6 +69,7 @@ public:
     CPPUNIT_TEST(testFinacialFormula);
     CPPUNIT_TEST(testStatisticalFormulaFisher);
     CPPUNIT_TEST(testStatisticalFormulaFisherInv);
+    CPPUNIT_TEST(testStatisticalFormulaGamma);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -453,8 +455,26 @@ void ScOpenclTest::testStatisticalFormulaFisherInv()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-
-
+//[AMLOEXT-45]
+void ScOpenclTest::testStatisticalFormulaGamma()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Gamma.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Gamma.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 19; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 
 ScOpenclTest::ScOpenclTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
