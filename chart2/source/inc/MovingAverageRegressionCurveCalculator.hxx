@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_MOVINGAVERAGEREGRESSIONCURVECALCULATOR_HXX
-#define CHART2_MOVINGAVERAGEREGRESSIONCURVECALCULATOR_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_MOVINGAVERAGEREGRESSIONCURVECALCULATOR_HXX
+#define INCLUDED_CHART2_SOURCE_INC_MOVINGAVERAGEREGRESSIONCURVECALCULATOR_HXX
 
 #include "RegressionCurveCalculator.hxx"
 #include <vector>
@@ -63,6 +63,6 @@ private:
 
 } //  namespace chart
 
-#endif // CHART2_POLYNOMALREGRESSIONCURVECALCULATOR_HXX
+#endif // INCLUDED_CHART2_SOURCE_INC_MOVINGAVERAGEREGRESSIONCURVECALCULATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

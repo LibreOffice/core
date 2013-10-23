@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_COMMANDDISPATCHCONTAINER_HXX
-#define CHART2_COMMANDDISPATCHCONTAINER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_COMMANDDISPATCHCONTAINER_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_COMMANDDISPATCHCONTAINER_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -143,7 +143,7 @@ private:
 
 } //  namespace chart
 
-// CHART2_COMMANDDISPATCHCONTAINER_HXX
+// INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_COMMANDDISPATCHCONTAINER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

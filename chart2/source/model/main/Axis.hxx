@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_AXIS_HXX
-#define CHART_AXIS_HXX
+#ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_AXIS_HXX
+#define INCLUDED_CHART2_SOURCE_MODEL_MAIN_AXIS_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "MutexContainer.hxx"
@@ -165,7 +165,7 @@ private: //member
 
 } //  namespace chart
 
-// CHART_AXIS_HXX
+// INCLUDED_CHART2_SOURCE_MODEL_MAIN_AXIS_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

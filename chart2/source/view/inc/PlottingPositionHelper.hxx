@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CHART2_PLOTTINGPOSITIONHELPER_HXX
-#define _CHART2_PLOTTINGPOSITIONHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_PLOTTINGPOSITIONHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_INC_PLOTTINGPOSITIONHELPER_HXX
 
 #include "LabelAlignment.hxx"
 #include "chartview/ExplicitScaleValues.hxx"

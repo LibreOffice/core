@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_BASEGFXHELPER_HXX
-#define CHART2_BASEGFXHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_BASEGFXHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_INC_BASEGFXHELPER_HXX
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
@@ -90,7 +90,7 @@ OOO_DLLPUBLIC_CHARTTOOLS double Rad2Deg( double fRadians );
 } //  namespace BaseGFXHelper
 } //  namespace chart
 
-// CHART2_BASEGFXHELPER_HXX
+// INCLUDED_CHART2_SOURCE_INC_BASEGFXHELPER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

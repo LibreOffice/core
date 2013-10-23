@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAMPLEADDIN_HXX_
-#define _SAMPLEADDIN_HXX_
+#ifndef INCLUDED_CHART2_WORKBENCH_ADDIN_SAMPLEADDIN_HXX
+#define INCLUDED_CHART2_WORKBENCH_ADDIN_SAMPLEADDIN_HXX
 
 #include <cppuhelper/implbase9.hxx>
 
@@ -150,6 +150,6 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
-#endif  // _SAMPLEADDIN_HXX_
+#endif // INCLUDED_CHART2_WORKBENCH_ADDIN_SAMPLEADDIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

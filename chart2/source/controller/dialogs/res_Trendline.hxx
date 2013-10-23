@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_RES_TRENDLINE_HXX
-#define CHART2_RES_TRENDLINE_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_TRENDLINE_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_TRENDLINE_HXX
 
 #include <vcl/window.hxx>
 #include <vcl/button.hxx>
@@ -86,7 +86,7 @@ private:
 
 } //  namespace chart
 
-// CHART2_RES_TRENDLINE_HXX
+// INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_TRENDLINE_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

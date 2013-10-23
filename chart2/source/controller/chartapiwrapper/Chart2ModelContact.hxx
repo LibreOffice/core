@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_CHART2MODELCONTACT_HXX
-#define CHART_CHART2MODELCONTACT_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_CHART2MODELCONTACT_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_CHART2MODELCONTACT_HXX
 
 #include <chartview/ExplicitScaleValues.hxx>
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -155,7 +155,7 @@ private: //member
 } //  namespace wrapper
 } //  namespace chart
 
-// CHART_CHART2MODELCONTACT_HXX
+// INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_CHART2MODELCONTACT_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_WRAPPEDPROPERTYSET_HXX
-#define CHART_WRAPPEDPROPERTYSET_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_WRAPPEDPROPERTYSET_HXX
+#define INCLUDED_CHART2_SOURCE_INC_WRAPPEDPROPERTYSET_HXX
 
 #include "WrappedProperty.hxx"
 #include "MutexContainer.hxx"
@@ -126,7 +126,7 @@ protected: //member
 
 } //namespace chart
 
-// CHART_WRAPPEDPROPERTYSET_HXX
+// INCLUDED_CHART2_SOURCE_INC_WRAPPEDPROPERTYSET_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

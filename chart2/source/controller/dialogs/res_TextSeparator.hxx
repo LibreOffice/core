@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_RES_TEXTSEPARATOR_HXX
-#define CHART2_RES_TEXTSEPARATOR_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_TEXTSEPARATOR_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_TEXTSEPARATOR_HXX
 
 // header for class FixedText
 #include <vcl/fixed.hxx>

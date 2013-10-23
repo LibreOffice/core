@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_LABELEDDATASEQUENCE_HXX
-#define CHART2_LABELEDDATASEQUENCE_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_LABELEDDATASEQUENCE_HXX
+#define INCLUDED_CHART2_SOURCE_INC_LABELEDDATASEQUENCE_HXX
 #include "ServiceMacros.hxx"
 #include "MutexContainer.hxx"
 #include <comphelper/uno3.hxx>
@@ -99,7 +99,7 @@ private:
 
 } //  namespace chart
 
-// CHART2_LABELEDDATASEQUENCE_HXX
+// INCLUDED_CHART2_SOURCE_INC_LABELEDDATASEQUENCE_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_MINMAXLINEWRAPPER_HXX
-#define CHART_MINMAXLINEWRAPPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_MINMAXLINEWRAPPER_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_MINMAXLINEWRAPPER_HXX
 
 #include "ServiceMacros.hxx"
 #include "MutexContainer.hxx"
@@ -117,7 +117,7 @@ private: //member
 } //  namespace wrapper
 } //  namespace chart
 
-// CHART_MINMAXLINEWRAPPER_HXX
+// INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_MINMAXLINEWRAPPER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

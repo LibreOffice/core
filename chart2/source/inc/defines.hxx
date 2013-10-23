@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __CHART2_DEFINES_HXX__
-#define __CHART2_DEFINES_HXX__
+#ifndef INCLUDED_CHART2_SOURCE_INC_DEFINES_HXX
+#define INCLUDED_CHART2_SOURCE_INC_DEFINES_HXX
 
 #define FIXED_SIZE_FOR_3D_CHART_VOLUME 10000.0
 

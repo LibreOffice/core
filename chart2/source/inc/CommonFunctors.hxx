@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_COMMONFUNCTORS_HXX
-#define CHART2_COMMONFUNCTORS_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_COMMONFUNCTORS_HXX
+#define INCLUDED_CHART2_SOURCE_INC_COMMONFUNCTORS_HXX
 
 #include <algorithm>
 #include <functional>
@@ -204,7 +204,7 @@ template< typename T >
 } //  namespace CommonFunctors
 } //  namespace chart
 
-// CHART2_COMMONFUNCTORS_HXX
+// INCLUDED_CHART2_SOURCE_INC_COMMONFUNCTORS_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

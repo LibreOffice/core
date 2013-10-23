@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_CONFIGURATIONACCESS_HXX
-#define _CHART2_CONFIGURATIONACCESS_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_CONFIGURATIONACCESS_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_CONFIGURATIONACCESS_HXX
 
 // header for enum FieldUnit
 #include <tools/fldunit.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_CREATION_WIZARD_UNO_HXX
-#define _CHART2_CREATION_WIZARD_UNO_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CREATIONWIZARD_UNO_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CREATIONWIZARD_UNO_HXX
 
 #include "ServiceMacros.hxx"
 #include "MutexContainer.hxx"

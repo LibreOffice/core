@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CHART2_BUBBLECHART_HXX
-#define _CHART2_BUBBLECHART_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_BUBBLECHART_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_BUBBLECHART_HXX
 
 #include "VSeriesPlotter.hxx"
 #include <com/sun/star/drawing/Direction3D.hpp>

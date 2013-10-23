@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CHART2_TP_POLAROPTIONS_HXX
-#define _CHART2_TP_POLAROPTIONS_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_POLAROPTIONS_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_POLAROPTIONS_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>

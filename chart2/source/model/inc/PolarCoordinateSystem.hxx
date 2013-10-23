@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CHART_POLARCOORDINATESYSTEM_HXX
-#define _CHART_POLARCOORDINATESYSTEM_HXX
+#ifndef INCLUDED_CHART2_SOURCE_MODEL_INC_POLARCOORDINATESYSTEM_HXX
+#define INCLUDED_CHART2_SOURCE_MODEL_INC_POLARCOORDINATESYSTEM_HXX
 
 #include "ServiceMacros.hxx"
 #include "BaseCoordinateSystem.hxx"
@@ -81,7 +81,7 @@ public:
 
 }  // namespace chart
 
-// _CHART_POLARCOORDINATESYSTEM_HXX
+// INCLUDED_CHART2_SOURCE_MODEL_INC_POLARCOORDINATESYSTEM_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

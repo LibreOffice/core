@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CHART2_ITEMPOOL_HXX
-#define _CHART2_ITEMPOOL_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_MAIN_CHARTITEMPOOL_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_MAIN_CHARTITEMPOOL_HXX
 
 #include <svl/poolitem.hxx>
 #include <svl/itempool.hxx>
@@ -47,6 +47,6 @@ public:
 } //  namespace chart
 
 #endif
-// _CHART2_ITEMPOOL_HXX
+// INCLUDED_CHART2_SOURCE_VIEW_MAIN_CHARTITEMPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

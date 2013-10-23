@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_DATASOURCEDIALOG_HXX
-#define CHART2_DATASOURCEDIALOG_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATASOURCE_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATASOURCE_HXX
 
 // header for class TabDialog
 #include <vcl/tabdlg.hxx>
@@ -86,7 +86,7 @@ private:
 
 } //  namespace chart
 
-// CHART2_DATASOURCEDIALOG_HXX
+// INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATASOURCE_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CHART2_DATEHELPER_HXX
-#define _CHART2_DATEHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_DATEHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_INC_DATEHELPER_HXX
 
 #include <com/sun/star/chart2/XScaling.hpp>
 #include <tools/date.hxx>

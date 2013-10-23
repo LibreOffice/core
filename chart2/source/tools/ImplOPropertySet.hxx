@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_IMPLOPROPERTYSET_HXX
-#define CHART_IMPLOPROPERTYSET_HXX
+#ifndef INCLUDED_CHART2_SOURCE_TOOLS_IMPLOPROPERTYSET_HXX
+#define INCLUDED_CHART2_SOURCE_TOOLS_IMPLOPROPERTYSET_HXX
 
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -84,7 +84,7 @@ private:
 } //  namespace impl
 } //  namespace chart
 
-// CHART_IMPLOPROPERTYSET_HXX
+// INCLUDED_CHART2_SOURCE_TOOLS_IMPLOPROPERTYSET_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

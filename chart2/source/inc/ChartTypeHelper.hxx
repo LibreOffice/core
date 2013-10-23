@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_CHARTTYPEHELPER_HXX
-#define _CHART2_CHARTTYPEHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_CHARTTYPEHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_INC_CHARTTYPEHELPER_HXX
 
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>

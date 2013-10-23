@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CHART2_CHARTMODELCLONE_HXX
-#define CHART2_CHARTMODELCLONE_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTMODELCLONE_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTMODELCLONE_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
@@ -69,6 +69,6 @@ namespace chart
 
 } // namespace chart
 
-#endif // CHART2_CHARTMODELCLONE_HXX
+#endif // INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTMODELCLONE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

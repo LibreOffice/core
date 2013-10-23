@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_DISPOSEHELPER_HXX
-#define CHART2_DISPOSEHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_DISPOSEHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_INC_DISPOSEHELPER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -89,7 +89,7 @@ template< class Map >
 } //  namespace DisposeHelper
 } //  namespace chart
 
-// CHART2_DISPOSEHELPER_HXX
+// INCLUDED_CHART2_SOURCE_INC_DISPOSEHELPER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

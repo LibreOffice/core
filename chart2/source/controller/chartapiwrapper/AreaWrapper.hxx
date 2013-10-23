@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_AREAWRAPPER_HXX
-#define CHART_AREAWRAPPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_AREAWRAPPER_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_AREAWRAPPER_HXX
 
 #include "WrappedPropertySet.hxx"
 #include "ServiceMacros.hxx"
@@ -93,7 +93,7 @@ private:
 } //  namespace wrapper
 } //  namespace chart
 
-// CHART_AREAWRAPPER_HXX
+// INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_AREAWRAPPER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

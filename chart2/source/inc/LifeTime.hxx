@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _LIFETIME_HXX
-#define _LIFETIME_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_LIFETIME_HXX
+#define INCLUDED_CHART2_SOURCE_INC_LIFETIME_HXX
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_VLEGENDSYMBOLFACTORY_HXX
-#define CHART2_VLEGENDSYMBOLFACTORY_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_VLEGENDSYMBOLFACTORY_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_INC_VLEGENDSYMBOLFACTORY_HXX
 
 #include "LegendEntryProvider.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -59,7 +59,7 @@ private:
 
 } //  namespace chart
 
-// CHART2_VLEGENDSYMBOLFACTORY_HXX
+// INCLUDED_CHART2_SOURCE_VIEW_INC_VLEGENDSYMBOLFACTORY_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_DATASOURCE_HXX
-#define CHART2_DATASOURCE_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_DATASOURCE_HXX
+#define INCLUDED_CHART2_SOURCE_INC_DATASOURCE_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -71,7 +71,7 @@ private:
 
 } //  namespace chart
 
-// CHART2_DATASOURCE_HXX
+// INCLUDED_CHART2_SOURCE_INC_DATASOURCE_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

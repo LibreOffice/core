@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CHART_DATA_BROWSER_HXX
-#define CHART_DATA_BROWSER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSER_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSER_HXX
 
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/outdev.hxx>
@@ -194,6 +194,6 @@ private:
 
 } // namespace chart
 
-#endif  // CHART_DATA_BROWSER_HXX
+#endif // INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

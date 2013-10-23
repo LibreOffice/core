@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CHART2_TOOLS_AXISHELPER_HXX
-#define _CHART2_TOOLS_AXISHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_AXISHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_INC_AXISHELPER_HXX
 
 #include "charttoolsdllapi.hxx"
 #include "ReferenceSizeProvider.hxx"

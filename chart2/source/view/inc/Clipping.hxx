@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_CLIPPING_HXX
-#define _CHART2_CLIPPING_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_CLIPPING_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_INC_CLIPPING_HXX
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>

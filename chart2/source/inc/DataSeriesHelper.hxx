@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_DATASERIESHELPER_HXX
-#define CHART2_DATASERIESHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_DATASERIESHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_INC_DATASERIESHELPER_HXX
 
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -200,7 +200,7 @@ OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromPoint( const ::com::sun::star:
 } //  namespace DataSeriesHelper
 } //  namespace chart
 
-// CHART2_DATASERIESHELPER_HXX
+// INCLUDED_CHART2_SOURCE_INC_DATASERIESHELPER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

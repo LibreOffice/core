@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CHART_LINEAR3DTRANSFORMATION_HXX
-#define _CHART_LINEAR3DTRANSFORMATION_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_LINEAR3DTRANSFORMATION_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_INC_LINEAR3DTRANSFORMATION_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/chart2/XTransformation.hpp>
@@ -54,7 +54,7 @@ private:
 
 }  // namespace chart
 
-// _CHART_LINEAR3DTRANSFORMATION_HXX
+// INCLUDED_CHART2_SOURCE_VIEW_INC_LINEAR3DTRANSFORMATION_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

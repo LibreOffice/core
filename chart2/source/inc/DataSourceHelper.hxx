@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_DATASOURCEHELPER_HXX
-#define _CHART2_DATASOURCEHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_DATASOURCEHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_INC_DATASOURCEHELPER_HXX
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>

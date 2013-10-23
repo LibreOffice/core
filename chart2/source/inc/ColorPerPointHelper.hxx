@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_COLORPERPOINTHELPER_HXX
-#define _CHART2_COLORPERPOINTHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_COLORPERPOINTHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_INC_COLORPERPOINTHELPER_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "charttoolsdllapi.hxx"

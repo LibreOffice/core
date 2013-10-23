@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CHART2_EXPLICITSCALEVALUES_HXX
-#define _CHART2_EXPLICITSCALEVALUES_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_EXPLICITSCALEVALUES_HXX
+#define INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_EXPLICITSCALEVALUES_HXX
 
 #include "chartviewdllapi.hxx"
 #include <com/sun/star/chart/TimeInterval.hpp>

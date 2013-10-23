@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CHART2_OBJECTNAME_PROVIDER_HXX
-#define _CHART2_OBJECTNAME_PROVIDER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_OBJECTNAMEPROVIDER_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_OBJECTNAMEPROVIDER_HXX
 
 #include "ObjectIdentifier.hxx"
 #include "TitleHelper.hxx"

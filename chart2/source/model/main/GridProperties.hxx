@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_GRIDPROPERTIES_HXX
-#define CHART_GRIDPROPERTIES_HXX
+#ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_GRIDPROPERTIES_HXX
+#define INCLUDED_CHART2_SOURCE_MODEL_MAIN_GRIDPROPERTIES_HXX
 
 #include "ServiceMacros.hxx"
 #include <osl/mutex.hxx>
@@ -116,7 +116,7 @@ private:
 
 } //  namespace chart
 
-// CHART_GRIDPROPERTIES_HXX
+// INCLUDED_CHART2_SOURCE_MODEL_MAIN_GRIDPROPERTIES_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

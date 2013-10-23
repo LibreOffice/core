@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _VLEGEND_HXX
-#define _VLEGEND_HXX
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_MAIN_VLEGEND_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_MAIN_VLEGEND_HXX
 
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>

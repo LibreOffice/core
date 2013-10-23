@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2RANGEEDIT_HXX
-#define CHART2RANGEEDIT_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RANGEEDIT_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RANGEEDIT_HXX
 
 #include <vcl/edit.hxx>
 #include <vcl/accel.hxx>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2__SERVICEREGISTRATION_CHARTTYPES_HXX
-#define CHART2__SERVICEREGISTRATION_CHARTTYPES_HXX
+#ifndef INCLUDED_CHART2_SOURCE_MODEL_INC__SERVICEREGISTRATION_CHARTTYPES_HXX
+#define INCLUDED_CHART2_SOURCE_MODEL_INC__SERVICEREGISTRATION_CHARTTYPES_HXX
 
 #include <cppuhelper/implementationentry.hxx>
 
@@ -28,7 +28,7 @@ public:
         getImplementationEntries();
 };
 
-// CHART2__SERVICEREGISTRATION_CHARTTYPES_HXX
+// INCLUDED_CHART2_SOURCE_MODEL_INC__SERVICEREGISTRATION_CHARTTYPES_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

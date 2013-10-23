@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_CONTAINERHELPER_HXX
-#define CHART2_CONTAINERHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_CONTAINERHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_INC_CONTAINERHELPER_HXX
 
 #include <vector>
 #include <set>
@@ -168,7 +168,7 @@ template< class Map >
 } // namespace ContainerHelper
 } //  namespace chart
 
-// CHART2_CONTAINERHELPER_HXX
+// INCLUDED_CHART2_SOURCE_INC_CONTAINERHELPER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_AREACHARTTYPETEMPLATE_HXX
-#define CHART_AREACHARTTYPETEMPLATE_HXX
+#ifndef INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_AREACHARTTYPETEMPLATE_HXX
+#define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_AREACHARTTYPETEMPLATE_HXX
 
 #include "ChartTypeTemplate.hxx"
 #include "StackMode.hxx"
@@ -90,7 +90,7 @@ private:
 
 } //  namespace chart
 
-// CHART_AREACHARTTYPETEMPLATE_HXX
+// INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_AREACHARTTYPETEMPLATE_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

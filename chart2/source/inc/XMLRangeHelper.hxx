@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_XMLRANGEHELPER_HXX
-#define CHART2_XMLRANGEHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_XMLRANGEHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_INC_XMLRANGEHELPER_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -61,7 +61,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange );
 } //  namespace XMLRangeHelper
 } //  namespace chart
 
-// CHART2_XMLRANGEHELPER_HXX
+// INCLUDED_CHART2_SOURCE_INC_XMLRANGEHELPER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

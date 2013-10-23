@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_CHARTDEBUGTRACE_HXX
-#define CHART2_CHARTDEBUGTRACE_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_CHARTDEBUGTRACE_HXX
+#define INCLUDED_CHART2_SOURCE_INC_CHARTDEBUGTRACE_HXX
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -57,7 +57,7 @@ OOO_DLLPUBLIC_CHARTTOOLS void ChartDebugTraceDiagram(
 } // namespace debug
 } //  namespace chart
 
-// CHART2_CHARTDEBUGTRACE_HXX
+// INCLUDED_CHART2_SOURCE_INC_CHARTDEBUGTRACE_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

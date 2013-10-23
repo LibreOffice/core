@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_DRAGMETHOD_PIESEGMENT_HXX
-#define CHART2_DRAGMETHOD_PIESEGMENT_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_DRAGMETHOD_PIESEGMENT_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_DRAGMETHOD_PIESEGMENT_HXX
 
 #include "DragMethod_Base.hxx"
 #include <basegfx/vector/b2dvector.hxx>
@@ -52,7 +52,7 @@ private:
 
 } //  namespace chart
 
-// CHART2_DRAGMETHOD_PIESEGMENT_HXX
+// INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_DRAGMETHOD_PIESEGMENT_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

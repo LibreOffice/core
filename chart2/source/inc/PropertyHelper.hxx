@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART_PROPERTYHELPER_HXX
-#define CHART_PROPERTYHELPER_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_PROPERTYHELPER_HXX
+#define INCLUDED_CHART2_SOURCE_INC_PROPERTYHELPER_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/Property.hpp>
@@ -180,7 +180,7 @@ private:
 
 } //  namespace chart
 
-// CHART_PROPERTYHELPER_HXX
+// INCLUDED_CHART2_SOURCE_INC_PROPERTYHELPER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

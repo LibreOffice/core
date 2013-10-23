@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CHART2_DLG_OBJECTPROPERTIES_HXX
-#define _CHART2_DLG_OBJECTPROPERTIES_HXX
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_OBJECTPROPERTIES_HXX
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_OBJECTPROPERTIES_HXX
 
 #include "ObjectIdentifier.hxx"
 #include <sfx2/tabdlg.hxx>

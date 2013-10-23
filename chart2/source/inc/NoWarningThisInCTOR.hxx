@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_NOWARNINGTHISINCTOR_HXX
-#define CHART2_NOWARNINGTHISINCTOR_HXX
+#ifndef INCLUDED_CHART2_SOURCE_INC_NOWARNINGTHISINCTOR_HXX
+#define INCLUDED_CHART2_SOURCE_INC_NOWARNINGTHISINCTOR_HXX
 
 /** Include this file, if you have to use "this" in the base initializer list of
     a constructor.
@@ -34,7 +34,7 @@
 #  pragma warning (disable : 4355)
 #endif
 
-// CHART2_NOWARNINGTHISINCTOR_HXX
+// INCLUDED_CHART2_SOURCE_INC_NOWARNINGTHISINCTOR_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
