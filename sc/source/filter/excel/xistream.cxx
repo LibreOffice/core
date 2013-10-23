@@ -150,7 +150,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
             ::std::vector< sal_uInt16 > aPassVect( 16 );
             ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
             for( sal_Int32 nInd = 0; nInd < nLen; ++nInd, ++aIt )
-                *aIt = static_cast< sal_uInt16 >( rPassword.getStr()[nInd] );
+                *aIt = static_cast< sal_uInt16 >( rPassword[nInd] );
 
             uno::Sequence< sal_Int8 > aDocId = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
             OSL_ENSURE( aDocId.getLength() == 16, "Unexpected length of the senquence!" );

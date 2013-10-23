@@ -81,14 +81,11 @@ void PackageUri::init() const
         }
 
         // Scheme must be followed by '://'
-        if ( ( m_aUri.getStr()[ PACKAGE_URL_SCHEME_LENGTH ]
-                != sal_Unicode( ':' ) )
+        if ( ( m_aUri[ PACKAGE_URL_SCHEME_LENGTH ] != ':' )
              ||
-             ( m_aUri.getStr()[ PACKAGE_URL_SCHEME_LENGTH + 1 ]
-                != sal_Unicode( '/' ) )
+             ( m_aUri[ PACKAGE_URL_SCHEME_LENGTH + 1 ] != '/' )
              ||
-             ( m_aUri.getStr()[ PACKAGE_URL_SCHEME_LENGTH + 2 ]
-                != sal_Unicode( '/' ) ) )
+             ( m_aUri[ PACKAGE_URL_SCHEME_LENGTH + 2 ] != '/' ) )
         {
             // error, but remember that we did a init().
             m_aPath = OUString( "/" );
@@ -135,8 +132,7 @@ void PackageUri::init() const
             }
             else if ( nEnd == ( aPureUri.getLength() - 1 ) )
             {
-                if ( aPureUri.getStr()[ aPureUri.getLength() - 2 ]
-                                                == sal_Unicode( '/' ) )
+                if ( aPureUri[ aPureUri.getLength() - 2 ] == '/' )
                 {
                     // Only <scheme>://// or <scheme>://<something>//
 

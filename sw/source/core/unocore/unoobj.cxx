@@ -2775,12 +2775,12 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (rPropName.matchAsciiL("CollatorAlgorithm", 17) &&
+        else if (rPropName.startsWith("CollatorAlgorithm") &&
             rPropName.getLength() == 18 &&
-            (rPropName.getStr()[17] >= '0' && rPropName.getStr()[17] <= '9'))
+            (rPropName[17] >= '0' && rPropName[17] <= '9'))
         {
             bOldSortdescriptor = sal_True;
-            sal_uInt16 nIndex = rPropName.getStr()[17];
+            sal_uInt16 nIndex = rPropName[17];
             nIndex -= '0';
             OUString aTxt;
             if ((aValue >>= aTxt) && nIndex < 3)
@@ -2792,12 +2792,12 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (rPropName.matchAsciiL("SortRowOrColumnNo", 17) &&
+        else if (rPropName.startsWith("SortRowOrColumnNo") &&
             rPropName.getLength() == 18 &&
-            (rPropName.getStr()[17] >= '0' && rPropName.getStr()[17] <= '9'))
+            (rPropName[17] >= '0' && rPropName[17] <= '9'))
         {
             bOldSortdescriptor = sal_True;
-            sal_uInt16 nIndex = rPropName.getStr()[17];
+            sal_uInt16 nIndex = rPropName[17];
             nIndex -= '0';
             sal_Int16 nCol = -1;
             if (aValue.getValueType() == ::getCppuType((const sal_Int16*)0)
@@ -2814,12 +2814,12 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (0 == rPropName.indexOf("IsSortNumeric") &&
+        else if (rPropName.startsWith("IsSortNumeric") &&
             rPropName.getLength() == 14 &&
-            (rPropName.getStr()[13] >= '0' && rPropName.getStr()[13] <= '9'))
+            (rPropName[13] >= '0' && rPropName[13] <= '9'))
         {
             bOldSortdescriptor = sal_True;
-            sal_uInt16 nIndex = rPropName.getStr()[13];
+            sal_uInt16 nIndex = rPropName[13];
             nIndex = nIndex - '0';
             if (aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3)
             {
@@ -2831,12 +2831,12 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (0 == rPropName.indexOf("IsSortAscending") &&
+        else if (rPropName.startsWith("IsSortAscending") &&
             rPropName.getLength() == 16 &&
-            (rPropName.getStr()[15] >= '0' && rPropName.getStr()[15] <= '9'))
+            (rPropName[15] >= '0' && rPropName[15] <= '9'))
         {
             bOldSortdescriptor = sal_True;
-            sal_uInt16 nIndex = rPropName.getStr()[15];
+            sal_uInt16 nIndex = rPropName[15];
             nIndex -= '0';
             if (aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3)
             {

@@ -86,8 +86,8 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
         // Something is wrong.  Stick with the default separators.
         return;
 
-    sal_Unicode cDecSep  = rDecSep.getStr()[0];
-    sal_Unicode cListSep = rListSep.getStr()[0];
+    sal_Unicode cDecSep  = rDecSep[0];
+    sal_Unicode cListSep = rListSep[0];
 
     // Excel by default uses system's list separator as the parameter
     // separator, which in English locales is a comma.  However, OOo's list

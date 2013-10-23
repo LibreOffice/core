@@ -39,7 +39,7 @@ namespace rptui
         while ( nPatternIndex > -1 )
         {
             const OUString* pReplace = NULL;
-            switch ( sExpression.getStr()[ nPatternIndex + 1 ] )
+            switch ( sExpression[ nPatternIndex + 1 ] )
             {
             case '$': pReplace = &_rFieldDataSource; break;
             case '1': pReplace = &_rLHS; break;

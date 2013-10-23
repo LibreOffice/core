@@ -271,8 +271,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SvxThesaurusDialog::que
             xThesaurus->queryMeanings( rTerm, rLocale, rProperties ) );
 
     // text with '.' at the end?
-    if ( 0 == aMeanings.getLength() && !rTerm.isEmpty() &&
-        rTerm.getStr()[ rTerm.getLength() - 1 ] == '.')
+    if ( 0 == aMeanings.getLength() && rTerm.endsWith(".") )
     {
         // try again without trailing '.' chars. It may be a word at the
         // end of a sentence and not an abbreviation...

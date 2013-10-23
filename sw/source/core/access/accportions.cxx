@@ -584,7 +584,7 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
 
         // if we have anything except plain text, compute nExtend + nRefPos
         if( (nModelEndPos - nModelPos == 1) &&
-            (pTxtNode->GetTxt()[nModelPos] != sAccessibleString.getStr()[nPos]))
+            (pTxtNode->GetTxt()[nModelPos] != sAccessibleString[nPos]))
         {
             // case 1: a one-character, non-text portion
             // reference position is the first accessibilty for our

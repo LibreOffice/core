@@ -2019,8 +2019,8 @@ OUString lcl_ExctractAskVariableAndHint( const OUString& rCommand, OUString& rHi
     // the text after the variable and before a '\' is the hint
     // if no hint is set the variable is used as hint
     // the quotes of the hint have to be removed
-    sal_Int32 nIndex = rCommand.indexOf( ' ', 2);//find last space after 'ASK'
-    while(rCommand.getStr()[nIndex] == ' ')
+    sal_Int32 nIndex = rCommand.indexOf( ' ', 2); //find last space after 'ASK'
+    while(rCommand[nIndex] == ' ')
         ++nIndex;
     OUString sShortCommand( rCommand.copy( nIndex ) ); //cut off the " ASK "
 
@@ -2212,7 +2212,7 @@ void FieldContext::AppendCommand(const OUString& rPart)
         if (sToken.isEmpty())
             continue;
 
-        if (sToken.getStr()[0] == '"')
+        if (sToken[0] == '"')
         {
             bInStringNext = true;
             sToken = sToken.copy(1);

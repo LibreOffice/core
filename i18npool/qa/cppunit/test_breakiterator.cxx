@@ -739,7 +739,7 @@ void TestBreakIterator::testWeak()
             sal_Int16 nScript = m_xBreak->getScriptType(aWeaks, i);
             OStringBuffer aMsg;
             aMsg.append(RTL_CONSTASCII_STRINGPARAM("Char 0x"));
-            aMsg.append(static_cast<sal_Int32>(aWeaks.getStr()[i]), 16);
+            aMsg.append(static_cast<sal_Int32>(aWeaks[i]), 16);
             aMsg.append(RTL_CONSTASCII_STRINGPARAM(" should have been weak"));
             CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(),
                 nScript == i18n::ScriptType::WEAK);
@@ -778,7 +778,7 @@ void TestBreakIterator::testAsian()
             sal_Int16 nScript = m_xBreak->getScriptType(aAsians, i);
             OStringBuffer aMsg;
             aMsg.append(RTL_CONSTASCII_STRINGPARAM("Char 0x"));
-            aMsg.append(static_cast<sal_Int32>(aAsians.getStr()[i]), 16);
+            aMsg.append(static_cast<sal_Int32>(aAsians[i]), 16);
             aMsg.append(RTL_CONSTASCII_STRINGPARAM(" should have been asian"));
             CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(),
                 nScript == i18n::ScriptType::ASIAN);

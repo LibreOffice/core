@@ -2564,7 +2564,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sal_Bool 
     {
         sal_Int32 n = nStartPos;
         sal_Int32 nLen = rStr.getLength();
-        while ( ( n < nLen ) && ( rStr.getStr()[ n ] == LINE_SEP ) )
+        while ( ( n < nLen ) && ( rStr[ n ] == LINE_SEP ) )
             n++;
 
         if ( n > nStartPos )

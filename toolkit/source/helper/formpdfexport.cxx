@@ -484,7 +484,7 @@ namespace toolkitform
                 {
                     OUString sURL;
                     OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_TARGET_URL ) >>= sURL );
-                    const bool bDocumentLocalTarget = !sURL.isEmpty() && ( sURL.getStr()[0] == '#' );
+                    const bool bDocumentLocalTarget = sURL.startsWith("#");
                     if ( bDocumentLocalTarget )
                     {
                         // Register the destination for for future handling ...

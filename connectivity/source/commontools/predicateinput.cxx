@@ -67,7 +67,7 @@ namespace dbtools
 
         sal_Unicode nReturn( _nFallback );
         if ( !_rSeparator.isEmpty() )
-            nReturn = static_cast< sal_Char >( _rSeparator.getStr()[0] );
+            nReturn = static_cast< sal_Char >( _rSeparator[0] );
         return nReturn;
     }
 
@@ -150,8 +150,8 @@ namespace dbtools
             {   // yes -> force a quoted text and try again
                 OUString sQuoted( _rStatement );
                 if  (   !sQuoted.isEmpty()
-                    &&  (   (sQuoted.getStr()[0] != '\'')
-                        ||  (sQuoted.getStr()[ sQuoted.getLength() - 1 ] != '\'' )
+                    &&  (   !sQuoted.startsWith("'")
+                        ||  !sQuoted.endsWith("'")
                         )
                     )
                 {
@@ -296,9 +296,7 @@ namespace dbtools
             // '-characters to the text. If we would give this to predicateTree this would add
             // two  additional '-characters which we don't want. So check the field format.
             // FS - 06.01.00 - 71532
-            sal_Bool bValidQuotedText = ( sValue.getLength() >= 2 )
-                                    &&  ( sValue.getStr()[0] == '\'' )
-                                    &&  ( sValue.getStr()[ sValue.getLength() - 1 ] == '\'' );
+            sal_Bool bValidQuotedText = sValue.startsWith("'") && sValue.endsWith("'");
                 // again : as normalizePredicateString always did a conversion on the value text,
                 // bValidQuotedText == sal_True implies that we have a text field, as no other field
                 // values will be formatted with the quote characters

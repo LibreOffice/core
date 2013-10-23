@@ -321,7 +321,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const OUS
         sal_uInt16 pnPasswd[16];
         memset( pnPasswd, 0, sizeof( pnPasswd ) );
         for (xub_StrLen nChar = 0; nChar < aPass.getLength(); ++nChar )
-            pnPasswd[nChar] = aPass.getStr()[nChar];
+            pnPasswd[nChar] = aPass[nChar];
 
         ::msfilter::MSCodec_Std97 aCodec;
         aCodec.InitKey( pnPasswd, pnDocId );

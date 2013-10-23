@@ -490,7 +490,7 @@ sal_Bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& 
 
         if ( !bResult && !aPath.compareTo( aSegment, nSegLen ) )
         {
-            if ( nPathLen == nSegLen || aPath.getStr()[nSegLen] == (sal_Unicode)'/' )
+            if ( nPathLen == nSegLen || aPath[nSegLen] == '/' )
                 bResult = sal_True;
         }
 

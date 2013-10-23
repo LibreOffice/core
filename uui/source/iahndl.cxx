@@ -266,10 +266,9 @@ UUIInteractionHelper::replaceMessageWithArguments(
         if (i == -1)
             break;
         if (aMessage.getLength() - i >= RTL_CONSTASCII_LENGTH("$(ARGx)")
-            && aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARGx")] == ')')
+            && aMessage[i + RTL_CONSTASCII_LENGTH("$(ARGx")] == ')')
         {
-            sal_Unicode c
-                = aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARG")];
+            sal_Unicode c = aMessage[i + RTL_CONSTASCII_LENGTH("$(ARG")];
             if (c >= '1' && c <= '2')
             {
                 std::vector< OUString >::size_type nIndex

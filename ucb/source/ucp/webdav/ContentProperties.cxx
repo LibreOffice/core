@@ -112,8 +112,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
         ++it;
     }
 
-    if ( rResource.uri.getStr()[ rResource.uri.getLength() - 1 ]
-        == sal_Unicode( '/' ) )
+    if ( rResource.uri.endsWith("/") )
         m_bTrailingSlash = sal_True;
 }
 

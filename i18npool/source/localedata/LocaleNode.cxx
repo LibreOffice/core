@@ -419,14 +419,14 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     sepNode = findNode("LongDateDayOfWeekSeparator");
     aLDS = sepNode->getValue();
     of.writeParameter("LongDateDayOfWeekSeparator", aLDS);
-    if (aLDS.getLength() == 1 && aLDS.getStr()[0] == ',')
+    if (aLDS == ",")
         fprintf( stderr, "Warning: %s\n",
                 "LongDateDayOfWeekSeparator is only a comma not followed by a space. Usually this is not the case and may lead to concatenated display names like \"Wednesday,May 9, 2007\".");
 
     sepNode = findNode("LongDateDaySeparator");
     aLDS = sepNode->getValue();
     of.writeParameter("LongDateDaySeparator", aLDS);
-    if (aLDS.getLength() == 1 && (aLDS.getStr()[0] == ',' || aLDS.getStr()[0] == '.'))
+    if (aLDS == "," || aLDS == ".")
         fprintf( stderr, "Warning: %s\n",
                 "LongDateDaySeparator is only a comma or dot not followed by a space. Usually this is not the case and may lead to concatenated display names like \"Wednesday, May 9,2007\".");
 
@@ -459,7 +459,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     if (aListSep == aThoSep)
         fprintf( stderr, "Warning: %s\n",
                 "ListSeparator equals ThousandSeparator.");
-    if (aListSep.getLength() != 1 || aListSep.getStr()[0] != ';')
+    if (aListSep.getLength() != 1 || aListSep[0] != ';')
     {
         incError( "ListSeparator not ';' semicolon. Strongly recommended. Currently required.");
         ++nSavErr;  // format codes not affected

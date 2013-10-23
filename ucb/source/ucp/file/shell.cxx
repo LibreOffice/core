@@ -1967,9 +1967,9 @@ sal_Bool SAL_CALL shell::getUnqFromUrl( const OUString& Url,OUString& Unq )
     Unq = Url;
 
     sal_Int32 l = Unq.getLength()-1;
-    if( ! err && Unq.getStr()[ l ] == '/' &&
-        Unq.indexOf( '/', RTL_CONSTASCII_LENGTH("//") ) < l )
-        Unq = Unq.copy(0, Unq.getLength() - 1);
+    if( ! err && Unq.endsWith("/") &&
+        Unq.indexOf( '/', RTL_CONSTASCII_LENGTH("//") ) != -1 )
+        Unq = Unq.copy(0, l);
 
     return err;
 }

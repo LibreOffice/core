@@ -126,8 +126,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         OString depFileUrl;
         if (options.isValid("-M")) {
             depFileUrl = convertToFileUrl(options.getOption("-M"));
-            if ('/' != depFileUrl.getStr()[depFileUrl.getLength()-1]) {
-                depFileUrl += OString('/');
+            if (!depFileUrl.endsWith("/")) {
+                depFileUrl += "/";
             }
             depFileUrl += strippedFileName.replaceAt(
                     strippedFileName.getLength() -3 , 3, "d");

@@ -290,7 +290,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             {
                 if (aURL.getExtension().isEmpty())
                 {
-                    sal_Unicode nChar = aURL.getBase().getStr()[0];
+                    sal_Unicode nChar = aURL.getBase()[0];
                     if(match(tableNamePattern,aURL.getBase(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                     {
                         aRow.push_back(new ORowSetValueDecorator(OUString(aURL.getBase())));

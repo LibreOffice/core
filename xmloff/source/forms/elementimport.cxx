@@ -1225,7 +1225,7 @@ namespace xmloff
             OSL_ENSURE(_rValue.getLength() == 1, "OPasswordImport::handleAttribute: invalid echo char attribute!");
                 // we ourself should not have written values other than of length 1
             if (_rValue.getLength() >= 1)
-                aEchoChar.Value <<= (sal_Int16)_rValue.getStr()[0];
+                aEchoChar.Value <<= (sal_Int16)_rValue[0];
             else
                 aEchoChar.Value <<= (sal_Int16)0;
             implPushBackPropertyValue(aEchoChar);
@@ -2015,9 +2015,7 @@ namespace xmloff
 
                 nElementLength = sElement.getLength();
                 // when writing the sequence, we quoted the single elements with " characters
-                OSL_ENSURE( (nElementLength >= 2)
-                        &&  (sElement.getStr()[0] == '"')
-                        &&  (sElement.getStr()[nElementLength - 1] == '"'),
+                OSL_ENSURE( sElement.startsWith("\"") && sElement.endsWith("\""),
                         "OFormImport::implTranslateStringListProperty: invalid quoted element name.");
                 sElement = sElement.copy(1, nElementLength - 2);
 

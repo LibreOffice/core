@@ -141,7 +141,7 @@ OUString PlaceWareTempFile::createTempFileURL()
     {
         u %= (nRadix*nRadix*nRadix);
         OUString aTmp( aTempDirURL );
-        if( aTmp.getStr()[ aTmp.getLength() - 1 ] != sal_Unicode( '/' ) )
+        if( !aTmp.endsWith("/") )
             aTmp += "/";
         aTmp += OUString::number(  (unsigned) u, nRadix );
         aTmp += ".tmp";

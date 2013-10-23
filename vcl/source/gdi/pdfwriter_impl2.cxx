@@ -1303,7 +1303,7 @@ void PDFWriterImpl::padPassword( const OUString& i_rPassword, sal_uInt8* o_pPadd
     sal_Int32 nCurrentChar;
 
     for( nCurrentChar = 0; nCurrentChar < nToCopy; nCurrentChar++ )
-        o_pPaddedPW[nCurrentChar] = (sal_uInt8)( aString.getStr()[nCurrentChar] );
+        o_pPaddedPW[nCurrentChar] = (sal_uInt8)( aString[nCurrentChar] );
 
     //pad it with standard byte string
     sal_Int32 i,y;

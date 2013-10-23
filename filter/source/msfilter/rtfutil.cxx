@@ -97,7 +97,7 @@ OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc, bool* pS
                 for (sal_Int32 nI = 0; nI < nLen; ++nI)
                 {
                     aBuf.append("\\'");
-                    aBuf.append(OutHex(sConverted.getStr()[nI], 2));
+                    aBuf.append(OutHex(sConverted[nI], 2));
                 }
             }
     }

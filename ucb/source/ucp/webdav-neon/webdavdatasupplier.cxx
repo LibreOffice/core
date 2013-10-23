@@ -392,8 +392,7 @@ sal_Bool DataSupplier::getData()
                     m_pImpl->m_xContent->getResourceAccess().getURL() );
                 OUString aPath = aURI.GetPath();
 
-                if ( aPath.getStr()[ aPath.getLength() - 1 ]
-                     == sal_Unicode( '/' ) )
+                if ( aPath.endsWith("/") )
                     aPath = aPath.copy( 0, aPath.getLength() - 1 );
 
                 aPath = NeonUri::unescape( aPath );
@@ -411,9 +410,7 @@ sal_Bool DataSupplier::getData()
                         {
                             NeonUri aCurrURI( rRes.uri );
                             OUString aCurrPath = aCurrURI.GetPath();
-                            if ( aCurrPath.getStr()[
-                                     aCurrPath.getLength() - 1 ]
-                                 == sal_Unicode( '/' ) )
+                            if ( aCurrPath.endsWith("/") )
                                 aCurrPath
                                     = aCurrPath.copy(
                                         0,

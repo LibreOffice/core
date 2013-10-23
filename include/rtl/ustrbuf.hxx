@@ -384,6 +384,21 @@ public:
     }
 
     /**
+      Access to individual characters.
+
+      @param index must be non-negative and less than length.
+
+      @return a reference to the character at the given index.
+
+      @since LibreOffice 4.2
+    */
+    const sal_Unicode & operator [](sal_Int32 index) const
+    {
+        assert(index >= 0 && index < pData->length);
+        return pData->buffer[index];
+    }
+
+    /**
         Return a OUString instance reflecting the current content
         of this OUStringBuffer.
      */

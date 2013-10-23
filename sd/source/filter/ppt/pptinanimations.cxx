@@ -139,7 +139,7 @@ static bool convertMeasure( OUString& rString )
         while( (nIndex = rString.indexOf( aSearch, nIndex )) != -1  )
         {
             sal_Int32 nLength = aSearch.getLength();
-            if( nIndex && (rString.getStr()[nIndex-1] == '#' ) )
+            if( nIndex && (rString[nIndex-1] == '#' ) )
             {
                 nIndex--;
                 nLength++;

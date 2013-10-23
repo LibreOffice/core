@@ -788,7 +788,7 @@ sal_Unicode PresenterTextParagraph::GetCharacter (
     }
     else
     {
-        return msParagraphText.getStr()[nGlobalCharacterIndex - mnCharacterOffset];
+        return msParagraphText[nGlobalCharacterIndex - mnCharacterOffset];
     }
 }
 

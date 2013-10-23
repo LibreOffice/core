@@ -1835,9 +1835,9 @@ Content::queryChildContent( const OUString & rRelativeChildUri )
 
     const OUString aMyId = getIdentifier()->getContentIdentifier();
     OUStringBuffer aBuf( aMyId );
-    if ( aMyId.getStr()[ aMyId.getLength() - 1 ] != sal_Unicode( '/' ) )
+    if ( !aMyId.endsWith("/") )
         aBuf.appendAscii( "/" );
-    if ( rRelativeChildUri.getStr()[ 0 ] != sal_Unicode( '/' ) )
+    if ( !rRelativeChildUri.startsWith("/") )
         aBuf.append( rRelativeChildUri );
     else
         aBuf.append( rRelativeChildUri.copy( 1 ) );

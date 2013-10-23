@@ -106,8 +106,8 @@ namespace ucb { namespace ucp { namespace ext
             ENSURE_OR_RETURN( !i_rBaseURL.isEmpty(), "illegal base URL", i_rRelativeURL );
 
             OUStringBuffer aComposer( i_rBaseURL );
-            if ( i_rBaseURL.getStr()[ i_rBaseURL.getLength() - 1 ] != '/' )
-                aComposer.append( sal_Unicode( '/' ) );
+            if ( !i_rBaseURL.endsWith("/") )
+                aComposer.append( '/' );
             aComposer.append( i_rRelativeURL );
             return aComposer.makeStringAndClear();
         }
@@ -368,7 +368,7 @@ namespace ucb { namespace ucp { namespace ext
                 break;
             }
 
-            if ( sRelativeURL.getStr()[ sRelativeURL.getLength() - 1 ] == '/' )
+            if ( sRelativeURL.endsWith("/") )
                 sRelativeURL = sRelativeURL.copy( 0, sRelativeURL.getLength() - 1 );
 
             // remove the last segment

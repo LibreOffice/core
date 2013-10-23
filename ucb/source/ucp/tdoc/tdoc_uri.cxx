@@ -65,15 +65,13 @@ void Uri::init() const
         // Remember normalized scheme string.
         m_aUri = m_aUri.replaceAt( 0, aScheme.getLength(), aScheme );
 
-        if ( m_aUri.getStr()[ TDOC_URL_SCHEME_LENGTH ]
-                != sal_Unicode( ':' ) )
+        if ( m_aUri[ TDOC_URL_SCHEME_LENGTH ] != ':' )
         {
             // Invaild (no ':' after <scheme>).
             return;
         }
 
-        if ( m_aUri.getStr()[ TDOC_URL_SCHEME_LENGTH + 1 ]
-                != sal_Unicode( '/' ) )
+        if ( m_aUri[ TDOC_URL_SCHEME_LENGTH + 1 ] != '/' )
         {
             // Invaild (no '/' after <scheme>:).
             return;

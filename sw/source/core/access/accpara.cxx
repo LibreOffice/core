@@ -1140,7 +1140,7 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
     // return character (if valid)
     if( IsValidChar(nIndex, sText.getLength() ) )
     {
-        return sText.getStr()[nIndex];
+        return sText[nIndex];
     }
     else
         throw lang::IndexOutOfBoundsException();

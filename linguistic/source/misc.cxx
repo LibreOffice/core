@@ -178,8 +178,8 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
     {
         for (k = 1;  k <= nLen2;  ++k)
         {
-            sal_Unicode c1i = rTxt1.getStr()[i - 1];
-            sal_Unicode c2k = rTxt2.getStr()[k - 1];
+            sal_Unicode c1i = rTxt1[i - 1];
+            sal_Unicode c2k = rTxt2[k - 1];
             sal_Int32 nCost = c1i == c2k ? 0 : 1;
             sal_Int32 nNew = Minimum( aData.Value(i-1, k  ) + 1,
                                        aData.Value(i  , k-1) + 1,
@@ -188,9 +188,9 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
             if (2 < i && 2 < k)
             {
                 int nT = aData.Value(i-2, k-2) + 1;
-                if (rTxt1.getStr()[i - 2] != c1i)
+                if (rTxt1[i - 2] != c1i)
                     ++nT;
-                if (rTxt2.getStr()[k - 2] != c2k)
+                if (rTxt2[k - 2] != c2k)
                     ++nT;
                 if (nT < nNew)
                     nNew = nT;

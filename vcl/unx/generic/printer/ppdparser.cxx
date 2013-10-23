@@ -141,7 +141,7 @@ namespace psp
                 OString aStr( pEnvLocale );
                 sal_Int32 nLen = aStr.getLength();
                 aLoc.Language = OStringToOUString( aStr.copy( 0, nLen > 2 ? 2 : nLen ), RTL_TEXTENCODING_MS_1252 );
-                if( nLen >=5 && aStr.getStr()[2] == '_' )
+                if( nLen >=5 && aStr[2] == '_' )
                     aLoc.Country = OStringToOUString( aStr.copy( 3, 2 ), RTL_TEXTENCODING_MS_1252 );
                 else
                     aLoc.Country = OUString();

@@ -76,7 +76,7 @@ sal_Bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
     sal_Bool bIsAll = sal_True;
     for (sal_Int32 i = 0;  i < rTxt.getLength() && bIsAll;  ++i)
     {
-        if (checkScriptType( rTxt.getStr()[i]) != nScriptType)
+        if (checkScriptType( rTxt[i]) != nScriptType)
             bIsAll = sal_False;
     }
     return bIsAll;

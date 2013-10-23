@@ -222,7 +222,7 @@ sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
         for ( sal_Int32 nInd = aString.getLength() - 1; nInd >= 0; nInd-- )
         {
             nResult = ( ( nResult >> 14 ) & 0x01 ) | ( ( nResult << 1 ) & 0x7FFF );
-            nResult ^= aString.getStr()[nInd];
+            nResult ^= aString[nInd];
         }
 
         nResult = ( ( nResult >> 14 ) & 0x01 ) | ( ( nResult << 1 ) & 0x7FFF );

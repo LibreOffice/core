@@ -227,7 +227,7 @@ namespace rptui
                 // not bound to a table field
                 // TODO: we might also do this kind of thing for functions and expressions ...
                 return;
-            if ( sDataField.getStr()[ sDataField.getLength() - 1 ] != ']' )
+            if ( !sDataField.endsWith("]") )
             {
                 // last character is not the closing brace
                 OSL_FAIL( "FormatNormalizer::impl_adjustFormatToDataFieldType_nothrow: suspicious data field value!" );

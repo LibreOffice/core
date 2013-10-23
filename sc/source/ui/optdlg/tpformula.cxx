@@ -143,7 +143,7 @@ bool ScTpFormulaOptions::IsValidSeparator(const OUString& rSep) const
     if (rSep.compareToAscii("A") >= 0 && rSep.compareToAscii("Z") <= 0)
         return false;
 
-    sal_Unicode c = rSep.getStr()[0];
+    sal_Unicode c = rSep[0];
     switch (c)
     {
         case '+':
