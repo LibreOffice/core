@@ -21,6 +21,7 @@
 #include <vcl/vclmain.hxx>
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -95,6 +96,8 @@ IMPL_LINK ( TiledRenderingDialog,  RenderHdl, Button *, EMPTYARG )
     ExtractInt("spinTilePosY");
     ExtractInt("spinTileWidth");
     ExtractInt("spinTileHeight");
+    FixedImage * pImage;
+    get(pImage,"imageTile");
     return 1;
 }
 
