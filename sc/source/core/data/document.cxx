@@ -6177,12 +6177,12 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
                 return ScAddress(nCol, nRow, nTab);
 
             OSL_FAIL("note not found");
-            return ScAddress();
+            return ScAddress(ScAddress::INITIALIZE_INVALID);
         }
     }
 
     OSL_FAIL("note not found");
-    return ScAddress();
+    return ScAddress(ScAddress::INITIALIZE_INVALID);
 }
 
 SCROW ScDocument::GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const
