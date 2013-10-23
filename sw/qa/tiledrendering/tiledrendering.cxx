@@ -21,6 +21,10 @@
 #include <vcl/vclmain.hxx>
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
+#include <sfx2/filedlghelper.hxx>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <sfx2/filedlghelper.hxx>
 
 class UIPreviewApp : public Application
 {
@@ -29,7 +33,10 @@ public:
     virtual int Main();
 };
 
-using namespace com::sun::star;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui::dialogs;
+using namespace ::sfx2;
 
 class TiledRenderingDialog: public ModalDialog{
 public:
@@ -38,6 +45,11 @@ public:
         PushButton * renderButton;
         get(renderButton,"buttonRenderTile");
         renderButton->SetClickHdl( LINK( this, TiledRenderingDialog, RenderHdl));
+
+        PushButton * chooseDocumentButton;
+        get(chooseDocumentButton,"buttonChooseDocument");
+        chooseDocumentButton->SetClickHdl( LINK( this, TiledRenderingDialog, ChooseDocumentHdl));
+
         SetStyle(GetStyle()|WB_CLOSEABLE);
     }
     virtual ~TiledRenderingDialog()
@@ -45,13 +57,14 @@ public:
     }
 
     DECL_LINK ( RenderHdl, Button * );
+    DECL_LINK ( ChooseDocumentHdl, Button * );
 
     sal_Int32 extractInt(const char * name)
     {
         NumericField * pField;
         get(pField,name);
         OUString aString(pField->GetText());
-        std::cerr << "param " << name << " returned " << aString <<"/n";
+        std::cerr << "param " << name << " returned " << aString <<"\n";
         return aString.toInt32();
     }
 
@@ -65,6 +78,18 @@ IMPL_LINK ( TiledRenderingDialog,  RenderHdl, Button *, EMPTYARG )
     extractInt("spinTilePosY");
     extractInt("spinTileWidth");
     extractInt("spinTileHeight");
+    return 1;
+}
+
+IMPL_LINK ( TiledRenderingDialog,  ChooseDocumentHdl, Button *, EMPTYARG )
+{
+    FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
+    uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+    if( aDlgHelper.Execute() == ERRCODE_NONE )
+    {
+        OUString aFilePath =xFP->getFiles().getConstArray()[0];
+        std::cerr << aFilePath <<"\n";
+    }
     return 1;
 }
 

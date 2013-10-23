@@ -28,6 +28,7 @@ $(eval $(call gb_Executable_use_libraries,tiledrendering,\
     tl \
     ucbhelper \
     vcl \
+    sfx \
 	sw \
 ))
 
