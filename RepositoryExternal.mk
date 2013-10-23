@@ -1034,10 +1034,10 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,cairo)/src \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_libraries,$(1),\
-	cairo \
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,cairo)/src/.libs -lcairo \
 	$(if $(filter-out MACOSX WNT,$(OS)), \
-		pixman-1 \
+		-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1 \
 	) \
 )
 
