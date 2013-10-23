@@ -160,15 +160,24 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Protect Records...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:RejectTracedChange" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Reject Change</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:AcceptTracedChange" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Accept Change</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:NextTrackedChange" oor:op="replace">
@@ -191,7 +200,7 @@
           <value xml:lang="en-US">~Record</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
-          <value>8</value>
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ShowTrackedChanges" oor:op="replace">
@@ -199,7 +208,7 @@
           <value xml:lang="en-US">~Show</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
-          <value>8</value>
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:GotoPage" oor:op="replace">
@@ -210,6 +219,9 @@
       <node oor:name=".uno:CommentChangeTracking" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Comment...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:UpdateAll" oor:op="replace">
@@ -225,6 +237,9 @@
       <node oor:name=".uno:AcceptTrackedChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Accept or Reject...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:EditCurIndex" oor:op="replace">
