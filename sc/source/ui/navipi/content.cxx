@@ -58,9 +58,6 @@
 #include "clipparam.hxx"
 #include "markdata.hxx"
 
-#include "table.hxx"
-#include "column.hxx"
-
 using namespace com::sun::star;
 
 //  Reihenfolge der Kategorien im Navigator -------------------------------------
