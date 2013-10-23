@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __EDITENGINE_MACROS_HXX__
-#define __EDITENGINE_MACROS_HXX__
+#ifndef INCLUDED_EDITENG_MACROS_HXX
+#define INCLUDED_EDITENG_MACROS_HXX
 
 #define DEBUG_EDIT_ENGINE 0
 

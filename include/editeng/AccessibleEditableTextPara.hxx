@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBLE_EDITABLE_TEXT_PARA_HXX
-#define _SVX_ACCESSIBLE_EDITABLE_TEXT_PARA_HXX
+#ifndef INCLUDED_EDITENG_ACCESSIBLEEDITABLETEXTPARA_HXX
+#define INCLUDED_EDITENG_ACCESSIBLEEDITABLETEXTPARA_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>

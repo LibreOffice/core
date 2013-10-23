@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBLE_IMAGE_BULLET_HXX
-#define _SVX_ACCESSIBLE_IMAGE_BULLET_HXX
+#ifndef INCLUDED_EDITENG_ACCESSIBLEIMAGEBULLET_HXX
+#define INCLUDED_EDITENG_ACCESSIBLEIMAGEBULLET_HXX
 
 #include <tools/gen.hxx>
 #include <cppuhelper/weakref.hxx>

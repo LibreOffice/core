@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_CHARRELIEFITEM_HXX
-#define _SVX_CHARRELIEFITEM_HXX
+#ifndef INCLUDED_EDITENG_CHARRELIEFITEM_HXX
+#define INCLUDED_EDITENG_CHARRELIEFITEM_HXX
 
 #include <svl/eitem.hxx>
 #include <vcl/fntstyle.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCESSIBLESTRINGWRAP_HXX
-#define _ACCESSIBLESTRINGWRAP_HXX
+#ifndef INCLUDED_EDITENG_ACCESSIBLESTRINGWRAP_HXX
+#define INCLUDED_EDITENG_ACCESSIBLESTRINGWRAP_HXX
 
 #include <editeng/editengdllapi.h>
 #include <sal/types.h>
@@ -51,6 +51,6 @@ private:
     OUString            maText;
 };
 
-#endif /* _ACCESSIBLESTRINGWRAP_HXX */
+#endif // INCLUDED_EDITENG_ACCESSIBLESTRINGWRAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_SVXFONT_HXX
-#define _SVX_SVXFONT_HXX
+#ifndef INCLUDED_EDITENG_SVXFONT_HXX
+#define INCLUDED_EDITENG_SVXFONT_HXX
 
 #include <limits.h>
 #include <editeng/svxenum.hxx>
@@ -109,6 +109,6 @@ public:
     SvxFont&    operator=( const Font& rFont );
 };
 
-#endif // #ifndef   _SVX_SVXFONT_HXX
+#endif // INCLUDED_EDITENG_SVXFONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

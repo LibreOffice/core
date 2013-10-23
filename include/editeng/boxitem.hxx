@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_BOXITEM_HXX
-#define _SVX_BOXITEM_HXX
+#ifndef INCLUDED_EDITENG_BOXITEM_HXX
+#define INCLUDED_EDITENG_BOXITEM_HXX
 
 #include <svl/poolitem.hxx>
 #include <editeng/borderline.hxx>

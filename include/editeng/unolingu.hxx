@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNO_LINGU_HXX
-#define _UNO_LINGU_HXX
+#ifndef INCLUDED_EDITENG_UNOLINGU_HXX
+#define INCLUDED_EDITENG_UNOLINGU_HXX
 
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>

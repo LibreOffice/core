@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FRMDIR_HXX
-#define _SVX_FRMDIR_HXX
+#ifndef INCLUDED_EDITENG_FRMDIR_HXX
+#define INCLUDED_EDITENG_FRMDIR_HXX
 
 // ----------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ enum SvxFrameDirection
 
 // ----------------------------------------------------------------------------
 
-#endif // #ifndef _SVX_FRMDIR_HXX
+#endif // INCLUDED_EDITENG_FRMDIR_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MyTXTRANGE_HXX
-#define _MyTXTRANGE_HXX
+#ifndef INCLUDED_EDITENG_TXTRANGE_HXX
+#define INCLUDED_EDITENG_TXTRANGE_HXX
 
 #include "editeng/editengdllapi.h"
 #include "tools/solar.h"

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_CHARSCALEITEM_HXX
-#define _SVX_CHARSCALEITEM_HXX
+#ifndef INCLUDED_EDITENG_CHARSCALEITEM_HXX
+#define INCLUDED_EDITENG_CHARSCALEITEM_HXX
 
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 // MyEDITENG, due to exported EditEng
-#ifndef _MyEDITENG_HXX
-#define _MyEDITENG_HXX
+#ifndef INCLUDED_EDITENG_EDITENG_HXX
+#define INCLUDED_EDITENG_EDITENG_HXX
 
 #include <rtl/ref.hxx>
 #include <vector>
@@ -588,6 +588,6 @@ public:
     bool Redo(EditView* pView);
 };
 
-#endif // _MyEDITENG_HXX
+#endif // INCLUDED_EDITENG_EDITENG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

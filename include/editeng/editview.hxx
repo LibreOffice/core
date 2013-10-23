@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 // MyEDITVIEW, due to exported EditView
-#ifndef _MyEDITVIEW_HXX
-#define _MyEDITVIEW_HXX
+#ifndef INCLUDED_EDITENG_EDITVIEW_HXX
+#define INCLUDED_EDITENG_EDITVIEW_HXX
 
 #include <com/sun/star/i18n/WordType.hpp>
 
@@ -242,6 +242,6 @@ public:
                             bool bIsParaText );
 };
 
-#endif // _MyEDITVIEW_HXX
+#endif // INCLUDED_EDITENG_EDITVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

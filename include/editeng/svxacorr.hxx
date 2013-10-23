@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EE_SVXACORR_HXX
-#define EE_SVXACORR_HXX
+#ifndef INCLUDED_EDITENG_SVXACORR_HXX
+#define INCLUDED_EDITENG_SVXACORR_HXX
 
 #include <com/sun/star/embed/XStorage.hpp>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SPELL_PORTIONS_HXX
-#define SVX_SPELL_PORTIONS_HXX
+#ifndef INCLUDED_EDITENG_SPELLPORTIONS_HXX
+#define INCLUDED_EDITENG_SPELLPORTIONS_HXX
 
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>

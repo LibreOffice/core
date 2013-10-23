@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef EDITENG_SECTIONATTRIBUTE_HXX
-#define EDITENG_SECTIONATTRIBUTE_HXX
+#ifndef INCLUDED_EDITENG_SECTION_HXX
+#define INCLUDED_EDITENG_SECTION_HXX
 
 #include "editeng/editengdllapi.h"
 

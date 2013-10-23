@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __EDITENG_FIELDUPDATER_HXX__
-#define __EDITENG_FIELDUPDATER_HXX__
+#ifndef INCLUDED_EDITENG_FIELDUPDATER_HXX
+#define INCLUDED_EDITENG_FIELDUPDATER_HXX
 
 #include "editengdllapi.h"
 

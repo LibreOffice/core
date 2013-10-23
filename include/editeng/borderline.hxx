@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_BORDERLINE_HXX
-#define SVX_BORDERLINE_HXX
+#ifndef INCLUDED_EDITENG_BORDERLINE_HXX
+#define INCLUDED_EDITENG_BORDERLINE_HXX
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 

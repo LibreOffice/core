@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDITUND2_HXX
-#define _EDITUND2_HXX
+#ifndef INCLUDED_EDITENG_EDITUND2_HXX
+#define INCLUDED_EDITENG_EDITUND2_HXX
 
 #include "editeng/editengdllapi.h"
 #include <svl/undo.hxx>
@@ -63,7 +63,7 @@ public:
     virtual sal_uInt16  GetId() const;
 };
 
-#endif  // _EDITUND2_HXX
+#endif // INCLUDED_EDITENG_EDITUND2_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

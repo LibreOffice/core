@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_POSTITEM_HXX
-#define _SVX_POSTITEM_HXX
+#ifndef INCLUDED_EDITENG_POSTITEM_HXX
+#define INCLUDED_EDITENG_POSTITEM_HXX
 
 #include <vcl/vclenum.hxx>
 #include <svl/eitem.hxx>
@@ -71,6 +71,6 @@ public:
                                 { SetValue( (sal_uInt16)eNew ); }
 };
 
-#endif // #ifndef _SVX_POSTITEM_HXX
+#endif // INCLUDED_EDITENG_POSTITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

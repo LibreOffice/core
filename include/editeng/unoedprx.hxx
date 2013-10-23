@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOEDPRX_HXX
-#define _SVX_UNOEDPRX_HXX
+#ifndef INCLUDED_EDITENG_UNOEDPRX_HXX
+#define INCLUDED_EDITENG_UNOEDPRX_HXX
 
 #include <memory>
 #include <svl/brdcst.hxx>

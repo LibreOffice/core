@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOTEXT_HXX
-#define _SVX_UNOTEXT_HXX
+#ifndef INCLUDED_EDITENG_UNOTEXT_HXX
+#define INCLUDED_EDITENG_UNOTEXT_HXX
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/text/XTextRange.hpp>

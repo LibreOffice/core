@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOFIELD_HXX
-#define _SVX_UNOFIELD_HXX
+#ifndef INCLUDED_EDITENG_UNOFIELD_HXX
+#define INCLUDED_EDITENG_UNOFIELD_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

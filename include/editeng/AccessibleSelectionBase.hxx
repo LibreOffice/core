@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SELECTION_BASE_HXX
-#define _SVX_ACCESSIBILITY_ACCESSIBLE_SELECTION_BASE_HXX
+#ifndef INCLUDED_EDITENG_ACCESSIBLESELECTIONBASE_HXX
+#define INCLUDED_EDITENG_ACCESSIBLESELECTIONBASE_HXX
 
 #include <comphelper/accessibleselectionhelper.hxx>
 #include "editeng/editengdllapi.h"
@@ -62,6 +62,6 @@ namespace accessibility
 
 }
 
-#endif // _SVX_ACCESSIBILITY_ACCESSIBLE_SELECTION_BASE_HXX
+#endif // INCLUDED_EDITENG_ACCESSIBLESELECTIONBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

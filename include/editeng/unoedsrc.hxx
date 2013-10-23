@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOEDSRC_HXX
-#define _SVX_UNOEDSRC_HXX
+#ifndef INCLUDED_EDITENG_UNOEDSRC_HXX
+#define INCLUDED_EDITENG_UNOEDSRC_HXX
 
 #include <com/sun/star/accessibility/TextSegment.hpp>
 

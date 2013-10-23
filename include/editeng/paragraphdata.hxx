@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PARAGRAPH_DATA_HXX
-#define _PARAGRAPH_DATA_HXX
+#ifndef INCLUDED_EDITENG_PARAGRAPHDATA_HXX
+#define INCLUDED_EDITENG_PARAGRAPHDATA_HXX
 
 #include <tools/solar.h>
 #include <vector>
@@ -59,6 +59,6 @@ typedef ::std::vector< ParagraphData > ParagraphDataVector;
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // _PARAGRAPH_DATA_HXX
+#endif // INCLUDED_EDITENG_PARAGRAPHDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

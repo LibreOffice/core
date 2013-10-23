@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef EDITENG_MISSPELLRANGE_HXX
-#define EDITENG_MISSPELLRANGE_HXX
+#ifndef INCLUDED_EDITENG_MISSPELLRANGE_HXX
+#define INCLUDED_EDITENG_MISSPELLRANGE_HXX
 
 #include "editeng/editengdllapi.h"
 

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_PARAVERTALIGNITEM_HXX
-#define _SVX_PARAVERTALIGNITEM_HXX
+#ifndef INCLUDED_EDITENG_PARAVERTALIGNITEM_HXX
+#define INCLUDED_EDITENG_PARAVERTALIGNITEM_HXX
 
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>

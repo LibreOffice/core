@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_WRITINGMODEITEM_HXX
-#define _SVX_WRITINGMODEITEM_HXX
+#ifndef INCLUDED_EDITENG_WRITINGMODEITEM_HXX
+#define INCLUDED_EDITENG_WRITINGMODEITEM_HXX
 
 #include <com/sun/star/text/WritingMode.hpp>
 #include <svl/intitem.hxx>
@@ -52,6 +52,6 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
-#endif // #ifndef _SVX_WRITINGMODEITEM_HXX
+#endif // INCLUDED_EDITENG_WRITINGMODEITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

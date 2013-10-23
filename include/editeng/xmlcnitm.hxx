@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XMLCNITM_HXX
-#define _SVX_XMLCNITM_HXX
+#ifndef INCLUDED_EDITENG_XMLCNITM_HXX
+#define INCLUDED_EDITENG_XMLCNITM_HXX
 
 #include <svl/poolitem.hxx>
 #include "editeng/editengdllapi.h"
@@ -78,6 +78,6 @@ public:
     const OUString& GetPrefix( sal_uInt16 i ) const;
 };
 
-#endif //  _SVX_XMLCNITM_HXX
+#endif // INCLUDED_EDITENG_XMLCNITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

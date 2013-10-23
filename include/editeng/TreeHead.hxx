@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TREEHEAD_HXX
-#define TREEHEAD_HXX
+#ifndef INCLUDED_EDITENG_TREEHEAD_HXX
+#define INCLUDED_EDITENG_TREEHEAD_HXX
 
 #include <editeng/Node.hxx>
 
@@ -44,6 +44,6 @@ TreeHead::TreeHead() :
 {
 }
 
-#endif // TREEHEAD_HXX
+#endif // INCLUDED_EDITENG_TREEHEAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_MUTXHELP_HXX
-#define _SVX_MUTXHELP_HXX
+#ifndef INCLUDED_EDITENG_MUTXHELP_HXX
+#define INCLUDED_EDITENG_MUTXHELP_HXX
 
 #include <osl/mutex.hxx>
 

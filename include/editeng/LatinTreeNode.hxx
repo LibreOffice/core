@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LATINTREENODE_HXX
-#define LATINTREENODE_HXX
+#ifndef INCLUDED_EDITENG_LATINTREENODE_HXX
+#define INCLUDED_EDITENG_LATINTREENODE_HXX
 
 #include <editeng/Node.hxx>
 
@@ -43,6 +43,6 @@ private:
     Node* m_pLeaves[26];  // handles [a-z]
 };
 
-#endif // LATINTREENODE_HXX
+#endif // INCLUDED_EDITENG_LATINTREENODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

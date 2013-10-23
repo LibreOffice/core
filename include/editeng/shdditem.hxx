@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_SHDDITEM_HXX
-#define _SVX_SHDDITEM_HXX
+#ifndef INCLUDED_EDITENG_SHDDITEM_HXX
+#define INCLUDED_EDITENG_SHDDITEM_HXX
 
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>

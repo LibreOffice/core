@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _EEDATA_HXX
-#define _EEDATA_HXX
+#ifndef INCLUDED_EDITENG_EEDATA_HXX
+#define INCLUDED_EDITENG_EEDATA_HXX
 
 //////////////////////////////////////////////////////////////////////////////
 // extended data definitions for EditEngine portion stripping (StripPortions()
@@ -60,6 +60,6 @@ namespace EEngineData
 
 } // end of namespace EditEngine
 
-#endif // _EEDATA_HXX
+#endif // INCLUDED_EDITENG_EEDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

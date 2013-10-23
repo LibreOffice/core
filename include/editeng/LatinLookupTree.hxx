@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LATINLOOKUPTREE_HXX
-#define LATINLOOKUPTREE_HXX
+#ifndef INCLUDED_EDITENG_LATINLOOKUPTREE_HXX
+#define INCLUDED_EDITENG_LATINLOOKUPTREE_HXX
 
 #include <editeng/LookupTree.hxx>
 #include <editeng/TreeHead.hxx>
@@ -69,6 +69,6 @@ private:
     Node*   m_pLeaves[52];  // handles [a-z] and [A-Z]
 };
 
-#endif // LATINLOOKUPTREE_HXX
+#endif // INCLUDED_EDITENG_LATINLOOKUPTREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

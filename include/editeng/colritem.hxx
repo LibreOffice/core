@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_COLRITEM_HXX
-#define _SVX_COLRITEM_HXX
+#ifndef INCLUDED_EDITENG_COLRITEM_HXX
+#define INCLUDED_EDITENG_COLRITEM_HXX
 
 #include <svl/poolitem.hxx>
 #include <tools/color.hxx>

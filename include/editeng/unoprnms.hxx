@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOPRNMS_HXX
-#define _SVX_UNOPRNMS_HXX
+#ifndef INCLUDED_EDITENG_UNOPRNMS_HXX
+#define INCLUDED_EDITENG_UNOPRNMS_HXX
 
 #define UNO_NAME_SHAPE_SIZE                     "Size"
 #define UNO_NAME_SHAPE_POSITION                 "Position"

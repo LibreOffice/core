@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EERDLL_HXX
-#define _EERDLL_HXX
+#ifndef INCLUDED_EDITENG_EERDLL_HXX
+#define INCLUDED_EDITENG_EERDLL_HXX
 
 class GlobalEditData;
 
@@ -50,6 +50,6 @@ public:
 
 #define EE_RESSTR(x) EditResId(x).toString()
 
-#endif //_EERDLL_HXX
+#endif // INCLUDED_EDITENG_EERDLL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

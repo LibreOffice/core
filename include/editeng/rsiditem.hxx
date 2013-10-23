@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _SVX_RSIDITEM_HXX
-#define _SVX_RSIDITEM_HXX
+#ifndef INCLUDED_EDITENG_RSIDITEM_HXX
+#define INCLUDED_EDITENG_RSIDITEM_HXX
 
 #include <svl/intitem.hxx>
 #include "editeng/editengdllapi.h"
@@ -31,4 +31,4 @@ public:
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
-#endif // _SVX_RSIDITEM_HXX
+#endif // INCLUDED_EDITENG_RSIDITEM_HXX

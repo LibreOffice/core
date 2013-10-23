@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOEDHLP_HXX
-#define _SVX_UNOEDHLP_HXX
+#ifndef INCLUDED_EDITENG_UNOEDHLP_HXX
+#define INCLUDED_EDITENG_UNOEDHLP_HXX
 
 #include <memory>
 #include <tools/solar.h>

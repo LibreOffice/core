@@ -18,8 +18,8 @@
  */
 
 // MyEDITDATA, wegen exportiertem EditData
-#ifndef _MyEDITDATA_HXX
-#define _MyEDITDATA_HXX
+#ifndef INCLUDED_EDITENG_EDITDATA_HXX
+#define INCLUDED_EDITENG_EDITDATA_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -368,6 +368,6 @@ struct EENotify
         { eNotificationType = eType; pEditEngine = NULL; pEditView = NULL; nParagraph = EE_PARA_NOT_FOUND; nParam1 = 0; nParam2 = 0; }
 };
 
-#endif // _MyEDITDATA_HXX
+#endif // INCLUDED_EDITENG_EDITDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOFOROU_HXX
-#define _SVX_UNOFOROU_HXX
+#ifndef INCLUDED_EDITENG_UNOFOROU_HXX
+#define INCLUDED_EDITENG_UNOFOROU_HXX
 
 #include <editeng/unoedsrc.hxx>
 #include "editeng/editengdllapi.h"

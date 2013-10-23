@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_TWOLINESITEM_HXX
-#define _SVX_TWOLINESITEM_HXX
+#ifndef INCLUDED_EDITENG_TWOLINESITEM_HXX
+#define INCLUDED_EDITENG_TWOLINESITEM_HXX
 
 #include <sal/types.h>
 #include <svl/poolitem.hxx>

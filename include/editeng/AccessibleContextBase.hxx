@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTEXT_BASE_HXX
-#define _SVX_ACCESSIBILITY_ACCESSIBLE_CONTEXT_BASE_HXX
+#ifndef INCLUDED_EDITENG_ACCESSIBLECONTEXTBASE_HXX
+#define INCLUDED_EDITENG_ACCESSIBLECONTEXTBASE_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>

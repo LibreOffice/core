@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNONRULE_HXX
-#define _SVX_UNONRULE_HXX
+#ifndef INCLUDED_EDITENG_UNONRULE_HXX
+#define INCLUDED_EDITENG_UNONRULE_HXX
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/ucb/XAnyCompare.hpp>

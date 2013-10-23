@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef LOOKUPTREE_H
-#define LOOKUPTREE_H
+#ifndef INCLUDED_EDITENG_LOOKUPTREE_HXX
+#define INCLUDED_EDITENG_LOOKUPTREE_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -90,6 +90,6 @@ OUString LookupTree::language() const
     return m_sLanguage;
 }
 
-#endif // LOOKUPTREE_H
+#endif // INCLUDED_EDITENG_LOOKUPTREE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
