@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_INTERCEPTEDINTERACTION_HXX_
-#define _UCBHELPER_INTERCEPTEDINTERACTION_HXX_
+#ifndef INCLUDED_UCBHELPER_INTERCEPTEDINTERACTION_HXX
+#define INCLUDED_UCBHELPER_INTERCEPTEDINTERACTION_HXX
 
 #include <vector>
 
@@ -329,6 +329,6 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
 
 } // namespace ucbhelper
 
-#endif // _UCBHELPER_INTERCEPTEDINTERACTION_HXX_
+#endif // INCLUDED_UCBHELPER_INTERCEPTEDINTERACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_MACROS_HXX
-#define _UCBHELPER_MACROS_HXX
+#ifndef INCLUDED_UCBHELPER_MACROS_HXX
+#define INCLUDED_UCBHELPER_MACROS_HXX
 
 #include <sal/types.h>
 #include <cppuhelper/queryinterface.hxx>
@@ -756,6 +756,6 @@ Class::getSupportedServiceNames_Static()                                    \
     return aSNS;                                                            \
 }
 
-#endif /* !_UCBHELPER_MACROS_HXX */
+#endif /* ! INCLUDED_UCBHELPER_MACROS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

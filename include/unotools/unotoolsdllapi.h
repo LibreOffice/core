@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTOOLSDLLAPI_H
-#define INCLUDED_UNOTOOLSDLLAPI_H
+#ifndef INCLUDED_UNOTOOLS_UNOTOOLSDLLAPI_H
+#define INCLUDED_UNOTOOLS_UNOTOOLSDLLAPI_H
 
 #include "sal/types.h"
 
@@ -29,6 +29,6 @@
 #endif
 #define UNOTOOLS_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_UNOTOOLSDLLAPI_H */
+#endif // INCLUDED_UNOTOOLS_UNOTOOLSDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

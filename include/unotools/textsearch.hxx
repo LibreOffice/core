@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_TEXTSEARCH_HXX
-#define _UNOTOOLS_TEXTSEARCH_HXX
+#ifndef INCLUDED_UNOTOOLS_TEXTSEARCH_HXX
+#define INCLUDED_UNOTOOLS_TEXTSEARCH_HXX
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>

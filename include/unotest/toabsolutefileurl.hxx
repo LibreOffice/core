@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TEST_TOABSOLUTEFILEURL_HXX
-#define INCLUDED_TEST_TOABSOLUTEFILEURL_HXX
+#ifndef INCLUDED_UNOTEST_TOABSOLUTEFILEURL_HXX
+#define INCLUDED_UNOTEST_TOABSOLUTEFILEURL_HXX
 
 #include "sal/config.h"
 

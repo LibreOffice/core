@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNO_MAPPING_HXX_
-#define _UNO_MAPPING_HXX_
+#ifndef INCLUDED_UNO_MAPPING_HXX
+#define INCLUDED_UNO_MAPPING_HXX
 
 #include <cppu/macros.hxx>
 #include <rtl/alloc.h>

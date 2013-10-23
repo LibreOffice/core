@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_ACTIVEDATASTREAMER_HXX
-#define _UCBHELPER_ACTIVEDATASTREAMER_HXX
+#ifndef INCLUDED_UCBHELPER_ACTIVEDATASTREAMER_HXX
+#define INCLUDED_UCBHELPER_ACTIVEDATASTREAMER_HXX
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
@@ -59,6 +59,6 @@ public:
 
 } /* namespace ucbhelper */
 
-#endif /* !_UCBHELPER_ACTIVEDATASTREAMER_HXX */
+#endif /* ! INCLUDED_UCBHELPER_ACTIVEDATASTREAMER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

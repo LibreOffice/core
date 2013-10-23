@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_SIMPLEINTERACTIONREQUEST_HXX
-#define _UCBHELPER_SIMPLEINTERACTIONREQUEST_HXX
+#ifndef INCLUDED_UCBHELPER_SIMPLEINTERACTIONREQUEST_HXX
+#define INCLUDED_UCBHELPER_SIMPLEINTERACTIONREQUEST_HXX
 
 #include <ucbhelper/interactionrequest.hxx>
 #include "ucbhelper/ucbhelperdllapi.h"
@@ -85,6 +85,6 @@ public:
 
 } // namespace ucbhelper
 
-#endif /* !_UCBHELPER_SIMPLEINTERACTIONREQUEST_HXX */
+#endif /* ! INCLUDED_UCBHELPER_SIMPLEINTERACTIONREQUEST_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

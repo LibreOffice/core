@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UNOTOOLS_CLOSEVETO_HXX
-#define UNOTOOLS_CLOSEVETO_HXX
+#ifndef INCLUDED_UNOTOOLS_CLOSEVETO_HXX
+#define INCLUDED_UNOTOOLS_CLOSEVETO_HXX
 
 #include "unotools/unotoolsdllapi.h"
 
@@ -55,6 +55,6 @@ namespace utl
 } // namespace dbaui
 //......................................................................................................................
 
-#endif // UNOTOOLS_CLOSEVETO_HXX
+#endif // INCLUDED_UNOTOOLS_CLOSEVETO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCBHELPERDLLAPI_H
-#define INCLUDED_UCBHELPERDLLAPI_H
+#ifndef INCLUDED_UCBHELPER_UCBHELPERDLLAPI_H
+#define INCLUDED_UCBHELPER_UCBHELPERDLLAPI_H
 
 #include "sal/types.h"
 
@@ -29,6 +29,6 @@
 #endif
 #define UCBHELPER_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_UCBHELPERDLLAPI_H */
+#endif // INCLUDED_UCBHELPER_UCBHELPERDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

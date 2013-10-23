@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _EVENTCFG_HXX
-#define _EVENTCFG_HXX
+#ifndef INCLUDED_UNOTOOLS_EVENTCFG_HXX
+#define INCLUDED_UNOTOOLS_EVENTCFG_HXX
 
 #include "unotools/unotoolsdllapi.h"
 #include <unotools/configitem.hxx>
@@ -108,6 +108,6 @@ class UNOTOOLS_DLLPUBLIC GlobalEventConfig:
         static sal_Int32 m_nRefCount;
 };
 
-#endif // _EVENTCFG_HXX
+#endif // INCLUDED_UNOTOOLS_EVENTCFG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_unotools_XMLACCELCFG_HXX
-#define INCLUDED_unotools_XMLACCELCFG_HXX
+#ifndef INCLUDED_UNOTOOLS_XMLACCELCFG_HXX
+#define INCLUDED_UNOTOOLS_XMLACCELCFG_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/weak.hxx>
@@ -85,6 +85,6 @@ class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocume
         SvtAcceleratorItemList& m_aReadAcceleratorList;
 };
 
-#endif // INCLUDED_unotools_XMLACCELCFG_HXX
+#endif // INCLUDED_UNOTOOLS_XMLACCELCFG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

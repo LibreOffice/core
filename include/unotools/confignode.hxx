@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#define _UNOTOOLS_CONFIGNODE_HXX_
+#ifndef INCLUDED_UNOTOOLS_CONFIGNODE_HXX
+#define INCLUDED_UNOTOOLS_CONFIGNODE_HXX
 
 #include "unotools/unotoolsdllapi.h"
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -320,6 +320,6 @@ namespace utl
 }   // namespace utl
 //........................................................................
 
-#endif // _UNOTOOLS_CONFIGNODE_HXX_
+#endif // INCLUDED_UNOTOOLS_CONFIGNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

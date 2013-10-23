@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
-#define INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#ifndef INCLUDED_UNOTOOLS_MODULEOPTIONS_HXX
+#define INCLUDED_UNOTOOLS_MODULEOPTIONS_HXX
 
 #include "unotools/unotoolsdllapi.h"
 #include <salhelper/singletonref.hxx>
@@ -203,6 +203,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
 
 };      // class SvtModuleOptions
 
-#endif  // #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#endif // INCLUDED_UNOTOOLS_MODULEOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

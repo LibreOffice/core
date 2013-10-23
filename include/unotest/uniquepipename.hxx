@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TEST_UNIQUEPIPENAME_HXX
-#define INCLUDED_TEST_UNIQUEPIPENAME_HXX
+#ifndef INCLUDED_UNOTEST_UNIQUEPIPENAME_HXX
+#define INCLUDED_UNOTEST_UNIQUEPIPENAME_HXX
 
 #include "sal/config.h"
 

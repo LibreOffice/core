@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_RESULTSETMETADATA_HXX
-#define _UCBHELPER_RESULTSETMETADATA_HXX
+#ifndef INCLUDED_UCBHELPER_RESULTSETMETADATA_HXX
+#define INCLUDED_UCBHELPER_RESULTSETMETADATA_HXX
 
 #include <vector>
 #include <com/sun/star/uno/Reference.hxx>
@@ -465,6 +465,6 @@ public:
 
 } // namespace ucbhelper
 
-#endif /* !_UCBHELPER_RESULTSETMETADATA_HXX */
+#endif /* ! INCLUDED_UCBHELPER_RESULTSETMETADATA_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

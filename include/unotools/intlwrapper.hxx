@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_INTLWRAPPER_HXX
-#define _UNOTOOLS_INTLWRAPPER_HXX
+#ifndef INCLUDED_UNOTOOLS_INTLWRAPPER_HXX
+#define INCLUDED_UNOTOOLS_INTLWRAPPER_HXX
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
@@ -93,6 +93,6 @@ public:
                                     }
 };
 
-#endif // _UNOTOOLS_INTLWRAPPER_HXX
+#endif // INCLUDED_UNOTOOLS_INTLWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX
-#define _UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX
+#ifndef INCLUDED_UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX
+#define INCLUDED_UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/interactionrequest.hxx>
@@ -144,6 +144,6 @@ public:
 
 } // namespace ucbhelper
 
-#endif /* !_UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX */
+#endif /* ! INCLUDED_UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

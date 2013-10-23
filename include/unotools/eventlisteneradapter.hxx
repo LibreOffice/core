@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
-#define _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
+#ifndef INCLUDED_UNOTOOLS_EVENTLISTENERADAPTER_HXX
+#define INCLUDED_UNOTOOLS_EVENTLISTENERADAPTER_HXX
 #include <com/sun/star/lang/XComponent.hpp>
 
 //.........................................................................
@@ -59,6 +59,6 @@ namespace utl
 }   // namespace utl
 //.........................................................................
 
-#endif // _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
+#endif // INCLUDED_UNOTOOLS_EVENTLISTENERADAPTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNO_ANY2_H_
-#define _UNO_ANY2_H_
+#ifndef INCLUDED_UNO_ANY2_H
+#define INCLUDED_UNO_ANY2_H
 
 #include <cppu/cppudllapi.h>
 #include <uno/data.h>

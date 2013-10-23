@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_unotools_OPTIONSDLG_HXX
-#define INCLUDED_unotools_OPTIONSDLG_HXX
+#ifndef INCLUDED_UNOTOOLS_OPTIONSDLG_HXX
+#define INCLUDED_UNOTOOLS_OPTIONSDLG_HXX
 
 #include "unotools/unotoolsdllapi.h"
 #include <rtl/ustring.hxx>

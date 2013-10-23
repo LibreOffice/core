@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _unotools_LINGUPROPS_HXX_
-#define _unotools_LINGUPROPS_HXX_
+#ifndef INCLUDED_UNOTOOLS_LINGUPROPS_HXX
+#define INCLUDED_UNOTOOLS_LINGUPROPS_HXX
 
 
 // UNO property names for general options

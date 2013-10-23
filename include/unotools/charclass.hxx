@@ -19,8 +19,8 @@
 
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_CHARCLASS_HXX
-#define _UNOTOOLS_CHARCLASS_HXX
+#ifndef INCLUDED_UNOTOOLS_CHARCLASS_HXX
+#define INCLUDED_UNOTOOLS_CHARCLASS_HXX
 
 #include <boost/noncopyable.hpp>
 #include <i18nlangtag/languagetag.hxx>
@@ -222,6 +222,6 @@ private:
     const ::com::sun::star::lang::Locale &  getMyLocale() const;
 };
 
-#endif // _UNOTOOLS_CHARCLASS_HXX
+#endif // INCLUDED_UNOTOOLS_CHARCLASS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

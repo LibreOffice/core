@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UTL_PROGRESSHANDLERWRAP_HXX_
-#define _UTL_PROGRESSHANDLERWRAP_HXX_
+#ifndef INCLUDED_UNOTOOLS_PROGRESSHANDLERWRAP_HXX
+#define INCLUDED_UNOTOOLS_PROGRESSHANDLERWRAP_HXX
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
@@ -45,6 +45,6 @@ public:
 
 }   // namespace utl
 
-#endif // _UTL_PROGRESSHANDLERWRAP_HXX_
+#endif // INCLUDED_UNOTOOLS_PROGRESSHANDLERWRAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

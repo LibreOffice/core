@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_unotools_LOCALISATIONOPTIONS_HXX
-#define INCLUDED_unotools_LOCALISATIONOPTIONS_HXX
+#ifndef INCLUDED_UNOTOOLS_LOCALISATIONOPTIONS_HXX
+#define INCLUDED_UNOTOOLS_LOCALISATIONOPTIONS_HXX
 
 #include <sal/types.h>
 #include "unotools/unotoolsdllapi.h"
@@ -131,6 +131,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtLocalisationOptions : public utl::de
 
 };      // class SvtLocalisationOptions
 
-#endif  // #ifndef INCLUDED_unotools_LOCALISATIONOPTIONS_HXX
+#endif // INCLUDED_UNOTOOLS_LOCALISATIONOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

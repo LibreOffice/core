@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
-#define _UNOTOOLS_COLLATORWRAPPER_HXX
+#ifndef INCLUDED_UNOTOOLS_COLLATORWRAPPER_HXX
+#define INCLUDED_UNOTOOLS_COLLATORWRAPPER_HXX
 
 #include <com/sun/star/i18n/XCollator.hpp>
 
@@ -69,6 +69,6 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
         CollatorWrapper();
 };
 
-#endif /* _UNOTOOLS_COLLATORWRAPPER_HXX */
+#endif // INCLUDED_UNOTOOLS_COLLATORWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

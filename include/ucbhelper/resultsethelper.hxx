@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_RESULTSETHELPER_HXX
-#define _UCBHELPER_RESULTSETHELPER_HXX
+#ifndef INCLUDED_UCBHELPER_RESULTSETHELPER_HXX
+#define INCLUDED_UCBHELPER_RESULTSETHELPER_HXX
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -199,6 +199,6 @@ public:
 
 }
 
-#endif /* !_UCBHELPER_RESULTSETHELPER_HXX */
+#endif /* ! INCLUDED_UCBHELPER_RESULTSETHELPER_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

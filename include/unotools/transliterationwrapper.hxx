@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
-#define _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#ifndef INCLUDED_UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
+#define INCLUDED_UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <i18nlangtag/languagetag.hxx>

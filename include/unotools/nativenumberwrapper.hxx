@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_NATIVENUMBERWRAPPER_HXX
-#define _UNOTOOLS_NATIVENUMBERWRAPPER_HXX
+#ifndef INCLUDED_UNOTOOLS_NATIVENUMBERWRAPPER_HXX
+#define INCLUDED_UNOTOOLS_NATIVENUMBERWRAPPER_HXX
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 
 namespace com { namespace sun { namespace star {
@@ -59,6 +59,6 @@ public:
 
 };
 
-#endif // _UNOTOOLS_NATIVENUMBERWRAPPER_HXX
+#endif // INCLUDED_UNOTOOLS_NATIVENUMBERWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

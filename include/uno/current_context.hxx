@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNO_CURRENT_CONTEXT_HXX_
-#define _UNO_CURRENT_CONTEXT_HXX_
+#ifndef INCLUDED_UNO_CURRENT_CONTEXT_HXX
+#define INCLUDED_UNO_CURRENT_CONTEXT_HXX
 
 #include <uno/current_context.h>
 

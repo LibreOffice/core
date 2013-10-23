@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef UNOTOOLS_CONFIGPATHS_HXX_INCLUDED
-#define UNOTOOLS_CONFIGPATHS_HXX_INCLUDED
+#ifndef INCLUDED_UNOTOOLS_CONFIGPATHS_HXX
+#define INCLUDED_UNOTOOLS_CONFIGPATHS_HXX
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
@@ -165,6 +165,6 @@ namespace utl
 }   // namespace utl
 //----------------------------------------------------------------------------
 
-#endif // UNOTOOLS_CONFIGPATHS_HXX_INCLUDED
+#endif // INCLUDED_UNOTOOLS_CONFIGPATHS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

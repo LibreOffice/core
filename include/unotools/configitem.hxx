@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UTL_CONFIGITEM_HXX_
-#define _UTL_CONFIGITEM_HXX_
+#ifndef INCLUDED_UNOTOOLS_CONFIGITEM_HXX
+#define INCLUDED_UNOTOOLS_CONFIGITEM_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -179,6 +179,6 @@ namespace utl
             sal_Bool                IsValidConfigMgr() const;
     };
 }//namespace utl
-#endif //_UTL_CONFIGITEM_HXX_
+#endif // INCLUDED_UNOTOOLS_CONFIGITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

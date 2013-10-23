@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_REGISTERUCB_HXX_
-#define _UCBHELPER_REGISTERUCB_HXX_
+#ifndef INCLUDED_UCBHELPER_REGISTERUCB_HXX
+#define INCLUDED_UCBHELPER_REGISTERUCB_HXX
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -101,6 +101,6 @@ UCBHELPER_DLLPUBLIC bool registerAtUcb(
     throw (com::sun::star::uno::RuntimeException);
 
 }
-#endif // _UCBHELPER_REGISTERUCB_HXX_
+#endif // INCLUDED_UCBHELPER_REGISTERUCB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

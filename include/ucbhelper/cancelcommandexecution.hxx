@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_CANCELCOMMANDEXECUTION_HXX_
-#define _UCBHELPER_CANCELCOMMANDEXECUTION_HXX_
+#ifndef INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX
+#define INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -99,6 +99,6 @@ UCBHELPER_DLLPUBLIC void cancelCommandExecution( const com::sun::star::ucb::IOEr
     throw( com::sun::star::uno::Exception );
 }
 
-#endif // _UCBHELPER_CANCELCOMMANDEXECUTION_HXX_
+#endif // INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

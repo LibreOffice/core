@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOTOOLS_UCBHELPER_HXX
-#define _UNOTOOLS_UCBHELPER_HXX
+#ifndef INCLUDED_UNOTOOLS_UCBHELPER_HXX
+#define INCLUDED_UNOTOOLS_UCBHELPER_HXX
 
 #include "sal/config.h"
 

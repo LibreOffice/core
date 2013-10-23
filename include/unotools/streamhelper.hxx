@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UNOTOOLS_STREAMHELPER_HXX_
-#define _UNOTOOLS_STREAMHELPER_HXX_
+#ifndef INCLUDED_UNOTOOLS_STREAMHELPER_HXX
+#define INCLUDED_UNOTOOLS_STREAMHELPER_HXX
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <osl/mutex.hxx>

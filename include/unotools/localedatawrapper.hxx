@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#define _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#ifndef INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#define INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -357,6 +357,6 @@ private:
 };
 
 
-#endif // _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#endif // INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_unotools_ITEMHOLDERBASE_HXX_
-#define INCLUDED_unotools_ITEMHOLDERBASE_HXX_
+#ifndef INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
+#define INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
 
 #include <vector>
 #include <osl/mutex.hxx>
@@ -99,6 +99,6 @@ struct TItemInfo
 
 typedef ::std::vector< TItemInfo > TItems;
 
-#endif // INCLUDED_unotools_ITEMHOLDERBASE_HXX_
+#endif // INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TEST_GETTESTARGUMENT_HXX
-#define INCLUDED_TEST_GETTESTARGUMENT_HXX
+#ifndef INCLUDED_UNOTEST_GETTESTARGUMENT_HXX
+#define INCLUDED_UNOTEST_GETTESTARGUMENT_HXX
 
 #include "sal/config.h"
 

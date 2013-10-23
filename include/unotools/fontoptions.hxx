@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_unotools_FONTOPTIONS_HXX
-#define INCLUDED_unotools_FONTOPTIONS_HXX
+#ifndef INCLUDED_UNOTOOLS_FONTOPTIONS_HXX
+#define INCLUDED_UNOTOOLS_FONTOPTIONS_HXX
 
 #include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
@@ -124,6 +124,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtFontOptions : public utl::detail::Op
 
 };      // class SvtFontOptions
 
-#endif  // #ifndef INCLUDED_unotools_FONTOPTIONS_HXX
+#endif // INCLUDED_UNOTOOLS_FONTOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

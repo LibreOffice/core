@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOTOOLS_ID_HELPER_HXX_
-#define _UNOTOOLS_ID_HELPER_HXX_
+#ifndef INCLUDED_UNOTOOLS_IDHELPER_HXX
+#define INCLUDED_UNOTOOLS_IDHELPER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -194,6 +194,6 @@ void classname::implCreateMap() \
     \
 
 
-#endif // _UNOTOOLS_ID_HELPER_HXX_
+#endif // INCLUDED_UNOTOOLS_IDHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

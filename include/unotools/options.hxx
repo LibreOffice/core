@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_unotools_OPTIONS_HXX
-#define INCLUDED_unotools_OPTIONS_HXX
+#ifndef INCLUDED_UNOTOOLS_OPTIONS_HXX
+#define INCLUDED_UNOTOOLS_OPTIONS_HXX
 
 #include "sal/config.h"
 #include "unotools/unotoolsdllapi.h"

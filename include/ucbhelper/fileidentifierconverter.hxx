@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_FILEIDENTIFIERCONVERTER_HXX_
-#define _UCBHELPER_FILEIDENTIFIERCONVERTER_HXX_
+#ifndef INCLUDED_UCBHELPER_FILEIDENTIFIERCONVERTER_HXX
+#define INCLUDED_UCBHELPER_FILEIDENTIFIERCONVERTER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -109,6 +109,6 @@ getSystemPathFromFileURL(
 
 }
 
-#endif // _UCBHELPER_FILEIDENTIFIERCONVERTER_HXX_
+#endif // INCLUDED_UCBHELPER_FILEIDENTIFIERCONVERTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

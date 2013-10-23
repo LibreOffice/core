@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
-#define UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#ifndef INCLUDED_UNOTOOLS_SHAREDUNOCOMPONENT_HXX
+#define INCLUDED_UNOTOOLS_SHAREDUNOCOMPONENT_HXX
 
 #include "unotoolsdllapi.h"
 
@@ -353,6 +353,6 @@ namespace utl
 }   // namespace utl
 //............................................................................
 
-#endif // UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#endif // INCLUDED_UNOTOOLS_SHAREDUNOCOMPONENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

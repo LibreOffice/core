@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
-#define _UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
+#ifndef INCLUDED_UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
+#define INCLUDED_UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
 
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
 #include "unotools/unotoolsdllapi.h"
@@ -63,6 +63,6 @@ public:
 
 };
 
-#endif // _UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
+#endif // INCLUDED_UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

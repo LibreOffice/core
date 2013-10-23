@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNOTOOLS_STREAMSECTION_HXX_
-#define _UNOTOOLS_STREAMSECTION_HXX_
+#ifndef INCLUDED_UNOTOOLS_STREAMSECTION_HXX
+#define INCLUDED_UNOTOOLS_STREAMSECTION_HXX
 
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/io/XDataInputStream.hpp>
@@ -72,7 +72,7 @@ public:
 
 }   // namespace utl
 
-#endif // _UNOTOOLS_STREAMSECTION_HXX_
+#endif // INCLUDED_UNOTOOLS_STREAMSECTION_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

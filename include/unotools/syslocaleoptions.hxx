@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
-#define INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
+#ifndef INCLUDED_UNOTOOLS_SYSLOCALEOPTIONS_HXX
+#define INCLUDED_UNOTOOLS_SYSLOCALEOPTIONS_HXX
 
 #include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
@@ -171,6 +171,6 @@ public:
             bool                IsReadOnly( EOption eOption ) const;
 };
 
-#endif  // INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
+#endif // INCLUDED_UNOTOOLS_SYSLOCALEOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

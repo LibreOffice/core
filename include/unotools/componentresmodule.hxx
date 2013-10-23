@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef UNOTOOLS_INC_UNOTOOLS_COMPONENTRESMODULE_HXX
-#define UNOTOOLS_INC_UNOTOOLS_COMPONENTRESMODULE_HXX
+#ifndef INCLUDED_UNOTOOLS_COMPONENTRESMODULE_HXX
+#define INCLUDED_UNOTOOLS_COMPONENTRESMODULE_HXX
 
 #include <comphelper/componentmodule.hxx>
 #include <unotools/unotoolsdllapi.h>
@@ -175,6 +175,6 @@ namespace utl
 } // namespace utl
 //........................................................................
 
-#endif // UNOTOOLS_INC_UNOTOOLS_COMPONENTRESMODULE_HXX
+#endif // INCLUDED_UNOTOOLS_COMPONENTRESMODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_unotools_SECURITYOPTIONS_HXX
-#define INCLUDED_unotools_SECURITYOPTIONS_HXX
+#ifndef INCLUDED_UNOTOOLS_SECURITYOPTIONS_HXX
+#define INCLUDED_UNOTOOLS_SECURITYOPTIONS_HXX
 
 #include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
@@ -256,6 +256,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
 
 };      // class SvtSecurityOptions
 
-#endif  // #ifndef INCLUDED_unotools_SECURITYOPTIONS_HXX
+#endif // INCLUDED_UNOTOOLS_SECURITYOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

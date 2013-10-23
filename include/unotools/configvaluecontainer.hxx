@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef UNOTOOLS_CONFIGVALUECONTAINER_HXX
-#define UNOTOOLS_CONFIGVALUECONTAINER_HXX
+#ifndef INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
+#define INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/mutex.hxx>
 
@@ -178,6 +178,6 @@ namespace utl
 }   // namespace utl
 //.........................................................................
 
-#endif // UNOTOOLS_CONFIGVALUECONTAINER_HXX
+#endif // INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

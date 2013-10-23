@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef _UTL_BOOTSTRAP_HXX
-#define _UTL_BOOTSTRAP_HXX
+#ifndef INCLUDED_UNOTOOLS_BOOTSTRAP_HXX
+#define INCLUDED_UNOTOOLS_BOOTSTRAP_HXX
 
 #include <rtl/ustring.hxx>
 

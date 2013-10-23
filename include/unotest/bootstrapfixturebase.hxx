@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_UNOUNOTEST_BOOTSTRAPFIXTUREBASE_HXX
-#define INCLUDED_UNOUNOTEST_BOOTSTRAPFIXTUREBASE_HXX
+#ifndef INCLUDED_UNOTEST_BOOTSTRAPFIXTUREBASE_HXX
+#define INCLUDED_UNOTEST_BOOTSTRAPFIXTUREBASE_HXX
 
 #include <sal/config.h>
 

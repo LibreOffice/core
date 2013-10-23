@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_unotools_PRINTWARNINGOPTIONS_HXX
-#define INCLUDED_unotools_PRINTWARNINGOPTIONS_HXX
+#ifndef INCLUDED_UNOTOOLS_PRINTWARNINGOPTIONS_HXX
+#define INCLUDED_UNOTOOLS_PRINTWARNINGOPTIONS_HXX
 
 #include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
@@ -116,6 +116,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtPrintWarningOptions : public utl::de
 
 };      // class SvtPrintWarningOptions
 
-#endif // #ifndef INCLUDED_unotools_PRINTWARNINGOPTIONS_HXX
+#endif // INCLUDED_UNOTOOLS_PRINTWARNINGOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

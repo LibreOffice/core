@@ -18,8 +18,8 @@
  */
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef UNOTOOLS_INC_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
-#define UNOTOOLS_INC_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
+#ifndef INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
+#define INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 
 //........................................................................
 namespace utl
@@ -67,6 +67,6 @@ namespace utl
 } // namespace utl
 //........................................................................
 
-#endif // UNOTOOLS_INC_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
+#endif // INCLUDED_UNOTOOLS_DESKTOPTERMINATIONOBSERVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

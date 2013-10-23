@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_FD_INPUTSTREAM_HXX_
-#define _UCBHELPER_FD_INPUTSTREAM_HXX_
+#ifndef INCLUDED_UCBHELPER_FD_INPUTSTREAM_HXX
+#define INCLUDED_UCBHELPER_FD_INPUTSTREAM_HXX
 
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>

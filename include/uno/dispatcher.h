@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNO_DISPATCHER_H_
-#define _UNO_DISPATCHER_H_
+#ifndef INCLUDED_UNO_DISPATCHER_H
+#define INCLUDED_UNO_DISPATCHER_H
 
 #include <sal/types.h>
 #include <rtl/ustring.h>

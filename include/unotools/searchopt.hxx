@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVT_SEARCHOPT_HXX_
-#define _SVT_SEARCHOPT_HXX_
+#ifndef INCLUDED_UNOTOOLS_SEARCHOPT_HXX
+#define INCLUDED_UNOTOOLS_SEARCHOPT_HXX
 
 #include "unotools/unotoolsdllapi.h"
 #include "tools/solar.h"

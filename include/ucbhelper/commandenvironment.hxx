@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UCBHELPER_COMMANDENVIRONMENT_HXX
-#define _UCBHELPER_COMMANDENVIRONMENT_HXX
+#ifndef INCLUDED_UCBHELPER_COMMANDENVIRONMENT_HXX
+#define INCLUDED_UCBHELPER_COMMANDENVIRONMENT_HXX
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -89,6 +89,6 @@ public:
 
 } /* namespace ucbhelper */
 
-#endif /* !_UCBHELPER_COMMANDENVIRONMENT_HXX */
+#endif /* ! INCLUDED_UCBHELPER_COMMANDENVIRONMENT_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
