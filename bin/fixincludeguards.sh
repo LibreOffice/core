@@ -28,7 +28,7 @@ for fn in "$@"; do
        [ aa"`git grep -h "^\s*#define ${guard_prefix}$guard" "$fn" | wc -l`" != "aa1" ]; then
 
         # pattern which identifies guards, common one look like
-        # _XMLOFF_ANIMEXP_HXX, BENTOID_H, IXFOBJECT_INC
+        # _MODULE_FILE_HXX, FILE_H, FILE_INC
         pattern=".*\(_HXX\|_H\|_INC\)"
 
         ### extract guard definition
@@ -41,10 +41,10 @@ for fn in "$@"; do
         fi
 
 
-    if [ aa"`git grep -w "$old_guard" | cut -d ':' -f1 | sort -u | wc -l `" != aa"1" ]; then
-        echo -e "$fn: \e[00;31mwarning:\e[00m guard definition used in other files"
-        continue
-    fi
+        if [ aa"`git grep -w "$old_guard" | cut -d ':' -f1 | sort -u | wc -l `" != aa"1" ]; then
+            echo -e "$fn: \e[00;31mwarning:\e[00m guard definition used in other files"
+            continue
+        fi
 
         ### skip some special files...
 
