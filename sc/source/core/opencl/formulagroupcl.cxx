@@ -996,13 +996,12 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "Yieldmat"; }
 };
-class OpRMZ: public Normal
+class OpPMT: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string sSymName, SubArguments &vSubArguments)
     {
-
         ss << "\ndouble " << sSymName;
         ss << "_"<< BinFuncName() <<"(";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -1013,19 +1012,35 @@ public:
         }
         ss << ") {\n\t";
         ss << "double tmp = 0;\n\t";
+        ss<<"double tFv=0,tType=0;\n\t";
         ss << "int gid0 = get_global_id(0);\n\t";
-        ss<<"double abl = pow(1.0+"<<vSubArguments[0]->GenSlidingWindowDeclRef();
+         if(vSubArguments.size()==4)
+            ss<<"tFv="<<vSubArguments[3]->GenSlidingWindowDeclRef()<<";\n\t";
+        else if(vSubArguments.size()==5)
+        {
+            ss<<"tType="<<vSubArguments[4]->GenSlidingWindowDeclRef();
+            ss<<";\n\t";
+            ss<<"tFv="<<vSubArguments[3]->GenSlidingWindowDeclRef();
+            ss<<";\n\t";
+        }
+        ss<<"if("<<vSubArguments[0]->GenSlidingWindowDeclRef()<<"==0.0)\n\t";
+        ss<<"\treturn ("<<vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss<<"+tFv)/";
+        ss<<vSubArguments[1]->GenSlidingWindowDeclRef()<<";\n\t";
+        ss<<"double abl = pow(1.0+"<<vSubArguments[0]
+            ->GenSlidingWindowDeclRef();
         ss << ","<<vSubArguments[1]->GenSlidingWindowDeclRef();
-        ss<<");\n\ttmp-="<<vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss<<");\n\ttmp-=tFv";
         ss<<";\n\ttmp-="<<vSubArguments[2]->GenSlidingWindowDeclRef();
-        ss<<"*abl;\n\t"<<"tmp =tmp/(1.0+"<<vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss<<"*"<<vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss<<"*abl;\n\t"<<"tmp =tmp/(1.0+"<<vSubArguments[0]
+            ->GenSlidingWindowDeclRef();
+        ss<<"*tType";
         ss<<") / ( (abl-1.0)/"<<vSubArguments[0]->GenSlidingWindowDeclRef();
         ss << ");\n\t";
         ss << "return tmp;\n";
         ss << "}";
     }
-	virtual std::string BinFuncName(void) const { return "PMT"; }
+    virtual std::string BinFuncName(void) const { return "PMT"; }
 };
 class OpReceived:public Normal
 {
@@ -1438,7 +1453,7 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     ft->Children[i]));
                 break;
             case ocRMZ:
-                mvSubArguments.push_back(SoPHelper<OpRMZ>(ts,
+                mvSubArguments.push_back(SoPHelper<OpPMT>(ts,
                     ft->Children[i]));
                 break;
             case ocZins:
