@@ -2686,8 +2686,6 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
     // Token LINE_SEP query,
     // since the MAC-Compiler makes something else from \n !
 
-    // fdo#39869 The loop run variable must be capable to hold STRLEN_MAX+1,
-    // that with STRING32 would be SAL_MAX_INT32+1 but with 16-bit is 0xFFFF+1
     sal_Int32 nStart = 0;
     while ( nStart < aText.getLength() )
     {
