@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_MORPH_DLG_HXX
-#define SD_MORPH_DLG_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_MORPHDLG_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_MORPHDLG_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/group.hxx>

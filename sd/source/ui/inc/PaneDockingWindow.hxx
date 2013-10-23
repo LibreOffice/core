@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_PANE_DOCKING_WINDOW_HXX
-#define SD_PANE_DOCKING_WINDOW_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_PANEDOCKINGWINDOW_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_PANEDOCKINGWINDOW_HXX
 
 #include <sfx2/titledockwin.hxx>
 #include <sfx2/viewfrm.hxx>

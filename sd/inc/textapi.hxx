@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_TEXTAPI_HXX_
-#define _SD_TEXTAPI_HXX_
+#ifndef INCLUDED_SD_INC_TEXTAPI_HXX
+#define INCLUDED_SD_INC_TEXTAPI_HXX
 
 #include <editeng/unoedsrc.hxx>
 #include <editeng/unotext.hxx>
@@ -58,6 +58,6 @@ private:
 } // namespace sd
 
 
-#endif // _SD_TEXTAPI_HXX_
+#endif // INCLUDED_SD_INC_TEXTAPI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

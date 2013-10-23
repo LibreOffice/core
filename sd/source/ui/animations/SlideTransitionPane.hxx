@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SD_SLIDETRANSITIONPANE_HXX
-#define SD_SLIDETRANSITIONPANE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_SLIDETRANSITIONPANE_HXX
+#define INCLUDED_SD_SOURCE_UI_ANIMATIONS_SLIDETRANSITIONPANE_HXX
 
 #include "EventMultiplexer.hxx"
 
@@ -137,7 +137,7 @@ private:
 
 } //  namespace sd
 
-// SD_SLIDETRANSITIONPANE_HXX
+// INCLUDED_SD_SOURCE_UI_ANIMATIONS_SLIDETRANSITIONPANE_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

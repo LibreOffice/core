@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_OUTLINER_ITERATOR_IMPL_HXX
-#define SD_OUTLINER_ITERATOR_IMPL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_OUTLINERITERATORIMPL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_OUTLINERITERATORIMPL_HXX
 
 #include <svx/svdobj.hxx>
 #include "OutlinerIterator.hxx"

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SD_PRLTEMPL_HXX
-#define SD_PRLTEMPL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_PRLTEMPL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_PRLTEMPL_HXX
 
 #include "sdresid.hxx"
 #include <sfx2/tabdlg.hxx>
@@ -93,6 +93,6 @@ public:
 };
 
 
-#endif // SD_PRLTEMPL_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_PRLTEMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_RULER_HXX
-#define SD_RULER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_RULER_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_RULER_HXX
 
 
 #include <svx/ruler.hxx>

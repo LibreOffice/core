@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TOOL_PANEL_VIEW_SHELL_HXX
-#define SD_TOOL_PANEL_VIEW_SHELL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TASKPANE_TOOLPANELVIEWSHELL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TASKPANE_TOOLPANELVIEWSHELL_HXX
 
 #include "ViewShell.hxx"
 #include "glob.hxx"

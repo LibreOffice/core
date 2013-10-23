@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FU_MEASURE_DLG_HXX
-#define SD_FU_MEASURE_DLG_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FUMEASUR_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FUMEASUR_HXX
 
 #include "fupoor.hxx"
 

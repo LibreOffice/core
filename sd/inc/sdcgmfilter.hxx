@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SDCGMFILTER_HXX
-#define _SD_SDCGMFILTER_HXX
+#ifndef INCLUDED_SD_INC_SDCGMFILTER_HXX
+#define INCLUDED_SD_INC_SDCGMFILTER_HXX
 
 #include "sdfilter.hxx"
 
@@ -39,6 +39,6 @@ public:
     sal_Bool        Export();
 };
 
-#endif // _SD_SDCGMFILTER_HXX
+#endif // INCLUDED_SD_INC_SDCGMFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

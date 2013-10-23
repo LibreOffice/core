@@ -55,14 +55,14 @@
  */
 
 
-/* _DNS_SD_H contains the mDNSResponder version number for this header file, formatted as follows:
+/* INCLUDED_SD_SOURCE_UI_REMOTECONTROL_MDNSRESPONDER_DNS_SD_H contains the mDNSResponder version number for this header file, formatted as follows:
  *   Major part of the build number * 10000 +
  *   minor part of the build number *   100
  * For example, Mac OS X 10.4.9 has mDNSResponder-108.4, which would be represented as
  * version 1080400. This allows C code to do simple greater-than and less-than comparisons:
  * e.g. an application that requires the DNSServiceGetProperty() call (new in mDNSResponder-126) can check:
  *
- *   #if _DNS_SD_H+0 >= 1260000
+ *   #if INCLUDED_SD_SOURCE_UI_REMOTECONTROL_MDNSRESPONDER_DNS_SD_H+0 >= 1260000
  *   ... some C code that calls DNSServiceGetProperty() ...
  *   #endif
  *
@@ -76,8 +76,8 @@
  *     ("system service" on Windows) meets some required minimum functionality level.
  */
 
-#ifndef _DNS_SD_H
-#define _DNS_SD_H 3793700
+#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_MDNSRESPONDER_DNS_SD_H
+#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_MDNSRESPONDER_DNS_SD_H 3793700
 
 #ifdef  __cplusplus
 extern "C" {
@@ -2486,4 +2486,4 @@ struct CompileTimeAssertionChecks_DNS_SD
 }
 #endif
 
-#endif  /* _DNS_SD_H */
+#endif // INCLUDED_SD_SOURCE_UI_REMOTECONTROL_MDNSRESPONDER_DNS_SD_H

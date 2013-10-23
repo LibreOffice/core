@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_PAGE_OBJECT_VIEW_OBJECT_CONTACT_HXX
-#define SD_SLIDESORTER_PAGE_OBJECT_VIEW_OBJECT_CONTACT_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSPAGEOBJECTVIEWOBJECTCONTACT_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSPAGEOBJECTVIEWOBJECTCONTACT_HXX
 
 #include <svx/sdr/contact/viewobjectcontactofpageobj.hxx>
 #include "model/SlsSharedPageDescriptor.hxx"

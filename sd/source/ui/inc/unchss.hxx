@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNCHSS_HXX
-#define _SD_UNCHSS_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_UNCHSS_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_UNCHSS_HXX
 
 #include "sdundo.hxx"
 
@@ -47,6 +47,6 @@ public:
     virtual OUString GetComment() const;
 };
 
-#endif      // _SD_UNCHSS_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_UNCHSS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

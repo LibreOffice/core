@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SD_TMPLCTRL_HXX
-#define _SD_TMPLCTRL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TMPLCTRL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TMPLCTRL_HXX
 
 #include <sfx2/stbitem.hxx>
 

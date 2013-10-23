@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_PARAGR_HXX
-#define _SD_PARAGR_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_PARAGR_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_PARAGR_HXX
 
 
 #include <sfx2/tabdlg.hxx>
@@ -38,7 +38,7 @@ public:
                     ~SdParagraphDlg() {};
 };
 
-#endif // _SD_PARAGR_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_PARAGR_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

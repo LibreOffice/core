@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_CUSTOMANIMATIONPANE_HXX
-#define _SD_CUSTOMANIMATIONPANE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
+#define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -179,6 +179,6 @@ private:
 
 }
 
-#endif // _SD_CUSTOMANIMATIONPANE_HXX
+#endif // INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_PUBDLG_HXX
-#define _SD_PUBDLG_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/fixed.hxx>
@@ -198,6 +198,6 @@ public:
     void GetParameterSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rParams );
 };
 
-#endif // _SD_PUBDLG_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_PUBDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

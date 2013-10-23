@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FU_ZOOM_HXX
-#define SD_FU_ZOOM_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FUZOOM_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FUZOOM_HXX
 
 #include <vcl/pointr.hxx>
 #include "fupoor.hxx"

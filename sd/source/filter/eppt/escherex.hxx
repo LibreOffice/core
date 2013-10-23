@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PptEscherEX_HXX
-#define _PptEscherEX_HXX
+#ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_ESCHEREX_HXX
+#define INCLUDED_SD_SOURCE_FILTER_EPPT_ESCHEREX_HXX
 #include <filter/msfilter/escherex.hxx>
 
 /// Values for the sal_uLong in PPT_PST_TextHeaderAtom.

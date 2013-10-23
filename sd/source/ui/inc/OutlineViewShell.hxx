@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_OUTLINE_VIEW_SHELL_HXX
-#define SD_OUTLINE_VIEW_SHELL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_OUTLINEVIEWSHELL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_OUTLINEVIEWSHELL_HXX
 
 #include "DrawDocShell.hxx"
 #include "ViewShell.hxx"

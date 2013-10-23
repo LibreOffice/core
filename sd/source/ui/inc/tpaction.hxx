@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_TPACTION_HXX
-#define _SD_TPACTION_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TPACTION_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TPACTION_HXX
 
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
@@ -121,6 +121,6 @@ public:
     using TabPage::DeactivatePage;
 };
 
-#endif      // _SD_TPACTION_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_TPACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

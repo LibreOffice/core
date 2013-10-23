@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_GLUECTRL_HXX
-#define SD_GLUECTRL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_GLUECTRL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_GLUECTRL_HXX
 
 #include <vcl/lstbox.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -59,6 +59,6 @@ public:
             ~SdTbxCtlGlueEscDir() {}
 };
 
-#endif // SD_GLUECTRL_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_GLUECTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

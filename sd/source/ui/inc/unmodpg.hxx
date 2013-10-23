@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNMODPG_HXX
-#define _SD_UNMODPG_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_UNMODPG_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_UNMODPG_HXX
 
 #include "sdundo.hxx"
 #include "pres.hxx"
@@ -77,6 +77,6 @@ private:
     const OUString maComment;
 };
 
-#endif      // _SD_UNMODPG_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_UNMODPG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

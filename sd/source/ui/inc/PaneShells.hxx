@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_PANE_SHELLS_HXX
-#define SD_PANE_SHELLS_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_PANESHELLS_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_PANESHELLS_HXX
 
 
 #include <sfx2/module.hxx>

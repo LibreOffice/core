@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_STLSHEET_HXX
-#define _SD_STLSHEET_HXX
+#ifndef INCLUDED_SD_INC_STLSHEET_HXX
+#define INCLUDED_SD_INC_STLSHEET_HXX
 
 #include <rtl/ref.hxx>
 
@@ -147,7 +147,7 @@ private:
 typedef rtl::Reference< SdStyleSheet > SdStyleSheetRef;
 typedef std::vector< SdStyleSheetRef > SdStyleSheetVector;
 
-#endif     // _SD_STLSHEET_HXX
+#endif // INCLUDED_SD_INC_STLSHEET_HXX
 
 
 

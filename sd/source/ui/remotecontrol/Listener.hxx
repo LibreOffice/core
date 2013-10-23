@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _SD_IMPRESSREMOTE_LISTENER_HXX
-#define _SD_IMPRESSREMOTE_LISTENER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_LISTENER_HXX
+#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_LISTENER_HXX
 
 #include <sal/config.h>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -66,5 +66,5 @@ private:
     css::uno::Reference< css::presentation::XSlideShowController > mController;
 };
 }
-#endif // _SD_IMPRESSREMOTE_LISTENER_HXX
+#endif // INCLUDED_SD_SOURCE_UI_REMOTECONTROL_LISTENER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

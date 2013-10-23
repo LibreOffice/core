@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDOBJFAC_HXX
-#define _SDOBJFAC_HXX
+#ifndef INCLUDED_SD_INC_SDOBJFAC_HXX
+#define INCLUDED_SD_INC_SDOBJFAC_HXX
 
 
 #include <tools/link.hxx>
@@ -47,6 +47,6 @@ public:
 extern SdObjectFactory aSdObjectFactory;
 
 
-#endif // _SDOBJFAC_HXX
+#endif // INCLUDED_SD_INC_SDOBJFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ANNOTATIONWINDOW_HXX
-#define _ANNOTATIONWINDOW_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONWINDOW_HXX
+#define INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONWINDOW_HXX
 
 #include <com/sun/star/office/XAnnotation.hpp>
 

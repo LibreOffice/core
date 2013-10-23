@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_IMAPINFO_HXX
-#define _SD_IMAPINFO_HXX
+#ifndef INCLUDED_SD_INC_IMAPINFO_HXX
+#define INCLUDED_SD_INC_IMAPINFO_HXX
 
 #include "sdiocmpt.hxx"
 #include "glob.hxx"
@@ -51,7 +51,7 @@ public:
     const ImageMap& GetImageMap() const { return aImageMap; }
 };
 
-#endif      // _SD_IMAPINFO_HXX
+#endif // INCLUDED_SD_INC_IMAPINFO_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_BREAK_DLG_HXX
-#define SD_BREAK_DLG_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_BREAKDLG_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_BREAKDLG_HXX
 
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_VIEW_HXX
-#define SD_VIEW_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_VIEW_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_VIEW_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

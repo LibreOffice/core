@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNODOCUMENTSETTINGS_HXX_
-#define _SD_UNODOCUMENTSETTINGS_HXX_
+#ifndef INCLUDED_SD_SOURCE_UI_UNOIDL_UNODOCUMENTSETTINGS_HXX
+#define INCLUDED_SD_SOURCE_UI_UNOIDL_UNODOCUMENTSETTINGS_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 

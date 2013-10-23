@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _SD_IMPRESSREMOTE_BLUETOOTHSERVER_HXX
-#define _SD_IMPRESSREMOTE_BLUETOOTHSERVER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_BLUETOOTHSERVER_HXX
+#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_BLUETOOTHSERVER_HXX
 
 #include <osl/thread.hxx>
 #include <vector>
@@ -56,5 +56,5 @@ namespace sd
     };
 }
 
-#endif // _SD_IMPRESSREMOTE_BLUETOOTHSERVER_HXX
+#endif // INCLUDED_SD_SOURCE_UI_REMOTECONTROL_BLUETOOTHSERVER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

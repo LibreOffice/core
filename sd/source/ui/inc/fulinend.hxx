@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FULINE_END_HXX
-#define SD_FULINE_END_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FULINEND_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FULINEND_HXX
 
 #include "fupoor.hxx"
 

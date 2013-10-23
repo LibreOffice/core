@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNDOOBJECTS_HXX
-#define _SD_UNDOOBJECTS_HXX
+#ifndef INCLUDED_SD_INC_UNDO_UNDOOBJECTS_HXX
+#define INCLUDED_SD_INC_UNDO_UNDOOBJECTS_HXX
 
 #include <svx/svdundo.hxx>
 #include <svx/svdpage.hxx>
@@ -189,6 +189,6 @@ protected:
 
 } // namespace sd
 
-#endif     // _SD_UNDOOBJECTS_HXX
+#endif // INCLUDED_SD_INC_UNDO_UNDOOBJECTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_DLGPAGE_HXX
-#define _SD_DLGPAGE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_DLGPAGE_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_DLGPAGE_HXX
 
 #include <sfx2/tabdlg.hxx>
 
@@ -50,6 +50,6 @@ public:
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
 };
 
-#endif // _SD_DLGPAGE_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_DLGPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

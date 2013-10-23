@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_DLGSNAP_HXX
-#define _SD_DLGSNAP_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_DLGSNAP_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_DLGSNAP_HXX
 
 
 #include <vcl/button.hxx>
@@ -71,6 +71,6 @@ public:
 
 
 
-#endif      // _SD_DLGSNAP_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_DLGSNAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

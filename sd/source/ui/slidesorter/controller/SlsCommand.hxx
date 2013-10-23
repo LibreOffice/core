@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_COMMAND_HXX
-#define SD_SLIDESORTER_COMMAND_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_CONTROLLER_SLSCOMMAND_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CONTROLLER_SLSCOMMAND_HXX
 
 namespace sd { namespace slidesorter { namespace controller {
 

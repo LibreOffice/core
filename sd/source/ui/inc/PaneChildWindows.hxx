@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_PANE_CHILD_WINDOWS_HXX
-#define SD_PANE_CHILD_WINDOWS_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_PANECHILDWINDOWS_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_PANECHILDWINDOWS_HXX
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/taskpane.hxx>

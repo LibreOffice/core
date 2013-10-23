@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SIDEBAR_PANELS_CURRENT_MASTER_PAGES_SELECTOR_HXX
-#define SD_SIDEBAR_PANELS_CURRENT_MASTER_PAGES_SELECTOR_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_CURRENTMASTERPAGESSELECTOR_HXX
+#define INCLUDED_SD_SOURCE_UI_SIDEBAR_CURRENTMASTERPAGESSELECTOR_HXX
 
 #include "MasterPagesSelector.hxx"
 #include <com/sun/star/lang/XComponent.hpp>

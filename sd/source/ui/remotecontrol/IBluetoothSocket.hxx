@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SD_IMPRESSREMOTE_IBLUETOOTHSOCKET_HXX
-#define _SD_IMPRESSREMOTE_IBLUETOOTHSOCKET_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IBLUETOOTHSOCKET_HXX
+#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IBLUETOOTHSOCKET_HXX
 
 #include <rtl/string.hxx>
 #include <boost/noncopyable.hpp>
@@ -38,6 +38,6 @@ namespace sd
     };
 }
 
-#endif // _SD_IMPRESSREMOTE_IBLUETOOTHSOCKET_HXX
+#endif // INCLUDED_SD_SOURCE_UI_REMOTECONTROL_IBLUETOOTHSOCKET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

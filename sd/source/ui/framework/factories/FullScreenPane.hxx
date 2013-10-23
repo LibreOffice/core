@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_FULL_SCREEN_PANE_HXX
-#define SD_FRAMEWORK_FULL_SCREEN_PANE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_FULLSCREENPANE_HXX
+#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_FULLSCREENPANE_HXX
 
 #include "FrameWindowPane.hxx"
 #include <com/sun/star/frame/XLayoutManager.hpp>

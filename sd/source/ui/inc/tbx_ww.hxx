@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_TBX_WW_HXX
-#define _SD_TBX_WW_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TBX_WW_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TBX_WW_HXX
 
 #include <sdresid.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -41,6 +41,6 @@ public:
                                 const SfxPoolItem* pState );
 };
 
-#endif      // _SD_TBX_WW_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_TBX_WW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

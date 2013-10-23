@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CUSTOMSHOWLIST_HXX
-#define _CUSTOMSHOWLIST_HXX
+#ifndef INCLUDED_SD_INC_CUSTOMSHOWLIST_HXX
+#define INCLUDED_SD_INC_CUSTOMSHOWLIST_HXX
 
 #include <vector>
 
@@ -72,6 +72,6 @@ public:
 };
 
 
-#endif // _CUSTOMSHOWLIST_HXX
+#endif // INCLUDED_SD_INC_CUSTOMSHOWLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

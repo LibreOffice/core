@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_PRESENTER_PRESENTER_CANVAS_HXX
-#define SD_PRESENTER_PRESENTER_CANVAS_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERCANVAS_HXX
+#define INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERCANVAS_HXX
 
 #include "CanvasUpdateRequester.hxx"
 #include <basegfx/range/b2drectangle.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_PRESENTER_PRESENTER_HELPER_HXX
-#define SD_PRESENTER_PRESENTER_HELPER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERHELPER_HXX
+#define INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERHELPER_HXX
 
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

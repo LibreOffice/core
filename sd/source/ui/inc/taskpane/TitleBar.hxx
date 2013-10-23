@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TASKPANE_TITLE_BAR_HXX
-#define SD_TASKPANE_TITLE_BAR_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TASKPANE_TITLEBAR_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TASKPANE_TITLEBAR_HXX
 
 #include "taskpane/TaskPaneTreeNode.hxx"
 #include <vcl/image.hxx>

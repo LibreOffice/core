@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_VISUAL_STATE_HXX
-#define SD_SLIDESORTER_VISUAL_STATE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSVISUALSTATE_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSVISUALSTATE_HXX
 
 #include <sal/types.h>
 #include <tools/gen.hxx>

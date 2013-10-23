@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _SD_REMOTEDIALOG_HXX_
-#define _SD_REMOTEDIALOG_HXX_
+#ifndef INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOG_HXX
+#define INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOG_HXX
 
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
@@ -38,6 +38,6 @@ public:
 
 }
 
-#endif // _SD_REMOTEDIALOG_HXX_
+#endif // INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

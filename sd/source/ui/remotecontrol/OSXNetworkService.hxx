@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef OSX_NETWORK_SERVICE_HXX
-#define OSX_NETWORK_SERVICE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXNETWORKSERVICE_HXX
+#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXNETWORKSERVICE_HXX
 
 
 #include <errno.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TOOLS_EVENT_MULTIPLEXER_HXX
-#define SD_TOOLS_EVENT_MULTIPLEXER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_EVENTMULTIPLEXER_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_EVENTMULTIPLEXER_HXX
 
 #include <svl/lstner.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNDOMANAGER_HXX
-#define _SD_UNDOMANAGER_HXX
+#ifndef INCLUDED_SD_INC_UNDO_UNDOMANAGER_HXX
+#define INCLUDED_SD_INC_UNDO_UNDOMANAGER_HXX
 
 #include <misc/scopelock.hxx>
 #include <svx/sdrundomanager.hxx>
@@ -60,6 +60,6 @@ private:
 
 }
 
-#endif     // _SD_UNDOMANAGER_HXX
+#endif // INCLUDED_SD_INC_UNDO_UNDOMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

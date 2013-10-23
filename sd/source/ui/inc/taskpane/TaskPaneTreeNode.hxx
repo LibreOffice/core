@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TASKPANE_TREE_NODE_HXX
-#define SD_TASKPANE_TREE_NODE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TASKPANE_TASKPANETREENODE_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TASKPANE_TASKPANETREENODE_HXX
 
 #include "ILayoutableWindow.hxx"
 #include <memory>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_STLPOOL_HXX
-#define _SD_STLPOOL_HXX
+#ifndef INCLUDED_SD_INC_STLPOOL_HXX
+#define INCLUDED_SD_INC_STLPOOL_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -144,6 +144,6 @@ private:
     OUString           msTableFamilyName;
 };
 
-#endif     // _SD_STLPOOL_HXX
+#endif // INCLUDED_SD_INC_STLPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

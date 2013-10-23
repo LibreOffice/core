@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_ANNOTATIONTAG_HXX_
-#define _SD_ANNOTATIONTAG_HXX_
+#ifndef INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONTAG_HXX
+#define INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONTAG_HXX
 
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -91,6 +91,6 @@ private:
 
 } // end of namespace sd
 
-#endif      // _SD_ANNOTATIONTAG_HXX_
+#endif // INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONTAG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

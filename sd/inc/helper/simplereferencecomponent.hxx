@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SIMPLEREFERENCECOMPONENT_HXX_
-#define _SD_SIMPLEREFERENCECOMPONENT_HXX_
+#ifndef INCLUDED_SD_INC_HELPER_SIMPLEREFERENCECOMPONENT_HXX
+#define INCLUDED_SD_INC_HELPER_SIMPLEREFERENCECOMPONENT_HXX
 
 #include "osl/interlck.h"
 #include "sal/types.h"

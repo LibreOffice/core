@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FU_TRANSFORM_HXX
-#define SD_FU_TRANSFORM_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FUTRANSF_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FUTRANSF_HXX
 
 #include <svx/rectenum.hxx>
 #include "fupoor.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_VIEW_VIEW_CACHE_CONTEXT_HXX
-#define SD_SLIDESORTER_VIEW_VIEW_CACHE_CONTEXT_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_VIEW_SLSVIEWCACHECONTEXT_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_VIEW_SLSVIEWCACHECONTEXT_HXX
 
 #include "cache/SlsCacheContext.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"

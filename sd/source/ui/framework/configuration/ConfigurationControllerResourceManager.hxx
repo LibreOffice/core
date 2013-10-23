@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_RESOURCE_MANAGER_HXX
-#define SD_FRAMEWORK_RESOURCE_MANAGER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONCONTROLLERRESOURCEMANAGER_HXX
+#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONCONTROLLERRESOURCEMANAGER_HXX
 
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/framework/XResource.hpp>

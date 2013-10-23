@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_ZOOM_LIST_HXX
-#define SD_ZOOM_LIST_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_ZOOMLIST_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_ZOOMLIST_HXX
 
 #include <vector>
 

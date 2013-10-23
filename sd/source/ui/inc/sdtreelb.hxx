@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDTREELB_HXX
-#define _SDTREELB_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_SDTREELB_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_SDTREELB_HXX
 
 #include <svtools/transfer.hxx>
 
@@ -273,6 +273,6 @@ private:
         SdrObject& rObject) const;
 };
 
-#endif      // _SDTREELB_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_SDTREELB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

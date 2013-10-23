@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _UNOOBJ_HXX
-#define _UNOOBJ_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_UNOIDL_UNOOBJ_HXX
+#define INCLUDED_SD_SOURCE_UI_UNOIDL_UNOOBJ_HXX
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

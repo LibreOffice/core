@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TASKPANE_SLIDE_SORTER_CACHE_DISPLAY_HXX
-#define SD_TASKPANE_SLIDE_SORTER_CACHE_DISPLAY_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TASKPANE_SLIDESORTERCACHEDISPLAY_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TASKPANE_SLIDESORTERCACHEDISPLAY_HXX
 
 // Uncomment the define below to activate the slide sorter cache display in
 // the task pane.  Visible slide previews are displayed as large rectangles,

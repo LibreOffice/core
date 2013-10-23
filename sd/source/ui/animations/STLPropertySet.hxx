@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_STLPROPERTYSET_HXX
-#define _SD_STLPROPERTYSET_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_STLPROPERTYSET_HXX
+#define INCLUDED_SD_SOURCE_UI_ANIMATIONS_STLPROPERTYSET_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -73,6 +73,6 @@ private:
 
 }
 
-#endif // _SD_STLPROPERTYSET_HXX
+#endif // INCLUDED_SD_SOURCE_UI_ANIMATIONS_STLPROPERTYSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

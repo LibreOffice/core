@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SD_QA_UNIT_SDMODELTESTBASE_HXX
-#define SD_QA_UNIT_SDMODELTESTBASE_HXX
+#ifndef INCLUDED_SD_QA_UNIT_SDMODELTESTBASE_HXX
+#define INCLUDED_SD_QA_UNIT_SDMODELTESTBASE_HXX
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmldiff.hxx>

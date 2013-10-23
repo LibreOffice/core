@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_GRAPHIC_VIEW_SHELL_BASE_HXX
-#define SD_GRAPHIC_VIEW_SHELL_BASE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_GRAPHICVIEWSHELLBASE_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_GRAPHICVIEWSHELLBASE_HXX
 
 #include "ViewShellBase.hxx"
 

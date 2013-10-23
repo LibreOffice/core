@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAME_VIEW_HXX
-#define SD_FRAME_VIEW_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FRAMEVIEW_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FRAMEVIEW_HXX
 
 #include "ViewShell.hxx"
 #include <svx/svdview.hxx>

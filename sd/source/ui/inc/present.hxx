@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_PRESENT_HXX_
-#define _SD_PRESENT_HXX_
+#ifndef INCLUDED_SD_SOURCE_UI_INC_PRESENT_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_PRESENT_HXX
 
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
@@ -93,6 +93,6 @@ public:
     void                GetAttr( SfxItemSet& rOutAttrs );
 };
 
-#endif // _SD_PRESENT_HXX_
+#endif // INCLUDED_SD_SOURCE_UI_INC_PRESENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

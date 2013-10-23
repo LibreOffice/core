@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_VIEW_SHELL_FACTORY_HXX
-#define SD_VIEW_SHELL_FACTORY_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_SHELLFACTORY_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_SHELLFACTORY_HXX
 
 #include <sal/types.h>
 #include <memory>

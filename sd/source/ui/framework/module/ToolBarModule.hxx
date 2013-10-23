@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_TOOL_BAR_MODULE_HXX
-#define SD_FRAMEWORK_TOOL_BAR_MODULE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_TOOLBARMODULE_HXX
+#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_TOOLBARMODULE_HXX
 
 #include "ToolBarManager.hxx"
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>

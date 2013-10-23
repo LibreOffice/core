@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_VIEW_SHELL_WRAPPER_HXX
-#define SD_FRAMEWORK_VIEW_SHELL_WRAPPER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_VIEWSHELLWRAPPER_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_VIEWSHELLWRAPPER_HXX
 
 #include "MutexOwner.hxx"
 #include <com/sun/star/drawing/framework/XView.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_PPTIN_HXX
-#define _SD_PPTIN_HXX
+#ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PPTIN_HXX
+#define INCLUDED_SD_SOURCE_FILTER_PPT_PPTIN_HXX
 
 #include <filter/msfilter/svdfppt.hxx>
 #include <svx/msdffdef.hxx>
@@ -93,6 +93,6 @@ class SdPPTImport
         sal_Bool Import();
 };
 
-#endif // _SD_PPTIN_HXX
+#endif // INCLUDED_SD_SOURCE_FILTER_PPT_PPTIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

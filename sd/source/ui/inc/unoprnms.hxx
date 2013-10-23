@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SD_UNOPRNMS_HXX
-#define _SD_UNOPRNMS_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_UNOPRNMS_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_UNOPRNMS_HXX
 
 #define UNO_NAME_MODEL_LANGUAGE         "CharLocale"
 #define UNO_NAME_MODEL_TABSTOP          "TabStop"

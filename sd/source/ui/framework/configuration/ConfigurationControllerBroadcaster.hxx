@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_CONFIGURATION_CONTROLLER_BROADCASTER_HXX
-#define SD_FRAMEWORK_CONFIGURATION_CONTROLLER_BROADCASTER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONCONTROLLERBROADCASTER_HXX
+#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONCONTROLLERBROADCASTER_HXX
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>

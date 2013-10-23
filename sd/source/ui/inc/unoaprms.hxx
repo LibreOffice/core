@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNOAPRMS_HXX
-#define _SD_UNOAPRMS_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_UNOAPRMS_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_UNOAPRMS_HXX
 
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -136,6 +136,6 @@ public:
     virtual void Redo();
 };
 
-#endif      // _SD_UNOAPRMS_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_UNOAPRMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SDDLLAPI_H
-#define INCLUDED_SDDLLAPI_H
+#ifndef INCLUDED_SD_INC_SDDLLAPI_H
+#define INCLUDED_SD_INC_SDDLLAPI_H
 
 #include "sal/types.h"
 
@@ -28,6 +28,6 @@
 #define SD_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif /* INCLUDED_SDDLLAPI_H */
+#endif // INCLUDED_SD_INC_SDDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

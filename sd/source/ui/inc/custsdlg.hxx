@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_CUSTSDLG_HXX
-#define _SD_CUSTSDLG_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_CUSTSDLG_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_CUSTSDLG_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
@@ -100,6 +100,6 @@ public:
     sal_Bool            IsModified() const { return( bModified ); }
 };
 
-#endif // _SD_CUSTSDLG_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_CUSTSDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

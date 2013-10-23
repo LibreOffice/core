@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PROPREAD_HXX_
-#define _PROPREAD_HXX_
+#ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PROPREAD_HXX
+#define INCLUDED_SD_SOURCE_FILTER_PPT_PROPREAD_HXX
 
 #include <map>
 #include <boost/ptr_container/ptr_vector.hpp>

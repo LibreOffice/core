@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_DLGFIELD_HXX
-#define _SD_DLGFIELD_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_DLGFIELD_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_DLGFIELD_HXX
 
 
 #include <vcl/lstbox.hxx>
@@ -59,6 +59,6 @@ public:
 
 
 
-#endif      // _SD_DLGFIELD_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_DLGFIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

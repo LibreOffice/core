@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TAB_CONTROL_HXX
-#define SD_TAB_CONTROL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TABCONTROL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TABCONTROL_HXX
 
 #include <svtools/tabbar.hxx>
 #include <svtools/transfer.hxx>

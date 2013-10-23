@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNDOBACK_HXX
-#define _SD_UNDOBACK_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_UNDOBACK_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_UNDOBACK_HXX
 
 #include "sdundo.hxx"
 
@@ -55,6 +55,6 @@ public:
     virtual SdUndoAction*   Clone() const;
 };
 
-#endif // _SD_UNDOBACK_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_UNDOBACK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

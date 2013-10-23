@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SD_SLIDELAYOUTCONTROLLER_HXX_
-#define __SD_SLIDELAYOUTCONTROLLER_HXX_
+#ifndef INCLUDED_SD_SOURCE_UI_CONTROLLER_SLIDELAYOUTCONTROLLER_HXX
+#define INCLUDED_SD_SOURCE_UI_CONTROLLER_SLIDELAYOUTCONTROLLER_HXX
 
 #include <svtools/popupwindowcontroller.hxx>
 
@@ -45,6 +45,6 @@ private:
 
 }
 
-#endif // __SD_SLIDELAYOUTCONTROLLER_HXX_
+#endif // INCLUDED_SD_SOURCE_UI_CONTROLLER_SLIDELAYOUTCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

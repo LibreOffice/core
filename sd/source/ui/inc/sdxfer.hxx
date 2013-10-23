@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SDXFER_HXX
-#define _SD_SDXFER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_SDXFER_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_SDXFER_HXX
 
 #include <svtools/transfer.hxx>
 #include <vcl/graph.hxx>
@@ -152,6 +152,6 @@ private:
 
 };
 
-#endif // _SD_SDXFER_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_SDXFER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

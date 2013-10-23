@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_PPT_EXSOUNDCOLLECTION_HXX
-#define _SD_PPT_EXSOUNDCOLLECTION_HXX
+#ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_PPTEXSOUNDCOLLECTION_HXX
+#define INCLUDED_SD_SOURCE_FILTER_EPPT_PPTEXSOUNDCOLLECTION_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

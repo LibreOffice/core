@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SLIDESHOW_HXX
-#define _SD_SLIDESHOW_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_SLIDESHOW_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_SLIDESHOW_HXX
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -221,6 +221,6 @@ namespace slideshowhelp
 
 }
 
-#endif /* _SD_SLIDESHOW_HXX */
+#endif // INCLUDED_SD_SOURCE_UI_INC_SLIDESHOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

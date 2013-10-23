@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SMARTTAG_HXX_
-#define _SD_SMARTTAG_HXX_
+#ifndef INCLUDED_SD_SOURCE_UI_INC_SMARTTAG_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_SMARTTAG_HXX
 
 #include "helper/simplereferencecomponent.hxx"
 #include <rtl/ref.hxx>
@@ -176,6 +176,6 @@ protected:
 
 } // end of namespace sd
 
-#endif      // _SD_SMARTTAG_HXX_
+#endif // INCLUDED_SD_SOURCE_UI_INC_SMARTTAG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

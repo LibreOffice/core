@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_NAVIGATOR_HXX
-#define SD_NAVIGATOR_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_NAVIGATR_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_NAVIGATR_HXX
 
 #include <vcl/window.hxx>
 #include <vcl/lstbox.hxx>

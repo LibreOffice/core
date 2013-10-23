@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SD_DLG_CHAR_HXX
-#define SD_DLG_CHAR_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_DLG_CHAR_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_DLG_CHAR_HXX
 
 #include <sfx2/tabdlg.hxx>
 
@@ -48,6 +48,6 @@ public:
             ~SdCharDlg() {};
 };
 
-#endif // SD_DLG_CHAR_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_DLG_CHAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

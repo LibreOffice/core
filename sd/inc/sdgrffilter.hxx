@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SDGRFFILTER_HXX
-#define _SD_SDGRFFILTER_HXX
+#ifndef INCLUDED_SD_INC_SDGRFFILTER_HXX
+#define INCLUDED_SD_INC_SDGRFFILTER_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
 
@@ -42,6 +42,6 @@ public:
     static void HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong nStreamError = ERRCODE_NONE );
 };
 
-#endif // _SD_SDGRFFILTER_HXX
+#endif // INCLUDED_SD_INC_SDGRFFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

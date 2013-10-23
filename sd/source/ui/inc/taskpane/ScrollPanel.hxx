@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TOOLPANEL_SCROLL_PANEL_HXX
-#define SD_TOOLPANEL_SCROLL_PANEL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TASKPANE_SCROLLPANEL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TASKPANE_SCROLLPANEL_HXX
 
 #include "taskpane/TaskPaneTreeNode.hxx"
 

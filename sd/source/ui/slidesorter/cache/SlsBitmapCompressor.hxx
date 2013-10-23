@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_BITMAP_COMPRESSOR_HXX
-#define SD_SLIDESORTER_BITMAP_COMPRESSOR_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSBITMAPCOMPRESSOR_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSBITMAPCOMPRESSOR_HXX
 
 #include <sal/types.h>
 #include <boost/shared_ptr.hpp>

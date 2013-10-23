@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_PPT_INANIMATIONS_HXX
-#define _SD_PPT_INANIMATIONS_HXX
+#ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PPTINANIMATIONS_HXX
+#define INCLUDED_SD_SOURCE_FILTER_PPT_PPTINANIMATIONS_HXX
 
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDDLL_HXX
-#define _SDDLL_HXX
+#ifndef INCLUDED_SD_INC_SDDLL_HXX
+#define INCLUDED_SD_INC_SDDLL_HXX
 
 #include <sfx2/module.hxx>
 #include <sfx2/sfxdefs.hxx>
@@ -57,6 +57,6 @@ public:
 };
 
 
-#endif                               // _SDDLL_HXX
+#endif // INCLUDED_SD_INC_SDDLL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

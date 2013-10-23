@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_DRAW_VIEW_SHELL_HXX
-#define SD_DRAW_VIEW_SHELL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_DRAWVIEWSHELL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_DRAWVIEWSHELL_HXX
 
 #include "ViewShell.hxx"
 #include "tools/AsynchronousCall.hxx"

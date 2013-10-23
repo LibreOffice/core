@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_PPT_97_ANIMATIONS_HXX
-#define _SD_PPT_97_ANIMATIONS_HXX
+#ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PPT97ANIMATIONS_HXX
+#define INCLUDED_SD_SOURCE_FILTER_PPT_PPT97ANIMATIONS_HXX
 
 // header for class SvStream
 #include <tools/stream.hxx>

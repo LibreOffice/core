@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_SHELL_STACK_GUARD_HXX
-#define SD_FRAMEWORK_SHELL_STACK_GUARD_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_SHELLSTACKGUARD_HXX
+#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_SHELLSTACKGUARD_HXX
 
 #include <cppuhelper/basemutex.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SIDEBAR_PANELS_PREVIEW_VALUE_SET_HXX
-#define SD_SIDEBAR_PANELS_PREVIEW_VALUE_SET_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_PREVIEWVALUESET_HXX
+#define INCLUDED_SD_SOURCE_UI_SIDEBAR_PREVIEWVALUESET_HXX
 
 #include <svtools/valueset.hxx>
 

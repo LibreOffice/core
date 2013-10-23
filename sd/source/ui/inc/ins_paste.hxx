@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_INS_PASTE_HXX_
-#define _SD_INS_PASTE_HXX_
+#ifndef INCLUDED_SD_SOURCE_UI_INC_INS_PASTE_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_INS_PASTE_HXX
 
 #include <sddllapi.h>
 
@@ -50,6 +50,6 @@ public:
     sal_Bool            IsInsertBefore() const;
 };
 
-#endif // _SD_INS_PASTE_HXX_
+#endif // INCLUDED_SD_SOURCE_UI_INC_INS_PASTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

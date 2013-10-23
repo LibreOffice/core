@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_CUSTOMANIMATIONLIST_HXX
-#define _SD_CUSTOMANIMATIONLIST_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONLIST_HXX
+#define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONLIST_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <svtools/treelistbox.hxx>
@@ -114,6 +114,6 @@ private:
 
 }
 
-#endif // _SD_CUSTOMANIMATIONLIST_HXX
+#endif // INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

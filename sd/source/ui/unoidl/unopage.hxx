@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SD_UNOPAGE_HXX
-#define _SD_UNOPAGE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_UNOIDL_UNOPAGE_HXX
+#define INCLUDED_SD_SOURCE_UI_UNOIDL_UNOPAGE_HXX
 
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -302,6 +302,6 @@ public:
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
 };
 
-#endif // _SD_UNOPAGE_HXX
+#endif // INCLUDED_SD_SOURCE_UI_UNOIDL_UNOPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_OPTSITEM_HXX
-#define _SD_OPTSITEM_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_OPTSITEM_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_OPTSITEM_HXX
 
 #include <unotools/configitem.hxx>
 #include <sfx2/module.hxx>
@@ -610,6 +610,6 @@ public:
     void                StoreConfig( sal_uLong nOptionRange = SD_OPTIONS_ALL );
 };
 
-#endif // _SD_OPTSITEM_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_OPTSITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

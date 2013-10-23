@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_CELLTEMPL_HXX
-#define SD_CELLTEMPL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_CELLTEMPL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_CELLTEMPL_HXX
 
 #include <sfx2/styledlg.hxx>
 
@@ -44,6 +44,6 @@ public:
 };
 
 
-#endif // SD_CELLTEMPL_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_CELLTEMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

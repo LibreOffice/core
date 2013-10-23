@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_PRESENTER_SLIDE_PREVIEW_HXX
-#define SD_PRESENTER_SLIDE_PREVIEW_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_PRESENTER_SLIDERENDERER_HXX
+#define INCLUDED_SD_SOURCE_UI_PRESENTER_SLIDERENDERER_HXX
 
 #include "PreviewRenderer.hxx"
 #include <com/sun/star/drawing/XDrawPage.hpp>

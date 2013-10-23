@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_ANIMATION_CHILD_WINDOW_HXX
-#define SD_ANIMATION_CHILD_WINDOW_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_ANIMATIONCHILDWINDOW_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_ANIMATIONCHILDWINDOW_HXX
 
 #include <tools/solar.h>
 #include <sfx2/childwin.hxx>

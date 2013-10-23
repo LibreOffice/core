@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_VIEW_MASTER_PAGE_OBSERVER_HXX
-#define SD_VIEW_MASTER_PAGE_OBSERVER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_MASTERPAGEOBSERVER_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_MASTERPAGEOBSERVER_HXX
 
 #include <rtl/ustring.hxx>
 #include "tools/SdGlobalResourceContainer.hxx"

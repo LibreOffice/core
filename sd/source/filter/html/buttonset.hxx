@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_HTMLEX_BUTTONSET_HXX
-#define _SD_HTMLEX_BUTTONSET_HXX
+#ifndef INCLUDED_SD_SOURCE_FILTER_HTML_BUTTONSET_HXX
+#define INCLUDED_SD_SOURCE_FILTER_HTML_BUTTONSET_HXX
 
 #include <sddllapi.h>
 
@@ -44,6 +44,6 @@ private:
     ButtonSetImpl* mpImpl;
 };
 
-#endif // _SD_HTMLEX_BUTTONSET_HXX
+#endif // INCLUDED_SD_SOURCE_FILTER_HTML_BUTTONSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

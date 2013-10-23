@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
-#define SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEOUTLINEVIEW_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEOUTLINEVIEW_HXX
 
 #include "AccessibleDocumentViewBase.hxx"
 #include <svx/AccessibleTextHelper.hxx>

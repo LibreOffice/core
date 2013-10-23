@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_ANNOTATIONMANAGER_IMPL_HXX
-#define _SD_ANNOTATIONMANAGER_IMPL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONMANAGERIMPL_HXX
+#define INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONMANAGERIMPL_HXX
 
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
@@ -130,6 +130,6 @@ private:
 
 }
 
-#endif // _SD_ANNOTATIONMANAGER_IMPL_HXX
+#endif // INCLUDED_SD_SOURCE_UI_ANNOTATIONS_ANNOTATIONMANAGERIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

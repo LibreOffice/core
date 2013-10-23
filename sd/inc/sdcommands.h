@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SD_SDCOMMANDS_HRC
-#define SD_SDCOMMANDS_HRC
+#ifndef INCLUDED_SD_INC_SDCOMMANDS_H
+#define INCLUDED_SD_INC_SDCOMMANDS_H
 
 #define CMD_SID_OBJECT_MIRROR                       ".uno:Mirror"
 #define CMD_SID_ANIMATION_EFFECTS                   ".uno:AnimationEffects"

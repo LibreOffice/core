@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EPPT_GROUP_TABLE
-#define EPPT_GROUP_TABLE
+#ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_GROUPTABLE_HXX
+#define INCLUDED_SD_SOURCE_FILTER_EPPT_GROUPTABLE_HXX
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 

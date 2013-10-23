@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _SD_IMPRESSREMOTE_RECEIVER_HXX
-#define _SD_IMPRESSREMOTE_RECEIVER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_RECEIVER_HXX
+#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_RECEIVER_HXX
 
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
@@ -42,4 +42,4 @@ private:
 };
 
 }
-#endif // _SD_IMPRESSREMOTE_RECEIVER_HXX
+#endif // INCLUDED_SD_SOURCE_UI_REMOTECONTROL_RECEIVER_HXX

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_SLIDE_SORTER_LISTENER_HXX
-#define SD_SLIDESORTER_SLIDE_SORTER_LISTENER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_CONTROLLER_SLSLISTENER_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CONTROLLER_SLSLISTENER_HXX
 
 #include "MutexOwner.hxx"
 #include "controller/SlideSorterController.hxx"

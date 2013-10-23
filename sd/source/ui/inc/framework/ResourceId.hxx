@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_RESOURCE_ID_HXX
-#define SD_FRAMEWORK_RESOURCE_ID_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_RESOURCEID_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_RESOURCEID_HXX
 
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

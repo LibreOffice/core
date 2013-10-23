@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_VIEW_LAYER_PAINTER_HXX
-#define SD_SLIDESORTER_VIEW_LAYER_PAINTER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSILAYERPAINTER_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSILAYERPAINTER_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <sal/types.h>

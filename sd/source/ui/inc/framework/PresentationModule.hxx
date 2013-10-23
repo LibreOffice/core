@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_PRESENTATION_MODULE_HXX
-#define SD_FRAMEWORK_PRESENTATION_MODULE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_PRESENTATIONMODULE_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_PRESENTATIONMODULE_HXX
 
 #include <com/sun/star/frame/XController.hpp>
 

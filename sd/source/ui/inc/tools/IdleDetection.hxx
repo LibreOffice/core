@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_IDLE_DETECTION_HXX
-#define SD_IDLE_DETECTION_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TOOLS_IDLEDETECTION_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TOOLS_IDLEDETECTION_HXX
 
 #include <sal/types.h>
 

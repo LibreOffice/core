@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _PRESENTATION_HXX
-#define _PRESENTATION_HXX
+#ifndef INCLUDED_SD_INC_PRES_HXX
+#define INCLUDED_SD_INC_PRES_HXX
 
 enum PresObjKind
 {
@@ -129,6 +129,6 @@ enum NavigatorDragType
 };
 #define NAVIGATOR_DRAGTYPE_COUNT 4
 
-#endif  // _PRESENTATION_HXX
+#endif // INCLUDED_SD_INC_PRES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

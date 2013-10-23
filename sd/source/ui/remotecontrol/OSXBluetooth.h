@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OSXBLUETOOTH_H
-#define INCLUDED_OSXBLUETOOTH_H
+#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXBLUETOOTH_H
+#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXBLUETOOTH_H
 
 #import <IOBluetooth/objc/IOBluetoothRFCOMMChannel.h>
 
@@ -28,6 +28,6 @@
 
 @end
 
-#endif /* INCLUDED_OSXBLUETOOTH_H */
+#endif // INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXBLUETOOTH_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

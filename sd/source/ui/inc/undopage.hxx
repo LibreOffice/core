@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNDOPAGE_HXX
-#define _SD_UNDOPAGE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_UNDOPAGE_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_UNDOPAGE_HXX
 
 #include <tools/gen.hxx>
 #include <vcl/prntypes.hxx>
@@ -165,6 +165,6 @@ public:
 
 
 
-#endif      // _SD_UNDOPAGE_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_UNDOPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

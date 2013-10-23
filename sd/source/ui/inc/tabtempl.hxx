@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SD_TABTEMPL_HXX
-#define SD_TABTEMPL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TABTEMPL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TABTEMPL_HXX
 
 #include <svx/tabarea.hxx>
 #include <sfx2/styledlg.hxx>
@@ -79,6 +79,6 @@ public:
 };
 
 
-#endif // SD_TABTEMPL_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_TABTEMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_CHILD_WINDOW_PANE_HXX
-#define SD_FRAMEWORK_CHILD_WINDOW_PANE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_CHILDWINDOWPANE_HXX
+#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_CHILDWINDOWPANE_HXX
 
 #include "framework/Pane.hxx"
 #include "PaneShells.hxx"

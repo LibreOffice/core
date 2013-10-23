@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_WORKBENCH_CTP_PANEL_HXX
-#define SD_WORKBENCH_CTP_PANEL_HXX
+#ifndef INCLUDED_SD_WORKBEN_CUSTOMPANEL_CTP_PANEL_HXX
+#define INCLUDED_SD_WORKBEN_CUSTOMPANEL_CTP_PANEL_HXX
 
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>
@@ -87,6 +87,6 @@ namespace sd { namespace colortoolpanel
 } } // namespace sd::colortoolpanel
 //......................................................................................................................
 
-#endif // SD_WORKBENCH_CTP_PANEL_HXX
+#endif // INCLUDED_SD_WORKBEN_CUSTOMPANEL_CTP_PANEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

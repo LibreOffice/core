@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_UI_TASKPANE_PANELID_HXX
-#define SD_UI_TASKPANE_PANELID_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_TASKPANE_PANELID_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_TASKPANE_PANELID_HXX
 
 
 //......................................................................................................................
@@ -48,6 +48,6 @@ namespace sd { namespace toolpanel
 } } // namespace sd::toolpanel
 //......................................................................................................................
 
-#endif // SD_UI_TASKPANE_PANELID_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_TASKPANE_PANELID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

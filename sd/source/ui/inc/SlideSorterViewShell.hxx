@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_SLIDE_SORTER_VIEW_SHELL_HXX
-#define SD_SLIDESORTER_SLIDE_SORTER_VIEW_SHELL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_SLIDESORTERVIEWSHELL_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_SLIDESORTERVIEWSHELL_HXX
 
 #include "ViewShell.hxx"
 #include "glob.hxx"

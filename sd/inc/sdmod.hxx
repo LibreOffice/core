@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDMOD_HXX
-#define _SDMOD_HXX
+#ifndef INCLUDED_SD_INC_SDMOD_HXX
+#define INCLUDED_SD_INC_SDMOD_HXX
 
 #include "glob.hxx"
 #include "pres.hxx"
@@ -186,6 +186,6 @@ private:
 
 #define SD_MOD() ( *(SdModule**) GetAppData(SHL_DRAW) )
 
-#endif                                 // _SDMOD_HXX
+#endif // INCLUDED_SD_INC_SDMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_VIEW_SHELL_IMPLEMENTATION_HXX
-#define SD_VIEW_SHELL_IMPLEMENTATION_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_VIEWSHELLIMPLEMENTATION_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_VIEWSHELLIMPLEMENTATION_HXX
 
 #include "ViewShell.hxx"
 #include "ViewShellManager.hxx"

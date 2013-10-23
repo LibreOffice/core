@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_PGJUMP_HXX
-#define _SD_PGJUMP_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_PGJUMP_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_PGJUMP_HXX
 
 enum PageJump
 {
@@ -31,6 +31,6 @@ enum PageJump
 };
 
 
-#endif      // _SD_PGJUMP_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_PGJUMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EPPT_EPPTBASE_HXX
-#define EPPT_EPPTBASE_HXX
+#ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTBASE_HXX
+#define INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTBASE_HXX
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>

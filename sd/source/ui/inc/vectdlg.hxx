@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_VECTDLG_HXX
-#define _SD_VECTDLG_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_VECTDLG_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_VECTDLG_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/group.hxx>

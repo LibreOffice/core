@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FU_SEARCH_HXX
-#define SD_FU_SEARCH_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FUSEARCH_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FUSEARCH_HXX
 
 #include "fupoor.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_CONTROLLER_ANIMATOR_HXX
-#define SD_SLIDESORTER_CONTROLLER_ANIMATOR_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSANIMATOR_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSANIMATOR_HXX
 
 #include "SlideSorter.hxx"
 #include "view/SlideSorterView.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_CUSTOMANIMATIONDIALOG_HXX
-#define _SD_CUSTOMANIMATIONDIALOG_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONDIALOG_HXX
+#define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONDIALOG_HXX
 
 #include "CustomAnimationEffect.hxx"
 #include "CustomAnimationPreset.hxx"
@@ -172,6 +172,6 @@ private:
 
 }
 
-#endif // _SD_CUSTOMANIMATIONDIALOG_HXX
+#endif // INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

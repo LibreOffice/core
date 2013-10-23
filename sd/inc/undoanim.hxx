@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNDO_ANIM_HXX
-#define _SD_UNDO_ANIM_HXX
+#ifndef INCLUDED_SD_INC_UNDOANIM_HXX
+#define INCLUDED_SD_INC_UNDOANIM_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -84,6 +84,6 @@ private:
 
 }
 
-#endif      // _SD_UNDO_ANIM_HXX
+#endif // INCLUDED_SD_INC_UNDOANIM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

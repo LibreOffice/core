@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_ANMINFO_HXX
-#define _SD_ANMINFO_HXX
+#ifndef INCLUDED_SD_INC_ANMINFO_HXX
+#define INCLUDED_SD_INC_ANMINFO_HXX
 
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -70,6 +70,6 @@ public:
     virtual SdrObjUserData* Clone(SdrObject* pObject) const;
 };
 
-#endif // _SD_ANMINFO_HXX
+#endif // INCLUDED_SD_INC_ANMINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_GLOB_HXX
-#define SD_GLOB_HXX
+#ifndef INCLUDED_SD_INC_GLOB_HXX
+#define INCLUDED_SD_INC_GLOB_HXX
 
 #include <tools/solar.h>
 
@@ -84,7 +84,7 @@ const sal_uInt32 SdUDInventor=sal_uInt32('S')*0x00000001+
 
 //------------------------------------------------------------------
 
-#endif // _SD_GLOB_HXX
+#endif // _ INCLUDED_SD_INC_GLOB_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

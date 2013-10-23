@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNOKYWDS_HXX_
-#define _SD_UNOKYWDS_HXX_
+#ifndef INCLUDED_SD_SOURCE_UI_INC_UNOKYWDS_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_UNOKYWDS_HXX
 
 #define UNO_PREFIX "com.sun.star."
 

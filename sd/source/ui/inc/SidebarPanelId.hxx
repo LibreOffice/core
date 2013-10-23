@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SD_SIDEBAR_PANEL_ID_HXX
-#define SD_SIDEBAR_PANEL_ID_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_SIDEBARPANELID_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_SIDEBARPANELID_HXX
 
 namespace rtl
 {

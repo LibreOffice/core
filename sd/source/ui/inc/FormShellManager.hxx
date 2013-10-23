@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FORM_SHELL_MANAGER_HXX
-#define SD_FORM_SHELL_MANAGER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FORMSHELLMANAGER_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FORMSHELLMANAGER_HXX
 
 #include <ViewShellManager.hxx>
 

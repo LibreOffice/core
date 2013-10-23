@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SD_SIDEBAR_PANELS_TABLE_DESIGN_PANEL_HXX
-#define SD_SIDEBAR_PANELS_TABLE_DESIGN_PANEL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_TABLEDESIGNPANEL_HXX
+#define INCLUDED_SD_SOURCE_UI_SIDEBAR_TABLEDESIGNPANEL_HXX
 
 #include "PanelBase.hxx"
 

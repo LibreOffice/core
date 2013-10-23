@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_OSXNETWORKSERVICE_H
-#define INCLUDED_OSXNETWORKSERVICE_H
+#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXNETWORKSERVICE_H
+#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXNETWORKSERVICE_H
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -28,6 +28,6 @@
 
 @end
 
-#endif /* INCLUDED_OSXNETWORKSERVICE_H */
+#endif // INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXNETWORKSERVICE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

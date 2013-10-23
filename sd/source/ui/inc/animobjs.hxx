@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_ANIMOBJS_HXX
-#define SD_ANIMOBJS_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_ANIMOBJS_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_ANIMOBJS_HXX
 
 #include <sfx2/dockwin.hxx>
 #include <vcl/fixed.hxx>

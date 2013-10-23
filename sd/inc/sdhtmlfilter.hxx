@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SDHTMLFILTER_HXX
-#define _SD_SDHTMLFILTER_HXX
+#ifndef INCLUDED_SD_INC_SDHTMLFILTER_HXX
+#define INCLUDED_SD_INC_SDHTMLFILTER_HXX
 
 #include "sdfilter.hxx"
 
@@ -43,6 +43,6 @@ private:
 
 };
 
-#endif // _SD_SDHTMLFILTER_HXX
+#endif // INCLUDED_SD_INC_SDHTMLFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

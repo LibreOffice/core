@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_CLIPBOARD
-#define SD_SLIDESORTER_CLIPBOARD
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSCLIPBOARD_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSCLIPBOARD_HXX
 
 #include "ViewClipboard.hxx"
 #include "controller/SlsSelectionObserver.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_MUTEX_OWNER
-#define SD_MUTEX_OWNER
+#ifndef INCLUDED_SD_SOURCE_UI_INC_MUTEXOWNER_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_MUTEXOWNER_HXX
 
 #include <osl/mutex.hxx>
 

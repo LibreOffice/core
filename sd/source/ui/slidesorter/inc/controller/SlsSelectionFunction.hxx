@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_SELECTION_FUNCTION_HXX
-#define SD_SLIDESORTER_SELECTION_FUNCTION_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSELECTIONFUNCTION_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSELECTIONFUNCTION_HXX
 
 #include "model/SlsSharedPageDescriptor.hxx"
 #include "controller/SlsFocusManager.hxx"

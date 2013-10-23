@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_PAGE_CACHE_MANAGER_HXX
-#define SD_PAGE_CACHE_MANAGER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CACHE_SLSPAGECACHEMANAGER_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CACHE_SLSPAGECACHEMANAGER_HXX
 
 #include <sal/types.h>
 #include <com/sun/star/uno/XInterface.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDPAGE_HXX
-#define _SDPAGE_HXX
+#ifndef INCLUDED_SD_INC_SDPAGE_HXX
+#define INCLUDED_SD_INC_SDPAGE_HXX
 
 #include <boost/shared_ptr.hpp>
 
@@ -390,6 +390,6 @@ private:
     void onRemoveObject( SdrObject* pObject );
 };
 
-#endif     // _SDPAGE_HXX
+#endif // INCLUDED_SD_INC_SDPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

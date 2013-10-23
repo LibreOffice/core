@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_UNDOHEADERFOOTER_HXX
-#define _SD_UNDOHEADERFOOTER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_UNDOHEADERFOOTER_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_UNDOHEADERFOOTER_HXX
 
 #include "sdundo.hxx"
 #include "sdpage.hxx"
@@ -44,6 +44,6 @@ public:
     virtual void Redo();
 };
 
-#endif      // _SD_UNDOHEADERFOOTER_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_UNDOHEADERFOOTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

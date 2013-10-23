@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_STRMNAME_H
-#define _SD_STRMNAME_H
+#ifndef INCLUDED_SD_INC_STRMNAME_H
+#define INCLUDED_SD_INC_STRMNAME_H
 
 // PowerPoint-Filter
 static const OUString pFilterPowerPoint97( "MS PowerPoint 97" );
@@ -29,6 +29,6 @@ static const OUString pFilterPowerPoint97AutoPlay( "MS PowerPoint 97 AutoPlay" )
 static const OUString pStarDrawXMLContent( "content.xml" );
 static const OUString pStarDrawOldXMLContent( "Content.xml" );
 
-#endif  // _SD_STRMNAME_H
+#endif // INCLUDED_SD_INC_STRMNAME_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

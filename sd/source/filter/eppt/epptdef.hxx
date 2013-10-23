@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EPPT_DEF_HXX
-#define _EPPT_DEF_HXX
+#ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTDEF_HXX
+#define INCLUDED_SD_SOURCE_FILTER_EPPT_EPPTDEF_HXX
 
 #include <tools/solar.h>
 

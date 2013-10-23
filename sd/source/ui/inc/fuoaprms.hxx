@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FU_OBJECT_ANIMATION_PARAMETERS
-#define SD_FU_OBJECT_ANIMATION_PARAMETERS
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FUOAPRMS_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FUOAPRMS_HXX
 
 #include "fupoor.hxx"
 
@@ -46,8 +46,5 @@ private:
 } // end of namespace sd
 
 #endif
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

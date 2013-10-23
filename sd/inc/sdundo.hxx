@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SDUNDO_HXX
-#define _SD_SDUNDO_HXX
+#ifndef INCLUDED_SD_INC_SDUNDO_HXX
+#define INCLUDED_SD_INC_SDUNDO_HXX
 
 #include <svl/undo.hxx>
 #include "sddllapi.h"
@@ -42,6 +42,6 @@ protected:
     OUString maComment;
 };
 
-#endif     // _SD_SDUNDO_HXX
+#endif // INCLUDED_SD_INC_SDUNDO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

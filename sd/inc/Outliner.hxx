@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_OUTLINER_HXX
-#define SD_OUTLINER_HXX
+#ifndef INCLUDED_SD_INC_OUTLINER_HXX
+#define INCLUDED_SD_INC_OUTLINER_HXX
 
 #include <svx/svdobj.hxx>
 #include <svx/svdoutl.hxx>

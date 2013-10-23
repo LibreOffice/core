@@ -7,8 +7,8 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef _SD_PHOTOALBUMDIALOG_HXX
-#define _SD_PHOTOALBUMDIALOG_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_DLG_PHOTOALBUMDIALOG_HXX
+#define INCLUDED_SD_SOURCE_UI_DLG_PHOTOALBUMDIALOG_HXX
 
 #include "tools/link.hxx"
 #include "sdpage.hxx"
@@ -100,5 +100,5 @@ private:
 
 } // end of namespace sd
 
-#endif // _SD_PHOTOALBUMDIALOG_HXX
+#endif // INCLUDED_SD_SOURCE_UI_DLG_PHOTOALBUMDIALOG_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

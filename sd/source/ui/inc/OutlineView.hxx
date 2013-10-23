@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_OUTLINE_VIEW_HXX
-#define SD_OUTLINE_VIEW_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_OUTLINEVIEW_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_OUTLINEVIEW_HXX
 
 #include <vcl/image.hxx>
 #include <editeng/lrspitem.hxx>

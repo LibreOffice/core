@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_VIEW_TOOL_TIP_HXX
-#define SD_SLIDESORTER_VIEW_TOOL_TIP_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSTOOLTIP_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSTOOLTIP_HXX
 
 #include "SlideSorter.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"

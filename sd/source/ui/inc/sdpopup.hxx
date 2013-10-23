@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_SDPOPUP_HXX
-#define _SD_SDPOPUP_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_SDPOPUP_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_SDPOPUP_HXX
 
 
 #include <vcl/menu.hxx>
@@ -47,6 +47,6 @@ public:
 
 
 
-#endif      // _SD_SDPOPUP_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_SDPOPUP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

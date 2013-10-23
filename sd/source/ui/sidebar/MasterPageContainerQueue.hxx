@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SIDEBAR_PANELS_MASTER_PAGE_CONTAINER_QUEUE_HXX
-#define SD_SIDEBAR_PANELS_MASTER_PAGE_CONTAINER_QUEUE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_MASTERPAGECONTAINERQUEUE_HXX
+#define INCLUDED_SD_SOURCE_UI_SIDEBAR_MASTERPAGECONTAINERQUEUE_HXX
 
 #include "MasterPageContainer.hxx"
 #include "MasterPageDescriptor.hxx"

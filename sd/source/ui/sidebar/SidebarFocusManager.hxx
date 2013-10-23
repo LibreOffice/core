@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TOOLPANEL_FOCUS_MANAGER_HXX
-#define SD_TOOLPANEL_FOCUS_MANAGER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_SIDEBARFOCUSMANAGER_HXX
+#define INCLUDED_SD_SOURCE_UI_SIDEBAR_SIDEBARFOCUSMANAGER_HXX
 
 #include <tools/link.hxx>
 

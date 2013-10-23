@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FILEDLG_HXX
-#define _FILEDLG_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
 
 #include <tools/errcode.hxx>
 
@@ -55,6 +55,6 @@ public:
     void                     SetPath( const OUString& rPath );
 };
 
-#endif // _FILEDLG_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

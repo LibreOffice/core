@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_SDIOCMPT_HXX
-#define _SD_SDIOCMPT_HXX
+#ifndef INCLUDED_SD_INC_SDIOCMPT_HXX
+#define INCLUDED_SD_INC_SDIOCMPT_HXX
 
 #include <tools/stream.hxx>
 
@@ -63,7 +63,7 @@ public:
     sal_uInt16  GetVersion() const { return nVersion; }
 };
 
-#endif      // _SD_SDIOCMPT_HXX
+#endif // INCLUDED_SD_INC_SDIOCMPT_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

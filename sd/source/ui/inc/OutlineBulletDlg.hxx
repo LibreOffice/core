@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_OUTLINE_BULLET_DLG_HXX
-#define SD_OUTLINE_BULLET_DLG_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_OUTLINEBULLETDLG_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_OUTLINEBULLETDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
 

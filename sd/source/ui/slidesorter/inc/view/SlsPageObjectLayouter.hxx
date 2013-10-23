@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_SLIDESORTER_PAGE_OBJECT_LAYOUTER_HXX
-#define SD_SLIDESORTER_PAGE_OBJECT_LAYOUTER_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSPAGEOBJECTLAYOUTER_HXX
+#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSPAGEOBJECTLAYOUTER_HXX
 
 #include "SlideSorter.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"

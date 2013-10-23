@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SD_LAYER_DLG_HXX_
-#define _SD_LAYER_DLG_HXX_
+#ifndef INCLUDED_SD_SOURCE_UI_INC_LAYEROPTIONSDLG_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_LAYEROPTIONSDLG_HXX
 
 #include <sddllapi.h>
 
@@ -52,6 +52,6 @@ public:
     void                GetAttr( SfxItemSet& rOutAttrs );
 };
 
-#endif // _SD_LAYER_DLG_HXX_
+#endif // INCLUDED_SD_SOURCE_UI_INC_LAYEROPTIONSDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SD_SIDEBAR_PANELS_SLIDE_TRANSITION_PANEL_HXX
-#define SD_SIDEBAR_PANELS_SLIDE_TRANSITION_PANEL_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_SLIDETRANSITIONPANEL_HXX
+#define INCLUDED_SD_SOURCE_UI_SIDEBAR_SLIDETRANSITIONPANEL_HXX
 
 #include "PanelBase.hxx"
 #include <sfx2/sidebar/ControlFactory.hxx>

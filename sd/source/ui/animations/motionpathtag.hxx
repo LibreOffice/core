@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_MOTIONPATHTAG_HXX_
-#define _SD_MOTIONPATHTAG_HXX_
+#ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_MOTIONPATHTAG_HXX
+#define INCLUDED_SD_SOURCE_UI_ANIMATIONS_MOTIONPATHTAG_HXX
 
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -115,6 +115,6 @@ private:
 
 } // end of namespace sd
 
-#endif      // _SD_MOTIONPATHTAG_HXX_
+#endif // INCLUDED_SD_SOURCE_UI_ANIMATIONS_MOTIONPATHTAG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

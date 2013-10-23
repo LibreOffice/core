@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_UNO_OUTLINE_VIEW_HXX
-#define SD_UNO_OUTLINE_VIEW_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_SDUNOOUTLINEVIEW_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_SDUNOOUTLINEVIEW_HXX
 
 #include "DrawSubController.hxx"
 #include <cppuhelper/basemutex.hxx>

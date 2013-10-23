@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
-#define SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEDOCUMENTVIEWBASE_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEDOCUMENTVIEWBASE_HXX
 
 #include <editeng/AccessibleContextBase.hxx>
 #include <editeng/AccessibleComponentBase.hxx>

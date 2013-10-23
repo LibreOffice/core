@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FU_EXPAND_PAGE_HXX
-#define SD_FU_EXPAND_PAGE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_FUEXPAND_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_FUEXPAND_HXX
 
 #include "fupoor.hxx"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDATTR_HXX
-#define _SDATTR_HXX
+#ifndef INCLUDED_SD_INC_SDATTR_HXX
+#define INCLUDED_SD_INC_SDATTR_HXX
 
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <svl/intitem.hxx>
@@ -160,7 +160,7 @@ public:
     virtual int          operator==( const SfxPoolItem& ) const;
 };
 
-#endif // _SDATTR_HXX
+#endif // INCLUDED_SD_INC_SDATTR_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

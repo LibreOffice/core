@@ -18,8 +18,8 @@
  */
 
 
-#ifndef SD_DLGCTRLS_HXX
-#define SD_DLGCTRLS_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_DLGCTRLS_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_DLGCTRLS_HXX
 
 #include "TransitionPreset.hxx"
 #include <vcl/lstbox.hxx>
@@ -46,6 +46,6 @@ public:
     FadeEffectLBImpl*           mpImpl;
 };
 
-#endif // SD_DLGCTRLS_HXX
+#endif // INCLUDED_SD_SOURCE_UI_INC_DLGCTRLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

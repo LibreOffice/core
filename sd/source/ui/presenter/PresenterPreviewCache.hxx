@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_PRESENTER_PRESENTER_PREVIEW_CACHE_HXX
-#define SD_PRESENTER_PRESENTER_PREVIEW_CACHE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERPREVIEWCACHE_HXX
+#define INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERPREVIEWCACHE_HXX
 
 #include <com/sun/star/drawing/XSlidePreviewCache.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

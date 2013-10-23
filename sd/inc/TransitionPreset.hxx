@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SD_TRANSITIONPRESET_HXX
-#define _SD_TRANSITIONPRESET_HXX
+#ifndef INCLUDED_SD_INC_TRANSITIONPRESET_HXX
+#define INCLUDED_SD_INC_TRANSITIONPRESET_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -76,6 +76,6 @@ private:
 
 }
 
-#endif // _SD_TRANSITIONPRESET_HXX
+#endif // INCLUDED_SD_INC_TRANSITIONPRESET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

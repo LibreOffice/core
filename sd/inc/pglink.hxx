@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PGLINK_HXX
-#define _PGLINK_HXX
+#ifndef INCLUDED_SD_INC_PGLINK_HXX
+#define INCLUDED_SD_INC_PGLINK_HXX
 
 #include <sfx2/lnkbase.hxx>
 
@@ -40,7 +40,7 @@ public:
     bool         Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
 
-#endif     // _PGLINK_HXX
+#endif // INCLUDED_SD_INC_PGLINK_HXX
 
 
 

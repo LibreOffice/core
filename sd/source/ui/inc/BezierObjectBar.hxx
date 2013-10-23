@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_BEZIER_OBJECT_BAR_HXX
-#define SD_BEZIER_OBJECT_BAR_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_INC_BEZIEROBJECTBAR_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_BEZIEROBJECTBAR_HXX
 
 #include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_FRAMEWORK_CHANGE_OPERATION_QUEUE_HXX
-#define SD_FRAMEWORK_CHANGE_OPERATION_QUEUE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CHANGEREQUESTQUEUE_HXX
+#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CHANGEREQUESTQUEUE_HXX
 
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 
