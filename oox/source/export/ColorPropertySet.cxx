@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+// FIXME? This file is nearly identical to xmloff/source/chart/ColorPropertySet.cxx
+
 #include "ColorPropertySet.hxx"
 
 #include <cppuhelper/implbase1.hxx>

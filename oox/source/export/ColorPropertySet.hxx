@@ -20,6 +20,8 @@
 #ifndef XMLOFF_COLORPROPERTYSET_HXX
 #define XMLOFF_COLORPROPERTYSET_HXX
 
+// FIXME? this file is identical to xmloff/source/chart/ColorPropertySet.hxx
+
 #include <cppuhelper/implbase2.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
