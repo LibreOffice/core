@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,cppunit))
 
 $(eval $(call gb_Module_add_targets,cppunit,\
 	UnpackedTarball_cppunit \
-	ExternalPackage_cppunit \
 	ExternalProject_cppunit \
 ))
 
