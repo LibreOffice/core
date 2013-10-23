@@ -24,10 +24,8 @@ $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.
 else ifeq ($(OS),AIX)
 $(eval $(call gb_ExternalPackage_add_library_for_install,curl,lib/libcurl.so,lib/.libs/libcurl.so.4))
 else
-# TODO: Do we really want the unversioned library in the installation?
-# And if that's true, why do we need to deliver the versioned one at all?
-$(eval $(call gb_ExternalPackage_add_library_for_install,curl,lib/libcurl.so,lib/.libs/libcurl.so.4.2.0))
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so.4,lib/.libs/libcurl.so.4.2.0))
+$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so.4.2.0))
+$(eval $(call gb_ExternalPackage_add_library_for_install,curl,lib/libcurl.so.4,lib/.libs/libcurl.so.4.2.0))
 endif
 
 else ifeq ($(OS)$(COM),WNTGCC)
