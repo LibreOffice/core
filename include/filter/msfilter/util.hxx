@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_MSFILTER_UTIL_HXX
-#define INCLUDED_MSFILTER_UTIL_HXX
+#ifndef INCLUDED_FILTER_MSFILTER_UTIL_HXX
+#define INCLUDED_FILTER_MSFILTER_UTIL_HXX
 
 #include <rtl/textenc.h>
 #include <tools/datetime.hxx>

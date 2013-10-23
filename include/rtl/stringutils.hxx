@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _RTL_STRINGUTILS_HXX_
-#define _RTL_STRINGUTILS_HXX_
+#ifndef INCLUDED_RTL_STRINGUTILS_HXX
+#define INCLUDED_RTL_STRINGUTILS_HXX
 
 #include "sal/config.h"
 
@@ -182,6 +182,6 @@ struct Enable< T, true >
 
 } /* Namespace */
 
-#endif /* _RTL_STRINGUTILS_HXX_ */
+#endif // INCLUDED_RTL_STRINGUTILS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef RTL_STRINGCONCAT_HXX
-#define RTL_STRINGCONCAT_HXX
+#ifndef INCLUDED_RTL_STRINGCONCAT_HXX
+#define INCLUDED_RTL_STRINGCONCAT_HXX
 
 #include <rtl/stringutils.hxx>
 

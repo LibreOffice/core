@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VBAHELPER_VBAEVENTSHELPERBASE_HXX
-#define VBAHELPER_VBAEVENTSHELPERBASE_HXX
+#ifndef INCLUDED_VBAHELPER_VBAEVENTSHELPERBASE_HXX
+#define INCLUDED_VBAHELPER_VBAEVENTSHELPERBASE_HXX
 
 #include <deque>
 #include <map>

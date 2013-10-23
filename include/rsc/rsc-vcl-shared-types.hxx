@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RSC_RSC_VCL_SHARED_TYPES_HXX
-#define _RSC_RSC_VCL_SHARED_TYPES_HXX
+#ifndef INCLUDED_RSC_RSC_VCL_SHARED_TYPES_HXX
+#define INCLUDED_RSC_RSC_VCL_SHARED_TYPES_HXX
 
 enum TimeFieldFormat {TIMEF_NONE, TIMEF_SEC, TIMEF_100TH_SEC, TIMEF_SEC_CS, TimeFieldFormat_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
 

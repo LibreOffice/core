@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRAMEWORK_TITLEHELPER_HXX_
-#define _FRAMEWORK_TITLEHELPER_HXX_
+#ifndef INCLUDED_FRAMEWORK_TITLEHELPER_HXX
+#define INCLUDED_FRAMEWORK_TITLEHELPER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -201,6 +201,6 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
 
 } // namespace framework
 
-#endif // _FRAMEWORK_TITLEHELPER_HXX_
+#endif // INCLUDED_FRAMEWORK_TITLEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

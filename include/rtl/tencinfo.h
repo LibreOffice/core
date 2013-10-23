@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_TENCINFO_H
-#define _RTL_TENCINFO_H
+#ifndef INCLUDED_RTL_TENCINFO_H
+#define INCLUDED_RTL_TENCINFO_H
 
 #include "sal/config.h"
 
@@ -273,6 +273,6 @@ rtl_getWindowsCodePageFromTextEncoding(rtl_TextEncoding nEncoding);
 }
 #endif
 
-#endif /* _RTL_TENCINFO_H */
+#endif // INCLUDED_RTL_TENCINFO_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

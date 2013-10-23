@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUISTIC_LNGPROPS_HHX_
-#define _LINGUISTIC_LNGPROPS_HHX_
+#ifndef INCLUDED_LINGUISTIC_LNGPROPS_HXX
+#define INCLUDED_LINGUISTIC_LNGPROPS_HXX
 
 #include <unotools/linguprops.hxx>
 

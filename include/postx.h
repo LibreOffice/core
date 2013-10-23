@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _POSTX_H
-#define _POSTX_H
+#ifndef INCLUDED_POSTX_H
+#define INCLUDED_POSTX_H
 
 #if defined __cplusplus
 }

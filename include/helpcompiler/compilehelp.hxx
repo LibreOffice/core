@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPILE_HXX
-#define COMPILE_HXX
+#ifndef INCLUDED_HELPCOMPILER_COMPILEHELP_HXX
+#define INCLUDED_HELPCOMPILER_COMPILEHELP_HXX
 
 #include "sal/types.h"
 

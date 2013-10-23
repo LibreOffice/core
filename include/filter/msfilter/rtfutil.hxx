@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_MSFILTER_RTFUTIL_HXX
-#define INCLUDED_MSFILTER_RTFUTIL_HXX
+#ifndef INCLUDED_FILTER_MSFILTER_RTFUTIL_HXX
+#define INCLUDED_FILTER_MSFILTER_RTFUTIL_HXX
 
 #include <filter/msfilter/msfilterdllapi.h>
 #include <rtl/string.hxx>

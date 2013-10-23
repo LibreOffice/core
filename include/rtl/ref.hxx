@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_REF_HXX_
-#define _RTL_REF_HXX_
+#ifndef INCLUDED_RTL_REF_HXX
+#define INCLUDED_RTL_REF_HXX
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -238,6 +238,6 @@ inline T * get_pointer( Reference<T> const& r )
 
 } // namespace rtl
 
-#endif /* !_RTL_REF_HXX_ */
+#endif /* ! INCLUDED_RTL_REF_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_DATAVIEW_HXX
-#define DBAUI_DATAVIEW_HXX
+#ifndef INCLUDED_DBACCESS_DATAVIEW_HXX
+#define INCLUDED_DBACCESS_DATAVIEW_HXX
 
 #include "dbaccessdllapi.h"
 
@@ -80,6 +80,6 @@ namespace dbaui
         virtual void resizeDocumentView( Rectangle& _rPlayground );
     };
 }
-#endif // DBAUI_DATAVIEW_HXX
+#endif // INCLUDED_DBACCESS_DATAVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

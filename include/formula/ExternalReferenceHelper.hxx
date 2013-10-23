@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_EXTERNALREFERENCEHELPER_HXX
-#define FORMULA_EXTERNALREFERENCEHELPER_HXX
+#ifndef INCLUDED_FORMULA_EXTERNALREFERENCEHELPER_HXX
+#define INCLUDED_FORMULA_EXTERNALREFERENCEHELPER_HXX
 
 #include <rtl/ustring.hxx>
 #include "formula/formuladllapi.h"
@@ -36,6 +36,6 @@ namespace formula
 // =============================================================================
 } // formula
 // =============================================================================
-#endif //FORMULA_EXTERNALREFERENCEHELPER_HXX
+#endif // INCLUDED_FORMULA_EXTERNALREFERENCEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

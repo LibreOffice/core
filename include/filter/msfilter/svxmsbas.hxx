@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVXMSBAS_HXX
-#define _SVXMSBAS_HXX
+#ifndef INCLUDED_FILTER_MSFILTER_SVXMSBAS_HXX
+#define INCLUDED_FILTER_MSFILTER_SVXMSBAS_HXX
 
 #include <tools/solar.h>
 #include "filter/msfilter/msfilterdllapi.h"

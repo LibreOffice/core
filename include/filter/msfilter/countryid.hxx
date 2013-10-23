@@ -19,8 +19,8 @@
 
 // ============================================================================
 
-#ifndef INCLUDED_SVX_COUNTRYID_HXX
-#define INCLUDED_SVX_COUNTRYID_HXX
+#ifndef INCLUDED_FILTER_MSFILTER_COUNTRYID_HXX
+#define INCLUDED_FILTER_MSFILTER_COUNTRYID_HXX
 
 #include <sal/types.h>
 #include <i18nlangtag/lang.h>

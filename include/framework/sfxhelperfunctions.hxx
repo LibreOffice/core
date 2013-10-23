@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
-#define __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
+#ifndef INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
+#define INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
 
 #include <framework/fwedllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -92,6 +92,6 @@ FWE_DLLPUBLIC void SAL_CALL ActivateToolPanel(
     const OUString& i_rPanelURL );
 }
 
-#endif // __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
+#endif // INCLUDED_FRAMEWORK_SFXHELPERFUNCTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

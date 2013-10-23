@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __FRAMEWORK_CLASSES_ADDONMENU_HXX_
-#define __FRAMEWORK_CLASSES_ADDONMENU_HXX_
+#ifndef INCLUDED_FRAMEWORK_ADDONMENU_HXX
+#define INCLUDED_FRAMEWORK_ADDONMENU_HXX
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -122,6 +122,6 @@ class FWE_DLLPUBLIC AddonMenuManager
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_CLASSES_ADDONMENU_HXX_
+#endif // INCLUDED_FRAMEWORK_ADDONMENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

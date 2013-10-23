@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_DRAWINGLAYER_PRIMITIVETYPES3D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_DRAWINGLAYER_PRIMITIVETYPES3D_HXX
 
 //////////////////////////////////////////////////////////////////////////////
 // define ranges for other libraries
@@ -50,6 +50,6 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
+#endif // INCLUDED_DRAWINGLAYER_PRIMITIVE3D_DRAWINGLAYER_PRIMITIVETYPES3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

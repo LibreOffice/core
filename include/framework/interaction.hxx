@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
-#define __FRAMEWORK_DISPATCH_INTERACTION_HXX_
+#ifndef INCLUDED_FRAMEWORK_INTERACTION_HXX
+#define INCLUDED_FRAMEWORK_INTERACTION_HXX
 
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
@@ -98,6 +98,6 @@ public:
 
 }       //  namespace framework
 
-#endif  // #define __FRAMEWORK_DISPATCH_INTERACTION_HXX_
+#endif  // #define INCLUDED_FRAMEWORK_INTERACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

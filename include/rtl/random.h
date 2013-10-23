@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_RANDOM_H_
-#define _RTL_RANDOM_H_
+#ifndef INCLUDED_RTL_RANDOM_H
+#define INCLUDED_RTL_RANDOM_H
 
 #include "sal/config.h"
 
@@ -105,6 +105,6 @@ SAL_DLLPUBLIC rtlRandomError SAL_CALL rtl_random_getBytes (
 }
 #endif
 
-#endif /* _RTL_RANDOM_H_ */
+#endif // INCLUDED_RTL_RANDOM_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DFFRECORDHEADER_HXX
-#define _DFFRECORDHEADER_HXX
+#ifndef INCLUDED_FILTER_MSFILTER_DFFRECORDHEADER_HXX
+#define INCLUDED_FILTER_MSFILTER_DFFRECORDHEADER_HXX
 
 #include <tools/solar.h>
 #include <tools/stream.hxx>

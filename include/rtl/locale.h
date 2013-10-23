@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_LOCALE_H_
-#define _RTL_LOCALE_H_
+#ifndef INCLUDED_RTL_LOCALE_H
+#define INCLUDED_RTL_LOCALE_H
 
 #include "sal/config.h"
 
@@ -130,7 +130,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_locale_equals( rtl_Locale * This, rtl_Local
 }
 #endif
 
-#endif /* _RTL_LOCALE_H_ */
+#endif // INCLUDED_RTL_LOCALE_H
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

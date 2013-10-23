@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef FORMULA_ICONTROL_REFERENCE_HANDLER_HXX_INCLUDED
-#define FORMULA_ICONTROL_REFERENCE_HANDLER_HXX_INCLUDED
+#ifndef INCLUDED_FORMULA_ICONTROLREFERENCEHANDLER_HXX
+#define INCLUDED_FORMULA_ICONTROLREFERENCEHANDLER_HXX
 
 #include "formula/formuladllapi.h"
 
@@ -37,6 +37,6 @@ namespace formula
         ~IControlReferenceHandler() {}
     };
 } // formula
-#endif // FORMULA_ICONTROL_REFERENCE_HANDLER_HXX_INCLUDED
+#endif // INCLUDED_FORMULA_ICONTROLREFERENCEHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

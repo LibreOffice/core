@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LNG_DLLAPI_H
-#define _LNG_DLLAPI_H
+#ifndef INCLUDED_LINGUISTIC_LNGDLLAPI_H
+#define INCLUDED_LINGUISTIC_LNGDLLAPI_H
 
 #include "sal/config.h"
 #include "sal/types.h"

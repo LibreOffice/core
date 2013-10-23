@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_INTERACTION_PREVENTDUPLICATEINTERACTION_HXX_
-#define __FRAMEWORK_INTERACTION_PREVENTDUPLICATEINTERACTION_HXX_
+#ifndef INCLUDED_FRAMEWORK_PREVENTDUPLICATEINTERACTION_HXX
+#define INCLUDED_FRAMEWORK_PREVENTDUPLICATEINTERACTION_HXX
 
 #include <framework/fwedllapi.h>
 
@@ -231,6 +231,6 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_INTERACTION_PREVENTDUPLICATEINTERACTION_HXX_
+#endif // INCLUDED_FRAMEWORK_PREVENTDUPLICATEINTERACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

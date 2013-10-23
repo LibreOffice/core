@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __TEST_BEANS_XPROPERTYSET_HXX__
-#define __TEST_BEANS_XPROPERTYSET_HXX__
+#ifndef INCLUDED_TEST_BEANS_XPROPERTYSET_HXX
+#define INCLUDED_TEST_BEANS_XPROPERTYSET_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

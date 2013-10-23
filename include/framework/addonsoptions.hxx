@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
-#define __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
+#ifndef INCLUDED_FRAMEWORK_ADDONSOPTIONS_HXX
+#define INCLUDED_FRAMEWORK_ADDONSOPTIONS_HXX
 
 #include <sal/types.h>
 #include <osl/mutex.hxx>
@@ -367,6 +367,6 @@ class FWE_DLLPUBLIC AddonsOptions
 
 }
 
-#endif  // #ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
+#endif // INCLUDED_FRAMEWORK_ADDONSOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

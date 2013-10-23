@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESSDLLAPI_H
-#define INCLUDED_DBACCESSDLLAPI_H
+#ifndef INCLUDED_DBACCESS_DBACCESSDLLAPI_H
+#define INCLUDED_DBACCESS_DBACCESSDLLAPI_H
 
 #include "sal/types.h"
 
@@ -29,6 +29,6 @@
 #endif
 #define DBACCESS_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_DBACCESSDLLAPI_H */
+#endif // INCLUDED_DBACCESS_DBACCESSDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

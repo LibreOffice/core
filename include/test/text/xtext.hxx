@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __TEST_TEXT_XTEXT_HXX__
-#define __TEST_TEXT_XTEXT_HXX__
+#ifndef INCLUDED_TEST_TEXT_XTEXT_HXX
+#define INCLUDED_TEST_TEXT_XTEXT_HXX
 
 #include "test/testdllapi.hxx"
 

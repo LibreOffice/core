@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PROCESSOR_FROM_OUTPUTDEVICE_HXX
-#define _PROCESSOR_FROM_OUTPUTDEVICE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSORFROMOUTPUTDEVICE_HXX
+#define INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSORFROMOUTPUTDEVICE_HXX
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include "drawinglayer/drawinglayerdllapi.h"
@@ -50,6 +50,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_PROCESSOR_FROM_OUTPUTDEVICE_HXX
+#endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSORFROMOUTPUTDEVICE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

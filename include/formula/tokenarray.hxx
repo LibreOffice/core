@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_TOKENARRAY_HXX
-#define FORMULA_TOKENARRAY_HXX
+#ifndef INCLUDED_FORMULA_TOKENARRAY_HXX
+#define INCLUDED_FORMULA_TOKENARRAY_HXX
 
 #include <limits.h>
 #include "formula/token.hxx"
@@ -282,6 +282,6 @@ private:
 // =============================================================================
 
 
-#endif // FORMULA_TOKENARRAY_HXX
+#endif // INCLUDED_FORMULA_TOKENARRAY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

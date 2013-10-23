@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef VBA_DOCUMENTBASE_HXX
-#define VBA_DOCUMENTBASE_HXX
+#ifndef INCLUDED_VBAHELPER_VBADOCUMENTBASE_HXX
+#define INCLUDED_VBAHELPER_VBADOCUMENTBASE_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <ooo/vba/XDocumentBase.hpp>
@@ -62,6 +62,6 @@ public:
     static OUString getNameFromModel( const css::uno::Reference< css::frame::XModel >& xModel );
 };
 
-#endif /* VBA_DOCUMENTBASE_HXX */
+#endif // INCLUDED_VBAHELPER_VBADOCUMENTBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

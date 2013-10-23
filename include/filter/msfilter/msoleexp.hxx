@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _MSOLEEXP_HXX
-#define _MSOLEEXP_HXX
+#ifndef INCLUDED_FILTER_MSFILTER_MSOLEEXP_HXX
+#define INCLUDED_FILTER_MSFILTER_MSOLEEXP_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include "filter/msfilter/msfilterdllapi.h"

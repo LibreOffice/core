@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
-#define _DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_CANVASPROCESSOR_HXX
+#define INCLUDED_DRAWINGLAYER_PROCESSOR2D_CANVASPROCESSOR_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
@@ -117,6 +117,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
+#endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_CANVASPROCESSOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

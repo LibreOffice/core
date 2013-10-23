@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FWEDLLAPI_H
-#define INCLUDED_FWEDLLAPI_H
+#ifndef INCLUDED_FRAMEWORK_FWEDLLAPI_H
+#define INCLUDED_FRAMEWORK_FWEDLLAPI_H
 
 #include "sal/types.h"
 
@@ -29,6 +29,6 @@
 #endif
 #define FWE_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_FWEDLLAPI_H */
+#endif // INCLUDED_FRAMEWORK_FWEDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

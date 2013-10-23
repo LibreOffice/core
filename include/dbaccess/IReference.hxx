@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef DBAUI_IREFERENCE_HXX
-#define DBAUI_IREFERENCE_HXX
+#ifndef INCLUDED_DBACCESS_IREFERENCE_HXX
+#define INCLUDED_DBACCESS_IREFERENCE_HXX
 
 #include "dbaccessdllapi.h"
 
@@ -34,7 +34,7 @@ namespace dbaui
         ~IReference() {}
     };
 }
-#endif // DBAUI_IREFERENCE_HXX
+#endif // INCLUDED_DBACCESS_IREFERENCE_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

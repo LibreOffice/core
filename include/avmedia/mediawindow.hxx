@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AVMEDIA_MEDIAWINDOW_HXX
-#define _AVMEDIA_MEDIAWINDOW_HXX
+#ifndef INCLUDED_AVMEDIA_MEDIAWINDOW_HXX
+#define INCLUDED_AVMEDIA_MEDIAWINDOW_HXX
 
 #include <memory>
 #include <vector>
@@ -122,6 +122,6 @@ namespace avmedia
     };
 }
 
-#endif // _AVMEDIA_MEDIAWINDOW_HXX
+#endif // INCLUDED_AVMEDIA_MEDIAWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

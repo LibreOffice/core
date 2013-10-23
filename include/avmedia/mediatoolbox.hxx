@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AVMEDIA_MEDIATOOLBOX_HXX
-#define _AVMEDIA_MEDIATOOLBOX_HXX
+#ifndef INCLUDED_AVMEDIA_MEDIATOOLBOX_HXX
+#define INCLUDED_AVMEDIA_MEDIATOOLBOX_HXX
 
 #include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -55,6 +55,6 @@ private:
 
 }
 
-#endif // _AVMEDIA_MEDIATOOLBOX_HXX
+#endif // INCLUDED_AVMEDIA_MEDIATOOLBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef FORMULA_VECTORTOKEN_HXX
-#define FORMULA_VECTORTOKEN_HXX
+#ifndef INCLUDED_FORMULA_VECTORTOKEN_HXX
+#define INCLUDED_FORMULA_VECTORTOKEN_HXX
 
 #include "formula/token.hxx"
 

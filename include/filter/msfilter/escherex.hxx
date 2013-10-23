@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ESCHEREX_HXX
-#define _SVX_ESCHEREX_HXX
+#ifndef INCLUDED_FILTER_MSFILTER_ESCHEREX_HXX
+#define INCLUDED_FILTER_MSFILTER_ESCHEREX_HXX
 
 #include <memory>
 #include <vector>

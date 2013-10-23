@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMULA_MODULECLIENT_HXX
-#define INCLUDED_FORMULA_MODULECLIENT_HXX
+#ifndef INCLUDED_FORMULA_OMODULECLIENT_HXX
+#define INCLUDED_FORMULA_OMODULECLIENT_HXX
 
 #include "sal/config.h"
 

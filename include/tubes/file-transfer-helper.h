@@ -22,8 +22,8 @@
 
 /* empathy-ft-handler.h */
 
-#ifndef __EMPATHY_FT_HANDLER_H__
-#define __EMPATHY_FT_HANDLER_H__
+#ifndef INCLUDED_TUBES_FILE_TRANSFER_HELPER_H
+#define INCLUDED_TUBES_FILE_TRANSFER_HELPER_H
 
 #include <config_lgpl.h>
 #include <glib-object.h>
@@ -124,6 +124,6 @@ gboolean empathy_ft_handler_is_cancelled (EmpathyFTHandler *handler);
 
 G_END_DECLS
 
-#endif /* __EMPATHY_FT_HANDLER_H__ */
+#endif // INCLUDED_TUBES_FILE_TRANSFER_HELPER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

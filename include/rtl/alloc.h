@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_ALLOC_H_
-#define _RTL_ALLOC_H_
+#ifndef INCLUDED_RTL_ALLOC_H
+#define INCLUDED_RTL_ALLOC_H
 
 #include "sal/config.h"
 
@@ -252,6 +252,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
 }
 #endif
 
-#endif /*_RTL_ALLOC_H_ */
+#endif // INCLUDED_RTL_ALLOC_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

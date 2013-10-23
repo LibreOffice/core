@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_CLASSES_MENUEXTENSIONSUPPLIER_HXX_
-#define __FRAMEWORK_CLASSES_MENUEXTENSIONSUPPLIER_HXX_
+#ifndef INCLUDED_FRAMEWORK_MENUEXTENSIONSUPPLIER_HXX
+#define INCLUDED_FRAMEWORK_MENUEXTENSIONSUPPLIER_HXX
 
 #include <rtl/ustring.hxx>
 #include <framework/fwedllapi.h>
@@ -38,6 +38,6 @@ FWE_DLLPUBLIC MenuExtensionItem SAL_CALL GetMenuExtension();
 
 }
 
-#endif // __FRAMEWORK_CLASSES_MENUEXTENSIONSUPPLIER_HXX_
+#endif // INCLUDED_FRAMEWORK_MENUEXTENSIONSUPPLIER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

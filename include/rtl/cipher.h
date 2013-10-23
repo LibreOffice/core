@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_CIPHER_H_
-#define _RTL_CIPHER_H_
+#ifndef INCLUDED_RTL_CIPHER_H
+#define INCLUDED_RTL_CIPHER_H
 
 #include "sal/config.h"
 
@@ -312,6 +312,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cipher_destroyARCFOUR (
 }
 #endif
 
-#endif /* !_RTL_CIPHER_H_ */
+#endif /* ! INCLUDED_RTL_CIPHER_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

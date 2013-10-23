@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_CLASSES_FRAMELISTANALYZER_HXX_
-#define __FRAMEWORK_CLASSES_FRAMELISTANALYZER_HXX_
+#ifndef INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
+#define INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
 
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -190,6 +190,6 @@ class FWE_DLLPUBLIC FrameListAnalyzer
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_CLASSES_FRAMELISTANALYZER_HXX_
+#endif // INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

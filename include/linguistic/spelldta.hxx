@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUISTIC_SPELLDTA_HXX_
-#define _LINGUISTIC_SPELLDTA_HXX_
+#ifndef INCLUDED_LINGUISTIC_SPELLDTA_HXX
+#define INCLUDED_LINGUISTIC_SPELLDTA_HXX
 
 #include <vector>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>

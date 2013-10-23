@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FRAMEWORK_UNDOMANAGERHELPER_HXX
-#define FRAMEWORK_UNDOMANAGERHELPER_HXX
+#ifndef INCLUDED_FRAMEWORK_UNDOMANAGERHELPER_HXX
+#define INCLUDED_FRAMEWORK_UNDOMANAGERHELPER_HXX
 
 #include "framework/fwedllapi.h"
 #include "framework/iguard.hxx"
@@ -154,6 +154,6 @@ namespace framework
 } // namespace framework
 //......................................................................................................................
 
-#endif // FRAMEWORK_UNDOMANAGERHELPER_HXX
+#endif // INCLUDED_FRAMEWORK_UNDOMANAGERHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

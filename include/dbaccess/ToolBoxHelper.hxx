@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_TOOLBOXHELPER_HXX
-#define DBAUI_TOOLBOXHELPER_HXX
+#ifndef INCLUDED_DBACCESS_TOOLBOXHELPER_HXX
+#define INCLUDED_DBACCESS_TOOLBOXHELPER_HXX
 
 #include <sal/types.h>
 #include <tools/link.hxx>
@@ -72,6 +72,6 @@ namespace dbaui
         DECL_LINK(SettingsChanged, VclWindowEvent* );
     };
 }
-#endif // DBAUI_TOOLBOXHELPER_HXX
+#endif // INCLUDED_DBACCESS_TOOLBOXHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

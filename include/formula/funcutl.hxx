@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_FUNCUTL_HXX
-#define FORMULA_FUNCUTL_HXX
+#ifndef INCLUDED_FORMULA_FUNCUTL_HXX
+#define INCLUDED_FORMULA_FUNCUTL_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
@@ -104,6 +104,6 @@ public:
 
 } // formula
 
-#endif // FORMULA_FUNCUTL_HXX
+#endif // INCLUDED_FORMULA_FUNCUTL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

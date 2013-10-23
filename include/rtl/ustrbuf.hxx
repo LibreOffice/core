@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_USTRBUF_HXX_
-#define _RTL_USTRBUF_HXX_
+#ifndef INCLUDED_RTL_USTRBUF_HXX
+#define INCLUDED_RTL_USTRBUF_HXX
 
 #include "sal/config.h"
 
@@ -1381,6 +1381,6 @@ typedef rtlunittest::OUStringBuffer OUStringBuffer;
 using ::rtl::OUStringBuffer;
 #endif
 
-#endif  /* _RTL_USTRBUF_HXX_ */
+#endif // INCLUDED_RTL_USTRBUF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

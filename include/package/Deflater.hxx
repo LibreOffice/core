@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DEFLATER_HXX_
-#define _DEFLATER_HXX_
+#ifndef INCLUDED_PACKAGE_DEFLATER_HXX
+#define INCLUDED_PACKAGE_DEFLATER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include "packagedllapi.hxx"

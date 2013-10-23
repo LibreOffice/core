@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RTL_BYTESEQ_H_
-#define _RTL_BYTESEQ_H_
+#ifndef INCLUDED_RTL_BYTESEQ_H
+#define INCLUDED_RTL_BYTESEQ_H
 
 #include "sal/config.h"
 

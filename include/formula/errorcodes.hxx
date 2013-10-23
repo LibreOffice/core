@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_ERRORCODES_HXX
-#define SC_ERRORCODES_HXX
+#ifndef INCLUDED_FORMULA_ERRORCODES_HXX
+#define INCLUDED_FORMULA_ERRORCODES_HXX
 
 #include <rtl/math.hxx>
 #include <tools/solar.h>
@@ -114,6 +114,6 @@ inline sal_uInt16 GetDoubleErrorValue( double fVal )
 // yes, exceptionally we put a "using namespace" in a header file..
 using namespace ScErrorCodes;
 
-#endif // SC_ERRORCODES_HXX
+#endif // INCLUDED_FORMULA_ERRORCODES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

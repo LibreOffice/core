@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_MSCODEC_HXX
-#define SVX_MSCODEC_HXX
+#ifndef INCLUDED_FILTER_MSFILTER_MSCODEC_HXX
+#define INCLUDED_FILTER_MSFILTER_MSCODEC_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>

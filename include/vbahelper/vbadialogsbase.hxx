@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef VBA_DIALOGS_BASE_HXX
-#define VBA_DIALOGS_BASE_HXX
+#ifndef INCLUDED_VBAHELPER_VBADIALOGSBASE_HXX
+#define INCLUDED_VBAHELPER_VBADIALOGSBASE_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
@@ -40,6 +40,6 @@ public:
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
 };
 
-#endif /* VBA_DIALOGS_BASE_HXX */
+#endif // INCLUDED_VBAHELPER_VBADIALOGSBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
-#define __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
+#ifndef INCLUDED_FRAMEWORK_IMAGEPRODUCER_HXX
+#define INCLUDED_FRAMEWORK_IMAGEPRODUCER_HXX
 
 #include <sal/types.h>
 #include <com/sun/star/frame/XFrame.hpp>

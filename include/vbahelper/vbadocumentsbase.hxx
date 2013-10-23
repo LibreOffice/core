@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef VBA_WORKBOOKS_HXX
-#define VBA_WORKBOOKS_HXX
+#ifndef INCLUDED_VBAHELPER_VBADOCUMENTSBASE_HXX
+#define INCLUDED_VBAHELPER_VBADOCUMENTSBASE_HXX
 
 
 #include <vbahelper/vbacollectionimpl.hxx>
@@ -55,6 +55,6 @@ protected:
     css::uno::Any openDocument( const OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException);
 };
 
-#endif /* SC_VBA_WORKBOOKS_HXX */
+#endif /* SC_ INCLUDED_VBAHELPER_VBADOCUMENTSBASE_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AVMEDIA_MEDIACHILD_HXX
-#define _AVMEDIA_MEDIACHILD_HXX
+#ifndef INCLUDED_AVMEDIA_MEDIAPLAYER_HXX
+#define INCLUDED_AVMEDIA_MEDIAPLAYER_HXX
 
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dockwin.hxx>

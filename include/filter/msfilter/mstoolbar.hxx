@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _MSTOOLBAR_HXX
-#define _MSTOOLBAR_HXX
+#ifndef INCLUDED_FILTER_MSFILTER_MSTOOLBAR_HXX
+#define INCLUDED_FILTER_MSFILTER_MSTOOLBAR_HXX
 #include "filter/msfilter/msfilterdllapi.h"
 #include <sot/storage.hxx>
 #include <ostream>

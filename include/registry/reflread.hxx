@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _REGISTRY_REFLREAD_HXX_
-#define _REGISTRY_REFLREAD_HXX_
+#ifndef INCLUDED_REGISTRY_REFLREAD_HXX
+#define INCLUDED_REGISTRY_REFLREAD_HXX
 
 #include <registry/regdllapi.h>
 #include <registry/refltype.hxx>

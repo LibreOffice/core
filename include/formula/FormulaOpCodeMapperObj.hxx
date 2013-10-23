@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_FORMULAOPCODEMAPPER_HXX_INCLUDED
-#define FORMULA_FORMULAOPCODEMAPPER_HXX_INCLUDED
+#ifndef INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
+#define INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
 
 #include "formula/formuladllapi.h"
 #include <cppuhelper/implbase2.hxx>
@@ -79,6 +79,6 @@ private:
 } // formula
 // =============================================================================
 
-#endif // FORMULA_FORMULAOPCODEMAPPER_HXX_INCLUDED
+#endif // INCLUDED_FORMULA_FORMULAOPCODEMAPPEROBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

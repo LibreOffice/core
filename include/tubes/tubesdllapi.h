@@ -1,6 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-#ifndef INCLUDED_TUBESDLLAPI_H
-#define INCLUDED_TUBESDLLAPI_H
+#ifndef INCLUDED_TUBES_TUBESDLLAPI_H
+#define INCLUDED_TUBES_TUBESDLLAPI_H
 
 #include "sal/types.h"
 
@@ -11,6 +11,6 @@
 #endif
 #define TUBES_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_TUBESDLLAPI_H */
+#endif // INCLUDED_TUBES_TUBESDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

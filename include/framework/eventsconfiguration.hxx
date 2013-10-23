@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_XML_EVENTSCONFIGURATION_HXX_
-#define __FRAMEWORK_XML_EVENTSCONFIGURATION_HXX_
+#ifndef INCLUDED_FRAMEWORK_EVENTSCONFIGURATION_HXX
+#define INCLUDED_FRAMEWORK_EVENTSCONFIGURATION_HXX
 
 #include <framework/fwedllapi.h>
 #include <tools/stream.hxx>
@@ -38,6 +38,6 @@ struct FWE_DLLPUBLIC EventsConfig
 
 } // namespace framework
 
-#endif // __FRAMEWORK_XML_EVENTSCONFIGURATION_HXX_
+#endif // INCLUDED_FRAMEWORK_EVENTSCONFIGURATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

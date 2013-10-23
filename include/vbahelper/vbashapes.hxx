@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_SHAPES_HXX
-#define SC_VBA_SHAPES_HXX
+#ifndef INCLUDED_VBAHELPER_VBASHAPES_HXX
+#define INCLUDED_VBAHELPER_VBASHAPES_HXX
 
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -69,6 +69,6 @@ public:
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& Index2 ) throw (css::uno::RuntimeException);
 };
 
-#endif//SC_VBA_SHAPES_HXX
+#endif // INCLUDED_VBAHELPER_VBASHAPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

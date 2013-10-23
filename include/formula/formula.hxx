@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_FORMULA_HXX
-#define FORMULA_FORMULA_HXX
+#ifndef INCLUDED_FORMULA_FORMULA_HXX
+#define INCLUDED_FORMULA_FORMULA_HXX
 
 #include <sfx2/basedlgs.hxx>
 #include <memory>
@@ -136,6 +136,6 @@ protected:
 
 } // formula
 
-#endif // FORMULA_FORMULA_HXX
+#endif // INCLUDED_FORMULA_FORMULA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

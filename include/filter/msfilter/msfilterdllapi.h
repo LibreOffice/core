@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_MSFILTER_DLLAPI_H
-#define INCLUDED_MSFILTER_DLLAPI_H
+#ifndef INCLUDED_FILTER_MSFILTER_MSFILTERDLLAPI_H
+#define INCLUDED_FILTER_MSFILTER_MSFILTERDLLAPI_H
 
 #include "sal/types.h"
 

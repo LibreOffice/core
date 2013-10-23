@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FLT_MSDFFIMP_HXX
-#define FLT_MSDFFIMP_HXX
+#ifndef INCLUDED_FILTER_MSFILTER_MSDFFIMP_HXX
+#define INCLUDED_FILTER_MSFILTER_MSDFFIMP_HXX
 
 #include <string.h>
 

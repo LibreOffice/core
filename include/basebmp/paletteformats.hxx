@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEBMP_PACKEDPIXELFORMATS_HXX
-#define INCLUDED_BASEBMP_PACKEDPIXELFORMATS_HXX
+#ifndef INCLUDED_BASEBMP_PALETTEFORMATS_HXX
+#define INCLUDED_BASEBMP_PALETTEFORMATS_HXX
 
 #include <basebmp/color.hxx>
 #include <basebmp/colortraits.hxx>
@@ -134,6 +134,6 @@ typedef PixelFormatTraitsTemplate_Palette<
 
 } // namespace basebmp
 
-#endif /* INCLUDED_BASEBMP_PACKEDPIXELFORMATS_HXX */
+#endif // INCLUDED_BASEBMP_PALETTEFORMATS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

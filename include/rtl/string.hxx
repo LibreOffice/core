@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_STRING_HXX_
-#define _RTL_STRING_HXX_
+#ifndef INCLUDED_RTL_STRING_HXX
+#define INCLUDED_RTL_STRING_HXX
 
 #include "sal/config.h"
 
@@ -1750,6 +1750,6 @@ using ::rtl::OStringHash;
 using ::rtl::OStringLiteral;
 #endif
 
-#endif /* _RTL_STRING_HXX_ */
+#endif // INCLUDED_RTL_STRING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

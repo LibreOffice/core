@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_COMPILER_HXX_INCLUDED
-#define FORMULA_COMPILER_HXX_INCLUDED
+#ifndef INCLUDED_FORMULA_FORMULACOMPILER_HXX
+#define INCLUDED_FORMULA_FORMULACOMPILER_HXX
 
 #include <formula/formuladllapi.h>
 #include <rtl/ustrbuf.hxx>
@@ -392,7 +392,7 @@ private:
 } // formula
 // =============================================================================
 
-#endif // FORMULA_COMPILER_HXX_INCLUDED
+#endif // INCLUDED_FORMULA_FORMULACOMPILER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

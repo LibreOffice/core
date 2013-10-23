@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_STRING_H_
-#define _RTL_STRING_H_
+#ifndef INCLUDED_RTL_STRING_H
+#define INCLUDED_RTL_STRING_H
 
 #include "sal/config.h"
 
@@ -1424,6 +1424,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_ensureCapacity( rtl_String ** str, sal_In
 }
 #endif
 
-#endif /* _RTL_STRING_H_ */
+#endif // INCLUDED_RTL_STRING_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

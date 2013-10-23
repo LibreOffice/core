@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _L10N_DLLAPI_H
-#define _L10N_DLLAPI_H
+#ifndef INCLUDED_HELPCOMPILER_DLLAPI_H
+#define INCLUDED_HELPCOMPILER_DLLAPI_H
 
 #include "sal/config.h"
 #include "sal/types.h"

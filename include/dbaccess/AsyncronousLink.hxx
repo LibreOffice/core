@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_ASYNCRONOUSLINK_HXX
-#define DBAUI_ASYNCRONOUSLINK_HXX
+#ifndef INCLUDED_DBACCESS_ASYNCRONOUSLINK_HXX
+#define INCLUDED_DBACCESS_ASYNCRONOUSLINK_HXX
 
 #include <tools/link.hxx>
 #include <osl/mutex.hxx>
@@ -59,6 +59,6 @@ namespace dbaui
         DECL_LINK(OnAsyncCall, void*);
     };
 }
-#endif // DBAUI_ASYNCRONOUSLINK_HXX
+#endif // INCLUDED_DBACCESS_ASYNCRONOUSLINK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

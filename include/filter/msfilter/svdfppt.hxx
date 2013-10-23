@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDFPPT_HXX
-#define _SVDFPPT_HXX
+#ifndef INCLUDED_FILTER_MSFILTER_SVDFPPT_HXX
+#define INCLUDED_FILTER_MSFILTER_SVDFPPT_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -1561,6 +1561,6 @@ public :
 #define PPT_PLACEHOLDER_ORGANISZATIONCHART      23  // 24 Organization Chart
 #define PPT_PLACEHOLDER_MEDIACLIP               24  // 25 Media Clip
 
-#endif //_SVDFPPT_HXX
+#endif // INCLUDED_FILTER_MSFILTER_SVDFPPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

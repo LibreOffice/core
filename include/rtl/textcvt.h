@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_TEXTCVT_H
-#define _RTL_TEXTCVT_H
+#ifndef INCLUDED_RTL_TEXTCVT_H
+#define INCLUDED_RTL_TEXTCVT_H
 
 #include "sal/config.h"
 
@@ -172,6 +172,6 @@ SAL_DLLPUBLIC sal_Size SAL_CALL rtl_convertUnicodeToText(
 }
 #endif
 
-#endif /* _RTL_TEXTCVT_H */
+#endif // INCLUDED_RTL_TEXTCVT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

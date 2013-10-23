@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FRAMEWORK_XML_MENUCONFIGURATION_HXX_
-#define __FRAMEWORK_XML_MENUCONFIGURATION_HXX_
+#ifndef INCLUDED_FRAMEWORK_MENUCONFIGURATION_HXX
+#define INCLUDED_FRAMEWORK_MENUCONFIGURATION_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
@@ -102,6 +102,6 @@ class FWE_DLLPUBLIC MenuConfiguration
 
 }
 
-#endif // __FRAMEWORK_XML_MENUCONFIGURATION_HXX_
+#endif // INCLUDED_FRAMEWORK_MENUCONFIGURATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

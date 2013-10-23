@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_DBAUNDOMANAGER_HXX
-#define DBACCESS_DBAUNDOMANAGER_HXX
+#ifndef INCLUDED_DBACCESS_DBAUNDOMANAGER_HXX
+#define INCLUDED_DBACCESS_DBAUNDOMANAGER_HXX
 
 #include "dbaccessdllapi.h"
 
@@ -91,6 +91,6 @@ namespace dbaui
 } // namespace dbaui
 //......................................................................................................................
 
-#endif // DBACCESS_DBAUNDOMANAGER_HXX
+#endif // INCLUDED_DBACCESS_DBAUNDOMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

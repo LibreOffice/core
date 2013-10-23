@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_FORMDATA_HXX
-#define FORMULA_FORMDATA_HXX
+#ifndef INCLUDED_FORMULA_FORMDATA_HXX
+#define INCLUDED_FORMULA_FORMDATA_HXX
 
 #include <formula/formuladllapi.h>
 #include <rtl/ustring.hxx>
@@ -78,6 +78,6 @@ private:
 
 
 } // formula
-#endif // FORMULA_FORMDATA_HXX
+#endif // INCLUDED_FORMULA_FORMDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

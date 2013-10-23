@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef HELPINDEXER_HXX
-#define HELPINDEXER_HXX
+#ifndef INCLUDED_HELPCOMPILER_HELPINDEXER_HXX
+#define INCLUDED_HELPCOMPILER_HELPINDEXER_HXX
 
 #include <helpcompiler/dllapi.h>
 

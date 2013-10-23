@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_AVMEDIADLLAPI_H
-#define INCLUDED_AVMEDIADLLAPI_H
+#ifndef INCLUDED_AVMEDIA_AVMEDIADLLAPI_H
+#define INCLUDED_AVMEDIA_AVMEDIADLLAPI_H
 
 #include "sal/types.h"
 
@@ -29,6 +29,6 @@
 #endif
 #define AVMEDIA_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_AVMEDIADLLAPI_H */
+#endif // INCLUDED_AVMEDIA_AVMEDIADLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVE2DTOOLS_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVE2DTOOLS_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETOOLS2D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETOOLS2D_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
@@ -194,6 +194,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVE2DTOOLS_HXX
+#endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETOOLS2D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

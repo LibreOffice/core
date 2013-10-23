@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _RTL_PROCESS_H_
-#define _RTL_PROCESS_H_
+#ifndef INCLUDED_RTL_PROCESS_H
+#define INCLUDED_RTL_PROCESS_H
 
 #include "sal/config.h"
 

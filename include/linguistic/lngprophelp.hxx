@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINGUISTIC_LNGPROPHELP_HXX_
-#define _LINGUISTIC_LNGPROPHELP_HXX_
+#ifndef INCLUDED_LINGUISTIC_LNGPROPHELP_HXX
+#define INCLUDED_LINGUISTIC_LNGPROPHELP_HXX
 
 #include <tools/solar.h>
 #include <uno/lbnames.h>

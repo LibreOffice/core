@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTL_TEXTENC_H
-#define _RTL_TEXTENC_H
+#ifndef INCLUDED_RTL_TEXTENC_H
+#define INCLUDED_RTL_TEXTENC_H
 
 #ifdef _SOLAR_RSC_INVOKED
 /* Enable resources to use these values, rsc can't handle casts */
@@ -265,6 +265,6 @@ Japanese (JIS 0212)                             RTL_TEXTENCODING_JISX_0212
 # Currently not implemented
 */
 
-#endif /* _RTL_TEXTENC_H */
+#endif // INCLUDED_RTL_TEXTENC_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

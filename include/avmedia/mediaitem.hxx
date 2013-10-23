@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef AVMEDIA_MEDIAITEM_HXX
-#define AVMEDIA_MEDIAITEM_HXX
+#ifndef INCLUDED_AVMEDIA_MEDIAITEM_HXX
+#define INCLUDED_AVMEDIA_MEDIAITEM_HXX
 
 #include <boost/scoped_ptr.hpp>
 

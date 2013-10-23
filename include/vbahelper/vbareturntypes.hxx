@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef RETURNTYPES_HXX
-#define RETURNTYPES_HXX
+#ifndef INCLUDED_VBAHELPER_VBARETURNTYPES_HXX
+#define INCLUDED_VBAHELPER_VBARETURNTYPES_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/script/XDefaultProperty.hpp>

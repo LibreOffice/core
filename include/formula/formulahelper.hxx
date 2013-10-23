@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef FORMULA_FORMULA_HELPER_HXX
-#define FORMULA_FORMULA_HELPER_HXX
+#ifndef INCLUDED_FORMULA_FORMULAHELPER_HXX
+#define INCLUDED_FORMULA_FORMULAHELPER_HXX
 
 #include <formula/IFunctionDescription.hxx>
 #include <formula/formuladllapi.h>
@@ -75,6 +75,6 @@ namespace formula
 } // formula
 // =============================================================================
 
-#endif //FORMULA_FORMULA_HELPER_HXX
+#endif // INCLUDED_FORMULA_FORMULAHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _I18N_SCRIPTTYPEDETECTOR_HXX_
-#define _I18N_SCRIPTTYPEDETECTOR_HXX_
+#ifndef INCLUDED_I18NUTIL_SCRIPTTYPEDETECTOR_HXX
+#define INCLUDED_I18NUTIL_SCRIPTTYPEDETECTOR_HXX
 
 #include "i18nutildllapi.h"
 #include <rtl/ustring.hxx>

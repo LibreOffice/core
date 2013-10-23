@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX
-#define __FRAMEWORK_CLASSES_BMKMENU_HXX
+#ifndef INCLUDED_FRAMEWORK_BMKMENU_HXX
+#define INCLUDED_FRAMEWORK_BMKMENU_HXX
 
 #include "framework/addonmenu.hxx"
 
@@ -63,6 +63,6 @@ class FWE_DLLPUBLIC BmkMenu : public AddonMenu
 
 } // namespace framework
 
-#endif // #ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX
+#endif // INCLUDED_FRAMEWORK_BMKMENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

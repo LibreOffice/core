@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMULADLLAPI_H
-#define INCLUDED_FORMULADLLAPI_H
+#ifndef INCLUDED_FORMULA_FORMULADLLAPI_H
+#define INCLUDED_FORMULA_FORMULADLLAPI_H
 
 #include "sal/types.h"
 
@@ -29,6 +29,6 @@
 #endif
 #define FORMULA_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_FORMULADLLAPI_H */
+#endif // INCLUDED_FORMULA_FORMULADLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
