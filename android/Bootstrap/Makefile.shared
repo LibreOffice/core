@@ -88,6 +88,7 @@ LIBS = \
   $(HUNSPELL_LIBS) \
   $(HYPHEN_LIB) \
   $(MYTHES_LIBS) \
+  $(wildcard $(WORKDIR)/UnpackedTarball/curl/lib/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/icu/source/lib/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/lcms2/src/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/libcdr/src/lib/.libs/*.a) \

@@ -1931,9 +1931,16 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,curl/include) \
 	$$(INCLUDE) \
 )
+
+ifeq ($(COM),MSC)
 $(call gb_LinkTarget_use_libraries,$(1),\
-	curl \
+	$(call gb_UnpackedTarball_get_dir,curl)/lib/libcurl.lib \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,curl)/lib/.libs -lcurl \
+)
+endif
 
 endef
 

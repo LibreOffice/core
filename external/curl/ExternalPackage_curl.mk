@@ -11,33 +11,18 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,curl,curl))
 
 $(eval $(call gb_ExternalPackage_use_external_project,curl,curl))
 
-ifneq ($(OS),WNT)
+ifneq ($(DISABLE_DYNLOADING),TRUE)
 
-ifeq ($(COM),GCC)
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/pkgconfig/libcurl.pc,libcurl.pc))
-endif
-
-ifeq ($(DISABLE_DYNLOADING),TRUE)
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.a,lib/.libs/libcurl.a))
-else ifeq ($(OS),ANDROID)
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so))
+ifeq ($(OS)$(COM),WNTGCC)
+$(eval $(call gb_ExternalPackage_add_library_for_install,curl,bin/libcurl.dll,lib/.libs/libcurl.dll))
+else ifeq ($(COM),MSC)
+$(eval $(call gb_ExternalPackage_add_library_for_install,curl,bin/libcurl.dll,lib/libcurl.dll))
 else ifeq ($(OS),AIX)
 $(eval $(call gb_ExternalPackage_add_library_for_install,curl,lib/libcurl.so,lib/.libs/libcurl.so.4))
 else
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so.4.2.0))
 $(eval $(call gb_ExternalPackage_add_library_for_install,curl,lib/libcurl.so.4,lib/.libs/libcurl.so.4.2.0))
 endif
 
-else ifeq ($(OS)$(COM),WNTGCC)
-
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.a,lib/.libs/libcurl.a))
-$(eval $(call gb_ExternalPackage_add_library_for_install,curl,bin/libcurl.dll,lib/.libs/libcurl.dll))
-
-else ifeq ($(COM),MSC)
-
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.lib,lib/libcurl.lib))
-$(eval $(call gb_ExternalPackage_add_library_for_install,curl,bin/libcurl.dll,lib/libcurl.dll))
-
-endif
+endif # $(DISABLE_DYNLOADING)
 
 # vim: set noet sw=4 ts=4:
