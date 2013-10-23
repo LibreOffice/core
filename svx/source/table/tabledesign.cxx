@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <comphelper/serviceinfohelper.hxx>
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -36,6 +35,7 @@
 #include <cppuhelper/compbase6.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "svx/unoprov.hxx"
 #include "svx/sdr/table/tabledesign.hxx"
@@ -209,23 +209,16 @@ const CellStyleNameMap& TableDesignStyle::getCellStyleNameMap()
     return aMap;
 }
 
-// ----------------------------------------------------------
 // XServiceInfo
-// ----------------------------------------------------------
-
 OUString SAL_CALL TableDesignStyle::getImplementationName() throw(RuntimeException)
 {
     return OUString("TableDesignStyle");
 }
 
-// ----------------------------------------------------------
-
 sal_Bool SAL_CALL TableDesignStyle::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
-
-// ----------------------------------------------------------
 
 Sequence< OUString > SAL_CALL TableDesignStyle::getSupportedServiceNames() throw(RuntimeException)
 {
@@ -234,16 +227,11 @@ Sequence< OUString > SAL_CALL TableDesignStyle::getSupportedServiceNames() throw
     return aSeq;
 }
 
-// ----------------------------------------------------------
 // XStyle
-// ----------------------------------------------------------
-
 sal_Bool SAL_CALL TableDesignStyle::isUserDefined() throw (RuntimeException)
 {
     return sal_False;
 }
-
-// ----------------------------------------------------------
 
 sal_Bool SAL_CALL TableDesignStyle::isInUse() throw (RuntimeException)
 {
@@ -489,21 +477,15 @@ void SAL_CALL TableDesignStyle::disposing( const ::com::sun::star::lang::EventOb
 
 // ----------------------------------------------------------
 // XServiceInfo
-// ----------------------------------------------------------
-
 OUString SAL_CALL TableDesignFamily::getImplementationName() throw(RuntimeException)
 {
     return OUString("TableDesignFamily");
 }
 
-// ----------------------------------------------------------
-
 sal_Bool SAL_CALL TableDesignFamily::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
-
-// ----------------------------------------------------------
 
 Sequence< OUString > SAL_CALL TableDesignFamily::getSupportedServiceNames() throw(RuntimeException)
 {
@@ -512,25 +494,17 @@ Sequence< OUString > SAL_CALL TableDesignFamily::getSupportedServiceNames() thro
     return aSeq;
 }
 
-// ----------------------------------------------------------
 // XNamed
-// ----------------------------------------------------------
-
 OUString SAL_CALL TableDesignFamily::getName() throw (RuntimeException)
 {
     return OUString( "table" );
 }
 
-// ----------------------------------------------------------
-
 void SAL_CALL TableDesignFamily::setName( const OUString& ) throw (RuntimeException)
 {
 }
 
-// ----------------------------------------------------------
 // XNameAccess
-// ----------------------------------------------------------
-
 Any SAL_CALL TableDesignFamily::getByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     SolarMutexGuard aGuard;

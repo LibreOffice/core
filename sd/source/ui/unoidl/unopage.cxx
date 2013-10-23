@@ -28,6 +28,7 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/metaact.hxx>
@@ -2011,7 +2012,7 @@ OUString SAL_CALL SdPageLinkTargets::getImplementationName()
 sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()

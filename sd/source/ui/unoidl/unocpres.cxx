@@ -24,7 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/svdpage.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "unohelp.hxx"
 #include "unomodel.hxx"
@@ -73,7 +73,7 @@ OUString SAL_CALL SdXCustomPresentation::getImplementationName()
 sal_Bool SAL_CALL SdXCustomPresentation::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentation::getSupportedServiceNames()
@@ -302,7 +302,7 @@ OUString SAL_CALL SdXCustomPresentationAccess::getImplementationName()
 sal_Bool SAL_CALL SdXCustomPresentationAccess::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getSupportedServiceNames()

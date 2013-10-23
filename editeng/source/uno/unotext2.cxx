@@ -25,8 +25,9 @@
 #include <editeng/flditem.hxx>
 #include <editeng/unofield.hxx>
 #include <editeng/unotext.hxx>
-#include <comphelper/serviceinfohelper.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -682,7 +683,7 @@ OUString SAL_CALL SvxUnoTextCursor::getImplementationName() throw(uno::RuntimeEx
 
 sal_Bool SAL_CALL SvxUnoTextCursor::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextCursor::getSupportedServiceNames() throw(uno::RuntimeException)

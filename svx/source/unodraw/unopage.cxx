@@ -22,7 +22,7 @@
 #include <osl/mutex.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/classids.hxx>
-#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <svx/svdpool.hxx>
@@ -816,7 +816,7 @@ OUString SAL_CALL SvxDrawPage::getImplementationName() throw( uno::RuntimeExcept
 sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames() throw( uno::RuntimeException )

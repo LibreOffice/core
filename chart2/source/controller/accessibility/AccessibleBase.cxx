@@ -37,6 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/unofdesc.hxx>
 #include <editeng/outliner.hxx>
@@ -898,7 +899,7 @@ OUString SAL_CALL AccessibleBase::getImplementationName()
 sal_Bool SAL_CALL AccessibleBase::supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()

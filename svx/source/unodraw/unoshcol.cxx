@@ -21,7 +21,7 @@
 
 #include "svx/unoshcol.hxx"
 #include <svx/unoprov.hxx>
-#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -196,22 +196,17 @@ uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-
-//----------------------------------------------------------------------
 uno::Type SAL_CALL SvxShapeCollection::getElementType() throw( uno::RuntimeException )
 {
     return ::getCppuType(( const Reference< drawing::XShape >*)0);
 }
 
-//----------------------------------------------------------------------
 sal_Bool SAL_CALL SvxShapeCollection::hasElements() throw( uno::RuntimeException )
 {
     return getCount() != 0;
 }
 
-//----------------------------------------------------------------------
 // XServiceInfo
-//----------------------------------------------------------------------
 OUString SAL_CALL SvxShapeCollection::getImplementationName()
     throw( uno::RuntimeException )
 {
@@ -226,7 +221,7 @@ OUString SvxShapeCollection::getImplementationName_Static()
 sal_Bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames() throw( uno::RuntimeException )

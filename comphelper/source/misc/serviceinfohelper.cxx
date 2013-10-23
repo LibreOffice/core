@@ -32,21 +32,6 @@ OUString SAL_CALL ServiceInfoHelper::getImplementationName() throw( ::com::sun::
     return OUString();
 }
 
-/** the base implementation iterates over the service names from <code>getSupportedServiceNames</code> */
-sal_Bool SAL_CALL ServiceInfoHelper::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
-{
-    return supportsService( ServiceName, getSupportedServiceNames() );
-}
-
-sal_Bool SAL_CALL ServiceInfoHelper::supportsService( const OUString& ServiceName, const ::com::sun::star::uno::Sequence< OUString >& SupportedServices ) throw()
-{
-    const OUString * pArray = SupportedServices.getConstArray();
-    for( sal_Int32 i = 0; i < SupportedServices.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
-}
-
 /** the base implementation has no supported services */
 ::com::sun::star::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
 {
@@ -71,6 +56,5 @@ void ServiceInfoHelper::addToSequence( ::com::sun::star::uno::Sequence< OUString
 }
 
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

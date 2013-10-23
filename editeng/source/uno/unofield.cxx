@@ -29,8 +29,8 @@
 #include <editeng/measfld.hxx>
 #include <editeng/unofield.hxx>
 #include <editeng/unotext.hxx>
-#include <comphelper/serviceinfohelper.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "editeng/unonames.hxx"
 
@@ -868,7 +868,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
 
 sal_Bool SAL_CALL SvxUnoTextField::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const OUString& ServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)

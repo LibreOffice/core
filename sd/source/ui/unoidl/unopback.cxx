@@ -23,12 +23,12 @@
 #include <svl/itemset.hxx>
 #include <svx/svdpool.hxx>
 #include <comphelper/extract.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
-#include <comphelper/serviceinfohelper.hxx>
 
 #include "unopback.hxx"
 #include "unohelp.hxx"
@@ -188,7 +188,7 @@ OUString SAL_CALL SdUnoPageBackground::getImplementationName()
 sal_Bool SAL_CALL SdUnoPageBackground::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL SdUnoPageBackground::getSupportedServiceNames()
