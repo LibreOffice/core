@@ -38,7 +38,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
 				,$(ICU_CPPFLAGS)) \
-			-L$(OUTDIR)/lib \
+			-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
 			" \
 		&& ./configure \
 			--without-editline \

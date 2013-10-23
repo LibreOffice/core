@@ -9029,7 +9029,7 @@ else
     # external libs): the system icu-config is quite unhelpful and spits out
     # dozens of weird flags and also default path -I/usr/include
     ICU_CFLAGS="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
-    ICU_LIBS=""
+    ICU_LIBS="-L${WORKDIR}/UnpackedTarball/icu/source/lib"
 fi
 AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
