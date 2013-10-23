@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZH///7I\u003d",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-23T10:27:53Z",
+      "side": 1,
+      "message": "so the below TODO comment can go now",
+      "revId": "430ee1eedd701229f3bf795077508d6007eecc51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZH///60\u003d",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-23T10:27:53Z",
+      "side": 1,
+      "message": "please group the conditionals differently,\n\n  i !\u003d nPrefixEnd \u0026\u0026 i !\u003d rEnd \u0026\u0026 rText[i] \u003d\u003d \u0027#\u0027\n\nas the first (check that we\u0027re not still at nPrefixEnd, i.e., have seen something else in between) is checking something else than the last two (check that the next char is \u0027#\u0027)",
+      "revId": "430ee1eedd701229f3bf795077508d6007eecc51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZH///6w\u003d",
+        "filename": "svl/source/misc/urihelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-23T10:27:53Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "430ee1eedd701229f3bf795077508d6007eecc51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
