@@ -2211,7 +2211,7 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
     // #i65474# handling of fragment URLs ("#....") is undefined
     // they are stored 'as is'
     uno::Reference< uri::XUriReference > xUriRef;
-    if(!sValue.isEmpty() && sValue.getStr()[0] != '#')
+    if(!sValue.isEmpty() && sValue[0] != '#')
     {
         try
         {

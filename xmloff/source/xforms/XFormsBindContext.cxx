@@ -162,7 +162,7 @@ static void lcl_fillNamespaceContainer(
 
         // as a hack, we will ignore our own 'default' namespaces
         DBG_ASSERT( !sPrefix.isEmpty(), "no prefix?" );
-        if( sPrefix.getStr()[0] != sal_Unicode( '_' )  &&
+        if( !sPrefix.startsWith("_") &&
             nKeyIter >= XML_OLD_NAMESPACE_META_IDX )
         {
             // insert prefix (use replace if already known)

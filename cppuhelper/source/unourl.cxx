@@ -72,7 +72,7 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
     for (sal_Int32 i = 0;; ++i)
     {
         bool bEnd = i == rDescriptor.getLength();
-        sal_Unicode c = bEnd ? 0 : rDescriptor.getStr()[i];
+        sal_Unicode c = bEnd ? 0 : rDescriptor[i];
         switch (eState)
         {
         case STATE_NAME0:
@@ -236,7 +236,7 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
             rtl::OUString("UNO URL contains empty ObjectName"));
     for (j = i; j < rUrl.getLength(); ++j)
     {
-        sal_Unicode c = rUrl.getStr()[j];
+        sal_Unicode c = rUrl[j];
         if (!isAlphanum(c) && c != 0x21 && c != 0x24 // '!', '$'
             && c != 0x26 && c != 0x27 && c != 0x28 // '&', ''', '('
             && c != 0x28 && c != 0x2A && c != 0x2B // ')', '*', '+'

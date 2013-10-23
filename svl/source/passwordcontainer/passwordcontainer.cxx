@@ -169,7 +169,7 @@ static ::rtl::ByteSequence getBufFromAsciiLine( OUString line )
 
     for( int ind = 0; ind < tmpLine.getLength()/2; ind++ )
     {
-        aResult[ind] = ( (sal_uInt8)( tmpLine.getStr()[ind*2] - 'a' ) << 4 ) | (sal_uInt8)( tmpLine.getStr()[ind*2+1] - 'a' );
+        aResult[ind] = ( (sal_uInt8)( tmpLine[ind*2] - 'a' ) << 4 ) | (sal_uInt8)( tmpLine[ind*2+1] - 'a' );
     }
 
     return aResult;

@@ -160,7 +160,7 @@ ORowSetValue OOp_RTrim::operate(const ORowSetValue& lhs) const
 
     OUString sRet = lhs;
     OUString sNew = sRet.trim();
-    return sRet.copy(0,sRet.lastIndexOf(sNew.getStr()[sNew.getLength()-1])+1);
+    return sRet.copy(0,sRet.lastIndexOf(sNew[sNew.getLength()-1])+1);
 }
 //------------------------------------------------------------------
 ORowSetValue OOp_Space::operate(const ORowSetValue& lhs) const

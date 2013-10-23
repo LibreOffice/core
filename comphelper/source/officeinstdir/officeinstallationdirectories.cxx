@@ -67,9 +67,7 @@ static bool makeCanonicalFileURL( OUString & rURL )
 
                 if ( !aNormalizedURL.isEmpty() )
                 {
-                    if ( aNormalizedURL
-                            .getStr()[ aNormalizedURL.getLength() - 1 ]
-                                != sal_Unicode( '/' ) )
+                    if ( !aNormalizedURL.endsWith("/") )
                         rURL = aNormalizedURL;
                     else
                         rURL = aNormalizedURL

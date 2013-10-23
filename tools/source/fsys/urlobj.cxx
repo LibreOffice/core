@@ -2248,8 +2248,7 @@ sal_Int32 INetURLObject::getAuthorityBegin() const
     else
         nBegin = m_aPath.getBegin();
     nBegin -= RTL_CONSTASCII_LENGTH("//");
-    DBG_ASSERT(m_aAbsURIRef.getStr()[nBegin] == '/'
-               && m_aAbsURIRef.getStr()[nBegin + 1] == '/',
+    DBG_ASSERT(m_aAbsURIRef[nBegin] == '/' && m_aAbsURIRef[nBegin + 1] == '/',
                "INetURLObject::getAuthority(): Bad authority");
     return nBegin;
 }
@@ -3943,7 +3942,7 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
             switch (nLength - aPath2.getLength())
             {
                 case -1:
-                    if (aPath2.getStr()[nLength] != '/')
+                    if (aPath2[nLength] != '/')
                         return false;
                     break;
 
@@ -3951,7 +3950,7 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
                     break;
 
                 case 1:
-                    if (aPath1.getStr()[--nLength] != '/')
+                    if (aPath1[--nLength] != '/')
                         return false;
                     break;
 

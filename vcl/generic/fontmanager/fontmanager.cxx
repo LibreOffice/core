@@ -451,8 +451,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
     {
         int nLen = aFamily.getLength();
         if( nLen > 2 &&
-            aFamily.getStr()[ nLen-2 ] == 'G' &&
-            aFamily.getStr()[ nLen-1 ] == 'B' &&
+            aFamily.endsWith("GB") &&
             pInfo->numOfChars > 255 )
         {
             m_aEncoding = RTL_TEXTENCODING_GBK;

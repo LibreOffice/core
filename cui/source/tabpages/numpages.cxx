@@ -320,8 +320,8 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl)
             return 0;
         SvxNumSettings_Impl* _pSet = &aNumSettingsArr[nIdx];
         sal_Int16 eNewType = _pSet->nNumberType;
-        const sal_Unicode cLocalPrefix = !_pSet->sPrefix.isEmpty() ? _pSet->sPrefix.getStr()[0] : 0;
-        const sal_Unicode cLocalSuffix = !_pSet->sSuffix.isEmpty() ? _pSet->sSuffix.getStr()[0] : 0;
+        const sal_Unicode cLocalPrefix = !_pSet->sPrefix.isEmpty() ? _pSet->sPrefix[0] : 0;
+        const sal_Unicode cLocalSuffix = !_pSet->sSuffix.isEmpty() ? _pSet->sSuffix[0] : 0;
 
         sal_uInt16 nMask = 1;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -730,7 +730,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
                     aFmt.SetBulletFont( &rActBulletFont );
 
                 aFmt.SetBulletChar( !pLevelSettings->sBulletChar.isEmpty()
-                                        ? pLevelSettings->sBulletChar.getStr()[0]
+                                        ? pLevelSettings->sBulletChar[0]
                                         : 0 );
                 aFmt.SetCharFmtName( sBulletCharFmtName );
                 // #62069# // #92724#

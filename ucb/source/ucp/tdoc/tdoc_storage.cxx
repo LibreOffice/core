@@ -114,7 +114,7 @@ StorageElementFactory::createStorage( const OUString & rUri,
     }
 
     OUString aUriKey
-        ( ( rUri.getStr()[ rUri.getLength() - 1 ] == sal_Unicode( '/' ) )
+        ( rUri.endsWith("/")
           ? rUri.copy( 0, rUri.getLength() - 1 )
           : rUri );
 

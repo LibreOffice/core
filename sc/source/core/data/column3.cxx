@@ -1596,8 +1596,8 @@ bool ScColumn::ParseString(
                 if (rDecSep.getLength() != 1 || rGroupSep.getLength() != 1)
                     break;
 
-                sal_Unicode dsep = rDecSep.getStr()[0];
-                sal_Unicode gsep = rGroupSep.getStr()[0];
+                sal_Unicode dsep = rDecSep[0];
+                sal_Unicode gsep = rGroupSep[0];
 
                 if (!ScStringUtil::parseSimpleNumber(rString, dsep, gsep, nVal))
                     break;

@@ -73,7 +73,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
                     if ( sValue == sFileName )
                     {
                         const sal_Int32 nFileNameLength = sFileName.getLength();
-                        if ( ( nFileNameLength > 0 ) && ( sFileName.getStr()[ nFileNameLength - 1 ] == '/' ) )
+                        if ( sFileName.endsWith("/") )
                             sFileName = sFileName.copy( 0, nFileNameLength - 1 );
 
                         sLocation = ::svt::OFileNotation( rImport.GetAbsoluteReference( sFileName ) ).get( ::svt::OFileNotation::N_SYSTEM );

@@ -204,7 +204,7 @@ namespace pcr
         if ( m_bIsPassword )
         {
             if ( !sText.isEmpty() )
-                aPropValue <<= (sal_Int16)sText.getStr()[0];
+                aPropValue <<= (sal_Int16)sText[0];
         }
         else
             aPropValue <<= sText;

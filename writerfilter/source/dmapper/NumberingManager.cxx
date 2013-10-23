@@ -185,7 +185,7 @@ sal_Int16 ListLevel::GetParentNumbering( OUString sText, sal_Int16 nLevel,
     {
         if( sLevelText.getLength() > 1 )
         {
-            sal_Unicode cLevel = sLevelText.getStr()[1];
+            sal_Unicode cLevel = sLevelText[1];
             if( cLevel >= '1' && cLevel <= '9' )
             {
                 if( cLevel - '1' < nMinLevel )

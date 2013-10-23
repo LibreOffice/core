@@ -458,8 +458,8 @@ void cclass_Unicode::initParserTable( const Locale& rLocale, sal_Int32 startChar
             mxLocaleData->getLocaleItem( aParserLocale );
 //!TODO: theoretically separators may be a string, adjustment would have to be
 //! done here and in parsing and in ::rtl::math::stringToDouble()
-        cGroupSep = aItem.thousandSeparator.getStr()[0];
-        cDecimalSep = aItem.decimalSeparator.getStr()[0];
+        cGroupSep = aItem.thousandSeparator[0];
+        cDecimalSep = aItem.decimalSeparator[0];
     }
 
     if ( cGroupSep < nDefCnt )

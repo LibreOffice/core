@@ -227,15 +227,12 @@ throw(  SAXException, RuntimeException )
                             {
                                 OUString aColor = xAttribs->getValueByIndex( n );
 
-                                if ( !aColor.isEmpty() )
+                                if ( aColor.startsWith("#") )
                                 {
-                                    if ( aColor.getStr()[0] == '#' )
-                                    {
-                                        // the color value is given as #rrggbb and used the hexadecimal system!!
-                                        sal_uInt32 nColor = aColor.copy( 1 ).toUInt32( 16 );
+                                    // the color value is given as #rrggbb and used the hexadecimal system!!
+                                    sal_uInt32 nColor = aColor.copy( 1 ).toUInt32( 16 );
 
-                                        m_pImages->aMaskColor = Color( COLORDATA_RGB( nColor ) );
-                                    }
+                                    m_pImages->aMaskColor = Color( COLORDATA_RGB( nColor ) );
                                 }
                             }
                             break;

@@ -127,8 +127,8 @@ NumSettings_ImplPtr lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>
         else if(pValues[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sBulletFontName)))
             pValues[j].Value >>= pNew->sBulletFont;
     }
-    const sal_Unicode cLocalPrefix = pNew->sPrefix.getLength() ? pNew->sPrefix.getStr()[0] : 0;
-    const sal_Unicode cLocalSuffix = pNew->sSuffix.getLength() ? pNew->sSuffix.getStr()[0] : 0;
+    const sal_Unicode cLocalPrefix = pNew->sPrefix.getLength() ? pNew->sPrefix[0] : 0;
+    const sal_Unicode cLocalSuffix = pNew->sSuffix.getLength() ? pNew->sSuffix[0] : 0;
     OUString aEmptyStr;
     if( cLocalPrefix == ' ') pNew->sPrefix=aEmptyStr;
     if( cLocalSuffix == ' ') pNew->sSuffix=aEmptyStr;
@@ -1407,8 +1407,8 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
         return (sal_uInt16)0xFFFF;
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
-    //sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix()).getStr()[0];
-    //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix()).getStr()[0];
+    //sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix())[0];
+    //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix())[0];
     OUString sPreFix = aFmt.GetPrefix();
     OUString sLclSuffix = aFmt.GetSuffix();
     sal_Int16 eNumType = aFmt.GetNumberingType();
@@ -1446,8 +1446,8 @@ sal_Bool NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sa
         return sal_False;
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
-    //sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix()).getStr()[0];
-    //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix()).getStr()[0];
+    //sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix())[0];
+    //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix())[0];
     sal_Int16 eNumType = aFmt.GetNumberingType();
 
     sal_uInt16 nCount = pNumberSettingsArr->size();
@@ -1641,7 +1641,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
             {
                 sal_Unicode cChar = aFmt.GetBulletChar();
                 //const Font* pFont = aFmt.GetBulletFont();
-                sal_Unicode ccChar = _pSet->sBulletChar.getStr()[0];
+                sal_Unicode ccChar = _pSet->sBulletChar[0];
                 // rtl::OUString sFont = _pSet->sBulletFont;
                 if ( !((cChar == ccChar) && //pFont && sFont.compareTo(pFont->GetName()) &&
                     _pSet->eLabelFollowedBy == aFmt.GetLabelFollowedBy() &&
@@ -1710,8 +1710,8 @@ sal_Bool OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
     for (sal_uInt16 iLevel=0;iLevel < nCount;iLevel++)
     {
         SvxNumberFormat aFmt(aNum.GetLevel(iLevel));
-        //sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix()).getStr()[0];
-        //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix()).getStr()[0];
+        //sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix())[0];
+        //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix())[0];
         sal_Int16 eNumType = aFmt.GetNumberingType();
 
         NumSettings_ImplPtr _pSet = (*pItemArr->pNumSettingsArr)[iLevel].get();

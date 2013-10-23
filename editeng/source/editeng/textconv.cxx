@@ -483,7 +483,7 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
                 nIndex = static_cast< xub_StrLen >( rOrigText.getLength() );
             }
 
-            if (rOrigText.getStr()[nIndex] == rNewText[nPos] ||
+            if (rOrigText[nIndex] == rNewText[nPos] ||
                 nPos == nConvTextLen /* end of string also terminates non-matching char sequence */)
             {
                 // substring that needs to be replaced found?

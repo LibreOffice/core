@@ -3826,7 +3826,7 @@ void XMLAnnotationImportContext::PrepareField(
     if ( sBuffer.getLength() )
     {
         // delete last paragraph mark (if necessary)
-        if (sal_Char(0x0a) == sBuffer.getStr()[sBuffer.getLength()-1])
+        if (sal_Char(0x0a) == sBuffer[sBuffer.getLength()-1])
             sBuffer = sBuffer.copy(0, sBuffer.getLength()-1);
         xPropertySet->setPropertyValue(sPropertyContent, makeAny(sBuffer));
     }

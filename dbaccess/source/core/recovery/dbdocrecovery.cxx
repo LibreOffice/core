@@ -102,7 +102,7 @@ namespace dbaccess
                 return false;
             }
             o_rCompDesc.sName = i_rIniLine.copy( nEqualSignPos + 1, nCommaPos - nEqualSignPos - 1 );
-            o_rCompDesc.bForEditing = ( i_rIniLine.getStr()[ nCommaPos + 1 ] == '1' );
+            o_rCompDesc.bForEditing = ( i_rIniLine[ nCommaPos + 1 ] == '1' );
             return true;
         }
 
@@ -152,7 +152,7 @@ namespace dbaccess
         static bool lcl_isSectionStart( const OUString& i_rIniLine, OUString& o_rSectionName )
         {
             const sal_Int32 nLen = i_rIniLine.getLength();
-            if ( ( nLen > 0 ) && ( i_rIniLine.getStr()[0] == '[' ) && ( i_rIniLine.getStr()[ nLen - 1 ] == ']' ) )
+            if ( i_rIniLine.startsWith("[") && i_rIniLine.endsWith("]") )
             {
                 o_rSectionName = i_rIniLine.copy( 1, nLen -2 );
                 return true;
@@ -163,7 +163,7 @@ namespace dbaccess
         static void lcl_stripTrailingLineFeed( OUString& io_rLine )
         {
             const sal_Int32 nLen = io_rLine.getLength();
-            if ( ( nLen > 0 ) && ( io_rLine.getStr()[ nLen - 1 ] == '\n' ) )
+            if ( io_rLine.endsWith("\n") )
                 io_rLine = io_rLine.copy( 0, nLen - 1 );
         }
 

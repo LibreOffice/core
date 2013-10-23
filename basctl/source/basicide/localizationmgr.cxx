@@ -235,7 +235,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                     // Replace string by id, add id+string to StringResource
                     if( eMode == SET_IDS )
                     {
-                        bool bEscAlreadyExisting = (!aPropStr.isEmpty() && aPropStr.getStr()[0] == '&' );
+                        bool bEscAlreadyExisting = aPropStr.startsWith("&");
                         if( bEscAlreadyExisting )
                             continue;
 
@@ -425,7 +425,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         for ( i = 0; i < nPropStringCount; ++i )
                         {
                             OUString aPropStr = pPropStrings[i];
-                            bool bEscAlreadyExisting = (!aPropStr.isEmpty() && aPropStr.getStr()[0] == '&' );
+                            bool bEscAlreadyExisting = aPropStr.startsWith("&");
                             if( bEscAlreadyExisting )
                             {
                                 pIdStrings[i] = aPropStr;

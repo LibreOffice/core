@@ -133,7 +133,7 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                     for (sal_Int32 nI = 0; nI < nLen; ++nI)
                     {
                         rStream << "\\'";
-                        Out_Hex(rStream, sConverted.getStr()[nI], 2);
+                        Out_Hex(rStream, sConverted[nI], 2);
                     }
                 }
                 break;

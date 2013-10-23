@@ -363,7 +363,7 @@ OUString extractTableFromInsert( const OUString & sql )
                     }
                 }
             }
-            ret = OUString( &sql.getStr()[start], i - start ).trim();
+            ret = sql.copy(start, i - start ).trim();
 //             printf( "pq_statement: parsed table name %s from insert\n" ,
 //                     OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US).getStr() );
         }

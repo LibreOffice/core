@@ -241,7 +241,7 @@ namespace comphelper
         if ( !implIsValidIndex( nIndex, sText.getLength() ) )
             throw IndexOutOfBoundsException();
 
-        return sText.getStr()[nIndex];
+        return sText[nIndex];
     }
 
     // -----------------------------------------------------------------------------

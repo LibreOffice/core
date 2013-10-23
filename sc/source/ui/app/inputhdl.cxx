@@ -876,7 +876,7 @@ void ScInputHandler::ShowTipCursor()
                                     {
                                         for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
                                         {
-                                            sal_Unicode cNext = aNew.getStr()[i];
+                                            sal_Unicode cNext = aNew[i];
                                             if( cNext == '(' )
                                             {
                                                 nStartPosition = i+1;
@@ -888,7 +888,7 @@ void ScInputHandler::ShowTipCursor()
                                         sal_uInt16 nCount = 0;
                                         for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
                                         {
-                                            sal_Unicode cNext = aNew.getStr()[i];
+                                            sal_Unicode cNext = aNew[i];
                                             if( cNext == '(' )
                                             {
                                                 nStartPosition = i+1;
@@ -910,7 +910,7 @@ void ScInputHandler::ShowTipCursor()
                                         sal_uInt16 nCount = 0;
                                         for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
                                         {
-                                            sal_Unicode cNext = aNew.getStr()[i];
+                                            sal_Unicode cNext = aNew[i];
                                             if( cNext == '(' )
                                             {
                                                 nStartPosition = i+1;
@@ -1128,7 +1128,7 @@ void ScInputHandler::UseFormulaData()
                                {
                                     for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
                                     {
-                                        sal_Unicode cNext = aNew.getStr()[i];
+                                        sal_Unicode cNext = aNew[i];
                                         if( cNext == '(' )
                                         {
                                             nStartPosition = i+1;
@@ -1140,7 +1140,7 @@ void ScInputHandler::UseFormulaData()
                                     sal_uInt16 nCount = 0;
                                     for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
                                     {
-                                        sal_Unicode cNext = aNew.getStr()[i];
+                                        sal_Unicode cNext = aNew[i];
                                         if( cNext == '(' )
                                         {
                                             nStartPosition = i+1;
@@ -1162,7 +1162,7 @@ void ScInputHandler::UseFormulaData()
                                     sal_uInt16 nCount = 0;
                                     for (sal_Int32 i = 0; i < aNew.getLength(); ++i)
                                     {
-                                        sal_Unicode cNext = aNew.getStr()[i];
+                                        sal_Unicode cNext = aNew[i];
                                         if( cNext == '(' )
                                         {
                                             nStartPosition = i+1;
@@ -2746,7 +2746,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
     {
         //  keine typographische Anfuehrungszeichen in Formeln
 
-        if (aString.getStr()[0] == '=')
+        if (aString[0] == '=')
         {
             SvxAutoCorrect* pAuto = SvxAutoCorrCfg::Get().GetAutoCorrect();
             if ( pAuto )

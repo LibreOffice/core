@@ -1311,7 +1311,7 @@ PDFFileImplData* PDFFile::impl_getData() const
 #if OSL_DEBUG_LEVEL > 1
                     OUString aTmp;
                     for( int i = 0; i < m_pData->m_aDocID.getLength(); i++ )
-                        aTmp += OUString::number((unsigned int)sal_uInt8(m_pData->m_aDocID.getStr()[i]), 16);
+                        aTmp += OUString::number((unsigned int)sal_uInt8(m_pData->m_aDocID[i]), 16);
                     SAL_INFO("sdext.pdfimport.pdfparse", "DocId is <" << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr() << ">");
 #endif
                 }
@@ -1375,7 +1375,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 {
                                     OUString aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        aTmp += " " + OUString::number((unsigned int)sal_uInt8(aEnt.getStr()[i]), 16);
+                                        aTmp += " " + OUString::number((unsigned int)sal_uInt8(aEnt[i]), 16);
                                     SAL_WARN("sdext.pdfimport.pdfparse",
                                              "O entry has length " << (int)aEnt.getLength() << ", should be 32 <" << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr() << ">" );
                                 }
@@ -1395,7 +1395,7 @@ PDFFileImplData* PDFFile::impl_getData() const
                                 {
                                     OUString aTmp;
                                     for( int i = 0; i < aEnt.getLength(); i++ )
-                                        aTmp += " " + OUString::number((unsigned int)sal_uInt8(aEnt.getStr()[i]), 16);
+                                        aTmp += " " + OUString::number((unsigned int)sal_uInt8(aEnt[i]), 16);
                                     SAL_WARN("sdext.pdfimport.pdfparse",
                                              "U entry has length " << (int)aEnt.getLength() << ", should be 32 <" << OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8).getStr() << ">" );
                                 }

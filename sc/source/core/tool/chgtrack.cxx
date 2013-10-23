@@ -1421,7 +1421,7 @@ void ScChangeActionContent::SetValueString(
     OUString& rValue, ScCellValue& rCell, const OUString& rStr, ScDocument* pDoc )
 {
     rCell.clear();
-    if ( rStr.getLength() > 1 && rStr.getStr()[0] == '=' )
+    if ( rStr.getLength() > 1 && rStr[0] == '=' )
     {
         rValue = EMPTY_OUSTRING;
         rCell.meType = CELLTYPE_FORMULA;

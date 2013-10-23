@@ -904,8 +904,8 @@ OUString lclEncodeDosUrl(
         else if ( aOldUrl.getLength() > 2 && aOldUrl.copy(1,2) == ":\\" )
         {
             // drive letter
-            sal_Unicode cThisDrive = rBase.isEmpty() ? ' ' : rBase.getStr()[0];
-            sal_Unicode cDrive = aOldUrl.getStr()[0];
+            sal_Unicode cThisDrive = rBase.isEmpty() ? ' ' : rBase[0];
+            sal_Unicode cDrive = aOldUrl[0];
             if (cThisDrive == cDrive)
                 // This document and the referenced document are under the same drive.
                 aBuf.append(EXC_URL_DRIVEROOT);

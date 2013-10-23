@@ -1807,7 +1807,7 @@ static void columnMetaData2DatabaseTypeDescription(
             i++;
             int start = i;
             while( array[i] && array[i] != '}' && array[i] != ',' ) i++;
-            row[3] <<= OUString( &array.getStr()[start], i - start );
+            row[3] <<= array.copy(start, i - start );
             vec.push_back( row );
         }
     }

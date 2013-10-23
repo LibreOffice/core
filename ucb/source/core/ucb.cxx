@@ -138,7 +138,7 @@ void makeAndAppendXMLName(
     sal_Int32 nCount = rIn.getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
-        const sal_Unicode c = rIn.getStr()[ n ];
+        const sal_Unicode c = rIn[ n ];
         switch ( c )
         {
             case '&':

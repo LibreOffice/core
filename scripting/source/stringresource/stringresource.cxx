@@ -1672,7 +1672,7 @@ bool checkNamingSceme( const OUString& aName, const OUString& aNameBase,
     // Name has to start with NameBase followed
     // by a '_' and at least one more character
     if( aName.startsWith( aNameBase ) && nNameBaseLen < nNameLen-1 &&
-        aName.getStr()[nNameBaseLen] == '_' )
+        aName[nNameBaseLen] == '_' )
     {
         bSuccess = true;
 
@@ -2671,8 +2671,8 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
     }
     else
     {
-        if( m_aLocation.getStr()[nLen - 1] != '/' )
-            m_aLocation += OUString("/");
+        if( m_aLocation[nLen - 1] != '/' )
+            m_aLocation += "/";
     }
 
     if( !bOk )

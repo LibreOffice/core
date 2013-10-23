@@ -467,7 +467,7 @@ namespace svx
         sal_Int32 nDescriptorLen = m_sCompatibleObjectDescription.getLength();
         if (nDescriptorLen)
         {
-            if (m_sCompatibleObjectDescription.getStr()[nDescriptorLen] == 11)
+            if (m_sCompatibleObjectDescription[nDescriptorLen] == 11)
                 m_sCompatibleObjectDescription = m_sCompatibleObjectDescription.copy(0, nDescriptorLen - 1);
 
             if (nDescriptorLen)

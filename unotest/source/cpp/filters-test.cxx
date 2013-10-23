@@ -79,7 +79,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
             if ((nLastSlash != -1) && (nLastSlash+1 < sURL.getLength()))
             {
                 //ignore .files
-                if (sURL.getStr()[nLastSlash+1] == '.')
+                if (sURL[nLastSlash+1] == '.')
                     continue;
 
                 if (

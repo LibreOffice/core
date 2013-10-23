@@ -626,7 +626,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth
     }
     sal_uInt8 nSignCount = 0, nDecimalCount = 0, nExpCount = 0;
     sal_Int32 nLen = aString.getLength();
-    sal_Unicode cDecSep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator.getStr()[0];
+    sal_Unicode cDecSep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator[0];
     for (xub_StrLen i = 0; i < nLen; ++i)
     {
         sal_Unicode c = aString[i];

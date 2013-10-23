@@ -316,8 +316,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
                     aLeft.Y() -= (pDev->GetTextHeight()/2);
                     if(!sPrefixes[i].isEmpty() &&
-                        sPrefixes[i] != " " &&
-                        sPrefixes[i].getStr()[0] != 0)
+                        sPrefixes[i] != " ")
                     {
                         pVDev->SetFont(aFont);
                         pVDev->DrawText(aLeft, sPrefixes[i]);
@@ -349,9 +348,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                                     aLeft,
                                     aRuleFont,
                                     aFont);
-                    if(!sSuffixes[i].isEmpty()&&
-                        !sSuffixes[i].equalsAsciiL(" ", 1) &&
-                        sSuffixes[i].getStr()[0] != 0)
+                    if(!sSuffixes[i].isEmpty() &&
+                       !sSuffixes[i].startsWith(" "))
                     {
                         pVDev->SetFont(aFont);
                         pVDev->DrawText(aLeft, sSuffixes[i]);

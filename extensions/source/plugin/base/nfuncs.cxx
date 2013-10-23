@@ -146,13 +146,13 @@ static OString normalizeURL( XPlugin_Impl* plugin, const OString& url )
         int nPos;
         if( ( nPos = aLoadURL.indexOf( "://" ) ) != -1 )
         {
-            if( !url.isEmpty() && (url.getStr()[ 0 ] == '/' || url.indexOf( '/' ) != -1) )
+            if( url.indexOf( '/' ) != -1 )
             {
                 // this means same server but new path
                 nPos = aLoadURL.indexOf( '/', nPos+3 );
 
                 if( nPos != -1 )
-                    aLoadURL = aLoadURL.copy( 0, url.getStr()[0] == '/' ? nPos : nPos+1 );
+                    aLoadURL = aLoadURL.copy( 0, url.startsWith("/") ? nPos : nPos+1 );
             }
             else
             {

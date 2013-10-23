@@ -82,8 +82,7 @@ void HierarchyUri::init() const
             }
             else if ( ( m_aUri.getLength() == HIERARCHY_URL_SCHEME_LENGTH + 2 )
                       &&
-                      ( m_aUri.getStr()[ HIERARCHY_URL_SCHEME_LENGTH + 1 ]
-                                                    == sal_Unicode( '/' ) ) )
+                      ( m_aUri[ HIERARCHY_URL_SCHEME_LENGTH + 1 ] == '/' ) )
             {
                 // root folder URI without service specifier.
                 m_aUri += OUString( "/" DEFAULT_DATA_SOURCE_SERVICE "/"  );
@@ -93,8 +92,7 @@ void HierarchyUri::init() const
             }
             else if ( ( m_aUri.getLength() > HIERARCHY_URL_SCHEME_LENGTH + 2 )
                       &&
-                      ( m_aUri.getStr()[ HIERARCHY_URL_SCHEME_LENGTH + 2 ]
-                                                    != sal_Unicode( '/' ) ) )
+                      ( m_aUri[ HIERARCHY_URL_SCHEME_LENGTH + 2 ] != '/' ) )
             {
                 // other (no root folder) URI without service specifier.
                 m_aUri = m_aUri.replaceAt(
