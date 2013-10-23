@@ -152,8 +152,8 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Romanian (Moldova)" ; LANGUAGE_ROMANIAN_MOLDOVA ; > ;
         < "Russian" ; LANGUAGE_RUSSIAN ; > ;
         < "Sanskrit" ; LANGUAGE_SANSKRIT ; > ;
-        < "Serbian Cyrillic (Serbia and Montenegro)" ; LANGUAGE_SERBIAN_CYRILLIC ; > ;
-        < "Serbian Latin (Serbia and Montenegro)" ; LANGUAGE_SERBIAN_LATIN ; > ;
+        < "Serbian Cyrillic (Serbia and Montenegro)" ; LANGUAGE_SERBIAN_CYRILLIC_SAM ; > ;
+        < "Serbian Latin (Serbia and Montenegro)" ; LANGUAGE_SERBIAN_LATIN_SAM ; > ;
         < "Serbian Cyrillic (Serbia)" ; LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA ; > ;
         < "Serbian Latin (Serbia)" ; LANGUAGE_USER_SERBIAN_LATIN_SERBIA ; > ;
         < "Serbian Cyrillic (Montenegro)" ; LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO ; > ;
@@ -205,8 +205,8 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Dhivehi" ; LANGUAGE_DHIVEHI ; > ;
         < "Northern Sotho" ; LANGUAGE_SEPEDI ; > ;
         < "Gaelic (Scotland)" ; LANGUAGE_GAELIC_SCOTLAND ; > ;
-        < "Mongolian Cyrillic" ; LANGUAGE_MONGOLIAN ; > ;
-        < "Mongolian Mongolian" ; LANGUAGE_MONGOLIAN_MONGOLIAN ; > ;
+        < "Mongolian Cyrillic" ; LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA ; > ;
+        < "Mongolian Mongolian" ; LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA ; > ;
         < "Interlingua" ; LANGUAGE_USER_INTERLINGUA ; > ;
         < "Bosnian" ; LANGUAGE_BOSNIAN_BOSNIA_HERZEGOVINA ; > ;
         < "Bengali (Bangladesh)" ; LANGUAGE_BENGALI_BANGLADESH ; > ;
@@ -315,7 +315,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Yoruba" ; LANGUAGE_YORUBA ; > ;
         < "Rusyn (Ukraine)" ; LANGUAGE_USER_RUSYN_UKRAINE ; > ;
         < "Rusyn (Slovakia)" ; LANGUAGE_USER_RUSYN_SLOVAKIA ; > ;
-        < "Kabyle Latin" ; LANGUAGE_TAMAZIGHT_LATIN ; > ;
+        < "Kabyle Latin" ; LANGUAGE_TAMAZIGHT_LATIN_ALGERIA ; > ;
         < "Yiddish (USA)" ; LANGUAGE_USER_YIDDISH_US ; > ;
         < "Hawaiian" ; LANGUAGE_HAWAIIAN_UNITED_STATES ; > ;
         < "Limbu" ; LANGUAGE_USER_LIMBU ; > ;

@@ -1174,7 +1174,7 @@ bool LanguageTagImpl::canonicalize()
         return bChanged;            // that's it
     }
     meIsLiblangtagNeeded = DECISION_YES;
-    SAL_INFO( "i18nlangtag", "LanguageTagImpl::canonicalize: using liblangtag for " << maBcp47);
+    SAL_INFO( "i18nlangtag", "LanguageTagImpl::canonicalize: using liblangtag for '" << maBcp47 << "'");
 
     if (!mpImplLangtag)
     {
@@ -1187,7 +1187,7 @@ bool LanguageTagImpl::canonicalize()
     if (lt_tag_parse( mpImplLangtag, OUStringToOString( maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
     {
         char* pTag = lt_tag_canonicalize( mpImplLangtag, &aError.p);
-        SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTagImpl::canonicalize: could not canonicalize " << maBcp47);
+        SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTagImpl::canonicalize: could not canonicalize '" << maBcp47 << "'");
         if (pTag)
         {
             OUString aOld( maBcp47);
@@ -1201,7 +1201,7 @@ bool LanguageTagImpl::canonicalize()
                 meIsIsoODF = DECISION_DONTKNOW;
                 if (!lt_tag_parse( mpImplLangtag, pTag, &aError.p))
                 {
-                    SAL_WARN( "i18nlangtag", "LanguageTagImpl::canonicalize: could not reparse " << maBcp47);
+                    SAL_WARN( "i18nlangtag", "LanguageTagImpl::canonicalize: could not reparse '" << maBcp47 << "'");
                     free( pTag);
                     meIsValid = DECISION_NO;
                     return bChanged;
@@ -1214,7 +1214,7 @@ bool LanguageTagImpl::canonicalize()
     }
     else
     {
-        SAL_INFO( "i18nlangtag", "LanguageTagImpl::canonicalize: could not parse " << maBcp47);
+        SAL_INFO( "i18nlangtag", "LanguageTagImpl::canonicalize: could not parse '" << maBcp47 << "'");
     }
     meIsValid = DECISION_NO;
     return bChanged;
@@ -1536,11 +1536,13 @@ OUString LanguageTagImpl::getLanguageFromLangtag()
     if (mpImplLangtag)
     {
         const lt_lang_t* pLangT = lt_tag_get_language( mpImplLangtag);
-        SAL_WARN_IF( !pLangT, "i18nlangtag", "LanguageTag::getLanguageFromLangtag: pLangT==NULL");
+        SAL_WARN_IF( !pLangT, "i18nlangtag",
+                "LanguageTag::getLanguageFromLangtag: pLangT==NULL for '" << maBcp47 << "'");
         if (!pLangT)
             return aLanguage;
         const char* pLang = lt_lang_get_tag( pLangT);
-        SAL_WARN_IF( !pLang, "i18nlangtag", "LanguageTag::getLanguageFromLangtag: pLang==NULL");
+        SAL_WARN_IF( !pLang, "i18nlangtag",
+                "LanguageTag::getLanguageFromLangtag: pLang==NULL for '" << maBcp47 << "'");
         if (pLang)
             aLanguage = OUString::createFromAscii( pLang);
     }
@@ -1595,11 +1597,12 @@ OUString LanguageTagImpl::getRegionFromLangtag()
         SAL_WARN_IF( !pRegionT &&
                 maBcp47.getLength() != 2 && maBcp47.getLength() != 3 &&
                 maBcp47.getLength() != 7 && maBcp47.getLength() != 8,
-                "i18nlangtag", "LanguageTag::getRegionFromLangtag: pRegionT==NULL");
+                "i18nlangtag", "LanguageTag::getRegionFromLangtag: pRegionT==NULL for '" << maBcp47 << "'");
         if (!pRegionT)
             return aRegion;
         const char* pRegion = lt_region_get_tag( pRegionT);
-        SAL_WARN_IF( !pRegion, "i18nlangtag", "LanguageTag::getRegionFromLangtag: pRegion==NULL");
+        SAL_WARN_IF( !pRegion, "i18nlangtag",
+                "LanguageTag::getRegionFromLangtag: pRegion==NULL for'" << maBcp47 << "'");
         if (pRegion)
             aRegion = OUString::createFromAscii( pRegion);
     }
@@ -2399,7 +2402,10 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
         }
     }
     if (eRet == EXTRACTED_NONE)
+    {
+        SAL_INFO( "i18nlangtag", "LanguageTagImpl::simpleExtract: did not extract '" << rBcp47 << "'");
         rLanguage = rScript = rCountry = rVariants = OUString();
+    }
     return eRet;
 }
 

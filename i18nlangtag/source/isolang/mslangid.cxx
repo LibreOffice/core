@@ -252,7 +252,8 @@ bool MsLangId::isTraditionalChinese( const ::com::sun::star::lang::Locale & rLoc
 //static
 bool MsLangId::isChinese( LanguageType nLang )
 {
-    return MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_CHINESE);
+    return MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_CHINESE) ||
+        MsLangId::getPrimaryLanguage(nLang) == MsLangId::getPrimaryLanguage(LANGUAGE_YUE_CHINESE_HONGKONG);
 }
 
 //static
@@ -266,9 +267,10 @@ bool MsLangId::isCJK( LanguageType nLang )
 {
     switch (nLang & LANGUAGE_MASK_PRIMARY)
     {
-        case LANGUAGE_CHINESE  & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_JAPANESE & LANGUAGE_MASK_PRIMARY:
-        case LANGUAGE_KOREAN   & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_CHINESE              & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_YUE_CHINESE_HONGKONG & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_JAPANESE             & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_KOREAN               & LANGUAGE_MASK_PRIMARY:
             return true;
         default:
             break;
@@ -313,7 +315,9 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
     switch( nLang )
     {
         // CTL
-        case LANGUAGE_MONGOLIAN_MONGOLIAN:
+        case LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA:
+        case LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA:
+        case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO:
         case LANGUAGE_USER_KURDISH_IRAN:
         case LANGUAGE_USER_KURDISH_IRAQ:
         case LANGUAGE_USER_KYRGYZ_CHINA:
@@ -321,7 +325,8 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
             break;
 
         // "Western"
-        case LANGUAGE_MONGOLIAN:
+        case LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA:
+        case LANGUAGE_MONGOLIAN_CYRILLIC_LSO:
         case LANGUAGE_USER_KURDISH_SYRIA:
         case LANGUAGE_USER_KURDISH_TURKEY:
             nScript = ::com::sun::star::i18n::ScriptType::LATIN;
@@ -341,9 +346,10 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
             switch ( nLang & LANGUAGE_MASK_PRIMARY )
             {
                 // CJK catcher
-                case LANGUAGE_CHINESE  & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_JAPANESE & LANGUAGE_MASK_PRIMARY:
-                case LANGUAGE_KOREAN   & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_CHINESE              & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_YUE_CHINESE_HONGKONG & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_JAPANESE             & LANGUAGE_MASK_PRIMARY:
+                case LANGUAGE_KOREAN               & LANGUAGE_MASK_PRIMARY:
                     nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
                     break;
 
@@ -433,10 +439,31 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bo
             nLang = LANGUAGE_LUXEMBOURGISH_LUXEMBOURG;
             break;
         case LANGUAGE_OBSOLETE_USER_KABYLE:
-            nLang = LANGUAGE_TAMAZIGHT_LATIN;
+            nLang = LANGUAGE_TAMAZIGHT_LATIN_ALGERIA;
             break;
         case LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN:
             nLang = LANGUAGE_CATALAN_VALENCIAN;
+            break;
+        case LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU:
+            nLang = LANGUAGE_MALAGASY_PLATEAU;
+            break;
+        case LANGUAGE_GAELIC_SCOTLAND_LEGACY:
+            nLang = LANGUAGE_GAELIC_SCOTLAND;
+            break;
+        case LANGUAGE_OBSOLETE_USER_TSWANA_BOTSWANA:
+            nLang = LANGUAGE_TSWANA_BOTSWANA;
+            break;
+        case LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA:
+            nLang = LANGUAGE_SERBIAN_LATIN_SERBIA;
+            break;
+        case LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO:
+            nLang = LANGUAGE_SERBIAN_LATIN_MONTENEGRO;
+            break;
+        case LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_SERBIA:
+            nLang = LANGUAGE_SERBIAN_CYRILLIC_SERBIA;
+            break;
+        case LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_MONTENEGRO:
+            nLang = LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO;
             break;
 
         // The following are not strictly obsolete but should be mapped to a

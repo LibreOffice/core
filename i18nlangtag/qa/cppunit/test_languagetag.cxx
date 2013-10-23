@@ -154,7 +154,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( aLocale.Language == "qlt" );
         CPPUNIT_ASSERT( aLocale.Country == "CS" );
         CPPUNIT_ASSERT( aLocale.Variant == s_sr_Latn_CS );
-        CPPUNIT_ASSERT( sr_Latn_CS.getLanguageType() == LANGUAGE_SERBIAN_LATIN );
+        CPPUNIT_ASSERT( sr_Latn_CS.getLanguageType() == LANGUAGE_SERBIAN_LATIN_SAM );
         CPPUNIT_ASSERT( sr_Latn_CS.isValidBcp47() == true );
         CPPUNIT_ASSERT( sr_Latn_CS.isIsoLocale() == false );
         CPPUNIT_ASSERT( sr_Latn_CS.isIsoODF() == true );
@@ -352,14 +352,15 @@ void TestLanguageTag::testAllTags()
     }
 
     // "no", "nb" and "nn" share the same primary language ID, which even is
-    // assigned to "no-NO" for legacy so none gets it assigned, all on-the-fly.
+    // assigned to "no-NO" for legacy so none gets it assigned, all on-the-fly
+    // except if there is a defined MS-LCID for LanguageScriptOnly (LSO).
     {
         LanguageTag no( "no", true );
         CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( no.getLanguageType()) );
         LanguageTag nb( "nb", true );
-        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( nb.getLanguageType()) );
+        CPPUNIT_ASSERT( nb.getLanguageType() == LANGUAGE_NORWEGIAN_BOKMAL_LSO );
         LanguageTag nn( "nn", true );
-        CPPUNIT_ASSERT( LanguageTag::isOnTheFlyID( nn.getLanguageType()) );
+        CPPUNIT_ASSERT( nn.getLanguageType() == LANGUAGE_NORWEGIAN_NYNORSK_LSO );
         LanguageTag no_NO( "no-NO", true );
         CPPUNIT_ASSERT( no_NO.getLanguageType() == LANGUAGE_NORWEGIAN );
     }
@@ -409,6 +410,29 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( en_GB_oed_Fallbacks[2] == "en");
         // 'en-oed' is not a valid fallback!
     }
+
+#if USE_LIBLANGTAG
+    // 'zh-yue-HK' uses extlang and should be preferred 'yue-HK'
+    {
+        OUString s_zh_yue_HK( "zh-yue-HK" );
+        LanguageTag zh_yue_HK( s_zh_yue_HK );
+        lang::Locale aLocale = zh_yue_HK.getLocale();
+        CPPUNIT_ASSERT( zh_yue_HK.getBcp47() == "yue-HK" );
+        CPPUNIT_ASSERT( aLocale.Language == "yue" );
+        CPPUNIT_ASSERT( aLocale.Country == "HK" );
+        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        CPPUNIT_ASSERT( zh_yue_HK.getLanguageType() == LANGUAGE_YUE_CHINESE_HONGKONG );
+        CPPUNIT_ASSERT( zh_yue_HK.isValidBcp47() == true );
+        CPPUNIT_ASSERT( zh_yue_HK.isIsoLocale() == true );
+        CPPUNIT_ASSERT( zh_yue_HK.isIsoODF() == true );
+        CPPUNIT_ASSERT( zh_yue_HK.getLanguageAndScript() == "yue" );
+        CPPUNIT_ASSERT( zh_yue_HK.getVariants() == "" );
+        ::std::vector< OUString > zh_yue_HK_Fallbacks( zh_yue_HK.getFallbackStrings( true));
+        CPPUNIT_ASSERT( zh_yue_HK_Fallbacks.size() == 2);
+        CPPUNIT_ASSERT( zh_yue_HK_Fallbacks[0] == "yue-HK");
+        CPPUNIT_ASSERT( zh_yue_HK_Fallbacks[1] == "yue");
+    }
+#endif
 
     // 'qtz' is a local use known pseudolocale for key ID resource
     {

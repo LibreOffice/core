@@ -161,10 +161,11 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_CHINESE_SIMPLIFIED,          "zh", "CN", false },
     { LANGUAGE_CHINESE_SIMPLIFIED_LEGACY,   "zh", "CN", false },
     { LANGUAGE_CHINESE_TRADITIONAL,         "zh", "TW", false },
-    { LANGUAGE_CHINESE_TRADITIONAL_LEGACY,  "zh", "TW", false },
     { LANGUAGE_CHINESE_HONGKONG,            "zh", "HK", false },
     { LANGUAGE_CHINESE_SINGAPORE,           "zh", "SG", false },
     { LANGUAGE_CHINESE_MACAU,               "zh", "MO", false },
+    { LANGUAGE_CHINESE_LSO,                 "zh", ""  , false },
+    { LANGUAGE_YUE_CHINESE_HONGKONG,       "yue", "HK", false },
     { LANGUAGE_ENGLISH_HONG_KONG_SAR,       "en", "HK", false },
     { LANGUAGE_JAPANESE,                    "ja", "JP", false },
     { LANGUAGE_KOREAN,                      "ko", "KR", false },
@@ -236,7 +237,9 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_INDONESIAN,                  "in", "ID", true  },   // old: new is "id"
     { LANGUAGE_NORWEGIAN,                   "no", "NO", false },
     { LANGUAGE_NORWEGIAN_BOKMAL,            "nb", "NO", false },
+    { LANGUAGE_NORWEGIAN_BOKMAL_LSO,        "nb", ""  , false },
     { LANGUAGE_NORWEGIAN_NYNORSK,           "nn", "NO", false },
+    { LANGUAGE_NORWEGIAN_NYNORSK_LSO,       "nn", ""  , false },
     { LANGUAGE_POLISH,                      "pl", "PL", false },
     { LANGUAGE_RHAETO_ROMAN,                "rm", "CH", false },
     { LANGUAGE_ROMANIAN,                    "ro", "RO", false },
@@ -276,21 +279,28 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_LITHUANIAN_CLASSIC,          "lt", "LT", false },
     { LANGUAGE_CROATIAN,                    "hr", "HR", false },   // Croatian in Croatia
     { LANGUAGE_CROATIAN_BOSNIA_HERZEGOVINA, "hr", "BA", false },
-    { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,        "bs", "BA", false },
-    { LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA,        "sr", "RS", false },   // Serbian Cyrillic in Serbia
-    { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "CS", false },   // Serbian Cyrillic in Serbia and Montenegro
-    { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "YU", true  },   // legacy Serbian Cyrillic in Serbia and Montenegro (former Yugoslavia); kludge, sr_CS not supported by ICU 2.6 (3.4 does)
-    { LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO,    "sr", "ME", false },
+    { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,    "bs", "BA", false },
+    { LANGUAGE_BOSNIAN_LSO,                 "bs", ""  , false },    // so what is 'bs' vs 'bs-Latn'?
+    { LANGUAGE_SERBIAN_CYRILLIC_SERBIA,             "sr", "RS", false },   // Serbian Cyrillic in Serbia
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_SERBIA,"sr", "RS", false },
+    { LANGUAGE_SERBIAN_CYRILLIC_SAM,                "sr", "CS", false },   // Serbian Cyrillic in Serbia and Montenegro
+    { LANGUAGE_SERBIAN_CYRILLIC_SAM,                "sr", "YU", true  },   // legacy Serbian Cyrillic in Serbia and Montenegro (former Yugoslavia); kludge, sr_CS not supported by ICU 2.6 (3.4 does)
+    { LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO,         "sr", "ME", false },
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_MONTENEGRO,"sr", "ME", false },
     { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr", "BA", false },
-    { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,           "sh", "RS", true  },   // legacy kludge, is sr-Latn-RS now
-    { LANGUAGE_SERBIAN_LATIN,                       "sh", "CS", true  },   // legacy kludge, is sr-Latn-CS now
-    { LANGUAGE_SERBIAN_LATIN,                       "sh", "YU", true  },   // legacy kludge, is sr-Latn-YU now
-    { LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO,       "sh", "ME", true  },   // legacy kludge, is sr-Latn-ME now
+    { LANGUAGE_SERBIAN_CYRILLIC_LSO,                "sr", ""  , false },
+    { LANGUAGE_SERBIAN_LATIN_SERBIA,                "sh", "RS", true  },   // legacy kludge, is sr-Latn-RS now
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA,  "sh", "RS", true  },   // legacy kludge, is sr-Latn-RS now
+    { LANGUAGE_SERBIAN_LATIN_SAM,                   "sh", "CS", true  },   // legacy kludge, is sr-Latn-CS now
+    { LANGUAGE_SERBIAN_LATIN_SAM,                   "sh", "YU", true  },   // legacy kludge, is sr-Latn-YU now
+    { LANGUAGE_SERBIAN_LATIN_MONTENEGRO,            "sh", "ME", true  },   // legacy kludge, is sr-Latn-ME now
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO,"sh", "ME", true  }, // legacy kludge, is sr-Latn-ME now
     { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,    "sh", "BA", true  },   // legacy kludge, is sr-Latn-BA now
-    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sh", ""  , true  },   // legacy kludge, is sr-Latn now
+    { LANGUAGE_SERBIAN_LATIN_LSO,                   "sh", ""  , true  },   // legacy kludge, is sr-Latn now
     { LANGUAGE_ARMENIAN,                    "hy", "AM", false },
     { LANGUAGE_AZERI_LATIN,                 "az", "AZ", false },    // macrolanguage code
     { LANGUAGE_UZBEK_LATIN,                 "uz", "UZ", false },    // macrolanguage code
+    { LANGUAGE_UZBEK_LATIN_LSO,             "uz", ""  , false },    // macrolanguage code
     { LANGUAGE_BENGALI_BANGLADESH,          "bn", "BD", false },
     { LANGUAGE_BENGALI,                     "bn", "IN", false },
     { LANGUAGE_BURMESE,                     "my", "MM", false },
@@ -313,12 +323,15 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ORIYA,                       "or", "IN", false },
     { LANGUAGE_PUNJABI,                     "pa", "IN", false },
     { LANGUAGE_SANSKRIT,                    "sa", "IN", false },
-    { LANGUAGE_SINDHI,                      "sd", "IN", false },
+    { LANGUAGE_SINDHI,                      "sd", "IN", false },    // TODO: there's Deva(nagari) and Arab(ic) script, which do we use in 'sd' translation? MS maps this to 'sd-Deva-IN'
     { LANGUAGE_TAMIL,                       "ta", "IN", false },
+    { LANGUAGE_TAMIL_SRI_LANKA,             "ta", "LK", false },
     { LANGUAGE_TELUGU,                      "te", "IN", false },
-    { LANGUAGE_PUNJABI_PAKISTAN,           "lah", "PK", false },   // preferring "lah" over "pa" for Western Punjabi, see http://www.ethnologue.com/show_language.asp?code=PNB
-    { LANGUAGE_PUNJABI_PAKISTAN,            "pa", "PK", false },
-    { LANGUAGE_SINDHI_PAKISTAN,             "sd", "PK", false },
+    { LANGUAGE_PUNJABI_PAKISTAN,           "pnb", "PK", false },
+    { LANGUAGE_PUNJABI_ARABIC_LSO,         "pnb", ""  , false },
+    { LANGUAGE_PUNJABI_PAKISTAN,           "lah", "PK", true  },    // macrolanguage code, earlier preferred 'lah' over 'pa' for Western Panjabi, now there is 'pnb'
+    { LANGUAGE_PUNJABI_PAKISTAN,            "pa", "PK", true  },    // MS maps this to 'pa-Arab-PK', but 'pa'='pan' Eastern Panjabi is not used in PK, only in IN
+    { LANGUAGE_SINDHI_PAKISTAN,             "sd", "PK", false },    // TODO: there's Deva(nagari) and Arab(ic) script, which do we use in 'sd' translation? MS maps this to 'sd-Arab-PK'
     { LANGUAGE_BELARUSIAN,                  "be", "BY", false },
     { LANGUAGE_CATALAN,                     "ca", "ES", false },   // Spain (default)
     { LANGUAGE_CATALAN,                     "ca", "AD", false },   // Andorra
@@ -334,23 +347,27 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_FRENCH_REUNION,              "fr", "RE", false },
     { LANGUAGE_FRENCH,                      "fr", ""  , false },   // needed as a catcher before other "fr" entries!
     { LANGUAGE_FRENCH_NORTH_AFRICA,         "fr", ""  , false },
-    { LANGUAGE_FRENCH_WEST_INDIES,          "fr", ""  , false },   // unknown ISO country code
+    { LANGUAGE_FRENCH_WEST_INDIES,          "fr", ""  , false },   // no ISO country code; MS "Neither defined nor reserved"
     { LANGUAGE_FRISIAN_NETHERLANDS,         "fy", "NL", false },
     { LANGUAGE_GAELIC_IRELAND,              "ga", "IE", false },
     { LANGUAGE_GAELIC_SCOTLAND,             "gd", "GB", false },
+    { LANGUAGE_GAELIC_SCOTLAND_LEGACY,      "gd", "GB", false },
     { LANGUAGE_GALICIAN,                    "gl", "ES", false },
     { LANGUAGE_GEORGIAN,                    "ka", "GE", false },
     { LANGUAGE_KHMER,                       "km", "KH", false },
     { LANGUAGE_KIRGHIZ,                     "ky", "KG", false },
     { LANGUAGE_LAO,                         "lo", "LA", false },
     { LANGUAGE_MALTESE,                     "mt", "MT", false },
-    { LANGUAGE_MONGOLIAN,                   "mn", "MN", true  },   // Cyrillic script
+    { LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA, "mn", "MN", false },    // macrolanguage code; should be khk-MN; Cyrillic script
+    { LANGUAGE_MONGOLIAN_CYRILLIC_LSO,      "mn", ""  , false },    // macrolanguage code; should be khk; Cyrillic script
     { LANGUAGE_RUSSIAN_MOLDOVA,             "mo", "MD", false },
     { LANGUAGE_SWAHILI,                     "sw", "KE", false },
     { LANGUAGE_USER_SWAHILI_TANZANIA,       "sw", "TZ", false },
     { LANGUAGE_TAJIK,                       "tg", "TJ", false },
+    { LANGUAGE_TAJIK_LSO,                   "tg", ""  , false },
     { LANGUAGE_TIBETAN,                     "bo", "CN", false },   // CN politically correct?
     { LANGUAGE_USER_TIBETAN_INDIA,          "bo", "IN", false },
+    { LANGUAGE_USER_TIBETAN_BHUTAN,         "bo", "BT", false },    // MS reserved, but with the ID error instead
     { LANGUAGE_DZONGKHA,                    "dz", "BT", false },
     { LANGUAGE_USER_DZONGKHA_MAP_LONLY,     "dz", ""  , false },    // because of the MS error, see lang.h
     { LANGUAGE_TURKMEN,                     "tk", "TM", false },
@@ -366,9 +383,12 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_VENDA,                      "ven", "ZA", true  },   // 639-2 may have been used temporarily since 2004-07-23
     { LANGUAGE_XHOSA,                       "xh", "ZA", false },
     { LANGUAGE_ZULU,                        "zu", "ZA", false },
-    { LANGUAGE_QUECHUA_ECUADOR,             "qu", "EC", false },
-    { LANGUAGE_QUECHUA_PERU,                "qu", "PE", false },
-    { LANGUAGE_QUECHUA_BOLIVIA,             "qu", "BO", false },   // macro: quh-BO, qul-BO
+//  { LANGUAGE_QUECHUA_COLOMBIA,           "quc", "CO", false },    // MS reserved, and looks wrong, quc would be in Guatemala, not Colombia
+    { LANGUAGE_QUECHUA_ECUADOR,            "quz", "EC", false },    // MS
+    { LANGUAGE_QUECHUA_ECUADOR,             "qu", "EC", true  },    // macrolanguage code
+    { LANGUAGE_QUECHUA_PERU,               "quz", "PE", false },    // MS
+    { LANGUAGE_QUECHUA_PERU,                "qu", "PE", true  },    // macrolanguage code
+    { LANGUAGE_QUECHUA_BOLIVIA,             "qu", "BO", false },    // macrolanguage code, TODO instead: quh-BO or qul-BO; MS says quz-BO which is wrong
     { LANGUAGE_PASHTO,                      "ps", "AF", false },
     { LANGUAGE_OROMO,                       "om", "ET", false },
     { LANGUAGE_DHIVEHI,                     "dv", "MV", false },
@@ -379,7 +399,9 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_GUARANI_PARAGUAY,           "gug", "PY", false },
     { LANGUAGE_HAWAIIAN_UNITED_STATES,     "haw", "US", false },
     { LANGUAGE_EDO,                        "bin", "NG", false },
-    { LANGUAGE_FULFULDE_NIGERIA,            "ff", "NG", false },
+    { LANGUAGE_FULFULDE_NIGERIA,           "fuv", "NG", false },
+    { LANGUAGE_FULFULDE_NIGERIA,            "ff", "NG", true  },    // macrolanguage code
+    { LANGUAGE_FULFULDE_SENEGAL,            "ff", "SN", false },    // macrolanguage code
     { LANGUAGE_HAUSA_NIGERIA,               "ha", "NG", false },
     { LANGUAGE_USER_HAUSA_GHANA,            "ha", "GH", false },
     { LANGUAGE_IGBO_NIGERIA,                "ig", "NG", false },
@@ -397,17 +419,21 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_SYRIAC,                     "syr", "TR", false },   // "TR" according to http://www.ethnologue.com/show_language.asp?code=SYC
     { LANGUAGE_SINHALESE_SRI_LANKA,         "si", "LK", false },
     { LANGUAGE_CHEROKEE_UNITED_STATES,     "chr", "US", false },
-    { LANGUAGE_INUKTITUT_LATIN_CANADA,      "iu", "CA", false },
-//  { LANGUAGE_INUKTITUT_SYLLABICS_CANADA,  "iu", "CA", false },   // script codes not supported yet
+    { LANGUAGE_INUKTITUT_LATIN_CANADA,      "iu", "CA", true  },    // macrolanguage code
+    { LANGUAGE_INUKTITUT_LATIN_LSO,         "iu", ""  , true  },    // macrolanguage code
     { LANGUAGE_SAMI_NORTHERN_NORWAY,        "se", "NO", false },
     { LANGUAGE_SAMI_INARI,                 "smn", "FI", false },
+    { LANGUAGE_SAMI_INARI_LSO,             "smn", ""  , false },
     { LANGUAGE_SAMI_LULE_NORWAY,           "smj", "NO", false },
     { LANGUAGE_SAMI_LULE_SWEDEN,           "smj", "SE", false },
+    { LANGUAGE_SAMI_LULE_LSO,              "smj", ""  , false },
     { LANGUAGE_SAMI_NORTHERN_FINLAND,       "se", "FI", false },
     { LANGUAGE_SAMI_NORTHERN_SWEDEN,        "se", "SE", false },
     { LANGUAGE_SAMI_SKOLT,                 "sms", "FI", false },
+    { LANGUAGE_SAMI_SKOLT_LSO,             "sms", ""  , false },
     { LANGUAGE_SAMI_SOUTHERN_NORWAY,       "sma", "NO", false },
     { LANGUAGE_SAMI_SOUTHERN_SWEDEN,       "sma", "SE", false },
+    { LANGUAGE_SAMI_SOUTHERN_LSO,          "sma", ""  , false },
     { LANGUAGE_USER_SAMI_KILDIN_RUSSIA,    "sjd", "RU", false },
     { LANGUAGE_MAPUDUNGUN_CHILE,           "arn", "CL", false },
     { LANGUAGE_CORSICAN_FRANCE,             "co", "FR", false },
@@ -416,18 +442,27 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_MOHAWK_CANADA,              "moh", "CA", false },
     { LANGUAGE_BASHKIR_RUSSIA,              "ba", "RU", false },
     { LANGUAGE_KICHE_GUATEMALA,            "qut", "GT", false },
-    { LANGUAGE_DARI_AFGHANISTAN,           "gbz", "AF", false },
+    { LANGUAGE_DARI_AFGHANISTAN,           "prs", "AF", false },
+    { LANGUAGE_DARI_AFGHANISTAN,           "gbz", "AF", true  },    // was an error
     { LANGUAGE_WOLOF_SENEGAL,               "wo", "SN", false },
     { LANGUAGE_FILIPINO,                   "fil", "PH", false },
     { LANGUAGE_USER_TAGALOG,                "tl", "PH", false },
     { LANGUAGE_ENGLISH_PHILIPPINES,         "en", "PH", false },
-//  { LANGUAGE_IBIBIO_NIGERIA,             "nic", "NG", false },   // ISO "nic" is only a collective language code
+    { LANGUAGE_IBIBIO_NIGERIA,             "ibb", "NG", false },
     { LANGUAGE_YI,                          "ii", "CN", false },
-    { LANGUAGE_TAMAZIGHT_LATIN,            "kab", "DZ", false },   // In practice Kabyle is the language used for this
+    { LANGUAGE_ENGLISH_ARAB_EMIRATES,       "en", "AE", false },    // MS reserved
+    { LANGUAGE_ENGLISH_BAHRAIN,             "en", "BH", false },    // MS reserved
+    { LANGUAGE_ENGLISH_EGYPT,               "en", "EG", false },    // MS reserved
+    { LANGUAGE_ENGLISH_JORDAN,              "en", "JO", false },    // MS reserved
+    { LANGUAGE_ENGLISH_KUWAIT,              "en", "KW", false },    // MS reserved
+    { LANGUAGE_ENGLISH_TURKEY,              "en", "TR", false },    // MS reserved
+    { LANGUAGE_ENGLISH_YEMEN,               "en", "YE", false },    // MS reserved
+    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,    "kab", "DZ", false },    // In practice Kabyle is the language used for this
     { LANGUAGE_OBSOLETE_USER_KABYLE,       "kab", "DZ", false },
-    { LANGUAGE_TAMAZIGHT_LATIN,            "ber", "DZ", false },   // In practice Algeria has standardized on Kabyle as the member of the "ber" collective which gets used there.
-    { LANGUAGE_TAMAZIGHT_TIFINAGH,         "ber", "MA", false },   // Morocco is officially using Tifinagh for its Berber languages so store it to distinguish explicitly from LANGUAGE_TAMAZIGHT_LATIN, even though as a collective language its not of much use
-//  { LANGUAGE_TAMAZIGHT_ARABIC,           "ber", ""  , false },   // ISO "ber" only collective!
+    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,    "ber", "DZ", true  },    // In practice Algeria has standardized on Kabyle as the member of the "ber" collective which gets used there.
+    { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO, "tmz", "MA", true  },
+    { LANGUAGE_TAMAZIGHT_MOROCCO,          "tmz", "MA", false },    // MS reserved
+    { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO, "ber", "MA", true  },    // Morocco is officially using Tifinagh for its Berber languages, old kludge to distinguish from LANGUAGE_TAMAZIGHT_LATIN_ALGERIA
     { LANGUAGE_LATIN,                       "la", "VA", false },
     { LANGUAGE_OBSOLETE_USER_LATIN,         "la", "VA", false },
     { LANGUAGE_USER_ESPERANTO,              "eo", ""  , false },
@@ -439,6 +474,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_UPPER_SORBIAN_GERMANY,      "hsb", "DE", false },   // MS maps this to 'wen-DE', which is nonsense. 'wen' is a collective language code, 'WEN' is a SIL code, see http://www.ethnologue.com/14/show_iso639.asp?code=wen and http://www.ethnologue.com/14/show_language.asp?code=WEN
     { LANGUAGE_OBSOLETE_USER_UPPER_SORBIAN,"hsb", "DE", false },
     { LANGUAGE_LOWER_SORBIAN_GERMANY,      "dsb", "DE", false },   // MS maps this to 'wee-DE', which is nonsense. 'WEE' is a SIL code, see http://www.ethnologue.com/14/show_language.asp?code=WEE
+    { LANGUAGE_LOWER_SORBIAN_LSO,          "dsb", ""  , false },
     { LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN,"dsb", "DE", false },
     { LANGUAGE_OCCITAN_FRANCE,              "oc", "FR", false },
     { LANGUAGE_OBSOLETE_USER_OCCITAN,       "oc", "FR", false },
@@ -457,7 +493,8 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_OBSOLETE_USER_KALAALLISUT,   "kl", "GL", false },
     { LANGUAGE_USER_SWAZI,                  "ss", "ZA", false },
     { LANGUAGE_USER_NDEBELE_SOUTH,          "nr", "ZA", false },
-    { LANGUAGE_USER_TSWANA_BOTSWANA,        "tn", "BW", false },
+    { LANGUAGE_TSWANA_BOTSWANA,             "tn", "BW", false },
+    { LANGUAGE_OBSOLETE_USER_TSWANA_BOTSWANA, "tn", "BW", false },
     { LANGUAGE_USER_MOORE,                 "mos", "BF", false },
     { LANGUAGE_USER_BAMBARA,                "bm", "ML", false },
     { LANGUAGE_USER_AKAN,                   "ak", "GH", false },
@@ -499,8 +536,9 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_MAORE,                 "swb", "YT", false },
     { LANGUAGE_USER_BUSHI,                 "buc", "YT", false },
     { LANGUAGE_USER_TAHITIAN,               "ty", "PF", false },
-    { LANGUAGE_USER_MALAGASY_PLATEAU,      "plt", "MG", false },
-    { LANGUAGE_USER_MALAGASY_PLATEAU,       "mg", "MG", false },
+    { LANGUAGE_MALAGASY_PLATEAU,           "plt", "MG", false },
+    { LANGUAGE_MALAGASY_PLATEAU,            "mg", "MG", true },
+    { LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU, "plt", "MG", false },
     { LANGUAGE_USER_BAFIA,                 "ksf", "CM", false },
     { LANGUAGE_USER_GIKUYU,                 "ki", "KE", false },
     { LANGUAGE_USER_RUSYN_UKRAINE,         "rue", "UA", false },
@@ -574,21 +612,75 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
 
 static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
 {
-    // MS-LangID                          ISO639-ISO15924, ISO3166
-    { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,       "sr-Latn", "RS" },
-    { LANGUAGE_SERBIAN_LATIN,                   "sr-Latn", "CS" },  // Serbian Latin in Serbia and Montenegro; note that not all applications may know about the 'CS' reusage mess, see https://en.wikipedia.org/wiki/ISO_3166-2:CS
-    { LANGUAGE_SERBIAN_LATIN,                   "sr-Latn", "YU" },  // legacy Serbian Latin in Yugoslavia
-    { LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO,   "sr-Latn", "ME" },
-    { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,"sr-Latn", "BA" },
-    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,           "sr-Latn", ""   },
+    // MS-LangID                              ISO639-ISO15924, ISO3166
+    { LANGUAGE_SERBIAN_LATIN_SERBIA,                "sr-Latn", "RS" },
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA,  "sr-Latn", "RS" },
+    { LANGUAGE_SERBIAN_LATIN_MONTENEGRO,            "sr-Latn", "ME" },
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO,"sr-Latn", "ME" },
+    { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,    "sr-Latn", "BA" },
+    { LANGUAGE_SERBIAN_LATIN_SAM,                   "sr-Latn", "CS" },  // Serbian Latin in Serbia and Montenegro; note that not all applications may know about the 'CS' reusage mess, see https://en.wikipedia.org/wiki/ISO_3166-2:CS
+    { LANGUAGE_SERBIAN_LATIN_SAM,                   "sr-Latn", "YU" },  // legacy Serbian Latin in Yugoslavia
+    { LANGUAGE_SERBIAN_LATIN_LSO,                   "sr-Latn", ""   },
+    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sr-Latn", ""   },  // MS lists this as 'sr' only, what a mess
+    { LANGUAGE_SERBIAN_CYRILLIC_SERBIA,             "sr-Cyrl", "RS" },  // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO,         "sr-Cyrl", "ME" },  // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr-Cyrl", "BA" },  // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_SAM,                "sr-Cyrl", "CS" },  // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_LSO,                "sr-Cyrl", ""   },  // MS
     { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "bs-Cyrl", "BA" },
-    { LANGUAGE_AZERI_CYRILLIC,                  "az-Cyrl", "AZ" },  // macrolanguage code
-    { LANGUAGE_UZBEK_CYRILLIC,                  "uz-Cyrl", "UZ" },  // macrolanguage code
-    { LANGUAGE_MONGOLIAN,                       "mn-Cyrl", "MN" },  // macrolanguage code
-    { LANGUAGE_MONGOLIAN_MONGOLIAN,             "mn-Mong", "MN" },  // macrolanguage code
-    { LANGUAGE_USER_PALI_LATIN,                 "pi-Latn", ""   },
-    { LANGUAGE_USER_KARAKALPAK_LATIN,          "kaa-Latn", "UZ" },
-    { LANGUAGE_DONTKNOW,                        "",        ""   }   // marks end of table
+    { LANGUAGE_BOSNIAN_CYRILLIC_LSO,                "bs-Cyrl", ""   },
+    { LANGUAGE_AZERI_CYRILLIC,                      "az-Cyrl", "AZ" },  // macrolanguage code
+    { LANGUAGE_AZERI_CYRILLIC_LSO,                  "az-Cyrl", ""   },  // macrolanguage code
+    { LANGUAGE_UZBEK_CYRILLIC,                      "uz-Cyrl", "UZ" },  // macrolanguage code
+    { LANGUAGE_UZBEK_CYRILLIC_LSO,                  "uz-Cyrl", ""   },  // macrolanguage code
+    { LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA,         "mn-Cyrl", "MN" },  // macrolanguage code; should be khk-MN or khk-Cyrl-MN
+    { LANGUAGE_MONGOLIAN_CYRILLIC_LSO,              "mn-Cyrl", ""   },  // macrolanguage code; MS, should be khk or khk-Cyrl
+    { LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA,        "mn-Mong", "MN" },  // macrolanguage code; MS, should be khk-Mong-MN
+    { LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA,           "mn-Mong", "CN" },  // macrolanguage code; MS, should actually be mvf-CN
+    { LANGUAGE_MONGOLIAN_MONGOLIAN_LSO,             "mn-Mong", ""   },  // macrolanguage code
+    { LANGUAGE_USER_PALI_LATIN,                     "pi-Latn", ""   },
+    { LANGUAGE_USER_KARAKALPAK_LATIN,              "kaa-Latn", "UZ" },
+    { LANGUAGE_TAJIK,                               "tg-Cyrl", "TJ" },  // MS
+    { LANGUAGE_TAJIK_LSO,                           "tg-Cyrl", ""   },  // MS
+    { LANGUAGE_AZERI_LATIN,                         "az-Latn", "AZ" },  // macrolanguage code; MS
+    { LANGUAGE_AZERI_LATIN_LSO,                     "az-Latn", ""   },  // macrolanguage code; MS
+    { LANGUAGE_USER_YIDDISH_US,                     "yi-Hebr", "US" },  // macrolanguage code; MS
+    { LANGUAGE_YIDDISH,                             "yi-Hebr", "IL" },  // macrolanguage code; MS
+    { LANGUAGE_UZBEK_LATIN,                         "uz-Latn", "UZ" },  // macrolanguage code
+    { LANGUAGE_UZBEK_LATIN_LSO,                     "uz-Latn", ""   },
+//  { LANGUAGE_SINDHI,                              "sd-Deva", "IN" },  // MS, TODO: see comment above in aImplIsoLangEntries
+//  { LANGUAGE_SINDHI_PAKISTAN,                     "sd-Arab", "PK" },  // MS, TODO: see comment above in aImplIsoLangEntries
+    { LANGUAGE_SINDHI_ARABIC_LSO,                   "sd-Arab", ""   },
+    { LANGUAGE_CHEROKEE_UNITED_STATES,             "chr-Cher", "US" },  // MS
+    { LANGUAGE_CHEROKEE_CHEROKEE_LSO,              "chr-Cher", ""   },
+    { LANGUAGE_INUKTITUT_SYLLABICS_CANADA,          "iu-Cans", "CA" },  // macrolanguage code, MS
+    { LANGUAGE_INUKTITUT_SYLLABICS_LSO,             "iu-Cans", ""   },  // macrolanguage code, MS
+    { LANGUAGE_INUKTITUT_LATIN_CANADA,              "iu-Latn", "CA" },  // macrolanguage code, MS
+    { LANGUAGE_INUKTITUT_LATIN_LSO,                 "iu-Latn", ""   },  // macrolanguage code, MS
+    { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO,         "tzm-Tfng", "MA" },
+    { LANGUAGE_TAMAZIGHT_TIFINAGH_LSO,             "tzm-Tfng", ""   },
+    { LANGUAGE_KASHMIRI_INDIA,                      "ks-Deva", "IN" },  // MS
+    { LANGUAGE_KASHMIRI,                            "ks-Arab", ""   },  // MS, Kashmiri in "Jammu and Kashmir" ... no ISO3166 code for that
+    { LANGUAGE_HAUSA_NIGERIA,                       "ha-Latn", "NG" },  // MS
+    { LANGUAGE_USER_HAUSA_GHANA,                    "ha-Latn", "GH" },  // MS
+    { LANGUAGE_HAUSA_LATIN_LSO,                     "ha-Latn", ""   },
+    { LANGUAGE_LATIN,                               "la-Latn", ""   },  // MS
+    { LANGUAGE_TAI_NUA_CHINA,                      "tdd-Tale", "CN" },  // MS reserved
+    { LANGUAGE_LU_CHINA,                           "khb-Talu", "CN" },  // MS reserved
+    { LANGUAGE_KURDISH_ARABIC_IRAQ,                 "ku-Arab", "IQ" },  // macrolanguage code, MS
+    { LANGUAGE_KURDISH_ARABIC_LSO,                  "ku-Arab", ""   },  // macrolanguage code
+    { LANGUAGE_PUNJABI_PAKISTAN,                   "pnb-Arab", "PK" },
+    { LANGUAGE_PUNJABI_ARABIC_LSO,                 "pnb-Arab", ""   },
+    { LANGUAGE_PUNJABI_PAKISTAN,                    "pa-Arab", "PK" },  // MS, incorrect
+    { LANGUAGE_PUNJABI_ARABIC_LSO,                  "pa-Arab", ""   },  // MS, incorrect
+    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,            "tzm-Latn", "DZ" },  // MS
+    { LANGUAGE_TAMAZIGHT_LATIN_LSO,                "tzm-Latn", ""   },  // MS
+    { LANGUAGE_FULFULDE_SENEGAL,                    "ff-Latn", "SN" },  // macrolanguage code, MS
+    { LANGUAGE_FULFULDE_LATIN_LSO,                  "ff-Latn", ""   },  // macrolanguage code
+    { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,    "bs-Latn", "BA" },  // MS, though Latn is suppress-script
+    { LANGUAGE_BOSNIAN_LATIN_LSO,                   "bs-Latn", ""   },  // MS, though Latn is suppress-script
+    { LANGUAGE_CHINESE_TRADITIONAL_LSO,             "zh-Hant", ""   },
+    { LANGUAGE_DONTKNOW,                            "",        ""   }   // marks end of table
 };
 
 static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
@@ -597,6 +689,7 @@ static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
     { LANGUAGE_CATALAN_VALENCIAN,       "ca-ES-valencia", "ES", "ca-valencia" },
     { LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN, "ca-ES-valencia", "ES", "" },   // In case MS format files using the old value escaped into the wild, map them back.
     { LANGUAGE_USER_ENGLISH_UK_OED,          "en-GB-oed", "GB", "" },   // grandfathered
+//  { LANGUAGE_YUE_CHINESE_HONGKONG,         "zh-yue-HK", "HK", "" },   // MS reserved, prefer yue-HK; do not add unless LanguageTag::simpleExtract() can handle it to not call liblangtag for rsc!
     { LANGUAGE_DONTKNOW,                    "", "", "" }    // marks end of table
 };
 
@@ -719,8 +812,8 @@ static IsoLangNoneStdEntry const aImplIsoNoneStdLangEntries[] =
 {
     { LANGUAGE_NORWEGIAN_BOKMAL,            "no", "BOK"      }, // registered subtags for "no" in rfc1766
     { LANGUAGE_NORWEGIAN_NYNORSK,           "no", "NYN"      }, // registered subtags for "no" in rfc1766
-    { LANGUAGE_SERBIAN_LATIN,               "sr", "latin"    },
-    { LANGUAGE_SERBIAN_CYRILLIC,            "sr", "cyrillic" },
+    { LANGUAGE_SERBIAN_LATIN_SAM,           "sr", "latin"    },
+    { LANGUAGE_SERBIAN_CYRILLIC_SAM,        "sr", "cyrillic" },
     { LANGUAGE_AZERI_LATIN,                 "az", "latin"    },
     { LANGUAGE_AZERI_CYRILLIC,              "az", "cyrillic" },
     { LANGUAGE_DONTKNOW,                    "",   ""         }  // marks end of table
@@ -1138,9 +1231,9 @@ static IsoLangGLIBCModifiersEntry const aImplIsoLangGLIBCModifiersEntries[] =
     // MS-LANGID codes               ISO639-1/2/3 ISO3166            glibc modifier
     { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "bs", "BA", "cyrillic" },
     { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,           "sr", "RS", "latin" },   // Serbian Latin in Serbia
-    { LANGUAGE_SERBIAN_LATIN,                       "sr", "CS", "latin" },   // Serbian Latin in Serbia and Montenegro
+    { LANGUAGE_SERBIAN_LATIN_SAM,                   "sr", "CS", "latin" },   // Serbian Latin in Serbia and Montenegro
     { LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO,       "sr", "ME", "latin" },   // Serbian Latin in Montenegro
-    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sr", "",   "latin" },
+    { LANGUAGE_SERBIAN_LATIN_LSO,                   "sr", "",   "latin" },
     { LANGUAGE_AZERI_CYRILLIC,                      "az", "AZ", "cyrillic" },
     { LANGUAGE_UZBEK_CYRILLIC,                      "uz", "UZ", "cyrillic" },
     { LANGUAGE_DONTKNOW,                            "",   "",   ""   }       // marks end of table

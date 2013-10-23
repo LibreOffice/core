@@ -63,6 +63,17 @@
  !
  ! Use THAT ^^^ as of 2013-09-17 it includes also Windows 8
 
+ ! BUT, you can download a PDF document from
+ ! http://msdn.microsoft.com/library/cc233965.aspx
+ ! that has YET MORE definitions, sigh.. didn't cross-check if any are missing
+ ! from that.. however, it also contains a few MS-reserved definitions that use
+ ! ISO 639-3 codes reserved for local use, such as 'qps-ploc' and 'qps-ploca'
+ ! (sic!), or strange things like 'ar-Ploc-SA' and 'ja-Ploc-JP' ('Ploc'??).
+ !
+ ! Use THAT ^^^ as the ultimate reference source (haha?) as of 2013-10-17 it
+ ! inludes also Windows 8.1 (Release: Monday, July 22, 2013; well, its table
+ ! says 08/08/2013 Revision 6.0, but hey, who cares ...)
+
    For completeness, you can never have enough lists:
    List of supported locale identifiers in Word
    Applies to Microsoft Word 2000 and 2002
@@ -121,38 +132,45 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_ARABIC_LIBYA               0x1001
 #define LANGUAGE_ARABIC_MOROCCO             0x1801
 #define LANGUAGE_ARABIC_OMAN                0x2001
+#define LANGUAGE_ARABIC_PRIMARY_ONLY        0x0001  /* primary only, not a locale! */
 #define LANGUAGE_ARABIC_QATAR               0x4001
 #define LANGUAGE_ARABIC_SAUDI_ARABIA        0x0401
 #define LANGUAGE_ARABIC_SYRIA               0x2801
 #define LANGUAGE_ARABIC_TUNISIA             0x1C01
 #define LANGUAGE_ARABIC_UAE                 0x3801
 #define LANGUAGE_ARABIC_YEMEN               0x2401
-#define LANGUAGE_ARABIC_PRIMARY_ONLY        0x0001  /* primary only, not a locale! */
 #define LANGUAGE_ARMENIAN                   0x042B
 #define LANGUAGE_ASSAMESE                   0x044D
 #define LANGUAGE_AZERI_CYRILLIC             0x082C
+#define LANGUAGE_AZERI_CYRILLIC_LSO         0x742C
 #define LANGUAGE_AZERI_LATIN                0x042C
+#define LANGUAGE_AZERI_LATIN_LSO            0x782C
 #define LANGUAGE_BASHKIR_RUSSIA             0x046D
 #define LANGUAGE_BASQUE                     0x042D
 #define LANGUAGE_BELARUSIAN                 0x0423
 #define LANGUAGE_BENGALI                    0x0445  /* in India */
 #define LANGUAGE_BENGALI_BANGLADESH         0x0845
-#define LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA       0x141A
+#define LANGUAGE_BOSNIAN_CYRILLIC_LSO                   0x641A
 #define LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA    0x201A
+#define LANGUAGE_BOSNIAN_LATIN_LSO                      0x681A
+#define LANGUAGE_BOSNIAN_LSO                            0x781A
+#define LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA       0x141A
 #define LANGUAGE_BOSNIAN_BOSNIA_HERZEGOVINA     LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA   /* TODO: remove, only for langtab.src & localize.sdf compatibility */
 #define LANGUAGE_BRETON_FRANCE              0x047E  /* obsoletes LANGUAGE_USER_BRETON 0x0629 */
 #define LANGUAGE_BULGARIAN                  0x0402
 #define LANGUAGE_BURMESE                    0x0455
 #define LANGUAGE_CATALAN                    0x0403
-#define LANGUAGE_CATALAN_VALENCIAN          0x0803
+#define LANGUAGE_CATALAN_VALENCIAN          0x0803  /* obsoletes LANGUAGE_USER_CATALAN_VALENCIAN */
 #define LANGUAGE_CHEROKEE_UNITED_STATES     0x045C
+#define LANGUAGE_CHEROKEE_CHEROKEE_LSO      0x7C5C
 #define LANGUAGE_CHINESE_HONGKONG           0x0C04
+#define LANGUAGE_CHINESE_LSO                0x7804
 #define LANGUAGE_CHINESE_MACAU              0x1404
 #define LANGUAGE_CHINESE_SIMPLIFIED         0x0804
 #define LANGUAGE_CHINESE_SINGAPORE          0x1004
 #define LANGUAGE_CHINESE_TRADITIONAL        0x0404
 #define LANGUAGE_CHINESE_SIMPLIFIED_LEGACY  0x0004  /* MS-.NET 'zh-CHS', primary only! but maps to 'zh-CN' */
-#define LANGUAGE_CHINESE_TRADITIONAL_LEGACY 0x7C04  /* MS-.NET 'zh-CHT' */
+#define LANGUAGE_CHINESE_TRADITIONAL_LSO    0x7C04  /* MS-.NET 'zh-CHT' but maps to 'zh-Hant' */
 #define LANGUAGE_CHINESE                    LANGUAGE_CHINESE_SIMPLIFIED     /* most code uses LANGUAGE_CHINESE */
 #define LANGUAGE_CORSICAN_FRANCE            0x0483
 #define LANGUAGE_CROATIAN                   0x041A
@@ -165,23 +183,30 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_DUTCH_BELGIAN              0x0813
 #define LANGUAGE_EDO                        0x0466
 #define LANGUAGE_ENGLISH                    0x0009  /* primary only, not a locale! */
+#define LANGUAGE_ENGLISH_ARAB_EMIRATES      0x4C09
 #define LANGUAGE_ENGLISH_AUS                0x0C09
+#define LANGUAGE_ENGLISH_BAHRAIN            0x5009
 #define LANGUAGE_ENGLISH_BELIZE             0x2809
 #define LANGUAGE_ENGLISH_CAN                0x1009
 #define LANGUAGE_ENGLISH_CARRIBEAN          0x2409
+#define LANGUAGE_ENGLISH_EGYPT              0x5409
 #define LANGUAGE_ENGLISH_EIRE               0x1809
 #define LANGUAGE_ENGLISH_HONG_KONG_SAR      0x3C09
 #define LANGUAGE_ENGLISH_INDIA              0x4009
 #define LANGUAGE_ENGLISH_INDONESIA          0x3809
 #define LANGUAGE_ENGLISH_JAMAICA            0x2009
+#define LANGUAGE_ENGLISH_JORDAN             0x5809
+#define LANGUAGE_ENGLISH_KUWAIT             0x5C09
 #define LANGUAGE_ENGLISH_MALAYSIA           0x4409
 #define LANGUAGE_ENGLISH_NZ                 0x1409
 #define LANGUAGE_ENGLISH_PHILIPPINES        0x3409
 #define LANGUAGE_ENGLISH_SAFRICA            0x1C09
 #define LANGUAGE_ENGLISH_SINGAPORE          0x4809
 #define LANGUAGE_ENGLISH_TRINIDAD           0x2C09
+#define LANGUAGE_ENGLISH_TURKEY             0x6009
 #define LANGUAGE_ENGLISH_UK                 0x0809
 #define LANGUAGE_ENGLISH_US                 0x0409
+#define LANGUAGE_ENGLISH_YEMEN              0x6409
 #define LANGUAGE_ENGLISH_ZIMBABWE           0x3009
 #define LANGUAGE_ESTONIAN                   0x0425
 #define LANGUAGE_FAEROESE                   0x0438
@@ -203,12 +228,15 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_FRENCH_REUNION             0x200C
 #define LANGUAGE_FRENCH_SENEGAL             0x280C
 #define LANGUAGE_FRENCH_SWISS               0x100C
-#define LANGUAGE_FRENCH_WEST_INDIES         0x1C0C
+#define LANGUAGE_FRENCH_WEST_INDIES         0x1C0C  /* MS in its MS-LCID.pdf now says "Neither defined nor reserved" */
 #define LANGUAGE_FRENCH_ZAIRE               0x240C
 #define LANGUAGE_FRISIAN_NETHERLANDS        0x0462
+#define LANGUAGE_FULFULDE_LATIN_LSO         0x7C67
 #define LANGUAGE_FULFULDE_NIGERIA           0x0467
+#define LANGUAGE_FULFULDE_SENEGAL           0x0867
 #define LANGUAGE_GAELIC_IRELAND             0x083C
-#define LANGUAGE_GAELIC_SCOTLAND            0x043C
+#define LANGUAGE_GAELIC_SCOTLAND            0x0491  /* apparently it occurred to MS that those are different languages */
+#define LANGUAGE_GAELIC_SCOTLAND_LEGACY     0x043C
 #define LANGUAGE_GALICIAN                   0x0456
 #define LANGUAGE_GEORGIAN                   0x0437
 #define LANGUAGE_GERMAN                     0x0407
@@ -219,6 +247,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_GREEK                      0x0408
 #define LANGUAGE_GUARANI_PARAGUAY           0x0474
 #define LANGUAGE_GUJARATI                   0x0447
+#define LANGUAGE_HAUSA_LATIN_LSO            0x7C68
 #define LANGUAGE_HAUSA_NIGERIA              0x0468
 #define LANGUAGE_HAWAIIAN_UNITED_STATES     0x0475
 #define LANGUAGE_HEBREW                     0x040D
@@ -229,7 +258,9 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_IGBO_NIGERIA               0x0470
 #define LANGUAGE_INDONESIAN                 0x0421
 #define LANGUAGE_INUKTITUT_SYLLABICS_CANADA 0x045D
+#define LANGUAGE_INUKTITUT_SYLLABICS_LSO    0x785D
 #define LANGUAGE_INUKTITUT_LATIN_CANADA     0x085D
+#define LANGUAGE_INUKTITUT_LATIN_LSO        0x7C5D
 #define LANGUAGE_ITALIAN                    0x0410
 #define LANGUAGE_ITALIAN_SWISS              0x0810
 #define LANGUAGE_JAPANESE                   0x0411
@@ -246,13 +277,17 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_KONKANI                    0x0457
 #define LANGUAGE_KOREAN                     0x0412
 #define LANGUAGE_KOREAN_JOHAB               0x0812
+#define LANGUAGE_KURDISH_ARABIC_IRAQ        0x0492  /* TODO: obsoletes LANGUAGE_USER_KURDISH_IRAQ */
+#define LANGUAGE_KURDISH_ARABIC_LSO         0x7C92
 #define LANGUAGE_LAO                        0x0454
 #define LANGUAGE_LATIN                      0x0476  /* obsoletes LANGUAGE_USER_LATIN 0x0610 */
 #define LANGUAGE_LATVIAN                    0x0426
 #define LANGUAGE_LITHUANIAN                 0x0427
-#define LANGUAGE_LITHUANIAN_CLASSIC         0x0827
+#define LANGUAGE_LITHUANIAN_CLASSIC         0x0827  /* MS in its MS-LCID.pdf now says "Neither defined nor reserved" */
+#define LANGUAGE_LU_CHINA                   0x0490
 #define LANGUAGE_LUXEMBOURGISH_LUXEMBOURG   0x046E  /* obsoletes LANGUAGE_USER_LUXEMBOURGISH 0x0630 */
 #define LANGUAGE_MACEDONIAN                 0x042F
+#define LANGUAGE_MALAGASY_PLATEAU           0x048D  /* obsoletes LANGUAGE_USER_MALAGASY_PLATEAU */
 #define LANGUAGE_MALAYALAM                  0x044C  /* in India */
 #define LANGUAGE_MALAY_BRUNEI_DARUSSALAM    0x083E
 #define LANGUAGE_MALAY_MALAYSIA             0x043E
@@ -262,13 +297,18 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_MAPUDUNGUN_CHILE           0x047A  /* AKA Araucanian */
 #define LANGUAGE_MARATHI                    0x044E
 #define LANGUAGE_MOHAWK_CANADA              0x047C
-#define LANGUAGE_MONGOLIAN                  0x0450  /* Cyrillic script */
-#define LANGUAGE_MONGOLIAN_MONGOLIAN        0x0850
+#define LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA    0x0450
+#define LANGUAGE_MONGOLIAN_CYRILLIC_LSO         0x7850
+#define LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA   0x0C50
+#define LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA      0x0850
+#define LANGUAGE_MONGOLIAN_MONGOLIAN_LSO        0x7C50
 #define LANGUAGE_NEPALI                     0x0461
 #define LANGUAGE_NEPALI_INDIA               0x0861
 #define LANGUAGE_NORWEGIAN                  0x0014  /* primary only, not a locale! */
 #define LANGUAGE_NORWEGIAN_BOKMAL           0x0414
+#define LANGUAGE_NORWEGIAN_BOKMAL_LSO       0x7C14
 #define LANGUAGE_NORWEGIAN_NYNORSK          0x0814
+#define LANGUAGE_NORWEGIAN_NYNORSK_LSO      0x7814
 #define LANGUAGE_OCCITAN_FRANCE             0x0482  /* obsoletes LANGUAGE_USER_OCCITAN 0x0625 */
 #define LANGUAGE_ORIYA                      0x0448
 #define LANGUAGE_OROMO                      0x0472
@@ -278,8 +318,10 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_PORTUGUESE                 0x0816
 #define LANGUAGE_PORTUGUESE_BRAZILIAN       0x0416
 #define LANGUAGE_PUNJABI                    0x0446
+#define LANGUAGE_PUNJABI_ARABIC_LSO         0x7C46
 #define LANGUAGE_PUNJABI_PAKISTAN           0x0846
 #define LANGUAGE_QUECHUA_BOLIVIA            0x046B
+#define LANGUAGE_QUECHUA_COLOMBIA           0x0493  /* different primary ID */
 #define LANGUAGE_QUECHUA_ECUADOR            0x086B
 #define LANGUAGE_QUECHUA_PERU               0x0C6B
 #define LANGUAGE_RHAETO_ROMAN               0x0417
@@ -290,23 +332,34 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_SAMI_NORTHERN_NORWAY       0x043B
 #define LANGUAGE_SAMI_LAPPISH               LANGUAGE_SAMI_NORTHERN_NORWAY   /* the old MS definition */
 #define LANGUAGE_SAMI_INARI                 0x243B
+#define LANGUAGE_SAMI_INARI_LSO             0x703B
+#define LANGUAGE_SAMI_LULE_LSO              0x7C3B
 #define LANGUAGE_SAMI_LULE_NORWAY           0x103B
 #define LANGUAGE_SAMI_LULE_SWEDEN           0x143B
 #define LANGUAGE_SAMI_NORTHERN_FINLAND      0x0C3B
 #define LANGUAGE_SAMI_NORTHERN_SWEDEN       0x083B
 #define LANGUAGE_SAMI_SKOLT                 0x203B
+#define LANGUAGE_SAMI_SKOLT_LSO             0x743B
+#define LANGUAGE_SAMI_SOUTHERN_LSO          0x783B
 #define LANGUAGE_SAMI_SOUTHERN_NORWAY       0x183B
 #define LANGUAGE_SAMI_SOUTHERN_SWEDEN       0x1C3B
 #define LANGUAGE_SANSKRIT                   0x044F
 #define LANGUAGE_SEPEDI                     0x046C
 #define LANGUAGE_NORTHERNSOTHO              LANGUAGE_SEPEDI /* just an alias for the already existing localization */
-#define LANGUAGE_SERBIAN_CYRILLIC           0x0C1A  /* MS lists this as Serbian (Cyrillic, Serbia) 'sr-Cyrl-SP', but they use 'SP' since at least Windows2003 where it was Serbia and Montenegro! */
+#define LANGUAGE_SERBIAN_CYRILLIC_LSO       0x6C1A
+#define LANGUAGE_SERBIAN_CYRILLIC_SAM       0x0C1A  /* Serbia and Montenegro (former) */
 #define LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA    0x1C1A
-#define LANGUAGE_SERBIAN_LATIN              0x081A  /* MS lists this as Serbian (Latin, Serbia) 'sr-Latn-SP', but they use 'SP' since at least Windows2003 where it was Serbia and Montenegro! */
+#define LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO 0x301A
+#define LANGUAGE_SERBIAN_CYRILLIC_SERBIA    0x281A
+#define LANGUAGE_SERBIAN_LATIN_LSO          0x701A
+#define LANGUAGE_SERBIAN_LATIN_SAM          0x081A
 #define LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA       0x181A
-#define LANGUAGE_SERBIAN_LATIN_NEUTRAL      0x7C1A  /* MS lists this as 'sr' only. What a mess. */
+#define LANGUAGE_SERBIAN_LATIN_MONTENEGRO   0x2C1A
+#define LANGUAGE_SERBIAN_LATIN_NEUTRAL      0x7C1A
+#define LANGUAGE_SERBIAN_LATIN_SERBIA       0x241A
 #define LANGUAGE_SESOTHO                    0x0430  /* also called Sutu now by MS */
 #define LANGUAGE_SINDHI                     0x0459
+#define LANGUAGE_SINDHI_ARABIC_LSO          0x7C59
 #define LANGUAGE_SINDHI_PAKISTAN            0x0859
 #define LANGUAGE_SINHALESE_SRI_LANKA        0x045B
 #define LANGUAGE_SLOVAK                     0x041B
@@ -314,6 +367,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_SOMALI                     0x0477
 #define LANGUAGE_UPPER_SORBIAN_GERMANY      0x042E  /* obsoletes LANGUAGE_USER_UPPER_SORBIAN 0x0623 */
 #define LANGUAGE_LOWER_SORBIAN_GERMANY      0x082E  /* obsoletes LANGUAGE_USER_LOWER_SORBIAN 0x0624. NOTE: the primary ID is identical to Upper Sorbian, which is not quite correct because they're distinct languages */
+#define LANGUAGE_LOWER_SORBIAN_LSO          0x7C2E
 #define LANGUAGE_SORBIAN                    LANGUAGE_USER_UPPER_SORBIAN /* a strange MS definition */
 #define LANGUAGE_SPANISH_DATED              0x040A  /* old collation, not supported, see #i94435# */
 #define LANGUAGE_SPANISH_ARGENTINA          0x2C0A
@@ -342,11 +396,17 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_SWEDISH                    0x041D
 #define LANGUAGE_SWEDISH_FINLAND            0x081D
 #define LANGUAGE_SYRIAC                     0x045A
+#define LANGUAGE_TAI_NUA_CHINA              0x048F
 #define LANGUAGE_TAJIK                      0x0428
-#define LANGUAGE_TAMAZIGHT_ARABIC           0x045F
-#define LANGUAGE_TAMAZIGHT_LATIN            0x085F
-#define LANGUAGE_TAMAZIGHT_TIFINAGH         0x0C5F
+#define LANGUAGE_TAJIK_LSO                  0x7C28
+#define LANGUAGE_TAMAZIGHT_ARABIC_MOROCCO   0x045F
+#define LANGUAGE_TAMAZIGHT_LATIN_ALGERIA    0x085F
+#define LANGUAGE_TAMAZIGHT_LATIN_LSO        0x7C5F
+#define LANGUAGE_TAMAZIGHT_MOROCCO          0x0C5F
+#define LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO 0x105F
+#define LANGUAGE_TAMAZIGHT_TIFINAGH_LSO     0x785F
 #define LANGUAGE_TAMIL                      0x0449
+#define LANGUAGE_TAMIL_SRI_LANKA            0x0849
 #define LANGUAGE_TATAR                      0x0444
 #define LANGUAGE_TELUGU                     0x044A
 #define LANGUAGE_THAI                       0x041E
@@ -357,6 +417,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_TIGRIGNA_ETHIOPIA          0x0473
 #define LANGUAGE_TSONGA                     0x0431
 #define LANGUAGE_TSWANA                     0x0432  /* AKA Setsuana, for South Africa */
+#define LANGUAGE_TSWANA_BOTSWANA            0x0832  /* obsoletes LANGUAGE_USER_TSWANA_BOTSWANA */
 #define LANGUAGE_TURKISH                    0x041F
 #define LANGUAGE_TURKMEN                    0x0442
 #define LANGUAGE_UIGHUR_CHINA               0x0480
@@ -364,7 +425,9 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_URDU_INDIA                 0x0820
 #define LANGUAGE_URDU_PAKISTAN              0x0420
 #define LANGUAGE_UZBEK_CYRILLIC             0x0843
+#define LANGUAGE_UZBEK_CYRILLIC_LSO         0x7843
 #define LANGUAGE_UZBEK_LATIN                0x0443
+#define LANGUAGE_UZBEK_LATIN_LSO            0x7C43
 #define LANGUAGE_VENDA                      0x0433
 #define LANGUAGE_VIETNAMESE                 0x042A
 #define LANGUAGE_WELSH                      0x0452
@@ -374,7 +437,19 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_YI                         0x0478  /* Sichuan Yi */
 #define LANGUAGE_YIDDISH                    0x043D
 #define LANGUAGE_YORUBA                     0x046A
+#define LANGUAGE_YUE_CHINESE_HONGKONG       0x048E
 #define LANGUAGE_ZULU                       0x0435
+
+#define LANGUAGE_qps_ploc                   0x0501  /* 'qps-ploc', qps is a reserved for local use code */
+#define LANGUAGE_qps_ploca                  0x05FE  /* 'qps-ploca', qps is a reserved for local use code */
+#define LANGUAGE_qps_plocm                  0x09FF  /* 'qps-plocm', qps is a reserved for local use code */
+
+#define LANGUAGE_ar_Ploc_SA__reserved                   0x4401  /* 'ar-Ploc-SA', 'Ploc'?? */
+#define LANGUAGE_ja_Ploc_JP__reserved                   0x0811  /* 'ja-Ploc-JP', 'Ploc'?? */
+#define LANGUAGE_pap_029__reserved                      0x0479  /* 'pap-029' */
+#define LANGUAGE_ar_145__reserved                       0x4801  /* 'ar-145' */
+#define LANGUAGE_es_419                                 0x580A  /* 'es-419', not reserved, used? */
+#define LANGUAGE_Neither_defined_nor_reserved_0x2008    0x2008
 
 /*! use only for import/export of MS documents, number formatter maps it to
  *! LANGUAGE_SYSTEM and then to effective system language */
@@ -454,7 +529,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_KALAALLISUT           LANGUAGE_KALAALLISUT_GREENLAND
 #define LANGUAGE_USER_SWAZI                 0x062B
 #define LANGUAGE_USER_NDEBELE_SOUTH         0x062C
-#define LANGUAGE_USER_TSWANA_BOTSWANA       0x8032  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_TSWANA)) */
+#define LANGUAGE_OBSOLETE_USER_TSWANA_BOTSWANA 0x8032  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_TSWANA)) */
+#define LANGUAGE_USER_TSWANA_BOTSWANA       LANGUAGE_TSWANA_BOTSWANA
 #define LANGUAGE_USER_MOORE                 0x062D
 #define LANGUAGE_USER_BAMBARA               0x062E
 #define LANGUAGE_USER_AKAN                  0x062F
@@ -486,10 +562,14 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_TETUN                 0x0640
 #define LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA 0x0641
 #define LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA 0x0642
-#define LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA       0x8C1A  /* makeLangID( 0x20+0x03, getPrimaryLanguage( LANGUAGE_SERBIAN_CYRILLIC)) */
-#define LANGUAGE_USER_SERBIAN_LATIN_SERBIA          0x881A  /* makeLangID( 0x20+0x02, getPrimaryLanguage( LANGUAGE_SERBIAN_LATIN)) */
-#define LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO   0xCC1A  /* makeLangID( 0x20+0x13, getPrimaryLanguage( LANGUAGE_SERBIAN_CYRILLIC)) */
-#define LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO      0xC81A  /* makeLangID( 0x20+0x12, getPrimaryLanguage( LANGUAGE_SERBIAN_LATIN)) */
+#define LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_SERBIA      0x8C1A  /* makeLangID( 0x20+0x03, getPrimaryLanguage( LANGUAGE_SERBIAN_CYRILLIC_LSO)) */
+#define LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA               LANGUAGE_SERBIAN_CYRILLIC_SERBIA
+#define LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA         0x881A  /* makeLangID( 0x20+0x02, getPrimaryLanguage( LANGUAGE_SERBIAN_LATIN_LSO)) */
+#define LANGUAGE_USER_SERBIAN_LATIN_SERBIA                  LANGUAGE_SERBIAN_LATIN_SERBIA
+#define LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_MONTENEGRO  0xCC1A  /* makeLangID( 0x20+0x13, getPrimaryLanguage( LANGUAGE_SERBIAN_CYRILLIC_LSO)) */
+#define LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO           LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO
+#define LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO     0xC81A  /* makeLangID( 0x20+0x12, getPrimaryLanguage( LANGUAGE_SERBIAN_LATIN_LSO)) */
+#define LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO              LANGUAGE_SERBIAN_LATIN_MONTENEGRO
 #define LANGUAGE_USER_SAMI_KILDIN_RUSSIA    0x803B  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SAMI_NORTHERN_NORWAY)) */
 #define LANGUAGE_USER_BODO_INDIA            0x0643
 #define LANGUAGE_USER_DOGRI_INDIA           0x0644
@@ -513,7 +593,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_MAORE                 0x064C
 #define LANGUAGE_USER_BUSHI                 0x064D
 #define LANGUAGE_USER_TAHITIAN              0x064E
-#define LANGUAGE_USER_MALAGASY_PLATEAU      0x064F
+#define LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU 0x064F
+#define LANGUAGE_USER_MALAGASY_PLATEAU      LANGUAGE_MALAGASY_PLATEAU
 #define LANGUAGE_USER_PAPIAMENTU_ARUBA      0x8079  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
 #define LANGUAGE_USER_SARDINIAN_CAMPIDANESE 0x0650
 #define LANGUAGE_USER_SARDINIAN_GALLURESE   0x0651
@@ -527,7 +608,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_LIMBU                 0x0657
 #define LANGUAGE_USER_LOJBAN                0x0658  /* no locale */
 #define LANGUAGE_OBSOLETE_USER_KABYLE       0x0659
-#define LANGUAGE_USER_KABYLE                LANGUAGE_TAMAZIGHT_LATIN
+#define LANGUAGE_USER_KABYLE                LANGUAGE_TAMAZIGHT_LATIN_ALGERIA
 #define LANGUAGE_USER_HAITIAN               0x065A
 #define LANGUAGE_USER_BEEMBE                0x065B
 #define LANGUAGE_USER_BEKWEL                0x065C
@@ -592,6 +673,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_NOGAI                 0x068B
 #define LANGUAGE_USER_KARAKALPAK_LATIN      0x068C
 #define LANGUAGE_USER_LADIN                 0x068D
+#define LANGUAGE_USER_TIBETAN_BHUTAN        0x8451  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_TIBETAN)) */
 
 
 /* Primary language ID range for on-the-fly assignment. */

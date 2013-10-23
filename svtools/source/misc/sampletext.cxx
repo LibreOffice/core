@@ -586,9 +586,17 @@ OUString makeRepresentativeTextForLanguage(LanguageType eLang)
         case LANGUAGE_KHMER & LANGUAGE_MASK_PRIMARY:
             sRet = makeRepresentativeTextForScript(USCRIPT_KHMER);
             break;
-        case LANGUAGE_MONGOLIAN & LANGUAGE_MASK_PRIMARY:
-            if (eLang == LANGUAGE_MONGOLIAN_MONGOLIAN)
-                sRet = makeRepresentativeTextForScript(USCRIPT_MONGOLIAN);
+        case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO & LANGUAGE_MASK_PRIMARY:
+            switch (eLang)
+            {
+                case LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA:
+                case LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA:
+                case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO:
+                    sRet = makeRepresentativeTextForScript(USCRIPT_MONGOLIAN);
+                    break;
+                default:
+                    break;
+            }
             break;
         case LANGUAGE_JAPANESE & LANGUAGE_MASK_PRIMARY:
             sRet = makeRepresentativeTextForScript(USCRIPT_JAPANESE);

@@ -197,7 +197,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_BELARUS,              LANGUAGE_BELARUSIAN,                    false   },
     { COUNTRY_MONACO,               LANGUAGE_FRENCH_MONACO,                 true    },
     { COUNTRY_UKRAINE,              LANGUAGE_UKRAINIAN,                     false   },
-    { COUNTRY_SERBIA,               LANGUAGE_SERBIAN_LATIN,                 false   },
+    { COUNTRY_SERBIA,               LANGUAGE_SERBIAN_LATIN_SAM,             false   },
     { COUNTRY_CROATIA,              LANGUAGE_CROATIAN,                      true    },  // sub type of LANGUAGE_SERBIAN
     { COUNTRY_SLOVENIA,             LANGUAGE_SLOVENIAN,                     false   },
     { COUNTRY_MACEDONIA,            LANGUAGE_MACEDONIAN,                    false   },
@@ -235,7 +235,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_ISRAEL,               LANGUAGE_HEBREW,                        false   },
     { COUNTRY_BAHRAIN,              LANGUAGE_ARABIC_BAHRAIN,                true    },
     { COUNTRY_QATAR,                LANGUAGE_ARABIC_QATAR,                  true    },
-    { COUNTRY_MONGOLIA,             LANGUAGE_MONGOLIAN,                     false   },
+    { COUNTRY_MONGOLIA,             LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA,   false   },
     { COUNTRY_NEPAL,                LANGUAGE_NEPALI,                        false   },
     { COUNTRY_IRAN,                 LANGUAGE_FARSI,                         false   },
     { COUNTRY_TAJIKISTAN,           LANGUAGE_TAJIK,                         false   },

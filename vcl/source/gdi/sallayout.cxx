@@ -287,11 +287,18 @@ VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
         case LANGUAGE_MALAYALAM     & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x0D66 - '0';  // malayalam
             break;
-        case LANGUAGE_MONGOLIAN     & LANGUAGE_MASK_PRIMARY:
-            if (eLang == LANGUAGE_MONGOLIAN_MONGOLIAN)
-                nOffset = 0x1810 - '0';   // mongolian
-            else
-                nOffset = 0;              // mongolian cyrillic
+        case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO & LANGUAGE_MASK_PRIMARY:
+            switch (eLang)
+            {
+                case LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA:
+                case LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA:
+                case LANGUAGE_MONGOLIAN_MONGOLIAN_LSO:
+                    nOffset = 0x1810 - '0';   // mongolian
+                    break;
+                default:
+                    nOffset = 0;              // mongolian cyrillic
+                    break;
+            }
             break;
         case LANGUAGE_BURMESE       & LANGUAGE_MASK_PRIMARY:
             nOffset = 0x1040 - '0';  // myanmar
