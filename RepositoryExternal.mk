@@ -1690,8 +1690,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 
 define gb_LinkTarget__use_lpsolve
 $(call gb_LinkTarget_use_unpacked,$(1),lpsolve)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	lpsolve55 \
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,lpsolve)/lpsolve55 -llpsolve55 \
 )
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,lpsolve) \

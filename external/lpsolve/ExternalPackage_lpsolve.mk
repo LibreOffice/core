@@ -8,29 +8,17 @@
 #
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,lpsolve,lpsolve))
+
 $(eval $(call gb_ExternalPackage_use_external_project,lpsolve,lpsolve))
 
+ifneq ($(DISABLE_DYNLOADING),TRUE)
 ifeq ($(OS),WNT)
-ifeq ($(COM),GCC)
-ifneq ($(OS_FOR_BUILD),WNT)
-$(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/liblpsolve55.dll.a))
-endif # $(OS_FOR_BUILD)
-else # $(COM)
-$(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/lpsolve55.lib))
-endif # $(COM)
 $(eval $(call gb_ExternalPackage_add_library_for_install,lpsolve,bin/lpsolve55.dll,lpsolve55/lpsolve55.dll))
-else # $(OS)
-
-ifeq ($(OS),MACOSX)
+else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_library_for_install,lpsolve,lib/liblpsolve55.dylib,lpsolve55/liblpsolve55.dylib))
-else
-ifeq ($(DISABLE_DYNLOADING),TRUE)
-$(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/liblpsolve55.a))
-else
+else # $(OS) != WNT/MACOSX
 $(eval $(call gb_ExternalPackage_add_library_for_install,lpsolve,lib/liblpsolve55.so,lpsolve55/liblpsolve55.so))
+endif # $(OS)
 endif # $(DISABLE_DYNLOADING)
-
-endif # $(OS)
-endif # $(OS)
 
 # vim: set noet sw=4 ts=4:

@@ -96,6 +96,7 @@ LIBS = \
   $(wildcard $(WORKDIR)/UnpackedTarball/liborcus/src/*/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/libvisio/src/lib/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/libwp?/src/lib/.libs/*.a) \
+  $(wildcard $(WORKDIR)/UnpackedTarball/lpsolve/lpsolve55/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/openssl/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/raptor/src/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/rasqal/src/.libs/*.a) \
