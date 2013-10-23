@@ -84,6 +84,33 @@ class OpFisherInv:public Normal{
     virtual std::string BinFuncName(void) const { return "FisherInv"; }
 };
 
+class OpGamma:public Normal{
+    public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR= dynamic_cast<const
+              formula::SingleVectorRefToken *>(tmpCur);
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss <<"int gid0=get_global_id(0);\n\t";
+        ss << "double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+        ss << "double tmp=tgamma(arg0);\n\t";
+        ss << "return tmp;\n";
+        ss << "}\n";
+    }
+    virtual std::string BinFuncName(void) const { return "Gamma"; }
+};
+
 }}
 #endif
 

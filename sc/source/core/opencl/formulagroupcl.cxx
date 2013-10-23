@@ -521,6 +521,10 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 mvSubArguments.push_back(SoPHelper<OpFisherInv>(ts,
                     ft->Children[i]));
                 break;
+            case ocGamma:
+                mvSubArguments.push_back(SoPHelper<OpGamma>(ts,
+                    ft->Children[i]));
+                break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getEffect"))))
@@ -576,7 +580,7 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     mvSubArguments.push_back(SoPHelper<OpTbillprice>(ts,
                             ft->Children[i]));
                 }
-               else if( !(pChild->GetExternal().compareTo(OUString(
+                else if( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getTbillyield"))))
                 {
                     mvSubArguments.push_back(SoPHelper<OpTbillyield>(ts,
