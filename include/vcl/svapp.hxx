@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SVAPP_HXX
-#define _SV_SVAPP_HXX
+#ifndef INCLUDED_VCL_SVAPP_HXX
+#define INCLUDED_VCL_SVAPP_HXX
 
 #include <config_features.h>
 

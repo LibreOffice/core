@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_NATIVEWIDGETS_HXX
-#define _SV_NATIVEWIDGETS_HXX
+#ifndef INCLUDED_VCL_SALNATIVEWIDGETS_HXX
+#define INCLUDED_VCL_SALNATIVEWIDGETS_HXX
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>

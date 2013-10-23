@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_APPTYPES_HXX
-#define _VCL_APPTYPES_HXX
+#ifndef INCLUDED_VCL_APPTYPES_HXX
+#define INCLUDED_VCL_APPTYPES_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -46,6 +46,6 @@
 #define VCL_INPUT_MOUSEANDKEYBOARD      (VCL_INPUT_MOUSE | VCL_INPUT_KEYBOARD)
 #define VCL_INPUT_ANY                   (VCL_INPUT_MOUSEANDKEYBOARD | VCL_INPUT_PAINT | VCL_INPUT_TIMER | VCL_INPUT_OTHER | VCL_INPUT_APPEVENT)
 
-#endif // _VCL_APPTYPES_HXX
+#endif // INCLUDED_VCL_APPTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

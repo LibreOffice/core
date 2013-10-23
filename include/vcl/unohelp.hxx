@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_UNOHELP_HXX
-#define _VCL_UNOHELP_HXX
+#ifndef INCLUDED_VCL_UNOHELP_HXX
+#define INCLUDED_VCL_UNOHELP_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
@@ -56,6 +56,6 @@ VCL_DLLPUBLIC OUString CreateLibraryName( const sal_Char* pModName, sal_Bool bSU
 VCL_DLLPUBLIC void NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject );
 }}  // namespace vcl::unohelper
 
-#endif  // _VCL_UNOHELP_HXX
+#endif // INCLUDED_VCL_UNOHELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

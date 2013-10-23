@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_HELP_HXX
-#define _SV_HELP_HXX
+#ifndef INCLUDED_VCL_HELP_HXX
+#define INCLUDED_VCL_HELP_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -113,6 +113,6 @@ public:
     static void         HideTip( sal_uLong nId );
 };
 
-#endif  // _SV_HELP_HXX
+#endif // INCLUDED_VCL_HELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

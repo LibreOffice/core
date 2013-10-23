@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALBTYPE_HXX
-#define _SV_SALBTYPE_HXX
+#ifndef INCLUDED_VCL_SALBTYPE_HXX
+#define INCLUDED_VCL_SALBTYPE_HXX
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -891,6 +891,6 @@ inline void ColorMask::SetColorFor32Bit( const BitmapColor& rColor, HPBYTE pPixe
 #endif
 }
 
-#endif // _SV_SALBTYPE_HXX
+#endif // INCLUDED_VCL_SALBTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_POINTR_HXX
-#define _VCL_POINTR_HXX
+#ifndef INCLUDED_VCL_POINTR_HXX
+#define INCLUDED_VCL_POINTR_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -48,6 +48,6 @@ public:
                         { return !(Pointer::operator==( rPointer )); }
 };
 
-#endif // _VCL_POINTR_HXX
+#endif // INCLUDED_VCL_POINTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

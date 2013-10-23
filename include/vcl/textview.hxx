@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TEXTVIEW_HXX
-#define _TEXTVIEW_HXX
+#ifndef INCLUDED_VCL_TEXTVIEW_HXX
+#define INCLUDED_VCL_TEXTVIEW_HXX
 
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>

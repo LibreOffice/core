@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_KEYCODES_HXX
-#define _SV_KEYCODES_HXX
+#ifndef INCLUDED_VCL_KEYCODES_HXX
+#define INCLUDED_VCL_KEYCODES_HXX
 
 #include <tools/solar.h>
 #include <rsc/rsc-vcl-shared-types.hxx>
@@ -181,6 +181,6 @@
 #define INDICATOR_NUMLOCK       0x0002
 #define INDICATOR_SCROLLLOCK    0x0004
 
-#endif // _SV_KEYCODES_HXX
+#endif // INCLUDED_VCL_KEYCODES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TXTATTR_HXX
-#define _TXTATTR_HXX
+#ifndef INCLUDED_VCL_TXTATTR_HXX
+#define INCLUDED_VCL_TXTATTR_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
@@ -222,6 +222,6 @@ inline sal_Bool TextCharAttrib::IsEmpty()
     return mnStart == mnEnd;
 }
 
-#endif // _TXTATTR_HXX
+#endif // INCLUDED_VCL_TXTATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_WRKWIN_HXX
-#define _SV_WRKWIN_HXX
+#ifndef INCLUDED_VCL_WRKWIN_HXX
+#define INCLUDED_VCL_WRKWIN_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -100,6 +100,6 @@ public:
     sal_Bool        IsMaximized() const;
 };
 
-#endif // _SV_WRKWIN_HXX
+#endif // INCLUDED_VCL_WRKWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FLTCALL_HXX
-#define _FLTCALL_HXX
+#ifndef INCLUDED_VCL_FLTCALL_HXX
+#define INCLUDED_VCL_FLTCALL_HXX
 #include <sal/types.h>
 #include <vcl/field.hxx>
 #include <com/sun/star/uno/Sequence.h>

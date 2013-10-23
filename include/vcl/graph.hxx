@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_GRAPH_HXX
-#define _SV_GRAPH_HXX
+#ifndef INCLUDED_VCL_GRAPH_HXX
+#define INCLUDED_VCL_GRAPH_HXX
 
 #include <tools/stream.hxx>
 #include <vcl/dllapi.h>
@@ -200,6 +200,6 @@ public:
     const SvgDataPtr&   getSvgData() const;
 };
 
-#endif  // _SV_GRAPH_HXX
+#endif // INCLUDED_VCL_GRAPH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

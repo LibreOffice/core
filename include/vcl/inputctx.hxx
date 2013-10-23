@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_INPUTCTX_HXX
-#define _VCL_INPUTCTX_HXX
+#ifndef INCLUDED_VCL_INPUTCTX_HXX
+#define INCLUDED_VCL_INPUTCTX_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -77,6 +77,6 @@ inline sal_Bool InputContext::operator==( const InputContext& rInputContext ) co
             (maFont     == rInputContext.maFont));
 }
 
-#endif // _VCL_INPUTCTX_HXX
+#endif // INCLUDED_VCL_INPUTCTX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

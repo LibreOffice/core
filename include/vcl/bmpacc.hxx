@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_BMPACC_HXX
-#define _SV_BMPACC_HXX
+#ifndef INCLUDED_VCL_BMPACC_HXX
+#define INCLUDED_VCL_BMPACC_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -467,6 +467,6 @@ inline void BitmapWriteAccess::SetPixelIndex( long nY, long nX, sal_uInt8 cIndex
 
 // ------------------------------------------------------------------
 
-#endif // _SV_BMPACC_HXX
+#endif // INCLUDED_VCL_BMPACC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

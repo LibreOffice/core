@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_THROBBER_HXX
-#define VCL_THROBBER_HXX
+#ifndef INCLUDED_VCL_THROBBER_HXX
+#define INCLUDED_VCL_THROBBER_HXX
 
 #include "vcl/dllapi.h"
 #include "vcl/imgctrl.hxx"
@@ -89,6 +89,6 @@ private:
     DECL_LINK( TimeOutHdl, void* );
 };
 
-#endif // VCL_THROBBER_HXX
+#endif // INCLUDED_VCL_THROBBER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

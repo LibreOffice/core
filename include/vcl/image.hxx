@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_IMAGE_HXX
-#define _SV_IMAGE_HXX
+#ifndef INCLUDED_VCL_IMAGE_HXX
+#define INCLUDED_VCL_IMAGE_HXX
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
@@ -140,6 +140,6 @@ private:
     SAL_DLLPRIVATE sal_uInt16  ImplGetImageId( const OUString& rImageName ) const;
 };
 
-#endif  // _SV_IMAGE_HXX
+#endif // INCLUDED_VCL_IMAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

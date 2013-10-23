@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_FIELD_HXX
-#define _SV_FIELD_HXX
+#ifndef INCLUDED_VCL_FIELD_HXX
+#define INCLUDED_VCL_FIELD_HXX
 
 #include <vcl/dllapi.h>
 #include <tools/link.hxx>
@@ -830,6 +830,6 @@ public:
     virtual void            ReformatAll();
 };
 
-#endif // _SV_FIELD_HXX
+#endif // INCLUDED_VCL_FIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

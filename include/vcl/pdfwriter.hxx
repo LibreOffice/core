@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _VCL_PDFWRITER_HXX
-#define _VCL_PDFWRITER_HXX
+#ifndef INCLUDED_VCL_PDFWRITER_HXX
+#define INCLUDED_VCL_PDFWRITER_HXX
 
 #include <sal/types.h>
 
@@ -1302,6 +1302,6 @@ The following structure describes the permissions used in PDF security
 
 }
 
-#endif // _VCL_PDFWRITER_HXX
+#endif // INCLUDED_VCL_PDFWRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

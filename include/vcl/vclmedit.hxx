@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLMEDIT_HXX
-#define _VCLMEDIT_HXX
+#ifndef INCLUDED_VCL_VCLMEDIT_HXX
+#define INCLUDED_VCL_VCLMEDIT_HXX
 
 #include <tools/lineend.hxx>
 #include <tools/wintypes.hxx>
@@ -140,6 +140,6 @@ inline sal_uLong VclMultiLineEdit::IsUpdateDataEnabled() const
     return pUpdateDataTimer ? pUpdateDataTimer->GetTimeout() : 0;
 }
 
-#endif  //_VCLMEDIT_HXX
+#endif // INCLUDED_VCL_VCLMEDIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

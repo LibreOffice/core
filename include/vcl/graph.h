@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_GRAPH_H
-#define _SV_GRAPH_H
+#ifndef INCLUDED_VCL_GRAPH_H
+#define INCLUDED_VCL_GRAPH_H
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -69,6 +69,6 @@ public:
     Size            GetPreviewSize() const;
 };
 
-#endif // _SV_GRAPH_H
+#endif // INCLUDED_VCL_GRAPH_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

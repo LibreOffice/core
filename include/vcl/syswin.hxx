@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SYSWIN_HXX
-#define _SV_SYSWIN_HXX
+#ifndef INCLUDED_VCL_SYSWIN_HXX
+#define INCLUDED_VCL_SYSWIN_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -263,6 +263,6 @@ public:
     const Link& GetCloseHdl() const;
 };
 
-#endif // _SV_SYSWIN_HXX
+#endif // INCLUDED_VCL_SYSWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_FIXED_HXX
-#define _SV_FIXED_HXX
+#ifndef INCLUDED_VCL_FIXED_HXX
+#define INCLUDED_VCL_FIXED_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -205,6 +205,6 @@ public:
     static Image loadThemeImage(const OString &rFileName);
 };
 
-#endif  // _SV_FIXED_HXX
+#endif // INCLUDED_VCL_FIXED_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

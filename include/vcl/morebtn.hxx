@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_MOREBTN_HXX
-#define _SV_MOREBTN_HXX
+#ifndef INCLUDED_VCL_MOREBTN_HXX
+#define INCLUDED_VCL_MOREBTN_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -81,6 +81,6 @@ inline void MoreButton::SetState( sal_Bool bNewState )
         Click();
 }
 
-#endif  // _SV_MOREBTN_HXX
+#endif // INCLUDED_VCL_MOREBTN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

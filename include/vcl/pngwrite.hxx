@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_PNGWRITE_HXX
-#define _SV_PNGWRITE_HXX
+#ifndef INCLUDED_VCL_PNGWRITE_HXX
+#define INCLUDED_VCL_PNGWRITE_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -56,6 +56,6 @@ namespace vcl
     };
 }
 
-#endif // _SV_PNGWRITE_HXX
+#endif // INCLUDED_VCL_PNGWRITE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

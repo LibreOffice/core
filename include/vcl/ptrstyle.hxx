@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_PTRSTYLE_HXX
-#define _VCL_PTRSTYLE_HXX
+#ifndef INCLUDED_VCL_PTRSTYLE_HXX
+#define INCLUDED_VCL_PTRSTYLE_HXX
 
 #include <tools/solar.h>
 
@@ -129,6 +129,6 @@ typedef sal_uInt16 PointerStyle;
 
 #define POINTER_COUNT                   94
 
-#endif // _VCL_PTRSTYLE_HXX
+#endif // INCLUDED_VCL_PTRSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PSPRINT_HELPER_HXX_
-#define _PSPRINT_HELPER_HXX_
+#ifndef INCLUDED_VCL_HELPER_HXX
+#define INCLUDED_VCL_HELPER_HXX
 
 #include <list>
 
@@ -54,6 +54,6 @@ enum whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
 OUString VCL_DLLPUBLIC getOfficePath( enum whichOfficePath ePath );
 } // namespace
 
-#endif // _PSPRINT_HELPER_HXX_
+#endif // INCLUDED_VCL_HELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

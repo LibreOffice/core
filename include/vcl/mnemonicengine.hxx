@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_MNEMONICENGINE_HXX
-#define VCL_MNEMONICENGINE_HXX
+#ifndef INCLUDED_VCL_MNEMONICENGINE_HXX
+#define INCLUDED_VCL_MNEMONICENGINE_HXX
 
 #include "dllapi.h"
 
@@ -149,6 +149,6 @@ namespace vcl
 } // namespace vcl
 //........................................................................
 
-#endif // VCL_MNEMONICENGINE_HXX
+#endif // INCLUDED_VCL_MNEMONICENGINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

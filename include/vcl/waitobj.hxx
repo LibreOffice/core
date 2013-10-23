@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_WAITOBJ_HXX
-#define _SV_WAITOBJ_HXX
+#ifndef INCLUDED_VCL_WAITOBJ_HXX
+#define INCLUDED_VCL_WAITOBJ_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -42,6 +42,6 @@ public:
                 ~WaitObject();
 };
 
-#endif // _SV_WAITOBJ_HXX
+#endif // INCLUDED_VCL_WAITOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

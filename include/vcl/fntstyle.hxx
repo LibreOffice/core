@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_FNTSTYLE_HXX
-#define _VCL_FNTSTYLE_HXX
+#ifndef INCLUDED_VCL_FNTSTYLE_HXX
+#define INCLUDED_VCL_FNTSTYLE_HXX
 
 #include <tools/solar.h>
 #include <sal/types.h>
@@ -42,6 +42,6 @@ typedef sal_uInt8 FontKerning;
 #define KERNING_FONTSPECIFIC        ((FontKerning)0x01)
 #define KERNING_ASIAN               ((FontKerning)0x02)
 
-#endif  // _VCL_FNTSTYLE_HXX
+#endif // INCLUDED_VCL_FNTSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

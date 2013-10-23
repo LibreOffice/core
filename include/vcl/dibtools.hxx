@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SV_DIBTOOLS_HXX
-#define _SV_DIBTOOLS_HXX
+#ifndef INCLUDED_VCL_DIBTOOLS_HXX
+#define INCLUDED_VCL_DIBTOOLS_HXX
 
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
@@ -66,7 +66,7 @@ bool VCL_DLLPUBLIC WriteDIBV5(
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // _SV_DIBTOOLS_HXX
+#endif // INCLUDED_VCL_DIBTOOLS_HXX
 
 //////////////////////////////////////////////////////////////////////////////
 

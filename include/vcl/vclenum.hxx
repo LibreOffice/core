@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_VCLENUM_HXX
-#define _VCL_VCLENUM_HXX
+#ifndef INCLUDED_VCL_VCLENUM_HXX
+#define INCLUDED_VCL_VCLENUM_HXX
 
 #include <sal/types.h>
 #include <tools/solar.h>
@@ -150,6 +150,6 @@ enum VclResponseType
     RET_HELP    = 10
 };
 
-#endif  // _VCL_VCLENUM_HXX
+#endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

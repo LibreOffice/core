@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_PDFEXTOUTDEVDATA_HXX
-#define _VCL_PDFEXTOUTDEVDATA_HXX
+#ifndef INCLUDED_VCL_PDFEXTOUTDEVDATA_HXX
+#define INCLUDED_VCL_PDFEXTOUTDEVDATA_HXX
 
 #include <vcl/dllapi.h>
 

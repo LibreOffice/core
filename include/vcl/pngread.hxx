@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_PNGREAD_HXX
-#define _SV_PNGREAD_HXX
+#ifndef INCLUDED_VCL_PNGREAD_HXX
+#define INCLUDED_VCL_PNGREAD_HXX
 
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
@@ -59,6 +59,6 @@ namespace vcl
     };
 }
 
-#endif // _SV_PNGREAD_HXX
+#endif // INCLUDED_VCL_PNGREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

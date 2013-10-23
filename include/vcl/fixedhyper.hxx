@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_FIXEDHYPER_HXX
-#define VCL_FIXEDHYPER_HXX
+#ifndef INCLUDED_VCL_FIXEDHYPER_HXX
+#define INCLUDED_VCL_FIXEDHYPER_HXX
 
 #include <vcl/dllapi.h>
 #include <vcl/fixed.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_DOCKWIN_HXX
-#define _SV_DOCKWIN_HXX
+#ifndef INCLUDED_VCL_DOCKWIN_HXX
+#define INCLUDED_VCL_DOCKWIN_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -415,6 +415,6 @@ inline void DockingWindow::SetFloatingPos( const Point& rNewPos )
 }
 
 
-#endif  // _SV_DOCKWIN_HXX
+#endif // INCLUDED_VCL_DOCKWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

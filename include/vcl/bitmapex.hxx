@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_BITMAPEX_HXX
-#define _SV_BITMAPEX_HXX
+#ifndef INCLUDED_VCL_BITMAPEX_HXX
+#define INCLUDED_VCL_BITMAPEX_HXX
 
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
@@ -479,6 +479,6 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
 
 // ------------------------------------------------------------------
 
-#endif // _SV_BITMAPEX_HXX
+#endif // INCLUDED_VCL_BITMAPEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

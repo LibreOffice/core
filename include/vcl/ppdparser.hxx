@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _PSPRINT_PPDPARSER_HXX_
-#define _PSPRINT_PPDPARSER_HXX_
+#ifndef INCLUDED_VCL_PPDPARSER_HXX
+#define INCLUDED_VCL_PPDPARSER_HXX
 
 #include <list>
 #include <vector>
@@ -305,6 +305,6 @@ public:
 
 } // namespace
 
-#endif // _PSPRINT_PPDPARSER_HXX_
+#endif // INCLUDED_VCL_PPDPARSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

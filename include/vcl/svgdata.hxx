@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SVGDATA_HXX
-#define _SV_SVGDATA_HXX
+#ifndef INCLUDED_VCL_SVGDATA_HXX
+#define INCLUDED_VCL_SVGDATA_HXX
 
 #include <basegfx/range/b2drange.hxx>
 #include <boost/shared_array.hpp>
@@ -81,6 +81,6 @@ public:
 
 typedef boost::shared_ptr< SvgData > SvgDataPtr;
 
-#endif // _SV_SVGDATA_HXX
+#endif // INCLUDED_VCL_SVGDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

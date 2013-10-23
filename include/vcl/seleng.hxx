@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SELENG_HXX
-#define _SV_SELENG_HXX
+#ifndef INCLUDED_VCL_SELENG_HXX
+#define INCLUDED_VCL_SELENG_HXX
 
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
@@ -227,6 +227,6 @@ inline void SelectionEngine::SetAnchor( sal_Bool bAnchor )
         nFlags &= (~SELENG_HAS_ANCH);
 }
 
-#endif  // _SV_SELENG_HXX
+#endif // INCLUDED_VCL_SELENG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

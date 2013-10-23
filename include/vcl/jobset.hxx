@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_JOBSET_HXX
-#define _SV_JOBSET_HXX
+#ifndef INCLUDED_VCL_JOBSET_HXX
+#define INCLUDED_VCL_JOBSET_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -69,6 +69,6 @@ public:
     friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStream, const JobSetup& rJobSetup );
 };
 
-#endif  // _SV_JOBSET_HXX
+#endif // INCLUDED_VCL_JOBSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

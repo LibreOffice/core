@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_FONT_HXX
-#define _SV_FONT_HXX
+#ifndef INCLUDED_VCL_FONT_HXX
+#define INCLUDED_VCL_FONT_HXX
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

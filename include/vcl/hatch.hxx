@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_HATCH_HXX
-#define _SV_HATCH_HXX
+#ifndef INCLUDED_VCL_HATCH_HXX
+#define INCLUDED_VCL_HATCH_HXX
 
 #include <tools/color.hxx>
 #include <vcl/dllapi.h>
@@ -84,6 +84,6 @@ public:
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const Hatch& rHatch );
 };
 
-#endif  // _SV_HATCH_HXX
+#endif // INCLUDED_VCL_HATCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_CVTGRF_HXX
-#define _SV_CVTGRF_HXX
+#ifndef INCLUDED_VCL_CVTGRF_HXX
+#define INCLUDED_VCL_CVTGRF_HXX
 
 #include <vcl/dllapi.h>
 #include <tools/link.hxx>
@@ -52,6 +52,6 @@ public:
     const Link&         GetFilterHdl() const { return maFilterHdl; }
 };
 
-#endif // _SV_CVTGRF_HXX
+#endif // INCLUDED_VCL_CVTGRF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

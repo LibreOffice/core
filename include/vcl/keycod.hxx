@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_KEYCODE_HXX
-#define _SV_KEYCODE_HXX
+#ifndef INCLUDED_VCL_KEYCOD_HXX
+#define INCLUDED_VCL_KEYCOD_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -127,6 +127,6 @@ inline KeyCode& KeyCode::operator = ( const KeyCode& rKeyCode )
     return *this;
 }
 
-#endif // _SV_KEYCODE_HXX
+#endif // INCLUDED_VCL_KEYCOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

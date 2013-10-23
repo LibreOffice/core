@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SYSCHILD_HXX
-#define _SV_SYSCHILD_HXX
+#ifndef INCLUDED_VCL_SYSCHILD_HXX
+#define INCLUDED_VCL_SYSCHILD_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -60,6 +60,6 @@ public:
     sal_IntPtr              GetParentWindowHandle( sal_Bool bUseJava = sal_False );
 };
 
-#endif // _SV_SYSCHILD_HXX
+#endif // INCLUDED_VCL_SYSCHILD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

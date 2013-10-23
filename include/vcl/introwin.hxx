@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_INTROWIN_HXX
-#define _SV_INTROWIN_HXX
+#ifndef INCLUDED_VCL_INTROWIN_HXX
+#define INCLUDED_VCL_INTROWIN_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -39,6 +39,6 @@ public:
     ~IntroWindow();
 };
 
-#endif // _SV_INTROWIN_HXX
+#endif // INCLUDED_VCL_INTROWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

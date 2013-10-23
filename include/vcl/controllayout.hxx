@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_CONTROLLAYOUT_HXX
-#define _VCL_CONTROLLAYOUT_HXX
+#ifndef INCLUDED_VCL_CONTROLLAYOUT_HXX
+#define INCLUDED_VCL_CONTROLLAYOUT_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -74,6 +74,6 @@ struct VCL_DLLPUBLIC ControlLayoutData
 
 } // namespace vcl
 
-#endif // _VCL_CONTROLLAYOUT_HXX
+#endif // INCLUDED_VCL_CONTROLLAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_OUTDEV_HXX
-#define _SV_OUTDEV_HXX
+#ifndef INCLUDED_VCL_OUTDEV_HXX
+#define INCLUDED_VCL_OUTDEV_HXX
 
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
@@ -1215,6 +1215,6 @@ public:
 
 };
 
-#endif // _SV_OUTDEV_HXX
+#endif // INCLUDED_VCL_OUTDEV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

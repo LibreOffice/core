@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef VCL_EMBEDDEDFONTSHELPER_HXX
-#define VCL_EMBEDDEDFONTSHELPER_HXX
+#ifndef INCLUDED_VCL_EMBEDDEDFONTSHELPER_HXX
+#define INCLUDED_VCL_EMBEDDEDFONTSHELPER_HXX
 
 #include <vcl/dllapi.h>
 

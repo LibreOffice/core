@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WMF_HXX
-#define _WMF_HXX
+#ifndef INCLUDED_VCL_WMF_HXX
+#define INCLUDED_VCL_WMF_HXX
 
 #include <vcl/dllapi.h>
 

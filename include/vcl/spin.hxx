@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SPIN_HXX
-#define _SV_SPIN_HXX
+#ifndef INCLUDED_VCL_SPIN_HXX
+#define INCLUDED_VCL_SPIN_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -105,6 +105,6 @@ private:
     }
 };
 
-#endif  // _SV_SPIN_HXX
+#endif // INCLUDED_VCL_SPIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

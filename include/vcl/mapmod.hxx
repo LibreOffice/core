@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_MAPMOD_HXX
-#define _SV_MAPMOD_HXX
+#ifndef INCLUDED_VCL_MAPMOD_HXX
+#define INCLUDED_VCL_MAPMOD_HXX
 
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
@@ -105,6 +105,6 @@ public:
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const MapMode& rMapMode );
 };
 
-#endif  // _SV_MAPMOD_HXX
+#endif // INCLUDED_VCL_MAPMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

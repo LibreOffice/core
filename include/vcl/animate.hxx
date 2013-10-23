@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_ANIMATE_HXX
-#define _SV_ANIMATE_HXX
+#ifndef INCLUDED_VCL_ANIMATE_HXX
+#define INCLUDED_VCL_ANIMATE_HXX
 
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
@@ -233,6 +233,6 @@ public:
     friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStream, const Animation& rAnimation );
 };
 
-#endif // _SV_ANIMATE_HXX
+#endif // INCLUDED_VCL_ANIMATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

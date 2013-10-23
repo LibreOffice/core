@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SPLIT_HXX
-#define _SV_SPLIT_HXX
+#ifndef INCLUDED_VCL_SPLIT_HXX
+#define INCLUDED_VCL_SPLIT_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -113,6 +113,6 @@ public:
     const Link&         GetSplitHdl() const { return maSplitHdl; }
 };
 
-#endif  // _SV_SPLIT_HXX
+#endif // INCLUDED_VCL_SPLIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

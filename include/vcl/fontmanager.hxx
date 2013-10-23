@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PSPRINT_FONTMANAGER_HXX_
-#define _PSPRINT_FONTMANAGER_HXX_
+#ifndef INCLUDED_VCL_FONTMANAGER_HXX
+#define INCLUDED_VCL_FONTMANAGER_HXX
 
 #include <boost/unordered_map.hpp>
 #include <map>
@@ -554,6 +554,6 @@ public:
 
 } // namespace
 
-#endif // _PSPRINT_FONTMANAGER_HXX_
+#endif // INCLUDED_VCL_FONTMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

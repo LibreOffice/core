@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_COMBOBOX_HXX
-#define _SV_COMBOBOX_HXX
+#ifndef INCLUDED_VCL_COMBOBOX_HXX
+#define INCLUDED_VCL_COMBOBOX_HXX
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>

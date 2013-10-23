@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XTEXTEDT_HXX
-#define _XTEXTEDT_HXX
+#ifndef INCLUDED_VCL_XTEXTEDT_HXX
+#define INCLUDED_VCL_XTEXTEDT_HXX
 
 #include <vcl/dllapi.h>
 #include <vcl/texteng.hxx>
@@ -64,6 +64,6 @@ public:
     sal_Bool            UnindentBlock();
 };
 
-#endif // _XTEXTEDT_HXX
+#endif // INCLUDED_VCL_XTEXTEDT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

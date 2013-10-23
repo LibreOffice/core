@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_UNOWRAP_HXX
-#define _VCL_UNOWRAP_HXX
+#ifndef INCLUDED_VCL_UNOWRAP_HXX
+#define INCLUDED_VCL_UNOWRAP_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -81,6 +81,6 @@ protected:
     ~UnoWrapperBase() {}
 };
 
-#endif  // _VCL_UNOWRAP_HXX
+#endif // INCLUDED_VCL_UNOWRAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

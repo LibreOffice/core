@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_LINEINFO_HXX
-#define _SV_LINEINFO_HXX
+#ifndef INCLUDED_VCL_LINEINFO_HXX
+#define INCLUDED_VCL_LINEINFO_HXX
 
 #include <sal/types.h>
 #include <vcl/dllapi.h>
@@ -122,6 +122,6 @@ public:
         basegfx::B2DPolyPolygon& o_rFillPolyPolygon) const;
 };
 
-#endif  // _SV_LINEINFO_HXX
+#endif // INCLUDED_VCL_LINEINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

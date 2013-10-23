@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _VCLBUILDER_HXX
-#define _VCLBUILDER_HXX
+#ifndef INCLUDED_VCL_BUILDER_HXX
+#define INCLUDED_VCL_BUILDER_HXX
 
 #include <typeinfo>
 #include <osl/module.hxx>

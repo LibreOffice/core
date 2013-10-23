@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_TABCTRL_HXX
-#define _SV_TABCTRL_HXX
+#ifndef INCLUDED_VCL_TABCTRL_HXX
+#define INCLUDED_VCL_TABCTRL_HXX
 
 #include "tools/solar.h"
 #include "vcl/dllapi.h"
@@ -205,6 +205,6 @@ public:
     virtual void queue_resize();
 };
 
-#endif  // _SV_TABCTRL_HXX
+#endif // INCLUDED_VCL_TABCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

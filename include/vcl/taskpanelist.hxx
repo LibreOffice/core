@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_TASKPANELIST_HXX
-#define _SV_TASKPANELIST_HXX
+#ifndef INCLUDED_VCL_TASKPANELIST_HXX
+#define INCLUDED_VCL_TASKPANELIST_HXX
 
 #include <vcl/dllapi.h>
 

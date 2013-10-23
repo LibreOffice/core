@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TEXTDATA_HXX
-#define _TEXTDATA_HXX
+#ifndef INCLUDED_VCL_TEXTDATA_HXX
+#define INCLUDED_VCL_TEXTDATA_HXX
 
 #include <rtl/ustring.hxx>
 #include <svl/brdcst.hxx>
@@ -167,6 +167,6 @@ public:
     void            Remove( sal_uLong nPos ) { ::std::vector< T >::erase( this->begin()+nPos ); }
 };
 
-#endif // _TEXTDATA_HXX
+#endif // INCLUDED_VCL_TEXTDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

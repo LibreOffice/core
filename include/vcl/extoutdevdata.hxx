@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_EXTOUTDEVDATA_HXX
-#define _VCL_EXTOUTDEVDATA_HXX
+#ifndef INCLUDED_VCL_EXTOUTDEVDATA_HXX
+#define INCLUDED_VCL_EXTOUTDEVDATA_HXX
 
 #include <tools/rtti.hxx>
 #include <vcl/dllapi.h>
@@ -36,6 +36,6 @@ public:
 
 }
 
-#endif // _VCL_PDFWRITER_HXX
+#endif // INCLUDED_VCL_EXTOUTDEVDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

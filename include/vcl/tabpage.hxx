@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_TABPAGE_HXX
-#define _SV_TABPAGE_HXX
+#ifndef INCLUDED_VCL_TABPAGE_HXX
+#define INCLUDED_VCL_TABPAGE_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -60,6 +60,6 @@ public:
     virtual Size    GetOptimalSize() const;
 };
 
-#endif  // _SV_TABPAGE_HXX
+#endif // INCLUDED_VCL_TABPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

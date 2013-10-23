@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALGTYPE_HXX
-#define _SV_SALGTYPE_HXX
+#ifndef INCLUDED_VCL_SALGTYPE_HXX
+#define INCLUDED_VCL_SALGTYPE_HXX
 
 #include <tools/solar.h>
 
@@ -79,6 +79,6 @@ typedef sal_uInt16 SalInvert;
 #define SAL_INVERT_50               ((SalInvert)0x0002)
 #define SAL_INVERT_TRACKFRAME       ((SalInvert)0x0004)
 
-#endif // _SV_SALGTYPE_HXX
+#endif // INCLUDED_VCL_SALGTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

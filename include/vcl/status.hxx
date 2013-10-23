@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_STATUS_HXX
-#define _SV_STATUS_HXX
+#ifndef INCLUDED_VCL_STATUS_HXX
+#define INCLUDED_VCL_STATUS_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -205,6 +205,6 @@ public:
     const OUString&     GetAccessibleName( sal_uInt16 nItemId ) const;
 };
 
-#endif  // _SV_STATUS_HXX
+#endif // INCLUDED_VCL_STATUS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

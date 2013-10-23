@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_FLOATWIN_HXX
-#define _SV_FLOATWIN_HXX
+#ifndef INCLUDED_VCL_FLOATWIN_HXX
+#define INCLUDED_VCL_FLOATWIN_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -147,6 +147,6 @@ public:
     static Point    CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex );
 };
 
-#endif // _SV_FLOATWIN_HXX
+#endif // INCLUDED_VCL_FLOATWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

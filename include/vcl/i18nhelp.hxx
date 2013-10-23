@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_I18NHELP_HXX
-#define _VCL_I18NHELP_HXX
+#ifndef INCLUDED_VCL_I18NHELP_HXX
+#define INCLUDED_VCL_I18NHELP_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -82,6 +82,6 @@ public:
 
 }   // namespace vcl
 
-#endif  // _VCL_I18NHELP_HXX
+#endif // INCLUDED_VCL_I18NHELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

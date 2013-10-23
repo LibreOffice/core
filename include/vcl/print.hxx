@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_PRINT_HXX
-#define _SV_PRINT_HXX
+#ifndef INCLUDED_VCL_PRINT_HXX
+#define INCLUDED_VCL_PRINT_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -684,6 +684,6 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
 }
 
 
-#endif  // _SV_PRINT_HXX
+#endif // INCLUDED_VCL_PRINT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

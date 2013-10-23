@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_STDTEXT_HXX
-#define _VCL_STDTEXT_HXX
+#ifndef INCLUDED_VCL_STDTEXT_HXX
+#define INCLUDED_VCL_STDTEXT_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -42,6 +42,6 @@ OUString VCL_DLLPUBLIC GetStandardText(sal_uInt16 nStdText);
 
 void VCL_DLLPUBLIC ShowServiceNotAvailableError(Window* pParent, const OUString& rServiceName, bool bError);
 
-#endif  // _VCL_STDTEXT_HXX
+#endif // INCLUDED_VCL_STDTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

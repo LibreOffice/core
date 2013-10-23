@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PSPRINT_JOBDATA_HXX_
-#define _PSPRINT_JOBDATA_HXX_
+#ifndef INCLUDED_VCL_JOBDATA_HXX
+#define INCLUDED_VCL_JOBDATA_HXX
 
 #include "vcl/ppdparser.hxx"
 

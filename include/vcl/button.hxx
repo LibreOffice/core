@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_BUTTON_HXX
-#define _SV_BUTTON_HXX
+#ifndef INCLUDED_VCL_BUTTON_HXX
+#define INCLUDED_VCL_BUTTON_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -564,6 +564,6 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt );
 };
 
-#endif  // _SV_BUTTON_HXX
+#endif // INCLUDED_VCL_BUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

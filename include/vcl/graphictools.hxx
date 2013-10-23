@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_GRAPHICTOOLS_HXX_
-#define _VCL_GRAPHICTOOLS_HXX_
+#ifndef INCLUDED_VCL_GRAPHICTOOLS_HXX
+#define INCLUDED_VCL_GRAPHICTOOLS_HXX
 
 #include <vcl/dllapi.h>
 #include <sal/types.h>
@@ -371,6 +371,6 @@ private:
     Graphic         maFillGraphic;
 };
 
-#endif /* _VCL_GRAPHICTOOLS_HXX_ */
+#endif // INCLUDED_VCL_GRAPHICTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

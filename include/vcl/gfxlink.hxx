@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_GFXLINK_HXX
-#define _SV_GFXLINK_HXX
+#ifndef INCLUDED_VCL_GFXLINK_HXX
+#define INCLUDED_VCL_GFXLINK_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_SOLARMUTEX_HXX_
-#define _VCL_SOLARMUTEX_HXX_
+#ifndef INCLUDED_VCL_SOLARMUTEX_HXX
+#define INCLUDED_VCL_SOLARMUTEX_HXX
 
 #include <comphelper/solarmutex.hxx>
 #include <osl/mutex.h>
@@ -60,6 +60,6 @@ private:
 
 }
 
-#endif // _VCL_SOLARMUTEX_HXX_
+#endif // INCLUDED_VCL_SOLARMUTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

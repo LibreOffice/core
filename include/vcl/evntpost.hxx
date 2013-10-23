@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _VCL_EVNTPOST_HXX
-#define _VCL_EVNTPOST_HXX
+#ifndef INCLUDED_VCL_EVNTPOST_HXX
+#define INCLUDED_VCL_EVNTPOST_HXX
 
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_VCLEVENT_HXX
-#define _VCL_VCLEVENT_HXX
+#ifndef INCLUDED_VCL_VCLEVENT_HXX
+#define INCLUDED_VCL_VCLEVENT_HXX
 
 #include "tools/link.hxx"
 #include "tools/rtti.hxx"
@@ -284,6 +284,6 @@ public:
     void callListeners( VclSimpleEvent* );
 };
 
-#endif // _VCL_VCLEVENT_HXX
+#endif // INCLUDED_VCL_VCLEVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

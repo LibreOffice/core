@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_IMAGEREPOSITORY_HXX
-#define VCL_IMAGEREPOSITORY_HXX
+#ifndef INCLUDED_VCL_IMAGEREPOSITORY_HXX
+#define INCLUDED_VCL_IMAGEREPOSITORY_HXX
 
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -63,6 +63,6 @@ namespace vcl
 } // namespace vcl
 //........................................................................
 
-#endif // VCL_IMAGEREPOSITORY_HXX
+#endif // INCLUDED_VCL_IMAGEREPOSITORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

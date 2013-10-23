@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __POPUPMENUWINDOW_HXX__
-#define __POPUPMENUWINDOW_HXX__
+#ifndef INCLUDED_VCL_POPUPMENUWINDOW_HXX
+#define INCLUDED_VCL_POPUPMENUWINDOW_HXX
 
 #include "vcl/floatwin.hxx"
 

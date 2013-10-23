@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_REGION_HXX
-#define _SV_REGION_HXX
+#ifndef INCLUDED_VCL_REGION_HXX
+#define INCLUDED_VCL_REGION_HXX
 
 #include <tools/gen.hxx>
 #include <tools/solar.h>
@@ -131,6 +131,6 @@ public:
     static Region GetRegionFromPolyPolygon( const PolyPolygon& rPolyPoly );
 };
 
-#endif  // _SV_REGION_HXX
+#endif // INCLUDED_VCL_REGION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

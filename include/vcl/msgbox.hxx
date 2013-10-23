@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_MSGBOX_HXX
-#define _SV_MSGBOX_HXX
+#ifndef INCLUDED_VCL_MSGBOX_HXX
+#define INCLUDED_VCL_MSGBOX_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -145,6 +145,6 @@ public:
     static Image        GetStandardImage();
 };
 
-#endif  // _SV_MSGBOX_HXX
+#endif // INCLUDED_VCL_MSGBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

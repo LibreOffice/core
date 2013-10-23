@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_CMDEVT_HXX
-#define _VCL_CMDEVT_HXX
+#ifndef INCLUDED_VCL_CMDEVT_HXX
+#define INCLUDED_VCL_CMDEVT_HXX
 
 #include <tools/gen.hxx>
 #include <tools/solar.h>
@@ -463,6 +463,6 @@ inline const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() 
 }
 
 
-#endif // _VCL_CMDEVT_HXX
+#endif // INCLUDED_VCL_CMDEVT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

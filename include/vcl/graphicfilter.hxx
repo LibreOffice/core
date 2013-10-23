@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FILTER_HXX
-#define _FILTER_HXX
+#ifndef INCLUDED_VCL_GRAPHICFILTER_HXX
+#define INCLUDED_VCL_GRAPHICFILTER_HXX
 
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
@@ -320,6 +320,6 @@ public:
                      sal_uInt16* pDeterminedFormat = NULL );
 };
 
-#endif  //_FILTER_HXX
+#endif // INCLUDED_VCL_GRAPHICFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

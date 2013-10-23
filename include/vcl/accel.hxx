@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_ACCEL_HXX
-#define _SV_ACCEL_HXX
+#ifndef INCLUDED_VCL_ACCEL_HXX
+#define INCLUDED_VCL_ACCEL_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -100,6 +100,6 @@ public:
     Accelerator&    operator=( const Accelerator& rAccel );
 };
 
-#endif  // _SV_ACCEL_HXX
+#endif // INCLUDED_VCL_ACCEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

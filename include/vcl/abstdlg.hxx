@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _VCL_ABSTDLG_HXX
-#define _VCL_ABSTDLG_HXX
+#ifndef INCLUDED_VCL_ABSTDLG_HXX
+#define INCLUDED_VCL_ABSTDLG_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>

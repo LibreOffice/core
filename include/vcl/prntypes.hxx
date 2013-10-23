@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_PRNTYPES_HXX
-#define _SV_PRNTYPES_HXX
+#ifndef INCLUDED_VCL_PRNTYPES_HXX
+#define INCLUDED_VCL_PRNTYPES_HXX
 
 #include <tools/solar.h>
 #include <i18nutil/paper.hxx>
@@ -84,6 +84,6 @@ enum Orientation { ORIENTATION_PORTRAIT, ORIENTATION_LANDSCAPE };
 #define PRINTER_CAPABILITIES_SETDUPLEX          ((sal_uInt16)11)
 #define PRINTER_CAPABILITIES_USEPULLMODEL       ((sal_uInt16)12)
 
-#endif  // _SV_PRNTYPES_HXX
+#endif // INCLUDED_VCL_PRNTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

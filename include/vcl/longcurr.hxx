@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LONGCURR_HXX
-#define _LONGCURR_HXX
+#ifndef INCLUDED_VCL_LONGCURR_HXX
+#define INCLUDED_VCL_LONGCURR_HXX
 
 #include <vcl/dllapi.h>
 #include <tools/bigint.hxx>
@@ -129,6 +129,6 @@ public:
                         { return LongCurrencyFormatter::GetValue(); }
 };
 
-#endif // _LONGCURR_HXX
+#endif // INCLUDED_VCL_LONGCURR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

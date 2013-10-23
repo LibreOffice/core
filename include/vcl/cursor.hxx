@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_CURSOR_HXX
-#define _SV_CURSOR_HXX
+#ifndef INCLUDED_VCL_CURSOR_HXX
+#define INCLUDED_VCL_CURSOR_HXX
 
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
@@ -109,6 +109,6 @@ private:
     bool ImplDoHide( bool bStop );
 };
 
-#endif  // _SV_CURSOR_HXX
+#endif // INCLUDED_VCL_CURSOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_DNDHELP_HXX
-#define _VCL_DNDHELP_HXX
+#ifndef INCLUDED_VCL_DNDHELP_HXX
+#define INCLUDED_VCL_DNDHELP_HXX
 
 #include <vcl/dllapi.h>
 #include <cppuhelper/weak.hxx>
@@ -114,6 +114,6 @@ public:
 
 }}  // namespace vcl::unohelper
 
-#endif  // _VCL_DNDHELP_HXX
+#endif // INCLUDED_VCL_DNDHELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

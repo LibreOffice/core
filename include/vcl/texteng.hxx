@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TEXTENG_HXX
-#define _TEXTENG_HXX
+#ifndef INCLUDED_VCL_TEXTENG_HXX
+#define INCLUDED_VCL_TEXTENG_HXX
 
 #include <vcl/dllapi.h>
 
@@ -318,6 +318,6 @@ public:
     static sal_Bool     IsSimpleCharInput( const KeyEvent& rKeyEvent );
 };
 
-#endif // _TEXTENG_HXX
+#endif // INCLUDED_VCL_TEXTENG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

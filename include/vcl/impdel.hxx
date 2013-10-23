@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef _VCL_IMPDEL_HXX
- #define _VCL_IMPDEL_HXX
+ #ifndef INCLUDED_VCL_IMPDEL_HXX
+ #define INCLUDED_VCL_IMPDEL_HXX
 
  #include <list>
 
@@ -76,6 +76,6 @@
 
  } // namespace vcl
 
- #endif // _VCL_IMPDEL_HXX
+ #endif // INCLUDED_VCL_IMPDEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

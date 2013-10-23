@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_EVENT_HXX
-#define _SV_EVENT_HXX
+#ifndef INCLUDED_VCL_EVENT_HXX
+#define INCLUDED_VCL_EVENT_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -517,6 +517,6 @@ inline const AllSettings* DataChangedEvent::GetOldSettings() const
         return NULL;
 }
 
-#endif // _SV_EVENT_HXX
+#endif // INCLUDED_VCL_EVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

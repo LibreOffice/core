@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_LSTBOX_H
-#define _SV_LSTBOX_H
+#ifndef INCLUDED_VCL_LSTBOX_H
+#define INCLUDED_VCL_LSTBOX_H
 
 #define LISTBOX_APPEND              ((sal_uInt16)0xFFFF)
 #define LISTBOX_ENTRY_NOTFOUND      ((sal_uInt16)0xFFFF)
@@ -52,6 +52,6 @@
 */
 #define LISTBOX_ENTRY_FLAG_DRAW_DISABLED            0x0000004
 
-#endif  // _SV_LSTBOX_H
+#endif // INCLUDED_VCL_LSTBOX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

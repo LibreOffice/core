@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_EDIT_HXX
-#define _SV_EDIT_HXX
+#ifndef INCLUDED_VCL_EDIT_HXX
+#define INCLUDED_VCL_EDIT_HXX
 
 #include <tools/solar.h>
 #include <tools/string.hxx>
@@ -264,6 +264,6 @@ inline sal_uLong Edit::IsUpdateDataEnabled() const
         return sal_False;
 }
 
-#endif  // _SV_EDIT_HXX
+#endif // INCLUDED_VCL_EDIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

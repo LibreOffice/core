@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SPLITWIN_HXX
-#define _SV_SPLITWIN_HXX
+#ifndef INCLUDED_VCL_SPLITWIN_HXX
+#define INCLUDED_VCL_SPLITWIN_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -236,6 +236,6 @@ public:
     const Link&         GetFadeOutHdl() const { return maFadeOutHdl; }
 };
 
-#endif  // _SV_SPLITWIN_HXX
+#endif // INCLUDED_VCL_SPLITWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_TOOLBOX_HXX
-#define _SV_TOOLBOX_HXX
+#ifndef INCLUDED_VCL_TOOLBOX_HXX
+#define INCLUDED_VCL_TOOLBOX_HXX
 
 #include <tools/solar.h>
 #include <rsc/rsc-vcl-shared-types.hxx>
@@ -616,6 +616,6 @@ inline sal_uInt16 ToolBox::GetFloatingLines() const
     return mnFloatLines;
 }
 
-#endif  // _SV_TOOLBOX_HXX
+#endif // INCLUDED_VCL_TOOLBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

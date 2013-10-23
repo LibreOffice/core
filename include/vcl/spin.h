@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SPIN_H
-#define _SV_SPIN_H
+#ifndef INCLUDED_VCL_SPIN_H
+#define INCLUDED_VCL_SPIN_H
 
 #include <tools/solar.h>
 
@@ -33,6 +33,6 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
                          sal_Bool bLowerEnabled = sal_True,
                          sal_Bool bHorz = sal_False, sal_Bool bMirrorHorz = sal_False );
 
-#endif  // _SV_SPIN_H
+#endif // INCLUDED_VCL_SPIN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

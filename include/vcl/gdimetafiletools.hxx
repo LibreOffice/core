@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SV_GDIMETAFILETOOLS_HXX
-#define _SV_GDIMETAFILETOOLS_HXX
+#ifndef INCLUDED_VCL_GDIMETAFILETOOLS_HXX
+#define INCLUDED_VCL_GDIMETAFILETOOLS_HXX
 
 #include <vcl/gdimtf.hxx>
 
@@ -41,6 +41,6 @@ bool VCL_DLLPUBLIC usesClipActions(const GDIMetaFile& rSource);
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // _SV_GDIMETAFILETOOLS_HXX
+#endif // INCLUDED_VCL_GDIMETAFILETOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

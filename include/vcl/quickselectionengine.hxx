@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_QUICKSELECTIONENGINE_HXX
-#define VCL_QUICKSELECTIONENGINE_HXX
+#ifndef INCLUDED_VCL_QUICKSELECTIONENGINE_HXX
+#define INCLUDED_VCL_QUICKSELECTIONENGINE_HXX
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
@@ -89,6 +89,6 @@ namespace vcl
 } // namespace vcl
 //........................................................................
 
-#endif // VCL_QUICKSELECTIONENGINE_HXX
+#endif // INCLUDED_VCL_QUICKSELECTIONENGINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

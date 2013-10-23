@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _FILTER_CONFIG_ITEM_HXX_
-#define _FILTER_CONFIG_ITEM_HXX_
+#ifndef INCLUDED_VCL_FILTERCONFIGITEM_HXX
+#define INCLUDED_VCL_FILTERCONFIGITEM_HXX
 
 #include <vcl/dllapi.h>
 
@@ -82,6 +82,6 @@ public :
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator() const;
 };
 
-#endif  // _FILTER_CONFIG_ITEM_HXX_
+#endif // INCLUDED_VCL_FILTERCONFIGITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

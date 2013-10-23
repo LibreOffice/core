@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SPINFLD_HXX
-#define _SV_SPINFLD_HXX
+#ifndef INCLUDED_VCL_SPINFLD_HXX
+#define INCLUDED_VCL_SPINFLD_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -106,6 +106,6 @@ public:
     virtual Size    CalcSize( sal_uInt16 nChars ) const;
 };
 
-#endif // _SV_SPINFLD_HXX
+#endif // INCLUDED_VCL_SPINFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

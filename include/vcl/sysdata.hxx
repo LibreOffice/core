@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SYSDATA_HXX
-#define _SV_SYSDATA_HXX
+#ifndef INCLUDED_VCL_SYSDATA_HXX
+#define INCLUDED_VCL_SYSDATA_HXX
 
 #include <vector>
 #include <cstddef>
@@ -259,6 +259,6 @@ struct SystemTextLayoutData
     int                   orientation;   // Text orientation
 };
 
-#endif // _SV_SYSDATA_HXX
+#endif // INCLUDED_VCL_SYSDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
