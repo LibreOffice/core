@@ -17,6 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifdef IOS
+
+#include <touch/touch.h>
+
+#endif
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>
@@ -1761,7 +1767,7 @@ void SwViewShell::PaintTile(OutputDevice *pOut, const Rectangle &rRect)
 #if !HAVE_FEATURE_DESKTOP
 
 extern "C"
-void touch_lo_draw_tile(void * /*context*/, int contextWidth, int contextHeight, int tilePosX, int tilePosY, int tileWidth, int tileHeight)
+void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int tilePosX, int tilePosY, int tileWidth, int tileHeight)
 {
     // Currently we expect that only one document is open, so we are using the
     // current shell.  Should it turn out that we need to have more documents
@@ -1787,6 +1793,8 @@ void touch_lo_draw_tile(void * /*context*/, int contextWidth, int contextHeight,
 }
 
 #endif
+
+extern "C" void touch_ui_selection_none() {}
 
 void SwViewShell::SetBrowseBorder( const Size& rNew )
 {

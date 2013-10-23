@@ -131,7 +131,7 @@ tilePosX, tilePosY, tileWidth, tileHeight address the part of the document to be
 context, contextHeight, contextWidth specify where to draw.
 */
 void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int tilePosX, int tilePosY, int tileWidth, int tileHeight);
-
+void touch_lo_copy_buffer(const void * source, size_t sourceWidth, size_t sourceHeight, size_t sourceBytesPerRow, void * target, size_t targetWidth, size_t targetHeight);
 void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state);
 
 // Move the start of the selection to (x,y)

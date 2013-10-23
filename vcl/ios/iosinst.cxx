@@ -345,7 +345,14 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
              CGRectIntersectsRect( invalidRect, bbox ) ) {
 
             const basebmp::BitmapDeviceSharedPtr aDevice = pFrame->getDevice();
-            CGDataProviderRef provider =
+            touch_lo_copy_buffer(aDevice->getBuffer().get(),
+                                 aDevice->getSize().getX(),
+                                 aDevice->getSize().getY(),
+                                 aDevice->getScanlineStride(),
+                                 arg->context,
+                                 aGeom.nWidth,
+                                 aGeom.nHeight);
+            /*CGDataProviderRef provider =
                 CGDataProviderCreateWithData( NULL,
                                               aDevice->getBuffer().get(),
                                               aDevice->getSize().getY() * aDevice->getScanlineStride(),
@@ -360,7 +367,7 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
                                false,
                                kCGRenderingIntentDefault );
             CGContextDrawImage( arg->context, bbox, image );
-
+             */
             // if current frame covers the whole invalidRect then break
             if (CGRectEqualToRect(CGRectIntersection(invalidRect, bbox), invalidRect))
             {
@@ -380,6 +387,31 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
     SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_unlock failed: " << strerror( rc ) );
 
     return 0;
+}
+
+extern "C"
+void
+touch_lo_copy_buffer(const void * source, size_t sourceWidth, size_t sourceHeight, size_t sourceBytesPerRow, void * target, size_t targetWidth, size_t targetHeight){
+
+    CGDataProviderRef provider =CGDataProviderCreateWithData(NULL,
+                                                             source,
+                                                             sourceHeight * sourceBytesPerRow,
+                                                             NULL );
+    CGImage *sourceImage =  CGImageCreate(sourceWidth,
+                                    sourceHeight,
+                                    8,
+                                    32,
+                                    sourceBytesPerRow,
+                                    CGColorSpaceCreateDeviceRGB(),
+                                    kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little,
+                                    provider,
+                                    NULL,
+                                    false,
+                                    kCGRenderingIntentDefault );
+    CGContextRef context =(CGContextRef) target;
+    CGRect targetRect = CGRectMake( 0, 0, targetWidth, targetHeight );
+    CGContextDrawImage( context, targetRect, sourceImage );
+    CGImageRelease(sourceImage);
 }
 
 extern "C"
