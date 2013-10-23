@@ -1940,7 +1940,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 ifeq ($(COM),MSC)
-$(call gb_LinkTarget_use_libraries,$(1),\
+$(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,curl)/lib/libcurl.lib \
 )
 else
