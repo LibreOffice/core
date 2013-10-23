@@ -26,6 +26,7 @@
 #include <com/sun/star/util/URL.hpp>
 
 #include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
@@ -260,23 +261,16 @@ void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, ::Wind
 
 }
 
-// --------------------------------------------------------------------
 // XServiceInfo
-// --------------------------------------------------------------------
-
 OUString SAL_CALL SlideShow::getImplementationName(  ) throw(RuntimeException)
 {
     return OUString( "com.sun.star.comp.sd.SlideShow" );
 }
 
-// --------------------------------------------------------------------
-
 sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames(  ) );
+    return cppu::supportsService( this, ServiceName );
 }
-
-// --------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  ) throw(RuntimeException)
 {
@@ -285,18 +279,13 @@ Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  ) throw(Runt
     return aSeq;
 }
 
-// --------------------------------------------------------------------
 // XPropertySet
-// --------------------------------------------------------------------
-
 Reference< XPropertySetInfo > SAL_CALL SlideShow::getPropertySetInfo() throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
     static Reference< XPropertySetInfo > xInfo = maPropSet.getPropertySetInfo();
     return xInfo;
  }
-
-// --------------------------------------------------------------------
 
 void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {

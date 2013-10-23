@@ -20,7 +20,7 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
-#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -171,23 +171,16 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuc
     throw NoSuchElementException();
 }
 
-// ----------------------------------------------------------
 // XServiceInfo
-// ----------------------------------------------------------
-
 OUString SAL_CALL SdStyleFamily::getImplementationName() throw(RuntimeException)
 {
     return OUString( "SdStyleFamily" );
 }
 
-// ----------------------------------------------------------
-
 sal_Bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
-
-// ----------------------------------------------------------
 
 Sequence< OUString > SAL_CALL SdStyleFamily::getSupportedServiceNames() throw(RuntimeException)
 {
@@ -196,10 +189,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getSupportedServiceNames() throw(Ru
     return aSeq;
 }
 
-// ----------------------------------------------------------
 // XNamed
-// ----------------------------------------------------------
-
 OUString SAL_CALL SdStyleFamily::getName() throw (RuntimeException)
 {
     if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )

@@ -32,7 +32,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <editeng/unofield.hxx>
 #include <unomodel.hxx>
@@ -3011,7 +3011,7 @@ OUString SAL_CALL SdDocLinkTargets::getImplementationName()
 sal_Bool SAL_CALL SdDocLinkTargets::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()

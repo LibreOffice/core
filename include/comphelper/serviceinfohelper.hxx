@@ -36,12 +36,10 @@ class COMPHELPER_DLLPUBLIC ServiceInfoHelper : public ::com::sun::star::lang::XS
 public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
     // helper
     static void addToSequence( ::com::sun::star::uno::Sequence< OUString >& rSeq, sal_uInt16 nServices, /* sal_Char* */... ) throw();
-    static sal_Bool SAL_CALL supportsService( const OUString& ServiceName, const ::com::sun::star::uno::Sequence< OUString >& SupportedServices ) throw();
 
 protected:
     ~ServiceInfoHelper() {}

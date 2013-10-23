@@ -18,8 +18,6 @@
  */
 
 
-#include <comphelper/serviceinfohelper.hxx>
-
 #include "SdUnoOutlineView.hxx"
 
 #include "DrawController.hxx"
@@ -28,6 +26,7 @@
 #include "unopage.hxx"
 
 #include <cppuhelper/proptypehlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svx/unopage.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -195,7 +194,6 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
     return aValue;
 }
 
-
 // XServiceInfo
 OUString SAL_CALL SdUnoOutlineView::getImplementationName(  ) throw (RuntimeException)
 {
@@ -204,7 +202,7 @@ OUString SAL_CALL SdUnoOutlineView::getImplementationName(  ) throw (RuntimeExce
 
 sal_Bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 Sequence< OUString > SAL_CALL SdUnoOutlineView::getSupportedServiceNames(  ) throw (RuntimeException)

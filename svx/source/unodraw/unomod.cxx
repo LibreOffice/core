@@ -26,7 +26,7 @@
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <cppuhelper/implbase2.hxx>
 #include <svx/unofill.hxx>
@@ -557,7 +557,7 @@ OUString SAL_CALL SvxUnoDrawingModel::getImplementationName()
 sal_Bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getSupportedServiceNames() throw(uno::RuntimeException)

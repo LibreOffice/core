@@ -18,7 +18,7 @@
  */
 
 
-#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "DrawController.hxx"
 #include "SdUnoSlideView.hxx"
@@ -217,7 +217,7 @@ OUString SAL_CALL SdUnoSlideView::getImplementationName(  ) throw (RuntimeExcept
 
 sal_Bool SAL_CALL SdUnoSlideView::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 Sequence< OUString > SAL_CALL SdUnoSlideView::getSupportedServiceNames(  ) throw (RuntimeException)

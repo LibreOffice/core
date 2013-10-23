@@ -24,7 +24,7 @@
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <boost/bind.hpp>
 
 #include <editeng/outliner.hxx>
@@ -873,24 +873,16 @@ void SdStyleSheet::notifyModifyListener()
     }
 }
 
-
-// --------------------------------------------------------------------
 // XServiceInfo
-// --------------------------------------------------------------------
-
 OUString SAL_CALL SdStyleSheet::getImplementationName() throw(RuntimeException)
 {
     return OUString( "SdStyleSheet" );
 }
 
-// --------------------------------------------------------------------
-
 sal_Bool SAL_CALL SdStyleSheet::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
-
-// --------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames() throw(RuntimeException)
 {
@@ -911,10 +903,7 @@ Sequence< OUString > SAL_CALL SdStyleSheet::getSupportedServiceNames() throw(Run
     return aNameSequence;
 }
 
-// --------------------------------------------------------------------
 // XNamed
-// --------------------------------------------------------------------
-
 OUString SAL_CALL SdStyleSheet::getName() throw(RuntimeException)
 {
     SolarMutexGuard aGuard;

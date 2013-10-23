@@ -31,7 +31,7 @@
 #include "pres.hxx"
 
 #include <cppuhelper/proptypehlp.hxx>
-#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdpagv.hxx>
@@ -613,7 +613,7 @@ OUString SAL_CALL SdUnoDrawView::getImplementationName(  ) throw (RuntimeExcepti
 
 sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  ) throw (RuntimeException)

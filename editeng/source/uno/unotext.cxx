@@ -43,8 +43,9 @@
 #include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unoipset.hxx>
-#include <comphelper/serviceinfohelper.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "editeng/unonames.hxx"
 
@@ -1481,7 +1482,7 @@ void SvxUnoTextRangeBase::GotoEnd(sal_Bool Expand) throw()
 sal_Bool SAL_CALL SvxUnoTextRangeBase::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextRangeBase::getSupportedServiceNames()

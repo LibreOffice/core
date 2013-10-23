@@ -25,7 +25,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdobj.hxx>
-#include <comphelper/serviceinfohelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 // folgende fuer InsertSdPage()
 #include <svx/svdlayer.hxx>
@@ -163,7 +163,7 @@ OUString SAL_CALL SdLayer::getImplementationName()
 sal_Bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL SdLayer::getSupportedServiceNames()
@@ -498,7 +498,7 @@ OUString SAL_CALL SdLayerManager::getImplementationName()
 sal_Bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL SdLayerManager::getSupportedServiceNames()
