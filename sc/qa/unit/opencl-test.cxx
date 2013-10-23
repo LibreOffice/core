@@ -65,6 +65,8 @@ public:
     void testFinacialIRRFormula();
     void testFinacialMIRRFormula();
     void testFinacialRateFormula();
+    void testCompilerNested();
+
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSGroundWater);
@@ -77,6 +79,7 @@ public:
     CPPUNIT_TEST(testFinacialIRRFormula);
     CPPUNIT_TEST(testFinacialMIRRFormula);
     CPPUNIT_TEST(testFinacialRateFormula);
+    CPPUNIT_TEST(testCompilerNested);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -113,6 +116,30 @@ void ScOpenclTest::enableOpenCL(ScDocShell* pShell)
     maSavedConfig.mbOpenCLEnabled = true;
     rOpt.SetCalcConfig(maSavedConfig);
     pShell->SetFormulaOptions(rOpt);
+}
+
+void ScOpenclTest::testCompilerNested()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenCLTests/Compiler/nested.", ODS);
+
+    enableOpenCL(xDocSh);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocShellRef xDocShRes = loadDoc("OpenCLTests/Compiler/nested.", ODS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i < 5; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
 }
 
 void ScOpenclTest::testSharedFormulaXLSStockHistory()
