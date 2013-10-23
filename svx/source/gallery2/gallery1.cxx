@@ -42,7 +42,15 @@ using namespace ::com::sun::star;
 
 // - GalleryThemeEntry -
 
-GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const OUString& rName,
+static bool FileExists( const INetURLObject &rURL, const rtl::OUString &rExt )
+{
+    INetURLObject aURL( rURL );
+    aURL.setExtension( rExt );
+    return FileExists( aURL );
+}
+
+GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
+                                      const INetURLObject& rBaseURL, const OUString& rName,
                                       sal_Bool _bReadOnly, sal_Bool _bNewFile,
                                       sal_uInt32 _nId, sal_Bool _bThemeNameFromResource ) :
         nId                                     ( _nId ),
@@ -51,6 +59,19 @@ GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const OUStr
 {
     INetURLObject aURL( rBaseURL );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+
+    if (bCreateUniqueURL)
+    {
+        INetURLObject aBaseNoCase( ImplGetURLIgnoreCase( rBaseURL ) );
+        aURL = aBaseNoCase;
+        static sal_Int32 nIdx = 0;
+        while( FileExists( aURL, "thm" ) )
+        { // create new URLs
+            nIdx++;
+            aURL = aBaseNoCase;
+            aURL.setName( aURL.getName() + OUString::number(nIdx));
+        }
+    }
 
     aURL.setExtension( "thm" );
     aThmURL = ImplGetURLIgnoreCase( aURL );
@@ -491,8 +512,9 @@ sal_Bool Gallery::CreateTheme( const OUString& rThemeName )
     {
         INetURLObject aURL( GetUserURL() );
         aURL.Append( rThemeName );
-        GalleryThemeEntry* pNewEntry = new GalleryThemeEntry( aURL, rThemeName,
-                                                              sal_False, sal_True, 0, sal_False );
+        GalleryThemeEntry* pNewEntry = new GalleryThemeEntry(
+                true, aURL, rThemeName,
+                sal_False, sal_True, 0, sal_False );
 
         aThemeList.push_back( pNewEntry );
         delete( new GalleryTheme( this, pNewEntry ) );

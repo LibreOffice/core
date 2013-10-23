@@ -53,7 +53,9 @@ private:
 
 public:
 
-                            GalleryThemeEntry( const INetURLObject& rBaseURL, const OUString& rName,
+                            GalleryThemeEntry( bool bCreateUniqueURL,
+                                               const INetURLObject& rBaseURL,
+                                               const OUString& rName,
                                                sal_Bool bReadOnly, sal_Bool bNewFile,
                                                sal_uInt32 nId, sal_Bool bThemeNameFromResource );
                             ~GalleryThemeEntry() {};

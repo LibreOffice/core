@@ -746,7 +746,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
                 }
 
                 INetURLObject aPathURL( rURL );
-                pRet = new GalleryThemeEntry( aPathURL, aThemeName,
+                pRet = new GalleryThemeEntry( false, aPathURL, aThemeName,
                                               bReadOnly, sal_False, nThemeId,
                                               bThemeNameFromResource );
             }
