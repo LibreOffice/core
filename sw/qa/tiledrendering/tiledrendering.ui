@@ -15,11 +15,11 @@
   </object>
   <object class="GtkWindow" id="TiledRendering">
     <property name="can_focus">False</property>
+    <property name="border_width">12</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="border_width">12</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkBox" id="box7">

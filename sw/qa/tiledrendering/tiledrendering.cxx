@@ -105,7 +105,7 @@ public:
     }
 };
 
-IMPL_LINK ( TiledRenderingDialog,  RenderHdl, Button *, EMPTYARG )
+IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
 {
     int contextWidth = extractInt(mpContextWidth);
     int contextHeight = extractInt(mpContextHeight);
@@ -133,6 +133,9 @@ IMPL_LINK ( TiledRenderingDialog,  RenderHdl, Button *, EMPTYARG )
         // copy the aDevice content to mpImage
         BitmapEx aBitmap(aDevice.GetBitmapEx(Point(0,0), aDevice.GetOutputSizePixel()));
         mpImage->SetImage(Image(aBitmap));
+
+        // update the dialog size
+        setOptimalLayoutSize();
     }
 
     return 1;
