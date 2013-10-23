@@ -364,6 +364,12 @@ void AsynchReader::execute()
     }
 }
 
+static bool isEnvVarSetToOne(const OUString &aVar)
+{
+    OUString aValue;
+    getBootstrap()->getFrom(aVar, aValue);
+    return aValue == "1";
+}
 
 bool getJavaProps(const OUString & exePath,
 #ifdef JVM_ONE_PATH_CHECK
@@ -393,8 +399,7 @@ bool getJavaProps(const OUString & exePath,
     //If the bootstrap variable is "1" then we pass the argument
     //"noaccessibility" to JREProperties.class. This will prevent
     //that it calls   java.awt.Toolkit.getDefaultToolkit();
-    OUString sValue;
-    getBootstrap()->getFrom("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY", sValue);
+    bool bNoAccessibility = isEnvVarSetToOne("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY");
 
     //prepare the arguments
     sal_Int32 cArgs = 3;
@@ -404,8 +409,13 @@ bool getJavaProps(const OUString & exePath,
     OUString arg4 = "noaccessibility";
     rtl_uString *args[4] = {arg1.pData, arg2.pData, arg3.pData};
 
+#ifdef UNX
+    // Java is no longer required for a11y - we use atk directly.
+    bNoAccessibility = !isEnvVarSetToOne("JFW_PLUGIN_FORCE_ACCESSIBILITY");
+#endif
+
     // Only add the fourth param if the bootstrap parameter is set.
-    if (sValue.equals(OUString::number( 1)))
+    if (bNoAccessibility)
     {
         args[3] = arg4.pData;
         cArgs = 4;

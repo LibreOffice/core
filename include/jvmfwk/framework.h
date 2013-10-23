@@ -73,7 +73,7 @@ extern "C" {
     </p>
 
     <p>Setting the class path used by a Java VM should not be necesarry. The locations
-    of Jar files should be knows by a class loader. If a jar file depends on another
+    of Jar files should be known by a class loader. If a jar file depends on another
     jar file then it can be referenced in the manifest file of the first jar. However,
     a user may add jars to the class path by using this API. If it becomes necessary
     to add files to the class path which is to be used by all users then one can use
@@ -168,6 +168,12 @@ extern "C" {
     It may be removed in the future. By setting it to 1, the framework will not try to
     find out if the system is configured to use accessibility tools or if a JRE has an
     accessibiliy bridge installed</dd>
+    <dt>JFW_PLUGIN_FORCE_ACCESSIBILITY</dt>
+    <dd>This is a unofficial variable which was introduced to workaround external issues.
+    It may be removed in the future. By setting it to 1, the framework will override a
+    platform's desire not to probe each java backend to determine if it has an accessibility
+    bridge installed. If the JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY is set this variable has
+    no effect, and is Unix specific.</dd>
     </dl>
 */
 

@@ -56,9 +56,8 @@ namespace jfw
 bool isAccessibilitySupportDesired()
 {
     OUString sValue;
-    if ((sal_True == ::rtl::Bootstrap::get(
-        OUString("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY"), sValue)) && sValue == "1"
-        )
+    if (::rtl::Bootstrap::get( "JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY", sValue) &&
+        sValue == "1" )
         return false;
 
     bool retVal = false;
@@ -103,23 +102,12 @@ bool isAccessibilitySupportDesired()
     RegCloseKey(hKey);
 
 #elif defined UNX
-    char buf[16];
-    // use 2 shells to suppress the eventual "gcontool-2 not found" message
-    // of the shell trying to execute the command
-    FILE* fp = popen( "/bin/sh 2>/dev/null -c \"gconftool-2 -g /desktop/gnome/interface/accessibility\"", "r" );
-    if( fp )
-    {
-        if( fgets( buf, sizeof(buf), fp ) )
-        {
-            int nCompare = strncasecmp( buf, "true", 4 );
-            retVal = (nCompare == 0 ? true : false);
-        }
-        pclose( fp );
-    }
+    // Java is no longer required for a11y - we use atk directly.
+    retVal = ::rtl::Bootstrap::get( "JFW_PLUGIN_FORCE_ACCESSIBILITY", sValue) && sValue == "1";
 #endif
+
     return retVal;
 }
-
 
 rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData)
 {
