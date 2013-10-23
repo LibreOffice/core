@@ -244,5 +244,17 @@ public:
 
 };
 
+namespace sc {
+
+struct NoteEntry
+{
+    ScAddress maPos;
+    const ScPostIt* mpNote;
+
+    NoteEntry( const ScAddress& rPos, const ScPostIt* pNote );
+};
+
+}
+
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

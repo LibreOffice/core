@@ -1214,6 +1214,82 @@ bool ScColumn::IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
     return nEndRow < nNextRow;
 }
 
+size_t ScColumn::GetNoteCount() const
+{
+    size_t nCount = 0;
+    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->type != sc::element_type_cellnote)
+            continue;
+
+        nCount += it->size;
+    }
+
+    return nCount;
+}
+
+SCROW ScColumn::GetNotePosition( size_t nIndex ) const
+{
+    // Return the row position of the nth note in the column.
+
+    sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
+
+    size_t nCount = 0; // Number of notes encountered so far.
+    for (; it != itEnd; ++it)
+    {
+        if (!it->type != sc::element_type_cellnote)
+            // Skip the empty blocks.
+            continue;
+
+        if (nIndex < nCount + it->size)
+        {
+            // Index falls within this block.
+            size_t nOffset = nIndex - nCount;
+            return it->position + nOffset;
+        }
+
+        nCount += it->size;
+    }
+
+    return -1;
+}
+
+namespace {
+
+class NoteEntryCollector
+{
+    std::vector<sc::NoteEntry>& mrNotes;
+    SCTAB mnTab;
+    SCCOL mnCol;
+public:
+    NoteEntryCollector( std::vector<sc::NoteEntry>& rNotes, SCTAB nTab, SCCOL nCol ) :
+        mrNotes(rNotes), mnTab(nTab), mnCol(nCol) {}
+
+    void operator() (const sc::CellNoteStoreType::value_type& node) const
+    {
+        if (node.type != sc::element_type_cellnote)
+            return;
+
+        size_t nTopRow = node.position;
+        sc::cellnote_block::const_iterator it = sc::cellnote_block::begin(*node.data);
+        sc::cellnote_block::const_iterator itEnd = sc::cellnote_block::end(*node.data);
+        size_t nOffset = 0;
+        for (; it != itEnd; ++it, ++nOffset)
+        {
+            ScAddress aPos(mnCol, nTopRow + nOffset, mnTab);
+            mrNotes.push_back(sc::NoteEntry(aPos, *it));
+        }
+    }
+};
+
+}
+
+void ScColumn::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
+{
+    std::for_each(maCellNotes.begin(), maCellNotes.end(), NoteEntryCollector(rNotes, nTab, nCol));
+}
+
 SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const
 {
     // Given a range of rows, find a top or bottom empty segment.

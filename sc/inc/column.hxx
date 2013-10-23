@@ -38,21 +38,24 @@ namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
 
 namespace sc {
-    struct FormulaGroupContext;
-    class StartListeningContext;
-    class EndListeningContext;
-    class CopyFromClipContext;
-    class CopyToClipContext;
-    class CopyToDocContext;
-    class MixDocContext;
-    class ColumnSpanSet;
-    struct ColumnBlockPosition;
-    class SingleColumnSpanSet;
-    struct RefUpdateContext;
-    struct RefUpdateInsertTabContext;
-    struct RefUpdateDeleteTabContext;
-    struct RefUpdateMoveTabContext;
-    class EditTextIterator;
+
+struct FormulaGroupContext;
+class StartListeningContext;
+class EndListeningContext;
+class CopyFromClipContext;
+class CopyToClipContext;
+class CopyToDocContext;
+class MixDocContext;
+class ColumnSpanSet;
+struct ColumnBlockPosition;
+class SingleColumnSpanSet;
+struct RefUpdateContext;
+struct RefUpdateInsertTabContext;
+struct RefUpdateDeleteTabContext;
+struct RefUpdateMoveTabContext;
+class EditTextIterator;
+struct NoteEntry;
+
 }
 
 class Fraction;
@@ -499,6 +502,10 @@ public:
     bool HasCellNotes() const;
     void SetCellNote( SCROW nRow, ScPostIt* pNote);
     bool IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
+
+    size_t GetNoteCount() const;
+    SCROW GetNotePosition( size_t nIndex ) const;
+    void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
 
     SCROW GetCellNotesMaxRow() const;
     SCROW GetCellNotesMinRow() const;

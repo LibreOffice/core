@@ -3429,41 +3429,12 @@ void ScAnnotationsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 bool ScAnnotationsObj::GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos ) const
 {
-    if (pDocShell)
-    {
-        sal_Int32 nFound = 0;
-        ScDocument* pDoc = pDocShell->GetDocument();
-        SCTAB nTabCount = pDoc->GetTableCount();
-        for (SCTAB aTab=0; aTab<nTabCount; aTab++)
-        {
-            for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
-            {
-                sc::CellNoteStoreType& maNotes = pDoc->GetColNotes(nCol, aTab);
-                std::pair<sc::CellNoteStoreType::const_iterator,size_t> aPos = maNotes.position(0);
-                sc::CellNoteStoreType::const_iterator it = aPos.first;
-                size_t nOffset = aPos.second;
-                size_t nDataSize = 0;
-                size_t nRow = 0;
-                sal_Int32 nNotesSize = maNotes.size();
-                if (nFound + nNotesSize >= nIndex)
-                {
-                    for (; it != maNotes.end(); ++it, nOffset = 0, nRow += nDataSize)
-                    {
-                        nDataSize = it->size - nOffset;
-                        if (nFound == nIndex)
-                        {
-                            rPos = ScAddress(nCol, nRow, nTab);
-                            return true;
-                        }
-                        ++nFound;
-                    }
-                }
-                else
-                    nFound += nNotesSize;
-            }
-        }
-    }
-    return false;
+    if (!pDocShell)
+        return false;
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    rPos = pDoc->GetNotePosition(nIndex);
+    return rPos.IsValid();
 }
 
 ScAnnotationObj* ScAnnotationsObj::GetObjectByIndex_Impl( sal_Int32 nIndex ) const

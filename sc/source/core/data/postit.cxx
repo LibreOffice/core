@@ -936,4 +936,12 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
     }
     return pNote;
 }
+
+namespace sc {
+
+NoteEntry::NoteEntry( const ScAddress& rPos, const ScPostIt* pNote ) :
+    maPos(rPos), mpNote(pNote) {}
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6073,10 +6073,7 @@ ScPostIt* ScDocument::GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
         return NULL;
 
 }
-sc::CellNoteStoreType& ScDocument::GetColNotes(SCCOL nCol, SCTAB nTab)
-{
-        return maTabs[nTab]->aCol[nCol].maCellNotes;
-}
+
 void ScDocument::SetNote(const ScAddress& rPos, ScPostIt* pNote)
 {
     return SetNote(rPos.Col(), rPos.Row(), rPos.Tab(), pNote);
@@ -6138,24 +6135,75 @@ ScPostIt* ScDocument::CreateNote(const ScAddress& rPos)
     return pPostIt;
 }
 
-sal_uLong ScDocument::CountNotes()
+size_t ScDocument::CountNotes() const
 {
-    sal_uLong nCount = 0;
+    size_t nCount = 0;
     SCTAB nTabCount = GetTableCount();
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
     {
         for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
-        {
-            sc::CellNoteStoreType& maCellNotes = GetColNotes(nCol, nTab);
-            sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
-            for (; it != itEnd; ++it)
-            {
-               if (it->type == sc::element_type_cellnote)
-                    nCount +=it->size;
-            }
-        }
+            nCount += GetNoteCount(nTab, nCol);
     }
     return nCount;
+}
+
+size_t ScDocument::GetNoteCount( SCTAB nTab, SCCOL nCol ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return 0;
+
+    return pTab->GetNoteCount(nCol);
+}
+
+ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
+{
+    for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
+    {
+        for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
+        {
+            size_t nColNoteCount = GetNoteCount(nTab, nCol);
+            if (!nColNoteCount)
+                continue;
+
+            if (nIndex >= nColNoteCount)
+            {
+                nIndex -= nColNoteCount;
+                continue;
+            }
+
+            SCROW nRow = GetNotePosition(nTab, nCol, nIndex);
+            if (nRow >= 0)
+                return ScAddress(nCol, nRow, nTab);
+
+            OSL_FAIL("note not found");
+            return ScAddress();
+        }
+    }
+
+    OSL_FAIL("note not found");
+    return ScAddress();
+}
+
+SCROW ScDocument::GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return -1;
+
+    return pTab->GetNotePosition(nCol, nIndex);
+}
+
+void ScDocument::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
+{
+    for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
+    {
+        const ScTable* pTab = maTabs[nTab];
+        if (!pTab)
+            continue;
+
+        pTab->GetAllNoteEntries(rNotes);
+    }
 }
 
 void ScDocument::SetAutoNameCache(  ScAutoNameCache* pCache )

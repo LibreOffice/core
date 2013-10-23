@@ -51,20 +51,23 @@ namespace com { namespace sun { namespace star {
 
 namespace formula { struct VectorRefArray; }
 namespace sc {
-    struct FormulaGroupContext;
-    class StartListeningContext;
-    class EndListeningContext;
-    class CopyFromClipContext;
-    class CopyToClipContext;
-    class CopyToDocContext;
-    class MixDocContext;
-    class ColumnSpanSet;
-    class ColumnSet;
-    struct ColumnBlockPosition;
-    struct RefUpdateContext;
-    struct RefUpdateInsertTabContext;
-    struct RefUpdateDeleteTabContext;
-    struct RefUpdateMoveTabContext;
+
+struct FormulaGroupContext;
+class StartListeningContext;
+class EndListeningContext;
+class CopyFromClipContext;
+class CopyToClipContext;
+class CopyToDocContext;
+class MixDocContext;
+class ColumnSpanSet;
+class ColumnSet;
+struct ColumnBlockPosition;
+struct RefUpdateContext;
+struct RefUpdateInsertTabContext;
+struct RefUpdateDeleteTabContext;
+struct RefUpdateMoveTabContext;
+struct NoteEntry;
+
 }
 
 class SfxItemSet;
@@ -374,6 +377,11 @@ public:
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
     ScPostIt*   GetNote(const SCCOL nCol, const SCROW nRow);
+
+    size_t GetNoteCount( SCCOL nCol ) const;
+    SCROW GetNotePosition( SCCOL nCol, size_t nIndex ) const;
+
+    void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
 
     bool TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize ) const;
     void        InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize );

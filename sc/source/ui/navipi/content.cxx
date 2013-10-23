@@ -848,7 +848,6 @@ static OUString lcl_NoteString( const ScPostIt& rNote )
     return aText;
 }
 
-
 void ScContentTree::GetNoteStrings()
 {
     if ( nRootType && nRootType != SC_CONTENT_NOTE )        // ausgeblendet ?
@@ -859,36 +858,11 @@ void ScContentTree::GetNoteStrings()
         return;
 
     // loop over cell notes
-    SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-    {
-        for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
-        {
-            if ( pDoc->HasColNotes(nCol, nTab) )
-            {
-                sc::CellNoteStoreType& maCellNotes = pDoc->GetColNotes(nCol, nTab);
-
-                sc::CellNoteStoreType::const_iterator itBlk = maCellNotes.begin(), itBlkEnd = maCellNotes.end();
-                sc::cellnote_block::const_iterator itData, itDataEnd;
-
-                for(;itBlk != itBlkEnd; ++itBlk)
-                {
-                    if (itBlk->data)
-                    {
-                        itData = sc::cellnote_block::begin(*itBlk->data);
-                        itDataEnd = sc::cellnote_block::end(*itBlk->data);
-                        for (; itData != itDataEnd; ++itData)
-                        {
-                            ScPostIt* pNote = *itData;
-                            if (pNote)
-                                InsertContent(SC_CONTENT_NOTE, lcl_NoteString( *pNote ));
-                        }
-                    }
-
-                }
-            }
-        }
-    }
+    std::vector<sc::NoteEntry> aEntries;
+    pDoc->GetAllNoteEntries(aEntries);
+    std::vector<sc::NoteEntry>::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
+    for (; it != itEnd; ++it)
+        InsertContent(SC_CONTENT_NOTE, lcl_NoteString(*it->mpNote));
 }
 
 ScAddress ScContentTree::GetNotePos( sal_uLong nIndex )
@@ -897,47 +871,8 @@ ScAddress ScContentTree::GetNotePos( sal_uLong nIndex )
     if (!pDoc)
         return ScAddress();
 
-    sal_uLong nFound = 0;
-    SCTAB nTabCount = pDoc->GetTableCount();
-
-    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-    {
-        for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
-        {
-            if ( pDoc->HasColNotes(nCol, nTab) )
-            {
-                sc::CellNoteStoreType& maCellNotes = pDoc->GetColNotes(nCol, nTab);
-
-                sc::CellNoteStoreType::const_iterator itBlk = maCellNotes.begin(), itBlkEnd = maCellNotes.end();
-                sc::cellnote_block::const_iterator itData, itDataEnd;
-
-                for(;itBlk != itBlkEnd; ++itBlk)
-                {
-                    if (itBlk->data)
-                    {
-                        SCROW nRow = itBlk->position;
-                        itData = sc::cellnote_block::begin(*itBlk->data);
-                        itDataEnd = sc::cellnote_block::end(*itBlk->data);
-                        for (; itData != itDataEnd; ++itData, ++nRow)
-                        {
-                            ScPostIt* pNote = *itData;
-                            if (pNote)
-                            {
-                                if (nFound == nIndex)
-                                    return ScAddress(nCol, nRow, nTab);
-                                ++nFound;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    OSL_FAIL("note not found");
-    return ScAddress();
+    return pDoc->GetNotePosition(nIndex);
 }
-
 
 sal_Bool ScContentTree::NoteStringsChanged()
 {
@@ -952,35 +887,20 @@ sal_Bool ScContentTree::NoteStringsChanged()
     SvTreeListEntry* pEntry = FirstChild( pParent );
 
     bool bEqual = true;
-    SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCount && bEqual; nTab++)
+    std::vector<sc::NoteEntry> aEntries;
+    pDoc->GetAllNoteEntries(aEntries);
+    std::vector<sc::NoteEntry>::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
+    for (; it != itEnd; ++it)
     {
-        for (SCCOL nCol=0; nCol<MAXCOLCOUNT; nCol++)
+        const ScPostIt* pNote = it->mpNote;
+        if (!pEntry)
+            bEqual = false;
+        else
         {
-            if ( pDoc->HasColNotes(nCol, nTab) )
-            {
-                sc::CellNoteStoreType& maCellNotes = pDoc->GetColNotes(nCol, nTab);
-                sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
-                for (; it != itEnd; ++it)
-                {
-                    if (it->type == sc::element_type_cellnote)
-                    {
-                        SCROW nRow = it->position;
-                        ScPostIt* pNote = maCellNotes.get<ScPostIt*>(nRow);
-                        if (pNote)
-                        {
-                            if ( !pEntry )
-                                bEqual = false;
-                            else
-                            {
-                                if ( lcl_NoteString( *pNote ) != GetEntryText(pEntry) )
-                                    bEqual = false;
-                                pEntry = NextSibling( pEntry );
-                            }
-                        }
-                    }
-                }
-            }
+            if (lcl_NoteString(*pNote) != GetEntryText(pEntry))
+                bEqual = false;
+
+            pEntry = NextSibling(pEntry);
         }
     }
 

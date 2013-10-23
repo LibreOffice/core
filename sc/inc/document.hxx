@@ -48,8 +48,6 @@
 #include <boost/scoped_ptr.hpp>
 #include "markdata.hxx"
 
-#include "mtvelements.hxx"
-
 namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
 namespace svl {
@@ -60,14 +58,17 @@ class SharedStringPool;
 }
 
 namespace sc {
-    struct FormulaGroupContext;
-    class StartListeningContext;
-    class EndListeningContext;
-    class CopyFromClipContext;
-    class ColumnSpanSet;
-    struct ColumnBlockPosition;
-    struct RefUpdateContext;
-    class EditTextIterator;
+
+struct FormulaGroupContext;
+class StartListeningContext;
+class EndListeningContext;
+class CopyFromClipContext;
+class ColumnSpanSet;
+struct ColumnBlockPosition;
+struct RefUpdateContext;
+class EditTextIterator;
+struct NoteEntry;
+
 }
 
 class SvxFontItem;
@@ -905,8 +906,13 @@ public:
     SC_DLLPUBLIC ScPostIt*       ReleaseNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
     SC_DLLPUBLIC ScPostIt*       GetOrCreateNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       CreateNote(const ScAddress& rPos);
-    sal_uLong                    CountNotes();
-    SC_DLLPUBLIC sc::CellNoteStoreType&  GetColNotes(SCCOL nCol, SCTAB nTab);
+    size_t CountNotes() const;
+    size_t GetNoteCount( SCTAB nTab, SCCOL nCol ) const;
+
+    ScAddress GetNotePosition( size_t nIndex ) const;
+    SCROW GetNotePosition( SCTAB nTab, SCCOL nCol, size_t nIndex ) const;
+
+    SC_DLLPUBLIC void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
 
     SC_DLLPUBLIC void            SetDrawPageSize(SCTAB nTab);
 

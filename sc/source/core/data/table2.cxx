@@ -1502,6 +1502,28 @@ ScPostIt* ScTable::GetNote(const SCCOL nCol, const SCROW nRow)
     return pDocument->GetNote(nCol, nRow, nTab);
 }
 
+size_t ScTable::GetNoteCount( SCCOL nCol ) const
+{
+    if (!ValidCol(nCol))
+        return 0;
+
+    return aCol[nCol].GetNoteCount();
+}
+
+SCROW ScTable::GetNotePosition( SCCOL nCol, size_t nIndex ) const
+{
+    if (!ValidCol(nCol))
+        return -1;
+
+    return aCol[nCol].GetNotePosition(nIndex);
+}
+
+void ScTable::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
+{
+    for (SCCOL nCol = 0; nCol < MAXCOLCOUNT; ++nCol)
+        aCol[nCol].GetAllNoteEntries(rNotes);
+}
+
 CellType ScTable::GetCellType( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow( nCol, nRow ))
