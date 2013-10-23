@@ -2589,6 +2589,7 @@ void SchXMLExportHelper_Impl::exportSeries(
 
     OUString aFirstXDomainRange;
     OUString aFirstYDomainRange;
+    bool modifyLabelRange = false;
 
     std::vector< XMLPropertyState > aPropertyStates;
 
@@ -2734,11 +2735,17 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     // #i75297# allow empty series, export empty range to have all ranges on import
                                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, OUString());
 
-                                if( xLabelSeq.is())
+                                if( xLabelSeq.is()) {
+                                    OUString aRange = xLabelSeq->getSourceRangeRepresentation();
+                                    if ( nSeriesIdx == 0 && aRange.compareToAscii("label 1") == 0)
+                                        modifyLabelRange = true;
+                                    if (modifyLabelRange)
+                                        aRange = OUString("label ") + OUString::number(aRange.copy( OUString("label").getLength()).toInt32() - 1);
                                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS,
                                                            lcl_ConvertRange(
-                                                               xLabelSeq->getSourceRangeRepresentation(),
+                                                               aRange,
                                                                xNewDoc ));
+                                }
                                 if( xLabelSeq.is() || xValuesSeq.is() )
                                     aSeriesLabelValuesPair = tLabelValuesDataPair( xLabelSeq, xValuesSeq );
 
