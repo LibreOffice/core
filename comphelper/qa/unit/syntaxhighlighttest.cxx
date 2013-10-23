@@ -41,6 +41,7 @@ void SyntaxHighlightTest::testBasicString()
             aPortions.begin(), itrEnd = aPortions.end(); itr != itrEnd; ++itr)
     {
         CPPUNIT_ASSERT_EQUAL(prevEnd, itr->nBegin);
+        CPPUNIT_ASSERT(itr->nBegin < itr->nEnd);
         prevEnd = itr->nEnd;
     }
     CPPUNIT_ASSERT_EQUAL(aBasicString.getLength(), prevEnd);
