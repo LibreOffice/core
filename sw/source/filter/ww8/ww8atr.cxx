@@ -2241,65 +2241,67 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                 }
                             }
                         }
-                            {
-                                OUString aFillTxt;
-                                sal_uInt8 nNoPgStt = MAXLEVEL, nNoPgEnd = MAXLEVEL;
-                                bool bFirstFillTxt = true, bOnlyText = true;
-                                for( n = 0; n < nTOXLvl; ++n )
-                                {
-                                    OUString aTxt;
-                                    int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(),
-                                        static_cast< sal_uInt8 >(n+1), aTxt );
-                                    if( 1 == nRet )
-                                    {
-                                        bOnlyText = false;
-                                        if( MAXLEVEL == nNoPgStt )
-                                            nNoPgStt = static_cast< sal_uInt8 >(n+1);
-                                    }
-                                    else
-                                    {
-                                        if( MAXLEVEL != nNoPgStt &&
-                                            MAXLEVEL == nNoPgEnd )
-                                            nNoPgEnd = sal_uInt8(n);
 
-                                        bOnlyText = bOnlyText && 3 == nRet;
-                                        if( 3 == nRet || 4 == nRet )
-                                        {
-                                            if( bFirstFillTxt )
-                                                aFillTxt = aTxt;
-                                            else if( aFillTxt != aTxt )
-                                                aFillTxt = "";
-                                            bFirstFillTxt = false;
-                                        }
+                        // No 'else' branch; why the below snippet is a block I have no idea.
+                        {
+                            OUString aFillTxt;
+                            sal_uInt8 nNoPgStt = MAXLEVEL, nNoPgEnd = MAXLEVEL;
+                            bool bFirstFillTxt = true, bOnlyText = true;
+                            for( n = 0; n < nTOXLvl; ++n )
+                            {
+                                OUString aTxt;
+                                int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(),
+                                    static_cast< sal_uInt8 >(n+1), aTxt );
+                                if( 1 == nRet )
+                                {
+                                    bOnlyText = false;
+                                    if( MAXLEVEL == nNoPgStt )
+                                        nNoPgStt = static_cast< sal_uInt8 >(n+1);
+                                }
+                                else
+                                {
+                                    if( MAXLEVEL != nNoPgStt &&
+                                        MAXLEVEL == nNoPgEnd )
+                                        nNoPgEnd = sal_uInt8(n);
+
+                                    bOnlyText = bOnlyText && 3 == nRet;
+                                    if( 3 == nRet || 4 == nRet )
+                                    {
+                                        if( bFirstFillTxt )
+                                            aFillTxt = aTxt;
+                                        else if( aFillTxt != aTxt )
+                                            aFillTxt = "";
+                                        bFirstFillTxt = false;
                                     }
-                                }
-                                if( MAXLEVEL != nNoPgStt )
-                                {
-                                    if (WW8ListManager::nMaxLevel < nNoPgEnd)
-                                        nNoPgEnd = WW8ListManager::nMaxLevel;
-                                    sStr += "\\n ";
-                                    sStr += OUString::number( nNoPgStt );
-                                    sStr += "-";
-                                    sStr += OUString::number( nNoPgEnd  );
-                                    sStr += " ";
-                                }
-                                if( bOnlyText )
-                                {
-                                    sStr += "\\p \"";
-                                    sStr += aFillTxt;
-                                    sStr += sEntryEnd;
                                 }
                             }
-
-                            if( !sTOption.isEmpty() )
+                            if( MAXLEVEL != nNoPgStt )
                             {
-                                sStr += "\\t \"";
-                                sStr += sTOption;
+                                if (WW8ListManager::nMaxLevel < nNoPgEnd)
+                                    nNoPgEnd = WW8ListManager::nMaxLevel;
+                                sStr += "\\n ";
+                                sStr += OUString::number( nNoPgStt );
+                                sStr += "-";
+                                sStr += OUString::number( nNoPgEnd  );
+                                sStr += " ";
+                            }
+                            if( bOnlyText )
+                            {
+                                sStr += "\\p \"";
+                                sStr += aFillTxt;
                                 sStr += sEntryEnd;
                             }
+                        }
 
-                            if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
-                                sStr += "\\h";
+                        if( !sTOption.isEmpty() )
+                        {
+                            sStr += "\\t \"";
+                            sStr += sTOption;
+                            sStr += sEntryEnd;
+                        }
+
+                        if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
+                            sStr += "\\h";
                     }
                     break;
                 }
