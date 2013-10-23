@@ -17,9 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FILTERDETECT_HXX
-#define _FILTERDETECT_HXX
-
+#ifndef INCLUDED_FILTER_SOURCE_XMLFILTERDETECT_FILTERDETECT_HXX
+#define INCLUDED_FILTER_SOURCE_XMLFILTERDETECT_FILTERDETECT_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -27,8 +26,6 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase5.hxx>
-
 #include <cppuhelper/implbase3.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -45,98 +42,61 @@ enum FilterType
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
 
-class FilterDetect : public cppu::WeakImplHelper3
-
-<
-
-
-    com::sun::star::document::XExtendedFilterDetection,
-
-    com::sun::star::lang::XInitialization,
-
-    com::sun::star::lang::XServiceInfo
-
+class FilterDetect : public cppu::WeakImplHelper3 <
+    css::document::XExtendedFilterDetection,
+    css::lang::XInitialization,
+    css::lang::XServiceInfo
 >
-
 {
 
 protected:
+    css::uno::Reference< css::uno::XComponentContext > mxCtx;
+    css::uno::Reference< css::lang::XComponent > mxDoc;
 
-  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxCtx;
+    OUString msFilterName;
+    OUString msTemplateName;
 
-  ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
+    css::uno::Sequence< OUString > msUserData;
 
-  OUString msFilterName;
+    sal_Bool SAL_CALL exportImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
+        throw (css::uno::RuntimeException);
 
-  ::com::sun::star::uno::Sequence< OUString > msUserData;
-
-   OUString msTemplateName;
-
-
-
-    sal_Bool SAL_CALL exportImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-
-        throw (::com::sun::star::uno::RuntimeException);
-
-    sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-
-        throw (::com::sun::star::uno::RuntimeException);
-
-
-
-
+    sal_Bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
+        throw (css::uno::RuntimeException);
 
 public:
-
-    FilterDetect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxCtx)
-
+    FilterDetect( const css::uno::Reference< css::uno::XComponentContext > &rxCtx)
         : mxCtx( rxCtx ) {}
 
     virtual ~FilterDetect() {}
 
-
-
-
-
-
-     //XExtendedFilterDetection
-     virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lDescriptor )
-            throw( com::sun::star::uno::RuntimeException );
-
+    //XExtendedFilterDetection
+    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor )
+        throw( css::uno::RuntimeException );
 
     // XInitialization
-
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw (css::uno::Exception, css::uno::RuntimeException);
 
     // XServiceInfo
-
     virtual OUString SAL_CALL getImplementationName(  )
-
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+        throw (css::uno::RuntimeException);
 
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-
-        throw (::com::sun::star::uno::RuntimeException);
-
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (css::uno::RuntimeException);
 };
 
 OUString SAL_CALL FilterDetect_getImplementationName();
 
-com::sun::star::uno::Sequence< OUString > SAL_CALL
-FilterDetect_getSupportedServiceNames();
+css::uno::Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames();
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
-FilterDetect_createInstance(
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext > const & context);
+css::uno::Reference< css::uno::XInterface > SAL_CALL
+    FilterDetect_createInstance(
+        css::uno::Reference<
+            css::uno::XComponentContext > const & context);
 
 #endif
 
