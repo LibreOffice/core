@@ -3444,7 +3444,8 @@ bool ScAnnotationsObj::GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos
                 size_t nOffset = aPos.second;
                 size_t nDataSize = 0;
                 size_t nRow = 0;
-                if (nFound + maNotes.size() >= nIndex)
+                sal_Int32 nNotesSize = maNotes.size();
+                if (nFound + nNotesSize >= nIndex)
                 {
                     for (; it != maNotes.end(); ++it, nOffset = 0, nRow += nDataSize)
                     {
@@ -3458,7 +3459,7 @@ bool ScAnnotationsObj::GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos
                     }
                 }
                 else
-                    nFound += maNotes.size();
+                    nFound += nNotesSize;
             }
         }
     }
