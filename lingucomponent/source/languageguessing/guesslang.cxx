@@ -26,6 +26,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <simpleguesser.hxx>
 #include <guess.hxx>
@@ -346,7 +347,6 @@ void SAL_CALL LangGuess_Impl::enableLanguages(
     }
 }
 
-//*************************************************************************
 OUString SAL_CALL LangGuess_Impl::getImplementationName(  )
     throw(RuntimeException)
 {
@@ -354,20 +354,12 @@ OUString SAL_CALL LangGuess_Impl::getImplementationName(  )
     return OUString( IMPLNAME );
 }
 
-//*************************************************************************
 sal_Bool SAL_CALL LangGuess_Impl::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    osl::MutexGuard aGuard( GetLangGuessMutex() );
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//*************************************************************************
 Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
@@ -375,15 +367,11 @@ Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames(  )
     return getSupportedServiceNames_Static();
 }
 
-//*************************************************************************
 Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames_Static(  )
 {
     OUString aName( SERVICENAME );
     return Sequence< OUString >( &aName, 1 );
 }
-
-//*************************************************************************
-
 
 /**
  * Function to create a new component instance; is needed by factory helper implementation.

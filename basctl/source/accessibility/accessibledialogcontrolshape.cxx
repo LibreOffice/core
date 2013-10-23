@@ -25,6 +25,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/awt/vclxfont.hxx>
@@ -309,29 +310,16 @@ void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEv
     }
 }
 
-// -----------------------------------------------------------------------------
 // XServiceInfo
-// -----------------------------------------------------------------------------
-
 OUString AccessibleDialogControlShape::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.basctl.AccessibleShape" );
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool AccessibleDialogControlShape::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< OUString > aNames( getSupportedServiceNames() );
-    const OUString* pNames = aNames.getConstArray();
-    const OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, rServiceName);
 }
-
-// -----------------------------------------------------------------------------
 
 Sequence< OUString > AccessibleDialogControlShape::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -340,10 +328,7 @@ Sequence< OUString > AccessibleDialogControlShape::getSupportedServiceNames() th
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
 // XAccessible
-// -----------------------------------------------------------------------------
-
 Reference< XAccessibleContext > AccessibleDialogControlShape::getAccessibleContext(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
@@ -351,10 +336,7 @@ Reference< XAccessibleContext > AccessibleDialogControlShape::getAccessibleConte
     return this;
 }
 
-// -----------------------------------------------------------------------------
 // XAccessibleContext
-// -----------------------------------------------------------------------------
-
 sal_Int32 AccessibleDialogControlShape::getAccessibleChildCount() throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );

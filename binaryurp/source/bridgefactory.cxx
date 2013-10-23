@@ -30,6 +30,7 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
@@ -93,13 +94,7 @@ OUString BridgeFactory::getImplementationName()
 sal_Bool BridgeFactory::supportsService(OUString const & ServiceName)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > s(getSupportedServiceNames());
-    for (sal_Int32 i = 0; i != s.getLength(); ++i) {
-        if (ServiceName == s[i]) {
-            return true;
-        }
-    }
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > BridgeFactory::getSupportedServiceNames()

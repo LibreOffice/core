@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <cppuhelper/supportsservice.hxx>
 #include "rtl/ustrbuf.hxx"
 
 #include "wininetbackend.hxx"
@@ -374,8 +374,6 @@ OUString SAL_CALL WinInetBackend::getImplementationName(void)
     return getBackendName() ;
 }
 
-//------------------------------------------------------------------------------
-
 uno::Sequence<OUString> SAL_CALL WinInetBackend::getBackendServiceNames(void)
 {
     uno::Sequence<OUString> aServiceNameList(1);
@@ -384,21 +382,11 @@ uno::Sequence<OUString> SAL_CALL WinInetBackend::getBackendServiceNames(void)
     return aServiceNameList ;
 }
 
-//------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > const svc = getBackendServiceNames();
-
-    for(sal_Int32 i = 0; i < svc.getLength(); ++i )
-        if(svc[i] == aServiceName)
-            return true;
-
-    return false;
+    return cppu::supportsService(this, aServiceName);
 }
-
-//------------------------------------------------------------------------------
 
 uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames(void)
     throw (uno::RuntimeException)

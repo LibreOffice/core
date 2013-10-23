@@ -35,6 +35,7 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase3.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include "cppuhelper/weak.hxx"
 #include "osl/conditn.hxx"
 #include "osl/interlck.h"
@@ -319,14 +320,7 @@ private:
 sal_Bool Service::supportsService(OUString const & serviceName)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< OUString > names(
-        getSupportedServiceNames_static());
-    for (sal_Int32 i = 0; i< names.getLength(); ++i) {
-        if (names[i] == serviceName) {
-            return true;
-        }
-    }
-    return false;
+    return cppu::supportsService(this, serviceName);
 }
 
 namespace {
