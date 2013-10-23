@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VBAHELPER_MSFORMS_VBANEWFONT_HXX
-#define VBAHELPER_MSFORMS_VBANEWFONT_HXX
+#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBANEWFONT_HXX
+#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBANEWFONT_HXX
 
 #include <ooo/vba/msforms/XNewFont.hpp>
 #include <vbahelper/vbahelperinterface.hxx>

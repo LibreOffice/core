@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_COMBOBOX_HXX
-#define SC_VBA_COMBOBOX_HXX
+#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACOMBOBOX_HXX
+#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACOMBOBOX_HXX
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_CONTROL_HXX
-#define SC_VBA_CONTROL_HXX
+#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROL_HXX
+#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROL_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -138,6 +138,6 @@ private:
     ~ScVbaControlFactory();
 };
 
-#endif//SC_VBA_CONTROL_HXX
+#endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

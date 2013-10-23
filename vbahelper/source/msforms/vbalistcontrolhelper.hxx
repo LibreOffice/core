@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SC_VBA_LISTCONTROLHELPER
-#define SC_VBA_LISTCONTROLHELPER
+#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALISTCONTROLHELPER_HXX
+#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALISTCONTROLHELPER_HXX
 
 #include <vbahelper/vbahelper.hxx>
 
@@ -36,6 +36,7 @@ public:
     virtual css::uno::Any SAL_CALL List( const css::uno::Any& pvargIndex, const css::uno::Any& pvarColumn ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Clear(  ) throw (css::uno::RuntimeException);
 };
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_XFILLFORMAT_HXX
-#define SC_VBA_XFILLFORMAT_HXX
+#ifndef INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBAFILLFORMAT_HXX
+#define INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBAFILLFORMAT_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -60,6 +60,6 @@ public:
 
 };
 
-#endif//SC_VBA_XFILLFORMAT_HXX
+#endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBAFILLFORMAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

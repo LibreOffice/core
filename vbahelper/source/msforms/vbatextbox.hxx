@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_TEXTBOX_HXX
-#define SC_VBA_TEXTBOX_HXX
+
+#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBATEXTBOX_HXX
+#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBATEXTBOX_HXX
+
 #include <cppuhelper/implbase2.hxx>
 #include <ooo/vba/msforms/XTextBox.hpp>
 #include "vbacontrol.hxx"
@@ -58,6 +60,7 @@ public:
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();
 };
-#endif //SC_VBA_TEXTBOX_HXX
+
+#endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBATEXTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

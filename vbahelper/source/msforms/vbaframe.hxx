@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SC_VBA_FRAME_HXX
-#define SC_VBA_FRAME_HXX
+
+#ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAFRAME_HXX
+#define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAFRAME_HXX
+
 #include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/msforms/XFrame.hpp>
 
@@ -55,6 +57,7 @@ public:
 private:
     css::uno::Reference< css::awt::XControl > mxDialog;
 };
-#endif //SC_VBA_LABEL_HXX
+
+#endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
