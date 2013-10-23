@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_ZOOMITEM_HXX
-#define _SVX_ZOOMITEM_HXX
+#ifndef INCLUDED_SFX2_ZOOMITEM_HXX
+#define INCLUDED_SFX2_ZOOMITEM_HXX
 
 #include <svl/intitem.hxx>
 #include <sfx2/sfxsids.hrc>

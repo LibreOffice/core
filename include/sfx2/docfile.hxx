@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXDOCFILE_HXX
-#define _SFXDOCFILE_HXX
+#ifndef INCLUDED_SFX2_DOCFILE_HXX
+#define INCLUDED_SFX2_DOCFILE_HXX
 
 #include <com/sun/star/io/XSeekable.hpp>
 #include "sal/config.h"

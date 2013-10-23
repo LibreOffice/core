@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_NFKEYTAB_HXX
-#define INCLUDED_SVTOOLS_NFKEYTAB_HXX
+#ifndef INCLUDED_SVL_NFKEYTAB_HXX
+#define INCLUDED_SVL_NFKEYTAB_HXX
 
 #include <vector>
 #include <rtl/ustring.hxx>
@@ -117,6 +117,6 @@ public:
     const OUString & operator[] (Keywords_t::size_type n) const { return m_keywords[n]; }
 };
 
-#endif // INCLUDED_SVTOOLS_NFKEYTAB_HXX
+#endif // INCLUDED_SVL_NFKEYTAB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

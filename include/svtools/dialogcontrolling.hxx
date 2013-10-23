@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_DIALOGCONTROLLING_HXX
-#define SVTOOLS_DIALOGCONTROLLING_HXX
+#ifndef INCLUDED_SVTOOLS_DIALOGCONTROLLING_HXX
+#define INCLUDED_SVTOOLS_DIALOGCONTROLLING_HXX
 
 #include <svtools/svtdllapi.h>
 
@@ -289,6 +289,6 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // SVTOOLS_DIALOGCONTROLLING_HXX
+#endif // INCLUDED_SVTOOLS_DIALOGCONTROLLING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

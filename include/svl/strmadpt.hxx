@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_STRMADPT_HXX
-#define SVTOOLS_STRMADPT_HXX
+#ifndef INCLUDED_SVL_STRMADPT_HXX
+#define INCLUDED_SVL_STRMADPT_HXX
 
 #include "svl/svldllapi.h"
 #include <com/sun/star/io/XInputStream.hpp>
@@ -122,6 +122,6 @@ public:
                com::sun::star::uno::RuntimeException);
 };
 
-#endif // SVTOOLS_STRMADPT_HXX
+#endif // INCLUDED_SVL_STRMADPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

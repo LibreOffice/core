@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_IMGDEF_HXX
-#define _SVTOOLS_IMGDEF_HXX
+#ifndef INCLUDED_SVTOOLS_IMGDEF_HXX
+#define INCLUDED_SVTOOLS_IMGDEF_HXX
 
 enum SfxSymbolsSize
 {
@@ -31,6 +31,6 @@ enum SfxSymbolsSize
 #define SFX_TOOLBOX_CHANGEOUTSTYLE      0x0002
 #define SFX_TOOLBOX_CHANGEBUTTONTYPE    0x0004
 
-#endif // _SVTOOLS_IMGDEF_HXX
+#endif // INCLUDED_SVTOOLS_IMGDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

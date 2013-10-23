@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXINTITEM_HXX
-#define _SFXINTITEM_HXX
+#ifndef INCLUDED_SVL_INTITEM_HXX
+#define INCLUDED_SVL_INTITEM_HXX
 
 #include "svl/svldllapi.h"
 #include <svl/cintitem.hxx>
@@ -158,6 +158,6 @@ public:
     { return new SfxUInt32Item(*this); }
 };
 
-#endif // _SFXINTITEM_HXX
+#endif // INCLUDED_SVL_INTITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

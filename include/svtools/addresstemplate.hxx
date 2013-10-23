@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVT_ADDRESSTEMPLATE_HXX_
-#define _SVT_ADDRESSTEMPLATE_HXX_
+#ifndef INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX
+#define INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX
 
 #include "svtools/svtdllapi.h"
 #include <vcl/dialog.hxx>
@@ -139,6 +139,6 @@ namespace svt
 }   // namespace svt
 // .......................................................................
 
-#endif // _SVT_ADDRESSTEMPLATE_HXX_
+#endif // INCLUDED_SVTOOLS_ADDRESSTEMPLATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

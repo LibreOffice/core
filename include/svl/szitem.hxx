@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFXSZITEM_HXX
-#define _SFXSZITEM_HXX
+#ifndef INCLUDED_SVL_SZITEM_HXX
+#define INCLUDED_SVL_SZITEM_HXX
 
 #include <tools/gen.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_KDE_HEADERS_H
-#define INCLUDED_VCL_KDE_HEADERS_H
+#ifndef INCLUDED_SHELL_KDE_HEADERS_H
+#define INCLUDED_SHELL_KDE_HEADERS_H
 
 #include <config_vclplug.h>
 

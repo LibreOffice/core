@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CALENDAR_HXX
-#define _CALENDAR_HXX
+#ifndef INCLUDED_SVTOOLS_CALENDAR_HXX
+#define INCLUDED_SVTOOLS_CALENDAR_HXX
 
 #include "svtools/svtdllapi.h"
 #include <unotools/calendarwrapper.hxx>
@@ -442,6 +442,6 @@ protected:
     virtual void    StateChanged( StateChangedType nStateChange );
 };
 
-#endif  // _CALENDAR_HXX
+#endif // INCLUDED_SVTOOLS_CALENDAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

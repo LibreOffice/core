@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
-#define _SVTOOLS_LOCALRESACCESS_HXX_
+#ifndef INCLUDED_SVTOOLS_LOCALRESACCESS_HXX
+#define INCLUDED_SVTOOLS_LOCALRESACCESS_HXX
 
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
@@ -70,6 +70,6 @@ namespace svt
 }   // namespace svt
 //.........................................................................
 
-#endif // _SVTOOLS_LOCALRESACCESS_HXX_
+#endif // INCLUDED_SVTOOLS_LOCALRESACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

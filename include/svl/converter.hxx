@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SV_CONVERTER_HXX_
-#define _SV_CONVERTER_HXX_
+#ifndef INCLUDED_SVL_CONVERTER_HXX
+#define INCLUDED_SVL_CONVERTER_HXX
 
 #include "svl/svldllapi.h"
 #include <tools/solar.h>

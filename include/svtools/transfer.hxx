@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TRANSFER_HXX
-#define _TRANSFER_HXX
+#ifndef INCLUDED_SVTOOLS_TRANSFER_HXX
+#define INCLUDED_SVTOOLS_TRANSFER_HXX
 
 #include "svtools/svtdllapi.h"
 #include <tools/globname.hxx>

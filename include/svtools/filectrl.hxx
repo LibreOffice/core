@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_FILECTRL_HXX
-#define _SV_FILECTRL_HXX
+#ifndef INCLUDED_SVTOOLS_FILECTRL_HXX
+#define INCLUDED_SVTOOLS_FILECTRL_HXX
 
 #include "svtools/svtdllapi.h"
 #include <vcl/window.hxx>

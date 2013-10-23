@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
-#define _SVTOOLS_EDITBROWSEBOX_HXX_
+#ifndef INCLUDED_SVTOOLS_EDITBROWSEBOX_HXX
+#define INCLUDED_SVTOOLS_EDITBROWSEBOX_HXX
 #define SVTOOLS_IN_EDITBROWSEBOX_HXX
 
 #include "svtools/svtdllapi.h"
@@ -680,6 +680,6 @@ namespace svt
 // .......................................................................
 
 #undef SVTOOLS_IN_EDITBROWSEBOX_HXX
-#endif // _SVTOOLS_EDITBROWSEBOX_HXX_
+#endif // INCLUDED_SVTOOLS_EDITBROWSEBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

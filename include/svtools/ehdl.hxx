@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EHDL_HXX
-#define _EHDL_HXX
+#ifndef INCLUDED_SVTOOLS_EHDL_HXX
+#define INCLUDED_SVTOOLS_EHDL_HXX
 
 #ifndef __RSC
 

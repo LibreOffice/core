@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ZFORLIST_HXX
-#define _ZFORLIST_HXX
+#ifndef INCLUDED_SVL_ZFORLIST_HXX
+#define INCLUDED_SVL_ZFORLIST_HXX
 
 #include "svl/svldllapi.h"
 #include <rtl/ustrbuf.hxx>
@@ -1019,6 +1019,6 @@ inline sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear( sal_uInt16 nYear, sal_u
     return nYear;
 }
 
-#endif  // _ZFORLIST_HXX
+#endif // INCLUDED_SVL_ZFORLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX2_OPENGRF_HXX
-#define _SFX2_OPENGRF_HXX
+#ifndef INCLUDED_SFX2_OPENGRF_HXX
+#define INCLUDED_SFX2_OPENGRF_HXX
 
 #include <memory>
 #include <vcl/graphicfilter.hxx>

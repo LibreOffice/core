@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _NUMUNO_HXX
-#define _NUMUNO_HXX
+#ifndef INCLUDED_SVL_NUMUNO_HXX
+#define INCLUDED_SVL_NUMUNO_HXX
 
 #include "svl/svldllapi.h"
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -86,7 +86,7 @@ public:
     ::comphelper::SharedMutex&  getSharedMutex() const;
 };
 
-#endif // #ifndef _NUMUNO_HXX
+#endif // INCLUDED_SVL_NUMUNO_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

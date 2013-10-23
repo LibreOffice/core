@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX2_SIGNATURESTATE_HXX
-#define SFX2_SIGNATURESTATE_HXX
+#ifndef INCLUDED_SFX2_SIGNATURESTATE_HXX
+#define INCLUDED_SFX2_SIGNATURESTATE_HXX
 
 // xmlsec05, check with SFX team
 #define SIGNATURESTATE_UNKNOWN                  (sal_Int16)(-1)
@@ -33,6 +33,6 @@
 //OOo 2.x - OOo 3.1.1. This state is only used  together with document signatures.
 #define SIGNATURESTATE_SIGNATURES_PARTIAL_OK    (sal_Int16)5
 
-#endif // SFX2_SIGNATURESTATE_HXX
+#endif // INCLUDED_SFX2_SIGNATURESTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

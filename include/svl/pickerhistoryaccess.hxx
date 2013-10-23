@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_PICKERHISTORYACCESS_HXX
-#define SVTOOLS_PICKERHISTORYACCESS_HXX
+#ifndef INCLUDED_SVL_PICKERHISTORYACCESS_HXX
+#define INCLUDED_SVL_PICKERHISTORYACCESS_HXX
 
 #include "svl/svldllapi.h"
 
@@ -40,6 +40,6 @@ namespace svt
 }   // namespace svt
 //.........................................................................
 
-#endif // SVTOOLS_PICKERHISTORYACCESS_HXX
+#endif // INCLUDED_SVL_PICKERHISTORYACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

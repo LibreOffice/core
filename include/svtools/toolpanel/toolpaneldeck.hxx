@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVT_TOOLPANELDECK_HXX
-#define SVT_TOOLPANELDECK_HXX
+#ifndef INCLUDED_SVTOOLS_TOOLPANEL_TOOLPANELDECK_HXX
+#define INCLUDED_SVTOOLS_TOOLPANEL_TOOLPANELDECK_HXX
 
 #include "svtools/svtdllapi.h"
 #include "svtools/toolpanel/toolpanel.hxx"
@@ -189,6 +189,6 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // SVT_TOOLPANELDECK_HXX
+#endif // INCLUDED_SVTOOLS_TOOLPANEL_TOOLPANELDECK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

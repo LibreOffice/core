@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_XMLIDREGISTRY_HXX_
-#define _SFX_XMLIDREGISTRY_HXX_
+#ifndef INCLUDED_SFX2_XMLIDREGISTRY_HXX
+#define INCLUDED_SFX2_XMLIDREGISTRY_HXX
 
 #include <sal/config.h>
 
@@ -79,6 +79,6 @@ public:
 
 } // namespace sfx2
 
-#endif // _SFX_XMLIDREGISTRY_HXX_
+#endif // INCLUDED_SFX2_XMLIDREGISTRY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

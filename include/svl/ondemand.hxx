@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_ONDEMAND_HXX
-#define INCLUDED_SVTOOLS_ONDEMAND_HXX
+#ifndef INCLUDED_SVL_ONDEMAND_HXX
+#define INCLUDED_SVL_ONDEMAND_HXX
 
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/lang.h>
@@ -379,6 +379,6 @@ public:
             NativeNumberWrapper&    operator*()     { return *get(); }
 };
 
-#endif // INCLUDED_SVTOOLS_ONDEMAND_HXX
+#endif // INCLUDED_SVL_ONDEMAND_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

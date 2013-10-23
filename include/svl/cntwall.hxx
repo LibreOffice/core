@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CNTWALL_HXX
-#define _CNTWALL_HXX
+#ifndef INCLUDED_SVL_CNTWALL_HXX
+#define INCLUDED_SVL_CNTWALL_HXX
 
 #include "svl/svldllapi.h"
 
@@ -66,6 +66,6 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#endif // _CNTWALL_HXX
+#endif // INCLUDED_SVL_CNTWALL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

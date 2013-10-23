@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVTOOLS_CTLOPTIONS_HXX
-#define _SVTOOLS_CTLOPTIONS_HXX
+#ifndef INCLUDED_SVL_CTLOPTIONS_HXX
+#define INCLUDED_SVL_CTLOPTIONS_HXX
 
 #include "svl/svldllapi.h"
 #include <sal/types.h>
@@ -82,6 +82,6 @@ public:
     bool IsReadOnly(EOption eOption) const;
 };
 
-#endif // _SVTOOLS_CTLOPTIONS_HXX
+#endif // INCLUDED_SVL_CTLOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

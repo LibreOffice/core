@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SVTOOLS_INCLUDED_FILECHANGEDCHECKER_HXX
-#define SVTOOLS_INCLUDED_FILECHANGEDCHECKER_HXX
+#ifndef INCLUDED_SVTOOLS_FILECHANGEDCHECKER_HXX
+#define INCLUDED_SVTOOLS_FILECHANGEDCHECKER_HXX
 
 #include "svtools/svtdllapi.h"
 #include <boost/function.hpp>

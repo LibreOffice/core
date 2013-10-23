@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX2_TEMPLATEFOLDERCACHE_HXX
-#define SFX2_TEMPLATEFOLDERCACHE_HXX
+#ifndef INCLUDED_SVTOOLS_TEMPLATEFOLDERCACHE_HXX
+#define INCLUDED_SVTOOLS_TEMPLATEFOLDERCACHE_HXX
 
 #include "svtools/svtdllapi.h"
 #include <sal/types.h>
@@ -97,6 +97,6 @@ namespace svt
 }   // namespace svt
 //.........................................................................
 
-#endif // SFX2_TEMPLATEFOLDERCACHE_HXX
+#endif // INCLUDED_SVTOOLS_TEMPLATEFOLDERCACHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

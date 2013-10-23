@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SVTOOLS_TREELISTENTRY_HXX__
-#define __SVTOOLS_TREELISTENTRY_HXX__
+#ifndef INCLUDED_SVTOOLS_TREELISTENTRY_HXX
+#define INCLUDED_SVTOOLS_TREELISTENTRY_HXX
 
 #include "svtdllapi.h"
 #include "tools/solar.h"

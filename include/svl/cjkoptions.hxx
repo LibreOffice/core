@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
-#define _SVTOOLS_CJKOPTIONS_HXX
+#ifndef INCLUDED_SVL_CJKOPTIONS_HXX
+#define INCLUDED_SVL_CJKOPTIONS_HXX
 
 #include "svl/svldllapi.h"
 #include <sal/types.h>
@@ -65,6 +65,6 @@ public:
     sal_Bool    IsReadOnly(EOption eOption) const;
 };
 
-#endif // _SVTOOLS_CJKOPTIONS_HXX
+#endif // INCLUDED_SVL_CJKOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

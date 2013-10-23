@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SFX_QUERYSAVEDOCUMENT_HXX
-#define SFX_QUERYSAVEDOCUMENT_HXX
+#ifndef INCLUDED_SFX2_QUERYSAVEDOCUMENT_HXX
+#define INCLUDED_SFX2_QUERYSAVEDOCUMENT_HXX
 
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
@@ -33,6 +33,6 @@ class Window;
 SFX2_DLLPUBLIC short ExecuteQuerySaveDocument(
     Window* _pParent, const OUString& _rTitle);
 
-#endif //SFX_QUERYSAVEDOCUMENT_HXX
+#endif // INCLUDED_SFX2_QUERYSAVEDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

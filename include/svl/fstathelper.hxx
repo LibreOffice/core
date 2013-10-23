@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_FSTATHELPER_HXX
-#define _SVTOOLS_FSTATHELPER_HXX
+#ifndef INCLUDED_SVL_FSTATHELPER_HXX
+#define INCLUDED_SVL_FSTATHELPER_HXX
 
 #include "svl/svldllapi.h"
 #include <rtl/ustring.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GRAPHICEXPORTOPTIONSDIALOG_HXX_
-#define _GRAPHICEXPORTOPTIONSDIALOG_HXX_
+#ifndef INCLUDED_SVTOOLS_GRAPHICEXPORTOPTIONSDIALOG_HXX
+#define INCLUDED_SVTOOLS_GRAPHICEXPORTOPTIONSDIALOG_HXX
 
 #include <vcl/fltcall.hxx>
 #include <vcl/dialog.hxx>

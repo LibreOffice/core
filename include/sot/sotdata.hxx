@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SOT_DATA_HXX
-#define _SOT_DATA_HXX
+#ifndef INCLUDED_SOT_SOTDATA_HXX
+#define INCLUDED_SOT_SOTDATA_HXX
 
 /*************************************************************************
 *************************************************************************/

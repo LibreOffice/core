@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAX_FASTATTRIBS_HXX_
-#define _SAX_FASTATTRIBS_HXX_
+#ifndef INCLUDED_SAX_FASTATTRIBS_HXX
+#define INCLUDED_SAX_FASTATTRIBS_HXX
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>

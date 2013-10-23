@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_PRNSETUP_HXX_
-#define _SV_PRNSETUP_HXX_
+#ifndef INCLUDED_SVTOOLS_PRNSETUP_HXX
+#define INCLUDED_SVTOOLS_PRNSETUP_HXX
 
 #include "svtools/svtdllapi.h"
 
@@ -88,6 +88,6 @@ Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter );
 void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo );
 OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo );
 
-#endif // _SV_PRNSETUP_HXX_
+#endif // INCLUDED_SVTOOLS_PRNSETUP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

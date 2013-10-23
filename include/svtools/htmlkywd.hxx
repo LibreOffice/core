@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HTMLKYWD_HXX
-#define _HTMLKYWD_HXX
+#ifndef INCLUDED_SVTOOLS_HTMLKYWD_HXX
+#define INCLUDED_SVTOOLS_HTMLKYWD_HXX
 
 #include "sal/config.h"
 

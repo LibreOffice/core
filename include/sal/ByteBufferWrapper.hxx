@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SAL_BYTEBUFFERWRAPPER_HXX
-#define _SAL_BYTEBUFFERWRAPPER_HXX
+#ifndef INCLUDED_SAL_BYTEBUFFERWRAPPER_HXX
+#define INCLUDED_SAL_BYTEBUFFERWRAPPER_HXX
 
 #ifdef ANDROID
 

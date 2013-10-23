@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #ifdef MACOSX
-// We need an empty block in here. Otherwise, if the #ifndef _SFXNRANGES_HXX
+// We need an empty block in here. Otherwise, if the #ifndef INCLUDED_SVL_NRANGES_HXX
 // line is the first line, the Mac OS X version of the gcc preprocessor will
 // incorrectly optimize the inclusion process and will never include this file
 // a second time
 #endif
 
-#ifndef _SFXNRANGES_HXX
-#define _SFXNRANGES_HXX
+#ifndef INCLUDED_SVL_NRANGES_HXX
+#define INCLUDED_SVL_NRANGES_HXX
 
 #include <tools/solar.h>
 

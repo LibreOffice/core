@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDITSYNTAXHIGHLIGHTER_HXX
-#define _EDITSYNTAXHIGHLIGHTER_HXX
+#ifndef INCLUDED_SVTOOLS_EDITSYNTAXHIGHLIGHTER_HXX
+#define INCLUDED_SVTOOLS_EDITSYNTAXHIGHLIGHTER_HXX
 
 #include <comphelper/syntaxhighlight.hxx>
 #include <svtools/svmedit.hxx>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_WHITER_HXX
-#define _SFX_WHITER_HXX
+#ifndef INCLUDED_SVL_WHITER_HXX
+#define INCLUDED_SVL_WHITER_HXX
 
 #include "svl/svldllapi.h"
 

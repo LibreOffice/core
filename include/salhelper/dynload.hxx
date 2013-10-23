@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SALHELPER_DYNLOAD_HXX_
-#define _SALHELPER_DYNLOAD_HXX_
+#ifndef INCLUDED_SALHELPER_DYNLOAD_HXX
+#define INCLUDED_SALHELPER_DYNLOAD_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

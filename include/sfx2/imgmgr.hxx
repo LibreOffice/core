@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXIMGMGR_HXX
-#define _SFXIMGMGR_HXX
+#ifndef INCLUDED_SFX2_IMGMGR_HXX
+#define INCLUDED_SFX2_IMGMGR_HXX
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"

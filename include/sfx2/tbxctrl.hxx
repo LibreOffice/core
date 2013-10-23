@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFXTBXCTRL_HXX
-#define _SFXTBXCTRL_HXX
+#ifndef INCLUDED_SFX2_TBXCTRL_HXX
+#define INCLUDED_SFX2_TBXCTRL_HXX
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"

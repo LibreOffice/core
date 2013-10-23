@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_INSTRM_HXX
-#define SVTOOLS_INSTRM_HXX
+#ifndef INCLUDED_SVL_INSTRM_HXX
+#define INCLUDED_SVL_INSTRM_HXX
 
 #include "svl/svldllapi.h"
 #include <com/sun/star/uno/Reference.h>
@@ -68,6 +68,6 @@ public:
     virtual void RemoveMark(sal_uLong nPos);
 };
 
-#endif // SVTOOLS_INSTRM_HXX
+#endif // INCLUDED_SVL_INSTRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX_MAILMODEL_HXX
-#define INCLUDED_SFX_MAILMODEL_HXX
+#ifndef INCLUDED_SFX2_MAILMODELAPI_HXX
+#define INCLUDED_SFX2_MAILMODELAPI_HXX
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -129,6 +129,6 @@ public:
 
 sal_Bool CreateFromAddress_Impl( OUString& rFrom );
 
-#endif // INCLUDED_SFX_MAILMODEL_HXX
+#endif // INCLUDED_SFX2_MAILMODELAPI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

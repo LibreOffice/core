@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_CINTITEM_HXX
-#define _SVTOOLS_CINTITEM_HXX
+#ifndef INCLUDED_SVL_CINTITEM_HXX
+#define INCLUDED_SVL_CINTITEM_HXX
 
 #include "svl/svldllapi.h"
 #include <tools/debug.hxx>
@@ -269,6 +269,6 @@ inline void CntUInt32Item::SetValue(sal_uInt32 nTheValue)
     m_nValue = nTheValue;
 }
 
-#endif // _SVTOOLS_CINTITEM_HXX
+#endif // INCLUDED_SVL_CINTITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

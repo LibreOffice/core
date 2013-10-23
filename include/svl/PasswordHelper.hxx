@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_PASSWORDHELPER_HXX
-#define _SVTOOLS_PASSWORDHELPER_HXX
+#ifndef INCLUDED_SVL_PASSWORDHELPER_HXX
+#define INCLUDED_SVL_PASSWORDHELPER_HXX
 
 #include "svl/svldllapi.h"
 #include "sal/types.h"

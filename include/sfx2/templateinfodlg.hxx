@@ -7,8 +7,8 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-#ifndef __SFX2_TEMPLATEINFODLG_HXX__
-#define __SFX2_TEMPLATEINFODLG_HXX__
+#ifndef INCLUDED_SFX2_TEMPLATEINFODLG_HXX
+#define INCLUDED_SFX2_TEMPLATEINFODLG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -45,6 +45,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
 };
 
-#endif // __SFX2_TEMPLATEINFODLG_HXX__
+#endif // INCLUDED_SFX2_TEMPLATEINFODLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_INC_IMAGERESOURCEACCESS_HXX
-#define SVTOOLS_INC_IMAGERESOURCEACCESS_HXX
+#ifndef INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX
+#define INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX
 
 #include "svtools/svtdllapi.h"
 
@@ -76,6 +76,6 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // DBA14_SVTOOLS_INC_IMAGERESOURCEACCESS_HXX
+#endif // DBA14_ INCLUDED_SVTOOLS_IMAGERESOURCEACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

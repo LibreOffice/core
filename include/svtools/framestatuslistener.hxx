@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_FRAMESTATUSLISTENER_HXX
-#define _SVTOOLS_FRAMESTATUSLISTENER_HXX
+#ifndef INCLUDED_SVTOOLS_FRAMESTATUSLISTENER_HXX
+#define INCLUDED_SVTOOLS_FRAMESTATUSLISTENER_HXX
 
 #include "svtools/svtdllapi.h"
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -96,6 +96,6 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
 
 }
 
-#endif // _SVTOOLS_FRAMESTATUSLISTENER_HXX
+#endif // INCLUDED_SVTOOLS_FRAMESTATUSLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

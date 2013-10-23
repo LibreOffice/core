@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_DOCFILT_HACK_HXX
-#define _SFX_DOCFILT_HACK_HXX
+#ifndef INCLUDED_SFX2_DOCFILT_HXX
+#define INCLUDED_SFX2_DOCFILT_HXX
 
 #include <com/sun/star/plugin/PluginDescription.hpp>
 #include <com/sun/star/embed/XStorage.hpp>

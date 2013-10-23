@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SALHELPER_REFOBJ_HXX_
-#define _SALHELPER_REFOBJ_HXX_
+#ifndef INCLUDED_SALHELPER_REFOBJ_HXX
+#define INCLUDED_SALHELPER_REFOBJ_HXX
 
 #include <sal/types.h>
 #include <rtl/alloc.h>
@@ -99,6 +99,6 @@ protected:
 
 } // namespace salhelper
 
-#endif /* !_SALHELPER_REFOBJ_HXX_ */
+#endif /* ! INCLUDED_SALHELPER_REFOBJ_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _LCKBITEM_HXX
-#define _LCKBITEM_HXX
+#ifndef INCLUDED_SVL_LCKBITEM_HXX
+#define INCLUDED_SVL_LCKBITEM_HXX
 
 #include "svl/svldllapi.h"
 #include <tools/solar.h>

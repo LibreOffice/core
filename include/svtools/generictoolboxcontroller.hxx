@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SVTOOLS_GENERICTOOLBOXCONTROLLER_HXX_
-#define __SVTOOLS_GENERICTOOLBOXCONTROLLER_HXX_
+#ifndef INCLUDED_SVTOOLS_GENERICTOOLBOXCONTROLLER_HXX
+#define INCLUDED_SVTOOLS_GENERICTOOLBOXCONTROLLER_HXX
 
 #include "svtools/svtdllapi.h"
 #include <svtools/toolboxcontroller.hxx>
@@ -56,6 +56,6 @@ class SVT_DLLPUBLIC GenericToolboxController : public svt::ToolboxController
 
 }
 
-#endif // __SVTOOLS_GENERICTOOLBOXCONTROLLER_HXX_
+#endif // INCLUDED_SVTOOLS_GENERICTOOLBOXCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DATETIMEITEM_HXX
-#define _DATETIMEITEM_HXX
+#ifndef INCLUDED_SVL_DATEITEM_HXX
+#define INCLUDED_SVL_DATEITEM_HXX
 
 #include <tools/rtti.hxx>
 #include <tools/datetime.hxx>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFXBRDCST_HXX
-#define _SFXBRDCST_HXX
+#ifndef INCLUDED_SVL_BRDCST_HXX
+#define INCLUDED_SVL_BRDCST_HXX
 
 #include "svl/svldllapi.h"
 #include <tools/rtti.hxx>

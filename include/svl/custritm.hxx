@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_CUSTRITM_HXX
-#define _SVTOOLS_CUSTRITM_HXX
+#ifndef INCLUDED_SVL_CUSTRITM_HXX
+#define INCLUDED_SVL_CUSTRITM_HXX
 
 #include "svl/svldllapi.h"
 #include <tools/debug.hxx>
@@ -80,6 +80,6 @@ inline void CntUnencodedStringItem::SetValue(const OUString & rTheValue)
     m_aValue = rTheValue;
 }
 
-#endif //  _SVTOOLS_CUSTRITM_HXX
+#endif // INCLUDED_SVL_CUSTRITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SFX2_RECENTDOCSVIEW_HXX__
-#define __SFX2_RECENTDOCSVIEW_HXX__
+#ifndef INCLUDED_SFX2_RECENTDOCSVIEW_HXX
+#define INCLUDED_SFX2_RECENTDOCSVIEW_HXX
 
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/recentdocsviewitem.hxx>
@@ -68,6 +68,6 @@ protected:
     long    mnItemMaxTextLength;
 };
 
-#endif  // __SFX2_RECENTDOCSVIEW_HXX__
+#endif // INCLUDED_SFX2_RECENTDOCSVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

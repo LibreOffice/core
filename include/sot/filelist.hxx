@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FILELIST_HXX
-#define _FILELIST_HXX
+#ifndef INCLUDED_SOT_FILELIST_HXX
+#define INCLUDED_SOT_FILELIST_HXX
 
 #include "sot/sotdllapi.h"
 #include <tools/stream.hxx>
@@ -60,6 +60,6 @@ public:
 
 };
 
-#endif // _FILELIST_HXX
+#endif // INCLUDED_SOT_FILELIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

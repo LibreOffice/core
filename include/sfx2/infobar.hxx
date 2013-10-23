@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _SFX2_MESSAGEBAR_HXX_
-#define _SFX2_MESSAGEBAR_HXX_
+#ifndef INCLUDED_SFX2_INFOBAR_HXX
+#define INCLUDED_SFX2_INFOBAR_HXX
 
 #include <vector>
 

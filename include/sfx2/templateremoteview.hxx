@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SFX2_TEMPLATEREMOTEVIEW_HXX__
-#define __SFX2_TEMPLATEREMOTEVIEW_HXX__
+#ifndef INCLUDED_SFX2_TEMPLATEREMOTEVIEW_HXX
+#define INCLUDED_SFX2_TEMPLATEREMOTEVIEW_HXX
 
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/templateproperties.hxx>
@@ -42,7 +42,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
 };
 
-#endif // __SFX2_TEMPLATEREMOTEVIEW_HXX__
+#endif // INCLUDED_SFX2_TEMPLATEREMOTEVIEW_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

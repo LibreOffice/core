@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXVISIBILITYITEM_HXX
-#define _SFXVISIBILITYITEM_HXX
+#ifndef INCLUDED_SVL_VISITEM_HXX
+#define INCLUDED_SVL_VISITEM_HXX
 
 #include "svl/svldllapi.h"
 #include <tools/debug.hxx>
@@ -82,6 +82,6 @@ public:
     void SetValue(sal_Bool bVisible) { m_nValue.bVisible = bVisible; }
 };
 
-#endif // _SFXVISIBILITYITEM_HXX
+#endif // INCLUDED_SVL_VISITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_ACCESSIBLETABLE_HXX
-#define _SVTOOLS_ACCESSIBLETABLE_HXX
+#ifndef INCLUDED_SVTOOLS_ACCESSIBLETABLE_HXX
+#define INCLUDED_SVTOOLS_ACCESSIBLETABLE_HXX
 
 #include <vcl/window.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -198,6 +198,6 @@ protected:
 } // namespace table
 } // namespace svt
 
-#endif // _SVTOOLS_ACCESSIBLETABLE_HXX
+#endif // INCLUDED_SVTOOLS_ACCESSIBLETABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

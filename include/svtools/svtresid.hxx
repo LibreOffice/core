@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_SVTRESID_HXX
-#define _SVTOOLS_SVTRESID_HXX
+#ifndef INCLUDED_SVTOOLS_SVTRESID_HXX
+#define INCLUDED_SVTOOLS_SVTRESID_HXX
 
 #include "svtools/svtdllapi.h"
 #include <tools/resid.hxx>
@@ -33,6 +33,6 @@ public:
 
 #define SVT_RESSTR(i)    SvtResId(i).toString()
 
-#endif //  _SVTOOLS_SVTRESID_HXX
+#endif // INCLUDED_SVTOOLS_SVTRESID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

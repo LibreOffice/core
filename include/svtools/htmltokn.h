@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HTMLTOKN_H
-#define _HTMLTOKN_H
+#ifndef INCLUDED_SVTOOLS_HTMLTOKN_H
+#define INCLUDED_SVTOOLS_HTMLTOKN_H
 
 #include "svtools/svtdllapi.h"
 #include <sal/types.h>
@@ -459,6 +459,6 @@ HTML_O_UNKNOWN                  = HTML_OPTION_CONTEXT_END,
 HTML_OPTION_END
 };
 
-#endif  // _HTMLTOKN_H
+#endif // INCLUDED_SVTOOLS_HTMLTOKN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

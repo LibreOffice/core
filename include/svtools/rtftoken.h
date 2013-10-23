@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTFTOKEN_H
-#define _RTFTOKEN_H
+#ifndef INCLUDED_SVTOOLS_RTFTOKEN_H
+#define INCLUDED_SVTOOLS_RTFTOKEN_H
 
 namespace rtl {
   class OUString;
@@ -1262,6 +1262,6 @@ enum RTF_TOKEN_IDS {
 
 };
 
-#endif // _RTFTOKEN_H
+#endif // INCLUDED_SVTOOLS_RTFTOKEN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

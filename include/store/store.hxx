@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STORE_STORE_HXX_
-#define _STORE_STORE_HXX_
+#ifndef INCLUDED_STORE_STORE_HXX
+#define INCLUDED_STORE_STORE_HXX
 
 #include "sal/types.h"
 #include "rtl/ustring.hxx"
@@ -597,7 +597,7 @@ private:
 
 } // namespace store
 
-#endif /* !_STORE_STORE_HXX_ */
+#endif /* ! INCLUDED_STORE_STORE_HXX */
 
 
 

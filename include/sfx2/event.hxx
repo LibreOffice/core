@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFXEVENT_HXX
-#define _SFXEVENT_HXX
+#ifndef INCLUDED_SFX2_EVENT_HXX
+#define INCLUDED_SFX2_EVENT_HXX
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAL_MACROS_H_
-#define _SAL_MACROS_H_
+#ifndef INCLUDED_SAL_MACROS_H
+#define INCLUDED_SAL_MACROS_H
 
 #include <stddef.h>
 

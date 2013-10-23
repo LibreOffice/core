@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_OUTSTRM_HXX
-#define SVTOOLS_OUTSTRM_HXX
+#ifndef INCLUDED_SVL_OUTSTRM_HXX
+#define INCLUDED_SVL_OUTSTRM_HXX
 
 #include "svl/svldllapi.h"
 #include <com/sun/star/uno/Reference.h>
@@ -54,6 +54,6 @@ public:
     virtual sal_uInt16 IsA() const;
 };
 
-#endif // SVTOOLS_OUTSTRM_HXX
+#endif // INCLUDED_SVL_OUTSTRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

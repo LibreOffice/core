@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_DROPTARGETLISTENER_HXX
-#define SVTOOLS_DROPTARGETLISTENER_HXX
+#ifndef INCLUDED_SVTOOLS_OPENFILEDROPTARGETLISTENER_HXX
+#define INCLUDED_SVTOOLS_OPENFILEDROPTARGETLISTENER_HXX
 
 #include <svtools/svtdllapi.h>
 
@@ -66,6 +66,6 @@ class SVT_DLLPUBLIC OpenFileDropTargetListener : public ::cppu::WeakImplHelper1<
         void     implts_OpenFile( const OUString& rFilePath );
 };
 
-#endif // SVTOOLS_DROPTARGETLISTENER_HXX
+#endif // INCLUDED_SVTOOLS_OPENFILEDROPTARGETLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HEADBAR_HXX
-#define _HEADBAR_HXX
+#ifndef INCLUDED_SVTOOLS_HEADBAR_HXX
+#define INCLUDED_SVTOOLS_HEADBAR_HXX
 
 #include "svtools/svtdllapi.h"
 #include <tools/link.hxx>
@@ -370,6 +370,6 @@ public:
     void SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > );
 };
 
-#endif  // _HEADBAR_HXX
+#endif // INCLUDED_SVTOOLS_HEADBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

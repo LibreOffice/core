@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFXENUMITEM_HXX
-#define SFXENUMITEM_HXX
+#ifndef INCLUDED_SVL_EITEM_HXX
+#define INCLUDED_SVL_EITEM_HXX
 
 #include "svl/svldllapi.h"
 #include <svl/cenumitm.hxx>
@@ -117,6 +117,6 @@ public:
 
 };
 
-#endif // SFXENUMITEM_HXX
+#endif // INCLUDED_SVL_EITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

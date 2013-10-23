@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_DOCUMENTMETADATAACCESS_HXX_
-#define _SFX_DOCUMENTMETADATAACCESS_HXX_
+#ifndef INCLUDED_SFX2_DOCUMENTMETADATAACCESS_HXX
+#define INCLUDED_SFX2_DOCUMENTMETADATAACCESS_HXX
 
 #include <sal/config.h>
 
@@ -203,6 +203,6 @@ private:
 
 } // namespace sfx2
 
-#endif // _SFX_DOCUMENTMETADATAACCESS_HXX_
+#endif // INCLUDED_SFX2_DOCUMENTMETADATAACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

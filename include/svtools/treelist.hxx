@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTREELIST_HXX
-#define _SVTREELIST_HXX
+#ifndef INCLUDED_SVTOOLS_TREELIST_HXX
+#define INCLUDED_SVTOOLS_TREELIST_HXX
 
 #include "svtools/svtdllapi.h"
 #include "svtools/treelistentries.hxx"

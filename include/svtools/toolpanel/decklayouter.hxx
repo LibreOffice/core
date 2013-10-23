@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVT_DECKLAYOUTER_HXX
-#define SVT_DECKLAYOUTER_HXX
+#ifndef INCLUDED_SVTOOLS_TOOLPANEL_DECKLAYOUTER_HXX
+#define INCLUDED_SVTOOLS_TOOLPANEL_DECKLAYOUTER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -94,6 +94,6 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // SVT_DECKLAYOUTER_HXX
+#endif // INCLUDED_SVTOOLS_TOOLPANEL_DECKLAYOUTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

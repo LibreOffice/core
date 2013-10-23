@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXDEFS_HXX
-#define _SFXDEFS_HXX
+#ifndef INCLUDED_SFX2_SFXDEFS_HXX
+#define INCLUDED_SFX2_SFXDEFS_HXX
 
 #define SfxFilterFlags sal_uLong
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX_SIDEBAR_SIDEBAR_HXX
-#define SFX_SIDEBAR_SIDEBAR_HXX
+#ifndef INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
+#define INCLUDED_SFX2_SIDEBAR_SIDEBAR_HXX
 
 #include "sfx2/dllapi.h"
 #include <com/sun/star/frame/XFrame.hpp>

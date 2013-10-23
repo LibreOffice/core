@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_HELP_HXX
-#define _SFX_HELP_HXX
+#ifndef INCLUDED_SFX2_SFXHELP_HXX
+#define INCLUDED_SFX2_SFXHELP_HXX
 
 #include <rtl/ustring.hxx>
 #include "sal/config.h"
@@ -55,6 +55,6 @@ public:
     static OUString         GetCurrentModuleIdentifier();
 };
 
-#endif // #ifndef _SFX_HELP_HXX
+#endif // INCLUDED_SFX2_SFXHELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

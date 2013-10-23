@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SFX_DINFDLG_HXX
-#define SFX_DINFDLG_HXX
+#ifndef INCLUDED_SFX2_DINFDLG_HXX
+#define INCLUDED_SFX2_DINFDLG_HXX
 
 #include <boost/optional/optional.hpp>
 
@@ -636,6 +636,6 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
 };
 
-#endif // #ifndef _SFX_DINFDLG_HXX
+#endif // #ifndef _ INCLUDED_SFX2_DINFDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

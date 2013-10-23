@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PARHTML_HXX
-#define _PARHTML_HXX
+#ifndef INCLUDED_SVTOOLS_PARHTML_HXX
+#define INCLUDED_SVTOOLS_PARHTML_HXX
 
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>

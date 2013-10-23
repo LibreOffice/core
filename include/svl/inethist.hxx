@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _INETHIST_HXX
-#define _INETHIST_HXX
+#ifndef INCLUDED_SVL_INETHIST_HXX
+#define INCLUDED_SVL_INETHIST_HXX
 
 #include "svl/svldllapi.h"
 #include <tools/solar.h>
@@ -119,6 +119,6 @@ public:
  *=======================================================================*/
 DECL_PTRHINT (SVL_DLLPUBLIC, INetURLHistoryHint, const INetURLObject);
 
-#endif /* _INETHIST_HXX */
+#endif // INCLUDED_SVL_INETHIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

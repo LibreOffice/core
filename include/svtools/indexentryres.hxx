@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_INDEXENTRYRESOURCE_HXX
-#define SVTOOLS_INDEXENTRYRESOURCE_HXX
+#ifndef INCLUDED_SVTOOLS_INDEXENTRYRES_HXX
+#define INCLUDED_SVTOOLS_INDEXENTRYRES_HXX
 
 #include "svtools/svtdllapi.h"
 #include <rtl/ustring.hxx>
@@ -36,7 +36,7 @@ class SVT_DLLPUBLIC IndexEntryResource
         const OUString& GetTranslation (const OUString& r_Algorithm);
 };
 
-#endif /* SVTOOLS_INDEXENTRYRESOURCE_HXX */
+#endif // INCLUDED_SVTOOLS_INDEXENTRYRES_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

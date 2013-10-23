@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_PRINTOPT_HXX
-#define _SFX_PRINTOPT_HXX
+#ifndef INCLUDED_SFX2_PRINTOPT_HXX
+#define INCLUDED_SFX2_PRINTOPT_HXX
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
@@ -104,6 +104,6 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
 
-#endif // #ifndef _SFX_PRINTOPT_HXX
+#endif // INCLUDED_SFX2_PRINTOPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

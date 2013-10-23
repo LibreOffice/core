@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_DOCINSERT_HXX
-#define _SFX_DOCINSERT_HXX
+#ifndef INCLUDED_SFX2_DOCINSERT_HXX
+#define INCLUDED_SFX2_DOCINSERT_HXX
 
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
@@ -65,6 +65,6 @@ public:
 
 } // namespace sfx2
 
-#endif // _SFX_DOCINSERT_HXX
+#endif // INCLUDED_SFX2_DOCINSERT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

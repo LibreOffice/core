@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVT_GENERICUNODIALOG_HXX_
-#define _SVT_GENERICUNODIALOG_HXX_
+#ifndef INCLUDED_SVTOOLS_GENERICUNODIALOG_HXX
+#define INCLUDED_SVTOOLS_GENERICUNODIALOG_HXX
 
 #include "svtools/svtdllapi.h"
 
@@ -180,6 +180,6 @@ namespace svt
 }   // namespace svt
 //.........................................................................
 
-#endif // _SVT_GENERICUNODIALOG_HXX_
+#endif // INCLUDED_SVTOOLS_GENERICUNODIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

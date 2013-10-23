@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_CENUMITM_HXX
-#define SVTOOLS_CENUMITM_HXX
+#ifndef INCLUDED_SVL_CENUMITM_HXX
+#define INCLUDED_SVL_CENUMITM_HXX
 
 #include "svl/svldllapi.h"
 #include <tools/debug.hxx>
@@ -81,6 +81,6 @@ public:
     virtual void SetBoolValue(sal_Bool bValue);
 };
 
-#endif // SVTOOLS_CENUMITM_HXX
+#endif // INCLUDED_SVL_CENUMITM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

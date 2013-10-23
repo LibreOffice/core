@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _SERVERDETAILSCONTROLS_HXX
-#define _SERVERDETAILSCONTROLS_HXX
+#ifndef INCLUDED_SVTOOLS_SERVERDETAILSCONTROLS_HXX
+#define INCLUDED_SVTOOLS_SERVERDETAILSCONTROLS_HXX
 
 #include <map>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVT_TABITEMCONTENT_HXX
-#define SVT_TABITEMCONTENT_HXX
+#ifndef INCLUDED_SVTOOLS_TOOLPANEL_TABITEMCONTENT_HXX
+#define INCLUDED_SVTOOLS_TOOLPANEL_TABITEMCONTENT_HXX
 
 //........................................................................
 namespace svt
@@ -38,6 +38,6 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // SVT_TABITEMCONTENT_HXX
+#endif // INCLUDED_SVTOOLS_TOOLPANEL_TABITEMCONTENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_COLLATORRESOURCE_HXX
-#define SVTOOLS_COLLATORRESOURCE_HXX
+#ifndef INCLUDED_SVTOOLS_COLLATORRES_HXX
+#define INCLUDED_SVTOOLS_COLLATORRES_HXX
 
 #include "svtools/svtdllapi.h"
 #include <rtl/ustring.hxx>
@@ -37,6 +37,6 @@ class SVT_DLLPUBLIC CollatorResource
         const OUString& GetTranslation (const OUString& r_Algorithm);
 };
 
-#endif /* SVTOOLS_COLLATORRESOURCE_HXX */
+#endif // INCLUDED_SVTOOLS_COLLATORRES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

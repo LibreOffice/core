@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef NF_NFVERSI_HXX
-#define NF_NFVERSI_HXX
+#ifndef INCLUDED_SVL_NFVERSI_HXX
+#define INCLUDED_SVL_NFVERSI_HXX
 
 //      file IDs
 

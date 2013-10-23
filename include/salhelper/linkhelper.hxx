@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SALHELPER_LINKHELPER_HXX
-#define _SALHELPER_LINKHELPER_HXX
+#ifndef INCLUDED_SALHELPER_LINKHELPER_HXX
+#define INCLUDED_SALHELPER_LINKHELPER_HXX
 
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>

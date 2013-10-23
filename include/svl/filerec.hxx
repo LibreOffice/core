@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXFILEREC_HXX
-#define _SFXFILEREC_HXX
+#ifndef INCLUDED_SVL_FILEREC_HXX
+#define INCLUDED_SVL_FILEREC_HXX
 
 #include "svl/svldllapi.h"
 #include <tools/debug.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX2_DOCSTORAGEMODIFYLISTENER_HXX
-#define SFX2_DOCSTORAGEMODIFYLISTENER_HXX
+#ifndef INCLUDED_SFX2_DOCSTORAGEMODIFYLISTENER_HXX
+#define INCLUDED_SFX2_DOCSTORAGEMODIFYLISTENER_HXX
 
 #include "sfx2/dllapi.h"
 
@@ -82,6 +82,6 @@ namespace sfx2
 } // namespace sfx2
 //........................................................................
 
-#endif // SFX2_DOCSTORAGEMODIFYLISTENER_HXX
+#endif // INCLUDED_SFX2_DOCSTORAGEMODIFYLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

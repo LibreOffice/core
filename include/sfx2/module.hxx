@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFXMODULE_HXX
-#define _SFXMODULE_HXX  // internal
+#ifndef INCLUDED_SFX2_MODULE_HXX
+#define INCLUDED_SFX2_MODULE_HXX  // internal
 #define _SFXMOD_HXX     // external
 
 #include "sal/config.h"

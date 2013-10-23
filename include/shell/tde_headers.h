@@ -10,8 +10,8 @@
  * Copyright (C) 2012, Timothy Pearson <kb9vqf@pearsoncomputing.net>
  */
 
-#ifndef INCLUDED_VCL_TDE_HEADERS_H
-#define INCLUDED_VCL_TDE_HEADERS_H
+#ifndef INCLUDED_SHELL_TDE_HEADERS_H
+#define INCLUDED_SHELL_TDE_HEADERS_H
 
 /* ********* Suppress warnings if needed */
 #include "sal/config.h"

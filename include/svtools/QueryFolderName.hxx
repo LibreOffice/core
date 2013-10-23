@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SVT_QUERYFOLDER_HXX
-#define SVT_QUERYFOLDER_HXX
+#ifndef INCLUDED_SVTOOLS_QUERYFOLDERNAME_HXX
+#define INCLUDED_SVTOOLS_QUERYFOLDERNAME_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
@@ -52,6 +52,6 @@ public:
 };
 
 }
-#endif // SVT_QUERYFOLDER_HXX
+#endif // INCLUDED_SVTOOLS_QUERYFOLDERNAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

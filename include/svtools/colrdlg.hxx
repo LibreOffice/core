@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_COLRDLG_HXX
-#define _SV_COLRDLG_HXX
+#ifndef INCLUDED_SVTOOLS_COLRDLG_HXX
+#define INCLUDED_SVTOOLS_COLRDLG_HXX
 
 #include "svtools/svtdllapi.h"
 
@@ -55,6 +55,6 @@ private:
     sal_Int16 meMode;
 };
 
-#endif  // _SV_COLRDLG_HXX
+#endif // INCLUDED_SVTOOLS_COLRDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

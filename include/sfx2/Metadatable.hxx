@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef METADATABLE_HXX
-#define METADATABLE_HXX
+#ifndef INCLUDED_SFX2_METADATABLE_HXX
+#define INCLUDED_SFX2_METADATABLE_HXX
 
 #include <sal/config.h>
 
@@ -176,6 +176,6 @@ protected:
 
 } // namespace sfx2
 
-#endif // METADATABLE_HXX
+#endif // INCLUDED_SFX2_METADATABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

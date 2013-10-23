@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVT_DRAWERLAYOUTER_HXX
-#define SVT_DRAWERLAYOUTER_HXX
+#ifndef INCLUDED_SVTOOLS_TOOLPANEL_DRAWERLAYOUTER_HXX
+#define INCLUDED_SVTOOLS_TOOLPANEL_DRAWERLAYOUTER_HXX
 
 #include "svtools/svtdllapi.h"
 #include "svtools/toolpanel/refbase.hxx"
@@ -92,6 +92,6 @@ private:
 } // namespace svt
 //......................................................................................................................
 
-#endif // SVT_DRAWERLAYOUTER_HXX
+#endif // INCLUDED_SVTOOLS_TOOLPANEL_DRAWERLAYOUTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_LNGMISC_HXX_
-#define _SVTOOLS_LNGMISC_HXX_
+#ifndef INCLUDED_SVL_LNGMISC_HXX
+#define INCLUDED_SVL_LNGMISC_HXX
 
 #include "svl/svldllapi.h"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTDLLAPI_H
-#define INCLUDED_SVTDLLAPI_H
+#ifndef INCLUDED_SVTOOLS_SVTDLLAPI_H
+#define INCLUDED_SVTOOLS_SVTDLLAPI_H
 
 #include "sal/types.h"
 
@@ -29,6 +29,6 @@
 #endif
 #define SVT_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_SVTDLLAPI_H */
+#endif // INCLUDED_SVTOOLS_SVTDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

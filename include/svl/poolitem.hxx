@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFXPOOLITEM_HXX
-#define _SFXPOOLITEM_HXX
+#ifndef INCLUDED_SVL_POOLITEM_HXX
+#define INCLUDED_SVL_POOLITEM_HXX
 
 #include "svl/svldllapi.h"
 #include <com/sun/star/uno/Any.hxx>
@@ -407,6 +407,6 @@ DECL_PTRHINT(SVL_DLLPUBLIC, SfxPoolItemHint, SfxPoolItem);
 
 // -----------------------------------------------------------------------
 
-#endif // #ifndef _SFXPOOLITEM_HXX
+#endif // INCLUDED_SVL_POOLITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

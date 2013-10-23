@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAX_DLLAPI_H
-#define INCLUDED_SAX_DLLAPI_H
+#ifndef INCLUDED_SAX_SAXDLLAPI_H
+#define INCLUDED_SAX_SAXDLLAPI_H
 
 #include <sal/types.h>
 

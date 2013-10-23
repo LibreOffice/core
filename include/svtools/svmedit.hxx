@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVEDIT_HXX
-#define _SVEDIT_HXX
+#ifndef INCLUDED_SVTOOLS_SVMEDIT_HXX
+#define INCLUDED_SVTOOLS_SVMEDIT_HXX
 
 #include <vcl/svapp.hxx>
 #include <vcl/vclmedit.hxx>
@@ -40,6 +40,6 @@ public:
 };
 
 
-#endif  //_SVEDIT_HXX
+#endif // INCLUDED_SVTOOLS_SVMEDIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

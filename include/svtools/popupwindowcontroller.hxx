@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SVTOOLS_POPUPWINDOWCONTROLLER_HXX_
-#define __SVTOOLS_POPUPWINDOWCONTROLLER_HXX_
+#ifndef INCLUDED_SVTOOLS_POPUPWINDOWCONTROLLER_HXX
+#define INCLUDED_SVTOOLS_POPUPWINDOWCONTROLLER_HXX
 
 #include "svtools/svtdllapi.h"
 
@@ -74,6 +74,6 @@ private:
 
 } // namespace svt
 
-#endif // __SVTOOLS_POPUPWINDOWCONTROLLER_HXX_
+#endif // INCLUDED_SVTOOLS_POPUPWINDOWCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

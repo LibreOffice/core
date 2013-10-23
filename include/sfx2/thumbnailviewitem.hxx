@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef THUMBNAILVIEWITEM_HXX
-#define THUMBNAILVIEWITEM_HXX
+#ifndef INCLUDED_SFX2_THUMBNAILVIEWITEM_HXX
+#define INCLUDED_SFX2_THUMBNAILVIEWITEM_HXX
 
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
@@ -129,6 +129,6 @@ protected:
     Rectangle maTextEditMaxArea;
 };
 
-#endif // THUMBNAILVIEWITEM_HXX
+#endif // INCLUDED_SFX2_THUMBNAILVIEWITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

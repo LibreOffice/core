@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_INC_TABLE_ABSTRACTTABLECONTROL_HXX
-#define SVTOOLS_INC_TABLE_ABSTRACTTABLECONTROL_HXX
+#ifndef INCLUDED_SVTOOLS_TABLE_TABLECONTROLINTERFACE_HXX
+#define INCLUDED_SVTOOLS_TABLE_TABLECONTROLINTERFACE_HXX
 
 #include <sal/types.h>
 #include <vcl/event.hxx>
@@ -252,6 +252,6 @@ namespace svt { namespace table
 } } // namespace svt::table
 //......................................................................................................................
 
-#endif // SVTOOLS_INC_TABLE_ABSTRACTTABLECONTROL_HXX
+#endif // INCLUDED_SVTOOLS_TABLE_TABLECONTROLINTERFACE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_URL_FILTER_HXX
-#define SVTOOLS_URL_FILTER_HXX
+#ifndef INCLUDED_SVL_URLFILTER_HXX
+#define INCLUDED_SVL_URLFILTER_HXX
 
 #include <tools/wldcrd.hxx>
 #include <functional>
@@ -39,6 +39,6 @@ public:
     static void createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters);
 };
 
-#endif // SVTOOLS_URL_FILTER_HXX
+#endif // INCLUDED_SVL_URLFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STORE_STORE_H_
-#define _STORE_STORE_H_
+#ifndef INCLUDED_STORE_STORE_H
+#define INCLUDED_STORE_STORE_H
 
 #include <store/types.h>
 #include <store/storedllapi.h>
@@ -397,7 +397,7 @@ STORE_DLLPUBLIC storeError SAL_CALL store_remove (
 }
 #endif
 
-#endif /* _STORE_STORE_H_ */
+#endif // INCLUDED_STORE_STORE_H
 
 
 

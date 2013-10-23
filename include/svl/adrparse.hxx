@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ADRPARSE_HXX
-#define _ADRPARSE_HXX
+#ifndef INCLUDED_SVL_ADRPARSE_HXX
+#define INCLUDED_SVL_ADRPARSE_HXX
 
 #include "svl/svldllapi.h"
 #include <vector>
@@ -73,6 +73,6 @@ public:
     }
 };
 
-#endif // _ADRPARSE_HXX
+#endif // INCLUDED_SVL_ADRPARSE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

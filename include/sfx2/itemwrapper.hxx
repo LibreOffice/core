@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX_ITEMWRAPPER_HXX
-#define SFX_ITEMWRAPPER_HXX
+#ifndef INCLUDED_SFX2_ITEMWRAPPER_HXX
+#define INCLUDED_SFX2_ITEMWRAPPER_HXX
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"

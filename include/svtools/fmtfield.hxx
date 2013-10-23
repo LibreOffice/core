@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FMTFIELD_HXX_
-#define _FMTFIELD_HXX_
+#ifndef INCLUDED_SVTOOLS_FMTFIELD_HXX
+#define INCLUDED_SVTOOLS_FMTFIELD_HXX
 
 #include "svtools/svtdllapi.h"
 #include <vcl/spinfld.hxx>
@@ -315,6 +315,6 @@ protected:
     void UpdateCurrencyFormat();
 };
 
-#endif // _FMTFIELD_HXX_
+#endif // INCLUDED_SVTOOLS_FMTFIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

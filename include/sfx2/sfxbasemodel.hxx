@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_SFXBASEMODEL_HXX_
-#define _SFX_SFXBASEMODEL_HXX_
+#ifndef INCLUDED_SFX2_SFXBASEMODEL_HXX
+#define INCLUDED_SFX2_SFXBASEMODEL_HXX
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
@@ -1557,6 +1557,6 @@ private:
     SolarMutexResettableGuard  m_aGuard;
 };
 
-#endif // _SFX_SFXBASEMODEL_HXX_
+#endif // INCLUDED_SFX2_SFXBASEMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SVL_STRINGPOOL_HXX
-#define SVL_STRINGPOOL_HXX
+#ifndef INCLUDED_SVL_SHAREDSTRINGPOOL_HXX
+#define INCLUDED_SVL_SHAREDSTRINGPOOL_HXX
 
 #include "svl/sharedstring.hxx"
 

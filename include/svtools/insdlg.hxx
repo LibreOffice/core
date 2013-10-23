@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVTOOLS_INSDLG_HXX
-#define _SVTOOLS_INSDLG_HXX
+#ifndef INCLUDED_SVTOOLS_INSDLG_HXX
+#define INCLUDED_SVTOOLS_INSDLG_HXX
 
 #include "svtools/svtdllapi.h"
 #include <com/sun/star/uno/Reference.h>
@@ -74,6 +74,6 @@ public:
     static sal_Bool GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotFormatStringId& _nFormat);
 };
 
-#endif // _SVTOOLS_INSDLG_HXX
+#endif // INCLUDED_SVTOOLS_INSDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

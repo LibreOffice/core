@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX_TASKPANE_HXX
-#define SFX_TASKPANE_HXX
+#ifndef INCLUDED_SFX2_TASKPANE_HXX
+#define INCLUDED_SFX2_TASKPANE_HXX
 
 #include "sfx2/dllapi.h"
 #include "sfx2/childwin.hxx"
@@ -207,6 +207,6 @@ namespace sfx2
 } // namespace sfx2
 //......................................................................................................................
 
-#endif // SFX_TASKPANE_HXX
+#endif // INCLUDED_SFX2_TASKPANE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

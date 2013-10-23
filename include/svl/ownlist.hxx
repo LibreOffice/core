@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OWNLIST_HXX
-#define _OWNLIST_HXX
+#ifndef INCLUDED_SVL_OWNLIST_HXX
+#define INCLUDED_SVL_OWNLIST_HXX
 
 #include "svl/svldllapi.h"
 #include <com/sun/star/uno/Sequence.hxx>
@@ -85,6 +85,6 @@ public:
                     }
 };
 
-#endif // _OWNLIST_HXX
+#endif // INCLUDED_SVL_OWNLIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

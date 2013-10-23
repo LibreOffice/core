@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SVTOOLS_LANGHELP_HXX_
-#define _SVTOOLS_LANGHELP_HXX_
+#ifndef INCLUDED_SVTOOLS_LANGHELP_HXX
+#define INCLUDED_SVTOOLS_LANGHELP_HXX
 
 #include <svtools/svtdllapi.h>
 

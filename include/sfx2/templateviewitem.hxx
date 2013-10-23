@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef TEMPLATEVIEWITEM_HXX
-#define TEMPLATEVIEWITEM_HXX
+#ifndef INCLUDED_SFX2_TEMPLATEVIEWITEM_HXX
+#define INCLUDED_SFX2_TEMPLATEVIEWITEM_HXX
 
 #include <sfx2/thumbnailviewitem.hxx>
 
@@ -56,6 +56,6 @@ private:
     Point maSubTitlePos;
 };
 
-#endif // TEMPLATEVIEWITEM_HXX
+#endif // INCLUDED_SFX2_TEMPLATEVIEWITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

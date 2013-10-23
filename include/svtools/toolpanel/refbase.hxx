@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVT_REFBASE_HXX
-#define SVT_REFBASE_HXX
+#ifndef INCLUDED_SVTOOLS_TOOLPANEL_REFBASE_HXX
+#define INCLUDED_SVTOOLS_TOOLPANEL_REFBASE_HXX
 
 #include "svtools/svtdllapi.h"
 
@@ -70,6 +70,6 @@ namespace svt
 } // namespace svt
 //........................................................................
 
-#endif // SVT_REFBASE_HXX
+#endif // INCLUDED_SVTOOLS_TOOLPANEL_REFBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

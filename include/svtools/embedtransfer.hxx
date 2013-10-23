@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EMBEDTRANSFER_HXX
-#define _EMBEDTRANSFER_HXX
+#ifndef INCLUDED_SVTOOLS_EMBEDTRANSFER_HXX
+#define INCLUDED_SVTOOLS_EMBEDTRANSFER_HXX
 
 #include "svtools/svtdllapi.h"
 #include <com/sun/star/embed/XEmbeddedObject.hpp>

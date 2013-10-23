@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_JAVAINTERACTION_HXX_
-#define _SVTOOLS_JAVAINTERACTION_HXX_
+#ifndef INCLUDED_SVTOOLS_JAVAINTERACTIONHANDLER_HXX
+#define INCLUDED_SVTOOLS_JAVAINTERACTIONHANDLER_HXX
 
 #include "svtools/svtdllapi.h"
 #include <osl/mutex.hxx>

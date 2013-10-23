@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STORE_TYPES_H_
-#define _STORE_TYPES_H_
+#ifndef INCLUDED_STORE_TYPES_H
+#define INCLUDED_STORE_TYPES_H
 
 #include <sal/types.h>
 #include <rtl/ustring.h>
@@ -155,6 +155,6 @@ typedef struct __store_FindData storeFindData;
 }
 #endif
 
-#endif /* _STORE_TYPES_H_ */
+#endif // INCLUDED_STORE_TYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

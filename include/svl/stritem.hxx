@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXSTRITEM_HXX
-#define _SFXSTRITEM_HXX
+#ifndef INCLUDED_SVL_STRITEM_HXX
+#define INCLUDED_SVL_STRITEM_HXX
 
 #include "svl/svldllapi.h"
 #include <svl/custritm.hxx>
@@ -43,6 +43,6 @@ public:
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 };
 
-#endif // _SFXSTRITEM_HXX
+#endif // INCLUDED_SVL_STRITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

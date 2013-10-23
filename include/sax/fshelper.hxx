@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAX_FS_HELPER_HXX_
-#define _SAX_FS_HELPER_HXX_
+#ifndef INCLUDED_SAX_FSHELPER_HXX
+#define INCLUDED_SAX_FSHELPER_HXX
 
 #include <com/sun/star/uno/XReference.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -194,6 +194,6 @@ typedef boost::shared_ptr< FastSerializerHelper > FSHelperPtr;
 
 }
 
-#endif // _SAX_FS_HELPER_HXX_
+#endif // INCLUDED_SAX_FSHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

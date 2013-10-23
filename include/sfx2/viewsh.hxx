@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFXVIEWSH_HXX
-#define _SFXVIEWSH_HXX
+#ifndef INCLUDED_SFX2_VIEWSH_HXX
+#define INCLUDED_SFX2_VIEWSH_HXX
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
@@ -127,7 +127,7 @@ typedef ::std::vector< SfxInPlaceClient* > SfxInPlaceClientList;
 // -----------------------------------------------------------------------
 class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener
 {
-#ifdef _SFXVIEWSH_HXX
+#ifdef INCLUDED_SFX2_VIEWSH_HXX
 friend class SfxViewFrame;
 friend class SfxBaseController;
 friend class SfxPrinterController;
@@ -337,7 +337,7 @@ inline SfxViewFrame* SfxViewShell::GetViewFrame() const
     return pFrame;
 }
 
-#endif // #ifndef _SFXVIEWSH_HXX
+#endif // INCLUDED_SFX2_VIEWSH_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

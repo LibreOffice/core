@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAL_CONFIG_H_
-#define _SAL_CONFIG_H_
+#ifndef INCLUDED_SAL_CONFIG_H
+#define INCLUDED_SAL_CONFIG_H
 
 #if defined LIBO_INTERNAL_ONLY
 #include "config_global.h"
@@ -91,7 +91,7 @@
 #define sun sun
 #endif
 
-#endif /*_SAL_CONFIG_H_ */
+#endif // INCLUDED_SAL_CONFIG_H
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _INETIMG_HXX
-#define _INETIMG_HXX
+#ifndef INCLUDED_SVTOOLS_INETIMG_HXX
+#define INCLUDED_SVTOOLS_INETIMG_HXX
 
 #include <tools/gen.hxx>
 
@@ -71,7 +71,7 @@ public:
     sal_Bool Read( SvStream& rIStm, sal_uLong nFormat );
 };
 
-#endif // #ifndef _INETIMG_HXX
+#endif // INCLUDED_SVTOOLS_INETIMG_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

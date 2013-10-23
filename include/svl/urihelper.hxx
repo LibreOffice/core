@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_URIHELPER_HXX
-#define SVTOOLS_URIHELPER_HXX
+#ifndef INCLUDED_SVL_URIHELPER_HXX
+#define INCLUDED_SVL_URIHELPER_HXX
 
 #include "svl/svldllapi.h"
 #include "com/sun/star/uno/Reference.hxx"
@@ -160,6 +160,6 @@ SVL_DLLPUBLIC OUString removePassword(OUString const & rURI,
                                       rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 }
 
-#endif // SVTOOLS_URIHELPER_HXX
+#endif // INCLUDED_SVL_URIHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

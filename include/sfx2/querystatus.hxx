@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXQUERYSTATUS_HXX
-#define _SFXQUERYSTATUS_HXX
+#ifndef INCLUDED_SFX2_QUERYSTATUS_HXX
+#define INCLUDED_SFX2_QUERYSTATUS_HXX
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
@@ -50,6 +50,6 @@ class SFX2_DLLPUBLIC SfxQueryStatus
         SfxQueryStatus_Impl*                                                       m_pSfxQueryStatusImpl;
 };
 
-#endif // _SFXQUERYSTATUS_HXX
+#endif // INCLUDED_SFX2_QUERYSTATUS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFXITEMSET_HXX
-#define _SFXITEMSET_HXX
+#ifndef INCLUDED_SVL_ITEMSET_HXX
+#define INCLUDED_SVL_ITEMSET_HXX
 
 #include "svl/svldllapi.h"
 
@@ -186,6 +186,6 @@ public:
                                      sal_Bool bInvalidAsDefault = sal_True );
 };
 
-#endif // #ifndef _SFXITEMSET_HXX
+#endif // INCLUDED_SVL_ITEMSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

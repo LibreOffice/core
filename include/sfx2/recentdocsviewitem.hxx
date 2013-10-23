@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SFX2_RECENTDOCSVIEWITEM_HXX__
-#define __SFX2_RECENTDOCSVIEWITEM_HXX__
+#ifndef INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX
+#define INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX
 
 #include <sfx2/thumbnailview.hxx>
 
@@ -22,6 +22,6 @@ public:
     OUString maURL;
 };
 
-#endif  // __SFX2_RECENTDOCSVIEWITEM_HXX__
+#endif // INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

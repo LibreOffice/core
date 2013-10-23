@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVT_LOCKFILECOMMON_HXX
-#define _SVT_LOCKFILECOMMON_HXX
+#ifndef INCLUDED_SVL_LOCKFILECOMMON_HXX
+#define INCLUDED_SVL_LOCKFILECOMMON_HXX
 
 #include <svl/svldllapi.h>
 

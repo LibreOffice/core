@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SFX2_SFXCOMMANDS_HRC
-#define SFX2_SFXCOMMANDS_HRC
+#ifndef INCLUDED_SFX2_SFXCOMMANDS_H
+#define INCLUDED_SFX2_SFXCOMMANDS_H
 
 #define CMD_SID_ABOUT                               ".uno:About"
 #define CMD_SID_NEWDOC                              ".uno:NewDoc"

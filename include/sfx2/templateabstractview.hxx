@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SFX2_TEMPLATEABSTRACTVIEW_HXX__
-#define __SFX2_TEMPLATEABSTRACTVIEW_HXX__
+#ifndef INCLUDED_SFX2_TEMPLATEABSTRACTVIEW_HXX
+#define INCLUDED_SFX2_TEMPLATEABSTRACTVIEW_HXX
 
 #include <sfx2/templateproperties.hxx>
 #include <sfx2/thumbnailview.hxx>
@@ -145,6 +145,6 @@ protected:
     Link maOpenTemplateHdl;
 };
 
-#endif // __SFX2_TEMPLATEABSTRACTVIEW_HXX__
+#endif // INCLUDED_SFX2_TEMPLATEABSTRACTVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

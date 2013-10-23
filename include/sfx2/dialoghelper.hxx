@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SFX_DIALOGHELPER_HXX
-#define _SFX_DIALOGHELPER_HXX
+#ifndef INCLUDED_SFX2_DIALOGHELPER_HXX
+#define INCLUDED_SFX2_DIALOGHELPER_HXX
 
 #include "sfx2/dllapi.h"
 #include <rtl/ustring.hxx>

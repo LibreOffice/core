@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _SFX_CHECKIN_HXX
-#define _SFX_CHECKIN_HXX
+#ifndef INCLUDED_SFX2_CHECKIN_HXX
+#define INCLUDED_SFX2_CHECKIN_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

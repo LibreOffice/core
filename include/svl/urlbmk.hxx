@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _URLBMK_HXX
-#define _URLBMK_HXX
+#ifndef INCLUDED_SVL_URLBMK_HXX
+#define INCLUDED_SVL_URLBMK_HXX
 
 #include <rtl/ustring.hxx>
 

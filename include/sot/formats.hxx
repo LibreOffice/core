@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SOT_FORMATS_HXX
-#define _SOT_FORMATS_HXX
+#ifndef INCLUDED_SOT_FORMATS_HXX
+#define INCLUDED_SOT_FORMATS_HXX
 
 #ifdef _SOT_FORMATS_INCLUDE_SYSTEMFORMATS
 
@@ -178,6 +178,6 @@
 #define SOT_FORMATSTR_ID_PNG                    ((sal_uLong)141)
 #define SOT_FORMATSTR_ID_USER_END               SOT_FORMATSTR_ID_PNG
 
-#endif // _SOT_FORMATS_HXX
+#endif // INCLUDED_SOT_FORMATS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

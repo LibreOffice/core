@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ICNVW_HXX
-#define _ICNVW_HXX
+#ifndef INCLUDED_SVTOOLS_IVCTRL_HXX
+#define INCLUDED_SVTOOLS_IVCTRL_HXX
 
 #include "svtools/svtdllapi.h"
 #include <vcl/ctrl.hxx>
@@ -347,6 +347,6 @@ public:
         ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
-#endif // _ICNVW_HXX
+#endif // INCLUDED_SVTOOLS_IVCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

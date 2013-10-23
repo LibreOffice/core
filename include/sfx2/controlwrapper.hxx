@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX_CONTROLWRAPPER_HXX
-#define SFX_CONTROLWRAPPER_HXX
+#ifndef INCLUDED_SFX2_CONTROLWRAPPER_HXX
+#define INCLUDED_SFX2_CONTROLWRAPPER_HXX
 
 #include <tools/debug.hxx>
 #include "sal/config.h"

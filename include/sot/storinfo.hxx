@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SOT_STORINFO_HXX
-#define _SOT_STORINFO_HXX
+#ifndef INCLUDED_SOT_STORINFO_HXX
+#define INCLUDED_SOT_STORINFO_HXX
 
 #include <tools/globname.hxx>
 #include <tools/solar.h>

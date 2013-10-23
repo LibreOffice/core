@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTFOUT_HXX
-#define _RTFOUT_HXX
+#ifndef INCLUDED_SVTOOLS_RTFOUT_HXX
+#define INCLUDED_SVTOOLS_RTFOUT_HXX
 
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>

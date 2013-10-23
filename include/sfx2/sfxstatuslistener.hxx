@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXSTATUSLISTENER_HXX
-#define _SFXSTATUSLISTENER_HXX
+#ifndef INCLUDED_SFX2_SFXSTATUSLISTENER_HXX
+#define INCLUDED_SFX2_SFXSTATUSLISTENER_HXX
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
@@ -80,6 +80,6 @@ class SFX2_DLLPUBLIC SfxStatusListener : public ::cppu::WeakImplHelper2<
         ::com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >            m_xDispatch;
 };
 
-#endif // _SFXSTATUSLISTENER_HXX
+#endif // INCLUDED_SFX2_SFXSTATUSLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

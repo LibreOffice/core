@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVT_WIZDLG_HXX
-#define _SVT_WIZDLG_HXX
+#ifndef INCLUDED_SVTOOLS_WIZDLG_HXX
+#define INCLUDED_SVTOOLS_WIZDLG_HXX
 
 #include "svtools/svtdllapi.h"
 
@@ -300,6 +300,6 @@ public:
     const Link&         GetDeactivatePageHdl() const { return maDeactivateHdl; }
 };
 
-#endif  // _SVT_WIZDLG_HXX
+#endif // INCLUDED_SVTOOLS_WIZDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

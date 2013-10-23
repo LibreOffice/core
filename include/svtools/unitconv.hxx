@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVT_UNITCONV_HXX
-#define _SVT_UNITCONV_HXX
+#ifndef INCLUDED_SVTOOLS_UNITCONV_HXX
+#define INCLUDED_SVTOOLS_UNITCONV_HXX
 
 #include <vcl/field.hxx>
 #include "svtools/svtdllapi.h"

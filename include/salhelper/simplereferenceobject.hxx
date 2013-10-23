@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#define _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#ifndef INCLUDED_SALHELPER_SIMPLEREFERENCEOBJECT_HXX
+#define INCLUDED_SALHELPER_SIMPLEREFERENCEOBJECT_HXX
 
 #include "osl/interlck.h"
 #include "sal/types.h"
@@ -126,6 +126,6 @@ protected:
 
 }
 
-#endif // _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#endif // INCLUDED_SALHELPER_SIMPLEREFERENCEOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

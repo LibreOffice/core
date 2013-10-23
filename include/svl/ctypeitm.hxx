@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVTOOLS_CTYPEITM_HXX
-#define _SVTOOLS_CTYPEITM_HXX
+#ifndef INCLUDED_SVL_CTYPEITM_HXX
+#define INCLUDED_SVL_CTYPEITM_HXX
 
 #include <svl/inettype.hxx>
 #include <svl/custritm.hxx>
@@ -68,6 +68,6 @@ public:
     void                  SetValue( const INetContentType eType );
 };
 
-#endif /* !_SVTOOLS_CTYPEITM_HXX */
+#endif /* ! INCLUDED_SVL_CTYPEITM_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

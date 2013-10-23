@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STDCTRL_HXX
-#define _STDCTRL_HXX
+#ifndef INCLUDED_SVTOOLS_STDCTRL_HXX
+#define INCLUDED_SVTOOLS_STDCTRL_HXX
 
 #include "svtools/svtdllapi.h"
 
@@ -36,6 +36,6 @@ public:
     FixedInfo( Window* pParent, const ResId& rResId );
 };
 
-#endif  // _STDCTRL_HXX
+#endif // INCLUDED_SVTOOLS_STDCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

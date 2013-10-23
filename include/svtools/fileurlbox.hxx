@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVTOOLS_FILEURLBOX_HXX
-#define SVTOOLS_FILEURLBOX_HXX
+#ifndef INCLUDED_SVTOOLS_FILEURLBOX_HXX
+#define INCLUDED_SVTOOLS_FILEURLBOX_HXX
 
 #include "svtools/svtdllapi.h"
 #include <svtools/inettbc.hxx>
@@ -63,6 +63,6 @@ namespace svt
 }   // namespace svt
 //.........................................................................
 
-#endif // SVTOOLS_FILEURLBOX_HXX
+#endif // INCLUDED_SVTOOLS_FILEURLBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

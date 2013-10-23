@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _DOCUMENTTOGRAPHICRENDERER_HXX_
-#define _DOCUMENTTOGRAPHICRENDERER_HXX_
+#ifndef INCLUDED_SVTOOLS_DOCUMENTTOGRAPHICRENDERER_HXX
+#define INCLUDED_SVTOOLS_DOCUMENTTOGRAPHICRENDERER_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>

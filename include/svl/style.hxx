@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFXSTYLE_HXX
-#define _SFXSTYLE_HXX
+#ifndef INCLUDED_SVL_STYLE_HXX
+#define INCLUDED_SVL_STYLE_HXX
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

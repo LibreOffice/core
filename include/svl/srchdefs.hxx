@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_SRCHDEFS_HXX_
-#define _SFX_SRCHDEFS_HXX_
+#ifndef INCLUDED_SVL_SRCHDEFS_HXX
+#define INCLUDED_SVL_SRCHDEFS_HXX
 
 
 #define SEARCH_OPTIONS_SEARCH       ((sal_uInt16)0x0001)

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SFX_SIDEBAR_CONTEXT_CHANGE_BROADCASTER_HXX
-#define SFX_SIDEBAR_CONTEXT_CHANGE_BROADCASTER_HXX
+#ifndef INCLUDED_SFX2_SIDEBAR_CONTEXTCHANGEBROADCASTER_HXX
+#define INCLUDED_SFX2_SIDEBAR_CONTEXTCHANGEBROADCASTER_HXX
 
 #include <com/sun/star/frame/XFrame.hpp>
 

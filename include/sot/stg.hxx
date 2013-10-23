@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _STG_HXX
-#define _STG_HXX
+#ifndef INCLUDED_SOT_STG_HXX
+#define INCLUDED_SOT_STG_HXX
 
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>

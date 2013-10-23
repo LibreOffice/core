@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SIMPTABL_HXX
-#define _SV_SIMPTABL_HXX
+#ifndef INCLUDED_SVTOOLS_SIMPTABL_HXX
+#define INCLUDED_SVTOOLS_SIMPTABL_HXX
 
 #include <svtools/svtdllapi.h>
 #include <svtools/headbar.hxx>
@@ -146,6 +146,6 @@ public:
 };
 
 
-#endif // _SV_SIMPTABL_HXX
+#endif // INCLUDED_SVTOOLS_SIMPTABL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

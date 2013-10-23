@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFXMACITEM_HXX
-#define _SFXMACITEM_HXX
+#ifndef INCLUDED_SVL_MACITEM_HXX
+#define INCLUDED_SVL_MACITEM_HXX
 
 // class SvxMacroItem ----------------------------------------------------
 

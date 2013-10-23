@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef TEMPLATEFOLDERVIEW_HXX
-#define TEMPLATEFOLDERVIEW_HXX
+#ifndef INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX
+#define INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX
 
 #include <set>
 
@@ -102,6 +102,6 @@ private:
     std::vector<TemplateContainerItem* > maRegions;
 };
 
-#endif // TEMPLATEFOLDERVIEW_HXX
+#endif // INCLUDED_SFX2_TEMPLATELOCALVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SOT_EXCHANGE_HXX
-#define _SOT_EXCHANGE_HXX
+#ifndef INCLUDED_SOT_EXCHANGE_HXX
+#define INCLUDED_SOT_EXCHANGE_HXX
 
 #include <list>
 #include <vector>
