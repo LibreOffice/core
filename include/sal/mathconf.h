@@ -72,7 +72,7 @@ extern "C" {
 #define SAL_MATH_FINITE(d) isfinite(d)
 #elif defined( WNT)
 #define SAL_MATH_FINITE(d) _finite(d)
-#elif defined LINUX || defined UNX
+#elif defined(ANDROID) || defined LINUX || defined UNX
 #define SAL_MATH_FINITE(d) finite(d)
 #else /* WNT, LINUX, UNX */
 #error "SAL_MATH_FINITE not defined"
