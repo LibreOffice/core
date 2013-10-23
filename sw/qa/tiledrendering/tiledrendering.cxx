@@ -51,24 +51,28 @@ public:
     void Open(OUString & aFileUrl);
 };
 
-
-class TiledRenderingDialog: public ModalDialog{
+class TiledRenderingDialog: public ModalDialog
+{
 private:
-    TiledRenderingApp * app;
+    TiledRenderingApp *mpApp;
+    FixedImage *mpImage;
+
 public:
-    TiledRenderingDialog(TiledRenderingApp * app_) :
+    TiledRenderingDialog(TiledRenderingApp * app) :
         ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "qa/sw/ui/tiledrendering.ui"),
-        app(app_)
+        mpApp(app)
     {
         PushButton * renderButton;
-        get(renderButton,"buttonRenderTile");
+        get(renderButton, "buttonRenderTile");
         renderButton->SetClickHdl( LINK( this, TiledRenderingDialog, RenderHdl));
 
         PushButton * chooseDocumentButton;
-        get(chooseDocumentButton,"buttonChooseDocument");
+        get(chooseDocumentButton, "buttonChooseDocument");
         chooseDocumentButton->SetClickHdl( LINK( this, TiledRenderingDialog, ChooseDocumentHdl));
 
         SetStyle(GetStyle()|WB_CLOSEABLE);
+
+        get(mpImage, "imageTile");
     }
 
     virtual ~TiledRenderingDialog()
@@ -81,7 +85,7 @@ public:
     sal_Int32 ExtractInt(const char * name)
     {
         NumericField * pField;
-        get(pField,name);
+        get(pField, name);
         OUString aString(pField->GetText());
         return aString.toInt32();
     }
@@ -96,8 +100,6 @@ IMPL_LINK ( TiledRenderingDialog,  RenderHdl, Button *, EMPTYARG )
     ExtractInt("spinTilePosY");
     ExtractInt("spinTileWidth");
     ExtractInt("spinTileHeight");
-    FixedImage * pImage;
-    get(pImage,"imageTile");
     return 1;
 }
 
@@ -108,12 +110,13 @@ IMPL_LINK ( TiledRenderingDialog,  ChooseDocumentHdl, Button *, EMPTYARG )
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         OUString aFileUrl =xFP->getFiles().getConstArray()[0];
-        app->Open(aFileUrl);
+        mpApp->Open(aFileUrl);
     }
     return 1;
 }
 
-void TiledRenderingApp::Open(OUString & aFileUrl){
+void TiledRenderingApp::Open(OUString & aFileUrl)
+{
     static const OUString TARGET("_default");
     static const Sequence<beans::PropertyValue> PROPS (0);
     if(xComponent.get())
@@ -121,7 +124,7 @@ void TiledRenderingApp::Open(OUString & aFileUrl){
         xComponent->dispose();
         xComponent.clear();
     }
-    xComponent.set(xLoader->loadComponentFromURL(aFileUrl,TARGET,0,PROPS));
+    xComponent.set(xLoader->loadComponentFromURL(aFileUrl, TARGET, 0, PROPS));
 }
 
 void TiledRenderingApp::Init()
