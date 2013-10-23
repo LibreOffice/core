@@ -886,7 +886,6 @@ sal_Bool ScContentTree::NoteStringsChanged()
 
     SvTreeListEntry* pEntry = FirstChild( pParent );
 
-    bool bEqual = true;
     std::vector<sc::NoteEntry> aEntries;
     pDoc->GetAllNoteEntries(aEntries);
     std::vector<sc::NoteEntry>::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
@@ -894,20 +893,18 @@ sal_Bool ScContentTree::NoteStringsChanged()
     {
         const ScPostIt* pNote = it->mpNote;
         if (!pEntry)
-            bEqual = false;
-        else
-        {
-            if (lcl_NoteString(*pNote) != GetEntryText(pEntry))
-                bEqual = false;
+            return true;
 
-            pEntry = NextSibling(pEntry);
-        }
+        if (lcl_NoteString(*pNote) != GetEntryText(pEntry))
+            return true;
+
+        pEntry = NextSibling(pEntry);
     }
 
     if ( pEntry )
-        bEqual = false;             // kommt noch was
+        return true;
 
-    return !bEqual;
+    return false;
 }
 
 sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
