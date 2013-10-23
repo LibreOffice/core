@@ -89,6 +89,7 @@ LIBS = \
   $(HYPHEN_LIB) \
   $(MYTHES_LIBS) \
   $(wildcard $(WORKDIR)/UnpackedTarball/icu/source/lib/*.a) \
+  $(wildcard $(WORKDIR)/UnpackedTarball/lcms2/src/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/libcdr/src/lib/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/libmspub/src/lib/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/libmwaw/src/lib/.libs/*.a) \

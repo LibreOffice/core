@@ -7791,9 +7791,12 @@ if test "$with_system_lcms2" = "yes"; then
 else
     SYSTEM_LCMS2=NO
 fi
-libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2],["-I${WORKDIR}/UnpackedTarball/lcms2/include"],["-L${OUTDIR}/lib -llcms2"])
+libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2],["-I${WORKDIR}/UnpackedTarball/lcms2/include"],["-L${WORKDIR}/UnpackedTarball/lcms2/src/.libs -llcms2"])
 if test "$GCC" = "yes"; then
     LCMS2_CFLAGS="${LCMS2_CFLAGS} -Wno-long-long"
+fi
+if test "$COM" = "MSC"; then # override the above
+    LCMS2_LIBS=${WORKDIR}/UnpackedTarball/lcms2/bin/lcms2.lib
 fi
 
 dnl ===================================================================

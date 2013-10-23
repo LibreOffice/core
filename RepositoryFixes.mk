@@ -117,11 +117,11 @@ gb_Library_ILIBFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_ILIBFILENAMES))
 
 gb_Library_NOILIBFILENAMES_D := \
     icudt icuin icuuc \
-    lcms2 \
 
 # change the names of all import libraries that don't have an "i" prefix as in our standard naming schema
 gb_Library_NOILIBFILENAMES := \
     langtag \
+    lcms2 \
     lpsolve55 \
     xpcom \
     xpcom_core \
