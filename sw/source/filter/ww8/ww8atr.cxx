@@ -2215,6 +2215,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         }
 
                         if( nsSwTOXElement::TOX_TEMPLATE & pTOX->GetCreateType() )
+                        {
                             // #i99641# - Consider additional styles regardless of TOX-outlinelevel
                             for( n = 0; n < MAXLEVEL; ++n )
                             {
@@ -2239,7 +2240,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                     } while( -1 != nPos );
                                 }
                             }
-
+                        }
                             {
                                 OUString aFillTxt;
                                 sal_uInt8 nNoPgStt = MAXLEVEL, nNoPgEnd = MAXLEVEL;
