@@ -4760,6 +4760,14 @@ else
 fi
 AC_SUBST(WITH_MYSPELL_DICTS)
 
+# There are no "system" myspell, hyphen or mythes dictionaries on OS X, Windows, Android or iOS.
+if test $_os = Darwin -o $_os = WINNT -o $_os = iOS -o $_os = Android; then
+    if test "$with_system_dicts" = yes; then
+        AC_MSG_ERROR([There are no system dicts on this OS in the formats the 3rd-party libs we use expect]);
+    fi
+    with_system_dicts=no
+fi
+
 AC_MSG_CHECKING([whether to use dicts from external paths])
 if test -z "$with_system_dicts" -o "$with_system_dicts" != "no"; then
     AC_MSG_RESULT([yes])
