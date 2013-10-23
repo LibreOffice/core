@@ -1152,11 +1152,9 @@ void ImportExcel::TableOp( void )
                 break;
             }
 
-            ScMarkData aMarkData;
-            aMarkData.SelectOneTable( nTab );
-            pD->InsertTableOp( aTabOpParam, static_cast<SCCOL>(nCol),
-                    static_cast<SCROW>(nRow), static_cast<SCCOL>(nLastCol),
-                    static_cast<SCROW>(nLastRow), aMarkData );
+            ScDocumentImport& rDoc = GetDocImport();
+            ScRange aTabOpRange(nCol, nRow, nTab, nLastCol, nLastRow, nTab);
+            rDoc.setTableOpCells(aTabOpRange, aTabOpParam);
         }
     }
     else

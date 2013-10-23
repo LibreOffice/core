@@ -24,6 +24,7 @@ class ScAddress;
 class ScTokenArray;
 class ScFormulaCell;
 struct ScSetStringParam;
+struct ScTabOpParam;
 struct ScDocumentImportImpl;
 
 /**
@@ -71,6 +72,8 @@ public:
 
     void setMatrixCells(
         const ScRange& rRange, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGrammar);
+
+    void setTableOpCells(const ScRange& rRange, const ScTabOpParam& rParam);
 
     void finalize();
 

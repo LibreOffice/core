@@ -17,6 +17,8 @@
 #include "mtvelements.hxx"
 #include "tokenarray.hxx"
 #include "stringutil.hxx"
+#include "compiler.hxx"
+#include "paramisc.hxx"
 
 #include "svl/sharedstringpool.hxx"
 
@@ -298,6 +300,95 @@ void ScDocumentImport::setMatrixCells(
             pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, pTokArr.get(), eGram, MM_REFERENCE);
             pBlockPos->miCellPos =
                 rColCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
+        }
+    }
+}
+
+void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam& rParam)
+{
+    SCTAB nTab = rRange.aStart.Tab();
+    SCCOL nCol1 = rRange.aStart.Col();
+    SCROW nRow1 = rRange.aStart.Row();
+    SCCOL nCol2 = rRange.aEnd.Col();
+    SCROW nRow2 = rRange.aEnd.Row();
+
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    ScDocument* pDoc = &mpImpl->mrDoc;
+    ScRefAddress aRef;
+    OUStringBuffer aFormulaBuf('=');
+    aFormulaBuf.append(ScCompiler::GetNativeSymbol(ocTableOp));
+    aFormulaBuf.append(ScCompiler::GetNativeSymbol(ocOpen));
+
+    OUString aSep = ScCompiler::GetNativeSymbol(ocSep);
+    if (rParam.meMode == ScTabOpParam::Column) // column only
+    {
+        aRef.Set(rParam.aRefFormulaCell.GetAddress(), true, false, false);
+        aFormulaBuf.append(aRef.GetRefString(pDoc, nTab));
+        aFormulaBuf.append(aSep);
+        aFormulaBuf.append(rParam.aRefColCell.GetRefString(pDoc, nTab));
+        aFormulaBuf.append(aSep);
+        aRef.Set(nCol1, nRow1, nTab, false, true, true);
+        aFormulaBuf.append(aRef.GetRefString(pDoc, nTab));
+        nCol1++;
+        nCol2 = std::min( nCol2, (SCCOL)(rParam.aRefFormulaEnd.Col() -
+                    rParam.aRefFormulaCell.Col() + nCol1 + 1));
+    }
+    else if (rParam.meMode == ScTabOpParam::Row) // row only
+    {
+        aRef.Set(rParam.aRefFormulaCell.GetAddress(), false, true, false);
+        aFormulaBuf.append(aRef.GetRefString(pDoc, nTab));
+        aFormulaBuf.append(aSep);
+        aFormulaBuf.append(rParam.aRefRowCell.GetRefString(pDoc, nTab));
+        aFormulaBuf.append(aSep);
+        aRef.Set(nCol1, nRow1, nTab, true, false, true);
+        aFormulaBuf.append(aRef.GetRefString(pDoc, nTab));
+        ++nRow1;
+        nRow2 = std::min(
+            nRow2, rParam.aRefFormulaEnd.Row() - rParam.aRefFormulaCell.Row() + nRow1 + 1);
+    }
+    else // both
+    {
+        aFormulaBuf.append(rParam.aRefFormulaCell.GetRefString(pDoc, nTab));
+        aFormulaBuf.append(aSep);
+        aFormulaBuf.append(rParam.aRefColCell.GetRefString(pDoc, nTab));
+        aFormulaBuf.append(aSep);
+        aRef.Set(nCol1, nRow1 + 1, nTab, false, true, true);
+        aFormulaBuf.append(aRef.GetRefString(pDoc, nTab));
+        aFormulaBuf.append(aSep);
+        aFormulaBuf.append(rParam.aRefRowCell.GetRefString(pDoc, nTab));
+        aFormulaBuf.append(aSep);
+        aRef.Set(nCol1 + 1, nRow1, nTab, true, false, true);
+        aFormulaBuf.append(aRef.GetRefString(pDoc, nTab));
+        ++nCol1;
+        ++nRow1;
+    }
+
+    aFormulaBuf.append(ScCompiler::GetNativeSymbol(ocClose));
+
+    ScFormulaCell aRefCell(
+        pDoc, ScAddress(nCol1, nRow1, nTab), aFormulaBuf.makeStringAndClear(),
+        formula::FormulaGrammar::GRAM_NATIVE, MM_NONE);
+
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+    {
+        sc::ColumnBlockPosition* pBlockPos =
+            mpImpl->maBlockPosSet.getBlockPosition(nTab, nCol);
+
+        if (!pBlockPos)
+            // Something went horribly wrong.
+            return;
+
+        sc::CellStoreType& rColCells = pTab->aCol[nCol].maCells;
+
+        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+        {
+            ScAddress aPos(nCol, nRow, nTab);
+            ScFormulaCell* pCell = new ScFormulaCell(aRefCell, *pDoc, aPos);
+            pBlockPos->miCellPos =
+                rColCells.set(pBlockPos->miCellPos, nRow, pCell);
         }
     }
 }
