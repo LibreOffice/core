@@ -187,9 +187,9 @@ endif
 
 gb_Helper_set_ld_path := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}"$(OUTDIR_FOR_BUILD)/lib:$(INSTROOT_FOR_BUILD)/$(LIBO_URE_LIB_FOLDER_FOR_BUILD):$(INSTROOT_FOR_BUILD)/$(LIBO_LIB_FOLDER_FOR_BUILD)"
 
-# $(1): list of directory pathnames to append at the end of the ld path
+# $(1): list of : separated directory pathnames to append to the ld path
 define gb_Helper_extend_ld_path
-$(gb_Helper_set_ld_path)$(foreach dir,$(1),:$(dir))
+$(gb_Helper_set_ld_path):$(1)
 endef
 
 # Convert path to file URL.
