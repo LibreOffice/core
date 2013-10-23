@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _LINEEND_HXX
-#define _LINEEND_HXX
+#ifndef INCLUDED_TOOLS_LINEEND_HXX
+#define INCLUDED_TOOLS_LINEEND_HXX
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>

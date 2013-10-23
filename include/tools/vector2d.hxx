@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VECTOR2D_HXX
-#define _VECTOR2D_HXX
+#ifndef INCLUDED_TOOLS_VECTOR2D_HXX
+#define INCLUDED_TOOLS_VECTOR2D_HXX
 
 #include <math.h>
 #include <tools/gen.hxx>

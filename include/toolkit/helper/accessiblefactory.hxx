@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_HELPER_ACCESSIBLE_FACTORY_HXX
-#define TOOLKIT_HELPER_ACCESSIBLE_FACTORY_HXX
+#ifndef INCLUDED_TOOLKIT_HELPER_ACCESSIBLEFACTORY_HXX
+#define INCLUDED_TOOLKIT_HELPER_ACCESSIBLEFACTORY_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -129,6 +129,6 @@ namespace toolkit
 }   // namespace toolkit
 //........................................................................
 
-#endif // TOOLKIT_HELPER_ACCESSIBLE_FACTORY_HXX
+#endif // INCLUDED_TOOLKIT_HELPER_ACCESSIBLEFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

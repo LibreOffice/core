@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _TOOLS_HELPERS_HXX
-#define _TOOLS_HELPERS_HXX
+#ifndef INCLUDED_TOOLS_HELPERS_HXX
+#define INCLUDED_TOOLS_HELPERS_HXX
 
 inline long MinMax( long nVal, long nMin, long nMax )
 {

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_AWT_VCLXTOPWINDOW_HXX_
-#define _TOOLKIT_AWT_VCLXTOPWINDOW_HXX_
+#ifndef INCLUDED_TOOLKIT_AWT_VCLXTOPWINDOW_HXX
+#define INCLUDED_TOOLKIT_AWT_VCLXTOPWINDOW_HXX
 
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/awt/XTopWindow2.hpp>
@@ -109,6 +109,6 @@ public:
 
 
 
-#endif // _TOOLKIT_AWT_VCLXTOPWINDOW_HXX_
+#endif // INCLUDED_TOOLKIT_AWT_VCLXTOPWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

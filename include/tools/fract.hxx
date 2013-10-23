@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FRACT_HXX
-#define _FRACT_HXX
+#ifndef INCLUDED_TOOLS_FRACT_HXX
+#define INCLUDED_TOOLS_FRACT_HXX
 
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>

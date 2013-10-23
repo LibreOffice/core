@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLS_RCID_H
-#define _TOOLS_RCID_H
+#ifndef INCLUDED_TOOLS_RCID_H
+#define INCLUDED_TOOLS_RCID_H
 
 #include <tools/resid.hxx>
 

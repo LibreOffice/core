@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_TABPAGE_MODEL_HXX
-#define TOOLKIT_TABPAGE_MODEL_HXX
+#ifndef INCLUDED_TOOLKIT_CONTROLS_TABPAGEMODEL_HXX
+#define INCLUDED_TOOLKIT_CONTROLS_TABPAGEMODEL_HXX
 
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
@@ -84,6 +84,6 @@ public:
     DECLIMPL_SERVICEINFO( UnoControlTabPage, szServiceName_UnoControlTabPage)
 };
 
-#endif // TOOLKIT_TABPAGE_MODEL_HXX
+#endif // INCLUDED_TOOLKIT_CONTROLS_TABPAGEMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

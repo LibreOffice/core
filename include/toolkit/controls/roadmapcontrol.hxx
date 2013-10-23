@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_ROADMAP_CONTROL_HXX
-#define TOOLKIT_ROADMAP_CONTROL_HXX
+#ifndef INCLUDED_TOOLKIT_CONTROLS_ROADMAPCONTROL_HXX
+#define INCLUDED_TOOLKIT_CONTROLS_ROADMAPCONTROL_HXX
 
 
 #include <toolkit/controls/unocontrols.hxx>
@@ -188,6 +188,6 @@ namespace toolkit
 
 
 
-#endif // _TOOLKIT_ROADMAP_CONTROL_HXX
+#endif // _ INCLUDED_TOOLKIT_CONTROLS_ROADMAPCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_CONTROLS_UNOCONTROLCONTAINER_HXX_
-#define _TOOLKIT_CONTROLS_UNOCONTROLCONTAINER_HXX_
+#ifndef INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLCONTAINER_HXX
+#define INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLCONTAINER_HXX
 
 
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -155,6 +155,6 @@ private:
 
 
 
-#endif // _TOOLKIT_CONTROLS_UNOCONTROLCONTAINER_HXX_
+#endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

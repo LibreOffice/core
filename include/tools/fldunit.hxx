@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TOOLS_FLDUNIT_HXX
-#define _TOOLS_FLDUNIT_HXX
+#ifndef INCLUDED_TOOLS_FLDUNIT_HXX
+#define INCLUDED_TOOLS_FLDUNIT_HXX
 
 enum FieldUnit { FUNIT_NONE, FUNIT_MM, FUNIT_CM, FUNIT_M, FUNIT_KM,
                  FUNIT_TWIP, FUNIT_POINT, FUNIT_PICA,

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef TOOLS_DIAGNOSE_EX_H
-#define TOOLS_DIAGNOSE_EX_H
+#ifndef INCLUDED_TOOLS_DIAGNOSE_EX_H
+#define INCLUDED_TOOLS_DIAGNOSE_EX_H
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_HELPER_UNOWRAPPER_HXX_
-#define _TOOLKIT_HELPER_UNOWRAPPER_HXX_
+#ifndef INCLUDED_TOOLKIT_HELPER_UNOWRAPPER_HXX
+#define INCLUDED_TOOLKIT_HELPER_UNOWRAPPER_HXX
 
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
@@ -81,6 +81,6 @@ private:
     virtual ~UnoWrapper();
 };
 
-#endif // _TOOLKIT_HELPER_UNOWRAPPER_HXX_
+#endif // INCLUDED_TOOLKIT_HELPER_UNOWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

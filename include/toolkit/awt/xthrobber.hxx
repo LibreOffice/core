@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef TOOLKIT_AWT_XTHROBBER_HXX
-#define TOOLKIT_AWT_XTHROBBER_HXX
+#ifndef INCLUDED_TOOLKIT_AWT_XTHROBBER_HXX
+#define INCLUDED_TOOLKIT_AWT_XTHROBBER_HXX
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
@@ -68,6 +68,6 @@ namespace toolkit
 } // namespacetoolkit
 //........................................................................
 
-#endif // TOOLKIT_AWT_XTHROBBER_HXX
+#endif // INCLUDED_TOOLKIT_AWT_XTHROBBER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _B3D_B3DTRANS_HXX
-#define _B3D_B3DTRANS_HXX
+#ifndef INCLUDED_TOOLS_B3DTRANS_HXX
+#define INCLUDED_TOOLS_B3DTRANS_HXX
 
 #define ZBUFFER_DEPTH_RANGE         ((double)(256L * 256L * 256L))
 

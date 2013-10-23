@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVBORDER_HXX
-#define _SVBORDER_HXX
+#ifndef INCLUDED_TOOLS_SVBORDER_HXX
+#define INCLUDED_TOOLS_SVBORDER_HXX
 
 #include "tools/toolsdllapi.h"
 #include <tools/gen.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
-#define _TOOLKIT_AWT_VCLXWINDOW_HXX_
+#ifndef INCLUDED_TOOLKIT_AWT_VCLXWINDOW_HXX
+#define INCLUDED_TOOLKIT_AWT_VCLXWINDOW_HXX
 
 #include <toolkit/dllapi.h>
 #include <toolkit/awt/vclxdevice.hxx>
@@ -230,6 +230,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XStyleSettings > SAL_CALL getStyleSettings() throw (::com::sun::star::uno::RuntimeException);
 };
 
-#endif // _TOOLKIT_AWT_VCLXWINDOW_HXX_
+#endif // INCLUDED_TOOLKIT_AWT_VCLXWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

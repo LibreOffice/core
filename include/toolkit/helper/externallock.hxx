@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TOOLKIT_HELPER_EXTERNALLOCK_HXX_
-#define _TOOLKIT_HELPER_EXTERNALLOCK_HXX_
+#ifndef INCLUDED_TOOLKIT_HELPER_EXTERNALLOCK_HXX
+#define INCLUDED_TOOLKIT_HELPER_EXTERNALLOCK_HXX
 
 #include <toolkit/dllapi.h>
 #include <comphelper/accessiblecontexthelper.hxx>
@@ -33,6 +33,6 @@ public:
     virtual void release();
 };
 
-#endif  // _TOOLKIT_HELPER_EXTERNALLOCK_HXX_
+#endif // INCLUDED_TOOLKIT_HELPER_EXTERNALLOCK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

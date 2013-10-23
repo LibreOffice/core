@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLS_WEAKBASE_HXX_
-#define _TOOLS_WEAKBASE_HXX_
+#ifndef INCLUDED_TOOLS_WEAKBASE_HXX
+#define INCLUDED_TOOLS_WEAKBASE_HXX
 
 #include <tools/weakbase.h>
 

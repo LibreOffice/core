@@ -19,8 +19,8 @@
 
 #ifndef __RSC
 
-#ifndef _EINF_HXX
-#define _EINF_HXX
+#ifndef INCLUDED_TOOLS_ERRINF_HXX
+#define INCLUDED_TOOLS_ERRINF_HXX
 
 #include <limits.h>
 #include <rtl/ustring.hxx>

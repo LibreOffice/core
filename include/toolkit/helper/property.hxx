@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
-#define _TOOLKIT_HELPER_PROPERTY_HXX_
+#ifndef INCLUDED_TOOLKIT_HELPER_PROPERTY_HXX
+#define INCLUDED_TOOLKIT_HELPER_PROPERTY_HXX
 
 #include <toolkit/dllapi.h>
 
@@ -248,7 +248,7 @@ sal_Bool                            CompareProperties( const ::com::sun::star::u
 
 
 
-#endif // _TOOLKIT_HELPER_PROPERTY_HXX_
+#endif // INCLUDED_TOOLKIT_HELPER_PROPERTY_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

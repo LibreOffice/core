@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
-#define _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
+#ifndef INCLUDED_TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX
+#define INCLUDED_TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -150,6 +150,6 @@ private:
 ---------------------------------------------------------- */
 
 
-#endif // _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
+#endif // INCLUDED_TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

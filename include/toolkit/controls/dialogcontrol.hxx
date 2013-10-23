@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_DIALOG_CONTROL_HXX
-#define TOOLKIT_DIALOG_CONTROL_HXX
+#ifndef INCLUDED_TOOLKIT_CONTROLS_DIALOGCONTROL_HXX
+#define INCLUDED_TOOLKIT_CONTROLS_DIALOGCONTROL_HXX
 
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
@@ -331,6 +331,6 @@ public:
 DECLIMPL_SERVICEINFO_DERIVED( UnoFrameControl, ControlContainerBase, szServiceName_UnoPageControl )
 };
 
-#endif // TOOLKIT_DIALOG_CONTROL_HXX
+#endif // INCLUDED_TOOLKIT_CONTROLS_DIALOGCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
-#define _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
+#ifndef INCLUDED_TOOLKIT_AWT_VCLXTOOLKIT_HXX
+#define INCLUDED_TOOLKIT_AWT_VCLXTOOLKIT_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/XToolkitExperimental.hpp>
@@ -201,6 +201,6 @@ public:
 
 };
 
-#endif // _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
+#endif // INCLUDED_TOOLKIT_AWT_VCLXTOOLKIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _BIGINT_HXX
-#define _BIGINT_HXX
+#ifndef INCLUDED_TOOLS_BIGINT_HXX
+#define INCLUDED_TOOLS_BIGINT_HXX
 
 #include <climits>
 #include <rtl/ustring.hxx>

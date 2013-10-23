@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_HELPER_TKRESMGR_HXX_
-#define _TOOLKIT_HELPER_TKRESMGR_HXX_
+#ifndef INCLUDED_TOOLKIT_HELPER_TKRESMGR_HXX
+#define INCLUDED_TOOLKIT_HELPER_TKRESMGR_HXX
 
 #include <rtl/ustring.hxx>
 #include <vcl/image.hxx>
@@ -63,6 +63,6 @@ public:
 };
 
 
-#endif // _TOOLKIT_HELPER_TKRESMGR_HXX_
+#endif // INCLUDED_TOOLKIT_HELPER_TKRESMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

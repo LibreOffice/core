@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTTI_HXX
-#define _RTTI_HXX
+#ifndef INCLUDED_TOOLS_RTTI_HXX
+#define INCLUDED_TOOLS_RTTI_HXX
 
 #include <string.h>
 #include <tools/solar.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_AWT_VCLXTABPAGECONTAINER_HXX_
-#define _TOOLKIT_AWT_VCLXTABPAGECONTAINER_HXX_
+#ifndef INCLUDED_TOOLKIT_AWT_VCLXTABPAGECONTAINER_HXX
+#define INCLUDED_TOOLKIT_AWT_VCLXTABPAGECONTAINER_HXX
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -76,6 +76,6 @@ private:
     TabPageListenerMultiplexer m_aTabPageListeners;
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPage > > m_aTabPages;
 };
-#endif // _TOOLKIT_AWT_VCLXTABPAGEMODEL_HXX_
+#endif // INCLUDED_TOOLKIT_AWT_VCLXTABPAGECONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

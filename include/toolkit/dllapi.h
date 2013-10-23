@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_DLLAPI_H
-#define TOOLKIT_DLLAPI_H
+#ifndef INCLUDED_TOOLKIT_DLLAPI_H
+#define INCLUDED_TOOLKIT_DLLAPI_H
 
 #include "sal/config.h"
 #include "sal/types.h"

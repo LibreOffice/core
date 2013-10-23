@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_HELPER_FORM_FORMPDFEXPORT_HXX
-#define _TOOLKIT_HELPER_FORM_FORMPDFEXPORT_HXX
+#ifndef INCLUDED_TOOLKIT_HELPER_FORMPDFEXPORT_HXX
+#define INCLUDED_TOOLKIT_HELPER_FORMPDFEXPORT_HXX
 
 #include <toolkit/dllapi.h>
 
@@ -50,6 +50,6 @@ namespace toolkitform
 } // namespace toolkitform
 //........................................................................
 
-#endif // _TOOLKIT_HELPER_FORM_FORMPDFEXPORT_HXX
+#endif // INCLUDED_TOOLKIT_HELPER_FORMPDFEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

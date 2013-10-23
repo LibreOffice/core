@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _REF_HXX
-#define _REF_HXX
+#ifndef INCLUDED_TOOLS_REF_HXX
+#define INCLUDED_TOOLS_REF_HXX
 
 #include "tools/toolsdllapi.h"
 #include <vector>

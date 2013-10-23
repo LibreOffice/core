@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _VCOMPAT_HXX
-#define _VCOMPAT_HXX
+#ifndef INCLUDED_TOOLS_VCOMPAT_HXX
+#define INCLUDED_TOOLS_VCOMPAT_HXX
 
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>

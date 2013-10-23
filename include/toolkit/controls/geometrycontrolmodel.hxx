@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_HELPERS_GEOMETRYCONTROLMODEL_HXX_
-#define _TOOLKIT_HELPERS_GEOMETRYCONTROLMODEL_HXX_
+#ifndef INCLUDED_TOOLKIT_CONTROLS_GEOMETRYCONTROLMODEL_HXX
+#define INCLUDED_TOOLKIT_CONTROLS_GEOMETRYCONTROLMODEL_HXX
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
@@ -257,6 +257,6 @@ namespace com { namespace sun { namespace star {
 // }    // namespace toolkit
 //........................................................................
 
-#endif // _TOOLKIT_HELPERS_GEOMETRYCONTROLMODEL_HXX_
+#endif // INCLUDED_TOOLKIT_CONTROLS_GEOMETRYCONTROLMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

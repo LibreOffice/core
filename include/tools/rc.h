@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLS_RC_H
-#define _TOOLS_RC_H
+#ifndef INCLUDED_TOOLS_RC_H
+#define INCLUDED_TOOLS_RC_H
 
 #include <tools/rcid.h>
 

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TOOLS_INETSTRM_HXX
-#define _TOOLS_INETSTRM_HXX
+#ifndef INCLUDED_TOOLS_INETSTRM_HXX
+#define INCLUDED_TOOLS_INETSTRM_HXX
 
 #include "tools/toolsdllapi.h"
 #include <sal/types.h>

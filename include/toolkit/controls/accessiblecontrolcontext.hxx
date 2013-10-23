@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_ACCESSIBLE_CONTROL_CONTEXT_HXX
-#define TOOLKIT_ACCESSIBLE_CONTROL_CONTEXT_HXX
+#ifndef INCLUDED_TOOLKIT_CONTROLS_ACCESSIBLECONTROLCONTEXT_HXX
+#define INCLUDED_TOOLKIT_CONTROLS_ACCESSIBLECONTROLCONTEXT_HXX
 
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/accimplaccess.hxx>
@@ -124,6 +124,6 @@ namespace toolkit
 }   // namespace toolkit
 //........................................................................
 
-#endif // TOOLKIT_ACCESSIBLE_CONTROL_CONTEXT_HXX
+#endif // INCLUDED_TOOLKIT_CONTROLS_ACCESSIBLECONTROLCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

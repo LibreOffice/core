@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_AWT_UNOCONTROLBASE_HXX_
-#define _TOOLKIT_AWT_UNOCONTROLBASE_HXX_
+#ifndef INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLBASE_HXX
+#define INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLBASE_HXX
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -63,6 +63,6 @@ protected:
 
 
 
-#endif // _TOOLKIT_AWT_UNOCONTROLBASE_HXX_
+#endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

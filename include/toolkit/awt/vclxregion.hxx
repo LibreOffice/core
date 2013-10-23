@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_AWT_VCLXREGION_HXX_
-#define _TOOLKIT_AWT_VCLXREGION_HXX_
+#ifndef INCLUDED_TOOLKIT_AWT_VCLXREGION_HXX
+#define INCLUDED_TOOLKIT_AWT_VCLXREGION_HXX
 
 
 #include <com/sun/star/awt/XRegion.hpp>
@@ -84,6 +84,6 @@ public:
 
 
 
-#endif // _TOOLKIT_AWT_VCLXREGION_HXX_
+#endif // INCLUDED_TOOLKIT_AWT_VCLXREGION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

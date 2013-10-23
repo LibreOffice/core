@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_ANIMATEDIMAGES_HXX
-#define TOOLKIT_ANIMATEDIMAGES_HXX
+#ifndef INCLUDED_TOOLKIT_CONTROLS_ANIMATEDIMAGES_HXX
+#define INCLUDED_TOOLKIT_CONTROLS_ANIMATEDIMAGES_HXX
 
 #include "toolkit/controls/unocontrolbase.hxx"
 #include "toolkit/controls/unocontrolmodel.hxx"
@@ -133,6 +133,6 @@ namespace toolkit
 } // namespace toolkit
 //......................................................................................................................
 
-#endif // TOOLKIT_ANIMATEDIMAGES_HXX
+#endif // INCLUDED_TOOLKIT_CONTROLS_ANIMATEDIMAGES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

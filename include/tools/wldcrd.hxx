@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _WLDCRD_HXX
-#define _WLDCRD_HXX
+#ifndef INCLUDED_TOOLS_WLDCRD_HXX
+#define INCLUDED_TOOLS_WLDCRD_HXX
 
 #include "tools/toolsdllapi.h"
 #include <osl/thread.h>

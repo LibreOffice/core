@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLS_MAPUNIT_HXX
-#define _TOOLS_MAPUNIT_HXX
+#ifndef INCLUDED_TOOLS_MAPUNIT_HXX
+#define INCLUDED_TOOLS_MAPUNIT_HXX
 
 enum MapUnit { MAP_100TH_MM, MAP_10TH_MM, MAP_MM, MAP_CM,
                MAP_1000TH_INCH, MAP_100TH_INCH, MAP_10TH_INCH, MAP_INCH,

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ERRCODE_HXX
-#define _ERRCODE_HXX
+#ifndef INCLUDED_TOOLS_ERRCODE_HXX
+#define INCLUDED_TOOLS_ERRCODE_HXX
 
 #ifndef __RSC
 #include <tools/solar.h>

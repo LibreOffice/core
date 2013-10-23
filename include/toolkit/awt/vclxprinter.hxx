@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOOLKIT_AWT_VCLXPRINTER_HXX_
-#define _TOOLKIT_AWT_VCLXPRINTER_HXX_
+#ifndef INCLUDED_TOOLKIT_AWT_VCLXPRINTER_HXX
+#define INCLUDED_TOOLKIT_AWT_VCLXPRINTER_HXX
 
 
 #include <com/sun/star/awt/XPrinterPropertySet.hpp>
@@ -185,6 +185,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XInfoPrinter > SAL_CALL createInfoPrinter( const OUString& printerName ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-#endif // _TOOLKIT_AWT_VCLXPRINTER_HXX_
+#endif // INCLUDED_TOOLKIT_AWT_VCLXPRINTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_TABPAGE_CONTAINER_HXX
-#define TOOLKIT_TABPAGE_CONTAINER_HXX
+#ifndef INCLUDED_TOOLKIT_CONTROLS_TABPAGECONTAINER_HXX
+#define INCLUDED_TOOLKIT_CONTROLS_TABPAGECONTAINER_HXX
 
 #include <com/sun/star/awt/tab/XTabPageContainer.hpp>
 #include <com/sun/star/awt/tab/XTabPageContainerModel.hpp>
@@ -129,6 +129,6 @@ private:
     TabPageListenerMultiplexer  m_aTabPageListeners;
 };
 
-#endif // _TOOLKIT_TABPAGE_CONTAINER_HXX
+#endif // _ INCLUDED_TOOLKIT_CONTROLS_TABPAGECONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

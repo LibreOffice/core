@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef TOOLKIT_CONTROLS_TKTHROBBER_HXX
-#define TOOLKIT_CONTROLS_TKTHROBBER_HXX
+#ifndef INCLUDED_TOOLKIT_CONTROLS_TKTHROBBER_HXX
+#define INCLUDED_TOOLKIT_CONTROLS_TKTHROBBER_HXX
 
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/servicenames.hxx>
@@ -98,6 +98,6 @@ namespace toolkit
 } // namespacetoolkit
 //........................................................................
 
-#endif // TOOLKIT_CONTROLS_TKTHROBBER_HXX
+#endif // INCLUDED_TOOLKIT_CONTROLS_TKTHROBBER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

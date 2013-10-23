@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _STREAM_HXX
-#define _STREAM_HXX
+#ifndef INCLUDED_TOOLS_STREAM_HXX
+#define INCLUDED_TOOLS_STREAM_HXX
 
 #include <limits>
 #include "tools/toolsdllapi.h"

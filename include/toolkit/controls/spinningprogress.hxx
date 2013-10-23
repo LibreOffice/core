@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef TOOLKIT_SPINNINGPROGRESS_HXX
-#define TOOLKIT_SPINNINGPROGRESS_HXX
+#ifndef INCLUDED_TOOLKIT_CONTROLS_SPINNINGPROGRESS_HXX
+#define INCLUDED_TOOLKIT_CONTROLS_SPINNINGPROGRESS_HXX
 
 #include "toolkit/controls/animatedimages.hxx"
 
@@ -57,6 +57,6 @@ namespace toolkit
 } // namespace toolkit
 //......................................................................................................................
 
-#endif // TOOLKIT_SPINNINGPROGRESS_HXX
+#endif // INCLUDED_TOOLKIT_CONTROLS_SPINNINGPROGRESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
