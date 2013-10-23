@@ -1423,7 +1423,7 @@
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.productivity</string>
     <key>LSMinimumSystemVersion</key>
-    <string>@MACOSX_DEPLOYMENT_TARGET@.0<string>
+    <string>@MACOSX_DEPLOYMENT_TARGET@.0</string>
 </dict>
 </plist>
 
