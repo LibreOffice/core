@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_TOOLS_KEYSTOPLERP_HXX
-#define _BGFX_TOOLS_KEYSTOPLERP_HXX
+#ifndef INCLUDED_BASEGFX_TOOLS_KEYSTOPLERP_HXX
+#define INCLUDED_BASEGFX_TOOLS_KEYSTOPLERP_HXX
 
 #include <basegfx/numeric/ftools.hxx>
 #include <vector>

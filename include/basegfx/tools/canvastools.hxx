@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
-#define _BGFX_TOOLS_CANVASTOOLS_HXX
+#ifndef INCLUDED_BASEGFX_TOOLS_CANVASTOOLS_HXX
+#define INCLUDED_BASEGFX_TOOLS_CANVASTOOLS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -200,6 +200,6 @@ namespace basegfx
     }
 }
 
-#endif /* _BGFX_TOOLS_CANVASTOOLS_HXX */
+#endif // INCLUDED_BASEGFX_TOOLS_CANVASTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

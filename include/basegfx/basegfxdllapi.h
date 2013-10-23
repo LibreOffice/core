@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFXDLLAPI_H
-#define INCLUDED_BASEGFXDLLAPI_H
+#ifndef INCLUDED_BASEGFX_BASEGFXDLLAPI_H
+#define INCLUDED_BASEGFX_BASEGFXDLLAPI_H
 
 #if defined BASEGFX_STATICLIBRARY
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
-#define _BGFX_POLYGON_B3DPOLYGON_HXX
+#ifndef INCLUDED_BASEGFX_POLYGON_B3DPOLYGON_HXX
+#define INCLUDED_BASEGFX_POLYGON_B3DPOLYGON_HXX
 
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
@@ -125,6 +125,6 @@ namespace basegfx
 //////////////////////////////////////////////////////////////////////////////
 
 
-#endif /* _BGFX_POLYGON_B3DPOLYGON_HXX */
+#endif // INCLUDED_BASEGFX_POLYGON_B3DPOLYGON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

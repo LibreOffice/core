@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBXCLASS_HXX
-#define _SBXCLASS_HXX
+#ifndef INCLUDED_BASIC_SBX_HXX
+#define INCLUDED_BASIC_SBX_HXX
 
 #include "tools/ref.hxx"
 #include "svl/smplhint.hxx"

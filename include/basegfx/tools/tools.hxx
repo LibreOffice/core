@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_TOOLS_TOOLS_HXX
-#define _BGFX_TOOLS_TOOLS_HXX
+#ifndef INCLUDED_BASEGFX_TOOLS_TOOLS_HXX
+#define INCLUDED_BASEGFX_TOOLS_TOOLS_HXX
 
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
@@ -122,6 +122,6 @@ namespace basegfx
     }
 }
 
-#endif /* _BGFX_TOOLS_TOOLS_HXX */
+#endif // INCLUDED_BASEGFX_TOOLS_TOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

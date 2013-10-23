@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIXTOOLS_HXX
-#define _BGFX_MATRIX_B2DHOMMATRIXTOOLS_HXX
+#ifndef INCLUDED_BASEGFX_MATRIX_B2DHOMMATRIXTOOLS_HXX
+#define INCLUDED_BASEGFX_MATRIX_B2DHOMMATRIXTOOLS_HXX
 
 #include <sal/types.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -226,6 +226,6 @@ namespace basegfx
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#endif /* _BGFX_MATRIX_B2DHOMMATRIXTOOLS_HXX */
+#endif // INCLUDED_BASEGFX_MATRIX_B2DHOMMATRIXTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

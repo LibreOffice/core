@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
-#define _BGFX_RANGE_B2DRANGE_HXX
+#ifndef INCLUDED_BASEGFX_RANGE_B2DRANGE_HXX
+#define INCLUDED_BASEGFX_RANGE_B2DRANGE_HXX
 
 #include <ostream>
 #include <vector>
@@ -323,6 +323,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return stream << range.getWidth() << "x" << range.getHeight() << "@" << range.getMinimum();
 }
 
-#endif /* _BGFX_RANGE_B2DRANGE_HXX */
+#endif // INCLUDED_BASEGFX_RANGE_B2DRANGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

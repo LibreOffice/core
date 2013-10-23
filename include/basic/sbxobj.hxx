@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBX_SBXOBJECT_HXX
-#define _SBX_SBXOBJECT_HXX
+#ifndef INCLUDED_BASIC_SBXOBJ_HXX
+#define INCLUDED_BASIC_SBXOBJ_HXX
 
 #include <svl/lstner.hxx>
 #include <basic/sbxvar.hxx>
@@ -91,6 +91,6 @@ public:
 SV_DECL_REF(SbxObject)
 SV_IMPL_REF(SbxObject)
 
-#endif /* _SBX_SBXOBJECT_HXX */
+#endif // INCLUDED_BASIC_SBXOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

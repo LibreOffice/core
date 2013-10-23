@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBXBASE_HXX
-#define _SBXBASE_HXX
+#ifndef INCLUDED_BASIC_SBXBASE_HXX
+#define INCLUDED_BASIC_SBXBASE_HXX
 
 #include <i18nlangtag/lang.h>
 #include <basic/sbxdef.hxx>

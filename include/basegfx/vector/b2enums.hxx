@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_VECTOR_B2ENUMS_HXX
-#define _BGFX_VECTOR_B2ENUMS_HXX
+#ifndef INCLUDED_BASEGFX_VECTOR_B2ENUMS_HXX
+#define INCLUDED_BASEGFX_VECTOR_B2ENUMS_HXX
 
 #include <sal/types.h>
 
@@ -65,6 +65,6 @@ namespace basegfx
 
 } // end of namespace basegfx
 
-#endif /* _BGFX_VECTOR_B2ENUMS_HXX */
+#endif // INCLUDED_BASEGFX_VECTOR_B2ENUMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_TOOLS_GRADIENTTOOLS_HXX
-#define _BGFX_TOOLS_GRADIENTTOOLS_HXX
+#ifndef INCLUDED_BASEGFX_TOOLS_GRADIENTTOOLS_HXX
+#define INCLUDED_BASEGFX_TOOLS_GRADIENTTOOLS_HXX
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>

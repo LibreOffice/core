@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_RASTER_RASTERCONVERT3D_HXX
-#define _BGFX_RASTER_RASTERCONVERT3D_HXX
+#ifndef INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
+#define INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
 
 #include <sal/types.h>
 #include <vector>
@@ -445,6 +445,6 @@ namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif /* _BGFX_RASTER_RASTERCONVERT3D_HXX */
+#endif // INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

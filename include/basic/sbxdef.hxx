@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SBXDEF_HXX
-#define _SBXDEF_HXX
+#ifndef INCLUDED_BASIC_SBXDEF_HXX
+#define INCLUDED_BASIC_SBXDEF_HXX
 
 
 #ifndef __RSC

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_TOOLS_RECTCLIPTOOLS_HXX
-#define _BGFX_TOOLS_RECTCLIPTOOLS_HXX
+#ifndef INCLUDED_BASEGFX_TOOLS_RECTCLIPTOOLS_HXX
+#define INCLUDED_BASEGFX_TOOLS_RECTCLIPTOOLS_HXX
 
 #include <sal/types.h>
 #include <basegfx/range/b2ibox.hxx>
@@ -91,6 +91,6 @@ namespace basegfx
     }
 }
 
-#endif // _BGFX_TOOLS_RECTCLIPTOOLS_HXX
+#endif // INCLUDED_BASEGFX_TOOLS_RECTCLIPTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

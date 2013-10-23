@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SB_OBJMOD_HXX
-#define _SB_OBJMOD_HXX
+#ifndef INCLUDED_BASIC_SBOBJMOD_HXX
+#define INCLUDED_BASIC_SBOBJMOD_HXX
 
 #include <rtl/ref.hxx>
 #include <basic/sbmod.hxx>

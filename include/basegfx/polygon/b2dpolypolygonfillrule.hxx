@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONFILLRULE_HXX
-#define _BGFX_POLYGON_B2DPOLYPOLYGONFILLRULE_HXX
+#ifndef INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONFILLRULE_HXX
+#define INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONFILLRULE_HXX
 
 #include <sal/types.h>
 
@@ -49,6 +49,6 @@ namespace basegfx
     };
 }
 
-#endif /* _BGFX_POLYGON_B2DPOLYPOLYGONFILLRULE_HXX */
+#endif // INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONFILLRULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

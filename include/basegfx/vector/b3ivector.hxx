@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_VECTOR_B3IVECTOR_HXX
-#define _BGFX_VECTOR_B3IVECTOR_HXX
+#ifndef INCLUDED_BASEGFX_VECTOR_B3IVECTOR_HXX
+#define INCLUDED_BASEGFX_VECTOR_B3IVECTOR_HXX
 
 #include <basegfx/tuple/b3ituple.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -244,6 +244,6 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
-#endif /* _BGFX_VECTOR_B3DVECTOR_HXX */
+#endif // INCLUDED_BASEGFX_VECTOR_B3IVECTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

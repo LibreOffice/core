@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
-#define _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
+#ifndef INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
+#define INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -148,6 +148,6 @@ namespace basegfx
 //////////////////////////////////////////////////////////////////////////////
 
 
-#endif /* _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX */
+#endif // INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef BASIC_SBGLOBAL_HXX
-#define BASIC_SBGLOBAL_HXX
+#ifndef INCLUDED_BASIC_GLOBAL_HXX
+#define INCLUDED_BASIC_GLOBAL_HXX
 
 namespace utl {
     class TransliterationWrapper;

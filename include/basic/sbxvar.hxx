@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SBXVAR_HXX
-#define SBXVAR_HXX
+#ifndef INCLUDED_BASIC_SBXVAR_HXX
+#define INCLUDED_BASIC_SBXVAR_HXX
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
@@ -351,6 +351,6 @@ public:
 
 SV_DECL_REF(SbxVariable)
 
-#endif  // SBXVAR_HXX
+#endif // INCLUDED_BASIC_SBXVAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

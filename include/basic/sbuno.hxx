@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SB_SBUNO_HXX
-#define _SB_SBUNO_HXX
+#ifndef INCLUDED_BASIC_SBUNO_HXX
+#define INCLUDED_BASIC_SBUNO_HXX
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/uno/Any.hxx>

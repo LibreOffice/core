@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
-#define _BGFX_RANGE_B2DRECTANGLE_HXX
+#ifndef INCLUDED_BASEGFX_RANGE_B2DRECTANGLE_HXX
+#define INCLUDED_BASEGFX_RANGE_B2DRECTANGLE_HXX
 
 #include <basegfx/range/b2drange.hxx>
 
@@ -31,6 +31,6 @@ namespace basegfx
     typedef B2DRange B2DRectangle;
 }
 
-#endif /* _BGFX_RANGE_B2DRECTANGLE_HXX */
+#endif // INCLUDED_BASEGFX_RANGE_B2DRECTANGLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

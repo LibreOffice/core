@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
-#define _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
+#ifndef INCLUDED_BASEGFX_POLYGON_B3DPOLYPOLYGONTOOLS_HXX
+#define INCLUDED_BASEGFX_POLYGON_B3DPOLYPOLYGONTOOLS_HXX
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -128,6 +128,6 @@ namespace basegfx
     } // end of namespace tools
 } // end of namespace basegfx
 
-#endif /* _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX */
+#endif // INCLUDED_BASEGFX_POLYGON_B3DPOLYPOLYGONTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

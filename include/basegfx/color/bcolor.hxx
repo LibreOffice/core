@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_COLOR_BCOLOR_HXX
-#define _BGFX_COLOR_BCOLOR_HXX
+#ifndef INCLUDED_BASEGFX_COLOR_BCOLOR_HXX
+#define INCLUDED_BASEGFX_COLOR_BCOLOR_HXX
 
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -224,6 +224,6 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif /* _BGFX_COLOR_BCOLOR_HXX */
+#endif // INCLUDED_BASEGFX_COLOR_BCOLOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

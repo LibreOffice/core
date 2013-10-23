@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
-#define _BGFX_MATRIX_B3DHOMMATRIX_HXX
+#ifndef INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIX_HXX
+#define INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIX_HXX
 
 #include <sal/types.h>
 #include <basegfx/point/b3dpoint.hxx>
@@ -150,6 +150,6 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
-#endif /* _BGFX_MATRIX_B3DHOMMATRIX_HXX */
+#endif // INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

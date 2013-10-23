@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_RANGE_BASICRANGE_HXX
-#define _BGFX_RANGE_BASICRANGE_HXX
+#ifndef INCLUDED_BASEGFX_RANGE_BASICRANGE_HXX
+#define INCLUDED_BASEGFX_RANGE_BASICRANGE_HXX
 
 #include <sal/types.h>
 #include <float.h>
@@ -273,6 +273,6 @@ namespace basegfx
 
 } // end of namespace basegfx
 
-#endif /* _BGFX_RANGE_BASICRANGE_HXX */
+#endif // INCLUDED_BASEGFX_RANGE_BASICRANGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

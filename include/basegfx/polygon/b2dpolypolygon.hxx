@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
-#define _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#ifndef INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#define INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGON_HXX
 
 #include <ostream>
 #include <vector>
@@ -148,6 +148,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return stream;
 }
 
-#endif /* _BGFX_POLYGON_B2DPOLYPOLYGON_HXX */
+#endif // INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

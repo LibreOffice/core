@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SB_SBSTAR_HXX
-#define _SB_SBSTAR_HXX
+#ifndef INCLUDED_BASIC_SBSTAR_HXX
+#define INCLUDED_BASIC_SBSTAR_HXX
 
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>

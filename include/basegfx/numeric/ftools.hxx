@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
-#define _BGFX_NUMERIC_FTOOLS_HXX
+#ifndef INCLUDED_BASEGFX_NUMERIC_FTOOLS_HXX
+#define INCLUDED_BASEGFX_NUMERIC_FTOOLS_HXX
 
 #include <rtl/math.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -223,6 +223,6 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif /* _BGFX_NUMERIC_FTOOLS_HXX */
+#endif // INCLUDED_BASEGFX_NUMERIC_FTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

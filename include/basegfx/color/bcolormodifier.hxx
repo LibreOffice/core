@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_COLOR_BCOLORMODIFIER_HXX
-#define _BGFX_COLOR_BCOLORMODIFIER_HXX
+#ifndef INCLUDED_BASEGFX_COLOR_BCOLORMODIFIER_HXX
+#define INCLUDED_BASEGFX_COLOR_BCOLORMODIFIER_HXX
 
 #include <basegfx/color/bcolor.hxx>
 #include <vector>
@@ -132,6 +132,6 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif // _BGFX_COLOR_BCOLORMODIFIER_HXX
+#endif // INCLUDED_BASEGFX_COLOR_BCOLORMODIFIER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

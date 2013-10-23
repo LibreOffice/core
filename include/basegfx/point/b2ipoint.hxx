@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_POINT_B2IPOINT_HXX
-#define _BGFX_POINT_B2IPOINT_HXX
+#ifndef INCLUDED_BASEGFX_POINT_B2IPOINT_HXX
+#define INCLUDED_BASEGFX_POINT_B2IPOINT_HXX
 
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -112,6 +112,6 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif /* _BGFX_POINT_B2IPOINT_HXX */
+#endif // INCLUDED_BASEGFX_POINT_B2IPOINT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

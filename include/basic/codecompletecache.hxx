@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CODECOMPLETECACHE_H
-#define CODECOMPLETECACHE_H
+#ifndef INCLUDED_BASIC_CODECOMPLETECACHE_HXX
+#define INCLUDED_BASIC_CODECOMPLETECACHE_HXX
 
 #include <basic/sbdef.hxx>
 #include <basic/sbxobj.hxx>
@@ -98,6 +98,6 @@ public:
     void Clear();
 };
 
-#endif // CODECOMPLETECACHE_H
+#endif // INCLUDED_BASIC_CODECOMPLETECACHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

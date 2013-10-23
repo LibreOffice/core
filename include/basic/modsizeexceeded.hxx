@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASIC_MODSIZEEXCEEDED_HXX
-#define _BASIC_MODSIZEEXCEEDED_HXX
+#ifndef INCLUDED_BASIC_MODSIZEEXCEEDED_HXX
+#define INCLUDED_BASIC_MODSIZEEXCEEDED_HXX
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cppuhelper/implbase1.hxx>

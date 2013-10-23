@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASRDLL_HXX
-#define _BASRDLL_HXX
+#ifndef INCLUDED_BASIC_BASRDLL_HXX
+#define INCLUDED_BASIC_BASRDLL_HXX
 
 class ResMgr;
 
@@ -47,6 +47,6 @@ public:
 
 #define BASIC_DLL() (*(BasicDLL**)GetAppData( SHL_BASIC ) )
 
-#endif //_BASRDLL_HXX
+#endif // INCLUDED_BASIC_BASRDLL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

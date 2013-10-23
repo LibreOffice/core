@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_RANGE_B1IRANGE_HXX
-#define _BGFX_RANGE_B1IRANGE_HXX
+#ifndef INCLUDED_BASEGFX_RANGE_B1IRANGE_HXX
+#define INCLUDED_BASEGFX_RANGE_B1IRANGE_HXX
 
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -164,6 +164,6 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif /* _BGFX_RANGE_B1IRANGE_HXX */
+#endif // INCLUDED_BASEGFX_RANGE_B1IRANGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

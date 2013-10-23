@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_TUPLE_B2DTUPLE_HXX
-#define _BGFX_TUPLE_B2DTUPLE_HXX
+#ifndef INCLUDED_BASEGFX_TUPLE_B2DTUPLE_HXX
+#define INCLUDED_BASEGFX_TUPLE_B2DTUPLE_HXX
 
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
@@ -358,6 +358,6 @@ namespace basegfx
     BASEGFX_DLLPUBLIC B2ITuple fround(const B2DTuple& rTup);
 } // end of namespace basegfx
 
-#endif /* _BGFX_TUPLE_B2DTUPLE_HXX */
+#endif // INCLUDED_BASEGFX_TUPLE_B2DTUPLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

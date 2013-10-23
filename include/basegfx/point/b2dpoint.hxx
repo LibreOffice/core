@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BGFX_POINT_B2DPOINT_HXX
-#define _BGFX_POINT_B2DPOINT_HXX
+#ifndef INCLUDED_BASEGFX_POINT_B2DPOINT_HXX
+#define INCLUDED_BASEGFX_POINT_B2DPOINT_HXX
 
 #include <ostream>
 
@@ -145,6 +145,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return stream << "(" << point.getX() << "," << point.getY() << ")";
 }
 
-#endif /* _BGFX_POINT_B2DPOINT_HXX */
+#endif // INCLUDED_BASEGFX_POINT_B2DPOINT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
