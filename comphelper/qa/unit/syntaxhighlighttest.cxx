@@ -36,14 +36,14 @@ void SyntaxHighlightTest::testBasicString()
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( 0, aBasicString, aPortions );
 
-
-    // check that all strings are valid
+    sal_Int32 prevEnd = 0;
     for(std::vector<HighlightPortion>::const_iterator itr =
             aPortions.begin(), itrEnd = aPortions.end(); itr != itrEnd; ++itr)
     {
-        CPPUNIT_ASSERT(itr->nBegin < aBasicString.getLength());
-        //CPPUNIT_ASSERT(itr->nEnd < aBasicString.getLength());
+        CPPUNIT_ASSERT_EQUAL(prevEnd, itr->nBegin);
+        prevEnd = itr->nEnd;
     }
+    CPPUNIT_ASSERT_EQUAL(aBasicString.getLength(), prevEnd);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SyntaxHighlightTest);
