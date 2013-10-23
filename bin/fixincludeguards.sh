@@ -42,7 +42,7 @@ for fn in "$@"; do
 
 
         if [ aa"`git grep -w "$old_guard" | cut -d ':' -f1 | sort -u | wc -l `" != aa"1" ]; then
-            echo -e "$fn: \e[00;31mwarning:\e[00m guard definition used in other files"
+            echo -e "$fn: \e[00;31mwarning:\e[00m $old_guard guard definition used in other files"
             continue
         fi
 
