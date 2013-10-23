@@ -1042,6 +1042,96 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "PMT"; }
 };
+class OpPPMT: public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ArgVector argVector;
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+       {
+            if (i)
+            ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+            argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
+       }
+        ss << ") {\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss<<"double tFv=0,tType=0;\n\t";
+        if(vSubArguments.size()==5)
+            ss<<"tFv="<<vSubArguments[4]->GenSlidingWindowDeclRef()<<";\n\t";
+        else if(vSubArguments.size()==6)
+        {
+            ss<<"tType="<<vSubArguments[5]->GenSlidingWindowDeclRef();
+            ss<<";\n\t";
+            ss<<"tFv="<<vSubArguments[4]->GenSlidingWindowDeclRef();
+            ss<<";\n\t";
+        }
+        ss << "double tmp = 0.0;\n\t";
+        ss <<"double pmt ;\n\t";
+        ss<<"if("<<vSubArguments[0]->GenSlidingWindowDeclRef()<<"==0.0)\n\t";
+        ss<<"\treturn ("<<vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss<<"+tFv)/";
+        ss<<vSubArguments[2]->GenSlidingWindowDeclRef()<<";\n\t";
+        ss <<"double temp1=0;\n\t";
+        ss <<"double abl = pow(1.0+";
+        ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<",";
+        ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss<<");\n\t";
+        ss <<"temp1-=tFv";
+        ss<<";\n\t";
+        ss<<"temp1-=";
+        ss<<vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss<<"*abl;\n\t";
+        ss <<"pmt = temp1/(1.0+";
+        ss<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<"*tType";
+        ss<<") / ( (abl-1.0)/";
+        ss<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<");\n\t";
+        ss <<"double temp = pow( 1+";
+        ss<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<" ,";
+        ss<<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss<<"-2);\n\t";
+        ss <<"double re;\n\t";
+        ss <<"if (tType";
+        ss<<" == 0)\n\t";
+        ss <<"{\n\t";
+        ss <<"    re = -";
+        ss<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<" * ";
+        ss<<vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss<<"*pow(1+";
+        ss<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<" ,";
+        vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss<<"-1) - pmt * (pow(1+";
+        ss<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<" ,";
+        ss<<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss<<"-1)-1);\n\t";
+        ss <<"}\n\t";
+        ss <<"else\n\t";
+        ss <<"{\n\t";
+        ss <<"    re = -";
+        ss<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<" * (";
+        ss<<vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss<<" + pmt)* temp - pmt * (temp-1);\n\t";
+        ss <<"}\n\t";
+        ss <<"tmp = pmt - re;\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+    virtual std::string BinFuncName(void) const { return "PPMT"; }
+};
+
+
 class OpReceived:public Normal
 {
 public:
@@ -1462,6 +1552,9 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 break;
             case ocZGZ:
                 mvSubArguments.push_back(SoPHelper<OpRRI>(ts, ft->Children[i]));
+                break;
+            case ocKapz:
+                mvSubArguments.push_back(SoPHelper<OpPPMT>(ts, ft->Children[i]));
                 break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
