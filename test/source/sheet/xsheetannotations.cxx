@@ -38,21 +38,30 @@ void XSheetAnnotations::testInsertNew()
     //uno::Reference< container::XIndexAccess > xAnnotationsIndexAfter (aSheetAnnotations, UNO_QUERY_THROW);
     sal_Int32 nAfter = xAnnotationsIndex->getCount();
 
-    CPPUNIT_ASSERT_MESSAGE("Annotations index not updated", nAfter == nBefore + 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Annotations index not updated", nBefore + 1, nAfter);
 
     // is the position ok ?
     uno::Reference< sheet::XSheetAnnotation > aLastSheetAnnotation (xAnnotationsIndex->getByIndex(nAfter-1), UNO_QUERY_THROW);
     table::CellAddress xResultCellAddress = aLastSheetAnnotation->getPosition();
 
-    CPPUNIT_ASSERT_MESSAGE("Insert Annotation - Wrong SHEET reference position", xResultCellAddress.Sheet == xTargetCellAddress.Sheet);
-    CPPUNIT_ASSERT_MESSAGE("Insert Annotation - Wrong COLUMN reference position", xResultCellAddress.Column == xTargetCellAddress.Column);
-    CPPUNIT_ASSERT_MESSAGE("Insert Annotation - Wrong ROW reference position", xResultCellAddress.Row == xTargetCellAddress.Row);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Insert Annotation - Wrong SHEET reference position",
+        xTargetCellAddress.Sheet, xResultCellAddress.Sheet);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Insert Annotation - Wrong COLUMN reference position",
+        xTargetCellAddress.Column, xResultCellAddress.Column);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Insert Annotation - Wrong ROW reference position",
+        xTargetCellAddress.Row, xResultCellAddress.Row);
 
     // is the string ok ?
     uno::Reference< text::XTextRange > aTextSheetAnnotation(aLastSheetAnnotation, UNO_QUERY_THROW);
     OUString aString = aTextSheetAnnotation->getString();
 
-    CPPUNIT_ASSERT_MESSAGE("Insert Annotation - Wrong string", aString == "an inserted annotation");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Insert Annotation - Wrong string", OUString("an inserted annotation"),
+        aString);
 
 }
 
@@ -83,29 +92,45 @@ void XSheetAnnotations::testRemoveByIndex()
     uno::Reference< sheet::XSheetAnnotation > aLastSheetAnnotation (xAnnotationsIndex->getByIndex(nAfter-1), UNO_QUERY_THROW);
     table::CellAddress xResultCellAddress = aLastSheetAnnotation->getPosition();
 
-    CPPUNIT_ASSERT_MESSAGE("Remove Annotation - Wrong SHEET reference position", xResultCellAddress.Sheet == xOtherCellAddress.Sheet);
-    CPPUNIT_ASSERT_MESSAGE("Remove Annotation - Wrong COLUMN reference position", xResultCellAddress.Column == xOtherCellAddress.Column);
-    CPPUNIT_ASSERT_MESSAGE("Remove Annotation - Wrong ROW reference position", xResultCellAddress.Row == xOtherCellAddress.Row);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Remove Annotation - Wrong SHEET reference position",
+        xOtherCellAddress.Sheet, xResultCellAddress.Sheet);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Remove Annotation - Wrong COLUMN reference position",
+        xOtherCellAddress.Column, xResultCellAddress.Column);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Remove Annotation - Wrong ROW reference position",
+        xOtherCellAddress.Row, xResultCellAddress.Row);
 
     // is the string ok ?
     uno::Reference< text::XTextRange > aLastTextSheetAnnotation(aLastSheetAnnotation, UNO_QUERY_THROW);
     OUString aLastString = aLastTextSheetAnnotation->getString();
 
-    CPPUNIT_ASSERT_MESSAGE("Remove Annotation - Wrong string", aLastString == "an inserted annotation 3");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Remove Annotation - Wrong string",
+        OUString("an inserted annotation 3"), aLastString);
 
     // the previous should be xTargetCellAddress
     uno::Reference< sheet::XSheetAnnotation > aPreviousSheetAnnotation (xAnnotationsIndex->getByIndex(nAfter-2), UNO_QUERY_THROW);
     table::CellAddress xPreviousCellAddress = aPreviousSheetAnnotation->getPosition();
 
-    CPPUNIT_ASSERT_MESSAGE("Remove Annotation - Wrong SHEET reference position", xPreviousCellAddress.Sheet == xTargetCellAddress.Sheet);
-    CPPUNIT_ASSERT_MESSAGE("Remove Annotation - Wrong COLUMN reference position", xPreviousCellAddress.Column == xTargetCellAddress.Column);
-    CPPUNIT_ASSERT_MESSAGE("Remove Annotation - Wrong ROW reference position", xPreviousCellAddress.Row == xTargetCellAddress.Row);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Remove Annotation - Wrong SHEET reference position",
+        xTargetCellAddress.Sheet, xPreviousCellAddress.Sheet);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Remove Annotation - Wrong COLUMN reference position",
+        xTargetCellAddress.Column, xPreviousCellAddress.Column);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Remove Annotation - Wrong ROW reference position",
+        xTargetCellAddress.Row, xPreviousCellAddress.Row);
 
     // is the string ok ?
     uno::Reference< text::XTextRange > aPreviousTextSheetAnnotation(aPreviousSheetAnnotation, UNO_QUERY_THROW);
     OUString aPreviousString = aPreviousTextSheetAnnotation->getString();
 
-    CPPUNIT_ASSERT_MESSAGE("Remove Annotation - Wrong string", aPreviousString == "an inserted annotation 1");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Remove Annotation - Wrong string",
+        OUString("an inserted annotation 1"), aPreviousString);
 
 }
 
