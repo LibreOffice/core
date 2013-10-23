@@ -1104,13 +1104,13 @@ void ImportExcel::TableOp( void )
         if( nFirstCol && nFirstRow )
         {
             ScTabOpParam aTabOpParam;
-            aTabOpParam.nMode = (nGrbit & EXC_TABLEOP_BOTH) ? 2 : ((nGrbit & EXC_TABLEOP_ROW) ? 1 : 0 );
+            aTabOpParam.meMode = (nGrbit & EXC_TABLEOP_BOTH) ? ScTabOpParam::Both : ((nGrbit & EXC_TABLEOP_ROW) ? ScTabOpParam::Row : ScTabOpParam::Column);
             sal_uInt16 nCol = nFirstCol - 1;
             sal_uInt16 nRow = nFirstRow - 1;
             SCTAB nTab = GetCurrScTab();
-            switch( aTabOpParam.nMode )
+            switch (aTabOpParam.meMode)
             {
-                case 0:     // COL
+                case ScTabOpParam::Column:
                     aTabOpParam.aRefFormulaCell.Set(
                             static_cast<SCCOL>(nFirstCol),
                             static_cast<SCROW>(nFirstRow - 1), nTab, false,
@@ -1124,7 +1124,7 @@ void ImportExcel::TableOp( void )
                             false );
                     nRow++;
                 break;
-                case 1:     // ROW
+                case ScTabOpParam::Row:
                     aTabOpParam.aRefFormulaCell.Set(
                             static_cast<SCCOL>(nFirstCol - 1),
                             static_cast<SCROW>(nFirstRow), nTab, false, false,
@@ -1138,7 +1138,7 @@ void ImportExcel::TableOp( void )
                             false );
                     nCol++;
                 break;
-                case 2:     // TWO-INPUT
+                case ScTabOpParam::Both:     // TWO-INPUT
                     aTabOpParam.aRefFormulaCell.Set(
                             static_cast<SCCOL>(nFirstCol - 1),
                             static_cast<SCROW>(nFirstRow - 1), nTab, false,

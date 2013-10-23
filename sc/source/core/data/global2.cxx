@@ -294,12 +294,14 @@ sal_Bool ScSolveParam::operator==( const ScSolveParam& r ) const
 //------------------------------------------------------------------------
 // struct ScTabOpParam
 
+ScTabOpParam::ScTabOpParam() : meMode(Column) {}
+
 ScTabOpParam::ScTabOpParam( const ScTabOpParam& r )
     :   aRefFormulaCell ( r.aRefFormulaCell ),
         aRefFormulaEnd  ( r.aRefFormulaEnd ),
         aRefRowCell     ( r.aRefRowCell ),
         aRefColCell     ( r.aRefColCell ),
-        nMode           ( r.nMode )
+    meMode(r.meMode)
 {
 }
 
@@ -309,12 +311,12 @@ ScTabOpParam::ScTabOpParam( const ScRefAddress& rFormulaCell,
                             const ScRefAddress& rFormulaEnd,
                             const ScRefAddress& rRowCell,
                             const ScRefAddress& rColCell,
-                                  sal_uInt8      nMd)
+                            Mode eMode )
     :   aRefFormulaCell ( rFormulaCell ),
         aRefFormulaEnd  ( rFormulaEnd ),
         aRefRowCell     ( rRowCell ),
         aRefColCell     ( rColCell ),
-        nMode           ( nMd )
+    meMode(eMode)
 {
 }
 
@@ -326,19 +328,19 @@ ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
     aRefFormulaEnd   = r.aRefFormulaEnd;
     aRefRowCell      = r.aRefRowCell;
     aRefColCell      = r.aRefColCell;
-    nMode            = r.nMode;
+    meMode = r.meMode;
     return *this;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScTabOpParam::operator==( const ScTabOpParam& r ) const
+bool ScTabOpParam::operator==( const ScTabOpParam& r ) const
 {
     return (        (aRefFormulaCell == r.aRefFormulaCell)
                  && (aRefFormulaEnd  == r.aRefFormulaEnd)
                  && (aRefRowCell     == r.aRefRowCell)
                  && (aRefColCell     == r.aRefColCell)
-                 && (nMode           == r.nMode) );
+                 && (meMode == r.meMode) );
 }
 
 OUString ScGlobal::GetAbsDocName( const OUString& rFileName,

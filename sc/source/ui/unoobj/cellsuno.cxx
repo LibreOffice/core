@@ -5342,7 +5342,7 @@ void SAL_CALL ScCellRangeObj::setTableOperation( const table::CellRangeAddress& 
     ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
     {
-        sal_Bool bError = false;
+        bool bError = false;
         ScTabOpParam aParam;
         aParam.aRefFormulaCell = ScRefAddress( (SCCOL)aFormulaRange.StartColumn,
                                               (SCROW)aFormulaRange.StartRow, aFormulaRange.Sheet,
@@ -5356,19 +5356,20 @@ void SAL_CALL ScCellRangeObj::setTableOperation( const table::CellRangeAddress& 
         aParam.aRefColCell     = ScRefAddress( (SCCOL)aColumnCell.Column,
                                               (SCROW)aColumnCell.Row, aColumnCell.Sheet,
                                               false, false, false );
+
         switch (nMode)
         {
             case sheet::TableOperationMode_COLUMN:
-                aParam.nMode = 0;
+                aParam.meMode = ScTabOpParam::Column;
                 break;
             case sheet::TableOperationMode_ROW:
-                aParam.nMode = 1;
+                aParam.meMode = ScTabOpParam::Row;
                 break;
             case sheet::TableOperationMode_BOTH:
-                aParam.nMode = 2;
+                aParam.meMode = ScTabOpParam::Both;
                 break;
             default:
-                bError = sal_True;
+                bError = true;
         }
 
         if (!bError)

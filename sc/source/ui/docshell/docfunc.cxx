@@ -4156,7 +4156,7 @@ sal_Bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
                                      rParam.aRefFormulaEnd,
                                      rParam.aRefRowCell,
                                      rParam.aRefColCell,
-                                     rParam.nMode) );
+                                     rParam.meMode) );
         }
         pDoc->InsertTableOp(rParam, nStartCol, nStartRow, nEndCol, nEndRow, aMark);
         rDocShell.PostPaintGridAll();

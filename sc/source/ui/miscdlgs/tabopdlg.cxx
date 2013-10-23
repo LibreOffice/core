@@ -243,7 +243,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
 {
     if ( pBtn == &aBtnOk )
     {
-        sal_uInt8 nMode = 3;
+        ScTabOpParam::Mode eMode = ScTabOpParam::Column;
         sal_uInt16 nError = 0;
 
         // Zu ueberpruefen:
@@ -274,7 +274,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                         theFormulaCell.Col() != theFormulaEnd.Col())
                         nError = TABOPERR_NOCOLFORMULA;
                     else
-                        nMode = 1;
+                        eMode = ScTabOpParam::Row;
                 }
             }
             if (!aEdColCell.GetText().isEmpty())
@@ -284,16 +284,16 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                     nError = TABOPERR_WRONGCOL;
                 else
                 {
-                    if (nMode == 1)                         // beides
+                    if (eMode == ScTabOpParam::Row)                         // beides
                     {
-                        nMode = 2;
+                        eMode = ScTabOpParam::Both;
                         ConvertSingleRef( pDoc, aEdFormulaRange.GetText(), nCurTab,
                                           theFormulaCell, eConv );
                     }
                     else if (theFormulaCell.Row() != theFormulaEnd.Row())
                         nError = TABOPERR_NOROWFORMULA;
                     else
-                        nMode = 0;
+                        eMode = ScTabOpParam::Column;
                 }
             }
         }
@@ -302,11 +302,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
             RaiseError( (ScTabOpErr) nError );
         else
         {
-            ScTabOpParam aOutParam( theFormulaCell,
-                                    theFormulaEnd,
-                                    theRowCell,
-                                    theColCell,
-                                    nMode );
+            ScTabOpParam aOutParam(theFormulaCell, theFormulaEnd, theRowCell, theColCell, eMode);
             ScTabOpItem  aOutItem( SID_TABOP, &aOutParam );
 
             SetDispatcherLock( false );

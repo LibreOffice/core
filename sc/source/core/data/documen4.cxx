@@ -378,7 +378,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     aForString.append(ScCompiler::GetNativeSymbol( ocOpen));
 
     const OUString& sSep = ScCompiler::GetNativeSymbol( ocSep);
-    if (rParam.nMode == 0)                          // nur Spalte
+    if (rParam.meMode == ScTabOpParam::Column) // column only
     {
         aRef.Set( rParam.aRefFormulaCell.GetAddress(), true, false, false );
         aForString.append(aRef.GetRefString(this, nTab1));
@@ -391,7 +391,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
         nCol2 = std::min( nCol2, (SCCOL)(rParam.aRefFormulaEnd.Col() -
                     rParam.aRefFormulaCell.Col() + nCol1 + 1));
     }
-    else if (rParam.nMode == 1)                 // nur zeilenweise
+    else if (rParam.meMode == ScTabOpParam::Row) // row only
     {
         aRef.Set( rParam.aRefFormulaCell.GetAddress(), false, true, false );
         aForString.append(aRef.GetRefString(this, nTab1));
@@ -404,7 +404,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
         nRow2 = std::min( nRow2, (SCROW)(rParam.aRefFormulaEnd.Row() -
                     rParam.aRefFormulaCell.Row() + nRow1 + 1));
     }
-    else                    // beides
+    else // both
     {
         aForString.append(rParam.aRefFormulaCell.GetRefString(this, nTab1));
         aForString.append(sSep);

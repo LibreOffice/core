@@ -24,6 +24,7 @@
 #include "viewutil.hxx"
 #include "spellparam.hxx"
 #include "cellmergeoption.hxx"
+#include "paramisc.hxx"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -527,7 +528,7 @@ public:
                                  const ScRefAddress& rFormulaEnd,
                                  const ScRefAddress& rRowCell,
                                  const ScRefAddress& rColCell,
-                                 sal_uInt8 nMode );
+                                 ScTabOpParam::Mode eMode );
     virtual         ~ScUndoTabOp();
 
     virtual void    Undo();
@@ -544,7 +545,7 @@ private:
     ScRefAddress    theFormulaEnd;
     ScRefAddress    theRowCell;
     ScRefAddress    theColCell;
-    sal_uInt8           nMode;
+    ScTabOpParam::Mode meMode;
 };
 
 

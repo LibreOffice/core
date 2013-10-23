@@ -1086,7 +1086,7 @@ ScUndoTabOp::ScUndoTabOp( ScDocShell* pNewDocShell,
                 const ScRefAddress& rFormulaEnd,
                 const ScRefAddress& rRowCell,
                 const ScRefAddress& rColCell,
-                sal_uInt8 nMd )
+                ScTabOpParam::Mode eMode )
     :   ScSimpleUndo( pNewDocShell ),
         aRange          ( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
         pUndoDoc        ( pNewUndoDoc ),
@@ -1094,7 +1094,7 @@ ScUndoTabOp::ScUndoTabOp( ScDocShell* pNewDocShell,
         theFormulaEnd   ( rFormulaEnd ),
         theRowCell      ( rRowCell ),
         theColCell      ( rColCell ),
-        nMode           ( nMd )
+        meMode(eMode)
 {
 }
 
@@ -1135,9 +1135,7 @@ void ScUndoTabOp::Redo()
 
     ScUndoUtil::MarkSimpleBlock( pDocShell, aRange );
 
-    ScTabOpParam aParam( theFormulaCell, theFormulaEnd,
-                         theRowCell,     theColCell,
-                         nMode );
+    ScTabOpParam aParam(theFormulaCell, theFormulaEnd, theRowCell, theColCell, meMode);
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)

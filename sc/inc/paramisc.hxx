@@ -40,25 +40,27 @@ struct ScSolveParam
     sal_Bool        operator==  ( const ScSolveParam& r ) const;
 };
 
-struct ScTabOpParam
+/**
+ * Parameter for data table aka multiple operations.
+ */
+struct SC_DLLPUBLIC ScTabOpParam
 {
+    enum Mode { Column = 0, Row = 1, Both = 2 };
+
     ScRefAddress    aRefFormulaCell;
     ScRefAddress    aRefFormulaEnd;
     ScRefAddress    aRefRowCell;
     ScRefAddress    aRefColCell;
-    sal_uInt8           nMode;
+    Mode meMode;
 
-    ScTabOpParam() {};
+    ScTabOpParam();
     ScTabOpParam( const ScTabOpParam& r );
-    ScTabOpParam( const ScRefAddress& rFormulaCell,
-                  const ScRefAddress& rFormulaEnd,
-                  const ScRefAddress& rRowCell,
-                  const ScRefAddress& rColCell,
-                        sal_uInt8        nMd);
-    ~ScTabOpParam() {};
+    ScTabOpParam(
+        const ScRefAddress& rFormulaCell, const ScRefAddress& rFormulaEnd,
+        const ScRefAddress& rRowCell, const ScRefAddress& rColCell, Mode eMode );
 
     ScTabOpParam&   operator=       ( const ScTabOpParam& r );
-    sal_Bool        operator==      ( const ScTabOpParam& r ) const;
+    bool operator== ( const ScTabOpParam& r ) const;
 };
 
 #endif // SC_PARAMISC_HXX
