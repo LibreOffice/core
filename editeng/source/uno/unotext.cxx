@@ -1494,10 +1494,10 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextRangeBase::getSupportedServiceNames
 uno::Sequence< OUString > SAL_CALL SvxUnoTextRangeBase::getSupportedServiceNames_Static()
     SAL_THROW(())
 {
-    uno::Sequence< OUString >   aSeq;
-    comphelper::ServiceInfoHelper::addToSequence( aSeq, 3, "com.sun.star.style.CharacterProperties",
-                                                  "com.sun.star.style.CharacterPropertiesComplex",
-                                                  "com.sun.star.style.CharacterPropertiesAsian");
+    uno::Sequence< OUString > aSeq(3);
+    aSeq[0] = "com.sun.star.style.CharacterProperties";
+    aSeq[1] = "com.sun.star.style.CharacterPropertiesComplex";
+    aSeq[2] = "com.sun.star.style.CharacterPropertiesAsian";
     return aSeq;
 }
 

@@ -21,14 +21,12 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <comphelper/serviceinfohelper.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
