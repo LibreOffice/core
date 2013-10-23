@@ -60,17 +60,17 @@ public:
         mSymName(s), mFormulaTree(ft), mpClmem(NULL) {}
     const std::string &GetNameAsString(void) const { return mSymName; }
     /// Generate declaration
-    virtual void GenDecl(std::stringstream &ss)
+    virtual void GenDecl(std::stringstream &ss) const
     {
         ss << "__global double *"<<mSymName;
     }
     /// When declared as input to a sliding window function
-    virtual void GenSlidingWindowDecl(std::stringstream &ss)
+    virtual void GenSlidingWindowDecl(std::stringstream &ss) const
     {
         GenDecl(ss);
     }
     /// When referenced in a sliding window function
-    virtual std::string GenSlidingWindowDeclRef(void)
+    virtual std::string GenSlidingWindowDeclRef(void) const
     {
         std::stringstream ss;
         ss << mSymName << "[gid0]";
@@ -169,7 +169,7 @@ public:
         std::shared_ptr<FormulaTreeNode> ft):
             DynamicKernelArgument(s, ft) {}
     /// Generate declaration
-    virtual void GenDecl(std::stringstream &ss)
+    virtual void GenDecl(std::stringstream &ss) const
     {
         ss << "double " << mSymName;
     }
@@ -179,11 +179,11 @@ public:
         assert (Tok->GetType() == formula::svDouble);
         ss << Tok->GetDouble();
     }
-    virtual void GenSlidingWindowDecl(std::stringstream &ss)
+    virtual void GenSlidingWindowDecl(std::stringstream &ss) const
     {
         GenDecl(ss);
     }
-    virtual std::string GenSlidingWindowDeclRef(void)
+    virtual std::string GenSlidingWindowDeclRef(void) const
     {
         assert(GetFormulaToken()->GetType() == formula::svDouble);
         return mSymName;
@@ -222,7 +222,7 @@ public:
     }
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
 
-    virtual std::string GenSlidingWindowDeclRef(void)
+    virtual std::string GenSlidingWindowDeclRef(void) const
     {
         std::stringstream ss;
         if (!bIsStartFixed && !bIsEndFixed)
@@ -250,8 +250,8 @@ public:
     typedef std::vector<std::string> ArgVector;
     typedef std::vector<std::string>::iterator ArgVectorIter;
     virtual std::string GetBottom(void) {return "";};
-    virtual std::string Gen(const std::string &/*lhs*/,
-        const std::string &/*rhs*/){return "";}
+    virtual std::string Gen2(const std::string &/*lhs*/,
+        const std::string &/*rhs*/) const {return "";}
     virtual std::string Gen(ArgVector& /*argVector*/){return "";};
     virtual std::string BinFuncName(void)const {return "";};
     virtual ~OpBase() {}
@@ -268,7 +268,7 @@ public:
         for (unsigned i = 0; i < vSubArguments.size(); i++)
         {
             if (i)
-                ss << ",";
+                ss << ", ";
             vSubArguments[i]->GenSlidingWindowDecl(ss);
         }
         ss << ") {\n\t";
@@ -294,7 +294,7 @@ public:
             }
             ss << "tmp = ";
             // Generate the operation in binary form
-            ss << Gen(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
+            ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
             ss << ";\n\t";
         }
         ss << "return tmp;\n";
@@ -724,7 +724,7 @@ public:
 class OpNop: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "0"; }
-    virtual std::string Gen(const std::string &lhs, const std::string &)
+    virtual std::string Gen2(const std::string &lhs, const std::string &) const
     {
         return lhs;
     }
@@ -734,7 +734,7 @@ public:
 class OpCount: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "0"; }
-    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
         std::stringstream ss;
         ss << "(isNan(" << lhs << ")?"<<rhs<<":"<<rhs<<"+1.0)";
@@ -746,7 +746,7 @@ public:
 class OpSum: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "0"; }
-    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
         std::stringstream ss;
         ss << "fsum(" << lhs <<","<< rhs<<")";
@@ -758,7 +758,7 @@ public:
 class OpSub: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "0"; }
-    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
         return lhs + "-" + rhs;
     }
@@ -768,7 +768,7 @@ public:
 class OpMul: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "1"; }
-    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
         return lhs + "*" + rhs;
     }
@@ -779,7 +779,7 @@ public:
 class OpDiv: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "1.0"; }
-    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
         return "(" + lhs + "/" + rhs + ")";
     }
@@ -789,7 +789,7 @@ public:
 class OpMin: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "MAXFLOAT"; }
-    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
         return "fmin("+lhs + "," + rhs +")";
     }
@@ -799,7 +799,7 @@ public:
 class OpMax: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "-MAXFLOAT"; }
-    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
         return "fmax("+lhs + "," + rhs +")";
     }
@@ -808,7 +808,7 @@ public:
 class OpSumProduct: public SumOfProduct {
 public:
     virtual std::string GetBottom(void) { return "0"; }
-    virtual std::string Gen(const std::string &lhs, const std::string &rhs)
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
         return lhs + "*" + rhs;
     }
@@ -828,10 +828,6 @@ public:
 class OpCumipmt: public Cumipmt {
 public:
     virtual std::string GetBottom(void) { return "0"; }
-    virtual std::string Gen(ArgVector& )
-    {
-        return "";
-    }
     virtual std::string BinFuncName(void) const { return "Cumipmt"; }
 };
 class OpXNPV:public XNPV{
@@ -1414,29 +1410,16 @@ public:
             mvSubArguments[i]->GenSlidingWindowFunction(ss);
         CodeGen.GenSlidingWindowFunction(ss, mSymName, mvSubArguments);
     }
-
-    /// Generate use/references to the argument
     virtual void GenDeclRef(std::stringstream &ss) const
     {
-        FormulaToken *pChild = mFormulaTree->Children[0]->GetFormulaToken();
-        assert(pChild);
-        ss << mSymName << "_" << CodeGen.BinFuncName() <<"(";
-        size_t nItems = 0;
         for (unsigned i = 0; i < mvSubArguments.size(); i++)
         {
             if (i)
                 ss << ",";
             mvSubArguments[i]->GenDeclRef(ss);
-            nItems += mvSubArguments[i]->GetWindowSize();
-        }
-        ss << ")";
-        if (mFormulaTree->GetFormulaToken() &&
-                mFormulaTree->GetFormulaToken()->GetOpCode() == ocAverage)
-        {
-            ss << "/(double)"<<nItems;
         }
     }
-    virtual void GenDecl(std::stringstream &ss)
+    virtual void GenDecl(std::stringstream &ss) const
     {
         for(auto it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
             ++it) {
@@ -1452,15 +1435,36 @@ public:
     }
 
     /// When declared as input to a sliding window function
-    virtual void GenSlidingWindowDecl(std::stringstream &ss)
+    virtual void GenSlidingWindowDecl(std::stringstream &ss) const
     {
-        ss << " double "<<mSymName;
+        for(auto it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
+            ++it) {
+            if (it != mvSubArguments.begin())
+                ss << ", ";
+            (*it)->GenSlidingWindowDecl(ss);
+        }
     }
 
-    virtual std::string GenSlidingWindowDeclRef(void)
+    virtual std::string GenSlidingWindowDeclRef(void) const
     {
         std::stringstream ss;
-        ss << mSymName;
+        FormulaToken *pChild = mFormulaTree->Children[0]->GetFormulaToken();
+        assert(pChild);
+        ss << mSymName << "_" << CodeGen.BinFuncName() <<"(";
+        size_t nItems = 0;
+        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ", ";
+            mvSubArguments[i]->GenDeclRef(ss);
+            nItems += mvSubArguments[i]->GetWindowSize();
+        }
+        ss << ")";
+        if (mFormulaTree->GetFormulaToken() &&
+                mFormulaTree->GetFormulaToken()->GetOpCode() == ocAverage)
+        {
+            ss << "/(double)"<<nItems;
+        }
         return ss.str();
     }
 private:
@@ -1666,15 +1670,6 @@ public:
             ss << "\n";
         }
     }
-    /// Used to generate declartion in the kernel declaration
-    void DumpParamDecls(std::stringstream &ss)
-    {
-        for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
-            ++it) {
-            ss << ", ";
-            (*it)->GenDecl(ss);
-        }
-    }
     /// Memory mapping from host to device and pass buffers to the given kernel as
     /// arguments
     void Marshal(cl_kernel, int);
@@ -1701,9 +1696,9 @@ public:
     /// Code generation in OpenCL
     std::string CodeGen() {
         // Travese the tree of expression and declare symbols used
-        mSyms.DeclRefArg<
-            DynamicKernelSoPArguments<OpNop> >(mpRoot)
-            ->GenDeclRef(mKernelSrc);
+        const DynamicKernelArgument *DK= mSyms.DeclRefArg<
+            DynamicKernelSoPArguments<OpNop> >(mpRoot);
+
         std::stringstream decl;
         if (OpenclDevice::gpuEnv.mnKhrFp64Flag) {
             decl << "#pragma OPENCL EXTENSION cl_khr_fp64: enable\n";
@@ -1715,10 +1710,10 @@ public:
         decl << finacialFunc;
         mSyms.DumpSlidingWindowFunctions(decl);
         decl << "__kernel void DynamicKernel" << GetMD5();
-        decl << "(\n__global double *result";
-        mSyms.DumpParamDecls(decl);
+        decl << "(\n__global double *result, ";
+        DK->GenSlidingWindowDecl(decl);
         decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
-        mKernelSrc.str() << ";\n}\n";
+            DK->GenSlidingWindowDeclRef() << ";\n}\n";
         mFullProgramSrc = decl.str();
 #if 1
         std::cerr<< "Program to be compiled = \n" << mFullProgramSrc << "\n";
