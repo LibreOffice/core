@@ -151,7 +151,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
         //check whether we have a percent scale -> use percent format
         if( xNumberFormatsSupplier.is() )
         {
-            ChartModel* pModel = dynamic_cast<ChartModel*>( xNumberFormatsSupplier.get() );
+            ChartModel* pModel = dynamic_cast<ChartModel*>( xChartDoc.get() );
             assert(pModel);
             ScaleData aData = AxisHelper::getDateCheckedScale( xAxis, *pModel );
             if( aData.AxisType==AxisType::PERCENT )
