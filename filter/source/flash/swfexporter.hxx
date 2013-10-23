@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FLASH_EXPORTER_HXX
-#define _FLASH_EXPORTER_HXX
+#ifndef INCLUDED_FILTER_SOURCE_FLASH_SWFEXPORTER_HXX
+#define INCLUDED_FILTER_SOURCE_FLASH_SWFEXPORTER_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

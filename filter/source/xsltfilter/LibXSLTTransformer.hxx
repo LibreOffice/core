@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __LIBXSLTTRANSFORMER_HXX__
-#define __LIBXSLTTRANSFORMER_HXX__
+#ifndef INCLUDED_FILTER_SOURCE_XSLTFILTER_LIBXSLTTRANSFORMER_HXX
+#define INCLUDED_FILTER_SOURCE_XSLTFILTER_LIBXSLTTRANSFORMER_HXX
 
 #include <stdio.h>
 
@@ -188,5 +188,5 @@ namespace XSLT
 }
 ;
 
-#endif // __LIBXSLTTRANSFORMER_HXX__
+#endif // INCLUDED_FILTER_SOURCE_XSLTFILTER_LIBXSLTTRANSFORMER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

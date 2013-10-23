@@ -8,8 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OLEHANDLER_HXX_
-#define OLEHANDLER_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_XSLTFILTER_OLEHANDLER_HXX
+#define INCLUDED_FILTER_SOURCE_XSLTFILTER_OLEHANDLER_HXX
 #include <cstdio>
 #include <cstring>
 #include <list>
@@ -87,4 +87,4 @@ namespace XSLT
 }
 
 
-#endif /* OLEHANDLER_HXX_ */
+#endif // INCLUDED_FILTER_SOURCE_XSLTFILTER_OLEHANDLER_HXX

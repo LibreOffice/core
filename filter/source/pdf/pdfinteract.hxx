@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef PDFINTERACT_HXX
-#define PDFINTERACT_HXX
+#ifndef INCLUDED_FILTER_SOURCE_PDF_PDFINTERACT_HXX
+#define INCLUDED_FILTER_SOURCE_PDF_PDFINTERACT_HXX
 
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "cppuhelper/implbase2.hxx"
@@ -75,6 +75,6 @@ Reference< XInterface >
 SAL_CALL PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw ( Exception );
 
-#endif // PDFINTERACT_HXX
+#endif // INCLUDED_FILTER_SOURCE_PDF_PDFINTERACT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _T602FILTER_HXX
-#define _T602FILTER_HXX
+#ifndef INCLUDED_FILTER_SOURCE_T602_T602FILTER_HXX
+#define INCLUDED_FILTER_SOURCE_T602_T602FILTER_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>

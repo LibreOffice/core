@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __FILTER_CONFIG_BASECONTAINER_HXX_
-#define __FILTER_CONFIG_BASECONTAINER_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_BASECONTAINER_HXX
+#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_BASECONTAINER_HXX
 
 #include "filtercache.hxx"
 #include <com/sun/star/uno/Exception.hpp>
@@ -296,6 +296,6 @@ class BaseContainer : public BaseLock
     } // namespace config
 } // namespace filter
 
-#endif // __FILTER_CONFIG_BASECONTAINER_HXX_
+#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_BASECONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

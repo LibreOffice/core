@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef PDFFILTER_HXX
-#define PDFFILTER_HXX
+#ifndef INCLUDED_FILTER_SOURCE_PDF_PDFFILTER_HXX
+#define INCLUDED_FILTER_SOURCE_PDF_PDFFILTER_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -112,7 +112,7 @@ Reference< XInterface >
 SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw ( Exception );
 
-#endif // PDFFILTER_HXX
+#endif // INCLUDED_FILTER_SOURCE_PDF_PDFFILTER_HXX
 
 
 

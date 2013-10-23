@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVGDIALOG_HXX
-#define SVGDIALOG_HXX
+#ifndef INCLUDED_FILTER_SOURCE_SVG_SVGDIALOG_HXX
+#define INCLUDED_FILTER_SOURCE_SVG_SVGDIALOG_HXX
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/document/XExporter.hpp>

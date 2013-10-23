@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FILTER_CONFIG_LATEINITLISTENER_HXX_
-#define __FILTER_CONFIG_LATEINITLISTENER_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_LATEINITLISTENER_HXX
+#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_LATEINITLISTENER_HXX
 
 #include "cacheitem.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -103,6 +103,6 @@ class LateInitListener : public BaseLock // must be the first one to guarantee r
     } // namespace config
 } // namespace filter
 
-#endif // __FILTER_CONFIG_LATEINITLISTENER_HXX_
+#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_LATEINITLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

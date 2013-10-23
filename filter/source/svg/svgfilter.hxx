@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVGFILTER_HXX
-#define SVGFILTER_HXX
+#ifndef INCLUDED_FILTER_SOURCE_SVG_SVGFILTER_HXX
+#define INCLUDED_FILTER_SOURCE_SVG_SVGFILTER_HXX
 
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
@@ -328,6 +328,6 @@ public:
     virtual    ~SVGFilter();
 };
 
-#endif // SVGFILTER_HXX
+#endif // INCLUDED_FILTER_SOURCE_SVG_SVGFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FILTER_CONFIG_FILTERCACHE_HXX_
-#define __FILTER_CONFIG_FILTERCACHE_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERCACHE_HXX
+#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERCACHE_HXX
 
 #include "cacheitem.hxx"
 #include <com/sun/star/uno/Exception.hpp>
@@ -1041,6 +1041,6 @@ class FilterCache : public BaseLock
     } // namespace config
 } // namespace filter
 
-#endif // __FILTER_CONFIG_FILTERCACHE_HXX_
+#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_FILTERCACHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

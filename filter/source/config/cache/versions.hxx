@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FILTER_CONFIG_VERSIONS_HXX_
-#define _FILTER_CONFIG_VERSIONS_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_VERSIONS_HXX
+#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_VERSIONS_HXX
 
 //_______________________________________________
 
 #define _FILTER_CONFIG_MIGRATION_Q_     // useful for migration time, to support some old functionality temp. :-)
 
-#endif // _FILTER_CONFIG_VERSIONS_HXX_
+#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_VERSIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

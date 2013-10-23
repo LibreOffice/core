@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FILTER_CONFIG_CONSTANT_HXX_
-#define _FILTER_CONFIG_CONSTANT_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONSTANT_HXX
+#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONSTANT_HXX
 
 #include "macros.hxx"
 
@@ -181,6 +181,6 @@
 #define  QUERY_PARAM_DEFAULTFIRST                   _FILTER_CONFIG_FROM_ASCII_("default_first")
 #define  QUERY_CONSTVALUE_ALL                       _FILTER_CONFIG_FROM_ASCII_("all")
 
-#endif // _FILTER_CONFIG_CONSTANT_HXX_
+#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONSTANT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

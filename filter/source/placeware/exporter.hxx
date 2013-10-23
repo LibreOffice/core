@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _PLACEWARE_EXPORTER_HXX
-#define _PLACEWARE_EXPORTER_HXX
+#ifndef INCLUDED_FILTER_SOURCE_PLACEWARE_EXPORTER_HXX
+#define INCLUDED_FILTER_SOURCE_PLACEWARE_EXPORTER_HXX
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XGraphicExportFilter.hpp>

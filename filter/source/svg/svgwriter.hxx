@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVGWRITER_HXX
-#define SVGWRITER_HXX
+#ifndef INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
+#define INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
 
 #include <stack>
 #include <cppuhelper/implbase1.hxx>

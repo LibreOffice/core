@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef PDFEXPORT_HXX
-#define PDFEXPORT_HXX
+#ifndef INCLUDED_FILTER_SOURCE_PDF_PDFEXPORT_HXX
+#define INCLUDED_FILTER_SOURCE_PDF_PDFEXPORT_HXX
 
 #include "pdffilter.hxx"
 #include <tools/multisel.hxx>

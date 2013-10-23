@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LZWDECOM_HXX
-#define _LZWDECOM_HXX
+#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_LZWDECOM_HXX
+#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_LZWDECOM_HXX
 
 #include <tools/stream.hxx>
 

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __FILTER_CONFIG_TYPEDETECTION_HXX_
-#define __FILTER_CONFIG_TYPEDETECTION_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_TYPEDETECTION_HXX
+#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_TYPEDETECTION_HXX
 
 #include "basecontainer.hxx"
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -381,6 +381,6 @@ public:
 
 }}
 
-#endif // __FILTER_CONFIG_TYPEDETECTION_HXX_
+#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_TYPEDETECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

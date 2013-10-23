@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GRAPHICEXPORTDIALOG_HXX_
-#define _GRAPHICEXPORTDIALOG_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_GRAPHIC_GRAPHICEXPORTDIALOG_HXX
+#define INCLUDED_FILTER_SOURCE_GRAPHIC_GRAPHICEXPORTDIALOG_HXX
 
 #include <tools/fldunit.hxx>
 #include <cppuhelper/implbase4.hxx>

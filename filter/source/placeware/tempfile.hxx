@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PLACEWARE_TEMPFILE_HXX_
-#define _PLACEWARE_TEMPFILE_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_PLACEWARE_TEMPFILE_HXX
+#define INCLUDED_FILTER_SOURCE_PLACEWARE_TEMPFILE_HXX
 
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>

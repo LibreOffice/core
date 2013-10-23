@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _BASEGFX_B2DELLIPSE_HXX
-#define _BASEGFX_B2DELLIPSE_HXX
+#ifndef INCLUDED_FILTER_SOURCE_SVG_B2DELLIPSE_HXX
+#define INCLUDED_FILTER_SOURCE_SVG_B2DELLIPSE_HXX
 
 #include <sal/types.h>
 
@@ -50,6 +50,6 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif /* _BASEGFX_B2DELLIPSE_HXX */
+#endif // INCLUDED_FILTER_SOURCE_SVG_B2DELLIPSE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

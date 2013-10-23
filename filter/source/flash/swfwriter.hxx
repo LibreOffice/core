@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SWF_WRITER_HXX_
-#define _SWF_WRITER_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_FLASH_SWFWRITER_HXX
+#define INCLUDED_FILTER_SOURCE_FLASH_SWFWRITER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>

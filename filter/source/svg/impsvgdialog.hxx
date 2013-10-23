@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IMPSVGDIALOG_HXX
-#define IMPSVGDIALOG_HXX
+#ifndef INCLUDED_FILTER_SOURCE_SVG_IMPSVGDIALOG_HXX
+#define INCLUDED_FILTER_SOURCE_SVG_IMPSVGDIALOG_HXX
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -71,6 +71,6 @@ public:
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > GetFilterData();
 };
 
-#endif // IMPSVGDIALOG_HXX
+#endif // INCLUDED_FILTER_SOURCE_SVG_IMPSVGDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

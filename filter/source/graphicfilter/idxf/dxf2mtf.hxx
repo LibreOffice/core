@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXF2MTF_HXX
-#define _DXF2MTF_HXX
+#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXF2MTF_HXX
+#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXF2MTF_HXX
 
 #include "dxfreprd.hxx"
 #include <vcl/font.hxx>

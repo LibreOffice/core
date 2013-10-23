@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef PDFDIALOG_HXX
-#define PDFDIALOG_HXX
+#ifndef INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
+#define INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
 
 #include "pdffilter.hxx"
 #include <svtools/genericunodialog.hxx>
@@ -79,6 +79,6 @@ Sequence< sal_Int8 > SAL_CALL PDFDialog_getImplementationId() throw(RuntimeExcep
 Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames() throw (RuntimeException);
 Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
 
-#endif // PDFDIALOG_HXX
+#endif // INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

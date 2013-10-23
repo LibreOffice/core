@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CGM_ELEMENTS_HXX_
-#define CGM_ELEMENTS_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_ELEMENTS_HXX
+#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_ELEMENTS_HXX
 
 #include "main.hxx"
 #include "cgmtypes.hxx"

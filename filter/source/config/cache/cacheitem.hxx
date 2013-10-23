@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FILTER_CONFIG_CACHEITEM_HXX_
-#define __FILTER_CONFIG_CACHEITEM_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
+#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
 
 #include <boost/unordered_map.hpp>
 #include <deque>
@@ -228,6 +228,6 @@ typedef ::std::list< FlatDetectionInfo > FlatDetection;
     } // namespace config
 } // namespace filter
 
-#endif // __FILTER_CONFIG_CACHEITEM_HXX_
+#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GIFLZWC_HXX
-#define _GIFLZWC_HXX
+#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_EGIF_GIFLZWC_HXX
+#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_EGIF_GIFLZWC_HXX
 
 #include <vcl/bmpacc.hxx>
 
@@ -52,6 +52,6 @@ public:
     void                        EndCompression();
 };
 
-#endif // _GIFLZWC_HXX
+#endif // INCLUDED_FILTER_SOURCE_GRAPHICFILTER_EGIF_GIFLZWC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

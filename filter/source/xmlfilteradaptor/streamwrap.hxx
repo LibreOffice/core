@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _OSL_FILE_WRAPPER_HXX_
-#define _OSL_FILE_WRAPPER_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_XMLFILTERADAPTOR_STREAMWRAP_HXX
+#define INCLUDED_FILTER_SOURCE_XMLFILTERADAPTOR_STREAMWRAP_HXX
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -56,6 +56,6 @@ public:
 }   // namespace utl
 
 
-#endif // _UTL_STREAM_WRAPPER_HXX_
+#endif // INCLUDED_FILTER_SOURCE_XMLFILTERADAPTOR_STREAMWRAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

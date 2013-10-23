@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLFILTERTABPAGEXSLT_HXX_
-#define _XMLFILTERTABPAGEXSLT_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABPAGEXSLT_HXX
+#define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERTABPAGEXSLT_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <sfx2/tabdlg.hxx>

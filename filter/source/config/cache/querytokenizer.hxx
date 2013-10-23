@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FILTER_CONFIG_QUERYTOKENIZER_HXX_
-#define _FILTER_CONFIG_QUERYTOKENIZER_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_QUERYTOKENIZER_HXX
+#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_QUERYTOKENIZER_HXX
 
 #include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
@@ -97,6 +97,6 @@ class QueryTokenizer : public ::boost::unordered_map< OUString                  
     } // namespace config
 } // namespace filter
 
-#endif // _FILTER_CONFIG_QUERYTOKENIZER_HXX_
+#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_QUERYTOKENIZER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

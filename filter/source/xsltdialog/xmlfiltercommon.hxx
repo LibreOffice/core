@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLFILTERCOMMON_HXX_
-#define _XMLFILTERCOMMON_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERCOMMON_HXX
+#define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERCOMMON_HXX
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

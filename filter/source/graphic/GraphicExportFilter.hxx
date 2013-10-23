@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GRAPHICEXPORTFILTER_HXX_
-#define _GRAPHICEXPORTFILTER_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_GRAPHIC_GRAPHICEXPORTFILTER_HXX
+#define INCLUDED_FILTER_SOURCE_GRAPHIC_GRAPHICEXPORTFILTER_HXX
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/document/XFilter.hpp>

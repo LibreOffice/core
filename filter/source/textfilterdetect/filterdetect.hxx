@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __FILTER_TEXTFILTERDETECT_FILTERDETECT_HXX__
-#define __FILTER_TEXTFILTERDETECT_FILTERDETECT_HXX__
+#ifndef INCLUDED_FILTER_SOURCE_TEXTFILTERDETECT_FILTERDETECT_HXX
+#define INCLUDED_FILTER_SOURCE_TEXTFILTERDETECT_FILTERDETECT_HXX
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

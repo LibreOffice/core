@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVG_ODFSERIALIZER_HXX
-#define INCLUDED_SVG_ODFSERIALIZER_HXX
+#ifndef INCLUDED_FILTER_SOURCE_SVG_TEST_ODFSERIALIZER_HXX
+#define INCLUDED_FILTER_SOURCE_SVG_TEST_ODFSERIALIZER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>

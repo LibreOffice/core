@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CGM_BUNDLES_HXX_
-#define CGM_BUNDLES_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_BUNDLES_HXX
+#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_BUNDLES_HXX
 
 #include <sal/types.h>
 #include "cgmtypes.hxx"

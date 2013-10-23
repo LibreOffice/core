@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FILTER_CONFIG_MACROS_HXX_
-#define _FILTER_CONFIG_MACROS_HXX_
+#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_MACROS_HXX
+#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_MACROS_HXX
 
 //_______________________________________________
 
@@ -42,6 +42,6 @@
 #define _FILTER_CONFIG_LOG_1_(FORMAT, ARG1)
 #define _FILTER_CONFIG_LOG_2_(FORMAT, ARG1, ARG2)
 
-#endif // _FILTER_CONFIG_MACROS_HXX_
+#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_MACROS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

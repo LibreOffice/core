@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXFVEC_HXX
-#define _DXFVEC_HXX
+#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFVEC_HXX
+#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFVEC_HXX
 
 #include <sal/types.h>
 #include <vcl/lineinfo.hxx>
