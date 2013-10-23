@@ -2694,11 +2694,6 @@ endef
 
 define gb_ExternalProject__use_nss3
 $(call gb_ExternalProject_use_package,$(1),nss)
-$(call gb_ExternalProject_use_libraries,$(1),\
-	nspr4 \
-	nss3 \
-	smime3 \
-)
 
 endef
 
