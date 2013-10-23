@@ -58,6 +58,10 @@ STD_FONT_FILELIST(gid_File_Fnt_SourceSans, "fonts_sourcesans.filelist")
 // Source Code Pro fonts
 STD_FONT_FILELIST(gid_File_Fnt_SourceCode, "fonts_sourcecode.filelist")
 
+//Carlito and Caladea fonts
+STD_FONT_FILELIST(gid_File_Fnt_Carlito, "fonts_carlito.filelist")
+STD_FONT_FILELIST(gid_File_Fnt_Caladea, "fonts_caladea.filelist")
+
 #endif
 
 // fontconfig updates to allow proper use of local fonts

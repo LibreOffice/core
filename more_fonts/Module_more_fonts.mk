@@ -11,6 +11,8 @@ $(eval $(call gb_Module_Module,more_fonts))
 
 $(eval $(call gb_Module_add_targets,more_fonts,\
 	Package_conf \
+	ExternalPackage_caladea \
+	ExternalPackage_carlito \
 	ExternalPackage_dejavu \
 	ExternalPackage_gentium \
 	ExternalPackage_liberation \
@@ -20,6 +22,8 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_ptserif \
 	ExternalPackage_sourcecode \
 	ExternalPackage_sourcesans \
+	UnpackedTarball_caladea \
+	UnpackedTarball_carlito \
 	UnpackedTarball_dejavu \
 	UnpackedTarball_gentium \
 	UnpackedTarball_liberation \
