@@ -199,13 +199,20 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,\
 define gb_LinkTarget__use_cppunit
 $(call gb_LinkTarget_use_package,$(1),cppunit)
 
-$(call gb_LinkTarget_use_libraries,$(1),\
-    cppunit \
-)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,cppunit/include)\
 	$$(INCLUDE) \
 )
+
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,cppunit)/src/cppunit/$(if $(MSVC_USE_DEBUG_RUNTIME),DebugDll/cppunitd_dll.lib,ReleaseDll/cppunit_dll.lib) \
+)
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,cppunit)/src/cppunit/.libs -lcppunit \
+)
+endif
 
 endef
 

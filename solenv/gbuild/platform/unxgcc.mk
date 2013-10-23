@@ -300,7 +300,7 @@ endef
 # CppunitTest class
 
 gb_CppunitTest_CPPTESTPRECOMMAND := \
-    $(call gb_Helper_extend_ld_path,$(OUTDIR_FOR_BUILD)/lib/sqlite)
+    $(call gb_Helper_extend_ld_path,$(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs)
 gb_CppunitTest_get_filename = libtest_$(1).so
 gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
 
@@ -337,7 +337,7 @@ endef
 
 # PythonTest class
 
-gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(INSTROOT)/$(LIBO_URE_LIB_FOLDER):$(INSTROOT)/$(LIBO_LIB_FOLDER):$(OUTDIR)/lib
+gb_PythonTest_PRECOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND)
 
 # Module class
 

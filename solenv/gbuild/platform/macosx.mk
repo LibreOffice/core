@@ -278,7 +278,8 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path):"$(gb_Library_DLLDIR)"
+gb_CppunitTest_CPPTESTPRECOMMAND := \
+    $(call gb_Helper_extend_ld_path,$(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs)
 gb_CppunitTest_get_filename = libtest_$(1).dylib
 gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
 
@@ -315,7 +316,7 @@ gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY
 ifneq ($(LIBO_LIB_FOLDER),$(LIBO_URE_LIB_FOLDER))
 gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(INSTROOT)/$(LIBO_LIB_FOLDER)
 endif
-gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(OUTDIR)/lib
+gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(OUTDIR)/lib:$(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs
 
 # Module class
 
