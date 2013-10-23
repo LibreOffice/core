@@ -279,7 +279,7 @@ endef
 # CppunitTest class
 
 gb_CppunitTest_CPPTESTPRECOMMAND := \
-    $(call gb_Helper_extend_ld_path,$(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs)
+	$(call gb_Helper_extend_ld_path,$(gb_Library_DLLDIR) $(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs)
 gb_CppunitTest_get_filename = libtest_$(1).dylib
 gb_CppunitTest_get_ilibfilename = $(gb_CppunitTest_get_filename)
 

@@ -387,7 +387,7 @@ endef
 gb_CppunitTest_DEFS := -D_DLL
 # cppunittester.exe is in the cppunit subdirectory of ${OUTDIR}/bin,
 # thus it won't find its DLLs unless ${OUTDIR}/bin is added to PATH.
-gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path):"$(shell cygpath -w $(gb_Library_DLLDIR)):$(shell cygpath -w $(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/(if $(MSVC_USE_DEBUG_RUNTIME),DebugDll,ReleaseDll))"
+gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path):"$(shell cygpath -w $(gb_Library_DLLDIR)):$(shell cygpath -w $(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/$(if $(MSVC_USE_DEBUG_RUNTIME),DebugDll,ReleaseDll))"
 
 gb_CppunitTest_get_filename = test_$(1).dll
 gb_CppunitTest_get_ilibfilename = itest_$(1).lib
