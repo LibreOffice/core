@@ -57,6 +57,7 @@
 #include <pagepreviewlayout.hxx>
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
+#include <wrtsh.hxx>
 
 #include "../../ui/inc/view.hxx"
 #include <PostItMgr.hxx>
@@ -1739,6 +1740,53 @@ void SwViewShell::Paint(const Rectangle &rRect)
         }
     }
 }
+
+void SwViewShell::PaintTile(OutputDevice *pOut, const Rectangle &rRect)
+{
+    assert(pOut);
+
+    pOut->SetPixelOffset(Size(-rRect.TopLeft().X(), -rRect.TopLeft().Y()));
+    // TODO make the tileWidth/Height fit the width/height of the pOut device
+
+    // now we need to setup the SwViewShell's output device
+    // TODO clean up SwViewShell's approach to output devices
+    OutputDevice *pSaveOut = mpOut;
+    mpOut = pOut;
+
+    Paint(rRect);
+
+    mpOut = pSaveOut;
+}
+
+#if !HAVE_FEATURE_DESKTOP
+
+extern "C"
+void touch_lo_draw_tile(void * /*context*/, int contextWidth, int contextHeight, int tilePosX, int tilePosY, int tileWidth, int tileHeight)
+{
+    // Currently we expect that only one document is open, so we are using the
+    // current shell.  Should it turn out that we need to have more documents
+    // open, we need to add a documentHandle that would hold the right
+    // document shell in the iOS / Android impl, and we would get it as a
+    // parameter.
+    SwWrtShell *pViewShell = GetActiveWrtShell();
+
+    if (pViewShell)
+    {
+        // TODO create a VirtualDevice based on SystemGraphicsData instead so
+        // that we get direct rendering; something like:
+        //
+        // SystemGraphicsData aData;
+        // [setup the aData]
+        // VirtualDevice aDevice(&aData, [color depth]);
+        VirtualDevice aDevice;
+        aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
+
+        pViewShell->PaintTile(&aDevice, Rectangle(tilePosX, tilePosY, tileWidth, tileHeight));
+        //TODO now get it to the 'context'
+    }
+}
+
+#endif
 
 void SwViewShell::SetBrowseBorder( const Size& rNew )
 {

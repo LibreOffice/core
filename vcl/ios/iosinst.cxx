@@ -560,17 +560,4 @@ void touch_lo_selection_end_move(const void *documentHandle,
     Application::PostUserEvent( LINK( pInstance, IosSalInstance, SelectionEndMove), pArg );
 }
 
-extern "C"
-void touch_lo_draw_tile(void * /*context*/, int /*contextWidth*/, int /*contextHeight*/, int /*tilePosX*/, int /*tilePosY*/, int /*tileWidth*/, int /*tileHeight*/)
-{
-    // draws the area of one tile
-
-    SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
-    if (pFocus) {
-
-        // TODO: calling tile drawing code
-
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

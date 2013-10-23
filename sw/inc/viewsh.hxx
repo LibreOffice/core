@@ -245,6 +245,14 @@ public:
     //////////////////////////////////////////////////////////////////////////////
 
     virtual void Paint(const Rectangle &rRect);
+
+    /** Paint tile.
+
+        Sets the pOut so that the rRect is always painted over the entire
+        pOut, ie. starts in 0,0 and ends in width/height.
+    */
+    void PaintTile(OutputDevice *pOut, const Rectangle &rRect);
+
     sal_Bool IsPaintInProgress() const { return mbPaintInProgress; }
     bool IsDrawingLayerPaintInProgress() const { return !mPrePostPaintRegions.empty(); }
 
