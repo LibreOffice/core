@@ -24,23 +24,40 @@
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <sfx2/filedlghelper.hxx>
-
-class UIPreviewApp : public Application
-{
-public:
-    virtual void Init();
-    virtual int Main();
-};
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
-class TiledRenderingDialog: public ModalDialog{
+class TiledRenderingApp : public Application
+{
+private:
+    uno::Reference<uno::XComponentContext> xContext;
+    uno::Reference<lang::XMultiComponentFactory> xFactory;
+    uno::Reference<lang::XMultiServiceFactory> xSFactory;
+    uno::Reference<uno::XInterface> xDesktop;
+    uno::Reference<frame::XComponentLoader> xLoader;
+    uno::Reference<lang::XComponent> xComponent;
 public:
-    TiledRenderingDialog() : ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "qa/sw/ui/tiledrendering.ui")
+    virtual void Init();
+    virtual int Main();
+    void Open(OUString & aFileUrl);
+};
+
+
+class TiledRenderingDialog: public ModalDialog{
+private:
+    TiledRenderingApp * app;
+public:
+    TiledRenderingDialog(TiledRenderingApp * app) :
+        ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "qa/sw/ui/tiledrendering.ui"),
+        app(app)
     {
         PushButton * renderButton;
         get(renderButton,"buttonRenderTile");
@@ -52,6 +69,7 @@ public:
 
         SetStyle(GetStyle()|WB_CLOSEABLE);
     }
+
     virtual ~TiledRenderingDialog()
     {
     }
@@ -59,12 +77,11 @@ public:
     DECL_LINK ( RenderHdl, Button * );
     DECL_LINK ( ChooseDocumentHdl, Button * );
 
-    sal_Int32 extractInt(const char * name)
+    sal_Int32 ExtractInt(const char * name)
     {
         NumericField * pField;
         get(pField,name);
         OUString aString(pField->GetText());
-        std::cerr << "param " << name << " returned " << aString <<"\n";
         return aString.toInt32();
     }
 
@@ -72,12 +89,12 @@ public:
 
 IMPL_LINK ( TiledRenderingDialog,  RenderHdl, Button *, EMPTYARG )
 {
-    extractInt("spinContextWidth");
-    extractInt("spinContextHeight");
-    extractInt("spinTilePosX");
-    extractInt("spinTilePosY");
-    extractInt("spinTileWidth");
-    extractInt("spinTileHeight");
+    ExtractInt("spinContextWidth");
+    ExtractInt("spinContextHeight");
+    ExtractInt("spinTilePosX");
+    ExtractInt("spinTilePosY");
+    ExtractInt("spinTileWidth");
+    ExtractInt("spinTileHeight");
     return 1;
 }
 
@@ -87,64 +104,62 @@ IMPL_LINK ( TiledRenderingDialog,  ChooseDocumentHdl, Button *, EMPTYARG )
     uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
-        OUString aFilePath =xFP->getFiles().getConstArray()[0];
-        std::cerr << aFilePath <<"\n";
+        OUString aFileUrl =xFP->getFiles().getConstArray()[0];
+        app->Open(aFileUrl);
     }
     return 1;
 }
 
-void UIPreviewApp::Init()
+void TiledRenderingApp::Open(OUString & aFileUrl){
+    static const OUString TARGET("_default");
+    static const Sequence<beans::PropertyValue> PROPS (0);
+    if(xComponent.get())
+    {
+        xComponent->dispose();
+        xComponent.clear();
+    }
+    xComponent.set(xLoader->loadComponentFromURL(aFileUrl,TARGET,0,PROPS));
+}
+
+void TiledRenderingApp::Init()
 {
-    uno::Reference<uno::XComponentContext> xContext =
-        cppu::defaultBootstrap_InitialComponentContext();
-    uno::Reference<lang::XMultiComponentFactory> xFactory =
-        xContext->getServiceManager();
-    uno::Reference<lang::XMultiServiceFactory> xSFactory =
-        uno::Reference<lang::XMultiServiceFactory> (xFactory, uno::UNO_QUERY_THROW);
+    xContext.set(cppu::defaultBootstrap_InitialComponentContext());
+    xFactory.set(xContext->getServiceManager());
+    xSFactory.set(uno::Reference<lang::XMultiServiceFactory> (xFactory, uno::UNO_QUERY_THROW));
     comphelper::setProcessServiceFactory(xSFactory);
 
     // Create UCB (for backwards compatibility, in case some code still uses
     // plain createInstance w/o args directly to obtain an instance):
-    ::ucb::UniversalContentBroker::create(
-        comphelper::getProcessComponentContext() );
+    ::ucb::UniversalContentBroker::create(comphelper::getProcessComponentContext() );
+
+    xDesktop.set(xFactory->createInstanceWithContext(OUString("com.sun.star.frame.Desktop"), xContext));
+    xLoader.set(frame::Desktop::create(xContext));
 }
 
-int UIPreviewApp::Main()
+int TiledRenderingApp::Main()
 {
-    //std::vector<OUString> uifiles;
-    //for (sal_uInt16 i = 0; i < GetCommandLineParamCount(); ++i)
-    //{
-    //    OUString aFileUrl;
-    //   osl::File::getFileURLFromSystemPath(GetCommandLineParam(i), aFileUrl);
-    //    uifiles.push_back(aFileUrl);
-    //}
-    //if (uifiles.empty())
-    //{
-    //    fprintf(stderr, "Usage: ui-previewer file.ui\n");
-    //    return EXIT_FAILURE;
-    //}
-
-    // turn on tooltips
+    if(GetCommandLineParamCount()>0)
+    {
+        OUString aFileUrl;
+        osl::File::getFileURLFromSystemPath(GetCommandLineParam(0), aFileUrl);
+        Open(aFileUrl);
+    }
     Help::EnableQuickHelp();
-
     try
     {
-
-        TiledRenderingDialog pDialog;
-
+        TiledRenderingDialog pDialog(this);
         pDialog.Execute();
     }
     catch (const uno::Exception &e)
     {
         fprintf(stderr, "fatal error: %s\n", OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
     }
-
     return EXIT_SUCCESS;
 }
 
 void vclmain::createApplication()
 {
-    static UIPreviewApp aApp;
+    static TiledRenderingApp aApp;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
