@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OOX_SHAPE_LOCKEDCANVASCONTEXT
-#define OOX_SHAPE_LOCKEDCANVASCONTEXT
+#ifndef INCLUDED_OOX_SOURCE_SHAPE_LOCKEDCANVASCONTEXT_HXX
+#define INCLUDED_OOX_SOURCE_SHAPE_LOCKEDCANVASCONTEXT_HXX
 
 #include "oox/core/contexthandler2.hxx"
 #include "oox/drawingml/shape.hxx"
@@ -33,7 +33,6 @@ protected:
 
 
 } }
-
 
 #endif
 

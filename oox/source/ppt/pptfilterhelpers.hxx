@@ -17,9 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifndef OOX_PPT_PPTFILTERHELPERS
-#define OOX_PPT_PPTFILTERHELPERS
+#ifndef INCLUDED_OOX_SOURCE_PPT_PPTFILTERHELPERS_HXX
+#define INCLUDED_OOX_SOURCE_PPT_PPTFILTERHELPERS_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -91,7 +90,6 @@ namespace oox { namespace ppt {
 
 
 } }
-
 
 #endif
 

@@ -19,8 +19,8 @@
 
 
 
-#ifndef OOX_PPT_HEADERFOOTERCONTEXT
-#define OOX_PPT_HEADERFOOTERCONTEXT
+#ifndef INCLUDED_OOX_SOURCE_PPT_HEADERFOOTERCONTEXT_HXX
+#define INCLUDED_OOX_SOURCE_PPT_HEADERFOOTERCONTEXT_HXX
 
 #include "oox/ppt/headerfooter.hxx"
 #include "oox/core/fragmenthandler2.hxx"

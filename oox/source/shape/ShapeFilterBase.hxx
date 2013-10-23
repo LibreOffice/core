@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_SHAPE_SHAPEFILTERBASE_HXX
-#define OOX_SHAPE_SHAPEFILTERBASE_HXX
+#ifndef INCLUDED_OOX_SOURCE_SHAPE_SHAPEFILTERBASE_HXX
+#define INCLUDED_OOX_SOURCE_SHAPE_SHAPEFILTERBASE_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <rtl/ref.hxx>

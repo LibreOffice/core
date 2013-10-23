@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifndef OOX_PPT_COMMONTIMENODECONTEXT
-#define OOX_PPT_COMMONTIMENODECONTEXT
-
+#ifndef INCLUDED_OOX_SOURCE_PPT_COMMONTIMENODECONTEXT_HXX
+#define INCLUDED_OOX_SOURCE_PPT_COMMONTIMENODECONTEXT_HXX
 
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include "oox/ppt/timenode.hxx"
 #include "oox/ppt/timenodelistcontext.hxx"
 #include "conditioncontext.hxx"
-
 
 namespace oox { namespace ppt {
 
@@ -49,7 +46,6 @@ namespace oox { namespace ppt {
 
 
 } }
-
 
 #endif
 

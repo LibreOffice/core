@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOX_DRAWINGML_SHAPECONTEXT_HXX
-#define OOX_DRAWINGML_SHAPECONTEXT_HXX
+#ifndef INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DATAMODELCONTEXT_HXX
+#define INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DATAMODELCONTEXT_HXX
 
 #include <com/sun/star/drawing/XShapes.hpp>
 
@@ -42,6 +42,6 @@ protected:
 
 } }
 
-#endif  //  OOX_DRAWINGML_SHAPEGROUPCONTEXT_HXX
+#endif // INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DATAMODELCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
-#ifndef OOX_PPT_ANIMVARIANTCONTEXT
-#define OOX_PPT_ANIMVARIANTCONTEXT
-
+#ifndef INCLUDED_OOX_SOURCE_PPT_ANIMVARIANTCONTEXT_HXX
+#define INCLUDED_OOX_SOURCE_PPT_ANIMVARIANTCONTEXT_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 
@@ -47,7 +44,6 @@ namespace oox { namespace ppt {
     };
 
 } }
-
 
 #endif
 

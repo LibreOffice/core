@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef OOX_SHAPE_SHAPE_CONTEXT_HANDLER_HXX
-#define OOX_SHAPE_SHAPE_CONTEXT_HANDLER_HXX
+#ifndef INCLUDED_OOX_SOURCE_SHAPE_SHAPECONTEXTHANDLER_HXX
+#define INCLUDED_OOX_SOURCE_SHAPE_SHAPECONTEXTHANDLER_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -168,6 +168,6 @@ private:
 
 }}
 
-#endif // OOX_SHAPE_SHAPE_CONTEXT_HANDLER_HXX
+#endif // INCLUDED_OOX_SOURCE_SHAPE_SHAPECONTEXTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

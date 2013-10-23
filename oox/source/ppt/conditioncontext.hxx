@@ -17,9 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifndef OOX_PPT_CONDITIONCONTEXT
-#define OOX_PPT_CONDITIONCONTEXT
+#ifndef INCLUDED_OOX_SOURCE_PPT_CONDITIONCONTEXT_HXX
+#define INCLUDED_OOX_SOURCE_PPT_CONDITIONCONTEXT_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/animations/Event.hpp>
@@ -69,7 +68,6 @@ namespace oox { namespace ppt {
 
 
 } }
-
 
 #endif
 
