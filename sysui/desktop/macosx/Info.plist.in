@@ -71,7 +71,7 @@
 				</array>
 			</dict>
 		</dict>
-		
+
 		<!-- Calc documents -->
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -847,7 +847,7 @@
 			</dict>
 		</dict>
 	</array>
-	
+
 	<!-- Document type declaration for OS X < 10.4 -->
 	<key>CFBundleDocumentTypes</key>
 	<array>
@@ -1422,6 +1422,8 @@
 	<string>VCL_NSApplication</string>
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.productivity</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>@MACOSX_DEPLOYMENT_TARGET@.0<string>
 </dict>
 </plist>
 
