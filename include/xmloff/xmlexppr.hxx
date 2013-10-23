@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLEXPPR_HXX
-#define _XMLOFF_XMLEXPPR_HXX
+#ifndef INCLUDED_XMLOFF_XMLEXPPR_HXX
+#define INCLUDED_XMLOFF_XMLEXPPR_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -180,6 +180,6 @@ public:
     const OUString& GetStyleName() const;
 };
 
-#endif  //  _XMLOFF_XMLEXPPR_HXX
+#endif // INCLUDED_XMLOFF_XMLEXPPR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLTKMAP_HXX
-#define _XMLOFF_XMLTKMAP_HXX
+#ifndef INCLUDED_XMLOFF_XMLTKMAP_HXX
+#define INCLUDED_XMLOFF_XMLTKMAP_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -54,6 +54,6 @@ public:
     sal_uInt16 Get( sal_uInt16 nPrefix, const OUString& rLName ) const;
 };
 
-#endif  //  _XMLOFF_XMLTKMAP_HXX
+#endif // INCLUDED_XMLOFF_XMLTKMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

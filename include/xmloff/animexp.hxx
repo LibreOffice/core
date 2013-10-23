@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_ANIMEXP_HXX
-#define _XMLOFF_ANIMEXP_HXX
+#ifndef INCLUDED_XMLOFF_ANIMEXP_HXX
+#define INCLUDED_XMLOFF_ANIMEXP_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <xmloff/uniref.hxx>
@@ -40,6 +40,6 @@ public:
     void exportAnimations( SvXMLExport& rExport );
 };
 
-#endif  //  _XMLOFF_ANIMEXP_HXX
+#endif // INCLUDED_XMLOFF_ANIMEXP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

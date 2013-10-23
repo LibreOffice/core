@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_NUMEHELP_HXX
-#define XMLOFF_NUMEHELP_HXX
+#ifndef INCLUDED_XMLOFF_NUMEHELP_HXX
+#define INCLUDED_XMLOFF_NUMEHELP_HXX
 
 #include "sal/config.h"
 #include "xmloff/xmlnmspe.hxx"

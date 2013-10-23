@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#define _XMLOFF_XMLNMSPE_HXX
+#ifndef INCLUDED_XMLOFF_XMLNMSPE_HXX
+#define INCLUDED_XMLOFF_XMLNMSPE_HXX
 
 #include <sal/types.h>
 
@@ -102,6 +102,6 @@ XML_NAMESPACE( CSS3TEXT,        103U )      // CSS Text Level 3
 XML_NAMESPACE( FORMX,           101U )      // form interop extensions
 
 
-#endif  //  _XMLOFF_XMLNMSPE_HXX
+#endif // INCLUDED_XMLOFF_XMLNMSPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

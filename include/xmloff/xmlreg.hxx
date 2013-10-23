@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLREG_HXX
-#define _XMLOFF_XMLREG_HXX
+#ifndef INCLUDED_XMLOFF_XMLREG_HXX
+#define INCLUDED_XMLOFF_XMLREG_HXX
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -31,6 +31,6 @@
  */
 sal_Bool XMLRegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ); /// [all] ServiceProvider to register in.
 
-#endif  //  _XMLOFF_XMLREG_HXX
+#endif // INCLUDED_XMLOFF_XMLREG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

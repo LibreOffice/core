@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_HATCHSTYLE_HXX
-#define _XMLOFF_HATCHSTYLE_HXX
+#ifndef INCLUDED_XMLOFF_HATCHSTYLE_HXX
+#define INCLUDED_XMLOFF_HATCHSTYLE_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
-#define _XMLSCRIPT_XMLDLG_IMEXP_HXX_
+#ifndef INCLUDED_XMLSCRIPT_XMLDLG_IMEXP_HXX
+#define INCLUDED_XMLSCRIPT_XMLDLG_IMEXP_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
 

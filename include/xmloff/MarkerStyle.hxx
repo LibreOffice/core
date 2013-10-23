@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_MARKERSTYLE_HXX
-#define _XMLOFF_MARKERSTYLE_HXX
+#ifndef INCLUDED_XMLOFF_MARKERSTYLE_HXX
+#define INCLUDED_XMLOFF_MARKERSTYLE_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -62,6 +62,6 @@ public:
         const ::com::sun::star::uno::Any& rValue );
 };
 
-#endif // _XMLOFF_MARKERSTYLE_HXX
+#endif // INCLUDED_XMLOFF_MARKERSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

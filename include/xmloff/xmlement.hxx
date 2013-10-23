@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLEMENT_HXX
-#define _XMLOFF_XMLEMENT_HXX
+#ifndef INCLUDED_XMLOFF_XMLEMENT_HXX
+#define INCLUDED_XMLOFF_XMLEMENT_HXX
 
 #include <sal/types.h>
 #include <xmloff/xmltoken.hxx>
@@ -46,6 +46,6 @@ struct SvXMLEnumStringMapEntry
     sal_uInt16          nValue;
 };
 
-#endif  //  _XMLOFF_XMLEMENT_HXX
+#endif // INCLUDED_XMLOFF_XMLEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

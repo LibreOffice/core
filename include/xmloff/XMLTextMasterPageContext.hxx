@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLOFF_TEXTMASTERPAGECONTEXT_HXX_
-#define _XMLOFF_TEXTMASTERPAGECONTEXT_HXX_
+#ifndef INCLUDED_XMLOFF_XMLTEXTMASTERPAGECONTEXT_HXX
+#define INCLUDED_XMLOFF_XMLTEXTMASTERPAGECONTEXT_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"

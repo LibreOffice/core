@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROPERTYHANDLERBASE_HXX
-#define _XMLOFF_PROPERTYHANDLERBASE_HXX
+#ifndef INCLUDED_XMLOFF_XMLPRHDL_HXX
+#define INCLUDED_XMLOFF_XMLPRHDL_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -53,6 +53,6 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
 };
 
-#endif      // _XMLOFF_PROPERTYHANDLERBASE_HXX
+#endif // INCLUDED_XMLOFF_XMLPRHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

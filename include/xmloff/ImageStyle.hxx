@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_IMAGESTYLE_HXX
-#define _XMLOFF_IMAGESTYLE_HXX
+#ifndef INCLUDED_XMLOFF_IMAGESTYLE_HXX
+#define INCLUDED_XMLOFF_IMAGESTYLE_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -49,6 +49,6 @@ private:
                            SvXMLImport& rImport );
 };
 
-#endif // _XMLOFF_IMAGESTYLE_HXX
+#endif // INCLUDED_XMLOFF_IMAGESTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLNUME_HXX
-#define _XMLOFF_XMLNUME_HXX
+#ifndef INCLUDED_XMLOFF_XMLNUME_HXX
+#define INCLUDED_XMLOFF_XMLNUME_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/mapunit.hxx>
@@ -88,6 +88,6 @@ public:
                 ::com::sun::star::container::XIndexReplace > & xNumRule );
 };
 
-#endif  //  _XMLOFF_XMLNUME_HXX
+#endif // INCLUDED_XMLOFF_XMLNUME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

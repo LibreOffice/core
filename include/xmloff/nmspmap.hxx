@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_NMSPMAP_HXX
-#define _XMLOFF_NMSPMAP_HXX
+#ifndef INCLUDED_XMLOFF_NMSPMAP_HXX
+#define INCLUDED_XMLOFF_NMSPMAP_HXX
 
 #include "sal/config.h"
 
@@ -165,6 +165,6 @@ public:
                              sal_uInt16 nIdxGuess = USHRT_MAX ) const;
 };
 
-#endif  //  _XMLOFF_NMSPMAP_HXX
+#endif // INCLUDED_XMLOFF_NMSPMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

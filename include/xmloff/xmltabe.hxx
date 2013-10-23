@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLTABE_HXX
-#define _XMLOFF_XMLTABE_HXX
+#ifndef INCLUDED_XMLOFF_XMLTABE_HXX
+#define INCLUDED_XMLOFF_XMLTABE_HXX
 
 // prevent funny things like "#define sun 1" from the compiler
 #include <sal/config.h>
@@ -48,6 +48,6 @@ public:
 };
 
 
-#endif  //  _XMLOFF_XMLTABE_HXX
+#endif // INCLUDED_XMLOFF_XMLTABE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

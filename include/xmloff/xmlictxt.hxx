@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#define _XMLOFF_XMLICTXT_HXX
+#ifndef INCLUDED_XMLOFF_XMLICTXT_HXX
+#define INCLUDED_XMLOFF_XMLICTXT_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -96,6 +96,6 @@ SV_DECL_REF( SvXMLImportContext )
 SV_IMPL_REF( SvXMLImportContext )
 
 
-#endif  //  _XMLOFF_XMLICTXT_HXX
+#endif // INCLUDED_XMLOFF_XMLICTXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

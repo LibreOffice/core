@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLNUMI_HXX
-#define _XMLOFF_XMLNUMI_HXX
+#ifndef INCLUDED_XMLOFF_XMLNUMI_HXX
+#define INCLUDED_XMLOFF_XMLNUMI_HXX
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 
@@ -99,6 +99,6 @@ public:
     void CreateAndInsertAuto() const;
 };
 
-#endif  //  _XMLOFF_XMLNUMI_HXX
+#endif // INCLUDED_XMLOFF_XMLNUMI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

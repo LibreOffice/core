@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLTYPES_HXX
-#define _XMLOFF_XMLTYPES_HXX
+#ifndef INCLUDED_XMLOFF_XMLTYPES_HXX
+#define INCLUDED_XMLOFF_XMLTYPES_HXX
 
 ///////////////////////////////////////////////////////////////////////////////
 // Flags to specify how to im/export the property
@@ -281,6 +281,6 @@
 #define XML_PM_TYPES_START  (0x5 << XML_TYPE_APP_SHIFT) // page master
 #define XML_DB_TYPES_START  (0x6 << XML_TYPE_APP_SHIFT)
 
-#endif      // _XMLOFF_XMLTYPES_HXX
+#endif // INCLUDED_XMLOFF_XMLTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

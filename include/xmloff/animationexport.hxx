@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_ANIMATIONEXPORT_HXX
-#define _XMLOFF_ANIMATIONEXPORT_HXX
+#ifndef INCLUDED_XMLOFF_ANIMATIONEXPORT_HXX
+#define INCLUDED_XMLOFF_ANIMATIONEXPORT_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -48,6 +48,6 @@ public:
 
 }
 
-#endif	//  _XMLOFF_ANIMATIONEXPORT_HXX
+#endif // INCLUDED_XMLOFF_ANIMATIONEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

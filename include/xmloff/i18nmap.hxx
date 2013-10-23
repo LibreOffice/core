@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_I18NMAP_HXX
-#define _XMLOFF_I18NMAP_HXX
+#ifndef INCLUDED_XMLOFF_I18NMAP_HXX
+#define INCLUDED_XMLOFF_I18NMAP_HXX
 
 #include <sal/config.h>
 #include "xmloff/dllapi.h"
@@ -68,6 +68,6 @@ public:
                                 const OUString& rName ) const;
 };
 
-#endif  //  _XMLOFF_I18NMAP_HXX
+#endif // INCLUDED_XMLOFF_I18NMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

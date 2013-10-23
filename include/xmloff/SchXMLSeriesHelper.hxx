@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_SCH_XML_SERIESHELPER_HXX
-#define _XMLOFF_SCH_XML_SERIESHELPER_HXX
+#ifndef INCLUDED_XMLOFF_SCHXMLSERIESHELPER_HXX
+#define INCLUDED_XMLOFF_SCHXMLSERIESHELPER_HXX
 
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -67,7 +67,7 @@ public:
                         ::com::sun::star::frame::XModel >& xChartModel );
 };
 
-// _XMLOFF_SCH_XML_SERIESHELPER_HXX
+// INCLUDED_XMLOFF_SCHXMLSERIESHELPER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

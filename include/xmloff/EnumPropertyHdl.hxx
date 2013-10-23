@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
-#define _XMLOFF_ENUMPROPERTYHANDLER_HXX
+#ifndef INCLUDED_XMLOFF_ENUMPROPERTYHDL_HXX
+#define INCLUDED_XMLOFF_ENUMPROPERTYHDL_HXX
 
 #include <xmloff/xmlprhdl.hxx>
 #include <com/sun/star/uno/Type.h>
@@ -41,6 +41,6 @@ public:
     virtual bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif      // _XMLOFF_ENUMPROPERTYHANDLER_HXX
+#endif // INCLUDED_XMLOFF_ENUMPROPERTYHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

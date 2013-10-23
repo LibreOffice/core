@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
-#define _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
+#ifndef INCLUDED_XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
+#define INCLUDED_XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -58,6 +58,6 @@ public:
             const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
-#endif      // _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
+#endif // INCLUDED_XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

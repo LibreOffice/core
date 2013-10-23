@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
-#define _XMLOFF_PROGRESSBARHELPER_HXX
+#ifndef INCLUDED_XMLOFF_PROGRESSBARHELPER_HXX
+#define INCLUDED_XMLOFF_PROGRESSBARHELPER_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"

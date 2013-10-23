@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLASTPLP_HXX
-#define _XMLOFF_XMLASTPLP_HXX
+#ifndef INCLUDED_XMLOFF_XMLAUSTP_HXX
+#define INCLUDED_XMLOFF_XMLAUSTP_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -119,6 +119,6 @@ public:
     void ClearEntries();
 };
 
-#endif  //  _XMLOFF_XMLASTPLP_HXX
+#endif // INCLUDED_XMLOFF_XMLAUSTP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

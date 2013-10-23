@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLOFF_TXTIMPPR_HXX
-#define _XMLOFF_TXTIMPPR_HXX
+#ifndef INCLUDED_XMLOFF_TXTIMPPR_HXX
+#define INCLUDED_XMLOFF_TXTIMPPR_HXX
 
 #include "xmloff/dllapi.h"
 #include <xmloff/xmlimppr.hxx>
@@ -66,6 +66,6 @@ public:
             sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const;
 };
 
-#endif  //  _XMLOFF_XMLIMPPR_HXX
+#endif // INCLUDED_XMLOFF_TXTIMPPR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

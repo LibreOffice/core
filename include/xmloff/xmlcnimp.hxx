@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLCNIMP_HXX
-#define _XMLOFF_XMLCNIMP_HXX
+#ifndef INCLUDED_XMLOFF_XMLCNIMP_HXX
+#define INCLUDED_XMLOFF_XMLCNIMP_HXX
 
 #include "xmloff/dllapi.h"
 #include <sal/types.h>

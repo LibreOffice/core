@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLOFF_SCH_XMLIMPORTHELPER_HXX_
-#define _XMLOFF_SCH_XMLIMPORTHELPER_HXX_
+#ifndef INCLUDED_XMLOFF_SCHXMLIMPORTHELPER_HXX
+#define INCLUDED_XMLOFF_SCHXMLIMPORTHELPER_HXX
 
 #include <xmloff/uniref.hxx>
 #include <xmloff/families.hxx>
@@ -148,6 +148,6 @@ public:
                         ::com::sun::star::chart2::XChartDocument > & xDoc );
 };
 
-#endif  // _XMLOFF_SCH_XMLIMPORTHELPER_HXX_
+#endif // INCLUDED_XMLOFF_SCHXMLIMPORTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -9,8 +9,8 @@
 
 // Simple interface to allow serialization of document settings
 
-#ifndef _XMLOFF_SETTINGS_STORE_HXX
-#define _XMLOFF_SETTINGS_STORE_HXX
+#ifndef INCLUDED_XMLOFF_SETTINGSSTORE_HXX
+#define INCLUDED_XMLOFF_SETTINGSSTORE_HXX
 
 #include <vector>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -35,6 +35,6 @@ protected:
     ~DocumentSettingsSerializer() {}
 };
 
-#endif // _XMLOFF_SETTINGS_STORE_HXX
+#endif // INCLUDED_XMLOFF_SETTINGSSTORE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

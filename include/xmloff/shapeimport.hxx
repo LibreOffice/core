@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_SHAPEIMPORT_HXX_
-#define _XMLOFF_SHAPEIMPORT_HXX_
+#ifndef INCLUDED_XMLOFF_SHAPEIMPORT_HXX
+#define INCLUDED_XMLOFF_SHAPEIMPORT_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -421,6 +421,6 @@ public:
     const rtl::Reference< XMLTableImport >&     GetShapeTableImport();
 };
 
-#endif // _XMLOFF_SHAPEIMPORT_HXX_
+#endif // INCLUDED_XMLOFF_SHAPEIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

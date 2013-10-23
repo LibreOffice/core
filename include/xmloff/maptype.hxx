@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
-#define _XMLOFF_PROPMAPPINGTYPES_HXX
+#ifndef INCLUDED_XMLOFF_MAPTYPE_HXX
+#define INCLUDED_XMLOFF_MAPTYPE_HXX
 
 #include <tools/solar.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -63,6 +63,6 @@ struct XMLPropertyState
         : mnIndex( rPropState.mnIndex ), maValue( rPropState.maValue ) {}
 };
 
-#endif // _XMLOFF_PROPMAPPINGTYPES_HXX
+#endif // INCLUDED_XMLOFF_MAPTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

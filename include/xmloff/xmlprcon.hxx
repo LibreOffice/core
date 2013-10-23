@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
-#define _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_XMLPRCON_HXX
+#define INCLUDED_XMLOFF_XMLPRCON_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimppr.hxx>
@@ -65,6 +65,6 @@ public:
 
 };
 
-#endif  //  _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
+#endif // INCLUDED_XMLOFF_XMLPRCON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

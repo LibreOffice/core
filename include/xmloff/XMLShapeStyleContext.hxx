@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
-#define _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
+#ifndef INCLUDED_XMLOFF_XMLSHAPESTYLECONTEXT_HXX
+#define INCLUDED_XMLOFF_XMLSHAPESTYLECONTEXT_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -65,6 +65,6 @@ public:
                 ::com::sun::star::beans::XPropertySet > & rPropSet );
 };
 
-#endif  //  _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
+#endif // INCLUDED_XMLOFF_XMLSHAPESTYLECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

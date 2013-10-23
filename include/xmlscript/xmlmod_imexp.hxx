@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLSCRIPT_XMLMOD_IMEXP_HXX_
-#define _XMLSCRIPT_XMLMOD_IMEXP_HXX_
+#ifndef INCLUDED_XMLSCRIPT_XMLMOD_IMEXP_HXX
+#define INCLUDED_XMLSCRIPT_XMLMOD_IMEXP_HXX
 
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/uno/Sequence.hxx>

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLOFF_XMLIMPPR_HXX
-#define _XMLOFF_XMLIMPPR_HXX
+#ifndef INCLUDED_XMLOFF_XMLIMPPR_HXX
+#define INCLUDED_XMLOFF_XMLIMPPR_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -187,6 +187,6 @@ inline const UniReference< XMLPropertySetMapper >&
     return maPropMapper;
 }
 
-#endif  //  _XMLOFF_XMLIMPPR_HXX
+#endif // INCLUDED_XMLOFF_XMLIMPPR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

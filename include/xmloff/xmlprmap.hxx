@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#define _XMLOFF_PROPERTYSETMAPPER_HXX
+#ifndef INCLUDED_XMLOFF_XMLPRMAP_HXX
+#define INCLUDED_XMLOFF_XMLPRMAP_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -176,6 +176,6 @@ public:
     void RemoveEntry( sal_Int32 nIndex );
 };
 
-#endif // _XMLOFF_PROPERTYSETMAPPER_HXX
+#endif // INCLUDED_XMLOFF_XMLPRMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

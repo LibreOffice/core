@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
-#define _XMLOFF_PROPERTYHANDLERFACTORY_HXX
+#ifndef INCLUDED_XMLOFF_PRHDLFAC_HXX
+#define INCLUDED_XMLOFF_PRHDLFAC_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -98,6 +98,6 @@ private:
     CacheMap maHandlerCache;
 };
 
-#endif  // _XMLOFF_PROPERTYHANDLERFACTORY_HXX
+#endif // INCLUDED_XMLOFF_PRHDLFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

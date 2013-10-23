@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLTEXTSHAPEIMPORTHELPER_HXX
-#define _XMLTEXTSHAPEIMPORTHELPER_HXX
+#ifndef INCLUDED_XMLOFF_XMLTEXTSHAPEIMPORTHELPER_HXX
+#define INCLUDED_XMLOFF_XMLTEXTSHAPEIMPORTHELPER_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"

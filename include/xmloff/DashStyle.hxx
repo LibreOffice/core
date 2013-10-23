@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_DASHSTYLE_HXX
-#define _XMLOFF_DASHSTYLE_HXX
+#ifndef INCLUDED_XMLOFF_DASHSTYLE_HXX
+#define INCLUDED_XMLOFF_DASHSTYLE_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -61,6 +61,6 @@ public:
                         const ::com::sun::star::uno::Any& rValue );
 };
 
-#endif // _XMLOFF_DASHSTYLE_HXX
+#endif // INCLUDED_XMLOFF_DASHSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

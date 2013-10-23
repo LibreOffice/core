@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLSTYLE_HXX
-#define _XMLOFF_XMLSTYLE_HXX
+#ifndef INCLUDED_XMLOFF_XMLSTYLE_HXX
+#define INCLUDED_XMLOFF_XMLSTYLE_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -260,6 +260,6 @@ public:
     sal_Bool IsAutomaticStyle() const;
 };
 
-#endif  //  _XMLOFF_XMLSTYLE_HXX
+#endif // INCLUDED_XMLOFF_XMLSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

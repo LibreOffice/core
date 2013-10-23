@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_XMLMETAI_HXX
-#define XMLOFF_XMLMETAI_HXX
+#ifndef INCLUDED_XMLOFF_XMLMETAI_HXX
+#define INCLUDED_XMLOFF_XMLMETAI_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -64,6 +64,6 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xImportInfo );
 };
 
-#endif // _XMLOFF_XMLMETAI_HXX
+#endif // _ INCLUDED_XMLOFF_XMLMETAI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

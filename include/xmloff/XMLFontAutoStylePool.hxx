@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
-#define _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
+#ifndef INCLUDED_XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
+#define INCLUDED_XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -67,6 +67,6 @@ public:
     void exportXML();
 };
 
-#endif  //  _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
+#endif // INCLUDED_XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

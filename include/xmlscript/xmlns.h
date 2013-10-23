@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _XMLSCRIPT_XMLNS_H_
-#define _XMLSCRIPT_XMLNS_H_
+#ifndef INCLUDED_XMLSCRIPT_XMLNS_H
+#define INCLUDED_XMLSCRIPT_XMLNS_H
 
 #define XMLNS_DIALOGS_URI "http://openoffice.org/2000/dialog"
 #define XMLNS_DIALOGS_PREFIX "dlg"

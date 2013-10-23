@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNIVERSALL_REFERENCE_HXX
-#define _UNIVERSALL_REFERENCE_HXX
+#ifndef INCLUDED_XMLOFF_UNIREF_HXX
+#define INCLUDED_XMLOFF_UNIREF_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -219,6 +219,6 @@ inline sal_Bool UniReference< T >::operator != ( const UniReference & rRef ) con
     return ( ! operator == ( rRef ) );
 }
 
-#endif  // _UNIVERSALL_REFERENCE_HXX
+#endif // INCLUDED_XMLOFF_UNIREF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

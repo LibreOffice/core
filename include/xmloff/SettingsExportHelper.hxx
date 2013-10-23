@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_SETTINGSEXPORTHELPER_HXX
-#define _XMLOFF_SETTINGSEXPORTHELPER_HXX
+#ifndef INCLUDED_XMLOFF_SETTINGSEXPORTHELPER_HXX
+#define INCLUDED_XMLOFF_SETTINGSEXPORTHELPER_HXX
 
 #include "xmloff/dllapi.h"
 

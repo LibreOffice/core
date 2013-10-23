@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSCRIPT_DLL_API_H
-#define INCLUDED_XMLSCRIPT_DLL_API_H
+#ifndef INCLUDED_XMLSCRIPT_XMLSCRIPTDLLAPI_H
+#define INCLUDED_XMLSCRIPT_XMLSCRIPTDLLAPI_H
 
 #include <sal/types.h>
 

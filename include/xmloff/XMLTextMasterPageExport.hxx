@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
-#define _XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
+#ifndef INCLUDED_XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
+#define INCLUDED_XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
 
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
@@ -63,6 +63,6 @@ public:
     ~XMLTextMasterPageExport();
 };
 
-#endif  //  _XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
+#endif // INCLUDED_XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

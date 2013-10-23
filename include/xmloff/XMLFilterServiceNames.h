@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
-#define _XMLOFF_XMLFILTERSERVICENAMES_H
+#ifndef INCLUDED_XMLOFF_XMLFILTERSERVICENAMES_H
+#define INCLUDED_XMLOFF_XMLFILTERSERVICENAMES_H
 
 
 #define XML_IMPORT_FILTER_WRITER    "com.sun.star.comp.Writer.XMLOasisImporter"
