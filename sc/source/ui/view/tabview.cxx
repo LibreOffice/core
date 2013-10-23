@@ -19,32 +19,6 @@
 
 #include <vcl/svapp.hxx>
 
-///////////////////////////////////////////////////////////////////////////
-// NODRAW.HXX
-// Erweiterte Konstanten, um CLOKs mit SVDRAW.HXX zu vermeiden
-// Die u.a. Aenderungen nehmen vorgeschlagene Konstante vorweg
-///////////////////////////////////////////////////////////////////////////
-
-////////////////////// Umsetzen der Standard-Defines //////////////////////
-
-#ifdef _SDR_NOGRAFOBJ
-    #undef _SDR_NOGRAFOBJ
-    #define _SVDOGRAF_HXX
-#else
-    #undef _SVDOTEXT_HXX
-    #undef _SVDORECT_HXX
-#endif
-
-#ifdef _SDR_NOOLE2OBJ
-    #undef _SDR_NOOLE2OBJ
-    #define _SVDOOLE2_HXX
-#else
-    #undef _SVDOTEXT_HXX
-    #undef _SVDORECT_HXX
-#endif
-
-////////////////////// Ende der SVDRAW-Modifikationen /////////////////////
-
 #include "scitems.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -86,11 +60,6 @@
 #define SC_TABBAR_MIN       6
 
 using namespace ::com::sun::star;
-
-// STATIC DATA -----------------------------------------------------------
-
-
-//==================================================================
 
 //  Corner-Button
 
@@ -161,8 +130,6 @@ void ScCornerButton::StateChanged( StateChangedType nType )
     SetBackground( rStyleSettings.GetFaceColor() );
     Invalidate();
 }
-
-// -----------------------------------------------------------------------
 
 void ScCornerButton::DataChanged( const DataChangedEvent& rDCEvt )
 {
