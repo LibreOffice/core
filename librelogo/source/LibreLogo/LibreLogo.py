@@ -83,6 +83,7 @@ class __Doc__:
         self.pensize = __LINEWIDTH__
         self.linestyle = __LineStyle_SOLID__
         self.linejoint = __ROUNDED__
+        self.linecap = __Cap_NONE__
         self.oldlc = 0
         self.oldlw = 0
         self.oldls = __LineStyle_SOLID__
@@ -104,6 +105,9 @@ from com.sun.star.drawing import Hatch as __Hatch__
 from com.sun.star.drawing import PolyPolygonBezierCoords as __Bezier__
 from com.sun.star.text.TextContentAnchorType import AT_PAGE as __AT_PAGE__
 from com.sun.star.text.WrapTextMode import THROUGHT as __THROUGHT__
+from com.sun.star.drawing.LineCap import BUTT as __Cap_NONE__
+from com.sun.star.drawing.LineCap import ROUND as __Cap_ROUND__
+from com.sun.star.drawing.LineCap import SQUARE as __Cap_SQUARE__
 from com.sun.star.drawing.LineJoint import NONE as __Joint_NONE__
 from com.sun.star.drawing.LineJoint import BEVEL as __BEVEL__
 from com.sun.star.drawing.LineJoint import MITER as __MITER__
@@ -829,7 +833,7 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
     dx = n * sin((pi/180)*(max(turtle.RotateAngle, preciseAngle)/100))
     dy = n * cos((pi/180)*(max(turtle.RotateAngle, preciseAngle)/100))
     turtle.setPosition(__Point__(pos.X + dx / __MM10_TO_TWIP__, pos.Y + dy / __MM10_TO_TWIP__))
-    if (_.pencolor != _.oldlc or _.pensize != _.oldlw or _.linestyle != _.oldls or _.linejoint != _.oldlj):
+    if (_.pencolor != _.oldlc or _.pensize != _.oldlw or _.linestyle != _.oldls or _.linejoint != _.oldlj or _.linecap != _.oldlcap):
         __removeshape__(__ACTUAL__)
         shape = None
     else:
@@ -838,6 +842,7 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
     _.oldlc = _.pencolor
     _.oldls = _.linestyle
     _.oldlj = _.linejoint
+    _.oldlcap = _.linecap
     if shape and not _.pen and not dot:
         _.continuous = False
         return
@@ -870,6 +875,7 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
     last2 = __Point__(last.X + c2.X, last.Y + c2.Y)
     shape.LineStyle, shape.LineDash = __linestyle__(_.linestyle)
     shape.LineJoint = _.linejoint
+    shape.LineCap = _.linecap
     if dot or _.linestyle == __LineStyle_DOTTED__:
         shape.PolyPolygon = tuple( list(shape.PolyPolygon) + __dots__(n, last, c2.X, c2.Y))
         shape.LineStart = __bezierdot__
@@ -887,6 +893,7 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
     _.oldlc = _.pencolor
     _.oldls = _.linestyle
     _.oldlj = _.linejoint
+    _.oldlcap = _.linecap
     _.continuous = True
     __lefthang__(shape)
 
@@ -901,6 +908,7 @@ def __fillit__(filled = True):
         shape.setPosition(oldshape.getPosition())
         shape.LineStyle, shape.LineDash = __linestyle__(_.linestyle)
         shape.LineJoint = _.linejoint
+        shape.LineCap = _.linecap
         if _.hatch:
             shape.FillBackground = True
             shape.FillHatch = _.hatch
@@ -921,6 +929,7 @@ def __fillit__(filled = True):
     elif oldshape and "PolyPolygon" in oldshape.ShapeType:
         oldshape.LineStyle = int(_.pen)
         oldshape.LineJoint = _.linejoint
+        oldshape.LineCap = _.linecap
         if _.hatch:
             oldshape.FillBackground = True
             oldshape.FillHatch = _.hatch
@@ -954,6 +963,7 @@ def __boxshape__(shapetype, l):
     shape.LineStyle, shape.LineDash = __linestyle__(_.linestyle)
     shape.LineWidth = _.pensize / __MM10_TO_TWIP__
     shape.LineJoint = _.linejoint
+    shape.LineCap = _.linecap
     shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
     shape.FillColor, shape.FillTransparence = __splitcolor__(_.areacolor)
     shape.RotateAngle = turtle.RotateAngle
@@ -1192,6 +1202,16 @@ def penjoint(n = -1):
     elif re.match(__l12n__(_.lng)['ROUNDED'], n, flags = re.I):
         _.linejoint = __ROUNDED__
 
+def pencap(n = -1):
+    if n == -1:
+        return __locname__(_.linecap.value.replace('BUTT', 'NONE'))
+    if re.match(__l12n__(_.lng)['NONE'], n, flags = re.I):
+        _.linecap = __Cap_NONE__
+    elif re.match(__l12n__(_.lng)['ROUNDED'], n, flags = re.I):
+        _.linecap = __Cap_ROUND__
+    elif re.match(__l12n__(_.lng)['SQUARE'], n, flags = re.I):
+        _.linecap = __Cap_SQUARE__
+
 def fillcolor(n = -1):
     if n != -1:
         _.areacolor = __color__(n)
@@ -1389,6 +1409,7 @@ def __loadlang__(lang, a):
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENCOLOR'], "\n)pencolor("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENSTYLE'], "\n)penstyle("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENJOINT'], "\n)penjoint("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENCAP'], "\n)pencap("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['FILLCOLOR'], "\n)fillcolor("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['FILLSTYLE'], "\n)fillstyle("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTCOLOR'], "\n)fontcolor("],
