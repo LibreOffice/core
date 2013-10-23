@@ -20,6 +20,7 @@
 
 #include "localebackend.hxx"
 #include <com/sun/star/beans/Optional.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/time.h>
 
 #include <stdio.h>
@@ -311,15 +312,11 @@ OUString SAL_CALL LocaleBackend::getBackendName(void) {
     return OUString("com.sun.star.comp.configuration.backend.LocaleBackend") ;
 }
 
-//------------------------------------------------------------------------------
-
 OUString SAL_CALL LocaleBackend::getImplementationName(void)
     throw (uno::RuntimeException)
 {
     return getBackendName() ;
 }
-
-//------------------------------------------------------------------------------
 
 uno::Sequence<OUString> SAL_CALL LocaleBackend::getBackendServiceNames(void)
 {
@@ -328,21 +325,11 @@ uno::Sequence<OUString> SAL_CALL LocaleBackend::getBackendServiceNames(void)
     return aServiceNameList ;
 }
 
-//------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL LocaleBackend::supportsService(const OUString& aServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > const svc = getBackendServiceNames();
-
-    for(sal_Int32 i = 0; i < svc.getLength(); ++i )
-        if(svc[i] == aServiceName)
-            return true;
-
-    return false;
+    return cppu::supportsService(this, aServiceName);
 }
-
-//------------------------------------------------------------------------------
 
 uno::Sequence<OUString> SAL_CALL LocaleBackend::getSupportedServiceNames(void)
     throw (uno::RuntimeException)

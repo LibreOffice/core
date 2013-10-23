@@ -47,6 +47,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <cppuhelper/implbase1.hxx>
@@ -781,22 +782,11 @@ OUString AnimationNode::getImplementationName() throw()
     }
 }
 
-// --------------------------------------------------------------------
-
 // XServiceInfo
 sal_Bool AnimationNode::supportsService(const OUString& ServiceName) throw()
 {
-    Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
-// --------------------------------------------------------------------
 
 // XServiceInfo
 Sequence< OUString > AnimationNode::getSupportedServiceNames(void) throw()

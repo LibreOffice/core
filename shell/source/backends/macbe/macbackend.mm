@@ -29,6 +29,7 @@
 #include "macbackend.hxx"
 
 #include "com/sun/star/beans/Optional.hpp"
+#include <cppuhelper/supportsservice.hxx>
 #include "rtl/ustrbuf.hxx"
 #include "osl/file.h"
 
@@ -447,8 +448,6 @@ rtl::OUString SAL_CALL MacOSXBackend::getImplementationName(void)
     return getBackendName();
 }
 
-//------------------------------------------------------------------------------
-
 uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getBackendServiceNames(void)
 {
     uno::Sequence<rtl::OUString> aServiceNameList(1);
@@ -457,21 +456,11 @@ uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getBackendServiceNames(void
     return aServiceNameList;
 }
 
-//------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL MacOSXBackend::supportsService(const rtl::OUString& aServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > const svc = getBackendServiceNames();
-
-    for(sal_Int32 i = 0; i < svc.getLength(); ++i )
-        if(svc[i] == aServiceName)
-            return true;
-
-    return false;
+    return cppu::supportsService(this, aServiceName);
 }
-
-//------------------------------------------------------------------------------
 
 uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(void)
     throw (uno::RuntimeException)

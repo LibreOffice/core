@@ -24,6 +24,7 @@
 
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER
@@ -341,36 +342,21 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     }
 }
 
-// -------------------------------------------------
 // XServiceInfo
-// -------------------------------------------------
-
 OUString SAL_CALL CSysShExec::getImplementationName(  )
     throw( RuntimeException )
 {
     return OUString(SYSSHEXEC_IMPL_NAME );
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 sal_Bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
-    Sequence < OUString > SupportedServicesNames = SysShExec_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
     throw( RuntimeException )
 {

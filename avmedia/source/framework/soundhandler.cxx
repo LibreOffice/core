@@ -29,6 +29,7 @@
 
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 namespace avmedia{
 
@@ -134,47 +135,19 @@ OUString SAL_CALL SoundHandler::getImplementationName() throw( css::uno::Runtime
     return impl_getStaticImplementationName();
 }
 
-/*===========================================================================================================*/
-/* XServiceInfo */
-/*===========================================================================================================*/
+// XServiceInfo
 sal_Bool SAL_CALL SoundHandler::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )
 {
-    /* Set default return value. */
-    bool bReturn = sal_False ;
-    /* Get names of all supported servicenames. */
-    css::uno::Sequence < OUString >  seqServiceNames       =   getSupportedServiceNames();
-    const OUString*                        pArray          =   seqServiceNames.getConstArray();
-    sal_Int32                              nCounter        =   0;
-    sal_Int32                              nLength         =   seqServiceNames.getLength();
-    /* Search for right name in list. */
-    while   (
-              ( nCounter      <       nLength         )       &&
-              ( bReturn       ==      sal_False       )
-            )
-    {
-        /* Is name was found, say "YES, SERVICE IS SUPPORTED." and break loop. */
-        if ( pArray[nCounter] == sServiceName )
-        {
-            bReturn = sal_True ;
-        }
-        /* Else step to next element in list. */
-        ++nCounter;
-    }
-    /* Return state of search. */
-    return bReturn;
+    return cppu::supportsService(this, sServiceName);
 }
 
-/*===========================================================================================================*/
-/* XServiceInfo */
-/*===========================================================================================================*/
+// XServiceInfo
 css::uno::Sequence< OUString > SAL_CALL SoundHandler::getSupportedServiceNames() throw( css::uno::RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
-/*===========================================================================================================*/
-/* Helper for XServiceInfo                                                                                   */
-/*===========================================================================================================*/
+// Helper for XServiceInfo
 css::uno::Sequence< OUString > SoundHandler::impl_getStaticSupportedServiceNames()
 {
     css::uno::Sequence< OUString > seqServiceNames( 1 );
@@ -182,9 +155,7 @@ css::uno::Sequence< OUString > SoundHandler::impl_getStaticSupportedServiceNames
     return seqServiceNames;
 }
 
-/*===========================================================================================================*/
-/* Helper for XServiceInfo */
-/*===========================================================================================================*/
+// Helper for XServiceInfo
 OUString SoundHandler::impl_getStaticImplementationName()
 {
     return IMPLEMENTATIONNAME_SOUNDHANDLER;

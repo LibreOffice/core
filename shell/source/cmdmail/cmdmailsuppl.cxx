@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <string.h>
 #include <errno.h>
@@ -267,36 +268,21 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     }
 }
 
-// -------------------------------------------------
 // XServiceInfo
-// -------------------------------------------------
-
 OUString SAL_CALL CmdMailSuppl::getImplementationName(  )
     throw( RuntimeException )
 {
     return OUString(COMP_IMPL_NAME);
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 sal_Bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
-    Sequence < OUString > SupportedServicesNames = Component_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
     throw( RuntimeException )
 {

@@ -20,6 +20,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
@@ -645,11 +646,7 @@ void SAL_CALL Thesaurus::removeEventListener( const Reference< XEventListener >&
         aEvtListeners.removeInterface( rxListener );
 }
 
-
-///////////////////////////////////////////////////////////////////////////
 // Service specific part
-//
-
 OUString SAL_CALL Thesaurus::getImplementationName()
         throw(RuntimeException)
 {
@@ -661,16 +658,8 @@ OUString SAL_CALL Thesaurus::getImplementationName()
 sal_Bool SAL_CALL Thesaurus::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
 
 Sequence< OUString > SAL_CALL Thesaurus::getSupportedServiceNames()
         throw(RuntimeException)
@@ -678,7 +667,6 @@ Sequence< OUString > SAL_CALL Thesaurus::getSupportedServiceNames()
     MutexGuard  aGuard( GetLinguMutex() );
     return getSupportedServiceNames_Static();
 }
-
 
 Sequence< OUString > Thesaurus::getSupportedServiceNames_Static()
         throw()

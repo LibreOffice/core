@@ -29,6 +29,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/awt/vclxfont.hxx>
@@ -605,29 +606,16 @@ void AccessibleDialogWindow::disposing()
     }
 }
 
-// -----------------------------------------------------------------------------
 // XServiceInfo
-// -----------------------------------------------------------------------------
-
 OUString AccessibleDialogWindow::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.basctl.AccessibleWindow" );
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool AccessibleDialogWindow::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< OUString > aNames( getSupportedServiceNames() );
-    const OUString* pNames = aNames.getConstArray();
-    const OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
+    return cppu::supportsService(this, rServiceName);
 }
-
-// -----------------------------------------------------------------------------
 
 Sequence< OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -636,10 +624,7 @@ Sequence< OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (R
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
 // XAccessible
-// -----------------------------------------------------------------------------
-
 Reference< XAccessibleContext > AccessibleDialogWindow::getAccessibleContext(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
@@ -647,10 +632,7 @@ Reference< XAccessibleContext > AccessibleDialogWindow::getAccessibleContext(  )
     return this;
 }
 
-// -----------------------------------------------------------------------------
 // XAccessibleContext
-// -----------------------------------------------------------------------------
-
 sal_Int32 AccessibleDialogWindow::getAccessibleChildCount() throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );

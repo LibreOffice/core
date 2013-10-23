@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include "smplmailsuppl.hxx"
 #include "smplmailclient.hxx"
@@ -79,13 +80,7 @@ OUString SAL_CALL CSmplMailSuppl::getImplementationName()
 sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
     throw(RuntimeException)
 {
-    Sequence <OUString> SupportedServicesNames = Component_getSupportedServiceNames();
-
-    for (sal_Int32 n = SupportedServicesNames.getLength(); n--;)
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence<OUString> SAL_CALL CSmplMailSuppl::getSupportedServiceNames()

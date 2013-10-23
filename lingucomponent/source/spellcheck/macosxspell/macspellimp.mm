@@ -22,6 +22,7 @@
 
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
@@ -520,11 +521,7 @@ void SAL_CALL
         aEvtListeners.removeInterface( rxListener );
 }
 
-
-///////////////////////////////////////////////////////////////////////////
 // Service specific part
-//
-
 OUString SAL_CALL MacSpellChecker::getImplementationName()
         throw(RuntimeException)
 {
@@ -533,20 +530,11 @@ OUString SAL_CALL MacSpellChecker::getImplementationName()
     return getImplementationName_Static();
 }
 
-
 sal_Bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
 
 Sequence< OUString > SAL_CALL MacSpellChecker::getSupportedServiceNames()
         throw(RuntimeException)
@@ -555,7 +543,6 @@ Sequence< OUString > SAL_CALL MacSpellChecker::getSupportedServiceNames()
 
     return getSupportedServiceNames_Static();
 }
-
 
 Sequence< OUString > MacSpellChecker::getSupportedServiceNames_Static()
         throw()

@@ -33,6 +33,7 @@
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "uno/current_context.hxx"
 
@@ -265,37 +266,21 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     }
 }
 
-
-// -------------------------------------------------
 // XServiceInfo
-// -------------------------------------------------
-
 OUString SAL_CALL ShellExec::getImplementationName(  )
     throw( RuntimeException )
 {
     return OUString(SHELLEXEC_IMPL_NAME );
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 sal_Bool SAL_CALL ShellExec::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
-    Sequence < OUString > SupportedServicesNames = ShellExec_getSupportedServiceNames();
-
-    for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if ( SupportedServicesNames[n] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-// -------------------------------------------------
 //  XServiceInfo
-// -------------------------------------------------
-
 Sequence< OUString > SAL_CALL ShellExec::getSupportedServiceNames(   )
     throw( RuntimeException )
 {

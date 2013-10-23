@@ -21,6 +21,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
@@ -847,11 +848,7 @@ void SAL_CALL Hyphenator::removeEventListener( const Reference< XEventListener >
         aEvtListeners.removeInterface( rxListener );
 }
 
-
-///////////////////////////////////////////////////////////////////////////
 // Service specific part
-//
-
 OUString SAL_CALL Hyphenator::getImplementationName()
         throw(RuntimeException)
 {
@@ -860,20 +857,11 @@ OUString SAL_CALL Hyphenator::getImplementationName()
     return getImplementationName_Static();
 }
 
-
 sal_Bool SAL_CALL Hyphenator::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
 
 Sequence< OUString > SAL_CALL Hyphenator::getSupportedServiceNames()
         throw(RuntimeException)
@@ -882,7 +870,6 @@ Sequence< OUString > SAL_CALL Hyphenator::getSupportedServiceNames()
 
     return getSupportedServiceNames_Static();
 }
-
 
 Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
         throw()
