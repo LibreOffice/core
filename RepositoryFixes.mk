@@ -71,7 +71,7 @@ endif
 endif
 
 ifeq ($(OS),WNT)
-gb_Library_ICU_LIBRARIES := icudt icuuc icuin icutu
+gb_Library_ICU_LIBRARIES := icudt icuuc icuin
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_ICU_LIBRARIES),$(lib):%),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES += $(foreach lib,$(gb_Library_ICU_LIBRARIES),$(lib):$(lib)$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll)
 gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
