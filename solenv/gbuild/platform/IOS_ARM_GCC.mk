@@ -123,6 +123,7 @@ define gb_LinkTarget__command_dynamiclink
 		$(HYPHEN_LIB) \
 		$(MYTHES_LIBS) \
 		$(wildcard $(WORKDIR)/LinkTarget/StaticLibrary/lib*.a) \
+		$(wildcard $(WORKDIR)/UnpackedTarball/icu/source/lib/*.a) \
 		$(wildcard $(WORKDIR)/UnpackedTarball/libcdr/src/lib/.libs/*.a) \
 		$(wildcard $(WORKDIR)/UnpackedTarball/libmspub/src/lib/.libs/*.a) \
 		$(wildcard $(WORKDIR)/UnpackedTarball/libmwaw/src/lib/.libs/*.a) \
@@ -131,6 +132,8 @@ define gb_LinkTarget__command_dynamiclink
 		$(wildcard $(WORKDIR)/UnpackedTarball/libvisio/src/lib/.libs/*.a) \
 		$(wildcard $(WORKDIR)/UnpackedTarball/libwp?/src/lib/.libs/*.a) \
 		$(wildcard $(WORKDIR)/UnpackedTarball/openssl/*.a) \
+		$(wildcard $(WORKDIR)/UnpackedTarball/xml2/.libs/*.a) \
+		$(wildcard $(WORKDIR)/UnpackedTarball/xslt/libxslt/.libs/*.a) \
 		$(T_LIBS) \
 		-o $(1))
 endef
