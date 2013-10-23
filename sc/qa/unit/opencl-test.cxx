@@ -61,7 +61,10 @@ public:
     void testStatisticalFormulaFisher();
     void testStatisticalFormulaFisherInv();
     void testStatisticalFormulaGamma();
-
+    void testFinacialFvscheduleFormula();
+    void testFinacialIRRFormula();
+    void testFinacialMIRRFormula();
+    void testFinacialRateFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSGroundWater);
@@ -70,6 +73,10 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaFisher);
     CPPUNIT_TEST(testStatisticalFormulaFisherInv);
     CPPUNIT_TEST(testStatisticalFormulaGamma);
+    CPPUNIT_TEST(testFinacialFvscheduleFormula);
+    CPPUNIT_TEST(testFinacialIRRFormula);
+    CPPUNIT_TEST(testFinacialMIRRFormula);
+    CPPUNIT_TEST(testFinacialRateFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -475,7 +482,91 @@ void ScOpenclTest::testStatisticalFormulaGamma()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+//[AMLOEXT-46]
+void ScOpenclTest::testFinacialFvscheduleFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Fvschedule.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Fvschedule.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 
+
+void ScOpenclTest::testFinacialIRRFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/IRR.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/IRR.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 6; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+
+void ScOpenclTest::testFinacialMIRRFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/MIRR.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/MIRR.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 6; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+
+void ScOpenclTest::testFinacialRateFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/RATE.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/RATE.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 1; i <= 5; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(6, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(6, i, 0));
+        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 ScOpenclTest::ScOpenclTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
 {
