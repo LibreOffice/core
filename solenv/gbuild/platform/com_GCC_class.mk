@@ -228,4 +228,7 @@ gb_LinkTarget_get_linksearchpath_for_layer = \
 		$(patsubst $(layer):%,-L%,\
 			$(filter $(layer):%,$(gb_Library_LAYER_DIRS))))
 
+
+gb_ICU_PRECOMMAND := $(call gb_Helper_extend_ld_path,$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source/lib)
+
 # vim: set noet sw=4 ts=4:
