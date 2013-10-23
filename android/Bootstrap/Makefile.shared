@@ -96,6 +96,8 @@ LIBS = \
   $(wildcard $(WORKDIR)/UnpackedTarball/libvisio/src/lib/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/libwp?/src/lib/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/openssl/*.a) \
+  $(wildcard $(WORKDIR)/UnpackedTarball/xml2/.libs/*.a) \
+  $(wildcard $(WORKDIR)/UnpackedTarball/xslt/libxslt/.libs/*.a) \
   -Wl,--end-group
 
 WHOLELIBS = \
