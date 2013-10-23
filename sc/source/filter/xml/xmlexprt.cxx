@@ -2988,9 +2988,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
         pSharedData->SetLastRow(nTable, aRowHeaderRange.EndRow);
     pDefaults->FillDefaultStyles(nTable, pSharedData->GetLastRow(nTable),
         pSharedData->GetLastColumn(nTable), pCellStyles, pDoc);
-    pRowFormatRanges->SetRowDefaults(pDefaults->GetRowDefaults());
     pRowFormatRanges->SetColDefaults(pDefaults->GetColDefaults());
-    pCellStyles->SetRowDefaults(pDefaults->GetRowDefaults());
     pCellStyles->SetColDefaults(pDefaults->GetColDefaults());
     ExportColumns(nTable, aColumnHeaderRange, bHasColumnHeader);
     bool bIsFirst(true);

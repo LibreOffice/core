@@ -152,7 +152,6 @@ class ScRowFormatRanges
 {
     typedef std::list<ScMyRowFormatRange> ScMyRowFormatRangesList;
     ScMyRowFormatRangesList     aRowFormatRanges;
-    const ScMyDefaultStyleList* pRowDefaults;
     const ScMyDefaultStyleList* pColDefaults;
     sal_uInt32                  nSize;
 
@@ -164,10 +163,9 @@ public:
     ScRowFormatRanges(const ScRowFormatRanges* pRanges);
     ~ScRowFormatRanges();
 
-    void SetRowDefaults(const ScMyDefaultStyleList* pDefaults) { pRowDefaults = pDefaults; }
     void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }
     void Clear();
-    void AddRange(ScMyRowFormatRange& rFormatRange, const sal_Int32 nStartRow);
+    void AddRange(ScMyRowFormatRange& rFormatRange);
     bool GetNext(ScMyRowFormatRange& rFormatRange);
     sal_Int32 GetMaxRows() const;
     sal_Int32 GetSize() const;
@@ -196,14 +194,12 @@ class ScFormatRangeStyles
     ScMyFormatRangeListVec      aTables;
     ScMyOUStringVec             aStyleNames;
     ScMyOUStringVec             aAutoStyleNames;
-    const ScMyDefaultStyleList* pRowDefaults;
     const ScMyDefaultStyleList* pColDefaults;
 
 public:
     ScFormatRangeStyles();
     ~ScFormatRangeStyles();
 
-    void SetRowDefaults(const ScMyDefaultStyleList* pDefaults) { pRowDefaults = pDefaults; }
     void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }
     void AddNewTable(const sal_Int32 nTable);
     bool AddStyleName(OUString* pString, sal_Int32& rIndex, const bool bIsAutoStyle = true);
