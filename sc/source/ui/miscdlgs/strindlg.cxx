@@ -17,53 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
-
-//------------------------------------------------------------------
 
 #include "strindlg.hxx"
 #include "scresid.hxx"
-#include "miscdlgs.hrc"
-
-//==================================================================
 
 ScStringInputDlg::ScStringInputDlg( Window*         pParent,
                                     const OUString&   rTitle,
                                     const OUString&   rEditTitle,
                                     const OUString&   rDefault,
-                                    const OString& sHelpId, const OString& sEditHelpId    ) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_STRINPUT ) ),
-    //
-    aFtEditTitle    ( this, ScResId( FT_LABEL ) ),
-    aEdInput        ( this, ScResId( ED_INPUT ) ),
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) )
+                                    const OString& sHelpId, const OString& sEditHelpId )
+    : ModalDialog(pParent, "InputStringDialog", "modules/scalc/ui/inputstringdialog.ui")
 {
     SetHelpId( sHelpId );
     SetText( rTitle );
-    aFtEditTitle.SetText( rEditTitle );
-    aEdInput.SetText( rDefault );
-    aEdInput.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    aEdInput.SetHelpId( sEditHelpId );
-    //-------------
-    FreeResource();
+    get(m_pFtEditTitle, "description_label");
+    m_pFtEditTitle->SetText(rEditTitle);
+    get(m_pEdInput, "name_entry");
+    m_pEdInput->SetText( rDefault );
+    m_pEdInput->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
+    m_pEdInput->SetHelpId( sEditHelpId );
 }
-
-//------------------------------------------------------------------------
-
-void ScStringInputDlg::GetInputString( OUString& rString ) const
-{
-    rString = aEdInput.GetText();
-}
-
-ScStringInputDlg::~ScStringInputDlg()
-{
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

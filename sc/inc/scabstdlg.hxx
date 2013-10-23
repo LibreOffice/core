@@ -299,7 +299,7 @@ class AbstractScSortWarningDlg : public VclAbstractDialog
 class AbstractScStringInputDlg :  public VclAbstractDialog
 {
 public:
-    virtual void GetInputString( OUString& rString ) const = 0;
+    virtual OUString GetInputString() const = 0;
 };
 
 class AbstractScTabBgColorDlg : public VclAbstractDialog
@@ -458,8 +458,7 @@ public:
                                                                 const OUString& rTitle,
                                                                 const OUString& rEditTitle,
                                                                 const OUString& rDefault,
-                                                                const OString& sHelpId, const OString& sEditHelpId,
-                                                                int nId ) = 0;
+                                                                const OString& sHelpId, const OString& sEditHelpId ) = 0;
 
     virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  Window* pParent,
                                                                 const OUString& rTitle, //Dialog Title

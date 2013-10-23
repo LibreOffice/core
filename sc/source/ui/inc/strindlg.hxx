@@ -20,32 +20,27 @@
 #ifndef SC_STRINDLG_HXX
 #define SC_STRINDLG_HXX
 
-
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
 #include <vcl/edit.hxx>
-
-//------------------------------------------------------------------------
+#include <vcl/fixed.hxx>
 
 class ScStringInputDlg : public ModalDialog
 {
 public:
-            ScStringInputDlg(     Window* pParent,
-                            const OUString& rTitle,
-                            const OUString& rEditTitle,
-                            const OUString& rDefault,
-                            const OString& sHelpId, const OString& sEditHelpId );
-            ~ScStringInputDlg();
+    ScStringInputDlg(Window* pParent,
+        const OUString& rTitle,
+        const OUString& rEditTitle,
+        const OUString& rDefault,
+        const OString& sHelpId, const OString& sEditHelpId);
 
-    void GetInputString( OUString& rString ) const;
+    OUString GetInputString() const
+    {
+        return m_pEdInput->GetText();
+    }
 
 private:
-    FixedText       aFtEditTitle;
-    Edit            aEdInput;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    FixedText* m_pFtEditTitle;
+    Edit*      m_pEdInput;
 };
 
 #endif // SC_STRINDLG_HXX

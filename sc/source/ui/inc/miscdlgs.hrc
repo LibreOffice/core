@@ -20,7 +20,6 @@
 #include "sc.hrc"
                     // -> RID_SCDLG_INSCONT
                     // -> RID_SCDLG_MOVETAB
-                    // -> RID_SCDLG_STRINPUT
                     // -> RID_SCDLG_MTRINPUT
                     // -> RID_SCDLG_SELENTRY
                     // -> RID_SCDLG_FILLSERIES

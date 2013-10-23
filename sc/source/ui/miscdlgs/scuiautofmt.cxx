@@ -249,7 +249,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 
             if ( pDlg->Execute() == RET_OK )
             {
-                pDlg->GetInputString( aFormatName );
+                aFormatName = pDlg->GetInputString();
 
                 if ( !aFormatName.isEmpty() && !aFormatName.equals(aStrStandard) )
                 {
@@ -359,7 +359,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
         if( pDlg->Execute() == RET_OK )
         {
             bool bFmtRenamed = false;
-            pDlg->GetInputString( aFormatName );
+            aFormatName = pDlg->GetInputString();
 
             if (!aFormatName.isEmpty())
             {

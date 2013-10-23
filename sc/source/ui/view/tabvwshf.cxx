@@ -377,7 +377,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     AbstractScStringInputDlg* pDlg = pFact->CreateScStringInputDlg(
                         GetDialogParent(), aDlgTitle, OUString(ScResId(SCSTR_NAME)),
                         aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
-                        pHelpId, RID_SCDLG_STRINPUT);
+                        pHelpId);
 
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
@@ -387,7 +387,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                         if ( nRet == RET_OK )
                         {
-                            pDlg->GetInputString( aName );
+                            aName = pDlg->GetInputString();
 
 
                             switch ( nSlot )

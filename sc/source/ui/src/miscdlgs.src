@@ -224,48 +224,6 @@ ModalDialog RID_SCDLG_INSCONT
     };
 };
 
-ModalDialog RID_SCDLG_STRINPUT
-{
-    HelpID = "sc:ModalDialog:RID_SCDLG_STRINPUT";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 178 , 63 ) ;
-    Moveable = TRUE ;
-    Closeable = FALSE ;
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 122 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 122 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 122 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    Edit ED_INPUT
-    {
-        HelpID = "sc:Edit:RID_SCDLG_STRINPUT:ED_INPUT";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 110 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    FixedText FT_LABEL
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 110 , 8 ) ;
-    };
-};
-
 ModalDialog RID_SCDLG_TAB_BG_COLOR
 {
     HelpID = "sc:ModalDialog:RID_SCDLG_TAB_BG_COLOR";

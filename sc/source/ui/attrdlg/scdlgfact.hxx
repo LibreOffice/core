@@ -352,7 +352,7 @@ class AbstractScSortWarningDlg_Impl : public AbstractScSortWarningDlg
 class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg
 {
     DECL_ABSTDLG_BASE( AbstractScStringInputDlg_Impl, ScStringInputDlg )
-    virtual void GetInputString( OUString& rString ) const;
+    virtual OUString GetInputString() const;
 };
 
 class AbstractScTabBgColorDlg_Impl :  public AbstractScTabBgColorDlg
@@ -527,8 +527,7 @@ public:
                                                                 const OUString& rTitle,
                                                                 const OUString& rEditTitle,
                                                                 const OUString& rDefault,
-                                                                const OString& sHelpId, const OString& sEditHelpId,
-                                                                int nId );
+                                                                const OString& sHelpId, const OString& sEditHelpId );
 
     virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  Window* pParent,
                                                                 const OUString& rTitle, //Dialog Title

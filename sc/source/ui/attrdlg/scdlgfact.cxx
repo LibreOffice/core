@@ -572,14 +572,14 @@ sal_uInt16  AbstractScShowTabDlg_Impl::GetSelectEntryPos(sal_uInt16 nPos) const
     return pDlg->GetSelectEntryPos( nPos);
 }
 
-OUString   AbstractScShowTabDlg_Impl::GetSelectEntry(sal_uInt16 nPos) const
+OUString AbstractScShowTabDlg_Impl::GetSelectEntry(sal_uInt16 nPos) const
 {
-        return pDlg->GetSelectEntry(nPos);
+    return pDlg->GetSelectEntry(nPos);
 }
 
-void AbstractScStringInputDlg_Impl::GetInputString( OUString& rString ) const
+OUString AbstractScStringInputDlg_Impl::GetInputString() const
 {
-    pDlg->GetInputString( rString );
+    return pDlg->GetInputString();
 }
 
 void AbstractScTabBgColorDlg_Impl::GetSelectedColor( Color& rColor ) const
@@ -1025,22 +1025,10 @@ AbstractScStringInputDlg * ScAbstractDialogFactory_Impl::CreateScStringInputDlg 
                                                                 const OUString& rTitle,
                                                                 const OUString& rEditTitle,
                                                                 const OUString& rDefault,
-                                                                const OString& sHelpId, const OString& sEditHelpId,
-                                                                int nId )
+                                                                const OString& sHelpId, const OString& sEditHelpId )
 {
-    ScStringInputDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_STRINPUT :
-            pDlg = new ScStringInputDlg( pParent, rTitle, rEditTitle, rDefault, sHelpId, sEditHelpId );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScStringInputDlg_Impl( pDlg );
-    return 0;
+    ScStringInputDlg *pDlg = new ScStringInputDlg( pParent, rTitle, rEditTitle, rDefault, sHelpId, sEditHelpId );
+    return new AbstractScStringInputDlg_Impl( pDlg );
 }
 
 AbstractScTabBgColorDlg * ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg (
