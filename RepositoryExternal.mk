@@ -1192,60 +1192,74 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	icudt \
 	icuin \
 ))
-
-define gb_LinkTarget__use_icudata
-$(call gb_LinkTarget_use_package,$(1),icu)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	icudt \
-)
-
-endef
-define gb_LinkTarget__use_icui18n
-$(call gb_LinkTarget_use_package,$(1),icu)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	icuin \
-)
-
-endef
 else
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	icudata$(gb_ICU_suffix) \
 	icui18n$(gb_ICU_suffix) \
 ))
-
-define gb_LinkTarget__use_icudata
-$(call gb_LinkTarget_use_package,$(1),icu)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	icudata$(gb_ICU_suffix) \
-)
-
-endef
-define gb_LinkTarget__use_icui18n
-$(call gb_LinkTarget_use_package,$(1),icu)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	icui18n$(gb_ICU_suffix) \
-)
-
-endef
 endif
-
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	icutu$(gb_ICU_suffix) \
 	icuuc$(gb_ICU_suffix) \
 ))
 
-define gb_LinkTarget__use_icutu
+define gb_LinkTarget__use_icudata
 $(call gb_LinkTarget_use_package,$(1),icu)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	icutu$(gb_ICU_suffix) \
+
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,icu)/source/lib/icudt$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib -licudata$(gb_ICU_suffix) \
+)
+endif
 
 endef
+
+define gb_LinkTarget__use_icui18n
+$(call gb_LinkTarget_use_package,$(1),icu)
+
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,icu)/source/lib/icuin$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
+)
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib -licui18n$(gb_ICU_suffix) \
+)
+endif
+
+endef
+
+define gb_LinkTarget__use_icutu
+$(call gb_LinkTarget_use_package,$(1),icu)
+
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,icu)/source/lib/icutu$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
+)
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib -licutu$(gb_ICU_suffix) \
+)
+endif
+
+endef
+
 define gb_LinkTarget__use_icuuc
 $(call gb_LinkTarget_use_package,$(1),icu)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	icuuc$(gb_ICU_suffix) \
+
+ifeq ($(OS),WNT)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,icu)/source/lib/icuuc$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib -licuuc$(gb_ICU_suffix) \
+)
+endif
 
 endef
 
