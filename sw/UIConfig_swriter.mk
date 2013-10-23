@@ -23,6 +23,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
 	sw/uiconfig/swriter/toolbar/basicshapes \
 	sw/uiconfig/swriter/toolbar/bezierobjectbar \
 	sw/uiconfig/swriter/toolbar/calloutshapes \
+	sw/uiconfig/swriter/toolbar/changes \
 	sw/uiconfig/swriter/toolbar/colorbar \
 	sw/uiconfig/swriter/toolbar/drawbar \
 	sw/uiconfig/swriter/toolbar/drawingobjectbar \
