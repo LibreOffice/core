@@ -13,18 +13,12 @@ $(eval $(call gb_ExternalPackage_use_external_project,redland,redland))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_library_for_install,redland,lib/librdf-lo.$(REDLAND_MAJOR).dylib,src/.libs/librdf-lo.$(REDLAND_MAJOR).dylib))
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.dylib,src/.libs/librdf-lo.$(REDLAND_MAJOR).dylib))
-else ifneq ($(filter IOS ANDROID,$(OS)),)
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.a,src/.libs/librdf.a))
-else ifneq ($(filter WNTGCC,$(OS)$(COM)),)
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.dll.a,src/.libs/librdf.dll.a))
+else ifeq ($(OS)-$(COM),WNT-GCC)
 $(eval $(call gb_ExternalPackage_add_library_for_install,redland,bin/librdf-$(REDLAND_MAJOR).dll,src/.libs/librdf-$(REDLAND_MAJOR).dll))
-else ifneq ($(filter WNT,$(OS)),)
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.a,src/.libs/librdf.a))
+else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_library_for_install,redland,bin/librdf.dll,src/.libs/librdf.dll))
-else
+else ifeq ($(filter IOS ANDROID,$(OS)),)
 $(eval $(call gb_ExternalPackage_add_library_for_install,redland,lib/librdf-lo.so.$(REDLAND_MAJOR),src/.libs/librdf-lo.so.$(REDLAND_MAJOR).0.0))
-$(eval $(call gb_ExternalPackage_add_file,redland,lib/librdf.so,src/.libs/librdf-lo.so.$(REDLAND_MAJOR).0.0))
 endif
 
 # vim: set noet sw=4 ts=4:

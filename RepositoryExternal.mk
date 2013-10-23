@@ -985,9 +985,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 
 define gb_LinkTarget__use_librdf
 $(call gb_LinkTarget_use_packages,$(1),raptor rasqal redland)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	raptor2 \
-	rdf \
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2 \
+	-L$(call gb_UnpackedTarball_get_dir,redland)/src/.libs -lrdf \
 )
 
 endef

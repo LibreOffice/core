@@ -27,7 +27,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 		OBJDUMP="$(HOST_PLATFORM)-objdump" \
 		PKG_CONFIG="" \
 		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
-		RAPTOR2_LIBS="-L$(OUTDIR)/lib -lraptor2" \
+		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2" \
 		./configure --disable-static --enable-shared --disable-gtk-doc \
 			--disable-pcre \
 			--with-decimal=none \
@@ -48,7 +48,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 		$(if $(SYSBASE),CPPFLAGS="-I$(SYSBASE)/usr/include") \
 		PKG_CONFIG="" \
 		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
-		RAPTOR2_LIBS="-L$(OUTDIR)/lib -lraptor2" \
+		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2" \
 		./configure --disable-gtk-doc \
 			--with-regex-library=posix \
 			--with-decimal=none \
