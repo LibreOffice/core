@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZH///48\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3278,
+      "author": {
+        "id": 1000534
+      },
+      "writtenOn": "2013-10-23T15:04:07Z",
+      "side": 1,
+      "message": "nitpick: the indentation of this line is wrong",
+      "revId": "ef469657262b35a0463cb2ceda2eec7917a96766",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
