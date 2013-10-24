@@ -565,6 +565,10 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 mvSubArguments.push_back(SoPHelper<OpGauss>(ts,
                     ft->Children[i]));
                 break;
+            case ocGeoMean:
+                mvSubArguments.push_back(SoPHelper<OpGeoMean>(ts,
+                    ft->Children[i]));
+                break;
             case ocHarMean:
                 mvSubArguments.push_back(SoPHelper<OpHarMean>(ts,
                     ft->Children[i]));
