@@ -153,39 +153,29 @@ bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeData(SCCOLROW nPos, 
     if (!mbTreeSearchEnabled)
         return getRangeDataLeaf(nPos, rData);
 
-    ValueType nValue;
-    SCCOLROW nPos1, nPos2;
-
     if (!maSegments.is_tree_valid())
         maSegments.build_tree();
 
-    if (!maSegments.search_tree(nPos, nValue, &nPos1, &nPos2).second)
+    if (!maSegments.search_tree(nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2).second)
         return false;
 
-    rData.mnPos1 = nPos1;
-    rData.mnPos2 = nPos2-1; // end point is not inclusive.
-    rData.mnValue = nValue;
+    rData.mnPos2 = rData.mnPos2-1; // end point is not inclusive.
     return true;
 }
 
 template<typename _ValueType, typename _ExtValueType>
 bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeDataLeaf(SCCOLROW nPos, RangeData& rData)
 {
-    ValueType nValue;
-    SCCOLROW nPos1, nPos2;
-
     // Conduct leaf-node only search.  Faster when searching between range insertion.
-    ::std::pair<typename fst_type::const_iterator, bool> ret =
-        maSegments.search(maItr, nPos, nValue, &nPos1, &nPos2);
+    const ::std::pair<typename fst_type::const_iterator, bool> &ret =
+        maSegments.search(maItr, nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2);
 
     if (!ret.second)
         return false;
 
     maItr = ret.first;
 
-    rData.mnPos1 = nPos1;
-    rData.mnPos2 = nPos2-1; // end point is not inclusive.
-    rData.mnValue = nValue;
+    rData.mnPos2 = rData.mnPos2-1; // end point is not inclusive.
     return true;
 }
 
