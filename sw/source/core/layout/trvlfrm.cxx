@@ -1800,7 +1800,7 @@ sal_uInt16 SwFrm::GetVirtPageNum() const
         return 0;
 
     sal_uInt16 nPhyPage = pPage->GetPhyPageNum();
-    if ( !((SwRootFrm*)pPage->GetUpper())->IsVirtPageNum() )
+    if ( !(static_cast<const SwRootFrm*>(pPage->GetUpper()))->IsVirtPageNum() )
         return nPhyPage;
 
     //Search the nearest section using the virtual page number.
