@@ -184,6 +184,15 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : \
 
 endef
 
+# Make an external project depend on a Jar file
+#
+# gb_ExternalProject_use_jars external jars
+define gb_ExternalProject_use_jars
+$(call gb_ExternalProject_get_preparation_target,$(1)) : \
+	$(foreach jar,$(2),$(call gb_Jar_get_target,$(lib)))
+
+endef
+
 # Run a target command
 #
 # This provides a wrapper that changes to the right directory,
