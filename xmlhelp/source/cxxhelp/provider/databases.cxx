@@ -751,12 +751,12 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,helpdatafileproxy:
         listId[i] = id[i];
         listAnchor[i] = anchor[i];
 
+        helpdatafileproxy::HDFData aHDFData;
         const sal_Char* pData = NULL;
 
         if( pHdf )
         {
             OString idi( id[i].getStr(),id[i].getLength(),RTL_TEXTENCODING_UTF8 );
-            helpdatafileproxy::HDFData aHDFData;
             bool bSuccess = pHdf->getValueForKey( idi, aHDFData );
             if( bSuccess )
                 pData = aHDFData.getData();
