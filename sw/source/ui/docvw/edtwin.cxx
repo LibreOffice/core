@@ -817,7 +817,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
                         case LANGUAGE_GREEK:
                         case LANGUAGE_RUSSIAN:
                         case LANGUAGE_RUSSIAN_MOLDOVA:
-                        case LANGUAGE_SERBIAN_CYRILLIC:
+                        case LANGUAGE_SERBIAN_CYRILLIC_SAM:
                         case LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA:
                         case LANGUAGE_UZBEK_CYRILLIC:
                         case LANGUAGE_UKRAINIAN:
