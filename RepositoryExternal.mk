@@ -2820,21 +2820,21 @@ $(eval $(call gb_Helper_register_jars,OXT,\
 ))
 
 define gb_Jar__use_commons-codec
-$(call gb_Jar_use_jar,$(1),commons-codec-1.6)
+$(call gb_Jar_use_external_jar,$(1),$(OUTDIR)/bin/commons-codec-1.6.jar)
 endef
 define gb_ExternalProject__use_commons-codec
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_codec)
 endef
 
 define gb_Jar__use_commons-httpclient
-$(call gb_Jar_use_jar,$(1),commons-httpclient-3.1)
+$(call gb_Jar_use_external_jar,$(1),$(OUTDIR)/bin/commons-httpclient-3.1.jar)
 endef
 define gb_ExternalProject__use_commons-httpclient
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_httpclient)
 endef
 
 define gb_Jar__use_commons-lang
-$(call gb_Jar_use_jar,$(1),commons-lang-2.4)
+$(call gb_Jar_use_external_jar,$(1),$(OUTDIR)/bin/commons-lang-2.4.jar)
 endef
 define gb_ExternalProject__use_commons-lang
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_lang)
