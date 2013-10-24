@@ -336,7 +336,7 @@ static Unicode2LangType aLangFromCodeChart[]= {
 //  {0x1740, 0x175F, LANGUAGE_BUHID},               // Buhid
 //  {0x1760, 0x177F, LANGUAGE_TAGBANWA},            // Tagbanwa
     {0x1780, 0x17FF, LANGUAGE_KHMER},               // Khmer
-    {0x18A0, 0x18AF, LANGUAGE_MONGOLIAN},           // Mongolian
+    {0x18A0, 0x18AF, LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA}, // Mongolian
 //  {0x1900, 0x194F, LANGUAGE_LIMBU},               // Limbu
 //  {0x1950, 0x197F, LANGUAGE_TAILE},               // Tai Le
 //  {0x1980, 0x19DF, LANGUAGE_TAILUE},              // Tai Lue
