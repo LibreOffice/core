@@ -952,6 +952,96 @@ public:
     virtual std::string BinFuncName(void) const { return "PPMT"; }
 };
 
+class OpCoupdaybs:public Normal
+{
+public:
+    virtual std::string GetBottom(void) { return "0";}
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string sSymName, SubArguments &vSubArguments)
+        {
+            ss << "\ndouble " << sSymName;
+            ss << "_"<< BinFuncName() <<"(";
+            for (unsigned i = 0; i < vSubArguments.size(); i++)
+            {
+                if (i)
+                    ss << ",";
+                vSubArguments[i]->GenSlidingWindowDecl(ss);
+            }
+            ss << ") {\n\t";
+            ss << "double tmp = " << GetBottom() <<";\n\t";
+            ss << "int gid0 = get_global_id(0);\n\t";
+            ss << "int nSettle,nMat,nFreq,nBase;\n\t";
+#ifdef ISNAN
+            FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+            const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+            formula::SingleVectorRefToken *>(tmpCur0);
+            FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+            const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+            formula::SingleVectorRefToken *>(tmpCur1);
+            FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+            const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+            formula::SingleVectorRefToken *>(tmpCur2);
+            FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
+            const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
+            formula::SingleVectorRefToken *>(tmpCur3);
+            ss<< "int buffer_nSettle_len = ";
+            ss<< tmpCurDVR0->GetArrayLength();
+            ss << ";\n\t";
+            ss<< "int buffer_nMat_len = ";
+            ss<< tmpCurDVR1->GetArrayLength();
+            ss << ";\n\t";
+            ss<< "int buffer_nFreq_len = ";
+            ss<< tmpCurDVR2->GetArrayLength();
+            ss << ";\n\t";
+            ss<< "int buffer_nBase_len = ";
+            ss<< tmpCurDVR3->GetArrayLength();
+            ss << ";\n\t";
+#endif
+#ifdef ISNAN
+            ss <<"if(gid0 >= buffer_nSettle_len || isNan(";
+            ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss <<"))\n\t\t";
+            ss <<"nSettle = 0;\n\telse\n\t\t";
+#endif
+           ss << "nSettle=(int)";
+           ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+           ss <<";\n\t";
+#ifdef ISNAN
+            ss <<"if(gid0 >= buffer_nMat_len || isNan(";
+            ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
+            ss <<"))\n\t\t";
+            ss <<"nMat = 0;\n\telse\n\t\t";
+#endif
+            ss << "nMat=(int)";
+            ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+            ss << ";\n\t";
+#ifdef ISNAN
+            ss <<"if(gid0 >= buffer_nFreq_len || isNan(";
+            ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
+            ss <<"))\n\t\t";
+            ss <<"nFreq = 0;\n\telse\n\t\t";
+#endif
+            ss << "nFreq=(int)";
+            ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+            ss <<";\n\t";
+#ifdef ISNAN
+            ss <<"if(gid0 >= buffer_nBase_len || isNan(";
+            ss <<vSubArguments[3]->GenSlidingWindowDeclRef();
+            ss <<"))\n\t\t";
+            ss <<"nBase = 0;\n\telse\n\t\t";
+#endif
+            ss << "nBase=(int)";
+            ss << vSubArguments[3]->GenSlidingWindowDeclRef();
+            ss << ";\n\t";
+            ss <<"int nNullDate=GetNullDate();\n\t";
+            ss <<"tmp = lcl_Getcoupdaybs(nNullDate,";
+            ss <<"nSettle, nMat,nFreq,nBase);\n\t";
+            ss << "return tmp;\n";
+            ss << "}";
+        }
+virtual std::string BinFuncName(void) const { return "Coupdaybs";}
+
+};
 
 class OpReceived:public Normal
 {

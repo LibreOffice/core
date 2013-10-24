@@ -666,6 +666,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     mvSubArguments.push_back(SoPHelper<OpAccrintm>(ts,
                         ft->Children[i]));
                 }
+               else if ( !(pChild->GetExternal().compareTo(OUString(
+                     "com.sun.star.sheet.addin.Analysis.getCoupdaybs"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpCoupdaybs>(ts,
+                        ft->Children[i]));
+                }
                 break;
             default:
                 assert(0 && "Unsupported");
