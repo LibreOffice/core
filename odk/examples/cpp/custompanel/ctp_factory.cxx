@@ -24,12 +24,10 @@
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
-//......................................................................................................................
 namespace sd { namespace colortoolpanel
 {
-//......................................................................................................................
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -102,40 +100,26 @@ namespace sd { namespace colortoolpanel
         return xUIElement;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OUString SAL_CALL ToolPanelFactory::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     OUString SAL_CALL ToolPanelFactory::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString( "org.openoffice.comp.example.custompanel.ToolPanelFactory" );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL ToolPanelFactory::supportsService( const OUString& i_rServiceName ) throw (RuntimeException)
     {
-        const Sequence< OUString > aServiceNames( getSupportedServiceNames() );
-        for (   const OUString* serviceName = aServiceNames.getConstArray();
-                serviceName != aServiceNames.getConstArray() + aServiceNames.getLength();
-                ++serviceName
-            )
-        {
-            if ( i_rServiceName == *serviceName )
-                return  sal_True;
-        }
-        return sal_False;
+        return cppu::supportsService(this, i_rServiceName);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Sequence< OUString > SAL_CALL ToolPanelFactory::getSupportedServiceNames() throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Sequence< OUString > SAL_CALL ToolPanelFactory::getSupportedServiceNames_static() throw (RuntimeException)
     {
         Sequence< OUString > aServiceNames(1);

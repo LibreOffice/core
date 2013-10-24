@@ -22,6 +22,7 @@
 #include "services.hxx"
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/form/XForm.hpp>
 
@@ -105,24 +106,16 @@ Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(Runtim
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
 OUString SAL_CALL OFormsCollection::getImplementationName() throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.forms.OFormsCollection");
 }
 
-//------------------------------------------------------------------------------
 sal_Bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence<OUString> aSupported = getSupportedServiceNames();
-    const OUString* pSupported = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-        if (pSupported->equals(_rServiceName))
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------------------
 StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aReturn(2);
@@ -134,7 +127,6 @@ StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(Runti
 }
 
 // XCloneable
-//------------------------------------------------------------------------------
 Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  ) throw (RuntimeException)
 {
     OFormsCollection* pClone = new OFormsCollection( *this );

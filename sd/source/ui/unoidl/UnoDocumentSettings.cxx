@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <tools/urlobj.hxx>
@@ -1255,16 +1256,7 @@ OUString SAL_CALL DocumentSettings::getImplementationName(  )
 sal_Bool SAL_CALL DocumentSettings::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    const Sequence< OUString > aSeq( getSupportedServiceNames() );
-    sal_Int32 nCount = aSeq.getLength();
-    const OUString* pServices = aSeq.getConstArray();
-    while( nCount-- )
-    {
-        if( *pServices++ == ServiceName )
-            return sal_True;
-    }
-
-    return sal_True;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL DocumentSettings::getSupportedServiceNames(  )

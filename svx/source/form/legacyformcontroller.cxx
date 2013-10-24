@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 
 //........................................................................
@@ -183,18 +184,11 @@ namespace svxform
         return OUString( "org.openoffice.comp.svx.LegacyFormController" );
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL LegacyFormController::supportsService( const OUString& _serviceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aServices( getSupportedServiceNames() );
-        const OUString* pServices = aServices.getConstArray();
-        for ( sal_Int32 i = 0; i < aServices.getLength(); ++i, ++pServices )
-            if( pServices->equals( _serviceName ) )
-                return sal_True;
-        return sal_False;
+        return cppu::supportsService(this, _serviceName);
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL LegacyFormController::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         Sequence< OUString > aServices(2);
@@ -203,11 +197,8 @@ namespace svxform
         return aServices;
     }
 
-//........................................................................
 } // namespace svxform
-//........................................................................
 
-//------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     LegacyFormController_NewInstance_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB )
 {

@@ -51,6 +51,7 @@
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
@@ -873,36 +874,26 @@ namespace frm
         OSL_ENSURE( m_xConnection.is(), "OFilterControl::initialize: unable to determine the form's connection!" );
     }
 
-    //---------------------------------------------------------------------
     OUString SAL_CALL OFilterControl::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_Static();
     }
 
-    //---------------------------------------------------------------------
     sal_Bool SAL_CALL OFilterControl::supportsService( const OUString& ServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aSupported( getSupportedServiceNames() );
-        const OUString* pArray = aSupported.getConstArray();
-        for( sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray )
-            if( pArray->equals( ServiceName ) )
-                return sal_True;
-        return sal_False;
+        return cppu::supportsService(this, ServiceName);
     }
 
-    //---------------------------------------------------------------------
     Sequence< OUString > SAL_CALL OFilterControl::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
 
-    //---------------------------------------------------------------------
     OUString SAL_CALL OFilterControl::getImplementationName_Static()
     {
         return OUString( "com.sun.star.comp.forms.OFilterControl" );
     }
 
-    //---------------------------------------------------------------------
     Sequence< OUString > SAL_CALL OFilterControl::getSupportedServiceNames_Static()
     {
         Sequence< OUString > aNames( 2 );

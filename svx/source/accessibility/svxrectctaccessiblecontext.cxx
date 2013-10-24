@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
@@ -500,7 +501,6 @@ sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
 }
 
 //=====  XServiceInfo  ========================================================
-
 OUString SAL_CALL SvxRectCtlAccessibleContext::getImplementationName( void ) throw( RuntimeException )
 {
     return OUString( "com.sun.star.comp.ui.SvxRectCtlAccessibleContext" );
@@ -508,20 +508,7 @@ OUString SAL_CALL SvxRectCtlAccessibleContext::getImplementationName( void ) thr
 
 sal_Bool SAL_CALL SvxRectCtlAccessibleContext::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
-    //  Iterate over all supported service names and return true if on of them
-    //  matches the given name.
-    Sequence< OUString > aSupportedServices( getSupportedServiceNames() );
-    int                     nLength = aSupportedServices.getLength();
-    const OUString*          pStr = aSupportedServices.getConstArray();
-
-    for( int i = nLength ; i ; --i, ++pStr )
-    {
-        if( sServiceName == *pStr )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, sServiceName);
 }
 
 Sequence< OUString > SAL_CALL SvxRectCtlAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )

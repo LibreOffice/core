@@ -33,6 +33,7 @@
  *
  *************************************************************************/
 
+#include <cppuhelper/supportsservice.hxx>
 #include "SDriver.hxx"
 #include "SConnection.hxx"
 
@@ -46,7 +47,6 @@ namespace connectivity
 {
     namespace skeleton
     {
-        //------------------------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SkeletonDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
         {
             return *(new SkeletonDriver());
@@ -83,7 +83,7 @@ rtl::OUString SkeletonDriver::getImplementationName_Static(  ) throw(RuntimeExce
         // this name is referenced in the configuration and in the skeleton.xml
         // Please take care when changing it.
 }
-//------------------------------------------------------------------------------
+
 Sequence< ::rtl::OUString > SkeletonDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
@@ -93,31 +93,21 @@ Sequence< ::rtl::OUString > SkeletonDriver::getSupportedServiceNames_Static(  ) 
     return aSNS;
 }
 
-//------------------------------------------------------------------
 ::rtl::OUString SAL_CALL SkeletonDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-//------------------------------------------------------------------
 sal_Bool SAL_CALL SkeletonDriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL SkeletonDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-// --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL SkeletonDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     // create a new connection with the given properties and append it to our vector
