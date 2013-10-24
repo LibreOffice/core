@@ -16,6 +16,24 @@
       "revId": "ef469657262b35a0463cb2ceda2eec7917a96766",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZH///1c\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3278,
+      "author": {
+        "id": 1000542
+      },
+      "writtenOn": "2013-10-24T05:18:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAZH///48\u003d",
+      "revId": "ef469657262b35a0463cb2ceda2eec7917a96766",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
