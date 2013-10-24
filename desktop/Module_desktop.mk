@@ -40,7 +40,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_migrationoo3 \
     Library_unopkgapp \
     Package_scripts \
-    Package_scripts_install \
     Pagein_calc \
     Pagein_common \
     Pagein_draw \
