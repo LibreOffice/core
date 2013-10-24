@@ -409,10 +409,6 @@ ScSolverIntegerDialog::ScSolverIntegerDialog(Window * pParent)
     get(m_pNfValue, "value");
 }
 
-ScSolverIntegerDialog::~ScSolverIntegerDialog()
-{
-}
-
 void ScSolverIntegerDialog::SetOptionName( const OUString& rName )
 {
     m_pFrame->set_label(rName);
@@ -436,35 +432,28 @@ sal_Int32 ScSolverIntegerDialog::GetValue() const
 //------------------------------------------------------------------
 
 ScSolverValueDialog::ScSolverValueDialog( Window * pParent )
-    : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVER_DOUBLE ) ),
-    maFtName        ( this, ScResId( FT_OPTIONNAME ) ),
-    maEdValue       ( this, ScResId( ED_VALUE ) ),
-    maFlButtons     ( this, ScResId( FL_BUTTONS ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) ),
-    maBtnCancel     ( this, ScResId( BTN_CANCEL ) )
+    : ModalDialog( pParent, "DoubleDialog",
+        "modules/scalc/ui/doubledialog.ui" )
 {
-    FreeResource();
-}
-
-ScSolverValueDialog::~ScSolverValueDialog()
-{
+    get(m_pFrame, "frame");
+    get(m_pEdValue, "value");
 }
 
 void ScSolverValueDialog::SetOptionName( const OUString& rName )
 {
-    maFtName.SetText( rName );
+    m_pFrame->set_label(rName);
 }
 
 void ScSolverValueDialog::SetValue( double fValue )
 {
-    maEdValue.SetText( rtl::math::doubleToUString( fValue,
+    m_pEdValue->SetText( rtl::math::doubleToUString( fValue,
             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
             ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true ) );
 }
 
 double ScSolverValueDialog::GetValue() const
 {
-    OUString aInput = maEdValue.GetText();
+    OUString aInput = m_pEdValue->GetText();
 
     const LocaleDataWrapper* pLocaleData = ScGlobal::GetpLocaleData();
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;

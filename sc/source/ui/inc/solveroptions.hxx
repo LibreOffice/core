@@ -82,7 +82,6 @@ class ScSolverIntegerDialog : public ModalDialog
 
 public:
     ScSolverIntegerDialog( Window * pParent );
-    ~ScSolverIntegerDialog();
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( sal_Int32 nValue );
@@ -91,15 +90,11 @@ public:
 
 class ScSolverValueDialog : public ModalDialog
 {
-    FixedText       maFtName;
-    Edit            maEdValue;
-    FixedLine       maFlButtons;
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
+    VclFrame*   m_pFrame;
+    Edit*       m_pEdValue;
 
 public:
     ScSolverValueDialog( Window * pParent );
-    ~ScSolverValueDialog();
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( double fValue );

@@ -89,47 +89,4 @@ ModalDialog RID_SCDLG_SOLVEROPTIONS
     Text [ en-US ] = "Options" ;
 };
 
-ModalDialog RID_SCDLG_SOLVER_DOUBLE
-{
-    OutputSize = TRUE ;
-    HelpId = HID_SC_SOLVER_DOUBLE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 118 , 76 ) ;
-    Moveable = TRUE ;
-    FixedText FT_OPTIONNAME
-    {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
-        Size = MAP_APPFONT ( 106 , 16 ) ;
-        WordBreak = TRUE ;
-        // text is dynamic
-    };
-    Edit ED_VALUE
-    {
-        HelpID = "sc:Edit:RID_SCDLG_SOLVER_DOUBLE:ED_VALUE";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 27 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        TabStop = TRUE ;
-    };
-    FixedLine FL_BUTTONS
-    {
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 118 , 8 ) ;
-    };
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 6 , 56 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 62 , 56 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    Text [ en-US ] = "Edit Setting" ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
