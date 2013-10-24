@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,hyphen))
 ifneq ($(or $(filter NO,$(SYSTEM_HYPH)),$(filter TRUE,$(WITH_MYSPELL_DICTS))),)
 $(eval $(call gb_Module_add_targets,hyphen,\
 	UnpackedTarball_hyphen \
-	ExternalPackage_hyphen \
 ))
 ifeq ($(COM),MSC)
 
