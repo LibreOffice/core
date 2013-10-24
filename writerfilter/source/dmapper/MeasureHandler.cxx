@@ -84,6 +84,13 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
         case NS_rtf::LN_preferredWidth:
         case NS_ooxml::LN_CT_TblWidth_w:// = 90667;
             m_nMeasureValue = nIntValue;
+            if (!m_aInteropGrabBagName.isEmpty())
+            {
+                beans::PropertyValue aValue;
+                aValue.Name = "w";
+                aValue.Value = uno::makeAny(nIntValue);
+                m_aInteropGrabBag.push_back(aValue);
+            }
         break;
         case NS_ooxml::LN_CT_Height_val: // 90665 -- a string value
         {

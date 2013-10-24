@@ -242,7 +242,11 @@ namespace dmapper {
                 if( pProperties.get())
                 {
                     CellMarginHandlerPtr pCellMarginHandler( new CellMarginHandler );
+                    if (m_pCurrentInteropGrabBag)
+                        pCellMarginHandler->enableInteropGrabBag("tblCellMar");
                     pProperties->resolve( *pCellMarginHandler );
+                    if (m_pCurrentInteropGrabBag)
+                        m_pCurrentInteropGrabBag->push_back(pCellMarginHandler->getInteropGrabBag());
                     TablePropertyMapPtr pMarginProps( new TablePropertyMap );
                     if( pCellMarginHandler->m_bTopMarginValid )
                         pMarginProps->setValue( TablePropertyMap::CELL_MAR_TOP, pCellMarginHandler->m_nTopMargin );
