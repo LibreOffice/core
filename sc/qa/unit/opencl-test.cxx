@@ -70,6 +70,7 @@ public:
     void testFinacialSLNFormula();
     void testStatisticalFormulaGammaLn();
     void testStatisticalFormulaGauss();
+    void testStatisticalFormulaHarMean();
 
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
@@ -88,6 +89,7 @@ public:
     CPPUNIT_TEST(testFinancialAccrintmFormula);
     CPPUNIT_TEST(testStatisticalFormulaGammaLn);
     CPPUNIT_TEST(testStatisticalFormulaGauss);
+    CPPUNIT_TEST(testStatisticalFormulaHarMean);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -590,6 +592,26 @@ void ScOpenclTest::testStatisticalFormulaGauss()
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Gauss.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 19; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-51]
+void ScOpenclTest::testStatisticalFormulaHarMean()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/HarMean.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/HarMean.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
