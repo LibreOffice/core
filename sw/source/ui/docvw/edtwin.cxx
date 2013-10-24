@@ -2671,6 +2671,11 @@ static bool lcl_urlOverBackground(SwWrtShell& rSh, const Point& rDocPos)
 
 #if !HAVE_FEATURE_DESKTOP
 
+// As such these two functions could be more or less anywhere, I have
+// them now in this source file because the act of moving a selection
+// end point is somewhat the same as what happens when one
+// shift-clicks on either side of an existing selection.
+
 void touch_lo_selection_start_move_impl(const void *documentHandle,
                                         int x,
                                         int y)
@@ -2685,6 +2690,17 @@ void touch_lo_selection_start_move_impl(const void *documentHandle,
         pOut = pWrtShell->GetOut();
 
     const Point aDocPos( pOut->PixelToLogic( Point(x, y) ) );
+
+    // Don't allow moving the start of the selection beyond the end
+    // (point) of the selection.
+
+    SwRect startCharRect;
+    pWrtShell->GetCharRectAt(startCharRect, pWrtShell->GetCrsr()->GetPoint());
+    const Point startCharPos = startCharRect.Center();
+
+    if (startCharPos.Y() < aDocPos.Y() ||
+        (startCharPos.Y() == aDocPos.Y() && startCharPos.X() - startCharRect.Width() <= aDocPos.X()))
+        return;
 
     pWrtShell->ChgCurrPam( aDocPos );
 
@@ -2712,6 +2728,17 @@ void touch_lo_selection_end_move_impl(const void *documentHandle,
         pOut = pWrtShell->GetOut();
 
     const Point aDocPos( pOut->PixelToLogic( Point(x, y) ) );
+
+    // Don't allow moving the end of the selection beyond the start
+    // (mark) of the selection.
+
+    SwRect endCharRect;
+    pWrtShell->GetCharRectAt(endCharRect, pWrtShell->GetCrsr()->GetMark());
+    const Point endCharPos = endCharRect.Center();
+
+    if (endCharPos.Y() > aDocPos.Y() ||
+        (endCharPos.Y() == aDocPos.Y() && endCharPos.X() + endCharRect.Width() >= aDocPos.X()))
+        return;
 
     pWrtShell->ChgCurrPam( aDocPos );
 
