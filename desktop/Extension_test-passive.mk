@@ -17,7 +17,7 @@ $(eval $(call gb_Extension_add_files,test-passive,, \
     $(SRCDIR)/desktop/test/deployment/passive/Addons.xcu \
     $(SRCDIR)/desktop/test/deployment/passive/ProtocolHandler.xcu \
     $(SRCDIR)/desktop/test/deployment/passive/passive_python.py \
-    $(call gb_Jar_get_outdir_target,passive_java) \
+    $(call gb_Jar_get_target,passive_java) \
 ))
 
 $(eval $(call gb_Extension_add_libraries,test-passive, \

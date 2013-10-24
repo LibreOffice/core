@@ -39,7 +39,7 @@ $(testtools_BRIDGEDIR)/bridgetest_server$(testtools_BATCHSUFFIX) :| $(testtools_
 	$(if $(filter-out WNT,$(OS)),chmod +x $@)
 
 
-testtools_MY_CLASSPATH := $(OUTDIR)/bin/ridl.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/java_uno.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/jurt.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/juh.jar
+testtools_MY_CLASSPATH := $(call gb_Jar_get_target,ridl)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,java_uno)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,jurt)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,juh)
 
 $(testtools_BRIDGEDIR)/bridgetest_javaserver$(testtools_BATCHSUFFIX) :| $(testtools_BRIDGEDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
@@ -48,7 +48,7 @@ $(testtools_BRIDGEDIR)/bridgetest_javaserver$(testtools_BATCHSUFFIX) :| $(testto
 		"URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_target,uno_services))" \
 		"URE_MORE_TYPES=$(call gb_Helper_make_url,$(WORKDIR)/UnoApiTarget/bridgetest.rdb)" \
 		"java" \
-		"-classpath $(testtools_MY_CLASSPATH)$(gb_CLASSPATHSEP)$(OUTDIR)/bin/testComponent.jar" \
+		"-classpath $(testtools_MY_CLASSPATH)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,testComponent)" \
 		"com.sun.star.comp.bridge.TestComponentMain" \
 		\""uno:socket$(COMMA)host=127.0.0.1$(COMMA)port=2002;urp;test"\" \
 		"singleaccept" \

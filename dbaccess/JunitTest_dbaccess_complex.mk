@@ -12,6 +12,7 @@ $(eval $(call gb_JunitTest_JunitTest,dbaccess_complex))
 $(eval $(call gb_JunitTest_use_jars,dbaccess_complex,\
     ConnectivityTools \
     OOoRunner \
+	juh \
     jurt \
     ridl \
     test \
