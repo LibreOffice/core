@@ -4368,7 +4368,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             }
                             else
                             {
-                                if ( bExecHyperlinks )
+                                if ( bExecHyperlinks && aCntntAtPos.aFnd.pAttr )
                                     rSh.ClickToINetAttr( *(SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr, nFilter );
                             }
 
