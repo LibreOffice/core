@@ -78,6 +78,13 @@
 		BE9086FF16FF02B3004400A1 /* svptext.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svptext.cxx; path = ../../../../vcl/headless/svptext.cxx; sourceTree = "<group>"; };
 		BE90870016FF02B3004400A1 /* svpvd.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpvd.cxx; path = ../../../../vcl/headless/svpvd.cxx; sourceTree = "<group>"; };
 		BE954A2E1704F9500040D517 /* iosinst.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iosinst.cxx; path = ../../../../vcl/ios/iosinst.cxx; sourceTree = "<group>"; };
+		BE96AEB118196DCE00BD1AC4 /* svpbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpbmp.cxx; path = ../../../../vcl/headless/svpbmp.cxx; sourceTree = "<group>"; };
+		BE96AEB218196DCE00BD1AC4 /* svpdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpdata.cxx; path = ../../../../vcl/headless/svpdata.cxx; sourceTree = "<group>"; };
+		BE96AEB318196DCE00BD1AC4 /* svpframe.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpframe.cxx; path = ../../../../vcl/headless/svpframe.cxx; sourceTree = "<group>"; };
+		BE96AEB418196DCE00BD1AC4 /* svpgdi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpgdi.cxx; path = ../../../../vcl/headless/svpgdi.cxx; sourceTree = "<group>"; };
+		BE96AEB518196DCE00BD1AC4 /* svpvd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpvd.cxx; path = ../../../../vcl/headless/svpvd.cxx; sourceTree = "<group>"; };
+		BE96AEB6181971AF00BD1AC4 /* svpinst.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpinst.cxx; path = ../../../../vcl/headless/svpinst.cxx; sourceTree = "<group>"; };
+		BE96AEB7181973DA00BD1AC4 /* salbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salbmp.cxx; path = ../../../../vcl/quartz/salbmp.cxx; sourceTree = "<group>"; };
 		BE9B03C8181671C000E1B0CF /* edws.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = edws.cxx; path = ../../../../sw/source/core/edit/edws.cxx; sourceTree = "<group>"; };
 		BEB752BD180C90D0005B5696 /* outmap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = outmap.cxx; path = ../../../../vcl/source/gdi/outmap.cxx; sourceTree = "<group>"; };
 		BEBF3E3A17002D0200C454AC /* svapp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svapp.cxx; path = ../../../../vcl/source/app/svapp.cxx; sourceTree = "<group>"; };
@@ -135,8 +142,15 @@
 			children = (
 				BE954A2E1704F9500040D517 /* iosinst.cxx */,
 				BEB752BD180C90D0005B5696 /* outmap.cxx */,
+				BE96AEB7181973DA00BD1AC4 /* salbmp.cxx */,
 				BEBF3E3A17002D0200C454AC /* svapp.cxx */,
 				BEBF3E3B17002D0200C454AC /* svmain.cxx */,
+				BE96AEB118196DCE00BD1AC4 /* svpbmp.cxx */,
+				BE96AEB218196DCE00BD1AC4 /* svpdata.cxx */,
+				BE96AEB318196DCE00BD1AC4 /* svpframe.cxx */,
+				BE96AEB418196DCE00BD1AC4 /* svpgdi.cxx */,
+				BE96AEB6181971AF00BD1AC4 /* svpinst.cxx */,
+				BE96AEB518196DCE00BD1AC4 /* svpvd.cxx */,
 				BE4EEE9A16FF80B100D475B2 /* virdev.cxx */,
 				BEBF3E3D17002D6900C454AC /* window.cxx */,
 				BE2CB9601808247600953CB4 /* winproc.cxx */,
