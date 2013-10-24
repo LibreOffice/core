@@ -11,6 +11,8 @@
 
 $(eval $(call gb_Extension_Extension,wiki-publisher,swext/mediawiki/src))
 
+$(eval $(call gb_Extension_use_unpacked,wiki-publisher,xsltml))
+
 $(eval $(call gb_Extension_use_default_description,wiki-publisher))
 $(eval $(call gb_Extension_use_default_license,wiki-publisher))
 
@@ -36,13 +38,13 @@ $(eval $(call gb_Extension_add_file,wiki-publisher,WikiEditor/Module1.xba,$(SRCD
 $(eval $(call gb_Extension_add_file,wiki-publisher,WikiEditor/script.xlb,$(SRCDIR)/swext/mediawiki/dialogs/script.xlb))
 $(eval $(call gb_Extension_add_file,wiki-publisher,WikiEditor/dialog.xlb,$(SRCDIR)/swext/mediawiki/dialogs/dialog.xlb))
 $(eval $(call gb_Extension_add_file,wiki-publisher,WikiEditor/SendToMediaWiki.xdl,$(SRCDIR)/swext/mediawiki/dialogs/SendToMediaWiki.xdl))
-$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/cmarkup.xsl,$(OUTDIR)/bin/xslt/export/xsltml/cmarkup.xsl))
-$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/entities.xsl,$(OUTDIR)/bin/xslt/export/xsltml/entities.xsl))
-$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/glayout.xsl,$(OUTDIR)/bin/xslt/export/xsltml/glayout.xsl))
-$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/mmltex.xsl,$(OUTDIR)/bin/xslt/export/xsltml/mmltex.xsl))
-$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/scripts.xsl,$(OUTDIR)/bin/xslt/export/xsltml/scripts.xsl))
-$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/tables.xsl,$(OUTDIR)/bin/xslt/export/xsltml/tables.xsl))
-$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/tokens.xsl,$(OUTDIR)/bin/xslt/export/xsltml/tokens.xsl))
+$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/cmarkup.xsl,$(call gb_UnpackedTarball_get_dir,xsltml)/cmarkup.xsl))
+$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/entities.xsl,$(call gb_UnpackedTarball_get_dir,xsltml)/entities.xsl))
+$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/glayout.xsl,$(call gb_UnpackedTarball_get_dir,xsltml)/glayout.xsl))
+$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/mmltex.xsl,$(call gb_UnpackedTarball_get_dir,xsltml)/mmltex.xsl))
+$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/scripts.xsl,$(call gb_UnpackedTarball_get_dir,xsltml)/scripts.xsl))
+$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/tables.xsl,$(call gb_UnpackedTarball_get_dir,xsltml)/tables.xsl))
+$(eval $(call gb_Extension_add_file,wiki-publisher,filter/math/tokens.xsl,$(call gb_UnpackedTarball_get_dir,xsltml)/tokens.xsl))
 $(eval $(call gb_Extension_add_file,wiki-publisher,filter/odt2mediawiki.xsl,$(SRCDIR)/swext/mediawiki/src/filter/odt2mediawiki.xsl))
 $(eval $(call gb_Extension_add_file,wiki-publisher,license/THIRDPARTYLICENSEREADME.html,$(SRCDIR)/swext/mediawiki/src/THIRDPARTYLICENSEREADME.html))
 $(eval $(call gb_Extension_add_file,wiki-publisher,templates/MediaWiki/mediawiki.ott,$(SRCDIR)/swext/mediawiki/src/filter/mediawiki.ott))
