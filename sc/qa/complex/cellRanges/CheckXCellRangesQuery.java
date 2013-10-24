@@ -47,6 +47,8 @@ import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 
+import com.sun.star.container.XNamed;
+
 /**
  * Check the XCellRangesQuery interface on the SheetCell service. test was
  * created for bug i20044.
@@ -55,6 +57,7 @@ public class CheckXCellRangesQuery /* extends ComplexTestCase */ {
     XSpreadsheetDocument m_xSheetDoc = null;
     XCellRangesQuery m_xCell = null;
     XSpreadsheet m_xSpreadSheet = null;
+    String sSheetName = "";
 
     /**
      * Get all test methods.
@@ -91,6 +94,10 @@ public class CheckXCellRangesQuery /* extends ComplexTestCase */ {
             UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
             m_xSpreadSheet = (XSpreadsheet) AnyConverter.toObject(
                     new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
+
+            // get the first sheet name
+            XNamed m_xNamed = (XNamed) AnyConverter.toObject(new Type(XNamed.class),m_xSpreadSheet);
+            sSheetName = m_xNamed.getName();
 
             // get the cell
             System.out.println("Getting a cell from sheet") ;
@@ -167,9 +174,9 @@ public class CheckXCellRangesQuery /* extends ComplexTestCase */ {
     @Test public void checkEmptyCell() {
         System.out.println("Checking an empty cell...");
         // compare an empty cell with a cell with a value
-        assertTrue("\tQuery column differences did not return the correct value.", _queryColumnDifferences("Sheet1.C4"));
+        assertTrue("\tQuery column differences did not return the correct value.", _queryColumnDifferences(sSheetName+".C4"));
         // compare an empty cell with a cell with a value
-        assertTrue("\tQuery column differences did not return the correct value.", _queryRowDifferences("Sheet1.C4"));
+        assertTrue("\tQuery column differences did not return the correct value.", _queryRowDifferences(sSheetName+".C4"));
         // try to get this cell
 //         assertTrue("\tQuery empty cells did not return the correct value.", _queryEmptyCells("Sheet1.C4"));
         System.out.println("...done");
@@ -195,9 +202,9 @@ public class CheckXCellRangesQuery /* extends ComplexTestCase */ {
         }
 
         // compare an cell with value 5 with a cell with value 15
-        assertTrue("\tQuery column differences did not return the correct value.", _queryColumnDifferences("Sheet1.C4"));
+        assertTrue("\tQuery column differences did not return the correct value.", _queryColumnDifferences(sSheetName + ".C4"));
         // compare an cell with value 5 with a cell with value 15
-        assertTrue("\tQuery column differences did not return the correct value.", _queryRowDifferences("Sheet1.C4"));
+        assertTrue("\tQuery column differences did not return the correct value.", _queryRowDifferences(sSheetName+".C4"));
         // try to get nothing
         assertTrue("\tQuery empty cells did not return the correct value.", _queryEmptyCells(""));
         System.out.println("...done");
