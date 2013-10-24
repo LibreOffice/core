@@ -35,5 +35,5 @@ StartupWMClass=libreoffice-writer
 X-KDE-Protocols=file,http,smb,ftp,webdav
 [X-New Shortcut Group]
 UnityQuicklist=New Document
-Exec=libreoffice --writer %%FILE%%
+Exec=${UNIXBASISROOTNAME} --writer %%FILE%%
 TargetEnvironment=Unity

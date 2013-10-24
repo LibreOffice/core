@@ -35,5 +35,5 @@ StartupWMClass=libreoffice-draw
 X-KDE-Protocols=file,http,smb,ftp,webdav
 [X-New Shortcut Group]
 UnityQuicklist=New Drawing
-Exec=libreoffice --draw %%FILE%%
+Exec=${UNIXBASISROOTNAME} --draw %%FILE%%
 TargetEnvironment=Unity
