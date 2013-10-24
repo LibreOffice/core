@@ -9,23 +9,26 @@
 
 $(eval $(call gb_Module_Module,hyphen))
 
-ifneq ($(or $(filter NO,$(SYSTEM_HYPH)),$(filter TRUE,$(WITH_MYSPELL_DICTS))),)
+ifeq ($(SYSTEM_HYPH),NO)
+
 $(eval $(call gb_Module_add_targets,hyphen,\
 	UnpackedTarball_hyphen \
 ))
+
 ifeq ($(COM),MSC)
 
-ifeq ($(SYSTEM_HYPH),NO)
 $(eval $(call gb_Module_add_targets,hyphen,\
 	StaticLibrary_hyphen \
 ))
-endif
 
 else
+
 $(eval $(call gb_Module_add_targets,hyphen,\
 	ExternalProject_hyphen \
 ))
-endif
-endif
+
+endif # $(COM)
+
+endif # $(SYSTEM_HYPH)
 
 # vim: set noet sw=4 ts=4:
