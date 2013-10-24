@@ -124,6 +124,8 @@ private:
     StyleSheetTable* m_pStyleSheet;
     TblStylePrs m_aStyles;
 
+    std::vector<beans::PropertyValue> m_aInteropGrabBag;
+
 public:
 
     short m_nColBandSize;
@@ -141,6 +143,7 @@ public:
     // @param pStack    already processed StyleSheetEntries
     PropertyMapPtr GetProperties( sal_Int32 nMask, StyleSheetEntryDequePtr pStack = StyleSheetEntryDequePtr());
 
+    void AppendInteropGrabBag(beans::PropertyValue aValue);
     beans::PropertyValue GetInteropGrabBag();
 
     TableStyleSheetEntry( StyleSheetEntry& aEntry, StyleSheetTable* pStyles );

@@ -106,6 +106,13 @@ void TblStylePrHandler::resolveSprmProps(Sprm & rSprm)
         pProperties->resolve(*this);
 }
 
+beans::PropertyValue TblStylePrHandler::getInteropGrabBag(OUString aName)
+{
+    beans::PropertyValue aRet;
+    aRet.Name = aName;
+    return aRet;
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -69,6 +69,7 @@ public:
 
     inline PropertyMapPtr       getProperties() { return m_pProperties; };
     inline TblStyleType         getType() { return m_nType; };
+    beans::PropertyValue getInteropGrabBag(OUString aName);
 
 private:
 

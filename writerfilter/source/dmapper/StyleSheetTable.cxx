@@ -177,7 +177,19 @@ beans::PropertyValue TableStyleSheetEntry::GetInteropGrabBag()
 {
     beans::PropertyValue aRet;
     aRet.Name = sStyleName;
+
+    uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
+    beans::PropertyValue* pSeq = aSeq.getArray();
+    for (std::vector<beans::PropertyValue>::iterator i = m_aInteropGrabBag.begin(); i != m_aInteropGrabBag.end(); ++i)
+        *pSeq++ = *i;
+
+    aRet.Value = uno::makeAny(aSeq);
     return aRet;
+}
+
+void TableStyleSheetEntry::AppendInteropGrabBag(beans::PropertyValue aValue)
+{
+    m_aInteropGrabBag.push_back(aValue);
 }
 
 void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleType nStyleId )
@@ -560,15 +572,20 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 PropertyMapPtr pProps = pTblStylePrHandler->getProperties( );
                 StyleSheetEntry *  pEntry = m_pImpl->m_pCurrentEntry.get();
 
+                TableStyleSheetEntry * pTableEntry = dynamic_cast<TableStyleSheetEntry*>( pEntry );
                 if (nType == TBL_STYLE_UNKNOWN)
                 {
                     pEntry->pProperties->InsertProps(pProps);
                 }
                 else
                 {
-                    TableStyleSheetEntry * pTableEntry = dynamic_cast<TableStyleSheetEntry*>( pEntry );
                     if (pTableEntry != NULL)
                         pTableEntry->AddTblStylePr( nType, pProps );
+                }
+
+                if (nSprmId == NS_ooxml::LN_CT_Style_tblPr)
+                {
+                    pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tblPr"));
                 }
             }
             break;
