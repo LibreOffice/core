@@ -959,6 +959,8 @@ public class DBMetaData
     private String[] StringsFromResultSet(XResultSet _xResultSet, int _icol)
     {
         String[] sColValues = null;
+        if (_xResultSet == null)
+            return sColValues;
         try
         {
             XRow xRow = UnoRuntime.queryInterface( XRow.class, _xResultSet );
