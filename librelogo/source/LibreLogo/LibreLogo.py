@@ -1285,7 +1285,7 @@ def create_valid_svg_file(filename):
         f.write(s)
 
 def __groupend__(name = ""):
-    global __group__, __grouplefthang__, __groupstack__
+    global __group__, __grouplefthang__, __groupstack__, __halt__
     g = 0
     if __group__.getCount() > 1:
         if __grouplefthang__ < 0:
@@ -1313,19 +1313,26 @@ def __groupend__(name = ""):
       d = ctx.ServiceManager.createInstanceWithContext("com.sun.star.frame.Desktop", ctx)
       draw = d.loadComponentFromURL("private:factory/sdraw", "_blank", 0, ())
       drawpage = draw.getDrawPages().getByIndex(0)
+      while XSCRIPTCONTEXT.getDocument() != draw:
+        if XSCRIPTCONTEXT.getDocument() not in [draw, _.doc, None]:
+          __halt__ = True
+          return
+        __time__.sleep(0.1)
       __dispatcher__(".uno:Paste", (), draw)
       __dispatcher__(".uno:FormatGroup", (), draw)
       pic = drawpage.getByIndex(0)
       pic.setPosition(__Point__((g.BoundRect.Width - g.Size.Width)//2, (g.BoundRect.Height - g.Size.Height)//2))
       drawpage.Height, drawpage.Width = g.BoundRect.Height, g.BoundRect.Width
-      __time__.sleep(1) # avoid writing problem
       if not os.path.isabs(name):
         name = os.path.expanduser('~') + os.path.sep + name
       __dispatcher__(".uno:ExportTo", (__getprop__("URL", unohelper.systemPathToFileUrl(name)), __getprop__("FilterName", "draw_svg_Export")), draw)
-      __time__.sleep(1)
-      create_valid_svg_file(name)
       draw.close(True)
-
+      while XSCRIPTCONTEXT.getDocument() != _.doc:
+        if XSCRIPTCONTEXT.getDocument() not in [draw, _.doc, None]:
+          __halt__ = True
+          return
+        __time__.sleep(0.1)
+      create_valid_svg_file(name)
     __group__ = __groupstack__.pop()
     if __group__ and g:
         __group__.add(g)
