@@ -898,6 +898,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     mvSubArguments.push_back(SoPHelper<OpDollarde>(ts,
                         ft->Children[i]));
                 }
+                else    if ( !(pChild->GetExternal().compareTo(OUString(
+                     "com.sun.star.sheet.addin.Analysis.getDollarfr"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpDollarfr>(ts,
+                        ft->Children[i]));
+                }
                 break;
             default:
                 assert(0 && "Unsupported");
