@@ -217,6 +217,13 @@ $(call gb_Jar_add_manifest_classpath,$(1),$(call gb_Helper_make_url,$(2)))
 
 endef
 
+define gb_Jar_use_external_jar
+$(call gb_JavaClassSet_use_system_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+$(call gb_Jar_add_manifest_classpath,$(1),$(notdir $(2)))
+$(call gb_Jar_get_target,$(1)) : $(2)
+
+endef
+
 define gb_Jar_add_jars
 $$(call gb_Output_error,\
  gb_Jar_add_jars: use gb_Jar_use_jars instead.)
