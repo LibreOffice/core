@@ -269,10 +269,10 @@ endef
 
 gb_HelpLinkTarget_HELPLINKERDEPS := $(call gb_Executable_get_runtime_dependencies,HelpLinker)
 gb_HelpLinkTarget_HELPLINKERCOMMAND := $(call gb_Executable_get_command,HelpLinker)
-gb_HelpLinkTarget_COMPACTTARGET := $(OUTDIR)/bin/compact.xsl
-gb_HelpLinkTarget_EMBEDTARGET := $(OUTDIR)/bin/embed.xsl
-gb_HelpLinkTarget_IDXCAPTIONTARGET := $(OUTDIR)/bin/idxcaption.xsl
-gb_HelpLinkTarget_IDXCONTENTTARGET := $(OUTDIR)/bin/idxcontent.xsl
+gb_HelpLinkTarget_COMPACTTARGET := $(SRCDIR)/xmlhelp/util/compact.xsl
+gb_HelpLinkTarget_EMBEDTARGET := $(SRCDIR)/xmlhelp/util/embed.xsl
+gb_HelpLinkTarget_IDXCAPTIONTARGET := $(SRCDIR)/xmlhelp/util/idxcaption.xsl
+gb_HelpLinkTarget_IDXCONTENTTARGET := $(SRCDIR)/xmlhelp/util/idxcontent.xsl
 gb_HelpLinkTarget_DEPS := \
 	$(gb_HelpLinkTarget_HELPLINKERDEPS) \
 	$(gb_HelpLinkTarget_COMPACTTARGET) \

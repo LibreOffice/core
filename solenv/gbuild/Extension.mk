@@ -440,19 +440,19 @@ define gb_Extension__compile_help_onelang
 $(call gb_Extension_get_rootdir,$(1))/help/$(2).done : \
         $(gb_Extension_HELPINDEXERDEPS) \
         $(gb_Extension_HELPLINKERDEPS) \
-        $(OUTDIR_FOR_BUILD)/bin/embed.xsl \
-        $(OUTDIR_FOR_BUILD)/bin/idxcaption.xsl \
-        $(OUTDIR_FOR_BUILD)/bin/idxcontent.xsl | \
+        $(SRCDIR)/xmlhelp/util/embed.xsl \
+        $(SRCDIR)/xmlhelp/util/idxcaption.xsl \
+        $(SRCDIR)/xmlhelp/util/idxcontent.xsl | \
         $(call gb_Extension_get_rootdir,$(1))/help/.dir
 	$$(call gb_Output_announce,$(1) $(2),$(true),XHC,3)
 	$$(call gb_Helper_abbreviate_dirs, \
         mkdir -p $$(basename $$@) && \
         $$(gb_Extension_HELPLINKERCOMMAND) -mod help \
             -extlangsrc $(call gb_Extension_get_workdir,$(1))/help/$(2) \
-            -sty $(OUTDIR_FOR_BUILD)/bin/embed.xsl \
+            -sty $(SRCDIR)/xmlhelp/util/embed.xsl \
             -extlangdest $$(basename $$@) \
-            -idxcaption $(OUTDIR_FOR_BUILD)/bin/idxcaption.xsl \
-            -idxcontent $(OUTDIR_FOR_BUILD)/bin/idxcontent.xsl \
+            -idxcaption $(SRCDIR)/xmlhelp/util/idxcaption.xsl \
+            -idxcontent $(SRCDIR)/xmlhelp/util/idxcontent.xsl \
             $$(HELPFILES) && \
         (cd $(call gb_Extension_get_workdir,$(1))/help/$(2) && \
             $$(gb_Extension_ZIPCOMMAND) -r $$(basename $$@)/help.jar \
