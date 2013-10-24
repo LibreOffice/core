@@ -125,13 +125,29 @@ IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
         // SystemGraphicsData aData;
         // [setup the aData]
         // VirtualDevice aDevice(&aData, [color depth]);
-        VirtualDevice aDevice;
-        aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
+/*
+        // FIXME don't use pViewShell()->GetOut() directly, we need an own
+        // device here, something like
+#ifdef IOS
+        VirtualDevice aDevice(8);
+#else
+        VirtualDevice aDevice(1);
+#endif
 
-        pViewShell->PaintTile(&aDevice, Rectangle(tilePosX, tilePosY, tileWidth, tileHeight));
+        aDevice.SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
+        MapMode aMapMode(aDevice.GetMapMode());
+        aMapMode.SetMapUnit(MAP_TWIP);
+        aDevice.SetMapMode(aMapMode);
+
+        aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
+*/
+
+        pViewShell->PaintTile(pViewShell->GetOut(), Rectangle(tilePosX, tilePosY, tileWidth, tileHeight));
+        // FIXME pViewShell->PaintTile(&aDevice, Rectangle(tilePosX, tilePosY, tileWidth, tileHeight));
 
         // copy the aDevice content to mpImage
-        BitmapEx aBitmap(aDevice.GetBitmapEx(Point(0,0), aDevice.GetOutputSizePixel()));
+        // FIXME BitmapEx aBitmap(pViewShell->GetOut()->GetBitmapEx(Point(0,0), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
+        BitmapEx aBitmap(pViewShell->GetOut()->GetBitmapEx(Point(0,0), pViewShell->GetOut()->PixelToLogic(Size(contextWidth, contextHeight))));
         mpImage->SetImage(Image(aBitmap));
 
         // update the dialog size
