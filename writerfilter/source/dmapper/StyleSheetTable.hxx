@@ -141,6 +141,8 @@ public:
     // @param pStack    already processed StyleSheetEntries
     PropertyMapPtr GetProperties( sal_Int32 nMask, StyleSheetEntryDequePtr pStack = StyleSheetEntryDequePtr());
 
+    beans::PropertyValue GetInteropGrabBag();
+
     TableStyleSheetEntry( StyleSheetEntry& aEntry, StyleSheetTable* pStyles );
     virtual ~TableStyleSheetEntry( );
 
