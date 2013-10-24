@@ -962,13 +962,16 @@ public class DBMetaData
         try
         {
             XRow xRow = UnoRuntime.queryInterface( XRow.class, _xResultSet );
-            ArrayList<String> aColVector = new ArrayList<String>();
-            while (_xResultSet.next())
+            if (_xResultSet != null)
             {
-                aColVector.add(xRow.getString(_icol));
+                ArrayList<String> aColVector = new ArrayList<String>();
+                while (_xResultSet.next())
+                {
+                    aColVector.add(xRow.getString(_icol));
+                }
+                sColValues = new String[aColVector.size()];
+                aColVector.toArray(sColValues);
             }
-            sColValues = new String[aColVector.size()];
-            aColVector.toArray(sColValues);
         }
         catch (SQLException e)
         {
