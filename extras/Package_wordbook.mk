@@ -9,7 +9,9 @@
 
 $(eval $(call gb_Package_Package,extras_wordbook,$(SRCDIR)/extras/source/wordbook))
 
-$(eval $(call gb_Package_add_files,extras_wordbook,pck,\
+$(eval $(call gb_Package_set_outdir,extras_wordbook,$(INSTROOT)))
+
+$(eval $(call gb_Package_add_files,extras_wordbook,share/wordbook,\
 	en-GB.dic \
 	en-US.dic \
 	sl.dic \
