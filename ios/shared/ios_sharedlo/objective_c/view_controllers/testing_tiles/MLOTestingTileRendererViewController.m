@@ -30,6 +30,7 @@
 
 -(void)initScrollView{
     self.scrollView = [UIScrollView new];
+    self.scrollView.backgroundColor = [UIColor grayColor];
     self.view = self.scrollView;
 }
 -(void)resize{

@@ -55,7 +55,9 @@
 #include <ndole.hxx>
 #include <ndindex.hxx>
 #include <accmap.hxx>
+#include <vcl/bitmapex.hxx>
 #include <svtools/colorcfg.hxx>
+#include <vcl/bmpacc.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <accessibilityoptions.hxx>
 #include <statstr.hrc>
@@ -64,6 +66,7 @@
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <wrtsh.hxx>
+#include <vcl/alpha.hxx>
 
 #include "../../ui/inc/view.hxx"
 #include <PostItMgr.hxx>
@@ -1788,7 +1791,16 @@ void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int
         aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
 
         pViewShell->PaintTile(&aDevice, Rectangle(tilePosX, tilePosY, tileWidth, tileHeight));
-        //TODO now get it to the 'context'
+        BitmapEx aBitmapEx(aDevice.GetBitmapEx(Point(0,0), aDevice.GetOutputSizePixel()));
+        Bitmap aBitmap = aBitmapEx.GetBitmap();
+        BitmapReadAccess * readAccess = aBitmap.AcquireReadAccess();
+        touch_lo_copy_buffer((void *) readAccess->GetBuffer(),
+                             tileWidth,
+                             tileHeight,
+                             readAccess-> GetScanlineSize(),
+                             context,
+                             contextWidth,
+                             contextHeight);
     }
 }
 
