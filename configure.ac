@@ -1436,8 +1436,8 @@ AC_ARG_WITH(system-jars,
 
 AC_ARG_WITH(system-cairo,
     AS_HELP_STRING([--with-system-cairo],
-        [Use Cairo libraries already on system.]),,
-    [with_system_cairo="$with_system_libs"])
+        [Use cairo libraries already on system.  Happens automatically for
+         (implicit) --enable-gtk and for --enable-gtk3.]))
 
 AC_ARG_WITH(myspell-dicts,
     AS_HELP_STRING([--with-myspell-dicts],
@@ -9910,10 +9910,10 @@ GTK3_CFLAGS=""
 GTK3_LIBS=""
 ENABLE_GTK3=""
 if test "x$enable_gtk3" = "xyes"; then
-    if test "$with_system_cairo" != yes; then
-        AC_MSG_WARN([System cairo required for gtk3 support, please use --with-system-cairo])
-        add_warning "System cairo required for gtk3 support, please use --with-system-cairo"
+    if test "$with_system_cairo" = no; then
+        AC_MSG_ERROR([System cairo required for gtk3 support, do not combine --enable-gtk3 with --without-system-cairo])
     fi
+    : ${with_system_cairo:=yes}
     PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.2 gtk+-unix-print-3.0 gmodule-no-export-2.0 cairo, ENABLE_GTK3="TRUE", ENABLE_GTK3="")
     if test "x$ENABLE_GTK3" = "xTRUE"; then
         R="gtk3"
@@ -9932,6 +9932,10 @@ if test "$GUIBASE" != "unx" -o "$enable_headless" = "yes"; then
 fi
 ENABLE_GTK=""
 if test "x$enable_gtk" = "xyes"; then
+    if test "$with_system_cairo" = no; then
+        AC_MSG_ERROR([System cairo required for gtk support, do not use --without-system-cairo or use --disable-gtk])
+    fi
+    : ${with_system_cairo:=yes}
     ENABLE_GTK="TRUE"
     AC_DEFINE(ENABLE_GTK)
     R="gtk $R"
@@ -11707,6 +11711,7 @@ fi
 if test "$test_cairo" = "yes"; then
     AC_MSG_CHECKING([whether to use the system cairo])
 
+    : ${with_system_cairo:=$with_system_libs}
     if test "$with_system_cairo" = "yes"; then
         SYSTEM_CAIRO=YES
         AC_MSG_RESULT([yes])

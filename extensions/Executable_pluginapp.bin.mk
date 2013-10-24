@@ -71,10 +71,6 @@ $(eval $(call gb_Executable_use_externals,pluginapp.bin,\
     gthread \
     gtk \
 ))
-# FIXME: on Fedora 19 link fails with unresolved symbols in cairo without this?
-$(eval $(call gb_Executable_add_libs,pluginapp.bin,\
-	-lpixman-1 \
-))
 
 # the orignal dmakefile said: don't ask, it's ugly
 ifeq ($(OS),SOLARIS)
