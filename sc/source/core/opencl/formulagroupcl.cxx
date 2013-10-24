@@ -557,6 +557,10 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
             case ocLIA:
                  mvSubArguments.push_back(SoPHelper<OpSLN>(ts,
                     ft->Children[i]));
+            case ocGammaLn:
+                mvSubArguments.push_back(SoPHelper<OpGammaLn>(ts,
+                    ft->Children[i]));
+                break;
                 break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
