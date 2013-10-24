@@ -472,6 +472,14 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     mbBookMode( false ),
     mbSidebarChanged( false ),
     mbNeedGrammarCheck( false ),
+    bCheckSuperfluous( false ),
+    bIdleFormat( true ),
+    bBrowseWidthValid( false ),
+    bTurboAllowed( true ),
+    bAssertFlyPages( true ),
+    bIsVirtPageNum( false ),
+    bIsNewLayout( true ),
+    bCallbackActionEnabled ( false ),
     nBrowseWidth( MM50*4 ), //2cm minimum
     pTurbo( 0 ),
     pLastPage( 0 ),
@@ -483,8 +491,6 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     nAccessibleShells( 0 )
 {
     mnType = FRMC_ROOT;
-    bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = sal_True;
-    bCheckSuperfluous = bBrowseWidthValid = sal_False;
     setRootFrm( this );
 }
 
