@@ -288,11 +288,6 @@ IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
     }
 }
 
-namespace
-{
-    const char CrossRefHeadingBookmark_NamePrefix[] = "__RefHeading__";
-}
-
 OUString IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()
 {
     return OUString("__RefHeading__");
