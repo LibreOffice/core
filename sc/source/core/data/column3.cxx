@@ -1717,8 +1717,6 @@ void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::Form
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
-//    ScPostIt* pPostIt;
-//    maCellNotes.set(nRow, pPostIt);
 
     CellStorageModified();
 
@@ -1736,8 +1734,6 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
-//    ScPostIt* pPostIt;
-//    maCellNotes.set(nRow, pPostIt);
 
     CellStorageModified();
 
@@ -1752,8 +1748,6 @@ ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
-//    ScPostIt* pPostIt;
-//    maCellNotes.set(nRow, pPostIt);
 
     CellStorageModified();
 
@@ -1785,8 +1779,6 @@ bool ScColumn::SetGroupFormulaCell( SCROW nRow, ScFormulaCell* pCell )
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
-//    ScPostIt* pPostIt;
-//    maCellNotes.set(nRow, pPostIt);
 
     CellStorageModified();
 
@@ -2206,8 +2198,6 @@ void ScColumn::SetError( SCROW nRow, const sal_uInt16 nError)
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
-//    ScPostIt* pPostIt;
-//    maCellNotes.set(nRow, pPostIt);
 
     CellStorageModified();
 
@@ -2234,8 +2224,6 @@ void ScColumn::SetRawString( SCROW nRow, const svl::SharedString& rStr, bool bBr
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     maCells.set(it, nRow, rStr);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
-//    ScPostIt* pPostIt;
-//    maCellNotes.set(nRow, pPostIt);
 
     CellStorageModified();
 
@@ -2278,8 +2266,6 @@ void ScColumn::SetValue( SCROW nRow, double fVal )
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     maCells.set(it, nRow, fVal);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
-//    ScPostIt* pPostIt;
-//    maCellNotes.set(nRow, pPostIt);
 
     CellStorageModified();
 
