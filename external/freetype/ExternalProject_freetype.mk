@@ -20,10 +20,10 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 		--disable-shared \
 		--without-zlib \
 		--without-bzip2 \
-		--prefix=$(OUTDIR) --includedir=$(call gb_UnpackedTarball_get_dir,freetype)/include \
+		--prefix=$(call gb_UnpackedTarball_get_dir,freetype/instdir) \
 		--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 	&& chmod +x builds/unix/freetype-config \
-	&& $(MAKE) \
+	&& $(MAKE) install \
 	&& touch $@
 
 # vim: set noet sw=4 ts=4:
