@@ -12751,7 +12751,7 @@ git clone git://anongit.freedesktop.org/libreoffice/contrib/dev-tools
 cd dev-tools/make-3.82-gbuild
 ./configure --prefix=/opt/lo
 make
-sudo make install
+make install
 
 Then re-run autogen.sh
 
