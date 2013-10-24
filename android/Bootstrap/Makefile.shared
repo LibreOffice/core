@@ -81,7 +81,6 @@ clean: android_version_setup properties
 
 LIBS = \
   -Wl,--start-group \
-  $(wildcard $(OUTDIR)/lib/lib*.a) \
   $(wildcard $(INSTDIR)/$(LIBO_LIB_FOLDER)/lib*.a) \
   $(wildcard $(WORKDIR)/LinkTarget/StaticLibrary/lib*.a) \
   $(HARFBUZZ_LIBS) \
