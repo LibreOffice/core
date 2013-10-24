@@ -7716,6 +7716,11 @@ fi
 AC_SUBST(SYSTEM_EXPAT)
 
 dnl ===================================================================
+dnl Check for system libetonyek
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([libetonyek],[ETONYEK],[libetonyek-0.0],["-I${WORKDIR}/UnpackedTarball/libetonyek/inc"],["-L${WORKDIR}/UnpackedTarball/libetonyek/src/lib/.libs -letonyek-0.0"])
+
+dnl ===================================================================
 dnl Check for system libodfgen
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libodfgen],[ODFGEN],[libodfgen-0.0])
