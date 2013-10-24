@@ -61,7 +61,7 @@ sub action($$$)
          'shl/OXT/URELIB' => ($OLD ? '@executable_path/urelibs' : '@executable_path/../Frameworks'),
          'shl/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
-         'shl/NONE/NONE' => '@__VIA_LIBRARY_PATH__');
+         'shl/NONE/NONE' => '@loader_path');
     my ($type, $loc1, $loc2) = @_;
     my $act = $action{"$type/$loc1/$loc2"};
     die "illegal combination $type/$loc1/$loc2" unless defined $act;
