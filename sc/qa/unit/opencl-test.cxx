@@ -78,6 +78,7 @@ public:
     void testCompilerInEq();
     void testFinacialDollarfrFormula();
     void testFinacialSYDFormula();
+    void testStatisticalFormulaCorrel();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSGroundWater);
@@ -103,6 +104,7 @@ public:
     CPPUNIT_TEST(testCompilerInEq);
     CPPUNIT_TEST(testFinacialDollarfrFormula);
     CPPUNIT_TEST(testFinacialSYDFormula);
+    CPPUNIT_TEST(testStatisticalFormulaCorrel);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -523,6 +525,27 @@ void ScOpenclTest::testFinacialFormula()
     }
     xDocSh->DoClose();
     xDocShRes->DoClose();
+}
+//[AMLOEXT-20]
+void ScOpenclTest::testStatisticalFormulaCorrel()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenCLTests/statistical/Correl.", ODS);
+    enableOpenCL(xDocSh);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenCLTests/statistical/Correl.", ODS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 20; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+
 }
 void ScOpenclTest::testStatisticalFormulaFisher()
 {
