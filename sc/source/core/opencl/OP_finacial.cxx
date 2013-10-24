@@ -194,6 +194,11 @@ public:
         const formula::DoubleVectorRefToken* pCurDVR =
             dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
         size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+        FormulaToken* pCur1 = vSubArguments[1]->GetFormulaToken();
+        assert(pCur1);
+        const formula::SingleVectorRefToken* pSVR1 =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pCur1);
+        assert(pSVR1);
         ss << "\ndouble " << sSymName;
         ss << "_"<< BinFuncName() <<"(";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -210,7 +215,10 @@ public:
         ss << "double fEps = 1.0;\n\t";
         ss << "double x = 0.0, xNeu = 0.0, fZaehler = 0.0, fNenner = 0.0;\n\t";
         ss << "double nCount = 0.0;\n\t";
+        ss << "int argLen1 = " << pSVR1->GetArrayLength() << ";\n\t";
         #ifdef  ISNAN
+        ss << "if (gid0 >= argLen1)\n\t\t";
+        ss << "fSchaetzwert = 0.1;\n\t";
         ss << "if (isNan(fSchaetzwert))\n\t\t";
         ss << "x = 0.1;\n\t";
         ss << "else\n\t\t";
@@ -362,6 +370,17 @@ public:
         const formula::DoubleVectorRefToken* pCurDVR =
         dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
         size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+        FormulaToken* pCur1 = vSubArguments[1]->GetFormulaToken();
+        assert(pCur1);
+        const formula::SingleVectorRefToken* pSVR1 =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pCur1);
+        assert(pSVR1);
+        FormulaToken* pCur2 = vSubArguments[2]->GetFormulaToken();
+        assert(pCur2);
+        const formula::SingleVectorRefToken* pSVR2 =
+            dynamic_cast< const formula::SingleVectorRefToken* >(pCur2);
+        assert(pSVR2);
+
         ss << "\ndouble " << sSymName;
         ss << "_"<< BinFuncName() <<"(";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -378,7 +397,13 @@ public:
         ss << ";\n\t";
         ss << "arg2 = " << vSubArguments[2]->GenSlidingWindowDeclRef();
         ss << ";\n\t";
+        ss << "int argLen1 = " << pSVR1->GetArrayLength() << ";\n\t";
+        ss << "int argLen2 = " << pSVR2->GetArrayLength() << ";\n\t";
         #ifdef  ISNAN
+        ss << "if (gid0 >= argLen1)\n\t\t";
+        ss << "arg1 = 0.0;\n\t";
+        ss << "if (gid0 >= argLen2)\n\t\t";
+        ss << "arg2 = 0.0;\n\t";
         ss << "if (isNan(arg1))\n\t\t";
         ss << "arg1 = 0.0;\n\t";
         ss << "if (isNan(arg2))\n\t\t";
