@@ -559,6 +559,123 @@ public:
         virtual std::string BinFuncName(void) const { return "cumprinc"; }
 
 };
+class OpAccrintm: public Normal
+{
+ public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "double tmp = " << GetBottom() <<";\n\t";
+        ss << "int nStartDate,nEndDate,mode;\n\t";
+        ss << "double fRate,fVal;\n\t";
+#ifdef ISNAN
+        FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur0);
+        FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur1);
+
+        FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur2);
+
+        FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur3);
+
+        FormulaToken *tmpCur4 = vSubArguments[4]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur4);
+        ss<< "int buffer_nIssue_len = ";
+        ss<< tmpCurDVR0->GetArrayLength();
+        ss << ";\n\t";
+
+        ss<< "int buffer_nSettle_len = ";
+        ss<< tmpCurDVR1->GetArrayLength();
+        ss << ";\n\t";
+
+        ss<< "int buffer_fRate_len = ";
+        ss<< tmpCurDVR2->GetArrayLength();
+        ss << ";\n\t";
+
+        ss<< "int buffer_fVal_len = ";
+        ss<< tmpCurDVR3->GetArrayLength();
+        ss << ";\n\t";
+
+        ss<< "int buffer_nMode_len = ";
+        ss<< tmpCurDVR4->GetArrayLength();
+        ss << ";\n\t";
+#endif
+#ifdef ISNAN
+         ss <<"if(gid0 >= buffer_nIssue_len || isNan(";
+         ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
+         ss <<"))\n\t\t";
+         ss <<"nStartDate = 0;\n\telse\n\t\t";
+ #endif
+         ss << "nStartDate=(int)";
+         ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss <<";\n\t";
+#ifdef ISNAN
+        ss <<"if(gid0 >= buffer_nSettle_len || isNan(";
+        ss <<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss <<"))\n\t\t";
+        ss <<"nEndDate = 0;\n\telse\n\t\t";
+#endif
+       ss << "nEndDate=(int)";
+       ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+       ss << ";\n\t";
+
+#ifdef ISNAN
+       ss <<"if(gid0 >= buffer_fRate_len || isNan(";
+       ss <<vSubArguments[2]->GenSlidingWindowDeclRef();
+       ss <<"))\n\t\t";
+       ss <<"fRate = 0;\n\telse\n\t\t";
+#endif
+       ss << "fRate=";
+       ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+       ss <<";\n\t";
+#ifdef ISNAN
+       ss <<"if(gid0 >= buffer_fVal_len || isNan(";
+       ss <<vSubArguments[3]->GenSlidingWindowDeclRef();
+       ss <<"))\n\t\t";
+       ss <<"fVal = 0;\n\telse\n\t\t";
+#endif
+        ss << "fVal=";
+        ss << vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+#ifdef ISNAN
+        ss <<"if(gid0 >= buffer_nMode_len || isNan(";
+        ss <<vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss <<"))\n\t\t";
+        ss <<"mode = 0;\n\telse\n\t\t";
+#endif
+        ss << "mode = (int)";
+        ss << vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+        ss <<"int nDays1stYear=0;\n\t";
+        ss <<"int nNullDate=GetNullDate();\n\t";
+        ss <<"int nTotalDays = GetDiffDate(nNullDate,nStartDate,";
+        ss <<"nEndDate, mode,&nDays1stYear);\n\t";
+        ss <<"tmp = fVal*fRate*convert_double(nTotalDays)";
+        ss <<"/convert_double(nDays1stYear);\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+        }
+    virtual std::string BinFuncName(void) const { return "Accrintm"; }
+};
+
 class OpYield: public Normal {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,

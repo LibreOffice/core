@@ -643,6 +643,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     mvSubArguments.push_back(SoPHelper<OpYieldmat>(ts,
                         ft->Children[i]));
                 }
+               else if ( !(pChild->GetExternal().compareTo(OUString(
+                     "com.sun.star.sheet.addin.Analysis.getAccrintm"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpAccrintm>(ts,
+                        ft->Children[i]));
+                }
                 break;
             default:
                 assert(0 && "Unsupported");
