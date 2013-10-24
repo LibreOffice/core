@@ -1115,6 +1115,7 @@ endef
 else ifeq ($(OS),ANDROID)
 
 define gb_LinkTarget__use_fontconfig
+$(call gb_LinkTarget_use_external_project,$(1),fontconfig)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,fontconfig) \
 	$$(INCLUDE) \

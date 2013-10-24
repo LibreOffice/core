@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,fontconfig))
 ifeq ($(OS),ANDROID)
 
 $(eval $(call gb_Module_add_targets,fontconfig,\
-	ExternalPackage_fontconfig \
 	ExternalProject_fontconfig \
 	UnpackedTarball_fontconfig \
 ))
