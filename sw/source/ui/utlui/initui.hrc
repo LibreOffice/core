@@ -48,9 +48,10 @@
 #define STR_PAGEDESC_NAME           25
 #define STR_PAGEDESC_FIRSTNAME      26
 #define STR_PAGEDESC_FOLLOWNAME     27
-#define STR_HYPERLINK_CLICK         28
-#define STR_GETREFFLD_REFITEMNOTFOUND   29
-#define STR_DURATION_FORMAT             30
+#define STR_LINK_CTRL_CLICK         28
+#define STR_LINK_CLICK              29
+#define STR_GETREFFLD_REFITEMNOTFOUND   30
+#define STR_DURATION_FORMAT         31
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

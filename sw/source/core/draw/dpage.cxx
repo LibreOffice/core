@@ -182,9 +182,9 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
 
                     if ( !bExecHyperlinks )
-                    {
-                        sTxt = ViewShell::GetShellRes()->aHyperlinkClick + ": " + sTxt;
-                    }
+                        sTxt = ViewShell::GetShellRes()->aLinkCtrlClick + ": " + sTxt;
+                    else
+                        sTxt = ViewShell::GetShellRes()->aLinkClick + ": " + sTxt;
                 }
 
 

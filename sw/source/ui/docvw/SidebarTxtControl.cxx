@@ -241,9 +241,9 @@ void SidebarTxtControl::MouseMove( const MouseEvent& rMEvt )
                 OUString sURL( pURL->GetURL() );
                 SvtSecurityOptions aSecOpts;
                 if ( aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK) )
-                {
-                    sURL = ViewShell::GetShellRes()->aHyperlinkClick + ": " + sURL;
-                }
+                    sURL = ViewShell::GetShellRes()->aLinkCtrlClick + ": " + sURL;
+                else
+                    sURL = ViewShell::GetShellRes()->aLinkClick + ": " + sURL;
                 Help::ShowQuickHelp( this,PixelToLogic(Rectangle(GetPosPixel(),Size(50,10))),sURL);
             }
         }

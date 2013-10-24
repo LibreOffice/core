@@ -133,11 +133,14 @@ Resource RID_SW_SHELLRES
     {
         Text [ en-US ] = "Illustration Index";
     };
-    String STR_HYPERLINK_CLICK
+    String STR_LINK_CTRL_CLICK
     {
-        Text [ en-US ] = "%s-click to open hyperlink";
+        Text [ en-US ] = "%s-Click to follow link";
     };
-
+    String STR_LINK_CLICK
+    {
+        Text [ en-US ] = "Click to follow link";
+    };
 
      // SubType DocInfo
      //

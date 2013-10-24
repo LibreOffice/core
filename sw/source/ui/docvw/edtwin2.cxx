@@ -217,11 +217,11 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     SvtSecurityOptions aSecOpts;
                     bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
 
+                    sTxt = ": " + sTxt;
                     if ( !bExecHyperlinks )
-                    {
-                        sTxt = ": " + sTxt;
-                        sTxt = ViewShell::GetShellRes()->aHyperlinkClick + sTxt;
-                    }
+                        sTxt = ViewShell::GetShellRes()->aLinkCtrlClick + sTxt;
+                    else
+                        sTxt = ViewShell::GetShellRes()->aLinkClick + sTxt;
                 }
                 break;
             }
