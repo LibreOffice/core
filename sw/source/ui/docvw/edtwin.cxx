@@ -4429,8 +4429,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                         if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, sal_False ) )
                         {
-                            // Do it again if we're not on a field to update the cursor accordingly
-                            if ( SwContentAtPos::SW_FIELD != aCntntAtPos.eCntntAtPos )
+                            // Do it again if we're not on a field/hyperlink to update the cursor accordingly
+                            if ( SwContentAtPos::SW_FIELD != aCntntAtPos.eCntntAtPos
+                                 && SwContentAtPos::SW_INETATTR != aCntntAtPos.eCntntAtPos )
                                 rSh.GetContentAtPos( aDocPt, aCntntAtPos, sal_True );
 
                             sal_Bool bViewLocked = rSh.IsViewLocked();
@@ -4487,7 +4488,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     }
                                 }
                             }
-                            else
+                            else if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
                             {
                                 if ( bExecHyperlinks && aCntntAtPos.aFnd.pAttr )
                                     rSh.ClickToINetAttr( *(SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr, nFilter );
