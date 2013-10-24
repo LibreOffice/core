@@ -36,7 +36,6 @@ gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
 gb_ResTarget_get_unittest_target = \
     $(OUTDIR)/unittest/install/$(LIBO_SHARE_RESOURCE_FOLDER)/$(1).res
 gb_UnoApi_get_target = $(OUTDIR)/bin/$(1).rdb
-gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
 
 # instdir target patterns
 
@@ -121,7 +120,7 @@ gb_InstallModuleTarget_get_filelist = $(WORKDIR)/InstallModuleTarget/$(1).fileli
 gb_InstallModuleTarget_get_target = $(WORKDIR)/InstallModuleTarget/$(1).filelist
 gb_InstallScriptTarget_get_target = $(WORKDIR)/InstallScriptTarget/$(1)$(gb_InstallScript_EXT)
 gb_InternalUnoApi_get_target = $(WORKDIR)/InternalUnoApi/$(1).done
-gb_Jar_get_target = $(WORKDIR)/Jar/$(1).jar
+gb_Jar_get_target = $(call gb_Jar_get_install_target,$(1))
 gb_Jar_get_classsetname = Jar/$(1)
 gb_JavaClassSet_get_classdir = $(WORKDIR)/JavaClassSet/$(1)
 gb_JavaClassSet_get_repo_target = $(WORKDIR)/JavaClassSet/$(2)/$(1).done

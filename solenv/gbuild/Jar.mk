@@ -23,8 +23,11 @@ gb_Jar_JAVACOMMAND := $(JAVAINTERPRETER)
 gb_Jar_JARCOMMAND := jar
 
 gb_Jar_LAYER_DIRS := \
-	OOO:$(LIBO_SHARE_JAVA_FOLDER) \
-	URE:$(LIBO_URE_SHARE_JAVA_FOLDER)
+	URE:$(INSTROOT)/$(LIBO_URE_SHARE_JAVA_FOLDER) \
+	OOO:$(INSTROOT)/$(LIBO_SHARE_JAVA_FOLDER) \
+	OXT:$(WORKDIR)/Jar \
+	NONE:$(WORKDIR)/Jar \
+
 
 # location of files going to be packed into .jar file
 define gb_Jar_get_workdir
@@ -37,7 +40,7 @@ $(call gb_Jar_get_workdir,$(1))/META-INF/MANIFEST.MF
 endef
 
 gb_Jar__get_layer = $(strip $(foreach group,$(gb_Jar_VALIDGROUPS),$(if $(filter $(1),$(gb_Jar_$(group))),$(group))))
-gb_Jar__get_dir_for_layer = $(patsubst $(1):%,$(INSTROOT)/%,$(filter $(1):%,$(gb_Jar_LAYER_DIRS)))
+gb_Jar__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Jar_LAYER_DIRS)))
 gb_Jar_get_install_target = $(call gb_Jar__get_dir_for_layer,$(call gb_Jar__get_layer,$(1)))/$(1).jar
 
 # creates classset and META-INF folders if they don't exist
@@ -52,7 +55,7 @@ gb_Jar_get_install_target = $(call gb_Jar__get_dir_for_layer,$(call gb_Jar__get_
 # the archive with the main class hierarchy and then updating it from
 # the other one(s), which seems to work .-)
 define gb_Jar__command
-	$(call gb_Output_announce,$*,$(true),JAR,3)
+	$(call gb_Output_announce,$(1),$(true),JAR,3)
 	$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(call gb_Jar_get_workdir,$(1))/META-INF && \
 	echo Manifest-Version: 1.0 > $(call gb_Jar_get_manifest_target,$(1)) && \
@@ -70,20 +73,25 @@ endef
 $(call gb_Jar_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(call gb_Jar_get_classsetname,%))
 	$(call gb_Output_announce,$*,$(false),JAR,3)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_Jar_get_target,$*) $(call gb_Jar_get_outdir_target,$*))
+		rm -f $(call gb_Jar_get_target,$*))
 
-# the outdir target depends on the workdir target and is built by delivering the latter
 # the workdir target is created by cd'ing to the target directory and adding/updating the files
 
 # rule for creating the jar file using the command defined above
-$(call gb_Jar_get_target,%) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,%))
-	$(call gb_Jar__command,$*,$@,$*,$?)
+$(WORKDIR)/Jar/%.jar :
+	$(call gb_Jar__command,$*,$@)
+
+# call gb_Jar__make_installed_rule,jar
+define gb_Jar__make_installed_rule
+$(call gb_Jar_get_target,$(1)) :
+	$$(call gb_Jar__command,$(1),$(call gb_Jar_get_target,$(1)))
+
+endef
 
 # resets scoped variables (see explanations where they are set)
 # creates a class set and a dependency to it 
 # registers target and clean target
 # adds jar files to DeliverLogTarget
-# adds dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
 define gb_Jar_Jar
 ifeq (,$$(findstring $(1),$$(gb_Jar_KNOWN)))
 $$(eval $$(call gb_Output_info,Currently known jars are: $(sort $(gb_Jar_KNOWN)),ALL))
@@ -94,18 +102,14 @@ $(call gb_Jar_get_target,$(1)) : JARCLASSPATH :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEDIRS :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEFILES :=
+$(call gb_Jar_get_target,$(1)) : \
+	$(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(1)))
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)))
-$(eval $(call gb_Module_register_target,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
-$(call gb_Helper_make_userfriendly_targets,$(1),Jar,$(call gb_Jar_get_outdir_target,$(1)))
-$(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_target,$(1)),$(1))
-$(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
-$(call gb_Jar_get_outdir_target,$(1)) :| $(dir $(call gb_Jar_get_outdir_target,$(1))).dir
+$(eval $(call gb_Module_register_target,$(call gb_Jar_get_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Jar,$(call gb_Jar_get_target,$(1)))
 
-$(if $(filter OOO URE,$(call gb_Jar__get_layer,$(1))),\
-$(call gb_Helper_install,$(call gb_Jar_get_outdir_target,$(1)), \
-	$(call gb_Jar_get_install_target,$(1)), \
-	$(call gb_Jar_get_target,$(1))) \
-)
+# installed jars need a rule to build!
+$(if $(findstring $(INSTDIR),$(call gb_Jar_get_target,$(1))),$(call gb_Jar__make_installed_rule,$(1)))
 
 endef
 
