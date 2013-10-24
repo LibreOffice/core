@@ -2069,7 +2069,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             if ( bAutoComplete )
                 GetColData();
 
-            if ( ( aStr[0] == '=' || aStr[0] == '+' || aStr[0] == '-' ) &&
+            if ( !aStr.isEmpty() && ( aStr[0] == '=' || aStr[0] == '+' || aStr[0] == '-' ) &&
                  !cTyped && !bCreatingFuncView )
                 InitRangeFinder(aStr);              // Formel wird editiert -> RangeFinder
 
