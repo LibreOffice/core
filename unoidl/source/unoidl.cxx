@@ -28,41 +28,101 @@ namespace unoidl {
 
 namespace {
 
+class AggregatingModule: public ModuleEntity {
+public:
+    AggregatingModule(
+        std::vector< rtl::Reference< Provider > > const & providers,
+        OUString const & name):
+        providers_(providers), name_(name)
+    {}
+
+private:
+    virtual ~AggregatingModule() throw () {}
+
+    virtual std::vector< OUString > getMemberNames() const;
+
+    virtual rtl::Reference< MapCursor > createCursor() const;
+
+    std::vector< rtl::Reference< Provider > > providers_;
+    OUString name_;
+};
+
+std::vector< OUString > AggregatingModule::getMemberNames() const {
+    std::set< OUString > names;
+    for (std::vector< rtl::Reference< Provider > >::const_iterator i(
+             providers_.begin());
+         i != providers_.end(); ++i)
+    {
+        rtl::Reference< Entity > ent((*i)->findEntity(name_));
+        if (ent.is() && ent->getSort() == Entity::SORT_MODULE) {
+            std::vector< OUString > ns(
+                static_cast< ModuleEntity * >(ent.get())->getMemberNames());
+            names.insert(ns.begin(), ns.end());
+        }
+    }
+    return std::vector< OUString >(names.begin(), names.end());
+}
+
 class AggregatingCursor: public MapCursor {
 public:
     AggregatingCursor(
-        std::vector< rtl::Reference< MapCursor > > const & cursors):
-        cursors_(cursors), iterator_(cursors_.begin())
-    {}
+        std::vector< rtl::Reference< Provider > > const & providers,
+        OUString const & name):
+        providers_(providers), name_(name), iterator_(providers_.begin())
+    { findCursor(); }
 
 private:
     virtual ~AggregatingCursor() throw () {}
 
-    virtual rtl::Reference< Entity > getNext(rtl::OUString * name);
+    virtual rtl::Reference< Entity > getNext(OUString * name);
 
-    std::vector< rtl::Reference< MapCursor > > cursors_;
-    std::vector< rtl::Reference< MapCursor > >::iterator iterator_;
-    std::set< rtl::OUString > seenMembers;
+    void findCursor();
+
+    std::vector< rtl::Reference< Provider > > providers_;
+    OUString name_;
+    std::vector< rtl::Reference< Provider > >::iterator iterator_;
+    rtl::Reference< MapCursor > cursor_;
+    std::set< OUString > seen_;
 };
 
-rtl::Reference< Entity > AggregatingCursor::getNext(rtl::OUString * name) {
-    for (;;) {
-        if (iterator_ == cursors_.end()) {
-            return rtl::Reference< Entity >();
-        }
-        rtl::OUString n;
-        rtl::Reference< Entity > ent((*iterator_)->getNext(&n));
+rtl::Reference< Entity > AggregatingCursor::getNext(OUString * name) {
+    while (cursor_.is()) {
+        OUString n;
+        rtl::Reference< Entity > ent(cursor_->getNext(&n));
         if (ent.is()) {
-            if (seenMembers.insert(n).second) {
+            if (seen_.insert(n).second) {
                 if (name != 0) {
                     *name = n;
                 }
-                return ent;
+                return ent->getSort() == Entity::SORT_MODULE
+                    ? new AggregatingModule(
+                        providers_, (name_.isEmpty() ? name_ : name_ + ".") + n)
+                    : ent;
             }
         } else {
-            ++iterator_;
+            cursor_.clear();
+            findCursor();
         }
     }
+    return rtl::Reference< Entity >();
+}
+
+void AggregatingCursor::findCursor() {
+    for (; !cursor_.is() && iterator_ != providers_.end(); ++iterator_) {
+        if (name_.isEmpty()) {
+            cursor_ = (*iterator_)->createRootCursor();
+        } else {
+            rtl::Reference< Entity > ent((*iterator_)->findEntity(name_));
+            if (ent.is() && ent->getSort() == Entity::SORT_MODULE) {
+                cursor_ = static_cast< ModuleEntity * >(ent.get())->
+                    createCursor();
+            }
+        }
+    }
+}
+
+rtl::Reference< MapCursor > AggregatingModule::createCursor() const {
+    return new AggregatingCursor(providers_, name_);
 }
 
 }
@@ -156,23 +216,7 @@ rtl::Reference< Entity > Manager::findEntity(rtl::OUString const & name) const {
 rtl::Reference< MapCursor > Manager::createCursor(rtl::OUString const & name)
     const
 {
-    std::vector< rtl::Reference< MapCursor > > curs;
-    for (std::vector< rtl::Reference< Provider > >::const_iterator i(
-             providers_.begin());
-         i != providers_.end(); ++i)
-    {
-        if (name.isEmpty()) {
-            curs.push_back((*i)->createRootCursor());
-        } else {
-            rtl::Reference< Entity > ent((*i)->findEntity(name));
-            if (ent.is() && ent->getSort() == Entity::SORT_MODULE) {
-                curs.push_back(
-                    static_cast< ModuleEntity * >(ent.get())->createCursor());
-            }
-        }
-    }
-    return curs.empty()
-        ? rtl::Reference< MapCursor >() : new AggregatingCursor(curs);
+    return new AggregatingCursor(providers_, name);
 }
 
 Manager::~Manager() throw () {}
