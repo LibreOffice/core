@@ -176,7 +176,7 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
 beans::PropertyValue TableStyleSheetEntry::GetInteropGrabBag()
 {
     beans::PropertyValue aRet;
-    aRet.Name = sStyleName;
+    aRet.Name = sStyleIdentifierI;
 
     uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
     beans::PropertyValue* pSeq = aSeq.getArray();
@@ -477,12 +477,28 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         break;
         case NS_ooxml::LN_CT_Style_default:
             m_pImpl->m_pCurrentEntry->bIsDefaultStyle = (nIntValue != 0);
+            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+            {
+                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pImpl->m_pCurrentEntry.get());
+                beans::PropertyValue aValue;
+                aValue.Name = "default";
+                aValue.Value = uno::makeAny(sal_Bool(pTableEntry->bIsDefaultStyle));
+                pTableEntry->AppendInteropGrabBag(aValue);
+            }
         break;
         case NS_ooxml::LN_CT_Style_customStyle:
         break;
         case NS_ooxml::LN_CT_Style_styleId:
             m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
             m_pImpl->m_pCurrentEntry->sStyleIdentifierD = sValue;
+            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+            {
+                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pImpl->m_pCurrentEntry.get());
+                beans::PropertyValue aValue;
+                aValue.Name = "styleId";
+                aValue.Value = uno::makeAny(sValue);
+                pTableEntry->AppendInteropGrabBag(aValue);
+            }
         break;
         case NS_ooxml::LN_CT_TblWidth_w:
             dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TblWidth_w( nIntValue );
@@ -533,6 +549,14 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             //this is only a UI name!
             m_pImpl->m_pCurrentEntry->sStyleName = sStringValue;
             m_pImpl->m_pCurrentEntry->sStyleName1 = sStringValue;
+            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+            {
+                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pImpl->m_pCurrentEntry.get());
+                beans::PropertyValue aValue;
+                aValue.Name = "name";
+                aValue.Value = uno::makeAny(sStringValue);
+                pTableEntry->AppendInteropGrabBag(aValue);
+            }
             break;
         case NS_ooxml::LN_CT_Style_basedOn:
             m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = sStringValue;
