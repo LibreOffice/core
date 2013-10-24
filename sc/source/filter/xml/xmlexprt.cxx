@@ -1440,7 +1440,7 @@ void ScXMLExport::WriteRowContent()
 }
 
 void ScXMLExport::WriteRowStartTag(
-    sal_Int32 nRow, const sal_Int32 nIndex, const sal_Int32 nEqualRows,
+    const sal_Int32 nIndex, const sal_Int32 nEqualRows,
     bool bHidden, bool bFiltered)
 {
     AddAttribute(sAttrStyleName, *pRowStyles->GetStyleNameByIndex(nIndex));
@@ -1458,18 +1458,6 @@ void ScXMLExport::WriteRowStartTag(
         AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED, aBuf.makeStringAndClear());
     }
 
-    const ScMyDefaultStyleList& rRowDefaults = *pDefaults->GetRowDefaults();
-    if ( nRow >= sal::static_int_cast<sal_Int32>( rRowDefaults.size() ) )
-    {
-        // used to happen with detective operations - if there are more cases, use the last row's style
-        OSL_FAIL("WriteRowStartTag: not enough defaults");
-        nRow = rRowDefaults.size() - 1;
-    }
-    sal_Int32 nCellStyleIndex(rRowDefaults[nRow].nIndex);
-    if (nCellStyleIndex != -1)
-        AddAttribute(XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME,
-            *pCellStyles->GetStyleNameByIndex(nCellStyleIndex,
-                (*pDefaults->GetRowDefaults())[nRow].bIsAutoStyle));
     StartElement( sElemRow, true);
 }
 
@@ -1506,17 +1494,17 @@ void ScXMLExport::OpenNewRow(
             nEquals = aRowHeaderRange.EndRow - nStartRow + 1;
         else
             nEquals = nEqualRows;
-        WriteRowStartTag(nStartRow, nIndex, nEquals, bHidden, bFiltered);
+        WriteRowStartTag(nIndex, nEquals, bHidden, bFiltered);
         nOpenRow = nStartRow + nEquals - 1;
         if (nEquals < nEqualRows)
         {
             CloseRow(nStartRow + nEquals - 1);
-            WriteRowStartTag(nStartRow, nIndex, nEqualRows - nEquals, bHidden, bFiltered);
+            WriteRowStartTag(nIndex, nEqualRows - nEquals, bHidden, bFiltered);
             nOpenRow = nStartRow + nEqualRows - 1;
         }
     }
     else
-        WriteRowStartTag(nStartRow, nIndex, nEqualRows, bHidden, bFiltered);
+        WriteRowStartTag(nIndex, nEqualRows, bHidden, bFiltered);
 }
 
 void ScXMLExport::OpenAndCloseRow(

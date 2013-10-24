@@ -454,119 +454,57 @@ const OUString& ScMyValidationsContainer::GetValidationName(const sal_Int32 nInd
 
 sal_Int32 ScMyDefaultStyles::GetStyleNameIndex(const ScFormatRangeStyles* pCellStyles,
     const sal_Int32 nTable, const sal_Int32 nPos,
-    const sal_Int32 i, const bool bRow, bool& bIsAutoStyle)
+    const sal_Int32 i, bool& bIsAutoStyle)
 {
-    if (bRow)
-        return pCellStyles->GetStyleNameIndex(nTable, nPos, i,
-                                bIsAutoStyle);
-    else
-        return pCellStyles->GetStyleNameIndex(nTable, i, nPos,
-                                bIsAutoStyle);
-}
-
-void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
-    const sal_Int32 nLastRow, const sal_Int32 nLastCol,
-    const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc,
-    const bool bRow)
-{
-    if (pDoc)
-    {
-        SCTAB nTab = static_cast<SCTAB>(nTable);
-        sal_Int32 nPos;
-        sal_Int32 nLast;
-        ScMyDefaultStyleList* pDefaults;
-        if (bRow)
-        {
-            pDefaults = &maRowDefaults;
-            nLast = nLastRow;
-        }
-        else
-        {
-            pDefaults = &maColDefaults;
-            nLast = nLastCol;
-        }
-        bool bPrevAutoStyle(false);
-        bool bIsAutoStyle;
-        bool bResult;
-        sal_Int32 nPrevIndex(0);
-        sal_Int32 nIndex;
-        sal_Int32 nRepeat(0);
-        sal_Int32 nEmptyRepeat(0);
-        for (sal_Int32 i = nLast; i >= 0; --i)
-        {
-            if (bRow)
-            {
-                SCCOL nCol;
-                bResult = pDoc->GetRowDefault(nTab,
-                    static_cast<SCROW>(i), static_cast<SCCOL>(nLastCol), nCol);
-                nPos = static_cast<sal_Int32>(nCol);
-            }
-            else
-            {
-                SCROW nRow;
-                bResult = pDoc->GetColDefault(nTab,
-                    static_cast<SCCOL>(i), static_cast<SCROW>(nLastRow), nRow);
-                nPos = static_cast<sal_Int32>(nRow);
-            }
-            if (bResult)
-            {
-                nEmptyRepeat = 0;
-                if (!nRepeat)
-                {
-                    nPrevIndex = GetStyleNameIndex(pCellStyles, nTab, nPos, i,
-                                                bRow, bPrevAutoStyle);
-                    (*pDefaults)[i].nIndex = nPrevIndex;
-                    (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
-                    nRepeat = 1;
-                }
-                else
-                {
-                    nIndex = GetStyleNameIndex(pCellStyles, nTab, nPos, i,
-                                            bRow, bIsAutoStyle);
-                    if ((nIndex != nPrevIndex) || (bIsAutoStyle != bPrevAutoStyle))
-                    {
-                        nRepeat = 1;
-                        nPrevIndex = GetStyleNameIndex(pCellStyles, nTab, nPos, i,
-                                                bRow, bPrevAutoStyle);
-                        (*pDefaults)[i].nIndex = nPrevIndex;
-                        (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
-                    }
-                    else
-                    {
-                        (*pDefaults)[i].nIndex = nPrevIndex;
-                        (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
-                        ++nRepeat;
-                        if (nRepeat > 1)
-                            (*pDefaults)[i].nRepeat = nRepeat;
-                    }
-                }
-            }
-            else
-            {
-                nRepeat = 0;
-                if (!nEmptyRepeat)
-                    nEmptyRepeat = 1;
-                else
-                {
-                    ++nEmptyRepeat;
-                    if (nEmptyRepeat > 1)
-                        (*pDefaults)[i].nRepeat = nEmptyRepeat;
-                }
-            }
-        }
-    }
+    return pCellStyles->GetStyleNameIndex(nTable, i, nPos, bIsAutoStyle);
 }
 
 void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
     const sal_Int32 nLastRow, const sal_Int32 nLastCol,
     const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc)
 {
-    maRowDefaults.clear();
-    maRowDefaults.resize(nLastRow + 1);
-    FillDefaultStyles(nTable, nLastRow, nLastCol, pCellStyles, pDoc, true);
     maColDefaults.clear();
     maColDefaults.resize(nLastCol + 1);
-    FillDefaultStyles(nTable, nLastRow, nLastCol, pCellStyles, pDoc, false);
+    if (!pDoc)
+        return ;
+
+    SCTAB nTab = static_cast<SCTAB>(nTable);
+    sal_Int32 nPos;
+    ScMyDefaultStyleList* pDefaults = &maColDefaults;
+    bool bPrevAutoStyle(false);
+    bool bIsAutoStyle;
+    sal_Int32 nPrevIndex(0);
+    sal_Int32 nRepeat(0);
+    for (sal_Int32 i = nLastCol; i >= 0; --i)
+    {
+        pDoc->GetColDefault(nTab, static_cast<SCCOL>(i), static_cast<SCROW>(nLastRow), nPos);
+        if (!nRepeat)
+        {
+            nPrevIndex = GetStyleNameIndex(pCellStyles, nTab, nPos, i, bPrevAutoStyle);
+            (*pDefaults)[i].nIndex = nPrevIndex;
+            (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
+            nRepeat = 1;
+        }
+        else
+        {
+            sal_Int32 nIndex = GetStyleNameIndex(pCellStyles, nTab, nPos, i, bIsAutoStyle);
+            if ((nIndex != nPrevIndex) || (bIsAutoStyle != bPrevAutoStyle))
+            {
+                nRepeat = 1;
+                nPrevIndex = GetStyleNameIndex(pCellStyles, nTab, nPos, i, bPrevAutoStyle);
+                (*pDefaults)[i].nIndex = nPrevIndex;
+                (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
+            }
+            else
+            {
+                (*pDefaults)[i].nIndex = nPrevIndex;
+                (*pDefaults)[i].bIsAutoStyle = bPrevAutoStyle;
+                ++nRepeat;
+                if (nRepeat > 1)
+                    (*pDefaults)[i].nRepeat = nRepeat;
+            }
+        }
+    }
 }
 
 ScMyRowFormatRange::ScMyRowFormatRange()
