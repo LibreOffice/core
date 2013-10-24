@@ -65,6 +65,7 @@ public:
     void testFinacialIRRFormula();
     void testFinacialMIRRFormula();
     void testFinacialRateFormula();
+    void testFinancialAccrintmFormula();
     void testCompilerNested();
     void testFinacialSLNFormula();
 
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST(testFinacialRateFormula);
     CPPUNIT_TEST(testCompilerNested);
     CPPUNIT_TEST(testFinacialSLNFormula);
+    CPPUNIT_TEST(testFinancialAccrintmFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -613,6 +615,26 @@ void ScOpenclTest::testFinacialRateFormula()
         double fLibre = pDoc->GetValue(ScAddress(6, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(6, i, 0));
         //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-54]
+void ScOpenclTest::testFinancialAccrintmFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Accrintm.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Accrintm.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 1; i <= 10; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(5, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
