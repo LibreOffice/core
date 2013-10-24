@@ -76,7 +76,7 @@ public:
     void testFinacialDollardeFormula();
     void testCompilerString();
     void testCompilerInEq();
-
+    void testFinacialDollarfrFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSGroundWater);
@@ -100,6 +100,7 @@ public:
     CPPUNIT_TEST(testFinacialDollardeFormula);
     CPPUNIT_TEST(testCompilerString);
     CPPUNIT_TEST(testCompilerInEq);
+    CPPUNIT_TEST(testFinacialDollarfrFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -824,6 +825,27 @@ void ScOpenclTest::testFinancialAccrintmFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(5, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(5, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-64]
+void ScOpenclTest::testFinacialDollarfrFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Dollarfr.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Dollarfr.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
