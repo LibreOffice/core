@@ -746,15 +746,13 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,helpdatafileproxy:
     listAnchor.realloc( id.size() );
     listTitle.realloc( id.size() );
 
-    const sal_Char* pData = NULL;
-    const sal_Char pEmpty[] = "";
-
     for( sal_uInt32 i = 0; i < id.size(); ++i )
     {
         listId[i] = id[i];
         listAnchor[i] = anchor[i];
 
-        pData = pEmpty;
+        const sal_Char* pData = NULL;
+
         if( pHdf )
         {
             OString idi( id[i].getStr(),id[i].getLength(),RTL_TEXTENCODING_UTF8 );
