@@ -589,6 +589,82 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "Yield"; }
 };
+
+class OpSLN: public Normal{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = " <<"0"<<";\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "double wert;\n\t";
+        ss << "double rest;\n\t";
+        ss << "double dauer;\n\t";
+
+#ifdef ISNAN
+        FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR0=
+            dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur0);
+        FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR1=
+            dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur1);
+        FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR2=
+            dynamic_cast<const formula::SingleVectorRefToken *>(tmpCur2);
+        ss<< "int buffer_wert_len = ";
+        ss<< tmpCurDVR0->GetArrayLength();
+        ss << ";\n\t";
+        ss<< "int buffer_rest_len = ";
+        ss<< tmpCurDVR1->GetArrayLength();
+        ss << ";\n\t";
+        ss<< "int buffer_dauer_len = ";
+        ss<< tmpCurDVR2->GetArrayLength();
+        ss << ";\n\t";
+#endif
+#ifdef ISNAN
+        ss<<"if(gid0>=buffer_wert_len || isNan(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<"))\n\t\t";
+        ss<<"wert = 0;\n\telse \n\t\t";
+#endif
+        ss<<"wert = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<";\n\t";
+#ifdef ISNAN
+        ss<<"if(gid0>=buffer_rest_len || isNan(";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss<<"))\n\t\t";
+        ss<<"rest = 0;\n\telse \n\t\t";
+#endif
+        ss<<"rest = ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss<<";\n\t";
+#ifdef ISNAN
+        ss<<"if(gid0>=buffer_dauer_len || isNan(";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss<<"))\n\t\t";
+        ss<<"dauer = 0;\n\telse \n\t\t";
+#endif
+        ss<<"dauer = ";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss<<";\n\t";
+        ss << "tmp = (wert-rest)/dauer;\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+    virtual std::string BinFuncName(void) const { return "SLN"; }
+};
+
 class OpFvschedule: public Fvschedule{
 public:
     virtual std::string GetBottom(void) { return "0"; }

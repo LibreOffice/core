@@ -554,6 +554,10 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 mvSubArguments.push_back(SoPHelper<OpGamma>(ts,
                     ft->Children[i]));
                 break;
+            case ocLIA:
+                 mvSubArguments.push_back(SoPHelper<OpSLN>(ts,
+                    ft->Children[i]));
+                break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getEffect"))))
