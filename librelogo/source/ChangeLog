@@ -1,3 +1,16 @@
+2013-10-24 László Németh:
+    * synchronize Writer/Draw when saving cropped SVG to avoid program halt,
+      huge sleeps (the workaround) have been removed
+    * support hatching with 'INVISIBLE' filling color
+    * support PENUP in UI (Line Style "-none-")
+    * support INVISIBLE filling color in UI (Area Style/Filling "None")
+    * using 'INVISIBLE' line and filling colors set -none-/None in
+      Drawing Object Properties toolbar
+    * fix blinking LABEL (now the temporary text shape is invisible)
+    * support PENCAP settings (values: NONE, ROUND, SQUARE)
+    * fix black (not refreshed) invisible filling color (LO 4.1 problem)
+      reported by Levente Kovács in http://bug.openscope.org/browse/OOO-838
+
 2013-08-29 László Németh:
     * fix bad selection of invisible turtle after HIDETURTLE CLEARSCREEN
     * fix SVG cropping in LibreOffice 4.1

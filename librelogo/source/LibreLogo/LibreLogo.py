@@ -112,6 +112,8 @@ from com.sun.star.drawing.LineJoint import NONE as __Joint_NONE__
 from com.sun.star.drawing.LineJoint import BEVEL as __BEVEL__
 from com.sun.star.drawing.LineJoint import MITER as __MITER__
 from com.sun.star.drawing.LineJoint import ROUND as __ROUNDED__
+from com.sun.star.drawing.FillStyle import NONE as __FillStyle_NONE__
+from com.sun.star.drawing.LineStyle import NONE as __LineStyle_NONE__
 from com.sun.star.drawing.LineStyle import SOLID as __LineStyle_SOLID__
 from com.sun.star.drawing.LineStyle import DASH as __LineStyle_DASHED__
 from com.sun.star.drawing.DashStyle import RECT as __DashStyle_RECT__
@@ -463,10 +465,18 @@ def __initialize__():
         shape.FillColor, transparence = __splitcolor__(_.areacolor)
         shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
     elif shape.Visible:
-        _.areacolor = shape.FillColor + (int(255.0 * shape.FillTransparence/100) << 24)
-        _.pencolor = shape.LineColor + (int(255.0 * shape.LineTransparence/100) << 24)
+        if shape.FillStyle == __FillStyle_NONE__:
+            _.areacolor = 0xffffffff
+        else:
+            _.areacolor = shape.FillColor + (int(255.0 * shape.FillTransparence/100) << 24)
         if shape.LineWidth != round((1 + _.pen * 2) * __PT_TO_TWIP__ / __MM10_TO_TWIP__) and shape.LineWidth != round(__LINEWIDTH__ / __MM10_TO_TWIP__):
             _.pensize = shape.LineWidth * __MM10_TO_TWIP__
+        if shape.LineStyle == __LineStyle_NONE__: # - none -
+            __pen__(0)
+        else:
+            if shape.LineStyle == __LineStyle_SOLID__:
+                __pen__(1)
+            _.pencolor = shape.LineColor + (int(255.0 * shape.LineTransparence/100) << 24)
     shape.LineJoint = __ROUNDED__
     shape.Shadow = True
     shape.FillColor, transparence = __splitcolor__(_.areacolor)
@@ -886,6 +896,8 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
         shape.PolyPolygon = tuple([tuple( list(shape.PolyPolygon[-1]) + [last2])])
         shape.LineWidth = _.pensize / __MM10_TO_TWIP__
     shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
+    if shape.LineTransparence == 100:
+        shape.LineStyle = 0
     __visible__(shape, True)
     shape.Name = __ACTUAL__
     _.shapecache[__ACTUAL__] = shape
@@ -909,15 +921,21 @@ def __fillit__(filled = True):
         shape.LineStyle, shape.LineDash = __linestyle__(_.linestyle)
         shape.LineJoint = _.linejoint
         shape.LineCap = _.linecap
+        shape.LineWidth = _.pensize / __MM10_TO_TWIP__
+        shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
+        shape.FillColor, shape.FillTransparence = __splitcolor__(_.areacolor)
         if _.hatch:
-            shape.FillBackground = True
+            shape.FillBackground = True if shape.FillTransparence != 100 else False
             shape.FillHatch = _.hatch
             shape.FillStyle = 3
         else:
             shape.FillStyle = int(filled)
-        shape.LineWidth = _.pensize / __MM10_TO_TWIP__
-        shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
-        shape.FillColor, shape.FillTransparence = __splitcolor__(_.areacolor)
+        if shape.LineTransparence == 100:
+            shape.LineStyle = 0
+        if shape.FillTransparence == 100:
+            shape.FillTransparence = 0 # for hatching and better modifications on UI 
+            if not _.hatch:
+                shape.FillStyle = 0
         shape.setString(oldshape.getString())
         oldshape.Name = ""
         shape.Name = __ACTUAL__
@@ -949,12 +967,6 @@ def point():
 def __boxshape__(shapetype, l):
     turtle = __getshape__(__TURTLE__)
     shape = __draw__(shapetype + "Shape")
-    if _.hatch:
-        shape.FillBackground = True
-        shape.FillHatch = _.hatch
-        shape.FillStyle = 3
-    else:
-        shape.FillStyle = 1
     pos = turtle.getPosition()
     pos.X = pos.X - (l[0] * __PT_TO_TWIP__ / __MM10_TO_TWIP__ / 2) + turtle.BoundRect.Width / 2.0
     pos.Y = pos.Y - (l[1] * __PT_TO_TWIP__ / __MM10_TO_TWIP__ / 2) + turtle.BoundRect.Height / 2.0
@@ -966,6 +978,18 @@ def __boxshape__(shapetype, l):
     shape.LineCap = _.linecap
     shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
     shape.FillColor, shape.FillTransparence = __splitcolor__(_.areacolor)
+    if _.hatch:
+        shape.FillBackground = True if shape.FillTransparence != 100 else False
+        shape.FillHatch = _.hatch
+        shape.FillStyle = 3
+    else:
+        shape.FillStyle = 1
+    if shape.LineTransparence == 100:
+        shape.LineStyle = 0
+    if shape.FillTransparence == 100:
+        shape.FillTransparence = 0 # for hatching and better modifications on UI 
+        if not _.hatch:
+            shape.FillStyle = 0
     shape.RotateAngle = turtle.RotateAngle
     if shapetype == "Rectangle" and len(l) > 2:
         shape.CornerRadius = (l[2] * __PT_TO_TWIP__) / __MM10_TO_TWIP__
