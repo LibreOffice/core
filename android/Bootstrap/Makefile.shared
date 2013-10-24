@@ -90,6 +90,7 @@ LIBS = \
   $(MYTHES_LIBS) \
   $(wildcard $(WORKDIR)/UnpackedTarball/curl/lib/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/fontconfig/src/.libs/libfontconfig.a) \
+  $(wildcard $(WORKDIR)/UnpackedTarball/freetype/objs/.libs/libfreetype.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/icu/source/lib/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/lcms2/src/.libs/*.a) \
   $(wildcard $(WORKDIR)/UnpackedTarball/libcdr/src/lib/.libs/*.a) \

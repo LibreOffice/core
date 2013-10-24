@@ -1081,6 +1081,7 @@ gb_ExternalProject__use_freetype :=
 else ifeq ($(OS),ANDROID)
 
 define gb_LinkTarget__use_freetype_headers
+$(call gb_LinkTarget_use_external_project,$(1),freetype)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,freetype)/include \
 	$$(INCLUDE) \
@@ -1094,7 +1095,7 @@ $(call gb_LinkTarget_use_external,$(1),freetype_headers)
 endef
 
 define gb_ExternalProject__use_freetype
-$(call gb_ExternalProject_use_package,$(1),freetype)
+$(call gb_ExternalProject_use_external_project,$(1),freetype)
 
 endef
 

@@ -26,7 +26,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			--with-arch=arm \
 			--with-expat-includes=$(call gb_UnpackedTarball_get_dir,expat)/lib \
 			--with-expat-lib=$(gb_StaticLibrary_WORKDIR) \
-			--with-freetype-config=$(OUTDIR)/bin/freetype-config \
+			--with-freetype-config=$(call gb_UnpackedTarball_get_dir,freetype)/builds/unix/freetype-config \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 		&& $(MAKE) \
 	)

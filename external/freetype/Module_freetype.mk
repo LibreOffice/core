@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,freetype))
 ifeq ($(OS),ANDROID)
 
 $(eval $(call gb_Module_add_targets,freetype,\
-	ExternalPackage_freetype \
 	ExternalProject_freetype \
 	UnpackedTarball_freetype \
 ))
