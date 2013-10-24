@@ -3120,10 +3120,4 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
     return aPropertySetArr[nPropertyId];
 }
 
-sal_Bool SwItemPropertySet::FillItem(SfxItemSet& /*rSet*/, sal_uInt16 /*nWhich*/, sal_Bool /*bGetProperty*/) const
-{
-    sal_Bool bRet = sal_False;
-    return bRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

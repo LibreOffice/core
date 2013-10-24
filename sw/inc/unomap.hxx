@@ -306,14 +306,6 @@
 #define WID_TXTCOL_AUTO_DISTANCE        6
 #define WID_TXTCOL_LINE_STYLE           7
 
-class SwItemPropertySet : public SfxItemPropertySet
-{
-protected:
-    virtual sal_Bool            FillItem(SfxItemSet& rSet, sal_uInt16 nWhich, sal_Bool bGetProperty) const;
-public:
-    SwItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :
-        SfxItemPropertySet( pMap ){}
-};
 class SwUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry*        aMapEntriesArr[PROPERTY_MAP_END];
