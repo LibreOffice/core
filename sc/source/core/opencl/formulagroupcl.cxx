@@ -924,6 +924,12 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     mvSubArguments.push_back(SoPHelper<OpCoupdaysnc>(ts,
                         ft->Children[i]));
                 }
+                else if ( !(pChild->GetExternal().compareTo(OUString(
+                   "com.sun.star.sheet.addin.Analysis.getDisc"))))
+                {
+                    mvSubArguments.push_back(SoPHelper<OpDISC>(ts,
+                        ft->Children[i]));
+                }
                 break;
             default:
                 assert(0 && "Unsupported");
