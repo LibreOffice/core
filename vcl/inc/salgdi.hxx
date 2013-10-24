@@ -56,10 +56,7 @@ namespace basegfx {
 // - SalGraphics-Codes -
 // ---------------------
 
-#define SAL_SETFONT_REMOVEANDMATCHNEW       ((sal_uInt16)0x0001)
-#define SAL_SETFONT_USEDRAWTEXT             ((sal_uInt16)0x0002)
 #define SAL_SETFONT_USEDRAWTEXTARRAY        ((sal_uInt16)0x0004)
-#define SAL_SETFONT_UNICODE                 ((sal_uInt16)0x0008)
 #define SAL_SETFONT_BADFONT                 ((sal_uInt16)0x1000)
 
 #define SAL_COPYAREA_WINDOWINVALIDATE       ((sal_uInt16)0x0001)
