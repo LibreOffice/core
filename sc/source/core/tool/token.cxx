@@ -1352,7 +1352,13 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocFisher:
             case ocFisherInv:
             case ocGamma:
-                // Don't change the state.
+            case ocGammaLn:
+            case ocNotAvail:
+            case ocGauss:
+            case ocGeoMean:
+            case ocHarMean:
+            case ocDIA:
+            // Don't change the state.
             break;
             default:
                 meVectorState = FormulaVectorDisabled;
