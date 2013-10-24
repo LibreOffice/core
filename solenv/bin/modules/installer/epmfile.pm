@@ -722,13 +722,6 @@ sub find_epm_on_system
         {
             $epmname = $ENV{'EPM'};
         }
-        elsif ( ($ENV{'EPM'} eq "no") || ($ENV{'EPM'} eq "internal") )
-        {
-            $epmname = "epm";
-            my $epmref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$epmname, $includepatharrayref, 0);
-            if ($$epmref eq "") { installer::exiter::exit_program("ERROR: Could not find program $epmname (EPM set to \"internal\" or \"no\")!", "find_epm_on_system"); }
-            $epmname = $$epmref;
-        }
         else
         {
             installer::exiter::exit_program("Environment variable EPM set (\"$ENV{'EPM'}\"), but file does not exist or is not executable!", "find_epm_on_system");

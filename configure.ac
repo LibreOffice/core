@@ -7362,6 +7362,7 @@ if test "$enable_epm" = "yes"; then
         if test "$EPM" = "no" -o "$EPM" = "internal"; then
             echo "EPM will be built."
             BUILD_TYPE="$BUILD_TYPE EPM"
+            EPM=${WORKDIR}/UnpackedTarball/epm/epm
         else
             # Gentoo has some epm which is something different...
             AC_MSG_CHECKING([whether the found epm is the right epm])
@@ -7377,8 +7378,7 @@ if test "$enable_epm" = "yes"; then
                 AC_MSG_RESULT([OK, >= 3.7])
             else
                 AC_MSG_RESULT([too old. epm >= 3.7 is required.])
-                echo "EPM will be built."
-                BUILD_TYPE="$BUILD_TYPE EPM"
+                AC_MSG_ERROR([Install ESP Package Manager (http://www.msweet.org/projects.php?Z2) and/or specify the path to the right epm])
             fi
         fi
     fi
@@ -7428,7 +7428,7 @@ if test "$enable_epm" = "yes"; then
     fi
     if echo "$PKGFORMAT" | $EGREP rpm 2>&1 >/dev/null || \
        echo "$PKGFORMAT" | $EGREP pkg 2>&1 >/dev/null; then
-        if test "$EPM" != "no" -a "$EPM" != "internal"; then
+        if test "$with_epm" = "no" -a "$_os" != "Darwin"; then
             if test "`echo $EPM_VERSION | cut -d'.' -f1`" -lt "4"; then
                 AC_MSG_CHECKING([whether epm is patched for LibreOffice's needs])
                 if grep "Patched for LibreOffice" $EPM >/dev/null 2>/dev/null; then
