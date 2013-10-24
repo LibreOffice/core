@@ -1550,10 +1550,9 @@ public:
                     // the row heights are always compared.
     SCROW           GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCareManualSize = true) const;
 
-    // returns whether to export a Default style for this col/row or not
-    // nDefault is setted to one possition in the current row/col where the Default style is
+    // returns whether to export a Default style for this col or not
+    // nDefault is setted to one possition in the current row where the Default style is
     bool            GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault);
-    bool            GetRowDefault( SCTAB nTab, SCROW nRow, SCCOL nLastCol, SCCOL& nDefault);
 
     bool            UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bShow );
     bool            UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bShow );
