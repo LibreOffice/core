@@ -1040,6 +1040,7 @@ def label(st):
     # get text size 
     shape = _.doc.createInstance( "com.sun.star.drawing.TextShape")
     shape.TextAutoGrowWidth = True
+    shape.Visible = False
     actual = __getshape__(__ACTUAL__)
     _.drawpage.add(shape)
     text(shape, st[2])
