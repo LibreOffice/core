@@ -81,6 +81,7 @@ public:
     void testStatisticalFormulaCorrel();
     void testFinancialCoupdaysFormula();
     void testFinancialCoupdaysncFormula();
+    void testFinacialDISCFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSGroundWater);
@@ -109,6 +110,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaCorrel);
     CPPUNIT_TEST(testFinancialCoupdaysFormula);
     CPPUNIT_TEST(testFinancialCoupdaysncFormula);
+    CPPUNIT_TEST(testFinacialDISCFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -934,6 +936,27 @@ void ScOpenclTest::testFinacialDollarfrFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-71]
+void ScOpenclTest::testFinacialDISCFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/DISC.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/DISC.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(5, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(5, i, 0));
         //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
