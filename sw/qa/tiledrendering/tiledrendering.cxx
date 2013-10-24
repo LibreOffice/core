@@ -56,9 +56,9 @@ class TiledRenderingDialog: public ModalDialog{
 private:
     TiledRenderingApp * app;
 public:
-    TiledRenderingDialog(TiledRenderingApp * app) :
+    TiledRenderingDialog(TiledRenderingApp * app_) :
         ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "qa/sw/ui/tiledrendering.ui"),
-        app(app)
+        app(app_)
     {
         PushButton * renderButton;
         get(renderButton,"buttonRenderTile");
