@@ -48,6 +48,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 // generated c++ interfaces
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -66,8 +67,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::foo;
 
-
-//========================================================================
 class MyCounterImpl
     : public XCountable
     , public XServiceInfo
@@ -113,41 +112,29 @@ public:
         { return (--m_nCount); }
 };
 
-//*************************************************************************
 OUString SAL_CALL MyCounterImpl::getImplementationName(  )
     throw(RuntimeException)
 {
     return OUString( IMPLNAME );
 }
 
-//*************************************************************************
 sal_Bool SAL_CALL MyCounterImpl::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//*************************************************************************
 Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-//*************************************************************************
 Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames_Static(  )
 {
     OUString aName( SERVICENAME );
     return Sequence< OUString >( &aName, 1 );
 }
-
-
-
 
 /**
  * Function to create a new component instance; is needed by factory helper implementation.

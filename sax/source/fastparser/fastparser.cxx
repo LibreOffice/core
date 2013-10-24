@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "fastparser.hxx"
 
@@ -706,14 +707,7 @@ OUString FastSaxParser::getImplementationName() throw (RuntimeException)
 // XServiceInfo
 sal_Bool FastSaxParser::supportsService(const OUString& ServiceName) throw (RuntimeException)
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo

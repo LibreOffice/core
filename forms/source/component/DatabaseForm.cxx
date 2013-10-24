@@ -67,6 +67,7 @@
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
 #include <svl/inettype.hxx>
@@ -3841,31 +3842,20 @@ Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames() throw( R
     // better solution _may_ be to return the compatible names at runtime, too
 }
 
-//------------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseForm::supportsService(const OUString& ServiceName) throw( RuntimeException )
 {
-    Sequence< OUString > aSupported( getSupportedServiceNames() );
-    const OUString* pArray = aSupported.getConstArray();
-    for( sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray )
-        if( pArray->equals( ServiceName ) )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//==============================================================================
 // com::sun::star::io::XPersistObject
-//------------------------------------------------------------------------------
-
 const sal_uInt16 CYCLE              = 0x0001;
 const sal_uInt16 DONTAPPLYFILTER    = 0x0002;
 
-//------------------------------------------------------------------------------
 OUString ODatabaseForm::getServiceName() throw( RuntimeException )
 {
     return OUString(FRM_COMPONENT_FORM);  // old (non-sun) name for compatibility !
 }
 
-//------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutStream) throw( IOException, RuntimeException )
 {
     DBG_ASSERT(m_xAggregateSet.is(), "ODatabaseForm::write : only to be called if the aggregate exists !");

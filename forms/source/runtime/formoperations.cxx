@@ -57,6 +57,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
 
@@ -183,35 +184,27 @@ namespace frm
         throw IllegalArgumentException( OUString(), *this, 0 );
     }
 
-    //--------------------------------------------------------------------
     OUString SAL_CALL FormOperations::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_Static();
     }
 
-    //--------------------------------------------------------------------
     ::sal_Bool SAL_CALL FormOperations::supportsService( const OUString& _ServiceName ) throw (RuntimeException)
     {
-        Sequence< OUString > aSupportedServiceNames( getSupportedServiceNames() );
-        const OUString* pBegin = aSupportedServiceNames.getConstArray();
-        const OUString* pEnd = aSupportedServiceNames.getConstArray() + aSupportedServiceNames.getLength();
-        return ::std::find( pBegin, pEnd, _ServiceName ) != pEnd;
+        return cppu::supportsService(this, _ServiceName);
     }
 
-    //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL FormOperations::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
 
-    //--------------------------------------------------------------------
     Reference< XRowSet > SAL_CALL FormOperations::getCursor() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_xCursor;
     }
 
-    //--------------------------------------------------------------------
     Reference< XResultSetUpdate > SAL_CALL FormOperations::getUpdateCursor() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );

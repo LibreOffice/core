@@ -33,6 +33,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <expat.h>
 
@@ -629,14 +630,7 @@ OUString SaxExpatParser::getImplementationName() throw ()
 // XServiceInfo
 sal_Bool SaxExpatParser::supportsService(const OUString& ServiceName) throw ()
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo

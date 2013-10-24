@@ -34,6 +34,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/byteseq.hxx>
@@ -1014,7 +1015,6 @@ static inline sal_Bool isFirstCharWhitespace( const sal_Unicode *p ) throw()
     return *p == ' ';
 }
 
-
 // XServiceInfo
 OUString SAXWriter::getImplementationName() throw()
 {
@@ -1024,14 +1024,7 @@ OUString SAXWriter::getImplementationName() throw()
 // XServiceInfo
 sal_Bool SAXWriter::supportsService(const OUString& ServiceName) throw()
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
@@ -1041,8 +1034,6 @@ Sequence< OUString > SAXWriter::getSupportedServiceNames(void) throw ()
     seq.getArray()[0] = SaxWriter_getServiceName();
     return seq;
 }
-
-
 
 void SAXWriter::startDocument()                     throw(SAXException, RuntimeException )
 {

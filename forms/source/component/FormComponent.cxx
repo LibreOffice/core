@@ -44,6 +44,7 @@
 #include <comphelper/property.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -226,7 +227,6 @@ void OControl::initFormControlPeer( const Reference< XWindowPeer >& /*_rxPeer*/ 
 }
 
 // OComponentHelper
-//------------------------------------------------------------------------------
 void OControl::disposing()
 {
     OComponentHelper::disposing();
@@ -239,18 +239,11 @@ void OControl::disposing()
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
 sal_Bool SAL_CALL OControl::supportsService(const OUString& _rsServiceName) throw ( RuntimeException)
 {
-    Sequence<OUString> aSupported = getSupportedServiceNames();
-    const OUString* pSupported = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-        if (pSupported->equals(_rsServiceName))
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, _rsServiceName);
 }
 
-//------------------------------------------------------------------------------
 Sequence< OUString > OControl::getAggregateServiceNames()
 {
     Sequence< OUString > aAggServices;
@@ -260,7 +253,6 @@ Sequence< OUString > OControl::getAggregateServiceNames()
     return aAggServices;
 }
 
-//------------------------------------------------------------------------------
 Sequence<OUString> SAL_CALL OControl::getSupportedServiceNames() throw(RuntimeException)
 {
     return ::comphelper::concatSequences(
@@ -728,7 +720,6 @@ void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent)
 }
 
 // XNamed
-//------------------------------------------------------------------------------
 OUString SAL_CALL OControlModel::getName() throw(RuntimeException)
 {
     OUString aReturn;
@@ -736,25 +727,17 @@ OUString SAL_CALL OControlModel::getName() throw(RuntimeException)
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
 void SAL_CALL OControlModel::setName(const OUString& _rName) throw(RuntimeException)
 {
         setFastPropertyValue(PROPERTY_ID_NAME, makeAny(_rName));
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
 sal_Bool SAL_CALL OControlModel::supportsService(const OUString& _rServiceName) throw ( RuntimeException)
 {
-    Sequence<OUString> aSupported = getSupportedServiceNames();
-    const OUString* pSupported = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-        if (pSupported->equals(_rServiceName))
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------------------
 Sequence< OUString > OControlModel::getAggregateServiceNames()
 {
     Sequence< OUString > aAggServices;
@@ -764,7 +747,6 @@ Sequence< OUString > OControlModel::getAggregateServiceNames()
     return aAggServices;
 }
 
-//------------------------------------------------------------------------------
 Sequence<OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
     return ::comphelper::concatSequences(
@@ -773,7 +755,6 @@ Sequence<OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw(Runt
     );
 }
 
-//------------------------------------------------------------------------------
 Sequence< OUString > SAL_CALL OControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     Sequence< OUString > aServiceNames( 2 );

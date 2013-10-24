@@ -20,6 +20,7 @@
 #include "supservs.hxx"
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/sharedmutex.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
@@ -118,13 +119,7 @@ OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getImplementationName(  
 
 sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< OUString > aServices = getSupportedServiceNames();
-    const OUString* pServices = aServices.getConstArray();
-    for (sal_Int32 i=0; i<aServices.getLength(); ++i, ++pServices)
-        if (pServices->equals(_rServiceName))
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 Sequence< OUString > SAL_CALL SvNumberFormatsSupplierServiceObject::getSupportedServiceNames(  ) throw(RuntimeException)

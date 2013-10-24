@@ -68,6 +68,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <vector>
 #include <boost/unordered_map.hpp>
 
@@ -320,8 +321,6 @@ uno::Sequence<double> SAL_CALL SolverComponent::getSolution() throw(uno::Runtime
     return maSolution;
 }
 
-// -------------------------------------------------------------------------
-
 void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
 {
     uno::Reference<frame::XModel> xModel( mxDoc, uno::UNO_QUERY );
@@ -568,8 +567,6 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
     delete_lp( lp );
 }
 
-// -------------------------------------------------------------------------
-
 // XServiceInfo
 
 uno::Sequence< OUString > SolverComponent_getSupportedServiceNames()
@@ -591,10 +588,7 @@ OUString SAL_CALL SolverComponent::getImplementationName() throw(uno::RuntimeExc
 
 sal_Bool SAL_CALL SolverComponent::supportsService( const OUString& rServiceName ) throw(uno::RuntimeException)
 {
-    const uno::Sequence< OUString > aServices = SolverComponent_getSupportedServiceNames();
-    const OUString* pArray = aServices.getConstArray();
-    const OUString* pArrayEnd = pArray + aServices.getLength();
-    return ::std::find( pArray, pArrayEnd, rServiceName ) != pArrayEnd;
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL SolverComponent::getSupportedServiceNames() throw(uno::RuntimeException)
@@ -607,8 +601,6 @@ uno::Reference<uno::XInterface> SolverComponent_createInstance( const uno::Refer
 {
     return (cppu::OWeakObject*) new SolverComponent( rSMgr );
 }
-
-// -------------------------------------------------------------------------
 
 extern "C"
 {

@@ -39,6 +39,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/supportsService.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "propertyids.hxx"
 
@@ -53,13 +54,12 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-//------------------------------------------------------------------------------
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 ::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)    \
 {
     return ::rtl::OUString("com.sun.star.sdbcx.skeleton.ResultSet");
 }
-// -------------------------------------------------------------------------
+
  Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< ::rtl::OUString > aSupported(2);
@@ -67,19 +67,12 @@ using namespace com::sun::star::util;
     aSupported[1] = ::rtl::OUString("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw( RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
-    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
-        ;
-
-    return pSupported != pEnd;
+    return cppu::supportsService(this, _rServiceName);
 }
 
-// -------------------------------------------------------------------------
 OResultSet::OResultSet(OStatement_Base* pStmt)
     : OResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
@@ -90,11 +83,11 @@ OResultSet::OResultSet(OStatement_Base* pStmt)
     ,m_bWasNull(sal_True)
 {
 }
-// -------------------------------------------------------------------------
+
 OResultSet::~OResultSet()
 {
 }
-// -------------------------------------------------------------------------
+
 void OResultSet::disposing(void)
 {
     OPropertySetHelper::disposing();

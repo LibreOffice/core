@@ -26,6 +26,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "xfactory.hxx"
 #include "xstorage.hxx"
@@ -282,13 +283,7 @@ OUString SAL_CALL OStorageFactory::getImplementationName()
 sal_Bool SAL_CALL OStorageFactory::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
-
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName == aSeq[nInd] )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL OStorageFactory::getSupportedServiceNames()

@@ -19,6 +19,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "sddll.hxx"
 #include "sdmod.hxx"
@@ -133,16 +134,7 @@ OUString SAL_CALL SdUnoModule::getImplementationName(  ) throw(uno::RuntimeExcep
 
 sal_Bool SAL_CALL SdUnoModule::supportsService( const OUString& sServiceName ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames();
-    const OUString*           pArray          = seqServiceNames.getConstArray();
-    for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
-    {
-        if ( pArray[nCounter] == sServiceName )
-        {
-            return sal_True ;
-        }
-    }
-    return sal_False ;
+    return cppu::supportsService(this, sServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  ) throw(uno::RuntimeException)
