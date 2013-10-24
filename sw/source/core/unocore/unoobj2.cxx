@@ -106,24 +106,11 @@
 #include <boost/bind.hpp>
 #include <switerator.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 
 namespace sw {
-
-sal_Bool SupportsServiceImpl(
-        size_t const nServices, char const*const pServices[],
-        OUString const & rServiceName)
-{
-    for (size_t i = 0; i < nServices; ++i)
-    {
-        if (rServiceName.equalsAscii(pServices[i]))
-        {
-            return sal_True;
-        }
-    }
-    return sal_False;
-}
 
 uno::Sequence< OUString >
 GetSupportedServiceNamesImpl(
@@ -535,8 +522,7 @@ sal_Bool SAL_CALL
 SwXParagraphEnumeration::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            g_nServicesParagraphEnum, g_ServicesParagraphEnum, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -917,8 +903,7 @@ static const size_t g_nServicesTextRange(
 sal_Bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            g_nServicesTextRange, g_ServicesTextRange, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -1644,8 +1629,7 @@ static const size_t g_nServicesTextRanges(
 sal_Bool SAL_CALL SwXTextRanges::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            g_nServicesTextRanges, g_ServicesTextRanges, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -1939,8 +1923,7 @@ sal_Bool SAL_CALL
 SwXParaFrameEnumeration::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            g_nServicesParaFrameEnum, g_ServicesParaFrameEnum, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

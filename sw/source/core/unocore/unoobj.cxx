@@ -19,6 +19,7 @@
 
 #include <com/sun/star/table/TableSortField.hpp>
 #include <comphelper/string.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/endian.h>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -919,8 +920,7 @@ static const size_t g_nServicesTextCursor(
 sal_Bool SAL_CALL SwXTextCursor::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            g_nServicesTextCursor, g_ServicesTextCursor, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

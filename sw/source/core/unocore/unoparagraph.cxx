@@ -20,6 +20,7 @@
 #include <unoparagraph.hxx>
 
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <cmdid.h>
 #include <unomid.h>
@@ -305,8 +306,7 @@ sal_Bool SAL_CALL
 SwXParagraph::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            g_nServicesParagraph, g_ServicesParagraph, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

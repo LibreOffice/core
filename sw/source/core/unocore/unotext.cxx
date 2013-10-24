@@ -30,6 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <cmdid.h>
 #include <unotextbodyhf.hxx>
@@ -2408,8 +2409,7 @@ static const size_t g_nServicesBodyText(
 sal_Bool SAL_CALL SwXBodyText::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            g_nServicesBodyText, g_ServicesBodyText, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -2702,9 +2702,7 @@ static char const*const g_ServicesHeadFootText[] =
 sal_Bool SAL_CALL SwXHeadFootText::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            SAL_N_ELEMENTS(g_ServicesHeadFootText),
-            g_ServicesHeadFootText, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
