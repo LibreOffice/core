@@ -3673,14 +3673,14 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         aCorrectedSymbol = "";
     }
     sal_uInt8 nForced = 0;   // ==formula forces recalc even if cell is not visible
-    if( aFormula[nSrcPos] == '=' )
+    if( nSrcPos < aFormula.getLength() && aFormula[nSrcPos] == '=' )
     {
         nSrcPos++;
         nForced++;
         if ( bAutoCorrect )
             aCorrectedFormula += "=";
     }
-    if( aFormula[nSrcPos] == '=' )
+    if( nSrcPos < aFormula.getLength() && aFormula[nSrcPos] == '=' )
     {
         nSrcPos++;
         nForced++;

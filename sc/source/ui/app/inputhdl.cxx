@@ -2247,11 +2247,15 @@ void ScInputHandler::UpdateFormulaMode()
 {
     SfxApplication* pSfxApp = SFX_APP();
 
-    if ( pEngine->GetParagraphCount() == 1 &&
-         ( pEngine->GetText(0)[0] == '=' ||
-           pEngine->GetText(0)[0] == '+' ||
-           pEngine->GetText(0)[0] == '-' ) &&
-         !bProtected )
+    bool bIsFormula = !bProtected && pEngine->GetParagraphCount() == 1;
+    if (bIsFormula)
+    {
+        const OUString& rText = pEngine->GetText(0);
+        bIsFormula = !rText.isEmpty() &&
+            (rText[0] == '=' || rText[0] == '+' || rText[0] == '-');
+    }
+
+    if ( bIsFormula )
     {
         if (!bFormulaMode)
         {
