@@ -33,10 +33,7 @@ struct SwPosition;
 struct SwCrsrMoveState;
 class SwAttrSetChg;
 class Font;
-
-// #i28701# - replaced by class <SwSortedObjs>
 class SwSortedObjs;
-// #i28701#
 class SwAnchoredObject;
 
 enum SwPageChg
@@ -51,7 +48,6 @@ class SwPageFrm: public SwFtnBossFrm
 {
     friend class SwFrm;
 
-    // #i28701# - use <SwSortedObjs>
     SwSortedObjs *pSortedObjs;
 
     SwPageDesc *pDesc;      //PageDesc der die Seite beschreibt.
@@ -123,7 +119,6 @@ public:
     const SwSortedObjs  *GetSortedObjs() const  { return pSortedObjs; }
           SwSortedObjs  *GetSortedObjs()          { return pSortedObjs; }
 
-    // #i28701# - new methods to append/remove drawing objects
     void AppendDrawObjToPage( SwAnchoredObject& _rNewObj );
     void RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj );
 
@@ -157,7 +152,6 @@ public:
     //Schickt an alle ContentFrames ein Prepare wg. geaenderter Registervorlage
     void PrepareRegisterChg();
 
-    // #i50432# - adjust method description and synopsis.
     // Appends a fly frame - the given one or a new one - at the page frame.
     // Needed for <Modify> and <MakeFrms>
     // - return value not needed any more
@@ -260,9 +254,6 @@ public:
 
     /** paint page border and shadow
 
-        #i9719#
-        implement paint of page border and shadow
-
         @param _rPageRect
         input parameter - constant instance reference of the page rectangle.
         Generally, it's the frame area of the page, but for empty pages in print
@@ -290,8 +281,6 @@ public:
                                       bool bRightSidebar );
 
     /** get bound rectangle of border and shadow for repaints
-
-        #i9719#
 
         @param _rPageRect
         input parameter - constant instance reference of the page rectangle.

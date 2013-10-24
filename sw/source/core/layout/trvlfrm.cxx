@@ -49,13 +49,11 @@
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
 #include <dcontact.hxx>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 #include <txatbase.hxx>
 #include <fmtfld.hxx>
 #include <fldbas.hxx>
 
-// FLT_MAX
 #include <cfloat>
 #include <swselectionlist.hxx>
 
@@ -1608,8 +1606,6 @@ Point SwRootFrm::GetPagePos( sal_uInt16 nPageNum ) const
 }
 
 /** get page frame by phyiscal page number
- *
- * OD 14.01.2003 #103492#
  *
  * @return pointer to the page frame with the given physical page number
  */
