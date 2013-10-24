@@ -13,7 +13,6 @@ $(eval $(call gb_Module_Module,cppuhelper))
 $(eval $(call gb_Module_add_targets,cppuhelper,\
 	InternalUnoApi_cppuhelper \
 	Library_cppuhelper \
-	Package_unorc \
 	StaticLibrary_findsofficepath \
 ))
 
