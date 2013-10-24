@@ -799,6 +799,10 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 mvSubArguments.push_back(SoPHelper<OpSYD>(ts,
                     ft->Children[i]));
                 break;
+            case ocCorrel:
+                mvSubArguments.push_back(SoPHelper<OpCorrel>(ts,
+                    ft->Children[i]));
+                break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getEffect"))))
