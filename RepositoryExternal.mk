@@ -2810,11 +2810,13 @@ gb_ExternalProject__use_commons-logging :=
 
 else # !SYSTEM_APACHE_COMMONS
 
+$(eval $(call gb_Helper_register_jars,OOO,\
+	commons-logging-1.1.1 \
+))
 $(eval $(call gb_Helper_register_jars,OXT,\
 	commons-codec-1.6 \
 	commons-httpclient-3.1 \
 	commons-lang-2.4 \
-	commons-logging-1.1.1 \
 ))
 
 define gb_Jar__use_commons-codec
@@ -2896,7 +2898,7 @@ endef
 
 else # !SYSTEM_JFREEREPORT
 
-$(eval $(call gb_Helper_register_jars,OXT,\
+$(eval $(call gb_Helper_register_jars,OOO,\
 	flow-engine-0.9.4 \
 	flute-1.1.6 \
 	libbase-1.1.6 \
