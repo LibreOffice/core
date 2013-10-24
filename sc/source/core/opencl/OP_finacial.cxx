@@ -77,6 +77,69 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "NOMINAL_ADD"; }
 };
+class OpDollarde:public Normal
+{
+public:
+        virtual std::string GetBottom(void) { return "0"; }
+        virtual void GenSlidingWindowFunction(std::stringstream &ss,
+        const std::string sSymName, SubArguments &vSubArguments)
+        {
+            ss << "\ndouble " << sSymName;
+            ss << "_"<< BinFuncName() <<"(";
+            for (unsigned i = 0; i < vSubArguments.size(); i++)
+            {
+                if (i)
+                    ss << ",";
+                vSubArguments[i]->GenSlidingWindowDecl(ss);
+            }
+            ss << ") {\n\t";
+            ss << "double tmp = " << GetBottom() <<";\n\t";
+            ss << "int gid0 = get_global_id(0);\n\t";
+            ss << "double fInt = " << GetBottom() <<";\n\t";
+            ss << "double dollar;\n\t";
+            ss << "double fFrac;\n\t";
+            #ifdef ISNAN
+            FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+            const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+            formula::SingleVectorRefToken *>(tmpCur0);
+            FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+            const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+            formula::SingleVectorRefToken *>(tmpCur1);
+            ss<< "int buffer_dollar_len = ";
+            ss<< tmpCurDVR0->GetArrayLength();
+            ss << ";\n\t";
+            ss<< "int buffer_frac_len = ";
+            ss<< tmpCurDVR1->GetArrayLength();
+            ss << ";\n\t";
+            #endif
+            #ifdef ISNAN
+            ss<<"if((gid0)>=buffer_dollar_len || isNan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss<<"))\n\t\t";
+            ss<<"dollar = 0;\n\telse \n\t\t";
+            #endif
+            ss<<"dollar = ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss<<";\n\t";
+            #ifdef ISNAN
+            ss<<"if((gid0)>=buffer_frac_len || isNan(";
+            ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+            ss<<"))\n\t\t";
+            ss<<"fFrac = 0;\n\telse \n\t\t";
+            #endif
+            ss<<"fFrac = ";
+            ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+            ss<<";\n\t";
+            ss << "tmp = modf( dollar , &fInt );\n\t";
+            ss << "tmp /= fFrac;\n\t";
+            ss << "tmp *= pow( 10.0 , ceil( log10(fFrac ) ) );\n\t";
+            ss << "tmp += fInt;\t";
+            ss << "\n\treturn tmp;\n";
+            ss << "}";
+        }
+virtual std::string BinFuncName(void) const { return "Dollarde"; }
+
+};
 class Fvschedule: public Normal
 {
 public:
