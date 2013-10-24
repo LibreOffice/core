@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <boost/shared_ptr.hpp>
 
 namespace dbaui

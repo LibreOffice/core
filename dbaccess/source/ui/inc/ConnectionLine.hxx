@@ -20,7 +20,7 @@
 #define DBAUI_CONNECTIONLINE_HXX
 
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include "ConnectionLineData.hxx"
 #include <functional>
 

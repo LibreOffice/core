@@ -63,9 +63,9 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <rtl/ustring.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <tools/diagnose_ex.h>
-#include <tools/string.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <boost/mem_fn.hpp>

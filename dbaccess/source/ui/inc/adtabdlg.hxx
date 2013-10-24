@@ -20,15 +20,13 @@
 #define DBAUI_QYDLGTAB_HXX
 
 #include <vcl/dialog.hxx>
-
 #include <vcl/button.hxx>
-
 #include <vcl/fixed.hxx>
 
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 #include <vcl/lstbox.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include "tabletree.hxx"
 

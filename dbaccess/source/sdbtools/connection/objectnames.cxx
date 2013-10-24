@@ -33,7 +33,6 @@
 #include <connectivity/sqlerror.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/string.hxx>
 
 #include <boost/shared_ptr.hpp>
 

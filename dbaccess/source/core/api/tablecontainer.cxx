@@ -48,7 +48,7 @@
 #include "ContainerMediator.hxx"
 #include "definitioncolumn.hxx"
 #include "objectnameapproval.hxx"
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace dbaccess;

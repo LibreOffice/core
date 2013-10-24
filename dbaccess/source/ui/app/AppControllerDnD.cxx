@@ -65,7 +65,6 @@
 #include <vcl/lstbox.hxx>
 #include <connectivity/dbtools.hxx>
 #include "sqlmessage.hxx"
-#include <tools/string.hxx>
 #include "dbexchange.hxx"
 #include "UITools.hxx"
 #include <algorithm>
