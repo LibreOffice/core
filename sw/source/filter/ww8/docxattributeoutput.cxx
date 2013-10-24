@@ -2660,8 +2660,136 @@ void DocxAttributeOutput::DocDefaults( )
     m_pSerializer->endElementNS(XML_w, XML_docDefaults);
 }
 
+void DocxAttributeOutput::TableStyles()
+{
+    // Do we have table styles from InteropGrabBag available?
+    uno::Reference<beans::XPropertySet> xPropertySet(m_rExport.pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aInteropGrabBag;
+    xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
+    uno::Sequence<beans::PropertyValue> aTableStyles;
+    for (sal_Int32 i = 0; i < aInteropGrabBag.getLength(); ++i)
+    {
+        if (aInteropGrabBag[i].Name == "tableStyles")
+        {
+            aInteropGrabBag[i].Value >>= aTableStyles;
+            break;
+        }
+    }
+    if (!aTableStyles.getLength())
+        return;
+
+    for (sal_Int32 i = 0; i < aTableStyles.getLength(); ++i)
+    {
+        uno::Sequence<beans::PropertyValue> aTableStyle;
+        aTableStyles[i].Value >>= aTableStyle;
+        TableStyle(aTableStyle);
+    }
+}
+
+StringTokenMap const aTblCellMarTokens[] = {
+    {"left", XML_left},
+    {"right", XML_right},
+    {"start", XML_start},
+    {"end", XML_end},
+    {"top", XML_top},
+    {"bottom", XML_bottom},
+    {0, 0}
+};
+
+/// Export of w:tblCellMar in a table style.
+void lcl_TableStyleTblCellMar(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTblCellMar)
+{
+    if (!rTblCellMar.hasElements())
+        return;
+
+    pSerializer->startElementNS(XML_w, XML_tblCellMar, FSEND);
+    for (sal_Int32 i = 0; i < rTblCellMar.getLength(); ++i)
+    {
+        if (sal_Int32 nToken = lcl_getToken(aTblCellMarTokens, rTblCellMar[i].Name))
+        {
+            comphelper::SequenceAsHashMap aMap(rTblCellMar[i].Value.get< uno::Sequence<beans::PropertyValue> >());
+            pSerializer->singleElementNS(XML_w, nToken,
+                    FSNS(XML_w, XML_w), OString::number(aMap["w"].get<sal_Int32>()),
+                    FSNS(XML_w, XML_type), OUStringToOString(aMap["type"].get<OUString>(), RTL_TEXTENCODING_UTF8).getStr(),
+                    FSEND);
+        }
+    }
+    pSerializer->endElementNS(XML_w, XML_tblCellMar);
+}
+
+/// Export of w:tblInd in a table style.
+void lcl_TableStyleTblInd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTblInd)
+{
+    if (!rTblInd.hasElements())
+        return;
+
+    sax_fastparser::FastAttributeList* pAttributeList = pSerializer->createAttrList();
+    for (sal_Int32 i = 0; i < rTblInd.getLength(); ++i)
+    {
+        if (rTblInd[i].Name == "w")
+            pAttributeList->add(FSNS(XML_w, XML_w), OString::number(rTblInd[i].Value.get<sal_Int32>()));
+        else if (rTblInd[i].Name == "type")
+            pAttributeList->add(FSNS(XML_w, XML_type), OUStringToOString(rTblInd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+    }
+    XFastAttributeListRef xAttributeList(pAttributeList);
+    pSerializer->singleElementNS(XML_w, XML_tblInd, xAttributeList);
+}
+
+/// Export of w:tblPr in a table style.
+void lcl_TableStyleTblPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTblPr)
+{
+    if (!rTblPr.hasElements())
+        return;
+
+    pSerializer->startElementNS(XML_w, XML_tblPr, FSEND);
+
+    uno::Sequence<beans::PropertyValue> aTblInd, aTblCellMar;
+    for (sal_Int32 i = 0; i < rTblPr.getLength(); ++i)
+    {
+        if (rTblPr[i].Name == "tblInd")
+            aTblInd = rTblPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rTblPr[i].Name == "tblCellMar")
+            aTblCellMar = rTblPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+    }
+    lcl_TableStyleTblInd(pSerializer, aTblInd);
+    lcl_TableStyleTblCellMar(pSerializer, aTblCellMar);
+
+    pSerializer->endElementNS(XML_w, XML_tblPr);
+}
+
+void DocxAttributeOutput::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle)
+{
+    bool bDefault = false;
+    OUString aStyleId, aName;
+    uno::Sequence<beans::PropertyValue> aTblPr;
+    for (sal_Int32 i = 0; i < rStyle.getLength(); ++i)
+    {
+        if (rStyle[i].Name == "default")
+            bDefault = rStyle[i].Value.get<sal_Bool>();
+        else if (rStyle[i].Name == "styleId")
+            aStyleId = rStyle[i].Value.get<OUString>();
+        else if (rStyle[i].Name == "name")
+            aName = rStyle[i].Value.get<OUString>();
+        else if (rStyle[i].Name == "tblPr")
+            aTblPr = rStyle[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+    }
+    m_pSerializer->startElementNS(XML_w, XML_style,
+            FSNS(XML_w, XML_type), "table",
+            FSNS(XML_w, XML_default), bDefault ? "true" : "false",
+            FSNS(XML_w, XML_styleId), OUStringToOString(aStyleId, RTL_TEXTENCODING_UTF8).getStr(),
+            FSEND);
+    m_pSerializer->singleElementNS(XML_w, XML_name,
+            FSNS(XML_w, XML_val), OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr(),
+            FSEND);
+
+    lcl_TableStyleTblPr(m_pSerializer, aTblPr);
+
+    m_pSerializer->endElementNS(XML_w, XML_style);
+}
+
 void DocxAttributeOutput::EndStyles( sal_uInt16 /*nNumberOfStyles*/ )
 {
+    TableStyles();
     m_pSerializer->endElementNS( XML_w, XML_styles );
 }
 

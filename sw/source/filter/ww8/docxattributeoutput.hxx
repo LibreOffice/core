@@ -217,6 +217,10 @@ public:
     /// Write latent styles.
     void LatentStyles();
 
+    /// Write table styles from InteropGrabBag.
+    void TableStyles();
+    void TableStyle(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rStyle);
+
     /** Similar to OutputItem(), but write something only if it is not the default.
 
         This is to output the docDefaults, and we should write something out
