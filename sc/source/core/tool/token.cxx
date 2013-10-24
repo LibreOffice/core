@@ -1358,6 +1358,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocGeoMean:
             case ocHarMean:
             case ocDIA:
+            case ocCorrel:
             // Don't change the state.
             break;
             default:
