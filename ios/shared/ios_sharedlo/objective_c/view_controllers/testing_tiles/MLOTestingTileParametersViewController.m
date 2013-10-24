@@ -39,12 +39,12 @@ static const CGFloat RENDER_BUTTON_HEIGHT = 50.0f;
 }
 
 -(void)initParams{
-    self.params = @[[self createParam:@"contextWidth"   extractor:^(CGFloat value){self.contextWidth = value;} value:100],
-                    [self createParam:@"contextHeight"  extractor:^(CGFloat value){self.contextHeight = value;} value:100],
+    self.params = @[[self createParam:@"contextWidth"   extractor:^(CGFloat value){self.contextWidth = value;} value:300],
+                    [self createParam:@"contextHeight"  extractor:^(CGFloat value){self.contextHeight = value;} value:300],
                     [self createParam:@"tilePosX"       extractor:^(CGFloat value){self.tilePosX = value;} value:0],
                     [self createParam:@"tilePosY"       extractor:^(CGFloat value){self.tilePosY = value;} value:0],
-                    [self createParam:@"tileWidth"      extractor:^(CGFloat value){self.tileWidth = value;} value:100],
-                    [self createParam:@"tileHeight"     extractor:^(CGFloat value){self.tileHeight = value;} value:100]
+                    [self createParam:@"tileWidth"      extractor:^(CGFloat value){self.tileWidth = value;} value:300],
+                    [self createParam:@"tileHeight"     extractor:^(CGFloat value){self.tileHeight = value;} value:300]
                     ];
 }
 
