@@ -28,7 +28,8 @@ $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/%.html : \
 		$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt
 	touch $@
 
-$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : $(call gb_Jar_get_outdir_target,ridl)
+$(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : \
+		$(call gb_Jar_get_target,ridl)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JDC,1)
 	$(JAVADOC) -J-Xmx120m -use -splitindex \
 		-windowtitle "Java UNO Runtime Reference" \
@@ -36,7 +37,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : $(call g
 		-tag attention:a:"Attention:" \
 		-d $(dir $@) \
 		-sourcepath "$(SRCDIR)/ridljar/source/unoloader$(gb_CLASSPATHSEP)$(SRCDIR)/ridljar$(gb_CLASSPATHSEP)$(SRCDIR)/jurt$(gb_CLASSPATHSEP)$(SRCDIR)/javaunohelper" \
-		-classpath $(OUTDIR)/bin/ridl.jar \
+		-classpath $(call gb_Jar_get_target,ridl) \
 		-linkoffline ../../common/reg $(SRCDIR)/odk/docs/java-uno \
 		-linkoffline http://java.sun.com/j2se/1.5/docs/api $(SRCDIR)/odk/docs/java \
 		$(odk_JAVAPACKAGES) \

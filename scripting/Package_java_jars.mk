@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,scripting_java_jars,$(OUTDIR)/bin))
+$(eval $(call gb_Package_Package,scripting_java_jars,$(WORKDIR)/Jar))
 
 $(eval $(call gb_Package_set_outdir,scripting_java_jars,$(INSTROOT)))
 

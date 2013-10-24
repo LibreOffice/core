@@ -15,8 +15,8 @@ $(eval $(call gb_Extension_use_default_description,nlpsolver))
 $(eval $(call gb_Extension_use_default_license,nlpsolver))
 
 $(eval $(call gb_Extension_add_file,nlpsolver,components.rdb,$(SRCDIR)/nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/components.rdb))
-$(eval $(call gb_Extension_add_file,nlpsolver,nlpsolver.jar,$(OUTDIR)/bin/nlpsolver.jar))
-$(eval $(call gb_Extension_add_file,nlpsolver,EvolutionarySolver.jar,$(OUTDIR)/bin/EvolutionarySolver.jar))
+$(eval $(call gb_Extension_add_file,nlpsolver,nlpsolver.jar,$(call gb_Jar_get_target,nlpsolver)))
+$(eval $(call gb_Extension_add_file,nlpsolver,EvolutionarySolver.jar,$(call gb_Jar_get_target,EvolutionarySolver)))
 
 $(eval $(call gb_Extension_add_file,nlpsolver,locale/NLPSolverCommon_en_US.default,$(SRCDIR)/nlpsolver/src/locale/NLPSolverCommon_en_US.default))
 $(eval $(call gb_Extension_add_file,nlpsolver,locale/NLPSolverStatusDialog_en_US.default,$(SRCDIR)/nlpsolver/src/locale/NLPSolverStatusDialog_en_US.default))

@@ -11,9 +11,9 @@
 $(eval $(call gb_Jar_Jar,test))
 
 $(eval $(call gb_Jar_add_manifest_classpath,test,\
-	juh.jar \
-	ridl.jar \
-	unoil.jar \
+	$(call gb_Helper_make_url,$(call gb_Jar_get_target,juh)) \
+	$(call gb_Helper_make_url,$(call gb_Jar_get_target,ridl)) \
+	$(call gb_Helper_make_url,$(call gb_Jar_get_target,unoil)) \
 ))
 
 $(eval $(call gb_Jar_use_jars,test,\

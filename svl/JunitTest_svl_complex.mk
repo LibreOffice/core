@@ -30,6 +30,7 @@ $(eval $(call gb_JunitTest_use_jars,svl_complex,\
     test \
     unoil \
     jurt \
+	juh \
     ConnectivityTools \
 ))
 

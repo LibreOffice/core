@@ -17,6 +17,7 @@ $(call gb_CustomTarget_get_workdir,accessibility/bridge/inc)/WindowsAccessBridge
         $(call gb_Jar_get_target,java_uno_accessbridge)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVH,1)
 	cd $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,java_uno_accessbridge)) && \
-    javah -classpath "$(OUTDIR)/bin/ridl.jar$(gb_CLASSPATHSEP)$(OUTDIR)/bin/unoil.jar$(gb_CLASSPATHSEP)." -o $@ org.openoffice.accessibility.WindowsAccessBridgeAdapter
+    javah -classpath "$(call gb_Jar_get_target,ridl)$(gb_CLASSPATHSEP)$(call gb_Jar_get_target,unoil)$(gb_CLASSPATHSEP)." \
+        -o $@ org.openoffice.accessibility.WindowsAccessBridgeAdapter
 
 # vim: set ts=4 sw=4 et:

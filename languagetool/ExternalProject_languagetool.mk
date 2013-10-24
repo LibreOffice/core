@@ -14,10 +14,10 @@ $(eval $(call gb_ExternalProject_register_targets,languagetool,\
 ))
 
 $(call gb_ExternalProject_get_state_target,languagetool,build) : \
-            $(call gb_Jar_get_outdir_target,juh) \
-            $(call gb_Jar_get_outdir_target,jurt) \
-            $(call gb_Jar_get_outdir_target,ridl) \
-            $(call gb_Jar_get_outdir_target,unoil)
+            $(call gb_Jar_get_target,juh) \
+            $(call gb_Jar_get_target,jurt) \
+            $(call gb_Jar_get_target,ridl) \
+            $(call gb_Jar_get_target,unoil)
 	cd "$(call gb_UnpackedTarball_get_dir,languagetool)" && \
 	$(ICECREAM_RUN) "$(ANT)" \
 		-q \

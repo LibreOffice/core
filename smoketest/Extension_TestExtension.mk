@@ -9,6 +9,6 @@
 
 $(eval $(call gb_Extension_Extension,TestExtension,smoketest/com/sun/star/comp/smoketest,nodeliver))
 
-$(eval $(call gb_Extension_add_file,TestExtension,TestExtension.jar,$(call gb_Jar_get_outdir_target,TestExtension)))
+$(eval $(call gb_Extension_add_file,TestExtension,TestExtension.jar,$(call gb_Jar_get_target,TestExtension)))
 
 # vim: set noet sw=4 ts=4:
