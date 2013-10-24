@@ -449,7 +449,20 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_pap_029__reserved                      0x0479  /* 'pap-029' */
 #define LANGUAGE_ar_145__reserved                       0x4801  /* 'ar-145' */
 #define LANGUAGE_es_419                                 0x580A  /* 'es-419', not reserved, used? */
-#define LANGUAGE_Neither_defined_nor_reserved_0x2008    0x2008
+
+/* Seems these values were used or reserved at one point of time ... */
+#define LANGUAGE_Neither_defined_nor_reserved_0x007B 0x007B
+#define LANGUAGE_Neither_defined_nor_reserved_0x007D 0x007D
+#define LANGUAGE_Neither_defined_nor_reserved_0x0089 0x0089
+#define LANGUAGE_Neither_defined_nor_reserved_0x008A 0x008A
+#define LANGUAGE_Neither_defined_nor_reserved_0x008B 0x008B
+#define LANGUAGE_Neither_defined_nor_reserved_0x008D 0x008D
+#define LANGUAGE_Neither_defined_nor_reserved_0x008E 0x008E
+#define LANGUAGE_Neither_defined_nor_reserved_0x008F 0x008F
+#define LANGUAGE_Neither_defined_nor_reserved_0x0090 0x0090
+#define LANGUAGE_Neither_defined_nor_reserved_0x0827 0x0827
+#define LANGUAGE_Neither_defined_nor_reserved_0x1C0C 0x1C0C
+#define LANGUAGE_Neither_defined_nor_reserved_0x2008 0x2008
 
 /*! use only for import/export of MS documents, number formatter maps it to
  *! LANGUAGE_SYSTEM and then to effective system language */
