@@ -262,13 +262,11 @@ namespace dmapper {
                if (pProperties.get())
                {
                    MeasureHandlerPtr pHandler(new MeasureHandler);
+                   if (m_pCurrentInteropGrabBag)
+                       pHandler->enableInteropGrabBag("tblInd");
                    pProperties->resolve( *pHandler );
                    if (m_pCurrentInteropGrabBag)
-                   {
-                       beans::PropertyValue aValue;
-                       aValue.Name = "tblInd";
-                       m_pCurrentInteropGrabBag->push_back(aValue);
-                   }
+                       m_pCurrentInteropGrabBag->push_back(pHandler->getInteropGrabBag());
                    TablePropertyMapPtr pTblIndMap(new TablePropertyMap);
                    sal_uInt32 nTblInd = pHandler->getMeasureValue();
                    pTblIndMap->setValue( TablePropertyMap::LEFT_MARGIN, nTblInd);

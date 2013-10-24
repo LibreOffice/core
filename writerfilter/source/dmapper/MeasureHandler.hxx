@@ -22,6 +22,7 @@
 #include <WriterFilterDllApi.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace writerfilter {
 namespace dmapper
@@ -35,6 +36,9 @@ class WRITERFILTER_DLLPRIVATE MeasureHandler : public LoggedProperties
     sal_Int32 m_nMeasureValue;
     sal_Int32 m_nUnit;
     sal_Int16 m_nRowHeightSizeType; //table row height type
+
+    OUString m_aInteropGrabBagName;
+    std::vector<beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val);
@@ -50,6 +54,8 @@ public:
     sal_Int32 getUnit() const { return m_nUnit; }
 
     sal_Int16 GetRowHeightSizeType() const { return m_nRowHeightSizeType;}
+    void enableInteropGrabBag(OUString aName);
+    beans::PropertyValue getInteropGrabBag();
 };
 typedef boost::shared_ptr
     < MeasureHandler >  MeasureHandlerPtr;

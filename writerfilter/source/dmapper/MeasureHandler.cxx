@@ -53,9 +53,25 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
     {
         case NS_rtf::LN_unit:
         case NS_ooxml::LN_CT_TblWidth_type:// = 90668;
+        {
             //can be: NS_ooxml::LN_Value_ST_TblWidth_nil, NS_ooxml::LN_Value_ST_TblWidth_pct,
             //        NS_ooxml::LN_Value_ST_TblWidth_dxa, NS_ooxml::LN_Value_ST_TblWidth_auto;
             m_nUnit = nIntValue;
+
+            if (!m_aInteropGrabBagName.isEmpty())
+            {
+                beans::PropertyValue aValue;
+                aValue.Name = "type";
+                switch (nIntValue)
+                {
+                    case NS_ooxml::LN_Value_ST_TblWidth_nil: aValue.Value = uno::makeAny(OUString("nil")); break;
+                    case NS_ooxml::LN_Value_ST_TblWidth_pct: aValue.Value = uno::makeAny(OUString("pct")); break;
+                    case NS_ooxml::LN_Value_ST_TblWidth_dxa: aValue.Value = uno::makeAny(OUString("dxa")); break;
+                    case NS_ooxml::LN_Value_ST_TblWidth_auto: aValue.Value = uno::makeAny(OUString("auto")); break;
+                }
+                m_aInteropGrabBag.push_back(aValue);
+            }
+        }
         break;
         case NS_ooxml::LN_CT_Height_hRule: // 90666;
         {
@@ -103,6 +119,25 @@ sal_Int32 MeasureHandler::getMeasureValue() const
         //NS_ooxml::LN_Value_ST_TblWidth_dxa, NS_ooxml::LN_Value_ST_TblWidth_auto;
     }
     return nRet;
+}
+
+void MeasureHandler::enableInteropGrabBag(OUString aName)
+{
+    m_aInteropGrabBagName = aName;
+}
+
+beans::PropertyValue MeasureHandler::getInteropGrabBag()
+{
+    beans::PropertyValue aRet;
+    aRet.Name = m_aInteropGrabBagName;
+
+    uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
+    beans::PropertyValue* pSeq = aSeq.getArray();
+    for (std::vector<beans::PropertyValue>::iterator i = m_aInteropGrabBag.begin(); i != m_aInteropGrabBag.end(); ++i)
+        *pSeq++ = *i;
+
+    aRet.Value = uno::makeAny(aSeq);
+    return aRet;
 }
 
 } //namespace dmapper
