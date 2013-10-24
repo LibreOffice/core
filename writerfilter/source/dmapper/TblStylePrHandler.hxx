@@ -58,6 +58,7 @@ private:
 
     TblStyleType                m_nType;
     PropertyMapPtr              m_pProperties;
+    std::vector<beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val);

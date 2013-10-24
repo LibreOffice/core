@@ -42,6 +42,7 @@ class TablePropertiesHandler
 private:
     vector< PropertyMapPtr > m_rPropertiesStack;
     PropertyMapPtr m_pCurrentProperties;
+    std::vector<beans::PropertyValue>* m_pCurrentInteropGrabBag;
     DomainMapperTableManager_Base_t *m_pTableManager;
     bool m_bOOXML;
 
@@ -60,6 +61,8 @@ public:
     {
         m_pCurrentProperties = pProperties;
     };
+
+    void SetInteropGrabBag(std::vector<beans::PropertyValue>& rValue);
 
 private:
 

@@ -83,6 +83,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
         default:
             // Tables specific properties have to handled here
             m_pTablePropsHandler->SetProperties( m_pProperties );
+            m_pTablePropsHandler->SetInteropGrabBag(m_aInteropGrabBag);
             bool bRet = m_pTablePropsHandler->sprm( rSprm );
 
             if ( !bRet )
@@ -110,6 +111,13 @@ beans::PropertyValue TblStylePrHandler::getInteropGrabBag(OUString aName)
 {
     beans::PropertyValue aRet;
     aRet.Name = aName;
+
+    uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
+    beans::PropertyValue* pSeq = aSeq.getArray();
+    for (std::vector<beans::PropertyValue>::iterator i = m_aInteropGrabBag.begin(); i != m_aInteropGrabBag.end(); ++i)
+        *pSeq++ = *i;
+
+    aRet.Value = uno::makeAny(aSeq);
     return aRet;
 }
 

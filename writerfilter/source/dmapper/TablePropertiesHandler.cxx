@@ -38,6 +38,7 @@ namespace writerfilter {
 namespace dmapper {
 
     TablePropertiesHandler::TablePropertiesHandler( bool bOOXML ) :
+        m_pCurrentInteropGrabBag(0),
         m_pTableManager( NULL ),
         m_bOOXML( bOOXML )
     {
@@ -262,6 +263,12 @@ namespace dmapper {
                {
                    MeasureHandlerPtr pHandler(new MeasureHandler);
                    pProperties->resolve( *pHandler );
+                   if (m_pCurrentInteropGrabBag)
+                   {
+                       beans::PropertyValue aValue;
+                       aValue.Name = "tblInd";
+                       m_pCurrentInteropGrabBag->push_back(aValue);
+                   }
                    TablePropertyMapPtr pTblIndMap(new TablePropertyMap);
                    sal_uInt32 nTblInd = pHandler->getMeasureValue();
                    pTblIndMap->setValue( TablePropertyMap::LEFT_MARGIN, nTblInd);
@@ -277,6 +284,11 @@ namespace dmapper {
 #endif
 
         return bRet;
+    }
+
+    void TablePropertiesHandler::SetInteropGrabBag(std::vector<beans::PropertyValue>& rValue)
+    {
+        m_pCurrentInteropGrabBag = &rValue;
     }
 }}
 
