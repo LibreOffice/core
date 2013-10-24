@@ -89,56 +89,6 @@ ModalDialog RID_SCDLG_SOLVEROPTIONS
     Text [ en-US ] = "Options" ;
 };
 
-ModalDialog RID_SCDLG_SOLVER_INTEGER
-{
-    OutputSize = TRUE ;
-    HelpId = HID_SC_SOLVER_INTEGER ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 118 , 76 ) ;
-    Moveable = TRUE ;
-    FixedText FT_OPTIONNAME
-    {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
-        Size = MAP_APPFONT ( 106 , 16 ) ;
-        WordBreak = TRUE ;
-        // text is dynamic
-    };
-    NumericField NF_VALUE
-    {
-        HelpID = "sc:NumericField:RID_SCDLG_SOLVER_INTEGER:NF_VALUE";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 27 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
-        TabStop = TRUE ;
-        Spin = TRUE ;
-        SpinSize = 1 ;
-        Repeat = TRUE ;
-        Minimum = -2147483648 ;
-        Maximum = 2147483647 ;
-        First = 0 ;
-        Last = 100 ;
-    };
-    FixedLine FL_BUTTONS
-    {
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 118 , 8 ) ;
-    };
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 6 , 56 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 62 , 56 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    Text [ en-US ] = "Edit Setting" ;
-};
-
 ModalDialog RID_SCDLG_SOLVER_DOUBLE
 {
     OutputSize = TRUE ;

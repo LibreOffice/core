@@ -170,7 +170,6 @@
 
 #define HID_SC_SOLVEROPTIONS                                    "SC_HID_SC_SOLVEROPTIONS"
 #define HID_SC_SOLVEROPTIONS_LB                                 "SC_HID_SC_SOLVEROPTIONS_LB"
-#define HID_SC_SOLVER_INTEGER                                   "SC_HID_SC_SOLVER_INTEGER"
 #define HID_SC_SOLVER_DOUBLE                                    "SC_HID_SC_SOLVER_DOUBLE"
 #define HID_SC_SOLVER_PROGRESS                                  "SC_HID_SC_SOLVER_PROGRESS"
 #define HID_SC_SOLVER_NOSOLUTION                                "SC_HID_SC_SOLVER_NOSOLUTION"

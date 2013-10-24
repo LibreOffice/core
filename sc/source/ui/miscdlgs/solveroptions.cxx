@@ -401,15 +401,12 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
 
 //------------------------------------------------------------------
 
-ScSolverIntegerDialog::ScSolverIntegerDialog( Window * pParent )
-    : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVER_INTEGER ) ),
-    maFtName        ( this, ScResId( FT_OPTIONNAME ) ),
-    maNfValue       ( this, ScResId( NF_VALUE ) ),
-    maFlButtons     ( this, ScResId( FL_BUTTONS ) ),
-    maBtnOk         ( this, ScResId( BTN_OK ) ),
-    maBtnCancel     ( this, ScResId( BTN_CANCEL ) )
+ScSolverIntegerDialog::ScSolverIntegerDialog(Window * pParent)
+    : ModalDialog( pParent, "IntegerDialog",
+        "modules/scalc/ui/integerdialog.ui" )
 {
-    FreeResource();
+    get(m_pFrame, "frame");
+    get(m_pNfValue, "value");
 }
 
 ScSolverIntegerDialog::~ScSolverIntegerDialog()
@@ -418,17 +415,17 @@ ScSolverIntegerDialog::~ScSolverIntegerDialog()
 
 void ScSolverIntegerDialog::SetOptionName( const OUString& rName )
 {
-    maFtName.SetText( rName );
+    m_pFrame->set_label(rName);
 }
 
 void ScSolverIntegerDialog::SetValue( sal_Int32 nValue )
 {
-    maNfValue.SetValue( nValue );
+    m_pNfValue->SetValue( nValue );
 }
 
 sal_Int32 ScSolverIntegerDialog::GetValue() const
 {
-    sal_Int64 nValue = maNfValue.GetValue();
+    sal_Int64 nValue = m_pNfValue->GetValue();
     if ( nValue < SAL_MIN_INT32 )
         return SAL_MIN_INT32;
     if ( nValue > SAL_MAX_INT32 )

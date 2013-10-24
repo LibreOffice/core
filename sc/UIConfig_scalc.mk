@@ -86,6 +86,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/insertcells \
 	sc/uiconfig/scalc/ui/insertname \
 	sc/uiconfig/scalc/ui/insertsheet \
+	sc/uiconfig/scalc/ui/integerdialog \
 	sc/uiconfig/scalc/ui/leftfooterdialog \
 	sc/uiconfig/scalc/ui/leftheaderdialog \
 	sc/uiconfig/scalc/ui/namerangesdialog \

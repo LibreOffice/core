@@ -20,12 +20,12 @@
 #ifndef SC_SOLVEROPTIONS_HXX
 #define SC_SOLVEROPTIONS_HXX
 
-#include <vcl/dialog.hxx>
-
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
 #include <svx/checklbx.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -77,11 +77,8 @@ public:
 
 class ScSolverIntegerDialog : public ModalDialog
 {
-    FixedText       maFtName;
-    NumericField    maNfValue;
-    FixedLine       maFlButtons;
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
+    VclFrame*     m_pFrame;
+    NumericField* m_pNfValue;
 
 public:
     ScSolverIntegerDialog( Window * pParent );
