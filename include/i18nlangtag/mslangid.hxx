@@ -148,6 +148,9 @@ public:
     /** Get ::com::sun::star::i18n::ScriptType of locale. */
     static sal_Int16 getScriptType( LanguageType nLang );
 
+    /** Whether locale is "Western" but not Latin script, e.g. Cyrillic or Greek. */
+    static bool isNonLatinWestern( LanguageType nLang );
+
 
     /** Map an obsolete user defined LANGID (see lang.h
         LANGUAGE_OBSOLETE_USER_...) to the new value defined by MS in the

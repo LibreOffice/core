@@ -24,6 +24,10 @@
 
 #include "i18nlangtag/mslangid.hxx"
 
+// Only very limited few functions that are guaranteed to not be called from
+// LanguageTag may use LanguageTag ...
+#include "i18nlangtag/languagetag.hxx"
+
 
 LanguageType MsLangId::nConfiguredSystemLanguage   = LANGUAGE_SYSTEM;
 LanguageType MsLangId::nConfiguredSystemUILanguage = LANGUAGE_SYSTEM;
@@ -401,6 +405,44 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
             break;
     }
     return nScript;
+}
+
+
+// static
+bool MsLangId::isNonLatinWestern( LanguageType nLang )
+{
+    switch (nLang)
+    {
+        case LANGUAGE_AZERI_CYRILLIC:
+        case LANGUAGE_AZERI_CYRILLIC_LSO:
+        case LANGUAGE_BELARUSIAN:
+        case LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA:
+        case LANGUAGE_BOSNIAN_CYRILLIC_LSO:
+        case LANGUAGE_BULGARIAN:
+        case LANGUAGE_GREEK:
+        case LANGUAGE_MONGOLIAN_CYRILLIC_LSO:
+        case LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA:
+        case LANGUAGE_RUSSIAN:
+        case LANGUAGE_RUSSIAN_MOLDOVA:
+        case LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA:
+        case LANGUAGE_SERBIAN_CYRILLIC_LSO:
+        case LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO:
+        case LANGUAGE_SERBIAN_CYRILLIC_SAM:
+        case LANGUAGE_SERBIAN_CYRILLIC_SERBIA:
+        case LANGUAGE_UKRAINIAN:
+        case LANGUAGE_UZBEK_CYRILLIC:
+        case LANGUAGE_UZBEK_CYRILLIC_LSO:
+            return true;
+        default:
+            {
+                if (getScriptType( nLang) != com::sun::star::i18n::ScriptType::LATIN)
+                    return false;
+                LanguageTag aLanguageTag( nLang);
+                if (aLanguageTag.hasScript())
+                    return aLanguageTag.getScript() != "Latn";
+            }
+    }
+    return false;
 }
 
 
