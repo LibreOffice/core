@@ -430,6 +430,13 @@ public:
         }
         return ss.str();
     }
+    virtual std::string DumpOpName(void) const
+    {
+        std::string t = "_" + CodeGen.BinFuncName();
+        for (unsigned i = 0; i < mvSubArguments.size(); i++)
+            t = t + mvSubArguments[i]->DumpOpName();
+        return t;
+    }
 private:
     std::vector<SubArgument> mvSubArguments;
     Op CodeGen;
@@ -696,7 +703,8 @@ public:
         decl << publicFunc;
         decl << finacialFunc;
         mSyms.DumpSlidingWindowFunctions(decl);
-        decl << "__kernel void DynamicKernel" << GetMD5();
+        mKernelSignature = DK->DumpOpName();
+        decl << "__kernel void DynamicKernel" << mKernelSignature;
         decl << "(\n__global double *result, ";
         DK->GenSlidingWindowDecl(decl);
         decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
@@ -733,7 +741,7 @@ public:
     bool CreateKernel(void)
     {
         cl_int err;
-        std::string kname = "DynamicKernel"+GetMD5();
+        std::string kname = "DynamicKernel"+mKernelSignature;
         // Compile kernel here!!!
         // Obtain cl context
         KernelEnv kEnv;
