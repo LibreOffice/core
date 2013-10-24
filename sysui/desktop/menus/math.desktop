@@ -36,5 +36,5 @@ StartupWMClass=libreoffice-math
 X-KDE-Protocols=file,http,smb,ftp,webdav
 [X-New Shortcut Group]
 UnityQuicklist=New Formula
-Exec=libreoffice --math %%FILE%%
+Exec=${UNIXBASISROOTNAME} --math %%FILE%%
 TargetEnvironment=Unity

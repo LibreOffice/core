@@ -35,5 +35,5 @@ StartupWMClass=libreoffice-impress
 X-KDE-Protocols=file,http,smb,ftp,webdav
 [X-New Shortcut Group]
 UnityQuicklist=New Presentation
-Exec=libreoffice --impress %%FILE%%
+Exec=${UNIXBASISROOTNAME} --impress %%FILE%%
 TargetEnvironment=Unity

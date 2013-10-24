@@ -35,5 +35,5 @@ StartupWMClass=libreoffice-calc
 X-KDE-Protocols=file,http,smb,ftp,webdav
 [X-New Shortcut Group]
 UnityQuicklist=New Spreadsheet
-Exec=libreoffice --calc %%FILE%%
+Exec=${UNIXBASISROOTNAME} --calc %%FILE%%
 TargetEnvironment=Unity

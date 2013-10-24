@@ -35,5 +35,5 @@ StartupWMClass=libreoffice-base
 X-KDE-Protocols=file,http,smb,ftp,webdav
 [X-New Shortcut Group]
 UnityQuicklist=New Database
-Exec=libreoffice --base %%FILE%%
+Exec=${UNIXBASISROOTNAME} --base %%FILE%%
 TargetEnvironment=Unity
