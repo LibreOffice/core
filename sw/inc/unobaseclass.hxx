@@ -148,9 +148,6 @@ namespace sw {
     ::com::sun::star::uno::Sequence< OUString >
     GetSupportedServiceNamesImpl(
             size_t const nServices, char const*const pServices[]);
-    sal_Bool SupportsServiceImpl(
-            size_t const nServices, char const*const pServices[],
-            OUString const & rServiceName);
 
 } // namespace sw
 

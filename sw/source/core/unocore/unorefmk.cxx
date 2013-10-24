@@ -20,6 +20,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
 #include <unomid.h>
@@ -183,8 +184,7 @@ sal_Bool SAL_CALL
 SwXReferenceMark::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            g_nServicesReferenceMark, g_ServicesReferenceMark, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -917,8 +917,7 @@ sal_Bool SAL_CALL
 SwXMeta::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            g_nServicesMeta, g_ServicesMeta, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -1347,8 +1346,7 @@ sal_Bool SAL_CALL
 SwXMetaField::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            g_nServicesMetaField, g_ServicesMetaField, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

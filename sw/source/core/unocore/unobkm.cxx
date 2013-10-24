@@ -21,6 +21,7 @@
 #include <unobookmark.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
 #include <TextCursorHelper.hxx>
@@ -392,8 +393,7 @@ static const size_t g_nServicesBookmark(
 sal_Bool SAL_CALL SwXBookmark::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            g_nServicesBookmark, g_ServicesBookmark, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

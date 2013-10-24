@@ -20,6 +20,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -206,10 +207,7 @@ static const size_t g_nServicesFootnote( g_nServicesEndnote - 1 ); // NB: omit!
 sal_Bool SAL_CALL SwXFootnote::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    SolarMutexGuard g;
-    return ::sw::SupportsServiceImpl(
-            (m_pImpl->m_bIsEndnote) ? g_nServicesEndnote : g_nServicesFootnote,
-            g_ServicesFootnote, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

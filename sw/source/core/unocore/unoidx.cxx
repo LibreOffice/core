@@ -30,6 +30,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
 #include <hints.hxx>
@@ -2378,9 +2379,7 @@ sal_Bool SAL_CALL
 SwXDocumentIndexes::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-        SAL_N_ELEMENTS(g_ServicesDocumentIndexes),
-        g_ServicesDocumentIndexes, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -2577,13 +2576,10 @@ static char const*const g_ServicesIndexStyleAccess[] =
 };
 
 sal_Bool SAL_CALL
-SwXDocumentIndex::StyleAccess_Impl::supportsService(
-        const OUString& rServiceName)
+SwXDocumentIndex::StyleAccess_Impl::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-        SAL_N_ELEMENTS(g_ServicesIndexStyleAccess),
-        g_ServicesIndexStyleAccess, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -2715,9 +2711,7 @@ SwXDocumentIndex::TokenAccess_Impl::supportsService(
         const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-        SAL_N_ELEMENTS(g_ServicesIndexTokenAccess),
-        g_ServicesIndexTokenAccess, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL

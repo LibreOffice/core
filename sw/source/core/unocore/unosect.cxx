@@ -23,6 +23,7 @@
 #include <com/sun/star/text/SectionFileLink.hpp>
 
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <cmdid.h>
 #include <hintids.hxx>
@@ -1763,9 +1764,7 @@ static char const*const g_ServicesTextSection[] =
 sal_Bool SAL_CALL SwXTextSection::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    return ::sw::SupportsServiceImpl(
-            SAL_N_ELEMENTS(g_ServicesTextSection),
-            g_ServicesTextSection, rServiceName);
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
