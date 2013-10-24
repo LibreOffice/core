@@ -688,17 +688,23 @@ $(LIBATOMIC_OPS_CFLAGS) \
 	$$(INCLUDE) \
 	$(LIBATOMIC_OPS_CFLAGS) \
 )
-$(call gb_LinkTarget_use_package,$(1),\
+$(call gb_LinkTarget_use_external_project,$(1),\
 	libatomic_ops \
 )
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	libatomic_ops \
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src/lib/.libs/libatomic_ops-7.2d.lib \
 )
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src/lib/.libs -latomic_ops-7.2d \
+)
+endif
 
 endef
 
 define gb_ExternalProject__use_libatomic_ops
-$(call gb_ExternalProject_use_package,$(1),libatomic_ops)
+$(call gb_ExternalProject_use_external_project,$(1),libatomic_ops)
 
 endef
 

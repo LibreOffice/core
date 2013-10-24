@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,libatomic_ops))
 
 $(eval $(call gb_Module_add_targets,libatomic_ops,\
 	ExternalProject_libatomic_ops \
-	ExternalPackage_libatomic_ops \
 	UnpackedTarball_libatomic_ops \
 ))
 
