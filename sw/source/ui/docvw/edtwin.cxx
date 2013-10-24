@@ -796,7 +796,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
                         (i18n::UnicodeScript)GetAppCharClass().getScript( rInBuffer, 0 ) :
                         i18n::UnicodeScript_kScriptCount;
 
-                    bool bSystemIsNonLatin = false, bOOoLangIsNonLatin = false;
+                    bool bSystemIsNonLatin = false;
                     switch ( eType )
                     {
                         case i18n::UnicodeScript_kGreek:
@@ -809,24 +809,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
                             break;
                     }
 
-                    switch ( eLang )
-                    {
-                        case LANGUAGE_AZERI_CYRILLIC:
-                        case LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA:
-                        case LANGUAGE_BULGARIAN:
-                        case LANGUAGE_GREEK:
-                        case LANGUAGE_RUSSIAN:
-                        case LANGUAGE_RUSSIAN_MOLDOVA:
-                        case LANGUAGE_SERBIAN_CYRILLIC_SAM:
-                        case LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA:
-                        case LANGUAGE_UZBEK_CYRILLIC:
-                        case LANGUAGE_UKRAINIAN:
-                        case LANGUAGE_BELARUSIAN:
-                            bOOoLangIsNonLatin = true;
-                            break;
-                        default:
-                            break;
-                    }
+                    bool bOOoLangIsNonLatin = MsLangId::isNonLatinWestern( eLang);
 
                     bLang = (bSystemIsNonLatin != bOOoLangIsNonLatin);
                 }
