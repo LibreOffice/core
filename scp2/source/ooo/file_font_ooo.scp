@@ -36,9 +36,11 @@ STD_FONT_FILELIST( gid_File_Fnt_Opensymb, "extras_fonts.filelist" )
 // DejaVu fonts
 STD_FONT_FILELIST(gid_File_Fnt_DejaVu, "fonts_dejavu.filelist")
 
+#ifndef WNT // fdo#62764 - Libreration fonts reportedly cause BSOD on Win7 SP1
 // Liberation fonts
 STD_FONT_FILELIST(gid_File_Fnt_LibSansNarrow, "fonts_liberation_narrow.filelist")
 STD_FONT_FILELIST(gid_File_Fnt_Liberation, "fonts_liberation.filelist")
+#endif
 
 // Gentium fonts
 STD_FONT_FILELIST(gid_File_Fnt_Gentium, "fonts_gentium.filelist")
