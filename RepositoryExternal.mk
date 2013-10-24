@@ -1431,6 +1431,41 @@ endef
 endif # SYSTEM_CDR
 
 
+ifeq ($(SYSTEM_ETONYEK),YES)
+
+define gb_LinkTarget__use_etonyek
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(ETONYEK_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ETONYEK_LIBS))
+
+endef
+
+gb_ExternalProject__use_etonyek :=
+
+else # !SYSTEM_ETONYEK
+
+define gb_LinkTarget__use_etonyek
+$(call gb_LinkTarget_set_include,$(1),\
+	$(ETONYEK_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libetonyek)/src/lib/.libs/libetonyek-0.0$(gb_StaticLibrary_PLAINEXT) \
+)
+$(call gb_LinkTarget_use_external_project,$(1),libetonyek)
+
+endef
+
+define gb_ExternalProject__use_etonyek
+$(call gb_ExternalProject_use_external_project,$(1),libetonyek)
+
+endef
+
+endif # SYSTEM_ETONYEK
+
+
 ifeq ($(SYSTEM_ODFGEN),YES)
 
 define gb_LinkTarget__use_odfgen
