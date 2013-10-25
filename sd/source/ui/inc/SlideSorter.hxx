@@ -180,7 +180,7 @@ public:
         present, set it at the content window.  This method supports the use
         of functions even when there is no SlideSorterViewShell.
     */
-    void SetCurrentFunction (const FunctionReference& rpFunction);
+    void SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction);
 
     /** Return a collection of properties that are used througout the slide
         sorter.

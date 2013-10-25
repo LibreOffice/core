@@ -300,7 +300,7 @@ void SlotManager::FuPermanent (SfxRequest& rRequest)
 
     if(pShell->GetCurrentFunction().is())
     {
-        FunctionReference xEmpty;
+        rtl::Reference<FuPoor> xEmpty;
         if (pShell->GetOldFunction() == pShell->GetCurrentFunction())
             pShell->SetOldFunction(xEmpty);
 
@@ -322,7 +322,7 @@ void SlotManager::FuPermanent (SfxRequest& rRequest)
     if(pShell->GetOldFunction().is())
     {
         pShell->GetOldFunction()->Deactivate();
-        FunctionReference xEmpty;
+        rtl::Reference<FuPoor> xEmpty;
         pShell->SetOldFunction(xEmpty);
     }
 

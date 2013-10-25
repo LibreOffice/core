@@ -61,7 +61,7 @@ FuMorph::FuMorph (
 {
 }
 
-FunctionReference FuMorph::Create(
+rtl::Reference<FuPoor> FuMorph::Create(
     ViewShell* pViewSh,
     ::sd::Window* pWin,
     ::sd::View* pView,
@@ -69,7 +69,7 @@ FunctionReference FuMorph::Create(
     SfxRequest& rReq
 )
 {
-    FunctionReference xFunc( new FuMorph( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuMorph( pViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }

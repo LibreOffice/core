@@ -95,7 +95,7 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
     mpView->GetAttributes( aAttrSet );
     rSet.Put(aAttrSet, sal_False); // <- sal_False, so DontCare-Status gets aquired
 
-    FunctionReference xFunc( mpViewSh->GetCurrentFunction() );
+    rtl::Reference<FuPoor> xFunc( mpViewSh->GetCurrentFunction() );
 
     if(xFunc.is())
     {
@@ -301,7 +301,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
         case SID_BEZIER_MOVE:
         case SID_BEZIER_INSERT:
         {
-            FunctionReference xFunc( mpViewSh->GetCurrentFunction() );
+            rtl::Reference<FuPoor> xFunc( mpViewSh->GetCurrentFunction() );
 
             if(xFunc.is())
             {

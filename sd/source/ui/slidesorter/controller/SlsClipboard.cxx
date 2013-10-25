@@ -178,7 +178,7 @@ Clipboard::~Clipboard (void)
 void Clipboard::HandleSlotCall (SfxRequest& rRequest)
 {
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-    FunctionReference xFunc;
+    rtl::Reference<FuPoor> xFunc;
     if (pViewShell != NULL)
         xFunc = pViewShell->GetCurrentFunction();
     switch (rRequest.GetSlot())

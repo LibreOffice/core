@@ -101,7 +101,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 SdDrawDocument& rDoc = mpView->GetDoc();
                 OSL_ASSERT (mpViewShell->GetViewShell()!=NULL);
-                FunctionReference xFunc( FuTemplate::Create( mpViewShell, static_cast< ::sd::Window*>( mpViewShell->GetViewShell()->GetWindow()), mpView, &rDoc, rReq ) );
+                rtl::Reference<FuPoor> xFunc( FuTemplate::Create( mpViewShell, static_cast< ::sd::Window*>( mpViewShell->GetViewShell()->GetWindow()), mpView, &rDoc, rReq ) );
 
                 if(xFunc.is())
                 {

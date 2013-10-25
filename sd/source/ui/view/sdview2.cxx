@@ -386,7 +386,7 @@ void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
 
         if( pDrawViewShell )
         {
-            FunctionReference xFunction( pDrawViewShell->GetCurrentFunction() );
+            rtl::Reference<FuPoor> xFunction( pDrawViewShell->GetCurrentFunction() );
 
             if( xFunction.is() && xFunction->ISA( FuDraw ) )
                 static_cast<FuDraw*>(xFunction.get())->ForcePointer( NULL );

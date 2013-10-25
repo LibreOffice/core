@@ -349,11 +349,11 @@ SelectionFunction::~SelectionFunction (void)
 
 
 
-FunctionReference SelectionFunction::Create(
+rtl::Reference<FuPoor> SelectionFunction::Create(
     SlideSorter& rSlideSorter,
     SfxRequest& rRequest)
 {
-    FunctionReference xFunc( new SelectionFunction( rSlideSorter, rRequest ) );
+    rtl::Reference<FuPoor> xFunc( new SelectionFunction( rSlideSorter, rRequest ) );
     return xFunc;
 }
 

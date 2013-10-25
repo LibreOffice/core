@@ -861,9 +861,9 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
 
 
 
-FunctionReference SlideSorterController::CreateSelectionFunction (SfxRequest& rRequest)
+rtl::Reference<FuPoor> SlideSorterController::CreateSelectionFunction (SfxRequest& rRequest)
 {
-    FunctionReference xFunc( SelectionFunction::Create(mrSlideSorter, rRequest) );
+    rtl::Reference<FuPoor> xFunc( SelectionFunction::Create(mrSlideSorter, rRequest) );
     return xFunc;
 }
 
@@ -872,7 +872,7 @@ FunctionReference SlideSorterController::CreateSelectionFunction (SfxRequest& rR
 
 ::rtl::Reference<SelectionFunction> SlideSorterController::GetCurrentSelectionFunction (void)
 {
-    FunctionReference pFunction (mrSlideSorter.GetViewShell()->GetCurrentFunction());
+    rtl::Reference<FuPoor> pFunction (mrSlideSorter.GetViewShell()->GetCurrentFunction());
     return ::rtl::Reference<SelectionFunction>(dynamic_cast<SelectionFunction*>(pFunction.get()));
 }
 

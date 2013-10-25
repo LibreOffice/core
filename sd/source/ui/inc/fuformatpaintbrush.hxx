@@ -35,7 +35,7 @@ class FuFormatPaintBrush : public FuText
 public:
     TYPEINFO();
 
-    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);

@@ -191,7 +191,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             if( mpViewShell )
             {
-                FunctionReference aFunc( FuHangulHanjaConversion::Create( mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
+                rtl::Reference<FuPoor> aFunc( FuHangulHanjaConversion::Create( mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
                 static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, i18n::TextConversionOption::CHARACTER_BY_CHARACTER, sal_True );
             }
         }
@@ -201,7 +201,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             if( mpViewShell )
             {
-                FunctionReference aFunc( FuHangulHanjaConversion::Create( mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
+                rtl::Reference<FuPoor> aFunc( FuHangulHanjaConversion::Create( mpViewShell, mpViewShell->GetActiveWindow(), mpViewShell->GetView(), mpDoc, rReq ) );
                 static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartChineseConversion();
             }
         }
@@ -212,7 +212,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
     }
 }
 
-void DrawDocShell::SetDocShellFunction( const ::sd::FunctionReference& xFunction )
+void DrawDocShell::SetDocShellFunction( const rtl::Reference<FuPoor>& xFunction )
 {
     if( mxDocShellFunction.is() )
         mxDocShellFunction->Dispose();

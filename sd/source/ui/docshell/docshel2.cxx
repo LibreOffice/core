@@ -301,7 +301,7 @@ sal_Bool DrawDocShell::CheckPageName (::Window* pWin, OUString& rName )
             if( mpViewShell )
                 aNameDlg->SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) );
 
-            FunctionReference xFunc( mpViewShell->GetCurrentFunction() );
+            rtl::Reference<FuPoor> xFunc( mpViewShell->GetCurrentFunction() );
             if( xFunc.is() )
                 xFunc->cancel();
 

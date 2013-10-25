@@ -172,7 +172,7 @@ public:
 
     /** This factory method creates a selection function.
     */
-    virtual FunctionReference CreateSelectionFunction (SfxRequest& rRequest);
+    virtual rtl::Reference<FuPoor> CreateSelectionFunction (SfxRequest& rRequest);
 
     /** When the current function of the view shell is the slide sorter
         selection function then return a reference to it.  Otherwise return

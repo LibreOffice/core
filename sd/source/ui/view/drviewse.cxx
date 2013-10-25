@@ -150,7 +150,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         ( nSId == SID_TEXTEDIT || nSId == SID_ATTR_CHAR || nSId == SID_TEXT_FITTOSIZE ||
           nSId == SID_ATTR_CHAR_VERTICAL || nSId == SID_TEXT_FITTOSIZE_VERTICAL ) )
     {
-        FunctionReference xFunc( GetCurrentFunction() );
+        rtl::Reference<FuPoor> xFunc( GetCurrentFunction() );
 
         FuText* pFuText = dynamic_cast< FuText* >( xFunc.get() );
 
@@ -1253,7 +1253,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_GLUE_VERTALIGN_TOP:
         case SID_GLUE_VERTALIGN_BOTTOM:
         {
-            FunctionReference xFunc( GetCurrentFunction() );
+            rtl::Reference<FuPoor> xFunc( GetCurrentFunction() );
             FuEditGluePoints* pFunc = dynamic_cast< FuEditGluePoints* >( xFunc.get() );
 
             if(pFunc)

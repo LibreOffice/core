@@ -54,7 +54,7 @@ class ContentWindow : public ::sd::Window
 public:
     ContentWindow(::Window& rParent, SlideSorter& rSlideSorter);
     ~ContentWindow (void);
-    void SetCurrentFunction (const FunctionReference& rpFunction);
+    void SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction);
     virtual void Paint(const Rectangle& rRect);
     virtual void KeyInput (const KeyEvent& rEvent);
     virtual void MouseMove (const MouseEvent& rEvent);
@@ -65,7 +65,7 @@ public:
 
 private:
     SlideSorter& mrSlideSorter;
-    FunctionReference mpCurrentFunction;
+    rtl::Reference<FuPoor> mpCurrentFunction;
 };
 }
 
@@ -552,7 +552,7 @@ bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
 
 
 
-void SlideSorter::SetCurrentFunction (const FunctionReference& rpFunction)
+void SlideSorter::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
 {
     if (GetViewShell() != NULL)
     {
@@ -613,7 +613,7 @@ ContentWindow::~ContentWindow (void)
 
 
 
-void ContentWindow::SetCurrentFunction (const FunctionReference& rpFunction)
+void ContentWindow::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
 {
     mpCurrentFunction = rpFunction;
 }

@@ -540,7 +540,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                     KeyEvent aKEvt( 0, aKCode );
                     pOutlView->PostKeyEvent(aKEvt);
 
-                    FunctionReference xFunc( GetCurrentFunction() );
+                    rtl::Reference<FuPoor> xFunc( GetCurrentFunction() );
                     FuOutlineText* pFuOutlineText = dynamic_cast< FuOutlineText* >( xFunc.get() );
                     if( pFuOutlineText )
                         pFuOutlineText->UpdateForKeyPress (aKEvt);

@@ -44,9 +44,9 @@ FuArea::FuArea( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* _pView, SdDr
 {
 }
 
-FunctionReference FuArea::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* _pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuArea::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* _pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    FunctionReference xFunc( new FuArea( pViewSh, pWin, _pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuArea( pViewSh, pWin, _pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
     return xFunc;
 }

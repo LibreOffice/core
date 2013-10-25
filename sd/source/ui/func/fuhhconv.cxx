@@ -91,9 +91,9 @@ FuHangulHanjaConversion::~FuHangulHanjaConversion()
         delete pSdOutliner;
 }
 
-FunctionReference FuHangulHanjaConversion::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuHangulHanjaConversion::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    FunctionReference xFunc( new FuHangulHanjaConversion( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuHangulHanjaConversion( pViewSh, pWin, pView, pDoc, rReq ) );
     return xFunc;
 }
 

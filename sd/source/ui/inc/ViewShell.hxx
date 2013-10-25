@@ -250,14 +250,14 @@ public:
     */
     virtual SdPage* getCurrentPage() const = 0;
 
-    FunctionReference GetOldFunction() const { return mxOldFunction; }
+    rtl::Reference<FuPoor> GetOldFunction() const { return mxOldFunction; }
     bool HasOldFunction() const { return mxOldFunction.is(); }
-    FunctionReference GetCurrentFunction() const { return mxCurrentFunction; }
+    rtl::Reference<FuPoor> GetCurrentFunction() const { return mxCurrentFunction; }
     bool HasCurrentFunction( sal_uInt16 nSID ) { return mxCurrentFunction.is() && (mxCurrentFunction->GetSlotID() == nSID ); }
     bool HasCurrentFunction() { return mxCurrentFunction.is(); }
 
-    void SetCurrentFunction(const FunctionReference& xFunction);
-    void SetOldFunction(const FunctionReference& xFunction);
+    void SetCurrentFunction(const rtl::Reference<FuPoor>& xFunction);
+    void SetOldFunction(const rtl::Reference<FuPoor>& xFunction);
     void DeactivateCurrentFunction( bool bPermanent = false );
 
     void    SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
@@ -482,8 +482,8 @@ protected:
     ::sd::View* mpView;
     FrameView*  mpFrameView;
 
-    FunctionReference   mxCurrentFunction;
-    FunctionReference   mxOldFunction;
+    rtl::Reference<FuPoor>   mxCurrentFunction;
+    rtl::Reference<FuPoor>   mxOldFunction;
     ZoomList*   mpZoomList;
 
     Point       maViewPos;

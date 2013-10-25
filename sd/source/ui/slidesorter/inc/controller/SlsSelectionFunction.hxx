@@ -44,7 +44,7 @@ class SelectionFunction
 public:
     TYPEINFO();
 
-    static FunctionReference Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
+    static rtl::Reference<FuPoor> Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
 
     // Mouse- & Key-Events
     virtual sal_Bool KeyInput(const KeyEvent& rKEvt);

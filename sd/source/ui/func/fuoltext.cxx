@@ -89,9 +89,9 @@ FuOutlineText::FuOutlineText(ViewShell* pViewShell, ::sd::Window* pWindow,
 {
 }
 
-FunctionReference FuOutlineText::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+rtl::Reference<FuPoor> FuOutlineText::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
-    FunctionReference xFunc( new FuOutlineText( pViewSh, pWin, pView, pDoc, rReq ) );
+    rtl::Reference<FuPoor> xFunc( new FuOutlineText( pViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute( rReq );
     return xFunc;
 }

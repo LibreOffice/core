@@ -1251,7 +1251,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
     {
         case SID_MAIL_SCROLLBODY_PAGEDOWN:
         {
-            FunctionReference xFunc( GetCurrentFunction() );
+            rtl::Reference<FuPoor> xFunc( GetCurrentFunction() );
             if( xFunc.is() )
                 ScrollLines( 0, -1 );
 
@@ -1346,20 +1346,20 @@ ErrCode ViewShell::DoVerb (long )
     return ERRCODE_NONE;
 }
 
-void ViewShell::SetCurrentFunction( const FunctionReference& xFunction)
+void ViewShell::SetCurrentFunction( const rtl::Reference<FuPoor>& xFunction)
 {
     if( mxCurrentFunction.is() && (mxOldFunction != mxCurrentFunction) )
         mxCurrentFunction->Dispose();
-    FunctionReference xTemp( mxCurrentFunction );
+    rtl::Reference<FuPoor> xTemp( mxCurrentFunction );
     mxCurrentFunction = xFunction;
 }
 
-void ViewShell::SetOldFunction(const FunctionReference& xFunction)
+void ViewShell::SetOldFunction(const rtl::Reference<FuPoor>& xFunction)
 {
     if( mxOldFunction.is() && (xFunction != mxOldFunction) && (mxCurrentFunction != mxOldFunction) )
         mxOldFunction->Dispose();
 
-    FunctionReference xTemp( mxOldFunction );
+    rtl::Reference<FuPoor> xTemp( mxOldFunction );
     mxOldFunction = xFunction;
 }
 
@@ -1370,7 +1370,7 @@ void ViewShell::Cancel()
 {
     if(mxCurrentFunction.is() && (mxCurrentFunction != mxOldFunction ))
     {
-        FunctionReference xTemp( mxCurrentFunction );
+        rtl::Reference<FuPoor> xTemp( mxCurrentFunction );
         mxCurrentFunction.clear();
         xTemp->Deactivate();
         xTemp->Dispose();
@@ -1394,7 +1394,7 @@ void ViewShell::DeactivateCurrentFunction( bool bPermanent /* == false */ )
         if( mxCurrentFunction != mxOldFunction )
             mxCurrentFunction->Dispose();
 
-        FunctionReference xTemp( mxCurrentFunction );
+        rtl::Reference<FuPoor> xTemp( mxCurrentFunction );
         mxCurrentFunction.clear();
     }
 }
@@ -1403,7 +1403,7 @@ void ViewShell::DisposeFunctions()
 {
     if(mxCurrentFunction.is())
     {
-        FunctionReference xTemp( mxCurrentFunction );
+        rtl::Reference<FuPoor> xTemp( mxCurrentFunction );
         mxCurrentFunction.clear();
         xTemp->Deactivate();
         xTemp->Dispose();
@@ -1411,7 +1411,7 @@ void ViewShell::DisposeFunctions()
 
     if(mxOldFunction.is())
     {
-        FunctionReference xTemp( mxOldFunction );
+        rtl::Reference<FuPoor> xTemp( mxOldFunction );
         mxOldFunction->Dispose();
         mxOldFunction.clear();
     }

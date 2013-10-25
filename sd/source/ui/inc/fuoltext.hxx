@@ -40,7 +40,7 @@ class FuOutlineText
 public:
     TYPEINFO();
 
-    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
     virtual sal_Bool MouseMove(const MouseEvent& rMEvt);

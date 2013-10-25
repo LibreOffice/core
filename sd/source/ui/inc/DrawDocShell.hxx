@@ -106,8 +106,8 @@ public:
 
     sd::ViewShell* GetViewShell() { return mpViewShell; }
     ::sd::FrameView* GetFrameView();
-    ::sd::FunctionReference GetDocShellFunction() const { return mxDocShellFunction; }
-    void SetDocShellFunction( const ::sd::FunctionReference& xFunction );
+    rtl::Reference<FuPoor> GetDocShellFunction() const { return mxDocShellFunction; }
+    void SetDocShellFunction( const rtl::Reference<FuPoor>& xFunction );
 
     SdDrawDocument*         GetDoc();
     DocumentType            GetDocumentType() const { return meDocType; }
@@ -204,7 +204,7 @@ protected:
     SfxPrinter*             mpPrinter;
     ::sd::ViewShell*        mpViewShell;
     FontList*               mpFontList;
-    ::sd::FunctionReference mxDocShellFunction;
+    rtl::Reference<FuPoor> mxDocShellFunction;
     DocumentType            meDocType;
     sal_uInt16                  mnStyleFamily;
     const sal_uInt16*           mpFilterSIDs;
