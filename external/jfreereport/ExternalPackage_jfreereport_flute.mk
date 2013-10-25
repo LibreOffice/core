@@ -12,8 +12,10 @@ include $(SRCDIR)/external/jfreereport/version.mk
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_flute,jfreereport_flute))
 
+$(eval $(call gb_ExternalPackage_set_outdir,jfreereport_flute,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,jfreereport_flute,jfreereport_flute))
 
-$(eval $(call gb_ExternalPackage_add_jar_for_install,jfreereport_flute,bin/flute-$(FLUTE_VERSION).jar,dist/flute-$(FLUTE_VERSION).jar))
+$(eval $(call gb_ExternalPackage_add_file,jfreereport_flute,$(LIBO_SHARE_JAVA_FOLDER)/flute-$(FLUTE_VERSION).jar,dist/flute-$(FLUTE_VERSION).jar))
 
 # vim: set noet sw=4 ts=4:

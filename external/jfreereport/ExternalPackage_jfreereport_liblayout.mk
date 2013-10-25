@@ -12,8 +12,10 @@ include $(SRCDIR)/external/jfreereport/version.mk
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_liblayout,jfreereport_liblayout))
 
+$(eval $(call gb_ExternalPackage_set_outdir,jfreereport_liblayout,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,jfreereport_liblayout,jfreereport_liblayout))
 
-$(eval $(call gb_ExternalPackage_add_jar_for_install,jfreereport_liblayout,bin/liblayout.jar,build/lib/liblayout.jar))
+$(eval $(call gb_ExternalPackage_add_file,jfreereport_liblayout,$(LIBO_SHARE_JAVA_FOLDER)/liblayout.jar,build/lib/liblayout.jar))
 
 # vim: set noet sw=4 ts=4:

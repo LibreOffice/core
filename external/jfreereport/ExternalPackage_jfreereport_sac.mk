@@ -9,8 +9,10 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_sac,jfreereport_sac))
 
+$(eval $(call gb_ExternalPackage_set_outdir,jfreereport_sac,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,jfreereport_sac,jfreereport_sac))
 
-$(eval $(call gb_ExternalPackage_add_jar_for_install,jfreereport_sac,bin/sac.jar,build/lib/sac.jar))
+$(eval $(call gb_ExternalPackage_add_file,jfreereport_sac,$(LIBO_SHARE_JAVA_FOLDER)/sac.jar,build/lib/sac.jar))
 
 # vim: set noet sw=4 ts=4:

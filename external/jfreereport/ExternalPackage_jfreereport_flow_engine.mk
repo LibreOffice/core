@@ -12,8 +12,10 @@ include $(SRCDIR)/external/jfreereport/version.mk
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_flow_engine,jfreereport_flow_engine))
 
+$(eval $(call gb_ExternalPackage_set_outdir,jfreereport_flow_engine,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,jfreereport_flow_engine,jfreereport_flow_engine))
 
-$(eval $(call gb_ExternalPackage_add_jar_for_install,jfreereport_flow_engine,bin/flow-engine.jar,build/lib/flow-engine.jar))
+$(eval $(call gb_ExternalPackage_add_file,jfreereport_flow_engine,$(LIBO_SHARE_JAVA_FOLDER)/flow-engine.jar,build/lib/flow-engine.jar))
 
 # vim: set noet sw=4 ts=4:

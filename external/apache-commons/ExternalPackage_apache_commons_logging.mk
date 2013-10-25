@@ -9,8 +9,10 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,apache_commons_logging,apache_commons_logging))
 
+$(eval $(call gb_ExternalPackage_set_outdir,apache_commons_logging,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,apache_commons_logging,apache_commons_logging))
 
-$(eval $(call gb_ExternalPackage_add_jar_for_install,apache_commons_logging,bin/commons-logging-1.1.1.jar,target/commons-logging-1.1.1-SNAPSHOT.jar))
+$(eval $(call gb_ExternalPackage_add_file,apache_commons_logging,$(LIBO_SHARE_JAVA_FOLDER)/commons-logging-1.1.1.jar,target/commons-logging-1.1.1-SNAPSHOT.jar))
 
 # vim: set noet sw=4 ts=4:

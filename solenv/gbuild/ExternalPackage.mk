@@ -230,24 +230,4 @@ $(foreach file,$(3),$(call gb_ExternalPackage_add_library_for_install,$(1),$(2)/
 
 endef
 
-# Add a jar that is a part of the installation.
-#
-# This function works just like to gb_ExternalPackage_add_file, except
-# that it also allows to deliver the jar to its proper place in
-# $(INSTROOT).
-#
-# gb_ExternalPackage_add_jar_for_install package dest src
-define gb_ExternalPackage_add_jar_for_install
-$(call gb_ExternalPackage__add_file_for_install,$(1),$(2),$(INSTROOT)/$(LIBO_SHARE_JAVA_FOLDER)/$(notdir $(2)),$(3))
-
-endef
-
-# Add several jars for install at once.
-#
-# gb_ExternalPackage_add_jars_for_install package destdir file(s)
-define gb_ExternalPackage_add_jars_for_install
-$(foreach file,$(3),$(call gb_ExternalPackage_add_jar_for_install,$(1),$(2)/$(notdir $(file)),$(file)))
-
-endef
-
 # vim: set noet sw=4 ts=4:

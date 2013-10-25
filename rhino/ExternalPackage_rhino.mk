@@ -9,8 +9,10 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,rhino,rhino))
 
+$(eval $(call gb_ExternalPackage_set_outdir,rhino,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,rhino,rhino))
 
-$(eval $(call gb_ExternalPackage_add_jar_for_install,rhino,bin/js.jar,build/rhino1_5R5/js.jar))
+$(eval $(call gb_ExternalPackage_add_file,rhino,$(LIBO_SHARE_JAVA_FOLDER)/js.jar,build/rhino1_5R5/js.jar))
 
 # vim: set noet sw=4 ts=4:
