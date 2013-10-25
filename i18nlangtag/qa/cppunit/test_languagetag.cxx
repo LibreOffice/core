@@ -615,6 +615,7 @@ static bool checkMapping( const OUString rStr1, const OUString& rStr2 )
     if (rStr1 == "pli"         ) return rStr2 == "pi-Latn";
     if (rStr1 == "ks"          ) return rStr2 == "ks-Arab";
     if (rStr1 == "chr-US"      ) return rStr2 == "chr-Cher-US";
+    if (rStr1 == "sd-PK"       ) return rStr2 == "sd-Arab-PK";
     return rStr1 == rStr2;
 }
 

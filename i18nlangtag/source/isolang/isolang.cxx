@@ -350,7 +350,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ORIYA,                       "or", "IN", 0     },
     { LANGUAGE_PUNJABI,                     "pa", "IN", 0     },
     { LANGUAGE_SANSKRIT,                    "sa", "IN", 0     },
-    { LANGUAGE_SINDHI,                      "sd", "IN", 0     },    // TODO: there's Deva(nagari) and Arab(ic) script, which do we use in 'sd' translation? MS maps this to 'sd-Deva-IN'
+    { LANGUAGE_SINDHI,                      "sd", "IN", 0     },    // TODO: there's Deva(nagari) and Arab(ic) script, MS maps this to 'sd-Deva-IN'
     { LANGUAGE_TAMIL,                       "ta", "IN", 0     },
     { LANGUAGE_TAMIL_SRI_LANKA,             "ta", "LK", 0     },
     { LANGUAGE_TELUGU,                      "te", "IN", 0     },
@@ -358,7 +358,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_PUNJABI_ARABIC_LSO,         "pnb", ""  , 0     },
     { LANGUAGE_PUNJABI_PAKISTAN,           "lah", "PK", kSAME },    // macrolanguage code, earlier preferred 'lah' over 'pa' for Western Panjabi, now there is 'pnb'
     { LANGUAGE_PUNJABI_PAKISTAN,            "pa", "PK", kSAME },    // MS maps this to 'pa-Arab-PK', but 'pa'='pan' Eastern Panjabi is not used in PK, only in IN
-    { LANGUAGE_SINDHI_PAKISTAN,             "sd", "PK", 0     },    // TODO: there's Deva(nagari) and Arab(ic) script, which do we use in 'sd' translation? MS maps this to 'sd-Arab-PK'
+    { LANGUAGE_SINDHI_PAKISTAN,             "sd", "PK", kSAME },    // Arabic script
     { LANGUAGE_BELARUSIAN,                  "be", "BY", 0     },
     { LANGUAGE_CATALAN,                     "ca", "ES", 0     },    // Spain (default)
     { LANGUAGE_CATALAN,                     "ca", "AD", 0     },    // Andorra
@@ -677,7 +677,7 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_UZBEK_LATIN,                         "uz-Latn", "UZ", 0     },   // macrolanguage code
     { LANGUAGE_UZBEK_LATIN_LSO,                     "uz-Latn", ""  , 0     },
 //  { LANGUAGE_SINDHI,                              "sd-Deva", "IN", 0     },   // MS, TODO: see comment above in aImplIsoLangEntries
-//  { LANGUAGE_SINDHI_PAKISTAN,                     "sd-Arab", "PK", 0     },   // MS, TODO: see comment above in aImplIsoLangEntries
+    { LANGUAGE_SINDHI_PAKISTAN,                     "sd-Arab", "PK", 0     },   // MS
     { LANGUAGE_SINDHI_ARABIC_LSO,                   "sd-Arab", ""  , 0     },
     { LANGUAGE_CHEROKEE_UNITED_STATES,             "chr-Cher", "US", 0     },   // MS
     { LANGUAGE_CHEROKEE_CHEROKEE_LSO,              "chr-Cher", ""  , 0     },
