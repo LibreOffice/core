@@ -276,7 +276,7 @@ void ODataStreamTest::testSimple(   const Reference < XDataInputStream > &rInput
     ERROR_ASSERT( rInput->readHyper() == 0x123456789abcdefLL , "int64 read/write mismatch" );
 
     rOutput->writeUTF( OUString("Live long and prosper !") );
-    ERROR_ASSERT( rInput->readUTF() == OUString("Live long and prosper !") ,
+    ERROR_ASSERT( rInput->readUTF() == "Live long and prosper !",
                     "UTF read/write mismatch" );
 
     Sequence<sal_Unicode> wc(0x10001);

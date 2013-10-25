@@ -355,8 +355,8 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodeP
     uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
                 com::sun::star::configuration::theDefaultProvider::get( xContext  ) );
 
-    if( sNodePath == OUString("") )
-        sNodePath = OUString("/");
+    if( sNodePath == "" )
+        sNodePath = "/";
     beans::NamedValue aProperty;
     aProperty.Name = "nodepath";
     aProperty.Value = uno::makeAny( sNodePath );
@@ -472,24 +472,24 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
     OUString sDialogValue;
     OUString sNewValue;
 
-    if( sPropertyType == OUString( "boolean" ) )
+    if( sPropertyType == "boolean" )
     {
         bool bValue;
-        if( sPropertyValue == OUString("true") )
+        if( sPropertyValue == "true" )
         {
-            sDialogValue = OUString("false");
+            sDialogValue = "false";
             bValue = false;
         }
         else
         {
-            sDialogValue = OUString("true");
+            sDialogValue = "true";
             bValue = true;
         }
 
         pProperty->Value = uno::makeAny( bValue );
         bOpenDialog = false;
     }
-    else if ( sPropertyType == OUString( "void" ) )
+    else if ( sPropertyType == "void" )
     {
         bOpenDialog = false;
     }
@@ -505,11 +505,11 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
         {
             //Cosmetic length limit for integer values.
             int limit=0;
-            if( sPropertyType == OUString("short") )
+            if( sPropertyType == "short" )
                 limit = SHORT_LEN_LIMIT;
-            else if( sPropertyType == OUString("long") )
+            else if( sPropertyType == "long" )
                 limit = LONG_LEN_LIMIT;
-            else if( sPropertyType == OUString("hyper") )
+            else if( sPropertyType == "hyper" )
                 limit = HYPER_LEN_LIMIT;
 
             CuiAboutConfigValueDialog* pValueDialog = new CuiAboutConfigValueDialog(0, sDialogValue, limit);
@@ -518,7 +518,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
             if( ret == RET_OK )
             {
                 sNewValue = pValueDialog->getValue();
-                if ( sPropertyType == OUString("short"))
+                if ( sPropertyType == "short")
                 {
                     sal_Int16 nShort;
                     sal_Int32 nNumb = sNewValue.toInt32();
@@ -531,7 +531,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                     pProperty->Value = uno::makeAny( nShort );
                 }
                 else
-                    if( sPropertyType == OUString("long"))
+                    if( sPropertyType == "long" )
                     {
                         sal_Int32 nLong = sNewValue.toInt32();
                         if( !( nLong==0 && sNewValue.getLength()!=1 ) && nLong < SAL_MAX_INT32 && nLong > SAL_MIN_INT32)
@@ -539,7 +539,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                         else
                             throw uno::Exception();
                     }
-                    else if( sPropertyType == OUString("hyper"))
+                    else if( sPropertyType == "hyper")
                     {
                         sal_Int64 nHyper = sNewValue.toInt64();
                         if( !( nHyper==0 && sNewValue.getLength()!=1 ) && nHyper < SAL_MAX_INT32 && nHyper > SAL_MIN_INT32)
@@ -547,7 +547,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                         else
                             throw uno::Exception();
                     }
-                    else if( sPropertyType == OUString("double"))
+                    else if( sPropertyType == "double")
                     {
                         double nDoub = sNewValue.toDouble();
                         if( !( nDoub ==0 && sNewValue.getLength()!=1 ) && nDoub < SAL_MAX_INT32 && nDoub > SAL_MIN_INT32)
@@ -555,7 +555,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                         else
                             throw uno::Exception();
                     }
-                    else if( sPropertyType == OUString("float"))
+                    else if( sPropertyType == "float")
                     {
                         float nFloat = sNewValue.toFloat();
                         if( !( nFloat ==0 && sNewValue.getLength()!=1 ) && nFloat < SAL_MAX_INT32 && nFloat > SAL_MIN_INT32)
@@ -567,7 +567,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                     {
                         pProperty->Value = uno::makeAny( sNewValue );
                     }
-                    else if( sPropertyType == OUString("[]short") )
+                    else if( sPropertyType == "[]short" )
                     {
                         //create string sequence from comma seperated string
                         //uno::Sequence< OUString > seqStr;
@@ -583,7 +583,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                         }
                         pProperty->Value = uno::makeAny( seqShort );
                     }
-                    else if( sPropertyType == OUString("[]long") )
+                    else if( sPropertyType == "[]long" )
                     {
                         std::vector< OUString > seqStrLong;
                         seqStrLong = commaStringToSequence( sNewValue );
@@ -595,7 +595,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                         }
                         pProperty->Value = uno::makeAny( seqLong );
                     }
-                    else if( sPropertyType == OUString("[]hyper") )
+                    else if( sPropertyType == "[]hyper" )
                     {
                         std::vector< OUString > seqStrHyper;
                         seqStrHyper = commaStringToSequence( sNewValue );
@@ -606,7 +606,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                         }
                         pProperty->Value = uno::makeAny( seqHyper );
                     }
-                    else if( sPropertyType == OUString("[]double") )
+                    else if( sPropertyType == "[]double" )
                     {
                         std::vector< OUString > seqStrDoub;
                         seqStrDoub = commaStringToSequence( sNewValue );
@@ -617,7 +617,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                         }
                         pProperty->Value = uno::makeAny( seqDoub );
                     }
-                    else if( sPropertyType == OUString("[]float") )
+                    else if( sPropertyType == "[]float" )
                     {
                         std::vector< OUString > seqStrFloat;
                         seqStrFloat = commaStringToSequence( sNewValue );
@@ -628,7 +628,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                         }
                         pProperty->Value = uno::makeAny( seqFloat );
                     }
-                    else if( sPropertyType == OUString("[]string"))
+                    else if( sPropertyType == "[]string" )
                     {
                         pProperty->Value = uno::makeAny( comphelper::containerToSequence( commaStringToSequence( sNewValue )));
                     }

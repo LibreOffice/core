@@ -85,7 +85,7 @@ void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyV
 
         if ( aPropName.equalsAscii( SW_PROP_NAME_STR(UNO_NAME_FILTER_NAME) ) )
             rProp.Value >>= sFilterName;
-        else if ( aPropName == OUString(FILTER_OPTIONS_NAME) )
+        else if ( aPropName == FILTER_OPTIONS_NAME )
             rProp.Value >>= sFilterOptions;
         else if ( aPropName == "InputStream" )
             rProp.Value >>= xInputStream;
@@ -159,7 +159,7 @@ OUString SwXFilterOptions::getImplementationName() throw(uno::RuntimeException)
 sal_Bool SwXFilterOptions::supportsService( const OUString& rServiceName )
     throw(uno::RuntimeException)
 {
-    return rServiceName == OUString(SWFILTEROPTIONSOBJ_SERVICE);
+    return rServiceName == SWFILTEROPTIONSOBJ_SERVICE;
 }
 
 uno::Sequence< OUString > SwXFilterOptions::getSupportedServiceNames()

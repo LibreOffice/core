@@ -1037,10 +1037,10 @@ void ToolBarManager::CreateControllers()
 
                 if (pController)
                 {
-                    if(aCommandURL == OUString( ".uno:SwitchXFormsDesignMode" ) ||
-                       aCommandURL == OUString( ".uno:ViewDataSourceBrowser" ) ||
-                       aCommandURL == OUString( ".uno:ParaLeftToRight" ) ||
-                       aCommandURL == OUString( ".uno:ParaRightToLeft" )
+                    if(aCommandURL == ".uno:SwitchXFormsDesignMode" ||
+                       aCommandURL == ".uno:ViewDataSourceBrowser" ||
+                       aCommandURL == ".uno:ParaLeftToRight" ||
+                       aCommandURL == ".uno:ParaRightToLeft"
                        )
                         pController->setFastPropertyValue_NoBroadcast(1,makeAny(sal_True));
                 }

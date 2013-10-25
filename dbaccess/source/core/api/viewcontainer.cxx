@@ -217,7 +217,7 @@ void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) thr
         Reference<XPropertySet> xProp(Event.Element,UNO_QUERY);
         OUString sType;
         xProp->getPropertyValue(PROPERTY_TYPE) >>= sType;
-        if ( sType == OUString("VIEW") )
+        if ( sType == "VIEW" )
             insertElement(sName,createObject(sName));
     }
 }

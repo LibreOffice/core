@@ -2834,7 +2834,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                             IDocumentMarkAccess::BOOKMARK );
 
                         // jump to bookmark
-                        if( JUMPTO_MARK == eJumpTo && pNewMark->GetName() == OUString(sJmpMark) )
+                        if( JUMPTO_MARK == eJumpTo && pNewMark->GetName() == sJmpMark )
                         {
                             bChkJumpMark = sal_True;
                             eJumpTo = JUMPTO_NONE;

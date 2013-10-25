@@ -252,7 +252,7 @@ sal_uLong SotExchange::RegisterFormatName( const OUString& rName )
     for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
         DataFlavor* pFlavor = rL[ i ];
-        if( pFlavor && rName == OUString( pFlavor->HumanPresentableName ) )
+        if( pFlavor && rName == pFlavor->HumanPresentableName )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
 
@@ -287,7 +287,7 @@ sal_uLong SotExchange::RegisterFormatMimeType( const OUString& rMimeType )
     for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
         DataFlavor* pFlavor = rL[ i ];
-        if( pFlavor && rMimeType == OUString( pFlavor->MimeType ) )
+        if( pFlavor && rMimeType == pFlavor->MimeType )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
 

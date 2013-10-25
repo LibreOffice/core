@@ -298,7 +298,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
         if ( !IsCorrectContext( rModel, aContext ) || ( aTitle.isEmpty() && aURL.isEmpty() ))
             continue;
 
-        if ( aURL == OUString( "private:separator" ))
+        if ( aURL == "private:separator" )
             bInsertSeparator = sal_True;
         else
         {

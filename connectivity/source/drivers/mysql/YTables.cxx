@@ -136,7 +136,7 @@ void OTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
         OUString aSql(  "DROP " );
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
-        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == OUString("VIEW");
+        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == "VIEW";
         if(bIsView) // here we have a view
             aSql += "VIEW ";
         else

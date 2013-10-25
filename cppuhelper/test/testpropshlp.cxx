@@ -468,13 +468,13 @@ public:
             case PROPERTY_BOOL:
                 {
                 OSL_FAIL( "PropertySetHelper: BOOL cannot change" );
-                OSL_ENSURE( evt.PropertyName == OUString("BOOL"), "PropertySetHelper: wrong name" );
+                OSL_ENSURE( evt.PropertyName == "BOOL", "PropertySetHelper: wrong name" );
                 }
             break;
 
             case PROPERTY_INT16:
                 {
-                OSL_ENSURE( evt.PropertyName == OUString("INT16"), "PropertySetHelper: wrong name" );
+                OSL_ENSURE( evt.PropertyName == "INT16", "PropertySetHelper: wrong name" );
 
                 OSL_ENSURE( pExceptedListenerValues[nCurrent].getValueType().getTypeClass() == TypeClass_SHORT ,
                             "PropertySetHelper: wrong data type" );
@@ -493,7 +493,7 @@ public:
 
             case PROPERTY_INT32:
                 {
-                    OSL_ENSURE( evt.PropertyName == OUString("INT32"), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == "INT32", "PropertySetHelper: wrong name" );
 
                     sal_Int32 nInt32(0),nOldInt32(0);
 
@@ -526,13 +526,13 @@ public:
             case PROPERTY_BOOL:
                 {
                     OSL_FAIL( "PropertySetHelper: BOOL cannot change" );
-                    OSL_ENSURE( evt.PropertyName == OUString("BOOL"), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == "BOOL", "PropertySetHelper: wrong name" );
                 }
             break;
 
             case PROPERTY_INT16:
                 {
-                    OSL_ENSURE( evt.PropertyName == OUString("INT16"), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == "INT16", "PropertySetHelper: wrong name" );
 
                     sal_Int16 nInt16(0), nOldInt16(0);
                     pExceptedListenerValues[nCurrent]   >>= nInt16;
@@ -554,7 +554,7 @@ public:
 
             case PROPERTY_INT32:
                 {
-                    OSL_ENSURE( evt.PropertyName == OUString("INT32"), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == "INT32", "PropertySetHelper: wrong name" );
 
                     sal_Int32 nInt32(0),nOldInt32(0);
                     pExceptedListenerValues[nCurrent] >>= nInt32;
@@ -589,13 +589,13 @@ public:
                 case PROPERTY_BOOL:
                     {
                     OSL_FAIL( "PropertySetHelper: BOOL cannot change" );
-                    OSL_ENSURE( evt.PropertyName == OUString("BOOL"), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == "BOOL", "PropertySetHelper: wrong name" );
                     }
                 break;
 
                 case PROPERTY_INT16:
                     {
-                    OSL_ENSURE( evt.PropertyName == OUString("INT16"), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == "INT16", "PropertySetHelper: wrong name" );
 
                     sal_Int16 nInt16(0), nOldInt16(0);
                     pExceptedListenerValues[nCurrent]   >>= nInt16;
@@ -611,7 +611,7 @@ public:
 
                 case PROPERTY_INT32:
                     {
-                    OSL_ENSURE( evt.PropertyName == OUString("INT32"), "PropertySetHelper: wrong name" );
+                    OSL_ENSURE( evt.PropertyName == "INT32", "PropertySetHelper: wrong name" );
 
 
                     sal_Int32 nInt32(0),nOldInt32(0);

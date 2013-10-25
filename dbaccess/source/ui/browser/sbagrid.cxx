@@ -446,17 +446,17 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     const PropertyValue* pArgs = aArgs.getConstArray();
     for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArgs)
     {
-        if (pArgs->Name == OUString("ColumnViewPos"))
+        if (pArgs->Name == "ColumnViewPos")
         {
             nColId = pGrid->GetColumnIdFromViewPos(::comphelper::getINT16(pArgs->Value));
             break;
         }
-        if (pArgs->Name == OUString("ColumnModelPos"))
+        if (pArgs->Name == "ColumnModelPos")
         {
             nColId = pGrid->GetColumnIdFromModelPos(::comphelper::getINT16(pArgs->Value));
             break;
         }
-        if (pArgs->Name == OUString("ColumnId"))
+        if (pArgs->Name == "ColumnId")
         {
             nColId = ::comphelper::getINT16(pArgs->Value);
             break;

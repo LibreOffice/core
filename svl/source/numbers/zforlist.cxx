@@ -3727,7 +3727,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         }
         rCurrencyTable.insert( rCurrencyTable.begin() + nCurrencyPos++, pEntry );
         if ( !nSystemCurrencyPosition && (!aConfiguredCurrencyAbbrev.isEmpty() ?
-                                          pEntry->GetBankSymbol() == OUString(aConfiguredCurrencyAbbrev) &&
+                                          pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev &&
                                           pEntry->GetLanguage() == eConfiguredCurrencyLanguage : false) )
         {
             nSystemCurrencyPosition = nCurrencyPos-1;
@@ -3772,7 +3772,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                         rCurrencyTable.insert( rCurrencyTable.begin() + nCurrencyPos++, pEntry );
                         if ( !nSecondarySystemCurrencyPosition &&
                              (!aConfiguredCurrencyAbbrev.isEmpty() ?
-                              pEntry->GetBankSymbol() == OUString(aConfiguredCurrencyAbbrev) :
+                              pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :
                               pEntry->GetLanguage() == eConfiguredCurrencyLanguage) )
                         {
                             nSecondarySystemCurrencyPosition = nCurrencyPos-1;

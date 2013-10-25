@@ -3063,7 +3063,7 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
 
         const SfxFilter* pFilter = rMedium.GetFilter();
         bool bChart = false;
-        if(pFilter->GetName() == OUString("chart8"))
+        if(pFilter->GetName() == "chart8")
             bChart = true;
 
         SetupStorage( xStorage, nVersion, bTemplate, bChart );

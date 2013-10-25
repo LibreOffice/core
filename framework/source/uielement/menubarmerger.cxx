@@ -149,7 +149,7 @@ sal_uInt16 MenuBarMerger::FindMenuItem( const OUString& rCmd, Menu* pCurrMenu )
         const sal_uInt16 nItemId = pCurrMenu->GetItemId( i );
         if ( nItemId > 0 )
         {
-            if ( rCmd == OUString( pCurrMenu->GetItemCommand( nItemId )))
+            if ( rCmd == pCurrMenu->GetItemCommand( nItemId ) )
                 return i;
         }
     }

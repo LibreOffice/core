@@ -1052,7 +1052,7 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const OUString& rDoc ) :
     {
         sal_uInt8 nMode = pDoc->GetLinkMode(i);
         if (nMode)
-            if (pDoc->GetLinkDoc(i) == OUString(aDocName))
+            if (pDoc->GetLinkDoc(i) == aDocName)
             {
                 if (!nCount)
                 {

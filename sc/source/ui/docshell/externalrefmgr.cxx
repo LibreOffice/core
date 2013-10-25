@@ -2373,7 +2373,7 @@ void ScExternalRefManager::convertToAbsName(OUString& rFile) const
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType, false));
     while (pShell)
     {
-        if (rFile == OUString(pShell->GetName()))
+        if (rFile == pShell->GetName())
             return;
 
         pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, &aType, false));

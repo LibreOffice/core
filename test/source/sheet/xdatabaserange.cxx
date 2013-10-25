@@ -71,53 +71,53 @@ void XDatabaseRange::testGetSortDescriptor()
         beans::PropertyValue xProp = xSortDescr[i];
         //std::cout << "Prop " << i << " Name: " << OUString(xProp.Name) << std::endl;
 
-        if (xProp.Name == OUString("IsSortColumns"))
+        if (xProp.Name == "IsSortColumns")
         {
             sal_Bool bIsSortColumns = sal_True;
             xProp.Value >>= bIsSortColumns;
             CPPUNIT_ASSERT(bIsSortColumns == sal_True);
         }
-        else if (xProp.Name == OUString("ContainsHeader"))
+        else if (xProp.Name == "ContainsHeader")
         {
             sal_Bool bContainsHeader = sal_True;
             xProp.Value >>= bContainsHeader;
             CPPUNIT_ASSERT(bContainsHeader == sal_True);
         }
-        else if (xProp.Name == OUString("MaxFieldCount"))
+        else if (xProp.Name == "MaxFieldCount")
         {
             sal_Int32 nMaxFieldCount = 0;
             xProp.Value >>= nMaxFieldCount;
             std::cout << "Value: " << nMaxFieldCount << std::endl;
 
         }
-        else if (xProp.Name == OUString("SortFields"))
+        else if (xProp.Name == "SortFields")
         {
 
         }
-        else if (xProp.Name == OUString("BindFormatsToContent"))
+        else if (xProp.Name == "BindFormatsToContent")
         {
             sal_Bool bBindFormatsToContent = sal_False;
             xProp.Value >>= bBindFormatsToContent;
             CPPUNIT_ASSERT(bBindFormatsToContent == sal_True);
         }
-        else if (xProp.Name == OUString("CopyOutputData"))
+        else if (xProp.Name == "CopyOutputData")
         {
             sal_Bool bCopyOutputData = sal_True;
             xProp.Value >>= bCopyOutputData;
             CPPUNIT_ASSERT(bCopyOutputData == sal_False);
         }
-        else if (xProp.Name == OUString("OutputPosition"))
+        else if (xProp.Name == "OutputPosition")
         {
 
         }
-        else if (xProp.Name == OUString("IsUserListEnabled"))
+        else if (xProp.Name == "IsUserListEnabled")
         {
             sal_Bool bIsUserListEnabled  = sal_True;
             xProp.Value >>= bIsUserListEnabled;
             CPPUNIT_ASSERT(bIsUserListEnabled == sal_False);
 
         }
-        else if (xProp.Name == OUString("UserListIndex"))
+        else if (xProp.Name == "UserListIndex")
         {
             sal_Int32 nUserListIndex = 1;
             xProp.Value >>= nUserListIndex;

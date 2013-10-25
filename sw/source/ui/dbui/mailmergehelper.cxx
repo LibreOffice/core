@@ -753,7 +753,7 @@ sal_Bool SwMailTransferable::isDataFlavorSupported(
             const datatransfer::DataFlavor& aFlavor )
                             throw (uno::RuntimeException)
 {
-    return (aFlavor.MimeType == OUString(m_aMimeType));
+    return (aFlavor.MimeType == m_aMimeType);
 }
 
 uno::Reference< beans::XPropertySetInfo > SwMailTransferable::getPropertySetInfo(  ) throw(uno::RuntimeException)

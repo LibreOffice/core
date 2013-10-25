@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl)
         ScDocument* pDoc = GetSelectedDoc();
         if (pDoc)
             pDoc->CreateValidTabName(aCopyName);
-        if (aCopyName == OUString(pEdTabName->GetText()))
+        if (aCopyName == pEdTabName->GetText())
             pEdTabName->SetText( OUString() );
     }
     else

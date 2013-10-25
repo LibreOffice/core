@@ -1411,7 +1411,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             size_t nCount = aStrings.size();
             size_t nPos = 0;
             while(nPos < nCount && pEntry &&
-                  aStrings[nPos] == OUString(aFmtLb.GetEntryText(pEntry)))
+                  aStrings[nPos] == aFmtLb.GetEntryText(pEntry))
             {
                 ++nPos;
                 pEntry = aFmtLb.Next( pEntry );

@@ -295,7 +295,7 @@ void ScSheetLinkObj::setFileName(const OUString& rNewName)
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            if ( pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab) == OUString(aFileName) )  // alte Datei
+            if ( pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab) == aFileName )  // alte Datei
                 pDoc->SetLink( nTab, pDoc->GetLinkMode(nTab), aNewStr,
                                 pDoc->GetLinkFlt(nTab), pDoc->GetLinkOpt(nTab),
                                 pDoc->GetLinkTab(nTab),

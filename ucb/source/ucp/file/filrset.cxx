@@ -813,8 +813,8 @@ void SAL_CALL XResultSet_impl::setPropertyValue(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == OUString("IsRowCountFinal") ||
-        aPropertyName == OUString("RowCount") )
+    if( aPropertyName == "IsRowCountFinal" ||
+        aPropertyName == "RowCount" )
         return;
     throw beans::UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
@@ -826,13 +826,13 @@ uno::Any SAL_CALL XResultSet_impl::getPropertyValue(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( PropertyName == OUString("IsRowCountFinal") )
+    if( PropertyName == "IsRowCountFinal" )
     {
         uno::Any aAny;
         aAny <<= m_bRowCountFinal;
         return aAny;
     }
-    else if ( PropertyName == OUString("RowCount") )
+    else if ( PropertyName == "RowCount" )
     {
         uno::Any aAny;
         sal_Int32 count = sal::static_int_cast<sal_Int32>(m_aItems.size());
@@ -851,7 +851,7 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == OUString("IsRowCountFinal") )
+    if( aPropertyName == "IsRowCountFinal" )
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pIsFinalListeners )
@@ -860,7 +860,7 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
 
         m_pIsFinalListeners->addInterface( xListener );
     }
-    else if ( aPropertyName == OUString("RowCount") )
+    else if ( aPropertyName == "RowCount" )
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pRowCountListeners )
@@ -880,13 +880,13 @@ void SAL_CALL XResultSet_impl::removePropertyChangeListener(
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == OUString("IsRowCountFinal") &&
+    if( aPropertyName == "IsRowCountFinal" &&
         m_pIsFinalListeners )
     {
         osl::MutexGuard aGuard( m_aMutex );
         m_pIsFinalListeners->removeInterface( aListener );
     }
-    else if ( aPropertyName == OUString("RowCount") &&
+    else if ( aPropertyName == "RowCount" &&
               m_pRowCountListeners )
     {
         osl::MutexGuard aGuard( m_aMutex );

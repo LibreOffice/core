@@ -84,7 +84,7 @@ void SAL_CALL ImplXMLSignatureListener::endDocument(  )
 void SAL_CALL ImplXMLSignatureListener::startElement( const OUString& aName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
-    if ( aName == OUString("Signature") )
+    if ( aName == "Signature" )
     {
             maStartVerifySignatureElementListener.Call( (void*)&xAttribs );
     }

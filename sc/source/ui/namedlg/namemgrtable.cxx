@@ -215,8 +215,8 @@ void ScRangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
 {
     for (SvTreeListEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
     {
-        if (rLine.aName == OUString(GetEntryText(pEntry, 0))
-                && rLine.aScope == OUString(GetEntryText(pEntry, 2)))
+        if (rLine.aName == GetEntryText(pEntry, 0)
+                && rLine.aScope == GetEntryText(pEntry, 2))
         {
             SetCurEntry(pEntry);
         }

@@ -492,7 +492,7 @@ sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
 {
     /*  Get built-in index from the name. Special case: the database range
         'unnamed' will be mapped to Excel's built-in '_FilterDatabase' name. */
-    sal_Unicode cBuiltIn = (bDBRange && (rName == OUString(STR_DB_LOCAL_NONAME))) ?
+    sal_Unicode cBuiltIn = (bDBRange && (rName == STR_DB_LOCAL_NONAME)) ?
         EXC_BUILTIN_FILTERDATABASE : XclTools::GetBuiltInDefNameIndex( rName );
 
     if( cBuiltIn < EXC_BUILTIN_UNKNOWN )

@@ -125,7 +125,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 const OUString sFormula = sCompleteFormula.getToken(0,'(',nIndex);
                                 ::sal_Int16 nGroupOn = report::GroupOn::DEFAULT;
 
-                                if ( sFormula ==OUString("rpt:LEFT"))
+                                if ( sFormula == "rpt:LEFT")
                                 {
                                     nGroupOn = report::GroupOn::PREFIX_CHARACTERS;
                                     OUString sInterval = sCompleteFormula.getToken(1,';',nIndex);
@@ -133,26 +133,26 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                     sInterval = sInterval.getToken(0,')',nIndex);
                                     m_xGroup->setGroupInterval(sInterval.toInt32());
                                 }
-                                else if ( sFormula == OUString("rpt:YEAR"))
+                                else if ( sFormula == "rpt:YEAR")
                                     nGroupOn = report::GroupOn::YEAR;
-                                else if ( sFormula == OUString("rpt:MONTH"))
+                                else if ( sFormula == "rpt:MONTH")
                                 {
                                     nGroupOn = report::GroupOn::MONTH;
                                 }
-                                else if ( sCompleteFormula.matchIgnoreAsciiCase(OUString("rpt:INT((MONTH"),0)
+                                else if ( sCompleteFormula.matchIgnoreAsciiCase("rpt:INT((MONTH",0)
                                        && sCompleteFormula.endsWithIgnoreAsciiCaseAsciiL("-1)/3)+1",8) )
                                 {
                                     nGroupOn = report::GroupOn::QUARTAL;
                                 }
-                                else if ( sFormula ==OUString("rpt:WEEK"))
+                                else if ( sFormula == "rpt:WEEK")
                                     nGroupOn = report::GroupOn::WEEK;
-                                else if ( sFormula ==OUString("rpt:DAY"))
+                                else if ( sFormula == "rpt:DAY")
                                     nGroupOn = report::GroupOn::DAY;
-                                else if ( sFormula ==OUString("rpt:HOUR"))
+                                else if ( sFormula == "rpt:HOUR")
                                     nGroupOn = report::GroupOn::HOUR;
-                                else if ( sFormula ==OUString("rpt:MINUTE"))
+                                else if ( sFormula == "rpt:MINUTE")
                                     nGroupOn = report::GroupOn::MINUTE;
-                                else if ( sFormula ==OUString("rpt:INT"))
+                                else if ( sFormula == "rpt:INT")
                                 {
                                     nGroupOn = report::GroupOn::INTERVAL;
                                     _rImport.removeFunction(sExpression);

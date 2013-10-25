@@ -250,9 +250,9 @@ void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, 
     OUString aString = pDoc->GetString(1, 0, 0);
 
     //check string import
-    CPPUNIT_ASSERT_MESSAGE("string imported not correctly", aString == OUString("String1"));
+    CPPUNIT_ASSERT_MESSAGE("string imported not correctly", aString == "String1");
     aString = pDoc->GetString(1, 1, 0);
-    CPPUNIT_ASSERT_MESSAGE("string not imported correctly", aString == OUString("String2"));
+    CPPUNIT_ASSERT_MESSAGE("string not imported correctly", aString == "String2");
 
     //check basic formula import
     // in case of DIF it just contains values

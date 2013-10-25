@@ -383,7 +383,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
         if(bInsert)
         {
             GetParentSwLabDlg()->TypeIds().push_back(i);
-            if ( !nLstType && aType == OUString(aItem.aLstType) )
+            if ( !nLstType && aType == aItem.aLstType )
                 nLstType = GetParentSwLabDlg()->TypeIds().size();
         }
     }

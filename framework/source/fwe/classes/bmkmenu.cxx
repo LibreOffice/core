@@ -134,7 +134,7 @@ void BmkMenu::Initialize()
         if ( aTitle.isEmpty() && aURL.isEmpty() )
             continue;
 
-        if ( aURL == OUString( "private:separator" ))
+        if ( aURL == "private:separator" )
             InsertSeparator();
         else
         {

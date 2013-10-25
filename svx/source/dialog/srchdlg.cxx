@@ -1210,7 +1210,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
 
 IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
 {
-    bool bInclusive = ( m_pLayoutBtn->GetText() == OUString(aLayoutStr) );
+    bool bInclusive = ( m_pLayoutBtn->GetText() == aLayoutStr );
 
     if ( ( pBtn == m_pSearchBtn )   ||
          ( pBtn == m_pSearchAllBtn )||

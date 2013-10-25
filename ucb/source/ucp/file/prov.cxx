@@ -192,7 +192,7 @@ FileProvider::supportsService(
                   const OUString& ServiceName )
   throw( RuntimeException )
 {
-  return ServiceName == OUString("com.sun.star.ucb.FileContentProvider");
+  return ServiceName == "com.sun.star.ucb.FileContentProvider";
 }
 
 

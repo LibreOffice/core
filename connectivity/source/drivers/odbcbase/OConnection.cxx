@@ -161,7 +161,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr,sal_Int32 nTim
     {
         OUString sVersion;
         OTools::GetInfo(this,m_aConnectionHandle,SQL_DRIVER_ODBC_VER,sVersion,*this,getTextEncoding());
-        m_bUseOldDateFormat =  sVersion == OUString("02.50") || sVersion == OUString("02.00");
+        m_bUseOldDateFormat =  sVersion == "02.50" || sVersion == "02.00";
     }
     catch(Exception&)
     {

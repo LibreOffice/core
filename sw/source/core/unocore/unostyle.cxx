@@ -1691,7 +1691,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             {
                 for (sal_uInt16 i=0, nEnd = pPrinter->GetPaperBinCount(); i < nEnd; i++ )
                 {
-                    if (sTmp == OUString ( pPrinter->GetPaperBinName ( i ) ) )
+                    if (sTmp == pPrinter->GetPaperBinName ( i ) )
                     {
                         nBin = i;
                         break;

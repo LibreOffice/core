@@ -232,22 +232,22 @@ void test_SimpleRegistry(
             name = seqNames.getArray()[i];
             xSubKey = seqKeys.getArray()[i];
 
-            if (name == OUString( "/FirstKey/FirstSubKey" ))
+            if (name == "/FirstKey/FirstSubKey" )
             {
                 OSL_ENSURE( xSubKey->getLongValue() == 123456789,
                             "test_SimpleRegistry error 10" );
             } else
-            if (name == OUString( "/FirstKey/SecondSubKey" ))
+            if (name == "/FirstKey/SecondSubKey" )
             {
-                OSL_ENSURE( xSubKey->getAsciiValue() == OUString( "ich bin ein acsii value" ),
+                OSL_ENSURE( xSubKey->getAsciiValue() == "ich bin ein acsii value",
                             "test_SimpleRegistry error 11" );
             } else
-            if (name == OUString( "/FirstKey/ThirdSubKey" ))
+            if (name == "/FirstKey/ThirdSubKey" )
             {
-                OSL_ENSURE( xSubKey->getStringValue() == OUString( "ich bin ein unicode value" ),
+                OSL_ENSURE( xSubKey->getStringValue() == "ich bin ein unicode value",
                             "test_SimpleRegistry error 12" );
             } else
-            if (name == OUString( "/FirstKey/FourthSubKey" ))
+            if (name == "/FirstKey/FourthSubKey" )
             {
                 Sequence<sal_Int8> seqByte = xSubKey->getBinaryValue();
                 OSL_ENSURE(!strcmp(((const char*)seqByte.getArray()), "ich bin ein binary value"),
@@ -287,9 +287,9 @@ void test_SimpleRegistry(
         Sequence<OUString> seqAscii2;
         seqAscii2 = xKey->getAsciiListValue();
         OSL_ENSURE( seqAscii2.getLength() == 3, "test_SimpleRegistry error 18" );
-        OSL_ENSURE( seqAscii2.getArray()[0] == OUString( "Hallo" ), "test_SimpleRegistry error 19");
-        OSL_ENSURE( seqAscii2.getArray()[1] == OUString( "jetzt komm" ), "test_SimpleRegistry error 20");
-        OSL_ENSURE( seqAscii2.getArray()[2] == OUString( "ich" ), "test_SimpleRegistry error 21");
+        OSL_ENSURE( seqAscii2.getArray()[0] == "Hallo", "test_SimpleRegistry error 19");
+        OSL_ENSURE( seqAscii2.getArray()[1] == "jetzt komm", "test_SimpleRegistry error 20");
+        OSL_ENSURE( seqAscii2.getArray()[2] == "ich", "test_SimpleRegistry error 21");
 
         xKey = xRootKey->createKey(OUString( "FourthKey" ));
         OUString pUnicode[3];
@@ -303,9 +303,9 @@ void test_SimpleRegistry(
         Sequence<OUString> seqUnicode2;
         seqUnicode2 = xKey->getStringListValue();
         OSL_ENSURE( seqUnicode2.getLength() == 3, "test_SimpleRegistry error 22" );
-        OSL_ENSURE( seqUnicode2.getArray()[0] == OUString( "Hallo" ), "test_SimpleRegistry error 23");
-        OSL_ENSURE( seqUnicode2.getArray()[1] == OUString( "jetzt komm" ), "test_SimpleRegistry error 24");
-        OSL_ENSURE( seqUnicode2.getArray()[2] == OUString( "ich als unicode" ), "test_SimpleRegistry error 25");
+        OSL_ENSURE( seqUnicode2.getArray()[0] == "Hallo", "test_SimpleRegistry error 23");
+        OSL_ENSURE( seqUnicode2.getArray()[1] == "jetzt komm", "test_SimpleRegistry error 24");
+        OSL_ENSURE( seqUnicode2.getArray()[2] == "ich als unicode", "test_SimpleRegistry error 25");
 
 
         xReg->open(testreg2, sal_False, sal_True);
@@ -354,18 +354,18 @@ void test_SimpleRegistry(
 
         xKey = xRootKey->openKey("/FifthKey/MyFirstLink");
         OSL_ENSURE( xKey->isValid(), "test_SimpleRegistry error 27" );
-        OSL_ENSURE( xKey->getKeyName() == OUString( "/ThirdKey/FirstSubKey" ), "test_SimpleRegistry error 28" );
+        OSL_ENSURE( xKey->getKeyName() == "/ThirdKey/FirstSubKey", "test_SimpleRegistry error 28" );
 
         xKey->createLink(OUString( "/WithSubSubKey/MyFourthLink" ),
                          OUString( "/FourthKey/MySecondLink" ));
 
         OSL_ENSURE( xKey->getLinkTarget(OUString( "/WithSubSubKey/MyFourthLink" ))
-                     == OUString( "/FourthKey/MySecondLink" ), "test_SimpleRegistry error 29" );
+                     == "/FourthKey/MySecondLink", "test_SimpleRegistry error 29" );
 
         try
         {
             OSL_ENSURE( xKey->getResolvedName(OUString( "/WithSubSubKey/MyFourthLink/BlaBlaBla" ))
-                         == OUString( "/FourthKey/MySecondLink/BlaBlaBla" ), "test_SimpleRegistry error 30" );
+                         == "/FourthKey/MySecondLink/BlaBlaBla", "test_SimpleRegistry error 30" );
         }
         catch(InvalidRegistryException&)
         {
@@ -388,7 +388,7 @@ void test_SimpleRegistry(
         }
 
         OSL_ENSURE( xRootKey->getLinkTarget(OUString( "/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink" ))
-                     == OUString( "/FourthKey/MySecondLink" ), "test_SimpleRegistry error 31" );
+                     == "/FourthKey/MySecondLink", "test_SimpleRegistry error 31" );
 
         xRootKey->deleteLink(OUString( "/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink" ));
 
@@ -399,14 +399,14 @@ void test_SimpleRegistry(
         seqNames = xKey->getKeyNames();
         seqKeys = xKey->openKeys();
 
-        OSL_ENSURE( seqNames.getArray()[0] == OUString( "/SixthKey/SixthSubKey" ),
+        OSL_ENSURE( seqNames.getArray()[0] == "/SixthKey/SixthSubKey",
                       "test_SimpleRegistry error 32" );
-        OSL_ENSURE( seqNames.getArray()[1] == OUString( "/SixthKey/MyThirdLink" ),
+        OSL_ENSURE( seqNames.getArray()[1] == "/SixthKey/MyThirdLink",
                       "test_SimpleRegistry error 33" );
 
-        OSL_ENSURE( seqKeys.getArray()[0]->getKeyName() == OUString( "/SixthKey/SixthSubKey" ),
+        OSL_ENSURE( seqKeys.getArray()[0]->getKeyName() == "/SixthKey/SixthSubKey",
                       "test_SimpleRegistry error 34" );
-        OSL_ENSURE( seqKeys.getArray()[1]->getKeyName() == OUString( "/ThirdKey/FirstSubKey/WithSubSubKey" ),
+        OSL_ENSURE( seqKeys.getArray()[1]->getKeyName() == "/ThirdKey/FirstSubKey/WithSubSubKey",
                       "test_SimpleRegistry error 35" );
 
         xRootKey->deleteLink(OUString( "/FourthKey/MySecondLink" ));
@@ -457,7 +457,7 @@ void test_DefaultRegistry(
 
     OSL_ENSURE( xServInfo.is(), "test_DefaultRegistry error2");
 
-    OSL_ENSURE( xServInfo->getImplementationName() == OUString( "com.sun.star.comp.stoc.NestedRegistry" ), "test_DefualtRegistry error3");
+    OSL_ENSURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.NestedRegistry", "test_DefualtRegistry error3");
     OSL_ENSURE( xServInfo->supportsService("com.sun.star.registry.NestedRegistry"), "test_DefaultRegistry error4");
     OSL_ENSURE( xServInfo->getSupportedServiceNames().getLength() == 1, "test_DefaultRegistry error5");
     xServInfo.clear();
@@ -470,7 +470,7 @@ void test_DefaultRegistry(
 
         Reference<XRegistryKey> xKey = xRootKey->openKey("/UCR/com/sun/star/registry/XSimpleRegistry");
 
-        OSL_ENSURE( xKey->getKeyName() == OUString( "/UCR/com/sun/star/registry/XSimpleRegistry" ),
+        OSL_ENSURE( xKey->getKeyName() == "/UCR/com/sun/star/registry/XSimpleRegistry",
                      "test_DefaultRegistry error 7" );
 
         if (bMergeDifferently)
@@ -508,11 +508,11 @@ void test_DefaultRegistry(
             Sequence<OUString> seqValue = xKey->getAsciiListValue();
 
             OSL_ENSURE( seqValue.getLength() == 3, "test_DefaultRegistry error 10" );
-            OSL_ENSURE( seqValue.getArray()[0] == OUString( "Hallo" ),
+            OSL_ENSURE( seqValue.getArray()[0] == "Hallo",
                           "test_DefaultRegistry error 11" );
-            OSL_ENSURE( seqValue.getArray()[1] == OUString( "jetzt komm" ),
+            OSL_ENSURE( seqValue.getArray()[1] == "jetzt komm",
                           "test_DefaultRegistry error 12" );
-            OSL_ENSURE( seqValue.getArray()[2] == OUString( "ich" ),
+            OSL_ENSURE( seqValue.getArray()[2] == "ich",
                           "test_DefaultRegistry error 13" );
 
             Sequence<sal_Int32> seqLong(3);
@@ -537,20 +537,20 @@ void test_DefaultRegistry(
 
         xKey = xRootKey->openKey("/Test/FifthKey/MyFirstLink");
         OSL_ENSURE( xKey->isValid(), "test_DefaultRegistry error 18" );
-        OSL_ENSURE( xKey->getKeyName() == OUString( "/Test/ThirdKey/FirstSubKey" ),
+        OSL_ENSURE( xKey->getKeyName() == "/Test/ThirdKey/FirstSubKey",
                       "test_DefaultRegistry error 19" );
 
         xKey->createLink(OUString( "/WithSubSubKey/MyFourthLink" ),
                          OUString( "/Test/FourthKey/MySecondLink" ));
 
         OSL_ENSURE( xKey->getLinkTarget(OUString( "/WithSubSubKey/MyFourthLink" ))
-                     == OUString( "/Test/FourthKey/MySecondLink" ),
+                     == "/Test/FourthKey/MySecondLink",
                       "test_DefaultRegistry error 20" );
 
         try
         {
             OSL_ENSURE( xKey->getResolvedName(OUString( "/WithSubSubKey/MyFourthLink/BlaBlaBla" ))
-                          == OUString( "/Test/FourthKey/MySecondLink/BlaBlaBla" ),
+                          == "/Test/FourthKey/MySecondLink/BlaBlaBla",
                           "test_DefaultRegistry error 21" );
         }
         catch(InvalidRegistryException&)
@@ -573,7 +573,7 @@ void test_DefaultRegistry(
         }
 
         OSL_ENSURE( xRootKey->getLinkTarget(OUString( "/Test/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink" ))
-                     == OUString( "/Test/FourthKey/MySecondLink" ),
+                     == "/Test/FourthKey/MySecondLink",
                       "test_DefaultRegistry error 22" );
 
         xRootKey->deleteLink(OUString( "/Test/FifthKey/MyFirstLink/WithSubSubKey/MyFourthLink" ));
@@ -581,12 +581,12 @@ void test_DefaultRegistry(
         xKey = xRootKey->openKey("/Test/DefaultLink/SecondSubSubKey");
         if (xKey.is())
         {
-            OSL_ENSURE( xKey->getKeyName() == OUString( "/Test/ThirdKey/FirstSubKey/SecondSubSubKey" ), "test_DefaultRegistry error 23" );
+            OSL_ENSURE( xKey->getKeyName() == "/Test/ThirdKey/FirstSubKey/SecondSubSubKey", "test_DefaultRegistry error 23" );
         }
         xKey = xRootKey->createKey(OUString( "/Test/DefaultLink/ThirdSubSubKey" ));
         if (xKey.is())
         {
-            OSL_ENSURE( xKey->getKeyName() == OUString( "/Test/ThirdKey/FirstSubKey/ThirdSubSubKey" ),
+            OSL_ENSURE( xKey->getKeyName() == "/Test/ThirdKey/FirstSubKey/ThirdSubSubKey",
                           "test_DefaultRegistry error 24" );
         }
 

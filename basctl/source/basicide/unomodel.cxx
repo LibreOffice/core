@@ -93,7 +93,7 @@ OUString SIDEModel::getImplementationName_Static()
 
 sal_Bool SIDEModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == OUString( "com.sun.star.script.BasicIDE" );
+    return rServiceName == "com.sun.star.script.BasicIDE";
 }
 uno::Sequence< OUString > SIDEModel::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {

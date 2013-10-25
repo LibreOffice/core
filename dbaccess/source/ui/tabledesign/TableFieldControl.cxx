@@ -58,7 +58,7 @@ sal_Bool OTableFieldControl::IsReadOnly()
     {
         // The columns of a ::com::sun::star::sdbcx::View could not be locked
         Reference<XPropertySet> xTable = GetCtrl()->GetView()->getController().getTable();
-        if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == OUString("VIEW"))
+        if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == "VIEW")
             bRead = sal_True;
         else
         {

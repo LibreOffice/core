@@ -186,7 +186,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
     for (i = 0; i < n; i++)
     {
         PropertyChangeEvent evt (rEvent[i]);
-        if (evt.PropertyName == OUString("DocumentHeader"))
+        if (evt.PropertyName == "DocumentHeader")
         {
             Sequence<DocumentHeaderField> aHead;
             if (evt.NewValue >>= aHead)
@@ -211,7 +211,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
 
             m_xLockBytes->SetStreamValid_Impl();
         }
-        else if (evt.PropertyName == OUString("PresentationURL"))
+        else if (evt.PropertyName == "PresentationURL")
         {
             OUString aUrl;
             if (evt.NewValue >>= aUrl)
@@ -224,7 +224,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
                 }
             }
         }
-        else if (evt.PropertyName == OUString("MediaType"))
+        else if (evt.PropertyName == "MediaType")
         {
             OUString aContentType;
             if (evt.NewValue >>= aContentType)

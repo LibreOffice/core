@@ -208,7 +208,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                      pCustomShow != NULL && bDifferent;
                      pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
                 {
-                    if( aStr == OUString( pCustomShow->GetName() ) )
+                    if( aStr == pCustomShow->GetName() )
                         bDifferent = sal_False;
                 }
                 if( !bDifferent )

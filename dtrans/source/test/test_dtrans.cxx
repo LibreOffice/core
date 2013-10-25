@@ -434,7 +434,7 @@ int SAL_CALL main( int argc, const char* argv[] )
         TEST( "initial number of clipboards (0): ", xClipboardManager->listClipboardNames().getLength() == 0 );
         PERFORM( "insertion of generic clipboard: ", xClipboardManager->addClipboard( xClipboard ) );
         TEST( "number of inserted clipboards (1): ", xClipboardManager->listClipboardNames().getLength() == 1 );
-        TEST( "name of inserted clipboard (generic): ", xClipboardManager->listClipboardNames()[0] == OUString("generic") );
+        TEST( "name of inserted clipboard (generic): ", xClipboardManager->listClipboardNames()[0] == "generic" );
         TEST( "inserted clipboard instance: ", xClipboardManager->getClipboard( OUString("generic") ) == xClipboard );
         PERFORM( "removal of generic clipboard: ", xClipboardManager->removeClipboard( OUString("generic") ) );
         TEST( "number of inserted clipboards (0): ", xClipboardManager->listClipboardNames().getLength() == 0 );

@@ -246,13 +246,13 @@ void SAL_CALL CMimeContentType::trailer( void )
     OUString sToken(TOKEN);
     while( !m_nxtSym.isEmpty( ) )
     {
-        if ( m_nxtSym == OUString("(") )
+        if ( m_nxtSym == "(" )
         {
             getSym( );
             comment( );
             acceptSym( OUString(")") );
         }
-        else if ( m_nxtSym == OUString(";") )
+        else if ( m_nxtSym == ";" )
         {
             // get the parameter name
             getSym( );
@@ -315,7 +315,7 @@ OUString SAL_CALL CMimeContentType::pValue( )
 
     OUString sToken(TOKEN);
     // quoted pvalue
-    if ( m_nxtSym == OUString( "\"" ) )
+    if ( m_nxtSym == "\"" )
     {
         getSym( );
         pvalue = quotedPValue( );
@@ -362,7 +362,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
         else if ( isInRange( m_nxtSym, OUString(TOKEN) + OUString(TSPECIALS) + OUString(SPACE) ) )
         {
             pvalue += m_nxtSym;
-            if ( m_nxtSym == OUString( "\"" ) )
+            if ( m_nxtSym == "\"" )
                 bAfterQuoteSign = sal_True;
             else
                 bAfterQuoteSign = sal_False;
@@ -408,7 +408,7 @@ void SAL_CALL CMimeContentType::comment( void )
     {
         if ( isInRange( m_nxtSym, OUString(TOKEN) + OUString(SPACE) ) )
             getSym( );
-        else if ( m_nxtSym == OUString(")") )
+        else if ( m_nxtSym == ")" )
             break;
         else
             throw IllegalArgumentException( );

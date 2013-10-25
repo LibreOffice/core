@@ -361,7 +361,7 @@ void SvBaseLink::_GetRealObject( sal_Bool bConnect)
     {
         OUString sServer;
         if( pImpl->m_pLinkMgr->GetDisplayNames( this, &sServer ) &&
-            sServer == OUString(GetpApp()->GetAppName()) )  // internal Link !!!
+            sServer == GetpApp()->GetAppName() )  // internal Link !!!
         {
             // so that the Internal link can be created!
             nObjType = OBJECT_INTERN;

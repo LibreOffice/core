@@ -341,7 +341,7 @@ xKey.clear();
             xKey->getPropertyValue(PROPERTY_TYPE) >>= nType;
             OUString sReferencedTable;
             xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
-            if ( sReferencedTable == OUString(getReferencedTable()->GetTableName()) )
+            if ( sReferencedTable == getReferencedTable()->GetTableName() )
             {
                 xColSup.set(xKey,UNO_QUERY_THROW);
                 try

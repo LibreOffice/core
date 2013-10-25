@@ -1991,7 +1991,7 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
             SmTextNode *pText=(SmTextNode *)pNode;
             //if the token str and the result text are the same then this
             //is to be seen as text, else assume it's a mathchar
-            if (pText->GetText() == OUString(pText->GetToken().aText))
+            if (pText->GetText() == pText->GetToken().aText)
                 HandleText(pText,nLevel);
             else
                 HandleMath(pText,nLevel);

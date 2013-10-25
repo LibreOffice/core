@@ -562,25 +562,25 @@ OUString StyleSettings::ImplSymbolsStyleToName( sal_uLong nStyle ) const
 
 sal_uLong StyleSettings::ImplNameToSymbolsStyle( const OUString &rName ) const
 {
-    if ( rName == OUString("default") )
+    if ( rName == "default" )
         return STYLE_SYMBOLS_DEFAULT;
-    else if ( rName == OUString("hicontrast") )
+    else if ( rName == "hicontrast" )
         return STYLE_SYMBOLS_HICONTRAST;
-    else if ( rName == OUString("industrial") )
+    else if ( rName == "industrial" )
         return STYLE_SYMBOLS_TANGO; // industrial is dead
-    else if ( rName == OUString("crystal") )
+    else if ( rName == "crystal" )
         return STYLE_SYMBOLS_CRYSTAL;
-    else if ( rName == OUString("tango") )
+    else if ( rName == "tango" )
         return STYLE_SYMBOLS_TANGO;
-    else if ( rName == OUString("oxygen") )
+    else if ( rName == "oxygen" )
         return STYLE_SYMBOLS_OXYGEN;
-    else if ( rName == OUString("classic") )
+    else if ( rName == "classic" )
         return STYLE_SYMBOLS_CLASSIC;
-    else if ( rName == OUString("human") )
+    else if ( rName == "human" )
         return STYLE_SYMBOLS_HUMAN;
-    else if ( rName == OUString("sifr") )
+    else if ( rName == "sifr" )
         return STYLE_SYMBOLS_SIFR;
-    else if ( rName == OUString("tango_testing") )
+    else if ( rName == "tango_testing" )
         return STYLE_SYMBOLS_TANGO_TESTING;
 
     return STYLE_SYMBOLS_AUTO;

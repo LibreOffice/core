@@ -104,7 +104,7 @@ sal_Bool MorkDriver::acceptsURL(OUString const & url)
         {
             aAddrbookScheme= aAddrbookURI;
         }
-        else if(url == OUString("sdbc:address:") )
+        else if( url == "sdbc:address:" )
         {
             return false;
         }

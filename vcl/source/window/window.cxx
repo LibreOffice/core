@@ -7909,7 +7909,7 @@ void Window::SetCursor( Cursor* pCursor )
 
 void Window::SetText( const OUString& rStr )
 {
-    if (rStr == OUString(mpWindowImpl->maText))
+    if (rStr == mpWindowImpl->maText)
         return;
 
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );

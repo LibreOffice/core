@@ -575,7 +575,7 @@ sal_Bool ImplIntroTest::hasElements(  )
 sal_Int32 getIndexForName( const OUString& ItemName )
 {
     OUString aLeftStr = ItemName.copy( 0, 4 );
-    if( aLeftStr == OUString("Item") )
+    if( aLeftStr == "Item" )
     {
         // TODO
         OUString aNumStr = ItemName.copy( 4 );

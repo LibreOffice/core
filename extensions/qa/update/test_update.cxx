@@ -65,7 +65,7 @@ protected:
         deployment::UpdateInformationEntry aEntry;
         if ( aUpdateInfoEnumeration->nextElement() >>= aEntry )
         {
-            CPPUNIT_ASSERT( aEntry.UpdateDocument->getNodeName() == OUString( "description" ) );
+            CPPUNIT_ASSERT( aEntry.UpdateDocument->getNodeName() == "description" );
 
             uno::Reference< dom::XNodeList> xChildNodes = aEntry.UpdateDocument->getChildNodes();
             CPPUNIT_ASSERT( xChildNodes.is() );
@@ -85,7 +85,7 @@ protected:
 
             //uno::Reference< dom::XElement > xChildId( xChildNodes->item( 0 ), uno::UNO_QUERY );
             //CPPUNIT_ASSERT( xChildId.is() );
-            //CPPUNIT_ASSERT( xChildId->getNodeValue() == OUString( "LibreOffice_3.4" ) );
+            //CPPUNIT_ASSERT( xChildId->getNodeValue() == "LibreOffice_3.4" );
             //fprintf( stderr, "Attribute == %s\n", OUStringToOString( aEntry.UpdateDocument->getAttribute( OUString( "test" ) ), RTL_TEXTENCODING_UTF8 ).getStr() );
             //fprintf( stderr, "Value == %s\n", OUStringToOString( xChildId->getNodeValue(), RTL_TEXTENCODING_UTF8 ).getStr() );
             // TODO check more deeply
@@ -108,7 +108,7 @@ protected:
                     OUString( "InstallSetID" ) ) )
         {
             CPPUNIT_ASSERT( aInfo.Sources.size() == 1 );
-            CPPUNIT_ASSERT( aInfo.Sources[0].URL == OUString( "http://www.libreoffice.org/download/" ) );
+            CPPUNIT_ASSERT( aInfo.Sources[0].URL == "http://www.libreoffice.org/download/" );
         }
         else
             CPPUNIT_FAIL( "Calling checkForUpdates() failed." );

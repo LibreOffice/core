@@ -460,17 +460,17 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 {
                     OUString aServiceName;
                     rProperty.maValue >>= aServiceName;
-                    if      (aServiceName == OUString("com.sun.star.chart2.LinearRegressionCurve"))
+                    if      (aServiceName == "com.sun.star.chart2.LinearRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_LINEAR ));
-                    else if (aServiceName == OUString("com.sun.star.chart2.LogarithmicRegressionCurve"))
+                    else if (aServiceName == "com.sun.star.chart2.LogarithmicRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_LOGARITHMIC ));
-                    else if (aServiceName == OUString("com.sun.star.chart2.ExponentialRegressionCurve"))
+                    else if (aServiceName == "com.sun.star.chart2.ExponentialRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_EXPONENTIAL ));
-                    else if (aServiceName == OUString("com.sun.star.chart2.PotentialRegressionCurve"))
+                    else if (aServiceName == "com.sun.star.chart2.PotentialRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_POWER ));
-                    else if (aServiceName == OUString("com.sun.star.chart2.PolynomialRegressionCurve"))
+                    else if (aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_POLYNOMIAL ));
-                    else if (aServiceName == OUString("com.sun.star.chart2.MovingAverageRegressionCurve"))
+                    else if (aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve")
                         sValueBuffer.append( GetXMLToken( XML_MOVING_AVERAGE ));
                 }
                 break;

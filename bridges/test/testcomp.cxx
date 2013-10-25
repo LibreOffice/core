@@ -95,7 +95,7 @@ Any OInstanceProvider::queryInterface( const  Type & aType ) throw ( RuntimeExce
               ::com::sun::star::uno::RuntimeException)
 {
     // Tries to get the PerformanceTestObject
-    if( sObjectName == OUString( "TestRemoteObject" ) )
+    if( sObjectName == "TestRemoteObject" )
     {
         return m_rSMgr->createInstance(
             OUString("com.sun.star.test.performance.PerformanceTestObject") );

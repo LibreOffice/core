@@ -220,7 +220,7 @@ EDriverType MozabDriver::impl_classifyURL( const OUString& url )
         // There isn't any subschema: - but could be just subschema
         if ( !aAddrbookURI.isEmpty() )
             aAddrbookScheme= aAddrbookURI;
-        else if(url == OUString("sdbc:address:") )
+        else if(url == "sdbc:address:" )
             return Unknown; // TODO check
         else
             return Unknown;

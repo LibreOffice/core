@@ -1348,7 +1348,7 @@ DECLARE_OOXML_TEST(testSmartart, "smartart.docx")
     sal_Bool bTheme = sal_False;
     for(int i = 0; i < aGrabBag.getLength(); ++i)
     {
-      if (aGrabBag[i].Name == OUString("OOXTheme"))
+      if (aGrabBag[i].Name == "OOXTheme")
       {
         bTheme = sal_True;
         uno::Reference<xml::dom::XDocument> aThemeDom;
@@ -1372,35 +1372,35 @@ DECLARE_OOXML_TEST(testSmartart, "smartart.docx")
     sal_Bool bData = sal_False, bLayout = sal_False, bQStyle = sal_False, bColor = sal_False, bDrawing = sal_False;
     for(int i = 0; i < aGrabBag.getLength(); ++i)
     {
-      if (aGrabBag[i].Name == OUString("OOXData"))
+      if (aGrabBag[i].Name == "OOXData")
       {
         bData = sal_True;
         uno::Reference<xml::dom::XDocument> aDataDom;
         CPPUNIT_ASSERT(aGrabBag[i].Value >>= aDataDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aDataDom.get()); // Reference not empty
       }
-      else if (aGrabBag[i].Name == OUString("OOXLayout"))
+      else if (aGrabBag[i].Name == "OOXLayout")
       {
         bLayout = sal_True;
         uno::Reference<xml::dom::XDocument> aLayoutDom;
         CPPUNIT_ASSERT(aGrabBag[i].Value >>= aLayoutDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aLayoutDom.get()); // Reference not empty
       }
-      else if (aGrabBag[i].Name == OUString("OOXStyle"))
+      else if (aGrabBag[i].Name == "OOXStyle")
       {
         bQStyle = sal_True;
         uno::Reference<xml::dom::XDocument> aStyleDom;
         CPPUNIT_ASSERT(aGrabBag[i].Value >>= aStyleDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aStyleDom.get()); // Reference not empty
       }
-      else if (aGrabBag[i].Name == OUString("OOXColor"))
+      else if (aGrabBag[i].Name == "OOXColor")
       {
         bColor = sal_True;
         uno::Reference<xml::dom::XDocument> aColorDom;
         CPPUNIT_ASSERT(aGrabBag[i].Value >>= aColorDom); // PropertyValue of proper type
         CPPUNIT_ASSERT(aColorDom.get()); // Reference not empty
       }
-      else if (aGrabBag[i].Name == OUString("OOXDrawing"))
+      else if (aGrabBag[i].Name == "OOXDrawing")
       {
         bDrawing = sal_True;
         uno::Reference<xml::dom::XDocument> aDrawingDom;
