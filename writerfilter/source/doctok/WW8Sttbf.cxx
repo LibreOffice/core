@@ -68,27 +68,6 @@ OUString WW8Sttbf::getEntry(sal_uInt32 nPos) const
     return getString(getEntryOffset(nPos));
 }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-WW8StringProperty::WW8StringProperty(sal_uInt32 nId, WW8StringValue::Pointer_t pValue)
-: mnId(nId), mpValue(pValue)
-{
-}
-SAL_WNODEPRECATED_DECLARATIONS_POP
-
-WW8StringProperty::~WW8StringProperty()
-{
-}
-
-void WW8StringProperty::resolve(Properties & rProperties)
-{
-    rProperties.attribute(mnId, *mpValue);
-}
-
-string WW8StringProperty::getType() const
-{
-    return "WW8StringProperty";
-}
-
 sal_uInt32 WW8SttbRgtplc::getEntryCount()
 {
     return getU16(2);
