@@ -1343,6 +1343,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocCount:
             case ocCount2:
             case ocVLookup:
+            case ocLIA:
             case ocIRR:
             case ocMIRR:
             case ocRMZ:
