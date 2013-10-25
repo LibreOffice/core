@@ -9,14 +9,16 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,firebird,firebird))
 
+$(eval $(call gb_ExternalPackage_set_outdir,firebird,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,firebird,firebird))
 
 ifeq ($(OS)-$(COM),WNT-MSC)
-$(eval $(call gb_ExternalPackage_add_library_for_install,firebird,bin/ifbembed.dll,gen/firebird/bin/ifbembed.dll))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/ifbembed.dll,gen/firebird/bin/ifbembed.dll))
 else ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_library_for_install,firebird,lib/libfbembed.dylib,gen/firebird/lib/libfbembed.dylib.2.5.2))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbembed.dylib,gen/firebird/lib/libfbembed.dylib.2.5.2))
 else
-$(eval $(call gb_ExternalPackage_add_library_for_install,firebird,lib/libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5.2))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5.2))
 endif
 
 # vim: set noet sw=4 ts=4:

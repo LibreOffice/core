@@ -9,15 +9,17 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,lpsolve,lpsolve))
 
+$(eval $(call gb_ExternalPackage_set_outdir,lpsolve,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,lpsolve,lpsolve))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 ifeq ($(OS),WNT)
-$(eval $(call gb_ExternalPackage_add_library_for_install,lpsolve,bin/lpsolve55.dll,lpsolve55/lpsolve55.dll))
+$(eval $(call gb_ExternalPackage_add_file,lpsolve,$(LIBO_LIB_FOLDER)/lpsolve55.dll,lpsolve55/lpsolve55.dll))
 else ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_library_for_install,lpsolve,lib/liblpsolve55.dylib,lpsolve55/liblpsolve55.dylib))
+$(eval $(call gb_ExternalPackage_add_file,lpsolve,$(LIBO_LIB_FOLDER)/liblpsolve55.dylib,lpsolve55/liblpsolve55.dylib))
 else # $(OS) != WNT/MACOSX
-$(eval $(call gb_ExternalPackage_add_library_for_install,lpsolve,lib/liblpsolve55.so,lpsolve55/liblpsolve55.so))
+$(eval $(call gb_ExternalPackage_add_file,lpsolve,$(LIBO_LIB_FOLDER)/liblpsolve55.so,lpsolve55/liblpsolve55.so))
 endif # $(OS)
 endif # $(DISABLE_DYNLOADING)
 

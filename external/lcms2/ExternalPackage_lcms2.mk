@@ -9,21 +9,23 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,lcms2,lcms2))
 
+$(eval $(call gb_ExternalPackage_set_outdir,lcms2,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,lcms2,lcms2))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_library_for_install,lcms2,lib/liblcms2.2.dylib,src/.libs/liblcms2.2.dylib))
+$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2.2.dylib,src/.libs/liblcms2.2.dylib))
 else ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
-$(eval $(call gb_ExternalPackage_add_library_for_install,lcms2,bin/liblcms2-2.dll,src/.libs/liblcms2-2.dll))
+$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2-2.dll,src/.libs/liblcms2-2.dll))
 else ifeq ($(COM),MSC)
 # note: the lcms2d.lib references LCMS2.DLL (without D!) but the dll is
 # actually called LCMS2D.DLL then
-$(eval $(call gb_ExternalPackage_add_library_for_install,lcms2,bin/lcms2.dll,bin/lcms2$(if $(MSVC_USE_DEBUG_RUNTIME),d).dll))
+$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/lcms2.dll,bin/lcms2$(if $(MSVC_USE_DEBUG_RUNTIME),d).dll))
 endif # $(COM)
 else  # $(OS) != WNT/MACOSX
-$(eval $(call gb_ExternalPackage_add_library_for_install,lcms2,lib/liblcms2.so.2,src/.libs/liblcms2.so.2.0.4))
+$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2.so.2,src/.libs/liblcms2.so.2.0.4))
 endif # $(OS)
 endif # $(DISABLE_DYNLOADING)
 
