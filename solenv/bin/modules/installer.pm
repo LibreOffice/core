@@ -47,7 +47,6 @@ use installer::scriptitems;
 use installer::setupscript;
 use installer::simplepackage;
 use installer::strip qw(strip_libraries);
-use installer::substfilenamefiles;
 use installer::systemactions;
 use installer::windows::assembly;
 use installer::windows::binary;
@@ -630,14 +629,6 @@ sub run {
         {
             installer::scriptitems::quoting_illegal_filenames($filesinproductlanguageresolvedarrayref);
         }
-
-        #####################################
-        # Files with flag SUBST_FILENAME
-        #####################################
-
-        installer::logger::print_message( "... analyzing files with flag SUBST_FILENAME ...\n" );
-
-        installer::substfilenamefiles::resolving_subst_filename_flag($filesinproductlanguageresolvedarrayref, $allvariableshashref, $languagestringref);
 
         #####################################
         # Files with flag SCPZIP_REPLACE
