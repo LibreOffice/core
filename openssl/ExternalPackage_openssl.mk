@@ -9,10 +9,12 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,openssl,openssl))
 
+$(eval $(call gb_ExternalPackage_set_outdir,openssl,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,openssl,openssl))
 
 ifeq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_libraries_for_install,openssl,bin,\
+$(eval $(call gb_ExternalPackage_add_files,openssl,$(LIBO_LIB_FOLDER),\
 	out32dll/ssleay32.dll \
 	out32dll/libeay32.dll \
 ))

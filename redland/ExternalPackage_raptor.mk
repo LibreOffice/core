@@ -9,16 +9,18 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,raptor,raptor))
 
+$(eval $(call gb_ExternalPackage_set_outdir,raptor,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,raptor,raptor))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_library_for_install,raptor,lib/libraptor2-lo.$(RAPTOR_MAJOR).dylib,src/.libs/libraptor2-lo.$(RAPTOR_MAJOR).dylib))
+$(eval $(call gb_ExternalPackage_add_file,raptor,$(LIBO_LIB_FOLDER)/libraptor2-lo.$(RAPTOR_MAJOR).dylib,src/.libs/libraptor2-lo.$(RAPTOR_MAJOR).dylib))
 else ifeq ($(OS)-$(COM),WNT-GCC)
-$(eval $(call gb_ExternalPackage_add_library_for_install,raptor,bin/libraptor2-$(RAPTOR_MAJOR).dll,src/.libs/libraptor2-$(RAPTOR_MAJOR).dll))
+$(eval $(call gb_ExternalPackage_add_file,raptor,$(LIBO_LIB_FOLDER)/libraptor2-$(RAPTOR_MAJOR).dll,src/.libs/libraptor2-$(RAPTOR_MAJOR).dll))
 else ifeq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_library_for_install,raptor,bin/libraptor2.dll,src/.libs/libraptor2.dll))
+$(eval $(call gb_ExternalPackage_add_file,raptor,$(LIBO_LIB_FOLDER)/libraptor2.dll,src/.libs/libraptor2.dll))
 else ifeq ($(filter IOS ANDROID,$(OS)),)
-$(eval $(call gb_ExternalPackage_add_library_for_install,raptor,lib/libraptor2-lo.so.$(RAPTOR_MAJOR),src/.libs/libraptor2-lo.so.$(RAPTOR_MAJOR).0.0))
+$(eval $(call gb_ExternalPackage_add_file,raptor,$(LIBO_LIB_FOLDER)/libraptor2-lo.so.$(RAPTOR_MAJOR),src/.libs/libraptor2-lo.so.$(RAPTOR_MAJOR).0.0))
 endif
 
 # vim: set noet sw=4 ts=4:
