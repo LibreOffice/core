@@ -1046,13 +1046,13 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
         }
 
         if (bOLEObjFound)
-            pBMView->GetDoc().SetAllocDocSh(sal_True);
+            pBMView->GetDoc().SetAllocDocSh(true);
 
         SdDrawDocument* pTmpDoc = (SdDrawDocument*) pBMView->GetMarkedObjModel();
         bOK = pView->Paste(*pTmpDoc, aObjPos, pPage);
 
         if (bOLEObjFound)
-            pBMView->GetDoc().SetAllocDocSh(sal_False);
+            pBMView->GetDoc().SetAllocDocSh(false);
 
         if (!bOLEObjFound)
             delete pTmpDoc;         // Would otherwise be destroyed by DocShell
@@ -1107,7 +1107,7 @@ bool SdDrawDocument::IsReadOnly() const
 
 // In the subsequent AllocModel() a DocShell (xAllocedDocShRef) is created.
 // Any pre-existing DocShell is deleted
-void SdDrawDocument::SetAllocDocSh(sal_Bool bAlloc)
+void SdDrawDocument::SetAllocDocSh(bool bAlloc)
 {
     mbAllocDocSh = bAlloc;
 

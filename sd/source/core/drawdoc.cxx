@@ -156,16 +156,16 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mpCustomShowList(NULL)
 , mpDocSh(static_cast< ::sd::DrawDocShell*>(pDrDocSh))
 , mpCreatingTransferable( NULL )
-, mbHasOnlineSpellErrors(sal_False)
-, mbInitialOnlineSpellingEnabled(sal_True)
-, mbNewOrLoadCompleted(sal_False)
+, mbHasOnlineSpellErrors(false)
+, mbInitialOnlineSpellingEnabled(true)
+, mbNewOrLoadCompleted(false)
 , mbStartWithPresentation( false )
 , mbExitAfterPresenting( false )
 , meLanguage( LANGUAGE_SYSTEM )
 , meLanguageCJK( LANGUAGE_SYSTEM )
 , meLanguageCTL( LANGUAGE_SYSTEM )
 , mePageNumType(SVX_ARABIC)
-, mbAllocDocSh(sal_False)
+, mbAllocDocSh(false)
 , meDocType(eType)
 , mpCharClass(NULL)
 , mpLocale(NULL)
@@ -386,7 +386,7 @@ SdDrawDocument::~SdDrawDocument()
     mpOnlineSearchItem = NULL;
 
     CloseBookmarkDoc();
-    SetAllocDocSh(sal_False);
+    SetAllocDocSh(false);
 
     ClearModel(sal_True);
 
@@ -482,7 +482,7 @@ SdrModel* SdDrawDocument::AllocModel() const
     {
         // Create a DocShell which is then returned with GetAllocedDocSh()
         SdDrawDocument* pDoc = (SdDrawDocument*) this;
-        pDoc->SetAllocDocSh(sal_False);
+        pDoc->SetAllocDocSh(false);
         pDoc->mxAllocedDocShRef = new ::sd::DrawDocShell(
             SFX_CREATE_MODE_EMBEDDED, sal_True, meDocType);
         pDoc->mxAllocedDocShRef->DoInitNew(NULL);
@@ -657,7 +657,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         }
     }
 
-    mbNewOrLoadCompleted = sal_True;
+    mbNewOrLoadCompleted = true;
 
     // Update all linked pages
     SdPage* pPage = NULL;

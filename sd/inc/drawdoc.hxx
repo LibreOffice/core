@@ -151,8 +151,8 @@ private:
     SdCustomShowList*   mpCustomShowList;
     ::sd::DrawDocShell* mpDocSh;
     SdTransferable *    mpCreatingTransferable;
-    sal_Bool                mbHasOnlineSpellErrors;
-    sal_Bool                mbInitialOnlineSpellingEnabled;
+    bool                mbHasOnlineSpellErrors;
+    bool                mbInitialOnlineSpellingEnabled;
     OUString            maBookmarkFile;
     ::sd::DrawDocShellRef   mxBookmarkDocShRef;
 
@@ -160,7 +160,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation2 > mxPresentation;
 
-    sal_Bool                mbNewOrLoadCompleted;
+    bool                mbNewOrLoadCompleted;
 
     sal_Bool                mbOnlineSpell;
     sal_Bool                mbSummationOfParagraphs;
@@ -171,7 +171,7 @@ private:
     LanguageType        meLanguageCTL;
     SvxNumType          mePageNumType;
     ::sd::DrawDocShellRef   mxAllocedDocShRef;   // => AllocModel()
-    sal_Bool                mbAllocDocSh;       // => AllocModel()
+    bool                mbAllocDocSh;       // => AllocModel()
     DocumentType        meDocType;
     CharClass*          mpCharClass;
     ::com::sun::star::lang::Locale* mpLocale;
@@ -229,7 +229,7 @@ public:
 
     DocumentType        GetDocumentType() const { return meDocType; }
 
-    void                SetAllocDocSh(sal_Bool bAlloc);
+    void                SetAllocDocSh(bool bAlloc);
 
     void                CreatingDataObj( SdTransferable* pTransferable ) { mpCreatingTransferable = pTransferable; }
 
@@ -426,7 +426,7 @@ public:
 
     void                NewOrLoadCompleted(DocCreationMode eMode);
     void                NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool );
-    sal_Bool                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
+    bool                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
 
     ::sd::FrameView* GetFrameView(sal_uLong nPos) {
         return nPos < maFrameViewList.size() ? maFrameViewList[nPos] : NULL; }

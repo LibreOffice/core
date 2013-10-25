@@ -863,7 +863,7 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
     else
     {
         // Initial spelling has finished
-        mbInitialOnlineSpellingEnabled = sal_False;
+        mbInitialOnlineSpellingEnabled = false;
 
         // Stop search
         StopOnlineSpelling();
@@ -880,7 +880,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 {
     if (pObj && pObj->GetOutlinerParaObject() /* && pObj != pView->GetTextEditObject() */)
     {
-        mbHasOnlineSpellErrors = sal_False;
+        mbHasOnlineSpellErrors = false;
         ::sd::Outliner* pOutl = GetInternalOutliner(sal_True);
         pOutl->SetUpdateMode(sal_True);
         Link aEvtHdl = pOutl->GetStatusEventHdl();
@@ -925,7 +925,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
         pOutl->SetStatusEventHdl(aEvtHdl);
         pOutl->SetUpdateMode(sal_False);
         pOutl->Init( nOldOutlMode );
-        mbHasOnlineSpellErrors = sal_False;
+        mbHasOnlineSpellErrors = false;
     }
 }
 
