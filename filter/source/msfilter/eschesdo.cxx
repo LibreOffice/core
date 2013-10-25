@@ -166,7 +166,6 @@ void ImplEESdrWriter::ImplHandleRotation( ImplEESdrObject& rObj, EscherPropertyC
         const basegfx::B2DPoint aCurrentCenter(ImplMapB2DPoint(rMat.getB2DHomMatrix() * basegfx::B2DPoint(0.5, 0.5)));
         const basegfx::B2DPoint aObjectRangeCenter(rObj.getObjectRange().getCenter());
         basegfx::B2DRange aObjectRange(rObj.getObjectRange());
-        bool bChanged(false);
 
         if(!aCurrentCenter.equal(aObjectRangeCenter))
         {
@@ -175,7 +174,6 @@ void ImplEESdrWriter::ImplHandleRotation( ImplEESdrObject& rObj, EscherPropertyC
                     aCurrentCenter - aObjectRangeCenter));
 
             aObjectRange.transform(aAdaptToCenterRotation);
-            bChanged = true;
         }
 
         // do use inverted rotation here: The old model format (in which the value is here)
@@ -199,7 +197,6 @@ void ImplEESdrWriter::ImplHandleRotation( ImplEESdrObject& rObj, EscherPropertyC
                     F_PI2));
 
             aObjectRange.transform(aMirrorDiagonal);
-            bChanged = true;
         }
 
         rObj.setObjectRange(aObjectRange);
@@ -1549,6 +1546,31 @@ bool ImplEESdrObject::ImplHasText() const
 {
     Reference< XText > xXText( mXShape, UNO_QUERY );
     return xXText.is() && xXText->getString().getLength();
+}
+
+void ImplEESdrObject::setObjectRange(const basegfx::B2DRange& rObjectRange)
+{
+    maObjectRange = rObjectRange;
+}
+
+const basegfx::B2DRange& ImplEESdrObject::getObjectRange() const
+{
+    return maObjectRange;
+}
+
+sal_Int32 ImplEESdrObject::GetAngle() const
+{
+    return mnAngle;
+}
+
+void ImplEESdrObject::SetAngle(sal_Int32 nVal)
+{
+    mnAngle = nVal;
+}
+
+basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& ImplEESdrObject::getTransform()
+{
+    return maObjTrans;
 }
 
 // eof

@@ -33,10 +33,10 @@
 enum SdrCircleObjType
 {
     /// basic types the circle may have
-    CircleType_Circle = 0,          // old OBJ_CIRC
-    CircleType_Sector,              // old OBJ_SECT
-    CircleType_Arc,                 // old OBJ_CARC
-    CircleType_Segment,             // old OBJ_CCUT
+    CircleType_Circle = 0,          // old OBJ_CIRC -> drawing::CircleKind_FULL
+    CircleType_Sector,              // old OBJ_SECT -> drawing::CircleKind_SECTION
+    CircleType_Arc,                 // old OBJ_CARC -> drawing::CircleKind_ARC
+    CircleType_Segment,             // old OBJ_CCUT -> drawing::CircleKind_CUT
 };
 
 //////////////////////////////////////////////////////////////////////////////

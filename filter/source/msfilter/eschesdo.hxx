@@ -74,11 +74,11 @@ public:
     const String&       GetType() const         { return mType; }
     void                SetType( const String& rS ) { mType = rS; }
 
-    void setObjectRange(const basegfx::B2DRange& rObjectRange) { maObjectRange = rObjectRange; }
-    const basegfx::B2DRange& getObjectRange() const { return maObjectRange; }
+    void setObjectRange(const basegfx::B2DRange& rObjectRange);
+    const basegfx::B2DRange& getObjectRange() const;
 
-    sal_Int32               GetAngle() const        { return mnAngle; }
-    void                SetAngle( sal_Int32 nVal )  { mnAngle = nVal; }
+    sal_Int32 GetAngle() const;
+    void SetAngle(sal_Int32 nVal);
 
     sal_uInt32              GetTextSize() const     { return mnTextSize; }
 
@@ -93,7 +93,7 @@ public:
     sal_uInt32              ImplGetText();
     bool                ImplHasText() const;
 
-    basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& getTransform() { return maObjTrans; }
+    basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& getTransform();
 };
 
 

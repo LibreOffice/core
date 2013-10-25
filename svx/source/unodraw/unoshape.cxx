@@ -3286,16 +3286,16 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
 
             if(pSdrCircObj)
             {
-                drawing::CircleKind eKind;
+                drawing::CircleKind eKind(drawing::CircleKind_FULL);
 
                 switch(pSdrCircObj->GetSdrCircleObjType())
                 {
-                    case CircleType_Circle:
+                    default: // case CircleType_Circle:
                     {
                         eKind = drawing::CircleKind_FULL;
                         break;
                     }
-                    case CircleType_Sector:
+                    case CircleType_Segment:
                     {
                         eKind = drawing::CircleKind_CUT;
                         break;
@@ -3305,7 +3305,7 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                         eKind = drawing::CircleKind_ARC;
                         break;
                     }
-                    case CircleType_Segment:
+                    case CircleType_Sector:
                     {
                         eKind = drawing::CircleKind_SECTION;
                         break;

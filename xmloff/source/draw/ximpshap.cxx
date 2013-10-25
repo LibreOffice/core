@@ -1236,8 +1236,8 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
         if(!basegfx::fTools::equalZero(mfCX)
             || !basegfx::fTools::equalZero(mfCY)
-            || !basegfx::fTools::equalZero(mfRX)
-            || !basegfx::fTools::equalZero(mfRY))
+            || !basegfx::fTools::equal(mfRX, 1.0)
+            || !basegfx::fTools::equal(mfRY, 1.0))
         {
             // #121972# center/radius is used, put to pos and size
             maObjectSize.setX(2.0 * mfRX);

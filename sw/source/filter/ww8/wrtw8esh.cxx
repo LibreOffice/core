@@ -715,6 +715,8 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             // <--
 
             Point aObjPos;
+            double fObjectRotation(0);
+
             if (RES_FLYFRMFMT == rFmt.Which())
             {
                 SwRect aLayRect(rFmt.FindLayoutRect(false, &aObjPos));
@@ -740,7 +742,36 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 ASSERT(pObj, "wo ist das SDR-Object?");
                 if (pObj)
                 {
-                    aRect = sdr::legacy::GetSnapRect(*pObj);
+                    // original used SnapRect, but the unrotated snap range is sufficient
+                    // here; for rotation a special treatment is needed anyways (see below)
+                    const basegfx::B2DRange aUnrotatedRange(
+                        pObj->getSdrObjectTranslate(),
+                        pObj->getSdrObjectTranslate() + pObj->getSdrObjectScale());
+
+                    // fill aRect with it
+                    aRect.Left() = basegfx::fround(aUnrotatedRange.getMinX());
+                    aRect.Top() = basegfx::fround(aUnrotatedRange.getMinY());
+                    aRect.Right() = basegfx::fround(aUnrotatedRange.getMaxX());
+                    aRect.Bottom() = basegfx::fround(aUnrotatedRange.getMaxY());
+
+                    // get ObjectRotation; prefer rotation over mirroring
+                    fObjectRotation = pObj->getSdrObjectRotate();
+                    bool bMirroredX(pObj->getSdrObjectScale().getX() < 0.0);
+                    bool bMirroredY(pObj->getSdrObjectScale().getY() < 0.0);
+
+                    // if mirror is X and Y, replace with 180 degree rotation. Prefer
+                    // rotation export over mirror export.
+                    if(bMirroredX && bMirroredY)
+                    {
+                        bMirroredX = bMirroredY = false;
+                        fObjectRotation += F_PI;
+                    }
+
+                    if(bMirroredX != bMirroredY)
+                    {
+                        // if one axis is mirrored, invert the rotation
+                        fObjectRotation = -fObjectRotation;
+                    }
                 }
             }
 
@@ -778,6 +809,57 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             {
                 aRect.SetPos(Point(0,0));
                 nThick = 0;
+            }
+
+            if(!basegfx::fTools::equalZero(fObjectRotation))
+            {
+                // we rotate around top-left, mS around center, so adapt position by
+                // correlating the two different centers of the objects
+                basegfx::B2DRange aUnrotatedRange(
+                    pObj->getSdrObjectTranslate(),
+                    pObj->getSdrObjectTranslate() + pObj->getSdrObjectScale());
+                const basegfx::B2DPoint aRealCenter(pObj->getSdrObjectTransformation() * basegfx::B2DPoint(0.5, 0.5));
+                const basegfx::B2DPoint aUnrotatedCenter(aUnrotatedRange.getCenter());
+
+                aUnrotatedRange.transform(
+                    basegfx::tools::createTranslateB2DHomMatrix(
+                        aRealCenter - aUnrotatedCenter));
+
+                // also need to correct by the SnapRect which was used for positioning;
+                // remove TopLeft of it and add aRect's adapted position
+                const basegfx::B2DRange aSnapRange(pObj->getSnapRange());
+
+                aUnrotatedRange.transform(
+                    basegfx::tools::createTranslateB2DHomMatrix(
+                        aRect.Left() - aSnapRange.getMinX(),
+                        aRect.Top() - aSnapRange.getMinY()));
+
+                // extract ObjectRotation in MS coordinates to decide if the
+                // ObjectRange needs to be 'mirrored diagonal', a special treatment
+                // for MS shapes in their formats
+                const sal_Int32 nAngle(basegfx::fround(basegfx::snapToZeroRange(fObjectRotation / F_PI18000, 36000.0)));
+
+                // adapt angle to MS format
+                sal_Int32 nMSAngle(nAngle * 655);
+                nMSAngle += 0x8000;
+                nMSAngle &=~0xffff; // round to full degrees
+
+                // detect if MS format needs a mirroring on diagonal
+                const bool bMirrorDiagonal((nMSAngle >= (45 << 16) && nMSAngle < (135 << 16)) || (nMSAngle >= (225 << 16) && nMSAngle < (315 << 16)));
+
+                if(bMirrorDiagonal)
+                {
+                    // in this range of rotation the object range is rotated, do this here, too
+                    aUnrotatedRange.transform(
+                        basegfx::tools::createRotateAroundPoint(
+                            aUnrotatedRange.getCenter(),
+                            F_PI2));
+                }
+
+                aRect.Left() = basegfx::fround(aUnrotatedRange.getMinX());
+                aRect.Top() = basegfx::fround(aUnrotatedRange.getMinY());
+                aRect.Right() = basegfx::fround(aUnrotatedRange.getMaxX());
+                aRect.Bottom() = basegfx::fround(aUnrotatedRange.getMaxY());
             }
 
             // spid
