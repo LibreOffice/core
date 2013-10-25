@@ -767,6 +767,7 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
             case ocLIA:
                  mvSubArguments.push_back(SoPHelper<OpSLN>(ts,
                     ft->Children[i]));
+                break;
             case ocGammaLn:
                 mvSubArguments.push_back(SoPHelper<OpGammaLn>(ts,
                     ft->Children[i]));
