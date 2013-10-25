@@ -79,19 +79,6 @@ public:
     OUString getEntry(sal_uInt32 nPos) const;
 };
 
-class WW8SttbTableResource : public ::writerfilter::Reference<Table>
-{
-    WW8Sttbf::Pointer_t mpSttbf;
-
-public:
-    WW8SttbTableResource(WW8Sttbf::Pointer_t pSttbf);
-    virtual ~WW8SttbTableResource();
-
-    void resolve(Table & rTable);
-
-    string getType() const;
-};
-
 class WW8StringProperty : public ::writerfilter::Reference<Properties>
 {
     sal_uInt32 mnId;

@@ -68,33 +68,6 @@ OUString WW8Sttbf::getEntry(sal_uInt32 nPos) const
     return getString(getEntryOffset(nPos));
 }
 
-WW8SttbTableResource::WW8SttbTableResource(WW8Sttbf::Pointer_t pSttbf)
-: mpSttbf(pSttbf)
-{
-}
-
-WW8SttbTableResource::~WW8SttbTableResource()
-{
-}
-
-void WW8SttbTableResource::resolve(Table & rTable)
-{
-    sal_uInt32 nCount = mpSttbf->getEntryCount();
-
-    for (sal_uInt32 n = 0; n < nCount; n++)
-    {
-        WW8StringValue::Pointer_t pVal(new WW8StringValue(mpSttbf->getEntry(n)));
-        ::writerfilter::Reference<Properties>::Pointer_t pProps(new WW8StringProperty(0, pVal));
-
-        rTable.entry(n, pProps);
-    }
-}
-
-string WW8SttbTableResource::getType() const
-{
-    return "WW8SttbTableResource";
-}
-
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 WW8StringProperty::WW8StringProperty(sal_uInt32 nId, WW8StringValue::Pointer_t pValue)
 : mnId(nId), mpValue(pValue)
