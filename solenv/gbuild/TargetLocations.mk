@@ -35,7 +35,8 @@ gb_PackagePart_get_destinations = \
 gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
 gb_ResTarget_get_unittest_target = \
     $(OUTDIR)/unittest/install/$(LIBO_SHARE_RESOURCE_FOLDER)/$(1).res
-gb_UnoApi_get_target = $(OUTDIR)/bin/$(1).rdb
+# kind of lame but with just 3 of these why bother with registration etc.
+gb_UnoApi_get_target = $(INSTDIR)/$(if $(filter udkapi,$(1)),$(LIBO_URE_SHARE_FOLDER)/misc/types,$(LIBO_ETC_FOLDER)/types/$(1)).rdb
 
 # instdir target patterns
 
@@ -307,6 +308,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	UIImageListTarget \
 	UILocalizeTarget \
 	UIMenubarTarget \
+	UnoApi \
 	UnoApiHeadersTarget \
 	UnoApiTarget \
 	UnpackedTarball \
@@ -329,7 +331,6 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	CliNativeLibrary \
 	CliUnoApi \
 	InstallScript \
-	UnoApi \
 ))
 
 $(eval $(call gb_Helper_make_dep_targets,\

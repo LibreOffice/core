@@ -17,9 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_UnoApi_UnoApi,udkapi,udkapi))
-
-$(eval $(call gb_UnoApi_install,udkapi,$(LIBO_URE_SHARE_FOLDER)/misc/types.rdb))
+$(eval $(call gb_UnoApi_UnoApi,udkapi))
 
 $(eval $(call gb_UnoApi_package_idlfiles,udkapi))
 

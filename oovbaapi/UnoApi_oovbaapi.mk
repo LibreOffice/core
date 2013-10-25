@@ -17,9 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_UnoApi_UnoApi,oovbaapi,oovbaapi))
-
-$(eval $(call gb_UnoApi_install,oovbaapi,$(LIBO_ETC_FOLDER)/types/oovbaapi.rdb))
+$(eval $(call gb_UnoApi_UnoApi,oovbaapi))
 
 $(eval $(call gb_UnoApi_use_api,oovbaapi,\
     udkapi \

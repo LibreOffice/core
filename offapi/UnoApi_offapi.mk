@@ -17,9 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_UnoApi_UnoApi,offapi,offapi))
-
-$(eval $(call gb_UnoApi_install,offapi,$(LIBO_ETC_FOLDER)/types/offapi.rdb))
+$(eval $(call gb_UnoApi_UnoApi,offapi))
 
 $(eval $(call gb_UnoApi_package_idlfiles,offapi))
 

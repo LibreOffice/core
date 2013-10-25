@@ -14,8 +14,9 @@ $(call gb_UnoApi_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_UnoApi_get_target,$*))
 
+# call gb_UnoApi_UnoApi,api
 define gb_UnoApi_UnoApi
-$(call gb_UnoApiTarget_UnoApiTarget,$(1),$(2))
+$(call gb_UnoApiTarget_UnoApiTarget,$(1),$(1))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
 ifneq ($(gb_UnoApi_ENABLE_INSTALL),)
 $(call gb_Package_Package_internal,$(1)_idl,$(SRCDIR))
@@ -24,7 +25,7 @@ endif
 
 $(call gb_UnoApi_get_target,$(1)) :| $(dir $(call gb_UnoApi_get_target,$(1))).dir
 $(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
-$(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_target,$(1))
+$(call gb_UnoApi_get_target,$(1)) :| $(call gb_UnoApiHeadersTarget_get_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
 
@@ -32,14 +33,6 @@ $(call gb_Deliver_add_deliverable,$(call gb_UnoApi_get_target,$(1)),$(call gb_Un
 
 $$(eval $$(call gb_Module_register_target,$(call gb_UnoApi_get_target,$(1)),$(call gb_UnoApi_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UnoApi)
-
-endef
-
-define gb_UnoApi_install
-$(if $(2),,$(call gb_Output_error,gb_UnoApi_install: missing install name.))
-$(call gb_Helper_install,$(call gb_UnoApi_get_target,$(1)), \
-	$(INSTROOT)/$(2), \
-	$(call gb_UnoApiTarget_get_target,$(1)))
 
 endef
 

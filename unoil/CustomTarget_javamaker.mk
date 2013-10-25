@@ -13,13 +13,17 @@ unoil_JAVADIR := $(call gb_CustomTarget_get_workdir,unoil/javamaker)
 
 $(call gb_CustomTarget_get_target,unoil/javamaker) : $(unoil_JAVADIR)/done
 
-$(unoil_JAVADIR)/done : $(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb \
+$(unoil_JAVADIR)/done : \
+		$(call gb_UnoApi_get_target,offapi) \
+		$(call gb_UnoApi_get_target,udkapi) \
 		$(call gb_Executable_get_runtime_dependencies,javamaker) \
 		| $(unoil_JAVADIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVM,1)
 	$(call gb_Helper_abbreviate_dirs, \
 	rm -r $(unoil_JAVADIR) && \
-	$(call gb_Helper_execute,javamaker -O$(unoil_JAVADIR) $(OUTDIR)/bin/offapi.rdb -X$(OUTDIR)/bin/udkapi.rdb) && \
+	$(call gb_Helper_execute,javamaker -O$(unoil_JAVADIR) \
+		$(call gb_UnoApi_get_target,offapi) \
+		-X$(call gb_UnoApi_get_target,udkapi)) && \
 	touch $@)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

@@ -564,9 +564,8 @@ End
 File gid_File_Misc_TypesRdb
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_SHARE_MISC;
-    Name = "udkapi.rdb";
-    InstallName = "types.rdb";
-    Styles = (PACKED, SUBST_FILENAME);
+    Name = "types.rdb";
+    Styles = (PACKED);
 End
 
 File gid_File_Misc_ServicesRdb
