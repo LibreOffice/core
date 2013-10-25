@@ -342,7 +342,7 @@ void ODatabaseMetaDataResultSetMetaData::setSchemasMap()
 
 void ODatabaseMetaDataResultSetMetaData::setVersionColumnsMap()
 {
-   m_mColumns[1] = OColumn(OUString(),"SCOPE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
+    m_mColumns[1] = OColumn(OUString(),"SCOPE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
     m_mColumns[2] = OColumn(OUString(),"COLUMN_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
     m_mColumns[3] = OColumn(OUString(),"DATA_TYPE", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
     m_mColumns[4] = OColumn(OUString(),"TYPE_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
