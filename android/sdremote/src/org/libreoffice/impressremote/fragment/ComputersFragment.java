@@ -23,7 +23,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,6 +110,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
         if (aProgressMessageDisplayed) {
             showProgressMessage();
+            showLearnMoreMessage();
         }
     }
 
@@ -122,6 +126,20 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
 
     private TextView getProgressMessageView() {
         return (TextView) getView().findViewById(R.id.text_progress_message);
+    }
+
+    private void showLearnMoreMessage() {
+        TextView learnMoreView = getLearnMoreView();
+        Animation aFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
+
+        learnMoreView.setMovementMethod(LinkMovementMethod.getInstance());
+
+        learnMoreView.startAnimation(aFadeInAnimation);
+        learnMoreView.setVisibility(View.VISIBLE);
+    }
+
+    private TextView getLearnMoreView() {
+        return (TextView) getView().findViewById(R.id.text_learn_more);
     }
 
     private String getProgressMessage() {
@@ -238,6 +256,7 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
         }
 
         showProgressMessage();
+        showLearnMoreMessage();
     }
 
     private boolean isShowingProgressMessageRequired() {

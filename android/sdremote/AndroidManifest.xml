@@ -78,6 +78,13 @@
         <activity
             android:name=".activity.RequirementsActivity"
             android:label="@string/title_requirements">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <data android:scheme="org.libreoffice.impressremote"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+
         </activity>
 
         <activity

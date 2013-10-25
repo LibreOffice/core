@@ -44,6 +44,7 @@
     <dimen name="padding_vertical_error_message">12dp</dimen>
     <dimen name="padding_vertical_edit">8dp</dimen>
     <dimen name="padding_vertical_progress_message">8dp</dimen>
+    <dimen name="padding_vertical_learn_more">4dp</dimen>
 
     <dimen name="margin_vertical_action_bar_divider">12dp</dimen>
     <dimen name="margin_slide">8dp</dimen>
