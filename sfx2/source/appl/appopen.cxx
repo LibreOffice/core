@@ -594,7 +594,7 @@ bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
         return true;
 
     OUString aName = rFilter.GetFilterName();
-    if (aName.indexOf("MS Excel") == 0)
+    if (aName.startsWith("MS Excel"))
         // We can handle all Excel variants natively.
         return true;
 
@@ -622,8 +622,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
         else
         {
-            sal_Int32 nIndex = aCommand.indexOf("slot:");
-            if ( nIndex == 0 )
+            if ( aCommand.startsWith("slot:") )
             {
                 sal_uInt16 nSlotId = (sal_uInt16) aCommand.copy(5).toInt32();
                 if ( nSlotId == SID_OPENDOC )

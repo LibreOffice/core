@@ -159,7 +159,7 @@ ProviderCache::populateCache() throw ( RuntimeException )
 
                 for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )
                 {
-                    if ( serviceNames[ index ].indexOf( searchString ) == 0 && !isInBlackList(  serviceNames[ index ] ) )
+                    if ( serviceNames[ index ].startsWith( searchString ) && !isInBlackList(  serviceNames[ index ] ) )
                     {
                         serviceName = serviceNames[ index ];
                         ProviderDetails details;

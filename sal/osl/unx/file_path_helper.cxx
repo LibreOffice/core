@@ -71,7 +71,7 @@ void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
             rtl_uString_assign(ppustrPath, path.pData);
         }
 
-        OSL_POSTCOND(path.lastIndexOf(FPH_CHAR_PATH_SEPARATOR) == (path.getLength() - 1), \
+        OSL_POSTCOND(path.endsWith(FPH_PATH_SEPARATOR()), \
                      "osl_systemPathEnsureSeparator: Post condition failed");
     }
 }

@@ -262,7 +262,7 @@ throw( ::com::sun::star::uno::RuntimeException )
     rBHelper.addListener( ::getCppuType( &xControl ), xControl );
 
     aLock.reset();
-    if ( aURL.Complete.indexOf( m_aBaseURL ) == 0 )
+    if ( aURL.Complete.startsWith( m_aBaseURL ) )
         bStatusUpdate = true;
     aLock.clear();
 

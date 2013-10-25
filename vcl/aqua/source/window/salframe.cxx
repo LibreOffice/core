@@ -355,7 +355,7 @@ void AquaSalFrame::SetRepresentedURL( const OUString& i_rDocURL )
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    if( i_rDocURL.indexOfAsciiL( "file:", 5 ) == 0 )
+    if( i_rDocURL.startsWith( "file:" ) )
     {
         OUString aSysPath;
         osl_getSystemPathFromFileURL( i_rDocURL.pData, &aSysPath.pData );

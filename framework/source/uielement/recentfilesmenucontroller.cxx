@@ -312,7 +312,7 @@ throw( RuntimeException )
 
     throwIfDisposed();
 
-    if ( aURL.Complete.indexOf( m_aBaseURL ) == 0 )
+    if ( aURL.Complete.startsWith( m_aBaseURL ) )
         return Reference< XDispatch >( static_cast< OWeakObject* >( this ), UNO_QUERY );
     else
         return Reference< XDispatch >();
@@ -328,7 +328,7 @@ throw( RuntimeException )
 
     throwIfDisposed();
 
-    if ( aURL.Complete.indexOf( m_aBaseURL ) == 0 )
+    if ( aURL.Complete.startsWith( m_aBaseURL ) )
     {
         // Parse URL to retrieve entry argument and its value
         sal_Int32 nQueryPart = aURL.Complete.indexOf( '?', m_aBaseURL.getLength() );

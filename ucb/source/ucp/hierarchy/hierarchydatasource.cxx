@@ -543,28 +543,25 @@ bool HierarchyDataSource::createConfigPath(
 {
     if ( !rInPath.isEmpty() )
     {
-        if ( rInPath.indexOf( '/' ) == 0 )
+        if ( rInPath.startsWith( "/" ) )
         {
             OSL_FAIL( "HierarchyDataSource::createConfigPath - "
                         "Leading slash in node path!" );
             return false;
         }
 
-        if ( rInPath.lastIndexOf( '/' ) == rInPath.getLength() - 1 )
+        if ( rInPath.endsWith( "/" ) )
         {
             OSL_FAIL( "HierarchyDataSource::createConfigPath - "
                         "Trailing slash in node path!" );
             return false;
         }
 
-        OUString aOutPath(
-                 CONFIG_DATA_ROOT_KEY "/"  );
-        aOutPath += rInPath;
-        rOutPath = aOutPath;
+        rOutPath = CONFIG_DATA_ROOT_KEY "/" + rInPath;
     }
     else
     {
-        rOutPath = OUString( CONFIG_DATA_ROOT_KEY  );
+        rOutPath = CONFIG_DATA_ROOT_KEY;
     }
 
     return true;

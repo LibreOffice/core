@@ -808,7 +808,7 @@ SvxConfigDialog::SvxConfigDialog(
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
 
-        if (text.indexOf( ITEM_TOOLBAR_URL ) == 0)
+        if (text.startsWith( ITEM_TOOLBAR_URL ) )
         {
             SetCurPageId( RID_SVXPAGE_TOOLBARS );
         }
@@ -3113,7 +3113,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     if ( pItem )
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
-        if (text.indexOf( ITEM_TOOLBAR_URL ) == 0)
+        if (text.startsWith( ITEM_TOOLBAR_URL ))
         {
             m_aURLToSelect = text.copy( 0 );
         }
@@ -3758,7 +3758,7 @@ void ToolbarSaveInData::SetSystemStyle(
     const OUString& rResourceURL,
     sal_Int32 nStyle )
 {
-    if ( rResourceURL.indexOf( "private" ) == 0 &&
+    if ( rResourceURL.startsWith( "private" ) &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3797,7 +3797,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
 {
     sal_Int32 result = 0;
 
-    if ( rResourceURL.indexOf( "private" ) == 0 &&
+    if ( rResourceURL.startsWith( "private" ) &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3831,7 +3831,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
 {
     OUString result;
 
-    if ( rResourceURL.indexOf( "private" ) == 0 &&
+    if ( rResourceURL.startsWith( "private" ) &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3857,7 +3857,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
         }
     }
 
-    if ( rResourceURL.indexOf( ".uno" ) == 0 &&
+    if ( rResourceURL.startsWith( ".uno" ) &&
          m_xCommandToLabelMap.is() &&
          m_xCommandToLabelMap->hasByName( rResourceURL ) )
     {
@@ -3960,7 +3960,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 aToolbarInfo.insert( ToolbarInfo::value_type( systemname, true ));
 
                 OUString custom(CUSTOM_TOOLBAR_STR);
-                if ( systemname.indexOf( custom ) == 0 )
+                if ( systemname.startsWith( custom ) )
                 {
                     pEntry->SetUserDefined( sal_True );
                 }
@@ -4012,7 +4012,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
 
                 // custom toolbars of the parent are not visible in the document layer
                 OUString custom(CUSTOM_TOOLBAR_STR);
-                if ( systemname.indexOf( custom ) == 0 )
+                if ( systemname.startsWith( custom ) )
                     continue;
 
                 // check if toolbar is already in the document layer
@@ -4043,7 +4043,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                         pEntry->SetMain( sal_True );
                         pEntry->SetStyle( GetSystemStyle( url ) );
 
-                        if ( systemname.indexOf( custom ) == 0 )
+                        if ( systemname.startsWith( custom ) )
                         {
                             pEntry->SetUserDefined( sal_True );
                         }

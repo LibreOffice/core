@@ -1458,7 +1458,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
                     else
                     {
 
-                        if ( sToken.indexOf('"') == 0 && sToken.lastIndexOf('"') == sToken.getLength()-1 )
+                        if ( sToken.startsWith("\"") && sToken.endsWith("\"") )
                             sToken = sToken.copy(1,sToken.getLength()-2);
 
                         bool bPrevCharIsSpace = false;

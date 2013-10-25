@@ -211,7 +211,7 @@ namespace DOM
             attr_qname = attribs->getNameByIndex(i);
             attr_value = attribs->getValueByIndex(i);
             // new prefix mapping
-            if (attr_qname.indexOf("xmlns:") == 0)
+            if (attr_qname.startsWith("xmlns:"))
             {
                 newprefix = attr_qname.copy(attr_qname.indexOf(':')+1);
                 aNSMap.insert(NSMap::value_type(newprefix, attr_value));

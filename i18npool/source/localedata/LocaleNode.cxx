@@ -631,7 +631,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     if ( strFrom == "[CURRENCY]" )
         sTheCurrencyReplaceTo = str;
     // Remember the currency symbol if present.
-    if (str.indexOfAsciiL( "[$", 2) == 0)
+    if (str.startsWith( "[$" ))
     {
         sal_Int32 nHyphen = str.indexOf( '-');
         if (nHyphen >= 3)

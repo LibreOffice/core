@@ -933,8 +933,8 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             else
                 op = MQueryOp::Contains;
         }
-        else if (  matchString.indexOf ( WILDCARD ) == 0
-                   && matchString.lastIndexOf ( WILDCARD ) == matchString.getLength() -1
+        else if (  matchString.startsWith( WILDCARD )
+                   && matchString.endsWith( WILDCARD )
                    && matchString.indexOf ( WILDCARD, 1 ) == matchString.lastIndexOf ( WILDCARD )
                    && matchString.indexOf( MATCHCHAR ) == -1
                  )
@@ -962,20 +962,20 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                 )
             {
                 // One occurrence of '%' - no '_' matches...
-                if ( matchString.indexOf ( WILDCARD ) == 0 )
+                if ( matchString.startsWith( WILDCARD ) )
                 {
                     op = MQueryOp::EndsWith;
                     matchString = matchString.replaceAt( 0, 1, OUString());
                 }
-                else if ( matchString.indexOf ( WILDCARD ) == matchString.getLength() -1 )
+                else if ( matchString.endsWith( WILDCARD ) )
                 {
                     op = MQueryOp::BeginsWith;
-                    matchString = matchString.replaceAt( matchString.getLength() -1 , 1, OUString() );
+                    matchString = matchString.replaceAt( matchString.getLength() -1, 1, OUString() );
                 }
                 else
                 {
                     sal_Int32 pos = matchString.indexOf ( WILDCARD );
-                    matchString = matchString.replaceAt( pos, 1,OUString(".*") );
+                    matchString = matchString.replaceAt( pos, 1, ".*" );
                     op = MQueryOp::RegExp;
                 }
 
@@ -983,16 +983,15 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             else
             {
                 // Most Complex, need to use an RE
-                sal_Int32 pos = matchString.indexOf ( WILDCARD );
+                sal_Int32 pos;
                 while ( (pos = matchString.indexOf ( WILDCARD )) != -1 )
                 {
-                    matchString = matchString.replaceAt( pos, 1, OUString(".*") );
+                    matchString = matchString.replaceAt( pos, 1, ".*" );
                 }
 
-                pos = matchString.indexOf ( MATCHCHAR );
                 while ( (pos = matchString.indexOf( MATCHCHAR )) != -1 )
                 {
-                    matchString = matchString.replaceAt( pos, 1, OUString(".") );
+                    matchString = matchString.replaceAt( pos, 1, "." );
                 }
 
                 op = MQueryOp::RegExp;

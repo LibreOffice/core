@@ -317,7 +317,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
         {
             SvtPathOptions aPathOpt;
             OUString aAddinPath = aPathOpt.GetAddinPath();
-            if( OUString( sDocUrlOrPath ).indexOf( aAddinPath ) == 0 )
+            if( sDocUrlOrPath.startsWith( aAddinPath ) )
                 pFoundShell = pShell;
         }
         if( !pFoundShell )
@@ -751,7 +751,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
     if ( !MacroName.isEmpty() )
     {
         OUString aMacroName = MacroName.trim();
-        if (0 == aMacroName.indexOf('!'))
+        if( aMacroName.startsWith("!") )
             MacroName = aMacroName.copy(1).trim();
         SfxObjectShell* pShell = NULL;
         if ( rxModel.is() )

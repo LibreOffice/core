@@ -143,8 +143,8 @@ MenuManager::MenuManager(
         if ( pPopupMenu )
         {
             AddMenu(pPopupMenu,aItemCommand,nItemId,bDeleteChildren,bDeleteChildren);
-            if (! (( aItemCommand.getLength() > nAddonsURLPrefixLength ) &&
-                ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 )) )
+            if (! ( aItemCommand.getLength() > nAddonsURLPrefixLength  &&
+                    aItemCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX ) ) )
             {
 
                 // Create addon popup menu if there exist elements and this is the tools popup menu

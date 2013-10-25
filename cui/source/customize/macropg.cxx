@@ -631,7 +631,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     }
 
     bool bDoubleClick = (pBtn == NULL);
-    bool bUNOAssigned = (sEventURL.indexOf( aVndSunStarUNO ) == 0);
+    bool bUNOAssigned = sEventURL.startsWith( aVndSunStarUNO );
     if( pBtn == pImpl->pDeletePB )
     {
         // delete pressed
@@ -895,14 +895,10 @@ AssignComponentDialog::AssignComponentDialog( Window * pParent, const OUString& 
     maOKButton.SetClickHdl(LINK(this, AssignComponentDialog, ButtonHandler));
 
     OUString aMethodName;
-    if( !maURL.isEmpty() )
+    if( maURL.startsWith( aVndSunStarUNO ) )
     {
-        sal_Int32 nIndex = maURL.indexOf( aVndSunStarUNO );
-        if( nIndex == 0 )
-        {
-            sal_Int32 nBegin = aVndSunStarUNO.getLength();
-            aMethodName = maURL.copy( nBegin );
-        }
+        sal_Int32 nBegin = aVndSunStarUNO.getLength();
+        aMethodName = maURL.copy( nBegin );
     }
     maMethodEdit.SetText( aMethodName, Selection( 0, SELECTION_MAX ) );
 }

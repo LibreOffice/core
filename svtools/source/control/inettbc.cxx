@@ -312,7 +312,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
 
     sal_Bool bPureHomePath = sal_False;
 #ifdef UNX
-    bPureHomePath = aText.indexOf( '~' ) == 0 && aText.indexOf( '/' ) == -1;
+    bPureHomePath = aText.startsWith( "~" ) && aText.indexOf( '/' ) == -1;
 #endif
 
     sal_Bool bExectMatch = bPureHomePath
@@ -484,7 +484,7 @@ OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUStrin
         INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( aBaseURL );
 
         // if a base URL is set the string may be parsed relative
-        if( aText.indexOf( '/' ) == 0 )
+        if( aText.startsWith( "/" ) )
         {
             // text starting with slashes means absolute file URLs
             OUString aTemp = INetURLObject::GetScheme( eBaseProt );
@@ -1296,7 +1296,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
 )
 {
 #ifdef UNX
-    if( aText.indexOf( '~' ) == 0 )
+    if( aText.startsWith( "~" ) )
     {
         OUString aParseTilde;
         sal_Bool bTrailingSlash = sal_True; // use trailing slash

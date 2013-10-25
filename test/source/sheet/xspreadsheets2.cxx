@@ -329,7 +329,7 @@ bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, const OUS
     const sal_Char* sSrcContent = OUStringToOString( aSrcContent, RTL_TEXTENCODING_UTF8 ).getStr();
 
     return  (aDestContent.endsWithIgnoreAsciiCaseAsciiL(sSrcContent, aSrcContent.getLength()) // same cell address
-            && aDestContent.indexOf(aStart)==0 // starts with 'file://
+            && aDestContent.startsWith(aStart) // starts with 'file://
             && aDestContent.indexOf(aSrcFileName)>0); // contains source file name
 }
 

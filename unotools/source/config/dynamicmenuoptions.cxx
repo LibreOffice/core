@@ -636,7 +636,7 @@ class SelectByPrefix
         bool operator() ( const OUString& s ) const
         {
             // Prefer setup written entries by check first letter of given string. It must be a "s".
-            return( s.indexOf( PATHPREFIX_SETUP ) == 0 );
+            return s.startsWith( PATHPREFIX_SETUP );
         }
 };
 

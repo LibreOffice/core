@@ -552,7 +552,7 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
     if( aStream.IsOpen() )
     {
         OString aLine = aStream.ReadLine();
-        if (aLine.indexOfL(RTL_CONSTASCII_STRINGPARAM("*PPD-Adobe")) == 0)
+        if (aLine.startsWith("*PPD-Adobe"))
             aRet = aStream.GetFileName();
         else
         {

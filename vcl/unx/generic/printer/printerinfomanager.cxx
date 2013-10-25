@@ -1259,7 +1259,7 @@ static void lpgetSysQueueTokenHandler(
             while( it != i_rLines.end() )
             {
                 OString aClean( WhitespaceToSpace( *it ) );
-                if( aClean.indexOf( aAllAttr, 0 ) == 0 )
+                if( aClean.startsWith( aAllAttr ) )
                 {
                     // insert the comma separated entries into the set of printers to use
                     sal_Int32 nPos = aAllAttr.getLength();

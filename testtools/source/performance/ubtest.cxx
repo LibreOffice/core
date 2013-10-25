@@ -936,7 +936,7 @@ static OUString extractParam( const Sequence< OUString > & rArgs, const OUString
     const OUString * pArgs = rArgs.getConstArray();
     for ( sal_Int32 nPos = rArgs.getLength(); nPos--; )
     {
-        if (pArgs[nPos].indexOf( rParam ) == 0 &&
+        if (pArgs[nPos].startsWith( rParam ) &&
             pArgs[nPos].getLength() > (rParam.getLength()+1))
         {
             return pArgs[nPos].copy( rParam.getLength() +1 ); // XXX=bla

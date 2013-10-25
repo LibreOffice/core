@@ -47,7 +47,7 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
             sal_Int32 n;
 
             // comments
-            if( aLine.indexOf( '#' ) == 0 )
+            if( aLine.startsWith( "#" ) )
                 continue;
 
             // a[en_US] = Bob

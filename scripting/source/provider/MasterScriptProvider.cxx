@@ -129,7 +129,7 @@ throw ( Exception, RuntimeException )
         if ( args[ 0 ] >>= m_sCtxString )
         {
             invokeArgs[ 0  ] = args[ 0 ];
-            if ( m_sCtxString.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.tdoc" ) ) == 0 )
+            if ( m_sCtxString.startsWith( "vnd.sun.star.tdoc" ) )
             {
                 m_xModel =  MiscUtils::tDocUrlToModel( m_sCtxString );
             }
@@ -411,7 +411,7 @@ MasterScriptProvider::getName()
     if ( !isPkgProvider() )
     {
         OUString sCtx = getContextString();
-        if ( sCtx.indexOf( "vnd.sun.star.tdoc" ) == 0 )
+        if ( sCtx.startsWith( "vnd.sun.star.tdoc" ) )
         {
             Reference< frame::XModel > xModel = m_xModel;
             if ( !xModel.is() )

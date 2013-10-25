@@ -152,7 +152,7 @@ Reference< provider::XScriptProvider >
     Reference< provider::XScriptProvider > msp;
     try
     {
-        if ( context.indexOf( "vnd.sun.star.tdoc" ) == 0 )
+        if ( context.startsWith( "vnd.sun.star.tdoc" ) )
         {
             Reference< frame::XModel > xModel( MiscUtils::tDocUrlToModel( context ) );
 

@@ -42,12 +42,10 @@ namespace connectivity
             { // we need a table name
                 sal_Int32 nIntoIndex = sStmt.indexOf("INTO ");
                 sStmt = sStmt.copy(nIntoIndex+5);
-                do
+                while (sStmt.startsWith(" "));
                 {
-                    if ( sStmt.indexOf(' ') == 0 )
-                        sStmt = sStmt.copy(1);
+                    sStmt = sStmt.copy(1);
                 }
-                while (sStmt.indexOf(' ') == 0 );
 
                 nIntoIndex = 0;
                 OUString sTableName = sStmt.getToken(0,' ',nIntoIndex);

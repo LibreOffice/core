@@ -3545,7 +3545,7 @@ static void ConvertSlotsToCommands( SfxObjectShell* pDoc, Reference< container::
             if ( rToolbarDefinition->getByIndex( i ) >>= aSeqPropValue )
             {
                 GetCommandFromSequence( aCommand, nIndex, aSeqPropValue );
-                if ( nIndex >= 0 && ( aCommand.indexOf( aSlotCmd ) == 0 ))
+                if ( nIndex >= 0 && ( aCommand.startsWith( aSlotCmd ) ))
                 {
                     OUString aSlot( aCommand.copy( 5 ));
 

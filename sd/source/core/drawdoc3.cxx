@@ -1502,7 +1502,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
                 // #i121863# search in source styles with original style name from source of
                 // evtl. cloned master (not-cloned, renamed for uniqueness)
-                if( aName.indexOf( aOriginalNewLayoutName ) == 0 )
+                if( aName.startsWith( aOriginalNewLayoutName ) )
                 {
                     // #i121863# build name of evtl. cloned master style to search for
                     if(aOriginalNewLayoutName != aTargetNewLayoutName)

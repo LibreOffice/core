@@ -322,7 +322,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
                     resultVector.push_back((currentValue.endsWith(searchedValue)) ? sal_True : sal_False);
                 } else if (evStr->getCond() == MQueryOp::BeginsWith) {
                     SAL_INFO("connectivity.mork", "MQueryOp::BeginsWith; done");
-                    resultVector.push_back((currentValue.indexOf(searchedValue) == 0) ? sal_True : sal_False);
+                    resultVector.push_back((currentValue.startsWith(searchedValue)) ? sal_True : sal_False);
                 } else if (evStr->getCond() == MQueryOp::Contains) {
                     SAL_INFO("connectivity.mork", "MQueryOp::Contains; done");
                     resultVector.push_back((currentValue.indexOf(searchedValue) == -1) ? sal_False : sal_True);

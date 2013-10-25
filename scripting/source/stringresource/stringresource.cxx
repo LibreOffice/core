@@ -1671,7 +1671,7 @@ bool checkNamingSceme( const OUString& aName, const OUString& aNameBase,
 
     // Name has to start with NameBase followed
     // by a '_' and at least one more character
-    if( aName.indexOf( aNameBase ) == 0 && nNameBaseLen < nNameLen-1 &&
+    if( aName.startsWith( aNameBase ) && nNameBaseLen < nNameLen-1 &&
         aName.getStr()[nNameBaseLen] == '_' )
     {
         bSuccess = true;

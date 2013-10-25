@@ -65,7 +65,7 @@ getContentPart( const OUString& _rRawString )
         sal_Int32 nContStart = _rRawString.indexOf( sPartId );
         if ( nContStart != -1 )
         {
-            nContStart = nContStart + sPartId.getLength();
+            nContStart += sPartId.getLength();
             sal_Int32 nContEnd = _rRawString.indexOf( sal_Unicode( ',' ), nContStart );
             if ( nContEnd != -1 )
                 sPart = _rRawString.copy( nContStart, nContEnd - nContStart );
@@ -90,8 +90,8 @@ isDomainMatch(
        if (hostName.equalsIgnoreAsciiCase( element ))
            return true;
 
-       if ( 0 == element.indexOf( '*' ) &&
-                 hostName.getLength() >= element.getLength()  )
+       if (element.startsWith("*") &&
+           hostName.getLength() >= element.getLength()  )
        {
            OUString cmpStr = element.copy( 1 );
            if ( hostName.matchIgnoreAsciiCase(

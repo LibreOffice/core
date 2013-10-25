@@ -185,7 +185,7 @@ sal_Int32 SAL_CALL SwVbaParagraphFormat::getOutlineLevel() throw (uno::RuntimeEx
     OUString aHeading;
     const OUString HEADING = OUString("Heading");
     mxParaProps->getPropertyValue("ParaStyleName") >>= aHeading;
-    if( aHeading.indexOf( HEADING ) == 0 )
+    if( aHeading.startsWith( HEADING ) )
     {
         // get the sub string after "Heading"
         nLevel = aHeading.copy( HEADING.getLength() ).toInt32();

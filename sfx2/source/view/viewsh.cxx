@@ -530,7 +530,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 OUString aRecipient( pMailRecipient->GetValue() );
                 OUString aMailToStr("mailto:");
 
-                if ( aRecipient.indexOf( aMailToStr ) == 0 )
+                if ( aRecipient.startsWith( aMailToStr ) )
                     aRecipient = aRecipient.copy( aMailToStr.getLength() );
                 aModel.AddAddress( aRecipient, SfxMailModel::ROLE_TO );
             }

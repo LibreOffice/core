@@ -133,7 +133,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
             if ( nId != 0 && pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR )
             {
                 aCommand = pPopupMenu->GetItemCommand( nId );
-                if ( aCommand.indexOf( m_aEmptyDocURL ) == 0 )
+                if ( aCommand.startsWith( m_aEmptyDocURL ) )
                 {
                     pPopupMenu->SetAccelKey( nId, rKeyCode );
                     bFound = sal_True;

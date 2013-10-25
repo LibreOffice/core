@@ -1072,12 +1072,12 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
             {
                 OUString aStr = OUString::number(nVal1);
                 OUString aStr2 = OUString::number(nArg);
-                bValid = aStr2.indexOf(aStr) == 0;
+                bValid = aStr2.startsWith(aStr);
             }
             else
             {
                 OUString aStr2 = OUString::number(nArg);
-                bValid = aStr2.indexOf(aStrVal1) == 0;
+                bValid = aStr2.startsWith(aStrVal1);
             }
             break;
         case SC_COND_ENDS_WITH:
@@ -1178,7 +1178,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
                 bValid = !bValid;
         break;
         case SC_COND_BEGINS_WITH:
-            bValid = rArg.indexOf(aUpVal1) == 0;
+            bValid = rArg.startsWith(aUpVal1);
         break;
         case SC_COND_ENDS_WITH:
             bValid = rArg.endsWith(aUpVal1);

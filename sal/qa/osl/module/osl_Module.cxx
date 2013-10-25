@@ -70,10 +70,9 @@ inline ::rtl::OUString getDllURL( void )
     return dllPath;
 }
 
-inline sal_Bool isURL( const ::rtl::OUString pathname )
+inline bool isURL( const ::rtl::OUString pathname )
 {
-    ::rtl::OUString aPreURL( "file:///" );
-    return ( ( pathname.indexOf( aPreURL ) == 0 ) ? sal_True : sal_False );
+    return pathname.startsWith( "file:///" );
 }
 
 /** create a temp test directory using OUString name of full qualified URL or system path.

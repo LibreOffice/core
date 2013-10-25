@@ -1147,7 +1147,7 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
 {
     const OUString aURL( rURL ), aPrefix( UNO_NAME_GRAPHOBJ_URLPREFIX );
-    if( aURL.indexOf( aPrefix ) == 0 )
+    if( aURL.startsWith( aPrefix ) )
     {
         // graphic manager url
         OString aUniqueID(OUStringToOString(rURL.copy(sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX) - 1), RTL_TEXTENCODING_UTF8));

@@ -141,7 +141,7 @@ ScriptingFrameworkURIHelper::initBaseURI()
         test = OUString("uno_packages");
         uri = OUString(SHARE_UNO_PACKAGES_URI);
     }
-    else if (m_sLocation.indexOf(TDOC_SCHEME) == 0)
+    else if (m_sLocation.startsWith(TDOC_SCHEME))
     {
         m_sBaseURI = m_sLocation.concat( SCRIPTS_PART );
         m_sLocation = OUString(DOCUMENT );

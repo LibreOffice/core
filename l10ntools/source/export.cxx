@@ -274,9 +274,9 @@ int Export::Execute( int nToken, const char * pToken )
         OString sTestToken(pToken);
         sTestToken = sTestToken.replaceAll("\t", OString()).
             replaceAll(" ", OString());
-        if (( !bReadOver ) && ( sTestToken.indexOf("#ifndef__RSC_PARSER") == 0 ))
+        if (( !bReadOver ) && ( sTestToken.startsWith("#ifndef__RSC_PARSER")))
             bReadOver = sal_True;
-        else if (( bReadOver ) && ( sTestToken.indexOf("#endif") == 0 ))
+        else if (( bReadOver ) && ( sTestToken.startsWith("#endif") ))
             bReadOver = sal_False;
     }
     if ((( nToken < FILTER_LEVEL ) || ( bReadOver )) &&

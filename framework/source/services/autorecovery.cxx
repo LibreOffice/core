@@ -1060,7 +1060,7 @@ void AutoRecovery::implts_readConfig()
             implts_specifyAppModuleAndFactory(aInfo);
             implts_specifyDefaultFilterAndExtension(aInfo);
 
-            if (pItems[i].indexOf(sRECOVERY_ITEM_BASE_IDENTIFIER)==0)
+            if (pItems[i].startsWith(sRECOVERY_ITEM_BASE_IDENTIFIER))
             {
                 OUString sID = pItems[i].copy(sRECOVERY_ITEM_BASE_IDENTIFIER.getLength());
                 aInfo.ID = sID.toInt32();
