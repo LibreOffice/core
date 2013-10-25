@@ -429,8 +429,8 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_FULFULDE_NIGERIA,           "fuv", "NG", 0     },
     { LANGUAGE_FULFULDE_NIGERIA,            "ff", "NG", kSAME },    // macrolanguage code
     { LANGUAGE_FULFULDE_SENEGAL,            "ff", "SN", 0     },    // macrolanguage code
-    { LANGUAGE_HAUSA_NIGERIA,               "ha", "NG", 0     },
-    { LANGUAGE_USER_HAUSA_GHANA,            "ha", "GH", 0     },
+    { LANGUAGE_HAUSA_NIGERIA,               "ha", "NG", kSAME },
+    { LANGUAGE_USER_HAUSA_GHANA,            "ha", "GH", kSAME },
     { LANGUAGE_IGBO_NIGERIA,                "ig", "NG", 0     },
     { LANGUAGE_KANURI_NIGERIA,              "kr", "NG", 0     },
     { LANGUAGE_YORUBA,                      "yo", "NG", 0     },
@@ -690,7 +690,7 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_KASHMIRI_INDIA,                      "ks-Deva", "IN", 0     },   // MS
     { LANGUAGE_KASHMIRI,                            "ks-Arab", ""  , 0     },   // MS, Kashmiri in "Jammu and Kashmir" ... no ISO3166 code for that
     { LANGUAGE_HAUSA_NIGERIA,                       "ha-Latn", "NG", 0     },   // MS
-    { LANGUAGE_USER_HAUSA_GHANA,                    "ha-Latn", "GH", 0     },   // MS
+    { LANGUAGE_USER_HAUSA_GHANA,                    "ha-Latn", "GH", 0     },
     { LANGUAGE_HAUSA_LATIN_LSO,                     "ha-Latn", ""  , 0     },
     { LANGUAGE_LATIN_LSO,                           "la-Latn", ""  , kSAME },   // MS, though Latn is suppress-script
     { LANGUAGE_TAI_NUA_CHINA,                      "tdd-Tale", "CN", 0     },   // MS reserved

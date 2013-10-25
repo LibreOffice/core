@@ -623,6 +623,8 @@ static bool checkMapping( const OUString rStr1, const OUString& rStr2 )
     if (rStr1 == "sr-Cyrl"     ) return rStr2 == "sr";
     if (rStr1 == "yi-Hebr-US"  ) return rStr2 == "yi-US";
     if (rStr1 == "yi-Hebr-IL"  ) return rStr2 == "yi-IL";
+    if (rStr1 == "ha-NG"       ) return rStr2 == "ha-Latn-NG";
+    if (rStr1 == "ha-GH"       ) return rStr2 == "ha-Latn-GH";
     return rStr1 == rStr2;
 }
 
