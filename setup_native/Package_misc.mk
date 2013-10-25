@@ -18,5 +18,6 @@ $(eval $(call gb_Package_add_file,setup_native/misc,bin/osl/osxdndinstall.png,ma
 $(eval $(call gb_Package_add_file,setup_native/misc,bin/root3.dat,linux/root3.dat))
 $(eval $(call gb_Package_add_file,setup_native/misc,bin/root4.dat,linux/root4.dat))
 $(eval $(call gb_Package_add_file,setup_native/misc,bin/root5.dat,linux/root5.dat))
+$(eval $(call gb_Package_add_file,setup_native/misc,bin/desktophelper.txt,win32/desktophelper.txt))
 
 # vim: set noet sw=4 ts=4:

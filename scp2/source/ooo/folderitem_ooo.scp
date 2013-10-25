@@ -20,19 +20,19 @@
 
 FolderItem gid_Folderitem_LibreOffice
     Name = "%PRODUCTNAME";
-    ModuleID = gid_Module_Root_Brand;
+    ModuleID = gid_Module_Root;
 #ifdef ENABLE_SILENT_MSI
     FolderID = PREDEFINED_STARTMENU;
-    Tooltip = "LibreOffice";
 #else
     FolderID = gid_Folder_Staroffice51;
-    ALL_LANG(Tooltip, STR_FI_TOOLTIP_SOFFICE);
 #endif
     FileID = gid_Brand_File_Bin_Soffice;
     IconFile = gid_Brand_File_Bin_Soffice;
     IconID = 0;
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";
+    Styles = (NON_ADVERTISED);
+    ALL_LANG(Tooltip, STR_FI_TOOLTIP_SOFFICE);
 End
 
 FolderItemProperty gid_Fip_LibreOffice_AppID
@@ -44,18 +44,19 @@ End
 FolderItem gid_Folderitem_Soffice_Desktop
 #ifdef ENABLE_SILENT_MSI
     Name = "%PRODUCTNAME";
-    Tooltip = "LibreOffice";
 #else
     Name = "%PRODUCTNAME %PRODUCTVERSION";
-    ALL_LANG(Tooltip, STR_FI_TOOLTIP_SOFFICE);
 #endif
-    ModuleID = gid_Module_Root_Brand;
+    ModuleID = gid_Module_Root;
     FolderID = PREDEFINED_DESKTOP;
     FileID = gid_Brand_File_Bin_Soffice;
     IconFile = gid_Brand_File_Bin_Soffice;
     IconID = 0;
+    ComponentIDFile = "gid_Brand_File_Desktophelper_Txt";
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";
+    Styles = (NON_ADVERTISED,USE_HELPER_FILENAME);
+    ALL_LANG(Tooltip, STR_FI_TOOLTIP_SOFFICE);
     ComponentCondition = "CREATEDESKTOPLINK=1";
 End
 
