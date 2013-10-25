@@ -84,6 +84,7 @@ public:
     void testFinacialDISCFormula();
     void testFinacialINTRATEFormula();
     void testMathFormulaCos();
+    void testStatisticalFormulaPearson();
     void testStatisticalFormulaNegbinomdist();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
@@ -117,6 +118,7 @@ public:
     CPPUNIT_TEST(testFinacialINTRATEFormula);
     CPPUNIT_TEST(testMathFormulaCos);
     CPPUNIT_TEST(testStatisticalFormulaNegbinomdist);
+    CPPUNIT_TEST(testStatisticalFormulaPearson);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1026,6 +1028,27 @@ void ScOpenclTest::testFinacialINTRATEFormula()
         double fLibre = pDoc->GetValue(ScAddress(5, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(5, i, 0));
         //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-82]
+void ScOpenclTest::testStatisticalFormulaPearson()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Pearson.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Pearson.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
+        std::cout<<fLibre<<"\t"<<fExcel<<"\n";
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
