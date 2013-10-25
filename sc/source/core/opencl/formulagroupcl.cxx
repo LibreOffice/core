@@ -426,6 +426,30 @@ public:
     virtual std::string BinFuncName(void) const { return "eq"; }
 };
 
+class OpLessEqual: public Binary {
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
+    {
+        std::stringstream ss;
+        ss << "("<< lhs << "<=" << rhs <<")";
+        return ss.str();
+    }
+    virtual std::string BinFuncName(void) const { return "leq"; }
+};
+
+class OpGreater: public Binary {
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
+    {
+        std::stringstream ss;
+        ss << "("<< lhs << ">" << rhs <<")";
+        return ss.str();
+    }
+    virtual std::string BinFuncName(void) const { return "gt"; }
+};
+
 class OpSum: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "0"; }
@@ -759,8 +783,16 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 mvSubArguments.push_back(SoPHelper<OpHarMean>(ts,
                     ft->Children[i]));
                 break;
+            case ocLessEqual:
+                mvSubArguments.push_back(SoPHelper<OpLessEqual>(ts,
+                    ft->Children[i]));
+                break;
             case ocEqual:
                 mvSubArguments.push_back(SoPHelper<OpEqual>(ts,
+                    ft->Children[i]));
+                break;
+            case ocGreater:
+                mvSubArguments.push_back(SoPHelper<OpGreater>(ts,
                     ft->Children[i]));
                 break;
             case ocExternal:
