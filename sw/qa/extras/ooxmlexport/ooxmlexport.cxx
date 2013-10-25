@@ -1647,6 +1647,63 @@ DECLARE_OOXML_TEST(testImageCrop, "ImageCrop.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 2290 ), aGraphicCropStruct.Bottom );
 }
 
+DECLARE_OOXML_TEST(testFdo70838, "fdo70838.docx")
+{
+    // The problem was that VMLExport::Commit didn't save the correct width and height,
+    // and ImplEESdrWriter::ImplFlipBoundingBox made a mistake calculating the position
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+
+    // get styles of the four shapes
+    OUString aStyles[4];
+    aStyles[0] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[1]/v:rect", "style");
+    // original is: "position:absolute;margin-left:97.6pt;margin-top:165pt;width:283.4pt;height:141.7pt;rotation:285"
+    aStyles[1] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[2]/v:rect", "style");
+    // original is: "position:absolute;margin-left:97.6pt;margin-top:164.95pt;width:283.4pt;height:141.7pt;rotation:255"
+    aStyles[2] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[3]/v:rect", "style");
+    // original is: "position:absolute;margin-left:97.5pt;margin-top:164.9pt;width:283.4pt;height:141.7pt;rotation:105"
+    aStyles[3] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[4]/v:rect", "style");
+    // original is: "position:absolute;margin-left:97.55pt;margin-top:164.95pt;width:283.4pt;height:141.7pt;rotation:75"
+
+    //check the size and position of each of the shapes
+    for( int i = 0; i < 4; ++i )
+    {
+        CPPUNIT_ASSERT(!aStyles[i].isEmpty());
+
+        int nextTokenPos = 0;
+        do
+        {
+            OUString aStyleCommand = aStyles[i].getToken( 0, ';', nextTokenPos );
+            CPPUNIT_ASSERT(!aStyleCommand.isEmpty());
+
+            OUString aStyleCommandName  = aStyleCommand.getToken( 0, ':' );
+            OUString aStyleCommandValue = aStyleCommand.getToken( 1, ':' );
+
+            if( aStyleCommandName.equals( "margin-left" ) )
+            {
+                float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
+                CPPUNIT_ASSERT_EQUAL(0, abs(97.6 - fValue));
+            }
+            else if( aStyleCommandName.equals( "margin-top" ) )
+            {
+                float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
+                CPPUNIT_ASSERT_EQUAL(0, abs(165 - fValue));
+            }
+            else if( aStyleCommandName.equals( "width" ) )
+            {
+                float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
+                CPPUNIT_ASSERT_EQUAL(0, abs(283.4 - fValue));
+            }
+            else if( aStyleCommandName.equals( "height" ) )
+            {
+                float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
+                CPPUNIT_ASSERT_EQUAL(0, abs(141.7 - fValue));
+            }
+
+        } while( nextTokenPos != -1 );
+    }
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
