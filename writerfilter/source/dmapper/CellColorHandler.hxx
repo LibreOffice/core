@@ -23,6 +23,8 @@
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 namespace writerfilter {
 namespace dmapper
 {
@@ -37,9 +39,14 @@ private:
     sal_Int32 m_nFillColor;
     OutputFormat m_OutputFormat;
 
+    OUString m_aInteropGrabBagName;
+    std::vector<beans::PropertyValue> m_aInteropGrabBag;
+
     // Properties
     virtual void lcl_attribute(Id Name, Value & val);
     virtual void lcl_sprm(Sprm & sprm);
+
+    void createGrabBag(OUString aName, uno::Any aValue);
 
 public:
     CellColorHandler( );
@@ -48,6 +55,9 @@ public:
     ::boost::shared_ptr<TablePropertyMap>            getProperties();
 
     void setOutputFormat( OutputFormat format ) { m_OutputFormat = format; }
+
+    void enableInteropGrabBag(OUString aName);
+    beans::PropertyValue getInteropGrabBag();
 };
 typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
 }}

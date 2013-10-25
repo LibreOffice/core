@@ -47,6 +47,56 @@ CellColorHandler::~CellColorHandler()
 {
 }
 
+// ST_Shd strings are converted to integers by the tokenizer, store strings in
+// the InteropGrabBag
+uno::Any lcl_ConvertShd(sal_Int32 nIntValue)
+{
+    OUString aRet;
+    // This should be in sync with the ST_Shd list in ooxml's model.xml.
+    switch (nIntValue)
+    {
+        case 0: aRet = "clear"; break;
+        case 1: aRet = "solid"; break;
+        case 2: aRet = "pct5"; break;
+        case 3: aRet = "pct10"; break;
+        case 4: aRet = "pct20"; break;
+        case 5: aRet = "pct25"; break;
+        case 6: aRet = "pct30"; break;
+        case 7: aRet = "pct40"; break;
+        case 8: aRet = "pct50"; break;
+        case 9: aRet = "pct60"; break;
+        case 10: aRet = "pct70"; break;
+        case 11: aRet = "pct75"; break;
+        case 12: aRet = "pct80"; break;
+        case 13: aRet = "pct90"; break;
+        case 14: aRet = "horzStripe"; break;
+        case 15: aRet = "vertStripe"; break;
+        case 17: aRet = "reverseDiagStripe"; break;
+        case 16: aRet = "diagStripe"; break;
+        case 18: aRet = "horzCross"; break;
+        case 19: aRet = "diagCross"; break;
+        case 20: aRet = "thinHorzStripe"; break;
+        case 21: aRet = "thinVertStripe"; break;
+        case 23: aRet = "thinReverseDiagStripe"; break;
+        case 22: aRet = "thinDiagStripe"; break;
+        case 24: aRet = "thinHorzCross"; break;
+        case 25: aRet = "thinDiagCross"; break;
+        case 37: aRet = "pct12"; break;
+        case 38: aRet = "pct15"; break;
+        case 43: aRet = "pct35"; break;
+        case 44: aRet = "pct37"; break;
+        case 46: aRet = "pct45"; break;
+        case 49: aRet = "pct55"; break;
+        case 51: aRet = "pct62"; break;
+        case 52: aRet = "pct65"; break;
+        case 57: aRet = "pct85"; break;
+        case 58: aRet = "pct87"; break;
+        case 60: aRet = "pct95"; break;
+        case 65535: aRet = "nil"; break;
+    }
+    return uno::makeAny(aRet);
+}
+
 void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
@@ -60,17 +110,20 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_ooxml::LN_CT_Shd_val:
         {
+            createGrabBag("val", lcl_ConvertShd(nIntValue));
             //might be clear, pct5...90, some hatch types
             //TODO: The values need symbolic names!
             m_nShadingPattern = nIntValue; //clear == 0, solid: 1, pct5: 2, pct50:8, pct95: x3c, horzStripe:0x0e, thinVertStripe: 0x15
         }
         break;
         case NS_ooxml::LN_CT_Shd_fill:
+            createGrabBag("fill", uno::makeAny(nIntValue));
             if( nIntValue == OOXML_COLOR_AUTO )
                 nIntValue = 0xffffff; //fill color auto means white
             m_nFillColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_Shd_color:
+            createGrabBag("color", uno::makeAny(nIntValue));
             if( nIntValue == OOXML_COLOR_AUTO )
                 nIntValue = 0; //shading color auto means black
             //color of the shading
@@ -271,6 +324,37 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
                         : PROP_CHAR_BACK_COLOR, uno::makeAny( nApplyColor ));
     return pPropertyMap;
 }
+
+void CellColorHandler::createGrabBag(OUString aName, uno::Any aAny)
+{
+    if (m_aInteropGrabBagName.isEmpty())
+        return;
+
+    beans::PropertyValue aValue;
+    aValue.Name = aName;
+    aValue.Value = aAny;
+    m_aInteropGrabBag.push_back(aValue);
+}
+
+void CellColorHandler::enableInteropGrabBag(OUString aName)
+{
+    m_aInteropGrabBagName = aName;
+}
+
+beans::PropertyValue CellColorHandler::getInteropGrabBag()
+{
+    beans::PropertyValue aRet;
+    aRet.Name = m_aInteropGrabBagName;
+
+    uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
+    beans::PropertyValue* pSeq = aSeq.getArray();
+    for (std::vector<beans::PropertyValue>::iterator i = m_aInteropGrabBag.begin(); i != m_aInteropGrabBag.end(); ++i)
+        *pSeq++ = *i;
+
+    aRet.Value = uno::makeAny(aSeq);
+    return aRet;
+}
+
 } //namespace dmapper
 } //namespace writerfilter
 

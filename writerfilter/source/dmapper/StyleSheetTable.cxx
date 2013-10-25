@@ -590,8 +590,21 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_personal:
         case NS_ooxml::LN_CT_Style_personalCompose:
         case NS_ooxml::LN_CT_Style_personalReply:
-        case NS_ooxml::LN_CT_Style_trPr:
+        break;
         case NS_ooxml::LN_CT_Style_tcPr:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties.get() && m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+            {
+                TblStylePrHandlerPtr pTblStylePrHandler(new TblStylePrHandler(m_pImpl->m_rDMapper));
+                pProperties->resolve(*pTblStylePrHandler);
+                StyleSheetEntry* pEntry = m_pImpl->m_pCurrentEntry.get();
+                TableStyleSheetEntry* pTableEntry = dynamic_cast<TableStyleSheetEntry*>(pEntry);
+                pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tcPr"));
+            }
+        }
+        break;
+        case NS_ooxml::LN_CT_Style_trPr:
         break;
         case NS_ooxml::LN_CT_Style_rsid:
         case NS_ooxml::LN_CT_Style_qFormat:

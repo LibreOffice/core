@@ -228,7 +228,11 @@ namespace dmapper {
                 if( pProperties.get())
                 {
                     CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
+                    if (m_pCurrentInteropGrabBag)
+                        pCellColorHandler->enableInteropGrabBag("shd");
                     pProperties->resolve( *pCellColorHandler );
+                    if (m_pCurrentInteropGrabBag)
+                        m_pCurrentInteropGrabBag->push_back(pCellColorHandler->getInteropGrabBag());
                     cellProps( pCellColorHandler->getProperties());
                 }
             }
