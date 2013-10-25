@@ -91,7 +91,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation(  ) thro
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs() throw(SQLException, RuntimeException)
 {
-    return 0;
+    OSL_FAIL("Not implemented yet!");
+    // TODO implement
+    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eCatalogs);
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls() throw(SQLException, RuntimeException)
@@ -150,7 +152,9 @@ OUString SAL_CALL ODatabaseMetaData::getSchemaTerm()
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
     throw(SQLException, RuntimeException)
 {
-    return 0;
+    OSL_FAIL("Not implemented yet!");
+    // TODO implement
+    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eSchemas);
 }
 
 //----- Max Sizes/Lengths -----------------------------------------------------
@@ -838,7 +842,9 @@ uno::Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
 // -------------------------------------------------------------------------
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    OSL_FAIL("Not implemented yet!");
+    // TODO implement
+    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
@@ -1413,7 +1419,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     (void) schemaPattern;
     (void) procedureNamePattern;
     (void) columnNamePattern;
-    return NULL;
+    OSL_FAIL("Not implemented yet!");
+    // TODO implement
+    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eProcedureColumns);
 }
 // -------------------------------------------------------------------------
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
@@ -1424,7 +1432,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     (void) catalog;
     (void) schemaPattern;
     (void) procedureNamePattern;
-    return NULL;
+    OSL_FAIL("Not implemented yet!");
+    // TODO implement
+    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eProcedures);
 }
 // -------------------------------------------------------------------------
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
@@ -1434,7 +1444,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     (void) catalog;
     (void) schema;
     (void) table;
-    return NULL;
+    OSL_FAIL("Not implemented yet!");
+    // TODO implement
+    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eVersionColumns);
 }
 // -------------------------------------------------------------------------
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
@@ -1447,7 +1459,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     (void) catalog;
     (void) schema;
     (void) table;
-    return NULL;
+    OSL_FAIL("Not implemented yet!");
+    // TODO implement
+    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eExportedKeys);
 }
 // -------------------------------------------------------------------------
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
@@ -1460,7 +1474,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     (void) catalog;
     (void) schema;
     (void) table;
-    return NULL;
+    OSL_FAIL("Not implemented yet!");
+    // TODO implement
+    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eImportedKeys);
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
@@ -1627,7 +1643,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     (void) table;
     (void) scope;
     (void) nullable;
-    return NULL;
+    OSL_FAIL("Not implemented yet!");
+    // TODO implement
+    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eBestRowIdentifier);
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
@@ -1709,7 +1727,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     (void) foreignCatalog;
     (void) foreignSchema;
     (void) foreignTable;
-    return NULL;
+    OSL_FAIL("Not implemented yet!");
+    // TODO implement
+    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eCrossReference);
 }
 // -------------------------------------------------------------------------
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
@@ -1719,7 +1739,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& cat
     (void) typeNamePattern;
     (void) types;
     OSL_FAIL("Not implemented yet!");
-    throw SQLException();
+    // TODO implement
+    return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eUDTs);
 }
 // -----------------------------------------------------------------------------
 
