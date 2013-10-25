@@ -75,6 +75,7 @@ public:
     void testFinancialCoupdaybsFormula();
     void testFinacialDollardeFormula();
     void testCompilerString();
+    void testCompilerInEq();
 
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
@@ -98,6 +99,7 @@ public:
     CPPUNIT_TEST(testFinancialCoupdaybsFormula);
     CPPUNIT_TEST(testFinacialDollardeFormula);
     CPPUNIT_TEST(testCompilerString);
+    CPPUNIT_TEST(testCompilerInEq);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -187,6 +189,29 @@ void ScOpenclTest::testCompilerString()
     xDocShRes->DoClose();
 }
 
+void ScOpenclTest::testCompilerInEq()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenCLTests/Compiler/ineq.", ODS);
+
+    enableOpenCL(xDocSh);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocShellRef xDocShRes = loadDoc("OpenCLTests/Compiler/ineq.", ODS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i < 7; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 
 void ScOpenclTest::testSharedFormulaXLSStockHistory()
 {
