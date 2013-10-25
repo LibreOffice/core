@@ -638,6 +638,95 @@ class OpHarMean:public Normal{
     }
       virtual std::string BinFuncName(void) const { return "HarMean"; }
 };
+class OpRsq:public Normal{
+    public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        FormulaToken* pCur = vSubArguments[1]->GetFormulaToken();
+        assert(pCur);
+        const formula::DoubleVectorRefToken* pCurDVR =
+            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+        size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ")\n";
+        ss << "{\n\t";
+        ss << "int gid0=get_global_id(0);\n\t";
+        ss << "double fCount = 0.0;\n\t";
+        ss << "double fSumX = 0.0;\n\t";
+        ss << "double fSumY = 0.0;\n\t";
+        ss << "double fSumDeltaXDeltaY = 0.0;\n\t";
+        ss << "double fSumSqrDeltaX    = 0.0;\n\t";
+        ss << "double fSumSqrDeltaY    = 0.0;\n\t";
+        ss << "double fInx;\n\t";
+        ss << "double fIny;\n\t";
+#ifdef ISNAN
+        FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+        const formula::DoubleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+        formula::DoubleVectorRefToken *>(tmpCur0);
+        FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+        const formula::DoubleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+        formula::DoubleVectorRefToken *>(tmpCur1);
+        ss<< "int buffer_fInx_len = ";
+        ss<< tmpCurDVR0->GetArrayLength();
+        ss << ";\n\t";
+
+        ss<< "int buffer_fIny_len = ";
+        ss<< tmpCurDVR1->GetArrayLength();
+        ss << ";\n\t";
+#endif
+        ss << "for(int i=0; i<"<<nCurWindowSize<<"; i++)\n\t";
+        ss << "{\n\t";
+#ifdef ISNAN
+        ss<<"if((gid0+i)>=buffer_fInx_len || isNan(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<"))\n\t\t";
+        ss<<"fInx = 0;\n\telse \n\t";
+#endif
+        ss << "  fInx = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << "  ;\n\t";
+#ifdef ISNAN
+        ss<<"if((gid0+i)>=buffer_fIny_len || isNan(";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss<<"))\n\t\t";
+        ss<<"fIny = 0;\n\telse \n\t";
+#endif
+        ss << "  fIny = "<<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << "  ;\n\t";
+        ss << "  double fValX = fInx;\n\t";
+        ss << "  double fValY = fIny;\n\t";
+        ss << "  fSumX += fValX;\n\t";
+        ss << "  fSumY += fValY;\n\t";
+        ss << "  fCount = fCount + 1;\n\t";
+        ss << "}\n\t";
+        ss << "const double fMeanX = fSumX / fCount;\n\t";
+        ss << "const double fMeanY = fSumY / fCount;\n\t";
+        ss << "for(int i=0; i<"<<nCurWindowSize<<"; i++)\n\t";
+        ss << "{\n\t";
+        ss << "  fInx = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " ;\n\t";
+        ss << "  fIny = "<<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << " ;\n\t";
+        ss << "  const double fValX = fInx;\n\t";
+        ss << "  const double fValY = fIny;\n\t";
+        ss << "  fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);\n\t";
+        ss << "  fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);\n\t";
+        ss << "  fSumSqrDeltaY    += (fValY - fMeanY) * (fValY - fMeanY);\n\t";
+        ss << "}\n\t";
+        ss << "double tmp = ( fSumDeltaXDeltaY / sqrt( fSumSqrDeltaX * fSumSqrDeltaY));\n\t";
+        ss << "return (tmp * tmp);\n";
+        ss << "}\n";
+    }
+    virtual std::string BinFuncName(void) const { return "OpRsq"; }
+};
 }}
 #endif
 
