@@ -352,4 +352,14 @@ void ODatabaseMetaDataResultSetMetaData::setVersionColumnsMap()
     m_mColumns[8] = OColumn(OUString(),"PSEUDO_COLUMN", ColumnValue::NO_NULLS, 0,0,0, DataType::INTEGER);
 }
 
+void ODatabaseMetaDataResultSetMetaData::setUDTsMap()
+{
+    m_mColumns[1] = OColumn(OUString(),"TYPE_CAT",   ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[2] = OColumn(OUString(),"TYPE_SCHEM", ColumnValue::NULLABLE, 0,0,0, DataType::VARCHAR);
+    m_mColumns[3] = OColumn(OUString(),"TYPE_NAME",  ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[4] = OColumn(OUString(),"CLASS_NAME", ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[5] = OColumn(OUString(),"DATA_TYPE",  ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+    m_mColumns[6] = OColumn(OUString(),"REMARKS",    ColumnValue::NO_NULLS, 0,0,0, DataType::VARCHAR);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

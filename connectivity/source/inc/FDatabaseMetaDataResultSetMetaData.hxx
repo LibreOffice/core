@@ -96,6 +96,7 @@ namespace connectivity
         void setImportedKeysMap() { setCrossReferenceMap(); }
         void setCatalogsMap();
         void setSchemasMap();
+        void setUDTsMap();
     };
 }
 #endif // _CONNECTIVITY_FILE_ADATABASEMETARESULTSETMETADATA_HXX_

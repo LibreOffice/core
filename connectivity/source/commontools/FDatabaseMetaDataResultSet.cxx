@@ -111,6 +111,7 @@ void ODatabaseMetaDataResultSet::setType(MetaDataResultSetType _eType)
         case eTypeInfo:             setTypeInfoMap(); break;
         case eBestRowIdentifier:    setBestRowIdentifierMap(); break;
         case eVersionColumns:       setVersionColumnsMap(); break;
+        case eUDTs:                 setUDTsMap(); break;
         default:
             OSL_FAIL("Wrong type!");
     }
@@ -608,6 +609,13 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap()
 {
     ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setTypeInfoMap();
+    m_xMetaData = pMetaData;
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSet::setUDTsMap()
+{
+    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    pMetaData->setUDTsMap();
     m_xMetaData = pMetaData;
 }
 // -------------------------------------------------------------------------

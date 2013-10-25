@@ -101,7 +101,9 @@ namespace connectivity
             /// describes a result set as expected by XDatabaseMetaData::getBestRowIdentifier
             eBestRowIdentifier = 15,
             /// describes a result set as expected by XDatabaseMetaData::getVersionColumns
-            eVersionColumns = 16
+            eVersionColumns = 16,
+            /// describes a result set as expected by XDatabaseMetaData::getUDTs
+            eUDTs = 17
         };
 
     private:
@@ -234,6 +236,7 @@ namespace connectivity
         void setTypeInfoMap();
         void setBestRowIdentifierMap();
         void setVersionColumnsMap();
+        void setUDTsMap();
     public:
         // some methods to get already defined ORowSetValues
         // this increase the reuse of ORowSetValues
