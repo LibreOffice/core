@@ -2744,13 +2744,26 @@ void lcl_TableStyleTblPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<
     pSerializer->startElementNS(XML_w, XML_tblPr, FSEND);
 
     uno::Sequence<beans::PropertyValue> aTblInd, aTblCellMar;
+    boost::optional<sal_Int32> oTblStyleRowBandSize, oTblStyleColBandSize;
     for (sal_Int32 i = 0; i < rTblPr.getLength(); ++i)
     {
-        if (rTblPr[i].Name == "tblInd")
+        if (rTblPr[i].Name == "tblStyleRowBandSize")
+            oTblStyleRowBandSize = rTblPr[i].Value.get<sal_Int32>();
+        else if (rTblPr[i].Name == "tblStyleColBandSize")
+            oTblStyleColBandSize = rTblPr[i].Value.get<sal_Int32>();
+        else if (rTblPr[i].Name == "tblInd")
             aTblInd = rTblPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
         else if (rTblPr[i].Name == "tblCellMar")
             aTblCellMar = rTblPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
     }
+    if (oTblStyleRowBandSize)
+        pSerializer->singleElementNS(XML_w, XML_tblStyleRowBandSize,
+                FSNS(XML_w, XML_val), OString::number(oTblStyleRowBandSize.get()),
+                FSEND);
+    if (oTblStyleColBandSize)
+        pSerializer->singleElementNS(XML_w, XML_tblStyleColBandSize,
+                FSNS(XML_w, XML_val), OString::number(oTblStyleColBandSize.get()),
+                FSEND);
     lcl_TableStyleTblInd(pSerializer, aTblInd);
     lcl_TableStyleTblCellMar(pSerializer, aTblCellMar);
 
@@ -2759,28 +2772,67 @@ void lcl_TableStyleTblPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<
 
 void DocxAttributeOutput::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle)
 {
-    bool bDefault = false;
-    OUString aStyleId, aName;
+    bool bDefault = false, bCustomStyle = false, bQFormat = false;
+    OUString aStyleId, aName, aBasedOn;
+    sal_Int32 nUiPriority = 0, nRsid = 0;
     uno::Sequence<beans::PropertyValue> aTblPr;
     for (sal_Int32 i = 0; i < rStyle.getLength(); ++i)
     {
         if (rStyle[i].Name == "default")
             bDefault = rStyle[i].Value.get<sal_Bool>();
+        else if (rStyle[i].Name == "customStyle")
+            bCustomStyle = rStyle[i].Value.get<sal_Bool>();
         else if (rStyle[i].Name == "styleId")
             aStyleId = rStyle[i].Value.get<OUString>();
         else if (rStyle[i].Name == "name")
             aName = rStyle[i].Value.get<OUString>();
+        else if (rStyle[i].Name == "basedOn")
+            aBasedOn = rStyle[i].Value.get<OUString>();
+        else if (rStyle[i].Name == "uiPriority")
+            nUiPriority = rStyle[i].Value.get<sal_Int32>();
+        else if (rStyle[i].Name == "qFormat")
+            bQFormat = true;
+        else if (rStyle[i].Name == "rsid")
+            nRsid = rStyle[i].Value.get<sal_Int32>();
         else if (rStyle[i].Name == "tblPr")
             aTblPr = rStyle[i].Value.get< uno::Sequence<beans::PropertyValue> >();
     }
-    m_pSerializer->startElementNS(XML_w, XML_style,
-            FSNS(XML_w, XML_type), "table",
-            FSNS(XML_w, XML_default), bDefault ? "true" : "false",
-            FSNS(XML_w, XML_styleId), OUStringToOString(aStyleId, RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND);
+
+    sax_fastparser::FastAttributeList* pAttributeList = m_pSerializer->createAttrList();
+    pAttributeList->add(FSNS(XML_w, XML_type), "table");
+    if (bDefault)
+        pAttributeList->add(FSNS(XML_w, XML_default), "1");
+    if (bCustomStyle)
+        pAttributeList->add(FSNS(XML_w, XML_customStyle), "1");
+    if (!aStyleId.isEmpty())
+        pAttributeList->add(FSNS(XML_w, XML_styleId), OUStringToOString(aStyleId, RTL_TEXTENCODING_UTF8).getStr());
+    XFastAttributeListRef xAttributeList(pAttributeList);
+    m_pSerializer->startElementNS(XML_w, XML_style, xAttributeList);
+
     m_pSerializer->singleElementNS(XML_w, XML_name,
             FSNS(XML_w, XML_val), OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr(),
             FSEND);
+    if (!aBasedOn.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, XML_basedOn,
+                FSNS(XML_w, XML_val), OUStringToOString(aBasedOn, RTL_TEXTENCODING_UTF8).getStr(),
+                FSEND);
+    if (nUiPriority)
+        m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
+                FSNS(XML_w, XML_val), OString::number(nUiPriority),
+                FSEND);
+    if (bQFormat)
+        m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
+    if (nRsid)
+    {
+        // We want the rsid as a hex string, but always with the length of 8.
+        OStringBuffer aBuf = OString::number(nRsid, 16);
+        OStringBuffer aStr;
+        comphelper::string::padToLength(aStr, 8 - aBuf.getLength(), '0');
+        aStr.append(aBuf.getStr());
+        m_pSerializer->singleElementNS(XML_w, XML_rsid,
+                FSNS(XML_w, XML_val), aStr.getStr(),
+                FSEND);
+    }
 
     lcl_TableStyleTblPr(m_pSerializer, aTblPr);
 
