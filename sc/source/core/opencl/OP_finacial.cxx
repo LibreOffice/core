@@ -312,6 +312,114 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "DISC"; }
 };
+class OpINTRATE: public Normal {
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "double tmp = " << GetBottom() <<";\n\t";
+        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "double settle = " << GetBottom() <<";\n\t";
+        ss << "double maturity = " << GetBottom() <<";\n\t";
+        ss << "double price = " << GetBottom() <<";\n\t";
+        ss << "double redemp = " << GetBottom() <<";\n\t";
+        ss << "int mode = " << GetBottom() <<";\n\t";
+        #ifdef  ISNAN
+        FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur0);
+        FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur1);
+        FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur2);
+        FormulaToken *tmpCur3 = vSubArguments[3]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR3= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur3);
+        FormulaToken *tmpCur4 = vSubArguments[4]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR4= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur4);
+        ss << "int buffer_settle_len = ";
+        ss << tmpCurDVR0->GetArrayLength();
+        ss << ";\n\t";
+        ss << "int buffer_maturity_len = ";
+        ss << tmpCurDVR1->GetArrayLength();
+        ss << ";\n\t";
+        ss << "int buffer_price_len = ";
+        ss << tmpCurDVR2->GetArrayLength();
+        ss << ";\n\t";
+        ss << "int buffer_redemp_len = ";
+        ss << tmpCurDVR3->GetArrayLength();
+        ss << ";\n\t";
+        ss << "int buffer_mode_len = ";
+        ss << tmpCurDVR4->GetArrayLength();
+        ss << ";\n\t";
+        #endif
+        #ifdef  ISNAN
+        ss << "if((gid0)>=buffer_settle_len || isNan(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << "))\n\t\t";
+        ss << "settle = 0;\n\telse \n\t\t";
+        #endif
+        ss << "settle = ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+        #ifdef  ISNAN
+        ss << "if((gid0)>=buffer_maturity_len || isNan(";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << "))\n\t\t";
+        ss << "maturity = 0;\n\telse \n\t\t";
+        #endif
+        ss << "maturity = ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+        #ifdef  ISNAN
+        ss << "if((gid0)>=buffer_price_len || isNan(";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << "))\n\t\t";
+        ss << "price = 0;\n\telse \n\t\t";
+        #endif
+        ss << "price = ";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+        #ifdef  ISNAN
+        ss << "if((gid0)>=buffer_redemp_len || isNan(";
+        ss << vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss << "))\n\t\t";
+        ss << "redemp = 0;\n\telse \n\t\t";
+        #endif
+        ss << "redemp = ";
+        ss << vSubArguments[3]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+        #ifdef  ISNAN
+        ss << "if((gid0)>=buffer_mode_len || isNan(";
+        ss << vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss << "))\n\t\t";
+        ss << "mode = 0;\n\telse \n\t\t";
+        #endif
+        ss << "mode = ";
+        ss << vSubArguments[4]->GenSlidingWindowDeclRef();
+        ss << ";\n\t";
+        ss << "int nNullDate = GetNullDate(30,12,1899);\n\t";
+        ss << "tmp = (redemp / price - 1.0) / GetYearDiff(nNullDate, settle, maturity, mode);\n\t";
+        ss << "return tmp;\n";
+        ss << "}";
+    }
+    virtual std::string BinFuncName(void) const { return "INTRATE"; }
+};
 class Fvschedule: public Normal
 {
 public:
