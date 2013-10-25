@@ -1413,7 +1413,7 @@ def __loadlang__(lang, a):
     [r"(?<=\n)__repeat__([^\n]*\w[^\n]*):(?=\n)", "for %s in range(1, 1+int(\\1)):" % repcount], # repeat block
     [r"(?<=\d)[%s](?=\d)" % a['DECIMAL'], "."], # decimal sign
     [r"(?<!/)/(?!/)", "*1.0/"], # fix division: /1 -> /1.0, but not with //
-    [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['HOUR'], "\\1*30"], # 12h = 12*30°
+    [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['HOUR'], lambda r: str(float(r.group(1).replace(",", "."))*30)], # 12h = 12*30°
     [r"(?<=\d)(%s)" % a['DEG'], ""], # 1° -> 1
     [r"(?<!:)\b(?:__def__)[ \t]+(\w+)\b[ \t]*([:]?\w[^\n]*)", "\ndef \\1(\\2):\n["],
     [r"(?<!:)\b(?:__def__)\s+(\w+)", "\ndef \\1():\n["],
@@ -1486,9 +1486,9 @@ def __loadlang__(lang, a):
     [r"(?<!:)\b(?:%s)\b" % a['PRINT'], "\n)Print("],
     [r"(?<!:)\b(?:%s)\b" % a['TURNLEFT'], "\n)turnleft("],
     [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['PT'], "\\1"],
-    [r"\b([0-9]+([,.][0-9]+)?)(%s)(?!\w)" % a['INCH'], "\\1*72"],
-    [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['MM'], "\\1*%s" % __MM_TO_PT__],
-    [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['CM'], "\\1*%s*10" % __MM_TO_PT__],
+    [r"\b([0-9]+([,.][0-9]+)?)(%s)(?!\w)" % a['INCH'], lambda r: str(float(r.group(1).replace(",", "."))*72)],
+    [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['MM'], lambda r: str(float(r.group(1).replace(",", "."))*__MM_TO_PT__)],
+    [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['CM'], lambda r: str(float(r.group(1).replace(",", "."))*__MM_TO_PT__*10)],
     [r"\b(__(?:int|float|string)__len|round|abs|sin|cos|sqrt|set|list|tuple|sorted)\b ((?:\w|\d+([,.]\d+)?|0[xX][0-9a-fA-F]+|[-+*/]| )+)\)" , "\\1(\\2))" ], # fix parsing: (1 + sqrt x) -> (1 + sqrt(x))
     [r"(?<=[-*/=+,]) ?\n\)(\w+)\(", "\\1()"], # read attributes, eg. x = fillcolor
     [r"(?<=return) ?\n\)(\w+)\(", "\\1()"], # return + user function
