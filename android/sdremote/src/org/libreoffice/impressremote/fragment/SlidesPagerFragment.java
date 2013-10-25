@@ -119,6 +119,10 @@ public class SlidesPagerFragment extends SherlockFragment implements ServiceConn
     }
 
     private void setUpCurrentSlide() {
+        if (!isServiceBound()) {
+            return;
+        }
+
         SlideShow aSlideShow = mCommunicationService.getSlideShow();
 
         getSlidesPager().setCurrentItem(aSlideShow.getCurrentSlideIndex());

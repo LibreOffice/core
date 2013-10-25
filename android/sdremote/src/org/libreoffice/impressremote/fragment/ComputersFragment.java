@@ -459,6 +459,10 @@ public class ComputersFragment extends SherlockListFragment implements ServiceCo
     }
 
     private void stopComputersSearch() {
+        if (!isServiceBound()) {
+            return;
+        }
+
         mCommunicationService.stopServersSearch();
     }
 
