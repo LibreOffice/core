@@ -37,4 +37,10 @@
   <implementation name="com.sun.star.svtools.SvFilterOptionsDialog">
     <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svt.FilePicker">
+    <service name="com.sun.star.ui.dialogs.FilePicker"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.svt.FolderPicker">
+    <service name="com.sun.star.ui.dialogs.FolderPicker"/>
+  </implementation>
 </component>
