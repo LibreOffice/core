@@ -119,6 +119,11 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_ExternalProje
 
 endef
 
+# call gb_ExternalProject_use_external_projects,project,projects
+define gb_ExternalProject_use_external_projects
+$(foreach ext,$(2),$(call gb_ExternalProject_use_external_project,$(1),$(ext)))
+endef
+
 # Make an ExternalProject depend on an external
 #
 # this forwards to functions that must be defined in RepositoryExternal.mk.

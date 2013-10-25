@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,jfreereport_flow_engine))
 
-$(eval $(call gb_ExternalProject_use_packages,jfreereport_flow_engine,\
+$(eval $(call gb_ExternalProject_use_external_projects,jfreereport_flow_engine,\
 	jfreereport_liblayout \
 ))
 
@@ -26,7 +26,12 @@ $(call gb_ExternalProject_get_state_target,jfreereport_flow_engine,build) :
 			$(if $(filter YES,$(SYSTEM_APACHE_COMMONS)),\
 				-Dcommons-logging.jar=$(COMMONS_LOGGING_JAR) \
 				-Dcommons-logging.jar=$(INSTROOT)/$(LIBO_SHARE_JAVA_FOLDER)/commons-logging-1.1.1.jar) \
-			-Dlib=$(OUTDIR)/bin \
+			-Dlibbase.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libbase)/dist/libbase-$(LIBBASE_VERSION).jar \
+			-Dlibformula.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libformula)/dist/libformula-$(LIBFORMULA_VERSION).jar \
+			-Dliblayout.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_liblayout)/build/lib/liblayout.jar \
+			-Dlibloader.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libloader)/dist/libloader-$(LIBLOADER_VERSION).jar \
+			-Dlibserializer.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libserializer)/dist/libserializer-$(LIBBASE_VERSION).jar \
+			-Dlibxml.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libxml)/dist/libxml-$(LIBXML_VERSION).jar \
 			$(if $(filter yes,$(JAVACISGCJ))\
 				,-Dbuild.compiler=gcj \
 				,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \

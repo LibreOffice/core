@@ -13,7 +13,7 @@ $(eval $(call gb_ExternalProject_use_externals,jfreereport_liblayout,\
 	commons-logging \
 ))
 
-$(eval $(call gb_ExternalProject_use_packages,jfreereport_liblayout,\
+$(eval $(call gb_ExternalProject_use_external_projects,jfreereport_liblayout,\
 	jfreereport_sac \
 	jfreereport_libbase \
 	jfreereport_flute \
@@ -38,6 +38,15 @@ $(call gb_ExternalProject_get_state_target,jfreereport_liblayout,build) :
 			$(if $(filter YES,$(SYSTEM_APACHE_COMMONS)),\
 				-Dcommons-logging.jar=$(COMMONS_LOGGING_JAR) \
 				-Dcommons-logging.jar=$(INSTROOT)/$(LIBO_SHARE_JAVA_FOLDER)/commons-logging-1.1.1.jar) \
+			-Dflute.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_flute)/dist/flute-$(FLUTE_VERSION).jar \
+			-Dlibbase.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libbase)/dist/libbase-$(LIBBASE_VERSION).jar \
+			-Dlibformula.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libformula)/dist/libformula-$(LIBFORMULA_VERSION).jar \
+			-Dlibfonts.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libfonts)/dist/libfonts-$(LIBFONTS_VERSION).jar \
+			-Dlibloader.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libloader)/dist/libloader-$(LIBLOADER_VERSION).jar \
+			-Dlibrepository.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_librepository)/dist/librepository-$(LIBREPOSITORY_VERSION).jar \
+			-Dlibserializer.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libserializer)/dist/libserializer-$(LIBBASE_VERSION).jar \
+			-Dlibxml.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_libxml)/dist/libxml-$(LIBXML_VERSION).jar \
+			-Dsac.jar=$(call gb_UnpackedTarball_get_dir,jfreereport_sac)/build/lib/sac.jar \
 			$(if $(filter yes,$(JAVACISGCJ))\
 				,-Dbuild.compiler=gcj \
 				,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
@@ -45,7 +54,6 @@ $(call gb_ExternalProject_get_state_target,jfreereport_liblayout,build) :
 			) \
 			-Dantcontrib.available="true" \
 			-Dbuild.id="10682" \
-			-Dlib=$(OUTDIR)/bin \
 			$(if $(debug),-Dbuild.debug="on") jar \
 	)
 
