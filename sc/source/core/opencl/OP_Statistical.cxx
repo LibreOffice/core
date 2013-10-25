@@ -321,7 +321,83 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "Correl"; }
 };
+class OpNegbinomdist:public Normal{
+    public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ",";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ")\n";
+        ss << "{\n\t";
+        ss << "double f,s,p;\n\t";
+        ss << " int gid0=get_global_id(0);\n\t";
+#ifdef ISNAN
+        FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR0= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur0);
 
+        FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR1= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur1);
+
+        FormulaToken *tmpCur2 = vSubArguments[2]->GetFormulaToken();
+        const formula::SingleVectorRefToken*tmpCurDVR2= dynamic_cast<const
+        formula::SingleVectorRefToken *>(tmpCur2);
+        ss<< "int buffer_f_len = ";
+        ss<< tmpCurDVR0->GetArrayLength();
+        ss << ";\n\t";
+
+        ss<< "int buffer_s_len = ";
+        ss<< tmpCurDVR1->GetArrayLength();
+        ss << ";\n\t";
+
+        ss<< "int buffer_p_len = ";
+        ss<< tmpCurDVR2->GetArrayLength();
+        ss << ";\n\t";
+#endif
+#ifdef ISNAN
+        ss<<"if((gid0)>=buffer_p_len || isNan(";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss<<"))\n\t\t";
+        ss<<"p = 0;\n\telse \n\t\t";
+#endif
+        ss << "  p = "<<vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << " ;\n\t";
+#ifdef ISNAN
+        ss<<"if((gid0)>=buffer_s_len || isNan(";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss<<"))\n\t\t";
+        ss<<"s = 0;\n\telse \n\t\t";
+#endif
+        ss << "  s = "<<vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss << " ;\n\t";
+#ifdef ISNAN
+        ss<<"if((gid0)>=buffer_f_len || isNan(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss<<"))\n\t\t";
+        ss<<"f = 0;\n\telse \n\t\t";
+#endif
+        ss << "  f = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " ;\n\t";
+        ss << " double q = 1.0 - p;\n\t";
+        ss << " double fFactor = pow(p,s);\n\t";
+        ss << " for(int i=0; i<f; i++)\n\t";
+        ss << " {\n\t";
+        ss << "   fFactor *= ((double)i+s)/((double)i+1.0)*q;\n\t";
+        ss << " }\n\t";
+        ss << " double tmp=fFactor;\n\t";
+        ss << " return tmp;\n";
+        ss << "}\n";
+    }
+    virtual std::string BinFuncName(void) const { return "OpNegbinomdist"; }
+};
 class OpGammaLn:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
