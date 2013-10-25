@@ -1449,6 +1449,9 @@ void Test::testStyleInheritance()
 
     // This numbering style wasn't roundtripped.
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoList']/w:name", "val", "No List");
+
+    // Table style wasn't roundtripped.
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableNormal']/w:tblPr/w:tblCellMar/w:left", "w", "108");
 }
 
 void Test::testSmartart()
