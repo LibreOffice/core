@@ -2717,6 +2717,22 @@ void lcl_TableStyleTblCellMar(sax_fastparser::FSHelperPtr pSerializer, uno::Sequ
     pSerializer->endElementNS(XML_w, XML_tblCellMar);
 }
 
+/// Export of w:shd in a table style.
+void lcl_TableStyleShd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rShd)
+{
+    if (!rShd.hasElements())
+        return;
+
+    sax_fastparser::FastAttributeList* pAttributeList = pSerializer->createAttrList();
+    for (sal_Int32 i = 0; i < rShd.getLength(); ++i)
+    {
+        if (rShd[i].Name == "val")
+            pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+    }
+    XFastAttributeListRef xAttributeList(pAttributeList);
+    pSerializer->singleElementNS(XML_w, XML_shd, xAttributeList);
+}
+
 /// Export of w:tblInd in a table style.
 void lcl_TableStyleTblInd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTblInd)
 {
@@ -2770,12 +2786,31 @@ void lcl_TableStyleTblPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<
     pSerializer->endElementNS(XML_w, XML_tblPr);
 }
 
+/// Export of w:tcPr in a table style.
+void lcl_TableStyleTcPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTcPr)
+{
+    if (!rTcPr.hasElements())
+        return;
+
+    pSerializer->startElementNS(XML_w, XML_tcPr, FSEND);
+
+    uno::Sequence<beans::PropertyValue> aShd;
+    for (sal_Int32 i = 0; i < rTcPr.getLength(); ++i)
+    {
+        if (rTcPr[i].Name == "shd")
+            aShd = rTcPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+    }
+    lcl_TableStyleShd(pSerializer, aShd);
+
+    pSerializer->endElementNS(XML_w, XML_tcPr);
+}
+
 void DocxAttributeOutput::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle)
 {
     bool bDefault = false, bCustomStyle = false, bQFormat = false;
     OUString aStyleId, aName, aBasedOn;
     sal_Int32 nUiPriority = 0, nRsid = 0;
-    uno::Sequence<beans::PropertyValue> aTblPr;
+    uno::Sequence<beans::PropertyValue> aTblPr, aTcPr;
     for (sal_Int32 i = 0; i < rStyle.getLength(); ++i)
     {
         if (rStyle[i].Name == "default")
@@ -2796,6 +2831,8 @@ void DocxAttributeOutput::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle
             nRsid = rStyle[i].Value.get<sal_Int32>();
         else if (rStyle[i].Name == "tblPr")
             aTblPr = rStyle[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rStyle[i].Name == "tcPr")
+            aTcPr = rStyle[i].Value.get< uno::Sequence<beans::PropertyValue> >();
     }
 
     sax_fastparser::FastAttributeList* pAttributeList = m_pSerializer->createAttrList();
@@ -2835,6 +2872,7 @@ void DocxAttributeOutput::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle
     }
 
     lcl_TableStyleTblPr(m_pSerializer, aTblPr);
+    lcl_TableStyleTcPr(m_pSerializer, aTcPr);
 
     m_pSerializer->endElementNS(XML_w, XML_style);
 }
