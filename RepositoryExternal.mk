@@ -2786,6 +2786,18 @@ endef
 
 endif # SYSTEM_RHINO
 
+ifeq ($(SYSTEM_TOMCAT),YES)
+
+gb_ExternalProject__use_servlet_api :=
+
+else # !SYSTEM_TOMCAT
+
+define gb_ExternalProject__use_servlet_api
+$(eval $(call gb_ExternalProject_use_external_project,$(1),tomcat))
+endef
+
+endif # SYSTEM_TOMCAT
+
 ifeq ($(SYSTEM_APACHE_COMMONS),YES)
 
 define gb_Jar__use_commons-codec

@@ -13,7 +13,6 @@ ifneq ($(ENABLE_JAVA),)
 ifneq ($(filter TOMCAT,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_targets,tomcat,\
 	ExternalProject_tomcat \
-	Package_tomcat \
 	UnpackedTarball_tomcat \
 ))
 endif
