@@ -283,7 +283,7 @@ namespace pcr
         OUString sURL;
         if ( ( _rValue >>= sURL ) )
         {
-            if ( sURL.indexOf( "vnd.sun.star.GraphicObject:" ) == 0 )
+            if ( sURL.startsWith( "vnd.sun.star.GraphicObject:" ) )
                 getTypedControlWindow()->DisplayURL( getTypedControlWindow()->GetPlaceHolder() );
             else
                 getTypedControlWindow()->DisplayURL( sURL );

@@ -237,23 +237,16 @@ sal_Bool removeTypeFile(const OString& fileName)
     return sal_False;
 }
 
-static sal_Bool isFileUrl(const OString& fileName)
-{
-    if (fileName.indexOf("file://") == 0 )
-        return sal_True;
-    return sal_False;
-}
-
 OUString convertToFileUrl(const OString& fileName)
 {
-    if ( isFileUrl(fileName) )
+    if ( fileName.startsWith("file://") )
     {
         return OStringToOUString(fileName, osl_getThreadTextEncoding());
     }
 
     OUString uUrlFileName;
     OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
-    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
+    if ( fileName.startsWith(".") || fileName.indexOf(SEPARATOR) < 0 )
     {
         OUString uWorkingDir;
         if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)

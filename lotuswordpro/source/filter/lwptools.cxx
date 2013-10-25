@@ -207,7 +207,7 @@ sal_Bool LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
 
 sal_Bool LwpTools::isFileUrl(const OString &fileName)
 {
-    if (fileName.indexOf("file://") == 0 )
+    if (fileName.startsWith("file://") )
         return sal_True;
     return sal_False;
 }
@@ -221,7 +221,7 @@ OUString LwpTools::convertToFileUrl(const OString &fileName)
 
     OUString uUrlFileName;
     OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
-    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
+    if ( fileName.startsWith(".") || fileName.indexOf(SEPARATOR) < 0 )
     {
         OUString uWorkingDir;
         OSL_VERIFY( osl_getProcessWorkingDir(&uWorkingDir.pData) == osl_Process_E_None );

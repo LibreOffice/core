@@ -67,7 +67,7 @@ namespace rptui
         {
         case Expression:
         {
-            if ( _rFieldOrExpression.indexOf( lcl_getExpressionPrefix() ) == 0 )
+            if ( _rFieldOrExpression.startsWith( lcl_getExpressionPrefix() ) )
                 m_sCompleteFormula = _rFieldOrExpression;
             else
                 m_sCompleteFormula = lcl_getExpressionPrefix() + _rFieldOrExpression;
@@ -102,7 +102,7 @@ namespace rptui
 
         sal_Int32 nPrefixLen( -1 );
         // is it an ordinary expression?
-        if ( m_sCompleteFormula.indexOf( lcl_getExpressionPrefix( &nPrefixLen ) ) == 0 )
+        if ( m_sCompleteFormula.startsWith( lcl_getExpressionPrefix( &nPrefixLen ) ) )
         {
             m_eType = Expression;
             m_sUndecoratedContent = m_sCompleteFormula.copy( nPrefixLen );
@@ -110,7 +110,7 @@ namespace rptui
         }
 
         /// does it refer to a field?
-        if ( m_sCompleteFormula.indexOf( lcl_getFieldPrefix( &nPrefixLen ) ) == 0 )
+        if ( m_sCompleteFormula.startsWith( lcl_getFieldPrefix( &nPrefixLen ) ) )
         {
             if  (   ( m_sCompleteFormula.getLength() >= nPrefixLen + 2 )
                 &&  ( m_sCompleteFormula[ nPrefixLen ] == '[' )

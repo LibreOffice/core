@@ -798,11 +798,11 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_0( const ::com::sun::star::uno:
 {
     bool bResult = false;
     OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xChartModel) );
-    if(    ( aGenerator.indexOf( "OpenOffice.org 1" ) == 0 )
-        || ( aGenerator.indexOf( "StarOffice 6" ) == 0 )
-        || ( aGenerator.indexOf( "StarOffice 7" ) == 0 )
-        || ( aGenerator.indexOf( "StarSuite 6" ) == 0 )
-        || ( aGenerator.indexOf( "StarSuite 7" ) == 0 )
+    if(    aGenerator.startsWith( "OpenOffice.org 1" )
+        || aGenerator.startsWith( "StarOffice 6" )
+        || aGenerator.startsWith( "StarOffice 7" )
+        || aGenerator.startsWith( "StarSuite 6" )
+        || aGenerator.startsWith( "StarSuite 7" )
         )
         bResult= true;
     return bResult;

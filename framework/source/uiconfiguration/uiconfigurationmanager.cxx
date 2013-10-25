@@ -90,11 +90,11 @@ static const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
 static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 {
 
-    if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
+    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         OUString aTmpStr     = aResourceURL.copy( RESOURCEURL_PREFIX_SIZE );
-        sal_Int32     nIndex      = aTmpStr.indexOf( '/' );
+        sal_Int32     nIndex = aTmpStr.indexOf( '/' );
         if (( nIndex > 0 ) &&  ( aTmpStr.getLength() > nIndex ))
         {
             OUString aTypeStr( aTmpStr.copy( 0, nIndex ));
@@ -111,7 +111,7 @@ static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 
 static OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
 {
-    if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
+    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         sal_Int32 nIndex = aResourceURL.lastIndexOf( '/' );

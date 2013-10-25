@@ -99,7 +99,7 @@ OUString FilterConfigCache::FilterConfigCacheEntry::GetShortName()
     if ( lExtensionList.getLength() )
     {
         aShortName = lExtensionList[ 0 ];
-        if ( aShortName.indexOf( "*." ) == 0 )
+        if ( aShortName.startsWith( "*." ) )
             aShortName = aShortName.replaceAt( 0, 2, "" );
     }
     return aShortName;

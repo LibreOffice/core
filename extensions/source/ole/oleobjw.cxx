@@ -492,7 +492,7 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
                 if ( SUCCEEDED( pInfo->GetDocumentation( -1, &sName, NULL, NULL, NULL  ) ) )
                 {
                     OUString sTmp( reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName)));
-                    if ( sTmp.indexOf('_')  == 0 )
+                    if ( sTmp.startsWith("_") )
                        sTmp = sTmp.copy(1);
                     // do we own the memory for pTypeLib, msdn doco is vague
                     // I'll assume we do

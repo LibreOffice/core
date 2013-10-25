@@ -99,7 +99,7 @@ sal_Bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
     static sal_Int32 LEN_SPART     = CMDURL_SPART_ONLY.getLength();
     static sal_Int32 LEN_FPART     = CMDURL_FPART_ONLY.getLength();
 
-    if (aStyle.sCommand.indexOf(CMDURL_STYLEPROT_ONLY, 0) != 0)
+    if (!aStyle.sCommand.startsWith(CMDURL_STYLEPROT_ONLY))
         return sal_False;
 
     aStyle.sFamily = OUString();
@@ -112,15 +112,15 @@ sal_Bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
         return sal_False;
 
     OUString sArg = sCmdArgs.copy(0, i);
-    if (sArg.indexOf(CMDURL_SPART_ONLY) == 0)
+    if (sArg.startsWith(CMDURL_SPART_ONLY))
         aStyle.sStyle = sArg.copy(LEN_SPART, sArg.getLength()-LEN_SPART);
-    else if (sArg.indexOf(CMDURL_FPART_ONLY) == 0)
+    else if (sArg.startsWith(CMDURL_FPART_ONLY))
         aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
 
     sArg = sCmdArgs.copy(i+1, sCmdArgs.getLength()-i-1);
-    if (sArg.indexOf(CMDURL_SPART_ONLY) == 0)
+    if (sArg.startsWith(CMDURL_SPART_ONLY))
         aStyle.sStyle = sArg.copy(LEN_SPART, sArg.getLength()-LEN_SPART);
-    else if (sArg.indexOf(CMDURL_FPART_ONLY) == 0)
+    else if (sArg.startsWith(CMDURL_FPART_ONLY))
         aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
 
     if (!(aStyle.sFamily.isEmpty() || aStyle.sStyle.isEmpty()))

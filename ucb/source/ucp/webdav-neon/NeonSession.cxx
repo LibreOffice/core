@@ -347,9 +347,8 @@ namespace {
         sal_Int32 nContStart = _rRawString.indexOf( sPartId );
         if ( nContStart != -1 )
         {
-            nContStart = nContStart + sPartId.getLength();
-            sal_Int32 nContEnd
-                = _rRawString.indexOf( sal_Unicode( ',' ), nContStart );
+            nContStart += sPartId.getLength();
+            sal_Int32 nContEnd = _rRawString.indexOf( sal_Unicode( ',' ), nContStart );
             sPart = _rRawString.copy( nContStart, nContEnd - nContStart );
         }
         return sPart;
@@ -2031,7 +2030,7 @@ NeonSession::isDomainMatch( OUString certHostName )
     if (hostName.equalsIgnoreAsciiCase( certHostName ) )
         return sal_True;
 
-    if ( 0 == certHostName.indexOf( '*' ) &&
+    if ( certHostName.startsWith( "*" ) &&
          hostName.getLength() >= certHostName.getLength()  )
     {
         OUString cmpStr = certHostName.copy( 1 );

@@ -891,7 +891,7 @@ protected:
             // always compile it in that grammar. Perhaps
             // css.sheet.FormulaParser should be used in future to directly
             // pass formula tokens when that API stabilizes.
-            if ( m_eGrammar != formula::FormulaGrammar::GRAM_PODF_A1 && ( sFormula.trim().indexOf('=') == 0 ) )
+            if ( m_eGrammar != formula::FormulaGrammar::GRAM_PODF_A1 && ( sFormula.trim().startsWith("=") ) )
             {
                 uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
                 ScCellRangesBase* pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );
@@ -4333,9 +4333,8 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
     //  *searchtext* - contains
     //  <>*searchtext* - doesn't contain
     // [>|>=|<=|...]searchtext for GREATER_value, GREATER_EQUAL_value etc.
-    sal_Int32 nPos = 0;
     bool bIsNumeric = false;
-    if ( ( nPos = sCriteria1.indexOf( EQUALS ) ) == 0 )
+    if ( sCriteria1.startsWith( EQUALS ) )
     {
         if ( sCriteria1.getLength() == EQUALS.getLength() )
             rFilterField.Operator = sheet::FilterOperator2::EMPTY;
@@ -4350,7 +4349,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
         }
 
     }
-    else if ( ( nPos = sCriteria1.indexOf( NOTEQUALS ) ) == 0 )
+    else if ( sCriteria1.startsWith( NOTEQUALS ) )
     {
         if ( sCriteria1.getLength() == NOTEQUALS.getLength() )
             rFilterField.Operator = sheet::FilterOperator2::NOT_EMPTY;
@@ -4364,10 +4363,10 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
                 xDescProps->setPropertyValue( "UseRegularExpressions", uno::Any( sal_True ) );
         }
     }
-    else if ( ( nPos = sCriteria1.indexOf( GREATERTHAN ) ) == 0 )
+    else if ( sCriteria1.startsWith( GREATERTHAN ) )
     {
         bIsNumeric = true;
-        if ( ( nPos = sCriteria1.indexOf( GREATERTHANEQUALS ) ) == 0 )
+        if ( sCriteria1.startsWith( GREATERTHANEQUALS ) )
         {
             sCriteria1 = sCriteria1.copy( GREATERTHANEQUALS.getLength() );
             rFilterField.Operator = sheet::FilterOperator2::GREATER_EQUAL;
@@ -4379,10 +4378,10 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
         }
 
     }
-    else if ( ( nPos = sCriteria1.indexOf( LESSTHAN ) ) == 0 )
+    else if ( sCriteria1.startsWith( LESSTHAN ) )
     {
         bIsNumeric = true;
-        if ( ( nPos = sCriteria1.indexOf( LESSTHANEQUALS ) ) == 0 )
+        if ( sCriteria1.startsWith( LESSTHANEQUALS ) )
         {
             sCriteria1 = sCriteria1.copy( LESSTHANEQUALS.getLength() );
             rFilterField.Operator = sheet::FilterOperator2::LESS_EQUAL;

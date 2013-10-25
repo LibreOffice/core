@@ -186,7 +186,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
         {
             for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )
             {
-                if ( serviceNames[ index ].indexOf( providerKey ) == 0 )
+                if ( serviceNames[ index ].startsWith( providerKey ) )
                 {
                     OUString serviceName = serviceNames[ index ];
                     OUString aCommand = aCmdBase;

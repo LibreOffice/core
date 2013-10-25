@@ -243,7 +243,7 @@ namespace basprov
             }
 
             OUString sDoc = "vnd.sun.star.tdoc";
-            if ( m_sScriptingContext.indexOf( sDoc  ) == 0 )
+            if ( m_sScriptingContext.startsWith( sDoc  ) )
             {
                 xModel = MiscUtils::tDocUrlToModel(  m_sScriptingContext );
                 // TODO: use ScriptingContantsPool for SCRIPTING_DOC_REF

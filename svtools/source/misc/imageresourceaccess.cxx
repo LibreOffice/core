@@ -126,11 +126,11 @@ namespace svt
     //--------------------------------------------------------------------
     bool GraphicAccess::isSupportedURL( const OUString& _rURL )
     {
-        if  (   ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:resource/" ) ) == 0 )
-            ||  ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:graphicrepository/" ) ) == 0 )
-            ||  ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:standardimage/" ) ) == 0 )
-            ||  ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.GraphicObject:" ) ) == 0 )
-            ||  ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.extension://" ) ) == 0 )
+        if  (  _rURL.startsWith( "private:resource/" )
+            || _rURL.startsWith( "private:graphicrepository/" )
+            || _rURL.startsWith( "private:standardimage/" )
+            || _rURL.startsWith( "vnd.sun.star.GraphicObject:" )
+            || _rURL.startsWith( "vnd.sun.star.extension://" )
             )
             return true;
         return false;

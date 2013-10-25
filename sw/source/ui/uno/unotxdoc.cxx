@@ -1702,7 +1702,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 //! adding the shapes to the draw page).
                 //! For inserting OLE objects the proper way is to use
                 //! "com.sun.star.text.TextEmbeddedObject"!
-                if (rServiceName.lastIndexOf( ".OLE2Shape" ) == rServiceName.getLength() - 10)
+                if (rServiceName.endsWith( ".OLE2Shape" ))
                     throw ServiceNotRegisteredException();  // declare service to be not registered with this factory
 
                 //

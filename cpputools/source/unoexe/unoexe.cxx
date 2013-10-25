@@ -89,7 +89,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
     throw (RuntimeException)
 {
     const OUString dash("-");
-    if(aArg.indexOf(dash) != 0)
+    if(!aArg.startsWith(dash))
         return sal_False;
 
     OUString aOpt = OUString::createFromAscii( pOpt );
@@ -145,7 +145,7 @@ static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
     const OUString dashdash("--");
     OUString aOpt = OUString::createFromAscii(pOpt);
 
-    if(aArg.indexOf(dashdash) == 0 && aOpt.equals(aArg.copy(2)))
+    if(aArg.startsWith(dashdash) && aOpt.equals(aArg.copy(2)))
     {
         ++(*pnIndex);
         *pbOpt = sal_True;

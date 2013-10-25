@@ -820,7 +820,7 @@ bool DialogWindow::SaveDialog()
 
                         if( aExtension == "properties" || aExtension == "default" )
                         {
-                            if( aPureName.indexOf( aDialogName_ ) == 0 )
+                            if( aPureName.startsWith( aDialogName_ ) )
                             {
                                 try
                                 {

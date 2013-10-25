@@ -656,7 +656,7 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
                 if ( ( nSID == SID_ADDONS ) ||
                      ( nSID == SID_ADDONHELP ) ||
                      (( (sal_uInt32)aCommand.getLength() > nAddonsPopupPrefixLen ) &&
-                      ( aCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 )) )
+                      ( aCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX ) ) ) )
                     bIsAddonPopupMenu = sal_True;
 
                 // Create VirtualMenu for Sub-Menu

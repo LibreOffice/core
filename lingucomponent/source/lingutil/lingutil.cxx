@@ -137,7 +137,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         {
             aItem.getFileStatus(aFileStatus);
             OUString sPath = aFileStatus.getFileURL();
-            if (sPath.lastIndexOf(aSystemSuffix) == sPath.getLength()-aSystemSuffix.getLength())
+            if (sPath.endsWith(aSystemSuffix))
             {
                 sal_Int32 nStartIndex = sPath.lastIndexOf(sal_Unicode('/')) + 1;
                 if (!sPath.match(aSystemPrefix, nStartIndex))

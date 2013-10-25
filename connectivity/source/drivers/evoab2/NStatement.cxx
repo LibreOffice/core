@@ -387,7 +387,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         }
         else if( (aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) ) )
         {   // One occurrence of '%'  matches...
-            if ( aMatchString.indexOf ( WILDCARD ) == 0 )
+            if ( aMatchString.startsWith( WILDCARD ) )
                 pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 1 ) );
             else if ( aMatchString.indexOf ( WILDCARD ) == aMatchString.getLength() - 1 )
                 pResult = createTest( aColumnName, E_BOOK_QUERY_BEGINS_WITH, aMatchString.copy( 0, aMatchString.getLength() - 1 ) );
@@ -398,7 +398,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
                 pResult = e_book_query_not( pResult, TRUE );
         }
         else if( aMatchString.getLength() >= 3 &&
-                 aMatchString.indexOf ( WILDCARD ) == 0 &&
+                 aMatchString.startsWith( WILDCARD ) &&
                  aMatchString.indexOf ( WILDCARD, 1) == aMatchString.getLength() - 1 ) {
             // one '%' at the start and another at the end
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString.copy (1, aMatchString.getLength() - 2) );

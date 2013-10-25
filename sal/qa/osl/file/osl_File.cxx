@@ -322,9 +322,9 @@ inline sal_Bool isURL( const sal_Char *pathname )
 /** simple version to judge if a file name or directory name is a URL or a system path, just to see if it
     is start with "file:///";.
 */
-inline sal_Bool isURL( const ::rtl::OUString pathname )
+inline bool isURL( const ::rtl::OUString pathname )
 {
-    return ( ( pathname.indexOf( aPreURL ) == 0 ) ? sal_True : sal_False );
+    return pathname.startsWith( aPreURL );
 }
 
 /** concat two part to form a URL or system path, add PATH_SEPARATOR between them if necessary, add "file:///" to beginning if necessary.
@@ -339,10 +339,8 @@ inline void concatURL( ::rtl::OUString & pathname1, const ::rtl::OUString & path
         pathname1   = aPathName.copy( 0 );
     }
 
-    sal_Int32 index = 0;
     //check if '/' is in the end of pathname1 or at the begin of pathname2;
-    if ( ( ( index = pathname1.lastIndexOf( aSlashURL ) ) != ( pathname1.getLength() - 1 ) ) &&
-         ( ( index = pathname2.indexOf( aSlashURL ) ) != 0 ) )
+    if ( !pathname1.endsWith( aSlashURL ) && !pathname2.startsWith( aSlashURL ) )
         pathname1 += aSlashURL;
     pathname1 += pathname2;
 }

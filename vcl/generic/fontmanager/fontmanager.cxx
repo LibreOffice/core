@@ -360,7 +360,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
     if( m_aStyleName.isEmpty() && pInfo->gfi->fullName && *pInfo->gfi->fullName )
     {
         OUString aFullName( OStringToOUString( pInfo->gfi->fullName, RTL_TEXTENCODING_ISO_8859_1 ) );
-        if( aFullName.indexOf( aFamily ) == 0 )
+        if( aFullName.startsWith( aFamily ) )
             m_aStyleName = WhitespaceToSpace( aFullName.copy( aFamily.getLength() ) );
     }
 
@@ -2533,7 +2533,7 @@ std::list< sal_Unicode >  PrintFontManager::getUnicodeFromAdobeName( const OStri
 
     if( aRet.begin() == aRet.end() )
     {
-        if( rName.getLength() == 7 && rName.indexOf( "uni" ) == 0 )
+        if( rName.getLength() == 7 && rName.startsWith( "uni" ) )
         {
             sal_Unicode aCode = (sal_Unicode)rName.copy( 3 ).toUInt32( 16 );
             aRet.push_back( aCode );

@@ -211,7 +211,7 @@ namespace
         OUString sErrorMessage( _rErrorMessage );
 
         const OUString sVendorIdentifier( ::connectivity::SQLError::getMessagePrefix() );
-        if ( sErrorMessage.indexOf( sVendorIdentifier ) == 0 )
+        if ( sErrorMessage.startsWith( sVendorIdentifier ) )
         {
             // characters to strip
             sal_Int32 nStripLen( sVendorIdentifier.getLength() );

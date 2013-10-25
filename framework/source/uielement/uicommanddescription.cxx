@@ -240,7 +240,7 @@ Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const OUString& rComm
         fillCache();
     }
 
-    if ( rCommandURL.indexOf( m_aPrivateResourceURL ) == 0 )
+    if ( rCommandURL.startsWith( m_aPrivateResourceURL ) )
     {
         // special keys to retrieve information about a set of commands
         // SAFE
@@ -711,7 +711,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
             }
         }
     }
-    else if ( !m_aPrivateResourceURL.isEmpty() && aName.indexOf( m_aPrivateResourceURL ) == 0 )
+    else if ( !m_aPrivateResourceURL.isEmpty() && aName.startsWith( m_aPrivateResourceURL ) )
     {
         // special keys to retrieve information about a set of commands
         return m_xGenericUICommands->getByName( aName );

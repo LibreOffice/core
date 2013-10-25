@@ -25,13 +25,9 @@
 
 using namespace ::rtl;
 
-sal_Bool isGlobal(const OString& scopedName)
+bool isGlobal(const OString& scopedName)
 {
-    if (scopedName.isEmpty() || (scopedName.indexOf(':') == 0))
-    {
-        return sal_True;
-    }
-    return sal_False;
+    return scopedName.isEmpty() || scopedName.startsWith(":");
 }
 
 AstScope::AstScope(NodeType nodeType)

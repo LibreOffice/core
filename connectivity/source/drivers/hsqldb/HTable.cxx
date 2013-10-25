@@ -328,8 +328,8 @@ OUString OHSQLTable::getAlterTableColumnPart()
 void OHSQLTable::executeStatement(const OUString& _rStatement )
 {
     OUString sSQL = _rStatement;
-    if(sSQL.lastIndexOf(',') == (sSQL.getLength()-1))
-        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,OUString(")"));
+    if(sSQL.endsWith(","))
+        sSQL = sSQL.replaceAt(sSQL.getLength()-1, 1, ")");
 
     Reference< XStatement > xStmt = getConnection()->createStatement(  );
     if ( xStmt.is() )

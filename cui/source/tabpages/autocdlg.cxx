@@ -1274,7 +1274,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
                 else
                 {
                     aTestStr = pCharClass->lowercase( aTestStr );
-                    if( aTestStr.indexOf(aWordStr) == 0 && !bTmpSelEntry )
+                    if( aTestStr.startsWith(aWordStr) && !bTmpSelEntry )
                     {
                         m_pReplaceTLB->MakeVisible( pEntry );
                         bTmpSelEntry = sal_True;

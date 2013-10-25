@@ -90,8 +90,8 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *, sal_uInt16 nKind )
         aStrPlugMIMEType = aStrPlugMIMEType.toAsciiLowerCase();
         aStrPlugExtension = aStrPlugExtension.toAsciiLowerCase();
 
-        if ( ( nKind == SID_INSERT_SOUND && aStrPlugMIMEType.indexOf( sAudio ) == 0 ) ||
-             ( nKind == SID_INSERT_VIDEO && aStrPlugMIMEType.indexOf( sVideo ) == 0 ) )
+        if ( ( nKind == SID_INSERT_SOUND && aStrPlugMIMEType.startsWith( sAudio ) ) ||
+             ( nKind == SID_INSERT_VIDEO && aStrPlugMIMEType.startsWith( sVideo ) ) )
         {
             // extension already in the filterlist of the filedlg ?
             bool bAlreadyExist = false;

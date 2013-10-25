@@ -385,10 +385,10 @@ OUString createSqlCreateTableStatement(  const Reference< XPropertySet >& descri
         aSql += sKeyStmt;
     else
     {
-        if ( aSql.lastIndexOf(',') == (aSql.getLength()-1) )
-            aSql = aSql.replaceAt(aSql.getLength()-1,1,OUString(")"));
+        if ( aSql.endsWith(",") )
+            aSql = aSql.replaceAt(aSql.getLength()-1, 1, ")");
         else
-            aSql += OUString(")");
+            aSql += ")";
     }
     return aSql;
 }

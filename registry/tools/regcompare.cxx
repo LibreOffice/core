@@ -271,7 +271,7 @@ bool Options_Impl::matchedWithExcludeKey( const OUString& keyName) const
         StringSet::const_iterator first = m_excludeKeys.begin(), last = m_excludeKeys.end();
         for (; first != last; ++first)
         {
-            if (keyName.indexOf(*first) == 0)
+            if (keyName.startsWith(*first))
                 return true;
         }
     }

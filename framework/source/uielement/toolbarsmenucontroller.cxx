@@ -164,7 +164,7 @@ void ToolbarsMenuController::addCommand(
     rPopupMenu->insertItem( nItemId, aLabel, 0, nItemId );
     rPopupMenu->setCommand( nItemId, rCommandURL );
 
-    bool bInternal = ( rCommandURL.indexOf( STATIC_INTERNAL_CMD_PART ) == 0);
+    bool bInternal = rCommandURL.startsWith( STATIC_INTERNAL_CMD_PART );
     if ( !bInternal )
     {
         if ( !getDispatchFromCommandURL( rCommandURL ).is() )
@@ -616,7 +616,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
             PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
             OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
-            if ( aCmd.indexOf( STATIC_INTERNAL_CMD_PART ) == 0 )
+            if ( aCmd.startsWith( STATIC_INTERNAL_CMD_PART ) )
             {
                 // Command to restore the visibility of all context sensitive toolbars
                 Reference< XNameReplace > xNameReplace( xPersistentWindowState, UNO_QUERY );
@@ -765,7 +765,7 @@ void SAL_CALL ToolbarsMenuController::itemActivated( const css::awt::MenuEvent& 
     const sal_uInt32 nCount = aCmdVector.size();
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        bool bInternal = ( aCmdVector[i].indexOf( STATIC_INTERNAL_CMD_PART ) == 0);
+        bool bInternal = aCmdVector[i].startsWith( STATIC_INTERNAL_CMD_PART );
 
         if ( !bInternal )
         {

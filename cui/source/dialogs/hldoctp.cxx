@@ -235,7 +235,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl)
     if ( GetPathType ( maStrURL ) == Type_ExistsFile  ||
          maStrURL.isEmpty() ||
          maStrURL.equalsIgnoreAsciiCase( sFileScheme ) ||
-         maStrURL.indexOf( sHash ) == 0 )
+         maStrURL.startsWith( sHash ) )
     {
         mpMarkWnd->SetError( LERR_NOERROR );
 

@@ -60,7 +60,7 @@ static sal_Char tmpFilePattern[512];
 
 sal_Bool isFileUrl(const OString& fileName)
 {
-    if (fileName.indexOf("file://") == 0 )
+    if (fileName.startsWith("file://") )
         return sal_True;
     return sal_False;
 }

@@ -84,7 +84,7 @@ void WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( const OUStrin
     const sal_Int32 RESOURCEURL_PREFIX_SIZE = 17;
     const char      RESOURCEURL_PREFIX[] = "private:resource/";
 
-    if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
+    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         OUString aTmpStr( aResourceURL.copy( RESOURCEURL_PREFIX_SIZE ));

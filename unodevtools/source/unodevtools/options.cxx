@@ -93,8 +93,8 @@ sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
     const OUString dash("-");
     OUString aOpt = OUString::createFromAscii(pOpt);
 
-    if((aArg.indexOf(dash) == 0 && aOpt.equalsIgnoreAsciiCase(aArg.copy(1))) ||
-       (aArg.indexOf(dashdash) == 0 && aOpt.equalsIgnoreAsciiCase(aArg.copy(2))) )
+    if((aArg.startsWith(dash) && aOpt.equalsIgnoreAsciiCase(aArg.copy(1))) ||
+       (aArg.startsWith(dashdash) && aOpt.equalsIgnoreAsciiCase(aArg.copy(2))) )
     {
         ++(*pnIndex);
         *pbOpt = sal_True;

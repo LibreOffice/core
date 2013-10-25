@@ -371,7 +371,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl)
     // disable login-editfields if checked
     if ( maCbAnonymous.IsChecked() )
     {
-        if ( maEdLogin.GetText().toAsciiLowerCase().indexOf ( sAnonymous ) == 0 )
+        if ( maEdLogin.GetText().toAsciiLowerCase().startsWith( sAnonymous ) )
         {
             maStrOldUser = aEmptyStr;
             maStrOldPassword = aEmptyStr;

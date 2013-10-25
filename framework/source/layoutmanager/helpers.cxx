@@ -199,7 +199,7 @@ OUString getElementTypeFromResourceURL( const OUString& aResourceURL )
     OUString aType;
 
     OUString aUIResourceURL( UIRESOURCE_URL );
-    if ( aResourceURL.indexOf( aUIResourceURL ) == 0 )
+    if ( aResourceURL.startsWith( aUIResourceURL ) )
     {
         sal_Int32       nIndex = 0;
         OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );
@@ -214,7 +214,7 @@ OUString getElementTypeFromResourceURL( const OUString& aResourceURL )
 void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUString& aElementName )
 {
     OUString aUIResourceURL( UIRESOURCE_URL );
-    if ( aResourceURL.indexOf( aUIResourceURL ) == 0 )
+    if ( aResourceURL.startsWith( aUIResourceURL ) )
     {
         sal_Int32       nIndex = 0;
         OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );

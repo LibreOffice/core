@@ -786,7 +786,7 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                 {
                     OString aSearch(aReplIter->second.toAsciiLowerCase());
                     OString aSearchIn(aRelPathStr.toAsciiLowerCase());
-                    if( aSearchIn.indexOf(aSearch) == 0 )
+                    if( aSearchIn.startsWith(aSearch) )
                     {
                         sal_Int32       nCopyPos = aReplIter->second.getLength(), nLength = aRelPathStr.getLength();
                         const sal_Char* pChars = aRelPathStr.getStr();

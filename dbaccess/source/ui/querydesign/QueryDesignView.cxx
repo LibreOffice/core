@@ -333,14 +333,14 @@ namespace
         if ( pData->GetJoinType() != INNER_JOIN && _pEntryTabTo->ExistsAVisitedConn() )
         {
             sal_Bool bBrace = sal_False;
-            if(!_rJoin.isEmpty() && _rJoin.lastIndexOf(')') == (_rJoin.getLength()-1))
+            if(_rJoin.endsWith(")"))
             {
                 bBrace = sal_True;
                 _rJoin = _rJoin.replaceAt(_rJoin.getLength()-1,1,OUString(' '));
             }
             (_rJoin += C_AND) += BuildJoinCriteria(_xConnection,pData->GetConnLineDataList(),pData);
             if(bBrace)
-                _rJoin += OUString(')');
+                _rJoin += ")";
             _pEntryConn->SetVisited(sal_True);
         }
     }
@@ -1531,7 +1531,7 @@ namespace
             // don't display the column name
             aCondition = aCondition.copy(aColumnName.getLength());
             aCondition = aCondition.trim();
-            if ( aCondition.indexOf('=',0) == 0 ) // ignore the equal sign
+            if ( aCondition.startsWith("=") ) // ignore the equal sign
                 aCondition = aCondition.copy(1);
 
             if ( SQL_ISRULE(pFunction, general_set_fct ) )

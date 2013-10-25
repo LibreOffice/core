@@ -2719,7 +2719,7 @@ uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeExcept
         const FeatureState aFeatureState = GetState( nCommandIDs[i] );
 
         OUString sCommandURL( getURLForId( nCommandIDs[i] ).Main );
-        OSL_ENSURE( sCommandURL.indexOfAsciiL( ".uno:", 5 ) == 0, "OReportController::getViewData: illegal command URL!" );
+        OSL_ENSURE( sCommandURL.startsWith( ".uno:" ), "OReportController::getViewData: illegal command URL!" );
         sCommandURL = sCommandURL.copy( 5 );
 
         Any aCommandState;

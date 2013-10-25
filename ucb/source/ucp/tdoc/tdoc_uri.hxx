@@ -115,7 +115,7 @@ inline sal_Bool Uri::isDocument() const
 inline sal_Bool Uri::isFolder() const
 {
     init();
-    return ( m_aPath.lastIndexOf( '/' ) == m_aPath.getLength() - 1 );
+    return m_aPath.isEmpty() || m_aPath.endsWith( "/" );
 }
 
 } // namespace tdoc_ucp

@@ -197,7 +197,7 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory 
       aTxt = unicodetouri(OUString("file:///."));
     }
 
-    if( aTxt.lastIndexOf('/') == aTxt.getLength() - 1 )
+    if( aTxt.endsWith("/") )
         aTxt = aTxt.copy( 0, aTxt.getLength() - 1 );
 
     OSL_TRACE( "setting path to %s", aTxt.getStr() );

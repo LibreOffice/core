@@ -3387,7 +3387,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
         OUString aName( pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) ) );
         // Hacky capture of Evaluate [] syntax
         // this should be tackled I feel at the pcode level
-        if ( bIsVBAInterOp && aName.indexOf((sal_Unicode)'[') == 0 )
+        if ( bIsVBAInterOp && aName.startsWith("[") )
         {
             // emulate pcode here
             StepARGC();

@@ -225,10 +225,10 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     if (pOut)
     {
         rtl::ByteSequence seq;
-                if (osl_File_E_None == osl_readLine(pOut, (sal_Sequence **)&seq))
+        if (osl_File_E_None == osl_readLine(pOut, (sal_Sequence **)&seq))
         {
-                        OString line( (const sal_Char *) seq.getConstArray(), seq.getLength() );
-            if (line.indexOf(OString("Unsupported output format")) == 0)
+            OString line( (const sal_Char *) seq.getConstArray(), seq.getLength() );
+            if (line.startsWith("Unsupported output format"))
                 bEMFSupported=false;
         }
         osl_closeFile(pOut);

@@ -90,7 +90,7 @@ static const char       RESOURCEURL_CUSTOM_ELEMENT[] = "custom_";
 static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 {
 
-    if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
+    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         OUString    aTmpStr     = aResourceURL.copy( RESOURCEURL_PREFIX_SIZE );
@@ -111,7 +111,7 @@ static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 
 static OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
 {
-    if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
+    if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         sal_Int32 nIndex = aResourceURL.lastIndexOf( '/' );

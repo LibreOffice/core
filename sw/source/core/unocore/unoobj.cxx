@@ -2834,7 +2834,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (0 == rPropName.indexOf("IsSortNumeric") &&
+        else if (rPropName.startsWith("IsSortNumeric") &&
             rPropName.getLength() == 14 &&
             (rPropName.getStr()[13] >= '0' && rPropName.getStr()[13] <= '9'))
         {
@@ -2851,7 +2851,7 @@ sal_Bool SwUnoCursorHelper::ConvertSortProperties(
                 bRet = sal_False;
             }
         }
-        else if (0 == rPropName.indexOf("IsSortAscending") &&
+        else if (rPropName.startsWith("IsSortAscending") &&
             rPropName.getLength() == 16 &&
             (rPropName.getStr()[15] >= '0' && rPropName.getStr()[15] <= '9'))
         {

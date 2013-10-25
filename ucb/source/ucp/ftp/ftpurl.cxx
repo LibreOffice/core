@@ -531,11 +531,9 @@ OUString FTPURL::net_title() const
     while(true) {
         OUString url(ident(false,true));
 
-        if(try_more &&
-           1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-            url += OUString("/");  // add end-slash
-        else if(!try_more &&
-                1+url.lastIndexOf(sal_Unicode('/')) == url.getLength())
+        if(try_more && !url.endsWith("/"))
+            url += "/";  // add end-slash
+        else if(!try_more && url.endsWith("/"))
             url = url.copy(0,url.getLength()-1);         // remove end-slash
 
         SET_URL(url);
@@ -550,8 +548,7 @@ OUString FTPURL::net_title() const
             // analyze the output:
             // Format of current working directory:
             // 257 "/bla/bla" is current directory
-            sal_Int32 index1 = aNetTitle.lastIndexOf(
-                OUString("257"));
+            sal_Int32 index1 = aNetTitle.lastIndexOf("257");
             index1 = 1+aNetTitle.indexOf(sal_Unicode('"'),index1);
             sal_Int32 index2 = aNetTitle.indexOf(sal_Unicode('"'),index1);
             aNetTitle = aNetTitle.copy(index1,index2-index1);
@@ -712,8 +709,8 @@ void FTPURL::mkdir(bool ReplaceExisting) const
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
     OUString url(parent(true));
-    if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-        url += OUString("/");
+    if(!url.endsWith("/"))
+        url += "/";
     SET_URL(url);
 
     CURLcode err = curl_easy_perform(curl);
@@ -752,8 +749,8 @@ OUString FTPURL::ren(const OUString& NewTitle)
     curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
     OUString url(parent(true));
-    if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-        url += OUString("/");
+    if(!url.endsWith("/"))
+        url += "/";
     SET_URL(url);
 
     CURLcode err = curl_easy_perform(curl);
@@ -802,8 +799,8 @@ void FTPURL::del() const
     curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
     OUString url(parent(true));
-    if(1+url.lastIndexOf(sal_Unicode('/')) != url.getLength())
-        url += OUString("/");
+    if(!url.endsWith("/"))
+        url += "/";
     SET_URL(url);
 
     CURLcode err = curl_easy_perform(curl);

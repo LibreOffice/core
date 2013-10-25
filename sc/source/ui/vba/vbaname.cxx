@@ -118,7 +118,7 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
     OUString sContent( rContent );
     if ( bRemoveEquals )
     {
-        if (sContent.indexOf('=') == 0)
+        if (sContent.startsWith("="))
             sContent = sContent.copy(1);
     }
     ScNamedRangeObj* pNamedRange = dynamic_cast< ScNamedRangeObj* >( mxNamedRange.get() );

@@ -744,7 +744,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                         // like "R" (Rand) and 'R' (era)
                         if ( nCurrPos >= 0 &&
                              nPos-1 + sCurString.getLength() <= rStr.getLength() &&
-                             sCurString.indexOf( sKeyword[nTmpType] ) == 0 )
+                             sCurString.startsWith( sKeyword[nTmpType] ) )
                         {
                             OUString aTest = pChrCls->uppercase( rStr.copy( nPos-1, sCurString.getLength() ) );
                             if ( aTest == sCurString )

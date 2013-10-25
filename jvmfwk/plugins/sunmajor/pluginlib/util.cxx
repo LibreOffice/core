@@ -719,7 +719,7 @@ bool getJREInfoFromBinPath(
 
         //make sure argument path does not end with '/'
         OUString sBinPath = path;
-        if (path.lastIndexOf('/') == (path.getLength() - 1))
+        if (path.endsWith("/"))
             sBinPath = path.copy(0, path.getLength() - 1);
 
         typedef vector<OUString>::const_iterator c_it;
@@ -1063,8 +1063,8 @@ Reference<VendorBase> createInstance(createInstance_func pFunc,
 
 inline OUString getDirFromFile(const OUString& usFilePath)
 {
-    sal_Int32 index= usFilePath.lastIndexOf('/');
-    return OUString(usFilePath.getStr(), index);
+    sal_Int32 index = usFilePath.lastIndexOf('/');
+    return usFilePath.copy(0, index);
 }
 
 void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)

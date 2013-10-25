@@ -1297,7 +1297,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 lcl_CheckForChildren(pMenu, nItemId);
             }
             else if (( aItemCommand.getLength() > nAddonsURLPrefixLength ) &&
-                     ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 ))
+                     ( aItemCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX ) ))
             {
                 // A special addon popup menu, must be created with a different ctor
                 MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,(AddonPopupMenu *)pPopup, bDeleteChildren, bDeleteChildren );
