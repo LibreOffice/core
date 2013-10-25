@@ -358,18 +358,28 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
         // if not existing, enter the entry
         if( bDifferent )
         {
-            const XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
+            const XLineEndEntry* pOldEntry = pLineEndList->GetLineEnd( nPos );
 
-            m_pEdtName->SetText( aName );
+            if(pOldEntry)
+            {
+                // #123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
+                XLineEndEntry* pEntry = new XLineEndEntry(pOldEntry->GetLineEnd(), aName);
+                delete pLineEndList->Replace(pEntry, nPos);
 
-            const XLineEndEntry aEntry(pEntry->GetLineEnd(), aName);
+                m_pEdtName->SetText( aName );
 
-            m_pLbLineEnds->Modify( aEntry, nPos, pLineEndList->GetUiBitmap( nPos ) );
-            m_pLbLineEnds->SelectEntryPos( nPos );
+                m_pLbLineEnds->Modify( *pEntry, nPos, pLineEndList->GetUiBitmap( nPos ) );
+                m_pLbLineEnds->SelectEntryPos( nPos );
 
-            *pnLineEndListState |= CT_MODIFIED;
+                // Flag fuer modifiziert setzen
+                *pnLineEndListState |= CT_MODIFIED;
 
-            *pPageType = 3;
+                *pPageType = 3;
+            }
+            else
+            {
+                OSL_ENSURE(false, "LineEnd to be modified not existing (!)");
+            }
         }
     }
     return( 0L );

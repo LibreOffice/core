@@ -685,9 +685,12 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
                 bLoop = sal_False;
 
                 const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
-                const XBitmapEntry aEntry(Graphic(aBitmapEx), aName);
 
-                m_pLbBitmaps->Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), aEntry, nPos );
+                // #i123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
+                XBitmapEntry* pEntry = new XBitmapEntry(Graphic(aBitmapEx), aName);
+                delete pBitmapList->Replace(pEntry, nPos);
+
+                m_pLbBitmaps->Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry, nPos );
                 m_pLbBitmaps->SelectEntryPos( nPos );
 
                 *pnBitmapListState |= CT_MODIFIED;

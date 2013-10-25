@@ -794,13 +794,15 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
             if (eCM != CM_RGB)
                 ConvertColorValues (aTmpColor, CM_RGB);
 
-            const XColorEntry aEntry(aTmpColor, aName);
+            // #123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
+            XColorEntry* pEntry = new XColorEntry(aTmpColor, aName);
+            delete pColorList->Replace(pEntry, nPos);
 
-            m_pLbColor->Modify( aEntry, nPos );
+            m_pLbColor->Modify( *pEntry, nPos );
             m_pLbColor->SelectEntryPos( nPos );
 
-            m_pValSetColorList->SetItemColor( nPos + 1, aEntry.GetColor() );
-            m_pValSetColorList->SetItemText( nPos + 1, aEntry.GetName() );
+            m_pValSetColorList->SetItemColor( nPos + 1, pEntry->GetColor() );
+            m_pValSetColorList->SetItemText( nPos + 1, pEntry->GetName() );
             m_pEdtName->SetText( aName );
 
             m_pCtlPreviewOld->Invalidate();
