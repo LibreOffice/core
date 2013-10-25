@@ -650,11 +650,11 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_SERBIAN_LATIN_SAM,                   "sr-Latn", "YU", 0     },   // legacy Serbian Latin in Yugoslavia
     { LANGUAGE_SERBIAN_LATIN_LSO,                   "sr-Latn", ""  , 0     },
     { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sr-Latn", ""  , 0     },   // MS lists this as 'sr' only, what a mess
-    { LANGUAGE_SERBIAN_CYRILLIC_SERBIA,             "sr-Cyrl", "RS", 0     },   // MS
-    { LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO,         "sr-Cyrl", "ME", 0     },   // MS
-    { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr-Cyrl", "BA", 0     },   // MS
-    { LANGUAGE_SERBIAN_CYRILLIC_SAM,                "sr-Cyrl", "CS", 0     },   // MS
-    { LANGUAGE_SERBIAN_CYRILLIC_LSO,                "sr-Cyrl", ""  , 0     },   // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_SERBIA,             "sr-Cyrl", "RS", kSAME },   // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO,         "sr-Cyrl", "ME", kSAME },   // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr-Cyrl", "BA", kSAME },   // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_SAM,                "sr-Cyrl", "CS", kSAME },   // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_LSO,                "sr-Cyrl", ""  , kSAME },   // MS
     { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "bs-Cyrl", "BA", 0     },
     { LANGUAGE_BOSNIAN_CYRILLIC_LSO,                "bs-Cyrl", ""  , 0     },
     { LANGUAGE_AZERI_CYRILLIC,                      "az-Cyrl", "AZ", 0     },   // macrolanguage code

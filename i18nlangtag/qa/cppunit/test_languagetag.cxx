@@ -588,7 +588,7 @@ static bool checkMapping( const OUString rStr1, const OUString& rStr2 )
     if (rStr1 == "cz"          ) return rStr2 == "cs-CZ";
     if (rStr1 == "iw-IL"       ) return rStr2 == "he-IL";
     if (rStr1 == "in-ID"       ) return rStr2 == "id-ID";
-    if (rStr1 == "sr-YU"       ) return rStr2 == "sr-Cyrl-CS";
+    if (rStr1 == "sr-YU"       ) return rStr2 == "sr-CS";
     if (rStr1 == "sh-RS"       ) return rStr2 == "sr-Latn-RS";
     if (rStr1 == "sh-YU"       ) return rStr2 == "sr-Latn-CS";
     if (rStr1 == "sh-CS"       ) return rStr2 == "sr-Latn-CS";
@@ -616,6 +616,11 @@ static bool checkMapping( const OUString rStr1, const OUString& rStr2 )
     if (rStr1 == "ks"          ) return rStr2 == "ks-Arab";
     if (rStr1 == "chr-US"      ) return rStr2 == "chr-Cher-US";
     if (rStr1 == "sd-PK"       ) return rStr2 == "sd-Arab-PK";
+    if (rStr1 == "sr-Cyrl-RS"  ) return rStr2 == "sr-RS";
+    if (rStr1 == "sr-Cyrl-ME"  ) return rStr2 == "sr-ME";
+    if (rStr1 == "sr-Cyrl-BA"  ) return rStr2 == "sr-BA";
+    if (rStr1 == "sr-Cyrl-CS"  ) return rStr2 == "sr-CS";
+    if (rStr1 == "sr-Cyrl"     ) return rStr2 == "sr";
     return rStr1 == rStr2;
 }
 
