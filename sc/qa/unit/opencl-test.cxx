@@ -84,6 +84,7 @@ public:
     void testFinacialDISCFormula();
     void testFinacialINTRATEFormula();
     void testMathFormulaCos();
+    void testMathFormulaCsc();
     void testStatisticalFormulaRsq();
     void testStatisticalFormulaPearson();
     void testStatisticalFormulaNegbinomdist();
@@ -121,6 +122,7 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaNegbinomdist);
     CPPUNIT_TEST(testStatisticalFormulaRsq);
     CPPUNIT_TEST(testStatisticalFormulaPearson);
+    CPPUNIT_TEST(testMathFormulaCsc);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -409,6 +411,7 @@ void ScOpenclTest::testMathFormulaCos()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+
 void ScOpenclTest::testFinacialFormula()
 {
     ScDocShellRef xDocSh = loadDoc("FinancialFormulaTest.", XLS);
@@ -1070,6 +1073,24 @@ void ScOpenclTest::testStatisticalFormulaRsq()
     {
         double fLibre = pDoc->GetValue(ScAddress(2,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-90]
+void ScOpenclTest::testMathFormulaCsc()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenCLTests/math/csc.", ODS);
+    enableOpenCL(xDocSh);   ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenCLTests/math/csc.", ODS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 15; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(1,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
