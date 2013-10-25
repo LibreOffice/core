@@ -98,10 +98,11 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     sal_Int32 nAngle = rObj.GetAngle();
     Rectangle aRect( rObj.GetRect() );
 
+    // for position calculations, we normalize the angle between 0 and 90 degrees
     if ( nAngle < 0 )
         nAngle = ( 36000 + nAngle ) % 36000;
-    else
-        nAngle = ( 36000 - ( nAngle % 36000 ) );
+    while ( nAngle > 9000 )
+        nAngle = ( 18000 - ( nAngle % 18000 ) );
 
     double fVal = (double)nAngle * F_PI18000;
     double  fCos = cos( fVal );
@@ -110,10 +111,24 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
     double  nWidthHalf = (double) aRect.GetWidth() / 2;
     double  nHeightHalf = (double) aRect.GetHeight() / 2;
 
-    double nXDiff = fCos * nWidthHalf + fSin * (-nHeightHalf);
-    double nYDiff = - ( fSin * nWidthHalf - fCos * ( -nHeightHalf ) );
+    // fdo#70838:
+    // when you rotate an object, the top-left corner of its bounding box is moved
+    // nXDiff and nYDiff pixels. To get their values we use these equations:
+    //
+    //   fSin * nHeightHalf + fCos * nWidthHalf  == nXDiff + nWidthHalf
+    //   fSin * nWidthHalf  + fCos * nHeightHalf == nYDiff + nHeightHalf
 
-    aRect.Move( (sal_Int32)( -( nWidthHalf - nXDiff ) ), (sal_Int32)( - ( nHeightHalf + nYDiff ) ) );
+    double nXDiff = fSin * nHeightHalf + fCos * nWidthHalf  - nWidthHalf;
+    double nYDiff = fSin * nWidthHalf  + fCos * nHeightHalf - nHeightHalf;
+
+    aRect.Move( (sal_Int32) nXDiff, (sal_Int32) nYDiff );
+
+    // calculate the proper angle value to be saved
+    nAngle = rObj.GetAngle();
+    if ( nAngle < 0 )
+        nAngle = ( 36000 + nAngle ) % 36000;
+    else
+        nAngle = ( 36000 - ( nAngle % 36000 ) );
 
     nAngle *= 655;
     nAngle += 0x8000;
