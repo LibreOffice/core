@@ -278,7 +278,24 @@ namespace dmapper {
                }
            }
             break;
-            default: bRet = false;
+            default:
+            // Not handled here, give the next handler a chance.
+            bRet = false;
+            // However, these logically belong here, so save the value if necessary.
+            switch (nSprmId)
+            {
+                case NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize:
+                case NS_ooxml::LN_CT_TblPrBase_tblStyleColBandSize:
+                    if (m_pCurrentInteropGrabBag)
+                    {
+                        beans::PropertyValue aValue;
+                        aValue.Name = (nSprmId == NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize ? OUString("tblStyleRowBandSize") : OUString("tblStyleColBandSize"));
+                        aValue.Value = uno::makeAny(nIntValue);
+                        m_pCurrentInteropGrabBag->push_back(aValue);
+                    }
+                    break;
+            }
+            break;
         }
 
 #ifdef DEBUG_DOMAINMAPPER

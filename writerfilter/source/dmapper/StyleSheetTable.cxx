@@ -487,6 +487,14 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_Style_customStyle:
+            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+            {
+                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pImpl->m_pCurrentEntry.get());
+                beans::PropertyValue aValue;
+                aValue.Name = "customStyle";
+                aValue.Value = uno::makeAny(sal_Bool(nIntValue != 0));
+                pTableEntry->AppendInteropGrabBag(aValue);
+            }
         break;
         case NS_ooxml::LN_CT_Style_styleId:
             m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
@@ -560,6 +568,14 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             break;
         case NS_ooxml::LN_CT_Style_basedOn:
             m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = sStringValue;
+            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+            {
+                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pImpl->m_pCurrentEntry.get());
+                beans::PropertyValue aValue;
+                aValue.Name = "basedOn";
+                aValue.Value = uno::makeAny(sStringValue);
+                pTableEntry->AppendInteropGrabBag(aValue);
+            }
             break;
         case NS_ooxml::LN_CT_Style_next:
             m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = sStringValue;
@@ -568,17 +584,36 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_link:
         case NS_ooxml::LN_CT_Style_autoRedefine:
         case NS_ooxml::LN_CT_Style_hidden:
-        case NS_ooxml::LN_CT_Style_uiPriority:
         case NS_ooxml::LN_CT_Style_semiHidden:
         case NS_ooxml::LN_CT_Style_unhideWhenUsed:
-        case NS_ooxml::LN_CT_Style_qFormat:
         case NS_ooxml::LN_CT_Style_locked:
         case NS_ooxml::LN_CT_Style_personal:
         case NS_ooxml::LN_CT_Style_personalCompose:
         case NS_ooxml::LN_CT_Style_personalReply:
-        case NS_ooxml::LN_CT_Style_rsid:
         case NS_ooxml::LN_CT_Style_trPr:
         case NS_ooxml::LN_CT_Style_tcPr:
+        break;
+        case NS_ooxml::LN_CT_Style_rsid:
+        case NS_ooxml::LN_CT_Style_qFormat:
+        case NS_ooxml::LN_CT_Style_uiPriority:
+            if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+            {
+                TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pImpl->m_pCurrentEntry.get());
+                beans::PropertyValue aValue;
+                if (nSprmId == NS_ooxml::LN_CT_Style_rsid)
+                {
+                    aValue.Name = "rsid";
+                    aValue.Value = uno::makeAny(nIntValue);
+                }
+                else if (nSprmId == NS_ooxml::LN_CT_Style_qFormat)
+                    aValue.Name = "qFormat";
+                else
+                {
+                    aValue.Name = "uiPriority";
+                    aValue.Value = uno::makeAny(nIntValue);
+                }
+                pTableEntry->AppendInteropGrabBag(aValue);
+            }
         break;
         case NS_ooxml::LN_CT_Style_tblPr: //contains table properties
         case NS_ooxml::LN_CT_Style_tblStylePr: //contains  to table properties
