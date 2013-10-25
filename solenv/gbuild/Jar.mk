@@ -221,10 +221,11 @@ $(call gb_Jar_add_manifest_classpath,$(1),$(call gb_Helper_make_url,$(2)))
 
 endef
 
+# call gb_Jar_use_external_jar,jar,externaljarfullpath,manifestentry
 define gb_Jar_use_external_jar
+$(if $(3),,$(call gb_Output_error,gb_Jar_use_external_jar: manifest entry missing))
 $(call gb_JavaClassSet_use_system_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
-$(call gb_Jar_add_manifest_classpath,$(1),$(notdir $(2)))
-$(call gb_Jar_get_target,$(1)) : $(2)
+$(call gb_Jar_add_manifest_classpath,$(1),$(3))
 
 endef
 
@@ -281,6 +282,13 @@ endef
 define gb_Jar_use_customtargets
 $(foreach customtarget,$(2),$(call gb_Jar_use_customtarget,$(1),$(customtarget)))
 
+endef
+
+# Add a dependency on an ExternalProject.
+#
+# call gb_Jar_use_external_project,jar,externalproject
+define gb_Jar_use_external_project
+$(call gb_JavaClassSet_use_external_project,$(call gb_Jar_get_classsetname,$(1)),$(2))
 endef
 
 # possible directories for jar files containing UNO services 

@@ -278,6 +278,15 @@ $(call gb_Extension__get_preparation_target,$(1)) \
 
 endef
 
+# Add a dependency on an ExternalProject.
+#
+# call gb_Extension_use_external_project,extension,externalproject
+define gb_Extension_use_external_project
+$(call gb_Extension__get_preparation_target,$(1)) \
+	:| $(call gb_ExternalProject_get_target,$(2))
+
+endef
+
 define gb_Extension_use_package
 $(call gb_Extension__get_preparation_target,$(1)) \
 	:| $(call gb_Package_get_target,$(2))

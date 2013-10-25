@@ -15,9 +15,6 @@ $(eval $(call gb_Module_add_targets,apache-commons,\
 	ExternalProject_apache_commons_httpclient \
 	ExternalProject_apache_commons_lang \
 	ExternalProject_apache_commons_logging \
-	Package_apache_commons_codec \
-	Package_apache_commons_httpclient \
-	Package_apache_commons_lang \
 	UnpackedTarball_apache_commons_codec \
 	UnpackedTarball_apache_commons_httpclient \
 	UnpackedTarball_apache_commons_lang \

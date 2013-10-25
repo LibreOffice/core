@@ -2820,27 +2820,31 @@ $(eval $(call gb_Helper_register_jars,OXT,\
 ))
 
 define gb_Jar__use_commons-codec
-$(call gb_Jar_use_external_jar,$(1),$(OUTDIR)/bin/commons-codec-1.6.jar)
+$(call gb_Jar_use_external_project,$(1),apache_commons_codec)
+$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_codec)/dist/commons-codec-1.6-SNAPSHOT.jar,commons-codec-1.6.jar)
 endef
 define gb_ExternalProject__use_commons-codec
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_codec)
 endef
 
 define gb_Jar__use_commons-httpclient
-$(call gb_Jar_use_external_jar,$(1),$(OUTDIR)/bin/commons-httpclient-3.1.jar)
+$(call gb_Jar_use_external_project,$(1),apache_commons_httpclient)
+$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_httpclient)/dist/commons-httpclient.jar,commons-httpclient-3.1.jar)
 endef
 define gb_ExternalProject__use_commons-httpclient
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_httpclient)
 endef
 
 define gb_Jar__use_commons-lang
-$(call gb_Jar_use_external_jar,$(1),$(OUTDIR)/bin/commons-lang-2.4.jar)
+$(call gb_Jar_use_external_project,$(1),apache_commons_lang)
+$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_lang)/dist/commons-lang-2.4.jar,commons-lang-2.4.jar)
 endef
 define gb_ExternalProject__use_commons-lang
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_lang)
 endef
 
 define gb_Jar__use_commons-logging
+$(call gb_Jar_use_external_project,$(1),apache_commons_logging)
 $(call gb_Jar_use_jar,$(1),commons-logging-1.1.1)
 endef
 define gb_ExternalProject__use_commons-logging

@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,apache_commons_logging_inc,apache_commons_logging))
+$(eval $(call gb_ExternalPackage_ExternalPackage,apache_commons_logging,apache_commons_logging))
 
-$(eval $(call gb_ExternalPackage_use_external_project,apache_commons_logging_inc,apache_commons_logging))
+$(eval $(call gb_ExternalPackage_use_external_project,apache_commons_logging,apache_commons_logging))
 
-$(eval $(call gb_ExternalPackage_add_jar_for_install,apache_commons_logging_inc,bin/commons-logging-1.1.1.jar,target/commons-logging-1.1.1-SNAPSHOT.jar))
+$(eval $(call gb_ExternalPackage_add_jar_for_install,apache_commons_logging,bin/commons-logging-1.1.1.jar,target/commons-logging-1.1.1-SNAPSHOT.jar))
 
 # vim: set noet sw=4 ts=4:

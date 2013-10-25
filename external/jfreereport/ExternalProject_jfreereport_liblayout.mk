@@ -9,11 +9,9 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,jfreereport_liblayout))
 
-ifneq ($(SYSTEM_APACHE_COMMONS),YES)
-$(eval $(call gb_ExternalProject_use_packages,jfreereport_liblayout,\
-	apache_commons_logging_inc \
+$(eval $(call gb_ExternalProject_use_externals,jfreereport_liblayout,\
+	commons-logging \
 ))
-endif
 
 $(eval $(call gb_ExternalProject_use_packages,jfreereport_liblayout,\
 	jfreereport_sac \
@@ -37,7 +35,9 @@ $(call gb_ExternalProject_get_state_target,jfreereport_liblayout,build) :
 			-q \
 			-f build.xml \
 			-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
-			$(if $(filter YES,$(SYSTEM_APACHE_COMMONS)),-Dcommons-logging.jar=$(COMMONS_LOGGING_JAR) )\
+			$(if $(filter YES,$(SYSTEM_APACHE_COMMONS)),\
+				-Dcommons-logging.jar=$(COMMONS_LOGGING_JAR) \
+				-Dcommons-logging.jar=$(INSTROOT)/$(LIBO_SHARE_JAVA_FOLDER)/commons-logging-1.1.1.jar) \
 			$(if $(filter yes,$(JAVACISGCJ))\
 				,-Dbuild.compiler=gcj \
 				,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \

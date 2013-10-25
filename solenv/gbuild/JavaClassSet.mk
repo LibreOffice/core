@@ -197,4 +197,10 @@ $(call gb_JavaClassSet_add_classpath,$(1),$(call gb_CustomTarget_get_workdir,$(2
 
 endef
 
+define gb_JavaClassSet_use_external_project
+$(call gb_JavaClassSet_get_preparation_target,$(1)) : \
+	$(call gb_ExternalProject_get_target,$(2))
+
+endef
+
 # vim: set noet sw=4:
