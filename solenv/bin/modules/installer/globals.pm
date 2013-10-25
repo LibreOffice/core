@@ -186,6 +186,8 @@ BEGIN
     $refresh_includepaths = 0;
     $include_paths_read = 0;
     @patchfilecollector = ();
+    @userregistrycollector = ();
+    $addeduserregitrykeys = 0;
     $desktoplinkexists = 0;
     $analyze_spellcheckerlanguage = 0;
     %spellcheckerlanguagehash = ();

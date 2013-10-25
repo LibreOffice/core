@@ -270,9 +270,6 @@ sub set_important_properties
     $onepropertyline = "DONTOPTIMIZELIBS" . "\t" . "0" . "\n";
     push(@{$propertyfile}, $onepropertyline);
 
-    $onepropertyline = "DISABLEADVTSHORTCUTS" . "\t" . "1" . "\n";
-    push(@{$propertyfile}, $onepropertyline);
-
     if ( $installer::globals::officedirhostname )
     {
         my $onepropertyline = "OFFICEDIRHOSTNAME" . "\t" . $installer::globals::officedirhostname . "\n";

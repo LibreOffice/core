@@ -627,6 +627,34 @@ sub collect_all_files_from_includepaths
     push( @installer::globals::globallogfileinfo, "\n");
 }
 
+##############################################
+# Searching for a file with the gid
+##############################################
+
+sub find_file_by_id
+{
+    my ( $filesref, $gid ) = @_;
+
+    my $foundfile = 0;
+    my $onefile;
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        $onefile = ${$filesref}[$i];
+        my $filegid = $onefile->{'gid'};
+
+        if ( $filegid eq $gid )
+        {
+            $foundfile = 1;
+            last;
+        }
+    }
+
+    if (! $foundfile ) { $onefile  = ""; }
+
+    return $onefile;
+}
+
 #################################################
 # Generating paths for cygwin (second version)
 # This function generates smaller files for
