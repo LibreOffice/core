@@ -2915,12 +2915,12 @@ endef
 else # !SYSTEM_JFREEREPORT
 
 $(eval $(call gb_Helper_register_jars,OOO,\
-	flow-engine-0.9.4 \
+	flow-engine \
 	flute-1.1.6 \
 	libbase-1.1.6 \
 	libfonts-1.1.6 \
 	libformula-1.1.7 \
-	liblayout-0.2.10 \
+	liblayout \
 	libloader-1.1.6 \
 	librepository-1.1.6 \
 	libserializer-1.1.6 \
@@ -2929,7 +2929,7 @@ $(eval $(call gb_Helper_register_jars,OOO,\
 ))
 
 define gb_Jar__use_flow-engine
-$(call gb_Jar_use_jar,$(1),flow-engine-0.9.4)
+$(call gb_Jar_use_jar,$(1),flow-engine)
 endef
 
 define gb_Jar__use_flute
@@ -2949,7 +2949,7 @@ $(call gb_Jar_use_jar,$(1),libformula-1.1.7)
 endef
 
 define gb_Jar__use_liblayout
-$(call gb_Jar_use_jar,$(1),liblayout-0.2.10)
+$(call gb_Jar_use_jar,$(1),liblayout)
 endef
 
 define gb_Jar__use_libloader

@@ -57,12 +57,12 @@ STD_JAR_FILE(gid_File_Jar_CommonsLogging, commons-logging-1.1.1)
 
 /* Not sure, if can we use CONCAT3 in that context here? */
 #ifndef SYSTEM_JFREEREPORT
-    STD_JAR_FILE( gid_File_Jar_FlowEngine, CONCAT3(flow-engine,-,FLOW_ENGINE_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_FlowEngine, flow-engine )
     STD_JAR_FILE( gid_File_Jar_Flute, CONCAT3(flute,-,FLUTE_VERSION) )
     STD_JAR_FILE( gid_File_Jar_Libbase, CONCAT3(libbase,-,LIBBASE_VERSION) )
     STD_JAR_FILE( gid_File_Jar_Libfonts, CONCAT3(libfonts,-,LIBFONTS_VERSION) )
     STD_JAR_FILE( gid_File_Jar_Libformula, CONCAT3(libformula,-,LIBFORMULA_VERSION) )
-    STD_JAR_FILE( gid_File_Jar_Liblayout, CONCAT3(liblayout,-,LIBLAYOUT_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_Liblayout, liblayout )
     STD_JAR_FILE( gid_File_Jar_Libloader, CONCAT3(libloader,-,LIBLOADER_VERSION) )
     STD_JAR_FILE( gid_File_Jar_Librepository, CONCAT3(librepository,-,LIBREPOSITORY_VERSION) )
     STD_JAR_FILE( gid_File_Jar_Libserializer, CONCAT3(libserializer,-,LIBSERIALIZER_VERSION) )
