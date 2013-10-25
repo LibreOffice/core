@@ -17,7 +17,6 @@
 using namespace formula;
 
 namespace sc { namespace opencl {
- #define ISNAN
 class OpFisher:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,

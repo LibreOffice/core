@@ -88,6 +88,20 @@ public:
     void testStatisticalFormulaRsq();
     void testStatisticalFormulaPearson();
     void testStatisticalFormulaNegbinomdist();
+    void testFinacialXNPVFormula();
+    void testFinacialPriceMatFormula();
+    void testFinacialFormulaReceived();
+    void testFinancialFormulaCumipmt();
+    void testFinancialFormulaCumprinc();
+    void testFinacialRRIFormula();
+    void testFinacialEFFECT_ADDFormula();
+    void testFinacialNominalFormula();
+    void testFinacialTBILLEQFormula();
+    void testFinacialTBILLPRICEFormula();
+    void testFinacialTBILLYIELDFormula();
+    void testFinacialYIELDFormula();
+    void testFinacialYIELDDISCFormula();
+    void testFinacialYIELDMATFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSGroundWater);
@@ -123,6 +137,20 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaRsq);
     CPPUNIT_TEST(testStatisticalFormulaPearson);
     CPPUNIT_TEST(testMathFormulaCsc);
+    CPPUNIT_TEST(testFinacialPriceMatFormula);
+    CPPUNIT_TEST(testFinacialXNPVFormula);
+    CPPUNIT_TEST(testFinacialFormulaReceived);
+    CPPUNIT_TEST(testFinancialFormulaCumipmt);
+    CPPUNIT_TEST(testFinancialFormulaCumprinc);
+    CPPUNIT_TEST(testFinacialRRIFormula);
+    CPPUNIT_TEST(testFinacialEFFECT_ADDFormula);
+    CPPUNIT_TEST(testFinacialNominalFormula);
+    CPPUNIT_TEST(testFinacialTBILLEQFormula);
+    CPPUNIT_TEST(testFinacialTBILLPRICEFormula);
+    CPPUNIT_TEST(testFinacialTBILLYIELDFormula);
+    CPPUNIT_TEST(testFinacialYIELDFormula);
+    CPPUNIT_TEST(testFinacialYIELDDISCFormula);
+    CPPUNIT_TEST(testFinacialYIELDMATFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1096,7 +1124,280 @@ void ScOpenclTest::testMathFormulaCsc()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+//[AMLOEXT-92]
+void ScOpenclTest::testFinacialXNPVFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/XNPV.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/XNPV.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 1; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
 
+     for (SCROW i = 16; i <= 26; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+void ScOpenclTest::testFinacialPriceMatFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/PriceMat.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/PriceMat.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(6, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(6, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+void ScOpenclTest::testFinacialFormulaReceived()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Received.", XLS);
+    enableOpenCL(xDocSh);   ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Received.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 0; i < 10; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(5,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(5,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+void ScOpenclTest::testFinancialFormulaCumipmt()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Cumipmt.", XLS);
+    enableOpenCL(xDocSh);   ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Cumipmt.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 10; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(6,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(6,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+void ScOpenclTest::testFinancialFormulaCumprinc()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Cumprinc.", XLS);
+    enableOpenCL(xDocSh);   ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Cumprinc.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 10; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(6,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(6,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+void ScOpenclTest::testFinacialRRIFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/RRI.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/RRI.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+void ScOpenclTest::testFinacialEFFECT_ADDFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/EFFECT_ADD.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/EFFECT_ADD.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
+        //CPPUNIT_ASSERT_EQUAL(fExcel, fLibre);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+void ScOpenclTest::testFinacialNominalFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Nominal.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Nominal.", XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 19; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(3,i,0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+void ScOpenclTest::testFinacialTBILLEQFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/TBILLEQ.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/TBILLEQ.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 6; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+void ScOpenclTest::testFinacialTBILLPRICEFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/TBILLPRICE.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/TBILLPRICE.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 6; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+void ScOpenclTest::testFinacialTBILLYIELDFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/TBILLYIELD.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/TBILLYIELD.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 6; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(3, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+void ScOpenclTest::testFinacialYIELDFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/YIELD.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/YIELD.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 6; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(7, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(7, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+
+void ScOpenclTest::testFinacialYIELDDISCFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/YIELDDISC.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/YIELDDISC.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 6; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(5, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(5, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+
+void ScOpenclTest::testFinacialYIELDMATFormula()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/YIELDMAT.", XLS);
+    enableOpenCL(xDocSh);
+    ScDocument *pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/YIELDMAT.", XLS);
+    ScDocument *pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    for (SCROW i = 0; i <= 6; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(6, i, 0));
+        double fExcel = pDocRes->GetValue(ScAddress(6, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 ScOpenclTest::ScOpenclTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
 {

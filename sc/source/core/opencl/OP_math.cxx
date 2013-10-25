@@ -14,7 +14,6 @@
 
 #include <memory>
 using namespace formula;
-#define ISNAN
 
 namespace sc { namespace opencl {
 class OpCos: public Normal
