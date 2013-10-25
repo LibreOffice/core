@@ -97,22 +97,16 @@ public:
 
     DECL_LINK ( RenderHdl, Button * );
     DECL_LINK ( ChooseDocumentHdl, Button * );
-
-    int extractInt(const NumericField *pField)
-    {
-        OUString aString(pField->GetText());
-        return aString.toInt32();
-    }
 };
 
 IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
 {
-    int contextWidth = extractInt(mpContextWidth);
-    int contextHeight = extractInt(mpContextHeight);
-    int tilePosX = extractInt(mpTilePosX);
-    int tilePosY = extractInt(mpTilePosY);
-    int tileWidth = extractInt(mpTileWidth);
-    int tileHeight = extractInt(mpTileHeight);
+    int contextWidth = mpContextWidth->GetValue();
+    int contextHeight = mpContextHeight->GetValue();
+    int tilePosX = mpTilePosX->GetValue();
+    int tilePosY = mpTilePosY->GetValue();
+    int tileWidth = mpTileWidth->GetValue();
+    int tileHeight = mpTileHeight->GetValue();
 
     // do the same thing we are doing in touch_lo_draw_tile()
     SwWrtShell *pViewShell = GetActiveWrtShell();
