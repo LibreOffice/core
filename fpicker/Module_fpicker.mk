@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,fpicker))
 
 $(eval $(call gb_Module_add_targets,fpicker,\
 	AllLangResTarget_fps_office \
-	Library_fpicker \
 	Library_fps_office \
 ))
 

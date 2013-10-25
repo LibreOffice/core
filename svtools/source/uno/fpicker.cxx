@@ -20,7 +20,6 @@
 #include "sal/types.h"
 #include "rtl/ustring.hxx"
 
-#include "cppuhelper/implementationentry.hxx"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 
 #include "svtools/miscopt.hxx"
@@ -58,7 +57,7 @@ static OUString FilePicker_getSystemPickerServiceName()
 #endif
 }
 
-static Reference< css::uno::XInterface > FilePicker_createInstance (
+Reference< css::uno::XInterface > FilePicker_CreateInstance (
     Reference< css::uno::XComponentContext > const & rxContext)
 {
     Reference< css::uno::XInterface > xResult;
@@ -102,12 +101,12 @@ static Reference< css::uno::XInterface > FilePicker_createInstance (
     return xResult;
 }
 
-static OUString FilePicker_getImplementationName()
+OUString SAL_CALL FilePicker_getImplementationName()
 {
-    return OUString("com.sun.star.comp.fpicker.FilePicker");
+    return OUString("com.sun.star.comp.svt.FilePicker");
 }
 
-static Sequence< OUString > FilePicker_getSupportedServiceNames()
+Sequence< OUString > FilePicker_getSupportedServiceNames()
 {
     Sequence< OUString > aServiceNames(1);
     aServiceNames.getArray()[0] =
@@ -132,7 +131,7 @@ static OUString FolderPicker_getSystemPickerServiceName()
     return OUString("com.sun.star.ui.dialogs.SystemFolderPicker");
 }
 
-static Reference< css::uno::XInterface > FolderPicker_createInstance (
+Reference< css::uno::XInterface > FolderPicker_CreateInstance (
     Reference< css::uno::XComponentContext > const & rxContext)
 {
     Reference< css::uno::XInterface > xResult;
@@ -173,51 +172,17 @@ static Reference< css::uno::XInterface > FolderPicker_createInstance (
     return xResult;
 }
 
-static OUString FolderPicker_getImplementationName()
+OUString SAL_CALL FolderPicker_getImplementationName()
 {
-    return OUString("com.sun.star.comp.fpicker.FolderPicker");
+    return OUString("com.sun.star.comp.svt.FolderPicker");
 }
 
-static Sequence< OUString > FolderPicker_getSupportedServiceNames()
+Sequence< OUString > FolderPicker_getSupportedServiceNames()
 {
     Sequence< OUString > aServiceNames(1);
     aServiceNames.getArray()[0] =
         OUString( "com.sun.star.ui.dialogs.FolderPicker");
     return aServiceNames;
 }
-
-/*
- * Implementation entries.
- */
-static const cppu::ImplementationEntry g_entries[] =
-{
-    {
-        FilePicker_createInstance,
-        FilePicker_getImplementationName,
-        FilePicker_getSupportedServiceNames,
-        cppu::createSingleComponentFactory, 0, 0
-    },
-    {
-        FolderPicker_createInstance,
-        FolderPicker_getImplementationName,
-        FolderPicker_getSupportedServiceNames,
-        cppu::createSingleComponentFactory, 0, 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-/*
- * Public (exported) interface.
- */
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL fpicker_component_getFactory (
-    const sal_Char * pImplementationName, void * pServiceManager, void * pRegistryKey)
-{
-    return cppu::component_getFactoryHelper (
-        pImplementationName, pServiceManager, pRegistryKey, g_entries);
-}
-
-} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
