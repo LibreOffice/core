@@ -899,15 +899,18 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                 {
                     UINT nFileType;
                     hResult = iDialog->GetFileTypeIndex(&nFileType);
-                    if ( SUCCEEDED(hResult) )
+                    if ( SUCCEEDED(hResult) && nFileType > 0 )
                     {
                         ::sal_Int32 nRealIndex = (nFileType-1); // COM dialog base on 1 ... filter container on 0 .-)
                         ::std::vector< COMDLG_FILTERSPEC > lFilters = lcl_buildFilterList(m_lFilters);
-                        LPCWSTR lpFilterExt = lFilters[nRealIndex].pszSpec;
+                        if ( nRealIndex < lFilters.size() )
+                        {
+                            LPCWSTR lpFilterExt = lFilters[nRealIndex].pszSpec;
 
-                        lpFilterExt = wcsrchr( lpFilterExt, '.' );
-                        if ( lpFilterExt )
-                            aFileURL += reinterpret_cast<const sal_Unicode*>(lpFilterExt);
+                            lpFilterExt = wcsrchr( lpFilterExt, '.' );
+                            if ( lpFilterExt )
+                                aFileURL += reinterpret_cast<const sal_Unicode*>(lpFilterExt);
+                        }
                     }
                 }
 
