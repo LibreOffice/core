@@ -350,7 +350,6 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ORIYA,                       "or", "IN", 0     },
     { LANGUAGE_PUNJABI,                     "pa", "IN", 0     },
     { LANGUAGE_SANSKRIT,                    "sa", "IN", 0     },
-    { LANGUAGE_SINDHI,                      "sd", "IN", 0     },    // TODO: there's Deva(nagari) and Arab(ic) script, MS maps this to 'sd-Deva-IN'
     { LANGUAGE_TAMIL,                       "ta", "IN", 0     },
     { LANGUAGE_TAMIL_SRI_LANKA,             "ta", "LK", 0     },
     { LANGUAGE_TELUGU,                      "te", "IN", 0     },
@@ -359,6 +358,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_PUNJABI_PAKISTAN,           "lah", "PK", kSAME },    // macrolanguage code, earlier preferred 'lah' over 'pa' for Western Panjabi, now there is 'pnb'
     { LANGUAGE_PUNJABI_PAKISTAN,            "pa", "PK", kSAME },    // MS maps this to 'pa-Arab-PK', but 'pa'='pan' Eastern Panjabi is not used in PK, only in IN
     { LANGUAGE_SINDHI_PAKISTAN,             "sd", "PK", kSAME },    // Arabic script
+    { LANGUAGE_SINDHI,                      "sd", "IN", 0     },    // TODO: there's Deva(nagari) and Arab(ic) script, MS maps this to 'sd-Deva-IN'
     { LANGUAGE_BELARUSIAN,                  "be", "BY", 0     },
     { LANGUAGE_CATALAN,                     "ca", "ES", 0     },    // Spain (default)
     { LANGUAGE_CATALAN,                     "ca", "AD", 0     },    // Andorra
