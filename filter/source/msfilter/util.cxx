@@ -287,9 +287,13 @@ TextCategory categorizeCodePoint(sal_uInt32 codePoint, const OUString &rBcp47Lan
     return eRet;
 }
 
-OString ConvertColor( const Color &rColor )
+OString ConvertColor( const Color &rColor, bool bAutoColor )
 {
     OString color( "auto" );
+
+    if (bAutoColor && rColor.GetColor() == OOXML_COLOR_AUTO)
+        return color;
+
     if ( rColor.GetColor() != COL_AUTO )
     {
         const char pHexDigits[] = "0123456789ABCDEF";

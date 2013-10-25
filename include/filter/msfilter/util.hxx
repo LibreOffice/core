@@ -71,8 +71,15 @@ enum TextCategory
 */
 MSFILTER_DLLPUBLIC TextCategory categorizeCodePoint(sal_uInt32 codePoint, const OUString &rBcp47LanguageTag);
 
-/// Converts tools Color to HTML color (without leading hashmark).
-MSFILTER_DLLPUBLIC OString ConvertColor( const Color &rColor );
+#define OOXML_COLOR_AUTO 0x0a
+
+/**
+ * Converts tools Color to HTML color (without leading hashmark).
+ *
+ * @param rColor color to convert
+ * @param bAutoColor if OOXML_COLOR_AUTO should be recognized as an auto color
+ */
+MSFILTER_DLLPUBLIC OString ConvertColor( const Color &rColor, bool bAutoColor = false );
 
 
 /** Paper size in 1/100 millimeters. */

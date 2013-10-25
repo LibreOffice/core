@@ -2728,6 +2728,10 @@ void lcl_TableStyleShd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
     {
         if (rShd[i].Name == "val")
             pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rShd[i].Name == "color")
+            pAttributeList->add(FSNS(XML_w, XML_color), msfilter::util::ConvertColor(rShd[i].Value.get<sal_Int32>(), /*bAutoColor =*/ true));
+        else if (rShd[i].Name == "fill")
+            pAttributeList->add(FSNS(XML_w, XML_fill), msfilter::util::ConvertColor(rShd[i].Value.get<sal_Int32>(), /*bAutoColor =*/ true));
     }
     XFastAttributeListRef xAttributeList(pAttributeList);
     pSerializer->singleElementNS(XML_w, XML_shd, xAttributeList);

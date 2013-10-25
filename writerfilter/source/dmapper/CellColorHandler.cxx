@@ -23,9 +23,8 @@
 #include <ooxml/resourceids.hxx>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <sal/macros.h>
+#include <filter/msfilter/util.hxx>
 #include "dmapperLoggers.hxx"
-
-#define OOXML_COLOR_AUTO 0x0a //todo: AutoColor needs symbol
 
 namespace writerfilter {
 namespace dmapper {
