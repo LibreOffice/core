@@ -1,21 +1,3 @@
-diff -Naur misc/build/JLanguageTool-1.7.0/build.properties misc/build/JLanguageTool-1.7.0_patched/build.properties
---- misc/build/JLanguageTool-1.7.0/build.properties	2012-06-25 08:22:35.000000000 +0200
-+++ misc/build/JLanguageTool-1.7.0_patched/build.properties	2012-06-25 09:24:21.253494500 +0200
-@@ -67,10 +67,10 @@
- ext.log4j.lib = ${ext.dir}/build/cobertura/log4j-1.2.9.jar
- ext.jakarta-oro.lib = ${ext.dir}/build/cobertura/jakarta-oro-2.0.8.jar
- 
--ext.ooo.juh.lib = ${ext.ooo.dir}/juh.jar
--ext.ooo.unoil.lib = ${ext.ooo.dir}/unoil.jar
--ext.ooo.ridl.lib = ${ext.ooo.dir}/ridl.jar
--ext.ooo.jurt.lib = ${ext.ooo.dir}/jurt.jar
-+ext.ooo.juh.lib = ${solver.ooo.dir}/juh.jar
-+ext.ooo.unoil.lib = ${solver.ooo.dir}/unoil.jar
-+ext.ooo.ridl.lib = ${solver.ooo.dir}/ridl.jar
-+ext.ooo.jurt.lib = ${solver.ooo.dir}/jurt.jar
- 
- converter.name = RuleConverter
- build.meta-inf = ${build.dir}/META-INF
 diff -Naur misc/build/JLanguageTool-1.7.0/build.xml misc/build/JLanguageTool-1.7.0_patched/build.xml
 --- misc/build/JLanguageTool-1.7.0/build.xml	2012-06-25 08:22:35.000000000 +0200
 +++ misc/build/JLanguageTool-1.7.0_patched/build.xml	2012-06-25 09:27:39.077442000 +0200

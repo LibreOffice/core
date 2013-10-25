@@ -32,7 +32,11 @@ $(call gb_ExternalProject_get_state_target,languagetool,build) :
 			-Dant.build.javac.target=$(JAVA_TARGET_VER) \
 		) \
 		$(if $(debug),-Dbuild.debug="on") \
-		-Dsolver.ooo.dir="$(OUTDIR_FOR_BUILD)/bin" dist && \
+		-Dext.ooo.juh.lib="$(call gb_Jar_get_target,juh)" \
+		-Dext.ooo.jurt.lib="$(call gb_Jar_get_target,jurt)" \
+		-Dext.ooo.ridl.lib="$(call gb_Jar_get_target,ridl)" \
+		-Dext.ooo.unoil.lib="$(call gb_Jar_get_target,unoil)" \
+		dist && \
 	touch $@
 
 # vim: set noet sw=4 ts=4:

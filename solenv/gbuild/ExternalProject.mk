@@ -189,7 +189,7 @@ endef
 # gb_ExternalProject_use_jars external jars
 define gb_ExternalProject_use_jars
 $(call gb_ExternalProject_get_preparation_target,$(1)) : \
-	$(foreach jar,$(2),$(call gb_Jar_get_target,$(lib)))
+	$(foreach jar,$(2),$(call gb_Jar_get_target,$(jar)))
 
 endef
 
