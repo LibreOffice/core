@@ -296,36 +296,113 @@ public:
         ss << ") {\n\t";
         ss << "double tmp = " << GetBottom() <<";\n\t";
         ss << "int gid0 = get_global_id(0);\n\t";
+        ss << "int nCount = 0;\n\t";
+        ss << "double tmpBottom;\n\t";
         unsigned i = vSubArguments.size();
         size_t nItems = 0;
         while (i--)
         {
             FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
             assert(pCur);
-            if (const formula::DoubleVectorRefToken* pCurDVR =
-                dynamic_cast<const formula::DoubleVectorRefToken *>(pCur))
+            if (pCur->GetType() == formula::svDoubleVectorRef)
             {
-                size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+                const formula::DoubleVectorRefToken* pDVR =
+                dynamic_cast<const formula::DoubleVectorRefToken *>(pCur);
+                size_t nCurWindowSize = pDVR->GetRefRowSize();
                 ss << "for (int i = ";
-                if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
-                    ss << "gid0; i < "<< nCurWindowSize <<"; i++)\n\t\t";
-                } else if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed()) {
-                    ss << "0; i < gid0+"<< nCurWindowSize <<"; i++)\n\t\t";
-                } else {
-                    ss << "0; i < "<< nCurWindowSize <<"; i++)\n\t\t";
+                if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                    ss << "gid0; i < " << pDVR->GetArrayLength();
+                    ss << " && i < " << nCurWindowSize  << "; i++){\n\t\t";
+#else
+                    ss << "gid0; i < "<< nCurWindowSize << "; i++)\n\t\t";
+#endif
+                } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+#ifdef  ISNAN
+                    ss << "0; i < " << pDVR->GetArrayLength();
+                    ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n\t\t";
+#else
+                    ss << "0; i < gid0+"<< nCurWindowSize << "; i++)\n\t\t";
+#endif
+                } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+#ifdef  ISNAN
+                    ss << "0; i + gid0 < " << pDVR->GetArrayLength();
+                    ss << " &&  i < "<< nCurWindowSize << "; i++){\n\t\t";
+#else
+                    ss << "0; i < "<< nCurWindowSize << "; i++)\n\t\t";
+#endif
+                }
+                else {
+#ifdef  ISNAN
+                    ss << "0; i < "<< nCurWindowSize << "; i++){\n\t\t";
+#else
+                    ss << "0; i < "<< nCurWindowSize << "; i++)\n\t\t";
+#endif
                 }
                 nItems += nCurWindowSize;
-            } else {
+            }
+            else if (pCur->GetType() == formula::svSingleVectorRef)
+            {
+#ifdef  ISNAN
+                    const formula::SingleVectorRefToken* pSVR =
+                    dynamic_cast< const formula::SingleVectorRefToken* >(pCur);
+                ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n\t\t";
+#else
+                nItems += 1;
+#endif
+            }
+            else if (pCur->GetType() == formula::svDouble)
+            {
+#ifdef  ISNAN
+                ss << "{\n\t\t";
+#endif
                 nItems += 1;
             }
+            else
+            {
+#ifdef  ISNAN
+                ss << "nCount += 1;\n\t\t";
+#endif
+                nItems += 1;
+            }
+#ifdef  ISNAN
+            if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+            {
+                ss << "tmpBottom = " << GetBottom() << ";\n\t\t";
+                ss << "if (isNan(";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                ss << "))\n\t\t\t";
+                ss << "tmp = ";
+                ss << Gen2("tmpBottom", "tmp") << ";\n\t\t";
+                ss << "else{\n\t\t\t";
+                ss << "tmp = ";
+                ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
+                ss << ";\n\t\t\t";
+                ss << "nCount += 1;\n\t\t";
+                ss << "}\n\t";
+                ss << "}\n\t";
+            }
+            else
+            {
+                ss << "tmp = ";
+                ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
+                ss << ";\n\t";
+            }
+#else
             ss << "tmp = ";
             // Generate the operation in binary form
             ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
             ss << ";\n\t";
+#endif
         }
         ss << "return tmp";
+#ifdef  ISNAN
+        if (isAverage())
+            ss << "/(double)nCount";
+#else
         if (isAverage())
             ss << "/(double)"<<nItems;
+#endif
         ss << ";\n}";
     }
     virtual bool isAverage() const { return false; }
@@ -377,15 +454,47 @@ public:
         ss << ") {\n\t";
         ss << "double tmp = 0.0;\n\t";
         ss << "int gid0 = get_global_id(0);\n\t";
-        ss << "for (int i = 0; i <" << nCurWindowSize << "; i++)\n\t\t";
+        ss << "for (int i = 0; i <" << nCurWindowSize << "; i++){\n\t\t";
+        ss << "int currentCount = i+gid0+1;\n";
         ss << "tmp += ";
         for (unsigned i = 0; i < vSubArguments.size(); i++)
         {
             if (i)
                 ss << "*";
+#ifdef  ISNAN
+            if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+            {
+                ss <<"(";
+                ss <<"(currentCount>";
+                if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+                     formula::svSingleVectorRef)
+                {
+                    const formula::SingleVectorRefToken* pSVR =
+                    dynamic_cast< const formula::SingleVectorRefToken*>
+                         (vSubArguments[i]->GetFormulaToken());
+                    ss<<pSVR->GetArrayLength();
+                }
+                else if(vSubArguments[i]->GetFormulaToken()->GetType() ==
+                          formula::svDoubleVectorRef)
+                {
+                    const formula::DoubleVectorRefToken* pSVR =
+                    dynamic_cast< const formula::DoubleVectorRefToken*>
+                          (vSubArguments[i]->GetFormulaToken());
+                    ss<<pSVR->GetArrayLength();
+                }
+                ss << ")&&isNan("<<vSubArguments[i]
+                    ->GenSlidingWindowDeclRef(true);
+                ss << ")?0:";
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
+                ss << ")";
+            }
+            else
+                ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
+#else
             ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
+#endif
         }
-        ss << ";\n\t";
+        ss << ";\n\t}\n\t";
         ss << "return tmp;\n";
         ss << "}";
     }
@@ -408,7 +517,11 @@ public:
     virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
     {
         std::stringstream ss;
+#ifdef  ISNAN
+        ss << "(0 =="<< lhs << ")? tmp : (" << rhs<<"+1.0)";
+#else
         ss << "(isNan(" << lhs << ")?"<<rhs<<":"<<rhs<<"+1.0)";
+#endif
         return ss.str();
     }
     virtual std::string BinFuncName(void) const { return "fcount"; }
