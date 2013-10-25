@@ -9,10 +9,12 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,nss,nss))
 
+$(eval $(call gb_ExternalPackage_set_outdir,nss,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,nss,nss))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,lib,\
+$(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		mozilla/dist/out/lib/libfreebl3.dylib \
 		mozilla/dist/out/lib/libnspr4.dylib \
 		mozilla/dist/out/lib/libnss3.dylib \
@@ -26,7 +28,7 @@ $(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,lib,\
 		mozilla/dist/out/lib/libssl3.dylib \
 ))
 else ifeq ($(OS),WNT)
-$(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,bin,\
+$(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		mozilla/dist/out/lib/freebl3.dll \
 		mozilla/dist/out/lib/nspr4.dll \
 		mozilla/dist/out/lib/nss3.dll \
@@ -41,7 +43,7 @@ $(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,bin,\
 		mozilla/dist/out/lib/ssl3.dll \
 ))
 else # OS!=WNT/MACOSX
-$(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,lib,\
+$(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		mozilla/dist/out/lib/libfreebl3.so \
 		mozilla/dist/out/lib/libnspr4.so \
 		mozilla/dist/out/lib/libnss3.so \

@@ -9,18 +9,20 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,curl,curl))
 
+$(eval $(call gb_ExternalPackage_set_outdir,curl,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,curl,curl))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 
 ifeq ($(OS)$(COM),WNTGCC)
-$(eval $(call gb_ExternalPackage_add_library_for_install,curl,bin/libcurl.dll,lib/.libs/libcurl.dll))
+$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.dll,lib/.libs/libcurl.dll))
 else ifeq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_library_for_install,curl,bin/libcurl.dll,lib/libcurl.dll))
+$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.dll,lib/libcurl.dll))
 else ifeq ($(OS),AIX)
-$(eval $(call gb_ExternalPackage_add_library_for_install,curl,lib/libcurl.so,lib/.libs/libcurl.so.4))
+$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so,lib/.libs/libcurl.so.4))
 else
-$(eval $(call gb_ExternalPackage_add_library_for_install,curl,lib/libcurl.so.4,lib/.libs/libcurl.so.4.2.0))
+$(eval $(call gb_ExternalPackage_add_file,curl,$(LIBO_LIB_FOLDER)/libcurl.so.4,lib/.libs/libcurl.so.4.2.0))
 endif
 
 endif # $(DISABLE_DYNLOADING)
