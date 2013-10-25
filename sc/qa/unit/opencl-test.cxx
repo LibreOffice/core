@@ -84,6 +84,7 @@ public:
     void testFinacialDISCFormula();
     void testFinacialINTRATEFormula();
     void testMathFormulaCos();
+    void testStatisticalFormulaNegbinomdist();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSGroundWater);
@@ -115,6 +116,7 @@ public:
     CPPUNIT_TEST(testFinacialDISCFormula);
     CPPUNIT_TEST(testFinacialINTRATEFormula);
     CPPUNIT_TEST(testMathFormulaCos);
+    CPPUNIT_TEST(testStatisticalFormulaNegbinomdist);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -938,6 +940,29 @@ void ScOpenclTest::testFinancialAccrintmFormula()
     {
         double fLibre = pDoc->GetValue(ScAddress(5, i, 0));
         double fExcel = pDocRes->GetValue(ScAddress(5, i, 0));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+    }
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
+//[AMLOEXT-57]
+void ScOpenclTest::testStatisticalFormulaNegbinomdist()
+{
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Negbinomdist."
+        ,XLS);
+    enableOpenCL(xDocSh);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Negbinomdist."
+        ,XLS);
+    ScDocument* pDocRes = xDocShRes->GetDocument();
+    CPPUNIT_ASSERT(pDocRes);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 0; i <= 9; ++i)
+    {
+        double fLibre = pDoc->GetValue(ScAddress(3,i,0));
+        double fExcel = pDocRes->GetValue(ScAddress(3,i,0));
+        std::cout<<fLibre<<"\t"<<fExcel<<"\n";
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
