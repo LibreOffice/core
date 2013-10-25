@@ -402,19 +402,28 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         // Wenn nicht vorhanden, wird Eintrag aufgenommen
         if( bDifferent )
         {
-            const XLineEndEntry* pEntry = maLineEndList->GetLineEnd( nPos );
+            const XLineEndEntry* pOldEntry = maLineEndList->GetLineEnd( nPos );
 
-            aEdtName.SetText( aName );
+            if(pOldEntry)
+            {
+                // #123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
+                XLineEndEntry* pEntry = new XLineEndEntry(pOldEntry->GetLineEnd(), aName);
+                delete maLineEndList->Replace(pEntry, nPos);
 
-            const XLineEndEntry aEntry(pEntry->GetLineEnd(), aName);
+                aEdtName.SetText( aName );
 
-            aLbLineEnds.Modify( aEntry, nPos, maLineEndList->GetUiBitmap( nPos ) );
-            aLbLineEnds.SelectEntryPos( nPos );
+                aLbLineEnds.Modify( *pEntry, nPos, maLineEndList->GetUiBitmap( nPos ) );
+                aLbLineEnds.SelectEntryPos( nPos );
 
-            // Flag fuer modifiziert setzen
-            *pnLineEndListState |= CT_MODIFIED;
+                // Flag fuer modifiziert setzen
+                *pnLineEndListState |= CT_MODIFIED;
 
-            *pPageType = 3;
+                *pPageType = 3;
+            }
+            else
+            {
+                OSL_ENSURE(false, "LineEnd to be modified not existing (!)");
+            }
         }
     }
     return( 0L );

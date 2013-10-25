@@ -631,13 +631,15 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             if (eCM != CM_RGB)
                 ConvertColorValues (aTmpColor, CM_RGB);
 
-            const XColorEntry aEntry(aTmpColor, aName);
+            // #123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
+            XColorEntry* pEntry = new XColorEntry(aTmpColor, aName);
+            delete maColorTab->Replace(pEntry, nPos);
 
-            aLbColor.Modify( aEntry, nPos );
+            aLbColor.Modify( *pEntry, nPos );
             aLbColor.SelectEntryPos( nPos );
 
-            aValSetColorTable.SetItemColor( nPos + 1, aEntry.GetColor() );
-            aValSetColorTable.SetItemText( nPos + 1, aEntry.GetName() );
+            aValSetColorTable.SetItemColor( nPos + 1, pEntry->GetColor() );
+            aValSetColorTable.SetItemText( nPos + 1, pEntry->GetName() );
             aEdtName.SetText( aName );
 
             aCtlPreviewOld.Invalidate();
