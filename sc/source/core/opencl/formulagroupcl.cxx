@@ -59,6 +59,7 @@ size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
         const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
         assert(pDVR);
+        assert (pDVR->GetArrays()[0].mbNumeric);
         pHostBuffer = const_cast<double*>(pDVR->GetArrays()[0].mpNumericArray);
         szHostBuffer = pDVR->GetArrayLength() * sizeof(double);
     }
@@ -76,6 +77,65 @@ size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
     assert(CL_SUCCESS == err);
     return 1;
 }
+
+/// Arguments that are actually compile-time constant string
+/// Currently, only the hash is passed.
+/// TBD(IJSUNG): pass also length and the actual string if there is a
+/// hash function collision
+class ConstStringArgument: public DynamicKernelArgument
+{
+public:
+    ConstStringArgument(const std::string &s,
+        std::shared_ptr<FormulaTreeNode> ft):
+            DynamicKernelArgument(s, ft) {}
+    /// Generate declaration
+    virtual void GenDecl(std::stringstream &ss) const
+    {
+        ss << "unsigned " << mSymName;
+    }
+    virtual void GenDeclRef(std::stringstream &ss) const
+    {
+        ss << GenSlidingWindowDeclRef(false);
+    }
+    virtual void GenSlidingWindowDecl(std::stringstream &ss) const
+    {
+        GenDecl(ss);
+    }
+    virtual std::string GenSlidingWindowDeclRef(bool=false) const
+    {
+        std::stringstream ss;
+        assert(GetFormulaToken()->GetType() == formula::svString);
+        FormulaToken *Tok = GetFormulaToken();
+        ss << Tok->GetString().hashCode() << "U";
+        return ss.str();
+    }
+    virtual size_t GetWindowSize(void) const
+    {
+        return 1;
+    }
+    /// Pass the 32-bit hash of the string to the kernel
+    virtual size_t Marshal(cl_kernel k, int argno, int)
+    {
+        FormulaToken *ref = mFormulaTree->GetFormulaToken();
+        assert(mpClmem == NULL);
+        cl_uint hashCode = 0;
+        if (ref->GetType() == formula::svString)
+        {
+            const rtl::OUString s = ref->GetString();
+            hashCode = s.hashCode();
+        } else {
+            assert(0 && "Unsupported");
+        }
+        // marshaling
+        // Obtain cl context
+        KernelEnv kEnv;
+        OclCalc::setKernelEnv(&kEnv);
+        // Pass the scalar result back to the rest of the formula kernel
+        cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), (void*)&hashCode);
+        assert(CL_SUCCESS == err);
+        return 1;
+    }
+};
 
 /// Arguments that are actually compile-time constants
 class DynamicKernelConstantArgument: public DynamicKernelArgument
@@ -119,14 +179,80 @@ public:
     }
 };
 
+class DynamicKernelStringArgument: public DynamicKernelArgument
+{
+public:
+    DynamicKernelStringArgument(const std::string &s,
+        std::shared_ptr<FormulaTreeNode> ft):
+        DynamicKernelArgument(s, ft) {}
+
+    virtual void GenSlidingWindowFunction(std::stringstream &) {}
+    /// Generate declaration
+    virtual void GenDecl(std::stringstream &ss) const
+    {
+        ss << "__global unsigned int *"<<mSymName;
+    }
+    virtual size_t Marshal(cl_kernel, int, int);
+};
+
+/// Marshal a string vector reference
+size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int)
+{
+    FormulaToken *ref = mFormulaTree->GetFormulaToken();
+    assert(mpClmem == NULL);
+    // Obtain cl context
+    KernelEnv kEnv;
+    OclCalc::setKernelEnv(&kEnv);
+    cl_int err;
+    formula::VectorRefArray vRef;
+    size_t nStrings = 0;
+    if (ref->GetType() == formula::svSingleVectorRef) {
+        const formula::SingleVectorRefToken* pSVR =
+            dynamic_cast< const formula::SingleVectorRefToken* >(ref);
+        assert(pSVR);
+        nStrings = pSVR->GetArrayLength();
+        vRef = pSVR->GetArray();
+    } else if (ref->GetType() == formula::svDoubleVectorRef) {
+        const formula::DoubleVectorRefToken* pDVR =
+            dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
+        assert(pDVR);
+        assert(!pDVR->GetArrays()[0].mbNumeric);
+        nStrings = pDVR->GetArrayLength();
+        vRef = pDVR->GetArrays()[0];
+    }
+    size_t szHostBuffer = nStrings * sizeof(cl_int);
+    // Marshal strings. Right now we pass hashes of these string
+    mpClmem = clCreateBuffer(kEnv.mpkContext,
+            (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
+            szHostBuffer, NULL, &err);
+    assert(CL_SUCCESS == err);
+    cl_uint *pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
+            kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
+            szHostBuffer, 0, NULL, NULL, &err);
+    assert(err == CL_SUCCESS);
+    for (size_t i = 0; i < nStrings; i++)
+    {
+        const OUString tmp = vRef.mpStringArray[i];
+        pHashBuffer[i] = tmp.hashCode();
+    }
+    err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
+            pHashBuffer, 0, NULL, NULL);
+    assert(err == CL_SUCCESS);
+
+    err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
+    assert(CL_SUCCESS == err);
+    return 1;
+}
+
 /// Handling a Double Vector that is used as a sliding window input
 /// to either a sliding window average or sum-of-products
-class DynamicKernelSlidingArgument: public DynamicKernelArgument
+template<class Base>
+class DynamicKernelSlidingArgument: public Base
 {
 public:
     DynamicKernelSlidingArgument(const std::string &s,
         std::shared_ptr<FormulaTreeNode> ft):
-        DynamicKernelArgument(s, ft)
+        Base(s, ft)
     {
         FormulaToken *t = ft->GetFormulaToken();
         assert(t->GetType() == formula::svDoubleVectorRef);
@@ -142,12 +268,12 @@ public:
     {
         std::stringstream ss;
         if (!bIsStartFixed && !bIsEndFixed)
-            ss << mSymName << "[i + gid0]";
+            ss << Base::GetName() << "[i + gid0]";
         else
-            ss << mSymName << "[i]";
+            ss << Base::GetName() << "[i]";
         return ss.str();
     }
-private:
+protected:
     bool bIsStartFixed, bIsEndFixed;
 };
 
@@ -203,6 +329,31 @@ public:
         ss << ";\n}";
     }
     virtual bool isAverage() const { return false; }
+};
+
+// Strictly binary operators
+class Binary: public SlidingFunctionBase, public OpBase
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string sSymName, SubArguments &vSubArguments)
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        assert(vSubArguments.size() == 2);
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ", ";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "int gid0 = get_global_id(0), i = 0;\n\t";
+        ss << "double tmp = ";
+        ss << Gen2(vSubArguments[0]->GenSlidingWindowDeclRef(false),
+                vSubArguments[1]->GenSlidingWindowDeclRef(false)) << ";\n\t";
+        ss << "return tmp;\n}";
+    }
 };
 
 class SumOfProduct: public SlidingFunctionBase, public OpBase
@@ -261,6 +412,18 @@ public:
         return ss.str();
     }
     virtual std::string BinFuncName(void) const { return "fcount"; }
+};
+
+class OpEqual: public Binary {
+public:
+    virtual std::string GetBottom(void) { return "0"; }
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const
+    {
+        std::stringstream ss;
+        ss << "strequal("<< lhs << "," << rhs <<")";
+        return ss.str();
+    }
+    virtual std::string BinFuncName(void) const { return "eq"; }
 };
 
 class OpSum: public Reduction {
@@ -468,17 +631,40 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
             case ocPush:
                 if (pChild->GetType() == formula::svDoubleVectorRef)
                 {
-                    mvSubArguments.push_back(
-                            SubArgument(new DynamicKernelSlidingArgument(
-                                    ts, ft->Children[i])));
+                    const formula::DoubleVectorRefToken* pDVR =
+                        dynamic_cast< const formula::DoubleVectorRefToken* >(pChild);
+                    assert(pDVR);
+                    if (pDVR->GetArrays()[0].mbNumeric)
+                        mvSubArguments.push_back(
+                                SubArgument(new DynamicKernelSlidingArgument
+                                    <DynamicKernelArgument>(ts, ft->Children[i])));
+                    else
+                        mvSubArguments.push_back(
+                                SubArgument(new DynamicKernelSlidingArgument
+                                    <DynamicKernelStringArgument>(
+                                        ts, ft->Children[i])));
                 } else if (pChild->GetType() == formula::svSingleVectorRef) {
-                    mvSubArguments.push_back(
-                            SubArgument(new DynamicKernelArgument(ts,
-                                    ft->Children[i])));
+                    const formula::SingleVectorRefToken* pSVR =
+                        dynamic_cast< const formula::SingleVectorRefToken* >(pChild);
+                    assert(pSVR);
+                    if (pSVR->GetArray().mbNumeric)
+                        mvSubArguments.push_back(
+                                SubArgument(new DynamicKernelArgument(ts,
+                                        ft->Children[i])));
+                    else
+                        mvSubArguments.push_back(
+                                SubArgument(new DynamicKernelStringArgument(
+                                        ts, ft->Children[i])));
                 } else if (pChild->GetType() == formula::svDouble) {
                     mvSubArguments.push_back(
                             SubArgument(new DynamicKernelConstantArgument(ts,
                                     ft->Children[i])));
+                } else if (pChild->GetType() == formula::svString) {
+                    mvSubArguments.push_back(
+                            SubArgument(new ConstStringArgument(ts,
+                                    ft->Children[i])));
+                } else {
+                    assert(0 && "Unknown type pushed");
                 }
                 break;
             case ocDiv:
@@ -573,8 +759,10 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 mvSubArguments.push_back(SoPHelper<OpHarMean>(ts,
                     ft->Children[i]));
                 break;
-
-
+            case ocEqual:
+                mvSubArguments.push_back(SoPHelper<OpEqual>(ts,
+                    ft->Children[i]));
+                break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getEffect"))))

@@ -102,6 +102,7 @@ public:
         return 0;
     }
     virtual std::string DumpOpName(void) const { return std::string(""); }
+    const std::string& GetName(void) const { return mSymName; }
 protected:
     const std::string mSymName;
     std::shared_ptr<FormulaTreeNode> mFormulaTree;
