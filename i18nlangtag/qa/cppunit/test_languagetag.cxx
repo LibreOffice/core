@@ -604,7 +604,7 @@ static bool checkMapping( const OUString rStr1, const OUString& rStr2 )
     if (rStr1 == "qu-EC"       ) return rStr2 == "quz-EC";
     if (rStr1 == "qu-PE"       ) return rStr2 == "quz-PE";
     if (rStr1 == "ff-NG"       ) return rStr2 == "fuv-NG";
-    if (rStr1 == "ji-IL"       ) return rStr2 == "yi-Hebr-IL";
+    if (rStr1 == "ji-IL"       ) return rStr2 == "yi-IL";
     if (rStr1 == "iu-CA"       ) return rStr2 == "iu-Latn-CA";
     if (rStr1 == "iu"          ) return rStr2 == "iu-Latn";
     if (rStr1 == "gbz-AF"      ) return rStr2 == "prs-AF";
@@ -621,6 +621,8 @@ static bool checkMapping( const OUString rStr1, const OUString& rStr2 )
     if (rStr1 == "sr-Cyrl-BA"  ) return rStr2 == "sr-BA";
     if (rStr1 == "sr-Cyrl-CS"  ) return rStr2 == "sr-CS";
     if (rStr1 == "sr-Cyrl"     ) return rStr2 == "sr";
+    if (rStr1 == "yi-Hebr-US"  ) return rStr2 == "yi-US";
+    if (rStr1 == "yi-Hebr-IL"  ) return rStr2 == "yi-IL";
     return rStr1 == rStr2;
 }
 

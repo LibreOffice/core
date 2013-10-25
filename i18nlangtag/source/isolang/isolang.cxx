@@ -672,8 +672,8 @@ static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_TAJIK_LSO,                           "tg-Cyrl", ""  , 0     },   // MS
     { LANGUAGE_AZERI_LATIN,                         "az-Latn", "AZ", 0     },   // macrolanguage code; MS
     { LANGUAGE_AZERI_LATIN_LSO,                     "az-Latn", ""  , 0     },   // macrolanguage code; MS
-    { LANGUAGE_USER_YIDDISH_US,                     "yi-Hebr", "US", 0     },   // macrolanguage code; MS
-    { LANGUAGE_YIDDISH,                             "yi-Hebr", "IL", 0     },   // macrolanguage code; MS
+    { LANGUAGE_USER_YIDDISH_US,                     "yi-Hebr", "US", kSAME },   // macrolanguage code; MS, Hebr is suppress-script
+    { LANGUAGE_YIDDISH,                             "yi-Hebr", "IL", kSAME },   // macrolanguage code; MS, Hebr is suppress-script
     { LANGUAGE_UZBEK_LATIN,                         "uz-Latn", "UZ", 0     },   // macrolanguage code
     { LANGUAGE_UZBEK_LATIN_LSO,                     "uz-Latn", ""  , 0     },
 //  { LANGUAGE_SINDHI,                              "sd-Deva", "IN", 0     },   // MS, TODO: see comment above in aImplIsoLangEntries
