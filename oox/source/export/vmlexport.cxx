@@ -326,15 +326,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
     if ( m_nShapeType == ESCHER_ShpInst_Line )
         AddLineDimensions( rRect );
     else
-    {
-        Rectangle aRect(rRect);
-        if (m_pNdTopLeft)
-        {
-            aRect = m_pSdrObject->GetSnapRect();
-            aRect -= *m_pNdTopLeft;
-        }
-        AddRectangleDimensions( *m_pShapeStyle, aRect );
-    }
+        AddRectangleDimensions( *m_pShapeStyle, rRect );
 
     // properties
     bool bAlreadyWritten[ 0xFFF ];
