@@ -787,15 +787,15 @@ namespace frm
                     OUString aQuote = xMeta->getIdentifierQuoteString();
                     OUString aStatement("SELECT ");
                     if (aBoundFieldName.isEmpty())   // act like a combobox
-                        aStatement += OUString("DISTINCT ");
+                        aStatement += "DISTINCT ";
 
                     aStatement += quoteName(aQuote,aFieldName);
                     if (!aBoundFieldName.isEmpty())
                     {
-                        aStatement += OUString(", ");
+                        aStatement += ", ";
                         aStatement += quoteName(aQuote, aBoundFieldName);
                     }
-                    aStatement += OUString(" FROM ");
+                    aStatement += " FROM ";
 
                     OUString sCatalog, sSchema, sTable;
                     qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, eInDataManipulation );

@@ -396,7 +396,7 @@ void BackendImpl::implProcessHelp(
                 if( !xSFA->isFolder( aExpandedHelpURL ) )
                 {
                     OUString aErrStr = getResourceString( RID_STR_HELPPROCESSING_GENERAL_ERROR );
-                    aErrStr += OUString("No help folder" );
+                    aErrStr += "No help folder";
                     OWeakObject* oWeakThis = static_cast<OWeakObject *>(this);
                     throw deployment::DeploymentException( OUString(), oWeakThis,
                                                            makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
@@ -439,9 +439,9 @@ void BackendImpl::implProcessHelp(
                             aJarFile, rtl_UriCharClassPchar,
                             rtl_UriEncodeIgnoreEscapes,
                             RTL_TEXTENCODING_UTF8 );
-                        OUString aDestBasePath = OUString("vnd.sun.star.zip://" );
+                        OUString aDestBasePath = "vnd.sun.star.zip://";
                         aDestBasePath += aEncodedJarFilePath;
-                        aDestBasePath += OUString("/" );
+                        aDestBasePath += "/" ;
 
                         sal_Int32 nLenLangFolderURL = aLangURL.getLength() + 1;
 
@@ -534,14 +534,14 @@ void BackendImpl::implProcessHelp(
                                 aErrStr += aErrMsg;
                                 if( nErrStrId == RID_STR_HELPPROCESSING_XMLPARSING_ERROR && !aErrorInfo.m_aXMLParsingFile.isEmpty() )
                                 {
-                                    aErrStr += OUString(" in " );
+                                    aErrStr += " in ";
 
                                     OUString aDecodedFile = rtl::Uri::decode( aErrorInfo.m_aXMLParsingFile,
                                                                                    rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                                     aErrStr += aDecodedFile;
                                     if( aErrorInfo.m_nXMLParsingLine != -1 )
                                     {
-                                        aErrStr += OUString(", line " );
+                                        aErrStr += ", line ";
                                         aErrStr += OUString::number( aErrorInfo.m_nXMLParsingLine );
                                     }
                                 }

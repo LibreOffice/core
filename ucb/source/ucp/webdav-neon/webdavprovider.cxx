@@ -173,7 +173,7 @@ ContentProvider::queryContent(
         nPos = aURL.indexOf( '/', nPos + 1 );
         if ( nPos == -1 )
         {
-            aURL += OUString("/");
+            aURL += "/";
             bNewId = true;
         }
     }

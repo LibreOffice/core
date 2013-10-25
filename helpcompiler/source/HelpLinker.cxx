@@ -810,7 +810,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         //This part is used when compileExtensionHelp is called from the extensions manager.
         //If extension help is compiled using helplinker in the build process
         OUString aIdxCaptionPathFileURL( *pOfficeHelpPath );
-        aIdxCaptionPathFileURL += OUString("/idxcaption.xsl");
+        aIdxCaptionPathFileURL += "/idxcaption.xsl";
 
         OString aOStr_IdxCaptionPathFileURL( OUStringToOString
             ( aIdxCaptionPathFileURL, fs::getThreadTextEncoding() ) );
@@ -835,7 +835,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         //then  -idxcontent must be supplied
         //This part is used when compileExtensionHelp is called from the extensions manager.
         OUString aIdxContentPathFileURL( *pOfficeHelpPath );
-        aIdxContentPathFileURL += OUString("/idxcontent.xsl");
+        aIdxContentPathFileURL += "/idxcontent.xsl";
 
         OString aOStr_IdxContentPathFileURL( OUStringToOString
             ( aIdxContentPathFileURL, fs::getThreadTextEncoding() ) );
@@ -971,8 +971,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     // The following basically checks if the help.tree is well formed XML.
     // Apparently there have been cases when translations contained
     // non-well-formed XML in the past.
-    OUString aTreeFileURL = aExtensionLanguageRoot;
-    aTreeFileURL += OUString("/help.tree");
+    OUString aTreeFileURL = aExtensionLanguageRoot + "/help.tree";
     osl::DirectoryItem aTreeFileItem;
     osl::FileBase::RC rcGet = osl::DirectoryItem::get( aTreeFileURL, aTreeFileItem );
     osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );

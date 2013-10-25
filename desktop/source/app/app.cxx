@@ -1504,9 +1504,8 @@ int Desktop::Main()
 #ifdef DBG_UTIL
         //include buildid in non product builds
         OUString aDefault("development");
-        aTitle += OUString(" [");
-        OUString aVerId( utl::Bootstrap::getBuildIdData(aDefault));
-        aTitle += aVerId;
+        aTitle += " [";
+        aTitle += utl::Bootstrap::getBuildIdData(aDefault);
         aTitle += "]";
 #endif
 

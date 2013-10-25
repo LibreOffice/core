@@ -1111,7 +1111,7 @@ void handleNameClashRename(
         aOldTitlePre = aOldTitle;
 
     if ( nPos > 0 )
-        aOldTitlePre += OUString("_");
+        aOldTitlePre += "_";
 
     sal_Bool bContinue = sal_True;
     do

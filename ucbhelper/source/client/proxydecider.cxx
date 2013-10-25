@@ -718,7 +718,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
                         aServer = aToken;
                     }
 
-                    aToken += OUString(":*");
+                    aToken += ":*";
                 }
                 else
                 {

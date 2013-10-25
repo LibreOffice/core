@@ -2307,7 +2307,7 @@ namespace
         {
             OUString aIdent = _pConenction->getContent()->getIdentifier()->getContentIdentifier();
             if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
-                aIdent += OUString("/");
+                aIdent += "/";
             aIdent += oldName;
             aName = aIdent;
         }

@@ -65,13 +65,11 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     Sequence<OUString> aPropNames(aNodeNames.getLength() * 4);
     OUString* pNames = aPropNames.getArray();
     sal_Int32 nName = 0;
-    sPropPrefix += OUString("/");
+    sPropPrefix += "/";
     sal_Int32 nNode;
     for(nNode = 0; nNode < aNodeNames.getLength(); nNode++)
     {
-        OUString sStart(sPropPrefix);
-        sStart += pNodeNames[nNode];
-        sStart += OUString("/");
+        OUString sStart = sPropPrefix + pNodeNames[nNode] + "/";
         pNames[nName] = sStart;     pNames[nName++] += cReplaceFont;
         pNames[nName] = sStart;     pNames[nName++] += cSubstituteFont;
         pNames[nName] = sStart;     pNames[nName++] += cAlways;
@@ -125,10 +123,7 @@ void SvtFontSubstConfig::Commit()
         const uno::Type& rBoolType = ::getBooleanCppuType();
         for(size_t i = 0; i < pImpl->aSubstArr.size(); i++)
         {
-            OUString sPrefix(sNode);
-            sPrefix += "/_";
-            sPrefix += OUString::number(i);
-            sPrefix += "/";
+            OUString sPrefix = sNode + "/_" + OUString::number(i) + "/";
 
             SubstitutionStruct& pSubst = pImpl->aSubstArr[i];
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sReplaceFont;

@@ -166,7 +166,7 @@ static BOOL GetCrashDataPath( LPTSTR szBuffer )
 
     if ( !ustrValue.isEmpty() )
     {
-        ustrValue += OUString("/user/crashdata");
+        ustrValue += "/user/crashdata";
 
         ::osl::FileBase::RC result = ::osl::Directory::createPath( ustrValue );
 

@@ -717,7 +717,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                             {
                                                 OUString sCondition("is-true-formula(");
                                                 sCondition += xSheetCondition->getFormula1();
-                                                sCondition += OUString(")");
+                                                sCondition += ")";
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, rScXMLExport.EncodeStyleName( sStyleName ));
                                                 OUString sOUBaseAddress;
@@ -738,9 +738,9 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                     else
                                                         sCondition = OUString("cell-content-is-not-between(");
                                                     sCondition += xSheetCondition->getFormula1();
-                                                    sCondition += OUString(",");
+                                                    sCondition += ",";
                                                     sCondition += xSheetCondition->getFormula2();
-                                                    sCondition += OUString(")");
+                                                    sCondition += ")";
                                                 }
                                                 else
                                                 {
@@ -748,22 +748,22 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                     switch (aOperator)
                                                     {
                                                         case sheet::ConditionOperator_LESS:
-                                                            sCondition += OUString("<");
+                                                            sCondition += "<";
                                                         break;
                                                         case sheet::ConditionOperator_GREATER:
-                                                            sCondition += OUString(">");
+                                                            sCondition += ">";
                                                         break;
                                                         case sheet::ConditionOperator_LESS_EQUAL:
-                                                            sCondition += OUString("<=");
+                                                            sCondition += "<=";
                                                         break;
                                                         case sheet::ConditionOperator_GREATER_EQUAL:
-                                                            sCondition += OUString(">=");
+                                                            sCondition += ">=";
                                                         break;
                                                         case sheet::ConditionOperator_EQUAL:
-                                                            sCondition += OUString("=");
+                                                            sCondition += "=";
                                                         break;
                                                         case sheet::ConditionOperator_NOT_EQUAL:
-                                                            sCondition += OUString("!=");
+                                                            sCondition += "!=";
                                                         break;
                                                         default:
                                                         {
@@ -1081,7 +1081,7 @@ bool XmlScPropHdl_CellProtection::exportXML(
         else if (aCellProtection.IsFormulaHidden && aCellProtection.IsLocked)
         {
             rStrExpValue = GetXMLToken(XML_PROTECTED);
-            rStrExpValue += OUString(" ");
+            rStrExpValue += " ";
             rStrExpValue += GetXMLToken(XML_FORMULA_HIDDEN);
             bRetval = true;
         }

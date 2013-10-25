@@ -230,7 +230,7 @@ int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRec
     static int ppt_anim_debug_stream_number = 1;
     OUString ppt_anim_debug_filename("ppt-animation-import-debug-output-");
     ppt_anim_debug_filename += OUString::number(ppt_anim_debug_stream_number++);
-    ppt_anim_debug_filename += OUString(".xml");
+    ppt_anim_debug_filename += ".xml";
     mpFile = fopen( OUStringToOString( ppt_anim_debug_filename, RTL_TEXTENCODING_UTF8).getStr() , "w+" );
 #endif
     dump("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");

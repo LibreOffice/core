@@ -303,9 +303,7 @@ namespace {
 
 bool writeInfo(void * registryKey, OUString const & implementationName,
                css::uno::Sequence< OUString > const & serviceNames) {
-    OUString keyName("/");
-    keyName += implementationName;
-    keyName += OUString("/UNO/SERVICES");
+    OUString keyName = "/" + implementationName + "/UNO/SERVICES";
     css::uno::Reference< css::registry::XRegistryKey > key;
     try {
         key = static_cast< css::registry::XRegistryKey * >(registryKey)->

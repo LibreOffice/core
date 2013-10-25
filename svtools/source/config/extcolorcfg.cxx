@@ -268,7 +268,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
             m_aComponentDisplayNames.insert(TDisplayNames::value_type(pIter->getToken(1,'/',nIndex),sComponentDisplayName));
         }
 
-        *pIter += OUString("/Entries");
+        *pIter += "/Entries";
         uno::Sequence < OUString > aDisplayNames = GetPropertyNames(*pIter);
         lcl_addString(aDisplayNames,sDisplayName);
 
@@ -472,7 +472,7 @@ sal_Bool ExtendedColorConfig_Impl::ExistsScheme(const OUString& _sSchemeName)
     OUString sBase("ExtendedColorScheme/ColorSchemes");
 
     uno::Sequence < OUString > aComponentNames = GetPropertyNames(sBase);
-    sBase += OUString("/") + _sSchemeName;
+    sBase += "/" + _sSchemeName;
     const OUString* pCompIter = aComponentNames.getConstArray();
     const OUString* pCompEnd  = pCompIter + aComponentNames.getLength();
     for(;pCompIter != pCompEnd && *pCompIter != sBase;++pCompIter)

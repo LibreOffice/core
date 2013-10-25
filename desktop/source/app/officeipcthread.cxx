@@ -1001,13 +1001,13 @@ static void AddConversionsToDispatchList(
 
     if( !rParamOut.trim().isEmpty() )
     {
-        aParam += OUString(";");
+        aParam += ";";
         aParam += aOutDir;
     }
     else
     {
         ::osl::FileBase::getSystemPathFromFileURL( aPWD, aPWD );
-        aParam += OUString(";" ) + aPWD;
+        aParam += ";" + aPWD;
     }
 
     for (std::vector< OUString >::const_iterator i(rRequestList.begin());

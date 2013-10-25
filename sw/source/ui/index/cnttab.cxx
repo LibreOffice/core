@@ -3129,9 +3129,9 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         long nDebugWidth = pDebugCtrl->GetSizePixel().Width();
 
         sMessage += OUString::number( nDebugXPos );
-        sMessage += OUString(" ");
+        sMessage += " ";
         sMessage += OUString::number(nDebugXPos + nDebugWidth);
-        sMessage += OUString(" | ");
+        sMessage += " | ";
     }
 
 #endif

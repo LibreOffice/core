@@ -532,7 +532,7 @@ namespace xmloff
                     if (!sReferencedBy.isEmpty())
                         // it's not the first _rxObject referring to the xCurrentReference
                         // -> separate the id
-                        sReferencedBy += OUString(",");
+                        sReferencedBy += ",";
                     sReferencedBy += sCurrentId;
                 }
             }

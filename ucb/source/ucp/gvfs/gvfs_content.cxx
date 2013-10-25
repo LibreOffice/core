@@ -499,7 +499,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     OUString aURL = getOUURI();
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-        aURL += OUString("/");
+        aURL += "/";
 
     name = create_document ? "[New_Content]" : "[New_Collection]";
     // This looks problematic to me cf. webdav
@@ -700,7 +700,7 @@ Content::makeNewURL( const char */*newName*/ )
 {
     OUString aNewURL = getParentURL();
     if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
-        aNewURL += OUString("/");
+        aNewURL += "/";
 
     char *name = gnome_vfs_escape_string( m_info.name );
     aNewURL += GnomeToOUString( name );
@@ -882,7 +882,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     sal_Int32 nURLPos = aURL.lastIndexOf( '/' );
 
     if ( nURLPos != ( aURL.getLength() - 1 ) )
-        aURL += OUString("/");
+        aURL += "/";
 
     sal_Int32 nLen = aURL.getLength();
 

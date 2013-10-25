@@ -214,8 +214,7 @@ void SAL_CALL TestOutputStream::writeBytes(
         m_bMore = true;
     }
     m_sStart
-        += OUString(reinterpret_cast< const sal_Char * >(rData.
-                                                              getConstArray()),
+        += OUString(reinterpret_cast< const sal_Char * >(rData.getConstArray()),
                          nLen, RTL_TEXTENCODING_ISO_8859_1);
 }
 
@@ -224,7 +223,7 @@ OUString TestOutputStream::getStart() const
 {
     OUString sResult = m_sStart;
     if (m_bMore)
-        sResult += OUString("...");
+        sResult += "...";
     return sResult;
 }
 
@@ -272,14 +271,13 @@ OUString ProgressHandler::toString(const uno::Any & rStatus)
         OUString sResult;
         if (aStart.Text.getLength() > 0)
         {
-            sResult = aStart.Text;
-            sResult += OUString(" ");
+            sResult = aStart.Text + " ";
         }
-        sResult += OUString("[");
+        sResult += "[";
         sResult += OUString::valueOf(aStart.Minimum);
-        sResult += OUString("..");
+        sResult += "..";
         sResult += OUString::valueOf(aStart.Maximum);
-        sResult += OUString("]");
+        sResult += "]";
         return sResult;
     }
 
@@ -290,9 +288,7 @@ OUString ProgressHandler::toString(const uno::Any & rStatus)
     sal_Int32 nValue;
     if (rStatus >>= nValue)
     {
-        OUString sResult("..");
-        sResult += OUString::valueOf(nValue);
-        sResult += OUString("..");
+        OUString sResult = ".." + OUString::valueOf(nValue) + "..";
         return OUString(sResult);
     }
 
@@ -387,10 +383,10 @@ OUString Ucb::getUnoURL()
     OUString aUnoURL(
                          "uno:socket,host=localhost,port=8121;");
     if (m_aProtocol.getLength() == 0)
-        aUnoURL += OUString("urp");
+        aUnoURL += "urp";
     else
         aUnoURL += m_aProtocol;
-    aUnoURL += OUString(";UCB.Factory");
+    aUnoURL += ";UCB.Factory";
     return aUnoURL;
 }
 
@@ -443,8 +439,7 @@ sal_Bool Ucb::init()
                 aInfos(xProvMgr->queryContentProviders());
             for (sal_Int32 i = 0; i < aInfos.getLength(); ++i)
             {
-                String aText("    ");
-                aText += OUString(aInfos[i].Scheme);
+                OUString aText = "    " + aInfos[i].Scheme;
                 print(aText);
             }
         }
@@ -2136,10 +2131,10 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
         case MYWIN_ITEMID_FETCHSIZE:
         {
             m_nFetchSize = aCmdLine.ToInt32();
-            String aText;
+            OUString aText;
             if (m_nFetchSize > 0)
             {
-                aText.AssignAscii("Fetch size set to ");
+                aText = "Fetch size set to ";
                 aText += OUString::number(m_nFetchSize);
             }
             else

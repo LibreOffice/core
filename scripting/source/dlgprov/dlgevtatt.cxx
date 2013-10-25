@@ -533,9 +533,9 @@ namespace dlgprov
             sal_Int32 nIndex = sScriptCode.indexOf( ':' );
             if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
             {
-                sScriptURL = OUString("vnd.sun.star.script:");
+                sScriptURL = "vnd.sun.star.script:";
                 sScriptURL += sScriptCode.copy( nIndex + 1 );
-                sScriptURL += OUString("?language=Basic&location=");
+                sScriptURL += "?language=Basic&location=";
                 sScriptURL += sScriptCode.copy( 0, nIndex );
             }
             ScriptEvent aSFScriptEvent( aScriptEvent );

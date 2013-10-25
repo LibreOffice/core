@@ -910,7 +910,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 {
                     if ( !aStyleMirrorAttrValue.isEmpty() )
                     {
-                        aStyleMirrorAttrValue += OUString(" " );
+                        aStyleMirrorAttrValue += " ";
                     }
 
                     if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_LEFT_PAGES ) )
@@ -990,7 +990,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         if( bMoveProtect && -1 == aProtectAttrValue.indexOf( rPosition ) )
         {
             if( !aProtectAttrValue.isEmpty() )
-                aProtectAttrValue += OUString( sal_Unicode( ' ' ) );
+                aProtectAttrValue += " ";
             aProtectAttrValue += rPosition;
         }
 
@@ -998,7 +998,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         if( bSizeProtect && -1 == aProtectAttrValue.indexOf( rSize ) )
         {
             if( !aProtectAttrValue.isEmpty() )
-                aProtectAttrValue += OUString( sal_Unicode( ' ' ) );
+                aProtectAttrValue += " ";
             aProtectAttrValue += rSize;
         }
 

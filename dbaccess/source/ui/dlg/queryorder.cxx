@@ -232,7 +232,7 @@ OUString DlgOrderCrit::GetOrderList( ) const
         if(m_aColumnList[i]->GetSelectEntryPos() != 0)
         {
             if(!sOrder.isEmpty())
-                sOrder += OUString(",");
+                sOrder += ",";
 
             OUString sName = m_aColumnList[i]->GetSelectEntry();
             sOrder += ::dbtools::quoteName(sQuote,sName);

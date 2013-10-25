@@ -825,14 +825,9 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
                               const OUString& _rName,
                               ColumnInformationMap& _rInfo)
 {
-    static OUString STR_WHERE = OUString(" WHERE ");
-
-    OUString sSelect = OUString("SELECT ");
-    sSelect += _rName;
-    sSelect += OUString(" FROM ");
-    sSelect += _sComposedName;
-    sSelect += STR_WHERE;
-    sSelect += OUString("0 = 1");
+    OUString sSelect = "SELECT " + _rName +
+        " FROM " + _sComposedName +
+        " WHERE 0 = 1";
 
     try
     {

@@ -235,10 +235,9 @@ void MacabAddressBook::manageDuplicateGroups(::std::vector<MacabGroup *> _xGroup
         // duplicate!
         if(count != 1)
         {
-            OUString sName = (*iter1)->getName();
-            sName += OUString(" (") +
+            OUString sName = (*iter1)->getName() + " (" +
                 OUString::number(count) +
-                OUString(")");
+                ")";
             (*iter1)->setName(sName);
         }
     }

@@ -888,7 +888,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                 OUString aFileURL(m_sDirectory);
                 sal_Int32 nIndex = aFileURL.lastIndexOf('/');
                 if (nIndex != aFileURL.getLength()-1)
-                    aFileURL += OUString("/");
+                    aFileURL += "/";
                 aFileURL += m_sFilename;
 
                 TFileDialogCustomize iCustom = impl_getCustomizeInterface();

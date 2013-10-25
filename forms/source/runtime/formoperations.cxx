@@ -395,7 +395,7 @@ namespace frm
 
                 OUString sValue = OUString::number( nCount );
                 if ( !bFinalCount )
-                    sValue += OUString(" *");
+                    sValue += " *";
 
                 aState.State <<= sValue;
                 aState.Enabled = sal_True;

@@ -1093,15 +1093,15 @@ void AppendConfigToken( OUString& _rURL, sal_Bool _bQuestionMark )
     // query part exists?
     if ( _bQuestionMark )
         // no, so start with '?'
-        _rURL += OUString("?");
+        _rURL += "?";
     else
         // yes, so only append with '&'
-        _rURL += OUString("&");
+        _rURL += "&";
 
     // set parameters
-    _rURL += OUString("Language=");
+    _rURL += "Language=";
     _rURL += utl::ConfigManager::getLocale();
-    _rURL += OUString("&System=");
+    _rURL += "&System=";
     _rURL += SvtHelpOptions().GetSystem();
 }
 
@@ -1143,10 +1143,8 @@ namespace
 ::com::sun::star::util::URL createHelpAgentURL(const OUString& _sModuleName, const OString& sHelpId)
 {
     ::com::sun::star::util::URL aURL;
-    aURL.Complete = OUString( "vnd.sun.star.help://" );
-    aURL.Complete += _sModuleName;
-    aURL.Complete += OUString( "/" );
-    aURL.Complete += OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8);
+    aURL.Complete = "vnd.sun.star.help://" +
+        _sModuleName + "/" + OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8);
 
     OUString sAnchor;
     OUString sTempURL = aURL.Complete;
@@ -1155,7 +1153,7 @@ namespace
     AppendConfigToken(aURL.Complete,sal_True);
     if ( bHasAnchor )
     {
-        aURL.Complete += OUString("#");
+        aURL.Complete += "#";
         aURL.Complete += sAnchor;
     }
     return aURL;

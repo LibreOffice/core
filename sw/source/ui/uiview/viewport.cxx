@@ -704,7 +704,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
                     m_pWrtShell->GetContentAtPos( aPos, aCnt );
                     if( !aCnt.sStr.isEmpty() )
                     {
-                        sPageStr += OUString("  - ");
+                        sPageStr += "  - ";
                         sal_Int32 nChunkLen = std::min<sal_Int32>(aCnt.sStr.getLength(), 80);
                         OUString sChunk = aCnt.sStr.copy(0, nChunkLen);
                         sPageStr = sChunk + sPageStr;

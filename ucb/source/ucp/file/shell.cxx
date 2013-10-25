@@ -1190,8 +1190,7 @@ shell::move( sal_Int32 CommandId,
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    OUString aPostFix( "_" );
-                    aPostFix += OUString::number( ++nTry );
+                    OUString aPostFix =  "_" + OUString::number( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 
@@ -1417,8 +1416,7 @@ shell::copy(
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    OUString aPostFix( "_" );
-                    aPostFix += OUString::number( ++nTry );
+                    OUString aPostFix =  "_" + OUString::number( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 
@@ -2039,7 +2037,7 @@ shell::copy_recursive( const OUString& srcUnqPath,
                                           RTL_TEXTENCODING_UTF8 );
 
                 if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
-                    newDstUnqPath += OUString("/");
+                    newDstUnqPath += "/";
 
                 newDstUnqPath += tit;
 

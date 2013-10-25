@@ -910,7 +910,7 @@ BaseContent::setPropertyValues(
                             // m_aUncPath contains parent's URI.
 
                             if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
-                                m_aUncPath += OUString("/");
+                                m_aUncPath += "/";
 
                             m_aUncPath += rtl::Uri::encode( NewTitle,
                                                             rtl_UriCharClassPchar,
@@ -951,7 +951,7 @@ BaseContent::setPropertyValues(
 
             OUString aDstName = getParentName( m_aUncPath );
             if( aDstName.lastIndexOf( sal_Unicode('/') ) != aDstName.getLength() - 1 )
-                aDstName += OUString("/");
+                aDstName += "/";
 
             aDstName += rtl::Uri::encode( NewTitle,
                                           rtl_UriCharClassPchar,
@@ -1247,7 +1247,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
             m_pMyShell->clearError( nMyCommandIdentifier );
             m_aUncPath = getParentName( m_aUncPath );
             if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
-                m_aUncPath += OUString("/");
+                m_aUncPath += "/";
 
             m_aUncPath += rtl::Uri::encode( aRequestImpl->newName(),
                                             rtl_UriCharClassPchar,

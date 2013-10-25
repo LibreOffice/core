@@ -1455,7 +1455,7 @@ namespace svxform
             aNewName = aBaseName;
             if( i>0 )
             {
-                aNewName += OUString(" ");
+                aNewName += " ";
                 aNewName += OUString::number(i).getStr();
             }
 

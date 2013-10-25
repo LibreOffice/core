@@ -365,10 +365,9 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
 // -------------------------------------------------------------------------
 OUString ODbaseIndex::getCompletePath()
 {
-    OUString sDir = m_pTable->getConnection()->getURL();
-    sDir += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
-    sDir += m_Name;
-    sDir += OUString(".ndx");
+    OUString sDir = m_pTable->getConnection()->getURL() +
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER) +
+        m_Name + ".ndx";
     return sDir;
 }
 //------------------------------------------------------------------
@@ -420,10 +419,9 @@ sal_Bool ODbaseIndex::DropImpl()
     }
 
     // synchronize inf-file
-    OUString sCfgFile(m_pTable->getConnection()->getURL());
-    sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
-    sCfgFile += m_pTable->getName();
-    sCfgFile += OUString(".inf");
+    OUString sCfgFile = m_pTable->getConnection()->getURL() +
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER) +
+        m_pTable->getName() + ".inf";
 
     OUString sPhysicalPath;
     OSL_VERIFY_RES( LocalFileHelper::ConvertURLToPhysicalName(sCfgFile, sPhysicalPath),
@@ -433,14 +431,14 @@ sal_Bool ODbaseIndex::DropImpl()
     aInfFile.SetGroup(dBASE_III_GROUP);
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
     OString aKeyName;
-    OUString sEntry = m_Name + (".ndx");
+    OUString sEntry = m_Name + ".ndx";
 
     // delete entries from the inf file
     for (sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++)
     {
         // References the Key to an Index-file?
         aKeyName = aInfFile.GetKeyName( nKey );
-        if (aKeyName.copy(0,3).equals("NDX"))
+        if (aKeyName.copy(0,3) == "NDX")
         {
             if(sEntry == OStringToOUString(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding()))
             {

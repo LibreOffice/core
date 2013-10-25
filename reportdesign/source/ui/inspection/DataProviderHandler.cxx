@@ -193,7 +193,7 @@ uno::Any SAL_CALL DataProviderHandler::getPropertyValue(const OUString & Propert
             //            for(;pChartTypeIter != pChartTypeEnd;++pChartTypeIter)
             //            {
             //                sChartTypes += (*pChartTypeIter)->getChartType();
-            //                sChartTypes += OUString(";");
+            //                sChartTypes += ";";
             //            }
             //        }
             //        aPropertyValue;// <<= sChartTypes;

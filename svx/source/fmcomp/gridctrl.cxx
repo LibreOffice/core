@@ -664,7 +664,7 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
                 else
                     aText = m_aAbsolute.CreateFieldText(pParent->GetRowCount());
                 if(!pParent->m_bRecordCountFinal)
-                    aText += OUString(" *");
+                    aText += " *";
             }
             else
                 aText = "";

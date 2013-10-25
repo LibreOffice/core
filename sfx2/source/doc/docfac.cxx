@@ -253,7 +253,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
 
             OUString aBackupURL;
             ::osl::Security().getConfigDir(aBackupURL);
-            aBackupURL += OUString("/temp");
+            aBackupURL += "/temp";
 
             if ( !xSimpleFileAccess->exists( aBackupURL ) )
                 xSimpleFileAccess->createFolder( aBackupURL );

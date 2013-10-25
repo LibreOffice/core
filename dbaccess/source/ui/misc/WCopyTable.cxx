@@ -166,9 +166,7 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
         const OUString sTargetName = ::dbtools::composeTableNameForSelect(_xConnection,_rxObject);
         const OUString sTargetNameTemp = (sTargetName + OUString("."));
 
-        OUString sStatement("SELECT * FROM ");
-        sStatement += sTargetName;
-        sStatement += OUString(" WHERE 0=1");
+        OUString sStatement = "SELECT * FROM " + sTargetName + " WHERE 0=1";
 
         for ( size_t i=0; i < SAL_N_ELEMENTS(aProperties); ++i )
         {

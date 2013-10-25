@@ -609,12 +609,12 @@ HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
                     "HierarchyContent::createNewContent - empty identifier!" );
 
         if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-            aURL += OUString("/");
+            aURL += "/";
 
         if ( bCreateFolder )
-            aURL += OUString("New_Folder");
+            aURL += "New_Folder";
         else
-            aURL += OUString("New_Link");
+            aURL += "New_Link";
 
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aURL );
@@ -772,7 +772,7 @@ HierarchyContent::makeNewIdentifier( const OUString& rTitle )
     // Assemble new content identifier...
     HierarchyUri aUri( m_xIdentifier->getContentIdentifier() );
     OUString aNewURL = aUri.getParentUri();
-    aNewURL += OUString("/");
+    aNewURL += "/";
     aNewURL += ::ucb_impl::urihelper::encodeSegment( rTitle );
 
     return uno::Reference< ucb::XContentIdentifier >(
@@ -798,7 +798,7 @@ void HierarchyContent::queryChildren( HierarchyContentRefList& rChildren )
     if ( nURLPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aURL += OUString("/");
+        aURL += "/";
     }
 
     sal_Int32 nLen = aURL.getLength();
@@ -1449,7 +1449,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                 do
                 {
                     OUString aNewId = xId->getContentIdentifier();
-                    aNewId += OUString("_");
+                    aNewId += "_";
                     aNewId += OUString::number( ++nTry );
                     xId = new ::ucbhelper::ContentIdentifier( aNewId );
                 }
@@ -1469,7 +1469,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                 else
                 {
                     OUString aNewTitle( m_aProps.getTitle() );
-                    aNewTitle += OUString("_");
+                    aNewTitle += "_";
                     aNewTitle += OUString::number( nTry );
                     m_aProps.setTitle( aNewTitle );
                 }
@@ -1618,7 +1618,7 @@ void HierarchyContent::transfer(
     if ( nPos != ( aId.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aId += OUString("/");
+        aId += "/";
     }
 
     if ( rInfo.SourceURL.getLength() <= aId.getLength() )
@@ -1801,7 +1801,7 @@ void HierarchyContent::transfer(
 
             OUString aChildId = xId->getContentIdentifier();
             if ( ( aChildId.lastIndexOf( '/' ) + 1 ) != aChildId.getLength() )
-                aChildId += OUString("/");
+                aChildId += "/";
 
             aChildId += rResult.getName();
 

@@ -161,7 +161,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         escaped_name = gnome_vfs_escape_string( m_pImpl->m_aResults[ nIndex ]->aInfo.name );
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += OUString("/");
+            aId += "/";
 
         aId += OUString::createFromAscii( escaped_name );
 

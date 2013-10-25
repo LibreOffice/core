@@ -206,9 +206,7 @@ PassMap StorageItem::getInfo()
 
     for( aNodeInd = 0; aNodeInd < aNodeCount; ++aNodeInd )
     {
-        aPropNames[aNodeInd]  = OUString("Store/Passwordstorage['");
-        aPropNames[aNodeInd] += aNodeNames[aNodeInd];
-        aPropNames[aNodeInd] += OUString("']/Password");
+        aPropNames[aNodeInd]  = "Store/Passwordstorage['" + aNodeNames[aNodeInd] + "']/Password";
     }
 
     Sequence< Any > aPropertyValues = ConfigItem::GetProperties( aPropNames );
@@ -367,9 +365,7 @@ void StorageItem::update( const OUString& aURL, const NamePassRecord& aRecord )
 
     Sequence< beans::PropertyValue > sendSeq(1);
 
-    sendSeq[0].Name  = OUString("Store/Passwordstorage['");
-    sendSeq[0].Name += createIndex( forIndex );
-    sendSeq[0].Name += OUString("']/Password");
+    sendSeq[0].Name  = "Store/Passwordstorage['" + createIndex( forIndex ) + "']/Password";
 
     sendSeq[0].Value <<= aRecord.GetPersPasswords();
 
@@ -810,7 +806,7 @@ OUString PasswordContainer::GetDefaultMasterPassword()
 {
     OUString aResult;
     for ( sal_Int32 nInd = 0; nInd < RTL_DIGEST_LENGTH_MD5; nInd++ )
-        aResult += OUString( "aa"  );
+        aResult += "aa";
 
     return aResult;
 }

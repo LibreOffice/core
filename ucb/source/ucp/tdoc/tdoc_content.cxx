@@ -717,12 +717,12 @@ Content::createNewContent( const ucb::ContentInfo& Info )
                     "Content::createNewContent - empty identifier!" );
 
         if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-            aURL += OUString("/");
+            aURL += "/";
 
         if ( bCreateFolder )
-            aURL += OUString("New_Folder");
+            aURL += "New_Folder";
         else
-            aURL += OUString("New_Stream");
+            aURL += "New_Stream";
 
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aURL );
@@ -783,7 +783,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     if ( nURLPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aURL += OUString("/");
+        aURL += "/";
     }
 
     sal_Int32 nLen = aURL.getLength();
@@ -1985,7 +1985,7 @@ void Content::transfer(
     if ( nPos != ( aId.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aId += OUString("/");
+        aId += "/";
     }
 
     if ( rInfo.SourceURL.getLength() <= aId.getLength() )
@@ -2096,7 +2096,7 @@ void Content::transfer(
 
     OUString aTargetUri = m_xIdentifier->getContentIdentifier();
     if ( ( aTargetUri.lastIndexOf( '/' ) + 1 ) != aTargetUri.getLength() )
-        aTargetUri += OUString("/");
+        aTargetUri += "/";
 
     if ( !rInfo.NewTitle.isEmpty() )
         aTargetUri += ::ucb_impl::urihelper::encodeSegment( rInfo.NewTitle );

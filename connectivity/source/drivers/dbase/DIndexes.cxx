@@ -39,10 +39,9 @@ using namespace ::com::sun::star::lang;
 
 sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
 {
-    OUString sFile = m_pTable->getConnection()->getURL();
-    sFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
-    sFile += _rName;
-    sFile += OUString(".ndx");
+    OUString sFile = m_pTable->getConnection()->getURL() +
+        OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER) +
+        _rName + ".ndx";
     if ( !UCBContentHelper::Exists(sFile) )
     {
         const OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(

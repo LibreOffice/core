@@ -225,14 +225,10 @@ void SAL_CALL OMySQLUser::grantPrivileges( const OUString& objName, sal_Int32 ob
     OUString sPrivs = getPrivilegeString(objPrivileges);
     if(!sPrivs.isEmpty())
     {
-        OUString sGrant;
-        sGrant += OUString("GRANT ");
-        sGrant += sPrivs;
-        sGrant += OUString(" ON ");
         Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-        sGrant += ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation);
-        sGrant += OUString(" TO ");
-        sGrant += m_Name;
+        OUString sGrant = "GRANT " + sPrivs +
+            " ON " + ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation) +
+            " TO " + m_Name;
 
         Reference<XStatement> xStmt = m_xConnection->createStatement();
         if(xStmt.is())
@@ -255,14 +251,10 @@ void SAL_CALL OMySQLUser::revokePrivileges( const OUString& objName, sal_Int32 o
     OUString sPrivs = getPrivilegeString(objPrivileges);
     if(!sPrivs.isEmpty())
     {
-        OUString sGrant;
-        sGrant += OUString("REVOKE ");
-        sGrant += sPrivs;
-        sGrant += OUString(" ON ");
         Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-        sGrant += ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation);
-        sGrant += OUString(" FROM ");
-        sGrant += m_Name;
+        OUString sGrant = "REVOKE " + sPrivs +
+            " ON " + ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation) +
+            " FROM " + m_Name;
 
         Reference<XStatement> xStmt = m_xConnection->createStatement();
         if(xStmt.is())
@@ -276,12 +268,9 @@ void SAL_CALL OMySQLUser::changePassword( const OUString& /*oldPassword*/, const
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
-    OUString sAlterPwd;
-    sAlterPwd = OUString("SET PASSWORD FOR ");
-    sAlterPwd += m_Name;
-    sAlterPwd += OUString("@\"%\" = PASSWORD('") ;
-    sAlterPwd += newPassword;
-    sAlterPwd += OUString("')") ;
+    OUString sAlterPwd = "SET PASSWORD FOR " +
+        m_Name + "@\"%\" = PASSWORD('" +
+        newPassword + "')";
 
 
     Reference<XStatement> xStmt = m_xConnection->createStatement();
@@ -296,41 +285,41 @@ OUString OMySQLUser::getPrivilegeString(sal_Int32 nRights) const
 {
     OUString sPrivs;
     if((nRights & Privilege::INSERT) == Privilege::INSERT)
-        sPrivs += OUString("INSERT");
+        sPrivs += "INSERT";
 
     if((nRights & Privilege::DELETE) == Privilege::DELETE)
     {
         if(!sPrivs.isEmpty())
-            sPrivs += OUString(",");
-        sPrivs += OUString("DELETE");
+            sPrivs += ",";
+        sPrivs += "DELETE";
     }
 
     if((nRights & Privilege::UPDATE) == Privilege::UPDATE)
     {
         if(!sPrivs.isEmpty())
-            sPrivs += OUString(",");
-        sPrivs += OUString("UPDATE");
+            sPrivs += ",";
+        sPrivs += "UPDATE";
     }
 
     if((nRights & Privilege::ALTER) == Privilege::ALTER)
     {
         if(!sPrivs.isEmpty())
-            sPrivs += OUString(",");
-        sPrivs += OUString("ALTER");
+            sPrivs += ",";
+        sPrivs += "ALTER";
     }
 
     if((nRights & Privilege::SELECT) == Privilege::SELECT)
     {
         if(!sPrivs.isEmpty())
-            sPrivs += OUString(",");
-        sPrivs += OUString("SELECT");
+            sPrivs += ",";
+        sPrivs += "SELECT";
     }
 
     if((nRights & Privilege::REFERENCE) == Privilege::REFERENCE)
     {
         if(!sPrivs.isEmpty())
-            sPrivs += OUString(",");
-        sPrivs += OUString("REFERENCES");
+            sPrivs += ",";
+        sPrivs += "REFERENCES";
     }
 
     return sPrivs;

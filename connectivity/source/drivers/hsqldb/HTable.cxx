@@ -206,12 +206,11 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
         {
             const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
-            OUString sSql = getAlterTableColumnPart();
-            sSql += OUString(" ALTER COLUMN ");
-            sSql += ::dbtools::quoteName(sQuote,colName);
-
-            sSql += OUString(" RENAME TO ");
-            sSql += ::dbtools::quoteName(sQuote,sNewColumnName);
+            OUString sSql = getAlterTableColumnPart() +
+                " ALTER COLUMN " +
+                ::dbtools::quoteName(sQuote,colName) +
+                " RENAME TO " +
+                ::dbtools::quoteName(sQuote,sNewColumnName);
 
             executeStatement(sSql);
         }
@@ -263,7 +262,7 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, c
 {
     OUString sSql = getAlterTableColumnPart();
 
-    sSql += OUString(" ALTER COLUMN ");
+    sSql += " ALTER COLUMN ";
 #if OSL_DEBUG_LEVEL > 0
     try
     {
@@ -292,25 +291,22 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, c
 // -----------------------------------------------------------------------------
 void OHSQLTable::alterDefaultValue(const OUString& _sNewDefault,const OUString& _rColName)
 {
-    OUString sSql = getAlterTableColumnPart();
-    sSql += OUString(" ALTER COLUMN ");
-
     const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
-    sSql += ::dbtools::quoteName(sQuote,_rColName);
-    sSql += OUString(" SET DEFAULT '") + _sNewDefault;
-    sSql += OUString("'");
+    OUString sSql = getAlterTableColumnPart() +
+        " ALTER COLUMN " +
+        ::dbtools::quoteName(sQuote,_rColName) +
+        " SET DEFAULT '" + _sNewDefault + "'";
 
     executeStatement(sSql);
 }
 // -----------------------------------------------------------------------------
 void OHSQLTable::dropDefaultValue(const OUString& _rColName)
 {
-    OUString sSql = getAlterTableColumnPart();
-    sSql += OUString(" ALTER COLUMN ");
-
     const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
-    sSql += ::dbtools::quoteName(sQuote,_rColName);
-    sSql += OUString(" DROP DEFAULT");
+    OUString sSql = getAlterTableColumnPart() +
+        " ALTER COLUMN " +
+        ::dbtools::quoteName(sQuote,_rColName) +
+        " DROP DEFAULT";
 
     executeStatement(sSql);
 }
@@ -380,20 +376,19 @@ void SAL_CALL OHSQLTable::rename( const OUString& newName ) throw(SQLException, 
 
     if(!isNew())
     {
-        OUString sSql = OUString("ALTER ");
-        if ( m_Type == OUString("VIEW") )
-            sSql += OUString(" VIEW ");
+        OUString sSql = "ALTER ";
+        if ( m_Type == "VIEW" )
+            sSql += " VIEW ";
         else
-            sSql += OUString(" TABLE ");
+            sSql += " TABLE ";
 
         OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-        OUString sComposedName(
-            ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInDataManipulation ) );
-        sSql += sComposedName
-            + OUString(" RENAME TO ");
-        sSql += ::dbtools::composeTableName( getMetaData(), sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation );
+        OUString sComposedName =
+            ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInDataManipulation ) +
+            sComposedName + " RENAME TO " +
+            ::dbtools::composeTableName( getMetaData(), sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation );
 
         executeStatement(sSql);
 

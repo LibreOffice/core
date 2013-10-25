@@ -75,7 +75,7 @@ void HierarchyUri::init() const
             if ( m_aUri.getLength() == HIERARCHY_URL_SCHEME_LENGTH + 1 )
             {
                 // root folder URI without path and service specifier.
-                m_aUri += OUString( "//" DEFAULT_DATA_SOURCE_SERVICE "/"  );
+                m_aUri += "//" DEFAULT_DATA_SOURCE_SERVICE "/";
                 m_aService = OUString( DEFAULT_DATA_SOURCE_SERVICE  );
 
                 nPos = m_aUri.getLength() - 1;
@@ -85,7 +85,7 @@ void HierarchyUri::init() const
                       ( m_aUri[ HIERARCHY_URL_SCHEME_LENGTH + 1 ] == '/' ) )
             {
                 // root folder URI without service specifier.
-                m_aUri += OUString( "/" DEFAULT_DATA_SOURCE_SERVICE "/"  );
+                m_aUri += "/" DEFAULT_DATA_SOURCE_SERVICE "/";
                 m_aService = OUString( DEFAULT_DATA_SOURCE_SERVICE  );
 
                 nPos = m_aUri.getLength() - 1;
@@ -144,7 +144,7 @@ void HierarchyUri::init() const
                 {
                     // Trailing slash missing.
                     nEnd = m_aUri.getLength();
-                    m_aUri += OUString("/");
+                    m_aUri += "/";
                 }
 
                 m_aService = m_aUri.copy( nStart, nEnd - nStart );

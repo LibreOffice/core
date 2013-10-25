@@ -188,26 +188,26 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
         {
             //case sheet::ValidationType_CUSTOM
             case sheet::ValidationType_DATE :
-                sCondition += OUString("cell-content-is-date()");
+                sCondition += "cell-content-is-date()";
             break;
             case sheet::ValidationType_DECIMAL :
-                sCondition += OUString("cell-content-is-decimal-number()");
+                sCondition += "cell-content-is-decimal-number()";
             break;
             case sheet::ValidationType_LIST :
-                sCondition += OUString("cell-content-is-in-list(");
+                sCondition += "cell-content-is-in-list(";
                 sCondition += aValidation.sFormula1;
-                sCondition += OUString(")");
+                sCondition += ")";
             break;
             case sheet::ValidationType_TEXT_LEN :
                 if (aValidation.aOperator != sheet::ConditionOperator_BETWEEN &&
                     aValidation.aOperator != sheet::ConditionOperator_NOT_BETWEEN)
-                    sCondition += OUString("cell-content-text-length()");
+                    sCondition += "cell-content-text-length()";
             break;
             case sheet::ValidationType_TIME :
-                sCondition += OUString("cell-content-is-time()");
+                sCondition += "cell-content-is-time()";
             break;
             case sheet::ValidationType_WHOLE :
-                sCondition += OUString("cell-content-is-whole-number()");
+                sCondition += "cell-content-is-whole-number()";
             break;
             default:
             {
@@ -221,31 +221,31 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
             !aValidation.sFormula2.isEmpty())))
         {
             if (aValidation.aValidationType != sheet::ValidationType_TEXT_LEN)
-                sCondition += OUString(" and ");
+                sCondition += " and ";
             if (aValidation.aOperator != sheet::ConditionOperator_BETWEEN &&
                 aValidation.aOperator != sheet::ConditionOperator_NOT_BETWEEN)
             {
                 if (aValidation.aValidationType != sheet::ValidationType_TEXT_LEN)
-                    sCondition += OUString("cell-content()");
+                    sCondition += "cell-content()";
                 switch (aValidation.aOperator)
                 {
                     case sheet::ConditionOperator_EQUAL :
-                        sCondition += OUString("=");
+                        sCondition += "=";
                     break;
                     case sheet::ConditionOperator_GREATER :
-                        sCondition += OUString(">");
+                        sCondition += ">";
                     break;
                     case sheet::ConditionOperator_GREATER_EQUAL :
-                        sCondition += OUString(">=");
+                        sCondition += ">=";
                     break;
                     case sheet::ConditionOperator_LESS :
-                        sCondition += OUString("<");
+                        sCondition += "<";
                     break;
                     case sheet::ConditionOperator_LESS_EQUAL :
-                        sCondition += OUString("<=");
+                        sCondition += "<=";
                     break;
                     case sheet::ConditionOperator_NOT_EQUAL :
-                        sCondition += OUString("!=");
+                        sCondition += "!=";
                     break;
                     default:
                     {
@@ -259,21 +259,21 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
                 if (aValidation.aValidationType == sheet::ValidationType_TEXT_LEN)
                 {
                     if (aValidation.aOperator == sheet::ConditionOperator_BETWEEN)
-                        sCondition += OUString("cell-content-text-length-is-between(");
+                        sCondition += "cell-content-text-length-is-between(";
                     else
-                        sCondition += OUString("cell-content-text-length-is-not-between(");
+                        sCondition += "cell-content-text-length-is-not-between(";
                 }
                 else
                 {
                     if (aValidation.aOperator == sheet::ConditionOperator_BETWEEN)
-                        sCondition += OUString("cell-content-is-between(");
+                        sCondition += "cell-content-is-between(";
                     else
-                        sCondition += OUString("cell-content-is-not-between(");
+                        sCondition += "cell-content-is-not-between(";
                 }
                 sCondition += aValidation.sFormula1;
-                sCondition += OUString(",");
+                sCondition += ",";
                 sCondition += aValidation.sFormula2;
-                sCondition += OUString(")");
+                sCondition += ")";
             }
         }
         else

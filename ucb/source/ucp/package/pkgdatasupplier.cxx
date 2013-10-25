@@ -463,7 +463,7 @@ OUString DataSupplier::assembleChildURL( const OUString& aName )
 
         sal_Int32 nPackageUrlEnd = aURL.lastIndexOf( '/' );
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
-            aURL += OUString("/");
+            aURL += "/";
 
         aURL += ::ucb_impl::urihelper::encodeSegment( aName );
         aURL += aContURL.copy( nParam );
@@ -474,7 +474,7 @@ OUString DataSupplier::assembleChildURL( const OUString& aName )
 
         sal_Int32 nPackageUrlEnd = aURL.lastIndexOf( '/' );
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
-            aURL += OUString("/");
+            aURL += "/";
 
         aURL += ::ucb_impl::urihelper::encodeSegment( aName );
     }

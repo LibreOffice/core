@@ -483,10 +483,10 @@ void OTableHelper::refreshIndexes()
 OUString OTableHelper::getRenameStart() const
 {
     OUString sSql("RENAME ");
-    if ( m_Type == OUString("VIEW") )
-        sSql += OUString(" VIEW ");
+    if ( m_Type == "VIEW" )
+        sSql += " VIEW ";
     else
-        sSql += OUString(" TABLE ");
+        sSql += " TABLE ";
 
     return sSql;
 }

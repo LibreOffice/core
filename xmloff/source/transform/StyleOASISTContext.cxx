@@ -502,7 +502,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         {
                             if ( !aNewAttrValue.isEmpty() )
                             {
-                                aNewAttrValue += OUString(" " );
+                                aNewAttrValue += " ";
                             }
 
                             if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_EVEN ) )

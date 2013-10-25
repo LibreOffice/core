@@ -343,11 +343,11 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
         if( nType == word::WdSeekView::wdSeekEvenPagesFooter
             || nType == word::WdSeekView::wdSeekEvenPagesHeader )
         {
-            aTempPropText += OUString("Left");
+            aTempPropText += "Left";
         }
         else
         {
-            aTempPropText += OUString("Right");
+            aTempPropText += "Right";
         }
         xText.set( xPageProps->getPropertyValue( aTempPropText), uno::UNO_QUERY_THROW );
     }

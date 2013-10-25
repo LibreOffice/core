@@ -728,13 +728,13 @@ Content::createNewContent( const ucb::ContentInfo& Info )
             return uno::Reference< ucb::XContent >();
 
         OUString aURL = m_aUri.getUri();
-        aURL += OUString("/");
+        aURL += "/";
 
         if ( Info.Type.equalsIgnoreAsciiCase(
                 getContentType( m_aUri.getScheme(), sal_True ) ) )
-            aURL += OUString("New_Folder");
+            aURL += "New_Folder";
         else
-            aURL += OUString("New_Stream");
+            aURL += "New_Stream";
 
         uno::Reference< ucb::XContentIdentifier > xId(
             new ::ucbhelper::ContentIdentifier( aURL ) );
@@ -1371,7 +1371,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         // Assemble new content identifier...
         OUString aNewURL = m_aUri.getParentUri();
-        aNewURL += OUString("/");
+        aNewURL += "/";
         aNewURL += ::ucb_impl::urihelper::encodeSegment( aNewTitle );
         uno::Reference< ucb::XContentIdentifier > xNewId
             = new ::ucbhelper::ContentIdentifier( aNewURL );
@@ -1635,7 +1635,7 @@ void Content::insert(
 
     OUString aNewURL = m_aUri.getParentUri();
     if (1 + aNewURL.lastIndexOf('/') != aNewURL.getLength())
-        aNewURL += OUString("/");
+        aNewURL += "/";
     aNewURL += ::ucb_impl::urihelper::encodeSegment( m_aProps.aTitle );
     PackageUri aNewUri( aNewURL );
 
@@ -1670,7 +1670,7 @@ void Content::insert(
                 do
                 {
                     OUString aNew = aNewUri.getUri();
-                    aNew += OUString("_");
+                    aNew += "_";
                     aNew += OUString::number( ++nTry );
                     aNewUri.setUri( aNew );
                 }
@@ -1689,7 +1689,7 @@ void Content::insert(
                 }
                 else
                 {
-                    m_aProps.aTitle += OUString("_");
+                    m_aProps.aTitle += "_";
                     m_aProps.aTitle += OUString::number( nTry );
                 }
             }
@@ -1835,7 +1835,7 @@ void Content::transfer(
 
     // Is source not a parent of me / not me?
     OUString aId = m_aUri.getParentUri();
-    aId += OUString("/");
+    aId += "/";
 
     if ( rInfo.SourceURL.getLength() <= aId.getLength() )
     {
@@ -2035,7 +2035,7 @@ void Content::transfer(
                     OUString aChildId = xId->getContentIdentifier();
                     if ( ( aChildId.lastIndexOf( '/' ) + 1 )
                                                 != aChildId.getLength() )
-                        aChildId += OUString("/");
+                        aChildId += "/";
 
                     aChildId += ::ucb_impl::urihelper::encodeSegment( aName );
 
@@ -2178,7 +2178,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     OSL_ENSURE( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ),
                 "Content::queryChildren - Invalid URL!" );
 
-    aURL += OUString("/");
+    aURL += "/";
 
     sal_Int32 nLen = aURL.getLength();
 

@@ -2660,7 +2660,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const OUString& r
             {
                 OUString sErrorMessage("Fehler im Formatstring ");
                 sErrorMessage += sFormatString;
-                sErrorMessage += OUString(" an Position ");
+                sErrorMessage += " an Position ";
                 sErrorMessage += OUString::number(rException.CheckPos);
                 uno::Sequence<OUString> aSeq(1);
                 aSeq[0] = sErrorMessage;

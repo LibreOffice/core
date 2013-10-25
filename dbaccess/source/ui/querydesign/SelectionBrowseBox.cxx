@@ -711,13 +711,13 @@ sal_Bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRe
             else
                 sSql += sFullFieldName;
 
-            sSql = OUString("SELECT ") + sSql;
+            sSql = "SELECT " + sSql;
             if ( !sFieldAlias.isEmpty() )
             { // always quote the alias name: there cannot be a function in it
-                sSql += OUString(" ");
+                sSql += " ";
                 sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), sFieldAlias );
             }
-            sSql += OUString(" FROM x");
+            sSql += " FROM x";
 
             pParseNode = rParser.parseTree( sErrorMsg, sSql, bInternational );
         }

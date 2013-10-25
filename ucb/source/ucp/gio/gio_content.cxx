@@ -550,7 +550,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     sal_Int32 nURLPos = aURL.lastIndexOf( '/' );
 
     if ( nURLPos != ( aURL.getLength() - 1 ) )
-        aURL += OUString("/");
+        aURL += "/";
 
     sal_Int32 nLen = aURL.getLength();
 
@@ -1171,7 +1171,7 @@ uno::Reference< ucb::XContent >
     OUString aURL = m_xIdentifier->getContentIdentifier();
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-            aURL += OUString("/");
+            aURL += "/";
 
     name = create_document ? "[New_Content]" : "[New_Collection]";
     aURL += OUString::createFromAscii( name );

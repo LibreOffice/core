@@ -1016,7 +1016,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             if( pLocaleItem != NULL )
             {
                 OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
-                aStreamName += OUString(".properties");
+                aStreamName += ".properties";
 
                 try
                 {
@@ -1038,7 +1038,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             loadLocale( pLocaleItem ) )
         {
             OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, aNameBase );
-            aStreamName += OUString(".properties");
+            aStreamName += ".properties";
 
             Reference< io::XStream > xElementStream =
                     Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
@@ -1076,7 +1076,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             if( pLocaleItem != NULL )
             {
                 OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
-                aStreamName += OUString(".default");
+                aStreamName += ".default";
 
                 try
                 {
@@ -1095,7 +1095,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     if( m_pDefaultLocaleItem != NULL && (bStoreAll || m_bDefaultModified) )
     {
         OUString aStreamName = implGetFileNameForLocaleItem( m_pDefaultLocaleItem, aNameBase );
-        aStreamName += OUString(".default");
+        aStreamName += ".default";
 
         Reference< io::XStream > xElementStream =
                 Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
@@ -2568,7 +2568,7 @@ bool StringResourceWithStorageImpl::implLoadLocale( LocaleItem* pLocaleItem )
     try
     {
         OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
-        aStreamName += OUString( ".properties" );
+        aStreamName += ".properties";
 
         Reference< io::XStream > xElementStream =
             m_xStorage->openStreamElement( aStreamName, ElementModes::READ );

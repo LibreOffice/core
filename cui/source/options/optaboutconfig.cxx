@@ -293,7 +293,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                                 {
                                     OUString sNumber( OUString::number(seqLong[nInd]) );
                                     sValue += sNumber;
-                                    sValue += OUString(",");
+                                    sValue += ",";
                                 }
                             }
                         }
@@ -319,7 +319,7 @@ void CuiAboutConfigTabPage::FillItems( Reference< XNameAccess >xNameAccess, OUSt
                                 {
                                     OUString sHyper( OUString::number( seqHyp[nInd] ) );
                                     sValue += sHyper;
-                                    sValue += OUString(",");
+                                    sValue += ",";
                                 }
                             }
                         }

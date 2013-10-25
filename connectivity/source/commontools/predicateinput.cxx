@@ -343,11 +343,7 @@ namespace dbtools
         if ( nType == DataType::OTHER || sField.isEmpty() )
         {
             // first try the international version
-            OUString sSql;
-            sSql += OUString("SELECT * ");
-            sSql += OUString(" FROM x WHERE ");
-            sSql += sField;
-            sSql += _rPredicateValue;
+            OUString sSql = "SELECT * FROM x WHERE " + sField + _rPredicateValue;
             ::std::auto_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, sal_True ) );
             nType = DataType::DOUBLE;
             if ( pParseNode.get() )

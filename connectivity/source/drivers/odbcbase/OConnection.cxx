@@ -235,12 +235,12 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
         else if(!pBegin->Name.compareToAscii(pUser))
         {
             OSL_VERIFY( pBegin->Value >>= aUID );
-            aDSN = aDSN + OUString(";UID=") + aUID;
+            aDSN = aDSN + ";UID=" + aUID;
         }
         else if(!pBegin->Name.compareToAscii(pPwd))
         {
             OSL_VERIFY( pBegin->Value >>= aPWD );
-            aDSN = aDSN + OUString(";PWD=") + aPWD;
+            aDSN = aDSN + ";PWD=" + aPWD;
         }
         else if(!pBegin->Name.compareToAscii(pUseCatalog))
         {
@@ -249,7 +249,7 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
         else if(!pBegin->Name.compareToAscii(pSysDrv))
         {
             OSL_VERIFY( pBegin->Value >>= aSysDrvSettings );
-            aDSN += OUString(";");
+            aDSN += ";";
             aDSN += aSysDrvSettings;
         }
         else if(0 == pBegin->Name.compareToAscii(pCharSet))

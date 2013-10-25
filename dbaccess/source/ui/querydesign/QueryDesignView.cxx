@@ -2874,9 +2874,7 @@ OUString OQueryDesignView::getStatement()
     GenerateInnerJoinCriterias(xConnection,aJoinCrit,pConnList);
     if(!aJoinCrit.isEmpty())
     {
-        OUString aTmp("( ");
-        aTmp += aJoinCrit;
-        aTmp += OUString(" )");
+        OUString aTmp = "( " + aJoinCrit + " )";
         if(!aCriteriaListStr.isEmpty())
         {
             aTmp += C_AND;

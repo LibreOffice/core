@@ -836,7 +836,7 @@ void MacabRecords::manageDuplicateHeaders(macabfield **_headerNames, const sal_I
             // There is probably a better way to do this...
             OUString newName = CFStringToOUString((CFStringRef) _headerNames[i]->value);
             CFRelease(_headerNames[i]->value);
-            newName += OUString(" (") + OUString::number(count) + OUString(")");
+            newName += " (" + OUString::number(count) + ")";
             _headerNames[i]->value = OUStringToCFString(newName);
         }
     }

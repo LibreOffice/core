@@ -170,7 +170,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
         if ( xRootReadAccess.is() )
         {
             OUString aTitlePath = m_aPath;
-            aTitlePath += OUString("/Title");
+            aTitlePath += "/Title";
 
             // Note: Avoid NoSuchElementExceptions, because exceptions are
             //       relatively 'expensive'. Checking for availability of
@@ -194,7 +194,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
 
             // Get TargetURL value.
             OUString aTargetURLPath = m_aPath;
-            aTargetURLPath += OUString("/TargetURL");
+            aTargetURLPath += "/TargetURL";
             if ( !( xRootReadAccess->getByHierarchicalName( aTargetURLPath )
                     >>= aValue ) )
             {
@@ -213,7 +213,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
             rData.setTargetURL( aValue );
 
             OUString aTypePath = m_aPath;
-            aTypePath += OUString("/Type");
+            aTypePath += "/Type";
             if ( xRootReadAccess->hasByHierarchicalName( aTypePath ) )
             {
                 // Might not be present since it was introduced long after
@@ -921,7 +921,7 @@ sal_Bool HierarchyEntry::first( iterator& it )
                 if ( !m_aPath.isEmpty() )
                 {
                     OUString aPath = m_aPath;
-                    aPath += OUString("/Children");
+                    aPath += "/Children";
 
                     xRootHierNameAccess->getByHierarchicalName( aPath )
                         >>= xNameAccess;
@@ -1127,9 +1127,9 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
             OUString aTargetURL = aTitle;
             OUString aType      = aTitle;
 
-            aTitle     += OUString("/Title");
-            aTargetURL += OUString("/TargetURL");
-            aType      += OUString("/Type");
+            aTitle     += "/Title";
+            aTargetURL += "/TargetURL";
+            aType      += "/Type";
 
             OUString aValue;
             m_pImpl->dir->getByHierarchicalName( aTitle ) >>= aValue;

@@ -68,18 +68,14 @@ Reference< XPropertySet > OUsers::createDescriptor()
 // XAppend
 sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    OUString aSql(  "GRANT USAGE ON * TO " );
     OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
-    OUString sUserName( _rForName );
-    aSql += ::dbtools::quoteName(aQuote,sUserName)
-                + OUString(" @\"%\" ");
     OUString sPassword;
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPassword;
+    OUString aSql =  "GRANT USAGE ON * TO " +
+        ::dbtools::quoteName(aQuote,_rForName) + " @\"%\" ";
     if ( !sPassword.isEmpty() )
     {
-        aSql += OUString(" IDENTIFIED BY '");
-        aSql += sPassword;
-        aSql += OUString("'");
+        aSql += " IDENTIFIED BY '" + sPassword + "'";
     }
 
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );

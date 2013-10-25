@@ -177,11 +177,10 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const OUString& _rForName, const
         return cloneDescriptor( descriptor );
 
     Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
-    OUString aSql( "ALTER TABLE " );
-
-    aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
-    aSql += OUString(" ADD ");
-    aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),NULL,m_pTable->getTypeCreatePattern());
+    OUString aSql = "ALTER TABLE " +
+        ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true ) +
+        " ADD " +
+        ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),NULL,m_pTable->getTypeCreatePattern());
 
     Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
     if ( xStmt.is() )
@@ -198,13 +197,12 @@ void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName
     OSL_ENSURE(m_pTable,"OColumnsHelper::dropByName: Table is null!");
     if ( m_pTable && !m_pTable->isNew() )
     {
-        OUString aSql( "ALTER TABLE " );
         Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
         OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
-
-        aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
-        aSql += OUString(" DROP ");
-        aSql += ::dbtools::quoteName( aQuote,_sElementName);
+        OUString aSql = "ALTER TABLE " +
+            ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true ) +
+            " DROP " +
+            ::dbtools::quoteName( aQuote,_sElementName);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         if ( xStmt.is() )

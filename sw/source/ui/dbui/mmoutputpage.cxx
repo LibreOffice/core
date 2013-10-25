@@ -835,7 +835,7 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     SwDocMergeInfo& rEndInfo = rConfigItem.GetDocumentMergeInfo(nEnd - 1);
 
     OUString sPages(OUString::number( rStartInfo.nStartPageInTarget ));
-    sPages += OUString(" - ");
+    sPages += " - ";
     sPages += OUString::number(  rEndInfo.nEndPageInTarget );
 
     SwWrtShell& rSh = pTargetView->GetWrtShell();
@@ -896,7 +896,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
             if( 2 > nTokenCount)
             {
-                sAttach += OUString('.');
+                sAttach += ".";
                 ++nTokenCount;
             }
             sAttach = comphelper::string::setToken(sAttach, nTokenCount - 1, '.', lcl_GetExtensionForDocType( nDocType ));
@@ -1051,7 +1051,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
             if (2 > nTokenCount)
             {
-                sAttach += OUString('.');
+                sAttach += ".";
                 ++nTokenCount;
             }
             sAttach = comphelper::string::setToken(sAttach, nTokenCount - 1, '.', lcl_GetExtensionForDocType(
@@ -1176,7 +1176,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                 while ( bDone )
                 {
                     sBody += OStringToOUString(sLine, eEncoding);
-                    sBody += OUString('\n');
+                    sBody += "\n";
                     bDone = pInStream->ReadLine( sLine );
                 }
             }
@@ -1191,7 +1191,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttachment, '.');
             if (2 > nTokenCount)
             {
-                sAttachment += OUString('.');
+                sAttachment += ".";
                 sAttachment = comphelper::string::setToken(sAttachment, nTokenCount, '.', sExtension);
             }
             else if (sAttachment.getToken( nTokenCount - 1, '.') != sExtension)
@@ -1232,9 +1232,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         aDesc.sBodyContent = sBody;
         if(MM_DOCTYPE_HTML == nDocType)
         {
-            aDesc.sBodyMimeType = OUString("text/html; charset=");
-            aDesc.sBodyMimeType += OUString::createFromAscii(
-                                rtl_getBestMimeCharsetFromTextEncoding( eEncoding ));
+            aDesc.sBodyMimeType = "text/html; charset=" +
+                OUString::createFromAscii(rtl_getBestMimeCharsetFromTextEncoding( eEncoding ));
         }
         else
             aDesc.sBodyMimeType =

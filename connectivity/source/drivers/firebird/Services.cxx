@@ -52,9 +52,7 @@ void REGISTER_PROVIDER(
         const Sequence< OUString>& Services,
         const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
 {
-    OUString aMainKeyName("/");
-    aMainKeyName += aServiceImplName;
-    aMainKeyName += OUString("/UNO/SERVICES");
+    OUString aMainKeyName = "/" + aServiceImplName + "/UNO/SERVICES";
 
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "FIREBIRD::component_writeInfo : could not create a registry key !");

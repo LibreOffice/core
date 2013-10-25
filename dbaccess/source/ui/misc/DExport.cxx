@@ -829,15 +829,13 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
                                                        ,const TPositions& _rvColumns)
 {
     SAL_INFO("dbaccess.ui", "ODatabaseExport::createPreparedStatment" );
-    OUString aSql(OUString("INSERT INTO "));
+    OUString aSql("INSERT INTO ");
     OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::eInDataManipulation, false, false, true );
 
     aSql += sComposedTableName;
-    aSql += OUString(" ( ");
+    aSql += " ( ";
     // set values and column names
     OUString aValues(" VALUES ( ");
-    static OUString aPara("?,");
-    static OUString aComma(",");
 
     OUString aQuote;
     if ( _xMetaData.is() )
@@ -874,13 +872,13 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
         if ( !aInsertIter->isEmpty() )
         {
             aSql += *aInsertIter;
-            aSql += aComma;
-            aValues += aPara;
+            aSql += ",";
+            aValues += "?,";
         }
     }
 
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,OUString(")"));
-    aValues = aValues.replaceAt(aValues.getLength()-1,1,OUString(")"));
+    aSql = aSql.replaceAt(aSql.getLength()-1, 1, ")");
+    aValues = aValues.replaceAt(aValues.getLength()-1, 1, ")");
 
     aSql += aValues;
     // now create,fill and execute the prepared statement

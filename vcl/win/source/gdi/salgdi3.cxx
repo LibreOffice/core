@@ -2172,7 +2172,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         osl_getExecutableFile( &aPath.pData );
         aPath = aPath.copy( 0, aPath.lastIndexOf('/') );
         OUString aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
-        aFontDirUrl += OUString("/" LIBO_SHARE_FOLDER "/fonts/truetype");
+        aFontDirUrl += "/" LIBO_SHARE_FOLDER "/fonts/truetype";
 
         // collect fonts in font path that could not be registered
         osl::Directory aFontDir( aFontDirUrl );
@@ -2184,7 +2184,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 
             OUString aBootStrap;
             rtl::Bootstrap::get( OUString("BRAND_BASE_DIR"), aBootStrap );
-            aBootStrap += OUString("/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" ) );
+            aBootStrap += "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" );
             rtl::Bootstrap aBootstrap( aBootStrap );
             OUString aUserPath;
             aBootstrap.getFrom( OUString( "UserInstallation" ), aUserPath );

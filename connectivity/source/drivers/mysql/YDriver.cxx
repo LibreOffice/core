@@ -290,11 +290,11 @@ namespace connectivity
                                 } // if ( !sCuttedUrl.matchIgnoreAsciiCase(s_sCharSetOp) )
                             } // if ( RTL_TEXTENCODING_UTF8 == (*aLookup).getEncoding() )
                             if ( sCuttedUrl.indexOf('?') == -1 )
-                                sCuttedUrl += OUString("?");
+                                sCuttedUrl += "?";
                             else
-                                sCuttedUrl += OUString("&");
+                                sCuttedUrl += "&";
                             sCuttedUrl += sAdd;
-                            sCuttedUrl += OUString("characterEncoding=");
+                            sCuttedUrl += "characterEncoding=";
                             sCuttedUrl += sIanaName;
                         }
                     }

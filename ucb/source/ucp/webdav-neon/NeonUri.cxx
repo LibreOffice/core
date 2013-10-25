@@ -147,16 +147,12 @@ void NeonUri::init( const OString & rUri, const ne_uri * pUri )
 
     if ( pUri->query )
     {
-        mPath += OUString("?");
-        mPath += OStringToOUString(
-            pUri->query,  RTL_TEXTENCODING_UTF8 );
+        mPath += "?" + OStringToOUString( pUri->query,  RTL_TEXTENCODING_UTF8 );
     }
 
     if ( pUri->fragment )
     {
-        mPath += OUString("#");
-        mPath += OStringToOUString(
-            pUri->fragment,  RTL_TEXTENCODING_UTF8 );
+        mPath += "#" + OStringToOUString( pUri->fragment,  RTL_TEXTENCODING_UTF8 );
     }
 }
 
@@ -255,7 +251,7 @@ OUString NeonUri::GetPathBaseNameUnescaped () const
 void NeonUri::AppendPath (const OUString& rPath)
 {
     if (mPath.lastIndexOf ('/') != mPath.getLength () - 1)
-        mPath += OUString("/");
+        mPath += "/";
 
     mPath += rPath;
     calculateURI ();

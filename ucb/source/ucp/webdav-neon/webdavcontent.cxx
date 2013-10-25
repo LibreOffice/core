@@ -1076,17 +1076,17 @@ Content::createNewContent( const ucb::ContentInfo& Info )
                 "WebdavContent::createNewContent - empty identifier!" );
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-        aURL += OUString("/");
+        aURL += "/";
 
     sal_Bool isCollection;
     if ( Info.Type == WEBDAV_COLLECTION_TYPE )
     {
-        aURL += OUString("New_Collection");
+        aURL += "New_Collection";
         isCollection = sal_True;
     }
     else
     {
-        aURL += OUString("New_Content");
+        aURL += "New_Content";
         isCollection = sal_False;
     }
 
@@ -1851,7 +1851,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         OUString aNewURL = getParentURL();
         if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
-            aNewURL += OUString("/");
+            aNewURL += "/";
 
         aNewURL += NeonUri::escapeSegment( aNewTitle );
 
@@ -2225,7 +2225,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     if ( nURLPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aURL += OUString("/");
+        aURL += "/";
     }
 
     sal_Int32 nLen = aURL.getLength();
@@ -2385,7 +2385,7 @@ void Content::insert(
         // Assemble new content identifier...
         OUString aURL = getParentURL();
         if ( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ) )
-            aURL += OUString("/");
+            aURL += "/";
 
         aURL += aEscapedTitle;
 
@@ -2603,7 +2603,7 @@ void Content::transfer(
         OUString aTargetURL = xIdentifier->getContentIdentifier();
         if ( ( aTargetURL.lastIndexOf( '/' ) + 1 )
                 != aTargetURL.getLength() )
-            aTargetURL += OUString("/");
+            aTargetURL += "/";
 
         aTargetURL += aTitle;
 
@@ -2971,7 +2971,7 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
     {
         aURL = getParentURL();
         if ( aURL.lastIndexOf('/') != ( aURL.getLength() - 1 ) )
-            aURL += OUString(static_cast<sal_Unicode>('/'));
+            aURL += "/";
 
         aURL += m_aEscapedTitle;
     }

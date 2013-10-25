@@ -660,7 +660,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
         {
             xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                      xProgress );
-            aTemp += OUString("?repairpackage");
+            aTemp += "?repairpackage";
         }
 
         m_pContent = new ::ucbhelper::Content( aTemp, xComEnv, comphelper::getProcessComponentContext() );
@@ -1591,8 +1591,8 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
     if ( m_bIsRoot )
     {
         // create the special package URL for the package content
-        OUString aTemp = OUString("vnd.sun.star.pkg://");
-        aTemp += OUString(INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL ));
+        OUString aTemp = "vnd.sun.star.pkg://";
+        aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL );
         m_aURL = aTemp;
 
         if ( m_nMode & STREAM_WRITE )
@@ -1636,8 +1636,8 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     // UCBStorages work on a content, so a temporary file for a content must be created, even if the stream is only
     // accessed readonly
     // the root storage opens the package; create the special package URL for the package content
-    OUString aTemp = OUString("vnd.sun.star.pkg://");
-    aTemp += OUString(INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL ));
+    OUString aTemp = "vnd.sun.star.pkg://";
+    aTemp += INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL );
     m_aURL = aTemp;
 
     // copy data into the temporary file
@@ -1768,7 +1768,7 @@ void UCBStorage_Impl::CreateContent()
         {
             xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                      m_xProgressHandler );
-            aTemp += OUString("?repairpackage");
+            aTemp += "?repairpackage";
         }
 
         m_pContent = new ::ucbhelper::Content( aTemp, xComEnv, comphelper::getProcessComponentContext() );
@@ -3209,8 +3209,7 @@ OUString UCBStorage::CreateLinkFile( const OUString& rName )
             aTitle += ".";
             for ( sal_Int32 i=0; !bRet; i++ )
             {
-                OUString aTmp( aTitle );
-                aTmp += OUString::number( i );
+                OUString aTmp = aTitle + OUString::number( i );
                 bRet = ::utl::UCBContentHelper::MakeFolder( aFolder, aTmp, aNewFolder );
                 if ( bRet )
                     aTitle = aTmp;

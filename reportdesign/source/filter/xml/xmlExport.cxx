@@ -1100,7 +1100,7 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                         if ( aGroupFind != m_aGroupFunctionMap.end() )
                             sExpression = aGroupFind->second->getName();
                         sFormula += sExpression;
-                        sFormula += OUString("\")");
+                        sFormula += "\")";
                         sExpression = sFormula;
                     }
                     AddAttribute(XML_NAMESPACE_REPORT, XML_SORT_EXPRESSION, sField);
@@ -1597,14 +1597,14 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                     xFunction->setName(sFunctionName);
                     if ( !sInitialFormula.isEmpty() )
                         xFunction->setInitialFormula(beans::Optional< OUString>(sal_True, sInitialFormula));
-                    sFunction = OUString("rpt:") + sFunction;
-                    sFunction += OUString("([");
+                    sFunction = "rpt:" + sFunction;
+                    sFunction += "([";
                     sFunction += sExpression;
-                    sFunction += OUString("]");
+                    sFunction += "]";
 
                     if ( !sPrefix.isEmpty() )
                         sFunction += sPrefix;
-                    sFunction += OUString(")");
+                    sFunction += ")";
                     if ( !sPostfix.isEmpty() )
                         sFunction += sPostfix;
                     xFunction->setFormula(sFunction);

@@ -78,15 +78,15 @@ namespace basprov
                 {
                     m_sURI = OUString("vnd.sun.star.script:");
                     m_sURI += pBasic->GetName();
-                    m_sURI += OUString(".");
+                    m_sURI += ".";
                     m_sURI += pModule->GetName();
-                    m_sURI += OUString(".");
+                    m_sURI += ".";
                     m_sURI += m_pMethod->GetName();
-                    m_sURI += OUString("?language=Basic&location=");
+                    m_sURI += "?language=Basic&location=";
                     if ( m_bIsAppScript )
-                        m_sURI += OUString("application");
+                        m_sURI += "application";
                     else
-                        m_sURI += OUString("document");
+                        m_sURI += "document";
                 }
             }
         }

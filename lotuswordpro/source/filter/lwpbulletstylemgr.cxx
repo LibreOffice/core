@@ -204,7 +204,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
                     OUString aNumber = LwpSilverBullet::GetNumCharByStyleID(pParaNumber);
                     if (pParaNumber->GetStyleID() == NUMCHAR_01 || pParaNumber->GetStyleID() == NUMCHAR_Chinese4)
                     {
-                        aPrefix += OUString("0");
+                        aPrefix += "0";
                     }
                     aFmt.SetPrefix(aPrefix);
 

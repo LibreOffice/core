@@ -348,7 +348,7 @@ void AssignmentPersistentData::Commit()
         {
             OUString sFieldPath("Fields/");
             sFieldPath += _rLogicalName;
-            sFieldPath += OUString("/AssignedFieldName");
+            sFieldPath += "/AssignedFieldName";
             sAssignment = getStringProperty(sFieldPath);
         }
         return sAssignment;
@@ -421,17 +421,15 @@ void AssignmentPersistentData::Commit()
 
         // Fields/<field>
         OUString sFieldElementNodePath(sDescriptionNodePath);
-        sFieldElementNodePath += OUString("/");
+        sFieldElementNodePath += "/";
         sFieldElementNodePath += _rLogicalName;
 
         Sequence< PropertyValue > aNewFieldDescription(2);
         // Fields/<field>/ProgrammaticFieldName
-        aNewFieldDescription[0].Name = sFieldElementNodePath;
-        aNewFieldDescription[0].Name += OUString("/ProgrammaticFieldName");
+        aNewFieldDescription[0].Name = sFieldElementNodePath + "/ProgrammaticFieldName";
         aNewFieldDescription[0].Value <<= _rLogicalName;
         // Fields/<field>/AssignedFieldName
-        aNewFieldDescription[1].Name = sFieldElementNodePath;
-        aNewFieldDescription[1].Name += OUString("/AssignedFieldName");
+        aNewFieldDescription[1].Name = sFieldElementNodePath + "/AssignedFieldName";
         aNewFieldDescription[1].Value <<= _rAssignment;
 
         // just set the new value

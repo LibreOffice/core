@@ -121,7 +121,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
             g_uri_escape_string( g_file_info_get_name(maResults[ nIndex ]->pInfo) , NULL, false);
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-                aId += OUString("/");
+                aId += "/";
 
         aId += OUString::createFromAscii( escaped_name );
 

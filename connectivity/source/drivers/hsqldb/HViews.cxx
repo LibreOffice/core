@@ -131,14 +131,12 @@ void HViews::createView( const Reference< XPropertySet >& descriptor )
 {
     Reference<XConnection> xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
 
-    OUString aSql(  "CREATE VIEW " );
     OUString sCommand;
-
-    aSql += ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
-
-    aSql += OUString(" AS ");
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
-    aSql += sCommand;
+
+    OUString aSql = "CREATE VIEW " +
+        ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true ) +
+        " AS " + sCommand;
 
     Reference< XStatement > xStmt = xConnection->createStatement(  );
     if ( xStmt.is() )

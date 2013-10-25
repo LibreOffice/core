@@ -77,9 +77,9 @@ sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Referen
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPassword;
     if ( !sPassword.isEmpty() )
     {
-        aSql += OUString(" IDENTIFIED BY '");
+        aSql += " IDENTIFIED BY '";
         aSql += sPassword;
-        aSql += OUString("'");
+        aSql += "'";
     }
 
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );

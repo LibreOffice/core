@@ -65,8 +65,7 @@ void lcl_correctCellAddress(const OUString & _sName, const uno::Reference< xml::
     const sal_Int32 nPos = sCellAddress.lastIndexOf('$');
     if ( nPos != -1 )
     {
-        sCellAddress = sCellAddress.copy(0,nPos);
-        sCellAddress += OUString("$65535");
+        sCellAddress = sCellAddress.copy(0,nPos) + "$65535";
         pList->RemoveAttribute(_sName);
         pList->AddAttribute(_sName,sCellAddress);
     }

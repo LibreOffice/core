@@ -429,7 +429,7 @@ ResultSetDataSupplier::assembleChildURL( const OUString& aName )
 
     sal_Int32 nUrlEnd = aURL.lastIndexOf( '/' );
     if ( nUrlEnd != aURL.getLength() - 1 )
-        aURL += OUString("/");
+        aURL += "/";
 
     aURL += aName;
     return aURL;

@@ -146,8 +146,7 @@ namespace connectivity
             nsresult rv;
 #endif
             OUString regDir = getRegistryDir(product);
-            OUString profilesIni( regDir );
-            profilesIni += OUString("profiles.ini");
+            OUString profilesIni = regDir + "profiles.ini";
             IniParser parser( profilesIni );
             IniSectionMap &mAllSection = *(parser.getAllSection());
 
