@@ -122,6 +122,7 @@ public:
     void testSmartart();
     void testFdo69636();
     void testCharHighlight();
+    void testFdo70838();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(WNT)
@@ -241,6 +242,7 @@ void Test::run()
         {"smartart.docx", &Test::testSmartart},
         {"fdo69636.docx", &Test::testFdo69636},
         {"char_highlight.docx", &Test::testCharHighlight},
+        {"fdo70838.docx", &Test::testFdo70838},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -1576,6 +1578,64 @@ void Test::testCharHighlight()
         const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,18), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), getProperty<sal_Int32>(xRun,"CharBackColor"));
+    }
+}
+
+void Test::testFdo70838()
+{
+    // The problem was that VMLExport::Commit didn't save the correct width and height,
+    // and ImplEESdrWriter::ImplFlipBoundingBox made a mistake calculating the position
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+
+    // get styles of the four shapes
+    OUString aStyles[4];
+    aStyles[0] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[1]/v:rect", "style");
+    // original is: "position:absolute;margin-left:97.6pt;margin-top:165pt;width:283.4pt;height:141.7pt;rotation:285"
+    aStyles[1] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[2]/v:rect", "style");
+    // original is: "position:absolute;margin-left:97.6pt;margin-top:164.95pt;width:283.4pt;height:141.7pt;rotation:255"
+    aStyles[2] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[3]/v:rect", "style");
+    // original is: "position:absolute;margin-left:97.5pt;margin-top:164.9pt;width:283.4pt;height:141.7pt;rotation:105"
+    aStyles[3] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/w:pict[4]/v:rect", "style");
+    // original is: "position:absolute;margin-left:97.55pt;margin-top:164.95pt;width:283.4pt;height:141.7pt;rotation:75"
+
+    //check the size and position of each of the shapes
+    for( int i = 0; i < 4; ++i )
+    {
+        CPPUNIT_ASSERT(!aStyles[i].isEmpty());
+
+        int nextTokenPos = 0;
+        do
+        {
+            OUString aStyleCommand = aStyles[i].getToken( 0, ';', nextTokenPos );
+            CPPUNIT_ASSERT(!aStyleCommand.isEmpty());
+
+            OUString aStyleCommandName  = aStyleCommand.getToken( 0, ':' );
+            OUString aStyleCommandValue = aStyleCommand.getToken( 1, ':' );
+
+            // a difference < than 1 is acceptable
+            if( aStyleCommandName.equals( "margin-left" ) )
+            {
+                float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
+                CPPUNIT_ASSERT( abs( 97.6 - fValue ) < 1.0 );
+            }
+            else if( aStyleCommandName.equals( "margin-top" ) )
+            {
+                float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
+                CPPUNIT_ASSERT( abs( 165 - fValue ) < 1.0 );
+            }
+            else if( aStyleCommandName.equals( "width" ) )
+            {
+                float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
+                CPPUNIT_ASSERT( abs( 283.4 - fValue ) < 1.0 );
+            }
+            else if( aStyleCommandName.equals( "height" ) )
+            {
+                float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
+                CPPUNIT_ASSERT( abs( 141.7 - fValue ) < 1.0 );
+            }
+
+        } while( nextTokenPos != -1 );
     }
 }
 
