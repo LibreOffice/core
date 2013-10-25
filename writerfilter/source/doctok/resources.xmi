@@ -3009,9 +3009,6 @@
         <!--Class LFO-->
         <!--Class SttbRgtplc-->
         <UML:Class xmi.id="SttbRgtplc" name="SttbRgtplc">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>rtf:SttbRgtplc</UML:TaggedValue.dataValue>
