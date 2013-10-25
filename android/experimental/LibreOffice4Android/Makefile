@@ -38,8 +38,8 @@ copy-stuff:
 		assets
 	cp $(WORKDIR)/ComponentTarget/i18npool/util/i18npool.component assets/ComponentTarget/i18npool/util
 #
-	cp -R $(INSTDIR)/share/registry assets/share
 	mkdir -p assets/share/config
+	cp -R $(INSTDIR)/share/registry assets/share
 	cp -R $(INSTDIR)/share/config/soffice.cfg assets/share/config
 #
 # Set up rc, the "inifile". See BootstrapMap::getBaseIni(). As this app
@@ -60,7 +60,7 @@ copy-stuff:
 	echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/fundamentalrc
 	echo 'URE_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/fundamentalrc # checkme - is this used to find configs ?
 	echo 'BRAND_BASE_DIR=file:///assets' >> assets/program/fundamentalrc
-	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
+	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/nothing-here/we-can/exec-anyway' >> assets/program/fundamentalrc
 #
 # Set up unorc

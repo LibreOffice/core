@@ -39,8 +39,8 @@ copy-stuff:
 		assets
 	cp $(WORKDIR)/ComponentTarget/i18npool/util/i18npool.component assets/ComponentTarget/i18npool/util
 #
-	cp -R $(INSTDIR)/share/registry assets/share
 	mkdir -p assets/share/config
+	cp -R $(INSTDIR)/share/registry assets/share
 	cp -R $(INSTDIR)/share/config/soffice.cfg assets/share/config
 #
 # Set up rc, the "inifile". See BootstrapMap::getBaseIni(). As this app
@@ -61,7 +61,7 @@ copy-stuff:
 	echo "LO_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
 	echo "URE_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc # checkme - is this used to find configs ?
 	echo 'BRAND_BASE_DIR=file:///assets' >> assets/program/fundamentalrc
-	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
+	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
 	echo 'URE_MORE_TYPES=file://$(APP_DATA_PATH)/program/offapi.rdb file://$(APP_DATA_PATH)/program/oovbaapi.rdb' >> assets/program/fundamentalrc
 	echo 'URE_MORE_SERVICES=file:///assets/program/services/services.rdb' >> assets/program/fundamentalrc
@@ -111,7 +111,6 @@ copy-stuff:
 	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
 # ------------ Pieces not from DocumentLoader ------------
 # tango artwork / icons
-	mkdir -p assets/share/config
 	cp -R $(INSTDIR)/$(LIBO_SHARE_FOLDER)/config/images_tango.zip assets/share/config
 # shell / splash images
 	mkdir -p assets/program
