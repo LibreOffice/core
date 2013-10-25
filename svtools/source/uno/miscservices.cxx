@@ -26,6 +26,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <osl/diagnose.h>
 #include <uno/mapping.hxx>
+#include "fpicker.hxx"
 #include "provider.hxx"
 #include "renderer.hxx"
 #include "unowizard.hxx"
@@ -69,6 +70,18 @@ namespace
             ::svt::uno::Wizard::getSupportedServiceNames_static,
             ::cppu::createSingleComponentFactory, NULL, 0
         },
+        {
+            FilePicker_CreateInstance,
+            FilePicker_getImplementationName,
+            FilePicker_getSupportedServiceNames,
+            ::cppu::createSingleComponentFactory, 0, 0
+        },
+        {
+            FolderPicker_CreateInstance,
+            FolderPicker_getImplementationName,
+            FolderPicker_getSupportedServiceNames,
+            ::cppu::createSingleComponentFactory, 0, 0
+        },
         { 0, 0, 0, 0, 0, 0 }
     };
 }
@@ -90,6 +103,8 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
     void * pResult = 0;
     if ( _pServiceManager )
     {
+        Reference< XMultiServiceFactory > xSMgr(reinterpret_cast< XMultiServiceFactory * >( _pServiceManager ) );
+
         Reference< XSingleServiceFactory > xFactory;
         if (rtl_str_compare (
                 pImplementationName, "com.sun.star.comp.svtools.OAddressBookSourceDialogUno") == 0)
@@ -98,8 +113,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
             aServiceNames.getArray()[0] =
                 OUString( "com.sun.star.ui.AddressBookSourceDialog" );
 
-            xFactory = ::cppu::createSingleFactory (
-                reinterpret_cast< XMultiServiceFactory* >( _pServiceManager ),
+            xFactory = ::cppu::createSingleFactory (xSMgr,
                 OUString::createFromAscii( pImplementationName ),
                 svt::OAddressBookSourceDialogUno_CreateInstance,
                 aServiceNames);
@@ -111,31 +125,28 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svt_component_getFactory (
             aServiceNames.getArray()[0] =
                 OUString( "com.sun.star.ui.dialogs.FilterOptionsDialog" );
 
-            xFactory = ::cppu::createSingleFactory (
-                reinterpret_cast< XMultiServiceFactory* >( _pServiceManager ),
+            xFactory = ::cppu::createSingleFactory (xSMgr,
                 OUString::createFromAscii( pImplementationName ),
                 SvFilterOptionsDialog_CreateInstance,
                 aServiceNames);
         }
         else if( 0 == GraphicProvider::getImplementationName_Static().compareToAscii( pImplementationName ) )
         {
-            xFactory =  ::cppu::createOneInstanceFactory(
-                reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ),
+            xFactory =  ::cppu::createOneInstanceFactory(xSMgr,
                 GraphicProvider::getImplementationName_Static(),
                 GraphicProvider_CreateInstance,
                 GraphicProvider::getSupportedServiceNames_Static() );
         }
         else if( 0 == GraphicRendererVCL::getImplementationName_Static().compareToAscii( pImplementationName ) )
         {
-            xFactory = ::cppu::createOneInstanceFactory(
-                reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ),
+            xFactory = ::cppu::createOneInstanceFactory(xSMgr,
                 GraphicRendererVCL::getImplementationName_Static(),
                 GraphicRendererVCL_CreateInstance,
                 GraphicRendererVCL::getSupportedServiceNames_Static() );
         }
         else
         {
-            pResult =  component_getFactoryHelper( pImplementationName, reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ),reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ), serviceDecl );
+            pResult =  component_getFactoryHelper( pImplementationName, reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ), reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ), serviceDecl );
             if ( !pResult )
                 pResult = ::cppu::component_getFactoryHelper( pImplementationName, _pServiceManager, pRegistryKey, s_aServiceEntries );
         }
