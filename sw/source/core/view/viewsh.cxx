@@ -1755,10 +1755,6 @@ void SwViewShell::PaintTile(OutputDevice *pOut, const Rectangle &rRect)
 {
     assert(pOut);
 
-    pOut->SetPixelOffset(Size(rRect.TopLeft().X(), rRect.TopLeft().Y()));
-
-    // TODO make the tileWidth/Height fit the width/height of the pOut device
-
     // now we need to setup the SwViewShell's output device
     // TODO clean up SwViewShell's approach to output devices
     OutputDevice *pSaveOut = GetOut();
