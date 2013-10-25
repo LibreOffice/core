@@ -1374,6 +1374,30 @@ def __float__(x): # handle eg. float("10,5cm")
         x = eval(x)
     return float(x)
 
+def fontheight(n = -1):
+    if n != -1:
+        _.fontheight = n
+    else:
+        return _.fontheight
+
+def fontweight(n = -1):
+    if n != -1:
+        _.fontweight = n
+    else:
+        return _.fontweight
+
+def fontfamily(s = -1):
+    if s != -1:
+        _.fontfamily = s
+    else:
+        return _.fontfamily
+
+def fontstyle(n = -1):
+    if n != -1:
+        _.fontstyle = n
+    else:
+        return _.fontstyle
+
 def __loadlang__(lang, a):
     global comp, __colors__
     __colors__[lang] = {}
@@ -1445,13 +1469,13 @@ def __loadlang__(lang, a):
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['FILLCOLOR'], "\n)fillcolor("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['FILLSTYLE'], "\n)fillstyle("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTCOLOR'], "\n)fontcolor("],
-    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTFAMILY'], "\nglobal _\n_.fontfamily="],
-    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTHEIGHT'], "\nglobal _\n_.fontheight="],
-    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTWEIGHT'], "\nglobal _\n_.fontweight="],
-    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTSTYLE'], "\nglobal _\n_.fontstyle="],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTFAMILY'], "\n)fontfamily("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTHEIGHT'], "\n)fontheight("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTWEIGHT'], "\n)fontweight("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTSTYLE'], "\n)fontstyle("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENWIDTH'], "\n)pensize("],
-    [r"(?<!:)\b(?:%s)\b" % a['PENDOWN'], "\nglobal _\n__pen__(1)"],
-    [r"(?<!:)\b(?:%s)\b" % a['PENUP'], "\nglobal _\n__pen__(0)"],
+    [r"(?<!:)\b(?:%s)\b" % a['PENDOWN'], "\n__pen__(1)"],
+    [r"(?<!:)\b(?:%s)\b" % a['PENUP'], "\n__pen__(0)"],
     [r"(?<!:)\b(?:%s)\b" % a['HIDETURTLE'], "\nhideturtle()"],
     [r"(?<!:)\b(?:%s)\b" % a['SHOWTURTLE'], "\nshowturtle()"],
     [r"(?<!:)\b(?:%s)\b\[" % a['POSITION'], "position()["],
