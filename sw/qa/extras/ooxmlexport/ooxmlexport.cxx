@@ -120,6 +120,7 @@ public:
     void testFdo68787();
     void testCharacterBorder();
     void testStyleInheritance();
+    void testCalendar1();
     void testSmartart();
     void testFdo69636();
     void testCharHighlight();
@@ -240,6 +241,7 @@ void Test::run()
         {"fdo68787.docx", &Test::testFdo68787},
         {"charborder.odt", &Test::testCharacterBorder},
         {"style-inheritance.docx", &Test::testStyleInheritance},
+        {"calendar1.docx", &Test::testCalendar1},
         {"smartart.docx", &Test::testSmartart},
         {"fdo69636.docx", &Test::testFdo69636},
         {"char_highlight.docx", &Test::testCharHighlight},
@@ -1452,6 +1454,16 @@ void Test::testStyleInheritance()
 
     // Table style wasn't roundtripped.
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableNormal']/w:tblPr/w:tblCellMar/w:left", "w", "108");
+}
+
+void Test::testCalendar1()
+{
+    // Document has a non-trivial table style, test the roundtrip of it.
+    xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:basedOn", "val", "TableNormal");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:rsid", "val", "00903003");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblPr/w:tblStyleColBandSize", "val", "1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tcPr/w:shd", "val", "clear");
 }
 
 void Test::testSmartart()
