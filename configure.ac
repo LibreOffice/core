@@ -1327,11 +1327,6 @@ AC_ARG_WITH(external-tar,
     TARFILE_LOCATION=$withval ,
 )
 
-AC_ARG_WITH(solver-and-workdir-root,
-    AS_HELP_STRING([--with-solver-and-workdir-root=<PATH>],
-        [Specify path that contains SOLARVER and WORKDIR directories manually.])
-)
-
 AC_ARG_WITH(referenced-git,
     AS_HELP_STRING([--with-referenced-git=<OTHER_CHECKOUT_DIR>],
         [Specify another checkout directory to reference. This makes use of
@@ -2339,20 +2334,7 @@ else
 fi
 AC_SUBST(DISABLE_DYNLOADING)
 
-if test -n "${with_solver_and_workdir_root}"; then
-    if ! test -d ${with_solver_and_workdir_root}; then
-      AC_MSG_ERROR([directory does not exist: ${with_solver_and_workdir_root}])
-    fi
-    PathFormat "${with_solver_and_workdir_root}"
-    # IsValidFilePath in /sal/osl/w32/file_url.cxx rejects "X:\\" breaking idlc
-    if echo ${formatted_path} | $GREP -q '/$'; then
-        SOLARVER=${formatted_path}solver
-    else
-        SOLARVER=${formatted_path}/solver
-    fi
-else
-    SOLARVER=${BUILDDIR}/solver
-fi
+SOLARVER="${BUILDDIR}/solver"
 
 # remenber SYSBASE value
 AC_SUBST(SYSBASE)
@@ -4387,20 +4369,8 @@ if test "$enable_headless" = "yes"; then
 fi
 
 INPATH="${OUTPATH}${PROEXT}"
-if test -n "${with_solver_and_workdir_root}"; then
-    PathFormat "${with_solver_and_workdir_root}"
-    # IsValidFilePath in /sal/osl/w32/file_url.cxx rejects "X:\\" breaking idlc
-    if echo ${formatted_path} | $GREP -q '/$'; then
-        WORKDIR=${formatted_path}workdir/${INPATH}
-        INSTDIR=${formatted_path}instdir/${INPATH}
-    else
-        WORKDIR=${formatted_path}/workdir/${INPATH}
-        INSTDIR=${formatted_path}/instdir/${INPATH}
-    fi
-else
-    WORKDIR=${BUILDDIR}/workdir/${INPATH}
-    INSTDIR=${BUILDDIR}/instdir/${INPATH}
-fi
+WORKDIR="${BUILDDIR}/workdir/${INPATH}"
+INSTDIR="${BUILDDIR}/instdir/${INPATH}"
 INSTROOT="${INSTDIR}${INSTROOTSUFFIX}"
 OUTDIR="${SOLARVER}/${INPATH}"
 SOLARINC="-I. -I$SRC_ROOT/include $SOLARINC"
@@ -4507,7 +4477,6 @@ if test "$cross_compiling" = "yes"; then
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
-    test -n "${with_solver_and_workdir_root}" && sub_conf_opts="$sub_conf_opts --with-solver-and-workdir-root=${with_solver_and_workdir_root}"
     test -n "$with_system_boost_for_build" && sub_conf_opts="$sub_conf_opts --with-system-boost"
     test -n "$with_system_cppunit_for_build" && sub_conf_opts="$sub_conf_opts --with-system-cppunit"
     test -n "$with_system_expat_for_build" && sub_conf_opts="$sub_conf_opts --with-system-expat"
