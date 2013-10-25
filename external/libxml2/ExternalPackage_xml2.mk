@@ -9,19 +9,21 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,xml2,xml2))
 
+$(eval $(call gb_ExternalPackage_set_outdir,xml2,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,xml2,xml2))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_library_for_install,xml2,lib/libxml2.2.dylib,.libs/libxml2.2.dylib,xml2))
+$(eval $(call gb_ExternalPackage_add_file,xml2,$(LIBO_URE_LIB_FOLDER)/libxml2.2.dylib,.libs/libxml2.2.dylib))
 else ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
-$(eval $(call gb_ExternalPackage_add_library_for_install,xml2,bin/libxml2.dll,.libs/libxml2.dll,xml2))
+$(eval $(call gb_ExternalPackage_add_file,xml2,$(LIBO_URE_LIB_FOLDER)/libxml2.dll,.libs/libxml2.dll))
 else # COM=MSC
-$(eval $(call gb_ExternalPackage_add_library_for_install,xml2,bin/libxml2.dll,win32/bin.msvc/libxml2.dll,xml2))
+$(eval $(call gb_ExternalPackage_add_file,xml2,$(LIBO_URE_LIB_FOLDER)/libxml2.dll,win32/bin.msvc/libxml2.dll))
 endif
 else # OS!=WNT
-$(eval $(call gb_ExternalPackage_add_library_for_install,xml2,lib/libxml2.so.2,.libs/libxml2.so.2.7.6,xml2))
+$(eval $(call gb_ExternalPackage_add_file,xml2,$(LIBO_URE_LIB_FOLDER)/libxml2.so.2,.libs/libxml2.so.2.7.6))
 endif
 endif # DISABLE_DYNLOADING
 

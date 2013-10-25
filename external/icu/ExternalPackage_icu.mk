@@ -11,19 +11,21 @@ icu_VERSION := $(ICU_MAJOR).$(ICU_MINOR)$(if $(ICU_MICRO),.$(ICU_MICRO))
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,icu,icu))
 
+$(eval $(call gb_ExternalPackage_set_outdir,icu,$(INSTROOT)))
+
 $(eval $(call gb_ExternalPackage_use_external_project,icu,icu))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 ifeq ($(OS),WNT)
 
 ifeq ($(COM),GCC)
-$(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,bin,\
+$(eval $(call gb_ExternalPackage_add_files,icu,$(LIBO_LIB_FOLDER),\
 	source/lib/icudt$(ICU_MAJOR).dll \
 	source/lib/icuuc$(ICU_MAJOR).dll \
 	source/lib/icuin$(ICU_MAJOR).dll \
 ))
 else
-$(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,bin,\
+$(eval $(call gb_ExternalPackage_add_files,icu,$(LIBO_LIB_FOLDER),\
 	source/lib/icudt$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icuuc$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icuin$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
@@ -32,7 +34,7 @@ endif # $(COM)
 
 else ifeq ($(OS),ANDROID)
 
-$(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,lib,\
+$(eval $(call gb_ExternalPackage_add_files,icu,$(LIBO_LIB_FOLDER),\
 	source/lib/libicudatalo.so \
 	source/lib/libicuuclo.so \
 	source/lib/libicui18nlo.so \
@@ -40,9 +42,9 @@ $(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,lib,\
 
 else # $(OS) != WNT/ANDROID
 
-$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicuuc$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicui18n$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
+$(eval $(call gb_ExternalPackage_add_file,icu,$(LIBO_LIB_FOLDER)/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION)))
+$(eval $(call gb_ExternalPackage_add_file,icu,$(LIBO_LIB_FOLDER)/libicuuc$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION)))
+$(eval $(call gb_ExternalPackage_add_file,icu,$(LIBO_LIB_FOLDER)/libicui18n$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
 
 endif # $(OS)
 endif # DISABLE_DYNLOADING
