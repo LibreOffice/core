@@ -160,7 +160,7 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
         LanguageType nOrigLang = nLang;
         if (bResolveSystem || nLang == LANGUAGE_DONTKNOW)
             nLang = MsLangId::getRealLanguage( nLang);
-        convertLanguageToLocaleImpl( nLang, aLocale);
+        convertLanguageToLocaleImpl( nLang, aLocale, true);
         if (bResolveSystem && aLocale.Language.isEmpty() && simplifySystemLanguages( nOrigLang) == LANGUAGE_SYSTEM)
         {
             // None found but resolve requested, last resort is "en-US".
@@ -454,7 +454,7 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bo
         default:
             break;  // nothing
         case LANGUAGE_OBSOLETE_USER_LATIN:
-            nLang = LANGUAGE_LATIN;
+            nLang = LANGUAGE_USER_LATIN_VATICAN;
             break;
         case LANGUAGE_OBSOLETE_USER_MAORI:
             nLang = LANGUAGE_MAORI_NEW_ZEALAND;

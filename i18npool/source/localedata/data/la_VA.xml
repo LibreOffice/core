@@ -84,22 +84,22 @@
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>[$€-476] #.##0;-[$€-476] #.##0</FormatCode>
+      <FormatCode>[$€-8076] #.##0;-[$€-8076] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[$€-476] #.##0;-[$€-476] #.##0</FormatCode>
+      <FormatCode>[$€-8076] #.##0;-[$€-8076] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="true" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>[$€-476] #.##0;[RED]-[$€-476] #.##0</FormatCode>
+      <FormatCode>[$€-8076] #.##0;[RED]-[$€-8076] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="false" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>[$€-476] #.##0;[RED]-[$€-476] #.##0</FormatCode>
+      <FormatCode>[$€-8076] #.##0;[RED]-[$€-8076] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode>#.##0 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>[$€-476] #.##0;[RED]-[$€-476] #.##0</FormatCode>
+      <FormatCode>[$€-8076] #.##0;[RED]-[$€-8076] #.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>DD/MM/YY</FormatCode>

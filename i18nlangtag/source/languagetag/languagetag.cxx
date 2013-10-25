@@ -924,7 +924,8 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
                 {
                     if (pImpl->mnLangID != LANGUAGE_DONTKNOW)
                     {
-                        // May have involved canonicalize(), so compare with pImpl->maBcp47!
+                        // May have involved canonicalize(), so compare with
+                        // pImpl->maBcp47 instead of maBcp47!
                         aBcp47 = LanguageTagImpl::convertToBcp47(
                                 MsLangId::Conversion::convertLanguageToLocale( pImpl->mnLangID, true));
                         bInsert = (aBcp47 == pImpl->maBcp47);
@@ -1156,6 +1157,19 @@ bool LanguageTagImpl::canonicalize()
                         meIsLiblangtagNeeded = DECISION_NO; // known fallback
                 }
             }
+            // We may have an internal override "canonicalization".
+            lang::Locale aNew( MsLangId::Conversion::getOverride( maLocale));
+            if (!aNew.Language.isEmpty() &&
+                    (aNew.Language != maLocale.Language ||
+                     aNew.Country  != maLocale.Country ||
+                     aNew.Variant  != maLocale.Variant))
+            {
+                maBcp47 = LanguageTagImpl::convertToBcp47( aNew);
+                bChanged = true;
+                meIsIsoLocale = DECISION_DONTKNOW;
+                meIsIsoODF = DECISION_DONTKNOW;
+                meIsLiblangtagNeeded = DECISION_NO; // known locale
+            }
         }
         if (bTemporaryLocale)
         {
@@ -1173,6 +1187,7 @@ bool LanguageTagImpl::canonicalize()
         meIsValid = DECISION_YES;   // really, known must be valid ...
         return bChanged;            // that's it
     }
+
     meIsLiblangtagNeeded = DECISION_YES;
     SAL_INFO( "i18nlangtag", "LanguageTagImpl::canonicalize: using liblangtag for '" << maBcp47 << "'");
 
@@ -1190,12 +1205,12 @@ bool LanguageTagImpl::canonicalize()
         SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTagImpl::canonicalize: could not canonicalize '" << maBcp47 << "'");
         if (pTag)
         {
-            OUString aOld( maBcp47);
-            maBcp47 = OUString::createFromAscii( pTag);
+            OUString aNew( OUString::createFromAscii( pTag));
             // Make the lt_tag_t follow the new string if different, which
             // removes default script and such.
-            if (maBcp47 != aOld)
+            if (maBcp47 != aNew)
             {
+                maBcp47 = aNew;
                 bChanged = true;
                 meIsIsoLocale = DECISION_DONTKNOW;
                 meIsIsoODF = DECISION_DONTKNOW;
@@ -2182,6 +2197,8 @@ LanguageTag & LanguageTag::makeFallback()
             aTmp = aLanguage + "-" + aCountry + "-" + aVariants;
             if (aTmp != maBcp47)
                 aVec.push_back( aTmp);
+            if (maBcp47 == "ca-ES-valencia")
+                aVec.push_back( "ca-XV");
             // Language with variant but without country before language
             // without variant but with country.
             // But only if variant is not from a grandfathered tag that

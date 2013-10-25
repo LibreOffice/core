@@ -29,14 +29,40 @@ using namespace com::sun::star;
 
 // =======================================================================
 
+static const LanguageType kSAME = 0xffff;
+
+namespace {
+inline LanguageType getOverrideLang( LanguageType nLang, LanguageType nOverride )
+{
+    return nOverride ? ((nOverride == kSAME) ? nLang : nOverride) : nLang;
+}
+}
+
+/* Usage of override mechanism:
+ * If a table entry's mnOverride is not 0, an override entry with an mnLang
+ * value of (mnOverride==kSAME ? mnLang : mnOverride) exists that should be
+ * used instead. There MUST exist one such entry that does not have an
+ * mnOverride value and within one table it MUST be located before any entry
+ * with that mnLang and an mnOverride value of not 0. Usually kSAME is used as
+ * override value, with rare exceptions, see tables below.
+ *
+ * The override serves these purposes:
+ * - With getOverride() it indicates that there is a different language tag
+ *   (locale) that the requested language tag should be "canonicalized" to.
+ * - With lookupFallbackLocale() a locale may be returned where the language
+ *   tag differs.
+ * - With convertLanguageToLocaleImpl() and bIgnoreOverride=false the override
+ *   is followed and the override locale returned.
+ * - With convertLocaleToLanguageImpl() a different LangID may be returned in
+ *   rare cases where the actual mapped ID differs.
+ */
+
 struct IsoLanguageCountryEntry
 {
     LanguageType  mnLang;
     sal_Char      maLanguage[4];
     sal_Char      maCountry[3];
-    /** If TRUE, a higher (!) level override with the same mnLang (!) exists
-        that should be used instead. */
-    bool          mbOverrideExists;
+    LanguageType  mnOverride;
 
     /** Obtain a language tag string with '-' separator. */
     OUString getTagString() const;
@@ -50,6 +76,7 @@ struct IsoLanguageScriptCountryEntry
     LanguageType  mnLang;
     sal_Char      maLanguageScript[9];      ///< "ll-Ssss" or "lll-Ssss"
     sal_Char      maCountry[3];
+    LanguageType  mnOverride;
 
     /** Obtain a language tag string with '-' separator. */
     OUString getTagString() const;
@@ -142,545 +169,546 @@ struct IsoLangOtherEntry
 
 static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
 {
-    // MS-LANGID codes               ISO639-1/2/3 ISO3166
-    { LANGUAGE_ENGLISH,                     "en", ""  , false },
-    { LANGUAGE_ENGLISH_US,                  "en", "US", false },
-    { LANGUAGE_ENGLISH_UK,                  "en", "GB", false },
-    { LANGUAGE_ENGLISH_AUS,                 "en", "AU", false },
-    { LANGUAGE_ENGLISH_CAN,                 "en", "CA", false },
-    { LANGUAGE_FRENCH,                      "fr", "FR", false },
-    { LANGUAGE_GERMAN,                      "de", "DE", false },
-    { LANGUAGE_ITALIAN,                     "it", "IT", false },
-    { LANGUAGE_DUTCH,                       "nl", "NL", false },
-    { LANGUAGE_SPANISH_MODERN,              "es", "ES", false },
-    { LANGUAGE_SPANISH_DATED,               "es", "ES", false },
-    { LANGUAGE_PORTUGUESE,                  "pt", "PT", false },
-    { LANGUAGE_PORTUGUESE_BRAZILIAN,        "pt", "BR", false },
-    { LANGUAGE_DANISH,                      "da", "DK", false },
-    { LANGUAGE_GREEK,                       "el", "GR", false },
-    { LANGUAGE_CHINESE_SIMPLIFIED,          "zh", "CN", false },
-    { LANGUAGE_CHINESE_SIMPLIFIED_LEGACY,   "zh", "CN", false },
-    { LANGUAGE_CHINESE_TRADITIONAL,         "zh", "TW", false },
-    { LANGUAGE_CHINESE_HONGKONG,            "zh", "HK", false },
-    { LANGUAGE_CHINESE_SINGAPORE,           "zh", "SG", false },
-    { LANGUAGE_CHINESE_MACAU,               "zh", "MO", false },
-    { LANGUAGE_CHINESE_LSO,                 "zh", ""  , false },
-    { LANGUAGE_YUE_CHINESE_HONGKONG,       "yue", "HK", false },
-    { LANGUAGE_ENGLISH_HONG_KONG_SAR,       "en", "HK", false },
-    { LANGUAGE_JAPANESE,                    "ja", "JP", false },
-    { LANGUAGE_KOREAN,                      "ko", "KR", false },
-    { LANGUAGE_KOREAN_JOHAB,                "ko", "KR", false },
-    { LANGUAGE_USER_KOREAN_NORTH,           "ko", "KP", false },
-    { LANGUAGE_SWEDISH,                     "sv", "SE", false },
-    { LANGUAGE_SWEDISH_FINLAND,             "sv", "FI", false },
-    { LANGUAGE_FINNISH,                     "fi", "FI", false },
-    { LANGUAGE_RUSSIAN,                     "ru", "RU", false },
-    { LANGUAGE_TATAR,                       "tt", "RU", false },
-    { LANGUAGE_ENGLISH_NZ,                  "en", "NZ", false },
-    { LANGUAGE_ENGLISH_EIRE,                "en", "IE", false },
-    { LANGUAGE_DUTCH_BELGIAN,               "nl", "BE", false },
-    { LANGUAGE_FRENCH_BELGIAN,              "fr", "BE", false },
-    { LANGUAGE_FRENCH_CANADIAN,             "fr", "CA", false },
-    { LANGUAGE_FRENCH_SWISS,                "fr", "CH", false },
-    { LANGUAGE_GERMAN_SWISS,                "de", "CH", false },
-    { LANGUAGE_GERMAN_AUSTRIAN,             "de", "AT", false },
-    { LANGUAGE_ITALIAN_SWISS,               "it", "CH", false },
-    { LANGUAGE_ALBANIAN,                    "sq", "AL", false },
-    { LANGUAGE_ARABIC_SAUDI_ARABIA,         "ar", "SA", false },
-    { LANGUAGE_ARABIC_EGYPT,                "ar", "EG", false },
-    { LANGUAGE_ARABIC_UAE,                  "ar", "AE", false },
-    { LANGUAGE_ARABIC_IRAQ,                 "ar", "IQ", false },
-    { LANGUAGE_ARABIC_LIBYA,                "ar", "LY", false },
-    { LANGUAGE_ARABIC_ALGERIA,              "ar", "DZ", false },
-    { LANGUAGE_ARABIC_MOROCCO,              "ar", "MA", false },
-    { LANGUAGE_ARABIC_TUNISIA,              "ar", "TN", false },
-    { LANGUAGE_ARABIC_OMAN,                 "ar", "OM", false },
-    { LANGUAGE_ARABIC_YEMEN,                "ar", "YE", false },
-    { LANGUAGE_ARABIC_SYRIA,                "ar", "SY", false },
-    { LANGUAGE_ARABIC_JORDAN,               "ar", "JO", false },
-    { LANGUAGE_ARABIC_LEBANON,              "ar", "LB", false },
-    { LANGUAGE_ARABIC_KUWAIT,               "ar", "KW", false },
-    { LANGUAGE_ARABIC_BAHRAIN,              "ar", "BH", false },
-    { LANGUAGE_ARABIC_QATAR,                "ar", "QA", false },
-    { LANGUAGE_USER_ARABIC_CHAD,            "ar", "TD", false },
-    { LANGUAGE_USER_ARABIC_COMOROS,         "ar", "KM", false },
-    { LANGUAGE_USER_ARABIC_DJIBOUTI,        "ar", "DJ", false },
-    { LANGUAGE_USER_ARABIC_ERITREA,         "ar", "ER", false },
-    { LANGUAGE_USER_ARABIC_ISRAEL,          "ar", "IL", false },
-    { LANGUAGE_USER_ARABIC_MAURITANIA,      "ar", "MR", false },
-    { LANGUAGE_USER_ARABIC_PALESTINE,       "ar", "PS", false },
-    { LANGUAGE_USER_ARABIC_SOMALIA,         "ar", "SO", false },
-    { LANGUAGE_USER_ARABIC_SUDAN,           "ar", "SD", false },
-    { LANGUAGE_ARABIC_PRIMARY_ONLY,         "ar", ""  , false },
-    { LANGUAGE_BASQUE,                      "eu", ""  , false },
-    { LANGUAGE_BULGARIAN,                   "bg", "BG", false },
-    { LANGUAGE_CZECH,                       "cs", "CZ", false },
-    { LANGUAGE_CZECH,                       "cz", ""  , true  },
-    { LANGUAGE_ENGLISH_JAMAICA,             "en", "JM", false },
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "en", "BS", false },   // not 100%, because AG is Bahamas
-    { LANGUAGE_ENGLISH_BELIZE,              "en", "BZ", false },
-    { LANGUAGE_ENGLISH_TRINIDAD,            "en", "TT", false },
-    { LANGUAGE_ENGLISH_ZIMBABWE,            "en", "ZW", false },
-    { LANGUAGE_ENGLISH_INDONESIA,           "en", "ID", false },
-    { LANGUAGE_ESTONIAN,                    "et", "EE", false },
-    { LANGUAGE_FAEROESE,                    "fo", "FO", false },
-    { LANGUAGE_FARSI,                       "fa", "IR", false },
-    { LANGUAGE_FRENCH_LUXEMBOURG,           "fr", "LU", false },
-    { LANGUAGE_FRENCH_MONACO,               "fr", "MC", false },
-    { LANGUAGE_GERMAN_LUXEMBOURG,           "de", "LU", false },
-    { LANGUAGE_GERMAN_LIECHTENSTEIN,        "de", "LI", false },
-    { LANGUAGE_HEBREW,                      "he", "IL", false },   // new: old was "iw"
-    { LANGUAGE_HEBREW,                      "iw", "IL", true  },   // old: new is "he"
-    { LANGUAGE_HUNGARIAN,                   "hu", "HU", false },
-    { LANGUAGE_ICELANDIC,                   "is", "IS", false },
-    { LANGUAGE_INDONESIAN,                  "id", "ID", false },   // new: old was "in"
-    { LANGUAGE_INDONESIAN,                  "in", "ID", true  },   // old: new is "id"
-    { LANGUAGE_NORWEGIAN,                   "no", "NO", false },
-    { LANGUAGE_NORWEGIAN_BOKMAL,            "nb", "NO", false },
-    { LANGUAGE_NORWEGIAN_BOKMAL_LSO,        "nb", ""  , false },
-    { LANGUAGE_NORWEGIAN_NYNORSK,           "nn", "NO", false },
-    { LANGUAGE_NORWEGIAN_NYNORSK_LSO,       "nn", ""  , false },
-    { LANGUAGE_POLISH,                      "pl", "PL", false },
-    { LANGUAGE_RHAETO_ROMAN,                "rm", "CH", false },
-    { LANGUAGE_ROMANIAN,                    "ro", "RO", false },
-    { LANGUAGE_ROMANIAN_MOLDOVA,            "ro", "MD", false },
-    { LANGUAGE_SLOVAK,                      "sk", "SK", false },
-    { LANGUAGE_SLOVENIAN,                   "sl", "SI", false },
-    { LANGUAGE_SPANISH_MEXICAN,             "es", "MX", false },
-    { LANGUAGE_SPANISH_GUATEMALA,           "es", "GT", false },
-    { LANGUAGE_SPANISH_COSTARICA,           "es", "CR", false },
-    { LANGUAGE_SPANISH_PANAMA,              "es", "PA", false },
-    { LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,  "es", "DO", false },
-    { LANGUAGE_SPANISH_VENEZUELA,           "es", "VE", false },
-    { LANGUAGE_SPANISH_COLOMBIA,            "es", "CO", false },
-    { LANGUAGE_SPANISH_PERU,                "es", "PE", false },
-    { LANGUAGE_SPANISH_ARGENTINA,           "es", "AR", false },
-    { LANGUAGE_SPANISH_ECUADOR,             "es", "EC", false },
-    { LANGUAGE_SPANISH_CHILE,               "es", "CL", false },
-    { LANGUAGE_SPANISH_URUGUAY,             "es", "UY", false },
-    { LANGUAGE_SPANISH_PARAGUAY,            "es", "PY", false },
-    { LANGUAGE_SPANISH_BOLIVIA,             "es", "BO", false },
-    { LANGUAGE_SPANISH_EL_SALVADOR,         "es", "SV", false },
-    { LANGUAGE_SPANISH_HONDURAS,            "es", "HN", false },
-    { LANGUAGE_SPANISH_NICARAGUA,           "es", "NI", false },
-    { LANGUAGE_SPANISH_PUERTO_RICO,         "es", "PR", false },
-    { LANGUAGE_SPANISH_UNITED_STATES,       "es", "US", false },
-    { LANGUAGE_SPANISH_LATIN_AMERICA,       "es", ""  , false },
-    { LANGUAGE_TURKISH,                     "tr", "TR", false },
-    { LANGUAGE_UKRAINIAN,                   "uk", "UA", false },
-    { LANGUAGE_VIETNAMESE,                  "vi", "VN", false },
-    { LANGUAGE_LATVIAN,                     "lv", "LV", false },
-    { LANGUAGE_MACEDONIAN,                  "mk", "MK", false },
-    { LANGUAGE_MALAY_MALAYSIA,              "ms", "MY", false },
-    { LANGUAGE_MALAY_BRUNEI_DARUSSALAM,     "ms", "BN", false },
-    { LANGUAGE_ENGLISH_MALAYSIA,            "en", "MY", false },
-    { LANGUAGE_THAI,                        "th", "TH", false },
-    { LANGUAGE_LITHUANIAN,                  "lt", "LT", false },
-    { LANGUAGE_LITHUANIAN_CLASSIC,          "lt", "LT", false },
-    { LANGUAGE_CROATIAN,                    "hr", "HR", false },   // Croatian in Croatia
-    { LANGUAGE_CROATIAN_BOSNIA_HERZEGOVINA, "hr", "BA", false },
-    { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,    "bs", "BA", false },
-    { LANGUAGE_BOSNIAN_LSO,                 "bs", ""  , false },    // so what is 'bs' vs 'bs-Latn'?
-    { LANGUAGE_SERBIAN_CYRILLIC_SERBIA,             "sr", "RS", false },   // Serbian Cyrillic in Serbia
-    { LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_SERBIA,"sr", "RS", false },
-    { LANGUAGE_SERBIAN_CYRILLIC_SAM,                "sr", "CS", false },   // Serbian Cyrillic in Serbia and Montenegro
-    { LANGUAGE_SERBIAN_CYRILLIC_SAM,                "sr", "YU", true  },   // legacy Serbian Cyrillic in Serbia and Montenegro (former Yugoslavia); kludge, sr_CS not supported by ICU 2.6 (3.4 does)
-    { LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO,         "sr", "ME", false },
-    { LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_MONTENEGRO,"sr", "ME", false },
-    { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr", "BA", false },
-    { LANGUAGE_SERBIAN_CYRILLIC_LSO,                "sr", ""  , false },
-    { LANGUAGE_SERBIAN_LATIN_SERBIA,                "sh", "RS", true  },   // legacy kludge, is sr-Latn-RS now
-    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA,  "sh", "RS", true  },   // legacy kludge, is sr-Latn-RS now
-    { LANGUAGE_SERBIAN_LATIN_SAM,                   "sh", "CS", true  },   // legacy kludge, is sr-Latn-CS now
-    { LANGUAGE_SERBIAN_LATIN_SAM,                   "sh", "YU", true  },   // legacy kludge, is sr-Latn-YU now
-    { LANGUAGE_SERBIAN_LATIN_MONTENEGRO,            "sh", "ME", true  },   // legacy kludge, is sr-Latn-ME now
-    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO,"sh", "ME", true  }, // legacy kludge, is sr-Latn-ME now
-    { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,    "sh", "BA", true  },   // legacy kludge, is sr-Latn-BA now
-    { LANGUAGE_SERBIAN_LATIN_LSO,                   "sh", ""  , true  },   // legacy kludge, is sr-Latn now
-    { LANGUAGE_ARMENIAN,                    "hy", "AM", false },
-    { LANGUAGE_AZERI_LATIN,                 "az", "AZ", false },    // macrolanguage code
-    { LANGUAGE_UZBEK_LATIN,                 "uz", "UZ", false },    // macrolanguage code
-    { LANGUAGE_UZBEK_LATIN_LSO,             "uz", ""  , false },    // macrolanguage code
-    { LANGUAGE_BENGALI_BANGLADESH,          "bn", "BD", false },
-    { LANGUAGE_BENGALI,                     "bn", "IN", false },
-    { LANGUAGE_BURMESE,                     "my", "MM", false },
-    { LANGUAGE_KAZAKH,                      "kk", "KZ", false },
-    { LANGUAGE_ENGLISH_INDIA,               "en", "IN", false },
-    { LANGUAGE_URDU_INDIA,                  "ur", "IN", false },
-    { LANGUAGE_URDU_PAKISTAN,               "ur", "PK", false },
-    { LANGUAGE_HINDI,                       "hi", "IN", false },
-    { LANGUAGE_GUJARATI,                    "gu", "IN", false },
-    { LANGUAGE_KANNADA,                     "kn", "IN", false },
-    { LANGUAGE_ASSAMESE,                    "as", "IN", false },
-    { LANGUAGE_KASHMIRI_INDIA,              "ks", "IN", false },
-    { LANGUAGE_KASHMIRI,                    "ks", ""  , false },   // Kashmiri in "Jammu and Kashmir" ... no ISO3166 code for that
-    { LANGUAGE_MALAYALAM,                   "ml", "IN", false },
-    { LANGUAGE_MANIPURI,                   "mni", "IN", false },
-    { LANGUAGE_MARATHI,                     "mr", "IN", false },
-    { LANGUAGE_KONKANI,                    "kok", "IN", false },
-    { LANGUAGE_NEPALI,                      "ne", "NP", false },
-    { LANGUAGE_NEPALI_INDIA,                "ne", "IN", false },
-    { LANGUAGE_ORIYA,                       "or", "IN", false },
-    { LANGUAGE_PUNJABI,                     "pa", "IN", false },
-    { LANGUAGE_SANSKRIT,                    "sa", "IN", false },
-    { LANGUAGE_SINDHI,                      "sd", "IN", false },    // TODO: there's Deva(nagari) and Arab(ic) script, which do we use in 'sd' translation? MS maps this to 'sd-Deva-IN'
-    { LANGUAGE_TAMIL,                       "ta", "IN", false },
-    { LANGUAGE_TAMIL_SRI_LANKA,             "ta", "LK", false },
-    { LANGUAGE_TELUGU,                      "te", "IN", false },
-    { LANGUAGE_PUNJABI_PAKISTAN,           "pnb", "PK", false },
-    { LANGUAGE_PUNJABI_ARABIC_LSO,         "pnb", ""  , false },
-    { LANGUAGE_PUNJABI_PAKISTAN,           "lah", "PK", true  },    // macrolanguage code, earlier preferred 'lah' over 'pa' for Western Panjabi, now there is 'pnb'
-    { LANGUAGE_PUNJABI_PAKISTAN,            "pa", "PK", true  },    // MS maps this to 'pa-Arab-PK', but 'pa'='pan' Eastern Panjabi is not used in PK, only in IN
-    { LANGUAGE_SINDHI_PAKISTAN,             "sd", "PK", false },    // TODO: there's Deva(nagari) and Arab(ic) script, which do we use in 'sd' translation? MS maps this to 'sd-Arab-PK'
-    { LANGUAGE_BELARUSIAN,                  "be", "BY", false },
-    { LANGUAGE_CATALAN,                     "ca", "ES", false },   // Spain (default)
-    { LANGUAGE_CATALAN,                     "ca", "AD", false },   // Andorra
+    // MS-LANGID codes,             ISO639-1/2/3, ISO3166, override
+    { LANGUAGE_ENGLISH,                     "en", ""  , 0     },
+    { LANGUAGE_ENGLISH_US,                  "en", "US", 0     },
+    { LANGUAGE_ENGLISH_UK,                  "en", "GB", 0     },
+    { LANGUAGE_ENGLISH_AUS,                 "en", "AU", 0     },
+    { LANGUAGE_ENGLISH_CAN,                 "en", "CA", 0     },
+    { LANGUAGE_FRENCH,                      "fr", "FR", 0     },
+    { LANGUAGE_GERMAN,                      "de", "DE", 0     },
+    { LANGUAGE_ITALIAN,                     "it", "IT", 0     },
+    { LANGUAGE_DUTCH,                       "nl", "NL", 0     },
+    { LANGUAGE_SPANISH_MODERN,              "es", "ES", 0     },
+    { LANGUAGE_SPANISH_DATED,               "es", "ES", 0     },
+    { LANGUAGE_PORTUGUESE,                  "pt", "PT", 0     },
+    { LANGUAGE_PORTUGUESE_BRAZILIAN,        "pt", "BR", 0     },
+    { LANGUAGE_DANISH,                      "da", "DK", 0     },
+    { LANGUAGE_GREEK,                       "el", "GR", 0     },
+    { LANGUAGE_CHINESE_SIMPLIFIED,          "zh", "CN", 0     },
+    { LANGUAGE_CHINESE_SIMPLIFIED_LEGACY,   "zh", "CN", 0     },
+    { LANGUAGE_CHINESE_TRADITIONAL,         "zh", "TW", 0     },
+    { LANGUAGE_CHINESE_HONGKONG,            "zh", "HK", 0     },
+    { LANGUAGE_CHINESE_SINGAPORE,           "zh", "SG", 0     },
+    { LANGUAGE_CHINESE_MACAU,               "zh", "MO", 0     },
+    { LANGUAGE_CHINESE_LSO,                 "zh", ""  , 0     },
+    { LANGUAGE_YUE_CHINESE_HONGKONG,       "yue", "HK", 0     },
+    { LANGUAGE_ENGLISH_HONG_KONG_SAR,       "en", "HK", 0     },
+    { LANGUAGE_JAPANESE,                    "ja", "JP", 0     },
+    { LANGUAGE_KOREAN,                      "ko", "KR", 0     },
+    { LANGUAGE_KOREAN_JOHAB,                "ko", "KR", 0     },
+    { LANGUAGE_USER_KOREAN_NORTH,           "ko", "KP", 0     },
+    { LANGUAGE_SWEDISH,                     "sv", "SE", 0     },
+    { LANGUAGE_SWEDISH_FINLAND,             "sv", "FI", 0     },
+    { LANGUAGE_FINNISH,                     "fi", "FI", 0     },
+    { LANGUAGE_RUSSIAN,                     "ru", "RU", 0     },
+    { LANGUAGE_TATAR,                       "tt", "RU", 0     },
+    { LANGUAGE_ENGLISH_NZ,                  "en", "NZ", 0     },
+    { LANGUAGE_ENGLISH_EIRE,                "en", "IE", 0     },
+    { LANGUAGE_DUTCH_BELGIAN,               "nl", "BE", 0     },
+    { LANGUAGE_FRENCH_BELGIAN,              "fr", "BE", 0     },
+    { LANGUAGE_FRENCH_CANADIAN,             "fr", "CA", 0     },
+    { LANGUAGE_FRENCH_SWISS,                "fr", "CH", 0     },
+    { LANGUAGE_GERMAN_SWISS,                "de", "CH", 0     },
+    { LANGUAGE_GERMAN_AUSTRIAN,             "de", "AT", 0     },
+    { LANGUAGE_ITALIAN_SWISS,               "it", "CH", 0     },
+    { LANGUAGE_ALBANIAN,                    "sq", "AL", 0     },
+    { LANGUAGE_ARABIC_SAUDI_ARABIA,         "ar", "SA", 0     },
+    { LANGUAGE_ARABIC_EGYPT,                "ar", "EG", 0     },
+    { LANGUAGE_ARABIC_UAE,                  "ar", "AE", 0     },
+    { LANGUAGE_ARABIC_IRAQ,                 "ar", "IQ", 0     },
+    { LANGUAGE_ARABIC_LIBYA,                "ar", "LY", 0     },
+    { LANGUAGE_ARABIC_ALGERIA,              "ar", "DZ", 0     },
+    { LANGUAGE_ARABIC_MOROCCO,              "ar", "MA", 0     },
+    { LANGUAGE_ARABIC_TUNISIA,              "ar", "TN", 0     },
+    { LANGUAGE_ARABIC_OMAN,                 "ar", "OM", 0     },
+    { LANGUAGE_ARABIC_YEMEN,                "ar", "YE", 0     },
+    { LANGUAGE_ARABIC_SYRIA,                "ar", "SY", 0     },
+    { LANGUAGE_ARABIC_JORDAN,               "ar", "JO", 0     },
+    { LANGUAGE_ARABIC_LEBANON,              "ar", "LB", 0     },
+    { LANGUAGE_ARABIC_KUWAIT,               "ar", "KW", 0     },
+    { LANGUAGE_ARABIC_BAHRAIN,              "ar", "BH", 0     },
+    { LANGUAGE_ARABIC_QATAR,                "ar", "QA", 0     },
+    { LANGUAGE_USER_ARABIC_CHAD,            "ar", "TD", 0     },
+    { LANGUAGE_USER_ARABIC_COMOROS,         "ar", "KM", 0     },
+    { LANGUAGE_USER_ARABIC_DJIBOUTI,        "ar", "DJ", 0     },
+    { LANGUAGE_USER_ARABIC_ERITREA,         "ar", "ER", 0     },
+    { LANGUAGE_USER_ARABIC_ISRAEL,          "ar", "IL", 0     },
+    { LANGUAGE_USER_ARABIC_MAURITANIA,      "ar", "MR", 0     },
+    { LANGUAGE_USER_ARABIC_PALESTINE,       "ar", "PS", 0     },
+    { LANGUAGE_USER_ARABIC_SOMALIA,         "ar", "SO", 0     },
+    { LANGUAGE_USER_ARABIC_SUDAN,           "ar", "SD", 0     },
+    { LANGUAGE_ARABIC_PRIMARY_ONLY,         "ar", ""  , 0     },
+    { LANGUAGE_BASQUE,                      "eu", ""  , 0     },
+    { LANGUAGE_BULGARIAN,                   "bg", "BG", 0     },
+    { LANGUAGE_CZECH,                       "cs", "CZ", 0     },
+    { LANGUAGE_CZECH,                       "cz", ""  , kSAME },
+    { LANGUAGE_ENGLISH_JAMAICA,             "en", "JM", 0     },
+    { LANGUAGE_ENGLISH_CARRIBEAN,           "en", "BS", 0     },    // not 100%, because AG is Bahamas
+    { LANGUAGE_ENGLISH_BELIZE,              "en", "BZ", 0     },
+    { LANGUAGE_ENGLISH_TRINIDAD,            "en", "TT", 0     },
+    { LANGUAGE_ENGLISH_ZIMBABWE,            "en", "ZW", 0     },
+    { LANGUAGE_ENGLISH_INDONESIA,           "en", "ID", 0     },
+    { LANGUAGE_ESTONIAN,                    "et", "EE", 0     },
+    { LANGUAGE_FAEROESE,                    "fo", "FO", 0     },
+    { LANGUAGE_FARSI,                       "fa", "IR", 0     },
+    { LANGUAGE_FRENCH_LUXEMBOURG,           "fr", "LU", 0     },
+    { LANGUAGE_FRENCH_MONACO,               "fr", "MC", 0     },
+    { LANGUAGE_GERMAN_LUXEMBOURG,           "de", "LU", 0     },
+    { LANGUAGE_GERMAN_LIECHTENSTEIN,        "de", "LI", 0     },
+    { LANGUAGE_HEBREW,                      "he", "IL", 0     },    // new: old was "iw"
+    { LANGUAGE_HEBREW,                      "iw", "IL", kSAME },    // old: new is "he"
+    { LANGUAGE_HUNGARIAN,                   "hu", "HU", 0     },
+    { LANGUAGE_ICELANDIC,                   "is", "IS", 0     },
+    { LANGUAGE_INDONESIAN,                  "id", "ID", 0     },    // new: old was "in"
+    { LANGUAGE_INDONESIAN,                  "in", "ID", kSAME },    // old: new is "id"
+    { LANGUAGE_NORWEGIAN,                   "no", "NO", 0     },
+    { LANGUAGE_NORWEGIAN_BOKMAL,            "nb", "NO", 0     },
+    { LANGUAGE_NORWEGIAN_BOKMAL_LSO,        "nb", ""  , 0     },
+    { LANGUAGE_NORWEGIAN_NYNORSK,           "nn", "NO", 0     },
+    { LANGUAGE_NORWEGIAN_NYNORSK_LSO,       "nn", ""  , 0     },
+    { LANGUAGE_POLISH,                      "pl", "PL", 0     },
+    { LANGUAGE_RHAETO_ROMAN,                "rm", "CH", 0     },
+    { LANGUAGE_ROMANIAN,                    "ro", "RO", 0     },
+    { LANGUAGE_ROMANIAN_MOLDOVA,            "ro", "MD", 0     },
+    { LANGUAGE_SLOVAK,                      "sk", "SK", 0     },
+    { LANGUAGE_SLOVENIAN,                   "sl", "SI", 0     },
+    { LANGUAGE_SPANISH_MEXICAN,             "es", "MX", 0     },
+    { LANGUAGE_SPANISH_GUATEMALA,           "es", "GT", 0     },
+    { LANGUAGE_SPANISH_COSTARICA,           "es", "CR", 0     },
+    { LANGUAGE_SPANISH_PANAMA,              "es", "PA", 0     },
+    { LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,  "es", "DO", 0     },
+    { LANGUAGE_SPANISH_VENEZUELA,           "es", "VE", 0     },
+    { LANGUAGE_SPANISH_COLOMBIA,            "es", "CO", 0     },
+    { LANGUAGE_SPANISH_PERU,                "es", "PE", 0     },
+    { LANGUAGE_SPANISH_ARGENTINA,           "es", "AR", 0     },
+    { LANGUAGE_SPANISH_ECUADOR,             "es", "EC", 0     },
+    { LANGUAGE_SPANISH_CHILE,               "es", "CL", 0     },
+    { LANGUAGE_SPANISH_URUGUAY,             "es", "UY", 0     },
+    { LANGUAGE_SPANISH_PARAGUAY,            "es", "PY", 0     },
+    { LANGUAGE_SPANISH_BOLIVIA,             "es", "BO", 0     },
+    { LANGUAGE_SPANISH_EL_SALVADOR,         "es", "SV", 0     },
+    { LANGUAGE_SPANISH_HONDURAS,            "es", "HN", 0     },
+    { LANGUAGE_SPANISH_NICARAGUA,           "es", "NI", 0     },
+    { LANGUAGE_SPANISH_PUERTO_RICO,         "es", "PR", 0     },
+    { LANGUAGE_SPANISH_UNITED_STATES,       "es", "US", 0     },
+    { LANGUAGE_SPANISH_LATIN_AMERICA,       "es", ""  , 0     },
+    { LANGUAGE_TURKISH,                     "tr", "TR", 0     },
+    { LANGUAGE_UKRAINIAN,                   "uk", "UA", 0     },
+    { LANGUAGE_VIETNAMESE,                  "vi", "VN", 0     },
+    { LANGUAGE_LATVIAN,                     "lv", "LV", 0     },
+    { LANGUAGE_MACEDONIAN,                  "mk", "MK", 0     },
+    { LANGUAGE_MALAY_MALAYSIA,              "ms", "MY", 0     },
+    { LANGUAGE_MALAY_BRUNEI_DARUSSALAM,     "ms", "BN", 0     },
+    { LANGUAGE_ENGLISH_MALAYSIA,            "en", "MY", 0     },
+    { LANGUAGE_THAI,                        "th", "TH", 0     },
+    { LANGUAGE_LITHUANIAN,                  "lt", "LT", 0     },
+    { LANGUAGE_LITHUANIAN_CLASSIC,          "lt", "LT", 0     },
+    { LANGUAGE_CROATIAN,                    "hr", "HR", 0     },    // Croatian in Croatia
+    { LANGUAGE_CROATIAN_BOSNIA_HERZEGOVINA, "hr", "BA", 0     },
+    { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,          "bs", "BA", 0     },
+    { LANGUAGE_BOSNIAN_LSO,                               "bs", ""  , 0     },  // so what is 'bs' vs 'bs-Latn'?
+    { LANGUAGE_SERBIAN_CYRILLIC_SERBIA,                   "sr", "RS", 0     },  // Serbian Cyrillic in Serbia
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_SERBIA,     "sr", "RS", 0     },
+    { LANGUAGE_SERBIAN_CYRILLIC_SAM,                      "sr", "CS", 0     },  // Serbian Cyrillic in Serbia and Montenegro
+    { LANGUAGE_SERBIAN_CYRILLIC_SAM,                      "sr", "YU", kSAME },  // legacy Serbian Cyrillic in Serbia and Montenegro (former Yugoslavia); kludge, sr_CS not supported by ICU 2.6 (3.4 does)
+    { LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO,               "sr", "ME", 0     },
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_MONTENEGRO, "sr", "ME", 0     },
+    { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA,       "sr", "BA", 0     },
+    { LANGUAGE_SERBIAN_CYRILLIC_LSO,                      "sr", ""  , 0     },
+    { LANGUAGE_SERBIAN_LATIN_SERBIA,                      "sh", "RS", kSAME },  // legacy kludge, is sr-Latn-RS now
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA,        "sh", "RS", kSAME },  // legacy kludge, is sr-Latn-RS now
+    { LANGUAGE_SERBIAN_LATIN_SAM,                         "sh", "CS", kSAME },  // legacy kludge, is sr-Latn-CS now
+    { LANGUAGE_SERBIAN_LATIN_SAM,                         "sh", "YU", kSAME },  // legacy kludge, is sr-Latn-YU now
+    { LANGUAGE_SERBIAN_LATIN_MONTENEGRO,                  "sh", "ME", kSAME },  // legacy kludge, is sr-Latn-ME now
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO,    "sh", "ME", kSAME },  // legacy kludge, is sr-Latn-ME now
+    { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,          "sh", "BA", kSAME },  // legacy kludge, is sr-Latn-BA now
+    { LANGUAGE_SERBIAN_LATIN_LSO,                         "sh", ""  , kSAME },  // legacy kludge, is sr-Latn now
+    { LANGUAGE_ARMENIAN,                    "hy", "AM", 0     },
+    { LANGUAGE_AZERI_LATIN,                 "az", "AZ", 0     },    // macrolanguage code
+    { LANGUAGE_UZBEK_LATIN,                 "uz", "UZ", 0     },    // macrolanguage code
+    { LANGUAGE_UZBEK_LATIN_LSO,             "uz", ""  , 0     },    // macrolanguage code
+    { LANGUAGE_BENGALI_BANGLADESH,          "bn", "BD", 0     },
+    { LANGUAGE_BENGALI,                     "bn", "IN", 0     },
+    { LANGUAGE_BURMESE,                     "my", "MM", 0     },
+    { LANGUAGE_KAZAKH,                      "kk", "KZ", 0     },
+    { LANGUAGE_ENGLISH_INDIA,               "en", "IN", 0     },
+    { LANGUAGE_URDU_INDIA,                  "ur", "IN", 0     },
+    { LANGUAGE_URDU_PAKISTAN,               "ur", "PK", 0     },
+    { LANGUAGE_HINDI,                       "hi", "IN", 0     },
+    { LANGUAGE_GUJARATI,                    "gu", "IN", 0     },
+    { LANGUAGE_KANNADA,                     "kn", "IN", 0     },
+    { LANGUAGE_ASSAMESE,                    "as", "IN", 0     },
+    { LANGUAGE_KASHMIRI_INDIA,              "ks", "IN", 0     },
+    { LANGUAGE_KASHMIRI,                    "ks", ""  , kSAME },    // Kashmiri in "Jammu and Kashmir" ... no ISO3166 code for that
+    { LANGUAGE_MALAYALAM,                   "ml", "IN", 0     },
+    { LANGUAGE_MANIPURI,                   "mni", "IN", 0     },
+    { LANGUAGE_MARATHI,                     "mr", "IN", 0     },
+    { LANGUAGE_KONKANI,                    "kok", "IN", 0     },
+    { LANGUAGE_NEPALI,                      "ne", "NP", 0     },
+    { LANGUAGE_NEPALI_INDIA,                "ne", "IN", 0     },
+    { LANGUAGE_ORIYA,                       "or", "IN", 0     },
+    { LANGUAGE_PUNJABI,                     "pa", "IN", 0     },
+    { LANGUAGE_SANSKRIT,                    "sa", "IN", 0     },
+    { LANGUAGE_SINDHI,                      "sd", "IN", 0     },    // TODO: there's Deva(nagari) and Arab(ic) script, which do we use in 'sd' translation? MS maps this to 'sd-Deva-IN'
+    { LANGUAGE_TAMIL,                       "ta", "IN", 0     },
+    { LANGUAGE_TAMIL_SRI_LANKA,             "ta", "LK", 0     },
+    { LANGUAGE_TELUGU,                      "te", "IN", 0     },
+    { LANGUAGE_PUNJABI_PAKISTAN,           "pnb", "PK", 0     },
+    { LANGUAGE_PUNJABI_ARABIC_LSO,         "pnb", ""  , 0     },
+    { LANGUAGE_PUNJABI_PAKISTAN,           "lah", "PK", kSAME },    // macrolanguage code, earlier preferred 'lah' over 'pa' for Western Panjabi, now there is 'pnb'
+    { LANGUAGE_PUNJABI_PAKISTAN,            "pa", "PK", kSAME },    // MS maps this to 'pa-Arab-PK', but 'pa'='pan' Eastern Panjabi is not used in PK, only in IN
+    { LANGUAGE_SINDHI_PAKISTAN,             "sd", "PK", 0     },    // TODO: there's Deva(nagari) and Arab(ic) script, which do we use in 'sd' translation? MS maps this to 'sd-Arab-PK'
+    { LANGUAGE_BELARUSIAN,                  "be", "BY", 0     },
+    { LANGUAGE_CATALAN,                     "ca", "ES", 0     },    // Spain (default)
+    { LANGUAGE_CATALAN,                     "ca", "AD", 0     },    // Andorra
     //LANGUAGE_CATALAN_VALENCIAN ca-ES-valencia Bcp47CountryEntry takes precedence
-    { LANGUAGE_CATALAN_VALENCIAN,           "ca", "XV", true  },   // XV: ISO 3166 user-assigned; old workaround for UI localization only, in case it escaped to document content
-    { LANGUAGE_CATALAN_VALENCIAN,          "qcv", "ES", true  },   // qcv: ISO 639-3 reserved-for-local-use; old UI localization quirk only, in case it escaped to document content
-    { LANGUAGE_FRENCH_CAMEROON,             "fr", "CM", false },
-    { LANGUAGE_FRENCH_COTE_D_IVOIRE,        "fr", "CI", false },
-    { LANGUAGE_FRENCH_MALI,                 "fr", "ML", false },
-    { LANGUAGE_FRENCH_SENEGAL,              "fr", "SN", false },
-    { LANGUAGE_FRENCH_ZAIRE,                "fr", "CD", false },   // Democratic Republic Of Congo
-    { LANGUAGE_FRENCH_MOROCCO,              "fr", "MA", false },
-    { LANGUAGE_FRENCH_REUNION,              "fr", "RE", false },
-    { LANGUAGE_FRENCH,                      "fr", ""  , false },   // needed as a catcher before other "fr" entries!
-    { LANGUAGE_FRENCH_NORTH_AFRICA,         "fr", ""  , false },
-    { LANGUAGE_FRENCH_WEST_INDIES,          "fr", ""  , false },   // no ISO country code; MS "Neither defined nor reserved"
-    { LANGUAGE_FRISIAN_NETHERLANDS,         "fy", "NL", false },
-    { LANGUAGE_GAELIC_IRELAND,              "ga", "IE", false },
-    { LANGUAGE_GAELIC_SCOTLAND,             "gd", "GB", false },
-    { LANGUAGE_GAELIC_SCOTLAND_LEGACY,      "gd", "GB", false },
-    { LANGUAGE_GALICIAN,                    "gl", "ES", false },
-    { LANGUAGE_GEORGIAN,                    "ka", "GE", false },
-    { LANGUAGE_KHMER,                       "km", "KH", false },
-    { LANGUAGE_KIRGHIZ,                     "ky", "KG", false },
-    { LANGUAGE_LAO,                         "lo", "LA", false },
-    { LANGUAGE_MALTESE,                     "mt", "MT", false },
-    { LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA, "mn", "MN", false },    // macrolanguage code; should be khk-MN; Cyrillic script
-    { LANGUAGE_MONGOLIAN_CYRILLIC_LSO,      "mn", ""  , false },    // macrolanguage code; should be khk; Cyrillic script
-    { LANGUAGE_RUSSIAN_MOLDOVA,             "mo", "MD", false },
-    { LANGUAGE_SWAHILI,                     "sw", "KE", false },
-    { LANGUAGE_USER_SWAHILI_TANZANIA,       "sw", "TZ", false },
-    { LANGUAGE_TAJIK,                       "tg", "TJ", false },
-    { LANGUAGE_TAJIK_LSO,                   "tg", ""  , false },
-    { LANGUAGE_TIBETAN,                     "bo", "CN", false },   // CN politically correct?
-    { LANGUAGE_USER_TIBETAN_INDIA,          "bo", "IN", false },
-    { LANGUAGE_USER_TIBETAN_BHUTAN,         "bo", "BT", false },    // MS reserved, but with the ID error instead
-    { LANGUAGE_DZONGKHA,                    "dz", "BT", false },
-    { LANGUAGE_USER_DZONGKHA_MAP_LONLY,     "dz", ""  , false },    // because of the MS error, see lang.h
-    { LANGUAGE_TURKMEN,                     "tk", "TM", false },
-    { LANGUAGE_WELSH,                       "cy", "GB", false },
-    { LANGUAGE_SESOTHO,                     "st", "ZA", false },
-    { LANGUAGE_SEPEDI,                     "nso", "ZA", false },
-    { LANGUAGE_SEPEDI,                      "ns", "ZA", true  },   // fake "ns" for compatibility with existing OOo1.1.x localization to be able to read those documents
-    { LANGUAGE_TSONGA,                      "ts", "ZA", false },
-    { LANGUAGE_TSWANA,                      "tn", "ZA", false },
-    { LANGUAGE_ENGLISH_SAFRICA,             "en", "ZA", false },
-    { LANGUAGE_AFRIKAANS,                   "af", "ZA", false },
-    { LANGUAGE_VENDA,                       "ve", "ZA", false },   // default 639-1
-    { LANGUAGE_VENDA,                      "ven", "ZA", true  },   // 639-2 may have been used temporarily since 2004-07-23
-    { LANGUAGE_XHOSA,                       "xh", "ZA", false },
-    { LANGUAGE_ZULU,                        "zu", "ZA", false },
-//  { LANGUAGE_QUECHUA_COLOMBIA,           "quc", "CO", false },    // MS reserved, and looks wrong, quc would be in Guatemala, not Colombia
-    { LANGUAGE_QUECHUA_ECUADOR,            "quz", "EC", false },    // MS
-    { LANGUAGE_QUECHUA_ECUADOR,             "qu", "EC", true  },    // macrolanguage code
-    { LANGUAGE_QUECHUA_PERU,               "quz", "PE", false },    // MS
-    { LANGUAGE_QUECHUA_PERU,                "qu", "PE", true  },    // macrolanguage code
-    { LANGUAGE_QUECHUA_BOLIVIA,             "qu", "BO", false },    // macrolanguage code, TODO instead: quh-BO or qul-BO; MS says quz-BO which is wrong
-    { LANGUAGE_PASHTO,                      "ps", "AF", false },
-    { LANGUAGE_OROMO,                       "om", "ET", false },
-    { LANGUAGE_DHIVEHI,                     "dv", "MV", false },
-    { LANGUAGE_UIGHUR_CHINA,                "ug", "CN", false },
-    { LANGUAGE_TIGRIGNA_ETHIOPIA,           "ti", "ET", false },
-    { LANGUAGE_TIGRIGNA_ERITREA,            "ti", "ER", false },
-    { LANGUAGE_AMHARIC_ETHIOPIA,            "am", "ET", false },
-    { LANGUAGE_GUARANI_PARAGUAY,           "gug", "PY", false },
-    { LANGUAGE_HAWAIIAN_UNITED_STATES,     "haw", "US", false },
-    { LANGUAGE_EDO,                        "bin", "NG", false },
-    { LANGUAGE_FULFULDE_NIGERIA,           "fuv", "NG", false },
-    { LANGUAGE_FULFULDE_NIGERIA,            "ff", "NG", true  },    // macrolanguage code
-    { LANGUAGE_FULFULDE_SENEGAL,            "ff", "SN", false },    // macrolanguage code
-    { LANGUAGE_HAUSA_NIGERIA,               "ha", "NG", false },
-    { LANGUAGE_USER_HAUSA_GHANA,            "ha", "GH", false },
-    { LANGUAGE_IGBO_NIGERIA,                "ig", "NG", false },
-    { LANGUAGE_KANURI_NIGERIA,              "kr", "NG", false },
-    { LANGUAGE_YORUBA,                      "yo", "NG", false },
-    { LANGUAGE_SOMALI,                      "so", "SO", false },
-    { LANGUAGE_PAPIAMENTU,                 "pap", "AN", false },
-    { LANGUAGE_USER_PAPIAMENTU_ARUBA,      "pap", "AW", false },
-    { LANGUAGE_USER_PAPIAMENTU_CURACAO,    "pap", "CW", false },
-    { LANGUAGE_USER_PAPIAMENTU_BONAIRE,    "pap", "BQ", false },
-    { LANGUAGE_ENGLISH_SINGAPORE,           "en", "SG", false },
-    { LANGUAGE_USER_YIDDISH_US,             "yi", "US", false },
-    { LANGUAGE_YIDDISH,                     "yi", "IL", false },   // new: old was "ji"
-    { LANGUAGE_YIDDISH,                     "ji", "IL", true  },   // old: new is "yi"
-    { LANGUAGE_SYRIAC,                     "syr", "TR", false },   // "TR" according to http://www.ethnologue.com/show_language.asp?code=SYC
-    { LANGUAGE_SINHALESE_SRI_LANKA,         "si", "LK", false },
-    { LANGUAGE_CHEROKEE_UNITED_STATES,     "chr", "US", false },
-    { LANGUAGE_INUKTITUT_LATIN_CANADA,      "iu", "CA", true  },    // macrolanguage code
-    { LANGUAGE_INUKTITUT_LATIN_LSO,         "iu", ""  , true  },    // macrolanguage code
-    { LANGUAGE_SAMI_NORTHERN_NORWAY,        "se", "NO", false },
-    { LANGUAGE_SAMI_INARI,                 "smn", "FI", false },
-    { LANGUAGE_SAMI_INARI_LSO,             "smn", ""  , false },
-    { LANGUAGE_SAMI_LULE_NORWAY,           "smj", "NO", false },
-    { LANGUAGE_SAMI_LULE_SWEDEN,           "smj", "SE", false },
-    { LANGUAGE_SAMI_LULE_LSO,              "smj", ""  , false },
-    { LANGUAGE_SAMI_NORTHERN_FINLAND,       "se", "FI", false },
-    { LANGUAGE_SAMI_NORTHERN_SWEDEN,        "se", "SE", false },
-    { LANGUAGE_SAMI_SKOLT,                 "sms", "FI", false },
-    { LANGUAGE_SAMI_SKOLT_LSO,             "sms", ""  , false },
-    { LANGUAGE_SAMI_SOUTHERN_NORWAY,       "sma", "NO", false },
-    { LANGUAGE_SAMI_SOUTHERN_SWEDEN,       "sma", "SE", false },
-    { LANGUAGE_SAMI_SOUTHERN_LSO,          "sma", ""  , false },
-    { LANGUAGE_USER_SAMI_KILDIN_RUSSIA,    "sjd", "RU", false },
-    { LANGUAGE_MAPUDUNGUN_CHILE,           "arn", "CL", false },
-    { LANGUAGE_CORSICAN_FRANCE,             "co", "FR", false },
-    { LANGUAGE_ALSATIAN_FRANCE,            "gsw", "FR", false },   // in fact 'gsw' is Schwyzerduetsch (Swiss German), which is a dialect of Alemannic German, as is Alsatian. They aren't distinct languages and share this code.
-    { LANGUAGE_YAKUT_RUSSIA,               "sah", "RU", false },
-    { LANGUAGE_MOHAWK_CANADA,              "moh", "CA", false },
-    { LANGUAGE_BASHKIR_RUSSIA,              "ba", "RU", false },
-    { LANGUAGE_KICHE_GUATEMALA,            "qut", "GT", false },
-    { LANGUAGE_DARI_AFGHANISTAN,           "prs", "AF", false },
-    { LANGUAGE_DARI_AFGHANISTAN,           "gbz", "AF", true  },    // was an error
-    { LANGUAGE_WOLOF_SENEGAL,               "wo", "SN", false },
-    { LANGUAGE_FILIPINO,                   "fil", "PH", false },
-    { LANGUAGE_USER_TAGALOG,                "tl", "PH", false },
-    { LANGUAGE_ENGLISH_PHILIPPINES,         "en", "PH", false },
-    { LANGUAGE_IBIBIO_NIGERIA,             "ibb", "NG", false },
-    { LANGUAGE_YI,                          "ii", "CN", false },
-    { LANGUAGE_ENGLISH_ARAB_EMIRATES,       "en", "AE", false },    // MS reserved
-    { LANGUAGE_ENGLISH_BAHRAIN,             "en", "BH", false },    // MS reserved
-    { LANGUAGE_ENGLISH_EGYPT,               "en", "EG", false },    // MS reserved
-    { LANGUAGE_ENGLISH_JORDAN,              "en", "JO", false },    // MS reserved
-    { LANGUAGE_ENGLISH_KUWAIT,              "en", "KW", false },    // MS reserved
-    { LANGUAGE_ENGLISH_TURKEY,              "en", "TR", false },    // MS reserved
-    { LANGUAGE_ENGLISH_YEMEN,               "en", "YE", false },    // MS reserved
-    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,    "kab", "DZ", false },    // In practice Kabyle is the language used for this
-    { LANGUAGE_OBSOLETE_USER_KABYLE,       "kab", "DZ", false },
-    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,    "ber", "DZ", true  },    // In practice Algeria has standardized on Kabyle as the member of the "ber" collective which gets used there.
-    { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO, "tmz", "MA", true  },
-    { LANGUAGE_TAMAZIGHT_MOROCCO,          "tmz", "MA", false },    // MS reserved
-    { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO, "ber", "MA", true  },    // Morocco is officially using Tifinagh for its Berber languages, old kludge to distinguish from LANGUAGE_TAMAZIGHT_LATIN_ALGERIA
-    { LANGUAGE_LATIN,                       "la", "VA", false },
-    { LANGUAGE_OBSOLETE_USER_LATIN,         "la", "VA", false },
-    { LANGUAGE_USER_ESPERANTO,              "eo", ""  , false },
-    { LANGUAGE_USER_INTERLINGUA,            "ia", ""  , false },
-    { LANGUAGE_MAORI_NEW_ZEALAND,           "mi", "NZ", false },
-    { LANGUAGE_OBSOLETE_USER_MAORI,         "mi", "NZ", false },
-    { LANGUAGE_KINYARWANDA_RWANDA,          "rw", "RW", false },
-    { LANGUAGE_OBSOLETE_USER_KINYARWANDA,   "rw", "RW", false },
-    { LANGUAGE_UPPER_SORBIAN_GERMANY,      "hsb", "DE", false },   // MS maps this to 'wen-DE', which is nonsense. 'wen' is a collective language code, 'WEN' is a SIL code, see http://www.ethnologue.com/14/show_iso639.asp?code=wen and http://www.ethnologue.com/14/show_language.asp?code=WEN
-    { LANGUAGE_OBSOLETE_USER_UPPER_SORBIAN,"hsb", "DE", false },
-    { LANGUAGE_LOWER_SORBIAN_GERMANY,      "dsb", "DE", false },   // MS maps this to 'wee-DE', which is nonsense. 'WEE' is a SIL code, see http://www.ethnologue.com/14/show_language.asp?code=WEE
-    { LANGUAGE_LOWER_SORBIAN_LSO,          "dsb", ""  , false },
-    { LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN,"dsb", "DE", false },
-    { LANGUAGE_OCCITAN_FRANCE,              "oc", "FR", false },
-    { LANGUAGE_OBSOLETE_USER_OCCITAN,       "oc", "FR", false },
-    { LANGUAGE_USER_KURDISH_TURKEY,         "ku", "TR", false },
-    { LANGUAGE_USER_KURDISH_SYRIA,          "ku", "SY", false },
-    { LANGUAGE_USER_KURDISH_IRAQ,           "ku", "IQ", false },
-    { LANGUAGE_USER_KURDISH_IRAN,           "ku", "IR", false },
-    { LANGUAGE_USER_SARDINIAN,              "sc", "IT", false },   // macrolanguage code
-    { LANGUAGE_USER_SARDINIAN_CAMPIDANESE, "sro", "IT", false },
-    { LANGUAGE_USER_SARDINIAN_GALLURESE,   "sdn", "IT", false },
-    { LANGUAGE_USER_SARDINIAN_LOGUDORESE,  "src", "IT", false },
-    { LANGUAGE_USER_SARDINIAN_SASSARESE,   "sdc", "IT", false },
-    { LANGUAGE_BRETON_FRANCE,               "br", "FR", false },
-    { LANGUAGE_OBSOLETE_USER_BRETON,        "br", "FR", false },
-    { LANGUAGE_KALAALLISUT_GREENLAND,       "kl", "GL", false },
-    { LANGUAGE_OBSOLETE_USER_KALAALLISUT,   "kl", "GL", false },
-    { LANGUAGE_USER_SWAZI,                  "ss", "ZA", false },
-    { LANGUAGE_USER_NDEBELE_SOUTH,          "nr", "ZA", false },
-    { LANGUAGE_TSWANA_BOTSWANA,             "tn", "BW", false },
-    { LANGUAGE_OBSOLETE_USER_TSWANA_BOTSWANA, "tn", "BW", false },
-    { LANGUAGE_USER_MOORE,                 "mos", "BF", false },
-    { LANGUAGE_USER_BAMBARA,                "bm", "ML", false },
-    { LANGUAGE_USER_AKAN,                   "ak", "GH", false },
-    { LANGUAGE_LUXEMBOURGISH_LUXEMBOURG,    "lb", "LU", false },
-    { LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH, "lb", "LU", false },
-    { LANGUAGE_USER_FRIULIAN,              "fur", "IT", false },
-    { LANGUAGE_USER_FIJIAN,                 "fj", "FJ", false },
-    { LANGUAGE_USER_AFRIKAANS_NAMIBIA,      "af", "NA", false },
-    { LANGUAGE_USER_ENGLISH_NAMIBIA,        "en", "NA", false },
-    { LANGUAGE_USER_WALLOON,                "wa", "BE", false },
-    { LANGUAGE_USER_COPTIC,                "cop", "EG", false },
-    { LANGUAGE_USER_GASCON,                "gsc", "FR", false },
-    { LANGUAGE_USER_GERMAN_BELGIUM,         "de", "BE", false },
-    { LANGUAGE_USER_CHUVASH,                "cv", "RU", false },
-    { LANGUAGE_USER_EWE_GHANA,              "ee", "GH", false },
-    { LANGUAGE_USER_ENGLISH_GHANA,          "en", "GH", false },
-    { LANGUAGE_USER_SANGO,                  "sg", "CF", false },
-    { LANGUAGE_USER_GANDA,                  "lg", "UG", false },
-    { LANGUAGE_USER_LINGALA_DRCONGO,        "ln", "CD", false },
-    { LANGUAGE_USER_LOW_GERMAN,            "nds", "DE", false },
-    { LANGUAGE_USER_HILIGAYNON,            "hil", "PH", false },
-    { LANGUAGE_USER_ENGLISH_MALAWI,         "en", "MW", false },   /* en default for MW */
-    { LANGUAGE_USER_NYANJA,                 "ny", "MW", false },
-    { LANGUAGE_USER_KASHUBIAN,             "csb", "PL", false },
-    { LANGUAGE_USER_SPANISH_CUBA,           "es", "CU", false },
-    { LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA, "qul", "BO", false },
-    { LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA, "quh", "BO", false },
-    { LANGUAGE_USER_BODO_INDIA,            "brx", "IN", false },
-    { LANGUAGE_USER_DOGRI_INDIA,           "dgo", "IN", false },
-    { LANGUAGE_USER_MAITHILI_INDIA,        "mai", "IN", false },
-    { LANGUAGE_USER_SANTALI_INDIA,         "sat", "IN", false },
-    { LANGUAGE_USER_TETUN,                 "tet", "ID", false },
-    { LANGUAGE_USER_TETUN_TIMOR_LESTE,     "tet", "TL", false },
-    { LANGUAGE_USER_TOK_PISIN,             "tpi", "PG", false },
-    { LANGUAGE_USER_SHUSWAP,               "shs", "CA", false },
-    { LANGUAGE_USER_ANCIENT_GREEK,         "grc", "GR", false },
-    { LANGUAGE_USER_ASTURIAN,              "ast", "ES", false },
-    { LANGUAGE_USER_LATGALIAN,             "ltg", "LV", false },
-    { LANGUAGE_USER_MAORE,                 "swb", "YT", false },
-    { LANGUAGE_USER_BUSHI,                 "buc", "YT", false },
-    { LANGUAGE_USER_TAHITIAN,               "ty", "PF", false },
-    { LANGUAGE_MALAGASY_PLATEAU,           "plt", "MG", false },
-    { LANGUAGE_MALAGASY_PLATEAU,            "mg", "MG", true },
-    { LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU, "plt", "MG", false },
-    { LANGUAGE_USER_BAFIA,                 "ksf", "CM", false },
-    { LANGUAGE_USER_GIKUYU,                 "ki", "KE", false },
-    { LANGUAGE_USER_RUSYN_UKRAINE,         "rue", "UA", false },
-    { LANGUAGE_USER_RUSYN_SLOVAKIA,        "rue", "SK", false },
-    { LANGUAGE_USER_LIMBU,                 "lif", "NP", false },
-    { LANGUAGE_USER_LOJBAN,                "jbo", ""  , false },
-    { LANGUAGE_USER_HAITIAN,                "ht", "HT", false },
-    { LANGUAGE_FRENCH_HAITI,                "fr", "HT", false },
-    { LANGUAGE_USER_BEEMBE,                "beq", "CG", false },
-    { LANGUAGE_USER_BEKWEL,                "bkw", "CG", false },
-    { LANGUAGE_USER_KITUBA,                "mkw", "CG", false },
-    { LANGUAGE_USER_LARI,                  "ldi", "CG", false },
-    { LANGUAGE_USER_MBOCHI,                "mdw", "CG", false },
-    { LANGUAGE_USER_TEKE_EBOO,             "ebo", "CG", false },
-    { LANGUAGE_USER_TEKE_IBALI,            "tek", "CG", false },
-    { LANGUAGE_USER_TEKE_TYEE,             "tyx", "CG", false },
-    { LANGUAGE_USER_VILI,                  "vif", "CG", false },
-    { LANGUAGE_USER_PORTUGUESE_ANGOLA,      "pt", "AO", false },
-    { LANGUAGE_USER_MANX,                   "gv", "GB", false },
-    { LANGUAGE_USER_ARAGONESE,              "an", "ES", false },
-    { LANGUAGE_USER_KEYID,                 "qtz", ""  , false },   // key id pseudolanguage used for UI testing
-    { LANGUAGE_USER_PALI_LATIN,            "pli", ""  , true  },   // Pali with Latin script, ISO 639-3 (sigh..) back-compat, Latin is not a default script though..
-    { LANGUAGE_USER_KYRGYZ_CHINA,           "ky", "CN", false },
-    { LANGUAGE_USER_KOMI_ZYRIAN,           "kpv", "RU", false },
-    { LANGUAGE_USER_KOMI_PERMYAK,          "koi", "RU", false },
-    { LANGUAGE_USER_PITJANTJATJARA,        "pjt", "AU", false },
-    { LANGUAGE_USER_ERZYA,                 "myv", "RU", false },
-    { LANGUAGE_USER_MARI_MEADOW,           "mhr", "RU", false },
-    { LANGUAGE_USER_KHANTY,                "kca", "RU", false },
-    { LANGUAGE_USER_LIVONIAN,              "liv", "RU", false },
-    { LANGUAGE_USER_MOKSHA,                "mdf", "RU", false },
-    { LANGUAGE_USER_MARI_HILL,             "mrj", "RU", false },
-    { LANGUAGE_USER_NGANASAN,              "nio", "RU", false },
-    { LANGUAGE_USER_OLONETS,               "olo", "RU", false },
-    { LANGUAGE_USER_VEPS,                  "vep", "RU", false },
-    { LANGUAGE_USER_VORO,                  "vro", "EE", false },
-    { LANGUAGE_USER_NENETS,                "yrk", "RU", false },
-    { LANGUAGE_USER_AKA,                   "axk", "CF", false },
-    { LANGUAGE_USER_AKA_CONGO,             "axk", "CG", false },
-    { LANGUAGE_USER_DIBOLE,                "bvx", "CG", false },
-    { LANGUAGE_USER_DOONDO,                "dde", "CG", false },
-    { LANGUAGE_USER_KAAMBA,                "xku", "CG", false },
-    { LANGUAGE_USER_KOONGO,                "kng", "CD", false },
-    { LANGUAGE_USER_KOONGO_CONGO,          "kng", "CG", false },
-    { LANGUAGE_USER_KUNYI,                 "njx", "CG", false },
-    { LANGUAGE_USER_NGUNGWEL,              "ngz", "CG", false },
-    { LANGUAGE_USER_NJYEM,                 "njy", "CM", false },
-    { LANGUAGE_USER_NJYEM_CONGO,           "njy", "CG", false },
-    { LANGUAGE_USER_PUNU,                  "puu", "GA", false },
-    { LANGUAGE_USER_PUNU_CONGO,            "puu", "CG", false },
-    { LANGUAGE_USER_SUUNDI,                "sdj", "CG", false },
-    { LANGUAGE_USER_TEKE_KUKUYA,           "kkw", "CG", false },
-    { LANGUAGE_USER_TSAANGI,               "tsa", "CG", false },
-    { LANGUAGE_USER_YAKA,                  "iyx", "CG", false },
-    { LANGUAGE_USER_YOMBE,                 "yom", "CD", false },
-    { LANGUAGE_USER_YOMBE_CONGO,           "yom", "CG", false },
-    { LANGUAGE_USER_SIDAMA,                "sid", "ET", false },
-    { LANGUAGE_USER_NKO,                   "nqo", "GN", false },
-    { LANGUAGE_USER_UDMURT,                "udm", "RU", false },
-    { LANGUAGE_USER_CORNISH,               "kw",  "UK", false },
-    { LANGUAGE_USER_SAMI_PITE_SWEDEN,      "sje", "SE", false },
-    { LANGUAGE_USER_NGAEBERE,              "gym", "PA", false },
-    { LANGUAGE_USER_KUMYK,                 "kum", "RU", false },
-    { LANGUAGE_USER_NOGAI,                 "nog", "RU", false },
-    { LANGUAGE_USER_LADIN,                 "lld", "IT", false },
-    { LANGUAGE_MULTIPLE,                   "mul", ""  , false },   // multiple languages, many languages are used
-    { LANGUAGE_UNDETERMINED,               "und", ""  , false },   // undetermined language, language cannot be identified
-    { LANGUAGE_NONE,                       "zxx", ""  , false },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
-    { LANGUAGE_DONTKNOW,                    "",   ""  , false }    // marks end of table
+    { LANGUAGE_CATALAN_VALENCIAN,           "ca", "XV", kSAME },    // XV: ISO 3166 user-assigned; old workaround for UI localization only, in case it escaped to document content
+    { LANGUAGE_CATALAN_VALENCIAN,          "qcv", "ES", kSAME },    // qcv: ISO 639-3 reserved-for-local-use; old UI localization quirk only, in case it escaped to document content
+    { LANGUAGE_FRENCH_CAMEROON,             "fr", "CM", 0     },
+    { LANGUAGE_FRENCH_COTE_D_IVOIRE,        "fr", "CI", 0     },
+    { LANGUAGE_FRENCH_MALI,                 "fr", "ML", 0     },
+    { LANGUAGE_FRENCH_SENEGAL,              "fr", "SN", 0     },
+    { LANGUAGE_FRENCH_ZAIRE,                "fr", "CD", 0     },    // Democratic Republic Of Congo
+    { LANGUAGE_FRENCH_MOROCCO,              "fr", "MA", 0     },
+    { LANGUAGE_FRENCH_REUNION,              "fr", "RE", 0     },
+    { LANGUAGE_FRENCH,                      "fr", ""  , 0     },    // needed as a catcher before other "fr" entries!
+    { LANGUAGE_FRENCH_NORTH_AFRICA,         "fr", ""  , 0     },
+    { LANGUAGE_FRENCH_WEST_INDIES,          "fr", ""  , 0     },    // no ISO country code; MS "Neither defined nor reserved"
+    { LANGUAGE_FRISIAN_NETHERLANDS,         "fy", "NL", 0     },
+    { LANGUAGE_GAELIC_IRELAND,              "ga", "IE", 0     },
+    { LANGUAGE_GAELIC_SCOTLAND,             "gd", "GB", 0     },
+    { LANGUAGE_GAELIC_SCOTLAND_LEGACY,      "gd", "GB", 0     },
+    { LANGUAGE_GALICIAN,                    "gl", "ES", 0     },
+    { LANGUAGE_GEORGIAN,                    "ka", "GE", 0     },
+    { LANGUAGE_KHMER,                       "km", "KH", 0     },
+    { LANGUAGE_KIRGHIZ,                     "ky", "KG", 0     },
+    { LANGUAGE_LAO,                         "lo", "LA", 0     },
+    { LANGUAGE_MALTESE,                     "mt", "MT", 0     },
+    { LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA, "mn", "MN", 0     },    // macrolanguage code; should be khk-MN; Cyrillic script
+    { LANGUAGE_MONGOLIAN_CYRILLIC_LSO,      "mn", ""  , 0     },    // macrolanguage code; should be khk; Cyrillic script
+    { LANGUAGE_RUSSIAN_MOLDOVA,             "mo", "MD", 0     },
+    { LANGUAGE_SWAHILI,                     "sw", "KE", 0     },
+    { LANGUAGE_USER_SWAHILI_TANZANIA,       "sw", "TZ", 0     },
+    { LANGUAGE_TAJIK,                       "tg", "TJ", 0     },
+    { LANGUAGE_TAJIK_LSO,                   "tg", ""  , 0     },
+    { LANGUAGE_TIBETAN,                     "bo", "CN", 0     },    // CN politically correct?
+    { LANGUAGE_USER_TIBETAN_INDIA,          "bo", "IN", 0     },
+    { LANGUAGE_USER_TIBETAN_BHUTAN,         "bo", "BT", 0     },    // MS reserved, but with the ID error instead
+    { LANGUAGE_DZONGKHA,                    "dz", "BT", 0     },
+    { LANGUAGE_USER_DZONGKHA_MAP_LONLY,     "dz", ""  , 0     },    // because of the MS error, see lang.h
+    { LANGUAGE_TURKMEN,                     "tk", "TM", 0     },
+    { LANGUAGE_WELSH,                       "cy", "GB", 0     },
+    { LANGUAGE_SESOTHO,                     "st", "ZA", 0     },
+    { LANGUAGE_SEPEDI,                     "nso", "ZA", 0     },
+    { LANGUAGE_SEPEDI,                      "ns", "ZA", kSAME },    // fake "ns" for compatibility with existing OOo1.1.x localization to be able to read those documents
+    { LANGUAGE_TSONGA,                      "ts", "ZA", 0     },
+    { LANGUAGE_TSWANA,                      "tn", "ZA", 0     },
+    { LANGUAGE_ENGLISH_SAFRICA,             "en", "ZA", 0     },
+    { LANGUAGE_AFRIKAANS,                   "af", "ZA", 0     },
+    { LANGUAGE_VENDA,                       "ve", "ZA", 0     },    // default 639-1
+    { LANGUAGE_VENDA,                      "ven", "ZA", kSAME },    // 639-2 may have been used temporarily since 2004-07-23
+    { LANGUAGE_XHOSA,                       "xh", "ZA", 0     },
+    { LANGUAGE_ZULU,                        "zu", "ZA", 0     },
+//  { LANGUAGE_QUECHUA_COLOMBIA,           "quc", "CO", 0     },    // MS reserved, and looks wrong, quc would be in Guatemala, not Colombia
+    { LANGUAGE_QUECHUA_ECUADOR,            "quz", "EC", 0     },    // MS
+    { LANGUAGE_QUECHUA_ECUADOR,             "qu", "EC", kSAME },    // macrolanguage code
+    { LANGUAGE_QUECHUA_PERU,               "quz", "PE", 0     },    // MS
+    { LANGUAGE_QUECHUA_PERU,                "qu", "PE", kSAME },    // macrolanguage code
+    { LANGUAGE_QUECHUA_BOLIVIA,             "qu", "BO", 0     },    // macrolanguage code, TODO instead: quh-BO or qul-BO; MS says quz-BO which is wrong
+    { LANGUAGE_PASHTO,                      "ps", "AF", 0     },
+    { LANGUAGE_OROMO,                       "om", "ET", 0     },
+    { LANGUAGE_DHIVEHI,                     "dv", "MV", 0     },
+    { LANGUAGE_UIGHUR_CHINA,                "ug", "CN", 0     },
+    { LANGUAGE_TIGRIGNA_ETHIOPIA,           "ti", "ET", 0     },
+    { LANGUAGE_TIGRIGNA_ERITREA,            "ti", "ER", 0     },
+    { LANGUAGE_AMHARIC_ETHIOPIA,            "am", "ET", 0     },
+    { LANGUAGE_GUARANI_PARAGUAY,           "gug", "PY", 0     },
+    { LANGUAGE_HAWAIIAN_UNITED_STATES,     "haw", "US", 0     },
+    { LANGUAGE_EDO,                        "bin", "NG", 0     },
+    { LANGUAGE_FULFULDE_NIGERIA,           "fuv", "NG", 0     },
+    { LANGUAGE_FULFULDE_NIGERIA,            "ff", "NG", kSAME },    // macrolanguage code
+    { LANGUAGE_FULFULDE_SENEGAL,            "ff", "SN", 0     },    // macrolanguage code
+    { LANGUAGE_HAUSA_NIGERIA,               "ha", "NG", 0     },
+    { LANGUAGE_USER_HAUSA_GHANA,            "ha", "GH", 0     },
+    { LANGUAGE_IGBO_NIGERIA,                "ig", "NG", 0     },
+    { LANGUAGE_KANURI_NIGERIA,              "kr", "NG", 0     },
+    { LANGUAGE_YORUBA,                      "yo", "NG", 0     },
+    { LANGUAGE_SOMALI,                      "so", "SO", 0     },
+    { LANGUAGE_PAPIAMENTU,                 "pap", "AN", 0     },
+    { LANGUAGE_USER_PAPIAMENTU_ARUBA,      "pap", "AW", 0     },
+    { LANGUAGE_USER_PAPIAMENTU_CURACAO,    "pap", "CW", 0     },
+    { LANGUAGE_USER_PAPIAMENTU_BONAIRE,    "pap", "BQ", 0     },
+    { LANGUAGE_ENGLISH_SINGAPORE,           "en", "SG", 0     },
+    { LANGUAGE_USER_YIDDISH_US,             "yi", "US", 0     },
+    { LANGUAGE_YIDDISH,                     "yi", "IL", 0     },    // new: old was "ji"
+    { LANGUAGE_YIDDISH,                     "ji", "IL", kSAME },    // old: new is "yi"
+    { LANGUAGE_SYRIAC,                     "syr", "TR", 0     },    // "TR" according to http://www.ethnologue.com/show_language.asp?code=SYC
+    { LANGUAGE_SINHALESE_SRI_LANKA,         "si", "LK", 0     },
+    { LANGUAGE_CHEROKEE_UNITED_STATES,     "chr", "US", kSAME },
+    { LANGUAGE_INUKTITUT_LATIN_CANADA,      "iu", "CA", kSAME },    // macrolanguage code
+    { LANGUAGE_INUKTITUT_LATIN_LSO,         "iu", ""  , kSAME },    // macrolanguage code
+    { LANGUAGE_SAMI_NORTHERN_NORWAY,        "se", "NO", 0     },
+    { LANGUAGE_SAMI_INARI,                 "smn", "FI", 0     },
+    { LANGUAGE_SAMI_INARI_LSO,             "smn", ""  , 0     },
+    { LANGUAGE_SAMI_LULE_NORWAY,           "smj", "NO", 0     },
+    { LANGUAGE_SAMI_LULE_SWEDEN,           "smj", "SE", 0     },
+    { LANGUAGE_SAMI_LULE_LSO,              "smj", ""  , 0     },
+    { LANGUAGE_SAMI_NORTHERN_FINLAND,       "se", "FI", 0     },
+    { LANGUAGE_SAMI_NORTHERN_SWEDEN,        "se", "SE", 0     },
+    { LANGUAGE_SAMI_SKOLT,                 "sms", "FI", 0     },
+    { LANGUAGE_SAMI_SKOLT_LSO,             "sms", ""  , 0     },
+    { LANGUAGE_SAMI_SOUTHERN_NORWAY,       "sma", "NO", 0     },
+    { LANGUAGE_SAMI_SOUTHERN_SWEDEN,       "sma", "SE", 0     },
+    { LANGUAGE_SAMI_SOUTHERN_LSO,          "sma", ""  , 0     },
+    { LANGUAGE_USER_SAMI_KILDIN_RUSSIA,    "sjd", "RU", 0     },
+    { LANGUAGE_MAPUDUNGUN_CHILE,           "arn", "CL", 0     },
+    { LANGUAGE_CORSICAN_FRANCE,             "co", "FR", 0     },
+    { LANGUAGE_ALSATIAN_FRANCE,            "gsw", "FR", 0     },    // in fact 'gsw' is Schwyzerduetsch (Swiss German), which is a dialect of Alemannic German, as is Alsatian. They aren't distinct languages and share this code.
+    { LANGUAGE_YAKUT_RUSSIA,               "sah", "RU", 0     },
+    { LANGUAGE_MOHAWK_CANADA,              "moh", "CA", 0     },
+    { LANGUAGE_BASHKIR_RUSSIA,              "ba", "RU", 0     },
+    { LANGUAGE_KICHE_GUATEMALA,            "qut", "GT", 0     },
+    { LANGUAGE_DARI_AFGHANISTAN,           "prs", "AF", 0     },
+    { LANGUAGE_DARI_AFGHANISTAN,           "gbz", "AF", kSAME },    // was an error
+    { LANGUAGE_WOLOF_SENEGAL,               "wo", "SN", 0     },
+    { LANGUAGE_FILIPINO,                   "fil", "PH", 0     },
+    { LANGUAGE_USER_TAGALOG,                "tl", "PH", 0     },
+    { LANGUAGE_ENGLISH_PHILIPPINES,         "en", "PH", 0     },
+    { LANGUAGE_IBIBIO_NIGERIA,             "ibb", "NG", 0     },
+    { LANGUAGE_YI,                          "ii", "CN", 0     },
+    { LANGUAGE_ENGLISH_ARAB_EMIRATES,       "en", "AE", 0     },    // MS reserved
+    { LANGUAGE_ENGLISH_BAHRAIN,             "en", "BH", 0     },    // MS reserved
+    { LANGUAGE_ENGLISH_EGYPT,               "en", "EG", 0     },    // MS reserved
+    { LANGUAGE_ENGLISH_JORDAN,              "en", "JO", 0     },    // MS reserved
+    { LANGUAGE_ENGLISH_KUWAIT,              "en", "KW", 0     },    // MS reserved
+    { LANGUAGE_ENGLISH_TURKEY,              "en", "TR", 0     },    // MS reserved
+    { LANGUAGE_ENGLISH_YEMEN,               "en", "YE", 0     },    // MS reserved
+    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,    "kab", "DZ", 0     },    // In practice Kabyle is the language used for this
+    { LANGUAGE_OBSOLETE_USER_KABYLE,       "kab", "DZ", 0     },
+    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,    "ber", "DZ", kSAME },    // In practice Algeria has standardized on Kabyle as the member of the "ber" collective which gets used there.
+    { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO, "tmz", "MA", kSAME },
+    { LANGUAGE_TAMAZIGHT_MOROCCO,          "tmz", "MA", 0     },    // MS reserved
+    { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO, "ber", "MA", kSAME },    // Morocco is officially using Tifinagh for its Berber languages, old kludge to distinguish from LANGUAGE_TAMAZIGHT_LATIN_ALGERIA
+    { LANGUAGE_USER_LATIN_VATICAN,          "la", "VA", 0     },
+    { LANGUAGE_OBSOLETE_USER_LATIN,         "la", "VA", 0     },
+    { LANGUAGE_LATIN_LSO,                   "la", ""  , 0     },
+    { LANGUAGE_USER_ESPERANTO,              "eo", ""  , 0     },
+    { LANGUAGE_USER_INTERLINGUA,            "ia", ""  , 0     },
+    { LANGUAGE_MAORI_NEW_ZEALAND,           "mi", "NZ", 0     },
+    { LANGUAGE_OBSOLETE_USER_MAORI,         "mi", "NZ", 0     },
+    { LANGUAGE_KINYARWANDA_RWANDA,          "rw", "RW", 0     },
+    { LANGUAGE_OBSOLETE_USER_KINYARWANDA,   "rw", "RW", 0     },
+    { LANGUAGE_UPPER_SORBIAN_GERMANY,      "hsb", "DE", 0     },    // MS maps this to 'wen-DE', which is nonsense. 'wen' is a collective language code, 'WEN' is a SIL code, see http://www.ethnologue.com/14/show_iso639.asp?code=wen and http://www.ethnologue.com/14/show_language.asp?code=WEN
+    { LANGUAGE_OBSOLETE_USER_UPPER_SORBIAN,"hsb", "DE", 0     },
+    { LANGUAGE_LOWER_SORBIAN_GERMANY,      "dsb", "DE", 0     },    // MS maps this to 'wee-DE', which is nonsense. 'WEE' is a SIL code, see http://www.ethnologue.com/14/show_language.asp?code=WEE
+    { LANGUAGE_LOWER_SORBIAN_LSO,          "dsb", ""  , 0     },
+    { LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN,"dsb", "DE", 0     },
+    { LANGUAGE_OCCITAN_FRANCE,              "oc", "FR", 0     },
+    { LANGUAGE_OBSOLETE_USER_OCCITAN,       "oc", "FR", 0     },
+    { LANGUAGE_USER_KURDISH_TURKEY,         "ku", "TR", 0     },
+    { LANGUAGE_USER_KURDISH_SYRIA,          "ku", "SY", 0     },
+    { LANGUAGE_USER_KURDISH_IRAQ,           "ku", "IQ", 0     },
+    { LANGUAGE_USER_KURDISH_IRAN,           "ku", "IR", 0     },
+    { LANGUAGE_USER_SARDINIAN,              "sc", "IT", 0     },    // macrolanguage code
+    { LANGUAGE_USER_SARDINIAN_CAMPIDANESE, "sro", "IT", 0     },
+    { LANGUAGE_USER_SARDINIAN_GALLURESE,   "sdn", "IT", 0     },
+    { LANGUAGE_USER_SARDINIAN_LOGUDORESE,  "src", "IT", 0     },
+    { LANGUAGE_USER_SARDINIAN_SASSARESE,   "sdc", "IT", 0     },
+    { LANGUAGE_BRETON_FRANCE,               "br", "FR", 0     },
+    { LANGUAGE_OBSOLETE_USER_BRETON,        "br", "FR", 0     },
+    { LANGUAGE_KALAALLISUT_GREENLAND,       "kl", "GL", 0     },
+    { LANGUAGE_OBSOLETE_USER_KALAALLISUT,   "kl", "GL", 0     },
+    { LANGUAGE_USER_SWAZI,                  "ss", "ZA", 0     },
+    { LANGUAGE_USER_NDEBELE_SOUTH,          "nr", "ZA", 0     },
+    { LANGUAGE_TSWANA_BOTSWANA,             "tn", "BW", 0     },
+    { LANGUAGE_OBSOLETE_USER_TSWANA_BOTSWANA, "tn", "BW", 0     },
+    { LANGUAGE_USER_MOORE,                 "mos", "BF", 0     },
+    { LANGUAGE_USER_BAMBARA,                "bm", "ML", 0     },
+    { LANGUAGE_USER_AKAN,                   "ak", "GH", 0     },
+    { LANGUAGE_LUXEMBOURGISH_LUXEMBOURG,    "lb", "LU", 0     },
+    { LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH, "lb", "LU", 0     },
+    { LANGUAGE_USER_FRIULIAN,              "fur", "IT", 0     },
+    { LANGUAGE_USER_FIJIAN,                 "fj", "FJ", 0     },
+    { LANGUAGE_USER_AFRIKAANS_NAMIBIA,      "af", "NA", 0     },
+    { LANGUAGE_USER_ENGLISH_NAMIBIA,        "en", "NA", 0     },
+    { LANGUAGE_USER_WALLOON,                "wa", "BE", 0     },
+    { LANGUAGE_USER_COPTIC,                "cop", "EG", 0     },
+    { LANGUAGE_USER_GASCON,                "gsc", "FR", 0     },
+    { LANGUAGE_USER_GERMAN_BELGIUM,         "de", "BE", 0     },
+    { LANGUAGE_USER_CHUVASH,                "cv", "RU", 0     },
+    { LANGUAGE_USER_EWE_GHANA,              "ee", "GH", 0     },
+    { LANGUAGE_USER_ENGLISH_GHANA,          "en", "GH", 0     },
+    { LANGUAGE_USER_SANGO,                  "sg", "CF", 0     },
+    { LANGUAGE_USER_GANDA,                  "lg", "UG", 0     },
+    { LANGUAGE_USER_LINGALA_DRCONGO,        "ln", "CD", 0     },
+    { LANGUAGE_USER_LOW_GERMAN,            "nds", "DE", 0     },
+    { LANGUAGE_USER_HILIGAYNON,            "hil", "PH", 0     },
+    { LANGUAGE_USER_ENGLISH_MALAWI,         "en", "MW", 0     },   /* en default for MW */
+    { LANGUAGE_USER_NYANJA,                 "ny", "MW", 0     },
+    { LANGUAGE_USER_KASHUBIAN,             "csb", "PL", 0     },
+    { LANGUAGE_USER_SPANISH_CUBA,           "es", "CU", 0     },
+    { LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA, "qul", "BO", 0     },
+    { LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA, "quh", "BO", 0     },
+    { LANGUAGE_USER_BODO_INDIA,            "brx", "IN", 0     },
+    { LANGUAGE_USER_DOGRI_INDIA,           "dgo", "IN", 0     },
+    { LANGUAGE_USER_MAITHILI_INDIA,        "mai", "IN", 0     },
+    { LANGUAGE_USER_SANTALI_INDIA,         "sat", "IN", 0     },
+    { LANGUAGE_USER_TETUN,                 "tet", "ID", 0     },
+    { LANGUAGE_USER_TETUN_TIMOR_LESTE,     "tet", "TL", 0     },
+    { LANGUAGE_USER_TOK_PISIN,             "tpi", "PG", 0     },
+    { LANGUAGE_USER_SHUSWAP,               "shs", "CA", 0     },
+    { LANGUAGE_USER_ANCIENT_GREEK,         "grc", "GR", 0     },
+    { LANGUAGE_USER_ASTURIAN,              "ast", "ES", 0     },
+    { LANGUAGE_USER_LATGALIAN,             "ltg", "LV", 0     },
+    { LANGUAGE_USER_MAORE,                 "swb", "YT", 0     },
+    { LANGUAGE_USER_BUSHI,                 "buc", "YT", 0     },
+    { LANGUAGE_USER_TAHITIAN,               "ty", "PF", 0     },
+    { LANGUAGE_MALAGASY_PLATEAU,           "plt", "MG", 0     },
+    { LANGUAGE_MALAGASY_PLATEAU,            "mg", "MG", kSAME },
+    { LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU, "plt", "MG", 0     },
+    { LANGUAGE_USER_BAFIA,                 "ksf", "CM", 0     },
+    { LANGUAGE_USER_GIKUYU,                 "ki", "KE", 0     },
+    { LANGUAGE_USER_RUSYN_UKRAINE,         "rue", "UA", 0     },
+    { LANGUAGE_USER_RUSYN_SLOVAKIA,        "rue", "SK", 0     },
+    { LANGUAGE_USER_LIMBU,                 "lif", "NP", 0     },
+    { LANGUAGE_USER_LOJBAN,                "jbo", ""  , 0     },
+    { LANGUAGE_USER_HAITIAN,                "ht", "HT", 0     },
+    { LANGUAGE_FRENCH_HAITI,                "fr", "HT", 0     },
+    { LANGUAGE_USER_BEEMBE,                "beq", "CG", 0     },
+    { LANGUAGE_USER_BEKWEL,                "bkw", "CG", 0     },
+    { LANGUAGE_USER_KITUBA,                "mkw", "CG", 0     },
+    { LANGUAGE_USER_LARI,                  "ldi", "CG", 0     },
+    { LANGUAGE_USER_MBOCHI,                "mdw", "CG", 0     },
+    { LANGUAGE_USER_TEKE_EBOO,             "ebo", "CG", 0     },
+    { LANGUAGE_USER_TEKE_IBALI,            "tek", "CG", 0     },
+    { LANGUAGE_USER_TEKE_TYEE,             "tyx", "CG", 0     },
+    { LANGUAGE_USER_VILI,                  "vif", "CG", 0     },
+    { LANGUAGE_USER_PORTUGUESE_ANGOLA,      "pt", "AO", 0     },
+    { LANGUAGE_USER_MANX,                   "gv", "GB", 0     },
+    { LANGUAGE_USER_ARAGONESE,              "an", "ES", 0     },
+    { LANGUAGE_USER_KEYID,                 "qtz", ""  , 0     },    // key id pseudolanguage used for UI testing
+    { LANGUAGE_USER_PALI_LATIN,            "pli", ""  , kSAME },    // Pali with Latin script, ISO 639-3 (sigh..) back-compat, Latin is not a default script though..
+    { LANGUAGE_USER_KYRGYZ_CHINA,           "ky", "CN", 0     },
+    { LANGUAGE_USER_KOMI_ZYRIAN,           "kpv", "RU", 0     },
+    { LANGUAGE_USER_KOMI_PERMYAK,          "koi", "RU", 0     },
+    { LANGUAGE_USER_PITJANTJATJARA,        "pjt", "AU", 0     },
+    { LANGUAGE_USER_ERZYA,                 "myv", "RU", 0     },
+    { LANGUAGE_USER_MARI_MEADOW,           "mhr", "RU", 0     },
+    { LANGUAGE_USER_KHANTY,                "kca", "RU", 0     },
+    { LANGUAGE_USER_LIVONIAN,              "liv", "RU", 0     },
+    { LANGUAGE_USER_MOKSHA,                "mdf", "RU", 0     },
+    { LANGUAGE_USER_MARI_HILL,             "mrj", "RU", 0     },
+    { LANGUAGE_USER_NGANASAN,              "nio", "RU", 0     },
+    { LANGUAGE_USER_OLONETS,               "olo", "RU", 0     },
+    { LANGUAGE_USER_VEPS,                  "vep", "RU", 0     },
+    { LANGUAGE_USER_VORO,                  "vro", "EE", 0     },
+    { LANGUAGE_USER_NENETS,                "yrk", "RU", 0     },
+    { LANGUAGE_USER_AKA,                   "axk", "CF", 0     },
+    { LANGUAGE_USER_AKA_CONGO,             "axk", "CG", 0     },
+    { LANGUAGE_USER_DIBOLE,                "bvx", "CG", 0     },
+    { LANGUAGE_USER_DOONDO,                "dde", "CG", 0     },
+    { LANGUAGE_USER_KAAMBA,                "xku", "CG", 0     },
+    { LANGUAGE_USER_KOONGO,                "kng", "CD", 0     },
+    { LANGUAGE_USER_KOONGO_CONGO,          "kng", "CG", 0     },
+    { LANGUAGE_USER_KUNYI,                 "njx", "CG", 0     },
+    { LANGUAGE_USER_NGUNGWEL,              "ngz", "CG", 0     },
+    { LANGUAGE_USER_NJYEM,                 "njy", "CM", 0     },
+    { LANGUAGE_USER_NJYEM_CONGO,           "njy", "CG", 0     },
+    { LANGUAGE_USER_PUNU,                  "puu", "GA", 0     },
+    { LANGUAGE_USER_PUNU_CONGO,            "puu", "CG", 0     },
+    { LANGUAGE_USER_SUUNDI,                "sdj", "CG", 0     },
+    { LANGUAGE_USER_TEKE_KUKUYA,           "kkw", "CG", 0     },
+    { LANGUAGE_USER_TSAANGI,               "tsa", "CG", 0     },
+    { LANGUAGE_USER_YAKA,                  "iyx", "CG", 0     },
+    { LANGUAGE_USER_YOMBE,                 "yom", "CD", 0     },
+    { LANGUAGE_USER_YOMBE_CONGO,           "yom", "CG", 0     },
+    { LANGUAGE_USER_SIDAMA,                "sid", "ET", 0     },
+    { LANGUAGE_USER_NKO,                   "nqo", "GN", 0     },
+    { LANGUAGE_USER_UDMURT,                "udm", "RU", 0     },
+    { LANGUAGE_USER_CORNISH,               "kw",  "UK", 0     },
+    { LANGUAGE_USER_SAMI_PITE_SWEDEN,      "sje", "SE", 0     },
+    { LANGUAGE_USER_NGAEBERE,              "gym", "PA", 0     },
+    { LANGUAGE_USER_KUMYK,                 "kum", "RU", 0     },
+    { LANGUAGE_USER_NOGAI,                 "nog", "RU", 0     },
+    { LANGUAGE_USER_LADIN,                 "lld", "IT", 0     },
+    { LANGUAGE_MULTIPLE,                   "mul", ""  , 0     },    // multiple languages, many languages are used
+    { LANGUAGE_UNDETERMINED,               "und", ""  , 0     },    // undetermined language, language cannot be identified
+    { LANGUAGE_NONE,                       "zxx", ""  , 0     },    // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
+    { LANGUAGE_DONTKNOW,                    "",   ""  , 0     }     // marks end of table
 };
 
 static IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
 {
-    // MS-LangID                              ISO639-ISO15924, ISO3166
-    { LANGUAGE_SERBIAN_LATIN_SERBIA,                "sr-Latn", "RS" },
-    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA,  "sr-Latn", "RS" },
-    { LANGUAGE_SERBIAN_LATIN_MONTENEGRO,            "sr-Latn", "ME" },
-    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO,"sr-Latn", "ME" },
-    { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,    "sr-Latn", "BA" },
-    { LANGUAGE_SERBIAN_LATIN_SAM,                   "sr-Latn", "CS" },  // Serbian Latin in Serbia and Montenegro; note that not all applications may know about the 'CS' reusage mess, see https://en.wikipedia.org/wiki/ISO_3166-2:CS
-    { LANGUAGE_SERBIAN_LATIN_SAM,                   "sr-Latn", "YU" },  // legacy Serbian Latin in Yugoslavia
-    { LANGUAGE_SERBIAN_LATIN_LSO,                   "sr-Latn", ""   },
-    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sr-Latn", ""   },  // MS lists this as 'sr' only, what a mess
-    { LANGUAGE_SERBIAN_CYRILLIC_SERBIA,             "sr-Cyrl", "RS" },  // MS
-    { LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO,         "sr-Cyrl", "ME" },  // MS
-    { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr-Cyrl", "BA" },  // MS
-    { LANGUAGE_SERBIAN_CYRILLIC_SAM,                "sr-Cyrl", "CS" },  // MS
-    { LANGUAGE_SERBIAN_CYRILLIC_LSO,                "sr-Cyrl", ""   },  // MS
-    { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "bs-Cyrl", "BA" },
-    { LANGUAGE_BOSNIAN_CYRILLIC_LSO,                "bs-Cyrl", ""   },
-    { LANGUAGE_AZERI_CYRILLIC,                      "az-Cyrl", "AZ" },  // macrolanguage code
-    { LANGUAGE_AZERI_CYRILLIC_LSO,                  "az-Cyrl", ""   },  // macrolanguage code
-    { LANGUAGE_UZBEK_CYRILLIC,                      "uz-Cyrl", "UZ" },  // macrolanguage code
-    { LANGUAGE_UZBEK_CYRILLIC_LSO,                  "uz-Cyrl", ""   },  // macrolanguage code
-    { LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA,         "mn-Cyrl", "MN" },  // macrolanguage code; should be khk-MN or khk-Cyrl-MN
-    { LANGUAGE_MONGOLIAN_CYRILLIC_LSO,              "mn-Cyrl", ""   },  // macrolanguage code; MS, should be khk or khk-Cyrl
-    { LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA,        "mn-Mong", "MN" },  // macrolanguage code; MS, should be khk-Mong-MN
-    { LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA,           "mn-Mong", "CN" },  // macrolanguage code; MS, should actually be mvf-CN
-    { LANGUAGE_MONGOLIAN_MONGOLIAN_LSO,             "mn-Mong", ""   },  // macrolanguage code
-    { LANGUAGE_USER_PALI_LATIN,                     "pi-Latn", ""   },
-    { LANGUAGE_USER_KARAKALPAK_LATIN,              "kaa-Latn", "UZ" },
-    { LANGUAGE_TAJIK,                               "tg-Cyrl", "TJ" },  // MS
-    { LANGUAGE_TAJIK_LSO,                           "tg-Cyrl", ""   },  // MS
-    { LANGUAGE_AZERI_LATIN,                         "az-Latn", "AZ" },  // macrolanguage code; MS
-    { LANGUAGE_AZERI_LATIN_LSO,                     "az-Latn", ""   },  // macrolanguage code; MS
-    { LANGUAGE_USER_YIDDISH_US,                     "yi-Hebr", "US" },  // macrolanguage code; MS
-    { LANGUAGE_YIDDISH,                             "yi-Hebr", "IL" },  // macrolanguage code; MS
-    { LANGUAGE_UZBEK_LATIN,                         "uz-Latn", "UZ" },  // macrolanguage code
-    { LANGUAGE_UZBEK_LATIN_LSO,                     "uz-Latn", ""   },
-//  { LANGUAGE_SINDHI,                              "sd-Deva", "IN" },  // MS, TODO: see comment above in aImplIsoLangEntries
-//  { LANGUAGE_SINDHI_PAKISTAN,                     "sd-Arab", "PK" },  // MS, TODO: see comment above in aImplIsoLangEntries
-    { LANGUAGE_SINDHI_ARABIC_LSO,                   "sd-Arab", ""   },
-    { LANGUAGE_CHEROKEE_UNITED_STATES,             "chr-Cher", "US" },  // MS
-    { LANGUAGE_CHEROKEE_CHEROKEE_LSO,              "chr-Cher", ""   },
-    { LANGUAGE_INUKTITUT_SYLLABICS_CANADA,          "iu-Cans", "CA" },  // macrolanguage code, MS
-    { LANGUAGE_INUKTITUT_SYLLABICS_LSO,             "iu-Cans", ""   },  // macrolanguage code, MS
-    { LANGUAGE_INUKTITUT_LATIN_CANADA,              "iu-Latn", "CA" },  // macrolanguage code, MS
-    { LANGUAGE_INUKTITUT_LATIN_LSO,                 "iu-Latn", ""   },  // macrolanguage code, MS
-    { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO,         "tzm-Tfng", "MA" },
-    { LANGUAGE_TAMAZIGHT_TIFINAGH_LSO,             "tzm-Tfng", ""   },
-    { LANGUAGE_KASHMIRI_INDIA,                      "ks-Deva", "IN" },  // MS
-    { LANGUAGE_KASHMIRI,                            "ks-Arab", ""   },  // MS, Kashmiri in "Jammu and Kashmir" ... no ISO3166 code for that
-    { LANGUAGE_HAUSA_NIGERIA,                       "ha-Latn", "NG" },  // MS
-    { LANGUAGE_USER_HAUSA_GHANA,                    "ha-Latn", "GH" },  // MS
-    { LANGUAGE_HAUSA_LATIN_LSO,                     "ha-Latn", ""   },
-    { LANGUAGE_LATIN,                               "la-Latn", ""   },  // MS
-    { LANGUAGE_TAI_NUA_CHINA,                      "tdd-Tale", "CN" },  // MS reserved
-    { LANGUAGE_LU_CHINA,                           "khb-Talu", "CN" },  // MS reserved
-    { LANGUAGE_KURDISH_ARABIC_IRAQ,                 "ku-Arab", "IQ" },  // macrolanguage code, MS
-    { LANGUAGE_KURDISH_ARABIC_LSO,                  "ku-Arab", ""   },  // macrolanguage code
-    { LANGUAGE_PUNJABI_PAKISTAN,                   "pnb-Arab", "PK" },
-    { LANGUAGE_PUNJABI_ARABIC_LSO,                 "pnb-Arab", ""   },
-    { LANGUAGE_PUNJABI_PAKISTAN,                    "pa-Arab", "PK" },  // MS, incorrect
-    { LANGUAGE_PUNJABI_ARABIC_LSO,                  "pa-Arab", ""   },  // MS, incorrect
-    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,            "tzm-Latn", "DZ" },  // MS
-    { LANGUAGE_TAMAZIGHT_LATIN_LSO,                "tzm-Latn", ""   },  // MS
-    { LANGUAGE_FULFULDE_SENEGAL,                    "ff-Latn", "SN" },  // macrolanguage code, MS
-    { LANGUAGE_FULFULDE_LATIN_LSO,                  "ff-Latn", ""   },  // macrolanguage code
-    { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,    "bs-Latn", "BA" },  // MS, though Latn is suppress-script
-    { LANGUAGE_BOSNIAN_LATIN_LSO,                   "bs-Latn", ""   },  // MS, though Latn is suppress-script
-    { LANGUAGE_CHINESE_TRADITIONAL_LSO,             "zh-Hant", ""   },
-    { LANGUAGE_DONTKNOW,                            "",        ""   }   // marks end of table
+    // MS-LangID,                             ISO639-ISO15924, ISO3166, override
+    { LANGUAGE_SERBIAN_LATIN_SERBIA,                "sr-Latn", "RS", 0     },
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA,  "sr-Latn", "RS", 0     },
+    { LANGUAGE_SERBIAN_LATIN_MONTENEGRO,            "sr-Latn", "ME", 0     },
+    { LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO,"sr-Latn", "ME", 0     },
+    { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,    "sr-Latn", "BA", 0     },
+    { LANGUAGE_SERBIAN_LATIN_SAM,                   "sr-Latn", "CS", 0     },   // Serbian Latin in Serbia and Montenegro; note that not all applications may know about the 'CS' reusage mess, see https://en.wikipedia.org/wiki/ISO_3166-2:CS
+    { LANGUAGE_SERBIAN_LATIN_SAM,                   "sr-Latn", "YU", 0     },   // legacy Serbian Latin in Yugoslavia
+    { LANGUAGE_SERBIAN_LATIN_LSO,                   "sr-Latn", ""  , 0     },
+    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sr-Latn", ""  , 0     },   // MS lists this as 'sr' only, what a mess
+    { LANGUAGE_SERBIAN_CYRILLIC_SERBIA,             "sr-Cyrl", "RS", 0     },   // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO,         "sr-Cyrl", "ME", 0     },   // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr-Cyrl", "BA", 0     },   // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_SAM,                "sr-Cyrl", "CS", 0     },   // MS
+    { LANGUAGE_SERBIAN_CYRILLIC_LSO,                "sr-Cyrl", ""  , 0     },   // MS
+    { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "bs-Cyrl", "BA", 0     },
+    { LANGUAGE_BOSNIAN_CYRILLIC_LSO,                "bs-Cyrl", ""  , 0     },
+    { LANGUAGE_AZERI_CYRILLIC,                      "az-Cyrl", "AZ", 0     },   // macrolanguage code
+    { LANGUAGE_AZERI_CYRILLIC_LSO,                  "az-Cyrl", ""  , 0     },   // macrolanguage code
+    { LANGUAGE_UZBEK_CYRILLIC,                      "uz-Cyrl", "UZ", 0     },   // macrolanguage code
+    { LANGUAGE_UZBEK_CYRILLIC_LSO,                  "uz-Cyrl", ""  , 0     },   // macrolanguage code
+    { LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA,         "mn-Cyrl", "MN", 0     },   // macrolanguage code; should be khk-MN or khk-Cyrl-MN
+    { LANGUAGE_MONGOLIAN_CYRILLIC_LSO,              "mn-Cyrl", ""  , 0     },   // macrolanguage code; MS, should be khk or khk-Cyrl
+    { LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA,        "mn-Mong", "MN", 0     },   // macrolanguage code; MS, should be khk-Mong-MN
+    { LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA,           "mn-Mong", "CN", 0     },   // macrolanguage code; MS, should actually be mvf-CN
+    { LANGUAGE_MONGOLIAN_MONGOLIAN_LSO,             "mn-Mong", ""  , 0     },   // macrolanguage code
+    { LANGUAGE_USER_PALI_LATIN,                     "pi-Latn", ""  , 0     },
+    { LANGUAGE_USER_KARAKALPAK_LATIN,              "kaa-Latn", "UZ", 0     },
+    { LANGUAGE_TAJIK,                               "tg-Cyrl", "TJ", 0     },   // MS
+    { LANGUAGE_TAJIK_LSO,                           "tg-Cyrl", ""  , 0     },   // MS
+    { LANGUAGE_AZERI_LATIN,                         "az-Latn", "AZ", 0     },   // macrolanguage code; MS
+    { LANGUAGE_AZERI_LATIN_LSO,                     "az-Latn", ""  , 0     },   // macrolanguage code; MS
+    { LANGUAGE_USER_YIDDISH_US,                     "yi-Hebr", "US", 0     },   // macrolanguage code; MS
+    { LANGUAGE_YIDDISH,                             "yi-Hebr", "IL", 0     },   // macrolanguage code; MS
+    { LANGUAGE_UZBEK_LATIN,                         "uz-Latn", "UZ", 0     },   // macrolanguage code
+    { LANGUAGE_UZBEK_LATIN_LSO,                     "uz-Latn", ""  , 0     },
+//  { LANGUAGE_SINDHI,                              "sd-Deva", "IN", 0     },   // MS, TODO: see comment above in aImplIsoLangEntries
+//  { LANGUAGE_SINDHI_PAKISTAN,                     "sd-Arab", "PK", 0     },   // MS, TODO: see comment above in aImplIsoLangEntries
+    { LANGUAGE_SINDHI_ARABIC_LSO,                   "sd-Arab", ""  , 0     },
+    { LANGUAGE_CHEROKEE_UNITED_STATES,             "chr-Cher", "US", 0     },   // MS
+    { LANGUAGE_CHEROKEE_CHEROKEE_LSO,              "chr-Cher", ""  , 0     },
+    { LANGUAGE_INUKTITUT_SYLLABICS_CANADA,          "iu-Cans", "CA", 0     },   // macrolanguage code, MS
+    { LANGUAGE_INUKTITUT_SYLLABICS_LSO,             "iu-Cans", ""  , 0     },   // macrolanguage code, MS
+    { LANGUAGE_INUKTITUT_LATIN_CANADA,              "iu-Latn", "CA", 0     },   // macrolanguage code, MS
+    { LANGUAGE_INUKTITUT_LATIN_LSO,                 "iu-Latn", ""  , 0     },   // macrolanguage code, MS
+    { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO,         "tzm-Tfng", "MA", 0     },
+    { LANGUAGE_TAMAZIGHT_TIFINAGH_LSO,             "tzm-Tfng", ""  , 0     },
+    { LANGUAGE_KASHMIRI_INDIA,                      "ks-Deva", "IN", 0     },   // MS
+    { LANGUAGE_KASHMIRI,                            "ks-Arab", ""  , 0     },   // MS, Kashmiri in "Jammu and Kashmir" ... no ISO3166 code for that
+    { LANGUAGE_HAUSA_NIGERIA,                       "ha-Latn", "NG", 0     },   // MS
+    { LANGUAGE_USER_HAUSA_GHANA,                    "ha-Latn", "GH", 0     },   // MS
+    { LANGUAGE_HAUSA_LATIN_LSO,                     "ha-Latn", ""  , 0     },
+    { LANGUAGE_LATIN_LSO,                           "la-Latn", ""  , kSAME },   // MS, though Latn is suppress-script
+    { LANGUAGE_TAI_NUA_CHINA,                      "tdd-Tale", "CN", 0     },   // MS reserved
+    { LANGUAGE_LU_CHINA,                           "khb-Talu", "CN", 0     },   // MS reserved
+    { LANGUAGE_KURDISH_ARABIC_IRAQ,                 "ku-Arab", "IQ", 0     },   // macrolanguage code, MS
+    { LANGUAGE_KURDISH_ARABIC_LSO,                  "ku-Arab", ""  , 0     },   // macrolanguage code
+    { LANGUAGE_PUNJABI_PAKISTAN,                   "pnb-Arab", "PK", 0     },
+    { LANGUAGE_PUNJABI_ARABIC_LSO,                 "pnb-Arab", ""  , 0     },
+    { LANGUAGE_PUNJABI_PAKISTAN,                    "pa-Arab", "PK", 0     },   // MS, incorrect
+    { LANGUAGE_PUNJABI_ARABIC_LSO,                  "pa-Arab", ""  , 0     },   // MS, incorrect
+    { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,            "tzm-Latn", "DZ", kSAME },   // MS
+    { LANGUAGE_TAMAZIGHT_LATIN_LSO,                "tzm-Latn", ""  , 0     },   // MS
+    { LANGUAGE_FULFULDE_SENEGAL,                    "ff-Latn", "SN", 0     },   // macrolanguage code, MS
+    { LANGUAGE_FULFULDE_LATIN_LSO,                  "ff-Latn", ""  , 0     },   // macrolanguage code
+    { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,    "bs-Latn", "BA", kSAME },   // MS, though Latn is suppress-script
+    { LANGUAGE_BOSNIAN_LATIN_LSO,                   "bs-Latn", ""  , LANGUAGE_BOSNIAN_LSO },   // MS, though Latn is suppress-script
+    { LANGUAGE_CHINESE_TRADITIONAL_LSO,             "zh-Hant", ""  , 0     },
+    { LANGUAGE_DONTKNOW,                            "",        ""  , 0     }    // marks end of table
 };
 
 static Bcp47CountryEntry const aImplBcp47CountryEntries[] =
@@ -860,13 +888,18 @@ static IsoLangOtherEntry const aImplPrivateUseEntries[] =
 
 // static
 void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
-        ::com::sun::star::lang::Locale & rLocale )
+        ::com::sun::star::lang::Locale & rLocale, bool bIgnoreOverride )
 {
+    const IsoLanguageScriptCountryEntry* pScriptEntryOverride = NULL;
+    const IsoLanguageCountryEntry* pEntryOverride = NULL;
+
+Label_Override_Lang_Locale:
+
     // Search for LangID in BCP47
     for (const Bcp47CountryEntry* pBcp47Entry = aImplBcp47CountryEntries;
             pBcp47Entry->mnLang != LANGUAGE_DONTKNOW; ++pBcp47Entry)
     {
-        if ( pBcp47Entry->mnLang == nLang )
+        if (pBcp47Entry->mnLang == nLang)
         {
             rLocale.Language = I18NLANGTAG_QLT;
             rLocale.Country  = OUString::createFromAscii( pBcp47Entry->maCountry);
@@ -879,12 +912,21 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
             pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
     {
-        if ( pScriptEntry->mnLang == nLang )
+        if (pScriptEntry->mnLang == nLang)
         {
-            rLocale.Language = I18NLANGTAG_QLT;
-            rLocale.Country  = OUString::createFromAscii( pScriptEntry->maCountry);
-            rLocale.Variant  = pScriptEntry->getTagString();
-            return;
+            if (bIgnoreOverride || !pScriptEntry->mnOverride)
+            {
+                rLocale.Language = I18NLANGTAG_QLT;
+                rLocale.Country  = OUString::createFromAscii( pScriptEntry->maCountry);
+                rLocale.Variant  = pScriptEntry->getTagString();
+                return;
+            }
+            else if (pScriptEntry->mnOverride && pScriptEntryOverride != pScriptEntry)
+            {
+                pScriptEntryOverride = pScriptEntry;
+                nLang = getOverrideLang( pScriptEntry->mnLang, pScriptEntry->mnOverride);
+                goto Label_Override_Lang_Locale;
+            }
         }
     }
 
@@ -892,12 +934,21 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
             pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {
-        if ( pEntry->mnLang == nLang )
+        if (pEntry->mnLang == nLang)
         {
-            rLocale.Language = OUString::createFromAscii( pEntry->maLanguage );
-            rLocale.Country  = OUString::createFromAscii( pEntry->maCountry );
-            rLocale.Variant  = OUString();
-            return;
+            if (bIgnoreOverride || !pEntry->mnOverride)
+            {
+                rLocale.Language = OUString::createFromAscii( pEntry->maLanguage );
+                rLocale.Country  = OUString::createFromAscii( pEntry->maCountry );
+                rLocale.Variant  = OUString();
+                return;
+            }
+            else if (pEntry->mnOverride && pEntryOverride != pEntry)
+            {
+                pEntryOverride = pEntry;
+                nLang = getOverrideLang( pEntry->mnLang, pEntry->mnOverride);
+                goto Label_Override_Lang_Locale;
+            }
         }
     }
 
@@ -905,7 +956,7 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
     for (const IsoLangOtherEntry* pPrivateEntry = aImplPrivateUseEntries;
             pPrivateEntry->mnLang != LANGUAGE_DONTKNOW; ++pPrivateEntry)
     {
-        if ( pPrivateEntry->mnLang == nLang )
+        if (pPrivateEntry->mnLang == nLang)
         {
             rLocale.Language = I18NLANGTAG_QLT;
             rLocale.Country  = OUString();
@@ -922,10 +973,23 @@ void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
 // static
 com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageCountryEntry * pEntry )
 {
-    if (pEntry->mbOverrideExists)
+    if (pEntry->mnOverride)
     {
         lang::Locale aLocale;
-        convertLanguageToLocaleImpl( pEntry->mnLang, aLocale);
+        convertLanguageToLocaleImpl( getOverrideLang( pEntry->mnLang, pEntry->mnOverride), aLocale, false);
+        return aLocale;
+    }
+    else
+        return pEntry->getLocale();
+}
+
+// static
+com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageScriptCountryEntry * pEntry )
+{
+    if (pEntry->mnOverride)
+    {
+        lang::Locale aLocale;
+        convertLanguageToLocaleImpl( getOverrideLang( pEntry->mnLang, pEntry->mnOverride), aLocale, false);
         return aLocale;
     }
     else
@@ -962,7 +1026,7 @@ com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageC
             if (pScriptEntry->startsInIgnoreAsciiCase( rLocale.Variant))
             {
                 if (rLocale.Variant.equalsIgnoreAsciiCase( pScriptEntry->getTagString()))
-                    return pScriptEntry->getLocale();
+                    return getLocale( pScriptEntry);    // may override
                 if (!pFirstScript)
                     pFirstScript = pScriptEntry;
             }
@@ -980,10 +1044,10 @@ com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageC
                 {
                     if (aUpperCountry.equalsAscii( pScriptEntry->maCountry) &&
                             pScriptEntry->startsInIgnoreAsciiCase( rLocale.Variant))
-                        return pScriptEntry->getLocale();
+                        return getLocale( pScriptEntry);    // may override
                 }
             }
-            return pFirstScript->getLocale();
+            return getLocale( pFirstScript);    // may override
         }
 
         // Extract language from tag string, country is used as present in
@@ -1089,7 +1153,7 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguageImpl(
             if (pScriptEntry->startsInIgnoreAsciiCase( rLocale.Variant))
             {
                 if (rLocale.Variant.equalsIgnoreAsciiCase( pScriptEntry->getTagString()))
-                    return pScriptEntry->mnLang;
+                    return getOverrideLang( pScriptEntry->mnLang, pScriptEntry->mnOverride);
             }
         }
     }
@@ -1105,10 +1169,57 @@ LanguageType MsLangId::Conversion::convertLocaleToLanguageImpl(
                 pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
         {
             if (aLowerLang.equalsAscii( pEntry->maLanguage) && aUpperCountry.equalsAscii( pEntry->maCountry))
-                return pEntry->mnLang;
+                return getOverrideLang( pEntry->mnLang, pEntry->mnOverride);
         }
     }
     return LANGUAGE_DONTKNOW;
+}
+
+
+// static
+::com::sun::star::lang::Locale MsLangId::Conversion::getOverride( const ::com::sun::star::lang::Locale& rLocale )
+{
+    if (rLocale.Language == I18NLANGTAG_QLT)
+    {
+        // "x-..." private use and the nasty "*" joker
+        if (rLocale.Variant.startsWithIgnoreAsciiCase( "x-") || (rLocale.Variant == "*"))
+            return rLocale;     // no overrides
+
+        // Search in BCP47
+        for (const Bcp47CountryEntry* pBcp47Entry = aImplBcp47CountryEntries;
+                pBcp47Entry->mnLang != LANGUAGE_DONTKNOW; ++pBcp47Entry)
+        {
+            if (rLocale.Variant.equalsIgnoreAsciiCase( pBcp47Entry->getTagString()))
+                return rLocale; // no overrides
+        }
+
+        // Search in ISO lll-Ssss-CC
+        for (const IsoLanguageScriptCountryEntry* pScriptEntry = aImplIsoLangScriptEntries;
+                pScriptEntry->mnLang != LANGUAGE_DONTKNOW; ++pScriptEntry)
+        {
+            if (pScriptEntry->startsInIgnoreAsciiCase( rLocale.Variant))
+            {
+                if (rLocale.Variant.equalsIgnoreAsciiCase( pScriptEntry->getTagString()))
+                    return getLocale( pScriptEntry);    // may override
+            }
+        }
+    }
+    else
+    {
+        // language is lower case in table
+        OUString aLowerLang = rLocale.Language.toAsciiLowerCase();
+        // country is upper case in table
+        OUString aUpperCountry = rLocale.Country.toAsciiUpperCase();
+
+        // Search in ISO lll-CC
+        for (const IsoLanguageCountryEntry* pEntry = aImplIsoLangEntries;
+                pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
+        {
+            if (aLowerLang.equalsAscii( pEntry->maLanguage) && aUpperCountry.equalsAscii( pEntry->maCountry))
+                return getLocale( pEntry);  // may override
+        }
+    }
+    return lang::Locale();
 }
 
 

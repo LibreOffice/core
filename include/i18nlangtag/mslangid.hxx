@@ -28,6 +28,7 @@
 #include <vector>
 
 struct IsoLanguageCountryEntry;
+struct IsoLanguageScriptCountryEntry;
 
 /** Methods related to Microsoft language IDs. For details about MS-LANGIDs
     please see lang.h */
@@ -226,6 +227,10 @@ public:
         I18NLANGTAG_DLLPRIVATE static LanguageType convertPrivateUseToLanguage(
                 const OUString& rPriv );
 
+        /** Used by LanguageTag::canonicalize() */
+        I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale getOverride(
+                const ::com::sun::star::lang::Locale & rLocale );
+
         /** Used by convertLocaleToLanguage(Locale) */
         I18NLANGTAG_DLLPRIVATE static LanguageType convertIsoNamesToLanguage(
                 const OUString& rLang, const OUString& rCountry );
@@ -240,6 +245,10 @@ public:
         I18NLANGTAG_DLLPRIVATE static com::sun::star::lang::Locale getLocale(
                 const IsoLanguageCountryEntry * pEntry );
 
+        /** Used by lookupFallbackLocale(Locale) */
+        I18NLANGTAG_DLLPRIVATE static com::sun::star::lang::Locale getLocale(
+                const IsoLanguageScriptCountryEntry * pEntry );
+
 
         /** Convert a LanguageType to a Locale.
 
@@ -252,14 +261,21 @@ public:
                 LanguageType nLang, bool bResolveSystem );
 
         /** Used by convertLanguageToLocale(LanguageType,bool) and
-            getLocale(IsoLanguageCountryEntry*)
+            getLocale(IsoLanguageCountryEntry*) and
+            getLocale(IsoLanguageScriptCountryEntry)
+
+            @param  bIgnoreOverride
+                    If bIgnoreOverride==true, a matching entry is used even if
+                    mnOverride is set, for conversion to an even outdated tag.
+                    If bIgnoreOverride==false, a matching entry is skipped if
+                    mnOverride is set and instead the override is followed.
 
             @return rLocale set to mapped values, unchanged if no mapping was
                     found. E.g. pass empty Locale to obtain empty SYSTEM locale
                     for that case.
          */
         I18NLANGTAG_DLLPRIVATE static void convertLanguageToLocaleImpl(
-                LanguageType nLang, ::com::sun::star::lang::Locale & rLocale );
+                LanguageType nLang, ::com::sun::star::lang::Locale & rLocale, bool bIgnoreOverride );
 
 
         I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(

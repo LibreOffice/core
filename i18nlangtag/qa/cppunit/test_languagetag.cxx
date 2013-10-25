@@ -176,26 +176,27 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( sr_Latn_CS.makeFallback().getBcp47() == "sr-Latn-CS");
     }
 
+    // 'sh-RS' has an internal override to 'sr-Latn-RS'
     {
         OUString s_sh_RS( "sh-RS" );
         LanguageTag sh_RS( s_sh_RS, true );
         lang::Locale aLocale = sh_RS.getLocale();
-        CPPUNIT_ASSERT( sh_RS.getBcp47() == s_sh_RS );
-        CPPUNIT_ASSERT( aLocale.Language == "sh" );
+        CPPUNIT_ASSERT( sh_RS.getBcp47() == "sr-Latn-RS" );
+        CPPUNIT_ASSERT( aLocale.Language == I18NLANGTAG_QLT );
         CPPUNIT_ASSERT( aLocale.Country == "RS" );
-        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        CPPUNIT_ASSERT( aLocale.Variant == "sr-Latn-RS" );
         CPPUNIT_ASSERT( sh_RS.getLanguageType() == LANGUAGE_USER_SERBIAN_LATIN_SERBIA );
         CPPUNIT_ASSERT( sh_RS.isValidBcp47() == true );
-        CPPUNIT_ASSERT( sh_RS.isIsoLocale() == true );
+        CPPUNIT_ASSERT( sh_RS.isIsoLocale() == false );
         CPPUNIT_ASSERT( sh_RS.isIsoODF() == true );
-        CPPUNIT_ASSERT( sh_RS.getLanguage() == "sh" );
+        CPPUNIT_ASSERT( sh_RS.getLanguage() == "sr" );
         CPPUNIT_ASSERT( sh_RS.getCountry() == "RS" );
-        CPPUNIT_ASSERT( sh_RS.getScript() == "" );
-        CPPUNIT_ASSERT( sh_RS.getLanguageAndScript() == "sh" );
+        CPPUNIT_ASSERT( sh_RS.getScript() == "Latn" );
+        CPPUNIT_ASSERT( sh_RS.getLanguageAndScript() == "sr-Latn" );
         ::std::vector< OUString > sh_RS_Fallbacks( sh_RS.getFallbackStrings( true));
         CPPUNIT_ASSERT( sh_RS_Fallbacks.size() == 6);
-        CPPUNIT_ASSERT( sh_RS_Fallbacks[0] == "sh-RS");
-        CPPUNIT_ASSERT( sh_RS_Fallbacks[1] == "sr-Latn-RS");
+        CPPUNIT_ASSERT( sh_RS_Fallbacks[0] == "sr-Latn-RS");
+        CPPUNIT_ASSERT( sh_RS_Fallbacks[1] == "sh-RS");
         CPPUNIT_ASSERT( sh_RS_Fallbacks[2] == "sr-Latn");
         CPPUNIT_ASSERT( sh_RS_Fallbacks[3] == "sh");
         CPPUNIT_ASSERT( sh_RS_Fallbacks[4] == "sr-RS");
@@ -203,6 +204,34 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( sh_RS.makeFallback().getBcp47() == "sr-Latn-RS");
         CPPUNIT_ASSERT( sh_RS.getBcp47() == "sr-Latn-RS");
         CPPUNIT_ASSERT( sh_RS.getLanguageType() == LANGUAGE_USER_SERBIAN_LATIN_SERBIA );
+    }
+
+    // 'bs-Latn-BA' with 'Latn' suppress-script, we map that ourselves for a
+    // known LangID with an override and canonicalization should work the same
+    // without liblangtag.
+    {
+        OUString s_bs_Latn_BA( "bs-Latn-BA" );
+        LanguageTag bs_Latn_BA( s_bs_Latn_BA, true );
+        lang::Locale aLocale = bs_Latn_BA.getLocale();
+        CPPUNIT_ASSERT( bs_Latn_BA.getBcp47() == "bs-BA" );
+        CPPUNIT_ASSERT( aLocale.Language == "bs" );
+        CPPUNIT_ASSERT( aLocale.Country == "BA" );
+        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        CPPUNIT_ASSERT( bs_Latn_BA.getLanguageType() == LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA );
+        CPPUNIT_ASSERT( bs_Latn_BA.isValidBcp47() == true );
+        CPPUNIT_ASSERT( bs_Latn_BA.isIsoLocale() == true );
+        CPPUNIT_ASSERT( bs_Latn_BA.isIsoODF() == true );
+        CPPUNIT_ASSERT( bs_Latn_BA.getLanguage() == "bs" );
+        CPPUNIT_ASSERT( bs_Latn_BA.getCountry() == "BA" );
+        CPPUNIT_ASSERT( bs_Latn_BA.getScript() == "" );
+        CPPUNIT_ASSERT( bs_Latn_BA.getLanguageAndScript() == "bs" );
+        ::std::vector< OUString > bs_Latn_BA_Fallbacks( bs_Latn_BA.getFallbackStrings( true));
+        CPPUNIT_ASSERT( bs_Latn_BA_Fallbacks.size() == 2);
+        CPPUNIT_ASSERT( bs_Latn_BA_Fallbacks[0] == "bs-BA");
+        CPPUNIT_ASSERT( bs_Latn_BA_Fallbacks[1] == "bs");
+        CPPUNIT_ASSERT( bs_Latn_BA.makeFallback().getBcp47() == "bs-BA");
+        CPPUNIT_ASSERT( bs_Latn_BA.getBcp47() == "bs-BA");
+        CPPUNIT_ASSERT( bs_Latn_BA.getLanguageType() == LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA );
     }
 
     {
@@ -222,11 +251,12 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( ca_ES_valencia.getScript() == "" );
         CPPUNIT_ASSERT( ca_ES_valencia.getLanguageAndScript() == "ca" );
         ::std::vector< OUString > ca_ES_valencia_Fallbacks( ca_ES_valencia.getFallbackStrings( true));
-        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks.size() == 4);
+        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks.size() == 5);
         CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[0] == "ca-ES-valencia");
-        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[1] == "ca-valencia");
-        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[2] == "ca-ES");
-        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[3] == "ca");
+        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[1] == "ca-XV");
+        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[2] == "ca-valencia");
+        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[3] == "ca-ES");
+        CPPUNIT_ASSERT( ca_ES_valencia_Fallbacks[4] == "ca");
         CPPUNIT_ASSERT( ca_ES_valencia.makeFallback().getBcp47() == "ca-ES-valencia");
     }
 
@@ -253,26 +283,28 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( ca_valencia.makeFallback().getBcp47() == "ca-ES-valencia");
     }
 
+    // 'ca-XV' has an internal override to 'ca-ES-valencia'
     {
         OUString s_ca_XV( "ca-XV" );
+        OUString s_ca_ES_valencia( "ca-ES-valencia" );
         LanguageTag ca_XV( s_ca_XV, true );
         lang::Locale aLocale = ca_XV.getLocale();
-        CPPUNIT_ASSERT( ca_XV.getBcp47() == s_ca_XV );
-        CPPUNIT_ASSERT( aLocale.Language == "ca" );
-        CPPUNIT_ASSERT( aLocale.Country == "XV" );
-        CPPUNIT_ASSERT( aLocale.Variant == "" );
+        CPPUNIT_ASSERT( ca_XV.getBcp47() == s_ca_ES_valencia );
+        CPPUNIT_ASSERT( aLocale.Language == I18NLANGTAG_QLT );
+        CPPUNIT_ASSERT( aLocale.Country == "ES" );
+        CPPUNIT_ASSERT( aLocale.Variant == s_ca_ES_valencia );
         CPPUNIT_ASSERT( ca_XV.getLanguageType() == LANGUAGE_CATALAN_VALENCIAN );
         CPPUNIT_ASSERT( ca_XV.isValidBcp47() == true );
-        CPPUNIT_ASSERT( ca_XV.isIsoLocale() == true );
-        CPPUNIT_ASSERT( ca_XV.isIsoODF() == true );
+        CPPUNIT_ASSERT( ca_XV.isIsoLocale() == false );
+        CPPUNIT_ASSERT( ca_XV.isIsoODF() == false );
         CPPUNIT_ASSERT( ca_XV.getLanguage() == "ca" );
-        CPPUNIT_ASSERT( ca_XV.getCountry() == "XV" );
+        CPPUNIT_ASSERT( ca_XV.getCountry() == "ES" );
         CPPUNIT_ASSERT( ca_XV.getScript() == "" );
         CPPUNIT_ASSERT( ca_XV.getLanguageAndScript() == "ca" );
         ::std::vector< OUString > ca_XV_Fallbacks( ca_XV.getFallbackStrings( true));
         CPPUNIT_ASSERT( ca_XV_Fallbacks.size() == 5);
-        CPPUNIT_ASSERT( ca_XV_Fallbacks[0] == "ca-XV");
-        CPPUNIT_ASSERT( ca_XV_Fallbacks[1] == "ca-ES-valencia");
+        CPPUNIT_ASSERT( ca_XV_Fallbacks[0] == "ca-ES-valencia");
+        CPPUNIT_ASSERT( ca_XV_Fallbacks[1] == "ca-XV");
         CPPUNIT_ASSERT( ca_XV_Fallbacks[2] == "ca-valencia");
         CPPUNIT_ASSERT( ca_XV_Fallbacks[3] == "ca-ES");
         CPPUNIT_ASSERT( ca_XV_Fallbacks[4] == "ca");
@@ -547,14 +579,58 @@ void TestLanguageTag::testAllTags()
     }
 }
 
+static bool checkMapping( const OUString rStr1, const OUString& rStr2 )
+{
+    if (rStr1 == "la-Latn"     ) return rStr2 == "la";
+    if (rStr1 == "tzm-Latn-DZ" ) return rStr2 == "kab-DZ";
+    if (rStr1 == "bs-Latn-BA"  ) return rStr2 == "bs-BA";
+    if (rStr1 == "bs-Latn"     ) return rStr2 == "bs";
+    if (rStr1 == "cz"          ) return rStr2 == "cs-CZ";
+    if (rStr1 == "iw-IL"       ) return rStr2 == "he-IL";
+    if (rStr1 == "in-ID"       ) return rStr2 == "id-ID";
+    if (rStr1 == "sr-YU"       ) return rStr2 == "sr-Cyrl-CS";
+    if (rStr1 == "sh-RS"       ) return rStr2 == "sr-Latn-RS";
+    if (rStr1 == "sh-YU"       ) return rStr2 == "sr-Latn-CS";
+    if (rStr1 == "sh-CS"       ) return rStr2 == "sr-Latn-CS";
+    if (rStr1 == "sh-ME"       ) return rStr2 == "sr-Latn-ME";
+    if (rStr1 == "sh-BA"       ) return rStr2 == "sr-Latn-BA";
+    if (rStr1 == "sh"          ) return rStr2 == "sr-Latn";
+    if (rStr1 == "lah-PK"      ) return rStr2 == "pnb-Arab-PK";
+    if (rStr1 == "pa-PK"       ) return rStr2 == "pnb-Arab-PK";
+    if (rStr1 == "ca-XV"       ) return rStr2 == "ca-ES-valencia";
+    if (rStr1 == "qcv-ES"      ) return rStr2 == "ca-ES-valencia";
+    if (rStr1 == "ns-ZA"       ) return rStr2 == "nso-ZA";
+    if (rStr1 == "ven-ZA"      ) return rStr2 == "ve-ZA";
+    if (rStr1 == "qu-EC"       ) return rStr2 == "quz-EC";
+    if (rStr1 == "qu-PE"       ) return rStr2 == "quz-PE";
+    if (rStr1 == "ff-NG"       ) return rStr2 == "fuv-NG";
+    if (rStr1 == "ji-IL"       ) return rStr2 == "yi-Hebr-IL";
+    if (rStr1 == "iu-CA"       ) return rStr2 == "iu-Latn-CA";
+    if (rStr1 == "iu"          ) return rStr2 == "iu-Latn";
+    if (rStr1 == "gbz-AF"      ) return rStr2 == "prs-AF";
+    if (rStr1 == "ber-DZ"      ) return rStr2 == "kab-DZ";
+    if (rStr1 == "tmz-MA"      ) return rStr2 == "tzm-Tfng-MA";
+    if (rStr1 == "ber-MA"      ) return rStr2 == "tzm-Tfng-MA";
+    if (rStr1 == "mg-MG"       ) return rStr2 == "plt-MG";
+    if (rStr1 == "pli"         ) return rStr2 == "pi-Latn";
+    if (rStr1 == "ks"          ) return rStr2 == "ks-Arab";
+    if (rStr1 == "chr-US"      ) return rStr2 == "chr-Cher-US";
+    return rStr1 == rStr2;
+}
+
 void TestLanguageTag::testAllIsoLangEntries()
 {
     const ::std::vector< MsLangId::LanguagetagMapping > aList( MsLangId::getDefinedLanguagetags());
     for (::std::vector< MsLangId::LanguagetagMapping >::const_iterator it( aList.begin()); it != aList.end(); ++it)
     {
+        bool b=false;
+        if ((*it).maBcp47 == "la-VA")
+            b=true;
+        (void)b;
+
         LanguageTag aTagString( (*it).maBcp47, true);
         LanguageTag aTagID( (*it).mnLang);
-        if ((*it).maBcp47 != aTagString.getBcp47())
+        if (!checkMapping( (*it).maBcp47, aTagString.getBcp47()))
         {
             OString aMessage( OUStringToOString( (*it).maBcp47, RTL_TEXTENCODING_ASCII_US));
             aMessage += " -> " + OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US);
@@ -567,8 +643,11 @@ void TestLanguageTag::testAllIsoLangEntries()
             if (aTagString.getLanguageType() != aTagBack.getLanguageType())
             {
                 OString aMessage( OUStringToOString( (*it).maBcp47, RTL_TEXTENCODING_ASCII_US));
-                aMessage += " " + OString::number( aTagString.getLanguageType(), 16) +
-                    " -> " + OString::number( aTagBack.getLanguageType(), 16);
+                aMessage += " " + OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US) + ": " +
+                    OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US) + " " +
+                    OString::number( aTagString.getLanguageType(), 16) +
+                    " -> " + OUStringToOString( aTagBack.getBcp47(), RTL_TEXTENCODING_ASCII_US) + " " +
+                    OString::number( aTagBack.getLanguageType(), 16);
                 CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), aTagString.getLanguageType() == aTagBack.getLanguageType());
             }
         }

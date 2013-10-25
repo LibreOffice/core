@@ -160,7 +160,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_BULGARIAN                  0x0402
 #define LANGUAGE_BURMESE                    0x0455
 #define LANGUAGE_CATALAN                    0x0403
-#define LANGUAGE_CATALAN_VALENCIAN          0x0803  /* obsoletes LANGUAGE_USER_CATALAN_VALENCIAN */
+#define LANGUAGE_CATALAN_VALENCIAN          0x0803  /* obsoletes LANGUAGE_USER_CATALAN_VALENCIAN 0x8003 */
 #define LANGUAGE_CHEROKEE_UNITED_STATES     0x045C
 #define LANGUAGE_CHEROKEE_CHEROKEE_LSO      0x7C5C
 #define LANGUAGE_CHINESE_HONGKONG           0x0C04
@@ -276,18 +276,18 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_KIRGHIZ                    0x0440  /* AKA Kyrgyz */
 #define LANGUAGE_KONKANI                    0x0457
 #define LANGUAGE_KOREAN                     0x0412
-#define LANGUAGE_KOREAN_JOHAB               0x0812
-#define LANGUAGE_KURDISH_ARABIC_IRAQ        0x0492  /* TODO: obsoletes LANGUAGE_USER_KURDISH_IRAQ */
+#define LANGUAGE_KOREAN_JOHAB               0x0812  /* not mentioned in MS-LCID.pdf, oh joy */
+#define LANGUAGE_KURDISH_ARABIC_IRAQ        0x0492  /* TODO: obsoletes LANGUAGE_USER_KURDISH_IRAQ 0x0E26 */
 #define LANGUAGE_KURDISH_ARABIC_LSO         0x7C92
 #define LANGUAGE_LAO                        0x0454
-#define LANGUAGE_LATIN                      0x0476  /* obsoletes LANGUAGE_USER_LATIN 0x0610 */
+#define LANGUAGE_LATIN_LSO                  0x0476  /* obsoletes LANGUAGE_USER_LATIN 0x0610 */
 #define LANGUAGE_LATVIAN                    0x0426
 #define LANGUAGE_LITHUANIAN                 0x0427
 #define LANGUAGE_LITHUANIAN_CLASSIC         0x0827  /* MS in its MS-LCID.pdf now says "Neither defined nor reserved" */
 #define LANGUAGE_LU_CHINA                   0x0490
 #define LANGUAGE_LUXEMBOURGISH_LUXEMBOURG   0x046E  /* obsoletes LANGUAGE_USER_LUXEMBOURGISH 0x0630 */
 #define LANGUAGE_MACEDONIAN                 0x042F
-#define LANGUAGE_MALAGASY_PLATEAU           0x048D  /* obsoletes LANGUAGE_USER_MALAGASY_PLATEAU */
+#define LANGUAGE_MALAGASY_PLATEAU           0x048D  /* obsoletes LANGUAGE_USER_MALAGASY_PLATEAU 0x064F */
 #define LANGUAGE_MALAYALAM                  0x044C  /* in India */
 #define LANGUAGE_MALAY_BRUNEI_DARUSSALAM    0x083E
 #define LANGUAGE_MALAY_MALAYSIA             0x043E
@@ -417,7 +417,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_TIGRIGNA_ETHIOPIA          0x0473
 #define LANGUAGE_TSONGA                     0x0431
 #define LANGUAGE_TSWANA                     0x0432  /* AKA Setsuana, for South Africa */
-#define LANGUAGE_TSWANA_BOTSWANA            0x0832  /* obsoletes LANGUAGE_USER_TSWANA_BOTSWANA */
+#define LANGUAGE_TSWANA_BOTSWANA            0x0832  /* obsoletes LANGUAGE_USER_TSWANA_BOTSWANA 0x8032 */
 #define LANGUAGE_TURKISH                    0x041F
 #define LANGUAGE_TURKMEN                    0x0442
 #define LANGUAGE_UIGHUR_CHINA               0x0480
@@ -444,11 +444,11 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_qps_ploca                  0x05FE  /* 'qps-ploca', qps is a reserved for local use code */
 #define LANGUAGE_qps_plocm                  0x09FF  /* 'qps-plocm', qps is a reserved for local use code */
 
-#define LANGUAGE_ar_Ploc_SA__reserved                   0x4401  /* 'ar-Ploc-SA', 'Ploc'?? */
-#define LANGUAGE_ja_Ploc_JP__reserved                   0x0811  /* 'ja-Ploc-JP', 'Ploc'?? */
-#define LANGUAGE_pap_029__reserved                      0x0479  /* 'pap-029' */
-#define LANGUAGE_ar_145__reserved                       0x4801  /* 'ar-145' */
-#define LANGUAGE_es_419                                 0x580A  /* 'es-419', not reserved, used? */
+#define LANGUAGE_ar_Ploc_SA__reserved       0x4401  /* 'ar-Ploc-SA', 'Ploc'?? */
+#define LANGUAGE_ja_Ploc_JP__reserved       0x0811  /* 'ja-Ploc-JP', 'Ploc'?? */
+#define LANGUAGE_pap_029__reserved          0x0479  /* 'pap-029' */
+#define LANGUAGE_ar_145__reserved           0x4801  /* 'ar-145' */
+#define LANGUAGE_es_419                     0x580A  /* 'es-419', not reserved, used? */
 
 /* Seems these values were used or reserved at one point of time ... */
 #define LANGUAGE_Neither_defined_nor_reserved_0x007B 0x007B
@@ -512,7 +512,8 @@ typedef unsigned short LanguageType;
  * mapping ISO back to LANGID will return the new value.
  */
 #define LANGUAGE_OBSOLETE_USER_LATIN        0x0610
-#define LANGUAGE_USER_LATIN                 LANGUAGE_LATIN
+#define LANGUAGE_USER_LATIN                 LANGUAGE_LATIN_LSO
+#define LANGUAGE_USER_LATIN_VATICAN         0x8076  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_LATIN_LSO)) */
 #define LANGUAGE_USER_ESPERANTO             0x0611  /* no locale possible */
 #define LANGUAGE_USER_INTERLINGUA           0x0612  /* no locale, but conventions */
 #define LANGUAGE_OBSOLETE_USER_MAORI        0x0620

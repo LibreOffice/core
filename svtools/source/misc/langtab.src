@@ -197,7 +197,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Uzbek Latin" ; LANGUAGE_UZBEK_LATIN ; > ;
         < "Uzbek Cyrillic" ; LANGUAGE_UZBEK_CYRILLIC ; > ;
         < "Welsh" ; LANGUAGE_WELSH ; > ;
-        < "Latin" ; LANGUAGE_LATIN ; > ;
+        < "Latin" ; LANGUAGE_USER_LATIN_VATICAN ; > ;
         < "Esperanto" ; LANGUAGE_USER_ESPERANTO ; > ;
         < "Kinyarwanda (Rwanda)" ; LANGUAGE_USER_KINYARWANDA ; > ;
         < "Maori" ; LANGUAGE_MAORI_NEW_ZEALAND ; > ;
