@@ -394,7 +394,7 @@ void GtkSalFrame::doKeyCallback( guint state,
 {
     SalKeyEvent aEvent;
 
-    aEvent.mnTime			= time;
+    aEvent.mnTime           = time;
     aEvent.mnCharCode       = aOrigCode;
     aEvent.mnRepeat         = 0;
 
@@ -722,7 +722,11 @@ gboolean ensure_dbus_setup( gpointer data )
             g_object_unref(thirdsubmenu);
 
             GSimpleActionGroup *group = g_simple_action_group_new ();
+#if GLIB_CHECK_VERSION(2,38,0) // g_simple_action_group_add_entries is deprecated since 2.38
+            g_action_map_add_action_entries (G_ACTION_MAP (group), app_entries, G_N_ELEMENTS (app_entries), NULL);
+#else
             g_simple_action_group_add_entries (group, app_entries, G_N_ELEMENTS (app_entries), NULL);
+#endif
             GActionGroup* pAppActionGroup = G_ACTION_GROUP(group);
 
             pSalFrame->m_nAppActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, "/org/libreoffice", pAppActionGroup, NULL);
@@ -1021,9 +1025,9 @@ void GtkSalFrame::InitCommon()
 #if !GTK_CHECK_VERSION(3,0,0)
     GtkSalDisplay* pDisp = GetGtkSalData()->GetGtkDisplay();
     m_aSystemData.pDisplay      = pDisp->GetDisplay();
-    m_aSystemData.pVisual		= pDisp->GetVisual( m_nXScreen ).GetVisual();
-    m_aSystemData.nDepth		= pDisp->GetVisual( m_nXScreen ).GetDepth();
-    m_aSystemData.aColormap		= pDisp->GetColormap( m_nXScreen ).GetXColormap();
+    m_aSystemData.pVisual       = pDisp->GetVisual( m_nXScreen ).GetVisual();
+    m_aSystemData.nDepth        = pDisp->GetVisual( m_nXScreen ).GetDepth();
+    m_aSystemData.aColormap     = pDisp->GetColormap( m_nXScreen ).GetXColormap();
     m_aSystemData.aWindow       = widget_get_xid(m_pWindow);
 #else
     static int nWindow = 0;
@@ -3575,7 +3579,8 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
                 {
                     sFinalProgram += "--display " + sDisplay;
                 }
-                system(sFinalProgram.getStr());
+                int returnValue = system(sFinalProgram.getStr());
+                (void)returnValue;
             }
         }
     }
