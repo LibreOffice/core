@@ -28,20 +28,16 @@
 #include <vcl/msgbox.hxx>
 
 // header for class OImplementationId
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-//.............................................................................
 namespace textconversiondlgs
 {
-//.............................................................................
 using namespace ::com::sun::star;
-
-#define SERVICE_IMPLEMENTATION_NAME OUString("com.sun.star.comp.linguistic2.ChineseTranslationDialog")
-#define SERVICE_NAME OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
 
 ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog( const uno::Reference< uno::XComponentContext >& xContext )
                     : m_xCC( xContext )
@@ -70,9 +66,8 @@ void ChineseTranslation_UnoDialog::impl_DeleteDialog()
         m_pDialog = 0;
     }
 }
-//-------------------------------------------------------------------------
-// lang::XServiceInfo
 
+// lang::XServiceInfo
 OUString SAL_CALL ChineseTranslation_UnoDialog::getImplementationName() throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -80,19 +75,12 @@ OUString SAL_CALL ChineseTranslation_UnoDialog::getImplementationName() throw( u
 
 OUString ChineseTranslation_UnoDialog::getImplementationName_Static()
 {
-    return SERVICE_IMPLEMENTATION_NAME;
+    return OUString("com.sun.star.comp.linguistic2.ChineseTranslationDialog");
 }
 
 sal_Bool SAL_CALL ChineseTranslation_UnoDialog::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString* pArray = aSNL.getArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-    {
-        if( pArray[ i ] == ServiceName )
-            return sal_True;
-    }
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL ChineseTranslation_UnoDialog::getSupportedServiceNames() throw( uno::RuntimeException )
@@ -103,13 +91,11 @@ uno::Sequence< OUString > SAL_CALL ChineseTranslation_UnoDialog::getSupportedSer
 uno::Sequence< OUString > ChineseTranslation_UnoDialog::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = SERVICE_NAME;
+    aSNS.getArray()[ 0 ] = OUString("com.sun.star.linguistic2.ChineseTranslationDialog");
     return aSNS;
 }
 
-//-------------------------------------------------------------------------
 // ui::dialogs::XExecutableDialog
-
 void SAL_CALL ChineseTranslation_UnoDialog::setTitle( const OUString& ) throw(uno::RuntimeException)
 {
     //not implemented - fell free to do so, if you do need this

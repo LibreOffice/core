@@ -23,6 +23,7 @@
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <comphelper/stl_types.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <svx/svdmodel.hxx>
 #include "UnoNameItemTable.hxx"
@@ -79,14 +80,7 @@ void SvxUnoNameItemTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw(
 
 sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )

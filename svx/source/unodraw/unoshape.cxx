@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
@@ -3793,20 +3794,10 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
     return aSeq;
 }
 
-//----------------------------------------------------------------------
 sal_Bool SAL_CALL SvxShape::supportsService( const OUString& ServiceName ) throw ( uno::RuntimeException )
 {
-    Sequence< OUString > SupportedServices( getSupportedServiceNames() );
-    const OUString * pArray = SupportedServices.getConstArray();
-    const sal_Int32 nCount = SupportedServices.getLength();
-    sal_Int32 i;
-    for( i = 0; i < nCount; i++ )
-        if( *pArray++ == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
-
-//----------------------------------------------------------------------
 
 // XGluePointsSupplier
 uno::Reference< container::XIndexContainer > SAL_CALL SvxShape::getGluePoints()

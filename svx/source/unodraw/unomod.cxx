@@ -708,7 +708,7 @@ OUString SAL_CALL SvxUnoDrawPagesAccess::getImplementationName(  ) throw(uno::Ru
 
 sal_Bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    return ServiceName == pSvxUnoDrawPagesAccessService;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNames(  ) throw(uno::RuntimeException)

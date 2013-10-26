@@ -42,24 +42,18 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/tools/unotools.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
 using namespace css::uno;
 
-// ---------------------------
 // - EnhancedCustomShapeEngine -
-// ---------------------------
-
 OUString EnhancedCustomShapeEngine_getImplementationName()
     throw( RuntimeException )
 {
     return OUString( "com.sun.star.drawing.EnhancedCustomShapeEngine" );
 }
-sal_Bool SAL_CALL EnhancedCustomShapeEngine_supportsService( const OUString& ServiceName )
-    throw( RuntimeException )
-{
-    return ServiceName == "com.sun.star.drawing.CustomShapeEngine";
-}
+
 Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
     throw( RuntimeException )
 {
@@ -68,8 +62,6 @@ Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames
     pArray[0] = "com.sun.star.drawing.CustomShapeEngine";
     return aRet;
 }
-
-// -----------------------------------------------------------------------------
 
 EnhancedCustomShapeEngine::EnhancedCustomShapeEngine( const Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxFact                  ( rxMgr ),
@@ -114,7 +106,6 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArg
 }
 
 // XServiceInfo ---------------------------------------------------------------
-
 OUString SAL_CALL EnhancedCustomShapeEngine::getImplementationName()
     throw( RuntimeException )
 {
@@ -123,7 +114,7 @@ OUString SAL_CALL EnhancedCustomShapeEngine::getImplementationName()
 sal_Bool SAL_CALL EnhancedCustomShapeEngine::supportsService( const OUString& rServiceName )
     throw( RuntimeException )
 {
-    return EnhancedCustomShapeEngine_supportsService( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceNames()
     throw ( RuntimeException )
@@ -132,7 +123,6 @@ Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceName
 }
 
 // XCustomShapeEngine -----------------------------------------------------------
-
 SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustomShape* pCustoObj, SdrObject* pRenderedShape )
 {
     bool bHasText = pCustoObj->HasText();

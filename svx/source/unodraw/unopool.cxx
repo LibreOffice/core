@@ -22,6 +22,7 @@
 
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "svx/unopool.hxx"
@@ -393,17 +394,9 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawPool::getImplementationId()
 }
 
 // XServiceInfo
-
 sal_Bool SAL_CALL SvxUnoDrawPool::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 OUString SAL_CALL SvxUnoDrawPool::getImplementationName() throw( uno::RuntimeException )

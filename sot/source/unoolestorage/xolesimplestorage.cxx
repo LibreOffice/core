@@ -30,6 +30,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <sot/storinfo.hxx>
 
@@ -769,31 +770,19 @@ void SAL_CALL OLESimpleStorage::setClassInfo( const uno::Sequence< sal_Int8 >& /
     throw lang::NoSupportException();
 }
 
-//____________________________________________________________________________________________________
 //  XServiceInfo
-//____________________________________________________________________________________________________
-
-// --------------------------------------------------------------------------------
 OUString SAL_CALL OLESimpleStorage::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
-// --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OLESimpleStorage::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
-
-    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName == aSeq[nInd] )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-// --------------------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getSupportedServiceNames()
         throw ( uno::RuntimeException )
 {

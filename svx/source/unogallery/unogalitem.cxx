@@ -29,6 +29,7 @@
 #include <svl/itemprop.hxx>
 #include <svl/itempool.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include "galobj.hxx"
 
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -143,38 +144,23 @@ uno::Sequence< OUString > GalleryItem::getSupportedServiceNames_Static()
     return aSeq;
 }
 
-// ------------------------------------------------------------------------------
-
 OUString SAL_CALL GalleryItem::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-// ------------------------------------------------------------------------------
-
 sal_Bool SAL_CALL GalleryItem::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
-    const OUString*              pArray = aSNL.getConstArray();
-
-    for( int i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< OUString > SAL_CALL GalleryItem::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
 }
-
-// ------------------------------------------------------------------------------
 
 uno::Sequence< uno::Type > SAL_CALL GalleryItem::getTypes()
     throw(uno::RuntimeException)

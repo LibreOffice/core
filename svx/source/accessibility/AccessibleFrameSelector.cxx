@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/awt/FocusChangeReason.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <osl/mutex.hxx>
@@ -552,49 +553,33 @@ void AccFrameSelector::removeAccessibleEventListener( const Reference< XAccessib
     }
 }
 
-// ----------------------------------------------------------------------------
-
 OUString AccFrameSelector::getImplementationName(  ) throw (RuntimeException)
 {
     return OUString("AccFrameSelector");
 }
 
-// ----------------------------------------------------------------------------
-
-const sal_Char sAccessible[]          = "Accessible";
-const sal_Char sAccessibleContext[]   = "AccessibleContext";
-const sal_Char sAccessibleComponent[] = "AccessibleComponent";
-
 sal_Bool AccFrameSelector::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    return  rServiceName.equalsAsciiL( sAccessible         , sizeof(sAccessible         )-1 ) ||
-            rServiceName.equalsAsciiL( sAccessibleContext  , sizeof(sAccessibleContext  )-1 ) ||
-            rServiceName.equalsAsciiL( sAccessibleComponent, sizeof(sAccessibleComponent)-1 );
+    return cppu::supportsService(this, rServiceName);
 }
-
-// ----------------------------------------------------------------------------
 
 Sequence< OUString > AccFrameSelector::getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     Sequence< OUString > aRet(3);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( sAccessible );
-    pArray[1] = OUString( sAccessibleContext );
-    pArray[2] = OUString( sAccessibleComponent );
+    pArray[0] = OUString( "Accessible" );
+    pArray[1] = OUString( "AccessibleContext" );
+    pArray[2] = OUString( "AccessibleComponent" );
     return aRet;
 }
-
-// ----------------------------------------------------------------------------
 
 void AccFrameSelector::IsValid() throw (RuntimeException)
 {
     if(!mpFrameSel)
         throw RuntimeException();
 }
-
-// ----------------------------------------------------------------------------
 
 void    AccFrameSelector::NotifyFocusListeners(sal_Bool bGetFocus)
 {

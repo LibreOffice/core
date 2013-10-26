@@ -19,21 +19,17 @@
 #include "formula/FormulaOpCodeMapperObj.hxx"
 #include "formula/opcode.hxx"
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
-// =============================================================================
 namespace formula
 {
-// =============================================================================
-
     using namespace ::com::sun::star;
 
-    // -----------------------------------------------------------------------------
-// --------------------------------------------------------------------------------
 sal_Bool SAL_CALL FormulaOpCodeMapperObj::supportsService( const OUString& _rServiceName ) throw(uno::RuntimeException)
 {
-    return ::comphelper::findValue( getSupportedServiceNames_Static(), _rServiceName, sal_True ).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
-//------------------------------------------------------------------------
+
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 FormulaOpCodeMapperObj::FormulaOpCodeMapperObj(::std::auto_ptr<FormulaCompiler> _pCompiler)
 : m_pCompiler(_pCompiler)
@@ -44,7 +40,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 FormulaOpCodeMapperObj::~FormulaOpCodeMapperObj()
 {
 }
-
 
 ::sal_Int32 SAL_CALL FormulaOpCodeMapperObj::getOpCodeExternal()
     throw (::com::sun::star::uno::RuntimeException)

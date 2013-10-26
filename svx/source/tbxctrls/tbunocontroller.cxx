@@ -31,6 +31,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <memory>
 
@@ -277,14 +278,7 @@ void SAL_CALL FontHeightToolBoxControl::release() throw ()
 sal_Bool SAL_CALL FontHeightToolBoxControl::supportsService( const OUString& ServiceName )
 throw(uno::RuntimeException)
 {
-    const uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 OUString SAL_CALL FontHeightToolBoxControl::getImplementationName()

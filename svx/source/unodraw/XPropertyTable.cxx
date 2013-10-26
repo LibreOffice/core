@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <svx/xdef.hxx>
 
 #include "svx/unoapi.hxx"
@@ -96,17 +97,7 @@ XPropertyEntry* SvxUnoXPropertyTable::get( long index ) const
 sal_Bool SAL_CALL SvxUnoXPropertyTable::supportsService( const  OUString& ServiceName )
     throw( uno::RuntimeException)
 {
-    const uno::Sequence< OUString > aServices( getSupportedServiceNames() );
-    const OUString* pServices = aServices.getConstArray();
-    const sal_Int32 nCount = aServices.getLength();
-    sal_Int32 i;
-    for( i = 0; i < nCount; i++ )
-    {
-        if( *pServices++ == ServiceName )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // XNameContainer
