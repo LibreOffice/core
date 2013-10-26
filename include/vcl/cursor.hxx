@@ -25,36 +25,28 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 
-class AutoTimer;
 struct ImplCursorData;
 class Window;
 
-// -----------------
-// - Cursor-Styles -
-// -----------------
-
+// Cursor styles
 #define CURSOR_SHADOW                   ((sal_uInt16)0x0001)
 #define CURSOR_DIRECTION_NONE           ((unsigned char)0x00)
 #define CURSOR_DIRECTION_LTR            ((unsigned char)0x01)
 #define CURSOR_DIRECTION_RTL            ((unsigned char)0x02)
 
-// ----------
-// - Cursor -
-// ----------
-
 class VCL_DLLPUBLIC Cursor
 {
 private:
-    ImplCursorData* mpData;             // Interne Daten
-    Window*         mpWindow;           // Window (only for shadow cursor)
-    long            mnSlant;            // Schraegstellung
-    long            mnOffsetY;          // Offset fuer Rotation
-    Size            maSize;             // Groesse
-    Point           maPos;              // Position
-    short           mnOrientation;      // Rotation
-    sal_uInt16          mnStyle;            // Style
-    bool            mbVisible;          // Ist Cursor sichtbar
-    unsigned char   mnDirection;        // indicates direction
+    ImplCursorData* mpData;
+    Window*         mpWindow;           // only for shadow cursor
+    long            mnSlant;
+    long            mnOffsetY;          // Offset for rotation
+    Size            maSize;
+    Point           maPos;
+    short           mnOrientation;
+    sal_uInt16      mnStyle;
+    bool            mbVisible;
+    unsigned char   mnDirection;
 
 public:
     SAL_DLLPRIVATE void         ImplDraw();
@@ -72,7 +64,7 @@ public:
                     ~Cursor();
 
     void            SetStyle( sal_uInt16 nStyle );
-    sal_uInt16          GetStyle() const { return mnStyle; }
+    sal_uInt16      GetStyle() const { return mnStyle; }
 
     void            Show();
     void            Hide();
