@@ -455,17 +455,15 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
 
         const sal_Int32  nIndices = pOffsets->getLength();
         const sal_Int32 *pIndices = pOffsets->getConstArray();
-        sal_Int32 nConvTextLen = rNewText.getLength();
+        const sal_Int32  nConvTextLen = rNewText.getLength();
         sal_Int32 nPos = 0;
         sal_Int32 nChgPos = -1;
-        sal_Int32 nChgLen = 0;
         sal_Int32 nConvChgPos = -1;
-        sal_Int32 nConvChgLen = 0;
 
         // offset to calculate the position in the text taking into
         // account that text may have been replaced with new text of
         // different length. Negative values allowed!
-        long nCorrectionOffset = 0;
+        sal_Int32 nCorrectionOffset = 0;
 
         DBG_ASSERT(nIndices == 0 || nIndices == nConvTextLen,
                 "mismatch between string length and sequence length!" );
@@ -483,14 +481,14 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
                 nIndex = rOrigText.getLength();
             }
 
-            if (rOrigText[nIndex] == rNewText[nPos] ||
-                nPos == nConvTextLen /* end of string also terminates non-matching char sequence */)
+            // end of string also terminates non-matching char sequence
+            if (rOrigText[nIndex] == rNewText[nPos] || nPos == nConvTextLen)
             {
                 // substring that needs to be replaced found?
-                if (nChgPos != -1 && nConvChgPos != -1)
+                if (nChgPos>=0 && nConvChgPos>=0)
                 {
-                    nChgLen = nIndex - nChgPos;
-                    nConvChgLen = nPos - nConvChgPos;
+                    const sal_Int32 nChgLen = nIndex - nChgPos;
+                    const sal_Int32 nConvChgLen = nPos - nConvChgPos;
 #ifdef DEBUG
                     OUString aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
 #endif
@@ -520,7 +518,7 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
             else
             {
                 // begin of non-matching char sequence found ?
-                if (nChgPos == -1 && nConvChgPos == -1)
+                if (nChgPos<0 && nConvChgPos<0)
                 {
                     nChgPos = nIndex;
                     nConvChgPos = nPos;
