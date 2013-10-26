@@ -42,7 +42,7 @@ ifneq ($(gb_UnoApi_ENABLE_INSTALL),)
 #
 # gb_UnoApi_package_idlfiles api
 define gb_UnoApi_package_idlfiles
-$(call gb_UnoApi_get_target,$(1)) : $(call gb_Package_get_target,$(1)_idl)
+$(call gb_UnoApi_get_target,$(1)) :| $(call gb_Package_get_target,$(1)_idl)
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_idl)
 
 endef
