@@ -69,6 +69,9 @@ struct FormulaGroupContext : boost::noncopyable
 
     ColArray* setCachedColArray(
         SCTAB nTab, SCCOL nCol, NumArrayType* pNumArray, StrArrayType* pStrArray );
+
+    void ensureStrArray( ColArray& rColArray, size_t nArrayLen );
+    void ensureNumArray( ColArray& rColArray, size_t nArrayLen );
 };
 
 /**

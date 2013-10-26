@@ -103,6 +103,29 @@ FormulaGroupContext::ColArray* FormulaGroupContext::setCachedColArray(
     return &rArray;
 }
 
+void FormulaGroupContext::ensureStrArray( ColArray& rColArray, size_t nArrayLen )
+{
+    if (rColArray.mpStrArray)
+        return;
+
+    maStrArrays.push_back(
+        new sc::FormulaGroupContext::StrArrayType(nArrayLen, NULL));
+    rColArray.mpStrArray = &maStrArrays.back();
+}
+
+void FormulaGroupContext::ensureNumArray( ColArray& rColArray, size_t nArrayLen )
+{
+    if (rColArray.mpNumArray)
+        return;
+
+    double fNan;
+    rtl::math::setNan(&fNan);
+
+    maNumArrays.push_back(
+        new sc::FormulaGroupContext::NumArrayType(nArrayLen, fNan));
+    rColArray.mpNumArray = &maNumArrays.back();
+}
+
 namespace {
 
 /**

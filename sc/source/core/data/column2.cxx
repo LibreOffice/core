@@ -2426,13 +2426,7 @@ bool appendToBlock(
             {
                 sc::string_block::iterator itData, itDataEnd;
                 getBlockIterators<sc::string_block>(it, nLenRemain, itData, itDataEnd);
-
-                if (!rColArray.mpStrArray)
-                {
-                    rCxt.maStrArrays.push_back(
-                        new sc::FormulaGroupContext::StrArrayType(nArrayLen, NULL));
-                    rColArray.mpStrArray = &rCxt.maStrArrays.back();
-                }
+                rCxt.ensureStrArray(rColArray, nArrayLen);
 
                 for (; itData != itDataEnd; ++itData, ++nPos)
                     (*rColArray.mpStrArray)[nPos] = itData->getDataIgnoreCase();
@@ -2442,13 +2436,7 @@ bool appendToBlock(
             {
                 sc::edittext_block::iterator itData, itDataEnd;
                 getBlockIterators<sc::edittext_block>(it, nLenRemain, itData, itDataEnd);
-
-                if (!rColArray.mpStrArray)
-                {
-                    rCxt.maStrArrays.push_back(
-                        new sc::FormulaGroupContext::StrArrayType(nArrayLen, NULL));
-                    rColArray.mpStrArray = &rCxt.maStrArrays.back();
-                }
+                rCxt.ensureStrArray(rColArray, nArrayLen);
 
                 for (; itData != itDataEnd; ++itData, ++nPos)
                 {
@@ -2479,24 +2467,12 @@ bool appendToBlock(
 
                     if (aRes.meType == sc::FormulaResultValue::String)
                     {
-                        if (!rColArray.mpStrArray)
-                        {
-                            rCxt.maStrArrays.push_back(
-                                new sc::FormulaGroupContext::StrArrayType(nArrayLen, NULL));
-                            rColArray.mpStrArray = &rCxt.maStrArrays.back();
-                        }
-
+                        rCxt.ensureStrArray(rColArray, nArrayLen);
                         (*rColArray.mpStrArray)[nPos] = aRes.maString.getDataIgnoreCase();
                     }
                     else
                     {
-                        if (!rColArray.mpNumArray)
-                        {
-                            rCxt.maNumArrays.push_back(
-                                new sc::FormulaGroupContext::NumArrayType(nArrayLen, fNan));
-                            rColArray.mpNumArray = &rCxt.maNumArrays.back();
-                        }
-
+                        rCxt.ensureNumArray(rColArray, nArrayLen);
                         (*rColArray.mpNumArray)[nPos] = aRes.mfValue;
                     }
                 }
@@ -2520,13 +2496,7 @@ bool appendToBlock(
             {
                 sc::numeric_block::iterator itData, itDataEnd;
                 getBlockIterators<sc::numeric_block>(it, nLenRemain, itData, itDataEnd);
-
-                if (!rColArray.mpNumArray)
-                {
-                    rCxt.maNumArrays.push_back(
-                        new sc::FormulaGroupContext::NumArrayType(nArrayLen, fNan));
-                    rColArray.mpNumArray = &rCxt.maNumArrays.back();
-                }
+                rCxt.ensureNumArray(rColArray, nArrayLen);
 
                 for (; itData != itDataEnd; ++itData, ++nPos)
                     (*rColArray.mpNumArray)[nPos] = *itData;
