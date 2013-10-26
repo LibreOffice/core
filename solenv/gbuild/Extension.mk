@@ -287,18 +287,6 @@ $(call gb_Extension__get_preparation_target,$(1)) \
 
 endef
 
-define gb_Extension_use_package
-$(call gb_Extension__get_preparation_target,$(1)) \
-	:| $(call gb_Package_get_target,$(2))
-
-endef
-
-define gb_Extension_use_packages
-$(foreach package,$(2),$(call gb_Extension_use_package,$(1),$(package)))
-
-endef
-
-
 define gb_Extension__localize_properties_onelang
 $(call gb_Extension_get_target,$(1)) : FILES += $(2)
 ifneq ($(filter-out en-US,$(4)),)

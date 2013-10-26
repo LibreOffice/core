@@ -13,16 +13,15 @@ $(eval $(call gb_Extension_Extension,wiki-publisher,swext/mediawiki/src))
 
 $(eval $(call gb_Extension_use_unpacked,wiki-publisher,xsltml))
 
-$(eval $(call gb_Extension_use_package,wiki-publisher,apache_commons_logging))
-
-$(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_codec))
-$(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_httpclient))
-$(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_lang))
-
 $(eval $(call gb_Extension_use_default_description,wiki-publisher))
 $(eval $(call gb_Extension_use_default_license,wiki-publisher))
 
 ifneq ($(SYSTEM_APACHE_COMMONS),YES)
+$(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_logging))
+$(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_codec))
+$(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_httpclient))
+$(eval $(call gb_Extension_use_external_project,wiki-publisher,apache_commons_lang))
+
 $(eval $(call gb_Extension_add_file,wiki-publisher,commons-codec-1.6.jar,$(call gb_UnpackedTarball_get_dir,apache_commons_codec)/dist/commons-codec-1.6-SNAPSHOT.jar))
 $(eval $(call gb_Extension_add_file,wiki-publisher,commons-httpclient-3.1.jar,$(call gb_UnpackedTarball_get_dir,apache_commons_httpclient)/dist/commons-httpclient.jar))
 $(eval $(call gb_Extension_add_file,wiki-publisher,commons-lang-2.4.jar,$(call gb_UnpackedTarball_get_dir,apache_commons_lang)/dist/commons-lang-2.4.jar))

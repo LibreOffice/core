@@ -2860,7 +2860,7 @@ $(call gb_Jar_use_external_project,$(1),apache_commons_logging)
 $(call gb_Jar_use_jar,$(1),commons-logging-1.1.1)
 endef
 define gb_ExternalProject__use_commons-logging
-$(call gb_ExternalProject_use_package,$(1),apache_commons_logging)
+$(call gb_ExternalProject_use_external_project,$(1),apache_commons_logging)
 endef
 
 endif # SYSTEM_APACHE_COMMONS
