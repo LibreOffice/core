@@ -2609,7 +2609,7 @@ static Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
         gint adjust_x = GTK_CONTAINER(gWidgetData[nScreen].gComboWidget)->border_width +
                         nFocusWidth +
                         nFocusPad;
-        gint adjust_y = adjust_x + gWidgetData[nScreen].gComboWidget->style->ythickness;
+        gint adjust_y = gWidgetData[nScreen].gComboWidget->style->ythickness;
         adjust_x     += gWidgetData[nScreen].gComboWidget->style->xthickness;
         aButtonRect.SetSize( Size( aAreaRect.GetWidth() - nButtonWidth - 2 * adjust_x,
                                    aAreaRect.GetHeight() - 2 * adjust_y ) );
