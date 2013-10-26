@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -1017,14 +1018,13 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
         return SvXMLGraphicImportHelper_getImplementationName();
     return SvXMLGraphicExportHelper_getImplementationName();
 }
+
 ::sal_Bool SAL_CALL SvXMLGraphicImportExportHelper::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    Sequence< OUString > aServiceNames( getSupportedServiceNames());
-    const OUString * pBegin = aServiceNames.getConstArray();
-    const OUString * pEnd = pBegin + aServiceNames.getLength();
-    return (::std::find( pBegin, pEnd, ServiceName ) != pEnd);
+    return cppu::supportsService(this, ServiceName);
 }
+
 Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {

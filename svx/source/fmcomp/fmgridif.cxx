@@ -51,6 +51,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
@@ -408,24 +409,16 @@ Sequence<sal_Int8> SAL_CALL FmXGridControl::getImplementationId(  ) throw(Runtim
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXGridControl::supportsService(const OUString& ServiceName) throw()
 {
-    ::comphelper::StringSequence aSupported = getSupportedServiceNames();
-    const OUString * pArray = aSupported.getConstArray();
-    for( sal_Int32 i = 0; i < aSupported.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//------------------------------------------------------------------------------
 OUString SAL_CALL FmXGridControl::getImplementationName() throw()
 {
     return OUString("com.sun.star.form.FmXGridControl");
 }
 
-//------------------------------------------------------------------------------
 ::comphelper::StringSequence SAL_CALL FmXGridControl::getSupportedServiceNames() throw()
 {
     Sequence< OUString > aServiceNames(2);

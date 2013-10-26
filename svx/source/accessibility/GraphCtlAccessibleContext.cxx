@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
@@ -555,32 +556,15 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground (void)
 
 
 //=====  XServiceInfo  ========================================================
-
 OUString SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationName( void ) throw( RuntimeException )
 {
     return OUString( "com.sun.star.comp.ui.SvxGraphCtrlAccessibleContext" );
 }
 
-//-----------------------------------------------------------------------------
-
 sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    ::SolarMutexGuard aGuard;
-    //  Iterate over all supported service names and return true if on of them
-    //  matches the given name.
-    Sequence< OUString >    aSupportedServices( getSupportedServiceNames() );
-    int                     nLenght = aSupportedServices.getLength();
-
-    for( int i = 0 ; i < nLenght ; ++i )
-    {
-        if( sServiceName == aSupportedServices[ i ] )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, sServiceName);
 }
-
-//-----------------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
 {
@@ -594,7 +578,6 @@ Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedService
 }
 
 //=====  XTypeProvider  =======================================================
-
 Sequence<sal_Int8> SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationId( void ) throw( RuntimeException )
 {
     ::SolarMutexGuard aGuard;

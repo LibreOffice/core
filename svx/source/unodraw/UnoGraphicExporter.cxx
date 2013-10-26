@@ -38,6 +38,7 @@
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <vcl/metaact.hxx>
 #include <vcl/svapp.hxx>
@@ -1229,14 +1230,7 @@ OUString SAL_CALL GraphicExporter::getImplementationName(  )
 sal_Bool SAL_CALL GraphicExporter::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    Sequence< OUString > aSeq( GraphicExporter_getSupportedServiceNames() );
-    sal_Int32 nArgs = aSeq.getLength();
-    const OUString* pService = aSeq.getConstArray();
-    while( nArgs-- )
-        if( *pService++ == ServiceName )
-            return sal_True;
-
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL GraphicExporter::getSupportedServiceNames(  )

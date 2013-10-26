@@ -23,6 +23,7 @@
 #include <svx/dialmgr.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
@@ -383,14 +384,7 @@ OUString SAL_CALL FindTextToolbarController::getImplementationName() throw( css:
 
 sal_Bool SAL_CALL FindTextToolbarController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
 {
-    const css::uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL FindTextToolbarController::getSupportedServiceNames() throw( css::uno::RuntimeException )
@@ -556,14 +550,7 @@ OUString SAL_CALL UpDownSearchToolboxController::getImplementationName() throw( 
 
 sal_Bool SAL_CALL UpDownSearchToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
 {
-    const css::uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL UpDownSearchToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
@@ -664,14 +651,7 @@ OUString SAL_CALL MatchCaseToolboxController::getImplementationName() throw( css
 
 sal_Bool SAL_CALL MatchCaseToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
 {
-    const css::uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
+    return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL MatchCaseToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
@@ -783,15 +763,7 @@ OUString SAL_CALL FindAllToolboxController::getImplementationName() throw( css::
 
 sal_Bool SAL_CALL FindAllToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
 {
-    const css::uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
-
+    return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL FindAllToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
@@ -886,15 +858,7 @@ OUString SAL_CALL ExitSearchToolboxController::getImplementationName() throw( cs
 
 sal_Bool SAL_CALL ExitSearchToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
 {
-    const css::uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return true;
-
-    return false;
-
+    return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL ExitSearchToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
@@ -1002,10 +966,7 @@ OUString SAL_CALL FindbarDispatcher::getImplementationName() throw( css::uno::Ru
 
 sal_Bool SAL_CALL FindbarDispatcher::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
 {
-    return (
-        ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.svx.FindbarDispatcher")) ||
-        ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.ProtocolHandler"))
-        );
+    return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL FindbarDispatcher::getSupportedServiceNames() throw( css::uno::RuntimeException )

@@ -1019,7 +1019,6 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getMinimumValue() throw( RuntimeE
 }
 
 //=====  XServiceInfo  ========================================================
-
 OUString SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationName( void ) throw( RuntimeException )
 {
     return OUString( "com.sun.star.comp.ui.SvxRectCtlChildAccessibleContext" );
@@ -1027,18 +1026,7 @@ OUString SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationName( void 
 
 sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
-    //  Iterate over all supported service names and return true if on of them
-    //  matches the given name.
-    ::osl::MutexGuard   aGuard( maMutex );
-    Sequence< OUString > aSupportedServices ( getSupportedServiceNames() );
-    int                     nLength = aSupportedServices.getLength();
-    for( int i = 0 ; i < nLength; ++i )
-    {
-        if( sServiceName == aSupportedServices[ i ] )
-            return sal_True;
-    }
-
-    return sal_False;
+    return cppu::supportsService(this, sServiceName);
 }
 
 Sequence< OUString > SAL_CALL SvxRectCtlChildAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
@@ -1048,7 +1036,6 @@ Sequence< OUString > SAL_CALL SvxRectCtlChildAccessibleContext::getSupportedServ
 }
 
 //=====  XTypeProvider  =======================================================
-
 Sequence< sal_Int8 > SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationId( void ) throw( RuntimeException )
 {
     static OImplementationId*   pId = 0;

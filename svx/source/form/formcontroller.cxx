@@ -75,6 +75,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/flagguard.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/IParseContext.hxx>
 #include <toolkit/controls/unocontrol.hxx>
@@ -674,7 +675,6 @@ Sequence< sal_Int8 > SAL_CALL FormController::getImplementationId() throw( Runti
     return pId->getImplementationId();
 }
 
-//------------------------------------------------------------------------------
 Sequence< Type > SAL_CALL FormController::getTypes(  ) throw(RuntimeException)
 {
     return comphelper::concatSequences(
@@ -684,24 +684,16 @@ Sequence< Type > SAL_CALL FormController::getTypes(  ) throw(RuntimeException)
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
 sal_Bool SAL_CALL FormController::supportsService(const OUString& ServiceName) throw( RuntimeException )
 {
-    Sequence< OUString> aSNL(getSupportedServiceNames());
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
-//------------------------------------------------------------------------------
 OUString SAL_CALL FormController::getImplementationName() throw( RuntimeException )
 {
     return OUString("org.openoffice.comp.svx.FormController");
 }
 
-//------------------------------------------------------------------------------
 Sequence< OUString> SAL_CALL FormController::getSupportedServiceNames(void) throw( RuntimeException )
 {
     // service names which are supported only, but cannot be used to created an
