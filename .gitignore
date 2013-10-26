@@ -24,14 +24,8 @@
 /workdir
 /solver
 
-# these two are dubbious. when the installed is reworked
-# it would be best to find them a new home
-/instsetoo_native/util/LibreOffice
-/instsetoo_native/util/LibreOffice_SDK
-
 # where the external downloads maybe located
 /src
-
 
 # autoconf generated stuff
 /aclocal.m4
@@ -56,6 +50,10 @@
 /README
 /AUTHORS
 /MAINTAINERS
+
+# make tags
+
+/tags
 
 # backup and temporary editor files: the only convinience rules allowed here.
 *~
