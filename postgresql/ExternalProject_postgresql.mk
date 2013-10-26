@@ -28,6 +28,28 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 
 else
 
+postgresql_CPPFLAGS := $(ZLIB_CFLAGS)
+postgresql_LDFLAGS  :=
+
+ifeq ($(DISABLE_OPENSSL),)
+ifeq ($(SYSTEM_OPENSSL),NO)
+postgresql_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,openssl)/include
+postgresql_LDFLAGS  += -L$(call gb_UnpackedTarball_get_dir,openssl)/
+endif
+endif
+
+ifeq ($(SYSTEM_OPENLDAP),NO)
+postgresql_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,openldap)/include
+postgresql_LDFLAGS  += \
+	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap_r/.libs \
+	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap/.libs \
+	-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/liblber/.libs \
+	$(if $(filter NO,$(SYSTEM_NSS)),\
+		-L$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib) \
+
+endif
+
+
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	$(call gb_ExternalProject_run,build,\
 		./configure \
@@ -36,15 +58,9 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 			$(if $(DISABLE_OPENSSL),,--with-openssl \
 				$(if $(filter YES,$(WITH_KRB5)), --with-krb5) \
 				$(if $(filter YES,$(WITH_GSSAPI)),--with-gssapi)) \
-			CPPFLAGS="$(ZLIB_CFLAGS) \
-				$(if $(filter NO,$(SYSTEM_OPENLDAP)),\
-					-I$(call gb_UnpackedTarball_get_dir,openldap/include)) \
-			$(if $(DISABLE_OPENSSL),,$(if $(filter NO,$(SYSTEM_OPENSSL)),\
-			-I$(call gb_UnpackedTarball_get_dir,openssl/include)))" \
-			$(if $(filter NO,$(SYSTEM_OPENLDAP)), \
-			LDFLAGS="-L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap_r/.libs -L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/libldap/.libs -L$(call gb_UnpackedTarball_get_dir,openldap)/libraries/liblber/.libs -L$(OUTDIR)/lib" \
+			CPPFLAGS="$(postgresql_CPPFLAGS)" \
+			LDFLAGS="$(postgresql_LDFLAGS)" \
 			EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4" \
-			) \
 		&& cd src/interfaces/libpq \
 		&& MAKEFLAGS= && $(MAKE) all-static-lib)
 
