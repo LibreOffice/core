@@ -162,7 +162,6 @@ endef
 define gb_Extension_add_file
 $(call gb_Extension_get_target,$(1)) : FILES += $(2)
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
-$(3) :| $(call gb_Extension__get_preparation_target,$(1))
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
 	mkdir -p $$(dir $$@) && \
 	cp -f $(3) $$@
