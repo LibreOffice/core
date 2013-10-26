@@ -24,7 +24,6 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
-#include <vcl/cvtsvm.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gdimtf.hxx>
@@ -32,6 +31,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/canvastools.hxx>
 
+#include <cvtsvm.hxx>
 #include <salbmp.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>

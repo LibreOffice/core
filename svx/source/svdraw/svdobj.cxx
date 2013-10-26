@@ -44,7 +44,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
 #include <tools/line.hxx>
-#include <vcl/cvtsvm.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>

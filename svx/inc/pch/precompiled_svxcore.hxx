@@ -582,7 +582,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/cvtsvm.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/fltcall.hxx>
 #include <vcl/gdimtf.hxx>

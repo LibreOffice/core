@@ -27,8 +27,9 @@
 #include <vcl/virdev.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/cvtsvm.hxx>
 #include <rtl/strbuf.hxx>
+
+#include <cvtsvm.hxx>
 
 // Inlines
 void ImplReadRect( SvStream& rIStm, Rectangle& rRect )
