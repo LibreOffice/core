@@ -24,6 +24,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/mediadescriptor.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <oox/core/filterdetect.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <WriterFilter.hxx>
@@ -254,28 +255,14 @@ OUString WriterFilter_getImplementationName () throw (uno::RuntimeException)
    return OUString ( "com.sun.star.comp.Writer.WriterFilter" );
 }
 
-#define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
-#define SERVICE_NAME2 "com.sun.star.document.ExportFilter"
-
-
-sal_Bool WriterFilter_supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
-{
-   return (ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
-}
-
-
 uno::Sequence< OUString > WriterFilter_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
    uno::Sequence < OUString > aRet(2);
    OUString* pArray = aRet.getArray();
-   pArray[0] =  SERVICE_NAME1;
-   pArray[1] =  SERVICE_NAME2;
+   pArray[0] = "com.sun.star.document.ImportFilter";
+   pArray[1] = "com.sun.star.document.ExportFilter";
    return aRet;
 }
-#undef SERVICE_NAME1
-#undef SERVICE_NAME2
-
-
 
 uno::Reference< uno::XInterface > WriterFilter_createInstance( const uno::Reference< uno::XComponentContext >& xContext)
                 throw( uno::Exception )
@@ -293,7 +280,7 @@ OUString WriterFilter::getImplementationName(  ) throw (uno::RuntimeException)
 
 sal_Bool WriterFilter::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException)
 {
-    return WriterFilter_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 
 

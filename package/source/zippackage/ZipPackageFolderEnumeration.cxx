@@ -19,6 +19,7 @@
 
 #include <ZipPackageFolderEnumeration.hxx>
 #include <ContentInfo.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
 
@@ -61,10 +62,11 @@ uno::Sequence< OUString > ZipPackageFolderEnumeration::getSupportedServiceNames(
     aNames[0] = "com.sun.star.packages.PackageFolderEnumeration";
     return aNames;
 }
+
 sal_Bool SAL_CALL ZipPackageFolderEnumeration::supportsService( OUString const & rServiceName )
     throw (uno::RuntimeException)
 {
-    return rServiceName == getSupportedServiceNames()[0];
+    return cppu::supportsService(this, rServiceName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

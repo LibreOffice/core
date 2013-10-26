@@ -21,6 +21,7 @@
 #include <ManifestExport.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -74,10 +75,6 @@ OUString ManifestWriter::static_getImplementationName()
     return OUString ( "com.sun.star.packages.manifest.comp.ManifestWriter" );
 }
 
-sal_Bool SAL_CALL ManifestWriter::static_supportsService(OUString const & rServiceName)
-{
-    return rServiceName == getSupportedServiceNames()[0];
-}
 Sequence < OUString > ManifestWriter::static_getSupportedServiceNames()
 {
     Sequence < OUString > aNames(1);
@@ -94,7 +91,7 @@ OUString ManifestWriter::getImplementationName()
 sal_Bool SAL_CALL ManifestWriter::supportsService(OUString const & rServiceName)
     throw (RuntimeException)
 {
-    return static_supportsService ( rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 Sequence < OUString > ManifestWriter::getSupportedServiceNames()
     throw (RuntimeException)

@@ -23,6 +23,7 @@
 #include <tools/solar.h>
 #include <RtfFilter.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <rtftok/RTFDocument.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -174,11 +175,9 @@ OUString RtfFilter::getImplementationName(  ) throw (uno::RuntimeException)
    return RtfFilter_getImplementationName();
 }
 
-#define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
-#define SERVICE_NAME2 "com.sun.star.document.ExportFilter"
 sal_Bool RtfFilter::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException)
 {
-    return ( rServiceName == SERVICE_NAME1 || rServiceName == SERVICE_NAME2 );
+    return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > RtfFilter::getSupportedServiceNames(  ) throw (uno::RuntimeException)
@@ -187,7 +186,6 @@ uno::Sequence< OUString > RtfFilter::getSupportedServiceNames(  ) throw (uno::Ru
 }
 
 /* Helpers, used by shared lib exports. */
-
 OUString RtfFilter_getImplementationName () throw (uno::RuntimeException)
 {
    return OUString ( "com.sun.star.comp.Writer.RtfFilter" );
@@ -197,12 +195,10 @@ uno::Sequence< OUString > RtfFilter_getSupportedServiceNames(  ) throw (uno::Run
 {
    uno::Sequence < OUString > aRet(2);
    OUString* pArray = aRet.getArray();
-   pArray[0] =  SERVICE_NAME1;
-   pArray[1] =  SERVICE_NAME2;
+   pArray[0] = "com.sun.star.document.ImportFilter";
+   pArray[1] = "com.sun.star.document.ExportFilter";
    return aRet;
 }
-#undef SERVICE_NAME1
-#undef SERVICE_NAME2
 
 uno::Reference< uno::XInterface > RtfFilter_createInstance( const uno::Reference< uno::XComponentContext >& xContext)
                 throw( uno::Exception )

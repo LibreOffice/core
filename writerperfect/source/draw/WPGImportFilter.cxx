@@ -23,6 +23,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <xmloff/attrlist.hxx>
 
@@ -176,26 +177,16 @@ throw (RuntimeException)
     return OUString (  "com.sun.star.comp.Draw.WPGImportFilter"  );
 }
 
-#define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
-#define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-sal_Bool SAL_CALL WPGImportFilter_supportsService( const OUString &ServiceName )
-throw (RuntimeException)
-{
-    SAL_INFO("writerperfect", "WPGImportFilter_supportsService");
-    return ( ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
-}
 Sequence< OUString > SAL_CALL WPGImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
     SAL_INFO("writerperfect", "WPGImportFilter_getSupportedServiceNames");
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
-    pArray[0] =  OUString (  SERVICE_NAME1  );
-    pArray[1] =  OUString (  SERVICE_NAME2  );
+    pArray[0] =  OUString ( "com.sun.star.document.ImportFilter" );
+    pArray[1] =  OUString ( "com.sun.star.document.ExtendedTypeDetection" );
     return aRet;
 }
-#undef SERVICE_NAME2
-#undef SERVICE_NAME1
 
 Reference< XInterface > SAL_CALL WPGImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
@@ -215,7 +206,7 @@ sal_Bool SAL_CALL WPGImportFilter::supportsService( const OUString &rServiceName
 throw (RuntimeException)
 {
     SAL_INFO("writerperfect", "WPGImportFilter::supportsService");
-    return WPGImportFilter_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL WPGImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException)

@@ -57,7 +57,6 @@ public:
     static OUString static_getImplementationName();
     static ::com::sun::star::uno::Sequence < OUString > static_getSupportedServiceNames();
     static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
-    sal_Bool SAL_CALL static_supportsService(OUString const & rServiceName);
 };
 #endif
 

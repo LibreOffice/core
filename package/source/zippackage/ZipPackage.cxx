@@ -77,6 +77,7 @@
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace std;
 using namespace osl;
@@ -1591,7 +1592,7 @@ Sequence< OUString > ZipPackage::static_getSupportedServiceNames()
 
 sal_Bool SAL_CALL ZipPackage::static_supportsService( OUString const & rServiceName )
 {
-    return rServiceName == getSupportedServiceNames()[0];
+    return cppu::supportsService(this, rServiceName);
 }
 
 OUString ZipPackage::getImplementationName()

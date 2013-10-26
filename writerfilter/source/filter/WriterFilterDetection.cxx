@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <WriterFilterDetection.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -47,7 +48,6 @@ OUString WriterFilterDetection_getImplementationName () throw (uno::RuntimeExcep
    return OUString ( "com.sun.star.comp.Writer.WriterFilterDetector"  );
 }
 
-#define SERVICE_NAME1 "com.sun.star.document.ExtendedTypeDetection"
 
 
 OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& rDescriptor )
@@ -132,20 +132,13 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
 }
 
 
-sal_Bool WriterFilterDetection_supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
-{
-   return ServiceName == SERVICE_NAME1;
-}
-
-
 uno::Sequence< OUString > WriterFilterDetection_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
    uno::Sequence < OUString > aRet(1);
    OUString* pArray = aRet.getArray();
-   pArray[0] =  OUString ( SERVICE_NAME1  );
+   pArray[0] =  OUString ( "com.sun.star.document.ExtendedTypeDetection" );
    return aRet;
 }
-#undef SERVICE_NAME1
 
 
 uno::Reference< uno::XInterface > WriterFilterDetection_createInstance( const uno::Reference< uno::XComponentContext >& xContext)
@@ -163,7 +156,7 @@ OUString WriterFilterDetection::getImplementationName(  ) throw (uno::RuntimeExc
 
 sal_Bool WriterFilterDetection::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException)
 {
-    return WriterFilterDetection_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 
 
