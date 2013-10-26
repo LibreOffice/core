@@ -88,7 +88,7 @@ using namespace com::sun::star;
 // tolerance limit of Drawing-SS
 #define MINMOVE ((sal_uInt16)GetOut()->PixelToLogic(Size(Imp()->GetDrawView()->GetMarkHdlSizePixel()/2,0)).Width())
 
-SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh )
+SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh )
 {
     if ( !pLst )
         pLst = pSh->HasDrawView() ? &pSh->Imp()->GetDrawView()->GetMarkedObjectList():0;
@@ -542,7 +542,7 @@ sal_uInt16 SwFEShell::GetSelFrmType() const
     {
         // obtain marked item as fly frame; if no fly frame, it must
         // be a draw object
-        const SwFlyFrm* pFly = ::GetFlyFromMarked(pMarkList, (ViewShell*)this);
+        const SwFlyFrm* pFly = ::GetFlyFromMarked(pMarkList, (SwViewShell*)this);
         if ( pFly != NULL )
         {
             if( pFly->IsFlyLayFrm() )
@@ -660,11 +660,11 @@ long SwFEShell::EndDrag( const Point *, sal_Bool )
     SdrView *pView = Imp()->GetDrawView();
     if ( pView->IsDragObj() )
     {
-        // Setup Start-/EndActions only to the ViewShell
-        ViewShell *pSh = this;
+        // Setup Start-/EndActions only to the SwViewShell
+        SwViewShell *pSh = this;
         do {
             pSh->StartAction();
-        } while ( this != (pSh = (ViewShell*)pSh->GetNext()) );
+        } while ( this != (pSh = (SwViewShell*)pSh->GetNext()) );
 
         StartUndo( UNDO_START );
 
@@ -689,7 +689,7 @@ long SwFEShell::EndDrag( const Point *, sal_Bool )
             pSh->EndAction();
             if( pSh->IsA( TYPE( SwCrsrShell ) ) )
                 ((SwCrsrShell*)pSh)->CallChgLnk();
-        } while ( this != (pSh = (ViewShell*)pSh->GetNext()) );
+        } while ( this != (pSh = (SwViewShell*)pSh->GetNext()) );
 
         GetDoc()->SetModified();
         ::FrameNotify( this, FLY_DRAG );
@@ -989,7 +989,7 @@ sal_Bool SwFEShell::IsFrmSelected() const
         return sal_False;
     else
         return 0 != ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
-                                        (ViewShell*)this );
+                                        (SwViewShell*)this );
 }
 
 sal_Bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const

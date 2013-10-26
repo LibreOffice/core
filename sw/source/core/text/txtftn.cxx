@@ -745,7 +745,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                     pBoss->RearrangeFtns( nDeadLine, sal_False, pFtn );
                     ValidateBodyFrm();
                     ValidateFrm();
-                    ViewShell *pSh = getRootFrm()->GetCurrShell();
+                    SwViewShell *pSh = getRootFrm()->GetCurrShell();
                     if ( pSh && nHeight == (pCont->Frm().*fnRect->fnGetHeight)() )
                         //Damit uns nix durch die Lappen geht.
                         pSh->InvalidateWindows( pCont->Frm() );

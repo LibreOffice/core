@@ -2391,7 +2391,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         OUString sNewTxt;
                         if( DBL_MAX == fVal )
                         {
-                            sNewTxt = ViewShell::GetShellRes()->aCalc_Error;
+                            sNewTxt = SwViewShell::GetShellRes()->aCalc_Error;
                         }
                         else
                         {

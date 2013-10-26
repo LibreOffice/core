@@ -540,7 +540,7 @@ SwLayNotify::~SwLayNotify()
             ((SwTabFrm*)pLay)->SetComplete();
         else
         {
-            const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
+            const SwViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
             if( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) ||
                   !(pLay->GetType() & (FRM_BODY | FRM_PAGE)) )
             //Thereby the subordinates are retouched clean.
@@ -643,7 +643,7 @@ SwFlyNotify::~SwFlyNotify()
     SwFlyFrm *pFly = GetFly();
     if ( pFly->IsNotifyBack() )
     {
-        ViewShell *pSh = pFly->getRootFrm()->GetCurrShell();
+        SwViewShell *pSh = pFly->getRootFrm()->GetCurrShell();
         SwViewImp *pImp = pSh ? pSh->Imp() : 0;
         if ( !pImp || !pImp->IsAction() || !pImp->GetLayAction().IsAgain() )
         {
@@ -841,7 +841,7 @@ SwCntntNotify::~SwCntntNotify()
     {
         //Active PlugIn's or OLE-Objects should know something of the change
         //thereby they move their window appropriate.
-        ViewShell *pSh  = pCnt->getRootFrm()->GetCurrShell();
+        SwViewShell *pSh  = pCnt->getRootFrm()->GetCurrShell();
         if ( pSh )
         {
             SwOLENode *pNd;
@@ -857,7 +857,7 @@ SwCntntNotify::~SwCntntNotify()
                 SwFlyFrm *pFly = pCnt->FindFlyFrm();
                 svt::EmbeddedObjectRef& xObj = pNd->GetOLEObj().GetObject();
                 SwFEShell *pFESh = 0;
-                ViewShell *pTmp = pSh;
+                SwViewShell *pTmp = pSh;
                 do
                 {   if ( pTmp->ISA( SwCrsrShell ) )
                     {
@@ -883,7 +883,7 @@ SwCntntNotify::~SwCntntNotify()
                                                     &pFly->Prt(), &pFly->Frm(),
                                                     bNoTxtFrmPrtAreaChanged );
                     }
-                    pTmp = (ViewShell*)pTmp->GetNext();
+                    pTmp = (SwViewShell*)pTmp->GetNext();
                 } while ( pTmp != pSh );
 
                 if ( pFESh && pNd->IsOLESizeInvalid() )
@@ -1289,8 +1289,8 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             // and relation CONTENT_FLOWS_TO for previous paragraph will change.
             if ( pFrm->IsTxtFrm() )
             {
-                ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
-                // no notification, if <ViewShell> is in construction
+                SwViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
+                // no notification, if <SwViewShell> is in construction
                 if ( pViewShell && !pViewShell->IsInConstructor() &&
                      pViewShell->GetLayout() &&
                      pViewShell->GetLayout()->IsAnyShellAccessible() )
@@ -1339,8 +1339,8 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             // Relation CONTENT_FLOWS_FROM for next paragraph will change
             // and relation CONTENT_FLOWS_TO for previous paragraph will change.
             {
-                ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
-                // no notification, if <ViewShell> is in construction
+                SwViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
+                // no notification, if <SwViewShell> is in construction
                 if ( pViewShell && !pViewShell->IsInConstructor() &&
                      pViewShell->GetLayout() &&
                      pViewShell->GetLayout()->IsAnyShellAccessible() )
@@ -1414,8 +1414,8 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 // Relation CONTENT_FLOWS_FROM for next paragraph will change
                 // and relation CONTENT_FLOWS_TO for previous paragraph will change.
                 {
-                    ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
-                    // no notification, if <ViewShell> is in construction
+                    SwViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
+                    // no notification, if <SwViewShell> is in construction
                     if ( pViewShell && !pViewShell->IsInConstructor() &&
                          pViewShell->GetLayout() &&
                          pViewShell->GetLayout()->IsAnyShellAccessible() )
@@ -2856,7 +2856,7 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         //Der Einfachheit halber wird hier bewusst jeweils ein Twip
         //unnoetig invalidiert.
 
-        ViewShell *pSh = pFly->getRootFrm()->GetCurrShell();
+        SwViewShell *pSh = pFly->getRootFrm()->GetCurrShell();
         if( pSh && rOld.HasArea() )
             pSh->InvalidateWindows( rOld );
 
@@ -3141,7 +3141,7 @@ void Notify_Background( const SdrObject* pObj,
         pAnchor->GetUpper()->InvalidateSize();
 
     // #i82258# - make code robust
-    ViewShell* pSh = 0;
+    SwViewShell* pSh = 0;
     if ( bInva && pPage &&
         0 != (pSh = pPage->getRootFrm()->GetCurrShell()) )
     {

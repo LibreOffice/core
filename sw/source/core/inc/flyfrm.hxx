@@ -226,7 +226,7 @@ public:
 
 
     // Paint on this shell (consider Preview, print flag, etc. recursively)?
-    static sal_Bool IsPaint( SdrObject *pObj, const ViewShell *pSh );
+    static sal_Bool IsPaint( SdrObject *pObj, const SwViewShell *pSh );
 
     /** SwFlyFrm::IsBackgroundTransparent
 

@@ -388,7 +388,7 @@ void _FrmFinit()
 
 class SwCurrShells : public std::set<CurrShell*> {};
 
-CurrShell::CurrShell( ViewShell *pNew )
+CurrShell::CurrShell( SwViewShell *pNew )
 {
     OSL_ENSURE( pNew, "insert 0-Shell?" );
     pRoot = pNew->GetLayout();
@@ -417,7 +417,7 @@ CurrShell::~CurrShell()
     }
 }
 
-void SetShell( ViewShell *pSh )
+void SetShell( SwViewShell *pSh )
 {
     SwRootFrm *pRoot = pSh->GetLayout();
     if ( pRoot->pCurrShells->empty() )
@@ -426,11 +426,11 @@ void SetShell( ViewShell *pSh )
         pRoot->pWaitingCurrShell = pSh;
 }
 
-void SwRootFrm::DeRegisterShell( ViewShell *pSh )
+void SwRootFrm::DeRegisterShell( SwViewShell *pSh )
 {
     // Activate some shell if possible
     if ( pCurrShell == pSh )
-        pCurrShell = pSh->GetNext() != pSh ? (ViewShell*)pSh->GetNext() : 0;
+        pCurrShell = pSh->GetNext() != pSh ? (SwViewShell*)pSh->GetNext() : 0;
 
     // Doesn't matter anymore
     if ( pWaitingCurrShell == pSh )
@@ -463,7 +463,7 @@ void InitCurrShells( SwRootFrm *pRoot )
 |*************************************************************************/
 
 
-SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
+SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, SwViewShell * pSh ) :
     SwLayoutFrm( pFmt->GetDoc()->MakeFrmFmt(
         OUString("Root"), pFmt ), 0 ),
     maPagesArea(),
@@ -582,7 +582,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     pTimerAccess->StartIdling();
     bCallbackActionEnabled = sal_True;
 
-    ViewShell *pViewSh  = GetCurrShell();
+    SwViewShell *pViewSh  = GetCurrShell();
     if (pViewSh)
         mbNeedGrammarCheck = pViewSh->GetViewOptions()->IsOnlineSpell();
 }

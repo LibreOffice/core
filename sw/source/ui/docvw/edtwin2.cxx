@@ -219,9 +219,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                     sTxt = ": " + sTxt;
                     if ( !bExecHyperlinks )
-                        sTxt = ViewShell::GetShellRes()->aLinkCtrlClick + sTxt;
+                        sTxt = SwViewShell::GetShellRes()->aLinkCtrlClick + sTxt;
                     else
-                        sTxt = ViewShell::GetShellRes()->aLinkClick + sTxt;
+                        sTxt = SwViewShell::GetShellRes()->aLinkClick + sTxt;
                 }
                 break;
             }

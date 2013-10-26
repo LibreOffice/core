@@ -1113,7 +1113,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                     // and relation CONTENT_FLOWS_TO for previous paragraph will change.
                     if ( pNew->IsTxtFrm() )
                     {
-                        ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
+                        SwViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
                         if ( pViewShell && pViewShell->GetLayout() &&
                              pViewShell->GetLayout()->IsAnyShellAccessible() )
                         {
@@ -1139,7 +1139,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 // and relation CONTENT_FLOWS_TO for previous paragraph will change.
                 if ( pNew->IsTxtFrm() )
                 {
-                    ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
+                    SwViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
                     if ( pViewShell && pViewShell->GetLayout() &&
                          pViewShell->GetLayout()->IsAnyShellAccessible() )
                     {

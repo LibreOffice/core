@@ -233,7 +233,7 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
         bool bGrow = pPage->IsFtnPage();
         if( bGrow )
         {
-            const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            const SwViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
                 bGrow = false;
         }
@@ -330,7 +330,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
             return 0;
         }
     }
-    const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+    const SwViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
     const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     SwPageFrm *pPage = pBoss->FindPageFrm();
     if ( bBrowseMode || !pPage->IsFtnPage() )
@@ -444,7 +444,7 @@ SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, sal_Bool bTst, sal_Bool bInfo )
             bShrink = true;
         else
         {
-            const ViewShell *pSh = getRootFrm()->GetCurrShell();
+            const SwViewShell *pSh = getRootFrm()->GetCurrShell();
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
                 bShrink = true;
         }
@@ -2697,7 +2697,7 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
     else
         nMaxFtnHeight = -(pBody->Frm().*fnRect->fnBottomDist)( nDeadLine );
 
-    const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+    const SwViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         nMaxFtnHeight += pBody->Grow( LONG_MAX, sal_True );
     if ( IsInSct() )
@@ -2779,7 +2779,7 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
         nRet = 0;
     if ( IsPageFrm() )
     {
-        const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+        const SwViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
         if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         nRet += BROWSE_HEIGHT - Frm().Height();
     }

@@ -811,7 +811,7 @@ sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
         const SwTxtNode* pNd = GetDoc()->GetNodes()[
                                     pSttNd->GetIndex() + 1 ]->GetTxtNode();
         if( !pNd ||
-            ( pNd->GetTxt() == ViewShell::GetShellRes()->aCalc_Error &&
+            ( pNd->GetTxt() == SwViewShell::GetShellRes()->aCalc_Error &&
               SFX_ITEM_SET == pChkBox->GetFrmFmt()->
                             GetItemState( RES_BOXATR_FORMULA )) )
             pChkBox = 0;
@@ -877,13 +877,13 @@ void SwCrsrShell::ClearTblBoxCntnt()
 sal_Bool SwCrsrShell::EndAllTblBoxEdit()
 {
     sal_Bool bRet = sal_False;
-    ViewShell *pSh = this;
+    SwViewShell *pSh = this;
     do {
         if( pSh->IsA( TYPE( SwCrsrShell ) ) )
             bRet |= ((SwCrsrShell*)pSh)->CheckTblBoxCntnt(
                         ((SwCrsrShell*)pSh)->m_pCurCrsr->GetPoint() );
 
-    } while( this != (pSh = (ViewShell *)pSh->GetNext()) );
+    } while( this != (pSh = (SwViewShell *)pSh->GetNext()) );
     return bRet;
 }
 

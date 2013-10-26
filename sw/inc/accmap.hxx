@@ -29,7 +29,7 @@
 
 #include <vector>
 
-class ViewShell;
+class SwViewShell;
 class Rectangle;
 class SwFrm;
 class SwTxtFrm;
@@ -82,7 +82,7 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
     // #i27301 data structure to keep information about
     // accessible paragraph, which have a selection.
     SwAccessibleSelectedParas_Impl* mpSelectedParas;
-    ViewShell *mpVSh;
+    SwViewShell *mpVSh;
     /// for page preview: store preview data, VisArea, and mapping of
     /// preview-to-display coordinates
     SwAccPreviewData* mpPreview;
@@ -124,7 +124,7 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
 
 public:
 
-    SwAccessibleMap( ViewShell *pSh );
+    SwAccessibleMap( SwViewShell *pSh );
     ~SwAccessibleMap();
 
     ::com::sun::star::uno::Reference<
@@ -155,7 +155,7 @@ public:
                                         SwAccessibleContext *pParentImpl,
                                         sal_Bool bCreate = sal_True );
 
-    inline ViewShell* GetShell() const
+    inline SwViewShell* GetShell() const
     {
         return mpVSh;
     }

@@ -32,12 +32,12 @@ class SwTestTabPage;
 #endif
 class SwAddPrinterTabPage;
 class SfxPrinter;
-class ViewShell;
+class SwViewShell;
 class SwViewOption;
 class SwContentOptPage;
 class SwShdwCrsrOptionsTabPage;
 
-SfxPrinter* GetPrt( ViewShell* );
+SfxPrinter* GetPrt( SwViewShell* );
 void        SetPrt( SfxPrinter* );
 
 /*--------OS 12.01.95 -----------------------------------

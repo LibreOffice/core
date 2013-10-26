@@ -35,7 +35,7 @@ class SwDocFac;
 class SwTextBlocks;
 class SwWrtShell;
 class SvxClipboardFmtItem;
-class ViewShell;
+class SwViewShell;
 class SwView_Impl;
 
 typedef sal_uInt16 TransferBufferType;
@@ -64,7 +64,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
     SwWrtShell      *pWrtShell;
     /* #96392# Added pCreatorView to distinguish SwFrameShell from
        SwWrtShell. */
-    const ViewShell       *pCreatorView;
+    const SwViewShell       *pCreatorView;
     SwDocFac        *pClpDocFac;
     Graphic         *pClpGraphic, *pClpBitmap, *pOrigGrf;
     INetBookmark    *pBkmk;     // URL and description!
@@ -198,9 +198,9 @@ public:
     // Interfaces for Selection
     /* #96392# Added pCreator to distinguish SwFrameShell from SwWrtShell. */
     static void CreateSelection( SwWrtShell & rSh,
-                                 const ViewShell * pCreator = NULL );
+                                 const SwViewShell * pCreator = NULL );
     static void ClearSelection( SwWrtShell& rSh,
-                                const ViewShell * pCreator = NULL );
+                                const SwViewShell * pCreator = NULL );
 
     // the related SwView is being closed and the SwTransferable is invalid now
     void    Invalidate() {pWrtShell = 0;}

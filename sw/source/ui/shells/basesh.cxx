@@ -583,7 +583,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             {
                 rSh.UpdateDocStat();
                 rSh.EndAllTblBoxEdit();
-                rSh.ViewShell::UpdateFlds(sal_True);
+                rSh.SwViewShell::UpdateFlds(sal_True);
 
                 if( rSh.IsCrsrInTbl() )
                 {

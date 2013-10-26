@@ -594,7 +594,7 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
     OSL_ENSURE( m_rThis.GetUpper(), "Where are we coming from?" );
 
     // Be economical with notifications if an action is running.
-    ViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
     const SwViewImp *pImp = pSh ? pSh->Imp() : 0;
     const bool bComplete = pImp && pImp->IsAction() && pImp->GetLayAction().IsComplete();
 
@@ -997,7 +997,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
                 return pLayLeaf;
 
             SwPageFrm *pNew = pLayLeaf->FindPageFrm();
-            const ViewShell *pSh = getRootFrm()->GetCurrShell();
+            const SwViewShell *pSh = getRootFrm()->GetCurrShell();
             // #111704# The pagedesc check does not make sense for frames in fly frames
             if ( pNew != FindPageFrm() && !bNewPg && !IsInFly() &&
                  // #i46683#
@@ -1123,7 +1123,7 @@ sal_Bool SwFlowFrm::IsPrevObjMove() const
     //         to insert a break if required.
 
     //!!!!!!!!!!!Hack!!!!!!!!!!!
-    const ViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
+    const SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         return sal_False;
 
@@ -1200,7 +1200,7 @@ sal_Bool SwFlowFrm::IsPageBreak( sal_Bool bAct ) const
     if ( !IsFollow() && m_rThis.IsInDocBody() &&
          ( !m_rThis.IsInTab() || ( m_rThis.IsTabFrm() && !m_rThis.GetUpper()->IsInTab() ) ) ) // i66968
     {
-        const ViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
+        const SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
         if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             return sal_False;
         const SwAttrSet *pSet = m_rThis.GetAttrSet();
@@ -2082,7 +2082,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
                 m_rThis.Prepare( PREP_BOSS_CHGD, 0, sal_False );
                 if( !bSamePage )
                 {
-                    ViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
+                    SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
                     if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
                         pSh->GetDoc()->SetNewFldLst(true);  // Will be done by CalcLayout() later on!
 
@@ -2094,7 +2094,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
             }
         }
         // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
-        const ViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
+        const SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
 
         if ( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) )
         {
@@ -2620,7 +2620,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         if( pNewPage != pOldPage )
         {
             m_rThis.Prepare( PREP_BOSS_CHGD, (const void*)pOldPage, sal_False );
-            ViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
+            SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
             if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
                 pSh->GetDoc()->SetNewFldLst(true);  // Will be done by CalcLayout() later on
 

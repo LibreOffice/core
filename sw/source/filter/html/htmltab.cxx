@@ -5472,7 +5472,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             }
 
             // Wenn Import abgebrochen wurde kein erneutes Show
-            // aufrufen, weil die ViewShell schon geloescht wurde!
+            // aufrufen, weil die SwViewShell schon geloescht wurde!
             // Genuegt nicht. Auch im ACCEPTING_STATE darf
             // kein Show aufgerufen werden, weil sonst waehrend des
             // Reschedules der Parser zerstoert wird, wenn noch ein

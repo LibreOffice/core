@@ -293,7 +293,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             }
 
             SwDocShell *const pDocShell = pNode->GetDoc()->GetDocShell();
-            ViewShell *const pWrtShell = (pDocShell) ? (ViewShell*)(pDocShell->GetWrtShell()) : 0;
+            SwViewShell *const pWrtShell = (pDocShell) ? (SwViewShell*)(pDocShell->GetWrtShell()) : 0;
             SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : 0;
 
             xub_StrLen aStart = 0;

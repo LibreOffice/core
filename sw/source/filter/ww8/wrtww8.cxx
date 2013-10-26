@@ -343,7 +343,7 @@ static void WriteDop( WW8Export& rWrt )
     rDop.dxaTab = (sal_uInt16)rTabStop[0].GetTabPos();
 
     // Zoom factor
-    ViewShell *pViewShell(rWrt.pDoc->GetCurrentViewShell());
+    SwViewShell *pViewShell(rWrt.pDoc->GetCurrentViewShell());
     if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SVX_ZOOM_PERCENT)
         rDop.wScaleSaved = pViewShell->GetViewOptions()->GetZoom();
 
@@ -3354,7 +3354,7 @@ void WW8Export::PrepareStorage()
 sal_uLong SwWW8Writer::WriteStorage()
 {
     // #i34818# - update layout (if present), for SwWriteTable
-    ViewShell* pViewShell = NULL;
+    SwViewShell* pViewShell = NULL;
     pDoc->GetEditShell( &pViewShell );
     if( pViewShell != NULL )
         pViewShell->CalcLayout();

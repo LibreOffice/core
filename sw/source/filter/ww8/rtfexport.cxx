@@ -516,7 +516,7 @@ void RtfExport::ExportDocument_Impl()
     // Default TabSize
     Strm() << m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr() << SAL_NEWLINE_STRING;
     // Zoom
-    ViewShell *pViewShell(pDoc->GetCurrentViewShell());
+    SwViewShell *pViewShell(pDoc->GetCurrentViewShell());
     if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SVX_ZOOM_PERCENT)
     {
         Strm() << OOO_STRING_SVTOOLS_RTF_VIEWSCALE;

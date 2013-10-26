@@ -200,7 +200,7 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
     if( !bSetAutoFmt )
     {
         // Then the list to be expanded by the entry "- none -".
-        m_pLbFormat->InsertEntry( ViewShell::GetShellRes()->aStrNone );
+        m_pLbFormat->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
         nDfltStylePos = 1;
         nIndex = 255;
     }
@@ -461,7 +461,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
     {
         nIndex = 255;
 
-        SwTableAutoFmt aTmp( ViewShell::GetShellRes()->aStrNone );
+        SwTableAutoFmt aTmp( SwViewShell::GetShellRes()->aStrNone );
         aTmp.SetFont( sal_False );
         aTmp.SetJustify( sal_False );
         aTmp.SetFrame( sal_False );

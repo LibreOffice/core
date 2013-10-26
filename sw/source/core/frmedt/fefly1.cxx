@@ -1025,7 +1025,7 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         }
     }
 
-    SET_CURR_SHELL( (ViewShell*)this );
+    SET_CURR_SHELL( (SwViewShell*)this );
 
     if( !rSet.Set( pFly->GetFmt()->GetAttrSet(), sal_True ) )
         return sal_False;

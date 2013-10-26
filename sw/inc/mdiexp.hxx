@@ -27,22 +27,22 @@
 class SwRect;
 class Size;
 class Dialog;
-class ViewShell;
+class SwViewShell;
 class SwDoc;
 class SwDocShell;
 
-extern void ScrollMDI(ViewShell* pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY);
-extern sal_Bool IsScrollMDI(ViewShell* pVwSh, const SwRect &);
-extern void SizeNotify(ViewShell* pVwSh, const Size &);
+extern void ScrollMDI(SwViewShell* pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY);
+extern sal_Bool IsScrollMDI(SwViewShell* pVwSh, const SwRect &);
+extern void SizeNotify(SwViewShell* pVwSh, const Size &);
 
 // Update of status bar during an action.
-extern void PageNumNotify( ViewShell* pVwSh,
+extern void PageNumNotify( SwViewShell* pVwSh,
                             sal_uInt16 nPhyNum,
                             sal_uInt16 nVirtNum,
                            const OUString& rPg );
 
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
-extern void FrameNotify( ViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
+extern void FrameNotify( SwViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
 
 SW_DLLPUBLIC void StartProgress    ( sal_uInt16 nMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = 0 );
 SW_DLLPUBLIC void EndProgress      ( SwDocShell *pDocSh = 0 );
@@ -54,7 +54,7 @@ void EnableCmdInterface(sal_Bool bEnable = sal_True);
 
 Dialog* GetSearchDialog();
 
-void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect );
+void RepaintPagePreview( SwViewShell* pVwSh, const SwRect& rRect );
 
 // ndgrf.cxx
 // Delete all QuickDraw-bitmaps of the specific Document.
@@ -63,7 +63,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc );
 // Read ChgMode for tables from configuration.
 TblChgMode GetTblChgDefaultMode();
 
-bool JumpToSwMark( ViewShell* pVwSh, const OUString& rMark );
+bool JumpToSwMark( SwViewShell* pVwSh, const OUString& rMark );
 
 
 #endif

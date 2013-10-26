@@ -140,7 +140,7 @@ const int CRSR_POSOLD = 0x01,   // cursor stays at old position
 OUString *ReplaceBackReferences( const com::sun::star::util::SearchOptions& rSearchOpt, SwPaM* pPam );
 
 class SW_DLLPUBLIC SwCrsrShell
-    : public ViewShell
+    : public SwViewShell
     , public SwModify
     , public ::sw::IShellCursorSupplier
 {

@@ -193,7 +193,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     else if( pCntntNode->IsOLENode() )
         bUpdate = true;
 
-    ViewShell *pSh = 0;
+    SwViewShell *pSh = 0;
     SwEditShell* pESh = pDoc->GetEditShell( &pSh );
 
     if ( bUpdate && bGraphicPieceArrived && !(bSwapIn || bDontNotify) )
@@ -290,7 +290,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
 {
     sal_Bool bRet = sal_False;
-    ViewShell *pSh;
+    SwViewShell *pSh;
     CurrShell *pCurr = 0;
     if ( pGrfNd->GetDoc()->GetEditShell( &pSh ) )
         pCurr = new CurrShell( pSh );

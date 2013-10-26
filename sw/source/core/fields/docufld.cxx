@@ -1107,7 +1107,7 @@ OUString SwDocInfoField::Expand() const
                     else if( aAny >>= aDuration )
                     {
                         sVal = OUString(aDuration.Negative ? '-' : '+')
-                             + ViewShell::GetShellRes()->sDurationFormat;
+                             + SwViewShell::GetShellRes()->sDurationFormat;
                         sVal = sVal.replaceFirst("%1", OUString::number( aDuration.Years  ) );
                         sVal = sVal.replaceFirst("%2", OUString::number( aDuration.Months ) );
                         sVal = sVal.replaceFirst("%3", OUString::number( aDuration.Days   ) );
@@ -1145,13 +1145,13 @@ OUString SwDocInfoField::GetFieldName() const
             break;
 
         default:
-            aStr += ViewShell::GetShellRes()
+            aStr += SwViewShell::GetShellRes()
                      ->aDocInfoLst[ nSub - DI_SUBTYPE_BEGIN ];
             break;
     }
     if (IsFixed())
     {
-        aStr += " " + OUString(ViewShell::GetShellRes()->aFixedStr);
+        aStr += " " + OUString(SwViewShell::GetShellRes()->aFixedStr);
     }
     return aStr;
 }

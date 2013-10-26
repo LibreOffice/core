@@ -193,7 +193,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case TAB_OVER_MARGIN: return mbTabOverMargin;
         case SURROUND_TEXT_WRAP_SMALL: return mbSurroundTextWrapSmall;
 
-        case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the ViewShell has to be asked!
+        case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the SwViewShell has to be asked!
         case HTML_MODE: return mbHTMLMode;
         case GLOBAL_DOCUMENT: return mbIsGlobalDoc;
         case GLOBAL_DOCUMENT_SAVE_LINKS: return mbGlblDocSaveLinks;
@@ -354,7 +354,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
 
          // COMPATIBILITY FLAGS END
 
-        case BROWSE_MODE: //can be used temporary (load/save) when no ViewShell is avaiable
+        case BROWSE_MODE: //can be used temporary (load/save) when no SwViewShell is avaiable
             mbLastBrowseMode = value;
             break;
 
@@ -563,7 +563,7 @@ void SwDoc::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/
             delete mpPrt;
         mpPrt = pP;
 
-        // our printer should always use TWIP. Don't rely on this being set in ViewShell::InitPrt, there
+        // our printer should always use TWIP. Don't rely on this being set in SwViewShell::InitPrt, there
         // are situations where this isn't called.
         // #i108712# / 2010-02-26 / frank.schoenheit@sun.com
         if ( mpPrt )
@@ -1227,7 +1227,7 @@ static void lcl_FormatPostIt(
 {
     static char const sTmp[] = " : ";
 
-    OSL_ENSURE( ViewShell::GetShellRes(), "missing ShellRes" );
+    OSL_ENSURE( SwViewShell::GetShellRes(), "missing ShellRes" );
 
     if (bNewPage)
     {
@@ -1241,19 +1241,19 @@ static void lcl_FormatPostIt(
         pIDCO->SplitNode( *aPam.GetPoint(), false );
     }
 
-    OUString aStr( ViewShell::GetShellRes()->aPostItPage );
+    OUString aStr( SwViewShell::GetShellRes()->aPostItPage );
     aStr += sTmp;
 
     aStr += OUString::number( nPageNo );
     aStr += " ";
     if( nLineNo )
     {
-        aStr += ViewShell::GetShellRes()->aPostItLine;
+        aStr += SwViewShell::GetShellRes()->aPostItLine;
         aStr += sTmp;
         aStr += OUString::number( nLineNo );
         aStr += " ";
     }
-    aStr += ViewShell::GetShellRes()->aPostItAuthor;
+    aStr += SwViewShell::GetShellRes()->aPostItAuthor;
     aStr += sTmp;
     aStr += pField->GetPar1();
     aStr += " ";

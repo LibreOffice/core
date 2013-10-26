@@ -574,8 +574,8 @@ void SwHTMLParser::Continue( int nToken )
     if( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
         eState = SVPAR_ERROR;
 
-    // Die ViewShell vom Dokument holen, merken und als aktuelle setzen.
-    ViewShell *pInitVSh = CallStartAction();
+    // Die SwViewShell vom Dokument holen, merken und als aktuelle setzen.
+    SwViewShell *pInitVSh = CallStartAction();
 
     if( SVPAR_ERROR != eState && GetMedium() && !bViewCreated )
     {
@@ -759,7 +759,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
                         pCNd->EndOfSectionIndex() && !bHasFlysOrMarks )
                     {
-                        ViewShell *pVSh = CheckActionViewShell();
+                        SwViewShell *pVSh = CheckActionViewShell();
                         SwCrsrShell *pCrsrSh = pVSh && pVSh->ISA(SwCrsrShell)
                                         ? static_cast < SwCrsrShell * >( pVSh )
                                         : 0;
@@ -872,7 +872,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
             // kann trotzdem mitlerweile eine angelegt worden sein.
             // In dieses Fall stimmt das bWasUndo-Flag nicht und
             // wir muessen das Undo noch anschalten.
-            ViewShell *pTmpVSh = CheckActionViewShell();
+            SwViewShell *pTmpVSh = CheckActionViewShell();
             if( pTmpVSh )
             {
                 pDoc->GetIDocumentUndoRedo().DoUndo(true);
@@ -890,7 +890,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
     }
 
 
-    // Wenn die Dokuemnt-ViewShell noch existiert und eine Action
+    // Wenn die Dokuemnt-SwViewShell noch existiert und eine Action
     // offen ist (muss bei Abbruch nicht sein), die Action beenden,
     // uns von der Shell abmelden und schliesslich die alte Shell
     // wieder rekonstruieren.
@@ -929,7 +929,7 @@ void SwHTMLParser::DocumentDetected()
 
         pDoc->GetIDocumentUndoRedo().DoUndo(false);
         // Durch das DocumentDetected wurde im allgemeinen eine
-        // ViewShell angelegt. Es kann aber auch sein, dass sie
+        // SwViewShell angelegt. Es kann aber auch sein, dass sie
         // erst spaeter angelegt wird, naemlich dann, wenn die UI
         // gecaptured ist.
         CallStartAction();
@@ -2472,7 +2472,7 @@ void SwHTMLParser::Show()
     // - und Start-Action gerufen
 
     OSL_ENSURE( SVPAR_WORKING==eState, "Show nicht im Working-State - Das kann ins Auge gehen" );
-    ViewShell *pOldVSh = CallEndAction();
+    SwViewShell *pOldVSh = CallEndAction();
 
     GetpApp()->Reschedule();
 
@@ -2483,9 +2483,9 @@ void SwHTMLParser::Show()
         eState = SVPAR_ERROR;
     }
 
-    // Die ViewShell nochmal holen, denn sie koennte im Reschedule
+    // Die SwViewShell nochmal holen, denn sie koennte im Reschedule
     // zerstoert wirden sein.
-    ViewShell *pVSh = CallStartAction( pOldVSh );
+    SwViewShell *pVSh = CallStartAction( pOldVSh );
 
     // ist der aktuelle Node nicht mehr sichtbar, dann benutzen wir
     // eine groessere Schrittweite
@@ -2520,7 +2520,7 @@ void SwHTMLParser::ShowStatline()
             // wurde der Import vom SFX abgebrochen?
             eState = SVPAR_ERROR;
 
-        ViewShell *pVSh = CheckActionViewShell();
+        SwViewShell *pVSh = CheckActionViewShell();
         if( pVSh && pVSh->HasInvalidRect() )
         {
             CallEndAction( sal_False, sal_False );
@@ -2529,18 +2529,18 @@ void SwHTMLParser::ShowStatline()
     }
 }
 
-ViewShell *SwHTMLParser::CallStartAction( ViewShell *pVSh, sal_Bool bChkPtr )
+SwViewShell *SwHTMLParser::CallStartAction( SwViewShell *pVSh, sal_Bool bChkPtr )
 {
-    OSL_ENSURE( !pActionViewShell, "CallStartAction: ViewShell schon gesetzt" );
+    OSL_ENSURE( !pActionViewShell, "CallStartAction: SwViewShell schon gesetzt" );
 
     if( !pVSh || bChkPtr )
     {
 #if OSL_DEBUG_LEVEL > 0
-        ViewShell *pOldVSh = pVSh;
+        SwViewShell *pOldVSh = pVSh;
 #endif
         pDoc->GetEditShell( &pVSh );
 #if OSL_DEBUG_LEVEL > 0
-        OSL_ENSURE( !pVSh || !pOldVSh || pOldVSh == pVSh, "CallStartAction: Wer hat die ViewShell ausgetauscht?" );
+        OSL_ENSURE( !pVSh || !pOldVSh || pOldVSh == pVSh, "CallStartAction: Wer hat die SwViewShell ausgetauscht?" );
         if( pOldVSh && !pVSh )
             pVSh = 0;
 #endif
@@ -2558,14 +2558,14 @@ ViewShell *SwHTMLParser::CallStartAction( ViewShell *pVSh, sal_Bool bChkPtr )
     return pActionViewShell;
 }
 
-ViewShell *SwHTMLParser::CallEndAction( sal_Bool bChkAction, sal_Bool bChkPtr )
+SwViewShell *SwHTMLParser::CallEndAction( sal_Bool bChkAction, sal_Bool bChkPtr )
 {
     if( bChkPtr )
     {
-        ViewShell *pVSh = 0;
+        SwViewShell *pVSh = 0;
         pDoc->GetEditShell( &pVSh );
         OSL_ENSURE( !pVSh || pActionViewShell == pVSh,
-                "CallEndAction: Wer hat die ViewShell ausgetauscht?" );
+                "CallEndAction: Wer hat die SwViewShell ausgetauscht?" );
 #if OSL_DEBUG_LEVEL > 0
         if( pActionViewShell && !pVSh )
             pVSh = 0;
@@ -2580,11 +2580,11 @@ ViewShell *SwHTMLParser::CallEndAction( sal_Bool bChkAction, sal_Bool bChkPtr )
     if( bSetCrsr )
     {
         // an allen CrsrEditShells die Cursor auf den Doc-Anfang setzen
-        ViewShell *pSh = pActionViewShell;
+        SwViewShell *pSh = pActionViewShell;
         do {
             if( pSh->IsA( TYPE( SwCrsrShell ) ) )
                 ((SwCrsrShell*)pSh)->SttEndDoc(sal_True);
-            pSh = (ViewShell *)pSh->GetNext();
+            pSh = (SwViewShell *)pSh->GetNext();
         } while( pSh != pActionViewShell );
 
         bSetCrsr = sal_False;
@@ -2620,18 +2620,18 @@ ViewShell *SwHTMLParser::CallEndAction( sal_Bool bChkAction, sal_Bool bChkPtr )
         eState = SVPAR_ERROR;
     }
 
-    ViewShell *pVSh = pActionViewShell;
+    SwViewShell *pVSh = pActionViewShell;
     pActionViewShell = 0;
 
     return pVSh;
 }
 
-ViewShell *SwHTMLParser::CheckActionViewShell()
+SwViewShell *SwHTMLParser::CheckActionViewShell()
 {
-    ViewShell *pVSh = 0;
+    SwViewShell *pVSh = 0;
     pDoc->GetEditShell( &pVSh );
     OSL_ENSURE( !pVSh || pActionViewShell == pVSh,
-            "CheckActionViewShell: Wer hat die ViewShell ausgetauscht?" );
+            "CheckActionViewShell: Wer hat die SwViewShell ausgetauscht?" );
 #if OSL_DEBUG_LEVEL > 0
     if( pActionViewShell && !pVSh )
         pVSh = 0;

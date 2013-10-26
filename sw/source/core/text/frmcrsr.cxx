@@ -116,7 +116,7 @@ bool sw_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
              !pFly->GetNextLink() && !pFly->GetPrevLink() ) ||
              ( !pFly && pFrm->IsInTab() ) )
         {
-            ViewShell* pVsh = pFrm->getRootFrm()->GetCurrShell();
+            SwViewShell* pVsh = pFrm->getRootFrm()->GetCurrShell();
             if( pVsh )
             {
                 if( pVsh->GetNext() != pVsh ||
@@ -902,7 +902,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
         xub_StrLen nOffs = GetOfst();
         if( pTmpPrev )
         {
-            ViewShell *pSh = getRootFrm()->GetCurrShell();
+            SwViewShell *pSh = getRootFrm()->GetCurrShell();
             sal_Bool bProtectedAllowed = pSh && pSh->GetViewOptions()->IsCursorInProtectedArea();
             const SwTxtFrm *pPrevPrev = pTmpPrev;
             // We skip protected frames and frames without content here
@@ -1256,7 +1256,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
             if( 0 != ( pTmpFollow = GetFollow() ) )
             {   // Skip protected follows
                 const SwCntntFrm* pTmp = pTmpFollow;
-                ViewShell *pSh = getRootFrm()->GetCurrShell();
+                SwViewShell *pSh = getRootFrm()->GetCurrShell();
                 if( !pSh || !pSh->GetViewOptions()->IsCursorInProtectedArea() )
                 {
                     while( pTmpFollow && pTmpFollow->IsProtected() )
@@ -1417,7 +1417,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         pColl = &pColl->GetNextTxtFmtColl();
     SwAttrSet aSet( ((SwDoc*)GetTxtNode()->GetDoc())->GetAttrPool(), aTxtFmtCollSetRange );
     const SwAttrSet* pSet = &pColl->GetAttrSet();
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if( GetTxtNode()->HasSwAttrSet() )
     {
         aSet.Put( *GetTxtNode()->GetpSwAttrSet() );

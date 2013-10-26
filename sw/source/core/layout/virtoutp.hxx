@@ -24,7 +24,7 @@
 #include "swtypes.hxx"
 #include "swrect.hxx"
 
-class ViewShell;
+class SwViewShell;
 #define VIRTUALHEIGHT 64
 
 /*************************************************************************
@@ -35,7 +35,7 @@ class SwLayVout
 {
     friend void _FrmFinit();    //deletes Vout
 private:
-    ViewShell*      pSh;
+    SwViewShell*      pSh;
     OutputDevice*   pOut;
     VirtualDevice*  pVirDev;
     SwRect          aRect;
@@ -50,7 +50,7 @@ public:
     ~SwLayVout() { delete pVirDev; }
 
     /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
-    void Enter( ViewShell *pShell, SwRect &rRect, sal_Bool bOn );
+    void Enter( SwViewShell *pShell, SwRect &rRect, sal_Bool bOn );
     void Leave() { --nCount; Flush(); }
 
     void SetOrgRect( SwRect &rRect ) { aOrgRect = rRect; }

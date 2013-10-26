@@ -59,7 +59,7 @@ void DrawGraphic( const SvxBrushItem *, const XFillStyleItem*, const XFillGradie
 
 // method to align rectangle.
 // Created declaration here to avoid <extern> declarations
-void SwAlignRect( SwRect &rRect, const ViewShell *pSh );
+void SwAlignRect( SwRect &rRect, const SwViewShell *pSh );
 
 // method to align graphic rectangle
 // Created declaration here to avoid <extern> declarations
@@ -80,7 +80,7 @@ void PaintCharacterBorder(
 
 // get Fly, if no List is given use the current shell
 // Implementation in feshview.cxx
-SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh );
+SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh );
 
 sal_uLong SqRt( BigInt nX );
 

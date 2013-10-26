@@ -50,7 +50,7 @@ class SwTabPortion;
 class SwTxtFrm;
 class SwTxtSizeInfo;
 class SwViewOption;
-class ViewShell;
+class SwViewShell;
 class SwAttrIter;
 struct SwMultiCreator;
 class SwMultiPortion;
@@ -162,7 +162,7 @@ protected:
     // this array is passed over to the info structure
     std::deque<sal_uInt16>* m_pKanaComp;
 
-    ViewShell    *m_pVsh;
+    SwViewShell    *m_pVsh;
 
     // m_pOut is the output device, m_pRef is the device used for formatting
     OutputDevice* m_pOut;
@@ -248,8 +248,8 @@ public:
     inline void SetDirection( const sal_uInt8 nNew ) { m_nDirection = nNew; }
     inline sal_Bool IsRotated() const { return 0 != ( 1 & m_nDirection ); }
 
-    inline ViewShell *GetVsh() { return m_pVsh; }
-    inline const ViewShell *GetVsh() const { return m_pVsh; }
+    inline SwViewShell *GetVsh() { return m_pVsh; }
+    inline const SwViewShell *GetVsh() const { return m_pVsh; }
 
     inline OutputDevice *GetOut() { return m_pOut; }
     inline const OutputDevice *GetOut() const { return m_pOut; }

@@ -2130,7 +2130,7 @@ void SwTabFrm::MakeAll()
 
         /// OD 23.10.2002 #103517# - In online layout try to grow upper of table
         /// frame, if table frame doesn't fit in its upper.
-        const ViewShell *pSh = getRootFrm()->GetCurrShell();
+        const SwViewShell *pSh = getRootFrm()->GetCurrShell();
         const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         if ( nDistanceToUpperPrtBottom < 0 && bBrowseMode )
         {
@@ -3014,7 +3014,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
         else
             (this->*fnRect->fnSetXMargins)( nLeftSpacing, nRightSpacing );
 
-        ViewShell *pSh = getRootFrm()->GetCurrShell();
+        SwViewShell *pSh = getRootFrm()->GetCurrShell();
         if ( bCheckBrowseWidth &&
              pSh && pSh->GetViewOptions()->getBrowseMode() &&
              GetUpper()->IsPageBodyFrm() &&  // only PageBodyFrms and not ColBodyFrms
@@ -3467,7 +3467,7 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
                     if ( (pNewUpper->Prt().*fnRectX->fnGetHeight)() > 0 || nTmpSpace <= 0 )
                         nSpace = nTmpSpace;
 
-                    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+                    const SwViewShell *pSh = getRootFrm()->GetCurrShell();
                     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
                         nSpace += pNewUpper->Grow( LONG_MAX, sal_True );
                 }
@@ -4418,7 +4418,7 @@ void SwRowFrm::Cut()
         SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
         {
-            ViewShell* pVSh = pRootFrm->GetCurrShell();
+            SwViewShell* pVSh = pRootFrm->GetCurrShell();
             if ( pVSh && pVSh->Imp() )
             {
                 SwFrm* pCellFrm( GetLower() );
@@ -5221,7 +5221,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
            SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_PROTECT, sal_False ) ) ||
          RES_PROTECT == pNew->Which() )
     {
-        ViewShell *pSh = getRootFrm()->GetCurrShell();
+        SwViewShell *pSh = getRootFrm()->GetCurrShell();
         if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
             pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
     }
@@ -5284,7 +5284,7 @@ void SwCellFrm::Cut()
         SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
         {
-            ViewShell* pVSh = pRootFrm->GetCurrShell();
+            SwViewShell* pVSh = pRootFrm->GetCurrShell();
             if ( pVSh && pVSh->Imp() )
             {
                 pVSh->Imp()->DisposeAccessibleFrm( this );

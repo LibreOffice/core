@@ -51,7 +51,7 @@ bool DocxExportFilter::exportDocument()
         return false;
 
     // update layout (if present), for SwWriteTable
-    ViewShell* pViewShell = NULL;
+    SwViewShell* pViewShell = NULL;
     pDoc->GetEditShell(&pViewShell);
     if (pViewShell != NULL)
         pViewShell->CalcLayout();

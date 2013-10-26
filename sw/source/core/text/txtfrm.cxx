@@ -419,7 +419,7 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
 
     const bool bHiddenCharsHidePara = GetTxtNode()->HasHiddenCharAttribute( true );
     const bool bHiddenParaField = GetTxtNode()->HasHiddenParaField();
-    const ViewShell* pVsh = getRootFrm()->GetCurrShell();
+    const SwViewShell* pVsh = getRootFrm()->GetCurrShell();
 
     if ( pVsh && ( bHiddenCharsHidePara || bHiddenParaField ) )
     {
@@ -584,7 +584,7 @@ void SwTxtFrm::HideAndShowObjects()
             // paragraph is visible, but can contain hidden text portion.
             // first we check if objects are allowed to be hidden:
             const SwTxtNode& rNode = *GetTxtNode();
-            const ViewShell* pVsh = getRootFrm()->GetCurrShell();
+            const SwViewShell* pVsh = getRootFrm()->GetCurrShell();
             const bool bShouldBeHidden = !pVsh || !pVsh->GetWin() ||
                                          !pVsh->GetViewOptions()->IsShowHiddenChar();
 
@@ -1044,7 +1044,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             }
 
             // #i104008#
-            ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
             if ( pViewSh  )
             {
                 pViewSh->InvalidateAccessibleParaAttrs( *this );
@@ -1301,7 +1301,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             if (isA11yRelevantAttribute(nWhich))
             {
                 // #i88069#
-                ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+                SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
                 if ( pViewSh  )
                 {
                     pViewSh->InvalidateAccessibleParaAttrs( *this );
@@ -2262,10 +2262,10 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     // invalidate printing area, if height of last line changes
     const SwTwips mnOldHeightOfLastLine( mnHeightOfLastLine );
     // determine output device
-    ViewShell* pVsh = getRootFrm()->GetCurrShell();
-    OSL_ENSURE( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell" );
+    SwViewShell* pVsh = getRootFrm()->GetCurrShell();
+    OSL_ENSURE( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no SwViewShell" );
     // #i78921# - make code robust, according to provided patch
-    // There could be no <ViewShell> instance in the case of loading a binary
+    // There could be no <SwViewShell> instance in the case of loading a binary
     // StarOffice file format containing an embedded Writer document.
     if ( !pVsh )
     {
@@ -2741,7 +2741,7 @@ void SwTxtFrm::repaintTextFrames( const SwTxtNode& rNode )
     {
         SwRect aRec( pFrm->PaintArea() );
         const SwRootFrm *pRootFrm = pFrm->getRootFrm();
-        ViewShell *pCurShell = pRootFrm ? pRootFrm->GetCurrShell() : NULL;
+        SwViewShell *pCurShell = pRootFrm ? pRootFrm->GetCurrShell() : NULL;
         if( pCurShell )
             pCurShell->InvalidateWindows( aRec );
     }

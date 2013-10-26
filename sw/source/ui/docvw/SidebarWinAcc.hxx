@@ -22,7 +22,7 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 
-class ViewShell;
+class SwViewShell;
 class SwSidebarItem;
 class SwFrm;
 
@@ -34,7 +34,7 @@ class SidebarWinAccessible : public VCLXWindow
 {
     public:
         explicit SidebarWinAccessible( SwSidebarWin& rSidebarWin,
-                                       ViewShell& rViewShell,
+                                       SwViewShell& rViewShell,
                                        const SwSidebarItem& rSidebarItem );
         virtual ~SidebarWinAccessible();
 
@@ -45,7 +45,7 @@ class SidebarWinAccessible : public VCLXWindow
 
     private:
         SwSidebarWin& mrSidebarWin;
-        ViewShell& mrViewShell;
+        SwViewShell& mrViewShell;
         const SwFrm* mpAnchorFrm;
         bool bAccContextCreated;
 };

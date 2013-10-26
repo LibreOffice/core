@@ -960,19 +960,19 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     return *this;
 }
 
-void SwFont::GoMagic( ViewShell *pSh, sal_uInt8 nWhich )
+void SwFont::GoMagic( SwViewShell *pSh, sal_uInt8 nWhich )
 {
     SwFntAccess aFntAccess( aSub[nWhich].pMagic, aSub[nWhich].nFntIndex,
                             &aSub[nWhich], pSh, sal_True );
 }
 
-sal_Bool SwSubFont::IsSymbol( ViewShell *pSh )
+sal_Bool SwSubFont::IsSymbol( SwViewShell *pSh )
 {
     SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, sal_False );
     return aFntAccess.Get()->IsSymbol();
 }
 
-sal_Bool SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice& rOut )
+sal_Bool SwSubFont::ChgFnt( SwViewShell *pSh, OutputDevice& rOut )
 {
     if ( pLastFont )
         pLastFont->Unlock();
@@ -989,7 +989,7 @@ sal_Bool SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice& rOut )
            STRIKEOUT_NONE != GetStrikeout();
 }
 
-void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut )
+void SwFont::ChgPhysFnt( SwViewShell *pSh, OutputDevice& rOut )
 {
     if( bOrgChg && aSub[nActual].IsEsc() )
     {
@@ -1046,7 +1046,7 @@ short SwSubFont::_CheckKerning( )
     return nKernx;
 }
 
-sal_uInt16 SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice& rOut )
+sal_uInt16 SwSubFont::GetAscent( SwViewShell *pSh, const OutputDevice& rOut )
 {
     sal_uInt16 nAscent;
     SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh );
@@ -1056,7 +1056,7 @@ sal_uInt16 SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice& rOut )
     return nAscent;
 }
 
-sal_uInt16 SwSubFont::GetHeight( ViewShell *pSh, const OutputDevice& rOut )
+sal_uInt16 SwSubFont::GetHeight( SwViewShell *pSh, const OutputDevice& rOut )
 {
     SV_STAT( nGetTextSize );
     SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh );

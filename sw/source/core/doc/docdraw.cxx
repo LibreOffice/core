@@ -603,7 +603,7 @@ void SwDoc::InitDrawModel()
     mpDrawModel->SetNotifyUndoActionHdl( LINK( this, SwDoc, AddDrawUndo ));
     if ( mpCurrentView )
     {
-        ViewShell* pViewSh = mpCurrentView;
+        SwViewShell* pViewSh = mpCurrentView;
         do
         {
             SwRootFrm* pRoot =  pViewSh->GetLayout();
@@ -617,7 +617,7 @@ void SwDoc::InitDrawModel()
                 pRoot->SetDrawPage( pDrawPage );
                 pDrawPage->SetSize( pRoot->Frm().SSize() );
             }
-            pViewSh = (ViewShell*)pViewSh->GetNext();
+            pViewSh = (SwViewShell*)pViewSh->GetNext();
         }while( pViewSh != mpCurrentView );
     }
 }
@@ -766,11 +766,11 @@ SdrModel* SwDoc::_MakeDrawModel()
     InitDrawModel();
     if ( mpCurrentView )
     {
-        ViewShell* pTmp = mpCurrentView;
+        SwViewShell* pTmp = mpCurrentView;
         do
         {
             pTmp->MakeDrawView();
-            pTmp = (ViewShell*) pTmp->GetNext();
+            pTmp = (SwViewShell*) pTmp->GetNext();
         } while ( pTmp != mpCurrentView );
 
         // Broadcast, so that the FormShell can be connected to the DrawView

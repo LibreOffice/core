@@ -359,7 +359,7 @@ class SwMinMaxArgs
 {
 public:
     OutputDevice* pOut;
-    ViewShell* pSh;
+    SwViewShell* pSh;
     sal_uLong &rMin;
     sal_uLong &rMax;
     sal_uLong &rAbsMin;
@@ -367,7 +367,7 @@ public:
     long nWordWidth;
     long nWordAdd;
     xub_StrLen nNoLineBreak;
-    SwMinMaxArgs( OutputDevice* pOutI, ViewShell* pShI, sal_uLong& rMinI, sal_uLong &rMaxI, sal_uLong &rAbsI )
+    SwMinMaxArgs( OutputDevice* pOutI, SwViewShell* pShI, sal_uLong& rMinI, sal_uLong &rMaxI, sal_uLong &rAbsI )
         : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rMax( rMaxI ), rAbsMin( rAbsI )
         { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = STRING_LEN; }
     void Minimum( long nNew ) const { if( (long)rMin < nNew ) rMin = nNew; }
@@ -434,7 +434,7 @@ sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     aIter.Seek( nBegin );
     return aIter.GetFnt()->IsSymbol(
-        const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()) );
+        const_cast<SwViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()) );
 }
 
 class SwMinMaxNodeArgs
@@ -585,7 +585,7 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
 void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax,
                                sal_uLong& rAbsMin, OutputDevice* pOut ) const
 {
-    ViewShell* pSh = 0;
+    SwViewShell* pSh = 0;
     GetDoc()->GetEditShell( &pSh );
     if( !pOut )
     {
@@ -696,7 +696,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
             case CHAR_HARDHYPHEN:
             {
                 OUString sTmp( cChar );
-                SwDrawTextInfo aDrawInf( const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()),
+                SwDrawTextInfo aDrawInf( const_cast<SwViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()),
                     *pOut, 0, sTmp, 0, 1, 0, sal_False );
                 nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                 aArg.nWordWidth += nAktWidth;
@@ -822,7 +822,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
 sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     const
 {
-    ViewShell* pSh = NULL;
+    SwViewShell* pSh = NULL;
     OutputDevice* pOut = NULL;
     GetDoc()->GetEditShell( &pSh );
 

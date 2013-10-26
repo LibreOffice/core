@@ -126,7 +126,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
         // if in online-layout the bottom of to-page anchored object is beyond
         // the page bottom, the page frame has to grow by growing its body frame.
-        const ViewShell *pSh = GetAnchorFrm().getRootFrm()->GetCurrShell();
+        const SwViewShell *pSh = GetAnchorFrm().getRootFrm()->GetCurrShell();
         if ( !bFlyAtFly && GetAnchorFrm().IsPageFrm() &&
              pSh && pSh->GetViewOptions()->getBrowseMode() )
         {

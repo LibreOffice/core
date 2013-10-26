@@ -22,7 +22,7 @@
 
 #include <swtypes.hxx>
 
-class ViewShell;
+class SwViewShell;
 class SwRootFrm;
 class SwFrmFmt;
 class SfxItemSet;
@@ -37,15 +37,15 @@ public:
 
     /** Returns the layout set at the document.
     */
-    virtual const ViewShell* GetCurrentViewShell() const = 0;
-    virtual       ViewShell* GetCurrentViewShell() = 0;
+    virtual const SwViewShell* GetCurrentViewShell() const = 0;
+    virtual       SwViewShell* GetCurrentViewShell() = 0;
     virtual const SwRootFrm* GetCurrentLayout() const = 0;
     virtual       SwRootFrm* GetCurrentLayout() = 0;
     virtual bool HasLayout() const = 0;
 
     /** !!!The old layout must be deleted!!!
     */
-    virtual void SetCurrentViewShell( ViewShell* pNew ) = 0;
+    virtual void SetCurrentViewShell( SwViewShell* pNew ) = 0;
 
     /**
     */

@@ -161,7 +161,7 @@ void SwVisCrsr::_SetPosAndShow()
     if( aRect.Height() )
     {
         ::SwCalcPixStatics( m_pCrsrShell->GetOut() );
-        ::SwAlignRect( aRect, (ViewShell*)m_pCrsrShell );
+        ::SwAlignRect( aRect, (SwViewShell*)m_pCrsrShell );
     }
     if( !m_pCrsrShell->IsOverwriteCrsr() || m_bIsDragCrsr ||
         m_pCrsrShell->IsSelection() )
@@ -367,7 +367,7 @@ void SwSelPaintRects::Paint( const Rectangle& /*rRect*/ )
 
 // check current MapMode of the shell and set possibly the static members.
 // Optional set the parameters pX, pY
-void SwSelPaintRects::Get1PixelInLogic( const ViewShell& rSh,
+void SwSelPaintRects::Get1PixelInLogic( const SwViewShell& rSh,
                                         long* pX, long* pY )
 {
     const OutputDevice* pOut = rSh.GetWin();
@@ -488,13 +488,13 @@ short SwShellCrsr::MaxReplaceArived()
         // a SSelection can be created.
         std::vector<sal_uInt16> aArr;
         sal_uInt16 nActCnt;
-        ViewShell *pShell = const_cast< SwCrsrShell* >( GetShell() ),
+        SwViewShell *pShell = const_cast< SwCrsrShell* >( GetShell() ),
                   *pSh = pShell;
         do {
             for( nActCnt = 0; pSh->ActionPend(); ++nActCnt )
                 pSh->EndAction();
             aArr.push_back( nActCnt );
-        } while( pShell != ( pSh = (ViewShell*)pSh->GetNext() ) );
+        } while( pShell != ( pSh = (SwViewShell*)pSh->GetNext() ) );
 
         {
             nRet = QueryBox( pDlg, SW_RES( MSG_COMCORE_ASKSEARCH )).Execute();
@@ -504,7 +504,7 @@ short SwShellCrsr::MaxReplaceArived()
         {
             for( nActCnt = aArr[n]; nActCnt--; )
                 pSh->StartAction();
-            pSh = (ViewShell*)pSh->GetNext();
+            pSh = (SwViewShell*)pSh->GetNext();
         }
     }
     else

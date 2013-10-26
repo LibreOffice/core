@@ -34,7 +34,7 @@ class SwAttrSet;
 class SwDoCapitals;     // DoCapitals
 class SwDrawTextInfo;   // _DrawText
 class SwScriptInfo;     // _GetTxtSize
-class ViewShell;
+class SwViewShell;
 class IDocumentSettingAccess;
 
 const sal_Unicode CH_BLANK = ' ';   // ' ' Leerzeichen
@@ -68,10 +68,10 @@ class SwSubFont : public SvxFont
 
     short _CheckKerning( );
 
-    sal_Bool ChgFnt( ViewShell *pSh, OutputDevice& rOut );
-    sal_Bool IsSymbol( ViewShell *pSh );
-    sal_uInt16 GetAscent( ViewShell *pSh, const OutputDevice& rOut );
-    sal_uInt16 GetHeight( ViewShell *pSh, const OutputDevice& rOut );
+    sal_Bool ChgFnt( SwViewShell *pSh, OutputDevice& rOut );
+    sal_Bool IsSymbol( SwViewShell *pSh );
+    sal_uInt16 GetAscent( SwViewShell *pSh, const OutputDevice& rOut );
+    sal_uInt16 GetHeight( SwViewShell *pSh, const OutputDevice& rOut );
     Size _GetTxtSize( SwDrawTextInfo& rInf );
     Size GetCapitalSize( SwDrawTextInfo& rInf );
     void _DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey );
@@ -167,7 +167,7 @@ public:
     SwFont( const SwAttrSet* pSet, const IDocumentSettingAccess* pIDocumentSettingAccess );
     SwFont( const SwFont& rFont );
 
-    inline void ChgFnt( ViewShell *pSh, OutputDevice& rOut )
+    inline void ChgFnt( SwViewShell *pSh, OutputDevice& rOut )
         { bPaintBlank = aSub[nActual].ChgFnt( pSh, rOut ); }
 
     ~SwFont();
@@ -179,14 +179,14 @@ public:
     inline const SvxFont& GetActualFont() const { return aSub[nActual]; }
 
     // holt sich eine MagicNumber ueber SwFntAccess
-    void GoMagic( ViewShell *pSh, sal_uInt8 nWhich );
+    void GoMagic( SwViewShell *pSh, sal_uInt8 nWhich );
     // set background color
     void SetBackColor( Color* pNewColor );
     inline const Color* GetBackColor() const{ return pBackColor; }
     void SetHighlightColor( const Color& aNewColor );
     const Color& GetHighlightColor() const { return m_aHighlightColor; }
 
-    inline void ChkMagic( ViewShell *pSh, sal_uInt8 nWhich )
+    inline void ChkMagic( SwViewShell *pSh, sal_uInt8 nWhich )
         { if( !aSub[ nWhich ].pMagic ) GoMagic( pSh, nWhich ); }
     // uebernimmt die MagicNumber eines (hoffentlich ident.) Kollegen
     inline void CopyMagic( const SwFont* pFnt, sal_uInt8 nWhich )
@@ -273,7 +273,7 @@ public:
     inline const SvxFont &GetFnt( const sal_uInt8 nWhich ) const
         { return aSub[nWhich]; };
 
-    sal_Bool IsSymbol( ViewShell *pSh )
+    sal_Bool IsSymbol( SwViewShell *pSh )
         { return aSub[nActual].IsSymbol( pSh ); }
     FontUnderline GetUnderline() const { return aSub[nActual].GetUnderline(); }
     const Color& GetUnderColor() const { return aUnderColor; }
@@ -326,12 +326,12 @@ public:
         { return aSub[nWhich].GetEmphasisMark(); }
 
     // Macht den logischen Font im OutputDevice wirksam.
-    void ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut );
+    void ChgPhysFnt( SwViewShell *pSh, OutputDevice& rOut );
 
     Size GetCapitalSize( SwDrawTextInfo& rInf )
         { return aSub[nActual].GetCapitalSize( rInf ); }
 
-    xub_StrLen GetCapitalBreak( ViewShell* pSh,  const OutputDevice* pOut,
+    xub_StrLen GetCapitalBreak( SwViewShell* pSh,  const OutputDevice* pOut,
         const SwScriptInfo* pScript, const OUString& rTxt,
         long nTextWidth, const xub_StrLen nIdx,
         const xub_StrLen nLen );
@@ -365,9 +365,9 @@ public:
     inline short CheckKerning()
         { return aSub[nActual].CheckKerning(); }
 
-    inline sal_uInt16 GetAscent( ViewShell *pSh, const OutputDevice& rOut )
+    inline sal_uInt16 GetAscent( SwViewShell *pSh, const OutputDevice& rOut )
         { return aSub[nActual].GetAscent( pSh, rOut ); }
-    inline sal_uInt16 GetHeight( ViewShell *pSh, const OutputDevice& rOut )
+    inline sal_uInt16 GetHeight( SwViewShell *pSh, const OutputDevice& rOut )
         { return aSub[nActual].GetHeight( pSh, rOut ); }
 
     inline void Invalidate()

@@ -205,7 +205,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
     bInvalidLayout = bInvalidCntnt = bInvalidSpelling = bInvalidSmartTags = bInvalidAutoCmplWrds = bInvalidWordCount = sal_True;
     bInvalidFlyLayout = bInvalidFlyCntnt = bInvalidFlyInCnt = bFtnPage = bEndNotePage = sal_False;
 
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     if ( bBrowseMode )
     {
@@ -254,7 +254,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
 SwPageFrm::~SwPageFrm()
 {
     // Cleanup the header-footer controls in the SwEditWin
-    ViewShell* pSh = getRootFrm()->GetCurrShell();
+    SwViewShell* pSh = getRootFrm()->GetCurrShell();
     SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pSh );
     if ( pWrtSh )
     {
@@ -340,7 +340,7 @@ void SwPageFrm::CheckDirection( sal_Bool bVert )
         }
         else
         {
-            const ViewShell *pSh = getRootFrm()->GetCurrShell();
+            const SwViewShell *pSh = getRootFrm()->GetCurrShell();
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
@@ -532,7 +532,7 @@ void SwPageFrm::PreparePage( sal_Bool bFtn )
 |*************************************************************************/
 void SwPageFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( pSh )
         pSh->SetFirstVisPageInvalid();
     sal_uInt8 nInvFlags = 0;
@@ -622,7 +622,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_FRM_SIZE:
         {
             const SwRect aOldPageFrmRect( Frm() );
-            ViewShell *pSh = getRootFrm()->GetCurrShell();
+            SwViewShell *pSh = getRootFrm()->GetCurrShell();
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
                 mbValidSize = sal_False;
@@ -783,7 +783,7 @@ SwPageDesc *SwPageFrm::FindPageDesc()
     SwPageDesc *pRet = 0;
 
     //5.
-    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
     {
         SwCntntFrm *pFrm = GetUpper()->ContainsCntnt();
@@ -837,7 +837,7 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
 {
     const sal_Bool bOld = pRoot->IsSuperfluous();
     pRoot->bCheckSuperfluous = sal_False;
-    ViewShell *pSh = pRoot->GetCurrShell();
+    SwViewShell *pSh = pRoot->GetCurrShell();
     if ( pSh )
     {
         do
@@ -848,7 +848,7 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
                 if ( pSh->Imp() )
                     pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );
             }
-            pSh = (ViewShell*)pSh->GetNext();
+            pSh = (SwViewShell*)pSh->GetNext();
         } while ( pSh != pRoot->GetCurrShell() );
     }
     pRoot->bCheckSuperfluous = bOld;
@@ -869,7 +869,7 @@ void SwPageFrm::Cut()
 {
     //AdjustRootSize( CHG_CUTPAGE, 0 );
 
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( !IsEmptyPage() )
     {
         if ( GetNext() )
@@ -970,7 +970,7 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 
     InvalidatePos();
 
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( pSh )
         pSh->SetFirstVisPageInvalid();
 
@@ -1049,7 +1049,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
 {
     OSL_ENSURE( pStart, "Keine Startpage." );
 
-    ViewShell *pSh   = pStart->getRootFrm()->GetCurrShell();
+    SwViewShell *pSh   = pStart->getRootFrm()->GetCurrShell();
     SwViewImp *pImp  = pSh ? pSh->Imp() : 0;
 
     if ( pImp && pImp->IsAction() && !pImp->GetLayAction().IsCheckPages() )
@@ -1344,7 +1344,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
         if ( bCheckPages )
         {
             CheckPageDescs( pSibling, sal_False );
-            ViewShell *pSh = getRootFrm()->GetCurrShell();
+            SwViewShell *pSh = getRootFrm()->GetCurrShell();
             SwViewImp *pImp = pSh ? pSh->Imp() : 0;
             if ( pImp && pImp->IsAction() && !pImp->GetLayAction().IsCheckPages() )
             {
@@ -1361,7 +1361,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
 
     //Fuer das Aktualisieren der Seitennummern-Felder gibt nDocPos
     //die Seitenposition an, _ab_ der invalidiert werden soll.
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( !pSh || !pSh->Imp()->IsUpdateExpFlds() )
     {
         SwDocPosUpdate aMsgHnt( pPrevPage->Frm().Top() );
@@ -1372,7 +1372,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
 
 sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
 {
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if( !pSh || pSh->GetViewOptions()->getBrowseMode() )
     {
         return sw::sidebarwindows::SIDEBAR_RIGHT;
@@ -1510,7 +1510,7 @@ void SwRootFrm::RemoveSuperfluous()
         }
     } while ( pPage );
 
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( nDocPos != LONG_MAX &&
          (!pSh || !pSh->Imp()->IsUpdateExpFlds()) )
     {
@@ -1732,7 +1732,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
         return;
 
     bBrowseWidthValid = sal_True;
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     nBrowseWidth = pSh
                     ? MINLAY + 2 * pSh->GetOut()->
                                 PixelToLogic( pSh->GetBrowseBorder() ).Width()
@@ -1846,21 +1846,21 @@ void SwRootFrm::ImplCalcBrowseWidth()
 
 void SwRootFrm::StartAllAction()
 {
-    ViewShell *pSh = GetCurrShell();
+    SwViewShell *pSh = GetCurrShell();
     if ( pSh )
         do
         {   if ( pSh->ISA( SwCrsrShell ) )
                 ((SwCrsrShell*)pSh)->StartAction();
             else
                 pSh->StartAction();
-            pSh = (ViewShell*)pSh->GetNext();
+            pSh = (SwViewShell*)pSh->GetNext();
 
         } while ( pSh != GetCurrShell() );
 }
 
 void SwRootFrm::EndAllAction( sal_Bool bVirDev )
 {
-    ViewShell *pSh = GetCurrShell();
+    SwViewShell *pSh = GetCurrShell();
     if ( pSh )
         do
         {
@@ -1876,19 +1876,19 @@ void SwRootFrm::EndAllAction( sal_Bool bVirDev )
             else
                 pSh->EndAction();
             pSh->SetEndActionByVirDev( bOldEndActionByVirDev );
-            pSh = (ViewShell*)pSh->GetNext();
+            pSh = (SwViewShell*)pSh->GetNext();
 
         } while ( pSh != GetCurrShell() );
 }
 
 void SwRootFrm::UnoRemoveAllActions()
 {
-    ViewShell *pSh = GetCurrShell();
+    SwViewShell *pSh = GetCurrShell();
     if ( pSh )
         do
         {
             // #i84729#
-            // No end action, if <ViewShell> instance is currently in its end action.
+            // No end action, if <SwViewShell> instance is currently in its end action.
             // Recursives calls to <::EndAction()> are not allowed.
             if ( !pSh->IsInEndAction() )
             {
@@ -1912,14 +1912,14 @@ void SwRootFrm::UnoRemoveAllActions()
                 pSh->SetRestoreActions(nRestore);
             }
             pSh->LockView(sal_True);
-            pSh = (ViewShell*)pSh->GetNext();
+            pSh = (SwViewShell*)pSh->GetNext();
 
         } while ( pSh != GetCurrShell() );
 }
 
 void SwRootFrm::UnoRestoreAllActions()
 {
-    ViewShell *pSh = GetCurrShell();
+    SwViewShell *pSh = GetCurrShell();
     if ( pSh )
         do
         {
@@ -1933,7 +1933,7 @@ void SwRootFrm::UnoRestoreAllActions()
             }
             pSh->SetRestoreActions(0);
             pSh->LockView(sal_False);
-            pSh = (ViewShell*)pSh->GetNext();
+            pSh = (SwViewShell*)pSh->GetNext();
 
         } while ( pSh != GetCurrShell() );
 }
@@ -1978,7 +1978,7 @@ static void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
                 {
                     SwCntntFrm* pCntntFrm = static_cast<SwCntntFrm*>(pFlyFrm->Lower());
                     SwRootFrm* pRoot = pFlyFrm->Lower()->getRootFrm();
-                    ViewShell *pSh = pRoot ? pRoot->GetCurrShell() : 0;
+                    SwViewShell *pSh = pRoot ? pRoot->GetCurrShell() : 0;
                     if ( pSh )
                     {
                         SwOLENode* pNode = pCntntFrm->GetNode()->GetOLENode();
@@ -1987,13 +1987,13 @@ static void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
                             svt::EmbeddedObjectRef& xObj = pNode->GetOLEObj().GetObject();
                             if ( xObj.is() )
                             {
-                                ViewShell* pTmp = pSh;
+                                SwViewShell* pTmp = pSh;
                                 do
                                 {
                                     SwFEShell* pFEShell = dynamic_cast< SwFEShell* >( pTmp );
                                     if ( pFEShell )
                                         pFEShell->MoveObjectIfActive( xObj, rOffset );
-                                    pTmp = static_cast<ViewShell*>( pTmp->GetNext() );
+                                    pTmp = static_cast<SwViewShell*>( pTmp->GetNext() );
                                 } while( pTmp != pSh );
                             }
                         }
@@ -2368,7 +2368,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
         ::AdjustSizeChgNotify( this );
         Calc();
 
-        ViewShell* pSh = GetCurrShell();
+        SwViewShell* pSh = GetCurrShell();
 
         if ( pSh && pSh->GetDoc()->GetDocShell() )
         {

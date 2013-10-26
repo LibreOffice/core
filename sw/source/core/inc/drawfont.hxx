@@ -25,7 +25,7 @@
 
 class SwTxtFrm;
 class OutputDevice;
-class ViewShell;
+class SwViewShell;
 class SwScriptInfo;
 class Point;
 class SwWrongList;
@@ -39,7 +39,7 @@ class SwDrawTextInfo
 {
     const SwTxtFrm* pFrm;
     OutputDevice* pOut;
-    ViewShell* pSh;
+    SwViewShell* pSh;
     const SwScriptInfo* pScriptInfo;
     Point m_aPos;
     OUString m_aText;
@@ -102,7 +102,7 @@ public:
     bool m_bDrawSp: 1;
 #endif
 
-    SwDrawTextInfo( ViewShell *pS, OutputDevice &rO, const SwScriptInfo* pSI,
+    SwDrawTextInfo( SwViewShell *pS, OutputDevice &rO, const SwScriptInfo* pSI,
                     const OUString &rSt, xub_StrLen nI, xub_StrLen nL,
                     sal_uInt16 nW = 0, sal_Bool bB = sal_False )
     {
@@ -164,7 +164,7 @@ public:
         pFrm = pNewFrm;
     }
 
-    ViewShell *GetShell() const
+    SwViewShell *GetShell() const
     {
         return pSh;
     }

@@ -896,14 +896,14 @@ namespace sw { namespace mark
 #define PCURSH ((SwCrsrShell*)_pStartShell)
 #define FOREACHSHELL_START( pEShell ) \
     {\
-        ViewShell *_pStartShell = pEShell; \
+        SwViewShell *_pStartShell = pEShell; \
         do { \
             if( _pStartShell->IsA( TYPE( SwCrsrShell )) ) \
             {
 
 #define FOREACHSHELL_END( pEShell ) \
             } \
-        } while((_pStartShell=(ViewShell*)_pStartShell->GetNext())!= pEShell ); \
+        } while((_pStartShell=(SwViewShell*)_pStartShell->GetNext())!= pEShell ); \
     }
 
 namespace

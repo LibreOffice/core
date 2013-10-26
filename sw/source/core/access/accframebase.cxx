@@ -42,7 +42,7 @@ sal_Bool SwAccessibleFrameBase::IsSelected()
     sal_Bool bRet = sal_False;
 
     OSL_ENSURE( GetMap(), "no map?" );
-    const ViewShell *pVSh = GetMap()->GetShell();
+    const SwViewShell *pVSh = GetMap()->GetShell();
     OSL_ENSURE( pVSh, "no shell?" );
     if( pVSh->ISA( SwFEShell ) )
     {
@@ -60,7 +60,7 @@ void SwAccessibleFrameBase::GetStates(
 {
     SwAccessibleContext::GetStates( rStateSet );
 
-    const ViewShell *pVSh = GetMap()->GetShell();
+    const SwViewShell *pVSh = GetMap()->GetShell();
     OSL_ENSURE( pVSh, "no shell?" );
     sal_Bool bSelectable =  pVSh->ISA( SwFEShell );
 

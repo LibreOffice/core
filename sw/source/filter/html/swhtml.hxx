@@ -37,7 +37,7 @@ class SdrObject;
 class SvxMacroTableDtor;
 class SwDoc;
 class SwPaM;
-class ViewShell;
+class SwViewShell;
 class SwStartNode;
 class SwFmtColl;
 class SwField;
@@ -391,7 +391,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     SwDoc           *pDoc;
     SwPaM           *pPam;      // SwPosition duerfte doch reichen, oder ??
-    ViewShell       *pActionViewShell;  // ViewShell, an der das StartAction
+    SwViewShell       *pActionViewShell;  // SwViewShell, an der das StartAction
                                         // gerufen wurde.
     SwNodeIndex     *pSttNdIdx;
 
@@ -482,9 +482,9 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void DocumentDetected();
     void Show();
     void ShowStatline();
-    ViewShell *CallStartAction( ViewShell *pVSh = 0, sal_Bool bChkPtr = sal_True );
-    ViewShell *CallEndAction( sal_Bool bChkAction = sal_False, sal_Bool bChkPtr = sal_True );
-    ViewShell *CheckActionViewShell();
+    SwViewShell *CallStartAction( SwViewShell *pVSh = 0, sal_Bool bChkPtr = sal_True );
+    SwViewShell *CallEndAction( sal_Bool bChkAction = sal_False, sal_Bool bChkPtr = sal_True );
+    SwViewShell *CheckActionViewShell();
 
     DECL_LINK( AsyncCallback, void* );
 

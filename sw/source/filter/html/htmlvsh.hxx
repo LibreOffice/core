@@ -21,7 +21,7 @@
 #define _HTMLVSH_HXX
 
 #include <calbck.hxx>
-class ViewShell;
+class SwViewShell;
 
 
 class SwHTMLViewShellClient : public SwClient
@@ -31,14 +31,14 @@ protected:
 
 public:
 
-    SwHTMLViewShellClient( ViewShell *pVSh );
+    SwHTMLViewShellClient( SwViewShell *pVSh );
 
     virtual ~SwHTMLViewShellClient();
 
-    void Register( ViewShell *pVsh );
+    void Register( SwViewShell *pVsh );
     void DeRegister();
 
-    ViewShell *GetViewShell();
+    SwViewShell *GetViewShell();
 };
 
 

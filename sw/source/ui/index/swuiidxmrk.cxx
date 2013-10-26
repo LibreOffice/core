@@ -794,7 +794,7 @@ void SwIndexMarkPane::UpdateDialog()
     if(!pMark)
         return;
 
-    ViewShell::SetCareWin(&m_rDialog);
+    SwViewShell::SetCareWin(&m_rDialog);
 
     aOrgStr = pMark->GetText();
     m_pEntryED->SetText(aOrgStr);
@@ -971,7 +971,7 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
 SwIndexMarkPane::~SwIndexMarkPane()
 {
     delete pTOXMgr;
-    ViewShell::SetCareWin( 0 );
+    SwViewShell::SetCareWin( 0 );
 }
 
 void    SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark)

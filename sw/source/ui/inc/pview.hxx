@@ -31,7 +31,7 @@
 class SwViewOption;
 class SwDocShell;
 class SwScrollbar;
-class ViewShell;
+class SwViewShell;
 class SwPagePreview;
 class ImageButton;
 class Button;
@@ -44,7 +44,7 @@ class SwPagePreviewLayout;
 // Delete member <mnVirtPage> and its accessor
 class SwPagePreviewWin : public Window
 {
-    ViewShell*          mpViewShell;
+    SwViewShell*          mpViewShell;
     sal_uInt16              mnSttPage;
     sal_uInt8                mnRow, mnCol;
     Size                maPxWinSize;
@@ -62,16 +62,16 @@ public:
     SwPagePreviewWin( Window* pParent, SwPagePreview& rView );
     ~SwPagePreviewWin();
 
-    // calls ViewShell::Paint
+    // calls SwViewShell::Paint
     virtual void Paint( const Rectangle& rRect );
     virtual void KeyInput( const KeyEvent & );
     virtual void Command( const CommandEvent& rCEvt );
     virtual void MouseButtonDown(const MouseEvent& rMEvt);
     virtual void DataChanged( const DataChangedEvent& );
 
-    void SetViewShell( ViewShell* pShell );
+    void SetViewShell( SwViewShell* pShell );
 
-    ViewShell* GetViewShell() const { return mpViewShell; }
+    SwViewShell* GetViewShell() const { return mpViewShell; }
 
     sal_uInt8    GetRow() const      { return mnRow; }
     void    SetRow( sal_uInt8 n )    { if( n ) mnRow = n; }
@@ -221,7 +221,7 @@ public:
     TYPEINFO();
 
     inline Window*          GetFrameWindow() const { return &(GetViewFrame())->GetWindow(); }
-    inline ViewShell*       GetViewShell() const { return aViewWin.GetViewShell(); }
+    inline SwViewShell*       GetViewShell() const { return aViewWin.GetViewShell(); }
     inline const Rectangle& GetVisArea() const { return aVisArea; }
     inline void             GrabFocusViewWin() { aViewWin.GrabFocus(); }
     inline void             RepaintCoreRect( const SwRect& rRect )

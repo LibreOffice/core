@@ -33,7 +33,7 @@
 class SwRect;
 class Window;
 class OutputDevice;
-class ViewShell;
+class SwViewShell;
 class SwDocShell;
 namespace svtools{ class ColorConfig;}
 
@@ -136,8 +136,8 @@ protected:
     static sal_uInt16   nPixelTwips;// 1 Pixel == ? Twips
 
     OUString   sSymbolFont;        // Symbolfont.
-    sal_uInt32      nCoreOptions;       // Bits for ViewShell.
-    sal_uInt32      nCore2Options;      // Bits for ViewShell.
+    sal_uInt32      nCoreOptions;       // Bits for SwViewShell.
+    sal_uInt32      nCore2Options;      // Bits for SwViewShell.
     sal_uInt32      nUIOptions;         // UI-Bits
     Color           aRetoucheColor;     // DefaultBackground for BrowseView
     Size            aSnapSize;          // Describes horizontal and vertical snap.

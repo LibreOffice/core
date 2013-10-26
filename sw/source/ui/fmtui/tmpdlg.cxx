@@ -514,7 +514,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         // collect character styles
         ListBox rCharFmtLB(this);
         rCharFmtLB.Clear();
-        rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
+        rCharFmtLB.InsertEntry( SwViewShell::GetShellRes()->aStrNone );
         SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
         ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
 

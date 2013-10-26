@@ -24,7 +24,7 @@
 #include <doc.hxx>
 
 class SwCntntFrm;
-class ViewShell;
+class SwViewShell;
 class SdrPage;
 class SwFrmFmt;
 class SwPaM;
@@ -109,7 +109,7 @@ class SwRootFrm: public SwLayoutFrm
     // this is approximated by setting the pointer pCurrShell when a
     // shell gets the focus (FEShell). Acditionally the pointer will be
     // set temporarily by SwCurrShell typically via  SET_CURR_SHELL
-    // The macro and class can be found in the ViewShell. These object can
+    // The macro and class can be found in the SwViewShell. These object can
     // be created nested (also for different kinds of Shells). They are
     // collected into the Array pCurrShells.
     // Futhermore it can happen that a shell is activated while a curshell
@@ -120,10 +120,10 @@ class SwRootFrm: public SwLayoutFrm
     // If at the time of the destruction of a shell, which is still referneced
     // by a curshell object, that will be cleaned up as well.
     friend class CurrShell;
-    friend void SetShell( ViewShell *pSh );
+    friend void SetShell( SwViewShell *pSh );
     friend void InitCurrShells( SwRootFrm *pRoot );
-    ViewShell *pCurrShell;
-    ViewShell *pWaitingCurrShell;
+    SwViewShell *pCurrShell;
+    SwViewShell *pWaitingCurrShell;
     SwCurrShells *pCurrShells;
 
     //Eine Page im DrawModel pro Dokument, hat immer die Groesse der Root.
@@ -159,12 +159,12 @@ public:
     //Clipping sparen, wenn im Vout eh genau das Cliprechteck ausgegeben wird
     static sal_Bool HasSameRect( const SwRect& rRect );
 
-    SwRootFrm( SwFrmFmt*, ViewShell* );
+    SwRootFrm( SwFrmFmt*, SwViewShell* );
     virtual ~SwRootFrm();
     void Init(SwFrmFmt*);
 
-    ViewShell *GetCurrShell() const { return pCurrShell; }
-    void DeRegisterShell( ViewShell *pSh );
+    SwViewShell *GetCurrShell() const { return pCurrShell; }
+    void DeRegisterShell( SwViewShell *pSh );
 
     //Start-/EndAction fuer alle Shells auf moeglichst hoeher
     //(Shell-Ableitungs-)Ebene aufsetzen. Fuer die StarONE Anbindung, die
@@ -175,7 +175,7 @@ public:
     void EndAllAction( sal_Bool bVirDev = sal_False );
 
     // fuer bestimmte UNO-Aktionen (Tabellencursor) ist es notwendig, dass alle Actions
-    // kurzfristig zurueckgesetzt werden. Dazu muss sich jede ViewShell ihren alten Action-zaehler
+    // kurzfristig zurueckgesetzt werden. Dazu muss sich jede SwViewShell ihren alten Action-zaehler
     // merken
     void UnoRemoveAllActions();
     void UnoRestoreAllActions();
@@ -206,7 +206,7 @@ public:
     {
         bIdleFormat = sal_True;
 
-        ViewShell* lcl_pCurrShell = GetCurrShell();
+        SwViewShell* lcl_pCurrShell = GetCurrShell();
         // May be NULL if called from SfxBaseModel::dispose
         // (this happens in the build test 'rtfexport').
         if (lcl_pCurrShell != NULL)
@@ -222,7 +222,7 @@ public:
 
         if ( bVal )
         {
-            ViewShell* lcl_pCurrShell = GetCurrShell();
+            SwViewShell* lcl_pCurrShell = GetCurrShell();
             // May be NULL if called from SfxBaseModel::dispose
             // (this happens in the build test 'rtfexport').
             if (lcl_pCurrShell != NULL)

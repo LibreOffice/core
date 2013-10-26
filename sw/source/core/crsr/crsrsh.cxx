@@ -68,7 +68,7 @@
 using namespace com::sun::star;
 using namespace util;
 
-TYPEINIT2(SwCrsrShell,ViewShell,SwModify);
+TYPEINIT2(SwCrsrShell,SwViewShell,SwModify);
 
 /**
  * Delete all overlapping Cursors from a Cursor ring.
@@ -226,7 +226,7 @@ void SwCrsrShell::StartAction()
         else
             m_nLeftFrmPos = 0;
     }
-    ViewShell::StartAction(); // to the ViewShell
+    SwViewShell::StartAction(); // to the SwViewShell
 }
 
 void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
@@ -244,12 +244,12 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
     if( 1 == mnStartAction )
         GetDoc()->UpdateNumRule();
 
-    // #i76923#: Don't show the cursor in the ViewShell::EndAction() - call.
+    // #i76923#: Don't show the cursor in the SwViewShell::EndAction() - call.
     //           Only the UpdateCrsr shows the cursor.
     sal_Bool bSavSVCrsrVis = m_bSVCrsrVis;
     m_bSVCrsrVis = sal_False;
 
-    ViewShell::EndAction( bIdleEnd );   // have ViewShell go first
+    SwViewShell::EndAction( bIdleEnd );   // have SwViewShell go first
 
     m_bSVCrsrVis = bSavSVCrsrVis;
 
@@ -1177,7 +1177,7 @@ void SwCrsrShell::Paint( const Rectangle &rRect)
     }
 
     // re-paint area
-    ViewShell::Paint( rRect );
+    SwViewShell::Paint( rRect );
 
     if( m_bHasFocus && !m_bBasicHideCrsr )
     {
@@ -1211,9 +1211,9 @@ void SwCrsrShell::VisPortChgd( const SwRect & rRect )
     m_aOldRBPos.setY(VisArea().Bottom());
 
     // For not having problems with the SV cursor, Update() is called for the
-    // Window in ViewShell::VisPo...
+    // Window in SwViewShell::VisPo...
     // During painting no selections should be shown, thus the call is encapsulated. <- TODO: old artefact?
-    ViewShell::VisPortChgd( rRect ); // move area
+    SwViewShell::VisPortChgd( rRect ); // move area
 
     if( m_bSVCrsrVis && bVis ) // show SV cursor again
         m_pVisCrsr->Show();
@@ -2077,7 +2077,7 @@ void SwCrsrShell::ShGetFcs( sal_Bool bUpdate )
 /** Get current frame in which the cursor is positioned. */
 SwCntntFrm *SwCrsrShell::GetCurrFrm( const sal_Bool bCalcFrm ) const
 {
-    SET_CURR_SHELL( (ViewShell*)this );
+    SET_CURR_SHELL( (SwViewShell*)this );
     SwCntntFrm *pRet = 0;
     SwCntntNode *pNd = m_pCurCrsr->GetCntntNode();
     if ( pNd )
@@ -2473,7 +2473,7 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
     pNew->GetPoint()->nNode = *pNode->EndOfSectionNode();
 
     // take care of all shells
-    ViewShell *pTmp = this;
+    SwViewShell *pTmp = this;
     do {
         if( pTmp->IsA( TYPE( SwCrsrShell )))
         {
@@ -2495,7 +2495,7 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
                 }
             }
         }
-    } while ( this != (pTmp = (ViewShell*)pTmp->GetNext() ));
+    } while ( this != (pTmp = (SwViewShell*)pTmp->GetNext() ));
     delete pNew;
 }
 
@@ -2505,7 +2505,7 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
     All views of a document are in the ring of the shell.
 */
 SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
-    : ViewShell( rShell, pInitWin ),
+    : SwViewShell( rShell, pInitWin ),
     SwModify( 0 ), m_pCrsrStk( 0 ), m_pBlockCrsr( 0 ), m_pTblCrsr( 0 ),
     m_pBoxIdx( 0 ), m_pBoxPtr( 0 ), m_nCrsrMove( 0 ), m_nBasicActionCnt( 0 ),
     m_eMvState( MV_NONE ),
@@ -2534,7 +2534,7 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
 /// default constructor
 SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
                             const SwViewOption *pInitOpt )
-    : ViewShell( rDoc, pInitWin, pInitOpt ),
+    : SwViewShell( rDoc, pInitWin, pInitOpt ),
     SwModify( 0 ), m_pCrsrStk( 0 ), m_pBlockCrsr( 0 ), m_pTblCrsr( 0 ),
     m_pBoxIdx( 0 ), m_pBoxPtr( 0 ), m_nCrsrMove( 0 ), m_nBasicActionCnt( 0 ),
     m_eMvState( MV_NONE ), // state for crsr-travelling - GetCrsrOfst

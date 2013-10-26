@@ -109,7 +109,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
         }
         else
         {
-            const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            const SwViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
             {
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
@@ -255,7 +255,7 @@ SwFlyFrm::~SwFlyFrm()
         SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
         {
-            ViewShell *pVSh = pRootFrm->GetCurrShell();
+            SwViewShell *pVSh = pRootFrm->GetCurrShell();
             if( pVSh && pVSh->Imp() )
             {
                 // Lowers aren't disposed already, so we have to do a recursive
@@ -453,16 +453,16 @@ void SwFlyFrm::FinitDrawObj()
     //Bei den SdrPageViews abmelden falls das Objekt dort noch selektiert ist.
     if ( !GetFmt()->GetDoc()->IsInDtor() )
     {
-        ViewShell *p1St = getRootFrm()->GetCurrShell();
+        SwViewShell *p1St = getRootFrm()->GetCurrShell();
         if ( p1St )
         {
-            ViewShell *pSh = p1St;
+            SwViewShell *pSh = p1St;
             do
             {   //z.Zt. kann das Drawing nur ein Unmark auf alles, weil das
                 //Objekt bereits Removed wurde.
                 if( pSh->HasDrawView() )
                     pSh->Imp()->GetDrawView()->UnmarkAll();
-                pSh = (ViewShell*)pSh->GetNext();
+                pSh = (SwViewShell*)pSh->GetNext();
 
             } while ( pSh != p1St );
         }
@@ -546,7 +546,7 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
     }
 
     // invalidate accessible relation set (accessibility wrapper)
-    ViewShell* pSh = pMaster->getRootFrm()->GetCurrShell();
+    SwViewShell* pSh = pMaster->getRootFrm()->GetCurrShell();
     if( pSh )
     {
         SwRootFrm* pLayout = pMaster->getRootFrm();
@@ -592,7 +592,7 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
                   pFollow->GetFmt()->GetDoc(), ++nIndex );
 
     // invalidate accessible relation set (accessibility wrapper)
-    ViewShell* pSh = pMaster->getRootFrm()->GetCurrShell();
+    SwViewShell* pSh = pMaster->getRootFrm()->GetCurrShell();
     if( pSh )
     {
         SwRootFrm* pLayout = pMaster->getRootFrm();
@@ -806,7 +806,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 {
     bool bClear = true;
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     switch( nWhich )
     {
         case RES_VERT_ORIENT:
@@ -2163,7 +2163,7 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
             SwRootFrm *pRootFrm = getRootFrm();
             if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
             {
-                ViewShell *pVSh = pRootFrm->GetCurrShell();
+                SwViewShell *pVSh = pRootFrm->GetCurrShell();
                 if( pVSh && pVSh->Imp() )
                 {
                     pVSh->Imp()->DisposeAccessibleFrm( pToRemove );
@@ -2248,7 +2248,7 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
     }
 
     // Notify accessible layout.
-    ViewShell* pSh = getRootFrm()->GetCurrShell();
+    SwViewShell* pSh = getRootFrm()->GetCurrShell();
     if( pSh )
     {
         SwRootFrm* pLayout = getRootFrm();
@@ -2260,7 +2260,7 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
 void SwFrm::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
 {
     // Notify accessible layout.
-    ViewShell* pSh = getRootFrm()->GetCurrShell();
+    SwViewShell* pSh = getRootFrm()->GetCurrShell();
     if( pSh )
     {
         SwRootFrm* pLayout = getRootFrm();
@@ -2466,7 +2466,7 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
     if( pRel ) // LAYER_IMPL
     {
         long nRelWidth = LONG_MAX, nRelHeight = LONG_MAX;
-        const ViewShell *pSh = getRootFrm()->GetCurrShell();
+        const SwViewShell *pSh = getRootFrm()->GetCurrShell();
         if ( ( pRel->IsBodyFrm() || pRel->IsPageFrm() ) &&
              pSh && pSh->GetViewOptions()->getBrowseMode() &&
              pSh->VisArea().HasArea() )

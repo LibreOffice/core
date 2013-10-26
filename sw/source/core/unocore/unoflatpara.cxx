@@ -348,7 +348,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
     SwTxtNode* pRet = 0;
     if ( mbAutomatic )
     {
-        ViewShell* pViewShell = 0;
+        SwViewShell* pViewShell = 0;
         mpDoc->GetEditShell( &pViewShell );
 
         SwPageFrm* pCurrentPage = pViewShell ? pViewShell->Imp()->GetFirstVisPage() : 0;

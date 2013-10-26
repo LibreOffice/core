@@ -96,7 +96,7 @@ public:
     const SwCrsrShell* GetShell() const { return pCShell; }
     // check current MapMode of the shell and set possibly the static members.
     // Optional set the parameters pX, pY
-    static void Get1PixelInLogic( const ViewShell& rSh,
+    static void Get1PixelInLogic( const SwViewShell& rSh,
                                     long* pX = 0, long* pY = 0 );
 };
 

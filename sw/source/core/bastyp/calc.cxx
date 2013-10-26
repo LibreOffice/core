@@ -54,7 +54,7 @@
 using namespace ::com::sun::star;
 
 // shortcut
-#define RESOURCE ViewShell::GetShellRes()
+#define RESOURCE SwViewShell::GetShellRes()
 
 const sal_Char sCalc_Add[]  =   "add";
 const sal_Char sCalc_Sub[]  =   "sub";

@@ -198,7 +198,7 @@ friend class SwConnectionDisposedListener_Impl;
     sal_Bool            bInMerge    : 1;    ///< merge process active
     sal_Bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
     sal_Bool            bMergeLock : 1;     /**< prevent update of database fields while document is
-                                             actually printed at the ViewShell */
+                                             actually printed at the SwViewShell */
     SwDSParamArr        aDataSourceParams;
     SwNewDBMgr_Impl*    pImpl;
     const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send

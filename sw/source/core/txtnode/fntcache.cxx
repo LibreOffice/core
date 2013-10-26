@@ -103,7 +103,7 @@ void SwFntCache::Flush( )
 |*
 |*************************************************************************/
 
-SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwn, ViewShell *pSh ) :
+SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwn, SwViewShell *pSh ) :
     SwCacheObj( (void*)pOwn ),
     aFont( rFont ),
     pScrFont( NULL ),
@@ -279,7 +279,7 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
  * it may be necessary to create the screen font first.
  *************************************************************************/
 
-sal_uInt16 SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut )
+sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& rOut )
 {
     sal_uInt16 nRet = 0;
     const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
@@ -322,7 +322,7 @@ sal_uInt16 SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rO
  * it may be necessary to create the screen font first.
  *************************************************************************/
 
-sal_uInt16 SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rOut )
+sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& rOut )
 {
     sal_uInt16 nRet = 0;
     const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
@@ -362,7 +362,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rO
     return nRet;
 }
 
-sal_uInt16 SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut )
+sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice& rOut )
 {
     sal_uInt16 nRet = 0;
 
@@ -416,13 +416,13 @@ sal_uInt16 SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& r
 
 /*************************************************************************
  *
- *  SwFntObj::CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut )
+ *  SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
  *
  *  pOut is the output device, not the reference device
  *
  *************************************************************************/
 
-void SwFntObj::CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut )
+void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
 {
     if ( pScrFont )
         return;
@@ -516,7 +516,7 @@ void SwFntObj::CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut )
 }
 
 
-void SwFntObj::GuessLeading( const ViewShell&
+void SwFntObj::GuessLeading( const SwViewShell&
 #if defined(WNT)
                              rSh
 #endif
@@ -601,7 +601,7 @@ void SwFntObj::GuessLeading( const ViewShell&
  *
  *************************************************************************/
 
-void SwFntObj::SetDevFont( const ViewShell *pSh, OutputDevice& rOut )
+void SwFntObj::SetDevFont( const SwViewShell *pSh, OutputDevice& rOut )
 {
     const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
 
@@ -2228,7 +2228,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 |*************************************************************************/
 
 SwFntAccess::SwFntAccess( const void* &rMagic,
-                sal_uInt16 &rIndex, const void *pOwn, ViewShell *pSh,
+                sal_uInt16 &rIndex, const void *pOwn, SwViewShell *pSh,
                 sal_Bool bCheck ) :
   SwCacheAccess( *pFntCache, rMagic, rIndex ),
   pShell( pSh )

@@ -2850,7 +2850,7 @@ void SwXMLTableContext::MakeTable()
         pTableNode->SetNewTable(pDDETable, sal_False);
     }
 
-    // ??? this is always false: root frame is only created in ViewShell::Init
+    // ??? this is always false: root frame is only created in SwViewShell::Init
     if( pTableNode->GetDoc()->GetCurrentViewShell() )
     {
         pTableNode->DelFrms();

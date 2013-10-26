@@ -985,7 +985,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
     SwAccessibleObjShape_Impl *pSelShape = 0;
     size_t nShapes = 0;
 
-    const ViewShell *pVSh = GetShell();
+    const SwViewShell *pVSh = GetShell();
     const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
                             static_cast< const SwFEShell * >( pVSh ) : 0;
     sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
@@ -1072,7 +1072,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
 
 void SwAccessibleMap::DoInvalidateShapeFocus()
 {
-    const ViewShell *pVSh = GetShell();
+    const SwViewShell *pVSh = GetShell();
     const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
                             static_cast< const SwFEShell * >( pVSh ) : 0;
     sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
@@ -1113,7 +1113,7 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
     }
 }
 
-SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
+SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
     mpFrmMap( 0  ),
     mpShapeMap( 0  ),
     mpShapes( 0  ),
@@ -1889,7 +1889,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 {
     SwAccessibleChild aFrmOrObj( pFrm );
     bool bShapeSelected = false;
-    const ViewShell *pVSh = GetShell();
+    const SwViewShell *pVSh = GetShell();
     if( pVSh->ISA( SwCrsrShell ) )
     {
         const SwCrsrShell *pCSh = static_cast< const SwCrsrShell * >( pVSh );

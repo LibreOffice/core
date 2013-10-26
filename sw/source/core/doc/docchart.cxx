@@ -93,7 +93,7 @@ bool SwTable::IsTblComplexForChart( const OUString& rSelection ) const
 
 void SwDoc::DoUpdateAllCharts()
 {
-    ViewShell* pVSh;
+    SwViewShell* pVSh;
     GetEditShell( &pVSh );
     if( pVSh )
     {
@@ -114,7 +114,7 @@ void SwDoc::DoUpdateAllCharts()
     }
 }
 
-void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
+void SwDoc::_UpdateCharts( const SwTable& rTbl, SwViewShell& rVSh ) const
 {
     OUString aName( rTbl.GetFrmFmt()->GetName() );
     SwOLENode *pONd;
@@ -142,7 +142,7 @@ void SwDoc::UpdateCharts( const OUString &rName ) const
     SwTable* pTmpTbl = SwTable::FindTable( FindTblFmtByName( rName ) );
     if( pTmpTbl )
     {
-        ViewShell* pVSh;
+        SwViewShell* pVSh;
         GetEditShell( &pVSh );
 
         if( pVSh )
@@ -183,7 +183,7 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
         {
             pNd->SetChartTblName( rNewName );
 
-            ViewShell* pVSh;
+            SwViewShell* pVSh;
             GetEditShell( &pVSh );
 
             SwTable* pTable = SwTable::FindTable( &rTblFmt );

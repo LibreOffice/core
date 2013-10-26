@@ -830,10 +830,10 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         }
         m_pWrtShell = new SwWrtShell( rDoc, m_pEditWin, *this, &aUsrPref );
         // creating an SwView from a SwPagePreview needs to
-        // add the ViewShell to the ring of the other ViewShell(s)
+        // add the SwViewShell to the ring of the other SwViewShell(s)
         if(m_bOldShellWasPagePreview)
         {
-            ViewShell& rPreviewViewShell = *((SwPagePreview*)pExistingSh)->GetViewShell();
+            SwViewShell& rPreviewViewShell = *((SwPagePreview*)pExistingSh)->GetViewShell();
             m_pWrtShell->MoveTo(&rPreviewViewShell);
             // to update the field command et.al. if necessary
             const SwViewOption* pPreviewOpt = rPreviewViewShell.GetViewOptions();

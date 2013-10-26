@@ -1997,7 +1997,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
     SwPosition *pStartPos = rCrsr.Start(),
                *pEndPos   = rCrsr.GetPoint() == pStartPos ? rCrsr.GetMark() : rCrsr.GetPoint();
 
-    ViewShell *pSh = GetCurrShell();
+    SwViewShell *pSh = GetCurrShell();
 
     // #i12836# enhanced pdf
     SwRegionRects aRegion( pSh && !pSh->GetViewOptions()->IsPDFExport() ?

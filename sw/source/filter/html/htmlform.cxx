@@ -685,7 +685,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     // das auch vom SwXShape implementiert wird.
     uno::Reference< beans::XPropertySet > xPropSet( rShape, UNO_QUERY );
 
-    ViewShell *pVSh;
+    SwViewShell *pVSh;
     pDoc->GetEditShell( &pVSh );
     if( !pVSh && !nEventId )
     {

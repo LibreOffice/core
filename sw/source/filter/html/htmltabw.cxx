@@ -1119,7 +1119,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 
 #ifdef DBG_UTIL
     {
-    ViewShell *pSh;
+    SwViewShell *pSh;
     rWrt.pDoc->GetEditShell( &pSh );
     if ( pSh && pSh->GetViewOptions()->IsTest1() )
         pLayout = 0;

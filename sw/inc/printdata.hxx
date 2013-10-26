@@ -37,7 +37,7 @@ class _SetGetExpFlds;
 class SwViewOption;
 class OutputDevice;
 class SwViewOptionAdjust_Impl;
-class ViewShell;
+class SwViewShell;
 class SfxViewShell;
 
 // forward declarations
@@ -248,7 +248,7 @@ public:
     /// an array of "_SetGetExpFld *" sorted by page and line numbers
     ::boost::scoped_ptr<_SetGetExpFlds> m_pPostItFields;
     /// this contains a SwDoc with the post-it content
-    ::boost::scoped_ptr<ViewShell>      m_pPostItShell;
+    ::boost::scoped_ptr<SwViewShell>      m_pPostItShell;
 
 public:
     SwRenderData();
@@ -263,8 +263,8 @@ public:
     void SetTempDocShell(SfxObjectShellLock const&);
 
     bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != 0; }
-    bool NeedNewViewOptionAdjust( const ViewShell& ) const;
-    void ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions);
+    bool NeedNewViewOptionAdjust( const SwViewShell& ) const;
+    void ViewOptionAdjustStart( SwViewShell &rSh, const SwViewOption &rViewOptions);
     void ViewOptionAdjust( SwPrintData const* const pPrtOptions );
     void ViewOptionAdjustStop();
     void ViewOptionAdjustCrashPreventionKludge();

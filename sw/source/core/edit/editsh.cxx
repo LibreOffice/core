@@ -598,7 +598,7 @@ void *SwEditShell::GetIMapInventor() const
 Graphic SwEditShell::GetIMapGraphic() const
 {
     // returns always a graphic if the cursor is in a Fly
-    SET_CURR_SHELL( (ViewShell*)this );
+    SET_CURR_SHELL( (SwViewShell*)this );
     Graphic aRet;
     SwPaM* pCrsr = GetCrsr();
     if ( !pCrsr->HasMark() )
@@ -1075,7 +1075,7 @@ void SwEditShell::CountWords( SwDocStat& rStat ) const
 void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
 {
     SwCrsrShell::StartAction();
-    ViewShell::ApplyViewOptions( rOpt );
+    SwViewShell::ApplyViewOptions( rOpt );
     SwEditShell::EndAction();
 }
 

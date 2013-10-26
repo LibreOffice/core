@@ -404,7 +404,7 @@ void SwView::Scroll( const Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt16 nRan
     Rectangle aOldVisArea( m_aVisArea );
     long nDiffY = 0;
 
-    Window* pCareWn = ViewShell::GetCareWin(GetWrtShell());
+    Window* pCareWn = SwViewShell::GetCareWin(GetWrtShell());
     if ( pCareWn )
     {
         Rectangle aDlgRect( GetEditWin().PixelToLogic(

@@ -45,7 +45,7 @@ extern void SwCalcPixStatics( OutputDevice *pOut );
 
 // methods to initialize page preview layout
 
-SwPagePreviewLayout::SwPagePreviewLayout( ViewShell& _rParentViewShell,
+SwPagePreviewLayout::SwPagePreviewLayout( SwViewShell& _rParentViewShell,
                                           const SwRootFrm& _rLayoutRootFrm )
     : mnXFree ( 4*142 ),
       mnYFree ( 4*142 ),

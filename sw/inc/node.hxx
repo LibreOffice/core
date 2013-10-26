@@ -61,7 +61,7 @@ class SwTableNode;
 class SwTableBox;
 class SwTxtNode;
 class SwPageDesc;
-class ViewShell;
+class SwViewShell;
 struct SwPosition;
 class IStyleAccess;
 class IDocumentSettingAccess;
@@ -258,7 +258,7 @@ public:
     IDocumentListItems& getIDocumentListItems();
 
     /// Is node in the visible area of the Shell?
-    sal_Bool IsInVisibleArea( ViewShell* pSh = 0 ) const;
+    sal_Bool IsInVisibleArea( SwViewShell* pSh = 0 ) const;
     /// Is node in an protected area?
     bool IsInProtectSect() const;
     /**  Is node in something that is protected (range, frame,

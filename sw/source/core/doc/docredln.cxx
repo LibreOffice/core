@@ -2739,7 +2739,7 @@ void SwRedlineTbl::Remove( sal_uInt16 nP )
 
     erase( begin() + nP );
 
-    ViewShell* pSh;
+    SwViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
         0 != ( pSh = pDoc->GetCurrentViewShell()) )
         pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
@@ -2760,7 +2760,7 @@ void SwRedlineTbl::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
         delete *it;
     erase( begin() + nP, begin() + nP + nL );
 
-    ViewShell* pSh;
+    SwViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
         0 != ( pSh = pDoc->GetCurrentViewShell() ) )
         pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );

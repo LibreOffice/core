@@ -87,7 +87,7 @@ inline bool GetRealURL( const SwGrfNode& rNd, OUString& rTxt )
 }
 
 static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
-                           const ViewShell &rSh, const SwNoTxtFrm *pFrm,
+                           const SwViewShell &rSh, const SwNoTxtFrm *pFrm,
                            bool bDefect )
 {
     static Font *pFont = 0;
@@ -132,7 +132,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
     pFont->SetUnderline( eUnderline );
     pFont->SetColor( aCol );
 
-    const BitmapEx& rBmp = ViewShell::GetReplacementBitmap( bDefect );
+    const BitmapEx& rBmp = SwViewShell::GetReplacementBitmap( bDefect );
     Graphic::DrawEx( rSh.GetOut(), rText, *pFont, rBmp, rRect.Pos(), rRect.SSize() );
 }
 
@@ -162,7 +162,7 @@ SwNoTxtFrm::~SwNoTxtFrm()
     StopAnimation();
 }
 
-void SetOutDev( ViewShell *pSh, OutputDevice *pOut )
+void SetOutDev( SwViewShell *pSh, OutputDevice *pOut )
 {
     pSh->mpOut = pOut;
 }
@@ -197,7 +197,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     if ( Frm().IsEmpty() )
         return;
 
-    const ViewShell* pSh = getRootFrm()->GetCurrShell();
+    const SwViewShell* pSh = getRootFrm()->GetCurrShell();
     if( !pSh->GetViewOptions()->IsGraphic() )
     {
         StopAnimation();
@@ -560,7 +560,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             bComplete = false;
             SwGrfNode* pNd = (SwGrfNode*) GetNode();
 
-            ViewShell *pVSh = 0;
+            SwViewShell *pVSh = 0;
             pNd->GetDoc()->GetEditShell( &pVSh );
             if( pVSh )
             {
@@ -568,7 +568,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 if( pNd->GetGrfObj().IsCached( pVSh->GetOut(), Point(),
                             Prt().SSize(), &pNd->GetGraphicAttr( aAttr, this ) ))
                 {
-                    ViewShell *pSh = pVSh;
+                    SwViewShell *pSh = pVSh;
                     do {
                         SET_CURR_SHELL( pSh );
                         if( pSh->GetWin() )
@@ -578,7 +578,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                             else
                                 pSh->GetWin()->Invalidate( Frm().SVRect() );
                         }
-                    } while( pVSh != (pSh = (ViewShell*)pSh->GetNext() ));
+                    } while( pVSh != (pSh = (SwViewShell*)pSh->GetNext() ));
                 }
                 else
                     pNd->SwapIn();
@@ -619,12 +619,12 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
             SwRect aRect( Frm() );
 
-            ViewShell *pVSh = 0;
+            SwViewShell *pVSh = 0;
             pNd->GetDoc()->GetEditShell( &pVSh );
             if( !pVSh )
                 break;
 
-            ViewShell *pSh = pVSh;
+            SwViewShell *pSh = pVSh;
             do {
                 SET_CURR_SHELL( pSh );
                 if( pSh->IsPreview() )
@@ -639,7 +639,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     pSh->GetWin()->Invalidate( aRect.SVRect() );
                 }
 
-                pSh = (ViewShell *)pSh->GetNext();
+                pSh = (SwViewShell *)pSh->GetNext();
             } while( pSh != pVSh );
         }
         break;
@@ -780,7 +780,7 @@ bool paintUsingPrimitivesHelper(
     @todo pixel-align coordinations for drawing graphic. */
 void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
 {
-    ViewShell* pShell = getRootFrm()->GetCurrShell();
+    SwViewShell* pShell = getRootFrm()->GetCurrShell();
 
     SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
@@ -1086,7 +1086,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
 sal_Bool SwNoTxtFrm::IsTransparent() const
 {
-    const ViewShell* pSh = getRootFrm()->GetCurrShell();
+    const SwViewShell* pSh = getRootFrm()->GetCurrShell();
     if ( !pSh || !pSh->GetViewOptions()->IsGraphic() )
         return sal_True;
 

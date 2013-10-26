@@ -27,7 +27,7 @@
 #include <swtypes.hxx>
 #include <vector>
 
-class ViewShell;
+class SwViewShell;
 class SwFlyFrm;
 class SwViewOption;
 class SwRegionRects;
@@ -53,7 +53,7 @@ namespace sdr { namespace contact {
 
 class SwViewImp
 {
-    friend class ViewShell;
+    friend class SwViewShell;
 
     friend class SwLayAction;   //Lay- und IdleAction tragen sich ein und aus.
     friend class SwLayIdle;
@@ -61,8 +61,8 @@ class SwViewImp
     // for paint of page preview
     friend class SwPagePreviewLayout;
 
-    ViewShell *pSh;             //Falls jemand einen Imp durchreicht und doch
-                                //mal eine ViewShell braucht hier die
+    SwViewShell *pSh;             //Falls jemand einen Imp durchreicht und doch
+                                //mal eine SwViewShell braucht hier die
                                 //Rueckwaertsverkettung.
 
     SwDrawView  *pDrawView;     //Unsere DrawView
@@ -111,8 +111,8 @@ class SwViewImp
     void SetFirstVisPage();     //Neue Ermittlung der ersten sichtbaren Seite
 
     void StartAction();         //Henkel Anzeigen und verstecken.
-    void EndAction();           //gerufen von ViewShell::ImplXXXAction
-    void LockPaint();           //dito, gerufen von ViewShell::ImplLockPaint
+    void EndAction();           //gerufen von SwViewShell::ImplXXXAction
+    void LockPaint();           //dito, gerufen von SwViewShell::ImplLockPaint
     void UnlockPaint();
 
 private:
@@ -123,7 +123,7 @@ private:
 
         #i27138#
         implementation for wrapper method
-        <ViewShell::InvalidateAccessibleParaFlowRelation(..)>
+        <SwViewShell::InvalidateAccessibleParaFlowRelation(..)>
 
         @param _pFromTxtFrm
         input parameter - paragraph frame, for which the relation CONTENT_FLOWS_FROM
@@ -142,7 +142,7 @@ private:
 
         #i27301#
         implementation for wrapper method
-        <ViewShell::InvalidateAccessibleParaTextSelection(..)>
+        <SwViewShell::InvalidateAccessibleParaTextSelection(..)>
     */
     void _InvalidateAccessibleParaTextSelection();
 
@@ -150,17 +150,17 @@ private:
 
         #i88069#
         implementation for wrapper method
-        <ViewShell::InvalidateAccessibleParaAttrs(..)>
+        <SwViewShell::InvalidateAccessibleParaAttrs(..)>
     */
     void _InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm );
 
 public:
-    SwViewImp( ViewShell * );
+    SwViewImp( SwViewShell * );
     ~SwViewImp();
-    void Init( const SwViewOption * );          //nur fuer ViewShell::Init()
+    void Init( const SwViewOption * );          //nur fuer SwViewShell::Init()
 
-    const ViewShell *GetShell() const { return pSh; }
-          ViewShell *GetShell()       { return pSh; }
+    const SwViewShell *GetShell() const { return pSh; }
+          SwViewShell *GetShell()       { return pSh; }
 
     Color GetRetoucheColor() const;
 

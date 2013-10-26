@@ -362,7 +362,7 @@ void SwFrm::Destroy()
         SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
         {
-            ViewShell *pVSh = pRootFrm->GetCurrShell();
+            SwViewShell *pVSh = pRootFrm->GetCurrShell();
             if( pVSh && pVSh->Imp() )
             {
                 OSL_ENSURE( !GetLower(), "Lowers should be dispose already!" );
@@ -509,7 +509,7 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
         // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
         if ( pFrm->IsTxtFrm() )
         {
-            ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
+            SwViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {

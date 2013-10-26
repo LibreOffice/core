@@ -212,7 +212,7 @@ public:
 
 //----------------- End of classes for border lines ----------------------
 
-static ViewShell *pGlobalShell = 0;
+static SwViewShell *pGlobalShell = 0;
 
 //Only repaint the Fly content as well as the background of the Fly content if
 //a metafile is taken of the Fly.
@@ -320,7 +320,7 @@ void SwCalcPixStatics( OutputDevice *pOut )
 class SwSavePaintStatics
 {
     sal_Bool            bSFlyMetafile;
-    ViewShell          *pSGlobalShell;
+    SwViewShell          *pSGlobalShell;
     OutputDevice       *pSFlyMetafileOut;
     SwFlyFrm           *pSRetoucheFly,
                        *pSRetoucheFly2,
@@ -1192,7 +1192,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 // Correction: adjust rectangle on pixel level in order
 //          to assure, that the border 'leaves its original pixel', if it has to.
 //          No prior adjustments for odd relation between pixel and twip.
-void SwAlignRect( SwRect &rRect, const ViewShell *pSh )
+void SwAlignRect( SwRect &rRect, const SwViewShell *pSh )
 {
     if( !rRect.HasArea() )
         return;
@@ -1769,7 +1769,7 @@ static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
 ///     with a background color in method <lcl_DrawGraphicBackgrd>
 ///     Also, change type of <bGrfNum> and <bClip> from <sal_Bool> to <bool>.
 static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
-                      ViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
+                      SwViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       bool bClip, bool bGrfNum,
                       bool bBackgrdAlreadyDrawn = false )
                       /// add parameter <bBackgrdAlreadyDrawn> to indicate
@@ -1815,7 +1815,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
     /// Add 6th parameter to indicate that method should
     ///   consider background transparency, saved in the color of the brush item
 {
-    ViewShell &rSh = *pGlobalShell;
+    SwViewShell &rSh = *pGlobalShell;
     bool bReplaceGrfNum = GRFNUM_REPLACE == nGrfNum;
     bool bGrfNum = GRFNUM_NO != nGrfNum;
     Size aGrfSize;
@@ -2153,7 +2153,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
 
     if( bReplaceGrfNum )
     {
-        const BitmapEx& rBmp = ViewShell::GetReplacementBitmap( false );
+        const BitmapEx& rBmp = SwViewShell::GetReplacementBitmap( false );
         Font aTmp( pOutDev->GetFont() );
         Graphic::DrawEx( pOutDev, aEmptyOUStr, aTmp, rBmp, rOrg.Pos(), rOrg.SSize() );
     }
@@ -2913,10 +2913,10 @@ namespace
     class SwViewObjectContactRedirector : public ::sdr::contact::ViewObjectContactRedirector
     {
         private:
-            const ViewShell& mrViewShell;
+            const SwViewShell& mrViewShell;
 
         public:
-            SwViewObjectContactRedirector( const ViewShell& rSh )
+            SwViewObjectContactRedirector( const SwViewShell& rSh )
                 : mrViewShell( rSh )
             {};
 
@@ -2968,7 +2968,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     PROTOCOL( this, PROT_FILE_INIT, 0, 0)
 
     bool bResetRootPaint = false;
-    ViewShell *pSh = pCurrShell;
+    SwViewShell *pSh = pCurrShell;
 
     if ( pSh->GetWin() )
     {
@@ -3000,11 +3000,11 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     //Using this trick we can ensure that all values are valid in all paints -
     //no problems, no special case(s).
     // #i92745#
-    // Extend check on certain states of the 'current' <ViewShell> instance to
-    // all existing <ViewShell> instances.
+    // Extend check on certain states of the 'current' <SwViewShell> instance to
+    // all existing <SwViewShell> instances.
     bool bPerformLayoutAction( true );
     {
-        ViewShell* pTmpViewShell = pSh;
+        SwViewShell* pTmpViewShell = pSh;
         do {
             if ( pTmpViewShell->IsInEndAction() ||
                  pTmpViewShell->IsPaintInProgress() ||
@@ -3014,7 +3014,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 bPerformLayoutAction = false;
             }
 
-            pTmpViewShell = static_cast<ViewShell*>(pTmpViewShell->GetNext());
+            pTmpViewShell = static_cast<SwViewShell*>(pTmpViewShell->GetNext());
         } while ( bPerformLayoutAction && pTmpViewShell != pSh );
     }
     if ( bPerformLayoutAction )
@@ -3120,8 +3120,8 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 // moved paint pre-process for DrawingLayer overlay here since the above
                 // code dependent from bExtraData may expand the PaintRect
                 {
-                    // #i75172# if called from ViewShell::ImplEndAction it sould no longer
-                    // really be used but handled by ViewShell::ImplEndAction already
+                    // #i75172# if called from SwViewShell::ImplEndAction it sould no longer
+                    // really be used but handled by SwViewShell::ImplEndAction already
                     const Region aDLRegion(aPaintRect.SVRect());
                     pSh->DLPrePaint2(aDLRegion);
                 }
@@ -3251,8 +3251,8 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 
             if ( aRect.IsOver( aEmptyPageRect ) )
             {
-                // #i75172# if called from ViewShell::ImplEndAction it sould no longer
-                // really be used but handled by ViewShell::ImplEndAction already
+                // #i75172# if called from SwViewShell::ImplEndAction it sould no longer
+                // really be used but handled by SwViewShell::ImplEndAction already
                 {
                     const Region aDLRegion(aPaintRect.SVRect());
                     pSh->DLPrePaint2(aDLRegion);
@@ -3381,7 +3381,7 @@ SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
 
 void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
 
     // #i16816# tagged pdf support
     Frm_Info aFrmInfo( *this );
@@ -3819,7 +3819,7 @@ sal_Bool SwFlyFrm::IsShadowTransparent() const
 |*
 |*************************************************************************/
 
-sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
+sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
 {
     SdrObjUserCall *pUserCall;
 
@@ -3946,7 +3946,7 @@ private:
 void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     //optimize thumbnail generation and store procedure to improve odt saving performance, #i120030#
-    ViewShell *pShell = getRootFrm()->GetCurrShell();
+    SwViewShell *pShell = getRootFrm()->GetCurrShell();
     if (pShell && pShell->GetDoc() && pShell->GetDoc()->GetDocShell())
     {
         sal_Bool bInGenerateThumbnail = pShell->GetDoc()->GetDocShell()->IsInGenerateAndStoreThumbnail();
@@ -4085,7 +4085,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                     // used in <SwNoTxtFrm::Paint(..)> to set the clip region
                     // for painting the graphic/OLE. Thus, the clip region is
                     // also applied for the PDF export.
-                    ViewShell *pSh = getRootFrm()->GetCurrShell();
+                    SwViewShell *pSh = getRootFrm()->GetCurrShell();
                     if ( !pOut->GetConnectMetaFile() || !pSh || !pSh->GetWin() )
                     {
                         pOut->SetClipRegion(Region(aPoly));
@@ -5816,7 +5816,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
     has to be generated.
 */
 void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
-                                 ViewShell* _pViewShell ) const
+                                 SwViewShell* _pViewShell ) const
 {
     if (  _pViewShell->GetWin() &&
          !_pViewShell->GetViewOptions()->getBrowseMode() )
@@ -5858,7 +5858,7 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 9;
 
 sal_Bool SwPageFrm::IsRightShadowNeeded() const
 {
-    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bIsLTR = getRootFrm()->IsLeftToRightViewLayout();
 
     // We paint the right shadow if we're not in book mode
@@ -5871,7 +5871,7 @@ sal_Bool SwPageFrm::IsRightShadowNeeded() const
 
 sal_Bool SwPageFrm::IsLeftShadowNeeded() const
 {
-    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bIsLTR = getRootFrm()->IsLeftToRightViewLayout();
 
     // We paint the left shadow if we're not in book mode
@@ -5888,7 +5888,7 @@ sal_Bool SwPageFrm::IsLeftShadowNeeded() const
     @author OD
 */
 /*static*/ void SwPageFrm::GetHorizontalShadowRect( const SwRect& _rPageRect,
-                                                const ViewShell*    _pViewShell,
+                                                const SwViewShell*    _pViewShell,
                                                 SwRect&       _orHorizontalShadowRect,
                                                 bool bPaintLeftShadow,
                                                 bool bPaintRightShadow,
@@ -5951,7 +5951,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
     @author OD
 */
 /*static*/ void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
-                                                 const ViewShell*    _pViewShell,
+                                                 const SwViewShell*    _pViewShell,
                                                  bool bPaintLeftShadow,
                                                  bool bPaintRightShadow,
                                                  bool bRightSidebar )
@@ -6084,7 +6084,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
 
 //mod #i6193# paint sidebar for notes
 //IMPORTANT: if you change the rects here, also change SwPostItMgr::ScrollbarHit
-/*static*/void SwPageFrm::PaintNotesSidebar(const SwRect& _rPageRect, ViewShell* _pViewShell, sal_uInt16 nPageNum, bool bRight)
+/*static*/void SwPageFrm::PaintNotesSidebar(const SwRect& _rPageRect, SwViewShell* _pViewShell, sal_uInt16 nPageNum, bool bRight)
 {
     //TODO: cut out scrollbar area and arrows out of sidepane rect, otherwise it could flicker when pressing arrow buttons
     if (!_pViewShell )
@@ -6180,7 +6180,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
     }
 }
 
-/*static*/ void SwPageFrm::PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown)
+/*static*/ void SwPageFrm::PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, SwViewShell* _pViewShell, const Color aColorUp, const Color aColorDown)
 {
     Polygon aTriangleUp(3);
     Polygon aTriangleDown(3);
@@ -6206,7 +6206,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
     author OD
 */
 /*static*/ void SwPageFrm::GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
-                                                        const ViewShell*    _pViewShell,
+                                                        const SwViewShell*    _pViewShell,
                                                         SwRect& _orBorderAndShadowBoundRect,
                                                         bool bLeftShadow,
                                                         bool bRightShadow,
@@ -6234,7 +6234,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
 
 SwRect SwPageFrm::GetBoundRect() const
 {
-    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     SwRect aPageRect( Frm() );
     SwRect aResult;
 
@@ -6247,7 +6247,7 @@ SwRect SwPageFrm::GetBoundRect() const
     return aResult;
 }
 
-/*static*/ SwTwips SwPageFrm::GetSidebarBorderWidth( const ViewShell* _pViewShell )
+/*static*/ SwTwips SwPageFrm::GetSidebarBorderWidth( const SwViewShell* _pViewShell )
 {
     const SwPostItMgr* pPostItMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
     const SwTwips nRet = pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() ? pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth() : 0;
@@ -6330,7 +6330,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     if( IsCellFrm() && IsCoveredCell() )
         return;
 
-    ViewShell *pSh = pGlobalShell;
+    SwViewShell *pSh = pGlobalShell;
 
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
@@ -7211,7 +7211,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         //cut out.
         SwRegionRects aRegion( aRetouche );
         aRegion -= rRect;
-        ViewShell *pSh = getRootFrm()->GetCurrShell();
+        SwViewShell *pSh = getRootFrm()->GetCurrShell();
 
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
@@ -7251,7 +7251,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
             pPage->RefreshSubsidiary( aRetouchePart );
         }
     }
-    if ( ViewShell::IsLstEndAction() )
+    if ( SwViewShell::IsLstEndAction() )
         ResetRetouche();
 }
 
@@ -7305,7 +7305,7 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
                                 sal_Bool bLowerMode ) const
 {
     const SwFrm *pFrm = this;
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const SwViewOption *pOpt = pSh->GetViewOptions();
     rpBrush = 0;
     rpFillStyle = 0;
@@ -7408,7 +7408,7 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
 |*
 |*************************************************************************/
 
-void SetOutDevAndWin( ViewShell *pSh, OutputDevice *pO,
+void SetOutDevAndWin( SwViewShell *pSh, OutputDevice *pO,
                       Window *pW, sal_uInt16 nZoom )
 {
     pSh->mpOut = pO;
@@ -7427,10 +7427,10 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
     //search any Fly!
     SwIterator<SwFrm,SwFmt> aIter( *this );
     SwFrm *pFirst = aIter.First();
-    ViewShell *pSh;
+    SwViewShell *pSh;
     if ( pFirst && 0 != ( pSh = pFirst->getRootFrm()->GetCurrShell()) )
     {
-        ViewShell *pOldGlobal = pGlobalShell;
+        SwViewShell *pOldGlobal = pGlobalShell;
         pGlobalShell = pSh;
 
         bool bNoteURL = pMap &&

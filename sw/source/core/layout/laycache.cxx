@@ -578,7 +578,7 @@ sal_uLong SwLayHelper::CalcPageCount()
             }
             if ( nNdCount < 1000 )
                 nPgCount = 0;// no progress bar for small documents
-            ViewShell *pSh = 0;
+            SwViewShell *pSh = 0;
             if( rpLay && rpLay->getRootFrm() )
                 pSh = rpLay->getRootFrm()->GetCurrShell();
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )

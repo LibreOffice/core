@@ -188,7 +188,7 @@ void SwSectionFrm::DelEmpty( sal_Bool bRemove )
         // Relation CONTENT_FLOWS_FROM for current next paragraph will change
         // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
         {
-            ViewShell* pViewShell( getRootFrm()->GetCurrShell() );
+            SwViewShell* pViewShell( getRootFrm()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
@@ -772,7 +772,7 @@ void SwSectionFrm::MakeAll()
 
     // OD 2004-03-15 #116561# - In online layout join the follows, if section
     // can grow.
-    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if( pSh && pSh->GetViewOptions()->getBrowseMode() &&
          ( Grow( LONG_MAX, true ) > 0 ) )
     {
@@ -1365,7 +1365,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             // OD 15.10.2002 #103517# - allow grow in online layout
             // Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
             // method <_CheckClipping(..)>.
-            const ViewShell *pSh = getRootFrm()->GetCurrShell();
+            const SwViewShell *pSh = getRootFrm()->GetCurrShell();
             _CheckClipping( pSh && pSh->GetViewOptions()->getBrowseMode(), bMaximize );
             bMaximize = ToMaximize( sal_False );
             mbValidSize = sal_True;
@@ -1988,7 +1988,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
              GetSection()->GetFmt()->GetBalancedColumns().GetValue();
         if( !bGrow )
         {
-             const ViewShell *pSh = getRootFrm()->GetCurrShell();
+             const SwViewShell *pSh = getRootFrm()->GetCurrShell();
              bGrow = pSh && pSh->GetViewOptions()->getBrowseMode();
         }
         if( bGrow )
@@ -2509,7 +2509,7 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
 
         case RES_PROTECT:
             {
-                ViewShell *pSh = getRootFrm()->GetCurrShell();
+                SwViewShell *pSh = getRootFrm()->GetCurrShell();
                 if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
                     pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
             }

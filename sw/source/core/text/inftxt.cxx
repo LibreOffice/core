@@ -552,7 +552,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
     if( GetFont()->IsBlink() && OnWin() && rPor.Width() )
     {
         // check if accessibility options allow blinking portions:
-        const ViewShell* pSh = GetTxtFrm()->getRootFrm()->GetCurrShell();
+        const SwViewShell* pSh = GetTxtFrm()->getRootFrm()->GetCurrShell();
         if ( pSh && ! pSh->GetAccessibilityOptions()->IsStopAnimatedText() &&
              ! pSh->IsPreview() )
         {
@@ -777,7 +777,7 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
 
     if( aRect.HasArea() && pIntersect )
     {
-        ::SwAlignRect( aRect, (ViewShell*)GetVsh() );
+        ::SwAlignRect( aRect, (SwViewShell*)GetVsh() );
 
         if ( GetOut()->IsClipRegion() )
         {

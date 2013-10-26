@@ -281,7 +281,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     // not found?
     if ( !pTxtNd )
     {
-        sTxt = ViewShell::GetShellRes()->aGetRefFld_RefItemNotFound;
+        sTxt = SwViewShell::GetShellRes()->aGetRefFld_RefItemNotFound;
         return ;
     }
     // where is the category name (e.g. "Illustration")?

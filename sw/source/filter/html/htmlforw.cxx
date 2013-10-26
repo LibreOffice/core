@@ -690,7 +690,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
 static void GetControlSize( const SdrObject& rSdrObj, Size& rSz,
                             SwDoc *pDoc )
 {
-    ViewShell *pVSh = 0;
+    SwViewShell *pVSh = 0;
     pDoc->GetEditShell( &pVSh );
     if( !pVSh )
         return;

@@ -67,7 +67,7 @@ class SwExtraPainter
     SwSaveClip aClip;
     SwRect aRect;
     const SwTxtFrm* pTxtFrm;
-    ViewShell *pSh;
+    SwViewShell *pSh;
     SwFont* pFnt;
     const SwLineNumberInfo &rLineInf;
     SwTwips nX;
@@ -78,7 +78,7 @@ class SwExtraPainter
     bool bLineNum;
     inline bool IsClipChg() { return aClip.IsChg(); }
 public:
-    SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
+    SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
         const SwLineNumberInfo &rLnInf, const SwRect &rRct,
         sal_Int16 eHor, bool bLnNm );
     ~SwExtraPainter() { delete pFnt; }
@@ -93,7 +93,7 @@ public:
 };
 
 
-SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
+SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
     const SwLineNumberInfo &rLnInf, const SwRect &rRct,
     sal_Int16 eHor, bool bLnNm )
     : aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 ),
@@ -294,7 +294,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
     {
         if( IsLocked() || IsHiddenNow() || !Prt().Height() )
             return;
-        ViewShell *pSh = getRootFrm()->GetCurrShell();
+        SwViewShell *pSh = getRootFrm()->GetCurrShell();
 
         SWAP_IF_NOT_SWAPPED( this )
         SwRect rOldRect( rRect );
@@ -444,7 +444,7 @@ SwRect SwTxtFrm::Paint()
 
 sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
 {
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if( pSh && ( pSh->GetViewOptions()->IsParagraph() || bInitFont ) )
     {
         bInitFont = false;
@@ -567,7 +567,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     ResetRepaint();
 
     // #i16816# tagged pdf support
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
 
     Num_Info aNumInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, 0, 0, *pSh->GetOut() );

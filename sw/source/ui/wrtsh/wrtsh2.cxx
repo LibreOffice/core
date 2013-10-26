@@ -357,7 +357,7 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
 }
 
 
-void LoadURL( ViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
+void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
               const OUString& rTargetFrameName )
 {
     OSL_ENSURE( !rURL.isEmpty(), "what should be loaded here?" );

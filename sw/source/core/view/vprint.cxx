@@ -77,10 +77,10 @@ class SwQueuedPaint
 {
 public:
     SwQueuedPaint *pNext;
-    ViewShell      *pSh;
+    SwViewShell      *pSh;
     SwRect          aRect;
 
-    SwQueuedPaint( ViewShell *pNew, const SwRect &rRect ) :
+    SwQueuedPaint( SwViewShell *pNew, const SwRect &rRect ) :
         pNext( 0 ),
         pSh( pNew ),
         aRect( rRect )
@@ -100,7 +100,7 @@ public:
     ~SwDrawViewSave();
 };
 
-void SwPaintQueue::Add( ViewShell *pNew, const SwRect &rNew )
+void SwPaintQueue::Add( SwViewShell *pNew, const SwRect &rNew )
 {
     SwQueuedPaint *pPt;
     if ( 0 != (pPt = pQueue) )
@@ -126,7 +126,7 @@ void SwPaintQueue::Repaint()
     {
         SwQueuedPaint *pPt = pQueue;
         do
-        {   ViewShell *pSh = pPt->pSh;
+        {   SwViewShell *pSh = pPt->pSh;
             SET_CURR_SHELL( pSh );
             if ( pSh->IsPreview() )
             {
@@ -150,7 +150,7 @@ void SwPaintQueue::Repaint()
     }
 }
 
-void SwPaintQueue::Remove( ViewShell *pSh )
+void SwPaintQueue::Remove( SwViewShell *pSh )
 {
     SwQueuedPaint *pPt;
     if ( 0 != (pPt = pQueue) )
@@ -172,7 +172,7 @@ void SwPaintQueue::Remove( ViewShell *pSh )
     }
 }
 
-void SetSwVisArea( ViewShell *pSh, const SwRect &rRect )
+void SetSwVisArea( SwViewShell *pSh, const SwRect &rRect )
 {
     OSL_ENSURE( !pSh->GetWin(), "Drucken mit Window?" );
     pSh->maVisArea = rRect;
@@ -192,7 +192,7 @@ void SetSwVisArea( ViewShell *pSh, const SwRect &rRect )
     pOut->SetMapMode( aMapMode );
 }
 
-void ViewShell::InitPrt( OutputDevice *pOutDev )
+void SwViewShell::InitPrt( OutputDevice *pOutDev )
 {
     // For printing we use a negative offset (exactly the offset of OutputSize).
     // This is necessary because the origin is in the upper left corner of the
@@ -215,7 +215,7 @@ void ViewShell::InitPrt( OutputDevice *pOutDev )
         mpOut = pOutDev;
 }
 
-void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
+void SwViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
 {
     OSL_ENSURE( mnStartAction, "missing an Action" );
     SET_CURR_SHELL( this );
@@ -254,7 +254,7 @@ void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
     }
 }
 
-void ViewShell::ChgAllPageSize( Size &rSz )
+void SwViewShell::ChgAllPageSize( Size &rSz )
 {
     OSL_ENSURE( mnStartAction, "missing an Action" );
     SET_CURR_SHELL( this );
@@ -288,7 +288,7 @@ void ViewShell::ChgAllPageSize( Size &rSz )
     }
 }
 
-void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
+void SwViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 {
     SET_CURR_SHELL( this );
 
@@ -318,9 +318,9 @@ void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
     pMyLayout->EndAllAction();
 }
 
-SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
+SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
-    OSL_ENSURE( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
+    OSL_ENSURE( this->IsA( TYPE(SwFEShell) ),"SwViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
     pPrtDoc->LockExpFlds();
 
@@ -438,7 +438,7 @@ sw_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage)
     return 0;
 }
 
-sal_Bool ViewShell::PrintOrPDFExport(
+sal_Bool SwViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
     SwPrintData const& rPrintData,
     sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
@@ -460,7 +460,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
     // It is implemented this way because PDF export calls this Prt function
     // once per page and we do not like to always have the temporary document
     // to be created that often here.
-    ViewShell *pShell = new ViewShell( *this, 0, pOutDev );
+    SwViewShell *pShell = new SwViewShell( *this, 0, pOutDev );
 
     SdrView *pDrawView = pShell->GetDrawView();
     if (pDrawView)
@@ -485,8 +485,8 @@ sal_Bool ViewShell::PrintOrPDFExport(
         const sal_Int32 nPage = rPrintData.GetRenderData().GetPagesToPrint()[ nRenderer ];
         OSL_ENSURE( nPage < 0 ||
             rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1,
-            "ViewShell::PrintOrPDFExport: nPage not valid" );
-        ViewShell *const pViewSh2 = (nPage < 0)
+            "SwViewShell::PrintOrPDFExport: nPage not valid" );
+        SwViewShell *const pViewSh2 = (nPage < 0)
                 ? rPrintData.GetRenderData().m_pPostItShell.get()// post-it page
                 : pShell; // a 'regular' page, not one from the post-it doc
 
@@ -520,16 +520,16 @@ sal_Bool ViewShell::PrintOrPDFExport(
     return sal_True;
 }
 
-void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
+void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect )
 {
     // For printing a shell is needed. Either the Doc already has one, than we
     // create a new view, or it has none, than we create the first view.
-    ViewShell *pSh;
+    SwViewShell *pSh;
     if( pDoc->GetCurrentViewShell() )
-        pSh = new ViewShell( *pDoc->GetCurrentViewShell(), 0, pOleOut,VSHELLFLAG_SHARELAYOUT );
+        pSh = new SwViewShell( *pDoc->GetCurrentViewShell(), 0, pOleOut,VSHELLFLAG_SHARELAYOUT );
     else
-        pSh = new ViewShell( *pDoc, 0, pOpt, pOleOut);
+        pSh = new SwViewShell( *pDoc, 0, pOpt, pOleOut);
 
     {
         SET_CURR_SHELL( pSh );
@@ -563,7 +563,7 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
 }
 
 /// Check if the DocNodesArray contains fields.
-sal_Bool ViewShell::IsAnyFieldInDoc() const
+sal_Bool SwViewShell::IsAnyFieldInDoc() const
 {
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = mpDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
@@ -600,7 +600,7 @@ SwDrawViewSave::~SwDrawViewSave()
 }
 
 // OD 09.01.2003 #i6467# - method also called for page preview
-void ViewShell::PrepareForPrint( const SwPrintData &rOptions )
+void SwViewShell::PrepareForPrint( const SwPrintData &rOptions )
 {
     mpOpt->SetGraphic ( sal_True == rOptions.bPrintGraphic );
     mpOpt->SetTable   ( sal_True == rOptions.bPrintTable );

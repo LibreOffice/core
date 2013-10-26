@@ -790,7 +790,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetBackground();
     sal_Bool bWeb = 0 != PTR_CAST(SwWebDocShell, this);
     SwPrintData aOpts;
-    ViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, pDev, aRect );
+    SwViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, pDev, aRect );
     pDev->Pop();
 
     if( pOrig )

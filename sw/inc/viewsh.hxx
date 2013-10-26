@@ -95,10 +95,10 @@ enum FrameControlType
 #define VSHELLFLAG_SHARELAYOUT          ((long)0x2)
 typedef boost::shared_ptr<SwRootFrm> SwRootFrmPtr;
 
-class SW_DLLPUBLIC ViewShell : public Ring
+class SW_DLLPUBLIC SwViewShell : public Ring
 {
-    friend void SetOutDev( ViewShell *pSh, OutputDevice *pOut );
-    friend void SetOutDevAndWin( ViewShell *pSh, OutputDevice *pOut,
+    friend void SetOutDev( SwViewShell *pSh, OutputDevice *pOut );
+    friend void SetOutDevAndWin( SwViewShell *pSh, OutputDevice *pOut,
                                  Window *pWin, sal_uInt16 nZoom );
 
     friend class SwViewImp;
@@ -109,7 +109,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
 
 
     // Set SwVisArea in order to enable clean formatting before printing.
-    friend void SetSwVisArea( ViewShell *pSh, const SwRect & );
+    friend void SetSwVisArea( SwViewShell *pSh, const SwRect & );
 
     static BitmapEx*    mpReplaceBmp;    ///< replaced display of still loaded images
     static BitmapEx*    mpErrorBmp;      ///< error display of missed images
@@ -124,7 +124,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
     SwRect        maInvalidRect;
 
     SfxViewShell *mpSfxViewShell;
-    SwViewImp    *mpImp;             // Core-internals of ViewShell.
+    SwViewImp    *mpImp;             // Core-internals of SwViewShell.
                                     // The pointer is never 0.
 
     Window       *mpWin;              ///< = 0 during printing or pdf export
@@ -147,7 +147,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
     sal_Bool  mbViewLocked      :1;  // Lock visible range;
                                     // in this case MakeVisible is ineffectual.
     sal_Bool  mbInEndAction     :1;  // Avoid problems, cf. viewsh.cxx.
-    sal_Bool  mbPreview         :1;  // If sal_True it is a Preview-ViewShell.
+    sal_Bool  mbPreview         :1;  // If sal_True it is a Preview-SwViewShell.
     sal_Bool  mbFrameView       :1;  // If sal_True it is a  (HTML-)Frame.
     sal_Bool  mbEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
                                     // of scrollbars.
@@ -343,7 +343,7 @@ public:
     inline Window* GetWin()    const { return mpWin; }
     inline OutputDevice* GetOut()     const { return mpOut; }
 
-    static inline sal_Bool IsLstEndAction() { return ViewShell::mbLstAct; }
+    static inline sal_Bool IsLstEndAction() { return SwViewShell::mbLstAct; }
 
     // Change of all page descriptors.
     void   ChgAllPageOrientation( sal_uInt16 eOri );
@@ -429,9 +429,9 @@ public:
     static ShellResource* GetShellRes();
 
     static void           SetCareWin( Window* pNew );
-    static Window*        GetCareWin(ViewShell& rVSh)
+    static Window*        GetCareWin(SwViewShell& rVSh)
                           { return mpCareWindow ? mpCareWindow : CareChildWin(rVSh); }
-    static Window*        CareChildWin(ViewShell& rVSh);
+    static Window*        CareChildWin(SwViewShell& rVSh);
 
     inline SfxViewShell   *GetSfxViewShell() { return mpSfxViewShell; }
     inline void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }
@@ -468,7 +468,7 @@ public:
 
     // DrawView may be used at UI.
           SdrView *GetDrawView();
-    const SdrView *GetDrawView() const { return ((ViewShell*)this)->GetDrawView(); }
+    const SdrView *GetDrawView() const { return ((SwViewShell*)this)->GetDrawView(); }
 
     // Take care that MarkList is up-to-date in any case (Bug 57153).
     SdrView *GetDrawViewWithValidMarkList();
@@ -542,12 +542,12 @@ public:
 
     SwAccessibleMap* GetAccessibleMap();
 
-    ViewShell( ViewShell&, Window *pWin = 0, OutputDevice *pOut = 0,
+    SwViewShell( SwViewShell&, Window *pWin = 0, OutputDevice *pOut = 0,
                 long nFlags = 0 );
-    ViewShell( SwDoc& rDoc, Window *pWin,
+    SwViewShell( SwDoc& rDoc, Window *pWin,
                const SwViewOption *pOpt = 0, OutputDevice *pOut = 0,
                long nFlags = 0 );
-    virtual ~ViewShell();
+    virtual ~SwViewShell();
 
     sal_Int32 GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const;
 
@@ -556,7 +556,7 @@ public:
     static const BitmapEx& GetReplacementBitmap( bool bIsErrorState );
     static void DeleteReplacementBitmaps();
 
-    const SwPostItMgr* GetPostItMgr() const { return (const_cast<ViewShell*>(this))->GetPostItMgr(); }
+    const SwPostItMgr* GetPostItMgr() const { return (const_cast<SwViewShell*>(this))->GetPostItMgr(); }
     SwPostItMgr* GetPostItMgr();
 
     /// Acts both for headers / footers, depending on the bShow(Header|Footer)Separator flags
@@ -573,43 +573,43 @@ public:
 class CurrShell
 {
 public:
-    ViewShell *pPrev;
+    SwViewShell *pPrev;
     SwRootFrm *pRoot;
 
-    CurrShell( ViewShell *pNew );
+    CurrShell( SwViewShell *pNew );
     ~CurrShell();
 };
 
-inline void ViewShell::ResetInvalidRect()
+inline void SwViewShell::ResetInvalidRect()
 {
    maInvalidRect.Clear();
 }
 
-inline void ViewShell::StartAction()
+inline void SwViewShell::StartAction()
 {
     if ( !mnStartAction++ )
         ImplStartAction();
 }
-inline void ViewShell::EndAction( const sal_Bool bIdleEnd )
+inline void SwViewShell::EndAction( const sal_Bool bIdleEnd )
 {
     if( 0 == (mnStartAction - 1) )
         ImplEndAction( bIdleEnd );
     --mnStartAction;
 }
 
-inline void ViewShell::LockPaint()
+inline void SwViewShell::LockPaint()
 {
     if ( !mnLockPaint++ )
         ImplLockPaint();
 }
-inline void ViewShell::UnlockPaint( sal_Bool bVirDev )
+inline void SwViewShell::UnlockPaint( sal_Bool bVirDev )
 {
     if ( 0 == --mnLockPaint )
         ImplUnlockPaint( bVirDev );
 }
-inline const SfxItemPool& ViewShell::GetAttrPool() const
+inline const SfxItemPool& SwViewShell::GetAttrPool() const
 {
-    return ((ViewShell*)this)->GetAttrPool();
+    return ((SwViewShell*)this)->GetAttrPool();
 }
 
 

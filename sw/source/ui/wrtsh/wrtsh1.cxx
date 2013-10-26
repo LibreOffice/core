@@ -1698,7 +1698,7 @@ void SwWrtShell::ApplyViewOptions( const SwViewOption &rOpt )
 void SwWrtShell::SetReadonlyOption(sal_Bool bSet)
 {
     GetView().GetEditWin().GetFrameControlsManager().SetReadonlyControls( bSet );
-    ViewShell::SetReadonlyOption( bSet );
+    SwViewShell::SetReadonlyOption( bSet );
 }
 
 // Switch on/off header or footer of a page style - if an empty name is
@@ -1776,7 +1776,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
 
 void SwWrtShell::SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow )
 {
-    ViewShell::SetShowHeaderFooterSeparator( eControl, bShow );
+    SwViewShell::SetShowHeaderFooterSeparator( eControl, bShow );
     if ( !bShow )
         GetView().GetEditWin().GetFrameControlsManager().HideControls( eControl );
 }

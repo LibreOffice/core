@@ -3996,7 +3996,7 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     else
     {
         sal_uInt16 nPos = mrReader.rDoc.MakePageDesc(
-            ViewShell::GetShellRes()->GetPageDescName(mnDesc, ShellResource::NORMAL_PAGE),
+            SwViewShell::GetShellRes()->GetPageDescName(mnDesc, ShellResource::NORMAL_PAGE),
             0, false);
         rIter->mpPage = &mrReader.rDoc.GetPageDesc(nPos);
     }

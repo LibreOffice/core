@@ -493,7 +493,7 @@ void    SwOutlineSettingsTabPage::Update()
             if(pFirstFmt)
                 m_pCharFmtLB->SelectEntry(pFirstFmt->GetName());
             else
-                m_pCharFmtLB->SelectEntry( ViewShell::GetShellRes()->aStrNone );
+                m_pCharFmtLB->SelectEntry( SwViewShell::GetShellRes()->aStrNone );
         }
         else
             m_pCharFmtLB->SetNoSelection();
@@ -527,7 +527,7 @@ void    SwOutlineSettingsTabPage::Update()
         if(pFmt)
             m_pCharFmtLB->SelectEntry(pFmt->GetName());
         else
-            m_pCharFmtLB->SelectEntry( ViewShell::GetShellRes()->aStrNone );
+            m_pCharFmtLB->SelectEntry( SwViewShell::GetShellRes()->aStrNone );
 
         if(nTmpLevel)
         {
@@ -695,7 +695,7 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFmtHdl)
 {
     OUString sEntry = m_pCharFmtLB->GetSelectEntry();
     sal_uInt16 nMask = 1;
-    bool bFormatNone = sEntry == ViewShell::GetShellRes()->aStrNone;
+    bool bFormatNone = sEntry == SwViewShell::GetShellRes()->aStrNone;
     SwCharFmt* pFmt = 0;
     if(!bFormatNone)
     {
@@ -791,7 +791,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
 
     // collect char styles
     m_pCharFmtLB->Clear();
-    m_pCharFmtLB->InsertEntry( ViewShell::GetShellRes()->aStrNone );
+    m_pCharFmtLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
 
     // char styles
     ::FillCharStyleListBox(*m_pCharFmtLB,

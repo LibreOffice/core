@@ -970,7 +970,7 @@ void SwDoc::UpdateLinks( bool bUI )
             SFX_CREATE_MODE_PREVIEW != eMode &&
             !GetDocShell()->IsPreview() )
         {
-            ViewShell* pVSh = 0;
+            SwViewShell* pVSh = 0;
             bool bAskUpdate = nLinkMode == MANUAL;
             bool bUpdate = true;
             switch(nUpdateDocMode)
@@ -986,7 +986,7 @@ void SwDoc::UpdateLinks( bool bUI )
                 Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
                 if( GetCurrentViewShell() && !GetEditShell( &pVSh ) && !pVSh )
                 {
-                    ViewShell aVSh( *this, 0, 0 );
+                    SwViewShell aVSh( *this, 0, 0 );
 
                     SET_CURR_SHELL( &aVSh );
                     GetLinkManager().UpdateAllLinks( bAskUpdate , true, false, pDlgParent );
@@ -1041,7 +1041,7 @@ SwDoc::GetIDocumentUndoRedo() const
 
 void SwDoc::InitTOXTypes()
 {
-   ShellResource* pShellRes = ViewShell::GetShellRes();
+   ShellResource* pShellRes = SwViewShell::GetShellRes();
    SwTOXType * pNew = new SwTOXType(TOX_CONTENT,   pShellRes->aTOXContentName        );
    mpTOXTypes->push_back( pNew );
    pNew = new SwTOXType(TOX_INDEX,                 pShellRes->aTOXIndexName  );

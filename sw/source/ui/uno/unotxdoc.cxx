@@ -405,7 +405,7 @@ SwXTextDocument::~SwXTextDocument()
     delete m_pPrintUIOptions;
     if (m_pRenderData && m_pRenderData->IsViewOptionAdjust())
     {   // rhbz#827695: this can happen if the last page is not printed
-        // the ViewShell has been deleted already by SwView::~SwView
+        // the SwViewShell has been deleted already by SwView::~SwView
         // FIXME: replace this awful implementation of XRenderable with
         // something less insane that has its own view
         m_pRenderData->ViewOptionAdjustCrashPreventionKludge();
@@ -2230,7 +2230,7 @@ void SwXTextDocument::refresh(void) throw( RuntimeException )
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw RuntimeException();
-    ViewShell *pViewShell = pDocShell->GetWrtShell();
+    SwViewShell *pViewShell = pDocShell->GetWrtShell();
     NotifyRefreshListeners();
     if(pViewShell)
         pViewShell->CalcLayout();
@@ -2433,7 +2433,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
 
                 rpView = GuessViewShell( bIsSwSrcView );
             }
-            OSL_ENSURE( rpView, "ViewShell missing" );
+            OSL_ENSURE( rpView, "SwViewShell missing" );
             // the view shell should be SwView for documents PDF export.
             // for the page preview no selection should be possible
             // (the export dialog does not allow for this option)
@@ -2460,7 +2460,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             }
             else
             {
-                OSL_FAIL("unexpected ViewShell" );
+                OSL_FAIL("unexpected SwViewShell" );
             }
         }
     }
@@ -2537,8 +2537,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     {
         SwDocShell *pRenderDocShell = pDoc->GetDocShell();
 
-        // TODO/mba: we really need a generic way to get the ViewShell!
-        ViewShell* pViewShell = 0;
+        // TODO/mba: we really need a generic way to get the SwViewShell!
+        SwViewShell* pViewShell = 0;
         SwView* pSwView = PTR_CAST(SwView, pView);
         if ( pSwView )
         {
@@ -2614,7 +2614,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             }
 
             // #122919# Force field update before PDF export
-            pViewShell->ViewShell::UpdateFlds(sal_True);
+            pViewShell->SwViewShell::UpdateFlds(sal_True);
             if( bStateChanged )
                 pRenderDocShell->EnableSetModified( sal_True );
 
@@ -2710,8 +2710,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if (0 > nRenderer)
         throw IllegalArgumentException();
 
-    // TODO/mba: we really need a generic way to get the ViewShell!
-    ViewShell* pVwSh = 0;
+    // TODO/mba: we really need a generic way to get the SwViewShell!
+    SwViewShell* pVwSh = 0;
     SwView* pSwView = PTR_CAST(SwView, pView);
     if ( pSwView )
         pVwSh = pSwView->GetWrtShellPtr();
@@ -2996,10 +2996,10 @@ void SAL_CALL SwXTextDocument::render(
                 //!! (check for SwView first as in GuessViewShell) !!
                 OSL_ENSURE( pView, "!! view missing !!" );
                 const TypeId aSwViewTypeId = TYPE(SwView);
-                ViewShell* pVwSh = 0;
+                SwViewShell* pVwSh = 0;
                 if (pView)
                 {
-                    // TODO/mba: we really need a generic way to get the ViewShell!
+                    // TODO/mba: we really need a generic way to get the SwViewShell!
                     SwView* pSwView = PTR_CAST(SwView, pView);
                     if ( pSwView )
                         pVwSh = pSwView->GetWrtShellPtr();
@@ -3940,7 +3940,7 @@ void SwXDocumentPropertyHelper::onChange()
 }
 
 SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(
-            ViewShell& rSh, const SwViewOption &rViewOptions)
+            SwViewShell& rSh, const SwViewOption &rViewOptions)
     : m_pShell(&rSh)
     , m_aOldViewOptions( rViewOptions )
 {

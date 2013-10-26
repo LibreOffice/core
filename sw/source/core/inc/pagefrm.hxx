@@ -95,7 +95,7 @@ class SwPageFrm: public SwFtnBossFrm
     */
 
     static void GetHorizontalShadowRect( const SwRect& _rPageRect,
-                                     const ViewShell*    _pViewShell,
+                                     const SwViewShell*    _pViewShell,
                                      SwRect&       _orBottomShadowRect,
                                      bool bPaintLeftShadow,
                                      bool bPaintRightShadow,
@@ -111,7 +111,7 @@ public:
     SwPageFrm( SwFrmFmt*, SwFrm*, SwPageDesc* );
     ~SwPageFrm();
 
-    //public, damit die ViewShell beim Umschalten vom BrowseMode darauf
+    //public, damit die SwViewShell beim Umschalten vom BrowseMode darauf
     //zugreifen kann.
     void PrepareHeader();   //Kopf-/Fusszeilen anlegen/entfernen.
     void PrepareFooter();
@@ -250,7 +250,7 @@ public:
         has to be generated.
     */
     void PaintMarginArea( const SwRect& _rOutputRect,
-                          ViewShell* _pViewShell ) const;
+                          SwViewShell* _pViewShell ) const;
 
     /** paint page border and shadow
 
@@ -275,7 +275,7 @@ public:
         shadow with & position).
     */
     static void PaintBorderAndShadow( const SwRect& _rPageRect,
-                                      const ViewShell*    _pViewShell,
+                                      const SwViewShell*    _pViewShell,
                                       bool bPaintLeftShadow,
                                       bool bPaintRightShadow,
                                       bool bRightSidebar );
@@ -296,15 +296,15 @@ public:
         rectangle for the given page rectangle
     */
     static void GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
-                                             const ViewShell*    _pViewShell,
+                                             const SwViewShell*    _pViewShell,
                                              SwRect& _orBorderAndShadowBoundRect,
                                              const bool bLeftShadow,
                                              const bool bRightShadow,
                                              const bool bRightSidebar
                                             );
 
-    static void PaintNotesSidebar(const SwRect& _rPageRect, ViewShell* _pViewShell, sal_uInt16 nPageNum, bool bRight);
-    static void PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown);
+    static void PaintNotesSidebar(const SwRect& _rPageRect, SwViewShell* _pViewShell, sal_uInt16 nPageNum, bool bRight);
+    static void PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, SwViewShell* _pViewShell, const Color aColorUp, const Color aColorDown);
     /**
         asks the page on which side a margin should be shown, e.g for notes
         returns true for left side, false for right side
@@ -329,7 +329,7 @@ public:
     // return font used to paint the "empty page" string
     static const Font& GetEmptyPageFont();
 
-    static SwTwips GetSidebarBorderWidth( const ViewShell* );
+    static SwTwips GetSidebarBorderWidth( const SwViewShell* );
 };
 
 inline SwCntntFrm *SwPageFrm::FindFirstBodyCntnt()

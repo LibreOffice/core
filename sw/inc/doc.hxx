@@ -172,7 +172,7 @@ class SwTxtFmtColls;
 class SwURLStateChanged;
 class SwUnoCrsr;
 class SwUnoCrsrTbl;
-class ViewShell;
+class SwViewShell;
 class _SetGetExpFld;
 class SwDrawContact;
 class SwLayouter;
@@ -314,7 +314,7 @@ class SW_DLLPUBLIC SwDoc :
     SwTOXTypes      *mpTOXTypes;         ///< Tables/indices
     SwDefTOXBase_Impl * mpDefTOXBases;   ///< defaults of SwTOXBase's
 
-    ViewShell       *mpCurrentView;  ///< SwDoc should get a new member mpCurrentView
+    SwViewShell       *mpCurrentView;  ///< SwDoc should get a new member mpCurrentView
     SdrModel        *mpDrawModel;        ///< StarView Drawing
 
     SwDocUpdtFld    *mpUpdtFlds;         ///< Struct for updating fields
@@ -673,7 +673,7 @@ private:
                         const SwTxtFmtColl* pSplitColl, int nOutlineLevel = 0 );
 
     /// Update charts of given table.
-    void _UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const;
+    void _UpdateCharts( const SwTable& rTbl, SwViewShell& rVSh ) const;
 
     sal_Bool _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
                                 sal_uInt16 nMode );
@@ -946,15 +946,15 @@ public:
 
     /** IDocumentLayoutAccess
     */
-    virtual void SetCurrentViewShell( ViewShell* pNew );
+    virtual void SetCurrentViewShell( SwViewShell* pNew );
     virtual SwLayouter* GetLayouter();
     virtual const SwLayouter* GetLayouter() const;
     virtual void SetLayouter( SwLayouter* pNew );
     virtual SwFrmFmt* MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet );
     virtual void DelLayoutFmt( SwFrmFmt *pFmt );
     virtual SwFrmFmt* CopyLayoutFmt( const SwFrmFmt& rSrc, const SwFmtAnchor& rNewAnchor, bool bSetTxtFlyAtt, bool bMakeFrms );
-    virtual const ViewShell *GetCurrentViewShell() const;
-    virtual ViewShell *GetCurrentViewShell(); ///< It must be able to communicate to a ViewShell.This is going to be removerd later.
+    virtual const SwViewShell *GetCurrentViewShell() const;
+    virtual SwViewShell *GetCurrentViewShell(); ///< It must be able to communicate to a SwViewShell.This is going to be removerd later.
     virtual const SwRootFrm *GetCurrentLayout() const;
     virtual SwRootFrm *GetCurrentLayout();
     virtual bool HasLayout() const;
@@ -1733,8 +1733,8 @@ public:
     const SwAttrPool& GetAttrPool() const   { return *mpAttrPool; }
           SwAttrPool& GetAttrPool()         { return *mpAttrPool; }
 
-    /// Search an EditShell or, if appropriate, a ViewShell via layout.
-    SwEditShell* GetEditShell( ViewShell** ppSh = 0 ) const;
+    /// Search an EditShell or, if appropriate, a SwViewShell via layout.
+    SwEditShell* GetEditShell( SwViewShell** ppSh = 0 ) const;
     ::sw::IShellCursorSupplier * GetIShellCursorSupplier();
 
     /// OLE 2.0-notification.

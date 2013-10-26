@@ -28,7 +28,7 @@
 
 class SwAttrSet;
 class IDocumentSettingAccess;
-class ViewShell;
+class SwViewShell;
 class SfxPoolItem;
 extern const sal_uInt8 StackPos[];
 
@@ -89,7 +89,7 @@ private:
     SwAttrStack aAttrStack[ NUM_ATTRIBUTE_STACKS ]; // stack collection
     const SfxPoolItem* pDefaultArray[ NUM_DEFAULT_VALUES ];
     const IDocumentSettingAccess* mpIDocumentSettingAccess;
-    const ViewShell* mpShell;
+    const SwViewShell* mpShell;
 
     // This is the base font for the paragraph. It is stored in order to have
     // a template, if we have to restart the attribute evaluation
@@ -116,10 +116,10 @@ public:
     // set default attributes to values in rAttrSet or from cache
     void Init( const SwAttrSet& rAttrSet,
                const IDocumentSettingAccess& rIDocumentSettingAccess,
-               const ViewShell* pShell );
+               const SwViewShell* pShell );
     void Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAttrSet,
                const IDocumentSettingAccess& rIDocumentSettingAccess,
-               const ViewShell* pShell, SwFont& rFnt,
+               const SwViewShell* pShell, SwFont& rFnt,
                sal_Bool bVertLayout );
 
     // remove everything from internal stacks, keep default data
@@ -141,7 +141,7 @@ public:
     inline void ResetFont( SwFont& rFnt ) const;
     inline const SwFont* GetFont() const;
 
-    void GetDefaultAscentAndHeight(ViewShell* pShell,
+    void GetDefaultAscentAndHeight(SwViewShell* pShell,
                                    OutputDevice& rOut,
                                    sal_uInt16& nAscent,
                                    sal_uInt16& nHeight) const;

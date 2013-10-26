@@ -1721,7 +1721,7 @@ sal_Bool SwHTMLParser::FileDownload( const OUString& rURL,
                                  OUString& rStr )
 {
     // View wegschmeissen (wegen Reschedule)
-    ViewShell *pOldVSh = CallEndAction();
+    SwViewShell *pOldVSh = CallEndAction();
 
     // Ein Medium anlegen
     SfxMedium aDLMedium( rURL, STREAM_READ | STREAM_SHARE_DENYWRITE );
@@ -1754,8 +1754,8 @@ sal_Bool SwHTMLParser::FileDownload( const OUString& rURL,
     }
 
     // recreate View
-    ViewShell *const pVSh = CallStartAction( pOldVSh );
-    OSL_ENSURE( pOldVSh == pVSh, "FileDownload: ViewShell changed on us" );
+    SwViewShell *const pVSh = CallStartAction( pOldVSh );
+    OSL_ENSURE( pOldVSh == pVSh, "FileDownload: SwViewShell changed on us" );
     (void) pVSh;
 
     return pStream!=0;

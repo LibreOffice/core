@@ -49,12 +49,12 @@ SwPageFrm const*
 sw_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage); // vprint.cxx
 
 // OD 12.12.2002 #103492#
-SwPagePreviewLayout* ViewShell::PagePreviewLayout()
+SwPagePreviewLayout* SwViewShell::PagePreviewLayout()
 {
     return Imp()->PagePreviewLayout();
 }
 
-void ViewShell::ShowPreviewSelection( sal_uInt16 nSelPage )
+void SwViewShell::ShowPreviewSelection( sal_uInt16 nSelPage )
 {
     Imp()->InvalidateAccessiblePreviewSelection( nSelPage );
 }
@@ -63,7 +63,7 @@ void ViewShell::ShowPreviewSelection( sal_uInt16 nSelPage )
 
     OD 09.01.2003 #i6467#
 */
-void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
+void SwViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
 {
     if ( !IsPreview() )
     {
@@ -79,7 +79,7 @@ void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
 /// print brochure
 // OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
 // for a page to be printed.
-void ViewShell::PrintProspect(
+void SwViewShell::PrintProspect(
     OutputDevice *pOutDev,
     const SwPrintData &rPrintData,
     sal_Int32 nRenderer // the index in the vector of prospect pages to be printed
@@ -101,7 +101,7 @@ void ViewShell::PrintProspect(
     OSL_ENSURE( rPagesToPrint.second == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
 
     // create a new shell for the printer
-    ViewShell aShell( *this, 0, pPrinter );
+    SwViewShell aShell( *this, 0, pPrinter );
 
     SET_CURR_SHELL( &aShell );
 

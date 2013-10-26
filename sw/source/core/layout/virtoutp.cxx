@@ -167,7 +167,7 @@ sal_Bool SwLayVout::DoesFit( const Size &rNew )
 ///     output is used.
 ///     <aRect> contains the rectangle that represents the area the virtual
 ///     output device is used for and that is flushed at the end.
-void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, sal_Bool bOn )
+void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, sal_Bool bOn )
 {
     Flush();
 

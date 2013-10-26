@@ -143,7 +143,7 @@ static const char cUserSuffix[] = " (user)";
 
 static void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
 {
-    ShellResource* pShellRes = ViewShell::GetShellRes();
+    ShellResource* pShellRes = SwViewShell::GetShellRes();
 
     if(rTmp.equals(pShellRes->aTOXUserName))
     {
@@ -160,7 +160,7 @@ static void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
 static void
 lcl_ConvertTOUNameToUserName(OUString& rTmp)
 {
-    ShellResource* pShellRes = ViewShell::GetShellRes();
+    ShellResource* pShellRes = SwViewShell::GetShellRes();
     if (rTmp.equalsAscii(cUserDefined))
     {
         rTmp = pShellRes->aTOXUserName;

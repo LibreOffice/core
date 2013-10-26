@@ -1123,7 +1123,7 @@ sal_Bool SwGrfNode::IsSelected() const
     if( pESh )
     {
         const SwNode* pN = this;
-        const ViewShell* pV = pESh;
+        const SwViewShell* pV = pESh;
         do {
             if( pV->ISA( SwEditShell ) && pN == &((SwCrsrShell*)pV)
                                 ->GetCrsr()->GetPoint()->nNode.GetNode() )
@@ -1132,7 +1132,7 @@ sal_Bool SwGrfNode::IsSelected() const
                 break;
             }
         }
-        while( pESh != ( pV = (ViewShell*)pV->GetNext() ));
+        while( pESh != ( pV = (SwViewShell*)pV->GetNext() ));
     }
     return bRet;
 }

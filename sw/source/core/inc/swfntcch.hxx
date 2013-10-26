@@ -26,7 +26,7 @@
 #include "swcache.hxx"
 #include "swfont.hxx"
 
-class ViewShell;
+class SwViewShell;
 class SfxPoolItem;
 
 /*************************************************************************
@@ -63,7 +63,7 @@ private:
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFontObj)
 
-    SwFontObj( const void* pOwner, ViewShell *pSh );
+    SwFontObj( const void* pOwner, SwViewShell *pSh );
 
     virtual ~SwFontObj();
 
@@ -79,12 +79,12 @@ public:
 
 class SwFontAccess : public SwCacheAccess
 {
-    ViewShell *pShell;
+    SwViewShell *pShell;
 protected:
     virtual SwCacheObj *NewObj( );
 
 public:
-    SwFontAccess( const void *pOwner, ViewShell *pSh );
+    SwFontAccess( const void *pOwner, SwViewShell *pSh );
     SwFontObj *Get();
 };
 

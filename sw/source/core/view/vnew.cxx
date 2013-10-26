@@ -36,7 +36,7 @@
 #include <accessibilityoptions.hxx>
 #include <switerator.hxx>
 
-void ViewShell::Init( const SwViewOption *pNewOpt )
+void SwViewShell::Init( const SwViewOption *pNewOpt )
 {
     mbDocSizeChgd = sal_False;
 
@@ -114,7 +114,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
         // Here's the code which disables the usage of "multiple" layouts at the moment
         // If the problems with controls and groups objects are solved,
         // this code can be removed...
-        ViewShell *pCurrShell = GetDoc()->GetCurrentViewShell();
+        SwViewShell *pCurrShell = GetDoc()->GetCurrentViewShell();
         if( pCurrShell )
             mpLayout = pCurrShell->mpLayout;
         // end of "disable multiple layouts"
@@ -140,7 +140,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 }
 
 /// CTor for the first Shell.
-ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
+SwViewShell::SwViewShell( SwDoc& rDocument, Window *pWindow,
                         const SwViewOption *pNewOpt, OutputDevice *pOutput,
                         long nFlags )
     :
@@ -167,7 +167,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     maPrePostMapMode()
 {
     // OD 2004-06-01 #i26791# - in order to suppress event handling in
-    // <SwDrawContact::Changed> during contruction of <ViewShell> instance
+    // <SwDrawContact::Changed> during contruction of <SwViewShell> instance
     mbInConstructor = true;
 
     mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView =
@@ -184,7 +184,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     mpOut = pOutput;
 
     // OD 28.03.2003 #108470# - initialize print preview layout after layout
-    // is created in <ViewShell::Init(..)> - called above.
+    // is created in <SwViewShell::Init(..)> - called above.
     if ( mbPreview )
     {
         // OD 12.12.2002 #103492# - init page preview layout
@@ -216,7 +216,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
 }
 
 /// CTor for further Shells on a document.
-ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
+SwViewShell::SwViewShell( SwViewShell& rShell, Window *pWindow,
                         OutputDevice *pOutput, long nFlags ) :
     Ring( &rShell ),
     maBrowseBorder( rShell.maBrowseBorder ),
@@ -242,7 +242,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     maPrePostMapMode()
 {
     // OD 2004-06-01 #i26791# - in order to suppress event handling in
-    // <SwDrawContact::Changed> during contruction of <ViewShell> instance
+    // <SwDrawContact::Changed> during contruction of <SwViewShell> instance
     mbInConstructor = true;
 
     mbPaintWorks = mbEnableSmooth = sal_True;
@@ -286,7 +286,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
 
 }
 
-ViewShell::~ViewShell()
+SwViewShell::~SwViewShell()
 {
     {
         SET_CURR_SHELL( this );
@@ -351,29 +351,29 @@ ViewShell::~ViewShell()
         GetLayout()->DeRegisterShell( this );
         if(mpDoc->GetCurrentViewShell()==this)
             mpDoc->SetCurrentViewShell( this->GetNext()!=this ?
-            (ViewShell*)this->GetNext() : NULL );
+            (SwViewShell*)this->GetNext() : NULL );
     }
 
     delete mpTmpRef;
     delete mpAccOptions;
 }
 
-sal_Bool ViewShell::HasDrawView() const
+sal_Bool SwViewShell::HasDrawView() const
 {
     return Imp() ? Imp()->HasDrawView() : 0;
 }
 
-void ViewShell::MakeDrawView()
+void SwViewShell::MakeDrawView()
 {
     Imp()->MakeDrawView( );
 }
 
-SdrView* ViewShell::GetDrawView()
+SdrView* SwViewShell::GetDrawView()
 {
     return Imp()->GetDrawView();
 }
 
-SdrView* ViewShell::GetDrawViewWithValidMarkList()
+SdrView* SwViewShell::GetDrawViewWithValidMarkList()
 {
     SwDrawView* pDView = Imp()->GetDrawView();
     pDView->ValidateMarkList();

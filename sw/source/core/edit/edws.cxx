@@ -69,39 +69,39 @@ void SwEditShell::SetUndoNoResetModified()
 
 void SwEditShell::StartAllAction()
 {
-    ViewShell *pSh = this;
+    SwViewShell *pSh = this;
     do {
         if( pSh->IsA( TYPE( SwEditShell ) ) )
             ((SwEditShell*)pSh)->StartAction();
         else
             pSh->StartAction();
-        pSh = (ViewShell *)pSh->GetNext();
+        pSh = (SwViewShell *)pSh->GetNext();
     } while(pSh != this);
 }
 
 void SwEditShell::EndAllAction()
 {
-    ViewShell *pSh = this;
+    SwViewShell *pSh = this;
     do {
         if( pSh->IsA( TYPE( SwEditShell ) ) )
             ((SwEditShell*)pSh)->EndAction();
         else
             pSh->EndAction();
-        pSh = (ViewShell *)pSh->GetNext();
+        pSh = (SwViewShell *)pSh->GetNext();
     } while(pSh != this);
 }
 
 void SwEditShell::CalcLayout()
 {
     StartAllAction();
-    ViewShell::CalcLayout();
+    SwViewShell::CalcLayout();
 
-    ViewShell *pSh = this;
+    SwViewShell *pSh = this;
     do
     {
         if ( pSh->GetWin() )
             pSh->GetWin()->Invalidate();
-        pSh = (ViewShell*)pSh->GetNext();
+        pSh = (SwViewShell*)pSh->GetNext();
 
     } while ( pSh != this );
 

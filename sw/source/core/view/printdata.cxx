@@ -60,7 +60,7 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
     SwViewOption  aViewOpt( *pViewOpt );
     aViewOpt.SetOnlineSpell( sal_False );
 
-    m_pPostItShell.reset(new ViewShell(*new SwDoc, 0, &aViewOpt, pOutDev));
+    m_pPostItShell.reset(new SwViewShell(*new SwDoc, 0, &aViewOpt, pOutDev));
 }
 
 void SwRenderData::DeletePostItData()
@@ -84,13 +84,13 @@ void SwRenderData::SetTempDocShell(SfxObjectShellLock const& xShell)
     m_xTempDocShell = xShell;
 }
 
-bool SwRenderData::NeedNewViewOptionAdjust( const ViewShell& rCompare ) const
+bool SwRenderData::NeedNewViewOptionAdjust( const SwViewShell& rCompare ) const
 {
     return m_pViewOptionAdjust ? ! m_pViewOptionAdjust->checkShell( rCompare ) : true;
 }
 
 void SwRenderData::ViewOptionAdjustStart(
-        ViewShell &rSh, const SwViewOption &rViewOptions)
+        SwViewShell &rSh, const SwViewOption &rViewOptions)
 {
     if (m_pViewOptionAdjust)
     {

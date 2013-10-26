@@ -159,7 +159,7 @@ class SW_DLLPUBLIC SwEditShell: public SwCrsrShell
 
     SW_DLLPRIVATE void _SetSectionAttr( SwSectionFmt& rSectFmt, const SfxItemSet& rSet );
 
-    using ViewShell::UpdateFlds;
+    using SwViewShell::UpdateFlds;
     using SwModify::GetInfo;
 
 public:

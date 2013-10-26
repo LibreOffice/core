@@ -243,7 +243,7 @@ void SwDoGetCapitalBreak::Do()
  *                    SwFont::GetCapitalBreak()
  *************************************************************************/
 
-xub_StrLen SwFont::GetCapitalBreak( ViewShell* pSh, const OutputDevice* pOut,
+xub_StrLen SwFont::GetCapitalBreak( SwViewShell* pSh, const OutputDevice* pOut,
     const SwScriptInfo* pScript, const OUString& rTxt, long const nTextWidth,
     const xub_StrLen nIdx, const xub_StrLen nLen )
 {

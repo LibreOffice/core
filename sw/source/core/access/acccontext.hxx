@@ -107,11 +107,11 @@ protected:
     const SwAccessibleMap *GetMap() const { return pMap; }
 
     /** convenience method to get the SwViewShell through accessibility map */
-    inline ViewShell* GetShell()
+    inline SwViewShell* GetShell()
     {
         return GetMap()->GetShell();
     }
-    inline const ViewShell* GetShell() const
+    inline const SwViewShell* GetShell() const
     {
         return GetMap()->GetShell();
     }

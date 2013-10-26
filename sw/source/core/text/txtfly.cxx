@@ -259,7 +259,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         delete pPolyPolygon;
         // UPPER_LOWER_TEST
 #ifdef DBG_UTIL
-        const ViewShell* pTmpViewShell = pFmt->GetDoc()->GetCurrentViewShell();
+        const SwViewShell* pTmpViewShell = pFmt->GetDoc()->GetCurrentViewShell();
         if( pTmpViewShell )
         {
             sal_Bool bT2 = pTmpViewShell->GetViewOptions()->IsTest2();

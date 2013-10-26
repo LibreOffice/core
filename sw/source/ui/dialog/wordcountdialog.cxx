@@ -43,7 +43,7 @@ IMPL_LINK_NOARG(SwWordCountFloatDlg, CloseHdl)
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {
-    ViewShell::SetCareWin( 0 );
+    SwViewShell::SetCareWin( 0 );
 }
 
 namespace

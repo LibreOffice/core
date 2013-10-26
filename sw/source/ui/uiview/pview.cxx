@@ -1173,7 +1173,7 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
             pOldSh = pF->GetViewShell();
     }
 
-    ViewShell *pVS, *pNew;
+    SwViewShell *pVS, *pNew;
 
     if( pOldSh && pOldSh->IsA( TYPE( SwPagePreview ) ) )
         pVS = ((SwPagePreview*)pOldSh)->GetViewShell();
@@ -1207,9 +1207,9 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     }
 
     if( pVS )
-        pNew = new ViewShell( *pVS, &aViewWin, 0, VSHELLFLAG_ISPREVIEW );
+        pNew = new SwViewShell( *pVS, &aViewWin, 0, VSHELLFLAG_ISPREVIEW );
     else
-        pNew = new ViewShell(
+        pNew = new SwViewShell(
                 *((SwDocShell*)pViewFrame->GetObjectShell())->GetDoc(),
                 &aViewWin, 0, 0, VSHELLFLAG_ISPREVIEW );
 
@@ -1669,7 +1669,7 @@ SfxPrinter*  SwPagePreview::GetPrinter( sal_Bool bCreate )
 
 sal_uInt16  SwPagePreview::SetPrinter( SfxPrinter *pNew, sal_uInt16 nDiffFlags, bool )
 {
-    ViewShell &rSh = *GetViewShell();
+    SwViewShell &rSh = *GetViewShell();
     SfxPrinter* pOld = rSh.getIDocumentDeviceAccess()->getPrinter( false );
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
@@ -1732,7 +1732,7 @@ SfxTabPage*  SwPagePreview::CreatePrintOptionsPage( Window *pParent,
     return ::CreatePrintOptionsPage( pParent, rOptions, !bNormalPrint );
 }
 
-void SwPagePreviewWin::SetViewShell( ViewShell* pShell )
+void SwPagePreviewWin::SetViewShell( SwViewShell* pShell )
 {
     mpViewShell = pShell;
     if ( mpViewShell && mpViewShell->IsPreview() )
@@ -1884,7 +1884,7 @@ void SwPagePreview::EnableVScrollbar(bool bEnable)
 
 void SwPagePreview::SetZoom(SvxZoomType eType, sal_uInt16 nFactor)
 {
-    ViewShell& rSh = *GetViewShell();
+    SwViewShell& rSh = *GetViewShell();
     SwViewOption aOpt(*rSh.GetViewOptions());
     // perform action only on changes of zoom or zoom type.
     if ( aOpt.GetZoom() != nFactor ||

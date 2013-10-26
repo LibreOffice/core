@@ -147,8 +147,8 @@ std::vector<OUString>* pAuthFieldTypeList = 0;
 void _FinitUI()
 {
     SwNewDBMgr::RemoveDbtoolsClient();
-    delete ViewShell::GetShellRes();
-    ViewShell::SetShellRes( 0 );
+    delete SwViewShell::GetShellRes();
+    SwViewShell::SetShellRes( 0 );
 
     SwEditWin::_FinitStaticData();
 
@@ -168,7 +168,7 @@ void _FinitUI()
 void _InitUI()
 {
     // ShellResource gives the CORE the possibility to work with resources.
-    ViewShell::SetShellRes( new ShellResource );
+    SwViewShell::SetShellRes( new ShellResource );
     SwEditWin::_InitStaticData();
 }
 

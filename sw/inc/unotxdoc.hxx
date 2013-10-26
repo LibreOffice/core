@@ -118,7 +118,7 @@ class SfxViewFrame;
 class SwPrintUIOptions;
 class SwPrintData;
 class SwRenderData;
-class ViewShell;
+class SwViewShell;
 
 typedef std::deque<UnoActionContext*> ActionContextArr;
 
@@ -568,21 +568,21 @@ public:
 
 
 /*  The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
-    the current ViewShell so that fields are not printed as commands and
+    the current SwViewShell so that fields are not printed as commands and
     hidden characters are always invisible. Hidden text and place holders
     should be printed according to the current print options.
     After printing the view options are restored
   -----------------------------------------------------------------------*/
 class SwViewOptionAdjust_Impl
 {
-    ViewShell *     m_pShell;
+    SwViewShell *     m_pShell;
     SwViewOption    m_aOldViewOptions;
 
 public:
-    SwViewOptionAdjust_Impl( ViewShell& rSh, const SwViewOption &rViewOptions );
+    SwViewOptionAdjust_Impl( SwViewShell& rSh, const SwViewOption &rViewOptions );
     ~SwViewOptionAdjust_Impl();
     void AdjustViewOptions( SwPrintData const* const pPrtOptions );
-    bool checkShell( const ViewShell& rCompare ) const
+    bool checkShell( const SwViewShell& rCompare ) const
     { return &rCompare == m_pShell; }
     void DontTouchThatViewShellItSmellsFunny() { m_pShell = 0; }
 };

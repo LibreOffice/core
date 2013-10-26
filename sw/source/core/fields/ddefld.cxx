@@ -95,7 +95,7 @@ public:
     // no dependencies left?
     if( rFldType.GetDepends() && !rFldType.IsModifyLocked() && !ChkNoDataFlag() )
     {
-        ViewShell* pSh;
+        SwViewShell* pSh;
         SwEditShell* pESh = rFldType.GetDoc()->GetEditShell( &pSh );
 
         // Search for fields. If no valid found, disconnect.
@@ -145,7 +145,7 @@ void SwIntrnlRefLink::Closed()
     if( rFldType.GetDoc() && !rFldType.GetDoc()->IsInDtor() )
     {
         // advise goes, convert all fields into text?
-        ViewShell* pSh;
+        SwViewShell* pSh;
         SwEditShell* pESh = rFldType.GetDoc()->GetEditShell( &pSh );
         if( pESh )
         {

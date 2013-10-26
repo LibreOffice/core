@@ -363,7 +363,7 @@ SwTableNode* SwNode::FindTableNode()
 }
 
 /// Is the node located in the visible area of the Shell?
-sal_Bool SwNode::IsInVisibleArea( ViewShell* pSh ) const
+sal_Bool SwNode::IsInVisibleArea( SwViewShell* pSh ) const
 {
     sal_Bool bRet = sal_False;
     const SwCntntNode* pNd;
@@ -1207,7 +1207,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
         // and relation CONTENT_FLOWS_TO for previous paragraph will change.
         if ( pNew->IsTxtFrm() )
         {
-            ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
+            SwViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {

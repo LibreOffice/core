@@ -2347,7 +2347,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
         if( pDoc->get(IDocumentSettingAccess::HTML_MODE) ||
             pDoc->get(IDocumentSettingAccess::BROWSE_MODE))
         {
-            ViewShell *pVSh = 0;
+            SwViewShell *pVSh = 0;
             pDoc->GetEditShell( &pVSh );
             if ( pVSh &&
                  COL_TRANSPARENT != pVSh->GetViewOptions()->GetRetoucheColor().GetColor())

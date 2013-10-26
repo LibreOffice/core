@@ -793,7 +793,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
             if( pObjSh->IsA(TYPE(SwDocShell)) )
             {
                 const SwDoc* pDoc = ((SwDocShell*)pObjSh)->GetDoc();
-                ViewShell* pVSh = 0;
+                SwViewShell* pVSh = 0;
                 pDoc->GetEditShell( &pVSh );
                 if ( pVSh )
                     pVSh->ChgNumberDigits();

@@ -50,7 +50,7 @@ SwAccessibleSelectionHelper::~SwAccessibleSelectionHelper()
 SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
 {
     OSL_ENSURE( rContext.GetMap() != NULL, "no map?" );
-    ViewShell* pViewShell = rContext.GetMap()->GetShell();
+    SwViewShell* pViewShell = rContext.GetMap()->GetShell();
     OSL_ENSURE( pViewShell != NULL,
                 "No view shell? Then what are you looking at?" );
 

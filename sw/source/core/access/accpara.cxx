@@ -529,7 +529,7 @@ void SwAccessibleParagraph::ClearPortionData()
 void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
 {
     OSL_ENSURE( GetMap() != NULL, "no map?" );
-    ViewShell* pViewShell = GetMap()->GetShell();
+    SwViewShell* pViewShell = GetMap()->GetShell();
 
     OSL_ENSURE( pViewShell != NULL, "View shell expected!" );
     SfxViewShell* pSfxShell = pViewShell->GetSfxViewShell();

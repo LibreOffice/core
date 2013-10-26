@@ -54,7 +54,7 @@ void SwAccessibleContext::InitStates()
 {
     bIsShowingState = GetMap() ? IsShowing( *(GetMap()) ) : sal_False;
 
-    ViewShell *pVSh = GetMap()->GetShell();
+    SwViewShell *pVSh = GetMap()->GetShell();
     bIsEditableState = pVSh && IsEditable( pVSh );
     bIsOpaqueState = pVSh && IsOpaque( pVSh );
     bIsDefuncState = sal_False;
@@ -82,7 +82,7 @@ Window *SwAccessibleContext::GetWindow()
 
     if( GetMap() )
     {
-        const ViewShell *pVSh = GetMap()->GetShell();
+        const SwViewShell *pVSh = GetMap()->GetShell();
         OSL_ENSURE( pVSh, "no view shell" );
         if( pVSh )
             pWin = pVSh->GetWin();
@@ -93,11 +93,11 @@ Window *SwAccessibleContext::GetWindow()
     return pWin;
 }
 
-// get ViewShell from accessibility map, and cast to cursor shell
+// get SwViewShell from accessibility map, and cast to cursor shell
 SwCrsrShell* SwAccessibleContext::GetCrsrShell()
 {
     SwCrsrShell* pCrsrShell;
-    ViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
+    SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
     OSL_ENSURE( pViewShell, "no view shell" );
     if( pViewShell && pViewShell->ISA( SwCrsrShell ) )
         pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
@@ -111,7 +111,7 @@ const SwCrsrShell* SwAccessibleContext::GetCrsrShell() const
 {
     // just like non-const GetCrsrShell
     const SwCrsrShell* pCrsrShell;
-    const ViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
+    const SwViewShell* pViewShell = GetMap() ? GetMap()->GetShell() : 0;
     OSL_ENSURE( pViewShell, "no view shell" );
     if( pViewShell && pViewShell->ISA( SwCrsrShell ) )
         pCrsrShell = static_cast<const SwCrsrShell*>( pViewShell );
@@ -1260,7 +1260,7 @@ void SwAccessibleContext::InvalidateStates( tAccessibleStates _nStates )
 {
     if( GetMap() )
     {
-        ViewShell *pVSh = GetMap()->GetShell();
+        SwViewShell *pVSh = GetMap()->GetShell();
         if( pVSh )
         {
             if( (_nStates & ACC_STATE_EDITABLE) != 0 )

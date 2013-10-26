@@ -43,7 +43,7 @@ class SwFlowFrm;
 class SwCntntFrm;
 class SfxPoolItem;
 class SwAttrSet;
-class ViewShell;
+class SwViewShell;
 class Color;
 class SwBorderAttrs;
 class SwCache;

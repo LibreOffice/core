@@ -219,7 +219,7 @@ void SwPageDesc::RegisterChange()
     {
         return;
     }
-    ViewShell* pSh = 0L;
+    SwViewShell* pSh = 0L;
     pDoc->GetEditShell( &pSh );
     if ( !pSh )
     {

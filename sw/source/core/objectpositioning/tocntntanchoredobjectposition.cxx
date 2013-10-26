@@ -152,7 +152,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     bool bBrowse = GetAnchorFrm().IsInDocBody() && !GetAnchorFrm().IsInTab();
     if( bBrowse )
     {
-        const ViewShell *pSh = GetAnchorFrm().getRootFrm()->GetCurrShell();
+        const SwViewShell *pSh = GetAnchorFrm().getRootFrm()->GetCurrShell();
         if( !pSh || !pSh->GetViewOptions()->getBrowseMode() )
             bBrowse = false;
     }

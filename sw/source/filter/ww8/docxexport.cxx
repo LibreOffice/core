@@ -685,7 +685,7 @@ void DocxExport::WriteProperties( )
 
 void DocxExport::WriteSettings()
 {
-    ViewShell *pViewShell(pDoc->GetCurrentViewShell());
+    SwViewShell *pViewShell(pDoc->GetCurrentViewShell());
     if( !pViewShell && !settings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
         return;
 

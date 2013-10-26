@@ -219,7 +219,7 @@ SwLinePortion *SwArrowPortion::Compress() { return this; }
 SwTwips SwTxtFrm::EmptyHeight() const
 {
     if (IsCollapse()) {
-        ViewShell *pSh = getRootFrm()->GetCurrShell();
+        SwViewShell *pSh = getRootFrm()->GetCurrShell();
         if ( pSh->IsA( TYPE(SwCrsrShell) ) ) {
             SwCrsrShell *pCrSh=(SwCrsrShell*)pSh;
             SwCntntFrm *pCurrFrm=pCrSh->GetCurrFrm();
@@ -237,7 +237,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
     SwFont *pFnt;
     const SwTxtNode& rTxtNode = *GetTxtNode();
     const IDocumentSettingAccess* pIDSA = rTxtNode.getIDocumentSettingAccess();
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( rTxtNode.HasSwAttrSet() )
     {
         const SwAttrSet *pAttrSet = &( rTxtNode.GetSwAttrSet() );
@@ -398,7 +398,7 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                         }
                         else
                         {
-                            ViewShell *pSh = getRootFrm()->GetCurrShell();
+                            SwViewShell *pSh = getRootFrm()->GetCurrShell();
                             SwFontAccess aFontAccess( pFmt, pSh );
                             SwFont aFnt( *aFontAccess.Get()->GetFont() );
 

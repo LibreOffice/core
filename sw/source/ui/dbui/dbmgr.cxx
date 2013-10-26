@@ -452,7 +452,7 @@ sal_Bool SwNewDBMgr::Merge(SwWrtShell* pSh)
 {
     pSh->StartAllAction();
 
-    pSh->ViewShell::UpdateFlds(sal_True);
+    pSh->SwViewShell::UpdateFlds(sal_True);
     pSh->SetModified();
 
     pSh->EndAllAction();
@@ -2808,7 +2808,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 rWorkShell.CalcLayout();
                 rWorkShell.UnlockExpFlds();
                 SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
-            rWorkShell.ViewShell::UpdateFlds();
+            rWorkShell.SwViewShell::UpdateFlds();
                 SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), rWorkShell.GetView().GetViewFrame()->GetObjectShell()));
 
             // strip invisible content and convert fields to text

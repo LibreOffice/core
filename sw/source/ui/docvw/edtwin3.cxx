@@ -38,7 +38,7 @@
 
 
 // Core-Notify
-void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
+void ScrollMDI( SwViewShell* pVwSh, const SwRect &rRect,
                 sal_uInt16 nRangeX, sal_uInt16 nRangeY)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
@@ -47,7 +47,7 @@ void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
 }
 
 // Docmdi - movable
-sal_Bool IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
+sal_Bool IsScrollMDI( SwViewShell* pVwSh, const SwRect &rRect )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if (pSfxVwSh && pSfxVwSh->ISA(SwView))
@@ -56,7 +56,7 @@ sal_Bool IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
 }
 
 // Notify for size change
-void SizeNotify(ViewShell* pVwSh, const Size &rSize)
+void SizeNotify(SwViewShell* pVwSh, const Size &rSize)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if (pSfxVwSh)
@@ -69,7 +69,7 @@ void SizeNotify(ViewShell* pVwSh, const Size &rSize)
 }
 
 // Notify for page number update
-void PageNumNotify( ViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
+void PageNumNotify( SwViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
                                                     const OUString& rPgStr)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
@@ -78,7 +78,7 @@ void PageNumNotify( ViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
             ((SwView *)pSfxVwSh)->UpdatePageNums(nPhyNum, nVirtNum, rPgStr);
 }
 
-void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
+void FrameNotify( SwViewShell* pVwSh, FlyMode eMode )
 {
     if ( pVwSh->ISA(SwCrsrShell) )
         SwBaseShell::SetFrmMode( eMode, (SwWrtShell*)pVwSh );
@@ -114,14 +114,14 @@ TblChgMode GetTblChgDefaultMode()
     return pOpt ? pOpt->GetTblMode() : TBLVAR_CHGABS;
 }
 
-void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect )
+void RepaintPagePreview( SwViewShell* pVwSh, const SwRect& rRect )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if (pSfxVwSh && pSfxVwSh->ISA( SwPagePreview ))
         ((SwPagePreview *)pSfxVwSh)->RepaintCoreRect( rRect );
 }
 
-bool JumpToSwMark( ViewShell* pVwSh, const OUString& rMark )
+bool JumpToSwMark( SwViewShell* pVwSh, const OUString& rMark )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if( pSfxVwSh && pSfxVwSh->ISA( SwView ) )
@@ -151,7 +151,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
         {
             pSh->LockPaint();
             bUnlockPaint = sal_True;
-            ViewShell::DeleteReplacementBitmaps();
+            SwViewShell::DeleteReplacementBitmaps();
             GetView().InvalidateBorder();               //Scrollbar work
         }
         break;

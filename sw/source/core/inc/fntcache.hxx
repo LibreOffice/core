@@ -29,7 +29,7 @@ class OutputDevice;
 class FontMetric;
 class SwFntObj;
 class SwDrawTextInfo;
-class ViewShell;
+class SwViewShell;
 class SwSubFont;
 class MapMode;
 class Point;
@@ -89,7 +89,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFntObj)
 
     SwFntObj( const SwSubFont &rFont, const void* pOwner,
-              ViewShell *pSh );
+              SwViewShell *pSh );
 
     virtual ~SwFntObj();
 
@@ -100,13 +100,13 @@ public:
     inline sal_uInt16 GetGuessedLeading() const  { return nGuessedLeading; }
     inline sal_uInt16 GetExtLeading() const  { return nExtLeading; }
 
-    sal_uInt16 GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut );
-    sal_uInt16 GetFontHeight( const ViewShell *pSh, const OutputDevice& rOut );
-    sal_uInt16 GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut );
+    sal_uInt16 GetFontAscent( const SwViewShell *pSh, const OutputDevice& rOut );
+    sal_uInt16 GetFontHeight( const SwViewShell *pSh, const OutputDevice& rOut );
+    sal_uInt16 GetFontLeading( const SwViewShell *pSh, const OutputDevice& rOut );
 
-    void GuessLeading( const ViewShell& rSh, const FontMetric& rMet );
+    void GuessLeading( const SwViewShell& rSh, const FontMetric& rMet );
 
-    void SetDevFont( const ViewShell *pSh, OutputDevice& rOut );
+    void SetDevFont( const SwViewShell *pSh, OutputDevice& rOut );
     inline OutputDevice* GetPrt() const { return pPrinter; }
     inline sal_uInt16   GetZoom() const { return nZoom; }
     inline sal_uInt16   GetPropWidth() const { return nPropWidth; }
@@ -117,19 +117,19 @@ public:
     Size  GetTextSize( SwDrawTextInfo &rInf );
     xub_StrLen GetCrsrOfst( SwDrawTextInfo &rInf );
 
-    void CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut );
+    void CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut );
     void CreatePrtFont( const OutputDevice& rOut );
 };
 
 class SwFntAccess : public SwCacheAccess
 {
-    ViewShell *pShell;
+    SwViewShell *pShell;
 protected:
     virtual SwCacheObj *NewObj( );
 
 public:
     SwFntAccess( const void * &rMagic, sal_uInt16 &rIndex, const void *pOwner,
-                 ViewShell *pShell,
+                 SwViewShell *pShell,
                  sal_Bool bCheck = sal_False  );
     inline SwFntObj* Get() { return (SwFntObj*) SwCacheAccess::Get(); };
 };

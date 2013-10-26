@@ -975,7 +975,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( aTmp.IsOver( rInf.GetPaintRect() ) && !bDraw )
         {
             rInf.NoteAnimation();
-            const ViewShell* pViewShell = rInf.GetVsh();
+            const SwViewShell* pViewShell = rInf.GetVsh();
 
             // virtual device, not pdf export
             if( OUTDEV_VIRDEV == rInf.GetOut()->GetOutDevType() &&
@@ -1218,7 +1218,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     }
 
     sal_uInt16 nTop = ( nCount + 1 ) / 2; // the first character of the second line
-    ViewShell *pSh = rInf.GetTxtFrm()->getRootFrm()->GetCurrShell();
+    SwViewShell *pSh = rInf.GetTxtFrm()->getRootFrm()->GetCurrShell();
     SwFont aTmpFont( *rInf.GetFont() );
     SwFontSave aFontSave( rInf, &aTmpFont );
     nProportion = 55;

@@ -57,14 +57,14 @@ const SwRedline& SwEditShell::GetRedline( sal_uInt16 nPos ) const
     return *GetDoc()->GetRedlineTbl()[ nPos ];
 }
 
-static void lcl_InvalidateAll( ViewShell* pSh )
+static void lcl_InvalidateAll( SwViewShell* pSh )
 {
-    ViewShell *pStop = pSh;
+    SwViewShell *pStop = pSh;
     do
     {
         if ( pSh->GetWin() )
             pSh->GetWin()->Invalidate();
-        pSh = (ViewShell*)pSh->GetNext();
+        pSh = (SwViewShell*)pSh->GetNext();
 
     } while ( pSh != pStop );
 }

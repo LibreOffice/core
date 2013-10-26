@@ -386,7 +386,7 @@ sal_Bool SwLayAction::RemoveEmptyBrowserPages()
     // switching from the normal to the browser mode, empty pages may be
     // retained for an annoyingly long time, so delete them here
     sal_Bool bRet = sal_False;
-    const ViewShell *pSh = pRoot->GetCurrShell();
+    const SwViewShell *pSh = pRoot->GetCurrShell();
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
     {
         SwPageFrm *pPage = (SwPageFrm*)pRoot->Lower();
@@ -1086,7 +1086,7 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
 sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
     sal_Bool bRet = sal_False;
-    const ViewShell *pSh = pRoot->GetCurrShell();
+    const SwViewShell *pSh = pRoot->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     // If the page is not valid, we quickly format it, otherwise
@@ -1339,7 +1339,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
              pLay->Frm().Pos() == aOldRect.Pos() &&
              pLay->Lower() )
         {
-            const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
+            const SwViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
             // Limitations because of headers / footers
             if( pSh && pSh->GetViewOptions()->getBrowseMode() &&
                 !( pLay->IsCompletePaint() && pLay->FindPageFrm()->FindFtnCont() ) )
@@ -1360,7 +1360,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
             bool bPageInBrowseMode = pLay->IsPageFrm();
             if( bPageInBrowseMode )
             {
-                const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
+                const SwViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
                 if( !pSh || !pSh->GetViewOptions()->getBrowseMode() )
                     bPageInBrowseMode = false;
             }
@@ -1407,7 +1407,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
                 const bool bPrev = bLeftToRightViewLayout ? pLay->GetPrev() : pLay->GetNext();
                 const bool bNext = bLeftToRightViewLayout ? pLay->GetNext() : pLay->GetPrev();
                 SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(pLay);
-                const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
+                const SwViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
                 SwRect aPageRect( pLay->Frm() );
 
                 if(pSh)
@@ -1730,7 +1730,7 @@ sal_Bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, sal_Bool bAddRect )
 sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 {
     const SwCntntFrm *pCntnt = pPage->ContainsCntnt();
-    const ViewShell *pSh = pRoot->GetCurrShell();
+    const SwViewShell *pSh = pRoot->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     while ( pCntnt && pPage->IsAnLower( pCntnt ) )
@@ -2043,7 +2043,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
 
     if( bProcess )
     {
-        ViewShell *pSh = pImp->GetShell();
+        SwViewShell *pSh = pImp->GetShell();
         if( STRING_LEN == nTxtPos )
         {
             --nTxtPos;
@@ -2139,7 +2139,7 @@ sal_Bool SwLayIdle::DoIdleJob( IdleJobType eJob, sal_Bool bVisAreaOnly )
 {
     // Spellcheck all contents of the pages. Either only the
     // visible ones or all of them.
-    const ViewShell* pViewShell = pImp->GetShell();
+    const SwViewShell* pViewShell = pImp->GetShell();
     const SwViewOption* pViewOptions = pViewShell->GetViewOptions();
     const SwDoc* pDoc = pViewShell->GetDoc();
 
@@ -2282,13 +2282,13 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
          !DoIdleJob( ONLINE_SPELLING, sal_True ) &&
          !DoIdleJob( AUTOCOMPLETE_WORDS, sal_True ) ) // SMARTTAGS
     {
-        // Format, then register repaint rectangles with the ViewShell if necessary.
+        // Format, then register repaint rectangles with the SwViewShell if necessary.
         // This requires running artificial actions, so we don't get undesired
         // effects when for instance the page count gets changed.
         // We remember the shells where the cursor is visible, so we can make
         // it visible again if needed after a document change.
         std::vector<bool> aBools;
-        ViewShell *pSh = pImp->GetShell();
+        SwViewShell *pSh = pImp->GetShell();
         do
         {   ++pSh->mnStartAction;
             sal_Bool bVis = sal_False;
@@ -2297,7 +2297,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 bVis = ((SwCrsrShell*)pSh)->GetCharRect().IsOver(pSh->VisArea());
             }
             aBools.push_back( bVis );
-            pSh = (ViewShell*)pSh->GetNext();
+            pSh = (SwViewShell*)pSh->GetNext();
         } while ( pSh != pImp->GetShell() );
 
         SwLayAction aAction( pRoot, pImp );
@@ -2336,7 +2336,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 }
             }
 
-            pSh = (ViewShell*)pSh->GetNext();
+            pSh = (SwViewShell*)pSh->GetNext();
             ++nBoolIdx;
         } while ( pSh != pImp->GetShell() );
 
@@ -2392,7 +2392,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                         pSh->UnlockPaint( sal_True );
                 }
 
-                pSh = (ViewShell*)pSh->GetNext();
+                pSh = (SwViewShell*)pSh->GetNext();
                 ++nBoolIdx;
 
             } while ( pSh != pImp->GetShell() );
@@ -2408,7 +2408,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
         bool bInValid = false;
         const SwViewOption& rVOpt = *pImp->GetShell()->GetViewOptions();
-        const ViewShell* pViewShell = pImp->GetShell();
+        const SwViewShell* pViewShell = pImp->GetShell();
         // See conditions in DoIdleJob()
         const sal_Bool bSpell     = rVOpt.IsOnlineSpell();
         const sal_Bool bACmplWrd  = rVOpt.IsAutoCompleteWords();

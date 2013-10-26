@@ -269,7 +269,7 @@ void SwAutoFormat::_SetRedlineTxt( sal_uInt16 nActionId )
     sal_uInt16 nSeqNo = 0;
     if( STR_AUTOFMTREDL_END > nActionId )
     {
-        sTxt = ViewShell::GetShellRes()->GetAutoFmtNameLst()[ nActionId ];
+        sTxt = SwViewShell::GetShellRes()->GetAutoFmtNameLst()[ nActionId ];
         switch( nActionId )
         {
         case STR_AUTOFMTREDL_SET_NUMBULET:
@@ -1762,7 +1762,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
 {
     if( aFlags.bWithRedlining )
     {
-        OUString sTxt(ViewShell::GetShellRes()->GetAutoFmtNameLst()[
+        OUString sTxt(SwViewShell::GetShellRes()->GetAutoFmtNameLst()[
                                     STR_AUTOFMTREDL_SET_TMPL_HEADLINE ] );
         sTxt = sTxt.replaceAll( "$(ARG1)", OUString::number( nLvl + 1 ) );
         pDoc->SetAutoFmtRedlineComment( &sTxt );

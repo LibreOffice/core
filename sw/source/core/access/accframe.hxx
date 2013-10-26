@@ -30,7 +30,7 @@
 
 class SwAccessibleMap;
 class SwFrm;
-class ViewShell;
+class SwViewShell;
 namespace sw { namespace access {
     class SwAccessibleChild;
 }}
@@ -76,9 +76,9 @@ private:
                              sal_Bool bInPagePreview );
 
 protected:
-    sal_Bool IsEditable( ViewShell *pVSh ) const;
+    sal_Bool IsEditable( SwViewShell *pVSh ) const;
 
-    sal_Bool IsOpaque( ViewShell *pVSh ) const;
+    sal_Bool IsOpaque( SwViewShell *pVSh ) const;
 
     sal_Bool IsShowing( const SwAccessibleMap& rAccMap,
                         const sw::access::SwAccessibleChild& rFrmOrObj ) const;

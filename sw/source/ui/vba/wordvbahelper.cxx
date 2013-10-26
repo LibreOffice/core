@@ -85,7 +85,7 @@ uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame
 sal_Int32 getPageCount( const uno::Reference< frame::XModel>& xModel ) throw (uno::RuntimeException)
 {
     SwDocShell* pDocShell = getDocShell( xModel );
-    ViewShell* pViewSh = pDocShell ? pDocShell->GetDoc()->GetCurrentViewShell() : 0;
+    SwViewShell* pViewSh = pDocShell ? pDocShell->GetDoc()->GetCurrentViewShell() : 0;
     return pViewSh ? pViewSh->GetPageCount() : 0;
 }
 

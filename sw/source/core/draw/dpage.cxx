@@ -83,11 +83,11 @@ void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrm *pPg )
 const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                         const SdrPageView* pPV, const Rectangle *pRect ) const
 {
-    ViewShell *pSh = ((SwDrawDocument*)GetModel())->GetDoc().GetCurrentViewShell();
+    SwViewShell *pSh = ((SwDrawDocument*)GetModel())->GetDoc().GetCurrentViewShell();
     if ( pSh )
     {
         while ( pSh->Imp()->GetPageView() != pPV )
-            pSh = (ViewShell*)pSh->GetNext();
+            pSh = (SwViewShell*)pSh->GetNext();
         if ( pSh )
         {
             if ( pGridLst )
@@ -182,9 +182,9 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
 
                     if ( !bExecHyperlinks )
-                        sTxt = ViewShell::GetShellRes()->aLinkCtrlClick + ": " + sTxt;
+                        sTxt = SwViewShell::GetShellRes()->aLinkCtrlClick + ": " + sTxt;
                     else
-                        sTxt = ViewShell::GetShellRes()->aLinkClick + ": " + sTxt;
+                        sTxt = SwViewShell::GetShellRes()->aLinkClick + ": " + sTxt;
                 }
 
 

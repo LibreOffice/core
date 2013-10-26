@@ -38,7 +38,7 @@
 //teuer werden kann.
 
 class SwQueuedPaint;
-class ViewShell;
+class SwViewShell;
 class SwRect;
 
 class SwPaintQueue
@@ -46,8 +46,8 @@ class SwPaintQueue
 public:
     static SwQueuedPaint *pQueue;
 
-    static void Add( ViewShell *pSh, const SwRect &rNew );
-    static void Remove( ViewShell *pSh );
+    static void Add( SwViewShell *pSh, const SwRect &rNew );
+    static void Remove( SwViewShell *pSh );
     static void Repaint();
 };
 

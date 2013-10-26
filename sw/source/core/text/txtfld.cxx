@@ -91,7 +91,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             const_cast<SwFmtFld*> (&pHint->GetFld())->Broadcast( SwFmtFldHint( &pHint->GetFld(), SWFMTFLD_LANGUAGE ) );
     }
 
-    ViewShell *pSh = rInf.GetVsh();
+    SwViewShell *pSh = rInf.GetVsh();
     SwDoc *const pDoc( (pSh) ? pSh->GetDoc() : 0 );
     bool const bInClipboard( (pDoc) ? pDoc->IsClipBoard() : true );
     sal_Bool bPlaceHolder = false;

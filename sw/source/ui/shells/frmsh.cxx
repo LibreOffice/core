@@ -945,7 +945,7 @@ SwFrameShell::SwFrameShell(SwView &_rView) :
     SetHelpId(SW_FRAMESHELL);
 
     // #96392# Use this to announce it is the frame shell who creates the selection.
-    SwTransferable::CreateSelection( _rView.GetWrtShell(), (ViewShell *) this );
+    SwTransferable::CreateSelection( _rView.GetWrtShell(), (SwViewShell *) this );
 
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Frame));
 }
@@ -953,7 +953,7 @@ SwFrameShell::SwFrameShell(SwView &_rView) :
 SwFrameShell::~SwFrameShell()
 {
     // #96392# Only clear the selection if it was this frame shell who created it.
-    SwTransferable::ClearSelection( GetShell(), (ViewShell *) this );
+    SwTransferable::ClearSelection( GetShell(), (SwViewShell *) this );
 }
 
 void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)

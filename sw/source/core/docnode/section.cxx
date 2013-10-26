@@ -1204,7 +1204,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     pDoc->SetVisibleLinks( sal_False );
 
     SwPaM* pPam;
-    ViewShell* pVSh = 0;
+    SwViewShell* pVSh = 0;
     SwEditShell* pESh = pDoc->GetEditShell( &pVSh );
     pDoc->LockExpFlds();
     {
@@ -1455,7 +1455,7 @@ void SwIntrnlSectRefLink::Closed()
         for( sal_uInt16 n = rFmts.size(); n; )
             if( rFmts[ --n ] == &rSectFmt )
             {
-                ViewShell* pSh;
+                SwViewShell* pSh;
                 SwEditShell* pESh = pDoc->GetEditShell( &pSh );
 
                 if( pESh )

@@ -33,7 +33,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 {
     public:
         explicit SidebarWinAccessibleContext( SwSidebarWin& rSidebarWin,
-                                              ViewShell& rViewShell,
+                                              SwViewShell& rViewShell,
                                               const SwFrm* pAnchorFrm )
             : VCLXAccessibleComponent( rSidebarWin.GetWindowPeer() )
             , mrViewShell( rViewShell )
@@ -86,7 +86,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         }
 
     private:
-        ViewShell& mrViewShell;
+        SwViewShell& mrViewShell;
         const SwFrm* mpAnchorFrm;
 
         ::osl::Mutex maMutex;
@@ -94,7 +94,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 
 // implementaion of accessible for <SwSidebarWin> instance
 SidebarWinAccessible::SidebarWinAccessible( SwSidebarWin& rSidebarWin,
-                                            ViewShell& rViewShell,
+                                            SwViewShell& rViewShell,
                                             const SwSidebarItem& rSidebarItem )
     : VCLXWindow()
     , mrSidebarWin( rSidebarWin )

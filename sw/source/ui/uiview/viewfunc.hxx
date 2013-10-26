@@ -28,13 +28,13 @@ class SfxTabPage;
 class Size;
 class SvxRuler;
 class SwScrollbar;
-class ViewShell;
+class SwViewShell;
 class Window;
 
 // The following functions are available in viewprt.cxx
 void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, sal_Bool bWeb );
 SfxTabPage* CreatePrintOptionsPage( Window*, const SfxItemSet& );
-void SetAppPrintOptions( ViewShell* pSh, sal_Bool bWeb );
+void SetAppPrintOptions( SwViewShell* pSh, sal_Bool bWeb );
 
 // The following functions are available in viewport.cxx
 void ViewResizePixel( const Window &rRef,

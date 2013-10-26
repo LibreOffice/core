@@ -2124,7 +2124,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
 // Erkennung doppelter Namen fehlt noch (Wahrscheinlichkeit
 // fuer dopp. Namen ist gering)
 
-    nPos = GetDoc().MakePageDesc( ViewShell::GetShellRes()->GetPageDescName(
+    nPos = GetDoc().MakePageDesc( SwViewShell::GetShellRes()->GetPageDescName(
                                    GetDoc().GetPageDescCnt(), bFollow ? ShellResource::FOLLOW_PAGE : ShellResource::NORMAL_PAGE),
                                 pFirstPageDesc, false );
 

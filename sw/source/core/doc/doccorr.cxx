@@ -38,14 +38,14 @@
 #define PCURSH ((SwCrsrShell*)_pStartShell)
 #define FOREACHSHELL_START( pEShell ) \
     {\
-        ViewShell *_pStartShell = pEShell; \
+        SwViewShell *_pStartShell = pEShell; \
         do { \
             if( _pStartShell->IsA( TYPE( SwCrsrShell )) ) \
             {
 
 #define FOREACHSHELL_END( pEShell ) \
             } \
-        } while((_pStartShell=(ViewShell*)_pStartShell->GetNext())!= pEShell ); \
+        } while((_pStartShell=(SwViewShell*)_pStartShell->GetNext())!= pEShell ); \
     }
 
 namespace
@@ -314,12 +314,12 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
         ::PaMCorrRel(rOldNode, rNewPos, nOffset);
 }
 
-SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
+SwEditShell* SwDoc::GetEditShell( SwViewShell** ppSh ) const
 {
     // Layout and OLE shells should be available
     if( mpCurrentView )
     {
-        ViewShell *pSh = mpCurrentView, *pVSh = pSh;
+        SwViewShell *pSh = mpCurrentView, *pVSh = pSh;
         if( ppSh )
             *ppSh = pSh;
 
@@ -328,7 +328,7 @@ SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
             if( pSh->IsA( TYPE( SwEditShell ) ) )
                 return (SwEditShell*)pSh;
 
-        } while( pVSh != ( pSh = (ViewShell*)pSh->GetNext() ));
+        } while( pVSh != ( pSh = (SwViewShell*)pSh->GetNext() ));
     }
     else if( ppSh )
         *ppSh = 0;

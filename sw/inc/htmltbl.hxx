@@ -325,7 +325,7 @@ public:
     void BordersChanged( sal_uInt16 nAbsAvail, sal_Bool bRecalc=sal_False );
 
     /** Calculate available width. This works only if a layout or a
-     ViewShell exists. Otherwise returns 0.
+     SwViewShell exists. Otherwise returns 0.
      This is needed by HTML-filter because it doesn't have access to the layout.) */
     static sal_uInt16 GetBrowseWidth( const SwDoc& rDoc );
 

@@ -2388,7 +2388,7 @@ void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
         // Relation CONTENT_FLOWS_FROM for next paragraph will change
         // and relation CONTENT_FLOWS_TO for previous paragraph will change.
         {
-            ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
+            SwViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
@@ -2423,7 +2423,7 @@ void SwTableNode::DelFrms()
                 // Relation CONTENT_FLOWS_FROM for current next paragraph will change
                 // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
                 {
-                    ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
+                    SwViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
                     if ( pViewShell && pViewShell->GetLayout() &&
                          pViewShell->GetLayout()->IsAnyShellAccessible() )
                     {

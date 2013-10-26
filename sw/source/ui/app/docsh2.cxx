@@ -434,7 +434,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( nSlotId )
                 {
                     // PagePreview in the WebDocShell
-                    // is found under Id ViewShell2.
+                    // is found under Id VIEWSHELL2.
                     if( ISA(SwWebDocShell) && SID_VIEWSHELL1 == nSlotId )
                         nSlotId = SID_VIEWSHELL2;
 

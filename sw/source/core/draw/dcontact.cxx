@@ -1043,7 +1043,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
                              SdrUserCallType eType,
                              const Rectangle& rOldBoundRect )
 {
-    // #i26791# - no event handling, if existing <ViewShell>
+    // #i26791# - no event handling, if existing <SwViewShell>
     // is in contruction
     SwDoc* pDoc = GetFmt()->GetDoc();
     if ( pDoc->GetCurrentViewShell() &&
@@ -1061,7 +1061,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
     }
 
     //Put on Action, but not if presently anywhere an action runs.
-    ViewShell *pSh = 0, *pOrg;
+    SwViewShell *pSh = 0, *pOrg;
     SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();
     if ( pTmpRoot && pTmpRoot->IsCallbackActionEnabled() )
     {
@@ -1072,7 +1072,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
             {   if ( pSh->Imp()->IsAction() || pSh->Imp()->IsIdleAction() )
                     pSh = 0;
                 else
-                    pSh = (ViewShell*)pSh->GetNext();
+                    pSh = (SwViewShell*)pSh->GetNext();
 
             } while ( pSh && pSh != pOrg );
 
@@ -1734,7 +1734,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
         case FLY_AT_PAGE:
                 {
                 sal_uInt16 nPgNum = pAnch->GetPageNum();
-                ViewShell *pShell = pDrawFrmFmt->getIDocumentLayoutAccess()->GetCurrentViewShell();
+                SwViewShell *pShell = pDrawFrmFmt->getIDocumentLayoutAccess()->GetCurrentViewShell();
                 if( !pShell )
                     break;
                 SwRootFrm* pRoot = pShell->GetLayout();

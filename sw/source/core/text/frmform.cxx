@@ -625,7 +625,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
     // is <this>, will change.
     {
-        ViewShell* pViewShell( pFoll->getRootFrm()->GetCurrShell() );
+        SwViewShell* pViewShell( pFoll->getRootFrm()->GetCurrShell() );
         if ( pViewShell && pViewShell->GetLayout() &&
              pViewShell->GetLayout()->IsAnyShellAccessible() )
         {
@@ -659,7 +659,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
     // is <this>, will change.
     {
-        ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
+        SwViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
         if ( pViewShell && pViewShell->GetLayout() &&
              pViewShell->GetLayout()->IsAnyShellAccessible() )
         {
@@ -1184,7 +1184,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
         }
         SwTwips nRght = std::max( nOldWidth, pNew->Width() +
                              pNew->GetHangingMargin() );
-        ViewShell *pSh = getRootFrm()->GetCurrShell();
+        SwViewShell *pSh = getRootFrm()->GetCurrShell();
         const SwViewOption *pOpt = pSh ? pSh->GetViewOptions() : 0;
         if( pOpt && (pOpt->IsParagraph() || pOpt->IsLineBreak()) )
             nRght += ( std::max( nOldAscent, pNew->GetAscent() ) );

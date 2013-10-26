@@ -21,12 +21,12 @@
 
 #include <rtl/ustring.hxx>
 
-class ViewShell;
+class SwViewShell;
 
 #define URLLOAD_NOFILTER            0x0000
 #define URLLOAD_NEWVIEW             0x8000
 
-void LoadURL( ViewShell& rSh, const OUString& rName,
+void LoadURL( SwViewShell& rSh, const OUString& rName,
               sal_uInt16 nFilter, const OUString& rTargetFrameName );
 
 #endif

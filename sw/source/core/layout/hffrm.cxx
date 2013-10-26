@@ -694,7 +694,7 @@ void SwPageFrm::PrepareHeader()
 
     const SwFmtHeader &rH = ((SwFrmFmt*)GetRegisteredIn())->GetHeader();
 
-    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rH.IsActive() )
@@ -743,7 +743,7 @@ void SwPageFrm::PrepareFooter()
     while ( pLay->GetNext() )
         pLay = (SwLayoutFrm*)pLay->GetNext();
 
-    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rF.IsActive() )
@@ -766,7 +766,7 @@ void SwPageFrm::PrepareFooter()
     else if ( pLay && pLay->IsFooterFrm() )
     {   // Remove footer if already present
         ::DelFlys( pLay, this );
-        ViewShell *pShell;
+        SwViewShell *pShell;
         if ( pLay->GetPrev() && 0 != (pShell = getRootFrm()->GetCurrShell()) &&
              pShell->VisArea().HasArea() )
             pShell->InvalidateWindows( pShell->VisArea() );

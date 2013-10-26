@@ -88,7 +88,7 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
 }
 
 /// CTor for the core internals
-SwViewImp::SwViewImp( ViewShell *pParent ) :
+SwViewImp::SwViewImp( SwViewShell *pParent ) :
     pSh( pParent ),
     pDrawView( 0 ),
     pSdrPageView( 0 ),
@@ -251,7 +251,7 @@ void SwViewImp::MakeDrawView()
 Color SwViewImp::GetRetoucheColor() const
 {
     Color aRet( COL_TRANSPARENT );
-    const ViewShell &rSh = *GetShell();
+    const SwViewShell &rSh = *GetShell();
     if ( rSh.GetWin() )
     {
         if ( rSh.GetViewOptions()->getBrowseMode() &&
@@ -291,13 +291,13 @@ void SwViewImp::DisposeAccessible( const SwFrm *pFrm,
                                    sal_Bool bRecursive )
 {
     OSL_ENSURE( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
-    ViewShell *pVSh = GetShell();
-    ViewShell *pTmp = pVSh;
+    SwViewShell *pVSh = GetShell();
+    SwViewShell *pTmp = pVSh;
     do
     {
         if( pTmp->Imp()->IsAccessible() )
             pTmp->Imp()->GetAccessibleMap().Dispose( pFrm, pObj, 0, bRecursive );
-        pTmp = (ViewShell *)pTmp->GetNext();
+        pTmp = (SwViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }
 
@@ -305,27 +305,27 @@ void SwViewImp::MoveAccessible( const SwFrm *pFrm, const SdrObject *pObj,
                                 const SwRect& rOldFrm )
 {
     OSL_ENSURE( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
-    ViewShell *pVSh = GetShell();
-    ViewShell *pTmp = pVSh;
+    SwViewShell *pVSh = GetShell();
+    SwViewShell *pTmp = pVSh;
     do
     {
         if( pTmp->Imp()->IsAccessible() )
             pTmp->Imp()->GetAccessibleMap().InvalidatePosOrSize( pFrm, pObj, 0,
                                                                  rOldFrm );
-        pTmp = (ViewShell *)pTmp->GetNext();
+        pTmp = (SwViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }
 
 void SwViewImp::InvalidateAccessibleFrmContent( const SwFrm *pFrm )
 {
     OSL_ENSURE( pFrm->IsAccessibleFrm(), "frame is not accessible" );
-    ViewShell *pVSh = GetShell();
-    ViewShell *pTmp = pVSh;
+    SwViewShell *pVSh = GetShell();
+    SwViewShell *pTmp = pVSh;
     do
     {
         if( pTmp->Imp()->IsAccessible() )
             pTmp->Imp()->GetAccessibleMap().InvalidateContent( pFrm );
-        pTmp = (ViewShell *)pTmp->GetNext();
+        pTmp = (SwViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }
 
@@ -340,13 +340,13 @@ void SwViewImp::InvalidateAccessibleEditableState( sal_Bool bAllShells,
 {
     if( bAllShells )
     {
-        ViewShell *pVSh = GetShell();
-        ViewShell *pTmp = pVSh;
+        SwViewShell *pVSh = GetShell();
+        SwViewShell *pTmp = pVSh;
         do
         {
             if( pTmp->Imp()->IsAccessible() )
                 pTmp->Imp()->GetAccessibleMap().InvalidateStates( ACC_STATE_EDITABLE, pFrm );
-            pTmp = (ViewShell *)pTmp->GetNext();
+            pTmp = (SwViewShell *)pTmp->GetNext();
         } while ( pTmp != pVSh );
     }
     else if( IsAccessible() )
@@ -358,14 +358,14 @@ void SwViewImp::InvalidateAccessibleEditableState( sal_Bool bAllShells,
 void SwViewImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
                                                  const SwFlyFrm *pFollow )
 {
-    ViewShell *pVSh = GetShell();
-    ViewShell *pTmp = pVSh;
+    SwViewShell *pVSh = GetShell();
+    SwViewShell *pTmp = pVSh;
     do
     {
         if( pTmp->Imp()->IsAccessible() )
             pTmp->Imp()->GetAccessibleMap().InvalidateRelationSet( pMaster,
                                                                    pFollow );
-        pTmp = (ViewShell *)pTmp->GetNext();
+        pTmp = (SwViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }
 
@@ -379,8 +379,8 @@ void SwViewImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxt
         return;
     }
 
-    ViewShell* pVSh = GetShell();
-    ViewShell* pTmp = pVSh;
+    SwViewShell* pVSh = GetShell();
+    SwViewShell* pTmp = pVSh;
     do
     {
         if ( pTmp->Imp()->IsAccessible() )
@@ -396,15 +396,15 @@ void SwViewImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxt
                             InvalidateParaFlowRelation( *_pToTxtFrm, false );
             }
         }
-        pTmp = (ViewShell *)pTmp->GetNext();
+        pTmp = (SwViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }
 
 /// invalidate text selection for paragraphs
 void SwViewImp::_InvalidateAccessibleParaTextSelection()
 {
-    ViewShell* pVSh = GetShell();
-    ViewShell* pTmp = pVSh;
+    SwViewShell* pVSh = GetShell();
+    SwViewShell* pTmp = pVSh;
     do
     {
         if ( pTmp->Imp()->IsAccessible() )
@@ -412,15 +412,15 @@ void SwViewImp::_InvalidateAccessibleParaTextSelection()
             pTmp->Imp()->GetAccessibleMap().InvalidateTextSelectionOfAllParas();
         }
 
-        pTmp = (ViewShell *)pTmp->GetNext();
+        pTmp = (SwViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }
 
 /// invalidate attributes for paragraphs
 void SwViewImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
 {
-    ViewShell* pVSh = GetShell();
-    ViewShell* pTmp = pVSh;
+    SwViewShell* pVSh = GetShell();
+    SwViewShell* pTmp = pVSh;
     do
     {
         if ( pTmp->Imp()->IsAccessible() )
@@ -428,7 +428,7 @@ void SwViewImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
             pTmp->Imp()->GetAccessibleMap().InvalidateAttr( rTxtFrm );
         }
 
-        pTmp = (ViewShell *)pTmp->GetNext();
+        pTmp = (SwViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }
 

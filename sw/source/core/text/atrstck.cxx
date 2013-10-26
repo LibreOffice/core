@@ -214,7 +214,7 @@ bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
 
 static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
                             const SfxPoolItem& rItem,
-                            const ViewShell* pShell,
+                            const SwViewShell* pShell,
                             Color* pColor )
 {
     if ( !pShell ||
@@ -401,7 +401,7 @@ SwAttrHandler::~SwAttrHandler()
 
 void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
                           const IDocumentSettingAccess& rIDocumentSettingAcces,
-                          const ViewShell* pSh )
+                          const SwViewShell* pSh )
 {
     mpIDocumentSettingAccess = &rIDocumentSettingAcces;
     mpShell = pSh;
@@ -412,7 +412,7 @@ void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
 
 void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
                           const IDocumentSettingAccess& rIDocumentSettingAcces,
-                          const ViewShell* pSh,
+                          const SwViewShell* pSh,
                           SwFont& rFnt, sal_Bool bVL )
 {
     // initialize default array
@@ -952,7 +952,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
 }
 
 // Takes the default font and calculated the ascent and height
-void SwAttrHandler::GetDefaultAscentAndHeight( ViewShell* pShell, OutputDevice& rOut,
+void SwAttrHandler::GetDefaultAscentAndHeight( SwViewShell* pShell, OutputDevice& rOut,
                                                sal_uInt16& nAscent, sal_uInt16& nHeight ) const
 {
     OSL_ENSURE( pFnt, "No font available for GetDefaultAscentAndHeight" );

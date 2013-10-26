@@ -231,7 +231,7 @@ OUString SwField::GetFieldName() const
     OUString sRet = SwFieldType::GetTypeStr( nTypeId );
     if (IsFixed())
     {
-        sRet += " " + OUString(ViewShell::GetShellRes()->aFixedStr);
+        sRet += " " + OUString(SwViewShell::GetShellRes()->aFixedStr);
     }
     return sRet;
 }
@@ -428,7 +428,7 @@ OUString SwValueFieldType::ExpandValue( const double& rVal,
                                         sal_uInt32 nFmt, sal_uInt16 nLng) const
 {
     if (rVal >= DBL_MAX) // error string for calculator
-        return ViewShell::GetShellRes()->aCalc_Error;
+        return SwViewShell::GetShellRes()->aCalc_Error;
 
     OUString sExpand;
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();

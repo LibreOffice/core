@@ -270,7 +270,7 @@ SfxTabPage* CreatePrintOptionsPage( Window *pParent,
     return pPage;
 }
 
-void SetAppPrintOptions( ViewShell* pSh, sal_Bool bWeb )
+void SetAppPrintOptions( SwViewShell* pSh, sal_Bool bWeb )
 {
     const IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
     SwPrintData aPrtData = pIDDA->getPrintData();

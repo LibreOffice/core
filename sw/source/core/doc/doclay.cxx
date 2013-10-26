@@ -1802,7 +1802,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
     if( pTmpRoot &&
         !SfxProgress::GetActiveProgress( mpDocShell ) )
     {
-        ViewShell *pSh, *pStartSh;
+        SwViewShell *pSh, *pStartSh;
         pSh = pStartSh = GetCurrentViewShell();
         do {
             if( pSh->ActionPend() )
@@ -1810,7 +1810,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
                 pTimer->Start();
                 return 0;
             }
-            pSh = (ViewShell*)pSh->GetNext();
+            pSh = (SwViewShell*)pSh->GetNext();
         } while( pSh != pStartSh );
 
         if( pTmpRoot->IsNeedGrammarCheck() )
@@ -1883,7 +1883,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 
 IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
 {
-    ViewShell *pSh, *pStartSh;
+    SwViewShell *pSh, *pStartSh;
     pSh = pStartSh = pThis->GetCurrentViewShell();
     if( pStartSh )
         do {
@@ -1893,7 +1893,7 @@ IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
                 pSh->LockPaint();
                 pSh->UnlockPaint( sal_True );
             }
-            pSh = (ViewShell*)pSh->GetNext();
+            pSh = (SwViewShell*)pSh->GetNext();
         } while( pSh != pStartSh );
     return 0;
 }
@@ -2236,7 +2236,7 @@ bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) const
     return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
 }
 
-void SwDoc::SetCurrentViewShell( ViewShell* pNew )
+void SwDoc::SetCurrentViewShell( SwViewShell* pNew )
 {
     mpCurrentView = pNew;
 }
@@ -2256,18 +2256,18 @@ void SwDoc::SetLayouter( SwLayouter* pNew )
     mpLayouter = pNew;
 }
 
-const ViewShell *SwDoc::GetCurrentViewShell() const
+const SwViewShell *SwDoc::GetCurrentViewShell() const
 {
     return mpCurrentView;
 }
 
-ViewShell *SwDoc::GetCurrentViewShell()
+SwViewShell *SwDoc::GetCurrentViewShell()
 {
     return mpCurrentView;
 }
 
 
-// It must be able to communicate to a ViewShell. This is going to be removed later.
+// It must be able to communicate to a SwViewShell. This is going to be removed later.
 const SwRootFrm *SwDoc::GetCurrentLayout() const
 {
     if(GetCurrentViewShell())
@@ -2291,8 +2291,8 @@ bool SwDoc::HasLayout() const
 std::set<SwRootFrm*> SwDoc::GetAllLayouts()
 {
     std::set<SwRootFrm*> aAllLayouts;
-    ViewShell *pStart = GetCurrentViewShell();
-    ViewShell *pTemp = pStart;
+    SwViewShell *pStart = GetCurrentViewShell();
+    SwViewShell *pTemp = pStart;
     if ( pTemp )
     {
         do
@@ -2300,7 +2300,7 @@ std::set<SwRootFrm*> SwDoc::GetAllLayouts()
             if (pTemp->GetLayout())
             {
                 aAllLayouts.insert(pTemp->GetLayout());
-                pTemp = (ViewShell*)pTemp->GetNext();
+                pTemp = (SwViewShell*)pTemp->GetNext();
             }
         } while(pTemp!=pStart);
     }

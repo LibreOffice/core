@@ -408,7 +408,7 @@ namespace
     class RestoreMapMode
     {
         public:
-            explicit RestoreMapMode( ViewShell* pViewShell )
+            explicit RestoreMapMode( SwViewShell* pViewShell )
                 : mbMapModeRestored( false )
                 , mpOutDev( pViewShell->GetOut() )
             {
@@ -449,7 +449,7 @@ namespace
 
 void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 {
-    ViewShell* pShell = pFlyFrm->getRootFrm()->GetCurrShell();
+    SwViewShell* pShell = pFlyFrm->getRootFrm()->GetCurrShell();
 
     // Only paint when we have a current shell and a DrawingLayer paint is in progress.
     // This avcoids evtl. problems with renderers which do processing stuff,
@@ -780,7 +780,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const SwFrm *pRel = GetFlyFrm()->IsFlyLayFrm() ?
                                 GetFlyFrm()->GetAnchorFrm() :
                                 GetFlyFrm()->GetAnchorFrm()->GetUpper();
-            const ViewShell *pSh = GetFlyFrm()->getRootFrm()->GetCurrShell();
+            const SwViewShell *pSh = GetFlyFrm()->getRootFrm()->GetCurrShell();
             if ( pSh && pRel->IsBodyFrm() &&
                  pSh->GetViewOptions()->getBrowseMode() &&
                  pSh->VisArea().HasArea() )

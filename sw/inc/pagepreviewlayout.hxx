@@ -29,7 +29,7 @@
 // datatype <SwTwips>
 #include <swtypes.hxx>
 
-class ViewShell;
+class SwViewShell;
 class SwRootFrm;
 class SwPageFrm;
 class Fraction;
@@ -43,14 +43,14 @@ struct PreviewPage;
 class SwPagePreviewLayout
 {
 private:
-    friend class ViewShell;
+    friend class SwViewShell;
 
     /// number of horizontal and vertical twips for spacing between the pages.
     const SwTwips mnXFree;
     const SwTwips mnYFree;
 
     /// view shell the print preview is generated for.
-    ViewShell& mrParentViewShell;
+    SwViewShell& mrParentViewShell;
     /// top layout frame of the layout for accessing the pages
     const SwRootFrm& mrLayoutRootFrm;
 
@@ -237,7 +237,7 @@ public:
         Reference will be hold as member <mrLayoutRootFrm> in order to get
         access to the page frames.
     */
-    SwPagePreviewLayout( ViewShell& _rParentViewShell,
+    SwPagePreviewLayout( SwViewShell& _rParentViewShell,
                          const SwRootFrm&    _rLayoutRootFrm );
 
     /** destructor of <SwPagePreviewLayout>

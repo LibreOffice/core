@@ -32,7 +32,7 @@
 class   SwWrtShell;
 class   SwView;
 class   SwRect;
-class   ViewShell;
+class   SwViewShell;
 class   SwAnchorMarker;
 class   SdrObject;
 class   SwShadowCursor;
@@ -58,13 +58,13 @@ class   SdrDropMarkerOverlay;
 class SwEditWin: public Window,
                 public DropTargetHelper, public DragSourceHelper
 {
-friend void     ScrollMDI(ViewShell* pVwSh, const SwRect&,
+friend void     ScrollMDI(SwViewShell* pVwSh, const SwRect&,
                           sal_uInt16 nRangeX, sal_uInt16 nRangeY);
-friend sal_Bool     IsScrollMDI(ViewShell* pVwSh, const SwRect&);
+friend sal_Bool     IsScrollMDI(SwViewShell* pVwSh, const SwRect&);
 
-friend void     SizeNotify(ViewShell* pVwSh, const Size &);
+friend void     SizeNotify(SwViewShell* pVwSh, const Size &);
 
-friend void     PageNumNotify(  ViewShell* pVwSh,
+friend void     PageNumNotify(  SwViewShell* pVwSh,
                                 sal_uInt16 nPhyNum,
                                 sal_uInt16 nVirtNum,
                                 const OUString& rPg );

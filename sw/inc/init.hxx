@@ -25,7 +25,7 @@
 #include "osl/module.h"
 #include "osl/module.hxx"
 
-class ViewShell;
+class SwViewShell;
 
 void _InitCore();   // bastyp/init.cxx
 void _FinitCore();
@@ -51,7 +51,7 @@ private:
 // layout/newfrm.cxx
 void _FrmInit();
 void _FrmFinit();
-void SetShell( ViewShell *pSh );
+void SetShell( SwViewShell *pSh );
 
 // text/txtfrm.cxx
 void _TextInit();

@@ -610,7 +610,7 @@ void SwDoc::PrtDataChanged()
     bool bDraw = true;
     if ( pTmpRoot )
     {
-        ViewShell *pSh = GetCurrentViewShell();
+        SwViewShell *pSh = GetCurrentViewShell();
         if( pSh &&
             (!pSh->GetViewOptions()->getBrowseMode() ||
              pSh->GetViewOptions()->IsPrtFormat()) )
@@ -636,7 +636,7 @@ void SwDoc::PrtDataChanged()
             do
             {
                 pSh->InitPrt( mpPrt );
-                pSh = (ViewShell*)pSh->GetNext();
+                pSh = (SwViewShell*)pSh->GetNext();
             }
             while ( pSh != GetCurrentViewShell() );
         }
@@ -670,10 +670,10 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
     SwFEShell *pShell = 0;
     if ( GetCurrentViewShell() )
     {
-        ViewShell *pSh = GetCurrentViewShell();
+        SwViewShell *pSh = GetCurrentViewShell();
         if ( !pSh->ISA(SwFEShell) )
             do
-            {   pSh = (ViewShell*)pSh->GetNext();
+            {   pSh = (SwViewShell*)pSh->GetNext();
             } while ( !pSh->ISA(SwFEShell) &&
                       pSh != GetCurrentViewShell() );
 

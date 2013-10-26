@@ -63,7 +63,7 @@ sal_Bool RtfExportFilter::filter( const uno::Sequence< beans::PropertyValue >& a
     }
 
     // fdo#37161 - update layout (if present), for SwWriteTable
-    ViewShell* pViewShell = NULL;
+    SwViewShell* pViewShell = NULL;
     pDoc->GetEditShell(&pViewShell);
     if (pViewShell != NULL)
         pViewShell->CalcLayout();

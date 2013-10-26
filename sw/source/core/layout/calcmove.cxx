@@ -155,7 +155,7 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
 
             //determine space left in new upper frame
             nSpace = (aRect.*fnRectX->fnGetHeight)();
-            const ViewShell *pSh = pNewUpper->getRootFrm()->GetCurrShell();
+            const SwViewShell *pSh = pNewUpper->getRootFrm()->GetCurrShell();
             if ( IsInFtn() ||
                  (pSh && pSh->GetViewOptions()->getBrowseMode()) ||
                  pNewUpper->IsCellFrm() ||
@@ -700,7 +700,7 @@ void SwPageFrm::MakeAll()
                     pAttrs = pAccess->Get();
                 }
                 // In BrowseView, we use fixed settings
-                ViewShell *pSh = getRootFrm()->GetCurrShell();
+                SwViewShell *pSh = getRootFrm()->GetCurrShell();
                 if ( pSh && pSh->GetViewOptions()->getBrowseMode() )
                 {
                     const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
@@ -972,7 +972,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             const long nRight = ((SwBorderAttrs&)rAttrs).CalcRight( this );
             (this->*fnRect->fnSetXMargins)( nLeft, nRight );
 
-            ViewShell *pSh = getRootFrm()->GetCurrShell();
+            SwViewShell *pSh = getRootFrm()->GetCurrShell();
             SwTwips nWidthArea;
             if( pSh && 0!=(nWidthArea=(pSh->VisArea().*fnRect->fnGetWidth)()) &&
                 GetUpper()->IsPageBodyFrm() && // but not for BodyFrms in Columns

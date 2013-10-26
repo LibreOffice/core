@@ -318,7 +318,7 @@ void SwHTMLTableLayout::GetAvail( sal_uInt16 nCol, sal_uInt16 nColSpan,
 
 sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByVisArea( const SwDoc& rDoc )
 {
-    ViewShell *pVSh = 0;
+    SwViewShell *pVSh = 0;
     rDoc.GetEditShell( &pVSh );
     if( pVSh )
     {

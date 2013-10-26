@@ -2232,7 +2232,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 // correctly evaluated the document needs a layout
                 // (has to be already formatted)
                 SwDoc *pDoc = m_pImpl->m_pDoc;
-                ViewShell *pViewShell = 0;
+                SwViewShell *pViewShell = 0;
                 SwEditShell *pEditShell = pDoc ? pDoc->GetEditShell( &pViewShell ) : 0;
                 if (pEditShell)
                     pEditShell->CalcLayout();

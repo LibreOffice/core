@@ -70,7 +70,7 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::lang;
 
 
-static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, ViewShell* pSh )
+static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, SwViewShell* pSh )
 {
     // in FrameSets the actual visibility can differ from the ViewOption's setting
     bool bVScrollChanged = rPref.IsViewVScrollBar() != pSh->GetViewOptions()->IsViewVScrollBar();
@@ -143,7 +143,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
                             sal_uInt16 nDest )
 {
     SwView* pCurrView = pActView;
-    ViewShell* pSh = pCurrView ? &pCurrView->GetWrtShell() : 0;
+    SwViewShell* pSh = pCurrView ? &pCurrView->GetWrtShell() : 0;
 
     SwMasterUsrPref* pPref = (SwMasterUsrPref*)GetUsrPref( static_cast< sal_Bool >(
                                          VIEWOPT_DEST_WEB == nDest ? sal_True  :
@@ -192,7 +192,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     xViewOpt->SetReadonly( bReadonly );
     if( !(*pSh->GetViewOptions() == *xViewOpt) )
     {
-        //is maybe only a ViewShell
+        //is maybe only a SwViewShell
         pSh->StartAction();
         pSh->ApplyViewOptions( *xViewOpt );
         ((SwWrtShell*)pSh)->SetReadOnlyAvailable(xViewOpt->IsCursorInProtectedArea());
@@ -622,7 +622,7 @@ void SwModule::CheckSpellChanges( bool bOnlineSpelling,
             if ( pTmp->GetCurrentViewShell() )
             {
                 pTmp->SpellItAgainSam( bInvalid, bOnlyWrong, bSmartTags );
-                ViewShell* pViewShell = 0;
+                SwViewShell* pViewShell = 0;
                 pTmp->GetEditShell( &pViewShell );
                 if ( bSmartTags && pViewShell && pViewShell->GetWin() )
                     pViewShell->GetWin()->Invalidate();

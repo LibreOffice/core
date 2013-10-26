@@ -62,7 +62,7 @@ TYPEINIT1(SwFEShell,SwEditShell)
 
 void SwFEShell::EndAllActionAndCall()
 {
-    ViewShell *pTmp = this;
+    SwViewShell *pTmp = this;
     do {
         if( pTmp->IsA( TYPE(SwCrsrShell) ) )
         {
@@ -71,7 +71,7 @@ void SwFEShell::EndAllActionAndCall()
         }
         else
             pTmp->EndAction();
-    } while( this != ( pTmp = (ViewShell*)pTmp->GetNext() ));
+    } while( this != ( pTmp = (SwViewShell*)pTmp->GetNext() ));
 }
 
 
@@ -83,7 +83,7 @@ void SwFEShell::EndAllActionAndCall()
 
 Point SwFEShell::GetCntntPos( const Point& rPoint, sal_Bool bNext ) const
 {
-    SET_CURR_SHELL( (ViewShell*)this );
+    SET_CURR_SHELL( (SwViewShell*)this );
     return GetLayout()->GetNextPrevCntntPos( rPoint, bNext );
 }
 
@@ -93,7 +93,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
 {
     const SwFrm *pFrm = Imp()->HasDrawView()
                 ? ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
-                                      (ViewShell*)this)
+                                      (SwViewShell*)this)
                 : 0;
 
     if( !pFrm )

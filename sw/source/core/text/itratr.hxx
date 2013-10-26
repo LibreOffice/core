@@ -32,7 +32,7 @@ class SwTxtAttr;
 class SwAttrSet;
 class SwTxtNode;
 class SwRedlineItr;
-class ViewShell;
+class SwViewShell;
 class SwTxtFrm;
 
 /*************************************************************************
@@ -45,7 +45,7 @@ class SwAttrIter
 protected:
 
     SwAttrHandler aAttrHandler;
-    ViewShell *pShell;
+    SwViewShell *pShell;
     SwFont *pFnt;
     SwpHints  *pHints;
     const SwAttrSet* pAttrSet;       // The char attribute set

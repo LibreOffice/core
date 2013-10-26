@@ -551,7 +551,7 @@ bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
                             if ( i == DI_CUSTOM )
                                 sNew = SW_RES( STR_CUSTOM );
                             else
-                                sNew = ViewShell::GetShellRes()->aDocInfoLst[i];
+                                sNew = SwViewShell::GetShellRes()->aDocInfoLst[i];
                         }
                         else
                             sNew = SW_RES(aSwFlds[nPos].nSubTypeStart + i);

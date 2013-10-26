@@ -51,7 +51,7 @@ sal_Bool SwAccessibleCell::IsSelected()
     sal_Bool bRet = sal_False;
 
     OSL_ENSURE( GetMap(), "no map?" );
-    const ViewShell *pVSh = GetMap()->GetShell();
+    const SwViewShell *pVSh = GetMap()->GetShell();
     OSL_ENSURE( pVSh, "no shell?" );
     if( pVSh->ISA( SwCrsrShell ) )
     {
@@ -75,7 +75,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     SwAccessibleContext::GetStates( rStateSet );
 
     // SELECTABLE
-    const ViewShell *pVSh = GetMap()->GetShell();
+    const SwViewShell *pVSh = GetMap()->GetShell();
     OSL_ENSURE( pVSh, "no shell?" );
     if( pVSh->ISA( SwCrsrShell ) )
         rStateSet.AddState( AccessibleStateType::SELECTABLE );

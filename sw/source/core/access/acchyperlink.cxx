@@ -76,7 +76,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
         const SwFmtINetFmt& rINetFmt = pTxtAttr->GetINetFmt();
         if( !rINetFmt.GetValue().isEmpty() )
         {
-            ViewShell *pVSh = xPara->GetShell();
+            SwViewShell *pVSh = xPara->GetShell();
             if( pVSh )
             {
                 LoadURL(*pVSh, rINetFmt.GetValue(), URLLOAD_NOFILTER,

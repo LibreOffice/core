@@ -12,7 +12,7 @@
 
 #include <svx/ruler.hxx>
 
-class ViewShell;
+class SwViewShell;
 class View;
 class Window;
 class SwEditWin;
@@ -27,7 +27,7 @@ class SwCommentRuler
 {
 public:
     SwCommentRuler (
-        ViewShell* pViewSh,
+        SwViewShell* pViewSh,
         Window* pParent,
         SwEditWin* pWin,
         sal_uInt16 nRulerFlags,
@@ -42,7 +42,7 @@ public:
     virtual void Paint( const Rectangle& rRect );
 
 protected:
-    ViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility
+    SwViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility
     SwEditWin * mpSwWin;         //< Used to get SwView to change the SideBar visibility
     bool        mbIsHighlighted; //< If comment control is highlighted (mouse is over it)
     VirtualDevice maVirDev;      //< VirtualDevice of this window. Just for convenience.

@@ -340,7 +340,7 @@ SwRect SwAccessibleFrame::GetBounds( const SwAccessibleMap& rAccMap,
     return aBounds;
 }
 
-sal_Bool SwAccessibleFrame::IsEditable( ViewShell *pVSh ) const
+sal_Bool SwAccessibleFrame::IsEditable( SwViewShell *pVSh ) const
 {
     const SwFrm *pFrm = GetFrm();
     if( !pFrm )
@@ -357,7 +357,7 @@ sal_Bool SwAccessibleFrame::IsEditable( ViewShell *pVSh ) const
     return sal_True;
 }
 
-sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const
+sal_Bool SwAccessibleFrame::IsOpaque( SwViewShell *pVSh ) const
 {
     SwAccessibleChild aFrm( GetFrm() );
     if( !aFrm.GetSwFrm() )

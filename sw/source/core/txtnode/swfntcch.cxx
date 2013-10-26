@@ -35,7 +35,7 @@ SwFontCache *pSwFontCache = NULL;
 |*
 |*************************************************************************/
 
-SwFontObj::SwFontObj( const void *pOwn, ViewShell *pSh ) :
+SwFontObj::SwFontObj( const void *pOwn, SwViewShell *pSh ) :
     SwCacheObj( (void*)pOwn ),
     aSwFont( &((SwTxtFmtColl *)pOwn)->GetAttrSet(), pSh ? pSh->getIDocumentSettingAccess() : 0 )
 {
@@ -55,7 +55,7 @@ SwFontObj::~SwFontObj()
 |*
 |*************************************************************************/
 
-SwFontAccess::SwFontAccess( const void *pOwn, ViewShell *pSh ) :
+SwFontAccess::SwFontAccess( const void *pOwn, SwViewShell *pSh ) :
     SwCacheAccess( *pSwFontCache, pOwn,
             ((SwTxtFmtColl*)pOwn)->IsInSwFntCache() ),
     pShell( pSh )
