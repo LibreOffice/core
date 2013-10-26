@@ -19,6 +19,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <xmloff/attrlist.hxx>
 #include <ucbhelper/content.hxx>
@@ -1030,24 +1031,15 @@ throw (RuntimeException)
     return OUString (  "com.sun.star.comp.Writer.MWAWImportFilter"  );
 }
 
-#define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
-#define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-sal_Bool SAL_CALL MWAWImportFilter_supportsService( const OUString &ServiceName )
-throw (RuntimeException)
-{
-    return ( ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
-}
 Sequence< OUString > SAL_CALL MWAWImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
-    pArray[0] =  OUString (  SERVICE_NAME1  );
-    pArray[1] =  OUString (  SERVICE_NAME2  );
+    pArray[0] =  OUString ( "com.sun.star.document.ImportFilter" );
+    pArray[1] =  OUString ( "com.sun.star.document.ExtendedTypeDetection" );
     return aRet;
 }
-#undef SERVICE_NAME2
-#undef SERVICE_NAME1
 
 Reference< XInterface > SAL_CALL MWAWImportFilter_createInstance( const Reference< XComponentContext > &rContext)
 throw( Exception )
@@ -1064,7 +1056,7 @@ throw (RuntimeException)
 sal_Bool SAL_CALL MWAWImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException)
 {
-    return MWAWImportFilter_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL MWAWImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException)

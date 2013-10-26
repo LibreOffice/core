@@ -27,6 +27,7 @@
 #include <ZipPackageFolderEnumeration.hxx>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <osl/time.h>
 #include <rtl/digest.h>
@@ -833,10 +834,11 @@ uno::Sequence< OUString > ZipPackageFolder::getSupportedServiceNames()
     aNames[0] = "com.sun.star.packages.PackageFolder";
     return aNames;
 }
+
 sal_Bool SAL_CALL ZipPackageFolder::supportsService( OUString const & rServiceName )
     throw (uno::RuntimeException)
 {
-    return rServiceName == getSupportedServiceNames()[0];
+    return cppu::supportsService(this, rServiceName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

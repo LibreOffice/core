@@ -19,6 +19,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <xmloff/attrlist.hxx>
 #include <sfx2/passwd.hxx>
@@ -240,24 +241,15 @@ throw (RuntimeException)
     return OUString (  "com.sun.star.comp.Writer.WordPerfectImportFilter"  );
 }
 
-#define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
-#define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-sal_Bool SAL_CALL WordPerfectImportFilter_supportsService( const OUString &ServiceName )
-throw (RuntimeException)
-{
-    return ( ServiceName == SERVICE_NAME1 || ServiceName == SERVICE_NAME2 );
-}
 Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
-    pArray[0] =  OUString (  SERVICE_NAME1  );
-    pArray[1] =  OUString (  SERVICE_NAME2  );
+    pArray[0] =  OUString ( "com.sun.star.document.ImportFilter" );
+    pArray[1] =  OUString ( "com.sun.star.document.ExtendedTypeDetection" );
     return aRet;
 }
-#undef SERVICE_NAME2
-#undef SERVICE_NAME1
 
 Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )
@@ -274,7 +266,7 @@ throw (RuntimeException)
 sal_Bool SAL_CALL WordPerfectImportFilter::supportsService( const OUString &rServiceName )
 throw (RuntimeException)
 {
-    return WordPerfectImportFilter_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames(  )
 throw (RuntimeException)
@@ -366,7 +358,7 @@ throw (RuntimeException)
 sal_Bool SAL_CALL WordPerfectImportFilterDialog::supportsService( const OUString &rServiceName )
 throw (RuntimeException)
 {
-    return WordPerfectImportFilterDialog_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 
 Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog::getSupportedServiceNames(  )
@@ -381,22 +373,14 @@ throw (RuntimeException)
     return OUString (  "com.sun.star.comp.Writer.WordPerfectImportFilterDialog"  );
 }
 
-#define SERVICE_NAME "com.sun.star.ui.dialogs.FilterOptionsDialog"
-sal_Bool SAL_CALL WordPerfectImportFilterDialog_supportsService( const OUString &ServiceName )
-throw (RuntimeException)
-{
-    return ( ServiceName == SERVICE_NAME );
-}
-
 Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog_getSupportedServiceNames(  )
 throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
     OUString *pArray = aRet.getArray();
-    pArray[0] =  OUString (  SERVICE_NAME  );
+    pArray[0] =  OUString ( "com.sun.star.ui.dialogs.FilterOptionsDialog" );
     return aRet;
 }
-#undef SERVICE_NAME
 
 Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance( const Reference< XComponentContext > & rContext)
 throw( Exception )

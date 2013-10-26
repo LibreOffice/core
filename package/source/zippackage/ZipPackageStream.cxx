@@ -41,6 +41,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/instance.hxx>
 
@@ -920,7 +921,7 @@ Sequence< OUString > ZipPackageStream::getSupportedServiceNames()
 sal_Bool SAL_CALL ZipPackageStream::supportsService( OUString const & rServiceName )
     throw ( RuntimeException )
 {
-    return rServiceName == getSupportedServiceNames()[0];
+    return cppu::supportsService(this, rServiceName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

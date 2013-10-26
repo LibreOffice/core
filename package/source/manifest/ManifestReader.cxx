@@ -21,6 +21,7 @@
 #include <ManifestImport.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -92,11 +93,6 @@ OUString ManifestReader::static_getImplementationName()
     return OUString( "com.sun.star.packages.manifest.comp.ManifestReader" );
 }
 
-sal_Bool SAL_CALL ManifestReader::static_supportsService(OUString const & rServiceName)
-{
-    return rServiceName == getSupportedServiceNames()[0];
-}
-
 Sequence < OUString > ManifestReader::static_getSupportedServiceNames()
 {
     Sequence < OUString > aNames(1);
@@ -113,7 +109,7 @@ OUString ManifestReader::getImplementationName()
 sal_Bool SAL_CALL ManifestReader::supportsService(OUString const & rServiceName)
     throw (RuntimeException)
 {
-    return static_supportsService ( rServiceName );
+    return cppu::supportsService(this, rServiceName );
 }
 
 Sequence < OUString > ManifestReader::getSupportedServiceNames()
