@@ -47,7 +47,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 		&& $(if $(filter WNT,$(OS)),\
-			   PATH="$(shell cygpath -u $(OUTDIR)/bin):$$PATH",\
+			   PATH="$(shell cygpath -u $(call gb_UnpackedTarball_get_dir,icu)/source/lib):$$PATH",\
 			   $(gb_Helper_set_ld_path)) \
 		   $(MAKE) firebird_embedded \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
