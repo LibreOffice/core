@@ -1275,6 +1275,27 @@ bool NormalModeHandler::ProcessButtonDownEvent (
             DeselectAllPages();
             break;
 
+        case BUTTON_DOWN | LEFT_BUTTON | DOUBLE_CLICK | NOT_OVER_PAGE:
+        {
+            // Insert a new slide:
+            // First of all we need to set the insertion indicator which sets the
+            // position where the new slide will be inserted.
+            ::boost::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler
+                = mrSlideSorter.GetController().GetInsertionIndicatorHandler();
+
+            pInsertionIndicatorHandler->Start(false);
+            pInsertionIndicatorHandler->UpdatePosition(
+                    rDescriptor.maMousePosition,
+                    InsertionIndicatorHandler::MoveMode);
+            mrSlideSorter.GetController().GetSelectionManager()->SetInsertionPosition(
+                pInsertionIndicatorHandler->GetInsertionPageIndex());
+
+            mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
+                SID_INSERTPAGE,
+                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            break;
+        }
+
         default:
             return false;
     }
