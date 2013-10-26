@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// i72022: ad-hoc to forcibly enable reconversion
-#if WINVER < 0x0500
-#undef WINVER
-#define WINVER 0x0500
-#endif
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -5484,7 +5477,6 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
 }
 
 // -----------------------------------------------------------------------
-#if WINVER >= 0x0500
 
 static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
 {
@@ -5606,8 +5598,6 @@ static LRESULT ImplHandleIMEQueryCharPosition( HWND hWnd, LPARAM lParam ) {
 
     return TRUE;
 }
-
-#endif // WINVER >= 0x0500
 
 // -----------------------------------------------------------------------
 
@@ -6022,7 +6012,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 nRet = 1;
             }
             break;
-#if WINVER >= 0x0500
         case WM_IME_REQUEST:
             if ( (sal_uIntPtr)( wParam ) == IMR_RECONVERTSTRING )
             {
@@ -6040,7 +6029,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 rDef = FALSE;
             }
             break;
-#endif // WINVER >= 0x0500
     }
 
     // catch WheelMouse-Message
