@@ -24,9 +24,9 @@ copy-stuff:
 # the .apk and/or unpacked at install time might be unnecessary.
 #
 	mkdir -p assets/gz.unpack/program/ure assets/lib assets/program/services assets/ure/share/misc assets/ComponentTarget/i18npool/util
-	gzip -9 <$(OUTDIR)/bin/offapi.rdb >assets/gz.unpack/program/offapi.rdb
-	gzip -9 <$(OUTDIR)/bin/oovbaapi.rdb >assets/gz.unpack/program/oovbaapi.rdb
-	gzip -9 <$(OUTDIR)/bin/udkapi.rdb >assets/gz.unpack/program/udkapi.rdb
+	gzip -9 <$(INSTDIR)/$(LIBO_ETC_FOLDER)/types/offapi.rdb >assets/gz.unpack/program/offapi.rdb
+	gzip -9 <$(INSTDIR)/$(LIBO_ETC_FOLDER)/types/oovbaapi.rdb >assets/gz.unpack/program/oovbaapi.rdb
+	gzip -9 <$(INSTDIR)/$(LIBO_URE_SHARE_FOLDER)/misc/types.rdb >assets/gz.unpack/program/udkapi.rdb
 # For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
 # So just hardcode the known APP_DATA_PATH for now...
 	for F in program/services/services ure/share/misc/services; do \
