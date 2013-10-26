@@ -33,8 +33,42 @@ struct FormulaGroupContext : boost::noncopyable
     typedef boost::ptr_vector<NumArrayType> NumArrayStoreType;
     typedef boost::ptr_vector<StrArrayType> StrArrayStoreType;
 
-    NumArrayStoreType maNumArrays;
-    StrArrayStoreType maStrArrays;
+    struct ColKey
+    {
+        SCTAB mnTab;
+        SCCOL mnCol;
+
+        struct Hash
+        {
+            size_t operator() ( const ColKey& rKey ) const;
+        };
+
+        ColKey( SCTAB nTab, SCCOL nCol );
+
+        bool operator== ( const ColKey& r ) const;
+        bool operator!= ( const ColKey& r ) const;
+    };
+
+    struct ColArray
+    {
+        NumArrayType* mpNumArray;
+        StrArrayType* mpStrArray;
+        size_t mnSize;
+
+        ColArray( NumArrayType* pNumArray, StrArrayType* pStrArray );
+    };
+
+    typedef boost::unordered_map<ColKey, ColArray, ColKey::Hash> ColArraysType;
+
+    NumArrayStoreType maNumArrays; /// manage life cycle of numeric arrays.
+    StrArrayStoreType maStrArrays; /// manage life cycle of string arrays.
+
+    ColArraysType maColArrays; /// keep track of longest array for each column.
+
+    ColArray* getCachedColArray( SCTAB nTab, SCCOL nCol, size_t nSize );
+
+    ColArray* setCachedColArray(
+        SCTAB nTab, SCCOL nCol, NumArrayType* pNumArray, StrArrayType* pStrArray );
 };
 
 /**

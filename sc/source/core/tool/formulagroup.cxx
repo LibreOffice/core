@@ -39,6 +39,70 @@ extern "C" void compileOpenCLKernels(const OUString*);
 
 namespace sc {
 
+size_t FormulaGroupContext::ColKey::Hash::operator ()( const FormulaGroupContext::ColKey& rKey ) const
+{
+    return rKey.mnTab * MAXCOLCOUNT + rKey.mnCol;
+}
+
+FormulaGroupContext::ColKey::ColKey( SCTAB nTab, SCCOL nCol ) : mnTab(nTab), mnCol(nCol) {}
+
+bool FormulaGroupContext::ColKey::operator== ( const ColKey& r ) const
+{
+    return mnTab == r.mnTab && mnCol == r.mnCol;
+}
+
+bool FormulaGroupContext::ColKey::operator!= ( const ColKey& r ) const
+{
+    return !operator==(r);
+}
+
+FormulaGroupContext::ColArray::ColArray( NumArrayType* pNumArray, StrArrayType* pStrArray ) :
+    mpNumArray(pNumArray), mpStrArray(pStrArray), mnSize(0)
+{
+    if (mpNumArray)
+        mnSize = mpNumArray->size();
+    else if (mpStrArray)
+        mnSize = mpStrArray->size();
+}
+
+FormulaGroupContext::ColArray* FormulaGroupContext::getCachedColArray( SCTAB nTab, SCCOL nCol, size_t nSize )
+{
+    ColArraysType::iterator itColArray = maColArrays.find(ColKey(nTab, nCol));
+    if (itColArray == maColArrays.end())
+        // Not cached for this column.
+        return NULL;
+
+    ColArray& rCached = itColArray->second;
+    if (nSize > rCached.mnSize)
+        // Cached data array is not long enough for the requested range.
+        return NULL;
+
+    return &rCached;
+}
+
+FormulaGroupContext::ColArray* FormulaGroupContext::setCachedColArray(
+    SCTAB nTab, SCCOL nCol, NumArrayType* pNumArray, StrArrayType* pStrArray )
+{
+    ColArraysType::iterator it = maColArrays.find(ColKey(nTab, nCol));
+    if (it == maColArrays.end())
+    {
+        std::pair<ColArraysType::iterator,bool> r =
+            maColArrays.insert(
+                ColArraysType::value_type(ColKey(nTab, nCol), ColArray(pNumArray, pStrArray)));
+
+        if (!r.second)
+            // Somehow the insertion failed.
+            return NULL;
+
+        return &r.first->second;
+    }
+
+    // Prior array exists for this column. Overwrite it.
+    ColArray& rArray = it->second;
+    rArray = ColArray(pNumArray, pStrArray);
+    return &rArray;
+}
+
 namespace {
 
 /**

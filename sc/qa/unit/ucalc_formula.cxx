@@ -152,6 +152,84 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 6, 13));
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 7, "ABC"));
 
+    // Column E consists of formula cells whose results are all numeric.
+    for (SCROW i = 0; i <= 6; ++i)
+        m_pDoc->SetString(ScAddress(4,i,0), "=ROW()");
+    m_pDoc->CalcAll();
+
+    // Leave row 7 empty.
+    m_pDoc->SetString(ScAddress(4,8,0), "Andy");
+    m_pDoc->SetValue(ScAddress(4,9,0), 123);
+
+    // This array fits within a single formula block.
+    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(4,0,0), 5);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array should be purely numeric.", aArray.mpNumericArray && !aArray.mpStringArray);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 1));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 1, 2));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 3));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 3, 4));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 4, 5));
+
+    // This array spans over multiple blocks.
+    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(4,0,0), 11);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 1));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 1, 2));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 3));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 3, 4));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 4, 5));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 5, 6));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 6, 7));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 7));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 8, "Andy"));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 9, 123));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 10));
+
+    // Hit the cache but at a different start row.
+    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(4,2,0), 3);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array should at least have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 3));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 1, 4));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 5));
+
+    // Column F begins with empty rows at the top.
+    m_pDoc->SetValue(ScAddress(5,2,0), 1.1);
+    m_pDoc->SetValue(ScAddress(5,3,0), 1.2);
+    m_pDoc->SetString(ScAddress(5,4,0), "=2*8");
+    m_pDoc->CalcAll();
+
+    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(5,2,0), 4);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array should at least have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 1.1));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 1, 1.2));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 16));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 3));
+
+    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(5,0,0), 3);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array should at least have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 0));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 1));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 1.1));
+
+    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(5,0,0), 10);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array should at least have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 0));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 1));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 1.1));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 3, 1.2));
+    CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 4, 16));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 5));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 6));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 7));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 8));
+    CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 9));
+
     m_pDoc->DeleteTab(0);
 }
 
