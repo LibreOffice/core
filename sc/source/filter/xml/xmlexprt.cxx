@@ -3211,10 +3211,10 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                 OUString sFormula(lcl_GetRawString(pDoc, aCellPos));
                 OUString sCellString = aCell.maBaseCell.getString(pDoc);
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                        sFormula, sCellString, true, true);
+                        sCellString, sFormula, true, true);
                 if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                            sFormula, sCellString, false, true, XML_NAMESPACE_CALC_EXT);
+                            sCellString, sFormula, false, true, XML_NAMESPACE_CALC_EXT);
             }
             break;
         case table::CellContentType_FORMULA :
