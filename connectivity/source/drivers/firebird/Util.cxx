@@ -201,10 +201,10 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
             pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen + 2);
             break;
         case SQL_SHORT:
-            pVar->sqldata = (char *)malloc(sizeof(short));
+            pVar->sqldata = (char*) malloc(sizeof(sal_Int16));
             break;
         case SQL_LONG:
-            pVar->sqldata = (char *)malloc(sizeof(long));
+            pVar->sqldata = (char*) malloc(sizeof(sal_Int32));
             break;
         case SQL_FLOAT:
             pVar->sqldata = (char *)malloc(sizeof(float));
