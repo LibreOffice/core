@@ -79,6 +79,7 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_nMaxWidth( 0 ),
     m_nMaxHeight( 0 )
 {
+    // SAL_DEBUG("SvpSalFrame::SvpSalFrame: " << this);
     // fast and easy cross-platform wiping of the data
     memset( (void *)&m_aSystemChildData, 0, sizeof( SystemEnvData ) );
     m_aSystemChildData.nSize        = sizeof( SystemEnvData );
@@ -114,6 +115,7 @@ SvpSalFrame::~SvpSalFrame()
 
     if( s_pFocusFrame == this )
     {
+        // SAL_DEBUG("SvpSalFrame::~SvpSalFrame: losing focus: " << this);
         s_pFocusFrame = NULL;
         // call directly here, else an event for a destroyed frame would be dispatched
         CallCallback( SALEVENT_LOSEFOCUS, NULL );
@@ -142,10 +144,14 @@ SvpSalFrame::~SvpSalFrame()
 
 void SvpSalFrame::GetFocus()
 {
+    if( s_pFocusFrame == this )
+        return;
+
     if( (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_FLOAT)) == 0 )
     {
         if( s_pFocusFrame )
             s_pFocusFrame->LoseFocus();
+        // SAL_DEBUG("SvpSalFrame::GetFocus(): " << this);
         s_pFocusFrame = this;
         m_pInstance->PostEvent( this, NULL, SALEVENT_GETFOCUS );
     }
@@ -155,6 +161,7 @@ void SvpSalFrame::LoseFocus()
 {
     if( s_pFocusFrame == this )
     {
+        // SAL_DEBUG("SvpSalFrame::LoseFocus: " << this);
         m_pInstance->PostEvent( this, NULL, SALEVENT_LOSEFOCUS );
         s_pFocusFrame = NULL;
     }
