@@ -191,20 +191,18 @@ sal_Bool CuiAboutConfigTabPage::FillItemSet( SfxItemSet& )
     sal_Bool bModified = sal_False;
     Reference< XNameAccess > xUpdateAccess = getConfigAccess( "/", sal_True );
 
-    for( size_t nInd = 0; nInd < m_vectorOfModified.size(); ++nInd )
+    std::vector< boost::shared_ptr< Prop_Impl > >::iterator pIter;
+    for( pIter = m_vectorOfModified.begin() ; pIter != m_vectorOfModified.end(); ++pIter )
     {
-        boost::shared_ptr< Prop_Impl > aNamedValue = m_vectorOfModified[ nInd ];
-
-        xUpdateAccess = getConfigAccess( aNamedValue->Name , sal_True );
+        xUpdateAccess = getConfigAccess( (*pIter)->Name , sal_True );
         Reference< XNameReplace > xNameReplace( xUpdateAccess, UNO_QUERY_THROW );
 
-        xNameReplace->replaceByName( aNamedValue->Property, aNamedValue->Value );
+        xNameReplace->replaceByName( (*pIter)->Property, (*pIter)->Value );
         bModified = sal_True;
+
+        Reference< util::XChangesBatch > xChangesBatch( xUpdateAccess, UNO_QUERY_THROW );
+        xChangesBatch->commitChanges();
     }
-
-    Reference< util::XChangesBatch > xChangesBatch( xUpdateAccess, UNO_QUERY_THROW );
-
-    xChangesBatch->commitChanges();
 
     return bModified;
 }
@@ -638,10 +636,10 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                         throw uno::Exception();
 
 
-                AddToModifiedVector( pProperty );
                 sDialogValue = sNewValue;
             }
         }
+        AddToModifiedVector( pProperty );
 
         //update listbox value.
         m_pPrefBox->SetEntryText( sDialogValue,  pEntry, 3 );
