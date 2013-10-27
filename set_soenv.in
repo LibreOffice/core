@@ -991,6 +991,12 @@ $PERL_PATH            = dirname('@PERL@'); # Perl Path
 $XLIB                 = PathFormat('@XLIB@'); # X11 libraries
 $XINC                 = PathFormat('@XINC@'); # X11 includes
 
+# YD disable autodetection, use PATH
+if ( $platform =~ m/os2/ )
+{
+   $PERL = 'perl';
+   $PERL_PATH = '';
+}
 
 # Mac OS X/Darwin only variables.
 if ( $platform =~ m/darwin/ )
@@ -2080,6 +2086,7 @@ if ( $platform =~ m/os2/ )
    ToFile( "LS",                "ls.exe",           "e" );
    ToFile( "GNUCOPY",           "cp.exe",           "e" );
    ToFile( "TOUCH",             "touch",            "e" );
+   ToFile( "CONFIG_SITE",       "/@unixroot/usr/share/config.site", "e" );
 }
 
 # $perlpre is only used for the following three variables

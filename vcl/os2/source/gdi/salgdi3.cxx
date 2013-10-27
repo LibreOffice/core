@@ -837,7 +837,7 @@ USHORT Os2SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         return 0;
     }
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL>10
     debug_printf( "Os2SalGraphics::SetFont\n");
 #endif
 

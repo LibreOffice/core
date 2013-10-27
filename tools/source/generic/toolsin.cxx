@@ -31,7 +31,7 @@
 #include <tools/debug.hxx>
 #include <toolsin.hxx>
 
-#if defined WNT || defined OS2
+#if defined WNT
 #include <dll.hxx>
 #endif
 

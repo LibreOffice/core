@@ -87,10 +87,6 @@ gb_CFLAGS := \
 	-I$(JAVA_HOME)/include \
 	-I$(JAVA_HOME)/include/os2
 
-
-#	-fvisibility=hidden \
-#
-
 gb_CXXFLAGS := \
 	-Zomf \
 	-Wall \
@@ -108,7 +104,7 @@ gb_CXXFLAGS := \
 
 gb_STDLIBS = \
 	z \
-	stdc++ \
+	stdc++
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -Werror
