@@ -190,12 +190,10 @@
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan &&
         gestureRecognizer.numberOfTouches == 1) {
         if ([self topLeftResizeHandleIsCloseTo:location]) {
-            NSLog(@"===> dragging TOPLEFT handle");
             draggedHandle = TOPLEFT;
             dragOffset.x = location.x - self.selectionRectangles[0].origin.x;
             dragOffset.y = location.y - self.selectionRectangles[0].origin.y;
         } else if ([self bottomRightResizeHandleIsCloseTo:location]) {
-            NSLog(@"===> dragging BOTTOMRIGHT handle");
             draggedHandle = BOTTOMRIGHT;
             dragOffset.x = location.x - self.selectionRectangles[N-1].origin.x;
             dragOffset.y = location.y - self.selectionRectangles[N-1].origin.y;
