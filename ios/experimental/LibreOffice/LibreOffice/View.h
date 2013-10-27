@@ -15,6 +15,7 @@
 {
 @public
     UITextView* textView;
+    CGRect applicationFrame;
 }
 - (void)drawRect:(CGRect)rect;
 - (void)tapGesture:(UITapGestureRecognizer *)gestureRecognizer;

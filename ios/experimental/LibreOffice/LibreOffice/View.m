@@ -51,6 +51,9 @@
 
 - (bool) topLeftResizeHandleIsCloseTo:(CGPoint)position
 {
+    if (self.selectionRectangleCount == 0)
+        return false;
+
     return ((SQUARE((self.selectionRectangles[0].origin.x - HANDLE_STEM_WIDTH/2) - position.x) +
              SQUARE((self.selectionRectangles[0].origin.y - HANDLE_STEM_HEIGHT/2 - HANDLE_BLOB/2) - position.y)) <
             SQUARE(DRAG_RADIUS));
@@ -59,6 +62,9 @@
 - (bool) bottomRightResizeHandleIsCloseTo:(CGPoint)position
 {
     const int N = self.selectionRectangleCount;
+
+    if (N == 0)
+        return false;
 
     return ((SQUARE((self.selectionRectangles[N-1].origin.x +
                      self.selectionRectangles[N-1].size.width + HANDLE_STEM_WIDTH/2) - position.x) +
@@ -114,6 +120,7 @@
 - (void)drawRect:(CGRect)rect
 {
     // NSLog(@"View drawRect: %dx%d@(%d,%d)", (int) rect.size.width, (int) rect.size.height, (int) rect.origin.x, (int) rect.origin.y);
+    // NSLog(@"  self.frame : %dx%d@(%d,%d)", (int) self.frame.size.width, (int) self.frame.size.height, (int) self.frame.origin.x, (int) self.frame.origin.y);
     // NSLog(@"statusBarOrientation: %ld", (long)[[UIApplication sharedApplication] statusBarOrientation]);
 
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -121,7 +128,13 @@
 
     switch ([[UIApplication sharedApplication] statusBarOrientation]) {
     case UIInterfaceOrientationPortrait:
-        CGContextTranslateCTM(context, 0, self.frame.size.height);
+        // No idea why I need to do this ugly subtraction of
+        // applicationFrame.origin.y here. The handling of View frame
+        // and applicationFrame has been a bit of a mystery to me.
+        // Anyway, unless a Right Way to do this is figured out,
+        // corresponding hacks are needed for the other orientations,
+        // too, obiously.
+        CGContextTranslateCTM(context, 0, self.frame.size.height - applicationFrame.origin.y);
         CGContextScaleCTM(context, 1, -1);
         break;
     case UIInterfaceOrientationLandscapeLeft:
@@ -179,9 +192,7 @@
         previous = CGPointMake(0, 0);
     }
 
-    CGPoint delta;
-    delta.x = translation.x - previous.x;
-    delta.y = translation.y - previous.y;
+    CGPoint delta = CGPointMake(translation.x - previous.x, translation.y - previous.y);
 
     // NSLog(@"location: (%f,%f) , drag: (%f,%f)", location.x, location.y, delta.x, delta.y);
 
@@ -191,12 +202,15 @@
         gestureRecognizer.numberOfTouches == 1) {
         if ([self topLeftResizeHandleIsCloseTo:location]) {
             draggedHandle = TOPLEFT;
-            dragOffset.x = location.x - self.selectionRectangles[0].origin.x;
-            dragOffset.y = location.y - self.selectionRectangles[0].origin.y;
+            dragOffset = CGPointMake(location.x - self.selectionRectangles[0].origin.x,
+                                     location.y - (self.selectionRectangles[0].origin.y +
+                                                   self.selectionRectangles[0].size.height/2));
         } else if ([self bottomRightResizeHandleIsCloseTo:location]) {
             draggedHandle = BOTTOMRIGHT;
-            dragOffset.x = location.x - self.selectionRectangles[N-1].origin.x;
-            dragOffset.y = location.y - self.selectionRectangles[N-1].origin.y;
+            dragOffset = CGPointMake(location.x - (self.selectionRectangles[N-1].origin.x +
+                                                   self.selectionRectangles[N-1].size.width),
+                                     location.y - (self.selectionRectangles[N-1].origin.y +
+                                                   self.selectionRectangles[N-1].size.height/2));
         }
     }
 

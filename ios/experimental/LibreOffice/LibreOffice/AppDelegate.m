@@ -46,11 +46,13 @@ static BOOL keyboardShows;
     [self.window makeKeyAndVisible];
     
     CGRect r = [self.window frame];
-    r.origin = CGPointMake(0, 0);
 
     self.view = [[View alloc] initWithFrame: r];
     vc.view = self.view;
     theView = self.view;
+
+    // This is baaad
+    theView->applicationFrame = applicationFrame;
 
     self.view->textView = [[UITextView alloc] initWithFrame: r];
     self.view->textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
