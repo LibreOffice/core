@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="DoCmd" script:language="StarBasic">Option Explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="DoCmd" script:language="StarBasic">REM =======================================================================================================================
+REM ===					The Access2Base library is a part of the LibreOffice project.									===
+REM ===					Full documentation is available on http://www.access2base.com									===
+REM =======================================================================================================================
+
+Option Explicit
 
 Type _FindParams
 	FindRecord				As Integer		&apos;	Set to 1 at first invocation of FindRecord
@@ -690,10 +695,16 @@ Dim iPosSize As Integer
 
 Dim oWindow As Object
 	Set oWindow = _SelectWindow()
-	If Not IsNull(oWindow.Frame) Then
-		oWindow.Frame.ContainerWindow.setPosSize(pvRight, pvDown, pvWidth, pvHeight, iPosSize)
-		MoveSize = True
-	End If
+	With oWindow
+		If Not IsNull(.Frame) Then
+			If Utils._hasUNOProperty(.Frame.ContainerWindow, &quot;IsMaximized&quot;) Then	&apos;	Ignored when &lt;= OO3.2
+				.Frame.ContainerWindow.IsMaximized = False
+				.Frame.ContainerWindow.IsMinimized = False
+			End If
+			.Frame.ContainerWindow.setPosSize(pvRight, pvDown, pvWidth, pvHeight, iPosSize)
+			MoveSize = True
+		End If
+	End With
 	
 Exit_Function:
 	Utils._ResetCalledSub(&quot;MoveSize&quot;)
@@ -1319,6 +1330,7 @@ Dim iVBACommand As Integer, sOOCommand As String, sDispatch As String
 		Case iVBACommand = acCmdSelectAllRecords  Or UCase(sOOCommand) = &quot;SELECTALL&quot; : sDispatch = &quot;SelectAll&quot;
 		Case iVBACommand = acCmdSendToBack  Or UCase(sOOCommand) = &quot;SENDTOBACK&quot; : sDispatch = &quot;SendToBack&quot;
 		Case UCase(sOOCommand) = &quot;SHOWFMEXPLORER&quot; : sDispatch = &quot;ShowFmExplorer&quot;
+		Case UCase(sOOCommand) = &quot;SIDEBAR&quot; : sDispatch = &quot;Sidebar&quot;
 		Case iVBACommand = acCmdSortDescending  Or UCase(sOOCommand) = &quot;SORTDOWN&quot; : sDispatch = &quot;SortDown&quot;
 		Case iVBACommand = acCmdSortAscending  Or UCase(sOOCommand) = &quot;SORTUP&quot; : sDispatch = &quot;Sortup&quot;
 		Case UCase(sOOCommand) = &quot;SPINBUTTON&quot; : sDispatch = &quot;SpinButton&quot;
