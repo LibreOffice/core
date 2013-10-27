@@ -16,9 +16,12 @@
 @property int selectionRectangleCount;
 @end
 
-#define HANDLE_BLOB 40
-#define HANDLE_STEM_WIDTH 6
-#define HANDLE_STEM_HEIGHT 40
+#define HANDLE_BLOB 20
+#define DRAG_RADIUS (HANDLE_BLOB + 20)
+#define HANDLE_STEM_WIDTH 4
+#define HANDLE_STEM_HEIGHT 10
+
+#define SQUARE(n) ((n)*(n))
 
 @implementation View
 
@@ -46,6 +49,24 @@
                       HANDLE_BLOB, HANDLE_BLOB);
 }
 
+- (bool) topLeftResizeHandleIsCloseTo:(CGPoint)position
+{
+    return ((SQUARE((self.selectionRectangles[0].origin.x - HANDLE_STEM_WIDTH/2) - position.x) +
+             SQUARE((self.selectionRectangles[0].origin.y - HANDLE_STEM_HEIGHT/2 - HANDLE_BLOB/2) - position.y)) <
+            SQUARE(DRAG_RADIUS));
+}
+
+- (bool) bottomRightResizeHandleIsCloseTo:(CGPoint)position
+{
+    const int N = self.selectionRectangleCount;
+
+    return ((SQUARE((self.selectionRectangles[N-1].origin.x +
+                     self.selectionRectangles[N-1].size.width + HANDLE_STEM_WIDTH/2) - position.x) +
+             SQUARE((self.selectionRectangles[N-1].origin.y +
+                     self.selectionRectangles[N-1].size.height + HANDLE_STEM_HEIGHT/2 + HANDLE_BLOB/2) - position.y)) <
+            SQUARE(DRAG_RADIUS));
+}
+
 - (void) requestSelectionRedisplay
 {
     if (self.selectionRectangleCount == 0)
@@ -70,19 +91,8 @@
 
     CGContextSetFillColorWithColor(context, [[UIColor colorWithRed:0 green:0 blue:1 alpha:0.5] CGColor]);
 
-#if 0
-    for (int i = 0; i < N; i++) {
-        NSLog(@"UIRectFill: %fx%f@(%f,%f)",
-              self.selectionRectangles[i].size.width, self.selectionRectangles[i].size.height,
-              self.selectionRectangles[i].origin.x, self.selectionRectangles[i].origin.y);
-        UIRectFillUsingBlendMode(CGRectMake(self.selectionRectangles[i].origin.x, self.selectionRectangles[i].origin.y,
-                                            self.selectionRectangles[i].size.width, self.selectionRectangles[i].size.height),
-                                 kCGBlendModeNormal);
-    }
-#else
     CGContextSetBlendMode(context, kCGBlendModeNormal);
     CGContextFillRects(context, self.selectionRectangles, self.selectionRectangleCount);
-#endif
 
     CGContextFillRect(context,
                       CGRectMake(self.selectionRectangles[0].origin.x - HANDLE_STEM_WIDTH,
@@ -94,6 +104,8 @@
                                  self.selectionRectangles[N-1].size.width,
                                  self.selectionRectangles[N-1].origin.y,
                                  HANDLE_STEM_WIDTH, self.selectionRectangles[N-1].size.height + HANDLE_STEM_HEIGHT));
+
+    CGContextSetFillColorWithColor(context, [[UIColor colorWithRed:0 green:0 blue:1 alpha:0.8] CGColor]);
 
     CGContextFillEllipseInRect(context, [self topLeftResizeHandle]);
     CGContextFillEllipseInRect(context, [self bottomRightResizeHandle]);
@@ -177,12 +189,12 @@
 
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan &&
         gestureRecognizer.numberOfTouches == 1) {
-        if (CGRectContainsPoint([self topLeftResizeHandle], location)) {
+        if ([self topLeftResizeHandleIsCloseTo:location]) {
             NSLog(@"===> dragging TOPLEFT handle");
             draggedHandle = TOPLEFT;
             dragOffset.x = location.x - self.selectionRectangles[0].origin.x;
             dragOffset.y = location.y - self.selectionRectangles[0].origin.y;
-        } else if (CGRectContainsPoint([self bottomRightResizeHandle], location)) {
+        } else if ([self bottomRightResizeHandleIsCloseTo:location]) {
             NSLog(@"===> dragging BOTTOMRIGHT handle");
             draggedHandle = BOTTOMRIGHT;
             dragOffset.x = location.x - self.selectionRectangles[N-1].origin.x;
