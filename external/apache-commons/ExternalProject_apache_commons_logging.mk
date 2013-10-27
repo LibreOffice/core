@@ -9,10 +9,6 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,apache_commons_logging))
 
-$(eval $(call gb_ExternalProject_use_externals,apache_commons_logging,\
-	servlet_api \
-))
-
 $(eval $(call gb_ExternalProject_register_targets,apache_commons_logging,\
 	build \
 ))
@@ -24,10 +20,6 @@ $(call gb_ExternalProject_get_state_target,apache_commons_logging,build) :
 		-q \
 		-f build.xml \
 		-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
-		$(if $(filter YES,$(SYSTEM_TOMCAT))\
-			,-Dservletapi.jar=$(SERVLETAPI_JAR) \
-			,-Dservletapi.jar=$(call gb_UnpackedTarball_get_dir,tomcat)/servletapi/jsr154/dist/lib/servlet-api.jar \
-		)\
 		$(if $(filter yes,$(JAVACISGCJ))\
 			,-Dbuild.compiler=gcj \
 			,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \

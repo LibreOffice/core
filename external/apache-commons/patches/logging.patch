@@ -1,5 +1,5 @@
---- misc/commons-logging-1.1.1-src/build.xml	2007-11-22 00:27:52.000000000 +0100
-+++ misc/build/commons-logging-1.1.1-src/build.xml	2008-06-24 14:23:56.316301736 +0200
+--- misc/commons-logging-1.1.1-src/build.xml   2007-11-22 00:27:52.000000000 +0100
++++ misc/build/commons-logging-1.1.1-src/build.xml     2008-06-24 14:23:56.316301736 +0200
 @@ -127,10 +127,10 @@
  <!-- ========== Compiler Defaults ========================================= -->
  
@@ -13,3 +13,23 @@
  
    <!-- Should Java compilations set the 'debug' compiler option? -->
    <property name="compile.debug"           value="true"/>
+@@ -280,6 +280,10 @@
+                classpathref="compile.classpath"
+                classname="org.apache.avalon.framework.logger.Logger"/>
+ 
++    <available property="servlet-api.present"
++               classpathref="compile.classpath"
++               classname="javax.servlet.ServletContextListener"/>
++
+     <available file="${log4j12.jar}" property="log4j12.present"/>
+     <available file="${log4j13.jar}" property="log4j13.present"/>
+     <available file="${build.home}/docs" property="maven.generated.docs.present"/>
+@@ -370,6 +374,8 @@
+                unless="logkit.present"/>
+       <exclude name="org/apache/commons/logging/impl/AvalonLogger.java"
+                unless="avalon-framework.present"/>
++      <exclude name="org/apache/commons/logging/impl/ServletContextCleaner.java"
++               unless="servlet-api.present"/>
+     </javac>
+   </target>
+ 
