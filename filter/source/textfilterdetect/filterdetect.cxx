@@ -87,6 +87,10 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
             setPropValue(lDescriptor, nFilter, "FilterName", OUString(WRITER_TEXT_FILTER));
         else if (aExt == "csv")
             setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
+        else if (aExt == "tsv")
+            setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
+        else if (aExt == "xls")
+            setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
         else if (aExt == "txt")
             setPropValue(lDescriptor, nFilter, "FilterName", OUString(WRITER_TEXT_FILTER));
         else
