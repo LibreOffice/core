@@ -609,7 +609,6 @@ double SAL_CALL OResultSet::getDouble(sal_Int32 columnIndex)
 OUString SAL_CALL OResultSet::getString(sal_Int32 nIndex)
     throw(SQLException, RuntimeException)
 {
-    // TODO: special handling for char type?
     return safelyRetrieveValue< OUString >(nIndex);
 }
 
