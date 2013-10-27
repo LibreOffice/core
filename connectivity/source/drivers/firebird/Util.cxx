@@ -231,7 +231,7 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
             pVar->sqldata = (char*) malloc(sizeof(ISC_DATE));
             break;
         case SQL_INT64:
-            pVar->sqldata = (char *)malloc(sizeof(int));
+            pVar->sqldata = (char *)malloc(sizeof(sal_Int64));
             break;
         case SQL_NULL:
             assert(false); // TODO: implement
