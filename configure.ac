@@ -1611,16 +1611,6 @@ AC_ARG_WITH(commons-logging-jar,
         [Specify path to jarfile manually.]),
     COMMONS_LOGGING_JAR=$withval)
 
-AC_ARG_WITH(system-servlet-api,
-    AS_HELP_STRING([--with-system-servlet-api],
-        [Use servlet-api already on system.]),,
-    [with_system_servlet_api="$with_system_jars"])
-
-AC_ARG_WITH(servlet-api-jar,
-    AS_HELP_STRING([--with-servlet-api-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    SERVLETAPI_JAR=$withval)
-
 AC_ARG_WITH(system-jfreereport,
     AS_HELP_STRING([--with-system-jfreereport],
         [Use JFreeReport already on system.]),,
@@ -10409,29 +10399,6 @@ else
     SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
 fi
 AC_SUBST(ENABLE_MEDIAWIKI)
-
-if test "$ENABLE_MEDIAWIKI" = "TRUE"; then
-    AC_MSG_CHECKING([which Servlet API Jar to use])
-    if test "$with_system_servlet_api" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_SERVLETAPI=YES
-        if test -z "$SERVLETAPI_JAR"; then
-            for version in '' -3.3 -3.2 -3.1 -3.0 -2.5 -2.4; do
-                if test -r "/usr/share/java/servlet-api${version}.jar"; then
-                    SERVLETAPI_JAR=/usr/share/java/servlet-api${version}.jar
-                fi
-            done
-        fi
-        AC_CHECK_FILE($SERVLETAPI_JAR, [],
-              [AC_MSG_ERROR(servlet-api.jar not found.)], [])
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_SERVLETAPI=NO
-        BUILD_TYPE="$BUILD_TYPE TOMCAT"
-    fi
-fi
-AC_SUBST(SYSTEM_SERVLETAPI)
-AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder])
 if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
