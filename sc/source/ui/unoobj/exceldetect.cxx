@@ -102,6 +102,7 @@ bool isExcel40(const uno::Reference<io::XInputStream>& xInStream)
         case 0x0009: // Excel 2.1 worksheet (BIFF 2)
         case 0x0209: // Excel 3.0 worksheet (BIFF 3)
         case 0x0409: // Excel 4.0 worksheet (BIFF 4)
+        case 0x0809: // Excel 5.0 worksheet (BIFF 5), some apps create such files (fdo#70100)
             break;
         default:
             return false;
