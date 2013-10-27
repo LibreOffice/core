@@ -130,10 +130,8 @@ public:
     CPPUNIT_TEST(testStatisticalFormulaCorrel);
     CPPUNIT_TEST(testFinancialCoupdaysFormula);
     CPPUNIT_TEST(testFinancialCoupdaysncFormula);
-#if 0
     CPPUNIT_TEST(testFinacialDISCFormula);
     CPPUNIT_TEST(testFinacialINTRATEFormula);
-#endif
     CPPUNIT_TEST(testMathFormulaCos);
     CPPUNIT_TEST(testStatisticalFormulaNegbinomdist);
     CPPUNIT_TEST(testStatisticalFormulaRsq);
