@@ -23,8 +23,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
-#include <cppcanvas/spritecanvas.hxx>
-
 #include "unoview.hxx"
 #include "unoviewcontainer.hxx"
 #include "attributableshape.hxx"
@@ -223,7 +221,7 @@ namespace slideshow
                 @param rTargetCanvas
                 Target canvas to output onto.
              */
-            bool renderTo( const ::cppcanvas::CanvasSharedPtr& rTargetCanvas ) const;
+            bool renderTo( const css::uno::Reference< css::rendering::XCanvas >& rTargetCanvas ) const;
 
         private:
             /** A hash map which maps the XShape to the corresponding Shape object.

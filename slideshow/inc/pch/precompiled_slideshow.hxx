@@ -169,14 +169,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
-#include <cppcanvas/bitmap.hxx>
-#include <cppcanvas/canvas.hxx>
-#include <cppcanvas/customsprite.hxx>
-#include <cppcanvas/polypolygon.hxx>
-#include <cppcanvas/renderer.hxx>
-#include <cppcanvas/spritecanvas.hxx>
-#include <cppcanvas/vclfactory.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/compbase2.hxx>

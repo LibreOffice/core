@@ -378,7 +378,7 @@ namespace canvas
         /// Convert standard 8888 RGBA color to vcl color
         CANVASTOOLS_DLLPUBLIC ::Color stdIntSequenceToColor( const ::com::sun::star::uno::Sequence<sal_Int8>& rColor );
 
-        /// Convert standard 8888 RGBA color to vcl color
+        /// Convert standard vcl Color to 8888 RGBA color
         CANVASTOOLS_DLLPUBLIC ::com::sun::star::uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor );
 
         // Modeled closely after boost::numeric_cast, only that we

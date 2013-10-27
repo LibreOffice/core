@@ -25,8 +25,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-#include <cppcanvas/basegfxfactory.hxx>
-
 #include <comphelper/optional.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
 
@@ -64,13 +62,15 @@ namespace {
 // helper methods
 // =============================================
 
-void fillPage( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
-               const ::basegfx::B2DSize&           rPageSizePixel,
-               const RGBColor&                     rFillColor )
+void fillPage( const uno::Reference<rendering::XCanvas>& ,
+               const ::basegfx::B2DSize&                 ,
+               const RGBColor&                            )
 {
+#if 0
+    // TODO-NYI
     // need to render without any transformation (we
     // assume rPageSizePixel to represent device units)
-    const ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas(
+    const uno::Reference<rendering::XCanvas> pDevicePixelCanvas(
         rDestinationCanvas->clone() );
     pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
@@ -88,6 +88,7 @@ void fillPage( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
                   aOutputPosPixel.getX() + rPageSizePixel.getX(),
                   aOutputPosPixel.getY() + rPageSizePixel.getY() ),
               rFillColor.getIntegerColor() );
+#endif
 }
 
 class PluginSlideChange: public SlideChangeBase
@@ -332,27 +333,29 @@ public:
         {}
 
     virtual void performIn(
-        const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
-        const ViewEntry&                            rViewEntry,
-        const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
-        double                                      t );
+        const uno::Reference<rendering::XCustomSprite>& rSprite,
+        const ViewEntry&                                rViewEntry,
+        const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+        double                                          t );
 
     virtual void performOut(
-        const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-        const ViewEntry&                           rViewEntry,
-        const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-        double                                     t );
+        const uno::Reference<rendering::XCustomSprite>& rSprite,
+        const ViewEntry&                                rViewEntry,
+        const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+        double                                          t );
 
 private:
     ClippingFunctor             maClippingFunctor;
 };
 
 void ClippedSlideChange::performIn(
-    const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
-    const ViewEntry&                            rViewEntry,
-    const ::cppcanvas::CanvasSharedPtr&         /*rDestinationCanvas*/,
-    double                                      t )
+    const uno::Reference<rendering::XCustomSprite>& ,
+    const ViewEntry&                                ,
+    const uno::Reference<rendering::XCanvas>&       ,
+    double                                           )
 {
+#if 0
+    // TODO-NYI
     // #i46602# Better work in device coordinate space here,
     // otherwise, we too easily suffer from roundoffs. Apart from
     // that, getEnteringSizePixel() _guarantees_ to cover the whole
@@ -361,13 +364,14 @@ void ClippedSlideChange::performIn(
     rSprite->setClipPixel(
         maClippingFunctor( t,
                            ::basegfx::B2DSize( getEnteringSlideSizePixel(rViewEntry.mpView) ) ) );
+#endif
 }
 
 void ClippedSlideChange::performOut(
-    const ::cppcanvas::CustomSpriteSharedPtr&  /*rSprite*/,
-    const ViewEntry&                           /*rViewEntry*/,
-    const ::cppcanvas::CanvasSharedPtr&        /*rDestinationCanvas*/,
-    double                                     /*t*/ )
+    const uno::Reference<rendering::XCustomSprite >& /*rSprite*/,
+    const ViewEntry&                                 /*rViewEntry*/,
+    const uno::Reference<rendering::XCanvas >&       /*rDestinationCanvas*/,
+    double                                           /*t*/ )
 {
     // not needed here
 }
@@ -398,19 +402,19 @@ public:
 
     virtual void prepareForRun(
         const ViewEntry& rViewEntry,
-        const cppcanvas::CanvasSharedPtr& rDestinationCanvas );
+        const uno::Reference<rendering::XCanvas>& rDestinationCanvas );
 
     virtual void performIn(
-        const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
-        const ViewEntry&                            rViewEntry,
-        const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
-        double                                      t );
+        const uno::Reference<rendering::XCustomSprite>& rSprite,
+        const ViewEntry&                                rViewEntry,
+        const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+        double                                          t );
 
     virtual void performOut(
-        const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-        const ViewEntry&                           rViewEntry,
-        const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-        double                                     t );
+        const uno::Reference<rendering::XCustomSprite>& rSprite,
+        const ViewEntry&                                rViewEntry,
+        const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+        double                                          t );
 
 private:
     const boost::optional< RGBColor >               maFadeColor;
@@ -418,7 +422,7 @@ private:
 
 void FadingSlideChange::prepareForRun(
     const ViewEntry& rViewEntry,
-    const cppcanvas::CanvasSharedPtr& rDestinationCanvas )
+    const uno::Reference<rendering::XCanvas>& rDestinationCanvas )
 {
     if ( maFadeColor )
     {
@@ -431,13 +435,13 @@ void FadingSlideChange::prepareForRun(
 }
 
 void FadingSlideChange::performIn(
-    const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
-    const ViewEntry&                            /*rViewEntry*/,
-    const ::cppcanvas::CanvasSharedPtr&         /*rDestinationCanvas*/,
-    double                                      t )
+    const uno::Reference<rendering::XCustomSprite>& rSprite,
+    const ViewEntry&                                /*rViewEntry*/,
+    const uno::Reference<rendering::XCanvas>&       /*rDestinationCanvas*/,
+    double                                          t )
 {
     ENSURE_OR_THROW(
-        rSprite,
+        rSprite.is(),
         "FadingSlideChange::performIn(): Invalid sprite" );
 
     if( maFadeColor )
@@ -449,16 +453,16 @@ void FadingSlideChange::performIn(
 }
 
 void FadingSlideChange::performOut(
-    const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-    const ViewEntry&                           /* rViewEntry */,
-    const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-    double                                     t )
+    const uno::Reference<rendering::XCustomSprite>& rSprite,
+    const ViewEntry&                                /* rViewEntry */,
+    const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+    double                                          t )
 {
     ENSURE_OR_THROW(
-        rSprite,
+        rSprite.is(),
         "FadingSlideChange::performOut(): Invalid sprite" );
     ENSURE_OR_THROW(
-        rDestinationCanvas,
+        rDestinationCanvas.is(),
         "FadingSlideChange::performOut(): Invalid dest canvas" );
 
     // only needed for color fades
@@ -496,19 +500,19 @@ public:
 
     virtual void prepareForRun(
         const ViewEntry& rViewEntry,
-        const cppcanvas::CanvasSharedPtr& rDestinationCanvas );
+        const uno::Reference<rendering::XCanvas>& rDestinationCanvas );
 
     virtual void performIn(
-        const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
-        const ViewEntry&                            rViewEntry,
-        const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
-        double                                      t );
+        const uno::Reference<rendering::XCustomSprite>& rSprite,
+        const ViewEntry&                                rViewEntry,
+        const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+        double                                          t );
 
     virtual void performOut(
-        const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-        const ViewEntry&                           rViewEntry,
-        const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-        double                                     t );
+        const uno::Reference<rendering::XCustomSprite>& rSprite,
+        const ViewEntry&                                rViewEntry,
+        const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+        double                                          t );
 
 private:
     RGBColor maFadeColor;
@@ -516,7 +520,7 @@ private:
 
 void CutSlideChange::prepareForRun(
     const ViewEntry& rViewEntry,
-    const cppcanvas::CanvasSharedPtr& rDestinationCanvas )
+    const uno::Reference<rendering::XCanvas>& rDestinationCanvas )
 {
     // clear page to given fade color. 'Leaving' slide is
     // painted atop of that
@@ -526,13 +530,13 @@ void CutSlideChange::prepareForRun(
 }
 
 void CutSlideChange::performIn(
-    const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
-    const ViewEntry&                            /*rViewEntry*/,
-    const ::cppcanvas::CanvasSharedPtr&         /*rDestinationCanvas*/,
-    double                                      t )
+    const uno::Reference<rendering::XCustomSprite>& rSprite,
+    const ViewEntry&                                /*rViewEntry*/,
+    const uno::Reference<rendering::XCanvas>&       /*rDestinationCanvas*/,
+    double                                          t )
 {
     ENSURE_OR_THROW(
-        rSprite,
+        rSprite.is(),
         "CutSlideChange::performIn(): Invalid sprite" );
 
     // After 2/3rd of the active time, display new slide
@@ -540,16 +544,16 @@ void CutSlideChange::performIn(
 }
 
 void CutSlideChange::performOut(
-    const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-    const ViewEntry&                           /* rViewEntry */,
-    const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-    double                                     t )
+    const uno::Reference<rendering::XCustomSprite>& rSprite,
+    const ViewEntry&                                /* rViewEntry */,
+    const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+    double                                          t )
 {
     ENSURE_OR_THROW(
-        rSprite,
+        rSprite.is(),
         "CutSlideChange::performOut(): Invalid sprite" );
     ENSURE_OR_THROW(
-        rDestinationCanvas,
+        rDestinationCanvas.is(),
         "CutSlideChange::performOut(): Invalid dest canvas" );
 
     // Until 1/3rd of the active time, display old slide.
@@ -610,24 +614,24 @@ public:
 
     virtual void prepareForRun(
         const ViewEntry& rViewEntry,
-        const cppcanvas::CanvasSharedPtr& rDestinationCanvas );
+        const uno::Reference<rendering::XCanvas>& rDestinationCanvas );
 
     virtual void performIn(
-        const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
-        const ViewEntry&                            rViewEntry,
-        const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
-        double                                      t );
+        const uno::Reference<rendering::XCustomSprite>& rSprite,
+        const ViewEntry&                                rViewEntry,
+        const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+        double                                          t );
 
     virtual void performOut(
-        const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-        const ViewEntry&                           rViewEntry,
-        const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-        double                                     t );
+        const uno::Reference<rendering::XCustomSprite>& rSprite,
+        const ViewEntry&                                rViewEntry,
+        const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+        double                                          t );
 };
 
 void MovingSlideChange::prepareForRun(
     const ViewEntry& rViewEntry,
-    const cppcanvas::CanvasSharedPtr& rDestinationCanvas )
+    const uno::Reference<rendering::XCanvas>& rDestinationCanvas )
 {
     if ( maLeavingDirection.equalZero() )
         renderBitmap( getLeavingBitmap( rViewEntry ), rDestinationCanvas );
@@ -636,20 +640,22 @@ void MovingSlideChange::prepareForRun(
 }
 
 void MovingSlideChange::performIn(
-    const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
-    const ViewEntry&                            rViewEntry,
-    const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
-    double                                      t )
+    const uno::Reference<rendering::XCustomSprite>& rSprite,
+    const ViewEntry&                                ,
+    const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+    double                                           )
 {
     // intro sprite moves:
 
     ENSURE_OR_THROW(
-        rSprite,
+        rSprite.is(),
         "MovingSlideChange::performIn(): Invalid sprite" );
     ENSURE_OR_THROW(
-        rDestinationCanvas,
+        rDestinationCanvas.is(),
         "MovingSlideChange::performIn(): Invalid dest canvas" );
 
+#if 0
+    // TODO-NYI
     // TODO(F1): This does not account for non-translational
     // transformations! If the canvas is rotated, we still
     // move the sprite unrotated (which might or might not
@@ -665,23 +671,26 @@ void MovingSlideChange::performIn(
         ((t - 1.0) *
          ::basegfx::B2DSize( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
          maEnteringDirection) );
+#endif
 }
 
 void MovingSlideChange::performOut(
-    const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-    const ViewEntry&                           rViewEntry,
-    const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-    double                                     t )
+    const uno::Reference<rendering::XCustomSprite>& rSprite,
+    const ViewEntry&                                ,
+    const uno::Reference<rendering::XCanvas>&       rDestinationCanvas,
+    double                                           )
 {
     // outro sprite moves:
 
     ENSURE_OR_THROW(
-        rSprite,
+        rSprite.is(),
         "MovingSlideChange::performOut(): Invalid sprite" );
     ENSURE_OR_THROW(
-        rDestinationCanvas,
+        rDestinationCanvas.is(),
         "MovingSlideChange::performOut(): Invalid dest canvas" );
 
+#if 0
+    // TODO-NYI
     // TODO(F1): This does not account for non-translational
     // transformations! If the canvas is rotated, we still
     // move the sprite unrotated (which might or might not
@@ -696,6 +705,7 @@ void MovingSlideChange::performOut(
         aPageOrigin + (t *
                        ::basegfx::B2DSize( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
                        maLeavingDirection) );
+#endif
 }
 
 

@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SLIDESHOW_VIEWSHAPE_HXX
 #define INCLUDED_SLIDESHOW_VIEWSHAPE_HXX
 
-#include <cppcanvas/renderer.hxx>
-#include <cppcanvas/bitmap.hxx>
-
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
@@ -177,9 +177,6 @@ namespace slideshow
                 canvas. This method does not render anything, if the
                 update flags are 0.
 
-                @param rMtf
-                The metafile representation of the shape
-
                 @param rArgs
                 Parameter structure, containing all necessary arguments
 
@@ -192,17 +189,13 @@ namespace slideshow
 
                 @return whether the rendering finished successfully.
             */
-            bool update( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XShape >& xShape,
-                         const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::drawing::XDrawPage >& xPage,
-                         const ::com::sun::star::uno::Sequence<
-                         ::com::sun::star::uno::Reference<
-                         ::com::sun::star::graphic::XPrimitive2D > >& xPrimitives,
-                         const GDIMetaFileSharedPtr&    rMtf,
-                         const RenderArgs&              rArgs,
-                         int                            nUpdateFlags,
-                         bool                           bIsVisible ) const;
+            bool update( const css::uno::Reference<css::drawing::XShape >&    xShape,
+                         const css::uno::Reference<css::drawing::XDrawPage >& xPage,
+                         const css::uno::Sequence<css::uno::Reference<
+                                    css::graphic::XPrimitive2D > >&           xPrimitives,
+                         const RenderArgs&                                    rArgs,
+                         int                                                  nUpdateFlags,
+                         bool                                                 bIsVisible ) const;
 
             /** Retrieve renderer for given canvas and metafile.
 
@@ -212,33 +205,30 @@ namespace slideshow
                 @return a renderer that renders to the given
                 destination canvas
              */
-            ::cppcanvas::RendererSharedPtr getRenderer( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
-                                                        const GDIMetaFileSharedPtr&         rMtf,
-                                                        const ShapeAttributeLayerSharedPtr& rAttr ) const;
-
+            drawinglayer::primitive2d::Primitive2DSequence getRenderer(
+                const css::uno::Reference<css::rendering::XCanvas>& rDestinationCanvas,
+                const ShapeAttributeLayerSharedPtr&                 rAttr ) const;
 
         private:
             struct RendererCacheEntry
             {
                 RendererCacheEntry() :
                     mpDestinationCanvas(),
-                    mpRenderer(),
-                    mpMtf(),
+                    mpPrimitiveSequence(),
                     mpLastBitmap(),
                     mpLastBitmapCanvas()
                 {
                 }
 
-                ::cppcanvas::CanvasSharedPtr getDestinationCanvas() const
+                css::uno::Reference<css::rendering::XCanvas> getDestinationCanvas() const
                 {
                     return mpDestinationCanvas;
                 }
 
-                ::cppcanvas::CanvasSharedPtr        mpDestinationCanvas;
-                ::cppcanvas::RendererSharedPtr      mpRenderer;
-                GDIMetaFileSharedPtr                mpMtf;
-                ::cppcanvas::BitmapSharedPtr        mpLastBitmap;
-                ::cppcanvas::BitmapCanvasSharedPtr  mpLastBitmapCanvas;
+                css::uno::Reference<css::rendering::XCanvas>          mpDestinationCanvas;
+                drawinglayer::primitive2d::Primitive2DSequence        mpPrimitiveSequence;
+                ::css::uno::Reference<css::rendering::XBitmap>        mpLastBitmap;
+                ::css::uno::Reference<css::rendering::XBitmapCanvas>  mpLastBitmapCanvas;
             };
 
             typedef ::std::vector< RendererCacheEntry > RendererCacheVector;
@@ -246,67 +236,54 @@ namespace slideshow
 
             /** Prefetch Renderer for given canvas
              */
-            bool prefetch( RendererCacheEntry&                  io_rCacheEntry,
-                           const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
-                           const GDIMetaFileSharedPtr&          rMtf,
-                           const ShapeAttributeLayerSharedPtr&  rAttr ) const;
+            bool prefetch( RendererCacheEntry&                                 io_rCacheEntry,
+                           const css::uno::Reference<css::rendering::XCanvas>& rDestinationCanvas,
+                           const ShapeAttributeLayerSharedPtr&                 rAttr ) const;
 
             /** Draw with prefetched Renderer to stored canvas
 
                 This method draws prefetched Renderer to its
                 associated canvas (which happens to be mpLastCanvas).
              */
-            bool draw( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
-                       const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::drawing::XShape >& xShape,
-                       const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::drawing::XDrawPage >& xPage,
-                       const ::com::sun::star::uno::Sequence<
-                       ::com::sun::star::uno::Reference<
-                       ::com::sun::star::graphic::XPrimitive2D > >& xPrimitives,
-                       const GDIMetaFileSharedPtr&          rMtf,
-                       const ShapeAttributeLayerSharedPtr&  rAttr,
-                       const ::basegfx::B2DHomMatrix&       rTransform,
-                       const ::basegfx::B2DPolyPolygon*     pClip,
-                       const VectorOfDocTreeNodes&          rSubsets ) const;
+            bool draw( const css::uno::Reference<css::rendering::XCanvas>& rDestinationCanvas,
+                       const css::uno::Reference<css::drawing::XShape>&    xShape,
+                       const css::uno::Reference<css::drawing::XDrawPage>& xPage,
+                       const css::uno::Sequence< css::uno::Reference<
+                               css::graphic::XPrimitive2D > >&             xPrimitives,
+                       const ShapeAttributeLayerSharedPtr&                 rAttr,
+                       const ::basegfx::B2DHomMatrix&                      rTransform,
+                       const ::basegfx::B2DPolyPolygon*                    pClip,
+                       const VectorOfDocTreeNodes&                         rSubsets ) const;
 
             /** Render shape to an active sprite
              */
-            bool renderSprite( const ViewLayerSharedPtr&            rViewLayer,
-                               const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::drawing::XShape >& xShape,
-                               const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::drawing::XDrawPage >& xPage,
-                               const ::com::sun::star::uno::Sequence<
-                               ::com::sun::star::uno::Reference<
-                               ::com::sun::star::graphic::XPrimitive2D > >& xPrimitives,
-                               const GDIMetaFileSharedPtr&          rMtf,
-                               const ::basegfx::B2DRectangle&       rOrigBounds,
-                               const ::basegfx::B2DRectangle&       rBounds,
-                               const ::basegfx::B2DRectangle&       rUnitBounds,
-                               int                                  nUpdateFlags,
-                               const ShapeAttributeLayerSharedPtr&  pAttr,
-                               const VectorOfDocTreeNodes&          rSubsets,
-                               double                               nPrio,
-                               bool                                 bIsVisible ) const;
+            bool renderSprite( const ViewLayerSharedPtr&                           rViewLayer,
+                               const css::uno::Reference<css::drawing::XShape>&    xShape,
+                               const css::uno::Reference<css::drawing::XDrawPage>& xPage,
+                               const css::uno::Sequence<css::uno::Reference<
+                                       css::graphic::XPrimitive2D > >&             xPrimitives,
+                               const ::basegfx::B2DRectangle&                      rOrigBounds,
+                               const ::basegfx::B2DRectangle&                      rBounds,
+                               const ::basegfx::B2DRectangle&                      rUnitBounds,
+                               int                                                 nUpdateFlags,
+                               const ShapeAttributeLayerSharedPtr&                 pAttr,
+                               const VectorOfDocTreeNodes&                         rSubsets,
+                               double                                              nPrio,
+                               bool                                                bIsVisible ) const;
 
             /** Render shape to given canvas
              */
-            bool render( const ::cppcanvas::CanvasSharedPtr&    rDestinationCanvas,
-                         const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::drawing::XShape >& xShape,
-                         const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::drawing::XDrawPage >& xPage,
-                         const ::com::sun::star::uno::Sequence<
-                         ::com::sun::star::uno::Reference<
-                         ::com::sun::star::graphic::XPrimitive2D > >& xPrimitives,
-                         const GDIMetaFileSharedPtr&            rMtf,
-                         const ::basegfx::B2DRectangle&         rBounds,
-                         const ::basegfx::B2DRectangle&         rUpdateBounds,
-                         int                                    nUpdateFlags,
-                         const ShapeAttributeLayerSharedPtr&    pAttr,
-                         const VectorOfDocTreeNodes&            rSubsets,
-                         bool                                   bIsVisible ) const;
+            bool render( const css::uno::Reference<css::rendering::XCanvas>&    rDestinationCanvas,
+                         const css::uno::Reference<css::drawing::XShape >&      xShape,
+                         const css::uno::Reference<css::drawing::XDrawPage >&   xPage,
+                         const css::uno::Sequence<css::uno::Reference<
+                                 css::graphic::XPrimitive2D > >&                xPrimitives,
+                         const ::basegfx::B2DRectangle&                         rBounds,
+                         const ::basegfx::B2DRectangle&                         rUpdateBounds,
+                         int                                                    nUpdateFlags,
+                         const ShapeAttributeLayerSharedPtr&                    pAttr,
+                         const VectorOfDocTreeNodes&                            rSubsets,
+                         bool                                                   bIsVisible ) const;
 
             /** Calc sprite size in pixel
 
@@ -332,7 +309,8 @@ namespace slideshow
                 the given canvas. The entry might be
                 default-constructed (if newly added)
              */
-            RendererCacheVector::iterator getCacheEntry( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas ) const;
+            RendererCacheVector::iterator getCacheEntry( const css::uno::Reference<
+                                                             css::rendering::XCanvas>& rDestinationCanvas ) const;
 
             void invalidateRenderer() const;
 

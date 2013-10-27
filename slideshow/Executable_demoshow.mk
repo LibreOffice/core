@@ -35,7 +35,6 @@ $(eval $(call gb_Library_use_sdk_api,demoshow))
 $(eval $(call gb_Executable_use_libraries,demoshow,\
     basegfx \
     comphelper \
-    cppcanvas \
     cppu \
     cppuhelper \
     sal \

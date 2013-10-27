@@ -1,0 +1,14 @@
+Stuff left doing
+================
+
+ - grep for TODO-NYI
+ - migrate emf+ renderer over to primitives
+ - implement stateful canvas processor (e.g. for the color changes?)
+   -or- decorate primitives with color modifiers e.g.
+ - do we need viewstate at the canvas to pass around?
+
+ - how much of the wrapper state in cppcanvas _was_ actually useful?
+ - review canvas api - e.g. for the createBitmap / createSprite
+   methods, is anyone *not* creating a Size struct on the fly?
+
+ - when all of that is done -> git rm cppcanvas

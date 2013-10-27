@@ -37,13 +37,10 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
-#include <cppcanvas/vclfactory.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
-#include <cppcanvas/renderer.hxx>
-#include <cppcanvas/bitmap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -53,7 +50,7 @@ namespace slideshow
     namespace internal
     {
 
-        bool ViewBackgroundShape::prefetch( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
+        bool ViewBackgroundShape::prefetch( const css::uno::Reference< css::rendering::XCanvas >& rDestinationCanvas,
                                             const GDIMetaFileSharedPtr&         rMtf ) const
         {
             SAL_INFO( "slideshow", "::presentation::internal::ViewBackgroundShape::prefetch()" );
@@ -78,39 +75,44 @@ namespace slideshow
                 // determine pixel size of bitmap (choose it one pixel
                 // larger, as polygon rendering takes one pixel more
                 // to the right and to the bottom)
-                const ::basegfx::B2ISize aBmpSizePixel(
+                const css::geometry::IntegerSize2D aBmpSizePixel(
                     ::basegfx::fround( aTmpRect.getRange().getX() + 1),
                     ::basegfx::fround( aTmpRect.getRange().getY() + 1) );
 
-                // create a bitmap of appropriate size
-                ::cppcanvas::BitmapSharedPtr pBitmap(
-                    ::cppcanvas::BaseGfxFactory::getInstance().createBitmap(
-                        rDestinationCanvas,
-                        aBmpSizePixel ) );
+                // create a non-transparent bitmap of appropriate size
+                uno::Reference< rendering::XIntegerBitmap > pBitmap(
+                    rDestinationCanvas->getDevice()->createCompatibleBitmap(
+                        aBmpSizePixel),
+                    uno::UNO_QUERY_THROW);
 
-                ENSURE_OR_THROW( pBitmap,
-                                  "ViewBackgroundShape::prefetch(): Cannot create background bitmap" );
+                ENSURE_OR_THROW( pBitmap.is(),
+                                 "ViewBackgroundShape::prefetch(): Cannot create background bitmap" );
 
-                ::cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas( pBitmap->getBitmapCanvas() );
+                uno::Reference< rendering::XCanvas > pBitmapCanvas(
+                    pBitmap, uno::UNO_QUERY_THROW);
 
-                ENSURE_OR_THROW( pBitmapCanvas,
-                                  "ViewBackgroundShape::prefetch(): Cannot create background bitmap canvas" );
+                ENSURE_OR_THROW( pBitmapCanvas.is(),
+                                 "ViewBackgroundShape::prefetch(): Cannot create background bitmap canvas" );
 
                 // clear bitmap
-                initSlideBackground( pBitmapCanvas,
-                                     aBmpSizePixel );
+                pBitmapCanvas->fill(
+                    ::basegfx::BColor(1.0,1.0,1.0).colorToDoubleSequence(
+                        pBitmapCanvas->getDevice()) );
 
                 // apply linear part of destination canvas transformation (linear means in this context:
                 // transformation without any translational components)
                 ::basegfx::B2DHomMatrix aLinearTransform( rCanvasTransform );
                 aLinearTransform.set( 0, 2, 0.0 );
                 aLinearTransform.set( 1, 2, 0.0 );
-                pBitmapCanvas->setTransformation( aLinearTransform );
+                // TODO-NYI
+                //pBitmapCanvas->setTransformation( aLinearTransform );
 
                 const basegfx::B2DHomMatrix aShapeTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
                     maBounds.getWidth(), maBounds.getHeight(),
                     maBounds.getMinX(), maBounds.getMinY()));
 
+# if 0
+                // TODO-NYI
                 ::cppcanvas::RendererSharedPtr pRenderer(
                     ::cppcanvas::VCLFactory::getInstance().createRenderer(
                         pBitmapCanvas,
@@ -118,12 +120,12 @@ namespace slideshow
                         ::cppcanvas::Renderer::Parameters() ) );
 
                 ENSURE_OR_RETURN_FALSE( pRenderer,
-                                   "ViewBackgroundShape::prefetch(): Could not create Renderer" );
+                                        "ViewBackgroundShape::prefetch(): Could not create Renderer" );
 
                 pRenderer->setTransformation( aShapeTransform );
                 pRenderer->draw();
-
-                mxBitmap = pBitmap->getUNOBitmap();
+# endif
+                mxBitmap = pBitmap;
             }
 
             mpLastMtf            = rMtf;
@@ -140,8 +142,10 @@ namespace slideshow
             maLastTransformation(),
             maBounds( rShapeBounds )
         {
-            ENSURE_OR_THROW( mpViewLayer, "ViewBackgroundShape::ViewBackgroundShape(): Invalid View" );
-            ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewBackgroundShape::ViewBackgroundShape(): Invalid ViewLayer canvas" );
+            ENSURE_OR_THROW( mpViewLayer,
+                             "ViewBackgroundShape::ViewBackgroundShape(): Invalid View" );
+            ENSURE_OR_THROW( mpViewLayer->getCanvas().is(),
+                             "ViewBackgroundShape::ViewBackgroundShape(): Invalid ViewLayer canvas" );
         }
 
         ViewLayerSharedPtr ViewBackgroundShape::getViewLayer() const
@@ -153,7 +157,7 @@ namespace slideshow
         {
             SAL_INFO( "slideshow", "::presentation::internal::ViewBackgroundShape::draw()" );
 
-            const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas( mpViewLayer->getCanvas() );
+            const css::uno::Reference< css::rendering::XCanvas >& rDestinationCanvas( mpViewLayer->getCanvas() );
 
             if( !prefetch( rDestinationCanvas, rMtf ) )
                 return false;
@@ -180,9 +184,12 @@ namespace slideshow
 
             try
             {
-                rDestinationCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
-                                                                rDestinationCanvas->getViewState(),
-                                                                aRenderState );
+#if 0
+                // TODO-NYI
+                rDestinationCanvas->drawBitmap( mxBitmap,
+                                                rDestinationCanvas->getViewState(),
+                                                aRenderState );
+#endif
             }
             catch( uno::Exception& )
             {

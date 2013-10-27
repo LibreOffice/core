@@ -24,12 +24,11 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include <cppcanvas/spritecanvas.hxx>
-
 #include "combtransition.hxx"
 
 #include <boost/bind.hpp>
 
+using namespace ::com::sun::star;
 
 namespace slideshow {
 namespace internal {
@@ -89,13 +88,13 @@ CombTransition::CombTransition(
 {
 }
 
-void CombTransition::renderComb( double           t,
+void CombTransition::renderComb( double           ,
                                  const ViewEntry& rViewEntry ) const
 {
     const SlideBitmapSharedPtr& pEnteringBitmap = getEnteringBitmap(rViewEntry);
-    const cppcanvas::CanvasSharedPtr pCanvas_ = rViewEntry.mpView->getCanvas();
+    const uno::Reference<rendering::XCanvas> pCanvas = rViewEntry.mpView->getCanvas();
 
-    if( !pEnteringBitmap || !pCanvas_ )
+    if( !pEnteringBitmap || !pCanvas.is() )
         return;
 
     // calc bitmap offsets. The enter/leaving bitmaps are only
@@ -110,9 +109,7 @@ void CombTransition::renderComb( double           t,
     const basegfx::B2DHomMatrix viewTransform( rViewEntry.mpView->getTransformation() );
     const basegfx::B2DPoint pageOrigin( viewTransform * basegfx::B2DPoint() );
 
-    // change transformation on cloned canvas to be in
-    // device pixel
-    cppcanvas::CanvasSharedPtr pCanvas( pCanvas_->clone() );
+    // transformation from now on in device pixel
     basegfx::B2DPoint p;
 
     // TODO(Q2): Use basegfx bitmaps here
@@ -132,6 +129,8 @@ void CombTransition::renderComb( double           t,
                            enteringSizePixel,
                            mnNumStripes, 1 ) );
 
+#if 0
+    // TODO-NYI - and let's use xsprites here FFS
     SlideBitmapSharedPtr const & pLeavingBitmap = getLeavingBitmap(rViewEntry);
     if( pLeavingBitmap )
     {
@@ -166,6 +165,7 @@ void CombTransition::renderComb( double           t,
     p = basegfx::B2DPoint( pageOrigin + ((1.0 - t) * aPushDirection) );
     pCanvas->setTransformation(basegfx::tools::createTranslateB2DHomMatrix(p.getX(), p.getY()));
     pEnteringBitmap->draw( pCanvas );
+#endif
 }
 
 bool CombTransition::operator()( double t )

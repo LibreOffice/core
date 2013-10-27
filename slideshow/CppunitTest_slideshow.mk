@@ -40,7 +40,6 @@ $(eval $(call gb_CppunitTest_use_libraries,slideshow,\
     basegfx \
     canvastools \
     comphelper \
-    cppcanvas \
     cppu \
     cppuhelper \
     sal \

@@ -22,10 +22,10 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <cppcanvas/spritecanvas.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
@@ -68,8 +68,8 @@ namespace slideshow
         private:
             /** Prefetch bitmap for given canvas
              */
-            bool prefetch( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
-                           const GDIMetaFileSharedPtr&          rMtf ) const;
+            bool prefetch( const css::uno::Reference< css::rendering::XCanvas >& rDestinationCanvas,
+                           const GDIMetaFileSharedPtr&                           rMtf ) const;
 
             /** The view layer this object is part of.
              */

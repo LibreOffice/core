@@ -24,9 +24,9 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
-#include <cppcanvas/vclfactory.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -217,7 +217,7 @@ void RehearseTimingsActivity::start()
 
     // paint and show all sprites:
     paintAllSprites();
-    for_each_sprite( boost::bind( &cppcanvas::Sprite::show, _1 ) );
+    for_each_sprite( boost::bind( &rendering::XCustomSprite::show, _1 ) );
 
     mrActivitiesQueue.addActivity( shared_from_this() );
 
@@ -235,7 +235,7 @@ double RehearseTimingsActivity::stop()
 
     mbActive = false; // will be removed from queue
 
-    for_each_sprite( boost::bind( &cppcanvas::Sprite::hide, _1 ) );
+    for_each_sprite( boost::bind( &rendering::XCustomSprite::hide, _1 ) );
 
     return maElapsedTime.getElapsedTime();
 }
@@ -306,7 +306,7 @@ void RehearseTimingsActivity::end()
 
 basegfx::B2DRange RehearseTimingsActivity::calcSpriteRectangle( UnoViewSharedPtr const& rView ) const
 {
-    const Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
+    const Reference<rendering::XBitmap> xBitmap( rView->getCanvas(),
                                                  UNO_QUERY );
     if( !xBitmap.is() )
         return basegfx::B2DRange();
@@ -331,7 +331,7 @@ basegfx::B2DRange RehearseTimingsActivity::calcSpriteRectangle( UnoViewSharedPtr
 
 void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
 {
-    cppcanvas::CustomSpriteSharedPtr sprite(
+    css::uno::Reference< css::rendering::XCustomSprite > sprite(
         rView->createSprite( basegfx::B2DSize(
                                  maSpriteSizePixel.getX()+2,
                                  maSpriteSizePixel.getY()+2 ),
@@ -340,9 +340,12 @@ void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
     sprite->setAlpha( 0.8 );
     const basegfx::B2DRange spriteRectangle(
         calcSpriteRectangle( rView ) );
+#if 0
+    // TODO-NYI - keep local state, or encapsulate in dedicated sprite object again?
     sprite->move( basegfx::B2DPoint(
                       spriteRectangle.getMinX(),
                       spriteRectangle.getMinY() ) );
+#endif
 
     if( maViews.empty() )
         maSpriteRectangle = spriteRectangle;
@@ -387,7 +390,8 @@ void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
     maSpriteRectangle = calcSpriteRectangle( rView );
 
     // reposition sprite:
-    aModifiedEntry->second->move( maSpriteRectangle.getMinimum() );
+    // TODO-NYI - keep local state, or encapsulate in dedicated sprite object again?
+    //aModifiedEntry->second->move( maSpriteRectangle.getMinimum() );
 
     // sprites changed, need screen update
     mrScreenUpdater.notifyUpdate( rView );
@@ -400,10 +404,13 @@ void RehearseTimingsActivity::viewsChanged()
         // new sprite pos, transformation might have changed:
         maSpriteRectangle = calcSpriteRectangle( maViews.front().first );
 
+#if 0
+        // TODO-NYI
         // reposition sprites
-        for_each_sprite( boost::bind( &cppcanvas::Sprite::move,
+        for_each_sprite( boost::bind( &rendering::XCustomSprite::move,
                                       _1,
                                       boost::cref(maSpriteRectangle.getMinimum())) );
+#endif
 
         // sprites changed, need screen update
         mrScreenUpdater.notifyUpdate();
@@ -416,11 +423,14 @@ void RehearseTimingsActivity::paintAllSprites() const
         boost::bind( &RehearseTimingsActivity::paint, this,
                      // call getContentCanvas() on each sprite:
                      boost::bind(
-                         &cppcanvas::CustomSprite::getContentCanvas, _1 ) ) );
+                         &rendering::XCustomSprite::getContentCanvas, _1 ) ) );
 }
 
-void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas ) const
+void RehearseTimingsActivity::paint( css::uno::Reference< css::rendering::XCanvas > const & ) const
 {
+#if 0
+    // TODO-NYI - move this over to drawing layer primitives!
+
     // build timer string:
     const sal_Int32 nTimeSecs =
         static_cast<sal_Int32>(maElapsedTime.getElapsedTime());
@@ -479,6 +489,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     const bool succ = renderer->draw();
     OSL_ASSERT( succ );
     (void)succ;
+#endif
 }
 
 

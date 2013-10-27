@@ -308,13 +308,6 @@ namespace slideshow
         {
         }
 
-        RGBColor::RGBColor( ::cppcanvas::Color::IntSRGBA nRGBColor ) :
-            maRGBTriple( ::cppcanvas::getRed( nRGBColor ) / 255.0,
-                         ::cppcanvas::getGreen( nRGBColor ) / 255.0,
-                         ::cppcanvas::getBlue( nRGBColor ) / 255.0 )
-        {
-        }
-
         RGBColor::RGBColor( double nRed, double nGreen, double nBlue ) :
             maRGBTriple( nRed, nGreen, nBlue )
         {
@@ -324,6 +317,13 @@ namespace slideshow
             maRGBTriple( hsl2rgb( truncateRangeHue( rColor.getHue() ),
                                   truncateRangeStd( rColor.getSaturation() ),
                                   truncateRangeStd( rColor.getLuminance() ) ) )
+        {
+        }
+
+        RGBColor::RGBColor( sal_uInt32 nColor ) :
+            maRGBTriple( (sal_uInt8)(nColor>>16) / 255.0,
+                         (sal_uInt8)(sal_uInt16(nColor) >> 8) / 255.0,
+                         (sal_uInt8)nColor / 255.0 )
         {
         }
 
@@ -340,14 +340,6 @@ namespace slideshow
         double RGBColor::getBlue() const
         {
             return maRGBTriple.mnBlue;
-        }
-
-        ::cppcanvas::Color::IntSRGBA RGBColor::getIntegerColor() const
-        {
-            return ::cppcanvas::makeColor( colorToInt( getRed() ),
-                                           colorToInt( getGreen() ),
-                                           colorToInt( getBlue() ),
-                                           255 );
         }
 
         sal_Bool operator==( const RGBColor& rLHS, const RGBColor& rRHS )

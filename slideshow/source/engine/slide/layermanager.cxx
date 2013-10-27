@@ -598,7 +598,7 @@ namespace slideshow
             class DummyLayer : public ViewLayer
             {
             public:
-                explicit DummyLayer( const ::cppcanvas::CanvasSharedPtr& rCanvas ) :
+                explicit DummyLayer( const css::uno::Reference< css::rendering::XCanvas >& rCanvas ) :
                     mpCanvas( rCanvas )
                 {
                 }
@@ -608,7 +608,7 @@ namespace slideshow
                     return true; // visible on all views
                 }
 
-                virtual ::cppcanvas::CanvasSharedPtr getCanvas() const
+                virtual css::uno::Reference< css::rendering::XCanvas > getCanvas() const
                 {
                     return mpCanvas;
                 }
@@ -623,12 +623,12 @@ namespace slideshow
                     // NOOP
                 }
 
-                virtual ::cppcanvas::CustomSpriteSharedPtr createSprite( const ::basegfx::B2DSize& /*rSpriteSizePixel*/,
+                virtual css::uno::Reference< css::rendering::XCustomSprite > createSprite( const ::basegfx::B2DSize& /*rSpriteSizePixel*/,
                                                                          double                    /*nSpritePrio*/ ) const
                 {
                     ENSURE_OR_THROW( false,
                                       "DummyLayer::createSprite(): This method is not supposed to be called!" );
-                    return ::cppcanvas::CustomSpriteSharedPtr();
+                    return css::uno::Reference< css::rendering::XCustomSprite >();
                 }
 
                 virtual void setPriority( const basegfx::B1DRange& /*rRange*/ )
@@ -643,7 +643,9 @@ namespace slideshow
 
                 virtual ::basegfx::B2DHomMatrix getTransformation() const
                 {
-                    return mpCanvas->getTransformation();
+                    // TODO-NYI
+                    //return mpCanvas->getTransformation();
+                    return ::basegfx::B2DHomMatrix();
                 }
 
                 virtual ::basegfx::B2DHomMatrix getSpriteTransformation() const
@@ -664,11 +666,11 @@ namespace slideshow
                 }
 
             private:
-                ::cppcanvas::CanvasSharedPtr mpCanvas;
+                css::uno::Reference< css::rendering::XCanvas > mpCanvas;
             };
         }
 
-        bool LayerManager::renderTo( const ::cppcanvas::CanvasSharedPtr& rTargetCanvas ) const
+        bool LayerManager::renderTo( const css::uno::Reference< css::rendering::XCanvas >& rTargetCanvas ) const
         {
             bool bRet( true );
             ViewLayerSharedPtr pTmpLayer( new DummyLayer( rTargetCanvas ) );

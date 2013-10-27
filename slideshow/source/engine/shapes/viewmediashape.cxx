@@ -41,8 +41,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <canvas/canvastools.hxx>
-#include <cppcanvas/vclfactory.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
 #include <avmedia/mediawindow.hxx>
 
 #include <com/sun/star/media/XManager.hpp>
@@ -81,7 +79,7 @@ namespace slideshow
         {
             ENSURE_OR_THROW( mxShape.is(), "ViewMediaShape::ViewMediaShape(): Invalid Shape" );
             ENSURE_OR_THROW( mpViewLayer, "ViewMediaShape::ViewMediaShape(): Invalid View" );
-            ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewMediaShape::ViewMediaShape(): Invalid ViewLayer canvas" );
+            ENSURE_OR_THROW( mpViewLayer->getCanvas().is(), "ViewMediaShape::ViewMediaShape(): Invalid ViewLayer canvas" );
             ENSURE_OR_THROW( mxComponentContext.is(), "ViewMediaShape::ViewMediaShape(): Invalid component context" );
 
             UnoViewSharedPtr pUnoView (::boost::dynamic_pointer_cast<UnoView>(rViewLayer));
@@ -179,9 +177,9 @@ namespace slideshow
 
         bool ViewMediaShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {
-            ::cppcanvas::CanvasSharedPtr pCanvas = mpViewLayer->getCanvas();
+            css::uno::Reference< css::rendering::XCanvas > pCanvas = mpViewLayer->getCanvas();
 
-            if( !pCanvas )
+            if( !pCanvas.is() )
                 return false;
 
             if( !mpMediaWindow.get() && !mxPlayerWindow.is() )
@@ -193,10 +191,11 @@ namespace slideshow
                     avmedia::MediaWindow::getAudioLogo() : avmedia::MediaWindow::getEmptyLogo() );
 
                 uno::Reference< rendering::XBitmap > xBitmap(vcl::unotools::xBitmapFromBitmapEx(
-                    pCanvas->getUNOCanvas()->getDevice(), aAudioLogo));
+                    pCanvas->getDevice(), aAudioLogo));
 
                 rendering::ViewState aViewState;
-                aViewState.AffineTransform = pCanvas->getViewState().AffineTransform;
+                // TODO-NYI
+                //aViewState.AffineTransform = pCanvas->getViewState().AffineTransform;
 
                 rendering::RenderState aRenderState;
                 ::canvas::tools::initRenderState( aRenderState );
@@ -209,9 +208,9 @@ namespace slideshow
                     aScale, rBounds.getMinimum()));
                 ::canvas::tools::setRenderStateTransform( aRenderState, aTranslation );
 
-                pCanvas->getUNOCanvas()->drawBitmap( xBitmap,
-                                                     aViewState,
-                                                     aRenderState );
+                pCanvas->drawBitmap( xBitmap,
+                                     aViewState,
+                                     aRenderState );
             }
 
             return true;
@@ -221,15 +220,15 @@ namespace slideshow
         {
             maBounds = rNewBounds;
 
-            ::cppcanvas::CanvasSharedPtr pCanvas = mpViewLayer->getCanvas();
+            css::uno::Reference< css::rendering::XCanvas > pCanvas = mpViewLayer->getCanvas();
 
-            if( !pCanvas )
+            if( !pCanvas.is() )
                 return false;
 
             if( !mxPlayerWindow.is() )
                 return true;
 
-            uno::Reference< beans::XPropertySet > xPropSet( pCanvas->getUNOCanvas()->getDevice(),
+            uno::Reference< beans::XPropertySet > xPropSet( pCanvas->getDevice(),
                                                             uno::UNO_QUERY );
 
             uno::Reference< awt::XWindow > xParentWindow;
@@ -284,10 +283,10 @@ namespace slideshow
         {
             if( !mxPlayer.is() && mxShape.is() )
             {
-                ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(),
-                                   "ViewMediaShape::update(): Invalid layer canvas" );
+                ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas().is(),
+                                        "ViewMediaShape::update(): Invalid layer canvas" );
 
-                uno::Reference< rendering::XCanvas > xCanvas( mpViewLayer->getCanvas()->getUNOCanvas() );
+                uno::Reference< rendering::XCanvas > xCanvas( mpViewLayer->getCanvas() );
 
                 if( xCanvas.is() )
                 {

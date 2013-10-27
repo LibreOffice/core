@@ -30,7 +30,6 @@
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
-#include <cppcanvas/spritecanvas.hxx>
 #include <canvas/canvastools.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -73,7 +72,7 @@ namespace slideshow
         {
             ENSURE_OR_THROW( rxShape.is(), "ViewAppletShape::ViewAppletShape(): Invalid Shape" );
             ENSURE_OR_THROW( mpViewLayer, "ViewAppletShape::ViewAppletShape(): Invalid View" );
-            ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewAppletShape::ViewAppletShape(): Invalid ViewLayer canvas" );
+            ENSURE_OR_THROW( mpViewLayer->getCanvas().is(), "ViewAppletShape::ViewAppletShape(): Invalid ViewLayer canvas" );
             ENSURE_OR_THROW( mxComponentContext.is(), "ViewAppletShape::ViewAppletShape(): Invalid component context" );
 
             uno::Reference<lang::XMultiComponentFactory> xFactory(
@@ -128,13 +127,13 @@ namespace slideshow
 
         bool ViewAppletShape::startApplet( const ::basegfx::B2DRectangle& rBounds )
         {
-            ENSURE_OR_RETURN_FALSE( mpViewLayer && mpViewLayer->getCanvas() && mpViewLayer->getCanvas()->getUNOCanvas().is(),
-                               "ViewAppletShape::startApplet(): Invalid or disposed view" );
+            ENSURE_OR_RETURN_FALSE( mpViewLayer && mpViewLayer->getCanvas().is(),
+                                    "ViewAppletShape::startApplet(): Invalid or disposed view" );
             try
             {
-                ::cppcanvas::CanvasSharedPtr pCanvas = mpViewLayer->getCanvas();
+                css::uno::Reference< css::rendering::XCanvas > pCanvas = mpViewLayer->getCanvas();
 
-                uno::Reference< beans::XPropertySet > xPropSet( pCanvas->getUNOCanvas()->getDevice(),
+                uno::Reference< beans::XPropertySet > xPropSet( pCanvas->getDevice(),
                                                                 uno::UNO_QUERY_THROW );
 
                 uno::Reference< awt::XWindow2 > xParentWindow(
@@ -232,17 +231,17 @@ namespace slideshow
 
         bool ViewAppletShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {
-            ::cppcanvas::CanvasSharedPtr pCanvas = mpViewLayer->getCanvas();
+            css::uno::Reference< css::rendering::XCanvas > pCanvas = mpViewLayer->getCanvas();
 
-            if( !pCanvas )
+            if( !pCanvas.is() )
                 return false;
 
             if( !mxFrame.is() )
             {
-                // fill the shape background with black
+                // fill the shape background with white
                 fillRect( pCanvas,
                           rBounds,
-                          0xFFFFFFFFU );
+                          basegfx::BColor(1.0) );
             }
 
             return true;

@@ -21,10 +21,11 @@
 #define INCLUDED_SLIDESHOW_SLIDEBITMAP_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppcanvas/canvas.hxx>
-#include <cppcanvas/bitmap.hxx>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
 
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2isize.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -60,9 +61,9 @@ namespace slideshow
         class SlideBitmap : private boost::noncopyable
         {
         public:
-            SlideBitmap( const ::cppcanvas::BitmapSharedPtr& rBitmap );
+            SlideBitmap( const css::uno::Reference< css::rendering::XBitmap >& rBitmap );
 
-            bool                draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const;
+            bool                draw( const css::uno::Reference< css::rendering::XCanvas >& rCanvas ) const;
             ::basegfx::B2ISize  getSize() const;
             ::basegfx::B2DPoint getOutputPos() const{return maOutputPos;}
             void                move( const ::basegfx::B2DPoint& rNewPos );

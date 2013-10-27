@@ -120,12 +120,12 @@ interface XCanvas : ::com::sun::star::uno::XInterface
      */
     void                erase();
 
-    /** Clears the whole canvas area to given color.<p>
+    /** Fills the whole canvas area to given color.<p>
 
         This method fills the whole canvas area with the given device
         color.
      */
-    void                clear( [in] sequence<ColorComponent> aColor );
+    void                fill( [in] sequence<ColorComponent> aColor );
 
      /** Draw a point in device resolution on the device.
 

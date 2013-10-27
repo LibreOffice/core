@@ -40,7 +40,7 @@ namespace slideshow
 
         class PaintOverlayHandler;
         typedef ::boost::shared_ptr< class UserPaintOverlay > UserPaintOverlaySharedPtr;
-        typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
+
         /** Slide overlay, which can be painted into by the user.
 
             This class registers itself at the EventMultiplexer,

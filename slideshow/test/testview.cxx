@@ -171,17 +171,17 @@ public:
         return true;
     }
 
-    virtual ::cppcanvas::CanvasSharedPtr getCanvas() const
+    virtual css::uno::Reference< css::rendering::XCanvas > getCanvas() const
     {
-        return ::cppcanvas::CanvasSharedPtr();
+        return css::uno::Reference< css::rendering::XCanvas >();
     }
 
-    virtual ::cppcanvas::CustomSpriteSharedPtr createSprite( const ::basegfx::B2DSize& rSpriteSizePixel,
+    virtual css::uno::Reference< css::rendering::XCustomSprite > createSprite( const ::basegfx::B2DSize& rSpriteSizePixel,
                                                              double                    nPriority ) const
     {
         maCreatedSprites.push_back( std::make_pair(rSpriteSizePixel,nPriority) );
 
-        return ::cppcanvas::CustomSpriteSharedPtr();
+        return css::uno::Reference< css::rendering::XCustomSprite >();
     }
 
     virtual void setPriority( const basegfx::B1DRange& rRange )

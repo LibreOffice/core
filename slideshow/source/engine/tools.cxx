@@ -39,9 +39,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tools/lerp.hxx>
+#include <basegfx/tools/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-
-#include <cppcanvas/basegfxfactory.hxx>
 
 #include "unoview.hxx"
 #include "smilfunctionparser.hxx"
@@ -296,11 +295,9 @@ namespace slideshow
                                       "extractValue(): inappropriate length for RGB color value" );
 
                     // truncate to byte
-                    o_rValue = RGBColor( ::cppcanvas::makeColor(
-                                             static_cast<sal_uInt8>(aTmp[0]),
-                                             static_cast<sal_uInt8>(aTmp[1]),
-                                             static_cast<sal_uInt8>(aTmp[2]),
-                                             255 ) );
+                    o_rValue = RGBColor( static_cast<sal_uInt8>(aTmp[0])/255.0,
+                                         static_cast<sal_uInt8>(aTmp[1])/255.0,
+                                         static_cast<sal_uInt8>(aTmp[2])/255.0 );
 
                     // succeeded
                     return true;
@@ -315,7 +312,9 @@ namespace slideshow
                     ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for RGB color value" );
 
-                    o_rValue = RGBColor( ::cppcanvas::makeColor( aTmp[0], aTmp[1], aTmp[2], 255 ) );
+                    o_rValue = RGBColor( aTmp[0] / 255.0,
+                                         aTmp[1] / 255.0,
+                                         aTmp[2] / 255.0 );
 
                     // succeeded
                     return true;
@@ -665,77 +664,28 @@ namespace slideshow
 
         RGBColor unoColor2RGBColor( sal_Int32 nColor )
         {
-            return RGBColor(
-                ::cppcanvas::makeColor(
-                    // convert from API color to IntSRGBA color
-                    // (0xAARRGGBB -> 0xRRGGBBAA)
-                    static_cast< sal_uInt8 >( nColor >> 16U ),
-                    static_cast< sal_uInt8 >( nColor >> 8U ),
-                    static_cast< sal_uInt8 >( nColor ),
-                    static_cast< sal_uInt8 >( nColor >> 24U ) ) );
+            return RGBColor( static_cast< sal_uInt8 >( nColor >> 16U ) / 255.0,
+                             static_cast< sal_uInt8 >( nColor >> 8U )  / 255.0,
+                             static_cast< sal_uInt8 >( nColor )        / 255.0 );
         }
 
-        sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
+        void fillRect( const uno::Reference< rendering::XCanvas >& xCanvas,
+                       const ::basegfx::B2DRectangle&              rRect,
+                       const basegfx::BColor&                      rFillColor )
         {
-            return ::cppcanvas::makeColorARGB(
-                // convert from IntSRGBA color to API color
-                // (0xRRGGBBAA -> 0xAARRGGBB)
-                static_cast< sal_uInt8 >(0),
-                ::cppcanvas::getRed(aColor),
-                ::cppcanvas::getGreen(aColor),
-                ::cppcanvas::getBlue(aColor));
-        }
+            // TODO-NYI
+            rendering::ViewState aViewState;
+            rendering::RenderState aRenderState;
+            canvas::tools::initRenderState(aRenderState);
+            aRenderState.DeviceColor =
+                rFillColor.colorToDoubleSequence(
+                    xCanvas->getDevice());
 
-        void fillRect( const ::cppcanvas::CanvasSharedPtr& rCanvas,
-                       const ::basegfx::B2DRectangle&      rRect,
-                       ::cppcanvas::Color::IntSRGBA        aFillColor )
-        {
-            const ::basegfx::B2DPolygon aPoly(
-                ::basegfx::tools::createPolygonFromRect( rRect ));
-
-            ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-                ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( rCanvas,
-                                                                              aPoly ) );
-
-            if( pPolyPoly )
-            {
-                pPolyPoly->setRGBAFillColor( aFillColor );
-                pPolyPoly->draw();
-            }
-        }
-
-        void initSlideBackground( const ::cppcanvas::CanvasSharedPtr& rCanvas,
-                                  const ::basegfx::B2ISize&           rSize )
-        {
-            ::cppcanvas::CanvasSharedPtr pCanvas( rCanvas->clone() );
-
-            // set transformation to identitiy (->device pixel)
-            pCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
-
-            // #i42440# Fill the _full_ background in
-            // black. Since we had to extend the bitmap by one
-            // pixel, and the bitmap is initialized white,
-            // depending on the slide content a one pixel wide
-            // line will show to the bottom and the right.
-            fillRect( pCanvas,
-                      ::basegfx::B2DRectangle( 0.0, 0.0,
-                                               rSize.getX(),
-                                               rSize.getY() ),
-                      0x000000FFU );
-
-            // fill the bounds rectangle in white. Subtract one pixel
-            // from both width and height, because the slide size is
-            // chosen one pixel larger than given by the drawing
-            // layer. This is because shapes with line style, that
-            // have the size of the slide would otherwise be cut
-            // off. OTOH, every other slide background (solid fill,
-            // gradient, bitmap) render one pixel less, thus revealing
-            // ugly white pixel to the right and the bottom.
-            fillRect( pCanvas,
-                      ::basegfx::B2DRectangle( 0.0, 0.0,
-                                               rSize.getX()-1,
-                                               rSize.getY()-1 ),
-                      0xFFFFFFFFU );
+            xCanvas->fillPolyPolygon(
+                basegfx::unotools::xPolyPolygonFromB2DPolygon(
+                    xCanvas->getDevice(),
+                    ::basegfx::tools::createPolygonFromRect( rRect )),
+                aViewState,  aRenderState);
         }
 
         ::basegfx::B2DRectangle getAPIShapeBounds( const uno::Reference< drawing::XShape >& xShape )

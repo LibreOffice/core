@@ -180,7 +180,6 @@ namespace slideshow
                                      ::boost::cref( mxShape ),
                                      ::boost::cref( mxPage ),
                                      ::boost::cref( mxPrimitives ),
-                                     ::boost::cref( mpCurrMtf ),
                                      ::boost::cref(
                                          getViewRenderArgs() ),
                                      nUpdateFlags,
@@ -299,8 +298,11 @@ namespace slideshow
                     // added or removed). Maybe we should exclude it here,
                     // always assuming full bounds?
 
-                    ::cppcanvas::CanvasSharedPtr pDestinationCanvas(
+                    css::uno::Reference< css::rendering::XCanvas > pDestinationCanvas(
                         maViewShapes.front()->getViewLayer()->getCanvas() );
+
+#if 0
+                    // TODO-NYI
 
                     // TODO(Q2): Although this _is_ currently
                     // view-agnostic, it might not stay like
@@ -362,6 +364,7 @@ namespace slideshow
 
                         maCurrentShapeUnitBounds.reset( aTotalBounds );
                     }
+#endif
                 }
 
                 return *maCurrentShapeUnitBounds;
@@ -674,7 +677,6 @@ namespace slideshow
                 pNewShape->update( mxShape,
                                    mxPage,
                                    mxPrimitives,
-                                   mpCurrMtf,
                                    getViewRenderArgs(),
                                    ViewShape::FORCE,
                                    isVisible() );
@@ -1000,8 +1002,11 @@ namespace slideshow
                 // TODO(Q2): Although this _is_ currently
                 // view-agnostic, it might not stay like that.
                 ViewShapeSharedPtr const& pViewShape = maViewShapes.front();
-                cppcanvas::CanvasSharedPtr const pCanvas(
+                css::uno::Reference< css::rendering::XCanvas > const pCanvas(
                     pViewShape->getViewLayer()->getCanvas() );
+
+#if 0
+                // TODO-NYI
 
                 // reuse Renderer of first view shape:
                 cppcanvas::RendererSharedPtr const pRenderer(
@@ -1037,6 +1042,7 @@ namespace slideshow
                         maHyperlinkRegions[pos].first = region;
                     }
                 }
+#endif
             }
 
             // shift shape-relative hyperlink regions to

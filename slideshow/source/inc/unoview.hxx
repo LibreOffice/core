@@ -37,6 +37,8 @@ namespace slideshow
 {
     namespace internal
     {
+        typedef ::std::vector< css::uno::Reference< css::rendering::XPolyPolygon2D > > PolyPolygonVector;
+
         /** Extend View with UNO interface retrieval.
 
             This interface extends View with an UNO interface

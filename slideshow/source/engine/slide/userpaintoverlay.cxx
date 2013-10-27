@@ -28,7 +28,8 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/tools/canvastools.hxx>
 
 #include "activity.hxx"
 #include "slideshowcontext.hxx"
@@ -144,14 +145,16 @@ namespace slideshow
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
                         SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
-                        ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
+                        css::uno::Reference< css::rendering::XCanvas > pCanvas( (*aIter)->getCanvas() );
 
                         const ::basegfx::B2DHomMatrix   aViewTransform( (*aIter)->getTransformation() );
                         const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
 
+#if 0
+                        // TODO-NYI
                         // setup a canvas with device coordinate space, the slide
                         // bitmap already has the correct dimension.
-                        ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
+                        css::uno::Reference< css::rendering::XCanvas > pDevicePixelCanvas( pCanvas->clone() );
 
                         pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
@@ -162,6 +165,7 @@ namespace slideshow
                         // transition)
                         pBitmap->clip( ::basegfx::B2DPolyPolygon() );
                         pBitmap->draw( pDevicePixelCanvas );
+#endif
 
                         mrScreenUpdater.notifyUpdate(*aIter,true);
                     }
@@ -223,7 +227,8 @@ namespace slideshow
                                      aIter!=aEnd;
                                      ++aIter )
                 {
-                    (*aIter)->draw();
+                    // TODO-NYI
+                    //(*aIter)->draw();
                 }
                 // screen update necessary to show painting
                 mrScreenUpdater.notifyUpdate();
@@ -362,21 +367,23 @@ namespace slideshow
 
                     //The point is to redraw the LastPoint the way it was originally on the bitmap,
                     //of the slide
-            for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
-                        aIter!=aEnd;
-                        ++aIter )
+                    for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
+                         aIter!=aEnd;
+                         ++aIter )
                     {
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
-                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
-                        ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
+                        SlideBitmapSharedPtr pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
+                        css::uno::Reference< css::rendering::XCanvas > pCanvas( (*aIter)->getCanvas() );
 
-                        ::basegfx::B2DHomMatrix     aViewTransform( (*aIter)->getTransformation() );
-                        const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
+                        ::basegfx::B2DHomMatrix   aViewTransform( (*aIter)->getTransformation() );
+                        const ::basegfx::B2DPoint aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
 
+#if 0
+                        // TODO-NYI
                         // setup a canvas with device coordinate space, the slide
                         // bitmap already has the correct dimension.
-                        ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
+                        css::uno::Reference< css::rendering::XCanvas > pDevicePixelCanvas( pCanvas->clone() );
 
                         pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
@@ -389,11 +396,10 @@ namespace slideshow
                         // set clip so that we just redraw a part of the canvas
                         pBitmap->clip(aPolyPoly);
                         pBitmap->draw( pDevicePixelCanvas );
-
+#endif
                         mrScreenUpdater.notifyUpdate(*aIter,true);
                     }
-
-        }
+                }
                 else
                 {
                     if( !mbIsLastPointValid )
@@ -417,15 +423,19 @@ namespace slideshow
                              aIter!=aEnd;
                              ++aIter )
                         {
-                            ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-                                ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( (*aIter)->getCanvas(),
-                                                                                              aPoly ) );
+                            uno::Reference< rendering::XPolyPolygon2D > pPolyPoly(
+                                basegfx::unotools::xPolyPolygonFromB2DPolygon(
+                                    (*aIter)->getCanvas()->getDevice(),
+                                    aPoly ) );
 
-                            if( pPolyPoly )
+                            if( pPolyPoly.is() )
                             {
+#if 0
+                                // TODO-NYI
                                 pPolyPoly->setStrokeWidth(mnStrokeWidth);
                                 pPolyPoly->setRGBALineColor( maStrokeColor.getIntegerColor() );
                                 pPolyPoly->draw();
+#endif
                                 maPolygons.push_back(pPolyPoly);
                             }
                         }

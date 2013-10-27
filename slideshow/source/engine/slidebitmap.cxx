@@ -42,26 +42,24 @@ namespace slideshow
     namespace internal
     {
 
-        SlideBitmap::SlideBitmap( const ::cppcanvas::BitmapSharedPtr& rBitmap ) :
+        SlideBitmap::SlideBitmap( const ::css::uno::Reference< css::rendering::XBitmap >& rBitmap ) :
             maOutputPos(),
             maClipPoly(),
-            mxBitmap()
+            mxBitmap(rBitmap)
         {
-            if( rBitmap )
-                mxBitmap = rBitmap->getUNOBitmap();
-
             ENSURE_OR_THROW( mxBitmap.is(), "SlideBitmap::SlideBitmap(): Invalid bitmap" );
         }
 
-        bool SlideBitmap::draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const
+        bool SlideBitmap::draw( const css::uno::Reference< css::rendering::XCanvas >& rCanvas ) const
         {
-            ENSURE_OR_RETURN_FALSE( rCanvas && rCanvas->getUNOCanvas().is(),
-                               "SlideBitmap::draw(): Invalid canvas" );
+            ENSURE_OR_RETURN_FALSE( rCanvas.is(),
+                                    "SlideBitmap::draw(): Invalid canvas" );
 
             // selectively only copy the transformation from current viewstate,
             // don't want no clipping here.
             rendering::ViewState aViewState;
-            aViewState.AffineTransform = rCanvas->getViewState().AffineTransform;
+            // TODO-NYI
+            //aViewState.AffineTransform = rCanvas->getViewState().AffineTransform;
 
             rendering::RenderState aRenderState;
             ::canvas::tools::initRenderState( aRenderState );
@@ -76,13 +74,13 @@ namespace slideshow
                     // TODO(P1): Buffer the clip polygon
                     aRenderState.Clip =
                         ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                            rCanvas->getUNOCanvas()->getDevice(),
+                            rCanvas->getDevice(),
                             maClipPoly );
                 }
 
-                rCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
-                                                     aViewState,
-                                                     aRenderState );
+                rCanvas->drawBitmap( mxBitmap,
+                                     aViewState,
+                                     aRenderState );
             }
             catch( uno::Exception& )
             {

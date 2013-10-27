@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_RGBCOLOR_HXX
 #define INCLUDED_SLIDESHOW_RGBCOLOR_HXX
 
-#include <cppcanvas/color.hxx>
-
+#include <sal/types.h>
 
 /* Definition of RGBColor class */
 
@@ -37,9 +36,9 @@ namespace slideshow
         {
         public:
             RGBColor();
-            explicit RGBColor( ::cppcanvas::Color::IntSRGBA nRGBColor );
             RGBColor( double nRed, double nGreen, double nBlue );
             explicit RGBColor( const HSLColor& rColor );
+            explicit RGBColor( sal_uInt32 nColor );
 
             /** Get the RGB red value.
              */
@@ -52,10 +51,6 @@ namespace slideshow
             /** Get the RGB blue value.
              */
             double getBlue() const;
-
-            /** Create an integer sRGBA color.
-             */
-            ::cppcanvas::Color::IntSRGBA getIntegerColor() const;
 
             struct RGBTriple
             {

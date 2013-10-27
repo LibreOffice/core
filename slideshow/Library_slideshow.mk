@@ -36,7 +36,6 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
     basegfx \
     canvastools \
     comphelper \
-    cppcanvas \
     cppu \
     cppuhelper \
     drawinglayer \

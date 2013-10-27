@@ -27,8 +27,7 @@
 #include <unotools/streamwrap.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
-#include <cppcanvas/polypolygon.hxx>
+#include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -475,8 +474,8 @@ bool ShapeImporter::isSkip(
 void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xPropSet) {
 
     drawing::PointSequenceSequence aRetval;
-    sal_Int32           nLineColor=0;
-    double              fLineWidth;
+    sal_Int32                      nLineColor=0;
+    double                         fLineWidth;
     getPropertyValue( aRetval, xPropSet, "PolyPolygon" );
     getPropertyValue( nLineColor, xPropSet, "LineColor" );
     getPropertyValue( fLineWidth, xPropSet, "LineWidth" );
@@ -496,16 +495,20 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
     UnoViewVector::const_iterator aEnd=(mrContext.mrViewContainer).end();
     while(aIter != aEnd)
     {
-        ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-            ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( (*aIter)->getCanvas(),
-                                                                          aPoly ) );
-        if( pPolyPoly )
+        uno::Reference< rendering::XPolyPolygon2D > xPoly=
+            basegfx::unotools::xPolyPolygonFromB2DPolygon(
+                (*aIter)->getCanvas()->getDevice(),
+                aPoly);
+#if 0
+        // TODO-NYI
+        if( xPoly.is() )
         {
-                pPolyPoly->setRGBALineColor( unoColor2RGBColor( nLineColor ).getIntegerColor() );
-                pPolyPoly->setStrokeWidth(fLineWidth);
-                pPolyPoly->draw();
-                maPolygons.push_back(pPolyPoly);
+            pPolyPoly->setRGBALineColor( unoColor2RGBColor( nLineColor ).getIntegerColor() );
+            pPolyPoly->setStrokeWidth(fLineWidth);
+            pPolyPoly->draw();
+            maPolygons.push_back(xPoly);
         }
+#endif
         ++aIter;
     }
 }

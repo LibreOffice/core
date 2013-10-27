@@ -26,6 +26,9 @@
 #include "slidebitmap.hxx"
 #include "shapemaps.hxx"
 
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
+
 #include <boost/shared_ptr.hpp>
 
 namespace com {  namespace sun { namespace star {
@@ -53,7 +56,7 @@ namespace slideshow
     {
         class RGBColor;
         class ScreenUpdater;
-        typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
+
         class Slide
         {
         public:

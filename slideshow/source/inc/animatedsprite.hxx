@@ -20,7 +20,9 @@
 #ifndef INCLUDED_SLIDESHOW_ANIMATEDSPRITE_HXX
 #define INCLUDED_SLIDESHOW_ANIMATEDSPRITE_HXX
 
-#include <cppcanvas/customsprite.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XCustomSprite.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dsize.hxx>
@@ -104,7 +106,7 @@ namespace slideshow
                 canvas is already correctly setup, matching the
                 associated destination canvas.
              */
-            ::cppcanvas::CanvasSharedPtr getContentCanvas() const;
+            css::uno::Reference< css::rendering::XCanvas > getContentCanvas() const;
 
             /** Move the sprite in device pixel space.
 
@@ -144,7 +146,7 @@ namespace slideshow
         private:
             ViewLayerSharedPtr                                          mpViewLayer;
 
-            ::cppcanvas::CustomSpriteSharedPtr                          mpSprite;
+            css::uno::Reference< css::rendering::XCustomSprite >        mpSprite;
             ::basegfx::B2DSize                                          maEffectiveSpriteSizePixel;
             ::basegfx::B2DSize                                          maContentPixelOffset;
 

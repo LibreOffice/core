@@ -41,8 +41,6 @@
 
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
-#include <cppcanvas/vclfactory.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
 #include <drawinglayer/processor2d/canvasprocessor2d.hxx>
 
 #include "viewshape.hxx"
@@ -62,16 +60,14 @@ namespace slideshow
         // char rotation etc.). Do that via mtf argument at this object
 
         bool ViewShape::prefetch( RendererCacheEntry&                   io_rCacheEntry,
-                                  const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,
-                                  const GDIMetaFileSharedPtr&           rMtf,
-                                  const ShapeAttributeLayerSharedPtr&   rAttr ) const
+                                  const css::uno::Reference< css::rendering::XCanvas >&   rDestinationCanvas,
+                                  const ShapeAttributeLayerSharedPtr&    ) const
         {
-            ENSURE_OR_RETURN_FALSE( rMtf,
-                               "ViewShape::prefetch(): no valid metafile!" );
-
-            if( rMtf != io_rCacheEntry.mpMtf ||
-                rDestinationCanvas != io_rCacheEntry.getDestinationCanvas() )
+            if( rDestinationCanvas != io_rCacheEntry.getDestinationCanvas() )
             {
+#if 0
+                // TODO-NYI
+
                 // buffered renderer invalid, re-create
                 ::cppcanvas::Renderer::Parameters aParms;
 
@@ -175,27 +171,23 @@ namespace slideshow
                     io_rCacheEntry.mpLastBitmapCanvas.reset();
                     io_rCacheEntry.mpLastBitmap.reset();
                 }
+#endif
             }
 
-            return static_cast< bool >(io_rCacheEntry.mpRenderer);
+            //return static_cast< bool >(io_rCacheEntry.mpRenderer);
+            return false;
         }
 
-        bool ViewShape::draw( const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,
-                              const uno::Reference<drawing::XShape>&    xShape,
-                              const uno::Reference<drawing::XDrawPage>& xPage,
-                              const uno::Sequence<uno::Reference<graphic::XPrimitive2D> >& xPrimitives,
-                              const GDIMetaFileSharedPtr&           rMtf,
-                              const ShapeAttributeLayerSharedPtr&   rAttr,
-                              const ::basegfx::B2DHomMatrix&        rTransform,
-                              const ::basegfx::B2DPolyPolygon*      pClip,
-                              const VectorOfDocTreeNodes&           rSubsets ) const
+        bool ViewShape::draw( const uno::Reference<rendering::XCanvas>&        rDestinationCanvas,
+                              const uno::Reference<drawing::XShape>&           ,
+                              const uno::Reference<drawing::XDrawPage>&        xPage,
+                              const uno::Sequence<
+                                      uno::Reference<graphic::XPrimitive2D> >& xPrimitives,
+                              const ShapeAttributeLayerSharedPtr&              ,
+                              const ::basegfx::B2DHomMatrix&                   rTransform,
+                              const ::basegfx::B2DPolyPolygon*                 ,
+                              const VectorOfDocTreeNodes&                       ) const
         {
-            ::cppcanvas::RendererSharedPtr pRenderer(
-                getRenderer( rDestinationCanvas, rMtf, rAttr ) );
-
-            ENSURE_OR_RETURN_FALSE( pRenderer, "ViewShape::draw(): Invalid renderer" );
-
-            pRenderer->setTransformation( rTransform );
 #if OSL_DEBUG_LEVEL >= 2
             rendering::RenderState aRenderState;
             ::canvas::tools::initRenderState(aRenderState);
@@ -209,14 +201,17 @@ namespace slideshow
 
             try
             {
-                rDestinationCanvas->getUNOCanvas()->drawLine( geometry::RealPoint2D(0.0,0.0),
-                                                              geometry::RealPoint2D(1.0,1.0),
-                                                              rDestinationCanvas->getViewState(),
-                                                              aRenderState );
-                rDestinationCanvas->getUNOCanvas()->drawLine( geometry::RealPoint2D(1.0,0.0),
-                                                              geometry::RealPoint2D(0.0,1.0),
-                                                              rDestinationCanvas->getViewState(),
-                                                              aRenderState );
+#if 0
+                // TODO-NYI
+                rDestinationCanvas->drawLine( geometry::RealPoint2D(0.0,0.0),
+                                              geometry::RealPoint2D(1.0,1.0),
+                                              rDestinationCanvas->getViewState(),
+                                              aRenderState );
+                rDestinationCanvas->drawLine( geometry::RealPoint2D(1.0,0.0),
+                                              geometry::RealPoint2D(0.0,1.0),
+                                              rDestinationCanvas->getViewState(),
+                                              aRenderState );
+#endif
             }
             catch( uno::Exception& )
             {
@@ -232,7 +227,7 @@ namespace slideshow
 
             drawinglayer::processor2d::CanvasProcessor2D aProcessor(
                 aViewInfo,
-                rDestinationCanvas->getUNOCanvas());
+                rDestinationCanvas);
 
             aProcessor.process(xPrimitives);
 
@@ -269,7 +264,9 @@ namespace slideshow
 
                 // add antialiasing border around the shape (AA
                 // touches pixel _outside_ the nominal bound rect)
-                aBoundsPixel.grow( ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE );
+
+                // TODO-NYI - make this canvas-dependent!
+                //aBoundsPixel.grow( ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE );
 
                 return aBoundsPixel;
             }
@@ -289,19 +286,19 @@ namespace slideshow
             }
         }
 
-        bool ViewShape::renderSprite( const ViewLayerSharedPtr&             rViewLayer,
+        bool ViewShape::renderSprite( const ViewLayerSharedPtr&                 rViewLayer,
                                       const uno::Reference<drawing::XShape>&    xShape,
                                       const uno::Reference<drawing::XDrawPage>& xPage,
-                                      const uno::Sequence<uno::Reference<graphic::XPrimitive2D> >& xPrimitives,
-                                      const GDIMetaFileSharedPtr&           rMtf,
-                                      const ::basegfx::B2DRectangle&        rOrigBounds,
-                                      const ::basegfx::B2DRectangle&        rBounds,
-                                      const ::basegfx::B2DRectangle&        rUnitBounds,
-                                      int                                   nUpdateFlags,
-                                      const ShapeAttributeLayerSharedPtr&   pAttr,
-                                      const VectorOfDocTreeNodes&           rSubsets,
-                                      double                                nPrio,
-                                      bool                                  bIsVisible ) const
+                                      const uno::Sequence<uno::Reference<
+                                              graphic::XPrimitive2D> >&         xPrimitives,
+                                      const ::basegfx::B2DRectangle&            rOrigBounds,
+                                      const ::basegfx::B2DRectangle&            rBounds,
+                                      const ::basegfx::B2DRectangle&            rUnitBounds,
+                                      int                                       nUpdateFlags,
+                                      const ShapeAttributeLayerSharedPtr&       pAttr,
+                                      const VectorOfDocTreeNodes&               rSubsets,
+                                      double                                    nPrio,
+                                      bool                                      bIsVisible ) const
         {
             // TODO(P1): For multiple views, it might pay off to reorg Shape and ViewShape,
             // in that all the common setup steps here are refactored to Shape (would then
@@ -408,12 +405,18 @@ namespace slideshow
             const ::basegfx::B2DSize& rSpriteCorrectionOffset(
                 rSpriteBoundsPixel.getMinimum() - rNominalShapeBoundsPixel.getMinimum() );
 
+#if 0
+            // TODO-NYI - make this canvas-dependent!
+
             // offset added top, left for anti-aliasing (otherwise,
             // shapes fully filling the sprite will have anti-aliased
             // pixel cut off)
             const ::basegfx::B2DSize aAAOffset(
                 ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE,
                 ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE );
+#else
+            const ::basegfx::B2DSize aAAOffset(2,2);
+#endif
 
             // set pixel output offset to sprite: we always leave
             // ANTIALIASING_EXTRA_SIZE room atop and to the left, and,
@@ -464,12 +467,16 @@ namespace slideshow
                     aViewTransform.set( 0, 2, 0.0 );
                     aViewTransform.set( 1, 2, 0.0 );
 
+#if 0
+                    // TODO-NYI make this canvas-dependent!
+
                     // make the clip 2*ANTIALIASING_EXTRA_SIZE larger
                     // such that it's again centered over the sprite.
                     aViewTransform.scale(rSpriteSizePixel.getX()/
                                          (rSpriteSizePixel.getX()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE),
                                          rSpriteSizePixel.getY()/
                                          (rSpriteSizePixel.getY()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE));
+#endif
 
                     // transform clip polygon from view to device
                     // coordinate space
@@ -501,30 +508,29 @@ namespace slideshow
             // sprite needs repaint - output to sprite canvas
             // ==============================================
 
-            ::cppcanvas::CanvasSharedPtr pContentCanvas( mpSprite->getContentCanvas() );
+            css::uno::Reference< css::rendering::XCanvas > pContentCanvas( mpSprite->getContentCanvas() );
 
             return draw( pContentCanvas,
                          xShape,
                          xPage,
                          xPrimitives,
-                         rMtf,
                          pAttr,
                          aShapeTransformation,
                          NULL, // clipping is done via Sprite::clip()
                          rSubsets );
         }
 
-        bool ViewShape::render( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
-                                const uno::Reference<drawing::XShape>&    xShape,
-                                const uno::Reference<drawing::XDrawPage>& xPage,
-                                const uno::Sequence<uno::Reference<graphic::XPrimitive2D> >& xPrimitives,
-                                const GDIMetaFileSharedPtr&         rMtf,
-                                const ::basegfx::B2DRectangle&      rBounds,
-                                const ::basegfx::B2DRectangle&      rUpdateBounds,
-                                int                                 nUpdateFlags,
-                                const ShapeAttributeLayerSharedPtr& pAttr,
-                                const VectorOfDocTreeNodes&         rSubsets,
-                                bool                                bIsVisible ) const
+        bool ViewShape::render( const uno::Reference<rendering::XCanvas >& rDestinationCanvas,
+                                const uno::Reference<drawing::XShape>&     xShape,
+                                const uno::Reference<drawing::XDrawPage>&  xPage,
+                                const uno::Sequence<uno::Reference<
+                                        graphic::XPrimitive2D> >&          xPrimitives,
+                                const ::basegfx::B2DRectangle&             rBounds,
+                                const ::basegfx::B2DRectangle&             ,
+                                int                                        nUpdateFlags,
+                                const ShapeAttributeLayerSharedPtr&        pAttr,
+                                const VectorOfDocTreeNodes&                rSubsets,
+                                bool                                       bIsVisible ) const
         {
             // TODO(P1): For multiple views, it might pay off to reorg Shape and ViewShape,
             // in that all the common setup steps here are refactored to Shape (would then
@@ -578,6 +584,11 @@ namespace slideshow
                 // a temp bitmap, and then to screen (this would have
                 // been much easier if we'd be currently a sprite -
                 // see above)
+
+                // TODO-NYI - scratch that. either use drawing layer
+                // primitive, or make transparency groups a canvas op
+                // in the first place
+#if 0
                 if( pAttr->isAlphaValid() )
                 {
                     const double nAlpha( pAttr->getAlpha() );
@@ -626,7 +637,7 @@ namespace slideshow
                             aCompositingSurface->mpLastBitmapCanvas->getSize() != aBmpSize )
                         {
                             // create a bitmap of appropriate size
-                            ::cppcanvas::BitmapSharedPtr pBitmap(
+                            ::css::uno::Reference< css::rendering::XBitmap > pBitmap(
                                 ::cppcanvas::BaseGfxFactory::getInstance().createAlphaBitmap(
                                     rDestinationCanvas,
                                     aBmpSize ) );
@@ -642,10 +653,10 @@ namespace slideshow
                         // buffer aCompositingSurface iterator content
                         // - said one might get invalidated during
                         // draw() below.
-                        ::cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas(
+                        ::css::uno::Reference< css::rendering::XBitmapCanvas > pBitmapCanvas(
                             aCompositingSurface->mpLastBitmapCanvas );
 
-                        ::cppcanvas::BitmapSharedPtr pBitmap(
+                        ::css::uno::Reference< css::rendering::XBitmap > pBitmap(
                             aCompositingSurface->mpLastBitmap);
 
                         // setup bitmap canvas transformation -
@@ -715,6 +726,7 @@ namespace slideshow
                         return true;
                     }
                 }
+#endif
             }
 
             // retrieve shape transformation, _with_ shape translation
@@ -727,7 +739,6 @@ namespace slideshow
                          xShape,
                          xPage,
                          xPrimitives,
-                         rMtf,
                          pAttr,
                          aTransform,
                          !aClip ? NULL : &(*aClip),
@@ -752,7 +763,7 @@ namespace slideshow
             return mpViewLayer;
         }
 
-        ViewShape::RendererCacheVector::iterator ViewShape::getCacheEntry( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas ) const
+        ViewShape::RendererCacheVector::iterator ViewShape::getCacheEntry( const css::uno::Reference< css::rendering::XCanvas >&  rDestinationCanvas ) const
         {
             // lookup destination canvas - is there already a renderer
             // created for that target?
@@ -763,7 +774,7 @@ namespace slideshow
             if( (aIter=::std::find_if( maRenderers.begin(),
                                        aEnd,
                                        ::boost::bind(
-                                           ::std::equal_to< ::cppcanvas::CanvasSharedPtr >(),
+                                           ::std::equal_to< css::uno::Reference< css::rendering::XCanvas > >(),
                                            ::boost::cref( rDestinationCanvas ),
                                            ::boost::bind(
                                                &RendererCacheEntry::getDestinationCanvas,
@@ -791,9 +802,10 @@ namespace slideshow
             return aIter;
         }
 
-        ::cppcanvas::RendererSharedPtr ViewShape::getRenderer( const ::cppcanvas::CanvasSharedPtr&  rDestinationCanvas,
-                                                               const GDIMetaFileSharedPtr&          rMtf,
-                                                               const ShapeAttributeLayerSharedPtr&  rAttr ) const
+        // TODO-NYI - rename this method
+        drawinglayer::primitive2d::Primitive2DSequence ViewShape::getRenderer(
+            const css::uno::Reference< css::rendering::XCanvas >& rDestinationCanvas,
+            const ShapeAttributeLayerSharedPtr&                   rAttr ) const
         {
             // lookup destination canvas - is there already a renderer
             // created for that target?
@@ -806,15 +818,14 @@ namespace slideshow
             // detect that)
             if( prefetch( *aIter,
                           rDestinationCanvas,
-                          rMtf,
                           rAttr ) )
             {
-                return aIter->mpRenderer;
+                return aIter->mpPrimitiveSequence;
             }
             else
             {
                 // prefetch failed - renderer is invalid
-                return ::cppcanvas::RendererSharedPtr();
+                return drawinglayer::primitive2d::Primitive2DSequence();
             }
         }
 
@@ -827,11 +838,14 @@ namespace slideshow
 
         ::basegfx::B2DSize ViewShape::getAntialiasingBorder() const
         {
-            ENSURE_OR_THROW( mpViewLayer->getCanvas(),
+            ENSURE_OR_THROW( mpViewLayer->getCanvas().is(),
                               "ViewShape::getAntialiasingBorder(): Invalid ViewLayer canvas" );
 
+#if 0
+            // TODO-NYI - move this to canvas!
             const ::basegfx::B2DHomMatrix& rViewTransform(
                 mpViewLayer->getTransformation() );
+
 
             // TODO(F1): As a quick shortcut (did not want to invert
             // whole matrix here), taking only scale components of
@@ -842,6 +856,9 @@ namespace slideshow
 
             return ::basegfx::B2DSize( nXBorder,
                                        nYBorder );
+#else
+            return ::basegfx::B2DSize( 1, 1 );
+#endif
         }
 
         bool ViewShape::enterAnimationMode()
@@ -861,13 +878,14 @@ namespace slideshow
 
         bool ViewShape::update( const uno::Reference<drawing::XShape>&    xShape,
                                 const uno::Reference<drawing::XDrawPage>& xPage,
-                                const uno::Sequence<uno::Reference<graphic::XPrimitive2D> >& xPrimitives,
-                                const GDIMetaFileSharedPtr&               rMtf,
+                                const uno::Sequence<uno::Reference<
+                                        graphic::XPrimitive2D> >&         xPrimitives,
                                 const RenderArgs&                         rArgs,
                                 int                                       nUpdateFlags,
                                 bool                                      bIsVisible ) const
         {
-            ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
+            ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas().is(),
+                                    "ViewShape::update(): Invalid layer canvas" );
 
             // Shall we render to a sprite, or to a plain canvas?
             if( isBackgroundDetached() )
@@ -875,7 +893,6 @@ namespace slideshow
                                      xShape,
                                      xPage,
                                      xPrimitives,
-                                     rMtf,
                                      rArgs.maOrigBounds,
                                      rArgs.maBounds,
                                      rArgs.maUnitBounds,
@@ -889,7 +906,6 @@ namespace slideshow
                                xShape,
                                xPage,
                                xPrimitives,
-                               rMtf,
                                rArgs.maBounds,
                                rArgs.maUpdateBounds,
                                nUpdateFlags,

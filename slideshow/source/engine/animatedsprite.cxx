@@ -24,9 +24,7 @@
 
 #include <animatedsprite.hxx>
 
-#include <cppcanvas/canvas.hxx>
 #include <canvas/canvastools.hxx>
-
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -63,15 +61,17 @@ namespace slideshow
             mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel,
                                                   mnSpritePrio );
 
-            ENSURE_OR_THROW( mpSprite, "AnimatedSprite::AnimatedSprite(): Could not create sprite" );
+            ENSURE_OR_THROW( mpSprite.is(),
+                             "AnimatedSprite::AnimatedSprite(): Could not create sprite" );
         }
 
-        ::cppcanvas::CanvasSharedPtr AnimatedSprite::getContentCanvas() const
+        uno::Reference< rendering::XCanvas > AnimatedSprite::getContentCanvas() const
         {
-            ENSURE_OR_THROW( mpViewLayer->getCanvas(), "AnimatedSprite::getContentCanvas(): No view layer canvas" );
+            ENSURE_OR_THROW( mpViewLayer->getCanvas().is(),
+                             "AnimatedSprite::getContentCanvas(): No view layer canvas" );
 
-            const ::cppcanvas::CanvasSharedPtr pContentCanvas( mpSprite->getContentCanvas() );
-            pContentCanvas->clear();
+            const uno::Reference< rendering::XCanvas > pContentCanvas( mpSprite->getContentCanvas() );
+            pContentCanvas->erase();
 
             // extract linear part of canvas view transformation
             // (linear means: without translational components). The
@@ -86,7 +86,8 @@ namespace slideshow
             aLinearTransform.set( 1, 2, maContentPixelOffset.getY() );
 
             // apply linear part of canvas view transformation to sprite canvas
-            pContentCanvas->setTransformation( aLinearTransform );
+            // TODO-NYI
+            //pContentCanvas->setTransformation( aLinearTransform );
 
             return pContentCanvas;
         }
@@ -134,24 +135,25 @@ namespace slideshow
                 mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel,
                                                       mnSpritePrio );
 
-                ENSURE_OR_THROW( mpSprite,
+                ENSURE_OR_THROW( mpSprite.is(),
                                   "AnimatedSprite::resize(): Could not create new sprite" );
 
                 // set attributes similar to previous sprite
-                if( mpSprite && mbSpriteVisible )
+                if( mpSprite.is() && mbSpriteVisible )
                 {
                     mpSprite->show();
                     mpSprite->setAlpha( mnAlpha );
 
-                    if( maPosPixel )
-                        mpSprite->movePixel( *maPosPixel );
+                    // TODO-NYI
+                    // if( maPosPixel )
+                    //     mpSprite->movePixel( *maPosPixel );
 
-                    if( maClip )
-                        mpSprite->setClip( *maClip );
+                    // if( maClip )
+                    //     mpSprite->setClip( *maClip );
                 }
             }
 
-            return static_cast< bool >(mpSprite);
+            return mpSprite.is();
         }
 
         void AnimatedSprite::setPixelOffset( const ::basegfx::B2DSize& rPixelOffset )
@@ -162,7 +164,8 @@ namespace slideshow
         void AnimatedSprite::movePixel( const ::basegfx::B2DPoint& rNewPos )
         {
             maPosPixel.reset( rNewPos );
-            mpSprite->movePixel( rNewPos );
+            // TODO-NYI
+            //mpSprite->movePixel( rNewPos );
         }
 
         void AnimatedSprite::setAlpha( double nAlpha )
@@ -174,19 +177,22 @@ namespace slideshow
         void AnimatedSprite::clip( const ::basegfx::B2DPolyPolygon& rClip )
         {
             maClip.reset( rClip );
-            mpSprite->setClipPixel( rClip );
+            // TODO-NYI
+            //mpSprite->setClipPixel( rClip );
         }
 
         void AnimatedSprite::clip()
         {
             maClip.reset();
-            mpSprite->setClip();
+            // TODO-NYI
+            //mpSprite->setClip();
         }
 
         void AnimatedSprite::transform( const ::basegfx::B2DHomMatrix& rTransform )
         {
             maTransform.reset( rTransform );
-            mpSprite->transform( rTransform );
+            // TODO-NYI
+            //mpSprite->transform( rTransform );
         }
 
         void AnimatedSprite::hide()

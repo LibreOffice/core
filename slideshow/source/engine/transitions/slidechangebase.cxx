@@ -25,7 +25,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
+
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 #include "slidechangebase.hxx"
 #include "tools.hxx"
@@ -101,34 +102,30 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
             getSlideSizePixel( basegfx::B2DSize( mpEnteringSlide->getSlideSize() ),
                                rView ));
 
-        cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
+        uno::Reference<rendering::XCanvas> pCanvas( rView->getCanvas() );
 
         // create a bitmap of appropriate size
-        cppcanvas::BitmapSharedPtr pBitmap(
-            cppcanvas::BaseGfxFactory::getInstance().createBitmap(
-                pCanvas,
-                slideSizePixel ) );
+        uno::Reference<rendering::XBitmap> pBitmap(
+            pCanvas->getDevice()->createCompatibleBitmap(
+                css::geometry::IntegerSize2D(
+                    slideSizePixel.getX(),
+                    slideSizePixel.getY()) ));
 
         ENSURE_OR_THROW(
-            pBitmap,
+            pBitmap.is(),
             "SlideChangeBase::createBitmap(): Cannot create page bitmap" );
 
-        cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas(
-            pBitmap->getBitmapCanvas() );
+        uno::Reference<rendering::XBitmapCanvas> pBitmapCanvas(
+            pBitmap, uno::UNO_QUERY);
 
-        ENSURE_OR_THROW( pBitmapCanvas,
+        ENSURE_OR_THROW( pBitmapCanvas.is(),
                           "SlideChangeBase::createBitmap(): "
                           "Cannot create page bitmap canvas" );
 
-        // set transformation to identitiy (->device pixel)
-        pBitmapCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
-
         // clear bitmap to black
-        fillRect( pBitmapCanvas,
-                  ::basegfx::B2DRectangle( 0.0, 0.0,
-                                           slideSizePixel.getX(),
-                                           slideSizePixel.getY() ),
-                  0x000000FFU );
+        pBitmapCanvas->fill(
+            ::basegfx::BColor(0,0,0).colorToDoubleSequence(
+                pBitmapCanvas->getDevice()) );
 
         pRet.reset( new SlideBitmap( pBitmap ));
     }
@@ -148,17 +145,19 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
 
 void SlideChangeBase::renderBitmap(
     SlideBitmapSharedPtr const & pSlideBitmap,
-    cppcanvas::CanvasSharedPtr const & pCanvas )
+    uno::Reference<rendering::XCanvas> const & pCanvas )
 {
-    if( pSlideBitmap && pCanvas )
+    if( pSlideBitmap && pCanvas.is() )
     {
+#if 0
+        // TODO-NYI
         // need to render without any transformation (we
         // assume device units):
         const basegfx::B2DHomMatrix viewTransform(
             pCanvas->getTransformation() );
         const basegfx::B2DPoint pageOrigin(
             viewTransform * basegfx::B2DPoint() );
-        const cppcanvas::CanvasSharedPtr pDevicePixelCanvas(
+        const uno::Reference<rendering::XCanvas> pDevicePixelCanvas(
             pCanvas->clone() );
 
         // render at output position, don't modify bitmap object (no move!):
@@ -167,6 +166,7 @@ void SlideChangeBase::renderBitmap(
 
         pDevicePixelCanvas->setTransformation( transform );
         pSlideBitmap->draw( pDevicePixelCanvas );
+#endif
     }
 }
 
@@ -278,9 +278,9 @@ bool SlideChangeBase::operator()( double nValue )
         // (i.e. pixel).
 
         ViewEntry& rViewEntry( maViewData[i] );
-        const ::cppcanvas::CanvasSharedPtr& rCanvas( rViewEntry.mpView->getCanvas() );
-        ::cppcanvas::CustomSpriteSharedPtr& rInSprite( rViewEntry.mpInSprite );
-        ::cppcanvas::CustomSpriteSharedPtr& rOutSprite( rViewEntry.mpOutSprite );
+        const uno::Reference<rendering::XCanvas>& rCanvas( rViewEntry.mpView->getCanvas() );
+        uno::Reference<rendering::XCustomSprite>& rInSprite( rViewEntry.mpInSprite );
+        uno::Reference<rendering::XCustomSprite>& rOutSprite( rViewEntry.mpOutSprite );
 
         // TODO(F2): Properly respect clip here.
 
@@ -290,22 +290,25 @@ bool SlideChangeBase::operator()( double nValue )
         const ::basegfx::B2DPoint aSpritePosPixel(
             aViewTransform * ::basegfx::B2DPoint() );
 
+#if 0
+        // TODO-NYI
         // move sprite to final output position, in
         // device coordinates
-        if( rOutSprite )
+        if( rOutSprite.is() )
             rOutSprite->movePixel( aSpritePosPixel );
-        if( rInSprite )
+        if( rInSprite.is() )
             rInSprite->movePixel( aSpritePosPixel );
+#endif
 
         if( !mbSpritesVisible )
         {
-            if( rOutSprite )
+            if( rOutSprite.is() )
             {
                 // only render once: clipping is done
                 // exclusively with the sprite
-                const ::cppcanvas::CanvasSharedPtr pOutContentCanvas(
+                const uno::Reference<rendering::XCanvas> pOutContentCanvas(
                     rOutSprite->getContentCanvas() );
-                if( pOutContentCanvas)
+                if( pOutContentCanvas.is() )
                 {
                     // TODO(Q2): Use basegfx bitmaps here
 
@@ -319,13 +322,13 @@ bool SlideChangeBase::operator()( double nValue )
                 }
             }
 
-            if( rInSprite )
+            if( rInSprite.is() )
             {
                 // only render once: clipping is done
                 // exclusively with the sprite
-                const ::cppcanvas::CanvasSharedPtr pInContentCanvas(
+                const uno::Reference<rendering::XCanvas> pInContentCanvas(
                     rInSprite->getContentCanvas() );
-                if( pInContentCanvas )
+                if( pInContentCanvas.is() )
                 {
                     // TODO(Q2): Use basegfx bitmaps here
 
@@ -338,18 +341,18 @@ bool SlideChangeBase::operator()( double nValue )
             }
         }
 
-        if( rOutSprite )
+        if( rOutSprite.is() )
             performOut( rOutSprite, rViewEntry, rCanvas, nValue );
-        if( rInSprite )
+        if( rInSprite.is() )
             performIn( rInSprite, rViewEntry, rCanvas, nValue );
 
         // finishing deeds for first run.
         if( !mbSpritesVisible)
         {
             // enable sprites:
-            if( rOutSprite )
+            if( rOutSprite.is() )
                 rOutSprite->show();
-            if( rInSprite )
+            if( rInSprite.is() )
                 rInSprite->show();
             bSpritesVisible = true;
         }
@@ -363,23 +366,23 @@ bool SlideChangeBase::operator()( double nValue )
 
 void SlideChangeBase::prepareForRun(
     const ViewEntry& /* rViewEntry */,
-    const boost::shared_ptr<cppcanvas::Canvas>& /* rDestinationCanvas */ )
+    const uno::Reference<rendering::XCanvas>& /* rDestinationCanvas */ )
 {
 }
 
 void SlideChangeBase::performIn(
-    const cppcanvas::CustomSpriteSharedPtr&   /*rSprite*/,
-    const ViewEntry&                          /*rViewEntry*/,
-    const cppcanvas::CanvasSharedPtr&         /*rDestinationCanvas*/,
-    double                                    /*t*/ )
+    const uno::Reference<rendering::XCustomSprite>& /*rSprite*/,
+    const ViewEntry&                                /*rViewEntry*/,
+    const uno::Reference<rendering::XCanvas>&       /*rDestinationCanvas*/,
+    double                                          /*t*/ )
 {
 }
 
 void SlideChangeBase::performOut(
-    const cppcanvas::CustomSpriteSharedPtr&  /*rSprite*/,
-    const ViewEntry&                         /*rViewEntry*/,
-    const cppcanvas::CanvasSharedPtr&        /*rDestinationCanvas*/,
-    double                                   /*t*/ )
+    const uno::Reference<rendering::XCustomSprite>& /*rSprite*/,
+    const ViewEntry&                                /*rViewEntry*/,
+    const uno::Reference<rendering::XCanvas>&       /*rDestinationCanvas*/,
+    double                                          /*t*/ )
 {
 }
 
@@ -470,13 +473,13 @@ void SlideChangeBase::viewsChanged()
     }
 }
 
-cppcanvas::CustomSpriteSharedPtr SlideChangeBase::createSprite(
+uno::Reference<rendering::XCustomSprite> SlideChangeBase::createSprite(
     UnoViewSharedPtr const & pView,
     basegfx::B2DSize const & rSpriteSize,
     double                   nPrio ) const
 {
     // TODO(P2): change to bitmapsprite once that's working
-    const cppcanvas::CustomSpriteSharedPtr pSprite(
+    const uno::Reference<rendering::XCustomSprite> pSprite(
         pView->createSprite( rSpriteSize,
                              nPrio ));
 
@@ -521,8 +524,8 @@ void SlideChangeBase::clearViewEntry( ViewEntry& rEntry )
     // resize)
     rEntry.mpEnteringBitmap.reset();
     rEntry.mpLeavingBitmap.reset();
-    rEntry.mpInSprite.reset();
-    rEntry.mpOutSprite.reset();
+    rEntry.mpInSprite.clear();
+    rEntry.mpOutSprite.clear();
 }
 
 } // namespace internal

@@ -12,7 +12,6 @@
 #define POINTERSYMBOL_HXX_INCLUDED
 
 #include <com/sun/star/rendering/XBitmap.hpp>
-#include <cppcanvas/customsprite.hxx>
 
 #include "com/sun/star/uno/Reference.hxx"
 
@@ -83,7 +82,7 @@ private:
 
     typedef ::std::vector<
         ::std::pair<UnoViewSharedPtr,
-                    cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
+                    css::uno::Reference< css::rendering::XCustomSprite >> > ViewsVecT;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::rendering::XBitmap>  mxBitmap;

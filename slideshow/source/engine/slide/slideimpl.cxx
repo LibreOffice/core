@@ -22,7 +22,6 @@
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -42,6 +41,7 @@
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XTargetPropertiesCreator.hpp>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 #include <animations/animationnodehelper.hxx>
 
@@ -309,14 +309,16 @@ public:
         rView->clearAll();
 
         SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( rView ) );
-        ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
+        css::uno::Reference< css::rendering::XCanvas > pCanvas( rView->getCanvas() );
 
         const ::basegfx::B2DHomMatrix   aViewTransform( rView->getTransformation() );
         const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
 
         // setup a canvas with device coordinate space, the slide
         // bitmap already has the correct dimension.
-        ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
+#if 0
+        // TODO-NYI
+        css::uno::Reference< css::rendering::XCanvas > pDevicePixelCanvas( pCanvas->clone() );
         pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
         // render at given output position
@@ -326,6 +328,7 @@ public:
         // transition)
         pBitmap->clip( ::basegfx::B2DPolyPolygon() );
         pBitmap->draw( pDevicePixelCanvas );
+#endif
     }
 
 private:
@@ -745,27 +748,29 @@ bool SlideImpl::isAnimated()
 SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr&   rView,
                                                           const ::basegfx::B2ISize& rBmpSize ) const
 {
-    ENSURE_OR_THROW( rView && rView->getCanvas(),
+    ENSURE_OR_THROW( rView && rView->getCanvas().is(),
                       "SlideImpl::createCurrentSlideBitmap(): Invalid view" );
     ENSURE_OR_THROW( mpLayerManager,
                       "SlideImpl::createCurrentSlideBitmap(): Invalid layer manager" );
     ENSURE_OR_THROW( mbShowLoaded,
                       "SlideImpl::createCurrentSlideBitmap(): No show loaded" );
 
-    ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
+    uno::Reference< rendering::XCanvas > pCanvas(
+        rView->getCanvas() );
 
     // create a bitmap of appropriate size
-    ::cppcanvas::BitmapSharedPtr pBitmap(
-        ::cppcanvas::BaseGfxFactory::getInstance().createBitmap(
-            pCanvas,
-            rBmpSize ) );
+    uno::Reference< rendering::XBitmap > pBitmap(
+        pCanvas->getDevice()->createCompatibleBitmap(
+            geometry::IntegerSize2D(
+                rBmpSize.getX(), rBmpSize.getY())) );
 
-    ENSURE_OR_THROW( pBitmap,
+    ENSURE_OR_THROW( pBitmap.is(),
                       "SlideImpl::createCurrentSlideBitmap(): Cannot create page bitmap" );
 
-    ::cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas( pBitmap->getBitmapCanvas() );
+    uno::Reference< rendering::XBitmapCanvas > pBitmapCanvas(
+        pBitmap, uno::UNO_QUERY_THROW );
 
-    ENSURE_OR_THROW( pBitmapCanvas,
+    ENSURE_OR_THROW( pBitmapCanvas.is(),
                       "SlideImpl::createCurrentSlideBitmap(): Cannot create page bitmap canvas" );
 
     // apply linear part of destination canvas transformation (linear means in this context:
@@ -773,10 +778,17 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
     ::basegfx::B2DHomMatrix aLinearTransform( rView->getTransformation() );
     aLinearTransform.set( 0, 2, 0.0 );
     aLinearTransform.set( 1, 2, 0.0 );
+#if 0
+    // TODO-NYI
     pBitmapCanvas->setTransformation( aLinearTransform );
 
+    // clear to white
+    pBitmapCanvas->fill(
+        ::basegfx::BColor(1.0,1.0,1.0).colorToDoubleSequence(
+            pBitmapCanvas->getDevice()) );
+#endif
+
     // output all shapes to bitmap
-    initSlideBackground( pBitmapCanvas, rBmpSize );
     mpLayerManager->renderTo( pBitmapCanvas );
 
     return SlideBitmapSharedPtr( new SlideBitmap( pBitmap ) );

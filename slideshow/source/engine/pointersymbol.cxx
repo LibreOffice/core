@@ -83,7 +83,7 @@ void PointerSymbol::setVisible( const bool bVisible )
         ViewsVecT::const_iterator const aEnd ( maViews.end() );
         while( aIter != aEnd )
         {
-            if( aIter->second )
+            if( aIter->second.is() )
             {
                 if( bVisible )
                     aIter->second->show();
@@ -111,7 +111,7 @@ basegfx::B2DPoint PointerSymbol::calcSpritePos(UnoViewSharedPtr const & rView) c
 
 void PointerSymbol::viewAdded( const UnoViewSharedPtr& rView )
 {
-    cppcanvas::CustomSpriteSharedPtr sprite;
+    uno::Reference< rendering::XCustomSprite > sprite;
 
     try
     {
@@ -124,11 +124,12 @@ void PointerSymbol::viewAdded( const UnoViewSharedPtr& rView )
         canvas::tools::initViewState( viewState );
         rendering::RenderState renderState;
         canvas::tools::initRenderState( renderState );
-        sprite->getContentCanvas()->getUNOCanvas()->drawBitmap(
+        sprite->getContentCanvas()->drawBitmap(
             mxBitmap, viewState, renderState );
 
         sprite->setAlpha( 0.9 );
-        sprite->movePixel( calcSpritePos( rView ) );
+        // TODO-NYI
+        // sprite->movePixel( calcSpritePos( rView ) );
         if( mbVisible )
             sprite->show();
     }
@@ -172,9 +173,12 @@ void PointerSymbol::viewChanged( const UnoViewSharedPtr& rView )
     if( aModifiedEntry == maViews.end() )
         return;
 
-    if( aModifiedEntry->second )
+#if 0
+    // TODO-NYI
+    if( aModifiedEntry->second.is() )
         aModifiedEntry->second->movePixel(
             calcSpritePos(aModifiedEntry->first) );
+#endif
 }
 
 void PointerSymbol::viewsChanged()
@@ -184,9 +188,12 @@ void PointerSymbol::viewsChanged()
     ViewsVecT::const_iterator const aEnd ( maViews.end() );
     while( aIter != aEnd )
     {
-        if( aIter->second )
+        if( aIter->second.is() )
+#if 0
+            // TODO-NYI
             aIter->second->movePixel(
                 calcSpritePos( aIter->first ));
+#endif
         ++aIter;
     }
 }
@@ -202,10 +209,11 @@ void PointerSymbol::viewsChanged(const geometry::RealPoint2D pos)
         ViewsVecT::const_iterator const aEnd ( maViews.end() );
         while( aIter != aEnd )
         {
-            if( aIter->second )
+            if( aIter->second.is() )
             {
-                aIter->second->movePixel(
-                calcSpritePos( aIter->first ));
+                // TODO-NYI
+                // aIter->second->movePixel(
+                calcSpritePos( aIter->first );
                 mrScreenUpdater.notifyUpdate();
                 mrScreenUpdater.commitUpdates();
             }

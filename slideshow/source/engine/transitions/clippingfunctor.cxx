@@ -160,16 +160,12 @@ namespace slideshow
                 mbForwardParameterSweep ? nValue : 1.0 - nValue );
 
             // TODO(Q4): workaround here, better be fixed in cppcanvas
+            // TODO-NYI - check this!
             if (aClipPoly.count() == 0)
                 aClipPoly.append( basegfx::B2DPolygon() );
 
             if (mbFlip)
                 aClipPoly.flip();
-
-            // currently, clipper cannot cope with curves. Subdivide first
-            // AW: Should be no longer necessary; clipping tools are now bezier-safe
-            // if( aClipPoly.areControlPointsUsed() )
-            //    aClipPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aClipPoly);
 
             if( mbSubtractPolygon )
             {

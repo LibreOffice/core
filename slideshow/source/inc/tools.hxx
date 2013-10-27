@@ -21,9 +21,11 @@
 #define INCLUDED_SLIDESHOW_TOOLS_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 
-#include <cppcanvas/color.hxx>
+#include <basegfx/color/bcolor.hxx>
 
 #include "shapeattributelayer.hxx"
 #include "shape.hxx"
@@ -50,7 +52,6 @@ namespace basegfx
     class B2IVector;
     class B2DHomMatrix;
 }
-namespace cppcanvas{ class Canvas; }
 
 class GDIMetaFile;
 
@@ -268,23 +269,14 @@ namespace slideshow
             const basegfx::B2DRange&                      rOrigBounds,
             const boost::shared_ptr<ShapeAttributeLayer>& pAttr );
 
-        /** Convert a plain UNO API 32 bit int to RGBColor
-         */
-        RGBColor unoColor2RGBColor( sal_Int32 );
-        /** Convert an IntSRGBA to plain UNO API 32 bit int
-         */
-        sal_Int32 RGBAColor2UnoColor( cppcanvas::Color::IntSRGBA );
+        /// Convert UNO API packed integer color to RGBColor struct
+        RGBColor unoColor2RGBColor( sal_Int32 nColor );
 
         /** Fill a plain rectangle on the given canvas with the given color
          */
-        void fillRect( const boost::shared_ptr< cppcanvas::Canvas >& rCanvas,
-                       const basegfx::B2DRange&                      rRect,
-                       cppcanvas::Color::IntSRGBA                    aFillColor );
-
-        /** Init canvas with default background (white)
-         */
-        void initSlideBackground( const boost::shared_ptr< cppcanvas::Canvas >& rCanvas,
-                                  const basegfx::B2IVector&                     rSize );
+        void fillRect( const css::uno::Reference< css::rendering::XCanvas >& rCanvas,
+                       const basegfx::B2DRange&                              rRect,
+                       const basegfx::BColor&                                rFillColor );
 
         /// Gets a random ordinal [0,n)
         inline ::std::size_t getRandomOrdinal( const ::std::size_t n )

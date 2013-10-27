@@ -22,7 +22,10 @@
 
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XCustomSprite.hpp>
 
 namespace basegfx
 {
@@ -31,11 +34,6 @@ namespace basegfx
     class B2DVector;
     class B2DHomMatrix;
     class B2DPolyPolygon;
-}
-namespace cppcanvas
-{
-    class Canvas;
-    class CustomSprite;
 }
 
 
@@ -64,7 +62,7 @@ namespace slideshow
                 The canvas returned by this method must not change, as
                 long as this object is alive.
             */
-            virtual boost::shared_ptr< cppcanvas::Canvas > getCanvas() const = 0;
+            virtual css::uno::Reference< css::rendering::XCanvas > getCanvas() const = 0;
 
             /** Clear the clipped view layer area
 
@@ -99,7 +97,7 @@ namespace slideshow
                 @return the sprite, or NULL on failure (or if this
                 canvas does not support sprites).
             */
-            virtual boost::shared_ptr< cppcanvas::CustomSprite >
+            virtual css::uno::Reference< css::rendering::XCustomSprite >
             createSprite( const basegfx::B2DVector& rSpriteSizePixel,
                           double                    nPriority ) const = 0;
 

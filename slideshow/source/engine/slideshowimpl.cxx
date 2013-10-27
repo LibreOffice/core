@@ -36,10 +36,6 @@
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/namecontainer.hxx>
 
-#include <cppcanvas/spritecanvas.hxx>
-#include <cppcanvas/vclfactory.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
-
 #include <tools/debug.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
@@ -205,8 +201,6 @@ private:
  ******************************************************************************/
 
 typedef cppu::WeakComponentImplHelper1<presentation::XSlideShow> SlideShowImplBase;
-
-typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
 
 /// Maps XDrawPage for annotations persistence
 typedef ::std::map< ::com::sun::star::uno::Reference<
@@ -1466,7 +1460,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     PolygonMap::iterator aIter=maPolygons.begin();
 
     PolyPolygonVector aPolygons;
-    ::cppcanvas::PolyPolygonSharedPtr pPolyPoly;
+    uno::Reference<rendering::XPolyPolygon2D> pPolyPoly;
     ::basegfx::B2DPolyPolygon b2DPolyPoly;
 
     //Register polygons for each slide
@@ -1481,7 +1475,8 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
              aIterPoly!=aEnd; ++aIterPoly )
         {
             pPolyPoly = (*aIterPoly);
-            b2DPolyPoly = ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(pPolyPoly->getUNOPolyPolygon());
+            b2DPolyPoly = ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
+                pPolyPoly);
 
             //Normally there is only one polygon
             for(sal_uInt32 i=0; i< b2DPolyPoly.count();i++)
@@ -1533,15 +1528,19 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                     aXPropSet->setPropertyValue("LineStyle", aAny );
 
                     //LineColor
-                    sal_uInt32          nLineColor;
-                    nLineColor = pPolyPoly->getRGBALineColor();
+                    // TODO-NYI
+                    //sal_uInt32          nLineColor;
+                    // TODO-NYI
+                    // nLineColor = pPolyPoly->getRGBALineColor();
                     //Transform polygon color from RRGGBBAA to AARRGGBB
-                    aAny <<= RGBAColor2UnoColor(nLineColor);
+                    // TODO-NYI
+                    //aAny <<= RGBAColor2UnoColor(nLineColor);
                     aXPropSet->setPropertyValue("LineColor", aAny );
 
                     //LineWidth
-                    double              fLineWidth;
-                    fLineWidth = pPolyPoly->getStrokeWidth();
+                    double              fLineWidth(0);
+                    // TODO-NYI
+                    // fLineWidth = pPolyPoly->getStrokeWidth();
                     aAny <<= (sal_Int32)fLineWidth;
                     aXPropSet->setPropertyValue("LineWidth", aAny );
 

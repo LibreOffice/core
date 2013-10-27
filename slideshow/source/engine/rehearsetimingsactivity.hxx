@@ -32,7 +32,6 @@
 
 class Font;
 namespace canvas{ namespace tools{ class ElapsedTime; }}
-namespace cppcanvas{ class CustomSprite; }
 namespace basegfx
 {
     class B2IVector;
@@ -91,7 +90,7 @@ private:
 
     explicit RehearseTimingsActivity( const SlideShowContext& rContext );
 
-    void paint( ::cppcanvas::CanvasSharedPtr const & canvas ) const;
+    void paint( css::uno::Reference< css::rendering::XCanvas > const & canvas ) const;
     void paintAllSprites() const;
 
     class MouseHandler;
@@ -99,7 +98,7 @@ private:
 
     typedef ::std::vector<
         ::std::pair<UnoViewSharedPtr,
-                    boost::shared_ptr<cppcanvas::CustomSprite> > > ViewsVecT;
+                    css::uno::Reference<css::rendering::XCustomSprite> > > ViewsVecT;
 
     template <typename func_type>
     void for_each_sprite( func_type const & func ) const

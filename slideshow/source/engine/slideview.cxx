@@ -34,16 +34,12 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/make_shared_from_uno.hxx>
 
-#include <cppcanvas/spritecanvas.hxx>
-#include <cppcanvas/customsprite.hxx>
-#include <cppcanvas/vclfactory.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
-
 #include <tools/debug.hxx>
 
 #include <basegfx/range/b1drange.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -85,8 +81,8 @@ struct StaticUnitRectPoly : public rtl::StaticWithInit<basegfx::B2DPolygon, Stat
  */
 struct SpriteEntry
 {
-    SpriteEntry( const cppcanvas::CustomSpriteSharedPtr& rSprite,
-                 double                                  nPrio ) :
+    SpriteEntry( const uno::Reference<rendering::XCustomSprite>& rSprite,
+                 double                                          nPrio ) :
         mpSprite( rSprite ),
         mnPriority( nPrio )
     {
@@ -97,8 +93,8 @@ struct SpriteEntry
         return mnPriority < rRHS.mnPriority;
     }
 
-    boost::weak_ptr< cppcanvas::CustomSprite > mpSprite;
-    double                                     mnPriority;
+    uno::WeakReference< rendering::XCustomSprite > mpSprite;
+    double                                         mnPriority;
 };
 
 typedef std::vector< SpriteEntry > SpriteVector;
@@ -119,9 +115,9 @@ typedef std::vector< SpriteEntry > SpriteVector;
     @return the view clip polygon, in view coordinates, which is
     guaranteed to at least clip to the view size.
  */
-basegfx::B2DPolyPolygon createClipPolygon( const basegfx::B2DPolyPolygon&    rClip,
-                                           const cppcanvas::CanvasSharedPtr& /*rCanvas*/,
-                                           const basegfx::B2DSize&           rUserSize )
+basegfx::B2DPolyPolygon createClipPolygon( const basegfx::B2DPolyPolygon&            rClip,
+                                           const uno::Reference<rendering::XCanvas>& /*rCanvas*/,
+                                           const basegfx::B2DSize&                   rUserSize )
 {
     // setup canvas clipping
     // =====================
@@ -166,33 +162,36 @@ basegfx::B2DPolyPolygon prepareClip( const basegfx::B2DPolyPolygon& rClip )
 }
 
 
-void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
-                basegfx::B2IRange const&            rArea )
+void clearRect( const basegfx::B2IRange& )
 {
+#if 0
+    // TODO-NYI
+    pCanvas = getCanvas(); ...
+
     // convert clip polygon to device coordinate system
     ::basegfx::B2DPolyPolygon const* pClipPoly( pCanvas->getClip() );
     if( pClipPoly )
     {
         ::basegfx::B2DPolyPolygon aClipPoly( *pClipPoly );
         aClipPoly.transform( pCanvas->getTransformation() );
-        pCanvas->setClip( aClipPoly );
+        // TODO-NYI
+        //pCanvas->setClip( aClipPoly );
     }
 
     // set transformation to identitiy (->device pixel)
-    pCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
+    // TODO-NYI
+    //pCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
     // #i42440# Fill the _full_ background in
     // black. Since we had to extend the bitmap by one
     // pixel, and the bitmap is initialized white,
     // depending on the slide content a one pixel wide
     // line will show to the bottom and the right.
-    const ::basegfx::B2DPolygon aPoly(
-        ::basegfx::tools::createPolygonFromRect(
-            basegfx::B2DRange(rArea)));
-
-    ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-        ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( pCanvas,
-                                                                      aPoly ) );
+    uno::Reference<rendering::XPolyPolygon> pPolyPoly(
+        basegfx::unotools::xPolyPolygonFromB2DPolygon(
+            pCanvas->getDevice(),
+            basegfx::tools::createPolygonFromRect(
+                basegfx::B2DRange(rArea))) );
 
     if( pPolyPoly )
     {
@@ -200,9 +199,11 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
         pPolyPoly->setRGBAFillColor( 0xFFFFFF00U );
         pPolyPoly->draw();
     }
+#endif
 
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
-    ::cppcanvas::CanvasSharedPtr pCliplessCanvas( pCanvas->clone() );
+    // TODO-NYI
+    uno::Reference<rendering::XCanvas> pCliplessCanvas( pCanvas->clone() );
     pCliplessCanvas->setClip();
 
     if( pCanvas->getClip() )
@@ -302,9 +303,8 @@ class LayerSpriteContainer
         const SpriteVector::iterator aEnd( maSprites.end() );
         while( aCurrSprite != aEnd )
         {
-            cppcanvas::CustomSpriteSharedPtr pCurrSprite( aCurrSprite->mpSprite.lock() );
-
-            if( pCurrSprite )
+            uno::Reference<rendering::XCustomSprite> pCurrSprite( aCurrSprite->mpSprite );
+            if( pCurrSprite.is() )
             {
                 // only copy still valid sprites over to the refreshed
                 // sprite vector.
@@ -344,10 +344,10 @@ public:
         }
     }
 
-    void addSprite( const cppcanvas::CustomSpriteSharedPtr& pSprite,
-                    double                                  nPriority )
+    void addSprite( const uno::Reference<rendering::XCustomSprite>& pSprite,
+                    double                                          nPriority )
     {
-        if( !pSprite )
+        if( !pSprite.is() )
             return;
 
         SpriteEntry aEntry( pSprite,nPriority );
@@ -423,15 +423,15 @@ class SlideViewLayer : public ViewLayer,
     basegfx::B2DHomMatrix                    maTransformation;
 
     /// 'parent' canvas, this viewlayer is associated with
-    const cppcanvas::SpriteCanvasSharedPtr   mpSpriteCanvas;
+    const uno::Reference<rendering::XSpriteCanvas> mpSpriteCanvas;
 
     /** output surface (necessarily a sprite, won't otherwise be able
         to display anything <em>before</em> other sprites)
     */
-    mutable cppcanvas::CustomSpriteSharedPtr mpSprite;
+    mutable uno::Reference<rendering::XCustomSprite> mpSprite;
 
     /// actual output canvas retrieved from a sprite
-    mutable cppcanvas::CanvasSharedPtr       mpOutputCanvas;
+    mutable uno::Reference<rendering::XCanvas> mpOutputCanvas;
 
     /// ptr back to owning view. needed for isOnView() method
     View const* const                        mpParentView;
@@ -448,11 +448,11 @@ public:
         @param rLayerBounds
         Initial layer bounds, in view coordinate system
      */
-    SlideViewLayer( const cppcanvas::SpriteCanvasSharedPtr& pCanvas,
-                    const basegfx::B2DHomMatrix&            rTransform,
-                    const basegfx::B2DRange&                rLayerBounds,
-                    const basegfx::B2DSize&                 rUserSize,
-                    View const* const                       pParentView) :
+    SlideViewLayer( const uno::Reference<rendering::XSpriteCanvas>& pCanvas,
+                    const basegfx::B2DHomMatrix&                    rTransform,
+                    const basegfx::B2DRange&                        rLayerBounds,
+                    const basegfx::B2DSize&                         rUserSize,
+                    View const* const                               pParentView) :
         maSpriteContainer(),
         maLayerBounds(rLayerBounds),
         maLayerBoundsPixel(),
@@ -484,8 +484,8 @@ public:
         if( rNewLayerPixel != maLayerBoundsPixel )
         {
             // re-gen sprite with new size
-            mpOutputCanvas.reset();
-            mpSprite.reset();
+            mpOutputCanvas.clear();
+            mpSprite.clear();
         }
     }
 
@@ -511,12 +511,14 @@ private:
     // ViewLayer interface
     // ----------------------------------------------
 
-    virtual cppcanvas::CustomSpriteSharedPtr createSprite(
+    virtual uno::Reference<rendering::XCustomSprite> createSprite(
         const ::basegfx::B2DSize& rSpriteSizePixel,
         double                    nPriority ) const
     {
-        cppcanvas::CustomSpriteSharedPtr pSprite(
-            mpSpriteCanvas->createCustomSprite( rSpriteSizePixel ) );
+        css::uno::Reference< css::rendering::XCustomSprite > pSprite(
+            mpSpriteCanvas->createCustomSprite(
+                ::basegfx::unotools::size2DFromB2DSize(
+                    rSpriteSizePixel) ) );
 
         maSpriteContainer.addSprite( pSprite,
                                      nPriority );
@@ -533,7 +535,7 @@ private:
 
         maSpriteContainer.setLayerPriority( rRange );
 
-        if( mpSprite )
+        if( mpSprite.is() )
             mpSprite->setPriority( rRange.getMinimum() );
     }
 
@@ -566,27 +568,22 @@ private:
 
     virtual void clear() const
     {
-        // grab canvas - that also lazy-initializes maLayerBoundsPixel
-        cppcanvas::CanvasSharedPtr pCanvas=getCanvas()->clone();
-
         // clear whole canvas
         const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
-        clearRect(pCanvas,
-                  basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
+        clearRect(basegfx::B2IRange(0,0,
+                                    rSpriteSize.getX(),rSpriteSize.getY()));
     }
 
     virtual void clearAll() const
     {
-        // grab canvas - that also lazy-initializes maLayerBoundsPixel
-        ::cppcanvas::CanvasSharedPtr pCanvas( getCanvas()->clone() );
-
+        // TODO-NYI
         // clear layer clip, to clear whole area
-        pCanvas->setClip();
+        //pCanvas->setClip();
 
         // clear whole canvas
         const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
-        clearRect(pCanvas,
-                  basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
+        clearRect(basegfx::B2IRange(0,0,
+                                    rSpriteSize.getX(),rSpriteSize.getY()));
     }
 
     virtual bool isOnView(boost::shared_ptr<View> const& rView) const
@@ -594,11 +591,11 @@ private:
         return rView.get() == mpParentView;
     }
 
-    virtual cppcanvas::CanvasSharedPtr getCanvas() const
+    virtual uno::Reference<rendering::XCanvas> getCanvas() const
     {
-        if( !mpOutputCanvas )
+        if( !mpOutputCanvas.is() )
         {
-            if( !mpSprite )
+            if( !mpSprite.is() )
             {
                 maLayerBoundsPixel = getLayerBoundsPixel(maLayerBounds,
                                                          maTransformation);
@@ -613,8 +610,9 @@ private:
 
                 const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
                 mpSprite = mpSpriteCanvas->createCustomSprite(
-                    basegfx::B2DVector(sal::static_int_cast<sal_Int32>(rSpriteSize.getX()),
-                                       sal::static_int_cast<sal_Int32>(rSpriteSize.getY())) );
+                    geometry::RealSize2D(
+                        sal::static_int_cast<sal_Int32>(rSpriteSize.getX()),
+                        sal::static_int_cast<sal_Int32>(rSpriteSize.getY())) );
 
                 mpSprite->setPriority(
                     maSpriteContainer.getLayerPriority().getMinimum() );
@@ -626,28 +624,33 @@ private:
 
                 mpSprite->setAlpha(0.5);
 #else
+#if 0
+                // TODO-NYI
                 mpSprite->movePixel(
                     basegfx::B2DPoint(maLayerBoundsPixel.getMinimum()) );
-
+#endif
                 mpSprite->setAlpha(1.0);
 #endif
                 mpSprite->show();
             }
 
-            ENSURE_OR_THROW( mpSprite,
+            ENSURE_OR_THROW( mpSprite.is(),
                               "SlideViewLayer::getCanvas(): no layer sprite" );
 
             mpOutputCanvas = mpSprite->getContentCanvas();
 
-            ENSURE_OR_THROW( mpOutputCanvas,
+            ENSURE_OR_THROW( mpOutputCanvas.is(),
                               "SlideViewLayer::getCanvas(): sprite doesn't yield a canvas" );
 
+#if 0
+            // TODO-NYI
             // new canvas retrieved - setup transformation and clip
             mpOutputCanvas->setTransformation( getTransformation() );
             mpOutputCanvas->setClip(
                 createClipPolygon( maClip,
                                    mpOutputCanvas,
                                    maUserSize ));
+#endif
         }
 
         return mpOutputCanvas;
@@ -661,11 +664,14 @@ private:
         {
             maClip = aNewClip;
 
-            if(mpOutputCanvas )
+#if 0
+            // TODO-NYI
+            if(mpOutputCanvas.is())
                 mpOutputCanvas->setClip(
                     createClipPolygon( maClip,
                                        mpOutputCanvas,
                                        maUserSize ));
+#endif
         }
     }
 
@@ -714,8 +720,8 @@ private:
     virtual bool isOnView(boost::shared_ptr<View> const& rView) const;
     virtual void clear() const;
     virtual void clearAll() const;
-    virtual cppcanvas::CanvasSharedPtr getCanvas() const;
-    virtual cppcanvas::CustomSpriteSharedPtr createSprite( const ::basegfx::B2DSize& rSpriteSizePixel,
+    virtual css::uno::Reference<rendering::XCanvas> getCanvas() const;
+    virtual css::uno::Reference<rendering::XCustomSprite> createSprite( const ::basegfx::B2DSize& rSpriteSizePixel,
                                                            double                    nPriority ) const;
     virtual void setPriority( const basegfx::B1DRange& rRange );
     virtual geometry::IntegerSize2D getTranslationOffset() const;
@@ -757,7 +763,7 @@ private:
     enum{ LAYER_ULLAGE=8 };
 
     uno::Reference<presentation::XSlideShowView>              mxView;
-    cppcanvas::SpriteCanvasSharedPtr                          mpCanvas;
+    uno::Reference<rendering::XSpriteCanvas>                  mpCanvas;
 
     EventMultiplexer&                                         mrEventMultiplexer;
     EventQueue&                                               mrEventQueue;
@@ -793,10 +799,9 @@ SlideView::SlideView( const uno::Reference<presentation::XSlideShowView>& xView,
     ENSURE_OR_THROW( mxView.is(),
                       "SlideView::SlideView(): Invalid view" );
 
-    mpCanvas = cppcanvas::VCLFactory::getInstance().createSpriteCanvas(
-        xView->getCanvas() );
-    ENSURE_OR_THROW( mpCanvas,
-                      "Could not create cppcanvas" );
+    mpCanvas = xView->getCanvas();
+    ENSURE_OR_THROW( mpCanvas.is(),
+                      "Could not obtain Canvas" );
 
     geometry::AffineMatrix2D aViewTransform(
         xView->getTransformation() );
@@ -827,7 +832,7 @@ void SlideView::disposing()
 
     maViewLayers.clear();
     maSprites.clear();
-    mpCanvas.reset();
+    mpCanvas.clear();
 
     // additionally, also de-register from XSlideShowView
     if (mxView.is())
@@ -842,7 +847,7 @@ ViewLayerSharedPtr SlideView::createViewLayer( const basegfx::B2DRange& rLayerBo
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_OR_THROW( mpCanvas,
+    ENSURE_OR_THROW( mpCanvas.is(),
                       "SlideView::createViewLayer(): Disposed" );
 
     const std::size_t nNumLayers( maViewLayers.size() );
@@ -886,14 +891,13 @@ void SlideView::clear() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    OSL_ENSURE( mxView.is() && mpCanvas,
+    OSL_ENSURE( mxView.is() && mpCanvas.is(),
                 "SlideView::clear(): Disposed" );
-    if( !mxView.is() || !mpCanvas )
+    if( !mxView.is() || !mpCanvas.is() )
         return;
 
     // keep layer clip
-    clearRect(getCanvas()->clone(),
-              getLayerBoundsPixel(
+    clearRect(getLayerBoundsPixel(
                   basegfx::B2DRange(0,0,
                                     maUserSize.getX(),
                                     maUserSize.getY()),
@@ -904,12 +908,12 @@ void SlideView::clearAll() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    OSL_ENSURE( mxView.is() && mpCanvas,
+    OSL_ENSURE( mxView.is() && mpCanvas.is(),
                 "SlideView::clear(): Disposed" );
-    if( !mxView.is() || !mpCanvas )
+    if( !mxView.is() || !mpCanvas.is() )
         return;
 
-    mpCanvas->clear(); // this is unnecessary, strictly speaking. but
+    mpCanvas->erase(); // this is unnecessary, strictly speaking. but
                        // it makes the SlideView behave exactly like a
                        // sprite-based SlideViewLayer, because those
                        // are created from scratch after a resize
@@ -939,26 +943,28 @@ bool SlideView::isOnView(boost::shared_ptr<View> const& rView) const
     return rView.get() == this;
 }
 
-cppcanvas::CanvasSharedPtr SlideView::getCanvas() const
+css::uno::Reference< css::rendering::XCanvas > SlideView::getCanvas() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_OR_THROW( mpCanvas,
+    ENSURE_OR_THROW( mpCanvas.is(),
                       "SlideView::getCanvas(): Disposed" );
 
     return mpCanvas;
 }
 
-cppcanvas::CustomSpriteSharedPtr SlideView::createSprite(
+css::uno::Reference< css::rendering::XCustomSprite > SlideView::createSprite(
     const basegfx::B2DSize& rSpriteSizePixel,
     double                  nPriority ) const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_OR_THROW( mpCanvas, "SlideView::createSprite(): Disposed" );
+    ENSURE_OR_THROW( mpCanvas.is(), "SlideView::createSprite(): Disposed" );
 
-    cppcanvas::CustomSpriteSharedPtr pSprite(
-        mpCanvas->createCustomSprite( rSpriteSizePixel ) );
+    css::uno::Reference< css::rendering::XCustomSprite > pSprite(
+        mpCanvas->createCustomSprite(
+            ::basegfx::unotools::size2DFromB2DSize(
+                rSpriteSizePixel) ) );
 
     maSprites.addSprite( pSprite,
                          nPriority );
@@ -1113,7 +1119,7 @@ void SlideView::windowPaint( const awt::PaintEvent& /*e*/ )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    OSL_ENSURE( mxView.is() && mpCanvas, "Disposed, but event received?!" );
+    OSL_ENSURE( mxView.is() && mpCanvas.is(), "Disposed, but event received?!" );
 
     // notify view clobbering. Don't call EventMultiplexer directly,
     // this might not be the main thread!
@@ -1125,18 +1131,21 @@ void SlideView::windowPaint( const awt::PaintEvent& /*e*/ )
 
 void SlideView::updateCanvas()
 {
-    OSL_ENSURE( mpCanvas,
+    OSL_ENSURE( mpCanvas.is(),
                 "SlideView::updateCanvasTransform(): Disposed" );
 
-    if( !mpCanvas || !mxView.is())
+    if( !mpCanvas.is() || !mxView.is())
         return;
 
     clearAll();
+#if 0
+    // TODO-NYI
     mpCanvas->setTransformation( getTransformation() );
     mpCanvas->setClip(
         createClipPolygon( maClip,
                            mpCanvas,
                            maUserSize ));
+#endif
 
     // forward update to viewlayers
     pruneLayers( true );
@@ -1144,17 +1153,20 @@ void SlideView::updateCanvas()
 
 void SlideView::updateClip()
 {
-    OSL_ENSURE( mpCanvas,
+    // TODO-NYI - here and other places, consolidate to ensure_and_return!
+    OSL_ENSURE( mpCanvas.is(),
                 "SlideView::updateClip(): Disposed" );
 
-    if( !mpCanvas )
+    if( !mpCanvas.is() )
         return;
 
+#if 0
+    // TODO-NYI
     mpCanvas->setClip(
         createClipPolygon( maClip,
                            mpCanvas,
                            maUserSize ));
-
+#endif
     pruneLayers( false );
 }
 
