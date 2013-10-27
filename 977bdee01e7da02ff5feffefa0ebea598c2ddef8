@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZX///+k\u003d",
+        "filename": "comphelper/source/misc/syntaxhighlight.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-10-27T15:04:29Z",
+      "side": 1,
+      "message": "This explicit check is unnecessary.",
+      "revId": "977bdee01e7da02ff5feffefa0ebea598c2ddef8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///+g\u003d",
+        "filename": "comphelper/source/misc/syntaxhighlight.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-10-27T15:04:29Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "977bdee01e7da02ff5feffefa0ebea598c2ddef8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
