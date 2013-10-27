@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Recordset" script:language="StarBasic">Option Compatible
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Recordset" script:language="StarBasic">REM =======================================================================================================================
+REM ===					The Access2Base library is a part of the LibreOffice project.									===
+REM ===					Full documentation is available on http://www.access2base.com									===
+REM =======================================================================================================================
+
+Option Compatible
 Option ClassModule
 
 Option Explicit
@@ -260,7 +265,7 @@ Dim vTemp As Variant
 			End If
 		Next i
 	End With
-	On Local Error Goto Error_Function
+	If _ErrorHandler() Then On Local Error Goto Error_Function Else On Local Error Goto 0
 
 	_EditMode = dbEditAdd
 	AddNew = True

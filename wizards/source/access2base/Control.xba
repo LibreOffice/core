@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Control" script:language="StarBasic">Option Compatible
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Control" script:language="StarBasic">REM =======================================================================================================================
+REM ===					The Access2Base library is a part of the LibreOffice project.									===
+REM ===					Full documentation is available on http://www.access2base.com									===
+REM =======================================================================================================================
+
+Option Compatible
 Option ClassModule
 
 Option Explicit
@@ -471,7 +476,7 @@ Dim vRowSource() As Variant, iCount As Integer, i As Integer
 	If pvIndex &lt; -1 Or pvIndex &gt; iCount + 1 Then Goto Error_Index
 	ReDim Preserve vRowSource(0 To iCount + 1)
 	If pvIndex = -1 Then pvIndex = iCount + 1
-	For i =iCount + 1 To pvIndex + 1 Step -1
+	For i = iCount + 1 To pvIndex + 1 Step -1
 		vRowSource(i) = vRowSource(i - 1)
 	Next i
 	vRowSource(pvIndex) = pvItem

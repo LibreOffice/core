@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="_License" script:language="StarBasic">&apos;      Copyright 2012-2013 Jean-Pierre LEDURE
-&apos;      
-&apos;	The files in this directory are part of Access2Base, a part of the LibreOffice project.
-&apos;	Documentation is available on http://www.access2base.com
-&apos;
+
+REM =======================================================================================================================
+REM ===					The Access2Base library is a part of the LibreOffice project.									===
+REM ===					Full documentation is available on http://www.access2base.com									===
+REM =======================================================================================================================
+
 &apos;	Access2Base is distributed in the hope that it will be useful,
 &apos;	but WITHOUT ANY WARRANTY; without even the implied warranty of 
 &apos;	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.

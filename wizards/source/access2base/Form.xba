@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Form" script:language="StarBasic">Option Compatible
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Form" script:language="StarBasic">REM =======================================================================================================================
+REM ===					The Access2Base library is a part of the LibreOffice project.									===
+REM ===					Full documentation is available on http://www.access2base.com									===
+REM =======================================================================================================================
+
+Option Compatible
 Option ClassModule
 
 Option Explicit
@@ -119,14 +124,14 @@ Property Let Height(ByVal pvValue As Variant)
 End Property	&apos;	Height (set)
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Property Get IsLoaded() As Boolean
+Function IsLoaded() As Boolean
 &apos;Return True if form open
 
-	If _ErrorHandler() Then On Local Error Goto Error_Property
+	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;Form.getIsLoaded&quot;)
 	If _IsLoaded Then			&apos;	For performance reasons, a form object, once detected as loaded, is presumed remaining loaded
 		IsLoaded = True
-		Goto Exit_Property
+		Goto Exit_Function
 	End If
 	IsLoaded = False
 	
@@ -168,13 +173,13 @@ Dim i As Integer
 	Set oComp = Nothing
 	IsLoaded = _IsLoaded
 
-Exit_Property:
+Exit_Function:
 	Utils._ResetCalledSub(&quot;Form.getIsLoaded&quot;)
-	Exit Property
-Error_Property:
+	Exit Function
+Error_Function:
 	TraceError(TRACEABORT, Err, &quot;Form.getIsLoaded&quot;, Erl)
-	GoTo Exit_Property
-End Property
+	GoTo Exit_Function
+End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Property Get Name() As String
@@ -438,7 +443,13 @@ Dim iPosSize As Integer
 	If pvTop &gt;= 0		Then iPosSize = iPosSize + com.sun.star.awt.PosSize.Y
 	If pvWidth &gt; 0		Then iPosSize = iPosSize + com.sun.star.awt.PosSize.WIDTH
 	If pvHeight &gt; 0		Then iPosSize = iPosSize + com.sun.star.awt.PosSize.HEIGHT
-	If iPosSize &gt; 0 Then ContainerWindow.setPosSize(pvLeft, pvTop, pvWidth, pvHeight, iPosSize)
+	If iPosSize &gt; 0 Then
+		If Utils._hasUNOProperty(ContainerWindow, &quot;IsMaximized&quot;) Then	&apos;	Ignored when &lt;= OO3.2
+			ContainerWindow.IsMaximized = False
+			ContainerWindow.IsMinimized = False
+		End If
+		ContainerWindow.setPosSize(pvLeft, pvTop, pvWidth, pvHeight, iPosSize)
+	End If
 	Move = True
 	
 Exit_Function:
@@ -605,7 +616,7 @@ Dim oObject As Object
 		Case UCase(&quot;Bookmark&quot;)
 			On Local Error Resume Next			&apos;	Disable error handler because bookmarking does not always react well in events ...
 			If DatabaseForm.IsBookmarkable Then vBookmark = DatabaseForm.getBookmark() Else vBookmark = Nothing
-			On Local Error Goto Error_Function
+			If _ErrorHandler() Then On Local Error Goto Error_Function Else On Local Error Goto 0
 			If IsNull(vBookmark) Then Goto Trace_Error
 			_PropertyGet = vBookmark
 		Case UCase(&quot;Caption&quot;)
@@ -727,6 +738,10 @@ Dim oDatabase As Object
 			DatabaseForm.reload()
 		Case UCase(&quot;Height&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
+			If Utils._hasUNOProperty(ContainerWindow, &quot;IsMaximized&quot;) Then	&apos;	Ignored when &lt;= OO3.2
+				ContainerWindow.IsMaximized = False
+				ContainerWindow.IsMinimized = False
+			End If
 			ContainerWindow.setPosSize(0, 0, 0, pvValue, com.sun.star.awt.PosSize.HEIGHT)
 		Case UCase(&quot;RecordSource&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
@@ -739,6 +754,10 @@ Dim oDatabase As Object
 			ContainerWindow.setVisible(pvValue)
 		Case UCase(&quot;Width&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric()) Then Goto Trace_Error_Value
+			If Utils._hasUNOProperty(ContainerWindow, &quot;IsMaximized&quot;) Then	&apos;	Ignored when &lt;= OO3.2
+				ContainerWindow.IsMaximized = False
+				ContainerWindow.IsMinimized = False
+			End If
 			ContainerWindow.setPosSize(0, 0,  pvValue, 0, com.sun.star.awt.PosSize.WIDTH)
 		Case Else
 			Goto Trace_Error
