@@ -399,16 +399,14 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
             // Comment?
             if ( c == '\'' )
             {
-                c = getChar();
+                c = peekChar();
 
                 // Remove all characters until end of line or EOF
                 sal_Unicode cPeek = c;
                 while( cPeek != 0 && testCharFlags( cPeek, CHAR_EOL ) == sal_False )
                 {
-                    getChar();
-                    cPeek = peekChar();
+                    cPeek = getChar();
                 }
-
                 reType = TT_COMMENT;
             }
 
@@ -674,7 +672,7 @@ void SimpleTokenizer_Impl::getHighlightPortions( sal_uInt32 nParseLine, const OU
     const sal_Unicode* pEndPos;
 
     // Loop over all the tokens
-    while( getNextToken( eType, pStartPos, pEndPos ) )
+    while( getNextToken( eType, pStartPos, pEndPos )  )
     {
         portions.push_back(
             HighlightPortion(
