@@ -19,12 +19,13 @@
 @synthesize protocol = _protocol;
 @synthesize serverName = _serverName;
 @synthesize serverAddress = _serverAddress;
-
+@synthesize serverVersion = _serverVersion;
 
 - (void)encodeWithCoder:(NSCoder *)coder;
 {
     [coder encodeObject:self.serverName forKey:@"name"];
     [coder encodeObject:self.serverAddress forKey:@"address"];
+    [coder encodeObject:self.serverVersion forKey:@"version"];
     [coder encodeInteger:self.protocol forKey:@"protocol"];
 }
 
@@ -32,7 +33,8 @@
 {
     self = [self initWithProtocol:[coder decodeIntegerForKey:@"protocol"]
                         atAddress:[coder decodeObjectForKey:@"address"]
-                           ofName:[coder decodeObjectForKey:@"name"]];
+                           ofName:[coder decodeObjectForKey:@"name"]
+                        ofVersion:[coder decodeObjectForKey:@"version"]];
     return self;
 }
 
@@ -40,16 +42,18 @@
 - (id)initWithProtocol:(Protocol_t)protocal
            atAddress:(NSString*) address
               ofName:(NSString*) name
+           ofVersion:(NSString*) version
 {
     self = [self init];
     self.protocol = protocal;
     self.serverAddress = address;
     self.serverName = name;
+    self.serverVersion = version;
     return self;
 }
 
 - (NSString *)description{
-    return [NSString stringWithFormat:@"Server: Name:%@ Addr:%@", self.serverName, self.serverAddress];
+    return [NSString stringWithFormat:@"Server: Name:%@ Addr:%@ Version:%@", self.serverName, self.serverAddress, self.serverVersion];
 }
 
 @end

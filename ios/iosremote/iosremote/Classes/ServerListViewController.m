@@ -99,7 +99,7 @@
         int port = socketAddress->sin_port;
         NSLog(@"Resolved at %@:%u", ipString, port);
         
-        [self.comManager connectToServer:[[Server alloc] initWithProtocol:NETWORK atAddress:ipString ofName:sender.name]];
+        [self.comManager connectToServer:[[Server alloc] initWithProtocol:NETWORK atAddress:ipString ofName:sender.name ofVersion:@""]];
     }
 }
 

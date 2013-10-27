@@ -11,6 +11,8 @@
 #import "SlideShow.h"
 #import "NSString+Base64.h"
 #import "CommunicationManager.h"
+#import "Client.h"
+#import "Server.h"
 
 @interface CommandInterpreter()
 
@@ -34,8 +36,8 @@ dispatch_queue_t backgroundQueue;
 }
 
 // Received a set of instructions from server.
+// Marker equals to the end of the one command
 - (void) parse:(NSArray*)command{
-//    NSLog(@"Command : %@", command);
     uint marker = 0;
     if ([command count] == 0) {
         return;
@@ -50,7 +52,9 @@ dispatch_queue_t backgroundQueue;
     else if ([instruction isEqualToString:STATUS_PAIRING_PAIRED]){
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_PAIRING_PAIRED
                                                             object:nil];
-        marker = 2;
+        [[[[CommunicationManager sharedComManager] client] server] setServerVersion:[command objectAtIndex:3]];
+        NSLog(@"Connected to %@", [[[CommunicationManager sharedComManager] client] server].description);
+        marker = 4;
     }
     else if([instruction isEqualToString:@"slideshow_started"]){
         uint slideLength = [[command objectAtIndex:1] integerValue];

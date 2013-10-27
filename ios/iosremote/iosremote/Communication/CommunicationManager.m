@@ -187,7 +187,7 @@
 - (void) addServersWithName:(NSString*)name
                   AtAddress:(NSString*)addr
 {
-    Server * s = [[Server alloc] initWithProtocol:NETWORK atAddress:addr ofName:name];
+    Server * s = [[Server alloc] initWithProtocol:NETWORK atAddress:addr ofName:name ofVersion:@""];
     [self.servers addObject:s];
     [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:self.servers] forKey:ExistingServersKey];
     [[NSUserDefaults standardUserDefaults] synchronize];

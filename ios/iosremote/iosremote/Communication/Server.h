@@ -15,11 +15,12 @@ typedef enum protocol {NETWORK} Protocol_t;
 @property (nonatomic) Protocol_t protocol;
 @property (nonatomic, strong) NSString* serverName;
 @property (nonatomic, strong) NSString* serverAddress;
+@property (nonatomic, strong) NSString* serverVersion;
 
 - (id)initWithProtocol:(Protocol_t)protocal
              atAddress:(NSString*) address
-                ofName:(NSString*) name;
-
+                ofName:(NSString*) name
+             ofVersion:(NSString*) version;
 @end
 
 @interface NSString (IPValidation)

@@ -10,6 +10,8 @@
 #import "SlideShow.h"
 #import "CommandInterpreter.h"
 #import "CommunicationManager.h"
+#import "Client.h"
+#import "Server.h"
 
 @interface PinValidationViewController ()
 
