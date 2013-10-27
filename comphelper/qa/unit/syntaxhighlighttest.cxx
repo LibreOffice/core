@@ -20,9 +20,11 @@ class SyntaxHighlightTest : public CppUnit::TestFixture
 {
 public:
     void testBasicString();
+    void testEmptyComment();
 
     CPPUNIT_TEST_SUITE(SyntaxHighlightTest);
     CPPUNIT_TEST(testBasicString);
+    CPPUNIT_TEST(testEmptyComment);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -46,6 +48,22 @@ void SyntaxHighlightTest::testBasicString()
         prevEnd = itr->nEnd;
     }
     CPPUNIT_ASSERT_EQUAL(aBasicString.getLength() - 1, prevEnd);
+}
+
+void SyntaxHighlightTest::testEmptyComment()
+{
+    OUString aBasicString("'");
+
+    SyntaxHighlighter aHighlighter;
+    aHighlighter.initialize( HIGHLIGHT_BASIC );
+
+    std::vector<HighlightPortion> aPortions;
+    aHighlighter.getHighlightPortions( 0, aBasicString, aPortions );
+
+    CPPUNIT_ASSERT_EQUAL((size_t) 1, aPortions.size());
+    CPPUNIT_ASSERT_EQUAL(0, aPortions[0].nBegin);
+    CPPUNIT_ASSERT_EQUAL(0, aPortions[0].nEnd);
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SyntaxHighlightTest);

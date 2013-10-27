@@ -484,7 +484,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     }
 
     // String?
-    else if( testCharFlags( c, CHAR_START_STRING ) == sal_True )
+    else if( testCharFlags( c, CHAR_START_STRING ) )
     {
         // Remember which character has opened the string
         sal_Unicode cEndString = c;
@@ -502,7 +502,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                 break;
             }
             c = getChar();
-            if( testCharFlags( c, CHAR_EOL ) == sal_True )
+            if( testCharFlags( c, CHAR_EOL ) )
             {
                 // ERROR: unterminated string literal
                 reType = TT_ERROR;
