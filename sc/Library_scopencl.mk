@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_libraries,scopencl,\
         cppuhelper \
         for \
         sal \
+        svl \
         sc \
         tl \
         $(gb_UWINAPI) \

@@ -59,7 +59,7 @@ size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
         const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
         assert(pDVR);
-        assert (pDVR->GetArrays()[0].mbNumeric);
+        assert (pDVR->GetArrays()[0].mpNumericArray != NULL);
         pHostBuffer = const_cast<double*>(pDVR->GetArrays()[0].mpNumericArray);
         szHostBuffer = pDVR->GetArrayLength() * sizeof(double);
     }
@@ -106,7 +106,7 @@ public:
         std::stringstream ss;
         assert(GetFormulaToken()->GetType() == formula::svString);
         FormulaToken *Tok = GetFormulaToken();
-        ss << Tok->GetString().hashCode() << "U";
+        ss << Tok->GetString().getString().toAsciiUpperCase().hashCode() << "U";
         return ss.str();
     }
     virtual size_t GetWindowSize(void) const
@@ -121,7 +121,7 @@ public:
         cl_uint hashCode = 0;
         if (ref->GetType() == formula::svString)
         {
-            const rtl::OUString s = ref->GetString();
+            const rtl::OUString s = ref->GetString().getString().toAsciiUpperCase();
             hashCode = s.hashCode();
         } else {
             assert(0 && "Unsupported");
@@ -216,7 +216,7 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int)
         const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
         assert(pDVR);
-        assert(!pDVR->GetArrays()[0].mbNumeric);
+        assert(pDVR->GetArrays()[0].mpNumericArray == NULL);
         nStrings = pDVR->GetArrayLength();
         vRef = pDVR->GetArrays()[0];
     }
@@ -232,7 +232,7 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int)
     assert(err == CL_SUCCESS);
     for (size_t i = 0; i < nStrings; i++)
     {
-        const OUString tmp = vRef.mpStringArray[i];
+        const OUString tmp = OUString(vRef.mpStringArray[i]);
         pHashBuffer[i] = tmp.hashCode();
     }
     err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
@@ -771,7 +771,7 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     const formula::DoubleVectorRefToken* pDVR =
                         dynamic_cast< const formula::DoubleVectorRefToken* >(pChild);
                     assert(pDVR);
-                    if (pDVR->GetArrays()[0].mbNumeric)
+                    if (pDVR->GetArrays()[0].mpNumericArray)
                         mvSubArguments.push_back(
                                 SubArgument(new DynamicKernelSlidingArgument
                                     <DynamicKernelArgument>(ts, ft->Children[i])));
@@ -784,7 +784,7 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     const formula::SingleVectorRefToken* pSVR =
                         dynamic_cast< const formula::SingleVectorRefToken* >(pChild);
                     assert(pSVR);
-                    if (pSVR->GetArray().mbNumeric)
+                    if (pSVR->GetArray().mpNumericArray)
                         mvSubArguments.push_back(
                                 SubArgument(new DynamicKernelArgument(ts,
                                         ft->Children[i])));
