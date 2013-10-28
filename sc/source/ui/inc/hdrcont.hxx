@@ -26,8 +26,7 @@
 
 #define HDR_SIZE_OPTIMUM    0xFFFF
 
-
-                                    // Size of the sliders
+// Size of the sliders
 #define HDR_SLIDERSIZE      2
 
 class ScHeaderControl : public Window
@@ -36,9 +35,9 @@ private:
     SelectionEngine*    pSelEngine;
     Font                aNormFont;
     Font                aBoldFont;
-    sal_Bool                bBoldSet;
+    bool                bBoldSet;
 
-    sal_Bool            bVertical;              // Vertical = Row header
+    bool            bVertical;              // Vertical = Row header
 
     long            nWidth;
     long            nSmallWidth;
@@ -48,18 +47,18 @@ private:
 
     SCCOLROW        nMarkStart;
     SCCOLROW        nMarkEnd;
-    sal_Bool            bMarkRange;
+    bool            bMarkRange;
 
-    sal_Bool            bDragging;              // Change size
+    bool            bDragging;              // Change size
     SCCOLROW        nDragNo;
     long            nDragStart;
     long            nDragPos;
-    sal_Bool            bDragMoved;
+    bool            bDragMoved;
 
-    sal_Bool            bIgnoreMove;
+    bool            bIgnoreMove;
 
     long            GetScrPos( SCCOLROW nEntryNo );
-    SCCOLROW        GetMousePos( const MouseEvent& rMEvt, sal_Bool& rBorder );
+    SCCOLROW        GetMousePos( const MouseEvent& rMEvt, bool& rBorder );
     bool            IsSelectionAllowed(SCCOLROW nPos) const;
     void            ShowDragHelp();
 
@@ -86,16 +85,16 @@ protected:
     virtual OUString  GetEntryText( SCCOLROW nEntryNo ) = 0;
 
     virtual SCCOLROW GetHiddenCount( SCCOLROW nEntryNo );
-    virtual sal_Bool    IsLayoutRTL();
-    virtual sal_Bool    IsMirrored();
+    virtual bool     IsLayoutRTL();
+    virtual bool     IsMirrored();
 
     virtual void    SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewWidth ) = 0;
     virtual void    HideEntries( SCCOLROW nStart, SCCOLROW nEnd ) = 0;
 
-    virtual void    SetMarking( sal_Bool bSet );
+    virtual void    SetMarking( bool bSet );
     virtual void    SelectWindow();
-    virtual sal_Bool    IsDisabled();
-    virtual sal_Bool    ResizeAllowed();
+    virtual bool    IsDisabled();
+    virtual bool    ResizeAllowed();
     virtual OUString  GetDragHelp( long nVal );
 
     virtual void    DrawInvert( long nDragPos );
@@ -106,11 +105,11 @@ public:
                                 SCCOLROW nNewSize, bool bNewVertical );
             ~ScHeaderControl();
 
-    void    SetIgnoreMove(sal_Bool bSet)            { bIgnoreMove = bSet; }
+    void    SetIgnoreMove(bool bSet)            { bIgnoreMove = bSet; }
 
     void    StopMarking();
 
-    void    SetMark( sal_Bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd );
+    void    SetMark( bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd );
 
     long    GetWidth() const                    { return nWidth; }
     long    GetSmallWidth() const               { return nSmallWidth; }
