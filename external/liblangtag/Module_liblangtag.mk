@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,liblangtag))
 
 $(eval $(call gb_Module_add_targets,liblangtag,\
 	UnpackedTarball_langtag \
-	ExternalPackage_langtag_data \
 	ExternalProject_langtag \
 	ExternalPackage_liblangtag_data \
 ))
