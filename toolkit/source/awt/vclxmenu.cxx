@@ -38,9 +38,6 @@
 
 #include <com/sun/star/awt/KeyModifier.hpp>
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-
 DBG_NAME(VCLXMenu)
 
 VCLXMenu::VCLXMenu()

@@ -57,7 +57,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::text;
 using namespace com::sun::star::container;
 using namespace com::sun::star::style;
-using rtl::OUString;
 
 namespace svx { namespace sidebar {
 #define MAX_VALUESET_GRAPHIC    30

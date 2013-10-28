@@ -46,7 +46,6 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::text;
 using namespace com::sun::star::container;
 using namespace com::sun::star::style;
-using rtl::OUString;
 
 namespace svx { namespace sidebar {
 

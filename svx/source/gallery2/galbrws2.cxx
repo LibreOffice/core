@@ -62,8 +62,6 @@
 #define TBX_ID_ICON 1
 #define TBX_ID_LIST 2
 
-using rtl::OUString;
-
 GalleryBrowserMode GalleryBrowser2::meInitMode = GALLERYBROWSERMODE_ICON;
 
 struct DispatchInfo
