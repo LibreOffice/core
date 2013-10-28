@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,setup_native/ulf,$(call gb_CustomTarget_get_workdir,setup_native/mac)))
 
+$(eval $(call gb_Package_set_outdir,setup_native/ulf,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_file,setup_native/ulf,bin/macinstall.ulf,macinstall.ulf))
 
 # vim: set noet sw=4 ts=4:

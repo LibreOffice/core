@@ -11,6 +11,8 @@
 # be delivered from somewhere, so why not from extras...
 $(eval $(call gb_Package_Package,extras_extensions,$(TARFILE_LOCATION)))
 
+$(eval $(call gb_Package_set_outdir,extras_extensions,$(OUTDIR)))
+
 ifneq ($(BARCODE_EXTENSION_PACK),)
 $(eval $(call gb_Package_add_file,extras_extensions,bin/Barcode.oxt,$(BARCODE_EXTENSION_PACK)))
 endif

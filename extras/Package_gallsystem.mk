@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,extras_gallsystem,$(SRCDIR)/extras/source/gallery/gallery_system))
 
-$(eval $(call gb_Package_set_outdir,extras_gallsystem,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,extras_gallsystem,$(LIBO_SHARE_FOLDER)/gallery,\
 	sg1.sdg \
 	sg1.sdv \

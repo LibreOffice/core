@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,openssl,openssl))
 
-$(eval $(call gb_ExternalPackage_set_outdir,openssl,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,openssl,openssl))
 
 ifeq ($(COM),MSC)

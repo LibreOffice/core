@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,redland,redland))
 
-$(eval $(call gb_ExternalPackage_set_outdir,redland,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,redland,redland))
 
 ifeq ($(OS),MACOSX)

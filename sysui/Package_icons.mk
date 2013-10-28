@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,sysui/icons,$(SRCDIR)/sysui/desktop/icons))
 
+$(eval $(call gb_Package_set_outdir,sysui/icons,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_file,sysui/icons,bin/soffice.ico,main_app.ico))
 
 $(eval $(call gb_Package_add_files,sysui/icons,res/icons,\

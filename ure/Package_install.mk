@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,ure_install,$(SRCDIR)/ure/source))
 
-$(eval $(call gb_Package_set_outdir,ure_install,$(INSTROOT)))
-
 ifneq (WNT,$(OS))
 ifeq ($(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE),)
 $(eval $(call gb_Package_add_file,ure_install,$(LIBO_URE_BIN_FOLDER)/startup.sh,startup.sh))

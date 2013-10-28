@@ -19,8 +19,6 @@
 
 $(eval $(call gb_Package_Package,wizards_basicsrvaccess2base,$(SRCDIR)/wizards/source/access2base))
 
-$(eval $(call gb_Package_set_outdir,wizards_basicsrvaccess2base,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,wizards_basicsrvaccess2base,$(LIBO_SHARE_FOLDER)/basic/Access2Base,\
 	_License.xba \
 	acConstants.xba \

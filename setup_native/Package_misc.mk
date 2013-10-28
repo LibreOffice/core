@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,setup_native/misc,$(SRCDIR)/setup_native/source))
 
+$(eval $(call gb_Package_set_outdir,setup_native/misc,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_file,setup_native/misc,bin/Info.plist.langpack,mac/Info.plist.langpack))
 $(eval $(call gb_Package_add_file,setup_native/misc,bin/ooo3_installer.icns,mac/ooo3_installer.icns))
 $(eval $(call gb_Package_add_file,setup_native/misc,bin/osl/DS_Store,mac/ooo/DS_Store))

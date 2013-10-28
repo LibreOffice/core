@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,cli_ure_version,$(SRCDIR)/cli_ure/version))
 
+$(eval $(call gb_Package_set_outdir,cli_ure_version,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_file,cli_ure_version,bin/cliureversion.mk,version.txt))
 
 # vim: set noet sw=4 ts=4:

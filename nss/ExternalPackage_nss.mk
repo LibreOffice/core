@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,nss,nss))
 
-$(eval $(call gb_ExternalPackage_set_outdir,nss,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,nss,nss))
 
 ifeq ($(OS),MACOSX)

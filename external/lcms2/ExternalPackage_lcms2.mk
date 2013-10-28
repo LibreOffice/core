@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,lcms2,lcms2))
 
-$(eval $(call gb_ExternalPackage_set_outdir,lcms2,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,lcms2,lcms2))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)

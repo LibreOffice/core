@@ -9,6 +9,8 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,langtag_data,langtag))
 
+$(eval $(call gb_ExternalPackage_set_outdir,langtag_data,$(OUTDIR)))
+
 $(eval $(call gb_ExternalPackage_add_unpacked_files,langtag_data,unittest/install/$(LIBO_SHARE_FOLDER)/liblangtag,data/language-subtag-registry.xml))
 $(eval $(call gb_ExternalPackage_add_unpacked_files,langtag_data,unittest/install/$(LIBO_SHARE_FOLDER)/liblangtag/common/bcp47,\
 	data/common/bcp47/calendar.xml \

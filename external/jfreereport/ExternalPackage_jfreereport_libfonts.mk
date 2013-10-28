@@ -12,8 +12,6 @@ include $(SRCDIR)/external/jfreereport/version.mk
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_libfonts,jfreereport_libfonts))
 
-$(eval $(call gb_ExternalPackage_set_outdir,jfreereport_libfonts,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,jfreereport_libfonts,jfreereport_libfonts))
 
 $(eval $(call gb_ExternalPackage_add_file,jfreereport_libfonts,$(LIBO_SHARE_JAVA_FOLDER)/libfonts-$(LIBFONTS_VERSION).jar,dist/libfonts-$(LIBFONTS_VERSION).jar))

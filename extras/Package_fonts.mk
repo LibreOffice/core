@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,extras_fonts,$(SRCDIR)/extras))
 
-$(eval $(call gb_Package_set_outdir,extras_fonts,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_file,extras_fonts,$(LIBO_SHARE_FOLDER)/fonts/truetype/opens___.ttf,source/truetype/symbol/opens___.ttf))
 
 # vim: set noet sw=4 ts=4:

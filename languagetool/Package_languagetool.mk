@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,languagetool,$(call gb_UnpackedTarball_get_dir,languagetool)))
 
+$(eval $(call gb_Package_set_outdir,languagetool,$(OUTDIR)))
+
 $(eval $(call gb_Package_use_external_project,languagetool,languagetool))
 
 $(eval $(call gb_Package_add_file,languagetool,bin/LanguageTool.oxt,dist/LanguageTool.oxt))

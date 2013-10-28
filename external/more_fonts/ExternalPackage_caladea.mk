@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_caladea,font_caladea))
 
-$(eval $(call gb_ExternalPackage_set_outdir,fonts_caladea,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_caladea,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	Caladea-Italic.ttf \
 	Caladea-Regular.ttf \

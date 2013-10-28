@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,python_zipcore,$(call gb_CustomTarget_get_workdir,pyuno/zipcore)))
 
+$(error FIXME do not deliver this stuff to OUTDIR)
+
 pyuno_PYTHON_ARCHIVE_NAME:=python-core-$(PYTHON_VERSION).zip
 
 $(eval $(call gb_Package_add_file,python_zipcore,bin/$(pyuno_PYTHON_ARCHIVE_NAME),$(pyuno_PYTHON_ARCHIVE_NAME)))

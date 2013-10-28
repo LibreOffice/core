@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,extras_gallroot,$(SRCDIR)/extras/source/gallery))
 
-$(eval $(call gb_Package_set_outdir,extras_gallroot,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,extras_gallroot,$(LIBO_SHARE_FOLDER)/gallery,\
 	apples.gif \
 	bigapple.gif \

@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,python3,python3))
 
-$(eval $(call gb_ExternalPackage_set_outdir,python3,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,python3,python3))
 
 ifeq ($(OS)-$(COM),WNT-MSC)

@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,postprocess_registry,$(patsubst %/,%,$(call gb_XcdTarget_get_target,))))
 
-$(eval $(call gb_Package_set_outdir,postprocess_registry,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,postprocess_registry,$(LIBO_SHARE_FOLDER)/registry,\
 	$(postprocess_XCDS) \
 	$(foreach lang,$(gb_Configuration_LANGS), \

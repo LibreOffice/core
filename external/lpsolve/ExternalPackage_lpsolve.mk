@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,lpsolve,lpsolve))
 
-$(eval $(call gb_ExternalPackage_set_outdir,lpsolve,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,lpsolve,lpsolve))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)

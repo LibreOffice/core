@@ -15,6 +15,8 @@ endif
 
 $(eval $(call gb_Package_Package,jvmfwk_jreproperties_solver,$(call gb_CustomTarget_get_workdir,jvmfwk/jreproperties)))
 
+$(eval $(call gb_Package_set_outdir,jvmfwk_jreproperties_solver,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_file,jvmfwk_jreproperties_solver,$(jvmfwk_Package_jreproperties_solver_LIBDIR)/JREProperties.class,JREProperties.class))
 
 # vim:set noet sw=4 ts=4:

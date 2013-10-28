@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,extras_gallmytheme,$(SRCDIR)/extras/source/gallery/gallery_mytheme))
 
-$(eval $(call gb_Package_set_outdir,extras_gallmytheme,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,extras_gallmytheme,$(LIBO_SHARE_PRESETS_FOLDER)/gallery,\
 	sg30.sdv \
 	sg30.thm \

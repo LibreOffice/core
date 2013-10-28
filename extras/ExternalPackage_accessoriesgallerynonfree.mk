@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgallerynonfree,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgallerynonfree,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgallerynonfree,$(LIBO_SHARE_FOLDER)/gallery,\
 	accessories-nonfree/sg600.sdg \
 	accessories-nonfree/sg600.sdv \

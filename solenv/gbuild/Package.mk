@@ -85,7 +85,7 @@ $(call gb_Package_get_target,%) :
 # for other targets that want to create Packages, does not register at Module
 define gb_Package_Package_internal
 gb_Package_SOURCEDIR_$(1) := $(2)
-gb_Package_OUTDIR_$(1) := $(OUTDIR)
+gb_Package_OUTDIR_$(1) := $(INSTROOT)
 $(call gb_Package_get_target,$(1)) : FILES :=
 $(call gb_Package_get_clean_target,$(1)) : FILES := $(call gb_Package_get_target,$(1)) $(call gb_Package_get_preparation_target,$(1))
 $(call gb_Package_get_target,$(1)) : $(call gb_Package_get_preparation_target,$(1))
@@ -113,7 +113,7 @@ endef
 
 # Set output dir for the package files.
 #
-# Default is $(OUTDIR).
+# Default is $(INSTROOT).
 #
 # gb_Package_set_outdir package outdir
 define gb_Package_set_outdir

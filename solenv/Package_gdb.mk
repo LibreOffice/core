@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,solenv_gdb,$(call gb_CustomTarget_get_workdir,solenv/gdb)))
 
+$(eval $(call gb_Package_set_outdir,solenv_gdb,$(OUTDIR)))
+
 # keep in sync with solenv/bin/install-gdb-printers
 $(eval $(call gb_Package_add_files,solenv_gdb,lib,\
 	$(if $(MERGELIBS), \

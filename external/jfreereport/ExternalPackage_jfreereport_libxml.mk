@@ -12,8 +12,6 @@ include $(SRCDIR)/external/jfreereport/version.mk
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_libxml,jfreereport_libxml))
 
-$(eval $(call gb_ExternalPackage_set_outdir,jfreereport_libxml,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,jfreereport_libxml,jfreereport_libxml))
 
 $(eval $(call gb_ExternalPackage_add_file,jfreereport_libxml,$(LIBO_SHARE_JAVA_FOLDER)/libxml-$(LIBXML_VERSION).jar,dist/libxml-$(LIBXML_VERSION).jar))

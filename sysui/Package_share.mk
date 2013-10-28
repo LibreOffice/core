@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,share,$(share_WORKDIR)/libreoffice))
 
-$(eval $(call gb_Package_set_outdir,share,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,share,share/xdg,\
 	$(addsuffix .desktop,$(LAUNCHERLIST)) \
 ))

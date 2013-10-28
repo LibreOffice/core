@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommon,templates-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommon,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommon,$(LIBO_SHARE_FOLDER)/template/common,\
 	templates/common/dummy_common_templates.txt \
 	templates/common/svn-commit.2.tmp \

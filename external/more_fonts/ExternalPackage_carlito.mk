@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_carlito,font_carlito))
 
-$(eval $(call gb_ExternalPackage_set_outdir,fonts_carlito,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_carlito,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	Carlito-BoldItalic.ttf \
 	Carlito-Regular.ttf \

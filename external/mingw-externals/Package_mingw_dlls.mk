@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,mingw_dlls,$(MINGW_SYSROOT)/bin))
 
-$(eval $(call gb_Package_set_outdir,mingw_dlls,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,mingw_dlls,bin,\
     $(sort $(MINGW_DLLS)) \
 ))

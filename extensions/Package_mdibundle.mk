@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,extensions_mdibundle,$(SRCDIR)/extensions/source/macosx/spotlight/mdimporter))
 
-$(eval $(call gb_Package_set_outdir,extensions_mdibundle,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,extensions_mdibundle,Library/Spotlight/OOoSpotlightImporter.mdimporter/Contents,\
     Info.plist \
     en.lproj/schema.strings \

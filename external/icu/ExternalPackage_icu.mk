@@ -11,8 +11,6 @@ icu_VERSION := $(ICU_MAJOR).$(ICU_MINOR)$(if $(ICU_MICRO),.$(ICU_MICRO))
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,icu,icu))
 
-$(eval $(call gb_ExternalPackage_set_outdir,icu,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,icu,icu))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)

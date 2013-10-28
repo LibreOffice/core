@@ -19,8 +19,6 @@
 
 $(eval $(call gb_Package_Package,wizards_basicshare,$(SRCDIR)/wizards/source/configshare))
 
-$(eval $(call gb_Package_set_outdir,wizards_basicshare,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,wizards_basicshare,$(LIBO_SHARE_FOLDER)/basic,\
 	dialog.xlc \
 	script.xlc \

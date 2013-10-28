@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,setup_native/scripts,$(SRCDIR)/setup_native/scripts))
 
+$(eval $(call gb_Package_set_outdir,setup_native/scripts,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_file,setup_native/scripts,bin/admin.pl,admin.pl))
 $(eval $(call gb_Package_add_file,setup_native/scripts,bin/mac_install.script,mac_install.script))
 $(eval $(call gb_Package_add_file,setup_native/scripts,bin/osx_install_languagepack.applescript,osx_install_languagepack.applescript))

@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,moz_runtime,mozruntime))
 
-$(eval $(call gb_ExternalPackage_set_outdir,moz_runtime,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files_with_dir,moz_runtime,$(LIBO_BIN_FOLDER),\
 	components/addrbook.dll \
 	components/addrbook.xpt \

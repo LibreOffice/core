@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,cairo,cairo))
 
-$(eval $(call gb_ExternalPackage_set_outdir,cairo,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,cairo,cairo))
 
 $(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo.so.2,src/.libs/libcairo.so.2.11000.2))

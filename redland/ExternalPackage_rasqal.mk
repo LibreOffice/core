@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,rasqal,rasqal))
 
-$(eval $(call gb_ExternalPackage_set_outdir,rasqal,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,rasqal,rasqal))
 
 ifeq ($(OS),MACOSX)

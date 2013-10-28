@@ -19,8 +19,6 @@
 
 $(eval $(call gb_Package_Package,svx_gengal,$(SRCDIR)/svx/source/gengal))
 
-$(eval $(call gb_Package_set_outdir,svx_gengal,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_file,svx_gengal,$(LIBO_BIN_FOLDER)/gengal,gengal.sh))
 
 # vim: set noet ts=4 sw=4:

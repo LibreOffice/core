@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,msms,$(MSM_PATH)))
 
+$(eval $(call gb_Package_set_outdir,msms,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_files,msms,bin,\
 	$(MERGE_MODULES) \
 ))

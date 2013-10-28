@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotostravel,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotostravel,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotostravel,$(LIBO_SHARE_FOLDER)/gallery/Photos/Travel,\
 	accessories/Photos/Travel/JS_PDPhO_balloons_festival.jpg \
 	accessories/Photos/Travel/JS_PDPhO_cruise_ship.jpg \

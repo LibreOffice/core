@@ -12,8 +12,6 @@ include $(SRCDIR)/external/jfreereport/version.mk
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_libformula,jfreereport_libformula))
 
-$(eval $(call gb_ExternalPackage_set_outdir,jfreereport_libformula,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,jfreereport_libformula,jfreereport_libformula))
 
 $(eval $(call gb_ExternalPackage_add_file,jfreereport_libformula,$(LIBO_SHARE_JAVA_FOLDER)/libformula-$(LIBFORMULA_VERSION).jar,dist/libformula-$(LIBFORMULA_VERSION).jar))

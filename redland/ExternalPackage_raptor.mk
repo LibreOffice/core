@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,raptor,raptor))
 
-$(eval $(call gb_ExternalPackage_set_outdir,raptor,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,raptor,raptor))
 
 ifeq ($(OS),MACOSX)

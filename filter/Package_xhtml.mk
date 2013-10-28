@@ -18,8 +18,6 @@
 
 $(eval $(call gb_Package_Package,filter_xhtml,$(SRCDIR)/filter/source/xslt))
 
-$(eval $(call gb_Package_set_outdir,filter_xhtml,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_file,filter_xhtml,$(LIBO_SHARE_FOLDER)/xslt/export/xhtml/body.xsl,odf2xhtml/export/xhtml/body.xsl))
 $(eval $(call gb_Package_add_file,filter_xhtml,$(LIBO_SHARE_FOLDER)/xslt/export/xhtml/header.xsl,odf2xhtml/export/xhtml/header.xsl))
 $(eval $(call gb_Package_add_file,filter_xhtml,$(LIBO_SHARE_FOLDER)/xslt/export/xhtml/opendoc2xhtml.xsl,odf2xhtml/export/xhtml/opendoc2xhtml.xsl))

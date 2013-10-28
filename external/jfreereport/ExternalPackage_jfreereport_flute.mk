@@ -12,8 +12,6 @@ include $(SRCDIR)/external/jfreereport/version.mk
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_flute,jfreereport_flute))
 
-$(eval $(call gb_ExternalPackage_set_outdir,jfreereport_flute,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,jfreereport_flute,jfreereport_flute))
 
 $(eval $(call gb_ExternalPackage_add_file,jfreereport_flute,$(LIBO_SHARE_JAVA_FOLDER)/flute-$(FLUTE_VERSION).jar,dist/flute-$(FLUTE_VERSION).jar))

@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotosfoodsanddrinks,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosfoodsanddrinks,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosfoodsanddrinks,$(LIBO_SHARE_FOLDER)/gallery/Photos/FoodsandDrinks,\
 	accessories/Photos/FoodsandDrinks/JS_PDPhO_beer.jpg \
 	accessories/Photos/FoodsandDrinks/JS_PDPhO_fish_and_chips.jpg \

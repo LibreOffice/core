@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,xmlsec,xmlsec))
 
-$(eval $(call gb_ExternalPackage_set_outdir,xmlsec,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,xmlsec,xmlsec))
 
 ifeq ($(OS),WNT)

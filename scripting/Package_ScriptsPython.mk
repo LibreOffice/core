@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,scripting_ScriptsPython,$(SRCDIR)/scripting/examples))
 
-$(eval $(call gb_Package_set_outdir,scripting_ScriptsPython,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files_with_dir,scripting_ScriptsPython,$(LIBO_SHARE_FOLDER)/Scripts,\
 	python/Capitalise.py \
 	python/HelloWorld.py \

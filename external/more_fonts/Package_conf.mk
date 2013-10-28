@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,more_fonts_conf,$(SRCDIR)/external/more_fonts/fonts))
 
-$(eval $(call gb_Package_set_outdir,more_fonts_conf,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_file,more_fonts_conf,$(LIBO_SHARE_FOLDER)/fonts/truetype/fc_local.conf,fc_local.conf))
 
 # vim: set noet sw=4 ts=4:

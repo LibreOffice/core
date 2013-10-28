@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,l10ntools_ulfconv,$(SRCDIR)/l10ntools/source/ulfconv))
 
+$(eval $(call gb_Package_set_outdir,l10ntools_ulfconv,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_file,l10ntools_ulfconv,bin/msi-encodinglist.txt,msi-encodinglist.txt))
 
 # vim: set noet sw=4 ts=4:

@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,xslt,xslt))
 
-$(eval $(call gb_ExternalPackage_set_outdir,xslt,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,xslt,xslt))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)

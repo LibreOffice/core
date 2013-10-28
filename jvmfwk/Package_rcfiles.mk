@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,jvmfwk_javavendors,$(SRCDIR)/jvmfwk))
 
-$(eval $(call gb_Package_set_outdir,jvmfwk_javavendors,$(INSTROOT)))
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_SHARE_FOLDER)/misc/javavendors.xml,distributions/OpenOfficeorg/javavendors_wnt.xml))
 else ifeq ($(OS),FREEBSD)

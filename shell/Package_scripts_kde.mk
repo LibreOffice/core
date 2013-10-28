@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,shell_scripts_kde,$(SRCDIR)/shell/source/unix/misc))
 
-$(eval $(call gb_Package_set_outdir,shell_scripts_kde,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_file,shell_scripts_kde,$(LIBO_BIN_FOLDER)/kde-open-url,kde-open-url.sh))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

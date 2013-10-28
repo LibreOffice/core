@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,shell_scripts,$(SRCDIR)/shell/source/unix/misc))
 
-$(eval $(call gb_Package_set_outdir,shell_scripts,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_file,shell_scripts,$(LIBO_BIN_FOLDER)/open-url,open-url.sh))
 
 ifeq ($(ENABLE_TDE),TRUE)

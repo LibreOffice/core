@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,unoil_clioootypesversion,$(SRCDIR)/unoil/climaker))
 
+$(eval $(call gb_Package_set_outdir,unoil_clioootypesversion,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_file,unoil_clioootypesversion,bin/clioootypesversion.mk,version.txt))
 
 # vim:set noet sw=4 ts=4:

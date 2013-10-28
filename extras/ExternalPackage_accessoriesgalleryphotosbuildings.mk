@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotosbuildings,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosbuildings,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosbuildings,$(LIBO_SHARE_FOLDER)/gallery/Photos/Buildings,\
 	accessories/Photos/Buildings/ArkSoft0408010009.jpg \
 	accessories/Photos/Buildings/ArkSoft0408010023.jpg \

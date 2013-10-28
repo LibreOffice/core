@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,pyuno_python_scripts,$(SRCDIR)/pyuno/source))
 
-$(eval $(call gb_Package_set_outdir,pyuno_python_scripts,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,pyuno_python_scripts,$(LIBO_LIB_PYUNO_FOLDER),\
 	loader/pythonloader.py \
 	module/uno.py \

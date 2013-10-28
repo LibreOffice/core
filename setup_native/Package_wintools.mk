@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,setup_native_wintools,$(call gb_CustomTarget_get_workdir,setup_native/wintools)))
 
+$(error FIXME do not deliver this stuff to OUTDIR)
+
 $(eval $(call gb_Package_add_files,setup_native_wintools,bin,\
 	makecab.exe \
 	msidb.exe \

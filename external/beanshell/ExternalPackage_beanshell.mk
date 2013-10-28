@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,beanshell,beanshell))
 
-$(eval $(call gb_ExternalPackage_set_outdir,beanshell,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,beanshell,beanshell))
 
 $(eval $(call gb_ExternalPackage_add_file,beanshell,$(LIBO_SHARE_JAVA_FOLDER)/bsh.jar,dist/bsh-2.0b1.jar))

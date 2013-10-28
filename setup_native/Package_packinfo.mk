@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,setup_native/packinfo,$(SRCDIR)/setup_native/source/packinfo))
 
+$(eval $(call gb_Package_set_outdir,setup_native/packinfo,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/solariscopyrightfile,solariscopyrightfile))
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/linuxcopyrightfile,linuxcopyrightfile))
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/libreoffice.pcp,libreoffice.pcp))

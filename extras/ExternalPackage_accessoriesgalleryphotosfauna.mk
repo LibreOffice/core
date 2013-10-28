@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotosfauna,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosfauna,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosfauna,$(LIBO_SHARE_FOLDER)/gallery/Photos/Fauna,\
 	accessories/Photos/Fauna/ArkSoft0407030001.jpg \
 	accessories/Photos/Fauna/bee_on_citrus.jpg \

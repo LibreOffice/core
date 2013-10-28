@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommoneducate,templates-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommoneducate,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommoneducate,$(LIBO_SHARE_FOLDER)/template/common/educate,\
 	templates/common/educate/A4-chequered.otg \
 	templates/common/educate/A4-lin_2mm.otg \

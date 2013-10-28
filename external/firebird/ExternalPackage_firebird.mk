@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,firebird,firebird))
 
-$(eval $(call gb_ExternalPackage_set_outdir,firebird,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,firebird,firebird))
 
 ifeq ($(OS)-$(COM),WNT-MSC)

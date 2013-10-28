@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,scripting_ScriptsBeanShell,$(SRCDIR)/scripting/examples))
 
-$(eval $(call gb_Package_set_outdir,scripting_ScriptsBeanShell,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files_with_dir,scripting_ScriptsBeanShell,$(LIBO_SHARE_FOLDER)/Scripts,\
 	beanshell/Capitalise/capitalise.bsh \
 	beanshell/Capitalise/parcel-descriptor.xml \

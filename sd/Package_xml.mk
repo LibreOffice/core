@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,sd_xml,$(SRCDIR)/sd/xml))
 
-$(eval $(call gb_Package_set_outdir,sd_xml,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,sd_xml,$(LIBO_SHARE_FOLDER)/config/soffice.cfg/simpress,\
 	effects.xml \
 	transitions.xml \

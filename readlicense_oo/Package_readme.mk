@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,readlicense_oo_readme_inc,$(call gb_CustomTarget_get_workdir,readlicense_oo/readme)))
 
+$(eval $(call gb_Package_set_outdir,readlicense_oo_readme_inc,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_files,readlicense_oo_readme_inc,bin/osl,\
 	$(foreach lang,en-US $(filter-out en-US,$(gb_WITH_LANG)),\
 		$(if $(filter-out WNT,$(OS)),README_$(lang),readme_$(lang).txt) \

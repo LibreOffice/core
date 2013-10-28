@@ -12,8 +12,6 @@ include $(SRCDIR)/external/jfreereport/version.mk
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_librepository,jfreereport_librepository))
 
-$(eval $(call gb_ExternalPackage_set_outdir,jfreereport_librepository,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,jfreereport_librepository,jfreereport_librepository))
 
 $(eval $(call gb_ExternalPackage_add_file,jfreereport_librepository,$(LIBO_SHARE_JAVA_FOLDER)/librepository-$(LIBREPOSITORY_VERSION).jar,dist/librepository-$(LIBREPOSITORY_VERSION).jar))

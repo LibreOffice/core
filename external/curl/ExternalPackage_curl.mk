@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,curl,curl))
 
-$(eval $(call gb_ExternalPackage_set_outdir,curl,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,curl,curl))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)

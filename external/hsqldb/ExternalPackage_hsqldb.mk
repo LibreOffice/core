@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,hsqldb_project,hsqldb))
 
-$(eval $(call gb_ExternalPackage_set_outdir,hsqldb_project,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,hsqldb_project,hsqldb))
 
 $(eval $(call gb_ExternalPackage_add_file,hsqldb_project,$(LIBO_SHARE_JAVA_FOLDER)/hsqldb.jar,lib/hsqldb.jar))

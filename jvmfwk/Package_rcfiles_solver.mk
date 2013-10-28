@@ -15,6 +15,8 @@ endif
 
 $(eval $(call gb_Package_Package,jvmfwk_rcfiles_solver,$(SRCDIR)/jvmfwk))
 
+$(eval $(call gb_Package_set_outdir,jvmfwk_rcfiles_solver,$(OUTDIR)))
+
 $(eval $(call gb_Package_add_file,jvmfwk_rcfiles_solver,$(jvmfwk_Package_rcfiles_solver_LIBDIR)/$(call gb_Helper_get_rcfile,jvmfwk3),source/jvmfwk3rc))
 $(eval $(call gb_Package_add_file,jvmfwk_rcfiles_solver,$(jvmfwk_Package_rcfiles_solver_LIBDIR)/$(call gb_Helper_get_rcfile,sunjavaplugin),plugins/sunmajor/pluginlib/sunjavapluginrc))
 

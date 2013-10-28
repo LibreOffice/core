@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriesgalleryphotosflowers,gallery-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriesgalleryphotosflowers,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriesgalleryphotosflowers,$(LIBO_SHARE_FOLDER)/gallery/Photos/Flowers,\
 	accessories/Photos/Flowers/1481157185_28ea113529_o.jpg \
 	accessories/Photos/Flowers/1482010374_31c0e4c1ed_o.jpg \

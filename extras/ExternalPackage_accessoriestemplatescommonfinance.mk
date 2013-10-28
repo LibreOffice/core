@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,extras_accessoriestemplatescommonfinance,templates-pack))
 
-$(eval $(call gb_ExternalPackage_set_outdir,extras_accessoriestemplatescommonfinance,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_add_unpacked_files,extras_accessoriestemplatescommonfinance,$(LIBO_SHARE_FOLDER)/template/common/finance,\
 	templates/common/finance/dummy_common_templates.txt \
 ))

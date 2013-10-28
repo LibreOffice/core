@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,jawt,$(call gb_CustomTarget_get_workdir,external/jawt)))
 
+$(error FIXME do not deliver this stuff to OUTDIR)
+
 $(eval $(call gb_Package_add_file,jawt,lib/libjawt.dll.a,libjawt.dll.a))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,sd_web,$(SRCDIR)/sd/res))
 
-$(eval $(call gb_Package_set_outdir,sd_web,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,sd_web,$(LIBO_SHARE_FOLDER)/config/webcast,\
 	webview/common.inc \
 	webview/common.pl \

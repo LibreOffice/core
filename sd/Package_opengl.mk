@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,sd_opengl,$(SRCDIR)/sd/xml))
 
-$(eval $(call gb_Package_set_outdir,sd_opengl,$(INSTROOT)))
-
 $(eval $(call gb_Package_add_files,sd_opengl,$(LIBO_SHARE_FOLDER)/config/soffice.cfg/simpress,\
 	transitions-ogl.xml \
 ))

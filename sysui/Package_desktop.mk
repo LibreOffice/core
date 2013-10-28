@@ -11,6 +11,8 @@ include $(SRCDIR)/sysui/productlist.mk
 
 $(eval $(call gb_Package_Package,desktop,$(WORKDIR)/CustomTarget))
 
+$(eval $(call gb_Package_set_outdir,desktop,$(OUTDIR)))
+
 ifneq ($(filter deb,$(PKGFORMAT)),)
 $(eval $(call gb_Package_add_files,desktop,bin/desktop-integration/deb,\
 	$(foreach product,$(PRODUCTLIST),\

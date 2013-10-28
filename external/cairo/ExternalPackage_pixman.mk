@@ -9,8 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,pixman,pixman))
 
-$(eval $(call gb_ExternalPackage_set_outdir,pixman,$(INSTROOT)))
-
 $(eval $(call gb_ExternalPackage_use_external_project,pixman,pixman))
 
 $(eval $(call gb_ExternalPackage_add_file,pixman,$(LIBO_LIB_FOLDER)/libpixman-1.so.0,pixman/.libs/libpixman-1.so.0.24.4))
