@@ -2521,7 +2521,7 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     m_bGCAttr = m_bIgnoreReadonly = m_bSelTblCells = m_bBasicHideCrsr =
     m_bOverwriteCrsr = sal_False;
     m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = sal_True;
-    m_bSVCrsrVis = touch_ui_keyboard_visible();
+    m_bSVCrsrVis = sal_True;
     m_bSetCrsrInReadOnly = sal_True;
     m_pVisCrsr = new SwVisCrsr( this );
     m_bMacroExecAllowed = rShell.IsMacroExecAllowed();
