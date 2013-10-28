@@ -17,6 +17,27 @@
 using namespace formula;
 
 namespace sc { namespace opencl {
+/// Exceptions
+
+/// Failed in parsing
+class UnhandledToken {
+public:
+    UnhandledToken(FormulaToken *t): mToken(t) {}
+    FormulaToken *mToken;
+};
+
+/// Failed in marshaling
+class OpenCLError {
+public:
+    OpenCLError(cl_int err): mError(err) {}
+    cl_int mError;
+};
+
+/// Inconsistent state
+class Unhandled {
+public:
+    Unhandled() {}
+};
 
 class FormulaTreeNode
 {
@@ -75,7 +96,8 @@ public:
         if (mpClmem) {
             //std::cerr << "\tFreeing cl_mem of " << mSymName <<"\n";
             cl_int ret = clReleaseMemObject(mpClmem);
-            assert(ret == CL_SUCCESS);
+            if (ret != CL_SUCCESS)
+                throw OpenCLError(ret);
         }
     }
     virtual void GenSlidingWindowFunction(std::stringstream &) {};
@@ -97,7 +119,7 @@ public:
             // Prepare intermediate results (on CPU for now)
             return 1;
         } else {
-            assert(0 && "Unreachable");
+            throw Unhandled();
         }
         return 0;
     }

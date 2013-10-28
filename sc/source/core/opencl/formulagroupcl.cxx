@@ -38,6 +38,7 @@ using namespace formula;
 
 namespace sc { namespace opencl {
 
+
 /// Map the buffer used by an argument and do necessary argument setting
 size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
 {
@@ -59,9 +60,12 @@ size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
         const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
         assert(pDVR);
-        assert (pDVR->GetArrays()[0].mpNumericArray != NULL);
+        if (pDVR->GetArrays()[0].mpNumericArray == NULL)
+            throw Unhandled();
         pHostBuffer = const_cast<double*>(pDVR->GetArrays()[0].mpNumericArray);
         szHostBuffer = pDVR->GetArrayLength() * sizeof(double);
+    } else {
+        throw Unhandled();
     }
     // Obtain cl context
     KernelEnv kEnv;
@@ -71,10 +75,12 @@ size_t DynamicKernelArgument::Marshal(cl_kernel k, int argno, int)
         (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR,
         szHostBuffer,
         pHostBuffer, &err);
-    assert(CL_SUCCESS == err);
+    if (CL_SUCCESS != err)
+        throw OpenCLError(err);
 
     err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
-    assert(CL_SUCCESS == err);
+    if (CL_SUCCESS != err)
+        throw OpenCLError(err);
     return 1;
 }
 
@@ -104,7 +110,8 @@ public:
     virtual std::string GenSlidingWindowDeclRef(bool=false) const
     {
         std::stringstream ss;
-        assert(GetFormulaToken()->GetType() == formula::svString);
+        if (GetFormulaToken()->GetType() != formula::svString)
+            throw Unhandled();
         FormulaToken *Tok = GetFormulaToken();
         ss << Tok->GetString().getString().toAsciiUpperCase().hashCode() << "U";
         return ss.str();
@@ -124,7 +131,7 @@ public:
             const rtl::OUString s = ref->GetString().getString().toAsciiUpperCase();
             hashCode = s.hashCode();
         } else {
-            assert(0 && "Unsupported");
+            throw Unhandled();
         }
         // marshaling
         // Obtain cl context
@@ -132,7 +139,8 @@ public:
         OclCalc::setKernelEnv(&kEnv);
         // Pass the scalar result back to the rest of the formula kernel
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), (void*)&hashCode);
-        assert(CL_SUCCESS == err);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
         return 1;
     }
 };
@@ -152,7 +160,8 @@ public:
     virtual void GenDeclRef(std::stringstream &ss) const
     {
         FormulaToken *Tok = GetFormulaToken();
-        assert (Tok->GetType() == formula::svDouble);
+        if (Tok->GetType() != formula::svDouble)
+            throw Unhandled();
         ss << Tok->GetDouble();
     }
     virtual void GenSlidingWindowDecl(std::stringstream &ss) const
@@ -161,7 +170,8 @@ public:
     }
     virtual std::string GenSlidingWindowDeclRef(bool=false) const
     {
-        assert(GetFormulaToken()->GetType() == formula::svDouble);
+        if (GetFormulaToken()->GetType() != formula::svDouble)
+            throw Unhandled();
         return mSymName;
     }
     virtual size_t GetWindowSize(void) const
@@ -174,7 +184,8 @@ public:
         double tmp = 0.0;
         // Pass the scalar result back to the rest of the formula kernel
         cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
-        assert(CL_SUCCESS == err);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
         return 1;
     }
 };
@@ -216,7 +227,8 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int)
         const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast< const formula::DoubleVectorRefToken* >(ref);
         assert(pDVR);
-        assert(pDVR->GetArrays()[0].mpNumericArray == NULL);
+        if (pDVR->GetArrays()[0].mpNumericArray != NULL)
+            throw Unhandled();
         nStrings = pDVR->GetArrayLength();
         vRef = pDVR->GetArrays()[0];
     }
@@ -225,11 +237,13 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int)
     mpClmem = clCreateBuffer(kEnv.mpkContext,
             (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
             szHostBuffer, NULL, &err);
-    assert(CL_SUCCESS == err);
+    if (CL_SUCCESS != err)
+        throw OpenCLError(err);
     cl_uint *pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
             szHostBuffer, 0, NULL, NULL, &err);
-    assert(err == CL_SUCCESS);
+    if (CL_SUCCESS != err)
+        throw OpenCLError(err);
     for (size_t i = 0; i < nStrings; i++)
     {
         const OUString tmp = OUString(vRef.mpStringArray[i]);
@@ -237,10 +251,12 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int)
     }
     err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
             pHashBuffer, 0, NULL, NULL);
-    assert(err == CL_SUCCESS);
+    if (CL_SUCCESS != err)
+        throw OpenCLError(err);
 
     err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
-    assert(CL_SUCCESS == err);
+    if (CL_SUCCESS != err)
+        throw OpenCLError(err);
     return 1;
 }
 
@@ -255,7 +271,8 @@ public:
         Base(s, ft)
     {
         FormulaToken *t = ft->GetFormulaToken();
-        assert(t->GetType() == formula::svDoubleVectorRef);
+        if (t->GetType() != formula::svDoubleVectorRef)
+            throw Unhandled();
         const formula::DoubleVectorRefToken* pDVR =
             dynamic_cast<const formula::DoubleVectorRefToken *>(t);
         assert(pDVR);
@@ -724,7 +741,8 @@ public:
             }
             ss << ")";
         } else {
-            assert(mvSubArguments.size() == 2);
+            if (mvSubArguments.size() != 2)
+                throw Unhandled();
             ss << "(" << CodeGen.Gen2(mvSubArguments[0]->GenSlidingWindowDeclRef(true),
                          mvSubArguments[1]->GenSlidingWindowDeclRef(true)) << ")";
         }
@@ -759,7 +777,8 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
     for (unsigned i = 0; i < nChildren; i++)
     {
         FormulaToken *pChild = ft->Children[i]->GetFormulaToken();
-        assert(pChild);
+        if (!pChild)
+            throw Unhandled();
         OpCode opc = pChild->GetOpCode();
         std::stringstream tmpname;
         tmpname << s << "_" << i;
@@ -801,7 +820,7 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                             SubArgument(new ConstStringArgument(ts,
                                     ft->Children[i])));
                 } else {
-                    assert(0 && "Unknown type pushed");
+                    throw UnhandledToken(pChild);
                 }
                 break;
             case ocDiv:
@@ -1072,7 +1091,7 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 }
                 break;
             default:
-                assert(0 && "Unsupported");
+                throw UnhandledToken(pChild);
         };
     }
 }
@@ -1201,16 +1220,18 @@ public:
         mpResClmem = clCreateBuffer(kEnv.mpkContext,
                 (cl_mem_flags) CL_MEM_READ_WRITE|CL_MEM_ALLOC_HOST_PTR,
                 nr*sizeof(double), NULL, &err);
-        assert(CL_SUCCESS == err);
-
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
         err = clSetKernelArg(mpKernel, 0, sizeof(cl_mem), (void*)&mpResClmem);
-        assert(CL_SUCCESS == err);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
         // The rest of buffers
         mSyms.Marshal(mpKernel, nr);
         size_t global_work_size[] = {nr};
         err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, mpKernel, 1, NULL,
             global_work_size, NULL, 0, NULL, NULL);
-        assert(CL_SUCCESS == err);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err);
     }
     ~DynamicKernel();
     cl_mem GetResultBuffer(void) const { return mpResClmem; }
@@ -1349,35 +1370,60 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     // Code generation
     mpKernel = new DynamicKernel(Root);
 
-    std::string kSrc = mpKernel->CodeGen();
-    // Obtain cl context
-    KernelEnv kEnv;
-    OclCalc::setKernelEnv(&kEnv);
-    // Compile kernel here!!!
-    if (mpKernel->CreateKernel()) {
-        std::cerr << "Cannot create kernel\n";
-#define NO_FALLBACK_TO_SWINTERP 1 /* undef this for non-TDD runs */
+    try {
+        std::string kSrc = mpKernel->CodeGen();
+        // Obtain cl context
+        KernelEnv kEnv;
+        OclCalc::setKernelEnv(&kEnv);
+        // Compile kernel here!!!
+        if (mpKernel->CreateKernel()) {
+            std::cerr << "Cannot create kernel\n";
+        }
+        // Run the kernel.
+        mpKernel->Launch(xGroup->mnLength);
+        // Map results back
+        cl_mem res = mpKernel->GetResultBuffer();
+        cl_int err;
+        double *resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
+                res,
+                CL_TRUE, CL_MAP_READ, 0,
+                xGroup->mnLength*sizeof(double), 0, NULL, NULL,
+                &err);
+        if (err != CL_SUCCESS)
+            throw OpenCLError(err);
+        rDoc.SetFormulaResults(rTopPos, resbuf, xGroup->mnLength);
+        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
+        if (err != CL_SUCCESS)
+            throw OpenCLError(err);
+        delete mpKernel;
+        return true;
+    }
+#undef NO_FALLBACK_TO_SWINTERP /* undef this for non-TDD runs */
+    catch (UnhandledToken &ut) {
+        std::cerr << "Dynamic formual compiler: unhandled token\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
 #else
         return false;
 #endif
     }
-    // Run the kernel.
-    mpKernel->Launch(xGroup->mnLength);
-    // Map results back
-    cl_mem res = mpKernel->GetResultBuffer();
-    cl_int err;
-    double *resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
-        res,
-        CL_TRUE, CL_MAP_READ, 0,
-        xGroup->mnLength*sizeof(double), 0, NULL, NULL,
-        &err);
-    assert(err == CL_SUCCESS);
-    rDoc.SetFormulaResults(rTopPos, resbuf, xGroup->mnLength);
-    err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
-    assert(CL_SUCCESS == err);
-    delete mpKernel;
+    catch (OpenCLError &oce) {
+        std::cerr << "Dynamic formula compiler: OpenCL error: ";
+        std::cerr << oce.mError << "\n";
+#ifdef NO_FALLBACK_TO_SWINTERP
+        assert(false);
+#else
+        return false;
+#endif
+    }
+    catch (...) {
+        std::cerr << "Dynamic formula compiler: unhandled compiler error\n";
+#ifdef NO_FALLBACK_TO_SWINTERP
+        assert(false);
+#else
+        return false;
+#endif
+    }
     return true;
 } // namespace opencl
 
