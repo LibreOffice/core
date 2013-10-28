@@ -119,7 +119,8 @@ void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 nStart
         // reset nextCell for new Text
         memset(nextCellIndex, 0, cellIndexSize * sizeof(sal_Int32));
     }
-    else if (nextCellIndex[nStartPos] > 0 || ! is_Thai(Text[nStartPos]))
+    else if (nStartPos >= Text.getLength() || nextCellIndex[nStartPos] > 0
+             || !is_Thai(Text[nStartPos]))
         return;
 
     const sal_Unicode* str = cachedText.getStr();
