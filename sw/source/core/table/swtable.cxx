@@ -1349,7 +1349,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
 static bool lcl_IsValidRowName( const OUString& rStr )
 {
     bool bIsValid = true;
-    xub_StrLen nLen = rStr.getLength();
+    sal_Int32 nLen = rStr.getLength();
     for (xub_StrLen i = 0;  i < nLen && bIsValid;  ++i)
     {
         const sal_Unicode cChar = rStr[i];

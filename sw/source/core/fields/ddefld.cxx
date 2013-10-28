@@ -67,7 +67,7 @@ public:
                                DDE_TXT_ENCODING  );
 
             // remove not needed CR-LF at the end
-            xub_StrLen n = sStr.getLength();
+            sal_Int32 n = sStr.getLength();
             while( n && 0 == sStr[ n-1 ] )
                 --n;
             if( n && 0x0a == sStr[ n-1 ] )

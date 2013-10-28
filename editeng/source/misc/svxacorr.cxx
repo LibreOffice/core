@@ -1048,7 +1048,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
 
         // Remove all non alphanumeric characters towards the end up until
         // the last one.
-        xub_StrLen nLen = sTmp.getLength();
+        sal_Int32 nLen = sTmp.getLength();
         while( nLen && !rCC.isLetterNumeric( sTmp, nLen-1 ) )
             --nLen;
         if( nLen + 1 < sTmp.getLength() )

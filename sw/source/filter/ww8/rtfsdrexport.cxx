@@ -541,7 +541,7 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
 
         OUString aStr( rEditObj.GetText( n ));
         xub_StrLen nAktPos = 0;
-        xub_StrLen nEnd = aStr.getLength();
+        sal_Int32  nEnd = aStr.getLength();
 
         aAttrIter.OutParaAttr(false);
         m_rAttrOutput.RunText().append(m_rAttrOutput.Styles().makeStringAndClear());

@@ -525,10 +525,10 @@ static void ExcelQueryToOooQuery( OUString& aStr, ScQueryEntry& rEntry )
     if (rEntry.eOp != SC_EQUAL && rEntry.eOp != SC_NOT_EQUAL)
         return;
 
-    xub_StrLen nLen = aStr.getLength();
+    sal_Int32   nLen = aStr.getLength();
     sal_Unicode nStart = aStr[0];
     sal_Unicode nEnd   = aStr[ nLen-1 ];
-    if( nLen >2 && nStart == '*' && nEnd == '*' )
+    if( nLen > 2 && nStart == '*' && nEnd == '*' )
     {
         aStr = aStr.copy( 1, nLen-2 );
         rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_CONTAINS : SC_DOES_NOT_CONTAIN;

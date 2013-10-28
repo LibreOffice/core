@@ -155,7 +155,7 @@ OUString ScfTools::ConvertToScDefinedName(const OUString& rName )
     //fdo#37872: we don't allow points in range names any more
     OUString sName = rName.replace(static_cast<sal_Unicode>('.'),
         static_cast<sal_Unicode>('_'));
-    xub_StrLen nLen = sName.getLength();
+    sal_Int32 nLen = sName.getLength();
     if( nLen && !ScCompiler::IsCharFlagAllConventions( sName, 0, SC_COMPILER_C_CHAR_NAME ) )
         sName = sName.replaceAt( 0, 1, "_" );
     for( xub_StrLen nPos = 1; nPos < nLen; ++nPos )

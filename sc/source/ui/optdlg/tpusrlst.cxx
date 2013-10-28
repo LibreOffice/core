@@ -324,12 +324,12 @@ void ScTpUserLists::MakeListStr( OUString& rListStr )
     }
 
     aStr = comphelper::string::strip(aStr, cDelimiter);
-    xub_StrLen nLen = aStr.getLength();
+    sal_Int32 nLen = aStr.getLength();
 
     rListStr = "";
 
     // Alle Doppelten cDelimiter entfernen:
-    xub_StrLen c = 0;
+    sal_Int32 c = 0;
     while ( c < nLen )
     {
         rListStr += OUString(aStr[c]);

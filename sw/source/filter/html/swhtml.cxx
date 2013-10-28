@@ -689,7 +689,7 @@ void SwHTMLParser::Continue( int nToken )
             SwNodeIndex aNxtIdx( *pSttNdIdx );
             if( pTxtNode && pTxtNode->CanJoinNext( &aNxtIdx ))
             {
-                xub_StrLen nStt = pTxtNode->GetTxt().getLength();
+                sal_Int32 nStt = pTxtNode->GetTxt().getLength();
                 // wenn der Cursor noch in dem Node steht, dann setze in an das Ende
                 if( pPam->GetPoint()->nNode == aNxtIdx )
                 {

@@ -385,7 +385,7 @@ void SwTxtNode::RstAttr(
     bool bChanged = false;
 
     // nMin and nMax initialized to maximum / minimum (inverse)
-    xub_StrLen nMin = m_Text.getLength();
+    sal_Int32 nMin = m_Text.getLength();
     xub_StrLen nMax = nStt;
     const bool bNoLen = nMin == 0;
 
@@ -1062,7 +1062,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
     // get range of text within node to be converted
     // (either all the text or the text within the selection
     // when the conversion was started)
-    xub_StrLen nTextBegin, nTextEnd;
+    sal_Int32 nTextBegin, nTextEnd;
     //
     if ( rArgs.pStartNode != this )
     {
@@ -1233,7 +1233,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
     const bool bRedlineChg = (pNode->GetTxt().getStr() != aOldTxt.getStr());
 
     xub_StrLen nBegin = 0;
-    xub_StrLen nEnd = pNode->GetTxt().getLength();
+    sal_Int32  nEnd = pNode->GetTxt().getLength();
     xub_StrLen nInsertPos = 0;
     xub_StrLen nChgStart = STRING_LEN;
     xub_StrLen nChgEnd = 0;
@@ -1518,9 +1518,9 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
     SwDoc* pDoc = pNode->GetDoc();
     SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
-    xub_StrLen nBegin = 0;
-    xub_StrLen nEnd = pNode->GetTxt().getLength();
-    xub_StrLen nLen;
+    sal_Int32  nBegin = 0;
+    sal_Int32  nEnd = pNode->GetTxt().getLength();
+    sal_Int32  nLen;
     bool bACWDirty = false, bAnyWrd = false;
 
     if( nBegin < nEnd )
@@ -1876,7 +1876,7 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
 
     m_Text = m_Text.replaceAt(nPos, nLen, rText);
 
-    xub_StrLen nTLen = rText.getLength();
+    sal_Int32 nTLen = rText.getLength();
     const sal_Int32* pOffsets = rOffsets.getConstArray();
     // now look for no 1-1 mapping -> move the indizies!
     xub_StrLen nI, nMyOff;

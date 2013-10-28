@@ -244,7 +244,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
 
         const sal_Int32  nIndices = pOffsets->getLength();
         const sal_Int32 *pIndices = pOffsets->getConstArray();
-        xub_StrLen nConvTextLen = rNewText.getLength();
+        sal_Int32 nConvTextLen = rNewText.getLength();
         xub_StrLen nPos = 0;
         xub_StrLen nChgPos = STRING_NOTFOUND;
         xub_StrLen nChgLen = 0;

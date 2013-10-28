@@ -146,7 +146,7 @@ sal_Bool SwTxtSizeInfo::_HasHint( const SwTxtNode* pTxtNode, xub_StrLen nPos )
 
 MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
 {
-    xub_StrLen nEnd = GetTxt().getLength();
+    sal_Int32 nEnd = GetTxt().getLength();
     if( nWishLen && nWishLen < nEnd )
         nEnd = nWishLen;
 

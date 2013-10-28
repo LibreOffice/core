@@ -1653,7 +1653,7 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
     // There might be a '|' as delimiter (if the link has been inserted
     // freshly) or a '%7c' or a '%7C' if the document has been saved and
     // loaded already.
-    xub_StrLen nPos = rURL.getLength();
+    sal_Int32 nPos = rURL.getLength();
     sal_Bool bFound = sal_False, bEncoded = sal_False;
     while( !bFound && nPos > 0 )
     {

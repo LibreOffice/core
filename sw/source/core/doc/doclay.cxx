@@ -1380,12 +1380,12 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
             if( !bOrderNumberingFirst )
                 aTxt += " ";
         }
-        xub_StrLen nIdx = aTxt.getLength();
+        sal_Int32 nIdx = aTxt.getLength();
         if( !rTxt.isEmpty() )
         {
             aTxt += rSeparator;
         }
-        xub_StrLen nSepIdx = aTxt.getLength();
+        sal_Int32 nSepIdx = aTxt.getLength();
         aTxt += rTxt;
 
         // Insert string
@@ -1675,9 +1675,9 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
             if( !bOrderNumberingFirst )
                 aTxt += " ";
         }
-        xub_StrLen nIdx = aTxt.getLength();
+        sal_Int32 nIdx = aTxt.getLength();
         aTxt += rSeparator;
-        xub_StrLen nSepIdx = aTxt.getLength();
+        sal_Int32 nSepIdx = aTxt.getLength();
         aTxt += rTxt;
 
         // insert text
@@ -1902,7 +1902,7 @@ static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 {
     ResId aId( nDefStrId, *pSwResMgr );
     OUString aName( aId );
-    xub_StrLen nNmLen = aName.getLength();
+    sal_Int32 nNmLen = aName.getLength();
 
     const SwFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
 
@@ -2004,7 +2004,7 @@ void SwDoc::SetFlyName( SwFlyFrmFmt& rFmt, const OUString& rName )
 
 void SwDoc::SetAllUniqueFlyNames()
 {
-    sal_uInt16 n, nFlyNum = 0, nGrfNum = 0, nOLENum = 0;
+    sal_Int32 n, nFlyNum = 0, nGrfNum = 0, nOLENum = 0;
 
     ResId nFrmId( STR_FRAME_DEFNAME, *pSwResMgr ),
           nGrfId( STR_GRAPHIC_DEFNAME, *pSwResMgr ),
@@ -2024,11 +2024,11 @@ void SwDoc::SetAllUniqueFlyNames()
     {
         if( RES_FLYFRMFMT == (pFlyFmt = (*GetSpzFrmFmts())[ --n ])->Which() )
         {
-            sal_uInt16 *pNum = 0;
+            sal_Int32 *pNum = 0;
             const OUString aNm = pFlyFmt->GetName();
             if ( !aNm.isEmpty() )
             {
-                xub_StrLen nLen = 0;
+                sal_Int32 nLen = 0;
                 if ( aNm.startsWith(sGrfNm) )
                 {
                     nLen = sGrfNm.getLength();
@@ -2047,7 +2047,7 @@ void SwDoc::SetAllUniqueFlyNames()
 
                 if ( pNum )
                 {
-                    const xub_StrLen nNewLen = static_cast< xub_StrLen >( aNm.copy( nLen ).toInt32() );
+                    const sal_Int32 nNewLen = aNm.copy( nLen ).toInt32();
                     if (*pNum < nNewLen)
                         *pNum = nNewLen;
                 }

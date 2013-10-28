@@ -6178,7 +6178,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                     aLastLine = convertLineEnd(aStr.copy(pLineInfo->GetIndex()), LINEEND_LF);
                     // Replace all LineFeeds with Spaces
                     OUStringBuffer aLastLineBuffer(aLastLine);
-                    xub_StrLen nLastLineLen = aLastLineBuffer.getLength();
+                    sal_Int32 nLastLineLen = aLastLineBuffer.getLength();
                     for ( i = 0; i < nLastLineLen; i++ )
                     {
                         if ( aLastLineBuffer[ i ] == '\n' )
@@ -7717,8 +7717,8 @@ xub_StrLen OutputDevice::HasGlyphs( const Font& rTempFont, const OUString& rStr,
 {
     if( nIndex >= rStr.getLength() )
         return nIndex;
-    xub_StrLen nEnd = nIndex + nLen;
-    if( (sal_Int32)nIndex+nLen > rStr.getLength() )
+    sal_Int32 nEnd = nIndex + nLen;
+    if( nIndex+nLen > rStr.getLength() )
         nEnd = rStr.getLength();
 
     DBG_ASSERT( nIndex < nEnd, "StartPos >= EndPos?" );

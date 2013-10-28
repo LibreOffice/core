@@ -706,12 +706,11 @@ sal_Bool IsNumeric( const OUString &rText )
     sal_Bool bRes = sal_False;
     if (!rText.isEmpty())
     {
-        xub_StrLen nLen = rText.getLength();
+        sal_Int32 nLen = rText.getLength();
         bRes = sal_True;
-        xub_StrLen i = 0;
-        while (i < nLen)
+        for(sal_Int32 i = 0; i < nLen; ++i)
         {
-            sal_Unicode cChar = rText[ i++ ];
+            sal_Unicode cChar = rText[ i ];
             if ( !((sal_Unicode)'0' <= cChar  &&  cChar <= (sal_Unicode)'9') )
             {
                 bRes = sal_False;

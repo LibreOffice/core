@@ -1053,7 +1053,7 @@ bool SwAutoFormat::HasBreakAttr( const SwTxtNode& rTxtNd ) const
 bool SwAutoFormat::IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const
 {
     const OUString& rStr = rTxtNd.GetTxt();
-    xub_StrLen n = rStr.getLength();
+    sal_Int32 n = rStr.getLength();
     if( !n )
         return true;
 
@@ -2337,7 +2337,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
 
                 bEmptyLine = false;
                 OUString sEndClrStr( sClrStr );
-                xub_StrLen nLen = DelTrailingBlanks( sEndClrStr ).getLength();
+                sal_Int32 nLen = DelTrailingBlanks( sEndClrStr ).getLength();
 
                 // not, then check if headline
                 if( ':' == sEndClrStr[ nLen - 1 ] )

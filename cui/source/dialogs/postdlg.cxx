@@ -201,7 +201,7 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
     aStr = convertLineEnd(aStr, GetSystemLineEnd());
 
     m_pEditED->SetText(aStr);
-    xub_StrLen nLen = aStr.getLength();
+    sal_Int32 nLen = aStr.getLength();
     m_pEditED->GrabFocus();
     m_pEditED->SetSelection( Selection( nLen, nLen ) );
     return 0;

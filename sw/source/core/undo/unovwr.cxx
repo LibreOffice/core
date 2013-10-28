@@ -60,7 +60,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     OSL_ENSURE( pTxtNd, "Overwrite not in a TextNode?" );
 
     bInsChar = sal_True;
-    xub_StrLen nTxtNdLen = pTxtNd->GetTxt().getLength();
+    sal_Int32 nTxtNdLen = pTxtNd->GetTxt().getLength();
     if( nSttCntnt < nTxtNdLen )     // no pure insert?
     {
         aDelStr += OUString( pTxtNd->GetTxt()[nSttCntnt] );

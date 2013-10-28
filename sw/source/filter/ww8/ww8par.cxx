@@ -3928,7 +3928,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
         if (pPreviousNode && bStartLine)
         {
             SwTxtNode* pEndNd = pPaM->GetNode()->GetTxtNode();
-            const xub_StrLen nDropCapLen = pPreviousNode->GetTxt().getLength();
+            const sal_Int32 nDropCapLen = pPreviousNode->GetTxt().getLength();
 
             // Need to reset the font size and text position for the dropcap
             {
@@ -5454,7 +5454,7 @@ namespace
         {
             OUString sUniPassword = QueryPasswordForMedium( rMedium );
 
-            xub_StrLen nLen = sUniPassword.getLength();
+            sal_Int32 nLen = sUniPassword.getLength();
             if ( nLen <= 15 )
             {
                 sal_Unicode pPassword[16];

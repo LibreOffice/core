@@ -251,7 +251,7 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
 
     pImpl->AddDocument(rDoc);
     bool bRet = false;
-    xub_StrLen nWrdLen = aNewWord.getLength();
+    sal_Int32 nWrdLen = aNewWord.getLength();
     while( nWrdLen && '.' == aNewWord[ nWrdLen-1 ])
         --nWrdLen;
 

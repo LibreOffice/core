@@ -225,7 +225,7 @@ void ScPrintAreasDlg::AddRefEntry()
         aVal += OUString(sep);
         pEdPrintArea->SetText(aVal);
 
-        xub_StrLen nLen = aVal.getLength();
+        sal_Int32 nLen = aVal.getLength();
         pEdPrintArea->SetSelection( Selection( nLen, nLen ) );
 
         Impl_ModifyHdl( pEdPrintArea );
@@ -681,8 +681,8 @@ static bool lcl_CheckOne_OOO( const OUString& rStr, bool bIsRow, SCCOLROW& rVal 
     // Row: [$]1-MAXTAB
     // Col: [$]A-IV
 
-    OUString  aStr    = rStr;
-    xub_StrLen nLen = aStr.getLength();
+    OUString    aStr    = rStr;
+    sal_Int32   nLen    = aStr.getLength();
     SCCOLROW    nNum    = 0;
     sal_Bool    bStrOk  = ( nLen > 0 ) && ( bIsRow ? ( nLen < 6 ) : ( nLen < 4 ) );
 
@@ -725,7 +725,7 @@ static bool lcl_CheckOne_XL_A1( const OUString& rStr, bool bIsRow, SCCOLROW& rVa
 
 static bool lcl_CheckOne_XL_R1C1( const OUString& rStr, bool bIsRow, SCCOLROW& rVal )
 {
-    xub_StrLen nLen = rStr.getLength();
+    sal_Int32 nLen = rStr.getLength();
     if (nLen <= 1)
         // There must be at least two characters.
         return false;
@@ -788,7 +788,7 @@ static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool 
 
     OUString aBuf;
     SCCOLROW nVal = 0;
-    xub_StrLen nLen = rStr.getLength();
+    sal_Int32 nLen = rStr.getLength();
     bool bEndPos = false;
     for (xub_StrLen i = 0; i < nLen; ++i)
     {

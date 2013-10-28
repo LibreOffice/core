@@ -597,7 +597,7 @@ static bool lcl_parseExternalName(
         return false;
     }
 
-    xub_StrLen nNameLen = aTmpName.getLength();
+    sal_Int32 nNameLen = aTmpName.getLength();
     if (nNameLen < 2)
     {
         // Name must be at least 2-char long (separator plus name).
@@ -3303,7 +3303,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 bColons = true;
                 sal_Int32 nIndex = 0;
                 OUString aTmp1( aSymbol.getToken( 0, ':', nIndex ) );
-                xub_StrLen nLen1 = aTmp1.getLength();
+                sal_Int32 nLen1 = aTmp1.getLength();
                 OUString aSym, aTmp2;
                 bool bLastAlp, bNextNum;
                 bLastAlp = bNextNum = true;
@@ -3312,7 +3312,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 for ( xub_StrLen j=1; j<nCount; j++ )
                 {
                     aTmp2 = aSymbol.getToken( 0, ':', nIndex );
-                    xub_StrLen nLen2 = aTmp2.getLength();
+                    sal_Int32 nLen2 = aTmp2.getLength();
                     if ( nLen1 || nLen2 )
                     {
                         if ( nLen1 )
@@ -3332,9 +3332,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                             }
                             else
                             {
-                                xub_StrLen nSymLen = aSym.getLength();
-                                if ( nSymLen
-                                  && (aSym[ nSymLen - 1 ] != ':') )
+                                if ( !aSym.isEmpty() && !aSym.endsWith(":"))
                                     aSym += ":";
                                 nStrip = 0;
                             }

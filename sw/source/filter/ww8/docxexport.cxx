@@ -870,7 +870,7 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
         rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
         OUString aStr( rEditObj.GetText( n ));
         xub_StrLen nAktPos = 0;
-        xub_StrLen nEnd = aStr.getLength();
+        sal_Int32  nEnd = aStr.getLength();
         do {
             AttrOutput().StartRun( NULL );
             xub_StrLen nNextAttr = aAttrIter.WhereNext();

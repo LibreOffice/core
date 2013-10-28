@@ -3545,7 +3545,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
 
         OUString aStr( rEditObj.GetText( n ));
         xub_StrLen nAktPos = 0;
-        xub_StrLen nEnd = aStr.getLength();
+        sal_Int32 nEnd = aStr.getLength();
 
         m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
 

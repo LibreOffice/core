@@ -193,7 +193,7 @@ xub_StrLen FormulaHelper::GetFunctionStart( const OUString&   rFormula,
                                             sal_Bool          bBack,
                                             OUString*         pFuncName ) const
 {
-    xub_StrLen nStrLen = rFormula.getLength();
+    sal_Int32 nStrLen = rFormula.getLength();
 
     if ( nStrLen < nStart )
         return nStart;
@@ -284,7 +284,7 @@ xub_StrLen FormulaHelper::GetFunctionStart( const OUString&   rFormula,
 
 xub_StrLen  FormulaHelper::GetFunctionEnd( const OUString& rStr, xub_StrLen nStart ) const
 {
-    xub_StrLen nStrLen = rStr.getLength();
+    sal_Int32 nStrLen = rStr.getLength();
 
     if ( nStrLen < nStart )
         return nStart;
@@ -342,7 +342,7 @@ xub_StrLen  FormulaHelper::GetFunctionEnd( const OUString& rStr, xub_StrLen nSta
 
 xub_StrLen FormulaHelper::GetArgStart( const OUString& rStr, xub_StrLen nStart, sal_uInt16 nArg ) const
 {
-    xub_StrLen nStrLen = rStr.getLength();
+    sal_Int32 nStrLen = rStr.getLength();
 
     if ( nStrLen < nStart )
         return nStart;

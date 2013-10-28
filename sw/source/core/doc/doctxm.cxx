@@ -1606,7 +1606,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
         while(aIt != aPattern.end()) // #i21237#
         {
             SwFormToken aToken = *aIt; // #i21237#
-            xub_StrLen nStartCharStyle = rTxt.getLength();
+            sal_Int32 nStartCharStyle = rTxt.getLength();
             switch( aToken.eTokenType )
             {
             case TOKEN_ENTRY_NO:
@@ -1785,7 +1785,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                 {
                     SwIndex aIdx( pTOXNd, nLinkStartPosition );
                     // pTOXNd->Erase( aIdx, SwForm::nFormLinkSttLen );
-                    xub_StrLen nEnd = rTxt.getLength();
+                    sal_Int32 nEnd = rTxt.getLength();
 
                     if( sURL.isEmpty() )
                     {
@@ -2132,7 +2132,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
             pCharFmt = pDoc->MakeCharFmt(GetMainEntryCharStyle(), 0);
 
         // find the page numbers in aNumStr and set the character style
-        xub_StrLen nOffset = pNd->GetTxt().getLength() - aNumStr.getLength();
+        sal_Int32 nOffset = pNd->GetTxt().getLength() - aNumStr.getLength();
         SwFmtCharFmt aCharFmt(pCharFmt);
         for (sal_uInt16 j = 0; j < xCharStyleIdx->size(); j += 2)
         {

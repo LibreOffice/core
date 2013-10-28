@@ -1171,7 +1171,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
 void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
 {
     rInf.SetGreyWave( bGrey );
-    xub_StrLen nLn = rInf.GetText().getLength();
+    sal_Int32 nLn = rInf.GetText().getLength();
     if( !rInf.GetLen() || !nLn )
         return;
     if( STRING_LEN == rInf.GetLen() )

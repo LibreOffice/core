@@ -2020,7 +2020,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                                     mpRefDevice->GetOutDevType() == OUTDEV_PRINTER )
                             {
                                 double fMul = GetStretch();
-                                xub_StrLen nLen = aString.getLength();
+                                sal_Int32 nLen = aString.getLength();
                                 for (xub_StrLen i=0; i<nLen; i++)
                                     pDX[i] = (long)(pDX[i] / fMul + 0.5);
                             }

@@ -62,7 +62,7 @@ SW_DLLPUBLIC OUString MakeSender()
         OUString sToken = sSenderToken.getToken( 0, ';', nSttPos );
         if (sToken == "COMPANY")
         {
-            xub_StrLen nOldLen = sRet.getLength();
+            sal_Int32 nOldLen = sRet.getLength();
             sRet += rUserOpt.GetCompany();
             bLastLength = sRet.getLength() != nOldLen;
         }

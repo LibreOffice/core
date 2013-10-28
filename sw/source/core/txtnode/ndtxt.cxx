@@ -358,7 +358,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
     // create a node "in front" of me
     const xub_StrLen nSplitPos = rPos.nContent.GetIndex();
-    const xub_StrLen nTxtLen = m_Text.getLength();
+    const sal_Int32 nTxtLen = m_Text.getLength();
     SwTxtNode* const pNode =
         _MakeNewTxtNode( rPos.nNode, sal_False, nSplitPos==nTxtLen );
 
@@ -625,7 +625,7 @@ SwCntntNode *SwTxtNode::JoinNext()
         std::vector<sal_uLong> aBkmkArr;
         _SaveCntntIdx( pDoc, aIdx.GetIndex(), USHRT_MAX, aBkmkArr, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
-        xub_StrLen nOldLen = m_Text.getLength();
+        sal_Int32 nOldLen = m_Text.getLength();
 
         // METADATA: merge
         this->JoinMetadatable(*pTxtNode, !this->Len(), !pTxtNode->Len());
@@ -1517,7 +1517,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     }
 
     // 1. Text kopieren
-    const xub_StrLen oldLen = pDest->m_Text.getLength();
+    const sal_Int32 oldLen = pDest->m_Text.getLength();
     //JP 15.02.96: Bug 25537 - Attributbehandlung am Ende fehlt! Darum
     //              ueber die InsertMethode den Text einfuegen und nicht
     //              selbst direkt
@@ -1888,7 +1888,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 
     xub_StrLen nTxtStartIdx = rStart.GetIndex();
     xub_StrLen nDestStart = rDestStart.GetIndex();      // alte Pos merken
-    const xub_StrLen nInitSize = pDest->m_Text.getLength();
+    const sal_Int32 nInitSize = pDest->m_Text.getLength();
 
     // wird in sich selbst verschoben, muss es gesondert behandelt werden !!
     if( pDest == this )

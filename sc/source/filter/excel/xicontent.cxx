@@ -342,7 +342,7 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
 void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
 {
-    xub_StrLen n = rUrl.getLength();
+    sal_Int32 n = rUrl.getLength();
     if (n < 4)
         // Needs at least 4 characters.
         return;

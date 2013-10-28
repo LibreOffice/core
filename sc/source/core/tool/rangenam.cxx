@@ -433,7 +433,7 @@ void ScRangeData::MakeValidName( OUString& rName )
 
     // strip leading invalid characters
     xub_StrLen nPos = 0;
-    xub_StrLen nLen = rName.getLength();
+    sal_Int32 nLen = rName.getLength();
     while ( nPos < nLen && !ScCompiler::IsCharFlagAllConventions( rName, nPos, SC_COMPILER_C_NAME) )
         ++nPos;
     if ( nPos>0 )
@@ -480,7 +480,7 @@ bool ScRangeData::IsNameValid( const OUString& rName, ScDocument* pDoc )
     if (rName.indexOf(a) != -1)
         return false;
     xub_StrLen nPos = 0;
-    xub_StrLen nLen = rName.getLength();
+    sal_Int32 nLen = rName.getLength();
     if ( !nLen || !ScCompiler::IsCharFlagAllConventions( rName, nPos++, SC_COMPILER_C_CHAR_NAME ) )
         return false;
     while ( nPos < nLen )

@@ -375,14 +375,13 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             else if ( rString[0] == '+' || rString[0] == '-' )
             {
                 // if there is more than one leading '+' or '-' character, remove the additional ones
-                OUString aString( rString );
-                xub_StrLen nIndex = 1;
-                xub_StrLen nLen = aString.getLength();
-                while ( nIndex < nLen && ( aString[ nIndex ] == '+' || aString[ nIndex ] == '-' ) )
+                sal_Int32 nIndex = 1;
+                sal_Int32 nLen = rString.getLength();
+                while ( nIndex < nLen && ( rString[ nIndex ] == '+' || rString[ nIndex ] == '-' ) )
                 {
                     ++nIndex;
                 }
-                aString = aString.replaceAt( 1, nIndex - 1, "" );
+                OUString aString = rString.replaceAt( 1, nIndex - 1, "" );
 
                 // if the remaining part without the leading '+' or '-' character
                 // is non-empty and not a number, handle as formula

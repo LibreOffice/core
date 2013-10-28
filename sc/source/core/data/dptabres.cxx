@@ -1323,9 +1323,9 @@ void ScDPResultMember::ProcessData( const vector< SCROW >& aChildMembers, const 
 static OUString lcl_parseSubtotalName(const OUString& rSubStr, const OUString& rCaption)
 {
     OUStringBuffer aNewStr;
-    xub_StrLen n = rSubStr.getLength();
+    sal_Int32 n = rSubStr.getLength();
     bool bEscaped = false;
-    for (xub_StrLen i = 0; i < n; ++i)
+    for (sal_Int32 i = 0; i < n; ++i)
     {
         sal_Unicode c = rSubStr[i];
         if (!bEscaped && c == sal_Unicode('\\'))

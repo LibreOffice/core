@@ -2043,8 +2043,8 @@ void ScColToAlpha( OUStringBuffer& rBuf, SCCOL nCol )
 bool AlphaToCol( SCCOL& rCol, const OUString& rStr)
 {
     SCCOL nResult = 0;
-    xub_StrLen nStop = rStr.getLength();
-    xub_StrLen nPos = 0;
+    sal_Int32 nStop = rStr.getLength();
+    sal_Int32 nPos = 0;
     sal_Unicode c;
     while (nResult <= MAXCOL && nPos < nStop && (c = rStr[nPos]) != 0 &&
             rtl::isAsciiAlpha(c))

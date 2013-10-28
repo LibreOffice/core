@@ -76,11 +76,10 @@ void HyphenEdit::KeyInput( const KeyEvent& rKEvt )
 void SvxHyphenWordDialog::EnableLRBtn_Impl()
 {
     OUString  aTxt( aEditWord );
-    xub_StrLen nLen = aTxt.getLength();
-    xub_StrLen i;
+    sal_Int32 nLen = aTxt.getLength();
 
     m_pRightBtn->Disable();
-    for ( i = nOldPos + 2; i < nLen; ++i )
+    for ( sal_Int32 i = nOldPos + 2; i < nLen; ++i )
     {
         if ( aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ) )
         {
@@ -93,7 +92,7 @@ void SvxHyphenWordDialog::EnableLRBtn_Impl()
     if (nOldPos >= aTxt.getLength())
         nOldPos = aTxt.getLength() - 1;
     m_pLeftBtn->Disable();
-    for ( i = nOldPos;  i-- > 0; )
+    for ( sal_Int32 i = nOldPos;  i-- > 0; )
     {
         if ( aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ) )
         {
@@ -328,7 +327,7 @@ void SvxHyphenWordDialog::SelLeft()
 void SvxHyphenWordDialog::SelRight()
 {
     OUString aTxt( aEditWord );
-    for ( xub_StrLen i = nOldPos + 1;  i < aTxt.getLength();  ++i )
+    for ( sal_Int32 i = nOldPos + 1;  i < aTxt.getLength();  ++i )
     {
         if (aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ))
         {

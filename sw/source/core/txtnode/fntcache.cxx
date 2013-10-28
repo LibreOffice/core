@@ -1572,12 +1572,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     aStr = aStr.replaceAt(i, 1, OUString(CH_BULLET));
         }
 
-        xub_StrLen nCnt = rInf.GetText().getLength();
+        sal_Int32 nCnt = rInf.GetText().getLength();
         if ( nCnt < rInf.GetIdx() )
             nCnt = 0;
         else
             nCnt = nCnt - rInf.GetIdx();
-        nCnt = std::min( nCnt, rInf.GetLen() );
+        nCnt = std::min<sal_Int32>( nCnt, rInf.GetLen() );
         long nKernSum = rInf.GetKern();
         sal_Unicode cChPrev = rInf.GetText()[ rInf.GetIdx() ];
 
@@ -1935,12 +1935,12 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
                                         rInf.GetIdx(), rInf.GetLen() );
             nScrPos = pScrArray[ 0 ];
-            xub_StrLen nCnt = rInf.GetText().getLength();
+            sal_Int32 nCnt = rInf.GetText().getLength();
             if ( nCnt < rInf.GetIdx() )
                 nCnt=0;
             else
                 nCnt = nCnt - rInf.GetIdx();
-            nCnt = std::min (nCnt, nLn);
+            nCnt = std::min<sal_Int32>(nCnt, nLn);
             sal_Unicode nChPrev = rInf.GetText()[ rInf.GetIdx() ];
 
             sal_Unicode nCh;

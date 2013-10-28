@@ -643,7 +643,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     xub_StrLen nIdx = 0;
     aIter.SeekAndChgAttrIter( nIdx, pOut );
-    xub_StrLen nLen = m_Text.getLength();
+    sal_Int32 nLen = m_Text.getLength();
     long nAktWidth = 0;
     MSHORT nAdd = 0;
     SwMinMaxArgs aArg( pOut, pSh, rMin, rMax, rAbsMin );

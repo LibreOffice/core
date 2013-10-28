@@ -511,7 +511,7 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         }
     }
 
-    xub_StrLen nEnd = sExp.getLength();
+    sal_Int32 nEnd = sExp.getLength();
     if ( nEnd )
     {
         xub_StrLen n;

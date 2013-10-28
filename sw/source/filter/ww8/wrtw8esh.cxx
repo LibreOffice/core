@@ -1366,7 +1366,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
 
         OUString aStr( rEditObj.GetText( n ));
         xub_StrLen nAktPos = 0;
-        xub_StrLen nEnd = aStr.getLength();
+        sal_Int32  nEnd = aStr.getLength();
         do {
             xub_StrLen nNextAttr = aAttrIter.WhereNext();
             rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();

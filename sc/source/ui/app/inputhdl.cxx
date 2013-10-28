@@ -439,7 +439,7 @@ xub_StrLen lcl_MatchParenthesis( const OUString& rStr, xub_StrLen nPos )
     }
     if ( !nDir )
         return STRING_NOTFOUND;
-    xub_StrLen nLen = rStr.getLength();
+    sal_Int32 nLen = rStr.getLength();
     const sal_Unicode* p0 = rStr.getStr();
     const sal_Unicode* p;
     const sal_Unicode* p1;

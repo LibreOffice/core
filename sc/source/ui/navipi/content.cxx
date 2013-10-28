@@ -1355,11 +1355,11 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName wie im Menue/
     //  "aktiv" oder "inaktiv" weglassen
 
     OUString aRealName = rName;
-    xub_StrLen nLen = rName.getLength();
-    xub_StrLen nActiveStart = nLen - pParentWindow->aStrActive.getLength();
+    sal_Int32 nLen = rName.getLength();
+    sal_Int32 nActiveStart = nLen - pParentWindow->aStrActive.getLength();
     if ( rName.copy( nActiveStart ) == pParentWindow->aStrActive )
         aRealName = rName.copy( 0, nActiveStart );
-    xub_StrLen nNotActiveStart = nLen - pParentWindow->aStrNotActive.getLength();
+    sal_Int32 nNotActiveStart = nLen - pParentWindow->aStrNotActive.getLength();
     if ( rName.copy( nNotActiveStart ) == pParentWindow->aStrNotActive )
         aRealName = rName.copy( 0, nNotActiveStart );
 
