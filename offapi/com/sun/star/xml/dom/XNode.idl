@@ -35,7 +35,7 @@ interface XDocument;
 <p>The Node interface is the primary datatype for the entire Document Object Model.
 It represents a single node in the document tree. While all objects implementing
 the Node interface expose methods for dealing with children, not all objects
-#implementing the Node interface may have children. For example, Text nodes may not
+implementing the Node interface may have children. For example, Text nodes may not
 have children, and adding children to such nodes results in a DOMException being raised.</p>
 
 <p>The attributes nodeName, nodeValue and attributes are included as a mechanism to get at
