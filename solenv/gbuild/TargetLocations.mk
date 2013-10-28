@@ -72,8 +72,6 @@ gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentTarget_get_target_for_build = $(WORKDIR_FOR_BUILD)/ComponentTarget/$(1).component
 gb_Configuration_get_preparation_target = $(WORKDIR)/Configuration/$(1).prepared
 gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
-gb_CppunitTestFakeExecutable_get_target = \
-    $(OUTDIR)/unittest/install/$(LIBO_BIN_FOLDER)/$(1)
 gb_CustomPackage_get_target = $(WORKDIR)/CustomPackage/$(1).filelist
 gb_CustomTarget_get_repo_target = $(WORKDIR)/CustomTarget/$(2)_$(1).done
 gb_CustomTarget_get_target = $(WORKDIR)/CustomTarget/$(1).done

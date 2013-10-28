@@ -301,20 +301,7 @@ $(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(OUTDIR)/unittest/registry
 endef
 
 define gb_CppunitTest_use_executable
-$(call gb_CppunitTest_get_target,$(1)) : \
-        $(call gb_CppunitTestFakeExecutable_get_target,$(2))
-
-$(call gb_CppunitTest_get_clean_target,$(1)) : \
-        $(call gb_CppunitTestFakeExecutable_get_clean_target,$(2))
-
-$(call gb_CppunitTestFakeExecutable_get_target,$(2)) : \
-        $(call gb_Executable_get_target,$(2))
-	$(call gb_Helper_abbreviate_dirs,mkdir -p $$(dir $$@) && cp $$< $$@)
-
-.PHONY : $(call gb_CppunitTestFakeExecutable_get_clean_target,$(2))
-$(call gb_CppunitTestFakeExecutable_get_clean_target,$(2)) :
-	$(call gb_Helper_abbreviate_dirs, \
-        rm -f $(call gb_CppunitTestFakeExecutable_get_target,$(2)))
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Executable_get_target,$(2))
 
 endef
 
