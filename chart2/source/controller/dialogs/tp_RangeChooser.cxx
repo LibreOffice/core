@@ -22,7 +22,6 @@
 #include "Strings.hrc"
 #include "ResId.hxx"
 #include "macros.hxx"
-#include "NoWarningThisInCTOR.hxx"
 #include "DataSourceHelper.hxx"
 #include "DiagramHelper.hxx"
 #include "ChartTypeTemplateProvider.hxx"

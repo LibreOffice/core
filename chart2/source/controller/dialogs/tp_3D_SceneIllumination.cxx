@@ -23,7 +23,6 @@
 #include "Strings.hrc"
 #include "Bitmaps.hrc"
 #include "CommonConverters.hxx"
-#include "NoWarningThisInCTOR.hxx"
 
 #include "svx/dialogs.hrc"
 // header for define SVX_RES

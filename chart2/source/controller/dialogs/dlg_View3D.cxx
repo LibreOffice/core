@@ -22,7 +22,6 @@
 #include "Strings.hrc"
 #include "TabPages.hrc"
 #include "ResId.hxx"
-#include "NoWarningThisInCTOR.hxx"
 #include "tp_3D_SceneGeometry.hxx"
 #include "tp_3D_SceneAppearance.hxx"
 #include "tp_3D_SceneIllumination.hxx"

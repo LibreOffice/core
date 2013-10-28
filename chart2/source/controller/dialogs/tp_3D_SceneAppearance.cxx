@@ -21,7 +21,6 @@
 #include "tp_3D_SceneAppearance.hrc"
 #include "ResId.hxx"
 #include "Strings.hrc"
-#include "NoWarningThisInCTOR.hxx"
 #include "ChartModelHelper.hxx"
 #include "ThreeDHelper.hxx"
 #include "macros.hxx"

@@ -116,10 +116,6 @@ static const char CUSTOM_MENU_STR[] = "vnd.openoffice.org:CustomMenu";
 static const char aSeparatorStr[] = "----------------------------------";
 static const char aMenuSeparatorStr[] = " | ";
 
-#ifdef _MSC_VER
-#pragma warning (disable:4355)
-#endif
-
 namespace uno = com::sun::star::uno;
 namespace frame = com::sun::star::frame;
 namespace lang = com::sun::star::lang;

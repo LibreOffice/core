@@ -21,7 +21,6 @@
 #include "tp_PolarOptions.hrc"
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
-#include "NoWarningThisInCTOR.hxx"
 
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

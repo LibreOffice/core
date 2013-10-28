@@ -205,9 +205,6 @@ public:
 
 SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUT_PAGE)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
     m_aHeaderFI(this,           SW_RES(  FI_HEADER           ) ),
     m_aOptionsFI(this,          SW_RES(  FI_OPTIONS          ) ),
     m_aSaveStartDocRB(this,     SW_RES(  RB_SAVESTARTDOC     ) ),
@@ -255,9 +252,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     m_sDefaultAttachmentST(SW_RES(   ST_DEFAULTATTACHMENT )),
     m_sNoSubjectST(SW_RES(           ST_NOSUBJECT )),
     m_sConfigureMail(SW_RES(         ST_CONFIGUREMAIL)),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
+
     m_bCancelSaving( false ),
     m_pWizard(_pParent),
     m_pTempPrinter( 0 )

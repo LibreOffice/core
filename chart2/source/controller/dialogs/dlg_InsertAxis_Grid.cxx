@@ -22,7 +22,6 @@
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "HelpIds.hrc"
-#include "NoWarningThisInCTOR.hxx"
 #include "ObjectNameProvider.hxx"
 
 // header for class SfxBoolItem

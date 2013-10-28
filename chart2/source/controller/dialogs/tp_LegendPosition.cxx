@@ -22,7 +22,6 @@
 #include "TabPages.hrc"
 #include "res_LegendPosition.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
-#include "NoWarningThisInCTOR.hxx"
 #include <svx/chrtitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>

@@ -22,7 +22,6 @@
 #include "res_LegendPosition.hxx"
 #include "ObjectNameProvider.hxx"
 #include "ResId.hxx"
-#include "NoWarningThisInCTOR.hxx"
 
 namespace chart
 {

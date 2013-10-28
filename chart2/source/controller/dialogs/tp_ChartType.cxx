@@ -23,7 +23,6 @@
 #include "ResId.hxx"
 #include "ChartModelHelper.hxx"
 #include "DiagramHelper.hxx"
-#include "NoWarningThisInCTOR.hxx"
 #include "res_BarGeometry.hxx"
 #include "ControllerLockGuard.hxx"
 #include "macros.hxx"

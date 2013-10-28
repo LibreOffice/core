@@ -23,7 +23,6 @@
 #include "Strings.hrc"
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
-#include "NoWarningThisInCTOR.hxx"
 #include "dlg_NumberFormat.hxx"
 
 // header for class SvxNumberInfoItem

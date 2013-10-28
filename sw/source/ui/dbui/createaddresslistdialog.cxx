@@ -84,14 +84,8 @@ public:
 
 SwAddressControl_Impl::SwAddressControl_Impl(Window* pParent, const ResId& rResId ) :
     Control(pParent, rResId),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
     m_aScrollBar(this, ResId(SCR_1,*rResId.GetResMgr())),
     m_aWindow(this, ResId(WIN_DATA,*rResId.GetResMgr())),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
     m_pData(0),
     m_aWinOutputSize( m_aWindow.GetOutputSizePixel() ),
     m_nLineHeight(0),
@@ -351,9 +345,6 @@ long SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
 SwCreateAddressListDialog::SwCreateAddressListDialog(
         Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CREATEADDRESSLIST)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
     m_aAddressInformation( this, SW_RES(  FI_ADDRESSINFORMATION)),
     m_pAddressControl(new SwAddressControl_Impl(this, SW_RES(CT_ADDRESS))),
     m_aNewPB( this, SW_RES(               PB_NEW)),
@@ -373,9 +364,6 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     m_aOK( this, SW_RES(                  PB_OK)),
     m_aCancel( this, SW_RES(              PB_CANCEL)),
     m_aHelp( this, SW_RES(                PB_HELP)),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
     m_sAddressListFilterName( SW_RES(    ST_FILTERNAME)),
     m_sURL(rURL),
     m_pCSVData( new SwCSVData ),

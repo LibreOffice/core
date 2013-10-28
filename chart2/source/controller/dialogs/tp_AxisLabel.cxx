@@ -22,7 +22,6 @@
 #include "ResId.hxx"
 #include "TabPages.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
-#include "NoWarningThisInCTOR.hxx"
 
 // header for SvxChartTextOrientItem / SvxChartTextOrderItem
 #include <svx/chrtitem.hxx>

@@ -28,7 +28,6 @@
 #include "ChartModelHelper.hxx"
 #include "AxisHelper.hxx"
 #include "LegendHelper.hxx"
-#include "NoWarningThisInCTOR.hxx"
 #include "ControllerLockGuard.hxx"
 
 namespace chart

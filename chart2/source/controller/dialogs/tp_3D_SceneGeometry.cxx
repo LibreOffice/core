@@ -20,7 +20,6 @@
 #include "tp_3D_SceneGeometry.hxx"
 #include "tp_3D_SceneGeometry.hrc"
 #include "ResId.hxx"
-#include "NoWarningThisInCTOR.hxx"
 #include "BaseGFXHelper.hxx"
 #include "macros.hxx"
 #include "DiagramHelper.hxx"

@@ -21,7 +21,6 @@
 #include "dlg_InsertTitle.hrc"
 #include "res_Titles.hxx"
 #include "ResId.hxx"
-#include "NoWarningThisInCTOR.hxx"
 #include "ObjectNameProvider.hxx"
 
 namespace chart

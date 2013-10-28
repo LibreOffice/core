@@ -108,11 +108,6 @@ static const SbiStatement StmntTable [] = {
 };
 
 
-#ifdef _MSC_VER
-// 'this' : used in base member initializer list
-#pragma warning( disable: 4355 )
-#endif
-
 SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
         : SbiTokenizer( pm->GetSource32(), pb ),
           aGblStrings( this ),

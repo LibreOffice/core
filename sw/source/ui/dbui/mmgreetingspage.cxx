@@ -230,9 +230,6 @@ void    SwGreetingsHandler::Contains(sal_Bool bContainsGreeting)
 
 SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_GREETINGS_PAGE)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
     m_aHeaderFI(this, SW_RES(          FI_HEADER     ) ),
     m_aGreetingLineCB(this, SW_RES(    CB_GREETINGLINE ) ),
     m_aPersonalizedCB(this, SW_RES(      CB_PERSONALIZED ) ),
@@ -256,9 +253,6 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent)
     m_aPrevSetIB(       this, SW_RES( IB_PREVSET     ) ),
     m_aNextSetIB(       this, SW_RES( IB_NEXTSET     ) ),
     m_sDocument(        SW_RES(       STR_DOCUMENT  ) )
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
 {
     m_pWizard = _pParent;
     m_pGreetingLineCB = &m_aGreetingLineCB;
@@ -432,9 +426,6 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
 
 SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_MAILBODY)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
     m_aGreetingLineCB(this, SW_RES(    CB_GREETINGLINE ) ),
     m_aPersonalizedCB(this, SW_RES(      CB_PERSONALIZED ) ),
     m_aFemaleFT(this, SW_RES(            FT_FEMALE   ) ),
@@ -456,9 +447,6 @@ SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard)
     m_aOK(   this, SW_RES(             PB_OK           ) ),
     m_aCancel(   this, SW_RES(         PB_CANCEL       ) ),
     m_aHelp(   this, SW_RES(           PB_HELP         ) )
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
 {
     m_pWizard = _pWizard;
     m_pGreetingLineCB = &m_aGreetingLineCB;

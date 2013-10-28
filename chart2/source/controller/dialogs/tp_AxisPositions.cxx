@@ -23,7 +23,6 @@
 #include "TabPages.hrc"
 #include "Strings.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
-#include "NoWarningThisInCTOR.hxx"
 #include "AxisHelper.hxx"
 
 #include <svx/svxids.hrc>

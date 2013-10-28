@@ -21,7 +21,6 @@
 
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
-#include "NoWarningThisInCTOR.hxx"
 
 // header for class SfxBoolItem
 #include <svl/eitem.hxx>

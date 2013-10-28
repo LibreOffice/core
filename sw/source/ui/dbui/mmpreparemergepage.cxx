@@ -40,9 +40,6 @@ using namespace ::com::sun::star::sdbc;
 
 SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_PREPAREMERGE_PAGE)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
     m_aHeaderFI(this,  SW_RES(     FI_HEADER ) ),
     m_aPreviewFI(this, SW_RES(     FI_PREVIEW ) ),
     m_aRecipientFT(this, SW_RES(   FT_RECIPIENT ) ),
@@ -55,9 +52,6 @@ SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pP
     m_aNoteHeaderFL(this, SW_RES(  FL_NOTEHEADER ) ),
     m_aEditFI(this, SW_RES(        FI_EDIT       ) ),
     m_aEditPB(this, SW_RES(        PB_EDIT       ) ),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
     m_pWizard(_pParent)
 {
     FreeResource();

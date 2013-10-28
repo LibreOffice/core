@@ -57,12 +57,6 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/configitem.hxx>
 
-
-/* HACK: disable some warnings for MS-C */
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)    // 4355: this used in initializer-list
-#endif
-
 using namespace ::com::sun::star::security;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

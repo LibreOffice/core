@@ -74,9 +74,6 @@ using namespace ::com::sun::star::view;
 
 SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_LAYOUT_PAGE)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
     m_aHeaderFI( this, SW_RES(         FI_HEADER             )),
     m_aPositionFL( this, SW_RES(       FL_POSITION           )),
     m_aAlignToBodyCB( this, SW_RES(      CB_ALIGN              )),
@@ -92,9 +89,6 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aExampleContainerWIN( this, SW_RES(  WIN_EXAMPLECONTAINER      )),
     m_aZoomFT( this, SW_RES(           FT_ZOOM               )),
     m_aZoomLB( this, SW_RES(           LB_ZOOM               )),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
     m_pExampleFrame(0),
     m_pExampleWrtShell(0),
     m_pAddressBlockFormat(0),

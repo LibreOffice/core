@@ -31,9 +31,6 @@
 
 SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_MERGE_PAGE)),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
-#endif
     m_aHeaderFI(this,           SW_RES(  FI_HEADER           ) ),
     m_aEditFI(this, SW_RES(           FI_EDIT )),
     m_aEditPB(this, SW_RES(           PB_EDIT )),
@@ -44,9 +41,6 @@ SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
     m_aWholeWordsCB(this, SW_RES(     CB_WHOLEWORDS)),
     m_aBackwardsCB(this, SW_RES(      CB_BACKWARDS )),
     m_aMatchCaseCB(this, SW_RES(      CB_MATCHCASE )),
-#ifdef _MSC_VER
-#pragma warning (default : 4355)
-#endif
     m_pWizard(_pParent)
 {
     FreeResource();
