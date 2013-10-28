@@ -90,6 +90,7 @@
 #include "clipcontext.hxx"
 #include "refupdatecontext.hxx"
 #include "scopetools.hxx"
+#include "formulagroup.hxx"
 
 using namespace com::sun::star;
 
@@ -121,6 +122,7 @@ private:
 
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpCellStringPool(new svl::SharedStringPool(ScGlobal::pCharClass)),
+        mpFormulaGroupCxt(NULL),
         mpUndoManager( NULL ),
         pEditEngine( NULL ),
         pNoteEngine( NULL ),
@@ -442,6 +444,7 @@ ScDocument::~ScDocument()
     delete pPreviewFont;
     OSL_POSTCOND( !pAutoNameCache, "AutoNameCache still set in dtor" );
 
+    mpFormulaGroupCxt.reset();
     mpCellStringPool.reset();
 }
 

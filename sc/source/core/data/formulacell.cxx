@@ -3327,7 +3327,6 @@ namespace {
 
 class GroupTokenConverter
 {
-    sc::FormulaGroupContext& mrCxt;
     ScTokenArray& mrGroupTokens;
     ScDocument& mrDoc;
     ScFormulaCell& mrCell;
@@ -3389,8 +3388,8 @@ class GroupTokenConverter
         return nRowLen;
     }
 public:
-    GroupTokenConverter(sc::FormulaGroupContext& rCxt, ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell, const ScAddress& rPos) :
-        mrCxt(rCxt), mrGroupTokens(rGroupTokens), mrDoc(rDoc), mrCell(rCell), mrPos(rPos) {}
+    GroupTokenConverter(ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell, const ScAddress& rPos) :
+        mrGroupTokens(rGroupTokens), mrDoc(rDoc), mrCell(rCell), mrPos(rPos) {}
 
     bool convert(ScTokenArray& rCode)
     {
@@ -3430,7 +3429,7 @@ public:
                         // returned array equals or greater than the requested
                         // length.
 
-                        formula::VectorRefArray aArray = mrDoc.FetchVectorRefArray(mrCxt, aRefPos, nLen);
+                        formula::VectorRefArray aArray = mrDoc.FetchVectorRefArray(aRefPos, nLen);
                         if (!aArray.isValid())
                             return false;
 
@@ -3498,7 +3497,7 @@ public:
                     for (SCCOL i = aAbs.aStart.Col(); i <= aAbs.aEnd.Col(); ++i)
                     {
                         aRefPos.SetCol(i);
-                        formula::VectorRefArray aArray = mrDoc.FetchVectorRefArray(mrCxt, aRefPos, nArrayLength);
+                        formula::VectorRefArray aArray = mrDoc.FetchVectorRefArray(aRefPos, nArrayLength);
                         if (!aArray.isValid())
                             return false;
 
@@ -3575,11 +3574,10 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (mxGroup->mbInvariant && false)
         return InterpretInvariantFormulaGroup();
 
-    sc::FormulaGroupContext aCxt;
     ScTokenArray aCode;
     ScAddress aTopPos = aPos;
     aTopPos.SetRow(mxGroup->mnStart);
-    GroupTokenConverter aConverter(aCxt, aCode, *pDocument, *this, aTopPos);
+    GroupTokenConverter aConverter(aCode, *pDocument, *this, aTopPos);
     if (!aConverter.convert(*pCode))
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;

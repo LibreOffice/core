@@ -2175,8 +2175,7 @@ formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol1, SCROW nRo
     return formula::FormulaTokenRef(new ScMatrixToken(pMat));
 }
 
-formula::VectorRefArray ScTable::FetchVectorRefArray(
-    sc::FormulaGroupContext& rCxt, SCCOL nCol, SCROW nRow1, SCROW nRow2 )
+formula::VectorRefArray ScTable::FetchVectorRefArray( SCCOL nCol, SCROW nRow1, SCROW nRow2 )
 {
     if (nRow2 < nRow1)
         return formula::VectorRefArray();
@@ -2184,7 +2183,7 @@ formula::VectorRefArray ScTable::FetchVectorRefArray(
     if (!ValidCol(nCol) || !ValidRow(nRow1) || !ValidRow(nRow2))
         return formula::VectorRefArray();
 
-    return aCol[nCol].FetchVectorRefArray(rCxt, nRow1, nRow2);
+    return aCol[nCol].FetchVectorRefArray(nRow1, nRow2);
 }
 
 ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )

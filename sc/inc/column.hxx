@@ -480,7 +480,7 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( SCROW nRow );
     bool ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow1, SCROW nRow2 );
     void FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2 ) const;
-    formula::VectorRefArray FetchVectorRefArray( sc::FormulaGroupContext& rCxt, SCROW nRow1, SCROW nRow2 );
+    formula::VectorRefArray FetchVectorRefArray( SCROW nRow1, SCROW nRow2 );
     void SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen );
     void SetFormulaResults( SCROW nRow, const formula::FormulaTokenRef* pResults, size_t nLen );
 

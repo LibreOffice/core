@@ -854,8 +854,7 @@ public:
     ScFormulaVectorState GetFormulaVectorState( SCCOL nCol, SCROW nRow ) const;
     formula::FormulaTokenRef ResolveStaticReference( SCCOL nCol, SCROW nRow );
     formula::FormulaTokenRef ResolveStaticReference( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
-    formula::VectorRefArray FetchVectorRefArray(
-        sc::FormulaGroupContext& rCxt, SCCOL nCol, SCROW nRow1, SCROW nRow2 );
+    formula::VectorRefArray FetchVectorRefArray( SCCOL nCol, SCROW nRow1, SCROW nRow2 );
 
     ScRefCellValue GetRefCellValue( SCCOL nCol, SCROW nRow );
 

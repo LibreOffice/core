@@ -94,6 +94,7 @@
 #include "listenercontext.hxx"
 #include "scopetools.hxx"
 #include "refupdatecontext.hxx"
+#include "formulagroup.hxx"
 
 #include "formula/vectortoken.hxx"
 
@@ -1675,14 +1676,13 @@ formula::FormulaTokenRef ScDocument::ResolveStaticReference( const ScRange& rRan
         rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
 }
 
-formula::VectorRefArray ScDocument::FetchVectorRefArray(
-    sc::FormulaGroupContext& rCxt, const ScAddress& rPos, SCROW nLength )
+formula::VectorRefArray ScDocument::FetchVectorRefArray( const ScAddress& rPos, SCROW nLength )
 {
     SCTAB nTab = rPos.Tab();
     if (!TableExists(nTab))
         return formula::VectorRefArray();
 
-    return maTabs[nTab]->FetchVectorRefArray(rCxt, rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
+    return maTabs[nTab]->FetchVectorRefArray(rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
 }
 
 bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
@@ -3223,6 +3223,14 @@ svl::SharedString ScDocument::GetSharedString( const ScAddress& rPos ) const
     return maTabs[rPos.Tab()]->GetSharedString(rPos.Col(), rPos.Row());
 }
 
+sc::FormulaGroupContext& ScDocument::GetFormulaGroupContext()
+{
+    if (!mpFormulaGroupCxt)
+        mpFormulaGroupCxt.reset(new sc::FormulaGroupContext);
+
+    return *mpFormulaGroupCxt;
+}
+
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -3603,6 +3611,7 @@ void ScDocument::CalcAll()
         if (*it)
             (*it)->CalcAll();
     ClearFormulaTree();
+    mpFormulaGroupCxt.reset();
 }
 
 

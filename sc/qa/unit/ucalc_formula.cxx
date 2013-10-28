@@ -76,8 +76,7 @@ void Test::testFetchVectorRefArray()
     m_pDoc->SetValue(ScAddress(0,2,0), 3);
     m_pDoc->SetValue(ScAddress(0,3,0), 4);
 
-    sc::FormulaGroupContext aCxt;
-    formula::VectorRefArray aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(0,0,0), 4);
+    formula::VectorRefArray aArray = m_pDoc->FetchVectorRefArray(ScAddress(0,0,0), 4);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array is expected to be numeric cells only.", !aArray.mpStringArray);
     CPPUNIT_ASSERT_EQUAL(1.0, aArray.mpNumericArray[0]);
@@ -85,7 +84,7 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_EQUAL(3.0, aArray.mpNumericArray[2]);
     CPPUNIT_ASSERT_EQUAL(4.0, aArray.mpNumericArray[3]);
 
-    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(0,0,0), 5);
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(0,0,0), 5);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array is expected to be numeric cells only.", !aArray.mpStringArray);
     CPPUNIT_ASSERT_EQUAL(1.0, aArray.mpNumericArray[0]);
@@ -102,7 +101,7 @@ void Test::testFetchVectorRefArray()
     m_pDoc->SetString(ScAddress(1,1,0), "Bruce");
     m_pDoc->SetString(ScAddress(1,2,0), "Charlie");
     m_pDoc->SetString(ScAddress(1,3,0), "David");
-    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(1,0,0), 5);
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,0,0), 5);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array is expected to be string cells only.", !aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 0, "Andy"));
@@ -119,7 +118,7 @@ void Test::testFetchVectorRefArray()
     m_pDoc->SetString(ScAddress(2,5,0), "=SUM(C2:C4)");
     m_pDoc->CalcAll();
 
-    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(2,0,0), 7);
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(2,0,0), 7);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 0, "Header"));
@@ -140,7 +139,7 @@ void Test::testFetchVectorRefArray()
     m_pDoc->SetString(ScAddress(3,7,0), "=CONCATENATE(\"A\";\"B\";\"C\")");
     m_pDoc->CalcAll();
 
-    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(3,0,0), 8);
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(3,0,0), 8);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 10));
@@ -162,7 +161,7 @@ void Test::testFetchVectorRefArray()
     m_pDoc->SetValue(ScAddress(4,9,0), 123);
 
     // This array fits within a single formula block.
-    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(4,0,0), 5);
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(4,0,0), 5);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should be purely numeric.", aArray.mpNumericArray && !aArray.mpStringArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 1));
@@ -172,7 +171,7 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 4, 5));
 
     // This array spans over multiple blocks.
-    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(4,0,0), 11);
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(4,0,0), 11);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 1));
@@ -188,7 +187,7 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 10));
 
     // Hit the cache but at a different start row.
-    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(4,2,0), 3);
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(4,2,0), 3);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should at least have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 3));
@@ -201,7 +200,7 @@ void Test::testFetchVectorRefArray()
     m_pDoc->SetString(ScAddress(5,4,0), "=2*8");
     m_pDoc->CalcAll();
 
-    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(5,2,0), 4);
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(5,2,0), 4);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should at least have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 0, 1.1));
@@ -209,14 +208,14 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 16));
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 3));
 
-    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(5,0,0), 3);
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(5,0,0), 3);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should at least have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 0));
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 1));
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 1.1));
 
-    aArray = m_pDoc->FetchVectorRefArray(aCxt, ScAddress(5,0,0), 10);
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(5,0,0), 10);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should at least have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 0));

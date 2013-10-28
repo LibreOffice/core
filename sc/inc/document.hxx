@@ -68,6 +68,7 @@ struct ColumnBlockPosition;
 struct RefUpdateContext;
 class EditTextIterator;
 struct NoteEntry;
+struct FormulaGroupContext;
 
 }
 
@@ -254,6 +255,7 @@ private:
     rtl::Reference<ScPoolHelper> xPoolHelper;
 
     boost::scoped_ptr<svl::SharedStringPool> mpCellStringPool;
+    boost::scoped_ptr<sc::FormulaGroupContext> mpFormulaGroupCxt;
 
     SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
@@ -861,6 +863,8 @@ public:
     const svl::SharedStringPool& GetSharedStringPool() const;
 
     svl::SharedString GetSharedString( const ScAddress& rPos ) const;
+
+    sc::FormulaGroupContext& GetFormulaGroupContext();
 
     SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );
     sal_uInt16 GetStringForFormula( const ScAddress& rPos, OUString& rString );
@@ -2017,8 +2021,7 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( const ScAddress& rPos );
     formula::FormulaTokenRef ResolveStaticReference( const ScRange& rRange );
 
-    formula::VectorRefArray FetchVectorRefArray(
-        sc::FormulaGroupContext& rCxt, const ScAddress& rPos, SCROW nLength );
+    formula::VectorRefArray FetchVectorRefArray( const ScAddress& rPos, SCROW nLength );
 
     SvtBroadcaster* GetBroadcaster( const ScAddress& rPos );
     const SvtBroadcaster* GetBroadcaster( const ScAddress& rPos ) const;

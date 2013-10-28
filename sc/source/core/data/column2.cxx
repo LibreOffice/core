@@ -2616,12 +2616,13 @@ copyFirstFormulaBlock(
 
 }
 
-formula::VectorRefArray ScColumn::FetchVectorRefArray( sc::FormulaGroupContext& rCxt, SCROW nRow1, SCROW nRow2 )
+formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 )
 {
     if (nRow1 > nRow2)
         return formula::VectorRefArray();
 
     // See if the requested range is already cached.
+    sc::FormulaGroupContext& rCxt = pDocument->GetFormulaGroupContext();
     sc::FormulaGroupContext::ColArray* pColArray = rCxt.getCachedColArray(nTab, nCol, nRow2+1);
     if (pColArray)
     {

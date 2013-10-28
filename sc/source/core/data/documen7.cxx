@@ -36,6 +36,7 @@
 #include "sheetevents.hxx"
 #include "tokenarray.hxx"
 #include "listenercontext.hxx"
+#include "formulagroup.hxx"
 
 #include <tools/shl.hxx>
 
@@ -296,6 +297,8 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
     // never ever recurse into this, might end up lost in infinity
     if ( IsCalculatingFormulaTree() )
         return ;
+
+    mpFormulaGroupCxt.reset();
     bCalculatingFormulaTree = true;
 
     SetForcedFormulaPending( false );
@@ -394,6 +397,8 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
     bAutoCalc = bOldAutoCalc;
     EnableIdle(bOldIdleEnabled);
     bCalculatingFormulaTree = false;
+
+    mpFormulaGroupCxt.reset();
 }
 
 
