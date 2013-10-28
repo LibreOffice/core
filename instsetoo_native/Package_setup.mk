@@ -16,6 +16,8 @@ $(eval $(call gb_Package_add_files,instsetoo_native_setup,$(LIBO_ETC_FOLDER),\
 	$(call gb_Helper_get_rcfile,fundamental) \
 	$(if $(ENABLE_OOENV),ooenv) \
 	$(if $(filter TRUE,$(DISABLE_PYTHON)),,$(call gb_Helper_get_rcfile,pythonloader.uno)) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),$(if $(filter-out MACOSX,$(OS)), \
+	    $(call gb_Helper_get_rcfile,redirect))) \
 	$(call gb_Helper_get_rcfile,uno) \
 	$(call gb_Helper_get_rcfile,version) \
 ))

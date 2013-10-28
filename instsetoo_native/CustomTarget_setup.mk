@@ -14,6 +14,8 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	$(call gb_Helper_get_rcfile,fundamental) \
 	$(if $(ENABLE_OOENV),ooenv) \
 	$(if $(filter TRUE,$(DISABLE_PYTHON)),,$(call gb_Helper_get_rcfile,pythonloader.uno)) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),$(if $(filter-out MACOSX,$(OS)), \
+	    $(call gb_Helper_get_rcfile,redirect))) \
 	$(call gb_Helper_get_rcfile,uno) \
 	$(call gb_Helper_get_rcfile,version) \
 ))
@@ -99,6 +101,13 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 			$(if $(filter WNTMSC,$(OS)$(COM)), \
 				'$(foreach dir,/ /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) ', \
 				'$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) ')))) \
+	) > $@
+
+$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,redirect) :
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	( \
+		echo '[Bootstrap]' \
+		&& echo 'URE_BOOTSTRAP=$${ORIGIN}/$(call gb_Helper_get_rcfile,fundamental)' \
 	) > $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,uno) :
