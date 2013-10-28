@@ -54,9 +54,7 @@ namespace cmis
         SAL_INFO( "ucb.ucp.cmis", "RepoContent::RepoContent() " << sURL );
 
         m_sRepositoryId = m_aURL.getObjectPath( );
-        if ( m_sRepositoryId[0] == '/' )
-            m_sRepositoryId = m_sRepositoryId.copy( 1 );
-
+        m_sRepositoryId.startsWith("/", &m_sRepositoryId);
     }
 
     RepoContent::~RepoContent()
