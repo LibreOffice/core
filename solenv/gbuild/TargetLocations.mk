@@ -34,8 +34,6 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/unittest \
 
 gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
-gb_ResTarget_get_unittest_target = \
-    $(OUTDIR)/unittest/install/$(LIBO_SHARE_RESOURCE_FOLDER)/$(1).res
 # kind of lame but with just 3 of these why bother with registration etc.
 gb_UnoApi_get_target = $(INSTROOT)/$(if $(filter udkapi,$(1)),$(LIBO_URE_SHARE_FOLDER)/misc/types,$(LIBO_ETC_FOLDER)/types/$(1)).rdb
 
