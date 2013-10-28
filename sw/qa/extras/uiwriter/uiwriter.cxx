@@ -8,6 +8,7 @@
 
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
+#include <wrtsh.hxx>
 
 #include "UndoManager.hxx"
 
@@ -21,10 +22,12 @@ public:
     //Regression test of fdo#70143
     //EDITING: undo search&replace corrupt text when searching backward
     void testReplaceBackward();
+    void testFdo69893();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
+    CPPUNIT_TEST(testFdo69893);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -95,6 +98,19 @@ void SwUiWriterTest::testReplaceBackward()
     rUndoManager.Undo();
 
     CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTxtNode->GetTxt());
+}
+
+void SwUiWriterTest::testFdo69893()
+{
+    SwDoc* pDoc = createDoc("fdo69893.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->SelAll();
+
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
+    // Selection did not include the para after table, this was "B1".
+    CPPUNIT_ASSERT_EQUAL(OUString("Para after table."), rEnd.GetTxt());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
