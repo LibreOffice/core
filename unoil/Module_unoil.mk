@@ -22,8 +22,7 @@ endif
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,unoil,\
-    CustomTarget_climaker \
-    Package_climaker \
+    CliUnoApi_oootypes \
 ))
 endif
 
