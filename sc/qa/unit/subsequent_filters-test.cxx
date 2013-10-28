@@ -359,6 +359,9 @@ void ScFiltersTest::testFunctionsODS()
     //test information functions
     createCSVPath(OUString("information-functions."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 3);
+    // text functions
+    createCSVPath(OUString("text-functions."), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 4);
 
     xDocSh->DoClose();
 }
@@ -384,6 +387,9 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         //test cached formula results of information functions
         createCSVPath(OUString("information-functions."), aCSVFileName);
         testFile(aCSVFileName, pDoc, 3);
+        // text functions
+        createCSVPath(OUString("text-functions."), aCSVFileName);
+        testFile(aCSVFileName, pDoc, 4);
 
         xDocSh->DoClose();
     }
