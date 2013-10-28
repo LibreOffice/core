@@ -229,7 +229,7 @@ static const struct {
     { "ky_KG",  lcl_DATA_OTHERS },
     { "kk_KZ",  lcl_DATA_OTHERS },
     { "fa_IR",  lcl_DATA_OTHERS },
-    { "ha_GH",  lcl_DATA_OTHERS },
+    { "ha_Latn_GH",  lcl_DATA_OTHERS },
     { "ee_GH",  lcl_DATA_OTHERS },
     { "sg_CF",  lcl_DATA_OTHERS },
     { "lg_UG",  lcl_DATA_OTHERS },
