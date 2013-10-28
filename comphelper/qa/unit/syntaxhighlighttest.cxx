@@ -43,8 +43,8 @@ void SyntaxHighlightTest::testBasicString() {
     SyntaxHighlighter(HIGHLIGHT_BASIC).getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
-    CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
-    CPPUNIT_ASSERT_EQUAL(5, ps[0].nEnd);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), ps[0].nEnd);
     CPPUNIT_ASSERT_EQUAL(TT_STRING, ps[0].tokenType);
 }
 
@@ -54,8 +54,8 @@ void SyntaxHighlightTest::testBasicComment() {
     SyntaxHighlighter(HIGHLIGHT_BASIC).getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
-    CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
-    CPPUNIT_ASSERT_EQUAL(5, ps[0].nEnd);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), ps[0].nEnd);
     CPPUNIT_ASSERT_EQUAL(TT_COMMENT, ps[0].tokenType);
 }
 
@@ -65,11 +65,11 @@ void SyntaxHighlightTest::testBasicCommentNewline() {
     SyntaxHighlighter(HIGHLIGHT_BASIC).getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(2), ps.size());
-    CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
-    CPPUNIT_ASSERT_EQUAL(5, ps[0].nEnd);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), ps[0].nEnd);
     CPPUNIT_ASSERT_EQUAL(TT_COMMENT, ps[0].tokenType);
-    CPPUNIT_ASSERT_EQUAL(5, ps[1].nBegin);
-    CPPUNIT_ASSERT_EQUAL(6, ps[1].nEnd);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), ps[1].nBegin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), ps[1].nEnd);
     CPPUNIT_ASSERT_EQUAL(TT_EOL, ps[1].tokenType);
 }
 
@@ -79,8 +79,8 @@ void SyntaxHighlightTest::testBasicEmptyComment() {
     SyntaxHighlighter(HIGHLIGHT_BASIC).getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
-    CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
-    CPPUNIT_ASSERT_EQUAL(1, ps[0].nEnd);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), ps[0].nEnd);
     CPPUNIT_ASSERT_EQUAL(TT_COMMENT, ps[0].tokenType);
 }
 
@@ -90,11 +90,11 @@ void SyntaxHighlightTest::testBasicEmptyCommentNewline() {
     SyntaxHighlighter(HIGHLIGHT_BASIC).getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(2), ps.size());
-    CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
-    CPPUNIT_ASSERT_EQUAL(1, ps[0].nEnd);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), ps[0].nEnd);
     CPPUNIT_ASSERT_EQUAL(TT_COMMENT, ps[0].tokenType);
-    CPPUNIT_ASSERT_EQUAL(1, ps[1].nBegin);
-    CPPUNIT_ASSERT_EQUAL(2, ps[1].nEnd);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), ps[1].nBegin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), ps[1].nEnd);
     CPPUNIT_ASSERT_EQUAL(TT_EOL, ps[1].tokenType);
 }
 
