@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZX///7o\u003d",
+        "filename": "ucb/source/ucp/cmis/cmis_repo_content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-28T13:33:37Z",
+      "side": 1,
+      "message": "can be simplified to m_sRepositoryId.startsWith(\"/\")",
+      "revId": "d9f58a6fb42a248b47f9881abc6892577e159c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
