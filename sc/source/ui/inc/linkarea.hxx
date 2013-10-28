@@ -20,7 +20,6 @@
 #ifndef SC_LINKAREA_HXX
 #define SC_LINKAREA_HXX
 
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <vcl/dialog.hxx>
 
 #include <vcl/button.hxx>
@@ -52,7 +51,6 @@ private:
     sfx2::DocumentInserter* pDocInserter;
 
     SfxObjectShellRef   aSourceRef;
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xSourceObject;
 
     DECL_LINK(FileHdl, void *);
     DECL_LINK(BrowseHdl, void *);
