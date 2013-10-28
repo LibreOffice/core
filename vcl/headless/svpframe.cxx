@@ -222,6 +222,7 @@ void SvpSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
 {
     if( bVisible && ! m_bVisible )
     {
+        // SAL_DEBUG("SvpSalFrame::Show: showing: " << this);
         m_bVisible = true;
         m_pInstance->PostEvent( this, NULL, SALEVENT_RESIZE );
         if( ! bNoActivate )
@@ -229,9 +230,14 @@ void SvpSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
     }
     else if( ! bVisible && m_bVisible )
     {
+        // SAL_DEBUG("SvpSalFrame::Show: hiding: " << this);
         m_bVisible = false;
         m_pInstance->PostEvent( this, NULL, SALEVENT_RESIZE );
         LoseFocus();
+    }
+    else
+    {
+        // SAL_DEBUG("SvpSalFrame::Show: nothihg: " << this);
     }
 }
 

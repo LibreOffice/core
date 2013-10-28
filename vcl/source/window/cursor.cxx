@@ -126,6 +126,7 @@ void Cursor::ImplDraw()
 {
     if ( mpData && mpData->mpWindow && !mpData->mbCurVisible )
     {
+        // SAL_DEBUG("Cursor::ImplDraw");
         Window* pWindow         = mpData->mpWindow;
         mpData->maPixPos        = pWindow->LogicToPixel( maPos );
         mpData->maPixSize       = pWindow->LogicToPixel( maSize );
@@ -156,6 +157,7 @@ void Cursor::ImplRestore()
 {
     if ( mpData && mpData->mbCurVisible )
     {
+        // SAL_DEBUG("Cursor::ImplRestore");
         ImplCursorInvert( mpData );
         mpData->mbCurVisible = false;
     }
