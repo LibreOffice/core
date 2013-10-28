@@ -20,6 +20,8 @@
 #include "gstframegrabber.hxx"
 #include "gstplayer.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
+
 #include <gst/gstbuffer.h>
 #include <gst/video/video.h>
 #include <gst/video/gstvideosink.h>
@@ -210,7 +212,7 @@ OUString SAL_CALL FrameGrabber::getImplementationName(  )
 sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName == AVMEDIA_GST_FRAMEGRABBER_SERVICENAME;
+    return cppu::supportsService(this, ServiceName);;
 }
 
 uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames()
