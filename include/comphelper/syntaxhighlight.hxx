@@ -88,12 +88,8 @@ class SimpleTokenizer_Impl
     const sal_Unicode* mpStringBegin;
     const sal_Unicode* mpActualPos;
 
-    // Lines and columns
-    sal_uInt32 nLine;
-    sal_uInt32 nCol;
-
     sal_Unicode peekChar( void )    { return *mpActualPos; }
-    sal_Unicode getChar( void )     { nCol++; return *mpActualPos++; }
+    sal_Unicode getChar( void )     { return *mpActualPos++; }
 
     // Auxiliary function: testing of the character flags
     sal_Bool testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags );
@@ -109,8 +105,8 @@ public:
     SimpleTokenizer_Impl( HighlighterLanguage aLang = HIGHLIGHT_BASIC );
     ~SimpleTokenizer_Impl( void );
 
-    sal_uInt16 parseLine( sal_uInt32 nLine, const OUString* aSource );
-    void getHighlightPortions( sal_uInt32 nParseLine, const OUString& rLine,
+    sal_uInt16 parseLine( const OUString* aSource );
+    void getHighlightPortions( const OUString& rLine,
                                /*out*/std::vector<HighlightPortion>& portions );
     void setKeyWords( const char** ppKeyWords, sal_uInt16 nCount );
 };
@@ -136,13 +132,11 @@ public:
 
     // (Re-)initialize Highlighter. The line-table will be completely erased,
     // meaning that on completion an empty Source is assumed.
-    // notifyChange() can only be given line 0
     void initialize( HighlighterLanguage eLanguage_ );
 
-    void notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,
-                                const OUString* pChangedLines, sal_uInt32 nArrayLength);
+    void notifyChange(const OUString* pChangedLines, sal_uInt32 nArrayLength);
 
-    void getHighlightPortions( sal_uInt32 nLine, const OUString& rLine,
+    void getHighlightPortions( const OUString& rLine,
                                std::vector<HighlightPortion>& pPortions );
 
     HighlighterLanguage GetLanguage() { return eLanguage;}

@@ -42,7 +42,7 @@ void SyntaxHighlightTest::testBasicString() {
     h.initialize(HIGHLIGHT_BASIC);
     OUString s("\"foo\"");
     std::vector<HighlightPortion> ps;
-    h.getHighlightPortions(0, s, ps);
+    h.getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
     CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
@@ -55,7 +55,7 @@ void SyntaxHighlightTest::testBasicComment() {
     h.initialize(HIGHLIGHT_BASIC);
     OUString s("' foo");
     std::vector<HighlightPortion> ps;
-    h.getHighlightPortions(0, s, ps);
+    h.getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
     CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
@@ -68,7 +68,7 @@ void SyntaxHighlightTest::testBasicCommentNewline() {
     h.initialize(HIGHLIGHT_BASIC);
     OUString s("' foo\n");
     std::vector<HighlightPortion> ps;
-    h.getHighlightPortions(0, s, ps);
+    h.getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(2), ps.size());
     CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
@@ -84,7 +84,7 @@ void SyntaxHighlightTest::testBasicEmptyComment() {
     h.initialize(HIGHLIGHT_BASIC);
     OUString s("'");
     std::vector<HighlightPortion> ps;
-    h.getHighlightPortions(0, s, ps);
+    h.getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
     CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
@@ -97,7 +97,7 @@ void SyntaxHighlightTest::testBasicEmptyCommentNewline() {
     h.initialize(HIGHLIGHT_BASIC);
     OUString s("'\n");
     std::vector<HighlightPortion> ps;
-    h.getHighlightPortions(0, s, ps);
+    h.getHighlightPortions(s, ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(2), ps.size());
     CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
@@ -116,7 +116,7 @@ void SyntaxHighlightTest::testBasic()
     aHighlighter.initialize( HIGHLIGHT_BASIC );
 
     std::vector<HighlightPortion> aPortions;
-    aHighlighter.getHighlightPortions( 0, aBasicString, aPortions );
+    aHighlighter.getHighlightPortions( aBasicString, aPortions );
 
     sal_Int32 prevEnd = 0;
     for(std::vector<HighlightPortion>::const_iterator itr =

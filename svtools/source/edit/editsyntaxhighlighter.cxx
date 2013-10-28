@@ -171,11 +171,11 @@ void MultiLineEditSyntaxHighlight::UpdateData()
     for (unsigned int nLine=0; nLine < GetTextEngine()->GetParagraphCount(); nLine++)
     {
         OUString aLine( GetTextEngine()->GetText( nLine ) );
-        aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
+        aHighlighter.notifyChange( &aLine, 1 );
 
         GetTextEngine()->RemoveAttribs( nLine, sal_True );
         std::vector<HighlightPortion> aPortions;
-        aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
+        aHighlighter.getHighlightPortions( aLine, aPortions );
         for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
              i != aPortions.end(); ++i)
         {

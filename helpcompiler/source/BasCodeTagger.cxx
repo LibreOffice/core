@@ -149,9 +149,9 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
     OUString strLine( reinterpret_cast<const sal_Char*>(codeSnippet),
                                 strlen(reinterpret_cast<const char*>(codeSnippet)),
                                 RTL_TEXTENCODING_UTF8 );
-    m_Highlighter.notifyChange ( 0, 0, &strLine, 1 );
+    m_Highlighter.notifyChange ( &strLine, 1 );
     std::vector<HighlightPortion> portions;
-    m_Highlighter.getHighlightPortions( 0, strLine, portions );
+    m_Highlighter.getHighlightPortions( strLine, portions );
     for (std::vector<HighlightPortion>::iterator i(portions.begin());
          i != portions.end(); ++i)
     {

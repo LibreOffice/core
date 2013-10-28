@@ -529,10 +529,6 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
         if( cNext != c && testCharFlags( cNext, CHAR_EOL ) == sal_True )
             getChar();
 
-        // Set position data at the line start
-        nCol = 0;
-        nLine++;
-
         reType = TT_EOL;
     }
 
@@ -635,14 +631,10 @@ SimpleTokenizer_Impl* getSimpleTokenizer( void )
     return pSimpleTokenizer;
 }
 
-sal_uInt16 SimpleTokenizer_Impl::parseLine( sal_uInt32 nParseLine, const OUString* aSource )
+sal_uInt16 SimpleTokenizer_Impl::parseLine( const OUString* aSource )
 {
     // Set the position to the beginning of the source string
     mpStringBegin = mpActualPos = aSource->getStr();
-
-    // Initialize row and column
-    nLine = nParseLine;
-    nCol = 0L;
 
     // Variables for the out parameter
     TokenTypes eType;
@@ -657,15 +649,11 @@ sal_uInt16 SimpleTokenizer_Impl::parseLine( sal_uInt32 nParseLine, const OUStrin
     return nTokenCount;
 }
 
-void SimpleTokenizer_Impl::getHighlightPortions( sal_uInt32 nParseLine, const OUString& rLine,
+void SimpleTokenizer_Impl::getHighlightPortions( const OUString& rLine,
                                                  /*out*/std::vector<HighlightPortion>& portions  )
 {
     // Set the position to the beginning of the source string
     mpStringBegin = mpActualPos = rLine.getStr();
-
-    // Initialize row and column
-    nLine = nParseLine;
-    nCol = 0L;
 
     // Variables for the out parameter
     TokenTypes eType;
@@ -716,19 +704,17 @@ void SyntaxHighlighter::initialize( HighlighterLanguage eLanguage_ )
     }
 }
 
-void SyntaxHighlighter::notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,
-                                const OUString* pChangedLines, sal_uInt32 nArrayLength)
+void SyntaxHighlighter::notifyChange(
+    const OUString* pChangedLines, sal_uInt32 nArrayLength)
 {
-    (void)nLineCountDifference;
-
     for( sal_uInt32 i=0 ; i < nArrayLength ; i++ )
-        m_pSimpleTokenizer->parseLine(nLine+i, &pChangedLines[i]);
+        m_pSimpleTokenizer->parseLine(&pChangedLines[i]);
 }
 
-void SyntaxHighlighter::getHighlightPortions( sal_uInt32 nLine, const OUString& rLine,
+void SyntaxHighlighter::getHighlightPortions( const OUString& rLine,
                                               /*out*/std::vector<HighlightPortion>& portions )
 {
-    m_pSimpleTokenizer->getHighlightPortions( nLine, rLine, portions );
+    m_pSimpleTokenizer->getHighlightPortions( rLine, portions );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
