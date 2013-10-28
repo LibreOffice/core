@@ -29,9 +29,7 @@ $(eval $(call gb_Library_add_defs,propertyhdl_x64,\
 	-UNOMINMAX \
 ))
 $(eval $(call gb_Library_add_defs,propertyhdl_x64,\
-	-U_WIN32_IE \
 	-D_WIN32_IE=0x501 \
-	-U_WIN32_WINNT \
 	-D_WIN32_WINNT=0x0501 \
 ))
 

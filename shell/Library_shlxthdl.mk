@@ -23,9 +23,7 @@ $(eval $(call gb_Library_add_defs,shlxthdl,\
 	-UNOMINMAX \
 ))
 $(eval $(call gb_Library_add_defs,shlxthdl,\
-	-U_WIN32_IE \
 	-D_WIN32_IE=0x501 \
-	-U_WIN32_WINNT \
 	-D_WIN32_WINNT=0x0501 \
 ))
 

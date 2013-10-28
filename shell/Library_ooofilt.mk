@@ -22,9 +22,7 @@ $(eval $(call gb_Library_add_defs,ooofilt,\
 	-D_UNICODE \
 ))
 $(eval $(call gb_Library_add_defs,ooofilt,\
-	-U_WIN32_IE \
 	-D_WIN32_IE=0x501 \
-	-U_WIN32_WINNT \
 	-D_WIN32_WINNT=0x0501 \
 	-UNOMINMAX \
 ))
