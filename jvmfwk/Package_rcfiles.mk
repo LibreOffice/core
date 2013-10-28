@@ -11,8 +11,9 @@ $(eval $(call gb_Package_Package,jvmfwk_javavendors,$(SRCDIR)/jvmfwk))
 
 $(eval $(call gb_Package_set_outdir,jvmfwk_javavendors,$(INSTROOT)))
 
-ifneq ($(OS),WNT)
-ifeq ($(OS),FREEBSD)
+ifeq ($(OS),WNT)
+$(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_SHARE_FOLDER)/misc/javavendors.xml,distributions/OpenOfficeorg/javavendors_wnt.xml))
+else ifeq ($(OS),FREEBSD)
 $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_SHARE_FOLDER)/misc/javavendors.xml,distributions/OpenOfficeorg/javavendors_freebsd.xml))
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_SHARE_FOLDER)/misc/javavendors.xml,distributions/OpenOfficeorg/javavendors_macosx.xml))
@@ -22,9 +23,6 @@ else ifeq ($(OS),AIX)
 $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_SHARE_FOLDER)/misc/javavendors.xml,distributions/OpenOfficeorg/javavendors_linux.xml))
 else
 $(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_SHARE_FOLDER)/misc/javavendors.xml,distributions/OpenOfficeorg/javavendors_unx.xml))
-endif
-else
-$(eval $(call gb_Package_add_file,jvmfwk_javavendors,$(LIBO_URE_SHARE_FOLDER)/misc/javavendors.xml,distributions/OpenOfficeorg/javavendors_wnt.xml))
 endif
 
 # vim:set noet sw=4 ts=4:
