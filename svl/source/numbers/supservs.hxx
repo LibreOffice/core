@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVTOOLS_NUMBERS_SUPPLIERSERVICE_HXX_
-#define _SVTOOLS_NUMBERS_SUPPLIERSERVICE_HXX_
+#ifndef INCLUDED_SVL_SOURCE_NUMBERS_SUPSERVS_HXX
+#define INCLUDED_SVL_SOURCE_NUMBERS_SUPSERVS_HXX
 
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
@@ -90,6 +90,6 @@ protected:
 };
 
 
-#endif // _SVTOOLS_NUMBERS_SUPPLIERSERVICE_HXX_
+#endif // INCLUDED_SVL_SOURCE_NUMBERS_SUPSERVS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

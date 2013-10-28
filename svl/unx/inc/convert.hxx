@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONVERT_HXX
-#define _CONVERT_HXX
+
+#ifndef INCLUDED_SVL_UNX_INC_CONVERT_HXX
+#define INCLUDED_SVL_UNX_INC_CONVERT_HXX
 
 class Convert
 {
@@ -39,6 +40,6 @@ public:
                       Swap( rRect.Left() ); Swap( rRect.Right() ); }
 };
 
-#endif // _CONVERT_HXX
+#endif // INCLUDED_SVL_UNX_INC_CONVERT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

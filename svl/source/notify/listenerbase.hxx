@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVT_LISTENERBASE_HXX
-#define _SVT_LISTENERBASE_HXX
+#ifndef INCLUDED_SVL_SOURCE_NOTIFY_LISTENERBASE_HXX
+#define INCLUDED_SVL_SOURCE_NOTIFY_LISTENERBASE_HXX
 
 class SvtBroadcaster;
 class SvtListener;

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SYSCREDS_HXX
-#define INCLUDED_SVTOOLS_SYSCREDS_HXX
+#ifndef INCLUDED_SVL_SOURCE_PASSWORDCONTAINER_SYSCREDS_HXX
+#define INCLUDED_SVL_SOURCE_PASSWORDCONTAINER_SYSCREDS_HXX
 
 #include <set>
 #include <memory>
@@ -81,6 +81,6 @@ class SysCredentialsConfig
         bool         m_bCfgInited;
 };
 
-#endif // INCLUDED_SVTOOLS_SYSCREDS_HXX
+#endif // INCLUDED_SVL_SOURCE_PASSWORDCONTAINER_SYSCREDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

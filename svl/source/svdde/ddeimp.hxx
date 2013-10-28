@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DDEIMP_HXX
-#define _DDEIMP_HXX
+#ifndef INCLUDED_SVL_SOURCE_SVDDE_DDEIMP_HXX
+#define INCLUDED_SVL_SOURCE_SVDDE_DDEIMP_HXX
 
 #include <windows.h>
 #include <ddeml.h>
@@ -150,6 +150,6 @@ inline DdeInstData* ImpGetInstData()
 DdeInstData* ImpInitInstData();
 void ImpDeinitInstData();
 
-#endif // _DDEIMP_HXX
+#endif // INCLUDED_SVL_SOURCE_SVDDE_DDEIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

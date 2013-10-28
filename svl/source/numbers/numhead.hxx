@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef NF_NUMHEAD_HXX
-#define NF_NUMHEAD_HXX
+#ifndef INCLUDED_SVL_SOURCE_NUMBERS_NUMHEAD_HXX
+#define INCLUDED_SVL_SOURCE_NUMBERS_NUMHEAD_HXX
 
 #include <tools/stream.hxx>
 
