@@ -455,11 +455,11 @@ published service Content
                     <td>
                         Adds a new properties to the content.
                         <p>
-                            <member>PropertyCommandArgument::Property</member>
+                            PropertyCommandArgument::Property
                             contains information about the property to be added.
-                            <member>PropertyCommandArgument::DefaultValue</member>
+                            PropertyCommandArgument::DefaultValue
                             may contain the default value for the property. Its type must
-                            match the one specified in <member scope="com::sun::star::beans">Property::Type</member>.
+                            match the one specified in com::sun::star::beans::Property::Type.
                         </p>
                         <p>Note that the dynamic properties must be kept persistent. The
                         service Store (UCB persistence service) may be used to
@@ -488,7 +488,7 @@ published service Content
                            if the Name of the property is empty.</p>
                         <blockquote>
                             Note: This command is new since Apache OpenOffice 4.0, LibreOffice 4.2 and replaces the deprecated interface method
-                            <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member>.
+                            com::sun::star::beans::XPropertyContainer::addProperty.
                         </blockquote>
                     </td>
                 </tr>
@@ -503,7 +503,7 @@ published service Content
                         if the property is not removable.</p>
                         <blockquote>
                             Note: This command is new since Apache OpenOffice 4.0, LibreOffice 4.2 and replaces the deprecated interface method
-                            <member scope="com::sun::star::beans">XPropertyContainer::removeProperty</member>.
+                            com::sun::star::beans::XPropertyContainer::removeProperty.
                         </blockquote>
                     </td>
                 </tr>
