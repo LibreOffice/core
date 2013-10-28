@@ -901,7 +901,8 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                     hResult = iDialog->GetFileTypeIndex(&nFileType);
                     if ( SUCCEEDED(hResult) && nFileType > 0 )
                     {
-                        ::sal_Int32 nRealIndex = (nFileType-1); // COM dialog base on 1 ... filter container on 0 .-)
+                        // COM dialog base on 1 ... filter container on 0 .-)
+                        ::size_t nRealIndex = (nFileType-1);
                         ::std::vector< COMDLG_FILTERSPEC > lFilters = lcl_buildFilterList(m_lFilters);
                         if ( nRealIndex < lFilters.size() )
                         {
