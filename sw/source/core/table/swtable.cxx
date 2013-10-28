@@ -1350,7 +1350,7 @@ static bool lcl_IsValidRowName( const OUString& rStr )
 {
     bool bIsValid = true;
     sal_Int32 nLen = rStr.getLength();
-    for (xub_StrLen i = 0;  i < nLen && bIsValid;  ++i)
+    for( sal_Int32 i = 0;  i < nLen && bIsValid; ++i )
     {
         const sal_Unicode cChar = rStr[i];
         if (cChar < '0' || cChar > '9')

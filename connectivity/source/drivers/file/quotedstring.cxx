@@ -142,7 +142,7 @@ namespace connectivity
                         sBuff.append(cChar);
                     }
                 }
-            } // for( xub_StrLen i = nStartPos; i < nLen; ++i )
+            } // for( sal_Int32 i = nStartPos; i < nLen; ++i )
             return sBuff.makeStringAndClear();
         }
         return OUString();

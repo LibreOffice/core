@@ -486,9 +486,9 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                                                       rInf.GetLen();
         if( rInf.GetSpace() > 0 )
         {
-            xub_StrLen nSpaceCnt = 0;
+            sal_Int32 nSpaceCnt = 0;
             const xub_StrLen nEndPos = rInf.GetIdx() + nTmpLen;
-            for( xub_StrLen nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos )
+            for( sal_Int32 nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos )
             {
                 if( CH_BLANK == rInf.GetText()[ nPos ] )
                     ++nSpaceCnt;

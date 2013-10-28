@@ -33,7 +33,7 @@ static OUString lcl_CheckGroupName( const OUString& rGroupName )
 {
     OUString sRet;
     //group name should contain only A-Z and a-z and spaces
-    for( xub_StrLen i = 0; i < rGroupName.getLength(); i++ )
+    for( sal_Int32 i = 0; i < rGroupName.getLength(); i++ )
     {
         sal_Unicode cChar = rGroupName[i];
         if (comphelper::string::isalnumAscii(cChar) ||

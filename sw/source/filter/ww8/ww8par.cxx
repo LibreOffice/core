@@ -3059,7 +3059,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         if (!bIsUnicode)
             nEndUsed = Custom8BitToUnicode(hConverter, p8Bits, nL2, pBuffer, nStrLen);
 
-        for( xub_StrLen nI = 0; nI < nStrLen; ++nI, ++pBuffer )
+        for( sal_Int32 nI = 0; nI < nStrLen; ++nI, ++pBuffer )
             if (m_bRegardHindiDigits && bBidi && LangUsesHindiNumbers(nCTLLang))
                 *pBuffer = TranslateToHindiNumbers(*pBuffer);
 
@@ -5428,7 +5428,7 @@ namespace
 
                 sal_uInt16 pStd97Pass[16];
                 memset( pStd97Pass, 0, sizeof( pStd97Pass ) );
-                for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
+                for( sal_Int32 nChar = 0; nChar < nLen; ++nChar )
                     pStd97Pass[nChar] = sUniPassword[nChar];
 
                 aCodec97.InitKey( pStd97Pass, pDocId );
@@ -5459,7 +5459,7 @@ namespace
             {
                 sal_Unicode pPassword[16];
                 memset( pPassword, 0, sizeof( pPassword ) );
-                for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
+                for( sal_Int32 nChar = 0; nChar < nLen; ++nChar )
                     pPassword[nChar] = sUniPassword[nChar];
 
                 rCodec.InitKey( pPassword, pDocId );

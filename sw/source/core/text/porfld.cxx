@@ -249,7 +249,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             if ( nCurrDir != UBIDI_RTL )
             {
                 nCurrDir = UBIDI_RTL;
-                for ( xub_StrLen nCharIdx = 0; nCharIdx < nEnd; ++nCharIdx )
+                for( sal_Int32 nCharIdx = 0; nCharIdx < nEnd; ++nCharIdx )
                 {
                     UCharDirection nCharDir = u_charDirection ( aTxt[ nCharIdx ]);
                     if ( nCharDir == U_LEFT_TO_RIGHT ||

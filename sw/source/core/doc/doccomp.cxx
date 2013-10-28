@@ -1028,7 +1028,7 @@ sal_uLong SwCompareLine::GetHashValue() const
     case ND_SECTIONNODE:
         {
             OUString sStr( GetText() );
-            for( xub_StrLen n = 0; n < sStr.getLength(); ++n )
+            for( sal_Int32 n = 0; n < sStr.getLength(); ++n )
                 ( nRet <<= 1 ) += sStr[ n ];
         }
         break;
@@ -1243,7 +1243,7 @@ OUString SwCompareLine::GetText() const
 sal_uLong SwCompareLine::GetTxtNodeHashValue( const SwTxtNode& rNd, sal_uLong nVal )
 {
     OUString sStr( rNd.GetExpandTxt() );
-    for( xub_StrLen n = 0; n < sStr.getLength(); ++n )
+    for( sal_Int32 n = 0; n < sStr.getLength(); ++n )
         ( nVal <<= 1 ) += sStr[ n ];
     return nVal;
 }

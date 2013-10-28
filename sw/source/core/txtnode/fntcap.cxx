@@ -77,7 +77,7 @@ xub_StrLen sw_CalcCaseMap( const SwFont& rFnt,
     // special case for title case:
     const bool bTitle = SVX_CASEMAP_TITEL == rFnt.GetCaseMap() &&
                         g_pBreakIt->GetBreakIter().is();
-    for ( xub_StrLen i = nOfst; i < nEnd; ++i )
+    for ( sal_Int32 i = nOfst; i < nEnd; ++i )
     {
         OUString aTmp(rOrigString.copy(i, 1));
 
@@ -781,7 +781,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                     rDo.GetInf().SetOut( *pOldOut );
                     if( !bWordWise && rDo.GetInf().GetSpace() )
                     {
-                        for( xub_StrLen nI = nOldPos; nI < nPos; ++nI )
+                        for( sal_Int32 nI = nOldPos; nI < nPos; ++nI )
                         {
                             if( CH_BLANK == rOldText[nI] )
                                 aPartSize.Width() += nSpaceAdd;

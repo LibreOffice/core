@@ -1812,7 +1812,7 @@ XclExpWebQuery::XclExpWebQuery(
     OUString aAppendTable;
     sal_Int32 nStringIx = 0;
     bool bExitLoop = false;
-    for( xub_StrLen nToken = 0; (nToken < nTokenCnt) && !bExitLoop; ++nToken )
+    for( sal_Int32 nToken = 0; (nToken < nTokenCnt) && !bExitLoop; ++nToken )
     {
         OUString aToken( rSource.getToken( 0, ';', nStringIx ) );
         mbEntireDoc = ScfTools::IsHTMLDocName( aToken );

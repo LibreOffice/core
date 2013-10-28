@@ -347,8 +347,7 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
         // Needs at least 4 characters.
         return;
 
-    sal_Unicode c = rUrl[0];
-    if (c != '#')
+    if (rUrl[0] != '#')
         // the 1st character must be '#'.
         return;
 
@@ -356,9 +355,9 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
 
     bool bInQuote = false;
     bool bQuoteTabName = false;
-    for (xub_StrLen i = 1; i < n; ++i)
+    for( sal_Int32 i = 1; i < n; ++i )
     {
-        c = rUrl[i];
+        sal_Unicode c = rUrl[i];
         if (c == '\'')
         {
             if (bInQuote && i+1 < n && rUrl[i+1] == sal_Unicode('\''))
@@ -937,7 +936,7 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
         xub_StrLen nTokenCnt = ScStringUtil::GetQuotedTokenCount( aTables, aQuotedPairs, ',' );
         maTables = "";
         sal_Int32 nStringIx = 0;
-        for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+        for( sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken )
         {
             OUString aToken( ScStringUtil::GetQuotedToken( aTables, 0, aQuotedPairs, ',', nStringIx ) );
             sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.toInt32() : 0;

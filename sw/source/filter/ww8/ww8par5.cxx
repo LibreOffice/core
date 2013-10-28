@@ -267,7 +267,7 @@ xub_StrLen FindParaStart( const OUString& rStr, sal_Unicode cToken, sal_Unicode 
 {
     bool bStr = false; // ignore inside a string
 
-    for( xub_StrLen nBuf=0; nBuf+1 < rStr.getLength(); nBuf++ )
+    for( sal_Int32 nBuf = 0; nBuf+1 < rStr.getLength(); nBuf++ )
     {
         if( rStr[ nBuf ] == '"' )
             bStr = !bStr;
@@ -973,7 +973,7 @@ void SwWW8ImplReader::MakeTagString( OUString& rStr, const OUString& rOrg )
     sal_Unicode cChar;
     rStr = rOrg;
 
-    for( xub_StrLen nI = 0;
+    for( sal_Int32 nI = 0;
             nI < rStr.getLength() && rStr.getLength() < (MAX_FIELDLEN - 4); ++nI )
     {
         bool bSetAsHex = false;

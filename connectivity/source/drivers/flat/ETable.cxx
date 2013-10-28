@@ -140,7 +140,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         sal_Int32 nStartPosHeaderLine = 0; // use for efficient way to get the tokens
         sal_Int32 nStartPosFirstLine = 0; // use for efficient way to get the tokens
         sal_Int32 nStartPosFirstLine2 = 0;
-        for (xub_StrLen i = 0; i < nFieldCount; i++)
+        for( sal_Int32 i = 0; i < nFieldCount; i++ )
         {
             if ( nRowCount == 0)
             {
@@ -173,7 +173,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     }
     while(nRowCount < nMaxRowsToScan && bRead);
 
-    for (xub_StrLen i = 0; i < nFieldCount; i++)
+    for( sal_Int32 i = 0; i < nFieldCount; i++ )
     {
         // check if the columname already exists
         OUString aAlias(aColumnNames[i]);
@@ -242,7 +242,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                     xub_StrLen nDot = 0;
                     xub_StrLen nDecimalDelCount = 0;
                     xub_StrLen nSpaceCount = 0;
-                    for (xub_StrLen j = 0; j < aField2.getLength(); j++)
+                    for( sal_Int32 j = 0; j < aField2.getLength(); j++ )
                     {
                         const sal_Unicode c = aField2[j];
                         if ( j == nSpaceCount && m_cFieldDelimiter != 32 && c == 32 )
@@ -275,7 +275,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                     {
                         // Is the delimiter correct?
                         const OUString aValue = aField2.getToken(0,cDecimalDelimiter);
-                        for (sal_Int32 j = aValue.getLength() - 4; j >= 0; j -= 4)
+                        for( sal_Int32 j = aValue.getLength() - 4; j >= 0; j -= 4)
                         {
                             const sal_Unicode c = aValue[j];
                             // just digits, decimal- and thousands-delimiter?

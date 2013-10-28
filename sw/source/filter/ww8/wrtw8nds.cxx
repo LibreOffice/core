@@ -414,7 +414,7 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
     sw::PoolItems aRangeItems;
     if (const SwpHints* pTxtAttrs = rNd.GetpSwpHints())
     {
-        for (xub_StrLen i = 0; i < pTxtAttrs->Count(); ++i)
+        for( sal_Int32 i = 0; i < pTxtAttrs->Count(); ++i )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             const xub_StrLen* pEnd = pHt->GetEnd();

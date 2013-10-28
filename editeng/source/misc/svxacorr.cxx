@@ -1097,7 +1097,7 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
     aConverted += rCC.uppercase(OUString(rTxt[nSttPos]));
     aConverted += rCC.lowercase(OUString(rTxt[nSttPos+1]));
 
-    for (xub_StrLen i = nSttPos+2; i < nEndPos; ++i)
+    for( sal_Int32 i = nSttPos+2; i < nEndPos; ++i )
     {
         if ( IsLowerLetter(rCC.getCharacterType(rTxt, i)) )
             // A lowercase letter disqualifies the whole text.

@@ -246,7 +246,7 @@ namespace
             {
                 aDXArray.reserve(rInfo.mnTextLen);
 
-                for(xub_StrLen a(0); a < rInfo.mnTextLen; a++)
+                for(sal_Int32 a=0; a < rInfo.mnTextLen; a++)
                 {
                     aDXArray.push_back((double)rInfo.mpDXArray[a]);
                 }

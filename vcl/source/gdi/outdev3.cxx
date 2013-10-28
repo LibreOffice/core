@@ -2761,7 +2761,7 @@ ImplMultiTextLineInfo::ImplMultiTextLineInfo()
 
 ImplMultiTextLineInfo::~ImplMultiTextLineInfo()
 {
-    for ( xub_StrLen i = 0; i < mnLines; i++ )
+    for( sal_Int32 i = 0; i < mnLines; i++ )
         delete mpLines[i];
     delete [] mpLines;
 }
@@ -2782,7 +2782,7 @@ void ImplMultiTextLineInfo::AddLine( ImplTextLineInfo* pLine )
 
 void ImplMultiTextLineInfo::Clear()
 {
-    for ( xub_StrLen i = 0; i < mnLines; i++ )
+    for( sal_Int32 i = 0; i < mnLines; i++ )
         delete mpLines[i];
     mnLines = 0;
 }

@@ -158,7 +158,7 @@ OUString ScfTools::ConvertToScDefinedName(const OUString& rName )
     sal_Int32 nLen = sName.getLength();
     if( nLen && !ScCompiler::IsCharFlagAllConventions( sName, 0, SC_COMPILER_C_CHAR_NAME ) )
         sName = sName.replaceAt( 0, 1, "_" );
-    for( xub_StrLen nPos = 1; nPos < nLen; ++nPos )
+    for( sal_Int32 nPos = 1; nPos < nLen; ++nPos )
         if( !ScCompiler::IsCharFlagAllConventions( sName, nPos, SC_COMPILER_C_NAME ) )
             sName = sName.replaceAt( nPos, 1, "_" );
     return sName;

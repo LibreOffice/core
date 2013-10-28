@@ -474,7 +474,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
                 bSwap = true;
                 sal_Char* pF = (sal_Char*)pNewBuf;
                 sal_Char* pN = pF+1;
-                for(xub_StrLen n = 0; n < nNewLen; ++n, pF+=2, pN+=2)
+                for(sal_uLong n = 0; n < nNewLen; ++n, pF+=2, pN+=2 )
                 {
                     sal_Char c = *pF;
                     *pF = *pN;

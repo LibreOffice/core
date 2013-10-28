@@ -708,8 +708,8 @@ void XclImpUrlHelper::DecodeUrl(
                     {
                         if( *(pChar + 1) )
                         {
-                            xub_StrLen nLen = *++pChar;
-                            for( xub_StrLen nChar = 0; (nChar < nLen) && *(pChar + 1); ++nChar )
+                            sal_Int32 nLen = *++pChar;
+                            for( sal_Int32 nChar = 0; (nChar < nLen) && *(pChar + 1); ++nChar )
                                 lclAppendUrlChar( rUrl, *++pChar );
 //                            rUrl.Append( ':' );
                         }

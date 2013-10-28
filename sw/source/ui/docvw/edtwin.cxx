@@ -863,7 +863,7 @@ void SwEditWin::FlushInBuffer()
                 OUString aNewText( aOldText );
                 if (rCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
                 {
-                    for (xub_StrLen k = 0;  k < m_aInBuffer.getLength();  ++k)
+                    for( sal_Int32 k = 0;  k < m_aInBuffer.getLength();  ++k)
                     {
                         const sal_Unicode cChar = m_aInBuffer[k];
                         const sal_Int32 nPrevPos =xISC->correctInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode );
@@ -893,7 +893,7 @@ void SwEditWin::FlushInBuffer()
                 }
                 else
                 {
-                    for (xub_StrLen k = 0;  k < m_aInBuffer.getLength();  ++k)
+                    for( sal_Int32 k = 0;  k < m_aInBuffer.getLength(); ++k )
                     {
                         const sal_Unicode cChar = m_aInBuffer[k];
                         if (xISC->checkInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode ))

@@ -486,11 +486,11 @@ WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
 }
 
 static void lcl_CopyGreaterEight(OUString &rDest, OUString &rSrc,
-    xub_StrLen nStart, xub_StrLen nLen = STRING_LEN)
+    sal_Int32 nStart, sal_Int32 nLen = STRING_LEN)
 {
     if (nLen > rSrc.getLength() || nLen == STRING_LEN)
         nLen = rSrc.getLength();
-    for (xub_StrLen nI = nStart; nI < nLen; ++nI)
+    for( sal_Int32 nI = nStart; nI < nLen; ++nI)
     {
         sal_Unicode nChar = rSrc[nI];
         if (nChar > WW8ListManager::nMaxLevel)

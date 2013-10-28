@@ -2459,8 +2459,8 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
 
 static bool lcl_IsNumber(const OUString& rString)
 {
-    xub_StrLen nLen = rString.getLength();
-    for (xub_StrLen i=0; i<nLen; i++)
+    sal_Int32 nLen = rString.getLength();
+    for (sal_Int32 i=0; i<nLen; i++)
     {
         sal_Unicode c = rString[i];
         if ( c < '0' || c > '9' )

@@ -183,7 +183,7 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
     xub_StrLen aIndex = 0;
     while (aCount)
     {
-        for (xub_StrLen i = 0; i <pHts->Count();i++)
+        for (sal_Int32 i = 0; i < pHts->Count(); i++ )
         {
             aIndex++;
             const SwTxtAttr* pTxtAttr = (*pHts)[i];
@@ -197,7 +197,7 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
         }
     }
     // throw away all following non postits
-    for (xub_StrLen i = aIndex; i <pHts->Count();i++)
+    for( sal_Int32 i = aIndex; i < pHts->Count(); i++ )
     {
         const SwTxtAttr* pTxtAttr = (*pHts)[i];
         if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
@@ -266,7 +266,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                     nStart = swap;
                 }
 
-                for (xub_StrLen i = 0; i <pHts->Count();i++)
+                for( sal_Int32 i = 0; i < pHts->Count(); i++ )
                 {
                     xub_StrLen aPos = *(*pHts)[i]->GetStart();
                     const SwTxtAttr* pTxtAttr = (*pHts)[i];

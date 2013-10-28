@@ -465,7 +465,7 @@ static bool GetSubranges( const OUString &rRangeRepresentation,
     {
         OUString *pRanges = aRanges.getArray();
         OUString aFirstTable;
-        for ( xub_StrLen i = 0;  i < nLen && bRes;  ++i)
+        for( sal_Int32 i = 0; i < nLen && bRes; ++i )
         {
             OUString aRange( aRangesStr.getToken( i, ';' ) );
             if (!aRange.isEmpty())

@@ -3309,7 +3309,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 bLastAlp = bNextNum = true;
                 xub_StrLen nStrip = 0;
                 xub_StrLen nCount = nRefs;
-                for ( xub_StrLen j=1; j<nCount; j++ )
+                for ( sal_Int32 j=1; j<nCount; j++ )
                 {
                     aTmp2 = aSymbol.getToken( 0, ':', nIndex );
                     sal_Int32 nLen2 = aTmp2.getLength();

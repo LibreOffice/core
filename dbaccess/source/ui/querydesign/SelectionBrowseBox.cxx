@@ -202,7 +202,7 @@ void OSelectionBrowseBox::initialize()
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
             sal_Int32 nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
-            for (xub_StrLen nIdx = 0; nIdx < nCount; nIdx++)
+            for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
                 m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(nIdx, ';'));
         }
         else // else only COUNT(*) and COUNT("table".*)
@@ -2260,9 +2260,9 @@ sal_Bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId, OUSt
             break;
         default:
             {
-                xub_StrLen nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
-                xub_StrLen i;
-                for ( i = 0; i < nCount-1; i++) // grouping is not counted
+                sal_Int32 nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
+                sal_Int32 i;
+                for( i = 0; i < nCount-1; i++ ) // grouping is not counted
                 {
                     if(rFkt.equalsIgnoreAsciiCase(m_aFunctionStrings.getToken(i, ';')))
                     {
@@ -2707,7 +2707,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
                 xub_StrLen nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
                 if ( _pEntry->isNumeric() )
                     --nCount;
-                for (xub_StrLen nIdx = 1; nIdx < nCount; nIdx++)
+                for( sal_Int32 nIdx = 1; nIdx < nCount; nIdx++ )
                     m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(nIdx, ';'));
             }
 

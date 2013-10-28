@@ -1592,7 +1592,7 @@ sal_Bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, cons
 
 static  bool lcl_HasStrongLTR ( const OUString& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
  {
-     for ( xub_StrLen nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
+     for( sal_Int32 nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
      {
          const UCharDirection nCharDir = u_charDirection ( rTxt[ nCharIdx ]);
          if ( nCharDir == U_LEFT_TO_RIGHT ||

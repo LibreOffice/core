@@ -118,9 +118,9 @@ static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
 /*************************************************************************
  * lcl_HasStrongLTR
  *************************************************************************/
-static  bool lcl_HasStrongLTR ( const OUString& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
+static  bool lcl_HasStrongLTR ( const OUString& rTxt, sal_Int32 nStart, sal_Int32 nEnd )
  {
-     for ( xub_StrLen nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
+     for( sal_Int32 nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
      {
          const UCharDirection nCharDir = u_charDirection ( rTxt[ nCharIdx ] );
          if ( nCharDir == U_LEFT_TO_RIGHT ||

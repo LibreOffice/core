@@ -236,7 +236,7 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_uInt16 nInsPos )
             DBG_ASSERT(nInsPos <= aTmp.getLength() - 2, "wrong hyphen position");
 
             sal_Int16 nIdxPos = -1;
-            for (sal_uInt16 i = 0; i <= nInsPos; ++i)
+            for (sal_Int32 i = 0; i <= nInsPos; ++i)
             {
                 if (HYPH_POS_CHAR == aTmp[ i ])
                     nIdxPos++;
@@ -304,7 +304,7 @@ void SvxHyphenWordDialog::SelLeft()
     if (nOldPos > 0)
     {
         OUString aTxt( aEditWord );
-        for ( xub_StrLen i = nOldPos - 1;  i > 0; --i)
+        for( sal_Int32 i = nOldPos - 1;  i > 0; --i )
         {
             DBG_ASSERT(i <= aTxt.getLength(), "index out of range");
             if (aTxt[ i ] == sal_Unicode( HYPH_POS_CHAR ))

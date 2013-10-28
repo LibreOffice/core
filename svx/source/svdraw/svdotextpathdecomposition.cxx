@@ -100,7 +100,7 @@ namespace
             {
                 maDblDXArray.reserve(mnTextLength);
 
-                for(xub_StrLen a(0); a < mnTextLength; a++)
+                for(sal_Int32 a=0; a < mnTextLength; a++)
                 {
                     maDblDXArray.push_back((double)rInfo.mpDXArray[a]);
                 }

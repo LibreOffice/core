@@ -627,7 +627,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth
     sal_uInt8 nSignCount = 0, nDecimalCount = 0, nExpCount = 0;
     sal_Int32 nLen = aString.getLength();
     sal_Unicode cDecSep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator[0];
-    for (xub_StrLen i = 0; i < nLen; ++i)
+    for( sal_Int32 i = 0; i < nLen; ++i )
     {
         sal_Unicode c = aString[i];
         if (c == sal_Unicode('-'))
@@ -1223,9 +1223,8 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
     if ( nMergeRows == 0 )
         nMergeRows = 1;
 
-    long i;
     long nMergeSizeX = 0;
-    for ( i=0; i<nMergeCols; i++ )
+    for ( long i=0; i<nMergeCols; i++ )
     {
         long nColWidth = ( nCellX+i <= nX2 ) ?
                 pRowInfo[0].pCellInfo[nCellX+i+1].nWidth :
@@ -2021,7 +2020,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                             {
                                 double fMul = GetStretch();
                                 sal_Int32 nLen = aString.getLength();
-                                for (xub_StrLen i=0; i<nLen; i++)
+                                for( sal_Int32 i = 0; i<nLen; i++ )
                                     pDX[i] = (long)(pDX[i] / fMul + 0.5);
                             }
 

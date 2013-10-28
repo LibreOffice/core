@@ -425,7 +425,7 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
 
         if ( pDXArray )
         {
-            for ( xub_StrLen i = 0; i < nLen; i++ )
+            for ( sal_Int32 i = 0; i < nLen; i++ )
                 pDXArray[i] += ( (i+1) * long( nKern ) );
             // The last one is a nKern too big:
             pDXArray[nLen-1] -= nKern;

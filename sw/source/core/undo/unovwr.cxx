@@ -205,7 +205,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         pTxtNd->SetIgnoreDontExpand( true );
 
         ++rIdx;
-        for( xub_StrLen n = 0; n < aDelStr.getLength(); n++  )
+        for( sal_Int32 n = 0; n < aDelStr.getLength(); n++  )
         {
             // do it individually, to keep the attributes!
             OUString aTmpStr(aDelStr[n]);
@@ -249,7 +249,7 @@ void SwUndoOverwrite::RepeatImpl(::sw::RepeatContext & rContext)
         ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
         rDoc.Overwrite(*pAktPam, OUString(aInsStr[0]));
     }
-    for( xub_StrLen n = 1; n < aInsStr.getLength(); ++n )
+    for( sal_Int32 n = 1; n < aInsStr.getLength(); ++n )
         rDoc.Overwrite( *pAktPam, OUString(aInsStr[n]) );
 }
 
@@ -277,7 +277,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
     pTxtNd->SetIgnoreDontExpand( true );
 
-    for( xub_StrLen n = 0; n < aInsStr.getLength(); n++  )
+    for( sal_Int32 n = 0; n < aInsStr.getLength(); n++  )
     {
         // do it individually, to keep the attributes!
         OUString const ins(
@@ -459,7 +459,7 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
         else
         {
             sal_Int32* p = aOffsets.getArray();
-            for( xub_StrLen n = 0; n < nLen; ++n, ++p )
+            for( sal_Int32 n = 0; n < nLen; ++n, ++p )
                 *p = n + nStart;
         }
         pTNd->ReplaceTextOnly( nStart, nLen, sText, aOffsets );

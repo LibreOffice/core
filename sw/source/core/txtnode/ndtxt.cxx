@@ -3450,7 +3450,7 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
     const xub_StrLen nStartPos = rStart.GetIndex();
     xub_StrLen nEndPos = nStartPos + nDelLen;
     xub_StrLen nLen = nDelLen;
-    for ( xub_StrLen nPos = nStartPos; nPos < nEndPos; ++nPos )
+    for( sal_Int32 nPos = nStartPos; nPos < nEndPos; ++nPos )
     {
         if ((CH_TXTATR_BREAKWORD == m_Text[nPos]) ||
             (CH_TXTATR_INWORD    == m_Text[nPos]))

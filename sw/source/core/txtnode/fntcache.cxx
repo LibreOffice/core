@@ -1029,7 +1029,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             }
 
             // calculate offsets
-            for ( xub_StrLen j = 1; j < rInf.GetLen(); ++j )
+            for( sal_Int32 j = 1; j < rInf.GetLen(); ++j )
             {
                 long nScr = pKernArray[ j ] - pKernArray[ j - 1 ];
                 nNextFix += nWidthPerChar;
@@ -1128,14 +1128,14 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         }
                     }
                     long nGridAddSum = nGridWidthAdd;
-                    for(xub_StrLen i = 0; i < rInf.GetLen(); i++,nGridAddSum += nGridWidthAdd )
+                    for(sal_Int32 i = 0; i < rInf.GetLen(); i++, nGridAddSum += nGridWidthAdd )
                     {
                         pKernArray[i] += nGridAddSum;
                     }
                     long nKernSum = rInf.GetKern();
                     if ( bSpecialJust || rInf.GetKern() )
                     {
-                        for( xub_StrLen i = 0; i < rInf.GetLen(); i++, nKernSum += rInf.GetKern() )
+                        for( sal_Int32 i = 0; i < rInf.GetLen(); i++, nKernSum += rInf.GetKern() )
                         {
                             if ( CH_BLANK == rInf.GetText()[ rInf.GetIdx()+i ] )
                                 nKernSum += nSpaceAdd;
@@ -1197,7 +1197,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 //long nKernAdd = rInf.GetKern();
         long nKernAdd = 0;
                 long nGridAddSum = nGridWidthAdd + nKernAdd;
-                for(xub_StrLen i = 0; i < rInf.GetLen(); i++,nGridAddSum += nGridWidthAdd + nKernAdd )
+                for(sal_Int32 i = 0; i < rInf.GetLen(); i++,nGridAddSum += nGridWidthAdd + nKernAdd )
                 {
                     pKernArray[i] += nGridAddSum;
                 }
@@ -1255,7 +1255,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
                 nDiff /= nZwi;
                 long nSum = nDiff;
-                for( xub_StrLen i = 0; i < nZwi; )
+                for( sal_Int32 i = 0; i < nZwi; )
                 {
                     pKernArray[ i ] += nSum;
                     if( ++i == nRest )
@@ -1345,7 +1345,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             if ( bStretch || bPaintBlank || rInf.GetKern() || bSpecialJust )
             {
-                for( xub_StrLen i = 0; i < rInf.GetLen(); i++,
+                for( sal_Int32 i = 0; i < rInf.GetLen(); i++,
                      nKernSum += rInf.GetKern() )
                 {
                     if ( CH_BLANK == rInf.GetText()[ rInf.GetIdx()+i ] )
@@ -1630,7 +1630,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             const long nOtherHalf = nSpaceAdd - nHalfSpace;
             if ( nSpaceAdd && ( cChPrev == CH_BLANK ) )
                 nSpaceSum = nHalfSpace;
-            for ( xub_StrLen i=1; i<nCnt; ++i,nKernSum += rInf.GetKern() )
+            for( sal_Int32 i=1; i<nCnt; ++i, nKernSum += rInf.GetKern() )
             {
                 nCh = rInf.GetText()[ rInf.GetIdx() + i ];
 
@@ -1951,7 +1951,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             if ( pPrtFont->GetKerning() )
                 nMul = 1;
             const sal_uInt16 nDiv = nMul+1;
-            for( xub_StrLen i=1; i<nCnt; i++ )
+            for( sal_Int32 i = 1; i<nCnt; i++ )
             {
                 nCh = rInf.GetText()[ rInf.GetIdx() + i ];
                 long nScr;
@@ -2149,7 +2149,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
             else
                 nGridWidthAdd = nGridWidthAdd - nDefaultFontHeight;
 
-            for(xub_StrLen j = 0; j < rInf.GetLen(); j++)
+            for(sal_Int32 j = 0; j < rInf.GetLen(); j++)
             {
                 long nScr = pKernArray[ j ] + ( nSpaceAdd + nGridWidthAdd  ) * ( j + 1 );
                 if( nScr >= rInf.GetOfst())

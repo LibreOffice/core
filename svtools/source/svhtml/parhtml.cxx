@@ -498,7 +498,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 else if( HTML_ISALPHA( nNextCh ) )
                 {
                     OUStringBuffer sEntityBuffer( MAX_ENTITY_LEN );
-                    xub_StrLen nPos = 0L;
+                    sal_Int32 nPos = 0L;
                     do
                     {
                         sEntityBuffer.append( nNextCh );
@@ -520,7 +520,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             DBG_ASSERT( rInput.Tell() - nStreamPos ==
                                         (sal_uLong)(nPos+1L)*GetCharSize(),
                                         "UTF-8 is failing here" );
-                            for( xub_StrLen i=nPos-1L; i>1L; i-- )
+                            for( sal_Int32 i = nPos-1; i>1; i-- )
                             {
                                 nNextCh = sEntityBuffer[i];
                                 sEntityBuffer.setLength( i );
@@ -1899,14 +1899,12 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
         if( 0xfe == (sal_uChar)pHeader[0] )
             bUCS2B = true;
 
-        xub_StrLen nLen;
-        for( nLen = 2;
-             pHeader[nLen] != 0 || pHeader[nLen+1] != 0;
-             nLen+=2 )
-            ;
+        sal_Int32 nLen = 2;
+        while( pHeader[nLen] != 0 || pHeader[nLen+1] != 0 )
+             nLen += 2;
 
         OStringBuffer sTmp( (nLen - 2)/2 );
-        for( xub_StrLen nPos = 2; nPos < nLen; nPos += 2 )
+        for( sal_Int32 nPos = 2; nPos < nLen; nPos += 2 )
         {
             sal_Unicode cUC;
             if( bUCS2B )

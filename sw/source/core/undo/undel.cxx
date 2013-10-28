@@ -605,7 +605,7 @@ OUString DenoteSpecialCharacters(const OUString & rStr)
         xub_StrLen nStart = 0;
         sal_Unicode cLast = 0;
 
-        for (xub_StrLen i = 0; i < rStr.getLength(); i++)
+        for( sal_Int32 i = 0; i < rStr.getLength(); i++)
         {
             if (lcl_IsSpecialCharacter(rStr[i]))
             {

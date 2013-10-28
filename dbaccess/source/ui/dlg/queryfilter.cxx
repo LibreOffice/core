@@ -717,7 +717,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
         }
         else if(eColumnSearch == ColumnSearch::CHAR)
         {
-            for(xub_StrLen i=6;i<10;i++)
+            for(sal_Int32 i=6; i<10; i++)
                 pComp->InsertEntry(aSTR_COMPARE_OPERATORS.getToken(i, ';'));
         }
         else if(eColumnSearch == ColumnSearch::BASIC)

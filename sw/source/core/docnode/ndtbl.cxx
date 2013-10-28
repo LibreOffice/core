@@ -1057,7 +1057,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
         if( T2T_PARA != cCh )
         {
-            for (xub_StrLen nChPos = 0; nChPos < pTxtNd->GetTxt().getLength();)
+            for (sal_Int32 nChPos = 0; nChPos < pTxtNd->GetTxt().getLength();)
             {
                 if (pTxtNd->GetTxt()[nChPos] == cCh)
                 {

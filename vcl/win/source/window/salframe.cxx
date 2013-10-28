@@ -5243,7 +5243,7 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                 sal_Int32 nTextLen2 = aEvt.maText.getLength();
                 pSalAttrAry = new sal_uInt16[nTextLen2];
                 memset( pSalAttrAry, 0, nTextLen2*sizeof( sal_uInt16 ) );
-                for ( xub_StrLen i = 0; (i < nTextLen2) && (i < nAttrLen); i++ )
+                for( sal_Int32 i = 0; (i < nTextLen2) && (i < nAttrLen); i++ )
                 {
                     BYTE nWinAttr = pAttrBuf[i];
                     sal_uInt16   nSalAttr;

@@ -790,7 +790,7 @@ static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool 
     SCCOLROW nVal = 0;
     sal_Int32 nLen = rStr.getLength();
     bool bEndPos = false;
-    for (xub_StrLen i = 0; i < nLen; ++i)
+    for( sal_Int32 i = 0; i < nLen; ++i )
     {
         const sal_Unicode c = rStr[i];
         if (c == rsep)

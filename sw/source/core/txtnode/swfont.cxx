@@ -1263,7 +1263,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
 
             const bool bAsianFont =
                 ( rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() );
-            for( xub_StrLen nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp )
+            for( sal_Int32 nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp )
             {
                 if( CH_BLANK == rOldStr[nTmp] || bAsianFont ||
                     ( nTmp + 1 < rOldStr.getLength() && pSI &&

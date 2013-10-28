@@ -1410,7 +1410,7 @@ lcl_CalcBreaks( ::std::vector<xub_StrLen> & rBreaks, SwPaM const & rPam )
     if (nEnd == pTxtNode->Len())
         return; // paragraph selected until the end
 
-    for (xub_StrLen i = nStart; i < nEnd; ++i)
+    for (sal_Int32 i = nStart; i < nEnd; ++i)
     {
         const sal_Unicode c(pTxtNode->GetTxt()[i]);
         if ((CH_TXTATR_INWORD == c) || (CH_TXTATR_BREAKWORD == c))

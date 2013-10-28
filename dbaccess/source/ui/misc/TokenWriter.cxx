@@ -107,7 +107,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
     if( nCount > SBA_FORMAT_SELECTION_COUNT && !rExchange.getToken(4, ';').isEmpty())
     {
         m_pRowMarker = new sal_Int32[nCount-SBA_FORMAT_SELECTION_COUNT];
-        for(xub_StrLen i=SBA_FORMAT_SELECTION_COUNT;i<nCount;++i)
+        for(sal_Int32 i=SBA_FORMAT_SELECTION_COUNT; i<nCount; ++i)
             m_pRowMarker[i-SBA_FORMAT_SELECTION_COUNT] = rExchange.getToken(i,char(11)).toInt32();
     }
     osl_atomic_decrement( &m_refCount );

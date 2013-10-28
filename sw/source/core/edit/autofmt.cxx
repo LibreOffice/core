@@ -459,7 +459,7 @@ sal_uInt16 SwAutoFormat::CalcLevel( const SwTxtNode& rNd, sal_uInt16 *pDigitLvl 
         ++nLvl;
     }
 
-    for (xub_StrLen n = 0, nEnd = rTxt.getLength(); n < nEnd; ++n)
+    for( xub_StrLen n = 0, nEnd = rTxt.getLength(); n < nEnd; ++n )
     {
         switch (rTxt[n])
         {
@@ -504,7 +504,7 @@ sal_Bool SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
     xub_StrLen nANChar = 0, nBlnk = 0;
 
     CharClass& rCC = GetCharClass( rNd.GetSwAttrSet().GetLanguage().GetLanguage() );
-    for( xub_StrLen n = 0, nEnd = rStr.getLength(); n < nEnd; ++n )
+    for( sal_Int32 n = 0, nEnd = rStr.getLength(); n < nEnd; ++n )
         if( IsSpace( rStr[ n ] ) )
             ++nBlnk;
         else if( rCC.isLetterNumeric( rStr, n ))
@@ -722,7 +722,7 @@ xub_StrLen SwAutoFormat::GetTrailingBlanks( const OUString& rStr ) const
 bool SwAutoFormat::IsFirstCharCapital( const SwTxtNode& rNd ) const
 {
     const OUString& rTxt = rNd.GetTxt();
-    for (xub_StrLen n = 0, nEnd = rTxt.getLength(); n < nEnd; ++n)
+    for( sal_Int32 n = 0, nEnd = rTxt.getLength(); n < nEnd; ++n )
         if (!IsSpace(rTxt[n]))
         {
             CharClass& rCC = GetCharClass( rNd.GetSwAttrSet().
