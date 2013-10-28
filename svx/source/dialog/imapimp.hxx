@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _IMAPIMP_HXX_
-#define _IMAPIMP_HXX_
+#ifndef INCLUDED_SVX_SOURCE_DIALOG_IMAPIMP_HXX
+#define INCLUDED_SVX_SOURCE_DIALOG_IMAPIMP_HXX
 
 // ---------------
 // - IMapOwnData -

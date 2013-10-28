@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FRMSELIMPL_HXX
-#define SVX_FRMSELIMPL_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_FRMSELIMPL_HXX
+#define INCLUDED_SVX_SOURCE_INC_FRMSELIMPL_HXX
 
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_TEXT_CHANGED_QUEUE_HXX
-#define _SVX_TEXT_CHANGED_QUEUE_HXX
+#ifndef INCLUDED_SVX_SOURCE_ACCESSIBILITY_ACCESSIBLETEXTEVENTQUEUE_HXX
+#define INCLUDED_SVX_SOURCE_ACCESSIBILITY_ACCESSIBLETEXTEVENTQUEUE_HXX
 
 #include <memory>
 #include <list>
@@ -87,6 +87,6 @@ namespace accessibility
 
 } // end of namespace accessibility
 
-#endif /* _SVX_TEXT_CHANGED_QUEUE_HXX */
+#endif // INCLUDED_SVX_SOURCE_ACCESSIBILITY_ACCESSIBLETEXTEVENTQUEUE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

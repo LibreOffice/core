@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FMUNDO_HXX
-#define _SVX_FMUNDO_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_FMUNDO_HXX
+#define INCLUDED_SVX_SOURCE_INC_FMUNDO_HXX
 
 #include <svx/svdundo.hxx>
 #include <svx/svdouno.hxx>
@@ -211,6 +211,6 @@ public:
 };
 
 
-#endif  //_SVX_FMUNDO_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_FMUNDO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

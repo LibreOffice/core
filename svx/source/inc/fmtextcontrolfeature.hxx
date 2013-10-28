@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
-#define SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
+#define INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -91,6 +91,6 @@ namespace svx
 } // namespace svx
 //........................................................................
 
-#endif // SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SVX_SIDEBAR_LINE_WIDTH_VALUE_SET_HXX
-#define SVX_SIDEBAR_LINE_WIDTH_VALUE_SET_HXX
+#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHVALUESET_HXX
+#define INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHVALUESET_HXX
 
 #include <svtools/valueset.hxx>
 #include <vcl/image.hxx>
@@ -48,6 +48,6 @@ protected:
 
 } } // end of namespace svx::sidebar
 
-#endif // SVX_SIDEBAR_LINE_WIDTH_VALUE_SET_HXX
+#endif // INCLUDED_SVX_SOURCE_SIDEBAR_LINE_LINEWIDTHVALUESET_HXX
 
 // eof

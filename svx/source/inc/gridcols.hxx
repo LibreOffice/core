@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_GRIDCOLS_HXX
-#define _SVX_GRIDCOLS_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_GRIDCOLS_HXX
+#define INCLUDED_SVX_SOURCE_INC_GRIDCOLS_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -49,6 +49,6 @@
 sal_Int32 getColumnTypeByModelName(const OUString& aModelName);
 
 
-#endif // _SVX_GRIDCOLS_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_GRIDCOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

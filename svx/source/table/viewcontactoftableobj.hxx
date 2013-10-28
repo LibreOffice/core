@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_CONTACT_VIEWCONTACTOFTABLEOBJ_HXX
-#define _SDR_CONTACT_VIEWCONTACTOFTABLEOBJ_HXX
+#ifndef INCLUDED_SVX_SOURCE_TABLE_VIEWCONTACTOFTABLEOBJ_HXX
+#define INCLUDED_SVX_SOURCE_TABLE_VIEWCONTACTOFTABLEOBJ_HXX
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_TYPECONVERSION_CLIENT_HXX
-#define SVX_TYPECONVERSION_CLIENT_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_TYPECONVERSIONCLIENT_HXX
+#define INCLUDED_SVX_SOURCE_INC_TYPECONVERSIONCLIENT_HXX
 
 #include "svx/dbtoolsclient.hxx"
 
@@ -79,7 +79,7 @@ namespace svxform
 }   // namespace svxform
 //........................................................................
 
-#endif // SVX_TYPECONVERSION_CLIENT_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_TYPECONVERSIONCLIENT_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

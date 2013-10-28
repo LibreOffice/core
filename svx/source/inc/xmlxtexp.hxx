@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XMLXTEXP_HXX
-#define _SVX_XMLXTEXP_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_XMLXTEXP_HXX
+#define INCLUDED_SVX_SOURCE_INC_XMLXTEXP_HXX
 
 #include "xmloff/xmlexp.hxx"
 

@@ -18,8 +18,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FORMCONTROLMANAGER_HXX
-#define SVX_FORMCONTROLMANAGER_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_FORMCONTROLFACTORY_HXX
+#define INCLUDED_SVX_SOURCE_INC_FORMCONTROLFACTORY_HXX
 
 #include "fmdocumentclassification.hxx"
 
@@ -108,6 +108,6 @@ namespace svxform
 } // namespace svxform
 //........................................................................
 
-#endif // SVX_FORMCONTROLMANAGER_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_FORMCONTROLFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

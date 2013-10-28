@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SQLPARSERCLIENT_HXX
-#define SVX_SQLPARSERCLIENT_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
+#define INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 
 #include "svx/dbtoolsclient.hxx"
 #include "svx/ParseContext.hxx"
@@ -66,7 +66,7 @@ namespace svxform
 }   // namespace svxform
 //........................................................................
 
-#endif // SVX_SQLPARSERCLIENT_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_SQLPARSERCLIENT_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

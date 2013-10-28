@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_GALOBJ_HXX_
-#define _SVX_GALOBJ_HXX_
+#ifndef INCLUDED_SVX_INC_GALOBJ_HXX
+#define INCLUDED_SVX_INC_GALOBJ_HXX
 
 #include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>

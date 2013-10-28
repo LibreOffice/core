@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONTIMP_HXX_
-#define _CONTIMP_HXX_
+#ifndef INCLUDED_SVX_SOURCE_DIALOG_CONTIMP_HXX
+#define INCLUDED_SVX_SOURCE_DIALOG_CONTIMP_HXX
 
 #include <svx/contdlg.hxx>
 #include "contwnd.hxx"
@@ -101,6 +101,6 @@ public:
 };
 
 
-#endif // _CONTIMP_HXX_
+#endif // INCLUDED_SVX_SOURCE_DIALOG_CONTIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

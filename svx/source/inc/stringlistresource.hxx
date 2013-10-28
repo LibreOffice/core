@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_STRINGLISTRESOURCE_HXX
-#define SVX_STRINGLISTRESOURCE_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_STRINGLISTRESOURCE_HXX
+#define INCLUDED_SVX_SOURCE_INC_STRINGLISTRESOURCE_HXX
 
 #include <tools/rc.hxx>
 #include <svx/svxdllapi.h>
@@ -74,6 +74,6 @@ namespace svx
 } // namespace svx
 //........................................................................
 
-#endif // SVX_STRINGLISTRESOURCE_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_STRINGLISTRESOURCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDFMTF_HXX
-#define _SVDFMTF_HXX
+#ifndef INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
+#define INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
 
 #include <tools/contnr.hxx>
 #include <vcl/metaact.hxx>
@@ -166,6 +166,6 @@ public:
         SvdProgressInfo* pProgrInfo = 0);
 };
 
-#endif //_SVDFMTF_HXX
+#endif // INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

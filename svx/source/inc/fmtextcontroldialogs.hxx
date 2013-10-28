@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SOURCE_FORM_FMTEXTCONTROLDIALOGS_HXX
-#define SVX_SOURCE_FORM_FMTEXTCONTROLDIALOGS_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLDIALOGS_HXX
+#define INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLDIALOGS_HXX
 
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/tabdlg.hxx>
@@ -58,6 +58,6 @@ namespace svx
 } // namespace svx
 //........................................................................
 
-#endif // SVX_SOURCE_FORM_FMTEXTCONTROLDIALOGS_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLDIALOGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

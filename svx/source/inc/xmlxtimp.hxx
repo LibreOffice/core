@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_XMLXTIMP_HXX
-#define _SVX_XMLXTIMP_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_XMLXTIMP_HXX
+#define INCLUDED_SVX_SOURCE_INC_XMLXTIMP_HXX
 
 #include <xmloff/xmlimp.hxx>
 

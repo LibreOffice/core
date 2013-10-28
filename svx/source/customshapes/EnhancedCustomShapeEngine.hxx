@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENHANCED_CUSTOMSHAPE_ENGINE_HXX
-#define _ENHANCED_CUSTOMSHAPE_ENGINE_HXX
+#ifndef INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPEENGINE_HXX
+#define INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPEENGINE_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>

@@ -20,8 +20,8 @@
 //========================================================================
 // class SvxColorWindow_Impl --------------------------------------------------
 //========================================================================
-#ifndef __SVX_COLORWINDOW_HXX_
-#define __SVX_COLORWINDOW_HXX_
+#ifndef INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
+#define INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
 
 #include <sfx2/tbxctrl.hxx>
 #include <svtools/valueset.hxx>

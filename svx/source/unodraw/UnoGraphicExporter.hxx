@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOGRAPHICEXPORTER_HXX_
-#define _SVX_UNOGRAPHICEXPORTER_HXX_
+#ifndef INCLUDED_SVX_SOURCE_UNODRAW_UNOGRAPHICEXPORTER_HXX
+#define INCLUDED_SVX_SOURCE_UNODRAW_UNOGRAPHICEXPORTER_HXX
 
 #include <com/sun/star/uno/XInterface.hpp>
 

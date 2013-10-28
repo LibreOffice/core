@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVDIBROW_HXX
-#define _SVDIBROW_HXX
+#ifndef INCLUDED_SVX_INC_SVDIBROW_HXX
+#define INCLUDED_SVX_INC_SVDIBROW_HXX
 
 #include <svtools/brwbox.hxx>
 #include <vcl/edit.hxx>
@@ -131,7 +131,7 @@ public:
     void ForceUndirty() { if (bDirty) Undirty(); }
 };
 
-#endif //_SVDIBROW_HXX
+#endif // INCLUDED_SVX_INC_SVDIBROW_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

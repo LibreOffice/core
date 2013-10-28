@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNONAMEITEMTABLE_HXX_
-#define _SVX_UNONAMEITEMTABLE_HXX_
+#ifndef INCLUDED_SVX_SOURCE_UNODRAW_UNONAMEITEMTABLE_HXX
+#define INCLUDED_SVX_SOURCE_UNODRAW_UNONAMEITEMTABLE_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -80,6 +80,6 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw( com::sun::star::uno::RuntimeException);
 };
 
-#endif // _SVX_UNONAMEITEMTABLE_HXX_
+#endif // INCLUDED_SVX_SOURCE_UNODRAW_UNONAMEITEMTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_SHAPEIMPL_HXX
-#define _SVX_SHAPEIMPL_HXX
+#ifndef INCLUDED_SVX_SOURCE_UNODRAW_SHAPEIMPL_HXX
+#define INCLUDED_SVX_SOURCE_UNODRAW_SHAPEIMPL_HXX
 
 #include <svx/unoshape.hxx>
 

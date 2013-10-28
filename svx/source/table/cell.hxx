@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_CELL_HXX_
-#define _SVX_CELL_HXX_
+#ifndef INCLUDED_SVX_SOURCE_TABLE_CELL_HXX
+#define INCLUDED_SVX_SOURCE_TABLE_CELL_HXX
 
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_ACCESSIBLEFRAMESELECTOR_HXX
-#define SVX_ACCESSIBLEFRAMESELECTOR_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_ACCESSIBLEFRAMESELECTOR_HXX
+#define INCLUDED_SVX_SOURCE_INC_ACCESSIBLEFRAMESELECTOR_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>

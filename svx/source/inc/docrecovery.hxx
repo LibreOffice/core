@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_DOCRECOVERY_HXX
-#define _SVX_DOCRECOVERY_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
+#define INCLUDED_SVX_SOURCE_INC_DOCRECOVERY_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>

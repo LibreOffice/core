@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SVX_GALLERY_SPLITTER_HXX
-#define SVX_GALLERY_SPLITTER_HXX
+#ifndef INCLUDED_SVX_SOURCE_GALLERY2_GALLERYSPLITTER_HXX
+#define INCLUDED_SVX_SOURCE_GALLERY2_GALLERYSPLITTER_HXX
 
 #include <vcl/split.hxx>
 #include <boost/function.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
-#define SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
+#define INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
 
 #include <tools/solar.h>
 
@@ -45,7 +45,7 @@ namespace svx
 } // namespace svx
 //........................................................................
 
-#endif // SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

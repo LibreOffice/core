@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SVDCONV_HXX
-#define _SVDCONV_HXX
+#ifndef INCLUDED_SVX_SOURCE_SVDRAW_SVDCONV_HXX
+#define INCLUDED_SVX_SOURCE_SVDRAW_SVDCONV_HXX
 
 #include <sal/types.h>
 
@@ -28,6 +28,6 @@ inline sal_Int32 ImplTwipsToMM(sal_Int32 nVal) { return ((nVal * 127 + 36) / 72)
 template<>
 inline sal_Int64 ImplTwipsToMM(sal_Int64 nVal) { return ((nVal * 127 + 36) / 72); }
 
-#endif // _SVDCONV_HXX
+#endif // INCLUDED_SVX_SOURCE_SVDRAW_SVDCONV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

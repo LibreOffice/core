@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CLONELIST_HXX_
-#define _CLONELIST_HXX_
+#ifndef INCLUDED_SVX_SOURCE_INC_CLONELIST_HXX
+#define INCLUDED_SVX_SOURCE_INC_CLONELIST_HXX
 
 #include <vector>
 
@@ -44,6 +44,6 @@ public:
     void CopyConnections() const;
 };
 
-#endif // _CLONELIST_HXX_
+#endif // INCLUDED_SVX_SOURCE_INC_CLONELIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FORM_SDBDATACOLUMN_HXX
-#define SVX_FORM_SDBDATACOLUMN_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_SDBDATACOLUMN_HXX
+#define INCLUDED_SVX_SOURCE_INC_SDBDATACOLUMN_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
@@ -125,7 +125,7 @@ namespace svxform
         inline void updateNumericObject(const ::com::sun::star::uno::Any& x, sal_Int32 scale) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
     };
 
-#endif // SVX_FORM_SDBDATACOLUMN_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_SDBDATACOLUMN_HXX
 
 //..............................................................................
 }   // namespace svxform

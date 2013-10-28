@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_DATALISTENER_HXX
-#define _SVX_DATALISTENER_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_DATALISTENER_HXX
+#define INCLUDED_SVX_SOURCE_INC_DATALISTENER_HXX
 
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/container/XContainerListener.hpp>
@@ -67,6 +67,6 @@ namespace svxform
 }   // namespace svxform
 //............................................................................
 
-#endif // #ifndef _SVX_DATALISTENER_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_DATALISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

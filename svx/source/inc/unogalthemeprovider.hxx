@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOGALTHEMEPROVIDER_HXX
-#define _SVX_UNOGALTHEMEPROVIDER_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_UNOGALTHEMEPROVIDER_HXX
+#define INCLUDED_SVX_SOURCE_INC_UNOGALTHEMEPROVIDER_HXX
 
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

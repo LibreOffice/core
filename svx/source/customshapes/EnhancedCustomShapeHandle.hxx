@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ENHANCED_CUSTOMSHAPE_HANDLE_HXX
-#define _ENHANCED_CUSTOMSHAPE_HANDLE_HXX
+#ifndef INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPEHANDLE_HXX
+#define INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPEHANDLE_HXX
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/implbase2.hxx>

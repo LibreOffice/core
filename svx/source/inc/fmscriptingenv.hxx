@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_FMSCRIPTINGENV_HXX
-#define SVX_FMSCRIPTINGENV_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_FMSCRIPTINGENV_HXX
+#define INCLUDED_SVX_SOURCE_INC_FMSCRIPTINGENV_HXX
 
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <rtl/ref.hxx>
@@ -85,6 +85,6 @@ namespace svxform
 } // namespace svxform
 //........................................................................
 
-#endif // SVX_FMSCRIPTINGENV_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_FMSCRIPTINGENV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

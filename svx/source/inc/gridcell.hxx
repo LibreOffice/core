@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_GRIDCELL_HXX
-#define _SVX_GRIDCELL_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_GRIDCELL_HXX
+#define INCLUDED_SVX_SOURCE_INC_GRIDCELL_HXX
 
 #include <svx/gridctrl.hxx>
 
@@ -1141,6 +1141,6 @@ protected:
     DECL_LINK( OnCommit, void* );
 };
 
-#endif // _SVX_GRIDCELL_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_GRIDCELL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

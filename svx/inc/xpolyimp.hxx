@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XPOLYIMP_HXX
-#define _XPOLYIMP_HXX
+#ifndef INCLUDED_SVX_INC_XPOLYIMP_HXX
+#define INCLUDED_SVX_INC_XPOLYIMP_HXX
 
 #include <svx/xpoly.hxx>
 #include <vector>
@@ -76,6 +76,6 @@ public:
 
 
 
-#endif      // _XPOLYIMP_HXX
+#endif // INCLUDED_SVX_INC_XPOLYIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

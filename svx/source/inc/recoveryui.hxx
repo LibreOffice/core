@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RECOVERYUI_HXX
-#define _RECOVERYUI_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_RECOVERYUI_HXX
+#define INCLUDED_SVX_SOURCE_INC_RECOVERYUI_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
@@ -134,6 +134,6 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
 
 } // namespace svx
 
-#endif // _RECOVERYUI_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_RECOVERYUI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

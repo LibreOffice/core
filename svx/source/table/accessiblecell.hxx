@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CELL_HXX
-#define _SVX_ACCESSIBILITY_ACCESSIBLE_CELL_HXX
+#ifndef INCLUDED_SVX_SOURCE_TABLE_ACCESSIBLECELL_HXX
+#define INCLUDED_SVX_SOURCE_TABLE_ACCESSIBLECELL_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>

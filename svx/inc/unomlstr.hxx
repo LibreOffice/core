@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_UNOMLSTR_HXX
-#define _SVX_UNOMLSTR_HXX
+#ifndef INCLUDED_SVX_INC_UNOMLSTR_HXX
+#define INCLUDED_SVX_INC_UNOMLSTR_HXX
 
 #include <com/sun/star/util/XModifyListener.hpp>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOGALITEM_HXX
-#define _SVX_UNOGALITEM_HXX
+#ifndef INCLUDED_SVX_SOURCE_UNOGALLERY_UNOGALITEM_HXX
+#define INCLUDED_SVX_SOURCE_UNOGALLERY_UNOGALITEM_HXX
 
 #include <svx/unomodel.hxx>
 #include <comphelper/servicehelper.hxx>

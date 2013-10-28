@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XMLCONFIG_HXX_
-#define _XMLCONFIG_HXX_
+#ifndef INCLUDED_SVX_WORKBEN_MSVIEW_XMLCONFIG_HXX
+#define INCLUDED_SVX_WORKBEN_MSVIEW_XMLCONFIG_HXX
 
 #include <map>
 #include <list>

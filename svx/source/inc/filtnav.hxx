@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_FILTNAV_HXX
-#define _SVX_FILTNAV_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_FILTNAV_HXX
+#define INCLUDED_SVX_SOURCE_INC_FILTNAV_HXX
 
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
@@ -352,6 +352,6 @@ public:
 }   // namespace svxform
 //........................................................................
 
-#endif // _SVX_FILTNAV_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_FILTNAV_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

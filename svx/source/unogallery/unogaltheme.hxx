@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_UNOGALTHEME_HXX
-#define _SVX_UNOGALTHEME_HXX
+#ifndef INCLUDED_SVX_SOURCE_UNOGALLERY_UNOGALTHEME_HXX
+#define INCLUDED_SVX_SOURCE_UNOGALLERY_UNOGALTHEME_HXX
 
 #include <list>
 

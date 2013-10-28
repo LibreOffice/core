@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_GALBRWS2_HXX_
-#define _SVX_GALBRWS2_HXX_
+#ifndef INCLUDED_SVX_INC_GALBRWS2_HXX
+#define INCLUDED_SVX_INC_GALBRWS2_HXX
 
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SVXRECTACCESSIBLECONTEXT_HXX
-#define _SVXRECTACCESSIBLECONTEXT_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_SVXRECTCTACCESSIBLECONTEXT_HXX
+#define INCLUDED_SVX_SOURCE_INC_SVXRECTCTACCESSIBLECONTEXT_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>

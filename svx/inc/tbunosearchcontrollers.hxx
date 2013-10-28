@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __TBUNOSEARCHCONTROLLERS_HXX_
-#define __TBUNOSEARCHCONTROLLERS_HXX_
+#ifndef INCLUDED_SVX_INC_TBUNOSEARCHCONTROLLERS_HXX
+#define INCLUDED_SVX_INC_TBUNOSEARCHCONTROLLERS_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
@@ -353,6 +353,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createIns
 
 }
 
-#endif // __TBUNOSEARCHCONTROLLERS_HXX_
+#endif // INCLUDED_SVX_INC_TBUNOSEARCHCONTROLLERS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

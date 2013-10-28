@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FMURL_HXX
-#define _SVX_FMURL_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_FMURL_HXX
+#define INCLUDED_SVX_SOURCE_INC_FMURL_HXX
 
 #define FMURL_FORM_POSITION                OUString( ".uno:FormController/positionForm" )
 #define FMURL_FORM_RECORDCOUNT             OUString( ".uno:FormController/RecordCount" )
@@ -48,6 +48,6 @@
 #define FMARG_ADDCOL_COLUMNTYPE            OUString( "ColumnType" )
 #define FMARG_ADDCOL_COLUMNPOS             OUString( "ColumnPosition" )
 
-#endif // _SVX_FMURL_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_FMURL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

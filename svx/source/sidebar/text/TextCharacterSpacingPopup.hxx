@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_SIDEBAR_CHARACTER_SPACING_POPUP_HXX_
-#define _SVX_SIDEBAR_CHARACTER_SPACING_POPUP_HXX_
+#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTCHARACTERSPACINGPOPUP_HXX
+#define INCLUDED_SVX_SOURCE_SIDEBAR_TEXT_TEXTCHARACTERSPACINGPOPUP_HXX
 
 #include "svx/sidebar/Popup.hxx"
 

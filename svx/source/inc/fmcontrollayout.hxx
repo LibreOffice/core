@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
-#define SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
+#define INCLUDED_SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -77,6 +77,6 @@ namespace svxform
 } // namespace svxform
 //........................................................................
 
-#endif // SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

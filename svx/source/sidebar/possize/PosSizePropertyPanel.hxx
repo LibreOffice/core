@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SVX_PROPERTYPANEL_POSIZEPAGE_HXX
-#define SVX_PROPERTYPANEL_POSIZEPAGE_HXX
+#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_POSSIZE_POSSIZEPROPERTYPANEL_HXX
+#define INCLUDED_SVX_SOURCE_SIDEBAR_POSSIZE_POSSIZEPROPERTYPANEL_HXX
 
 #include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
@@ -180,6 +180,6 @@ private:
 
 
 
-#endif // SVX_PROPERTYPANEL_POSIZEPAGE_HXX
+#endif // INCLUDED_SVX_SOURCE_SIDEBAR_POSSIZE_POSSIZEPROPERTYPANEL_HXX
 
 // eof

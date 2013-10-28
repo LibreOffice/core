@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_TABLEHANDLES_HXX
-#define _SVX_TABLEHANDLES_HXX
+#ifndef INCLUDED_SVX_SOURCE_TABLE_TABLEHANDLES_HXX
+#define INCLUDED_SVX_SOURCE_TABLE_TABLEHANDLES_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 

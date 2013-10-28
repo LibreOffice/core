@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SDR_CONTACT_SDRMEDIAWIMNDOW_HXX
+#ifndef INCLUDED_SVX_SOURCE_SDR_CONTACT_SDRMEDIAWINDOW_HXX
 
 #include <avmedia/mediawindow.hxx>
 

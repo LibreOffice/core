@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_SOURCE_INC_FMCONTROLBORDERMANAGER_HXX
-#define SVX_SOURCE_INC_FMCONTROLBORDERMANAGER_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_FMCONTROLBORDERMANAGER_HXX
+#define INCLUDED_SVX_SOURCE_INC_FMCONTROLBORDERMANAGER_HXX
 
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -254,6 +254,6 @@ namespace svxform
 } // namespace svxform
 //........................................................................
 
-#endif // SVX_SOURCE_INC_FMCONTROLBORDERMANAGER_HXX
+#endif // INCLUDED_SVX_SOURCE_INC_FMCONTROLBORDERMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
