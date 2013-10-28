@@ -85,6 +85,8 @@
 		BE96AEB518196DCE00BD1AC4 /* svpvd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpvd.cxx; path = ../../../../vcl/headless/svpvd.cxx; sourceTree = "<group>"; };
 		BE96AEB6181971AF00BD1AC4 /* svpinst.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpinst.cxx; path = ../../../../vcl/headless/svpinst.cxx; sourceTree = "<group>"; };
 		BE96AEB7181973DA00BD1AC4 /* salbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salbmp.cxx; path = ../../../../vcl/quartz/salbmp.cxx; sourceTree = "<group>"; };
+		BE9A8D56181DBC70002A11AD /* cursor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cursor.cxx; path = ../../../../vcl/source/window/cursor.cxx; sourceTree = "<group>"; };
+		BE9A8D57181E5352002A11AD /* swrect.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = swrect.hxx; path = ../../../../sw/inc/swrect.hxx; sourceTree = "<group>"; };
 		BE9B03C8181671C000E1B0CF /* edws.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = edws.cxx; path = ../../../../sw/source/core/edit/edws.cxx; sourceTree = "<group>"; };
 		BEB752BD180C90D0005B5696 /* outmap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = outmap.cxx; path = ../../../../vcl/source/gdi/outmap.cxx; sourceTree = "<group>"; };
 		BEBF3E3A17002D0200C454AC /* svapp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svapp.cxx; path = ../../../../vcl/source/app/svapp.cxx; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 		BE2F0A0D17077A950060FE0D /* vcl */ = {
 			isa = PBXGroup;
 			children = (
+				BE9A8D56181DBC70002A11AD /* cursor.cxx */,
 				BE954A2E1704F9500040D517 /* iosinst.cxx */,
 				BEB752BD180C90D0005B5696 /* outmap.cxx */,
 				BE96AEB7181973DA00BD1AC4 /* salbmp.cxx */,
@@ -299,6 +302,7 @@
 				BE9B03C8181671C000E1B0CF /* edws.cxx */,
 				BE02DE57175F2E2A00ED4032 /* guess.cxx */,
 				BE2CB9611808297500953CB4 /* select.cxx */,
+				BE9A8D57181E5352002A11AD /* swrect.hxx */,
 				BE2CB962180829DD00953CB4 /* txtcrsr.cxx */,
 				BECB749917185F48001BEB85 /* view.cxx */,
 				BECB749A17185F48001BEB85 /* view0.cxx */,
