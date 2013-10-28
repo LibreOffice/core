@@ -38,7 +38,7 @@ interface XWebDAVCommandEnvironment : XCommandEnvironment
     @param aURI
     The request URI.
 
-    @param aMethod
+    @param eMethod
     The WebDAV/HTTP method ("GET","PUT","MKCOL",...) as defined in WebDAVHTTPMethod.
 
     @return

@@ -194,8 +194,8 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
             is the command which should be executed, the type of command depends
             on the CommandType.
 
-            <p>In case of a #CommandType of com::sun::star::sdb::CommandType::COMMAND,
-            means in case the #Command specifies an SQL statement, the inherited
+            <p>In case of a \p CommandType of com::sun::star::sdb::CommandType::COMMAND,
+            means in case the \p Command specifies an SQL statement, the inherited
             com::sun::star::sdbc::RowSet::EscapeProcessing
             becomes relevant:<br/>
             It then can be to used to specify whether the SQL statement should be analyzed on the
