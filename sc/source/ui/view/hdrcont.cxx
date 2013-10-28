@@ -72,7 +72,7 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
     aBoldFont.SetWeight( WEIGHT_BOLD );
 
     SetFont(aBoldFont);
-    bBoldSet = sal_True;
+    bBoldSet = true;
 
     Size aSize = LogicToPixel( Size(
         GetTextWidth(OUString("8888")),
@@ -107,7 +107,7 @@ ScHeaderControl::~ScHeaderControl()
 
 void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
 {
-    sal_Bool bLayoutRTL = IsLayoutRTL();
+    bool bLayoutRTL = IsLayoutRTL();
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     Rectangle aRect( Point(0,0), GetOutputSizePixel() );
@@ -124,17 +124,17 @@ void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
     Invalidate(aRect);
 }
 
-void ScHeaderControl::SetMark( sal_Bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd )
+void ScHeaderControl::SetMark( bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd )
 {
-    sal_Bool bEnabled = SC_MOD()->GetInputOptions().GetMarkHeader();    //! cachen?
+    bool bEnabled = SC_MOD()->GetInputOptions().GetMarkHeader();    //! cachen?
     if (!bEnabled)
         bNewSet = false;
 
     //  Variablen setzen
 
-    sal_Bool bOldSet     = bMarkRange;
+    bool bOldSet       = bMarkRange;
     SCCOLROW nOldStart = nMarkStart;
-    SCCOLROW nOldEnd     = nMarkEnd;
+    SCCOLROW nOldEnd   = nMarkEnd;
     PutInOrder( nNewStart, nNewEnd );
     bMarkRange = bNewSet;
     nMarkStart = nNewStart;
@@ -249,8 +249,8 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     //  Linien zusammengefasst
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    sal_Bool bHighContrast = rStyleSettings.GetHighContrastMode();
-    sal_Bool bDark = rStyleSettings.GetFaceColor().IsDark();
+    bool bHighContrast = rStyleSettings.GetHighContrastMode();
+    bool bDark = rStyleSettings.GetFaceColor().IsDark();
     // Use the same distinction for bDark as in Window::DrawSelectionBackground
 
     Color aTextColor = rStyleSettings.GetButtonTextColor();
@@ -266,9 +266,9 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
     Color aSelLineColor = rStyleSettings.GetHighlightColor();
     aSelLineColor.Merge( aBlack, 0xe0 );        // darken just a little bit
 
-    sal_Bool bLayoutRTL = IsLayoutRTL();
+    bool bLayoutRTL = IsLayoutRTL();
     long nLayoutSign = bLayoutRTL ? -1 : 1;
-    sal_Bool bMirrored = IsMirrored();
+    bool bMirrored = IsMirrored();
 
     OUString            aString;
     sal_uInt16          nBarSize;
@@ -498,8 +498,8 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
                     else
                         aEndPos = Point( aScrPos.X()+(nSizePix-1)*nLayoutSign, aScrPos.Y()+nBarSize-1 );
 
-                    sal_Bool bMark = bMarkRange && nEntryNo >= nMarkStart && nEntryNo <= nMarkEnd;
-                    sal_Bool bNextToMark = bMarkRange && nEntryNo + 1 >= nMarkStart && nEntryNo <= nMarkEnd;
+                    bool bMark = bMarkRange && nEntryNo >= nMarkStart && nEntryNo <= nMarkEnd;
+                    bool bNextToMark = bMarkRange && nEntryNo + 1 >= nMarkStart && nEntryNo <= nMarkEnd;
 
                     switch ( nPass )
                     {
@@ -577,9 +577,9 @@ void ScHeaderControl::Paint( const Rectangle& rRect )
 //      Maus - Handling
 //
 
-SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, sal_Bool& rBorder )
+SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, bool& rBorder )
 {
-    sal_Bool    bFound=false;
+    bool        bFound = false;
     SCCOLROW    nCount = 1;
     SCCOLROW    nPos = GetPos();
     SCCOLROW    nHitNo = nPos;
@@ -589,7 +589,7 @@ SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, sal_Bool& rBorde
     Size    aSize = GetOutputSizePixel();
     long    nWinSize = bVertical ? aSize.Height() : aSize.Width();
 
-    sal_Bool bLayoutRTL = IsLayoutRTL();
+    bool bLayoutRTL = IsLayoutRTL();
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     long nEndPos = bLayoutRTL ? -1 : nWinSize;
 
@@ -606,7 +606,7 @@ SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, sal_Bool& rBorde
         nDif = nMousePos - nScrPos;
         if (nDif >= -2 && nDif <= 2 && nCount > 0)
         {
-            bFound=sal_True;
+            bFound = true;
             nHitNo=nEntryNo-1;
         }
         else if (nDif * nLayoutSign >= 0 && nEntryNo < nSize)
@@ -666,7 +666,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
     bIgnoreMove = false;
     SelectWindow();
 
-    sal_Bool bFound;
+    bool bFound;
     SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
     if (!IsSelectionAllowed(nHitNo))
         return;
@@ -691,7 +691,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
             DrawInvert( nDragPos );
 
             StartTracking();
-            bDragging = sal_True;
+            bDragging = true;
             bDragMoved = false;
         }
     }
@@ -706,7 +706,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
             aVis.Top() = LONG_MIN, aVis.Bottom() = LONG_MAX;
         pSelEngine->SetVisibleArea( aVis );
 
-        SetMarking( sal_True );     //  muss vor SelMouseButtonDown sein
+        SetMarking( true );     //  muss vor SelMouseButtonDown sein
         pSelEngine->SelMouseButtonDown( rMEvt );
 
         //  In column/row headers a simple click already is a selection.
@@ -736,11 +736,11 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     {
         DrawInvert( nDragPos );
         ReleaseMouse();
-        bDragging   = false;
+        bDragging = false;
 
         long nScrPos    = GetScrPos( nDragNo );
         long nMousePos  = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
-        sal_Bool bLayoutRTL = IsLayoutRTL();
+        bool bLayoutRTL = IsLayoutRTL();
         long nNewWidth  = bLayoutRTL ? ( nScrPos - nMousePos + 1 )
                                      : ( nMousePos + 2 - nScrPos );
 
@@ -782,7 +782,7 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
-    sal_Bool bFound;
+    bool bFound;
     (void)GetMousePos( rMEvt, bFound );
 
     if ( bDragging )
@@ -796,7 +796,7 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
             DrawInvert( nDragPos );
 
             if (nDragPos <= nDragStart-SC_DRAG_MIN || nDragPos >= nDragStart+SC_DRAG_MIN)
-                bDragMoved = sal_True;
+                bDragMoved = true;
         }
     }
     else
@@ -847,7 +847,7 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
                     SC_MOD()->InputEnterHandler();  // always end edit mode
 
                 MouseEvent aMEvt( rCEvt.GetMousePosPixel() );
-                sal_Bool bBorder;
+                bool bBorder;
                 SCCOLROW nPos = GetMousePos( aMEvt, bBorder );
                 if (!IsSelectionAllowed(nPos))
                     // Selecting this cell is not allowed, neither is context menu.
@@ -891,7 +891,7 @@ void ScHeaderControl::StopMarking()
     }
 
     SetMarking( false );
-    bIgnoreMove = sal_True;
+    bIgnoreMove = true;
 
     //  don't call pSelEngine->Reset, so selection across the parts of
     //  a split/frozen view is possible
@@ -904,7 +904,7 @@ void ScHeaderControl::ShowDragHelp()
     if (Help::IsQuickHelpEnabled())
     {
         long nScrPos    = GetScrPos( nDragNo );
-        sal_Bool bLayoutRTL = IsLayoutRTL();
+        bool bLayoutRTL = IsLayoutRTL();
         long nVal = bLayoutRTL ? ( nScrPos - nDragPos + 1 )
                                : ( nDragPos + 2 - nScrPos );
 
@@ -943,7 +943,7 @@ void ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )
     //  Wenn eigene QuickHelp angezeigt wird, nicht durch RequestHelp
     //  wieder wegnehmen lassen
 
-    sal_Bool bOwn = bDragging && Help::IsQuickHelpEnabled();
+    bool bOwn = bDragging && Help::IsQuickHelpEnabled();
     if (!bOwn)
         Window::RequestHelp(rHEvt);
 }
@@ -963,24 +963,24 @@ SCCOLROW ScHeaderControl::GetHiddenCount( SCCOLROW nEntryNo )
     return nHidden;
 }
 
-sal_Bool ScHeaderControl::IsLayoutRTL()
+bool ScHeaderControl::IsLayoutRTL()
 {
     return false;
 }
 
-sal_Bool ScHeaderControl::IsMirrored()
+bool ScHeaderControl::IsMirrored()
 {
     return false;
 }
 
-sal_Bool ScHeaderControl::IsDisabled()
+bool ScHeaderControl::IsDisabled()
 {
     return false;
 }
 
-sal_Bool ScHeaderControl::ResizeAllowed()
+bool ScHeaderControl::ResizeAllowed()
 {
-    return sal_True;
+    return true;
 }
 
 void ScHeaderControl::SelectWindow()
@@ -996,7 +996,7 @@ OUString ScHeaderControl::GetDragHelp( long /* nVal */ )
     return EMPTY_OUSTRING;
 }
 
-void ScHeaderControl::SetMarking( sal_Bool /* bSet */ )
+void ScHeaderControl::SetMarking( bool /* bSet */ )
 {
 }
 

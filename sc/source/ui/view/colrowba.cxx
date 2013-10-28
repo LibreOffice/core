@@ -69,7 +69,7 @@ ScColBar::~ScColBar()
 {
 }
 
-inline sal_Bool ScColBar::UseNumericHeader() const
+inline bool ScColBar::UseNumericHeader() const
 {
     return pViewData->GetDocument()->GetAddressConvention() == formula::FormulaGrammar::CONV_XL_R1C1;
 }
@@ -156,7 +156,7 @@ void ScColBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
     pViewData->GetView()->SetWidthOrHeight( sal_True, 1, nRange, SC_SIZE_DIRECT, 0 );
 }
 
-void ScColBar::SetMarking( sal_Bool bSet )
+void ScColBar::SetMarking( bool bSet )
 {
     pViewData->GetMarkData().SetMarking( bSet );
     if (!bSet)
@@ -191,13 +191,13 @@ void ScColBar::SelectWindow()
     pViewSh->ActiveGrabFocus();
 }
 
-sal_Bool ScColBar::IsDisabled()
+bool ScColBar::IsDisabled()
 {
     ScModule* pScMod = SC_MOD();
     return pScMod->IsFormulaMode() || pScMod->IsModalMode();
 }
 
-sal_Bool ScColBar::ResizeAllowed()
+bool ScColBar::ResizeAllowed()
 {
     return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
@@ -217,7 +217,7 @@ OUString ScColBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
 }
 
-sal_Bool ScColBar::IsLayoutRTL()        // overloaded only for columns
+bool ScColBar::IsLayoutRTL()        // overloaded only for columns
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }
@@ -320,7 +320,7 @@ void ScRowBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
     pViewData->GetView()->SetWidthOrHeight( false, 1, nRange, SC_SIZE_DIRECT, 0 );
 }
 
-void ScRowBar::SetMarking( sal_Bool bSet )
+void ScRowBar::SetMarking( bool bSet )
 {
     pViewData->GetMarkData().SetMarking( bSet );
     if (!bSet)
@@ -355,13 +355,13 @@ void ScRowBar::SelectWindow()
     pViewSh->ActiveGrabFocus();
 }
 
-sal_Bool ScRowBar::IsDisabled()
+bool ScRowBar::IsDisabled()
 {
     ScModule* pScMod = SC_MOD();
     return pScMod->IsFormulaMode() || pScMod->IsModalMode();
 }
 
-sal_Bool ScRowBar::ResizeAllowed()
+bool ScRowBar::ResizeAllowed()
 {
     return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
@@ -388,7 +388,7 @@ SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo )   // overloaded only for rows
     return pDoc->GetHiddenRowCount( nEntryNo, nTab );
 }
 
-sal_Bool ScRowBar::IsMirrored()         // overloaded only for rows
+bool ScRowBar::IsMirrored()         // overloaded only for rows
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }

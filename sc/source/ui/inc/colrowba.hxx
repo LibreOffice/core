@@ -44,21 +44,21 @@ public:
     virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo );
     virtual OUString    GetEntryText( SCCOLROW nEntryNo );
 
-    virtual sal_Bool        IsLayoutRTL();                      // only for columns
+    virtual bool        IsLayoutRTL();                      // only for columns
 
     virtual void        SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize );
     virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
 
-    virtual void        SetMarking( sal_Bool bSet );
+    virtual void        SetMarking( bool bSet );
     virtual void        SelectWindow();
-    virtual sal_Bool        IsDisabled();
-    virtual sal_Bool        ResizeAllowed();
+    virtual bool        IsDisabled();
+    virtual bool        ResizeAllowed();
 
     virtual void        DrawInvert( long nDragPos );
 
     virtual OUString    GetDragHelp( long nVal );
 
-            sal_Bool        UseNumericHeader() const;
+            bool        UseNumericHeader() const;
 };
 
 
@@ -77,16 +77,16 @@ public:
     virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo );
     virtual OUString    GetEntryText( SCCOLROW nEntryNo );
 
-    virtual sal_Bool        IsMirrored();                       // only for columns
+    virtual bool        IsMirrored();                       // only for columns
     virtual SCROW       GetHiddenCount( SCROW nEntryNo );   // only for columns
 
     virtual void        SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize );
     virtual void        HideEntries( SCCOLROW nStart, SCCOLROW nEnd );
 
-    virtual void        SetMarking( sal_Bool bSet );
+    virtual void        SetMarking( bool bSet );
     virtual void        SelectWindow();
-    virtual sal_Bool        IsDisabled();
-    virtual sal_Bool        ResizeAllowed();
+    virtual bool        IsDisabled();
+    virtual bool        ResizeAllowed();
 
     virtual void        DrawInvert( long nDragPos );
 
