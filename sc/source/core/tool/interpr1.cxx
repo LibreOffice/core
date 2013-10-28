@@ -7798,7 +7798,7 @@ void ScInterpreter::ScLeft()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        xub_StrLen n;
+        sal_Int32 n;
         if (nParamCount == 2)
         {
             double nVal = ::rtl::math::approxFloor(GetDouble());
@@ -7808,11 +7808,12 @@ void ScInterpreter::ScLeft()
                 return ;
             }
             else
-                n = (xub_StrLen) nVal;
+                n = (sal_Int32) nVal;
         }
         else
             n = 1;
         OUString aStr = GetString().getString();
+        n = std::min(n, aStr.getLength());
         aStr = aStr.copy( 0, n );
         PushString( aStr );
     }
