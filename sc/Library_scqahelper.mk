@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	cppuhelper \
 	for \
 	sal \
+	sc \
 	sfx \
 	sot \
 	svl \
@@ -45,9 +46,9 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	tl \
 	unotest \
 	utl \
-	sc \
 	ucbhelper \
 	unotest \
+	vcl \
 	$(gb_UWINAPI) \
 ))
 

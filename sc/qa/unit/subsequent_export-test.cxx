@@ -67,6 +67,7 @@ public:
     void testRichTextExportODS();
 
     void testCellValuesExportODS();
+    void testFormatExportODS();
 
     void testInlineArrayXLS();
     void testEmbeddedChartXLS();
@@ -86,6 +87,7 @@ public:
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testRichTextExportODS);
     CPPUNIT_TEST(testCellValuesExportODS);
+    CPPUNIT_TEST(testFormatExportODS);
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
     CPPUNIT_TEST(testFormulaReferenceXLS);
@@ -260,6 +262,21 @@ void ScExportTest::testDataBarExportODS()
     CPPUNIT_ASSERT(pDoc);
 
     testDataBar_Impl(pDoc);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testFormatExportODS()
+{
+    ScDocShellRef xShell = loadDoc("formats.", ODS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    testFormats(this, pDoc, ODS);
 
     xDocSh->DoClose();
 }

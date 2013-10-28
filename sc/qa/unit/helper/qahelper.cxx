@@ -11,9 +11,13 @@
 #include "csv_handler.hxx"
 #include "drwlayer.hxx"
 #include "compiler.hxx"
+#include "conditio.hxx"
+#include "stlsheet.hxx"
 #include "formulacell.hxx"
 #include "svx/svdpage.hxx"
 #include "svx/svdoole2.hxx"
+#include <editeng/brushitem.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include <config_orcus.h>
 
@@ -160,6 +164,122 @@ void testFile(OUString&, ScDocument*, SCTAB, StringType) {}
 void testCondFile(OUString&, ScDocument*, SCTAB) {}
 
 #endif
+
+void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
+{
+    //test Sheet1 with csv file
+    OUString aCSVFileName;
+    pTest->createCSVPath(OUString("numberFormat."), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0, PureString);
+    //need to test the color of B3
+    //it's not a font color!
+    //formatting for B5: # ??/100 gets lost during import
+
+    //test Sheet2
+    const ScPatternAttr* pPattern = NULL;
+    pPattern = pDoc->GetPattern(0,0,1);
+    Font aFont;
+    pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 10", 200l, aFont.GetSize().getHeight());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aFont.GetColor().GetColor());
+    pPattern = pDoc->GetPattern(0,1,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 12", 240l, aFont.GetSize().getHeight());
+    pPattern = pDoc->GetPattern(0,2,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be italic", ITALIC_NORMAL, aFont.GetItalic());
+    pPattern = pDoc->GetPattern(0,4,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    pPattern = pDoc->GetPattern(1,0,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be blue", COL_BLUE, aFont.GetColor().GetColor());
+    pPattern = pDoc->GetPattern(1,1,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a single line", STRIKEOUT_SINGLE, aFont.GetStrikeout());
+    //some tests on sheet2 only for ods
+    if (nFormat == ODS)
+    {
+        pPattern = pDoc->GetPattern(1,2,1);
+        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out with a double line", STRIKEOUT_DOUBLE, aFont.GetStrikeout());
+        pPattern = pDoc->GetPattern(1,3,1);
+        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be underlined with a dotted line", UNDERLINE_DOTTED, aFont.GetUnderline());
+        //check row height import
+        //disable for now until we figure out cause of win tinderboxes test failures
+        //CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(256), pDoc->GetRowHeight(0,1) ); //0.178in
+        //CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(304), pDoc->GetRowHeight(1,1) ); //0.211in
+        //CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(477), pDoc->GetRowHeight(5,1) ); //0.3311in
+        //check column width import
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(555), pDoc->GetColWidth(4,1) );  //0.3854in
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(1280), pDoc->GetColWidth(5,1) ); //0.889in
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(4153), pDoc->GetColWidth(6,1) ); //2.8839in
+        //test case for i53253 where a cell has text with different styles and space between the text.
+        OUString aTestStr = pDoc->GetString(3,0,1);
+        OUString aKnownGoodStr("text14 space");
+        CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
+        //test case for cell text with line breaks.
+        aTestStr = pDoc->GetString(3,5,1);
+        aKnownGoodStr = "Hello,\nCalc!";
+        CPPUNIT_ASSERT_EQUAL( aKnownGoodStr, aTestStr );
+    }
+    pPattern = pDoc->GetPattern(1,4,1);
+    Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
+    CPPUNIT_ASSERT_MESSAGE("background color should be green", aColor == COL_LIGHTGREEN);
+    pPattern = pDoc->GetPattern(2,0,1);
+    SvxCellHorJustify eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
+    //test alignment
+    pPattern = pDoc->GetPattern(2,1,1);
+    eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned right horizontally", SVX_HOR_JUSTIFY_RIGHT, eHorJustify);
+    pPattern = pDoc->GetPattern(2,2,1);
+    eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("cell content should be aligned block horizontally", SVX_HOR_JUSTIFY_BLOCK, eHorJustify);
+
+    //test Sheet3 only for ods and xlsx
+    if ( nFormat == ODS || nFormat == XLSX )
+    {
+        pTest->createCSVPath(OUString("conditionalFormatting."), aCSVFileName);
+        testCondFile(aCSVFileName, pDoc, 2);
+        // test parent cell style import ( fdo#55198 )
+        if ( nFormat == XLSX )
+        {
+            pPattern = pDoc->GetPattern(1,1,3);
+            ScStyleSheet* pStyleSheet = (ScStyleSheet*)pPattern->GetStyleSheet();
+            // check parent style name
+            OUString sExpected("Excel Built-in Date");
+            OUString sResult = pStyleSheet->GetName();
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("parent style for Sheet4.B2 is 'Excel Built-in Date'", sExpected, sResult);
+            // check  align of style
+            SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+            eHorJustify = static_cast<SvxCellHorJustify>(static_cast< const SvxHorJustifyItem& >(rItemSet.Get( ATTR_HOR_JUSTIFY ) ).GetValue() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
+            // check date format ( should be just month e.g. 29 )
+            sResult =pDoc->GetString( 1,1,3 );
+            sExpected = OUString("29");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("'Excel Built-in Date' style should just display month", sExpected, sResult );
+
+            // check actual align applied to cell, should be the same as
+            // the style
+            eHorJustify = static_cast<SvxCellHorJustify>(static_cast< const SvxHorJustifyItem& >(pPattern->GetItem( ATTR_HOR_JUSTIFY ) ).GetValue() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("cell with 'Excel Built-in Date' style should be aligned centre horizontally", SVX_HOR_JUSTIFY_CENTER, eHorJustify);
+        }
+    }
+
+    ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(0,0,2);
+    const ScRangeList& rRange = pCondFormat->GetRange();
+    CPPUNIT_ASSERT(rRange == ScRange(0,0,2,3,0,2));
+
+    pCondFormat = pDoc->GetCondFormat(0,1,2);
+    const ScRangeList& rRange2 = pCondFormat->GetRange();
+    CPPUNIT_ASSERT(rRange2 == ScRange(0,1,2,0,1,2));
+
+    pCondFormat = pDoc->GetCondFormat(1,1,2);
+    const ScRangeList& rRange3 = pCondFormat->GetRange();
+    CPPUNIT_ASSERT(rRange3 == ScRange(1,1,2,3,1,2));
+}
 
 const SdrOle2Obj* getSingleChartObject(ScDocument& rDoc, sal_uInt16 nPage)
 {

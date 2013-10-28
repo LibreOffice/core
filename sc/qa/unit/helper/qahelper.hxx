@@ -204,6 +204,8 @@ public:
 #define ASSERT_EQUAL_TYPE( type, expected, result ) \
     CPPUNIT_ASSERT_EQUAL( static_cast<type>(expected), static_cast<type>(result) );
 
+SCQAHELPER_DLLPUBLIC void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
