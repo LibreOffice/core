@@ -31,7 +31,7 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/pck \
 	$(OUTDIR)/res \
 	$(OUTDIR)/share \
-	$(OUTDIR)/unittest \
+	$(WORKDIR)/unittest \
 
 gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
 # kind of lame but with just 3 of these why bother with registration etc.

@@ -36,8 +36,6 @@ class OOO_DLLPUBLIC_UNOTEST BootstrapFixtureBase : public CppUnit::TestFixture
 protected:
   OUString m_aSrcRootURL;
   OUString m_aSrcRootPath;
-  OUString m_aSolverRootURL;
-  OUString m_aSolverRootPath;
   OUString m_aWorkdirRootURL;
   OUString m_aWorkdirRootPath;
 

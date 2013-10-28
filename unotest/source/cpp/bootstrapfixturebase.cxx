@@ -57,9 +57,6 @@ test::BootstrapFixtureBase::BootstrapFixtureBase()
     m_aSrcRootPath = OUString::createFromAscii( pSrcRoot );
     m_aSrcRootURL = getFileURLFromSystemPath(m_aSrcRootPath);
 
-    m_aSolverRootPath = OUString::createFromAscii( pSolverRoot );
-    m_aSolverRootURL = getFileURLFromSystemPath(m_aSolverRootPath);
-
     m_aWorkdirRootPath = OUString::createFromAscii( pWorkdirRoot );
     m_aWorkdirRootURL = getFileURLFromSystemPath(m_aWorkdirRootPath);
 
@@ -94,7 +91,7 @@ void test::BootstrapFixtureBase::setUp()
 {
     // set UserInstallation to user profile dir in test/user-template
     rtl::Bootstrap aDefaultVars;
-    OUString sUserInstallURL = m_aSolverRootURL + OUString("/unittest");
+    OUString sUserInstallURL = m_aWorkdirRootURL + OUString("/unittest");
     aDefaultVars.set(OUString("UserInstallation"), sUserInstallURL);
 
     m_xContext = comphelper::getProcessComponentContext();

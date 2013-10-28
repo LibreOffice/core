@@ -293,10 +293,10 @@ $(call gb_CppunitTest_get_target,$(1)) : HEADLESS=
 
 endef
 
-# Use configuration in $(OUTDIR)/unittest/registry.
+# Use configuration in $(WORKDIR)/unittest/registry.
 define gb_CppunitTest_use_unittest_configuration
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,test_unittest)
-$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(OUTDIR)/unittest/registry)
+$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(WORKDIR)/unittest/registry)
 
 endef
 
