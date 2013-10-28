@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CAIROCANVAS_REPAINTTARGET_HXX
-#define _CAIROCANVAS_REPAINTTARGET_HXX
+#ifndef INCLUDED_SOURCE_CAIRO_CAIRO_REPAINTTARGET_HXX
+#define INCLUDED_SOURCE_CAIRO_CAIRO_REPAINTTARGET_HXX
 
 #include <rtl/ref.hxx>
 
@@ -47,6 +47,6 @@ namespace cairocanvas
     };
 }
 
-#endif /* _CAIROCANVAS_REPAINTTARGET_HXX */
+#endif // INCLUDED_SOURCE_CAIRO_CAIRO_REPAINTTARGET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

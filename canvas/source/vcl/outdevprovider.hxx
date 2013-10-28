@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLCANVAS_OUTDEVPROVIDER_HXX
-#define _VCLCANVAS_OUTDEVPROVIDER_HXX
+#ifndef INCLUDED_SOURCE_VCL_OUTDEVPROVIDER_HXX
+#define INCLUDED_SOURCE_VCL_OUTDEVPROVIDER_HXX
 
 #include <sal/types.h>
 #include <boost/shared_ptr.hpp>
@@ -50,6 +50,6 @@ namespace vclcanvas
     typedef ::boost::shared_ptr< OutDevProvider > OutDevProviderSharedPtr;
 }
 
-#endif /* _VCLCANVAS_OUTDEVPROVIDER_HXX */
+#endif // INCLUDED_SOURCE_VCL_OUTDEVPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

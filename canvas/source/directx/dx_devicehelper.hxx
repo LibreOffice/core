@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXCANVAS_DEVICEHELPER_HXX
-#define _DXCANVAS_DEVICEHELPER_HXX
+#ifndef INCLUDED_SOURCE_DIRECTX_DX_DEVICEHELPER_HXX
+#define INCLUDED_SOURCE_DIRECTX_DX_DEVICEHELPER_HXX
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
@@ -110,6 +110,6 @@ namespace dxcanvas
     typedef ::rtl::Reference< com::sun::star::rendering::XGraphicDevice > DeviceRef;
 }
 
-#endif /* _DXCANVAS_DEVICEHELPER_HXX */
+#endif // INCLUDED_SOURCE_DIRECTX_DX_DEVICEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

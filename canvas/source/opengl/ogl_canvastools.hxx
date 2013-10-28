@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_CANVASTOOLS_HXX
-#define OGL_CANVASTOOLS_HXX
+#ifndef INCLUDED_SOURCE_OPENGL_OGL_CANVASTOOLS_HXX
+#define INCLUDED_SOURCE_OPENGL_OGL_CANVASTOOLS_HXX
 
 #include <sal/config.h>
 #include <vector>

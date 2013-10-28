@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLCANVAS_CANVASCUSTOMSPRITE_HXX
-#define _VCLCANVAS_CANVASCUSTOMSPRITE_HXX
+#ifndef INCLUDED_SOURCE_VCL_CANVASCUSTOMSPRITE_HXX
+#define INCLUDED_SOURCE_VCL_CANVASCUSTOMSPRITE_HXX
 
 #include <cppuhelper/compbase4.hxx>
 #include <comphelper/uno3.hxx>
@@ -120,6 +120,6 @@ namespace vclcanvas
     };
 }
 
-#endif /* _VCLCANVAS_CANVASCUSTOMSPRITE_HXX */
+#endif // INCLUDED_SOURCE_VCL_CANVASCUSTOMSPRITE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

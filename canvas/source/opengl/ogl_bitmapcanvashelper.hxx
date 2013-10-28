@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_BITMAPCANVASHELPER_HXX_
-#define OGL_BITMAPCANVASHELPER_HXX_
+#ifndef INCLUDED_SOURCE_OPENGL_OGL_BITMAPCANVASHELPER_HXX
+#define INCLUDED_SOURCE_OPENGL_OGL_BITMAPCANVASHELPER_HXX
 
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>

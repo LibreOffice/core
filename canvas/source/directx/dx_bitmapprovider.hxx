@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXCANVAS_BITMAPPROVIDER_HXX_
-#define _DXCANVAS_BITMAPPROVIDER_HXX_
+#ifndef INCLUDED_SOURCE_DIRECTX_DX_BITMAPPROVIDER_HXX
+#define INCLUDED_SOURCE_DIRECTX_DX_BITMAPPROVIDER_HXX
 
 #include "dx_ibitmap.hxx"
 #include <boost/shared_ptr.hpp>

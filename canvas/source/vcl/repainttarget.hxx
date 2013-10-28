@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLCANVAS_REPAINTTARGET_HXX
-#define _VCLCANVAS_REPAINTTARGET_HXX
+#ifndef INCLUDED_SOURCE_VCL_REPAINTTARGET_HXX
+#define INCLUDED_SOURCE_VCL_REPAINTTARGET_HXX
 
 #include <rtl/ref.hxx>
 
@@ -52,6 +52,6 @@ namespace vclcanvas
     };
 }
 
-#endif /* _VCLCANVAS_REPAINTTARGET_HXX */
+#endif // INCLUDED_SOURCE_VCL_REPAINTTARGET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

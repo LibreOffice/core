@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLCANVAS_CANVASBITMAPHELPER_HXX_
-#define _VCLCANVAS_CANVASBITMAPHELPER_HXX_
+#ifndef INCLUDED_SOURCE_VCL_CANVASBITMAPHELPER_HXX
+#define INCLUDED_SOURCE_VCL_CANVASBITMAPHELPER_HXX
 
 #include <canvashelper.hxx>
 #include <canvas/vclwrapper.hxx>
@@ -118,6 +118,6 @@ namespace vclcanvas
     };
 }
 
-#endif /* _VCLCANVAS_CANVASBITMAPHELPER_HXX_ */
+#endif // INCLUDED_SOURCE_VCL_CANVASBITMAPHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

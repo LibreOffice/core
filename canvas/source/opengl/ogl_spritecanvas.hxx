@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_SPRITECANVAS_HXX_
-#define OGL_SPRITECANVAS_HXX_
+#ifndef INCLUDED_SOURCE_OPENGL_OGL_SPRITECANVAS_HXX
+#define INCLUDED_SOURCE_OPENGL_OGL_SPRITECANVAS_HXX
 
 #include <rtl/ref.hxx>
 

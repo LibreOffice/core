@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLCANVAS_TEXTLAYOUT_HXX
-#define _VCLCANVAS_TEXTLAYOUT_HXX
+#ifndef INCLUDED_SOURCE_VCL_TEXTLAYOUT_HXX
+#define INCLUDED_SOURCE_VCL_TEXTLAYOUT_HXX
 
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -104,6 +104,6 @@ namespace vclcanvas
 
 }
 
-#endif /* _VCLCANVAS_TEXTLAYOUT_HXX */
+#endif // INCLUDED_SOURCE_VCL_TEXTLAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

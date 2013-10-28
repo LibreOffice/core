@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXCANVAS_SURFACEGRAPHICS_HXX
-#define _DXCANVAS_SURFACEGRAPHICS_HXX
+#ifndef INCLUDED_SOURCE_DIRECTX_DX_SURFACEGRAPHICS_HXX
+#define INCLUDED_SOURCE_DIRECTX_DX_SURFACEGRAPHICS_HXX
 
 #include "dx_graphicsprovider.hxx"
 
@@ -34,6 +34,6 @@ namespace dxcanvas
     GraphicsSharedPtr createSurfaceGraphics(const COMReference<surface_type>& rSurface );
 }
 
-#endif /* _DXCANVAS_SURFACEGRAPHICS_HXX */
+#endif // INCLUDED_SOURCE_DIRECTX_DX_SURFACEGRAPHICS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

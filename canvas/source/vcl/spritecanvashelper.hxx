@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLCANVAS_SPRITECANVASHELPER_HXX_
-#define _VCLCANVAS_SPRITECANVASHELPER_HXX_
+#ifndef INCLUDED_SOURCE_VCL_SPRITECANVASHELPER_HXX
+#define INCLUDED_SOURCE_VCL_SPRITECANVASHELPER_HXX
 
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
@@ -166,6 +166,6 @@ namespace vclcanvas
     };
 }
 
-#endif /* _VCLCANVAS_SPRITECANVASHELPER_HXX_ */
+#endif // INCLUDED_SOURCE_VCL_SPRITECANVASHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

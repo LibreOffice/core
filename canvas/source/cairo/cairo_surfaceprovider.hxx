@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CAIROCANVAS_SURFACEPROVIDER_HXX
-#define _CAIROCANVAS_SURFACEPROVIDER_HXX
+#ifndef INCLUDED_SOURCE_CAIRO_CAIRO_SURFACEPROVIDER_HXX
+#define INCLUDED_SOURCE_CAIRO_CAIRO_SURFACEPROVIDER_HXX
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/XInterface.hpp>

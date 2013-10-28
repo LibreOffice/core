@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CAIROCANVAS_SPRITEDEVICEHELPER_HXX
-#define _CAIROCANVAS_SPRITEDEVICEHELPER_HXX
+#ifndef INCLUDED_SOURCE_CAIRO_CAIRO_SPRITEDEVICEHELPER_HXX
+#define INCLUDED_SOURCE_CAIRO_CAIRO_SPRITEDEVICEHELPER_HXX
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>

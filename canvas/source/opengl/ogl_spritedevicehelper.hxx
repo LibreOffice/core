@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_SPRITEDEVICEHELPER_HXX
-#define OGL_SPRITEDEVICEHELPER_HXX
+#ifndef INCLUDED_SOURCE_OPENGL_OGL_SPRITEDEVICEHELPER_HXX
+#define INCLUDED_SOURCE_OPENGL_OGL_SPRITEDEVICEHELPER_HXX
 
 #include <rtl/ref.hxx>
 #include <canvas/elapsedtime.hxx>

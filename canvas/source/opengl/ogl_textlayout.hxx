@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_TEXTLAYOUT_HXX
-#define OGL_TEXTLAYOUT_HXX
+#ifndef INCLUDED_SOURCE_OPENGL_OGL_TEXTLAYOUT_HXX
+#define INCLUDED_SOURCE_OPENGL_OGL_TEXTLAYOUT_HXX
 
 #include <cppuhelper/compbase1.hxx>
 #include <comphelper/broadcasthelper.hxx>

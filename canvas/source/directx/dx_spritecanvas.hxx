@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXCANVAS_SPRITECANVAS_HXX_
-#define _DXCANVAS_SPRITECANVAS_HXX_
+#ifndef INCLUDED_SOURCE_DIRECTX_DX_SPRITECANVAS_HXX
+#define INCLUDED_SOURCE_DIRECTX_DX_SPRITECANVAS_HXX
 
 #include <rtl/ref.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CAIROCANVAS_CANVASHELPER_HXX_
-#define _CAIROCANVAS_CANVASHELPER_HXX_
+#ifndef INCLUDED_SOURCE_CAIRO_CAIRO_CANVASHELPER_HXX
+#define INCLUDED_SOURCE_CAIRO_CAIRO_CANVASHELPER_HXX
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
@@ -321,6 +321,6 @@ namespace cairocanvas
                                       ::com::sun::star::rendering::FillRule eFillrule );
 }
 
-#endif /* _CAIROCANVAS_CANVASHELPER_HXX_ */
+#endif // INCLUDED_SOURCE_CAIRO_CAIRO_CANVASHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

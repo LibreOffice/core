@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CAIROCANVAS_SPRITE_HXX
-#define _CAIROCANVAS_SPRITE_HXX
+#ifndef INCLUDED_SOURCE_CAIRO_CAIRO_SPRITE_HXX
+#define INCLUDED_SOURCE_CAIRO_CAIRO_SPRITE_HXX
 
 #include <canvas/base/sprite.hxx>
 
@@ -63,6 +63,6 @@ namespace cairocanvas
     };
 }
 
-#endif /* _CAIROCANVAS_SPRITE_HXX */
+#endif // INCLUDED_SOURCE_CAIRO_CAIRO_SPRITE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

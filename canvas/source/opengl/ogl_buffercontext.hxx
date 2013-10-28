@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_BUFFERCONTEXT_HXX_
-#define OGL_BUFFERCONTEXT_HXX_
+#ifndef INCLUDED_SOURCE_OPENGL_OGL_BUFFERCONTEXT_HXX
+#define INCLUDED_SOURCE_OPENGL_OGL_BUFFERCONTEXT_HXX
 
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>

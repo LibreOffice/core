@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLCANVAS_BACKBUFFER_HXX_
-#define _VCLCANVAS_BACKBUFFER_HXX_
+#ifndef INCLUDED_SOURCE_VCL_BACKBUFFER_HXX
+#define INCLUDED_SOURCE_VCL_BACKBUFFER_HXX
 
 #include <vcl/virdev.hxx>
 
@@ -56,6 +56,6 @@ namespace vclcanvas
     typedef ::boost::shared_ptr< BackBuffer > BackBufferSharedPtr;
 }
 
-#endif /* #ifndef _VCLCANVAS_BACKBUFFER_HXX_ */
+#endif // INCLUDED_SOURCE_VCL_BACKBUFFER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

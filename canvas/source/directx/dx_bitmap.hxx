@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXCANVAS_DXBITMAP_HXX
-#define _DXCANVAS_DXBITMAP_HXX
+#ifndef INCLUDED_SOURCE_DIRECTX_DX_BITMAP_HXX
+#define INCLUDED_SOURCE_DIRECTX_DX_BITMAP_HXX
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>

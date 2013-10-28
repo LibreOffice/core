@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXCANVAS_WINSTUFF_HXX
-#define _DXCANVAS_WINSTUFF_HXX
+#ifndef INCLUDED_SOURCE_DIRECTX_DX_WINSTUFF_HXX
+#define INCLUDED_SOURCE_DIRECTX_DX_WINSTUFF_HXX
 
 #include <algorithm>
 
@@ -214,6 +214,6 @@ namespace dxcanvas
 #undef DELETE
 #undef PolyPolygon
 
-#endif /* _DXCANVAS_WINSTUFF_HXX */
+#endif // INCLUDED_SOURCE_DIRECTX_DX_WINSTUFF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

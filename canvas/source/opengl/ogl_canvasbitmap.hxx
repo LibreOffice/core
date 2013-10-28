@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_CANVASBITMAP_HXX
-#define OGL_CANVASBITMAP_HXX
+#ifndef INCLUDED_SOURCE_OPENGL_OGL_CANVASBITMAP_HXX
+#define INCLUDED_SOURCE_OPENGL_OGL_CANVASBITMAP_HXX
 
 #include <cppuhelper/compbase2.hxx>
 

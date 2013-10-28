@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CAIROCANVAS_CANVASFONT_HXX
-#define _CAIROCANVAS_CANVASFONT_HXX
+#ifndef INCLUDED_SOURCE_CAIRO_CAIRO_CANVASFONT_HXX
+#define INCLUDED_SOURCE_CAIRO_CAIRO_CANVASFONT_HXX
 
 #include <comphelper/implementationreference.hxx>
 
@@ -85,6 +85,6 @@ namespace cairocanvas
 
 }
 
-#endif /* _CAIROCANVAS_CANVASFONT_HXX */
+#endif // INCLUDED_SOURCE_CAIRO_CAIRO_CANVASFONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

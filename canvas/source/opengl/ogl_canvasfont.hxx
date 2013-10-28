@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OGL_CANVASFONT_HXX
-#define OGL_CANVASFONT_HXX
+#ifndef INCLUDED_SOURCE_OPENGL_OGL_CANVASFONT_HXX
+#define INCLUDED_SOURCE_OPENGL_OGL_CANVASFONT_HXX
 
 #include <comphelper/implementationreference.hxx>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CAIROCANVAS_CACHEDBITMAP_HXX
-#define _CAIROCANVAS_CACHEDBITMAP_HXX
+#ifndef INCLUDED_SOURCE_CAIRO_CAIRO_CACHEDBITMAP_HXX
+#define INCLUDED_SOURCE_CAIRO_CAIRO_CACHEDBITMAP_HXX
 
 #include <canvas/base/cachedprimitivebase.hxx>
 
@@ -56,6 +56,6 @@ namespace cairocanvas
     };
 }
 
-#endif /* _CAIROCANVAS_CACHEDBITMAP_HXX */
+#endif // INCLUDED_SOURCE_CAIRO_CAIRO_CACHEDBITMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

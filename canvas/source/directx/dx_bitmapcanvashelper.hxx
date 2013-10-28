@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXCANVAS_BITMAPCANVASHELPER_HXX_
-#define _DXCANVAS_BITMAPCANVASHELPER_HXX_
+#ifndef INCLUDED_SOURCE_DIRECTX_DX_BITMAPCANVASHELPER_HXX
+#define INCLUDED_SOURCE_DIRECTX_DX_BITMAPCANVASHELPER_HXX
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
@@ -126,6 +126,6 @@ namespace dxcanvas
     };
 }
 
-#endif /* _DXCANVAS_BITMAPCANVASHELPER_HXX_ */
+#endif // INCLUDED_SOURCE_DIRECTX_DX_BITMAPCANVASHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

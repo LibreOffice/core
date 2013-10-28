@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXCANVAS_CANVASBITMAP_HXX
-#define _DXCANVAS_CANVASBITMAP_HXX
+#ifndef INCLUDED_SOURCE_DIRECTX_DX_CANVASBITMAP_HXX
+#define INCLUDED_SOURCE_DIRECTX_DX_CANVASBITMAP_HXX
 
 #include <cppuhelper/compbase4.hxx>
 
@@ -93,6 +93,6 @@ namespace dxcanvas
     };
 }
 
-#endif /* _DXCANVAS_CANVASBITMAP_HXX */
+#endif // INCLUDED_SOURCE_DIRECTX_DX_CANVASBITMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

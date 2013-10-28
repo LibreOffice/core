@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DXCANVAS_GDIPLUSUSER_HXX
-#define _DXCANVAS_GDIPLUSUSER_HXX
+#ifndef INCLUDED_SOURCE_DIRECTX_DX_GDIPLUSUSER_HXX
+#define INCLUDED_SOURCE_DIRECTX_DX_GDIPLUSUSER_HXX
 
 #include <sal/config.h>
 
@@ -44,6 +44,6 @@ namespace dxcanvas
 
 }
 
-#endif /* _DXCANVAS_GDIPLUSUSER_HXX */
+#endif // INCLUDED_SOURCE_DIRECTX_DX_GDIPLUSUSER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CAIROCANVAS_SPRITEHELPER_HXX
-#define _CAIROCANVAS_SPRITEHELPER_HXX
+#ifndef INCLUDED_SOURCE_CAIRO_CAIRO_SPRITEHELPER_HXX
+#define INCLUDED_SOURCE_CAIRO_CAIRO_SPRITEHELPER_HXX
 
 #include <com/sun/star/rendering/XCustomSprite.hpp>
 
@@ -104,6 +104,6 @@ namespace cairocanvas
     };
 }
 
-#endif /* _CAIROCANVAS_SPRITEHELPER_HXX */
+#endif // INCLUDED_SOURCE_CAIRO_CAIRO_SPRITEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

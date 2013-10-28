@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLCANVAS_BITMAPBACKBUFFER_HXX_
-#define _VCLCANVAS_BITMAPBACKBUFFER_HXX_
+#ifndef INCLUDED_SOURCE_VCL_BITMAPBACKBUFFER_HXX
+#define INCLUDED_SOURCE_VCL_BITMAPBACKBUFFER_HXX
 
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
@@ -92,6 +92,6 @@ namespace vclcanvas
 
 }
 
-#endif /* #ifndef _VCLCANVAS_BITMAPBACKBUFFER_HXX_ */
+#endif // INCLUDED_SOURCE_VCL_BITMAPBACKBUFFER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
