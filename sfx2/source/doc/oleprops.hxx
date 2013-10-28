@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX_OLEPROPS_HXX
-#define SFX_OLEPROPS_HXX
+#ifndef INCLUDED_SFX2_SOURCE_DOC_OLEPROPS_HXX
+#define INCLUDED_SFX2_SOURCE_DOC_OLEPROPS_HXX
 
 #include <map>
 #include <boost/shared_ptr.hpp>

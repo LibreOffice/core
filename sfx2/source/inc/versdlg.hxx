@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VERSDLG_HXX
-#define _VERSDLG_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_VERSDLG_HXX
+#define INCLUDED_SFX2_SOURCE_INC_VERSDLG_HXX
 
 #include <sfx2/basedlgs.hxx>
 #include <svtools/simptabl.hxx>

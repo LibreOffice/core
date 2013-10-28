@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SYSPATH_HXX__
-#define __SYSPATH_HXX__
+#ifndef INCLUDED_SFX2_SOURCE_DOC_SYSPATH_HXX
+#define INCLUDED_SFX2_SOURCE_DOC_SYSPATH_HXX
 //#pragma warning(disable:4917)
 
 #include <sfx2/dllapi.h>

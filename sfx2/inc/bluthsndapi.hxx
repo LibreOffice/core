@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX_BLUTHSNDAPI_HXX
-#define INCLUDED_SFX_BLUTHSNDAPI_HXX
+#ifndef INCLUDED_SFX2_INC_BLUTHSNDAPI_HXX
+#define INCLUDED_SFX2_INC_BLUTHSNDAPI_HXX
 
 #include <vector>
 #include <com/sun/star/frame/XFrame.hpp>

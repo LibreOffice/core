@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX2_FILTERGROUPING_HXX
-#define SFX2_FILTERGROUPING_HXX
+#ifndef INCLUDED_SFX2_SOURCE_DIALOG_FILTERGROUPING_HXX
+#define INCLUDED_SFX2_SOURCE_DIALOG_FILTERGROUPING_HXX
 
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -91,7 +91,7 @@ namespace sfx2
 }   // namespace sfx2
 //........................................................................
 
-#endif // SFX2_FILTERGROUPING_HXX
+#endif // INCLUDED_SFX2_SOURCE_DIALOG_FILTERGROUPING_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

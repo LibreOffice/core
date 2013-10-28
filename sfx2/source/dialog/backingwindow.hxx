@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX2_BACKINGWINDOW_HXX
-#define SFX2_BACKINGWINDOW_HXX
+#ifndef INCLUDED_SFX2_SOURCE_DIALOG_BACKINGWINDOW_HXX
+#define INCLUDED_SFX2_SOURCE_DIALOG_BACKINGWINDOW_HXX
 
 #include <rtl/ustring.hxx>
 

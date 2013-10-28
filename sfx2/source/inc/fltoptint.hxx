@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SFX2_FLTOPTINT_HXX
-#define SFX2_FLTOPTINT_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_FLTOPTINT_HXX
+#define INCLUDED_SFX2_SOURCE_INC_FLTOPTINT_HXX
 
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>

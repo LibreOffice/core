@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_INETTBC_HXX
-#define _SFX_INETTBC_HXX
+#ifndef INCLUDED_SFX2_INC_INETTBC_HXX
+#define INCLUDED_SFX2_INC_INETTBC_HXX
 
 #include <rtl/ustring.hxx>
 #include <sfx2/tbxctrl.hxx>

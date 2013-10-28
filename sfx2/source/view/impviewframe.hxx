@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX2_IMPVIEWFRAME_HXX
-#define SFX2_IMPVIEWFRAME_HXX
+#ifndef INCLUDED_SFX2_SOURCE_VIEW_IMPVIEWFRAME_HXX
+#define INCLUDED_SFX2_SOURCE_VIEW_IMPVIEWFRAME_HXX
 
 #include "sfx2/viewfrm.hxx"
 
@@ -87,6 +87,6 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange );
 };
 
-#endif // SFX2_IMPVIEWFRAME_HXX
+#endif // INCLUDED_SFX2_SOURCE_VIEW_IMPVIEWFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

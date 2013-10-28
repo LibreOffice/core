@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_PLUGIN_HXX
-#define _SFX_PLUGIN_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_PLUGIN_HXX
+#define INCLUDED_SFX2_SOURCE_INC_PLUGIN_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

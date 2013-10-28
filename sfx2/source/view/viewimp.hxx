@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SFX_VIEWIMP_HXX
-#define SFX_VIEWIMP_HXX
+#ifndef INCLUDED_SFX2_SOURCE_VIEW_VIEWIMP_HXX
+#define INCLUDED_SFX2_SOURCE_VIEW_VIEWIMP_HXX
 
 #include <basic/sbxobj.hxx>
 #include <sfx2/viewsh.hxx>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SFXACLDETECT_HXX__
-#define __SFXACLDETECT_HXX__
+#ifndef INCLUDED_SFX2_SOURCE_DOC_SFXACLDETECT_HXX
+#define INCLUDED_SFX2_SOURCE_DOC_SFXACLDETECT_HXX
 
 // Let's check if this extra ACL check is still necessary...  If disabling it
 // causes no regressions, then we can safely remove this code.

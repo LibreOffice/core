@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef TEMPLATEDLG_HXX
-#define TEMPLATEDLG_HXX
+#ifndef INCLUDED_SFX2_INC_TEMPLATEDLG_HXX
+#define INCLUDED_SFX2_INC_TEMPLATEDLG_HXX
 
 #include <set>
 
@@ -162,6 +162,6 @@ private:
     std::vector<TemplateRepository*> maRepositories; ///< Stores the remote repositories for templates
 };
 
-#endif // TEMPLATEDLG_HXX
+#endif // INCLUDED_SFX2_INC_TEMPLATEDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

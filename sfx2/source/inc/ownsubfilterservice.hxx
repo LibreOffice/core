@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OWNSUBFILTERSERVICE_HXX_
-#define _OWNSUBFILTERSERVICE_HXX_
+#ifndef INCLUDED_SFX2_SOURCE_INC_OWNSUBFILTERSERVICE_HXX
+#define INCLUDED_SFX2_SOURCE_INC_OWNSUBFILTERSERVICE_HXX
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

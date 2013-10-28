@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_SFXTYPES_HXX
-#define _SFX_SFXTYPES_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_SFXTYPES_HXX
+#define INCLUDED_SFX2_SOURCE_INC_SFXTYPES_HXX
 
 #include <tools/debug.hxx>
 #include <tools/rc.hxx>
@@ -126,7 +126,7 @@ struct StringList_Impl : private Resource
 
 };
 
-#endif // #ifndef _SFX_SFXTYPES_HXX
+#endif // INCLUDED_SFX2_SOURCE_INC_SFXTYPES_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

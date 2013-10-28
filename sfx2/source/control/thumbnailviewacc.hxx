@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef THUMBNAILVIEWACC_HXX
-#define THUMBNAILVIEWACC_HXX
+#ifndef INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
+#define INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase5.hxx>
@@ -228,6 +228,6 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
 };
 
-#endif // THUMBNAILVIEWACC_HXX
+#endif // INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

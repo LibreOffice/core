@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_GUISAVEAS_HXX_
-#define _SFX_GUISAVEAS_HXX_
+#ifndef INCLUDED_SFX2_INC_GUISAVEAS_HXX
+#define INCLUDED_SFX2_INC_GUISAVEAS_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

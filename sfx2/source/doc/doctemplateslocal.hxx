@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_DOCTEMPLATESLOCAL_HXX
-#define _SFX_DOCTEMPLATESLOCAL_HXX
+#ifndef INCLUDED_SFX2_SOURCE_DOC_DOCTEMPLATESLOCAL_HXX
+#define INCLUDED_SFX2_SOURCE_DOC_DOCTEMPLATESLOCAL_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/beans/StringPair.hpp>

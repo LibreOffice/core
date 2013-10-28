@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_HELPER_HXX
-#define _SFX_HELPER_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_HELPER_HXX
+#define INCLUDED_SFX2_SOURCE_INC_HELPER_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -39,7 +39,7 @@ public:
     static sal_Int64 GetSize( const OUString& rContent );
 };
 
-#endif // #ifndef _SFX_HELPER_HXX
+#endif // INCLUDED_SFX2_SOURCE_INC_HELPER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

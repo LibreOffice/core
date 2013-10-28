@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RECFLOAT_HXX
-#define _RECFLOAT_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_RECFLOAT_HXX
+#define INCLUDED_SFX2_SOURCE_INC_RECFLOAT_HXX
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _THESSUBMENU_HXX_
-#define _THESSUBMENU_HXX_
+#ifndef INCLUDED_SFX2_SOURCE_MENU_THESSUBMENU_HXX
+#define INCLUDED_SFX2_SOURCE_MENU_THESSUBMENU_HXX
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>

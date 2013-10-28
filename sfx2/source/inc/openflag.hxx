@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_OPENFLAG_HXX
-#define _SFX_OPENFLAG_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_OPENFLAG_HXX
+#define INCLUDED_SFX2_SOURCE_INC_OPENFLAG_HXX
 
 // Open file for editing, then only the third option (reading a copy) works
 #define SFX_STREAM_READWRITE  (STREAM_READWRITE |  STREAM_SHARE_DENYWRITE)

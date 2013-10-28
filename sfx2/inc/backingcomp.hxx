@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SFX2_DIALOG_BACKINGCOMP_HXX_
-#define __SFX2_DIALOG_BACKINGCOMP_HXX_
+#ifndef INCLUDED_SFX2_INC_BACKINGCOMP_HXX
+#define INCLUDED_SFX2_INC_BACKINGCOMP_HXX
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -130,6 +130,6 @@ class BackingComp : public  css::lang::XTypeProvider
         static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
 };
 
-#endif // __SFX2_DIALOG_BACKINGCOMP_HXX_
+#endif // INCLUDED_SFX2_INC_BACKINGCOMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

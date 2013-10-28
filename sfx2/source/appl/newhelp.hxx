@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX_NEWHELP_HXX
-#define INCLUDED_SFX_NEWHELP_HXX
+#ifndef INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HXX
+#define INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -599,6 +599,6 @@ public:
 /// Appends ?Language=xy&System=abc to the help URL in rURL
 void AppendConfigToken(OUStringBuffer& rURL, sal_Bool bQuestionMark, const OUString &rLang = OUString());
 
-#endif // #ifndef INCLUDED_SFX_NEWHELP_HXX
+#endif // INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

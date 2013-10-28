@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX_HELPINTERCEPTOR_HXX
-#define INCLUDED_SFX_HELPINTERCEPTOR_HXX
+#ifndef INCLUDED_SFX2_SOURCE_APPL_HELPINTERCEPTOR_HXX
+#define INCLUDED_SFX2_SOURCE_APPL_HELPINTERCEPTOR_HXX
 
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
@@ -157,6 +157,6 @@ public:
 };
 
 
-#endif // #ifndef INCLUDED_SFX_HELPINTERCEPTOR_HXX
+#endif // INCLUDED_SFX2_SOURCE_APPL_HELPINTERCEPTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

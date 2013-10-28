@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DOCUMENT_UNDO_MANAGER_HXX
-#define DOCUMENT_UNDO_MANAGER_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_DOCUNDOMANAGER_HXX
+#define INCLUDED_SFX2_SOURCE_INC_DOCUNDOMANAGER_HXX
 
 #include "sfx2/sfxbasemodel.hxx"
 
@@ -99,6 +99,6 @@ namespace sfx2
 } // namespace sfx2
 //......................................................................................................................
 
-#endif // DOCUMENT_UNDO_MANAGER_HXX
+#endif // INCLUDED_SFX2_SOURCE_INC_DOCUNDOMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

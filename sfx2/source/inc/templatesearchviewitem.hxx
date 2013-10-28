@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SFX2_TEMPLATESEARCHVIEWITEM_HXX__
-#define __SFX2_TEMPLATESEARCHVIEWITEM_HXX__
+#ifndef INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEWITEM_HXX
+#define INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEWITEM_HXX
 
 #include <sfx2/templateviewitem.hxx>
 
@@ -25,6 +25,6 @@ struct TemplateSearchViewItem : public TemplateViewItem
     sal_uInt16 mnAssocId;    //Associated item id to the TemplateViews
 };
 
-#endif // __SFX2_TEMPLATESEARCHVIEWITEM_HXX__
+#endif // INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEWITEM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

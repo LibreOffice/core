@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INPUTDLG_HXX
-#define INPUTDLG_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
+#define INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
 
 #include <vcl/dialog.hxx>
 
@@ -38,6 +38,6 @@ private:
     PushButton *mpCancel;
 };
 
-#endif // INPUTDLG_HXX
+#endif // INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

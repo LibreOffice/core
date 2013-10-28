@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SFX2_TEMPLATESEARCHVIEW_HXX__
-#define __SFX2_TEMPLATESEARCHVIEW_HXX__
+#ifndef INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEW_HXX
+#define INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEW_HXX
 
 #include <sfx2/thumbnailview.hxx>
 
@@ -25,6 +25,6 @@ public:
                     const OUString &rPath, const BitmapEx &rImage );
 };
 
-#endif // __SFX2_TEMPLATESEARCHVIEW_HXX__
+#endif // INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

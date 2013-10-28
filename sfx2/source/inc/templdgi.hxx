@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_TEMPDLGI_HXX
-#define _SFX_TEMPDLGI_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_TEMPLDGI_HXX
+#define INCLUDED_SFX2_SOURCE_INC_TEMPLDGI_HXX
 
 class SfxTemplateControllerItem;
 
@@ -328,7 +328,7 @@ public:
     void Initialize (void);
 };
 
-#endif // #ifndef _SFX_TEMPDLGI_HXX
+#endif // INCLUDED_SFX2_SOURCE_INC_TEMPLDGI_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

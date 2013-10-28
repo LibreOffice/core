@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_IFRAME_HXX
-#define _SFX_IFRAME_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_IFRAME_HXX
+#define INCLUDED_SFX2_SOURCE_INC_IFRAME_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

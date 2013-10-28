@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_FILEDLGIMPL_HXX
-#define _SFX_FILEDLGIMPL_HXX
+#ifndef INCLUDED_SFX2_SOURCE_DIALOG_FILEDLGIMPL_HXX
+#define INCLUDED_SFX2_SOURCE_DIALOG_FILEDLGIMPL_HXX
 
 #include <vcl/timer.hxx>
 #include <vcl/graph.hxx>
@@ -222,6 +222,6 @@ namespace sfx2
 
 }   // end of namespace sfx2
 
-#endif // _SFX_FILEDLGIMPL_HXX
+#endif // INCLUDED_SFX2_SOURCE_DIALOG_FILEDLGIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

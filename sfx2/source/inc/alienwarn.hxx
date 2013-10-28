@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_ALIENWARN_HXX
-#define _SFX_ALIENWARN_HXX
+#ifndef INCLUDED_SFX2_SOURCE_INC_ALIENWARN_HXX
+#define INCLUDED_SFX2_SOURCE_INC_ALIENWARN_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -42,6 +42,6 @@ public:
     virtual ~SfxAlienWarningDialog();
 };
 
-#endif // #ifndef _SFX_ALIENWARN_HXX
+#endif // INCLUDED_SFX2_SOURCE_INC_ALIENWARN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
