@@ -980,11 +980,11 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     sal_Int32 n;
     sal_Unicode cu;
     sal_uInt32 cp;
-    OSL_ASSERT(string != NULL && indexUtf16 != NULL);
+    assert(string != NULL && indexUtf16 != NULL);
     n = *indexUtf16;
-    OSL_ASSERT(n >= 0 && n <= string->length);
+    assert(n >= 0 && n <= string->length);
     while (incrementCodePoints < 0) {
-        OSL_ASSERT(n > 0);
+        assert(n > 0);
         cu = string->buffer[--n];
         if (SAL_RTL_IS_LOW_SURROGATE(cu) && n != 0 &&
             SAL_RTL_IS_HIGH_SURROGATE(string->buffer[n - 1]))
@@ -993,7 +993,7 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
         }
         ++incrementCodePoints;
     }
-    OSL_ASSERT(n >= 0 && n < string->length);
+    assert(n >= 0 && n < string->length);
     cu = string->buffer[n];
     if (SAL_RTL_IS_HIGH_SURROGATE(cu) && string->length - n >= 2 &&
         SAL_RTL_IS_LOW_SURROGATE(string->buffer[n + 1]))
@@ -1003,7 +1003,7 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
         cp = cu;
     }
     while (incrementCodePoints > 0) {
-        OSL_ASSERT(n < string->length);
+        assert(n < string->length);
         cu = string->buffer[n++];
         if (SAL_RTL_IS_HIGH_SURROGATE(cu) && n != string->length &&
             SAL_RTL_IS_LOW_SURROGATE(string->buffer[n]))
@@ -1012,7 +1012,7 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
         }
         --incrementCodePoints;
     }
-    OSL_ASSERT(n >= 0 && n <= string->length);
+    assert(n >= 0 && n <= string->length);
     *indexUtf16 = n;
     return cp;
 }
