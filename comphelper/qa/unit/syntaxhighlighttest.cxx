@@ -41,11 +41,10 @@ void SyntaxHighlightTest::testBasicString()
             aPortions.begin(), itrEnd = aPortions.end(); itr != itrEnd; ++itr)
     {
         CPPUNIT_ASSERT_EQUAL(prevEnd, itr->nBegin);
-        //The comment is empty, so empty zone
-        CPPUNIT_ASSERT(itr->nBegin <= itr->nEnd);
+        CPPUNIT_ASSERT(itr->nBegin < itr->nEnd);
         prevEnd = itr->nEnd;
     }
-    CPPUNIT_ASSERT_EQUAL(aBasicString.getLength() - 1, prevEnd);
+    CPPUNIT_ASSERT_EQUAL(aBasicString.getLength(), prevEnd);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SyntaxHighlightTest);
