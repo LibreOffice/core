@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SYMTBL_HXX
-#define _SYMTBL_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_SYMTBL_HXX
+#define INCLUDED_BASIC_SOURCE_INC_SYMTBL_HXX
 
 #include <vector>
 

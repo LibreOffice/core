@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBRUNTIME_HXX
-#define _SBRUNTIME_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_RUNTIME_HXX
+#define INCLUDED_BASIC_SOURCE_INC_RUNTIME_HXX
 
 #include <basic/sbx.hxx>
 

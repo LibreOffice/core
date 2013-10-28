@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SB_HXX
-#define _SB_HXX
+#ifndef INCLUDED_BASIC_INC_SB_HXX
+#define INCLUDED_BASIC_INC_SB_HXX
 
 #include <basic/sberrors.hxx>
 #include <basic/sbdef.hxx>

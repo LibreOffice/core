@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_PROPBAG_HXX
-#define _SFX_PROPBAG_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_PROPACC_HXX
+#define INCLUDED_BASIC_SOURCE_INC_PROPACC_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

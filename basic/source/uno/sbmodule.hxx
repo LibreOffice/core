@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SBMODULE_HXX
-#define SBMODULE_HXX
+#ifndef INCLUDED_BASIC_SOURCE_UNO_SBMODULE_HXX
+#define INCLUDED_BASIC_SOURCE_UNO_SBMODULE_HXX
 
 #include <comphelper/componentmodule.hxx>
 
@@ -81,6 +81,6 @@ namespace basic
 } // namespace basic
 //........................................................................
 
-#endif // SBMODULE_HXX
+#endif // INCLUDED_BASIC_SOURCE_UNO_SBMODULE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

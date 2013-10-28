@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SCANNER_HXX
-#define _SCANNER_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_SCANNER_HXX
+#define INCLUDED_BASIC_SOURCE_INC_SCANNER_HXX
 
 #include <basic/sberrors.hxx>
 

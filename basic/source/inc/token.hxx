@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TOKEN_HXX
-#define _TOKEN_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_TOKEN_HXX
+#define INCLUDED_BASIC_SOURCE_INC_TOKEN_HXX
 
 #include "scanner.hxx"
 #include <basic/sbdef.hxx>

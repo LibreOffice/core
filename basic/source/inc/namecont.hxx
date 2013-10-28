@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASIC_NAMECONTAINER_HXX
-#define BASIC_NAMECONTAINER_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_NAMECONT_HXX
+#define INCLUDED_BASIC_SOURCE_INC_NAMECONT_HXX
 
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

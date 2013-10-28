@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PARSER_HXX
-#define _PARSER_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_PARSER_HXX
+#define INCLUDED_BASIC_SOURCE_INC_PARSER_HXX
 
 #include "expr.hxx"
 #include "codegen.hxx"

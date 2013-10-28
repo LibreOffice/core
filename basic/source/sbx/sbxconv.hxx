@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBXCONV_HXX
-#define _SBXCONV_HXX
+#ifndef INCLUDED_BASIC_SOURCE_SBX_SBXCONV_HXX
+#define INCLUDED_BASIC_SOURCE_SBX_SBXCONV_HXX
 
 #include "sbxdec.hxx"
 

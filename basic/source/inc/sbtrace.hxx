@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBTRACE_HXX
-#define _SBTRACE_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_SBTRACE_HXX
+#define INCLUDED_BASIC_SOURCE_INC_SBTRACE_HXX
 
 //#define DBG_TRACE_BASIC
 

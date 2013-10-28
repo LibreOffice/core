@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXPR_HXX
-#define _EXPR_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_EXPR_HXX
+#define INCLUDED_BASIC_SOURCE_INC_EXPR_HXX
 
 #include "opcodes.hxx"
 #include "token.hxx"

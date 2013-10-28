@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SB_INTERN_HXX
-#define _SB_INTERN_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_SBINTERN_HXX
+#define INCLUDED_BASIC_SOURCE_INC_SBINTERN_HXX
 
 #include <basic/basicdllapi.h>
 #include <basic/sbxfac.hxx>

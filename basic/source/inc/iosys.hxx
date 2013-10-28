@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBIOSYS_HXX
-#define _SBIOSYS_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_IOSYS_HXX
+#define INCLUDED_BASIC_SOURCE_INC_IOSYS_HXX
 
 #include <tools/stream.hxx>
 #include <basic/sberrors.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BUFFER_HXX
-#define _BUFFER_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_BUFFER_HXX
+#define INCLUDED_BASIC_SOURCE_INC_BUFFER_HXX
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 

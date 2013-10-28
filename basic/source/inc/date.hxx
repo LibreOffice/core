@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SBDATE_HXX
-#define _SBDATE_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_DATE_HXX
+#define INCLUDED_BASIC_SOURCE_INC_DATE_HXX
 
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>

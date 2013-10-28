@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASRID_HXX
-#define _BASRID_HXX
+#ifndef INCLUDED_BASIC_INC_BASRID_HXX
+#define INCLUDED_BASIC_INC_BASRID_HXX
 
 #include <tools/resid.hxx>
 
@@ -28,6 +28,6 @@ class BasResId : public ResId
     BasResId( sal_uInt32 nId );
 };
 
-#endif //_BASRID_HXX
+#endif // INCLUDED_BASIC_INC_BASRID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

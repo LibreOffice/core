@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CODEGEN_HXX
-#define _CODEGEN_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_CODEGEN_HXX
+#define INCLUDED_BASIC_SOURCE_INC_CODEGEN_HXX
 
 class SbiParser;
 class SbModule;

@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _SB_SBJSMETH_HXX
-#define _SB_SBJSMETH_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_SBJSMETH_HXX
+#define INCLUDED_BASIC_SOURCE_INC_SBJSMETH_HXX
 
 #include <basic/sbmeth.hxx>
 

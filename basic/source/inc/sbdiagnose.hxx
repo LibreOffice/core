@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASIC_SBDIAGNOSE_HXX
-#define BASIC_SBDIAGNOSE_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_SBDIAGNOSE_HXX
+#define INCLUDED_BASIC_SOURCE_INC_SBDIAGNOSE_HXX
 
 #ifdef DBG_UTIL
 void    ResetCapturedAssertions();
 #endif
 
-#endif // BASIC_SBDIAGNOSE_HXX
+#endif // INCLUDED_BASIC_SOURCE_INC_SBDIAGNOSE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

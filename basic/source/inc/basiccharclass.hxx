@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASIC_BASICCHARCLASS_HXX
-#define _BASIC_BASICCHARCLASS_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_BASICCHARCLASS_HXX
+#define INCLUDED_BASIC_SOURCE_INC_BASICCHARCLASS_HXX
 
 #include <unotools/charclass.hxx>
 #include <rtl/instance.hxx>

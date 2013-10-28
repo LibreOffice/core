@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef BASIC_DIALOGCONTAINER_HXX
-#define BASIC_DIALOGCONTAINER_HXX
+#ifndef INCLUDED_BASIC_SOURCE_INC_DLGCONT_HXX
+#define INCLUDED_BASIC_SOURCE_INC_DLGCONT_HXX
 
 #include "namecont.hxx"
 
