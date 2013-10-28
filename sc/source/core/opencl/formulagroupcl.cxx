@@ -30,8 +30,9 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#define MD5_KERNEL 1
 #ifdef MD5_KERNEL
-#include <openssl/md5.h>
+#include <rtl/digest.h>
 #endif
 #include <memory>
 using namespace formula;
@@ -1172,10 +1173,11 @@ public:
         if(mKernelSignature.empty()) {
             std::stringstream md5s;
             // Compute MD5SUM of kernel body to obtain the name
-            unsigned char result[MD5_DIGEST_LENGTH];
-             MD5(reinterpret_cast<const unsigned char *>
-                (mKernelSrc.str().c_str()), mKernelSrc.str().length(), result);
-            for(int i=0; i < MD5_DIGEST_LENGTH; i++) {
+            sal_uInt8 result[RTL_DIGEST_LENGTH_MD5];
+            rtlDigestError err = rtl_digest_MD5(
+                mKernelSrc.str().c_str(), mKernelSrc.str().length(), result,
+                RTL_DIGEST_LENGTH_MD5);
+            for(int i=0; i < RTL_DIGEST_LENGTH_MD5; i++) {
                 md5s << std::hex << (int)result[i];
             }
             mKernelSignature = md5s.str();
@@ -1188,26 +1190,7 @@ public:
     /// Create program, build, and create kerenl
     /// TODO cache results based on kernel body hash
     /// TODO: abstract OpenCL part out into OpenCL wrapper.
-    bool CreateKernel(void)
-    {
-        cl_int err;
-        std::string kname = "DynamicKernel"+mKernelSignature;
-        // Compile kernel here!!!
-        // Obtain cl context
-        KernelEnv kEnv;
-        OclCalc::setKernelEnv(&kEnv);
-        const char *src = mFullProgramSrc.c_str();
-        mpProgram = clCreateProgramWithSource(kEnv.mpkContext, 1,
-                &src, NULL, &err);
-        if (err != CL_SUCCESS)
-            return true;
-        err = clBuildProgram(mpProgram, 1,
-                OpenclDevice::gpuEnv.mpArryDevsID, "", NULL, NULL);
-        if (err != CL_SUCCESS)
-            return true;
-        mpKernel = clCreateKernel(mpProgram, kname.c_str(), &err);
-        return (err != CL_SUCCESS);
-    }
+    bool CreateKernel(void);
     /// Prepare buffers, marshal them to GPU, and launch the kernel
     /// TODO: abstract OpenCL part out into OpenCL wrapper.
     void Launch(size_t nr)
@@ -1262,7 +1245,27 @@ DynamicKernel::~DynamicKernel()
         clReleaseProgram(mpProgram);
     }
 }
-
+/// Build code
+bool DynamicKernel::CreateKernel(void)
+{
+    cl_int err;
+    std::string kname = "DynamicKernel"+mKernelSignature;
+    // Compile kernel here!!!
+    // Obtain cl context
+    KernelEnv kEnv;
+    OclCalc::setKernelEnv(&kEnv);
+    const char *src = mFullProgramSrc.c_str();
+    mpProgram = clCreateProgramWithSource(kEnv.mpkContext, 1,
+            &src, NULL, &err);
+    if (err != CL_SUCCESS)
+        return true;
+    err = clBuildProgram(mpProgram, 1,
+            OpenclDevice::gpuEnv.mpArryDevsID, "", NULL, NULL);
+    if (err != CL_SUCCESS)
+        return true;
+    mpKernel = clCreateKernel(mpProgram, kname.c_str(), &err);
+    return (err != CL_SUCCESS);
+}
 // Symbol lookup. If there is no such symbol created, allocate one
 // kernel with argument with unique name and return so.
 // The template argument T must be a subclass of DynamicKernelArgument
