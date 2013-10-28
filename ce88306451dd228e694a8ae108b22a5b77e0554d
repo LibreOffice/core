@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZX///8M\u003d",
+        "filename": "svl/source/uno/fpicker.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-28T13:26:46Z",
+      "side": 1,
+      "message": "This file must be in svtools/source/uno/, not svl/source/uno/.",
+      "revId": "ce88306451dd228e694a8ae108b22a5b77e0554d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///8I\u003d",
+        "filename": "svl/source/uno/fpicker.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-28T13:26:46Z",
+      "side": 1,
+      "message": "The include guard should match the file name, INCLUDED_SVTOOLS_SOURCE_UNO_FILE_HXX.",
+      "revId": "ce88306451dd228e694a8ae108b22a5b77e0554d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///78\u003d",
+        "filename": "svl/source/uno/fpicker.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-28T13:26:46Z",
+      "side": 1,
+      "message": "Why is this macro needed in this include file?",
+      "revId": "ce88306451dd228e694a8ae108b22a5b77e0554d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///8E\u003d",
+        "filename": "svl/source/uno/fpicker.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-28T13:26:46Z",
+      "side": 1,
+      "message": "it helps readability to indent such follow-on lines",
+      "revId": "ce88306451dd228e694a8ae108b22a5b77e0554d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///8A\u003d",
+        "filename": "svl/source/uno/fpicker.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-28T13:26:46Z",
+      "side": 1,
+      "message": "Declarations of {File,Folder}Picker_getImplementationName are missing.",
+      "revId": "ce88306451dd228e694a8ae108b22a5b77e0554d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///70\u003d",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-28T13:26:46Z",
+      "side": 1,
+      "message": "Include files that are no longer needed (\"cppuhelper/implementationentry.hxx\") should be removed.",
+      "revId": "ce88306451dd228e694a8ae108b22a5b77e0554d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///74\u003d",
+        "filename": "svtools/source/uno/fpicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-28T13:26:46Z",
+      "side": 1,
+      "message": "* Repeating SAL_CALL in a function definition after it has already been seen in a corresponding function declaration is redundant and should be avoided.\n\n* The spelling of the declarations in the include file uses a capital \"C\" for {File,Folder}Picker_CreateInstance",
+      "revId": "ce88306451dd228e694a8ae108b22a5b77e0554d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///7w\u003d",
+        "filename": "svtools/source/uno/miscservices.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-10-28T13:26:46Z",
+      "side": 1,
+      "message": "This branch is unnecessary; it is already covered by the following else branch.",
+      "revId": "ce88306451dd228e694a8ae108b22a5b77e0554d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
