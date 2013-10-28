@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDITSTT2_HXX
-#define _EDITSTT2_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDITSTT2_HXX
+#define INCLUDED_EDITENG_SOURCE_EDITENG_EDITSTT2_HXX
 
 #include <editeng/editstat.hxx>
 
@@ -118,6 +118,6 @@ public:
                 { return ( ( nControlBits & EE_CNTRL_ULSPACEFIRSTPARA ) != 0 ); }
 };
 
-#endif // _EDITSTT2_HXX
+#endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITSTT2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

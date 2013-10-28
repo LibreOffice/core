@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_ACCESSIBLE_HYPERLINK_HXX
-#define _SVX_ACCESSIBLE_HYPERLINK_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_ACCESSIBILITY_ACCESSIBLEHYPERLINK_HXX
+#define INCLUDED_EDITENG_SOURCE_ACCESSIBILITY_ACCESSIBLEHYPERLINK_HXX
 
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/compbase1.hxx>

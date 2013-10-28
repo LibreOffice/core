@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DATAOBJ_HXX
-#define _DATAOBJ_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EEOBJ_HXX
+#define INCLUDED_EDITENG_SOURCE_EDITENG_EEOBJ_HXX
 
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -57,6 +57,6 @@ public:
     sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-#endif  // _DATAOBJ_HXX
+#endif // INCLUDED_EDITENG_SOURCE_EDITENG_EEOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDITOBJ2_HXX
-#define _EDITOBJ2_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDITOBJ2_HXX
+#define INCLUDED_EDITENG_SOURCE_EDITENG_EDITOBJ2_HXX
 
 #include <editeng/editobj.hxx>
 #include <editdoc.hxx>
@@ -278,6 +278,6 @@ public:
 #endif
 };
 
-#endif  // _EDITOBJ2_HXX
+#endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITOBJ2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

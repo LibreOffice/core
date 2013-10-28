@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OUTLUNDO_HXX
-#define _OUTLUNDO_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_OUTLINER_OUTLUNDO_HXX
+#define INCLUDED_EDITENG_SOURCE_OUTLINER_OUTLUNDO_HXX
 
 #include <editeng/outliner.hxx>
 #include <editeng/editdata.hxx>

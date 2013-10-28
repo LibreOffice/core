@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PARALIST_HXX
-#define _PARALIST_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_OUTLINER_PARALIST_HXX
+#define INCLUDED_EDITENG_SOURCE_OUTLINER_PARALIST_HXX
 
 #include <sal/config.h>
 #include <sal/log.hxx>

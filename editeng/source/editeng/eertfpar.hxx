@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _EERTFPAR_HXX
-#define _EERTFPAR_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EERTFPAR_HXX
+#define INCLUDED_EDITENG_SOURCE_EDITENG_EERTFPAR_HXX
 
 #include <editeng/svxrtf.hxx>
 
@@ -116,6 +116,6 @@ SV_DECL_REF( EditRTFParser )
 SV_IMPL_REF( EditRTFParser );
 
 
-#endif  //_EERTFPAR_HXX
+#endif // INCLUDED_EDITENG_SOURCE_EDITENG_EERTFPAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _IMPEDIT_HXX
-#define _IMPEDIT_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_IMPEDIT_HXX
+#define INCLUDED_EDITENG_SOURCE_EDITENG_IMPEDIT_HXX
 
 #include <editdoc.hxx>
 #include <editsel.hxx>
@@ -1213,7 +1213,7 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
 sal_uInt8 GetCharTypeForCompression( sal_Unicode cChar );
 Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin );
 
-#endif // _IMPEDIT_HXX
+#endif // INCLUDED_EDITENG_SOURCE_EDITENG_IMPEDIT_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

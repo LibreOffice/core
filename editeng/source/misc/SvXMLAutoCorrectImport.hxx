@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SV_XMLAUTOCORRECTIMPORT_HXX
-#define _SV_XMLAUTOCORRECTIMPORT_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_MISC_SVXMLAUTOCORRECTIMPORT_HXX
+#define INCLUDED_EDITENG_SOURCE_MISC_SVXMLAUTOCORRECTIMPORT_HXX
 
 #include <sot/storage.hxx>
 #include <xmloff/xmlictxt.hxx>

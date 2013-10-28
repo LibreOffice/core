@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDITSEL_HXX
-#define _EDITSEL_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDITSEL_HXX
+#define INCLUDED_EDITENG_SOURCE_EDITENG_EDITSEL_HXX
 
 #include <vcl/seleng.hxx>
 
@@ -56,6 +56,6 @@ public:
     void            SetCurView( EditView* pNewView );
 };
 
-#endif // _EDITSEL_HXX
+#endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITSEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

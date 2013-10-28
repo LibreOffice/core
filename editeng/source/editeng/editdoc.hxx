@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDITDOC_HXX
-#define _EDITDOC_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDITDOC_HXX
+#define INCLUDED_EDITENG_SOURCE_EDITENG_EDITDOC_HXX
 
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 
@@ -837,6 +837,6 @@ public:
     virtual SvStream&   Store( SvStream& rStream ) const;
 };
 
-#endif // _EDITDOC_HXX
+#endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITDOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

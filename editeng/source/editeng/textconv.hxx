@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TEXTCONV_HXX
-#define _TEXTCONV_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_TEXTCONV_HXX
+#define INCLUDED_EDITENG_SOURCE_EDITENG_TEXTCONV_HXX
 
 #include <editeng/splwrap.hxx>
 #include <editeng/svxacorr.hxx>

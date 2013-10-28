@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_EDITXML_HXX
-#define _SVX_EDITXML_HXX
+#ifndef INCLUDED_EDITENG_INC_EDITXML_HXX
+#define INCLUDED_EDITENG_INC_EDITXML_HXX
 
 class EditEngine;
 class SvStream;

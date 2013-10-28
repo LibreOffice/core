@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EDTSPELL_HXX
-#define _EDTSPELL_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDTSPELL_HXX
+#define INCLUDED_EDITENG_SOURCE_EDITENG_EDTSPELL_HXX
 
 #include <com/sun/star/uno/Reference.h>
 #include <editeng/editengdllapi.h>

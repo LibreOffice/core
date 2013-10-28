@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _OUTLEENG_HXX
-#define _OUTLEENG_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_OUTLINER_OUTLEENG_HXX
+#define INCLUDED_EDITENG_SOURCE_OUTLINER_OUTLEENG_HXX
 
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>

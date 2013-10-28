@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EEHTML_HXX
-#define _EEHTML_HXX
+#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EEHTML_HXX
+#define INCLUDED_EDITENG_SOURCE_EDITENG_EEHTML_HXX
 
 #include <editdoc.hxx>
 #include <svtools/parhtml.hxx>
@@ -80,6 +80,6 @@ public:
 SV_DECL_REF( EditHTMLParser )
 SV_IMPL_REF( EditHTMLParser );
 
-#endif // _EEHTML_HXX
+#endif // INCLUDED_EDITENG_SOURCE_EDITENG_EEHTML_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
