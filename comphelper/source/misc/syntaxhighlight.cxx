@@ -257,7 +257,6 @@ namespace
 
 class SyntaxHighlighter::Tokenizer
 {
-    HighlighterLanguage aLanguage;
     // Character information tables
     sal_uInt16 aCharTypeTab[256];
 
@@ -272,7 +271,9 @@ class SyntaxHighlighter::Tokenizer
     sal_uInt16 nKeyWordCount;
 
 public:
-    Tokenizer( HighlighterLanguage aLang = HIGHLIGHT_BASIC );
+    HighlighterLanguage const aLanguage;
+
+    Tokenizer( HighlighterLanguage aLang );
     ~Tokenizer( void );
 
     void getHighlightPortions( const OUString& rLine,
@@ -708,6 +709,11 @@ void SyntaxHighlighter::getHighlightPortions( const OUString& rLine,
                                               /*out*/std::vector<HighlightPortion>& portions )
 {
     m_tokenizer->getHighlightPortions( rLine, portions );
+}
+
+HighlighterLanguage SyntaxHighlighter::GetLanguage()
+{
+    return m_tokenizer->aLanguage;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

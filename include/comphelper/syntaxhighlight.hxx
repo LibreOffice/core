@@ -80,8 +80,9 @@ public:
     void getHighlightPortions( const OUString& rLine,
                                std::vector<HighlightPortion>& pPortions );
 
-    HighlighterLanguage GetLanguage() { return eLanguage;}
+    HighlighterLanguage GetLanguage();
 };
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
