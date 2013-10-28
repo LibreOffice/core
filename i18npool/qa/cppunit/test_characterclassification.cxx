@@ -27,9 +27,11 @@ public:
     virtual void tearDown();
 
     void testTitleCase();
+    void testStringType();
 
     CPPUNIT_TEST_SUITE(TestCharacterClassification);
     CPPUNIT_TEST(testTitleCase);
+    CPPUNIT_TEST(testStringType);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<i18n::XCharacterClassification> m_xCC;
@@ -66,6 +68,30 @@ void TestCharacterClassification::testTitleCase()
         OUString sLowerCase = m_xCC->toLower(aTest, 0, aTest.getLength(), aLocale);
         CPPUNIT_ASSERT_MESSAGE("Should be lower ", sLowerCase.getLength() == 1 && sLowerCase[0] == 0x01F3);
     }
+}
+
+//https://bugs.freedesktop.org/show_bug.cgi?id=69641
+void TestCharacterClassification::testStringType()
+{
+    lang::Locale aLocale;
+    aLocale.Language = OUString("en");
+    aLocale.Country = OUString("US");
+
+    {
+        //simple case
+        OUString sTest("Some text");
+        sal_Int32 nResult = m_xCC->getStringType(sTest, 0, sTest.getLength(), aLocale);
+        CPPUNIT_ASSERT_EQUAL(nResult, sal_Int32(230));
+    }
+
+    {
+        //tricky case
+        const sal_Unicode MATHEMATICAL_ITALIC_SMALL_THETA[] = { 0xD835, 0xDF03 };
+        OUString sTest(MATHEMATICAL_ITALIC_SMALL_THETA, SAL_N_ELEMENTS(MATHEMATICAL_ITALIC_SMALL_THETA));
+        sal_Int32 nResult = m_xCC->getStringType(sTest, 0, sTest.getLength(), aLocale);
+        CPPUNIT_ASSERT_EQUAL(nResult, sal_Int32(228));
+    }
+
 }
 
 void TestCharacterClassification::setUp()
