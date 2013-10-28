@@ -33,6 +33,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	comphelper \
 	cppu \
 	cppuhelper \
+    editeng \
 	for \
 	sal \
 	sc \
