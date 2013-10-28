@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DESKTOP_WORDBOOKMIGRATION_HXX_
-#define _DESKTOP_WORDBOOKMIGRATION_HXX_
+#ifndef INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_WORDBOOKMIGRATION_HXX
+#define INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_WORDBOOKMIGRATION_HXX
 
 #include "misc.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>

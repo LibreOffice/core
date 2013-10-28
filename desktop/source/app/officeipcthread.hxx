@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DESKTOP_OFFICEIPCTHREAD_HXX_
-#define _DESKTOP_OFFICEIPCTHREAD_HXX_
+#ifndef INCLUDED_DESKTOP_SOURCE_APP_OFFICEIPCTHREAD_HXX
+#define INCLUDED_DESKTOP_SOURCE_APP_OFFICEIPCTHREAD_HXX
 
 #include "sal/config.h"
 
@@ -159,6 +159,6 @@ class OfficeIPCThreadController : public ::cppu::WeakImplHelper2<
 
 }
 
-#endif // _DESKTOP_OFFICEIPCTHREAD_HXX_
+#endif // INCLUDED_DESKTOP_SOURCE_APP_OFFICEIPCTHREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

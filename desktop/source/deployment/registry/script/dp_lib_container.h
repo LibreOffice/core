@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DP_LIB_CONTAINER_H
-#define INCLUDED_DP_LIB_CONTAINER_H
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SCRIPT_DP_LIB_CONTAINER_H
+#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SCRIPT_DP_LIB_CONTAINER_H
 
 #include <com/sun/star/uno/Reference.hxx>
 

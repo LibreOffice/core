@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DP_COMMANDENVIRONMENTS_HXX
-#define INCLUDED_DP_COMMANDENVIRONMENTS_HXX
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_COMMANDENVIRONMENTS_HXX
+#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_COMMANDENVIRONMENTS_HXX
 
 #include "cppuhelper/compbase3.hxx"
 #include "ucbhelper/content.hxx"

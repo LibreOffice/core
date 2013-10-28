@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _DESKTOP_MIGRATION_IMPL_HXX_
-#define _DESKTOP_MIGRATION_IMPL_HXX_
+#ifndef INCLUDED_DESKTOP_SOURCE_MIGRATION_MIGRATION_IMPL_HXX
+#define INCLUDED_DESKTOP_SOURCE_MIGRATION_MIGRATION_IMPL_HXX
 
 #include <vector>
 #include <algorithm>

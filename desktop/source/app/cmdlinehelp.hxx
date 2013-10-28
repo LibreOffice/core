@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DESKTOP_COMMANDLINEHELP_HXX_
-#define _DESKTOP_COMMANDLINEHELP_HXX_
+#ifndef INCLUDED_DESKTOP_SOURCE_APP_CMDLINEHELP_HXX
+#define INCLUDED_DESKTOP_SOURCE_APP_CMDLINEHELP_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>

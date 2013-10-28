@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DESKTOP_MIGRATION_HXX_
-#define _DESKTOP_MIGRATION_HXX_
+#ifndef INCLUDED_DESKTOP_INC_MIGRATION_HXX
+#define INCLUDED_DESKTOP_INC_MIGRATION_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

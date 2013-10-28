@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DP_MISC_H
-#define INCLUDED_DP_MISC_H
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_H
+#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_H
 
 #include "rtl/ustrbuf.hxx"
 #include "rtl/instance.hxx"

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DESKTOP_MISC_HXX_
-#define _DESKTOP_MISC_HXX_
+#ifndef INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_MISC_HXX
+#define INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_MISC_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -37,6 +37,6 @@ namespace migration
 }   // namespace migration
 //.........................................................................
 
-#endif // _DESKTOP_MISC_HXX_
+#endif // INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_MISC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

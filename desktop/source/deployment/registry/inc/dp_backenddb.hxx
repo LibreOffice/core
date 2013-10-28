@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DP_BACKENDDB_HXX
-#define INCLUDED_DP_BACKENDDB_HXX
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_INC_DP_BACKENDDB_HXX
+#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_INC_DP_BACKENDDB_HXX
 
 #include "rtl/ustring.hxx"
 #include <list>

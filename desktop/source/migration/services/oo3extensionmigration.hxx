@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DESKTOP_OO3EXTENSIONMIGRATION_HXX_
-#define _DESKTOP_OO3EXTENSIONMIGRATION_HXX_
+#ifndef INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_OO3EXTENSIONMIGRATION_HXX
+#define INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_OO3EXTENSIONMIGRATION_HXX
 
 #include "misc.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -145,6 +145,6 @@ namespace migration
 }   // namespace migration
 //.........................................................................
 
-#endif // _DESKTOP_OO3EXTENSIONMIGRATION_HXX_
+#endif // INCLUDED_DESKTOP_SOURCE_MIGRATION_SERVICES_OO3EXTENSIONMIGRATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

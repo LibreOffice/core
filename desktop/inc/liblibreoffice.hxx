@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _LIBLIBREOFFICE_HXX
-#define _LIBLIBREOFFICE_HXX
+#ifndef INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_HXX
+#define INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_HXX
 
 class LODocument
 {

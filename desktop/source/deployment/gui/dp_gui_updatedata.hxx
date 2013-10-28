@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_DP_GUI_UPDATEDATA_HXX
-#define INCLUDED_DP_GUI_UPDATEDATA_HXX
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_UPDATEDATA_HXX
+#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_UPDATEDATA_HXX
 
 #include "sal/config.h"
 #include "tools/solar.h"

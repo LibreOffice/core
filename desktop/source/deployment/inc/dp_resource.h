@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DP_RESOURCE_H
-#define INCLUDED_DP_RESOURCE_H
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_RESOURCE_H
+#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_RESOURCE_H
 
 #include "tools/resid.hxx"
 #include <i18nlangtag/languagetag.hxx>

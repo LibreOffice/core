@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DESKTOP_APP_HXX_
-#define _DESKTOP_APP_HXX_
+#ifndef INCLUDED_DESKTOP_INC_APP_HXX
+#define INCLUDED_DESKTOP_INC_APP_HXX
 
 // stl includes first
 #include <map>
@@ -192,6 +192,6 @@ class Desktop : public Application
 
 }
 
-#endif // _DESKTOP_APP_HXX_
+#endif // INCLUDED_DESKTOP_INC_APP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

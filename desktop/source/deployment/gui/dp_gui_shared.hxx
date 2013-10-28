@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DP_GUI_SHARED_HXX
-#define INCLUDED_DP_GUI_SHARED_HXX
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_SHARED_HXX
+#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_SHARED_HXX
 
 #include "rtl/instance.hxx"
 #include "tools/resmgr.hxx"

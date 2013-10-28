@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef _SPLASHX_H
-#define _SPLASHX_H
+#ifndef INCLUDED_DESKTOP_UNX_SOURCE_SPLASHX_H
+#define INCLUDED_DESKTOP_UNX_SOURCE_SPLASHX_H
 
 
 #ifdef __cplusplus
@@ -24,6 +24,6 @@ void splash_draw_progress(struct splash* splash, int progess);
 } // extern "C"
 #endif
 
-#endif // _SPLASHX_H
+#endif // INCLUDED_DESKTOP_UNX_SOURCE_SPLASHX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
