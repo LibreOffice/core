@@ -162,7 +162,13 @@ long SwWrtShell::SelAll()
 
         bool bStartsWithTable = StartsWithTable();
         if (bStartsWithTable)
+        {
+            // Disable table cursor to make sure getShellCrsr() returns m_pCurCrsr, not m_pTblCrsr.
+            if (IsTableMode())
+                TblCrsrToCursor();
+            // Do the extended select all on m_pCurCrsr.
             ExtendedSelectAll(/*bFootnotes =*/ false);
+        }
 
         if( pStartPos )
         {
