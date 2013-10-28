@@ -1595,7 +1595,7 @@ def __compil__(s):
             (?:[^\n]*(?<!\b(%(END)s))\n)* # 0 or more lines (not END)
             [^\n]*\b(?:%(OUTPUT)s)\b[^\n]*\n # line with OUTPUT (functions = procedures with OUTPUT)
             (?:[^\n]*(?<!\b(?:%(END)s))\n)* # 0 or more lines (not END)
-            (?:%(END)s)\b""" % __l12n__(_.lng), s, re.X) ] # final END (XXX multiple names of "END" doesn't supported)
+            [ \t]*\b(?:%(END)s)\b""" % __l12n__(_.lng), s, re.X) ] # final END (XXX multiple names of "END" doesn't supported)
         # add line breaks before procedure calls
         procedures = set(subnames) - set(functions)
         if len(procedures) > 0:
