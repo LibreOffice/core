@@ -61,7 +61,7 @@ $(call gb_CliLibrary_get_clean_target,%) :
 #
 # gb_CliLibrary_CliLibrary target
 define gb_CliLibrary_CliLibrary
-$(call gb_CliAssembly_CliAssembly,$(1))
+$(call gb_CliAssembly_CliAssembly,$(1),$(call gb_CliLibrary_get_target,$(1)))
 
 $(call gb_CliLibrary_get_target,$(1)) : CLI_ASSEMBLIES :=
 $(call gb_CliLibrary_get_target,$(1)) : CLI_SOURCES :=

@@ -43,7 +43,7 @@ $(call gb_CliUnoApi_get_clean_target,%) :
 #
 # gb_CliUnoApi_CliUnoApi target
 define gb_CliUnoApi_CliUnoApi
-$(call gb_CliAssembly_CliAssembly,$(1))
+$(call gb_CliAssembly_CliAssembly,$(1),$(call gb_CliUnoApi_get_target,$(1)))
 
 $(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_API :=
 $(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_ASSEMBLIES :=

@@ -39,7 +39,7 @@ $(call gb_CliNativeLibrary_get_clean_target,%) :
 #
 # CliNativeLibrary target
 define gb_CliNativeLibrary_CliNativeLibrary
-$(call gb_CliAssembly_CliAssembly,$(1))
+$(call gb_CliAssembly_CliAssembly,$(1),$(call gb_CliNativeLibrary_get_target,$(1)))
 
 $(call gb_CliNativeLibrary_get_target,$(1)) : CLI_NATIVE_ASSEMBLIES := $(gb_Helper_MISCDUMMY)
 $(call gb_CliNativeLibrary_get_target,$(1)) : CLI_NATIVE_KEYFILE :=

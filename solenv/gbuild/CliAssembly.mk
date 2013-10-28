@@ -148,9 +148,11 @@ $(call gb_CliAssembly_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),CLA,3)
 	rm -f $(call gb_CliAssembly_get_target,$*)
 
+# call gb_CliAssembly_CliAssembly,dllname,dlltarget
 define gb_CliAssembly_CliAssembly
 $(call gb_CliAssemblyTarget_CliAssemblyTarget,$(1))
 $(call gb_Package_Package_internal,$(1)_assembly,$(WORKDIR))
+$(call gb_Package_set_outdir,$(1)_assembly,$(dir $(2)))
 
 $(call gb_CliAssembly_get_target,$(1)) : $(call gb_CliAssemblyTarget_get_target,$(1))
 $(call gb_CliAssembly_get_target,$(1)) :| $(call gb_Package_get_target,$(1)_assembly)
@@ -160,7 +162,7 @@ $(call gb_CliAssembly_get_clean_target,$(1)) : $(call gb_Package_get_clean_targe
 endef
 
 define gb_CliAssembly__add_file
-$(call gb_Package_add_file,$(1)_assembly,bin/$(notdir $(2)),$(subst $(WORKDIR)/,,$(2)))
+$(call gb_Package_add_file,$(1)_assembly,$(notdir $(2)),$(subst $(WORKDIR)/,,$(2)))
 
 endef
 
