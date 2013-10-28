@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cppuhelper/supportsservice.hxx>
+
 #include "gstmanager.hxx"
 #include "gstplayer.hxx"
 
@@ -82,7 +84,7 @@ OUString SAL_CALL Manager::getImplementationName(  )
 sal_Bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName == AVMEDIA_GST_MANAGER_SERVICENAME;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // ------------------------------------------------------------------------------

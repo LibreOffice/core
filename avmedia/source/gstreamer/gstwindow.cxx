@@ -19,6 +19,8 @@
 
 #include <com/sun/star/awt/SystemPointer.hpp>
 
+#include <cppuhelper/supportsservice.hxx>
+
 #include "gstwindow.hxx"
 #include "gstplayer.hxx"
 
@@ -228,7 +230,7 @@ OUString SAL_CALL Window::getImplementationName(  )
 sal_Bool SAL_CALL Window::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName == AVMEDIA_GST_WINDOW_SERVICENAME;
+    return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
