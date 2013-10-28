@@ -1790,15 +1790,15 @@ void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int
         MapMode aMapMode(aDevice.GetMapMode());
         aMapMode.SetMapUnit(MAP_TWIP);
         aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
-                // scaling
-        Fraction scaleX(contextWidth,tileWidth);
-        Fraction scaleY(contextHeight,tileHeight);
+        // scaling
+        Fraction scaleX(tileWidth,contextWidth);
+        Fraction scaleY(tileHeight,contextHeight);
         aMapMode.SetScaleX(scaleX);
         aMapMode.SetScaleY(scaleY);
         aDevice.SetMapMode(aMapMode);
         // resizes the virtual device so to contain the entrie context
         aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
-        // draw
+        // draw - works in logic coordinates
         pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)));
         // copy the aDevice content to mpImage
         Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
