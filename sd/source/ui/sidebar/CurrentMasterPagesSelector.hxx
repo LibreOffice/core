@@ -23,8 +23,6 @@
 #include "MasterPagesSelector.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
 
-
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 

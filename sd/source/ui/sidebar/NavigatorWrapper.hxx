@@ -27,8 +27,6 @@
 class SfxBindings;
 namespace sd { class ViewShellBase; }
 
-namespace css = ::com::sun::star;
-
 namespace sd { namespace sidebar {
 
 /** Present the navigator as control that can be displayed inside the

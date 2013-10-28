@@ -24,7 +24,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 class SfxViewShell;

@@ -21,7 +21,6 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {

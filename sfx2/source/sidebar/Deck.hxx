@@ -30,8 +30,6 @@
 
 class ScrollBar;
 
-namespace css = ::com::sun::star;
-
 namespace sfx2 { namespace sidebar {
 
 class DeckDescriptor;

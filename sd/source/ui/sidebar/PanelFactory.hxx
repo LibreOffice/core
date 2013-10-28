@@ -32,8 +32,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
-
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 

@@ -24,7 +24,6 @@
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 namespace sc { namespace sidebar {

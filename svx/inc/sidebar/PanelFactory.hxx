@@ -25,8 +25,6 @@
 
 #include <boost/noncopyable.hpp>
 
-
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 

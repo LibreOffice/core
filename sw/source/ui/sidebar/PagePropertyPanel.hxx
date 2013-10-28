@@ -47,8 +47,6 @@ namespace svx { namespace sidebar {
 
 #include <boost/scoped_ptr.hpp>
 
-
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 namespace sw { namespace sidebar {

@@ -62,7 +62,6 @@
 #define TBX_ID_ICON 1
 #define TBX_ID_LIST 2
 
-namespace css = ::com::sun::star;
 using rtl::OUString;
 
 GalleryBrowserMode GalleryBrowser2::meInitMode = GALLERYBROWSERMODE_ICON;

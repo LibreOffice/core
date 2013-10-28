@@ -21,8 +21,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-namespace css = ::com::sun::star;
-
 DBG_NAMEEX( SvxGalleryItem )
 DBG_NAME( SvxGalleryItem )
 

@@ -39,7 +39,6 @@ class ViewShell;
 class ViewShellBase;
 }
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 namespace cssdf = ::com::sun::star::drawing::framework;
 

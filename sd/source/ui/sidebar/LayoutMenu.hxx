@@ -37,10 +37,8 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 
-
 class SfxModule;
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 namespace sd {

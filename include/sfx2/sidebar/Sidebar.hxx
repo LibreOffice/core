@@ -23,7 +23,6 @@
 #include "sfx2/dllapi.h"
 #include <com/sun/star/frame/XFrame.hpp>
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 

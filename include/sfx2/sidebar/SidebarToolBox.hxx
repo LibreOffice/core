@@ -27,7 +27,6 @@
 #include <com/sun/star/util/URL.hpp>
 #include <map>
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {

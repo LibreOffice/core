@@ -47,7 +47,6 @@
 class FloatingWindow;
 class ToolBox;
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 

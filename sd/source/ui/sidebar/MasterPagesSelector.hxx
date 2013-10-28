@@ -35,7 +35,6 @@
 
 #include <queue>
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 class MouseEvent;

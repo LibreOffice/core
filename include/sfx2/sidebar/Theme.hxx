@@ -35,10 +35,8 @@
 #include <map>
 #include <boost/optional.hpp>
 
-
 class SvBorder;
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 

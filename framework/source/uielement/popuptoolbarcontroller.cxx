@@ -35,8 +35,6 @@
 #define UNO_COMMAND_RECENT_FILE_LIST    ".uno:RecentFileList"
 #define SFX_REFERER_USER                "private:user"
 
-namespace css = ::com::sun::star;
-
 namespace framework
 {
 

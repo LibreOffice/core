@@ -41,7 +41,6 @@ namespace
 }
 
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 namespace cssl = ::com::sun::star::lang;
 

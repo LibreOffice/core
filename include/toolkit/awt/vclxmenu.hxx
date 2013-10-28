@@ -36,8 +36,6 @@
 
 #include <vector>
 
-namespace css = ::com::sun::star;
-
 class Menu;
 class MenuBar;
 class VclSimpleEvent;

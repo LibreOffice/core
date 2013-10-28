@@ -26,7 +26,6 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 namespace

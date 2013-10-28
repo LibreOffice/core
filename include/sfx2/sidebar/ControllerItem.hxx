@@ -30,8 +30,6 @@
 
 #include <boost/function.hpp>
 
-
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 class SfxViewFrame;

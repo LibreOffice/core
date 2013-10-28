@@ -34,7 +34,6 @@
 #define A2S(s) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s)))
 #define S2A(s) rtl::OUStringToOString(s, RTL_TEXTENCODING_ASCII_US).getStr()
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 

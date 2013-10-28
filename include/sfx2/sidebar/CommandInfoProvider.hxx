@@ -25,8 +25,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
-
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {

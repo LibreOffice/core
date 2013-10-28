@@ -26,7 +26,6 @@
 #include <map>
 #include <svx/sidebar/PanelLayout.hxx>
 
-namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
 class ToolBox;

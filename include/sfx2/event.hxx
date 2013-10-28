@@ -31,8 +31,6 @@
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
 
-namespace css = ::com::sun::star;
-
 class SfxObjectShell;
 
 //-------------------------------------------------------------------
