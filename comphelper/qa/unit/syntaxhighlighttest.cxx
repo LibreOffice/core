@@ -14,6 +14,7 @@
 #include "cppunit/plugin/TestPlugIn.h"
 #include "rtl/ustring.hxx"
 
+#include <cassert>
 #include <vector>
 
 class SyntaxHighlightTest : public CppUnit::TestFixture
@@ -45,6 +46,13 @@ void SyntaxHighlightTest::testBasicString()
         prevEnd = itr->nEnd;
     }
     CPPUNIT_ASSERT_EQUAL(aBasicString.getLength(), prevEnd);
+
+    // The last portion is an empty comment consisting just of the leading
+    // apostrophe:
+    assert(!aPortions.empty());
+    CPPUNIT_ASSERT_EQUAL(98, aPortions.back().nBegin);
+    CPPUNIT_ASSERT_EQUAL(99, aPortions.back().nEnd);
+    CPPUNIT_ASSERT_EQUAL(TT_COMMENT, aPortions.back().tokenType);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SyntaxHighlightTest);
