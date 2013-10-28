@@ -122,6 +122,11 @@ public:
         const std::map< sal_Int32, com::sun::star::uno::Any >& deferredCharacterProperties );
     void setInTableStyleRunProps(bool bInTableStyleRunProps);
 
+    /// Enable storing of seen tokens in a named grab bag.
+    void enableInteropGrabBag(OUString aName);
+    /// Get the stored tokens and clear the internal storage.
+    beans::PropertyValue getInteropGrabBag();
+
 private:
     // Stream
     virtual void lcl_startSectionGroup();

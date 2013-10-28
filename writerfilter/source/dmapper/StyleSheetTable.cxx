@@ -749,7 +749,20 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     bool bTableStyleRunProps = m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE && nSprmId == NS_ooxml::LN_CT_Style_rPr;
                     if (bTableStyleRunProps)
                         m_pImpl->m_rDMapper.setInTableStyleRunProps(true);
+                    if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+                    {
+                        if (nSprmId == NS_ooxml::LN_CT_Style_pPr)
+                            m_pImpl->m_rDMapper.enableInteropGrabBag("pPr");
+                    }
                     m_pImpl->m_rDMapper.sprmWithProps( rSprm, pProps );
+                    if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
+                    {
+                        if (nSprmId == NS_ooxml::LN_CT_Style_pPr)
+                        {
+                            TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pImpl->m_pCurrentEntry.get());
+                            pTableEntry->AppendInteropGrabBag(m_pImpl->m_rDMapper.getInteropGrabBag());
+                        }
+                    }
                     if (bTableStyleRunProps)
                         m_pImpl->m_rDMapper.setInTableStyleRunProps(false);
 

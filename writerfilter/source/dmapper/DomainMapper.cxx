@@ -977,6 +977,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Spacing_beforeLines:
             break;
         case NS_ooxml::LN_CT_Spacing_after:
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "after", OUString::number(nIntValue));
             if (m_pImpl->GetTopContext())
                 // Don't overwrite NS_ooxml::LN_CT_Spacing_afterAutospacing.
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ), false);
@@ -1008,6 +1009,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             if( nName == NS_ooxml::LN_CT_Spacing_line )
             {
+                m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "line", OUString::number(nIntValue));
                 //now set the value depending on the Mode
                 if( aSpacing.Mode == style::LineSpacingMode::PROP )
                     aSpacing.Height = sal_Int16(sal_Int32(nIntValue) * 100 / SINGLE_LINE_SPACING );
@@ -1019,14 +1021,21 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     // exactly, atLeast, auto
                     if( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_auto)
                     {
+                        m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "lineRule", "auto");
                         aSpacing.Mode = style::LineSpacingMode::PROP;
                         //reinterpret the already set value
                         aSpacing.Height = sal_Int16( aSpacing.Height * 100 /  ConversionHelper::convertTwipToMM100( SINGLE_LINE_SPACING ));
                     }
                     else if( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_atLeast)
+                    {
+                        m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "lineRule", "atLeast");
                         aSpacing.Mode = style::LineSpacingMode::MINIMUM;
+                    }
                     else // NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_exact
+                    {
+                        m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "lineRule", "exact");
                         aSpacing.Mode = style::LineSpacingMode::FIX;
+                    }
             }
             if (pTopContext)
                 pTopContext->Insert(PROP_PARA_LINE_SPACING, uno::makeAny( aSpacing ));
@@ -2987,6 +2996,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         if (nSprmId == NS_ooxml::LN_CT_PPr_sectPr)
             m_pImpl->SetParaSectpr(true);
         resolveSprmProps(*this, rSprm);
+        if (nSprmId == NS_ooxml::LN_CT_PPrBase_spacing)
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "spacing", m_pImpl->m_aSubInteropGrabBag);
     break;
     case NS_ooxml::LN_EG_SectPrContents_footnotePr:
     case NS_ooxml::LN_EG_SectPrContents_endnotePr:
@@ -4202,6 +4213,26 @@ uno::Reference<drawing::XShape> DomainMapper::PopPendingShape()
 bool DomainMapper::IsInHeaderFooter() const
 {
     return m_pImpl->IsInHeaderFooter();
+}
+
+void DomainMapper::enableInteropGrabBag(OUString aName)
+{
+    m_pImpl->m_aInteropGrabBagName = aName;
+}
+
+beans::PropertyValue DomainMapper::getInteropGrabBag()
+{
+    beans::PropertyValue aRet;
+    aRet.Name = m_pImpl->m_aInteropGrabBagName;
+
+    uno::Sequence<beans::PropertyValue> aSeq(m_pImpl->m_aInteropGrabBag.size());
+    beans::PropertyValue* pSeq = aSeq.getArray();
+    for (std::vector<beans::PropertyValue>::iterator i = m_pImpl->m_aInteropGrabBag.begin(); i != m_pImpl->m_aInteropGrabBag.end(); ++i)
+        *pSeq++ = *i;
+
+    m_pImpl->m_aInteropGrabBag.clear();
+    aRet.Value = uno::makeAny(aSeq);
+    return aRet;
 }
 
 } //namespace dmapper

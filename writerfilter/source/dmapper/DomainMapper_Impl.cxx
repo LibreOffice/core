@@ -4115,6 +4115,33 @@ bool DomainMapper_Impl::IsNewDoc()
     return m_bIsNewDoc;
 }
 
+void DomainMapper_Impl::appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, OUString aKey, OUString aValue)
+{
+    if (m_aInteropGrabBagName.isEmpty())
+        return;
+    beans::PropertyValue aProperty;
+    aProperty.Name = aKey;
+    aProperty.Value = uno::makeAny(aValue);
+    rInteropGrabBag.push_back(aProperty);
+}
+
+void DomainMapper_Impl::appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, OUString aKey, std::vector<beans::PropertyValue>& rValue)
+{
+    if (m_aInteropGrabBagName.isEmpty())
+        return;
+    beans::PropertyValue aProperty;
+    aProperty.Name = aKey;
+
+    uno::Sequence<beans::PropertyValue> aSeq(rValue.size());
+    beans::PropertyValue* pSeq = aSeq.getArray();
+    for (std::vector<beans::PropertyValue>::iterator i = rValue.begin(); i != rValue.end(); ++i)
+        *pSeq++ = *i;
+
+    rValue.clear();
+    aProperty.Value = uno::makeAny(aSeq);
+    rInteropGrabBag.push_back(aProperty);
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

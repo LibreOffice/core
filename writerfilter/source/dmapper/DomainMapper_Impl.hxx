@@ -728,6 +728,19 @@ public:
     bool m_bFrameBtLr; ///< Bottom to top, left to right text frame direction is requested for the current text frame.
     /// Pending floating tables: they may be converted to text frames at the section end.
     std::vector<FloatingTableInfo> m_aPendingFloatingTables;
+
+    /// Append a property to a sub-grabbag if necessary (e.g. 'lineRule', 'auto')
+    void appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, OUString aKey, OUString aValue);
+    void appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, OUString aKey, std::vector<beans::PropertyValue>& rValue);
+
+    /// Name of m_aInteropGrabBag.
+    OUString m_aInteropGrabBagName;
+
+    /// A toplevel dmapper grabbag, like 'pPr'.
+    std::vector<beans::PropertyValue> m_aInteropGrabBag;
+
+    /// A sub-grabbag of m_aInteropGrabBag, like 'spacing'.
+    std::vector<beans::PropertyValue> m_aSubInteropGrabBag;
 };
 } //namespace dmapper
 } //namespace writerfilter
