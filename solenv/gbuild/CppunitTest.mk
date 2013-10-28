@@ -50,7 +50,7 @@ gb_CppunitTest_CPPTESTCOMMAND := $(call gb_Executable_get_target_for_build,cppun
 
 define gb_CppunitTest__make_args
 $(HEADLESS) \
-"-env:BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR)/unittest/install)" \
+"-env:BRAND_BASE_DIR=$(call gb_Helper_make_url,$(INSTROOT))" \
 "-env:BRAND_SHARE_SUBDIR=share" \
 $(if $(URE),\
     $(if $(strip $(CONFIGURATION_LAYERS)),\

@@ -21,7 +21,6 @@ $(call gb_CustomTarget_get_workdir,crashrep/source/win32)/crashrep_impl.rc : \
 	$(SRCDIR)/crashrep/source/win32/rctemplate.txt \
 	$(call gb_Executable_get_runtime_dependencies,lngconvex)
 
-#BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR)/unittest/install)
 $(call gb_CustomTarget_get_workdir,crashrep/source/win32)/crashrep_impl.rc :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),LCX,1)
 	$(call gb_Helper_abbreviate_dirs,\
