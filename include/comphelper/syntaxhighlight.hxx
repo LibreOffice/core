@@ -66,11 +66,6 @@ enum HighlighterLanguage
     HIGHLIGHT_SQL
 };
 
-//*** SyntaxHighlighter Class ***
-// Concept: the Highlighter will be notified of all changes in the source
-// (notifyChange) and returns the caller the range of lines, which based on the
-// changes, need to be highlighted again. For this the Highlighter marks all
-// lines internally whether or not C comments begin or end.
 class COMPHELPER_DLLPUBLIC SyntaxHighlighter: private boost::noncopyable
 {
     class Tokenizer;
@@ -81,8 +76,6 @@ class COMPHELPER_DLLPUBLIC SyntaxHighlighter: private boost::noncopyable
 public:
     SyntaxHighlighter(HighlighterLanguage language);
     ~SyntaxHighlighter();
-
-    void notifyChange(const OUString* pChangedLines, sal_uInt32 nArrayLength);
 
     void getHighlightPortions( const OUString& rLine,
                                std::vector<HighlightPortion>& pPortions );

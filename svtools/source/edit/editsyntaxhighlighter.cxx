@@ -170,8 +170,6 @@ void MultiLineEditSyntaxHighlight::UpdateData()
     for (unsigned int nLine=0; nLine < GetTextEngine()->GetParagraphCount(); nLine++)
     {
         OUString aLine( GetTextEngine()->GetText( nLine ) );
-        aHighlighter.notifyChange( &aLine, 1 );
-
         GetTextEngine()->RemoveAttribs( nLine, sal_True );
         std::vector<HighlightPortion> aPortions;
         aHighlighter.getHighlightPortions( aLine, aPortions );

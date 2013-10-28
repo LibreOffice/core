@@ -1189,8 +1189,6 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
     if ( bDoSyntaxHighlight )
     {
         OUString aLine( pEditEngine->GetText( nLine ) );
-        aHighlighter.notifyChange( &aLine, 1 );
-
         bool const bWasModified = pEditEngine->IsModified();
         pEditEngine->RemoveAttribs( nLine, true );
         std::vector<HighlightPortion> aPortions;
@@ -1326,12 +1324,6 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
                    GetOutputSizePixel().Height() - 2 * DWBORDER);
         rModulWindow.GetLineNumberWindow().SetPosSizePixel(Point(DWBORDER + 19, DWBORDER), aLnSz);
         rModulWindow.GetLineNumberWindow().Invalidate();
-
-        if ( bDoSyntaxHighlight )
-        {
-            OUString aDummy;
-            aHighlighter.notifyChange( &aDummy, 1 );
-        }
     }
 }
 
