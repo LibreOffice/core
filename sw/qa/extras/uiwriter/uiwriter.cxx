@@ -28,12 +28,14 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    SwDoc* createEmptyDoc();
+    SwDoc* createDoc(const char* pName = 0);
 };
 
-SwDoc* SwUiWriterTest::createEmptyDoc()
+SwDoc* SwUiWriterTest::createDoc(const char* pName)
 {
-    load(DATA_DIRECTORY, "empty.odt");
+    if (!pName)
+        pName = "empty.odt";
+    load(DATA_DIRECTORY, pName);
 
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     return pTxtDoc->GetDocShell()->GetDoc();
@@ -53,7 +55,7 @@ static const OUString EXPECTED_REPLACE_CONTENT("toto toto tutu");
 
 void SwUiWriterTest::testReplaceForward()
 {
-    SwDoc* pDoc = createEmptyDoc();
+    SwDoc* pDoc = createDoc();
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
@@ -75,7 +77,7 @@ void SwUiWriterTest::testReplaceForward()
 
 void SwUiWriterTest::testReplaceBackward()
 {
-    SwDoc* pDoc = createEmptyDoc();
+    SwDoc* pDoc = createDoc();
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
