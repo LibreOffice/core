@@ -8,8 +8,8 @@
  */
 
 
-#ifndef UNX_GTK_GTKPRN_HXX_INCLUDED
-#define UNX_GTK_GTKPRN_HXX_INCLUDED
+#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
+#define INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
 
 #include "generic/genprn.h"
 
@@ -48,6 +48,6 @@ public:
 };
 
 
-#endif // UNX_GTK_GTKPRN_HXX_INCLUDED
+#endif // INCLUDED_VCL_INC_UNX_GTK_GTKPRN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

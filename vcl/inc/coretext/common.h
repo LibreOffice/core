@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_CORETEXT_COMMON_H
-#define _VCL_CORETEXT_COMMON_H
+#ifndef INCLUDED_VCL_INC_CORETEXT_COMMON_H
+#define INCLUDED_VCL_INC_CORETEXT_COMMON_H
 
 #include <iostream>
 
@@ -48,6 +48,6 @@
 
 std::ostream &operator <<(std::ostream& s, CTFontRef pFont);
 
-#endif /* _VCL_CORETEXT_COMMON_H */
+#endif // INCLUDED_VCL_INC_CORETEXT_COMMON_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

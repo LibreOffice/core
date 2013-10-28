@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef IOS_SALINST_H
-#define IOS_SALINST_H
+#ifndef INCLUDED_VCL_INC_IOS_IOSINST_HXX
+#define INCLUDED_VCL_INC_IOS_IOSINST_HXX
 
 #include <pthread.h>
 
@@ -78,6 +78,6 @@ public:
     pthread_cond_t m_aRenderCond;
 };
 
-#endif // IOS_SALINST_H
+#endif // INCLUDED_VCL_INC_IOS_IOSINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

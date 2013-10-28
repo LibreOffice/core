@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_GTKGDI_HXX
-#define _VCL_GTKGDI_HXX
+#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKGDI_HXX
+#define INCLUDED_VCL_INC_UNX_GTK_GTKGDI_HXX
 
 #include <prex.h>
 #include <gtk/gtk.h>
@@ -280,6 +280,6 @@ protected:
 
 #endif // !gtk3
 
-#endif // _VCL_GTKGDI_HXX
+#endif // INCLUDED_VCL_INC_UNX_GTK_GTKGDI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

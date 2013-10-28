@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALDATABASIC_HXX
-#define _SV_SALDATABASIC_HXX
+#ifndef INCLUDED_VCL_INC_SALDATABASIC_HXX
+#define INCLUDED_VCL_INC_SALDATABASIC_HXX
 
 #include <svdata.hxx>
 #include <salinst.hxx>

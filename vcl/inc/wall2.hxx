@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_WALL2_HXX
-#define _SV_WALL2_HXX
+#ifndef INCLUDED_VCL_INC_WALL2_HXX
+#define INCLUDED_VCL_INC_WALL2_HXX
 
 #include <vcl/wall.hxx>
 
@@ -49,6 +49,6 @@ public:
 };
 
 
-#endif  // _SV_WALL2_HXX
+#endif // INCLUDED_VCL_INC_WALL2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

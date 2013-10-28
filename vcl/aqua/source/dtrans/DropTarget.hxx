@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DROPTARGET_HXX_
-#define _DROPTARGET_HXX_
+#ifndef INCLUDED_VCL_AQUA_SOURCE_DTRANS_DROPTARGET_HXX
+#define INCLUDED_VCL_AQUA_SOURCE_DTRANS_DROPTARGET_HXX
 
 #include "DataFlavorMapping.hxx"
 #include <cppuhelper/compbase5.hxx>

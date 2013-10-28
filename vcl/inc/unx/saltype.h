@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef SAL_TYPE_H
-#define SAL_TYPE_H
+#ifndef INCLUDED_VCL_INC_UNX_SALTYPE_H
+#define INCLUDED_VCL_INC_UNX_SALTYPE_H
 
 // an X11 screen index - this unpleasant construct is to allow
 // us to cleanly separate the 'DisplayScreen' concept - as used
@@ -22,5 +22,5 @@ public:
     bool operator!=(const SalX11Screen &rOther) { return rOther.mnXScreen != mnXScreen; }
 };
 
-#endif // SAL_TYPE_H
+#endif // INCLUDED_VCL_INC_UNX_SALTYPE_H
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

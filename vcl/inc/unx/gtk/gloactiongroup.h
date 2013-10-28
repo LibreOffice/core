@@ -8,8 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef GLOACTIONGROUP_H
-#define GLOACTIONGROUP_H
+#ifndef INCLUDED_VCL_INC_UNX_GTK_GLOACTIONGROUP_H
+#define INCLUDED_VCL_INC_UNX_GTK_GLOACTIONGROUP_H
 
 #include <gio/gio.h>
 
@@ -77,6 +77,6 @@ void                g_lo_action_group_clear                 (GLOActionGroup     
 
 G_END_DECLS
 
-#endif // GLOACTIONGROUP_H
+#endif // INCLUDED_VCL_INC_UNX_GTK_GLOACTIONGROUP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

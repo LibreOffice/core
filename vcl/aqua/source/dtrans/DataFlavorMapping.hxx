@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DATAFLAVORMAPPING_HXX_
-#define INCLUDED_DATAFLAVORMAPPING_HXX_
+#ifndef INCLUDED_VCL_AQUA_SOURCE_DTRANS_DATAFLAVORMAPPING_HXX
+#define INCLUDED_VCL_AQUA_SOURCE_DTRANS_DATAFLAVORMAPPING_HXX
 
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>

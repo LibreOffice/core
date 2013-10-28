@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_NATIVEWIDGETS_H
-#define _SV_NATIVEWIDGETS_H
+#ifndef INCLUDED_VCL_INC_AQUA_SALNATIVEWIDGETS_H
+#define INCLUDED_VCL_INC_AQUA_SALNATIVEWIDGETS_H
 
 // since 10.4 ... no metrics are returned, and we have to fix the values
 #define BUTTON_WIDTH 16
@@ -59,6 +59,6 @@
 
 #define CLIP_FUZZ 1
 
-#endif  // _SV_NATIVEWIDGETS_H
+#endif // INCLUDED_VCL_INC_AQUA_SALNATIVEWIDGETS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

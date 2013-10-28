@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_WINCOMP_HXX
-#define _SV_WINCOMP_HXX
+#ifndef INCLUDED_VCL_INC_WIN_WINCOMP_HXX
+#define INCLUDED_VCL_INC_WIN_WINCOMP_HXX
 
 #include <string.h>
 
@@ -250,6 +250,6 @@ typedef int (APIENTRY* SysAgt_Enable_PROC)( int );
 #define UNICODE_NOCHAR          0xFFFF
 #endif
 
-#endif // _SV_WINCOMP_HXX
+#endif // INCLUDED_VCL_INC_WIN_WINCOMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_X11SYS_H
-#define _SV_X11SYS_H
+#ifndef INCLUDED_VCL_INC_UNX_X11_X11SYS_HXX
+#define INCLUDED_VCL_INC_UNX_X11_X11SYS_HXX
 
 #include <tools/solar.h>
 #include <osl/mutex.hxx>
@@ -44,6 +44,6 @@ public:
                                   int nDefButton );
 };
 
-#endif // _SV_X11SYS_H
+#endif // INCLUDED_VCL_INC_UNX_X11_X11SYS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TEXTDOC_HXX
-#define _TEXTDOC_HXX
+#ifndef INCLUDED_VCL_SOURCE_EDIT_TEXTDOC_HXX
+#define INCLUDED_VCL_SOURCE_EDIT_TEXTDOC_HXX
 
 #include <rtl/ustring.hxx>
 #include <vcl/textdata.hxx>
@@ -130,6 +130,6 @@ public:
     sal_Bool            IsValidPaM( const TextPaM& rPaM );
 };
 
-#endif // _TEXTDOC_HXX
+#endif // INCLUDED_VCL_SOURCE_EDIT_TEXTDOC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

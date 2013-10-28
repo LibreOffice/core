@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALMATHUTILS_HXX
-#define _SV_SALMATHUTILS_HXX
+#ifndef INCLUDED_VCL_INC_AQUA_SALMATHUTILS_HXX
+#define INCLUDED_VCL_INC_AQUA_SALMATHUTILS_HXX
 
 #ifdef __cplusplus
 extern "C" {
@@ -76,6 +76,6 @@ unsigned long  Euclidian2Norm ( const LRectCoorVector  pVec );
 }
 #endif
 
-#endif  // _SV_SALMATHUTILS_HXX
+#endif // INCLUDED_VCL_INC_AQUA_SALMATHUTILS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

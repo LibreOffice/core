@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SGFFILT_HXX
-#define _SGFFILT_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_SGFFILT_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_SGFFILT_HXX
 #include <tools/urlobj.hxx>
 
 sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion);
@@ -35,6 +35,6 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath );
 
 #define SGV_VERSION    3     /* SGV mit anderer Version wird abgewiesen */
                              /* 3 entspricht StarDraw 2.00/2.01 M„rz'93 */
-#endif  //_SGFFILT_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_SGFFILT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

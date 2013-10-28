@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DRAGSOURCECONTEXT_HXX_
-#define _DRAGSOURCECONTEXT_HXX_
+#ifndef INCLUDED_VCL_AQUA_SOURCE_DTRANS_DRAGSOURCECONTEXT_HXX
+#define INCLUDED_VCL_AQUA_SOURCE_DTRANS_DRAGSOURCECONTEXT_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>

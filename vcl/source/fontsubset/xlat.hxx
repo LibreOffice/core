@@ -20,8 +20,8 @@
 /*|     Author: Alexander Gelfenbain                    |*/
 
 
-#ifndef __XLAT_H
-#define __XLAT_H
+#ifndef INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX
+#define INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX
 
 //####include "sft.hxx"
 
@@ -42,6 +42,6 @@ namespace vcl
     void TranslateString16(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
 }
 
-#endif /* __XLAT_H */
+#endif // INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

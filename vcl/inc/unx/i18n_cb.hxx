@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SAL_I18N_CALLBACK_HXX
-#define _SAL_I18N_CALLBACK_HXX
+#ifndef INCLUDED_VCL_INC_UNX_I18N_CB_HXX
+#define INCLUDED_VCL_INC_UNX_I18N_CB_HXX
 
 #include <salwtype.hxx>
 #include <vector>
@@ -80,6 +80,6 @@ typedef struct {
     std::vector< sal_uInt16 >   aInputFlags;
 } preedit_data_t;
 
-#endif /* _SAL_I18N_CALLBACK_HXX */
+#endif // INCLUDED_VCL_INC_UNX_I18N_CB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

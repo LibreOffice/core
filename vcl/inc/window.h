@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_WINDOW_H
-#define _SV_WINDOW_H
+#ifndef INCLUDED_VCL_INC_WINDOW_H
+#define INCLUDED_VCL_INC_WINDOW_H
 
 #include <vector>
 #include <tools/solar.h>
@@ -410,6 +410,6 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                            sal_uInt16 nCode, sal_uInt16 nMode );
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
 
-#endif // _SV_WINDOW_H
+#endif // INCLUDED_VCL_INC_WINDOW_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

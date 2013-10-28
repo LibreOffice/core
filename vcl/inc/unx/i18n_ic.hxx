@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAL_I18N_INPUTCONTEXT_HXX
-#define _SAL_I18N_INPUTCONTEXT_HXX
+#ifndef INCLUDED_VCL_INC_UNX_I18N_IC_HXX
+#define INCLUDED_VCL_INC_UNX_I18N_IC_HXX
 
 #include <i18nlangtag/lang.h>
 #include "i18n_cb.hxx"
@@ -84,7 +84,7 @@ private:
 
 };
 
-#endif // _SAL_I18N_INPUTCONTEXT_HXX
+#endif // INCLUDED_VCL_INC_UNX_I18N_IC_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

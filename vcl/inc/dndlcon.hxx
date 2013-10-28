@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DNDLCON_HXX_
-#define _DNDLCON_HXX_
+#ifndef INCLUDED_VCL_INC_DNDLCON_HXX
+#define INCLUDED_VCL_INC_DNDLCON_HXX
 
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_CONTROLDATA_HXX
-#define VCL_CONTROLDATA_HXX
+#ifndef INCLUDED_VCL_INC_CONTROLDATA_HXX
+#define INCLUDED_VCL_INC_CONTROLDATA_HXX
 
 #include <vcl/controllayout.hxx>
 
@@ -51,6 +51,6 @@ namespace vcl
 } // namespace vcl
 //........................................................................
 
-#endif // VCL_CONTROLDATA_HXX
+#endif // INCLUDED_VCL_INC_CONTROLDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

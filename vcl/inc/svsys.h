@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_SVSYS_H
-#define _VCL_SVSYS_H
+#ifndef INCLUDED_VCL_INC_SVSYS_H
+#define INCLUDED_VCL_INC_SVSYS_H
 
 #ifdef WNT
 #include "win/svsys.h"

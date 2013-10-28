@@ -25,8 +25,8 @@
 /*|  Author: Alexander Gelfenbain                       |*/
 /*[]---------------------------------------------------[]*/
 
-#ifndef __CLIST_H
-#define __CLIST_H
+#ifndef INCLUDED_VCL_INC_LIST_H
+#define INCLUDED_VCL_INC_LIST_H
 
 #ifdef __cplusplus
 extern "C"
@@ -85,6 +85,6 @@ extern "C"
 #endif
 
 
-#endif /* __CLIST_H */
+#endif // INCLUDED_VCL_INC_LIST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

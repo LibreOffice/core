@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XBMREAD_HXX
-#define _XBMREAD_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_IXBM_XBMREAD_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_IXBM_XBMREAD_HXX
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -70,6 +70,6 @@ public:
 
 bool ImportXBM( SvStream& rStream, Graphic& rGraphic );
 
-#endif // _XBMREAD_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_IXBM_XBMREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

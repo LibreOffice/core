@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_QUARTZ_UTILS_HXX
-#define INCLUDED_QUARTZ_UTILS_HXX
+#ifndef INCLUDED_VCL_INC_QUARTZ_UTILS_H
+#define INCLUDED_VCL_INC_QUARTZ_UTILS_H
 
 #include <iostream>
 
@@ -44,6 +44,6 @@ std::ostream &operator <<(std::ostream& s, CGPoint &rPoint);
 std::ostream &operator <<(std::ostream& s, CGSize &rSize);
 std::ostream &operator <<(std::ostream& s, CGColorRef pSize);
 
-#endif // INCLUDED_QUARTZ_UTILS_HXX
+#endif // INCLUDED_VCL_INC_QUARTZ_UTILS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

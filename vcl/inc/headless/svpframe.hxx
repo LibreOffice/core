@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVP_SVPFRAME_HXX
+#ifndef INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
 
 #include <vcl/sysdata.hxx>
 #include <basegfx/range/b2ibox.hxx>
@@ -135,6 +135,6 @@ public:
     static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }
 
 };
-#endif // _SVP_SVPFRAME_HXX
+#endif // INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

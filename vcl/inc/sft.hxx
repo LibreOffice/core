@@ -49,8 +49,8 @@
  */
 
 
-#ifndef __SUBFONT_H
-#define __SUBFONT_H
+#ifndef INCLUDED_VCL_INC_SFT_HXX
+#define INCLUDED_VCL_INC_SFT_HXX
 
 #ifdef UNX
 #include <sys/types.h>
@@ -609,6 +609,6 @@ namespace vcl
 
 } // namespace vcl
 
-#endif /* __SUBFONT_H */
+#endif // INCLUDED_VCL_INC_SFT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

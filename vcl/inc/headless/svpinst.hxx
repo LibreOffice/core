@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVP_SALINST_HXX
-#define _SVP_SALINST_HXX
+#ifndef INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
+#define INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 
 #include <vcl/solarmutex.hxx>
 

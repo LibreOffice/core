@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_GTKOBJECT_HXX
-#define _VCL_GTKOBJECT_HXX
+#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKOBJECT_HXX
+#define INCLUDED_VCL_INC_UNX_GTK_GTKOBJECT_HXX
 
 #include <tools/solar.h>
 #include <vcl/sysdata.hxx>

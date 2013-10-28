@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PSP_GSUB_H
-#define _PSP_GSUB_H
+#ifndef INCLUDED_VCL_SOURCE_FONTSUBSET_GSUB_H
+#define INCLUDED_VCL_SOURCE_FONTSUBSET_GSUB_H
 
 namespace vcl
 {
@@ -33,6 +33,6 @@ void ReleaseGSUB( struct vcl::_TrueTypeFont* pTTFile );
 
 }
 
-#endif /* _PSP_GSUB_H */
+#endif // INCLUDED_VCL_SOURCE_FONTSUBSET_GSUB_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

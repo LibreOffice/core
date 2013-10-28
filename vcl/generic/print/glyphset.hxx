@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PSPRINT_GLYPHSET_HXX_
-#define _PSPRINT_GLYPHSET_HXX_
+#ifndef INCLUDED_VCL_GENERIC_PRINT_GLYPHSET_HXX
+#define INCLUDED_VCL_GENERIC_PRINT_GLYPHSET_HXX
 
 #include "vcl/fontmanager.hxx"
 

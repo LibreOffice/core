@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALTIMER_HXX
-#define _SV_SALTIMER_HXX
+#ifndef INCLUDED_VCL_INC_SALTIMER_HXX
+#define INCLUDED_VCL_INC_SALTIMER_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -54,6 +54,6 @@ public:
     }
 };
 
-#endif // _SV_SALTIMER_HXX
+#endif // INCLUDED_VCL_INC_SALTIMER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

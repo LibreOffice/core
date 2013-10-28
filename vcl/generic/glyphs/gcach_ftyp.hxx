@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_GCACHFTYP_HXX
-#define _SV_GCACHFTYP_HXX
+#ifndef INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
+#define INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
 
 #include "generic/glyphcache.hxx"
 
@@ -176,6 +176,6 @@ public:
 
 // -----------------------------------------------------------------------
 
-#endif // _SV_GCACHFTYP_HXX
+#endif // INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNXCOMMANDTHREAD_HXX_
-#define _UNXCOMMANDTHREAD_HXX_
+#ifndef INCLUDED_VCL_UNX_KDE_UNXCOMMANDTHREAD_HXX
+#define INCLUDED_VCL_UNX_KDE_UNXCOMMANDTHREAD_HXX
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -121,6 +121,6 @@ protected:
     ::std::list< OUString > SAL_CALL tokenize( const OUString &rCommand );
 };
 
-#endif // _UNXCOMMANDTHREAD_HXX_
+#endif // INCLUDED_VCL_UNX_KDE_UNXCOMMANDTHREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

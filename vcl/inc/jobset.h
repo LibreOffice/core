@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_JOBSET_H
-#define _SV_JOBSET_H
+#ifndef INCLUDED_VCL_INC_JOBSET_H
+#define INCLUDED_VCL_INC_JOBSET_H
 
 #include <tools/solar.h>
 #include <vcl/prntypes.hxx>
@@ -67,6 +67,6 @@ struct ImplJobSetup
 // Papierbreite/hoehe wird wenn 0 im unabhaengigen Teil automatisch aus
 // Papierformat berechnet, wenn dieses ungleich PAPER_USER ist
 
-#endif  // _SV_JOBSET_H
+#endif // INCLUDED_VCL_INC_JOBSET_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_AQUA11WRAPPERCHECKBOX_H
-#define _SV_AQUA11WRAPPERCHECKBOX_H
+#ifndef INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YWRAPPERCHECKBOX_H
+#define INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YWRAPPERCHECKBOX_H
 
 #include "aqua/aqua11ywrapper.h"
 

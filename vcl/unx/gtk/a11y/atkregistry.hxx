@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ATK_REGISTRY_HXX__
-#define __ATK_REGISTRY_HXX__
+#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKREGISTRY_HXX
+#define INCLUDED_VCL_UNX_GTK_A11Y_ATKREGISTRY_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <atk/atk.h>

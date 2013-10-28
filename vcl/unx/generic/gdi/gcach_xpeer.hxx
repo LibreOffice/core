@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_GCACH_XPEER_HXX
-#define _SV_GCACH_XPEER_HXX
+#ifndef INCLUDED_VCL_UNX_GENERIC_GDI_GCACH_XPEER_HXX
+#define INCLUDED_VCL_UNX_GENERIC_GDI_GCACH_XPEER_HXX
 
 #include "generic/glyphcache.hxx"
 
@@ -41,6 +41,6 @@ public:
     static void  KillInstance();
 };
 
-#endif // _SV_GCACH_XPEER_HXX
+#endif // INCLUDED_VCL_UNX_GENERIC_GDI_GCACH_XPEER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

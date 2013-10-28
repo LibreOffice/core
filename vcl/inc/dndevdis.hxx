@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DNDEVDIS_HXX_
-#define _DNDEVDIS_HXX_
+#ifndef INCLUDED_VCL_INC_DNDEVDIS_HXX
+#define INCLUDED_VCL_INC_DNDEVDIS_HXX
 
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>

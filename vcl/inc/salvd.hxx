@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALVD_HXX
-#define _SV_SALVD_HXX
+#ifndef INCLUDED_VCL_INC_SALVD_HXX
+#define INCLUDED_VCL_INC_SALVD_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -51,6 +51,6 @@ public:                     // public for Sal Implementation
     virtual void            GetSize( long& rWidth, long& rHeight ) = 0;
 };
 
-#endif // _SV_SALVD_HXX
+#endif // INCLUDED_VCL_INC_SALVD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

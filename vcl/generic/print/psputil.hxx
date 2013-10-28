@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PSPRINT_PRINTERUTIL_HXX_
-#define _PSPRINT_PRINTERUTIL_HXX_
+#ifndef INCLUDED_VCL_GENERIC_PRINT_PSPUTIL_HXX
+#define INCLUDED_VCL_GENERIC_PRINT_PSPUTIL_HXX
 
 #include "osl/file.hxx"
 
@@ -65,6 +65,6 @@ ConverterFactory& GetConverterFactory ();
 
 }  /* namespace psp */
 
-#endif /* _PSPRINT_PRINTERUTIL_HXX_ */
+#endif // INCLUDED_VCL_GENERIC_PRINT_PSPUTIL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

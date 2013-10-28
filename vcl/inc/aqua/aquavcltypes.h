@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AQUAVCLTYPES_H
-#define _AQUAVCLTYPES_H
+#ifndef INCLUDED_VCL_INC_AQUA_AQUAVCLTYPES_H
+#define INCLUDED_VCL_INC_AQUA_AQUAVCLTYPES_H
 
 #include "premac.h"
 #import <Cocoa/Cocoa.h>
 #import <AppKit/NSEvent.h>
 #include "postmac.h"
 
-#endif /* _AQUAVCLTYPES_H */
+#endif // INCLUDED_VCL_INC_AQUA_AQUAVCLTYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

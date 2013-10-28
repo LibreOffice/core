@@ -15,8 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SV_REGIONBAND_HXX
-#define _SV_REGIONBAND_HXX
+#ifndef INCLUDED_VCL_INC_REGIONBAND_HXX
+#define INCLUDED_VCL_INC_REGIONBAND_HXX
 
 #include <vcl/regband.hxx>
 #include <vcl/region.hxx>
@@ -77,7 +77,7 @@ public:
     void GetRegionRectangles(RectangleVector& rTarget) const;
 };
 
-#endif  // _SV_REGIONBAND_HXX
+#endif // INCLUDED_VCL_INC_REGIONBAND_HXX
 
 //////////////////////////////////////////////////////////////////////////////
 //eof

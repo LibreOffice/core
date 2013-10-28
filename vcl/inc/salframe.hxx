@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALFRAME_HXX
-#define _SV_SALFRAME_HXX
+#ifndef INCLUDED_VCL_INC_SALFRAME_HXX
+#define INCLUDED_VCL_INC_SALFRAME_HXX
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -243,6 +243,6 @@ public:                     // public for Sal Implementation
         { return m_pProc ? m_pProc( m_pWindow, const_cast<SalFrame*>(this), nEvent, pEvent ) : 0; }
 };
 
-#endif // _SV_SALFRAME_HXX
+#endif // INCLUDED_VCL_INC_SALFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

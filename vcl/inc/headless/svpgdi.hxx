@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVP_SVPGDI_HXX
-#define _SVP_SVPGDI_HXX
+#ifndef INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
+#define INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 
 #include <basebmp/bitmapdevice.hxx>
 #include <basebmp/color.hxx>

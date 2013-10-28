@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EMFWR_HXX
-#define _EMFWR_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_WMF_EMFWR_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_WMF_EMFWR_HXX
 
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>
@@ -100,6 +100,6 @@ public:
     sal_Bool WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pConfigItem = NULL );
 };
 
-#endif // _EMFWR_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_WMF_EMFWR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

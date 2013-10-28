@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALIMESTATUS_HXX
-#define _SV_SALIMESTATUS_HXX
+#ifndef INCLUDED_VCL_INC_SALIMESTATUS_HXX
+#define INCLUDED_VCL_INC_SALIMESTATUS_HXX
 
 #include <vcl/dllapi.h>
 

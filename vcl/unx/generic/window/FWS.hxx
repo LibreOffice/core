@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FOREIGN_WINDOW_SYSTEM_HXX
-#define _FOREIGN_WINDOW_SYSTEM_HXX
+#ifndef INCLUDED_VCL_UNX_GENERIC_WINDOW_FWS_HXX
+#define INCLUDED_VCL_UNX_GENERIC_WINDOW_FWS_HXX
 
 #include <X11/Xlib.h>
 
@@ -52,6 +52,6 @@ AddFwsProtocols (Display *display, Window window);
 } /* extern "C" */
 #endif
 
-#endif // _FOREIGN_WINDOW_SYSTEM_HXX
+#endif // INCLUDED_VCL_UNX_GENERIC_WINDOW_FWS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

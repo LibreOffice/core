@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALMENU_HXX
-#define _SV_SALMENU_HXX
+#ifndef INCLUDED_VCL_INC_SALMENU_HXX
+#define INCLUDED_VCL_INC_SALMENU_HXX
 
 #include <tools/solar.h>
 #include "vcl/dllapi.h"
@@ -92,6 +92,6 @@ public:
 };
 
 
-#endif // _SV_SALMENU_HXX
+#endif // INCLUDED_VCL_INC_SALMENU_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

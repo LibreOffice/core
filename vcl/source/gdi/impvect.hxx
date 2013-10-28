@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_IMPVECT_HXX
-#define _SV_IMPVECT_HXX
+#ifndef INCLUDED_VCL_SOURCE_GDI_IMPVECT_HXX
+#define INCLUDED_VCL_SOURCE_GDI_IMPVECT_HXX
 
 #include <tools/poly.hxx>
 #include <vcl/gdimtf.hxx>

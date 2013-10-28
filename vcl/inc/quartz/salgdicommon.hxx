@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_AQUA_SALGDICOMMON_H
-#define _VCL_AQUA_SALGDICOMMON_H
+#ifndef INCLUDED_VCL_INC_QUARTZ_SALGDICOMMON_HXX
+#define INCLUDED_VCL_INC_QUARTZ_SALGDICOMMON_HXX
 
 #include <premac.h>
 #ifdef IOS
@@ -89,4 +89,4 @@ private:
     bool m_bIsEnabled;
 };
 
-#endif /* _VCL_AQUA_SALGDICOMMON_H */
+#endif // INCLUDED_VCL_INC_QUARTZ_SALGDICOMMON_HXX

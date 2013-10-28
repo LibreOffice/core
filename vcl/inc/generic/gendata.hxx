@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _SV_GENDATA_HXX
-#define _SV_GENDATA_HXX
+#ifndef INCLUDED_VCL_INC_GENERIC_GENDATA_HXX
+#define INCLUDED_VCL_INC_GENERIC_GENDATA_HXX
 
 #include <osl/socket.hxx>
 #include <saldatabasic.hxx>

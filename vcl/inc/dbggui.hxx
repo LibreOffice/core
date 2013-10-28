@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_DBGGUI_HXX
-#define _SV_DBGGUI_HXX
+#ifndef INCLUDED_VCL_INC_DBGGUI_HXX
+#define INCLUDED_VCL_INC_DBGGUI_HXX
 
 #include <tools/solar.h>
 
@@ -54,6 +54,6 @@ void DbgDialogTest( Window* pWindow );
 
 #endif
 
-#endif  // _SV_DBGGUI_HXX
+#endif // INCLUDED_VCL_INC_DBGGUI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

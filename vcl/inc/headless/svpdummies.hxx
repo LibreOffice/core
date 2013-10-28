@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVP_SVPDUMMIES_HXX
+#ifndef INCLUDED_VCL_INC_HEADLESS_SVPDUMMIES_HXX
 
 #include <vcl/sysdata.hxx>
 #include <generic/gensys.h>

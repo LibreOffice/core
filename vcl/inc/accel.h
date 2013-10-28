@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_ACCEL_H
-#define _SV_ACCEL_H
+#ifndef INCLUDED_VCL_INC_ACCEL_H
+#define INCLUDED_VCL_INC_ACCEL_H
 
 #include <tools/solar.h>
 #include <vcl/keycod.hxx>
@@ -37,6 +37,6 @@ public:
 
 void ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 );
 
-#endif  // _SV_ACCEL_H
+#endif // INCLUDED_VCL_INC_ACCEL_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

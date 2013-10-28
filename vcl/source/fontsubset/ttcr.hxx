@@ -24,8 +24,8 @@
  * @author Alexander Gelfenbain
  */
 
-#ifndef __TTCR_H
-#define __TTCR_H
+#ifndef INCLUDED_VCL_SOURCE_FONTSUBSET_TTCR_HXX
+#define INCLUDED_VCL_SOURCE_FONTSUBSET_TTCR_HXX
 
 #include "sft.hxx"
 
@@ -250,6 +250,6 @@ extern "C"
  void TrueTypeCreatorDispose(vcl::TrueTypeCreator *_this);
 }
 
-#endif /* __TTCR_H */
+#endif // INCLUDED_VCL_SOURCE_FONTSUBSET_TTCR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

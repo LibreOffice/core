@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_IMPBMP_HXX
-#define _SV_IMPBMP_HXX
+#ifndef INCLUDED_VCL_INC_IMPBMP_HXX
+#define INCLUDED_VCL_INC_IMPBMP_HXX
 
 #include <tools/gen.hxx>
 #include <tools/solar.h>
@@ -90,6 +90,6 @@ inline void ImpBitmap::ImplSetSourceSize( const Size& rSize)
     maSourceSize = rSize;
 }
 
-#endif // _SV_IMPBMP_HXX
+#endif // INCLUDED_VCL_INC_IMPBMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

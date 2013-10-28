@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef ANDROID_SALINST_H
-#define ANDROID_SALINST_H
+#ifndef INCLUDED_VCL_INC_ANDROID_ANDROIDINST_HXX
+#define INCLUDED_VCL_INC_ANDROID_ANDROIDINST_HXX
 
 #include <jni.h>
 #include <android/input.h>
@@ -48,6 +48,6 @@ public:
     void      damaged(AndroidSalFrame *frame);
 };
 
-#endif // ANDROID_SALINST_H
+#endif // INCLUDED_VCL_INC_ANDROID_ANDROIDINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

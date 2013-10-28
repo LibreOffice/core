@@ -8,8 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __G_LO_MENU_H__
-#define __G_LO_MENU_H__
+#ifndef INCLUDED_VCL_INC_UNX_GTK_GLOMENU_H
+#define INCLUDED_VCL_INC_UNX_GTK_GLOMENU_H
 
 #include <gio/gio.h>
 
@@ -130,6 +130,6 @@ GLOMenu *   g_lo_menu_get_menu_containing_item                          (GLOMenu
 
 G_END_DECLS
 
-#endif /* __G_LO_MENU_H__ */
+#endif // INCLUDED_VCL_INC_UNX_GTK_GLOMENU_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

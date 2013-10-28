@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HTMLFMTFLT_HXX
-#define INCLUDED_HTMLFMTFLT_HXX
+#ifndef INCLUDED_VCL_AQUA_SOURCE_DTRANS_HTMLFMTFLT_HXX
+#define INCLUDED_VCL_AQUA_SOURCE_DTRANS_HTMLFMTFLT_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 

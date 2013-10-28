@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_GENPSPGRAPHICS_H
-#define _VCL_GENPSPGRAPHICS_H
+#ifndef INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H
+#define INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H
 
 
 #include "vcl/fontmanager.hxx"
@@ -191,6 +191,6 @@ public:
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;
 };
 
-#endif // _VCL_GENPSPGRAPHICS_H
+#endif // INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

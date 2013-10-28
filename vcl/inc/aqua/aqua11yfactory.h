@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_AQUA11FACTORY_H
-#define _SV_AQUA11FACTORY_H
+#ifndef INCLUDED_VCL_INC_AQUA_AQUA11YFACTORY_H
+#define INCLUDED_VCL_INC_AQUA_AQUA11YFACTORY_H
 
 #include "aquavcltypes.h"
 #include "aqua11ywrapper.h"
@@ -36,6 +36,6 @@
 +(void)registerView: (NSView *) theView;
 +(void)revokeView: (NSView *) theViewt;
 @end
-#endif // _SV_AQUA11FACTORY_H
+#endif // INCLUDED_VCL_INC_AQUA_AQUA11YFACTORY_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_IMPIMAGETREE_HXX
-#define INCLUDED_VCL_IMPIMAGETREE_HXX
+#ifndef INCLUDED_VCL_INC_IMPIMAGETREE_HXX
+#define INCLUDED_VCL_INC_IMPIMAGETREE_HXX
 
 #include "sal/config.h"
 

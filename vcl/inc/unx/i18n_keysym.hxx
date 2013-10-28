@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAL_I18N_KEYSYM_HXX
-#define _SAL_I18N_KEYSYM_HXX
+#ifndef INCLUDED_VCL_INC_UNX_I18N_KEYSYM_HXX
+#define INCLUDED_VCL_INC_UNX_I18N_KEYSYM_HXX
 
 /*
  convert a keysym as defined in /usr/{X11R6|openwin}/include/X11/keysymdef.h
@@ -58,7 +58,7 @@
 
 sal_Unicode KeysymToUnicode (KeySym nKeySym);
 
-#endif /* _SAL_I18N_KEYSYM_HXX */
+#endif // INCLUDED_VCL_INC_UNX_I18N_KEYSYM_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

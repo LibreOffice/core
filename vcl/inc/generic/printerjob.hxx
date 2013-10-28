@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PSPRINT_PRINTERJOB_HXX_
-#define _PSPRINT_PRINTERJOB_HXX_
+#ifndef INCLUDED_VCL_INC_GENERIC_PRINTERJOB_HXX
+#define INCLUDED_VCL_INC_GENERIC_PRINTERJOB_HXX
 
 #include "vcl/jobdata.hxx"
 #include "osl/file.hxx"
@@ -132,6 +132,6 @@ public:
 
 }  /* namespace psp */
 
-#endif /* _PSPRINT_PRINTERJOB_HXX_ */
+#endif // INCLUDED_VCL_INC_GENERIC_PRINTERJOB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

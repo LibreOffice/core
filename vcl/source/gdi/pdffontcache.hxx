@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef VCL_PDFFONTCACHE_HXX
-#define VCL_PDFFONTCACHE_HXX
+#ifndef INCLUDED_VCL_SOURCE_GDI_PDFFONTCACHE_HXX
+#define INCLUDED_VCL_SOURCE_GDI_PDFFONTCACHE_HXX
 
 #include <sal/types.h>
 

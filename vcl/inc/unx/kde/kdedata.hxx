@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_KDEDATA_HXX
-#define _VCL_KDEDATA_HXX
+#ifndef INCLUDED_VCL_INC_UNX_KDE_KDEDATA_HXX
+#define INCLUDED_VCL_INC_UNX_KDE_KDEDATA_HXX
 
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
@@ -105,6 +105,6 @@ public:
     void doStartup();
 };
 
-#endif // _VCL_KDEDATA_HXX
+#endif // INCLUDED_VCL_INC_UNX_KDE_KDEDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

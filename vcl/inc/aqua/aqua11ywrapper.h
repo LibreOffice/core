@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_AQUA11WRAPPER_H
-#define _SV_AQUA11WRAPPER_H
+#ifndef INCLUDED_VCL_INC_AQUA_AQUA11YWRAPPER_H
+#define INCLUDED_VCL_INC_AQUA_AQUA11YWRAPPER_H
 
 #include "aquavcltypes.h"
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -105,6 +105,6 @@ struct ReferenceWrapper
 -(::com::sun::star::accessibility::XAccessibleTextMarkup *)accessibleTextMarkup;
 @end
 
-#endif // _SV_AQUA11WRAPPER_H
+#endif // INCLUDED_VCL_INC_AQUA_AQUA11YWRAPPER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

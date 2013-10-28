@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_ACCMGR_HXX
-#define _SV_ACCMGR_HXX
+#ifndef INCLUDED_VCL_INC_ACCMGR_HXX
+#define INCLUDED_VCL_INC_ACCMGR_HXX
 
 #include <tools/solar.h>
 #include <vector>
@@ -55,6 +55,6 @@ public:
     sal_Bool                IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat );
 };
 
-#endif  // _SV_ACCMGR_HXX
+#endif // INCLUDED_VCL_INC_ACCMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

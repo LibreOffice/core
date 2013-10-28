@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PSPRINT_PRINTERGFX_HXX_
-#define _PSPRINT_PRINTERGFX_HXX_
+#ifndef INCLUDED_VCL_INC_GENERIC_PRINTERGFX_HXX
+#define INCLUDED_VCL_INC_GENERIC_PRINTERGFX_HXX
 
 #include "vcl/helper.hxx"
 #include "sallayout.hxx"
@@ -412,6 +412,6 @@ public:
 } /* namespace psp */
 
 
-#endif /* _PSPRINT_PRINTERGFX_HXX_ */
+#endif // INCLUDED_VCL_INC_GENERIC_PRINTERGFX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

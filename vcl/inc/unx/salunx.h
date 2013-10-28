@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SALUNX_H
-#define _SALUNX_H
+#ifndef INCLUDED_VCL_INC_UNX_SALUNX_H
+#define INCLUDED_VCL_INC_UNX_SALUNX_H
 
 #include <prex.h>
 #include <postx.h>

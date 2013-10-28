@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _KDEMODALITYFILTER_HXX_
-#define _KDEMODALITYFILTER_HXX_
+#ifndef INCLUDED_VCL_UNX_KDE_FPICKER_KDEMODALITYFILTER_HXX
+#define INCLUDED_VCL_UNX_KDE_FPICKER_KDEMODALITYFILTER_HXX
 
 #include <config_vclplug.h>
 
@@ -44,6 +44,6 @@ public:
     virtual bool eventFilter( QObject *pObject, QEvent *pEvent );
 };
 
-#endif // _KDEMODALITYFILTER_HXX_
+#endif // INCLUDED_VCL_UNX_KDE_FPICKER_KDEMODALITYFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

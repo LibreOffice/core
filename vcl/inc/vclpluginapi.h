@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCLPLUGINAPI_H
-#define _VCLPLUGINAPI_H
+#ifndef INCLUDED_VCL_INC_VCLPLUGINAPI_H
+#define INCLUDED_VCL_INC_VCLPLUGINAPI_H
 
 #include "sal/config.h"
 #include "sal/types.h"

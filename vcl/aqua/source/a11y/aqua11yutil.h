@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_AQUA11YUTIL_H
-#define _SV_AQUA11YUTIL_H
+#ifndef INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YUTIL_H
+#define INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YUTIL_H
 
 #include <com/sun/star/awt/Point.hpp>
 
@@ -28,5 +28,5 @@
 +(::com::sun::star::awt::Point)nsPointToVclPoint:(NSValue *)nsPoint;
 @end
 
-#endif // _SV_AQUA11YUTIL_H
+#endif // INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YUTIL_H
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

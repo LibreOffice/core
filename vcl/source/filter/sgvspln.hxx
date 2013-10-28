@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SGVSPLN_HXX
-#define _SGVSPLN_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_SGVSPLN_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_SGVSPLN_HXX
 
 /*************************************************************************
 |*
@@ -58,6 +58,6 @@ bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
 *************************************************************************/
 bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly);
 
-#endif //_SGVSPLN_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_SGVSPLN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

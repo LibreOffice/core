@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_AQUA11ROLEHELPER_H
-#define _SV_AQUA11ROLEHELPER_H
+#ifndef INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YROLEHELPER_H
+#define INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YROLEHELPER_H
 
 #include "aqua/salinst.h"
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -31,6 +31,6 @@
 +(id)getRoleDescriptionFrom: (NSString *) role with: (NSString *) subRole;
 @end
 
-#endif // _SV_AQUA11ROLEHELPER_H
+#endif // INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YROLEHELPER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

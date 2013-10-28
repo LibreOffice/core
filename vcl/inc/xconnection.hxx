@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_XCONNECTION_HXX
-#define _VCL_XCONNECTION_HXX
+#ifndef INCLUDED_VCL_INC_XCONNECTION_HXX
+#define INCLUDED_VCL_INC_XCONNECTION_HXX
 
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
@@ -60,6 +60,6 @@ namespace vcl {
 
 }
 
-#endif // _VCL_XCONNECTION_HXX
+#endif // INCLUDED_VCL_INC_XCONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

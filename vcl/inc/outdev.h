@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_OUTDEV_H
-#define _SV_OUTDEV_H
+#ifndef INCLUDED_VCL_INC_OUTDEV_H
+#define INCLUDED_VCL_INC_OUTDEV_H
 
 #include <tools/solar.h>
 #include <outfont.hxx>
@@ -245,6 +245,6 @@ struct ImplOutDevData
     basegfx::B2DHomMatrix*      mpInverseViewTransform;
 };
 
-#endif // _SV_OUTDEV_H
+#endif // INCLUDED_VCL_INC_OUTDEV_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

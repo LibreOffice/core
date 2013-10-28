@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVP_SVBMP_HXX
-#define SVP_SVBMP_HXX
+#ifndef INCLUDED_VCL_INC_HEADLESS_SVPBMP_HXX
+#define INCLUDED_VCL_INC_HEADLESS_SVPBMP_HXX
 
 #include "sal/config.h"
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_GTKFRAME_HXX
-#define _VCL_GTKFRAME_HXX
+#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
+#define INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
 
 #include <prex.h>
 #include <cairo.h>
@@ -459,6 +459,6 @@ GType ooo_fixed_get_type( void );
 
 } // extern "C"
 
-#endif //_VCL_GTKFRAME_HXX
+#endif // INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

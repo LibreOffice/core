@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_AQUA11WRAPPERGROUP_H
-#define _SV_AQUA11WRAPPERGROUP_H
+#ifndef INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YWRAPPERGROUP_H
+#define INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YWRAPPERGROUP_H
 
 #include "aqua/aqua11ywrapper.h"
 
@@ -29,6 +29,6 @@
 -(NSArray *)accessibilityAttributeNames;
 @end
 
-#endif // _SV_AQUA11WRAPPERGROUP_H
+#endif // INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YWRAPPERGROUP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

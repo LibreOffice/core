@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_FONTSUBSET_HXX
-#define _SV_FONTSUBSET_HXX
+#ifndef INCLUDED_VCL_INC_FONTSUBSET_HXX
+#define INCLUDED_VCL_INC_FONTSUBSET_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -87,6 +87,6 @@ protected:
     bool    CreateFontSubsetFromType1( sal_Int32* pOutGlyphWidths = NULL );
 };
 
-#endif // _SV_FONTSUBSET_HXX
+#endif // INCLUDED_VCL_INC_FONTSUBSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_BMPFAST_HXX
-#define _SV_BMPFAST_HXX
+#ifndef INCLUDED_VCL_INC_BMPFAST_HXX
+#define INCLUDED_VCL_INC_BMPFAST_HXX
 
 class BitmapWriteAccess;
 class BitmapReadAccess;
@@ -40,6 +40,6 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDst,
 
 bool ImplFastEraseBitmap( BitmapBuffer&, const BitmapColor& );
 
-#endif // _SV_BMPFAST_HXX
+#endif // INCLUDED_VCL_INC_BMPFAST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

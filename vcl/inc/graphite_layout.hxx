@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_GRAPHITELAYOUT_HXX
-#define _SV_GRAPHITELAYOUT_HXX
+#ifndef INCLUDED_VCL_INC_GRAPHITE_LAYOUT_HXX
+#define INCLUDED_VCL_INC_GRAPHITE_LAYOUT_HXX
 // Description: An implementation of the SalLayout interface that uses the
 //              Graphite engine.
 
@@ -158,6 +158,6 @@ private:
                 long & rDXOffset, bool bIsBase, int baseChar);
 };
 
-#endif // _SV_GRAPHITELAYOUT_HXX
+#endif // INCLUDED_VCL_INC_GRAPHITE_LAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

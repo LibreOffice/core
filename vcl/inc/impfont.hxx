@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_IMPFONT_HXX
-#define _SV_IMPFONT_HXX
+#ifndef INCLUDED_VCL_INC_IMPFONT_HXX
+#define INCLUDED_VCL_INC_IMPFONT_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -232,6 +232,6 @@ bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
 
 void UpdateAttributesFromPSName( const OUString& rPSName, ImplDevFontAttributes& );
 
-#endif // _SV_IMPFONT_HXX
+#endif // INCLUDED_VCL_INC_IMPFONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

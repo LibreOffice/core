@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_SALFRAMEVIEW_H
-#define _VCL_SALFRAMEVIEW_H
+#ifndef INCLUDED_VCL_INC_AQUA_SALFRAMEVIEW_H
+#define INCLUDED_VCL_INC_AQUA_SALFRAMEVIEW_H
 
 #include "aqua/aqua11ywrapper.h"
 

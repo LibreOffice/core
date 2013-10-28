@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_IMPGRAPH_HXX
-#define _SV_IMPGRAPH_HXX
+#ifndef INCLUDED_VCL_INC_IMPGRAPH_HXX
+#define INCLUDED_VCL_INC_IMPGRAPH_HXX
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -167,6 +167,6 @@ private:
     const SvgDataPtr& getSvgData() const;
 };
 
-#endif // _SV_IMPGRAPH_HXX
+#endif // INCLUDED_VCL_INC_IMPGRAPH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

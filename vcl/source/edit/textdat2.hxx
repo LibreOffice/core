@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TEXTDAT2_HXX
-#define _TEXTDAT2_HXX
+#ifndef INCLUDED_VCL_SOURCE_EDIT_TEXTDAT2_HXX
+#define INCLUDED_VCL_SOURCE_EDIT_TEXTDAT2_HXX
 
 #include <vcl/seleng.hxx>
 #include <vcl/virdev.hxx>
@@ -296,6 +296,6 @@ struct TextDDInfo
     }
 };
 
-#endif // _TEXTDAT2_HXX
+#endif // INCLUDED_VCL_SOURCE_EDIT_TEXTDAT2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

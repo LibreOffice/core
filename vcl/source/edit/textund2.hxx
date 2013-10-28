@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _TEXTUND2_HXX
-#define _TEXTUND2_HXX
+#ifndef INCLUDED_VCL_SOURCE_EDIT_TEXTUND2_HXX
+#define INCLUDED_VCL_SOURCE_EDIT_TEXTUND2_HXX
 
 #include "textundo.hxx"
 #include <vcl/textdata.hxx>
@@ -130,6 +130,6 @@ public:
     virtual OUString GetComment () const;
 };
 
-#endif // _TEXTUND2_HXX
+#endif // INCLUDED_VCL_SOURCE_EDIT_TEXTUND2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

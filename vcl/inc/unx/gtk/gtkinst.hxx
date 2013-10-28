@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_GTKINST_HXX
-#define _VCL_GTKINST_HXX
+#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
+#define INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
 
 #include <boost/shared_ptr.hpp>
 
@@ -116,6 +116,6 @@ public:
     mutable boost::shared_ptr<vcl::unx::GtkPrintWrapper> m_pPrintWrapper;
 };
 
-#endif // _VCL_GTKINST_HXX
+#endif // INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

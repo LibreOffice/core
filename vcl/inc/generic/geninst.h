@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_GENERIC_INST_H
-#define _SV_GENERIC_INST_H
+#ifndef INCLUDED_VCL_INC_GENERIC_GENINST_H
+#define INCLUDED_VCL_INC_GENERIC_GENINST_H
 
 #include <tools/solar.h>
 #include <osl/thread.hxx>
@@ -118,6 +118,6 @@ inline SalGenericInstance *GetGenericInstance()
     return static_cast<SalGenericInstance *>(GetSalData()->m_pInstance);
 }
 
-#endif // _SV_GENERIC_INST_H
+#endif // INCLUDED_VCL_INC_GENERIC_GENINST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

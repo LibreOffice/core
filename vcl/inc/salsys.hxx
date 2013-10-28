@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALSYS_HXX
-#define _SV_SALSYS_HXX
+#ifndef INCLUDED_VCL_INC_SALSYS_HXX
+#define INCLUDED_VCL_INC_SALSYS_HXX
 
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
@@ -124,6 +124,6 @@ public:
 
 SalSystem* ImplGetSalSystem();
 
-#endif // _SV_SALSYS_HXX
+#endif // INCLUDED_VCL_INC_SALSYS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

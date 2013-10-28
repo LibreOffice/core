@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_ILSTBOX_HXX
-#define _SV_ILSTBOX_HXX
+#ifndef INCLUDED_VCL_INC_ILSTBOX_HXX
+#define INCLUDED_VCL_INC_ILSTBOX_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -654,6 +654,6 @@ public:
 void ImplInitFieldSettings( Window* pWin, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
 void ImplInitDropDownButton( PushButton* pButton );
 
-#endif  // _SV_ILSTBOX_HXX
+#endif // INCLUDED_VCL_INC_ILSTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

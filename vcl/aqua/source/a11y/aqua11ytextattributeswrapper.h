@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_AQUA11TEXTATTRIBUTESWRAPPER_H
-#define _SV_AQUA11TEXTATTRIBUTESWRAPPER_H
+#ifndef INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YTEXTATTRIBUTESWRAPPER_H
+#define INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YTEXTATTRIBUTESWRAPPER_H
 
 #include "aqua/aqua11ywrapper.h"
 
@@ -27,6 +27,6 @@
 }
 +(NSMutableAttributedString *)createAttributedStringForElement:(AquaA11yWrapper *)wrapper inOrigRange:(id)origRange;
 @end
-#endif // _SV_AQUA11TEXTATTRIBUTESWRAPPER_H
+#endif // INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YTEXTATTRIBUTESWRAPPER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

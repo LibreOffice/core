@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNXFILEPICKER_HXX_
-#define _UNXFILEPICKER_HXX_
+#ifndef INCLUDED_VCL_UNX_KDE_UNXFILEPICKER_HXX
+#define INCLUDED_VCL_UNX_KDE_UNXFILEPICKER_HXX
 
 #include <cppuhelper/compbase5.hxx>
 #include <osl/conditn.hxx>
@@ -167,6 +167,6 @@ private:
     void                        sendAppendControlCommand( sal_Int16 nControlId );
 };
 
-#endif // _UNXFILEPICKER_HXX_
+#endif // INCLUDED_VCL_UNX_KDE_UNXFILEPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

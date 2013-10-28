@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_AQUA11TEXTWRAPPER_H
-#define _SV_AQUA11TEXTWRAPPER_H
+#ifndef INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YTEXTWRAPPER_H
+#define INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YTEXTWRAPPER_H
 
 #include "aqua/aquavcltypes.h"
 #include "aqua/aqua11ywrapper.h"
@@ -53,6 +53,6 @@
 +(void)setValueAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
 @end
 
-#endif // _SV_AQUA11TEXTWRAPPER_H
+#endif // INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YTEXTWRAPPER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

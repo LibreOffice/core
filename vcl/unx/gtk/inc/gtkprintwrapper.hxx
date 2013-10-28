@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef UNX_GTK_INC_GTKPRINTWRAPPER_HXX_INCLUDED
-#define UNX_GTK_INC_GTKPRINTWRAPPER_HXX_INCLUDED
+#ifndef INCLUDED_VCL_UNX_GTK_INC_GTKPRINTWRAPPER_HXX
+#define INCLUDED_VCL_UNX_GTK_INC_GTKPRINTWRAPPER_HXX
 
 #include <boost/noncopyable.hpp>
 
@@ -127,6 +127,6 @@ private:
 }
 }
 
-#endif // UNX_GTK_INC_GTKPRINTWRAPPER_HXX_INCLUDED
+#endif // INCLUDED_VCL_UNX_GTK_INC_GTKPRINTWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

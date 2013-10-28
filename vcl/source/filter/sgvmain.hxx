@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SGVMAIN_HXX
-#define _SGVMAIN_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_SGVMAIN_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_SGVMAIN_HXX
 
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
@@ -329,6 +329,6 @@ public:
     SgfFontOne* GetFontDesc(sal_uInt32 ID);
 };
 
-#endif //_SGVMAIN_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_SGVMAIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

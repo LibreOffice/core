@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _XPMREAD_HXX
-#define _XPMREAD_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_IXPM_XPMREAD_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_IXPM_XPMREAD_HXX
 
 #include <vcl/bitmap.hxx>
 
@@ -106,6 +106,6 @@ public:
 
 bool ImportXPM( SvStream& rStream, Graphic& rGraphic );
 
-#endif // _XPMREAD_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_IXPM_XPMREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

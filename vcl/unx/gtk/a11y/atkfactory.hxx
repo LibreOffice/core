@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ATK_FACTORY_HXX__
-#define __ATK_FACTORY_HXX__
+#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKFACTORY_HXX
+#define INCLUDED_VCL_UNX_GTK_A11Y_ATKFACTORY_HXX
 
 #include <atk/atk.h>
 

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAL_I18N_STATUS_HXX
-#define _SAL_I18N_STATUS_HXX
+#ifndef INCLUDED_VCL_INC_UNX_I18N_STATUS_HXX
+#define INCLUDED_VCL_INC_UNX_I18N_STATUS_HXX
 
 #include <rtl/ustring.hxx>
 #include <salimestatus.hxx>
@@ -103,6 +103,6 @@ public:
 
 } // namespace
 
-#endif // _SAL_I18N_STATUS_HXX
+#endif // INCLUDED_VCL_INC_UNX_I18N_STATUS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_AQUAPRINTVIEW_H
-#define _VCL_AQUAPRINTVIEW_H
+#ifndef INCLUDED_VCL_INC_AQUA_AQUAPRINTVIEW_H
+#define INCLUDED_VCL_INC_AQUA_AQUAPRINTVIEW_H
 
 #include "premac.h"
 #include <Cocoa/Cocoa.h>

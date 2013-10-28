@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_SALSESSION_HXX
-#define _VCL_SALSESSION_HXX
+#ifndef INCLUDED_VCL_INC_SALSESSION_HXX
+#define INCLUDED_VCL_INC_SALSESSION_HXX
 
 #include "vcl/dllapi.h"
 

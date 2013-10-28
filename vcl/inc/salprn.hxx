@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALPRN_HXX
-#define _SV_SALPRN_HXX
+#ifndef INCLUDED_VCL_INC_SALPRN_HXX
+#define INCLUDED_VCL_INC_SALPRN_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -114,6 +114,6 @@ public:                     // public for Sal Implementation
 
 };
 
-#endif // _SV_SALPRN_HXX
+#endif // INCLUDED_VCL_INC_SALPRN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

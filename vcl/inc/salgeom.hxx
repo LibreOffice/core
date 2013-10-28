@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALGEOM_HXX
-#define _SV_SALGEOM_HXX
+#ifndef INCLUDED_VCL_INC_SALGEOM_HXX
+#define INCLUDED_VCL_INC_SALGEOM_HXX
 
 typedef struct _SalFrameGeometry {
     // screen position of upper left corner of drawable area in pixel
@@ -40,6 +40,6 @@ typedef struct _SalFrameGeometry {
     {}
 } SalFrameGeometry;
 
-#endif // _SV_SALGEOM_HXX
+#endif // INCLUDED_VCL_INC_SALGEOM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

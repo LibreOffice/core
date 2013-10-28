@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALGDI_HXX
-#define _SV_SALGDI_HXX
+#ifndef INCLUDED_VCL_INC_SALGDI_HXX
+#define INCLUDED_VCL_INC_SALGDI_HXX
 
 #include "tools/solar.h"
 #include "vcl/dllapi.h"
@@ -506,6 +506,6 @@ public:
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const = 0;
 };
 
-#endif // _SV_SALGDI_HXX
+#endif // INCLUDED_VCL_INC_SALGDI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

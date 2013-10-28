@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_XRENDER_PEER_HXX
-#define _SV_XRENDER_PEER_HXX
+#ifndef INCLUDED_VCL_UNX_GENERIC_GDI_XRENDER_PEER_HXX
+#define INCLUDED_VCL_UNX_GENERIC_GDI_XRENDER_PEER_HXX
 
 #include <prex.h>
 struct _XTrap; // on some older systems this is not declared within Xrender.h
@@ -214,6 +214,6 @@ inline XRenderColor GetXRenderColor( const SalColor& rSalColor, double fTranspar
 
 //=====================================================================
 
-#endif // _SV_XRENDER_PEER_HXX
+#endif // INCLUDED_VCL_UNX_GENERIC_GDI_XRENDER_PEER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

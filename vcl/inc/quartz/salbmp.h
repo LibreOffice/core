@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_QUARTZ_SALBMP_H
-#define _VCL_QUARTZ_SALBMP_H
+#ifndef INCLUDED_VCL_INC_QUARTZ_SALBMP_H
+#define INCLUDED_VCL_INC_QUARTZ_SALBMP_H
 
 #include "tools/gen.hxx"
 
@@ -100,6 +100,6 @@ public:
     CGImageRef      CreateCroppedImage( int nX, int nY, int nWidth, int nHeight ) const;
 };
 
-#endif // _VCL_QUARTZ_SALBMP_H
+#endif // INCLUDED_VCL_INC_QUARTZ_SALBMP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_SALNSMENU_H
-#define _VCL_SALNSMENU_H
+#ifndef INCLUDED_VCL_INC_AQUA_SALNSMENU_H
+#define INCLUDED_VCL_INC_AQUA_SALNSMENU_H
 
 class AquaSalMenu;
 class AquaSalMenuItem;

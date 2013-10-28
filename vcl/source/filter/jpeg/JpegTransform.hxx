@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _JPEG_TRANSFORM_HXX
-#define _JPEG_TRANSFORM_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGTRANSFORM_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGTRANSFORM_HXX
 
 #include <tools/solar.h>
 #include <vcl/graph.hxx>

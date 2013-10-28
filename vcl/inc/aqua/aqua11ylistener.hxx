@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AQUA11YLISTENER_HXX_
-#define _AQUA11YLISTENER_HXX_
+#ifndef INCLUDED_VCL_INC_AQUA_AQUA11YLISTENER_HXX
+#define INCLUDED_VCL_INC_AQUA_AQUA11YLISTENER_HXX
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -54,5 +54,5 @@ private:
     ::com::sun::star::awt::Rectangle m_oldBounds;
 };
 
-#endif // _AQUA11YLISTENER_HXX_
+#endif // INCLUDED_VCL_INC_AQUA_AQUA11YLISTENER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

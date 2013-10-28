@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_CANVASBITMAP_HXX
-#define _VCL_CANVASBITMAP_HXX
+#ifndef INCLUDED_VCL_INC_CANVASBITMAP_HXX
+#define INCLUDED_VCL_INC_CANVASBITMAP_HXX
 
 #include <cppuhelper/compbase3.hxx>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>

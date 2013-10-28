@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_GTKDATA_HXX
-#define _VCL_GTKDATA_HXX
+#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKDATA_HXX
+#define INCLUDED_VCL_INC_UNX_GTK_GTKDATA_HXX
 
 #include <prex.h>
 #define GLIB_DISABLE_DEPRECATION_WARNINGS
@@ -187,6 +187,6 @@ inline GdkDisplay *GtkData::GetGdkDisplay()
 #if !GTK_CHECK_VERSION(3,0,0)
 #endif
 
-#endif // _VCL_GTKDATA_HXX
+#endif // INCLUDED_VCL_INC_UNX_GTK_GTKDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

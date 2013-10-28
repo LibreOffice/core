@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SAL_I18N_INPUTMETHOD_HXX
-#define _SAL_I18N_INPUTMETHOD_HXX
+#ifndef INCLUDED_VCL_INC_UNX_I18N_IM_HXX
+#define INCLUDED_VCL_INC_UNX_I18N_IM_HXX
 
 #include <vclpluginapi.h>
 
@@ -49,7 +49,7 @@ public:
     ~SalI18N_InputMethod();
 };
 
-#endif // _SAL_I18N_INPUTMETHOD_HXX
+#endif // INCLUDED_VCL_INC_UNX_I18N_IM_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

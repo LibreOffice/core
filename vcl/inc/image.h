@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_IMAGE_H
-#define _SV_IMAGE_H
+#ifndef INCLUDED_VCL_INC_IMAGE_H
+#define INCLUDED_VCL_INC_IMAGE_H
 
 #include <vcl/bitmapex.hxx>
 
@@ -156,6 +156,6 @@ private:    // prevent assignment and copy construction
     void    operator=( const ImplImage&);
 };
 
-#endif // _SV_IMAGE_H
+#endif // INCLUDED_VCL_INC_IMAGE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

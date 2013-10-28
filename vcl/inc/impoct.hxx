@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_IMPOCT_HXX
-#define _SV_IMPOCT_HXX
+#ifndef INCLUDED_VCL_INC_IMPOCT_HXX
+#define INCLUDED_VCL_INC_IMPOCT_HXX
 
 #include <vcl/octree.hxx>
 
@@ -168,6 +168,6 @@ inline void ImpNodeCache::ImplReleaseNode( OctreeNode* pNode )
     pActNode = pNode;
 }
 
-#endif // _SV_IMPOCT_HXX
+#endif // INCLUDED_VCL_INC_IMPOCT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

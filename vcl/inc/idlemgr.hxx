@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_IDLEMGR_HXX
-#define _SV_IDLEMGR_HXX
+#ifndef INCLUDED_VCL_INC_IDLEMGR_HXX
+#define INCLUDED_VCL_INC_IDLEMGR_HXX
 
 #include <tools/solar.h>
 #include <vcl/timer.hxx>
@@ -51,6 +51,6 @@ public:
                     DECL_LINK(TimeoutHdl, void *);
 };
 
-#endif  // _SV_IDLEMGR_HXX
+#endif // INCLUDED_VCL_INC_IDLEMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

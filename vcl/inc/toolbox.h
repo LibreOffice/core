@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_TOOLBOX_H
-#define _SV_TOOLBOX_H
+#ifndef INCLUDED_VCL_INC_TOOLBOX_H
+#define INCLUDED_VCL_INC_TOOLBOX_H
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -181,6 +181,6 @@ struct ImplToolBoxPrivateData
 };
 
 
-#endif  // _SV_TOOLBOX_H
+#endif // INCLUDED_VCL_INC_TOOLBOX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

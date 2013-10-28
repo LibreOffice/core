@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _KDECOMMANDTHREAD_HXX_
-#define _KDECOMMANDTHREAD_HXX_
+#ifndef INCLUDED_VCL_UNX_KDE_FPICKER_KDECOMMANDTHREAD_HXX
+#define INCLUDED_VCL_UNX_KDE_FPICKER_KDECOMMANDTHREAD_HXX
 
 #include <config_vclplug.h>
 
@@ -95,6 +95,6 @@ protected:
     QStringList*                tokenize( const QString &rString );
 };
 
-#endif // _KDECOMMANDTHREAD_HXX_
+#endif // INCLUDED_VCL_UNX_KDE_FPICKER_KDECOMMANDTHREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

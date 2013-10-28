@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _WINMTF_HXX
-#define _WINMTF_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_WMF_WINMTF_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_WMF_WINMTF_HXX
 
 #ifdef DBG_UTIL
 #define WIN_MTF_ASSERT

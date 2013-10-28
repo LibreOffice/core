@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _GIFREAD_HXX
-#define _GIFREAD_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -114,6 +114,6 @@ public:
 
 bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
 
-#endif // _GIFREAD_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

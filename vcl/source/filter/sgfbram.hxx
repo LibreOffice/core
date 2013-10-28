@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SGFBRAM_HXX
-#define _SGFBRAM_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_SGFBRAM_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_SGFBRAM_HXX
 
 #include <tools/solar.h>
 
@@ -146,6 +146,6 @@ public:
     RGBQuad(sal_uInt8 R, sal_uInt8 G, sal_uInt8 B) { Red=R; Grn=G; Blu=B; Fil=0; }
 };
 
-#endif //_SGFBRAM_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_SGFBRAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

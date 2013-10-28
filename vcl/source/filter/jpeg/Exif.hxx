@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXIF_HXX
-#define _EXIF_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_JPEG_EXIF_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_JPEG_EXIF_HXX
 
 #include <osl/endian.h>
 #include <vcl/graph.hxx>
@@ -88,6 +88,6 @@ public :
 };
 
 
-#endif // _EXIF_HXX
+#endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_EXIF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

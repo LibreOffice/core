@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _UNXNOTIFYTHREAD_HXX_
-#define _UNXNOTIFYTHREAD_HXX_
+#ifndef INCLUDED_VCL_UNX_KDE_UNXNOTIFYTHREAD_HXX
+#define INCLUDED_VCL_UNX_KDE_UNXNOTIFYTHREAD_HXX
 
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -74,6 +74,6 @@ protected:
     virtual void SAL_CALL       run();
 };
 
-#endif // _UNXNOTIFYTHREAD_HXX_
+#endif // INCLUDED_VCL_UNX_KDE_UNXNOTIFYTHREAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _KDEFILEPICKER_HXX_
-#define _KDEFILEPICKER_HXX_
+#ifndef INCLUDED_VCL_UNX_KDE_FPICKER_KDEFILEPICKER_HXX
+#define INCLUDED_VCL_UNX_KDE_FPICKER_KDEFILEPICKER_HXX
 
 #include <config_vclplug.h>
 
@@ -134,6 +134,6 @@ public:
     void setCurrentFilter( const QString& filter );
 };
 
-#endif // _KDEFILEPICKER_HXX_
+#endif // INCLUDED_VCL_UNX_KDE_FPICKER_KDEFILEPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

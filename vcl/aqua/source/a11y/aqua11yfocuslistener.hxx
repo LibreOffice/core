@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AQUA11YFOCUSLISTENER_HXX_
-#define _AQUA11YFOCUSLISTENER_HXX_
+#ifndef INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YFOCUSLISTENER_HXX
+#define INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YFOCUSLISTENER_HXX
 
 #include <salhelper/refobj.hxx>
 
@@ -49,6 +49,6 @@ public:
     virtual oslInterlockedCount SAL_CALL release() SAL_THROW(());
 };
 
-#endif // _AQUA11YFOCUSLISTENER_HXX_
+#endif // INCLUDED_VCL_AQUA_SOURCE_A11Y_AQUA11YFOCUSLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

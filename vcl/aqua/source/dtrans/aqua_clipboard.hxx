@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _AQUA_CLIPBOARD_HXX_
-#define _AQUA_CLIPBOARD_HXX_
+#ifndef INCLUDED_VCL_AQUA_SOURCE_DTRANS_AQUA_CLIPBOARD_HXX
+#define INCLUDED_VCL_AQUA_SOURCE_DTRANS_AQUA_CLIPBOARD_HXX
 
 #include "DataFlavorMapping.hxx"
 #include <rtl/ustring.hxx>

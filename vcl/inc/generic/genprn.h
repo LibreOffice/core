@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_GENERIC_PRN_H
-#define _SV_GENERIC_PRN_H
+#ifndef INCLUDED_VCL_INC_GENERIC_GENPRN_H
+#define INCLUDED_VCL_INC_GENERIC_GENPRN_H
 
 #include "vcl/jobdata.hxx"
 #include "generic/printergfx.hxx"

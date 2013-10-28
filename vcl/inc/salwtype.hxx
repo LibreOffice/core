@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_SALWTYPE_HXX
-#define _SV_SALWTYPE_HXX
+#ifndef INCLUDED_VCL_INC_SALWTYPE_HXX
+#define INCLUDED_VCL_INC_SALWTYPE_HXX
 
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
@@ -296,6 +296,6 @@ struct SalInputContext
 
 typedef void (*SALTIMERPROC)();
 
-#endif // _SV_SALWTYPE_HXX
+#endif // INCLUDED_VCL_INC_SALWTYPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

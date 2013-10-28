@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef UNX_GTK3_INC_GTKPRINTWRAPPER_HXX_INCLUDED
-#define UNX_GTK3_INC_GTKPRINTWRAPPER_HXX_INCLUDED
+#ifndef INCLUDED_VCL_UNX_GTK3_INC_GTKPRINTWRAPPER_HXX
+#define INCLUDED_VCL_UNX_GTK3_INC_GTKPRINTWRAPPER_HXX
 
 #include "../../gtk/inc/gtkprintwrapper.hxx"
 
-#endif // UNX_GTK3_INC_GTKPRINTWRAPPER_HXX_INCLUDED
+#endif // INCLUDED_VCL_UNX_GTK3_INC_GTKPRINTWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

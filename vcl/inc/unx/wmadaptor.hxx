@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_WMADAPTOR_HXX_
-#define _VCL_WMADAPTOR_HXX_
+#ifndef INCLUDED_VCL_INC_UNX_WMADAPTOR_HXX
+#define INCLUDED_VCL_INC_UNX_WMADAPTOR_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>

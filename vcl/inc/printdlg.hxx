@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SV_PRNDLG_HXX
-#define _SV_PRNDLG_HXX
+#ifndef INCLUDED_VCL_INC_PRINTDLG_HXX
+#define INCLUDED_VCL_INC_PRINTDLG_HXX
 
 #include <vcl/dllapi.h>
 
@@ -298,6 +298,6 @@ namespace vcl
 }
 
 
-#endif // _SV_PRNDLG_HXX
+#endif // INCLUDED_VCL_INC_PRINTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

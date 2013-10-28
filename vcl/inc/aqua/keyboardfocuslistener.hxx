@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _KEYBOARDFOCUSLISTENER_HXX_
-#define _KEYBOARDFOCUSLISTENER_HXX_
+#ifndef INCLUDED_VCL_INC_AQUA_KEYBOARDFOCUSLISTENER_HXX
+#define INCLUDED_VCL_INC_AQUA_KEYBOARDFOCUSLISTENER_HXX
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
@@ -34,5 +34,5 @@ public:
     virtual void SAL_CALL focusedObjectChanged(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xAccessible) = 0;
 };
 
-#endif // _KEYBOARDFOCUSLISTENER_HXX_
+#endif // INCLUDED_VCL_INC_AQUA_KEYBOARDFOCUSLISTENER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

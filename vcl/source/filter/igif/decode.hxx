@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DECODE_HXX
-#define _DECODE_HXX
+#ifndef INCLUDED_VCL_SOURCE_FILTER_IGIF_DECODE_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_IGIF_DECODE_HXX
 
 #include <vcl/bmpacc.hxx>
 
