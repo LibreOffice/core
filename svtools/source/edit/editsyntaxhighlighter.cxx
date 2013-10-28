@@ -26,10 +26,9 @@
 
 
 MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle,
-    HighlighterLanguage aLanguage): MultiLineEdit(pParent,nWinStyle), mbDoBracketHilight(true)
+    HighlighterLanguage aLanguage): MultiLineEdit(pParent,nWinStyle), mbDoBracketHilight(true), aHighlighter(aLanguage)
 {
     EnableUpdateData(300);
-    aHighlighter.initialize( aLanguage );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeMultiLineEditSyntaxHighlight(Window *pParent, VclBuilder::stringmap &)

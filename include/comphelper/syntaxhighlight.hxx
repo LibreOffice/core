@@ -21,6 +21,7 @@
 
 #include <vector>
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <rtl/ustring.hxx>
 
@@ -70,24 +71,16 @@ enum HighlighterLanguage
 // (notifyChange) and returns the caller the range of lines, which based on the
 // changes, need to be highlighted again. For this the Highlighter marks all
 // lines internally whether or not C comments begin or end.
-class COMPHELPER_DLLPUBLIC SyntaxHighlighter
+class COMPHELPER_DLLPUBLIC SyntaxHighlighter: private boost::noncopyable
 {
     class Tokenizer;
 
     HighlighterLanguage eLanguage;
     boost::scoped_ptr<Tokenizer> m_tokenizer;
-    char* m_pKeyWords;
-    sal_uInt16 m_nKeyWordCount;
-
-//  void initializeKeyWords( HighlighterLanguage eLanguage );
 
 public:
-    SyntaxHighlighter( void );
-    ~SyntaxHighlighter( void );
-
-    // (Re-)initialize Highlighter. The line-table will be completely erased,
-    // meaning that on completion an empty Source is assumed.
-    void initialize( HighlighterLanguage eLanguage_ );
+    SyntaxHighlighter(HighlighterLanguage language);
+    ~SyntaxHighlighter();
 
     void notifyChange(const OUString* pChangedLines, sal_uInt32 nArrayLength);
 

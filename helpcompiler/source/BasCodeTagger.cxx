@@ -55,13 +55,13 @@ xmlNodePtr LibXmlTreeWalker::currentNode()
 
 //======================================================
 
-BasicCodeTagger::BasicCodeTagger( xmlDocPtr rootDoc )
+BasicCodeTagger::BasicCodeTagger( xmlDocPtr rootDoc ):
+    m_Highlighter(HIGHLIGHT_BASIC)
 {
       if ( rootDoc == NULL )
           throw NULL_DOCUMENT;
       m_pDocument = rootDoc;
     m_pXmlTreeWalker = NULL;
-    m_Highlighter.initialize( HIGHLIGHT_BASIC );
     m_bTaggingCompleted = false;
 
 }

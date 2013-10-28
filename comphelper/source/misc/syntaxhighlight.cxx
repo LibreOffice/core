@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cassert>
 
 #include <unicode/uchar.h>
 #include <comphelper/syntaxhighlight.hxx>
@@ -706,22 +709,9 @@ void SyntaxHighlighter::Tokenizer::getHighlightPortions( const OUString& rLine,
 }
 
 
-SyntaxHighlighter::SyntaxHighlighter()
+SyntaxHighlighter::SyntaxHighlighter(HighlighterLanguage language):
+    eLanguage(language), m_tokenizer(new SyntaxHighlighter::Tokenizer(language))
 {
-    m_pKeyWords = NULL;
-    m_nKeyWordCount = 0;
-}
-
-SyntaxHighlighter::~SyntaxHighlighter()
-{
-    delete m_pKeyWords;
-}
-
-void SyntaxHighlighter::initialize( HighlighterLanguage eLanguage_ )
-{
-    eLanguage = eLanguage_;
-    m_tokenizer.reset(new SyntaxHighlighter::Tokenizer(eLanguage));
-
     switch (eLanguage)
     {
         case HIGHLIGHT_BASIC:
@@ -733,9 +723,11 @@ void SyntaxHighlighter::initialize( HighlighterLanguage eLanguage_ )
                                             sizeof( strListSqlKeyWords ) / sizeof( char* ));
             break;
         default:
-            m_tokenizer->setKeyWords( NULL, 0 );
+            assert(false); // this cannot happen
     }
 }
+
+SyntaxHighlighter::~SyntaxHighlighter() {}
 
 void SyntaxHighlighter::notifyChange(
     const OUString* pChangedLines, sal_uInt32 nArrayLength)

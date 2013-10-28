@@ -233,6 +233,7 @@ EditorWindow::EditorWindow (Window* pParent, ModulWindow* pModulWindow) :
     pEditEngine(0),
     rModulWindow(*pModulWindow),
     nCurTextWidth(0),
+    aHighlighter(HIGHLIGHT_BASIC),
     bHighlightning(false),
     bDoSyntaxHighlight(true),
     bDelayHighlight(true),
@@ -962,8 +963,6 @@ void EditorWindow::CreateEditEngine()
     aSyntaxIdleTimer.SetTimeout( 200 );
     aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, EditorWindow, SyntaxTimerHdl ) );
 
-    aHighlighter.initialize( HIGHLIGHT_BASIC );
-
     bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;
     bDoSyntaxHighlight = false; // too slow for large texts...
     OUString aOUSource(rModulWindow.GetModule());
@@ -1311,7 +1310,6 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
         rModulWindow.GetBreakPoints().reset();
         rModulWindow.GetBreakPointWindow().Invalidate();
         rModulWindow.GetLineNumberWindow().Invalidate();
-        aHighlighter.initialize( HIGHLIGHT_BASIC );
     }
     else
     {
