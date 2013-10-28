@@ -20,6 +20,8 @@
 #define INCLUDED_COMPHELPER_SYNTAXHIGHLIGHT_HXX
 
 #include <vector>
+
+#include <boost/scoped_ptr.hpp>
 #include <rtl/ustring.hxx>
 
 #include <comphelper/comphelperdllapi.h>
@@ -55,22 +57,6 @@ struct HighlightPortion {
     {}
 };
 
-/////////////////////////////////////////////////////////////////////////
-// Auxiliary class to support JavaScript modules, next to find functions which
-// will later will be used for syntax highlighting
-
-// Flags for character properties
-#define CHAR_START_IDENTIFIER   0x0001
-#define CHAR_IN_IDENTIFIER      0x0002
-#define CHAR_START_NUMBER       0x0004
-#define CHAR_IN_NUMBER          0x0008
-#define CHAR_IN_HEX_NUMBER      0x0010
-#define CHAR_IN_OCT_NUMBER      0x0020
-#define CHAR_START_STRING       0x0040
-#define CHAR_OPERATOR           0x0080
-#define CHAR_SPACE              0x0100
-#define CHAR_EOL                0x0200
-
 // Language mode of the Highlighter (possibly to be refined later with keyword
 // lists, C comment flags)
 enum HighlighterLanguage
@@ -79,39 +65,6 @@ enum HighlighterLanguage
     HIGHLIGHT_SQL
 };
 
-class SimpleTokenizer_Impl
-{
-    HighlighterLanguage aLanguage;
-    // Character information tables
-    sal_uInt16 aCharTypeTab[256];
-
-    const sal_Unicode* mpStringBegin;
-    const sal_Unicode* mpActualPos;
-
-    sal_Unicode peekChar( void )    { return *mpActualPos; }
-    sal_Unicode getChar( void )     { return *mpActualPos++; }
-
-    // Auxiliary function: testing of the character flags
-    sal_Bool testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags );
-
-    // Get new token, EmptyString == nothing more over there
-    sal_Bool getNextToken( /*out*/TokenTypes& reType,
-        /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos );
-
-    const char** ppListKeyWords;
-    sal_uInt16 nKeyWordCount;
-
-public:
-    SimpleTokenizer_Impl( HighlighterLanguage aLang = HIGHLIGHT_BASIC );
-    ~SimpleTokenizer_Impl( void );
-
-    sal_uInt16 parseLine( const OUString* aSource );
-    void getHighlightPortions( const OUString& rLine,
-                               /*out*/std::vector<HighlightPortion>& portions );
-    void setKeyWords( const char** ppKeyWords, sal_uInt16 nCount );
-};
-
-
 //*** SyntaxHighlighter Class ***
 // Concept: the Highlighter will be notified of all changes in the source
 // (notifyChange) and returns the caller the range of lines, which based on the
@@ -119,8 +72,10 @@ public:
 // lines internally whether or not C comments begin or end.
 class COMPHELPER_DLLPUBLIC SyntaxHighlighter
 {
+    class Tokenizer;
+
     HighlighterLanguage eLanguage;
-    SimpleTokenizer_Impl* m_pSimpleTokenizer;
+    boost::scoped_ptr<Tokenizer> m_tokenizer;
     char* m_pKeyWords;
     sal_uInt16 m_nKeyWordCount;
 

@@ -22,6 +22,18 @@
 #include <comphelper/syntaxhighlight.hxx>
 #include <comphelper/string.hxx>
 
+// Flags for character properties
+#define CHAR_START_IDENTIFIER   0x0001
+#define CHAR_IN_IDENTIFIER      0x0002
+#define CHAR_START_NUMBER       0x0004
+#define CHAR_IN_NUMBER          0x0008
+#define CHAR_IN_HEX_NUMBER      0x0010
+#define CHAR_IN_OCT_NUMBER      0x0020
+#define CHAR_START_STRING       0x0040
+#define CHAR_OPERATOR           0x0080
+#define CHAR_SPACE              0x0100
+#define CHAR_EOL                0x0200
+
 // ##########################################################################
 // ATTENTION: all these words need to be in lower case
 // ##########################################################################
@@ -232,7 +244,7 @@ extern "C" int compare_strings( const void *arg1, const void *arg2 )
 
 namespace
 {
-    static bool isAlpha(sal_Unicode c)
+    bool isAlpha(sal_Unicode c)
     {
         if (comphelper::string::isalphaAscii(c))
             return true;
@@ -240,8 +252,40 @@ namespace
     }
 }
 
+class SyntaxHighlighter::Tokenizer
+{
+    HighlighterLanguage aLanguage;
+    // Character information tables
+    sal_uInt16 aCharTypeTab[256];
+
+    const sal_Unicode* mpStringBegin;
+    const sal_Unicode* mpActualPos;
+
+    sal_Unicode peekChar( void )    { return *mpActualPos; }
+    sal_Unicode getChar( void )     { return *mpActualPos++; }
+
+    // Auxiliary function: testing of the character flags
+    sal_Bool testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags );
+
+    // Get new token, EmptyString == nothing more over there
+    sal_Bool getNextToken( /*out*/TokenTypes& reType,
+        /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos );
+
+    const char** ppListKeyWords;
+    sal_uInt16 nKeyWordCount;
+
+public:
+    Tokenizer( HighlighterLanguage aLang = HIGHLIGHT_BASIC );
+    ~Tokenizer( void );
+
+    sal_uInt16 parseLine( const OUString* aSource );
+    void getHighlightPortions( const OUString& rLine,
+                               /*out*/std::vector<HighlightPortion>& portions );
+    void setKeyWords( const char** ppKeyWords, sal_uInt16 nCount );
+};
+
 // Helper function: test character flag
-sal_Bool SimpleTokenizer_Impl::testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags )
+sal_Bool SyntaxHighlighter::Tokenizer::testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags )
 {
     bool bRet = false;
     if( c != 0 && c <= 255 )
@@ -256,13 +300,13 @@ sal_Bool SimpleTokenizer_Impl::testCharFlags( sal_Unicode c, sal_uInt16 nTestFla
     return bRet;
 }
 
-void SimpleTokenizer_Impl::setKeyWords( const char** ppKeyWords, sal_uInt16 nCount )
+void SyntaxHighlighter::Tokenizer::setKeyWords( const char** ppKeyWords, sal_uInt16 nCount )
 {
     ppListKeyWords = ppKeyWords;
     nKeyWordCount = nCount;
 }
 
-sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
+sal_Bool SyntaxHighlighter::Tokenizer::getNextToken( /*out*/TokenTypes& reType,
     /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos )
 {
     reType = TT_UNKNOWN;
@@ -539,7 +583,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     return sal_True;
 }
 
-SimpleTokenizer_Impl::SimpleTokenizer_Impl( HighlighterLanguage aLang ): aLanguage(aLang)
+SyntaxHighlighter::Tokenizer::Tokenizer( HighlighterLanguage aLang ): aLanguage(aLang)
 {
     memset( aCharTypeTab, 0, sizeof( aCharTypeTab ) );
 
@@ -619,19 +663,11 @@ SimpleTokenizer_Impl::SimpleTokenizer_Impl( HighlighterLanguage aLang ): aLangua
     ppListKeyWords = NULL;
 }
 
-SimpleTokenizer_Impl::~SimpleTokenizer_Impl( void )
+SyntaxHighlighter::Tokenizer::~Tokenizer( void )
 {
 }
 
-SimpleTokenizer_Impl* getSimpleTokenizer( void )
-{
-    static SimpleTokenizer_Impl* pSimpleTokenizer = NULL;
-    if( !pSimpleTokenizer )
-        pSimpleTokenizer = new SimpleTokenizer_Impl();
-    return pSimpleTokenizer;
-}
-
-sal_uInt16 SimpleTokenizer_Impl::parseLine( const OUString* aSource )
+sal_uInt16 SyntaxHighlighter::Tokenizer::parseLine( const OUString* aSource )
 {
     // Set the position to the beginning of the source string
     mpStringBegin = mpActualPos = aSource->getStr();
@@ -649,7 +685,7 @@ sal_uInt16 SimpleTokenizer_Impl::parseLine( const OUString* aSource )
     return nTokenCount;
 }
 
-void SimpleTokenizer_Impl::getHighlightPortions( const OUString& rLine,
+void SyntaxHighlighter::Tokenizer::getHighlightPortions( const OUString& rLine,
                                                  /*out*/std::vector<HighlightPortion>& portions  )
 {
     // Set the position to the beginning of the source string
@@ -672,35 +708,32 @@ void SimpleTokenizer_Impl::getHighlightPortions( const OUString& rLine,
 
 SyntaxHighlighter::SyntaxHighlighter()
 {
-    m_pSimpleTokenizer = 0;
     m_pKeyWords = NULL;
     m_nKeyWordCount = 0;
 }
 
 SyntaxHighlighter::~SyntaxHighlighter()
 {
-    delete m_pSimpleTokenizer;
     delete m_pKeyWords;
 }
 
 void SyntaxHighlighter::initialize( HighlighterLanguage eLanguage_ )
 {
     eLanguage = eLanguage_;
-    delete m_pSimpleTokenizer;
-    m_pSimpleTokenizer = new SimpleTokenizer_Impl(eLanguage);
+    m_tokenizer.reset(new SyntaxHighlighter::Tokenizer(eLanguage));
 
     switch (eLanguage)
     {
         case HIGHLIGHT_BASIC:
-            m_pSimpleTokenizer->setKeyWords( strListBasicKeyWords,
+            m_tokenizer->setKeyWords( strListBasicKeyWords,
                                             sizeof( strListBasicKeyWords ) / sizeof( char* ));
             break;
         case HIGHLIGHT_SQL:
-            m_pSimpleTokenizer->setKeyWords( strListSqlKeyWords,
+            m_tokenizer->setKeyWords( strListSqlKeyWords,
                                             sizeof( strListSqlKeyWords ) / sizeof( char* ));
             break;
         default:
-            m_pSimpleTokenizer->setKeyWords( NULL, 0 );
+            m_tokenizer->setKeyWords( NULL, 0 );
     }
 }
 
@@ -708,13 +741,13 @@ void SyntaxHighlighter::notifyChange(
     const OUString* pChangedLines, sal_uInt32 nArrayLength)
 {
     for( sal_uInt32 i=0 ; i < nArrayLength ; i++ )
-        m_pSimpleTokenizer->parseLine(&pChangedLines[i]);
+        m_tokenizer->parseLine(&pChangedLines[i]);
 }
 
 void SyntaxHighlighter::getHighlightPortions( const OUString& rLine,
                                               /*out*/std::vector<HighlightPortion>& portions )
 {
-    m_pSimpleTokenizer->getHighlightPortions( rLine, portions );
+    m_tokenizer->getHighlightPortions( rLine, portions );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclmedit.hxx>
 
-#include <comphelper/syntaxhighlight.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/colorcfg.hxx>
 
