@@ -1179,6 +1179,11 @@ namespace oox { namespace xls {
     Sequence< OUString > SAL_CALL ExcelFilter_getSupportedServiceNames() throw();
     Reference< XInterface > SAL_CALL ExcelFilter_createInstance(
         const Reference< XComponentContext >& rxContext ) throw( Exception );
+
+    OUString SAL_CALL OOXMLFormulaParser_getImplementationName() throw();
+    Sequence< OUString > SAL_CALL OOXMLFormulaParser_getSupportedServiceNames() throw();
+    Reference< XInterface > SAL_CALL OOXMLFormulaParser_create(
+        const Reference< XComponentContext >& rxContext ) throw();
 } }
 
 #ifdef __cplusplus
@@ -1199,6 +1204,11 @@ extern "C"
     {
         oox::xls::ExcelFilter_createInstance, oox::xls::ExcelFilter_getImplementationName,
         oox::xls::ExcelFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+        0, 0
+    },
+    {
+        oox::xls::OOXMLFormulaParser_create, oox::xls::OOXMLFormulaParser_getImplementationName,
+        oox::xls::OOXMLFormulaParser_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
         0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
