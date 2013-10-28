@@ -13,6 +13,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_syntaxhighlight_te
     comphelper/qa/unit/syntaxhighlighttest \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,comphelper_syntaxhighlight_test,\
+	boost_headers \
+))
+
 $(eval $(call gb_CppunitTest_use_api,comphelper_syntaxhighlight_test, \
 	udkapi \
 	offapi \
