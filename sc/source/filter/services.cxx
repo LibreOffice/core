@@ -24,15 +24,17 @@
 #include "sal/types.h"
 
 #include "excelfilter.hxx"
+#include "ooxformulaparser.hxx"
+
+#define IMPLEMENTATION_ENTRY( className ) \
+    { &className##_create, &className##_getImplementationName, &className##_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL scfilt_component_getFactory(
     char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     static cppu::ImplementationEntry const services[] = {
-        { oox::xls::ExcelFilter_create,
-          oox::xls::ExcelFilter_getImplementationName,
-          oox::xls::ExcelFilter_getSupportedServiceNames,
-          cppu::createSingleComponentFactory, 0, 0 },
+        IMPLEMENTATION_ENTRY( oox::xls::ExcelFilter ),
+        IMPLEMENTATION_ENTRY( oox::xls::OOXMLFormulaParser ),
         { 0, 0, 0, 0, 0, 0 }
     };
     return cppu::component_getFactoryHelper(
