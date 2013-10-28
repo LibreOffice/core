@@ -20,7 +20,6 @@ $(call gb_UnoApiTarget_UnoApiTarget,$(1),$(1))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
 ifneq ($(gb_UnoApi_ENABLE_INSTALL),)
 $(call gb_Package_Package_internal,$(1)_idl,$(SRCDIR))
-$(call gb_Package_set_outdir,$(1)_idl,$(INSTDIR))
 endif
 
 $(call gb_UnoApi_get_target,$(1)) :| $(dir $(call gb_UnoApi_get_target,$(1))).dir
