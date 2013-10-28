@@ -40,8 +40,6 @@ using namespace osl;
 #define UNO_JAVA_JFW_ENV_CLASSPATH "UNO_JAVA_JFW_ENV_CLASSPATH"
 #define UNO_JAVA_JFW_CLASSPATH_URLS "UNO_JAVA_JFW_CLASSPATH_URLS"
 #define UNO_JAVA_JFW_VENDOR_SETTINGS "UNO_JAVA_JFW_VENDOR_SETTINGS"
-#define UNO_JAVA_JFW_USER_DATA "UNO_JAVA_JFW_USER_DATA"
-#define UNO_JAVA_JFW_SHARED_DATA "UNO_JAVA_JFW_SHARED_DATA"
 
 namespace jfw
 {
@@ -65,21 +63,18 @@ OString getVendorSettingsPath(OUString const & sURL)
     return osSystemPathSettings;
 }
 
-OUString getParam(const char * name)
+OUString getParam(OUString const & name)
 {
     OUString retVal;
-    if (Bootstrap::get()->getFrom(OUString::createFromAscii(name), retVal))
-    {
-#if OSL_DEBUG_LEVEL >=2
-        OString sValue = OUStringToOString(retVal, osl_getThreadTextEncoding());
-        fprintf(stderr,"[Java framework] Using bootstrap parameter %s = %s.\n",
-                name, sValue.getStr());
-#endif
-    }
+    bool b = Bootstrap::get()->getFrom(name, retVal);
+    SAL_INFO(
+        "jfw",
+        "Using bootstrap parameter " << name << " = \"" << retVal << "\""
+            << (b ? "" : " (undefined)"));
     return retVal;
 }
 
-OUString getParamFirstUrl(const char * name)
+OUString getParamFirstUrl(OUString const & name)
 {
     // Some parameters can consist of multiple URLs (separated by space
     // characters, although trim() harmlessly also removes other white-space),
@@ -343,12 +338,12 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
 
 OUString BootParams::getUserData()
 {
-    return getParamFirstUrl(UNO_JAVA_JFW_USER_DATA);
+    return getParamFirstUrl("UNO_JAVA_JFW_USER_DATA");
 }
 
 OUString BootParams::getSharedData()
 {
-    return getParamFirstUrl(UNO_JAVA_JFW_SHARED_DATA);
+    return getParamFirstUrl("UNO_JAVA_JFW_SHARED_DATA");
 }
 
 OString BootParams::getClasspath()
