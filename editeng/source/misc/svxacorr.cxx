@@ -607,10 +607,6 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
     return bRet;
 }
 
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4706) // assignment within conditional expression
-#endif
 
 sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
                                 SvxAutoCorrDoc& rDoc, const OUString& rTxt,
@@ -697,9 +693,6 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
     return bRet;
 }
 
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 sal_Bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     xub_StrLen nSttPos, xub_StrLen nEndPos,

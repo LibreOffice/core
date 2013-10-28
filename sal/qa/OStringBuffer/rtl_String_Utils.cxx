@@ -45,10 +45,7 @@ sal_uInt32 AStringLen( const sal_Char *pAStr )
 
     return nStrLen;
 } // AStringLen
-/* disable assignment within condition expression */
-#if defined WNT && defined _MSC_VER
-#pragma warning( disable : 4706 )
-#endif
+
 sal_Char* cpystr( sal_Char* dst, const sal_Char* src )
 {
     const sal_Char* psrc = src;

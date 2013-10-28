@@ -50,7 +50,7 @@
 #pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
-#pragma warning(disable:4273 4701 4706)
+#pragma warning(disable:4273 4701)
 #endif
 
 #if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
