@@ -8071,7 +8071,10 @@ void ScInterpreter::ScMid()
         if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(STRING_MAXLEN) || fAnz > double(STRING_MAXLEN))
             PushIllegalArgument();
         else
-            PushString(aStr.copy(static_cast<sal_Int32>(fAnfang-1), static_cast<sal_Int32>(fAnz)));
+        {
+            sal_Int32 nCharacters = std::min<sal_Int32>(static_cast<sal_Int32>(fAnz), aStr.getLength() - fAnfang + 1);
+            PushString(aStr.copy(static_cast<sal_Int32>(fAnfang-1), nCharacters));
+        }
     }
 }
 
