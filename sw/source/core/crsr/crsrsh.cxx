@@ -2521,14 +2521,14 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     m_bGCAttr = m_bIgnoreReadonly = m_bSelTblCells = m_bBasicHideCrsr =
     m_bOverwriteCrsr = sal_False;
     m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = sal_True;
-#if defined(ANDROID) || defined(IOS)
     m_bSVCrsrVis = touch_ui_keyboard_visible();
-#else
-    m_bSVCrsrVis = sal_True;
-#endif
     m_bSetCrsrInReadOnly = sal_True;
     m_pVisCrsr = new SwVisCrsr( this );
     m_bMacroExecAllowed = rShell.IsMacroExecAllowed();
+
+#if defined(ANDROID) || defined(IOS)
+    HideCrsr();
+#endif
 }
 
 /// default constructor
@@ -2558,15 +2558,15 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     m_bGCAttr = m_bIgnoreReadonly = m_bSelTblCells = m_bBasicHideCrsr =
     m_bOverwriteCrsr = sal_False;
     m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = sal_True;
-#if defined(ANDROID) || defined(IOS)
-    m_bSVCrsrVis = touch_ui_keyboard_visible();
-#else
     m_bSVCrsrVis = sal_True;
-#endif
     m_bSetCrsrInReadOnly = sal_True;
 
     m_pVisCrsr = new SwVisCrsr( this );
     m_bMacroExecAllowed = true;
+
+#if defined(ANDROID) || defined(IOS)
+    HideCrsr();
+#endif
 }
 
 SwCrsrShell::~SwCrsrShell()
