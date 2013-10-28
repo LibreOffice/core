@@ -3237,7 +3237,7 @@ static inline bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
 void ScInterpreter::ScClean()
 {
     OUString aStr = GetString().getString();
-    for ( xub_StrLen i = 0; i < aStr.getLength(); i++ )
+    for ( sal_Int32 i = 0; i < aStr.getLength(); i++ )
     {
         if ( !lcl_ScInterpreter_IsPrintable( aStr[i] ) )
             aStr = aStr.replaceAt(i,1,"");
@@ -7181,7 +7181,7 @@ void ScInterpreter::ScAddressFunc()
         if (eConv == FormulaGrammar::CONV_OOO)
         {
             // Isolate Tab from 'Doc'#Tab
-            xub_StrLen nPos = ScCompiler::GetDocTabPos( sTabStr);
+            sal_Int32 nPos = ScCompiler::GetDocTabPos( sTabStr);
             if (nPos != STRING_NOTFOUND)
             {
                 if (sTabStr[nPos+1] == '$')
@@ -7682,9 +7682,9 @@ void ScInterpreter::ScReplace()
             PushIllegalArgument();
         else
         {
-            xub_StrLen nCount = static_cast<xub_StrLen>(fCount);
-            xub_StrLen nPos   = static_cast<xub_StrLen>(fPos);
-            xub_StrLen nLen   = aOldStr.getLength();
+            sal_Int32 nCount = static_cast<sal_Int32>(fCount);
+            sal_Int32 nPos   = static_cast<sal_Int32>(fPos);
+            sal_Int32 nLen   = aOldStr.getLength();
             if (nPos > nLen + 1)
                 nPos = nLen + 1;
             if (nCount > nLen - nPos + 1)
@@ -7916,7 +7916,7 @@ void ScInterpreter::ScRightB()
                 return ;
             }
             else
-                n = (xub_StrLen) nVal;
+                n = (sal_Int32) nVal;
         }
         else
             n = 1;
@@ -7967,7 +7967,7 @@ void ScInterpreter::ScLeftB()
                 return ;
             }
             else
-                n = (xub_StrLen) nVal;
+                n = (sal_Int32) nVal;
         }
         else
             n = 1;
@@ -7987,8 +7987,8 @@ void ScInterpreter::ScMidB()
         else
         {
 
-            aStr = lcl_LeftB(aStr, (xub_StrLen)fAnfang + (xub_StrLen)fAnz - 1);
-            sal_Int32 nCnt = getLengthB(aStr) - (xub_StrLen)fAnfang + 1;
+            aStr = lcl_LeftB(aStr, (sal_Int32)fAnfang + (sal_Int32)fAnz - 1);
+            sal_Int32 nCnt = getLengthB(aStr) - (sal_Int32)fAnfang + 1;
             aStr = lcl_RightB(aStr, nCnt>0 ? nCnt:0);
             PushString(aStr);
         }
@@ -8000,7 +8000,7 @@ void ScInterpreter::ScRight()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        xub_StrLen n;
+        sal_Int32 n;
         if (nParamCount == 2)
         {
             double nVal = ::rtl::math::approxFloor(GetDouble());
@@ -8010,7 +8010,7 @@ void ScInterpreter::ScRight()
                 return ;
             }
             else
-                n = (xub_StrLen) nVal;
+                n = (sal_Int32) nVal;
         }
         else
             n = 1;
@@ -8159,7 +8159,7 @@ void ScInterpreter::ScSubstitute()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 4 ) )
     {
-        xub_StrLen nAnz;
+        sal_Int32 nAnz;
         if (nParamCount == 4)
         {
             double fAnz = ::rtl::math::approxFloor(GetDouble());
@@ -8169,7 +8169,7 @@ void ScInterpreter::ScSubstitute()
                 return;
             }
             else
-                nAnz = (xub_StrLen) fAnz;
+                nAnz = (sal_Int32) fAnz;
         }
         else
             nAnz = 0;
@@ -8177,9 +8177,9 @@ void ScInterpreter::ScSubstitute()
         OUString sOldStr = GetString().getString();
         OUString sStr    = GetString().getString();
         sal_Int32 nPos = 0;
-        xub_StrLen nCount = 0;
-        xub_StrLen nNewLen = sNewStr.getLength();
-        xub_StrLen nOldLen = sOldStr.getLength();
+        sal_Int32 nCount = 0;
+        sal_Int32 nNewLen = sNewStr.getLength();
+        sal_Int32 nOldLen = sOldStr.getLength();
         while( true )
         {
             nPos = sStr.indexOf( sOldStr, nPos );
@@ -8192,7 +8192,7 @@ void ScInterpreter::ScSubstitute()
                     if ( CheckStringResultLen( sStr, sNewStr ) )
                     {
                         sStr = sStr.replaceAt(nPos, 0, sNewStr);
-                        nPos = sal::static_int_cast<xub_StrLen>( nPos + nNewLen );
+                        nPos = sal::static_int_cast<sal_Int32>( nPos + nNewLen );
                     }
                     else
                         break;
@@ -8224,8 +8224,8 @@ void ScInterpreter::ScRept()
             PushString( EMPTY_OUSTRING );
         else
         {
-            const xub_StrLen nLen = aStr.getLength();
-            xub_StrLen n = (xub_StrLen) fAnz;
+            const sal_Int32 nLen = aStr.getLength();
+            sal_Int32 n = (sal_Int32) fAnz;
             OUStringBuffer aRes(n*nLen);
             while( n-- )
                 aRes.append(aStr);
