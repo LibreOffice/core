@@ -160,7 +160,9 @@ void SwViewShell::DLPrePaint2(const Region& rRegion)
         if(mpTargetPaintWindow->GetPreRenderDevice())
         {
             mpBufferedOut = mpOut;
+#ifndef IOS
             mpOut = &(mpTargetPaintWindow->GetTargetOutputDevice());
+#endif
         }
 
         // remember original paint MapMode for wrapped FlyFrame paints
@@ -190,11 +192,13 @@ void SwViewShell::DLPostPaint2(bool bPaintFormLayer)
     mPrePostPaintRegions.pop(); // clear
     if(0 != mpTargetPaintWindow)
     {
+#ifndef IOS
         // #i74769# restore buffered OutDev
         if(mpTargetPaintWindow->GetPreRenderDevice())
         {
             mpOut = mpBufferedOut;
         }
+#endif
 
         // #i74769# use SdrPaintWindow now direct
         Imp()->GetDrawView()->EndDrawLayers(*mpTargetPaintWindow, bPaintFormLayer);
@@ -1786,16 +1790,22 @@ void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int
         MapMode aMapMode(aDevice.GetMapMode());
         aMapMode.SetMapUnit(MAP_TWIP);
         aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
+                // scaling
+        Fraction scaleX(contextWidth,tileWidth);
+        Fraction scaleY(contextHeight,tileHeight);
+        aMapMode.SetScaleX(scaleX);
+        aMapMode.SetScaleY(scaleY);
         aDevice.SetMapMode(aMapMode);
-        aDevice.SetOutputSizePixel(aDevice.PixelToLogic(Size(contextWidth, contextHeight)));
+        // resizes the virtual device so to contain the entrie context
+        aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
         // draw
         pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)));
         // copy the aDevice content to mpImage
         Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         BitmapReadAccess * readAccess = aBitmap.AcquireReadAccess();
         touch_lo_copy_buffer((void *) readAccess->GetBuffer(),
-                             tileWidth,
-                             tileHeight,
+                             contextWidth,
+                             contextHeight,
                              readAccess-> GetScanlineSize(),
                              context,
                              contextWidth,
