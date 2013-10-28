@@ -128,13 +128,7 @@
 
     switch ([[UIApplication sharedApplication] statusBarOrientation]) {
     case UIInterfaceOrientationPortrait:
-        // No idea why I need to do this ugly subtraction of
-        // applicationFrame.origin.y here. The handling of View frame
-        // and applicationFrame has been a bit of a mystery to me.
-        // Anyway, unless a Right Way to do this is figured out,
-        // corresponding hacks are needed for the other orientations,
-        // too, obiously.
-        CGContextTranslateCTM(context, 0, self.frame.size.height - applicationFrame.origin.y);
+        CGContextTranslateCTM(context, 0, self.frame.size.height);
         CGContextScaleCTM(context, 1, -1);
         break;
     case UIInterfaceOrientationLandscapeLeft:

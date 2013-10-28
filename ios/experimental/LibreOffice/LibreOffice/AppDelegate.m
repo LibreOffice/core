@@ -51,9 +51,6 @@ static BOOL keyboardShows;
     vc.view = self.view;
     theView = self.view;
 
-    // This is baaad
-    theView->applicationFrame = applicationFrame;
-
     self.view->textView = [[UITextView alloc] initWithFrame: r];
     self.view->textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.view->textView.alpha = 0;
@@ -71,9 +68,9 @@ static BOOL keyboardShows;
     NSLog(@"statusBarOrientation: %ld", (long) [[UIApplication sharedApplication] statusBarOrientation]);
 
     if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]))
-        touch_lo_set_view_size(applicationFrame.size.height, applicationFrame.size.width);
+        touch_lo_set_view_size(r.size.height, r.size.width);
     else
-        touch_lo_set_view_size(applicationFrame.size.width, applicationFrame.size.height);
+        touch_lo_set_view_size(r.size.width, r.size.height);
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
