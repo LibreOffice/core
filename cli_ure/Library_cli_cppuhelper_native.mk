@@ -14,7 +14,7 @@ $(eval $(call gb_Library_Assembly,cli_cppuhelper))
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
 # in CLR meta-data - use of this type may lead to a runtime exception":
 $(eval $(call gb_Library_add_cxxflags,cli_cppuhelper,\
-	-AI $(gb_Helper_OUTDIRLIBDIR) \
+	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
 	-clr \
 	-wd4339 \
 ))

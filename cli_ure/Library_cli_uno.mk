@@ -10,7 +10,7 @@
 $(eval $(call gb_Library_Library,cli_uno))
 
 $(eval $(call gb_Library_add_cxxflags,cli_uno,\
-	-AI $(gb_Helper_OUTDIRLIBDIR) \
+	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
 	-clr \
 	-wd4339 \
 ))

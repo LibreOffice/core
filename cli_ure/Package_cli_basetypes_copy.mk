@@ -8,13 +8,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,cli_basetypes_copy,$(WORKDIR)))
+$(eval $(call gb_Package_Package,cli_basetypes_copy,$(INSTROOT)))
 
 $(eval $(call gb_Package_set_outdir,cli_basetypes_copy,$(INSTDIR)))
 
 # duplicate copy to work around CLR DLL finding brain damage
 $(eval $(call gb_Package_add_files,cli_basetypes_copy,$(SDKDIRNAME)/bin,\
-	CliLibraryTarget/cli_basetypes.dll \
+	$(LIBO_URE_LIB_FOLDER)/cli_basetypes.dll \
 ))
 
 # vim: set noet sw=4 ts=4:
