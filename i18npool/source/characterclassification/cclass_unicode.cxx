@@ -132,7 +132,6 @@ cclass_Unicode::getCharType( const OUString& Text, sal_Int32* nPos, sal_Int32 in
     using namespace ::com::sun::star::i18n::KCharacterType;
 
     sal_uInt32 ch = Text.iterateCodePoints(nPos, increment);
-    if (increment > 0) ch = Text.iterateCodePoints(nPos, 0);
     switch ( u_charType(ch) ) {
     // Upper
     case U_UPPERCASE_LETTER :
@@ -204,9 +203,16 @@ sal_Int32 SAL_CALL
 cclass_Unicode::getStringType( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& /*rLocale*/ ) throw(RuntimeException) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
 
-    sal_Int32 result = getCharType(Text, &nPos, 0);
-    for (sal_Int32 i = 1; i < nCount && nPos < Text.getLength(); i++)
+    sal_Int32 result = 0;
+
+    while (nCount && nPos < Text.getLength())
+    {
+        sal_Int32 nOrigPos = nPos;
         result |= getCharType(Text, &nPos, 1);
+        sal_Int32 nUtf16Units = nPos - nOrigPos;
+        nCount -= nUtf16Units;
+    }
+
     return result;
 }
 
