@@ -3190,11 +3190,11 @@ void ScInterpreter::ScNumberValue()
     {
         OUString aTemporary( nDecSep >= 0 ? aInputString.copy( 0, nDecSep ) : aInputString );
         sal_Int32 nIndex = 0;
-        do
+        while (nIndex < aGroupSeparator.getLength())
         {
             sal_uInt32 nChar = aGroupSeparator.iterateCodePoints( &nIndex );
             aTemporary = aTemporary.replaceAll( OUString( &nChar, 1 ), "" );
-        } while ( nIndex < aGroupSeparator.getLength() );
+        }
         if ( nDecSep >= 0 )
             aInputString = aTemporary + aInputString.copy( nDecSep );
         else
