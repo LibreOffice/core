@@ -86,9 +86,9 @@ static sal_uInt16 SAL_CALL getCombState(const sal_Unicode *text, sal_Int32 pos)
 
     if (text[pos+1] == SARA_AM) {
         if ((1 << ch1) & is_ST_COM)
-        return  ST_COM;
+            return  ST_COM;
         else
-        ch2 = CT_AD1;
+            ch2 = CT_AD1;
     }
 
     return thaiCompRel[ch1][ch2];
@@ -137,9 +137,9 @@ void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 nStart
     while (pos < endPos) {
         end += getACell(str, start, endPos);
         while (pos < end) {
-        nextCellIndex[pos] = end;
-        previousCellIndex[pos] = start;
-        pos++;
+            nextCellIndex[pos] = end;
+            previousCellIndex[pos] = start;
+            pos++;
         }
         start = end;
     }
