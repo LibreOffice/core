@@ -1782,13 +1782,16 @@ void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int
         // TODO create a VirtualDevice based on SystemGraphicsData instead so
         // that we get direct rendering; something like:
         //
-        // SystemGraphicsData aData;
-        // [setup the aData]
-        // VirtualDevice aDevice(&aData, [color depth]);
-        //VirtualDevice aDevice;
-        //aDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
-        pViewShell->PaintTile(pViewShell->GetOut(), Rectangle(tilePosX, tilePosY, tileWidth, tileHeight));
-        Bitmap aBitmap(pViewShell->GetOut()->GetBitmap(Point(0,0), pViewShell->GetOut()->PixelToLogic(Size(contextWidth, contextHeight))));
+        VirtualDevice aDevice;
+        MapMode aMapMode(aDevice.GetMapMode());
+        aMapMode.SetMapUnit(MAP_TWIP);
+        aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
+        aDevice.SetMapMode(aMapMode);
+        aDevice.SetOutputSizePixel(aDevice.PixelToLogic(Size(contextWidth, contextHeight)));
+        // draw
+        pViewShell->PaintTile(&aDevice, Rectangle(Point(tilePosX, tilePosY), Size(tileWidth, tileHeight)));
+        // copy the aDevice content to mpImage
+        Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         BitmapReadAccess * readAccess = aBitmap.AcquireReadAccess();
         touch_lo_copy_buffer((void *) readAccess->GetBuffer(),
                              tileWidth,
