@@ -399,14 +399,13 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
             // Comment?
             if ( c == '\'' )
             {
-                c = getChar();
-
-                // Remove all characters until end of line or EOF
-                sal_Unicode cPeek = c;
-                while( cPeek != 0 && testCharFlags( cPeek, CHAR_EOL ) == sal_False )
-                {
+                // Skip all characters until end of input or end of line:
+                for (;;) {
+                    c = peekChar();
+                    if (c == 0 || testCharFlags(c, CHAR_EOL)) {
+                        break;
+                    }
                     getChar();
-                    cPeek = peekChar();
                 }
 
                 reType = TT_COMMENT;
@@ -540,7 +539,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     // All other will remain TT_UNKNOWN
 
     // Save end position
-    rpEndPos = *mpActualPos == 0 ? mpActualPos - 1 : mpActualPos;
+    rpEndPos = mpActualPos;
     return sal_True;
 }
 

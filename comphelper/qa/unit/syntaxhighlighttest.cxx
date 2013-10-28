@@ -21,13 +21,94 @@ class SyntaxHighlightTest : public CppUnit::TestFixture
 {
 public:
     void testBasicString();
+    void testBasicComment();
+    void testBasicCommentNewline();
+    void testBasicEmptyComment();
+    void testBasicEmptyCommentNewline();
+    void testBasic();
 
     CPPUNIT_TEST_SUITE(SyntaxHighlightTest);
     CPPUNIT_TEST(testBasicString);
+    CPPUNIT_TEST(testBasicComment);
+    CPPUNIT_TEST(testBasicCommentNewline);
+    CPPUNIT_TEST(testBasicEmptyComment);
+    CPPUNIT_TEST(testBasicEmptyCommentNewline);
+    CPPUNIT_TEST(testBasic);
     CPPUNIT_TEST_SUITE_END();
 };
 
-void SyntaxHighlightTest::testBasicString()
+void SyntaxHighlightTest::testBasicString() {
+    SyntaxHighlighter h;
+    h.initialize(HIGHLIGHT_BASIC);
+    OUString s("\"foo\"");
+    std::vector<HighlightPortion> ps;
+    h.getHighlightPortions(0, s, ps);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
+    CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
+    CPPUNIT_ASSERT_EQUAL(5, ps[0].nEnd);
+    CPPUNIT_ASSERT_EQUAL(TT_STRING, ps[0].tokenType);
+}
+
+void SyntaxHighlightTest::testBasicComment() {
+    SyntaxHighlighter h;
+    h.initialize(HIGHLIGHT_BASIC);
+    OUString s("' foo");
+    std::vector<HighlightPortion> ps;
+    h.getHighlightPortions(0, s, ps);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
+    CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
+    CPPUNIT_ASSERT_EQUAL(5, ps[0].nEnd);
+    CPPUNIT_ASSERT_EQUAL(TT_COMMENT, ps[0].tokenType);
+}
+
+void SyntaxHighlightTest::testBasicCommentNewline() {
+    SyntaxHighlighter h;
+    h.initialize(HIGHLIGHT_BASIC);
+    OUString s("' foo\n");
+    std::vector<HighlightPortion> ps;
+    h.getHighlightPortions(0, s, ps);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<std::vector<HighlightPortion>::size_type>(2), ps.size());
+    CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
+    CPPUNIT_ASSERT_EQUAL(5, ps[0].nEnd);
+    CPPUNIT_ASSERT_EQUAL(TT_COMMENT, ps[0].tokenType);
+    CPPUNIT_ASSERT_EQUAL(5, ps[1].nBegin);
+    CPPUNIT_ASSERT_EQUAL(6, ps[1].nEnd);
+    CPPUNIT_ASSERT_EQUAL(TT_EOL, ps[1].tokenType);
+}
+
+void SyntaxHighlightTest::testBasicEmptyComment() {
+    SyntaxHighlighter h;
+    h.initialize(HIGHLIGHT_BASIC);
+    OUString s("'");
+    std::vector<HighlightPortion> ps;
+    h.getHighlightPortions(0, s, ps);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
+    CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
+    CPPUNIT_ASSERT_EQUAL(1, ps[0].nEnd);
+    CPPUNIT_ASSERT_EQUAL(TT_COMMENT, ps[0].tokenType);
+}
+
+void SyntaxHighlightTest::testBasicEmptyCommentNewline() {
+    SyntaxHighlighter h;
+    h.initialize(HIGHLIGHT_BASIC);
+    OUString s("'\n");
+    std::vector<HighlightPortion> ps;
+    h.getHighlightPortions(0, s, ps);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<std::vector<HighlightPortion>::size_type>(2), ps.size());
+    CPPUNIT_ASSERT_EQUAL(0, ps[0].nBegin);
+    CPPUNIT_ASSERT_EQUAL(1, ps[0].nEnd);
+    CPPUNIT_ASSERT_EQUAL(TT_COMMENT, ps[0].tokenType);
+    CPPUNIT_ASSERT_EQUAL(1, ps[1].nBegin);
+    CPPUNIT_ASSERT_EQUAL(2, ps[1].nEnd);
+    CPPUNIT_ASSERT_EQUAL(TT_EOL, ps[1].tokenType);
+}
+
+void SyntaxHighlightTest::testBasic()
 {
     OUString aBasicString("        if Mid(sText,iRun,1 )<> \" \" then Mid( sText ,iRun, 1, Chr( 1 + Asc( Mid(sText,iRun,1 )) ) '");
 
@@ -46,13 +127,6 @@ void SyntaxHighlightTest::testBasicString()
         prevEnd = itr->nEnd;
     }
     CPPUNIT_ASSERT_EQUAL(aBasicString.getLength(), prevEnd);
-
-    // The last portion is an empty comment consisting just of the leading
-    // apostrophe:
-    assert(!aPortions.empty());
-    CPPUNIT_ASSERT_EQUAL(98, aPortions.back().nBegin);
-    CPPUNIT_ASSERT_EQUAL(99, aPortions.back().nEnd);
-    CPPUNIT_ASSERT_EQUAL(TT_COMMENT, aPortions.back().tokenType);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SyntaxHighlightTest);
