@@ -1217,19 +1217,23 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         }
 
         // Rudimentary check if a pattern interferes with decimal number.
-        nIndex = 0;
-        sal_uInt32 cDecSep = aDecSep.iterateCodePoints( &nIndex);
-        for (vector<OUString>::const_iterator aIt = theDateAcceptancePatterns.begin();
-                aIt != theDateAcceptancePatterns.end(); ++aIt)
+        // But only if not inherited in which case we don't have aDecSep here.
+        if (!aDecSep.isEmpty())
         {
-            if ((*aIt).getLength() == (cDecSep <= 0xffff ? 3 : 4))
+            nIndex = 0;
+            sal_uInt32 cDecSep = aDecSep.iterateCodePoints( &nIndex);
+            for (vector<OUString>::const_iterator aIt = theDateAcceptancePatterns.begin();
+                    aIt != theDateAcceptancePatterns.end(); ++aIt)
             {
-                nIndex = 1;
-                if ((*aIt).iterateCodePoints( &nIndex) == cDecSep)
+                if ((*aIt).getLength() == (cDecSep <= 0xffff ? 3 : 4))
                 {
-                    ++nError;
-                    fprintf( stderr, "Error: Date acceptance pattern '%s' matches decimal number '#%s#'\n",
-                            OSTR( *aIt), OSTR( aDecSep));
+                    nIndex = 1;
+                    if ((*aIt).iterateCodePoints( &nIndex) == cDecSep)
+                    {
+                        ++nError;
+                        fprintf( stderr, "Error: Date acceptance pattern '%s' matches decimal number '#%s#'\n",
+                                OSTR( *aIt), OSTR( aDecSep));
+                    }
                 }
             }
         }
