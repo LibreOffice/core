@@ -7,17 +7,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# CliUnoApiTarget class
+# CliUnoApi class
 
-gb_CliUnoApiTarget_EXT := $(gb_CliAssembly_POLICYEXT)
+gb_CliUnoApi_EXT := $(gb_CliAssembly_POLICYEXT)
 
-gb_CliUnoApiTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,climaker)
-gb_CliUnoApiTarget_COMMAND := $(call gb_Executable_get_command,climaker)
+gb_CliUnoApi_KEYFILE_DEFAULT := $(gb_CliAssembly_KEYFILE_DEFAULT)
 
-define gb_CliUnoApiTarget__command
+gb_CliUnoApi_DEPS := $(call gb_Executable_get_runtime_dependencies,climaker)
+gb_CliUnoApi_COMMAND := $(call gb_Executable_get_command,climaker)
+
+define gb_CliUnoApi__command
 $(call gb_Output_announce,$(2),$(true),CLI,4)
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_CliUnoApiTarget_COMMAND) \
+	$(gb_CliUnoApi_COMMAND) \
 		--out $(1) \
 		--assembly-company "LibreOffice" \
 		--assembly-description "This assembly contains metadata for the LibreOffice API." \
@@ -29,96 +31,38 @@ $(call gb_Helper_abbreviate_dirs,\
 )
 endef
 
-$(dir $(call gb_CliUnoApiTarget_get_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_CliUnoApiTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(call gb_CliUnoApiTarget_get_target,%) : $(gb_CliUnoApiTarget_DEPS)
-	$(call gb_CliUnoApiTarget__command,$@,$*,$<)
-
-.PHONY : $(call gb_CliUnoApiTarget_get_clean_target,%)
-$(call gb_CliUnoApiTarget_get_clean_target,%) :
+.PHONY : $(call gb_CliUnoApi_get_clean_target,%)
+$(call gb_CliUnoApi_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),CLI,4)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_CliUnoApiTarget_get_target,$*) \
+		rm -f $(call gb_CliUnoApi_get_target,$*) \
 	)
 
-define gb_CliUnoApiTarget_CliUnoApiTarget
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_API :=
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_ASSEMBLIES :=
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_DEPS :=
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_KEYFILE :=
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_VERSION :=
-
-$(call gb_CliUnoApiTarget_get_target,$(1)) :| $(dir $(call gb_CliUnoApiTarget_get_target,$(1))).dir
-
-endef
-
-define gb_CliUnoApiTarget_set_keyfile
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_KEYFILE := $(2)
-$(call gb_CliUnoApiTarget_get_target,$(1)) : $(2)
-
-endef
-
-define gb_CliUnoApiTarget_set_version
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_VERSION := $(2)
-
-endef
-
-define gb_CliUnoApiTarget_wrap_api
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_API := $(call gb_UnoApiTarget_get_target,$(2))
-$(call gb_CliUnoApiTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
-
-endef
-
-define gb_CliUnoApiTarget__use_api
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_DEPS += $(2)
-$(call gb_CliUnoApiTarget_get_target,$(1)) : $(2)
-
-endef
-
-define gb_CliUnoApiTarget_use_api
-$(foreach api,$(2),$(call gb_CliUnoApiTarget__use_api,$(1),$(call gb_UnoApiTarget_get_target,$(api))))
-
-endef
-
-define gb_CliUnoApiTarget_use_assembly
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_ASSEMBLIES += $(call gb_CliUnoApi_get_target,$(2))
-$(call gb_CliUnoApiTarget_get_target,$(1)) : $(call gb_CliUnoApi_get_target,$(2))
-
-endef
-
-define gb_CliUnoApiTarget_use_assemblies
-$(foreach assembly,$(2),$(call gb_CliUnoApiTarget_use_assembly,$(1),$(assembly)))
-
-endef
-
-# CliUnoApi class
-
-gb_CliUnoApi_EXT := $(gb_CliUnoApiTarget_EXT)
-gb_CliUnoApi_KEYFILE_DEFAULT := $(gb_CliAssembly_KEYFILE_DEFAULT)
 
 # Create a CLI library for UNO API
 #
 # gb_CliUnoApi_CliUnoApi target
 define gb_CliUnoApi_CliUnoApi
-$(call gb_CliUnoApiTarget_CliUnoApiTarget,$(1))
 $(call gb_CliAssembly_CliAssembly,$(1))
 
-$(call gb_CliUnoApiTarget_set_keyfile,$(1),$(gb_CliUnoApi_KEYFILE_DEFAULT))
+$(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_API :=
+$(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_ASSEMBLIES :=
+$(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_DEPS :=
+$(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_KEYFILE :=
+$(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_VERSION :=
 
-$(call gb_CliUnoApi_get_target,$(1)) : $(call gb_CliUnoApiTarget_get_target,$(1))
+$(call gb_CliUnoApi_set_keyfile,$(1),$(gb_CliUnoApi_KEYFILE_DEFAULT))
+
 $(call gb_CliUnoApi_get_target,$(1)) :| $(call gb_CliAssembly_get_target,$(1))
 $(call gb_CliUnoApi_get_target,$(1)) :| $(dir $(call gb_CliUnoApi_get_target,$(1))).dir
-$(call gb_CliUnoApi_get_clean_target,$(1)) : $(call gb_CliUnoApiTarget_get_clean_target,$(1))
 $(call gb_CliUnoApi_get_clean_target,$(1)) : $(call gb_CliAssembly_get_clean_target,$(1))
 
-$(call gb_Deliver_add_deliverable,$(call gb_CliUnoApi_get_target,$(1)),$(call gb_CliUnoApiTarget_get_target,$(1)),$(1))
+$$(eval $$(call gb_Module_register_target,$(call gb_CliUnoApi_get_target,$(1)),$(call gb_CliUnoApi_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),CliUnoApi)
 
-$$(eval $$(call gb_Module_register_target,$(call gb_CliUnoApiTarget_get_target,$(1)),$(call gb_CliUnoApiTarget_get_clean_target,$(1))))
-$(call gb_Helper_make_userfriendly_targets,$(1),CliUnoApiTarget)
+
+$(call gb_CliUnoApi_get_target,$(1)) : $(gb_CliUnoApi_DEPS)
+	$$(call gb_CliUnoApi__command,$$@,$(1))
 
 endef
 
@@ -128,13 +72,14 @@ $(call gb_CliAssembly_set_configfile,$(1),$(2))
 endef
 
 define gb_CliUnoApi_set_keyfile
-$(call gb_CliUnoApiTarget_set_keyfile,$(1),$(2))
 $(call gb_CliAssembly_set_keyfile,$(1),$(2))
+$(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_KEYFILE := $(2)
+$(call gb_CliUnoApi_get_target,$(1)) : $(2)
 
 endef
 
 define gb_CliUnoApi_set_assembly_version
-$(call gb_CliUnoApiTarget_set_version,$(1),$(2))
+$(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_VERSION := $(2)
 
 endef
 
@@ -144,22 +89,30 @@ $(call gb_CliAssembly_set_policy,$(1),$(2),$(3))
 endef
 
 define gb_CliUnoApi_wrap_api
-$(call gb_CliUnoApiTarget_wrap_api,$(1),$(2))
+$(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_API := $(call gb_UnoApiTarget_get_target,$(2))
+$(call gb_CliUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
+
+endef
+
+define gb_CliUnoApi__use_api
+$(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_DEPS += $(2)
+$(call gb_CliUnoApi_get_target,$(1)) : $(2)
 
 endef
 
 define gb_CliUnoApi_use_api
-$(call gb_CliUnoApiTarget_use_api,$(1),$(2))
+$(foreach api,$(2),$(call gb_CliUnoApi__use_api,$(1),$(call gb_UnoApiTarget_get_target,$(api))))
 
 endef
 
 define gb_CliUnoApi_use_assembly
-$(call gb_CliUnoApiTarget_use_assembly,$(1),$(2))
+$(call gb_CliUnoApi_get_target,$(1)) : CLI_UNOAPI_ASSEMBLIES += $(call gb_CliUnoApi_get_target,$(2))
+$(call gb_CliUnoApi_get_target,$(1)) : $(call gb_CliUnoApi_get_target,$(2))
 
 endef
 
 define gb_CliUnoApi_use_assemblies
-$(call gb_CliUnoApiTarget_use_assemblies,$(1),$(2))
+$(foreach assembly,$(2),$(call gb_CliUnoApi_use_assembly,$(1),$(assembly)))
 
 endef
 

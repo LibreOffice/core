@@ -104,7 +104,7 @@ gbuild_TARGETS := AllLangHelp \
 	AutoInstall \
 	CliLibrary \
 	CliNativeLibrary \
-	CliUnoApiTarget \
+	CliUnoApi \
 	Configuration \
 	CppunitTest \
 	CustomTarget \
