@@ -494,7 +494,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 	xmlreader \
 ))
 
-# FIXME fdo#69601
+# this is NONE even though it is actually in URE because it is CliNativeLibrary
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
 ))

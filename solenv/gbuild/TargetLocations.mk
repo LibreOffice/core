@@ -19,8 +19,9 @@
 
 # outdir target pattern
 
+# thoese are hard-coded to URE for now since there are so few of them...
 gb_CliLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliLibrary_EXT)
-gb_CliNativeLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliNativeLibrary_EXT)
+gb_CliNativeLibrary_get_target = $(INSTROOT)/$(LIBO_URE_LIB_FOLDER)/$(1)$(gb_CliNativeLibrary_EXT)
 gb_CliUnoApi_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliUnoApi_EXT)
 gb_PackagePart_get_destinations = \
 	$(INSTDIR) \
@@ -69,8 +70,7 @@ gb_CliAssemblyTarget_get_target = $(WORKDIR)/CliAssemblyTarget/$(1).done
 gb_CliAssemblyTarget_get_assembly_target = $(WORKDIR)/CliAssemblyTarget/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
 gb_CliConfigTarget_get_target = $(WORKDIR)/CliConfigTarget/$(1).config
 gb_CliLibraryTarget_get_target = $(WORKDIR)/CliLibraryTarget/$(1)$(gb_CliLibraryTarget_EXT)
-gb_CliNativeLibraryTarget_get_external_target = $(WORKDIR)/CliNativeLibraryTarget/$(1).external
-gb_CliNativeLibraryTarget_get_target = $(WORKDIR)/CliNativeLibraryTarget/$(1)$(gb_CliNativeLibraryTarget_EXT)
+gb_CliNativeLibrary_get_preparation_target = $(WORKDIR)/CliNativeLibraryTarget/$(1).prepare
 gb_CliUnoApiTarget_get_target = $(WORKDIR)/CliUnoApiTarget/$(1)$(gb_CliUnoApiTarget_EXT)
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentTarget_get_target_for_build = $(WORKDIR_FOR_BUILD)/ComponentTarget/$(1).component
@@ -253,7 +253,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CliAssemblyTarget \
 	CliConfigTarget \
 	CliLibraryTarget \
-	CliNativeLibraryTarget \
+	CliNativeLibrary \
 	CliUnoApiTarget \
 	ComponentTarget \
 	CustomPackage \
@@ -328,7 +328,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	CliLibrary \
-	CliNativeLibrary \
 	CliUnoApi \
 	InstallScript \
 ))
