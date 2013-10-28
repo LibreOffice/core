@@ -2811,7 +2811,7 @@ void lcl_TableStyleTcPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<b
 
 void DocxAttributeOutput::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle)
 {
-    bool bDefault = false, bCustomStyle = false, bQFormat = false;
+    bool bDefault = false, bCustomStyle = false, bQFormat = false, bSemiHidden = false, bUnhideWhenUsed = false;
     OUString aStyleId, aName, aBasedOn;
     sal_Int32 nUiPriority = 0, nRsid = 0;
     uno::Sequence<beans::PropertyValue> aTblPr, aTcPr;
@@ -2831,6 +2831,10 @@ void DocxAttributeOutput::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle
             nUiPriority = rStyle[i].Value.get<sal_Int32>();
         else if (rStyle[i].Name == "qFormat")
             bQFormat = true;
+        else if (rStyle[i].Name == "semiHidden")
+            bSemiHidden = true;
+        else if (rStyle[i].Name == "unhideWhenUsed")
+            bUnhideWhenUsed = true;
         else if (rStyle[i].Name == "rsid")
             nRsid = rStyle[i].Value.get<sal_Int32>();
         else if (rStyle[i].Name == "tblPr")
@@ -2863,6 +2867,10 @@ void DocxAttributeOutput::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle
                 FSEND);
     if (bQFormat)
         m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
+    if (bSemiHidden)
+        m_pSerializer->singleElementNS(XML_w, XML_semiHidden, FSEND);
+    if (bUnhideWhenUsed)
+        m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
     if (nRsid)
     {
         // We want the rsid as a hex string, but always with the length of 8.

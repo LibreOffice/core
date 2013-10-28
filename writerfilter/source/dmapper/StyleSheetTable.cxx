@@ -584,8 +584,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_link:
         case NS_ooxml::LN_CT_Style_autoRedefine:
         case NS_ooxml::LN_CT_Style_hidden:
-        case NS_ooxml::LN_CT_Style_semiHidden:
-        case NS_ooxml::LN_CT_Style_unhideWhenUsed:
         case NS_ooxml::LN_CT_Style_locked:
         case NS_ooxml::LN_CT_Style_personal:
         case NS_ooxml::LN_CT_Style_personalCompose:
@@ -608,6 +606,8 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         break;
         case NS_ooxml::LN_CT_Style_rsid:
         case NS_ooxml::LN_CT_Style_qFormat:
+        case NS_ooxml::LN_CT_Style_semiHidden:
+        case NS_ooxml::LN_CT_Style_unhideWhenUsed:
         case NS_ooxml::LN_CT_Style_uiPriority:
             if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
             {
@@ -620,6 +620,10 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 }
                 else if (nSprmId == NS_ooxml::LN_CT_Style_qFormat)
                     aValue.Name = "qFormat";
+                else if (nSprmId == NS_ooxml::LN_CT_Style_semiHidden)
+                    aValue.Name = "semiHidden";
+                else if (nSprmId == NS_ooxml::LN_CT_Style_unhideWhenUsed)
+                    aValue.Name = "unhideWhenUsed";
                 else
                 {
                     aValue.Name = "uiPriority";
