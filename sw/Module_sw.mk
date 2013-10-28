@@ -46,7 +46,6 @@ endif
 
 $(eval $(call gb_Module_add_check_targets,sw,\
     CppunitTest_sw_uwriter \
-    CppunitTest_sw_uiwriter \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\
@@ -60,6 +59,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_rtfimport \
     CppunitTest_sw_odfexport \
     CppunitTest_sw_odfimport \
+    CppunitTest_sw_uiwriter \
 ))
 
 ifneq ($(DISABLE_CVE_TESTS),TRUE)
