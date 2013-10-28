@@ -587,7 +587,7 @@ void I18NStatus::setStatusText( const OUString& rText )
         /*
          *  #93614# convert fullwidth ASCII forms to ascii
          */
-        int nChars = rText.getLength()+1;
+        int nChars = rText.getLength();
         sal_Unicode* pBuffer = (sal_Unicode*)alloca( nChars*sizeof( sal_Unicode ) );
         for( int i = 0; i < nChars; i++ )
         {
@@ -596,7 +596,7 @@ void I18NStatus::setStatusText( const OUString& rText )
             else
                 pBuffer[i] = rText[i];
         }
-        OUString aText( pBuffer );
+        OUString aText( pBuffer, nChars );
         m_pStatusWindow->setText( aText );
         m_pStatusWindow->setPosition( m_pParent );
 
