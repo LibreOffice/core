@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_DOCLINKDIALOG_HXX_
-#define _SVX_DOCLINKDIALOG_HXX_
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_DOCLINKDIALOG_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_DOCLINKDIALOG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -79,6 +79,6 @@ namespace svx
 }   // namespace svx
 //......................................................................
 
-#endif // _SVX_DOCLINKDIALOG_HXX_
+#endif // INCLUDED_CUI_SOURCE_OPTIONS_DOCLINKDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

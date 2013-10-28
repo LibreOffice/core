@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CUI_DLGFACT_HXX
-#define _CUI_DLGFACT_HXX
+#ifndef INCLUDED_CUI_SOURCE_FACTORY_DLGFACT_HXX
+#define INCLUDED_CUI_SOURCE_FACTORY_DLGFACT_HXX
 
 #include <svx/svxdlg.hxx>
 #include <com/sun/star/container/XNameReplace.hpp>

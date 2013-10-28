@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CUI_TAB_LINE_HXX
-#define _CUI_TAB_LINE_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_CUITABLINE_HXX
+#define INCLUDED_CUI_SOURCE_INC_CUITABLINE_HXX
 
 #include <vector>
 #include <svx/tabline.hxx>
@@ -395,6 +395,6 @@ public:
     virtual void Resize();
 };
 
-#endif // _CUI_TAB_LINE_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_CUITABLINE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

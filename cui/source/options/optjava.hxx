@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_OPTJAVA_HXX
-#define _SVX_OPTJAVA_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTJAVA_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_OPTJAVA_HXX
 
 #include <config_features.h>
 
@@ -177,6 +177,6 @@ public:
     void                    SetClassPath( const OUString& _rPath );
 };
 
-#endif // #ifndef _SVX_OPTJAVA_HXX
+#endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTJAVA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

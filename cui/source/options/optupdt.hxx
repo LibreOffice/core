@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_OPTUPDT_HXX
-#define _SVX_OPTUPDT_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTUPDT_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_OPTUPDT_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>

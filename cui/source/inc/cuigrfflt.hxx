@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CUI_GRFFLT_HXX
-#define _CUI_GRFFLT_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_CUIGRFFLT_HXX
+#define INCLUDED_CUI_SOURCE_INC_CUIGRFFLT_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>

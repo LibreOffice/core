@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CUI_IMAPWND_HXX
-#define _CUI_IMAPWND_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_CUIIMAPWND_HXX
+#define INCLUDED_CUI_SOURCE_INC_CUIIMAPWND_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>

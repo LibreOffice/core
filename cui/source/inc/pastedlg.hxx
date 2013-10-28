@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _PASTEDLG_HXX
-#define _PASTEDLG_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_PASTEDLG_HXX
+#define INCLUDED_CUI_SOURCE_INC_PASTEDLG_HXX
 
 #include <map>
 #include <sot/formats.hxx>
@@ -64,6 +64,6 @@ public:
                         const TransferableObjectDescriptor* pDesc=0 );
 };
 
-#endif // _PASTEDLG_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_PASTEDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

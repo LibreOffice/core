@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _ACCCFG_HXX
-#define _ACCCFG_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_ACCCFG_HXX
+#define INCLUDED_CUI_SOURCE_INC_ACCCFG_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>

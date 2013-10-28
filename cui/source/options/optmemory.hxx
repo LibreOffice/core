@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _OFA_OPTMEMORY_HXX
-#define _OFA_OPTMEMORY_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTMEMORY_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_OPTMEMORY_HXX
 
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>

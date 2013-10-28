@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_BKWND_HYPERLINK_HXX
-#define _SVX_BKWND_HYPERLINK_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_HLMARKWN_HXX
+#define INCLUDED_CUI_SOURCE_INC_HLMARKWN_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <vcl/dialog.hxx>
@@ -97,6 +97,6 @@ public:
 };
 
 
-#endif  // _SVX_BKWND_HYPERLINK_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_HLMARKWN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

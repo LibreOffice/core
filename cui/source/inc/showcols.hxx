@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_SHOWCOLS_HXX
-#define _SVX_SHOWCOLS_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_SHOWCOLS_HXX
+#define INCLUDED_CUI_SOURCE_INC_SHOWCOLS_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>
@@ -52,6 +52,6 @@ protected:
     DECL_LINK(OnClickedOk, void *);
 };
 
-#endif // _SVX_SHOWCOLS_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_SHOWCOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

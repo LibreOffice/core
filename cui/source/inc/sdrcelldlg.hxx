@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_FORMAT_CELLS_DLG_HXX
-#define _SVX_FORMAT_CELLS_DLG_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_SDRCELLDLG_HXX
+#define INCLUDED_CUI_SOURCE_INC_SDRCELLDLG_HXX
 
 
 #include <sfx2/tabdlg.hxx>
@@ -46,7 +46,7 @@ public:
 
 };
 
-#endif // _SVX_FORMAT_CELLS_DLG_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_SDRCELLDLG_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

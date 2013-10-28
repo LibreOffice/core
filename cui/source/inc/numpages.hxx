@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_NUMPAGES_HXX
-#define _SVX_NUMPAGES_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_NUMPAGES_HXX
+#define INCLUDED_CUI_SOURCE_INC_NUMPAGES_HXX
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>

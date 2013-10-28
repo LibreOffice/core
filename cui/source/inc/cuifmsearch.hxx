@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CUI_FMSEARCH_HXX
-#define _CUI_FMSEARCH_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_CUIFMSEARCH_HXX
+#define INCLUDED_CUI_SOURCE_INC_CUIFMSEARCH_HXX
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
@@ -195,6 +195,6 @@ inline void FmSearchDialog::SetActiveField(const OUString& strField)
     LINK(this, FmSearchDialog, OnFieldSelected).Call(&m_lbField);
 }
 
-#endif // _CUI_FMSEARCH_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_CUIFMSEARCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

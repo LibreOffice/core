@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_DBREGISTERSETTING_HXX
-#define SVX_DBREGISTERSETTING_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTERSETTINGS_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTERSETTINGS_HXX
 
 #include <comphelper/stl_types.hxx>
 #include <svl/poolitem.hxx>
@@ -83,6 +83,6 @@ namespace svx
 //........................................................................
 }   // namespace svx
 //........................................................................
-#endif // SVX_DBREGISTERSETTING_HXX
+#endif // INCLUDED_CUI_SOURCE_OPTIONS_DBREGISTERSETTINGS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

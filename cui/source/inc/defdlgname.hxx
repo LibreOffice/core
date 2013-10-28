@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_DEF_DLG_NAME_HXX
-#define _SVX_DEF_DLG_NAME_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_DEFDLGNAME_HXX
+#define INCLUDED_CUI_SOURCE_INC_DEFDLGNAME_HXX
 
 // define ----------------------------------------------------------------
 

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CFGUTIL_HXX
-#define _CFGUTIL_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_CFGUTIL_HXX
+#define INCLUDED_CUI_SOURCE_INC_CFGUTIL_HXX
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>

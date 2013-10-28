@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SVX_OPTHEADERTABLISTBOX_HXX
-#define SVX_OPTHEADERTABLISTBOX_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTHEADERTABLISTBOX_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_OPTHEADERTABLISTBOX_HXX
 
 #include <svtools/simptabl.hxx>
 
@@ -33,6 +33,6 @@ namespace svx
         virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
     };
 } // svx
-#endif // SVX_OPTHEADERTABLISTBOX_HXX
+#endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTHEADERTABLISTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

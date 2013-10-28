@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ABOUT_HXX
-#define _ABOUT_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_ABOUT_HXX
+#define INCLUDED_CUI_SOURCE_INC_ABOUT_HXX
 
 #include <vcl/accel.hxx>
 #include <vcl/button.hxx>
@@ -69,7 +69,7 @@ public:
     DECL_LINK( HandleClick, PushButton* );
 };
 
-#endif // #ifndef _ABOUT_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_ABOUT_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

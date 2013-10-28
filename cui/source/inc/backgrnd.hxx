@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_BACKGRND_HXX
-#define _SVX_BACKGRND_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_BACKGRND_HXX
+#define INCLUDED_CUI_SOURCE_INC_BACKGRND_HXX
 
 #include <vcl/group.hxx>
 #include <svtools/stdctrl.hxx>
@@ -163,7 +163,7 @@ private:
     DECL_LINK(ModifyGradientHdl_Impl, void *);
 };
 
-#endif // #ifndef _SVX_BACKGRND_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_BACKGRND_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

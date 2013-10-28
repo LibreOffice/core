@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _OFA_AUTOCDLG_HXX
-#define _OFA_AUTOCDLG_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_AUTOCDLG_HXX
+#define INCLUDED_CUI_SOURCE_INC_AUTOCDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <svtools/langtab.hxx>

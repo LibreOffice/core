@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _CUI_CERTPATH_HXX
-#define _CUI_CERTPATH_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_CERTPATH_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_CERTPATH_HXX
 
 #include <sfx2/basedlgs.hxx>
 #include <svtools/simptabl.hxx>

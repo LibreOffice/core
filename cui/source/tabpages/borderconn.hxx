@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_BORDERCONN_HXX
-#define SVX_BORDERCONN_HXX
+#ifndef INCLUDED_CUI_SOURCE_TABPAGES_BORDERCONN_HXX
+#define INCLUDED_CUI_SOURCE_TABPAGES_BORDERCONN_HXX
 
 #include <sfx2/itemconnect.hxx>
 #include <svx/framebordertype.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_OPTJSEARCH_HXX_
-#define _SVX_OPTJSEARCH_HXX_
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTJSEARCH_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_OPTJSEARCH_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>

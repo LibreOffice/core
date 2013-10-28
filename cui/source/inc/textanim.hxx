@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_TEXTANIM_HXX
-#define _SVX_TEXTANIM_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_TEXTANIM_HXX
+#define INCLUDED_CUI_SOURCE_INC_TEXTANIM_HXX
 
 #include <vcl/field.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -107,6 +107,6 @@ public:
 };
 
 
-#endif // _SVX_TEXTANIM_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_TEXTANIM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SCRIPTDLG_HXX
-#define _SCRIPTDLG_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_SCRIPTDLG_HXX
+#define INCLUDED_CUI_SOURCE_INC_SCRIPTDLG_HXX
 
 #include <memory>
 
@@ -206,6 +206,6 @@ public:
     short           Execute();
 };
 
-#endif // _SCRIPTDLG_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_SCRIPTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

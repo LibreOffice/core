@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CUI_OPTABOUTCONFIG_HXX
-#define INCLUDED_CUI_OPTABOUTCONFIG_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTABOUTCONFIG_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_OPTABOUTCONFIG_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

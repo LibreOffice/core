@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SVX_CUIOPTGENRL_HXX
-#define SVX_CUIOPTGENRL_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_CUIOPTGENRL_HXX
+#define INCLUDED_CUI_SOURCE_INC_CUIOPTGENRL_HXX
 
 // include ---------------------------------------------------------------
 
@@ -73,7 +73,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
-#endif // #ifndef SVX_CUIOPTGENRL_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_CUIOPTGENRL_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

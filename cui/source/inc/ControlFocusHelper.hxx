@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SVX_CONTROLL_FUCUS_HELPER_HXX
-#define SVX_CONTROLL_FUCUS_HELPER_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_CONTROLFOCUSHELPER_HXX
+#define INCLUDED_CUI_SOURCE_INC_CONTROLFOCUSHELPER_HXX
 
 #include <vcl/ctrl.hxx>
 
@@ -37,6 +37,6 @@ public:
     virtual long    Notify( NotifyEvent& rNEvt );
 };
 
-#endif  // SVX_CONTROLL_FUCUS_HELPER_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_CONTROLFOCUSHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

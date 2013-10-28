@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_LABDLG_HXX
-#define _SVX_LABDLG_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_LABDLG_HXX
+#define INCLUDED_CUI_SOURCE_INC_LABDLG_HXX
 
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
@@ -119,6 +119,6 @@ public:
 };
 
 
-#endif //_SVX_LABDLG_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_LABDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

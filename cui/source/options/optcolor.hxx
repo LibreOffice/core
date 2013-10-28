@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SVX_OPTCOLOR_HXX
-#define SVX_OPTCOLOR_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTCOLOR_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_OPTCOLOR_HXX
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/group.hxx>

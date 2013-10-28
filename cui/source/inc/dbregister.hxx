@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SVX_DBREGISTER_HXX
-#define SVX_DBREGISTER_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
+#define INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
 
 #include <comphelper/stl_types.hxx>
 #include <rtl/ustring.hxx>
@@ -57,7 +57,7 @@ namespace svx
         sal_uLong               m_nOldCount;
         sal_Bool                m_bModified;
 
-#ifdef SVX_DBREGISTER_HXX
+#ifdef INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
         DECL_LINK( NewHdl, void * );
         DECL_LINK( EditHdl, void * );
         DECL_LINK( DeleteHdl, void * );
@@ -139,7 +139,7 @@ namespace svx
 }   // namespace svx
 //........................................................................
 
-#endif // SVX_DBREGISTER_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

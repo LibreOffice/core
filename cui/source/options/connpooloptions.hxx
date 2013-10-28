@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OFFAPP_CONNPOOLOPTIONS_HXX_
-#define _OFFAPP_CONNPOOLOPTIONS_HXX_
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLOPTIONS_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLOPTIONS_HXX
 
 #include <svl/solar.hrc>
 #include <sfx2/tabdlg.hxx>
@@ -71,6 +71,6 @@ namespace offapp
 
 } // namespace offapp
 
-#endif // _OFFAPP_CONNPOOLOPTIONS_HXX_
+#endif // INCLUDED_CUI_SOURCE_OPTIONS_CONNPOOLOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

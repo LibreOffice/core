@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_THESDLG_IMPL_HXX
-#define _SVX_THESDLG_IMPL_HXX
+#ifndef INCLUDED_CUI_SOURCE_DIALOGS_THESDLG_IMPL_HXX
+#define INCLUDED_CUI_SOURCE_DIALOGS_THESDLG_IMPL_HXX
 
 #include "thesdlg.hxx"
 

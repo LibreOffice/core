@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_NEWTABLEDLG_HXX
-#define _SVX_NEWTABLEDLG_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_NEWTABLEDLG_HXX
+#define INCLUDED_CUI_SOURCE_INC_NEWTABLEDLG_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
@@ -42,7 +42,7 @@ public:
     virtual sal_Int32 getColumns() const;
 };
 
-#endif // _SVX_NEWTABLEDLG_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_NEWTABLEDLG_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

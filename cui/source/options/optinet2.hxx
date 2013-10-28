@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_OPTINET_HXX
-#define _SVX_OPTINET_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/field.hxx>
@@ -224,7 +224,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
-#endif // #ifndef _SVX_OPTINET_HXX
+#endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

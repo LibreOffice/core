@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _LINKDLG_HXX
-#define _LINKDLG_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_LINKDLG_HXX
+#define INCLUDED_CUI_SOURCE_INC_LINKDLG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -117,6 +117,6 @@ public:
     void SetActLink( sfx2::SvBaseLink * pLink );
 };
 
-#endif // _LINKDLG_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_LINKDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

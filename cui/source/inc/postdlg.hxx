@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_POSTDLG_HXX
-#define _SVX_POSTDLG_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_POSTDLG_HXX
+#define INCLUDED_CUI_SOURCE_INC_POSTDLG_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>

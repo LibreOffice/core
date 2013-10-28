@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_OPTBASIC_HXX
-#define _SVX_OPTBASIC_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTBASIC_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_OPTBASIC_HXX
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
@@ -47,6 +47,6 @@ public:
 };
 
 
-#endif //_SVX_OPTBASIC_HXX
+#endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTBASIC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

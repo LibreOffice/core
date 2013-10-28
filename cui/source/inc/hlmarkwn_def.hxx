@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_BKWND_HYPERLINK_DEF_HXX
-#define _SVX_BKWND_HYPERLINK_DEF_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_HLMARKWN_DEF_HXX
+#define INCLUDED_CUI_SOURCE_INC_HLMARKWN_DEF_HXX
 
 #define LERR_NOERROR        0
 #define LERR_NOENTRIES      1

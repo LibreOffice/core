@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_ALIGN_HXX
-#define _SVX_ALIGN_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_ALIGN_HXX
+#define INCLUDED_CUI_SOURCE_INC_ALIGN_HXX
 
 // list box indexes
 #define ALIGNDLG_HORALIGN_STD       0

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CUI_PASSWDOMDLG_HXX_
-#define _CUI_PASSWDOMDLG_HXX_
+#ifndef INCLUDED_CUI_SOURCE_INC_PASSWDOMDLG_HXX
+#define INCLUDED_CUI_SOURCE_INC_PASSWDOMDLG_HXX
 
 
 #include <sfx2/basedlgs.hxx>

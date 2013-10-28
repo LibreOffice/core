@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CUI_GALDLG_HXX_
-#define _CUI_GALDLG_HXX_
+#ifndef INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX
+#define INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX
 
 #include "sal/config.h"
 
@@ -323,6 +323,6 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
 };
 
-#endif // _CUI_GALDLG_HXX_
+#endif // INCLUDED_CUI_SOURCE_INC_CUIGALDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

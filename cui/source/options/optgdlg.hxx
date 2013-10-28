@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _OFA_OPTGDLG_HXX
-#define _OFA_OPTGDLG_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTGDLG_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_OPTGDLG_HXX
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/field.hxx>
@@ -167,7 +167,7 @@ public:
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
-#endif // #ifndef _OFA_OPTGDLG_HXX
+#endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTGDLG_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

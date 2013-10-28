@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVXCFG_HXX
-#define _SVXCFG_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_CFG_HXX
+#define INCLUDED_CUI_SOURCE_INC_CFG_HXX
 
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
@@ -794,6 +794,6 @@ private:
 public:
     SvxIconChangeDialog(Window *pWindow, const OUString& aMessage);
 };
-#endif // _SVXCFG_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_CFG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_CFGCHART_HXX
-#define _SVX_CFGCHART_HXX
+#ifndef INCLUDED_CUI_SOURCE_OPTIONS_CFGCHART_HXX
+#define INCLUDED_CUI_SOURCE_OPTIONS_CFGCHART_HXX
 
 // header for TYPEINFO
 #include <tools/rtti.hxx>
@@ -109,6 +109,6 @@ private:
     SvxChartColorTable      m_aColorTable;
 };
 
-#endif  // _SVX_CFGCHART_HXX
+#endif // INCLUDED_CUI_SOURCE_OPTIONS_CFGCHART_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

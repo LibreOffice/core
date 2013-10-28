@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _ICCDLG_HXX
-#define _ICCDLG_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_ICONCDLG_HXX
+#define INCLUDED_CUI_SOURCE_INC_ICONCDLG_HXX
 
 #include <rtl/ustring.hxx>
 #include <svl/itempool.hxx>
@@ -226,6 +226,6 @@ public :
     EIconChoicePos      SetCtrlPos   ( const EIconChoicePos& rPos );
 };
 
-#endif //_ICCDLG_HXX
+#endif // INCLUDED_CUI_SOURCE_INC_ICONCDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

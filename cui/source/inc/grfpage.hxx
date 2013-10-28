@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_GRFPAGE_HXX
-#define _SVX_GRFPAGE_HXX
+#ifndef INCLUDED_CUI_SOURCE_INC_GRFPAGE_HXX
+#define INCLUDED_CUI_SOURCE_INC_GRFPAGE_HXX
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
