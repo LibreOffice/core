@@ -523,7 +523,7 @@ void lcl_GetColumnTypes(
         {
             aString = pDoc->GetString(nCol, nFirstRow, nTab);
             aString = aString.toAsciiUpperCase();
-            xub_StrLen nToken = comphelper::string::getTokenCount(aString, ',');
+            sal_Int32 nToken = comphelper::string::getTokenCount(aString, ',');
             if ( nToken > 1 )
             {
                 aFieldName = aString.getToken( 0, ',' );

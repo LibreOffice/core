@@ -1158,10 +1158,10 @@ namespace pcr
         //..............................................................
         StlSyntaxSequence< OUString > lcl_convertMultiLineToList( const OUString& _rCompsedTextWithLineBreaks )
         {
-            xub_StrLen nLines( comphelper::string::getTokenCount(_rCompsedTextWithLineBreaks, '\n') );
+            sal_Int32 nLines = comphelper::string::getTokenCount(_rCompsedTextWithLineBreaks, '\n');
             StlSyntaxSequence< OUString > aStrings( nLines );
             StlSyntaxSequence< OUString >::iterator stringItem = aStrings.begin();
-            for ( xub_StrLen token = 0; token < nLines; ++token, ++stringItem )
+            for ( sal_Int32 token = 0; token < nLines; ++token, ++stringItem )
                 *stringItem = _rCompsedTextWithLineBreaks.getToken( token, '\n' );
             return aStrings;
         }

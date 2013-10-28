@@ -62,8 +62,8 @@ using namespace com::sun::star::uno;
 
 static void lcl_FillCombo( ComboBox& rCombo, const OUString& rList, sal_Unicode cSelect )
 {
-    xub_StrLen i;
-    xub_StrLen nCount = comphelper::string::getTokenCount(rList, '\t');
+    sal_Int32 i;
+    sal_Int32 nCount = comphelper::string::getTokenCount(rList, '\t');
     for ( i=0; i<nCount; i+=2 )
         rCombo.InsertEntry( rList.getToken(i,'\t') );
 
@@ -86,8 +86,8 @@ static sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const OUString& rList )
     OUString aStr = rCombo.GetText();
     if ( !aStr.isEmpty() )
     {
-        xub_StrLen nCount = comphelper::string::getTokenCount(rList, '\t');
-        for ( xub_StrLen i=0; i<nCount; i+=2 )
+        sal_Int32 nCount = comphelper::string::getTokenCount(rList, '\t');
+        for ( sal_Int32 i=0; i<nCount; i+=2 )
         {
             if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.getToken(i,'\t') ) )
                 c = (sal_Unicode)rList.getToken(i+1,'\t').toInt32();
@@ -404,8 +404,8 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
     pLbCustomLang->SelectLanguage(static_cast<LanguageType>(nLanguage), true);
 
     // *** column type ListBox ***
-    xub_StrLen nCount = comphelper::string::getTokenCount(aColumnUser, ';');
-    for (xub_StrLen i=0; i<nCount; i++)
+    sal_Int32 nCount = comphelper::string::getTokenCount(aColumnUser, ';');
+    for (sal_Int32 i=0; i<nCount; i++)
         pLbType->InsertEntry( aColumnUser.getToken( i, ';' ) );
 
     pLbType->SetSelectHdl( LINK( this, ScImportAsciiDlg, LbColTypeHdl ) );

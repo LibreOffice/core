@@ -45,7 +45,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     bSaveAsShown = sal_True;    // "true" if not in string (after CSV import)
     bQuoteAllText = false;
     bSaveFormulas = false;
-    xub_StrLen nTokenCount = comphelper::string::getTokenCount(rStr, ',');
+    sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
     if ( nTokenCount >= 3 )
     {
         // first 3 tokens: common

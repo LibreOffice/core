@@ -1071,9 +1071,9 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const OUString& rText )
     /*  #i60296# If string contains mixed script types, the space character
         U+0020 may be drawn with a wrong width (from non-fixed-width Asian or
         Complex font). Now we draw every non-space portion separately. */
-    xub_StrLen nTokenCount = comphelper::string::getTokenCount(aPlainText, ' ');
+    sal_Int32 nTokenCount = comphelper::string::getTokenCount(aPlainText, ' ');
     sal_Int32 nCharIxInt = 0;
-    for( xub_StrLen nToken = 0; nToken < nTokenCount; ++nToken )
+    for( sal_Int32 nToken = 0; nToken < nTokenCount; ++nToken )
     {
         sal_Int32 nBeginIx = nCharIxInt;
         OUString aToken = aPlainText.getToken( 0, ' ', nCharIxInt );

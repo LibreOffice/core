@@ -797,9 +797,9 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
     if( GetString( aString, rScTokArr ) )
     {
         rScTokArr.Clear();
-        xub_StrLen nTokenCnt = comphelper::string::getTokenCount(aString, cStringSep);
+        sal_Int32 nTokenCnt = comphelper::string::getTokenCount(aString, cStringSep);
         sal_Int32 nStringIx = 0;
-        for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+        for( sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken )
         {
             OUString aToken( aString.getToken( 0, cStringSep, nStringIx ) );
             if( bTrimLeadingSpaces )

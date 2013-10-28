@@ -2121,11 +2121,11 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                        comphelper::string::getTokenCount(aExpand, '\t') ) )
             {
                 OUString sTmp( aExpand );
-                xub_StrLen nRows = comphelper::string::getTokenCount(sTmp, '\n');
+                sal_Int32 nRows = comphelper::string::getTokenCount(sTmp, '\n');
                 if( nRows )
                     --nRows;
                 sTmp = sTmp.getToken( 0, '\n' );
-                xub_StrLen nCols = comphelper::string::getTokenCount(sTmp, '\t');
+                sal_Int32 nCols = comphelper::string::getTokenCount(sTmp, '\t');
 
                 // at least one column & row must be there
                 if( !nRows || !nCols )

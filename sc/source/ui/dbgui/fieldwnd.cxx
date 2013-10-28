@@ -579,10 +579,10 @@ void ScDPFieldControlBase::DrawBackground( OutputDevice& rDev )
         support hard line breaks here. This part will draw each line of the
         text for itself. */
 
-    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(GetText(), '\n');
+    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(GetText(), '\n');
     long nY = (aSize.Height() - nTokenCnt * rDev.GetTextHeight()) / 2;
     sal_Int32 nStringIx = 0;
-    for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+    for( sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken )
     {
         OUString aLine( GetText().getToken( 0, '\n', nStringIx ) );
         Point aLinePos( (aSize.Width() - rDev.GetCtrlTextWidth( aLine )) / 2, nY );

@@ -1513,10 +1513,10 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             break;
         case TYP_DROPDOWN:
         {
-            xub_StrLen nTokenCount = comphelper::string::getTokenCount(sPar2, DB_DELIM);
+            sal_Int32 nTokenCount = comphelper::string::getTokenCount(sPar2, DB_DELIM);
             Sequence<OUString> aEntries(nTokenCount);
             OUString* pArray = aEntries.getArray();
-            for(xub_StrLen nToken = 0; nToken < nTokenCount; nToken++)
+            for(sal_Int32 nToken = 0; nToken < nTokenCount; nToken++)
                 pArray[nToken] = sPar2.getToken(nToken, DB_DELIM);
             ((SwDropDownField*)pTmpFld)->SetItems(aEntries);
             ((SwDropDownField*)pTmpFld)->SetName(sPar1);

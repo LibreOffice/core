@@ -278,7 +278,7 @@ sal_Bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilt
     // find total size of source area
     SCCOL nWidth = 0;
     SCROW nHeight = 0;
-    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(aTempArea, ';');
+    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(aTempArea, ';');
     sal_Int32 nStringIx = 0;
     xub_StrLen nToken;
 

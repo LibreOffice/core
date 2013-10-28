@@ -1568,9 +1568,9 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         Data validity is BIFF8 only (important for the XclExpString object).
                         Excel uses the NUL character as string list separator. */
                     mxString1.reset( new XclExpString( EXC_STR_8BITLENGTH ) );
-                    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(aString, '\n');
+                    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(aString, '\n');
                     sal_Int32 nStringIx = 0;
-                    for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+                    for( sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken )
                     {
                         OUString aToken( aString.getToken( 0, '\n', nStringIx ) );
                         if( nToken > 0 )
@@ -1807,7 +1807,7 @@ XclExpWebQuery::XclExpWebQuery(
     mbEntireDoc( false )
 {
     // comma separated list of HTML table names or indexes
-    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rSource, ';');
+    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(rSource, ';');
     OUString aNewTables;
     OUString aAppendTable;
     sal_Int32 nStringIx = 0;

@@ -1074,7 +1074,7 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
     m_pPathList->Clear();
     xub_StrLen i;
     sal_Int32 nIdx = 0;
-    xub_StrLen nCount = comphelper::string::getTokenCount(_rPath, CLASSPATH_DELIMITER);
+    sal_Int32 nCount = comphelper::string::getTokenCount(_rPath, CLASSPATH_DELIMITER);
     for ( i = 0; i < nCount; ++i )
     {
         OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );

@@ -54,10 +54,10 @@ SW_DLLPUBLIC OUString MakeSender()
 
     OUString sRet;
     OUString sSenderToken(SW_RES(STR_SENDER_TOKENS));
-    xub_StrLen nTokenCount = comphelper::string::getTokenCount(sSenderToken, ';');
+    sal_Int32 nTokenCount = comphelper::string::getTokenCount(sSenderToken, ';');
     sal_Int32 nSttPos = 0;
     bool bLastLength = true;
-    for( xub_StrLen i = 0; i < nTokenCount; i++ )
+    for( sal_Int32 i = 0; i < nTokenCount; i++ )
     {
         OUString sToken = sSenderToken.getToken( 0, ';', nSttPos );
         if (sToken == "COMPANY")

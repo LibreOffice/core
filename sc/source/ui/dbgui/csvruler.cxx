@@ -62,8 +62,8 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
         sSplits = sFixedWidthLists;
 
         // String ends with a semi-colon so there is no 'int' after the last one.
-        xub_StrLen n = comphelper::string::getTokenCount(sSplits, ';') - 1;
-        for (xub_StrLen i = 0; i < n; ++i)
+        sal_Int32 n = comphelper::string::getTokenCount(sSplits, ';') - 1;
+        for (sal_Int32 i = 0; i < n; ++i)
             aSplits.Insert( sSplits.getToken(i, ';').toInt32() );
     }
 }

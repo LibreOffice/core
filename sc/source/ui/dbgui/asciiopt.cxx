@@ -183,8 +183,8 @@ bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
 static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeFieldSeps )
 {
     OUString aFieldSeps;
-    xub_StrLen nSub = comphelper::string::getTokenCount( rSepNums, '/');
-    for (xub_StrLen i=0; i<nSub; ++i)
+    sal_Int32 nSub = comphelper::string::getTokenCount( rSepNums, '/');
+    for (sal_Int32 i=0; i<nSub; ++i)
     {
         OUString aCode = rSepNums.getToken( i, '/' );
         if ( aCode.equalsAscii(pStrMrg) )
@@ -204,7 +204,7 @@ static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeF
 
 void ScAsciiOptions::ReadFromString( const OUString& rString )
 {
-    xub_StrLen nCount = comphelper::string::getTokenCount(rString, ',');
+    sal_Int32 nCount = comphelper::string::getTokenCount(rString, ',');
     OUString aToken;
 
     // Field separator.
@@ -247,7 +247,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         delete[] pColFormat;
 
         aToken = rString.getToken(4,',');
-        xub_StrLen nSub = comphelper::string::getTokenCount(aToken, '/');
+        sal_Int32 nSub = comphelper::string::getTokenCount(aToken, '/');
         nInfoCount = nSub / 2;
         if (nInfoCount)
         {

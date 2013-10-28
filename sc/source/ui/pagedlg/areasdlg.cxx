@@ -372,8 +372,8 @@ sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
 
         ScAddress aAddr;
         ScRange aRange;
-        xub_StrLen nSepCount = comphelper::string::getTokenCount(aStrPrintArea, sep);
-        for ( xub_StrLen i = 0; i < nSepCount && bPrintAreaOk; ++i )
+        sal_Int32 nSepCount = comphelper::string::getTokenCount(aStrPrintArea, sep);
+        for ( sal_Int32 i = 0; i < nSepCount && bPrintAreaOk; ++i )
         {
             OUString aOne = aStrPrintArea.getToken(i, sep);
             sal_uInt16 nResult = aRange.Parse( aOne, pDoc, eConv );

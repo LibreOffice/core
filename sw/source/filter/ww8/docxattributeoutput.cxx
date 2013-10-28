@@ -911,9 +911,9 @@ void DocxAttributeOutput::DoWriteCmd( const OUString& rCmd )
 void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
 {
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-    xub_StrLen nNbToken = comphelper::string::getTokenCount(rInfos.sCmd, '\t');
+    sal_Int32 nNbToken = comphelper::string::getTokenCount(rInfos.sCmd, '\t');
 
-    for ( xub_StrLen i = 0; i < nNbToken; i++ )
+    for ( sal_Int32 i = 0; i < nNbToken; i++ )
     {
         OUString sToken = rInfos.sCmd.getToken( i, '\t' );
         if ( rInfos.eType ==  ww::eCREATEDATE

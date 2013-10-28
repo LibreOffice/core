@@ -69,7 +69,7 @@ namespace
         if ( !bAsterix )
         {
             OUString sName = _sFieldName;
-            xub_StrLen nTokenCount = comphelper::string::getTokenCount(sName, '.');
+            sal_Int32 nTokenCount = comphelper::string::getTokenCount(sName, '.');
             if (    (nTokenCount == 2 && sName.getToken(1,'.')[0] == '*' )
                 ||  (nTokenCount == 3 && sName.getToken(2,'.')[0] == '*' ) )
             {
@@ -139,9 +139,8 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
     SetTitleFont(aTitleFont);
 
     OUString aTxt(ModuleRes(STR_QUERY_SORTTEXT));
-    xub_StrLen nCount = comphelper::string::getTokenCount(aTxt, ';');
-    xub_StrLen nIdx = 0;
-    for (; nIdx < nCount; nIdx++)
+    sal_Int32 nCount = comphelper::string::getTokenCount(aTxt, ';');
+    for (sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
         m_pOrderCell->InsertEntry(aTxt.getToken(nIdx, ';'));
 
     for(long i=0;i < BROW_ROW_CNT;i++)
@@ -202,7 +201,7 @@ void OSelectionBrowseBox::initialize()
         // We slip in a few optionals one, too.
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
-            xub_StrLen nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
+            sal_Int32 nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
             for (xub_StrLen nIdx = 0; nIdx < nCount; nIdx++)
                 m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(nIdx, ';'));
         }

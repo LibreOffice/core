@@ -314,9 +314,9 @@ void ScTpUserLists::MakeListStr( OUString& rListStr )
 {
     OUString  aStr;
 
-    xub_StrLen nToken = comphelper::string::getTokenCount(rListStr, LF);
+    sal_Int32 nToken = comphelper::string::getTokenCount(rListStr, LF);
 
-    for(xub_StrLen i=0;i<nToken;i++)
+    for(sal_Int32 i=0; i<nToken; i++)
     {
         OUString aString = comphelper::string::strip(rListStr.getToken(i, LF), ' ');
         aStr += aString;

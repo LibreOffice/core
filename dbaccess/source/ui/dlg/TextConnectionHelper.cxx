@@ -86,7 +86,7 @@ DBG_NAME(OTextConnectionHelper)
     {
         DBG_CTOR(OTextConnectionHelper,NULL);
 
-        xub_StrLen nCnt = comphelper::string::getTokenCount(m_aFieldSeparatorList, '\t');
+        sal_Int32 nCnt = comphelper::string::getTokenCount(m_aFieldSeparatorList, '\t');
         xub_StrLen i;
 
         for( i = 0 ; i < nCnt ; i += 2 )
@@ -469,7 +469,7 @@ DBG_NAME(OTextConnectionHelper)
     void OTextConnectionHelper::SetSeparator( ComboBox& rBox, const OUString& rList, const OUString& rVal )
     {
         char    nTok = '\t';
-        xub_StrLen  nCnt(comphelper::string::getTokenCount(rList, nTok));
+        sal_Int32   nCnt = comphelper::string::getTokenCount(rList, nTok);
         xub_StrLen  i;
 
         for( i=0 ; i<nCnt ; i+=2 )

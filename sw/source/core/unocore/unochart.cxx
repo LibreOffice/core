@@ -457,7 +457,7 @@ static bool GetSubranges( const OUString &rRangeRepresentation,
 {
     bool bRes = true;
     OUString aRangesStr( rRangeRepresentation );
-    xub_StrLen nLen = comphelper::string::getTokenCount(aRangesStr, ';');
+    sal_Int32 nLen = comphelper::string::getTokenCount(aRangesStr, ';');
     uno::Sequence< OUString > aRanges( nLen );
 
     sal_Int32 nCnt = 0;
@@ -1767,7 +1767,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
 
     // multiple ranges are delimeted by a ';' like in
     // "Table1.A1:A4;Table1.C2:C5" the same table must be used in all ranges!
-    xub_StrLen nNumRanges = comphelper::string::getTokenCount(aRangeRepresentation, ';');
+    sal_Int32 nNumRanges = comphelper::string::getTokenCount(aRangeRepresentation, ';');
     SwTable* pFirstFoundTable = 0;  // to check that only one table will be used
     for (sal_uInt16 i = 0;  i < nNumRanges;  ++i)
     {
@@ -1835,7 +1835,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
 
     // multiple ranges are delimeted by a ' ' like in
     // "Table1.$A$1:.$A$4 Table1.$C$2:.$C$5" the same table must be used in all ranges!
-    xub_StrLen nNumRanges = comphelper::string::getTokenCount(aXMLRange, ' ');
+    sal_Int32 nNumRanges = comphelper::string::getTokenCount(aXMLRange, ' ');
     OUString aFirstFoundTable; // to check that only one table will be used
     for (sal_uInt16 i = 0;  i < nNumRanges;  ++i)
     {

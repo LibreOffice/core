@@ -3272,14 +3272,13 @@ void ScCompiler::AutoCorrectParsedSymbol()
         else if ( (GetCharTableFlags( c1, 0 ) & SC_COMPILER_C_CHAR_VALUE)
                && (GetCharTableFlags( c2, c2p ) & SC_COMPILER_C_CHAR_VALUE) )
         {
-            xub_StrLen nXcount;
-            if ( (nXcount = comphelper::string::getTokenCount(aCorrectedSymbol, cx)) > 1 )
+            if ( comphelper::string::getTokenCount(aCorrectedSymbol, cx) > 1 )
             {   // x => *
                 sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
                 aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUString(cx), OUString(c));
                 bCorrected = true;
             }
-            if ( (nXcount = comphelper::string::getTokenCount(aCorrectedSymbol, cX)) > 1 )
+            if ( comphelper::string::getTokenCount(aCorrectedSymbol, cX) > 1 )
             {   // X => *
                 sal_Unicode c = mxSymbols->getSymbolChar(ocMul);
                 aCorrectedSymbol = aCorrectedSymbol.replaceAll(OUString(cX), OUString(c));
@@ -3297,7 +3296,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 aDoc = aSymbol.copy(0, nPosition + 2);
                 aSymbol = aSymbol.copy(nPosition + 2);
             }
-            xub_StrLen nRefs = comphelper::string::getTokenCount(aSymbol, ':');
+            sal_Int32 nRefs = comphelper::string::getTokenCount(aSymbol, ':');
             bool bColons;
             if ( nRefs > 2 )
             {   // duplicated or too many ':'? B:2::C10 => B2:C10

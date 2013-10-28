@@ -211,9 +211,9 @@ OUString ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const OUString& r
     OUString aNewName;
     ScRangeName* pRangeNames = pDoc->GetRangeName();
     ScRangeList aRangeList;
-    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rOrigName, ';');
+    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(rOrigName, ';');
     sal_Int32 nStringIx = 0;
-    for( xub_StrLen nToken = 0; nToken < nTokenCnt; nToken++ )
+    for( sal_Int32 nToken = 0; nToken < nTokenCnt; nToken++ )
     {
         OUString aToken( rOrigName.getToken( 0, ';', nStringIx ) );
         if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )

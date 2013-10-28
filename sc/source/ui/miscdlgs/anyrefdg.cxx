@@ -148,8 +148,8 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
 
     ScAddress::Details aDetails(pDoc->GetAddressConvention(), 0, 0);
     ScRangeUtil aRangeUtil;
-    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rStr, ';');
-    for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+    sal_Int32 nTokenCnt = comphelper::string::getTokenCount(rStr, ';');
+    for( sal_Int32 nToken = 0; nToken < nTokenCnt; ++nToken )
     {
         ScRange aRange;
         OUString aRangeStr( rStr.getToken( nToken, ';' ) );
