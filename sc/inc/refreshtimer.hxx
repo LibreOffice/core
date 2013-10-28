@@ -66,10 +66,6 @@ class ScRefreshTimer : public AutoTimer
 private:
     ScRefreshTimerControl * const * ppControl;
 
-    void AppendToControl() {}
-
-    void RemoveFromControl() {}
-
     void Start()
     {
         if ( GetTimeout() )
@@ -104,12 +100,7 @@ public:
 
     void StartRefreshTimer() { Start(); }
 
-    void SetRefreshControl( ScRefreshTimerControl * const * pp )
-    {
-        RemoveFromControl();
-        ppControl = pp;
-        AppendToControl();
-    }
+    void SetRefreshControl( ScRefreshTimerControl * const * pp ) { ppControl = pp; }
 
     void SetRefreshHandler( const Link& rLink ) { SetTimeoutHdl( rLink ); }
 

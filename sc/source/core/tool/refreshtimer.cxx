@@ -37,7 +37,6 @@ ScRefreshTimer::~ScRefreshTimer()
 {
     if ( IsActive() )
         Stop();
-    RemoveFromControl();
 }
 
 
