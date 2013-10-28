@@ -19,6 +19,8 @@
 
 #include <math.h>
 
+#include <cppuhelper/supportsservice.hxx>
+
 #include <rtl/string.hxx>
 
 #include <vcl/syschild.hxx>
@@ -711,7 +713,7 @@ OUString SAL_CALL Player::getImplementationName()
 sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName == AVMEDIA_GST_PLAYER_SERVICENAME;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // ------------------------------------------------------------------------------

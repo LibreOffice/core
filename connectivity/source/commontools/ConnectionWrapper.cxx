@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <rtl/digest.h>
@@ -133,7 +134,7 @@ OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (::com::su
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL OConnectionWrapper::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::comphelper::findValue( getSupportedServiceNames(), _rServiceName, sal_True ).getLength() != 0;
+    return cppu::supportsService(this, _rServiceName);
 }
 
 // --------------------------------------------------------------------------------
