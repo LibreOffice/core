@@ -134,7 +134,6 @@ ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToke
     {
     case A_TOKEN( rPr ):    // "CT_TextCharPropertyBag" The text char properties of this text run.
         return new TextCharacterPropertiesContext( *this, rAttribs, mpRunPtr->getTextCharacterProperties() );
-        break;
     case A_TOKEN( t ):      // "xsd:string" minOccurs="1" The actual text string.
         mbIsInText = true;
         break;

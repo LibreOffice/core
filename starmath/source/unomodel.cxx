@@ -949,7 +949,6 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_INTEROP_GRAB_BAG:
                 getGrabBagItem(*pValue);
             break;
-            break;
         }
     }
 }
