@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __GLOBSTR_HRC_
-#define __GLOBSTR_HRC_
+#ifndef SC_GLOBSTR_HRC
+#define SC_GLOBSTR_HRC
 
 #define STR_UNDO_DELETECELLS        1
 #define STR_UNDO_CUT                2
