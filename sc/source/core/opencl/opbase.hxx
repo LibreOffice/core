@@ -14,6 +14,8 @@
 
 #include "formula/token.hxx"
 
+#include <boost/shared_ptr.hpp>
+
 #define ISNAN
 
 namespace sc { namespace opencl {
@@ -49,7 +51,7 @@ public:
     {
         Children.reserve(8);
     }
-    std::vector<std::shared_ptr<FormulaTreeNode>> Children;
+    std::vector<boost::shared_ptr<FormulaTreeNode> > Children;
     formula::FormulaToken *GetFormulaToken(void) const
     {
         return mpCurrentFormula;
@@ -66,7 +68,7 @@ private:
 class DynamicKernelArgument
 {
 public:
-    DynamicKernelArgument(const std::string &s, std::shared_ptr<FormulaTreeNode> ft);
+    DynamicKernelArgument(const std::string &s, boost::shared_ptr<FormulaTreeNode> ft);
 
     const std::string &GetNameAsString(void) const { return mSymName; }
     /// Generate declaration
@@ -94,7 +96,7 @@ public:
     const std::string& GetName(void) const { return mSymName; }
 protected:
     const std::string mSymName;
-    std::shared_ptr<FormulaTreeNode> mFormulaTree;
+    boost::shared_ptr<FormulaTreeNode> mFormulaTree;
     // Used by marshaling
     cl_mem mpClmem;
 };

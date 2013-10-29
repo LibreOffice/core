@@ -16,7 +16,7 @@ using namespace formula;
 namespace sc { namespace opencl {
 
 DynamicKernelArgument::DynamicKernelArgument(const std::string &s,
-   std::shared_ptr<FormulaTreeNode> ft):
+   boost::shared_ptr<FormulaTreeNode> ft):
     mSymName(s), mFormulaTree(ft), mpClmem(NULL) {}
 
 /// Generate declaration
