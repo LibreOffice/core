@@ -354,29 +354,40 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
             Color aPixelColor = aFront;
             Color aBackColor = aBack;
 
-            m_pBitmapCtl->SetPixelColor( aPixelColor );
-            m_pBitmapCtl->SetBackgroundColor( aBackColor );
+            // #i123564# This causes the wrong color to be selected
+            // as foreground color when the 1st bitmap in the bitmap
+            // list is selected. I see no reason why this is done,
+            // thus I will take it out
+            //
+            //if( 0 == m_pLbBitmaps->GetSelectEntryPos() )
+            //{
+            //  m_pLbColor->SelectEntry( Color( COL_BLACK ) );
+            //  ChangePixelColorHdl_Impl( this );
+            //}
+            //else
 
-            // if the entry is not in the listbox,
-            // the color is added temporarily
-            if( 0 == m_pLbBitmaps->GetSelectEntryPos() )
-            {
-                m_pLbColor->SelectEntry( Color( COL_BLACK ) );
-                ChangePixelColorHdl_Impl( this );
-            }
-            else
-                m_pLbColor->SelectEntry( aPixelColor );
+            m_pLbColor->SelectEntry( aPixelColor );
+
             if( m_pLbColor->GetSelectEntryCount() == 0 )
             {
                 m_pLbColor->InsertEntry( aPixelColor, OUString() );
                 m_pLbColor->SelectEntry( aPixelColor );
             }
+
             m_pLbBackgroundColor->SelectEntry( aBackColor );
+
             if( m_pLbBackgroundColor->GetSelectEntryCount() == 0 )
             {
                 m_pLbBackgroundColor->InsertEntry( aBackColor, OUString() );
                 m_pLbBackgroundColor->SelectEntry( aBackColor );
             }
+
+            // update m_pBitmapCtl, rXFSet and m_pCtlPreview
+            m_pBitmapCtl->SetPixelColor( aPixelColor );
+            m_pBitmapCtl->SetBackgroundColor( aBackColor );
+            rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
+            m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
+            m_pCtlPreview->Invalidate();
         }
         else
         {

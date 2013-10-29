@@ -484,8 +484,9 @@ namespace drawinglayer
                             aGraphicRange.transform(mpOutputDevice->GetViewTransformation() * aLocalTransform);
 
                             // extract discrete size of graphic
-                            const sal_Int32 nBWidth(basegfx::fround(aGraphicRange.getWidth()));
-                            const sal_Int32 nBHeight(basegfx::fround(aGraphicRange.getHeight()));
+                            // caution: when getting to zero, nothing would be painted; thus, do not allow this
+                            const sal_Int32 nBWidth(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getWidth())));
+                            const sal_Int32 nBHeight(std::max(sal_Int32(1), basegfx::fround(aGraphicRange.getHeight())));
 
                             // only do something when bitmap fill has a size in discrete units
                             if(nBWidth > 0 && nBHeight > 0)
@@ -497,9 +498,17 @@ namespace drawinglayer
                                 static bool bEnablePreScaling(true);
                                 const bool bPreScaled(bEnablePreScaling && nBWidth * nBHeight < (250 * 250));
 
+                                // ... but only up to a maximum size, else it gets too expensive
                                 if(bPreScaled)
                                 {
-                                    // ... but only up to a maximum size, else it gets too expensive
+                                    // if color depth is below 24bit, expand before scaling for better quality.
+                                    // This is even needed for low colors, else the scale will produce
+                                    // a bitmap in gray or Black/White (!)
+                                    if(aBitmapEx.GetBitCount() < 24)
+                                    {
+                                        aBitmapEx.Convert(BMP_CONVERSION_24BIT);
+                                    }
+
                                     aBitmapEx.Scale(aNeededBitmapSizePixel, BMP_SCALE_INTERPOLATE);
                                 }
 
