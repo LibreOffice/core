@@ -25,6 +25,7 @@
 #include <svgio/svgreader/svgpolynode.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -117,7 +118,7 @@ namespace svgio
             {
                 drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 
-                pStyle->add_path(basegfx::B2DPolyPolygon(*getPolygon()), aNewTarget);
+                pStyle->add_path(basegfx::B2DPolyPolygon(*getPolygon()), aNewTarget, 0);
 
                 if(aNewTarget.hasElements())
                 {

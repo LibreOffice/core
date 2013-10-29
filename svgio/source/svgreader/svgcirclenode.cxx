@@ -141,7 +141,7 @@ namespace svgio
 
                     drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 
-                    pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget);
+                    pStyle->add_path(basegfx::B2DPolyPolygon(aPath), aNewTarget, 0);
 
                     if(aNewTarget.hasElements())
                     {

@@ -19,25 +19,18 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include "XMLImageMapContext.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -50,7 +43,8 @@
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "XMLStringBufferImportContext.hxx"
 #include <tools/debug.hxx>
-
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -506,33 +500,30 @@ void XMLImageMapPolygonContext::ProcessAttribute(
     bValid = bViewBoxOK && bPointsOK;
 }
 
-void XMLImageMapPolygonContext::Prepare(
-    Reference<XPropertySet> & rPropertySet)
+void XMLImageMapPolygonContext::Prepare(Reference<XPropertySet> & rPropertySet)
 {
     // process view box
-    SdXMLImExViewBox aViewBox(sViewBoxString,
-                              GetImport().GetMM100UnitConverter());
+    SdXMLImExViewBox aViewBox(sViewBoxString, GetImport().GetMM100UnitConverter());
 
     // get polygon sequence
-    awt::Point aPoint(aViewBox.GetX(), aViewBox.GetY());
-    awt::Size aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
-    SdXMLImExPointsElement aPoints( sPointsString, aViewBox, aPoint, aSize,
-                                    GetImport().GetMM100UnitConverter() );
-    PointSequenceSequence aPointSeqSeq = aPoints.GetPointSequenceSequence();
+    basegfx::B2DPolygon aPolygon;
 
-    // only use first element of sequence-sequence
-    if (aPointSeqSeq.getLength() > 0)
+    if(basegfx::tools::importFromSvgPoints(aPolygon, sPointsString))
     {
-        Any aAny;
-        aAny <<= aPointSeqSeq[0];
-        rPropertySet->setPropertyValue(sPolygon, aAny);
+        if(aPolygon.count())
+        {
+            com::sun::star::drawing::PointSequence aPointSequence;
+            uno::Any aAny;
+
+            basegfx::tools::B2DPolygonToUnoPointSequence(aPolygon, aPointSequence);
+            aAny <<= aPointSequence;
+            rPropertySet->setPropertyValue(sPolygon, aAny);
+        }
     }
 
     // parent properties
     XMLImageMapObjectContext::Prepare(rPropertySet);
 }
-
-
 
 class XMLImageMapCircleContext : public XMLImageMapObjectContext
 {

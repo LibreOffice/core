@@ -40,6 +40,7 @@ SLOFILES= $(SLO)$/b2dclipstate.obj	\
           $(SLO)$/keystoplerp.obj	\
           $(SLO)$/liangbarsky.obj	\
           $(SLO)$/tools.obj		    \
+          $(SLO)$/stringconversiontools.obj \
           $(SLO)$/unopolypolygon.obj
 
 # --- Targets ----------------------------------

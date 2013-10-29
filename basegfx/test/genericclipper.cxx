@@ -91,12 +91,12 @@ public:
         fprintf(stderr, "%s input LHS - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(
-                        aSelfIntersect),
+                        aSelfIntersect, true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
         fprintf(stderr, "%s input RHS - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(
-                        aRect),
+                        aRect, true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
@@ -106,14 +106,14 @@ public:
 #if defined(VERBOSE)
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
-                    basegfx::tools::exportToSvgD(aRes),
+                    basegfx::tools::exportToSvgD(aRes, true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
         rtl::OUString aValid=rtl::OUString::createFromAscii(pValidSvgD);
 
         CPPUNIT_ASSERT_MESSAGE(pName,
-                               basegfx::tools::exportToSvgD(aRes) == aValid);
+                               basegfx::tools::exportToSvgD(aRes, true, true, false) == aValid);
     }
 
     void validateOr()

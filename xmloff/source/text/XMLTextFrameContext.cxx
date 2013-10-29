@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include <tools/debug.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -52,14 +51,15 @@
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "XMLImageMapContext.hxx"
 #include "XMLTextFrameContext.hxx"
-
 #include "XMLTextListBlockContext.hxx"
 #include "XMLTextListItemContext.hxx"
 #include <xmloff/attrlist.hxx>
 #include <comphelper/stl_types.hxx>
-
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <map>
-
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -296,36 +296,53 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         }
     }
 
-    OUString sContourPolyPolygon(
-            RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon") );
-    Reference < XPropertySetInfo > xPropSetInfo =
-        rPropSet->getPropertySetInfo();
-    if( xPropSetInfo->hasPropertyByName(
-                                                    sContourPolyPolygon ) &&
-        nWidth > 0 && nHeight > 0 && bPixelWidth == bPixelHeight &&
-        (bPath ? sD : sPoints).getLength() )
+    OUString sContourPolyPolygon(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon"));
+    Reference < XPropertySetInfo > xPropSetInfo = rPropSet->getPropertySetInfo();
+
+    if(xPropSetInfo->hasPropertyByName(sContourPolyPolygon) && nWidth > 0 && nHeight > 0 && bPixelWidth == bPixelHeight && (bPath ? sD : sPoints).getLength())
     {
-        awt::Point aPoint( 0,  0 );
-        awt::Size aSize( nWidth, nHeight );
-        SdXMLImExViewBox aViewBox( sViewBox,
-                                   GetImport().GetMM100UnitConverter());
+        const SdXMLImExViewBox aViewBox( sViewBox, GetImport().GetMM100UnitConverter());
+        basegfx::B2DPolyPolygon aPolyPolygon;
         Any aAny;
+
         if( bPath )
         {
-            SdXMLImExSvgDElement aPoints( sD, aViewBox, aPoint, aSize,
-                                          GetImport().GetMM100UnitConverter() );
-            aAny <<= aPoints.GetPointSequenceSequence();
+            basegfx::tools::importFromSvgD(aPolyPolygon, sD, true, 0);
         }
         else
         {
-            SdXMLImExPointsElement aPoints( sPoints, aViewBox, aPoint, aSize,
-                                        GetImport().GetMM100UnitConverter() );
-            aAny <<= aPoints.GetPointSequenceSequence();
+            basegfx::B2DPolygon aPolygon;
+
+            if(basegfx::tools::importFromSvgPoints(aPolygon, sPoints))
+            {
+                aPolyPolygon = basegfx::B2DPolyPolygon(aPolygon);
+            }
         }
 
-        OUString sIsPixelContour(
-                RTL_CONSTASCII_USTRINGPARAM("IsPixelContour") );
-        xPropSet->setPropertyValue( sContourPolyPolygon, aAny );
+        if(aPolyPolygon.count())
+        {
+            const basegfx::B2DRange aSourceRange(
+                aViewBox.GetX(), aViewBox.GetY(),
+                aViewBox.GetX() + aViewBox.GetWidth(), aViewBox.GetY() + aViewBox.GetHeight());
+            const basegfx::B2DRange aTargetRange(
+                0.0, 0.0,
+                nWidth, nHeight);
+
+            if(!aSourceRange.equal(aTargetRange))
+            {
+                aPolyPolygon.transform(
+                    basegfx::tools::createSourceRangeTargetRangeTransform(
+                        aSourceRange,
+                        aTargetRange));
+            }
+
+            com::sun::star::drawing::PointSequenceSequence aPointSequenceSequence;
+            basegfx::tools::B2DPolyPolygonToUnoPointSequenceSequence(aPolyPolygon, aPointSequenceSequence);
+            aAny <<= aPointSequenceSequence;
+            xPropSet->setPropertyValue( sContourPolyPolygon, aAny );
+        }
+
+        const OUString sIsPixelContour(RTL_CONSTASCII_USTRINGPARAM("IsPixelContour"));
 
         if( xPropSetInfo->hasPropertyByName( sIsPixelContour ) )
         {
@@ -333,8 +350,8 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
             xPropSet->setPropertyValue( sIsPixelContour, aAny );
         }
 
-        OUString sIsAutomaticContour(
-                RTL_CONSTASCII_USTRINGPARAM("IsAutomaticContour") );
+        const OUString sIsAutomaticContour(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticContour") );
+
         if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
         {
             aAny.setValue( &bAuto, ::getBooleanCppuType() );

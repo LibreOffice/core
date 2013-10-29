@@ -175,7 +175,7 @@ public:
         B2DPolyPolygon randomPoly;
         tools::importFromSvgD(
             randomPoly,
-            rtl::OUString::createFromAscii(randomSvg));
+            rtl::OUString::createFromAscii(randomSvg), false, 0);
         std::for_each(randomPoly.begin(),
                       randomPoly.end(),
                       boost::bind(
@@ -243,16 +243,14 @@ public:
         B2DPolyPolygon aTmp1;
         CPPUNIT_ASSERT_MESSAGE(sName,
                                tools::importFromSvgD(
-                                   aTmp1,
-                                   rtl::OUString::createFromAscii(sSvg)));
+                                   aTmp1, rtl::OUString::createFromAscii(sSvg), false, 0));
 
         const rtl::OUString aSvg=
-            tools::exportToSvgD(toTest.solveCrossovers());
+            tools::exportToSvgD(toTest.solveCrossovers(), , true, true, false);
         B2DPolyPolygon aTmp2;
         CPPUNIT_ASSERT_MESSAGE(sName,
                                tools::importFromSvgD(
-                                   aTmp2,
-                                   aSvg));
+                                   aTmp2, aSvg, false, 0));
 
         CPPUNIT_ASSERT_MESSAGE(
             sName,
@@ -303,7 +301,7 @@ public:
 #if defined(VERBOSE)
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
-                    basegfx::tools::exportToSvgD(rPoly),
+                    basegfx::tools::exportToSvgD(rPoly, , true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
     }
@@ -347,15 +345,14 @@ public:
         fprintf(stderr, "%s input      - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
                     basegfx::tools::exportToSvgD(
-                        genericClip),
+                        genericClip, , true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
         const B2DPolyPolygon boxClipResult=rRange.solveCrossovers();
         const rtl::OUString boxClipSvg(
             basegfx::tools::exportToSvgD(
-                normalizePoly(
-                    boxClipResult)));
+                normalizePoly(boxClipResult)), true, true, false);
 #if defined(VERBOSE)
         fprintf(stderr, "%s boxclipper - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
@@ -366,8 +363,7 @@ public:
         genericClip = tools::solveCrossovers(genericClip);
         const rtl::OUString genericClipSvg(
             basegfx::tools::exportToSvgD(
-                normalizePoly(
-                    genericClip)));
+                normalizePoly(genericClip)), true, true, false);
 #if defined(VERBOSE)
         fprintf(stderr, "%s genclipper - svg:d=\"%s\"\n",
                 pName, rtl::OUStringToOString(
