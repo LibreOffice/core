@@ -24,6 +24,30 @@ $(eval $(call gb_WinResTarget_add_defs,sofficebin/officeloader,\
 
 $(eval $(call gb_WinResTarget_add_dependencies,sofficebin/officeloader,\
     sysui/desktop/icons/main_app.ico \
+	sysui/desktop/icons/oasis-database.ico \
+	sysui/desktop/icons/oasis-drawing-template.ico \
+	sysui/desktop/icons/oasis-drawing.ico \
+	sysui/desktop/icons/oasis-formula.ico \
+	sysui/desktop/icons/oasis-master-document.ico \
+	sysui/desktop/icons/oasis-presentation-template.ico \
+	sysui/desktop/icons/oasis-presentation.ico \
+	sysui/desktop/icons/oasis-spreadsheet-template.ico \
+	sysui/desktop/icons/oasis-spreadsheet.ico \
+	sysui/desktop/icons/oasis-text-template.ico \
+	sysui/desktop/icons/oasis-text.ico \
+	sysui/desktop/icons/oasis-web-template.ico \
+	sysui/desktop/icons/database.ico \
+	sysui/desktop/icons/drawing-template.ico \
+	sysui/desktop/icons/drawing.ico \
+	sysui/desktop/icons/formula.ico \
+	sysui/desktop/icons/master-document.ico \
+	sysui/desktop/icons/presentation-template.ico \
+	sysui/desktop/icons/presentation.ico \
+	sysui/desktop/icons/spreadsheet-template.ico \
+	sysui/desktop/icons/spreadsheet.ico \
+	sysui/desktop/icons/text-template.ico \
+	sysui/desktop/icons/text.ico \
+	sysui/desktop/icons/oxt-extension.ico \
 ))
 
 $(eval $(call gb_WinResTarget_set_rcfile,sofficebin/officeloader,desktop/util/officeloader))
