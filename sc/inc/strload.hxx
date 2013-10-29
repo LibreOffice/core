@@ -38,6 +38,7 @@ private:
     OUString theStr;
 };
 
+#define SC_STRLOAD(resource,strid) ScRscStrLoader( resource, strid).GetString()
 
 #endif // SC_STRLOAD_HXX
 
