@@ -4009,9 +4009,11 @@ StackVar ScInterpreter::Interpret()
                 case ocAverageA         : ScAverage( true );            break;
                 case ocCount            : ScCount();                    break;
                 case ocCount2           : ScCount2();                   break;
-                case ocVar              : ScVar( false );               break;
+                case ocVar              :
+                case ocVarS             : ScVar( false );               break;
                 case ocVarA             : ScVar( true );                break;
-                case ocVarP             : ScVarP( false );              break;
+                case ocVarP             :
+                case ocVarP_MS          : ScVarP( false );              break;
                 case ocVarPA            : ScVarP( true );               break;
                 case ocStDev            :
                 case ocStDevS           : ScStDev( false );             break;

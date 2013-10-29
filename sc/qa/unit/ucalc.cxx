@@ -2436,6 +2436,8 @@ void Test::testFunctionLists()
         "TRIMMEAN",
         "TTEST",
         "VAR",
+        "VAR.P",
+        "VAR.S",
         "VARA",
         "VARP",
         "VARPA",

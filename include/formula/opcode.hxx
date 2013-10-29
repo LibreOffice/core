@@ -220,6 +220,8 @@ enum OpCodeEnum
         ocISPMT             = SC_OPCODE_ISPMT,
         ocVar               = SC_OPCODE_VAR,
         ocVarP              = SC_OPCODE_VAR_P,
+        ocVarP_MS           = SC_OPCODE_VAR_P_MS,
+        ocVarS              = SC_OPCODE_VAR_S,
         ocStDev             = SC_OPCODE_ST_DEV,
         ocStDevP            = SC_OPCODE_ST_DEV_P,
         ocStDevP_MS         = SC_OPCODE_ST_DEV_P_MS,
