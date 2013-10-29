@@ -55,8 +55,10 @@ public:
             const OUString &rUserData, unsigned int nFilterFlags,
             unsigned int nClipboardID, unsigned int nFilterVersion);
     void testSharedFormulaXLS();
+#if 0
     void testSharedFormulaXLSGroundWater();
     void testSharedFormulaXLSStockHistory();
+#endif
     void testFinacialFormula();
     void testStatisticalFormulaFisher();
     void testStatisticalFormulaFisherInv();
@@ -104,8 +106,6 @@ public:
     void testFinacialYIELDMATFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
-    CPPUNIT_TEST(testSharedFormulaXLSGroundWater);
-    CPPUNIT_TEST(testSharedFormulaXLSStockHistory);
     CPPUNIT_TEST(testFinacialFormula);
     CPPUNIT_TEST(testStatisticalFormulaFisher);
     CPPUNIT_TEST(testStatisticalFormulaFisherInv);
@@ -264,9 +264,9 @@ void ScOpenclTest::testCompilerInEq()
     xDocShRes->DoClose();
 }
 
+#if 0
 void ScOpenclTest::testSharedFormulaXLSStockHistory()
 {
-#if 1
     ScDocShellRef xDocSh = loadDoc("stock-history.", XLS);
 
     enableOpenCL(xDocSh);
@@ -295,7 +295,6 @@ void ScOpenclTest::testSharedFormulaXLSStockHistory()
 
     xDocSh->DoClose();
     xDocShRes->DoClose();
-#endif
 }
 
 void ScOpenclTest::testSharedFormulaXLSGroundWater()
@@ -321,6 +320,7 @@ void ScOpenclTest::testSharedFormulaXLSGroundWater()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
+#endif
 
 void ScOpenclTest::testSharedFormulaXLS()
 {
