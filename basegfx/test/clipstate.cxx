@@ -95,23 +95,21 @@ public:
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 sName, OUStringToOString(
-                    basegfx::tools::exportToSvgD(toTest.getClipPoly()),
+                    basegfx::tools::exportToSvgD(toTest.getClipPoly(), true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
         B2DPolyPolygon aTmp1;
         CPPUNIT_ASSERT_MESSAGE(sName,
                                tools::importFromSvgD(
-                                   aTmp1,
-                                   OUString::createFromAscii(sSvg)));
+                                   aTmp1, OUString::createFromAscii(sSvg), false, 0));
 
         const OUString aSvg=
-            tools::exportToSvgD(toTest.getClipPoly());
+            tools::exportToSvgD(toTest.getClipPoly(), true, true, false);
         B2DPolyPolygon aTmp2;
         CPPUNIT_ASSERT_MESSAGE(sName,
                                tools::importFromSvgD(
-                                   aTmp2,
-                                   aSvg));
+                                   aTmp2, aSvg, false, 0));
 
         CPPUNIT_ASSERT_MESSAGE(
             sName,
@@ -142,8 +140,7 @@ public:
 
         B2DPolyPolygon aTmp1;
         tools::importFromSvgD(
-            aTmp1,
-            OUString::createFromAscii(unionSvg));
+            aTmp1, OUString::createFromAscii(unionSvg), false, 0);
 
         aMixedClip.intersectPolyPolygon(aTmp1);
         aMixedClip.subtractRange(B2DRange(-20,-150,20,0));

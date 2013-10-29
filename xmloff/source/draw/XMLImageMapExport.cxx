@@ -26,7 +26,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Point.hpp>
@@ -38,8 +37,8 @@
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xexptran.hxx"
-
-
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -314,8 +313,7 @@ void XMLImageMapExport::ExportCircle(
                           aBuffer.makeStringAndClear() );
 }
 
-void XMLImageMapExport::ExportPolygon(
-    const Reference<XPropertySet> & rPropertySet)
+void XMLImageMapExport::ExportPolygon(const Reference<XPropertySet> & rPropertySet)
 {
     // polygons get exported as bounding box, viewbox, and coordinate
     // pair sequence. The bounding box is always the entire image.
@@ -325,52 +323,33 @@ void XMLImageMapExport::ExportPolygon(
     PointSequence aPoly;
     aAny >>= aPoly;
 
-    // get bounding box (assume top-left to be 0,0)
-    sal_Int32 nWidth = 0;
-    sal_Int32 nHeight = 0;
-    sal_Int32 nLength = aPoly.getLength();
-    const struct awt::Point* pPointPtr = aPoly.getConstArray();
-    for ( sal_Int32 i = 0; i < nLength; i++ )
-    {
-        sal_Int32 nPolyX = pPointPtr->X;
-        sal_Int32 nPolyY = pPointPtr->Y;
-
-        if ( nPolyX > nWidth )
-            nWidth = nPolyX;
-        if ( nPolyY > nHeight )
-            nHeight = nPolyY;
-
-        pPointPtr++;
-    }
-    DBG_ASSERT(nWidth > 0, "impossible Polygon found");
-    DBG_ASSERT(nHeight > 0, "impossible Polygon found");
+    const basegfx::B2DPolygon aPolygon(
+        basegfx::tools::UnoPointSequenceToB2DPolygon(
+            aPoly));
+    const basegfx::B2DRange aPolygonRange(aPolygon.getB2DRange());
 
     // parameters svg:x, svg:y, svg:width, svg:height
     OUStringBuffer aBuffer;
+
     mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, 0);
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X,
-                          aBuffer.makeStringAndClear() );
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X, aBuffer.makeStringAndClear() );
     mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, 0);
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y,
-                          aBuffer.makeStringAndClear() );
-    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, nWidth);
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
-                          aBuffer.makeStringAndClear() );
-    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, nHeight);
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
-                          aBuffer.makeStringAndClear() );
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y, aBuffer.makeStringAndClear() );
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, basegfx::fround(aPolygonRange.getWidth()));
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH, aBuffer.makeStringAndClear() );
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, basegfx::fround(aPolygonRange.getHeight()));
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, aBuffer.makeStringAndClear() );
 
     // svg:viewbox
-    SdXMLImExViewBox aViewBox(0, 0, nWidth, nHeight);
-    mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX,
-                aViewBox.GetExportString());
+    SdXMLImExViewBox aViewBox(0.0, 0.0, aPolygonRange.getWidth(), aPolygonRange.getHeight());
+    mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
 
     // export point sequence
-    awt::Point aPoint(0, 0);
-    awt::Size aSize(nWidth, nHeight);
-    SdXMLImExPointsElement aPoints( &aPoly, aViewBox, aPoint, aSize );
-    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_POINTS,
-                          aPoints.GetExportString());
+    const OUString aPointString(
+        basegfx::tools::exportToSvgPoints(
+            aPolygon));
+
+    mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

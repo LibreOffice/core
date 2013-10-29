@@ -24,227 +24,91 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/math.hxx>
+#include <stringconversiontools.hxx>
 
 namespace basegfx
 {
     namespace tools
     {
-        namespace
+        bool PointIndex::operator<(const PointIndex& rComp) const
         {
-            void lcl_skipSpaces(sal_Int32&          io_rPos,
-                                const OUString&     rStr,
-                                const sal_Int32     nLen)
+            if(rComp.getPolygonIndex() == getPolygonIndex())
             {
-                while( io_rPos < nLen &&
-                       sal_Unicode(' ') == rStr[io_rPos] )
-                {
-                    ++io_rPos;
-                }
+                return rComp.getPointIndex() < getPointIndex();
             }
 
-            void lcl_skipSpacesAndCommas(sal_Int32&         io_rPos,
-                                         const OUString&    rStr,
-                                         const sal_Int32    nLen)
-            {
-                while(io_rPos < nLen
-                      && (sal_Unicode(' ') == rStr[io_rPos] || sal_Unicode(',') == rStr[io_rPos]))
-                {
-                    ++io_rPos;
-                }
-            }
-
-            inline bool lcl_isOnNumberChar(const sal_Unicode aChar, bool bSignAllowed = true)
-            {
-                const bool bPredicate( (sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-                                       || (bSignAllowed && sal_Unicode('+') == aChar)
-                                       || (bSignAllowed && sal_Unicode('-') == aChar)
-                                       || (sal_Unicode('.') == aChar) );
-
-                return bPredicate;
-            }
-
-            inline bool lcl_isOnNumberChar(const OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true)
-            {
-                return lcl_isOnNumberChar(rStr[nPos],
-                                          bSignAllowed);
-            }
-
-            bool lcl_getDoubleChar(double&              o_fRetval,
-                                   sal_Int32&           io_rPos,
-                                   const OUString&      rStr)
-            {
-                sal_Unicode aChar( rStr[io_rPos] );
-                OUStringBuffer sNumberString;
-                bool separator_seen=false;
-
-                if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
-                {
-                    sNumberString.append(rStr[io_rPos]);
-                    aChar = rStr[++io_rPos];
-                }
-
-                while((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-                      || (!separator_seen && sal_Unicode('.') == aChar))
-                {
-                    if (sal_Unicode('.') == aChar) separator_seen = true;
-                    sNumberString.append(rStr[io_rPos]);
-                    io_rPos++;
-                    aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
-                }
-
-                if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
-                {
-                    sNumberString.append(rStr[io_rPos]);
-                    io_rPos++;
-                    aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
-
-                    if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
-                    {
-                        sNumberString.append(rStr[io_rPos]);
-                        io_rPos++;
-                        aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
-                    }
-
-                    while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-                    {
-                        sNumberString.append(rStr[io_rPos]);
-                        io_rPos++;
-                        aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
-                    }
-                }
-
-                if(!sNumberString.isEmpty())
-                {
-                    rtl_math_ConversionStatus eStatus;
-                    o_fRetval = ::rtl::math::stringToDouble( sNumberString.makeStringAndClear(),
-                                                             (sal_Unicode)('.'),
-                                                             (sal_Unicode)(','),
-                                                             &eStatus,
-                                                             NULL );
-                    return ( eStatus == rtl_math_ConversionStatus_Ok );
-                }
-
-                return false;
-            }
-
-            bool lcl_importDoubleAndSpaces( double&             o_fRetval,
-                                            sal_Int32&          io_rPos,
-                                            const OUString&     rStr,
-                                            const sal_Int32     nLen )
-            {
-                if( !lcl_getDoubleChar(o_fRetval, io_rPos, rStr) )
-                    return false;
-
-                lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
-
-                return true;
-            }
-
-            bool lcl_importFlagAndSpaces(sal_Int32&         o_nRetval,
-                                         sal_Int32&         io_rPos,
-                                         const OUString&    rStr,
-                                         const sal_Int32    nLen)
-            {
-                sal_Unicode aChar( rStr[io_rPos] );
-
-                if(sal_Unicode('0') == aChar)
-                {
-                    o_nRetval = 0;
-                    ++io_rPos;
-                }
-                else if (sal_Unicode('1') == aChar)
-                {
-                    o_nRetval = 1;
-                    ++io_rPos;
-                }
-                else
-                    return false;
-
-                lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
-
-                return true;
-            }
-
-            void lcl_putNumberChar( OUStringBuffer& rStr,
-                                    double          fValue )
-            {
-                rStr.append( fValue );
-            }
-
-            void lcl_putNumberCharWithSpace( OUStringBuffer&    rStr,
-                                             double             fValue,
-                                             double                 fOldValue,
-                                             bool                   bUseRelativeCoordinates )
-            {
-                if( bUseRelativeCoordinates )
-                    fValue -= fOldValue;
-
-                const sal_Int32 aLen( rStr.getLength() );
-                if(aLen > 0)
-                {
-                    if( lcl_isOnNumberChar(rStr[aLen - 1], false) &&
-                        fValue >= 0.0 )
-                    {
-                        rStr.append( sal_Unicode(' ') );
-                    }
-                }
-
-                lcl_putNumberChar(rStr, fValue);
-            }
-
-            inline sal_Unicode lcl_getCommand( sal_Char cUpperCaseCommand,
-                                               sal_Char cLowerCaseCommand,
-                                               bool     bUseRelativeCoordinates )
-            {
-                return bUseRelativeCoordinates ? cLowerCaseCommand : cUpperCaseCommand;
-            }
+            return rComp.getPolygonIndex() < getPolygonIndex();
         }
 
-        bool importFromSvgD(B2DPolyPolygon& o_rPolyPolygon, const OUString&  rSvgDStatement, bool bWrongPositionAfterZ)
+        bool importFromSvgD(
+            B2DPolyPolygon& o_rPolyPolygon,
+            const OUString& rSvgDStatement,
+            bool bHandleRelativeNextPointCompatible,
+            PointIndexSet* pHelpPointIndexSet)
         {
             o_rPolyPolygon.clear();
             const sal_Int32 nLen(rSvgDStatement.getLength());
             sal_Int32 nPos(0);
-            bool bIsClosed(false);
             double nLastX( 0.0 );
             double nLastY( 0.0 );
             B2DPolygon aCurrPoly;
 
             // skip initial whitespace
-            lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+            ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
             while(nPos < nLen)
             {
                 bool bRelative(false);
-                bool bMoveTo(false);
                 const sal_Unicode aCurrChar(rSvgDStatement[nPos]);
+
+                if(o_rPolyPolygon.count() && !aCurrPoly.count() && !('m' == aCurrChar || 'M' == aCurrChar))
+                {
+                    // we have a new sub-polygon starting, but without a 'moveto' command.
+                    // this requires to add the current point as start point to the polygon
+                    // (see SVG1.1 8.3.3 The "closepath" command)
+                    aCurrPoly.append(B2DPoint(nLastX, nLastY));
+                }
 
                 switch(aCurrChar)
                 {
                     case 'z' :
                     case 'Z' :
                     {
+                        // consume CurrChar and whitespace
                         nPos++;
-                        lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        // remember closed state of current polygon
-                        bIsClosed = true;
-
-                        // update current point - we're back at the start
-                        if( aCurrPoly.count() && !bWrongPositionAfterZ)
+                        // create closed polygon and reset import values
+                        if(aCurrPoly.count())
                         {
-                            const B2DPoint aFirst( aCurrPoly.getB2DPoint(0) );
-                            nLastX = aFirst.getX();
-                            nLastY = aFirst.getY();
+                            if(!bHandleRelativeNextPointCompatible)
+                            {
+                                // SVG defines that "the next subpath starts at the
+                                // same initial point as the current subpath", so set the
+                                // current point if we do not need to be compatible
+                                nLastX = aCurrPoly.getB2DPoint(0).getX();
+                                nLastY = aCurrPoly.getB2DPoint(0).getY();
+                            }
+
+                            aCurrPoly.setClosed(true);
+                            o_rPolyPolygon.append(aCurrPoly);
+                            aCurrPoly.clear();
                         }
+
                         break;
                     }
 
                     case 'm' :
                     case 'M' :
                     {
-                        bMoveTo = true;
-                        // FALLTHROUGH intended
+                        // create non-closed polygon and reset import values
+                        if(aCurrPoly.count())
+                        {
+                            o_rPolyPolygon.append(aCurrPoly);
+                            aCurrPoly.clear();
+                        }
+
+                        // FALLTHROUGH intended to add coordinate data as 1st point of new polygon
                     }
                     case 'l' :
                     case 'L' :
@@ -254,37 +118,16 @@ namespace basegfx
                             bRelative = true;
                         }
 
-                        if(bMoveTo)
-                        {
-                            // new polygon start, finish old one
-                            if(aCurrPoly.count())
-                            {
-                                // add current polygon
-                                if(bIsClosed)
-                                {
-                                    // #i123465# no need to do the old closeWithGeometryChange
-                                    // corerection on SVG polygons; this even may lead to wrong
-                                    // results e.g. for marker processing
-                                    aCurrPoly.setClosed(true);
-                                }
-
-                                o_rPolyPolygon.append(aCurrPoly);
-
-                                // reset import values
-                                bIsClosed = false;
-                                aCurrPoly.clear();
-                            }
-                        }
-
+                        // consume CurrChar and whitespace
                         nPos++;
-                        lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
 
-                            if(!lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -310,13 +153,13 @@ namespace basegfx
                     case 'H' :
                     {
                         nPos++;
-                        lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY(nLastY);
 
-                            if(!lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -340,13 +183,13 @@ namespace basegfx
                     case 'V' :
                     {
                         nPos++;
-                        lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX(nLastX), nY;
 
-                            if(!lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -370,17 +213,17 @@ namespace basegfx
                     case 'S' :
                     {
                         nPos++;
-                        lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
                             double nX2, nY2;
 
-                            if(!lcl_importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -429,20 +272,20 @@ namespace basegfx
                     case 'C' :
                     {
                         nPos++;
-                        lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
                             double nX1, nY1;
                             double nX2, nY2;
 
-                            if(!lcl_importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX2, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY2, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -479,17 +322,17 @@ namespace basegfx
                     case 'Q' :
                     {
                         nPos++;
-                        lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
                             double nX1, nY1;
 
-                            if(!lcl_importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX1, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY1, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -530,14 +373,14 @@ namespace basegfx
                     case 'T' :
                     {
                         nPos++;
-                        lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
 
-                            if(!lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -604,21 +447,21 @@ namespace basegfx
                     case 'A' :
                     {
                         nPos++;
-                        lcl_skipSpaces(nPos, rSvgDStatement, nLen);
+                        ::basegfx::internal::lcl_skipSpaces(nPos, rSvgDStatement, nLen);
 
-                        while(nPos < nLen && lcl_isOnNumberChar(rSvgDStatement, nPos))
+                        while(nPos < nLen && ::basegfx::internal::lcl_isOnNumberChar(rSvgDStatement, nPos))
                         {
                             double nX, nY;
                             double fRX, fRY, fPhi;
                             sal_Int32 bLargeArcFlag, bSweepFlag;
 
-                            if(!lcl_importDoubleAndSpaces(fRX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(fRY, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(fPhi, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importFlagAndSpaces(bLargeArcFlag, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importFlagAndSpaces(bSweepFlag, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
-                            if(!lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(fRX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(fRY, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(fPhi, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importFlagAndSpaces(bLargeArcFlag, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importFlagAndSpaces(bSweepFlag, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgDStatement, nLen)) return false;
+                            if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgDStatement, nLen)) return false;
 
                             if(bRelative)
                             {
@@ -749,7 +592,22 @@ namespace basegfx
                                 // if we swapped angles above
                                 if( !bSweepFlag )
                                     aSegment.flip();
+
+                                // remember PointIndex of evtl. added pure helper points
+                                sal_uInt32 nPointIndex(aCurrPoly.count() + 1);
                                 aCurrPoly.append(aSegment);
+
+                                // if asked for, mark pure helper points by adding them to the index list of
+                                // helper points
+                                if(pHelpPointIndexSet && aCurrPoly.count() > 1)
+                                {
+                                    const sal_uInt32 nPolyIndex(o_rPolyPolygon.count());
+
+                                    for(;nPointIndex + 1 < aCurrPoly.count(); nPointIndex++)
+                                    {
+                                        pHelpPointIndexSet->insert(PointIndex(nPolyIndex, nPointIndex));
+                                    }
+                                }
                             }
 
                             // set last position
@@ -769,17 +627,9 @@ namespace basegfx
                 }
             }
 
+            // if there is polygon data, create non-closed polygon
             if(aCurrPoly.count())
             {
-                // end-process last poly
-                if(bIsClosed)
-                {
-                    // #i123465# no need to do the old closeWithGeometryChange
-                    // corerection on SVG polygons; this even may lead to wrong
-                    // results e.g. for marker processing
-                    aCurrPoly.setClosed(true);
-                }
-
                 o_rPolyPolygon.append(aCurrPoly);
             }
 
@@ -795,27 +645,51 @@ namespace basegfx
             double nX, nY;
 
             // skip initial whitespace
-            lcl_skipSpaces(nPos, rSvgPointsAttribute, nLen);
+            ::basegfx::internal::lcl_skipSpaces(nPos, rSvgPointsAttribute, nLen);
 
             while(nPos < nLen)
             {
-                if(!lcl_importDoubleAndSpaces(nX, nPos, rSvgPointsAttribute, nLen)) return false;
-                if(!lcl_importDoubleAndSpaces(nY, nPos, rSvgPointsAttribute, nLen)) return false;
+                if(!::basegfx::internal::lcl_importDoubleAndSpaces(nX, nPos, rSvgPointsAttribute, nLen)) return false;
+                if(!::basegfx::internal::lcl_importDoubleAndSpaces(nY, nPos, rSvgPointsAttribute, nLen)) return false;
 
                 // add point
                 o_rPoly.append(B2DPoint(nX, nY));
 
                 // skip to next number, or finish
-                lcl_skipSpaces(nPos, rSvgPointsAttribute, nLen);
+                ::basegfx::internal::lcl_skipSpaces(nPos, rSvgPointsAttribute, nLen);
             }
 
             return true;
         }
 
+        OUString exportToSvgPoints( const B2DPolygon& rPoly )
+        {
+            OSL_ENSURE(!rPoly.areControlPointsUsed(), "exportToSvgPoints: Only non-bezier polygons allowed (!)");
+            const sal_uInt32 nPointCount(rPoly.count());
+            OUStringBuffer aResult;
+
+            for(sal_uInt32 a(0); a < nPointCount; a++)
+            {
+                const basegfx::B2DPoint aPoint(rPoly.getB2DPoint(a));
+
+                if(a)
+                {
+                    aResult.append(sal_Unicode(' '));
+                }
+
+                ::basegfx::internal::lcl_putNumberChar(aResult, aPoint.getX());
+                aResult.append(sal_Unicode(','));
+                ::basegfx::internal::lcl_putNumberChar(aResult, aPoint.getY());
+            }
+
+            return aResult.makeStringAndClear();
+        }
+
         OUString exportToSvgD(
             const B2DPolyPolygon& rPolyPolygon,
             bool bUseRelativeCoordinates,
-            bool bDetectQuadraticBeziers)
+            bool bDetectQuadraticBeziers,
+            bool bHandleRelativeNextPointCompatible)
         {
             const sal_uInt32 nCount(rPolyPolygon.count());
             OUStringBuffer aResult;
@@ -835,10 +709,21 @@ namespace basegfx
 
                     // handle polygon start point
                     B2DPoint aEdgeStart(aPolygon.getB2DPoint(0));
-                    aResult.append(lcl_getCommand('M', 'm', bUseRelativeCoordinates));
-                    lcl_putNumberCharWithSpace(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                    lcl_putNumberCharWithSpace(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                    aLastSVGCommand =  lcl_getCommand('L', 'l', bUseRelativeCoordinates);
+                    bool bUseRelativeCoordinatesForFirstPoint(bUseRelativeCoordinates);
+
+                    if(bHandleRelativeNextPointCompatible)
+                    {
+                        // To get around the error that the start point for the next polygon is the
+                        // start point of the current one (and not the last as it was handled up to now)
+                        // do force to write an absolute 'M' command as start for the next polygon
+                        bUseRelativeCoordinatesForFirstPoint = false;
+                    }
+
+                    // Write 'moveto' and the 1st coordinates, set aLastSVGCommand to 'lineto'
+                    aResult.append(::basegfx::internal::lcl_getCommand('M', 'm', bUseRelativeCoordinatesForFirstPoint));
+                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinatesForFirstPoint);
+                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinatesForFirstPoint);
+                    aLastSVGCommand =  ::basegfx::internal::lcl_getCommand('L', 'l', bUseRelativeCoordinatesForFirstPoint);
                     aCurrentSVGPosition = aEdgeStart;
 
                     for(sal_uInt32 nIndex(0); nIndex < nEdgeCount; nIndex++)
@@ -892,7 +777,7 @@ namespace basegfx
                                 // approximately equal, export as quadratic bezier
                                 if(bSymmetricAtEdgeStart)
                                 {
-                                    const sal_Unicode aCommand(lcl_getCommand('T', 't', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('T', 't', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -900,14 +785,14 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
-                                    const sal_Unicode aCommand(lcl_getCommand('Q', 'q', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('Q', 'q', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -915,10 +800,10 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    lcl_putNumberCharWithSpace(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aLeft.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aLeft.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
@@ -928,7 +813,7 @@ namespace basegfx
                                 // export as cubic bezier
                                 if(bSymmetricAtEdgeStart)
                                 {
-                                    const sal_Unicode aCommand(lcl_getCommand('S', 's', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('S', 's', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -936,16 +821,16 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
-                                    const sal_Unicode aCommand(lcl_getCommand('C', 'c', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('C', 'c', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -953,12 +838,12 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
@@ -984,7 +869,7 @@ namespace basegfx
                                 else if(bXEqual)
                                 {
                                     // export as vertical line
-                                    const sal_Unicode aCommand(lcl_getCommand('V', 'v', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('V', 'v', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -992,13 +877,13 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else if(bYEqual)
                                 {
                                     // export as horizontal line
-                                    const sal_Unicode aCommand(lcl_getCommand('H', 'h', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('H', 'h', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -1006,13 +891,13 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
                                     // export as line
-                                    const sal_Unicode aCommand(lcl_getCommand('L', 'l', bUseRelativeCoordinates));
+                                    const sal_Unicode aCommand(::basegfx::internal::lcl_getCommand('L', 'l', bUseRelativeCoordinates));
 
                                     if(aLastSVGCommand != aCommand)
                                     {
@@ -1020,8 +905,8 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    ::basegfx::internal::lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
@@ -1034,8 +919,13 @@ namespace basegfx
                     // close path if closed poly (Z and z are equivalent here, but looks nicer when case is matched)
                     if(aPolygon.isClosed())
                     {
-                        aResult.append(lcl_getCommand('Z', 'z', bUseRelativeCoordinates));
-                        // return to first point
+                        aResult.append(::basegfx::internal::lcl_getCommand('Z', 'z', bUseRelativeCoordinates));
+                    }
+
+                    if(!bHandleRelativeNextPointCompatible)
+                    {
+                        // SVG defines that "the next subpath starts at the same initial point as the current subpath",
+                        // so set aCurrentSVGPosition to the 1st point of the current, now ended and written path
                         aCurrentSVGPosition = aPolygon.getB2DPoint(0);
                     }
                 }

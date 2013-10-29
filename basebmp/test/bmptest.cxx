@@ -165,7 +165,7 @@ public:
         OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 
         basegfx::B2DPolyPolygon aPoly;
-        basegfx::tools::importFromSvgD( aPoly, aSvg );
+        basegfx::tools::importFromSvgD( aPoly, aSvg, false, NULL );
         const Color aCol(0xFFFFFFFF);
         mpBmp1bpp->fillPolyPolygon(
             aPoly,

@@ -1244,7 +1244,7 @@ struct ShapeWritingVisitor
                         +OUString::number(y1)+"L"+OUString::number(x2)+","
                         +OUString::number(y2);
                     basegfx::B2DPolyPolygon aPoly;
-                    basegfx::tools::importFromSvgD(aPoly, sLinePath);
+                    basegfx::tools::importFromSvgD(aPoly, sLinePath, false, NULL);
 
                     writePathShape(xAttrs,
                                    xUnoAttrs,
@@ -1334,7 +1334,7 @@ struct ShapeWritingVisitor
             {
                 OUString sPath = xElem->hasAttribute("d") ? xElem->getAttribute("d") : "";
                 basegfx::B2DPolyPolygon aPoly;
-                basegfx::tools::importFromSvgD(aPoly, sPath);
+                basegfx::tools::importFromSvgD(aPoly, sPath, false, NULL);
 
                 writePathShape(xAttrs,
                                xUnoAttrs,
@@ -1668,7 +1668,8 @@ struct ShapeWritingVisitor
             xAttrs->AddAttribute( "svg:d", basegfx::tools::exportToSvgD(
                 aPolys[i],
                 false,   // no relative coords. causes rounding errors
-                false )); // no quad bezier detection. crashes older versions.
+                false,   // no quad bezier detection. crashes older versions.
+                false ));
             mxDocumentHandler->startElement("draw:path", xUnoAttrs);
             mxDocumentHandler->endElement("draw:path");
         }

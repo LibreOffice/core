@@ -829,7 +829,8 @@ namespace svgio
 
         void SvgStyleAttributes::add_markers(
             const basegfx::B2DPolyPolygon& rPath,
-            drawinglayer::primitive2d::Primitive2DSequence& rTarget) const
+            drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+            const basegfx::tools::PointIndexSet* pHelpPointIndices) const
         {
             // try to access linked markers
             const SvgMarkerNode* pStart = accessMarkerStartXLink();
@@ -886,6 +887,18 @@ namespace svgio
                                 {
                                     // anything in-between, use pMid
                                     pNeeded = pMid;
+                                }
+
+                                if(pHelpPointIndices && !pHelpPointIndices->empty())
+                                {
+                                    const basegfx::tools::PointIndexSet::const_iterator aFound(
+                                        pHelpPointIndices->find(basegfx::tools::PointIndex(a, b)));
+
+                                    if(aFound != pHelpPointIndices->end())
+                                    {
+                                        // this point is a pure helper point; do not create a marker for it
+                                        continue;
+                                    }
                                 }
 
                                 if(!pNeeded)
@@ -999,7 +1012,8 @@ namespace svgio
 
         void SvgStyleAttributes::add_path(
             const basegfx::B2DPolyPolygon& rPath,
-            drawinglayer::primitive2d::Primitive2DSequence& rTarget) const
+            drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+            const basegfx::tools::PointIndexSet* pHelpPointIndices) const
         {
             if(!rPath.count())
             {
@@ -1057,7 +1071,7 @@ namespace svgio
                 SVGTokenLine == mrOwner.getType())          // line
             {
                 // try to add markers
-                add_markers(rPath, rTarget);
+                add_markers(rPath, rTarget, pHelpPointIndices);
             }
         }
 

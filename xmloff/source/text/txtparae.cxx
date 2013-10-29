@@ -21,11 +21,9 @@
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
-
 #include <vector>
 #include <list>
 #include <boost/unordered_map.hpp>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -59,15 +57,12 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
-
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XFormField.hpp>
-
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/SectionFileLink.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/XTextShapesSupplier.hpp>
-
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -104,8 +99,10 @@
 #include <xmloff/formlayerexport.hxx>
 #include "XMLTextCharStyleNamesElementExport.hxx"
 #include <comphelper/stlunosequence.hxx>
-
 #include <xmloff/odffields.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -2964,38 +2961,29 @@ void XMLTextParagraphExport::_exportTextFrame(
 }
 
 void XMLTextParagraphExport::exportContour(
-        const Reference < XPropertySet > & rPropSet,
-        const Reference < XPropertySetInfo > & rPropSetInfo )
+    const Reference < XPropertySet > & rPropSet,
+    const Reference < XPropertySetInfo > & rPropSetInfo )
 {
     if( !rPropSetInfo->hasPropertyByName( sContourPolyPolygon ) )
+    {
         return;
+    }
 
     PointSequenceSequence aSourcePolyPolygon;
     rPropSet->getPropertyValue( sContourPolyPolygon ) >>= aSourcePolyPolygon;
+    const basegfx::B2DPolyPolygon aPolyPolygon(
+        basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(
+            aSourcePolyPolygon));
+    const sal_uInt32 nPolygonCount(aPolyPolygon.count());
 
-    if( !aSourcePolyPolygon.getLength() )
-        return;
-
-    awt::Point aPoint( 0, 0 );
-    awt::Size aSize( 0, 0 );
-    sal_Int32 nPolygons = aSourcePolyPolygon.getLength();
-    const PointSequence *pPolygons = aSourcePolyPolygon.getConstArray();
-    while( nPolygons-- )
+    if(!nPolygonCount)
     {
-        sal_Int32 nPoints = pPolygons->getLength();
-        const awt::Point *pPoints = pPolygons->getConstArray();
-        while( nPoints-- )
-        {
-            if( aSize.Width < pPoints->X )
-                aSize.Width = pPoints->X;
-            if( aSize.Height < pPoints->Y )
-                aSize.Height = pPoints->Y;
-            pPoints++;
-        }
-        pPolygons++;
+        return;
     }
 
-    sal_Bool bPixel = sal_False;
+    const basegfx::B2DRange aPolyPolygonRange(aPolyPolygon.getB2DRange());
+    bool bPixel(false);
+
     if( rPropSetInfo->hasPropertyByName( sIsPixelContour ) )
     {
         bPixel = *(sal_Bool *)rPropSet->getPropertyValue( sIsPixelContour ).getValue();
@@ -3003,77 +2991,59 @@ void XMLTextParagraphExport::exportContour(
 
     // svg: width
     OUStringBuffer aStringBuffer( 10 );
-    if( bPixel )
+
+    if(bPixel)
     {
-        ::sax::Converter::convertMeasurePx(aStringBuffer, aSize.Width);
+        ::sax::Converter::convertMeasurePx(aStringBuffer, basegfx::fround(aPolyPolygonRange.getWidth()));
     }
     else
     {
-        GetExport().GetMM100UnitConverter().convertMeasureToXML(
-                aStringBuffer, aSize.Width);
+        GetExport().GetMM100UnitConverter().convertMeasureToXML(aStringBuffer, basegfx::fround(aPolyPolygonRange.getWidth()));
     }
-    GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
-                              aStringBuffer.makeStringAndClear() );
+
+    GetExport().AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, aStringBuffer.makeStringAndClear());
 
     // svg: height
-    if( bPixel )
+    if(bPixel)
     {
-        ::sax::Converter::convertMeasurePx(aStringBuffer, aSize.Height);
+        ::sax::Converter::convertMeasurePx(aStringBuffer, basegfx::fround(aPolyPolygonRange.getHeight()));
     }
     else
     {
-        GetExport().GetMM100UnitConverter().convertMeasureToXML(
-                aStringBuffer, aSize.Height);
+        GetExport().GetMM100UnitConverter().convertMeasureToXML(aStringBuffer, basegfx::fround(aPolyPolygonRange.getHeight()));
     }
-    GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
-                              aStringBuffer.makeStringAndClear() );
+
+    GetExport().AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStringBuffer.makeStringAndClear());
 
     // svg:viewbox
-    SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
-    GetExport().AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX,
-                aViewBox.GetExportString());
-
-    sal_Int32 nOuterCnt( aSourcePolyPolygon.getLength() );
-
+    SdXMLImExViewBox aViewBox(0.0, 0.0, aPolyPolygonRange.getWidth(), aPolyPolygonRange.getHeight());
+    GetExport().AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
     enum XMLTokenEnum eElem = XML_TOKEN_INVALID;
-    if( 1L == nOuterCnt )
+
+    if(1 == nPolygonCount )
     {
         // simple polygon shape, can be written as svg:points sequence
-        /*const*/ PointSequence* pSequence =
-                            (PointSequence*)aSourcePolyPolygon.getConstArray();
-
-        SdXMLImExPointsElement aPoints( pSequence, aViewBox, aPoint, aSize );
+        const OUString aPointString(
+            basegfx::tools::exportToSvgPoints(
+                aPolyPolygon.getB2DPolygon(0)));
 
         // write point array
-        GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_POINTS,
-                                      aPoints.GetExportString());
+        GetExport().AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);
         eElem = XML_CONTOUR_POLYGON;
     }
     else
     {
         // polypolygon, needs to be written as a svg:path sequence
-        /*const*/ PointSequence* pOuterSequence =
-                        (PointSequence*)aSourcePolyPolygon.getConstArray();
-        if(pOuterSequence)
-        {
-            // prepare svx:d element export
-            SdXMLImExSvgDElement aSvgDElement( aViewBox, GetExport() );
+        const OUString aPolygonString(
+            basegfx::tools::exportToSvgD(
+                aPolyPolygon,
+                true,           // bUseRelativeCoordinates
+                false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now
+                true));         // bHandleRelativeNextPointCompatible
 
-            for(sal_Int32 a(0L); a < nOuterCnt; a++)
-            {
-                /*const*/ PointSequence* pSequence = pOuterSequence++;
-                if(pSequence)
-                {
-                    aSvgDElement.AddPolygon(pSequence, 0L, aPoint,
-                        aSize, sal_True );
-                }
-            }
-
-            // write point array
-            GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_D,
-                                      aSvgDElement.GetExportString());
-            eElem = XML_CONTOUR_PATH;
-        }
+        // write point array
+        GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_D, aPolygonString);
+        eElem = XML_CONTOUR_PATH;
     }
 
     if( rPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )

@@ -29,6 +29,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -92,40 +95,37 @@ sal_Bool XMLMarkerStyleImport::importXML(
 
     if( bHasViewBox && bHasPathData )
     {
-        SdXMLImExSvgDElement aPoints(strPathData, *pViewBox, awt::Point( 0, 0 ),
-            awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ), rImport );
+        basegfx::B2DPolyPolygon aPolyPolygon;
 
-        if(aPoints.IsCurve())
+        if(basegfx::tools::importFromSvgD(aPolyPolygon, strPathData, true, 0))
         {
-            drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
-                aPoints.GetPointSequenceSequence(),
-                aPoints.GetFlagSequenceSequence());
-            rValue <<= aSourcePolyPolygon;
-        }
-        else
-        {
-            drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
-            aSourcePolyPolygon.Coordinates = aPoints.GetPointSequenceSequence();
-            aSourcePolyPolygon.Flags.realloc(aSourcePolyPolygon.Coordinates.getLength());
-
-            // Zeiger auf innere sequences holen
-            const drawing::PointSequence* pInnerSequence = aSourcePolyPolygon.Coordinates.getConstArray();
-            drawing::FlagSequence* pInnerSequenceFlags = aSourcePolyPolygon.Flags.getArray();
-
-            for(sal_Int32 a(0); a < aSourcePolyPolygon.Coordinates.getLength(); a++)
+            if(aPolyPolygon.count())
             {
-                pInnerSequenceFlags->realloc(pInnerSequence->getLength());
-                drawing::PolygonFlags* pPolyFlags = pInnerSequenceFlags->getArray();
+                // ViewBox probably not used, but stay with former processing inside of
+                // SdXMLImExSvgDElement
+                const basegfx::B2DRange aSourceRange(
+                    pViewBox->GetX(), pViewBox->GetY(),
+                    pViewBox->GetX() + pViewBox->GetWidth(), pViewBox->GetY() + pViewBox->GetHeight());
+                const basegfx::B2DRange aTargetRange(
+                    0.0, 0.0,
+                    pViewBox->GetWidth(), pViewBox->GetHeight());
 
-                for(sal_Int32 b(0); b < pInnerSequence->getLength(); b++)
-                    *pPolyFlags++ = drawing::PolygonFlags_NORMAL;
+                if(!aSourceRange.equal(aTargetRange))
+                {
+                    aPolyPolygon.transform(
+                        basegfx::tools::createSourceRangeTargetRangeTransform(
+                            aSourceRange,
+                            aTargetRange));
+                }
 
-                // next run
-                pInnerSequence++;
-                pInnerSequenceFlags++;
+                // always use PolyPolygonBezierCoords here
+                drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
+
+                basegfx::tools::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
+                    aPolyPolygon,
+                    aSourcePolyPolygon);
+                rValue <<= aSourcePolyPolygon;
             }
-
-            rValue <<= aSourcePolyPolygon;
         }
 
         if( !aDisplayName.isEmpty() )
@@ -134,7 +134,6 @@ sal_Bool XMLMarkerStyleImport::importXML(
                                         aDisplayName );
             rStrName = aDisplayName;
         }
-
     }
 
     if( pViewBox )
@@ -167,88 +166,44 @@ sal_Bool XMLMarkerStyleExport::exportXML(
         if(rValue >>= aBezier)
         {
             // Name
-            sal_Bool bEncoded = sal_False;
+            sal_Bool bEncoded(sal_False);
             OUString aStrName( rStrName );
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
-                                  rExport.EncodeStyleName( aStrName,
-                                                           &bEncoded ) );
+
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, rExport.EncodeStyleName( aStrName, &bEncoded ) );
+
             if( bEncoded )
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
-                                      aStrName );
-
-            // Viewbox (viewBox="0 0 1500 1000")
-            sal_Int32 nMinX(0x7fffffff);
-            sal_Int32 nMaxX(0x80000000);
-            sal_Int32 nMinY(0x7fffffff);
-            sal_Int32 nMaxY(0x80000000);
-            sal_Int32 nOuterCnt(aBezier.Coordinates.getLength());
-            drawing::PointSequence* pOuterSequence = aBezier.Coordinates.getArray();
-            sal_Int32 a, b;
-            sal_Bool bClosed(sal_False);
-
-            for (a = 0; a < nOuterCnt; a++)
             {
-                drawing::PointSequence* pSequence = pOuterSequence++;
-                const awt::Point *pPoints = pSequence->getConstArray();
-                sal_Int32 nPointCount(pSequence->getLength());
-
-                if(nPointCount)
-                {
-                    const awt::Point aStart = pPoints[0];
-                    const awt::Point aEnd = pPoints[nPointCount - 1];
-
-                    if(aStart.X == aEnd.X && aStart.Y == aEnd.Y)
-                    {
-                        bClosed = sal_True;
-                    }
-                }
-
-                for (b = 0; b < nPointCount; b++)
-                {
-                    const awt::Point aPoint = pPoints[b];
-
-                    if( aPoint.X < nMinX )
-                        nMinX = aPoint.X;
-
-                    if( aPoint.X > nMaxX )
-                        nMaxX = aPoint.X;
-
-                    if( aPoint.Y < nMinY )
-                        nMinY = aPoint.Y;
-
-                    if( aPoint.Y > nMaxY )
-                        nMaxY = aPoint.Y;
-                }
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, aStrName );
             }
 
-            sal_Int32 nDifX(nMaxX - nMinX);
-            sal_Int32 nDifY(nMaxY - nMinY);
+            const basegfx::B2DPolyPolygon aPolyPolygon(
+                basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
+                    aBezier));
+            const basegfx::B2DRange aPolyPolygonRange(aPolyPolygon.getB2DRange());
 
-            SdXMLImExViewBox aViewBox( 0, 0, nDifX, nDifY );
+            /////////////////
+            // Viewbox (viewBox="0 0 1500 1000")
+
+            SdXMLImExViewBox aViewBox(
+                aPolyPolygonRange.getMinX(),
+                aPolyPolygonRange.getMinY(),
+                aPolyPolygonRange.getWidth(),
+                aPolyPolygonRange.getHeight());
             rExport.AddAttribute( XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString() );
 
             // Pathdata
-            pOuterSequence = aBezier.Coordinates.getArray();
-            drawing::FlagSequence*  pOuterFlags = aBezier.Flags.getArray();
-            SdXMLImExSvgDElement aSvgDElement(aViewBox, rExport);
-
-            for (a = 0; a < nOuterCnt; a++)
-            {
-                drawing::PointSequence* pSequence = pOuterSequence++;
-                drawing::FlagSequence* pFlags = pOuterFlags++;
-
-                aSvgDElement.AddPolygon(pSequence, pFlags,
-                    awt::Point( 0, 0 ),
-                    awt::Size( aViewBox.GetWidth(), aViewBox.GetHeight() ),
-                    bClosed);
-            }
+            const OUString aPolygonString(
+                basegfx::tools::exportToSvgD(
+                    aPolyPolygon,
+                    true,           // bUseRelativeCoordinates
+                    false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now
+                    true));         // bHandleRelativeNextPointCompatible
 
             // write point array
-            rExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aSvgDElement.GetExportString());
+            rExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
 
             // Do Write
-            SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_MARKER,
-                                      sal_True, sal_False );
+            SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_MARKER, sal_True, sal_False );
         }
     }
 

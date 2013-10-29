@@ -31,6 +31,9 @@
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b3dpolypolygontools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -345,60 +348,37 @@ SdXML3DPolygonBasedShapeContext::~SdXML3DPolygonBasedShapeContext()
 void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+
     if(xPropSet.is())
     {
         // set parameters
         if(!maPoints.isEmpty() && !maViewBox.isEmpty())
         {
-            SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
-            awt::Point aMinPoint(aViewBox.GetX(), aViewBox.GetY());
-            awt::Size aMaxSize(aViewBox.GetWidth(), aViewBox.GetHeight());
-            SdXMLImExSvgDElement aPoints(maPoints, aViewBox, aMinPoint, aMaxSize, GetImport());
+            // import 2d PolyPolygon from svg:d
+            basegfx::B2DPolyPolygon aPolyPolygon;
 
-            // convert to double sequences
-            drawing::PointSequenceSequence& xPoSeSe =
-                (drawing::PointSequenceSequence&)aPoints.GetPointSequenceSequence();
-            sal_Int32 nOuterSequenceCount = xPoSeSe.getLength();
-            drawing::PointSequence* pInnerSequence = xPoSeSe.getArray();
-
-            drawing::PolyPolygonShape3D xPolyPolygon3D;
-            xPolyPolygon3D.SequenceX.realloc(nOuterSequenceCount);
-            xPolyPolygon3D.SequenceY.realloc(nOuterSequenceCount);
-            xPolyPolygon3D.SequenceZ.realloc(nOuterSequenceCount);
-            drawing::DoubleSequence* pOuterSequenceX = xPolyPolygon3D.SequenceX.getArray();
-            drawing::DoubleSequence* pOuterSequenceY = xPolyPolygon3D.SequenceY.getArray();
-            drawing::DoubleSequence* pOuterSequenceZ = xPolyPolygon3D.SequenceZ.getArray();
-
-            for(sal_Int32 a(0L); a < nOuterSequenceCount; a++)
+            if(basegfx::tools::importFromSvgD(aPolyPolygon, maPoints, true, 0))
             {
-                sal_Int32 nInnerSequenceCount(pInnerSequence->getLength());
-                awt::Point* pArray = pInnerSequence->getArray();
+                // convert to 3D PolyPolygon
+                const basegfx::B3DPolyPolygon aB3DPolyPolygon(
+                    basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(
+                        aPolyPolygon));
 
-                pOuterSequenceX->realloc(nInnerSequenceCount);
-                pOuterSequenceY->realloc(nInnerSequenceCount);
-                pOuterSequenceZ->realloc(nInnerSequenceCount);
-                double* pInnerSequenceX = pOuterSequenceX->getArray();
-                double* pInnerSequenceY = pOuterSequenceY->getArray();
-                double* pInnerSequenceZ = pOuterSequenceZ->getArray();
+                // convert to UNO API class PolyPolygonShape3D
+                drawing::PolyPolygonShape3D xPolyPolygon3D;
+                basegfx::tools::B3DPolyPolygonToUnoPolyPolygonShape3D(
+                    aB3DPolyPolygon,
+                    xPolyPolygon3D);
 
-                for(sal_Int32 b(0L); b < nInnerSequenceCount; b++)
-                {
-                    *pInnerSequenceX++ = pArray->X;
-                    *pInnerSequenceY++ = pArray->Y;
-                    *pInnerSequenceZ++ = 0.0;
-                    pArray++;
-                }
-                pInnerSequence++;
-
-                pOuterSequenceX++;
-                pOuterSequenceY++;
-                pOuterSequenceZ++;
+                // set polygon data
+                uno::Any aAny;
+                aAny <<= xPolyPolygon3D;
+                xPropSet->setPropertyValue(OUString("D3DPolyPolygon3D"), aAny);
             }
-
-            // set poly
-            uno::Any aAny;
-            aAny <<= xPolyPolygon3D;
-            xPropSet->setPropertyValue("D3DPolyPolygon3D", aAny);
+            else
+            {
+                OSL_ENSURE(false, "Error on importing svg:d for 3D PolyPolygon (!)");
+            }
         }
 
         // call parent

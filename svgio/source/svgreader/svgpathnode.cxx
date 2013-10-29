@@ -69,7 +69,7 @@ namespace svgio
                 {
                     basegfx::B2DPolyPolygon aPath;
 
-                    if(basegfx::tools::importFromSvgD(aPath, aContent))
+                    if(basegfx::tools::importFromSvgD(aPath, aContent, false, &maHelpPointIndices))
                     {
                         if(aPath.count())
                         {
@@ -114,7 +114,7 @@ namespace svgio
             {
                 drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 
-                pStyle->add_path(*getPath(), aNewTarget);
+                pStyle->add_path(*getPath(), aNewTarget, &maHelpPointIndices);
 
                 if(aNewTarget.hasElements())
                 {

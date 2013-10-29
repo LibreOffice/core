@@ -25,6 +25,8 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
+#include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/drawing/FlagSequence.hpp>
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
 
@@ -450,6 +452,58 @@ namespace basegfx
         /// get the tangent with which the given point is left seen from the following
         /// polygon path data. Take into account all stuff like closed state, zero-length edges and others.
         BASEGFX_DLLPUBLIC B2DVector getTangentLeavingPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
+
+        /// converters for com::sun::star::drawing::PointSequence
+        BASEGFX_DLLPUBLIC B2DPolygon UnoPointSequenceToB2DPolygon(
+            const com::sun::star::drawing::PointSequence& rPointSequenceSource,
+            bool bCheckClosed = true);
+        BASEGFX_DLLPUBLIC void B2DPolygonToUnoPointSequence(
+            const B2DPolygon& rPolygon,
+            com::sun::star::drawing::PointSequence& rPointSequenceRetval);
+
+        /* converters for com::sun::star::drawing::PointSequence and
+           com::sun::star::drawing::FlagSequence to B2DPolygon (curved polygons)
+         */
+        B2DPolygon UnoPolygonBezierCoordsToB2DPolygon(
+            const com::sun::star::drawing::PointSequence& rPointSequenceSource,
+            const com::sun::star::drawing::FlagSequence& rFlagSequenceSource,
+            bool bCheckClosed = true);
+        void B2DPolygonToUnoPolygonBezierCoords(
+            const B2DPolygon& rPolyPolygon,
+            com::sun::star::drawing::PointSequence& rPointSequenceRetval,
+            com::sun::star::drawing::FlagSequence& rFlagSequenceRetval);
+
+        /** Read poly-polygon from SVG.
+
+            This function imports a poly-polygon from an SVG points
+            attribute (a plain list of coordinate pairs).
+
+            @param o_rPoly
+            The output polygon. Note that svg:points can only define a
+            single polygon
+
+            @param rSvgPointsAttribute
+            A valid SVG points attribute string
+
+            @return true, if the string was successfully parsed
+         */
+        BASEGFX_DLLPUBLIC bool importFromSvgPoints( B2DPolygon&            o_rPoly,
+                                  const OUString& rSvgPointsAttribute );
+
+        /** Write poly-polygon to SVG.
+
+            This function imports a non-bezier polygon to SVG points
+            (a plain list of coordinate pairs).
+
+            @param rPoly
+            The polygon to export
+
+            @param rSvgPointsAttribute
+            A valid SVG points attribute string
+
+            @return true, if the string was successfully parsed
+         */
+        BASEGFX_DLLPUBLIC OUString exportToSvgPoints( const B2DPolygon& rPoly );
 
     } // end of namespace tools
 } // end of namespace basegfx

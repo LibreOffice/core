@@ -1688,7 +1688,7 @@ SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath()
 void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
 {
     ::basegfx::B2DPolyPolygon xPolyPoly;
-    if( ::basegfx::tools::importFromSvgD( xPolyPoly, getPath() ) )
+    if( ::basegfx::tools::importFromSvgD( xPolyPoly, getPath(), true, 0 ) )
     {
         SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
         if( pObj )
@@ -1744,7 +1744,7 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
         }
     }
 
-    setPath( ::basegfx::tools::exportToSvgD( xPolyPoly ) );
+    setPath( ::basegfx::tools::exportToSvgD( xPolyPoly, true, true, true) );
 }
 
 // ====================================================================

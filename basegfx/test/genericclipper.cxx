@@ -79,12 +79,12 @@ public:
         fprintf(stderr, "%s input LHS - svg:d=\"%s\"\n",
                 pName, OUStringToOString(
                     basegfx::tools::exportToSvgD(
-                        aSelfIntersect),
+                        aSelfIntersect, true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
         fprintf(stderr, "%s input RHS - svg:d=\"%s\"\n",
                 pName, OUStringToOString(
                     basegfx::tools::exportToSvgD(
-                        aRect),
+                        aRect, true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
@@ -94,14 +94,14 @@ public:
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 pName, OUStringToOString(
-                    basegfx::tools::exportToSvgD(aRes),
+                    basegfx::tools::exportToSvgD(aRes, true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
         OUString aValid=OUString::createFromAscii(pValidSvgD);
 
         CPPUNIT_ASSERT_MESSAGE(pName,
-                               basegfx::tools::exportToSvgD(aRes) == aValid);
+                               basegfx::tools::exportToSvgD(aRes, true, true, false) == aValid);
     }
 
     void validateOr()
@@ -136,13 +136,13 @@ public:
         OUString aValid=OUString::createFromAscii(pValidSvgD);
         B2DPolyPolygon aInputPoly, aValidPoly;
 
-        tools::importFromSvgD(aInputPoly, aInput);
-        tools::importFromSvgD(aValidPoly, aValid);
+        tools::importFromSvgD(aInputPoly, aInput, false, NULL);
+        tools::importFromSvgD(aValidPoly, aValid, false, NULL);
 
         CPPUNIT_ASSERT_MESSAGE(
             pName,
             basegfx::tools::exportToSvgD(
-                tools::solveCrossovers(aInputPoly)) == aValid);
+                tools::solveCrossovers(aInputPoly), true, true, false) == aValid);
     }
 
     void checkCrossoverSolver()

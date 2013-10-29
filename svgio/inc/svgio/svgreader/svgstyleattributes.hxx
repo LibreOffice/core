@@ -23,6 +23,7 @@
 #include <svgio/svgreader/svgpaint.hxx>
 #include <svgio/svgreader/svgnode.hxx>
 #include <vcl/vclenum.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -250,7 +251,8 @@ namespace svgio
                 const SvgMarkerNode& rMarker) const;
             void add_markers(
                 const basegfx::B2DPolyPolygon& rPath,
-                drawinglayer::primitive2d::Primitive2DSequence& rTarget) const;
+                drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+                const basegfx::tools::PointIndexSet* pHelpPointIndices) const;
 
         public:
             /// local attribute scanner
@@ -262,7 +264,8 @@ namespace svgio
                 drawinglayer::primitive2d::Primitive2DSequence& rSource) const;
             void add_path(
                 const basegfx::B2DPolyPolygon& rPath,
-                drawinglayer::primitive2d::Primitive2DSequence& rTarget) const;
+                drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+                const basegfx::tools::PointIndexSet* pHelpPointIndices) const;
             void add_postProcess(
                 drawinglayer::primitive2d::Primitive2DSequence& rTarget,
                 const drawinglayer::primitive2d::Primitive2DSequence& rSource,

@@ -149,7 +149,7 @@ private:
         OUString aSvg( "m 0 0l7 7h-1z" );
 
         basegfx::B2DPolyPolygon aPoly;
-        basegfx::tools::importFromSvgD( aPoly, aSvg );
+        basegfx::tools::importFromSvgD( aPoly, aSvg, false, NULL );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,

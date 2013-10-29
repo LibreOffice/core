@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,basebmp_cpputest))
 
+$(eval $(call gb_CppunitTest_use_sdk_api,basebmp_cpputest))
+
 $(eval $(call gb_CppunitTest_use_external,basebmp_cpputest,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,basebmp_cpputest,\

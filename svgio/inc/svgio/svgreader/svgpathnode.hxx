@@ -22,6 +22,7 @@
 
 #include <svgio/svgreader/svgnode.hxx>
 #include <svgio/svgreader/svgstyleattributes.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -33,12 +34,13 @@ namespace svgio
         {
         private:
             /// use styles
-            SvgStyleAttributes          maSvgStyleAttributes;
+            SvgStyleAttributes                  maSvgStyleAttributes;
 
             /// variable scan values, dependent of given XAttributeList
-            basegfx::B2DPolyPolygon*    mpPolyPolygon;
-            basegfx::B2DHomMatrix*      mpaTransform;
-            SvgNumber                   maPathLength;
+            basegfx::B2DPolyPolygon*            mpPolyPolygon;
+            basegfx::B2DHomMatrix*              mpaTransform;
+            SvgNumber                           maPathLength;
+            basegfx::tools::PointIndexSet       maHelpPointIndices;
 
         public:
             SvgPathNode(
