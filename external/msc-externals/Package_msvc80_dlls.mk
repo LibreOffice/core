@@ -9,9 +9,7 @@
 
 $(eval $(call gb_Package_Package,msvc80_dlls,$(MSVC80_DLL_PATH)))
 
-$(eval $(call gb_Package_set_outdir,msvc80_dlls,$(OUTDIR)))
-
-$(eval $(call gb_Package_add_files,msvc80_dlls,bin,\
+$(eval $(call gb_Package_add_files,msvc80_dlls,$(LIBO_LIB_FOLDER),\
 	$(MSVC80_DLLS) \
 ))
 
