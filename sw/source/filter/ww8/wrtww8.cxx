@@ -250,7 +250,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm, const ::sw:
 
 void WW8_WrtBookmarks::Write( WW8Export& rWrt)
 {
-    if (!aSttCps.size())
+    if (aSttCps.empty())
         return;
     CPItr aItr;
     long n;
