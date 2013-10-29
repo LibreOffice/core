@@ -22,32 +22,6 @@
 namespace writerfilter {
 namespace doctok {
 
-sal_uInt32 WW8LFOTable::getEntryCount()
-{
-    return getU32(0);
-}
-
-writerfilter::Reference<Properties>::Pointer_t
-WW8LFOTable::getEntry(sal_uInt32 nIndex)
-{
-    WW8LFO * pLFO = new WW8LFO(this, entryOffsets[nIndex]);
-
-    pLFO->setIndex(nIndex);
-
-    return writerfilter::Reference<Properties>::Pointer_t(pLFO);
-}
-
-writerfilter::Reference<Properties>::Pointer_t
-WW8LFO::get_LFOData()
-{
-    WW8LFOTable * pLFOTable = dynamic_cast<WW8LFOTable *>(mpParent);
-    sal_uInt32 nPayloadOffset = pLFOTable->getPayloadOffset(mnIndex);
-    sal_uInt32 nPayloadSize = pLFOTable->getPayloadSize(mnIndex);
-
-    return writerfilter::Reference<Properties>::Pointer_t
-    (new WW8LFOData(mpParent, nPayloadOffset, nPayloadSize));
-}
-
 void WW8LFOLevel::resolveNoAuto(Properties & /*rHandler*/)
 {
 

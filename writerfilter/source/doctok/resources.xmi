@@ -3110,15 +3110,6 @@
         <!--Class LFOData-->
         <!--Class LFOTable-->
         <UML:Class xmi.id="LFOTable" name="LFOTable">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8resource"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="plcf"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8nopayloadoffset"/>
-          </UML:ModelElement.stereotype>
           <UML:ModelElement.taggedValue>
             <UML:TaggedValue>
               <UML:TaggedValue.dataValue>rtf:LFOTABLE</UML:TaggedValue.dataValue>
