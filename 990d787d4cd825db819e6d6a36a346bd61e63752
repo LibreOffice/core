@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZX///6o\u003d",
+        "filename": "sot/source/sdstor/stgstrms.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-29T00:30:32Z",
+      "side": 1,
+      "message": "Just a nitpick: as this is a set and the insert case is the usual case we could spare the find() cycle here and directly use\n\n if (!nUsedPageNumbers.insert(nBgn)-\u003esecond)\n     bError \u003d true;",
+      "revId": "990d787d4cd825db819e6d6a36a346bd61e63752",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
