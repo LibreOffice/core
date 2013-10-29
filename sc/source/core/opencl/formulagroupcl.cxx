@@ -1414,7 +1414,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         return true;
     }
 #undef NO_FALLBACK_TO_SWINTERP /* undef this for non-TDD runs */
-    catch (UnhandledToken &ut) {
+    catch (const UnhandledToken&) {
         std::cerr << "Dynamic formual compiler: unhandled token\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
@@ -1422,7 +1422,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         return false;
 #endif
     }
-    catch (OpenCLError &oce) {
+    catch (const OpenCLError &oce) {
         std::cerr << "Dynamic formula compiler: OpenCL error: ";
         std::cerr << oce.mError << "\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
