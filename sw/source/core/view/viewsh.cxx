@@ -1770,7 +1770,6 @@ void SwViewShell::PaintTile(OutputDevice *pOut, const Rectangle &rRect)
 }
 
 #if !HAVE_FEATURE_DESKTOP
-
 extern "C"
 void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int tilePosX, int tilePosY, int tileWidth, int tileHeight)
 {
@@ -1811,17 +1810,6 @@ void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int
                              contextWidth,
                              contextHeight);
     }
-}
-
-extern "C"
-Size touch_lo_get_content_size()
-{
-    SwWrtShell *pViewShell = GetActiveWrtShell();
-    Size contentSize(0,0);
-    if (pViewShell)
-    {
-    }
-    return contentSize;
 }
 #endif
 
