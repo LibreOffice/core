@@ -18,10 +18,10 @@
 
 #include "openclwrapper.hxx"
 
-#include "OP_finacial.cxx"
-#include "OP_database.cxx"
-#include "OP_math.cxx"
-#include "OP_Statistical.cxx"
+#include "op_financial.cxx"
+#include "op_database.cxx"
+#include "op_math.cxx"
+#include "op_statistical.cxx"
 #include "formulagroupcl_public.hxx"
 #include "formulagroupcl_finacial.hxx"
 
