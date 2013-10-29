@@ -1542,13 +1542,10 @@ bool ScColumn::ParseString(
                 if (!aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
                     break;
 
-                if ( aParam.mpNumFormatter )
-                {
-                    // convert back to the original language if a built-in format was detected
-                    const SvNumberformat* pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
-                    if ( pOldFormat )
-                        nIndex = aParam.mpNumFormatter->GetFormatForLanguageIfBuiltIn( nIndex, pOldFormat->GetLanguage() );
-                }
+                // convert back to the original language if a built-in format was detected
+                const SvNumberformat* pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
+                if ( pOldFormat )
+                    nIndex = aParam.mpNumFormatter->GetFormatForLanguageIfBuiltIn( nIndex, pOldFormat->GetLanguage() );
 
                 rCell.set(nVal);
                 if ( nIndex != nOldIndex)
@@ -1558,7 +1555,6 @@ bool ScColumn::ParseString(
                     // Exception: If the new format is boolean, always apply it.
 
                     bool bOverwrite = false;
-                    const SvNumberformat* pOldFormat = aParam.mpNumFormatter->GetEntry( nOldIndex );
                     if ( pOldFormat )
                     {
                         short nOldType = pOldFormat->GetType() & ~NUMBERFORMAT_DEFINED;
