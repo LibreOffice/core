@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Module_Module,cli_ure))
 
-$(eval $(call gb_Module_add_targets,cli_ure,\
-    Package_version \
-))
-
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,cli_ure,\
 	CliLibrary_cli_basetypes \

@@ -55,7 +55,7 @@ LibreOffice
             BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PCPFILENAME libreoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
+            ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
             ADDSYSTEMINTEGRATION 1
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             PACKAGEREVISION {buildid}
@@ -106,7 +106,7 @@ LibreOffice_Dev
             SOLSUREPACKAGEPREFIX libreofficedev
             REGISTRYLAYERNAME LayerDev
             UPDATEURL http://update.libreoffice.org/check.php
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
+            ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
             ADDSYSTEMINTEGRATION 1
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             PACKAGEREVISION {buildid}

@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Module_Module,unoil))
 
-$(eval $(call gb_Module_add_targets,unoil,\
-    Package_clioootypesversion \
-))
-
 ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,unoil,\
     CustomTarget_javamaker \

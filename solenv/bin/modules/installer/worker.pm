@@ -542,13 +542,13 @@ sub add_variables_from_inc_to_hashref
     {
         $includefilename =~ s/^\s*//;
         $includefilename =~ s/\s*$//;
-        $includefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$includefilename, $includepatharrayref, 1);
-        if ( $$includefilenameref eq "" ) { installer::exiter::exit_program("Include file $includefilename not found!\nADD_INCLUDE_FILES = $allvariables->{'ADD_INCLUDE_FILES'}", "add_variables_from_inc_to_hashref"); }
+        $includefilenameref = $ENV{'SRCDIR'} . "/" . $includefilename;
+        if ( ! -f $includefilenameref ) { installer::exiter::exit_program("Include file $includefilename ($includefilenameref) not found!\nADD_INCLUDE_FILES = $allvariables->{'ADD_INCLUDE_FILES'}", "add_variables_from_inc_to_hashref"); }
 
-        $infoline = "Including inc file: $$includefilenameref \n";
+        $infoline = "Including inc file: $includefilenameref \n";
         push( @installer::globals::globallogfileinfo, $infoline);
 
-        my $includefile = installer::files::read_file($$includefilenameref);
+        my $includefile = installer::files::read_file($includefilenameref);
 
         for ( my $j = 0; $j <= $#{$includefile}; $j++ )
         {
