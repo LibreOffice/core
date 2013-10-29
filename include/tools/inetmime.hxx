@@ -782,8 +782,7 @@ public:
 
         @param nEnd  The offset past the last character to write.
      */
-    void write(const OString& rOctets, xub_StrLen nBegin,
-                      xub_StrLen nEnd)
+    void write(const OString& rOctets, sal_Int32 nBegin, sal_Int32 nEnd)
     {
         writeSequence(rOctets.getStr() + nBegin, rOctets.getStr() + nEnd);
         m_nColumn += nEnd - nBegin;
