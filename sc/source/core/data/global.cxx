@@ -378,11 +378,9 @@ const OUString& ScGlobal::GetRscString( sal_uInt16 nIndex )
                 ;   // nothing
         }
         if (eOp != ocNone)
-            ppRscString[ nIndex ] = new OUString(
-                    ScCompiler::GetNativeSymbol( eOp));
+            ppRscString[ nIndex ] = new OUString( ScCompiler::GetNativeSymbol( eOp));
         else
-            ppRscString[ nIndex ] = new OUString(
-                    ScRscStrLoader( RID_GLOBSTR, nIndex ).GetString());
+            ppRscString[ nIndex ] = new OUString( SC_STRLOAD( RID_GLOBSTR, nIndex ));
     }
     return *ppRscString[ nIndex ];
 }

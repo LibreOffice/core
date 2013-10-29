@@ -1060,7 +1060,7 @@ void ScCheckListMenuWindow::packWindow()
     getSectionPosSize(aPos, aSize, CHECK_TOGGLE_ALL);
     maChkToggleAll.SetPosSizePixel(aPos, aSize);
     maChkToggleAll.SetFont(getLabelFont());
-    maChkToggleAll.SetText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_TOGGLE_ALL).GetString());
+    maChkToggleAll.SetText(SC_STRLOAD(RID_POPUP_FILTER, STR_BTN_TOGGLE_ALL));
     maChkToggleAll.SetTextColor(rStyle.GetMenuTextColor());
     maChkToggleAll.SetControlBackground(rStyle.GetMenuColor());
     maChkToggleAll.SetClickHdl( LINK(this, ScCheckListMenuWindow, TriStateHdl) );
@@ -1068,14 +1068,14 @@ void ScCheckListMenuWindow::packWindow()
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
     maBtnSelectSingle.SetPosSizePixel(aPos, aSize);
-    maBtnSelectSingle.SetQuickHelpText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_SELECT_CURRENT).GetString());
+    maBtnSelectSingle.SetQuickHelpText(SC_STRLOAD(RID_POPUP_FILTER, STR_BTN_SELECT_CURRENT));
     maBtnSelectSingle.SetModeImage(Image(ScResId(RID_IMG_SELECT_CURRENT)));
     maBtnSelectSingle.SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnSelectSingle.Show();
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);
     maBtnUnselectSingle.SetPosSizePixel(aPos, aSize);
-    maBtnUnselectSingle.SetQuickHelpText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_UNSELECT_CURRENT).GetString());
+    maBtnUnselectSingle.SetQuickHelpText(SC_STRLOAD(RID_POPUP_FILTER, STR_BTN_UNSELECT_CURRENT));
     maBtnUnselectSingle.SetModeImage(Image(ScResId(RID_IMG_UNSELECT_CURRENT)));
     maBtnUnselectSingle.SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnUnselectSingle.Show();

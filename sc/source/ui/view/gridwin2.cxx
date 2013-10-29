@@ -503,13 +503,13 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         // Populate the menus.
         ScTabViewShell* pViewShell = pViewData->GetViewShell();
         mpDPFieldPopup->addMenuItem(
-            ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_ASC).GetString(), true,
+            SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_ASC), true,
             new PopupSortAction(rPos, PopupSortAction::ASCENDING, 0, pViewShell));
         mpDPFieldPopup->addMenuItem(
-            ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_DESC).GetString(), true,
+            SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_DESC), true,
             new PopupSortAction(rPos, PopupSortAction::DESCENDING, 0, pViewShell));
         ScMenuFloatingWindow* pSubMenu = mpDPFieldPopup->addSubMenuItem(
-            ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_CUSTOM).GetString(), !aUserSortNames.empty());
+            SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
 
         if (pSubMenu && !aUserSortNames.empty())
         {

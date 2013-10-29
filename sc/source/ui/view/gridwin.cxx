@@ -736,10 +736,10 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     // Populate the menu.
     mpAutoFilterPopup->addMenuItem(
-        ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_ASC).GetString(),
+        SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_ASC),
         true, new AutoFilterAction(this, SortAscending));
     mpAutoFilterPopup->addMenuItem(
-        ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_DESC).GetString(),
+        SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_DESC),
         true, new AutoFilterAction(this, SortDescending));
     mpAutoFilterPopup->addSeparator();
     mpAutoFilterPopup->addMenuItem(
