@@ -2056,13 +2056,14 @@ sal_uInt8 ScColumn::GetRangeScriptType(
         sc::celltextattr_block::iterator it = sc::celltextattr_block::begin(*itPos->data);
         sc::celltextattr_block::iterator itEnd = sc::celltextattr_block::end(*itPos->data);
         std::advance(it, aRet.second);
+        sc::CellStoreType::iterator itr = maCells.position(nRow).first;
         for (; it != itEnd; ++it, ++nRow)
         {
             if (nRow > nRow2)
                 return nScriptType;
 
             sc::CellTextAttr& rVal = *it;
-            if (UpdateScriptType(rVal, nRow))
+            if (UpdateScriptType(rVal, nRow, itr))
                 bUpdated = true;
             nScriptType |= rVal.mnScriptType;
         }
@@ -2073,6 +2074,7 @@ sal_uInt8 ScColumn::GetRangeScriptType(
         nRow += itPos->size - aRet.second;
     }
 
+    sc::CellStoreType::iterator itr = maCells.position(nRow).first;
     while (nRow <= nRow2)
     {
         ++itPos;
@@ -2094,7 +2096,7 @@ sal_uInt8 ScColumn::GetRangeScriptType(
                 return nScriptType;
 
             sc::CellTextAttr& rVal = *it;
-            if (UpdateScriptType(rVal, nRow))
+            if (UpdateScriptType(rVal, nRow, itr))
                 bUpdated = true;
 
             nScriptType |= rVal.mnScriptType;

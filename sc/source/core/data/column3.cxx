@@ -430,7 +430,7 @@ void ScColumn::BroadcastNewCell( SCROW nRow )
     Broadcast(nRow);
 }
 
-bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow )
+bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellStoreType::iterator& itr )
 {
     if (rAttr.mnScriptType != SC_SCRIPTTYPE_UNKNOWN)
         // Already updated. Nothing to do.
@@ -442,9 +442,11 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow )
     if (!pPattern)
         return false;
 
-    ScRefCellValue aCell;
+    sc::CellStoreType::position_type pos = maCells.position(itr, nRow);
+    itr = pos.first;
+    size_t nOffset = pos.second;
+    ScRefCellValue aCell = GetCellValue( itr, nOffset );
     ScAddress aPos(nCol, nRow, nTab);
-    aCell.assign(*pDocument, aPos);
 
     const SfxItemSet* pCondSet = NULL;
     ScConditionalFormatList* pCFList = pDocument->GetCondFormList(nTab);

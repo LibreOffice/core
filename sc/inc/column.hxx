@@ -544,7 +544,7 @@ private:
     void ActivateNewFormulaCell( const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell, bool bJoin = true );
     void ActivateNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell, bool bJoin = true );
     void BroadcastNewCell( SCROW nRow );
-    bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow );
+    bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellStoreType::iterator& itr );
 
     const ScFormulaCell* FetchFormulaCell( SCROW nRow ) const;
 
