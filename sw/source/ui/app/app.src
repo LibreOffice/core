@@ -504,14 +504,9 @@ String STR_OUTLINE_NUMBERING
     Text [ en-US ] = "Outline Numbering";
 };
 
-String STR_STATUSBAR_WORDCOUNT_NO_SELECTION
-{
-    Text [ en-US ] = "Words (characters): $1 ($2)";
-};
-
 String STR_STATUSBAR_WORDCOUNT
 {
-    Text [ en-US ] = "Words (characters): $1 ($2) Selected: $3 ($4)";
+    Text [ en-US ] = "%1 Words, %2 Characters";
 };
 
 String STR_CONVERT_TEXT_TABLE
