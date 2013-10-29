@@ -695,7 +695,7 @@ public:
     }
     virtual void GenDecl(std::stringstream &ss) const
     {
-        for(auto it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
+        for (SubArgumentsType::const_iterator it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
             ++it) {
             if (it != mvSubArguments.begin())
                 ss << ", ";
