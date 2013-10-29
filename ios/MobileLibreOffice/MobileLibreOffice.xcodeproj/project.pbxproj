@@ -17,8 +17,8 @@
 		681D78C2180C12D300D52D5E /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B7180C12D300D52D5E /* udkapi.rdb */; };
 		681D78C3180C12D300D52D5E /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = 681D78B8180C12D300D52D5E /* unorc */; };
 		681D78C6180C136400D52D5E /* ure in Resources */ = {isa = PBXBuildFile; fileRef = 681D78C5180C136400D52D5E /* ure */; };
-		688EAAE9180D3130003741B3 /* lo.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 688EAAE8180D3130003741B3 /* lo.xcconfig */; };
 		688EAB01180D67E9003741B3 /* libios_sharedlo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 688EAAFE180D679F003741B3 /* libios_sharedlo.a */; };
+		689A7ECC181EA0DD0020710C /* mlo-icon-57.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B99ED6180BBF7100FFEA35 /* mlo-icon-57.png */; };
 		689EBAEB18069FB7002F1CD7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689EBAEA18069FB7002F1CD7 /* UIKit.framework */; };
 		689EBAED18069FB7002F1CD7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689EBAEC18069FB7002F1CD7 /* Foundation.framework */; };
 		689EBAEF18069FB7002F1CD7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689EBAEE18069FB7002F1CD7 /* CoreGraphics.framework */; };
@@ -48,7 +48,6 @@
 		68B98C42180B38CD00FFEA35 /* MLOMagnifier@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C33180B38CD00FFEA35 /* MLOMagnifier@2x.png */; };
 		68B98C43180B38CD00FFEA35 /* MLOMagnifierMask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B98C34180B38CD00FFEA35 /* MLOMagnifierMask@2x.png */; };
 		68B99ED3180BBEE900FFEA35 /* test1.odt in Resources */ = {isa = PBXBuildFile; fileRef = 68B99ED2180BBEE900FFEA35 /* test1.odt */; };
-		68B99ED8180BBF7100FFEA35 /* mlo-icon-57.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B99ED6180BBF7100FFEA35 /* mlo-icon-57.png */; };
 		68B99ED9180BBF7100FFEA35 /* mlo-icon-114.png in Resources */ = {isa = PBXBuildFile; fileRef = 68B99ED7180BBF7100FFEA35 /* mlo-icon-114.png */; };
 		68C6FC51180AD0CA005ACB02 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 68C6FC4F180AD0CA005ACB02 /* libz.dylib */; };
 		68C6FC52180AD0CA005ACB02 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 68C6FC50180AD0CA005ACB02 /* libiconv.dylib */; };
@@ -74,7 +73,6 @@
 		681D78B1180C12D300D52D5E /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = resource_link/oovbaapi.rdb; sourceTree = SOURCE_ROOT; };
 		681D78B2180C12D300D52D5E /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = resource_link/program; sourceTree = SOURCE_ROOT; };
 		681D78B3180C12D300D52D5E /* rc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rc; path = resource_link/rc; sourceTree = SOURCE_ROOT; };
-		681D78B4180C12D300D52D5E /* registry */ = {isa = PBXFileReference; lastKnownFileType = folder; name = registry; path = resource_link/registry; sourceTree = SOURCE_ROOT; };
 		681D78B5180C12D300D52D5E /* services.rdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = services.rdb; path = resource_link/services.rdb; sourceTree = SOURCE_ROOT; };
 		681D78B6180C12D300D52D5E /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = resource_link/share; sourceTree = SOURCE_ROOT; };
 		681D78B7180C12D300D52D5E /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = resource_link/udkapi.rdb; sourceTree = SOURCE_ROOT; };
@@ -294,7 +292,6 @@
 			children = (
 				681D78C5180C136400D52D5E /* ure */,
 				681D78B2180C12D300D52D5E /* program */,
-				681D78B4180C12D300D52D5E /* registry */,
 				681D78B6180C12D300D52D5E /* share */,
 				681D78AF180C12D300D52D5E /* fundamentalrc */,
 				681D78B0180C12D300D52D5E /* offapi.rdb */,
@@ -343,7 +340,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 689EBB0D18069FB8002F1CD7 /* Build configuration list for PBXNativeTarget "MobileLibreOffice" */;
 			buildPhases = (
-				68B98C23180B2FE500FFEA35 /* ShellScript */,
 				689EBAE318069FB7002F1CD7 /* Sources */,
 				689EBAE418069FB7002F1CD7 /* Frameworks */,
 				689EBAE518069FB7002F1CD7 /* Resources */,
@@ -407,7 +403,7 @@
 				689EBAFD18069FB8002F1CD7 /* Default.png in Resources */,
 				689EBAFF18069FB8002F1CD7 /* Default@2x.png in Resources */,
 				689EBB0118069FB8002F1CD7 /* Default-568h@2x.png in Resources */,
-				68B99ED8180BBF7100FFEA35 /* mlo-icon-57.png in Resources */,
+				689A7ECC181EA0DD0020710C /* mlo-icon-57.png in Resources */,
 				68B99ED9180BBF7100FFEA35 /* mlo-icon-114.png in Resources */,
 				68B98C35180B38CD00FFEA35 /* MLOButtonBack.png in Resources */,
 				68B98C36180B38CD00FFEA35 /* MLOButtonBack@2x.png in Resources */,
@@ -435,27 +431,10 @@
 				681D78C2180C12D300D52D5E /* udkapi.rdb in Resources */,
 				681D78C3180C12D300D52D5E /* unorc in Resources */,
 				681D78C6180C136400D52D5E /* ure in Resources */,
-				688EAAE9180D3130003741B3 /* lo.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		68B98C23180B2FE500FFEA35 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "dest_resource=resource_link\nproduct_ver=`sed -ne 's/^\\(export PRODUCTVERSION=\\)\\(.*\\)/\\2/p' $LO_BUILDDIR/config_host.mk`\nbuildid=`(cd $LO_SRCDIR && git log -1 --format=%H)`\n\nrm $dest_resource\nmkdir -p $dest_resource\n\n#touch $SRCROOT/MobileLibreOffice/main.m\n\n# Libs #\nfor path in $LO_OUTDIR/lib $LO_INSTDIR/program $LO_WORKDIR/LinkTarget/StaticLibrary $LO_WORKDIR/UnpackedTarball/*/.libs/ $LO_WORKDIR/UnpackedTarball/*/src/.libs $LO_WORKDIR/UnpackedTarball/*/src/*/.libs $LO_WORKDIR/UnpackedTarball/openssl; do\n    flags+=\" -L$path\"\n    for lib in $path/lib*.a; do\n        if [ ! -r $lib ]; then\n            continue\n        fi\n        base=${lib##*/lib}\n        base=${base%\\.a}\n        flags+=\" -l${base}\"\n    done\ndone\n\nfile=../lo.xcconfig\nsed -i '' -e \"s|^\\(LINK_LDFLAGS =\\).*$|\\1 $flags|\" $file\n    \n# Resources #\nmkdir -p $dest_resource/ure\n\n# copy rdb files\ncp $LO_OUTDIR/bin/offapi.rdb          $dest_resource\ncp $LO_OUTDIR/bin/udkapi.rdb          $dest_resource\ncp $LO_OUTDIR/bin/oovbaapi.rdb        $dest_resource\ncp $LO_INSTDIR/program/services/services.rdb  $dest_resource\ncp $LO_INSTDIR/ure/share/misc/services.rdb    $dest_resource/ure\n\n# copy .res files\n# program/resource is hardcoded in tools/source/rc/resmgr.cxx. Sure,\n# we could set STAR_RESOURCE_PATH instead. sigh...\nmkdir -p $dest_resource/program/resource\ncp $LO_INSTDIR/program/resource/*en-US.res $dest_resource/program/resource\n\n# soffice.cfg\nmkdir -p $dest_resource/share/config\ncp -R $LO_INSTDIR/share/config/soffice.cfg $dest_resource/share/config\n            \n# \"registry\"\ncp -R $LO_INSTDIR/share/registry $dest_resource/share\n            \n# Set up rc, the \"inifile\". See getIniFileName_Impl().\nfile=$dest_resource/rc\necho '[Bootstrap]'                                      >  $file\necho 'URE_BOOTSTRAP=file://$APP_DATA_DIR/fundamentalrc' >> $file\necho 'HOME=$APP_DATA_DIR/tmp'                           >> $file\n\n# Set up fundamentalrc, unorc, bootstraprc and versionrc.\n# Do we really need all these?\nfile=$dest_resource/fundamentalrc\necho '[Bootstrap]'                                      >  $file\necho 'BRAND_BASE_DIR=file://$APP_DATA_DIR'              >> $file\necho 'CONFIGURATION_LAYERS=xcsxcu:${BRAND_BASE_DIR}/share/registry res:${BRAND_BASE_DIR}/registry' >> $file\n\nfile=$dest_resource/unorc\necho '[Bootstrap]' > $file\n\n# bootstraprc must be in $BRAND_BASE_DIR/program\nmkdir -p $dest_resource/program\nfile=$dest_resource/program/bootstraprc\necho '[Bootstrap]'                                                              >  $file\necho 'InstallMode=<installmode>'                                                >> $file\necho \"ProductKey=LibreOffice $product_ver\"                                      >> $file\necho 'UserInstallation=file://$APP_DATA_DIR/../Library/Application%20Support'   >> $file\n\n# Is this really needed?\nfile=$dest_resource/program/versionrc\necho '[Version]'            >  $file\necho 'AllLanguages=en-US'   >> $file\necho 'BuildVersion='        >> $file\necho \"buildid=$buildid\"     >> $file\necho 'ProductMajor=360'     >> $file\necho 'ProductMinor=1'       >> $file\n           ";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		689EBAE318069FB7002F1CD7 /* Sources */ = {
@@ -523,7 +502,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = "";
 				LLVM_LTO = NO;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(LINK_LDFLAGS)",
@@ -649,7 +628,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = "";
 				LLVM_LTO = NO;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(LINK_LDFLAGS)",

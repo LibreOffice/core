@@ -34,10 +34,10 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>mlo-icon-57.png</string>
 				<string>mlo-icon-114.png</string>
 				<string>mlo-icon-72.png</string>
 				<string>mlo-icon-144.png</string>
+				<string>mlo-icon-57.png</string>
 			</array>
 		</dict>
 	</dict>
