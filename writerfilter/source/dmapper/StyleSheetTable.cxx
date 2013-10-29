@@ -663,6 +663,8 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 {
                     pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tblPr"));
                 }
+                else if (nSprmId == NS_ooxml::LN_CT_Style_tblStylePr)
+                    pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tblStylePr"));
             }
             break;
         }

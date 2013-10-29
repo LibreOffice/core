@@ -78,7 +78,23 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_TblPrBase:
         case NS_ooxml::LN_CT_TrPrBase:
         case NS_ooxml::LN_CT_TcPrBase:
+        {
+            std::vector<beans::PropertyValue> aSavedGrabBag;
+            if (rSprm.getId() == NS_ooxml::LN_CT_PPrBase || rSprm.getId() == NS_ooxml::LN_EG_RPrBase)
+            {
+                aSavedGrabBag = m_aInteropGrabBag;
+                m_aInteropGrabBag.clear();
+            }
             resolveSprmProps( rSprm );
+            if (rSprm.getId() == NS_ooxml::LN_CT_PPrBase || rSprm.getId() == NS_ooxml::LN_EG_RPrBase)
+            {
+                if (rSprm.getId() == NS_ooxml::LN_CT_PPrBase)
+                    aSavedGrabBag.push_back(getInteropGrabBag("pPr"));
+                else if (rSprm.getId() == NS_ooxml::LN_EG_RPrBase)
+                    aSavedGrabBag.push_back(getInteropGrabBag("rPr"));
+                m_aInteropGrabBag = aSavedGrabBag;
+            }
+        }
             break;
         default:
             // Tables specific properties have to handled here
@@ -90,7 +106,12 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             {
                 // The DomainMapper can handle some of the properties
                 m_rDMapper.PushStyleSheetProperties( m_pProperties, true );
+                // Just pass a non-empty string, the array will have a single element anyway.
+                m_rDMapper.enableInteropGrabBag("TblStylePrHandler");
                 m_rDMapper.sprm( rSprm );
+                uno::Sequence<beans::PropertyValue> aGrabBag = m_rDMapper.getInteropGrabBag().Value.get< uno::Sequence<beans::PropertyValue> >();
+                if (aGrabBag.hasElements())
+                    m_aInteropGrabBag.push_back(aGrabBag[0]);
                 m_rDMapper.PopStyleSheetProperties( true );
             }
     }

@@ -58,6 +58,7 @@
 #include <com/sun/star/text/XFootnote.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <filter/msfilter/util.hxx>
 
 #include <CellColorHandler.hxx>
 #include <SectionColumnHandler.hxx>
@@ -914,6 +915,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Color_val:
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR, uno::makeAny( nIntValue ) );
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "val", OStringToOUString(msfilter::util::ConvertColor(nIntValue), RTL_TEXTENCODING_UTF8));
             break;
         case NS_ooxml::LN_CT_Underline_color:
             if (m_pImpl->GetTopContext())
@@ -2152,6 +2154,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                         uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
                         if (xCharStyle.is())
                             xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_WEIGHT), aBold);
+                        if (nSprmId == NS_sprm::LN_CFBold)
+                            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "b", OUString::number(nIntValue));
                     }
                     break;
                     case 61: /*sprmCFItalic*/
@@ -2162,6 +2166,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                         rContext->Insert( ePropertyId, aPosture );
                         if( nSprmId != NS_sprm::LN_CFItalicBi ) // sprmCFItalicBi
                             rContext->Insert(PROP_CHAR_POSTURE_ASIAN, aPosture );
+                        if (nSprmId == NS_sprm::LN_CFItalic)
+                            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "i", OUString::number(nIntValue));
                     }
                     break;
                     case NS_sprm::LN_CFStrike: /*sprmCFStrike*/
@@ -2239,6 +2245,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             // Make sure char sizes defined in the stylesheets don't affect char props from direct formatting.
             if (!m_pImpl->IsStyleSheetImport())
                 m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
+            if (nSprmId == NS_sprm::LN_CHps)
+                m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "sz", OUString::number(nIntValue));
         }
         break;
     case NS_sprm::LN_CHpsInc:
@@ -3005,6 +3013,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "rFonts", m_pImpl->m_aSubInteropGrabBag);
         else if (nSprmId == NS_ooxml::LN_EG_RPrBase_lang)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "lang", m_pImpl->m_aSubInteropGrabBag);
+        else if (nSprmId == NS_ooxml::LN_EG_RPrBase_color)
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "color", m_pImpl->m_aSubInteropGrabBag);
+    break;
+    case NS_ooxml::LN_CT_PPrBase_wordWrap:
+        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "wordWrap", "");
     break;
     case NS_ooxml::LN_EG_SectPrContents_footnotePr:
     case NS_ooxml::LN_EG_SectPrContents_endnotePr:
