@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZX///64\u003d",
+        "filename": "i18npool/source/characterclassification/cclass_unicode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-29T00:20:19Z",
+      "side": 1,
+      "message": "Call me paranoid ;-)  but if I\u0027m not mistaken it might happen that the caller passes an odd count whereas because of surrogates all added nUtf16Units result in an even value one greater than nCount so at the end nCount may switch value from 1 to -1 and the loop continues. Or am I missing something? IMHO it should be\n\n while (nCount \u003e 0 \u0026\u0026 ...)",
+      "revId": "04503ecb4c9611e529a0ce79a5aab3a0fcc9e7f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
