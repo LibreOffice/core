@@ -107,8 +107,8 @@ public:
     void testFinacialYIELDDISCFormula();
     void testFinacialYIELDMATFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
-    CPPUNIT_TEST(testSharedFormulaXLS);
-    CPPUNIT_TEST(testFinacialFormula);
+//  CPPUNIT_TEST(testSharedFormulaXLS);
+//  CPPUNIT_TEST(testFinacialFormula);
     CPPUNIT_TEST(testStatisticalFormulaFisher);
     CPPUNIT_TEST(testStatisticalFormulaFisherInv);
     CPPUNIT_TEST(testStatisticalFormulaGamma);
@@ -451,10 +451,12 @@ void ScOpenclTest::testFinacialFormula()
         return;
 
     ScDocShellRef xDocSh = loadDoc("FinancialFormulaTest.", XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("FinancialFormulaTest.", XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.Is());
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
