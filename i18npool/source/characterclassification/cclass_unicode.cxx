@@ -205,7 +205,7 @@ cclass_Unicode::getStringType( const OUString& Text, sal_Int32 nPos, sal_Int32 n
 
     sal_Int32 result = 0;
 
-    while (nCount && nPos < Text.getLength())
+    while (nCount > 0 && nPos < Text.getLength())
     {
         sal_Int32 nOrigPos = nPos;
         result |= getCharType(Text, &nPos, 1);
