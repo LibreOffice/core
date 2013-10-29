@@ -39,7 +39,6 @@
 #pragma disable_warn
     // somewhere in the files included directly or indirectly in nsString.h, warnings are enabled, again
 #endif
-#include "nsEmbedAPI.h"
 
 #include "nsDirectoryService.h"
 
