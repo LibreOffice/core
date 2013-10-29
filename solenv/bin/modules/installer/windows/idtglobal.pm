@@ -813,10 +813,9 @@ sub get_rtflicensefilesource
 {
     my ($language, $includepatharrayref) = @_;
 
-    my $licensefilename = "license_" . $language . ".rtf";
+    my $licensefilename = "EULA_en-US.rtf";
 
     my $sourcefileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $includepatharrayref, 1);
-
     if ($$sourcefileref eq "") { installer::exiter::exit_program("ERROR: Could not find $licensefilename!", "get_rtflicensefilesource"); }
 
     my $infoline = "Using licensefile: $$sourcefileref\n";
