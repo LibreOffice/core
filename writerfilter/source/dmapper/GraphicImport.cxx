@@ -908,6 +908,9 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         OUString sUrl;
                         xShapeProps->getPropertyValue("GraphicURL") >>= sUrl;
 
+                        sal_Int32 nRotation;
+                        xShapeProps->getPropertyValue("RotateAngle") >>= nRotation;
+
                         ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
                         aMediaProperties[0].Name = "URL";
                         aMediaProperties[0].Value <<= sUrl;
@@ -921,7 +924,9 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                             xShapeProps->getPropertyValue("ShadowTransparence") >>= m_pImpl->nShadowTransparence;
                         }
 
-                        m_xGraphicObject = createGraphicObject( aMediaProperties );
+                        // fdo#70457: transform XShape into a SwXTextGraphicObject only if there's no rotation
+                        if ( nRotation == 0 )
+                            m_xGraphicObject = createGraphicObject( aMediaProperties );
 
                         bUseShape = !m_xGraphicObject.is( );
 
