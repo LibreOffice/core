@@ -416,6 +416,8 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
         uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
         if( xBitmap.is () )
         {
+#if 0
+            // TODO-NYI
             uno::Reference< rendering::XBitmapCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
             if( xBitmapCanvas.is() )
             {
@@ -442,6 +444,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                     return true;
                 }
             }
+#endif
         }
     }
     catch (const uno::RuntimeException& )
