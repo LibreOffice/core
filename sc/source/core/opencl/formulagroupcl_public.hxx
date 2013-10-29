@@ -1,3 +1,15 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef SC_OPENCL_FORMULAGROUPCL_PUBLIC_HXX
+#define SC_OPENCL_FORMULAGROUPCL_PUBLIC_HXX
+
 const char* publicFunc =
  "int isNan(double a) { return a != a; }\n"
  "double fsum(double a, double b) { return isNan(a)?b:a+b; }\n"
@@ -5,3 +17,7 @@ const char* publicFunc =
  "double fdiv(double a, double b) { return a/b; }\n"
  "double strequal(unsigned a, unsigned b) { return (a==b)?1.0:0; }\n"
  ;
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,15 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef SC_OPENCL_FORMULAGROUPCL_FINACIAL_HXX
+#define SC_OPENCL_FORMULAGROUPCL_FINACIAL_HXX
+
 const char* finacialFunc =
 "bool approxEqual(double a, double b)\n"
 "{\n"
@@ -741,3 +753,6 @@ const char* finacialFunc =
 "    return GetDiffDate360_( nDay1, nMonth1, nYear1, IsLeapYear( nYear1 ), nDay2, nMonth2, nYear2, bUSAMethod );\n"
 "}\n";
 
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
