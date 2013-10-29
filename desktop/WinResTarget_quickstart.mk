@@ -16,7 +16,7 @@ $(eval $(call gb_WinResTarget_set_include,quickstart/QuickStart,\
 ))
 
 $(eval $(call gb_WinResTarget_add_dependencies,quickstart/QuickStart,\
-    sysui/desktop/icons/main_app.ico \
+    sysui/desktop/icons/soffice.ico \
 ))
 
 $(eval $(call gb_WinResTarget_set_rcfile,quickstart/QuickStart,desktop/win32/source/QuickStart/QuickStart))

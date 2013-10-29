@@ -633,17 +633,17 @@ sub create_shortcut_table
         my $onefile = "";
         my $sofficefile = "soffice.ico";
 
-        my $sourcepathref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$sofficefile, $includepatharrayref, 0);
+        my $sourcepathref = $ENV{'SRCDIR'} . "/sysui/desktop/icons/" . $sofficefile;
 
-        if ($$sourcepathref eq "") { installer::exiter::exit_program("ERROR: Could not find $sofficefile as icon!", "create_shortcut_table"); }
+        if (! -f $sourcepathref) { installer::exiter::exit_program("ERROR: Could not find $sofficefile ($sourcepathref) as icon!", "create_shortcut_table"); }
 
-        if (! grep {$_ eq $$sourcepathref} @{$iconfilecollector})
+        if (! grep {$_ eq $sourcepathref} @{$iconfilecollector})
         {
-            unshift(@{$iconfilecollector}, $$sourcepathref);
+            unshift(@{$iconfilecollector}, $sourcepathref);
             $installer::globals::sofficeiconadded = 1;
         }
 
-        my $localinfoline = "Added icon file $$sourcepathref for language pack into icon file collector.\n";
+        my $localinfoline = "Added icon file $sourcepathref for language pack into icon file collector.\n";
         push(@installer::globals::logfileinfo, $localinfoline);
 
         # Saving the file

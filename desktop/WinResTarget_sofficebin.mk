@@ -17,13 +17,13 @@ $(eval $(call gb_WinResTarget_set_include,sofficebin/officeloader,\
 $(eval $(call gb_WinResTarget_add_defs,sofficebin/officeloader,\
     -DRES_APP_NAME=soffice \
     -DRES_APP_FILEDESC="$(PRODUCTNAME)" \
-    -DRES_APP_ICON=icons/main_app.ico \
+    -DRES_APP_ICON=icons/soffice.ico \
     -DVERVARIANT=$(LIBO_VERSION_PATCH) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependencies,sofficebin/officeloader,\
-    sysui/desktop/icons/main_app.ico \
+    sysui/desktop/icons/soffice.ico \
 	sysui/desktop/icons/oasis-database.ico \
 	sysui/desktop/icons/oasis-drawing-template.ico \
 	sysui/desktop/icons/oasis-drawing.ico \
