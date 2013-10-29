@@ -25,8 +25,10 @@ namespace sc { namespace opencl {
 class UnhandledToken
 {
 public:
-    UnhandledToken(formula::FormulaToken *t): mToken(t) {}
+    UnhandledToken(formula::FormulaToken *t,
+            const char *const m): mToken(t), mMessage(m) {}
     formula::FormulaToken *mToken;
+    std::string mMessage;
 };
 
 /// Failed in marshaling

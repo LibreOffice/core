@@ -807,14 +807,19 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                     const formula::SingleVectorRefToken* pSVR =
                         dynamic_cast< const formula::SingleVectorRefToken* >(pChild);
                     assert(pSVR);
-                    if (pSVR->GetArray().mpNumericArray)
+                    if (pSVR->GetArray().mpNumericArray &&
+                        !pSVR->GetArray().mpStringArray)
                         mvSubArguments.push_back(
                                 SubArgument(new DynamicKernelArgument(ts,
                                         ft->Children[i])));
-                    else
+                    else if (!pSVR->GetArray().mpNumericArray &&
+                            pSVR->GetArray().mpStringArray)
                         mvSubArguments.push_back(
                                 SubArgument(new DynamicKernelStringArgument(
                                         ts, ft->Children[i])));
+                    else
+                        throw UnhandledToken(pChild,
+                                "Got both numeric and string vector");
                 } else if (pChild->GetType() == formula::svDouble) {
                     mvSubArguments.push_back(
                             SubArgument(new DynamicKernelConstantArgument(ts,
@@ -824,7 +829,7 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                             SubArgument(new ConstStringArgument(ts,
                                     ft->Children[i])));
                 } else {
-                    throw UnhandledToken(pChild);
+                    throw UnhandledToken(pChild, "unknown operand for ocPush");
                 }
                 break;
             case ocDiv:
@@ -1095,7 +1100,7 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 }
                 break;
             default:
-                throw UnhandledToken(pChild);
+                throw UnhandledToken(pChild, "unhandled opcode");
         };
     }
 }
@@ -1414,8 +1419,9 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         return true;
     }
 #undef NO_FALLBACK_TO_SWINTERP /* undef this for non-TDD runs */
-    catch (const UnhandledToken&) {
-        std::cerr << "Dynamic formual compiler: unhandled token\n";
+    catch (const UnhandledToken &ut) {
+        std::cerr << "\nDynamic formual compiler: unhandled token: ";
+        std::cerr << ut.mMessage << "\n";
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
 #else
