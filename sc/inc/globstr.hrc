@@ -690,11 +690,6 @@
 
 #define STR_COUNT                   553
 
-
-// Row fillers
-#define STR_VALERR              591
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

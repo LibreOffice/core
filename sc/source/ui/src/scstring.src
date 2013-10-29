@@ -859,4 +859,10 @@ StringArray SCSTR_UNIT
         < "Point" ; FUNIT_POINT ; > ;
     };
 };
+
+String SCSTR_VALERR
+{
+    Text [ en-US ] = "Invalid value" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

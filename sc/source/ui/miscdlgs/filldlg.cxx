@@ -55,7 +55,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
                                   sal_uInt16        nPossDir )
     : ModalDialog(pParent, "FillSeriesDialog", "modules/scalc/ui/filldlg.ui"),
         aStartStrVal    ( aStartStr),
-        aErrMsgInvalidVal( SC_RESSTR(STR_VALERR) ),
+        aErrMsgInvalidVal( SC_RESSTR(SCSTR_VALERR) ),
         rDoc            ( rDocument ),
         theFillDir      ( eFillDir ),
         theFillCmd      ( eFillCmd ),
