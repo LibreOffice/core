@@ -142,6 +142,30 @@ void ThemeTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Poi
 #endif
 }
 
+OUString ThemeTable::getStringForTheme(const Id id)
+{
+    std::map<sal_uInt32, OUString> tmpThemeFontMap;
+    switch (id)
+    {
+        case NS_ooxml::LN_Value_ST_Theme_majorEastAsia:
+            return OUString("majorEastAsia");
+        case NS_ooxml::LN_Value_ST_Theme_majorBidi:
+            return OUString("majorBidi");
+        case NS_ooxml::LN_Value_ST_Theme_majorAscii:
+            return OUString("majorAscii");
+        case NS_ooxml::LN_Value_ST_Theme_majorHAnsi:
+            return OUString("majorHAnsi");
+        case NS_ooxml::LN_Value_ST_Theme_minorEastAsia:
+            return OUString("minorEastAsia");
+        case NS_ooxml::LN_Value_ST_Theme_minorBidi:
+            return OUString("minorBidi");
+        case NS_ooxml::LN_Value_ST_Theme_minorAscii:
+            return OUString("minorAscii");
+        case NS_ooxml::LN_Value_ST_Theme_minorHAnsi:
+            return OUString("minorHAnsi");
+    }
+    return OUString();
+}
 const OUString ThemeTable::getFontNameForTheme(const Id id) const
 {
     std::map<sal_uInt32, OUString> tmpThemeFontMap;

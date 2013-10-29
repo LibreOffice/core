@@ -753,11 +753,13 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     {
                         if (nSprmId == NS_ooxml::LN_CT_Style_pPr)
                             m_pImpl->m_rDMapper.enableInteropGrabBag("pPr");
+                        else if (nSprmId == NS_ooxml::LN_CT_Style_rPr)
+                            m_pImpl->m_rDMapper.enableInteropGrabBag("rPr");
                     }
                     m_pImpl->m_rDMapper.sprmWithProps( rSprm, pProps );
                     if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
                     {
-                        if (nSprmId == NS_ooxml::LN_CT_Style_pPr)
+                        if (nSprmId == NS_ooxml::LN_CT_Style_pPr || nSprmId == NS_ooxml::LN_CT_Style_rPr)
                         {
                             TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(m_pImpl->m_pCurrentEntry.get());
                             pTableEntry->AppendInteropGrabBag(m_pImpl->m_rDMapper.getInteropGrabBag());

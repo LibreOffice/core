@@ -40,6 +40,7 @@ public:
     virtual ~ThemeTable();
 
     const OUString getFontNameForTheme(const Id id) const;
+    static OUString getStringForTheme(const Id id);
 
  private:
     // Properties

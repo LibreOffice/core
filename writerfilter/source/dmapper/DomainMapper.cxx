@@ -958,6 +958,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( sStringValue ));
             break;
         case NS_ooxml::LN_CT_Fonts_eastAsiaTheme:
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "eastAsiaTheme", ThemeTable::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( m_pImpl->GetThemeTable()->getFontNameForTheme(nIntValue) ) );
             break;
@@ -1159,6 +1160,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Language_eastAsia: //90315
         case NS_ooxml::LN_CT_Language_bidi: //90316
         {
+            if (nName == NS_ooxml::LN_CT_Language_eastAsia)
+                m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "eastAsia", sStringValue);
             lang::Locale aLocale( LanguageTag::convertToLocale( sStringValue));
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(NS_ooxml::LN_CT_Language_val== nName ? PROP_CHAR_LOCALE :
@@ -2998,6 +3001,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         resolveSprmProps(*this, rSprm);
         if (nSprmId == NS_ooxml::LN_CT_PPrBase_spacing)
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "spacing", m_pImpl->m_aSubInteropGrabBag);
+        else if (nSprmId == NS_ooxml::LN_EG_RPrBase_rFonts)
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "rFonts", m_pImpl->m_aSubInteropGrabBag);
+        else if (nSprmId == NS_ooxml::LN_EG_RPrBase_lang)
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "lang", m_pImpl->m_aSubInteropGrabBag);
     break;
     case NS_ooxml::LN_EG_SectPrContents_footnotePr:
     case NS_ooxml::LN_EG_SectPrContents_endnotePr:
