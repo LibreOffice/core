@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZX///2U\u003d",
+        "filename": "test/source/sheet/xspreadsheets2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-29T16:13:29Z",
+      "side": 1,
+      "message": "Actually the raw sal_Char* sSrcContent and conversion to OString and temporary aStart aren\u0027t needed at all, instead it should be something like (untested)\n\n return aDestContent.endsWithIgnoreAsciiCase( aSrcContent )\n     \u0026\u0026 aDestContent.startsWith( \"\u0027file://\" )\n     \u0026\u0026 aDestContent.indexOf( aSrcFileName ) \u003e 0;",
+      "revId": "978806d8867b9cfc87eca3e78f24a7dc7f9b9c3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
