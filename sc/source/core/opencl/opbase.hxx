@@ -7,16 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef OPBASE
-#define OPBASE
+#ifndef SC_OPENCL_OPBASE_HXX
+#define SC_OPENCL_OPBASE_HXX
+
 #include "formulagroup.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
 #include "tokenarray.hxx"
 #include "compiler.hxx"
 #include "interpre.hxx"
+#include "formula/vectortoken.hxx"
 
-#include<list>
+#include "clcc/clew.h"
+
+#include <list>
 #include <iostream>
 #include <sstream>
 #include <algorithm>

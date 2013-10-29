@@ -7,12 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "op_database.hxx"
+#ifndef SC_OPENCL_OP_DATABASE_HXX
+#define SC_OPENCL_OP_DATABASE_HXX
 
 namespace sc { namespace opencl {
 
 
 
 }}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
