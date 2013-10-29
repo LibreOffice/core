@@ -496,7 +496,7 @@ OUString Edit::ImplGetText() const
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplInvalidateOrRepaint( xub_StrLen nStart, xub_StrLen nEnd )
+void Edit::ImplInvalidateOrRepaint( sal_Int32 nStart, sal_Int32 nEnd )
 {
     if( IsPaintTransparent() )
     {
@@ -522,7 +522,7 @@ long Edit::ImplGetTextYPosition() const
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
+void Edit::ImplRepaint( sal_Int32 nStart, sal_Int32 nEnd, bool bLayout )
 {
     if ( !IsReallyVisible() )
         return;
@@ -705,7 +705,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
                         nIndex++;
                     }
                     i = nIndex;
-            aClip.Intersect(aRegion);
+                    aClip.Intersect(aRegion);
                     if( !aClip.IsEmpty() && nAttr )
                     {
                         Font aFont = GetFont();
@@ -1283,9 +1283,9 @@ void Edit::ImplAlignAndPaint()
 
 // -----------------------------------------------------------------------
 
-xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
+sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
 {
-    xub_StrLen nIndex = STRING_LEN;
+    sal_Int32 nIndex = STRING_LEN;
     OUString aText = ImplGetText();
 
     sal_Int32   nDXBuffer[256];
@@ -1344,7 +1344,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplSetCursorPos( xub_StrLen nChar, sal_Bool bSelect )
+void Edit::ImplSetCursorPos( sal_Int32 nChar, sal_Bool bSelect )
 {
     Selection aSelection( maSelection );
     aSelection.Max() = nChar;
