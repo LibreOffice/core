@@ -38,20 +38,20 @@ struct StatisticCalculation {
 
 static const StatisticCalculation lclCalcDefinitions[] =
 {
-    { SID_CALC_MEAN,           "=AVERAGE(%RANGE%)" },
-    { SID_CALC_STD_ERROR,      "=SQRT(VAR(%RANGE%)/COUNT(%RANGE%))"},
-    { SID_CALC_MODE,           "=MODE(%RANGE%)"},
-    { SID_CALC_MEDIAN,         "=MEDIAN(%RANGE%)"},
-    { SID_CALC_VARIANCE,       "=VAR(%RANGE%)"},
-    { SID_CALC_STD_DEVIATION,  "=STDEV(%RANGE%)"},
-    { SID_CALC_KURTOSIS,       "=KURT(%RANGE%)"},
-    { SID_CALC_SKEWNESS,       "=SKEW(%RANGE%)"},
-    { SID_CALC_RANGE,          "=MAX(%RANGE%)-MIN(%RANGE%)"},
-    { SID_CALC_MIN,            "=MIN(%RANGE%)"},
-    { SID_CALC_MAX,            "=MAX(%RANGE%)"},
-    { SID_CALC_SUM,            "=SUM(%RANGE%)"},
-    { SID_CALC_COUNT,          "=COUNT(%RANGE%)" },
-    { 0,                       NULL }
+    { STRID_CALC_MEAN,           "=AVERAGE(%RANGE%)" },
+    { STRID_CALC_STD_ERROR,      "=SQRT(VAR(%RANGE%)/COUNT(%RANGE%))"},
+    { STRID_CALC_MODE,           "=MODE(%RANGE%)"},
+    { STRID_CALC_MEDIAN,         "=MEDIAN(%RANGE%)"},
+    { STRID_CALC_VARIANCE,       "=VAR(%RANGE%)"},
+    { STRID_CALC_STD_DEVIATION,  "=STDEV(%RANGE%)"},
+    { STRID_CALC_KURTOSIS,       "=KURT(%RANGE%)"},
+    { STRID_CALC_SKEWNESS,       "=SKEW(%RANGE%)"},
+    { STRID_CALC_RANGE,          "=MAX(%RANGE%)-MIN(%RANGE%)"},
+    { STRID_CALC_MIN,            "=MIN(%RANGE%)"},
+    { STRID_CALC_MAX,            "=MAX(%RANGE%)"},
+    { STRID_CALC_SUM,            "=SUM(%RANGE%)"},
+    { STRID_CALC_COUNT,          "=COUNT(%RANGE%)" },
+    { 0,                         NULL }
 };
 
 static const OUString lclWildcardRange("%RANGE%");

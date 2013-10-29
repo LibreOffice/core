@@ -33,19 +33,19 @@
 
 #define STR_SAMPLING_UNDO_NAME                      20
 
-#define SID_CALC_MEAN                               21
-#define SID_CALC_STD_ERROR                          22
-#define SID_CALC_MODE                               23
-#define SID_CALC_MEDIAN                             24
-#define SID_CALC_VARIANCE                           25
-#define SID_CALC_STD_DEVIATION                      26
-#define SID_CALC_KURTOSIS                           27
-#define SID_CALC_SKEWNESS                           28
-#define SID_CALC_RANGE                              29
-#define SID_CALC_MIN                                30
-#define SID_CALC_MAX                                31
-#define SID_CALC_SUM                                32
-#define SID_CALC_COUNT                              33
+#define STRID_CALC_MEAN                             21
+#define STRID_CALC_STD_ERROR                        22
+#define STRID_CALC_MODE                             23
+#define STRID_CALC_MEDIAN                           24
+#define STRID_CALC_VARIANCE                         25
+#define STRID_CALC_STD_DEVIATION                    26
+#define STRID_CALC_KURTOSIS                         27
+#define STRID_CALC_SKEWNESS                         28
+#define STRID_CALC_RANGE                            29
+#define STRID_CALC_MIN                              30
+#define STRID_CALC_MAX                              31
+#define STRID_CALC_SUM                              32
+#define STRID_CALC_COUNT                            33
 
 #define STR_DESCRIPTIVE_STATISTICS_UNDO_NAME        34
 #define STR_ANALYSIS_OF_VARIANCE_UNDO_NAME          35
