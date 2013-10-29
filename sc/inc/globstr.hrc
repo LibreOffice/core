@@ -20,6 +20,16 @@
 #ifndef SC_GLOBSTR_HRC
 #define SC_GLOBSTR_HRC
 
+/*
+ * This file is reserved for string IDs of permanently loaded resident string
+ * resources for faster access in core and filter code (and some UI like
+ * Undo/Redo or strings displayed in the status bar), they reside in resource
+ * RID_GLOBSTR and are meant to be accessed via ScGlobal::GetRscString(). All
+ * other string IDs of strings used in message boxes and elsewhere go into
+ * sc/inc/sc.hrc if they need to be global, or if restricted to UI dialogs into
+ * a proper sc/source/ui/xxx/yyy.hrc and corresponding .src PLEASE!
+ */
+
 #define STR_UNDO_DELETECELLS        1
 #define STR_UNDO_CUT                2
 #define STR_UNDO_PASTE              3
