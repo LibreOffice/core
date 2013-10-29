@@ -3717,6 +3717,9 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     else
         with_system_libcmis=no
     fi
+    if test "$enable_win_mozab_driver" = "yes"; then
+        AC_MSG_ERROR([--enable-win-mozab-driver conflicts with --enable-dbgutil])
+    fi
 else
     ENABLE_DBGUTIL=""
     MSVC_USE_DEBUG_RUNTIME=""
