@@ -1,4 +1,4 @@
-char* finacialFunc =
+const char* finacialFunc =
 "bool approxEqual(double a, double b)\n"
 "{\n"
     "\tif (a == b)\n"
