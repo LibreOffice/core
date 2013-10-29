@@ -65,15 +65,18 @@ size_t DynamicKernelArgument::GetWindowSize(void) const
 {
     FormulaToken *pCur = mFormulaTree->GetFormulaToken();
     assert(pCur);
-    if (auto *pCurDVR =
-            dynamic_cast<const formula::DoubleVectorRefToken *>(pCur))
+    if (const formula::DoubleVectorRefToken* pCurDVR =
+        dynamic_cast<const formula::DoubleVectorRefToken *>(pCur))
     {
         return pCurDVR->GetRefRowSize();
-    } else if (dynamic_cast<const formula::SingleVectorRefToken *>(pCur))
+    }
+    else if (dynamic_cast<const formula::SingleVectorRefToken *>(pCur))
     {
         // Prepare intermediate results (on CPU for now)
         return 1;
-    } else {
+    }
+    else
+    {
         throw Unhandled();
     }
     return 0;

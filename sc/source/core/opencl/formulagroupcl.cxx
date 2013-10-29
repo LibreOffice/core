@@ -661,7 +661,8 @@ template<class Op>
 class DynamicKernelSoPArguments: public DynamicKernelArgument
 {
 public:
-    typedef std::unique_ptr<DynamicKernelArgument> SubArgument;
+    typedef boost::shared_ptr<DynamicKernelArgument> SubArgument;
+    typedef std::vector<SubArgument> SubArgumentsType;
 
     DynamicKernelSoPArguments(const std::string &s,
         boost::shared_ptr<FormulaTreeNode> ft);
@@ -670,8 +671,9 @@ public:
     virtual size_t Marshal(cl_kernel k, int argno, int nVectorWidth)
     {
         unsigned i = 0;
-        for(auto it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
-                ++it) {
+        for (SubArgumentsType::iterator it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
+                ++it)
+        {
             i += (*it)->Marshal(k, argno + i, nVectorWidth);
         }
         return i;
@@ -716,8 +718,9 @@ public:
     /// When declared as input to a sliding window function
     virtual void GenSlidingWindowDecl(std::stringstream &ss) const
     {
-        for(auto it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
-            ++it) {
+        for (SubArgumentsType::const_iterator it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
+            ++it)
+        {
             if (it != mvSubArguments.begin())
                 ss << ", ";
             (*it)->GenSlidingWindowDecl(ss);
@@ -757,7 +760,7 @@ public:
         return t;
     }
 private:
-    std::vector<SubArgument> mvSubArguments;
+    SubArgumentsType mvSubArguments;
     Op CodeGen;
 };
 
