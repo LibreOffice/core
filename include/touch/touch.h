@@ -90,6 +90,19 @@ typedef CGRect MLORect;
 typedef basegfx::B2IBox MLORect;
 #endif
 
+typedef long long MLOContentSizeDimension;
+struct MLOContentSize {
+    MLOContentSizeDimension width;
+    MLOContentSizeDimension height;
+};
+typedef struct MLOContentSize MLOContentSize;
+
+CG_INLINE MLOContentSize
+MLOContentSizeMake(MLOContentSizeDimension width, MLOContentSizeDimension height)
+{
+    MLOContentSize size; size.width = width; size.height = height; return size;
+}
+
 void touch_ui_selection_start(MLOSelectionKind kind,
                               const void *documentHandle,
                               MLORect *rectangles,
@@ -132,7 +145,7 @@ context, contextHeight, contextWidth specify where to draw.
 */
 void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, int tilePosX, int tilePosY, int tileWidth, int tileHeight);
 void touch_lo_copy_buffer(const void * source, size_t sourceWidth, size_t sourceHeight, size_t sourceBytesPerRow, void * target, size_t targetWidth, size_t targetHeight);
-CGSize touch_lo_get_content_size();
+MLOContentSize touch_lo_get_content_size();
 void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state);
 
 // Move the start of the selection to (x,y)

@@ -1815,6 +1815,15 @@ void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int
     }
     Application::ReleaseSolarMutex();
 }
+extern "C"
+MLOContentSize touch_lo_get_content_size()
+{
+    SwWrtShell *pViewShell = GetActiveWrtShell();
+    if (pViewShell)
+    {
+    }
+    return MLOContentSizeMake(0,0);
+}
 #endif
 
 extern "C" void touch_ui_selection_none() {}

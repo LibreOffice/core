@@ -415,17 +415,6 @@ touch_lo_copy_buffer(const void * source, size_t sourceWidth, size_t sourceHeigh
 }
 
 extern "C"
-CGSize touch_lo_get_content_size()
-{
-    CGSize contentSize = CGSizeMake(0,0);
-    SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
-    if (pFocus)
-    {
-    }
-    return contentSize;
-}
-
-extern "C"
 void touch_lo_render_windows(void *context, int minX, int minY, int width, int height)
 {
     CGContextRef cgContext = (CGContextRef) context;
