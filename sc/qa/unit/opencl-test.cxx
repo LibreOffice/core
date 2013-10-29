@@ -16,8 +16,6 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
 
-#define TEST_BUG_FILES 0
-
 #include "helper/qahelper.hxx"
 
 #include "calcconfig.hxx"
