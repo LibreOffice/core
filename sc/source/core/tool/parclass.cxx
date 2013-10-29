@@ -189,6 +189,8 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocVarA,            {{ Reference                                            }, 1 }},
     { ocVarP,            {{ Reference                                            }, 1 }},
     { ocVarPA,           {{ Reference                                            }, 1 }},
+    { ocVarP_MS,         {{ Reference                                            }, 1 }},
+    { ocVarS,            {{ Reference                                            }, 1 }},
     { ocVLookup,         {{ Value, Reference, Value, Value                       }, 0 }},
     { ocXor,             {{ Reference                                            }, 1 }},
     { ocZTest,           {{ Reference, Value, Value                              }, 0 }},

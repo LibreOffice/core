@@ -5087,6 +5087,30 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ;
         };
     };
+     // -=*# Resource for function VAR.S #*=-
+    Resource SC_OPCODE_VAR_S
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates the variance based on a sample." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_VAR_S );
+            VAR_ARGS;   0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number " ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ;
+        };
+    };
      // -=*# Resource for function VARIANZ #*=-
     Resource SC_OPCODE_VAR_A
     {
@@ -5123,6 +5147,30 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_VARIANZEN );
+            VAR_ARGS;   0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "number " ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which represent a population." ;
+        };
+    };
+     // -=*# Resource for function VAR.P #*=-
+    Resource SC_OPCODE_VAR_P_MS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates variance based on the entire population." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_STATISTIC;
+            U2S( HID_FUNC_VAR_P_MS );
             VAR_ARGS;   0;
             0;
         };
