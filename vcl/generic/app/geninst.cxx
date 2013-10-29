@@ -116,7 +116,10 @@ bool SalGenericInstance::CheckYieldMutex()
 
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() != osl::Thread::getCurrentIdentifier() )
+    {
+        SAL_WARN_IF( pYieldMutex->GetThreadId() != osl::Thread::getCurrentIdentifier(), "sw", "CheckYieldMutex: " << pYieldMutex->GetThreadId() << "!=" << osl::Thread::getCurrentIdentifier() );
         bRet = false;
+    }
 
     return bRet;
 }
