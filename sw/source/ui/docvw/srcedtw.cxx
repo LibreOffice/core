@@ -82,7 +82,7 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
     while(nActPos < nStrLen)
     {
         svtools::ColorConfigEntry eFoundType = svtools::HTMLUNKNOWN;
-        if(rSource[nActPos] == cOpenBracket && nActPos < nStrLen - 2 )
+        if((nActPos < nStrLen - 2) && (rSource[nActPos] == cOpenBracket))
         {
             // insert 'empty' portion
             if(nPortEnd < nActPos - 1 )

@@ -194,7 +194,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                     srcStr[len++] = str[i];
             } else {
                 if (len > 0) {
-                    if (isSeparator(str[i]) && i < nCount-1 && isNumber(str[i+1]))
+                    if (i < nCount-1 && isSeparator(str[i]) && isNumber(str[i+1]))
                         continue; // skip comma inside number string
                     sal_Bool notZero = sal_False;
                     for (sal_Int32 begin = 0, end = len % number->multiplierExponent[0];
@@ -224,11 +224,11 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                     len = 0;
                 }
                 if (i < nCount) {
-                    if ((doDecimal = (!doDecimal && isDecimal(str[i]) && i < nCount-1 && isNumber(str[i+1]))) != sal_False)
+                    if ((doDecimal = (!doDecimal && i < nCount-1 && isDecimal(str[i]) && isNumber(str[i+1]))) != sal_False)
                         newStr[count] = (DecimalChar[number->number] ? DecimalChar[number->number] : str[i]);
-                    else if (isMinus(str[i]) && i < nCount-1 && isNumber(str[i+1]))
+                    else if (i < nCount-1 && isMinus(str[i]) && isNumber(str[i+1]))
                         newStr[count] = (MinusChar[number->number] ? MinusChar[number->number] : str[i]);
-                    else if (isSeparator(str[i]) && i < nCount-1 && isNumber(str[i+1]))
+                    else if (i < nCount-1 && isSeparator(str[i]) && isNumber(str[i+1]))
                         newStr[count] = (SeparatorChar[number->number] ? SeparatorChar[number->number] : str[i]);
                     else
                         newStr[count] = str[i];
