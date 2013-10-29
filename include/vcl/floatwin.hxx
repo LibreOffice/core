@@ -48,6 +48,7 @@ class ToolBox;
 #define FLOATWIN_POPUPMODE_NEWLEVEL             ((sal_uLong)0x00008000)
 #define FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE       ((sal_uLong)0x00010000)
 #define FLOATWIN_POPUPMODE_GRABFOCUS            ((sal_uLong)0x00020000)
+#define FLOATWIN_POPUPMODE_NOHORZPLACEMENT      ((sal_uLong)0x00040000)
 
 #define FLOATWIN_POPUPMODEEND_CANCEL            ((sal_uInt16)0x0001)
 #define FLOATWIN_POPUPMODEEND_TEAROFF           ((sal_uInt16)0x0002)

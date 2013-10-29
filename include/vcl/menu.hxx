@@ -62,12 +62,17 @@ namespace vcl { struct MenuLayoutData; }
 #define MENU_APPEND             ((sal_uInt16)0xFFFF)
 #define MENU_ITEM_NOTFOUND      ((sal_uInt16)0xFFFF)
 
-#define POPUPMENU_EXECUTE_DOWN  ((sal_uInt16)0x0001)
-#define POPUPMENU_EXECUTE_UP    ((sal_uInt16)0x0002)
-#define POPUPMENU_EXECUTE_LEFT  ((sal_uInt16)0x0004)
-#define POPUPMENU_EXECUTE_RIGHT ((sal_uInt16)0x0008)
-
-#define POPUPMENU_NOMOUSEUPCLOSE ((sal_uInt16)0x0010)
+#define POPUPMENU_EXECUTE_DOWN     ((sal_uInt16)0x0001)
+#define POPUPMENU_EXECUTE_UP       ((sal_uInt16)0x0002)
+#define POPUPMENU_EXECUTE_LEFT     ((sal_uInt16)0x0004)
+#define POPUPMENU_EXECUTE_RIGHT    ((sal_uInt16)0x0008)
+#define POPUPMENU_NOMOUSEUPCLOSE   ((sal_uInt16)0x0010)
+//If there isn't enough space to put the menu where it wants
+//to go, then they will be autoplaced. Toggle this bit
+//on to force menus to be placed either above or below
+//the starting rectangle and shrunk to fit and then scroll rather than place
+//the menu beside that rectangle
+#define POPUPMENU_NOHORZ_PLACEMENT ((sal_uInt16)0x0020)
 
 #define MENU_FLAG_NOAUTOMNEMONICS       0x0001
 #define MENU_FLAG_HIDEDISABLEDENTRIES   0x0002

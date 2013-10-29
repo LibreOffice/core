@@ -3562,7 +3562,6 @@ sal_uInt16 PopupMenu::Execute( Window* pExecWindow, const Rectangle& rRect, sal_
 {
     ENSURE_OR_RETURN( pExecWindow, "PopupMenu::Execute: need a non-NULL window!", 0 );
 
-
     sal_uLong nPopupModeFlags = 0;
     if ( nFlags & POPUPMENU_EXECUTE_DOWN )
         nPopupModeFlags = FLOATWIN_POPUPMODE_DOWN;
@@ -3577,6 +3576,9 @@ sal_uInt16 PopupMenu::Execute( Window* pExecWindow, const Rectangle& rRect, sal_
 
     if (nFlags & POPUPMENU_NOMOUSEUPCLOSE )                      // allow popup menus to stay open on mouse button up
         nPopupModeFlags |= FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE;    // useful if the menu was opened on mousebutton down (eg toolbox configuration)
+
+    if (nFlags & POPUPMENU_NOHORZ_PLACEMENT)
+        nPopupModeFlags |= FLOATWIN_POPUPMODE_NOHORZPLACEMENT;
 
     return ImplExecute( pExecWindow, rRect, nPopupModeFlags, 0, sal_False );
 }
@@ -3681,17 +3683,37 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
 
     Size aSz = ImplCalcSize( pWin );
 
-    long nMaxHeight = pWin->GetDesktopRectPixel().GetHeight();
+    Rectangle aDesktopRect(pWin->GetDesktopRectPixel());
     if( Application::GetScreenCount() > 1 && Application::IsUnifiedDisplay() )
     {
         Window* pDeskW = pWindow->GetWindow( WINDOW_REALPARENT );
         if( ! pDeskW )
             pDeskW = pWindow;
         Point aDesktopTL( pDeskW->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) );
-        nMaxHeight = Application::GetScreenPosSizePixel(
-            Application::GetBestScreen( Rectangle( aDesktopTL, aRect.GetSize() ) )
-            ).GetHeight();
+        aDesktopRect = Application::GetScreenPosSizePixel(
+            Application::GetBestScreen( Rectangle( aDesktopTL, aRect.GetSize() ) ));
     }
+
+    long nMaxHeight = aDesktopRect.GetHeight();
+
+    //rhbz#1021915. If a menu won't fit in the desired location the default
+    //mode is to place it somewhere it will fit.  e.g. above, left, right. For
+    //some cases, e.g. menubars, it's desirable to limit the options to
+    //above/below and force the menu to scroll if it won't fit
+    if (nPopupModeFlags & FLOATWIN_POPUPMODE_NOHORZPLACEMENT)
+    {
+        Window* pRef = pWin;
+        if ( pRef->GetParent() )
+            pRef = pRef->GetParent();
+
+        Rectangle devRect(  pRef->OutputToAbsoluteScreenPixel( aRect.TopLeft() ),
+                            pRef->OutputToAbsoluteScreenPixel( aRect.BottomRight() ) );
+
+        long nHeightAbove = devRect.Top() - aDesktopRect.Top();
+        long nHeightBelow = aDesktopRect.Bottom() - devRect.Bottom();
+        nMaxHeight = std::min(nMaxHeight, std::max(nHeightAbove, nHeightBelow));
+    }
+
     if ( pStartedFrom && pStartedFrom->bIsMenuBar )
         nMaxHeight -= pW->GetSizePixel().Height();
     sal_Int32 nLeft, nTop, nRight, nBottom;
@@ -5326,7 +5348,7 @@ void MenuBarWindow::ImplCreatePopup( sal_Bool bPreSelectFirst )
             // #99071# do not grab the focus, otherwise it will be restored to the menubar
             // when the frame is reactivated later
             //GrabFocus();
-            pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FLOATWIN_POPUPMODE_DOWN, pMenu, bPreSelectFirst );
+            pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_NOHORZPLACEMENT, pMenu, bPreSelectFirst );
             if ( pActivePopup )
             {
                 // does not have a window, if aborted before or if there are no entries
