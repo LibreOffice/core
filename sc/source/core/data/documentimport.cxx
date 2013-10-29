@@ -16,6 +16,7 @@
 #include "globalnames.hxx"
 #include "mtvelements.hxx"
 #include "tokenarray.hxx"
+#include "stringutil.hxx"
 
 #include "svl/sharedstringpool.hxx"
 
@@ -81,7 +82,7 @@ void ScDocumentImport::setOriginDate(sal_uInt16 nYear, sal_uInt16 nMonth, sal_uI
     mpImpl->mrDoc.pDocOptions->SetDate(nDay, nMonth, nYear);
 }
 
-void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr)
+void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr, ScSetStringParam* pStringParam)
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
     if (!pTab)
@@ -95,7 +96,7 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr)
 
     ScCellValue aCell;
     pTab->aCol[rPos.Col()].ParseString(
-        aCell, rPos.Row(), rPos.Tab(), rStr, mpImpl->mrDoc.GetAddressConvention(), NULL);
+        aCell, rPos.Row(), rPos.Tab(), rStr, mpImpl->mrDoc.GetAddressConvention(), pStringParam);
 
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     switch (aCell.meType)

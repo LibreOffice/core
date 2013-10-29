@@ -23,6 +23,7 @@ class ScColumn;
 class ScAddress;
 class ScTokenArray;
 class ScFormulaCell;
+struct ScSetStringParam;
 struct ScDocumentImportImpl;
 
 /**
@@ -59,7 +60,8 @@ public:
 
     void setOriginDate(sal_uInt16 nYear, sal_uInt16 nMonth, sal_uInt16 nDay);
 
-    void setAutoInput(const ScAddress& rPos, const OUString& rStr);
+    void setAutoInput(const ScAddress& rPos, const OUString& rStr,
+            ScSetStringParam* pStringParam = NULL);
     void setNumericCell(const ScAddress& rPos, double fVal);
     void setStringCell(const ScAddress& rPos, const OUString& rStr);
     void setEditCell(const ScAddress& rPos, EditTextObject* pEditText);

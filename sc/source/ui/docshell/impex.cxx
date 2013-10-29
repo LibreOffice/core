@@ -49,6 +49,7 @@
 #include "stringutil.hxx"
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
+#include "documentimport.hxx"
 
 #include "globstr.hrc"
 #include <vcl/svapp.hxx>
@@ -954,11 +955,12 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
 
 
 static bool lcl_PutString(
-    ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rStr, sal_uInt8 nColFormat,
+    ScDocumentImport& rDocImport, SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rStr, sal_uInt8 nColFormat,
     SvNumberFormatter* pFormatter, bool bDetectNumFormat,
     ::utl::TransliterationWrapper& rTransliteration, CalendarWrapper& rCalendar,
     ::utl::TransliterationWrapper* pSecondTransliteration, CalendarWrapper* pSecondCalendar )
 {
+    ScDocument* pDoc = &rDocImport.getDoc();
     bool bMultiLine = false;
     if ( nColFormat == SC_COL_SKIP || rStr.isEmpty() || !ValidCol(nCol) || !ValidRow(nRow) )
         return bMultiLine;
@@ -977,8 +979,18 @@ static bool lcl_PutString(
             pDoc->ApplyPattern(nCol, nRow, nTab, aNewAttrs);
 
         }
-        pDoc->SetTextCell(ScAddress(nCol,nRow,nTab), rStr);
-        return bMultiLine;
+        if(ScStringUtil::isMultiline(rStr))
+        {
+            ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+            rEngine.SetText(rStr);
+            rDocImport.setEditCell(ScAddress(nCol, nRow, nTab), rEngine.CreateTextObject());
+            return true;
+        }
+        else
+        {
+            rDocImport.setStringCell(ScAddress(nCol, nRow, nTab), rStr);
+            return false;
+        }
     }
 
     if ( nColFormat == SC_COL_ENGLISH )
@@ -991,7 +1003,7 @@ static bool lcl_PutString(
         if ( pDocFormatter->IsNumberFormat( rStr, nEnglish, fVal ) )
         {
             //  Zahlformat wird nicht auf englisch gesetzt
-            pDoc->SetValue( nCol, nRow, nTab, fVal );
+            rDocImport.setNumericCell( ScAddress( nCol, nRow, nTab ), fVal );
             return bMultiLine;
         }
         //  sonst weiter mit SetString
@@ -1180,7 +1192,7 @@ static bool lcl_PutString(
                         nFormat = pDocFormatter->GetStandardFormat( fDays, nFormat, nType, eDocLang);
 
                     ScAddress aPos(nCol,nRow,nTab);
-                    pDoc->SetValue(aPos, fDays);
+                    rDocImport.setNumericCell(aPos, fDays);
                     pDoc->SetNumberFormat(aPos, nFormat);
 
                     return bMultiLine;     // success
@@ -1197,14 +1209,14 @@ static bool lcl_PutString(
         aParam.mbDetectNumberFormat = bDetectNumFormat;
         aParam.meSetTextNumFormat = ScSetStringParam::SpecialNumberOnly;
         aParam.mbHandleApostrophe = false;
-        pDoc->SetString( nCol, nRow, nTab, rStr, &aParam );
+        rDocImport.setAutoInput(ScAddress(nCol, nRow, nTab), rStr, &aParam);
     }
     else
     {
         bMultiLine = true;
         ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
         rEngine.SetText(rStr);
-        pDoc->SetEditText(ScAddress(nCol,nRow,nTab), rEngine.CreateTextObject());
+        rDocImport.setEditCell(ScAddress(nCol, nRow, nTab), rEngine.CreateTextObject());
     }
     return bMultiLine;
 }
@@ -1327,6 +1339,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     sal_uLong nOriginalStreamPos = rStrm.Tell();
 
+    ScDocumentImport aDocImport(*pDoc);
     do
     {
         for( ;; )
@@ -1363,7 +1376,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                                 nFmt = SC_COL_TEXT;
 
                             bMultiLine |= lcl_PutString(
-                                pDoc, nCol, nRow, nTab, aCell, nFmt,
+                                aDocImport, nCol, nRow, nTab, aCell, nFmt,
                                 &aNumFormatter, bDetectNumFormat, aTransliteration, aCalendar,
                                 pEnglishTransliteration.get(), pEnglishCalendar.get());
                         }
@@ -1406,7 +1419,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                                 nFmt = SC_COL_TEXT;
 
                             bMultiLine |= lcl_PutString(
-                                pDoc, nCol, nRow, nTab, aCell, nFmt,
+                                aDocImport, nCol, nRow, nTab, aCell, nFmt,
                                 &aNumFormatter, bDetectNumFormat, aTransliteration,
                                 aCalendar, pEnglishTransliteration.get(), pEnglishCalendar.get());
                         }
@@ -1464,6 +1477,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
         bDetermineRange = !bDetermineRange;     // toggle
     } while (!bDetermineRange);
+    aDocImport.finalize();
 
     xProgress.reset();    // make room for AdjustRowHeight progress
     if (bRangeIsDetermined)
