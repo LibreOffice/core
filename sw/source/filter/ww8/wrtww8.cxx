@@ -212,7 +212,7 @@ WW8_WrtBookmarks::WW8_WrtBookmarks()
 WW8_WrtBookmarks::~WW8_WrtBookmarks()
 {
     CPItr aEnd = aSttCps.end();
-    for (CPItr aItr = aSttCps.begin();aItr!=aEnd;aItr++)
+    for (CPItr aItr = aSttCps.begin();aItr!=aEnd;++aItr)
     {
         if (aItr->second)
         {
@@ -235,7 +235,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm, const ::sw:
     else
     {
         std::pair<CPItr,CPItr> aRange = aSttCps.equal_range(aResult.first->second);
-        for (CPItr aItr = aRange.first;aItr != aRange.second;aItr++)
+        for (CPItr aItr = aRange.first;aItr != aRange.second;++aItr)
         {
             if (aItr->second && aItr->second->second.second == rNm)
             {
@@ -257,7 +257,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
     std::vector<OUString> aNames;
     SvMemoryStream aTempStrm1(65535,65535);
     SvMemoryStream aTempStrm2(65535,65535);
-    for (aItr = aSttCps.begin();aItr!=aSttCps.end();aItr++)
+    for (aItr = aSttCps.begin();aItr!=aSttCps.end();++aItr)
     {
         if (aItr->second)
         {
@@ -268,7 +268,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
     }
 
     aTempStrm1.Seek(0L);
-    for (aItr = aEndCps.begin(), n = 0;aItr != aEndCps.end();aItr++,n++)
+    for (aItr = aEndCps.begin(), n = 0;aItr != aEndCps.end();++aItr,++n)
     {
         if (aItr->second)
         {
@@ -283,7 +283,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
     rWrt.pFib->fcPlcfbkf = rStrm.Tell();
     rStrm<<aTempStrm1;
     SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
-    for (aItr = aSttCps.begin();aItr!=aSttCps.end();aItr++)
+    for (aItr = aSttCps.begin();aItr!=aSttCps.end();++aItr)
     {
         if (aItr->second)
         {
@@ -316,7 +316,7 @@ void WW8_WrtBookmarks::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
             aItr = aRange.first;
             continue;
         }
-        aItr++;
+        ++aItr;
     }
 }
 

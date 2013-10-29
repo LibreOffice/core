@@ -3152,7 +3152,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                 }
                 else if ( bShowPage )
                 {
-                    for (SwFormTokens::iterator aItr = aPattern.begin();aItr!= aPattern.end();aItr++)
+                    for (SwFormTokens::iterator aItr = aPattern.begin();aItr!= aPattern.end();++aItr)
                     {
                         if (aItr->eTokenType == TOKEN_PAGE_NUMS)
                         {
