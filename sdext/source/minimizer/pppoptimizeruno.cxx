@@ -18,7 +18,6 @@
  */
 
 
-#include <stdio.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>

@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
-#include <vector>
 
 #include <boost/shared_array.hpp>
 

@@ -28,7 +28,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 namespace pdfi
 {

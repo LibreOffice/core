@@ -65,8 +65,6 @@
 
 #include "rtl/bootstrap.h"
 
-#include <string.h>
-
 using namespace com::sun::star;
 
 namespace pdfi

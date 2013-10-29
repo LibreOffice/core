@@ -19,7 +19,6 @@
 
 #ifndef INFORMATIONDIALOG_HXX
 #define INFORMATIONDIALOG_HXX
-#include <vector>
 #include "unodialog.hxx"
 #include "configurationaccess.hxx"
 #include "pppoptimizertoken.hxx"

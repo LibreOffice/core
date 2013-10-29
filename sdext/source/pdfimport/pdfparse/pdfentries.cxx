@@ -32,7 +32,6 @@
 #include <math.h>
 #include <map>
 
-#include <stdio.h>
 #include <string.h>
 
 
