@@ -595,7 +595,7 @@ osl::Mutex & lcl_GetCharClassMutex()
     return aMutex;
 }
 
-sal_Bool IsUpper( const OUString &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage )
+sal_Bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, sal_Int16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 

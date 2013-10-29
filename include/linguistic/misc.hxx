@@ -143,7 +143,7 @@ LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPo
                     ::com::sun::star::linguistic2::XHyphenatedWord > &rxHyphWord );
 
 
-LNG_DLLPUBLIC sal_Bool        IsUpper( const OUString &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
+LNG_DLLPUBLIC sal_Bool        IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, sal_Int16 nLanguage );
 
 inline sal_Bool        IsUpper( const OUString &rText, sal_Int16 nLanguage )     { return IsUpper( rText, 0, rText.getLength(), nLanguage ); }
 LNG_DLLPUBLIC CapType SAL_CALL capitalType(const OUString&, CharClass *);
