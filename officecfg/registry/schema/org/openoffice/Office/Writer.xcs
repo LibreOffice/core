@@ -205,7 +205,7 @@
     </group>
     <group oor:name="FileType">
       <info>
-        <desc>Contains information about a linked file, i.e. a graphic file.</desc>
+        <desc>Contains information about a linked file, i.e. an Image file.</desc>
       </info>
       <prop oor:name="Name" oor:type="xs:string">
         <info>
@@ -256,7 +256,7 @@
       </prop>
       <prop oor:name="CommandType" oor:type="xs:short">
         <info>
-          <desc>Specifies if the data comes from a table or a query</desc>
+          <desc>Specifies whether the data comes from a table or a query</desc>
         </info>
       </prop>
       <prop oor:name="ColumnsToText" oor:type="xs:string">
@@ -281,22 +281,22 @@
       </prop>
       <prop oor:name="IsTable" oor:type="xs:boolean">
         <info>
-          <desc>Specifies if the data is inserted into tables.</desc>
+          <desc>Specifies whether the data is inserted into tables.</desc>
         </info>
       </prop>
       <prop oor:name="IsField" oor:type="xs:boolean">
         <info>
-          <desc>Specifies if the data is inserted into fields.</desc>
+          <desc>Specifies whether the data is inserted into fields.</desc>
         </info>
       </prop>
       <prop oor:name="IsHeadlineOn" oor:type="xs:boolean">
         <info>
-          <desc>Specifies if the table has a headline.</desc>
+          <desc>Specifies whether the table has a headline.</desc>
         </info>
       </prop>
       <prop oor:name="IsEmptyHeadline" oor:type="xs:boolean">
         <info>
-          <desc>Specifies if the table has an empty headline or if the headline contains the database column names.</desc>
+          <desc>Specifies whether the table has an empty headline or if the headline contains the database column names.</desc>
         </info>
       </prop>
       <set oor:name="ColumnSet" oor:node-type="ColumnSetType">
@@ -321,12 +321,12 @@
       </prop>
       <prop oor:name="IsNumberFormat" oor:type="xs:boolean">
         <info>
-          <desc>Specifies if the database field is assigned to a number format.</desc>
+          <desc>Specifies whether the database field is assigned to a number format.</desc>
         </info>
       </prop>
       <prop oor:name="IsNumberFormatFromDataBase" oor:type="xs:boolean">
         <info>
-          <desc>Specifies if the database format or a user-defined format is used.</desc>
+          <desc>Specifies whether the database format or a user-defined format is used.</desc>
         </info>
       </prop>
       <prop oor:name="NumberFormat" oor:type="xs:string">
@@ -1001,8 +1001,8 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <info>
-            <desc>Specifies if graphics and objects are displayed.</desc>
-            <label>Graphics and Objects</label>
+            <desc>Specifies whether Images and Objects are displayed.</desc>
+            <label>Images and Objects</label>
           </info>
           <value>true</value>
         </prop>
@@ -1011,7 +1011,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <info>
-            <desc>Specifies if tables are displayed.</desc>
+            <desc>Specifies whether tables are displayed.</desc>
             <label>Tables</label>
           </info>
           <value>true</value>
@@ -1021,7 +1021,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <info>
-            <desc>Specifies if drawings and controls are displayed.</desc>
+            <desc>Specifies whether drawings and controls are displayed.</desc>
             <label>Drawings and controls</label>
           </info>
           <value>true</value>
@@ -1031,7 +1031,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <info>
-            <desc>Specifies if field codes are displayed.</desc>
+            <desc>Specifies whether field codes are displayed.</desc>
             <label>Field codes</label>
           </info>
           <value>false</value>
@@ -1041,7 +1041,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
           <info>
-            <desc>Specifies if comments are displayed.</desc>
+            <desc>Specifies whether comments are displayed.</desc>
             <label>Comments</label>
           </info>
           <value>true</value>
@@ -1073,7 +1073,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <info>
-            <desc>Specifies if paragraph ends are shown on the screen.</desc>
+            <desc>Specifies whether paragraph ends are shown on the screen.</desc>
             <label>Paragraph end</label>
           </info>
           <value>true</value>
@@ -1083,7 +1083,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <info>
-            <desc>Specifies if optional hyphens are shown on the screen.</desc>
+            <desc>Specifies whether optional hyphens are shown on the screen.</desc>
             <label>Optional hyphens</label>
           </info>
           <value>true</value>
@@ -1093,7 +1093,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <info>
-            <desc>Specifies if spaces are shown on the screen.</desc>
+            <desc>Specifies whether spaces are shown on the screen.</desc>
             <label>Spaces</label>
           </info>
           <value>true</value>
@@ -1103,7 +1103,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <info>
-            <desc>Specifies if protected spaces are shown on the screen.</desc>
+            <desc>Specifies whether protected spaces are shown on the screen.</desc>
             <label>Protected Spaces</label>
           </info>
           <value>true</value>
@@ -1113,7 +1113,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <info>
-            <desc>Specifies if breaks are shown on the screen.</desc>
+            <desc>Specifies whether breaks are shown on the screen.</desc>
             <label>Tabs</label>
           </info>
           <value>true</value>
@@ -1123,7 +1123,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <info>
-            <desc>Specifies if paragraph ends are shown on the screen.</desc>
+            <desc>Specifies whether paragraph ends are shown on the screen.</desc>
             <label>Breaks</label>
           </info>
           <value>true</value>
@@ -1133,7 +1133,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <info>
-            <desc>Specifies if hidden text fields are displayed on the screen.</desc>
+            <desc>Specifies whether hidden text fields are displayed on the screen.</desc>
             <label>Fields: Hidden text</label>
           </info>
           <value>false</value>
@@ -1143,7 +1143,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Nonprinting Characters -->
           <info>
-            <desc>Specifies if hidden paragraphs are displayed on the screen.</desc>
+            <desc>Specifies whether hidden paragraphs are displayed on the screen.</desc>
             <label>Hidden paragraphs</label>
           </info>
           <value>true</value>
@@ -1151,7 +1151,7 @@
         <prop oor:name="HiddenCharacter" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Text document  Formatting aids - [Section] Display of -->
           <info>
-            <desc>Specifies if hidden paragraphs are displayed on the screen.</desc>
+            <desc>Specifies whether hidden paragraphs are displayed on the screen.</desc>
             <label>Hidden text</label>
           </info>
           <value>false</value>
@@ -1166,7 +1166,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Update links -->
           <info>
-            <desc>Specifies if links in the document are updated during loading.</desc>
+            <desc>Specifies whether links in the document are updated during loading.</desc>
             <label>Update links: Always/On request/Never</label>
           </info>
           <constraints>
@@ -1193,7 +1193,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Fields and charts -->
           <info>
-            <desc>Specifies if fields in the document are updated during loading.</desc>
+            <desc>Specifies whether fields in the document are updated during loading.</desc>
             <label>Update fields automatically</label>
           </info>
           <value>true</value>
@@ -1203,7 +1203,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Fields and charts -->
           <info>
-            <desc>Specifies if charts in the document are updated during loading.</desc>
+            <desc>Specifies whether charts in the document are updated during loading.</desc>
             <label>Update charts automatically</label>
           </info>
           <value>true</value>
@@ -1267,7 +1267,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <info>
-            <desc>Specifies if the horizontal scroll bar is displayed.</desc>
+            <desc>Specifies whether the horizontal scroll bar is displayed.</desc>
             <label>Horizontal scroll</label>
           </info>
           <value>true</value>
@@ -1277,7 +1277,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <info>
-            <desc>Specifies if the vertical scroll bar is displayed.</desc>
+            <desc>Specifies whether the vertical scroll bar is displayed.</desc>
             <label>Vertical Scroll</label>
           </info>
           <value>true</value>
@@ -1295,7 +1295,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <info>
-            <desc>Specifies if the horizontal ruler is displayed.</desc>
+            <desc>Specifies whether the horizontal ruler is displayed.</desc>
             <label>Horizontal ruler</label>
           </info>
           <value>true</value>
@@ -1360,7 +1360,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <info>
-            <desc>Specifies if the vertical ruler is displayed.</desc>
+            <desc>Specifies whether the vertical ruler is displayed.</desc>
             <label>Vertical Ruler</label>
           </info>
           <value>true</value>
@@ -1368,7 +1368,7 @@
         <prop oor:name="IsVerticalRulerRight" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
           <info>
-            <desc>Specifies if the vertical ruler is right aligned.</desc>
+            <desc>Specifies whether the vertical ruler is right aligned.</desc>
             <label>Vertical Ruler on the right</label>
           </info>
           <value>false</value>
@@ -1590,7 +1590,7 @@
         <prop oor:name="BookMode" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: (Status Bar) -->
           <info>
-            <desc>Specifies if the book mode should be applied.</desc>
+            <desc>Specifies whether the book mode should be applied.</desc>
             <label>View Layout Book Mode</label>
           </info>
           <value>false</value>
@@ -1961,8 +1961,8 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies which document contents will be printed.</desc>
-            <label>Graphics</label>
+            <desc>Specifies whether Images are printed.</desc>
+            <label>Images</label>
           </info>
           <value>true</value>
         </prop>
@@ -1971,7 +1971,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if graphics are printed.</desc>
+            <desc>Specifies whether Tables are printed.</desc>
             <label>Tables</label>
           </info>
           <value>true</value>
@@ -1981,7 +1981,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if tables are printed.</desc>
+            <desc>Specifies whether Drawings are printed.</desc>
             <label>Drawings</label>
           </info>
           <value>true</value>
@@ -1991,7 +1991,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if controls are printed.</desc>
+            <desc>Specifies whether controls are printed.</desc>
             <label>Controls</label>
           </info>
           <value>true</value>
@@ -2001,7 +2001,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if background objects are printed.</desc>
+            <desc>Specifies whether background objects are printed.</desc>
             <label>Background</label>
           </info>
           <value>true</value>
@@ -2011,7 +2011,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if text is always printed in black.</desc>
+            <desc>Specifies whether text is always printed in black.</desc>
             <label>Print black</label>
           </info>
           <value>false</value>
@@ -2019,7 +2019,7 @@
         <prop oor:name="PrintHiddenText" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Option - Text-Document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if hidden text, fields, paragraphs are printed.</desc>
+            <desc>Specifies whether hidden text, fields, paragraphs are printed.</desc>
             <label>Print hidden text</label>
           </info>
           <value>false</value>
@@ -2027,7 +2027,7 @@
         <prop oor:name="PrintPlaceholders" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Option - Text-Document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if the text of placeholder fields is printed.</desc>
+            <desc>Specifies whether the text of placeholder fields is printed.</desc>
             <label>Print placeholders</label>
           </info>
           <value>false</value>
@@ -2037,7 +2037,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Print - [Section] Notes -->
           <info>
-            <desc>Specifies if and how comments are printed.</desc>
+            <desc>Specifies whether and how comments are printed.</desc>
           </info>
           <constraints>
             <enumeration oor:value="0">
@@ -2268,7 +2268,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
           <info>
-            <desc>Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
+            <desc>Specifies whether numbers in a table are recognized or if they are saved in a text format.</desc>
             <label>Number recognition</label>
           </info>
           <value>false</value>
@@ -2278,7 +2278,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
           <info>
-            <desc>Specifies if only entries with the defined format are accepted. This option is only available if the number format recognition is active (Number_recognition = True).</desc>
+            <desc>Specifies whether only entries with the defined format are accepted. This option is only available if the number format recognition is active (Number_recognition = True).</desc>
             <label>Number format recognition</label>
           </info>
           <value>false</value>
@@ -2288,7 +2288,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Insert - [Section] Insert into tables -->
           <info>
-            <desc>Specifies if all numbers are aligned below right of the cell and not above left (as in the case of text). This option is only available if number format recognition is active (Number_recognition = True).</desc>
+            <desc>Specifies whether all numbers are aligned below right of the cell and not above left (as in the case of text). This option is only available if number format recognition is active (Number_recognition = True).</desc>
             <label>Alignment</label>
           </info>
           <value>false</value>
@@ -2308,7 +2308,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Cursor - [Section] Direct Cursor -->
           <info>
-            <desc>Specifies if the Direct Cursor is active</desc>
+            <desc>Specifies whether the Direct Cursor is active</desc>
             <label>Use Direct Cursor</label>
           </info>
           <value>false</value>
@@ -2355,7 +2355,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Cursor - [Section] Options -->
           <info>
-            <desc>Specifies if the Direct Cursor can be positioned in a protected area.</desc>
+            <desc>Specifies whether the Direct Cursor can be positioned in a protected area.</desc>
             <label>Allow Cursor in protected areas</label>
           </info>
           <value>true</value>
@@ -2656,12 +2656,12 @@
       </prop>
       <prop oor:name="UseRSID" oor:type="xs:boolean">
         <info>
-          <desc>Specifies if RSIDs are used in comparison.</desc>
+          <desc>Specifies whether RSIDs are used in comparison.</desc>
         </info>
       </prop>
       <prop oor:name="IgnorePieces" oor:type="xs:boolean">
         <info>
-          <desc>Specifies if short pieces of matched text are ignored.</desc>
+          <desc>Specifies whether short pieces of matched text are ignored.</desc>
         </info>
       </prop>
       <prop oor:name="IgnoreLength" oor:type="xs:short">
@@ -2689,7 +2689,7 @@
         </prop>
         <prop oor:name="Automatic" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies how tables, graphics, frames and Office documents, which have been inserted as OLE objects, are labeled</desc>
+            <desc>Specifies how Tables, Images, Frames and Office documents, which have been inserted as OLE objects, are labeled</desc>
             <label>Automatic</label>
           </info>
           <value>false</value>
@@ -2966,12 +2966,12 @@
           <group oor:name="Graphic">
             <!-- OldPath: Writer/Insert/Caption/Object/StarWriter_Graphic -->
             <info>
-              <desc>Settings for insertion of captions for graphics.</desc>
+              <desc>Settings for insertion of captions for Images.</desc>
             </info>
             <prop oor:name="Enable" oor:type="xs:boolean" oor:nillable="false">
               <info>
-                <desc>Determines if the caption settings are valid for a graphic in a text document.</desc>
-                <label>Writer Graphic</label>
+                <desc>Determines if the caption settings are valid for an Image in a text document.</desc>
+                <label>Writer Image</label>
               </info>
               <value>false</value>
             </prop>
@@ -3095,7 +3095,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3238,7 +3238,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3376,7 +3376,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3514,7 +3514,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3652,7 +3652,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3790,7 +3790,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -3928,7 +3928,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -4066,7 +4066,7 @@
               </prop>
               <prop oor:name="ApplyAttributes" oor:type="xs:boolean">
                 <info>
-                  <desc>Determines whether the border and shadow attributes of the graphic frame should be applied to the newly inserted caption frame surrounding the graphic.</desc>
+                  <desc>Determines whether the border and shadow attributes of the Image frame should be applied to the newly inserted caption frame surrounding the Image.</desc>
                   <label>Apply attributes</label>
                 </info>
               </prop>
@@ -4083,28 +4083,28 @@
         </info>
         <prop oor:name="Header" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies if the table has a header.</desc>
+            <desc>Specifies whether the table has a header.</desc>
             <label>Header</label>
           </info>
           <value>false</value>
         </prop>
         <prop oor:name="RepeatHeader" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header = True.</desc>
+            <desc>Specifies whether the header in the new page is adopted when inserting a page break. This option is only available if Header = True.</desc>
             <label>Repeat header</label>
           </info>
           <value>false</value>
         </prop>
         <prop oor:name="Split" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies if tables can be split with a page break or not.</desc>
+            <desc>Specifies whether tables can be split with a page break or not.</desc>
             <label>Don't split</label>
           </info>
           <value>true</value>
         </prop>
         <prop oor:name="Border" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Specifies if table cells have a border by default.</desc>
+            <desc>Specifies whether table cells have a border by default.</desc>
             <label>Border</label>
           </info>
           <value>true</value>
@@ -4124,7 +4124,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
           <info>
-            <desc>Specifies if spacing between paragraphs and tables are added to ensure the compatibility to MS Word documents.</desc>
+            <desc>Specifies whether spacing between paragraphs and tables are added to ensure the compatibility to MS Word documents.</desc>
             <label>Add spacing between paragraphs and tables</label>
           </info>
           <value>false</value>
@@ -4134,7 +4134,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
           <info>
-            <desc>Specifies if paragraph and table spacing are added to the start of pages to ensure compatibility with MS Word documents.</desc>
+            <desc>Specifies whether paragraph and table spacing are added to the start of pages to ensure compatibility with MS Word documents.</desc>
             <label>Add paragraph and table spacing to start of pages</label>
           </info>
           <value>false</value>
@@ -4154,7 +4154,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Edit  AutoText  Save Links relative -->
           <info>
-            <desc>Specifies if file links inside AutoText modules are saved relatively or absolutely.</desc>
+            <desc>Specifies whether file links inside AutoText modules are saved relatively or absolutely.</desc>
             <label>(Save links relative to) File system</label>
           </info>
           <value>false</value>
@@ -4164,7 +4164,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Edit  AutoText  Save Links relative -->
           <info>
-            <desc>Specifies if Internet links inside AutoText modules are saved relatively or absolutely.</desc>
+            <desc>Specifies whether Internet links inside AutoText modules are saved relatively or absolutely.</desc>
             <label>(Save links relative to) Internet</label>
           </info>
           <value>false</value>
@@ -4174,7 +4174,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Edit  AutoText  Show preview -->
           <info>
-            <desc>Specifies if a preview of the AutoText is displayed.</desc>
+            <desc>Specifies whether a preview of the AutoText is displayed.</desc>
             <label>Show Preview</label>
           </info>
           <value>false</value>
@@ -4184,7 +4184,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Edit  AutoText  display remainder ... -->
           <info>
-            <desc>Specifies if the Tip help of the AutoText is displayed.</desc>
+            <desc>Specifies whether the Tip help of the AutoText is displayed.</desc>
             <label>Display AutoText name while typing</label>
           </info>
           <value>false</value>
@@ -4192,7 +4192,7 @@
         <prop oor:name="SearchInAllCategories" oor:type="xs:boolean" oor:nillable="false">
           <!-- #b6633427# -->
           <info>
-            <desc>Specifies if the search for an AutoText shortcut will always be done in all AutoText categories.</desc>
+            <desc>Specifies whether the search for an AutoText shortcut will always be done in all AutoText categories.</desc>
             <label>Search for short cut in all categories</label>
           </info>
           <value>false</value>
@@ -4211,7 +4211,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Use replacement table -->
             <info>
-              <desc>Specifies if the replacement table is used to replace letter combinations with defined text.</desc>
+              <desc>Specifies whether the replacement table is used to replace letter combinations with defined text.</desc>
               <label>Use replacement table</label>
             </info>
             <value>true</value>
@@ -4221,7 +4221,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Correct TWo INitial Capitals -->
             <info>
-              <desc>Specifies if two initial capitals are corrected automatically.</desc>
+              <desc>Specifies whether two initial capitals are corrected automatically.</desc>
               <label>Correct two initial capitals</label>
             </info>
             <value>true</value>
@@ -4231,7 +4231,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Capitalize first letter of every sentence -->
             <info>
-              <desc>Specifies if the letter at the beginning of a sentence is capitalized automatically.</desc>
+              <desc>Specifies whether the letter at the beginning of a sentence is capitalized automatically.</desc>
               <label>Capitalize first letter of every sentence</label>
             </info>
             <value>true</value>
@@ -4241,7 +4241,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Automatic *bold* and _underline_ -->
             <info>
-              <desc>Specifies if text is formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
+              <desc>Specifies whether text is formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
               <label>Apply underline or bold</label>
             </info>
             <value>true</value>
@@ -4251,7 +4251,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL regocnition -->
             <info>
-              <desc>Specifies if character strings which could represent a URL are converted to a hyperlink.</desc>
+              <desc>Specifies whether character strings which could represent a URL are converted to a hyperlink.</desc>
               <label>Detect URL</label>
             </info>
             <value>true</value>
@@ -4261,7 +4261,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace 1st... -->
             <info>
-              <desc>Specifies if ordinal numbers are displayed with raised endings.</desc>
+              <desc>Specifies whether ordinal numbers are displayed with raised endings.</desc>
               <label>Replace ordinal numbers</label>
             </info>
             <value>true</value>
@@ -4271,7 +4271,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
             <info>
-              <desc>Specifies if dashes are replaced automatically.</desc>
+              <desc>Specifies whether dashes are replaced automatically.</desc>
               <label>Replace dashes</label>
             </info>
             <value>true</value>
@@ -4291,7 +4291,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Remove blank paragraphs -->
             <info>
-              <desc>Specifies if blank paragraphs are deleted.</desc>
+              <desc>Specifies whether blank paragraphs are deleted.</desc>
               <label>Remove blank paragraphs</label>
             </info>
             <value>false</value>
@@ -4301,7 +4301,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace custom styles -->
             <info>
-              <desc>Specifies if user-defined styles applied in the document are replaced by predefined text document styles.</desc>
+              <desc>Specifies whether user-defined styles applied in the document are replaced by predefined text document styles.</desc>
               <label>Replace user-defined styles</label>
             </info>
             <value>true</value>
@@ -4353,7 +4353,7 @@
               <!-- OldLocation: Soffice.cfg -->
               <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace bullets with -->
               <info>
-                <desc>Specifies if paragraphs starting with a dash, a plus sign or an asterix followed by space or tab are replaced by a bullet character.</desc>
+                <desc>Specifies whether paragraphs starting with a dash, a plus sign or an asterix followed by space or tab are replaced by a bullet character.</desc>
                 <label>Replace bullets with</label>
               </info>
               <value>true</value>
@@ -4422,7 +4422,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - AutoFormat while typing -->
             <info>
-              <desc>Specifies if AutoFormat is active while typing.</desc>
+              <desc>Specifies whether AutoFormat is active while typing.</desc>
               <label>AutoFormat while typing</label>
             </info>
             <value>true</value>
@@ -4432,7 +4432,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
             <info>
-              <desc>Specifies if dashes are replaced automatically.</desc>
+              <desc>Specifies whether dashes are replaced automatically.</desc>
               <label>Replace dashes</label>
             </info>
             <value>true</value>
@@ -4442,7 +4442,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply border -->
             <info>
-              <desc>Specifies if borders are applied to paragraphs automatically.</desc>
+              <desc>Specifies whether borders are applied to paragraphs automatically.</desc>
               <label>Apply border</label>
             </info>
             <value>true</value>
@@ -4452,7 +4452,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Create table -->
             <info>
-              <desc>Specifies if tables are created by AutoFormat.</desc>
+              <desc>Specifies whether tables are created by AutoFormat.</desc>
               <label>Create table</label>
             </info>
             <value>true</value>
@@ -4462,7 +4462,7 @@
             <!-- OldLocation: Soffice.cfg -->
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply styles -->
             <info>
-              <desc>Specifies if styles are automatically be assigned.</desc>
+              <desc>Specifies whether styles are automatically be assigned.</desc>
               <label>Apply styles</label>
             </info>
             <value>false</value>
@@ -4494,7 +4494,7 @@
               <!-- OldLocation: Soffice.cfg -->
               <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply numbering-->
               <info>
-                <desc>Specifies if a numbered or bulleted text is created automatically while typing.</desc>
+                <desc>Specifies whether a numbered or bulleted text is created automatically while typing.</desc>
                 <label>Apply numbering</label>
               </info>
               <value>false</value>
@@ -4564,7 +4564,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Show suggestions -->
           <info>
-            <desc>Specifies if the suggestions for the automatic word completion are displayed on the screen.</desc>
+            <desc>Specifies whether the suggestions for the automatic word completion are displayed on the screen.</desc>
             <label>Show suggestions</label>
           </info>
           <value>true</value>
@@ -4594,7 +4594,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Collect suggestions -->
           <info>
-            <desc>Specifies if the suggestions are compiled in a list.</desc>
+            <desc>Specifies whether the suggestions are compiled in a list.</desc>
             <label>Collect suggestions</label>
           </info>
           <value>true</value>
@@ -4604,7 +4604,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: no UI available anymore -->
           <info>
-            <desc>Specifies if the list containing the suitable suggestions can be navigated with (Ctrl)(Tab)(forward).</desc>
+            <desc>Specifies whether the list containing the suitable suggestions can be navigated with (Ctrl)(Tab)(forward).</desc>
             <label>Endless suggestions</label>
           </info>
           <value>true</value>
@@ -4614,7 +4614,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Append blanc -->
           <info>
-            <desc>Specifies if a blank is added after the automatic word completion.</desc>
+            <desc>Specifies whether a blank is added after the automatic word completion.</desc>
             <label>Append space</label>
           </info>
           <value>false</value>
@@ -4624,7 +4624,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools  AutoCorrect/AutoFormat  WordCompletion  Show as tip -->
           <info>
-            <desc>Specifies if the suggestions for the automatic word completion function should be displayed as Tip helps.</desc>
+            <desc>Specifies whether the suggestions for the automatic word completion function should be displayed as Tip helps.</desc>
             <label>Show as tip</label>
           </info>
           <value>true</value>
@@ -4693,7 +4693,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
-            <desc>Specifies if the user's address is copied automatically into the label text field.</desc>
+            <desc>Specifies whether the user's address is copied automatically into the label text field.</desc>
             <label>Address</label>
           </info>
           <value>false</value>
@@ -4730,7 +4730,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Labels -->
           <info>
-            <desc>Specifies if continuous paper or individual sheets are used.</desc>
+            <desc>Specifies whether continuous paper or individual sheets are used.</desc>
             <label>Continous / Sheet</label>
           </info>
           <value>false</value>
@@ -4868,7 +4868,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Options -->
           <info>
-            <desc>Specifies if contents are synchronized.</desc>
+            <desc>Specifies whether contents are synchronized.</desc>
             <label>Synchronize contents</label>
           </info>
           <value>false</value>
@@ -4878,7 +4878,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  Labels  Options -->
           <info>
-            <desc>Specifies if the entire page or a single label are printed/generated.</desc>
+            <desc>Specifies whether the entire page or a single label are printed/generated.</desc>
             <label>Entire page / Single label</label>
           </info>
           <value>true</value>
@@ -4918,7 +4918,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Medium -->
           <info>
-            <desc>Specifies if continuous paper or individual sheets are used.</desc>
+            <desc>Specifies whether continuous paper or individual sheets are used.</desc>
             <label>Continous / Sheet</label>
           </info>
           <value>false</value>
@@ -5040,7 +5040,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Options -->
           <info>
-            <desc>Specifies if contents are synchronized.</desc>
+            <desc>Specifies whether contents are synchronized.</desc>
             <label>Synchronize contents</label>
           </info>
           <value>false</value>
@@ -5050,7 +5050,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: File  New  BusinessCards  Options -->
           <info>
-            <desc>Specifies if the entire page or a single business card is printed/generated.</desc>
+            <desc>Specifies whether the entire page or a single business card is printed/generated.</desc>
             <label>Entire page / Single business card</label>
           </info>
           <value>true</value>
@@ -5410,7 +5410,7 @@
         </info>
         <prop oor:name="Graphic" oor:type="xs:int" oor:nillable="false">
           <info>
-            <desc>Specifies whether the Graphic Object Bar or the Text Object Bar is visible when a graphic is selected.</desc>
+            <desc>Specifies whether the Image Object Bar or the Text Object Bar is visible when an Image is selected.</desc>
           </info>
           <value>-1</value>
         </prop>
@@ -5561,7 +5561,7 @@
         <!-- OldLocation: Soffice.cfg -->
         <!-- UIHints: Navigator -->
         <info>
-          <desc>Specifies if the contents of a category are displayed in the Navigator list box.</desc>
+          <desc>Specifies whether the contents of a category are displayed in the Navigator list box.</desc>
         </info>
         <value>0</value>
       </prop>
@@ -5599,7 +5599,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envolpe  Envelope -->
           <info>
-            <desc>Specifies if the sender's address is used.</desc>
+            <desc>Specifies whether the sender's address is used.</desc>
             <label>Use Sender</label>
           </info>
           <value>true</value>
@@ -5732,7 +5732,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Insert  Envolpe  Printer -->
           <info>
-            <desc>Specifies if the envelope is printed with the side facing up or down in the printer tray.</desc>
+            <desc>Specifies whether the envelope is printed with the side facing up or down in the printer tray.</desc>
             <label>Print from top / Print from bottom</label>
           </info>
           <value>true</value>
@@ -5825,7 +5825,7 @@
           <!--OldLocation: Soffice.cfg -->
           <!--UIHints: Numbering/Bullets dialog - Customize - Graphics - Keep Ratio-->
           <info>
-            <desc>Maintains the proportions of pictures when the size is modified.</desc>
+            <desc>Maintains the proportions of Images when the size is modified.</desc>
           </info>
           <value>false</value>
         </prop>
@@ -6021,7 +6021,7 @@
         <!-- OldLocation: Soffice.cfg -->
         <!--UIHints: Insert - Indexes - Show preview -->
         <info>
-          <desc>Specifies if a preview of the index is displayed in the Insert Index dialog .</desc>
+          <desc>Specifies whether a preview of the index is displayed in the Insert Index dialog .</desc>
           <label>Show Preview</label>
         </info>
         <value>true</value>
@@ -6131,7 +6131,7 @@
         <!-- OldLocation: Soffice.cfg -->
         <!--UIHints: context menu of readonly loaded documents-->
         <info>
-          <desc>Specifies if a preview of the index is displayed in the dialog Insert Index.</desc>
+          <desc>Specifies whether a preview of the index is displayed in the dialog Insert Index.</desc>
           <label>Show Preview</label>
         </info>
         <value>true</value>

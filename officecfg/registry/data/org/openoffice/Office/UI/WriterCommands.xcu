@@ -872,10 +872,10 @@
       </node>
       <node oor:name=".uno:GraphicDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Picture...</value>
+          <value xml:lang="en-US">Image...</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Pict~ure...</value>
+          <value xml:lang="en-US">~Image...</value>
         </prop>
       </node>
       <node oor:name=".uno:TableDialog" oor:op="replace">
@@ -1835,7 +1835,7 @@
       </node>
       <node oor:name=".uno:MirrorGraphicOnEvenPages" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Flip Graphics on Even Pages</value>
+          <value xml:lang="en-US">Flip Images on Even Pages</value>
         </prop>
       </node>
       <node oor:name=".uno:SplitTable" oor:op="replace">
@@ -2052,7 +2052,7 @@
       </node>
       <node oor:name=".uno:Graphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Graphics On/Off</value>
+          <value xml:lang="en-US">Images On/Off</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2296,7 +2296,7 @@
       </node>
       <node oor:name=".uno:SaveGraphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Save Graphics...</value>
+          <value xml:lang="en-US">Save Images...</value>
         </prop>
       </node>
       <node oor:name=".uno:ContinueNumbering" oor:op="replace">

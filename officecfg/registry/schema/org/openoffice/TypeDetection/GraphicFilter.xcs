@@ -19,12 +19,12 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="GraphicFilter" oor:package="org.openoffice.TypeDetection" xml:lang="en-US">
   <info>
-    <desc>Contains specialized data for internal graphic filter.</desc>
+    <desc>Contains specialized data for internal Image filter.</desc>
   </info>
   <templates>
     <group oor:name="Filter">
       <info>
-        <desc>Lists of all internal graphic filters.</desc>
+        <desc>Lists of all internal Image filters.</desc>
       </info>
       <prop oor:name="Type" oor:type="xs:string">
         <info>

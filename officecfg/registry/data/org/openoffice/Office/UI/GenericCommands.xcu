@@ -1866,7 +1866,7 @@
       </node>
       <node oor:name=".uno:GrafAttrCrop" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Crop Picture...</value>
+          <value xml:lang="en-US">Crop Image...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1874,7 +1874,7 @@
       </node>
       <node oor:name=".uno:Crop" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Crop Picture</value>
+          <value xml:lang="en-US">Crop Image</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5391,7 +5391,7 @@
       </node>
       <node oor:name=".uno:GraphicMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Pict~ure</value>
+          <value xml:lang="en-US">~Image</value>
         </prop>
       </node>
       <node oor:name=".uno:WindowList" oor:op="replace">

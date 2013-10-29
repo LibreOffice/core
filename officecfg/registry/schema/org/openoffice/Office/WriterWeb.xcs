@@ -36,8 +36,8 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <info>
-            <desc>Specifies if graphics and objects are displayed.</desc>
-            <label>Graphics and Objects</label>
+            <desc>Specifies whether Images and Objects are displayed.</desc>
+            <label>Images and Objects</label>
           </info>
           <value>true</value>
         </prop>
@@ -46,7 +46,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <info>
-            <desc>Specifies if tables are displayed.</desc>
+            <desc>Specifies whether tables are displayed.</desc>
             <label>Tables</label>
           </info>
           <value>true</value>
@@ -56,7 +56,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <info>
-            <desc>Specifies if drawings and controls are displayed.</desc>
+            <desc>Specifies whether drawings and controls are displayed.</desc>
             <label>Drawings and controls</label>
           </info>
           <value>true</value>
@@ -66,7 +66,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <info>
-            <desc>Specifies if field codes are displayed.</desc>
+            <desc>Specifies whether field codes are displayed.</desc>
             <label>Field codes</label>
           </info>
           <value>false</value>
@@ -76,7 +76,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <info>
-            <desc>Specifies if comments are displayed.</desc>
+            <desc>Specifies whether comments are displayed.</desc>
             <label>Comments</label>
           </info>
           <value>true</value>
@@ -107,7 +107,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <info>
-            <desc>Specifies if paragraph ends are shown on the screen.</desc>
+            <desc>Specifies whether paragraph ends are shown on the screen.</desc>
             <label>Paragraph end</label>
           </info>
           <value>true</value>
@@ -117,7 +117,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <info>
-            <desc>Specifies if optional hyphens are shown on the screen.</desc>
+            <desc>Specifies whether optional hyphens are shown on the screen.</desc>
             <label>Optional hyphens</label>
           </info>
           <value>true</value>
@@ -127,7 +127,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <info>
-            <desc>Specifies if spaces are shown on the screen.</desc>
+            <desc>Specifies whether spaces are shown on the screen.</desc>
             <label>Spaces</label>
           </info>
           <value>true</value>
@@ -137,7 +137,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <info>
-            <desc>Specifies if protected spaces are shown on the screen.</desc>
+            <desc>Specifies whether protected spaces are shown on the screen.</desc>
             <label>Protected Spaces</label>
           </info>
           <value>true</value>
@@ -147,7 +147,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <info>
-            <desc>Specifies if breaks are shown on the screen.</desc>
+            <desc>Specifies whether breaks are shown on the screen.</desc>
             <label>Breaks</label>
           </info>
           <value>true</value>
@@ -162,7 +162,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Highlighting -->
           <info>
-            <desc>Specifies if fields are highlighted.</desc>
+            <desc>Specifies whether fields are highlighted.</desc>
             <label>Fields</label>
           </info>
           <value>true</value>
@@ -217,7 +217,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <info>
-            <desc>Specifies if the horizontal scroll bar is displayed.</desc>
+            <desc>Specifies whether the horizontal scroll bar is displayed.</desc>
             <label>Horizontal scroll</label>
           </info>
           <value>true</value>
@@ -227,7 +227,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <info>
-            <desc>Specifies if the vertical scroll bar is displayed.</desc>
+            <desc>Specifies whether the vertical scroll bar is displayed.</desc>
             <label>Vertical Scroll</label>
           </info>
           <value>true</value>
@@ -245,7 +245,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <info>
-            <desc>Specifies if the horizontal ruler is displayed.</desc>
+            <desc>Specifies whether the horizontal ruler is displayed.</desc>
             <label>Horizontal ruler</label>
           </info>
           <value>true</value>
@@ -310,7 +310,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <info>
-            <desc>Specifies if the vertical ruler is displayed.</desc>
+            <desc>Specifies whether the vertical ruler is displayed.</desc>
             <label>Vertical Ruler</label>
           </info>
           <value>false</value>
@@ -592,8 +592,8 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if graphics are printed.</desc>
-            <label>Graphics</label>
+            <desc>Specifies whether Images are printed.</desc>
+            <label>Images</label>
           </info>
           <value>true</value>
         </prop>
@@ -602,7 +602,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if tables are printed.</desc>
+            <desc>Specifies whether tables are printed.</desc>
             <label>Tables</label>
           </info>
           <value>true</value>
@@ -612,7 +612,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if controls are printed.</desc>
+            <desc>Specifies whether controls are printed.</desc>
             <label>Controls</label>
           </info>
           <value>true</value>
@@ -622,7 +622,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if background objects are printed.</desc>
+            <desc>Specifies whether background objects are printed.</desc>
             <label>Background</label>
           </info>
           <value>true</value>
@@ -632,7 +632,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <info>
-            <desc>Specifies if text is always printed in black.</desc>
+            <desc>Specifies whether text is always printed in black.</desc>
             <label>Print black</label>
           </info>
           <value>false</value>
@@ -642,7 +642,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Notes -->
           <info>
-            <desc>Specifies if comments are printed and how they are printed.</desc>
+            <desc>Specifies whether comments are printed and how they are printed.</desc>
           </info>
           <constraints>
             <enumeration oor:value="0">
@@ -844,7 +844,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
           <info>
-            <desc>Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
+            <desc>Specifies whether numbers in a table are recognized or if they are saved in a text format.</desc>
             <label>Number recognition</label>
           </info>
           <value>true</value>
@@ -864,7 +864,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
           <info>
-            <desc>Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
+            <desc>Specifies whether all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
             <label>Alignment</label>
           </info>
           <value>false</value>
@@ -884,7 +884,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
           <info>
-            <desc>Specifies if the table has a header</desc>
+            <desc>Specifies whether the table has a header</desc>
             <label>Header</label>
           </info>
           <value>false</value>
@@ -894,7 +894,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
           <info>
-            <desc>Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
+            <desc>Specifies whether the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
             <label>Repeat header</label>
           </info>
           <value>false</value>
@@ -904,7 +904,7 @@
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
           <info>
-            <desc>Specifies if table cells have a border by default.</desc>
+            <desc>Specifies whether table cells have a border by default.</desc>
             <label>Border</label>
           </info>
           <value>true</value>
@@ -923,7 +923,7 @@
         </info>
         <prop oor:name="Graphic" oor:type="xs:int" oor:nillable="false">
           <info>
-            <desc>Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
+            <desc>Specifies whether the Image Object Bar or the Text Object Bar/Web is the visible toolbar when a Image is selected.</desc>
           </info>
           <value>-1</value>
         </prop>
@@ -973,9 +973,9 @@
       </info>
       <prop oor:name="AddGraphic" oor:type="xs:boolean" oor:nillable="false">
         <!--OldLocation: Soffice.cfg -->
-        <!--UIHints: HTML document in readonly mode - context menu of a graphic - Add Graphics - As Link / Copy-->
+        <!--UIHints: HTML document in readonly mode - context menu of an Image - Add Image - As Link / Copy-->
         <info>
-          <desc>Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
+          <desc>Specifies whether an Image is embedded or added as link when it is inserted into the Gallery.</desc>
         </info>
         <value>true</value>
       </prop>
