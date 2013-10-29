@@ -1170,19 +1170,20 @@ public:
     std::string GetMD5(void)
     {
 #ifdef MD5_KERNEL
-        if(mKernelSignature.empty()) {
+        if (mKernelHash.empty()) {
             std::stringstream md5s;
             // Compute MD5SUM of kernel body to obtain the name
             sal_uInt8 result[RTL_DIGEST_LENGTH_MD5];
-            rtlDigestError err = rtl_digest_MD5(
-                mKernelSrc.str().c_str(), mKernelSrc.str().length(), result,
+            rtl_digest_MD5(
+                mFullProgramSrc.c_str(),
+                mFullProgramSrc.length(), result,
                 RTL_DIGEST_LENGTH_MD5);
             for(int i=0; i < RTL_DIGEST_LENGTH_MD5; i++) {
                 md5s << std::hex << (int)result[i];
             }
-            mKernelSignature = md5s.str();
+            mKernelHash = md5s.str();
         }
-        return mKernelSignature;
+        return mKernelHash;
 #else
         return "";
 #endif
@@ -1190,7 +1191,7 @@ public:
     /// Create program, build, and create kerenl
     /// TODO cache results based on kernel body hash
     /// TODO: abstract OpenCL part out into OpenCL wrapper.
-    bool CreateKernel(void);
+    void CreateKernel(void);
     /// Prepare buffers, marshal them to GPU, and launch the kernel
     /// TODO: abstract OpenCL part out into OpenCL wrapper.
     void Launch(size_t nr)
@@ -1222,8 +1223,7 @@ private:
     void TraverseAST(std::shared_ptr<FormulaTreeNode>);
     std::shared_ptr<FormulaTreeNode> mpRoot;
     SymbolTable mSyms;
-    std::stringstream mKernelSrc;
-    std::string mKernelSignature;
+    std::string mKernelSignature, mKernelHash;
     std::string mFullProgramSrc;
     cl_program mpProgram;
     cl_kernel mpKernel;
@@ -1246,7 +1246,7 @@ DynamicKernel::~DynamicKernel()
     }
 }
 /// Build code
-bool DynamicKernel::CreateKernel(void)
+void DynamicKernel::CreateKernel(void)
 {
     cl_int err;
     std::string kname = "DynamicKernel"+mKernelSignature;
@@ -1255,16 +1255,27 @@ bool DynamicKernel::CreateKernel(void)
     KernelEnv kEnv;
     OclCalc::setKernelEnv(&kEnv);
     const char *src = mFullProgramSrc.c_str();
-    mpProgram = clCreateProgramWithSource(kEnv.mpkContext, 1,
-            &src, NULL, &err);
-    if (err != CL_SUCCESS)
-        return true;
-    err = clBuildProgram(mpProgram, 1,
-            OpenclDevice::gpuEnv.mpArryDevsID, "", NULL, NULL);
-    if (err != CL_SUCCESS)
-        return true;
+    if (OpenclDevice::buildProgramFromBinary("",
+        &OpenclDevice::gpuEnv,
+        (mKernelSignature+GetMD5()).c_str(), 0)) {
+        mpProgram = OpenclDevice::gpuEnv.mpArryPrograms[0];
+        OpenclDevice::gpuEnv.mpArryPrograms[0] = NULL;
+    } else {
+        mpProgram = clCreateProgramWithSource(kEnv.mpkContext, 1,
+                &src, NULL, &err);
+        if (err != CL_SUCCESS)
+            throw OpenCLError(err);
+        err = clBuildProgram(mpProgram, 1,
+                OpenclDevice::gpuEnv.mpArryDevsID, "", NULL, NULL);
+        if (err != CL_SUCCESS)
+            throw OpenCLError(err);
+        // Generate binary out of compiled kernel.
+        OpenclDevice::generatBinFromKernelSource(mpProgram,
+                (mKernelSignature+GetMD5()).c_str());
+    }
     mpKernel = clCreateKernel(mpProgram, kname.c_str(), &err);
-    return (err != CL_SUCCESS);
+    if (err != CL_SUCCESS)
+        throw OpenCLError(err);
 }
 // Symbol lookup. If there is no such symbol created, allocate one
 // kernel with argument with unique name and return so.
@@ -1379,9 +1390,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         KernelEnv kEnv;
         OclCalc::setKernelEnv(&kEnv);
         // Compile kernel here!!!
-        if (mpKernel->CreateKernel()) {
-            std::cerr << "Cannot create kernel\n";
-        }
+        mpKernel->CreateKernel();
         // Run the kernel.
         mpKernel->Launch(xGroup->mnLength);
         // Map results back
