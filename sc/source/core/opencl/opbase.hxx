@@ -106,7 +106,7 @@ protected:
 class SlidingFunctionBase
 {
 public:
-    typedef std::unique_ptr<DynamicKernelArgument> SubArgument;
+    typedef boost::shared_ptr<DynamicKernelArgument> SubArgument;
     typedef std::vector<SubArgument> SubArguments;
     virtual void GenSlidingWindowFunction(std::stringstream &,
         const std::string, SubArguments &) = 0;
