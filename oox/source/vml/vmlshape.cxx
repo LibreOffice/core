@@ -695,6 +695,9 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
             aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
             aPropSet.setProperty(PROP_Opaque, sal_False);
         }
+        // fdo#70457: preserve rotation information
+        if ( !maTypeModel.maRotation.isEmpty() )
+            lcl_SetRotation( aPropSet, maTypeModel.maRotation.toInt32() );
 
         lcl_SetAnchorType(aPropSet, maTypeModel);
     }

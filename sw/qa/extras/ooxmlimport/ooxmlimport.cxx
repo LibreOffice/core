@@ -1499,6 +1499,20 @@ DECLARE_OOXMLIMPORT_TEST(testFdo69548, "fdo69548.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("#this is a bookmark"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo70457, "fdo70457.docx")
+{
+    // The document contains a rotated bitmap
+    // It must be imported as a XShape object with the proper rotation value
+
+    // Check: there is one shape in the doc
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+
+    // Check: the angle of the shape is 45º
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4500), getProperty<sal_Int32>(getShape(1), "RotateAngle"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
