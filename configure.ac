@@ -5178,8 +5178,6 @@ find_msms()
             AC_MSG_WARN([Merge modules not found in $msmdir])
             msmdir=""
         fi
-    else
-        msms="Microsoft_VC${VCVER}_CRT_x86.msm"
     fi
 }
 
@@ -6600,14 +6598,12 @@ if test $_os = "WINNT" -a "$WITH_MINGW" != yes; then
     MSVC_DLL_PATH="$msvcdllpath"
     MSVC_DLLS="$msvcdlls"
     MSM_PATH="$msmdir"
-    MERGE_MODULES="$msms"
     SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
 fi
 
 AC_SUBST(MSVC_DLL_PATH)
 AC_SUBST(MSVC_DLLS)
 AC_SUBST(MSM_PATH)
-AC_SUBST(MERGE_MODULES)
 
 dnl ===================================================================
 dnl Checks for Java
