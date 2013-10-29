@@ -186,7 +186,7 @@
 
       <node oor:name="TextPropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Text</value>
+          <value xml:lang="en-US">Character</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>TextPropertyPanel</value>
