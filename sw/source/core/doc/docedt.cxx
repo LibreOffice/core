@@ -127,7 +127,7 @@ struct _SaveRedline
 
 typedef boost::ptr_vector< _SaveRedline > _SaveRedlines;
 
-static bool lcl_MayOverwrite( const SwTxtNode *pNode, const xub_StrLen nPos )
+static bool lcl_MayOverwrite( const SwTxtNode *pNode, const sal_Int32 nPos )
 {
     sal_Unicode const cChr = pNode->GetTxt()[nPos];
     switch (cChr)

@@ -976,7 +976,7 @@ namespace
     static const int BEHIND_SAME_NODE = 3;     // Same node index but content index behind given content index
     static const int BEHIND_NODE = 4;          // Position behind the given node index
 
-    static int lcl_RelativePosition( const SwPosition& rPos, sal_uLong nNode, xub_StrLen nCntnt )
+    static int lcl_RelativePosition( const SwPosition& rPos, sal_uLong nNode, sal_Int32 nCntnt )
     {
         sal_uLong nIndex = rPos.nNode.GetIndex();
         int nReturn = BEFORE_NODE;
@@ -1000,7 +1000,7 @@ namespace
         return rPos.nNode > rNdIdx || ( pIdx && rPos.nNode == rNdIdx && rPos.nContent > pIdx->GetIndex() );
     }
 
-    static void lcl_ChkPaM( std::vector<sal_uLong> &rSaveArr, sal_uLong nNode, xub_StrLen nCntnt,
+    static void lcl_ChkPaM( std::vector<sal_uLong> &rSaveArr, sal_uLong nNode, sal_Int32 nCntnt,
                     const SwPaM& rPam, _SwSaveTypeCountContent& rSave,
                     bool bChkSelDirection )
     {

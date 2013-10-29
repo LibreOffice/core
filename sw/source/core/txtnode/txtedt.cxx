@@ -97,7 +97,7 @@ extern       SwTxtFrm  *pLinguFrm;
 
 static sal_uInt16
 lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
-                         const xub_StrLen nStt, const xub_StrLen nEnd,
+                         sal_Int32 nStt, sal_Int32 nEnd,
                          const sal_Unicode cChar )
 {
     sal_uInt16 nNumOfMaskedRedlines = 0;
@@ -142,7 +142,7 @@ lcl_MaskRedlines( const SwTxtNode& rNode, OUStringBuffer& rText,
  */
 static sal_uInt16
 lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
-                                      const xub_StrLen nStt, const xub_StrLen nEnd,
+                                      sal_Int32 nStt, sal_Int32 nEnd,
                                       const sal_Unicode cChar = CH_TXTATR_INWORD,
                                       bool bCheckShowHiddenChar = true )
 {
@@ -175,7 +175,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
 /**
  * Used for spell checking. Calculates a rectangle for repaint.
  */
-static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, xub_StrLen nChgStart, xub_StrLen nChgEnd )
+static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, sal_Int32 nChgStart, sal_Int32 nChgEnd )
 {
     SwRect aRect;
 

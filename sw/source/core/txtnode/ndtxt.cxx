@@ -1140,18 +1140,15 @@ bool SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
     return bRet;
 }
 
-static bool lcl_GetTxtAttrDefault(xub_StrLen const nIndex,
-    xub_StrLen const nHintStart, xub_StrLen const nHintEnd)
+static bool lcl_GetTxtAttrDefault(sal_Int32 nIndex, sal_Int32 nHintStart, sal_Int32 nHintEnd)
 {
     return ((nHintStart <= nIndex) && (nIndex <  nHintEnd));
 }
-static bool lcl_GetTxtAttrExpand(xub_StrLen const nIndex,
-    xub_StrLen const nHintStart, xub_StrLen const nHintEnd)
+static bool lcl_GetTxtAttrExpand(sal_Int32 nIndex, sal_Int32 nHintStart, sal_Int32 nHintEnd)
 {
     return ((nHintStart <  nIndex) && (nIndex <= nHintEnd));
 }
-static bool lcl_GetTxtAttrParent(xub_StrLen const nIndex,
-    xub_StrLen const nHintStart, xub_StrLen const nHintEnd)
+static bool lcl_GetTxtAttrParent(sal_Int32 nIndex, sal_Int32 nHintStart, sal_Int32 nHintEnd)
 {
     return ((nHintStart <  nIndex) && (nIndex <  nHintEnd));
 }
@@ -1160,12 +1157,12 @@ static void
 lcl_GetTxtAttrs(
     ::std::vector<SwTxtAttr *> *const pVector, SwTxtAttr **const ppTxtAttr,
     SwpHints *const pSwpHints,
-    xub_StrLen const nIndex, RES_TXTATR const nWhich,
+    sal_Int32 nIndex, RES_TXTATR const nWhich,
     enum SwTxtNode::GetTxtAttrMode const eMode)
 {
     sal_uInt16 const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
     xub_StrLen nPreviousIndex(0); // index of last hint with nWhich
-    bool (*pMatchFunc)(xub_StrLen const, xub_StrLen const, xub_StrLen const)=0;
+    bool (*pMatchFunc)(sal_Int32, sal_Int32, sal_Int32)=0;
     switch (eMode)
     {
         case SwTxtNode::DEFAULT:   pMatchFunc = &lcl_GetTxtAttrDefault; break;

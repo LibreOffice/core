@@ -264,7 +264,7 @@ void SwLineLayout::CreateSpaceAdd( const long nInit )
  * in [nStt, nEnd[
  *************************************************************************/
 
-static bool lcl_HasOnlyBlanks( const OUString& rTxt, xub_StrLen nStt, xub_StrLen nEnd )
+static bool lcl_HasOnlyBlanks( const OUString& rTxt, sal_Int32 nStt, sal_Int32 nEnd )
 {
     bool bBlankOnly = true;
     while ( nStt < nEnd )

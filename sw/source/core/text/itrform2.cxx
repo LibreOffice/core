@@ -72,7 +72,7 @@ namespace {
     //! Calculates and sets optimal repaint offset for the current line
     static long lcl_CalcOptRepaint( SwTxtFormatter &rThis,
                                     SwLineLayout &rCurr,
-                                    const xub_StrLen nOldLineEnd,
+                                    const sal_Int32 nOldLineEnd,
                                     const std::vector<long> &rFlyStarts );
     //! Determine if we need to build hidden portions
     static bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos );
@@ -184,8 +184,8 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
     // line again.
     // Can be seen in 8081.sdw, if you enter text in the first line
 
-    const xub_StrLen nSoftHyphPos = rInf.GetSoftHyphPos();
-    const xub_StrLen nUnderScorePos = rInf.GetUnderScorePos();
+    const sal_Int32 nSoftHyphPos = rInf.GetSoftHyphPos();
+    const sal_Int32 nUnderScorePos = rInf.GetUnderScorePos();
 
     // Save flys and set to 0, or else segmentation fault
     // Not ClearFly(rInf) !
@@ -2729,7 +2729,7 @@ namespace {
     *************************************************************************/
     long lcl_CalcOptRepaint( SwTxtFormatter &rThis,
                          SwLineLayout &rCurr,
-                         const xub_StrLen nOldLineEnd,
+                         const sal_Int32 nOldLineEnd,
                          const std::vector<long> &rFlyStarts )
     {
         SwTxtFormatInfo txtFmtInfo = rThis.GetInfo();
@@ -2738,7 +2738,7 @@ namespace {
         // something of our text has moved to the next line
             return 0;
 
-        xub_StrLen nReformat = std::min( txtFmtInfo.GetReformatStart(), nOldLineEnd );
+        sal_Int32 nReformat = std::min<sal_Int32>( txtFmtInfo.GetReformatStart(), nOldLineEnd );
 
         // in case we do not have any fly in our line, our repaint position
         // is the changed position - 1

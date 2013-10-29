@@ -931,7 +931,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 // nPos: the new visual position
 // bLeft: whether the break iterator has to add or subtract from the
 //        current position
-static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen nIdx,
+static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nIdx,
                               xub_StrLen& nPos, sal_Bool& bRight,
                               sal_uInt8& nCrsrLevel, sal_uInt8 nDefaultDir )
 {

@@ -454,7 +454,7 @@ static inline sal_uInt16 lcl_SetScriptFlags( sal_uInt16 nType )
     return nRet;
 }
 
-static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
+static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, sal_Int32 nPos,
                             sal_uInt16 &rScrpt, bool bInSelection, bool bNum )
 {
     bool bRet = false;

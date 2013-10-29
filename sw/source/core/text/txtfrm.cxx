@@ -819,7 +819,7 @@ void SwTxtFrm::CalcLineSpace()
     lcl_SetWrong( *this, nPos, nCnt, bMove ); \
 }
 
-static void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
+static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, long nCnt, bool bMove )
 {
     if ( !rFrm.IsFollow() )
     {
@@ -892,13 +892,13 @@ static void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove
 #define SET_SCRIPT_INVAL( nPos )\
     lcl_SetScriptInval( *this, nPos );
 
-static void lcl_SetScriptInval( SwTxtFrm& rFrm, xub_StrLen nPos )
+static void lcl_SetScriptInval( SwTxtFrm& rFrm, sal_Int32 nPos )
 {
     if( rFrm.GetPara() )
         rFrm.GetPara()->GetScriptInfo().SetInvalidity( nPos );
 }
 
-static void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
+static void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, sal_Int32 nLen )
 {
     while( pFrm && pFrm->GetOfst() <= nPos )
         pFrm = pFrm->GetFollow();

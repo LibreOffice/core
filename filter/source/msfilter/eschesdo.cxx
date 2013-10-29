@@ -1137,7 +1137,7 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
     if( mXPropSet.is() )
     {
         static const sal_Char aPrefix[] = "com.sun.star.";
-        static const xub_StrLen nPrefix = sizeof(aPrefix)-1;
+        static const sal_Int32 nPrefix = sizeof(aPrefix)-1;
 
         // detect name first to make below test (is group) work
         mType = OUString( mXShape->getShapeType() );

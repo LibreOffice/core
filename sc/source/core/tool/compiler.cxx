@@ -411,7 +411,7 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
     }
 }
 
-static bool lcl_isValidQuotedText( const OUString& rFormula, xub_StrLen nSrcPos, ParseResult& rRes )
+static bool lcl_isValidQuotedText( const OUString& rFormula, sal_Int32 nSrcPos, ParseResult& rRes )
 {
     // Tokens that start at ' can have anything in them until a final '
     // but '' marks an escaped '
@@ -419,7 +419,7 @@ static bool lcl_isValidQuotedText( const OUString& rFormula, xub_StrLen nSrcPos,
     // surrounded by '
     if (rFormula[nSrcPos] == '\'')
     {
-        xub_StrLen nPos = nSrcPos+1;
+        sal_Int32 nPos = nSrcPos+1;
         while (nPos < rFormula.getLength())
         {
             if (rFormula[nPos] == '\'')
@@ -1748,7 +1748,7 @@ void ScCompiler::SetError(sal_uInt16 nError)
         pArr->SetCodeError( nError);
 }
 
-static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pSrc, xub_StrLen nMax )
+static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pSrc, sal_Int32 nMax )
 {
     const sal_Unicode* const pStop = pDst + nMax;
     while ( *pSrc && pDst < pStop )

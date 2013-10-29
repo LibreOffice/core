@@ -433,7 +433,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
 
 // -----------------------------------------------------------------------
 
-static xub_StrLen ImplPatternLeftPos(const OString& rEditMask, xub_StrLen nCursorPos)
+static xub_StrLen ImplPatternLeftPos(const OString& rEditMask, sal_Int32 nCursorPos)
 {
     // search non-literal predecessor
     xub_StrLen nNewPos = nCursorPos;
@@ -2224,7 +2224,7 @@ static bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const OUSt
 
 // -----------------------------------------------------------------------
 
-static bool ImplCutTimePortion( OUStringBuffer& _rStr, xub_StrLen _nSepPos, sal_Bool _bSkipInvalidCharacters, short* _pPortion )
+static bool ImplCutTimePortion( OUStringBuffer& _rStr, sal_Int32 _nSepPos, sal_Bool _bSkipInvalidCharacters, short* _pPortion )
 {
     OUString sPortion(_rStr.getStr(), _nSepPos );
     _rStr = _nSepPos < _rStr.getLength()
