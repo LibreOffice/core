@@ -682,5 +682,7 @@
 #define HID_FUNC_COVARIANCE_S                                   "SC_HID_FUNC_COVARIANCE_S"
 #define HID_FUNC_ST_DEV_P_MS                                    "SC_HID_FUNC_ST_DEV_P_MS"
 #define HID_FUNC_ST_DEV_S                                       "SC_HID_FUNC_ST_DEV_S"
+#define HID_FUNC_VAR_P_MS                                       "SC_HID_FUNC_VAR_P_MS"
+#define HID_FUNC_VAR_S                                          "SC_HID_FUNC_VAR_S"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

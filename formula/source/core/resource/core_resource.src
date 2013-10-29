@@ -184,6 +184,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_VAR_A { Text = "VARA" ; };
     String SC_OPCODE_VAR_P { Text = "VARP" ; };
     String SC_OPCODE_VAR_P_A { Text = "VARPA" ; };
+    String SC_OPCODE_VAR_P_MS { Text = "COM.MICROSOFT.VAR.P" ; };
+    String SC_OPCODE_VAR_S { Text = "COM.MICROSOFT.VAR.S" ; };
     String SC_OPCODE_ST_DEV { Text = "STDEV" ; };
     String SC_OPCODE_ST_DEV_A { Text = "STDEVA" ; };
     String SC_OPCODE_ST_DEV_P { Text = "STDEVP" ; };
@@ -536,6 +538,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_VAR_A { Text = "VARA" ; };
     String SC_OPCODE_VAR_P { Text = "VARP" ; };
     String SC_OPCODE_VAR_P_A { Text = "VARPA" ; };
+    String SC_OPCODE_VAR_P_MS { Text = "VAR.P" ; };
+    String SC_OPCODE_VAR_S { Text = "VAR.S" ; };
     String SC_OPCODE_ST_DEV { Text = "STDEV" ; };
     String SC_OPCODE_ST_DEV_A { Text = "STDEVA" ; };
     String SC_OPCODE_ST_DEV_P { Text = "STDEVP" ; };
@@ -1294,6 +1298,14 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_VAR_P_A
     {
         Text [ en-US ] = "VARPA" ;
+    };
+    String SC_OPCODE_VAR_P_MS
+    {
+        Text [ en-US ] = "VAR.P" ;
+    };
+    String SC_OPCODE_VAR_S
+    {
+        Text [ en-US ] = "VAR.S" ;
     };
     String SC_OPCODE_ST_DEV
     {
