@@ -19,11 +19,10 @@
 #include "document.hxx"
 #include "uiitems.hxx"
 #include "reffact.hxx"
-#include "scresid.hxx"
+#include "strload.hxx"
 #include "random.hxx"
 #include "docfunc.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
+#include "StatisticsDialogs.hrc"
 
 #include "CovarianceDialog.hxx"
 
@@ -56,7 +55,7 @@ sal_Bool ScCovarianceDialog::Close()
 
 void ScCovarianceDialog::CalculateInputAndWriteToOutput( )
 {
-    OUString aUndo(SC_RESSTR(STR_COVARIANCE_UNDO_NAME));
+    OUString aUndo( SC_STRLOAD( RID_STATISTICS_DLGS, STR_COVARIANCE_UNDO_NAME));
     ScDocShell* pDocShell = mViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo );

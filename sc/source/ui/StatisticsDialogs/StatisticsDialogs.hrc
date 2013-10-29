@@ -1,0 +1,55 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#include "sc.hrc"
+
+#define STR_UNDO_DISTRIBUTION_TEMPLATE              1
+#define STR_DISTRIBUTION_UNIFORM_REAL               2
+#define STR_DISTRIBUTION_UNIFORM_INTEGER            3
+#define STR_DISTRIBUTION_NORMAL                     4
+#define STR_DISTRIBUTION_CAUCHY                     5
+#define STR_DISTRIBUTION_BERNOULLI                  6
+#define STR_DISTRIBUTION_BINOMIAL                   7
+#define STR_DISTRIBUTION_NEGATIVE_BINOMIAL          8
+#define STR_DISTRIBUTION_CHI_SQUARED                9
+#define STR_DISTRIBUTION_GEOMETRIC                  10
+
+#define STR_RNG_PARAMETER_MINIMUM                   11
+#define STR_RNG_PARAMETER_MAXIMUM                   12
+#define STR_RNG_PARAMETER_MEAN                      13
+#define STR_RNG_PARAMETER_STANDARD_DEVIATION        14
+#define STR_RNG_PARAMETER_STANDARD_MEDIAN           15
+#define STR_RNG_PARAMETER_STANDARD_SIGMA            16
+#define STR_RNG_PARAMETER_STANDARD_PROBABILITY      17
+#define STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS 18
+#define STR_RNG_PARAMETER_STANDARD_NU_VALUE         19
+
+#define STR_SAMPLING_UNDO_NAME                      20
+
+#define SID_CALC_MEAN                               21
+#define SID_CALC_STD_ERROR                          22
+#define SID_CALC_MODE                               23
+#define SID_CALC_MEDIAN                             24
+#define SID_CALC_VARIANCE                           25
+#define SID_CALC_STD_DEVIATION                      26
+#define SID_CALC_KURTOSIS                           27
+#define SID_CALC_SKEWNESS                           28
+#define SID_CALC_RANGE                              29
+#define SID_CALC_MIN                                30
+#define SID_CALC_MAX                                31
+#define SID_CALC_SUM                                32
+#define SID_CALC_COUNT                              33
+
+#define STR_DESCRIPTIVE_STATISTICS_UNDO_NAME        34
+#define STR_ANALYSIS_OF_VARIANCE_UNDO_NAME          35
+#define STR_CORRELATION_UNDO_NAME                   36
+#define STR_COVARIANCE_UNDO_NAME                    37
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

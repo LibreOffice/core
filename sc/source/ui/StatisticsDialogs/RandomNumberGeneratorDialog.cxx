@@ -18,11 +18,10 @@
 #include "document.hxx"
 #include "uiitems.hxx"
 #include "reffact.hxx"
-#include "scresid.hxx"
+#include "strload.hxx"
 #include "random.hxx"
 #include "docfunc.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
+#include "StatisticsDialogs.hrc"
 
 #include <boost/random.hpp>
 #include <boost/random/uniform_real_distribution.hpp>
@@ -190,63 +189,63 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
         {
             boost::random::uniform_real_distribution<> distribution(parameter1, parameter2);
             boost::variate_generator<boost::mt19937&, boost::random::uniform_real_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_RESSTR(STR_DISTRIBUTION_UNIFORM_REAL));
+            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_UNIFORM_REAL));
             break;
         }
         case DIST_UNIFORM_INTEGER:
         {
             boost::random::uniform_int_distribution<> distribution(parameterInteger1, parameterInteger2);
             boost::variate_generator<boost::mt19937&, boost::random::uniform_int_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_RESSTR(STR_DISTRIBUTION_UNIFORM_INTEGER));
+            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_UNIFORM_INTEGER));
             break;
         }
         case DIST_NORMAL:
         {
             boost::random::normal_distribution<> distribution(parameter1, parameter2);
             boost::variate_generator<boost::mt19937&, boost::random::normal_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_RESSTR(STR_DISTRIBUTION_NORMAL));
+            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_NORMAL));
             break;
         }
         case DIST_CAUCHY:
         {
             boost::random::cauchy_distribution<> distribution(parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::cauchy_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_RESSTR(STR_DISTRIBUTION_CAUCHY));
+            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_CAUCHY));
             break;
         }
         case DIST_BERNOULLI:
         {
             boost::random::bernoulli_distribution<> distribution(parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::bernoulli_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_RESSTR(STR_DISTRIBUTION_BERNOULLI));
+            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_BERNOULLI));
             break;
         }
         case DIST_BINOMIAL:
         {
             boost::random::binomial_distribution<> distribution(parameterInteger2, parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::binomial_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_RESSTR(STR_DISTRIBUTION_BINOMIAL));
+            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_BINOMIAL));
             break;
         }
         case DIST_NEGATIVE_BINOMIAL:
         {
             boost::random::negative_binomial_distribution<> distribution(parameterInteger2, parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::negative_binomial_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_RESSTR(STR_DISTRIBUTION_NEGATIVE_BINOMIAL));
+            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_NEGATIVE_BINOMIAL));
             break;
         }
         case DIST_CHI_SQUARED:
         {
             boost::random::chi_squared_distribution<> distribution(parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::chi_squared_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_RESSTR(STR_DISTRIBUTION_CHI_SQUARED));
+            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_CHI_SQUARED));
             break;
         }
         case DIST_GEOMETRIC:
         {
             boost::random::geometric_distribution<> distribution(parameter1);
             boost::variate_generator<boost::mt19937&, boost::random::geometric_distribution<> > rng(seed, distribution);
-            GenerateNumbers(rng, SC_RESSTR(STR_DISTRIBUTION_GEOMETRIC));
+            GenerateNumbers(rng, SC_STRLOAD( RID_STATISTICS_DLGS, STR_DISTRIBUTION_GEOMETRIC));
             break;
         }
     }
@@ -255,7 +254,7 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
 template<class RNG>
 void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, OUString aDistributionName)
 {
-    OUString aUndo = SC_RESSTR(STR_UNDO_DISTRIBUTION_TEMPLATE);
+    OUString aUndo = SC_STRLOAD( RID_STATISTICS_DLGS, STR_UNDO_DISTRIBUTION_TEMPLATE);
     aUndo = aUndo.replaceAll("$(DISTRIBUTION)",  aDistributionName);
 
     ScDocShell* pDocShell = mViewData->GetDocShell();
@@ -384,19 +383,19 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged)
     {
         case DIST_UNIFORM:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_MINIMUM));
-            mpParameter2Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_MAXIMUM));
+            mpParameter1Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_MINIMUM));
+            mpParameter2Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_MAXIMUM));
             mpParameter2Text->Show();
             mpParameter2Value->Show();
             break;
         }
         case DIST_UNIFORM_INTEGER:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_MINIMUM));
+            mpParameter1Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_MINIMUM));
             mpParameter1Value->SetDecimalDigits(0);
             mpParameter1Value->SetSpinSize(1);
 
-            mpParameter2Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_MAXIMUM));
+            mpParameter2Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_MAXIMUM));
             mpParameter2Value->SetDecimalDigits(0);
             mpParameter2Value->SetSpinSize(1);
 
@@ -406,16 +405,16 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged)
         }
         case DIST_NORMAL:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_MEAN));
-            mpParameter2Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_DEVIATION));
+            mpParameter1Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_MEAN));
+            mpParameter2Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_STANDARD_DEVIATION));
             mpParameter2Text->Show();
             mpParameter2Value->Show();
             break;
         }
         case DIST_CAUCHY:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_MEDIAN));
-            mpParameter2Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_SIGMA));
+            mpParameter1Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_STANDARD_MEDIAN));
+            mpParameter2Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_STANDARD_SIGMA));
             mpParameter2Text->Show();
             mpParameter2Value->Show();
             break;
@@ -423,7 +422,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged)
         case DIST_BERNOULLI:
         case DIST_GEOMETRIC:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
+            mpParameter1Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_STANDARD_PROBABILITY));
             mpParameter1Value->SetMin(         0 );
             mpParameter1Value->SetMax( PERCISION );
             mpParameter1Value->SetSpinSize(1000);
@@ -435,12 +434,12 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged)
         case DIST_BINOMIAL:
         case DIST_NEGATIVE_BINOMIAL:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
+            mpParameter1Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_STANDARD_PROBABILITY));
             mpParameter1Value->SetMin(         0 );
             mpParameter1Value->SetMax( PERCISION );
             mpParameter1Value->SetSpinSize(1000);
 
-            mpParameter2Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS));
+            mpParameter2Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS));
             mpParameter2Value->SetDecimalDigits(0);
             mpParameter2Value->SetSpinSize(1);
             mpParameter2Value->SetMin(0);
@@ -451,7 +450,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged)
         }
         case DIST_CHI_SQUARED:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_NU_VALUE));
+            mpParameter1Text->SetText( SC_STRLOAD( RID_STATISTICS_DLGS, STR_RNG_PARAMETER_STANDARD_NU_VALUE));
 
             mpParameter2Text->Hide();
             mpParameter2Value->Hide();

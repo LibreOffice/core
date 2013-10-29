@@ -19,11 +19,10 @@
 #include "document.hxx"
 #include "uiitems.hxx"
 #include "reffact.hxx"
-#include "scresid.hxx"
+#include "strload.hxx"
 #include "random.hxx"
 #include "docfunc.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
+#include "StatisticsDialogs.hrc"
 
 #include <boost/random.hpp>
 

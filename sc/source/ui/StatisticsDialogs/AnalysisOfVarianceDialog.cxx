@@ -19,11 +19,10 @@
 #include "document.hxx"
 #include "uiitems.hxx"
 #include "reffact.hxx"
-#include "scresid.hxx"
+#include "strload.hxx"
 #include "random.hxx"
 #include "docfunc.hxx"
-#include "globstr.hrc"
-#include "sc.hrc"
+#include "StatisticsDialogs.hrc"
 
 #include "AnalysisOfVarianceDialog.hxx"
 
@@ -89,7 +88,7 @@ sal_Bool ScAnalysisOfVarianceDialog::Close()
 
 void ScAnalysisOfVarianceDialog::CalculateInputAndWriteToOutput( )
 {
-    OUString aUndo(SC_RESSTR(STR_ANALYSIS_OF_VARIANCE_UNDO_NAME));
+    OUString aUndo( SC_STRLOAD( RID_STATISTICS_DLGS, STR_ANALYSIS_OF_VARIANCE_UNDO_NAME));
 
     ScDocShell* pDocShell = mViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
