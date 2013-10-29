@@ -170,6 +170,7 @@ static const GtkBorder aDefDefBorder        = { 1, 1, 1, 1 };
 #define MIN_ARROW_SIZE                    11
 #define BTN_CHILD_SPACING                1
 #define MIN_SPIN_ARROW_WIDTH                6
+#define COMBOBOX_HEIGHT                  28
 
 
 static void NWEnsureGTKRadio             ( SalX11Screen nScreen );
@@ -219,7 +220,6 @@ static void NWPaintOneEditBox( SalX11Screen nScreen, GdkDrawable * gdkDrawable, 
                                ControlState nState, const ImplControlValue& aValue,
                                const OUString& rCaption );
 
-//---
 static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, const OUString& rCaption );
 
@@ -1005,6 +1005,13 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         rNativeBoundingRegion = NWGetComboBoxButtonRect( m_nXScreen, nType, nPart, rControlRegion, nState,
         aValue, rCaption );
         rNativeContentRegion = rNativeBoundingRegion;
+
+        returnVal = sal_True;
+    }
+    else if ( nType==CTRL_COMBOBOX && nPart==PART_ENTIRE_CONTROL )
+    {
+        rNativeBoundingRegion.setHeight(COMBOBOX_HEIGHT);
+        rNativeContentRegion.setHeight(COMBOBOX_HEIGHT);
 
         returnVal = sal_True;
     }
@@ -2442,8 +2449,6 @@ static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen,
     return( buttonRect );
 }
 
-//---
-
 static void NWPaintOneSpinButton( SalX11Screen nScreen,
                                   GdkPixmap*            pixmap,
                                   ControlType            nType,
@@ -2609,7 +2614,7 @@ static Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
         gint adjust_x = GTK_CONTAINER(gWidgetData[nScreen].gComboWidget)->border_width +
                         nFocusWidth +
                         nFocusPad;
-        gint adjust_y = gWidgetData[nScreen].gComboWidget->style->ythickness;
+        gint adjust_y = adjust_x + gWidgetData[nScreen].gComboWidget->style->ythickness;
         adjust_x     += gWidgetData[nScreen].gComboWidget->style->xthickness;
         aButtonRect.SetSize( Size( aAreaRect.GetWidth() - nButtonWidth - 2 * adjust_x,
                                    aAreaRect.GetHeight() - 2 * adjust_y ) );
