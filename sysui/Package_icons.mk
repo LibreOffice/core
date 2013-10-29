@@ -13,12 +13,4 @@ $(eval $(call gb_Package_set_outdir,sysui/icons,$(OUTDIR)))
 
 $(eval $(call gb_Package_add_file,sysui/icons,bin/soffice.ico,main_app.ico))
 
-$(eval $(call gb_Package_add_files,sysui/icons,res/icons,\
-	oasis-empty-template.ico \
-	oasis-empty-document.ico \
-	empty-template.ico \
-	empty-document.ico \
-	open.ico \
-))
-
 # vim: set noet sw=4 ts=4:
