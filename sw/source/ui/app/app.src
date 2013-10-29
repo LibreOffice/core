@@ -506,12 +506,12 @@ String STR_OUTLINE_NUMBERING
 
 String STR_STATUSBAR_WORDCOUNT_NO_SELECTION
 {
-    Text [ en-US ] = "Words (characters): $1 ($2)";
+    Text [ en-US ] = "%1 words, %2 characters";
 };
 
 String STR_STATUSBAR_WORDCOUNT
 {
-    Text [ en-US ] = "Words (characters): $1 ($2) Selected: $3 ($4)";
+    Text [ en-US ] = "%1 words, %2 characters selected";
 };
 
 String STR_CONVERT_TEXT_TABLE

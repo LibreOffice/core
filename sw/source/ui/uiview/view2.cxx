@@ -1266,15 +1266,12 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     documentStats = rShell.GetDoc()->GetUpdatedDocStat( true /* complete-async */, false /* don't update fields */ );
                 }
 
-                const sal_uInt32 stringId = selectionStats.nWord? STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION;
-                OUString wordCount(SW_RES(stringId));
-                wordCount = wordCount.replaceAll("$1", OUString::number(documentStats.nWord));
-                wordCount = wordCount.replaceAll("$2", OUString::number(documentStats.nChar));
-                if (selectionStats.nWord)
-                {
-                    wordCount = wordCount.replaceAll("$3", OUString::number(selectionStats.nWord));
-                    wordCount = wordCount.replaceAll("$4", OUString::number(selectionStats.nChar));
-                }
+                OUString wordCount(SW_RES(selectionStats.nWord ?
+                                          STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION));
+                wordCount = wordCount.replaceFirst("%1",
+                                OUString::number(selectionStats.nWord ? selectionStats.nWord : documentStats.nWord));
+                wordCount = wordCount.replaceFirst("%2",
+                                OUString::number(selectionStats.nChar ? selectionStats.nChar : documentStats.nChar));
                 rSet.Put(SfxStringItem(FN_STAT_WORDCOUNT, wordCount));
 
                 SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
