@@ -16,12 +16,8 @@
 #include "compiler.hxx"
 #include "interpre.hxx"
 #include "formula/vectortoken.hxx"
-#include <list>
-#include <iostream>
 #include <sstream>
-#include <algorithm>
 
-#include <memory>
 using namespace formula;
 
 namespace sc { namespace opencl {
