@@ -1780,6 +1780,9 @@ void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int
     // parameter.
     SwWrtShell *pViewShell = GetActiveWrtShell();
 
+    // Creation, use and destruction of a VirtualDevice needs to be
+    // protected by the SolarMutex, it seems.
+    Application::AcquireSolarMutex(1);
     if (pViewShell)
     {
         // TODO create a VirtualDevice based on SystemGraphicsData instead so
@@ -1810,6 +1813,7 @@ void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int
                              contextWidth,
                              contextHeight);
     }
+    Application::ReleaseSolarMutex();
 }
 #endif
 
