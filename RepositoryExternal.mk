@@ -2285,9 +2285,9 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/nspr4.lib \
 )
-$(call gb_LinkTarget_use_libraries,$(1),\
-	xpcom \
-	xpcom_core \
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,moz_lib)/xpcom.lib \
+	$(call gb_UnpackedTarball_get_dir,moz_lib)/xpcom_core.lib \
 )
 
 $(call gb_LinkTarget_add_defs,$(1),\
