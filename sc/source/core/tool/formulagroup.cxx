@@ -577,7 +577,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenclPlatformInfo>& rP
 #endif
 }
 
-void FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect)
+bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect)
 {
     bool bOpenCLEnabled = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
     if(!bOpenCLEnabled || rDeviceId == "Software")
@@ -586,31 +586,31 @@ void FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
         {
             // if we already have a software interpreter don't delete it
             if(dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(msInstance))
-                return;
+                return true;
 
             delete msInstance;
         }
 
         msInstance = new sc::FormulaGroupInterpreterSoftware();
-        return;
+        return true;
     }
 #if HAVE_FEATURE_OPENCL
 #ifndef DISABLE_DYNLOADING
     osl::Module* pModule = getOpenCLModule();
     if (!pModule)
-        return;
+        return false;
 
     oslGenericFunction fn = pModule->getFunctionSymbol("switchOpenClDevice");
     if (!fn)
-        return;
+        return false;
 
     bool bSuccess = reinterpret_cast<__switchOpenClDevice>(fn)(&rDeviceId, bAutoSelect);
     if(!bSuccess)
-        return;
+        return false;
 #else
     bool bSuccess = switchOpenClDevice(&rDeviceId, bAutoSelect);
     if(!bSuccess)
-        return;
+        return false;
 #endif
 #else
     (void) bAutoSelect;
@@ -624,17 +624,25 @@ void FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     {
 #ifdef DISABLE_DYNLOADING
         msInstance = createFormulaGroupOpenCLInterpreter();
+        return msInstance != NULL;
 #else
         // Dynamically load scopencl shared object, and instantiate the opencl interpreter.
+        bSuccess = false;
         fn = pModule->getFunctionSymbol("createFormulaGroupOpenCLInterpreter");
         if (fn)
+        {
             msInstance = reinterpret_cast<__createFormulaGroupOpenCLInterpreter>(fn)();
+            bSuccess = msInstance != NULL;
+        }
 
         if (!msInstance)
             msInstance = new sc::FormulaGroupInterpreterOpenCLMissing();
+
+        return bSuccess;
 #endif
     }
 #endif
+    return false;
 }
 
 void FormulaGroupInterpreter::compileOpenCLKernels()
@@ -659,6 +667,13 @@ void FormulaGroupInterpreter::compileOpenCLKernels()
     ::compileOpenCLKernels(&rConfig.maOpenCLDevice);
 #endif
 #endif
+}
+
+void FormulaGroupInterpreter::enableOpenCL(bool bEnable)
+{
+    ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
+    aConfig.mbOpenCLEnabled = bEnable;
+    ScInterpreter::SetGlobalConfig(aConfig);
 }
 
 void FormulaGroupInterpreter::generateRPNCode(ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rCode)

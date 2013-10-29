@@ -32,6 +32,8 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "formulacell.hxx"
+#include "platforminfo.hxx"
+#include "formulagroup.hxx"
 
 #include <svx/svdpage.hxx>
 
@@ -46,7 +48,7 @@ class ScOpenclTest
 {
 public:
     ScOpenclTest();
-    void enableOpenCL(ScDocShell* pShell);
+    bool enableOpenCL();
     void SetEnv();
     virtual void setUp();
     virtual void tearDown();
@@ -179,22 +181,19 @@ void ScOpenclTest::SetEnv()
         return;
     #endif
 }
-void ScOpenclTest::enableOpenCL(ScDocShell* pShell)
+
+bool ScOpenclTest::enableOpenCL()
 {
-    ScModule* pScMod = SC_MOD();
-    ScFormulaOptions rOpt = pScMod->GetFormulaOptions();
-    ScCalcConfig maSavedConfig = rOpt.GetCalcConfig();
-    maSavedConfig.mbOpenCLEnabled = true;
-    rOpt.SetCalcConfig(maSavedConfig);
-    pShell->SetFormulaOptions(rOpt);
+    sc::FormulaGroupInterpreter::enableOpenCL(true);
+    return sc::FormulaGroupInterpreter::switchOpenCLDevice(OUString(),true);
 }
 
 void ScOpenclTest::testCompilerNested()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("OpenCLTests/Compiler/nested.", ODS);
-
-    enableOpenCL(xDocSh);
-
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -215,10 +214,10 @@ void ScOpenclTest::testCompilerNested()
 
 void ScOpenclTest::testCompilerString()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("OpenCLTests/Compiler/string.", ODS);
-
-    enableOpenCL(xDocSh);
-
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -242,10 +241,10 @@ void ScOpenclTest::testCompilerString()
 
 void ScOpenclTest::testCompilerInEq()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("OpenCLTests/Compiler/ineq.", ODS);
-
-    enableOpenCL(xDocSh);
-
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -267,10 +266,10 @@ void ScOpenclTest::testCompilerInEq()
 #if 0
 void ScOpenclTest::testSharedFormulaXLSStockHistory()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("stock-history.", XLS);
-
-    enableOpenCL(xDocSh);
-
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -299,10 +298,10 @@ void ScOpenclTest::testSharedFormulaXLSStockHistory()
 
 void ScOpenclTest::testSharedFormulaXLSGroundWater()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("ground-water-daily.", XLS);
-
-    enableOpenCL(xDocSh);
-
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -324,8 +323,10 @@ void ScOpenclTest::testSharedFormulaXLSGroundWater()
 
 void ScOpenclTest::testSharedFormulaXLS()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("sum_ex.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -424,9 +425,13 @@ void ScOpenclTest::testSharedFormulaXLS()
 //[AMLOEXT-76]
 void ScOpenclTest::testMathFormulaCos()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("OpenclCase/math/cos.", XLS);
-    enableOpenCL(xDocSh);   ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/math/cos.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
@@ -442,9 +447,13 @@ void ScOpenclTest::testMathFormulaCos()
 
 void ScOpenclTest::testFinacialFormula()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("FinancialFormulaTest.", XLS);
-    enableOpenCL(xDocSh);   ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("FinancialFormulaTest.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
@@ -594,8 +603,10 @@ void ScOpenclTest::testFinacialFormula()
 //[AMLOEXT-20]
 void ScOpenclTest::testStatisticalFormulaCorrel()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("OpenCLTests/statistical/Correl.", ODS);
-    enableOpenCL(xDocSh);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenCLTests/statistical/Correl.", ODS);
@@ -614,8 +625,10 @@ void ScOpenclTest::testStatisticalFormulaCorrel()
 }
 void ScOpenclTest::testStatisticalFormulaFisher()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Fisher.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Fisher.", XLS);
@@ -634,8 +647,10 @@ void ScOpenclTest::testStatisticalFormulaFisher()
 //[AMLOEXT-44]
 void ScOpenclTest::testStatisticalFormulaFisherInv()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/FisherInv.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/FisherInv.", XLS);
@@ -654,8 +669,10 @@ void ScOpenclTest::testStatisticalFormulaFisherInv()
 //[AMLOEXT-45]
 void ScOpenclTest::testStatisticalFormulaGamma()
 {
+    if (!enableOpenCL())
+        return;
+
     ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Gamma.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Gamma.", XLS);
@@ -674,8 +691,9 @@ void ScOpenclTest::testStatisticalFormulaGamma()
 //[AMLOEXT-46]
 void ScOpenclTest::testFinacialFvscheduleFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Fvschedule.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -695,8 +713,9 @@ void ScOpenclTest::testFinacialFvscheduleFormula()
 //[AMLOEXT-69]
 void ScOpenclTest::testFinacialSYDFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/SYD.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -716,8 +735,9 @@ void ScOpenclTest::testFinacialSYDFormula()
 
 void ScOpenclTest::testFinacialIRRFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/IRR.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -737,8 +757,9 @@ void ScOpenclTest::testFinacialIRRFormula()
 //[AMLOEXT-49]
 void ScOpenclTest::testStatisticalFormulaGammaLn()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/GammaLn.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
 
@@ -758,8 +779,9 @@ void ScOpenclTest::testStatisticalFormulaGammaLn()
 //[AMLOEXT-50]
 void ScOpenclTest::testStatisticalFormulaGauss()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Gauss.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -779,8 +801,9 @@ void ScOpenclTest::testStatisticalFormulaGauss()
 //[AMLOEXT-52]
 void ScOpenclTest::testStatisticalFormulaGeoMean()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/GeoMean.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/GeoMean.", XLS);
@@ -799,8 +822,9 @@ void ScOpenclTest::testStatisticalFormulaGeoMean()
 //[AMLOEXT-51]
 void ScOpenclTest::testStatisticalFormulaHarMean()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/HarMean.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/HarMean.", XLS);
@@ -819,8 +843,9 @@ void ScOpenclTest::testStatisticalFormulaHarMean()
 //[AMLOEXT-53]
 void ScOpenclTest::testFinacialSLNFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/SLN.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -840,8 +865,9 @@ void ScOpenclTest::testFinacialSLNFormula()
 
 void ScOpenclTest::testFinacialMIRRFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/MIRR.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -862,8 +888,9 @@ void ScOpenclTest::testFinacialMIRRFormula()
 // [AMLOEXT-55]
 void ScOpenclTest::testFinancialCoupdaybsFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Coupdaybs.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -882,8 +909,9 @@ void ScOpenclTest::testFinancialCoupdaybsFormula()
 //[AMLOEXT-56]
 void ScOpenclTest::testFinacialDollardeFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Dollarde.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -903,8 +931,9 @@ void ScOpenclTest::testFinacialDollardeFormula()
 //[AMLOEXT-70]
 void ScOpenclTest::testFinancialCoupdaysFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Coupdays.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -923,8 +952,9 @@ void ScOpenclTest::testFinancialCoupdaysFormula()
 //[AMLOEXT-72]
 void ScOpenclTest::testFinancialCoupdaysncFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Coupdaysnc.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -942,8 +972,9 @@ void ScOpenclTest::testFinancialCoupdaysncFormula()
 }
 void ScOpenclTest::testFinacialRateFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/RATE.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -963,8 +994,9 @@ void ScOpenclTest::testFinacialRateFormula()
 //[AMLOEXT-54]
 void ScOpenclTest::testFinancialAccrintmFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Accrintm.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -983,13 +1015,12 @@ void ScOpenclTest::testFinancialAccrintmFormula()
 //[AMLOEXT-57]
 void ScOpenclTest::testStatisticalFormulaNegbinomdist()
 {
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Negbinomdist."
-        ,XLS);
-    enableOpenCL(xDocSh);
+    if (!enableOpenCL())
+        return;
+    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Negbinomdist." ,XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Negbinomdist."
-        ,XLS);
+    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Negbinomdist." ,XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -1006,8 +1037,9 @@ void ScOpenclTest::testStatisticalFormulaNegbinomdist()
 //[AMLOEXT-64]
 void ScOpenclTest::testFinacialDollarfrFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Dollarfr.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1027,8 +1059,9 @@ void ScOpenclTest::testFinacialDollarfrFormula()
 //[AMLOEXT-71]
 void ScOpenclTest::testFinacialDISCFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/DISC.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1048,8 +1081,9 @@ void ScOpenclTest::testFinacialDISCFormula()
 //[AMLOEXT-75]
 void ScOpenclTest::testFinacialINTRATEFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/INTRATE.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1069,8 +1103,9 @@ void ScOpenclTest::testFinacialINTRATEFormula()
 //[AMLOEXT-82]
 void ScOpenclTest::testStatisticalFormulaPearson()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Pearson.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Pearson.", XLS);
@@ -1089,8 +1124,9 @@ void ScOpenclTest::testStatisticalFormulaPearson()
 //[AMLOEXT-83]
 void ScOpenclTest::testStatisticalFormulaRsq()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Rsq.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Rsq.", XLS);
@@ -1109,9 +1145,12 @@ void ScOpenclTest::testStatisticalFormulaRsq()
 //[AMLOEXT-90]
 void ScOpenclTest::testMathFormulaCsc()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenCLTests/math/csc.", ODS);
-    enableOpenCL(xDocSh);   ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenCLTests/math/csc.", ODS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
@@ -1127,8 +1166,9 @@ void ScOpenclTest::testMathFormulaCsc()
 //[AMLOEXT-92]
 void ScOpenclTest::testFinacialXNPVFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/XNPV.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1153,8 +1193,9 @@ void ScOpenclTest::testFinacialXNPVFormula()
 }
 void ScOpenclTest::testFinacialPriceMatFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/PriceMat.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1172,8 +1213,10 @@ void ScOpenclTest::testFinacialPriceMatFormula()
 }
 void ScOpenclTest::testFinacialFormulaReceived()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Received.", XLS);
-    enableOpenCL(xDocSh);   ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Received.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
@@ -1190,8 +1233,10 @@ void ScOpenclTest::testFinacialFormulaReceived()
 }
 void ScOpenclTest::testFinancialFormulaCumipmt()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Cumipmt.", XLS);
-    enableOpenCL(xDocSh);   ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Cumipmt.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
@@ -1208,8 +1253,10 @@ void ScOpenclTest::testFinancialFormulaCumipmt()
 }
 void ScOpenclTest::testFinancialFormulaCumprinc()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Cumprinc.", XLS);
-    enableOpenCL(xDocSh);   ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Cumprinc.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
@@ -1226,8 +1273,9 @@ void ScOpenclTest::testFinancialFormulaCumprinc()
 }
 void ScOpenclTest::testFinacialRRIFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/RRI.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1245,8 +1293,9 @@ void ScOpenclTest::testFinacialRRIFormula()
 }
 void ScOpenclTest::testFinacialEFFECT_ADDFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/EFFECT_ADD.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1265,8 +1314,9 @@ void ScOpenclTest::testFinacialEFFECT_ADDFormula()
 }
 void ScOpenclTest::testFinacialNominalFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Nominal.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Nominal.", XLS);
@@ -1284,8 +1334,9 @@ void ScOpenclTest::testFinacialNominalFormula()
 }
 void ScOpenclTest::testFinacialTBILLEQFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/TBILLEQ.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1303,8 +1354,9 @@ void ScOpenclTest::testFinacialTBILLEQFormula()
 }
 void ScOpenclTest::testFinacialTBILLPRICEFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/TBILLPRICE.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1322,8 +1374,9 @@ void ScOpenclTest::testFinacialTBILLPRICEFormula()
 }
 void ScOpenclTest::testFinacialTBILLYIELDFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/TBILLYIELD.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1341,8 +1394,9 @@ void ScOpenclTest::testFinacialTBILLYIELDFormula()
 }
 void ScOpenclTest::testFinacialYIELDFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/YIELD.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1361,8 +1415,9 @@ void ScOpenclTest::testFinacialYIELDFormula()
 
 void ScOpenclTest::testFinacialYIELDDISCFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/YIELDDISC.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
@@ -1381,8 +1436,9 @@ void ScOpenclTest::testFinacialYIELDDISCFormula()
 
 void ScOpenclTest::testFinacialYIELDMATFormula()
 {
+    if (!enableOpenCL())
+        return;
     ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/YIELDMAT.", XLS);
-    enableOpenCL(xDocSh);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
