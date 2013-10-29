@@ -219,7 +219,6 @@ static void NWPaintOneEditBox( SalX11Screen nScreen, GdkDrawable * gdkDrawable, 
                                ControlState nState, const ImplControlValue& aValue,
                                const OUString& rCaption );
 
-//---
 static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, const OUString& rCaption );
 
@@ -1147,7 +1146,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         rNativeContentRegion = aIndicatorRect;
         returnVal = sal_True;
     }
-    if( (nType == CTRL_EDITBOX || nType == CTRL_SPINBOX) && nPart == PART_ENTIRE_CONTROL )
+    if( (nType == CTRL_EDITBOX || nType == CTRL_SPINBOX || nType == CTRL_COMBOBOX) && nPart == PART_ENTIRE_CONTROL )
     {
         NWEnsureGTKEditBox( m_nXScreen );
         GtkWidget* widget = gWidgetData[m_nXScreen].gEditBoxWidget;
@@ -2442,8 +2441,6 @@ static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen,
     return( buttonRect );
 }
 
-//---
-
 static void NWPaintOneSpinButton( SalX11Screen nScreen,
                                   GdkPixmap*            pixmap,
                                   ControlType            nType,
@@ -2609,7 +2606,7 @@ static Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
         gint adjust_x = GTK_CONTAINER(gWidgetData[nScreen].gComboWidget)->border_width +
                         nFocusWidth +
                         nFocusPad;
-        gint adjust_y = gWidgetData[nScreen].gComboWidget->style->ythickness;
+        gint adjust_y = adjust_x + gWidgetData[nScreen].gComboWidget->style->ythickness;
         adjust_x     += gWidgetData[nScreen].gComboWidget->style->xthickness;
         aButtonRect.SetSize( Size( aAreaRect.GetWidth() - nButtonWidth - 2 * adjust_x,
                                    aAreaRect.GetHeight() - 2 * adjust_y ) );
