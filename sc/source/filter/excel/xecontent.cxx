@@ -502,7 +502,6 @@ void XclExpHyperlink::WriteEmbeddedData( XclExpStream& rStrm )
 
 void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
 {
-    OString sTmp = XclXmlUtils::ToOString( maScPos );
     OUString sId = !msTarget.isEmpty() ? rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
             XclXmlUtils::ToOUString( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
             msTarget, true ) : OUString();
