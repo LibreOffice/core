@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Package_Package,dbghelp,$(TARFILE_LOCATION)))
 
-$(eval $(call gb_Package_set_outdir,dbghelp,$(OUTDIR)))
-
-$(eval $(call gb_Package_add_file,dbghelp,bin/dbghelp.dll,$(DBGHELP_DLL)))
+$(eval $(call gb_Package_add_file,dbghelp,$(LIBO_LIB_FOLDER)/dbghelp.dll,$(DBGHELP_DLL)))
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

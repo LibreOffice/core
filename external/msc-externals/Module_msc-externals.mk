@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,msc-externals))
 
 $(eval $(call gb_Module_add_targets,msc-externals,\
-	Package_dbghelp \
+	$(if $(ENABLE_CRASHDUMP),Package_dbghelp) \
 	$(if $(MSM_PATH),Package_msms) \
 	Package_msvc_dlls \
 	$(if $(filter YES,$(WITH_MOZAB4WIN)),Package_msvc80_dlls) \
