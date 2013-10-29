@@ -233,11 +233,11 @@ bootstrap: compilerplugins
 # Note: if invoked as "make check" this will also run subsequentcheck!
 #
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
+ifneq ($(filter-out WNT MACOSX IOS ANDROID,$(OS)),)
+	mkdir -p $(INSTDIR) && install-gdb-printers -a $(INSTDIR) -c
+endif
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild \
 		all $(if $(filter check,$(MAKECMDGOALS)),subsequentcheck)
-ifneq ($(filter-out WNT MACOSX IOS ANDROID,$(OS)),)
-	install-gdb-printers -a $(INSTDIR)
-endif
 ifeq ($(OS),IOS)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) ios
 endif
