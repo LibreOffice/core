@@ -10,44 +10,34 @@
 #ifndef SC_OPENCL_OPBASE_HXX
 #define SC_OPENCL_OPBASE_HXX
 
-#include "formulagroup.hxx"
-#include "document.hxx"
-#include "formulacell.hxx"
-#include "tokenarray.hxx"
-#include "compiler.hxx"
-#include "interpre.hxx"
-#include "formula/vectortoken.hxx"
-
 #include "clcc/clew.h"
 
-#include <list>
-#include <iostream>
-#include <sstream>
-#include <algorithm>
+#include "formula/token.hxx"
 
-#include <memory>
 #define ISNAN
-using namespace formula;
 
 namespace sc { namespace opencl {
 /// Exceptions
 
 /// Failed in parsing
-class UnhandledToken {
+class UnhandledToken
+{
 public:
-    UnhandledToken(FormulaToken *t): mToken(t) {}
-    FormulaToken *mToken;
+    UnhandledToken(formula::FormulaToken *t): mToken(t) {}
+    formula::FormulaToken *mToken;
 };
 
 /// Failed in marshaling
-class OpenCLError {
+class OpenCLError
+{
 public:
     OpenCLError(cl_int err): mError(err) {}
     cl_int mError;
 };
 
 /// Inconsistent state
-class Unhandled {
+class Unhandled
+{
 public:
     Unhandled() {}
 };
@@ -55,17 +45,17 @@ public:
 class FormulaTreeNode
 {
 public:
-    FormulaTreeNode(FormulaToken *ft): mpCurrentFormula(ft)
+    FormulaTreeNode(formula::FormulaToken *ft): mpCurrentFormula(ft)
     {
         Children.reserve(8);
     }
     std::vector<std::shared_ptr<FormulaTreeNode>> Children;
-    FormulaToken *GetFormulaToken(void) const
+    formula::FormulaToken *GetFormulaToken(void) const
     {
         return mpCurrentFormula;
     }
 private:
-    FormulaToken *const mpCurrentFormula;
+    formula::FormulaToken *const mpCurrentFormula;
 };
 
 /// Holds an input (read-only) argument reference to a SingleVectorRef.
@@ -73,69 +63,33 @@ private:
 /// like SumOfProduct
 /// In most of the cases the argument is introduced
 /// by a Push operation in the given RPN.
-class DynamicKernelArgument {
+class DynamicKernelArgument
+{
 public:
-    DynamicKernelArgument(const std::string &s,
-       std::shared_ptr<FormulaTreeNode> ft):
-        mSymName(s), mFormulaTree(ft), mpClmem(NULL) {}
+    DynamicKernelArgument(const std::string &s, std::shared_ptr<FormulaTreeNode> ft);
+
     const std::string &GetNameAsString(void) const { return mSymName; }
     /// Generate declaration
-    virtual void GenDecl(std::stringstream &ss) const
-    {
-        ss << "__global double *"<<mSymName;
-    }
+    virtual void GenDecl(std::stringstream &ss) const;
+
     /// When declared as input to a sliding window function
-    virtual void GenSlidingWindowDecl(std::stringstream &ss) const
-    {
-        GenDecl(ss);
-    }
+    virtual void GenSlidingWindowDecl(std::stringstream &ss) const;
+
     /// When referenced in a sliding window function
-    virtual std::string GenSlidingWindowDeclRef(bool=false) const
-    {
-        std::stringstream ss;
-        ss << mSymName << "[gid0]";
-        return ss.str();
-    }
+    virtual std::string GenSlidingWindowDeclRef(bool=false) const;
+
     /// Generate use/references to the argument
-    virtual void GenDeclRef(std::stringstream &ss) const
-    {
-        ss << mSymName;
-    }
+    virtual void GenDeclRef(std::stringstream &ss) const;
+
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal(cl_kernel, int, int);
-    virtual ~DynamicKernelArgument()
-    {
-        //std::cerr << "~DynamicKernelArgument: " << mSymName <<"\n";
-        if (mpClmem) {
-            //std::cerr << "\tFreeing cl_mem of " << mSymName <<"\n";
-            cl_int ret = clReleaseMemObject(mpClmem);
-            if (ret != CL_SUCCESS)
-                throw OpenCLError(ret);
-        }
-    }
-    virtual void GenSlidingWindowFunction(std::stringstream &) {};
+
+    virtual ~DynamicKernelArgument();
+
+    virtual void GenSlidingWindowFunction(std::stringstream &) {}
     const std::string &GetSymName(void) const { return mSymName; }
-    FormulaToken *GetFormulaToken(void) const
-    {
-        return mFormulaTree->GetFormulaToken();
-    }
-    virtual size_t GetWindowSize(void) const
-    {
-        FormulaToken *pCur = mFormulaTree->GetFormulaToken();
-        assert(pCur);
-        if (auto *pCurDVR =
-                dynamic_cast<const formula::DoubleVectorRefToken *>(pCur))
-        {
-            return pCurDVR->GetRefRowSize();
-        } else if (dynamic_cast<const formula::SingleVectorRefToken *>(pCur))
-        {
-            // Prepare intermediate results (on CPU for now)
-            return 1;
-        } else {
-            throw Unhandled();
-        }
-        return 0;
-    }
+    formula::FormulaToken *GetFormulaToken(void) const;
+    virtual size_t GetWindowSize(void) const;
     virtual std::string DumpOpName(void) const { return std::string(""); }
     const std::string& GetName(void) const { return mSymName; }
 protected:
@@ -147,7 +101,8 @@ protected:
 
 /// Abstract class for code generation
 
-class SlidingFunctionBase {
+class SlidingFunctionBase
+{
 public:
     typedef std::unique_ptr<DynamicKernelArgument> SubArgument;
     typedef std::vector<SubArgument> SubArguments;
@@ -156,7 +111,8 @@ public:
     virtual ~SlidingFunctionBase() {};
 };
 
-class OpBase {
+class OpBase
+{
 public:
     typedef std::vector<std::string> ArgVector;
     typedef std::vector<std::string>::iterator ArgVectorIter;
@@ -172,28 +128,9 @@ class Normal: public SlidingFunctionBase, public OpBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments)
-    {
-        ArgVector argVector;
-        ss << "\ndouble " << sSymName;
-        ss << "_"<< BinFuncName() <<"(";
-        for (unsigned i = 0; i < vSubArguments.size(); i++)
-        {
-            if (i)
-                ss << ",";
-            vSubArguments[i]->GenSlidingWindowDecl(ss);
-            argVector.push_back(vSubArguments[i]->GenSlidingWindowDeclRef());
-        }
-        ss << ") {\n\t";
-        ss << "double tmp = " << GetBottom() <<";\n\t";
-        ss << "int gid0 = get_global_id(0);\n\t";
-        ss << "tmp = ";
-        ss << Gen(argVector);
-        ss << ";\n\t";
-        ss << "return tmp;\n";
-        ss << "}";
-    }
+            const std::string sSymName, SubArguments &vSubArguments);
 };
+
 }}
 
 #endif

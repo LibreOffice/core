@@ -15,6 +15,7 @@
 #include "tokenarray.hxx"
 #include "compiler.hxx"
 #include "interpre.hxx"
+#include "formula/vectortoken.hxx"
 #include <list>
 #include <iostream>
 #include <sstream>
