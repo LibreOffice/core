@@ -352,10 +352,9 @@ void StgStrm::scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize)
             m_aPagesCache.push_back(nBgn);
         nBgn = pFat->GetNextPage( nBgn );
 
-        if( nUsedPageNumbers.find(nBgn) != nUsedPageNumbers.end() )
+        //returned second is false if it already exists
+        if (!nUsedPageNumbers.insert(nBgn).second)
             bError = true;
-        else
-            nUsedPageNumbers.insert(nBgn);
 
         nOptSize += nPageSize;
     }
