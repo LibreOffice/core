@@ -17,26 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/docfac.hxx>
+#include "rtl/ustring.hxx"              // for OUString, operator==
+#include "sal/types.h"                  // for sal_Bool
+#include "tools/errcode.hxx"            // for ERRCODE_ABORT, ERRCODE_NONE
+#include "tools/solar.h"                // for sal_uLong
+
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
-#include <svtools/sfxecode.hxx>
-#include <vcl/msgbox.hxx>
-#include <svtools/parhtml.hxx>
-#include <comphelper/classids.hxx>
 #include <iodetect.hxx>
-
 #include <swdetect.hxx>
 
-#include <app.hrc>
-#include <web.hrc>
-#include <globdoc.hrc>
-
 #include <unotools/moduleoptions.hxx>
-
-#include <unomid.h>
 
 bool IsDocShellRegistered()
 {
