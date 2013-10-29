@@ -17,6 +17,7 @@ $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/ure/LICENSE,txt/licen
 $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/NOTICE,txt/NOTICE))
 
 $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/osl/LICENSE.odt,odt/LICENSE.odt))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,bin/EULA.odt,odt/EULA.odt))
 $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/LICENSE.odt,odt/LICENSE.odt))
 $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/CREDITS.odt,odt/CREDITS.odt))
 

@@ -61,7 +61,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Libxml2,
              gid_Brand_File_Bmp_IntroAboutShell,
              gid_Brand_File_Bmp_IntroAboutShell_custom,
-	     gid_Brand_File_Desktophelper_Txt,
+             gid_Brand_File_Desktophelper_Txt,
              gid_Brand_File_Html_Thirdpartylicensereadme,
              gid_Brand_File_Lib_Dbghelp,
              gid_Brand_File_Lib_Mingw_GccS,
@@ -84,10 +84,11 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_Writer,
              gid_Brand_File_Share_Xdg_XsltFilter,
              gid_Brand_File_Txt_Package,
-	     gid_License_Txt,
-	     git_License_Odt,
-	     gid_Credits_Odt,
-	     gid_Apache_Notice);
+             gid_License_Txt,
+             git_License_Odt,
+             gid_Eula_Odt,
+             gid_Credits_Odt,
+             gid_Apache_Notice);
     Unixlinks = (gid_Brand_Unixlink_Program,
                  gid_Brand_Unixlink_Unopkg,
                  gid_Brand_Unixlink_Urelibs);
@@ -1403,6 +1404,17 @@ File gid_License_Odt
     Dir = gid_Dir_Brand_Root;
 #endif
     Name = "LICENSE.odt";
+    Styles = (PACKED);
+End
+
+File gid_Eula_Odt
+    BIN_FILE_BODY;
+#if defined MACOSX
+    Dir = gid_Dir_Bundle_Contents;
+#else
+    Dir = gid_Dir_Brand_Root;
+#endif
+    Name = "EULA.odt";
     Styles = (PACKED);
 End
 

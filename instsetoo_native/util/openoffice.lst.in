@@ -9,7 +9,7 @@ Globals
             REFERENCEOOOMAJORMINOR 3.4
             WINDOWSBASISROOTNAME LibreOffice @LIBO_VERSION_MAJOR@
             UNIXBASISROOTNAME libreoffice@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            HIDELICENSEDIALOG 1
+            HIDELICENSEDIALOG 0
             PACKAGEPREFIX
             BASISPACKAGEPREFIX libobasis
             UREPACKAGEPREFIX libreoffice
@@ -29,7 +29,7 @@ Globals
             CREATE_MSP_INSTALLSET 0
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
-            WINDOWSPATCHLEVEL 8
+            WINDOWSPATCHLEVEL 1
             OOOVENDOR The Document Foundation
             OOODOWNLOADNAME 1
             BUILDIDCWS {buildidcws}
