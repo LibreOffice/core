@@ -326,7 +326,8 @@ void XSpreadsheets2::importSheetToCopy()
 bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, const OUString& aSrcContent )
 {
     OUString aStart("'file://");
-    const sal_Char* sSrcContent = OUStringToOString( aSrcContent, RTL_TEXTENCODING_UTF8 ).getStr();
+    OString aContent = OUStringToOString( aSrcContent, RTL_TEXTENCODING_UTF8 );
+    const sal_Char* sSrcContent = aContent.getStr();
 
     return  (aDestContent.endsWithIgnoreAsciiCaseAsciiL(sSrcContent, aSrcContent.getLength()) // same cell address
             && aDestContent.indexOf(aStart)==0 // starts with 'file://
