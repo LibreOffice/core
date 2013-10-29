@@ -625,7 +625,7 @@ static bool lcl_appendLineData( OUString& rField, const sal_Unicode* p1, const s
     OSL_ENSURE( rField.getLength() + (p2 - p1) <= STRING_MAXLEN, "lcl_appendLineData: data overflow");
     if (rField.getLength() + (p2 - p1) <= STRING_MAXLEN)
     {
-        rField += OUString( p1, sal::static_int_cast<xub_StrLen>( p2 - p1 ) );
+        rField += OUString( p1, sal::static_int_cast<sal_Int32>( p2 - p1 ) );
         return true;
     }
     else
@@ -763,7 +763,7 @@ static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
     }
     if (!pEndQuote)
         pEndQuote = p;  // Take all data as string.
-    rString += OUString(pStartQuote + 1, sal::static_int_cast<xub_StrLen>( pEndQuote - pStartQuote - 1 ) );
+    rString += OUString(pStartQuote + 1, sal::static_int_cast<sal_Int32>( pEndQuote - pStartQuote - 1 ) );
     lcl_UnescapeSylk( rString, eVersion);
     return p;
 }
@@ -785,7 +785,7 @@ static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
             }
             ++p;
         }
-        rString += OUString( pStart, sal::static_int_cast<xub_StrLen>( p - pStart));
+        rString += OUString( pStart, sal::static_int_cast<sal_Int32>( p - pStart));
         lcl_UnescapeSylk( rString, eVersion);
     }
     else
@@ -826,7 +826,7 @@ static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
         {
             while (*p && *p != ';')
                 ++p;
-            rString += OUString( pStart, sal::static_int_cast<xub_StrLen>( p - pStart));
+            rString += OUString( pStart, sal::static_int_cast<sal_Int32>( p - pStart));
         }
     }
     return p;
@@ -1011,9 +1011,9 @@ static bool lcl_PutString(
     else if ( nColFormat != SC_COL_STANDARD )                   // Datumsformate
     {
         const sal_uInt16 nMaxNumberParts = 7;   // Y-M-D h:m:s.t
-        xub_StrLen nLen = rStr.getLength();
-        xub_StrLen nStart[nMaxNumberParts];
-        xub_StrLen nEnd[nMaxNumberParts];
+        sal_Int32 nLen = rStr.getLength();
+        sal_Int32 nStart[nMaxNumberParts];
+        sal_Int32 nEnd[nMaxNumberParts];
 
         sal_uInt16 nDP, nMP, nYP;
         switch ( nColFormat )
@@ -1026,7 +1026,7 @@ static bool lcl_PutString(
 
         sal_uInt16 nFound = 0;
         bool bInNum = false;
-        for ( xub_StrLen nPos=0; nPos<nLen && (bInNum ||
+        for ( sal_Int32 nPos=0; nPos<nLen && (bInNum ||
                     nFound<nMaxNumberParts); nPos++ )
         {
             if (bInNum && nFound == 3 && nColFormat == SC_COL_YMD &&
@@ -1052,8 +1052,8 @@ static bool lcl_PutString(
         {
             //  try to break one number (without separators) into date fields
 
-            xub_StrLen nDateStart = nStart[0];
-            xub_StrLen nDateLen = nEnd[0] + 1 - nDateStart;
+            sal_Int32 nDateStart = nStart[0];
+            sal_Int32 nDateLen = nEnd[0] + 1 - nDateStart;
 
             if ( nDateLen >= 5 && nDateLen <= 8 &&
                     ScGlobal::pCharClass->isNumeric( rStr.copy( nDateStart, nDateLen ) ) )
