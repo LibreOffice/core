@@ -1883,38 +1883,37 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
 sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
 {
     sal_Bool bOk = sal_False;
+
+    ModifyBlocker_Impl aBlock( this );
+
+    uno::Reference < embed::XStorage > xNewStor = rMedium.GetStorage();
+    if ( !xNewStor.is() )
+        return sal_False;
+
+    uno::Reference < beans::XPropertySet > xPropSet( xNewStor, uno::UNO_QUERY );
+    if ( !xPropSet.is() )
+        return sal_False;
+
+    Any a = xPropSet->getPropertyValue("MediaType");
+    OUString aMediaType;
+    if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
     {
-        ModifyBlocker_Impl aBlock( this );
+        SAL_WARN( "sfx.doc", "The mediatype must be set already!" );
+        SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, sal_False, false );
+    }
 
-        uno::Reference < embed::XStorage > xNewStor = rMedium.GetStorage();
-        if ( !xNewStor.is() )
-            return sal_False;
+    pImp->bIsSaving = sal_False;
+    bOk = SaveAsOwnFormat( rMedium );
 
-        uno::Reference < beans::XPropertySet > xPropSet( xNewStor, uno::UNO_QUERY );
-        if ( xPropSet.is() )
+    if ( bCommit )
+    {
+        try {
+            uno::Reference< embed::XTransactedObject > xTransact( xNewStor, uno::UNO_QUERY_THROW );
+            xTransact->commit();
+        }
+        catch( uno::Exception& )
         {
-            Any a = xPropSet->getPropertyValue("MediaType");
-            OUString aMediaType;
-            if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
-            {
-                SAL_WARN( "sfx.doc", "The mediatype must be set already!" );
-                SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, sal_False, false );
-            }
-
-            pImp->bIsSaving = sal_False;
-            bOk = SaveAsOwnFormat( rMedium );
-
-            if ( bCommit )
-            {
-                try {
-                    uno::Reference< embed::XTransactedObject > xTransact( xNewStor, uno::UNO_QUERY_THROW );
-                    xTransact->commit();
-                }
-                catch( uno::Exception& )
-                {
-                    SAL_WARN( "sfx.doc", "The strotage was not commited on DoSaveAs!" );
-                }
-            }
+            SAL_WARN( "sfx.doc", "The strotage was not commited on DoSaveAs!" );
         }
     }
 
