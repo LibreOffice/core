@@ -5170,8 +5170,7 @@ find_msms()
         AC_MSG_NOTICE([no registry entry for Merge Module directory - trying "$COMMONPROGRAMFILES\Merge Modules"])
         msmdir="$COMMONPROGRAMFILES\Merge Modules"
     fi
-    msmdir=`cygpath -d "$msmdir"`
-    msmdir=`cygpath -u "$msmdir"`
+    msmdir=`cygpath -m "$msmdir"`
     if test -z "$msmdir"; then
         if test "$ENABLE_RELEASE_BUILD" = "TRUE" ; then
             AC_MSG_ERROR([Merge modules not found in $msmdir])
