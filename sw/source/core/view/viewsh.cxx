@@ -1813,6 +1813,16 @@ void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int
     }
 }
 
+extern "C"
+Size touch_lo_get_content_size()
+{
+    SwWrtShell *pViewShell = GetActiveWrtShell();
+    Size contentSize(0,0);
+    if (pViewShell)
+    {
+    }
+    return contentSize;
+}
 #endif
 
 extern "C" void touch_ui_selection_none() {}
