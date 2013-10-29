@@ -161,7 +161,8 @@ static sal_Int32 lcl_AddSpace( const SwTxtSizeInfo &rInf, const OUString* pStr,
     if ( bDoNotAddSpace )
         return nCnt;
 
-    for ( ; nPos < nEnd; ++nPos )
+    sal_Int32 nTxtEnd = std::min(nEnd, pStr->getLength());
+    for ( ; nPos < nTxtEnd; ++nPos )
     {
         if( CH_BLANK == (*pStr)[ nPos ] )
             ++nCnt;
