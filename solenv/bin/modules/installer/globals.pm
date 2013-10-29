@@ -81,7 +81,7 @@ BEGIN
     $templatefoldername = "Templates";
     $programmenufolder = "ProgramMenuFolder";
     $systemfolder = "SystemFolder";
-    $lcidlistname = "msi-encodinglist.txt";
+    $lcidlistname = $ENV{'SRCDIR'} . "/l10ntools/source/ulfconv/msi-encodinglist.txt";
     $msilanguage = "";  # hash reference for msi languages LCID
     $sofficeiconadded = 0;
     $temppath = "";

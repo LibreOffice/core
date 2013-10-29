@@ -25,8 +25,4 @@ $(eval $(call gb_Module_add_targets_for_build,l10ntools,\
     StaticLibrary_transex \
 ))
 
-$(eval $(call gb_Module_add_targets,l10ntools,\
-    Package_ulfconv \
-))
-
 # vim:set noet sw=4 ts=4:

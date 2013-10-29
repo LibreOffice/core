@@ -408,14 +408,13 @@ sub check_logfile
 sub read_lcidlist
 {
     my ($patharrayref) = @_;
-    my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$installer::globals::lcidlistname, $patharrayref , 0);
 
-    if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Did not find Windows LCID list $installer::globals::lcidlistname!", "read_lcidlist"); }
+    if ( ! -f $installer::globals::lcidlistname ) { installer::exiter::exit_program("ERROR: Did not find Windows LCID list $installer::globals::lcidlistname!", "read_lcidlist"); }
 
-    my $infoline = "Found LCID file: $$fileref\n";
+    my $infoline = "Found LCID file: $installer::globals::lcidlistname\n";
     push(@installer::globals::globallogfileinfo, $infoline);
 
-    my $lcidlist = installer::files::read_file($$fileref);
+    my $lcidlist = installer::files::read_file($installer::globals::lcidlistname);
     my %msilanguage = ();
 
     for ( my $i = 0; $i <= $#{$lcidlist}; $i++ )
