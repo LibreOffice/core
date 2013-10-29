@@ -133,7 +133,7 @@ namespace dmapper {
             case NS_ooxml::LN_CT_TcPrBase_vAlign://90694
             {
                 sal_Int16 nVertOrient = text::VertOrientation::NONE;
-                switch( nIntValue ) //0 - top 1 - center 3 - bottom
+                switch( nIntValue ) //0 - top 1 - center 3 - bottom (ST_VerticalJc)
                 {
                     case 1: nVertOrient = text::VertOrientation::CENTER; break;
                     case 3: nVertOrient = text::VertOrientation::BOTTOM; break;
@@ -143,6 +143,24 @@ namespace dmapper {
                 pCellPropMap->Insert( PROP_VERT_ORIENT, uno::makeAny( nVertOrient ) );
                 //todo: in ooxml import the value of m_ncell is wrong
                 cellProps( pCellPropMap );
+                if (m_pCurrentInteropGrabBag)
+                {
+                    OUString aVertOrient;
+                    switch( nIntValue )
+                    {
+                        case 0: aVertOrient = "top"; break;
+                        case 1: aVertOrient = "center"; break;
+                        case 2: aVertOrient = "both"; break;
+                        case 3: aVertOrient = "bottom"; break;
+                    };
+                    if (!aVertOrient.isEmpty())
+                    {
+                        beans::PropertyValue aValue;
+                        aValue.Name = "vAlign";
+                        aValue.Value = uno::makeAny(aVertOrient);
+                        m_pCurrentInteropGrabBag->push_back(aValue);
+                    }
+                }
             }
             break;
             case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders, might be defined in table style

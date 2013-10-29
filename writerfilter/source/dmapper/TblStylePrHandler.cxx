@@ -80,18 +80,26 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_TcPrBase:
         {
             std::vector<beans::PropertyValue> aSavedGrabBag;
-            if (rSprm.getId() == NS_ooxml::LN_CT_PPrBase || rSprm.getId() == NS_ooxml::LN_EG_RPrBase)
+            bool bGrabBag = rSprm.getId() == NS_ooxml::LN_CT_PPrBase ||
+                rSprm.getId() == NS_ooxml::LN_EG_RPrBase ||
+                rSprm.getId() == NS_ooxml::LN_CT_TblPrBase ||
+                rSprm.getId() == NS_ooxml::LN_CT_TcPrBase;
+            if (bGrabBag)
             {
                 aSavedGrabBag = m_aInteropGrabBag;
                 m_aInteropGrabBag.clear();
             }
             resolveSprmProps( rSprm );
-            if (rSprm.getId() == NS_ooxml::LN_CT_PPrBase || rSprm.getId() == NS_ooxml::LN_EG_RPrBase)
+            if (bGrabBag)
             {
                 if (rSprm.getId() == NS_ooxml::LN_CT_PPrBase)
                     aSavedGrabBag.push_back(getInteropGrabBag("pPr"));
                 else if (rSprm.getId() == NS_ooxml::LN_EG_RPrBase)
                     aSavedGrabBag.push_back(getInteropGrabBag("rPr"));
+                else if (rSprm.getId() == NS_ooxml::LN_CT_TblPrBase)
+                    aSavedGrabBag.push_back(getInteropGrabBag("tblPr"));
+                else if (rSprm.getId() == NS_ooxml::LN_CT_TcPrBase)
+                    aSavedGrabBag.push_back(getInteropGrabBag("tcPr"));
                 m_aInteropGrabBag = aSavedGrabBag;
             }
         }
