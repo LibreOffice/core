@@ -765,10 +765,10 @@ private:
 };
 
 template <class Op>
-std::unique_ptr<DynamicKernelArgument> SoPHelper(const std::string &ts,
+boost::shared_ptr<DynamicKernelArgument> SoPHelper(const std::string &ts,
     boost::shared_ptr<FormulaTreeNode> ft)
 {
-    return std::unique_ptr<DynamicKernelArgument>(
+    return boost::shared_ptr<DynamicKernelArgument>(
         new DynamicKernelSoPArguments<Op>(ts, ft));
 }
 
