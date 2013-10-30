@@ -1378,15 +1378,6 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                         xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry")), aAny);
                     }
                 }
-
-                //awt::Point aPosition(aViewBox.GetX(), aViewBox.GetY());
-                //SdXMLImExPointsElement aPoints(maPoints, aViewBox,
-                //  aPosition, aSize, GetImport().GetMM100UnitConverter(), mbClosed);
-                //
-                //uno::Any aAny;
-                //aAny <<= aPoints.GetPointSequenceSequence();
-                //xPropSet->setPropertyValue(
-                //  OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry")), aAny);
             }
         }
 
@@ -1552,89 +1543,6 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                 }
             }
         }
-
-        // TTTT
-        //// prepare some of the parameters
-        //SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
-        //awt::Size aSize(aViewBox.GetWidth(), aViewBox.GetHeight());
-        //awt::Point aPosition(aViewBox.GetX(), aViewBox.GetY());
-        //if (maSize.Width != 0 && maSize.Height !=0)
-        //{
-        //    aSize = maSize;
-        //}
-        //
-        //SdXMLImExSvgDElement aPoints(maD, aViewBox,
-        //    aPosition, aSize, GetImport().GetMM100UnitConverter());
-        //
-        //const char* pService;
-        //// now create shape
-        //if(aPoints.IsCurve())
-        //{
-        //    if(aPoints.IsClosed())
-        //    {
-        //        pService = "com.sun.star.drawing.ClosedBezierShape";
-        //    }
-        //    else
-        //    {
-        //        pService = "com.sun.star.drawing.OpenBezierShape";
-        //    }
-        //}
-        //else
-        //{
-        //    if(aPoints.IsClosed())
-        //    {
-        //        pService = "com.sun.star.drawing.PolyPolygonShape";
-        //    }
-        //    else
-        //    {
-        //        pService = "com.sun.star.drawing.PolyLineShape";
-        //    }
-        //}
-        //
-        //// Add, set Style and properties from base shape
-        //AddShape(pService);
-        //
-        //// #89344# test for mxShape.is() and not for mxShapes.is() to support
-        //// shape import helper classes WITHOUT XShapes (member mxShapes). This
-        //// is used by the writer.
-        //if( mxShape.is() )
-        //{
-        //    SetStyle();
-        //    SetLayer();
-        //
-        //    // set local parameters on shape
-        //    uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-        //    if(xPropSet.is())
-        //    {
-        //        uno::Any aAny;
-        //
-        //        // set svg:d
-        //        if(maD.getLength())
-        //        {
-        //            if(aPoints.IsCurve())
-        //            {
-        //                drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
-        //                    aPoints.GetPointSequenceSequence(),
-        //                    aPoints.GetFlagSequenceSequence());
-        //
-        //                aAny <<= aSourcePolyPolygon;
-        //                xPropSet->setPropertyValue(
-        //                    OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry")), aAny);
-        //            }
-        //            else
-        //            {
-        //                aAny <<= aPoints.GetPointSequenceSequence();
-        //                xPropSet->setPropertyValue(
-        //                    OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry")), aAny);
-        //            }
-        //        }
-        //    }
-        //
-        //    // set pos, size, shear and rotate
-        //    SetTransformation();
-        //
-        //    SdXMLShapeContext::StartElement(xAttrList);
-        //}
     }
 }
 
@@ -2019,34 +1927,6 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
                     }
                 }
             }
-
-            // TTTT
-            //SdXMLImExViewBox aViewBox( 0.0, 0.0, 1.0, 1.0 );
-            //awt::Point aPoint( 0, 0 );
-            //awt::Size aSize( 1, 1 );
-            //
-            //SdXMLImExSvgDElement aPoints( rValue, aViewBox,
-            //    aPoint, aSize, GetImport().GetMM100UnitConverter() );
-            //
-            //if ( aPoints.IsCurve() )
-            //{
-            //    drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
-            //        aPoints.GetPointSequenceSequence(),
-            //        aPoints.GetFlagSequenceSequence());
-            //    maPath <<= aSourcePolyPolygon;
-            //}
-            //else
-            //{
-            //    const drawing::PointSequenceSequence& rOuterSeq = aPoints.GetPointSequenceSequence();
-            //    drawing::FlagSequenceSequence aFlagSeqSeq( rOuterSeq.getLength() );
-            //    for ( int a = 0; a < rOuterSeq.getLength(); a++ )
-            //        aFlagSeqSeq[ a ] = drawing::FlagSequence( rOuterSeq[ a ].getLength() );
-            //
-            //    drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
-            //        aPoints.GetPointSequenceSequence(),
-            //        aFlagSeqSeq );
-            //    maPath <<= aSourcePolyPolygon;
-            //}
         }
     }
     }

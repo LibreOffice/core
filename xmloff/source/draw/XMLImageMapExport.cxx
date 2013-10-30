@@ -318,8 +318,7 @@ void XMLImageMapExport::ExportCircle(
                           aBuffer.makeStringAndClear() );
 }
 
-void XMLImageMapExport::ExportPolygon(
-    const Reference<XPropertySet> & rPropertySet)
+void XMLImageMapExport::ExportPolygon(const Reference<XPropertySet> & rPropertySet)
 {
     // polygons get exported as bounding box, viewbox, and coordinate
     // pair sequence. The bounding box is always the entire image.
@@ -333,27 +332,6 @@ void XMLImageMapExport::ExportPolygon(
         basegfx::tools::UnoPointSequenceToB2DPolygon(
             aPoly));
     const basegfx::B2DRange aPolygonRange(aPolygon.getB2DRange());
-
-// TTTT:
-//  // get bounding box (assume top-left to be 0,0)
-//  sal_Int32 nWidth = 0;
-//  sal_Int32 nHeight = 0;
-//  sal_Int32 nLength = aPoly.getLength();
-//  const struct awt::Point* pPointPtr = aPoly.getConstArray();
-//  for ( sal_Int32 i = 0; i < nLength; i++ )
-//  {
-//      sal_Int32 nPolyX = pPointPtr->X;
-//      sal_Int32 nPolyY = pPointPtr->Y;
-//
-//      if ( nPolyX > nWidth )
-//          nWidth = nPolyX;
-//      if ( nPolyY > nHeight )
-//          nHeight = nPolyY;
-//
-//      pPointPtr++;
-//  }
-//  DBG_ASSERT(nWidth > 0, "impossible Polygon found");
-//  DBG_ASSERT(nHeight > 0, "impossible Polygon found");
 
     // parameters svg:x, svg:y, svg:width, svg:height
     OUStringBuffer aBuffer;
@@ -377,12 +355,6 @@ void XMLImageMapExport::ExportPolygon(
             aPolygon));
 
     mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);
-
-    // TTTT:
-    //awt::Point aPoint(0, 0);
-    //awt::Size aSize(nWidth, nHeight);
-    //SdXMLImExPointsElement aPoints( &aPoly, aViewBox, aPoint, aSize, true);
-    //mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_POINTS, aPoints.GetExportString());
 }
 
 // eof

@@ -2866,8 +2866,8 @@ void XMLTextParagraphExport::_exportTextFrame(
 }
 
 void XMLTextParagraphExport::exportContour(
-        const Reference < XPropertySet > & rPropSet,
-        const Reference < XPropertySetInfo > & rPropSetInfo )
+    const Reference < XPropertySet > & rPropSet,
+    const Reference < XPropertySetInfo > & rPropSetInfo )
 {
     if( !rPropSetInfo->hasPropertyByName( sContourPolyPolygon ) )
     {
@@ -2887,27 +2887,6 @@ void XMLTextParagraphExport::exportContour(
     }
 
     const basegfx::B2DRange aPolyPolygonRange(aPolyPolygon.getB2DRange());
-
-// TTTT:
-//  awt::Point aPoint( 0, 0 );
-//  awt::Size aSize( 0, 0 );
-//  sal_Int32 nPolygons = aSourcePolyPolygon.getLength();
-//  const PointSequence *pPolygons = aSourcePolyPolygon.getConstArray();
-//  while( nPolygons-- )
-//  {
-//      sal_Int32 nPoints = pPolygons->getLength();
-//      const awt::Point *pPoints = pPolygons->getConstArray();
-//      while( nPoints-- )
-//      {
-//          if( aSize.Width < pPoints->X )
-//              aSize.Width = pPoints->X;
-//          if( aSize.Height < pPoints->Y )
-//              aSize.Height = pPoints->Y;
-//          pPoints++;
-//      }
-//      pPolygons++;
-//  }
-
     bool bPixel(false);
 
     if( rPropSetInfo->hasPropertyByName( sIsPixelContour ) )
@@ -2953,10 +2932,6 @@ void XMLTextParagraphExport::exportContour(
             basegfx::tools::exportToSvgPoints(
                 aPolyPolygon.getB2DPolygon(0)));
 
-        // TTTT
-        //PointSequence* pSequence = (PointSequence*)aSourcePolyPolygon.getConstArray();
-        //SdXMLImExPointsElement aPoints( pSequence, aViewBox, aPolyPolygonRange.getMinimum(), aPolyPolygonRange.getRange(), true);
-
         // write point array
         GetExport().AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);
         eElem = XML_CONTOUR_POLYGON;
@@ -2968,36 +2943,11 @@ void XMLTextParagraphExport::exportContour(
             basegfx::tools::exportToSvgD(
                 aPolyPolygon,
                 true,           // bUseRelativeCoordinates
-                false));        // bDetectQuadraticBeziers TTTT: not used in old, but maybe activated now
+                false));        // bDetectQuadraticBeziers: not used in old, but maybe activated now
 
         // write point array
         GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_D, aPolygonString);
         eElem = XML_CONTOUR_PATH;
-
-        // TTTT
-        ///*const*/ PointSequence* pOuterSequence =
-        //                (PointSequence*)aSourcePolyPolygon.getConstArray();
-        //if(pOuterSequence)
-        //{
-        //    // prepare svx:d element export
-        //    SdXMLImExSvgDElement aSvgDElement( aViewBox );
-        //
-        //    for(sal_Int32 a(0L); a < nPolygonCount; a++)
-        //    {
-        //        /*const*/ PointSequence* pSequence = pOuterSequence++;
-        //        if(pSequence)
-        //        {
-        //            awt::Point aPoint(aPolyPolygonRange.getMinX(), aPolyPolygonRange.getMinY());
-        //            awt::Size aSize(aPolyPolygonRange.getWidth(), aPolyPolygonRange.getHeight());
-        //            aSvgDElement.AddPolygon(pSequence, 0L, aPoint, aSize, sal_True );
-        //        }
-        //    }
-        //
-        //    // write point array
-        //    GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_D,
-        //                              aSvgDElement.GetExportString());
-        //    eElem = XML_CONTOUR_PATH;
-        //}
     }
 
     if( rPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )

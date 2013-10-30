@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #define _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 

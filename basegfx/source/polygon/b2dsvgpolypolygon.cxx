@@ -92,7 +92,10 @@ namespace basegfx
                                 // add current polygon
                                 if(bIsClosed)
                                 {
-                                    closeWithGeometryChange(aCurrPoly);
+                                    // #123465# no need to do the old closeWithGeometryChange
+                                    // corerection on SVG polygons; this even may lead to wrong
+                                    // results e.g. for marker processing
+                                    aCurrPoly.setClosed(true);
                                 }
 
                                 o_rPolyPolygon.append(aCurrPoly);
@@ -612,7 +615,10 @@ namespace basegfx
                 // end-process last poly
                 if(bIsClosed)
                 {
-                    closeWithGeometryChange(aCurrPoly);
+                    // #123465# no need to do the old closeWithGeometryChange
+                    // corerection on SVG polygons; this even may lead to wrong
+                    // results e.g. for marker processing
+                    aCurrPoly.setClosed(true);
                 }
 
                 o_rPolyPolygon.append(aCurrPoly);

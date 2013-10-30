@@ -949,26 +949,26 @@ void XMLShapeExport::ImpExportEllipseShape(
 
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
 
+        // prepare name (with most used)
+        enum ::xmloff::token::XMLTokenEnum eName(XML_CIRCLE);
+
         if(bCircle)
         {
-            // write circle
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_CIRCLE, bCreateNewline, sal_True);
-
-            ImpExportDescription( xShape ); // #i68101#
-            ImpExportEvents( xShape );
-            ImpExportGluePoints( xShape );
-            ImpExportText( xShape );
+            // name already set
         }
         else
         {
-            // write ellipse
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_ELLIPSE, bCreateNewline, sal_True);
-
-            ImpExportDescription( xShape ); // #i68101#
-            ImpExportEvents( xShape );
-            ImpExportGluePoints( xShape );
-            ImpExportText( xShape );
+            // set name
+            eName = XML_ELLIPSE;
         }
+
+        // write ellipse or circle
+        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, eName, bCreateNewline, sal_True);
+
+        ImpExportDescription( xShape ); // #i68101#
+        ImpExportEvents( xShape );
+        ImpExportGluePoints( xShape );
+        ImpExportText( xShape );
     }
 }
 
@@ -976,17 +976,12 @@ void XMLShapeExport::ImpExportEllipseShape(
 
 void XMLShapeExport::ImpExportPolygonShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType /*eShapeType*/, sal_Int32 nFeatures, awt::Point* pRefPoint) // TTTT: eShapeType
+    XmlShapeType /*eShapeType*/, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
 
     if(xPropSet.is())
     {
-//      sal_Bool bClosed(eShapeType == XmlShapeTypeDrawPolyPolygonShape
-//          || eShapeType == XmlShapeTypeDrawClosedBezierShape);
-//      sal_Bool bBezier(eShapeType == XmlShapeTypeDrawClosedBezierShape
-//          || eShapeType == XmlShapeTypeDrawOpenBezierShape);
-
         // get matrix
         ::basegfx::B2DHomMatrix aMatrix;
         ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
@@ -1001,9 +996,6 @@ void XMLShapeExport::ImpExportPolygonShape(
         // use features and write
         ImpExportNewTrans_FeaturesAndWrite(aTRScale, fTRShear, fTRRotate, aTRTranslate, nFeatures);
 
-        //awt::Point aPoint(0, 0);
-        //awt::Size aSize(FRound(fabs(aTRScale.getX())), FRound(fabs(aTRScale.getY())));
-
         // create and export ViewBox. caution! for svg:ViewBox, use the absolute values (!)
         SdXMLImExViewBox aViewBox(0.0, 0.0, fabs(aTRScale.getX()), fabs(aTRScale.getY()));
 
@@ -1013,6 +1005,9 @@ void XMLShapeExport::ImpExportPolygonShape(
         const uno::Any aAny(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))));
         basegfx::B2DPolyPolygon aPolyPolygon;
         const bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+
+        // prepare name (with most used)
+        enum ::xmloff::token::XMLTokenEnum eName(XML_PATH);
 
         if(aAny.getValueType().equals(getCppuType((drawing::PolyPolygonBezierCoords*)0)))
         {
@@ -1032,13 +1027,8 @@ void XMLShapeExport::ImpExportPolygonShape(
             // write point array
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);
 
-            // write object now
-            SvXMLElementExport aOBJ(
-                mrExport,
-                XML_NAMESPACE_DRAW,
-                aPolygon.isClosed() ? XML_POLYGON : XML_POLYLINE,
-                bCreateNewline,
-                sal_True);
+            // set name
+            eName = aPolygon.isClosed() ? XML_POLYGON : XML_POLYLINE;
         }
         else
         {
@@ -1051,135 +1041,22 @@ void XMLShapeExport::ImpExportPolygonShape(
 
             // write point array
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
-
-            // write object now
-            SvXMLElementExport aOBJ(
-                mrExport,
-                XML_NAMESPACE_DRAW,
-                XML_PATH,
-                bCreateNewline,
-                sal_True);
         }
+
+        // write object, but after attributes are added since this call will
+        // consume all of these added attributes and the destructor will close the
+        // scope. Also before text is added; this may add sub-scopes as needed
+        SvXMLElementExport aOBJ(
+            mrExport,
+            XML_NAMESPACE_DRAW,
+            eName,
+            bCreateNewline,
+            sal_True);
 
         ImpExportDescription( xShape ); // #i68101#
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
         ImpExportText( xShape );
-
-// TTTT
-//      if(bBezier)
-//      {
-//          // get PolygonBezier
-//          uno::Any aAny( xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))) );
-//            drawing::PolyPolygonBezierCoords* pSourcePolyPolygon =
-//              (drawing::PolyPolygonBezierCoords*)aAny.getValue();
-//
-//          if(pSourcePolyPolygon && pSourcePolyPolygon->Coordinates.getLength())
-//          {
-//              sal_Int32 nOuterCnt(pSourcePolyPolygon->Coordinates.getLength());
-//              drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->Coordinates.getArray();
-//              drawing::FlagSequence*  pOuterFlags = pSourcePolyPolygon->Flags.getArray();
-//
-//              if(pOuterSequence && pOuterFlags)
-//              {
-//                  // prepare svx:d element export
-//                  SdXMLImExSvgDElement aSvgDElement(aViewBox);
-//
-//                  for(sal_Int32 a(0L); a < nOuterCnt; a++)
-//                  {
-//                      drawing::PointSequence* pSequence = pOuterSequence++;
-//                      drawing::FlagSequence* pFlags = pOuterFlags++;
-//
-//                      if(pSequence && pFlags)
-//                      {
-//                          aSvgDElement.AddPolygon(pSequence, pFlags,
-//                              aPoint, aSize, bClosed);
-//                      }
-//                  }
-//
-//                  // write point array
-//                  mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aSvgDElement.GetExportString());
-//              }
-//
-//              // write object now
-//              SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PATH, bCreateNewline, sal_True);
-//
-//              ImpExportDescription( xShape ); // #i68101#
-//              ImpExportEvents( xShape );
-//              ImpExportGluePoints( xShape );
-//              ImpExportText( xShape );
-//          }
-//      }
-//      else
-//      {
-//          // get non-bezier polygon
-//          uno::Any aAny( xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Geometry"))) );
-//          drawing::PointSequenceSequence* pSourcePolyPolygon = (drawing::PointSequenceSequence*)aAny.getValue();
-//
-//          if(pSourcePolyPolygon && pSourcePolyPolygon->getLength())
-//          {
-//              sal_Int32 nOuterCnt(pSourcePolyPolygon->getLength());
-//
-//              if(1L == nOuterCnt && !bBezier)
-//              {
-//                    // simple polygon shape, can be written as svg:points sequence
-//                    drawing::PointSequence* pSequence = pSourcePolyPolygon->getArray();
-//                    if(pSequence)
-//                    {
-//                        const basegfx::B2DPolygon aPolygon(
-//                            basegfx::tools::UnoPointSequenceToB2DPolygon(
-//                                *pSequence));
-//                        const ::rtl::OUString aPointString(
-//                            basegfx::tools::exportToSvgPoints(
-//                                aPolygon));
-//                        // SdXMLImExPointsElement aPoints(pSequence, aViewBox, aPoint, aSize, bClosed);
-//
-//                        // write point array
-//                        mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);
-//                    }
-//
-//                  // write object now
-//                  SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW,
-//                      bClosed ? XML_POLYGON : XML_POLYLINE , bCreateNewline, sal_True);
-//
-//                  ImpExportDescription( xShape ); // #i68101#
-//                  ImpExportEvents( xShape );
-//                  ImpExportGluePoints( xShape );
-//                  ImpExportText( xShape );
-//              }
-//              else
-//              {
-//                  // polypolygon or bezier, needs to be written as a svg:path sequence
-//                  drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->getArray();
-//                  if(pOuterSequence)
-//                  {
-//                      // prepare svx:d element export
-//                      SdXMLImExSvgDElement aSvgDElement(aViewBox);
-//
-//                      for(sal_Int32 a(0L); a < nOuterCnt; a++)
-//                      {
-//                          drawing::PointSequence* pSequence = pOuterSequence++;
-//                          if(pSequence)
-//                          {
-//                              aSvgDElement.AddPolygon(pSequence, 0L, aPoint,
-//                                  aSize, bClosed);
-//                          }
-//                      }
-//
-//                      // write point array
-//                      mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aSvgDElement.GetExportString());
-//                  }
-//
-//                  // write object now
-//                  SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PATH, bCreateNewline, sal_True);
-//
-//                  ImpExportDescription( xShape ); // #i68101#
-//                  ImpExportEvents( xShape );
-//                  ImpExportGluePoints( xShape );
-//                  ImpExportText( xShape );
-//              }
-//          }
-//      }
     }
 }
 
@@ -1538,34 +1415,6 @@ void XMLShapeExport::ImpExportConnectorShape(
 
             // write svg:d
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
-// TTTT
-//          sal_Int32 nOuterCnt(pSourcePolyPolygon->Coordinates.getLength());
-//          drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->Coordinates.getArray();
-//          drawing::FlagSequence*  pOuterFlags = pSourcePolyPolygon->Flags.getArray();
-//
-//          if(pOuterSequence && pOuterFlags)
-//          {
-//              // prepare svx:d element export
-//              awt::Point aPoint( 0, 0 );
-//              awt::Size aSize( 1, 1 );
-//              SdXMLImExViewBox aViewBox( 0.0, 0.0, 1.0, 1.0 );
-//              SdXMLImExSvgDElement aSvgDElement(aViewBox);
-//
-//              for(sal_Int32 a(0L); a < nOuterCnt; a++)
-//              {
-//                  drawing::PointSequence* pSequence = pOuterSequence++;
-//                  drawing::FlagSequence* pFlags = pOuterFlags++;
-//
-//                  if(pSequence && pFlags)
-//                  {
-//                      aSvgDElement.AddPolygon(pSequence, pFlags,
-//                          aPoint, aSize, sal_False );
-//                  }
-//              }
-//
-//              // write point array
-//              mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aSvgDElement.GetExportString());
-//          }
         }
     }
 

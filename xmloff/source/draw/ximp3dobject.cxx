@@ -475,59 +475,6 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
             {
                 OSL_ENSURE(false, "Error on importing svg:d for 3D PolyPolygon (!)");
             }
-
-            // TTTT
-            //SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
-            //awt::Point aMinPoint(aViewBox.GetX(), aViewBox.GetY());
-            //awt::Size aMaxSize(aViewBox.GetWidth(), aViewBox.GetHeight());
-            //SdXMLImExSvgDElement aPoints(maPoints, aViewBox,
-            //    aMinPoint, aMaxSize, GetImport().GetMM100UnitConverter());
-            //
-            //// convert to double sequences
-            //drawing::PointSequenceSequence& xPoSeSe =
-            //    (drawing::PointSequenceSequence&)aPoints.GetPointSequenceSequence();
-            //sal_Int32 nOuterSequenceCount = xPoSeSe.getLength();
-            //drawing::PointSequence* pInnerSequence = xPoSeSe.getArray();
-            //
-            //drawing::PolyPolygonShape3D xPolyPolygon3D;
-            //xPolyPolygon3D.SequenceX.realloc(nOuterSequenceCount);
-            //xPolyPolygon3D.SequenceY.realloc(nOuterSequenceCount);
-            //xPolyPolygon3D.SequenceZ.realloc(nOuterSequenceCount);
-            //drawing::DoubleSequence* pOuterSequenceX = xPolyPolygon3D.SequenceX.getArray();
-            //drawing::DoubleSequence* pOuterSequenceY = xPolyPolygon3D.SequenceY.getArray();
-            //drawing::DoubleSequence* pOuterSequenceZ = xPolyPolygon3D.SequenceZ.getArray();
-            //
-            //for(sal_Int32 a(0L); a < nOuterSequenceCount; a++)
-            //{
-            //    sal_Int32 nInnerSequenceCount(pInnerSequence->getLength());
-            //    awt::Point* pArray = pInnerSequence->getArray();
-            //
-            //    pOuterSequenceX->realloc(nInnerSequenceCount);
-            //    pOuterSequenceY->realloc(nInnerSequenceCount);
-            //    pOuterSequenceZ->realloc(nInnerSequenceCount);
-            //    double* pInnerSequenceX = pOuterSequenceX->getArray();
-            //    double* pInnerSequenceY = pOuterSequenceY->getArray();
-            //    double* pInnerSequenceZ = pOuterSequenceZ->getArray();
-            //
-            //    for(sal_Int32 b(0L); b < nInnerSequenceCount; b++)
-            //    {
-            //        *pInnerSequenceX++ = pArray->X;
-            //        *pInnerSequenceY++ = pArray->Y;
-            //        *pInnerSequenceZ++ = 0.0;
-            //        pArray++;
-            //    }
-            //    pInnerSequence++;
-            //
-            //    pOuterSequenceX++;
-            //    pOuterSequenceY++;
-            //    pOuterSequenceZ++;
-            //}
-            //
-            //// set poly
-            //uno::Any aAny;
-            //aAny <<= xPolyPolygon3D;
-            //xPropSet->setPropertyValue(
-            //    OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPolyPolygon3D")), aAny);
         }
 
         // call parent

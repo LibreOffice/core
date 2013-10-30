@@ -111,7 +111,7 @@ sal_Bool XMLMarkerStyleImport::importXML(
         {
             if(aPolyPolygon.count())
             {
-                // TTTT: ViewBox probably not used, but stay with former processing inside of
+                // ViewBox probably not used, but stay with former processing inside of
                 // SdXMLImExSvgDElement
                 const basegfx::B2DRange aSourceRange(
                     pViewBox->GetX(), pViewBox->GetY(),
@@ -137,44 +137,6 @@ sal_Bool XMLMarkerStyleImport::importXML(
                 rValue <<= aSourcePolyPolygon;
             }
         }
-
-        // TTTT
-        //SdXMLImExSvgDElement aPoints(strPathData, *pViewBox, awt::Point( 0, 0 ),
-        //    awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ),
-        //    rUnitConverter );
-        //
-        //if(aPoints.IsCurve())
-        //{
-        //    drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
-        //        aPoints.GetPointSequenceSequence(),
-        //        aPoints.GetFlagSequenceSequence());
-        //    rValue <<= aSourcePolyPolygon;
-        //}
-        //else
-        //{
-        //    drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
-        //    aSourcePolyPolygon.Coordinates = aPoints.GetPointSequenceSequence();
-        //    aSourcePolyPolygon.Flags.realloc(aSourcePolyPolygon.Coordinates.getLength());
-        //
-        //    // Zeiger auf innere sequences holen
-        //    const drawing::PointSequence* pInnerSequence = aSourcePolyPolygon.Coordinates.getConstArray();
-        //    drawing::FlagSequence* pInnerSequenceFlags = aSourcePolyPolygon.Flags.getArray();
-        //
-        //    for(sal_Int32 a(0); a < aSourcePolyPolygon.Coordinates.getLength(); a++)
-        //    {
-        //        pInnerSequenceFlags->realloc(pInnerSequence->getLength());
-        //        drawing::PolygonFlags* pPolyFlags = pInnerSequenceFlags->getArray();
-        //
-        //        for(sal_Int32 b(0); b < pInnerSequence->getLength(); b++)
-        //            *pPolyFlags++ = drawing::PolygonFlags_NORMAL;
-        //
-        //        // next run
-        //        pInnerSequence++;
-        //        pInnerSequenceFlags++;
-        //    }
-        //
-        //    rValue <<= aSourcePolyPolygon;
-        //}
 
         if( aDisplayName.getLength() )
         {
@@ -238,54 +200,6 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             /////////////////
             // Viewbox (viewBox="0 0 1500 1000")
 
-            // TTTT
-            //sal_Int32 nMinX(0x7fffffff);
-            //sal_Int32 nMaxX(0x80000000);
-            //sal_Int32 nMinY(0x7fffffff);
-            //sal_Int32 nMaxY(0x80000000);
-            //sal_Int32 nOuterCnt(aBezier.Coordinates.getLength());
-            //drawing::PointSequence* pOuterSequence = aBezier.Coordinates.getArray();
-            //sal_Int32 a, b;
-            //sal_Bool bClosed(sal_False);
-            //
-            //for (a = 0; a < nOuterCnt; a++)
-            //{
-            //    drawing::PointSequence* pSequence = pOuterSequence++;
-            //    const awt::Point *pPoints = pSequence->getConstArray();
-            //    sal_Int32 nPointCount(pSequence->getLength());
-            //
-            //    if(nPointCount)
-            //    {
-            //        const awt::Point aStart = pPoints[0];
-            //        const awt::Point aEnd = pPoints[nPointCount - 1];
-            //
-            //        if(aStart.X == aEnd.X && aStart.Y == aEnd.Y)
-            //        {
-            //            bClosed = sal_True;
-            //        }
-            //    }
-            //
-            //    for (b = 0; b < nPointCount; b++)
-            //    {
-            //        const awt::Point aPoint = pPoints[b];
-            //
-            //        if( aPoint.X < nMinX )
-            //            nMinX = aPoint.X;
-            //
-            //        if( aPoint.X > nMaxX )
-            //            nMaxX = aPoint.X;
-            //
-            //        if( aPoint.Y < nMinY )
-            //            nMinY = aPoint.Y;
-            //
-            //        if( aPoint.Y > nMaxY )
-            //            nMaxY = aPoint.Y;
-            //    }
-            //}
-            //
-            //sal_Int32 nDifX(nMaxX - nMinX);
-            //sal_Int32 nDifY(nMaxY - nMinY);
-
             SdXMLImExViewBox aViewBox(
                 aPolyPolygonRange.getMinX(),
                 aPolyPolygonRange.getMinY(),
@@ -299,23 +213,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
                 basegfx::tools::exportToSvgD(
                     aPolyPolygon,
                     true,           // bUseRelativeCoordinates
-                    false));        // bDetectQuadraticBeziers TTTT: not used in old, but maybe activated now
-
-            // TTTT
-            //pOuterSequence = aBezier.Coordinates.getArray();
-            //drawing::FlagSequence*  pOuterFlags = aBezier.Flags.getArray();
-            //SdXMLImExSvgDElement aSvgDElement(aViewBox);
-            //
-            //for (a = 0; a < nOuterCnt; a++)
-            //{
-            //    drawing::PointSequence* pSequence = pOuterSequence++;
-            //    drawing::FlagSequence* pFlags = pOuterFlags++;
-            //
-            //    aSvgDElement.AddPolygon(pSequence, pFlags,
-            //        awt::Point( 0, 0 ),
-            //        awt::Size( aViewBox.GetWidth(), aViewBox.GetHeight() ),
-            //        bClosed);
-            //}
+                    false));        // bDetectQuadraticBeziers: not used in old, but maybe activated now
 
             // write point array
             rExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
