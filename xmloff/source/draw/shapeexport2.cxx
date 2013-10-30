@@ -1071,9 +1071,9 @@ void XMLShapeExport::ImpExportPolygonShape(
             }
         }
 
-        // write object, but after attributes are added since the destructor will
-        // consume all of these added attributes. Also before text is added; this may
-        // open another SvXMLElementExport scope which needs to be inside this one
+        // write object, but after attributes are added since this call will
+        // consume all of these added attributes and the destructor will close the
+        // scope. Also before text is added; this may add sub-scopes as needed
         SvXMLElementExport aOBJ(
             mrExport,
             XML_NAMESPACE_DRAW,
