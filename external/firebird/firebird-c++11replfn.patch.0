@@ -1,0 +1,54 @@
+--- src/common/classes/alloc.h
++++ src/common/classes/alloc.h
+@@ -489,23 +489,11 @@
+ inline static MemoryPool* getDefaultMemoryPool() { return Firebird::MemoryPool::processMemoryPool; }
+ 
+ // Global versions of operators new and delete
+-inline void* operator new(size_t s) THROW_BAD_ALLOC
+-{
+-	return Firebird::MemoryPool::globalAlloc(s);
+-}
+-inline void* operator new[](size_t s) THROW_BAD_ALLOC
+-{
+-	return Firebird::MemoryPool::globalAlloc(s);
+-}
++void* operator new(size_t s) THROW_BAD_ALLOC;
++void* operator new[](size_t s) THROW_BAD_ALLOC;
+ 
+-inline void operator delete(void* mem) throw()
+-{
+-	Firebird::MemoryPool::globalFree(mem);
+-}
+-inline void operator delete[](void* mem) throw()
+-{
+-	Firebird::MemoryPool::globalFree(mem);
+-}
++void operator delete(void* mem) throw();
++void operator delete[](void* mem) throw();
+ 
+ #ifdef DEBUG_GDS_ALLOC
+ inline void* operator new(size_t s, Firebird::MemoryPool& pool, const char* file, int line)
+--- src/common/classes/alloc.cpp
++++ src/common/classes/alloc.cpp
+@@ -2080,3 +2080,21 @@
+ #endif
+ 
+ } // namespace Firebird
++
++void* operator new(size_t s) THROW_BAD_ALLOC
++{
++	return Firebird::MemoryPool::globalAlloc(s);
++}
++void* operator new[](size_t s) THROW_BAD_ALLOC
++{
++	return Firebird::MemoryPool::globalAlloc(s);
++}
++
++void operator delete(void* mem) throw()
++{
++	Firebird::MemoryPool::globalFree(mem);
++}
++void operator delete[](void* mem) throw()
++{
++	Firebird::MemoryPool::globalFree(mem);
++}
