@@ -89,6 +89,8 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocCountIf,         {{ Reference, Value                                     }, 0 }},
     { ocCountIfs,        {{ Reference, Value                                     }, 2 }},
     { ocCovar,           {{ ForceArray, ForceArray                               }, 0 }},
+    { ocCovarianceP,     {{ ForceArray, ForceArray                               }, 0 }},
+    { ocCovarianceS,     {{ ForceArray, ForceArray                               }, 0 }},
     { ocDBAverage,       {{ Reference, Reference, Reference                      }, 0 }},
     { ocDBCount,         {{ Reference, Reference, Reference                      }, 0 }},
     { ocDBCount2,        {{ Reference, Reference, Reference                      }, 0 }},
