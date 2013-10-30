@@ -36,10 +36,6 @@ $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_config_win \
 	Package_config_win \
 ))
-else
-$(eval $(call gb_Module_add_targets,odk,\
-	Package_config_notwin \
-))
 endif
 
 ifneq ($(ENABLE_JAVA),)

@@ -7,21 +7,23 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,odk_config,$(SRCDIR)/odk/config))
+$(eval $(call gb_Package_Package,odk_config,$(SRCDIR)))
 
 $(eval $(call gb_Package_set_outdir,odk_config,$(INSTDIR)))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Package_add_files,odk_config,$(SDKDIRNAME),\
-	cfgWin.js \
-	setsdkenv_windows.template \
-	setsdkname.bat \
+	odk/config/cfgWin.js \
+	odk/config/setsdkenv_windows.template \
+	odk/config/setsdkname.bat \
 ))
 else
 $(eval $(call gb_Package_add_files,odk_config,$(SDKDIRNAME),\
-	configure.pl \
-	setsdkenv_unix \
-	setsdkenv_unix.sh.in \
+	config.guess \
+	config.sub \
+	odk/config/configure.pl \
+	odk/config/setsdkenv_unix \
+	odk/config/setsdkenv_unix.sh.in \
 ))
 endif
 

@@ -96,13 +96,6 @@ File gid_File_Package_odk_config_win
     Name = "odk_config_win.filelist";
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
-#else
-File gid_File_Package_odk_config_notwin
-    TXT_FILE_BODY;
-    Dir = FILELIST_SDK_DIR;
-    Name = "odk_config_notwin.filelist";
-    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
 #endif
 
 File gid_File_Package_odk_docs
