@@ -34,6 +34,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.util.Date;
+import com.sun.star.util.Time;
 
 public class Control extends Shape
 {
@@ -304,13 +306,22 @@ public class Control extends Shape
             }
             else if (getControlType() == FormHandler.SODATECONTROL)
             {
-                xPropertySet.setPropertyValue("Date", 4711);       //TODO find a better date
+                Date d = new Date();
+                d.Day = 30;
+                d.Month = 12;
+                d.Year = 9999;
+                xPropertySet.setPropertyValue("Date", d);
                 aPreferredSize = getPeer().getPreferredSize();
                 xPropertySet.setPropertyValue("Date", com.sun.star.uno.Any.VOID);
             }
             else if (getControlType() == FormHandler.SOTIMECONTROL)
             {
-                xPropertySet.setPropertyValue("Time", 47114);      //TODO find a better time
+                Time t = new Time();
+                t.NanoSeconds = 999999999;
+                t.Seconds = 59;
+                t.Minutes = 59;
+                t.Hours = 22;
+                xPropertySet.setPropertyValue("Time", t);
                 aPreferredSize = getPeer().getPreferredSize();
                 xPropertySet.setPropertyValue("Time", com.sun.star.uno.Any.VOID);
             }
