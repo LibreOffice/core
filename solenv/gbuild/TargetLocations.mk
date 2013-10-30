@@ -86,6 +86,7 @@ gb_Extension_get_rootdir = $(WORKDIR)/Extension/$(1)/root
 gb_Extension_get_workdir = $(WORKDIR)/Extension/$(1)
 gb_ExtensionPackage_get_target = $(WORKDIR)/ExtensionPackage/$(1).filelist
 gb_ExtensionPackage_get_preparation_target = $(WORKDIR)/ExtensionPackage/$(1).prepare
+gb_ExtensionPackageSet_get_target = $(WORKDIR)/ExtensionPackage/$(1).set
 gb_ExternalPackage_get_target = $(WORKDIR)/ExternalPackage/$(1)
 gb_ExternalProject_get_statedir = $(WORKDIR)/ExternalProject/$(1)
 gb_ExternalProject_get_preparation_target = $(WORKDIR)/ExternalProject/$(1).prepare
@@ -258,6 +259,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ExternalPackage \
 	Extension \
 	ExtensionPackage \
+	ExtensionPackageSet \
 	Gallery \
 	GeneratedPackage \
 	HelpTarget \

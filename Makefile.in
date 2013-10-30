@@ -112,6 +112,7 @@ gbuild_TARGETS := AllLangHelp \
 	Executable \
 	Extension \
 	ExtensionPackage \
+	ExtensionPackageSet \
 	ExternalPackage \
 	ExternalProject \
 	GeneratedPackage \
