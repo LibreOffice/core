@@ -66,12 +66,20 @@ Module gid_Module_Root_SDK
     Files = (auto_sdk_ALL);
 End
 
-File gid_File_Pakage_odk_share_readme
+File gid_File_Package_odk_share_readme
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;
     Name = "odk_share_readme.filelist";
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
+
+File gid_File_Package_odk_share_readme_generated
+    TXT_FILE_BODY;
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_share_readme_generated.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+
 
 #if defined(WNT)
 File gid_File_Package_odk_cli

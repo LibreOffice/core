@@ -7,14 +7,17 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,odk_share_readme,$(OUTDIR)/bin))
+$(eval $(call gb_Package_Package,odk_share_readme,$(SRCDIR)))
 
 $(eval $(call gb_Package_set_outdir,odk_share_readme,$(INSTDIR)))
 
 $(eval $(call gb_Package_add_files,odk_share_readme,$(SDKDIRNAME)/share/readme,\
-	LICENSE.html \
-	osl/$(gb_LICENSE) \
-	osl/$(call gb_README,en-US) \
+	readlicense_oo/html/LICENSE.html \
 ))
+
+ifneq ($(OS),WNT)
+# the stupid thing is renamed, see Package_files.mk
+$(eval $(call gb_Package_add_file,odk_share_readme,$(SDKDIRNAME)/share/readme/LICENSE,readlicense_oo/txt/license.txt))
+endif
 
 # vim: set noet sw=4 ts=4:

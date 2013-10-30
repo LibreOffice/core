@@ -9,18 +9,15 @@
 
 $(eval $(call gb_Package_Package,readlicense_oo_files,$(SRCDIR)/readlicense_oo))
 
-$(eval $(call gb_Package_set_outdir,readlicense_oo_files,$(OUTDIR)))
-
 # LICENSE (upper case) is copied without EOL conversion from license.txt
 # license.txt is converted, prior to copy, see Package_license.mk
-$(eval $(call gb_Package_add_file,readlicense_oo_files,bin/osl/LICENSE,txt/license.txt))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE,txt/license.txt))
 
-$(eval $(call gb_Package_add_file,readlicense_oo_files,bin/NOTICE,txt/NOTICE))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,NOTICE,txt/NOTICE))
 
-$(eval $(call gb_Package_add_file,readlicense_oo_files,bin/osl/LICENSE.odt,odt/LICENSE.odt))
-$(eval $(call gb_Package_add_file,readlicense_oo_files,bin/LICENSE.odt,odt/LICENSE.odt))
-$(eval $(call gb_Package_add_file,readlicense_oo_files,bin/CREDITS.odt,odt/CREDITS.odt))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.odt,odt/LICENSE.odt))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,CREDITS.odt,odt/CREDITS.odt))
 
-$(eval $(call gb_Package_add_file,readlicense_oo_files,bin/LICENSE.html,html/LICENSE.html))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,LICENSE.html,html/LICENSE.html))
 
 # vim: set noet sw=4 ts=4:

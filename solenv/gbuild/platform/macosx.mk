@@ -350,7 +350,7 @@ gb_CliAssemblyTarget_get_dll :=
 
 # Extension class
 
-gb_Extension_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
+gb_Extension_LICENSEFILE_DEFAULT := $(INSTROOT)/LICENSE
 
 # UnpackedTarget class
 

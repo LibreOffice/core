@@ -544,7 +544,7 @@ gb_CliAssemblyTarget_get_dll = $(call gb_Library__get_dir_for_layer,NONE)/$(1)$(
 
 # Extension class
 
-gb_Extension_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/license.txt
+gb_Extension_LICENSEFILE_DEFAULT := $(INSTROOT)/license.txt
 
 # UnpackedTarget class
 
