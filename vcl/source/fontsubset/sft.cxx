@@ -58,7 +58,7 @@ static const char *modname  = "SunTypeTools-TT";
 static const char *modver   = "1.0";
 static const char *modextra = "gelf";
 
-/*- private functions, constants and data types */ /*FOLD00*/
+/*- private functions, constants and data types */
 
 enum PathSegmentType {
     PS_NOOP      = 0,
@@ -214,7 +214,7 @@ const char *ulcodes[LAST_URANGE_BIT+2] = {
 
 
 
-/*- inline functions */ /*FOLD01*/
+/*- inline functions */
 #ifdef __GNUC__
 #define _inline static __inline__
 #else
@@ -454,7 +454,7 @@ static void HexFmtBlockWrite(HexFmt *_this, const void *ptr, sal_uInt32 size)
 
 
 
-/* Outline Extraction functions */ /*FOLD01*/
+/* Outline Extraction functions */
 
 /* fills the aw and lsb entries of the TTGlyphMetrics structure from hmtx table -*/
 static void GetMetrics(TrueTypeFont *ttf, sal_uInt32 glyphID, TTGlyphMetrics *metrics)
@@ -488,7 +488,7 @@ static void GetMetrics(TrueTypeFont *ttf, sal_uInt32 glyphID, TTGlyphMetrics *me
 static int GetTTGlyphOutline(TrueTypeFont *, sal_uInt32 , ControlPoint **, TTGlyphMetrics *, std::vector< sal_uInt32 >* );
 
 /* returns the number of control points, allocates the pointArray */
-static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics) /*FOLD02*/
+static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics)
 {
     const sal_uInt8* table = getTable( ttf, O_glyf );
     sal_uInt8 flag, n;
@@ -579,7 +579,7 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
     return lastPoint + 1;
 }
 
-static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >& glyphlist) /*FOLD02*/
+static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >& glyphlist)
 {
     sal_uInt16 flags, index;
     sal_Int16 e, f, numberOfContours;
@@ -1450,7 +1450,7 @@ static void GetKern(TrueTypeFont *ttf)
     return;
 }
 
-/*- Public functions */ /*FOLD00*/
+/*- Public functions */
 
 int CountTTCFonts(const char* fname)
 {
@@ -1742,7 +1742,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     return SF_OK;
 }
 
-void CloseTTFont(TrueTypeFont *ttf) /*FOLD01*/
+void CloseTTFont(TrueTypeFont *ttf)
 {
 #if !defined(WIN32)
     if( ttf->fname )
@@ -1814,7 +1814,7 @@ int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal
 }
 
 #ifndef NO_TYPE3
-int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, /*FOLD00*/
+int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
                           sal_uInt16 *glyphArray, sal_uInt8 *encoding, int nGlyphs,
                           int wmode)
 {

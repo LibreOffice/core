@@ -280,7 +280,7 @@ namespace vcl
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
-    int VCL_DLLPUBLIC OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf); /*FOLD01*/
+    int VCL_DLLPUBLIC OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf);
 #if !defined(WIN32)
 /**
  * TrueTypeFont constructor.
@@ -554,7 +554,7 @@ namespace vcl
  bool GetSfntTable( TrueTypeFont* ttf, int nSubtableIndex,
      const sal_uInt8** ppRawBytes, int* pRawLength );
 
-/*- private definitions */ /*FOLD00*/
+/*- private definitions */
 
     struct _TrueTypeFont {
         sal_uInt32 tag;
