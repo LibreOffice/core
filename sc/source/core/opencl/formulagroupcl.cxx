@@ -1147,7 +1147,7 @@ public:
     DynamicKernel(boost::shared_ptr<FormulaTreeNode> r):mpRoot(r),
         mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL) {}
     /// Code generation in OpenCL
-    std::string CodeGen() {
+    void CodeGen() {
         // Travese the tree of expression and declare symbols used
         const DynamicKernelArgument *DK= mSyms.DeclRefArg<
             DynamicKernelSoPArguments<OpNop> >(mpRoot);
@@ -1172,7 +1172,6 @@ public:
 #if 1
         std::cerr<< "Program to be compiled = \n" << mFullProgramSrc << "\n";
 #endif
-        return decl.str();
     }
     /// Produce kernel hash
     std::string GetMD5(void)
@@ -1393,6 +1392,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     mpKernel = new DynamicKernel(Root);
 
     try {
+        mpKernel->CodeGen();
         // Obtain cl context
         KernelEnv kEnv;
         OclCalc::setKernelEnv(&kEnv);
