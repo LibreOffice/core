@@ -293,18 +293,161 @@ $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_dev$/intro.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 
-hack_msitemplates .PHONY:
-    -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)
-    -$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)
-    -$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)
-    -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)$/Binary
-    -$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)$/Binary
-    -$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)$/Binary
-    $(GNUCOPY) $(MSIOFFICETEMPLATESOURCE)$/*.* $(MSIOFFICETEMPLATEDIR)
-    $(GNUCOPY) $(MSILANGPACKTEMPLATESOURCE)$/*.* $(MSILANGPACKTEMPLATEDIR)
-    $(GNUCOPY) $(MSISDKOOTEMPLATESOURCE)$/*.* $(MSISDKOOTEMPLATEDIR)
-    $(GNUCOPY) $(MSIOFFICETEMPLATESOURCE)$/Binary$/*.* $(MSIOFFICETEMPLATEDIR)$/Binary
-    $(GNUCOPY) $(MSILANGPACKTEMPLATESOURCE)$/Binary$/*.* $(MSILANGPACKTEMPLATEDIR)$/Binary
-    $(GNUCOPY) $(MSISDKOOTEMPLATESOURCE)$/Binary$/*.* $(MSISDKOOTEMPLATEDIR)$/Binary
+hack_msitemplates .PHONY: msi_template_files msi_langpack_template_files msi_sdk_template_files
+
+MSI_OFFICE_TEMPLATE_FILES=		\
+    ActionTe.idt			\
+    AdminExe.idt			\
+    AdminUIS.idt			\
+    AdvtExec.idt			\
+    AppSearc.idt			\
+    Binary.idt			\
+    CheckBox.idt			\
+    Control.idt			\
+    ControlC.idt			\
+    ControlE.idt			\
+    CustomAc.idt			\
+    Dialog.idt			\
+    Error.idt			\
+    EventMap.idt			\
+    InstallE.idt			\
+    InstallU.idt			\
+    LaunchCo.idt			\
+    ListBox.idt			\
+    Property.idt			\
+    RadioBut.idt			\
+    RegLocat.idt			\
+    Signatur.idt			\
+    TextStyl.idt			\
+    UIText.idt			\
+    _Validat.idt			\
+    codes.txt			\
+    codes_broo.txt			\
+    codes_broodev.txt		\
+    codes_ooodev.txt		\
+    components.txt			\
+    upgradecode_remove_ooo.txt	\
+    Binary/Banner.bmp		\
+    Binary/Image.bmp		\
+    Binary/caution.ico		\
+    Binary/dontinstall.ico		\
+    Binary/install.ico		\
+    Binary/installfirstuse.ico	\
+    Binary/installpartial.ico	\
+    Binary/installstatemenu.ico	\
+    Binary/networkinstall.ico	\
+    Binary/newfolder.ico		\
+    Binary/openfolder.ico		\
+    Binary/setup.ico		\
+    Binary/setupcomplete.ico	\
+    Binary/setuppartial.ico		\
+    Binary/setuprepair.ico		\
+    Binary/trashcan.ico		\
+    Binary/up.ico
+
+MSI_LANGPACK_TEMPLATE_FILES=		\
+    ActionTe.idt			\
+    AdminExe.idt			\
+    AdminUIS.idt			\
+    AdvtExec.idt			\
+    Binary.idt			\
+    CheckBox.idt			\
+    Control.idt			\
+    ControlC.idt			\
+    ControlE.idt			\
+    CustomAc.idt			\
+    Dialog.idt			\
+    Error.idt			\
+    EventMap.idt			\
+    InstallE.idt			\
+    InstallU.idt			\
+    LaunchCo.idt			\
+    ListBox.idt			\
+    Property.idt			\
+    RadioBut.idt			\
+    TextStyl.idt			\
+    UIText.idt			\
+    _Validat.idt			\
+    bro_patchcodes.txt		\
+    brodev_patchcodes.txt		\
+    codes.txt			\
+    codes_broo.txt			\
+    codes_ooodev.txt		\
+    components.txt			\
+    ooo_patchcodes.txt		\
+    ooodev_patchcodes.txt		\
+    Binary/Banner.bmp
+
+MSI_SDK_TEMPLATE_FILES=			\
+    ActionTe.idt			\
+    AdminExe.idt			\
+    AdminUIS.idt			\
+    AdvtExec.idt			\
+    AppSearc.idt			\
+    Binary.idt			\
+    CheckBox.idt			\
+    Control.idt			\
+    ControlC.idt			\
+    ControlE.idt			\
+    CustomAc.idt			\
+    Dialog.idt			\
+    Error.idt			\
+    EventMap.idt			\
+    InstallE.idt			\
+    InstallU.idt			\
+    LaunchCo.idt			\
+    ListBox.idt			\
+    Property.idt			\
+    RadioBut.idt			\
+    RegLocat.idt			\
+    Signatur.idt			\
+    TextStyl.idt			\
+    UIText.idt			\
+    _Validat.idt			\
+    codes.txt			\
+    components.txt			\
+    Binary/Banner.bmp		\
+    Binary/Image.bmp		\
+    Binary/caution.ico		\
+    Binary/dontinstall.ico		\
+    Binary/install.ico		\
+    Binary/installfirstuse.ico	\
+    Binary/installpartial.ico	\
+    Binary/installstatemenu.ico	\
+    Binary/networkinstall.ico	\
+    Binary/newfolder.ico		\
+    Binary/openfolder.ico		\
+    Binary/setup.ico		\
+    Binary/setupcomplete.ico	\
+    Binary/setuppartial.ico		\
+    Binary/setuprepair.ico		\
+    Binary/trashcan.ico		\
+    Binary/up.ico
+
+msi_template_files .PHONY:					\
+    $(MSIOFFICETEMPLATEDIR)					\
+    $(MSIOFFICETEMPLATEDIR)$/Binary 			\
+    $(MSIOFFICETEMPLATEDIR)$/{$(MSI_OFFICE_TEMPLATE_FILES)}
+$(MSIOFFICETEMPLATEDIR) $(MSIOFFICETEMPLATEDIR)$/Binary :
+    -$(MKDIRHIER) $@
+$(MSIOFFICETEMPLATEDIR)$/% : $(MSIOFFICETEMPLATESOURCE)$/%
+    $(GNUCOPY) $< $@
+
+msi_langpack_template_files .PHONY :				\
+    $(MSILANGPACKTEMPLATEDIR)				\
+    $(MSILANGPACKTEMPLATEDIR)$/Binary			\
+    $(MSILANGPACKTEMPLATEDIR)$/{$(MSI_LANGPACK_TEMPLATE_FILES)}
+$(MSILANGPACKTEMPLATEDIR) $(MSILANGPACKTEMPLATEDIR)$/Binary  :
+    -$(MKDIRHIER) $@
+$(MSILANGPACKTEMPLATEDIR)$/% : $(MSILANGPACKTEMPLATESOURCE)$/%
+    $(GNUCOPY) $< $@
 
 
+msi_sdk_template_files .PHONY :					\
+    $(MSISDKOOTEMPLATEDIR)					\
+    $(MSISDKOOTEMPLATEDIR)$/Binary				\
+    $(MSISDKOOTEMPLATEDIR)$/{$(MSI_SDK_TEMPLATE_FILES)}
+$(MSISDKOOTEMPLATEDIR) $(MSISDKOOTEMPLATEDIR)$/Binary :
+    -$(MKDIRHIER) $@
+$(MSISDKOOTEMPLATEDIR)/% : $(MSISDKOOTEMPLATESOURCE)$/%
+    $(GNUCOPY) $< $@
