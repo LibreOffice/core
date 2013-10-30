@@ -18,7 +18,7 @@ class SwDoc;
 /// Handles DOCX export of table styles, based on InteropGrabBag.
 class DocxTableStyleExport
 {
-    class Impl;
+    struct Impl;
     boost::shared_ptr<Impl> m_pImpl;
 public:
     void TableStyles();
