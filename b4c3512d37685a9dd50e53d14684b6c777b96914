@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAZX///zQ\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 5101,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-30T15:04:17Z",
+      "side": 1,
+      "message": "One thing I overlooked already for COVARIANCE.{P,S} and STDEV.{P,S} (and just corrected and committed) are the HelpIDs, these need not be copied from other functions but a unique ID instead, here for example HID_FUNC_VAR_S. Just append a corresponding entry to sc/inc/helpids.h (please use the current master\u0027s file for that otherwise we\u0027d get merge conflicts).\n\nSorry for not having noticed earlier.",
+      "revId": "b4c3512d37685a9dd50e53d14684b6c777b96914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///zM\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 5173,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-10-30T15:04:17Z",
+      "side": 1,
+      "message": "Ditto, should be HID_FUNC_VAR_P_MS",
+      "revId": "b4c3512d37685a9dd50e53d14684b6c777b96914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
