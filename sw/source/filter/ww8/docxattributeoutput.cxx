@@ -2902,12 +2902,53 @@ void lcl_TableStyleTcPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<b
     pSerializer->endElementNS(XML_w, XML_tcPr);
 }
 
+/// Export of w:tblStylePr in a table style.
+void lcl_TableStyleTblStylePr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTblStylePr)
+{
+    if (!rTblStylePr.hasElements())
+        return;
+
+    OUString aType;
+    uno::Sequence<beans::PropertyValue> aPPr, aRPr, aTblPr, aTcPr;
+    for (sal_Int32 i = 0; i < rTblStylePr.getLength(); ++i)
+    {
+        if (rTblStylePr[i].Name == "type")
+            aType = rTblStylePr[i].Value.get<OUString>();
+        else if (rTblStylePr[i].Name == "pPr")
+            aPPr = rTblStylePr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rTblStylePr[i].Name == "rPr")
+            aRPr = rTblStylePr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rTblStylePr[i].Name == "tblPr")
+            aTblPr = rTblStylePr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rTblStylePr[i].Name == "tcPr")
+            aTcPr = rTblStylePr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+    }
+
+    pSerializer->startElementNS(XML_w, XML_tblStylePr,
+            FSNS(XML_w, XML_type), OUStringToOString(aType, RTL_TEXTENCODING_UTF8).getStr(),
+            FSEND);
+
+    lcl_TableStylePPr(pSerializer, aPPr);
+    lcl_TableStyleRPr(pSerializer, aRPr);
+    if (aTblPr.hasElements())
+        lcl_TableStyleTblPr(pSerializer, aTblPr);
+    else
+    {
+        // Even if we have an empty container, write it out, as Word does.
+        pSerializer->singleElementNS(XML_w, XML_tblPr, FSEND);
+    }
+    lcl_TableStyleTcPr(pSerializer, aTcPr);
+
+    pSerializer->endElementNS(XML_w, XML_tblStylePr);
+}
+
 void DocxAttributeOutput::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle)
 {
     bool bDefault = false, bCustomStyle = false, bQFormat = false, bSemiHidden = false, bUnhideWhenUsed = false;
     OUString aStyleId, aName, aBasedOn;
     sal_Int32 nUiPriority = 0, nRsid = 0;
     uno::Sequence<beans::PropertyValue> aPPr, aRPr, aTblPr, aTcPr;
+    std::vector< uno::Sequence<beans::PropertyValue> > aTblStylePrs;
     for (sal_Int32 i = 0; i < rStyle.getLength(); ++i)
     {
         if (rStyle[i].Name == "default")
@@ -2938,6 +2979,8 @@ void DocxAttributeOutput::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle
             aTblPr = rStyle[i].Value.get< uno::Sequence<beans::PropertyValue> >();
         else if (rStyle[i].Name == "tcPr")
             aTcPr = rStyle[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rStyle[i].Name == "tblStylePr")
+            aTblStylePrs.push_back(rStyle[i].Value.get< uno::Sequence<beans::PropertyValue> >());
     }
 
     sax_fastparser::FastAttributeList* pAttributeList = m_pSerializer->createAttrList();
@@ -2984,6 +3027,8 @@ void DocxAttributeOutput::TableStyle(uno::Sequence<beans::PropertyValue>& rStyle
     lcl_TableStyleRPr(m_pSerializer, aRPr);
     lcl_TableStyleTblPr(m_pSerializer, aTblPr);
     lcl_TableStyleTcPr(m_pSerializer, aTcPr);
+    for (size_t i = 0; i < aTblStylePrs.size(); ++i)
+        lcl_TableStyleTblStylePr(m_pSerializer, aTblStylePrs[i]);
 
     m_pSerializer->endElementNS(XML_w, XML_style);
 }
