@@ -23,9 +23,11 @@ ifneq ($(OS),WNT)
 curl_CPPFLAGS :=
 curl_LDFLAGS := $(if $(filter LINUX FREEBSD,$(OS)),"-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib)
 
+ifneq ($(OS),ANDROID)
 ifneq ($(SYSBASE),)
 curl_CPPFLAGS += -I$(SYSBASE)/usr/include
 curl_LDFLAGS += -L$(SYSBASE)/usr/lib
+endif
 endif
 
 # there are 2 include paths, the other one is passed to --with-nss below
