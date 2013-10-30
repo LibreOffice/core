@@ -56,10 +56,7 @@ void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
 
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    ServerFontLayoutEngine* pLE = mrServerFont.GetLayoutEngine();
-    assert(pLE);
-    bool bRet = pLE ? pLE->layout(*this, rArgs) : false;
-    return bRet;
+    return mrServerFont.GetLayoutEngine()->layout(*this, rArgs);
 }
 
 // -----------------------------------------------------------------------
