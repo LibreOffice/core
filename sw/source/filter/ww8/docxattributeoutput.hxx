@@ -36,6 +36,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/optional.hpp>
 #include <oox/export/vmlexport.hxx>
+#include <docxtablestyleexport.hxx>
 
 class SwGrfNode;
 class SdrObject;
@@ -216,10 +217,6 @@ public:
 
     /// Write latent styles.
     void LatentStyles();
-
-    /// Write table styles from InteropGrabBag.
-    void TableStyles();
-    void TableStyle(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rStyle);
 
     /** Similar to OutputItem(), but write something only if it is not the default.
 
@@ -766,6 +763,8 @@ private:
 
     PageMargins m_pageMargins;
 
+    boost::shared_ptr<DocxTableStyleExport> m_pTableStyleExport;
+
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
 
@@ -776,7 +775,7 @@ public:
     const DocxExport& GetExport() const { return const_cast< DocxAttributeOutput* >( this )->GetExport(); }
 
     /// For eg. the output of the styles, we need to switch the serializer to an other one.
-    void SetSerializer( ::sax_fastparser::FSHelperPtr pSerializer ) { m_pSerializer = pSerializer; }
+    void SetSerializer( ::sax_fastparser::FSHelperPtr pSerializer );
 
     /// Occasionnaly need to use this serializer from the outside
     ::sax_fastparser::FSHelperPtr GetSerializer( ) { return m_pSerializer; }
