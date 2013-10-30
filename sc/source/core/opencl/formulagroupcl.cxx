@@ -1393,7 +1393,6 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     mpKernel = new DynamicKernel(Root);
 
     try {
-        std::string kSrc = mpKernel->CodeGen();
         // Obtain cl context
         KernelEnv kEnv;
         OclCalc::setKernelEnv(&kEnv);
