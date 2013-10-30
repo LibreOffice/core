@@ -64,11 +64,6 @@ gb_$(1)_get_clean_target = $(WORKDIR)/Clean/$(1)/$$(1)
 
 endef
 
-define gb_Helper_make_outdir_clean_target
-gb_$(1)_get_clean_target = $$(subst $(OUTDIR)/,$(WORKDIR)/Clean/OutDir/,$$(call gb_$(1)_get_target,$$(1)))
-
-endef
-
 define gb_Helper_make_dep_target
 gb_$(1)_get_dep_target = $(WORKDIR)/Dep/$(1)/$$(1).d
 
@@ -80,20 +75,10 @@ $(foreach targettype,$(1),\
 
 endef
 
-define gb_Helper_make_outdir_clean_targets
-$(foreach targettype,$(1),\
-	$(call gb_Helper_make_outdir_clean_target,$(targettype)))
-
-endef
-
 define gb_Helper_make_dep_targets
 $(foreach targettype,$(1),\
 	$(call gb_Helper_make_dep_target,$(targettype)))
 
-endef
-
-define gb_Helper_get_outdir_clean_target
-$$(subst $(OUTDIR)/,$(WORKDIR)/Clean/OutDir/,$(1))
 endef
 
 # e.g. 'make CppunitTest_sw_macros_test'
