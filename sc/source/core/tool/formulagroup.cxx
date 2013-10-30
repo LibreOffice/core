@@ -289,7 +289,6 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                                                 const ScFormulaCellGroupRef& xGroup,
                                                 ScTokenArray& rCode)
 {
-    fprintf(stdout, "FormulaGroupInterpreterSoftware::interpret:   software\n");
     typedef boost::unordered_map<const formula::FormulaToken*, formula::FormulaTokenRef> CachedTokensType;
 
     // Decompose the group into individual cells and calculate them individually.
