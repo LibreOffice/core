@@ -19,6 +19,9 @@
 #define ISNAN
 
 namespace sc { namespace opencl {
+
+class FormulaTreeNode;
+
 /// Exceptions
 
 /// Failed in parsing
@@ -46,6 +49,8 @@ public:
     Unhandled() {}
 };
 
+typedef boost::shared_ptr<FormulaTreeNode> FormulaTreeNodeRef;
+
 class FormulaTreeNode
 {
 public:
@@ -53,7 +58,7 @@ public:
     {
         Children.reserve(8);
     }
-    std::vector<boost::shared_ptr<FormulaTreeNode> > Children;
+    std::vector<FormulaTreeNodeRef> Children;
     formula::FormulaToken *GetFormulaToken(void) const
     {
         return mpCurrentFormula;
@@ -70,7 +75,7 @@ private:
 class DynamicKernelArgument
 {
 public:
-    DynamicKernelArgument(const std::string &s, boost::shared_ptr<FormulaTreeNode> ft);
+    DynamicKernelArgument(const std::string &s, FormulaTreeNodeRef ft);
 
     const std::string &GetNameAsString(void) const { return mSymName; }
     /// Generate declaration
@@ -98,7 +103,7 @@ public:
     const std::string& GetName(void) const { return mSymName; }
 protected:
     const std::string mSymName;
-    boost::shared_ptr<FormulaTreeNode> mFormulaTree;
+    FormulaTreeNodeRef mFormulaTree;
     // Used by marshaling
     cl_mem mpClmem;
 };

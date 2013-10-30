@@ -93,7 +93,7 @@ class ConstStringArgument: public DynamicKernelArgument
 {
 public:
     ConstStringArgument(const std::string &s,
-        boost::shared_ptr<FormulaTreeNode> ft):
+        FormulaTreeNodeRef ft):
             DynamicKernelArgument(s, ft) {}
     /// Generate declaration
     virtual void GenDecl(std::stringstream &ss) const
@@ -151,7 +151,7 @@ class DynamicKernelConstantArgument: public DynamicKernelArgument
 {
 public:
     DynamicKernelConstantArgument(const std::string &s,
-        boost::shared_ptr<FormulaTreeNode> ft):
+        FormulaTreeNodeRef ft):
             DynamicKernelArgument(s, ft) {}
     /// Generate declaration
     virtual void GenDecl(std::stringstream &ss) const
@@ -195,7 +195,7 @@ class DynamicKernelStringArgument: public DynamicKernelArgument
 {
 public:
     DynamicKernelStringArgument(const std::string &s,
-        boost::shared_ptr<FormulaTreeNode> ft):
+        FormulaTreeNodeRef ft):
         DynamicKernelArgument(s, ft) {}
 
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
@@ -268,7 +268,7 @@ class DynamicKernelSlidingArgument: public Base
 {
 public:
     DynamicKernelSlidingArgument(const std::string &s,
-        boost::shared_ptr<FormulaTreeNode> ft):
+        FormulaTreeNodeRef ft):
         Base(s, ft)
     {
         FormulaToken *t = ft->GetFormulaToken();
@@ -665,7 +665,7 @@ public:
     typedef std::vector<SubArgument> SubArgumentsType;
 
     DynamicKernelSoPArguments(const std::string &s,
-        boost::shared_ptr<FormulaTreeNode> ft);
+        FormulaTreeNodeRef ft);
 
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal(cl_kernel k, int argno, int nVectorWidth)
@@ -766,7 +766,7 @@ private:
 
 template <class Op>
 boost::shared_ptr<DynamicKernelArgument> SoPHelper(const std::string &ts,
-    boost::shared_ptr<FormulaTreeNode> ft)
+    FormulaTreeNodeRef ft)
 {
     return boost::shared_ptr<DynamicKernelArgument>(
         new DynamicKernelSoPArguments<Op>(ts, ft));
@@ -774,7 +774,7 @@ boost::shared_ptr<DynamicKernelArgument> SoPHelper(const std::string &ts,
 
 template <class Op>
 DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
-    boost::shared_ptr<FormulaTreeNode> ft):
+    FormulaTreeNodeRef ft):
     DynamicKernelArgument(s, ft) {
     size_t nChildren = ft->Children.size();
 
@@ -1113,7 +1113,7 @@ public:
     typedef std::list< boost::shared_ptr<DynamicKernelArgument> > ArgumentList;
     SymbolTable(void):mCurId(0) {}
     template <class T>
-    const DynamicKernelArgument *DeclRefArg(boost::shared_ptr<FormulaTreeNode>);
+    const DynamicKernelArgument *DeclRefArg(FormulaTreeNodeRef);
     /// Used to generate sliding window helpers
     void DumpSlidingWindowFunctions(std::stringstream &ss)
     {
@@ -1144,7 +1144,7 @@ void SymbolTable::Marshal(cl_kernel k, int nVectorWidth)
 /// Code generation
 class DynamicKernel {
 public:
-    DynamicKernel(boost::shared_ptr<FormulaTreeNode> r):mpRoot(r),
+    DynamicKernel(FormulaTreeNodeRef r):mpRoot(r),
         mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL) {}
     /// Code generation in OpenCL
     void CodeGen() {
@@ -1227,8 +1227,8 @@ public:
     ~DynamicKernel();
     cl_mem GetResultBuffer(void) const { return mpResClmem; }
 private:
-    void TraverseAST(boost::shared_ptr<FormulaTreeNode>);
-    boost::shared_ptr<FormulaTreeNode> mpRoot;
+    void TraverseAST(FormulaTreeNodeRef);
+    FormulaTreeNodeRef mpRoot;
     SymbolTable mSyms;
     std::string mKernelSignature, mKernelHash;
     std::string mFullProgramSrc;
@@ -1289,7 +1289,7 @@ void DynamicKernel::CreateKernel(void)
 // The template argument T must be a subclass of DynamicKernelArgument
 template <typename T>
 const DynamicKernelArgument *SymbolTable::DeclRefArg(
-                  boost::shared_ptr<FormulaTreeNode> t)
+                  FormulaTreeNodeRef t)
 {
     FormulaToken *ref = t->GetFormulaToken();
     ArgumentMap::iterator it = mSymbols.find(ref);
@@ -1350,15 +1350,15 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     // Constructing "AST"
     FormulaTokenIterator aCode = rCode;
     std::list<FormulaToken *> list;
-    std::map<FormulaToken *, boost::shared_ptr<FormulaTreeNode> > m_hash_map;
+    std::map<FormulaToken *, FormulaTreeNodeRef> m_hash_map;
     FormulaToken*  pCur;
     while( (pCur = (FormulaToken*)(aCode.Next()) ) != NULL)
     {
         OpCode eOp = pCur->GetOpCode();
         if ( eOp != ocPush )
         {
-            boost::shared_ptr<FormulaTreeNode> m_currNode =
-                 boost::shared_ptr<FormulaTreeNode>(new FormulaTreeNode(pCur));
+            FormulaTreeNodeRef m_currNode =
+                 FormulaTreeNodeRef(new FormulaTreeNode(pCur));
             sal_uInt8 m_ParamCount =  pCur->GetParamCount();
             for(int i=0; i<m_ParamCount; i++)
             {
@@ -1372,8 +1372,8 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
                 }
                 else
                 {
-                    boost::shared_ptr<FormulaTreeNode> m_ChildTreeNode =
-                      boost::shared_ptr<FormulaTreeNode>(
+                    FormulaTreeNodeRef m_ChildTreeNode =
+                      FormulaTreeNodeRef(
                                new FormulaTreeNode(m_TempFormula));
                     m_currNode->Children.push_back(m_ChildTreeNode);
                 }
@@ -1385,8 +1385,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         list.push_back(pCur);
     }
 
-    boost::shared_ptr<FormulaTreeNode> Root =
-            boost::shared_ptr<FormulaTreeNode>(new FormulaTreeNode(NULL));
+    FormulaTreeNodeRef Root = FormulaTreeNodeRef(new FormulaTreeNode(NULL));
     Root->Children.push_back(m_hash_map[list.back()]);
     // Code generation
     mpKernel = new DynamicKernel(Root);
