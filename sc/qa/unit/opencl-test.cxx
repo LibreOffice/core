@@ -47,7 +47,7 @@ class ScOpenclTest
 public:
     ScOpenclTest();
     bool enableOpenCL();
-    void SetEnv();
+
     virtual void setUp();
     virtual void tearDown();
 
@@ -168,16 +168,6 @@ bool ScOpenclTest::load(const OUString &rFilter, const OUString &rURL,
     if (bLoaded)
         xDocShRef->DoClose();
     return bLoaded;
-}
-void ScOpenclTest::SetEnv()
-{
-    #ifdef WIN32
-        char *newpathfull  = (char *)malloc(1024);
-        newpathfull= "PATH=;C:\\Program Files (x86)\\AMD APP\\bin\\x86_64;";
-        putenv(newpathfull);
-    #else
-        return;
-    #endif
 }
 
 bool ScOpenclTest::enableOpenCL()
@@ -1462,7 +1452,6 @@ ScOpenclTest::ScOpenclTest()
 void ScOpenclTest::setUp()
 {
     test::BootstrapFixture::setUp();
-    SetEnv();
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xCalcComponent =
