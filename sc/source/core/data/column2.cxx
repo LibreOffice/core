@@ -2614,6 +2614,36 @@ copyFirstFormulaBlock(
     return rCxt.setCachedColArray(nTab, nCol, pNumArray, pStrArray);
 }
 
+struct FiniteValueFinder : std::unary_function<double, bool>
+{
+    bool operator() (double f) const { return !rtl::math::isNan(f); }
+};
+
+struct NonNullStringFinder : std::unary_function<const rtl_uString*, bool>
+{
+    bool operator() (const rtl_uString* p) const { return p != NULL; }
+};
+
+bool hasNonEmpty( const sc::FormulaGroupContext::NumArrayType& rArray, SCROW nRow1, SCROW nRow2 )
+{
+    // The caller has to make sure the array is at least nRow2+1 long.
+    sc::FormulaGroupContext::NumArrayType::const_iterator it = rArray.begin();
+    std::advance(it, nRow1);
+    sc::FormulaGroupContext::NumArrayType::const_iterator itEnd = it;
+    std::advance(itEnd, nRow2-nRow1+1);
+    return std::find_if(it, itEnd, FiniteValueFinder()) != itEnd;
+}
+
+bool hasNonEmpty( const sc::FormulaGroupContext::StrArrayType& rArray, SCROW nRow1, SCROW nRow2 )
+{
+    // The caller has to make sure the array is at least nRow2+1 long.
+    sc::FormulaGroupContext::StrArrayType::const_iterator it = rArray.begin();
+    std::advance(it, nRow1);
+    sc::FormulaGroupContext::StrArrayType::const_iterator itEnd = it;
+    std::advance(itEnd, nRow2-nRow1+1);
+    return std::find_if(it, itEnd, NonNullStringFinder()) != itEnd;
+}
+
 }
 
 formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 )
@@ -2627,11 +2657,11 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
     if (pColArray)
     {
         const double* pNum = NULL;
-        if (pColArray->mpNumArray)
+        if (pColArray->mpNumArray && hasNonEmpty(*pColArray->mpNumArray, nRow1, nRow2))
             pNum = &(*pColArray->mpNumArray)[nRow1];
 
         rtl_uString** pStr = NULL;
-        if (pColArray->mpStrArray)
+        if (pColArray->mpStrArray && hasNonEmpty(*pColArray->mpStrArray, nRow1, nRow2))
             pStr = &(*pColArray->mpStrArray)[nRow1];
 
         return formula::VectorRefArray(pNum, pStr);

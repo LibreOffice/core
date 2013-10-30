@@ -229,6 +229,12 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 8));
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 9));
 
+    // Get the array for F3:F4. This array should only consist of numeric array.
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(5,2,0), 3);
+    CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
+    CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
+    CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
+
     m_pDoc->DeleteTab(0);
 }
 
