@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAZX///yk\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 5101,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-30T15:31:41Z",
+      "side": 1,
+      "message": "I did think about it, but thought it unnecessary as these functions were as good as identical with the old Excel/ODF functions.\nBut now I\u0027m working on BETA.DIST, which has a different parameter order, so it is a necessity to have unique helpIDs.\n I will submit a revised patch set soon.",
+      "parentUuid": "AAAAZX///zQ\u003d",
+      "revId": "b4c3512d37685a9dd50e53d14684b6c777b96914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAZX///zM\u003d",
         "filename": "sc/source/ui/src/scfuncs.src",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-10-30T15:04:17Z",
       "side": 1,
       "message": "Ditto, should be HID_FUNC_VAR_P_MS",
+      "revId": "b4c3512d37685a9dd50e53d14684b6c777b96914",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///yg\u003d",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 5173,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2013-10-30T15:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAZX///zM\u003d",
       "revId": "b4c3512d37685a9dd50e53d14684b6c777b96914",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
