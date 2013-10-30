@@ -57,7 +57,6 @@ endif
 $(eval $(call gb_Module_add_targets,setup_native,\
 	CustomTarget_scripts \
 	Package_scripts \
-	Package_scripts_generated \
 ))
 endif
 
