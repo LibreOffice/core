@@ -20,7 +20,7 @@
 #undef UNICODE
 #undef _UNICODE
 
-#define _WIN32_WINDOWS 0x0410
+#define _WIN32_WINDOWS 0x0501
 
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */

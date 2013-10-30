@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _WIN32_WINNT 0x0401
+#define _WIN32_WINNT 0x0501
 
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */

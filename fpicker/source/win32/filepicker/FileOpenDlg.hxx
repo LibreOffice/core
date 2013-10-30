@@ -61,11 +61,11 @@ typedef struct _tagOFNA {
    LPEDITMENU   lpEditInfo;
    LPCSTR       lpstrPrompt;
 #endif
-#if (_WIN32_WINNT >= 0x0500)
+#if (_WIN32_WINNT >= 0x0501)
    void *       pvReserved;
    DWORD        dwReserved;
    DWORD        FlagsEx;
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif // (_WIN32_WINNT >= 0x0501)
 } _OPENFILENAMEA, *_LPOPENFILENAMEA;
 
 typedef struct _tagOFNW {
@@ -89,11 +89,11 @@ typedef struct _tagOFNW {
    LPARAM       lCustData;
    LPOFNHOOKPROC lpfnHook;
    LPCWSTR      lpTemplateName;
-#if (_WIN32_WINNT >= 0x0500)
+#if (_WIN32_WINNT >= 0x0501)
    void *       pvReserved;
    DWORD        dwReserved;
    DWORD        FlagsEx;
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif // (_WIN32_WINNT >= 0x0501)
 } _OPENFILENAMEW, *_LPOPENFILENAMEW;
 
 #ifdef UNICODE
@@ -104,7 +104,7 @@ typedef _OPENFILENAMEA _OPENFILENAME;
 typedef _LPOPENFILENAMEA _LPOPENFILENAME;
 #endif // UNICODE
 
-#if (_WIN32_WINNT >= 0x0500)
+#if (_WIN32_WINNT >= 0x0501)
     #define _OPENFILENAME_SIZE_VERSION_400A  _CDSIZEOF_STRUCT(_OPENFILENAMEA,lpTemplateName)
     #define _OPENFILENAME_SIZE_VERSION_400W  _CDSIZEOF_STRUCT(_OPENFILENAMEW,lpTemplateName)
     #ifdef UNICODE
@@ -114,7 +114,7 @@ typedef _LPOPENFILENAMEA _LPOPENFILENAME;
     #endif // !UNICODE
 #else
     #error _WIN32_WINNT seams not to be valid.
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif // (_WIN32_WINNT >= 0x0501)
 
 
 //-------------------------------------------------------------

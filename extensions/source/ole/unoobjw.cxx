@@ -18,7 +18,7 @@
  */
 
 #include "ole2uno.hxx"
-#if _WIN32_WINNT != 0x403
+#if _WIN32_WINNT != 0x0501
 #error wrong _WIN32_WINNT
 #endif
 

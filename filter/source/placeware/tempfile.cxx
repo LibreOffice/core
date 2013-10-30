@@ -56,7 +56,7 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 #else
 
 #ifndef _WIN32_WINNT
-#   define _WIN32_WINNT 0x0400
+#   define _WIN32_WINNT 0x0501
 #   define _CTYPE_DISABLE_MACROS /* wg. dynamischer C-Runtime MH */
 #endif
 

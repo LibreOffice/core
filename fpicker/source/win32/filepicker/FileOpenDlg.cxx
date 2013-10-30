@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined _WIN32_WINNT
-#   undef _WIN32_WINNT
+#ifdef _WIN32_WINNT
+#undef _WIN32_WINNT
 #endif
-#define _WIN32_WINNT 0x0500
+#define _WIN32_WINNT 0x0501
 
 #include <tchar.h>
 #include <osl/diagnose.h>

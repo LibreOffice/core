@@ -19,7 +19,7 @@
 
 #define UNICODE
 #define _UNICODE
-#define _WIN32_WINNT 0x0500
+#define _WIN32_WINNT 0x0501
 #include "systools/win32/uwinapi.h"
 
 #include "osl/file.h"

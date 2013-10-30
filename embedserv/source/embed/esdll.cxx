@@ -18,7 +18,7 @@
  */
 
 #define STRICT
-#define _WIN32_WINNT 0x0403
+#define _WIN32_WINNT 0x0501
 #define _WIN32_DCOM
 #ifdef _MSC_VER
 #pragma warning(disable : 4917 4555)
