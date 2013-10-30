@@ -7,12 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,setup_native/scripts,$(SRCDIR)/setup_native/scripts))
-
-$(eval $(call gb_Package_set_outdir,setup_native/scripts,$(OUTDIR)))
+$(eval $(call gb_Package_Package,setup_native_scripts,$(SRCDIR)/setup_native/scripts))
 
 ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
-$(eval $(call gb_Package_add_file,setup_native/scripts,bin/unpack_update,unpack_update.sh))
+$(eval $(call gb_Package_add_file,setup_native_scripts,$(LIBO_BIN_FOLDER)/unpack_update,unpack_update.sh))
 endif
 
 # vim: set noet sw=4 ts=4:
