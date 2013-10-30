@@ -18,7 +18,8 @@ gb_Helper_LIBRARY_PATH_VAR := PATH
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
 gb_OSDEFS := \
-	-DWINVER=0x0500 \
+	-D_WIN32_WINNT=0x0502 \
+	-DWINVER=0x0502 \
 	-D_WIN32_IE=0x0500 \
 	-DWIN32 \
 	-DWNT \

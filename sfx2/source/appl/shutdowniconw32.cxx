@@ -25,9 +25,6 @@
 #pragma warning(disable:4668 4917)
 #endif
 
-// Support Windows 95 too
-#undef WINVER
-#define WINVER 0x0400
 #define USE_APP_SHORTCUTS
 // the systray icon is only available on windows
 

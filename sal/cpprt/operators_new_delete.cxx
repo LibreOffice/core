@@ -20,7 +20,6 @@
 
 #ifdef _MSC_VER /* avoid 'std::bad_alloc' unresolved externals */
 #define _CRTIMP
-#define _NTSDK
 #endif
 
 #include <algorithm>

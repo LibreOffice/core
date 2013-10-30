@@ -19,7 +19,6 @@
 
 
 #define STRICT
-#define _WIN32_WINNT 0x0403
 #define _WIN32_DCOM
 
 #pragma warning (push,1)

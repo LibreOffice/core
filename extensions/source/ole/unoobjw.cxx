@@ -18,9 +18,6 @@
  */
 
 #include "ole2uno.hxx"
-#if _WIN32_WINNT != 0x403
-#error wrong _WIN32_WINNT
-#endif
 
 #include <stdio.h>
 #include <vector>

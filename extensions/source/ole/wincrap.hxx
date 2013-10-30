@@ -22,10 +22,6 @@
 
 /* wrap all includes that need to be wrapped by presys.h/postsys.h here */
 
-// from oleobjw.hxx
-// http://stackoverflow.com/questions/5839292/error-c1189-after-installing-visual-studio-2010
-#define _WIN32_WINNT 0x0403
-
 #define STRICT
 
 #define _WIN32_DCOM

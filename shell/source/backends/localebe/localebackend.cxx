@@ -27,11 +27,6 @@
 
 #ifdef WNT
 
-#ifdef WINVER
-#undef WINVER
-#endif
-#define WINVER 0x0501
-
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif

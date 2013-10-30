@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Executable_Executable,lngconvex))
 
-$(eval $(call gb_Executable_add_defs,lngconvex,\
-	-D_NTSDK \
-))
-
 $(eval $(call gb_Executable_use_external,lngconvex,boost_headers))
 
 $(eval $(call gb_Executable_use_sdk_api,lngconvex))

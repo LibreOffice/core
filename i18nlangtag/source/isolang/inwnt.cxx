@@ -20,8 +20,6 @@
 
 #include <sal/config.h>
 
-#define WINVER 0x0500
-
 #ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
 #endif

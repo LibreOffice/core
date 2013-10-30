@@ -18,13 +18,8 @@ $(eval $(call gb_Library_add_defs,shlxthdl,\
 	-DISOLATION_AWARE_ENABLED \
 	-DUNICODE \
 	-DWIN32_LEAN_AND_MEAN \
-	-D_NTSDK \
 	-D_UNICODE \
 	-UNOMINMAX \
-))
-$(eval $(call gb_Library_add_defs,shlxthdl,\
-	-D_WIN32_IE=0x501 \
-	-D_WIN32_WINNT=0x0501 \
 ))
 
 $(eval $(call gb_Library_use_externals,shlxthdl,\
