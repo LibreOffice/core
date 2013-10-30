@@ -82,7 +82,6 @@ End
 
 Start
 module = "gid_Module_Root"
-# script = "shellscripts_core01.txt"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
 requires = "%UREPACKAGEPREFIX%BRANDPACKAGEVERSION-ure %PACKAGEVERSION %PACKAGEVERSION"

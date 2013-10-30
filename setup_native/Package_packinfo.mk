@@ -28,10 +28,7 @@ $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/packinfo_office_help
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/packinfo_office_lang.txt,packinfo_office_lang.txt))
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/packinfo_sdkoo.txt,packinfo_sdkoo.txt))
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/packinfo_ure.txt,packinfo_ure.txt))
-$(eval $(call gb_Package_add_file,setup_native/packinfo,bin/shellscripts.txt,shellscripts.txt))
-$(eval $(call gb_Package_add_file,setup_native/packinfo,bin/shellscripts_core01.txt,shellscripts_core01.txt))
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/shellscripts_module.txt,shellscripts_module.txt))
-$(eval $(call gb_Package_add_file,setup_native/packinfo,bin/shellscripts_root.txt,shellscripts_root.txt))
 $(eval $(call gb_Package_add_file,setup_native/packinfo,bin/spellchecker_selection.txt,spellchecker_selection.txt))
 
 # vim: set noet sw=4 ts=4:
