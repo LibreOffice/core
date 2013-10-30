@@ -467,7 +467,7 @@
             <child>
               <object class="GtkLabel" id="software">
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Software</property>
+                <property name="label" translatable="yes">Internal, software interpreter</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
