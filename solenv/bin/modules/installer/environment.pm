@@ -64,6 +64,9 @@ sub create_pathvariables
     my $extensionsdir = $environment->{'WORKDIR'} . $installer::globals::separator . "Extension";
     $variables{'extensionsdir'} = $extensionsdir;
 
+    my $customtargetpath = $environment->{'WORKDIR'} . $installer::globals::separator . "CustomTarget";
+    $variables{'customtargetpath'} = $customtargetpath;
+
     my $filelistpath = $environment->{'WORKDIR'};
     $variables{'filelistpath'} = $filelistpath;
 
