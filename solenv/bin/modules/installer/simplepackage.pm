@@ -342,25 +342,24 @@ sub create_package
             my $scriptfilename = "";
             if ( $installer::globals::languagepack ) { $scriptfilename = "osx_install_languagepack.applescript"; }
             if ( $installer::globals::helppack ) { $scriptfilename = "osx_install_helppack.applescript"; }
-            my $scripthelpersolverfilename = "mac_install.script";
+            my $scripthelperfilename = $ENV{'SRCDIR'} . "/setup_native/scripts/mac_install.script";
             # my $scripthelperrealfilename = $volume_name;
             my $scripthelperrealfilename = $volume_name_classic_app;
             my $translationfilename = $installer::globals::macinstallfilename;
 
             # Finding both files in solver
 
-            my $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$scriptfilename, $includepatharrayref, 0);
-            if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script $scriptfilename!", "create_package"); }
-            my $scripthelperref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$scripthelpersolverfilename, $includepatharrayref, 0);
-            if ($$scripthelperref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script $scripthelpersolverfilename!", "create_package"); }
+            my $scriptref = $ENV{'SRCDIR'} . "/setup_native/scripts/" . $scriptfilename;
+            if (! -f $scriptref) { installer::exiter::exit_program("ERROR: Could not find Apple script $scriptfilename ($scriptref)!", "create_package"); }
+            if (! -f $scripthelperfilename) { installer::exiter::exit_program("ERROR: Could not find Apple script $scripthelperfilename!", "create_package"); }
             my $translationfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$translationfilename, $includepatharrayref, 0);
             if ($$translationfileref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script translation file $translationfilename ( includepatharrayref = $includepatharrayref )", "create_package"); }
 
             $scriptfilename = $contentsfolder . "/" . $scriptrealfilename;
             $scripthelperrealfilename = $contentsfolder . "/" . $scripthelperrealfilename;
 
-            installer::systemactions::copy_one_file($$scriptref, $scriptfilename);
-            installer::systemactions::copy_one_file($$scripthelperref, $scripthelperrealfilename);
+            installer::systemactions::copy_one_file($scriptref, $scriptfilename);
+            installer::systemactions::copy_one_file($scripthelperfilename, $scripthelperrealfilename);
 
             # Replacing variables in script $scriptfilename
             # Localizing script $scriptfilename

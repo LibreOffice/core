@@ -11,11 +11,6 @@ $(eval $(call gb_Package_Package,setup_native/scripts,$(SRCDIR)/setup_native/scr
 
 $(eval $(call gb_Package_set_outdir,setup_native/scripts,$(OUTDIR)))
 
-$(eval $(call gb_Package_add_file,setup_native/scripts,bin/mac_install.script,mac_install.script))
-$(eval $(call gb_Package_add_file,setup_native/scripts,bin/osx_install_languagepack.applescript,osx_install_languagepack.applescript))
-$(eval $(call gb_Package_add_file,setup_native/scripts,bin/langpackscript.sh,langpackscript.sh))
-$(eval $(call gb_Package_add_file,setup_native/scripts,bin/downloadscript.sh,downloadscript.sh))
-
 ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
 $(eval $(call gb_Package_add_file,setup_native/scripts,bin/unpack_update,unpack_update.sh))
 endif

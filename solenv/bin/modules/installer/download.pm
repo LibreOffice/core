@@ -741,23 +741,12 @@ sub create_download_sets
         else
         {
             # find and read setup script template
-            my $scriptfilename = "downloadscript.sh";
+            my $scriptfilename = $ENV{'SRCDIR'} . "/setup_native/scripts/downloadscript.sh";
 
-            my $scriptref = "";
+            if (! -f $scriptfilename) { installer::exiter::exit_program("ERROR: Could not find script file $scriptfilename!", "create_download_sets"); }
+            my $scriptfile = installer::files::read_file($scriptfilename);
 
-            if ( $installer::globals::include_paths_read )
-            {
-                $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptfilename, $includepatharrayref, 0);
-            }
-            else
-            {
-                $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$scriptfilename, $includepatharrayref, 0);
-            }
-
-            if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find script file $scriptfilename!", "create_download_sets"); }
-            my $scriptfile = installer::files::read_file($$scriptref);
-
-            $infoline = "Found  script file $scriptfilename: $$scriptref \n";
+            $infoline = "Found  script file $scriptfilename \n";
             push( @installer::globals::logfileinfo, $infoline);
 
             # add product name into script template

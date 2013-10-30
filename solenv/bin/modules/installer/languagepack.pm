@@ -454,12 +454,11 @@ sub build_installer_for_languagepack
 
     # find and read setup script template
 
-    my $scriptfilename = "langpackscript.sh";
-    my $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptfilename, $includepatharrayref, 0);
-    if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find script file $scriptfilename!", "build_installer_for_languagepack"); }
-    my $scriptfile = installer::files::read_file($$scriptref);
+    my $scriptfilename = $ENV{'SRCDIR'} . "/setup_native/scripts/langpackscript.sh";
+    if (! -f $scriptfilename) { installer::exiter::exit_program("ERROR: Could not find script file $scriptfilename!", "build_installer_for_languagepack"); }
+    my $scriptfile = installer::files::read_file($scriptfilename);
 
-    my $infoline = "Found  script file $scriptfilename: $$scriptref \n";
+    my $infoline = "Found  script file $scriptfilename: $scriptfile \n";
     push( @installer::globals::logfileinfo, $infoline);
 
     # find and read english license file
