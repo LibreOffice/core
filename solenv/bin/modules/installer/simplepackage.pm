@@ -377,19 +377,18 @@ sub create_package
             # Copy also Info.plist and icon file
             # Finding both files in solver
             my $iconfile = "ooo3_installer.icns";
-            my $iconfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$iconfile, $includepatharrayref, 0);
-            if ($$iconfileref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script icon file $iconfile!", "create_package"); }
+            my $iconfileref = $ENV{'SRCDIR'} . "/setup_native/source/mac/" . $iconfile;
+            if (! -f $iconfileref) { installer::exiter::exit_program("ERROR: Could not find Apple script icon file $iconfile ($iconfileref)!", "create_package"); }
             my $subdir = $contentsfolder . "/" . "Resources";
             if ( ! -d $subdir ) { installer::systemactions::create_directory($subdir); }
             $destfile = $subdir . "/" . $iconfile;
-            installer::systemactions::copy_one_file($$iconfileref, $destfile);
+            installer::systemactions::copy_one_file($iconfileref, $destfile);
 
-            my $infoplistfile = "Info.plist.langpack";
             my $installname = "Info.plist";
-            my $infoplistfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$infoplistfile, $includepatharrayref, 0);
-            if ($$infoplistfileref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script Info.plist: $infoplistfile!", "create_package"); }
+            my $infoplistfile = $ENV{'SRCDIR'} . "/setup_native/source/mac/Info.plist.langpack";
+            if (! -f $infoplistfile) { installer::exiter::exit_program("ERROR: Could not find Apple script Info.plist: $infoplistfile!", "create_package"); }
             $destfile = $contentsfolder . "/" . $installname;
-            installer::systemactions::copy_one_file($$infoplistfileref, $destfile);
+            installer::systemactions::copy_one_file($infoplistfile, $destfile);
 
             # Replacing variables in Info.plist
             $scriptfilecontent = installer::files::read_file($destfile);
