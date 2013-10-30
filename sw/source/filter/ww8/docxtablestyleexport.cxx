@@ -111,6 +111,22 @@ void lcl_TableStyleShd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
     pSerializer->singleElementNS(XML_w, XML_shd, xAttributeList);
 }
 
+/// Export of w:color in a table style.
+void lcl_TableStyleRColor(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rColor)
+{
+    if (!rColor.hasElements())
+        return;
+
+    sax_fastparser::FastAttributeList* pAttributeList = pSerializer->createAttrList();
+    for (sal_Int32 i = 0; i < rColor.getLength(); ++i)
+    {
+        if (rColor[i].Name == "val")
+            pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rColor[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+    }
+    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
+    pSerializer->singleElementNS(XML_w, XML_color, xAttributeList);
+}
+
 /// Export of w:lang in a table style.
 void lcl_TableStyleRLang(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rLang)
 {
@@ -138,6 +154,10 @@ void lcl_TableStyleRRFonts(sax_fastparser::FSHelperPtr pSerializer, uno::Sequenc
     {
         if (rRFonts[i].Name == "eastAsiaTheme")
             pAttributeList->add(FSNS(XML_w, XML_eastAsiaTheme), OUStringToOString(rRFonts[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rRFonts[i].Name == "asciiTheme")
+            pAttributeList->add(FSNS(XML_w, XML_asciiTheme), OUStringToOString(rRFonts[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rRFonts[i].Name == "hAnsiTheme")
+            pAttributeList->add(FSNS(XML_w, XML_hAnsiTheme), OUStringToOString(rRFonts[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     pSerializer->singleElementNS(XML_w, XML_rFonts, xAttributeList);
@@ -158,6 +178,14 @@ void lcl_TableStylePSpacing(sax_fastparser::FSHelperPtr pSerializer, uno::Sequen
             pAttributeList->add(FSNS(XML_w, XML_line), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
         else if (rSpacing[i].Name == "lineRule")
             pAttributeList->add(FSNS(XML_w, XML_lineRule), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rSpacing[i].Name == "beforeLines")
+            pAttributeList->add(FSNS(XML_w, XML_beforeLines), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rSpacing[i].Name == "beforeAutospacing")
+            pAttributeList->add(FSNS(XML_w, XML_beforeAutospacing), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rSpacing[i].Name == "afterLines")
+            pAttributeList->add(FSNS(XML_w, XML_afterLines), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+        else if (rSpacing[i].Name == "afterAutospacing")
+            pAttributeList->add(FSNS(XML_w, XML_afterAutospacing), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     pSerializer->singleElementNS(XML_w, XML_spacing, xAttributeList);
@@ -181,6 +209,17 @@ void lcl_TableStyleTblInd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence
     pSerializer->singleElementNS(XML_w, XML_tblInd, xAttributeList);
 }
 
+void lcl_handleBoolean(OUString aValue, sal_Int32 nToken, sax_fastparser::FSHelperPtr pSerializer)
+{
+    if (aValue.isEmpty())
+        return;
+    sax_fastparser::FastAttributeList* pAttributeList = pSerializer->createAttrList();
+    if (aValue != "1")
+        pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(aValue, RTL_TEXTENCODING_UTF8).getStr());
+    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
+    pSerializer->singleElementNS(XML_w, nToken, xAttributeList);
+}
+
 /// Export of w:rPr in a table style.
 void lcl_TableStyleRPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rRPr)
 {
@@ -189,16 +228,32 @@ void lcl_TableStyleRPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
 
     pSerializer->startElementNS(XML_w, XML_rPr, FSEND);
 
-    uno::Sequence<beans::PropertyValue> aRFonts, aLang;
+    uno::Sequence<beans::PropertyValue> aRFonts, aLang, aColor;
+    OUString aB, aI, aSz;
     for (sal_Int32 i = 0; i < rRPr.getLength(); ++i)
     {
         if (rRPr[i].Name == "rFonts")
             aRFonts = rRPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
         else if (rRPr[i].Name == "lang")
             aLang = rRPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rRPr[i].Name == "b")
+            aB = rRPr[i].Value.get<OUString>();
+        else if (rRPr[i].Name == "i")
+            aI = rRPr[i].Value.get<OUString>();
+        else if (rRPr[i].Name == "color")
+            aColor = rRPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rRPr[i].Name == "sz")
+            aSz = rRPr[i].Value.get<OUString>();
     }
     lcl_TableStyleRRFonts(pSerializer, aRFonts);
     lcl_TableStyleRLang(pSerializer, aLang);
+    lcl_handleBoolean(aB, XML_b, pSerializer);
+    lcl_handleBoolean(aI, XML_i, pSerializer);
+    lcl_TableStyleRColor(pSerializer, aColor);
+    if (!aSz.isEmpty())
+        pSerializer->singleElementNS(XML_w, XML_sz,
+                FSNS(XML_w, XML_val), OUStringToOString(aSz, RTL_TEXTENCODING_UTF8).getStr(),
+                FSEND);
 
     pSerializer->endElementNS(XML_w, XML_rPr);
 }
@@ -212,11 +267,16 @@ void lcl_TableStylePPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<be
     pSerializer->startElementNS(XML_w, XML_pPr, FSEND);
 
     uno::Sequence<beans::PropertyValue> aSpacing;
+    bool bWordWrap = false;
     for (sal_Int32 i = 0; i < rPPr.getLength(); ++i)
     {
         if (rPPr[i].Name == "spacing")
             aSpacing = rPPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        if (rPPr[i].Name == "wordWrap")
+            bWordWrap = true;
     }
+    if (bWordWrap)
+        pSerializer->singleElementNS(XML_w, XML_wordWrap, FSEND);
     lcl_TableStylePSpacing(pSerializer, aSpacing);
 
     pSerializer->endElementNS(XML_w, XML_pPr);
@@ -266,12 +326,19 @@ void lcl_TableStyleTcPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<b
     pSerializer->startElementNS(XML_w, XML_tcPr, FSEND);
 
     uno::Sequence<beans::PropertyValue> aShd;
+    OUString aVAlign;
     for (sal_Int32 i = 0; i < rTcPr.getLength(); ++i)
     {
         if (rTcPr[i].Name == "shd")
             aShd = rTcPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rTcPr[i].Name == "vAlign")
+            aVAlign = rTcPr[i].Value.get<OUString>();
     }
     lcl_TableStyleShd(pSerializer, aShd);
+    if (!aVAlign.isEmpty())
+        pSerializer->singleElementNS(XML_w, XML_vAlign,
+                FSNS(XML_w, XML_val), OUStringToOString(aVAlign, RTL_TEXTENCODING_UTF8).getStr(),
+                FSEND);
 
     pSerializer->endElementNS(XML_w, XML_tcPr);
 }

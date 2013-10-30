@@ -948,13 +948,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( sStringValue ));
             break;
         case NS_ooxml::LN_CT_Fonts_asciiTheme:
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "asciiTheme", ThemeTable::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( m_pImpl->GetThemeTable()->getFontNameForTheme(nIntValue) ));
             break;
         case NS_ooxml::LN_CT_Fonts_hAnsi:
             break;//unsupported
         case NS_ooxml::LN_CT_Fonts_hAnsiTheme:
-            break; //unsupported
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "hAnsiTheme", ThemeTable::getStringForTheme(nIntValue));
+            break;
         case NS_ooxml::LN_CT_Fonts_eastAsia:
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( sStringValue ));
@@ -978,6 +980,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ), false);
             break;
         case NS_ooxml::LN_CT_Spacing_beforeLines:
+                m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "beforeLines", OUString::number(nIntValue));
             break;
         case NS_ooxml::LN_CT_Spacing_after:
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "after", OUString::number(nIntValue));
@@ -986,6 +989,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ), false);
             break;
         case NS_ooxml::LN_CT_Spacing_afterLines:
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "afterLines", OUString::number(nIntValue));
             break;
         case NS_ooxml::LN_CT_Spacing_line: //91434
         case NS_ooxml::LN_CT_Spacing_lineRule: //91435
@@ -1173,12 +1177,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         // See SwWW8ImplReader::GetParagraphAutoSpace() on why these are 100 and 280
         case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "beforeAutospacing", OUString::number(nIntValue));
             if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(280) ) );
             else
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(100) ) );
         break;
         case NS_ooxml::LN_CT_Spacing_afterAutospacing:
+            m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "afterAutospacing", OUString::number(nIntValue));
             if (!m_pImpl->GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing())
                 m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertTwipToMM100(280) ) );
             else
