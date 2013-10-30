@@ -160,11 +160,6 @@ MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
 
-.IF "$(BUILD_SPECIAL)"!=""
-MSIOFFICETEMPLATEDIR=$(MSIOFFICETEMPLATESOURCE)
-MSILANGPACKTEMPLATEDIR=$(MSILANGPACKTEMPLATESOURCE)
-MSISDKOOTEMPLATEDIR=$(MSISDKOOTEMPLATESOURCE)
-.ELSE			# "$(BUILD_SPECIAL)"!=""
 NOLOGOSPLASH:=$(BIN)$/intro.zip
 DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
@@ -195,8 +190,6 @@ $(foreach,i,$(alllangiso) sdkoodev_$i) : $(ADDDEPS)
 .IF "$(MAKETARGETS)"!=""
 $(MAKETARGETS) : $(ADDDEPS)
 .ENDIF			# "$(MAKETARGETS)"!=""
-
-.ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 $(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!=""
