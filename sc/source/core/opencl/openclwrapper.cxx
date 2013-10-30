@@ -26,7 +26,7 @@
 #include <string.h>
 #include <cmath>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <Windows.h>
 #define OPENCL_DLL_NAME "OpenCL.dll"
 #elif defined(MACOSX)

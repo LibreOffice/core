@@ -33,9 +33,9 @@ using namespace std;
 #include <sal/macros.h>
 
 /* @Man: hwp수식을 LaTeX으로 바꾸기 */
-#ifdef WIN32
+#ifdef _WIN32
 # define ENDL  "\r\n"
-#else /* !WIN32 */
+#else /* !_WIN32 */
 # define ENDL  "\n"
 #endif
 
@@ -48,7 +48,7 @@ using namespace std;
 #define IS_WS(ch)   (strchr(WS, ch))
 #define IS_BINARY(ch)   (strchr("+-<=>", ch))
 
-#ifdef WIN32
+#ifdef _WIN32
 #define STRICMP stricmp
 #else
 #define STRICMP strcasecmp

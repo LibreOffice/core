@@ -25,7 +25,6 @@ $(eval $(call gb_Library_use_externals,rdf,\
 
 $(eval $(call gb_Library_add_defs,rdf,\
 	-DLIBRDF_INTERNAL \
-	-DWIN32 \
 	-DNDEBUG \
 	-D_WINDOWS \
 	-D_USRDLL \

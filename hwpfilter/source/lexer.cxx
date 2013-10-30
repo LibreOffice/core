@@ -48,7 +48,7 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
-#ifndef WIN32
+#ifndef _WIN32
 #include <unistd.h>
 #else
 #include <io.h>
@@ -960,7 +960,7 @@ char *yytext;
 #include <string.h>
 #include "nodes.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #define strdup _strdup
 #define fileno _fileno
 #define isatty _isatty
@@ -975,7 +975,7 @@ int yywrap();
 }
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 extern YYSTYPE yylval;
 #endif
 #ifdef TOKEN_DEBUG

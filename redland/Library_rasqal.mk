@@ -19,7 +19,6 @@ $(eval $(call gb_Library_use_libraries,rasqal,raptor2))
 
 $(eval $(call gb_Library_add_defs,rasqal,\
 	-DRASQAL_INTERNAL \
-	-DWIN32 \
 	-DNDEBUG \
 	-D_WINDOWS \
 	-D_USRDLL \

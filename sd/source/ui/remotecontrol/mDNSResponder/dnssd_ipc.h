@@ -33,13 +33,13 @@
 //
 // Common cross platform services
 //
-#if defined(WIN32)
+#if defined(_WIN32)
 #   include <winsock2.h>
 #endif
 
 #include "dns_sd.h"
 
-#if defined(WIN32)
+#if defined(_WIN32)
 #   define dnssd_InvalidSocket  INVALID_SOCKET
 #   define dnssd_SocketValid(s) ((s) != INVALID_SOCKET)
 #   define dnssd_EWOULDBLOCK    WSAEWOULDBLOCK

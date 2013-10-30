@@ -87,7 +87,7 @@ static void s_test__loadSharedLibComponentFactory(rtl::OUString const & clientPu
     uno::Reference<uno::XInterface> xItf(
         cppu::loadSharedLibComponentFactory(
             rtl::OUString(SAL_DLLPREFIX "TestComponent.uno" SAL_DLLEXTENSION),
-#ifdef WIN32
+#ifdef _WIN32
             "",
 #else
             "file://../lib/",
@@ -154,7 +154,7 @@ static rtl::OUString s_getSDrive(void)
     tmp = getenv("INPATH");
     path += rtl::OUString(tmp, rtl_str_getLength(tmp), RTL_TEXTENCODING_ASCII_US);
     path += rtl::OUString(SAL_PATHDELIMITER);
-#ifdef WIN32
+#ifdef _WIN32
     path += "bin";
 #else
     path += "lib";

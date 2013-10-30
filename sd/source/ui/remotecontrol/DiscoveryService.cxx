@@ -20,7 +20,7 @@
 
 #include "DiscoveryService.hxx"
 
-#ifdef WIN32
+#ifdef _WIN32
   // LO vs WinAPI conflict
   #undef WB_LEFT
   #undef WB_RIGHT
@@ -72,7 +72,7 @@ DiscoveryService::DiscoveryService()
     zService = new AvahiNetworkService(hostname);
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
     zService = new WINNetworkService();
 #endif
 

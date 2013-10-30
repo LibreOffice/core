@@ -140,7 +140,7 @@ extern "C" {
 //===========================================================================================================================
 
 #if ( !KERNEL )
-    #if defined(WIN32) && !defined(_WSPIAPI_COUNTOF)
+    #if defined(_WIN32) && !defined(_WSPIAPI_COUNTOF)
         #define _WSPIAPI_COUNTOF(_Array) (sizeof(_Array) / sizeof(_Array[0]))
     #endif
     #include    <stddef.h>

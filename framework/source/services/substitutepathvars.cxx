@@ -306,7 +306,7 @@ OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystem()
         m_eOSType = OS_SOLARIS;
 #elif defined LINUX
         m_eOSType = OS_LINUX;
-#elif defined WIN32
+#elif defined _WIN32
         m_eOSType = OS_WINDOWS;
 #elif defined UNIX
         m_eOSType = OS_UNIX;

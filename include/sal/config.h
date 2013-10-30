@@ -26,7 +26,7 @@
 
 #include <stdlib.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #define SAL_W32
 #define SAL_DLLEXTENSION ".dll"
 #define SAL_PATHSEPARATOR ';'
@@ -50,7 +50,7 @@
 #include <systools/win32/snprintf.h>
 #endif
 
-#endif /* defined WIN32 */
+#endif /* defined _WIN32 */
 
 #if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || \
     defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY) || defined(ANDROID)
