@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAZX///zI\u003d",
+        "filename": "wizards/com/sun/star/wizards/document/Control.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-10-30T15:02:53Z",
+      "side": 1,
+      "message": "That\u0027s what the old code did, so for a patch to stable, I do \"minimal changes\" to fix the bug. Your suggestion has merit for master.\n\nMy understanding of the intent of this code is to create a date whose rendering on screen will be typical or maximal.",
+      "parentUuid": "AAAAZX///1o\u003d",
+      "revId": "37a40e59a0cf83576258c86e64c6ac57ba5dd90a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAZX///1k\u003d",
         "filename": "wizards/com/sun/star/wizards/document/Control.java",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-10-30T06:54:07Z",
       "side": 1,
       "message": "Same as above. Create a method in Time class.",
+      "revId": "37a40e59a0cf83576258c86e64c6ac57ba5dd90a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///zE\u003d",
+        "filename": "wizards/com/sun/star/wizards/document/Control.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-10-30T15:02:53Z",
+      "side": 1,
+      "message": "Same as above, mutatis mutandis.",
+      "parentUuid": "AAAAZX///1k\u003d",
       "revId": "37a40e59a0cf83576258c86e64c6ac57ba5dd90a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
