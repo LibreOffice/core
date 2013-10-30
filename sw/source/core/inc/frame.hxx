@@ -1012,13 +1012,8 @@ inline void SwFrm::InvalidateNextPos( sal_Bool bNoFtn )
 {
     if ( mpNext && !mpNext->IsSctFrm() )
         mpNext->InvalidatePos();
-#ifndef C30 // maybe it works for C40?
     else
         ImplInvalidateNextPos( bNoFtn );
-#else
-    if ( !mpNext )
-        ImplInvalidateNextPos( bNoFtn );
-#endif
 }
 
 inline void SwFrm::Calc() const
