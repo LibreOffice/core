@@ -1816,7 +1816,7 @@ void touch_lo_draw_tile(void * context, int contextWidth, int contextHeight, int
     Application::ReleaseSolarMutex();
 }
 extern "C"
-MLOContentSize touch_lo_get_content_size()
+CGSize touch_lo_get_content_size()
 {
     SwWrtShell *pViewShell = GetActiveWrtShell();
     if (pViewShell)
@@ -1824,14 +1824,30 @@ MLOContentSize touch_lo_get_content_size()
         static const long WIDTH_ADDITION  = 6L * DOCUMENTBORDER;
         static const long HEIGHT_ADDITION = 2L * DOCUMENTBORDER;
         Size documentSize =pViewShell->GetView().GetDocSz();
-        return MLOContentSizeMake(documentSize.Width() + WIDTH_ADDITION,
+        return MLOPixelsToCGSize(documentSize.Width() + WIDTH_ADDITION,
                                   documentSize.Height() + HEIGHT_ADDITION);
     }
-    return MLOContentSizeMake(0,0);
+    return CGSizeMake(0,0);
+}
+
+extern "C"
+MLOPixelPoint CGPointToMLOPixelPoint(CGPoint cgPoint)
+{
+    CGSize contentSize = touch_lo_get_content_size();
+    MLOPixel x = CGFloatToMLOPixel(cgPoint.x - (contentSize.width/2.0f));
+    MLOPixel y = CGFloatToMLOPixel(cgPoint.y);
+    return MLOPixelPointMake(x,y);
+}
+
+extern "C"
+CGPoint MLOPixelPointToCGPoint(MLOPixelPoint mloPixelPoint)
+{
+    CGSize contentSize = touch_lo_get_content_size();
+    CGFloat x = MLOPixelToCGFloat(mloPixelPoint.x) + (contentSize.width/2.0f);
+    CGFloat y = MLOPixelToCGFloat(mloPixelPoint.y);
+    return CGPointMake(x,y);
 }
 #endif
-
-extern "C" void touch_ui_selection_none() {}
 
 void SwViewShell::SetBrowseBorder( const Size& rNew )
 {
