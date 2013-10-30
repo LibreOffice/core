@@ -65,7 +65,7 @@ String RID_WEBFRAME_TOOLBOX
 };
 String RID_WEBGRAPHIC_TOOLBOX
 {
-    Text [ en-US ] = "Graphics Object Bar/Web" ;
+    Text [ en-US ] = "Image Object Bar/Web" ;
 };
 String RID_WEBOLE_TOOLBOX
 {

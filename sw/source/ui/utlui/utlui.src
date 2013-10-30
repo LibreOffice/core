@@ -146,15 +146,15 @@ String STR_EVENT_MOUSEOUT_OBJECT
 };
 String STR_EVENT_IMAGE_LOAD
 {
-    Text [ en-US ] = "Graphics load successful" ;
+    Text [ en-US ] = "Image loaded successfully" ;
 };
 String STR_EVENT_IMAGE_ABORT
 {
-    Text [ en-US ] = "Graphics load terminated" ;
+    Text [ en-US ] = "Image loading terminated" ;
 };
 String STR_EVENT_IMAGE_ERROR
 {
-    Text [ en-US ] = "Graphics load faulty" ;
+    Text [ en-US ] = "Could not load Image" ;
 };
 String STR_EVENT_FRM_KEYINPUT_A
 {
@@ -186,7 +186,7 @@ String STR_CONTENT_TYPE_FRAME
 };
 String STR_CONTENT_TYPE_GRAPHIC
 {
-    Text [ en-US ] = "Graphics" ;
+    Text [ en-US ] = "Image" ;
 };
 String STR_CONTENT_TYPE_OLE
 {
@@ -250,7 +250,7 @@ String STR_IDXEXAMPLE_IDXTXT_TABLE1
 };
 String STR_IDXEXAMPLE_IDXTXT_IMAGE1
 {
-    Text [ en-US ] = "Image 1: This is image 1" ;
+    Text [ en-US ] = "Image 1: This is Image 1" ;
 };
 String STR_CONTENT_TYPE_SINGLE_OUTLINE
 {
@@ -266,7 +266,7 @@ String STR_CONTENT_TYPE_SINGLE_FRAME
 };
 String STR_CONTENT_TYPE_SINGLE_GRAPHIC
 {
-    Text [ en-US ] = "Graphics" ;
+    Text [ en-US ] = "Image" ;
 };
 String STR_CONTENT_TYPE_SINGLE_OLE
 {

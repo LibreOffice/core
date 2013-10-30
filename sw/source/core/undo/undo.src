@@ -293,11 +293,11 @@ String STR_DRAWDELETE
 };
 String STR_REREAD
 {
-    Text [ en-US ] = "Replace graphics" ;
+    Text [ en-US ] = "Replace Image" ;
 };
 String STR_DELGRF
 {
-    Text [ en-US ] = "Delete graphics" ;
+    Text [ en-US ] = "Delete Image" ;
 };
 String STR_DELOLE
 {

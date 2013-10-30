@@ -48,7 +48,7 @@ String STR_PRIVATETEXT
 };
 String STR_PRIVATEGRAPHIC
 {
-    Text [ en-US ] = "Graphics [%PRODUCTNAME Writer]" ;
+    Text [ en-US ] = "Image [%PRODUCTNAME Writer]" ;
 };
 String STR_PRIVATEOLE
 {

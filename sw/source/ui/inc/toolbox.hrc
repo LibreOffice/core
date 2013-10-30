@@ -510,7 +510,7 @@
     {\
         Identifier = FN_FORMAT_FRAME_DLG;\
         HelpID = FN_FORMAT_GRAFIC_DLG;\
-        Text [ en-US ] = "Graphics Properties";\
+        Text [ en-US ] = "Image Properties";\
     };
 
 
