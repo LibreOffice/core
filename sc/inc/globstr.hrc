@@ -688,7 +688,7 @@
 #define STR_CTRLCLICKHYPERLINK      551
 #define STR_CLICKHYPERLINK          552
 
-#define STR_COUNT                   553
+#define SC_GLOBSTR_STR_COUNT        553     /**< the count of permanently resident strings */
 
 #endif
 

@@ -346,7 +346,7 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
 
 const OUString& ScGlobal::GetRscString( sal_uInt16 nIndex )
 {
-    OSL_ENSURE( nIndex < STR_COUNT, "ScGlobal::GetRscString - invalid string index");
+    OSL_ENSURE( nIndex < SC_GLOBSTR_STR_COUNT, "ScGlobal::GetRscString - invalid string index");
     if( !ppRscString[ nIndex ] )
     {
         OpCode eOp = ocNone;
@@ -539,8 +539,8 @@ void ScGlobal::Init()
     pCharClass = pSysLocale->GetCharClassPtr();
     pLocaleData = pSysLocale->GetLocaleDataPtr();
 
-    ppRscString = new OUString *[ STR_COUNT ];
-    for( sal_uInt16 nC = 0 ; nC < STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
+    ppRscString = new OUString *[ SC_GLOBSTR_STR_COUNT ];
+    for( sal_uInt16 nC = 0 ; nC < SC_GLOBSTR_STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
 
     pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ), ATTR_BACKGROUND );
     pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
@@ -645,7 +645,7 @@ void ScGlobal::Clear()
     DELETEZ(pAddInCollection);
     DELETEZ(pUserList);
 
-    for( sal_uInt16 nC = 0 ; nC < STR_COUNT ; nC++ )
+    for( sal_uInt16 nC = 0 ; nC < SC_GLOBSTR_STR_COUNT ; nC++ )
         if( ppRscString ) delete ppRscString[ nC ];
     delete[] ppRscString;
     ppRscString = NULL;
