@@ -581,6 +581,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 # fcfg_impress
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filter/source/config/fragments/types,\
 	draw_StarOffice_XML_Draw \
+	impress_AppleKeynote \
 	impress_MS_PowerPoint_97 \
 	impress_MS_PowerPoint_97_AutoPlay \
 	impress_MS_PowerPoint_97_Vorlage \
@@ -600,6 +601,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filte
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filters.xcu,filter/source/config/fragments/filters,\
+	AppleKeynote \
 	MS_PowerPoint_97 \
 	MS_PowerPoint_97_AutoPlay \
 	MS_PowerPoint_97_Vorlage \
