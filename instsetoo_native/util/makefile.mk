@@ -28,8 +28,6 @@ TARGET=util
 .INCLUDE:  settings.mk
 .INCLUDE: $(SOLARINCDIR)$/rtlbootstrap.mk
 
-# PERL:=@echo
-
 # watch for the path delimiter
 .IF "$(GUI)"=="WNT"
 PYTHONPATH:=$(PWD)$/$(BIN);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
@@ -83,7 +81,6 @@ ALLTAR  : $(LOCALPYFILES)
 ALLTAR : openoffice
 .ELSE
 ALLTAR : openoffice sdkoo_en-US
-#ALLTAR : openoffice sdkoo_en-US ure_en-US
 .ENDIF
 .ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : updatepack
@@ -139,8 +136,6 @@ sdkoo: $(foreach,i,$(alllangiso) sdkoo_$i)
 
 sdkoodev: $(foreach,i,$(alllangiso) sdkoodev_$i)
 
-#ure: $(foreach,i,$(alllangiso) ure_$i)
-
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
@@ -176,8 +171,6 @@ $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) sdkoodev_$i) : $(ADDDEPS)
-
-#$(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
 
 .IF "$(MAKETARGETS)"!=""
 $(MAKETARGETS) : $(ADDDEPS)
@@ -220,17 +213,6 @@ sdkoo_%{$(PKGFORMAT:^".")} :
 $(foreach,i,$(alllangiso) sdkoodev_$i) : $$@{$(PKGFORMAT:^".")}
 sdkoodev_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p Apache_OpenOffice_Dev_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(MISC)$/win_ulffiles -dontstrip -format $(@:e:s/.//) $(VERBOSESWITCH)
-
-#$(foreach,i,$(alllangiso) ure_$i) : $$@{$(PKGFORMAT:^".")}
-#ure_%{$(PKGFORMAT:^".")} :
-#.IF "$(OS)" == "MACOSX"
-#    @echo 'for now, there is no standalone URE for Mac OS X'
-#.ELSE
-#    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.#lst \
-#        -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p URE -u $(OUT) -buildid $(BUILD) -#format $(@:e:s/.//) $(VERBOSESWITCH) \
-#        -msitemplate $(MSIURETEMPLATEDIR) \
-#        -msilanguage $(MISC)$/win_ulffiles
-#.ENDIF
 
 .IF "$(MAKETARGETS)"!=""
 .IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
