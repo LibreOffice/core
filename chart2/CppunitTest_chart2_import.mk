@@ -29,12 +29,15 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_import, \
     forui \
     i18nlangtag \
     msfilter \
+    vcl \
     oox \
     sal \
     salhelper \
     sax \
     sb \
     sc \
+    sw \
+    sd \
     sfx \
     sot \
     svl \
@@ -48,7 +51,6 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_import, \
     unotest \
     utl \
     vbahelper \
-    vcl \
     xo \
     $(gb_UWINAPI) \
 ))
@@ -66,11 +68,12 @@ $(eval $(call gb_CppunitTest_use_ure,chart2_import))
 
 $(eval $(call gb_CppunitTest_use_components,chart2_import,\
     basic/util/sb \
+    animations/source/animcore/animcore \
     chart2/source/controller/chartcontroller \
     chart2/source/chartcore \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    dbaccess/util/dba \
+    dtrans/util/mcnttype \
     embeddedobj/util/embobj \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
@@ -86,6 +89,12 @@ $(eval $(call gb_CppunitTest_use_components,chart2_import,\
     sc/util/sc \
     sc/util/scd \
     sc/util/scfilt \
+    sw/util/sw \
+    sw/util/swd \
+    sw/util/msword \
+    sd/util/sd \
+    sd/util/sdfilt \
+    sd/util/sdd \
     $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
 	    sc/util/vbaobj) \
     scaddins/source/analysis/analysis \

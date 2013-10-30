@@ -33,7 +33,9 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-
+#include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
 #include <iostream>
 
 using namespace com::sun::star;
@@ -44,6 +46,7 @@ class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     void load( const char* pDir, const char* pName );
     void reload( const OUString& rFilterName );
+    uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
 
     virtual void setUp();
     virtual void tearDown();
@@ -87,8 +90,7 @@ void ChartTest::tearDown()
     test::BootstrapFixture::tearDown();
 
 }
-
-Reference< chart2::XChartDocument > getChartDocFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > xComponent )
+Reference< lang::XComponent > getChartCompFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > xComponent )
 {
     // let us assume that we only have one chart per sheet
 
@@ -114,8 +116,12 @@ Reference< chart2::XChartDocument > getChartDocFromSheet( sal_Int32 nSheet, uno:
     uno::Reference< lang::XComponent > xChartComp( xEmbObjectSupplier->getEmbeddedObject(), UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xChartComp.is());
 
-    uno::Reference< chart2::XChartDocument > xChartDoc ( xChartComp, UNO_QUERY_THROW );
+    return xChartComp;
 
+}
+Reference< chart2::XChartDocument > getChartDocFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > xComponent )
+{
+    uno::Reference< chart2::XChartDocument > xChartDoc ( getChartCompFromSheet(nSheet, xComponent), UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xChartDoc.is());
     return xChartDoc;
 }
@@ -156,6 +162,27 @@ Reference< chart2::XDataSeries > getDataSeriesFromDoc( uno::Reference< chart2::X
     Reference< chart2::XDataSeries > xSeries = xSeriesSequence[nDataSeries];
 
     return xSeries;
+}
+
+
+uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const char* pDir, const char* pName )
+{
+    mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.comp.Draw.PresentationDocument");
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(mxComponent, uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT(xPage.is());
+    uno::Reference< beans::XPropertySet > xShapeProps(
+        xPage->getByIndex(0), uno::UNO_QUERY );
+    CPPUNIT_ASSERT(xShapeProps.is());
+    uno::Reference< frame::XModel > xDocModel;
+    xShapeProps->getPropertyValue("Model") >>= xDocModel;
+    CPPUNIT_ASSERT(xDocModel.is());
+    uno::Reference< chart::XChartDocument > xChart1Doc( xDocModel, uno::UNO_QUERY_THROW );
+    uno::Reference< chart::XChartDataArray > xChartData ( xChart1Doc->getData(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartData.is());
+    uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
+    return seriesList;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
