@@ -2766,7 +2766,7 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect)
     {
         // we don't need to change anything
         // still the same device
-        return true;
+        return pDeviceId != NULL;
     }
 
     cl_platform_id platformId;
