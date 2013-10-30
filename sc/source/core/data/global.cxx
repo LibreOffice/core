@@ -346,7 +346,7 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
 
 const OUString& ScGlobal::GetRscString( sal_uInt16 nIndex )
 {
-    OSL_ENSURE( nIndex < SC_GLOBSTR_STR_COUNT, "ScGlobal::GetRscString - invalid string index");
+    assert( nIndex < SC_GLOBSTR_STR_COUNT);
     if( !ppRscString[ nIndex ] )
     {
         OpCode eOp = ocNone;
