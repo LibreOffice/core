@@ -70,6 +70,8 @@ public:
 
     inline PropertyMapPtr       getProperties() { return m_pProperties; };
     inline TblStyleType         getType() { return m_nType; };
+    OUString getTypeString();
+    void appendInteropGrabBag(OUString aKey, OUString aValue);
     beans::PropertyValue getInteropGrabBag(OUString aName);
 
 private:
