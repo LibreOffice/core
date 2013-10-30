@@ -701,33 +701,6 @@ File gid_Starregistry_Services_Rdb
     Styles = (PACKED);
 End
 
-#ifdef LINUX
-File gid_File_Dat_Root3
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "root3.dat";
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef LINUX
-File gid_File_Dat_Root4
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "root4.dat";
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef LINUX
-File gid_File_Dat_Root5
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "root5.dat";
-    Styles = (PACKED);
-End
-#endif
-
 #ifdef MACOSX 
 File gid_File_App_InfoPlist
     TXT_FILE_BODY;
