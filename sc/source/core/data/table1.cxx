@@ -2129,7 +2129,8 @@ sal_uInt8 ScTable::GetRangeScriptType(
     if (!ValidCol(nCol))
         return 0;
 
-    return aCol[nCol].GetRangeScriptType(rBlockPos.miCellTextAttrPos, nRow1, nRow2);
+    sc::CellStoreType::iterator itr = aCol[nCol].maCells.begin();
+    return aCol[nCol].GetRangeScriptType(rBlockPos.miCellTextAttrPos, nRow1, nRow2, itr);
 }
 
 size_t ScTable::GetFormulaHash( SCCOL nCol, SCROW nRow ) const

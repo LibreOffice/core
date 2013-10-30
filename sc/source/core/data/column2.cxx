@@ -874,11 +874,12 @@ void ScColumn::GetOptimalHeight(
                     //  check for cells with different script type
                     sc::CellTextAttrStoreType::iterator itAttr = maCellTextAttrs.begin();
                     sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
+                    sc::CellStoreType::iterator itCells = maCells.begin();
                     for (; it != itEnd; ++it)
                     {
                         for (SCROW nRow = it->mnRow1; nRow <= it->mnRow2; ++nRow)
                         {
-                            sal_uInt8 nScript = GetRangeScriptType(itAttr, nRow, nRow);
+                            sal_uInt8 nScript = GetRangeScriptType(itAttr, nRow, nRow, itCells);
                             if (nScript == nDefScript)
                                 continue;
 
@@ -2038,7 +2039,7 @@ sal_uInt8 ScColumn::GetScriptType( SCROW nRow ) const
 }
 
 sal_uInt8 ScColumn::GetRangeScriptType(
-    sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2 )
+    sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2, sc::CellStoreType::iterator itrCells )
 {
     if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
         return 0;
@@ -2056,14 +2057,13 @@ sal_uInt8 ScColumn::GetRangeScriptType(
         sc::celltextattr_block::iterator it = sc::celltextattr_block::begin(*itPos->data);
         sc::celltextattr_block::iterator itEnd = sc::celltextattr_block::end(*itPos->data);
         std::advance(it, aRet.second);
-        sc::CellStoreType::iterator itr = maCells.position(nRow).first;
         for (; it != itEnd; ++it, ++nRow)
         {
             if (nRow > nRow2)
                 return nScriptType;
 
             sc::CellTextAttr& rVal = *it;
-            if (UpdateScriptType(rVal, nRow, itr))
+            if (UpdateScriptType(rVal, nRow, itrCells))
                 bUpdated = true;
             nScriptType |= rVal.mnScriptType;
         }
@@ -2074,7 +2074,6 @@ sal_uInt8 ScColumn::GetRangeScriptType(
         nRow += itPos->size - aRet.second;
     }
 
-    sc::CellStoreType::iterator itr = maCells.position(nRow).first;
     while (nRow <= nRow2)
     {
         ++itPos;
@@ -2096,7 +2095,7 @@ sal_uInt8 ScColumn::GetRangeScriptType(
                 return nScriptType;
 
             sc::CellTextAttr& rVal = *it;
-            if (UpdateScriptType(rVal, nRow, itr))
+            if (UpdateScriptType(rVal, nRow, itrCells))
                 bUpdated = true;
 
             nScriptType |= rVal.mnScriptType;

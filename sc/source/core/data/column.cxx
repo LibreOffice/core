@@ -2952,10 +2952,12 @@ class FindEditCellsHandler
 {
     ScColumn& mrColumn;
     sc::CellTextAttrStoreType::iterator miAttrPos;
+    sc::CellStoreType::iterator miCellPos;
 
 public:
-    FindEditCellsHandler(ScColumn& rColumn, sc::CellTextAttrStoreType& rAttrs) :
-        mrColumn(rColumn), miAttrPos(rAttrs.begin()) {}
+    FindEditCellsHandler(ScColumn& rColumn, sc::CellTextAttrStoreType& rAttrs,
+            sc::CellStoreType::iterator rCellItr) :
+        mrColumn(rColumn), miAttrPos(rAttrs.begin()), miCellPos(rCellItr) {}
 
     bool operator() (size_t, const EditTextObject*)
     {
@@ -2964,7 +2966,7 @@ public:
 
     bool operator() (size_t nRow, const ScFormulaCell* p)
     {
-        sal_uInt8 nScriptType = mrColumn.GetRangeScriptType(miAttrPos, nRow, nRow);
+        sal_uInt8 nScriptType = mrColumn.GetRangeScriptType(miAttrPos, nRow, nRow, miCellPos);
         if (IsAmbiguousScriptNonZero(nScriptType))
             return true;
 
@@ -2981,7 +2983,7 @@ public:
         for (size_t i = 0; i < nDataSize; ++i)
         {
             SCROW nRow = nTopRow + i;
-            sal_uInt8 nScriptType = mrColumn.GetRangeScriptType(miAttrPos, nRow, nRow);
+            sal_uInt8 nScriptType = mrColumn.GetRangeScriptType(miAttrPos, nRow, nRow, miCellPos);
             if (IsAmbiguousScriptNonZero(nScriptType))
                 // Return the offset from the first row.
                 return RetType(i, true);
@@ -3216,7 +3218,7 @@ bool ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst)
 {
     //  used in GetOptimalHeight - ambiguous script type counts as edit cell
 
-    FindEditCellsHandler aFunc(*this, maCellTextAttrs);
+    FindEditCellsHandler aFunc(*this, maCellTextAttrs, maCells.begin());
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos =
         sc::FindFormulaEditText(maCells, nStartRow, nEndRow, aFunc);
 

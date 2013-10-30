@@ -470,7 +470,8 @@ public:
      * Get combined script types of the specified range. This method may
      * update script types on demand if they have not been determined.
      */
-    sal_uInt8 GetRangeScriptType( sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2 );
+    sal_uInt8 GetRangeScriptType( sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2,
+            sc::CellStoreType::iterator itr);
 
     void SetScriptType( SCROW nRow, sal_uInt8 nType );
 
