@@ -554,7 +554,7 @@ postprocess_main_SED := \
 	-e 's,$${ABOUTBOXPRODUCTVERSION},$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX),g' \
 	-e 's,$${ABOUTBOXPRODUCTVERSIONSUFFIX},$(LIBO_VERSION_SUFFIX_SUFFIX),g' \
 	-e 's,$${DICT_REPO_URL},http://extensions.libreoffice.org/dictionaries/,g' \
-	-e 's,$${OOOVENDOR},$(if $(OOO_VENDOR),$(OOO_VENDOR),The Document Foundation),g' \
+	-e 's,$${OOOVENDOR},$(if $(OOO_VENDOR),$(subst $(COMMA),\x2c,$(OOO_VENDOR)),The Document Foundation),g' \
 	-e 's,$${PRODUCTNAME},$(PRODUCTNAME),g' \
 	-e 's,$${PRODUCTVERSION},$(PRODUCTVERSION),g' \
 	-e 's,$${PRODUCTEXTENSION},.$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX),g' \
