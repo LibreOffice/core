@@ -61,6 +61,26 @@ INSTALLDIR=$(OUT)
 
 .INCLUDE: target.mk
 
+# The help target belongs after the inclusion of target.mk to not become the default target.
+help .PHONY :
+    @echo "known targets:"
+    @echo "    openoffice             builds the default installation packages for the platform"
+    @echo "    aoo_srcrelease         packs the source release package"
+    @echo "    updatepack"
+    @echo "    openofficedev          devloper snapshot"
+    @echo "    openofficewithjre"
+    @echo "    ooolanguagepack"
+    @echo "    ooodevlanguagepack"
+    @echo "    sdkoo"
+    @echo "    sdkoodev"
+    @echo 
+    @echo "Most targets (all except aoo_srcrelease and updatepack) accept suffixes"
+    @echo "    add _<language> to build a target for one language only"
+    @echo "        the default set of languages is alllangiso=$(alllangiso)"
+    @echo "    add .<package_format> to build a target for one package format only"
+    @echo "        the default set of package formats is archive and PKGFORMAT=$(PKGFORMAT)"
+
+
 LOCALPYFILES= \
     $(BIN)$/uno.py \
     $(BIN)$/unohelper.py \
