@@ -203,7 +203,7 @@ $(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
 # This macro makes calling the make_installer.pl script a bit easier.
 # Just add -p and -msitemplate switches.
 MAKE_INSTALLER_COMMAND=					\
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl 	\
+    @$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl 	\
         -f $(PRJ)$/util$/openoffice.lst 	\
         -l $(subst,$(@:s/_/ /:1)_, $(@:b)) 	\
         -u $(OUT) 				\
@@ -215,14 +215,23 @@ MAKE_INSTALLER_COMMAND=					\
 # This macro makes calling gen_update_info.pl a bit easier
 # Just add --product switches, and xml input file and redirect output.
 GEN_UPDATE_INFO_COMMAND=					\
-    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl		\
+    @$(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl		\
         --buildid $(BUILD)				\
         --arch "$(RTL_ARCH)"				\
         --os "$(RTL_OS)"				\
         --lstfile $(PRJ)$/util$/openoffice.lst		\
         --languages $(subst,$(@:s/_/ /:1)_, $(@:b))
 
-openoffice_%{$(PKGFORMAT:^".") .archive} :
+openoffice_%{$(PKGFORMAT:^".")} :
+    $(MAKE_INSTALLER_COMMAND) 		\
+        -p Apache_OpenOffice		\
+        -msitemplate $(MSIOFFICETEMPLATEDIR)
+    $(GEN_UPDATE_INFO_COMMAND)		\
+        --product Apache_OpenOffice	\
+        $(PRJ)$/util$/update.xml	\
+        > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
+
+openoffice_%{.archive} :
     $(MAKE_INSTALLER_COMMAND) 		\
         -p Apache_OpenOffice		\
         -msitemplate $(MSIOFFICETEMPLATEDIR)
