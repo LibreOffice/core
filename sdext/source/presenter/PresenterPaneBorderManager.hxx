@@ -42,7 +42,6 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <rtl/ref.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 
 namespace sdext { namespace presenter {
 

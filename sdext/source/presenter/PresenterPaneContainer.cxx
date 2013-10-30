@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
-#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

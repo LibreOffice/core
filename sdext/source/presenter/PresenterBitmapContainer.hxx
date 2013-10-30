@@ -29,9 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <map>
-#include <vector>
 #include <boost/shared_ptr.hpp>
 
 namespace sdext { namespace presenter {

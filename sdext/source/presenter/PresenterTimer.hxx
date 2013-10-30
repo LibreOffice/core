@@ -28,7 +28,6 @@
 #include <osl/time.h>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
-#include <boost/enable_shared_from_this.hpp>
 #include <boost/function.hpp>
 #include <vector>
 

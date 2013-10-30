@@ -49,9 +49,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <boost/bind.hpp>
-#include <boost/function.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

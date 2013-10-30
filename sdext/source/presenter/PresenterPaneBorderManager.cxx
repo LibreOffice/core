@@ -35,7 +35,6 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <cppuhelper/compbase1.hxx>
 #include <osl/mutex.hxx>
-#include <boost/weak_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -37,7 +37,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <rtl/ref.hxx>
-#include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace sdext { namespace presenter {

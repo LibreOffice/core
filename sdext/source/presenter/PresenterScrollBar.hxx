@@ -30,6 +30,7 @@
 #include <cppuhelper/compbase4.hxx>
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace sdext { namespace presenter {

@@ -45,10 +45,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <rtl/ref.hxx>
 #include <map>
-#include <vector>
-#include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 
 namespace sdext { namespace presenter {
 

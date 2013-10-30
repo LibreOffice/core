@@ -29,6 +29,7 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace {
     typedef cppu::WeakComponentImplHelper3<

@@ -32,7 +32,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <rtl/ref.hxx>
-#include <boost/noncopyable.hpp>
 
 namespace sdext { namespace presenter {
 

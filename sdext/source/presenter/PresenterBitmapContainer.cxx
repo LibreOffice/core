@@ -26,7 +26,6 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <boost/bind.hpp>
-#include <map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

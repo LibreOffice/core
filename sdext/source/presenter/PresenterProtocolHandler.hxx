@@ -26,9 +26,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <boost/unordered_map.hpp>
 #include <rtl/ref.hxx>
-#include <boost/scoped_ptr.hpp>
 
 namespace sdext { namespace presenter {
 

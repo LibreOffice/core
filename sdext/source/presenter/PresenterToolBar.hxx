@@ -43,8 +43,6 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <map>
-#include <boost/scoped_ptr.hpp>
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
 

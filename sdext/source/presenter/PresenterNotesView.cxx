@@ -40,7 +40,6 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <boost/bind.hpp>
-#include <set>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
