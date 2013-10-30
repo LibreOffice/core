@@ -2211,9 +2211,9 @@ void XMLShapeExport::ImpExportPolygonShape(
             }
         }
 
-        // write object, but after attributes are added since the destructor will
-        // consume all of these added attributes. Also before text is added; this may
-        // open another SvXMLElementExport scope which needs to be inside this one
+        // write object, but after attributes are added since this call will
+        // consume all of these added attributes and the destructor will close the
+        // scope. Also before text is added; this may add sub-scopes as needed
         SvXMLElementExport aOBJ(
             mrExport,
             XML_NAMESPACE_DRAW,
@@ -3320,9 +3320,6 @@ void XMLShapeExport::ImpExport3DShape(
         {
             case XmlShapeTypeDraw3DCubeObject:
             {
-                // write 3DCube shape
-                SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_CUBE, sal_True, sal_True);
-
                 // minEdge
                 aAny = xPropSet->getPropertyValue("D3DPosition");
                 drawing::Position3D aPosition3D;
@@ -3354,13 +3351,15 @@ void XMLShapeExport::ImpExport3DShape(
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_MAX_EDGE, aStr);
                 }
 
+                // write 3DCube shape
+                // #i123542# Do this *after* the attributes are added, else these will be lost since opening
+                // the scope will clear the global attribute list at the exporter
+                SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_CUBE, sal_True, sal_True);
+
                 break;
             }
             case XmlShapeTypeDraw3DSphereObject:
             {
-                // write 3DSphere shape
-                SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_SPHERE, sal_True, sal_True);
-
                 // Center
                 aAny = xPropSet->getPropertyValue("D3DPosition");
                 drawing::Position3D aPosition3D;
@@ -3388,6 +3387,11 @@ void XMLShapeExport::ImpExport3DShape(
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SIZE, aStr);
                 }
+
+                // write 3DSphere shape
+                // #i123542# Do this *after* the attributes are added, else these will be lost since opening
+                // the scope will clear the global attribute list at the exporter
+                SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_SPHERE, sal_True, sal_True);
 
                 break;
             }
