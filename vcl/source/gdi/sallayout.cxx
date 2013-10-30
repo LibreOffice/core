@@ -1018,6 +1018,27 @@ void GenericSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
 // -----------------------------------------------------------------------
 
+// This DXArray thing is one of the stupidest ideas I have ever seen (I've been
+// told that it probably a one-to-one mapping of some Windows 3.1 API, which is
+// telling). To justify a text string, Writer calls OutputDevice::GetTextArray()
+// to get an array that maps input characters (not glyphs) to their absolute
+// position, GetTextArray() in turn calls SalLayout::FillDXArray() to get an
+// array of character widths that it converts to absolute positions.
+//
+// Writer would then apply justification adjustments to that array of absolute
+// character positions and return to OutputDevice, which eventually calls
+// ApplyDXArray(), which needs to extract the individual adjustments for each
+// character to apply it to corresponding glyphs, and since that information is
+// already lost it tries to do some heuristics to guess it again. Those
+// heuristics often fail, and have always been a source of all sorts of weird
+// text layout bugs, and instead of fixing the broken design a hack after hack
+// have been applied on top of it, making it a complete mess that nobody
+// understands.
+//
+// As you can see by now, this is utterly stupid, why Writer does not just send
+// us directly the advance width transformations it wants to apply to each
+// character instead of this whole mess?
+
 void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
 {
     if( m_GlyphItems.empty())

@@ -456,20 +456,36 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             if (bInCluster)
                 nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
 
+            // The whole IS_DIACRITIC concept is a stupid hack that was
+            // introduced ages ago to work around the utter brokenness of the
+            // way justification adjustments are applied (the DXArray fiasco).
+            // Since it is such a stupid hack, there is no sane way to directly
+            // map to concepts of the "outside" world, so we do some rather
+            // ugly hacks:
+            // * If the font has a GDEF table, we check for glyphs with mark
+            //   glyph class which is sensible, except that some fonts
+            //   (fdo#70968) assign mark class to spacing marks (which is wrong
+            //   but usually harmless), so we try to sniff what HarfBuzz thinks
+            //   about this glyph by checking if it gives it a zero advance
+            //   width.
+            // * If the font has no GDEF table, we just check if the glyph has
+            //   zero advance width, but this is stupid and can be wrong. A
+            //   better way would to check the character's Unicode combining
+            //   class, but unfortunately glyph gives combining marks the
+            //   cluster value of its base character, so nCharPos will be
+            //   pointing to the wrong character (but HarfBuzz might change
+            //   this in the future).
             bool bDiacritic = false;
             if (hb_ot_layout_has_glyph_classes(mpHbFace))
             {
                 // the font has GDEF table
-                if (hb_ot_layout_get_glyph_class(mpHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK)
+                bool bMark = hb_ot_layout_get_glyph_class(mpHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK;
+                if (bMark && pHbPositions[i].x_advance == 0)
                     bDiacritic = true;
             }
             else
             {
                 // the font lacks GDEF table
-                // HACK: if the resolved glyph advance is zero assume it is a
-                // combining mark.  The whole IS_DIACRITIC concept is a hack to
-                // fix the other hacks we use to second-guess glyph advances in
-                // ApplyDXArray and the likes and it needs to die
                 if (pHbPositions[i].x_advance == 0)
                     bDiacritic = true;
             }
