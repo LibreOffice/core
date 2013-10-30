@@ -33,7 +33,6 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/share \
 	$(WORKDIR)/unittest \
 
-gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
 # kind of lame but with just 3 of these why bother with registration etc.
 gb_UnoApi_get_target = $(INSTROOT)/$(if $(filter udkapi,$(1)),$(LIBO_URE_SHARE_FOLDER)/misc/types,$(LIBO_ETC_FOLDER)/types/$(1)).rdb
 
@@ -113,7 +112,7 @@ gb_InstallModule_get_target = $(WORKDIR)/InstallModule/$(1).done
 gb_InstallModuleTarget_get_external_target = $(WORKDIR)/InstallModuleTarget/$(1).external
 gb_InstallModuleTarget_get_filelist = $(WORKDIR)/InstallModuleTarget/$(1).filelist
 gb_InstallModuleTarget_get_target = $(WORKDIR)/InstallModuleTarget/$(1).filelist
-gb_InstallScriptTarget_get_target = $(WORKDIR)/InstallScriptTarget/$(1)$(gb_InstallScript_EXT)
+gb_InstallScript_get_target = $(WORKDIR)/InstallScriptTarget/$(1)$(gb_InstallScript_EXT)
 gb_InternalUnoApi_get_target = $(WORKDIR)/InternalUnoApi/$(1).done
 gb_Jar_get_target = $(call gb_Jar_get_install_target,$(1))
 gb_Jar_get_classsetname = Jar/$(1)
@@ -267,7 +266,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	HelpTreeTarget \
 	InstallModule \
 	InstallModuleTarget \
-	InstallScriptTarget \
+	InstallScript \
 	InternalUnoApi \
 	JavaClassSet \
 	Jar \
@@ -318,10 +317,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	XcuMergeTarget \
 	XcuResTarget \
 	Configuration \
-))
-
-$(eval $(call gb_Helper_make_outdir_clean_targets,\
-	InstallScript \
 ))
 
 $(eval $(call gb_Helper_make_dep_targets,\

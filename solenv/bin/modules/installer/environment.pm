@@ -61,6 +61,9 @@ sub create_pathvariables
     my $instdir = $ENV{'INSTDIR'};
     $variables{'instdir'} = $instdir;
 
+    my $installscriptdir = $environment->{'WORKDIR'} . $installer::globals::separator . "InstallScriptTarget";
+    $variables{'installscriptdir'} = $installscriptdir;
+
     my $extensionsdir = $environment->{'WORKDIR'} . $installer::globals::separator . "Extension";
     $variables{'extensionsdir'} = $extensionsdir;
 

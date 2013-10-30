@@ -46,7 +46,7 @@ End
 
 #if !defined(WNT) && !defined(MACOSX) && defined(WITH_RPM)
 ScpAction scp_Copy_Install
-    Copy = "userscripts/install";
+    Copy = "scripts/install";
     Name = "install";
     UnixRights = 755;
 End
