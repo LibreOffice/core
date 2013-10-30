@@ -970,8 +970,8 @@ public:
     void            SetDirty( const ScRange& );
     void            SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
     void            InterpretDirtyCells( const ScRangeList& rRanges );
-    void            CalcAll();
-    SC_DLLPUBLIC void           CalcAfterLoad();
+    SC_DLLPUBLIC void CalcAll();
+    SC_DLLPUBLIC void CalcAfterLoad();
     void            CompileAll();
     void            CompileXML();
 
