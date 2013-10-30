@@ -70,6 +70,9 @@ sub create_pathvariables
     my $filelistpath = $environment->{'WORKDIR'};
     $variables{'filelistpath'} = $filelistpath;
 
+    my $packinfopath = $environment->{'SRCDIR'} . $installer::globals::separator . "setup_native/source/packinfo";
+    $variables{'packinfopath'} = $packinfopath;
+
     return \%variables;
 }
 

@@ -11,10 +11,6 @@ $(eval $(call gb_Package_Package,setup_native/misc,$(SRCDIR)/setup_native/source
 
 $(eval $(call gb_Package_set_outdir,setup_native/misc,$(OUTDIR)))
 
-$(eval $(call gb_Package_add_file,setup_native/misc,bin/osl/DS_Store,mac/ooo/DS_Store))
-$(eval $(call gb_Package_add_file,setup_native/misc,bin/osl/DS_Store_Dev,mac/ooo/DS_Store_Dev))
-$(eval $(call gb_Package_add_file,setup_native/misc,bin/osl/DS_Store_Langpack,mac/ooo/DS_Store_Langpack))
-$(eval $(call gb_Package_add_file,setup_native/misc,bin/osl/osxdndinstall.png,mac/ooo/osxdndinstall.png))
 $(eval $(call gb_Package_add_file,setup_native/misc,bin/desktophelper.txt,win32/desktophelper.txt))
 
 # vim: set noet sw=4 ts=4:

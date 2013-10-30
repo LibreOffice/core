@@ -271,6 +271,7 @@ sub check_system_environment
         LOCAL_OUT
         LOCAL_COMMON_OUT
         WORKDIR
+        SRCDIR
     );
 
     for my $key ( @environmentvariables )
