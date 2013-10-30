@@ -25,7 +25,7 @@
 #include "formulagroupcl_public.hxx"
 #include "formulagroupcl_finacial.hxx"
 
-#include<list>
+#include <list>
 #include <map>
 #include <iostream>
 #include <sstream>
@@ -35,6 +35,9 @@
 #include <rtl/digest.h>
 #endif
 #include <memory>
+
+#include <boost/scoped_ptr.hpp>
+
 using namespace formula;
 
 namespace sc { namespace opencl {
@@ -297,7 +300,7 @@ protected:
 
 /// Abstract class for code generation
 
-class Reduction: public SlidingFunctionBase, public OpBase
+class Reduction: public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
@@ -427,7 +430,7 @@ public:
 };
 
 // Strictly binary operators
-class Binary: public SlidingFunctionBase, public OpBase
+class Binary: public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
@@ -451,7 +454,7 @@ public:
     }
 };
 
-class SumOfProduct: public SlidingFunctionBase, public OpBase
+class SumOfProduct: public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
@@ -656,16 +659,16 @@ public:
     }
     virtual std::string BinFuncName(void) const { return "fsop"; }
 };
+
 /// Helper functions that have multiple buffers
-template<class Op>
 class DynamicKernelSoPArguments: public DynamicKernelArgument
 {
 public:
     typedef boost::shared_ptr<DynamicKernelArgument> SubArgument;
     typedef std::vector<SubArgument> SubArgumentsType;
 
-    DynamicKernelSoPArguments(const std::string &s,
-        FormulaTreeNodeRef ft);
+    DynamicKernelSoPArguments(
+        const std::string &s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen);
 
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal(cl_kernel k, int argno, int nVectorWidth)
@@ -682,7 +685,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss) {
         for (unsigned i = 0; i < mvSubArguments.size(); i++)
             mvSubArguments[i]->GenSlidingWindowFunction(ss);
-        CodeGen.GenSlidingWindowFunction(ss, mSymName, mvSubArguments);
+        mpCodeGen->GenSlidingWindowFunction(ss, mSymName, mvSubArguments);
     }
     virtual void GenDeclRef(std::stringstream &ss) const
     {
@@ -733,7 +736,7 @@ public:
         std::stringstream ss;
         if (!nested)
         {
-            ss << mSymName << "_" << CodeGen.BinFuncName() <<"(";
+            ss << mSymName << "_" << mpCodeGen->BinFuncName() <<"(";
             for (unsigned i = 0; i < mvSubArguments.size(); i++)
             {
                 if (i)
@@ -747,35 +750,33 @@ public:
         } else {
             if (mvSubArguments.size() != 2)
                 throw Unhandled();
-            ss << "(" << CodeGen.Gen2(mvSubArguments[0]->GenSlidingWindowDeclRef(true),
+            ss << "(" << mpCodeGen->Gen2(mvSubArguments[0]->GenSlidingWindowDeclRef(true),
                          mvSubArguments[1]->GenSlidingWindowDeclRef(true)) << ")";
         }
         return ss.str();
     }
     virtual std::string DumpOpName(void) const
     {
-        std::string t = "_" + CodeGen.BinFuncName();
+        std::string t = "_" + mpCodeGen->BinFuncName();
         for (unsigned i = 0; i < mvSubArguments.size(); i++)
             t = t + mvSubArguments[i]->DumpOpName();
         return t;
     }
 private:
     SubArgumentsType mvSubArguments;
-    Op CodeGen;
+    boost::scoped_ptr<SlidingFunctionBase> mpCodeGen;
 };
 
-template <class Op>
-boost::shared_ptr<DynamicKernelArgument> SoPHelper(const std::string &ts,
-    FormulaTreeNodeRef ft)
+boost::shared_ptr<DynamicKernelArgument> SoPHelper(
+    const std::string &ts, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen)
 {
-    return boost::shared_ptr<DynamicKernelArgument>(
-        new DynamicKernelSoPArguments<Op>(ts, ft));
+    return boost::shared_ptr<DynamicKernelArgument>(new DynamicKernelSoPArguments(ts, ft, pCodeGen));
 }
 
-template <class Op>
-DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
-    FormulaTreeNodeRef ft):
-    DynamicKernelArgument(s, ft) {
+DynamicKernelSoPArguments::DynamicKernelSoPArguments(
+    const std::string &s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen) :
+    DynamicKernelArgument(s, ft), mpCodeGen(pCodeGen)
+{
     size_t nChildren = ft->Children.size();
 
     for (unsigned i = 0; i < nChildren; i++)
@@ -833,270 +834,215 @@ DynamicKernelSoPArguments<Op>::DynamicKernelSoPArguments(const std::string &s,
                 }
                 break;
             case ocDiv:
-                mvSubArguments.push_back(SoPHelper<OpDiv>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDiv));
                 break;
             case ocMul:
-                mvSubArguments.push_back(SoPHelper<OpMul>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMul));
                 break;
             case ocSub:
-                mvSubArguments.push_back(SoPHelper<OpSub>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSub));
                 break;
             case ocAdd:
             case ocSum:
-                mvSubArguments.push_back(SoPHelper<OpSum>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSum));
                 break;
             case ocAverage:
-                mvSubArguments.push_back(SoPHelper<OpAverage>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpAverage));
                 break;
             case ocMin:
-                mvSubArguments.push_back(SoPHelper<OpMin>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMin));
                 break;
             case ocMax:
-                mvSubArguments.push_back(SoPHelper<OpMax>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMax));
                 break;
             case ocCount:
-                mvSubArguments.push_back(SoPHelper<OpCount>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCount));
                 break;
             case ocSumProduct:
-                mvSubArguments.push_back(SoPHelper<OpSumProduct>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSumProduct));
                 break;
             case ocIRR:
-                mvSubArguments.push_back(SoPHelper<OpIRR>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpIRR));
                 break;
             case ocMIRR:
-                mvSubArguments.push_back(SoPHelper<OpMIRR>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMIRR));
                 break;
             case ocRMZ:
-                mvSubArguments.push_back(SoPHelper<OpPMT>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPMT));
                 break;
             case ocZins:
-                mvSubArguments.push_back(SoPHelper<OpIntrate>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpIntrate));
                 break;
             case ocZGZ:
-                mvSubArguments.push_back(SoPHelper<OpRRI>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpRRI));
                 break;
             case ocKapz:
-                mvSubArguments.push_back(SoPHelper<OpPPMT>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPPMT));
                 break;
             case ocFisher:
-                mvSubArguments.push_back(SoPHelper<OpFisher>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFisher));
                 break;
             case ocFisherInv:
-                mvSubArguments.push_back(SoPHelper<OpFisherInv>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFisherInv));
                 break;
             case ocGamma:
-                mvSubArguments.push_back(SoPHelper<OpGamma>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGamma));
                 break;
             case ocLIA:
-                 mvSubArguments.push_back(SoPHelper<OpSLN>(ts,
-                    ft->Children[i]));
+                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSLN));
                 break;
             case ocGammaLn:
-                mvSubArguments.push_back(SoPHelper<OpGammaLn>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGammaLn));
                 break;
             case ocGauss:
-                mvSubArguments.push_back(SoPHelper<OpGauss>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGauss));
                 break;
             case ocGeoMean:
-                mvSubArguments.push_back(SoPHelper<OpGeoMean>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGeoMean));
                 break;
             case ocHarMean:
-                mvSubArguments.push_back(SoPHelper<OpHarMean>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpHarMean));
                 break;
             case ocLessEqual:
-                mvSubArguments.push_back(SoPHelper<OpLessEqual>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpLessEqual));
                 break;
             case ocEqual:
-                mvSubArguments.push_back(SoPHelper<OpEqual>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpEqual));
                 break;
             case ocGreater:
-                mvSubArguments.push_back(SoPHelper<OpGreater>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGreater));
                 break;
             case ocDIA:
-                mvSubArguments.push_back(SoPHelper<OpSYD>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSYD));
                 break;
             case ocCorrel:
-                mvSubArguments.push_back(SoPHelper<OpCorrel>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCorrel));
                 break;
             case ocCos:
-                mvSubArguments.push_back(SoPHelper<OpCos>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCos));
                 break;
             case ocNegBinomVert :
-                mvSubArguments.push_back(SoPHelper<OpNegbinomdist>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpNegbinomdist));
                 break;
             case ocPearson:
-                mvSubArguments.push_back(SoPHelper<OpPearson>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPearson));
                 break;
             case ocRSQ:
-                mvSubArguments.push_back(SoPHelper<OpRsq>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpRsq));
                 break;
             case ocCosecant:
-                mvSubArguments.push_back(SoPHelper<OpCsc>(ts,
-                    ft->Children[i]));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCsc));
                 break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getEffect"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpEffective>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpEffective));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getCumipmt"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpCumipmt>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCumipmt));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getNominal"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpNominal>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpNominal));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getCumprinc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpCumprinc>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCumprinc));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getXnpv"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpXNPV>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpXNPV));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getPricemat"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpPriceMat>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPriceMat));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getReceived"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpReceived>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpReceived));
                 }
                 else if( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getTbilleq"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpTbilleq>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbilleq));
                 }
                 else if( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getTbillprice"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpTbillprice>(ts,
-                            ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbillprice));
                 }
                 else if( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getTbillyield"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpTbillyield>(ts,
-                       ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbillyield));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getFvschedule"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpFvschedule>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFvschedule));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getYield"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpYield>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpYield));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                    "com.sun.star.sheet.addin.Analysis.getYielddisc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpYielddisc>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpYielddisc));
                 }
                 else    if ( !(pChild->GetExternal().compareTo(OUString(
                      "com.sun.star.sheet.addin.Analysis.getYieldmat"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpYieldmat>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpYieldmat));
                 }
-               else if ( !(pChild->GetExternal().compareTo(OUString(
+                else if ( !(pChild->GetExternal().compareTo(OUString(
                      "com.sun.star.sheet.addin.Analysis.getAccrintm"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpAccrintm>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpAccrintm));
                 }
-               else if ( !(pChild->GetExternal().compareTo(OUString(
+                else if ( !(pChild->GetExternal().compareTo(OUString(
                      "com.sun.star.sheet.addin.Analysis.getCoupdaybs"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpCoupdaybs>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdaybs));
                 }
-               else    if ( !(pChild->GetExternal().compareTo(OUString(
+                else if ( !(pChild->GetExternal().compareTo(OUString(
                      "com.sun.star.sheet.addin.Analysis.getDollarde"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpDollarde>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDollarde));
                 }
-                else    if ( !(pChild->GetExternal().compareTo(OUString(
+                else if ( !(pChild->GetExternal().compareTo(OUString(
                      "com.sun.star.sheet.addin.Analysis.getDollarfr"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpDollarfr>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDollarfr));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                      "com.sun.star.sheet.addin.Analysis.getCoupdays"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpCoupdays>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdays));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                      "com.sun.star.sheet.addin.Analysis.getCoupdaysnc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpCoupdaysnc>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdaysnc));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                    "com.sun.star.sheet.addin.Analysis.getDisc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpDISC>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDISC));
                 }
                 else if ( !(pChild->GetExternal().compareTo(OUString(
                    "com.sun.star.sheet.addin.Analysis.getIntrate"))))
                 {
-                    mvSubArguments.push_back(SoPHelper<OpINTRATE>(ts,
-                        ft->Children[i]));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpINTRATE));
                 }
                 break;
             default:
@@ -1113,7 +1059,7 @@ public:
     typedef std::list< boost::shared_ptr<DynamicKernelArgument> > ArgumentList;
     SymbolTable(void):mCurId(0) {}
     template <class T>
-    const DynamicKernelArgument *DeclRefArg(FormulaTreeNodeRef);
+    const DynamicKernelArgument *DeclRefArg(FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen);
     /// Used to generate sliding window helpers
     void DumpSlidingWindowFunctions(std::stringstream &ss)
     {
@@ -1150,7 +1096,7 @@ public:
     void CodeGen() {
         // Travese the tree of expression and declare symbols used
         const DynamicKernelArgument *DK= mSyms.DeclRefArg<
-            DynamicKernelSoPArguments<OpNop> >(mpRoot);
+            DynamicKernelSoPArguments>(mpRoot, new OpNop);
 
         std::stringstream decl;
         if (OpenclDevice::gpuEnv.mnKhrFp64Flag) {
@@ -1289,7 +1235,7 @@ void DynamicKernel::CreateKernel(void)
 // The template argument T must be a subclass of DynamicKernelArgument
 template <typename T>
 const DynamicKernelArgument *SymbolTable::DeclRefArg(
-                  FormulaTreeNodeRef t)
+                  FormulaTreeNodeRef t, SlidingFunctionBase* pCodeGen)
 {
     FormulaToken *ref = t->GetFormulaToken();
     ArgumentMap::iterator it = mSymbols.find(ref);
@@ -1298,7 +1244,7 @@ const DynamicKernelArgument *SymbolTable::DeclRefArg(
         std::cerr << "DeclRefArg: Allocate a new symbol:";
         std::stringstream ss;
         ss << "tmp"<< mCurId++;
-        boost::shared_ptr<DynamicKernelArgument> new_arg(new T(ss.str(), t));
+        boost::shared_ptr<DynamicKernelArgument> new_arg(new T(ss.str(), t, pCodeGen));
         mSymbols[ref] = new_arg;
         mParams.push_back(new_arg);
         std::cerr << ss.str() <<"\n";

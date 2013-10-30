@@ -14,7 +14,7 @@
 
 namespace sc { namespace opencl {
 
-class RRI: public SlidingFunctionBase, public OpBase
+class RRI: public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,

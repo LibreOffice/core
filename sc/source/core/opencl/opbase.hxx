@@ -15,6 +15,7 @@
 #include "formula/token.hxx"
 
 #include <boost/shared_ptr.hpp>
+#include <boost/noncopyable.hpp>
 
 #define ISNAN
 
@@ -72,7 +73,7 @@ private:
 /// like SumOfProduct
 /// In most of the cases the argument is introduced
 /// by a Push operation in the given RPN.
-class DynamicKernelArgument
+class DynamicKernelArgument : boost::noncopyable
 {
 public:
     DynamicKernelArgument(const std::string &s, FormulaTreeNodeRef ft);
@@ -110,16 +111,6 @@ protected:
 
 /// Abstract class for code generation
 
-class SlidingFunctionBase
-{
-public:
-    typedef boost::shared_ptr<DynamicKernelArgument> SubArgument;
-    typedef std::vector<SubArgument> SubArguments;
-    virtual void GenSlidingWindowFunction(std::stringstream &,
-        const std::string, SubArguments &) = 0;
-    virtual ~SlidingFunctionBase() {};
-};
-
 class OpBase
 {
 public:
@@ -133,7 +124,17 @@ public:
     virtual ~OpBase() {}
 };
 
-class Normal: public SlidingFunctionBase, public OpBase
+class SlidingFunctionBase : public OpBase
+{
+public:
+    typedef boost::shared_ptr<DynamicKernelArgument> SubArgument;
+    typedef std::vector<SubArgument> SubArguments;
+    virtual void GenSlidingWindowFunction(std::stringstream &,
+        const std::string, SubArguments &) = 0;
+    virtual ~SlidingFunctionBase() {};
+};
+
+class Normal: public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
