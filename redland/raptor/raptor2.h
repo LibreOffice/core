@@ -90,7 +90,7 @@ extern "C" {
  *
  */
 #ifndef RAPTOR_API
-#  ifdef WIN32
+#  ifdef _WIN32
 #    ifdef __GNUC__
 #      undef _declspec
 #      define _declspec(x) __declspec(x)

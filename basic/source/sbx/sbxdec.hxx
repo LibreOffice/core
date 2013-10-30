@@ -21,7 +21,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_SBX_SBXDEC_HXX
 #define INCLUDED_BASIC_SOURCE_SBX_SBXDEC_HXX
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #undef WB_LEFT
 #undef WB_RIGHT
@@ -48,7 +48,7 @@ class SbxDecimal
 {
     friend void releaseDecimalPtr( SbxDecimal*& rpDecimal );
 
-#ifdef WIN32
+#ifdef _WIN32
     DECIMAL     maDec;
 #endif
     sal_Int32       mnRefCount;
@@ -78,7 +78,7 @@ public:
     bool setString( OUString* pOUString );
     void setDecimal( SbxDecimal* pDecimal )
     {
-#ifdef WIN32
+#ifdef _WIN32
         if( pDecimal )
             maDec = pDecimal->maDec;
 #else

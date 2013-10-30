@@ -28,7 +28,7 @@
   #include "BufferedStreamSocket.hxx"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
   // LO vs WinAPI conflict
   #undef WB_LEFT
   #undef WB_RIGHT
@@ -783,7 +783,7 @@ void SAL_CALL BluetoothServer::run()
     mpImpl->mpConnection = NULL;
     mpImpl->mpContext = NULL;
 
-#elif defined(WIN32)
+#elif defined(_WIN32)
     WORD wVersionRequested;
     WSADATA wsaData;
 

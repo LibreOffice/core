@@ -298,7 +298,7 @@ class PDFReader
     ~PDFReader() {}
 
     PDFEntry* read( const char* pFileName );
-#ifdef WIN32
+#ifdef _WIN32
     PDFEntry* read( const char* pBuffer, unsigned int nLen );
 #endif
 };

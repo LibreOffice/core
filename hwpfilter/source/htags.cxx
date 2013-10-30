@@ -53,7 +53,7 @@ EmPicture::EmPicture(size_t tsize)
     else
         data = new uchar[size];
 }
-#ifdef WIN32
+#ifdef _WIN32
 #define unlink _unlink
 #endif
 EmPicture::~EmPicture(void)
@@ -82,7 +82,7 @@ OlePicture::OlePicture(int tsize)
     size = tsize - 4;
     if (size <= 0)
         return;
-#ifdef WIN32
+#ifdef _WIN32
      pis = 0L;
 #else
      pis = new char[size];
@@ -91,7 +91,7 @@ OlePicture::OlePicture(int tsize)
 
 OlePicture::~OlePicture(void)
 {
-#ifdef WIN32
+#ifdef _WIN32
      if( pis )
           pis->Release();
 #else
@@ -110,7 +110,7 @@ bool OlePicture::Read(HWPFile & hwpf)
     hwpf.Read4b(&signature, 1);
     if (signature != FILESTG_SIGNATURE_NORMAL)
         return false;
-#ifdef WIN32
+#ifdef _WIN32
     char *data = new char[size];
     if( data == 0 || hwpf.ReadBlock(data,size) == 0 )
     {

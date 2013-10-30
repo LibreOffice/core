@@ -83,9 +83,6 @@
 extern "C" {
 #endif
 
-#ifndef WIN32
-#define WIN32
-#endif
 #ifndef NDEBUG
 #define NDEBUG
 #endif

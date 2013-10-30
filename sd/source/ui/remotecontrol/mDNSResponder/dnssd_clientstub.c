@@ -225,7 +225,7 @@ static int read_all(dnssd_sock_t sd, char *buf, int len)
             int defunct = 0;
             // Should never happen. If it does, it indicates some OS bug,
             // or that the mDNSResponder daemon crashed (which should never happen).
-#if defined(WIN32)
+#if defined(_WIN32)
             // <rdar://problem/7481776> Suppress logs for "A non-blocking socket operation
             //                          could not be completed immediately"
             if (WSAGetLastError() != WSAEWOULDBLOCK)
@@ -288,7 +288,7 @@ static int more_bytes(dnssd_sock_t sd)
 // Wait for daemon to write to socket
 static int wait_for_daemon(dnssd_sock_t sock, int timeout)
 {
-#ifndef WIN32
+#ifndef _WIN32
     // At this point the next operation (accept() or read()) on this socket may block for a few milliseconds waiting
     // for the daemon to respond, but that's okay -- the daemon is a trusted service and we know if won't take more
     // than a few milliseconds to respond.  So we'll forego checking for readability of the socket.

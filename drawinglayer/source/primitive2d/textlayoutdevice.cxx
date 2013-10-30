@@ -377,7 +377,7 @@ namespace drawinglayer
             const sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
             const bool bFontIsScaled(nHeight != nWidth);
 
-#ifdef WIN32
+#ifdef _WIN32
             // for WIN32 systems, start with creating an unscaled font. If FontScaling
             // is wanted, that width needs to be adapted using FontMetric again to get a
             // width of the unscaled font
@@ -406,7 +406,7 @@ namespace drawinglayer
             aRetval.SetPitch(rFontAttribute.getMonospaced() ? PITCH_FIXED : PITCH_VARIABLE);
             aRetval.SetLanguage(LanguageTag::convertToLanguageType( rLocale, false));
 
-#ifdef WIN32
+#ifdef _WIN32
             // for WIN32 systems, correct the FontWidth if FontScaling is used
             if(bFontIsScaled && nHeight > 0)
             {
@@ -453,7 +453,7 @@ namespace drawinglayer
             o_rSize.setY(rFont.GetSize().getHeight() > 0 ? rFont.GetSize().getHeight() : 0);
             o_rSize.setX(o_rSize.getY());
 
-#ifdef WIN32
+#ifdef _WIN32
             // for WIN32 systems, the FontScaling at the Font is detected by
             // checking that FontWidth != 0. When FontScaling is used, WIN32
             // needs to do extra stuff to detect the correct width (since it's

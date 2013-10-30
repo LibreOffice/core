@@ -44,7 +44,7 @@ extern "C" {
 #include <stdio.h>
 
 #ifndef REDLAND_API
-#  ifdef WIN32
+#  ifdef _WIN32
 #    ifdef __GNUC__
 #      undef _declspec
 #      define _declspec(x) __declspec(x)
@@ -64,7 +64,7 @@ extern "C" {
 #endif
 
 #ifndef REDLAND_CALLBACK_STDCALL
-#  if defined(WIN32) && defined(USE_STDCALL_CALLBACKS)
+#  if defined(_WIN32) && defined(USE_STDCALL_CALLBACKS)
 #    define REDLAND_CALLBACK_STDCALL _stdcall
 #  else
 #    define REDLAND_CALLBACK_STDCALL

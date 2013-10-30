@@ -147,7 +147,7 @@ catch (int sig)
     fatalerr ("got signal %d\n", sig);
 }
 
-#if (defined(i386) && defined(SYSV)) || defined(WIN32)
+#if (defined(i386) && defined(SYSV)) || defined(_WIN32)
 #define USGISH
 #endif
 
@@ -701,12 +701,12 @@ void redirect(line, makefile)
         fatalerr("cannot open \"%s\"\n", makefile);
     sprintf(backup, "%s.bak", makefile);
     unlink(backup);
-#if defined(WIN32)
+#if defined(_WIN32)
     fclose(fdin);
 #endif
     if (rename(makefile, backup) < 0)
         fatalerr("cannot rename %s to %s\n", makefile, backup);
-#if defined(WIN32)
+#if defined(_WIN32)
     if ((fdin = fopen(backup, "r")) == NULL)
         fatalerr("cannot open \"%s\"\n", backup);
 #endif

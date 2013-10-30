@@ -21,7 +21,6 @@ $(eval $(call gb_Library_set_warnings_not_errors,raptor2))
 $(eval $(call gb_Library_add_defs,raptor2,\
 	-DHAVE_CONFIG_H \
 	-DRAPTOR_INTERNAL \
-	-DWIN32 \
 	-DNDEBUG \
 	-D_WINDOWS \
 	-D_USRDLL \
