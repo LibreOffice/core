@@ -17,52 +17,45 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Module_Module,writerperfect))
+$(eval $(call gb_Library_Library,wpftimpress))
 
-ifneq (,$(SYSTEM_WPD))
-ifneq (,$(SYSTEM_WPS))
-ifneq (,$(SYSTEM_ODFGEN))
-$(eval $(call gb_Module_add_targets,writerperfect,\
-	Library_wpftwriter \
-))
-endif
-endif
-endif
+$(eval $(call gb_Library_set_componentfile,wpftimpress,writerperfect/source/impress/wpftimpress))
 
-ifneq (,$(SYSTEM_WPD))
-ifneq (,$(SYSTEM_WPG))
-ifneq (,$(SYSTEM_VISIO))
-ifneq (,$(SYSTEM_CDR))
-ifneq (,$(SYSTEM_MSPUB))
-ifneq (,$(SYSTEM_ODFGEN))
-$(eval $(call gb_Module_add_targets,writerperfect,\
-	Library_wpftdraw \
-))
-endif
-endif
-endif
-endif
-endif
-endif
-
-$(eval $(call gb_Module_add_targets,writerperfect,\
-	Library_wpftimpress \
+$(eval $(call gb_Library_set_include,wpftimpress,\
+	$$(INCLUDE) \
+    -I$(SRCDIR)/writerperfect/source \
 ))
 
-ifneq (,$(SYSTEM_WPD))
-ifneq (,$(SYSTEM_WPG))
-ifneq (,$(SYSTEM_ODFGEN))
-$(eval $(call gb_Module_add_targets,writerperfect,\
-	StaticLibrary_writerperfect \
-))
-endif
-endif
-endif
+$(eval $(call gb_Library_use_sdk_api,wpftimpress))
 
-ifneq (,$(SYSTEM_WPD))
-$(eval $(call gb_Module_add_check_targets,writerperfect,\
-	CppunitTest_writerperfect_stream \
+$(eval $(call gb_Library_use_libraries,wpftimpress,\
+	comphelper \
+	cppu \
+	cppuhelper \
+	sal \
+	sot \
+	tl \
+	utl \
+	xo \
+	$(gb_UWINAPI) \
 ))
-endif
+
+$(eval $(call gb_Library_use_static_libraries,wpftimpress,\
+	writerperfect \
+))
+
+$(eval $(call gb_Library_use_externals,wpftimpress,\
+	etonyek \
+	odfgen \
+	wpd \
+	wpg \
+	zlib \
+	libxml2 \
+))
+
+$(eval $(call gb_Library_add_exception_objects,wpftimpress,\
+	writerperfect/source/impress/KeynoteImportFilter \
+	writerperfect/source/impress/wpftimpress_genericfilter \
+))
 
 # vim: set noet sw=4 ts=4:

@@ -1,0 +1,29 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<node oor:name="Apple Keynote" oor:op="replace">
+    <prop oor:name="Flags">
+        <value>IMPORT ALIEN USESOPTIONS 3RDPARTYFILTER PREFERRED</value>
+    </prop>
+    <prop oor:name="FilterService">
+        <value>org.libreoffice.comp.Impress.KeynoteImportFilter</value>
+    </prop>
+    <prop oor:name="UIName">
+        <value xml:lang="x-default">Apple Keynote 5</value>
+    </prop>
+    <prop oor:name="FileFormatVersion">
+        <value>0</value>
+    </prop>
+    <prop oor:name="Type">
+        <value>impress_AppleKeynote</value>
+    </prop>
+    <prop oor:name="DocumentService">
+        <value>com.sun.star.presentation.PresentationDocument</value>
+    </prop>
+</node>
