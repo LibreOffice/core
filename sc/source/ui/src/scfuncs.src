@@ -9850,7 +9850,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             0;
             ID_FUNCTION_GRP_TEXT;
-            U2S( HID_FUNC_BITLSHIFT );
+            U2S( HID_FUNC_FILTERXML );
             2; 0; 0;
             0;
         };
@@ -9885,8 +9885,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             0;
             ID_FUNCTION_GRP_TEXT;
-            U2S( HID_FUNC_BITLSHIFT );
-            1; 0; 0;
+            U2S( HID_FUNC_WEBSERVICE );
+            1; 0;
             0;
         };
         String 2 // Name of Parameter 1
