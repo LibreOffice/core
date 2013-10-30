@@ -169,7 +169,7 @@ MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH)
 
 .IF "$(OS)" == "WNT"
-ADDDEPS+=hack_msitemplates
+ADDDEPS+=msitemplates
 .ENDIF
 
 $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
@@ -293,7 +293,7 @@ $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_dev$/intro.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 
-hack_msitemplates .PHONY: msi_template_files msi_langpack_template_files msi_sdk_template_files
+msitemplates .PHONY: msi_template_files msi_langpack_template_files msi_sdk_template_files
 
 MSI_OFFICE_TEMPLATE_FILES=		\
     ActionTe.idt			\
