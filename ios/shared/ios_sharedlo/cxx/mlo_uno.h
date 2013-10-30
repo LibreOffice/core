@@ -14,11 +14,13 @@ extern "C" {
 #endif
 
     typedef enum {MARK_ALL,MARK_FIRST,MARK_NEXT,MARK_PREVIOUS} MLOFindSelectionType;
+    typedef enum {LAST_PAGE,CURRENT_PAGE} MLOGetPageType;
 
     BOOL mlo_is_document_open(void);
     BOOL mlo_open_file(NSString * file);
     void mlo_close(void);
-    long mlo_get_pages(BOOL last);
+    long mlo_get_page_count(void);
+    long mlo_get_current_page(void);
     int mlo_find(NSString * toSearch,MLOFindSelectionType type);
     void mlo_get_selection(NSMutableString * mutableString);
     void mlo_fetch_view_data(NSMutableString * mutableString);

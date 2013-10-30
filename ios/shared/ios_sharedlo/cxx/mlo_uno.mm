@@ -92,132 +92,136 @@ rtl::OUString lastSearch;
 
 /// functions
 
-Reference< XComponentContext > getXComponentContext(){
-    if(!openedComponentContext.get()){
+Reference< XComponentContext > getXComponentContext()
+{
+    if(!openedComponentContext.get())
+    {
         openedComponentContext.set(cppu::defaultBootstrap_InitialComponentContext());
-    
         LOG_EVAL(openedComponentContext,@"XComponentContext");
     }
     return openedComponentContext;
 }
 
-Reference<XMultiComponentFactory> getXComponentFactory(){
-    if(!openedXComponentFactory.get()){
+Reference<XMultiComponentFactory> getXComponentFactory()
+{
+    if(!openedXComponentFactory.get())
+    {
         openedXComponentFactory.set(getXComponentContext()->getServiceManager());
-    
         LOG_EVAL(openedXComponentFactory,@"XMultiComponentContext");
     }
-  
     return openedXComponentFactory;
 }
 
-Reference<XInterface> getXDesktop(){
-    if(!openedXDesktop.get()){
-                
+Reference<XInterface> getXDesktop()
+{
+    if(!openedXDesktop.get())
+    {
         openedXDesktop.set(getXComponentFactory()->createInstanceWithContext ( OU("com.sun.star.frame.Desktop"), getXComponentContext()));
-    
         LOG_EVAL(openedXDesktop, @"XDesktop");
     }
-   
     return openedXDesktop;
 }
 
-Reference <XComponentLoader> getXComponentLoader(){
-    if(!openedXComponentLoader.get()){
+Reference <XComponentLoader> getXComponentLoader()
+{
+    if(!openedXComponentLoader.get())
+    {
         openedXComponentLoader.set(Reference < XComponentLoader >( Desktop::create(getXComponentContext())));
-        
         LOG_EVAL(openedXComponentLoader, @"XComponentLoader");
     }
-  
     return openedXComponentLoader;
 }
 
-Reference<XModel> getXModel(){
-    if(!openedXModel.get()){
+Reference<XModel> getXModel()
+{
+    if(!openedXModel.get())
+    {
         Reference<XModel> model(openedXComponent.get(), UNO_QUERY);
-    
         openedXModel.set(model);
-    
         LOG_EVAL(openedXModel, @"XModel");
     }
     return openedXModel;
 }
 
-Reference<XController> getXController(){
-   if(!openedXController.get()){
-       
+Reference<XController> getXController()
+{
+   if(!openedXController.get())
+   {
        openedXController.set(getXModel()->getCurrentController());
-    
        LOG_EVAL(openedXController, @"XController");
-    
    }
-    return openedXController;
+   return openedXController;
 }
 
-Reference<XTextViewCursorSupplier> getXTextViewCursorSupplier(){
-    if(!openedXTextViewCursorSupplier.get()){
-    
+Reference<XTextViewCursorSupplier> getXTextViewCursorSupplier()
+{
+    if(!openedXTextViewCursorSupplier.get())
+    {
         Reference<XTextViewCursorSupplier> supplier(getXController(), UNO_QUERY);
         openedXTextViewCursorSupplier.set(supplier);
-    
         LOG_EVAL(openedXTextViewCursorSupplier, @"XTextViewCursorSupplier");
     }
     return openedXTextViewCursorSupplier;
 }
 
-Reference<XPageCursor> getXPageCursor(){
-    if(!openedXPageCursor.get()){
+Reference<XPageCursor> getXPageCursor()
+{
+    if(!openedXPageCursor.get())
+    {
         Reference<XPageCursor> cursor(getXTextViewCursorSupplier()->getViewCursor(), UNO_QUERY);
         openedXPageCursor.set(cursor);
-        
         LOG_EVAL(openedXPageCursor, @"XPageCursor");
     }
     return openedXPageCursor;
 }
 
-Reference<XViewDataSupplier> getXViewDataSupplier(){
-    //if(!openedXViewDataSupplier.get()){
+Reference<XViewDataSupplier> getXViewDataSupplier()
+{
+    //if(!openedXViewDataSupplier.get())
+    //{
         Reference<XViewDataSupplier> supplier(getXController(),UNO_QUERY);
-    
-    openedXViewDataSupplier.set(supplier);
-    
-    LOG_EVAL(openedXViewDataSupplier,@"XViewDataSupplier");
+        openedXViewDataSupplier.set(supplier);
+        LOG_EVAL(openedXViewDataSupplier,@"XViewDataSupplier");
     //}
-
-    
     return openedXViewDataSupplier;
 }
 
-Reference<XSearchable> getXSearchable(){
-    if(!openedXSearchable.get()){
+Reference<XSearchable> getXSearchable()
+{
+    if(!openedXSearchable.get())
+    {
         Reference<XSearchable> xSearchable(getXModel(),UNO_QUERY);
         openedXSearchable.set(xSearchable);
-        
         LOG_EVAL(openedXSearchable,@"XSearchable");
     }
     return openedXSearchable;
 }
 
-Reference<XSelectionSupplier> getXSelectionSupplier(){
-    if(!openedXSelectionSupplier.get()){
+Reference<XSelectionSupplier> getXSelectionSupplier()
+{
+    if(!openedXSelectionSupplier.get())
+    {
         Reference<XSelectionSupplier> supplier(getXController(),UNO_QUERY);
         openedXSelectionSupplier.set(supplier);
-        
         LOG_EVAL(openedXSelectionSupplier, @"XSelectionSupplier");
     }
     return openedXSelectionSupplier;
 }
 
-Reference<XFrame> getXFrame(){
-    if(!openedXFrame.get()){
+Reference<XFrame> getXFrame()
+{
+    if(!openedXFrame.get())
+    {
         openedXFrame.set(getXController()->getFrame());
         LOG_EVAL(openedXFrame, @"XFrame");
     }
     return openedXFrame;
 }
 
-Reference<XDispatchProvider> getXDispatchProvider(){
-    if(!openedXDispatchProvider.get()){
+Reference<XDispatchProvider> getXDispatchProvider()
+{
+    if(!openedXDispatchProvider.get())
+    {
         Reference<XDispatchProvider> provider(getXFrame(),UNO_QUERY);
         openedXDispatchProvider.set(provider);
         LOG_EVAL(openedXDispatchProvider, @"XDispatchProvider");
@@ -225,14 +229,17 @@ Reference<XDispatchProvider> getXDispatchProvider(){
     return openedXDispatchProvider;
 }
 
-Reference<XDispatchHelper> getXDispatchHelper(){
+Reference<XDispatchHelper> getXDispatchHelper()
+{
     Reference<XDispatchHelper> helper = DispatchHelper::create(getXComponentContext());
     LOG_EVAL(helper, @"XDispatchHelper");
     return helper;
 }
 
-Reference<XStorable> getXStorable(){
-    if(!openedXStorable.get()){
+Reference<XStorable> getXStorable()
+{
+    if(!openedXStorable.get())
+    {
         Reference<XStorable> stroable(getXModel(),UNO_QUERY);
         openedXStorable.set(stroable);
         LOG_EVAL(openedXStorable, @"XDispatchProvider");
@@ -240,105 +247,113 @@ Reference<XStorable> getXStorable(){
     return openedXStorable;
 }
 
-NSString * createFileUri(NSString * file){
-    if(file==nil){
+NSString * createFileUri(NSString * file)
+{
+    if(file==nil)
+    {
         NSString * app_root_escaped = [[[NSBundle mainBundle] bundlePath] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
         file = [app_root_escaped stringByAppendingPathComponent:@"test1.odt"];
-    } else {
+    }
+    else
+    {
         file = [file stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     }
     static NSString * prefix = @"file://";
-    
-    if(![file hasPrefix:prefix]){
+    if(![file hasPrefix:prefix])
+    {
         return [prefix stringByAppendingString:file];
     }
     return file;
 }
 
-void postOpenUnoInitialization(){
+void postOpenUnoInitialization()
+{
     getXController();
     getXSearchable();
 }
 
 
 extern "C"
-BOOL
-mlo_open_file(NSString* filepath){
-    
+BOOL mlo_open_file(NSString* filepath)
+{
     static const OUString TARGET = OU("_default");
     static const Sequence<PropertyValue> PROPS (0);
-    
     filepath = createFileUri(filepath);
     NSLog(@"LO : Opening the file : %@",filepath );
-    
     NSDate * loadStart = [NSDate date];
     getXDesktop();
-
     openedXComponent.set(getXComponentLoader()->loadComponentFromURL(OU([filepath UTF8String]),TARGET,0,PROPS));
-
-    if(openedXComponent.get()){
+    if(openedXComponent.get())
+    {
         NSLog(@"LO : XComponent opened succesffully. Duration: %f",[[NSDate date] timeIntervalSinceDate:loadStart]);
         postOpenUnoInitialization();
         NSLog(@"LO : created document singletons");
         return YES;
     }
-    
     return NO;
 }
 
-void setLastSearch(OUString string){
+void setLastSearch(OUString string)
+{
     lastSearch = string;
     lastSearchIndex = -1;
     currentFindAll.clear();
 }
 
-void resetLastSearch(){
+void resetLastSearch()
+{
     setLastSearch(OUString());
 }
 
-void convert(const OUString & source,NSMutableString * target){
-    
+void convert(const OUString & source,NSMutableString * target)
+{
     OString asOString = OUStringToOString( source, RTL_TEXTENCODING_ASCII_US );
-    
     [target setString:[NSString stringWithUTF8String:asOString.getStr()]];
 }
 
-BOOL isResetSearch(NSString * toSearch){
-    if(!toSearch || ([toSearch length] ==0)){
+BOOL isResetSearch(NSString * toSearch)
+{
+    if(!toSearch || ([toSearch length] ==0))
+    {
         resetLastSearch();
         return YES;
     }
     return NO;
 }
 
-void markFind(int searchIndex){
+void markFind(int searchIndex)
+{
     Any currentFind= currentFindAll.get()->getByIndex(searchIndex);
-    
     getXSelectionSupplier()->select(currentFind);
 }
 
-void markDeltaFind(int findCount,int delta){
-    
+void markDeltaFind(int findCount,int delta)
+{
     lastSearchIndex += delta;
-    if(lastSearchIndex == findCount){
+    if(lastSearchIndex == findCount)
+    {
         lastSearchIndex=0;
-    }else if(lastSearchIndex < 0){
+    }
+    else if(lastSearchIndex < 0)
+    {
         lastSearchIndex = findCount-1;
     }
     markFind(lastSearchIndex);
 }
 
-void markAllFinds(int findCount){
-    for (int i = 0; i<findCount; i++) {
+void markAllFinds(int findCount)
+{
+    for (int i = 0; i<findCount; i++)
+    {
         markFind(i);
     }
 }
 
-void setCurrentFindAll(NSString * toSearch){
+void setCurrentFindAll(NSString * toSearch)
+{
     const OUString current = OU([toSearch UTF8String]);
-    
-    if(!lastSearch.equals(current)){
-        
+    if(!lastSearch.equals(current))
+    {
         setLastSearch(current);
         Reference<XSearchDescriptor> descriptor = getXSearchable()->createSearchDescriptor();
         descriptor->setSearchString(current);
@@ -347,13 +362,11 @@ void setCurrentFindAll(NSString * toSearch){
 }
 
 extern "C"
-void
-mlo_close(void){
-    
-    if(openedXComponent.get()){
-        
+void mlo_close(void)
+{
+    if(openedXComponent.get())
+    {
         NSLog(@"Disposing of the XComponent for the opened document");
-
         openedXComponent->dispose();
         openedXComponent.clear();
         openedXModel.clear();
@@ -367,68 +380,60 @@ mlo_close(void){
         openedXDispatchProvider.clear();
         openedXStorable.clear();
         resetLastSearch();
-        
         NSLog(@"XComponent disposed successfully");
     }
 }
 
-long getLong(Reference<XPropertySet> & set,const OUString & name){
-    
-    if(set.get()){
-    
+long getLong(Reference<XPropertySet> & set,const OUString & name)
+{
+    if(set.get())
+    {
         return set->getPropertyValue(name).get<long>();
     }
     return -666;
-    
 }
 
-
-int getInt(Reference<XPropertySet> & set,const OUString & name){
-    
+int getInt(Reference<XPropertySet> & set,const OUString & name)
+{
     return getLong(set, name);
-    
 }
-
 
 extern "C"
-void mlo_fetch_view_data(NSMutableString * mutableString){
-    
+void mlo_fetch_view_data(NSMutableString * mutableString)
+{
     Any any = getXController()->getViewData();
-    
     OUString ou = any.get<OUString>();
-    
     convert(ou, mutableString);
 }
 
 extern "C"
-long
-mlo_get_pages(BOOL last){
-    
-    if(last){
-        
-        static const OUString PAGE_COUNT = OU("PageCount");
-        
-        Reference< XPropertySet > set(  getXController(), UNO_QUERY );
-        return getLong(set,PAGE_COUNT);
-    }
-    
-    
-    return getXPageCursor()->getPage();
+long mlo_get_page_count()
+{
+   static const OUString PAGE_COUNT = OU("PageCount");
+   Reference< XPropertySet > set(  getXController(), UNO_QUERY );
+   return getLong(set,PAGE_COUNT);
+}
+
+extern "C"
+long mlo_get_current_page()
+{
+     return getXPageCursor()->getPage();
 }
 
 
 extern "C"
-int
-mlo_find(NSString * toSearch,MLOFindSelectionType type){
-
-    if(!isResetSearch(toSearch)){
-        
+int mlo_find(NSString * toSearch,MLOFindSelectionType type)
+{
+    if(!isResetSearch(toSearch))
+    {
         setCurrentFindAll(toSearch);
-        
-        if(currentFindAll.get()){
+        if(currentFindAll.get())
+        {
             sal_Int32 count =currentFindAll.get()->getCount();
-            if(count>0){
-                switch (type) {
+            if(count>0)
+            {
+                switch (type)
+                {
                     case MARK_ALL:
                         // mark all returns total count;
                         markAllFinds(count);
@@ -454,36 +459,34 @@ mlo_find(NSString * toSearch,MLOFindSelectionType type){
 }
 
 extern "C"
-void
-mlo_get_selection(NSMutableString * mutableString){
+void mlo_get_selection(NSMutableString * mutableString)
+{
     OUString asOuString;
-    
     Reference<XInterface> currentSelection = getXModel()->getCurrentSelection();
-    
-    if(currentSelection.get()){
-    
+    if(currentSelection.get())
+    {
         Reference< XIndexAccess > xIndexAccess( currentSelection, UNO_QUERY );
-
-        if(xIndexAccess.get() && (xIndexAccess->getCount()>0)){
+        if(xIndexAccess.get() && (xIndexAccess->getCount()>0))
+        {
             Reference< XTextRange > xTextRange(xIndexAccess->getByIndex(0),UNO_QUERY);
-            if(xTextRange.get()){
+            if(xTextRange.get())
+            {
                 asOuString=xTextRange->getString();
             }
         }
     }
-    
     convert(asOuString, mutableString);
 }
 
 extern "C"
-BOOL
-mlo_is_document_open(void){
+BOOL mlo_is_document_open(void)
+{
     return openedXComponent.is() ? YES : NO;
 }
 
 extern "C"
-void
-mlo_select_all(void){
+void mlo_select_all(void)
+{
     getXDispatchHelper()->executeDispatch(getXDispatchProvider(),
                                           OUString(".uno:SelectAll"),
                                           OUString("_self"),
@@ -492,13 +495,17 @@ mlo_select_all(void){
 }
 
 extern "C"
-void
-mlo_save(void){
-    if(mlo_is_document_open()){
+void mlo_save(void)
+{
+    if(mlo_is_document_open())
+    {
         Reference<XStorable> storable =getXStorable();
-        if(storable->isReadonly()){
+        if(storable->isReadonly())
+        {
             NSLog(@"Cannot save changes. File is read only");
-        }else{
+        }
+        else
+        {
             storable->store();
             NSLog(@"saved changes");
         }

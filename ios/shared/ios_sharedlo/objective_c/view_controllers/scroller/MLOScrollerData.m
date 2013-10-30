@@ -124,7 +124,7 @@ static const int INT_RESET= -1;
 
 -(NSInteger) getTotalPages{
     
-    NSInteger newTotalPages= mlo_get_pages(YES);
+    NSInteger newTotalPages= mlo_get_page_count();
     
     if(newTotalPages!= _totalPages){
                 
