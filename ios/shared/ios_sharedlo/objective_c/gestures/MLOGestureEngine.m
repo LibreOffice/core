@@ -470,3 +470,7 @@ void touch_ui_selection_start(MLOSelectionKind kind,
               rectangles[i].origin.y);
     }
 }
+
+void touch_ui_selection_none(){
+    // STUB
+}
