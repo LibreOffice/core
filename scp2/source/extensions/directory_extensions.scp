@@ -143,17 +143,6 @@ End
 
 #endif
 
-/* ** LanguageTool ** */
-
-#ifdef WITH_EXTENSION_LANGUAGETOOL
-
-Directory gid_Brand_Dir_Share_Extensions_LanguageTool
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "LanguageTool";
-End
-
-#endif
-
 /* ** MySQL Connector ** */
 
 #ifdef WITH_EXTENSION_MARIADBC

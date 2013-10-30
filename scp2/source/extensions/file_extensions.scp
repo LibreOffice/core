@@ -171,9 +171,9 @@ End
 
 File gid_File_Oxt_LanguageTool
     TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_LanguageTool;
-    Name = "LanguageTool.oxt";
+    Styles = (PACKED, FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "LanguageTool.filelist";
 End
 
 #endif

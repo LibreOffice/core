@@ -7,12 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,languagetool,$(call gb_UnpackedTarball_get_dir,languagetool)))
+$(eval $(call gb_ExtensionPackage_ExtensionPackage,LanguageTool,$(call gb_UnpackedTarball_get_dir,languagetool)/dist/LanguageTool.oxt))
 
-$(eval $(call gb_Package_set_outdir,languagetool,$(OUTDIR)))
-
-$(eval $(call gb_Package_use_external_project,languagetool,languagetool))
-
-$(eval $(call gb_Package_add_file,languagetool,bin/LanguageTool.oxt,dist/LanguageTool.oxt))
+$(eval $(call gb_ExtensionPackage_use_external_project,LanguageTool,languagetool))
 
 # vim: set noet sw=4 ts=4:
