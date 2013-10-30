@@ -106,14 +106,12 @@ namespace svgio
                 }
             }
 
-            if(maCssStyleVector.empty())
+            if(!maCssStyleVector.empty())
             {
-                return &rOriginal;
-            }
-            else
-            {
-                // set CssStyleParent at maCssStyleVector members to hang them in front of
-                // the existing style. Build a style chain, reset parent of original for security.
+                // #i123510# if CSS styles were found, create a linked list with rOriginal as parent
+                // and all CSS styles as linked children, so that the style attribute has
+                // priority over the CSS style. If there is no style attribute this means that
+                // no values are set at rOriginal, thus it is still correct to have that order.
                 // Repeated style requests should only be issued from sub-Text nodes and I'm not
                 // sure if in-between text nodes may build other chains (should not happen). But
                 // it's only a re-chaining with pointers (cheap), so allow to do it every time.
@@ -122,14 +120,15 @@ namespace svgio
 
                 for(sal_uInt32 a(0); a < maCssStyleVector.size(); a++)
                 {
-                    SvgStyleAttributes* pCandidate = const_cast< SvgStyleAttributes* >(maCssStyleVector[maCssStyleVector.size() - a - 1]);
+                    SvgStyleAttributes* pNext = const_cast< SvgStyleAttributes* >(maCssStyleVector[a]);
 
-                    pCandidate->setCssStyleParent(pCurrent);
-                    pCurrent = pCandidate;
+                    pCurrent->setCssStyleParent(pNext);
+                    pCurrent = pNext;
+                    pCurrent->setCssStyleParent(0);
                 }
-
-                return pCurrent;
             }
+
+            return &rOriginal;
         }
 
         SvgNode::SvgNode(
