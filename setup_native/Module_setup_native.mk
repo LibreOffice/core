@@ -13,13 +13,18 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 	$(if $(filter LINUX SOLARIS,$(OS)),Library_getuid) \
 	CustomTarget_spell \
 	Package_packinfo \
-	Package_misc \
 ))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,setup_native,\
 	CustomTarget_mac \
 	Package_ulf \
+))
+endif
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,setup_native,\
+	Package_misc \
 ))
 endif
 
