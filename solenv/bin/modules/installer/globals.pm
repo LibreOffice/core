@@ -244,7 +244,7 @@ BEGIN
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @featurecollector =();
     $msiassemblyfiles = "";
-    $macinstallfilename = "macinstall.ulf";
+    $macinstallfilename = $ENV{'WORKDIR'} . "/CustomTarget/setup_native/mac/macinstall.ulf";
     $extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @languagenames = ();
     %componentcondition = ();
