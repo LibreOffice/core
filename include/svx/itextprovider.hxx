@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#if !defined SVX_ITEXTPROVIDER_HXX_INCLUDED
-#define SVX_ITEXTPROVIDER_HXX_INCLUDED
+#ifndef INCLUDED_SVX_ITEXTPROVIDER_HXX
+#define INCLUDED_SVX_ITEXTPROVIDER_HXX
 
 #include <sal/types.h>
 
