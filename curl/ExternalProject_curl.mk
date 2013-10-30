@@ -21,7 +21,7 @@ $(eval $(call gb_ExternalProject_register_targets,curl,\
 ifneq ($(OS),WNT)
 
 curl_CPPFLAGS :=
-curl_LDFLAGS :=
+curl_LDFLAGS := $(if $(filter LINUX FREEBSD,$(OS)),"-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib)
 
 ifneq ($(SYSBASE),)
 curl_CPPFLAGS += -I$(SYSBASE)/usr/include
@@ -36,7 +36,7 @@ endif
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
 		CPPFLAGS="$(curl_CPPFLAGS)" \
-		LDFLAGS="$(curl_LDFLAGS)" \
+		LDFLAGS=$(curl_LDFLAGS) \
 		./configure \
 			--with-nss$(if $(filter NO,$(SYSTEM_NSS)),="$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out") \
 			--without-ssl \
