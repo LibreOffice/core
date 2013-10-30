@@ -234,9 +234,9 @@ bool ScImportExport::StartPaste()
 // Nachbereitung Insert: Undo/Redo-Aktionen erzeugen, Invalidate/Repaint
 
 
-void ScImportExport::EndPaste()
+void ScImportExport::EndPaste(bool bAutoRowHeight)
 {
-    bool bHeight = pDocSh && pDocSh->AdjustRowHeight(
+    bool bHeight = bAutoRowHeight && pDocSh && pDocSh->AdjustRowHeight(
                     aRange.aStart.Row(), aRange.aEnd.Row(), aRange.aStart.Tab() );
 
     if( pUndoDoc && pDoc->IsUndoEnabled() )
@@ -1470,7 +1470,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             nRow = nStartRow;
             if (!StartPaste())
             {
-                EndPaste();
+                EndPaste(false);
                 return false;
             }
         }
@@ -1481,7 +1481,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     xProgress.reset();    // make room for AdjustRowHeight progress
     if (bRangeIsDetermined)
-        EndPaste();
+        EndPaste(false);
 
     return true;
 }

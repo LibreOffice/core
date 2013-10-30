@@ -70,7 +70,7 @@ class ScImportExport
     ScAsciiOptions* pExtOptions;        // extended options
 
     bool StartPaste();                  // Protect check, set up Undo
-    void EndPaste();                    // Undo/Redo actions, Repaint
+    void EndPaste(bool bAutoRowHeight = true);                    // Undo/Redo actions, Repaint
     bool Doc2Text( SvStream& );
     bool Text2Doc( SvStream& );
     bool Doc2Sylk( SvStream& );
