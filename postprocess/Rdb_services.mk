@@ -118,6 +118,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	writerfilter/util/writerfilter \
 	writerperfect/util/wpftwriter \
 	writerperfect/util/wpftdraw \
+	writerperfect/source/impress/wpftimpress \
 	$(if $(filter MACOSX,$(OS)), \
 		$(if $(filter-out X86_64,$(CPUNAME)), \
 			avmedia/source/quicktime/avmediaQuickTime \
