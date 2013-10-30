@@ -17,15 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// for WINVER
-#include <windows.h>
-
 #include <win/salids.hrc>
 
 SAL_RESID_POINTER_NULL                  CURSOR          nullptr.cur
-#if ( WINVER < 0x0400 )
-SAL_RESID_POINTER_HELP                  CURSOR          help.cur
-#endif
 #ifndef WNT
 SAL_RESID_POINTER_HSIZE                 CURSOR          hsize.cur
 SAL_RESID_POINTER_VSIZE                 CURSOR          vsize.cur
