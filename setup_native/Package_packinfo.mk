@@ -7,10 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,setup_native/packinfo,$(SRCDIR)/setup_native/source/packinfo))
+$(eval $(call gb_Package_Package,setup_native_packinfo,$(SRCDIR)/setup_native/source/packinfo))
 
-$(eval $(call gb_Package_set_outdir,setup_native/packinfo,$(OUTDIR)))
-
-$(eval $(call gb_Package_add_file,setup_native/packinfo,bin/package.txt,package.txt))
+$(eval $(call gb_Package_add_file,setup_native_packinfo,$(LIBO_SHARE_FOLDER)/extensions/package.txt,package.txt))
 
 # vim: set noet sw=4 ts=4:
