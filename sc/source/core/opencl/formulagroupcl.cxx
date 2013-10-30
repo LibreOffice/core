@@ -1351,7 +1351,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     // Constructing "AST"
     FormulaTokenIterator aCode = rCode;
     std::list<FormulaToken *> list;
-    std::map<FormulaToken *, boost::shared_ptr<FormulaTreeNode>> m_hash_map;
+    std::map<FormulaToken *, boost::shared_ptr<FormulaTreeNode> > m_hash_map;
     FormulaToken*  pCur;
     while( (pCur = (FormulaToken*)(aCode.Next()) ) != NULL)
     {
