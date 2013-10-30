@@ -18,12 +18,7 @@ $(eval $(call gb_StaticLibrary_add_defs,shlxthandler_common,\
 	-DISOLATION_AWARE_ENABLED \
 	-DUNICODE \
 	-DWIN32_LEAN_AND_MEAN \
-	-D_NTSDK \
 	-D_UNICODE \
-))
-$(eval $(call gb_StaticLibrary_add_defs,shlxthandler_common,\
-	-D_WIN32_IE=0x501 \
-	-D_WIN32_WINNT=0x0501 \
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,shlxthandler_common,\

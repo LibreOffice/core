@@ -18,12 +18,9 @@ $(eval $(call gb_Library_add_defs,ooofilt,\
 	-DISOLATION_AWARE_ENABLED \
 	-DUNICODE \
 	-DWIN32_LEAN_AND_MEAN \
-	-D_NTSDK \
 	-D_UNICODE \
 ))
 $(eval $(call gb_Library_add_defs,ooofilt,\
-	-D_WIN32_IE=0x501 \
-	-D_WIN32_WINNT=0x0501 \
 	-UNOMINMAX \
 ))
 
