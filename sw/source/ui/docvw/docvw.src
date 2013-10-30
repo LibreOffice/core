@@ -85,7 +85,7 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_SAVEGRAPHIC ;
             HelpID = HID_MN_READONLY_SAVEGRAPHIC ;
-            Text [ en-US ] = "Save Graphics..." ;
+            Text [ en-US ] = "Save Image..." ;
         };
         MenuItem
         {
@@ -110,7 +110,7 @@ Menu MN_READONLY_POPUP
                     SEPARATOR
                 };
             };
-            Text [ en-US ] = "Add Graphics" ;
+            Text [ en-US ] = "Add Image" ;
         };
         MenuItem
         {
@@ -154,20 +154,20 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_COPYGRAPHIC ;
             HelpID = HID_MN_READONLY_COPYGRAPHIC ;
-            Text [ en-US ] = "Copy ~Graphics" ;
+            Text [ en-US ] = "Copy ~Image" ;
         };
         SEPARATOR
         MenuItem
         {
             Identifier = MN_READONLY_LOADGRAPHIC ;
             HelpID = HID_MN_READONLY_LOADGRAPHIC ;
-            Text [ en-US ] = "Load Graphics" ;
+            Text [ en-US ] = "Load Image" ;
         };
         MenuItem
         {
             Identifier = MN_READONLY_GRAPHICOFF ;
             HelpID = HID_MN_READONLY_GRAPHICOFF ;
-            Text [ en-US ] = "Graphics Off" ;
+            Text [ en-US ] = "Image Off" ;
         };
         MenuItem
         {

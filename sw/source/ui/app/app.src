@@ -320,7 +320,7 @@ String STR_STATSTR_AUTOFORMAT
 
 String STR_STATSTR_IMPGRF
 {
-    Text [ en-US ] = "Importing graphics..." ;
+    Text [ en-US ] = "Importing Images..." ;
 };
 
 String STR_STATSTR_SEARCH
@@ -403,7 +403,7 @@ String STR_TABLE_DEFNAME
 
 String STR_GRAPHIC_DEFNAME
 {
-    Text[ en-US ] = "graphics" ;
+    Text[ en-US ] = "Image" ;
 };
 
 String STR_OBJECT_DEFNAME

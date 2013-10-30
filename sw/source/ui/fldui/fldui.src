@@ -246,7 +246,7 @@ String FLD_STAT_PARA
 };
 String FLD_STAT_GRF
 {
-    Text [ en-US ] = "Graphics" ;
+    Text [ en-US ] = "Image" ;
 };
 String FLD_STAT_OBJ
 {
@@ -552,7 +552,7 @@ String FMT_MARK_FRAME
 };
 String FMT_MARK_GRAFIC
 {
-    Text [ en-US ] = "Graphics" ;
+    Text [ en-US ] = "Image" ;
 };
 String FMT_MARK_OLE
 {

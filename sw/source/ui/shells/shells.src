@@ -22,31 +22,31 @@
 #include "helpid.h"
 String STR_GRFILTER_OPENERROR
 {
-        Text [ en-US ] = "Graphics file cannot be opened" ;
+        Text [ en-US ] = "Image file cannot be opened" ;
 };
 String STR_GRFILTER_IOERROR
 {
-        Text [ en-US ] = "Graphics file cannot be read" ;
+        Text [ en-US ] = "Image file cannot be read" ;
 };
 String STR_GRFILTER_FORMATERROR
 {
-        Text [ en-US ] = "Unknown graphic format" ;
+        Text [ en-US ] = "Unknown Image format" ;
 };
 String STR_GRFILTER_VERSIONERROR
 {
-        Text [ en-US ] = "This graphic file version is not supported" ;
+        Text [ en-US ] = "This Image file version is not supported" ;
 };
 String STR_GRFILTER_FILTERERROR
 {
-        Text [ en-US ] = "Graphics filter not found" ;
+        Text [ en-US ] = "Image filter not found" ;
 };
 String STR_GRFILTER_TOOBIG
 {
-    Text [ en-US ] = "Not enough memory to insert the picture." ;
+    Text [ en-US ] = "Not enough memory to insert the Image." ;
 };
 String STR_INSERT_GRAPHIC
 {
-    Text [ en-US ] = "Insert picture" ;
+    Text [ en-US ] = "Insert Image" ;
 };
 String STR_NO_ADDRESSBOOK
 {
@@ -118,7 +118,7 @@ String RID_FRAME_TOOLBOX
 };
 String RID_GRAFIK_TOOLBOX
 {
-        Text [ en-US ] = "Graphics Object Bar" ;
+        Text [ en-US ] = "Images Object Bar" ;
 };
 String RID_OLE_TOOLBOX
 {
@@ -134,7 +134,7 @@ String RID_BEZIER_TOOLBOX
 };
 String RID_DRAW_TEXT_TOOLBOX
 {
-    Text [ en-US ] = "Text Object Bar/Graphics" ;
+    Text [ en-US ] = "Text Object Bar/Images" ;
 };
 String RID_NUM_TOOLBOX
 {
@@ -154,7 +154,7 @@ String STR_SHELLNAME_FRAME
 };
 String STR_SHELLNAME_GRAPHIC
 {
-        Text [ en-US ] = "Graphics" ;
+        Text [ en-US ] = "Image" ;
 };
 String STR_SHELLNAME_OBJECT
 {
@@ -195,7 +195,7 @@ String STR_SWBG_PARAGRAPH
 };
 String STR_SWBG_GRAPHIC
 {
-        Text [ en-US ] = "Graphics" ;
+        Text [ en-US ] = "Image" ;
 };
 String STR_SWBG_OLE
 {
