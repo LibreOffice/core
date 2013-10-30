@@ -320,6 +320,7 @@ include $(foreach class, \
 	HelpTarget \
 	AllLangHelp \
 	Extension \
+	ExtensionPackage \
 	Dictionary \
 	InstallModuleTarget \
 	InstallModule \
