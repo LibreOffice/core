@@ -171,6 +171,8 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocStDevA,          {{ Reference                                            }, 1 }},
     { ocStDevP,          {{ Reference                                            }, 1 }},
     { ocStDevPA,         {{ Reference                                            }, 1 }},
+    { ocStDevP_MS,       {{ Reference                                            }, 1 }},
+    { ocStDevS,          {{ Reference                                            }, 1 }},
     { ocSTEYX,           {{ ForceArray, ForceArray                               }, 0 }},
     { ocSub,             {{ Array, Array                                         }, 0 }},
     { ocSubTotal,        {{ Value, Reference                                     }, 1 }},
