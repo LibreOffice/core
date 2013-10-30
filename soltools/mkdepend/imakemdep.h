@@ -118,7 +118,7 @@ in this Software without prior written authorization from the X Consortium.
 #define imake_ccflags "-DX_NOT_POSIX"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #define imake_ccflags "-nologo -batch -D__STDC__"
 #endif
 
@@ -174,10 +174,10 @@ in this Software without prior written authorization from the X Consortium.
  *     all colons).  One way to tell if you need this is to see whether or not
  *     your Makefiles have no tabs in them and lots of @@ strings.
  */
-#if defined(sun) || defined(SYSV) || defined(SVR4) || defined(hcx) || defined(WIN32) || (defined(AMOEBA) && defined(CROSS_COMPILE))
+#if defined(sun) || defined(SYSV) || defined(SVR4) || defined(hcx) || defined(_WIN32) || (defined(AMOEBA) && defined(CROSS_COMPILE))
 #define FIXUP_CPP_WHITESPACE
 #endif
-#ifdef WIN32
+#ifdef _WIN32
 #define REMOVE_CPP_LEADSPACE
 #define INLINE_SYNTAX
 #define MAGIC_MAKE_VARS
@@ -192,7 +192,7 @@ in this Software without prior written authorization from the X Consortium.
  *     If use cc -E but want a different compiler, define DEFAULT_CC.
  *     If the cpp you need is not in /lib/cpp, define DEFAULT_CPP.
  */
-#ifdef WIN32
+#ifdef _WIN32
 #define USE_CC_E
 #define DEFAULT_CC "cl"
 #endif
@@ -433,7 +433,7 @@ char *cpp_argv[ARGUMENTS] = {
     "-DSVR4",
 #endif
 #endif
-#ifdef WIN32
+#ifdef _WIN32
     "-DWIN32",
     "-nologo",
     "-batch",

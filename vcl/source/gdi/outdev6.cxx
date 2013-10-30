@@ -258,7 +258,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 #if defined UNX && ! defined MACOSX
             && GetBitCount() > 8
 #endif
-#ifdef WIN32
+#ifdef _WIN32
         // workaround bad dithering on remote displaying when using GDI+ with toolbar buttoin hilighting
         && !rPolyPoly.IsRect()
 #endif

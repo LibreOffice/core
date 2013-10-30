@@ -121,7 +121,7 @@ const struct FontEntry FontMapTab[] =
     {"\xbd\xc5\xb8\xed \xb1\xc3\xbc\xad",3, 0.97}
 };
 
-#ifndef WIN32
+#ifndef _WIN32
 #if defined(LINUX)
 const char* RepFontTab[] =
 {

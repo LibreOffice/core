@@ -23,7 +23,7 @@
 
 #include "mzstring.h"
 
-#ifndef WIN32
+#ifndef _WIN32
 #else
 
     #if defined _MSC_VER
@@ -33,12 +33,12 @@
     #if defined _MSC_VER
         #pragma warning(pop)
     #endif
-#endif                                            /* WIN32 */
+#endif                                            /* _WIN32 */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef WIN32
+#ifndef _WIN32
 # define wsprintf sprintf
 #endif
 

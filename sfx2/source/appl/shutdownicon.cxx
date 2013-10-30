@@ -77,7 +77,7 @@ using namespace ::rtl;
 using namespace ::sfx2;
 
 #ifdef ENABLE_QUICKSTART_APPLET
-# if !defined(WIN32) && !defined(MACOSX)
+# if !defined(_WIN32) && !defined(MACOSX)
 extern "C" { static void SAL_CALL thisModule() {} }
 # endif
 #endif
@@ -128,7 +128,7 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
     }
 
 #ifdef ENABLE_QUICKSTART_APPLET
-#  ifdef WIN32
+#  ifdef _WIN32
     if ( pModule )
     {
         *pInit = win32_init_sys_tray;

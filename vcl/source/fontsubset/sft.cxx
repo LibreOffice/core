@@ -1484,7 +1484,7 @@ static void allocTrueTypeFont( TrueTypeFont** ttf )
 /* forward declariotn for the two entry points to use*/
 static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t );
 
-#if !defined(WIN32)
+#if !defined(_WIN32)
 int OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
 {
     int ret, fd = -1;
@@ -1744,7 +1744,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 
 void CloseTTFont(TrueTypeFont *ttf) /*FOLD01*/
 {
-#if !defined(WIN32)
+#if !defined(_WIN32)
     if( ttf->fname )
         munmap((char *) ttf->ptr, ttf->fsize);
 #endif
