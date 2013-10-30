@@ -1821,6 +1821,11 @@ MLOContentSize touch_lo_get_content_size()
     SwWrtShell *pViewShell = GetActiveWrtShell();
     if (pViewShell)
     {
+        static const long WIDTH_ADDITION  = 6L * DOCUMENTBORDER;
+        static const long HEIGHT_ADDITION = 2L * DOCUMENTBORDER;
+        Size documentSize =pViewShell->GetView().GetDocSz();
+        return MLOContentSizeMake(documentSize.Width() + WIDTH_ADDITION,
+                                  documentSize.Height() + HEIGHT_ADDITION);
     }
     return MLOContentSizeMake(0,0);
 }

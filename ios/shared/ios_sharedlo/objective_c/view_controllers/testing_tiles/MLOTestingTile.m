@@ -59,6 +59,9 @@
                        self.tester.params.tileHeight);
 
     CGContextRestoreGState(context);
+
+    MLOContentSize size = touch_lo_get_content_size();
+    NSLog(@"MLOContentSize: width=%lld, height=%lld",size.width, size.height);
 }
 
 @end
