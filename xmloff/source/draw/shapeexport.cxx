@@ -2097,26 +2097,27 @@ void XMLShapeExport::ImpExportEllipseShape(
 
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
 
+        // prepare name (with most used)
+        enum ::xmloff::token::XMLTokenEnum eName(XML_CIRCLE);
+
         if(bCircle)
         {
-            // write circle
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_CIRCLE, bCreateNewline, sal_True);
-
-            ImpExportDescription( xShape ); // #i68101#
-            ImpExportEvents( xShape );
-            ImpExportGluePoints( xShape );
-            ImpExportText( xShape );
+            // name already set
         }
         else
         {
-            // write ellipse
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_ELLIPSE, bCreateNewline, sal_True);
-
-            ImpExportDescription( xShape ); // #i68101#
-            ImpExportEvents( xShape );
-            ImpExportGluePoints( xShape );
-            ImpExportText( xShape );
+            // set name
+            eName = XML_ELLIPSE;
         }
+
+        // write ellipse or circle
+        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, eName, bCreateNewline, sal_True);
+
+        ImpExportDescription( xShape ); // #i68101#
+        ImpExportEvents( xShape );
+        ImpExportGluePoints( xShape );
+        ImpExportText( xShape );
+
     }
 }
 
@@ -2152,6 +2153,9 @@ void XMLShapeExport::ImpExportPolygonShape(
 
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
 
+        // prepare name (with most used)
+        enum ::xmloff::token::XMLTokenEnum eName(XML_PATH);
+
         if(bBezier)
         {
             // get PolygonBezier
@@ -2171,15 +2175,6 @@ void XMLShapeExport::ImpExportPolygonShape(
 
                 // write point array
                 mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
-
-                // write object now
-                SvXMLElementExport aOBJ(
-                    mrExport,
-                    XML_NAMESPACE_DRAW,
-                    XML_PATH,
-                    bCreateNewline,
-                    sal_True);
-
             }
         }
         else
@@ -2198,13 +2193,8 @@ void XMLShapeExport::ImpExportPolygonShape(
                 // write point array
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);
 
-                // write object now
-                SvXMLElementExport aOBJ(
-                    mrExport,
-                    XML_NAMESPACE_DRAW,
-                    aPolygon.isClosed() ? XML_POLYGON : XML_POLYLINE,
-                    bCreateNewline,
-                    sal_True);
+                // set name
+                eName = aPolygon.isClosed() ? XML_POLYGON : XML_POLYLINE;
             }
             else
             {
@@ -2218,16 +2208,18 @@ void XMLShapeExport::ImpExportPolygonShape(
 
                 // write point array
                 mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
-
-                // write object now
-                SvXMLElementExport aOBJ(
-                    mrExport,
-                    XML_NAMESPACE_DRAW,
-                    XML_PATH,
-                    bCreateNewline,
-                    sal_True);
             }
         }
+
+        // write object, but after attributes are added since the destructor will
+        // consume all of these added attributes. Also before text is added; this may
+        // open another SvXMLElementExport scope which needs to be inside this one
+        SvXMLElementExport aOBJ(
+            mrExport,
+            XML_NAMESPACE_DRAW,
+            eName,
+            bCreateNewline,
+            sal_True);
 
         ImpExportDescription( xShape ); // #i68101#
         ImpExportEvents( xShape );
