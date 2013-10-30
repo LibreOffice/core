@@ -95,6 +95,7 @@ $(call gb_Package_get_target,$(1)) :| $(dir $(call gb_Package_get_target,$(1))).
 endef
 
 define gb_Package_Package
+$$(if $$(gb_Package_SOURCEDIR_$(1)),$$(call gb_Output_error,gb_Package__check: Package $(1) has already been defined))
 $(if $(filter postprocess% instsetoo_native%,$(1)),,\
     $(call gb_Postprocess_register_target,AllPackages,Package,$(1)))
 $(call gb_Package_Package_internal,$(1),$(2))
