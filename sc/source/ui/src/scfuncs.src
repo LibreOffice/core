@@ -5194,7 +5194,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             0;
             ID_FUNCTION_GRP_STATISTIC;
-            U2S( HID_FUNC_STABW );
+            U2S( HID_FUNC_ST_DEV_S );
             VAR_ARGS;   0;
             0;
         };
@@ -5266,7 +5266,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             0;
             ID_FUNCTION_GRP_STATISTIC;
-            U2S( HID_FUNC_STABWN );
+            U2S( HID_FUNC_ST_DEV_P_MS );
             VAR_ARGS;   0;
             0;
         };
@@ -7601,7 +7601,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             0;
             ID_FUNCTION_GRP_STATISTIC;
-            U2S( HID_FUNC_KOVAR );
+            U2S( HID_FUNC_COVARIANCE_P );
             2;  0;  0;
             0;
         };
@@ -7633,7 +7633,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             0;
             ID_FUNCTION_GRP_STATISTIC;
-            U2S( HID_FUNC_KOVAR );
+            U2S( HID_FUNC_COVARIANCE_S );
             2;  0;  0;
             0;
         };

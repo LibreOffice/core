@@ -678,5 +678,9 @@
 #define HID_FUNC_BITRSHIFT                                      "SC_HID_FUNC_BITRSHIFT"
 #define HID_FUNC_FILTERXML                                      "SC_HID_FUNC_FILTERXML"
 #define HID_FUNC_WEBSERVICE                                     "SC_HID_FUNC_WEBSERVICE"
+#define HID_FUNC_COVARIANCE_P                                   "SC_HID_FUNC_COVARIANCE_P"
+#define HID_FUNC_COVARIANCE_S                                   "SC_HID_FUNC_COVARIANCE_S"
+#define HID_FUNC_ST_DEV_P_MS                                    "SC_HID_FUNC_ST_DEV_P_MS"
+#define HID_FUNC_ST_DEV_S                                       "SC_HID_FUNC_ST_DEV_S"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
