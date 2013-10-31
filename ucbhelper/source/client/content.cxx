@@ -393,7 +393,7 @@ Reference< XCommandInfo > Content::getCommands()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
-    aCommand.Name     = OUString("getCommandInfo");
+    aCommand.Name     = "getCommandInfo";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument = Any();
 
@@ -409,7 +409,7 @@ Reference< XPropertySetInfo > Content::getProperties()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
-    aCommand.Name     = OUString("getPropertySetInfo");
+    aCommand.Name     = "getPropertySetInfo";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument = Any();
 
@@ -489,7 +489,7 @@ Reference< XRow > Content::getPropertyValuesInterface(
     }
 
     Command aCommand;
-    aCommand.Name     = OUString("getPropertyValues");
+    aCommand.Name     = "getPropertyValues";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -537,7 +537,7 @@ Sequence< Any > Content::setPropertyValues(
     }
 
     Command aCommand;
-    aCommand.Name     = OUString("setPropertyValues");
+    aCommand.Name     = "setPropertyValues";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -587,7 +587,7 @@ Any Content::createCursorAny( const Sequence< OUString >& rPropertyNames,
     aArg.Properties = aProps;
 
     Command aCommand;
-    aCommand.Name     = OUString("open");
+    aCommand.Name     = "open";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -706,7 +706,7 @@ Reference< XInputStream > Content::openStream()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = OUString("open");
+    aCommand.Name     = "open";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -731,7 +731,7 @@ Reference< XInputStream > Content::openStreamNoLock()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = OUString("open");
+    aCommand.Name     = "open";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -756,7 +756,7 @@ Reference< XStream > Content::openWriteableStream()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = OUString("open");
+    aCommand.Name     = "open";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -781,7 +781,7 @@ Reference< XStream > Content::openWriteableStreamNoLock()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = OUString("open");
+    aCommand.Name     = "open";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -804,7 +804,7 @@ sal_Bool Content::openStream( const Reference< XActiveDataSink >& rSink )
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = OUString("open");
+    aCommand.Name     = "open";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -827,7 +827,7 @@ sal_Bool Content::openStream( const Reference< XOutputStream >& rStream )
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = OUString("open");
+    aCommand.Name     = "open";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -846,7 +846,7 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
     aArg.ReplaceExisting = bReplaceExisting;
 
     Command aCommand;
-    aCommand.Name     = OUString("insert");
+    aCommand.Name     = "insert";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -908,7 +908,7 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
     aInfo.Attributes = 0;
 
     Command aCommand;
-    aCommand.Name     = OUString("createNewContent");
+    aCommand.Name     = "createNewContent";
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aInfo;
 
@@ -990,7 +990,7 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
 
         case InsertOperation_CHECKIN:
             eTransOp = TransferCommandOperation_COPY;
-            sCommand = OUString( "checkin" );
+            sCommand = "checkin";
             bCheckIn = true;
             break;
 
@@ -1180,7 +1180,7 @@ void Content_Impl::disposing( const EventObject& Source )
 
         xContent = m_xContent;
 
-        m_aURL = OUString();
+        m_aURL = "";
         m_xCommandProcessor = 0;
         m_xContent = 0;
     }
@@ -1301,7 +1301,7 @@ void Content_Impl::inserted()
 {
     // URL might have changed during 'insert' => recalculate in next getURL()
     osl::MutexGuard aGuard( m_aMutex );
-    m_aURL = OUString();
+    m_aURL = "";
 }
 
 //=========================================================================

@@ -711,7 +711,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 if ( nColonPos == -1 )
                 {
                     // No port given, server pattern equals current token
-                    aPort = OUString("*");
+                    aPort = "*";
                     if ( aToken.indexOf( '*' ) == -1 )
                     {
                         // pattern describes exactly one server
