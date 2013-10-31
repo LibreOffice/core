@@ -32,20 +32,31 @@ namespace sdr
 {
     namespace properties
     {
-        void CustomShapeProperties::UpdateTextFrameStatus()
+        void CustomShapeProperties::UpdateTextFrameStatus(bool bInvalidateRenderGeometry)
         {
             SdrObjCustomShape& rObj = static_cast< SdrObjCustomShape& >(GetSdrObject());
             const bool bOld(rObj.bTextFrame);
 
+            // change TextFrame flag when bResizeShapeToFitText changes (which is mapped
+            // on the item SDRATTR_TEXT_AUTOGROWHEIGHT for custom shapes, argh)
             rObj.bTextFrame = 0 != static_cast< const SdrTextAutoGrowHeightItem& >(GetObjectItemSet().Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
 
+            // check if it did change
             if(rObj.bTextFrame != bOld)
             {
-                rObj.InvalidateRenderGeometry();
+                // on change also invalidate render geometry
+                bInvalidateRenderGeometry = true;
 
                 // #115391# Potential recursion, since it calls SetObjectItemSet again, but rObj.bTextFrame
-                // will not change again, thus it will be only one level and terminate
+                // will not change again. Thus it will be only one level and terminate safely
                 rObj.AdaptTextMinSize();
+            }
+
+            if(bInvalidateRenderGeometry)
+            {
+                // if asked for or bResizeShapeToFitText changed, make sure that
+                // the render geometry is reconstructed using changed parameters
+                rObj.InvalidateRenderGeometry();
             }
         }
 
@@ -127,7 +138,7 @@ namespace sdr
             TextProperties::ItemSetChanged(rSet);
 
             // update bTextFrame and RenderGeometry
-            UpdateTextFrameStatus();
+            UpdateTextFrameStatus(true);
         }
 
         void CustomShapeProperties::PostItemChange(const sal_uInt16 nWhich)
@@ -137,7 +148,7 @@ namespace sdr
                 case SDRATTR_TEXT_AUTOGROWHEIGHT:
                 {
                     // #115391#  update bTextFrame and RenderGeometry using AdaptTextMinSize()
-                    UpdateTextFrameStatus();
+                    UpdateTextFrameStatus(false);
                     break;
                 }
                 default:
@@ -156,7 +167,7 @@ namespace sdr
             TextProperties::ItemChange( nWhich, pNewItem );
 
             // update bTextFrame and RenderGeometry
-            UpdateTextFrameStatus();
+            UpdateTextFrameStatus(true);
         }
 
         void CustomShapeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
@@ -165,13 +176,13 @@ namespace sdr
             TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
 
             // update bTextFrame and RenderGeometry
-            UpdateTextFrameStatus();
+            UpdateTextFrameStatus(true);
         }
 
         void CustomShapeProperties::ForceDefaultAttributes()
         {
             // update bTextFrame and RenderGeometry
-            UpdateTextFrameStatus();
+            UpdateTextFrameStatus(true);
 
             // SJ: Following is no good if creating customshapes, leading to objects that are white after loading via xml
             // This means: Do *not* call parent here is by purpose...
@@ -219,11 +230,8 @@ namespace sdr
                 bRemoveRenderGeometry = sal_True;
             }
 
-            if ( bRemoveRenderGeometry )
-            {
                 // update bTextFrame and RenderGeometry
-                UpdateTextFrameStatus();
-            }
+            UpdateTextFrameStatus(bRemoveRenderGeometry);
         }
     } // end of namespace properties
 } // end of namespace sdr

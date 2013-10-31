@@ -30,7 +30,8 @@ namespace sdr
     {
         class CustomShapeProperties : public TextProperties
         {
-            void UpdateTextFrameStatus();
+        private:
+            void UpdateTextFrameStatus(bool bInvalidateRenderGeometry);
 
         protected:
             // create a new itemset
