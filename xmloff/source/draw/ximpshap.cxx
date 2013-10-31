@@ -1459,6 +1459,8 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                                 aPolyPolygon,
                                 aSourcePolyPolygon);
                             aAny <<= aSourcePolyPolygon;
+
+                            xPropSet->setPropertyValue(OUString("PolyPolygonBezier"), aAny);
                         }
                         else
                         {
@@ -1468,9 +1470,9 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                                 aPolyPolygon,
                                 aSourcePolyPolygon);
                             aAny <<= aSourcePolyPolygon;
-                        }
 
-                        xPropSet->setPropertyValue(OUString("Geometry"), aAny);
+                            xPropSet->setPropertyValue(OUString("Geometry"), aAny);
+                        }
                     }
 
                     // set pos, size, shear and rotate
@@ -1832,25 +1834,12 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
             {
                 if(aPolyPolygon.count())
                 {
-                    // set polygon data
-                    if(aPolyPolygon.areControlPointsUsed())
-                    {
-                        drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
+                    drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
 
-                        basegfx::tools::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
-                            aPolyPolygon,
-                            aSourcePolyPolygon);
-                        maPath <<= aSourcePolyPolygon;
-                    }
-                    else
-                    {
-                        drawing::PointSequenceSequence aSourcePolyPolygon;
-
-                        basegfx::tools::B2DPolyPolygonToUnoPointSequenceSequence(
-                            aPolyPolygon,
-                            aSourcePolyPolygon);
-                        maPath <<= aSourcePolyPolygon;
-                    }
+                    basegfx::tools::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
+                        aPolyPolygon,
+                        aSourcePolyPolygon);
+                    maPath <<= aSourcePolyPolygon;
                 }
             }
         }
@@ -1967,7 +1956,8 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
 
                 if ( bApplySVGD )
                 {
-                    xProps->setPropertyValue("PolyPolygonBezier", maPath );
+                    assert(maPath.getValueType() == ::getCppuType((const drawing::PolyPolygonBezierCoords*)0));
+                    xProps->setPropertyValue("PolyPolygonBezier", maPath);
                 }
             }
 
