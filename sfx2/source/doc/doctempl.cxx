@@ -832,7 +832,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
         uno::Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );;
 
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString("Hidden");
+        aArgs[0].Name = "Hidden";
         aArgs[0].Value <<= sal_True;
 
         INetURLObject   aTemplURL( rName );
@@ -1604,8 +1604,8 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     // now get the content of the region
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(2);
-    aProps[0] = OUString(TITLE );
-    aProps[1] = OUString(TARGET_URL );
+    aProps[0] = TITLE;
+    aProps[1] = TARGET_URL;
 
     try
     {
@@ -1641,7 +1641,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 {
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
-    aProps[0] = OUString(TITLE );
+    aProps[0] = TITLE;
 
     try
     {

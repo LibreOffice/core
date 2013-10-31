@@ -887,9 +887,9 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< OUString >& a
 
                 if ( !aInfo.isEmpty() && !aData[LOCKFILE_EDITTIME_ID].isEmpty() )
                 {
-                    aInfo += OUString( " ( "  );
+                    aInfo +=  " ( " ;
                     aInfo += aData[LOCKFILE_EDITTIME_ID];
-                    aInfo += OUString( " )" );
+                    aInfo += " )";
                 }
             }
 
@@ -1264,9 +1264,9 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
                                     new utl::ProgressHandlerWrap( xStatusIndicator ) );
 
         uno::Sequence< beans::PropertyValue > aAddProps( 2 );
-        aAddProps[0].Name = OUString("RepairPackage");
+        aAddProps[0].Name = "RepairPackage";
         aAddProps[0].Value <<= (sal_Bool)true;
-        aAddProps[1].Name = OUString("StatusIndicator");
+        aAddProps[1].Name = "StatusIndicator";
         aAddProps[1].Value <<= xProgressHandler;
 
         // the first arguments will be filled later
@@ -2222,7 +2222,7 @@ void SfxMedium::ClearBackup_Impl()
             if ( ::utl::UCBContentHelper::Kill( pImp->m_aBackupURL ) )
             {
                 pImp->m_bRemoveBackup = false;
-                pImp->m_aBackupURL = OUString();
+                pImp->m_aBackupURL = "";
             }
             else
             {
@@ -2232,7 +2232,7 @@ void SfxMedium::ClearBackup_Impl()
         }
     }
     else
-        pImp->m_aBackupURL = OUString();
+        pImp->m_aBackupURL = "";
 }
 
 //----------------------------------------------------------------
@@ -2818,7 +2818,7 @@ void SfxMedium::CompleteReOpen()
     {
         pTmpFile = pImp->pTempFile;
         pImp->pTempFile = NULL;
-        pImp->m_aName = OUString();
+        pImp->m_aName = "";
     }
 
     GetMedium_Impl();
@@ -3280,7 +3280,7 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
             return;
 
         DELETEZ( pImp->pTempFile );
-        pImp->m_aName = OUString();
+        pImp->m_aName = "";
     }
 
     pImp->pTempFile = new ::utl::TempFile();

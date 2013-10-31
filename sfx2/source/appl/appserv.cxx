@@ -202,9 +202,8 @@ static sal_Bool checkURL( const char *pName, const char *pExt, OUString &rURL )
     using namespace osl;
     DirectoryItem aDirItem;
 
-    rURL = OUString( "$BRAND_BASE_DIR/" );
-    rURL += OUString::createFromAscii( pName );
-    rURL += OUString::createFromAscii( pExt );
+    rURL = "$BRAND_BASE_DIR/" + OUString::createFromAscii( pName ) +
+           OUString::createFromAscii( pExt );
     rtl::Bootstrap::expandMacros( rURL );
 
     if (!rURL.isEmpty())
@@ -219,9 +218,9 @@ static void showDocument( const char* pBaseName )
     try {
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         Sequence < com::sun::star::beans::PropertyValue > args(2);
-        args[0].Name = OUString("ViewOnly");
+        args[0].Name = "ViewOnly";
         args[0].Value <<= sal_True;
-        args[1].Name = OUString("ReadOnly");
+        args[1].Name = "ReadOnly";
         args[1].Value <<= sal_True;
 
         OUString aURL;

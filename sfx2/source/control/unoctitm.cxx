@@ -666,7 +666,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             // so we must retrieve this as an argument from the parsed URL
             lNewArgs.realloc( lNewArgs.getLength()+1 );
             nMarkArg = lNewArgs.getLength()-1;
-            lNewArgs[nMarkArg].Name = OUString("Bookmark");
+            lNewArgs[nMarkArg].Name = "Bookmark";
             lNewArgs[nMarkArg].Value <<= aURL.Mark;
         }
 

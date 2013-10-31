@@ -336,7 +336,7 @@ void ShutdownIcon::FromTemplate()
             xFrame = Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
 
         URL aTargetURL;
-        aTargetURL.Complete = OUString( "slot:5500"  );
+        aTargetURL.Complete = "slot:5500";
         Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aTargetURL );
 
@@ -353,7 +353,7 @@ void ShutdownIcon::FromTemplate()
         {
             Sequence<PropertyValue> aArgs(1);
             PropertyValue* pArg = aArgs.getArray();
-            pArg[0].Name = OUString("Referer");
+            pArg[0].Name = "Referer";
             pArg[0].Value <<= OUString("private:user");
             Reference< ::com::sun::star::frame::XNotifyingDispatch > xNotifyer( xDisp, UNO_QUERY );
             if ( xNotifyer.is() )
@@ -444,15 +444,15 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                 Reference < com::sun::star::task::XInteractionHandler2 > xInteraction(
                     task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
 
-                aArgs[0].Name = OUString("InteractionHandler");
+                aArgs[0].Name = "InteractionHandler";
                 aArgs[0].Value <<= xInteraction;
 
                 sal_Int16 nMacroExecMode = ::com::sun::star::document::MacroExecMode::USE_CONFIG;
-                aArgs[1].Name = OUString("MacroExecutionMode");
+                aArgs[1].Name = "MacroExecutionMode";
                 aArgs[1].Value <<= nMacroExecMode;
 
                 sal_Int16 nUpdateDoc = ::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG;
-                aArgs[2].Name = OUString("UpdateDocMode");
+                aArgs[2].Name = "UpdateDocMode";
                 aArgs[2].Value <<= nUpdateDoc;
 
                 // use the filedlghelper to get the current filter name,
@@ -474,7 +474,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                     if ( bReadOnly )
                     {
                         aArgs.realloc( ++nArgs );
-                        aArgs[nArgs-1].Name  = OUString("ReadOnly");
+                        aArgs[nArgs-1].Name  = "ReadOnly";
                         aArgs[nArgs-1].Value <<= bReadOnly;
                     }
 
@@ -489,7 +489,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                         sal_Int16   uVersion = (sal_Int16)iVersion;
 
                         aArgs.realloc( ++nArgs );
-                        aArgs[nArgs-1].Name  = OUString("Version");
+                        aArgs[nArgs-1].Name  = "Version";
                         aArgs[nArgs-1].Value <<= uVersion;
                     }
 
@@ -514,7 +514,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                         if ( !aFilterName.isEmpty() )
                         {
                             aArgs.realloc( ++nArgs );
-                            aArgs[nArgs-1].Name  = OUString("FilterName");
+                            aArgs[nArgs-1].Name  = "FilterName";
                             aArgs[nArgs-1].Value <<= aFilterName;
                         }
                     }

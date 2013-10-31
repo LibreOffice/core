@@ -406,9 +406,7 @@ void SfxDocTplService_Impl::init_Impl()
     // set maRootContent to the root of the templates hierarchy. Create the
     // entry if necessary
 
-    maRootURL = OUString( TEMPLATE_ROOT_URL  );
-    maRootURL += OUString( '/' );
-    maRootURL += aLang;
+    maRootURL = ( TEMPLATE_ROOT_URL "/" ) + aLang;
 
     OUString aTemplVersPropName( TEMPLATE_VERSION  );
     OUString aTemplVers( TEMPLATE_VERSION_VALUE  );
@@ -445,7 +443,7 @@ void SfxDocTplService_Impl::init_Impl()
                 "cannot create DocumentProperties service:" << e.Message);
         }
 
-        OUString const aService = OUString( SERVICENAME_TYPEDETECTION  );
+        OUString const aService = SERVICENAME_TYPEDETECTION;
         mxType = uno::Reference< XTypeDetection > ( mxContext->getServiceManager()->createInstanceWithContext(aService, mxContext), UNO_QUERY );
 
         getDirList();
@@ -616,9 +614,9 @@ sal_Bool SfxDocTplService_Impl::setTitleForURL( const OUString& rURL, const OUSt
                     rURL, embed::ElementModes::READWRITE);
 
             uno::Sequence<beans::PropertyValue> medium(2);
-            medium[0].Name = OUString("DocumentBaseURL");
+            medium[0].Name = "DocumentBaseURL";
             medium[0].Value <<= rURL;
-            medium[1].Name = OUString("URL");
+            medium[1].Name = "URL";
             medium[1].Value <<= rURL;
 
             m_xDocProps->storeToStorage(xStorage, medium);
@@ -696,9 +694,9 @@ sal_Bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
     if ( ! Content::create( aLinkURL, maCmdEnv, comphelper::getProcessComponentContext(), aLink ) )
     {
         Sequence< OUString > aNames(3);
-        aNames[0] = OUString( TITLE  );
-        aNames[1] = OUString( IS_FOLDER  );
-        aNames[2] = OUString( TARGET_URL  );
+        aNames[0] = TITLE;
+        aNames[1] = IS_FOLDER;
+        aNames[2] = TARGET_URL;
 
         Sequence< Any > aValues(3);
         aValues[0] = makeAny( rTitle );
@@ -747,8 +745,8 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
         try
         {
             Sequence< OUString > aNames(2);
-            aNames[0] = OUString( TITLE  );
-            aNames[1] = OUString( IS_FOLDER  );
+            aNames[0] = TITLE;
+            aNames[1] = IS_FOLDER;
 
             Sequence< Any > aValues(2);
             aValues[0] = makeAny( aFolderName );
@@ -757,9 +755,9 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
             OUString aType;
 
             if ( bFsysFolder )
-                aType = OUString( TYPE_FSYS_FOLDER  );
+                aType = TYPE_FSYS_FOLDER;
             else
-                aType = OUString( TYPE_FOLDER  );
+                aType = TYPE_FOLDER;
 
             aParent.insertNewContent( aType, aNames, aValues, rNewFolder );
             bCreatedFolder = sal_True;
@@ -812,8 +810,8 @@ sal_Bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const OUString&
             try
             {
                 Sequence< OUString > aNames(2);
-                aNames[0] = OUString( TITLE  );
-                aNames[1] = OUString( IS_FOLDER  );
+                aNames[0] = TITLE;
+                aNames[1] = IS_FOLDER;
 
                 Sequence< Any > aValues(2);
                 aValues[0] = makeAny( aTryName );
@@ -872,14 +870,14 @@ OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( const OUString& a
             if ( nInd )
                 aTryName += OUString::number( nInd );
             if ( aExt.toChar() != '.' )
-                aTryName += OUString( "."  );
+                aTryName += ".";
             aTryName += aExt;
 
             try
             {
                 Sequence< OUString > aNames(2);
-                aNames[0] = OUString( TITLE  );
-                aNames[1] = OUString( IS_DOCUMENT  );
+                aNames[0] = TITLE;
+                aNames[1] = IS_DOCUMENT;
 
                 Sequence< Any > aValues(2);
                 aValues[0] = makeAny( aTryName );
@@ -1562,7 +1560,7 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
         uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps( 1 );
 
-        aProps[0] = OUString(TARGET_URL );
+        aProps[0] = TARGET_URL;
 
         try
         {
@@ -1679,7 +1677,7 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
         uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps( 1 );
 
-        aProps[0] = OUString(TARGET_URL );
+        aProps[0] = TARGET_URL;
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         xResultSet = aGroup.createCursor( aProps, eInclude );
 
@@ -1795,7 +1793,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
         uno::Sequence< uno::Any > aArgs( 1 );
         beans::PropertyValue aPathProp;
-        aPathProp.Name = OUString("nodepath");
+        aPathProp.Name = "nodepath";
         aPathProp.Value <<= OUString( "/org.openoffice.Setup/Office/Factories/"  );
         aArgs[0] <<= aPathProp;
 
@@ -1871,9 +1869,9 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
         // store template
         uno::Sequence< PropertyValue > aStoreArgs( 2 );
-        aStoreArgs[0].Name = OUString("FilterName");
+        aStoreArgs[0].Name = "FilterName";
         aStoreArgs[0].Value <<= aFilterName;
-        aStoreArgs[1].Name = OUString("DocumentTitle");
+        aStoreArgs[1].Name = "DocumentTitle";
         aStoreArgs[1].Value <<= rTemplateName;
 
         if( !::utl::UCBContentHelper::EqualURLs( aNewTemplateTargetURL, rStorable->getLocation() ))
@@ -2379,9 +2377,9 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(3);
 
-    aProps[0] = OUString(TITLE );
-    aProps[1] = OUString(TARGET_URL );
-    aProps[2] = OUString(PROPERTY_TYPE );
+    aProps[0] = TITLE ;
+    aProps[1] = TARGET_URL;
+    aProps[2] = PROPERTY_TYPE;
 
     try
     {
@@ -2490,7 +2488,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     Content                 aContent;
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(1);
-    aProps[0] = OUString(TITLE );
+    aProps[0] = TITLE;
 
     try
     {
@@ -2556,7 +2554,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
 
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
-    aProps[0] = OUString(TITLE );
+    aProps[0] = TITLE;
 
     try
     {
@@ -2648,13 +2646,13 @@ void SfxDocTplService_Impl::updateData( DocTemplates_EntryData_Impl *pData )
 
     if ( pData->getUpdateType() )
     {
-        aPropName = OUString( PROPERTY_TYPE  );
+        aPropName =  PROPERTY_TYPE;
         setProperty( aTemplate, aPropName, makeAny( pData->getType() ) );
     }
 
     if ( pData->getUpdateLink() )
     {
-        aPropName = OUString( TARGET_URL  );
+        aPropName = TARGET_URL;
         setProperty( aTemplate, aPropName, makeAny( pData->getTargetURL() ) );
     }
 }

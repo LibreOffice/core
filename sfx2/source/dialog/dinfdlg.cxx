@@ -2181,7 +2181,7 @@ CmisYesNo::CmisYesNo( Window* pParent, bool bValue )
 CmisPropertyLine::CmisPropertyLine( Window* pParent )
 {
     m_nNumValue = 1;
-    m_sId = OUString("");
+    m_sId = "";
     m_sType = CMIS_TYPE_STRING;
     m_pUIBuilder = new VclBuilder( pParent, getUIRootDir(), "sfx/ui/cmisline.ui");
     get( m_pFrame, "CmisFrame" );

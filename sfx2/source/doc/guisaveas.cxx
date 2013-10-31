@@ -532,7 +532,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( sal_Int32 nMust, sal_Int32 nDont )
 {
     uno::Sequence< beans::NamedValue > aSearchRequest( 1 );
-    aSearchRequest[0].Name = OUString("DocumentService");
+    aSearchRequest[0].Name = "DocumentService";
     aSearchRequest[0].Value <<= GetDocServiceName();
 
     return ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
@@ -550,9 +550,9 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
     {
         // Preselect PDF-Filter for EXPORT
         uno::Sequence< beans::NamedValue > aSearchRequest( 2 );
-        aSearchRequest[0].Name = OUString("Type");
+        aSearchRequest[0].Name = "Type";
         aSearchRequest[0].Value <<= OUString("pdf_Portable_Document_Format");
-        aSearchRequest[1].Name = OUString("DocumentService");
+        aSearchRequest[1].Name = "DocumentService";
         aSearchRequest[1].Value <<= GetDocServiceName();
 
         aFilterProps = ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
@@ -660,7 +660,7 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
         // the saving is acceptable
         // in case the configuration entry is not set or set to false
         // or in case of version creation
-        OUString aVersionCommentString = OUString("VersionComment");
+        OUString aVersionCommentString = "VersionComment";
         if ( officecfg::Office::Common::Save::Document::AlwaysSaveAs::get()
           && GetMediaDescr().find( aVersionCommentString ) == GetMediaDescr().end() )
         {
@@ -839,7 +839,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
 sal_Bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 {
     uno::Sequence< beans::NamedValue > aSearchRequest( 1 );
-    aSearchRequest[0].Name = OUString("DocumentService");
+    aSearchRequest[0].Name = "DocumentService";
     aSearchRequest[0].Value <<= GetDocServiceName();
 
     uno::Reference< container::XEnumeration > xFilterEnum =
@@ -1186,7 +1186,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
             if ( xFrameDispatch.is() )
             {
                 util::URL aURL;
-                aURL.Complete = OUString(".uno:SetDocumentProperties");
+                aURL.Complete = ".uno:SetDocumentProperties";
 
                 uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( comphelper::getProcessComponentContext() ) );
                 if ( xTransformer->parseStrict( aURL ) )

@@ -130,10 +130,10 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
             setValue( rProps[nProp].Name, rProps[nProp].Value );
 
         Sequence< beans::PropertyValue > aRenderOptions( 3 );
-        aRenderOptions[0].Name = OUString( "ExtraPrintUIOptions"  );
-        aRenderOptions[1].Name = OUString( "View"  );
+        aRenderOptions[0].Name = "ExtraPrintUIOptions";
+        aRenderOptions[1].Name = "View" ;
         aRenderOptions[1].Value = i_rViewProp;
-        aRenderOptions[2].Name = OUString( "IsPrinter"  );
+        aRenderOptions[2].Name = "IsPrinter";
         aRenderOptions[2].Value <<= sal_True;
         try
         {
@@ -214,7 +214,7 @@ Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
     }
 
     Sequence< beans::PropertyValue > aRenderOptions( 1 );
-    aRenderOptions[ 0 ].Name = OUString( "RenderDevice"  );
+    aRenderOptions[ 0 ].Name = "RenderDevice";
     aRenderOptions[ 0 ].Value <<= mxDevice;
 
     aRenderOptions = getJobProperties( aRenderOptions );
@@ -704,22 +704,22 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 {
                     if ( aProps[nProp].Name == "Copies" )
                     {
-                        aProps[nProp]. Name = OUString("CopyCount");
+                        aProps[nProp]. Name = "CopyCount";
                     }
                     else if ( aProps[nProp].Name == "RangeText" )
                     {
-                        aProps[nProp]. Name = OUString("Pages");
+                        aProps[nProp]. Name = "Pages";
                     }
                     else if ( aProps[nProp].Name == "Asynchron" )
                     {
-                        aProps[nProp]. Name = OUString("Wait");
+                        aProps[nProp]. Name = "Wait";
                         sal_Bool bAsynchron = sal_False;
                         aProps[nProp].Value >>= bAsynchron;
                         aProps[nProp].Value <<= (sal_Bool) (!bAsynchron);
                     }
                     else if ( aProps[nProp].Name == "Silent" )
                     {
-                        aProps[nProp]. Name = OUString("MonitorVisible");
+                        aProps[nProp]. Name = "MonitorVisible";
                         sal_Bool bPrintSilent = sal_False;
                         aProps[nProp].Value >>= bPrintSilent;
                         aProps[nProp].Value <<= (sal_Bool) (!bPrintSilent);
@@ -739,13 +739,13 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             // it would be better if writer handled this internally
             if( nId == SID_PRINTDOCDIRECT )
             {
-                aProps[nLen].Name = OUString( "PrintSelectionOnly"  );
+                aProps[nLen].Name = "PrintSelectionOnly";
                 aProps[nLen].Value = makeAny( bSelection );
             }
             else // if nId == SID_PRINTDOC ; nothing to do with the previous HACK
             {
                 // should the printer selection and properties dialogue display an help button
-                aProps[nLen].Name = OUString( "HideHelpButton" );
+                aProps[nLen].Name = "HideHelpButton";
                 aProps[nLen].Value = makeAny( bPrintOnHelp );
             }
 

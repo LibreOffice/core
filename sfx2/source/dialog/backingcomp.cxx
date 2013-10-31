@@ -640,7 +640,7 @@ void SAL_CALL BackingComp::dispose()
 
     // kill the menu
     css::util::URL aURL;
-    aURL.Complete = OUString(".uno:close");
+    aURL.Complete = ".uno:close";
     css::uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(m_xContext);
     if (xParser.is())
         xParser->parseStrict(aURL);

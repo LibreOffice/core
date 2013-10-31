@@ -2327,7 +2327,7 @@ namespace comp_CompatWriterDocProps {
     css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
     {
         css::uno::Sequence< OUString > aServiceNames(1);
-        aServiceNames[ 0 ] = OUString( "com.sun.star.writer.DocumentProperties"  );
+        aServiceNames[ 0 ] = "com.sun.star.writer.DocumentProperties";
         return aServiceNames;
     }
 
@@ -2350,7 +2350,7 @@ OUString SAL_CALL _getImplementationName() {
 css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > s(1);
-    s[0] = OUString("com.sun.star.document.DocumentProperties");
+    s[0] = "com.sun.star.document.DocumentProperties";
     return s;
 }
 

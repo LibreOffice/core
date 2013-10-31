@@ -165,7 +165,7 @@ Sequence< OUString > SfxApplicationDialogLibraryContainer::impl_getStaticSupport
     if( bNeedsInit )
     {
         OUString* pSeq = seqServiceNames.getArray();
-        pSeq[0] = OUString("com.sun.star.script.ApplicationDialogLibraryContainer");
+        pSeq[0] = "com.sun.star.script.ApplicationDialogLibraryContainer";
         bNeedsInit = sal_False;
     }
     return seqServiceNames;
@@ -194,7 +194,7 @@ Sequence< OUString > SfxApplicationScriptLibraryContainer::impl_getStaticSupport
 {
     Sequence< OUString > seqServiceNames( 1 );
     OUString* pSeq = seqServiceNames.getArray();
-    pSeq[0] = OUString("com.sun.star.script.ApplicationScriptLibraryContainer");
+    pSeq[0] = "com.sun.star.script.ApplicationScriptLibraryContainer";
     return seqServiceNames;
 }
 

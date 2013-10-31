@@ -484,7 +484,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
                 // The DocumentService property is only a preselection, and all preselections are considered as optional!
                 // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
                 uno::Sequence< beans::NamedValue > lQuery(1);
-                lQuery[0].Name = OUString("Name");
+                lQuery[0].Name = "Name";
                 lQuery[0].Value <<= sTypeName;
 
                 pFilter = GetFilterForProps(lQuery, nMust, nDont);
@@ -677,7 +677,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Mime( const OUString& rMediaType, S
     }
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
-    aSeq[0].Name = OUString("MediaType");
+    aSeq[0].Name = "MediaType";
     aSeq[0].Value <<= rMediaType;
     return GetFilterForProps( aSeq, nMust, nDont );
 }
@@ -706,7 +706,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4EA( const OUString& rType, SfxFilte
     }
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
-    aSeq[0].Name = OUString("Name");
+    aSeq[0].Name = "Name";
     aSeq[0].Value <<= OUString( rType );
     return GetFilterForProps( aSeq, nMust, nDont );
 }
@@ -745,7 +745,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const OUString& rExt, Sf
         sExt = sExt.copy(1);
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
-    aSeq[0].Name = OUString("Extensions");
+    aSeq[0].Name = "Extensions";
     uno::Sequence < OUString > aExts(1);
     aExts[0] = sExt;
     aSeq[0].Value <<= aExts;
@@ -759,7 +759,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4ClipBoardId( sal_uInt32 nId, SfxFil
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
     OUString aName = SotExchange::GetFormatName( nId );
-    aSeq[0].Name = OUString("ClipboardFormat");
+    aSeq[0].Name = "ClipboardFormat";
     aSeq[0].Value <<= aName;
     return GetFilterForProps( aSeq, nMust, nDont );
 }
@@ -996,7 +996,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                 // Extension preferred by the filter.  This takes precedence
                 // over those that are given in the file format type.
                 lFilterProperties[nFilterProperty].Value >>= sExtension;
-                sExtension = OUString("*.") + sExtension;
+                sExtension = "*." + sExtension;
             }
             else if ( lFilterProperties[nFilterProperty].Name == "Type" )
             {

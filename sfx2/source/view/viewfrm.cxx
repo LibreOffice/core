@@ -3102,7 +3102,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         else
         {
             ::com::sun::star::util::URL aTargetURL;
-            aTargetURL.Complete = OUString(".component:DB/DataSourceBrowser");
+            aTargetURL.Complete = ".component:DB/DataSourceBrowser";
             Reference < ::com::sun::star::util::XURLTransformer > xTrans(
                     ::com::sun::star::util::URLTransformer::create(
                          ::comphelper::getProcessComponentContext() ) );
@@ -3116,7 +3116,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
             {
                 Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
                 ::com::sun::star::beans::PropertyValue* pArg = aArgs.getArray();
-                pArg[0].Name = OUString("Referer");
+                pArg[0].Name = "Referer";
                 pArg[0].Value <<= OUString("private:user");
                 xDisp->dispatch( aTargetURL, aArgs );
             }

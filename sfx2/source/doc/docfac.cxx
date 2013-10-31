@@ -201,7 +201,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
     static OUString SERVICE_TYPE_DECTECTION("com.sun.star.document.TypeDetection");
 
     static OUString CONF_ROOT("/org.openoffice.Setup");
-    static OUString CONF_PATH  = OUString("Office/Factories/" ) + OUString( rServiceName );
+    static OUString CONF_PATH = "Office/Factories/" + rServiceName;
     static OUString PROP_DEF_TEMPL_CHANGED("ooSetupFactorySystemDefaultTemplateChanged");
     static OUString PROP_ACTUAL_FILTER("ooSetupFactoryActualFilter");
 
@@ -272,18 +272,18 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
                     aProps2.getUnpackedValueOrDefault("PreferredFilter", OUString() );
 
                 uno::Sequence< beans::PropertyValue > aArgs( 3 );
-                aArgs[0].Name = OUString("FilterName");
+                aArgs[0].Name = "FilterName";
                 aArgs[0].Value <<= aFilterName;
-                aArgs[1].Name = OUString("AsTemplate");
+                aArgs[1].Name = "AsTemplate";
                 aArgs[1].Value <<= sal_True;
-                aArgs[2].Name = OUString("URL");
+                aArgs[2].Name = "URL";
                 aArgs[2].Value <<= OUString( rTemplateName );
 
                 uno::Reference< frame::XLoadable > xLoadable( xFactory->createInstance( OUString( rServiceName ) ), uno::UNO_QUERY );
                 xLoadable->load( aArgs );
 
                 aArgs.realloc( 2 );
-                aArgs[1].Name = OUString("Overwrite");
+                aArgs[1].Name = "Overwrite";
                 aArgs[1].Value <<= sal_True;
 
                 uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY );

@@ -1038,13 +1038,13 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs() throw(RuntimeE
         aRectSeq[3] = aTmpRect.Bottom();
 
         seqArgsNew.realloc( ++nNewLength );
-        seqArgsNew[ nNewLength - 1 ].Name = OUString("WinExtent");
+        seqArgsNew[ nNewLength - 1 ].Name = "WinExtent";
         seqArgsNew[ nNewLength - 1 ].Value <<= aRectSeq;
 
         if ( !m_pData->m_aPreusedFilterName.isEmpty() )
         {
             seqArgsNew.realloc( ++nNewLength );
-            seqArgsNew[ nNewLength - 1 ].Name = OUString("PreusedFilterName");
+            seqArgsNew[ nNewLength - 1 ].Name = "PreusedFilterName";
             seqArgsNew[ nNewLength - 1 ].Value <<= m_pData->m_aPreusedFilterName;
         }
 
@@ -1060,7 +1060,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs() throw(RuntimeE
             aBorderSeq[3] = aBorder.Bottom();
 
             seqArgsNew.realloc( ++nNewLength );
-            seqArgsNew[ nNewLength - 1 ].Name = OUString("DocumentBorder");
+            seqArgsNew[ nNewLength - 1 ].Name = "DocumentBorder";
             seqArgsNew[ nNewLength - 1 ].Value <<= aBorderSeq;
         }
 
@@ -2221,54 +2221,54 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
 
     aFlavorSeq[0].MimeType =
         OUString( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""  );
-    aFlavorSeq[0].HumanPresentableName = OUString( "GDIMetaFile"  );
+    aFlavorSeq[0].HumanPresentableName =  "GDIMetaFile";
     aFlavorSeq[0].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[1].MimeType =
         OUString( "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\""  );
-    aFlavorSeq[1].HumanPresentableName = OUString( "GDIMetaFile"  );
+    aFlavorSeq[1].HumanPresentableName = "GDIMetaFile";
     aFlavorSeq[1].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[2].MimeType =
         OUString( "application/x-openoffice-emf;windows_formatname=\"Image EMF\""  );
-    aFlavorSeq[2].HumanPresentableName = OUString( "Enhanced Windows MetaFile"  );
+    aFlavorSeq[2].HumanPresentableName = "Enhanced Windows MetaFile";
     aFlavorSeq[2].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[3].MimeType =
         OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\""  );
-    aFlavorSeq[3].HumanPresentableName = OUString( "Windows MetaFile"  );
+    aFlavorSeq[3].HumanPresentableName = "Windows MetaFile";
     aFlavorSeq[3].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[4].MimeType =
         OUString( "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" );
-    aFlavorSeq[4].HumanPresentableName = OUString( "Star Object Descriptor (XML)"  );
+    aFlavorSeq[4].HumanPresentableName = "Star Object Descriptor (XML)";
     aFlavorSeq[4].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[5].MimeType =
         OUString( "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\""  );
-    aFlavorSeq[5].HumanPresentableName = OUString( "Star Embed Source (XML)"  );
+    aFlavorSeq[5].HumanPresentableName = "Star Embed Source (XML)";
     aFlavorSeq[5].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[6].MimeType =
         OUString( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\""  );
-    aFlavorSeq[6].HumanPresentableName = OUString( "Bitmap"  );
+    aFlavorSeq[6].HumanPresentableName = "Bitmap";
     aFlavorSeq[6].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[7].MimeType =
         OUString( "image/png"  );
-    aFlavorSeq[7].HumanPresentableName = OUString( "PNG"  );
+    aFlavorSeq[7].HumanPresentableName = "PNG";
     aFlavorSeq[7].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     if ( nSuppFlavors == 10 )
     {
         aFlavorSeq[8].MimeType =
             OUString( "application/x-openoffice-emf;windows_formatname=\"Image EMF\""  );
-        aFlavorSeq[8].HumanPresentableName = OUString( "Enhanced Windows MetaFile"  );
+        aFlavorSeq[8].HumanPresentableName = "Enhanced Windows MetaFile";
         aFlavorSeq[8].DataType = getCppuType( (const sal_uInt64*) 0 );
 
         aFlavorSeq[9].MimeType =
             OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\""  );
-        aFlavorSeq[9].HumanPresentableName = OUString( "Windows MetaFile"  );
+        aFlavorSeq[9].HumanPresentableName = "Windows MetaFile";
         aFlavorSeq[9].DataType = getCppuType( (const sal_uInt64*) 0 );
     }
 
@@ -2767,7 +2767,7 @@ void addTitle_Impl( Sequence < beans::PropertyValue >& rSeq, const OUString& rTi
     if ( nArg == nCount )
     {
         rSeq.realloc( nCount+1 );
-        rSeq[nCount].Name = OUString( "Title" );
+        rSeq[nCount].Name = "Title";
         rSeq[nCount].Value <<= rTitle;
     }
 }

@@ -501,7 +501,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = OUString("Referer");
+        pArg[0].Name = "Referer";
         pArg[0].Value <<= OUString("private:user");
 
         dispatchURL( TEMPLATE_URL, OUString(), xFrame, aArgs );

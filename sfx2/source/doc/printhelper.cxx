@@ -650,7 +650,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 aCheckedArgs[nProps++].Value <<= sFileURL;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = OUString("LocalFileName");
+                aCheckedArgs[nProps].Name = "LocalFileName";
                 aCheckedArgs[nProps++].Value <<= OUString( sTemp );
             }
             else
@@ -666,7 +666,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 aCheckedArgs[nProps++].Value <<= sTemp;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = OUString("LocalFileName");
+                aCheckedArgs[nProps].Name = "LocalFileName";
                 aCheckedArgs[nProps++].Value <<= sPath;
             }
             else
@@ -710,7 +710,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             sal_Bool bTemp = sal_Bool();
             if ( rProp.Value >>= bTemp )
             {
-                aCheckedArgs[nProps].Name = OUString("Collate");
+                aCheckedArgs[nProps].Name = "Collate";
                 aCheckedArgs[nProps++].Value <<= bTemp;
             }
             else

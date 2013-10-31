@@ -44,8 +44,8 @@ OwnSubFilterService::~OwnSubFilterService()
 uno::Sequence< OUString > SAL_CALL OwnSubFilterService::impl_getStaticSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
-    aRet[0] = OUString("com.sun.star.document.OwnSubFilter");
-    aRet[1] = OUString("com.sun.star.comp.document.OwnSubFilter");
+    aRet[0] = "com.sun.star.document.OwnSubFilter";
+    aRet[1] = "com.sun.star.comp.document.OwnSubFilter";
     return aRet;
 }
 

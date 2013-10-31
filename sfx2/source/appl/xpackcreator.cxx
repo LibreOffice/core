@@ -38,8 +38,8 @@ using namespace ::com::sun::star;
 uno::Sequence< OUString > SAL_CALL OPackageStructureCreator::impl_getStaticSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
-    aRet[0] = OUString("com.sun.star.embed.PackageStructureCreator");
-    aRet[1] = OUString("com.sun.star.comp.embed.PackageStructureCreator");
+    aRet[0] = "com.sun.star.embed.PackageStructureCreator";
+    aRet[1] = "com.sun.star.comp.embed.PackageStructureCreator";
     return aRet;
 }
 
