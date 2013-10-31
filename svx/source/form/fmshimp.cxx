@@ -511,9 +511,9 @@ sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun
         {
             switch ( (::TriState)xCheckBox->getState() )
             {
-                case STATE_NOCHECK: *_pCurrentText = OUString("0" ); break;
-                case STATE_CHECK: *_pCurrentText = OUString("1" ); break;
-                default: *_pCurrentText = OUString(); break;
+                case STATE_NOCHECK: *_pCurrentText = "0"; break;
+                case STATE_CHECK: *_pCurrentText = "1"; break;
+                default: *_pCurrentText = ""; break;
             }
         }
         return sal_True;
@@ -677,7 +677,7 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
     implAdjustConfigCache();
     // and register for changes on this settings
     Sequence< OUString > aNames(1);
-    aNames[0] = OUString("FormControlPilotsEnabled");
+    aNames[0] = "FormControlPilotsEnabled";
     EnableNotification(aNames);
 }
 
@@ -3442,7 +3442,7 @@ void FmXFormShell::CreateExternalView()
                 aColumnProps.realloc(pColumnProps - aColumnProps.getArray());
 
                 // columns props are a dispatch argument
-                pDispatchArgs->Name = OUString("ColumnProperties"); // TODO : fmurl.*
+                pDispatchArgs->Name = "ColumnProperties"; // TODO : fmurl.*
                 pDispatchArgs->Value = makeAny(aColumnProps);
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),
@@ -3529,7 +3529,7 @@ void FmXFormShell::CreateExternalView()
                 ++pDispatchArgs;
 
                 // the
-                pDispatchArgs->Name = OUString("ColumnProperties"); // TODO : fmurl.*
+                pDispatchArgs->Name = "ColumnProperties"; // TODO : fmurl.*
                 pDispatchArgs->Value = makeAny(aListBoxDescription);
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),
@@ -3580,7 +3580,7 @@ void FmXFormShell::implAdjustConfigCache()
 {
     // get (cache) the wizard usage flag
     Sequence< OUString > aNames(1);
-    aNames[0] = OUString("FormControlPilotsEnabled");
+    aNames[0] = "FormControlPilotsEnabled";
     Sequence< Any > aFlags = GetProperties(aNames);
     if (1 == aFlags.getLength())
         m_bUseWizards = ::cppu::any2bool(aFlags[0]);
@@ -3612,7 +3612,7 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
     m_bUseWizards = _bUseThem;
 
     Sequence< OUString > aNames(1);
-    aNames[0] = OUString("FormControlPilotsEnabled");
+    aNames[0] = "FormControlPilotsEnabled";
     Sequence< Any > aValues(1);
     aValues[0] = ::cppu::bool2any(m_bUseWizards);
     PutProperties(aNames, aValues);
@@ -4056,7 +4056,7 @@ sal_Bool SearchableControlIterator::ShouldHandleElement(const Reference< XInterf
         Any aClassId( xProperties->getPropertyValue(FM_PROP_CLASSID) );
         if (::comphelper::getINT16(aClassId) == FormComponentType::GRIDCONTROL)
         {
-            m_sCurrentValue = OUString();
+            m_sCurrentValue = "";
             return sal_True;
         }
     }

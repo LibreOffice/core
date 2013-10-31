@@ -140,7 +140,7 @@ OUString RecoveryUI::st_getImplementationName()
 css::uno::Sequence< OUString > RecoveryUI::st_getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > lServiceNames(1);
-    lServiceNames.getArray() [0] = OUString("com.sun.star.dialog.RecoveryUI");
+    lServiceNames[0] = "com.sun.star.dialog.RecoveryUI";
     return lServiceNames;
 }
 
@@ -154,11 +154,11 @@ static OUString GetCrashConfigDir()
 {
 
 #if defined(WNT)
-    OUString    ustrValue = OUString("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/bootstrap.ini:UserInstallation}");
+    OUString    ustrValue = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/bootstrap.ini:UserInstallation}";
 #elif defined(MACOSX)
-    OUString    ustrValue = OUString("~");
+    OUString    ustrValue = "~";
 #else
-    OUString    ustrValue = OUString("$SYSUSERCONFIG");
+    OUString    ustrValue = "$SYSUSERCONFIG";
 #endif
     Bootstrap::expandMacros( ustrValue );
 
@@ -179,11 +179,7 @@ static OUString GetCrashConfigDir()
 
 static OUString GetUnsentURL()
 {
-    OUString    aURL = GetCrashConfigDir();
-
-    aURL += "/";
-    aURL += OUString(  LCKFILE  );
-
+    OUString aURL = GetCrashConfigDir() + "/" + LCKFILE;
     return aURL;
 }
 

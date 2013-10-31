@@ -111,7 +111,7 @@ namespace drawinglayer
             if(!aSeq.getLength())
             {
                 aSeq.realloc(1L);
-                aSeq.getArray()[0L] = OUString("com.sun.star.graphic.PrimitiveFactory2D");
+                aSeq[0] = "com.sun.star.graphic.PrimitiveFactory2D";
             }
 
             return aSeq;

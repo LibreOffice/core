@@ -699,7 +699,7 @@ Sequence< OUString> SAL_CALL FormController::getSupportedServiceNames(void) thro
     // service names which are supported only, but cannot be used to created an
     // instance at a service factory
     Sequence< OUString > aNonCreatableServiceNames( 1 );
-    aNonCreatableServiceNames[ 0 ] = OUString( "com.sun.star.form.FormControllerDispatcher"  );
+    aNonCreatableServiceNames[ 0 ] = "com.sun.star.form.FormControllerDispatcher";
 
     // services which can be used to created an instance at a service factory
     Sequence< OUString > aCreatableServiceNames( getSupportedServiceNames_Static() );
@@ -727,8 +727,8 @@ Sequence< OUString> FormController::getSupportedServiceNames_Static(void)
     if (!aServices.getLength())
     {
         aServices.realloc(2);
-        aServices.getArray()[0] = OUString( "com.sun.star.form.runtime.FormController"  );
-        aServices.getArray()[1] = OUString("com.sun.star.awt.control.TabController");
+        aServices.getArray()[0] = "com.sun.star.form.runtime.FormController";
+        aServices.getArray()[1] = "com.sun.star.awt.control.TabController";
     }
     return aServices;
 }
@@ -3530,9 +3530,8 @@ Sequence< OUString > SAL_CALL FormController::getSupportedModes(void) throw( Run
     if (!aModes.getLength())
     {
         aModes.realloc(2);
-        OUString* pModes = aModes.getArray();
-        pModes[0] = OUString( "DataMode"  );
-        pModes[1] = OUString( "FilterMode"  );
+        aModes[0] = "DataMode";
+        aModes[1] = "FilterMode";
     }
     return aModes;
 }

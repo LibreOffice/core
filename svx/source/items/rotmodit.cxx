@@ -71,7 +71,7 @@ SfxItemPresentation SvxRotateModeItem::GetPresentation(
                                 SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
                                 OUString& rText, const IntlWrapper * )  const
 {
-    rText = OUString();
+    rText = "";
 
     switch ( ePres )
     {
@@ -98,7 +98,7 @@ OUString SvxRotateModeItem::GetValueText( sal_uInt16 nVal ) const
         case SVX_ROTATE_MODE_TOP:
         case SVX_ROTATE_MODE_CENTER:
         case SVX_ROTATE_MODE_BOTTOM:
-            aText = OUString("...");
+            aText = "...";
             break;
         default:
             OSL_FAIL("SvxRotateModeItem: falscher enum");

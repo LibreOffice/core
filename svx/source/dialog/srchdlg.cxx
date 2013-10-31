@@ -122,12 +122,12 @@ struct SearchDlg_Impl
         m_pSearchFormats->SetStyle(m_pSearchFormats->GetStyle() | WB_PATHELLIPSIS);
         pParent->get(m_pReplaceFormats, "replaceformat");
         m_pReplaceFormats->SetStyle(m_pReplaceFormats->GetStyle() | WB_PATHELLIPSIS);
-        aCommand1URL.Complete = aCommand1URL.Main = OUString("vnd.sun.search:SearchViaComponent1");
-        aCommand1URL.Protocol = OUString("vnd.sun.search:");
-        aCommand1URL.Path = OUString("SearchViaComponent1");
-        aCommand2URL.Complete = aCommand2URL.Main = OUString("vnd.sun.search:SearchViaComponent2");
-        aCommand2URL.Protocol = OUString("vnd.sun.search:");
-        aCommand2URL.Path = OUString("SearchViaComponent2");
+        aCommand1URL.Complete = aCommand1URL.Main = "vnd.sun.search:SearchViaComponent1";
+        aCommand1URL.Protocol = "vnd.sun.search:";
+        aCommand1URL.Path = "SearchViaComponent1";
+        aCommand2URL.Complete = aCommand2URL.Main = "vnd.sun.search:SearchViaComponent2";
+        aCommand2URL.Protocol = "vnd.sun.search:";
+        aCommand2URL.Path = "SearchViaComponent2";
     }
     ~SearchDlg_Impl() { delete[] pRanges; }
 };
@@ -1352,9 +1352,9 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     {
         uno::Sequence < beans::PropertyValue > aArgs(2);
         beans::PropertyValue* pArgs = aArgs.getArray();
-        pArgs[0].Name = OUString("SearchString");
+        pArgs[0].Name = "SearchString";
         pArgs[0].Value <<= OUString(m_pSearchLB->GetText());
-        pArgs[1].Name = OUString("ParentWindow");
+        pArgs[1].Name = "ParentWindow";
         pArgs[1].Value <<= VCLUnoHelper::GetInterface( this );
         if(pBtn == m_pSearchComponent1PB)
         {

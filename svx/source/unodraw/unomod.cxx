@@ -131,23 +131,23 @@ sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* 
 
 // #115423#
 //      case HINT_PAGECHG:              // Page geaendert
-//          aEvent.EventName = OUString( "PageModified" );
+//          aEvent.EventName = "PageModified";
 //          pPage = pSdrHint->GetPage();
 //          break;
         case HINT_PAGEORDERCHG:         // Reihenfolge der Seiten (Zeichenseiten oder Masterpages) geaendert (Insert/Remove/ChangePos)
-            aEvent.EventName = OUString( "PageOrderModified" );
+            aEvent.EventName = "PageOrderModified";
             pPage = pSdrHint->GetPage();
             break;
         case HINT_OBJCHG:               // Objekt geaendert
-            aEvent.EventName = OUString( "ShapeModified" );
+            aEvent.EventName = "ShapeModified";
             pObj = pSdrHint->GetObject();
             break;
         case HINT_OBJINSERTED:          // Neues Zeichenobjekt eingefuegt
-            aEvent.EventName = OUString( "ShapeInserted" );
+            aEvent.EventName = "ShapeInserted";
             pObj = pSdrHint->GetObject();
             break;
         case HINT_OBJREMOVED:           // Zeichenobjekt aus Liste entfernt
-            aEvent.EventName = OUString( "ShapeRemoved" );
+            aEvent.EventName = "ShapeRemoved";
             pObj = pSdrHint->GetObject();
             break;
 //                HINT_DEFAULTTABCHG,   // Default Tabulatorweite geaendert
@@ -517,28 +517,28 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames(
 
     sal_uInt16 i = 0;
 
-    aSNS[i++] = OUString("com.sun.star.drawing.DashTable");
-    aSNS[i++] = OUString("com.sun.star.drawing.GradientTable");
-    aSNS[i++] = OUString("com.sun.star.drawing.HatchTable");
-    aSNS[i++] = OUString("com.sun.star.drawing.BitmapTable");
-    aSNS[i++] = OUString("com.sun.star.drawing.TransparencyGradientTable");
-    aSNS[i++] = OUString("com.sun.star.drawing.MarkerTable");
-    aSNS[i++] = OUString("com.sun.star.text.NumberingRules");
-    aSNS[i++] = OUString("com.sun.star.image.ImageMapRectangleObject");
-    aSNS[i++] = OUString("com.sun.star.image.ImageMapCircleObject");
-    aSNS[i++] = OUString("com.sun.star.image.ImageMapPolygonObject");
+    aSNS[i++] = "com.sun.star.drawing.DashTable";
+    aSNS[i++] = "com.sun.star.drawing.GradientTable";
+    aSNS[i++] = "com.sun.star.drawing.HatchTable";
+    aSNS[i++] = "com.sun.star.drawing.BitmapTable";
+    aSNS[i++] = "com.sun.star.drawing.TransparencyGradientTable";
+    aSNS[i++] = "com.sun.star.drawing.MarkerTable";
+    aSNS[i++] = "com.sun.star.text.NumberingRules";
+    aSNS[i++] = "com.sun.star.image.ImageMapRectangleObject";
+    aSNS[i++] = "com.sun.star.image.ImageMapCircleObject";
+    aSNS[i++] = "com.sun.star.image.ImageMapPolygonObject";
 
-    aSNS[i++] = OUString("com.sun.star.presentation.TitleTextShape");
-    aSNS[i++] = OUString("com.sun.star.presentation.OutlinerShape");
-    aSNS[i++] = OUString("com.sun.star.presentation.SubtitleShape");
-    aSNS[i++] = OUString("com.sun.star.presentation.GraphicObjectShape");
-    aSNS[i++] = OUString("com.sun.star.presentation.ChartShape");
-    aSNS[i++] = OUString("com.sun.star.presentation.PageShape");
-    aSNS[i++] = OUString("com.sun.star.presentation.OLE2Shape");
-    aSNS[i++] = OUString("com.sun.star.presentation.TableShape");
-    aSNS[i++] = OUString("com.sun.star.presentation.OrgChartShape");
-    aSNS[i++] = OUString("com.sun.star.presentation.NotesShape");
-    aSNS[i++] = OUString("com.sun.star.presentation.HandoutShape");
+    aSNS[i++] = "com.sun.star.presentation.TitleTextShape";
+    aSNS[i++] = "com.sun.star.presentation.OutlinerShape";
+    aSNS[i++] = "com.sun.star.presentation.SubtitleShape";
+    aSNS[i++] = "com.sun.star.presentation.GraphicObjectShape";
+    aSNS[i++] = "com.sun.star.presentation.ChartShape";
+    aSNS[i++] = "com.sun.star.presentation.PageShape";
+    aSNS[i++] = "com.sun.star.presentation.OLE2Shape";
+    aSNS[i++] = "com.sun.star.presentation.TableShape";
+    aSNS[i++] = "com.sun.star.presentation.OrgChartShape";
+    aSNS[i++] = "com.sun.star.presentation.NotesShape";
+    aSNS[i++] = "com.sun.star.presentation.HandoutShape";
 
     DBG_ASSERT( i == aSNS.getLength(), "Sequence overrun!" );
 

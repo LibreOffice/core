@@ -1138,7 +1138,7 @@ sal_Bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, s
         if( bFolder )
         {
             uno::Sequence< OUString > aProps( 1 );
-            aProps.getArray()[ 0 ] = OUString("Url");
+            aProps[ 0 ] = "Url";
             uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
             uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
             if( xContentAccess.is() )

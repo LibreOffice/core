@@ -301,9 +301,9 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                     Sequence< PropertyValue > aProperties(2);
                     PropertyValue* pProperties = aProperties.getArray();
-                    pProperties[0].Name = OUString("NumberingType");
+                    pProperties[0].Name = "NumberingType";
                     pProperties[0].Value <<= aNumberingTypes[i];
-                    pProperties[1].Name = OUString("Value");
+                    pProperties[1].Name = "Value";
                     pProperties[1].Value <<= (sal_Int32)1;
                     try
                     {

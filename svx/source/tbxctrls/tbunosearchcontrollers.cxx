@@ -395,7 +395,7 @@ css::uno::Sequence< OUString > SAL_CALL FindTextToolbarController::getSupportedS
 css::uno::Sequence< OUString >  FindTextToolbarController::getSupportedServiceNames_Static() throw()
 {
     css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
+    aSNS[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -561,7 +561,7 @@ css::uno::Sequence< OUString > SAL_CALL UpDownSearchToolboxController::getSuppor
 css::uno::Sequence< OUString > UpDownSearchToolboxController::getSupportedServiceNames_Static() throw()
 {
     css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString("com.sun.star.frame.ToolbarController");
+    aSNS[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -662,7 +662,7 @@ css::uno::Sequence< OUString > SAL_CALL MatchCaseToolboxController::getSupported
 css::uno::Sequence< OUString >  MatchCaseToolboxController::getSupportedServiceNames_Static() throw()
 {
     css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
+    aSNS[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -774,7 +774,7 @@ css::uno::Sequence< OUString > SAL_CALL FindAllToolboxController::getSupportedSe
 css::uno::Sequence< OUString > FindAllToolboxController::getSupportedServiceNames_Static() throw()
 {
     css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString("com.sun.star.frame.ToolbarController");
+    aSNS[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -869,7 +869,7 @@ css::uno::Sequence< OUString > SAL_CALL ExitSearchToolboxController::getSupporte
 css::uno::Sequence< OUString > ExitSearchToolboxController::getSupportedServiceNames_Static() throw()
 {
     css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString("com.sun.star.frame.ToolbarController");
+    aSNS[0] = "com.sun.star.frame.ToolbarController";
     return aSNS;
 }
 
@@ -977,8 +977,8 @@ css::uno::Sequence< OUString > SAL_CALL FindbarDispatcher::getSupportedServiceNa
 css::uno::Sequence< OUString >  FindbarDispatcher::getSupportedServiceNames_Static() throw()
 {
     css::uno::Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = OUString( "com.sun.star.comp.svx.FindbarDispatcher" );
-    aSNS.getArray()[1] = OUString( "com.sun.star.frame.ProtocolHandler" );
+    aSNS[0] = "com.sun.star.comp.svx.FindbarDispatcher";
+    aSNS[1] = "com.sun.star.frame.ProtocolHandler";
     return aSNS;
 }
 

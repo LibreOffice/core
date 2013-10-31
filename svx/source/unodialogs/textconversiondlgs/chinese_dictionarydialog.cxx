@@ -501,14 +501,14 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
                     OUString aNameTo_Simplified("ChineseT2S");
                     OUString aNameTo_Traditional("ChineseS2T");
                     lang::Locale aLocale;
-                    aLocale.Language = OUString("zh");
+                    aLocale.Language = "zh";
 
                     if( xContainer->hasByName( aNameTo_Simplified ) )
                         xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
                                 xContainer->getByName( aNameTo_Simplified ), UNO_QUERY );
                     else
                     {
-                        aLocale.Country = OUString("TW");
+                        aLocale.Country = "TW";
                         xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
                                 xDictionaryList->addNewDictionary( aNameTo_Simplified
                                 , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
@@ -523,7 +523,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
                                 xContainer->getByName( aNameTo_Traditional ), UNO_QUERY );
                     else
                     {
-                        aLocale.Country = OUString("CN");
+                        aLocale.Country = "CN";
                         xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
                                 xDictionaryList->addNewDictionary( aNameTo_Traditional
                                 , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE

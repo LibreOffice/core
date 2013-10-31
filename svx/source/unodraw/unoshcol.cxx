@@ -232,8 +232,8 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames(
 uno::Sequence< OUString > SvxShapeCollection::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSeq(2);
-    aSeq.getArray()[0] = OUString("com.sun.star.drawing.Shapes");
-    aSeq.getArray()[1] = OUString("com.sun.star.drawing.ShapeCollection");
+    aSeq.getArray()[0] = "com.sun.star.drawing.Shapes";
+    aSeq.getArray()[1] = "com.sun.star.drawing.ShapeCollection";
     return aSeq;
 }
 

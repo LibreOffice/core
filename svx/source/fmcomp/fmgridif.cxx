@@ -423,7 +423,7 @@ OUString SAL_CALL FmXGridControl::getImplementationName() throw()
 {
     Sequence< OUString > aServiceNames(2);
     aServiceNames[0] = FM_SUN_CONTROL_GRIDCONTROL;
-    aServiceNames[1] = OUString("com.sun.star.awt.UnoControl");
+    aServiceNames[1] = "com.sun.star.awt.UnoControl";
     return aServiceNames;
 }
 
@@ -1110,8 +1110,7 @@ namespace fmgridif
 {
     const OUString getDataModeIdentifier()
     {
-        static OUString s_sDataModeIdentifier = OUString(  "DataMode"  );
-        return s_sDataModeIdentifier;
+        return OUString("DataMode");
     }
 }
 using namespace fmgridif;
@@ -2468,8 +2467,8 @@ OUString FmXGridPeer::getMode() throw( RuntimeException )
     {
         aModes.realloc(2);
         OUString* pModes = aModes.getArray();
-        pModes[0] = OUString(  "DataMode"  );
-        pModes[1] = OUString(  "FilterMode"  );
+        pModes[0] = "DataMode";
+        pModes[1] = "FilterMode";
     }
     return aModes;
 }

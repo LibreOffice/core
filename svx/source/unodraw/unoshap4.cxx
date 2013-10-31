@@ -366,7 +366,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
             {
                 ::comphelper::IEmbeddedHelper *pPersist = mpObj->GetModel()->GetPersist();
                 if( (NULL == pPersist) || !pPersist->getEmbeddedObjectContainer().HasEmbeddedObject( pOle->GetPersistName() ) )
-                    aPersistName = OUString();
+                    aPersistName = "";
             }
         }
 
@@ -461,14 +461,14 @@ sal_Bool SvxOle2Shape::createLink( const OUString& aLinkURL )
     ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
 
     uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-    aMediaDescr[0].Name = OUString("URL");
+    aMediaDescr[0].Name = "URL";
     aMediaDescr[0].Value <<= aLinkURL;
 
     uno::Reference< task::XInteractionHandler > xInteraction = pPersist->getInteractionHandler();
     if ( xInteraction.is() )
     {
         aMediaDescr.realloc( 2 );
-        aMediaDescr[1].Name = OUString(  "InteractionHandler"  );
+        aMediaDescr[1].Name = "InteractionHandler";
         aMediaDescr[1].Value <<= xInteraction;
     }
 
@@ -535,7 +535,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(OUString& rHexCLSID)
 
     if( pOle2Obj )
     {
-        rHexCLSID = OUString();
+        rHexCLSID = "";
 
         if( pOle2Obj->IsEmpty() )
         {

@@ -110,7 +110,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames()
 uno::Sequence< OUString > SvxUnoColorTable::getSupportedServiceNames_Static(void) throw()
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString("com.sun.star.drawing.ColorTable" );
+    aSNS.getArray()[0] = "com.sun.star.drawing.ColorTable";
     return aSNS;
 }
 

@@ -231,7 +231,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
         ::ucbhelper::Content                       aCnt( rBaseURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext() );
 
         uno::Sequence< OUString > aProps( 1 );
-        aProps.getArray()[ 0 ] = OUString("Url");
+        aProps.getArray()[ 0 ] = "Url";
 
         uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
 

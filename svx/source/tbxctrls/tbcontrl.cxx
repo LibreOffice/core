@@ -447,16 +447,16 @@ void SvxStyleBox_Impl::Select()
 
             Sequence< PropertyValue > aArgs( 2 );
             aArgs[0].Value  = makeAny( OUString( aSearchEntry ) );
-            aArgs[1].Name   = OUString("Family");
+            aArgs[1].Name   = "Family";
             aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
             if( bCreateNew )
             {
-                aArgs[0].Name   = OUString("Param");
+                aArgs[0].Name   = "Param";
                 SfxToolBoxControl::Dispatch( m_xDispatchProvider, OUString(".uno:StyleNewByExample"), aArgs);
             }
             else
             {
-                aArgs[0].Name   = OUString("Template");
+                aArgs[0].Name   = "Template";
                 SfxToolBoxControl::Dispatch( m_xDispatchProvider, m_aCommand, aArgs );
             }
         }
@@ -995,7 +995,7 @@ void SvxFontNameBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
             aInfo.GetCharSet(),
             SID_ATTR_CHAR_FONT );
         aFontItem.QueryValue( aArgs[0].Value );
-        aArgs[0].Name   = OUString( "CharPreviewFontName" );
+        aArgs[0].Name   = "CharPreviewFontName";
         SfxToolBoxControl::Dispatch( m_xDispatchProvider,
             OUString( ".uno:CharPreviewFontName" ),
                 aArgs );
@@ -1035,7 +1035,7 @@ void SvxFontNameBox_Impl::Select()
         EndPreview();
         if ( pFontItem.get() )
         {
-            aArgs[0].Name   = OUString( "CharFontName" );
+            aArgs[0].Name   = "CharFontName";
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
                                          OUString( ".uno:CharFontName" ),
                                          aArgs );
@@ -1050,7 +1050,7 @@ void SvxFontNameBox_Impl::Select()
         }
         if ( pFontItem.get() )
         {
-            aArgs[0].Name   = OUString( "CharPreviewFontName" );
+            aArgs[0].Name   = "CharPreviewFontName";
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
                                          OUString( ".uno:CharPreviewFontName" ),
                                          aArgs );
@@ -1438,10 +1438,10 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
 
     Any a;
     Sequence< PropertyValue > aArgs( 2 );
-    aArgs[0].Name = OUString( "OuterBorder" );
+    aArgs[0].Name = "OuterBorder";
     aBorderOuter.QueryValue( a );
     aArgs[0].Value = a;
-    aArgs[1].Name = OUString( "InnerBorder" );
+    aArgs[1].Name = "InnerBorder";
     aBorderInner.QueryValue( a );
     aArgs[1].Value = a;
 
@@ -1611,7 +1611,7 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
 
     Any a;
     Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString( "LineStyle" );
+    aArgs[0].Name = "LineStyle";
     aLineItem.QueryValue( a, m_bIsWriter ? CONVERT_TWIPS : 0 );
     aArgs[0].Value = a;
 
@@ -2587,29 +2587,29 @@ void SvxColorExtToolBoxControl::Select( sal_Bool )
     {
         case SID_ATTR_CHAR_COLOR2 :
             bNoArgs     = true;
-            aCommand    = OUString( ".uno:CharColorExt" );
-            aParamName  = OUString( "CharColorExt" );
+            aCommand    = ".uno:CharColorExt";
+            aParamName  = "CharColorExt";
             break;
 
         case SID_ATTR_CHAR_COLOR  :
-            aCommand    = OUString( ".uno:Color" );
-            aParamName  = OUString( "Color" );
+            aCommand    = ".uno:Color";
+            aParamName  = "Color";
             break;
 
         case SID_BACKGROUND_COLOR :
-            aCommand    = OUString( ".uno:BackgroundColor" );
-            aParamName  = OUString( "BackgroundColor" );
+            aCommand    = ".uno:BackgroundColor";
+            aParamName  = "BackgroundColor";
             break;
 
         case SID_ATTR_CHAR_COLOR_BACKGROUND :
             bNoArgs     = true;
-            aCommand    = OUString( ".uno:CharBackgroundExt" );
-            aParamName  = OUString( "CharBackgroundExt" );
+            aCommand    = ".uno:CharBackgroundExt";
+            aParamName  = "CharBackgroundExt";
             break;
 
         case SID_FRAME_LINECOLOR  :
-            aCommand    = OUString( ".uno:FrameLineColor" );
-            aParamName  = OUString( "FrameLineColor" );
+            aCommand    = ".uno:FrameLineColor";
+            aParamName  = "FrameLineColor";
             break;
     }
 

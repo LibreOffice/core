@@ -67,7 +67,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoHatchTable::getSupportedServiceNames(  
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString("com.sun.star.drawing.HatchTable" );
+    aSNS.getArray()[0] = "com.sun.star.drawing.HatchTable";
     return aSNS;
 }
 

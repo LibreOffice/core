@@ -822,7 +822,7 @@ sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames() throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSeq( 1 );
-    aSeq.getArray()[0] = OUString("com.sun.star.drawing.ShapeCollection" );
+    aSeq.getArray()[0] = "com.sun.star.drawing.ShapeCollection";
     return aSeq;
 }
 

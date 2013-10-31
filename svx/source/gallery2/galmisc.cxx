@@ -267,8 +267,8 @@ sal_Bool CreateDir( const INetURLObject& rURL )
             uno::Sequence< OUString >               aProps( 1 );
             uno::Sequence< uno::Any >               aValues( 1 );
 
-            aProps.getArray()[ 0 ] = OUString("Title");
-            aValues.getArray()[ 0 ] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
+            aProps[0] = "Title";
+            aValues[0] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
 
         ::ucbhelper::Content aContent( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );
         bRet = aParent.insertNewContent( OUString("application/vnd.sun.staroffice.fsys-folder"), aProps, aValues, aContent );

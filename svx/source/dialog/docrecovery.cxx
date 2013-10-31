@@ -1432,7 +1432,7 @@ void BrokenRecoveryDialog::impl_refresh()
         sal_uInt16 nPos = m_aFileListLB.InsertEntry(rInfo.DisplayName, rInfo.StandardImage );
         m_aFileListLB.SetEntryData( nPos, (void*)&rInfo );
     }
-    m_sSavePath = OUString();
+    m_sSavePath = "";
     m_aOkBtn.GrabFocus();
 }
 
@@ -1926,11 +1926,11 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         {
 
 #if defined(WNT)
-            OUString    ustrValue = OUString("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/bootstrap.ini:UserInstallation}");
+            OUString    ustrValue = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/bootstrap.ini:UserInstallation}";
 #elif defined( MACOSX )
-            OUString    ustrValue = OUString("~");
+            OUString    ustrValue = "~";
 #else
-            OUString    ustrValue = OUString("$SYSUSERCONFIG");
+            OUString    ustrValue = "$SYSUSERCONFIG";
 #endif
             Bootstrap::expandMacros( ustrValue );
 
@@ -1948,11 +1948,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
         static OUString GetPreviewURL()
         {
-            OUString aURL = GetCrashConfigDir();
-
-            aURL += OUString( "/"  );
-            aURL += OUString( PRVFILE  );
-
+            OUString aURL = GetCrashConfigDir() + "/" + PRVFILE;
             return aURL;
         }
 

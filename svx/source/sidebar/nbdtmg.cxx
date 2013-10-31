@@ -422,7 +422,7 @@ sal_Bool BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
     pActualBullets[nIndex]->bIsCustomized = sal_True;
 
     OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
-    OUString aReplace = OUString("%LIST_NUM");
+    OUString aReplace = "%LIST_NUM";
     OUString sNUM = OUString::number( nIndex + 1 );
     aStrFromRES = aStrFromRES.replaceFirst(aReplace,sNUM);
     pActualBullets[nIndex]->sDescription = aStrFromRES;
@@ -1367,7 +1367,7 @@ void NumberingTypeMgr::Init()
                         {
                             aLevel.realloc(aLevel.getLength() + 1);
                             PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
-                            rValue.Name = OUString("Value");
+                            rValue.Name = "Value";
                             rValue.Value <<= (sal_Int32)(j + 1);
 
                             if (j!=0)

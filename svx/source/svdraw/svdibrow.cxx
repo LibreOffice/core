@@ -309,7 +309,7 @@ OUString _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) con
             }
             else
             {
-                sRet = OUString("???");
+                sRet = "???";
                 switch (_nColId)
                 {
                     case ITEMBROWSER_WHICHCOL_ID:
@@ -1016,7 +1016,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                     }
                     else
                     {
-                        aEntry.aValue = OUString("InvalidItem");
+                        aEntry.aValue = "InvalidItem";
                     }
                     ImpSetEntry(aEntry,nEntryNum);
                     nEntryNum++;

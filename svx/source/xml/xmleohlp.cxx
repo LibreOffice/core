@@ -190,7 +190,7 @@ void SvXMLEmbeddedObjectHelper::splitObjectURL(OUString aURLNoPar,
     sal_Int32 _nPos = aURLNoPar.lastIndexOf( '/' );
     if( -1 == _nPos )
     {
-        rContainerStorageName = OUString();
+        rContainerStorageName = "";
         rObjectStorageName = aURLNoPar;
     }
     else
@@ -292,7 +292,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         nPos = aURLNoPar.lastIndexOf( '/' );
         if( -1 == nPos )
         {
-            rContainerStorageName = OUString();
+            rContainerStorageName = "";
             rObjectStorageName = aURLNoPar.copy( nPathStart );
         }
         else if( nPos > nPathStart )
@@ -494,11 +494,11 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
     else
     {
         // Objects are written using ::comphelper::IEmbeddedHelper::SaveAs
-        sRetURL = OUString("./");
+        sRetURL = "./";
         if( !aContainerStorageName.isEmpty() )
         {
             sRetURL += aContainerStorageName;
-            sRetURL += OUString( '/' );
+            sRetURL +=  "/";
         }
         sRetURL += aObjectStorageName;
     }
@@ -680,7 +680,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                                 mxTempStorage =
                                     comphelper::OStorageHelper::GetTemporaryStorage();
                             Sequence < beans::PropertyValue > aDummy( 0 ), aEmbDescr( 1 );
-                            aEmbDescr[0].Name = OUString( "StoreVisualReplacement" );
+                            aEmbDescr[0].Name = "StoreVisualReplacement";
                                aEmbDescr[0].Value <<= (sal_Bool)(!bOasisFormat);
                             if ( !bOasisFormat )
                             {
@@ -688,7 +688,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                                 if ( xGrInStream.is() )
                                 {
                                     aEmbDescr.realloc( 2 );
-                                    aEmbDescr[1].Name = OUString( "VisualReplacement" );
+                                    aEmbDescr[1].Name = "VisualReplacement";
                                     aEmbDescr[1].Value <<= xGrInStream;
                                 }
                             }

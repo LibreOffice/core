@@ -253,7 +253,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         }
 
         if( aDefaultFormatName.getLength() == 0 )
-            aDefaultFormatName = OUString( "PNG - Portable Network Graphic" );
+            aDefaultFormatName = "PNG - Portable Network Graphic";
 
         xFilterManager->setCurrentFilter( aDefaultFormatName );
 
@@ -280,9 +280,9 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
                 Reference<css::drawing::XGraphicExportFilter> xGraphicExporter = css::drawing::GraphicExportFilter::create( xContext );
 
                 Sequence<PropertyValue> aDescriptor( 2 );
-                aDescriptor[0].Name = OUString("MediaType");
+                aDescriptor[0].Name = "MediaType";
                 aDescriptor[0].Value <<= aExportMimeType;
-                aDescriptor[1].Name = OUString("URL");
+                aDescriptor[1].Name = "URL";
                 aDescriptor[1].Value <<= sPath;
 
                 Reference< XComponent > xSourceDocument = Reference< XComponent >( xShape, UNO_QUERY_THROW );
