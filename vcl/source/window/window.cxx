@@ -8407,20 +8407,20 @@ uno::Reference< XDragSource > Window::GetDragSource()
                     Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
                     OUString aDragSourceSN, aDropTargetSN;
 #if defined WNT
-                    aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
-                    aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
+                    aDragSourceSN = "com.sun.star.datatransfer.dnd.OleDragSource";
+                    aDropTargetSN = "com.sun.star.datatransfer.dnd.OleDropTarget";
                     aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->hWnd) ) );
                     aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->hWnd) ) );
 #elif defined MACOSX
             /* FIXME: Mac OS X specific dnd interface does not exist! *
              * Using Windows based dnd as a temporary solution        */
-                    aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
-                    aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
+                    aDragSourceSN = "com.sun.star.datatransfer.dnd.OleDragSource";
+                    aDropTargetSN = "com.sun.star.datatransfer.dnd.OleDropTarget";
                     aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
                     aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
 #elif HAVE_FEATURE_X11
-                    aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.X11DragSource");
-                    aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.X11DropTarget");
+                    aDragSourceSN = "com.sun.star.datatransfer.dnd.X11DragSource";
+                    aDropTargetSN = "com.sun.star.datatransfer.dnd.X11DropTarget";
 
                     aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                     aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );

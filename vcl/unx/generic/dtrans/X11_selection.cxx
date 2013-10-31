@@ -393,8 +393,8 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             m_nXdndActionPrivate= getAtom( OUString("XdndActionPrivate") );
 
             // initialize map with member none
-            m_aAtomToString[ 0 ]= OUString("None");
-            m_aAtomToString[ XA_PRIMARY ] = OUString("PRIMARY");
+            m_aAtomToString[ 0 ]= "None";
+            m_aAtomToString[ XA_PRIMARY ] = "PRIMARY";
 
             // create a (invisible) message window
             m_aWindow = XCreateSimpleWindow( m_pDisplay, DefaultRootWindow( m_pDisplay ),
@@ -663,7 +663,7 @@ bool SelectionManager::convertData(
                 aEncoding = getTextPlainEncoding( aFlavor.MimeType );
             if( aEncoding != RTL_TEXTENCODING_DONTKNOW || bCompoundText )
             {
-                aFlavor.MimeType = OUString("text/plain;charset=utf-16");
+                aFlavor.MimeType = "text/plain;charset=utf-16";
                 aFlavor.DataType = getCppuType( (OUString *) 0 );
                 if( xTransferable->isDataFlavorSupported( aFlavor ) )
                 {
@@ -1387,7 +1387,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             Sequence< DataFlavor > aTemp( nNewFlavors );
             for( i = 0; i < nNewFlavors-1; i++ )
                 aTemp.getArray()[i+1] = rTypes.getConstArray()[i];
-            aTemp.getArray()[0].MimeType = OUString("text/plain;charset=utf-16");
+            aTemp.getArray()[0].MimeType = "text/plain;charset=utf-16";
             aTemp.getArray()[0].DataType = getCppuType( (OUString*)0 );
             rTypes = aTemp;
 

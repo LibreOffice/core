@@ -567,7 +567,7 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
               aFont.SetFamily(FAMILY_ROMAN);
               aFont.SetPitch(PITCH_FIXED);
           } break;
-          default: FNam = OUString("Helvetica");
+          default: FNam = "Helvetica";
         }
         aFont.SetName(FNam);
         //aFont.SetCharSet(CHARSET_SYSTEM);

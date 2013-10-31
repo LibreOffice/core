@@ -331,7 +331,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             }
             rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
             if (bOK && !rStream.GetError()) {
-                rFormatExtension = OUString("MET");
+                rFormatExtension = "MET";
                 return true;
             }
         }
@@ -366,7 +366,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
                    sFirstBytes[14+nOffs] == 0x28 ||
                    sFirstBytes[14+nOffs] == 0x0c )
             {
-                rFormatExtension = OUString("BMP");
+                rFormatExtension = "BMP";
                 return true;
             }
         }
@@ -382,13 +382,13 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
 
         if ( nFirstLong==0xd7cdc69a || nFirstLong==0x01000900 )
         {
-            rFormatExtension = OUString("WMF");
+            rFormatExtension = "WMF";
             return true;
         }
         else if( nFirstLong == 0x01000000 && sFirstBytes[ 40 ] == 0x20 && sFirstBytes[ 41 ] == 0x45 &&
             sFirstBytes[ 42 ] == 0x4d && sFirstBytes[ 43 ] == 0x46 )
         {
-            rFormatExtension = OUString("EMF");
+            rFormatExtension = "EMF";
             return true;
         }
     }
@@ -403,7 +403,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             sal_uInt8 nEncoding=sFirstBytes[2];
             if( ( nVersion==0 || nVersion==2 || nVersion==3 || nVersion==5 ) && nEncoding<=1 )
             {
-                rFormatExtension = OUString("PCX");
+                rFormatExtension = "PCX";
                 return true;
             }
         }
@@ -415,7 +415,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         bSomethingTested=true;
         if ( nFirstLong==0x49492a00 || nFirstLong==0x4d4d002a )
         {
-            rFormatExtension = OUString("TIF");
+            rFormatExtension = "TIF";
             return true;
         }
     }
@@ -426,7 +426,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         bSomethingTested=true;
         if ( nFirstLong==0x47494638 && (sFirstBytes[4]==0x37 || sFirstBytes[4]==0x39) && sFirstBytes[5]==0x61 )
         {
-            rFormatExtension = OUString("GIF");
+            rFormatExtension = "GIF";
             return true;
         }
     }
@@ -437,7 +437,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         bSomethingTested=true;
         if (nFirstLong==0x89504e47 && nSecondLong==0x0d0a1a0a)
         {
-            rFormatExtension = OUString("PNG");
+            rFormatExtension = "PNG";
             return true;
         }
     }
@@ -449,7 +449,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         if ( ( nFirstLong==0xffd8ffe0 && sFirstBytes[6]==0x4a && sFirstBytes[7]==0x46 && sFirstBytes[8]==0x49 && sFirstBytes[9]==0x46 ) ||
              ( nFirstLong==0xffd8fffe ) || ( 0xffd8ff00 == ( nFirstLong & 0xffffff00 ) ) )
         {
-            rFormatExtension = OUString("JPG");
+            rFormatExtension = "JPG";
             return true;
         }
     }
@@ -460,13 +460,13 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         bSomethingTested=true;
         if( nFirstLong==0x53564744 && sFirstBytes[4]==0x49 )
         {
-            rFormatExtension = OUString("SVM");
+            rFormatExtension = "SVM";
             return true;
         }
         else if( sFirstBytes[0]==0x56 && sFirstBytes[1]==0x43 && sFirstBytes[2]==0x4C &&
                  sFirstBytes[3]==0x4D && sFirstBytes[4]==0x54 && sFirstBytes[5]==0x46 )
         {
-            rFormatExtension = OUString("SVM");
+            rFormatExtension = "SVM";
             return true;
         }
     }
@@ -481,9 +481,9 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             rStream.Seek( nStreamPos + 2048 );
             rStream.Read( sBuf, 7 );
 
-            if( strncmp( sBuf, "PCD_IPI", 7 ) ==  0 )
+            if( strncmp( sBuf, "PCD_IPI", 7 ) == 0 )
             {
-                rFormatExtension = OUString("PCD");
+                rFormatExtension = "PCD";
                 return true;
             }
         }
@@ -495,7 +495,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         bSomethingTested = true;
         if ( ( nFirstLong == 0x38425053 ) && ( (nSecondLong >> 16 ) == 1 ) )
         {
-            rFormatExtension = OUString("PSD");
+            rFormatExtension = "PSD";
             return true;
         }
     }
@@ -507,7 +507,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         if ( ( nFirstLong == 0xC5D0D3C6 ) || ( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"%!PS-Adobe", 10, 10 ) &&
              ImplSearchEntry( &sFirstBytes[15], (sal_uInt8*)"EPS", 3, 3 ) ) )
         {
-            rFormatExtension = OUString("EPS");
+            rFormatExtension = "EPS";
             return true;
         }
     }
@@ -518,7 +518,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         // Binary DXF File Format
         if( strncmp( (const char*) sFirstBytes, "AutoCAD Binary DXF", 18 ) == 0 )
         {
-            rFormatExtension = OUString("DXF");
+            rFormatExtension = "DXF";
             return true;
         }
 
@@ -540,7 +540,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
 
             if (i+7<256 && (strncmp((const char*)(sFirstBytes+i),"SECTION",7)==0))
             {
-                rFormatExtension = OUString("DXF");
+                rFormatExtension = "DXF";
                 return true;
             }
         }
@@ -553,7 +553,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         bSomethingTested = true;
         if (isPCT(rStream, nStreamPos, nStreamLen))
         {
-            rFormatExtension = OUString("PCT");
+            rFormatExtension = "PCT";
             return true;
         }
     }
@@ -571,17 +571,17 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             {
                 case '1' :
                 case '4' :
-                    rFormatExtension = OUString("PBM");
+                    rFormatExtension = "PBM";
                 return true;
 
                 case '2' :
                 case '5' :
-                    rFormatExtension = OUString("PGM");
+                    rFormatExtension = "PGM";
                 return true;
 
                 case '3' :
                 case '6' :
-                    rFormatExtension = OUString("PPM");
+                    rFormatExtension = "PPM";
                 return true;
             }
         }
@@ -593,7 +593,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         bSomethingTested=true;
         if( nFirstLong == 0x59a66a95 )
         {
-            rFormatExtension = OUString("RAS");
+            rFormatExtension = "RAS";
             return true;
         }
     }
@@ -604,7 +604,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         bSomethingTested = true;
         if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"/* XPM */", 256, 9 ) )
         {
-            rFormatExtension = OUString("XPM");
+            rFormatExtension = "XPM";
             return true;
         }
     }
@@ -628,7 +628,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         {
             if( ImplSearchEntry( pPtr, (sal_uInt8*)"_width", pBuf + nSize - pPtr, 6 ) )
             {
-                rFormatExtension = OUString("XBM");
+                rFormatExtension = "XBM";
                 delete[] pBuf;
                 return true;
             }
@@ -685,7 +685,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
 
             if(bIsSvg)
             {
-                rFormatExtension = OUString( "SVG" );
+                rFormatExtension = "SVG";
                 return true;
             }
         }
@@ -723,7 +723,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
 
             if(bIsSvg)
             {
-                rFormatExtension = OUString( "SVG" );
+                rFormatExtension = "SVG";
                 return true;
             }
         }
@@ -760,7 +760,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         bSomethingTested=true;
         if( sFirstBytes[ 0 ] == 'J' && sFirstBytes[ 1 ] == 'J' )
         {
-            rFormatExtension = OUString("SGF");
+            rFormatExtension = "SGF";
             return true;
         }
     }
@@ -925,11 +925,11 @@ static OUString ImpCreateFullFilterPath( const OUString& rPath, const OUString& 
     OUString aPathURL;
 
     ::osl::FileBase::getFileURLFromSystemPath( rPath, aPathURL );
-    aPathURL += OUString( '/' );
+    aPathURL += "/";
 
     OUString aSystemPath;
     ::osl::FileBase::getSystemPathFromFileURL( aPathURL, aSystemPath );
-    aSystemPath += OUString( rFilterName );
+    aSystemPath += rFilterName;
 
     return OUString( aSystemPath );
 }

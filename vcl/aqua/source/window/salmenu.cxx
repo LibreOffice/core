@@ -64,9 +64,9 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
     {
         OUString aDialog;
         if( nDialog == SHOWDIALOG_ID_ABOUT )
-            aDialog = OUString("ABOUT");
+            aDialog = "ABOUT";
         else if( nDialog == SHOWDIALOG_ID_PREFERENCES )
-            aDialog = OUString("PREFERENCES");
+            aDialog = "PREFERENCES";
         const ApplicationEvent* pAppEvent = new ApplicationEvent(
             ApplicationEvent::TYPE_SHOWDIALOG, aDialog);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );

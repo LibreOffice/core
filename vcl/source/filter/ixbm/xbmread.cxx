@@ -36,7 +36,7 @@ XBMReader::XBMReader( SvStream& rStm ) :
             bStatus         ( true )
 {
     pHexTable = new short[ 256 ];
-    maUpperName = OUString("SVIXBM");
+    maUpperName = "SVIXBM";
     InitTable();
 }
 

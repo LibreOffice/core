@@ -39,21 +39,21 @@ using namespace x11;
 Sequence< OUString > SAL_CALL x11::X11Clipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.datatransfer.clipboard.SystemClipboard");
+    aRet[0] = "com.sun.star.datatransfer.clipboard.SystemClipboard";
     return aRet;
 }
 
 Sequence< OUString > SAL_CALL x11::Xdnd_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.datatransfer.dnd.X11DragSource");
+    aRet[0] = "com.sun.star.datatransfer.dnd.X11DragSource";
     return aRet;
 }
 
 Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.datatransfer.dnd.X11DropTarget");
+    aRet[0] = "com.sun.star.datatransfer.dnd.X11DropTarget";
     return aRet;
 }
 

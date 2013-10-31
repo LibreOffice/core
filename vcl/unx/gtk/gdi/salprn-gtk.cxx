@@ -946,9 +946,9 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
         uno::Reference< XExporter > xExport(xFilter, UNO_QUERY);
         xExport->setSourceDocument(xDoc);
         uno::Sequence<beans::PropertyValue> aFilterData(2);
-        aFilterData[0].Name = OUString("PageLayout");
+        aFilterData[0].Name = "PageLayout";
         aFilterData[0].Value <<= sal_Int32(0);
-        aFilterData[1].Name = OUString("FirstPageOnLeft");
+        aFilterData[1].Name = "FirstPageOnLeft";
         aFilterData[1].Value <<= sal_False;
 
 
@@ -971,7 +971,7 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
                     aRangeText.AppendAscii(",");
             }
             aFilterData.realloc(aFilterData.getLength()+1);
-            aFilterData[aFilterData.getLength()-1].Name = OUString("PageRange");
+            aFilterData[aFilterData.getLength()-1].Name = "PageRange";
             aFilterData[aFilterData.getLength()-1].Value <<= OUString(aRangeText);
         }
         else if (pStr && !strcmp(pStr, "current"))
@@ -1011,7 +1011,7 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
                        if (i < xSheets->getCount())
                        {
                             aFilterData.realloc(aFilterData.getLength()+1);
-                            aFilterData[aFilterData.getLength()-1].Name = OUString("PageRange");
+                            aFilterData[aFilterData.getLength()-1].Name = "PageRange";
                             aFilterData[aFilterData.getLength()-1].Value <<= OUString(OUString::number(i + 1));
                        }
                    }
@@ -1037,15 +1037,15 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
             if (aSelection.hasValue())
             {
                 aFilterData.realloc(aFilterData.getLength()+1);
-                aFilterData[aFilterData.getLength()-1].Name = OUString("Selection");
+                aFilterData[aFilterData.getLength()-1].Name = "Selection";
                 aFilterData[aFilterData.getLength()-1].Value <<= aSelection;
             }
         }
 #endif
         uno::Sequence<beans::PropertyValue> aArgs(2);
-        aArgs[0].Name = OUString("FilterData");
+        aArgs[0].Name = "FilterData";
         aArgs[0].Value <<= aFilterData;
-        aArgs[1].Name = OUString("OutputStream");
+        aArgs[1].Name = "OutputStream";
         aArgs[1].Value <<= xOStm;
         xFilter->filter(aArgs);
     }

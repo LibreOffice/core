@@ -118,7 +118,7 @@ public:
     {
         DataFlavor df;
 
-        df.MimeType = OUString("text/plain;charset=utf-16");
+        df.MimeType = "text/plain;charset=utf-16";
         df.DataType = getCppuType( static_cast < OUString * > ( 0 ) );
 
          m_aFlavorList[0] = df;

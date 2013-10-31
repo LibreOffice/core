@@ -125,20 +125,20 @@ void doTestCode()
     static const char* pHome = getenv( "HOME"  );
     OUString aTestFile( "file://"  );
     aTestFile += OUString( pHome, strlen( pHome ), RTL_TEXTENCODING_MS_1252 );
-    aTestFile += OUString( "/pdf_export_test.pdf"  );
+    aTestFile += "/pdf_export_test.pdf";
 
     PDFWriter::PDFWriterContext aContext;
     aContext.URL            = aTestFile;
     aContext.Version        = PDFWriter::PDF_1_4;
     aContext.Tagged         = true;
     aContext.InitialPage    = 2;
-    aContext.DocumentInfo.Title = OUString( "PDF export test document"  );
-    aContext.DocumentInfo.Producer = OUString( "VCL"  );
+    aContext.DocumentInfo.Title = "PDF export test document";
+    aContext.DocumentInfo.Producer = "VCL";
 
     aContext.SignPDF        = true;
-    aContext.SignLocation   = OUString( "Burdur" );
-    aContext.SignReason     = OUString( "Some valid reason to sign" );
-    aContext.SignContact    = OUString( "signer@example.com" );
+    aContext.SignLocation   = "Burdur";
+    aContext.SignReason     = "Some valid reason to sign";
+    aContext.SignContact    = "signer@example.com";
 
     com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > xEnc;
     PDFWriter aWriter( aContext, xEnc );
@@ -339,46 +339,46 @@ void doTestCode()
 
     // include a button
     PDFWriter::PushButtonWidget aBtn;
-    aBtn.Name = OUString( "testButton"  );
-    aBtn.Description = OUString( "A test button"  );
-    aBtn.Text = OUString( "hit me"  );
+    aBtn.Name = "testButton";
+    aBtn.Description = "A test button";
+    aBtn.Text = "hit me";
     aBtn.Location = Rectangle( Point( 4500, 9000 ), Size( 4500, 3000 ) );
     aBtn.Border = aBtn.Background = true;
     aWriter.CreateControl( aBtn );
 
     // include a uri button
     PDFWriter::PushButtonWidget aUriBtn;
-    aUriBtn.Name = OUString( "wwwButton"  );
-    aUriBtn.Description = OUString( "A URI button"  );
-    aUriBtn.Text = OUString( "to www"  );
+    aUriBtn.Name = "wwwButton";
+    aUriBtn.Description = "A URI button";
+    aUriBtn.Text = "to www";
     aUriBtn.Location = Rectangle( Point( 9500, 9000 ), Size( 4500, 3000 ) );
     aUriBtn.Border = aUriBtn.Background = true;
-    aUriBtn.URL = OUString( "http://www.heise.de"  );
+    aUriBtn.URL = "http://www.heise.de";
     aWriter.CreateControl( aUriBtn );
 
     // include a dest button
     PDFWriter::PushButtonWidget aDstBtn;
-    aDstBtn.Name = OUString( "destButton"  );
-    aDstBtn.Description = OUString( "A Dest button"  );
-    aDstBtn.Text = OUString( "to paragraph"  );
+    aDstBtn.Name = "destButton";
+    aDstBtn.Description = "A Dest button";
+    aDstBtn.Text = "to paragraph";
     aDstBtn.Location = Rectangle( Point( 14500, 9000 ), Size( 4500, 3000 ) );
     aDstBtn.Border = aDstBtn.Background = true;
     aDstBtn.Dest = nFirstDest;
     aWriter.CreateControl( aDstBtn );
 
     PDFWriter::CheckBoxWidget aCBox;
-    aCBox.Name = OUString( "textCheckBox"  );
-    aCBox.Description = OUString( "A test check box"  );
-    aCBox.Text = OUString( "check me"  );
+    aCBox.Name = "textCheckBox";
+    aCBox.Description = "A test check box";
+    aCBox.Text = "check me";
     aCBox.Location = Rectangle( Point( 4500, 13500 ), Size( 3000, 750 ) );
     aCBox.Checked = true;
     aCBox.Border = aCBox.Background = false;
     aWriter.CreateControl( aCBox );
 
     PDFWriter::CheckBoxWidget aCBox2;
-    aCBox2.Name = OUString( "textCheckBox2"  );
-    aCBox2.Description = OUString( "Another test check box"  );
-    aCBox2.Text = OUString( "check me right"  );
+    aCBox2.Name = "textCheckBox2";
+    aCBox2.Description = "Another test check box";
+    aCBox2.Text = "check me right";
     aCBox2.Location = Rectangle( Point( 4500, 14250 ), Size( 3000, 750 ) );
     aCBox2.Checked = true;
     aCBox2.Border = aCBox2.Background = false;
@@ -386,9 +386,9 @@ void doTestCode()
     aWriter.CreateControl( aCBox2 );
 
     PDFWriter::RadioButtonWidget aRB1;
-    aRB1.Name = OUString( "rb1_1"  );
-    aRB1.Description = OUString( "radio 1 button 1"  );
-    aRB1.Text = OUString( "Despair"  );
+    aRB1.Name = "rb1_1";
+    aRB1.Description = "radio 1 button 1";
+    aRB1.Text = "Despair";
     aRB1.Location = Rectangle( Point( 4500, 15000 ), Size( 6000, 1000 ) );
     aRB1.Selected = true;
     aRB1.RadioGroup = 1;
@@ -401,27 +401,27 @@ void doTestCode()
     aWriter.CreateControl( aRB1 );
 
     PDFWriter::RadioButtonWidget aRB2;
-    aRB2.Name = OUString( "rb2_1"  );
-    aRB2.Description = OUString( "radio 2 button 1"  );
-    aRB2.Text = OUString( "Joy"  );
+    aRB2.Name = "rb2_1";
+    aRB2.Description = "radio 2 button 1";
+    aRB2.Text = "Joy";
     aRB2.Location = Rectangle( Point( 10500, 15000 ), Size( 3000, 1000 ) );
     aRB2.Selected = true;
     aRB2.RadioGroup = 2;
     aWriter.CreateControl( aRB2 );
 
     PDFWriter::RadioButtonWidget aRB3;
-    aRB3.Name = OUString( "rb1_2"  );
-    aRB3.Description = OUString( "radio 1 button 2"  );
-    aRB3.Text = OUString( "Desperation"  );
+    aRB3.Name = "rb1_2";
+    aRB3.Description = "radio 1 button 2";
+    aRB3.Text = "Desperation";
     aRB3.Location = Rectangle( Point( 4500, 16000 ), Size( 3000, 1000 ) );
     aRB3.Selected = true;
     aRB3.RadioGroup = 1;
     aWriter.CreateControl( aRB3 );
 
     PDFWriter::EditWidget aEditBox;
-    aEditBox.Name = OUString( "testEdit"  );
-    aEditBox.Description = OUString( "A test edit field"  );
-    aEditBox.Text = OUString( "A little test text"  );
+    aEditBox.Name = "testEdit";
+    aEditBox.Description = "A test edit field";
+    aEditBox.Text = "A little test text";
     aEditBox.TextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER;
     aEditBox.Location = Rectangle( Point( 10000, 18000 ), Size( 5000, 1500 ) );
     aEditBox.MaxLen = 100;
@@ -431,9 +431,9 @@ void doTestCode()
 
     // normal list box
     PDFWriter::ListBoxWidget aLstBox;
-    aLstBox.Name = OUString( "testListBox"  );
-    aLstBox.Text = OUString( "One"  );
-    aLstBox.Description = OUString( "select me"  );
+    aLstBox.Name = "testListBox";
+    aLstBox.Text = "One";
+    aLstBox.Description = "select me";
     aLstBox.Location = Rectangle( Point( 4500, 18000 ), Size( 3000, 1500 ) );
     aLstBox.Sort = true;
     aLstBox.MultiSelect = true;
@@ -448,15 +448,15 @@ void doTestCode()
     aWriter.CreateControl( aLstBox );
 
     // dropdown list box
-    aLstBox.Name = OUString( "testDropDownListBox"  );
+    aLstBox.Name = "testDropDownListBox";
     aLstBox.DropDown = true;
     aLstBox.Location = Rectangle( Point( 4500, 19500 ), Size( 3000, 500 ) );
     aWriter.CreateControl( aLstBox );
 
     // combo box
     PDFWriter::ComboBoxWidget aComboBox;
-    aComboBox.Name = OUString( "testComboBox"  );
-    aComboBox.Text = OUString( "test a combobox"  );
+    aComboBox.Name = "testComboBox";
+    aComboBox.Text = "test a combobox";
     aComboBox.Entries.push_back( OUString( "Larry"  ) );
     aComboBox.Entries.push_back( OUString( "Curly"  ) );
     aComboBox.Entries.push_back( OUString( "Moe"  ) );
@@ -6389,19 +6389,19 @@ static void escapeStringXML( const OUString& rStr, OUString &rValue)
         switch( *pUni )
         {
         case sal_Unicode('&'):
-            rValue += OUString( "&amp;"  );
+            rValue += "&amp;";
         break;
         case sal_Unicode('<'):
-            rValue += OUString( "&lt;"  );
+            rValue += "&lt;";
         break;
         case sal_Unicode('>'):
-            rValue += OUString( "&gt;"  );
+            rValue += "&gt;";
         break;
         case sal_Unicode('\''):
-            rValue += OUString( "&apos;"  );
+            rValue += "&apos;";
         break;
         case sal_Unicode('"'):
-            rValue += OUString( "&quot;"  );
+            rValue += "&quot;";
         break;
         default:
             rValue += OUString( *pUni );
@@ -6926,7 +6926,7 @@ bool PDFWriterImpl::emit()
     {
         // sign the document
         PDFWriter::SignatureWidget aSignature;
-        aSignature.Name = OUString("Signature1");
+        aSignature.Name = "Signature1";
         createControl( aSignature, 0 );
     }
 #endif
@@ -11882,7 +11882,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rRadioButton.m_aKidsIndex.push_back( nNewWidget );
         rNewWidget.m_nParent = rRadioButton.m_nObject;
 
-        rNewWidget.m_aValue     = OUString( "Off"  );
+        rNewWidget.m_aValue     = "Off";
         rNewWidget.m_aOnValue   = rBtn.OnValue;
         if( rRadioButton.m_aValue.isEmpty() && rBtn.Selected )
         {

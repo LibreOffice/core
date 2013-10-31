@@ -89,9 +89,9 @@ namespace
     uno::Sequence<OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<OUString> aRet(3);
-        aRet[0] = OUString("com.sun.star.ui.dialogs.FilePicker");
-        aRet[1] = OUString("com.sun.star.ui.dialogs.SystemFilePicker");
-        aRet[2] = OUString("com.sun.star.ui.dialogs.KDE4FilePicker");
+        aRet[0] = "com.sun.star.ui.dialogs.FilePicker";
+        aRet[1] = "com.sun.star.ui.dialogs.SystemFilePicker";
+        aRet[2] = "com.sun.star.ui.dialogs.KDE4FilePicker";
         return aRet;
     }
 }

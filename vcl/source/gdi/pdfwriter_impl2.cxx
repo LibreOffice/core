@@ -181,9 +181,9 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 sal_Int32       nColorMode = 0;
 
                 Sequence< PropertyValue > aFilterData( 2 );
-                aFilterData[ 0 ].Name = OUString( "Quality" );
+                aFilterData[ 0 ].Name = "Quality";
                 aFilterData[ 0 ].Value <<= sal_Int32(i_rContext.m_nJPEGQuality);
-                aFilterData[ 1 ].Name = OUString( "ColorMode" );
+                aFilterData[ 1 ].Name = "ColorMode";
                 aFilterData[ 1 ].Value <<= nColorMode;
 
                 try
@@ -196,11 +196,11 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                     uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
                     OUString aMimeType("image/jpeg");
                     uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
-                    aOutMediaProperties[0].Name = OUString("OutputStream");
+                    aOutMediaProperties[0].Name = "OutputStream";
                     aOutMediaProperties[0].Value <<= xOut;
-                    aOutMediaProperties[1].Name = OUString("MimeType");
+                    aOutMediaProperties[1].Name = "MimeType";
                     aOutMediaProperties[1].Value <<= aMimeType;
-                    aOutMediaProperties[2].Name = OUString("FilterData");
+                    aOutMediaProperties[2].Name = "FilterData";
                     aOutMediaProperties[2].Value <<= aFilterData;
                     xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
                     xOut->flush();
@@ -214,7 +214,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
 
                         xSeekable->seek( 0 );
                         Sequence< PropertyValue > aArgs( 1 );
-                        aArgs[ 0 ].Name = OUString("InputStream");
+                        aArgs[ 0 ].Name = "InputStream";
                         aArgs[ 0 ].Value <<= xStream;
                         uno::Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
                         if ( xPropSet.is() )

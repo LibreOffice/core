@@ -131,7 +131,7 @@ OUString GenericClipboard::getImplementationName_static()
 Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.datatransfer.clipboard.SystemClipboard");
+    aRet[0] = "com.sun.star.datatransfer.clipboard.SystemClipboard";
     return aRet;
 }
 
@@ -305,7 +305,7 @@ public:
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
-        aRet[0] = OUString("com.sun.star.datatransfer.dnd.GenericDragSource");
+        aRet[0] = "com.sun.star.datatransfer.dnd.GenericDragSource";
         return aRet;
     }
 
@@ -416,7 +416,7 @@ public:
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
-        aRet[0] = OUString("com.sun.star.datatransfer.dnd.GenericDropTarget");
+        aRet[0] = "com.sun.star.datatransfer.dnd.GenericDropTarget";
         return aRet;
     }
 

@@ -1320,7 +1320,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
                 // apply outdev3.cxx specific fontname normalization
                 GetEnglishSearchFontName( rFontSelData.maSearchName );
             else
-                rFontSelData.maSearchName = OUString();
+                rFontSelData.maSearchName = "";
 
             // See fdo#32665 for an example. FreeSerif that has glyphs in normal
             // font, but not in the italic or bold version
@@ -2390,17 +2390,17 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         {
             OUString aBoldName;
             if( aSearchName.startsWithIgnoreAsciiCase( "hggothicb" ) )
-                aBoldName = OUString("hggothice");
+                aBoldName = "hggothice";
             else if( aSearchName.startsWithIgnoreAsciiCase( "hgpgothicb" ) )
-                aBoldName = OUString("hgpgothice");
+                aBoldName = "hgpgothice";
             else if( aSearchName.startsWithIgnoreAsciiCase( "hgminchol" ) )
-                aBoldName = OUString("hgminchob");
+                aBoldName = "hgminchob";
             else if( aSearchName.startsWithIgnoreAsciiCase( "hgpminchol" ) )
-                aBoldName = OUString("hgpminchob");
+                aBoldName = "hgpminchob";
             else if( aSearchName.equalsIgnoreAsciiCase( "hgminchob" ) )
-                aBoldName = OUString("hgminchoe");
+                aBoldName = "hgminchoe";
             else if( aSearchName.equalsIgnoreAsciiCase( "hgpminchob" ) )
-                aBoldName = OUString("hgpminchoe");
+                aBoldName = "hgpminchoe";
 
             if( !aBoldName.isEmpty() && ImplFindBySearchName( aBoldName ) )
             {
@@ -2690,7 +2690,7 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
         // override the font name
         rFontSelData.SetFamilyName( pFallbackData->GetFamilyName() );
         // clear the cached normalized name
-        rFontSelData.maSearchName = OUString();
+        rFontSelData.maSearchName = "";
     }
 
     // get device font without doing device specific substitutions

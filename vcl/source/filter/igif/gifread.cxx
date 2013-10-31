@@ -45,7 +45,7 @@ GIFReader::GIFReader( SvStream& rStm ) :
             bGCTransparent  ( false ),
             bImGraphicReady ( false )
 {
-    maUpperName = OUString("SVIGIF");
+    maUpperName = "SVIGIF";
     pSrcBuf = new sal_uInt8[ 256 ];
     ClearImageExtensions();
 }

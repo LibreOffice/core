@@ -195,7 +195,7 @@ JPEGReader::JPEGReader( SvStream& rStream, void* /*pCallData*/, bool bSetLogSize
     mnLastLines      ( 0 ),
     mbSetLogSize     ( bSetLogSize )
 {
-    maUpperName = OUString("SVIJPEG");
+    maUpperName = "SVIJPEG";
     mnFormerPos = mnLastPos;
 }
 
