@@ -912,7 +912,7 @@ short Dialog::Execute()
     while ( !aDelData.IsDead() && mbInExecute )
         Application::Yield();
 
-    ImplEndExecutModal();
+    ImplEndExecuteModal();
 
 #ifdef DBG_UTIL
     if( pDialogParent  )
