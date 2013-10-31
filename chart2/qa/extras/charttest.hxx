@@ -27,6 +27,8 @@
 
 #include <unotools/tempfile.hxx>
 
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -164,6 +166,24 @@ Reference< chart2::XDataSeries > getDataSeriesFromDoc( uno::Reference< chart2::X
     return xSeries;
 }
 
+
+uno::Sequence < OUString > getWriterChartColumnDescriptions( Reference< lang::XComponent > mxComponent )
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT( xShape.is() );
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference< chart2::XChartDocument > xChartDoc;
+    xChartDoc.set( xPropertySet->getPropertyValue( "Model" ), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xChartDoc.is() );
+    CPPUNIT_ASSERT( xChartDoc->getDataProvider().is() );
+    uno::Reference<beans::XPropertySet> xProp(xChartDoc->getDataProvider(), uno::UNO_QUERY );
+    uno::Reference< chart2::XAnyDescriptionAccess > xAnyDescriptionAccess ( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT( xAnyDescriptionAccess.is() );
+    uno::Sequence< OUString > seriesList = xAnyDescriptionAccess->getColumnDescriptions();
+    return seriesList;
+}
 
 uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const char* pDir, const char* pName )
 {

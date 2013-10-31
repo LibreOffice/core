@@ -9,7 +9,6 @@
 
 
 #include "charttest.hxx"
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -17,7 +16,6 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
-#include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 
 class Chart2ImportTest : public ChartTest
@@ -31,6 +29,7 @@ public:
     void testXLSChartSeries();
     void testODTChartSeries();
     void testDOCChartSeries();
+    void testDOCXChartSeries();
     void testPPTXChartSeries();
     void testPPTChartSeries();
     void testODPChartSeries();
@@ -44,6 +43,7 @@ public:
     CPPUNIT_TEST(testXLSChartSeries);
     CPPUNIT_TEST(testODTChartSeries);
     CPPUNIT_TEST(testDOCChartSeries);
+    CPPUNIT_TEST(testDOCXChartSeries);
 /*
  *  Disabling Impress Uts.
  *  ChartTest::tearDown() calls dispose of mxComponent
@@ -225,19 +225,7 @@ void Chart2ImportTest::testXLSChartSeries()
 void Chart2ImportTest::testODTChartSeries()
 {
     load("/chart2/qa/extras/data/odt/", "chart.odt");
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT( xShape.is() );
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-    uno::Reference< chart2::XChartDocument > xChartDoc;
-    xChartDoc.set( xPropertySet->getPropertyValue( "Model" ), uno::UNO_QUERY );
-    CPPUNIT_ASSERT( xChartDoc.is() );
-    CPPUNIT_ASSERT( xChartDoc->getDataProvider().is() );
-    uno::Reference<beans::XPropertySet> xProp(xChartDoc->getDataProvider(), uno::UNO_QUERY );
-    uno::Reference< chart2::XAnyDescriptionAccess > xAnyDescriptionAccess ( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT( xAnyDescriptionAccess.is() );
-    uno::Sequence< OUString > seriesList = xAnyDescriptionAccess->getColumnDescriptions();
+    uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions(mxComponent);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
@@ -247,24 +235,20 @@ void Chart2ImportTest::testODTChartSeries()
 void Chart2ImportTest::testDOCChartSeries()
 {
     load("/chart2/qa/extras/data/doc/", "chart.doc");
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT( xShape.is() );
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-    uno::Reference< chart2::XChartDocument > xChartDoc;
-    xChartDoc.set( xPropertySet->getPropertyValue( "Model" ), uno::UNO_QUERY );
-    CPPUNIT_ASSERT( xChartDoc.is() );
-    CPPUNIT_ASSERT( xChartDoc->getDataProvider().is() );
-    uno::Reference<beans::XPropertySet> xProp(xChartDoc->getDataProvider(), uno::UNO_QUERY );
-    uno::Reference< chart2::XAnyDescriptionAccess > xAnyDescriptionAccess ( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT( xAnyDescriptionAccess.is() );
-    uno::Sequence< OUString > seriesList = xAnyDescriptionAccess->getColumnDescriptions();
+    uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions(mxComponent);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
 }
 
+void Chart2ImportTest::testDOCXChartSeries()
+{
+    load("/chart2/qa/extras/data/docx/", "chart.docx");
+    uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions(mxComponent);
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 1"), seriesList[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 2"), seriesList[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), seriesList[2]);
+}
 
 void Chart2ImportTest::testPPTChartSeries()
 {
