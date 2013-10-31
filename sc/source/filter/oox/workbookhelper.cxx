@@ -72,6 +72,7 @@
 #include "datauno.hxx"
 #include "globalnames.hxx"
 #include "clkernelthread.hxx"
+#include "documentimport.hxx"
 #include "rtl/ref.hxx"
 
 #include "formulabuffer.hxx"
@@ -80,6 +81,7 @@
 #include "editeng/editstat.hxx"
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace oox {
 namespace xls {
@@ -147,7 +149,10 @@ public:
         return *mxEditEngine.get();
     }
 
-    ScDocument& getScDocument() const { return *mpDoc; }
+    ScDocument& getScDocument() { return *mpDoc; }
+    const ScDocument& getScDocument() const { return *mpDoc; }
+
+    ScDocumentImport& getDocImport();
 
     /** Returns a reference to the source/target spreadsheet document model. */
     inline Reference< XSpreadsheetDocument > getDocument() const { return mxDoc; }
@@ -156,15 +161,15 @@ public:
     /** Returns the specified cell or page style from the Calc document. */
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
     /** Creates and returns a defined name on-the-fly in the Calc document. */
-    ScRangeData* createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const;
+    ScRangeData* createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags );
     /** Creates and returns a defined name on the-fly in the correct Calc sheet. */
-    ScRangeData* createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const;
+    ScRangeData* createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab );
     /** Creates and returns a database range on-the-fly in the Calc document. */
-    Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const;
+    Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr );
     /** Creates and returns an unnamed database range on-the-fly in the Calc document. */
-    Reference< XDatabaseRange > createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const;
+    Reference< XDatabaseRange > createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr );
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
-    Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle ) const;
+    Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle );
     /** Helper to switch chart data table - specifically for xlsx imports */
     void useInternalChartDataTable( bool bInternal );
 
@@ -306,6 +311,7 @@ private:
     rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
     bool                mbHasCodePage;          /// True = CODEPAGE record exists in imported stream.
     ScDocument* mpDoc;
+    boost::scoped_ptr<ScDocumentImport> mxDocImport;
 };
 
 // ----------------------------------------------------------------------------
@@ -329,6 +335,10 @@ WorkbookGlobals::~WorkbookGlobals()
     mrExcelFilter.unregisterWorkbookGlobals();
 }
 
+ScDocumentImport& WorkbookGlobals::getDocImport()
+{
+    return *mxDocImport;
+}
 
 Reference< XNameContainer > WorkbookGlobals::getStyleFamily( bool bPageStyles ) const
 {
@@ -396,7 +406,8 @@ OUString findUnusedName( const ScRangeName* pRangeName, const OUString& rSuggest
 
 }
 
-ScRangeData* WorkbookGlobals::createNamedRangeObject( OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags ) const
+ScRangeData* WorkbookGlobals::createNamedRangeObject(
+    OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags )
 {
     // create the name and insert it into the Calc document
     ScRangeData* pScRangeData = NULL;
@@ -412,7 +423,8 @@ ScRangeData* WorkbookGlobals::createNamedRangeObject( OUString& orName, const Se
     return pScRangeData;
 }
 
-ScRangeData* WorkbookGlobals::createLocalNamedRangeObject( OUString& orName, const Sequence< FormulaToken >&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab ) const
+ScRangeData* WorkbookGlobals::createLocalNamedRangeObject(
+    OUString& orName, const Sequence< FormulaToken >&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab )
 {
     // create the name and insert it into the Calc document
     ScRangeData* pScRangeData = NULL;
@@ -428,7 +440,7 @@ ScRangeData* WorkbookGlobals::createLocalNamedRangeObject( OUString& orName, con
     return pScRangeData;
 }
 
-Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const
+Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr )
 {
     // validate cell range
     CellRangeAddress aDestRange = rRangeAddr;
@@ -453,7 +465,7 @@ Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString
     return xDatabaseRange;
 }
 
-Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const
+Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr )
 {
     // validate cell range
     CellRangeAddress aDestRange = rRangeAddr;
@@ -482,7 +494,7 @@ Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( c
     return xDatabaseRange;
 }
 
-Reference< XStyle > WorkbookGlobals::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
+Reference< XStyle > WorkbookGlobals::createStyleObject( OUString& orStyleName, bool bPageStyle )
 {
     Reference< XStyle > xStyle;
     try
@@ -546,6 +558,8 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
 
     if (!mpDoc)
         throw RuntimeException("Workbookhelper::getScDocument(): Failed to access ScDocument from model", Reference<XInterface>());
+
+    mxDocImport.reset(new ScDocumentImport(*mpDoc));
 
     mxFormulaBuffer.reset( new FormulaBuffer( *this ) );
     mxWorkbookSettings.reset( new WorkbookSettings( *this ) );

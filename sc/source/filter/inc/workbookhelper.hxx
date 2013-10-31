@@ -56,6 +56,7 @@ namespace oox { namespace core {
 } }
 
 class ScDocument;
+class ScDocumentImport;
 class ScEditEngineDefaulter;
 
 namespace oox {
