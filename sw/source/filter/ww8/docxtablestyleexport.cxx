@@ -91,6 +91,49 @@ void lcl_TableStyleTblCellMar(sax_fastparser::FSHelperPtr pSerializer, uno::Sequ
     pSerializer->endElementNS(XML_w, XML_tblCellMar);
 }
 
+/// Export of a given table cell border type in a table style.
+void lcl_TableStyleTcBorder(sax_fastparser::FSHelperPtr pSerializer, sal_Int32 nToken, const uno::Sequence<beans::PropertyValue>& rTcBorder)
+{
+    if (!rTcBorder.hasElements())
+        return;
+
+    sax_fastparser::FastAttributeList* pAttributeList = pSerializer->createAttrList();
+    for (sal_Int32 i = 0; i < rTcBorder.getLength(); ++i)
+    {
+        if (rTcBorder[i].Name == "val")
+            pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rTcBorder[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+    }
+    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
+    pSerializer->singleElementNS(XML_w, nToken, xAttributeList);
+}
+
+DocxStringTokenMap const aTcBordersTokens[] = {
+    {"left", XML_left},
+    {"right", XML_right},
+    {"start", XML_start},
+    {"end", XML_end},
+    {"top", XML_top},
+    {"bottom", XML_bottom},
+    {"insideH", XML_insideH},
+    {"insideV", XML_insideV},
+    {"tl2br", XML_tl2br},
+    {"tr2bl", XML_tr2bl},
+    {0, 0}
+};
+
+/// Export of w:tcBorders in a table style.
+void lcl_TableStyleTcBorders(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rTcBorders)
+{
+    if (!rTcBorders.hasElements())
+        return;
+
+    pSerializer->startElementNS(XML_w, XML_tcBorders, FSEND);
+    for (sal_Int32 i = 0; i < rTcBorders.getLength(); ++i)
+        if (sal_Int32 nToken = DocxStringGetToken(aTcBordersTokens, rTcBorders[i].Name))
+            lcl_TableStyleTcBorder(pSerializer, nToken, rTcBorders[i].Value.get< uno::Sequence<beans::PropertyValue> >());
+    pSerializer->endElementNS(XML_w, XML_tcBorders);
+}
+
 /// Export of w:shd in a table style.
 void lcl_TableStyleShd(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<beans::PropertyValue>& rShd)
 {
@@ -325,15 +368,18 @@ void lcl_TableStyleTcPr(sax_fastparser::FSHelperPtr pSerializer, uno::Sequence<b
 
     pSerializer->startElementNS(XML_w, XML_tcPr, FSEND);
 
-    uno::Sequence<beans::PropertyValue> aShd;
+    uno::Sequence<beans::PropertyValue> aShd, aTcBorders;
     OUString aVAlign;
     for (sal_Int32 i = 0; i < rTcPr.getLength(); ++i)
     {
         if (rTcPr[i].Name == "shd")
             aShd = rTcPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
+        else if (rTcPr[i].Name == "tcBorders")
+            aTcBorders = rTcPr[i].Value.get< uno::Sequence<beans::PropertyValue> >();
         else if (rTcPr[i].Name == "vAlign")
             aVAlign = rTcPr[i].Value.get<OUString>();
     }
+    lcl_TableStyleTcBorders(pSerializer, aTcBorders);
     lcl_TableStyleShd(pSerializer, aShd);
     if (!aVAlign.isEmpty())
         pSerializer->singleElementNS(XML_w, XML_vAlign,

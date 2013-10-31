@@ -195,7 +195,11 @@ namespace dmapper {
                 {
                     //in OOXML there's one set of borders at each cell (if there is any)
                     TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler( m_bOOXML ));
+                    if (m_pCurrentInteropGrabBag)
+                        pTDefTableHandler->enableInteropGrabBag("tcBorders");
                     pProperties->resolve( *pTDefTableHandler );
+                    if (m_pCurrentInteropGrabBag)
+                        m_pCurrentInteropGrabBag->push_back(pTDefTableHandler->getInteropGrabBag());
                     TablePropertyMapPtr pCellPropMap( new TablePropertyMap );
                     pTDefTableHandler->fillCellProperties( 0, pCellPropMap );
                     cellProps( pCellPropMap );

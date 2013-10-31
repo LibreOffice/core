@@ -23,9 +23,14 @@
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vector>
-namespace com{ namespace sun{ namespace star{namespace table {
-    struct BorderLine2;
-}}}}
+namespace com{ namespace sun{ namespace star{
+    namespace table {
+        struct BorderLine2;
+    }
+    namespace beans {
+        struct PropertyValue;
+    }
+}}}
 
 namespace writerfilter {
 namespace dmapper
@@ -57,6 +62,10 @@ private:
 
     bool                                                m_bOOXML;
 
+    OUString m_aInteropGrabBagName;
+    std::vector<beans::PropertyValue> m_aInteropGrabBag;
+    void appendGrabBag(OUString aKey, OUString aValue);
+
     void localResolve(Id Name, writerfilter::Reference<Properties>::Pointer_t pProperties);
 
     // Properties
@@ -71,6 +80,8 @@ public:
     void                                        fillCellProperties( size_t nCell, ::boost::shared_ptr< TablePropertyMap > pCellProperties) const;
     ::boost::shared_ptr<PropertyMap>            getRowProperties() const;
     sal_Int32                                   getTableWidth() const;
+    void enableInteropGrabBag(OUString aName);
+    beans::PropertyValue getInteropGrabBag(OUString aName = OUString());
 };
 typedef boost::shared_ptr< TDefTableHandler >          TDefTableHandlerPtr;
 }}
