@@ -39,7 +39,7 @@ SRCS = filters-test.m
 
 CFLAGS = $(SOLARINC)
 
-LIBS = -Wl,$(WORKDIR)/LinkTarget/CppunitTest/libtest_sc_filters_test.a $(foreach LIB, bin/cppunit/cppunittester lib/bootstrap.uno lib/configmgr.uno lib/expwrap.uno lib/fastsax.uno lib/i18npool.uno lib/introspection.uno lib/reflection.uno lib/stocservices.uno lib/unobootstrapprotector lib/unoexceptionprotector, -Wl,$(OUTDIR)/$(LIB).a) $(SOLARLIB) -lanalysislo -lavmedialo -lbasegfxlo -lcanvastoolslo -llcms2 -lcollator_data -lcomphelpgcc3 -lcppcanvaslo -lcppunit -lcrypto -ldatelo -ldict_ja -ldict_zh -ldrawinglayerlo -leditenglo -lexpat_xmlparse -lexpat_xmltok -lfilterconfiglo -lforlo -lforuilo -lfwelo -lfwilo -lfwklo -lgcc3_uno -li18nlangtaggcc3 -li18nutilgcc3 -licudata -licui18n -licuuc -lindex_data -ljpeg -ljvmfwk -llnglo -llocaledata_en -llocaledata_es -llocaledata_euro -llocaledata_others -lmsfilterlo -looxlo -lpackage2 -lreg -lsal_textenc -lsalcpprt -lsaxlo -lscfiltlo -lsclo -lsfxlo -lsotlo -lstore -lsvllo -lsvtlo -lsvxlo -lsvxcorelo -ltest -ltextconv_dict -ltklo -ltllo -lucb1 -lucbhelper4gcc3 -lucpfile1 -lunoxmllo -luno_cppuhelpergcc3 -luno_cppu -luno_sal -luno_salhelpergcc3 -lunotest -lutllo -lvcllo -lxmlscriptlo -lxml2 -lxmlreader -lxolo -lxstor -lz $(addprefix -framework , $(gb_Library__FRAMEWORKS)) -liconv -lobjc
+LIBS = -Wl,$(WORKDIR)/LinkTarget/CppunitTest/libtest_sc_filters_test.a $(foreach LIB, bin/cppunit/cppunittester lib/bootstrap.uno lib/configmgr.uno lib/expwrap.uno lib/fastsax.uno lib/i18npool.uno lib/introspection.uno lib/reflection.uno lib/stocservices.uno lib/unobootstrapprotector lib/unoexceptionprotector, $(SOLARLIB) -lanalysislo -lavmedialo -lbasegfxlo -lcanvastoolslo -llcms2 -lcollator_data -lcomphelpgcc3 -lcppcanvaslo -lcppunit -lcrypto -ldatelo -ldict_ja -ldict_zh -ldrawinglayerlo -leditenglo -lexpat_xmlparse -lexpat_xmltok -lfilterconfiglo -lforlo -lforuilo -lfwelo -lfwilo -lfwklo -lgcc3_uno -li18nlangtaggcc3 -li18nutilgcc3 -licudata -licui18n -licuuc -lindex_data -ljpeg -ljvmfwk -llnglo -llocaledata_en -llocaledata_es -llocaledata_euro -llocaledata_others -lmsfilterlo -looxlo -lpackage2 -lreg -lsal_textenc -lsalcpprt -lsaxlo -lscfiltlo -lsclo -lsfxlo -lsotlo -lstore -lsvllo -lsvtlo -lsvxlo -lsvxcorelo -ltest -ltextconv_dict -ltklo -ltllo -lucb1 -lucbhelper4gcc3 -lucpfile1 -lunoxmllo -luno_cppuhelpergcc3 -luno_cppu -luno_sal -luno_salhelpergcc3 -lunotest -lutllo -lvcllo -lxmlscriptlo -lxml2 -lxmlreader -lxolo -lxstor -lz $(addprefix -framework , $(gb_Library__FRAMEWORKS)) -liconv -lobjc
 
 all: $(APPDIR)/$(APP) stuff
 
@@ -73,14 +73,12 @@ stuff:
 # hmm, once again, a hodgepodge of stuff, I don't really know which
 # files of which are actually needed...
 	mkdir -p $(APPDIR)/registry/res
-	cp $(OUTDIR)/xml/*.xcd $(APPDIR)/registry
 	mv $(APPDIR)/registry/fcfg_langpack_en-US.xcd $(APPDIR)/registry/res
-	cp -R $(OUTDIR)/xml/registry/* $(APPDIR)/registry
 #
 # .rdb files
-	cp $(OUTDIR)/bin/udkapi.rdb $(OUTDIR)/bin/types.rdb $(OUTDIR)/xml/ure/services.rdb $(APPDIR)
+	cp $(INSTDIR)/ure/share/misc/types.rdb $(INSTDIR)/program/types/offapi.rdb $(INSTDIR)/program/services/services.rdb $(APPDIR)
 	mkdir -p $(APPDIR)/ure
-	cp $(OUTDIR)/bin/ure/types.rdb $(APPDIR)/ure
+	cp $(INSTDIR)/ure/share/misc/types.rdb $(APPDIR)/ure
 #
 # a bunch of .component files
 	for F in framework/util/fwk i18npool/util/i18npool sfx2/util/sfx ucb/source/core/ucb1 ucb/source/ucp/file/ucpfile1 unoxml/source/service/unoxml configmgr/source/configmgr basic/util/sb chart2/source/controller/chartcontroller chart2/source/chartcore comphelper/util/comphelp eventattacher/source/evtatt filter/source/config/cache/filterconfig1 oox/util/oox package/source/xstor/xstor package/util/package2 sax/source/expatwrap/expwrap sax/source/fastparser/fastsax sc/util/sc sc/util/scfilt scaddins/source/analysis/analysis scaddins/source/datefunc/date sot/util/sot svl/util/svl toolkit/util/tk ucb/source/ucp/tdoc/ucptdoc1 unotools/util/utl unoxml/source/rdf/unordf; do \
@@ -94,7 +92,7 @@ stuff:
 # ResMgrContainer::init() in tools/source/rc/resmgr.cxx, so let's use
 # that.
 	mkdir -p $(APPDIR)/program/resource
-	for F in $(OUTDIR)/bin/*.res; do \
+	for F in $(INSTDIR)/program/resource/*.res; do \
 		cp $$F $(APPDIR)/program/resource; \
 	done
 #

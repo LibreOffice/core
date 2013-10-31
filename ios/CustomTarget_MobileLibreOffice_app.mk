@@ -48,7 +48,6 @@ MobileLibreOffice_setup:
 	# Libs #
 	# Create the link flags in the xcconfig for Xcode linkage
 	for path in $(INSTDIR)/program \
-				$(WORKDIR)/Headers/Library \
 				$(WORKDIR)/LinkTarget/StaticLibrary \
 				$(WORKDIR)/UnpackedTarball/*/.libs \
 				$(WORKDIR)/UnpackedTarball/*/src/.libs \

@@ -42,7 +42,6 @@ $(eval $(call gb_Executable_add_objcobjects,LibreOffice,\
 # variable for that list? (To be used for Android builds, too.)
 
 $(WORKDIR)/LinkTarget/Executable/LibreOffice : \
-    $(wildcard $(OUTDIR)/lib/lib*.a) \
     $(wildcard $(INSTDIR)/$(LIBO_LIB_FOLDER)/lib*.a) \
     $(wildcard $(WORKDIR)/LinkTarget/StaticLibrary/lib*.a)
 

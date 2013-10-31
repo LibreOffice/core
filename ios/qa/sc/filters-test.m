@@ -82,7 +82,6 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
     // See unotest/source/cpp/bootstrapfixturebase.cxx
     const char *app_root = [[[NSBundle mainBundle] bundlePath] UTF8String];
     setenv("SRC_ROOT", app_root, 1);
-    setenv("OUTDIR_FOR_BUILD", app_root, 1);
 
     setenv("SAL_LOG", "yes", 1);
 

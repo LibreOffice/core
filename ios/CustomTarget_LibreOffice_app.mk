@@ -53,9 +53,9 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,LibreOffice)
 #
 # Copy rdb files
 #
-	cp $(OUTDIR)/bin/offapi.rdb $(appdir)
-	cp $(OUTDIR)/bin/udkapi.rdb $(appdir)
-	cp $(OUTDIR)/bin/oovbaapi.rdb $(appdir)
+	cp $(INSTDIR)/ure/share/misc/types.rdb $(appdir)
+	cp $(INSTDIR)/program/types/offapi.rdb $(appdir)
+	cp $(INSTDIR)/program/types/oovbaapi.rdb $(appdir)
 	cp $(INSTDIR)/program/services/services.rdb $(appdir)
 	cp $(INSTDIR)/ure/share/misc/services.rdb $(appdir)/ure
 #
