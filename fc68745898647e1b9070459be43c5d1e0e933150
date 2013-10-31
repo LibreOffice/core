@@ -16,6 +16,24 @@
       "revId": "fc68745898647e1b9070459be43c5d1e0e933150",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAZX///qM\u003d",
+        "filename": "solenv/bin/ooinstall",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-10-31T15:19:40Z",
+      "side": 0,
+      "message": "not sure why this needs setting anyway - instsetoo_native/$ENV{\u0027INPATH\u0027} hasn\u0027t existed for more than half a year now...",
+      "parentUuid": "AAAAZX///qY\u003d",
+      "revId": "fc68745898647e1b9070459be43c5d1e0e933150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
