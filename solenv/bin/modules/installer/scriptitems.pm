@@ -916,7 +916,7 @@ sub get_sourcepath_from_filename_and_includepath_classic
         $onefile = "";  # the sourcepath has to be empty
         if ( $write_logfile)
         {
-            $infoline = "ERROR: Source for $$searchfilenameref not found!\n";    # Important message in log file
+            $infoline = "ERROR: Source for $$searchfilenameref not found (classic)!\n";    # Important message in log file
             push( @installer::globals::logfileinfo, $infoline);
         }
     }
