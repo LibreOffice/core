@@ -45,10 +45,6 @@
 #include <vcl/unowrap.hxx>
 #include <iostream>
 
-#ifdef ANDROID
-#include <osl/detail/android-bootstrap.h>
-#endif
-
 // =======================================================================
 
 static OString ImplGetDialogText( Dialog* pDialog )
@@ -801,12 +797,6 @@ sal_Bool Dialog::Close()
 
 sal_Bool Dialog::ImplStartExecuteModal()
 {
-#ifdef ANDROID
-    // Not sure if the idea is that this will be called on Android or
-    // not? But OK, let's try to have the below code reached on
-    // Android...
-#endif
-
     if ( mbInExecute )
     {
 #ifdef DBG_UTIL
