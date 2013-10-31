@@ -2306,21 +2306,38 @@ endef
 endif # SYSTEM_POSTGRESQL
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
 define gb_LinkTarget__use_mozilla
+
+$(call gb_LinkTarget_use_unpacked,$(1),moz_lib)
+$(call gb_LinkTarget_use_unpacked,$(1),moz_inc)
 
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DMOZILLA_INTERNAL_API \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc) \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/addrbook \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/content \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/embed_base \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/intl \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/mime \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/mozldap \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/msgbase \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/necko \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/pref \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/profile \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/rdf \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/string \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/uconv \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/xpcom \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/xpcom_obsolete \
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/mozilla \
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/nspr4.lib \
-)
-$(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,moz_lib)/xpcom.lib \
 	$(call gb_UnpackedTarball_get_dir,moz_lib)/xpcom_core.lib \
 )
