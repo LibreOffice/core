@@ -7721,6 +7721,11 @@ dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libetonyek],[ETONYEK],[libetonyek-0.0],["-I${WORKDIR}/UnpackedTarball/libetonyek/inc"],["-L${WORKDIR}/UnpackedTarball/libetonyek/src/lib/.libs -letonyek-0.0"])
 
 dnl ===================================================================
+dnl Check for system libfreehand
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([libfreehand],[FREEHAND],[libfreehand-0.0],["-I${WORKDIR}/UnpackedTarball/libfreehand/inc"],["-L${WORKDIR}/UnpackedTarball/libfreehand/src/lib/.libs -lfreehand-0.0"])
+
+dnl ===================================================================
 dnl Check for system libodfgen
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libodfgen],[ODFGEN],[libodfgen-0.0])

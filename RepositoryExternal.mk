@@ -1466,6 +1466,41 @@ endef
 endif # SYSTEM_ETONYEK
 
 
+ifeq ($(SYSTEM_FREEHAND),YES)
+
+define gb_LinkTarget__use_freehand
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(FREEHAND_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(FREEHAND_LIBS))
+
+endef
+
+gb_ExternalProject__use_freehand :=
+
+else # !SYSTEM_FREEHAND
+
+define gb_LinkTarget__use_freehand
+$(call gb_LinkTarget_set_include,$(1),\
+	$(FREEHAND_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libfreehand)/src/lib/.libs/libfreehand-0.0$(gb_StaticLibrary_PLAINEXT) \
+)
+$(call gb_LinkTarget_use_external_project,$(1),libfreehand)
+
+endef
+
+define gb_ExternalProject__use_freehand
+$(call gb_ExternalProject_use_external_project,$(1),libfreehand)
+
+endef
+
+endif # SYSTEM_FREEHAND
+
+
 ifeq ($(SYSTEM_ODFGEN),YES)
 
 define gb_LinkTarget__use_odfgen
