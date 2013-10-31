@@ -73,7 +73,7 @@ sub check_system_path
     if ($ENV{'CROSS_COMPILING'} eq 'YES')
     {
         # we build our own msi* etc. tools when cross-compiling
-        $ENV{'PATH'} .= $installer::globals::pathseparator . $ENV{'OUTDIR_FOR_BUILD'} . '/bin';
+        $ENV{'PATH'} .= $installer::globals::pathseparator . $ENV{'WORKDIR_FOR_BUILD'} . '/LinkTarget/Executable';
     }
 
     my $onefile;
@@ -169,7 +169,7 @@ sub get_makecab_version
     my $systemcall = "makecab.exe |";
     if ( $installer::globals::isunix )
     {
-        $systemcall = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe |";
+        $systemcall = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/makecab.exe |";
     }
     my @makecaboutput = ();
 

@@ -251,7 +251,7 @@ sub generate_cab_file_list
             my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
             if ( $installer::globals::isunix )
             {
-                $oneline = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+                $oneline = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
             }
 
             push(@cabfilelist, $oneline);
@@ -331,7 +331,7 @@ sub generate_cab_file_list
             my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
             if ( $installer::globals::isunix )
             {
-                $oneline = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+                $oneline = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
             }
 
             push(@cabfilelist, $oneline);
@@ -460,7 +460,7 @@ sub create_msi_database
     my $msidb = "msidb.exe";    # Has to be in the path
     if ( $installer::globals::isunix )
     {
-        $msidb = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msidb.exe";
+        $msidb = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/msidb.exe";
     }
     my $extraslash = "";        # Has to be set for non-ActiveState perl
 
@@ -615,7 +615,7 @@ sub write_summary_into_msi_database
     my $msiinfo = "msiinfo.exe";    # Has to be in the path
     if ( $installer::globals::isunix )
     {
-        $msiinfo = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msiinfo.exe";
+        $msiinfo = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/msiinfo.exe";
     }
 
     my $msiversion = get_msiversion_for_sis();
@@ -1151,7 +1151,7 @@ sub include_cabs_into_msi
     my $msidb = "msidb.exe";    # Has to be in the path
     if ( $installer::globals::isunix )
     {
-        $msidb = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msidb.exe";
+        $msidb = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/msidb.exe";
     }
     my $extraslash = "";        # Has to be set for non-ActiveState perl
 

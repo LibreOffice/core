@@ -102,7 +102,7 @@ sub extract_tables_from_pcpfile
     my $msidb = "msidb.exe";    # Has to be in the path
     if ( $installer::globals::isunix )
     {
-        $msidb = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msidb.exe";
+        $msidb = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/msidb.exe";
     }
     my $infoline = "";
     my $systemcall = "";
@@ -407,7 +407,7 @@ sub write_sis_info
     my $msiinfo = "msiinfo.exe";    # Has to be in the path
     if ( $installer::globals::isunix )
     {
-        $msiinfo = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msiinfo.exe";
+        $msiinfo = "$ENV{'WORKDIR_FOR_BUILD'}/LinkTarget/Executable/msiinfo.exe";
     }
     my $infoline = "";
     my $systemcall = "";
